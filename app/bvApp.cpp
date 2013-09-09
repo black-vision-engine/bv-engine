@@ -15,6 +15,7 @@
 #include "Engine/Models/ModelScene.h"
 #include "System/Profiler.h"
 #include "System/HRTimer.h"
+#include "MockScenes.h"
 
 bv::HighResolutionTimer GTimer;
 
@@ -318,8 +319,10 @@ bool BlackVisionApp::OnInitialize       ()
         freopen("CONOUT$", "wb", stderr);
     }
 
-    bv::BasicNode* root = BuildMockScene();
-    BuildMockScene2(root);
+	bv::BasicNode* root = SceneExamples::CreateSceneMock3(nullptr);
+
+   // bv::BasicNode* root = BuildMockScene();
+    //BuildMockScene2(root);
     //node = BuildMockScene(root);
     //node = BuildMockScene(node);
     //node = BuildMockScene(node);
@@ -332,9 +335,10 @@ bool BlackVisionApp::OnInitialize       ()
     m_Renderer->SetCamera(m_modelScene->GetCamera());
     m_mockSceneEng = m_modelScene->GetSceneRoot()->buildScene();
     
-    m_modelScene->GetCamera()->SetFrame(glm::vec3(0.f, 0.f, 1.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
+    m_modelScene->GetCamera()->SetFrame(glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
 
-    AddCameraAnimation();
+    //AddCameraAnimation();
+	AddCameraAnimation2();
 
     m_modelScene->GetCamera()->SetPerspactive(90.f, float(m_Width) / float(m_Height), 0.1f, 100.f);
 
@@ -367,6 +371,8 @@ namespace {
             t += 0.1f;
         }
 
+		it->addKey(t, glm::vec3(1.f, 1.f, 1.f));
+
         return alpha;
     }
 }
@@ -387,8 +393,45 @@ void BlackVisionApp::AddCameraAnimation  ()
     alpha = AddRotKeys( position, alpha, 7. * dt, 0.5f, t );
     alpha = AddRotKeys( position, alpha, 8. * dt, 0.01f, t );
     alpha = AddRotKeys( position, alpha, endTime, 0.2f, t );
-    //alpha = AddRotKeys( position, 0.f, 2.f * M_PI, 0.05, t );
+    alpha = AddRotKeys( position, 0.f, 2.f * M_PI, 0.05, t );
  
+    //float alpha = 0.f;
+    //for(float alpha = 0.f; alpha <= 2 * M_PI ; alpha += 0.05f)
+    //{
+    //    float z = 2 * cosf(alpha);
+    //    float x = 2 * sinf(alpha);
+    //    int dev = rand();
+    //    position->addKey(t, glm::vec3(x, float(dev) / float(RAND_MAX), z));
+    //    t += 0.1f;
+    //}
+
+
+    bv::Vec3Interpolator* direction = new bv::Vec3Interpolator();
+
+    direction->addKey(0.f, glm::vec3(0.f, 0.f, 0.f));
+
+
+    bv::Vec3Interpolator* up = new bv::Vec3Interpolator();
+
+    up->addKey(0.f, glm::vec3(0.f, 1.f, 0.f));
+
+    m_modelScene->AddCameraInterpolators(direction, position, up);
+}
+
+
+void BlackVisionApp::AddCameraAnimation2  () //smietnik
+{
+    bv::Vec3Interpolator* position = new bv::Vec3Interpolator();
+
+    position->setWrapMethod(WrapMethod::repeat, WrapMethod::pingPong);
+
+    float t = 0.f;
+    double endTime = 2. * M_PI;
+    double dt = endTime / 10.f;
+	position->addKey(0.f, glm::vec3(-2.f, 0.1f, 3.f));
+	position->addKey(1.f, glm::vec3(2.f, 0.1f, 3.f));
+	
+
     //float alpha = 0.f;
     //for(float alpha = 0.f; alpha <= 2 * M_PI ; alpha += 0.05f)
     //{

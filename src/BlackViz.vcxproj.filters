@@ -76,6 +76,7 @@
     <ClCompile Include="Engine\Models\Updaters\ShaderParamUpdater.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Extrude.cpp" />
     <ClCompile Include="System\HRTimer.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -162,6 +163,7 @@
     <ClInclude Include="Engine\Models\Updaters\ShaderParamUpdater.h" />
     <ClInclude Include="Engine\Models\Plugins\Extrude.h" />
     <ClInclude Include="System\HRTimer.h" />
+    <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Graphics\Resources\Texture2D.cpp" />

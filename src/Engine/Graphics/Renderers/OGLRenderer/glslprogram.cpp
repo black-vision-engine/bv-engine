@@ -313,7 +313,7 @@ void GLSLProgram::SetUniform( const char *name, const vec4 & v)
     } 
     else 
     {
-        printf("Uniform: %s not found.\n",name);
+        //printf("Uniform: %s not found.\n",name);
     }
 }
 
@@ -329,7 +329,7 @@ void GLSLProgram::SetUniform( const char *name, const vec2 & v)
     } 
     else 
     {
-        printf("Uniform: %s not found.\n",name);
+        //printf("Uniform: %s not found.\n",name);
     }
 }
 
@@ -345,7 +345,7 @@ void GLSLProgram::SetUniform( const char *name, const mat4 & m)
     } 
     else 
     {
-        printf("Uniform: %s not found.\n",name);
+        //printf("Uniform: %s not found.\n",name);
     }
 }
 
@@ -361,7 +361,7 @@ void GLSLProgram::SetUniform( const char *name, const mat3 & m)
     } 
     else 
     {
-        printf("Uniform: %s not found.\n",name);
+        //printf("Uniform: %s not found.\n",name);
     }
 }
 
@@ -377,7 +377,7 @@ void GLSLProgram::SetUniform( const char *name, float val )
     } 
     else 
     {
-        printf("Uniform: %s not found.\n",name);
+        //printf("Uniform: %s not found.\n",name);
     }
 }
 
@@ -393,7 +393,7 @@ void GLSLProgram::SetUniform( const char *name, int val )
     } 
     else 
     {
-        printf("Uniform: %s not found.\n",name);
+        //printf("Uniform: %s not found.\n",name);
     }
 }
 
@@ -409,7 +409,7 @@ void GLSLProgram::SetUniform( const char *name, bool val )
     } 
     else 
     {
-        printf("Uniform: %s not found.\n",name);
+        //printf("Uniform: %s not found.\n",name);
     }
 }
 

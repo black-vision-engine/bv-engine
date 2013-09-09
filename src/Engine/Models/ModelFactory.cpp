@@ -2,6 +2,7 @@
 
 #include "Engine\Models\Plugins\Transform\PluginTransformSimple.h"
 #include "Engine\Models\Plugins\Geometry\PluginGeometryRect.h"
+#include "Engine\Models\Plugins\Geometry\PluginGeometryRing.h"
 #include "Engine\Models\BasicNode.h"
 
 namespace bv
@@ -10,6 +11,12 @@ namespace bv
 PluginGeometryRect*      ModelFactory::CreatePluginGeometryRect(float w, float h)
 {
     return new PluginGeometryRect(w,h);
+}
+
+PluginGeometryRing*      ModelFactory::CreatePluginGeometryRing(const FloatInterpolator& innerRadius, const FloatInterpolator& outerRadius,
+																const FloatInterpolator& startAngle, const FloatInterpolator& endAngle, int numSegments)
+{
+    return new PluginGeometryRing(innerRadius, outerRadius,	startAngle, endAngle, numSegments);
 }
 
 PluginTransformSimple*   ModelFactory::CreatePluginTransformSimple(const TransformF& transform)

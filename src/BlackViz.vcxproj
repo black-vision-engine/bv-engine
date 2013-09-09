@@ -98,7 +98,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>./;../dep/Common/FreeImage/dist;../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;./Engine/Graphics/Renderers/OGLRenderer;./Engine/Graphics/Renderers/WGLRenderer;./Application;./Application/win32;./Engine/Graphics/Renderers;./Engine/Graphics/Resources;./Engine/Graphics/Resources/Textures;./System;./Engine/Graphics/Types;./Engine/Models;./Engine/Models/Mock;./Engine/Graphics/Shaders;./Engine/Graphics/SceneGraph;./Engine/Models/Updaters;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BOOST_INC);./;../dep/Common/FreeImage/dist;../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;./Engine/Graphics/Renderers/OGLRenderer;./Engine/Graphics/Renderers/WGLRenderer;./Application;./Application/win32;./Engine/Graphics/Renderers;./Engine/Graphics/Resources;./Engine/Graphics/Resources/Textures;./System;./Engine/Graphics/Types;./Engine/Models;./Engine/Models/Mock;./Engine/Graphics/Shaders;./Engine/Graphics/SceneGraph;./Engine/Models/Updaters;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -191,6 +191,7 @@
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.cpp" />
     <ClCompile Include="Engine\Models\ModelScene.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Extrude.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.cpp" />
     <ClCompile Include="Engine\Models\Updaters\CameraUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\ShaderParamUpdater.cpp" />
     <ClCompile Include="System\HRTimer.cpp" />
@@ -268,6 +269,7 @@
     <ClInclude Include="Engine\Graphics\Shaders\ShaderTypes.h" />
     <ClInclude Include="Engine\Models\ModelScene.h" />
     <ClInclude Include="Engine\Models\Plugins\Extrude.h" />
+    <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.h" />
     <ClInclude Include="Engine\Models\Updaters\CameraUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\ShaderParamUpdater.h" />
     <ClInclude Include="System\HRTimer.h" />
