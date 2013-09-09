@@ -1,0 +1,24 @@
+syntax: glob
+*.obj
+*.tlog
+*.pdb
+test/Debug/vc110.idb
+*.cache
+test/Debug/test.log
+*.lastbuildstate
+bv_params/scene.h
+*.vcxproj.orig*
+*.idb
+bv_params/Debug/bv_params.log
+*.suo
+bv_params.sdf
+*.opensdf
+Debug/test.ilk
+*.exe
+Debug/bv_params.lib
+*.log
+*.user
+*.o
+Debug
+*.sdf
+*.a
