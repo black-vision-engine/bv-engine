@@ -17,7 +17,7 @@ bv::BasicNode* CreateRect(bv::BasicNode* parent)
 	bv::BasicNode* rectNode = new bv::BasicNode();
 	bv::Vec4Interpolator color;
 	color.addKey(0, glm::vec4(1,0,0,1));
-	color.addKey(10, glm::vec4(0,1,0,1));
+	color.addKey(0.01, glm::vec4(0,0,1,1));
 	color.setWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
 	bv::SolidColorPlugin* solidRect = new bv::SolidColorPlugin(color);
 	rectNode->setPixelShaderPlugin(solidRect);
@@ -27,7 +27,7 @@ bv::BasicNode* CreateRect(bv::BasicNode* parent)
     si.setWrapMethod(bv::WrapMethod::repeat, bv::WrapMethod::pingPong);
     float s = 5.0f;
     si.addKey(0.f, 0.1f);
-    si.addKey(1.f, 2.0f);
+    si.addKey(1.f, -2.9f);
     //si.addKey(2.4f, 2.5f);//si.addKey(0.5f, s * 0.6f);si.addKey(0.65f, 0.4f);si.addKey(0.8f, s * 0.9f);si.addKey(0.95f, 0.35f);si.addKey(1.05f, 0.5f);
 	rectNode->setGeometryShaderPlugin(new bv::ExtrudePlugin(si));
 	
@@ -66,15 +66,9 @@ void createMyRing(bv::BasicNode* parent,float offsetX,float offsetY,float startA
 
     float rs = 10.f;
 
-    color.addKey(rs * .25f, glm::vec4(1,0.4,0.5,1));
-    color.addKey(rs *.5f, glm::vec4(0.3,0.4,0.5,1));
-    color.addKey(rs *.75f, glm::vec4(0.1,1.0,0.8,1));
-    color.addKey(rs *.95f, glm::vec4(0.7,0.2,0.4,1));
-    color.addKey(rs *1.15f, glm::vec4(0.4,0.1,1.,1));
-    color.addKey(rs *1.33f, glm::vec4(1,1.0,0.1,1));
-    color.addKey(rs *1.6f, glm::vec4(1,0.4,0.2,1));
-    color.addKey(rs *1.9f, glm::vec4(0,0.4,1.0,1));
-
+    color.addKey(0, glm::vec4(0,1,0,1));
+    color.addKey(0.1, glm::vec4(0.3,0,1,1));
+ 
     color.setWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
 
     bv::SolidColorPlugin* solid1 = new bv::SolidColorPlugin(color);
