@@ -12,12 +12,76 @@
 namespace bv
 {
 
+bv::PluginTransformSimple* FuncTranslate(float x,float y,float z)
+{
+	bv::TransformF* trans = new bv::TransformF();
+	bv::FloatInterpolator transX;
+	transX.addKey(0.f,x);
+	bv::FloatInterpolator transY;
+	transY.addKey(0.f,y);
+	bv::FloatInterpolator transZ;
+	transZ.addKey(0.f,z);
+	trans->addTranslation(transX,transY,transZ);
+	bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
+	return transPlugin;
+}
+
+
+
+void AnimLines(bv::BasicNode* parent)
+{
+	bv::BasicNode* lineUp = new bv::BasicNode();
+	bv::Vec4Interpolator color;
+	
+	color.addKey(0.01, glm::vec4(0,0,1,1));
+	color.setWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
+	bv::SolidColorPlugin* solidRect = new bv::SolidColorPlugin(color);
+	lineUp->setPixelShaderPlugin(solidRect);
+	lineUp->addGeometryPlugin(new bv::PluginGeometryRect(0.1f,0.1f));
+	
+	//bez sensu
+	bv::FloatInterpolator si;
+    si.setWrapMethod(bv::WrapMethod::repeat, bv::WrapMethod::pingPong);
+    float s = 5.0f;
+    si.addKey(0.f, 0.1f);
+	lineUp->setGeometryShaderPlugin(new bv::ExtrudePlugin(si));
+
+
+	bv::FloatInterpolator identity; 
+	identity.addKey(0.f, 1.f);
+
+
+	bv::FloatInterpolator scaleX; 
+	scaleX.setWrapPostMethod(bv::WrapMethod::clamp);
+    scaleX.addKey(0.f, 1.f);
+    scaleX.addKey(2.f, 10.0f);
+    
+	bv::TransformF* trans = new bv::TransformF();
+	trans->addScale(scaleX,identity,identity);
+    bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
+
+	
+
+	lineUp->addTransformPlugin(transPlugin);
+
+	lineUp->addTransformPlugin(FuncTranslate(0,-1,0));
+
+
+
+
+	if(parent != nullptr)
+    {
+        parent->addChild(lineUp);
+    }
+
+}
+
+
 bv::BasicNode* CreateRect(bv::BasicNode* parent)
 {
 	bv::BasicNode* rectNode = new bv::BasicNode();
 	bv::Vec4Interpolator color;
 	color.addKey(0, glm::vec4(1,0,0,1));
-	color.addKey(0.01, glm::vec4(0,0,1,1));
 	color.setWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
 	bv::SolidColorPlugin* solidRect = new bv::SolidColorPlugin(color);
 	rectNode->setPixelShaderPlugin(solidRect);
@@ -27,11 +91,11 @@ bv::BasicNode* CreateRect(bv::BasicNode* parent)
     si.setWrapMethod(bv::WrapMethod::repeat, bv::WrapMethod::pingPong);
     float s = 5.0f;
     si.addKey(0.f, 0.1f);
-    si.addKey(1.f, -2.9f);
+    si.addKey(1.f, -0.1f);
     //si.addKey(2.4f, 2.5f);//si.addKey(0.5f, s * 0.6f);si.addKey(0.65f, 0.4f);si.addKey(0.8f, s * 0.9f);si.addKey(0.95f, 0.35f);si.addKey(1.05f, 0.5f);
 	rectNode->setGeometryShaderPlugin(new bv::ExtrudePlugin(si));
 	
-	rectNode->addGeometryPlugin(new bv::PluginGeometryRect(2.f,1.f));
+	rectNode->addGeometryPlugin(new bv::PluginGeometryRect(0.2f,0.1f));
 
 	// b edzie sie rozszerzal
 
@@ -66,8 +130,8 @@ void createMyRing(bv::BasicNode* parent,float offsetX,float offsetY,float startA
 
     float rs = 10.f;
 
-    color.addKey(0, glm::vec4(0,1,0,1));
-    color.addKey(0.1, glm::vec4(0.3,0,1,1));
+    color.addKey(2, glm::vec4(0,0,0,1));
+    color.addKey(5, glm::vec4(1,0,0,1));
  
     color.setWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
 
@@ -90,7 +154,7 @@ void createMyRing(bv::BasicNode* parent,float offsetX,float offsetY,float startA
 	FloatInterpolator start;
 	FloatInterpolator end;
 
-	radIn.addKey(0.f, 1.f);
+	radIn.addKey(0.f, 1.7f);
 	radOut.addKey(0.f, 2.f);
 	start.addKey(0.f, startAngle);
 	end.addKey(0.f, endAngle);
@@ -137,6 +201,66 @@ void createMyRing(bv::BasicNode* parent,float offsetX,float offsetY,float startA
         parent->addChild(mockTree);
     }
 }
+void NightRect(bv::BasicNode* parent, int number)
+{
+	float RectWidth=0.1;
+	bv::BasicNode* rectNode = new bv::BasicNode();
+	bv::Vec4Interpolator color;
+	float atom=0.1;
+	color.addKey(number*atom, glm::vec4(0,0,0,1));
+	color.addKey(number*atom+2, glm::vec4(0,0,0,1));
+	color.addKey(number*atom+3, glm::vec4(1,0,0,1));
+	color.addKey(number*atom+4, glm::vec4(0,0,0,1));
+	color.addKey(number*atom+6, glm::vec4(0,0,0,1));
+	color.setWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::repeat);
+	bv::SolidColorPlugin* solidRect = new bv::SolidColorPlugin(color);
+	rectNode->setPixelShaderPlugin(solidRect);
+
+	//extrude
+	bv::FloatInterpolator si;
+    si.setWrapMethod(bv::WrapMethod::repeat, bv::WrapMethod::pingPong);
+    float s = 5.0f;
+    si.addKey(0.f, 0.1f);
+    si.addKey(1.f, 0.3f);
+    //si.addKey(2.4f, 2.5f);//si.addKey(0.5f, s * 0.6f);si.addKey(0.65f, 0.4f);si.addKey(0.8f, s * 0.9f);si.addKey(0.95f, 0.35f);si.addKey(1.05f, 0.5f);
+	rectNode->setGeometryShaderPlugin(new bv::ExtrudePlugin(si));
+	
+	rectNode->addGeometryPlugin(new bv::PluginGeometryRect(RectWidth,0.2f));
+
+	// b edzie sie rozszerzal
+
+	bv::FloatInterpolator identity; 
+	identity.addKey(0.f, 1.f);
+
+	bv::FloatInterpolator scaleX; scaleX.setWrapPostMethod(bv::WrapMethod::pingPong);
+    scaleX.addKey(0.f, 1.f);
+    scaleX.addKey(5.f, 1.2f);
+    
+	bv::TransformF* trans = new bv::TransformF();
+	trans->addScale(scaleX,identity,identity);
+    bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
+	
+	rectNode->addTransformPlugin(transPlugin);
+	rectNode->addTransformPlugin(FuncTranslate(-4+number*RectWidth*1.7,0,0.2));
+	if(parent != nullptr)
+    {
+        parent->addChild(rectNode);
+    }
+	
+}
+void NightRider(bv::BasicNode* parent)
+{
+	bv::BasicNode* NightRects= new bv::BasicNode();
+
+	for(int i=0;i<50;i++)
+	{
+		NightRect(parent,i);
+	}
+	/*if(parent != nullptr)
+    {
+        parent->addChild(NightRects);
+    }*/
+}
 
 bv::BasicNode* SceneExamples::CreateSceneMock3(bv::BasicNode* parent)
 {
@@ -154,6 +278,9 @@ bv::BasicNode* SceneExamples::CreateSceneMock3(bv::BasicNode* parent)
 	createMyRing(rect,1,-0.5,Angle3, Angle3+offset);	
 	createMyRing(rect,-1,-0.5,Angle4,Angle4+offset);
 	
+
+	AnimLines(rect);
+	NightRider(rect);
 
     return rect;
 

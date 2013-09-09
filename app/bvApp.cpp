@@ -429,7 +429,7 @@ void BlackVisionApp::AddCameraAnimation2  () //smietnik
     double endTime = 2. * M_PI;
     double dt = endTime / 10.f;
 	position->addKey(0.f, glm::vec3(-2.f, 0.1f, 3.f));
-	position->addKey(1.f, glm::vec3(2.f, 0.1f, 3.f));
+	position->addKey(20.f, glm::vec3(2.f, 0.1f, 3.f));
 	
 
     //float alpha = 0.f;
@@ -451,7 +451,7 @@ void BlackVisionApp::AddCameraAnimation2  () //smietnik
     bv::Vec3Interpolator* up = new bv::Vec3Interpolator();
 
     up->addKey(0.f, glm::vec3(0.f, 1.f, 0.f));
-	up->addKey(3.f, glm::vec3(0.f, 1.f, 5.f));
+	up->addKey(3.f, glm::vec3(0.f, 1.f, 0.f));
 
     m_modelScene->AddCameraInterpolators(direction, position, up);
 }
