@@ -77,6 +77,8 @@ public:
     void    EnableFaceCulling   ();
     void    SetCamera           (Camera* cam);
 
+	int		VertexCount;
+
 private:
     void    Enable              ( RenderablePass* pass, TransformableEntity* transform );
     void    Enable              ( VertexBuffer* vb );

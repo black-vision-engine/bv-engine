@@ -262,6 +262,8 @@ void BlackVisionApp::OnIdle		()
     double enginedt = engineUpdate - managerUpdate;
     double renderdt = frameUpdate - engineUpdate;
 
+	int vertexCount = m_Renderer->VertexCount;
+
     totalPassed += frameUpdate;
 
     if ( totalPassed > 1.0 )
@@ -269,7 +271,7 @@ void BlackVisionApp::OnIdle		()
         totalPassed = 0.0;
         std::cout.precision(4);
         std::cout << "FPS: " << 1.0 / frameUpdate << std::endl;
-        std::cout << "Model: " << modeldt * 1000.0 << "  Manager: " << managerdt * 1000.0 << "  Engine: " << enginedt * 1000.0 << " Render: " << renderdt * 1000.0 << " Total: " << frameUpdate * 1000.0 << std::endl;
+        std::cout << "Vertex "<<vertexCount<<" Model: " << modeldt * 1000.0 << "  Manager: " << managerdt * 1000.0 << "  Engine: " << enginedt * 1000.0 << " Render: " << renderdt * 1000.0 << " Total: " << frameUpdate * 1000.0 << std::endl;
     }
 }
 

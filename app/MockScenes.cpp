@@ -294,6 +294,10 @@ bv::BasicNode* SceneExamples::CreateSceneMock3(bv::BasicNode* parent)
 	CreateRings(rect,-9);
 	CreateRings(rect,-12);
 	CreateRings(rect,-15);
+	CreateRings(rect,-20);
+	CreateRings(rect,-30);
+	CreateRings(rect,-50);
+	CreateRings(rect,-70);
 
 	AnimLines(rect);
 	NightRider(rect);

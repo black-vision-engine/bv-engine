@@ -165,6 +165,9 @@ bool    Renderer::Draw                  (RenderableEntity* ent)
 
     //Disable(vb);
 
+	VertexCount = 999;
+
+
     return true;
 }
 
