@@ -16,8 +16,8 @@ std::string PassThroughVertexShader::m_programSource = "   #version 400 \n \
                                                             \
                                                             void main() \n \
                                                             {\n \
-															dummy();\
-                                                                gl_Position = vec4( vertexPosition, 1.0 );\n \
+                                                            dummy();\
+                                                                gl_Position = MVP * vec4( vertexPosition, 1.0 );\n \
                                                             }\n \
                                                         ";
 

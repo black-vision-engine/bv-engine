@@ -10,27 +10,29 @@ namespace bv {
 //
 RendererData::RenderState::RenderState			()
 {
-	//FIXME: implement
+    //FIXME: implement
 }
 
 // *********************************
 //
 void RendererData::RenderState::InitializeBasic ()
 {
-	glDisable		( GL_BLEND );
+    glDisable		( GL_BLEND );
     glDisable		( GL_ALPHA_TEST );
-	glEnable		( GL_CULL_FACE );
-	glCullFace		( GL_BACK );
-	glEnable		( GL_DEPTH_TEST );
-	glDisable		( GL_STENCIL_TEST );
-	glPolygonMode	( GL_FRONT_AND_BACK, GL_FILL );
+    glEnable		( GL_CULL_FACE );
+    glCullFace		( GL_BACK );
+    glEnable        (GL_BLEND);
+    glBlendFunc     (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glEnable		( GL_DEPTH_TEST );
+    glDisable		( GL_STENCIL_TEST );
+    glPolygonMode	( GL_FRONT_AND_BACK, GL_FILL );
 }
 
 // *********************************
 //
 RendererData::SamplerState::SamplerState ()
 {
-	//FIXME: implement
+    //FIXME: implement
 }
 
 }
