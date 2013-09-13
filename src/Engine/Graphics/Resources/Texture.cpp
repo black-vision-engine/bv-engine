@@ -11,114 +11,71 @@ namespace bv
 int Texture::m_sPixelSize[ Texture::TFormat::F_TOTAL ] =
 {
     4,   // F_A8R8G8B8
-    4,   // F_R32F
-    8,   // F_G32R32F
-    16   // F_A32B32G32R32F,
+    1,   // F_A8
+    1,   // F_L8
+    4,   //F_R32F
 };
 
 // *********************************
-//FIXME: implement poperly
-Texture::Texture     ( Texture::TFormat format, int w, int h, int numLevels, DataBuffer::Semantic semantic )
-{
-    //FIXME: implement and stre all texture parameters into texture (w, h, type, pixel format, semantic) - do not use fipImage to do this
-}
+//  
+Texture::Texture                                ( Texture::TFormat format, Texture::TType type, DataBuffer::Semantic semantic )
+    : m_format(format)
+    , m_type(type)
+    , m_semantic(semantic)
+{}
 
 // *********************************
 //
-Texture::Texture	                        ( fipImage* img )
-    : m_img( img )
-    , m_type( Texture::TType::T_2D )
-    , m_format( Texture::TFormat::F_A8R8G8B8 )
-    , m_semantic( DataBuffer::Semantic::S_TEXTURE )
-{
-    //FIXME: add other formats
-}
+Texture::~Texture	                            ()
+{}
 
 // *********************************
 //
-Texture::~Texture	                        ()
-{
-    m_img->clear();
-
-    delete m_img;
-}
-
-// *********************************
-//
-unsigned int	        Texture::Width		() const
-{
-    return m_img->getWidth();
-}
-
-// *********************************
-//
-unsigned int	        Texture::Height		() const
-{
-    return m_img->getHeight();
-}
-
-// *********************************
-//
-Texture::TFormat        Texture::Format	    () const
+Texture::TFormat        Texture::GetFormat	    () const
 {
     return m_format;
 }
 
 // *********************************
 //
-Texture::TType          Texture::Type       () const
+Texture::TType          Texture::GetType        () const
 {
     return m_type;
 }
 
 // *********************************
 //
-DataBuffer::Semantic    Texture::Semantic   () const
+DataBuffer::Semantic    Texture::GetSemantic    () const
 {
     return m_semantic;
 }
 
 // *********************************
 //
-int                     Texture::PixelSize  () const
+int                     Texture::GetPixelSize   () const
 {
-    return PixelSize( Format() );
+    return GetPixelSize( GetFormat() );
 }
 
 // *********************************
 //
-int                     Texture::PixelSize  ( Texture::TFormat format )
+int                     Texture::GetPixelSize   ( Texture::TFormat format )
 {
     return m_sPixelSize[ static_cast< int >( format ) ];
 }
 
-//// *********************************
-////FIXME: Implement
-//void	Texture::GenerateMipmaps	()
-//{
-//    assert(!"Implement this method");
-//}
-//
-//// *********************************
-////FIXME: Implement
-//bool	Texture::HasMipmaps			() const
-//{
-//    assert(!"Implement this method");
-//    return false;
-//}
-
 // *********************************
 //
-char *		            Texture::Data	    ()
+char *		            Texture::GetData        ()
 {
-    return (char*) m_img->accessPixels();
+    return m_data;
 }
 
 // *********************************
 //
-const char *            Texture::Data	    () const
+const char *            Texture::GetData	    () const
 {
-    return (char*) m_img->accessPixels();
+    return m_data;
 }
 
 }

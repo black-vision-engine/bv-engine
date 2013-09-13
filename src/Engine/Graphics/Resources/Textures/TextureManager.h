@@ -9,6 +9,7 @@ namespace bv
 {
 
 class Texture;
+class Texture2D;
 
 class TextureManager
 {
@@ -21,7 +22,7 @@ public:
                 TextureManager  ();
     virtual     ~TextureManager ();
 
-    Texture *   LoadTexture     ( const std::string & filename, bool loadFromMemory = true );
+    Texture2D*  LoadTexture     ( const std::string & filename, bool loadFromMemory = true );
     void        FreeTexture     ( Texture * tx );
 
 };

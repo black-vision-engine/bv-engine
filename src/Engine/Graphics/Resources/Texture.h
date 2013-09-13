@@ -2,8 +2,6 @@
 
 #include "DataBuffer.h"
 
-class fipImage;
-
 namespace bv
 {
 
@@ -11,21 +9,19 @@ class Texture
 {
 public:
 
-	enum class TFormat : int
+    enum class TFormat : int
     {
-        F_A8R8G8B8 = 0,
-
-        F_R32F,
-        F_G32R32F,
-        F_A32B32G32R32F,
-
+        F_A8R8G8B8 = 0  ,
+        F_A8            ,
+        F_L8            ,
+        F_R32F          ,
         F_TOTAL
     };
 
     enum class TType : int
     {
-        T_2D = 0,
-        T_CUBE,
+        T_2D = 0        ,
+        T_CUBE          ,
 
         T_TOTAL
     };
@@ -38,33 +34,23 @@ protected:
     TType                   m_type;
     DataBuffer::Semantic    m_semantic;
 
-    fipImage *              m_img;
+    char*                   m_data;
 
 public:
 
-                            //FIXME: implement poperly
-                            Texture     ( Texture::TFormat format, int w, int h, int numLevels, DataBuffer::Semantic semantic =  DataBuffer::Semantic::S_TEXTURE );
+                            Texture     ( Texture::TFormat format, Texture::TType type, DataBuffer::Semantic semantic =  DataBuffer::Semantic::S_TEXTURE );
 
-                            //FIXME: this one suxx
-					        Texture		( fipImage * img );
     virtual			        ~Texture	();
 
-    unsigned int	        Width		() const;
-    unsigned int	        Height		() const;
+    TFormat                 GetFormat	    () const;
+    TType                   GetType         () const;
+    DataBuffer::Semantic    GetSemantic     () const;
 
-    TFormat                 Format		() const;
-    TType                   Type        () const;
-    DataBuffer::Semantic    Semantic    () const;
+    int                     GetPixelSize    () const;
+    static int              GetPixelSize    ( TFormat format );
 
-    int                     PixelSize   () const;
-    static int              PixelSize   ( TFormat format );
-
-    //FIXME: implement
-    //void			        GenerateMipmaps	();
-    //bool			        HasMipmaps		() const;
-
-    char *                  Data        ();
-    const char *            Data        () const;
+    char *                  GetData         ();
+    const char *            GetData         () const;
 
 };
 

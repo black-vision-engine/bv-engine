@@ -346,7 +346,9 @@
     <ClInclude Include="System\Profiler.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Engine\Graphics\Resources\Texture2D.cpp" />
+    <ClCompile Include="Engine\Graphics\Resources\Texture2D.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

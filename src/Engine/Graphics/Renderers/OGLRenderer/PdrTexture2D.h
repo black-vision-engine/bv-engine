@@ -1,31 +1,32 @@
 #pragma once
 
-//#include "gl/glew.h"
+#include "gl/glew.h"
 
 namespace bv
 {
-//class Texture;
-//
-//class PdrTexture
-//{
-//private:
-//    bool        m_isBinded;
-//    GLuint      m_textureName;
-//    int         m_width;
-//    int         m_height;
-//    unsigned char*  m_data;
-//    GLuint      m_format;
-//
-//public:
-//
-//    explicit PdrTexture(const Texture* tex);
-//
-//    
-//    GLuint getTextureName() const;
-//
-//    
-//    GLuint bind();
-//
-//};
+
+class Texture2D;
+
+class PdrTexture2D
+{
+private:
+    GLuint          m_textureID;
+
+public:
+
+    void            Enable          ();
+    void            Disable         ();
+
+    void            Bind            ();
+    void            Unbind          ();
+
+
+    static PdrTexture2D*   Create(const Texture2D* texture);
+
+private:
+
+    explicit        PdrTexture2D    (const Texture2D* texture);
+
+};
 
 } // bv
