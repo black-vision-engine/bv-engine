@@ -54,7 +54,7 @@ public:
 private:
     //VertexDescriptor * vd, VertexBuffer * vb, IndexBuffer * ib, RenderableEffect * effect
     RenderableEntity::RenderableType    GetRenderableType() const;
-    bool                                CreateRenderableData(VertexDescriptor** vd, VertexBuffer** vb, IndexBuffer** ib) const;
+    bool                                CreateRenderableData(VertexDescriptor** vd, VertexBuffer** vb, IndexBuffer** ib, VertexArray ** vao) const;
     RenderableEffect*                   CreateRenderaleEffectMockImplementationForCompleteDummies() const;
 
     PixelShader*                        CreatePixelShader       ()                      const;

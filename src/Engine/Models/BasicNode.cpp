@@ -10,6 +10,7 @@
 
 #include "Engine\Graphics\Resources\VertexDescriptor.h"
 #include "Engine\Graphics\Resources\VertexBuffer.h"
+#include "Engine\Graphics\Resources\VertexArray.h"
 #include "Engine\Graphics\Resources\IndexBuffer.h"
 #include "Engine\Graphics\Shaders\RenderableEffect.h"
 #include "Engine\Models\Updaters\TransformUpdater.h"
@@ -70,11 +71,12 @@ SceneNode* BasicNode::buildScene()
     VertexBuffer *      vb          = nullptr;
     IndexBuffer *       ib          = nullptr;
     VertexDescriptor *  vd          = nullptr;
+    VertexArray *       vao         = nullptr;
 
     RenderableEntity *  renderEnt   = nullptr;
     RenderableEffect *  effect      = nullptr;
 
-    CreateRenderableData( &vd, &vb, &ib );
+    CreateRenderableData( &vd, &vb, &ib, &vao );
     effect = CreateRenderaleEffectMockImplementationForCompleteDummies();
     RenderableEntity::RenderableType renderableType = GetRenderableType();
 
@@ -238,7 +240,7 @@ RenderableEntity::RenderableType    BasicNode::GetRenderableType        ()      
     return (RenderableEntity::RenderableType)m_geometryPlugins.back()->AdjacencyType(); // FIXME: remove cast
 }
 
-bool                                BasicNode::CreateRenderableData     (VertexDescriptor** vd, VertexBuffer** vb, IndexBuffer** ib)    const
+bool                                BasicNode::CreateRenderableData     (VertexDescriptor** vd, VertexBuffer** vb, IndexBuffer** ib, VertexArray ** vao)    const
 {
     *vd = VertexDescriptor::Create(1, VertexDescriptor::AttrType::AT_FLOAT3, VertexDescriptor::AttrSemantic::AS_POSITION, 0); // TODO: Sprawdz size i ustaw AttrType poprawnie
 
@@ -265,6 +267,9 @@ bool                                BasicNode::CreateRenderableData     (VertexD
             (*ib)->AddIndex(i);
         }
     }
+
+    *vao = new VertexArray();
+    (*vao)->AddEntry( *vb, *vd );
 
     //TODO: czas 0
 
