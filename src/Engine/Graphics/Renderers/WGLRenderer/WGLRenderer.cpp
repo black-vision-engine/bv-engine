@@ -139,6 +139,7 @@ Renderer::Renderer ( RendererInput & ri, int w, int h, Texture::TFormat colorFor
 //
 Renderer::~Renderer ()
 {
+    //FIXME: remove all PDR resources
     WGLRendererData * data = static_cast< WGLRendererData * >( m_RendererData );
 
     if ( data->m_WindowRC )

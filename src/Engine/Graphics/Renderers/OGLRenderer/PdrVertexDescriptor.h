@@ -9,8 +9,8 @@ namespace bv
 
 class VertexDescriptor;
 class PdrVertexBuffer;
+class Renderer;
 
-//FIXME: implement
 class PdrVertexDescriptor
 {
 private:
@@ -19,7 +19,7 @@ private:
 
 public:
 
-                PdrVertexDescriptor     ( VertexDescriptor * vd );
+                PdrVertexDescriptor     ( Renderer * renderer, VertexDescriptor * vd );
                 ~PdrVertexDescriptor    ();
 
         void    VertexAttribPointer     ( GLuint index, PdrVertexBuffer * vb );

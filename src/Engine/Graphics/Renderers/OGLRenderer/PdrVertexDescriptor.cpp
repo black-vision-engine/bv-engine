@@ -2,13 +2,14 @@
 #include "PdrVertexBuffer.h"
 
 #include "Engine/Graphics/Resources/VertexDescriptor.h"
+#include "Engine/Graphics/Renderers/Renderer.h"
 
 //FIXME: implement
 namespace bv {
 
 // **************************
 //
-PdrVertexDescriptor::PdrVertexDescriptor            ( VertexDescriptor * vd )
+PdrVertexDescriptor::PdrVertexDescriptor            ( Renderer * renderer, VertexDescriptor * vd )
     : m_vertexDescriptor( vd )
 {
 }
@@ -20,7 +21,7 @@ PdrVertexDescriptor::~PdrVertexDescriptor           ()
 }
 
 // **************************
-//
+//FIXME: reimplement
 void    PdrVertexDescriptor::VertexAttribPointer     ( GLuint index, PdrVertexBuffer * vb )
 {
     vb->Bind();

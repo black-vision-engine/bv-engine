@@ -14,7 +14,7 @@
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
-#include "Engine\Graphics\SceneGraph\Camera.h"
+#include "Engine/Graphics/SceneGraph/Camera.h"
 
 namespace bv {
 
@@ -131,7 +131,7 @@ bool    Renderer::DrawRenderable        ( RenderableEntity* ent )
     return true;
 }
 
-bool    Renderer::Draw                  (RenderableEntity* ent)
+bool    Renderer::Draw                  ( RenderableEntity* ent )
 {
     //Based on Entity Type:
     //                        Enable(vertexbuffer);
@@ -145,12 +145,15 @@ bool    Renderer::Draw                  (RenderableEntity* ent)
     auto vb     = ent->GetVertexBuffer();
     auto ib     = ent->GetIndexBuffer();
     auto eff    = ent->GetRenderableEffect();
-    
+    auto vao    = ent->GetVertexArray();
+
     Enable(vb); // FIXME: KOLEJONSC
     if(ib) 
         Enable(ib);
 
-    Enable(vb, vd);
+    if (vao)
+        Enable(vao);
+
     Enable(eff->GetPass(0), ent); //FIXME: 0 pass
 
     //glPolygonMode(GL_FRONT, GL_LINE);
@@ -171,11 +174,15 @@ bool    Renderer::Draw                  (RenderableEntity* ent)
     return true;
 }
 
+// *********************************
+//
 bool    Renderer::PostDraw              ()
 {
     return true;
 }
 
+// *********************************
+//
 void    Renderer::Enable              ( RenderablePass* pass, TransformableEntity* transform )
 {
     auto it = m_PdrShaderMap.find(pass);
@@ -217,83 +224,112 @@ void    Renderer::Enable              ( RenderablePass* pass, TransformableEntit
     shader->Enable( this );
 }
 
-void    Renderer::Enable              ( VertexBuffer* vb )
+// *********************************
+//
+void    Renderer::Enable              ( VertexBuffer * vb )
 {
-    auto it = m_PdrVertexBufferMap.find(vb);
+    PdrVertexBuffer * pvb = GetPdrVertexBuffer( vb );
+    pvb->Enable( this );
+}
 
-    PdrVertexBuffer* vBuffer = nullptr;
+// *********************************
+//
+void    Renderer::Enable              ( IndexBuffer * ib )
+{
+    PdrIndexBuffer * pib = GetPdrIndexBuffer( ib );
+    pib->Enable( this );
+}
 
-    if(it == m_PdrVertexBufferMap.end())
+// *********************************
+//
+void    Renderer::Enable              ( VertexArray * vao )
+{
+    PdrVertexArrayObject  * pvao = GetPdrVertexArray( vao );
+    pvao->Enable( this );    
+}
+
+// *********************************
+//
+PdrVertexBuffer *           Renderer::GetPdrVertexBuffer        ( VertexBuffer * vb )
+{
+    auto it = m_PdrVertexBufferMap.find( vb );
+
+    PdrVertexBuffer * vBuffer = nullptr;
+
+    if( it == m_PdrVertexBufferMap.end() )
     {
-        vBuffer = new PdrVertexBuffer(this, vb);
-        m_PdrVertexBufferMap[vb] = vBuffer;
+        vBuffer = new PdrVertexBuffer( this, vb );
+        m_PdrVertexBufferMap[ vb ] = vBuffer;
     }
     else
     {
         vBuffer = it->second;
     }
 
-    vBuffer->Enable( this );
+    return vBuffer;
 }
 
-void    Renderer::Enable              ( IndexBuffer* ib )
+// *********************************
+//
+PdrIndexBuffer *            Renderer::GetPdrIndexBuffer         ( IndexBuffer * ib )
 {
-    auto it = m_PdrIndexBufferMap.find(ib);
+    auto it = m_PdrIndexBufferMap.find( ib );
 
-    PdrIndexBuffer* iBuffer = nullptr;
+    PdrIndexBuffer * iBuffer = nullptr;
 
-    if(it == m_PdrIndexBufferMap.end())
+    if( it == m_PdrIndexBufferMap.end() )
     {
-        iBuffer = new PdrIndexBuffer(this, ib);
-        m_PdrIndexBufferMap[ib] = iBuffer;
+        iBuffer = new PdrIndexBuffer( this, ib );
+        m_PdrIndexBufferMap[ ib ] = iBuffer;
     }
     else
     {
         iBuffer = it->second;
     }
 
-    iBuffer->Enable( this );
+    return iBuffer;
 }
 
-void    Renderer::Enable              ( VertexBuffer* vb, VertexDescriptor* vd )
+// *********************************
+//
+PdrVertexDescriptor *       Renderer::GetPdrVertexDescriptor    ( VertexDescriptor* vd  )
 {
-    assert(m_PdrVertexBufferMap.find(vb) != m_PdrVertexBufferMap.end());
+    auto it = m_PdrVertexDescriptorMap.find( vd );
 
-    PdrVertexBuffer* pdrVertexBuffer = m_PdrVertexBufferMap.find(vb)->second;
-    PdrVertexDescriptor* pdrVertexDescriptor = GetPdrVertexDescriptor( vd );
+    PdrVertexDescriptor * pdrVd = nullptr;
 
-    PdrVertexArrayObject* vao = nullptr;
-
-    auto it = m_PdrVertexArrayObjectMap.find(vd);
-
-    if(it == m_PdrVertexArrayObjectMap.end())
+    if( it == m_PdrVertexDescriptorMap.end() )
     {
-        vao = new PdrVertexArrayObject( pdrVertexBuffer, pdrVertexDescriptor );
-        m_PdrVertexArrayObjectMap[vd] = vao;
+        pdrVd = new PdrVertexDescriptor( this, vd );
+        m_PdrVertexDescriptorMap[ vd ] = pdrVd;
     }
     else
     {
-        vao = it->second;
+        pdrVd = it->second;
     }
 
-    vao->Enable( this );
+    return pdrVd;
 }
 
-PdrVertexDescriptor* Renderer::GetPdrVertexDescriptor( VertexDescriptor* vd  )
+// *********************************
+//
+PdrVertexArrayObject *         Renderer::GetPdrVertexArray         ( VertexArray * vao )
 {
-    auto it = m_PdrVertexDescriptorMap.find(vd);
+    auto it = m_PdrVertexArrayObjectMap.find( vao );
 
-    if(it == m_PdrVertexDescriptorMap.end())
+    PdrVertexArrayObject * pdrVao = nullptr;
+
+    if( it == m_PdrVertexArrayObjectMap.end() )
     {
-        PdrVertexDescriptor* pdrVd = new PdrVertexDescriptor(vd);
-        m_PdrVertexDescriptorMap[vd] = pdrVd;
-        return pdrVd;
+        pdrVao = new PdrVertexArrayObject( this, vao );
+        m_PdrVertexArrayObjectMap[ vao ] = pdrVao;
     }
     else
     {
-        return it->second;
+        pdrVao = it->second;
     }
-}
 
+    return pdrVao;
+}
 
 }

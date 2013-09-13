@@ -11,20 +11,28 @@
 namespace bv {
 
 class Camera;
+
 class RenderableEntity;
+
 class PixelShader;
 class VertexShader;
 class GeometryShader;
-class PdrShader;
-class VertexBuffer;
-class PdrVertexBuffer;
-class IndexBuffer;
-class PdrIndexBuffer;
-class VertexDescriptor;
-class PdrVertexArrayObject;
 class RenderablePass;
+
+class VertexBuffer;
+class IndexBuffer;
+class VertexDescriptor;
+class VertexArray;
+
+class PdrVertexBuffer;
+class PdrShader;
+class PdrIndexBuffer;
+class PdrVertexArrayObject;
 class PdrVertexDescriptor;
+class PdrVertexArrayObject;
+
 class TransformableEntity;
+
 enum class FaceKind : int;
 
 class Renderer
@@ -47,7 +55,7 @@ private:
     typedef std::hash_map<VertexBuffer*, PdrVertexBuffer*>              PdrVertexBufferMapType;
     typedef std::hash_map<IndexBuffer*, PdrIndexBuffer*>                PdrIndexBufferMapType;
     typedef std::hash_map<VertexDescriptor*, PdrVertexDescriptor*>      PdrVertexDescriptorType;
-    typedef std::hash_map<VertexDescriptor*, PdrVertexArrayObject*>     PdrVertexArrayObjectMapType;
+    typedef std::hash_map<VertexArray*, PdrVertexArrayObject*>     PdrVertexArrayObjectMapType;
 
     PdrShaderMapType                m_PdrShaderMap;
     PdrVertexBufferMapType          m_PdrVertexBufferMap;
@@ -80,12 +88,18 @@ public:
     int		VertexCount;
 
 private:
-    void    Enable              ( RenderablePass* pass, TransformableEntity* transform );
-    void    Enable              ( VertexBuffer* vb );
-    void    Enable              ( IndexBuffer* ib );
-    void    Enable              ( VertexBuffer* vb, VertexDescriptor* vd );
 
-    PdrVertexDescriptor*        GetPdrVertexDescriptor  ( VertexDescriptor* vd  );
+    void    Enable              ( RenderablePass * pass, TransformableEntity * transform );
+    void    Enable              ( VertexBuffer * vb );
+    void    Enable              ( IndexBuffer * ib );
+    void    Enable              ( VertexArray * vao );
+
+public:
+
+    PdrVertexBuffer *           GetPdrVertexBuffer      ( VertexBuffer * vb );
+    PdrIndexBuffer *            GetPdrIndexBuffer       ( IndexBuffer * ib );
+    PdrVertexDescriptor *       GetPdrVertexDescriptor  ( VertexDescriptor * vd );
+    PdrVertexArrayObject *      GetPdrVertexArray       ( VertexArray * vao );
 
     bool                        DrawRenderable          ( RenderableEntity* ent );
 };

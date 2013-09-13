@@ -266,12 +266,13 @@ void BlackVisionApp::OnIdle		()
 
     totalPassed += frameUpdate;
 
-    if ( totalPassed > 1.0 )
+    if ( totalPassed > 0.2 )
     {
         totalPassed = 0.0;
         std::cout.precision(4);
-        std::cout << "FPS: " << 1.0 / frameUpdate << std::endl;
-        std::cout << "Vertex "<<vertexCount<<" Model: " << modeldt * 1000.0 << "  Manager: " << managerdt * 1000.0 << "  Engine: " << enginedt * 1000.0 << " Render: " << renderdt * 1000.0 << " Total: " << frameUpdate * 1000.0 << std::endl;
+        //std::cout << "FPS: " << 1.0 / frameUpdate << std::endl;
+        //std::cout << "Vertex "<<vertexCount<<" Model: " << modeldt * 1000.0 << "  Manager: " << managerdt * 1000.0 << "  Engine: " << enginedt * 1000.0 << " Render: " << renderdt * 1000.0 << " Total: " << frameUpdate * 1000.0 << std::endl;
+        std::cout << "FPS: " << 1.0 / frameUpdate << " frame time: " << frameUpdate * 1000.0 << std::endl;
     }
 }
 

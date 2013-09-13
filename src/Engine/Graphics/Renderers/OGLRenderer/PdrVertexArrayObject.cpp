@@ -1,5 +1,8 @@
 #include "PdrVertexArrayObject.h"
 
+#include "Engine/Graphics/Resources/VertexArray.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexBuffer.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexDescriptor.h"
 #include "Renderer.h"
 
 #include "PdrVertexBuffer.h"
@@ -12,12 +15,17 @@ namespace bv
 
 // *******************************
 //
-PdrVertexArrayObject::PdrVertexArrayObject    ( PdrVertexBuffer * vb, PdrVertexDescriptor * vd )
-    : m_vertexBuffer( vb )
-    , m_vertexDescriptor( vd )
+PdrVertexArrayEntry::PdrVertexArrayEntry( PdrVertexBuffer * vb, PdrVertexDescriptor * vd )
+    : vertexBuffer( vb )
+    , vertexDescriptor( vd )
 {
-    assert( vb );
-    assert( vd );
+}
+
+// *******************************
+//
+PdrVertexArrayObject::PdrVertexArrayObject    ( Renderer * renderer, VertexArray * vao )
+{
+    assert( vao );
 
     //glGenVertexArrays         ( 1, &m_VaoHandle );
     //glBindVertexArray         ( m_VaoHandle );
@@ -28,9 +36,24 @@ PdrVertexArrayObject::PdrVertexArrayObject    ( PdrVertexBuffer * vb, PdrVertexD
 
     GLuint index = 0;
 
-    this->Bind();
-    this->EnableVertexAttribArray( index );
-    vd->VertexAttribPointer( index, vb );
+    Bind();
+
+    for( GLuint index = 0; index < (GLuint) vao->NumEntries(); ++index )
+    {
+        this->EnableVertexAttribArray( index );
+    }
+
+    for( GLuint index = 0; index < (GLuint) vao->NumEntries(); ++index )
+    {
+        VertexArrayEntry ve = vao->Entry( index );
+
+        PdrVertexBuffer *       pvb = renderer->GetPdrVertexBuffer( ve.vertexBuffer );
+        PdrVertexDescriptor *   pvd = renderer->GetPdrVertexDescriptor( ve.vertexDescriptor );
+
+        pvd->VertexAttribPointer( index, pvb );
+
+        m_vaoEntries.push_back( PdrVertexArrayEntry( pvb, pvd ) );
+    }
 }
 
 // *******************************

@@ -8,6 +8,7 @@ class VertexDescriptor;
 class VertexBuffer;
 class IndexBuffer;
 class RenderableEffect;
+class VertexArray;
 
 class RenderableEntity : public TransformableEntity
 {
@@ -29,6 +30,7 @@ protected:
     VertexDescriptor *  m_vDesc;
     VertexBuffer *      m_vBuf;
     IndexBuffer *       m_iBuf;
+    VertexArray *       m_vao;
 
     RenderableEffect *  m_effect;
 
@@ -44,7 +46,7 @@ public:
     VertexBuffer *          GetVertexBuffer            () { return m_vBuf; }
     IndexBuffer *           GetIndexBuffer             () { return m_iBuf; }
     RenderableEffect *      GetRenderableEffect        () { return m_effect; }
-
+    VertexArray *           GetVertexArray             () { return m_vao; }
 };
 
 }
