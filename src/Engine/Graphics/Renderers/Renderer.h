@@ -18,6 +18,8 @@ class PixelShader;
 class VertexShader;
 class GeometryShader;
 class RenderablePass;
+class Texture2D;
+class PdrTexture2D;
 
 class VertexBuffer;
 class IndexBuffer;
@@ -55,14 +57,15 @@ private:
     typedef std::hash_map<VertexBuffer*, PdrVertexBuffer*>              PdrVertexBufferMapType;
     typedef std::hash_map<IndexBuffer*, PdrIndexBuffer*>                PdrIndexBufferMapType;
     typedef std::hash_map<VertexDescriptor*, PdrVertexDescriptor*>      PdrVertexDescriptorType;
-    typedef std::hash_map<VertexArray*, PdrVertexArrayObject*>     PdrVertexArrayObjectMapType;
+    typedef std::hash_map<VertexArray*, PdrVertexArrayObject*>          PdrVertexArrayObjectMapType;
+    typedef std::hash_map<Texture2D*, PdrTexture2D*>                    PdrTexture2DMap;
 
     PdrShaderMapType                m_PdrShaderMap;
     PdrVertexBufferMapType          m_PdrVertexBufferMap;
     PdrIndexBufferMapType           m_PdrIndexBufferMap;
     PdrVertexDescriptorType         m_PdrVertexDescriptorMap;
     PdrVertexArrayObjectMapType     m_PdrVertexArrayObjectMap;
-
+    PdrTexture2DMap                 m_PdrTextures2DMap;
 
 public:
 
@@ -91,6 +94,7 @@ private:
     void    Enable              ( VertexBuffer * vb );
     void    Enable              ( IndexBuffer * ib );
     void    Enable              ( VertexArray * vao );
+    void    Enable              ( Texture2D * texture );
 
 public:
 
@@ -98,6 +102,7 @@ public:
     PdrIndexBuffer *            GetPdrIndexBuffer       ( IndexBuffer * ib );
     PdrVertexDescriptor *       GetPdrVertexDescriptor  ( VertexDescriptor * vd );
     PdrVertexArrayObject *      GetPdrVertexArray       ( VertexArray * vao );
+    PdrTexture2D *              GetPdrTexture2D         ( Texture2D * texture );
 
     bool                        DrawRenderable          ( RenderableEntity* ent );
 };
