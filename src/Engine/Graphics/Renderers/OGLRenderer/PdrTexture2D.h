@@ -6,6 +6,7 @@ namespace bv
 {
 
 class Texture2D;
+class Renderer;
 
 class PdrTexture2D
 {
@@ -14,8 +15,8 @@ private:
 
 public:
 
-    void            Enable          ();
-    void            Disable         ();
+    void            Enable          ( Renderer * renderer );
+    void            Disable         ( Renderer * renderer );
 
     void            Bind            ();
     void            Unbind          ();

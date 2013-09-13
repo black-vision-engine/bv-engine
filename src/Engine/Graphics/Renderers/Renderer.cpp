@@ -214,6 +214,8 @@ void    Renderer::Enable              ( RenderablePass* pass, TransformableEntit
         gs->UpdateP( projMat );
     }
 
+
+    shader->EnableTexture( nullptr );
     shader->Enable( this );
 }
 
@@ -245,7 +247,8 @@ void    Renderer::Enable              ( VertexArray * vao )
 //
 void    Renderer::Enable              ( Texture2D * texture )
 {
-
+    PdrTexture2D* pdrTex2D = GetPdrTexture2D( texture );
+    pdrTex2D->Enable( this );
 }
 
 // *********************************

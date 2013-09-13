@@ -70,6 +70,14 @@ void PdrShader::Disable        ( Renderer * renderer )
 }
 
 // *******************************
+//
+void PdrShader::EnableTexture  ( PdrTexture2D* pdrTex )
+{
+    //FIXME: get form texture
+    m_program->SetUniform("Tex1", 0);
+}
+
+// *******************************
 // FIXME: if enabled or something should be used here
 void    PdrShader::SetUniforms     ( Shader * shader )
 {

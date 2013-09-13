@@ -14,6 +14,7 @@ class PixelShader;
 class VertexShader;
 class GeometryShader;
 class GenericShaderParam;
+class PdrTexture2D;
 
 class PdrShader
 {
@@ -40,6 +41,7 @@ public:
     void Enable         ( Renderer * renderer );
     void Disable        ( Renderer * renderer );
 
+    void EnableTexture  ( PdrTexture2D* pdrTex );
     //FIXME: add when textures are more or less implemented
     //void SetSamplerState (Renderer* renderer, RendererData::SamplerState * curSamplerState );
     //void DisableTextures (Renderer* renderer );
