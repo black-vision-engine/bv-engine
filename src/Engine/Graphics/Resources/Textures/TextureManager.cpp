@@ -1,5 +1,5 @@
 #include "TextureManager.h"
-#include "Texture.h"
+#include "Texture2D.h"
 
 #include "FreeImagePlus.h"
 
@@ -32,7 +32,7 @@ TextureManager::~TextureManager()
 
 // *********************************
 //
-Texture * TextureManager::LoadTexture( const std::string & filename, bool loadFromMemory )
+Texture2D * TextureManager::LoadTexture( const std::string & filename, bool loadFromMemory )
 {
     boost::filesystem::path filepath( filename );
     std::string errMsg( "Cannot read file: " + filename ); 
@@ -76,7 +76,12 @@ Texture * TextureManager::LoadTexture( const std::string & filename, bool loadFr
         }
     }
 
-    Texture * newTex = new bv::Texture( fipImg );
+    if(!fipImg->convertTo32Bits())
+    {
+        throw std::runtime_error( "Cannot convert texture to bitmap" );
+    }
+
+    bv::Texture2D * newTex = new bv::Texture2D( Texture::TFormat::F_A8R8G8B8, fipImg->getWidth(), fipImg->getHeight() );
 
     m_txMap[ newTex ] = newTex;
 
