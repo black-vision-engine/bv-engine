@@ -19,7 +19,7 @@ RenderTarget::RenderTarget ( int numTargets, Texture::TFormat format, int w, int
 
     for( i = 0; i < numTargets; ++i )
     {
-        m_ColorTextures.push_back( new Texture2D( format, w, h, numLevels, DataBuffer::Semantic::S_RENDERTARGET ) );
+        m_ColorTextures.push_back( new Texture2D( format, w, h, DataBuffer::Semantic::S_RENDERTARGET ) );
     }
 
 }
@@ -48,21 +48,21 @@ int RenderTarget::NumTargets () const
 //
 Texture::TFormat RenderTarget::Format () const
 {
-    return m_ColorTextures[ 0 ]->Format();
+    return m_ColorTextures[ 0 ]->GetFormat();
 }
 
 // *********************************
 //
 int RenderTarget::Width () const
 {
-    return m_ColorTextures[ 0 ]->Width();
+    return m_ColorTextures[ 0 ]->GetWidth();
 }
 
 // *********************************
 //
 int RenderTarget::Height () const
 {
-    return m_ColorTextures[ 0 ]->Height();
+    return m_ColorTextures[ 0 ]->GetHeight();
 }
 
 // *********************************
