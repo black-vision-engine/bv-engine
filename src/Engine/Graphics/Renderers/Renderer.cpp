@@ -30,12 +30,6 @@ void	Renderer::Initialize	    ( int w, int h, Texture::TFormat colorFormat )
 
     //FIXME: add all renderer states (either as separate classes or as bunch of states stored in member variables, possibly add multisampling support)
     //FIXME: possibly add stencil data
-    //mDefaultAlphaState = new0 AlphaState();
-//   mDefaultCullState = new0 CullState();
-//   mDefaultDepthState = new0 DepthState();
-//   mDefaultOffsetState = new0 OffsetState();
-//   mDefaultStencilState = new0 StencilState();
-//   mDefaultWireState = new0 WireState();
  
     m_Camera		= nullptr;
     m_ClearColor	= glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f );
