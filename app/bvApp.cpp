@@ -262,8 +262,6 @@ void BlackVisionApp::OnIdle		()
     double enginedt = engineUpdate - managerUpdate;
     double renderdt = frameUpdate - engineUpdate;
 
-    int vertexCount = m_Renderer->VertexCount;
-
     totalPassed += frameUpdate;
 
     if ( totalPassed > 0.2 )
@@ -396,7 +394,7 @@ void BlackVisionApp::AddCameraAnimation  ()
     alpha = AddRotKeys( position, alpha, 7. * dt, 0.5f, t );
     alpha = AddRotKeys( position, alpha, 8. * dt, 0.01f, t );
     alpha = AddRotKeys( position, alpha, endTime, 0.2f, t );
-    alpha = AddRotKeys( position, 0.f, 2.f * M_PI, 0.05, t );
+    alpha = AddRotKeys( position, 0.f, 2. * M_PI, 0.05f, t );
  
     //float alpha = 0.f;
     //for(float alpha = 0.f; alpha <= 2 * M_PI ; alpha += 0.05f)

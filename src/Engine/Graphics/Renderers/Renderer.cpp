@@ -148,7 +148,7 @@ bool    Renderer::Draw                  ( RenderableEntity* ent )
     if (vao)
         Enable(vao);
 
-    Enable(eff->GetPass(0), ent); //FIXME: 0 pass
+    Enable(eff->GetPass(0), ent); //FIXME: 1 pass
 
     //glPolygonMode(GL_FRONT, GL_LINE);
     //glPolygonMode(GL_BACK, GL_LINE);
@@ -161,8 +161,6 @@ bool    Renderer::Draw                  ( RenderableEntity* ent )
     //    Disable(ib);
 
     //Disable(vb);
-
-	VertexCount = 999;
 
 
     return true;
