@@ -10,6 +10,7 @@
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexBuffer.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexArrayObject.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexDescriptor.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrTexture2D.h"
 #include "Engine/Graphics/Shaders/RenderablePass.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
@@ -168,7 +169,7 @@ bool    Renderer::Draw                  ( RenderableEntity* ent )
 
     //Disable(vb);
 
-	VertexCount = 999;
+    VertexCount = 999;
 
 
     return true;
@@ -246,6 +247,13 @@ void    Renderer::Enable              ( VertexArray * vao )
 {
     PdrVertexArrayObject  * pvao = GetPdrVertexArray( vao );
     pvao->Enable( this );    
+}
+
+// *********************************
+//
+void    Renderer::Enable              ( Texture2D * texture )
+{
+
 }
 
 // *********************************
@@ -331,5 +339,25 @@ PdrVertexArrayObject *         Renderer::GetPdrVertexArray         ( VertexArray
 
     return pdrVao;
 }
+
+PdrTexture2D *                  Renderer::GetPdrTexture2D         ( Texture2D * texture )
+{
+    auto it = m_PdrTextures2DMap.find( texture );
+
+    PdrTexture2D* pdrTex = nullptr;
+
+    if( it == m_PdrTextures2DMap.end() )
+    {
+        pdrTex = PdrTexture2D::Create( texture );
+        m_PdrTextures2DMap[ texture ] = pdrTex;
+    }
+    else
+    {
+        pdrTex = it->second;
+    }
+
+    return pdrTex;
+}
+
 
 }
