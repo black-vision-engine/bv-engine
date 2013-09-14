@@ -1,15 +1,25 @@
 #include "PluginGeometryRect.h"
 #include <cassert>
 
-
-
 namespace bv {
+
+// ***************************** DESCRIPTOR ********************************** 
+//PLUGIN NAME
+const std::string PluginGeometryRectPD::pluginName( "geometry.rect" );
+
+// *************************************
+//
+PluginGeometryRectPD::PluginGeometryRectPD()
+    : BaseParametersDescriptor( pluginName )
+{
+}
+
+// ***************************** PLUGIN ********************************** 
 
 // *********************************
 //
 PluginGeometryRect::PluginGeometryRect  ( float w, float h )
-    : PluginGeometry("geometry.rect")
-    , m_width( w )
+    : m_width( w )
     , m_height( h )
     , m_adjacency( Adjacency::A_TRIANGLE_STRIP )
     , m_ccw( true )

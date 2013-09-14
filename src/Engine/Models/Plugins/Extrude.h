@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine/Models/Plugins/PluginParameters.h"
 #include "Engine/Models/Plugin.h"
 
 #include "Solid.h" // FIXME: move ParametersDescriptor to separated header
@@ -10,30 +11,37 @@ namespace bv
 class ParamFloat;
 class ValueFloat;
 
+// ***************************** DESCRIPTOR **********************************
 class ExtrudeParamDescriptor : public BaseParametersDescriptor 
 {
 public:
-    std::string m_scaleParamName;
+    
+    static const std::string pluginName;
 
-    ExtrudeParamDescriptor();
+    static const std::string scaleParamName;
+
+    explicit ExtrudeParamDescriptor();
 };
 
-class ExtrudePlugin : public BasePlugin< IShaderPlugin >
-{
-    ExtrudeParamDescriptor*     m_paramDesc;
 
-    ParamFloat*                 m_scale;
-    ValueFloat*                 m_scaleValue;
+// ***************************** PLUGIN ********************************** 
+class ExtrudePlugin : public BasePlugin< IShaderPlugin, ExtrudeParamDescriptor >
+{
+private:
+
+    ParamFloat *                m_scaleParam;
+    ValueFloat *                m_scaleValue;
 
 public:
 
-    virtual std::string     GetShaderFile() const override;
+    explicit                ExtrudePlugin   ( const FloatInterpolator & scale );
+                            ~ExtrudePlugin  ();
 
-    void                    Update(float t) override;
+    virtual std::string     GetShaderFile   () const override;
 
-    explicit                ExtrudePlugin(const FloatInterpolator& scale);
+            void            Update          ( float t ) override;
+    virtual void            Print           ( std::ostream &,int ) const {}
 
-    virtual void            Print(std::ostream &,int) const {}
 };
 
 } // bv

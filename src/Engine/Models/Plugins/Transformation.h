@@ -1,6 +1,8 @@
 #pragma once
 
+#include "Engine/Models/Plugins/PluginParameters.h"
 #include "Engine/Models/Plugin.h"
+
 #include "Mathematics/Transform/MatTransform.h"
 #include "Engine/Models/Parameter.h"
 
@@ -8,11 +10,23 @@ namespace bv {
 
 class BuildScene;
 
-class Transformation : public BasePlugin<ITransformPlugin>
+class WypierdalajParamDescriptor : public BaseParametersDescriptor 
+{
+public:
+
+    static const std::string  pluginName;
+
+    explicit WypierdalajParamDescriptor()
+        : BaseParametersDescriptor( pluginName )
+    {
+    }
+};
+
+class Transformation : public BasePlugin<ITransformPlugin, WypierdalajParamDescriptor>
 {
 public:
     Transformation(const std::string& name, const TransformF& trans)
-        : BasePlugin("Transformation")
+       // : BasePlugin("Transformation")
     {
         if(name == "MVP")
         {

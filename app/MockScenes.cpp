@@ -33,7 +33,7 @@ void AnimLines(bv::BasicNode* parent)
 	bv::BasicNode* lineUp = new bv::BasicNode();
 	bv::Vec4Interpolator color;
 	
-	color.addKey(0.01, glm::vec4(0,0,1,1));
+	color.addKey(0.01f, glm::vec4(0,0,1,1));
 	color.setWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
 	bv::SolidColorPlugin* solidRect = new bv::SolidColorPlugin(color);
 	lineUp->setPixelShaderPlugin(solidRect);
@@ -203,10 +203,10 @@ void createMyRing(bv::BasicNode* parent,float offsetZ,float offsetX,float offset
 }
 void NightRect(bv::BasicNode* parent, int number,float offsetX,float offsetY)
 {
-	float RectWidth=0.04;
+	float RectWidth=0.04f;
 	bv::BasicNode* rectNode = new bv::BasicNode();
 	bv::Vec4Interpolator color;
-	float atom=0.1;
+	float atom=0.1f;
 	color.addKey(number*atom, glm::vec4(0,0,0,0));
 	color.addKey(number*atom+2, glm::vec4(0,0,0,0));
 	color.addKey(number*atom+3, glm::vec4(1,0,0,1));

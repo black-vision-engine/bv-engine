@@ -1,45 +1,36 @@
-#pragma once 
+#pragma once
 
 #include "Engine/Models/Plugin.h"
 #include "Engine/Models/Plugins/PluginParameters.h"
 
 namespace bv {
 
-class ParamVec4;
-class ValueVec4;
-
 // ***************************** DESCRIPTOR **********************************
-class SolidParametersDescriptor : public BaseParametersDescriptor
+class TexturePluginParametersDescriptor : public BaseParametersDescriptor
 {
 public:
 
     static const std::string            pluginName;
 
-    static const std::string colorParamName;
-
-    explicit SolidParametersDescriptor();
+    explicit TexturePluginParametersDescriptor();
 };
 
 
 // ***************************** PLUGIN ********************************** 
-class SolidColorPlugin : public BasePlugin< IShaderPlugin, SolidParametersDescriptor >
+class SimpleTexturePlugin : public BasePlugin< IShaderPlugin, TexturePluginParametersDescriptor >
 {
 private:
 
-    ParamVec4 *                     m_colorParam;
-    ValueVec4 *                     m_colorValue;
+    std::string     m_textureFileName;
 
 public:
 
-    explicit            SolidColorPlugin    ( const Vec4Interpolator & col );
-                        ~SolidColorPlugin   ();
-
+    explicit            SimpleTexturePlugin ( const std::string & textureFileName );
     virtual std::string GetShaderFile       () const override;
 
 
     void                Update              ( float t ) override;
     void                Print               ( std::ostream & out, int tabs = 0 ) const override;
-
 };
 
 } // bv

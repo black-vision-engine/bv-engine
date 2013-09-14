@@ -5,46 +5,71 @@
 
 namespace bv {
 
-using namespace debug;
+// ***************************** DESCRIPTOR **********************************
+//PLUGIN NAME
+const std::string SolidParametersDescriptor::pluginName( "Solid" );
 
+//PLUGIN PARAMETERS
+const std::string SolidParametersDescriptor::colorParamName( "solidColod" );
+
+// ******************************
+//
 SolidParametersDescriptor::SolidParametersDescriptor()
+    : BaseParametersDescriptor( pluginName )
 {
-    m_colorParamName            = "solidColor";
-    m_params[m_colorParamName]  = ParamType::PT_FLOAT4;
+    m_params[ colorParamName ] = ParamType::PT_FLOAT4;
 }
 
-SolidColorPlugin::SolidColorPlugin(const Vec4Interpolator& col)
-    : BasePlugin("Solid")
+
+// ***************************** PLUGIN **********************************
+
+// ******************************
+//
+SolidColorPlugin::SolidColorPlugin( const Vec4Interpolator & col )
 {
-    m_paramDesc = new SolidParametersDescriptor();
     //FIXME: pass params in constructor
-    m_color         = new ParamVec4(m_paramDesc->m_colorParamName, col);
-    m_colorValue    = new ValueVec4(m_paramDesc->m_colorParamName);
+    m_colorParam    = new ParamVec4( ParamDesc::colorParamName, col );
+    m_colorValue    = new ValueVec4( ParamDesc::colorParamName );
 
-    m_paramDesc->ValidateParameters(GetShaderFile());
+    //FIXME: GetShaderResource should be used instead
+    PluginParamDesc().ValidateParameters( GetShaderFile() );
 
-    RegisterValue(m_colorValue);
+    RegisterValue( m_colorValue );
+}
+
+// ******************************
+//
+SolidColorPlugin::~SolidColorPlugin   ()
+{
+    delete m_colorParam;
+    delete m_colorValue;
 }
 
 //GetModelParamList() //TODO
 
-std::string SolidColorPlugin::GetShaderFile() const
+// ******************************
+//
+std::string SolidColorPlugin::GetShaderFile () const
 {
-    // TODO; do not bind Solid with exact shader
+    // TODO; do not bind Solid with exact shader - at some point it will be provided by GLSL shader service or whatever else resource manager
     return "../dep/media/shaders/solid.frag";
 }
 
+// ******************************
+//
 void SolidColorPlugin::Update(float t)
 {
-    m_colorValue->SetValue( m_color->Evaluate( t ) );
+    m_colorValue->SetValue( m_colorParam->Evaluate( t ) );
 }
 
+// ******************************
+//
 void SolidColorPlugin::Print(std::ostream& out, int tabs) const
 {
-    out << m_pluginName << EndLine(tabs);
-    out << "PARAMS:" << EndLine(tabs);
+    out << GetName() << debug::EndLine(tabs);
+    out << "PARAMS:" << debug::EndLine(tabs);
     const glm::vec4& val = m_colorValue->GetValue();
-    out << m_color->getName() << "  " << val.a<< " " << val.r<< " " << val.g<< " " << val.b << EndLine(tabs);
+    out << m_colorParam->getName() << "  " << val.a<< " " << val.r<< " " << val.g<< " " << val.b << debug::EndLine(tabs);
 }
 
 } // bv

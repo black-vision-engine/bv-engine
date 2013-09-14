@@ -5,33 +5,57 @@
 namespace bv
 {
 
+// ***************************** DESCRIPTOR ********************************** 
+//PLUGIN NAME
+const std::string ExtrudeParamDescriptor::pluginName( "Extrude" );
+
+//PLUGIN PARAMETERS
+const std::string ExtrudeParamDescriptor::scaleParamName( "scale" );
+
+// ******************************
+//
 ExtrudeParamDescriptor::ExtrudeParamDescriptor()
+    : BaseParametersDescriptor( pluginName )
 {
-    m_scaleParamName = "scale";
-    m_params[m_scaleParamName]  = ParamType::PT_FLOAT;
+    m_params[ scaleParamName ]  = ParamType::PT_FLOAT;
 }
 
-ExtrudePlugin::ExtrudePlugin(const FloatInterpolator& scale)
-    : BasePlugin("Extrude")
+
+// ***************************** PLUGIN **********************************
+
+// ******************************
+//
+ExtrudePlugin::ExtrudePlugin( const FloatInterpolator & scale )
 {
-    m_paramDesc = new ExtrudeParamDescriptor();
     //FIXME: pass params in constructor
-    m_scale         = new ParamFloat(m_paramDesc->m_scaleParamName, scale);
-    m_scaleValue    = new ValueFloat(m_paramDesc->m_scaleParamName);
+    m_scaleParam    = new ParamFloat( ParamDesc::scaleParamName, scale );
+    m_scaleValue    = new ValueFloat( ParamDesc::scaleParamName );
 
-    m_paramDesc->ValidateParameters(GetShaderFile());
+    PluginParamDesc().ValidateParameters( GetShaderFile() );
 
-    RegisterValue(m_scaleValue);
+    RegisterValue( m_scaleValue );
 }
 
+// ******************************
+//
+ExtrudePlugin::~ExtrudePlugin()
+{
+    delete m_scaleParam;
+    delete m_scaleValue;
+}
+
+// ******************************
+//
 std::string ExtrudePlugin::GetShaderFile() const
 {
     return "../dep/media/shaders/extrude.geom";
 }
 
-void ExtrudePlugin::Update(float t)
+// ******************************
+//
+void ExtrudePlugin::Update( float t )
 {
-    m_scaleValue->SetValue( m_scale->Evaluate( t ) );
+    m_scaleValue->SetValue( m_scaleParam->Evaluate( t ) );
 }
 
 };

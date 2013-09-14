@@ -5,17 +5,34 @@
 
 namespace bv
 {
+
 class ParamTransform;
 
-class PluginTransformSimple : public PluginTransform
+// ***************************** DESCRIPTOR **********************************
+class SimpleTransformPluginParametersDescriptor : public BaseParametersDescriptor
 {
-    ParamTransform*          m_transParam;
+public:
+
+    static const std::string            pluginName;
+
+    explicit SimpleTransformPluginParametersDescriptor();
+};
+
+
+// ***************************** PLUGIN ********************************** 
+
+class PluginTransformSimple : public PluginTransform< SimpleTransformPluginParametersDescriptor >
+{
+private:
+
+    ParamTransform *    m_transParam; //FIXME: trans to sa kurwa tluszcze i do tego nienasycone !!!
 
 public:
-    virtual void    Update          (float t) override;
 
-    explicit PluginTransformSimple(const TransformF&);
-    virtual ~PluginTransformSimple(){}
+    virtual void    Update                  ( float t ) override;
+
+    explicit        PluginTransformSimple   ( const TransformF & );
+    virtual         ~PluginTransformSimple  ();
 };
 
 }

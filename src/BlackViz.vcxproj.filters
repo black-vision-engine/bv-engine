@@ -78,6 +78,8 @@
     <ClCompile Include="System\HRTimer.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\Texture2D.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\SimpleTexture.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\PluginParameters.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -165,5 +167,7 @@
     <ClInclude Include="Engine\Models\Plugins\Extrude.h" />
     <ClInclude Include="System\HRTimer.h" />
     <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.h" />
+    <ClInclude Include="Engine\Models\Plugins\SimpleTexture.h" />
+    <ClInclude Include="Engine\Models\Plugins\PluginParameters.h" />
   </ItemGroup>
 </Project>

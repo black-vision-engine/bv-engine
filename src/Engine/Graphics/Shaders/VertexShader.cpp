@@ -2,6 +2,8 @@
 
 namespace bv {
 
+// *********************************
+//
 std::string PassThroughVertexShader::m_programSource = "   #version 400 \n \
                                                             \
                                                             layout (location = 0) in vec3 vertexPosition; \n \
@@ -42,6 +44,8 @@ VertexShader::VertexShader( const std::string & programSource )
     ret->RegisterParameter(genShaderParam);
 }
 
+// *********************************
+//
 void        VertexShader::UpdateMVP( const glm::mat4& MVP )
 {
     GenericShaderParam* mvp = m_parameters->GetParam("MVP");
@@ -50,6 +54,8 @@ void        VertexShader::UpdateMVP( const glm::mat4& MVP )
     mvp->GenericSetVal(&MVP);
 }
 
+// *********************************
+//
 void        VertexShader::UpdateMV( const glm::mat4& MV )
 {
     GenericShaderParam* mv = m_parameters->GetParam("MV");
@@ -58,6 +64,8 @@ void        VertexShader::UpdateMV( const glm::mat4& MV )
     mv->GenericSetVal(&MV);
 }
 
+// *********************************
+//
 void        VertexShader::UpdateP( const glm::mat4& P )
 {
     GenericShaderParam* p = m_parameters->GetParam("P");
@@ -66,18 +74,25 @@ void        VertexShader::UpdateP( const glm::mat4& P )
     p->GenericSetVal(&P);
 }
 
+// ***************************** DESCRIPTOR **********************************
+//PLUGIN NAME
+const std::string PassThroughVertexShaderParametersDescriptor::pluginName( "pastruvertexszader" );
+
+//PLUGIN PARAMETERS
+const std::string  PassThroughVertexShaderParametersDescriptor::MVPParamName( "MVP" );
+
 // *********************************
 //
 PassThroughVertexShaderParametersDescriptor::PassThroughVertexShaderParametersDescriptor()
+    : BaseParametersDescriptor( "passthroughvertexshader" )
 {
-    m_MVPParamName              = "MVP";
-    m_params[m_MVPParamName]    = ParamType::PT_MAT4;
+    m_params[ MVPParamName ]    = ParamType::PT_MAT4;
 }
 
 // *********************************
 //
 PassThroughVertexShader::PassThroughVertexShader(PassThroughVertexShaderParametersDescriptor* desc)
-    : VertexShader(PassThroughVertexShader::m_programSource)
+    : VertexShader( PassThroughVertexShader::m_programSource )
 {
     //FIXME: pass params in constructor
     desc->ValidateParameters(PassThroughVertexShader::m_programSource);

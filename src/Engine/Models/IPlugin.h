@@ -46,21 +46,24 @@ namespace bv {
 class IPlugin
 {
 public:
-    virtual std::string                 getName             () const = 0;
 
-    //virtual bool                        IsActual            () const = 0;
-    virtual void                        Update              (float t) = 0;
-    virtual void                        Print               (std::ostream& out, int tabs = 0) const = 0;
+    virtual const std::string &                 GetName             ()                                      const = 0;
 
-    virtual ~IPlugin(){}
+    //virtual bool                              IsUpToDate          ()                                      const = 0;
+    virtual void                                Update              ( float t )                                   = 0;
+    virtual void                                Print               ( std::ostream & out, int tabs = 0 )    const = 0;
 
-    virtual const std::vector<IValue*>&             GetValuesList()     const = 0;
-    virtual const std::vector<IParameter*>&         GetParametersList() const = 0;
+    virtual                                     ~IPlugin            (){}
+
+    virtual const std::vector<IValue*> &        GetValuesList       ()                                      const = 0;
+    virtual const std::vector<IParameter*> &    GetParametersList   ()                                      const = 0;
+
 };
 
 class IShaderPlugin : public IPlugin
 {
 public:
+
     virtual std::string         GetShaderFile(/* TODO; Przekazaæ tu coœ */) const  = 0;
 };
 
@@ -120,6 +123,7 @@ public:
 class ITransformPlugin : public IPlugin
 {
 public:
+
     virtual const glm::mat4 &   TransformMatrix     () const = 0;
 };
 

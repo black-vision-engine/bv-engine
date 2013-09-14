@@ -3,12 +3,26 @@
 #include <vector>
 #include "glm/glm.hpp"
 
+#include "Engine/Models/Plugins/PluginParameters.h"
 #include "PluginGeometry.h"
 
 namespace bv
 {
 
-class PluginGeometryRing  : public PluginGeometry
+// ***************************** DESCRIPTOR **********************************
+class PluginGeometryRingPD : public BaseParametersDescriptor
+{
+public:
+
+    static const std::string pluginName;
+
+    explicit PluginGeometryRingPD();
+
+};
+
+
+// ***************************** PLUGIN ********************************** 
+class PluginGeometryRing  : public PluginGeometry< PluginGeometryRingPD >
 {
 	FloatInterpolator m_InnerRadius;
 	FloatInterpolator m_OuterRadius;

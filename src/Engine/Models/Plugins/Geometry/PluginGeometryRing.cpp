@@ -3,14 +3,28 @@
 namespace bv
 {
 
-PluginGeometryRing::PluginGeometryRing(const FloatInterpolator& innerRadius, const FloatInterpolator& outerRadius,
-										const FloatInterpolator& startAngle, const FloatInterpolator& endAngle, int numSegments)
-										: PluginGeometry("geometry.ring")
-										, m_InnerRadius(innerRadius)
-										, m_OuterRadius(outerRadius)
-										, m_StartAngle(startAngle)
-										, m_EndAngle(endAngle)
-										, m_numSegments(numSegments)
+// ***************************** DESCRIPTOR ********************************** 
+//PLUGIN NAME
+const std::string PluginGeometryRingPD::pluginName( "geometry.ring" );
+
+// *************************************
+//
+PluginGeometryRingPD::PluginGeometryRingPD()
+    : BaseParametersDescriptor( pluginName )
+{
+}
+
+// ***************************** PLUGIN ********************************** 
+
+// *************************************
+//
+PluginGeometryRing::PluginGeometryRing( const FloatInterpolator & innerRadius, const FloatInterpolator & outerRadius,
+										const FloatInterpolator & startAngle, const FloatInterpolator & endAngle, int numSegments )
+										: m_InnerRadius( innerRadius )
+										, m_OuterRadius( outerRadius )
+										, m_StartAngle( startAngle )
+										, m_EndAngle( endAngle )
+										, m_numSegments( numSegments )
 {
 	TriStripRep();
 }
@@ -50,59 +64,83 @@ void				PluginGeometryRing::TriStripRep             ()
     m_adjacency = Adjacency::A_TRIANGLE_STRIP;
 }
 
+// *************************************
+//
 bool                PluginGeometryRing::IsTimeInvariant     () const
 {
 	return true;
 }
 
-PluginGeometry::Adjacency PluginGeometryRing::AdjacencyType       () const
+// *************************************
+//
+PluginGeometryRing::Adjacency PluginGeometryRing::AdjacencyType       () const
 {
 	return m_adjacency;
 }
 
+// *************************************
+//
 void                PluginGeometryRing::ConvertToTraingles  ()
 {
 
 }
 
+// *************************************
+//
 void                PluginGeometryRing::ConvertToMesh       ()
 {
 }
 
+// *************************************
+//
 bool                PluginGeometryRing::IsCW                () const
 {
 	return !m_ccw;
 }
 
+// *************************************
+//
 bool                PluginGeometryRing::IsCCW               () const
 {
 	return m_ccw;
 }
 
+// *************************************
+//
 void                PluginGeometryRing::SetCW               ()
 {
 
 }
 
+// *************************************
+//
 void                PluginGeometryRing::SetCCW              ()
 {
 }
 
+// *************************************
+//
 bool                PluginGeometryRing::IsVertexNumConst    () const
 {
 	return true;
 }
 
+// *************************************
+//
 bool                PluginGeometryRing::IsAdjacencyConst    () const
 {
 	return true;
 }
 
+// *************************************
+//
 bool                PluginGeometryRing::IsVertexTypeConst   () const
 {
 	return true;
 }
 
+// *************************************
+//
 void				PluginGeometryRing::Update				(float t)
 {
 

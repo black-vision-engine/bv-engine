@@ -1,3 +1,5 @@
+#pragma once
+
 #include "IParameter.h"
 #include "Mathematics/Interpolators/Interpolators.h"
 #include "Mathematics/Transform/MatTransform.h"

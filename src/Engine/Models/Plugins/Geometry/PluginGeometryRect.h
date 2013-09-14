@@ -3,11 +3,26 @@
 #include <vector>
 #include "glm/glm.hpp"
 
+#include "Engine/Models/Plugins/PluginParameters.h"
 #include "PluginGeometry.h"
 
-namespace bv {
+namespace bv 
+{
 
-class PluginGeometryRect : public PluginGeometry
+// ***************************** DESCRIPTOR **********************************
+class PluginGeometryRectPD : public BaseParametersDescriptor
+{
+public:
+
+    static const std::string pluginName;
+
+    explicit PluginGeometryRectPD();
+
+};
+
+
+// ***************************** PLUGIN ********************************** 
+class PluginGeometryRect : public PluginGeometry< PluginGeometryRectPD >
 {
 private:
 
