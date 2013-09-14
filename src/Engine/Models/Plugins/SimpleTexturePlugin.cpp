@@ -1,4 +1,4 @@
-#include "SimpleTexture.h"
+#include "SimpleTexturePlugin.h"
 #include "System/Print.h"
 
 namespace bv {

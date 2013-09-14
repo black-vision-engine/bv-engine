@@ -30,6 +30,7 @@ public:
 
     void                Update              ( float t ) override;
     void                Print               ( std::ostream & out, int tabs = 0 ) const override;
+
 };
 
 } // bv

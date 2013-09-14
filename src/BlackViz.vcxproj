@@ -193,7 +193,7 @@
     <ClCompile Include="Engine\Models\Plugins\Extrude.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginParameters.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\SimpleTexture.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\SimpleTexturePlugin.cpp" />
     <ClCompile Include="Engine\Models\Updaters\CameraUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\ShaderParamUpdater.cpp" />
     <ClCompile Include="System\HRTimer.cpp" />
@@ -273,7 +273,7 @@
     <ClInclude Include="Engine\Models\Plugins\Extrude.h" />
     <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginParameters.h" />
-    <ClInclude Include="Engine\Models\Plugins\SimpleTexture.h" />
+    <ClInclude Include="Engine\Models\Plugins\SimpleTexturePlugin.h" />
     <ClInclude Include="Engine\Models\Updaters\CameraUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\ShaderParamUpdater.h" />
     <ClInclude Include="System\HRTimer.h" />
