@@ -28,7 +28,6 @@ public:
     explicit            SimpleTexturePlugin ( const std::string & textureFileName );
     virtual std::string GetShaderFile       () const override;
 
-
     void                Update              ( float t ) override;
     void                Print               ( std::ostream & out, int tabs = 0 ) const override;
 };
