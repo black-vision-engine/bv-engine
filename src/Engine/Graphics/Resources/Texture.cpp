@@ -19,10 +19,13 @@ int Texture::m_sPixelSize[ Texture::TFormat::F_TOTAL ] =
 // *********************************
 //  
 Texture::Texture                                ( Texture::TFormat format, Texture::TType type, DataBuffer::Semantic semantic )
-    : m_format(format)
-    , m_type(type)
-    , m_semantic(semantic)
-{}
+    : m_format( format )
+    , m_type( type )
+    , m_semantic( semantic )
+    , m_data( nullptr )
+    , m_dataSize( 0 )
+{
+}
 
 // *********************************
 //
@@ -66,6 +69,13 @@ int                     Texture::GetPixelSize   ( Texture::TFormat format )
 
 // *********************************
 //
+size_t                   Texture::GetDataSize     () const
+{
+    return m_dataSize;
+}
+
+// *********************************
+//
 char *		            Texture::GetData        ()
 {
     return m_data;
@@ -76,6 +86,21 @@ char *		            Texture::GetData        ()
 const char *            Texture::GetData	    () const
 {
     return m_data;
+}
+
+// *********************************
+//
+bool                    Texture::WriteToBuffer   ( char * memPtr, size_t dataSize )
+{
+    if ( GetDataSize() != dataSize )
+    {
+        delete[] m_data;
+        m_data = new char[ dataSize ];
+        memcpy( m_data, memPtr, dataSize );
+        m_dataSize = dataSize;
+    }
+
+    return true;
 }
 
 }
