@@ -6,18 +6,18 @@
 namespace bv {
 
 // ***************************** DESCRIPTOR **********************************
-class TexturePluginParametersDescriptor : public BaseParametersDescriptor
+class SimpleTexturePixelPluginPD : public BaseParametersDescriptor
 {
 public:
 
     static const std::string            pluginName;
 
-    explicit TexturePluginParametersDescriptor();
+    explicit SimpleTexturePixelPluginPD();
 };
 
 
 // ***************************** PLUGIN ********************************** 
-class SimpleTexturePlugin : public BasePlugin< IShaderPlugin, TexturePluginParametersDescriptor >
+class SimpleTexturePixelPlugin : public BasePlugin< IShaderPlugin, SimpleTexturePixelPluginPD >
 {
 private:
 
@@ -25,11 +25,35 @@ private:
 
 public:
 
-    explicit            SimpleTexturePlugin ( const std::string & textureFileName );
-    virtual std::string GetShaderFile       () const override;
+    explicit            SimpleTexturePixelPlugin    ( const std::string & textureFileName );
+    virtual std::string GetShaderFile               () const override;
 
-    void                Update              ( float t ) override;
-    void                Print               ( std::ostream & out, int tabs = 0 ) const override;
+    void                Update                      ( float t ) override;
+    void                Print                       ( std::ostream & out, int tabs = 0 ) const override;
+
+};
+
+// ***************************** DESCRIPTOR **********************************
+class SimpleTextureVertexPluginPD : public BaseParametersDescriptor
+{
+public:
+
+    static const std::string            pluginName;
+
+    explicit SimpleTextureVertexPluginPD();
+};
+
+
+// ***************************** PLUGIN ********************************** 
+class SimpleTextureVertexPlugin : public BasePlugin< IShaderPlugin, SimpleTexturePixelPluginPD >
+{
+public:
+
+    explicit            SimpleTextureVertexPlugin   ();
+    virtual std::string GetShaderFile               () const override;
+
+    void                Update                      ( float t ) override;
+    void                Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
 };
 

@@ -10,5 +10,5 @@ out vec2 texCord;
 void main()
 {
     gl_Position = MVP * vec4(vertexPosition, 1.0);
-	texCord = vertexTexCoord;
+    texCord = vertexTexCoord;
 }

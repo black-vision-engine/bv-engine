@@ -64,7 +64,7 @@ class IShaderPlugin : public IPlugin
 {
 public:
 
-    virtual std::string         GetShaderFile(/* TODO; Przekazaæ tu coœ */) const  = 0;
+    virtual std::string         GetShaderFile(/* TODO; Przekazaæ tu cos */) const  = 0;
 };
 
 class IGeometryGenPlugin : public IPlugin

@@ -5,11 +5,11 @@ namespace bv {
 
 // ***************************** DESCRIPTOR ********************************** 
 //PLUGIN NAME
-const std::string TexturePluginParametersDescriptor::pluginName( "SimpleTexture" );
+const std::string SimpleTexturePixelPluginPD::pluginName( "SimpleTexturePixel" );
 
 // *************************************
 //
-TexturePluginParametersDescriptor::TexturePluginParametersDescriptor()
+SimpleTexturePixelPluginPD::SimpleTexturePixelPluginPD()
     : BaseParametersDescriptor( pluginName )
 {
 }
@@ -18,32 +18,74 @@ TexturePluginParametersDescriptor::TexturePluginParametersDescriptor()
 
 // *************************************
 //
-SimpleTexturePlugin::SimpleTexturePlugin                    ( const std::string & textureFileName )
+SimpleTexturePixelPlugin::SimpleTexturePixelPlugin                    ( const std::string & textureFileName )
     : m_textureFileName( textureFileName )
 {
 }
 
 // *************************************
 //
-std::string SimpleTexturePlugin::GetShaderFile              () const
+std::string SimpleTexturePixelPlugin::GetShaderFile              () const
 {
-    //FIXME: implement that shader for the sake of simplicity and testability
-    return "nicht compile kurwile";
+    // TODO; do not bind SmpleTexturePlugin with exact shader - at some point it will be provided by GLSL shader service or whatever else resource manager
+    return "../dep/media/shaders/simpletexture.frag";
 }
 
 // *************************************
 //
-void                SimpleTexturePlugin::Update              ( float t )
+void                SimpleTexturePixelPlugin::Update              ( float t )
 {
     //FIXME: implement - whatever is required here
 }
 
 // *************************************
 //
-void                SimpleTexturePlugin::Print               ( std::ostream & out, int tabs ) const
+void                SimpleTexturePixelPlugin::Print               ( std::ostream & out, int tabs ) const
 {
     out << GetName() << debug::EndLine( tabs );
-    out << "Texture: " << m_textureFileName << debug::EndLine(tabs);
+    out << "Texture: " << m_textureFileName << debug::EndLine( tabs );
+}
+
+
+// ***************************** DESCRIPTOR ********************************** 
+//PLUGIN NAME
+const std::string SimpleTextureVertexPluginPD::pluginName( "SimpleTextureVertex" );
+
+// *************************************
+//
+SimpleTextureVertexPluginPD::SimpleTextureVertexPluginPD()
+    : BaseParametersDescriptor( pluginName )
+{
+}
+
+// ***************************** PLUGIN ********************************** 
+
+// *************************************
+//
+SimpleTextureVertexPlugin::SimpleTextureVertexPlugin            ()
+{
+}
+
+// *************************************
+//
+std::string SimpleTextureVertexPlugin::GetShaderFile              () const
+{
+    // TODO; do not bind SmpleTexturePlugin with exact shader - at some point it will be provided by GLSL shader service or whatever else resource manager
+    return "../dep/media/shaders/simpletexture.vert";
+}
+
+// *************************************
+//
+void                SimpleTextureVertexPlugin::Update              ( float t )
+{
+    //FIXME: implement - whatever is required here
+}
+
+// *************************************
+//
+void                SimpleTextureVertexPlugin::Print               ( std::ostream & out, int tabs ) const
+{
+    out << GetName() << debug::EndLine( tabs );
 }
 
 }
