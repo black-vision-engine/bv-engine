@@ -7,6 +7,7 @@ namespace bv {
 class VertexDescriptor;
 class VertexBuffer;
 class IndexBuffer;
+class VertexArray;
 class RenderableEffect;
 
 class Triangles : public RenderableEntity
@@ -14,7 +15,7 @@ class Triangles : public RenderableEntity
 
 public:
 
-            Triangles               ( VertexDescriptor * vd, VertexBuffer * vb, IndexBuffer * ib, RenderableEffect * effect, RenderableType type = RenderableType::RT_TRIANGLES );
+            Triangles               ( VertexArray * vao, VertexDescriptor * vd, VertexBuffer * vb, IndexBuffer * ib, RenderableEffect * effect, RenderableType type = RenderableType::RT_TRIANGLES );
             ~Triangles              ();
 
     virtual int     NumTriangles    () const = 0;

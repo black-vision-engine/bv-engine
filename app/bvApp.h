@@ -26,15 +26,17 @@ public:
 
 public:
 
-    BlackVisionApp		();
+    BlackVisionApp		        ();
 
     virtual void OnIdle         ();
     virtual bool OnInitialize   ();
     virtual void OnTerminate    ();
 
 private:
+
     void    AddCameraAnimation  ();
 	void    AddCameraAnimation2  (); // smietnik
+
     bool    RenderScene         ();
     bool    RenderNode          ( SceneNode* node);
 

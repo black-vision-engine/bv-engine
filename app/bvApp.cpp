@@ -20,172 +20,7 @@
 bv::HighResolutionTimer GTimer;
 
 #define _USE_MATH_DEFINES
-
 #include <math.h>
-
-#pragma warning (disable: 4996) // 'freopen': This function or variable may be unsafe. Consider using freopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-
-//#define DEBUG_INFO
-
-// *********************************
-// FIXME: move it to a valid BV windowed version of engine and wrap with a macro
-namespace
-{
-
-void RenderMockScene(bv::BasicNode* tree, std::ostream& out)
-{
-    static float t = 0.f;
-
-    tree->Update(t);
-
-    out << "---------------------------------TIME : " << t << " ---------------------------";
-
-    out << std::endl;
-
-    tree->Print(out);
-
-    out << "----------END TREE------------" << std::endl << std::endl;
-
-    t += 0.1f;
-}
-
-bv::BasicNode* BuildMockScene(bv::BasicNode* parent = nullptr)
-{
-    bv::BasicNode* mockTree = new bv::BasicNode();
-
-    // SOLID
-    bv::Vec4Interpolator color;
-
-    float rs = 10.f;
-
-    color.addKey(rs * .25f, glm::vec4(0,0,1,0.7f));
-    //color.addKey(rs *.5f, glm::vec4(0.3,0.4,0.5,1));
-    //color.addKey(rs *.75f, glm::vec4(0.1,1.0,0.8,0));
-    //color.addKey(rs *.95f, glm::vec4(0.7,0.2,0.4,1));
-    //color.addKey(rs *1.15f, glm::vec4(0.4,0.1,1.,0));
-    //color.addKey(rs *1.33f, glm::vec4(1,1.0,0.1,1));
-    //color.addKey(rs *1.6f, glm::vec4(1,0.4,0.2,0));
-    //color.addKey(rs *1.9f, glm::vec4(0,0.4,1.0,1));
-
-    color.setWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
-
-    bv::SolidColorPlugin* solid1 = new bv::SolidColorPlugin(color);
-
-    mockTree->setPixelShaderPlugin(solid1);
-
-    //bv::FloatInterpolator si;
-
-    //si.setWrapMethod(bv::WrapMethod::repeat, bv::WrapMethod::pingPong);
-    //float s = 5.0f;
-    ////si.addKey(0.f, 0.5f);si.addKey(0.4f, 0.5f);si.addKey(0.5f, s * 0.6f);si.addKey(0.65f, 0.4f);si.addKey(0.8f, s * 0.9f);si.addKey(0.95f, 0.35f);si.addKey(1.05f, 0.5f);
-    //si.addKey(0.f, 0.1f);
-    //si.addKey(2.4f, 2.5f);//si.addKey(0.5f, s * 0.6f);si.addKey(0.65f, 0.4f);si.addKey(0.8f, s * 0.9f);si.addKey(0.95f, 0.35f);si.addKey(1.05f, 0.5f);
-    
-    //mockTree->setGeometryShaderPlugin(new bv::ExtrudePlugin(si));
-
-    mockTree->addGeometryPlugin(new bv::PluginGeometryRect(4.f, 4.f));
-
-    // TRANSFORMATION
-    bv::FloatInterpolator angle; angle.setWrapPostMethod(bv::WrapMethod::pingPong);
-    bv::FloatInterpolator x;
-    bv::FloatInterpolator y;
-    bv::FloatInterpolator z;
-
-    x.addKey(0.f, 0.f);
-    y.addKey(0.f, 0.f);
-    z.addKey(0.f, 1.f);
-    angle.addKey(0.f, 0.f);
-    angle.addKey(5.f, 180.f);
-
-    bv::TransformF* trans = new bv::TransformF();
-    trans->addTransform(new bv::RotationF(angle, x,y,z));
-    bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
-
-    mockTree->addTransformPlugin(transPlugin);
-
-    if(parent != nullptr)
-    {
-        parent->addChild(mockTree);
-    }
-
-    return mockTree;
-}
-
-bv::BasicNode* BuildMockScene2(bv::BasicNode* parent)
-{
-    bv::BasicNode* mockTree = new bv::BasicNode();
-
-    // SOLID
-    bv::Vec4Interpolator color;
-
-    color.addKey(.0f, glm::vec4(1,0,0,0.5f));
-    //color.addKey(3.f, glm::vec4(0.3,0.4,0.5,1.f));
-    //color.addKey(1.f, glm::vec4(0.1,0.2,0.8,1.f));
-
-    //color.addKey(2.f, glm::vec4(1,0.4,0.5,1.f));
-
-    color.setWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
-
-    bv::SolidColorPlugin* solid1 = new bv::SolidColorPlugin(color);
-
-    mockTree->setPixelShaderPlugin(solid1);
-
-    //bv::FloatInterpolator scaleInt;
-
-    //scaleInt.setWrapMethod(bv::WrapMethod::pingPong, bv::WrapMethod::pingPong);
-
-    //scaleInt.addKey(0.f, -3.5f);
-    //scaleInt.addKey(-1.30f, 3.5f);
-
-    //mockTree->setGeometryShaderPlugin(new bv::ExtrudePlugin(scaleInt));
-
-    mockTree->addGeometryPlugin(new bv::PluginGeometryRect());
-
-    // TRANSFORMATION
-    bv::FloatInterpolator x;
-    bv::FloatInterpolator y;
-    bv::FloatInterpolator z;
-
-    float s = 2.0f;
-    float l = 1.4f;
-    x.addKey(0.f, 0.5f);x.addKey(0.4f, 0.5f);x.addKey(0.5f, s * 0.6f);x.addKey(0.65f, 0.4f);x.addKey(0.8f, s * 0.9f);x.addKey(0.95f, 0.35f);x.addKey(1.05f, 0.5f);
-    y.addKey(0.f, 0.5f);y.addKey(0.4f, 0.5f);y.addKey(0.5f, l * 0.6f);y.addKey(0.65f, 0.4f);y.addKey(0.8f, l * 0.9f);y.addKey(0.95f, 0.35f);y.addKey(1.05f, 0.5f);
-    z.addKey(0.f, 1.f);
-
-    x.setWrapPostMethod(bv::WrapMethod::repeat);
-    y.setWrapPostMethod(bv::WrapMethod::repeat);
-    
-    bv::TransformF* trans = new bv::TransformF();
-
-    bv::FloatInterpolator mx;
-    bv::FloatInterpolator my;
-    bv::FloatInterpolator mz;
-
-    mx.addKey(0.f, 0.0f);
-    my.addKey(0.f, 0.0f);
-    mz.addKey(0.f, 0.0f);
-
-    mx.addKey(1.f, 1.0f);
-    my.addKey(2.f, -2.0f);
-    mz.addKey(3.f, 0.f);
-
-    trans->addTranslation(mx, my, mz);
-    trans->addScale(x,y,z);
-
-    bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
-
-    mockTree->addTransformPlugin(transPlugin);
-
-    if(parent != nullptr)
-    {
-        parent->addChild(mockTree);
-    }
-
-    return mockTree;
-}
-
-}
-
 
 // *********************************
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
@@ -232,28 +67,22 @@ void BlackVisionApp::OnIdle		()
 
     float t = float(curTime - startTime) * 0.001f;
 
-    m_modelScene->Update( t );
+        m_modelScene->Update( t );
 
     double modelUpdate = GTimer.CurElapsed();
 
-    UpdatersManager::get().Update( t );
+        UpdatersManager::get().Update( t );
 
     double managerUpdate = GTimer.CurElapsed();
 
-    auto veiwMat = m_modelScene->GetCamera()->GetViewMatrix();
-    m_mockSceneEng->Update( t, Transform(veiwMat, glm::inverse(veiwMat)));
-
-#ifdef DEBUG_INFO
-    RenderMockScene(m_mockScene, m_file);
-#endif
+        auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
+        m_mockSceneEng->Update( t, Transform( viewMat, glm::inverse( viewMat ) ) );
 
     double engineUpdate = GTimer.CurElapsed();
 
-    m_Renderer->ClearBuffers();
-
-    RenderScene();
-
-    m_Renderer->DisplayColorBuffer();
+        m_Renderer->ClearBuffers();
+        RenderScene();
+        m_Renderer->DisplayColorBuffer();
 
     double frameUpdate = GTimer.CurElapsed();
 
@@ -279,9 +108,7 @@ void BlackVisionApp::OnIdle		()
 bool BlackVisionApp::RenderScene        ()
 {
     m_Renderer->PreDraw();
-
     bool bSuccess = RenderNode( m_mockSceneEng );
-
     m_Renderer->PostDraw();
 
     return bSuccess;
@@ -315,22 +142,15 @@ bool BlackVisionApp::OnInitialize       ()
 {
     if(AllocConsole())
     {
+        FILE * dummy;
         SetConsoleTitleA("Debug Console");
-        freopen("CONOUT$", "wb", stdout);
-        freopen("CONOUT$", "wb", stderr);
+        freopen_s(&dummy, "CONOUT$", "wb", stdout);
+        freopen_s(&dummy, "CONOUT$", "wb", stderr);
     }
 
     //bv::BasicNode* root = SceneExamples::CreateSceneMock3(nullptr);
 
-    bv::BasicNode* root = BuildMockScene();
-    BuildMockScene2(root);
-    //node = BuildMockScene(root);
-    //node = BuildMockScene(node);
-    //node = BuildMockScene(node);
-    //node = BuildMockScene(node);
-    //node = BuildMockScene(node);
-    //node = BuildMockScene(node);
-    //node = BuildMockScene(node);
+    bv::BasicNode* root = SceneExamples::BuildMockScene();
 
     m_modelScene = ModelScene::Create(root, new Camera());
     m_Renderer->SetCamera(m_modelScene->GetCamera());
@@ -338,16 +158,11 @@ bool BlackVisionApp::OnInitialize       ()
     
     m_modelScene->GetCamera()->SetFrame(glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
 
-    //AddCameraAnimation();
-    //AddCameraAnimation2();
 
     m_modelScene->GetCamera()->SetPerspactive(90.f, float(m_Width) / float(m_Height), 0.1f, 100.f);
 
     m_Renderer->DisableFaceCulling();
 
-#ifdef DEBUG_INFO
-    m_file.open("debug.txt", std::ios_base::out);
-#endif
     return WindowedApplication::OnInitialize();
 }
 

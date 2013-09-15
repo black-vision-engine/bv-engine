@@ -142,7 +142,9 @@ bool    Renderer::Draw                  ( RenderableEntity* ent )
     auto eff    = ent->GetRenderableEffect();
     auto vao    = ent->GetVertexArray();
 
-    Enable(vb); // FIXME: KOLEJONSC
+    if (vb)
+        Enable(vb); // FIXME: KOLEJONSC
+
     if(ib) 
         Enable(ib);
 

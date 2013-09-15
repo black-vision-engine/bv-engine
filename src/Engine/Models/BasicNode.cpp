@@ -84,7 +84,7 @@ SceneNode* BasicNode::buildScene()
     switch( renderableType )
     {
         case RenderableEntity::RenderableType::RT_TRIANGLE_STRIP:
-            renderEnt = new TriangleStrip( vd, vb, effect );
+            renderEnt = new TriangleStrip( vao, effect );
             break;
         case RenderableEntity::RenderableType::RT_TRIANGLES:
         case RenderableEntity::RenderableType::RT_TRIANGLE_MESH:

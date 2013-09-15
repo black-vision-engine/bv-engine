@@ -36,7 +36,7 @@ protected:
 
 public:
                     //FIXME: effect should be registered via some method so that it can be changed during to some other effect during runtime (RenderableEffect or RenderableEffectInstance if needed)
-                    RenderableEntity        ( RenderableType type, VertexDescriptor * vd, VertexBuffer * vb, IndexBuffer * ib, RenderableEffect * effect );
+                    RenderableEntity        ( RenderableType type, VertexArray * vao, VertexDescriptor * vd, VertexBuffer * vb, IndexBuffer * ib, RenderableEffect * effect );
     virtual         ~RenderableEntity       ();
 
 public:

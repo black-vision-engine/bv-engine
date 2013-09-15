@@ -21,6 +21,7 @@ using std::string;
 
 #include <Windows.h>
 
+
 namespace bv {
 
 GlobalState::GlobalState(IScene* scene)

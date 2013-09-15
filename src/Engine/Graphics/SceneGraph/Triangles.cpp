@@ -9,8 +9,8 @@ namespace bv {
 
 // *********************************
 //
-Triangles::Triangles               ( VertexDescriptor * vd, VertexBuffer * vb, IndexBuffer * ib, RenderableEffect * effect, RenderableType type )
-    : RenderableEntity( type, vd, vb, ib, effect )
+Triangles::Triangles               ( VertexArray * vao, VertexDescriptor * vd, VertexBuffer * vb, IndexBuffer * ib, RenderableEffect * effect, RenderableType type )
+    : RenderableEntity( type, vao, vd, vb, ib, effect )
 {
 }
 

@@ -10,7 +10,7 @@ private:
 
 public:
 
-    TriangleStrip   ( VertexDescriptor * vd, VertexBuffer * vb, RenderableEffect * effect );
+    TriangleStrip   ( VertexArray * vao, RenderableEffect * effect );
     ~TriangleStrip  ();
 
     virtual int     NumTriangles    () const override;
