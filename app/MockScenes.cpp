@@ -17,6 +17,14 @@
 namespace bv
 {
 
+// ***************************************
+//
+BasicNode *     TestScenesFactory::SimpeTextureTestScene()
+{
+    //FIXME: imeplent
+    return nullptr;
+}
+
 void RenderMockScene(bv::BasicNode* tree, std::ostream& out)
 {
     static float t = 0.f;
