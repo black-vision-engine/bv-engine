@@ -137,7 +137,7 @@ bool BlackVisionApp::RenderNode         ( SceneNode *   node )
 
 
 // *********************************
-//
+//FIXME: implement proper console
 bool BlackVisionApp::OnInitialize       ()
 {
     if(AllocConsole())
@@ -148,19 +148,19 @@ bool BlackVisionApp::OnInitialize       ()
         freopen_s(&dummy, "CONOUT$", "wb", stderr);
     }
 
-    //bv::BasicNode* root = SceneExamples::CreateSceneMock3(nullptr);
+    BasicNode * root = SceneExamples::BuildMockScene();
 
-    bv::BasicNode* root = SceneExamples::BuildMockScene();
+    m_modelScene = ModelScene::Create( root, new Camera() );
 
-    m_modelScene = ModelScene::Create(root, new Camera());
-    m_Renderer->SetCamera(m_modelScene->GetCamera());
-    m_mockSceneEng = m_modelScene->GetSceneRoot()->buildScene();
-    
-    m_modelScene->GetCamera()->SetFrame(glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
+    m_Renderer->SetCamera( m_modelScene->GetCamera() );
 
+    m_mockSceneEng = m_modelScene->GetSceneRoot()->buildScene();    
+    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 3.f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
 
-    m_modelScene->GetCamera()->SetPerspactive(90.f, float(m_Width) / float(m_Height), 0.1f, 100.f);
+    //FIXME: read from configuration file and change appropriately when resoultion changes
+    m_modelScene->GetCamera()->SetPerspactive( 90.f, float(m_Width) / float(m_Height), 0.1f, 100.f );
 
+    //FIXME: state changes should be implemented some other way around
     m_Renderer->DisableFaceCulling();
 
     return WindowedApplication::OnInitialize();
@@ -174,102 +174,30 @@ void BlackVisionApp::OnTerminate        ()
     WindowedApplication::OnTerminate();
 }
 
-namespace {
-    float AddRotKeys( bv::Vec3Interpolator * it, float startAngle, double endAngle, float speed, float & t )
-    {
-        float alpha = startAngle;
-        for(; alpha <= (float) endAngle ; alpha += speed )
-        {
-            float z = 2.5f * cosf(alpha);
-            float x = 2.5f * sinf(alpha);
-            int dev = rand();
-            it->addKey(t, glm::vec3(x, float(dev) / float(RAND_MAX), z));
-            t += 0.1f;
-        }
-
-        it->addKey(t, glm::vec3(1.f, 1.f, 1.f));
-
-        return alpha;
-    }
-}
-
+// *********************************
+//
 void BlackVisionApp::AddCameraAnimation  ()
 {
-    bv::Vec3Interpolator* position = new bv::Vec3Interpolator();
+    Vec3Interpolator * position     = new Vec3Interpolator();
+    Vec3Interpolator * direction    = new Vec3Interpolator();
+    Vec3Interpolator * up           = new Vec3Interpolator();
 
-    position->setWrapMethod(WrapMethod::repeat, WrapMethod::repeat);
+    TestParametersFactory::CameraAnimation_ver1( position, direction, up );
 
-    float t = 0.f;
-    double endTime = 2. * M_PI;
-    double dt = endTime / 10.f;
-
-    float alpha = AddRotKeys( position, 0.f, dt, 0.05f, t );
-    alpha = AddRotKeys( position, alpha, 3. * dt, 0.5f, t );
-    alpha = AddRotKeys( position, alpha, 5. * dt, 0.05f, t );
-    alpha = AddRotKeys( position, alpha, 7. * dt, 0.5f, t );
-    alpha = AddRotKeys( position, alpha, 8. * dt, 0.01f, t );
-    alpha = AddRotKeys( position, alpha, endTime, 0.2f, t );
-    alpha = AddRotKeys( position, 0.f, 2. * M_PI, 0.05f, t );
- 
-    //float alpha = 0.f;
-    //for(float alpha = 0.f; alpha <= 2 * M_PI ; alpha += 0.05f)
-    //{
-    //    float z = 2 * cosf(alpha);
-    //    float x = 2 * sinf(alpha);
-    //    int dev = rand();
-    //    position->addKey(t, glm::vec3(x, float(dev) / float(RAND_MAX), z));
-    //    t += 0.1f;
-    //}
-
-
-    bv::Vec3Interpolator* direction = new bv::Vec3Interpolator();
-
-    direction->addKey(0.f, glm::vec3(0.f, 0.f, 0.f));
-
-
-    bv::Vec3Interpolator* up = new bv::Vec3Interpolator();
-
-    up->addKey(0.f, glm::vec3(0.f, 1.f, 0.f));
-
-    m_modelScene->AddCameraInterpolators(direction, position, up);
+    m_modelScene->AddCameraInterpolators( position, direction, up );
 }
 
-
-void BlackVisionApp::AddCameraAnimation2  () //smietnik
+// *********************************
+//
+void BlackVisionApp::AddCameraAnimation2  () //smietnik lekko oczyszczony ze smieci
 {
-    bv::Vec3Interpolator* position = new bv::Vec3Interpolator();
+    Vec3Interpolator * position     = new Vec3Interpolator();
+    Vec3Interpolator * direction    = new Vec3Interpolator();
+    Vec3Interpolator * up           = new Vec3Interpolator();
 
-    position->setWrapMethod(WrapMethod::repeat, WrapMethod::pingPong);
+    TestParametersFactory::CameraAnimation_ver2( position, direction, up );
 
-    float t = 0.f;
-    double endTime = 2. * M_PI;
-    double dt = endTime / 10.f;
-    position->addKey(0.f, glm::vec3(-2.f, 0.1f, 3.f));
-    position->addKey(20.f, glm::vec3(2.f, 0.1f, 3.f));
-    
-
-    //float alpha = 0.f;
-    //for(float alpha = 0.f; alpha <= 2 * M_PI ; alpha += 0.05f)
-    //{
-    //    float z = 2 * cosf(alpha);
-    //    float x = 2 * sinf(alpha);
-    //    int dev = rand();
-    //    position->addKey(t, glm::vec3(x, float(dev) / float(RAND_MAX), z));
-    //    t += 0.1f;
-    //}
-
-
-    bv::Vec3Interpolator* direction = new bv::Vec3Interpolator();
-
-    direction->addKey(0.f, glm::vec3(0.f, 0.f, 0.f));
-
-
-    bv::Vec3Interpolator* up = new bv::Vec3Interpolator();
-
-    up->addKey(0.f, glm::vec3(0.f, 1.f, 0.f));
-    up->addKey(3.f, glm::vec3(0.f, 1.f, 0.f));
-
-    m_modelScene->AddCameraInterpolators(direction, position, up);
+    m_modelScene->AddCameraInterpolators( position, direction, up );
 }
 
 }

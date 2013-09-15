@@ -35,7 +35,7 @@ public:
 private:
 
     void    AddCameraAnimation  ();
-	void    AddCameraAnimation2  (); // smietnik
+	void    AddCameraAnimation2 ();
 
     bool    RenderScene         ();
     bool    RenderNode          ( SceneNode* node);

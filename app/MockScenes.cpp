@@ -2,15 +2,18 @@
 
 #include "Engine/Models/Plugins/Geometry/PluginGeometryRing.h"
 #include "Engine/Models/Plugins/Geometry/PluginGeometryRect.h"
-#include "Engine\Models\Plugins\Extrude.h"
+#include "Engine/Models/Plugins/Geometry/PluginGeometryUVSingle.h"
+#include "Engine/Models/Plugins/Extrude.h"
 #include "Engine/Models/Plugins/Solid.h"
-#include "Engine\Models\BasicNode.h"
-#include "Mathematics\Transform\MatTransform.h"
-#include "Engine\Models\ModelFactory.h"
-#include "Engine\Models\Plugins\Transform\PluginTransformSimple.h"
+#include "Engine/Models/BasicNode.h"
+#include "Mathematics/Transform/MatTransform.h"
+#include "Engine/Models/ModelFactory.h"
+#include "Engine/Models/Plugins/Transform/PluginTransformSimple.h"
+#include "Engine/Models/Plugins/SimpleTexturePlugin.h"
 
-
-//#define DEBUG_INFO
+#define _USE_MATH_DEFINES
+#include <math.h>
+//#include <cmath>
 
 // *********************************
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
@@ -21,8 +24,106 @@ namespace bv
 //
 BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 {
-    //FIXME: imeplent
-    return nullptr;
+    BasicNode * root = new BasicNode();
+
+    TransformF                  * trns  = new TransformF                ();
+
+    SimpleTexturePixelPlugin    * stpp  = new SimpleTexturePixelPlugin  ( "../dep/media/asets/flower.jpg" );
+    SimpleTextureVertexPlugin   * stvp  = new SimpleTextureVertexPlugin ();
+    PluginGeometryRect          * pgrc  = new PluginGeometryRect        ();
+    PluginGeometryUVSingle      * pguv  = new PluginGeometryUVSingle    ( pgrc );
+    PluginTransformSimple       * trpg  = ModelFactory::CreatePluginTransformSimple( *trns );
+
+    root->addTransformPlugin    ( trpg );
+    root->addGeometryPlugin     ( pgrc );
+    root->setVertexShaderPlugin ( stvp );
+    root->setPixelShaderPlugin  ( stpp );
+
+    return root;
+}
+
+namespace {
+    float AddRotKeys( bv::Vec3Interpolator * it, float startAngle, double endAngle, float speed, float & t )
+    {
+        float alpha = startAngle;
+        for(; alpha <= (float) endAngle ; alpha += speed )
+        {
+            float z = 2.5f * cosf(alpha);
+            float x = 2.5f * sinf(alpha);
+            int dev = rand();
+            it->addKey(t, glm::vec3(x, float(dev) / float(RAND_MAX), z));
+            t += 0.1f;
+        }
+
+        it->addKey(t, glm::vec3(1.f, 1.f, 1.f));
+
+        return alpha;
+    }
+}
+
+// ***************************************
+//    
+void TestParametersFactory::CameraAnimation_ver1( Vec3Interpolator * direction, Vec3Interpolator * position, Vec3Interpolator * up )
+{
+    position->setWrapMethod(WrapMethod::repeat, WrapMethod::repeat);
+
+    float t = 0.f;
+    double endTime = 2. * M_PI;
+    double dt = endTime / 10.f;
+
+    float alpha = AddRotKeys( position, 0.f, dt, 0.05f, t );
+    alpha = AddRotKeys( position, alpha, 3. * dt, 0.5f, t );
+    alpha = AddRotKeys( position, alpha, 5. * dt, 0.05f, t );
+    alpha = AddRotKeys( position, alpha, 7. * dt, 0.5f, t );
+    alpha = AddRotKeys( position, alpha, 8. * dt, 0.01f, t );
+    alpha = AddRotKeys( position, alpha, endTime, 0.2f, t );
+    alpha = AddRotKeys( position, 0.f, 2. * M_PI, 0.05f, t );
+ 
+    //float alpha = 0.f;
+    //for(float alpha = 0.f; alpha <= 2 * M_PI ; alpha += 0.05f)
+    //{
+    //    float z = 2 * cosf(alpha);
+    //    float x = 2 * sinf(alpha);
+    //    int dev = rand();
+    //    position->addKey(t, glm::vec3(x, float(dev) / float(RAND_MAX), z));
+    //    t += 0.1f;
+    //}
+
+    direction->addKey(0.f, glm::vec3(0.f, 0.f, 0.f));
+    up->addKey(0.f, glm::vec3(0.f, 1.f, 0.f));
+
+    //m_modelScene->AddCameraInterpolators(direction, position, up);
+}
+
+// ***************************************
+//    
+void TestParametersFactory::CameraAnimation_ver2( Vec3Interpolator * direction, Vec3Interpolator * position, Vec3Interpolator * up )
+{
+    position->setWrapMethod(WrapMethod::repeat, WrapMethod::pingPong);
+
+    float t = 0.f;
+    double endTime = 2. * M_PI;
+    double dt = endTime / 10.f;
+    position->addKey(0.f, glm::vec3(-2.f, 0.1f, 3.f));
+    position->addKey(20.f, glm::vec3(2.f, 0.1f, 3.f));
+    
+
+    //float alpha = 0.f;
+    //for(float alpha = 0.f; alpha <= 2 * M_PI ; alpha += 0.05f)
+    //{
+    //    float z = 2 * cosf(alpha);
+    //    float x = 2 * sinf(alpha);
+    //    int dev = rand();
+    //    position->addKey(t, glm::vec3(x, float(dev) / float(RAND_MAX), z));
+    //    t += 0.1f;
+    //}
+
+    direction->addKey(0.f, glm::vec3(0.f, 0.f, 0.f));
+
+    up->addKey(0.f, glm::vec3(0.f, 1.f, 0.f));
+    up->addKey(3.f, glm::vec3(0.f, 1.f, 0.f));
+
+    //m_modelScene->AddCameraInterpolators(direction, position, up);
 }
 
 void RenderMockScene(bv::BasicNode* tree, std::ostream& out)

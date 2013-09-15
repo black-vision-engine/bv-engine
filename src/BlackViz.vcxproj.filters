@@ -80,6 +80,7 @@
     <ClCompile Include="Engine\Graphics\Resources\Texture2D.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleTexturePlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryUVSingle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -169,5 +170,6 @@
     <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleTexturePlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryUVSingle.h" />
   </ItemGroup>
 </Project>
