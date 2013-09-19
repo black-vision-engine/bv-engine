@@ -148,7 +148,7 @@ bool BlackVisionApp::OnInitialize       ()
         freopen_s(&dummy, "CONOUT$", "wb", stderr);
     }
 
-    BasicNode * root = SceneExamples::BuildMockScene();
+    BasicNode * root = TestScenesFactory::SimpeTextureTestScene();
 
     m_modelScene = ModelScene::Create( root, new Camera() );
 

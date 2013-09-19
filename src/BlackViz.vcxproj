@@ -274,6 +274,12 @@
     <ClInclude Include="Engine\Models\Plugins\Extrude.h" />
     <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.h" />
     <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryUVSingle.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\ITransformChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleTexturePlugin.h" />
     <ClInclude Include="Engine\Models\Updaters\CameraUpdater.h" />

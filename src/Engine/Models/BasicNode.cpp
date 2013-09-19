@@ -242,7 +242,8 @@ RenderableEntity::RenderableType    BasicNode::GetRenderableType        ()      
 
 bool                                BasicNode::CreateRenderableData     (VertexDescriptor** vd, VertexBuffer** vb, IndexBuffer** ib, VertexArray ** vao)    const
 {
-    *vd = VertexDescriptor::Create(1, VertexDescriptor::AttrType::AT_FLOAT3, VertexDescriptor::AttrSemantic::AS_POSITION, 0); // TODO: Sprawdz size i ustaw AttrType poprawnie
+    *vd = VertexDescriptor::Create(1, VertexDescriptor::AttrType::AT_FLOAT3, VertexDescriptor::AttrSemantic::AS_POSITION
+                                    , VertexDescriptor::AttrType::AT_FLOAT2, VertexDescriptor::AttrSemantic::AS_TEXCOORD 0); // TODO: Sprawdz size i ustaw AttrType poprawnie
 
     auto& back = m_geometryPlugins.back();
 
