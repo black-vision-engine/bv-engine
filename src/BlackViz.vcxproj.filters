@@ -81,6 +81,8 @@
     <ClCompile Include="Engine\Models\Plugins\PluginParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleTexturePlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryUVSingle.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\GeometryChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\TranformChannel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -177,5 +179,8 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\ITransformChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IConnectedComponent.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\GeometryChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\TranformChannel.h" />
   </ItemGroup>
 </Project>

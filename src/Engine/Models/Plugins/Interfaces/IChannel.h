@@ -1,6 +1,6 @@
 #pragma once
 
-namespace bv
+namespace bv { namespace model
 {
 
 class IChannel
@@ -8,7 +8,8 @@ class IChannel
 public:
     virtual void        Update( float t ) = 0;
 
-    virtual             ~IGeometryChannel();
+    virtual             ~IChannel();
 };
 
+} // model
 } // bv

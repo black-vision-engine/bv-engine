@@ -5,15 +5,16 @@
 
 #include <vector>
 
-namespace bv
+namespace bv { namespace model
 {
 
 class GeometryChannel : public IGeometryChannel
 {
-    std::vector< IConnectedComponent* >         m_Components;
+    std::vector< IConnectedComponent* >         m_components;
 
 public:
 
 };
 
+} // model
 } // bv

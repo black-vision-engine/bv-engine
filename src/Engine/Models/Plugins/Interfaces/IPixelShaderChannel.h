@@ -2,7 +2,7 @@
 
 #include "IChannel.h"
 
-namespace bv
+namespace bv { namespace model
 {
 
 class IPixelShaderChannel : public IChannel
@@ -11,4 +11,5 @@ public:
     virtual         ~IPixelShaderChannel();
 };
 
+} // model
 } // bv

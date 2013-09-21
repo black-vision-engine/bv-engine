@@ -190,6 +190,8 @@
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.cpp" />
     <ClCompile Include="Engine\Models\ModelScene.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\GeometryChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\TranformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Extrude.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryUVSingle.cpp" />
@@ -271,10 +273,13 @@
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.h" />
     <ClInclude Include="Engine\Graphics\Shaders\ShaderTypes.h" />
     <ClInclude Include="Engine\Models\ModelScene.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\GeometryChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\TranformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Extrude.h" />
     <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.h" />
     <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryUVSingle.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IConnectedComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h" />
