@@ -10,10 +10,7 @@ class Transform;
 class ITransformChannel : public IChannel
 {
 public:
-
-    virtual void    AddTransform( Transform* transform ) = 0;
-
-    virtual         ~ITransformChannel();
+    virtual         ~ITransformChannel(){};
 };
 
 } // model

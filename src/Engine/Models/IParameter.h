@@ -6,13 +6,6 @@
 
 namespace bv {
 
-enum class ParameterSemantic : int
-{
-    NONE,
-    COLOR,
-    LOCAL_TRANSFORM,
-};
-
 class IParameter
 {
 protected:

@@ -19,26 +19,6 @@ public:
         VD_MAX_COLOR_UNITS = 2
     };
 
-    enum AttrType
-    {
-        AT_NONE,
-        AT_FLOAT1,
-        AT_FLOAT2,
-        AT_FLOAT3,
-        AT_FLOAT4,
-		AT_TOTAL
-    };
-
-    enum AttrSemantic
-    {
-        AS_NONE,
-        AS_POSITION,      
-        AS_NORMAL,        
-        AS_TEXCOORD,      
-        AS_COLOR,
-		AS_TOTAL
-    };
-
 protected:
 
     class Element

@@ -8,7 +8,7 @@ namespace bv { namespace model
 class IVertexShaderChannel : public IChannel
 {
 public:
-    virtual         ~IVertexShaderChannel();
+    virtual         ~IVertexShaderChannel(){};
 };
 
 

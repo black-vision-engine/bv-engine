@@ -1,7 +1,8 @@
-#include "GeometryChannel.h"
+#include "ConnectedComponent.h"
 
 namespace bv { namespace model
 {
+
 
 
 } // model

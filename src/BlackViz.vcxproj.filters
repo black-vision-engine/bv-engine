@@ -83,6 +83,8 @@
     <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryUVSingle.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\GeometryChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\TranformChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\ConnectedComponent.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\VertexAttributeChannel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -182,5 +184,12 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IConnectedComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\GeometryChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\TranformChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\ConnectedComponent.h" />
+    <ClInclude Include="Engine\Types\Enums.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributeChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\VertexAttributeChannel.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

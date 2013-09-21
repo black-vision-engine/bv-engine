@@ -8,7 +8,7 @@ namespace bv { namespace model
 class IPixelShaderChannel : public IChannel
 {
 public:
-    virtual         ~IPixelShaderChannel();
+    virtual         ~IPixelShaderChannel(){};
 };
 
 } // model

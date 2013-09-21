@@ -8,7 +8,7 @@ namespace bv { namespace model
 class IGeometryShaderChannel : public IChannel
 {
 public:
-    virtual         ~IGeometryShaderChannel();
+    virtual         ~IGeometryShaderChannel(){};
 };
 
 } // model
