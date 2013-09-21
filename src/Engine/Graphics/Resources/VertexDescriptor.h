@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/Types/Enums.h"
+
 namespace bv
 {
 

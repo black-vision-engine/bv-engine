@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugin.h"
+#include "Engine/Types/Enums.h"
 
 #include <hash_map>
 
