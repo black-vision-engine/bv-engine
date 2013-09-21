@@ -5,6 +5,11 @@
 
 namespace bv {
 
+namespace model
+{
+    class IGeometryChannel;
+}
+
 template< class Iface, class ParameterDescriptor >
 class BasePlugin : public Iface
 {
@@ -19,6 +24,10 @@ protected:
     std::vector< IParameter * >     m_params;
     std::vector< IValue * >         m_values;
 
+    ///////////////// Channels //////////////////
+
+    model::IGeometryChannel*        m_geomChannel;
+
 public:
 
     explicit                                    BasePlugin          ();
@@ -29,6 +38,10 @@ public:
     virtual const std::vector< IParameter * > & GetParametersList   () const    { return m_params; };
 
     void                                        RegisterValue       ( IValue * v ) { m_values.push_back( v ); }
+
+
+    void                                        SetGeometryChannel  (model::IGeometryChannel* geomChannel) { m_geomChannel = geomChannel; }
+    const model::IGeometryChannel*              GetGeometryChannel  () const    { return m_geomChannel; }
 
 protected:
 

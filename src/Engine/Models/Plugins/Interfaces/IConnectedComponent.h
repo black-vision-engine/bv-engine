@@ -14,10 +14,9 @@ class IConnectedComponent : public IChannel
 {
 public:
 
-    virtual std::vector< IVertexAttributeChannel* >&    GetVertexAttributeChannels  () const = 0;
+    virtual std::vector< IVertexAttributeChannel* >     GetVertexAttributeChannels  () const = 0;
 
     virtual int                                         GetNumVertices              () const = 0;
-    virtual int                                         GetNumPrimitives            () const = 0;
 
     virtual                                             ~IConnectedComponent        (){};
 };

@@ -6,14 +6,18 @@ namespace bv { namespace model
 {
 
 class IVertexAttributeChannel;
+class VertexAttributeChannel;
 
 class ConnectedComponent : public IConnectedComponent
 {
-    std::vector< IVertexAttributeChannel* >             m_VertexAttributeChannels;
+public:
+    std::vector< VertexAttributeChannel* >              m_vertexAttributeChannels;
 
 public:
 
-    virtual std::vector< IVertexAttributeChannel* >&    GetVertexAttributeChannels  () const;
+    virtual void                                        Update( float t );
+
+    virtual std::vector< IVertexAttributeChannel* >     GetVertexAttributeChannels  () const;
 
     virtual int                                         GetNumVertices              () const;
     virtual int                                         GetNumPrimitives            () const;

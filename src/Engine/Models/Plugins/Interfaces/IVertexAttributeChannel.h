@@ -12,6 +12,7 @@ public:
     virtual AttrType                GetType()           const = 0;
     virtual AttrSemantic            GetSemantic()       const = 0;
 
+    virtual int                     GetEntrySize()      const = 0;
     virtual int                     GetNumEntries()     const = 0;
     virtual const char*             GetData()           const = 0;
 };

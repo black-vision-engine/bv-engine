@@ -16,6 +16,8 @@
 #include "Engine\Models\Updaters\TransformUpdater.h"
 #include "Engine\Models\Updaters\ShaderParamUpdater.h"
 
+#include "Engine\Models\Plugins\Interfaces\IGeometryChannel.h"
+
 #include <fstream>
 #include <sstream>
 #include <sys/stat.h>
@@ -154,15 +156,20 @@ bool BasicNode::addChild(Node* n)
     return true;
 }
 
+void BasicNode::AddPlugin               ( IPlugin* plugin )
+{
+    m_plugins.push_back(plugin);
+}
+
 void BasicNode::addTransformPlugin(ITransformPlugin* tPlugin)
 {
     m_transformPlugins.push_back(tPlugin);
 }
 
-void BasicNode::addGeometryPlugin(IGeometryGenPlugin* gPlugin)
-{
-    m_geometryPlugins.push_back(gPlugin);
-}
+//void BasicNode::addGeometryPlugin(IGeometryGenPlugin* gPlugin)
+//{
+//    m_geometryPlugins.push_back(gPlugin);
+//}
 
 void BasicNode::setPixelShaderPlugin(IShaderPlugin* psPlugin)
 {
@@ -187,9 +194,9 @@ void BasicNode::Print(std::ostream& out, int tabs) const
     for(auto tp : m_transformPlugins)
         tp->Print(out, tabs + 1);
 
-    out << debug::EndLine(tabs) << "Geometry plugins: " << m_geometryPlugins.size();
-    for(auto gp : m_geometryPlugins)
-        gp->Print(out, tabs + 1);
+    //out << debug::EndLine(tabs) << "Geometry plugins: " << m_geometryPlugins.size();
+    //for(auto gp : m_geometryPlugins)
+    //    gp->Print(out, tabs + 1);
     
     out << debug::EndLine(tabs) << "Pixel Shader plugin: " << m_pshaderPlugin << debug::EndLine(tabs + 1);
     if(m_pshaderPlugin != nullptr)
@@ -216,8 +223,8 @@ void BasicNode::Update(float t)
     for(auto tp : m_transformPlugins)
         tp->Update(t);
 
-    for(auto gp : m_geometryPlugins)
-        gp->Update(t);
+    for(auto pl : m_plugins)
+        pl->Update(t);
 
     if(m_pshaderPlugin != nullptr)
         m_pshaderPlugin->Update(t);
@@ -237,7 +244,9 @@ void BasicNode::Update(float t)
 RenderableEntity::RenderableType    BasicNode::GetRenderableType        ()                                                              const
 {
     // TODO:
-    return (RenderableEntity::RenderableType)m_geometryPlugins.back()->AdjacencyType(); // FIXME: remove cast
+    //return m_plugins.back()->GetGeometryChannel()->GetPrimitiveType(); // TODO
+    return RenderableEntity::RenderableType::RT_TRIANGLE_STRIP;
+//    return (RenderableEntity::RenderableType)m_geometryPlugins.back()->AdjacencyType(); // FIXME: remove cast
 }
 
 bool                                BasicNode::CreateRenderableData     (VertexDescriptor** vd, VertexBuffer** vb, IndexBuffer** ib, VertexArray ** vao)    const
@@ -245,6 +254,7 @@ bool                                BasicNode::CreateRenderableData     (VertexD
     *vd = VertexDescriptor::Create(1, AttrType::AT_FLOAT3, AttrSemantic::AS_POSITION
                                     , AttrType::AT_FLOAT2, AttrSemantic::AS_TEXCOORD, 0 ); // TODO: Sprawdz size i ustaw AttrType poprawnie
 
+    //m_plugins.back()->GetGeometryChannel()->GetComponents()->
     auto& back = m_geometryPlugins.back();
 
     *vb = new VertexBuffer(back->Vertices().size(), back->VertexSize());

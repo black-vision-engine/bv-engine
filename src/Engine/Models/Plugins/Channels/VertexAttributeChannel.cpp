@@ -38,6 +38,13 @@ int                     Float3VertexAttributeChannel::GetNumEntries()   const
 
 // *********************************
 //
+int                     Float3VertexAttributeChannel::GetEntrySize ()    const
+{
+    return sizeof(glm::vec3);
+}
+
+// *********************************
+//
 const char*             Float3VertexAttributeChannel::GetData()         const
 {
     if( m_f3attritutes.empty() )
@@ -68,6 +75,13 @@ Float2VertexAttributeChannel::Float2VertexAttributeChannel(AttrSemantic semantic
 int                     Float2VertexAttributeChannel::GetNumEntries()   const
 {
     return m_f2attritutes.size();
+}
+
+// *********************************
+//
+int                     Float2VertexAttributeChannel::GetEntrySize ()    const
+{
+    return sizeof(glm::vec2);
 }
 
 // *********************************

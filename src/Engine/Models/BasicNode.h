@@ -28,7 +28,9 @@ private:
     TLayerNodeVec           m_layers;
 
     TTransformPluginVec     m_transformPlugins;
-    TGeometryPluginVec      m_geometryPlugins;
+
+    std::vector< IPlugin* > m_plugins;
+
 
     IShaderPlugin*          m_pshaderPlugin;
     IShaderPlugin*          m_vshaderPlugin;
@@ -42,8 +44,9 @@ public:
     
     bool                    addChild                (Node* n);
 
+    void                    AddPlugin               ( IPlugin* plugin );
+
     void                    addTransformPlugin      (ITransformPlugin* tPlugin);
-    void                    addGeometryPlugin       (IGeometryGenPlugin* gPlugin);
     void                    setPixelShaderPlugin    (IShaderPlugin* sPlugin);
     void                    setVertexShaderPlugin   (IShaderPlugin* sPlugin);
     void                    setGeometryShaderPlugin (IShaderPlugin* sPlugin);

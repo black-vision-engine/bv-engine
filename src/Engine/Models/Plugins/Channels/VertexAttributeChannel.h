@@ -26,9 +26,12 @@ class Float3VertexAttributeChannel : public VertexAttributeChannel
 {
     std::vector< glm::vec3 >        m_f3attritutes;
 public:
+    virtual void                    Update( float t ){} // FIXME: implement
+
     virtual int                     GetNumEntries   ()                      const;
     virtual const char*             GetData         ()                      const;
 
+    virtual int                     GetEntrySize    ()                      const;
     void                            AddVertexAttribute(const glm::vec3& v);
 
     explicit                        Float3VertexAttributeChannel(AttrSemantic semantic);
@@ -38,13 +41,18 @@ class Float2VertexAttributeChannel : public VertexAttributeChannel
 {
     std::vector< glm::vec2 >        m_f2attritutes;
 public:
+    virtual void                    Update( float t ){} // FIXME: implement
+
     virtual int                     GetNumEntries   ()                      const;
     virtual const char*             GetData         ()                      const;
 
+    virtual int                     GetEntrySize    ()                      const;
     void                            AddVertexAttribute(const glm::vec2& v);
 
     explicit                        Float2VertexAttributeChannel(AttrSemantic semantic);
 };
 
+
+// TODO: Czy kazdy typ moze mieæ ka¿d¹ semantykê? 
 } // model
 } // bv

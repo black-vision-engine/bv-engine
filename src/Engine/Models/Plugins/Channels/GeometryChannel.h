@@ -8,20 +8,36 @@
 namespace bv { namespace model
 {
 
+class IPlugin;
+class ConnectedComponent;
+
 class GeometryChannel : public IGeometryChannel
 {
-    std::vector< IConnectedComponent* >             m_components;
+protected:
+    std::vector< ConnectedComponent* >              m_components;
+    std::vector< AttrType >                         m_type;
+    std::vector< AttrSemantic >                     m_semantic;
+    PrimitiveType                                   m_primitiveType;
 
 public:
-    virtual std::vector< AttrType >                 GetType             () const;
-    virtual std::vector< AttrSemantic >             GetSemantic         () const;
+    virtual const std::vector< AttrType >&          GetType             () const;
+    virtual const std::vector< AttrSemantic >&      GetSemantic         () const;
     virtual PrimitiveType                           GetPrimitiveType    () const;
 
-    virtual std::vector< IConnectedComponent* >&    GetComponents       () const;
+    virtual int                                     GetNumPrimitives    ( IConnectedComponent* connComp ) const;
+    virtual std::vector< IConnectedComponent* >     GetComponents       () const;
 
-    virtual bool                                    IsTimeInvariant     () const;
+    virtual                                         ~GeometryChannel    ();
 
-    virtual                                         ~GeometryChannel   (){};
+                                                    GeometryChannel     (const IPlugin* pl);
+};
+
+class GeometryChannelStaticRect : public GeometryChannel
+{
+
+    GeometryChannelStaticRect(float w, float h);
+public:
+    static GeometryChannelStaticRect*             Create(float w = 1.f, float h = 1.f);
 };
 
 } // model
