@@ -18,7 +18,7 @@ public:
     virtual const std::vector< AttrSemantic >&      GetSemantic         () const = 0;
     virtual PrimitiveType                           GetPrimitiveType    () const = 0;
 
-    virtual int                                     GetNumPrimitives    () const = 0;
+    virtual int                                     GetNumPrimitives    ( IConnectedComponent* connComp ) const = 0;
     virtual std::vector< IConnectedComponent* >     GetComponents       () const = 0;
 
     virtual bool                                    IsTimeInvariant     () const = 0;
