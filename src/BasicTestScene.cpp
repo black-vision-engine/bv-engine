@@ -100,7 +100,7 @@ IScene* createTestScene()
 
     BasicScene* scene = new BasicScene();
 
-    SceneNode* rootSceneNode = root->buildScene();
+    SceneNode* rootSceneNode = root->BuildScene();
 
     scene->setTreeSceneRoot(rootSceneNode);
 

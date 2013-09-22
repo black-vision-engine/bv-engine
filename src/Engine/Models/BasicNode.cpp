@@ -105,7 +105,7 @@ SceneNode* BasicNode::BuildScene()
 
     for( auto ch : m_children )
     {
-        ret->AddChildNode(ch->buildScene());
+        ret->AddChildNode(ch->BuildScene());
     }
 
     return ret;

@@ -18,7 +18,7 @@ PluginGeometryRect *      ModelFactory::CreatePluginGeometryRect( float w, float
 // ********************************
 //
 PluginGeometryRing *     ModelFactory::CreatePluginGeometryRing( const FloatInterpolator & innerRadius, const FloatInterpolator & outerRadius,
-																 const FloatInterpolator & startAngle, const FloatInterpolator & endAngle, int numSegments )
+                                                                 const FloatInterpolator & startAngle, const FloatInterpolator & endAngle, int numSegments )
 {
     return new PluginGeometryRing( innerRadius, outerRadius,	startAngle, endAngle, numSegments );
 }
@@ -38,14 +38,13 @@ BasicNode *              ModelFactory::CreateNode( ITransformPlugin * tPlugin, I
     BasicNode * ret = new BasicNode();
 
     ret->addTransformPlugin( tPlugin );
-    ret->addGeometryPlugin( gPlugin );
     ret->setGeometryShaderPlugin( gShaderPlugin );
     ret->setPixelShaderPlugin( pShaderPlugin );
     ret->setVertexShaderPlugin( vShaderPlugin );
 
     if( parent != nullptr )
     {
-        parent->addChild( ret );
+        parent->AddChild( ret );
     }
 
     return ret;

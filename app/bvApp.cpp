@@ -154,7 +154,7 @@ bool BlackVisionApp::OnInitialize       ()
 
     m_Renderer->SetCamera( m_modelScene->GetCamera() );
 
-    m_mockSceneEng = m_modelScene->GetSceneRoot()->buildScene();    
+    m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
     m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 3.f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
 
     //FIXME: read from configuration file and change appropriately when resoultion changes
