@@ -1,5 +1,6 @@
 #include "SimpleTexturePlugin.h"
 #include "System/Print.h"
+#include "Engine\Models\Plugins\Channels\GeometryChannel.h"
 
 namespace bv {
 
@@ -21,6 +22,7 @@ SimpleTexturePixelPluginPD::SimpleTexturePixelPluginPD()
 SimpleTexturePixelPlugin::SimpleTexturePixelPlugin                    ( const std::string & textureFileName )
     : m_textureFileName( textureFileName )
 {
+    m_geomChannel = model::GeometryChannelStaticRectTextured::Create( textureFileName );
 }
 
 // *************************************

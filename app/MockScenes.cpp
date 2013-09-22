@@ -35,7 +35,7 @@ BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     PluginTransformSimple       * trpg  = ModelFactory::CreatePluginTransformSimple( *trns );
 
     root->addTransformPlugin    ( trpg );
-//    root->addGeometryPlugin     ( pgrc );
+    root->AddPlugin             ( stpp );
     root->setVertexShaderPlugin ( stvp );
     root->setPixelShaderPlugin  ( stpp );
 
@@ -362,6 +362,7 @@ bv::BasicNode* CreateRect(bv::BasicNode* parent)
     //si.addKey(2.4f, 2.5f);//si.addKey(0.5f, s * 0.6f);si.addKey(0.65f, 0.4f);si.addKey(0.8f, s * 0.9f);si.addKey(0.95f, 0.35f);si.addKey(1.05f, 0.5f);
     rectNode->setGeometryShaderPlugin(new bv::ExtrudePlugin(si));
     
+    rectNode->AddPlugin( new SimpleTexturePixelPlugin( "pliczek_z_kwiatkiem.jpg" ) );
 //	rectNode->addGeometryPlugin(new bv::PluginGeometryRect(0.2f,0.1f));
 
     // b edzie sie rozszerzal
@@ -551,7 +552,7 @@ void CreateRings(bv::BasicNode* parent,float z)
 
 bv::BasicNode* SceneExamples::CreateSceneMock3(bv::BasicNode* parent)
 {
-    bv::BasicNode* rect=CreateRect(parent);
+    bv::BasicNode* rect = CreateRect(parent);
 
     
 

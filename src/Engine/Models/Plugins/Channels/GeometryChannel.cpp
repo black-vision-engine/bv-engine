@@ -11,6 +11,7 @@ namespace bv { namespace model
 // *********************************
 //
 GeometryChannel::GeometryChannel     (const IPlugin* pl)
+    : m_primitiveType( PrimitiveType::PT_TRIANGLE_STRIP ) //FIXME: 
 {
 
 }
