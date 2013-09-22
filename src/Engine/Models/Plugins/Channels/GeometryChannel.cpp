@@ -72,6 +72,9 @@ int                                     GeometryChannel::GetNumPrimitives   ( IC
             return verNum - 3;
         case PrimitiveType::PT_POLYGON:
             return 1;
+        default:
+            assert(false);
+            return 0;
     }
 }
 

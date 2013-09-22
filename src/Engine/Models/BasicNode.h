@@ -27,11 +27,11 @@ private:
     TNodeVec                m_children;
     TLayerNodeVec           m_layers;
 
-    TTransformPluginVec     m_transformPlugins;
-
     std::vector< IPlugin* > m_plugins;
 
 
+    // TODO: move to plugins channel
+    TTransformPluginVec     m_transformPlugins;
     IShaderPlugin*          m_pshaderPlugin;
     IShaderPlugin*          m_vshaderPlugin;
     IShaderPlugin*          m_gshaderPlugin;
@@ -40,24 +40,24 @@ public:
     explicit BasicNode();
     virtual ~BasicNode(){}
 
-    virtual SceneNode*      buildScene              ();                              
-    
-    bool                    addChild                (Node* n);
-
+    virtual SceneNode*      BuildScene              ();                              
+    bool                    AddChild                (Node* n);
     void                    AddPlugin               ( IPlugin* plugin );
 
+    // TODO: move to plugins channel
     void                    addTransformPlugin      (ITransformPlugin* tPlugin);
     void                    setPixelShaderPlugin    (IShaderPlugin* sPlugin);
     void                    setVertexShaderPlugin   (IShaderPlugin* sPlugin);
     void                    setGeometryShaderPlugin (IShaderPlugin* sPlugin);
+
 
     virtual void            Print                   (std::ostream& out, int tabs = 0)             const;
     virtual void            Update                  (float t);
 
 private:
     //VertexDescriptor * vd, VertexBuffer * vb, IndexBuffer * ib, RenderableEffect * effect
-    RenderableEntity::RenderableType    GetRenderableType() const;
-    bool                                CreateRenderableData(VertexDescriptor** vd, VertexBuffer** vb, IndexBuffer** ib, VertexArray ** vao) const;
+    PrimitiveType                       GetRenderableType() const;
+    bool                                CreateRenderableData(VertexArray ** vao) const;
     RenderableEffect*                   CreateRenderaleEffectMockImplementationForCompleteDummies() const;
 
     PixelShader*                        CreatePixelShader       ()                      const;

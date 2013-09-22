@@ -35,7 +35,7 @@ int VertexDescriptor::m_sTypeSize[ AT_TOTAL ] =
 // *********************************
 //
 VertexDescriptor::VertexDescriptor ( int numAttrs )
-	: m_numAttrs( numAttrs )
+    : m_numAttrs( numAttrs )
     , m_stride(0)
 {
     assert( numAttrs > 0 );
@@ -54,7 +54,7 @@ VertexDescriptor::VertexDescriptor ( int numAttrs )
 //
 VertexDescriptor::~VertexDescriptor ()
 {
-	//FIXME: call renderer here and unbind all vertex deata associated with this vertex descriptor
+    //FIXME: call renderer here and unbind all vertex deata associated with this vertex descriptor
 }
 
 // *********************************
@@ -77,9 +77,9 @@ VertexDescriptor * VertexDescriptor::Create ( int numAttrs, ... )
 
         unsigned int semanticIndex = va_arg( args, unsigned int );
     
-		vd->SetAttribute( i, 0, offset, (AttrType)type, (AttrSemantic)semantic, semanticIndex );
+        vd->SetAttribute( i, 0, offset, (AttrType)type, (AttrSemantic)semantic, semanticIndex );
 
-		offset += m_sTypeSize[ type ];
+        offset += m_sTypeSize[ type ];
     }
 
     vd->SetStride( (int) offset );
@@ -93,8 +93,8 @@ VertexDescriptor * VertexDescriptor::Create ( int numAttrs, ... )
 //
 void VertexDescriptor::SetAttribute ( int attr, unsigned int streamIndex, unsigned int offset, AttrType type, AttrSemantic semantic, unsigned int usageIndex )
 {
-	assert( attr >= 0 ); 
-	assert( attr < m_numAttrs );
+    assert( attr >= 0 ); 
+    assert( attr < m_numAttrs );
  
     Element & elt = m_elements[ attr ];
 
@@ -111,32 +111,32 @@ void VertexDescriptor::SetStride ( int stride )
 {
     assert( stride > 0 );
     
-	m_stride = stride;
+    m_stride = stride;
 }
 
 // *********************************
 //
 int VertexDescriptor::NumAttrs		()	const
 {
-	return m_numAttrs;
+    return m_numAttrs;
 }
 
 // *********************************
 //
 unsigned int VertexDescriptor::StreamIndex ( int attr ) const
 {
-	assert( attr >= 0 );
-	assert( attr < m_numAttrs );
+    assert( attr >= 0 );
+    assert( attr < m_numAttrs );
 
-	return m_elements[ attr ].streamIndex;
+    return m_elements[ attr ].streamIndex;
 }
 
 // *********************************
 //
 unsigned int VertexDescriptor::Offset ( int attr ) const
 {
-	assert( attr >= 0 );
-	assert( attr < m_numAttrs );
+    assert( attr >= 0 );
+    assert( attr < m_numAttrs );
 
     return m_elements[ attr ].offset;
 }
@@ -145,8 +145,8 @@ unsigned int VertexDescriptor::Offset ( int attr ) const
 //
 AttrType VertexDescriptor::AttributeType ( int attr ) const
 {
-	assert( attr >= 0 );
-	assert( attr < m_numAttrs );
+    assert( attr >= 0 );
+    assert( attr < m_numAttrs );
 
     return m_elements[ attr ].type;
 }
@@ -155,28 +155,28 @@ AttrType VertexDescriptor::AttributeType ( int attr ) const
 //
 AttrSemantic VertexDescriptor::AttributeSemantic ( int attr ) const
 {
-	assert( attr >= 0 );
-	assert( attr < m_numAttrs );
+    assert( attr >= 0 );
+    assert( attr < m_numAttrs );
 
-	return m_elements[ attr ].semantic;
+    return m_elements[ attr ].semantic;
 }
 
 // *********************************
 //
 unsigned int VertexDescriptor::UsageIndex ( int attr  ) const
 {
-	assert( attr >= 0 );
-	assert( attr < m_numAttrs );
+    assert( attr >= 0 );
+    assert( attr < m_numAttrs );
 
-	return m_elements[ attr ].usageIndex;
+    return m_elements[ attr ].usageIndex;
 }
 
 // *********************************
 //
 void VertexDescriptor::GetAttribute ( int attr, unsigned int * streamIndex, unsigned int * offset, AttrType * type, AttrSemantic * semantic, unsigned int * usageIndex ) const
 {
-	assert( attr >= 0 );
-	assert( attr < m_numAttrs );
+    assert( attr >= 0 );
+    assert( attr < m_numAttrs );
 
     const Element& e = m_elements[ attr ];
 
@@ -198,7 +198,7 @@ int VertexDescriptor::Stride () const
 //
 int VertexDescriptor::Index ( AttrSemantic semantic, unsigned int usageIndex ) const
 {
-	for ( int i = 0; i < m_numAttrs; ++i )
+    for ( int i = 0; i < m_numAttrs; ++i )
     {
         if ( m_elements[ i ].semantic == semantic &&  m_elements[ i ].usageIndex == usageIndex )
         {

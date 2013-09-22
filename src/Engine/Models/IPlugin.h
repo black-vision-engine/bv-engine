@@ -12,43 +12,6 @@ namespace model
     class IGeometryChannel;
 }
 
-
-//class ParamDesc
-//{
-//    std::string         m_name;
-//    ParamType           m_type;
-//    ParameterSemantic   m_semantic;
-//
-//public:
-//    ParamType           getParamType() const { return m_type; }
-//    const std::string&  getName() const { return m_name; }
-//    ParameterSemantic   getSemantic() const { return m_semantic; }
-//
-//    explicit ParamDesc(const std::string& name, TypeKind type, ParameterSemantic semantic)
-//        : m_name(name), m_type(type), m_semantic(semantic)
-//    {}
-//};
-//
-//class ParametersDescriptors
-//{
-//private:
-//    std::vector<ParamDesc > m_params;
-//
-//public:
-//    void    addParam(const std::string& name, TypeKind type, ParameterSemantic semantic = ParameterSemantic::NONE) { m_params.push_back(ParamDesc(name, type, semantic)); }
-//    void    merge(const ParametersDescriptors& paramDesc)
-//    {
-//        for(auto p : paramDesc.m_params)
-//        {
-//            m_params.push_back(p);
-//        }
-//    }
-//
-//    int     size() const { return m_params.size(); }
-//    
-//    const ParamDesc& getParam(int i) const { return m_params[i]; }
-//};
-
 class IPlugin
 {
 public:

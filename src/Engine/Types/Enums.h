@@ -53,8 +53,10 @@ enum class PrimitiveType : int
     PT_TRIANGLES,
     PT_TRIANGLE_STRIP,
     PT_TRIANGLE_FAN,
+    PT_TRIANGLE_MESH,
     PT_QUADS,
     PT_QUAD_STRIP,
+    PT_QUAD_MESH,
     PT_POLYGON,
 
     PT_TOTAL,

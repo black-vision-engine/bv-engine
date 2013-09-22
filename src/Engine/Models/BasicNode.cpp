@@ -17,6 +17,8 @@
 #include "Engine\Models\Updaters\ShaderParamUpdater.h"
 
 #include "Engine\Models\Plugins\Interfaces\IGeometryChannel.h"
+#include "Engine\Models\Plugins\Interfaces\IConnectedComponent.h"
+#include "Engine\Models\Plugins\Interfaces\IVertexAttributeChannel.h"
 
 #include <fstream>
 #include <sstream>
@@ -68,7 +70,7 @@ BasicNode::BasicNode()
 {
 }
 
-SceneNode* BasicNode::buildScene()
+SceneNode* BasicNode::BuildScene()
 {
     VertexBuffer *      vb          = nullptr;
     IndexBuffer *       ib          = nullptr;
@@ -78,18 +80,18 @@ SceneNode* BasicNode::buildScene()
     RenderableEntity *  renderEnt   = nullptr;
     RenderableEffect *  effect      = nullptr;
 
-    CreateRenderableData( &vd, &vb, &ib, &vao );
+    CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
     effect = CreateRenderaleEffectMockImplementationForCompleteDummies();
-    RenderableEntity::RenderableType renderableType = GetRenderableType();
+    auto renderableType = GetRenderableType();
 
     //FIXME: to powinna ogarniac jakas faktoria-manufaktura
     switch( renderableType )
     {
-        case RenderableEntity::RenderableType::RT_TRIANGLE_STRIP:
+        case PrimitiveType::PT_TRIANGLE_STRIP:
             renderEnt = new TriangleStrip( vao, effect );
             break;
-        case RenderableEntity::RenderableType::RT_TRIANGLES:
-        case RenderableEntity::RenderableType::RT_TRIANGLE_MESH:
+        case PrimitiveType::PT_TRIANGLES:
+        case PrimitiveType::PT_TRIANGLE_MESH:
         default:
             return nullptr;
     }
@@ -107,49 +109,9 @@ SceneNode* BasicNode::buildScene()
     }
 
     return ret;
-
-
-    //SceneNode* ret =  new SceneNode(nullptr);
-
-    //if(m_pshaderPlugin)
-    //{
-    //    //ret->setShader(PixelShader::create(m_pshaderPlugin->GetShaderFile(), "", 1, 0)); // TODO: We do not need 4 params but 1.
-    //    ret->addParamDesc(m_pshaderPlugin->getDescriptors());
-    //}
-    //else
-    //    assert( false );
-    //    //ret->setShader(VertexShader::create("../dep/media/shaders/basic.frag", "", 1, 0));
-
-    //if(m_vshaderPlugin)
-    //    ret->setShader(VertexShader::create(m_vshaderPlugin->GetShaderFile(), "", 1, 0));
-    //else
-    //    ret->setShader(VertexShader::create("../dep/media/shaders/solid.vert", "", 1, 0));
-
-
-    //if(m_transformPlugins.empty())
-        // TODO:
-        //ret->addParamDesc(m_transformPlugin->getDescriptors());
-
-    //if(m_geometryPlugins.empty())
-
-    //if(!m_goemetryPlugin)
-    //{
-    //    ret->setGeometry(new VBORect(1.f, 1.f));
-    //}
-    //else
-    //{
-    //    // TODO:
-    //}
-
-    //ret->setInterpolatorsList(buildInterpolatorList());
-
-
-
-    //return ret;
-    return nullptr;
 }
 
-bool BasicNode::addChild(Node* n)
+bool BasicNode::AddChild(Node* n)
 {
     m_children.push_back(n);
 
@@ -165,11 +127,6 @@ void BasicNode::addTransformPlugin(ITransformPlugin* tPlugin)
 {
     m_transformPlugins.push_back(tPlugin);
 }
-
-//void BasicNode::addGeometryPlugin(IGeometryGenPlugin* gPlugin)
-//{
-//    m_geometryPlugins.push_back(gPlugin);
-//}
 
 void BasicNode::setPixelShaderPlugin(IShaderPlugin* psPlugin)
 {
@@ -193,10 +150,6 @@ void BasicNode::Print(std::ostream& out, int tabs) const
     out << "Transform plugins: " << m_transformPlugins.size() << debug::EndLine(tabs + 1);
     for(auto tp : m_transformPlugins)
         tp->Print(out, tabs + 1);
-
-    //out << debug::EndLine(tabs) << "Geometry plugins: " << m_geometryPlugins.size();
-    //for(auto gp : m_geometryPlugins)
-    //    gp->Print(out, tabs + 1);
     
     out << debug::EndLine(tabs) << "Pixel Shader plugin: " << m_pshaderPlugin << debug::EndLine(tabs + 1);
     if(m_pshaderPlugin != nullptr)
@@ -241,50 +194,54 @@ void BasicNode::Update(float t)
     }
 }
 
-RenderableEntity::RenderableType    BasicNode::GetRenderableType        ()                                                              const
+PrimitiveType                       BasicNode::GetRenderableType        ()                        const
 {
-    // TODO:
-    //return m_plugins.back()->GetGeometryChannel()->GetPrimitiveType(); // TODO
-    return RenderableEntity::RenderableType::RT_TRIANGLE_STRIP;
-//    return (RenderableEntity::RenderableType)m_geometryPlugins.back()->AdjacencyType(); // FIXME: remove cast
+    if( m_plugins.empty() )
+    {
+        assert(false);
+    }
+
+    return m_plugins.back()->GetGeometryChannel()->GetPrimitiveType();
 }
 
-bool                                BasicNode::CreateRenderableData     (VertexDescriptor** vd, VertexBuffer** vb, IndexBuffer** ib, VertexArray ** vao)    const
+bool                                BasicNode::CreateRenderableData     (VertexArray ** vao)    const
 {
-    *vd = VertexDescriptor::Create(1, AttrType::AT_FLOAT3, AttrSemantic::AS_POSITION
-                                    , AttrType::AT_FLOAT2, AttrSemantic::AS_TEXCOORD, 0 ); // TODO: Sprawdz size i ustaw AttrType poprawnie
-
-    //m_plugins.back()->GetGeometryChannel()->GetComponents()->
-    auto& back = m_geometryPlugins.back();
-
-    *vb = new VertexBuffer(back->Vertices().size(), back->VertexSize());
-
-    for(auto& v : back->Vertices())
+    if( m_plugins.empty() )
     {
-        (*vb)->AddVertex(v);
+        return false;
     }
 
-    if(back->AdjacencyType() != IGeometryGenPlugin::Adjacency::A_TRIANGLE_MESH)
-    {
-        *ib = nullptr;
-    }
-    else
-    {
-        assert(back->Indices().size() > 0);
-        *ib = new IndexBuffer(back->Indices().size(), sizeof(int));
+    auto components = m_plugins.back()->GetGeometryChannel()->GetComponents();
 
-        for(auto& i : back->Indices())
-        {
-            (*ib)->AddIndex(i);
-        }
+    if( components.empty() )
+    {
+        return nullptr;
+    }
+
+    auto lastComponent = components.back();
+
+    auto vertNum    = lastComponent->GetNumVertices();
+
+    auto attribChannels = lastComponent->GetVertexAttributeChannels();
+
+    if( attribChannels.empty() )
+    {
+        return nullptr;
     }
 
     *vao = new VertexArray();
-    (*vao)->AddEntry( *vb, *vd );
 
-    //TODO: czas 0
+    for( auto attrCh : attribChannels )
+    {
+        auto type       = attrCh->GetType();
+        auto semantic   = attrCh->GetSemantic();
 
-    //(*vb)->AddVertex()// FORNE
+        VertexDescriptor*   vd = VertexDescriptor::Create( 1, type, semantic, (int)semantic);
+        VertexBuffer*       vb = new VertexBuffer( vertNum, attrCh->GetEntrySize() );
+
+        (*vao)->AddEntry( vb, vd );
+    }
+
     return true;
 }
 
