@@ -7,16 +7,21 @@ namespace model
 {
 
 Transform::Transform()
-    : mat(glm::mat4x4(1.f))
+    : m_mat(glm::mat4x4(1.f))
 {}
 
 Transform::Transform(const glm::mat4x4& m)
-    :   mat(m)
+    :   m_mat(m)
 {}
 
 Transform Transform::operator*(const Transform& m) const
 {
-    return Transform(mat * m.mat);
+    return Transform(m_mat * m.m_mat);
+}
+
+void     Transform::SetMatrix   ( const glm::mat4x4& m )
+{
+    m_mat = m;
 }
 
 } // model
