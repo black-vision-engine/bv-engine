@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 #include "IChannel.h"
 #include "Engine\Types\Enums.h"
@@ -10,7 +10,7 @@ namespace bv { namespace model
 
 class IVertexAttributeChannel;
 
-class IConnectedComponent : public IChannel
+class IConnectedComponent
 {
 public:
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine\Models\Plugins\Channels\GeometryChannelDescriptor.h"
+
 #include "Engine/Models/Plugins/Interfaces/IGeometryChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
 
@@ -14,25 +16,33 @@ class ConnectedComponent;
 class GeometryChannel : public IGeometryChannel
 {
 protected:
-    std::vector< ConnectedComponent* >              m_components;
-    std::vector< AttrType >                         m_type;
-    std::vector< AttrSemantic >                     m_semantic;
+
+    GeometryChannelDescriptor                       m_desc;
+
+    std::vector< ConnectedComponent* >              m_connectedComponents;
     PrimitiveType                                   m_primitiveType;
 
 public:
 
-    void                                            Update              (float t);
-
-    virtual const std::vector< AttrType >&          GetType             () const;
-    virtual const std::vector< AttrSemantic >&      GetSemantic         () const;
-    virtual PrimitiveType                           GetPrimitiveType    () const;
-
-    virtual int                                     GetNumPrimitives    ( IConnectedComponent* connComp ) const;
-    virtual std::vector< IConnectedComponent* >     GetComponents       () const;
-
+                                                    GeometryChannel     ( PrimitiveType type );
     virtual                                         ~GeometryChannel    ();
 
-                                                    GeometryChannel     (const IPlugin* pl);
+    //IChannel
+    virtual void                                    Update              ( float t );
+
+    //IGeometryChannel
+    virtual const IGeometryChannelDescriptor *      GetDescriptor       () const;
+    virtual PrimitiveType                           GetPrimitiveType    () const;
+
+    virtual int                                     GetNumPrimitives    ( IConnectedComponent * cc ) const;
+    virtual std::vector< IConnectedComponent * >    GetComponents       () const;
+
+    virtual bool                                    CanBeConnectedTo    ( IPlugin * plugin ) const;
+
+protected:
+
+    virtual bool                                    CanBeConnectedTo    ( const GeometryChannelDescriptor & desc ) const = 0;
+
 };
 
 class GeometryChannelStaticRect : public GeometryChannel

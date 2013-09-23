@@ -1,0 +1,27 @@
+#pragma once
+
+#include "IChannel.h"
+
+namespace bv { namespace model
+{
+
+class IVertexAttributeChannelDescriptor;
+class IIndexChannelDescriptor;
+
+//FIXME: add interface to access groups of channels (position, maping
+class IGeometryChannelDescriptor
+{
+public:
+
+    virtual int									        GetNumVertexChannels		()						const = 0;
+	virtual bool								        HasIndexChannel				()						const = 0;
+
+	virtual const IVertexAttributeChannelDescriptor *	GetVertexChannelDescriptor	( int channelIndex )	const = 0;
+	virtual const IIndexChannelDescriptor *		        GetIndexChannelDescriptor	()						const = 0;
+
+    virtual										        ~IGeometryChannelDescriptor	() {}
+
+};
+
+} //model
+} //bv

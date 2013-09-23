@@ -85,6 +85,9 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\TranformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\ConnectedComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexAttributeChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\IndexChannelDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\VertexAttributeChannelDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\GeometryChannelDescriptor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -188,8 +191,16 @@
     <ClInclude Include="Engine\Types\Enums.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributeChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexAttributeChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IIndexChannelDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\IndexChannelDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributeChannelDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\VertexAttributeChannelDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\GeometryChannelDescriptor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Engine\Models\Plugins\Interfaces\IGeometryChannelDescriptor.h" />
   </ItemGroup>
 </Project>

@@ -192,8 +192,11 @@
     <ClCompile Include="Engine\Models\ModelScene.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\ConnectedComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\GeometryChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\GeometryChannelDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\IndexChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\TranformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexAttributeChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\VertexAttributeChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Extrude.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryUVSingle.cpp" />
@@ -277,8 +280,11 @@
     <ClInclude Include="Engine\Models\ModelScene.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\ConnectedComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\GeometryChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\GeometryChannelDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\IndexChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\TranformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexAttributeChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\VertexAttributeChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Extrude.h" />
     <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.h" />
     <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryUVSingle.h" />
@@ -286,9 +292,11 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IConnectedComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IIndexChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\ITransformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributeChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributeChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleTexturePlugin.h" />
@@ -375,6 +383,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Engine\Models\Plugins\Interfaces\IGeometryChannelDescriptor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

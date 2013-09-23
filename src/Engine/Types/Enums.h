@@ -24,23 +24,25 @@ enum class ParameterSemantic : int
     LOCAL_TRANSFORM,
 };
 
-enum AttrType
+enum class AttributeType : int
 {
-    AT_NONE,
-    AT_FLOAT1,
+    AT_FLOAT1 = 0,
     AT_FLOAT2,
     AT_FLOAT3,
     AT_FLOAT4,
+
     AT_TOTAL
 };
 
-enum AttrSemantic
+enum class AttributeSemantic : int
 {
-    AS_NONE,
-    AS_POSITION,      
-    AS_NORMAL,        
-    AS_TEXCOORD,      
+    AS_POSITION = 0,      
+    AS_TEXCOORD,
     AS_COLOR,
+    AS_NORMAL,        
+    AS_BINORMAL,        
+    AS_CUSTOM,
+
     AS_TOTAL
 };
 
@@ -60,6 +62,26 @@ enum class PrimitiveType : int
     PT_POLYGON,
 
     PT_TOTAL,
+};
+
+enum class ChannelRole : int
+{
+    CR_GENERATOR = 0,
+    CR_PROCESSOR,
+    CR_PASSTHROUGH,
+
+    CR_TOTAL,
+
+    CR_7 //Krisztjano Rezinaldo
+};
+
+enum class IndexType : int
+{
+    IT_UBYTE = 0,
+    IT_USHORT,
+    IT_UINT,
+
+    IT_TOTAL
 };
 
 } // bv

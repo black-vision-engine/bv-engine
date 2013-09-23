@@ -10,18 +10,21 @@ namespace bv { namespace model
 {
 
 class IConnectedComponent;
+class IGeometryChannelDescriptor;
 
 class IGeometryChannel : public IChannel
 {
 public:
-    virtual const std::vector< AttrType >&          GetType             () const = 0;
-    virtual const std::vector< AttrSemantic >&      GetSemantic         () const = 0;
-    virtual PrimitiveType                           GetPrimitiveType    () const = 0;
 
-    virtual int                                     GetNumPrimitives    ( IConnectedComponent* connComp ) const = 0;
-    virtual std::vector< IConnectedComponent* >     GetComponents       () const = 0;
+    virtual const IGeometryChannelDescriptor *      GetDescriptor       ()                              const = 0;
+    virtual PrimitiveType                           GetPrimitiveType    ()                              const = 0;
 
-    virtual bool                                    IsTimeInvariant     () const = 0;
+    virtual int                                     GetNumPrimitives    ( IConnectedComponent * cc )    const = 0;
+    virtual std::vector< IConnectedComponent* >     GetComponents       ()                              const = 0;
+
+    virtual bool                                    IsTimeInvariant     ()                              const = 0;
+
+    virtual bool                                    CanBeConnectedTo    ( IPlugin * plugin )            const = 0;
 
     virtual                                         ~IGeometryChannel   (){};
 };
