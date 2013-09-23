@@ -62,9 +62,12 @@ const IIndexChannelDescriptor *		        GeometryChannelDescriptor::GetIndexChan
 
 // ************************************
 //
-void    GeometryChannelDescriptor::AddVertexAttrChannelDesc    ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole )
+const VertexAttributeChannelDescriptor *  GeometryChannelDescriptor::AddVertexAttrChannelDesc    ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole )
 {
-    return AddVertexAttrChannelDesc( new VertexAttributeChannelDescriptor( attrType, attrSemantic, channelRole ) );
+    VertexAttributeChannelDescriptor * desc = new VertexAttributeChannelDescriptor( attrType, attrSemantic, channelRole );
+    AddVertexAttrChannelDesc( desc );
+
+    return desc;
 }
 
 // ************************************
@@ -76,9 +79,12 @@ void    GeometryChannelDescriptor::AddVertexAttrChannelDesc    ( VertexAttribute
 
 // ************************************
 //
-void    GeometryChannelDescriptor::SetIndexAttrChannelDesc     ( IndexType type )
+const IndexChannelDescriptor *   GeometryChannelDescriptor::SetIndexAttrChannelDesc     ( IndexType type )
 {
-    SetIndexAttrChannelDesc( new IndexChannelDescriptor( type ) );
+    IndexChannelDescriptor * desc = new IndexChannelDescriptor( type );
+    SetIndexAttrChannelDesc( desc );
+
+    return desc;
 }
 
 // ************************************

@@ -1,108 +1,55 @@
 #include "VertexAttributeChannel.h"
 
+#include <cassert>
+
+#include "Engine\Models\Plugins\Channels\VertexAttributeChannelDescriptor.h"
+
 namespace bv { namespace model
 {
 
 // *********************************
 //
-VertexAttributeChannel::VertexAttributeChannel(AttrType type, AttrSemantic semantic)
-    : m_type(type), m_semantic(semantic)
-{}
-
-// *********************************
-//
-AttrType                VertexAttributeChannel::GetType()               const
+VertexAttributeChannel::VertexAttributeChannel( const VertexAttributeChannelDescriptor * desc, const std::string & name, bool readOnly )
+    : m_desc( desc )
+    , m_name( name )
+    , m_readOnly( readOnly )
 {
-    return m_type;
+    assert( desc != nullptr );
 }
 
 // *********************************
 //
-AttrSemantic            VertexAttributeChannel::GetSemantic()           const
+VertexAttributeChannel::~VertexAttributeChannel ()
 {
-    return m_semantic;
+    //FIXME: not an owner of pointed channel descriptor so don't try to touch it here
 }
 
 // *********************************
 //
-Float3VertexAttributeChannel::Float3VertexAttributeChannel(AttrSemantic semantic)
-    : VertexAttributeChannel( AttrType::AT_FLOAT3, semantic )
-{}
-
-// *********************************
-//
-int                     Float3VertexAttributeChannel::GetNumEntries()   const
+void  VertexAttributeChannel::SetReadOnly             ( bool readOnly )
 {
-    return m_f3attritutes.size();
+    m_readOnly = readOnly;
 }
 
 // *********************************
 //
-int                     Float3VertexAttributeChannel::GetEntrySize ()    const
+bool  VertexAttributeChannel::IsReadOnly              ()  const
 {
-    return sizeof(glm::vec3);
+    return m_readOnly;
 }
 
 // *********************************
 //
-const char*             Float3VertexAttributeChannel::GetData()         const
+const IVertexAttributeChannelDescriptor *   VertexAttributeChannel::GetDescriptor           ()  const
 {
-    if( m_f3attritutes.empty() )
-    {
-        return nullptr;
-    }
-    else
-    {
-        return reinterpret_cast<const char*>( &m_f3attritutes[0] );
-    }
+    return m_desc;
 }
 
 // *********************************
 //
-void                    Float3VertexAttributeChannel::AddVertexAttribute(const glm::vec3& v)
+std::string                                 VertexAttributeChannel::GetName                 ()  const
 {
-    m_f3attritutes.push_back(v);
-}
-
-// *********************************
-//
-Float2VertexAttributeChannel::Float2VertexAttributeChannel(AttrSemantic semantic)
-    : VertexAttributeChannel( AttrType::AT_FLOAT2, semantic )
-{}
-
-// *********************************
-//
-int                     Float2VertexAttributeChannel::GetNumEntries()   const
-{
-    return m_f2attritutes.size();
-}
-
-// *********************************
-//
-int                     Float2VertexAttributeChannel::GetEntrySize ()    const
-{
-    return sizeof(glm::vec2);
-}
-
-// *********************************
-//
-const char*             Float2VertexAttributeChannel::GetData()         const
-{
-    if( m_f2attritutes.empty() )
-    {
-        return nullptr;
-    }
-    else
-    {
-        return reinterpret_cast<const char*>( &m_f2attritutes[0] );
-    }
-}
-
-// *********************************
-//
-void                    Float2VertexAttributeChannel::AddVertexAttribute(const glm::vec2& v)
-{
-    m_f2attritutes.push_back(v);
+    return m_name;
 }
 
 } // model

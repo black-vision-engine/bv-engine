@@ -1,5 +1,7 @@
 #include "VertexAttributeChannelDescriptor.h"
 
+#include <cassert>
+
 namespace bv { namespace model
 {
 
@@ -54,9 +56,25 @@ ChannelRole     VertexAttributeChannelDescriptor::GetChannelRole                
 
 // ************************************
 //
+std::string     VertexAttributeChannelDescriptor::SuggestedDefaultName                      ( int num ) const
+{
+    return DefaultName( m_attrType, m_attrSemantic, num );
+}
+
+// ************************************
+//
 int             VertexAttributeChannelDescriptor::GetAttrTypeSize                           ( AttributeType type )
 {
     return m_sAttrSizea[ (int) type ];
+}
+
+// ************************************
+//
+std::string     VertexAttributeChannelDescriptor::DefaultName                               ( AttributeType type, AttributeSemantic semantic, int num )
+{
+    //FIXME: implement properly
+    assert( false );
+    return "vertexfartexfakoff";
 }
 
 } //model

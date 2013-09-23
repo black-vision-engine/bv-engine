@@ -22,9 +22,12 @@ GeometryChannel::~GeometryChannel   ()
 
 // *********************************
 //
-void                                    GeometryChannel::Update              (float t)
+void                                    GeometryChannel::Update              ( float t )
 {
-    for( auto comp : m_components )
+    //FIXME: not necesarrily like this but it has to be thought over
+    //FIXME: it is best to assume that Update is called from the first to last plugin and state is well defined and each plugin just has to read predcessor's state (without calling Update)
+    //FIXME: and only calculate its state accordingly
+    for( auto comp : m_connectedComponents )
     {
         comp->Update( t );
     }
@@ -32,16 +35,9 @@ void                                    GeometryChannel::Update              (fl
 
 // *********************************
 //
-const std::vector< AttrType >&          GeometryChannel::GetType             () const
+const IGeometryChannelDescriptor *      GeometryChannel::GetDescriptor       () const
 {
-    return m_type;
-}
-
-// *********************************
-//
-const std::vector< AttrSemantic >&      GeometryChannel::GetSemantic         () const
-{
-    return m_semantic;
+    return &m_desc;
 }
 
 // *********************************
@@ -55,35 +51,35 @@ PrimitiveType                           GeometryChannel::GetPrimitiveType    () 
 //
 int                                     GeometryChannel::GetNumPrimitives   ( IConnectedComponent* connComp ) const
 {
-    int verNum = connComp->GetNumVertices();
+    int vertNum = connComp->GetNumVertices();
 
     switch(GetPrimitiveType())
     {
         case PrimitiveType::PT_POINTS:
-            return verNum;
+            return vertNum;
         case PrimitiveType::PT_LINES:
-            assert(verNum % 2 == 0);
-            return verNum / 2;
+            assert(vertNum % 2 == 0);
+            return vertNum / 2;
         case PrimitiveType::PT_LINE_STRIP:
-            return verNum - 1;
+            return vertNum - 1;
         case PrimitiveType::PT_LINE_LOOP:
-            return verNum;
+            return vertNum;
         case PrimitiveType::PT_TRIANGLES:
-            assert(verNum % 3 == 0);
-            return verNum / 3;
+            assert(vertNum % 3 == 0);
+            return vertNum / 3;
         case PrimitiveType::PT_TRIANGLE_STRIP:
-            return verNum - 2;
+            return vertNum - 2;
         case PrimitiveType::PT_TRIANGLE_FAN:
-            return verNum - 2;
+            return vertNum - 2;
         case PrimitiveType::PT_QUADS:
-            assert(verNum % 4 == 0);
-            return verNum / 4;
+            assert(vertNum % 4 == 0);
+            return vertNum / 4;
         case PrimitiveType::PT_QUAD_STRIP:
-            return verNum - 3;
+            return vertNum - 3;
         case PrimitiveType::PT_POLYGON:
             return 1;
         default:
-            assert(false);
+            assert( false );
             return 0;
     }
 }
@@ -92,60 +88,21 @@ int                                     GeometryChannel::GetNumPrimitives   ( IC
 //
 std::vector< IConnectedComponent* >     GeometryChannel::GetComponents       () const
 {
-    return std::vector< IConnectedComponent* >( m_components.begin(), m_components.end() );
+    return std::vector< IConnectedComponent* >( m_connectedComponents.begin(), m_connectedComponents.end() );
 }
+
+//// *********************************
+////
+//bool                                    GeometryChannel::CanBeConnectedTo    ( IPlugin * plugin ) const
+//{
+//    return CanBeConnectedTo( plugin->GetGeometryChannel() );
+//}
 
 // *********************************
 //
-GeometryChannelStaticRect::GeometryChannelStaticRect(float w, float h)
-    : GeometryChannel( nullptr ) // FIXME: Pass plugin
+bool                                    GeometryChannel::CanBeConnectedTo    ( IGeometryChannel * channel ) const
 {
-    ConnectedComponent* connComp = new ConnectedComponent();
-
-    Float3VertexAttributeChannel* vertArrtF3 = new Float3VertexAttributeChannel(AttrSemantic::AS_POSITION);
-
-    vertArrtF3->AddVertexAttribute(glm::vec3( -w / 2.f, h / 2.f , 0.f ) );
-    vertArrtF3->AddVertexAttribute(glm::vec3( -w / 2.f, -h / 2.f , 0.f ) );
-    vertArrtF3->AddVertexAttribute(glm::vec3( w / 2.f, -h / 2.f , 0.f ) );
-    vertArrtF3->AddVertexAttribute(glm::vec3( w / 2.f, h / 2.f , 0.f ) );
-
-    connComp->m_vertexAttributeChannels.push_back( vertArrtF3 );
-
-    m_components.push_back(connComp);
-}
-
-// *********************************
-//
-GeometryChannelStaticRectTextured::GeometryChannelStaticRectTextured( const std::string& texturePath, float w, float h )
-    : GeometryChannel( nullptr ) // FIXME: Pass plugin
-{
-    ConnectedComponent* connComp = new ConnectedComponent();
-
-    Float3VertexAttributeChannel* vertArrtF3 = new Float3VertexAttributeChannel(AttrSemantic::AS_POSITION);
-
-    vertArrtF3->AddVertexAttribute(glm::vec3( -w / 2.f, h / 2.f , 0.f ) );
-    vertArrtF3->AddVertexAttribute(glm::vec3( -w / 2.f, -h / 2.f , 0.f ) );
-    vertArrtF3->AddVertexAttribute(glm::vec3( w / 2.f, -h / 2.f , 0.f ) );
-    vertArrtF3->AddVertexAttribute(glm::vec3( w / 2.f, h / 2.f , 0.f ) );
-
-    connComp->m_vertexAttributeChannels.push_back( vertArrtF3 );
-
-    Float2VertexAttributeChannel* vertArrtF2 = new Float2VertexAttributeChannel(AttrSemantic::AS_TEXCOORD);
-    vertArrtF2->AddVertexAttribute(glm::vec2( 0.f, 0.f ) );
-    vertArrtF2->AddVertexAttribute(glm::vec2( 0.f, 1.f ) );
-    vertArrtF2->AddVertexAttribute(glm::vec2( 1.f, 1.f ) );
-    vertArrtF2->AddVertexAttribute(glm::vec2( 1.f, 0.f ) );
-
-    connComp->m_vertexAttributeChannels.push_back( vertArrtF2 );
-
-    m_components.push_back(connComp);
-}
-
-// *********************************
-//
-GeometryChannelStaticRectTextured*    GeometryChannelStaticRectTextured::Create( const std::string& texturePath, float w, float h )
-{
-    return new GeometryChannelStaticRectTextured(texturePath, w, h);
+    return CanBeConnectedTo( *static_cast< const GeometryChannelDescriptor * >( channel->GetDescriptor() ) );
 }
 
 } // model

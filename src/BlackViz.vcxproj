@@ -193,10 +193,12 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\ConnectedComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\GeometryChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\GeometryChannelDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\GeometryChannelImpl.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\IndexChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\TranformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexAttributeChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexAttributeChannelDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\VertexAttributeChannelTyped.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Extrude.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryUVSingle.cpp" />
@@ -281,10 +283,12 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\ConnectedComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\GeometryChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\GeometryChannelDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\GeometryChannelImpl.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\IndexChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\TranformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexAttributeChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexAttributeChannelDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\VertexAttributeChannelTyped.h" />
     <ClInclude Include="Engine\Models\Plugins\Extrude.h" />
     <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.h" />
     <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryUVSingle.h" />

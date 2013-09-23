@@ -233,13 +233,14 @@ bool                                BasicNode::CreateRenderableData     (VertexA
 
     for( auto attrCh : attribChannels )
     {
-        auto type       = attrCh->GetType();
-        auto semantic   = attrCh->GetSemantic();
+        //FIXME: SUUUUUX
+        //auto type       = attrCh->GetType();
+        //auto semantic   = attrCh->GetSemantic();
 
-        VertexDescriptor*   vd = VertexDescriptor::Create( 1, type, semantic, (int)semantic);
-        VertexBuffer*       vb = new VertexBuffer( vertNum, attrCh->GetEntrySize() );
+        //VertexDescriptor*   vd = VertexDescriptor::Create( 1, type, semantic, (int)semantic);
+        //VertexBuffer*       vb = new VertexBuffer( vertNum, attrCh->GetEntrySize() );
 
-        (*vao)->AddEntry( vb, vd );
+        //(*vao)->AddEntry( vb, vd );
     }
 
     return true;

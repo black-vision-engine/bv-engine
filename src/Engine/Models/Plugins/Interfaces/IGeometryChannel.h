@@ -9,6 +9,7 @@
 namespace bv { namespace model
 {
 
+class IPlugin;
 class IConnectedComponent;
 class IGeometryChannelDescriptor;
 
@@ -24,7 +25,9 @@ public:
 
     virtual bool                                    IsTimeInvariant     ()                              const = 0;
 
-    virtual bool                                    CanBeConnectedTo    ( IPlugin * plugin )            const = 0;
+    //FIXME: implement via plugin when its interface is known
+    //virtual bool                                  CanBeConnectedTo    ( IPlugin * plugin )            const = 0;
+    virtual bool                                    CanBeConnectedTo    ( IGeometryChannel * channel )  const = 0;
 
     virtual                                         ~IGeometryChannel   (){};
 };

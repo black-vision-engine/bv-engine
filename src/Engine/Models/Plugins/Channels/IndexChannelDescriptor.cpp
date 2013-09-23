@@ -37,9 +37,24 @@ int             IndexChannelDescriptor::GetIndexSize            ()  const
 
 // ************************************
 //
+std::string     IndexChannelDescriptor::SuggestedDefaultName    () const
+{
+    return DefaultName( m_indexType );
+}
+
+// ************************************
+//
 int             IndexChannelDescriptor::IndexSize               ( IndexType type )
 {
     return m_sIdxSizes[ (int) type ];
+}
+
+// ************************************
+//
+std::string     IndexChannelDescriptor::DefaultName             ( IndexType type )
+{
+    //FIXME: implement proeprly
+    return "indices";
 }
 
 } //model

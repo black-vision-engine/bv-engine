@@ -31,10 +31,10 @@ public:
 	virtual const IVertexAttributeChannelDescriptor *	GetVertexChannelDescriptor	( int channelIndex )	const;
 	virtual const IIndexChannelDescriptor *		        GetIndexChannelDescriptor	()						const;
 
-    void                                                AddVertexAttrChannelDesc    ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole );
+    const VertexAttributeChannelDescriptor *            AddVertexAttrChannelDesc    ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole );
     void                                                AddVertexAttrChannelDesc    ( VertexAttributeChannelDescriptor * desc );
 
-    void                                                SetIndexAttrChannelDesc     ( IndexType type );
+    const IndexChannelDescriptor *                      SetIndexAttrChannelDesc     ( IndexType type );
     void                                                SetIndexAttrChannelDesc     ( IndexChannelDescriptor * desc );
 
 };

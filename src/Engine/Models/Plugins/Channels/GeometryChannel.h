@@ -37,31 +37,13 @@ public:
     virtual int                                     GetNumPrimitives    ( IConnectedComponent * cc ) const;
     virtual std::vector< IConnectedComponent * >    GetComponents       () const;
 
-    virtual bool                                    CanBeConnectedTo    ( IPlugin * plugin ) const;
+    //virtual bool                                  CanBeConnectedTo    ( IPlugin * plugin ) const;
+    virtual bool                                    CanBeConnectedTo    ( IGeometryChannel * channel ) const;
 
 protected:
 
     virtual bool                                    CanBeConnectedTo    ( const GeometryChannelDescriptor & desc ) const = 0;
 
-};
-
-class GeometryChannelStaticRect : public GeometryChannel
-{
-
-    GeometryChannelStaticRect(float w, float h);
-public:
-    static GeometryChannelStaticRect*             Create(float w = 1.f, float h = 1.f);
-};
-
-class GeometryChannelStaticRectTextured : public GeometryChannel
-{
-
-    GeometryChannelStaticRectTextured(const std::string& texturePath, float w, float h );
-public:
-
-    virtual bool                                          IsTimeInvariant     () const { return true; }
-
-    static GeometryChannelStaticRectTextured*             Create(const std::string& texturePath, float w = 1.f, float h = 1.f );
 };
 
 } // model

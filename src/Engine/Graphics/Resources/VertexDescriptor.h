@@ -29,8 +29,8 @@ protected:
 
         unsigned int	streamIndex;
         unsigned int	offset;
-        AttrType		type;
-        AttrSemantic	semantic;
+        AttributeType		type;
+        AttributeSemantic	semantic;
         unsigned int	usageIndex;
     };
 
@@ -38,9 +38,9 @@ protected:
     Element		m_elements[ VD_MAX_ATTRIBUTES ];
     int			m_stride;
 
-    static int	m_sComponentSize [ AT_TOTAL ];
-    static int	m_sNumComponents [ AT_TOTAL ];
-    static int	m_sTypeSize		 [ AT_TOTAL ];
+    static int	m_sComponentSize [ (int) AttributeType::AT_TOTAL ];
+    static int	m_sNumComponents [ (int) AttributeType::AT_TOTAL ];
+    static int	m_sTypeSize		 [ (int) AttributeType::AT_TOTAL ];
 
 public:
 
@@ -49,27 +49,27 @@ public:
 
     static VertexDescriptor *	Create				( int numAttrs, ... );
 
-    void						SetAttribute		( int attr, unsigned int streamIndex, unsigned int offset, AttrType type, AttrSemantic semantic, unsigned int usageIndex );
+    void						SetAttribute		( int attr, unsigned int streamIndex, unsigned int offset, AttributeType type, AttributeSemantic semantic, unsigned int usageIndex );
     void						SetStride			( int stride );
 
     int							NumAttrs			() const;
 
     unsigned int				StreamIndex			( int attr ) const;
     unsigned int				Offset				( int attr ) const;
-    AttrType					AttributeType		( int attr ) const;
-	AttrSemantic				AttributeSemantic	( int attr ) const;
+    AttributeType		        GetAttributeType    ( int attr ) const;
+	AttributeSemantic		    GetAttributeSemantic( int attr ) const;
     unsigned int				UsageIndex			( int attr ) const;
 
-	void						GetAttribute		( int attr, unsigned int * streamIndex, unsigned int * offset, AttrType * type, AttrSemantic * semantic, unsigned int * usageIndex ) const;
+	void						GetAttribute		( int attr, unsigned int * streamIndex, unsigned int * offset, AttributeType * type, AttributeSemantic * semantic, unsigned int * usageIndex ) const;
 
     int							Stride				()	const;
 
-    int							Index				( AttrSemantic semantic, unsigned int semanticIndex = 0 ) const;
+    int							Index				( AttributeSemantic semantic, unsigned int semanticIndex = 0 ) const;
 
-    static int					ComponentSize		( AttrType type );
-    static int					NumComponents		( AttrType type );
-    static int					TypeSize			( AttrType type );
+    static int					ComponentSize		( AttributeType type );
+    static int					NumComponents		( AttributeType type );
+    static int					TypeSize			( AttributeType type );
 
 };
 
-}
+} //bv

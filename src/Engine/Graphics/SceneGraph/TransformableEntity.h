@@ -10,6 +10,7 @@ class TransformableEntity
 {
 private:
 
+    //FIXME: multiple different transformations should be passed here for instancing purposes (one local transform and vector of world transforms)
     bv::Transform       m_localTransform;
     bv::Transform       m_worldTransorm;
 

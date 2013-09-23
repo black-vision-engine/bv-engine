@@ -2,30 +2,32 @@
 #include <cassert>
 #include <cstdarg>
 
+#include "Engine/Types/Enums.h"
+
 namespace bv {
 
 //FIXME: move closer to definition
-int VertexDescriptor::m_sComponentSize[ AT_TOTAL ] =
+int VertexDescriptor::m_sComponentSize[ (int) AttributeType::AT_TOTAL ] =
 {
-    0,  // AT_NONE
+    //0,  // AT_NONE
     4,  // AT_FLOAT1
     4,  // AT_FLOAT2
     4,  // AT_FLOAT3
     4,  // AT_FLOAT4
 };
 
-int VertexDescriptor::m_sNumComponents[ AT_TOTAL ] =
+int VertexDescriptor::m_sNumComponents[ (int) AttributeType::AT_TOTAL ] =
 {
-    0,  // AT_NONE
+    //0,  // AT_NONE
     1,  // AT_FLOAT1
     2,  // AT_FLOAT2
     3,  // AT_FLOAT3
     4,  // AT_FLOAT4
 };
 
-int VertexDescriptor::m_sTypeSize[ AT_TOTAL ] =
+int VertexDescriptor::m_sTypeSize[ (int) AttributeType::AT_TOTAL ] =
 {
-    0,  // AT_NONE
+    //0,  // AT_NONE
     4,  // AT_FLOAT1
     8,  // AT_FLOAT2
     12, // AT_FLOAT3
@@ -44,8 +46,8 @@ VertexDescriptor::VertexDescriptor ( int numAttrs )
     {
         m_elements[ i ].streamIndex = 0;
         m_elements[ i ].offset		= 0;
-        m_elements[ i ].type		= AT_NONE;
-        m_elements[ i ].semantic	= AS_NONE;
+        m_elements[ i ].type		= AttributeType::AT_FLOAT1; //FIXME: fix it - none was here (AT_NONE)
+        m_elements[ i ].semantic	= AttributeSemantic::AS_POSITION; //FIXME: fix it - none was here (AS_NONE)
         m_elements[ i ].usageIndex	= 0;
     }
 }
@@ -77,7 +79,7 @@ VertexDescriptor * VertexDescriptor::Create ( int numAttrs, ... )
 
         unsigned int semanticIndex = va_arg( args, unsigned int );
     
-        vd->SetAttribute( i, 0, offset, (AttrType)type, (AttrSemantic)semantic, semanticIndex );
+        vd->SetAttribute( i, 0, offset, (AttributeType)type, (AttributeSemantic)semantic, semanticIndex );
 
         offset += m_sTypeSize[ type ];
     }
@@ -91,7 +93,7 @@ VertexDescriptor * VertexDescriptor::Create ( int numAttrs, ... )
 
 // *********************************
 //
-void VertexDescriptor::SetAttribute ( int attr, unsigned int streamIndex, unsigned int offset, AttrType type, AttrSemantic semantic, unsigned int usageIndex )
+void VertexDescriptor::SetAttribute ( int attr, unsigned int streamIndex, unsigned int offset, AttributeType type, AttributeSemantic semantic, unsigned int usageIndex )
 {
     assert( attr >= 0 ); 
     assert( attr < m_numAttrs );
@@ -143,7 +145,7 @@ unsigned int VertexDescriptor::Offset ( int attr ) const
 
 // *********************************
 //
-AttrType VertexDescriptor::AttributeType ( int attr ) const
+AttributeType VertexDescriptor::GetAttributeType ( int attr ) const
 {
     assert( attr >= 0 );
     assert( attr < m_numAttrs );
@@ -153,7 +155,7 @@ AttrType VertexDescriptor::AttributeType ( int attr ) const
 
 // *********************************
 //
-AttrSemantic VertexDescriptor::AttributeSemantic ( int attr ) const
+AttributeSemantic VertexDescriptor::GetAttributeSemantic ( int attr ) const
 {
     assert( attr >= 0 );
     assert( attr < m_numAttrs );
@@ -173,7 +175,7 @@ unsigned int VertexDescriptor::UsageIndex ( int attr  ) const
 
 // *********************************
 //
-void VertexDescriptor::GetAttribute ( int attr, unsigned int * streamIndex, unsigned int * offset, AttrType * type, AttrSemantic * semantic, unsigned int * usageIndex ) const
+void VertexDescriptor::GetAttribute ( int attr, unsigned int * streamIndex, unsigned int * offset, AttributeType * type, AttributeSemantic * semantic, unsigned int * usageIndex ) const
 {
     assert( attr >= 0 );
     assert( attr < m_numAttrs );
@@ -196,7 +198,7 @@ int VertexDescriptor::Stride () const
 
 // *********************************
 //
-int VertexDescriptor::Index ( AttrSemantic semantic, unsigned int usageIndex ) const
+int VertexDescriptor::Index ( AttributeSemantic semantic, unsigned int usageIndex ) const
 {
     for ( int i = 0; i < m_numAttrs; ++i )
     {
@@ -211,23 +213,23 @@ int VertexDescriptor::Index ( AttrSemantic semantic, unsigned int usageIndex ) c
 
 // *********************************
 //
-int VertexDescriptor::ComponentSize ( AttrType type )
+int VertexDescriptor::ComponentSize ( AttributeType type )
 {
-    return m_sComponentSize[ type ];
+    return m_sComponentSize[ (int) type ];
 }
 
 // *********************************
 //
-int VertexDescriptor::NumComponents ( AttrType type )
+int VertexDescriptor::NumComponents ( AttributeType type )
 {
-    return m_sNumComponents[ type ];
+    return m_sNumComponents[ (int) type ];
 }
 
 // *********************************
 //
-int VertexDescriptor::TypeSize		( AttrType type )
+int VertexDescriptor::TypeSize		( AttributeType type )
 {
-    return m_sTypeSize[ type ];
+    return m_sTypeSize[ (int) type ];
 }
 
 }

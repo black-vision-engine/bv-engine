@@ -88,6 +88,8 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\IndexChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexAttributeChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\GeometryChannelDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\VertexAttributeChannelTyped.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\GeometryChannelImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -196,6 +198,8 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributeChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexAttributeChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\GeometryChannelDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\VertexAttributeChannelTyped.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\GeometryChannelImpl.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

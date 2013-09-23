@@ -1,6 +1,6 @@
 #include "SimpleTexturePlugin.h"
 #include "System/Print.h"
-#include "Engine\Models\Plugins\Channels\GeometryChannel.h"
+#include "Engine\Models\Plugins\Channels\GeometryChannelImpl.h"
 
 namespace bv {
 
