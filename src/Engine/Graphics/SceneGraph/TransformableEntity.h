@@ -32,15 +32,9 @@ public:
     
     virtual void        UpdateTransforms                ( double t, const std::vector< Transform > & transforms );
 
-    //const Transform &   WorldTransform                  () const;
-    //void                SetWorldTransform               ( const Transform & t );
-
-    //virtual void        UpdateTransforms                ( double t, const Transform & parentTransform ); 
-
 private:
 
     void                UpdateSetWorldTransform         ( const std::vector< Transform > & parentTransforms );
-//    void                UpdateSetWorldTransform     ( const Transform & parentTransform );
 
     friend class TransformUpdater;
 };
