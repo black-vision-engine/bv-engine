@@ -55,7 +55,7 @@ public:
     char *                  GetData         ();
     const char *            GetData         () const;
 
-    bool                    WriteToBuffer   ( char * memPtr, size_t dataSize );
+    bool                    WriteToBuffer   ( const char * memPtr, size_t dataSize );
 
 };
 

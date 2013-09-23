@@ -90,7 +90,7 @@ const char *            Texture::GetData	    () const
 
 // *********************************
 //
-bool                    Texture::WriteToBuffer   ( char * memPtr, size_t dataSize )
+bool                    Texture::WriteToBuffer   ( const char * memPtr, size_t dataSize )
 {
     if ( GetDataSize() != dataSize )
     {

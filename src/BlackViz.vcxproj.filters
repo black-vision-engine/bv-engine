@@ -91,6 +91,9 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexAttributeChannelTyped.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\GeometryChannelImpl.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\SimpleTransformChannel.cpp" />
+    <ClCompile Include="Engine\Models\Resources\ResourceLoader.cpp" />
+    <ClCompile Include="Engine\Models\Resources\Resource.cpp" />
+    <ClCompile Include="Engine\Models\Resources\TextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -202,6 +205,11 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexAttributeChannelTyped.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\GeometryChannelImpl.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\SimpleTransformChannel.h" />
+    <ClInclude Include="Engine\Models\Resources\Resource.h" />
+    <ClInclude Include="Engine\Models\Resources\ResourceLoader.h" />
+    <ClInclude Include="Engine\Models\Resources\IResource.h" />
+    <ClInclude Include="Engine\Models\Resources\IResourceLoader.h" />
+    <ClInclude Include="Engine\Models\Resources\TextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
