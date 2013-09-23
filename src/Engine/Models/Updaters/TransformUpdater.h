@@ -6,18 +6,24 @@
 
 namespace bv
 {
+
 class TransformableEntity;
+
+namespace model
+{
+    class ITransformChannel;
+}
 
 class TransformUpdater : public IUpdater
 {
 private:
 
-    TransformableEntity *       m_out;
-    TTransformPluginVec *       m_in;
+    TransformableEntity *               m_out;
+    const model::ITransformChannel *    m_in;
 
 public:
             //FIXME: transform updater should use new implementation based on channels
-            TransformUpdater    ( TransformableEntity * out, TTransformPluginVec * in ); 
+            TransformUpdater    ( TransformableEntity * out, const model::ITransformChannel * in ); 
             ~TransformUpdater   ();
 
     void    Update              ( float t );

@@ -37,7 +37,7 @@ BasicNode *              ModelFactory::CreateNode( ITransformPlugin * tPlugin, I
 {
     BasicNode * ret = new BasicNode();
 
-    ret->addTransformPlugin( tPlugin );
+    //ret->addTransformPlugin( tPlugin );
     ret->setGeometryShaderPlugin( gShaderPlugin );
     ret->setPixelShaderPlugin( pShaderPlugin );
     ret->setVertexShaderPlugin( vShaderPlugin );

@@ -20,11 +20,12 @@ private:
     glm::mat4x4 m_mat;
 
 public:
-    Transform    operator * (const Transform& m) const;
+    Transform               operator *  (const Transform& m)        const;
 
-    void        SetMatrix   ( const glm::mat4x4& m );
+    void                    SetMatrix   ( const glm::mat4x4& m );
+    const glm::mat4x4&      GetMatrix   ()                          const;
 
-    explicit Transform(const glm::mat4x4& m);
+    explicit                Transform   (const glm::mat4x4& m);
     Transform();
 };
 
