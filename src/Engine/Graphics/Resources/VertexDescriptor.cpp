@@ -10,10 +10,10 @@ namespace bv {
 int VertexDescriptor::m_sComponentSize[ (int) AttributeType::AT_TOTAL ] =
 {
     //0,  // AT_NONE
-    4,  // AT_FLOAT1
-    4,  // AT_FLOAT2
-    4,  // AT_FLOAT3
-    4,  // AT_FLOAT4
+    sizeof( float ),  // AT_FLOAT1
+    sizeof( float ),  // AT_FLOAT2
+    sizeof( float ),  // AT_FLOAT3
+    sizeof( float ),  // AT_FLOAT4
 };
 
 int VertexDescriptor::m_sNumComponents[ (int) AttributeType::AT_TOTAL ] =
@@ -28,11 +28,12 @@ int VertexDescriptor::m_sNumComponents[ (int) AttributeType::AT_TOTAL ] =
 int VertexDescriptor::m_sTypeSize[ (int) AttributeType::AT_TOTAL ] =
 {
     //0,  // AT_NONE
-    4,  // AT_FLOAT1
-    8,  // AT_FLOAT2
-    12, // AT_FLOAT3
-    16, // AT_FLOAT4
+    sizeof( float ),      // AT_FLOAT1
+    2 * sizeof( float ),  // AT_FLOAT2
+    3 * sizeof( float ),  // AT_FLOAT3
+    4 * sizeof( float ),  // AT_FLOAT4
 };
+
 
 // *********************************
 //
@@ -42,13 +43,9 @@ VertexDescriptor::VertexDescriptor ( int numAttrs )
 {
     assert( numAttrs > 0 );
 
-    for ( int i = 0; i < VD_MAX_ATTRIBUTES; ++i )
+    for( int i = 0; i < numAttrs; ++i )
     {
-        m_elements[ i ].streamIndex = 0;
-        m_elements[ i ].offset		= 0;
-        m_elements[ i ].type		= AttributeType::AT_FLOAT1; //FIXME: fix it - none was here (AT_NONE)
-        m_elements[ i ].semantic	= AttributeSemantic::AS_POSITION; //FIXME: fix it - none was here (AS_NONE)
-        m_elements[ i ].usageIndex	= 0;
+        m_entries.push_back( Entry() );
     }
 }
 
@@ -56,13 +53,12 @@ VertexDescriptor::VertexDescriptor ( int numAttrs )
 //
 VertexDescriptor::~VertexDescriptor ()
 {
-    //FIXME: call renderer here and unbind all vertex deata associated with this vertex descriptor
 }
 
 // *********************************
 //    VertexDescriptor * vd = VertexDescriptor::Create(2,
-//        VertexFormat::AT_FLOAT3, VertexFormat::AS_POSITION, 0,
-//        VertexFormat::AT_FLOAT2, VertexFormat::AS_TEXCOORD, 0);
+//        0, VertexFormat::AT_FLOAT3, VertexFormat::AS_POSITION,
+//        1, VertexFormat::AT_FLOAT2, VertexFormat::AS_TEXCOORD );
 VertexDescriptor * VertexDescriptor::Create ( int numAttrs, ... )
 {
     VertexDescriptor * vd = new VertexDescriptor( numAttrs );
@@ -74,12 +70,13 @@ VertexDescriptor * VertexDescriptor::Create ( int numAttrs, ... )
 
     for ( int i = 0; i < numAttrs; ++i )
     {
+        int channelLoc  = va_arg( args, int );
         int type		= va_arg( args, int );
         int semantic	= va_arg( args, int );
 
         unsigned int semanticIndex = va_arg( args, unsigned int );
     
-        vd->SetAttribute( i, 0, offset, (AttributeType)type, (AttributeSemantic)semantic, semanticIndex );
+        vd->SetAttribute( i, channelLoc, offset, (AttributeType)type, (AttributeSemantic)semantic );
 
         offset += m_sTypeSize[ type ];
     }
@@ -93,18 +90,17 @@ VertexDescriptor * VertexDescriptor::Create ( int numAttrs, ... )
 
 // *********************************
 //
-void VertexDescriptor::SetAttribute ( int attr, unsigned int streamIndex, unsigned int offset, AttributeType type, AttributeSemantic semantic, unsigned int usageIndex )
+void VertexDescriptor::SetAttribute ( int attr, unsigned int channelLocation, unsigned int offset, AttributeType type, AttributeSemantic semantic )
 {
     assert( attr >= 0 ); 
     assert( attr < m_numAttrs );
  
-    Element & elt = m_elements[ attr ];
+    Entry & e = m_entries[ attr ];
 
-    elt.streamIndex		= streamIndex;
-    elt.offset			= offset;
-    elt.type			= type;
-    elt.semantic		= semantic;
-    elt.usageIndex		= usageIndex;
+    e.channelLocation   = channelLocation;
+    e.offset			= offset;
+    e.type			    = type;
+    e.semantic		    = semantic;
 }
 
 // *********************************
@@ -125,12 +121,12 @@ int VertexDescriptor::NumAttrs		()	const
 
 // *********************************
 //
-unsigned int VertexDescriptor::StreamIndex ( int attr ) const
+unsigned int VertexDescriptor::ChannelLocation ( int attr ) const
 {
     assert( attr >= 0 );
     assert( attr < m_numAttrs );
 
-    return m_elements[ attr ].streamIndex;
+    return m_entries[ attr ].channelLocation;
 }
 
 // *********************************
@@ -140,7 +136,7 @@ unsigned int VertexDescriptor::Offset ( int attr ) const
     assert( attr >= 0 );
     assert( attr < m_numAttrs );
 
-    return m_elements[ attr ].offset;
+    return m_entries[ attr ].offset;
 }
 
 // *********************************
@@ -150,7 +146,7 @@ AttributeType VertexDescriptor::GetAttributeType ( int attr ) const
     assert( attr >= 0 );
     assert( attr < m_numAttrs );
 
-    return m_elements[ attr ].type;
+    return m_entries[ attr ].type;
 }
 
 // *********************************
@@ -160,33 +156,23 @@ AttributeSemantic VertexDescriptor::GetAttributeSemantic ( int attr ) const
     assert( attr >= 0 );
     assert( attr < m_numAttrs );
 
-    return m_elements[ attr ].semantic;
+    return m_entries[ attr ].semantic;
 }
+
 
 // *********************************
 //
-unsigned int VertexDescriptor::UsageIndex ( int attr  ) const
+void VertexDescriptor::GetAttribute ( int attr, unsigned int * channelLocation, unsigned int * offset, AttributeType * type, AttributeSemantic * semantic ) const
 {
     assert( attr >= 0 );
     assert( attr < m_numAttrs );
 
-    return m_elements[ attr ].usageIndex;
-}
+    const Entry & e = m_entries[ attr ];
 
-// *********************************
-//
-void VertexDescriptor::GetAttribute ( int attr, unsigned int * streamIndex, unsigned int * offset, AttributeType * type, AttributeSemantic * semantic, unsigned int * usageIndex ) const
-{
-    assert( attr >= 0 );
-    assert( attr < m_numAttrs );
-
-    const Element& e = m_elements[ attr ];
-
-    *streamIndex	= e.streamIndex;
-    *offset			= e.offset;
-    *type			= e.type;
-    *semantic		= e.semantic;
-    *usageIndex		= e.usageIndex;
+    *channelLocation    = e.channelLocation;
+    *offset			    = e.offset;
+    *type			    = e.type;
+    *semantic		    = e.semantic;
 }
 
 // *********************************
@@ -194,21 +180,6 @@ void VertexDescriptor::GetAttribute ( int attr, unsigned int * streamIndex, unsi
 int VertexDescriptor::Stride () const
 {
     return m_stride;
-}
-
-// *********************************
-//
-int VertexDescriptor::Index ( AttributeSemantic semantic, unsigned int usageIndex ) const
-{
-    for ( int i = 0; i < m_numAttrs; ++i )
-    {
-        if ( m_elements[ i ].semantic == semantic &&  m_elements[ i ].usageIndex == usageIndex )
-        {
-            return i;
-        }
-    }
-
-    return -1;
 }
 
 // *********************************
@@ -232,6 +203,4 @@ int VertexDescriptor::TypeSize		( AttributeType type )
     return m_sTypeSize[ (int) type ];
 }
 
-}
-
-
+} //bv

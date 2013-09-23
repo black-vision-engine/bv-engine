@@ -61,6 +61,7 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource* res )  c
         throw std::runtime_error( "Cannot convert texture to bitmap" );
     }
 
+    //FIXME: memcpy
     return new ResourceHandle( (char*)fipImg->accessPixels(), fipImg->getWidth() * fipImg->getHeight() * ( fipImg->getBitsPerPixel() / 8 ), fipImg->getWidth(), fipImg->getHeight() );
 }
 

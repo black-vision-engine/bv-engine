@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include "Engine/Types/Enums.h"
 
 namespace bv
@@ -7,40 +8,26 @@ namespace bv
 
 class VertexDescriptor
 {
-public:
- 
-	enum
+protected:
+
+    struct Entry
     {
-        // The maximum number of attributes for a vertex format.
-        VD_MAX_ATTRIBUTES = 16,
-
-        // The maximum number of texture coordinate units.
-        VD_MAX_TCOORD_UNITS = 8,
-
-        // The maximum number of color units.
-        VD_MAX_COLOR_UNITS = 2
+        unsigned int	    channelLocation;
+        unsigned int	    offset;
+        AttributeType		type;
+        AttributeSemantic	semantic;
     };
 
 protected:
 
-    class Element
-    {
-    public:
-
-        unsigned int	    streamIndex;
-        unsigned int	    offset;
-        AttributeType		type;
-        AttributeSemantic	semantic;
-        unsigned int	    usageIndex;
-    };
-
-    int			m_numAttrs;
-    Element		m_elements[ VD_MAX_ATTRIBUTES ];
-    int			m_stride;
-
     static int	m_sComponentSize [ (int) AttributeType::AT_TOTAL ];
     static int	m_sNumComponents [ (int) AttributeType::AT_TOTAL ];
     static int	m_sTypeSize		 [ (int) AttributeType::AT_TOTAL ];
+
+
+    int			            m_numAttrs;
+    std::vector< Entry >	m_entries;
+    int			            m_stride;
 
 public:
 
@@ -49,22 +36,20 @@ public:
 
     static VertexDescriptor *	Create				( int numAttrs, ... );
 
-    void						SetAttribute		( int attr, unsigned int streamIndex, unsigned int offset, AttributeType type, AttributeSemantic semantic, unsigned int usageIndex );
+    void						SetAttribute		( int attr, unsigned int channelLocation, unsigned int offset, AttributeType type, AttributeSemantic semantic );
     void						SetStride			( int stride );
 
     int							NumAttrs			() const;
 
-    unsigned int				StreamIndex			( int attr ) const;
+    unsigned int				ChannelLocation     ( int attr ) const;
     unsigned int				Offset				( int attr ) const;
     AttributeType		        GetAttributeType    ( int attr ) const;
 	AttributeSemantic		    GetAttributeSemantic( int attr ) const;
-    unsigned int				UsageIndex			( int attr ) const;
 
-	void						GetAttribute		( int attr, unsigned int * streamIndex, unsigned int * offset, AttributeType * type, AttributeSemantic * semantic, unsigned int * usageIndex ) const;
+	void						GetAttribute		( int attr, unsigned int * channelLocation, unsigned int * offset, AttributeType * type, AttributeSemantic * semantic ) const;
 
     int							Stride				()	const;
-
-    int							Index				( AttributeSemantic semantic, unsigned int semanticIndex = 0 ) const;
+    int							Index				( AttributeSemantic semantic ) const;
 
     static int					ComponentSize		( AttributeType type );
     static int					NumComponents		( AttributeType type );
