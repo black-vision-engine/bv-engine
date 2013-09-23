@@ -12,11 +12,16 @@ class Transform;
 class TransformChannel : public ITransformChannel
 {
 protected:
+
     std::vector< Transform * >                      m_transformations;
+    bool                                            m_readOnly;
 
 public:
 
-    virtual const std::vector< Transform* >&         GetTransformChannels() const;
+                                                    TransformChannel    ( bool readOnly = false );
+
+    virtual bool                                    IsReadOnly          () const;
+    virtual const std::vector< Transform* >&        GetTransformChannels() const;
 
     virtual ~TransformChannel(){}
 };

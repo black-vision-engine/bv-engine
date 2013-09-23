@@ -203,7 +203,8 @@ void    Renderer::Enable              ( RenderablePass* pass, TransformableEntit
         projMat = m_Camera->GetProjectionMatrix();
     }
 
-    auto worldTrans = transform->WorldTransform().Matrix();
+    //FIXME: add proper loop here
+    auto worldTrans = transform->WorldTransforms()[0].Matrix(); //FIXME: instancing to be added here
     auto mvp        = projMat * worldTrans;
     pass->GetVertexShader()->UpdateMVP( mvp );
     pass->GetVertexShader()->UpdateMV( worldTrans );

@@ -34,7 +34,8 @@ BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     PluginGeometryUVSingle      * pguv  = new PluginGeometryUVSingle    ( pgrc );
     PluginTransformSimple       * trpg  = ModelFactory::CreatePluginTransformSimple( *trns );
 
-    root->addTransformPlugin    ( trpg );
+    //FIXME
+    //root->addTransformPlugin    ( trpg );
     root->AddPlugin             ( stpp );
     root->setVertexShaderPlugin ( stvp );
     root->setPixelShaderPlugin  ( stpp );
@@ -195,7 +196,8 @@ BasicNode* SceneExamples::BuildMockScene(bv::BasicNode * parent )
     trans->addTransform(new bv::RotationF(angle, x,y,z));
     bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
 
-    mockTree->addTransformPlugin(transPlugin);
+    //FIXME:
+    //mockTree->addTransformPlugin(transPlugin);
 
     if(parent != nullptr)
     {
@@ -268,7 +270,8 @@ BasicNode* SceneExamples::BuildMockScene2(bv::BasicNode* parent)
 
     bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
 
-    mockTree->addTransformPlugin(transPlugin);
+    //FIXME:
+    //mockTree->addTransformPlugin(transPlugin);
 
     if(parent != nullptr)
     {
@@ -329,9 +332,11 @@ void AnimLines(bv::BasicNode* parent)
 
     
 
-    lineUp->addTransformPlugin(transPlugin);
+    //FIXME:
+    //lineUp->addTransformPlugin(transPlugin);
 
-    lineUp->addTransformPlugin(FuncTranslate(0,-1,0));
+    //FIXME:
+    //lineUp->addTransformPlugin(FuncTranslate(0,-1,0));
 
 
 
@@ -378,7 +383,8 @@ bv::BasicNode* CreateRect(bv::BasicNode* parent)
     trans->addScale(scaleX,identity,identity);
     bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
 
-    rectNode->addTransformPlugin(transPlugin);
+    //FIXME:
+    //rectNode->addTransformPlugin(transPlugin);
     if(parent != nullptr)
     {
         parent->AddChild(rectNode);
@@ -459,7 +465,8 @@ void createMyRing(bv::BasicNode* parent,float offsetZ,float offsetX,float offset
     trans->addTransform(new bv::RotationF(angle, x,y,z));
     bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
 
-    mockTree->addTransformPlugin(transPlugin);
+    //FIXME:
+    //mockTree->addTransformPlugin(transPlugin);
 
 
     
@@ -508,8 +515,9 @@ void NightRect(bv::BasicNode* parent, int number,float offsetX,float offsetY)
     trans->addScale(scaleX,identity,identity);
     bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
     
-    rectNode->addTransformPlugin(transPlugin);
-    rectNode->addTransformPlugin(FuncTranslate(offsetX,offsetY,-4+number*RectWidth*6));
+    //FIXME:
+    //rectNode->addTransformPlugin(transPlugin);
+    //rectNode->addTransformPlugin(FuncTranslate(offsetX,offsetY,-4+number*RectWidth*6));
     if(parent != nullptr)
     {
         parent->AddChild(rectNode);

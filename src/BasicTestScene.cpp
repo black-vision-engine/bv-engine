@@ -19,6 +19,8 @@ using std::string;
 #include "Engine/Models/Plugins/Solid.h"
 #include "Engine/Models/Plugins/Transformation.h"
 
+#include "Engine\Models\Plugins\Channels\SimpleTransformChannel.h"
+
 #include <Windows.h>
 
 
@@ -91,9 +93,13 @@ IScene* createTestScene()
 
     t->addRotation(angle, x,y,z);
 
-    Transformation* trans = new Transformation("MVP", *t);
+    model::SimpleTransformChannel * stch = new model::SimpleTransformChannel();
+    stch->AddTransformChannel( t );
+    //Transformation* trans = new Transformation("MVP", *t);
 
-    root->addTransformPlugin(trans);
+    //FIXME: here
+    //root->AddPlugin( stch );
+//    root->addTransformPlugin(trans);
 
 
     // SCENE BUILDING AND INIT
