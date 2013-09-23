@@ -17,10 +17,12 @@ namespace model
 class Transform
 {
 private:
-    glm::mat4x4 mat;
+    glm::mat4x4 m_mat;
 
 public:
     Transform    operator * (const Transform& m) const;
+
+    void        SetMatrix   ( const glm::mat4x4& m );
 
     explicit Transform(const glm::mat4x4& m);
     Transform();

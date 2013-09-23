@@ -11,6 +11,7 @@ class Transform;
 
 class TransformChannel : public ITransformChannel
 {
+protected:
     std::vector< Transform * >                      m_transformations;
 
 public:
