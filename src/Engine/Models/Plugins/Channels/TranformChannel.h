@@ -11,10 +11,13 @@ class Transform;
 
 class TransformChannel : public ITransformChannel
 {
-    std::vector< Transform * >         m_transformations;
+    std::vector< Transform * >                      m_transformations;
 
 public:
 
+    virtual const std::vector< Transform* >&         GetTransformChannels() const;
+
+    virtual ~TransformChannel(){}
 };
 
 } // model
