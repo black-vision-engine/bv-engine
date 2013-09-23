@@ -3,6 +3,9 @@
 
 #include "FreeImagePlus.h"
 
+#include "Engine\Models\Resources\Resource.h"
+#include "Engine\Models\Resources\TextureLoader.h"
+
 #include <iostream>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -34,56 +37,14 @@ TextureManager::~TextureManager()
 //
 Texture2D * TextureManager::LoadTexture( const std::string & filename, bool loadFromMemory )
 {
-    boost::filesystem::path filepath( filename );
-    std::string errMsg( "Cannot read file: " + filename ); 
+    model::Resource res( "ladna nazwa", filename );
 
-    if( !exists( filepath ) )
-    {
-        throw std::runtime_error( errMsg );
-        return nullptr;
-    }
+    model::TextureLoader loader;
 
-    fipImage*  fipImg = new fipImage();
+    model::ResourceHandle* handle = loader.LoadResource( &res );
 
-    if( loadFromMemory )
-    {
-        boost::filesystem::ifstream file(filepath);
-
-        uintmax_t size = file_size(filepath);
-
-        char* bufToRead = new char[ ( unsigned int ) size ];
-    
-        file.read( bufToRead, size );
-
-        fipMemoryIO fipIO( ( BYTE * ) bufToRead, ( DWORD ) size );
-
-        FREE_IMAGE_FORMAT type = fipIO.getFileType();
-
-        if( !fipImg->loadFromMemory( fipIO ) )
-        {
-            throw std::runtime_error( errMsg );
-            return nullptr;
-        }
-
-        delete bufToRead;
-    }
-    else
-    {
-        if( !fipImg->load( filename.c_str() ) )
-        {
-            throw std::runtime_error( errMsg );
-            return nullptr;
-        }
-    }
-
-    if(!fipImg->convertTo32Bits())
-    {
-        throw std::runtime_error( "Cannot convert texture to bitmap" );
-    }
-
-    bv::Texture2D * newTex = new bv::Texture2D( Texture::TFormat::F_A8R8G8B8, fipImg->getWidth(), fipImg->getHeight() );
-    assert( fipImg->getBitsPerPixel() == 32 );
-    newTex->WriteToBuffer( (char*) fipImg->accessPixels(), fipImg->getWidth() * fipImg->getHeight() * ( fipImg->getBitsPerPixel() / 8 ) );
+    bv::Texture2D * newTex = new bv::Texture2D( Texture::TFormat::F_A8R8G8B8, handle->GetWidth(), handle->GetHeight() );
+    newTex->WriteToBuffer( handle->GetData(), handle->GetSize() );
 
     m_txMap[ newTex ] = newTex;
 
