@@ -5,9 +5,6 @@
 
 namespace bv {
 
-//FIXME: multiple different transformations should be passed here for instancing purposes (one local transform and vector of world transforms)
-//FIXME: and updaters should be tailored accordingly
-
 // *********************************
 //
 TransformableEntity::TransformableEntity                            ( TransformUpdater * locTransformUpdater )
@@ -66,7 +63,7 @@ void   TransformableEntity::UpdateTransforms                            ( double
 
 // *********************************
 //
-void                TransformableEntity::UpdateSetWorldTransform     ( const std::vector< Transform > & parentTransforms )
+void                TransformableEntity::UpdateSetWorldTransform        ( const std::vector< Transform > & parentTransforms )
 {
     assert( parentTransforms.size() == m_worldTransforms.size() );
 

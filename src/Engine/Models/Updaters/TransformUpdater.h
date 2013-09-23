@@ -11,10 +11,13 @@ class TransformableEntity;
 class TransformUpdater : public IUpdater
 {
 private:
-    TransformableEntity*    m_out;
-    TTransformPluginVec*    m_in;
+
+    TransformableEntity *       m_out;
+    TTransformPluginVec *       m_in;
+
 public:
-            TransformUpdater    ( TransformableEntity* out, TTransformPluginVec* in ); 
+            //FIXME: transform updater should use new implementation based on channels
+            TransformUpdater    ( TransformableEntity * out, TTransformPluginVec * in ); 
             ~TransformUpdater   ();
 
     void    Update              ( float t );

@@ -27,6 +27,7 @@ void    TransformUpdater::Update( float t )
     m_out->m_localTransform.Reset();
     for(auto t : *m_in)
     {
+        //use vector of trnasforms
         m_out->m_localTransform = m_out->m_localTransform * Transform( t->TransformMatrix(), glm::inverse(t->TransformMatrix()));
     }
 }
