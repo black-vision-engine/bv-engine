@@ -10,6 +10,7 @@ namespace bv {
 namespace model
 {
     class IGeometryChannel;
+    class ITransformChannel;
 }
 
 class IPlugin
@@ -19,6 +20,7 @@ public:
     virtual const std::string &                 GetName             ()                                      const = 0;
 
     virtual const model::IGeometryChannel*      GetGeometryChannel  ()                                      const = 0;
+    virtual const model::ITransformChannel*     GetTransformChannel ()                                      const = 0;
     //virtual bool                              IsUpToDate          ()                                      const = 0;
     virtual void                                Update              ( float t )                                   = 0;
     virtual void                                Print               ( std::ostream & out, int tabs = 0 )    const = 0;

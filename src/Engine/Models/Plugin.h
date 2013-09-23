@@ -8,6 +8,7 @@ namespace bv {
 namespace model
 {
     class IGeometryChannel;
+    class ITransformChannel;
 }
 
 template< class Iface, class ParameterDescriptor >
@@ -27,6 +28,7 @@ protected:
     ///////////////// Channels //////////////////
 
     model::IGeometryChannel*        m_geomChannel;
+    model::ITransformChannel*       m_transformChannel;
 
 public:
 
@@ -40,8 +42,11 @@ public:
     void                                        RegisterValue       ( IValue * v ) { m_values.push_back( v ); }
 
 
-    void                                        SetGeometryChannel  (model::IGeometryChannel* geomChannel) { m_geomChannel = geomChannel; }
+    void                                        SetGeometryChannel  (model::IGeometryChannel* geomChannel)          { m_geomChannel = geomChannel; }
+    void                                        SetTransformChannel (model::ITransformChannel* transformChannel)    { m_transformChannel = transformChannel; }
+
     const model::IGeometryChannel*              GetGeometryChannel  () const    { return m_geomChannel; }
+    const model::ITransformChannel*             GetTransformChannel () const    { return m_transformChannel; }
 
 protected:
 
