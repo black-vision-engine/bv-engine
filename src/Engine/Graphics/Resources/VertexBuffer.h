@@ -18,7 +18,7 @@ public:
     char *	Data			() const;
 
     template<class VertexType>
-    void    AddVertex       (const VertexType& data)
+    void    AddVertex       ( const VertexType & data )
     {
         assert(false);
     }

@@ -27,11 +27,11 @@ protected:
     {
     public:
 
-        unsigned int	streamIndex;
-        unsigned int	offset;
+        unsigned int	    streamIndex;
+        unsigned int	    offset;
         AttributeType		type;
         AttributeSemantic	semantic;
-        unsigned int	usageIndex;
+        unsigned int	    usageIndex;
     };
 
     int			m_numAttrs;
