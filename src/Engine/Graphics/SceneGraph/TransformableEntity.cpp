@@ -30,44 +30,50 @@ void                TransformableEntity::RegisterTransformUpdater    ( Transform
 
 // *********************************
 //
-const Transform &   TransformableEntity::LocalTransform             () const
+const Transform &   TransformableEntity::LocalTransform                 () const
 {
     return m_localTransform;
 }
 
 // *********************************
 //
-void                TransformableEntity::SetLocalTransform          ( const Transform & t )
+void                TransformableEntity::SetLocalTransform              ( const Transform & t )
 {
     m_localTransform = t;
 }
 
 // *********************************
 //
-const Transform &   TransformableEntity::WorldTransform             () const
+const std::vector< Transform > &  TransformableEntity::WorldTransforms  () const
 {
-    return m_worldTransorm;
+    return m_worldTransforms;
+}
+
+    
+// *********************************
+//
+void  TransformableEntity::SetWorldTransforms                           ( const std::vector< Transform > & transforms )
+{
+    m_worldTransforms = transforms;
 }
 
 // *********************************
 //
-void                TransformableEntity::SetWorldTransform          ( const Transform & t )
+void   TransformableEntity::UpdateTransforms                            ( double t, const std::vector< Transform > & transforms )
 {
-    m_worldTransorm = t;
+    UpdateSetWorldTransform( transforms );
 }
 
 // *********************************
 //
-void                TransformableEntity::UpdateTransforms           ( double t, const Transform & parentTransform )
+void                TransformableEntity::UpdateSetWorldTransform     ( const std::vector< Transform > & parentTransforms )
 {
-    UpdateSetWorldTransform( parentTransform );
-}
+    assert( parentTransforms.size() == m_worldTransforms.size() );
 
-// *********************************
-//
-void                TransformableEntity::UpdateSetWorldTransform     ( const Transform & parentTransform )
-{
-    m_worldTransorm = parentTransform * m_localTransform;
+    for( int i = 0; i < m_worldTransforms.size(); ++i )
+    {
+        m_worldTransforms[ i ] = parentTransforms[ i ] * m_localTransform;
+    }
 }
 
 }
