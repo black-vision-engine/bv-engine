@@ -97,9 +97,17 @@ SceneNode* BasicNode::BuildScene()
     }
 
     // TODO: dodac liste layerow do zwracanego SceneNode
-    TransformUpdater* tu = new TransformUpdater(renderEnt, &m_transformPlugins);
+    for( auto p : m_plugins )
+    {
+        auto transChannel = p->GetTransformChannel();
+        
+        if( transChannel )
+        {
+            TransformUpdater* tu = new TransformUpdater( renderEnt, transChannel );
 
-    UpdatersManager::get().RegisterUpdater(tu);
+            UpdatersManager::get().RegisterUpdater(tu);
+        }
+    }
 
     SceneNode* ret = new SceneNode(renderEnt);
 
@@ -123,11 +131,6 @@ void BasicNode::AddPlugin               ( IPlugin* plugin )
     m_plugins.push_back(plugin);
 }
 
-void BasicNode::addTransformPlugin(ITransformPlugin* tPlugin)
-{
-    m_transformPlugins.push_back(tPlugin);
-}
-
 void BasicNode::setPixelShaderPlugin(IShaderPlugin* psPlugin)
 {
     m_pshaderPlugin = psPlugin;
@@ -147,9 +150,9 @@ void BasicNode::setGeometryShaderPlugin(IShaderPlugin* gsPlugin)
 void BasicNode::Print(std::ostream& out, int tabs) const
 {
     out << "------------------NODE-------------------- : " << this << debug::EndLine(tabs);
-    out << "Transform plugins: " << m_transformPlugins.size() << debug::EndLine(tabs + 1);
-    for(auto tp : m_transformPlugins)
-        tp->Print(out, tabs + 1);
+    //out << "Transform plugins: " << m_transformPlugins.size() << debug::EndLine(tabs + 1);
+    //for(auto tp : m_transformPlugins)
+    //    tp->Print(out, tabs + 1);
     
     out << debug::EndLine(tabs) << "Pixel Shader plugin: " << m_pshaderPlugin << debug::EndLine(tabs + 1);
     if(m_pshaderPlugin != nullptr)
@@ -173,9 +176,6 @@ void BasicNode::Print(std::ostream& out, int tabs) const
 
 void BasicNode::Update(float t)
 {
-    for(auto tp : m_transformPlugins)
-        tp->Update(t);
-
     for(auto pl : m_plugins)
         pl->Update(t);
 

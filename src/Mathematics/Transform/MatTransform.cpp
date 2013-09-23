@@ -14,7 +14,7 @@ Transform::Transform(const glm::mat4x4& m)
     :   m_mat(m)
 {}
 
-Transform Transform::operator*(const Transform& m) const
+Transform               Transform::operator*    (const Transform& m)    const
 {
     return Transform(m_mat * m.m_mat);
 }
@@ -22,6 +22,11 @@ Transform Transform::operator*(const Transform& m) const
 void     Transform::SetMatrix   ( const glm::mat4x4& m )
 {
     m_mat = m;
+}
+
+const glm::mat4x4&      Transform::GetMatrix   ()                       const
+{
+    return m_mat;
 }
 
 } // model
