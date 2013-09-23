@@ -92,27 +92,27 @@ void            SceneNode::RegisterTransformRep( TransformableEntity * transform
 
 // ********************************
 //
-void            SceneNode::Update           ( double t, const Transform & parentTransform )
+void            SceneNode::Update              ( double t, const std::vector< Transform > & parentTransforms )
 {
-    const Transform * pWorldTransform = &parentTransform;
+    const std::vector< Transform > * pWorldTransforms = &parentTransforms;
 
     if( m_transformRep )
     {
-        m_transformRep->UpdateTransforms( t, parentTransform );
+        m_transformRep->UpdateTransforms( t, *pWorldTransforms );
 
-        pWorldTransform = &m_transformRep->WorldTransform();
+        pWorldTransforms = &m_transformRep->WorldTransforms();
     }
 
-    const Transform & worldTransform = *pWorldTransform;
+    const std::vector< Transform > & worldTransforms = *pWorldTransforms;
 
     for ( auto transformable : m_transformables )
     {
-        transformable->UpdateTransforms( t, worldTransform );
+        transformable->UpdateTransforms( t, worldTransforms );
     }
 
     for ( auto node : m_sceneNodes )
     {
-        node->Update( t, worldTransform );
+        node->Update( t, worldTransforms );
     }
 }
 
