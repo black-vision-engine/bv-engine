@@ -70,7 +70,7 @@ void                TransformableEntity::UpdateSetWorldTransform     ( const std
 {
     assert( parentTransforms.size() == m_worldTransforms.size() );
 
-    for( int i = 0; i < m_worldTransforms.size(); ++i )
+    for( unsigned int i = 0; i < m_worldTransforms.size(); ++i )
     {
         m_worldTransforms[ i ] = parentTransforms[ i ] * m_localTransform;
     }

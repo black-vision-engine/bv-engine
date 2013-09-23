@@ -31,7 +31,6 @@ private:
 
 
     // TODO: move to plugins channel
-    TTransformPluginVec     m_transformPlugins;
     IShaderPlugin*          m_pshaderPlugin;
     IShaderPlugin*          m_vshaderPlugin;
     IShaderPlugin*          m_gshaderPlugin;
@@ -45,7 +44,6 @@ public:
     void                    AddPlugin               ( IPlugin* plugin );
 
     // TODO: move to plugins channel
-    void                    addTransformPlugin      (ITransformPlugin* tPlugin);
     void                    setPixelShaderPlugin    (IShaderPlugin* sPlugin);
     void                    setVertexShaderPlugin   (IShaderPlugin* sPlugin);
     void                    setGeometryShaderPlugin (IShaderPlugin* sPlugin);
