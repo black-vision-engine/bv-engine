@@ -52,11 +52,13 @@ VBORect::VBORect( float w, float h )
     //glVertexAttribPointer( (GLuint)1, 2, GL_FLOAT, GL_FALSE, 0, ((GLubyte *)NULL + (0)) );
 }
 
+// ********************************
+//
 void VBORect::Render() const {
-    GLUtils::checkForOpenGLError(__FILE__,__LINE__);
+    GLUtils::CheckForOpenGLError(__FILE__,__LINE__);
     glBindVertexArray( m_VaoHandle );
 	glDrawArrays( GL_TRIANGLE_STRIP, 0, 4 );
-	GLUtils::checkForOpenGLError(__FILE__,__LINE__);
+	GLUtils::CheckForOpenGLError(__FILE__,__LINE__);
 }
 
 } //bv

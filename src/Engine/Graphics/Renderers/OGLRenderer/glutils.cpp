@@ -4,9 +4,16 @@
 
 #include <cstdio>
 
-GLUtils::GLUtils() {}
+// ******************************
+//
+GLUtils::GLUtils            () 
+{
+}
 
-int GLUtils::checkForOpenGLError(const char * file, int line) {
+// ******************************
+//
+int GLUtils::CheckForOpenGLError( const char * file, int line )
+{
     //
     // Returns 1 if an OpenGL error occurred, 0 otherwise.
     //
@@ -14,7 +21,7 @@ int GLUtils::checkForOpenGLError(const char * file, int line) {
     int    retCode = 0;
 
     glErr = glGetError();
-    while (glErr != GL_NO_ERROR)
+    while ( glErr != GL_NO_ERROR )
     {
 		const char * message = "";
 		switch( glErr )
@@ -46,27 +53,57 @@ int GLUtils::checkForOpenGLError(const char * file, int line) {
 
 }
 
-void GLUtils::dumpGLInfo(bool dumpExtensions) {
-    const GLubyte *renderer = glGetString( GL_RENDERER );
-    const GLubyte *vendor = glGetString( GL_VENDOR );
-    const GLubyte *version = glGetString( GL_VERSION );
-    const GLubyte *glslVersion = glGetString( GL_SHADING_LANGUAGE_VERSION );
+// ******************************
+//
+void GLUtils::DumpGLInfo( bool dumpExtensions ) 
+{
+
+    const GLubyte * renderer    = glGetString( GL_RENDERER );
+    const GLubyte * vendor      = glGetString( GL_VENDOR );
+    const GLubyte * version     = glGetString( GL_VERSION );
+    const GLubyte * glslVersion = glGetString( GL_SHADING_LANGUAGE_VERSION );
 
     GLint major, minor;
-    glGetIntegerv(GL_MAJOR_VERSION, &major);
-    glGetIntegerv(GL_MINOR_VERSION, &minor);
+    glGetIntegerv( GL_MAJOR_VERSION, &major );
+    glGetIntegerv( GL_MINOR_VERSION, &minor );
 
-    printf("GL Vendor    : %s\n", vendor);
-    printf("GL Renderer  : %s\n", renderer);
-    printf("GL Version   : %s\n", version);
-    printf("GL Version   : %d.%d\n", major, minor);
-    printf("GLSL Version : %s\n", glslVersion);
+    printf( "GL Vendor    : %s\n", vendor );
+    printf( "GL Renderer  : %s\n", renderer );
+    printf( "GL Version   : %s\n", version );
+    printf( "GL Version   : %d.%d\n", major, minor );
+    printf( "GLSL Version : %s\n", glslVersion );
 
-    if( dumpExtensions ) {
+    if( dumpExtensions )
+    {
         GLint nExtensions;
-        glGetIntegerv(GL_NUM_EXTENSIONS, &nExtensions);
-        for( int i = 0; i < nExtensions; i++ ) {
-            printf("%s\n", glGetStringi(GL_EXTENSIONS, i));
+
+        glGetIntegerv( GL_NUM_EXTENSIONS, &nExtensions );
+
+        for( int i = 0; i < nExtensions; i++ )
+        {
+            printf( "%s\n", glGetStringi( GL_EXTENSIONS, i ) );
         }
     }
+}
+
+// ******************************
+//FIXME: add other caps as well
+void GLUtils::DumpGLInfoCaps      ()
+{
+    GLint r0, r1, r2, r3, r4, r5;
+
+    glGetIntegerv( GL_MAX_VERTEX_ATTRIBS,  &r0 );
+    glGetIntegerv( GL_MAX_TEXTURE_UNITS,   &r1 );
+    glGetIntegerv( GL_MAX_TEXTURE_SIZE,    &r2 );
+    glGetIntegerv( GL_MAX_3D_TEXTURE_SIZE, &r3 );
+    glGetIntegerv( GL_MAX_DRAW_BUFFERS,    &r4 );
+    glGetIntegerv( GL_MAX_VARYING_FLOATS,  &r5 );
+
+    printf( "Max vertex attribs:  %d\n", r0 );
+    printf( "Max texture units:   %d\n", r1 );
+    printf( "Max texture size:    %d\n", r2 );
+    printf( "Max 3D texture size: %d\n", r3 );
+    printf( "Max draw buffers:    %d\n", r4 );
+    printf( "Max varying floats:  %d\n", r5 );
+
 }

@@ -3,8 +3,10 @@
 class GLUtils
 {
 public:
-    GLUtils();
 
-    static int checkForOpenGLError(const char *, int);
-    static void dumpGLInfo(bool dumpExtensions = false);
+                GLUtils             ();
+
+    static int  CheckForOpenGLError ( const char *, int );
+    static void DumpGLInfo          ( bool dumpExtensions = false );
+    static void DumpGLInfoCaps      ();
 };

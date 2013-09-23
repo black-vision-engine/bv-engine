@@ -1,5 +1,6 @@
 #include "VertexAttributeChannelDescriptor.h"
 
+#include <sstream>
 #include <cassert>
 
 namespace bv { namespace model
@@ -69,12 +70,40 @@ int             VertexAttributeChannelDescriptor::GetAttrTypeSize               
 }
 
 // ************************************
-//
+// FIXME: possibly also add attribyte type to this process
 std::string     VertexAttributeChannelDescriptor::DefaultName                               ( AttributeType type, AttributeSemantic semantic, int num )
 {
-    //FIXME: implement properly
-    assert( false );
-    return "vertexfartexfakoff";
+    assert( num >= 0 );
+
+    std::ostringstream oss;
+    
+    switch( semantic )
+    {
+        case AttributeSemantic::AS_POSITION:
+            oss << "pos";
+            break;
+        case AttributeSemantic::AS_TEXCOORD:
+            oss << "tex";
+            break;
+        case AttributeSemantic::AS_COLOR:
+            oss << "col";
+            break;
+        case AttributeSemantic::AS_NORMAL:
+            oss << "norm";
+            break;
+        case AttributeSemantic::AS_BINORMAL:
+            oss << "binorm";
+            break;
+        case AttributeSemantic::AS_CUSTOM:
+            oss << "custom";
+            break;
+        default:
+            assert( false );
+    }
+
+    oss << num;
+
+    return oss.str();
 }
 
 } //model

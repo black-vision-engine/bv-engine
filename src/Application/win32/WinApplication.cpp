@@ -246,7 +246,8 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
 
     if ( app->OnInitialize() )
     {
-        GLUtils::dumpGLInfo(); 
+        GLUtils::DumpGLInfo();
+        GLUtils::DumpGLInfoCaps();
 
         app->OnPreidle();
 

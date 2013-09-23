@@ -26,6 +26,7 @@ TransformUpdater::~TransformUpdater   ()
 
 void    TransformUpdater::Update( float t )
 {
+    //FIXME: rili rili
     m_out->m_localTransform.Reset();
     for( auto t : m_in->GetTransformChannels() )
     {
