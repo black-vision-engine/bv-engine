@@ -514,7 +514,7 @@ void NightRect(bv::BasicNode* parent, int number,float offsetX,float offsetY)
     bv::TransformF* trans = new bv::TransformF();
     trans->addScale(scaleX,identity,identity);
     bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
-    
+
     //FIXME:
     //rectNode->addTransformPlugin(transPlugin);
     //rectNode->addTransformPlugin(FuncTranslate(offsetX,offsetY,-4+number*RectWidth*6));
