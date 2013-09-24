@@ -90,7 +90,7 @@ void GLUtils::DumpGLInfo( bool dumpExtensions )
 //FIXME: add other caps as well
 void GLUtils::DumpGLInfoCaps      ()
 {
-    GLint r0, r1, r2, r3, r4, r5;
+    GLint r0, r1, r2, r3, r4, r5, r6, r7, r8, r9;
 
     glGetIntegerv( GL_MAX_VERTEX_ATTRIBS,  &r0 );
     glGetIntegerv( GL_MAX_TEXTURE_UNITS,   &r1 );
@@ -99,11 +99,23 @@ void GLUtils::DumpGLInfoCaps      ()
     glGetIntegerv( GL_MAX_DRAW_BUFFERS,    &r4 );
     glGetIntegerv( GL_MAX_VARYING_FLOATS,  &r5 );
 
-    printf( "Max vertex attribs:  %d\n", r0 );
-    printf( "Max texture units:   %d\n", r1 );
-    printf( "Max texture size:    %d\n", r2 );
-    printf( "Max 3D texture size: %d\n", r3 );
-    printf( "Max draw buffers:    %d\n", r4 );
-    printf( "Max varying floats:  %d\n", r5 );
+    glGetIntegerv( GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &r6 );
+    glGetIntegerv( GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS, &r7 );
+    glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS, &r8 );
+    glGetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &r9 );
+
+    printf( "Max vertex attribs:       %d\n", r0 );
+    printf( "Max texture units fixed:  %d\n", r1 );
+    printf( "Max texture size:         %d\n", r2 );
+    printf( "Max 3D texture size:      %d\n", r3 );
+    printf( "Max draw buffers:         %d\n", r4 );
+    printf( "Max varying floats:       %d\n", r5 );
+
+    printf( "\n" );
+
+    printf( "Max vertex texture image units:    %d\n", r6 );
+    printf( "Max geometry texture image units:  %d\n", r7 );
+    printf( "Max texture image units:           %d\n", r8 );
+    printf( "Max combined texture image units:  %d\n", r9 );
 
 }

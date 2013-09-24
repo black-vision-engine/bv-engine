@@ -10,6 +10,8 @@ class OffsetState;
 class StencilState;
 class WireState;
 
+//FIXME: tutaj mozna trzymac sobie stan dla wszystkich mozliwych teksture unitow, zeby ewentualnie nie trzeba bylo tego stany co tekstra przepinac - ale to taka mala optymalizacja
+//FIXME: Buffer usage dla texture unitu to jest DYNAMIC_DRAW, to samo trzeba robic dla dynamicznych geometrii, ktore co klatka wymagaja wrzucenia calego kanalu atrybutow !!!!
 class RendererData
 {
 public:
