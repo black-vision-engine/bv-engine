@@ -1,5 +1,7 @@
 #include "Shader.h"
 
+#include <cassert>
+
 #include "Engine\Models\Updaters\ShaderParamUpdater.h"
 
 namespace bv {
@@ -57,10 +59,23 @@ const std::string & Shader::ProgramSource       () const
     return m_programSurce;
 }
 
+// *********************************
+//
 void                Shader::Update              ()
 {
+    //FIXME: ?????
     if(m_paramUpdater)
         m_paramUpdater->Update(0.f);
+}
+
+// *********************************
+//
+const std::vector< const TextureSampler * > &  Shader::Samplers     () const
+{
+    assert( m_parameters );
+    assert( m_parameters->NumParameters() == (int) m_textureSamplers.size() );
+
+    return m_textureSamplers;
 }
 
 } //bv

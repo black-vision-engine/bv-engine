@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "glm/glm.hpp"
+
 namespace bv {
 
 enum class SamplerSamplingMode : int
@@ -24,7 +26,7 @@ enum class SamplerFilteringMode : int
     SFM_TOTAL
 };
 
-enum SamplerWrappingMode
+enum class SamplerWrappingMode : int
 {
     SWM_CLAMP,
     SWM_REPEAT,
@@ -46,10 +48,26 @@ private:
     SamplerFilteringMode    m_filteringMode;
     SamplerWrappingMode     m_wrappingMode;
 
+    glm::vec4               m_borderColor;
+
+public:
+
+                            TextureSampler  ( int id, const std::string & name, SamplerSamplingMode ssm, SamplerFilteringMode sfm, SamplerWrappingMode swm, const glm::vec4 & borderColor );
+                            ~TextureSampler ();
+
+    int                     GetId           () const;
+    const std::string &     GetName         () const;
+
+    SamplerSamplingMode     SamplingMode    () const;
+    SamplerFilteringMode    FilteringMode   () const;
+    SamplerWrappingMode     WrappingMode    () const;
+
+    const glm::vec4 &       GetBorderColor  () const;
+
     //FIXME: anisotropy
     //FIXME: LOD bias when LOD mipmapping is implemented
 
     //FIXME: glm::vec4 m_borderColor;
 };
 
-}
+} //bv

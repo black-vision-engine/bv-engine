@@ -5,7 +5,6 @@
 namespace bv
 {
 
-
 // ******************************
 //
 ShaderParamUpdater::ShaderParamUpdater( IShaderPlugin * pl, Shader * sh )
