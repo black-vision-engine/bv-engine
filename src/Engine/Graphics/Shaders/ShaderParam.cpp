@@ -1,5 +1,5 @@
 #include "ShaderParam.h"
-#include "ShaderParamUpdater.h"
+#include "IShaderParamUpdater.h"
 
 #include <cassert>
 

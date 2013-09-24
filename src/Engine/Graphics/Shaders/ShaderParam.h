@@ -49,19 +49,21 @@ public:
     friend class ShaderParamFactory;
 };
 
-
+// ******************************
 class ShaderParamFloat : public GenericShaderParam
 {
     void    Set    ( const float * mem );
 };
 
 
+// ******************************
 class ShaderParamBool : public GenericShaderParam
 {
     void    Set    ( const bool * mem );
 };
 
 
+// ******************************
 class ShaderParamInt  : public GenericShaderParam
 {
     void    Set    ( const int * mem );

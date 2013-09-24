@@ -94,6 +94,8 @@
     <ClCompile Include="Engine\Models\Resources\ResourceLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\Resource.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextureLoader.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\TextureSampler.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\IShaderParamUpdater.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -210,6 +212,8 @@
     <ClInclude Include="Engine\Models\Resources\IResource.h" />
     <ClInclude Include="Engine\Models\Resources\IResourceLoader.h" />
     <ClInclude Include="Engine\Models\Resources\TextureLoader.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\TextureSampler.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\IShaderParamUpdater.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

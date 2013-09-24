@@ -63,6 +63,8 @@ namespace
     }
 }
 
+// ********************************
+//
 BasicNode::BasicNode()
     : m_gshaderPlugin(nullptr)
     , m_pshaderPlugin(nullptr)
@@ -70,6 +72,8 @@ BasicNode::BasicNode()
 {
 }
 
+// ********************************
+//
 SceneNode* BasicNode::BuildScene()
 {
     VertexBuffer *      vb          = nullptr;
@@ -119,6 +123,8 @@ SceneNode* BasicNode::BuildScene()
     return ret;
 }
 
+// ********************************
+//
 bool BasicNode::AddChild(Node* n)
 {
     m_children.push_back(n);
@@ -126,27 +132,36 @@ bool BasicNode::AddChild(Node* n)
     return true;
 }
 
+// ********************************
+//
 void BasicNode::AddPlugin               ( IPlugin* plugin )
 {
     m_plugins.push_back(plugin);
 }
 
+// ********************************
+//
 void BasicNode::setPixelShaderPlugin(IShaderPlugin* psPlugin)
 {
     m_pshaderPlugin = psPlugin;
 }
 
+// ********************************
+//
 void BasicNode::setVertexShaderPlugin(IShaderPlugin* vsPlugin)
 {
     m_vshaderPlugin = vsPlugin;
 }
 
+// ********************************
+//
 void BasicNode::setGeometryShaderPlugin(IShaderPlugin* gsPlugin)
 {
     m_gshaderPlugin = gsPlugin;
 }
 
-
+// ********************************
+//
 void BasicNode::Print(std::ostream& out, int tabs) const
 {
     out << "------------------NODE-------------------- : " << this << debug::EndLine(tabs);
@@ -174,6 +189,8 @@ void BasicNode::Print(std::ostream& out, int tabs) const
     }
 }
 
+// ********************************
+//
 void BasicNode::Update(float t)
 {
     for(auto pl : m_plugins)
@@ -194,6 +211,8 @@ void BasicNode::Update(float t)
     }
 }
 
+// ********************************
+//
 PrimitiveType                       BasicNode::GetRenderableType        ()                        const
 {
     if( m_plugins.empty() )
@@ -204,7 +223,9 @@ PrimitiveType                       BasicNode::GetRenderableType        ()      
     return m_plugins.back()->GetGeometryChannel()->GetPrimitiveType();
 }
 
-bool                                BasicNode::CreateRenderableData     (VertexArray ** vao)    const
+// ********************************
+//
+bool                                BasicNode::CreateRenderableData     ( VertexArray ** vao )    const
 {
     if( m_plugins.empty() )
     {
@@ -249,6 +270,8 @@ bool                                BasicNode::CreateRenderableData     (VertexA
 namespace
 {
 
+// ********************************
+//
 template<class ShaderType>
 ShaderType* CreateShader(IShaderPlugin* pl)
 {
@@ -275,11 +298,15 @@ ShaderType* CreateShader(IShaderPlugin* pl)
 
 } // anonymous
 
+// ********************************
+//
 PixelShader*                        BasicNode::CreatePixelShader       ()                                                               const
 {
     return CreateShader<PixelShader>(m_pshaderPlugin);
 }
 
+// ********************************
+//
 VertexShader*                       BasicNode::CreateVertexShader      ()                                                               const
 {
     VertexShader * vs = CreateShader<VertexShader>(m_vshaderPlugin);
@@ -287,11 +314,15 @@ VertexShader*                       BasicNode::CreateVertexShader      ()       
     return vs ? vs : new PassThroughVertexShader(new PassThroughVertexShaderParametersDescriptor());
 }
 
+// ********************************
+//
 GeometryShader*                     BasicNode::CreateGeometryShader    ()                                                               const
 {
     return CreateShader<GeometryShader>(m_gshaderPlugin);
 }
 
+// ********************************
+//
 RenderableEffect*                   BasicNode::CreateRenderaleEffectMockImplementationForCompleteDummies   ()                                                              const
 {
     RenderableEffect* ret = new RenderableEffect();
@@ -303,6 +334,8 @@ RenderableEffect*                   BasicNode::CreateRenderaleEffectMockImplemen
     return ret;
 }
 
+// ********************************
+//
 void                                BasicNode::RegisterShaderParameters(IShaderPlugin* shaderPlugin, ShaderParameters * shParams)
 {
     for(auto param : shaderPlugin->GetValuesList())

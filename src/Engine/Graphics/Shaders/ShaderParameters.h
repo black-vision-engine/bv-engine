@@ -7,6 +7,7 @@
 namespace bv {
 
 class Shader;
+class Texture;
 
 //FIXME: Textura - klasa Texture, nawet niekoniecznie Texture2D trafia tutaj (a w zasadzie wszystkie tekstury, z których korzysta shader)
 //FIXME: potem mapowanie texture unitow na konkretne tekstury (to juz shader + pdr) wiazanie z konkretnymi texture unitami odbywa sie juz w pdr - dodajemy do zerowej tekstury
@@ -23,29 +24,32 @@ private:
     TShaderParamVec m_shaderParams;    
     Shader *        m_shader;
 
-    //TODO: add texture servicing
+    std::vector< Texture * >    m_textures;
 
 public:
 
-    void    SetOwner                        ( Shader * owner );
+                                        ~ShaderParameters               ();
 
-    bool    IsRegistered                    ( const std::string & name ) const;
+    void                                SetOwner                        ( Shader * owner );
 
-    void    RegisterParameter               ( GenericShaderParam * param );
-    int     NumParameters                   () const;
+    bool                                IsRegistered                    ( const std::string & name ) const;
 
-    GenericShaderParam * GetParam           ( int id );
-    GenericShaderParam * GetParam           ( const std::string& name );
+    void                                RegisterParameter               ( GenericShaderParam * param );
+    int                                 NumParameters                   () const;
 
-    void                 SetValue            ( const std::string& name , const char* pBuf);
+    GenericShaderParam *                GetParam                        ( int id );
+    GenericShaderParam *                GetParam                        ( const std::string & name );
 
-    void                 Update             ( /* ???? */ );
+    const std::vector< Texture * > &    Textures                        () const;
+    void                                AddTexture                      ( Texture * tex );
 
-    ~ShaderParameters                       ();
+    void                                SetValue                        ( const std::string & name , const char * pBuf );
+
+    void                                Update                          ( /* ???? */ );
 
 private:
 
-    GenericShaderParam * FindParam          ( const std::string & name ) const;
+    GenericShaderParam *                FindParam                       ( const std::string & name ) const;
 
 };
 
