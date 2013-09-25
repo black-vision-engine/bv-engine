@@ -72,9 +72,6 @@ void                Shader::Update              ()
 //
 const std::vector< const TextureSampler * > &  Shader::Samplers     () const
 {
-    assert( m_parameters );
-    assert( m_parameters->NumParameters() == (int) m_textureSamplers.size() );
-
     return m_textureSamplers;
 }
 
