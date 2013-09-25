@@ -30,7 +30,7 @@ BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 
     TransformF                  * trns  = new TransformF                ();
 
-    SimpleTexturePixelPlugin    * stpp  = new SimpleTexturePixelPlugin  ( "../dep/media/asets/flower.jpg" );
+    SimpleTexturePixelPlugin    * stpp  = new SimpleTexturePixelPlugin  ( "pliczek_z_kwiatkiem.jpg" );
     model::SimpleTransformChannel      * stch  = new model::SimpleTransformChannel();
     SimpleTextureVertexPlugin   * stvp  = new SimpleTextureVertexPlugin ();
     //PluginGeometryRect          * pgrc  = new PluginGeometryRect        ();

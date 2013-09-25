@@ -51,6 +51,10 @@ public:
     int							Stride				()	const;
     int							Index				( AttributeSemantic semantic ) const;
 
+    int					        ComponentSize		( int attr );
+    int					        NumComponents		( int attr );
+    int					        TypeSize			( int attr );
+
     static int					ComponentSize		( AttributeType type );
     static int					NumComponents		( AttributeType type );
     static int					TypeSize			( AttributeType type );

@@ -23,6 +23,7 @@ SimpleTexturePixelPlugin::SimpleTexturePixelPlugin                    ( const st
     : m_textureFileName( textureFileName )
 {
     m_geomChannel = model::GeometryChannelStaticRectTextured::Create();
+    m_textures.push_back( textureFileName );
 }
 
 // *************************************

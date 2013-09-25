@@ -17,6 +17,8 @@ public:
 
     char *	Data			() const;
 
+    void    WriteToBuffer   ( const char* src, int size );
+
     template<class VertexType>
     void    AddVertex       ( const VertexType & data )
     {
@@ -25,6 +27,14 @@ public:
 
     template<>
     void    AddVertex<glm::vec3>(const glm::vec3& data)
+    {
+            assert(m_curVertex < m_numElts);
+            memcpy(m_data + m_curVertex * m_eltSize, &data, m_eltSize);
+            m_curVertex++;
+    }
+
+    template<>
+    void    AddVertex<glm::vec2>(const glm::vec2& data)
     {
             assert(m_curVertex < m_numElts);
             memcpy(m_data + m_curVertex * m_eltSize, &data, m_eltSize);

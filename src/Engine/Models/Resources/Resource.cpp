@@ -12,5 +12,10 @@ const std::string&            Resource::GetFilePath () const
     return m_filePath;
 }
 
+Resource::Resource( const std::string& name, const std::string& filePath )
+    : m_name(name)
+    , m_filePath(filePath)
+{}
+
 } // model
 } // bv

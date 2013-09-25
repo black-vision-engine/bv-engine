@@ -20,6 +20,8 @@
 #include "Engine\Models\Plugins\Interfaces\IConnectedComponent.h"
 #include "Engine\Models\Plugins\Interfaces\IVertexAttributeChannel.h"
 #include "Engine\Models\Plugins\Interfaces\IVertexAttributeChannelDescriptor.h"
+#include "Engine\Graphics\Resources\Textures\TextureManager.h"
+#include "Engine\Graphics\Resources\Texture2D.h"
 
 #include <fstream>
 #include <sstream>
@@ -87,6 +89,8 @@ SceneNode* BasicNode::BuildScene()
 
     CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
     effect = CreateRenderaleEffectMockImplementationForCompleteDummies();
+
+
     auto renderableType = GetRenderableType();
 
     //FIXME: to powinna ogarniac jakas faktoria-manufaktura
@@ -111,6 +115,18 @@ SceneNode* BasicNode::BuildScene()
     // TODO: dodac liste layerow do zwracanego SceneNode
     for( auto p : m_plugins )
     {
+        for( auto tex : p->GetTextures() )
+        {
+            SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_CLAMP, SamplerWrappingMode::SWM_CLAMP, SamplerWrappingMode::SWM_CLAMP }; 
+            auto textureSampler = new TextureSampler( 0, "Tex0", bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 0.f, 0.f ));
+            effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );
+
+            auto loadedTex = bv::GTextureManager.LoadTexture( tex, false );
+
+            effect->GetPass( 0 )->GetPixelShader()->Parameters()->AddTexture( loadedTex );
+        }
+
+
         auto transChannel = p->GetTransformChannel();
         
         if( transChannel )
@@ -260,12 +276,16 @@ bool                                BasicNode::CreateRenderableData     ( Vertex
 
     *vao = new VertexArray();
 
+    int channelLoc = 0;
+
     for( auto attrCh : attribChannels )
     {
         auto desc       = attrCh->GetDescriptor();
         
-        VertexDescriptor*   vd = VertexDescriptor::Create( 1, desc->GetType(), desc->GetSemantic(), (int)desc->GetSemantic());
+        VertexDescriptor*   vd = VertexDescriptor::Create( 1, channelLoc++, desc->GetType(), desc->GetSemantic(), (int)desc->GetSemantic());
         VertexBuffer*       vb = new VertexBuffer( vertNum, desc->GetEntrySize() );
+
+        vb->WriteToBuffer( attrCh->GetData(), attrCh->GetNumEntries() * desc->GetEntrySize() );
 
         (*vao)->AddEntry( vb, vd );
     }

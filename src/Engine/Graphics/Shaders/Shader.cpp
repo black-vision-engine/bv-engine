@@ -38,6 +38,14 @@ ShaderParameters *  Shader::GetOrCreateShaderParameters()
 
 // *********************************
 //
+void                Shader::AddTextureSampler( const TextureSampler* sampler )
+{
+    m_textureSamplers.push_back( sampler );
+}
+
+
+// *********************************
+//
 void                Shader::RegisterUpdater  ( ShaderParamUpdater* updater )
 {
     assert(!m_paramUpdater);

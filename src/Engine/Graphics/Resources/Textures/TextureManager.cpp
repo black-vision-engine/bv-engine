@@ -39,7 +39,7 @@ Texture2D * TextureManager::LoadTexture( const std::string & filename, bool load
 {
     model::Resource res( "ladna nazwa", filename );
 
-    model::TextureLoader loader;
+    model::TextureLoader loader(loadFromMemory);
 
     model::ResourceHandle* handle = loader.LoadResource( &res );
 

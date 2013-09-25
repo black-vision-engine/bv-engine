@@ -58,17 +58,17 @@ GeometryChannelStaticRectTextured::GeometryChannelStaticRectTextured( float w, f
 
     Float3VertexAttributeChannel* vertArrtF3 = new Float3VertexAttributeChannel( descPos, descPos->SuggestedDefaultName( 0 ), true );
     
-    vertArrtF3->AddVertexAttribute(glm::vec3( -w / 2.f, h / 2.f , 0.f ) );
     vertArrtF3->AddVertexAttribute(glm::vec3( -w / 2.f, -h / 2.f , 0.f ) );
     vertArrtF3->AddVertexAttribute(glm::vec3( w / 2.f, -h / 2.f , 0.f ) );
+    vertArrtF3->AddVertexAttribute(glm::vec3( -w / 2.f, h / 2.f , 0.f ) );
     vertArrtF3->AddVertexAttribute(glm::vec3( w / 2.f, h / 2.f , 0.f ) );
 
     cc->m_vertexAttributeChannels.push_back( vertArrtF3 );
 
     Float2VertexAttributeChannel * vertArrtF2 = new Float2VertexAttributeChannel( descMap, descMap->SuggestedDefaultName( 0 ), true );
-    vertArrtF2->AddVertexAttribute(glm::vec2( 0.f, 0.f ) );
     vertArrtF2->AddVertexAttribute(glm::vec2( 0.f, 1.f ) );
     vertArrtF2->AddVertexAttribute(glm::vec2( 1.f, 1.f ) );
+    vertArrtF2->AddVertexAttribute(glm::vec2( 0.f, 0.f ) );
     vertArrtF2->AddVertexAttribute(glm::vec2( 1.f, 0.f ) );
 
     cc->m_vertexAttributeChannels.push_back( vertArrtF2 );

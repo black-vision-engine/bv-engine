@@ -24,4 +24,11 @@ char *	VertexBuffer::Data	() const
     return m_data;
 }
 
+// *********************************
+//
+void    VertexBuffer::WriteToBuffer   ( const char* src, int size )
+{
+    memcpy( m_data, src, size );
+}
+
 }

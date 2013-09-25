@@ -78,6 +78,9 @@ void BlackVisionApp::OnIdle		()
         auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
 
         //FIXME:
+        std::vector< bv::Transform > vec;
+        vec.push_back(Transform(viewMat, glm::inverse(viewMat)));
+        m_mockSceneEng->Update( t, vec);
         //m_mockSceneEng->Update( t, Transform( viewMat, glm::inverse( viewMat ) ) );
 
     double engineUpdate = GTimer.CurElapsed();

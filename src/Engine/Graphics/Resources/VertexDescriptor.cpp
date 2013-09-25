@@ -184,6 +184,28 @@ int VertexDescriptor::Stride () const
 
 // *********************************
 //
+int	VertexDescriptor::ComponentSize		( int attr )
+{
+    return ComponentSize( GetAttributeType( attr ) );
+}
+
+// *********************************
+//
+int	VertexDescriptor::NumComponents		( int attr )
+{
+    return NumComponents( GetAttributeType( attr ) );
+}
+
+// *********************************
+//
+int	VertexDescriptor::TypeSize			( int attr )
+{
+    return TypeSize( GetAttributeType( attr ) );
+}
+
+
+// *********************************
+//
 int VertexDescriptor::ComponentSize ( AttributeType type )
 {
     return m_sComponentSize[ (int) type ];

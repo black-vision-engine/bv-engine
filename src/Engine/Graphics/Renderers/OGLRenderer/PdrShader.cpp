@@ -73,8 +73,8 @@ void PdrShader::Enable         ( Renderer * renderer )
     //FIXME: possibly use numSamplers somehow (debug and/or logging)
     int numSamplers = EnableTextureSamplers( renderer );
 
-    //m_program->PrintActiveUniforms();
-    //m_program->PrintActiveAttribs();
+    m_program->PrintActiveUniforms();
+    m_program->PrintActiveAttribs();
 }
 
 // *******************************

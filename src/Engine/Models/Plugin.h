@@ -29,6 +29,7 @@ protected:
 
     model::IGeometryChannel*        m_geomChannel;
     model::ITransformChannel*       m_transformChannel;
+    std::vector< std::string >      m_textures;
 
 public:
 
@@ -47,6 +48,8 @@ public:
 
     const model::IGeometryChannel*              GetGeometryChannel  () const    { return m_geomChannel; }
     const model::ITransformChannel*             GetTransformChannel () const    { return m_transformChannel; }
+
+    virtual const std::vector< std::string >&   GetTextures         ()                                      const   { return m_textures; }
 
 protected:
 

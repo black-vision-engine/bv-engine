@@ -21,6 +21,7 @@ public:
 
     virtual const model::IGeometryChannel*      GetGeometryChannel  ()                                      const = 0;
     virtual const model::ITransformChannel*     GetTransformChannel ()                                      const = 0;
+    virtual const std::vector< std::string >&   GetTextures         ()                                      const = 0; // FIXME: use resources
     //virtual bool                              IsUpToDate          ()                                      const = 0;
     virtual void                                Update              ( float t )                                   = 0;
     virtual void                                Print               ( std::ostream & out, int tabs = 0 )    const = 0;

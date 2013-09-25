@@ -15,13 +15,20 @@ private:
 
 public:
 
-    int             GetWidth            () const;
-    int             GetHeight           () const;
-    int             GetSize             () const;
-    const char*     GetData             () const;
-    char*           GetWritableData     () const;
+    int             GetWidth            () const { return m_width; }
+    int             GetHeight           () const { return m_height; }
+    int             GetSize             () const { return m_size; }
+    const char*     GetData             () const { return m_data; }
+    char*           GetWritableData     () const { return m_data; }
     
-    ResourceHandle( char* data, int size, int w, int h );
+    ResourceHandle( char* data, int size, int w, int h )
+        : m_data(data)
+        , m_size(size)
+        , m_width(w)
+        , m_height(h)
+    {
+
+    }
 };
 
 class IResourceLoader
