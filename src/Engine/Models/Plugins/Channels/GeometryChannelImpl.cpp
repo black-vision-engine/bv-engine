@@ -66,10 +66,10 @@ GeometryChannelStaticRectTextured::GeometryChannelStaticRectTextured( float w, f
     cc->m_vertexAttributeChannels.push_back( vertArrtF3 );
 
     Float2VertexAttributeChannel * vertArrtF2 = new Float2VertexAttributeChannel( descMap, descMap->SuggestedDefaultName( 0 ), true );
-    vertArrtF2->AddVertexAttribute(glm::vec2( 0.f, 1.f ) );
-    vertArrtF2->AddVertexAttribute(glm::vec2( 1.f, 1.f ) );
     vertArrtF2->AddVertexAttribute(glm::vec2( 0.f, 0.f ) );
     vertArrtF2->AddVertexAttribute(glm::vec2( 1.f, 0.f ) );
+    vertArrtF2->AddVertexAttribute(glm::vec2( 0.f, 1.f ) );
+    vertArrtF2->AddVertexAttribute(glm::vec2( 1.f, 1.f ) );
 
     cc->m_vertexAttributeChannels.push_back( vertArrtF2 );
 

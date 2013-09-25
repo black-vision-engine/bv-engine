@@ -30,8 +30,35 @@ BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 
     TransformF                  * trns  = new TransformF                ();
 
+    bv::FloatInterpolator angle; angle.setWrapPostMethod(bv::WrapMethod::pingPong);
+    bv::FloatInterpolator x;
+    bv::FloatInterpolator y;
+    bv::FloatInterpolator z;
+
+    x.addKey(0.f, 0.f);
+    y.addKey(0.f, 0.f);
+    z.addKey(0.f, 1.f);
+    angle.addKey(0.f, 0.f);
+    angle.addKey(5.f, 180.f);
+
+    trns->addRotation(angle, x, y ,z);
+
+    bv::FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
+    bv::FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
+    bv::FloatInterpolator zs;
+
+    
+    xs.addKey(0.f, 1.f);
+    xs.addKey(3.f, 240.f);
+    ys.addKey(0.f, 1.f);
+    ys.addKey(3.f, 240.f);
+    zs.addKey(0.f, 1.f);
+
+    trns->addScale(xs, ys ,zs);
+
     SimpleTexturePixelPlugin    * stpp  = new SimpleTexturePixelPlugin  ( "pliczek_z_kwiatkiem.jpg" );
     model::SimpleTransformChannel      * stch  = new model::SimpleTransformChannel();
+    stch->AddTransformChannel( trns );
     SimpleTextureVertexPlugin   * stvp  = new SimpleTextureVertexPlugin ();
     //PluginGeometryRect          * pgrc  = new PluginGeometryRect        ();
     //PluginGeometryUVSingle      * pguv  = new PluginGeometryUVSingle    ( pgrc );

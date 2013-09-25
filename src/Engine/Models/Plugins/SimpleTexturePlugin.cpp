@@ -38,6 +38,7 @@ std::string SimpleTexturePixelPlugin::GetShaderFile              () const
 //
 void                SimpleTexturePixelPlugin::Update              ( float t )
 {
+    BasePlugin::Update( t );
     //FIXME: implement - whatever is required here
 }
 

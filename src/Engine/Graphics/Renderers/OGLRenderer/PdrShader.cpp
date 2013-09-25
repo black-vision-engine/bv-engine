@@ -73,8 +73,8 @@ void PdrShader::Enable         ( Renderer * renderer )
     //FIXME: possibly use numSamplers somehow (debug and/or logging)
     int numSamplers = EnableTextureSamplers( renderer );
 
-    m_program->PrintActiveUniforms();
-    m_program->PrintActiveAttribs();
+    //m_program->PrintActiveUniforms();
+    //m_program->PrintActiveAttribs();
 }
 
 // *******************************
@@ -202,7 +202,7 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
             glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t );
 
             glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter );
-            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mag_filter );
+            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter );
 
             glTexParameterfv( GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, &sampler->GetBorderColor()[ 0 ] );
 

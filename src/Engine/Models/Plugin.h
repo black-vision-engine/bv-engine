@@ -2,6 +2,8 @@
 
 #include "IPlugin.h"
 #include "IParameter.h"
+#include "Engine\Models\Plugins\Interfaces\IGeometryChannel.h"
+#include "Engine\Models\Plugins\Interfaces\ITransformChannel.h"
 
 namespace bv {
 
@@ -35,6 +37,8 @@ public:
 
     explicit                                    BasePlugin          ();
 
+    virtual void                                Update              ( float t );
+
     const std::string &                         GetName             () const    { return ParamDesc::pluginName; } 
 
     virtual const std::vector< IValue * > &     GetValuesList       () const    { return m_values; }
@@ -56,6 +60,14 @@ protected:
     const ParamDesc &                           PluginParamDesc     () const { return m_paramDesc; }
 
 };
+
+template<class Iface, class ParameterDescriptor >
+void BasePlugin< Iface, ParameterDescriptor >::Update              ( float t )
+{
+    if(m_geomChannel) m_geomChannel->Update( t );
+    if(m_transformChannel) m_transformChannel->Update( t );
+}
+
 
 // Implementation
 template<class Iface, class ParameterDescriptor >
