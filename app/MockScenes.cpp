@@ -9,7 +9,9 @@
 #include "Mathematics/Transform/MatTransform.h"
 #include "Engine/Models/ModelFactory.h"
 #include "Engine/Models/Plugins/Transform/PluginTransformSimple.h"
+#include "Engine/Models/Plugins/Channels/GeometryChannelImpl.h"
 #include "Engine/Models/Plugins/SimpleTexturePlugin.h"
+#include "Engine/Models/Plugins/Channels/SimpleTransformChannel.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -29,13 +31,20 @@ BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     TransformF                  * trns  = new TransformF                ();
 
     SimpleTexturePixelPlugin    * stpp  = new SimpleTexturePixelPlugin  ( "../dep/media/asets/flower.jpg" );
+    model::SimpleTransformChannel      * stch  = new model::SimpleTransformChannel();
     SimpleTextureVertexPlugin   * stvp  = new SimpleTextureVertexPlugin ();
-    PluginGeometryRect          * pgrc  = new PluginGeometryRect        ();
-    PluginGeometryUVSingle      * pguv  = new PluginGeometryUVSingle    ( pgrc );
-    PluginTransformSimple       * trpg  = ModelFactory::CreatePluginTransformSimple( *trns );
+    //PluginGeometryRect          * pgrc  = new PluginGeometryRect        ();
+    //PluginGeometryUVSingle      * pguv  = new PluginGeometryUVSingle    ( pgrc );
+    //PluginTransformSimple       * trpg  = ModelFactory::CreatePluginTransformSimple( *trns );
+
+    model::GeometryChannelStaticRectTextured* gcsr = model::GeometryChannelStaticRectTextured::Create();
+
 
     //FIXME
     //root->addTransformPlugin    ( trpg );
+    stpp->SetGeometryChannel        (gcsr);
+    stpp->SetTransformChannel( stch);
+    //root->AddPlugin             ( gcsr );
     root->AddPlugin             ( stpp );
     root->setVertexShaderPlugin ( stvp );
     root->setPixelShaderPlugin  ( stpp );

@@ -39,7 +39,7 @@ class GeometryChannelStaticRectTextured : public GeometryChannel
 {
 private:
 
-                                                GeometryChannelStaticRectTextured   ( const std::string& texturePath, float w, float h );
+                                                GeometryChannelStaticRectTextured   ( float w, float h );
 
 public:
 
@@ -52,7 +52,7 @@ protected:
 
 public:
 
-    static GeometryChannelStaticRectTextured *  Create                              ( const std::string& texturePath, float w = 1.f, float h = 1.f );
+    static GeometryChannelStaticRectTextured *  Create                              ( float w = 1.f, float h = 1.f );
 
 };
 

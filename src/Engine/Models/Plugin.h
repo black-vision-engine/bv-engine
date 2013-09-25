@@ -58,6 +58,8 @@ protected:
 template<class Iface, class ParameterDescriptor >
 BasePlugin< Iface, ParameterDescriptor >::BasePlugin()
     : m_paramDesc( ParameterDescriptor() )
+    , m_geomChannel( nullptr )
+    , m_transformChannel(nullptr)
 {}
 
 } // bv

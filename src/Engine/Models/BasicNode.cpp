@@ -19,6 +19,7 @@
 #include "Engine\Models\Plugins\Interfaces\IGeometryChannel.h"
 #include "Engine\Models\Plugins\Interfaces\IConnectedComponent.h"
 #include "Engine\Models\Plugins\Interfaces\IVertexAttributeChannel.h"
+#include "Engine\Models\Plugins\Interfaces\IVertexAttributeChannelDescriptor.h"
 
 #include <fstream>
 #include <sstream>
@@ -99,6 +100,13 @@ SceneNode* BasicNode::BuildScene()
         default:
             return nullptr;
     }
+
+    bv::Transform worldTrans;
+
+    std::vector< bv::Transform > trans;
+    trans.push_back( worldTrans );
+
+    renderEnt->SetWorldTransforms( trans );
 
     // TODO: dodac liste layerow do zwracanego SceneNode
     for( auto p : m_plugins )
@@ -254,14 +262,12 @@ bool                                BasicNode::CreateRenderableData     ( Vertex
 
     for( auto attrCh : attribChannels )
     {
-        //FIXME: SUUUUUX
-        //auto type       = attrCh->GetType();
-        //auto semantic   = attrCh->GetSemantic();
+        auto desc       = attrCh->GetDescriptor();
+        
+        VertexDescriptor*   vd = VertexDescriptor::Create( 1, desc->GetType(), desc->GetSemantic(), (int)desc->GetSemantic());
+        VertexBuffer*       vb = new VertexBuffer( vertNum, desc->GetEntrySize() );
 
-        //VertexDescriptor*   vd = VertexDescriptor::Create( 1, type, semantic, (int)semantic);
-        //VertexBuffer*       vb = new VertexBuffer( vertNum, attrCh->GetEntrySize() );
-
-        //(*vao)->AddEntry( vb, vd );
+        (*vao)->AddEntry( vb, vd );
     }
 
     return true;

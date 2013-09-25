@@ -47,7 +47,7 @@ GeometryChannelStaticRect *  GeometryChannelStaticRect::Create                  
 
 // *********************************
 // FIXME: of course it must be connecte
-GeometryChannelStaticRectTextured::GeometryChannelStaticRectTextured( const std::string & texturePath, float w, float h )
+GeometryChannelStaticRectTextured::GeometryChannelStaticRectTextured( float w, float h )
     : GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP ) // FIXME: Pass plugin - chyba ty !!!!!!!!!!!!
 {
     ConnectedComponent * cc = new ConnectedComponent();
@@ -86,9 +86,9 @@ bool                        GeometryChannelStaticRectTextured::CanBeConnectedTo 
 
 // *********************************
 //
-GeometryChannelStaticRectTextured *    GeometryChannelStaticRectTextured::Create( const std::string & texturePath, float w, float h )
+GeometryChannelStaticRectTextured *    GeometryChannelStaticRectTextured::Create( float w, float h )
 {
-    return new GeometryChannelStaticRectTextured( texturePath, w, h );
+    return new GeometryChannelStaticRectTextured( w, h );
 }
 
 } // model
