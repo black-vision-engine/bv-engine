@@ -12,6 +12,8 @@ public:
 
     static const std::string            pluginName;
 
+    static const std::string            alfaParamName;
+
     explicit SimpleTexturePixelPluginPD();
 };
 

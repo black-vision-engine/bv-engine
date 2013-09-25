@@ -11,8 +11,7 @@ out vec2 texCord;
 
 void main()
 {
-	mat4 dummy = MV * P;
-
-    gl_Position = MVP * vec4(vertexPosition, 1.0);
+	vec4 dummy = MV * P * vec4(vertexPosition, 1.0);
+    gl_Position = MVP * vec4(vertexPosition, 1.0) + dummy - MV * P * vec4(vertexPosition, 1.0);
     texCord = vertexTexCoord;
 }

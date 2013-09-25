@@ -49,9 +49,9 @@ BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 
     
     xs.addKey(0.f, 1.f);
-    xs.addKey(3.f, 240.f);
+    xs.addKey(13.f, 10.f);
     ys.addKey(0.f, 1.f);
-    ys.addKey(3.f, 240.f);
+    ys.addKey(13.f, 10.f);
     zs.addKey(0.f, 1.f);
 
     trns->addScale(xs, ys ,zs);

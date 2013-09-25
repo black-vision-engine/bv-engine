@@ -8,6 +8,9 @@ namespace bv {
 //PLUGIN NAME
 const std::string SimpleTexturePixelPluginPD::pluginName( "SimpleTexturePixel" );
 
+//PLUGIN PARAMETERS
+const std::string SimpleTexturePixelPluginPD::alfaParamName( "alfa" );
+
 // *************************************
 //
 SimpleTexturePixelPluginPD::SimpleTexturePixelPluginPD()
