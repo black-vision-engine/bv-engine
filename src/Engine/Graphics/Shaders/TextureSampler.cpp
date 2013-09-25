@@ -4,14 +4,18 @@ namespace bv {
 
 // ******************************
 //
-TextureSampler::TextureSampler  ( int id, const std::string & name,  SamplerSamplingMode ssm, SamplerFilteringMode sfm, SamplerWrappingMode swm, const glm::vec4 & borderColor )
+TextureSampler::TextureSampler  ( int id, const std::string & name,  SamplerSamplingMode ssm, SamplerFilteringMode sfm, 
+                                  SamplerWrappingMode swm[ (int) SamplerWrapDirection::SWD_TOTAL ], const glm::vec4 & borderColor )
     : m_id( id )
     , m_name( name )
     , m_samplingMode( ssm )
     , m_filteringMode( sfm )
-    , m_wrappingMode( swm )
     , m_borderColor( borderColor )
 {
+    for( int i = 0; i < (int) SamplerWrapDirection::SWD_TOTAL; ++i )
+    {
+        m_wrappingMode[ i ] = swm[ i ];
+    }
 }
 
 // ******************************
@@ -50,9 +54,9 @@ SamplerFilteringMode    TextureSampler::FilteringMode   () const
 
 // ******************************
 //
-SamplerWrappingMode     TextureSampler::WrappingMode    () const
+SamplerWrappingMode     TextureSampler::WrappingMode    ( SamplerWrapDirection direction ) const
 {
-    return m_wrappingMode;
+    return m_wrappingMode[ (int) direction ];
 }
 
 // ******************************

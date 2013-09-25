@@ -1,6 +1,14 @@
 #include "Parameters.h"
 
+#include <cassert>
+
 namespace bv {
+
+//FIXME: REMOVE FROM PROJECT
+void ParametersDummyCaller()
+{
+    assert( !"Suppress linker warnings" );    
+}
 
 //ShaderParameter::ShaderParameter(const std::string& name, char* mem, ParameterSemantic sema)
 //    : m_name(name), m_data(mem), m_semantic(sema)

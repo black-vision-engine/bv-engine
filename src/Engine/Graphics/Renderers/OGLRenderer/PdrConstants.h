@@ -7,6 +7,8 @@
 #include "DataBuffer.h"
 #include "RenderableEntity.h"
 
+#include "Engine\Graphics\Shaders\TextureSampler.h"
+
 namespace bv {
 
 enum class MemoryLockingType : int
@@ -33,6 +35,9 @@ public:
     static GLuint GlConstant( DataBuffer::Semantic semantic );
     static GLuint GlConstant( RenderableEntity::RenderableType type );
     static GLuint GlConstant( FaceKind face );
+    static GLuint GlConstant( SamplerWrappingMode wrappingMode );
+    static GLuint GlConstant( SamplerFilteringMode filteringMode );
+
 };
 
 

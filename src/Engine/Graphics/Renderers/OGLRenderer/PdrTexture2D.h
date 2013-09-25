@@ -11,22 +11,25 @@ class Renderer;
 class PdrTexture2D
 {
 private:
+
     GLuint          m_textureID;
-
-public:
-
-    void            Enable          ( Renderer * renderer );
-    void            Disable         ( Renderer * renderer );
-
-    void            Bind            ();
-    void            Unbind          ();
-
-
-    static PdrTexture2D*   Create(const Texture2D* texture);
+    GLuint          m_prevTextureID;
 
 private:
 
-    explicit        PdrTexture2D    (const Texture2D* texture);
+    explicit        PdrTexture2D    ( const Texture2D * texture );
+
+public:
+
+    void            Enable          ( Renderer * renderer, int textureUnit );
+    void            Disable         ( Renderer * renderer, int textureUnit );
+
+    GLuint          Bind            ();
+    void            Unbind          ();
+
+
+    static PdrTexture2D *   Create  ( const Texture2D * texture );
+
 
 };
 

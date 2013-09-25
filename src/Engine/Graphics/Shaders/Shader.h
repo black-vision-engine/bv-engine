@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ShaderParameters.h"
-
+#include "Engine\Graphics\Shaders\TextureSampler.h"
 
 namespace bv {
 
@@ -12,15 +12,14 @@ namespace bv {
 //FIXME: taki sampler jest statycznie powiazany z tekstura poki co czyli jego parametry sa ustalane statycznie przy tworzeniu sceny - ale moze bedzie trzeba pozwolic na ich zmiane
 //FIXME: juz w trakcie dzialania renderera
 class ShaderParamUpdater;
-class TextureSampler;
 
 class Shader
 {
 protected:
 
-    ShaderParameters *                      m_parameters;
-    std::string                             m_programSurce;
-    ShaderParamUpdater *                    m_paramUpdater;
+    ShaderParameters *        m_parameters;
+    std::string               m_programSurce;
+    ShaderParamUpdater *      m_paramUpdater;
     
     //FIXME: who owns TextureSamplers?
     std::vector< const TextureSampler * >   m_textureSamplers;
@@ -41,7 +40,7 @@ public:
 
     void                Update                      ();
 
-    const std::vector< const TextureSampler * > &  Samplers     () const;
+    const std::vector< const TextureSampler * > &  Samplers  () const;
 
 };
 

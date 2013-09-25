@@ -1,10 +1,23 @@
 #include "PdrShader.h"
 #include "glslprogram.h"
 
+#include "Engine\Graphics\Renderers\Renderer.h"
+
 #include "Engine/Graphics/Shaders/ShaderParam.h"
 #include "Engine/Graphics/Shaders/PixelShader.h"
 #include "Engine/Graphics/Shaders/VertexShader.h"
 #include "Engine/Graphics/Shaders/GeometryShader.h"
+
+#include "Engine\Graphics\Shaders\TextureSampler.h"
+#include "Engine\Graphics\Resources\Texture.h"
+
+#include "Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h"
+
+//FIXME: implement those textures
+//#include "Engine\Graphics\Resources\Texture1D.h"
+#include "Engine\Graphics\Resources\Texture2D.h"
+//#include "Engine\Graphics\Resources\Texture3D.h"
+//#include "Engine\Graphics\Resources\TextureCubic.h"
 
 namespace bv 
 {
@@ -50,13 +63,15 @@ PdrShader *  PdrShader::Create( PixelShader * ps, VertexShader * vs, GeometrySha
 //
 void PdrShader::Enable         ( Renderer * renderer )
 {
-    //FIXME: Enable textures
     //FIXME: some API for location binding should be (most probably) exposed here as well
     m_program->Use();
 
     SetUniforms( m_vertexShader );
     SetUniforms( m_pixelShader );
     SetUniforms( m_geometryShader );
+
+    //FIXME: possibly use numSamplers somehow (debug and/or logging)
+    int numSamplers = EnableTextureSamplers( renderer );
 
     //m_program->PrintActiveUniforms();
     //m_program->PrintActiveAttribs();
@@ -66,15 +81,7 @@ void PdrShader::Enable         ( Renderer * renderer )
 //
 void PdrShader::Disable        ( Renderer * renderer )
 {
-    //FIXME: Disable textures
-}
-
-// *******************************
-//
-void PdrShader::EnableTexture  ( PdrTexture2D* pdrTex )
-{
-    //FIXME: get form texture
-    m_program->SetUniform("Tex1", 0);
+    DisableTextureSamplers( renderer );
 }
 
 // *******************************
@@ -128,6 +135,152 @@ void    PdrShader::SetUniformParam ( GenericShaderParam * param )
         default:
             assert( false );
             break;
+    }
+}
+
+// *******************************
+//
+int     PdrShader::EnableTextureSamplers   ( Renderer * renderer )
+{
+    int numSamplers = 0;
+
+    numSamplers += EnableTextureSamplers( renderer, m_pixelShader, numSamplers );
+    numSamplers += EnableTextureSamplers( renderer, m_vertexShader, numSamplers );
+    numSamplers += EnableTextureSamplers( renderer, m_geometryShader, numSamplers );
+
+    return numSamplers;
+}
+
+// *******************************
+//
+int     PdrShader::EnableTextureSamplers   ( Renderer * renderer, Shader * shader, int firstAvailableSamplerIndex )
+{
+    if ( shader == nullptr )
+    {
+        return 0;
+    }
+
+    return EnableTextureSamplers( renderer, shader->Samplers(), shader->GetOrCreateShaderParameters()->Textures(), firstAvailableSamplerIndex );
+}
+
+// *******************************
+//
+int      PdrShader::EnableTextureSamplers   ( Renderer * renderer, const std::vector< const TextureSampler * > & samplers, const std::vector< Texture * > & textures, int firstAvailableSamplerIndex )
+{
+    assert( samplers.size() == textures.size() );
+    
+    for( unsigned int i = 0; i < samplers.size(); ++i )
+    {
+        EnableTextureSampler( renderer, samplers[ i ], textures[ i ], i + firstAvailableSamplerIndex );
+    }
+
+    return samplers.size();
+}
+
+// *******************************
+//
+void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureSampler * sampler, const Texture * texture, int samplerNum )
+{
+    int textureUnit = samplerNum;
+
+    //FIXME: assert that texture type corresponds to sampler type
+    switch( sampler->SamplingMode() )
+    {
+        case SamplerSamplingMode::SSM_MODE_2D:
+        {
+            renderer->Enable( static_cast< const Texture2D * >( texture ), textureUnit );
+
+            //FIXME: this state may be cached in currentSamplerState in Renderer (for specified target (GL_TEXTURE_2D here and selected texturing unit)
+            GLint wrap_s = (GLint) ConstantsMapper::GlConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
+            GLint wrap_t = (GLint) ConstantsMapper::GlConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_T ) );
+            
+            //FIXME: think a bit more about how filtering mag/min (and mipmaps) should be implemented
+            GLint min_filter = (GLint) ConstantsMapper::GlConstant( sampler->FilteringMode() );
+            GLint mag_filter = (GLint) ConstantsMapper::GlConstant( sampler->FilteringMode() );
+
+            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s );
+            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t );
+
+            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter );
+            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mag_filter );
+
+            glTexParameterfv( GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, &sampler->GetBorderColor()[ 0 ] );
+
+            //glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy ); //FIXME: when anisotropy is implemented in texture sampler
+            //glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, lodBias);          //FIXME: when lodbias is implemented in texture sampler
+
+            break;
+        }
+        //FIXME: implement        
+        case SamplerSamplingMode::SSM_MODE_1D:
+        case SamplerSamplingMode::SSM_MODE_3D:
+        case SamplerSamplingMode::SSM_MODE_CUBIC:
+        default:
+            assert( false );
+
+    }
+
+    m_program->SetUniform( sampler->GetName().c_str(), textureUnit );
+}
+
+// *******************************
+//
+int     PdrShader::DisableTextureSamplers  ( Renderer * renderer )
+{
+    int numSamplers = 0;
+
+    numSamplers += DisableTextureSamplers( renderer, m_geometryShader, numSamplers );
+    numSamplers += DisableTextureSamplers( renderer, m_vertexShader, numSamplers );
+    numSamplers += DisableTextureSamplers( renderer, m_pixelShader, numSamplers );
+
+    return numSamplers;
+}
+
+// *******************************
+//
+int    PdrShader::DisableTextureSamplers  ( Renderer * renderer, Shader * shader, int firstAvailableSamplerIndex )
+{
+    if ( shader == nullptr )
+    {
+        return 0;
+    }
+
+    return DisableTextureSamplers( renderer, shader->Samplers(), shader->GetOrCreateShaderParameters()->Textures(), firstAvailableSamplerIndex );
+}
+
+// *******************************
+//
+int     PdrShader::DisableTextureSamplers  ( Renderer * renderer, const std::vector< const TextureSampler * > & samplers, const std::vector< Texture * > & textures, int firstAvailableSamplerIndex )
+{
+    for( unsigned int i = 0; i < samplers.size(); ++i )
+    {
+        DisableTextureSampler( renderer, samplers[ i ], textures[ i ], i + firstAvailableSamplerIndex );
+    }
+
+    return samplers.size();
+}
+
+// *******************************
+//
+void    PdrShader::DisableTextureSampler   ( Renderer * renderer, const TextureSampler * sampler, const Texture * texture, int samplerNum )
+{
+    int textureUnit = samplerNum;
+
+    //FIXME: assert that texture type corresponds to sampler type
+    switch( sampler->SamplingMode() )
+    {
+        case SamplerSamplingMode::SSM_MODE_2D:
+        {
+            renderer->Disable( static_cast< const Texture2D * >( texture ), textureUnit );
+            break;
+        }
+        //FIXME: implement        
+        case SamplerSamplingMode::SSM_MODE_1D:
+        case SamplerSamplingMode::SSM_MODE_3D:
+        case SamplerSamplingMode::SSM_MODE_CUBIC:
+        default:
+            assert( false );
+
     }
 }
 

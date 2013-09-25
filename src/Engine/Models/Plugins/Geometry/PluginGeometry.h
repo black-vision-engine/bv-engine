@@ -8,6 +8,8 @@
 #include "Engine/Models/Plugins/PluginParameters.h"
 #include "Engine/Models/Plugin.h"
 
+//FIXME: REMOVE FROM PROJECT
+//FIXME: when required functionality is copied to channels
 namespace bv {
 
 template< typename PluginGeometryParametersDescriptor >
@@ -36,8 +38,8 @@ public:
 
     virtual void                    Print               ( std::ostream& out, int tabs = 0 ) const;
 
-    explicit                        PluginGeometry      (){}
-    virtual                         ~PluginGeometry     (){}
+    explicit                        PluginGeometry      () {}
+    virtual                         ~PluginGeometry     () {}
 
 };
 
@@ -60,5 +62,7 @@ void PluginGeometry< PluginGeometryParametersDescriptor >::Print( std::ostream &
 
     out << debug::EndLine( tabs );
 }
+
+void PluginGeometryDummySymbol();
 
 }

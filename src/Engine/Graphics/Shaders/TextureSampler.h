@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "glm/glm.hpp"
 
@@ -37,6 +38,15 @@ enum class SamplerWrappingMode : int
     SWM_TOTAL
 };
 
+enum class SamplerWrapDirection : int 
+{
+    SWD_S = 0,
+    SWD_T,
+    SWD_R,
+
+    SWD_TOTAL
+};
+
 class TextureSampler
 {
 private:
@@ -46,13 +56,15 @@ private:
     
     SamplerSamplingMode     m_samplingMode;
     SamplerFilteringMode    m_filteringMode;
-    SamplerWrappingMode     m_wrappingMode;
+    SamplerWrappingMode     m_wrappingMode[ (int) SamplerWrapDirection::SWD_TOTAL ];
 
     glm::vec4               m_borderColor;
 
 public:
 
-                            TextureSampler  ( int id, const std::string & name, SamplerSamplingMode ssm, SamplerFilteringMode sfm, SamplerWrappingMode swm, const glm::vec4 & borderColor );
+                            //FIXME: instead of passing whole array of wraping modes, it should be accessible via accessors (getters and setters)
+                            TextureSampler  ( int id, const std::string & name, SamplerSamplingMode ssm, SamplerFilteringMode sfm, 
+                                              SamplerWrappingMode swm[ (int) SamplerWrapDirection::SWD_TOTAL ], const glm::vec4 & borderColor );
                             ~TextureSampler ();
 
     int                     GetId           () const;
@@ -60,7 +72,7 @@ public:
 
     SamplerSamplingMode     SamplingMode    () const;
     SamplerFilteringMode    FilteringMode   () const;
-    SamplerWrappingMode     WrappingMode    () const;
+    SamplerWrappingMode     WrappingMode    ( SamplerWrapDirection direction ) const;
 
     const glm::vec4 &       GetBorderColor  () const;
 
@@ -69,5 +81,8 @@ public:
 
     //FIXME: glm::vec4 m_borderColor;
 };
+
+typedef std::vector< TextureSampler * >         TTextureSamplerVec;
+typedef std::vector< const TextureSampler * >   TConstTextureSamplerVec;
 
 } //bv

@@ -37,6 +37,7 @@ class TransformableEntity;
 
 enum class FaceKind : int;
 
+//FIXME: add disable methods so that current state can be cleared after frame is rendered
 class Renderer
 {
 private:
@@ -58,7 +59,7 @@ private:
     typedef std::hash_map<IndexBuffer*, PdrIndexBuffer*>                PdrIndexBufferMapType;
     typedef std::hash_map<VertexDescriptor*, PdrVertexDescriptor*>      PdrVertexDescriptorType;
     typedef std::hash_map<VertexArray*, PdrVertexArrayObject*>          PdrVertexArrayObjectMapType;
-    typedef std::hash_map<Texture2D*, PdrTexture2D*>                    PdrTexture2DMap;
+    typedef std::hash_map< const Texture2D *, PdrTexture2D * >          PdrTexture2DMap;
 
     PdrShaderMapType                m_PdrShaderMap;
     PdrVertexBufferMapType          m_PdrVertexBufferMap;
@@ -79,7 +80,7 @@ public:
     void	SetClearColor		( const glm::vec4 & col );
     void	Resize				( int w, int h );
     bool    PreDraw             ();
-    bool    Draw                (RenderableEntity* ent);
+    bool    Draw                ( RenderableEntity * ent );
     bool    PostDraw            ();
 
     void	DisplayColorBuffer	();
@@ -94,7 +95,13 @@ private:
     void    Enable              ( VertexBuffer * vb );
     void    Enable              ( IndexBuffer * ib );
     void    Enable              ( VertexArray * vao );
-    void    Enable              ( Texture2D * texture );
+
+public:
+
+    void    Enable              ( const Texture2D * texture, int textureUnit );
+
+    //FIXME: add disable methods so that current state can be cleared after frame is rendered
+    void    Disable             ( const Texture2D * texture, int textureUnit );
 
 public:
 
@@ -102,8 +109,9 @@ public:
     PdrIndexBuffer *            GetPdrIndexBuffer       ( IndexBuffer * ib );
     PdrVertexDescriptor *       GetPdrVertexDescriptor  ( VertexDescriptor * vd );
     PdrVertexArrayObject *      GetPdrVertexArray       ( VertexArray * vao );
-    PdrTexture2D *              GetPdrTexture2D         ( Texture2D * texture );
+    PdrTexture2D *              GetPdrTexture2D         ( const Texture2D * texture );
 
-    bool                        DrawRenderable          ( RenderableEntity* ent );
+    bool                        DrawRenderable          ( RenderableEntity * ent );
+
 };
 }

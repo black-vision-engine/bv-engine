@@ -17,6 +17,8 @@
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
+//FIXME: add disable methods so that current state can be cleared after frame is rendered
+
 namespace bv {
 
 // *********************************
@@ -126,7 +128,10 @@ bool    Renderer::DrawRenderable        ( RenderableEntity* ent )
     return true;
 }
 
-bool    Renderer::Draw                  ( RenderableEntity* ent )
+// *********************************
+//FIXME: add disable methods so that current state can be cleared after frame is rendered
+//FIXME: This one requires one solid reimplementation
+bool    Renderer::Draw                  ( RenderableEntity * ent )
 {
     //Based on Entity Type:
     //                        Enable(vertexbuffer);
@@ -151,6 +156,10 @@ bool    Renderer::Draw                  ( RenderableEntity* ent )
     if (vao)
         Enable(vao);
 
+    //FIXME: instancing should also be implemented somewhere here
+    //FIXME: read how http://www.opengl.org/sdk/docs/man/xhtml/glDrawArraysInstanced.xml
+    //FIXME: works
+    //FIXME: additional rendering branch (and engine/pdr classes are required for glDrawElements call - draw based on indices)
     Enable(eff->GetPass(0), ent); //FIXME: 1 pass
 
     //glPolygonMode(GL_FRONT, GL_LINE);
@@ -218,7 +227,6 @@ void    Renderer::Enable              ( RenderablePass* pass, TransformableEntit
     }
 
 
-    shader->EnableTexture( nullptr );
     shader->Enable( this );
 }
 
@@ -248,10 +256,18 @@ void    Renderer::Enable              ( VertexArray * vao )
 
 // *********************************
 //
-void    Renderer::Enable              ( Texture2D * texture )
+void    Renderer::Enable              ( const Texture2D * texture, int textureUnit )
 {
-    PdrTexture2D* pdrTex2D = GetPdrTexture2D( texture );
-    pdrTex2D->Enable( this );
+    PdrTexture2D * pdrTex2D = GetPdrTexture2D( texture );
+    pdrTex2D->Enable( this, textureUnit );
+}
+
+// *********************************
+//
+void    Renderer::Disable             ( const Texture2D * texture, int textureUnit )
+{
+    PdrTexture2D * pdrTex2D = GetPdrTexture2D( texture );
+    pdrTex2D->Disable( this, textureUnit );
 }
 
 // *********************************
@@ -338,7 +354,9 @@ PdrVertexArrayObject *         Renderer::GetPdrVertexArray         ( VertexArray
     return pdrVao;
 }
 
-PdrTexture2D *                  Renderer::GetPdrTexture2D         ( Texture2D * texture )
+// *********************************
+//
+PdrTexture2D *                  Renderer::GetPdrTexture2D         ( const Texture2D * texture )
 {
     auto it = m_PdrTextures2DMap.find( texture );
 

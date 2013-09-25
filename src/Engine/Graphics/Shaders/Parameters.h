@@ -5,8 +5,10 @@
 #include "Engine/Graphics/Renderers/OGLRenderer/glslprogram.h"
 #include "Engine/Models/IParameter.h"
 
+//FIXME: REMOVE FROM PROJECT
 namespace bv {
 
+void ParametersDummyCaller();
 
 //class ShaderParameters
 //{

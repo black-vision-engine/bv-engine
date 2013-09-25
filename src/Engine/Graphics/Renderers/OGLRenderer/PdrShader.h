@@ -14,7 +14,8 @@ class PixelShader;
 class VertexShader;
 class GeometryShader;
 class GenericShaderParam;
-class PdrTexture2D;
+class TextureSampler;
+class Texture;
 
 class PdrShader
 {
@@ -28,34 +29,45 @@ private:
 
 private:
 
-    PdrShader   ( GLSLProgram * program, PixelShader * ps, VertexShader * vs, GeometryShader * gs );
+    PdrShader                       ( GLSLProgram * program, PixelShader * ps, VertexShader * vs, GeometryShader * gs );
 
 public:
 
-    ~PdrShader  ();
+    ~PdrShader                      ();
 
-    static PdrShader *  Create( PixelShader * ps, VertexShader * vs, GeometryShader * gs );
+    static PdrShader *  Create      ( PixelShader * ps, VertexShader * vs, GeometryShader * gs );
 
 public:
 
-    void Enable         ( Renderer * renderer );
-    void Disable        ( Renderer * renderer );
+    void    Enable                  ( Renderer * renderer );
+    void    Disable                 ( Renderer * renderer );
 
-    void EnableTexture  ( PdrTexture2D* pdrTex );
-    //FIXME: add when textures are more or less implemented
-    //void SetSamplerState (Renderer* renderer, RendererData::SamplerState * curSamplerState );
-    //void DisableTextures (Renderer* renderer );
+    //FIXME: use SamplerState to cache it at least a bit (this should be stored in current Renderer)
+    //void SetSamplerState (Renderer* renderer, RendererData::SamplerState * curSamplerState ); //see comments in PdrShader.cpp
 
 private:
 
-    void    SetUniforms     ( Shader * shader );
-    void    SetUniformParam ( GenericShaderParam * param );
-    
+    void    SetUniforms             ( Shader * shader );
+    void    SetUniformParam         ( GenericShaderParam * param );
+
     template< ParamType paramType >
-    void    SetUniformDispatcher( GenericShaderParam * param )
+    void    SetUniformDispatcher    ( GenericShaderParam * param )
     {
         typedef ShaderParamTypeMapper< paramType >::type ValType;
         m_program->SetUniform( param->Name().c_str(), param->GenericGetVal< ValType >() );
     }
+
+    //FIXME: this API should  be moved to some helper class as it looks shitty ang pretty uglu over here (as if PdrShader was responsible mostly for enabling samplers and textures)
+    int     EnableTextureSamplers   ( Renderer * renderer );
+    int     EnableTextureSamplers   ( Renderer * renderer, Shader * shader, int firstAvailableSamplerIndex );
+    int     EnableTextureSamplers   ( Renderer * renderer, const std::vector< const TextureSampler * > & samplers, const std::vector< Texture * > & textures, int firstAvailableSamplerIndex );
+    void    EnableTextureSampler    ( Renderer * renderer, const TextureSampler * sampler, const Texture * texture, int samplerNum );
+
+    int     DisableTextureSamplers  ( Renderer * renderer );
+    int     DisableTextureSamplers  ( Renderer * renderer, Shader * shader, int firstAvailableSamplerIndex );
+    int     DisableTextureSamplers  ( Renderer * renderer, const std::vector< const TextureSampler * > & samplers, const std::vector< Texture * > & textures, int firstAvailableSamplerIndex );
+    void    DisableTextureSampler   ( Renderer * renderer, const TextureSampler * sampler, const Texture * texture, int samplerNum );
+    
 };
-}
+
+} //bv
