@@ -154,6 +154,9 @@ bool BlackVisionApp::OnInitialize       ()
     }
 
     BasicNode * root = TestScenesFactory::SimpeTextureTestScene();
+    BasicNode * root1 = TestScenesFactory::SimpeTextureTestScene();
+
+    root->AddChild( root1 );
 
     m_modelScene = ModelScene::Create( root, new Camera() );
 

@@ -26,6 +26,9 @@ namespace bv
 //
 BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 {
+    //FIXME: worst of hacks
+    static int numcall = 0;
+
     BasicNode * root = new BasicNode();
 
     TransformF *    trns  = new TransformF                ();
@@ -39,33 +42,67 @@ BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     y.addKey(0.f, 0.f);
     z.addKey(0.f, 1.f);
 
-    angle.addKey(0.f, 0.f);
-    angle.addKey(5.f, 180.f);
+    if( numcall == 0 ) 
+    {
+        angle.addKey(0.f, 0.f);
+        angle.addKey(5.f, 180.f);
+    }
+    else
+    {
+        angle.addKey(0.f, 300.f);
+        angle.addKey(6.5f, 0.f);
+    }
 
     trns->addRotation(angle, x, y ,z);
+
 
     TransformF * tx0m = new TransformF();
     TransformF * tx1m = new TransformF();
 
     FloatInterpolator alpha;
 
-    alpha.addKey( 0.0f, 0.25f ); alpha.setWrapPostMethod( WrapMethod::pingPong );
-    alpha.addKey( 1.0f, 0.05f );
-    alpha.addKey( 2.0f, 0.5f );
-    alpha.addKey( 5.0f, 1.0f );
-    alpha.addKey( 8.0f, 0.75f );
-    alpha.addKey( 10.0f, 0.0f );
+    if( numcall == 0 ) 
+    {
+        alpha.addKey( 0.0f, 0.25f ); alpha.setWrapPostMethod( WrapMethod::pingPong );
+        alpha.addKey( 1.0f, 0.05f );
+        alpha.addKey( 2.0f, 0.5f );
+        alpha.addKey( 5.0f, 1.0f );
+        alpha.addKey( 8.0f, 0.75f );
+        alpha.addKey( 10.0f, 0.0f );
+    }
+    else
+    {
+        alpha.addKey( 0.0f, 0.25f ); alpha.setWrapPostMethod( WrapMethod::pingPong );
+        alpha.addKey( 2.0f, 0.05f );
+        alpha.addKey( 3.0f, 0.5f );
+        alpha.addKey( 5.0f, 1.0f );
+        alpha.addKey( 7.0f, 0.75f );
+        alpha.addKey( 8.0f, 0.0f );
+    }
 
     FloatInterpolator angTex0; angTex0.setWrapPostMethod( WrapMethod::pingPong );
     FloatInterpolator angTex1; angTex1.setWrapPostMethod( WrapMethod::pingPong );
 
-    angTex0.addKey(0.f, 0.f);
-    angTex0.addKey(3.f, 180.f);
-    angTex0.addKey(4.f, 30.f);
+    if( numcall == 0 ) 
+    {
+        angTex0.addKey(0.f, 0.f);
+        angTex0.addKey(3.f, 180.f);
+        angTex0.addKey(4.f, 30.f);
 
-    angTex1.addKey(0.f, 180.f);
-    angTex1.addKey(4.f, 0.f);
-    angTex1.addKey(8.f, 120.f);
+        angTex1.addKey(0.f, 180.f);
+        angTex1.addKey(4.f, 0.f);
+        angTex1.addKey(8.f, 120.f);
+    }
+    else
+    {
+        angTex0.addKey(0.f, 0.f);
+        angTex0.addKey(2.f, 80.f);
+        angTex0.addKey(5.f, -230.f);
+
+        angTex1.addKey(0.f, 280.f);
+        angTex1.addKey(7.f, 0.f);
+        angTex1.addKey(12.f, 120.f);
+    }
 
     tx0m->addRotation( angTex0, x, y, z ); //FIXME: memory lik
     tx1m->addRotation( angTex1, x, y, z ); //FIXME: memory lik
@@ -75,16 +112,45 @@ BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     FloatInterpolator zs;
 
     
-    xs.addKey(0.f, 1.f);
-    xs.addKey(13.f, 10.f);
-    ys.addKey(0.f, 1.f);
-    ys.addKey(13.f, 10.f);
-    zs.addKey(0.f, 1.f);
+    if( numcall == 0 )
+    {
+        xs.addKey(0.f, 0.5f);
+        xs.addKey(13.f, 4.f);
+        ys.addKey(0.f, 0.5f);
+        ys.addKey(13.f, 4.f);
+        zs.addKey(0.f, 1.f);
+    }
+    else
+    {
+        xs.addKey(0.f, 0.2f);
+        xs.addKey(1.5f, 0.7f);
+        ys.addKey(0.f, 0.2f);
+        ys.addKey(1.5f, 0.67f);
+        zs.addKey(0.f, 1.f);
+    }
 
     trns->addScale(xs, ys ,zs);
 
+    if( numcall == 1 )
+    {
+        FloatInterpolator xt; xt.addKey( 0.0f, 0.0f );
+        FloatInterpolator yt; yt.addKey( 0.0f, 0.0f );
+        FloatInterpolator zt; zt.addKey( 0.0f, 0.1f );
 
-    SimpleTexturePixelPlugin    * stpp  = new SimpleTexturePixelPlugin  ( "simless_01.jpg", "simless_00.jpg", alpha, *tx0m, *tx1m );
+        trns->addTranslation( xt, yt, zt );
+    }
+
+    SimpleTexturePixelPlugin    * stpp  = nullptr;
+    
+    if( numcall == 0 )
+    {
+        stpp = new SimpleTexturePixelPlugin  ( "simless_01.jpg", "simless_00.jpg", alpha, *tx0m, *tx1m );
+    }
+    else
+    {
+        stpp = new SimpleTexturePixelPlugin  ( "pliczek_z_kwiatkiem.jpg", "simless_01.jpg", alpha, *tx0m, *tx1m );
+    }
+
     model::SimpleTransformChannel      * stch  = new model::SimpleTransformChannel();
     stch->AddTransformChannel( trns ); //FIXME: NIE CHANNEL
     SimpleTextureVertexPlugin   * stvp  = new SimpleTextureVertexPlugin ();
@@ -103,6 +169,8 @@ BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     root->AddPlugin             ( stpp );
     root->setVertexShaderPlugin ( stvp );
     root->setPixelShaderPlugin  ( stpp );
+
+    numcall++;
 
     return root;
 }
