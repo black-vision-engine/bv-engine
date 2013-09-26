@@ -2,8 +2,8 @@
 
 #include "Shader.h"
 
-#include "Engine/Models/Plugins/Solid.h"
 #include "Engine/Models/Parameter.h"
+#include "Engine/Models/Plugins/PluginParameters.h"
 
 namespace bv {
 

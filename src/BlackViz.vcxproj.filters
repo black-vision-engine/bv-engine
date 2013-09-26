@@ -81,21 +81,24 @@
     <ClCompile Include="Engine\Models\Plugins\PluginParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleTexturePlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryUVSingle.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\GeometryChannel.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\TranformChannel.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\ConnectedComponent.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\VertexAttributeChannel.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\IndexChannelDescriptor.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\VertexAttributeChannelDescriptor.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\GeometryChannelDescriptor.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\VertexAttributeChannelTyped.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\GeometryChannelImpl.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\SimpleTransformChannel.cpp" />
     <ClCompile Include="Engine\Models\Resources\ResourceLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\Resource.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextureLoader.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\TextureSampler.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\IShaderParamUpdater.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Transform\TranformChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelImpl.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelTyped.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\VertexShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\PixelShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\GeometryShader\GeometryShaderChannel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -193,20 +196,10 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\ITransformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IConnectedComponent.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\GeometryChannel.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\TranformChannel.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\ConnectedComponent.h" />
     <ClInclude Include="Engine\Types\Enums.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributeChannel.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\VertexAttributeChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IIndexChannelDescriptor.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\IndexChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributeChannelDescriptor.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\VertexAttributeChannelDescriptor.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\GeometryChannelDescriptor.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\VertexAttributeChannelTyped.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\GeometryChannelImpl.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\SimpleTransformChannel.h" />
     <ClInclude Include="Engine\Models\Resources\Resource.h" />
     <ClInclude Include="Engine\Models\Resources\ResourceLoader.h" />
     <ClInclude Include="Engine\Models\Resources\IResource.h" />
@@ -214,6 +207,20 @@
     <ClInclude Include="Engine\Models\Resources\TextureLoader.h" />
     <ClInclude Include="Engine\Graphics\Shaders\TextureSampler.h" />
     <ClInclude Include="Engine\Graphics\Shaders\IShaderParamUpdater.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Transform\TranformChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelImpl.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelTyped.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\VertexShader\VertexShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\PixelShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\GeometryShader\GeometryShaderChannel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

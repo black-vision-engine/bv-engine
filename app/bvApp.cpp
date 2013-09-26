@@ -4,7 +4,6 @@
 #include "Engine\Models\BasicNode.h"
 #include "Engine\Models\ModelFactory.h"
 
-#include "Engine\Models\Plugins\Solid.h"
 #include "Engine\Models\Plugins\Extrude.h"
 #include "Engine\Models\Plugins\Transform\PluginTransformSimple.h"
 #include "Engine\Models\BasicNode.h"

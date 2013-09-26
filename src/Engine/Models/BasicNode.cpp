@@ -27,7 +27,7 @@
 #include <sstream>
 #include <sys/stat.h>
 
-namespace bv {
+namespace bv { namespace model {
 
 namespace
 {
@@ -69,15 +69,11 @@ namespace
 // ********************************
 //
 BasicNode::BasicNode()
-    : m_gshaderPlugin(nullptr)
-    , m_pshaderPlugin(nullptr)
-    , m_vshaderPlugin(nullptr)
-{
-}
+{}
 
 // ********************************
 //
-SceneNode* BasicNode::BuildScene()
+SceneNode*                  BasicNode::BuildScene()
 {
     VertexBuffer *      vb          = nullptr;
     IndexBuffer *       ib          = nullptr;
@@ -154,90 +150,37 @@ SceneNode* BasicNode::BuildScene()
 
 // ********************************
 //
-bool BasicNode::AddChild(Node* n)
+void            BasicNode::AddChild                 ( Node* n )
 {
-    m_children.push_back(n);
-
-    return true;
+    m_children.push_back( n );
 }
 
 // ********************************
 //
-void BasicNode::AddPlugin               ( IPlugin* plugin )
+void            BasicNode::AddLayer                 ( Node* n )
+{
+    m_layers.push_back( n );
+}
+
+// ********************************
+//
+void            BasicNode::AddPlugin                ( IPlugin* plugin )
 {
     m_plugins.push_back(plugin);
 }
 
 // ********************************
 //
-void BasicNode::setPixelShaderPlugin(IShaderPlugin* psPlugin)
-{
-    m_pshaderPlugin = psPlugin;
-}
-
-// ********************************
-//
-void BasicNode::setVertexShaderPlugin(IShaderPlugin* vsPlugin)
-{
-    m_vshaderPlugin = vsPlugin;
-}
-
-// ********************************
-//
-void BasicNode::setGeometryShaderPlugin(IShaderPlugin* gsPlugin)
-{
-    m_gshaderPlugin = gsPlugin;
-}
-
-// ********************************
-//
-void BasicNode::Print(std::ostream& out, int tabs) const
-{
-    out << "------------------NODE-------------------- : " << this << debug::EndLine(tabs);
-    //out << "Transform plugins: " << m_transformPlugins.size() << debug::EndLine(tabs + 1);
-    //for(auto tp : m_transformPlugins)
-    //    tp->Print(out, tabs + 1);
-    
-    out << debug::EndLine(tabs) << "Pixel Shader plugin: " << m_pshaderPlugin << debug::EndLine(tabs + 1);
-    if(m_pshaderPlugin != nullptr)
-        m_pshaderPlugin->Print(out, tabs + 1);
-
-    out << debug::EndLine(tabs) << "Vertex Shader plugin: " << m_vshaderPlugin << debug::EndLine(tabs + 1);
-    if(m_vshaderPlugin != nullptr)
-        m_vshaderPlugin->Print(out, tabs + 1);
-
-    out << debug::EndLine(tabs) << "Geometry Shader plugin: " << m_gshaderPlugin << debug::EndLine(tabs + 1);
-    if(m_gshaderPlugin != nullptr)
-        m_gshaderPlugin->Print(out, tabs + 1);
-
-    out << debug::EndLine(tabs) << "------------------PARENT OF---------------- : " << m_children.size() << debug::EndLine(tabs + 1);
-    for(auto ch : m_children)
-    {
-        ch->Print(out, tabs + 1);
-        out << debug::EndLine(tabs + 1);
-    }
-}
-
-// ********************************
-//
 void BasicNode::Update(float t)
 {
+    for(auto l : m_layers)
+        l->Update( t );
+
     for(auto pl : m_plugins)
-        pl->Update(t);
-
-    if(m_pshaderPlugin != nullptr)
-        m_pshaderPlugin->Update(t);
-
-    if(m_vshaderPlugin != nullptr)
-        m_vshaderPlugin->Update(t);
-
-    if(m_gshaderPlugin != nullptr)
-        m_gshaderPlugin->Update(t);
+        pl->Update( t );
 
     for(auto ch : m_children)
-    {
-        ch->Update(t);
-    }
+        ch->Update( t );
 }
 
 // ********************************
@@ -314,7 +257,7 @@ ShaderType* CreateShader(IShaderPlugin* pl)
 
         ShaderType * s = new ShaderType(code.str());
 
-        BasicNode::RegisterShaderParameters(pl, s->GetOrCreateShaderParameters());
+        //BasicNode::RegisterShaderParameters(pl, s->GetOrCreateShaderParameters());
         
         s->RegisterUpdater(ShaderParamUpdater::Create(pl, s));
 
@@ -331,26 +274,26 @@ ShaderType* CreateShader(IShaderPlugin* pl)
 
 // ********************************
 //
-PixelShader*                        BasicNode::CreatePixelShader       ()                                                               const
-{
-    return CreateShader<PixelShader>(m_pshaderPlugin);
-}
-
-// ********************************
+//PixelShader*                        BasicNode::CreatePixelShader       ()                                                               const
+//{
+//    return CreateShader<PixelShader>(m_pshaderPlugin);
+//}
 //
-VertexShader*                       BasicNode::CreateVertexShader      ()                                                               const
-{
-    VertexShader * vs = CreateShader<VertexShader>(m_vshaderPlugin);
-
-    return vs ? vs : new PassThroughVertexShader(new PassThroughVertexShaderParametersDescriptor());
-}
-
-// ********************************
+//// ********************************
+////
+//VertexShader*                       BasicNode::CreateVertexShader      ()                                                               const
+//{
+//    VertexShader * vs = CreateShader<VertexShader>(m_vshaderPlugin);
 //
-GeometryShader*                     BasicNode::CreateGeometryShader    ()                                                               const
-{
-    return CreateShader<GeometryShader>(m_gshaderPlugin);
-}
+//    return vs ? vs : new PassThroughVertexShader(new PassThroughVertexShaderParametersDescriptor());
+//}
+//
+//// ********************************
+////
+//GeometryShader*                     BasicNode::CreateGeometryShader    ()                                                               const
+//{
+//    return CreateShader<GeometryShader>(m_gshaderPlugin);
+//}
 
 // ********************************
 //
@@ -367,13 +310,43 @@ RenderableEffect*                   BasicNode::CreateRenderaleEffectMockImplemen
 
 // ********************************
 //
-void                                BasicNode::RegisterShaderParameters(IShaderPlugin* shaderPlugin, ShaderParameters * shParams)
+//void                                BasicNode::RegisterShaderParameters(IShaderPlugin* shaderPlugin, ShaderParameters * shParams)
+//{
+//    for(auto param : shaderPlugin->GetValuesList())
+//    {
+//        GenericShaderParam* genShaderParam = ShaderParamFactory::Get().Create( param->GetName(), param->GetParamType() );
+//        shParams->RegisterParameter(genShaderParam);
+//    }
+//}
+
+// ********************************
+//
+void            BasicNode::Print                    (std::ostream& out, int tabs) const
 {
-    for(auto param : shaderPlugin->GetValuesList())
+    out << "------------------NODE-------------------- : " << this << debug::EndLine(tabs);
+    //out << "Transform plugins: " << m_transformPlugins.size() << debug::EndLine(tabs + 1);
+    //for(auto tp : m_transformPlugins)
+    //    tp->Print(out, tabs + 1);
+    
+    //out << debug::EndLine(tabs) << "Pixel Shader plugin: " << m_pshaderPlugin << debug::EndLine(tabs + 1);
+    //if(m_pshaderPlugin != nullptr)
+    //    m_pshaderPlugin->Print(out, tabs + 1);
+
+    //out << debug::EndLine(tabs) << "Vertex Shader plugin: " << m_vshaderPlugin << debug::EndLine(tabs + 1);
+    //if(m_vshaderPlugin != nullptr)
+    //    m_vshaderPlugin->Print(out, tabs + 1);
+
+    //out << debug::EndLine(tabs) << "Geometry Shader plugin: " << m_gshaderPlugin << debug::EndLine(tabs + 1);
+    //if(m_gshaderPlugin != nullptr)
+    //    m_gshaderPlugin->Print(out, tabs + 1);
+
+    out << debug::EndLine(tabs) << "------------------PARENT OF---------------- : " << m_children.size() << debug::EndLine(tabs + 1);
+    for(auto ch : m_children)
     {
-        GenericShaderParam* genShaderParam = ShaderParamFactory::Get().Create( param->GetName(), param->GetParamType() );
-        shParams->RegisterParameter(genShaderParam);
+        ch->Print(out, tabs + 1);
+        out << debug::EndLine(tabs + 1);
     }
 }
 
+} // model
 } // bv

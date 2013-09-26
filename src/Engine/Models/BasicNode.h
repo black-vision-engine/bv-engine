@@ -2,60 +2,49 @@
 
 #include "Node.h"
 #include "Plugin.h"
-#include "Engine\Models\Plugins\Geometry\PluginGeometry.h"
-#include "Engine\Models\Plugins\Transform\PluginTransform.h"
+//#include "Engine\Models\Plugins\Geometry\PluginGeometry.h"
+//#include "Engine\Models\Plugins\Transform\PluginTransform.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
 #include <vector>
 
 namespace bv {
-
-class InterpolatorsList;
-class LayerNode;
+    
 class PixelShader;
 class VertexShader; 
 class GeometryShader;
 class ShaderParameters;
 
-typedef std::vector< LayerNode* > TLayerNodeVec;
+namespace model {
+
 typedef std::vector< Node* > TNodeVec;
 
 class BasicNode : public Node
 {
 private:
     TNodeVec                m_children;
-    TLayerNodeVec           m_layers;
+    TNodeVec                m_layers;
 
     std::vector< IPlugin* > m_plugins;
-
-
-    // TODO: move to plugins channel
-    IShaderPlugin*          m_pshaderPlugin;
-    IShaderPlugin*          m_vshaderPlugin;
-    IShaderPlugin*          m_gshaderPlugin;
 
 public:
     explicit BasicNode();
     virtual ~BasicNode(){}
 
-    virtual SceneNode*      BuildScene              ();                              
-    bool                    AddChild                (Node* n);
-    void                    AddPlugin               ( IPlugin* plugin );
+    virtual SceneNode*                  BuildScene              ();                              
+    void                                AddChild                ( Node* n );
+    void                                AddLayer                ( Node* n );
+    void                                AddPlugin               ( IPlugin* plugin );
 
-    // TODO: move to plugins channel
-    void                    setPixelShaderPlugin    (IShaderPlugin* sPlugin);
-    void                    setVertexShaderPlugin   (IShaderPlugin* sPlugin);
-    void                    setGeometryShaderPlugin (IShaderPlugin* sPlugin);
-
-
-    virtual void            Print                   (std::ostream& out, int tabs = 0)             const;
-    virtual void            Update                  (float t);
+    virtual void                        Print                   (std::ostream& out, int tabs = 0)   const;
+    virtual void                        Update                  (float t);
 
 private:
-    //VertexDescriptor * vd, VertexBuffer * vb, IndexBuffer * ib, RenderableEffect * effect
-    PrimitiveType                       GetRenderableType() const;
-    bool                                CreateRenderableData(VertexArray ** vao) const;
+
+    PrimitiveType                       GetRenderableType       ()                                  const;
+    bool                                CreateRenderableData    (VertexArray ** vao)                const;
+
     RenderableEffect*                   CreateRenderaleEffectMockImplementationForCompleteDummies() const;
 
     PixelShader*                        CreatePixelShader       ()                      const;
@@ -63,10 +52,8 @@ private:
     GeometryShader*                     CreateGeometryShader    ()                      const;
 
 public:
-    static void                         RegisterShaderParameters(IShaderPlugin* shaderPlugin, ShaderParameters * shParams);
+    //static void                         RegisterShaderParameters(IShaderPlugin* shaderPlugin, ShaderParameters * shParams);
 };
 
-
-
-
+} // model
 } // bv

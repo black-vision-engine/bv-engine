@@ -1,13 +1,14 @@
 #pragma once
 
-#include "IChannel.h"
+#include "IShaderChannel.h"
 
 namespace bv { namespace model
 {
 
-class IGeometryShaderChannel : public IChannel
+class IGeometryShaderChannel : public IShaderChannel
 {
 public:
+
     virtual         ~IGeometryShaderChannel(){};
 };
 

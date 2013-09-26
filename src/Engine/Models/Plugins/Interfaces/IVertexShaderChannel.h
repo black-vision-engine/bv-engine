@@ -1,11 +1,11 @@
 #pragma once
 
-#include "IChannel.h"
+#include "IShaderChannel.h"
 
 namespace bv { namespace model
 {
 
-class IVertexShaderChannel : public IChannel
+class IVertexShaderChannel : public IShaderChannel
 {
 public:
     virtual         ~IVertexShaderChannel(){};

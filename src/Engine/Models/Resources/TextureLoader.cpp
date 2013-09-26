@@ -65,5 +65,22 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource* res )  c
     return new ResourceHandle( (char*)fipImg->accessPixels(), fipImg->getWidth() * fipImg->getHeight() * ( fipImg->getBitsPerPixel() / 8 ), fipImg->getWidth(), fipImg->getHeight() );
 }
 
+
+int TextureExtraData::GetWidth            () const
+{
+    return m_width;
+}
+
+int TextureExtraData::GetHeight           () const
+{
+    return m_height;
+}
+
+TextureExtraData::TextureExtraData( int w, int h )
+    : m_kind( ResourceExtraKind::RE_TEXTURE )
+    , m_width( w )
+    , m_height( h )
+{}
+
 } // model
 } // bv

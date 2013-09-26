@@ -4,7 +4,6 @@
 #include "Engine/Models/Plugins/Geometry/PluginGeometryRect.h"
 #include "Engine/Models/Plugins/Geometry/PluginGeometryUVSingle.h"
 #include "Engine/Models/Plugins/Extrude.h"
-#include "Engine/Models/Plugins/Solid.h"
 #include "Engine/Models/BasicNode.h"
 #include "Mathematics/Transform/MatTransform.h"
 #include "Engine/Models/ModelFactory.h"

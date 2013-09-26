@@ -17,5 +17,10 @@ Resource::Resource( const std::string& name, const std::string& filePath )
     , m_filePath(filePath)
 {}
 
+
+ResourceExtraData::ResourceExtraData( ResourceExtraKind kind )
+    : m_kind( kind )
+{}
+
 } // model
 } // bv

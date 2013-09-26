@@ -20,5 +20,16 @@ public:
     virtual ~Resource(){}
 };
 
+class ResourceExtraData : public IResourceExtraData
+{
+    ResourceExtraKind               m_kind;
+
+public:
+    virtual ResourceExtraKind       GetResourceExtraKind        () const { return m_kind; }
+
+    explicit                        ResourceExtraData           ( ResourceExtraKind kind );
+    virtual                         ~ResourceExtraData          () {}
+};
+
 } // model
 } // bv
