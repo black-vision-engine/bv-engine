@@ -5,24 +5,28 @@
 namespace bv
 {
 
-class IShaderChannel;
+namespace model
+{
+    class IShaderChannel;
+}
+
 class Shader;
 
 class ShaderParamUpdater : public IUpdater
 {
 private:
 
-    IShaderChannel *    m_shaderChannel;
-    Shader *            m_shader;
+    const model::IShaderChannel *   m_shaderChannel;
+    Shader *                        m_shader;
 
 private:
 
-                                    ShaderParamUpdater  ( IShaderChannel *, Shader * );
+                                    ShaderParamUpdater  ( const model::IShaderChannel *, Shader * );
 
 public:
 
     virtual void                    Update              ( float t );
-    static ShaderParamUpdater *     Create              ( IShaderChannel *, Shader * );
+    static ShaderParamUpdater *     Create              ( const model::IShaderChannel *, Shader * );
 
 };
 

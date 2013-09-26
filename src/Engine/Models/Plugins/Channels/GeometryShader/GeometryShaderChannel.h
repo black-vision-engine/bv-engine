@@ -1,15 +1,13 @@
 #pragma once
 
 #include "Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/ShaderChannel.h"
 
 namespace bv{ namespace model {
 
-class GeometryShaderChannel : public IGeometryShaderChannel
+class GeometryShaderChannel : public ShaderChannel< IGeometryShaderChannel >
 {
-    std::string             m_shaderFile;
 public:
-
-    virtual const std::string&      GetShaderFile() const override;
 
     explicit                        GeometryShaderChannel(const std::string& shaderFile);
 

@@ -18,6 +18,8 @@ class ShaderParameters;
 
 namespace model {
 
+class IShaderChannel;
+
 typedef std::vector< Node* > TNodeVec;
 
 class BasicNode : public Node
@@ -52,7 +54,7 @@ private:
     GeometryShader*                     CreateGeometryShader    ()                      const;
 
 public:
-    //static void                         RegisterShaderParameters(IShaderPlugin* shaderPlugin, ShaderParameters * shParams);
+    static void                         RegisterShaderParameters(const IShaderChannel* shaderPlugin, ShaderParameters * shParams);
 };
 
 } // model

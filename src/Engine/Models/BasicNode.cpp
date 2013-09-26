@@ -17,6 +17,9 @@
 #include "Engine\Models\Updaters\ShaderParamUpdater.h"
 
 #include "Engine\Models\Plugins\Interfaces\IGeometryChannel.h"
+#include "Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h"
+#include "Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h"
+#include "Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h"
 #include "Engine\Models\Plugins\Interfaces\IConnectedComponent.h"
 #include "Engine\Models\Plugins\Interfaces\IVertexAttributeChannel.h"
 #include "Engine\Models\Plugins\Interfaces\IVertexAttributeChannelDescriptor.h"
@@ -247,7 +250,7 @@ namespace
 // ********************************
 //
 template<class ShaderType>
-ShaderType* CreateShader(IShaderPlugin* pl)
+ShaderType* CreateShader(const std::vector< IPlugin* >& plugins)
 {
     if(pl != nullptr)
     {
@@ -270,29 +273,144 @@ ShaderType* CreateShader(IShaderPlugin* pl)
     }
 }
 
+const IVertexShaderChannel* GetVertexShaderChannel( const std::vector< IPlugin* >& plugins )
+{
+    const IVertexShaderChannel*   ret = nullptr;
+
+    for( auto pl : plugins )
+    {
+        auto vsCh = pl->GetVertexShaderChannel();
+        if( vsCh )
+        {
+            if( ret )
+                assert( !"Only one allowed!" );
+
+            ret = vsCh;
+        }
+    }
+
+    assert( ret );
+    return ret;
+}
+
+const IPixelShaderChannel* GetPixelShaderChannel( const std::vector< IPlugin* >& plugins )
+{
+    const IPixelShaderChannel*   ret = nullptr;
+
+    for( auto pl : plugins )
+    {
+        auto psCh = pl->GetPixelShaderChannel();
+        if( psCh )
+        {
+            if( ret )
+                assert( !"Only one allowed!" );
+
+            ret = psCh;
+        }
+    }
+
+    assert( ret );
+    return ret;
+}
+
+const IGeometryShaderChannel* GetGeometryShaderChannel( const std::vector< IPlugin* >& plugins )
+{
+    const IGeometryShaderChannel*   ret = nullptr;
+
+    for( auto pl : plugins )
+    {
+        auto psCh = pl->GetGeometryShaderChannel();
+        if( psCh )
+        {
+            if( ret )
+                assert( !"Only one or zero allowed!" );
+
+            ret = psCh;
+        }
+    }
+
+    return ret;
+}
+
 } // anonymous
 
 // ********************************
 //
 PixelShader*                        BasicNode::CreatePixelShader       ()                                                               const
 {
-    return CreateShader<PixelShader>(m_pshaderPlugin);
+    auto psCh = GetPixelShaderChannel( m_plugins );
+
+    if(psCh != nullptr)
+    {
+        std::stringstream code;
+
+        ReadFile(code, psCh->GetShaderFile());
+
+        PixelShader * s = new PixelShader(code.str());
+
+        //BasicNode::RegisterShaderParameters(pl, s->GetOrCreateShaderParameters());
+        
+        s->RegisterUpdater(ShaderParamUpdater::Create(psCh, s));
+
+        return s;
+    }
+    else
+    {
+        // FIXME:
+        return nullptr;
+    }
 }
 
 // ********************************
 //
 VertexShader*                       BasicNode::CreateVertexShader      ()                                                               const
 {
-    VertexShader * vs = CreateShader<VertexShader>(m_vshaderPlugin);
+    auto vsCh = GetVertexShaderChannel( m_plugins );
 
-    return vs ? vs : new PassThroughVertexShader(new PassThroughVertexShaderParametersDescriptor());
+    if(vsCh != nullptr)
+    {
+        std::stringstream code;
+
+        ReadFile(code, vsCh->GetShaderFile());
+
+        VertexShader * s = new VertexShader(code.str());
+
+        //BasicNode::RegisterShaderParameters(pl, s->GetOrCreateShaderParameters());
+        
+        s->RegisterUpdater(ShaderParamUpdater::Create(vsCh, s));
+
+        return s;
+    }
+    else
+    {
+        return new PassThroughVertexShader(new PassThroughVertexShaderParametersDescriptor());
+    }
 }
 
 // ********************************
 //
 GeometryShader*                     BasicNode::CreateGeometryShader    ()                                                               const
 {
-    return CreateShader<GeometryShader>(m_gshaderPlugin);
+    auto gsCh = GetGeometryShaderChannel( m_plugins );
+
+    if(gsCh != nullptr)
+    {
+        std::stringstream code;
+
+        ReadFile(code, gsCh->GetShaderFile());
+
+        GeometryShader * s = new GeometryShader(code.str());
+
+        //BasicNode::RegisterShaderParameters(pl, s->GetOrCreateShaderParameters());
+        
+        s->RegisterUpdater(ShaderParamUpdater::Create(gsCh, s));
+
+        return s;
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
 // ********************************
@@ -310,14 +428,14 @@ RenderableEffect*                   BasicNode::CreateRenderaleEffectMockImplemen
 
 // ********************************
 //
-//void                                BasicNode::RegisterShaderParameters(IShaderPlugin* shaderPlugin, ShaderParameters * shParams)
-//{
-//    for(auto param : shaderPlugin->GetValuesList())
-//    {
-//        GenericShaderParam* genShaderParam = ShaderParamFactory::Get().Create( param->GetName(), param->GetParamType() );
-//        shParams->RegisterParameter(genShaderParam);
-//    }
-//}
+void                                BasicNode::RegisterShaderParameters(const IShaderChannel* shaderChannel, ShaderParameters * shParams)
+{
+    for(auto param : shaderChannel->GetValuesList())
+    {
+        GenericShaderParam* genShaderParam = ShaderParamFactory::Get().Create( param->GetName(), param->GetParamType() );
+        shParams->RegisterParameter(genShaderParam);
+    }
+}
 
 // ********************************
 //

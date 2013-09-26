@@ -5,7 +5,7 @@
 #include "Mathematics/Transform/MatTransform.h"
 #include "Engine/Types/Enums.h"
 
-namespace bv {
+namespace bv { namespace model {
 
 //FIXME: this shit deserves some templates :D
 class BaseParameter : public IParameter
@@ -174,4 +174,5 @@ public:
     virtual ~ValueMat4(){}
 };
 
+} // model
 } // bv

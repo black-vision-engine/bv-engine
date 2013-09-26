@@ -4,14 +4,12 @@
 #include "Engine/Models/Plugins/PluginParameters.h"
 #include "Mathematics\Transform\MatTransform.h"
 
-namespace bv {
-    
+namespace bv { namespace model {
+
 class ParamFloat;
 class ValueFloat;
 class ParamTransform;
 class ValueMat4;
-
-namespace model {
 
 // ***************************** DESCRIPTOR **********************************
 class SimpleTexturePluginPD : public BaseParametersDescriptor

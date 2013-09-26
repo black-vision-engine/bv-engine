@@ -221,6 +221,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexShader\VertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\PixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\GeometryShader\GeometryShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\ShaderChannel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

@@ -1,15 +1,13 @@
 #pragma once
 
-#include "Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/ShaderChannel.h"
 
 namespace bv{ namespace model {
 
-class PixelShaderChannel : public IPixelShaderChannel
+class PixelShaderChannel : public ShaderChannel< IPixelShaderChannel >
 {
-    std::string             m_shaderFile;
 public:
-
-    virtual const std::string&      GetShaderFile() const override;
 
     explicit                        PixelShaderChannel(const std::string& shaderFile);
 

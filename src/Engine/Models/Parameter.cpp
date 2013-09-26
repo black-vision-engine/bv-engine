@@ -1,6 +1,6 @@
 #include "Parameter.h"
 
-namespace bv {
+namespace bv { namespace model {
 
 void            BaseParameter::SetLastEvaluatedTime(float t) const
 {
@@ -55,5 +55,5 @@ glm::mat2           ParamMat2::Evaluate        (float t)   const
     return glm::mat2( v[0], v[1], v[2], v[3] );
 }
 
-
+} // model
 } // bv

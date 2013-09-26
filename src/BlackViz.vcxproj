@@ -298,6 +298,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelImpl.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\PixelShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\ShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\TranformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannel.h" />

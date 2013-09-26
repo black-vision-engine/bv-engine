@@ -1,15 +1,13 @@
 #pragma once
 
 #include "Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/ShaderChannel.h"
 
 namespace bv{ namespace model {
 
-class VertexShaderChannel : public IVertexShaderChannel
+class VertexShaderChannel : public ShaderChannel< IVertexShaderChannel >
 {
-    std::string             m_shaderFile;
 public:
-
-    virtual const std::string&      GetShaderFile() const override;
 
     explicit                        VertexShaderChannel(const std::string& shaderFile);
 

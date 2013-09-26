@@ -3,14 +3,9 @@
 namespace bv{ namespace model {
 
 GeometryShaderChannel::GeometryShaderChannel(const std::string& shaderFile)
-    : m_shaderFile( shaderFile  )
+    : ShaderChannel( shaderFile  )
 {}
 
-
-const std::string&      GeometryShaderChannel::GetShaderFile() const
-{
-    return m_shaderFile;
-}
 
 } // model
 } // bv

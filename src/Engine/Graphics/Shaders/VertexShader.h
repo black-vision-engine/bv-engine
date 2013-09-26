@@ -7,13 +7,16 @@
 
 namespace bv {
 
-class ValueMat4;
+namespace model
+{
+    class ValueMat4;
+}
 
 class VertexShader : public Shader
 {
-    ValueMat4*          m_MVP;
-    ValueMat4*          m_MV;
-    ValueMat4*          m_P;
+    model::ValueMat4*          m_MVP;
+    model::ValueMat4*          m_MV;
+    model::ValueMat4*          m_P;
 
 public:
     void        UpdateMVP( const glm::mat4& MVP );

@@ -31,15 +31,15 @@ VertexShader::VertexShader( const std::string & programSource )
 {
     ShaderParameters* ret   = GetOrCreateShaderParameters();
 
-    m_MVP                   = new ValueMat4("MVP");
+    m_MVP                   = new model::ValueMat4("MVP");
     GenericShaderParam* genShaderParam = ShaderParamFactory::Get().Create( m_MVP->GetName(), m_MVP->GetParamType() );
     ret->RegisterParameter(genShaderParam);
 
-    m_MV                    = new ValueMat4("MV");
+    m_MV                    = new model::ValueMat4("MV");
     genShaderParam          = ShaderParamFactory::Get().Create( m_MV->GetName(), m_MV->GetParamType() );
     ret->RegisterParameter(genShaderParam);
 
-    m_P                     = new ValueMat4("P");
+    m_P                     = new model::ValueMat4("P");
     genShaderParam          = ShaderParamFactory::Get().Create( m_P->GetName(), m_P->GetParamType() );
     ret->RegisterParameter(genShaderParam);
 }

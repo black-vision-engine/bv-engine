@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Shaders/ShaderTypes.h"
 #include "Engine/Types/Enums.h"
 
-namespace bv {
+namespace bv { namespace model {
 
 class IParameter
 {
@@ -54,4 +54,5 @@ public:
     virtual const std::string&  GetName     ()              const { return m_name; }
 };
 
-}
+} // model
+} // bv

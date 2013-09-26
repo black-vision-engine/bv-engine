@@ -3,14 +3,8 @@
 namespace bv{ namespace model {
 
 PixelShaderChannel::PixelShaderChannel(const std::string& shaderFile)
-    : m_shaderFile( shaderFile  )
+    : ShaderChannel( shaderFile  )
 {}
-
-
-const std::string&      PixelShaderChannel::GetShaderFile() const
-{
-    return m_shaderFile;
-}
 
 } // model
 } // bv
