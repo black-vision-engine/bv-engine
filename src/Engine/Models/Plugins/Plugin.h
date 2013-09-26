@@ -1,12 +1,12 @@
 #pragma once
 
-#include "IPlugin.h"
-#include "IParameter.h"
-#include "Engine\Models\Plugins\Interfaces\IGeometryChannel.h"
-#include "Engine\Models\Plugins\Interfaces\ITransformChannel.h"
-#include "Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h"
-#include "Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h"
-#include "Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IPlugin.h"
+#include "Engine/Models/Plugins/Interfaces/IParameter.h"
+#include "Engine/Models/Plugins/Interfaces/IGeometryChannel.h"
+#include "Engine/Models/Plugins/Interfaces/ITransformChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 
 namespace bv { namespace model {
 

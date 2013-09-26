@@ -1,9 +1,7 @@
 #pragma once
 
 #include "Node.h"
-#include "Plugin.h"
-//#include "Engine\Models\Plugins\Geometry\PluginGeometry.h"
-//#include "Engine\Models\Plugins\Transform\PluginTransform.h"
+#include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 

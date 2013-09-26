@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/PluginParameters.h"
-#include "Engine/Models/Plugin.h"
+#include "Engine/Models/Plugins/Plugin.h"
 
 #if 0
 

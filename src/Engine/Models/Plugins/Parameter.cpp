@@ -18,8 +18,7 @@ bool            BaseParameter::IsEvaluationNeeded(float t)     const
 }
 
 BaseParameter::BaseParameter(const std::string& name, ParameterSemantic semantic)
-    : IParameter(name, semantic)
-    , m_lastEvaluatedTime(-1.f) // TODO: Is it goot idea to set in to -1 ?
+    : m_lastEvaluatedTime(-1.f) // TODO: Is it goot idea to set in to -1 ?
 {
 }
 

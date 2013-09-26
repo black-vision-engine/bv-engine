@@ -2,7 +2,7 @@
 
 #include "IUpdater.h"
 #include "Transform.h"
-#include "Engine/Models/IPlugin.h"
+#include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 
 namespace bv
 {

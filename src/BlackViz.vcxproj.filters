@@ -20,8 +20,6 @@
     <ClCompile Include="Engine\Graphics\Shaders\Shader.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\VertexShader.cpp" />
     <ClCompile Include="Engine\Models\BasicNode.cpp" />
-    <ClCompile Include="Engine\Models\Parameter.cpp" />
-    <ClCompile Include="Engine\Models\Plugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Solid.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Transformation.cpp" />
     <ClCompile Include="Mathematics\Interpolators\BasicInterpolator.cpp" />
@@ -99,6 +97,8 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\VertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\PixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\GeometryShader\GeometryShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameter.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Plugin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -121,11 +121,7 @@
     <ClInclude Include="Engine\Graphics\Shaders\Shader.h" />
     <ClInclude Include="Engine\Graphics\Shaders\VertexShader.h" />
     <ClInclude Include="Engine\Models\BasicNode.h" />
-    <ClInclude Include="Engine\Models\IParameter.h" />
-    <ClInclude Include="Engine\Models\IPlugin.h" />
     <ClInclude Include="Engine\Models\Node.h" />
-    <ClInclude Include="Engine\Models\Parameter.h" />
-    <ClInclude Include="Engine\Models\Plugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Solid.h" />
     <ClInclude Include="Engine\Models\Plugins\Transformation.h" />
     <ClInclude Include="Mathematics\defines.h" />
@@ -222,6 +218,10 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\PixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\GeometryShader\GeometryShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\ShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IParameter.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameter.h" />
+    <ClInclude Include="Engine\Models\Plugins\Plugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

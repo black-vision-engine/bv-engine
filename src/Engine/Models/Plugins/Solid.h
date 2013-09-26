@@ -1,6 +1,6 @@
 #pragma once 
 
-#include "Engine/Models/Plugin.h"
+#include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/PluginParameters.h"
 
 namespace bv {

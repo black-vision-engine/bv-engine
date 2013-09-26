@@ -3,7 +3,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelImpl.h"
 #include "Engine/Models/Resources/TextureLoader.h"
 
-#include "Engine/Models/Parameter.h"
+#include "Engine/Models/Plugins/Parameter.h"
 
 namespace bv { namespace model {
 

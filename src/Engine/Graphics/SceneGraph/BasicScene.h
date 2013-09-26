@@ -2,7 +2,7 @@
 
 #include "IScene.h"
 #include "Mathematics/Interpolators/Interpolators.h"
-#include "Engine/Models/IPlugin.h"
+#include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 #include <map>
 
 namespace bv {

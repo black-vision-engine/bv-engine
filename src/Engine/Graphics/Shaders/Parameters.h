@@ -3,7 +3,7 @@
 #include <map>
 #include <vector>
 #include "Engine/Graphics/Renderers/OGLRenderer/glslprogram.h"
-#include "Engine/Models/IParameter.h"
+#include "Engine/Models/Plugins/Interfaces/IParameter.h"
 
 //FIXME: REMOVE FROM PROJECT
 namespace bv {

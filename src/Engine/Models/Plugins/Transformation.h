@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Engine/Models/Plugins/PluginParameters.h"
-#include "Engine/Models/Plugin.h"
+#include "Engine/Models/Plugins/Plugin.h"
 
 #include "Mathematics/Transform/MatTransform.h"
-#include "Engine/Models/Parameter.h"
+#include "Engine/Models/Plugins/Parameter.h"
 
 namespace bv {
 

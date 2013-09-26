@@ -1,5 +1,5 @@
 #include "Solid.h"
-#include "Engine/Models/Parameter.h"
+#include "Engine/Models/Plugins/Parameter.h"
 
 #include "System/Print.h"
 

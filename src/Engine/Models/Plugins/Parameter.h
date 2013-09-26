@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IParameter.h"
+#include "Engine/Models/Plugins/Interfaces/IParameter.h"
 #include "Mathematics/Interpolators/Interpolators.h"
 #include "Mathematics/Transform/MatTransform.h"
 #include "Engine/Types/Enums.h"
@@ -10,18 +10,42 @@ namespace bv { namespace model {
 //FIXME: this shit deserves some templates :D
 class BaseParameter : public IParameter
 {
-    mutable float   m_lastEvaluatedTime;
+protected:
+    std::string         m_name;
+    ParameterSemantic   m_semantic;
+    mutable float       m_lastEvaluatedTime;
 
 protected:
 
-    void            SetLastEvaluatedTime(float t)   const;
-    float           GetLastEvaluatedTime()          const;
+    virtual std::string         GetName()       const { return m_name; }
+    virtual ParameterSemantic   GetSemantic()   const { return m_semantic; }
+
+
+    void                        SetLastEvaluatedTime(float t)   const;
+    float                       GetLastEvaluatedTime()          const;
 
     explicit BaseParameter(const std::string& name, ParameterSemantic semantic);
     virtual  ~BaseParameter(){}
 
 public:
-    bool            IsEvaluationNeeded(float t)     const;
+    bool                        IsEvaluationNeeded(float t)     const;
+};
+
+// TODO: Move to another file
+class BaseValue : public IValue
+{
+private:
+    std::string             m_name;
+
+protected:
+    explicit BaseValue(const std::string& name)
+        : m_name(name)
+    {}
+
+    virtual ~BaseValue(){}
+
+public:
+    virtual const std::string&  GetName     ()              const { return m_name; }
 };
 
 class ParamFloat : public BaseParameter

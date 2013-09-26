@@ -2,7 +2,7 @@
 
 #include "Shader.h"
 
-#include "Engine/Models/Parameter.h"
+#include "Engine/Models/Plugins/Parameter.h"
 #include "Engine/Models/Plugins/PluginParameters.h"
 
 namespace bv {

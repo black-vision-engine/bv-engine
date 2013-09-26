@@ -1,5 +1,5 @@
 #include "BasicNode.h"
-#include "Plugin.h"
+#include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Graphics/SceneGraph/BasicScene.h"
 #include "Engine/Graphics/Shaders/PixelShader.h"
 #include "Engine/Graphics/Shaders/VertexShader.h"

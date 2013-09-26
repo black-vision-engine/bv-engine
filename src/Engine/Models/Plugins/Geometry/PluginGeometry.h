@@ -6,7 +6,7 @@
 #include "glm/glm.hpp"
 
 #include "Engine/Models/Plugins/PluginParameters.h"
-#include "Engine/Models/Plugin.h"
+#include "Engine/Models/Plugins/Plugin.h"
 
 //FIXME: REMOVE FROM PROJECT
 //FIXME: when required functionality is copied to channels

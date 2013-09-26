@@ -3,10 +3,10 @@
 #include <vector>
 #include "glm/glm.hpp"
 
-#include "Engine/Models/Parameter.h"
+#include "Engine/Models/Plugins/Parameter.h"
 
 #include "System/Print.h"
-#include "Engine/Models/Plugin.h"
+#include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/PluginParameters.h"
 
 namespace bv {
