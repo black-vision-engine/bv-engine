@@ -52,6 +52,9 @@ template<>
 struct ShaderParamTypeMapper< ParamType::PT_FLOAT4 >    { typedef glm::vec4 type; };
 
 template<>
+struct ShaderParamTypeMapper< ParamType::PT_MAT2 >      { typedef glm::mat2 type; };
+
+template<>
 struct ShaderParamTypeMapper< ParamType::PT_MAT3 >      { typedef glm::mat3 type; };
 
 template<>

@@ -68,6 +68,7 @@ GLSLProgram::GLSLProgram( const PixelShader& ps, const VertexShader& vs, const G
     , m_Linked(false) 
 {
     m_Compiled = compileAndLinkProgram( *this, vs.ProgramSource(), ps.ProgramSource(), gs ? gs->ProgramSource() : "" );
+    assert( m_Compiled ); //FIXME: this error should be handled in somehow different manner
 }
 
 // *******************************
@@ -335,13 +336,13 @@ void GLSLProgram::SetUniform( const char *name, const vec2 & v)
 
 // *******************************
 //
-void GLSLProgram::SetUniform( const char *name, const mat4 & m)
+void GLSLProgram::SetUniform( const char *name, const mat2 & m)
 {
     int loc = GetUniformLocation(name);
 
     if( loc >= 0 )
     {
-        glUniformMatrix4fv(loc, 1, GL_FALSE, &m[0][0]);
+        glUniformMatrix2fv(loc, 1, GL_FALSE, &m[0][0]);
     } 
     else 
     {
@@ -358,6 +359,22 @@ void GLSLProgram::SetUniform( const char *name, const mat3 & m)
     if( loc >= 0 )
     {
         glUniformMatrix3fv(loc, 1, GL_FALSE, &m[0][0]);
+    } 
+    else 
+    {
+        printf("Uniform: %s not found.\n",name);
+    }
+}
+
+// *******************************
+//
+void GLSLProgram::SetUniform( const char *name, const mat4 & m)
+{
+    int loc = GetUniformLocation(name);
+
+    if( loc >= 0 )
+    {
+        glUniformMatrix4fv(loc, 1, GL_FALSE, &m[0][0]);
     } 
     else 
     {

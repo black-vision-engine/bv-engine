@@ -7,6 +7,7 @@
 
 namespace bv {
 
+//FIXME: this shit deserves some templates :D
 class BaseParameter : public IParameter
 {
     mutable float   m_lastEvaluatedTime;
@@ -26,9 +27,11 @@ public:
 class ParamFloat : public BaseParameter
 {
 private:
+
     FloatInterpolator   m_value;
 
 public:
+
     virtual ParamType   GetParamType     ()          const { return ParamType::PT_FLOAT; }
 
     float               Evaluate        (float t)   const;
@@ -55,18 +58,38 @@ public:
     {}
 };
 
+class ParamMat2 : public BaseParameter
+{
+private:
+
+    Vec4Interpolator    m_value;
+
+public:
+
+    virtual ParamType   GetParamType     ()          const { return ParamType::PT_MAT2; }
+
+    glm::mat2           Evaluate        (float t)   const;
+
+    explicit ParamMat2(const std::string& name, const Vec4Interpolator& value, ParameterSemantic semantic = ParameterSemantic::NONE)
+       : BaseParameter(name, semantic)
+       , m_value(value)
+    {}
+};
+
 
 class ParamTransform : public BaseParameter
 {
 private:
+
     TransformF          m_value;
 
 public:
+
     virtual ParamType   GetParamType     ()          const { return ParamType::PT_MAT4; }
 
     glm::mat4           Evaluate        (float t)   const { SetLastEvaluatedTime(t); return m_value.evaluate(t); }
 
-    explicit ParamTransform(const std::string& name, const TransformF& value, ParameterSemantic semantic = ParameterSemantic::NONE)
+    explicit ParamTransform(const std::string& name, const TransformF & value, ParameterSemantic semantic = ParameterSemantic::NONE)
         : BaseParameter(name, semantic)
         , m_value(value)
     {
@@ -77,7 +100,10 @@ public:
 
 class ValueFloat : public BaseValue
 {
+private:
+
     float                   m_value;
+
 public:
     virtual ParamType           GetParamType    ()              const   { return ParamType::PT_FLOAT; }
     virtual const char*         GetData         ()              const   { return reinterpret_cast<const char*>(&m_value); }
@@ -93,8 +119,12 @@ public:
 
 class ValueVec4 : public BaseValue
 {
+private:
+
     glm::vec4                   m_value;
+
 public:
+
     virtual ParamType           GetParamType    ()              const   { return ParamType::PT_FLOAT4; }
     virtual const char*         GetData         ()              const   { return reinterpret_cast<const char*>(&m_value); }
 
@@ -106,10 +136,33 @@ public:
     virtual ~ValueVec4(){}
 };
 
+class ValueMat2 : public BaseValue
+{
+private:
+
+    glm::mat2                   m_value;
+
+public:
+
+    virtual ParamType           GetParamType    ()              const   { return ParamType::PT_MAT2; }
+    virtual const char*         GetData         ()              const   { return reinterpret_cast<const char*>(&m_value); }
+
+    const glm::mat2&            GetValue        ()              const   { return m_value; }
+    void                        SetValue        (const glm::mat2 & v)   { m_value = v; }
+
+    explicit                    ValueMat2       (const std::string & name);
+
+    virtual ~ValueMat2(){}
+};
+
 class ValueMat4 : public BaseValue
 {
+private:
+
     glm::mat4                   m_value;
+
 public:
+
     virtual ParamType           GetParamType    ()              const   { return ParamType::PT_MAT4; }
     virtual const char*         GetData         ()              const   { return reinterpret_cast<const char*>(&m_value); }
 

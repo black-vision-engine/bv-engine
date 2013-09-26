@@ -8,6 +8,7 @@ const int ShaderParamDesc::m_sTypeSize[] = { sizeof( float ), //PT_FLOAT = 0,
                                              sizeof( glm::vec2 ), //PT_FLOAT2,
                                              sizeof( glm::vec3 ), //PT_FLOAT3,
                                              sizeof( glm::vec4 ), //PT_FLOAT4,
+                                             sizeof( glm::mat2 ), //PT_MAT2,
                                              sizeof( glm::mat3 ), //PT_MAT3,
                                              sizeof( glm::mat4 ), //PT_MAT4
                                              sizeof( int ), //PT_INT

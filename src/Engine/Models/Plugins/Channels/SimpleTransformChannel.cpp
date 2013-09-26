@@ -12,7 +12,8 @@ void                                    SimpleTransformChannel::Update( float t 
     }
 }
 
-void                                    SimpleTransformChannel::AddTransformChannel( TransformF* transInt )
+//FIXME: nie add transform channel, tylko add transform, bo w kanale Transform to juz jestesmy
+void                                    SimpleTransformChannel::AddTransformChannel( TransformF * transInt )
 {
     m_transformInterpolators.push_back( transInt );
     m_transformations.push_back( new Transform() );

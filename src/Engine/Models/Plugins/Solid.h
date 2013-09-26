@@ -13,7 +13,7 @@ class SolidParametersDescriptor : public BaseParametersDescriptor
 {
 public:
 
-    static const std::string            pluginName;
+    static const std::string pluginName;
 
     static const std::string colorParamName;
 
@@ -26,6 +26,7 @@ class SolidColorPlugin : public BasePlugin< IShaderPlugin, SolidParametersDescri
 {
 private:
 
+    //FIXME: some utils should be added to keep these pairs as pairs (if there is a 1-1 mapping)
     ParamVec4 *                     m_colorParam;
     ValueVec4 *                     m_colorValue;
 

@@ -10,8 +10,9 @@ using std::string;
 using glm::vec2;
 using glm::vec3;
 using glm::vec4;
-using glm::mat4;
+using glm::mat2;
 using glm::mat3;
+using glm::mat4;
 
 namespace bv {
 
@@ -62,8 +63,9 @@ public:
     void   SetUniform					( const char *name, const vec2 & v );
     void   SetUniform					( const char *name, const vec3 & v );
     void   SetUniform					( const char *name, const vec4 & v );
-    void   SetUniform					( const char *name, const mat4 & m );
+    void   SetUniform					( const char *name, const mat2 & m );
     void   SetUniform					( const char *name, const mat3 & m );
+    void   SetUniform					( const char *name, const mat4 & m );
     void   SetUniform					( const char *name, float val );
     void   SetUniform					( const char *name, int val );
     void   SetUniform					( const char *name, bool val );

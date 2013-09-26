@@ -3,6 +3,7 @@
 namespace bv
 {
 
+//FIXME: there so many dependencies on this type that it they all should be kept in one place (adding PT_MAT2 required a shitload of changes in the code)
 enum class ParamType : int
 {
     PT_FLOAT = 0,
@@ -10,6 +11,7 @@ enum class ParamType : int
     PT_FLOAT2,
     PT_FLOAT3,
     PT_FLOAT4,
+    PT_MAT2,
     PT_MAT3,
     PT_MAT4,
     PT_INT,
@@ -17,6 +19,7 @@ enum class ParamType : int
     PT_TOTAL
 };
 
+//FIXME: TOTOTOTO KURWA TRZEBA WYPIERDOLIC I POCZYSCIC KOD Z DEPRECATED KODEN BASEN FAK
 enum class ParameterSemantic : int
 {
     NONE,

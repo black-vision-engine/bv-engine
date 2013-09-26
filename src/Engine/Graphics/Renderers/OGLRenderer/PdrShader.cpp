@@ -120,6 +120,9 @@ void    PdrShader::SetUniformParam ( GenericShaderParam * param )
         case ParamType::PT_FLOAT4:
             SetUniformDispatcher< ParamType::PT_FLOAT4 >( param );
             break;
+        case ParamType::PT_MAT2:
+            SetUniformDispatcher< ParamType::PT_MAT2 >( param );
+            break;
         case ParamType::PT_MAT3:
             SetUniformDispatcher< ParamType::PT_MAT3 >( param );
             break;

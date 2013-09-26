@@ -28,24 +28,51 @@ BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 {
     BasicNode * root = new BasicNode();
 
-    TransformF                  * trns  = new TransformF                ();
+    TransformF *    trns  = new TransformF                ();
 
-    bv::FloatInterpolator angle; angle.setWrapPostMethod(bv::WrapMethod::pingPong);
-    bv::FloatInterpolator x;
-    bv::FloatInterpolator y;
-    bv::FloatInterpolator z;
+    FloatInterpolator angle; angle.setWrapPostMethod(bv::WrapMethod::pingPong);
+    FloatInterpolator x;
+    FloatInterpolator y;
+    FloatInterpolator z;
 
     x.addKey(0.f, 0.f);
     y.addKey(0.f, 0.f);
     z.addKey(0.f, 1.f);
+
     angle.addKey(0.f, 0.f);
     angle.addKey(5.f, 180.f);
 
     trns->addRotation(angle, x, y ,z);
 
-    bv::FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
-    bv::FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
-    bv::FloatInterpolator zs;
+    TransformF * tx0m = new TransformF();
+    TransformF * tx1m = new TransformF();
+
+    FloatInterpolator alpha;
+
+    alpha.addKey( 0.0f, 0.25f ); alpha.setWrapPostMethod( WrapMethod::pingPong );
+    alpha.addKey( 1.0f, 0.05f );
+    alpha.addKey( 2.0f, 0.5f );
+    alpha.addKey( 5.0f, 1.0f );
+    alpha.addKey( 8.0f, 0.75f );
+    alpha.addKey( 10.0f, 0.0f );
+
+    FloatInterpolator angTex0; angTex0.setWrapPostMethod( WrapMethod::pingPong );
+    FloatInterpolator angTex1; angTex1.setWrapPostMethod( WrapMethod::pingPong );
+
+    angTex0.addKey(0.f, 0.f);
+    angTex0.addKey(3.f, 180.f);
+    angTex0.addKey(4.f, 30.f);
+
+    angTex1.addKey(0.f, 180.f);
+    angTex1.addKey(4.f, 0.f);
+    angTex1.addKey(8.f, 120.f);
+
+    tx0m->addRotation( angTex0, x, y, z ); //FIXME: memory lik
+    tx1m->addRotation( angTex1, x, y, z ); //FIXME: memory lik
+
+    FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator zs;
 
     
     xs.addKey(0.f, 1.f);
@@ -56,9 +83,10 @@ BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 
     trns->addScale(xs, ys ,zs);
 
-    SimpleTexturePixelPlugin    * stpp  = new SimpleTexturePixelPlugin  ( "pliczek_z_kwiatkiem.jpg" );
+
+    SimpleTexturePixelPlugin    * stpp  = new SimpleTexturePixelPlugin  ( "simless_01.jpg", "simless_00.jpg", alpha, *tx0m, *tx1m );
     model::SimpleTransformChannel      * stch  = new model::SimpleTransformChannel();
-    stch->AddTransformChannel( trns );
+    stch->AddTransformChannel( trns ); //FIXME: NIE CHANNEL
     SimpleTextureVertexPlugin   * stvp  = new SimpleTextureVertexPlugin ();
     //PluginGeometryRect          * pgrc  = new PluginGeometryRect        ();
     //PluginGeometryUVSingle      * pguv  = new PluginGeometryUVSingle    ( pgrc );
@@ -402,8 +430,10 @@ bv::BasicNode* CreateRect(bv::BasicNode* parent)
     si.addKey(1.f, -0.1f);
     //si.addKey(2.4f, 2.5f);//si.addKey(0.5f, s * 0.6f);si.addKey(0.65f, 0.4f);si.addKey(0.8f, s * 0.9f);si.addKey(0.95f, 0.35f);si.addKey(1.05f, 0.5f);
     rectNode->setGeometryShaderPlugin(new bv::ExtrudePlugin(si));
-    
-    rectNode->AddPlugin( new SimpleTexturePixelPlugin( "pliczek_z_kwiatkiem.jpg" ) );
+   
+    //FIXME: not enaf paramiters
+    assert( false ); //FIXME: tu jest assert false jak by co !!!!!
+    //rectNode->AddPlugin( new SimpleTexturePixelPlugin( "pliczek_z_kwiatkiem.jpg" ) );
 //	rectNode->addGeometryPlugin(new bv::PluginGeometryRect(0.2f,0.1f));
 
     // b edzie sie rozszerzal

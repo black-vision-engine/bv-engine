@@ -115,15 +115,20 @@ SceneNode* BasicNode::BuildScene()
     // TODO: dodac liste layerow do zwracanego SceneNode
     for( auto p : m_plugins )
     {
+        const char * tnames[] = { "Tex0", "Tex1" }; //FIXME: all this is a shitty hack - hackenbusz hack
+
+        int i = 0;
         for( auto tex : p->GetTextures() )
         {
             SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_CLAMP }; 
-            auto textureSampler = new TextureSampler( 0, "Tex0", bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_POINT, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ));
+            auto textureSampler = new TextureSampler( i, tnames[ i ], bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ));
             effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );
 
             auto loadedTex = bv::GTextureManager.LoadTexture( tex, false );
 
             effect->GetPass( 0 )->GetPixelShader()->Parameters()->AddTexture( loadedTex );
+
+            i++;
         }
 
 
