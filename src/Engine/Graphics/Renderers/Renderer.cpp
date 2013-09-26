@@ -23,7 +23,7 @@ namespace bv {
 
 // *********************************
 //
-void	Renderer::Initialize	    ( int w, int h, Texture::TFormat colorFormat )
+void	Renderer::Initialize	    ( int w, int h, TextureFormat colorFormat )
 {
     assert( w > 0 && h > 0 );
 

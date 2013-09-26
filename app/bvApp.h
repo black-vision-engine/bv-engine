@@ -5,15 +5,20 @@
 
 namespace bv {
 
-class BasicNode;
+namespace model
+{
+    class BasicNode;
+    class ModelScene;
+}
+
 class SceneNode;
 class Camera;
-class ModelScene;
+
 
 class BlackVisionApp : public WindowedApplication
 {
 private:
-    ModelScene*         m_modelScene;
+    model::ModelScene*  m_modelScene;
     SceneNode*          m_mockSceneEng;
 
     std::ofstream       m_file; // For debugging
@@ -35,7 +40,7 @@ public:
 private:
 
     void    AddCameraAnimation  ();
-	void    AddCameraAnimation2 ();
+    void    AddCameraAnimation2 ();
 
     bool    RenderScene         ();
     bool    RenderNode          ( SceneNode* node);

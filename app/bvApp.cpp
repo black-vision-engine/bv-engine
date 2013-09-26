@@ -152,12 +152,12 @@ bool BlackVisionApp::OnInitialize       ()
         freopen_s(&dummy, "CONOUT$", "wb", stderr);
     }
 
-    BasicNode * root = TestScenesFactory::SimpeTextureTestScene();
-    BasicNode * root1 = TestScenesFactory::SimpeTextureTestScene();
+    model::BasicNode * root = TestScenesFactory::SimpeTextureTestScene();
+    model::BasicNode * root1 = TestScenesFactory::SimpeTextureTestScene();
 
     root->AddChild( root1 );
 
-    m_modelScene = ModelScene::Create( root, new Camera() );
+    m_modelScene = model::ModelScene::Create( root, new Camera() );
 
     m_Renderer->SetCamera( m_modelScene->GetCamera() );
 

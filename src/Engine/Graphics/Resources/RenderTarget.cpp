@@ -7,7 +7,7 @@ namespace bv {
 
 // *********************************
 //
-RenderTarget::RenderTarget ( int numTargets, Texture::TFormat format, int w, int h, bool hasMipmaps )
+RenderTarget::RenderTarget ( int numTargets, TextureFormat format, int w, int h, bool hasMipmaps )
     : m_numTargets( numTargets )
     , m_hasMipmaps( hasMipmaps )
 {
@@ -46,7 +46,7 @@ int RenderTarget::NumTargets () const
 
 // *********************************
 //
-Texture::TFormat RenderTarget::Format () const
+TextureFormat RenderTarget::Format () const
 {
     return m_ColorTextures[ 0 ]->GetFormat();
 }

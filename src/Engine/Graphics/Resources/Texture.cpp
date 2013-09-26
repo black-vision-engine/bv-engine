@@ -8,7 +8,7 @@ namespace bv
 
 //FIXME: implement all functions that Texture 2D should have
 
-int Texture::m_sPixelSize[ Texture::TFormat::F_TOTAL ] =
+int Texture::m_sPixelSize[ TextureFormat::F_TOTAL ] =
 {
     4,   // F_A8R8G8B8
     1,   // F_A8
@@ -18,7 +18,7 @@ int Texture::m_sPixelSize[ Texture::TFormat::F_TOTAL ] =
 
 // *********************************
 //  
-Texture::Texture                                ( Texture::TFormat format, Texture::TType type, DataBuffer::Semantic semantic )
+Texture::Texture                                ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic )
     : m_format( format )
     , m_type( type )
     , m_semantic( semantic )
@@ -34,14 +34,14 @@ Texture::~Texture	                            ()
 
 // *********************************
 //
-Texture::TFormat        Texture::GetFormat	    () const
+TextureFormat        Texture::GetFormat	    () const
 {
     return m_format;
 }
 
 // *********************************
 //
-Texture::TType          Texture::GetType        () const
+TextureType          Texture::GetType        () const
 {
     return m_type;
 }
@@ -62,7 +62,7 @@ int                     Texture::GetPixelSize   () const
 
 // *********************************
 //
-int                     Texture::GetPixelSize   ( Texture::TFormat format )
+int                     Texture::GetPixelSize   ( TextureFormat format )
 {
     return m_sPixelSize[ static_cast< int >( format ) ];
 }

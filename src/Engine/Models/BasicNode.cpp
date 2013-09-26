@@ -274,26 +274,26 @@ ShaderType* CreateShader(IShaderPlugin* pl)
 
 // ********************************
 //
-//PixelShader*                        BasicNode::CreatePixelShader       ()                                                               const
-//{
-//    return CreateShader<PixelShader>(m_pshaderPlugin);
-//}
+PixelShader*                        BasicNode::CreatePixelShader       ()                                                               const
+{
+    return CreateShader<PixelShader>(m_pshaderPlugin);
+}
+
+// ********************************
 //
-//// ********************************
-////
-//VertexShader*                       BasicNode::CreateVertexShader      ()                                                               const
-//{
-//    VertexShader * vs = CreateShader<VertexShader>(m_vshaderPlugin);
+VertexShader*                       BasicNode::CreateVertexShader      ()                                                               const
+{
+    VertexShader * vs = CreateShader<VertexShader>(m_vshaderPlugin);
+
+    return vs ? vs : new PassThroughVertexShader(new PassThroughVertexShaderParametersDescriptor());
+}
+
+// ********************************
 //
-//    return vs ? vs : new PassThroughVertexShader(new PassThroughVertexShaderParametersDescriptor());
-//}
-//
-//// ********************************
-////
-//GeometryShader*                     BasicNode::CreateGeometryShader    ()                                                               const
-//{
-//    return CreateShader<GeometryShader>(m_gshaderPlugin);
-//}
+GeometryShader*                     BasicNode::CreateGeometryShader    ()                                                               const
+{
+    return CreateShader<GeometryShader>(m_gshaderPlugin);
+}
 
 // ********************************
 //

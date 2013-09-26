@@ -23,11 +23,11 @@ protected:
 
 public:
 
-                        RenderTarget    ( int numTargets, Texture::TFormat fomat, int w, int h, bool hasMipmaps );
+                        RenderTarget    ( int numTargets, TextureFormat fomat, int w, int h, bool hasMipmaps );
     virtual             ~RenderTarget   ();
 
     int                 NumTargets      () const;
-    Texture::TFormat    Format          () const;
+    TextureFormat    Format          () const;
 
     int                 Width           () const;
     int                 Height          () const;

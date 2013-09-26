@@ -45,7 +45,7 @@ private:
     int					m_Width;
     int					m_Height;
 
-    Texture::TFormat    m_ColorFormat;
+    TextureFormat    m_ColorFormat;
     
     glm::vec4			m_ClearColor;
     float				m_ClearDepth;
@@ -70,10 +70,10 @@ private:
 
 public:
 
-    void	Initialize			( int w, int h, Texture::TFormat colorFormat );
+    void	Initialize			( int w, int h, TextureFormat colorFormat );
     void	Terminate			();
 
-            Renderer			( RendererInput & ri, int w, int h, Texture::TFormat colorFormat = Texture::TFormat::F_A8R8G8B8 );
+            Renderer			( RendererInput & ri, int w, int h, TextureFormat colorFormat = TextureFormat::F_A8R8G8B8 );
             ~Renderer			();
 
     void	ClearBuffers		();

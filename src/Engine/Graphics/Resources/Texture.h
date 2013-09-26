@@ -2,6 +2,8 @@
 
 #include "DataBuffer.h"
 
+#include "Engine/Types/Enums.h"
+
 namespace bv
 {
 
@@ -9,10 +11,10 @@ class Texture
 {
 protected:
 
-    static int              m_sPixelSize[ TFormat::F_TOTAL ];
+    static int              m_sPixelSize[ TextureFormat::F_TOTAL ];
 
-    TFormat                 m_format;
-    TType                   m_type;
+    TextureFormat           m_format;
+    TextureType             m_type;
     DataBuffer::Semantic    m_semantic;
 
     char *                  m_data;
@@ -20,16 +22,16 @@ protected:
 
 public:
 
-                            Texture         ( Texture::TFormat format, Texture::TType type, DataBuffer::Semantic semantic =  DataBuffer::Semantic::S_TEXTURE );
+                            Texture         ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic =  DataBuffer::Semantic::S_TEXTURE );
 
     virtual			        ~Texture	    ();
 
-    TFormat                 GetFormat	    () const;
-    TType                   GetType         () const;
+    TextureFormat           GetFormat	    () const;
+    TextureType             GetType         () const;
     DataBuffer::Semantic    GetSemantic     () const;
 
     int                     GetPixelSize    () const;
-    static int              GetPixelSize    ( TFormat format );
+    static int              GetPixelSize    ( TextureFormat format );
 
     size_t                  GetDataSize     () const;
 

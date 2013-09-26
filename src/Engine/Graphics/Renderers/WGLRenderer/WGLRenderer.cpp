@@ -104,7 +104,7 @@ bool	InitializeVSync( const RendererInput & ri )
 
 // *********************************
 //
-Renderer::Renderer ( RendererInput & ri, int w, int h, Texture::TFormat colorFormat )
+Renderer::Renderer ( RendererInput & ri, int w, int h, TextureFormat colorFormat )
 {
     Initialize( w, h, colorFormat );
 

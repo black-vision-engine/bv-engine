@@ -19,7 +19,7 @@ using std::string;
 #include "Engine/Models/Plugins/Solid.h"
 #include "Engine/Models/Plugins/Transformation.h"
 
-#include "Engine\Models\Plugins\Channels\SimpleTransformChannel.h"
+#include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
 
 #include <Windows.h>
 
@@ -56,67 +56,67 @@ GlobalState* GlobalState::createGlobalState(IScene* scene)
 
 IScene* createTestScene()
 {
-    // SOLID
-    Vec4Interpolator color;
+//    // SOLID
+//    Vec4Interpolator color;
+//
+//    color.addKey(0.f, glm::vec4(0,0,0,0));
+//
+//    color.addKey(.25f, glm::vec4(1,0.4,0.5,1));
+//    color.addKey(.5f, glm::vec4(0.3,0.4,0.5,1));
+//    color.addKey(.75f, glm::vec4(0.1,0.2,0.8,1));
+//
+//    color.addKey(1.f, glm::vec4(1,0.4,0.5,1));
+//
+//    color.setWrapMethod(WrapMethod::clamp, WrapMethod::pingPong);
+//
+//    SolidColorPlugin* solid1 = new SolidColorPlugin(color);
+//
+//    BasicNode* root = new BasicNode();
+//
+//    root->setPixelShaderPlugin(solid1);
+//
+//
+//    // TRANSFORMATION
+//
+//    TransformF* t = new TransformF(); 
+//
+//    FloatInterpolator angle; angle.setWrapPostMethod(WrapMethod::pingPong);
+//    FloatInterpolator x;
+//    FloatInterpolator y;
+//    FloatInterpolator z;
+//
+//    x.addKey(0.f, 0.f);
+//    y.addKey(0.f, 0.f);
+//    z.addKey(0.f, -1.f);
+//    angle.addKey(0.f, 0.f);
+//    angle.addKey(5.f, 180.f);
+//
+//    t->addRotation(angle, x,y,z);
+//
+//    model::SimpleTransformChannel * stch = new model::SimpleTransformChannel();
+//    stch->AddTransformChannel( t );
+//    //Transformation* trans = new Transformation("MVP", *t);
+//
+//    //FIXME: here
+//    //root->AddPlugin( stch );
+////    root->addTransformPlugin(trans);
+//
+//
+//    // SCENE BUILDING AND INIT
+//
+//    BasicScene* scene = new BasicScene();
+//
+//    SceneNode* rootSceneNode = root->BuildScene();
+//
+//    scene->setTreeSceneRoot(rootSceneNode);
+//
+//    scene->initScene();
+//
+//    Camera* cam = new Camera();
+//
+//    scene->setCamera(cam);
 
-    color.addKey(0.f, glm::vec4(0,0,0,0));
-
-    color.addKey(.25f, glm::vec4(1,0.4,0.5,1));
-    color.addKey(.5f, glm::vec4(0.3,0.4,0.5,1));
-    color.addKey(.75f, glm::vec4(0.1,0.2,0.8,1));
-
-    color.addKey(1.f, glm::vec4(1,0.4,0.5,1));
-
-    color.setWrapMethod(WrapMethod::clamp, WrapMethod::pingPong);
-
-    SolidColorPlugin* solid1 = new SolidColorPlugin(color);
-
-    BasicNode* root = new BasicNode();
-
-    root->setPixelShaderPlugin(solid1);
-
-
-    // TRANSFORMATION
-
-    TransformF* t = new TransformF(); 
-
-    FloatInterpolator angle; angle.setWrapPostMethod(WrapMethod::pingPong);
-    FloatInterpolator x;
-    FloatInterpolator y;
-    FloatInterpolator z;
-
-    x.addKey(0.f, 0.f);
-    y.addKey(0.f, 0.f);
-    z.addKey(0.f, -1.f);
-    angle.addKey(0.f, 0.f);
-    angle.addKey(5.f, 180.f);
-
-    t->addRotation(angle, x,y,z);
-
-    model::SimpleTransformChannel * stch = new model::SimpleTransformChannel();
-    stch->AddTransformChannel( t );
-    //Transformation* trans = new Transformation("MVP", *t);
-
-    //FIXME: here
-    //root->AddPlugin( stch );
-//    root->addTransformPlugin(trans);
-
-
-    // SCENE BUILDING AND INIT
-
-    BasicScene* scene = new BasicScene();
-
-    SceneNode* rootSceneNode = root->BuildScene();
-
-    scene->setTreeSceneRoot(rootSceneNode);
-
-    scene->initScene();
-
-    Camera* cam = new Camera();
-
-    scene->setCamera(cam);
-
-    return scene;
+    return nullptr;
 }
 
 } //bv

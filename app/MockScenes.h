@@ -4,14 +4,18 @@
 
 namespace bv
 {
-class BasicNode;
+    
+namespace model 
+{
+    class BasicNode;
+}
 
 // ********************************
 class TestScenesFactory
 {
 public:
 
-    static  BasicNode *     SimpeTextureTestScene();
+    static  model::BasicNode *     SimpeTextureTestScene();
 
 };
 
@@ -28,9 +32,9 @@ public:
 struct SceneExamples
 {
 
-    static BasicNode* BuildMockScene    ( BasicNode * parent = nullptr );
-    static BasicNode* BuildMockScene2   ( BasicNode * parent = nullptr );
-	static BasicNode* CreateSceneMock3  ( BasicNode * parent );
+    static model::BasicNode* BuildMockScene    ( model::BasicNode * parent = nullptr );
+    static model::BasicNode* BuildMockScene2   ( model::BasicNode * parent = nullptr );
+	static model::BasicNode* CreateSceneMock3  ( model::BasicNode * parent );
 
 };
 }

@@ -11,7 +11,7 @@ private:
     int         m_height;
 
 public:
-                Texture2D       ( Texture::TFormat format, int width, int height, DataBuffer::Semantic semantic =  DataBuffer::Semantic::S_TEXTURE );
+                Texture2D       ( TextureFormat format, int width, int height, DataBuffer::Semantic semantic =  DataBuffer::Semantic::S_TEXTURE );
     
     virtual     ~Texture2D      ();
 

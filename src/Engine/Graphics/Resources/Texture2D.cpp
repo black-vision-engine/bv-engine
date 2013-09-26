@@ -4,8 +4,8 @@ namespace bv {
 
 // *********************************
 //
-Texture2D::Texture2D                    ( Texture::TFormat format, int width, int height, DataBuffer::Semantic semantic )
-    : Texture( format, TType::T_2D, semantic )
+Texture2D::Texture2D                    ( TextureFormat format, int width, int height, DataBuffer::Semantic semantic )
+    : Texture( format, TextureType::T_2D, semantic )
     , m_width( width)
     , m_height( height)
 {}
