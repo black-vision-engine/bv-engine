@@ -5,14 +5,14 @@
 
 namespace bv{ namespace model {
 
-class GeometryShaderChannel : public ShaderChannel< IGeometryShaderChannel >
-{
-public:
-
-    explicit                        GeometryShaderChannel(const std::string& shaderFile);
-
-    virtual                         ~GeometryShaderChannel() {}
-};
+//class GeometryShaderChannel : public ShaderChannel< IGeometryShaderChannel >
+//{
+//public:
+//
+//    explicit                        GeometryShaderChannel(const std::string& shaderFile);
+//
+//    virtual                         ~GeometryShaderChannel() {}
+//};
 
 
 } // model

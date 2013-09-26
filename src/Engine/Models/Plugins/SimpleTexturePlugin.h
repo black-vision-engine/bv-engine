@@ -6,10 +6,6 @@
 
 namespace bv { namespace model {
 
-class ParamFloat;
-class ValueFloat;
-class ParamTransform;
-class ValueMat4;
 
 // ***************************** DESCRIPTOR **********************************
 class SimpleTexturePluginPD : public BaseParametersDescriptor
@@ -34,20 +30,11 @@ private:
     std::string         m_textureFileName;
     std::string         m_textureFileName1;
 
-    ParamFloat *        m_alphaParam;
-    ValueFloat *        m_alphaValue;
-
-    ParamTransform *    m_tex0TransformParam;
-    ValueMat4 *         m_tex0TransformValue;
-
-    ParamTransform *    m_tex1TransformParam;
-    ValueMat4 *         m_tex1TransformValue;
-
     ResourceHandle*     LoadTexture( const std::string& name, const std::string& path )   const;
 
 public:
 
-    explicit            SimpleTexturePlugin    ( const std::string & textureFileName, const std::string & textureFileName1, const FloatInterpolator & alpha, const TransformF & tex0Transform, const TransformF & tex1Transform );
+    explicit            SimpleTexturePlugin    ( const std::string & textureFileName, const std::string & textureFileName1 );
                         ~SimpleTexturePlugin   ();
 
     ///virtual std::string GetShaderFile               () const override;

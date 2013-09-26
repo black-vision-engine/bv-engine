@@ -5,14 +5,14 @@
 
 namespace bv{ namespace model {
 
-class VertexShaderChannel : public ShaderChannel< IVertexShaderChannel >
-{
-public:
-
-    explicit                        VertexShaderChannel(const std::string& shaderFile);
-
-    virtual                         ~VertexShaderChannel() {}
-};
+//class VertexShaderChannel : public ShaderChannel< IVertexShaderChannel >
+//{
+//public:
+//
+//    explicit                        VertexShaderChannel(const std::string& shaderFile);
+//
+//    virtual                         ~VertexShaderChannel() {}
+//};
 
 
 } // model

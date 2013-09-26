@@ -31,27 +31,27 @@ SimpleTexturePluginPD::SimpleTexturePluginPD()
 
 // *************************************
 //
-SimpleTexturePlugin::SimpleTexturePlugin                    ( const std::string & textureFileName, const std::string & textureFileName1, const FloatInterpolator & alpha, const TransformF & tex0Transform, const TransformF & tex1Transform )
+SimpleTexturePlugin::SimpleTexturePlugin                    ( const std::string & textureFileName, const std::string & textureFileName1 )
     : m_textureFileName( textureFileName )
     , m_textureFileName1( textureFileName1 )
 {
 
     //FIXME: pass params in constructor
-    m_alphaParam = new ParamFloat( ParamDesc::alphaParamName, alpha );
-    m_alphaValue = new ValueFloat( ParamDesc::alphaParamName );
+   // m_alphaParam = new ParamFloat( ParamDesc::alphaParamName, alpha );
+    //m_alphaValue = new ValueFloat( ParamDesc::alphaParamName );
 
-    m_tex0TransformParam = new ParamTransform( ParamDesc::txMatrix0ParamName, tex0Transform );
-    m_tex0TransformValue = new ValueMat4( ParamDesc::txMatrix0ParamName );
+    //m_tex0TransformParam = new ParamTransform( ParamDesc::txMatrix0ParamName, tex0Transform );
+    //m_tex0TransformValue = new ValueMat4( ParamDesc::txMatrix0ParamName );
 
-    m_tex1TransformParam = new ParamTransform( ParamDesc::txMatrix1ParamName, tex1Transform );
-    m_tex1TransformValue = new ValueMat4( ParamDesc::txMatrix1ParamName);
+    //m_tex1TransformParam = new ParamTransform( ParamDesc::txMatrix1ParamName, tex1Transform );
+    //m_tex1TransformValue = new ValueMat4( ParamDesc::txMatrix1ParamName);
 
-    //FIXME: GetShaderResource should be used instead
-    //PluginParamDesc().ValidateParameters( m_GetShaderFile() );
+    ////FIXME: GetShaderResource should be used instead
+    ////PluginParamDesc().ValidateParameters( m_GetShaderFile() );
 
-    RegisterValue( m_alphaValue );
-    RegisterValue( m_tex0TransformValue );
-    RegisterValue( m_tex1TransformValue );
+    //RegisterValue( m_alphaValue );
+    //RegisterValue( m_tex0TransformValue );
+    //RegisterValue( m_tex1TransformValue );
 
     m_geomChannel = model::GeometryChannelStaticRectTextured::Create();
 
@@ -74,23 +74,15 @@ ResourceHandle* SimpleTexturePlugin::LoadTexture( const std::string& name, const
 //
 SimpleTexturePlugin::~SimpleTexturePlugin   ()
 {
-    delete m_alphaParam;
-    delete m_alphaValue;
+    //delete m_alphaParam;
+    //delete m_alphaValue;
 
-    delete m_tex0TransformParam;
-    delete m_tex0TransformValue;
+    //delete m_tex0TransformParam;
+    //delete m_tex0TransformValue;
 
-    delete m_tex1TransformParam;
-    delete m_tex1TransformValue;
+    //delete m_tex1TransformParam;
+    //delete m_tex1TransformValue;
 }
-
-// *************************************
-//
-//std::string SimpleTexturePlugin::GetShaderFile              () const
-//{
-//    // TODO; do not bind SmpleTexturePlugin with exact shader - at some point it will be provided by GLSL shader service or whatever else resource manager
-//    return "../dep/media/shaders/simpletexture.frag";
-//}
 
 // *************************************
 //
@@ -98,9 +90,9 @@ void                SimpleTexturePlugin::Update              ( float t )
 {
     BasePlugin::Update( t );
 
-    m_alphaValue->SetValue( m_alphaParam->Evaluate( t ) );
-    m_tex0TransformValue->SetValue( m_tex0TransformParam->Evaluate( t ) );
-    m_tex1TransformValue->SetValue( m_tex1TransformParam->Evaluate( t ) );
+//    m_alphaValue->SetValue( m_alphaParam->Evaluate( t ) );
+//    m_tex0TransformValue->SetValue( m_tex0TransformParam->Evaluate( t ) );
+//    m_tex1TransformValue->SetValue( m_tex1TransformParam->Evaluate( t ) );
 }
 
 // *************************************

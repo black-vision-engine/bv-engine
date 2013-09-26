@@ -95,6 +95,20 @@ int TextureExtraData::GetBitsPerPixel     () const
 
 // ******************************
 //
+TextureFormat TextureExtraData::GetFormat () const
+{
+    return m_format;
+}
+
+// ******************************
+//
+TextureType TextureExtraData::GetType     () const
+{
+    return m_type;
+}
+
+// ******************************
+//
 TextureExtraData::TextureExtraData( int w, int h, int bitsPerPixel, TextureFormat format, TextureType type)
     : ResourceExtraData( ResourceExtraKind::RE_TEXTURE )
     , m_width( w )

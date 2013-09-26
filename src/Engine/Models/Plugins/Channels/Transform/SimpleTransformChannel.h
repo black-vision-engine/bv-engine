@@ -16,7 +16,7 @@ public:
 
     virtual void                                    Update( float t );
 
-    void                                            AddTransformChannel( TransformF* transInt );
+    void                                            AddTransform( TransformF* transInt );
 
 };
 

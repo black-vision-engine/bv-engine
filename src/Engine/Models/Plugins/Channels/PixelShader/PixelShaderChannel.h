@@ -5,14 +5,14 @@
 
 namespace bv{ namespace model {
 
-class PixelShaderChannel : public ShaderChannel< IPixelShaderChannel >
-{
-public:
-
-    explicit                        PixelShaderChannel(const std::string& shaderFile);
-
-    virtual                         ~PixelShaderChannel() {}
-};
+//class PixelShaderChannel : public ShaderChannel< IPixelShaderChannel >
+//{
+//public:
+//
+//    explicit                        PixelShaderChannel(const std::string& shaderFile);
+//
+//    virtual                         ~PixelShaderChannel() {}
+//};
 
 
 } // model

@@ -247,31 +247,6 @@ bool                                BasicNode::CreateRenderableData     ( Vertex
 namespace
 {
 
-// ********************************
-//
-template<class ShaderType>
-ShaderType* CreateShader(const std::vector< IPlugin* >& plugins)
-{
-    if(pl != nullptr)
-    {
-        std::stringstream code;
-
-        ReadFile(code, pl->GetShaderFile());
-
-        ShaderType * s = new ShaderType(code.str());
-
-        //BasicNode::RegisterShaderParameters(pl, s->GetOrCreateShaderParameters());
-        
-        s->RegisterUpdater(ShaderParamUpdater::Create(pl, s));
-
-        return s;
-    }
-    else
-    {
-        // FIXME:
-        return nullptr;
-    }
-}
 
 const IVertexShaderChannel* GetVertexShaderChannel( const std::vector< IPlugin* >& plugins )
 {
@@ -348,7 +323,7 @@ PixelShader*                        BasicNode::CreatePixelShader       ()       
 
         PixelShader * s = new PixelShader(code.str());
 
-        //BasicNode::RegisterShaderParameters(pl, s->GetOrCreateShaderParameters());
+        BasicNode::RegisterShaderParameters(psCh, s->GetOrCreateShaderParameters());
         
         s->RegisterUpdater(ShaderParamUpdater::Create(psCh, s));
 
@@ -375,7 +350,7 @@ VertexShader*                       BasicNode::CreateVertexShader      ()       
 
         VertexShader * s = new VertexShader(code.str());
 
-        //BasicNode::RegisterShaderParameters(pl, s->GetOrCreateShaderParameters());
+        BasicNode::RegisterShaderParameters(vsCh, s->GetOrCreateShaderParameters());
         
         s->RegisterUpdater(ShaderParamUpdater::Create(vsCh, s));
 
@@ -401,7 +376,7 @@ GeometryShader*                     BasicNode::CreateGeometryShader    ()       
 
         GeometryShader * s = new GeometryShader(code.str());
 
-        //BasicNode::RegisterShaderParameters(pl, s->GetOrCreateShaderParameters());
+        BasicNode::RegisterShaderParameters(gsCh, s->GetOrCreateShaderParameters());
         
         s->RegisterUpdater(ShaderParamUpdater::Create(gsCh, s));
 

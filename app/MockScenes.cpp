@@ -11,6 +11,9 @@
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelImpl.h"
 #include "Engine/Models/Plugins/SimpleTexturePlugin.h"
 #include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/PixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/VertexShader/VertexShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/GeometryShader/GeometryShaderChannel.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -20,6 +23,81 @@
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
 namespace bv
 {
+
+
+
+class SimpleTexturePluginPD : public BaseParametersDescriptor
+{
+public:
+
+    static const std::string            pluginName;
+
+    static const std::string            alphaParamName;
+    static const std::string            txMatrix0ParamName;
+    static const std::string            txMatrix1ParamName;
+
+    explicit SimpleTexturePluginPD();
+};
+
+// ***************************** DESCRIPTOR ********************************** 
+//PLUGIN NAME
+const std::string SimpleTexturePluginPD::pluginName( "SimpleTexturePlugin" );
+
+//PLUGIN PARAMETERS
+const std::string SimpleTexturePluginPD::alphaParamName( "alpha" );
+const std::string SimpleTexturePluginPD::txMatrix0ParamName( "txMat0" );
+const std::string SimpleTexturePluginPD::txMatrix1ParamName( "txMat1" );
+
+class MyPixelShaderChannel : public model::ShaderChannel< model::IPixelShaderChannel, SimpleTexturePluginPD >
+{
+    model::ParamFloat *        m_alphaParam;
+    model::ValueFloat *        m_alphaValue;
+
+    model::ParamTransform *    m_tex0TransformParam;
+    model::ValueMat4 *         m_tex0TransformValue;
+
+    model::ParamTransform *    m_tex1TransformParam;
+    model::ValueMat4 *         m_tex1TransformValue;
+
+public:
+    virtual void                    Update( float t )
+    {
+        ShaderChannel::Update( t );
+
+        m_alphaValue->SetValue( m_alphaParam->Evaluate( t ) );
+        m_tex0TransformValue->SetValue( m_tex0TransformParam->Evaluate( t ) );
+        m_tex1TransformValue->SetValue( m_tex1TransformParam->Evaluate( t ) );
+    }
+
+    MyPixelShaderChannel( const std::string& shaderFile, const FloatInterpolator & alpha, const TransformF & tex0Transform, const TransformF & tex1Transform )
+        : ShaderChannel( shaderFile )
+    {
+        m_alphaParam = new model::ParamFloat( ParamDesc::alphaParamName, alpha );
+        m_alphaValue = new model::ValueFloat( ParamDesc::alphaParamName );
+
+        m_tex0TransformParam = new model::ParamTransform( ParamDesc::txMatrix0ParamName, tex0Transform );
+        m_tex0TransformValue = new model::ValueMat4( ParamDesc::txMatrix0ParamName );
+
+        m_tex1TransformParam = new model::ParamTransform( ParamDesc::txMatrix1ParamName, tex1Transform );
+        m_tex1TransformValue = new model::ValueMat4( ParamDesc::txMatrix1ParamName);
+
+        RegisterValue( m_alphaValue );
+        RegisterValue( m_tex0TransformValue );
+        RegisterValue( m_tex1TransformValue );
+    }
+};
+
+class MyVertexShaderPD : public BaseParametersDescriptor
+{
+};
+
+class MyVertexShaderChannel : public model::ShaderChannel< model::IVertexShaderChannel, MyVertexShaderPD >
+{
+public:
+    MyVertexShaderChannel( const std::string& shaderFile )
+        : ShaderChannel( shaderFile )
+    {}
+};
 
 // ***************************************
 //
@@ -143,31 +221,24 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     
     if( numcall == 0 )
     {
-        stpp = new model::SimpleTexturePlugin  ( "simless_01.jpg", "simless_00.jpg", alpha, *tx0m, *tx1m );
+        stpp = new model::SimpleTexturePlugin  ( "simless_01.jpg", "simless_00.jpg" );
     }
     else
     {
-        stpp = new model::SimpleTexturePlugin  ( "pliczek_z_kwiatkiem.jpg", "simless_01.jpg", alpha, *tx0m, *tx1m );
+        stpp = new model::SimpleTexturePlugin  ( "pliczek_z_kwiatkiem.jpg", "simless_01.jpg" );
     }
 
     model::SimpleTransformChannel      * stch  = new model::SimpleTransformChannel();
-    stch->AddTransformChannel( trns ); //FIXME: NIE CHANNEL
-    //SimpleTextureVertexPlugin   * stvp  = new SimpleTextureVertexPlugin ();
-    //PluginGeometryRect          * pgrc  = new PluginGeometryRect        ();
-    //PluginGeometryUVSingle      * pguv  = new PluginGeometryUVSingle    ( pgrc );
-    //PluginTransformSimple       * trpg  = ModelFactory::CreatePluginTransformSimple( *trns );
+    stch->AddTransform( trns ); 
 
     model::GeometryChannelStaticRectTextured* gcsr = model::GeometryChannelStaticRectTextured::Create();
 
-
-    //FIXME
-    //root->addTransformPlugin    ( trpg );
     stpp->SetGeometryChannel        (gcsr);
-    stpp->SetTransformChannel( stch);
-    //root->AddPlugin             ( gcsr );
-    root->AddPlugin             ( stpp );
-//    root->setVertexShaderPlugin ( stvp );
-    //root->setPixelShaderPlugin  ( stpp );
+    stpp->SetTransformChannel       ( stch);
+    stpp->SetPixelShaderChannel     ( new MyPixelShaderChannel( "../dep/media/shaders/simpletexture.frag", alpha, *tx0m, *tx1m ) );
+    stpp->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
+
+    root->AddPlugin                 ( stpp );
 
     numcall++;
 

@@ -2,9 +2,9 @@
 
 namespace bv{ namespace model {
 
-VertexShaderChannel::VertexShaderChannel(const std::string& shaderFile)
-    : ShaderChannel( shaderFile  )
-{}
+//VertexShaderChannel::VertexShaderChannel(const std::string& shaderFile)
+//    : ShaderChannel( shaderFile  )
+//{}
 
 } // model
 } // bv

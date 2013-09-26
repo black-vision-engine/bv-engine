@@ -1,6 +1,7 @@
 #include "ShaderParamUpdater.h"
 #include "Engine/Models/Plugins/Interfaces/IShaderChannel.h"
 #include "Engine/Graphics/Shaders/Shader.h"
+#include "Engine/Models/IParameter.h"
 
 namespace bv
 {
@@ -17,14 +18,12 @@ ShaderParamUpdater::ShaderParamUpdater( const model::IShaderChannel * shCh, Shad
 //
 void                        ShaderParamUpdater::Update( float t )
 {
-    assert( !"A co tutaj?" );
-    // TODO
-    //auto shaderParams = m_shader->Parameters();
+    auto shaderParams = m_shader->Parameters();
 
-    //for( auto val : m_shaderChannel->GetValuesList())
-    //{
-    //    shaderParams->GetParam(val->GetName())->SetValue(val->GetData());
-    //}
+    for( auto val : m_shaderChannel->GetValuesList())
+    {
+        shaderParams->GetParam(val->GetName())->SetValue(val->GetData());
+    }
 }
 
 // ******************************

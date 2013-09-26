@@ -4,6 +4,9 @@
 #include "IParameter.h"
 #include "Engine\Models\Plugins\Interfaces\IGeometryChannel.h"
 #include "Engine\Models\Plugins\Interfaces\ITransformChannel.h"
+#include "Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h"
+#include "Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h"
+#include "Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h"
 
 namespace bv { namespace model {
 
@@ -81,6 +84,9 @@ void BasePlugin< Iface, ParameterDescriptor >::Update( float t )
 {
     if(m_geomChannel) m_geomChannel->Update( t );
     if(m_transformChannel) m_transformChannel->Update( t );
+    if(m_pshaderChannel) m_pshaderChannel->Update( t );
+    if(m_vshaderChannel) m_vshaderChannel->Update( t );
+    if(m_gshaderChannel) m_gshaderChannel->Update( t );
 }
 
 template<class Iface, class ParameterDescriptor >
@@ -88,6 +94,9 @@ BasePlugin< Iface, ParameterDescriptor >::BasePlugin()
     : m_paramDesc( ParameterDescriptor() )
     , m_geomChannel( nullptr )
     , m_transformChannel(nullptr)
+    , m_pshaderChannel(nullptr)
+    , m_vshaderChannel(nullptr)
+    , m_gshaderChannel(nullptr)
 {}
 
 
