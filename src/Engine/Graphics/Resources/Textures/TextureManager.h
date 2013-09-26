@@ -8,6 +8,11 @@
 namespace bv
 {
 
+namespace model
+{
+    class ResourceHandle;
+}
+
 class Texture;
 class Texture2D;
 
@@ -22,7 +27,7 @@ public:
                 TextureManager  ();
     virtual     ~TextureManager ();
 
-    Texture2D*  LoadTexture     ( const std::string & filename, bool loadFromMemory = true );
+    Texture2D*  LoadTexture     ( const model::ResourceHandle * resHandle, bool loadFromMemory = true );
     void        FreeTexture     ( Texture * tx );
 
 };

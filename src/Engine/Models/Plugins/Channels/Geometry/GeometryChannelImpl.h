@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Engine\Models\Plugins\Channels\GeometryChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
 
-#include "Engine\Models\Plugins\Channels\GeometryChannelDescriptor.h"
+#include "Engine\Models\Plugins\Channels/Geometry\GeometryChannelDescriptor.h"
 
 #include "Engine/Models/Plugins/Interfaces/IGeometryChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"

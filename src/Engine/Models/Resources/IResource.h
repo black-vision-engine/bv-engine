@@ -39,10 +39,10 @@ private:
 
 public:
 
-    int                     GetSize             () const { return m_size; }
-    const char*             GetData             () const { return m_data; }
-    char*                   GetWritableData     () const { return m_data; }
-    IResourceExtraData*     GetExtra            () const { return m_extra; }
+    int                         GetSize             () const { return m_size; }
+    const char*                 GetData             () const { return m_data; }
+    char*                       GetWritableData     () const { return m_data; }
+    const IResourceExtraData*   GetExtra            () const { return m_extra; }
     
     ResourceHandle( char* data, int size, IResourceExtraData* extra = nullptr )
         : m_data( data )

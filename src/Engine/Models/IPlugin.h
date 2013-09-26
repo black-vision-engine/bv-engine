@@ -12,6 +12,7 @@ class ITransformChannel;
 class IPixelShaderChannel;
 class IVertexShaderChannel;
 class IGeometryShaderChannel;
+class ResourceHandle;
 
 class IPlugin
 {
@@ -25,7 +26,7 @@ public:
     virtual const model::IVertexShaderChannel*      GetVertexShaderChannel      () const = 0;
     virtual const model::IGeometryShaderChannel*    GetGeometryShaderChannel    () const = 0;
 
-    virtual const std::vector< std::string >&       GetTextures                 () const = 0; // FIXME: use resources
+    virtual const std::vector< ResourceHandle* >&   GetTextures                 () const = 0; // FIXME: use resources
 
     virtual void                                    Update                      ( float t )                                   = 0;
     virtual void                                    Print                       ( std::ostream & out, int tabs = 0 )    const = 0;

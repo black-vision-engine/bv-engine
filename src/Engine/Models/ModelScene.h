@@ -3,10 +3,13 @@
 #include "glm/glm.hpp"
 #include "Mathematics/Interpolators/Interpolators.h"
 
-namespace bv
-{
+namespace bv {
 
 class Camera;
+
+namespace model
+{
+
 class BasicNode;
 
 class ModelScene
@@ -34,4 +37,5 @@ private:
 
 };
 
+} // model
 } // bv

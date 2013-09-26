@@ -3,7 +3,7 @@
 
 #include <cassert>
 
-#include "Engine\Models\Plugins\Channels\VertexAttributeChannelTyped.h"
+#include "Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelTyped.h"
 
 
 namespace bv { namespace model

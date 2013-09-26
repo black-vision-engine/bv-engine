@@ -1,24 +1,25 @@
 #include "SimpleTexturePlugin.h"
 #include "System/Print.h"
-#include "Engine\Models\Plugins\Channels\GeometryChannelImpl.h"
+#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelImpl.h"
+#include "Engine/Models/Resources/TextureLoader.h"
 
 #include "Engine/Models/Parameter.h"
 
-namespace bv {
+namespace bv { namespace model {
 
 // ***************************** DESCRIPTOR ********************************** 
 //PLUGIN NAME
-const std::string SimpleTexturePixelPluginPD::pluginName( "SimpleTexturePlugin" );
+const std::string SimpleTexturePluginPD::pluginName( "SimpleTexturePlugin" );
 
 //PLUGIN PARAMETERS
-const std::string SimpleTexturePixelPluginPD::alphaParamName( "alpha" );
-const std::string SimpleTexturePixelPluginPD::txMatrix0ParamName( "txMat0" );
-const std::string SimpleTexturePixelPluginPD::txMatrix1ParamName( "txMat1" );
+const std::string SimpleTexturePluginPD::alphaParamName( "alpha" );
+const std::string SimpleTexturePluginPD::txMatrix0ParamName( "txMat0" );
+const std::string SimpleTexturePluginPD::txMatrix1ParamName( "txMat1" );
 
 
 // *************************************
 //
-SimpleTexturePixelPluginPD::SimpleTexturePixelPluginPD()
+SimpleTexturePluginPD::SimpleTexturePluginPD()
     : BaseParametersDescriptor( pluginName )
 {
     m_params[ alphaParamName ] = ParamType::PT_FLOAT1;
@@ -30,7 +31,7 @@ SimpleTexturePixelPluginPD::SimpleTexturePixelPluginPD()
 
 // *************************************
 //
-SimpleTexturePixelPlugin::SimpleTexturePixelPlugin                    ( const std::string & textureFileName, const std::string & textureFileName1, const FloatInterpolator & alpha, const TransformF & tex0Transform, const TransformF & tex1Transform )
+SimpleTexturePlugin::SimpleTexturePlugin                    ( const std::string & textureFileName, const std::string & textureFileName1, const FloatInterpolator & alpha, const TransformF & tex0Transform, const TransformF & tex1Transform )
     : m_textureFileName( textureFileName )
     , m_textureFileName1( textureFileName1 )
 {
@@ -46,20 +47,32 @@ SimpleTexturePixelPlugin::SimpleTexturePixelPlugin                    ( const st
     m_tex1TransformValue = new ValueMat4( ParamDesc::txMatrix1ParamName);
 
     //FIXME: GetShaderResource should be used instead
-    PluginParamDesc().ValidateParameters( GetShaderFile() );
+    //PluginParamDesc().ValidateParameters( m_GetShaderFile() );
 
     RegisterValue( m_alphaValue );
     RegisterValue( m_tex0TransformValue );
     RegisterValue( m_tex1TransformValue );
 
     m_geomChannel = model::GeometryChannelStaticRectTextured::Create();
-    m_textures.push_back( textureFileName );
-    m_textures.push_back( textureFileName1 );
+
+    m_textures.push_back( LoadTexture( "Tex0", textureFileName ) );
+    m_textures.push_back( LoadTexture( "Tex1", textureFileName1 ) );
 }
 
 // *************************************
 //
-SimpleTexturePixelPlugin::~SimpleTexturePixelPlugin   ()
+ResourceHandle* SimpleTexturePlugin::LoadTexture( const std::string& name, const std::string& path ) const
+{
+    TextureLoader texLoader( false );
+
+    Resource texture( name, path );
+
+    return texLoader.LoadResource( &texture );
+}
+
+// *************************************
+//
+SimpleTexturePlugin::~SimpleTexturePlugin   ()
 {
     delete m_alphaParam;
     delete m_alphaValue;
@@ -73,15 +86,15 @@ SimpleTexturePixelPlugin::~SimpleTexturePixelPlugin   ()
 
 // *************************************
 //
-std::string SimpleTexturePixelPlugin::GetShaderFile              () const
-{
-    // TODO; do not bind SmpleTexturePlugin with exact shader - at some point it will be provided by GLSL shader service or whatever else resource manager
-    return "../dep/media/shaders/simpletexture.frag";
-}
+//std::string SimpleTexturePlugin::GetShaderFile              () const
+//{
+//    // TODO; do not bind SmpleTexturePlugin with exact shader - at some point it will be provided by GLSL shader service or whatever else resource manager
+//    return "../dep/media/shaders/simpletexture.frag";
+//}
 
 // *************************************
 //
-void                SimpleTexturePixelPlugin::Update              ( float t )
+void                SimpleTexturePlugin::Update              ( float t )
 {
     BasePlugin::Update( t );
 
@@ -92,52 +105,53 @@ void                SimpleTexturePixelPlugin::Update              ( float t )
 
 // *************************************
 //
-void                SimpleTexturePixelPlugin::Print               ( std::ostream & out, int tabs ) const
+void                SimpleTexturePlugin::Print               ( std::ostream & out, int tabs ) const
 {
     out << GetName() << debug::EndLine( tabs );
     out << "Texture: " << m_textureFileName << debug::EndLine( tabs );
 }
 
 
-// ***************************** DESCRIPTOR ********************************** 
-//PLUGIN NAME
-const std::string SimpleTextureVertexPluginPD::pluginName( "SimpleTextureVertex" );
-
-// *************************************
+//// ***************************** DESCRIPTOR ********************************** 
+////PLUGIN NAME
+//const std::string SimpleTextureVertexPluginPD::pluginName( "SimpleTextureVertex" );
 //
-SimpleTextureVertexPluginPD::SimpleTextureVertexPluginPD()
-    : BaseParametersDescriptor( pluginName )
-{
-}
-
-// ***************************** PLUGIN ********************************** 
-
-// *************************************
+//// *************************************
+////
+//SimpleTextureVertexPluginPD::SimpleTextureVertexPluginPD()
+//    : BaseParametersDescriptor( pluginName )
+//{
+//}
 //
-SimpleTextureVertexPlugin::SimpleTextureVertexPlugin            ()
-{
-}
-
-// *************************************
+//// ***************************** PLUGIN ********************************** 
 //
-std::string SimpleTextureVertexPlugin::GetShaderFile              () const
-{
-    // TODO; do not bind SmpleTexturePlugin with exact shader - at some point it will be provided by GLSL shader service or whatever else resource manager
-    return "../dep/media/shaders/simpletexture.vert";
-}
-
-// *************************************
+//// *************************************
+////
+//SimpleTextureVertexPlugin::SimpleTextureVertexPlugin            ()
+//{
+//}
 //
-void                SimpleTextureVertexPlugin::Update              ( float t )
-{
-    //FIXME: implement - whatever is required here
-}
-
-// *************************************
+//// *************************************
+////
+//std::string SimpleTextureVertexPlugin::GetShaderFile              () const
+//{
+//    // TODO; do not bind SmpleTexturePlugin with exact shader - at some point it will be provided by GLSL shader service or whatever else resource manager
+//    return "../dep/media/shaders/simpletexture.vert";
+//}
 //
-void                SimpleTextureVertexPlugin::Print               ( std::ostream & out, int tabs ) const
-{
-    out << GetName() << debug::EndLine( tabs );
-}
+//// *************************************
+////
+//void                SimpleTextureVertexPlugin::Update              ( float t )
+//{
+//    //FIXME: implement - whatever is required here
+//}
+//
+//// *************************************
+////
+//void                SimpleTextureVertexPlugin::Print               ( std::ostream & out, int tabs ) const
+//{
+//    out << GetName() << debug::EndLine( tabs );
+//}
 
-}
+} // model
+} // bv

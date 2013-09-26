@@ -6,11 +6,11 @@
 namespace bv
 {
 
-// ******************************
-//
-void PluginGeometryDummySymbol()
-{
-    assert( !"Suppress linker warnings" );    
-}
+//// ******************************
+////
+//void PluginGeometryDummySymbol()
+//{
+//    assert( !"Suppress linker warnings" );    
+//}
 
 }

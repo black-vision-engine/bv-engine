@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Engine\Models\Plugins\Channels\VertexAttributeChannel.h"
-#include "Engine\Models\Plugins\Channels\VertexAttributeChannelDescriptor.h"
+#include "Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannel.h"
+#include "Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.h"
 
 #include "Engine\Types\Enums.h"
 

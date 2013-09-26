@@ -35,16 +35,16 @@ TextureManager::~TextureManager()
 
 // *********************************
 //
-Texture2D * TextureManager::LoadTexture( const std::string & filename, bool loadFromMemory )
+Texture2D * TextureManager::LoadTexture( const model::ResourceHandle * resHandle, bool loadFromMemory )
 {
-    model::Resource res( "ladna nazwa", filename );
+    auto extraKind = resHandle->GetExtra()->GetResourceExtraKind();
 
-    model::TextureLoader loader(loadFromMemory);
+    assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
-    model::ResourceHandle* handle = loader.LoadResource( &res );
+    auto texExtra = static_cast< const model::TextureExtraData* >( resHandle->GetExtra() );
 
-    bv::Texture2D * newTex = new bv::Texture2D( Texture::TFormat::F_A8R8G8B8, handle->GetWidth(), handle->GetHeight() );
-    newTex->WriteToBuffer( handle->GetData(), handle->GetSize() );
+    bv::Texture2D * newTex = new bv::Texture2D( Texture::TFormat::F_A8R8G8B8, texExtra->GetWidth(), texExtra->GetHeight() );
+    newTex->WriteToBuffer( resHandle->GetData(), resHandle->GetSize() );
 
     m_txMap[ newTex ] = newTex;
 

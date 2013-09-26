@@ -3,6 +3,8 @@
 #include "Engine/Models/Plugins/PluginParameters.h"
 #include "PluginGeometry.h"
 
+#if 0
+
 namespace bv
 {
 // ***************************** DESCRIPTOR **********************************
@@ -52,3 +54,5 @@ public:
 };
 
 }
+
+#endif

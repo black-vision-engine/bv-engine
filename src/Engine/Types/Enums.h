@@ -3,6 +3,23 @@
 namespace bv
 {
 
+enum class TextureFormat : int
+{
+    F_A8R8G8B8 = 0  ,
+    F_A8            ,
+    F_L8            ,
+    F_R32F          ,
+    F_TOTAL
+};
+
+enum class TextureType : int
+{
+    T_2D = 0        ,
+    T_CUBE          ,
+
+    T_TOTAL
+};
+
 //FIXME: there so many dependencies on this type that it they all should be kept in one place (adding PT_MAT2 required a shitload of changes in the code)
 enum class ParamType : int
 {

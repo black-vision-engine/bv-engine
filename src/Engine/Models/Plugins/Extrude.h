@@ -3,6 +3,8 @@
 #include "Engine/Models/Plugins/PluginParameters.h"
 #include "Engine/Models/Plugin.h"
 
+#if 0
+
 #include "Solid.h" // FIXME: move ParametersDescriptor to separated header
 
 namespace bv
@@ -45,3 +47,5 @@ public:
 };
 
 } // bv
+
+#endif

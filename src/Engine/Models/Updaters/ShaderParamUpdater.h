@@ -5,24 +5,24 @@
 namespace bv
 {
 
-class IShaderPlugin;
+class IShaderChannel;
 class Shader;
 
 class ShaderParamUpdater : public IUpdater
 {
 private:
 
-    IShaderPlugin *     m_shaderPlugin;
+    IShaderChannel *    m_shaderChannel;
     Shader *            m_shader;
 
 private:
 
-                                    ShaderParamUpdater  ( IShaderPlugin *, Shader * );
+                                    ShaderParamUpdater  ( IShaderChannel *, Shader * );
 
 public:
 
     virtual void                    Update              ( float t );
-    static ShaderParamUpdater *     Create              ( IShaderPlugin *, Shader * );
+    static ShaderParamUpdater *     Create              ( IShaderChannel *, Shader * );
 
 };
 

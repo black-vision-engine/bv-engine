@@ -5,14 +5,16 @@
 #include "Mathematics\Transform\MatTransform.h"
 
 namespace bv {
-
+    
 class ParamFloat;
 class ValueFloat;
 class ParamTransform;
 class ValueMat4;
 
+namespace model {
+
 // ***************************** DESCRIPTOR **********************************
-class SimpleTexturePixelPluginPD : public BaseParametersDescriptor
+class SimpleTexturePluginPD : public BaseParametersDescriptor
 {
 public:
 
@@ -22,12 +24,12 @@ public:
     static const std::string            txMatrix0ParamName;
     static const std::string            txMatrix1ParamName;
 
-    explicit SimpleTexturePixelPluginPD();
+    explicit SimpleTexturePluginPD();
 };
 
 
 // ***************************** PLUGIN ********************************** 
-class SimpleTexturePixelPlugin : public BasePlugin< IShaderPlugin, SimpleTexturePixelPluginPD >
+class SimpleTexturePlugin : public BasePlugin< IPlugin, SimpleTexturePluginPD >
 {
 private:
 
@@ -43,40 +45,43 @@ private:
     ParamTransform *    m_tex1TransformParam;
     ValueMat4 *         m_tex1TransformValue;
 
+    ResourceHandle*     LoadTexture( const std::string& name, const std::string& path )   const;
+
 public:
 
-    explicit            SimpleTexturePixelPlugin    ( const std::string & textureFileName, const std::string & textureFileName1, const FloatInterpolator & alpha, const TransformF & tex0Transform, const TransformF & tex1Transform );
-                        ~SimpleTexturePixelPlugin   ();
+    explicit            SimpleTexturePlugin    ( const std::string & textureFileName, const std::string & textureFileName1, const FloatInterpolator & alpha, const TransformF & tex0Transform, const TransformF & tex1Transform );
+                        ~SimpleTexturePlugin   ();
 
-    virtual std::string GetShaderFile               () const override;
+    ///virtual std::string GetShaderFile               () const override;
 
     void                Update                      ( float t ) override;
     void                Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
 };
 
-// ***************************** DESCRIPTOR **********************************
-class SimpleTextureVertexPluginPD : public BaseParametersDescriptor
-{
-public:
+//// ***************************** DESCRIPTOR **********************************
+//class SimpleTextureVertexPluginPD : public BaseParametersDescriptor
+//{
+//public:
+//
+//    static const std::string            pluginName;
+//
+//    explicit SimpleTextureVertexPluginPD();
+//};
+//
+//
+//// ***************************** PLUGIN ********************************** 
+//class SimpleTextureVertexPlugin : public BasePlugin< IPlugin, SimpleTexturePixelPluginPD >
+//{
+//public:
+//
+//    explicit            SimpleTextureVertexPlugin   ();
+//    virtual std::string GetShaderFile               () const override;
+//
+//    void                Update                      ( float t ) override;
+//    void                Print                       ( std::ostream & out, int tabs = 0 ) const override;
+//
+//};
 
-    static const std::string            pluginName;
-
-    explicit SimpleTextureVertexPluginPD();
-};
-
-
-// ***************************** PLUGIN ********************************** 
-class SimpleTextureVertexPlugin : public BasePlugin< IShaderPlugin, SimpleTexturePixelPluginPD >
-{
-public:
-
-    explicit            SimpleTextureVertexPlugin   ();
-    virtual std::string GetShaderFile               () const override;
-
-    void                Update                      ( float t ) override;
-    void                Print                       ( std::ostream & out, int tabs = 0 ) const override;
-
-};
-
+} // model
 } // bv

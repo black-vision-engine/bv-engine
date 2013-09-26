@@ -1,7 +1,7 @@
 #include "GeometryChannel.h"
 #include "ConnectedComponent.h"
 
-#include "Engine\Models\Plugins\Channels\VertexAttributeChannel.h"
+#include "Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannel.h"
 
 #include <cassert>
 

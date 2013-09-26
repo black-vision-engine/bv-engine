@@ -1,5 +1,7 @@
 #include "PluginGeometryUVSingle.h"
 
+#if 0
+
 namespace bv
 {
 // ***************************** DESCRIPTOR ********************************** 
@@ -30,3 +32,6 @@ PluginGeometryUVSingle::~PluginGeometryUVSingle ()
 }
 
 }
+
+
+#endif

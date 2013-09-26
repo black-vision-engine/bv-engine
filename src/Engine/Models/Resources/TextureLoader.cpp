@@ -8,10 +8,14 @@
 
 namespace bv { namespace model {
 
+// ******************************
+//
 TextureLoader::TextureLoader( bool loadFormMemory )
     : m_loadFromMemory( loadFormMemory )
 {}
 
+// ******************************
+//
 ResourceHandle *        TextureLoader::LoadResource        ( IResource* res )  const
 {
     boost::filesystem::path filepath( res->GetFilePath() );
@@ -61,25 +65,43 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource* res )  c
         throw std::runtime_error( "Cannot convert texture to bitmap" );
     }
 
+    //FIXME: Add maping freeimage types to bv types
+    auto texExtra = new TextureExtraData( fipImg->getWidth(), fipImg->getHeight(), fipImg->getBitsPerPixel(), TextureFormat::F_A8R8G8B8, TextureType::T_2D );
+
     //FIXME: memcpy
-    return new ResourceHandle( (char*)fipImg->accessPixels(), fipImg->getWidth() * fipImg->getHeight() * ( fipImg->getBitsPerPixel() / 8 ), fipImg->getWidth(), fipImg->getHeight() );
+    return new ResourceHandle( (char*)fipImg->accessPixels(), fipImg->getWidth() * fipImg->getHeight() * ( fipImg->getBitsPerPixel() / 8 ), texExtra );
 }
 
-
+// ******************************
+//
 int TextureExtraData::GetWidth            () const
 {
     return m_width;
 }
 
+// ******************************
+//
 int TextureExtraData::GetHeight           () const
 {
     return m_height;
 }
 
-TextureExtraData::TextureExtraData( int w, int h )
-    : m_kind( ResourceExtraKind::RE_TEXTURE )
+// ******************************
+//
+int TextureExtraData::GetBitsPerPixel     () const
+{
+    return m_bitsPerPixel;
+}
+
+// ******************************
+//
+TextureExtraData::TextureExtraData( int w, int h, int bitsPerPixel, TextureFormat format, TextureType type)
+    : ResourceExtraData( ResourceExtraKind::RE_TEXTURE )
     , m_width( w )
     , m_height( h )
+    , m_bitsPerPixel( bitsPerPixel )
+    , m_format( format )
+    , m_type( type )
 {}
 
 } // model

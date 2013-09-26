@@ -1,6 +1,8 @@
 #include "PluginGeometryRect.h"
 #include <cassert>
 
+#if 0
+
 namespace bv {
 
 // ***************************** DESCRIPTOR ********************************** 
@@ -312,3 +314,5 @@ void    PluginGeometryRect::Update(float t)
 }
 
 }
+
+#endif

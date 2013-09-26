@@ -12,6 +12,7 @@ class ITransformChannel;
 class IPixelShaderChannel;
 class IVertexShaderChannel;
 class IGeometryShaderChannel;
+class ResourceHandle;
 
 template< class Iface, class ParameterDescriptor >
 class BasePlugin : public Iface
@@ -37,7 +38,7 @@ protected:
 
     ///////////////// Textures //////////////////
 
-    std::vector< std::string >      m_textures; // TODO: use Resources
+    std::vector< ResourceHandle* >  m_textures;
 
 public:
 
@@ -65,7 +66,7 @@ public:
     const model::IVertexShaderChannel*          GetVertexShaderChannel      () const                                        { return m_vshaderChannel; }
     const model::IGeometryShaderChannel*        GetGeometryShaderChannel    () const                                        { return m_gshaderChannel; }
 
-    virtual const std::vector< std::string >&   GetTextures                 () const                                        { return m_textures; }
+    virtual const std::vector< ResourceHandle* >& GetTextures                 () const                                      { return m_textures; }
 
 protected:
 

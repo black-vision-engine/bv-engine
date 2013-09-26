@@ -3,8 +3,7 @@
 #include "Engine/Models/Updaters/CameraUpdater.h"
 #include "Engine\Models\BasicNode.h"
 
-namespace bv
-{
+namespace bv { namespace model {
 
 ModelScene*     ModelScene::Create(BasicNode* node, Camera* cam)
 {
@@ -33,4 +32,5 @@ void            ModelScene::AddCameraInterpolators(Vec3Interpolator* pos, Vec3In
     UpdatersManager::get().RegisterUpdater(updater);
 }
 
-}
+} // model
+} // bv

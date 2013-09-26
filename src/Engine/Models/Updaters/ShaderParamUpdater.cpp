@@ -1,5 +1,5 @@
 #include "ShaderParamUpdater.h"
-#include "Engine/Models/IPlugin.h"
+#include "Engine/Models/Plugins/Interfaces/IShaderChannel.h"
 #include "Engine/Graphics/Shaders/Shader.h"
 
 namespace bv
@@ -7,8 +7,8 @@ namespace bv
 
 // ******************************
 //
-ShaderParamUpdater::ShaderParamUpdater( IShaderPlugin * pl, Shader * sh )
-    : m_shaderPlugin( pl )
+ShaderParamUpdater::ShaderParamUpdater( IShaderChannel * shCh, Shader * sh )
+    : m_shaderChannel( shCh )
     , m_shader( sh )
 {
 }
@@ -17,19 +17,21 @@ ShaderParamUpdater::ShaderParamUpdater( IShaderPlugin * pl, Shader * sh )
 //
 void                        ShaderParamUpdater::Update( float t )
 {
-    auto shaderParams = m_shader->Parameters();
+    assert( !"A co tutaj?" );
+    // TODO
+    //auto shaderParams = m_shader->Parameters();
 
-    for( auto val : m_shaderPlugin->GetValuesList())
-    {
-        shaderParams->GetParam(val->GetName())->SetValue(val->GetData());
-    }
+    //for( auto val : m_shaderChannel->GetValuesList())
+    //{
+    //    shaderParams->GetParam(val->GetName())->SetValue(val->GetData());
+    //}
 }
 
 // ******************************
 //
-ShaderParamUpdater *         ShaderParamUpdater::Create( IShaderPlugin * pl, Shader * sh )
+ShaderParamUpdater *         ShaderParamUpdater::Create( IShaderChannel * shCh, Shader * sh )
 {
-    return new ShaderParamUpdater( pl, sh );
+    return new ShaderParamUpdater( shCh, sh );
 }
 
 }

@@ -7,25 +7,6 @@ namespace bv
 
 class Texture
 {
-public:
-
-    enum class TFormat : int
-    {
-        F_A8R8G8B8 = 0  ,
-        F_A8            ,
-        F_L8            ,
-        F_R32F          ,
-        F_TOTAL
-    };
-
-    enum class TType : int
-    {
-        T_2D = 0        ,
-        T_CUBE          ,
-
-        T_TOTAL
-    };
-
 protected:
 
     static int              m_sPixelSize[ TFormat::F_TOTAL ];

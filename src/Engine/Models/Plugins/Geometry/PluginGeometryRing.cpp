@@ -1,5 +1,7 @@
 #include "PluginGeometryRing.h"
 
+#if 0
+
 namespace bv
 {
 
@@ -158,3 +160,6 @@ void				PluginGeometryRing::Update				(float t)
 //}
 
 } // bv
+
+
+#endif
