@@ -2,6 +2,7 @@
 #include "ConnectedComponent.h"
 
 #include "Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannel.h"
+#include "Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.h"
 
 #include <cassert>
 
@@ -10,8 +11,11 @@ namespace bv { namespace model
 
 // *********************************
 //
-GeometryChannel::GeometryChannel     ( PrimitiveType type )
-    : m_primitiveType( type ) 
+GeometryChannel::GeometryChannel     ( PrimitiveType type, const GeometryChannelDescriptor& desc, bool isReadOnly, bool isTimeInvariant )
+    : m_primitiveType( type )
+    , m_desc( desc )
+    , m_isReadOnly( isReadOnly )
+    , m_isTimeInvariant( isTimeInvariant )
 {
 }
 
@@ -33,6 +37,21 @@ void                                    GeometryChannel::Update              ( f
     }
 }
 
+
+// *********************************
+//
+bool                                    GeometryChannel::IsReadOnly          () const
+{
+    return m_isReadOnly;
+}
+
+// *********************************
+//
+bool                                    GeometryChannel::IsTimeInvariant     () const
+{
+    return m_isTimeInvariant;
+}
+
 // *********************************
 //
 const IGeometryChannelDescriptor *      GeometryChannel::GetDescriptor       () const
@@ -45,6 +64,23 @@ const IGeometryChannelDescriptor *      GeometryChannel::GetDescriptor       () 
 PrimitiveType                           GeometryChannel::GetPrimitiveType    () const
 {
     return m_primitiveType;
+}
+
+void                                    GeometryChannel::AddConnectedComponent( IConnectedComponent * cc )
+{
+    auto attrChannel = cc->GetVertexAttributeChannels();
+
+    assert( !attrChannel.empty() );
+    assert( attrChannel.size() == m_desc.GetNumVertexChannels() );
+
+    int i = 0;
+
+    for( auto attr : attrChannel )
+    {
+        assert( attr->GetDescriptor()->GetType() == m_desc.GetVertexChannelDescriptor( i++ )->GetType() );
+    }
+
+    m_connectedComponents.push_back( static_cast< ConnectedComponent * >( cc ) );
 }
 
 // *********************************

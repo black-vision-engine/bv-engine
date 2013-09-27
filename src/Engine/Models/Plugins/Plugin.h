@@ -20,8 +20,10 @@ class ResourceHandle;
 template< class Iface, class ParameterDescriptor >
 class BasePlugin : public Iface
 {
-protected:
+public:
+    typedef std::vector< std::pair< ResourceHandle*, std::string > > Textures;
 
+protected:
     typedef ParameterDescriptor ParamDesc;
 
 protected:
@@ -40,8 +42,7 @@ protected:
     IGeometryShaderChannel*         m_gshaderChannel;
 
     ///////////////// Textures //////////////////
-
-    std::vector< ResourceHandle* >  m_textures;
+    Textures  m_textures;
 
 public:
 
@@ -69,7 +70,7 @@ public:
     const model::IVertexShaderChannel*          GetVertexShaderChannel      () const                                        { return m_vshaderChannel; }
     const model::IGeometryShaderChannel*        GetGeometryShaderChannel    () const                                        { return m_gshaderChannel; }
 
-    virtual const std::vector< ResourceHandle* >& GetTextures                 () const                                      { return m_textures; }
+    virtual const Textures&                     GetTextures                 () const                                        { return m_textures; }
 
 protected:
 

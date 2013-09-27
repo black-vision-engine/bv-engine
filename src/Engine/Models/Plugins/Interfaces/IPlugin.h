@@ -17,6 +17,8 @@ class ResourceHandle;
 class IPlugin
 {
 public:
+    typedef std::vector< std::pair< ResourceHandle*, std::string > > Textures;
+
 
     virtual const std::string &                     GetName                     () const = 0;
 
@@ -26,7 +28,7 @@ public:
     virtual const model::IVertexShaderChannel*      GetVertexShaderChannel      () const = 0;
     virtual const model::IGeometryShaderChannel*    GetGeometryShaderChannel    () const = 0;
 
-    virtual const std::vector< ResourceHandle* >&   GetTextures                 () const = 0; // FIXME: use resources
+    virtual const Textures&                         GetTextures                 () const = 0; // FIXME: use resources
 
     virtual void                                    Update                      ( float t )                                   = 0;
     virtual void                                    Print                       ( std::ostream & out, int tabs = 0 )    const = 0;

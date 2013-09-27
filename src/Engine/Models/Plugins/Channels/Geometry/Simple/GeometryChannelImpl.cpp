@@ -10,42 +10,6 @@ namespace bv { namespace model
 {
 
 // *********************************
-//
-GeometryChannelStaticRect::GeometryChannelStaticRect(float w, float h)
-    : GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP ) // FIXME: Pass plugin - chyba ty !!!!!!!!!!!!
-{
-    ConnectedComponent * cc = new ConnectedComponent();
-
-    //FIXME: not null desc should be created via factory
-    const VertexAttributeChannelDescriptor * desc = m_desc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-    Float3VertexAttributeChannel * vertArrtF3 = new Float3VertexAttributeChannel( desc, desc->SuggestedDefaultName( 0 ), false );
-
-    vertArrtF3->AddVertexAttribute(glm::vec3( -w / 2.f, h / 2.f , 0.f ) );
-    vertArrtF3->AddVertexAttribute(glm::vec3( -w / 2.f, -h / 2.f , 0.f ) );
-    vertArrtF3->AddVertexAttribute(glm::vec3( w / 2.f, -h / 2.f , 0.f ) );
-    vertArrtF3->AddVertexAttribute(glm::vec3( w / 2.f, h / 2.f , 0.f ) );
-
-    cc->m_vertexAttributeChannels.push_back( vertArrtF3 );
-
-    m_connectedComponents.push_back( cc );
-}
-
-// *********************************
-//
-bool                        GeometryChannelStaticRect::CanBeConnectedTo            ( const GeometryChannelDescriptor & desc ) const
-{
-    return false; //cannot - it is a generator
-}
-
-// *********************************
-//
-GeometryChannelStaticRect *  GeometryChannelStaticRect::Create                      ( float w, float h )
-{
-    return new GeometryChannelStaticRect( w, h );
-}
-
-
-// *********************************
 // FIXME: of course it must be connecte
 GeometryChannelStaticRectTextured::GeometryChannelStaticRectTextured( float w, float h )
     : GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP ) // FIXME: Pass plugin - chyba ty !!!!!!!!!!!!

@@ -20,7 +20,6 @@
     <ClCompile Include="Engine\Graphics\Shaders\Shader.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\VertexShader.cpp" />
     <ClCompile Include="Engine\Models\BasicNode.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Transformation.cpp" />
     <ClCompile Include="Mathematics\Interpolators\BasicInterpolator.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\GLRendererData.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\Texture.cpp" />
@@ -75,7 +74,6 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelDescriptor.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelImpl.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.cpp" />
@@ -85,6 +83,8 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\GeometryShader\GeometryShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Plugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameter.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\GeometryPluginRect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -108,7 +108,6 @@
     <ClInclude Include="Engine\Graphics\Shaders\VertexShader.h" />
     <ClInclude Include="Engine\Models\BasicNode.h" />
     <ClInclude Include="Engine\Models\Node.h" />
-    <ClInclude Include="Engine\Models\Plugins\Transformation.h" />
     <ClInclude Include="Mathematics\defines.h" />
     <ClInclude Include="Mathematics\Interpolators\BasicInterpolator.h" />
     <ClInclude Include="Mathematics\Interpolators\Interpolators.h" />
@@ -181,7 +180,6 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelDescriptor.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelImpl.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.h" />
@@ -194,6 +192,8 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Plugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameter.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.h" />
+    <ClInclude Include="Engine\Models\Plugins\GeometryPluginRect.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

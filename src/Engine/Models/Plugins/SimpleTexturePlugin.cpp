@@ -1,7 +1,10 @@
 #include "SimpleTexturePlugin.h"
 #include "System/Print.h"
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelImpl.h"
 #include "Engine/Models/Resources/TextureLoader.h"
+#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
 
 #include "Engine/Models/Plugins/Parameter.h"
 
@@ -31,43 +34,74 @@ SimpleTexturePluginPD::SimpleTexturePluginPD()
 
 // *************************************
 //
-SimpleTexturePlugin::SimpleTexturePlugin                    ( const std::string & textureFileName, const std::string & textureFileName1 )
+SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin* prev, const std::string & textureFileName, const std::string & textureFileName1 )
     : m_textureFileName( textureFileName )
     , m_textureFileName1( textureFileName1 )
 {
-
-    //FIXME: pass params in constructor
-   // m_alphaParam = new ParamFloat( ParamDesc::alphaParamName, alpha );
-    //m_alphaValue = new ValueFloat( ParamDesc::alphaParamName );
-
-    //m_tex0TransformParam = new ParamTransform( ParamDesc::txMatrix0ParamName, tex0Transform );
-    //m_tex0TransformValue = new ValueMat4( ParamDesc::txMatrix0ParamName );
-
-    //m_tex1TransformParam = new ParamTransform( ParamDesc::txMatrix1ParamName, tex1Transform );
-    //m_tex1TransformValue = new ValueMat4( ParamDesc::txMatrix1ParamName);
-
-    ////FIXME: GetShaderResource should be used instead
-    ////PluginParamDesc().ValidateParameters( m_GetShaderFile() );
-
-    //RegisterValue( m_alphaValue );
-    //RegisterValue( m_tex0TransformValue );
-    //RegisterValue( m_tex1TransformValue );
-
-    m_geomChannel = model::GeometryChannelStaticRectTextured::Create();
-
     m_textures.push_back( LoadTexture( "Tex0", textureFileName ) );
     m_textures.push_back( LoadTexture( "Tex1", textureFileName1 ) );
+
+    EvalGeometryChannel( prev );
 }
 
 // *************************************
 //
-ResourceHandle* SimpleTexturePlugin::LoadTexture( const std::string& name, const std::string& path ) const
+void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
+{
+    ConnectedComponent* connComp = new ConnectedComponent();
+
+    auto prevGeomChannel = prev->GetGeometryChannel();
+
+    auto prevConnComp = static_cast< const model::ConnectedComponent* >( prevGeomChannel->GetComponents()[0] );
+
+    auto prevCompChannels = prevConnComp->m_vertexAttributeChannels;
+
+    GeometryChannelDescriptor geomChannelDesc;
+
+    for( auto prevCompCh : prevCompChannels )
+    {
+        connComp->m_vertexAttributeChannels.push_back( prevCompCh );
+        auto prevCompChDesc = prevCompCh->GetDescriptor();
+        geomChannelDesc.AddVertexAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
+    }
+
+    VertexAttributeChannelDescriptor * desc = new VertexAttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+
+    auto verTex0AttrChannel = new model::Float2VertexAttributeChannel( desc, m_textures[ 0 ].second, true );
+
+    verTex0AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 1.f ) );
+    verTex0AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 1.f ) );
+    verTex0AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 0.f ) );
+    verTex0AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 0.f ) );
+
+    connComp->m_vertexAttributeChannels.push_back( verTex0AttrChannel );
+
+    geomChannelDesc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+
+    auto verTex1AttrChannel = new model::Float2VertexAttributeChannel( desc, m_textures[ 1 ].second, true );
+
+    verTex1AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 1.f ) );
+    verTex1AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 1.f ) );
+    verTex1AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 0.f ) );
+    verTex1AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 0.f ) );
+
+    connComp->m_vertexAttributeChannels.push_back( verTex1AttrChannel );
+
+    geomChannelDesc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+
+    m_geomChannel = new model::GeometryChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, true );
+    m_geomChannel->AddConnectedComponent( connComp );
+}
+
+// *************************************
+//
+SimpleTexturePlugin::TexturePair SimpleTexturePlugin::LoadTexture( const std::string& name, const std::string& path ) const
 {
     TextureLoader texLoader( false );
 
     Resource texture( name, path );
 
-    return texLoader.LoadResource( &texture );
+    return SimpleTexturePlugin::TexturePair( texLoader.LoadResource( &texture ), name );
 }
 
 // *************************************

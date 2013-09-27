@@ -6,6 +6,7 @@
 
 namespace bv { namespace model {
 
+class Resource;
 
 // ***************************** DESCRIPTOR **********************************
 class SimpleTexturePluginPD : public BaseParametersDescriptor
@@ -26,47 +27,27 @@ public:
 class SimpleTexturePlugin : public BasePlugin< IPlugin, SimpleTexturePluginPD >
 {
 private:
+    typedef std::pair< ResourceHandle*, std::string > TexturePair;
+
 
     std::string         m_textureFileName;
     std::string         m_textureFileName1;
 
-    ResourceHandle*     LoadTexture( const std::string& name, const std::string& path )   const;
+
+    TexturePair         LoadTexture( const std::string& name, const std::string& path )   const;
+
+    void                EvalGeometryChannel( const IPlugin* prev );
 
 public:
 
-    explicit            SimpleTexturePlugin    ( const std::string & textureFileName, const std::string & textureFileName1 );
+    explicit            SimpleTexturePlugin    ( const IPlugin* prev, const std::string & textureFileName, const std::string & textureFileName1 );
                         ~SimpleTexturePlugin   ();
 
-    ///virtual std::string GetShaderFile               () const override;
 
     void                Update                      ( float t ) override;
     void                Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
 };
-
-//// ***************************** DESCRIPTOR **********************************
-//class SimpleTextureVertexPluginPD : public BaseParametersDescriptor
-//{
-//public:
-//
-//    static const std::string            pluginName;
-//
-//    explicit SimpleTextureVertexPluginPD();
-//};
-//
-//
-//// ***************************** PLUGIN ********************************** 
-//class SimpleTextureVertexPlugin : public BasePlugin< IPlugin, SimpleTexturePixelPluginPD >
-//{
-//public:
-//
-//    explicit            SimpleTextureVertexPlugin   ();
-//    virtual std::string GetShaderFile               () const override;
-//
-//    void                Update                      ( float t ) override;
-//    void                Print                       ( std::ostream & out, int tabs = 0 ) const override;
-//
-//};
 
 } // model
 } // bv

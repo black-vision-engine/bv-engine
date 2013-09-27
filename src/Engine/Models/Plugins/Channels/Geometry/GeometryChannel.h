@@ -21,18 +21,24 @@ protected:
 
     std::vector< ConnectedComponent* >              m_connectedComponents;
     PrimitiveType                                   m_primitiveType;
+    bool                                            m_isReadOnly;
+    bool                                            m_isTimeInvariant;
 
 public:
 
-                                                    GeometryChannel     ( PrimitiveType type );
+                                                    GeometryChannel     ( PrimitiveType type, const GeometryChannelDescriptor& desc, bool isReadOnly = false, bool isTimeInvariant = false );
     virtual                                         ~GeometryChannel    ();
 
     //IChannel
     virtual void                                    Update              ( float t );
+    virtual bool                                    IsReadOnly          () const;
+    virtual bool                                    IsTimeInvariant     () const;
 
     //IGeometryChannel
     virtual const IGeometryChannelDescriptor *      GetDescriptor       () const;
     virtual PrimitiveType                           GetPrimitiveType    () const;
+
+    virtual void                                    AddConnectedComponent( IConnectedComponent * cc );
 
     virtual int                                     GetNumPrimitives    ( IConnectedComponent * cc ) const;
     virtual std::vector< IConnectedComponent * >    GetComponents       () const;
@@ -42,8 +48,7 @@ public:
 
 protected:
 
-    virtual bool                                    CanBeConnectedTo    ( const GeometryChannelDescriptor & desc ) const = 0;
-
+    virtual bool                                    CanBeConnectedTo    ( const GeometryChannelDescriptor & desc ) const { return true; }
 };
 
 } // model

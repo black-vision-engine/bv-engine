@@ -21,12 +21,12 @@ GeometryChannelDescriptor::GeometryChannelDescriptor    ()
 GeometryChannelDescriptor::~GeometryChannelDescriptor   ()
 {
     //FIXME make sure that this is the owner of all descriptors
-    delete m_indexChannelDescriptor;
+    //delete m_indexChannelDescriptor;
 
-    for( auto desc : m_vertexAttributeChannelDescriptors )
-    {
-        delete desc;
-    }
+    //for( auto desc : m_vertexAttributeChannelDescriptors )
+    //{
+    //    delete desc;
+    //}
 }
 
 // ************************************
@@ -72,7 +72,7 @@ const VertexAttributeChannelDescriptor *  GeometryChannelDescriptor::AddVertexAt
 
 // ************************************
 //
-void    GeometryChannelDescriptor::AddVertexAttrChannelDesc    ( VertexAttributeChannelDescriptor * desc )
+void    GeometryChannelDescriptor::AddVertexAttrChannelDesc    ( const VertexAttributeChannelDescriptor * desc )
 {
     m_vertexAttributeChannelDescriptors.push_back( desc );
 }

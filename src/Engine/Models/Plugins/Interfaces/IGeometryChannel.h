@@ -23,6 +23,8 @@ public:
     virtual int                                     GetNumPrimitives    ( IConnectedComponent * cc )    const = 0;
     virtual std::vector< IConnectedComponent* >     GetComponents       ()                              const = 0;
 
+    virtual void                                    AddConnectedComponent( IConnectedComponent * cc )   = 0;
+
     virtual bool                                    IsTimeInvariant     ()                              const = 0;
 
     //FIXME: implement via plugin when its interface is known
