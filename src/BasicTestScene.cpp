@@ -16,8 +16,6 @@ using std::string;
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
 #include "Engine/Models/BasicNode.h"
-#include "Engine/Models/Plugins/Solid.h"
-#include "Engine/Models/Plugins/Transformation.h"
 
 #include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
 

@@ -20,7 +20,6 @@
     <ClCompile Include="Engine\Graphics\Shaders\Shader.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\VertexShader.cpp" />
     <ClCompile Include="Engine\Models\BasicNode.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Solid.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Transformation.cpp" />
     <ClCompile Include="Mathematics\Interpolators\BasicInterpolator.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\GLRendererData.cpp" />
@@ -48,17 +47,7 @@
     <ClCompile Include="Engine\Graphics\SceneGraph\TriangleStrip.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\ShaderParamDesc.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\ShaderParam.cpp" />
-    <ClCompile Include="Engine\Models\Mock\MockLayerNode.cpp" />
-    <ClCompile Include="Engine\Models\Mock\MockNode.cpp" />
-    <ClCompile Include="Engine\Models\Mock\MockPluginGeometry.cpp" />
-    <ClCompile Include="Engine\Models\Mock\MockPluginShader.cpp" />
-    <ClCompile Include="Engine\Models\Mock\MockPluginTransform.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometry.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryRect.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Transform\PluginTransform.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Transform\PluginTransformSimple.cpp" />
     <ClCompile Include="Engine\Models\ModelFactory.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\PluginsManager.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderableEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderablePass.cpp" />
     <ClCompile Include="Engine\Models\Updaters\TransformUpdater.cpp" />
@@ -72,13 +61,10 @@
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.cpp" />
     <ClCompile Include="Engine\Models\Updaters\ShaderParamUpdater.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Extrude.cpp" />
     <ClCompile Include="System\HRTimer.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\Texture2D.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleTexturePlugin.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Geometry\PluginGeometryUVSingle.cpp" />
     <ClCompile Include="Engine\Models\Resources\ResourceLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\Resource.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextureLoader.cpp" />
@@ -97,8 +83,8 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\VertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\PixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\GeometryShader\GeometryShaderChannel.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Parameter.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Plugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -122,7 +108,6 @@
     <ClInclude Include="Engine\Graphics\Shaders\VertexShader.h" />
     <ClInclude Include="Engine\Models\BasicNode.h" />
     <ClInclude Include="Engine\Models\Node.h" />
-    <ClInclude Include="Engine\Models\Plugins\Solid.h" />
     <ClInclude Include="Engine\Models\Plugins\Transformation.h" />
     <ClInclude Include="Mathematics\defines.h" />
     <ClInclude Include="Mathematics\Interpolators\BasicInterpolator.h" />
@@ -153,18 +138,8 @@
     <ClInclude Include="Engine\Graphics\SceneGraph\TriangleStrip.h" />
     <ClInclude Include="Engine\Graphics\Shaders\ShaderParamDesc.h" />
     <ClInclude Include="Engine\Graphics\Shaders\ShaderParam.h" />
-    <ClInclude Include="Engine\Models\Mock\MockLayerNode.h" />
-    <ClInclude Include="Engine\Models\Mock\MockNode.h" />
-    <ClInclude Include="Engine\Models\Mock\MockPluginGeometry.h" />
-    <ClInclude Include="Engine\Models\Mock\MockPluginShader.h" />
-    <ClInclude Include="Engine\Models\Mock\MockPluginTransform.h" />
     <ClInclude Include="Engine\Graphics\Shaders\ShaderParameters.h" />
-    <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometry.h" />
-    <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryRect.h" />
-    <ClInclude Include="Engine\Models\Plugins\Transform\PluginTransform.h" />
-    <ClInclude Include="Engine\Models\Plugins\Transform\PluginTransformSimple.h" />
     <ClInclude Include="Engine\Models\ModelFactory.h" />
-    <ClInclude Include="Engine\Models\Plugins\PluginsManager.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderableEffect.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderablePass.h" />
     <ClInclude Include="Engine\Models\Updaters\TransformUpdater.h" />
@@ -179,12 +154,9 @@
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.h" />
     <ClInclude Include="Engine\Graphics\Shaders\ShaderTypes.h" />
     <ClInclude Include="Engine\Models\Updaters\ShaderParamUpdater.h" />
-    <ClInclude Include="Engine\Models\Plugins\Extrude.h" />
     <ClInclude Include="System\HRTimer.h" />
-    <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryRing.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleTexturePlugin.h" />
-    <ClInclude Include="Engine\Models\Plugins\Geometry\PluginGeometryUVSingle.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryChannel.h" />
@@ -220,8 +192,8 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\ShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParameter.h" />
-    <ClInclude Include="Engine\Models\Plugins\Parameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Plugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

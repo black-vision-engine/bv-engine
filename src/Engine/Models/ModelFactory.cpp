@@ -1,8 +1,5 @@
 #include "ModelFactory.h"
 
-#include "Engine\Models\Plugins\Transform\PluginTransformSimple.h"
-#include "Engine\Models\Plugins\Geometry\PluginGeometryRect.h"
-#include "Engine\Models\Plugins\Geometry\PluginGeometryRing.h"
 #include "Engine\Models\BasicNode.h"
 
 namespace bv { namespace model {
