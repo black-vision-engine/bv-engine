@@ -98,7 +98,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(BOOST_INC);./;../dep/Common/FreeImage/dist;../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;./Engine/Graphics/Renderers/OGLRenderer;./Engine/Graphics/Renderers/WGLRenderer;./Application;./Application/win32;./Engine/Graphics/Renderers;./Engine/Graphics/Resources;./Engine/Graphics/Resources/Textures;./System;./Engine/Graphics/Types;./Engine/Models;./Engine/Models/Mock;./Engine/Graphics/Shaders;./Engine/Graphics/SceneGraph;./Engine/Models/Updaters;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BOOST_INC);./;../dep/Common/FreeImage/dist;../dep/Common/FreeType/include;../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;./Engine/Graphics/Renderers/OGLRenderer;./Engine/Graphics/Renderers/WGLRenderer;./Application;./Application/win32;./Engine/Graphics/Renderers;./Engine/Graphics/Resources;./Engine/Graphics/Resources/Textures;./System;./Engine/Graphics/Types;./Engine/Models;./Engine/Models/Mock;./Engine/Graphics/Shaders;./Engine/Graphics/SceneGraph;./Engine/Models/Updaters;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>

@@ -13,6 +13,8 @@
 #include "System/HRTimer.h"
 #include "MockScenes.h"
 
+#include "MockFonts\fttester.h"
+
 bv::HighResolutionTimer GTimer;
 
 #define _USE_MATH_DEFINES
@@ -148,6 +150,9 @@ bool BlackVisionApp::OnInitialize       ()
         freopen_s(&dummy, "CONOUT$", "wb", stdout);
         freopen_s(&dummy, "CONOUT$", "wb", stderr);
     }
+
+    //FIXME: remove me pleaZe
+    simple_freetype_test();
 
     model::BasicNode * root = TestScenesFactory::SimpeTextureTestScene();
     model::BasicNode * root1 = TestScenesFactory::SimpeTextureTestScene();
