@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <string>
+#include <sstream>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -158,9 +158,8 @@ void basic_write_atlas( const std::string & fontFile, const std::string & atlasF
                   // print byte from glyph
                   file << glyph_buffer[glyph_index][byte_order_in_glyph] << glyph_buffer[glyph_index][byte_order_in_glyph] << glyph_buffer[glyph_index][byte_order_in_glyph] << glyph_buffer[glyph_index][byte_order_in_glyph];
                 }
-        // otherwise write black
             } 
-            else 
+            else  // otherwise write black
             {
                 file << (unsigned char)0 << (unsigned char)0 << (unsigned char)0 << (unsigned char)0;
             }
@@ -170,6 +169,28 @@ void basic_write_atlas( const std::string & fontFile, const std::string & atlasF
     // convert raw image to png
     file.close ();
     //system ("convert -depth 8 -size 1024x1024 rgba:atlas.raw atlas.png");
+
+    // write meta-data to a file
+    std::stringstream ss;
+    ss << atlasFile << ".meta";
+    std::string atlasMetaFile = ss.str();
+
+    file.open ( atlasMetaFile.c_str(), std::ios::out );
+    // comment, reminding me what each column is
+    file << "// ascii_code prop_xMin prop_width prop_yMin prop_height prop_y_offset\n";
+    // write a line for the space character
+    file << "32 0 " << 64.0f / (float)atlas_dimension_px * 0.5f << " 0 " << 64.0f / (float)atlas_dimension_px << " 0\n"; 
+    // write a line for each regular character
+    for (unsigned long i = 33; i < 256; i++)
+    {
+        int order = i - 32;
+        int col = order % atlas_columns;
+        int row = order / atlas_columns;
+        float x_min = (float)(col * slot_glyph_size) / (float)atlas_dimension_px;
+        float y_min = (float)(row * slot_glyph_size) / (float)atlas_dimension_px;
+        file << i << " " << x_min << " " << (float)(gwidth[i] + padding_px) / (float)atlas_dimension_px << " " << y_min << " " << (grows[i] + padding_px)  / (float)atlas_dimension_px << " " << -((float)padding_px - (float)gymin[i]) / (float)atlas_dimension_px << "\n";
+    }
+    file.close ();
 }
 
 }

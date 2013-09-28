@@ -152,7 +152,9 @@ bool BlackVisionApp::OnInitialize       ()
     }
 
     //FIXME: remove me pleaZe
+    const std::string fontFile = "../dep/Media/fonts/arial.ttf";
     simple_freetype_test();
+    basic_write_atlas( fontFile, "ascii_arial_atlas.raw" );
 
     model::BasicNode * root = TestScenesFactory::SimpeTextureTestScene();
     model::BasicNode * root1 = TestScenesFactory::SimpeTextureTestScene();
