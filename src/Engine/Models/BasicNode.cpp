@@ -114,8 +114,6 @@ SceneNode*                  BasicNode::BuildScene()
     // TODO: dodac liste layerow do zwracanego SceneNode
     for( auto p : m_plugins )
     {
-        const char * tnames[] = { "Tex0", "Tex1" }; //FIXME: all this is a shitty hack - hackenbusz hack
-
         int i = 0;
         for( auto tex : p->GetTextures() )
         {

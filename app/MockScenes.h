@@ -16,6 +16,7 @@ class TestScenesFactory
 public:
 
     static  model::BasicNode *     SimpeTextureTestScene();
+    static  model::BasicNode *     SimpeTextTestScene();
 
 };
 

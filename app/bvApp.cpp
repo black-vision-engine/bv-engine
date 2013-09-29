@@ -156,10 +156,12 @@ bool BlackVisionApp::OnInitialize       ()
     simple_freetype_test();
     basic_write_atlas( fontFile, "ascii_arial_atlas.raw" );
 
-    model::BasicNode * root = TestScenesFactory::SimpeTextureTestScene();
-    model::BasicNode * root1 = TestScenesFactory::SimpeTextureTestScene();
+    //model::BasicNode * root = TestScenesFactory::SimpeTextureTestScene();
+    //model::BasicNode * root1 = TestScenesFactory::SimpeTextureTestScene();
 
-    root->AddChild( root1 );
+    //root->AddChild( root1 );
+
+    model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
 
     m_modelScene = model::ModelScene::Create( root, new Camera() );
 

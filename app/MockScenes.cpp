@@ -102,6 +102,76 @@ public:
 
 // ***************************************
 //
+model::BasicNode *     TestScenesFactory::SimpeTextTestScene()
+{
+    model::BasicNode * root = new model::BasicNode();
+
+
+    FloatInterpolator w;
+    FloatInterpolator h;
+    w.addKey( 0.f, 1.f );
+    h.addKey( 0.f, 1.f );
+
+    model::GeometryRectPlugin    * rectPlugin  = new model::GeometryRectPlugin( w, h );
+    
+    model::RectComponent *      rect        = model::RectComponent::Create();
+
+    model::GeometryChannelDescriptor desc;
+
+    for( auto compDesc : rect->GetVertexAttributeChannels() )
+    {
+        desc.AddVertexAttrChannelDesc( static_cast< const model::VertexAttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
+    }
+
+    model::GeometryChannel *    geomCh      = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
+    geomCh->AddConnectedComponent( rect );
+    rectPlugin->SetGeometryChannel( geomCh );
+
+
+    model::SimpleTransformChannel      * stch  = new model::SimpleTransformChannel();
+    TransformF *    trns  = new TransformF                ();
+
+    FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator zs;
+
+    xs.addKey(0.f, 0.5f);
+    xs.addKey(13.f, 4.f);
+    ys.addKey(0.f, 0.5f);
+    ys.addKey(13.f, 4.f);
+    zs.addKey(0.f, 1.f);
+
+    trns->addScale( xs, ys, zs );
+    stch->AddTransform( trns );
+    rectPlugin->SetTransformChannel       ( stch );
+
+    root->AddPlugin( rectPlugin );
+
+    /////////////////////////////// Texture plugin //////////////////////////////////
+
+    model::SimpleTexturePlugin    * stpp  = nullptr;
+    
+    stpp = new model::SimpleTexturePlugin  (rectPlugin, "asci_arial_atlas_red.png", "asci_arial_atlas_red.png" );
+
+    TransformF * tx0m = new TransformF();
+    TransformF * tx1m = new TransformF();
+
+    FloatInterpolator alpha;
+    alpha.addKey( 0.0f, 1.0f );
+
+    stpp->SetPixelShaderChannel     ( new MyPixelShaderChannel( "../dep/media/shaders/simpletexture.frag", alpha, *tx0m, *tx1m ) );
+    stpp->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
+
+    root->AddPlugin                 ( stpp );
+
+
+    return root;
+
+
+}
+
+// ***************************************
+//
 model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 {
     //FIXME: worst of hacks
@@ -253,11 +323,11 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     
     if( numcall == 0 )
     {
-        stpp = new model::SimpleTexturePlugin  (rectPlugin, "simless_01.jpg", "simless_00.jpg" );
+        stpp = new model::SimpleTexturePlugin  (rectPlugin, "asci_arial_atlas_red.png", "simless_00.jpg" );
     }
     else
     {
-        stpp = new model::SimpleTexturePlugin  (rectPlugin, "pliczek_z_kwiatkiem.jpg", "simless_01.jpg" );
+        stpp = new model::SimpleTexturePlugin  (rectPlugin, "asci_arial_atlas_red.png", "simless_01.jpg" );
     }
 
 
