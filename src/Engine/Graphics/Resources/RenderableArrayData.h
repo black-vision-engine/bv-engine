@@ -1,7 +1,12 @@
 #pragma once
 
+#include <vector>
+
 namespace bv
 {
+
+class VertexBuffer;
+class VertexDescriptor;
 
 enum class RenderableArrayDataEnumKind : int
 {
@@ -13,6 +18,27 @@ enum class RenderableArrayDataEnumKind : int
 
 class RenderableArrayData
 {
+protected:
+
+    VertexBuffer    *   m_vertexBuffer;
+    VertexDescriptor *  m_vertexDescriptor;
+
+    std::vector< unsigned int >     m_numVerticesInCC;
+    std::vector< unsigned int >     m_ccOffsets;
+
+    RenderableArrayDataEnumKind     m_type;
+
+public:
+
+    RenderableArrayDataEnumKind     Type                        () const;
+
+    const VertexDescriptor *        GetVertexDecscriptor        () const;
+    const VertexBuffer *            GetVertexBuffer             () const;
+
+    unsigned int                    GetCCOffset                 ( int ccNum ) const;
+    unsigned int                    GetCCNumVertices            ( int ccNum ) const;
+
+    unsigned int                    GetNumConnectedComponents   () const;
 
 };
 
