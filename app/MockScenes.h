@@ -11,13 +11,23 @@ namespace model
 }
 
 // ********************************
+class TestParamFactory
+{
+public:
+
+    static FloatInterpolator    ConstantValue( float val );
+
+};
+
+
+// ********************************
 class TestScenesFactory
 {
 public:
 
-    static  model::BasicNode *     SimpeTextureTestScene();
-    static  model::BasicNode *     SimpeTextTestScene();
-
+    static  model::BasicNode *      SimpeTextureTestScene   ();
+    static  model::BasicNode *      SimpeTextTestScene      ();
+    static  model::BasicNode *      SimpleMultiCCScene      ();
 };
 
 // ********************************

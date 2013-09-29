@@ -135,6 +135,23 @@ const std::string fontFile = "../dep/Media/fonts/arial.ttf";
 
 // ***************************************
 //
+FloatInterpolator    TestParamFactory::ConstantValue( float val )
+{
+    FloatInterpolator ret;
+    ret.addKey( 0.0f, val );
+
+    return ret;
+}
+
+namespace {
+    FloatInterpolator ConstValue( float val )
+    {
+        return TestParamFactory::ConstantValue( val );
+    }
+}
+
+// ***************************************
+//
 model::BasicNode *     TestScenesFactory::SimpeTextTestScene()
 {
     model::BasicNode * root = new model::BasicNode();
@@ -335,6 +352,64 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     root->AddPlugin                 ( stpp );
 
     numcall++;
+
+    return root;
+}
+
+// *******************************
+//
+model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
+{
+    model::BasicNode * root = new model::BasicNode();
+
+    /////////////////////////////// SimpleRect plugin //////////////////////////////////
+
+    // ******************** Connected Components *******************************
+    float w = 1.0f;
+    float h = 1.0f;
+    float dist = 0.75f;
+
+    model::RectComponent *          rect0 = model::RectComponent::Create( w, h, -dist, -dist );
+    model::RectComponent *          rect1 = model::RectComponent::Create( w, h, dist, -dist );
+    model::RectComponent *          rect2 = model::RectComponent::Create( w, h, dist, dist );
+    model::RectComponent *          rect3 = model::RectComponent::Create( w, h, -dist, -dist );
+
+    model::GeometryChannelDescriptor desc;
+
+    for( auto compDesc : rect0->GetVertexAttributeChannels() )
+    {
+        desc.AddVertexAttrChannelDesc( static_cast< const model::VertexAttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
+    }
+
+    // ******************** Geometry Channel *******************************
+    model::GeometryChannel *    geomCh      = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
+    geomCh->AddConnectedComponent( rect0 );
+    geomCh->AddConnectedComponent( rect1 );
+    geomCh->AddConnectedComponent( rect2 );
+    geomCh->AddConnectedComponent( rect3 );
+
+    // ******************** Plugin intself *******************************
+    model::GeometryRectPlugin    *  rectPlugin  = new model::GeometryRectPlugin( ConstValue( 1.0f ), ConstValue( 1.0f ) );
+    model::SimpleTransformChannel  * simpleTransform0  = new model::SimpleTransformChannel();
+
+    simpleTransform0->AddTransform  ( new TransformF() );
+
+    rectPlugin->SetTransformChannel ( simpleTransform0 );
+    rectPlugin->SetGeometryChannel( geomCh );
+
+    root->AddPlugin( rectPlugin );
+
+    /////////////////////////////// Texture plugin //////////////////////////////////
+
+    model::SimpleTexturePlugin    * stpp  = nullptr;
+    TransformF * tx0m = new TransformF();
+    TransformF * tx1m = new TransformF();    
+    stpp = new model::SimpleTexturePlugin  ( rectPlugin, "simless_01.jpg", "simless_00.jpg" );
+
+    stpp->SetPixelShaderChannel     ( new MyPixelShaderChannel( "../dep/media/shaders/simpletexture.frag", ConstValue( 0.5f ), *tx0m, *tx1m ) );
+    stpp->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
+
+    root->AddPlugin                 ( stpp );
 
     return root;
 }

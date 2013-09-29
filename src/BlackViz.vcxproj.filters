@@ -86,6 +86,9 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRect.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleTextPlugin.cpp" />
+    <ClCompile Include="Engine\Graphics\Resources\RenderableArrayData.cpp" />
+    <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataArrays.cpp" />
+    <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataElements.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -196,6 +199,9 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryPluginRect.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleTextPlugin.h" />
+    <ClInclude Include="Engine\Graphics\Resources\RenderableArrayData.h" />
+    <ClInclude Include="Engine\Graphics\Resources\RenderableArrayDataArrays.h" />
+    <ClInclude Include="Engine\Graphics\Resources\RenderableArrayDataElements.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

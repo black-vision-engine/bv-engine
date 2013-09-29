@@ -4,6 +4,7 @@
 
 namespace bv {
 
+class RenderableArrayData;
 class VertexDescriptor;
 class VertexBuffer;
 class IndexBuffer;
@@ -25,14 +26,16 @@ public:
 
 protected:
 
-    RenderableType      m_type;
+    RenderableType          m_type;
+    RenderableArrayData *   m_renderableArrayData;
+
+    RenderableEffect *      m_effect;
 
     VertexDescriptor *  m_vDesc;
     VertexBuffer *      m_vBuf;
     IndexBuffer *       m_iBuf;
     VertexArray *       m_vao;
 
-    RenderableEffect *  m_effect;
 
 public:
                     //FIXME: effect should be registered via some method so that it can be changed during to some other effect during runtime (RenderableEffect or RenderableEffectInstance if needed)
