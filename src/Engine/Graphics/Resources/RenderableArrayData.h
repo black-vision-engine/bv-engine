@@ -30,6 +30,9 @@ protected:
 
 public:
 
+                                    RenderableArrayData         ( RenderableArrayDataEnumKind type );
+    virtual                         ~RenderableArrayData        () = 0;
+
     RenderableArrayDataEnumKind     Type                        () const;
 
     const VertexDescriptor *        GetVertexDecscriptor        () const;

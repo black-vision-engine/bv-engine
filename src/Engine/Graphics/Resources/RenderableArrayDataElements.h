@@ -11,11 +11,13 @@ class RenderableArrayDataElements : public RenderableArrayData
 {
 private:
 
-    std::vector< IndexBuffer * >    m_inexBuffersVec;
+    std::vector< IndexBuffer * >    m_inedxBuffersVec;
 
 public:
 
-    const IndexBuffer *     GetIndexBuffer( int ccNum ) const;
+                            RenderableArrayDataElements ();
+
+    const IndexBuffer *     GetIndexBuffer              ( int ccNum ) const;
 
 };
 

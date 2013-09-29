@@ -10,6 +10,19 @@ namespace bv
 
 // *********************************
 //
+RenderableArrayData::RenderableArrayData         ( RenderableArrayDataEnumKind type )
+    : m_type( type )
+{
+}
+
+// *********************************
+//
+RenderableArrayData::~RenderableArrayData        ()
+{
+}
+
+// *********************************
+//
 RenderableArrayDataEnumKind     RenderableArrayData::Type                        () const
 {
     return m_type;

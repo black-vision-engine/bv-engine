@@ -8,6 +8,13 @@ namespace bv
 
 // *********************************
 //
+RenderableArrayDataArrays::RenderableArrayDataArrays   ()
+    : RenderableArrayData( RenderableArrayDataEnumKind::RADEK_VAO )
+{
+}
+
+// *********************************
+//
 const VertexArray *     RenderableArrayDataArrays::GetVAO( int ccNum ) const
 {
     assert( ccNum >= 0 );

@@ -15,7 +15,9 @@ private:
 
 public:
 
-    const VertexArray *     GetVAO( int ccNum ) const;
+                            RenderableArrayDataArrays   ();
+
+    const VertexArray *     GetVAO                      ( int ccNum ) const;
 
 };
 
