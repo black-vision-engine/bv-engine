@@ -8,6 +8,7 @@
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 #include "System/Print.h"
 
+#include "Engine\Graphics\Resources\RenderableArrayData.h"
 #include "Engine\Graphics\Resources\VertexDescriptor.h"
 #include "Engine\Graphics\Resources\VertexBuffer.h"
 #include "Engine\Graphics\Resources\VertexArray.h"
@@ -78,16 +79,20 @@ BasicNode::BasicNode()
 //
 SceneNode*                  BasicNode::BuildScene()
 {
+    auto renderableType = GetRenderableType();
+
+    RenderableEffect *  effect      = CreateRenderaleEffectMockImplementationForCompleteDummies();
+    RenderableArrayData * rad       = CreateRenderableArrayData( renderableType );
+
     VertexBuffer *      vb          = nullptr;
     IndexBuffer *       ib          = nullptr;
     VertexDescriptor *  vd          = nullptr;
     VertexArray *       vao         = nullptr;
 
     RenderableEntity *  renderEnt   = nullptr;
-    RenderableEffect *  effect      = nullptr;
 
     CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
-    effect = CreateRenderaleEffectMockImplementationForCompleteDummies();
+    effect = ;
 
 
     auto renderableType = GetRenderableType();
@@ -387,16 +392,40 @@ GeometryShader*                     BasicNode::CreateGeometryShader    ()       
 }
 
 // ********************************
-//
-RenderableEffect*                   BasicNode::CreateRenderaleEffectMockImplementationForCompleteDummies   ()                                                              const
+//FIXME: reimplement someday
+RenderableEffect *                  BasicNode::CreateRenderaleEffectMockImplementationForCompleteDummies   ()                                                              const
 {
-    RenderableEffect* ret = new RenderableEffect();
+    RenderableEffect *  ret = new RenderableEffect();
 
-    RenderablePass* renderPass = new RenderablePass(CreatePixelShader(), CreateVertexShader(), CreateGeometryShader());
+    RenderablePass *    renderPass = new RenderablePass(CreatePixelShader(), CreateVertexShader(), CreateGeometryShader());
 
     ret->AddPass(renderPass);
 
     return ret;
+}
+
+// ********************************
+//
+RenderableArrayData *               BasicNode::CreateRenderableArrayData( PrimitiveType type ) const
+{
+    switch( type )
+    {
+        case PrimitiveType::PT_TRIANGLE_STRIP:
+            return CreateRenderableArrayDataArrays();
+        case PrimitiveType::PT_TRIANGLES:
+        case PrimitiveType::PT_TRIANGLE_MESH:
+            //FIXME: implement
+            assert( false );
+        default:
+            return nullptr;
+    }
+}
+
+// ********************************
+//
+RenderableArrayData *               BasicNode::CreateRenderableArrayDataArrays() const
+{
+    return nullptr;
 }
 
 // ********************************

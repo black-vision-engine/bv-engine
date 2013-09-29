@@ -13,6 +13,7 @@ class PixelShader;
 class VertexShader; 
 class GeometryShader;
 class ShaderParameters;
+class RenderableArrayData;
 
 namespace model {
 
@@ -43,17 +44,24 @@ public:
 private:
 
     PrimitiveType                       GetRenderableType       ()                                  const;
-    bool                                CreateRenderableData    (VertexArray ** vao)                const;
+    bool                                CreateRenderableData    ( VertexArray ** vao )              const;
 
-    RenderableEffect*                   CreateRenderaleEffectMockImplementationForCompleteDummies() const;
+    //FIXME: scene building API should be moved to some more appropriate place
+    RenderableArrayData *               CreateRenderableArrayData( PrimitiveType type ) const; 
+    RenderableArrayData *               CreateRenderableArrayDataArrays() const;
 
-    PixelShader*                        CreatePixelShader       ()                      const;
-    VertexShader*                       CreateVertexShader      ()                      const;   
-    GeometryShader*                     CreateGeometryShader    ()                      const;
+    RenderableEffect *                  CreateRenderaleEffectMockImplementationForCompleteDummies() const;
+
+    PixelShader *                       CreatePixelShader       ()                      const;
+    VertexShader *                      CreateVertexShader      ()                      const;   
+    GeometryShader *                    CreateGeometryShader    ()                      const;
 
 public:
+
     static void                         RegisterShaderParameters(const IShaderChannel* shaderPlugin, ShaderParameters * shParams);
+
 };
+
 
 } // model
 } // bv
