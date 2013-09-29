@@ -341,6 +341,13 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     return root;
 }
 
+// *******************************
+//
+model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
+{
+    return nullptr;
+}
+
 namespace {
     float AddRotKeys( bv::Vec3Interpolator * it, float startAngle, double endAngle, float speed, float & t )
     {
