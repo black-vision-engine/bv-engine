@@ -14,9 +14,10 @@ struct Glyph
   char              bearingX;   // x offset of top-left corner from x axis
   char              bearingY;   // y offset of top-left corner from y axis
 
-  unsigned char     textureX;   // x pixel coord of the bitmap's bottom-left corner
-  unsigned char     textureY;   // y pixel coord of the bitmap's bottom-left corner
+  unsigned int      textureX;   // x pixel coord of the bitmap's bottom-left corner
+  unsigned int      textureY;   // y pixel coord of the bitmap's bottom-left corner
 
+  unsigned int      size;   // 
 };
 
 }
