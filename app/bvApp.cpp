@@ -161,7 +161,8 @@ bool BlackVisionApp::OnInitialize       ()
 
     //root->AddChild( root1 );
 
-    model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
+//    model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
+    model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
 
     m_modelScene = model::ModelScene::Create( root, new Camera() );
 

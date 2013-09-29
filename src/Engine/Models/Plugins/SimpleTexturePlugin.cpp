@@ -41,6 +41,7 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin* pre
     m_textures.push_back( LoadTexture( "Tex0", textureFileName ) );
     //m_textures.push_back( LoadTexture( "Tex1", textureFileName1 ) );
 
+    m_geomChannel = nullptr;
     EvalGeometryChannel( prev );
 }
 
@@ -48,49 +49,58 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin* pre
 //
 void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
 {
-    ConnectedComponent* connComp = new ConnectedComponent();
-
     auto prevGeomChannel = prev->GetGeometryChannel();
-
-    auto prevConnComp = static_cast< const model::ConnectedComponent* >( prevGeomChannel->GetComponents()[0] );
-
-    auto prevCompChannels = prevConnComp->m_vertexAttributeChannels;
-
-    GeometryChannelDescriptor geomChannelDesc;
-
-    for( auto prevCompCh : prevCompChannels )
-    {
-        connComp->m_vertexAttributeChannels.push_back( prevCompCh );
-        auto prevCompChDesc = prevCompCh->GetDescriptor();
-        geomChannelDesc.AddVertexAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
-    }
-
     VertexAttributeChannelDescriptor * desc = new VertexAttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-    auto verTex0AttrChannel = new model::Float2VertexAttributeChannel( desc, m_textures[ 0 ].second, true );
+    for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
+    {
+        ConnectedComponent* connComp = new ConnectedComponent();
+        GeometryChannelDescriptor geomChannelDesc;
 
-    verTex0AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 0.f ) );
-    verTex0AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 0.f ) );
-    verTex0AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 1.f ) );
-    verTex0AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 1.f ) );
+        auto prevConnComp = static_cast< const model::ConnectedComponent* >( prevGeomChannel->GetComponents()[ i ] );
+        auto prevCompChannels = prevConnComp->m_vertexAttributeChannels;
 
-    connComp->m_vertexAttributeChannels.push_back( verTex0AttrChannel );
+        for( auto prevCompCh : prevCompChannels )
+        {
+            connComp->m_vertexAttributeChannels.push_back( prevCompCh );
+        }
 
-    geomChannelDesc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+        if( m_geomChannel == nullptr )
+        {
+            for( auto prevCompCh : prevCompChannels )
+            {
+                auto prevCompChDesc = prevCompCh->GetDescriptor();
+                geomChannelDesc.AddVertexAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
+            }
 
-    //auto verTex1AttrChannel = new model::Float2VertexAttributeChannel( desc, m_textures[ 1 ].second, true );
+            geomChannelDesc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-    //verTex1AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 0.f ) );
-    //verTex1AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 0.f ) );
-    //verTex1AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 1.f ) );
-    //verTex1AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 1.f ) );
+            m_geomChannel = new model::GeometryChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, true );
+        }
 
-    //connComp->m_vertexAttributeChannels.push_back( verTex1AttrChannel );
+        auto verTex0AttrChannel = new model::Float2VertexAttributeChannel( desc, m_textures[ 0 ].second, true );
 
-    //geomChannelDesc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+        verTex0AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 0.f ) );
+        verTex0AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 0.f ) );
+        verTex0AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 1.f ) );
+        verTex0AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 1.f ) );
 
-    m_geomChannel = new model::GeometryChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, true );
-    m_geomChannel->AddConnectedComponent( connComp );
+        connComp->m_vertexAttributeChannels.push_back( verTex0AttrChannel );
+
+
+        //auto verTex1AttrChannel = new model::Float2VertexAttributeChannel( desc, m_textures[ 1 ].second, true );
+
+        //verTex1AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 0.f ) );
+        //verTex1AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 0.f ) );
+        //verTex1AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 1.f ) );
+        //verTex1AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 1.f ) );
+
+        //connComp->m_vertexAttributeChannels.push_back( verTex1AttrChannel );
+
+        //geomChannelDesc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+
+        m_geomChannel->AddConnectedComponent( connComp );
+    }
 }
 
 // *************************************

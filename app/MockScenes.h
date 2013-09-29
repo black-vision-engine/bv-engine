@@ -11,6 +11,16 @@ namespace model
 }
 
 // ********************************
+class TestParamFactory
+{
+public:
+
+    static FloatInterpolator    ConstantValue( float val );
+
+};
+
+
+// ********************************
 class TestScenesFactory
 {
 public:
