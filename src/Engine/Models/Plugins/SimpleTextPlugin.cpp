@@ -83,7 +83,9 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
 }
 
 void                SimpleTextPlugin::Update                      ( float t )
-{}
+{
+    BasePlugin::Update( t );
+}
 
 void                SimpleTextPlugin::Print                       ( std::ostream & out, int tabs ) const
 {

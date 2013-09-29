@@ -166,6 +166,10 @@ model::BasicNode *     TestScenesFactory::SimpeTextTestScene()
     ys.addKey(0.f, 1.f);
     zs.addKey(0.f, 1.f);
 
+
+    xs.addKey(3.f, 5.f);
+    ys.addKey(3.f, 5.f);
+
     TransformF *    trns  = new TransformF                ();
 
     trns->addScale( xs, ys, zs );
