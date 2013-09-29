@@ -97,7 +97,7 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
 //
 SimpleTexturePlugin::TexturePair SimpleTexturePlugin::LoadTexture( const std::string& name, const std::string& path ) const
 {
-    TextureLoader texLoader( false );
+    TextureLoader texLoader;
 
     Resource texture( name, path );
 

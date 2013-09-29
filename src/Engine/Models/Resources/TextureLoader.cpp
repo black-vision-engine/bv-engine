@@ -31,9 +31,11 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource* res )  c
 
     if( m_loadFromMemory )
     {
-        boost::filesystem::ifstream file(filepath);
+        boost::filesystem::ifstream file( filepath, std::ifstream::binary );
 
-        uintmax_t size = file_size(filepath);
+        file.seekg (0, file.end);
+        auto size = file.tellg();
+        file.seekg (0, file.beg);
 
         char* bufToRead = new char[ ( unsigned int ) size ];
     
