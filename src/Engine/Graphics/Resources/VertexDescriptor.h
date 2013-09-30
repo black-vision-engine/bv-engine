@@ -20,44 +20,43 @@ protected:
 
 protected:
 
-    static int	m_sComponentSize [ (int) AttributeType::AT_TOTAL ];
-    static int	m_sNumComponents [ (int) AttributeType::AT_TOTAL ];
-    static int	m_sTypeSize		 [ (int) AttributeType::AT_TOTAL ];
+    static unsigned int	m_sComponentSize [ (int) AttributeType::AT_TOTAL ];
+    static unsigned int	m_sNumComponents [ (int) AttributeType::AT_TOTAL ];
+    static unsigned int	m_sTypeSize		 [ (int) AttributeType::AT_TOTAL ];
 
-
-    int			            m_numAttrs;
+    unsigned int			m_numAttrs;
     std::vector< Entry >	m_entries;
-    int			            m_stride;
+    unsigned int	        m_stride;
 
 public:
 
-								VertexDescriptor	( int numAttrs );
+								VertexDescriptor	( unsigned int numAttrs );
     virtual						~VertexDescriptor	();
 
-    static VertexDescriptor *	Create				( int numAttrs, ... );
+    static VertexDescriptor *	Create				( unsigned int numAttrs, ... );
 
-    void						SetAttribute		( int attr, unsigned int channelLocation, unsigned int offset, AttributeType type, AttributeSemantic semantic );
-    void						SetStride			( int stride );
+    void						SetAttribute		( unsigned int attr, unsigned int channelLocation, unsigned int offset, AttributeType type, AttributeSemantic semantic );
+    void						SetStride			( unsigned int stride );
 
     int							NumAttrs			() const;
 
-    unsigned int				ChannelLocation     ( int attr ) const;
-    unsigned int				Offset				( int attr ) const;
-    AttributeType		        GetAttributeType    ( int attr ) const;
-	AttributeSemantic		    GetAttributeSemantic( int attr ) const;
+    unsigned int				ChannelLocation     ( unsigned int attr ) const;
+    unsigned int				Offset				( unsigned int attr ) const;
+    AttributeType		        GetAttributeType    ( unsigned int attr ) const;
+	AttributeSemantic		    GetAttributeSemantic( unsigned int attr ) const;
 
-	void						GetAttribute		( int attr, unsigned int * channelLocation, unsigned int * offset, AttributeType * type, AttributeSemantic * semantic ) const;
+	void						GetAttribute		( unsigned int attr, unsigned int * channelLocation, unsigned int * offset, AttributeType * type, AttributeSemantic * semantic ) const;
 
-    int							Stride				()	const;
-    int							Index				( AttributeSemantic semantic ) const;
+    unsigned int		        Stride				() const;
+    unsigned int			    Index				( AttributeSemantic semantic ) const;
 
-    int					        ComponentSize		( int attr ) const;
-    int					        NumComponents		( int attr ) const;
-    int					        TypeSize			( int attr ) const;
+    unsigned int				ComponentSize		( unsigned int attr ) const;
+    unsigned int				NumComponents		( unsigned int attr ) const;
+    unsigned int				TypeSize			( unsigned int attr ) const;
 
-    static int					ComponentSize		( AttributeType type );
-    static int					NumComponents		( AttributeType type );
-    static int					TypeSize			( AttributeType type );
+    static unsigned int			ComponentSize		( AttributeType type );
+    static unsigned int			NumComponents		( AttributeType type );
+    static unsigned int         TypeSize			( AttributeType type );
 
 };
 

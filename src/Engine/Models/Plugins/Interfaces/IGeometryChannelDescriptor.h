@@ -13,7 +13,7 @@ class IGeometryChannelDescriptor
 {
 public:
 
-    virtual int									        GetNumVertexChannels		()						const = 0;
+    virtual unsigned int						        GetNumVertexChannels		()						const = 0;
 	virtual bool								        HasIndexChannel				()						const = 0;
 
 	virtual const IVertexAttributeChannelDescriptor *	GetVertexChannelDescriptor	( int channelIndex )	const = 0;

@@ -52,6 +52,8 @@ private:
     RenderableArrayData *               CreateRenderableArrayData       ( PrimitiveType type ) const; 
     RenderableArrayData *               CreateRenderableArrayDataArrays ( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc ) const;
 
+    VertexDescriptor *                  CreateVertexDescriptor          ( const IGeometryChannelDescriptor * desc ) const;
+
     unsigned int                        TotalNumVertices                ( const std::vector< IConnectedComponent * > & ccVec) const;
     unsigned int                        TotalSize                       ( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc ) const;
 

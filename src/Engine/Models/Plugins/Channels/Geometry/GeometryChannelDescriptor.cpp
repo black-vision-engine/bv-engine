@@ -31,7 +31,7 @@ GeometryChannelDescriptor::~GeometryChannelDescriptor   ()
 
 // ************************************
 //
-int		GeometryChannelDescriptor::GetNumVertexChannels	() const
+unsigned int GeometryChannelDescriptor::GetNumVertexChannels	() const
 {
     return m_vertexAttributeChannelDescriptors.size();
 }

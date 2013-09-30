@@ -25,7 +25,7 @@ public:
                                                         GeometryChannelDescriptor   ();
     virtual										        ~GeometryChannelDescriptor	();
 
-    virtual int									        GetNumVertexChannels		()						const;
+    virtual unsigned int								GetNumVertexChannels		()						const;
 	virtual bool								        HasIndexChannel				()						const;
 
 	virtual const IVertexAttributeChannelDescriptor *	GetVertexChannelDescriptor	( int channelIndex )	const;

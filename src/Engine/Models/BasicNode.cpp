@@ -438,7 +438,8 @@ RenderableArrayData *               BasicNode::CreateRenderableArrayData( Primit
 //
 RenderableArrayData *               BasicNode::CreateRenderableArrayDataArrays( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc ) const
 {
-    VertexBuffer * vb = new VertexBuffer( TotalNumVertices( ccVec ), desc->SingleVertexEntrySize() ); //FIXME: a bit of hack because memory layout will be different than what this constructor suggests
+    //FIXME: a bit of hackery because memory layout will be different than what this constructor suggests
+    VertexBuffer * vb = new VertexBuffer( TotalNumVertices( ccVec ), desc->SingleVertexEntrySize() );
     
     RenderableArrayDataArrays * rad = new RenderableArrayDataArrays();
 
@@ -470,6 +471,26 @@ RenderableArrayData *               BasicNode::CreateRenderableArrayDataArrays( 
     }
 
     return true;
+}
+
+// ********************************
+//
+VertexDescriptor *                  BasicNode::CreateVertexDescriptor          ( const IGeometryChannelDescriptor * desc ) const
+{
+    VertexDescriptor * vertexDescriptor = new VertexDescriptor( desc->GetNumVertexChannels() );
+    for( unsigned int i = 0; i < desc->GetNumVertexChannels(); ++i )
+    {
+        auto channelDesc = desc->GetVertexChannelDescriptor( i );
+        channelDesc->GetType();
+    }
+    desc->GetVertexChannelDescriptor(
+    for( auto attrCh : attribChannels )
+    {
+        auto desc       = attrCh->GetDescriptor();
+        
+        VertexDescriptor*   vd = VertexDescriptor::Create( 1, channelLoc++, desc->GetType(), desc->GetSemantic(), (int)desc->GetSemantic());
+        VertexBuffer*       vb = new VertexBuffer( vertNum, desc->GetEntrySize() );
+    }    
 }
 
 // ********************************
