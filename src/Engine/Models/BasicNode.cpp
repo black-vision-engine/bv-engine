@@ -84,8 +84,8 @@ SceneNode*                  BasicNode::BuildScene()
 {
     auto renderableType = GetRenderableType();
 
-    RenderableEffect *  effect      = CreateRenderaleEffectMockImplementationForCompleteDummies();
-    RenderableArrayData * rad       = CreateRenderableArrayData( renderableType );
+    RenderableEffect *  effect                  = CreateRenderaleEffectMockImplementationForCompleteDummies();
+    RenderableArrayDataSingleVertexBuffer * rad = CreateRenderableArrayData( renderableType );
 
     RenderableEntity *  renderEnt   = nullptr;
 
@@ -97,8 +97,12 @@ SceneNode*                  BasicNode::BuildScene()
     switch( renderableType )
     {
         case PrimitiveType::PT_TRIANGLE_STRIP:
+        {
+            //FIXME: it should be constructed as a righ type RenderableArrayDataArraysSingleVertexBuffer * in the first place
+            RenderableArrayDataArraysSingleVertexBuffer * rad = CreateRenderableArrayDataTriStrip();
             renderEnt = new TriangleStrip( rad, effect );
             break;
+        }
         case PrimitiveType::PT_TRIANGLES:
         case PrimitiveType::PT_TRIANGLE_MESH:
             assert( false );
@@ -239,7 +243,7 @@ bool                                BasicNode::CreateRenderableData     (/* Vert
 
         vb->WriteToBuffer( attrCh->GetData(), attrCh->GetNumEntries() * desc->GetEntrySize() );
 
-        (*vao)->AddEntry( vb, vd );
+        //(*vao)->AddEntry( vb, vd );
     }
 
     return true;
@@ -404,7 +408,7 @@ RenderableEffect *                  BasicNode::CreateRenderaleEffectMockImplemen
 
 // ********************************
 //
-RenderableArrayData *               BasicNode::CreateRenderableArrayData( PrimitiveType type ) const
+RenderableArrayDataSingleVertexBuffer * BasicNode::CreateRenderableArrayData( PrimitiveType type ) const
 {
     if( m_plugins.empty() )
     {
@@ -436,7 +440,29 @@ RenderableArrayData *               BasicNode::CreateRenderableArrayData( Primit
 
 // ********************************
 //
-RenderableArrayData *               BasicNode::CreateRenderableArrayDataArrays( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc ) const
+RenderableArrayDataArraysSingleVertexBuffer *   BasicNode::CreateRenderableArrayDataTriStrip   () const
+{
+    if( m_plugins.empty() )
+    {
+        return nullptr;
+    }
+
+    auto geometryChannel = m_plugins.back()->GetGeometryChannel();
+
+    auto components = geometryChannel->GetComponents();
+    auto geomDesc = geometryChannel->GetDescriptor();
+
+    if( components.empty() )
+    {
+        return nullptr;
+    }
+    
+    return CreateRenderableArrayDataArrays( components, geomDesc );
+}
+
+// ********************************
+//
+RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDataArrays( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc ) const
 {
     //FIXME: a bit of hackery because memory layout may be different than what this constructor suggests (this time it is not)
     //FIXME: this code should be moved to some utility classes from this poor BasicNode (not so basic right now)
@@ -444,7 +470,7 @@ RenderableArrayData *               BasicNode::CreateRenderableArrayDataArrays( 
     VertexBuffer * vertexBuffer         = new VertexBuffer( TotalNumVertices( ccVec ), desc->SingleVertexEntrySize() );
     VertexDescriptor * vertexDescriptor = CreateVertexDescriptor( desc );
 
-    RenderableArrayDataArrays * rad = new RenderableArrayDataArrays();
+    RenderableArrayDataArraysSingleVertexBuffer * rad = new RenderableArrayDataArraysSingleVertexBuffer( vertexBuffer, vertexDescriptor );
 
     char * vbData = vertexBuffer->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P
 
@@ -456,30 +482,17 @@ RenderableArrayData *               BasicNode::CreateRenderableArrayDataArrays( 
 
         auto numVertices    = cc->GetNumVertices();
 
-        VertexArray * vao = new VertexArray( vertexBuffer, vertexDescriptor, numVertices, currentOffset );
+        VertexArraySingleVertexBuffer * vao = new VertexArraySingleVertexBuffer( vertexBuffer, vertexDescriptor, numVertices, currentOffset );
 
+        //FIXME: implement IMPLEMENT
+        AddVertexDataToVBO( vbData, cc, desc );
         currentOffset += numVertices * desc->SingleVertexEntrySize();
 
-        rad->
+        //Add vertex data to vao
+        rad->AddVAO( vao );
     }
 
-    *vao = new VertexArray();
-
-    int channelLoc = 0;
-
-    for( auto attrCh : attribChannels )
-    {
-        auto desc       = attrCh->GetDescriptor();
-        
-        VertexDescriptor*   vd = VertexDescriptor::Create( 1, channelLoc++, desc->GetType(), desc->GetSemantic(), (int)desc->GetSemantic());
-        VertexBuffer*       vb = new VertexBuffer( vertNum, desc->GetEntrySize() );
-
-        vb->WriteToBuffer( attrCh->GetData(), attrCh->GetNumEntries() * desc->GetEntrySize() );
-
-        (*vao)->AddEntry( vb, vd );
-    }
-
-    return true;
+    return rad;
 }
 
 // ********************************

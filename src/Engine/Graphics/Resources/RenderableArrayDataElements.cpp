@@ -53,4 +53,13 @@ unsigned int                RenderableArrayDataElements::GetNumConnectedComponen
     return m_inedxBuffersVec.size();
 }
 
+// *********************************
+//
+unsigned int                RenderableArrayDataElements::GetNumVerticesInConnectedComponent  ( unsigned int ccNum ) const
+{
+    assert( false ); //FIXME: implement
+
+    return 0;
+}
+
 }

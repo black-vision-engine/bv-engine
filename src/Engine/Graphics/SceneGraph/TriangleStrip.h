@@ -4,17 +4,17 @@
 
 namespace bv {
 
-class RenderableArrayData;
+class RenderableArrayDataArraysSingleVertexBuffer;
 
 class TriangleStrip : public Triangles
 {
 public:
 
-    TriangleStrip   ( RenderableArrayData * rad, RenderableEffect * effect );
+    TriangleStrip   ( RenderableArrayDataArraysSingleVertexBuffer * rad, RenderableEffect * effect );
     ~TriangleStrip  ();
 
-    virtual int     NumTriangles    ( int ccNum ) const override;
-    virtual int     NumVertices     ( int ccNum ) const override;
+    virtual int     NumTriangles    ( unsigned int ccNum ) const override;
+    virtual int     NumVertices     ( unsigned int ccNum ) const override;
 
 };
 

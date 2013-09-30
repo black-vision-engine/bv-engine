@@ -1,6 +1,7 @@
 #include "RenderableArrayDataArrays.h"
 
 #include <cassert>
+
 #include "Engine\Graphics\Resources\VertexArray.h"
 
 namespace bv
@@ -47,6 +48,15 @@ void                     RenderableArrayDataArraysSingleVertexBuffer::AddVAO    
 unsigned int             RenderableArrayDataArraysSingleVertexBuffer::GetNumConnectedComponents () const
 {
     return m_vaoVec.size();
+}
+
+// *********************************
+//
+unsigned int             RenderableArrayDataArraysSingleVertexBuffer::GetNumVerticesInConnectedComponent ( unsigned int ccNum ) const
+{
+    assert( ccNum < m_vaoVec.size() );
+
+    return m_vaoVec[ ccNum ]->GetNumVertices();
 }
 
 }

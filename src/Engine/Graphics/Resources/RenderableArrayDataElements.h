@@ -22,15 +22,16 @@ private:
 
 public:
 
-                                        RenderableArrayDataElements ( VertexBuffer * vb, VertexDescriptor * vd );
+                                        RenderableArrayDataElements         ( VertexBuffer * vb, VertexDescriptor * vd );
 
-    const IndexBuffer *                 GetIndexBuffer              ( int ccNum ) const;
+    const IndexBuffer *                 GetIndexBuffer                      ( int ccNum ) const;
 
     //FIXME: delete or uncomment if useful
-    //unsigned int                        GetCCOffset                 ( int ccNum ) const
-    //unsigned int                        GetCCNumVertices            ( int ccNum ) const
+    //unsigned int                        GetCCOffset                         ( int ccNum ) const
+    //unsigned int                        GetCCNumVertices                    ( int ccNum ) const
 
-    virtual unsigned int                GetNumConnectedComponents   () const;
+    virtual unsigned int                GetNumConnectedComponents           () const;
+    virtual unsigned int                GetNumVerticesInConnectedComponent  ( unsigned int ccNum ) const;
 
 };
 

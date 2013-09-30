@@ -9,11 +9,13 @@
 
 namespace bv {
     
+class VertexDescriptor;
 class PixelShader;
 class VertexShader; 
 class GeometryShader;
 class ShaderParameters;
-class RenderableArrayData;
+class RenderableArrayDataSingleVertexBuffer;
+class RenderableArrayDataArraysSingleVertexBuffer;
 
 namespace model {
 
@@ -49,8 +51,9 @@ private:
     bool                                CreateRenderableData    ( /*VertexArray ** vao*/ )              const;
 
     //FIXME: scene building API should be moved to some more appropriate place
-    RenderableArrayData *               CreateRenderableArrayData       ( PrimitiveType type ) const; 
-    RenderableArrayData *               CreateRenderableArrayDataArrays ( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc ) const;
+    RenderableArrayDataSingleVertexBuffer *         CreateRenderableArrayData           ( PrimitiveType type ) const; 
+    RenderableArrayDataArraysSingleVertexBuffer *   CreateRenderableArrayDataTriStrip   () const;
+    RenderableArrayDataArraysSingleVertexBuffer *   CreateRenderableArrayDataArrays     ( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc ) const;
 
     VertexDescriptor *                  CreateVertexDescriptor          ( const IGeometryChannelDescriptor * desc ) const;
 

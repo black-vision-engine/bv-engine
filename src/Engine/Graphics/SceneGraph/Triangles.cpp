@@ -8,7 +8,7 @@ namespace bv
 
 // *********************************
 //
-Triangles::Triangles               ( RenderableArrayData * rad, RenderableEffect * effect, RenderableType type )
+Triangles::Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, RenderableEffect * effect, RenderableType type )
     : RenderableEntity( type, rad, effect )
 {
 }

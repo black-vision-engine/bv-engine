@@ -5,7 +5,7 @@ namespace bv {
 
 // *********************************
 //
-IndexBuffer::IndexBuffer	( int numIndices, int indexSize, DataBuffer::Semantic semantic )
+IndexBuffer::IndexBuffer	( unsigned int numIndices, unsigned int indexSize, DataBuffer::Semantic semantic )
 	: DataBuffer( numIndices, indexSize, semantic )
 	, m_offset( 0 )
     , m_curIndex( 0 )
@@ -29,7 +29,7 @@ char* IndexBuffer::Data		() const
 
 // *********************************
 //
-void IndexBuffer::SetOffset ( int offset )
+void IndexBuffer::SetOffset ( unsigned int offset )
 {
 	assert( offset >=0 );
    
@@ -38,7 +38,7 @@ void IndexBuffer::SetOffset ( int offset )
 
 // *********************************
 //
-int IndexBuffer::Offset		() const
+unsigned int IndexBuffer::Offset		() const
 {
     return m_offset;
 }

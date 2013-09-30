@@ -24,6 +24,7 @@ public:
     void                                    AddVAO                                          ( VertexArraySingleVertexBuffer * vao );
 
     virtual unsigned int                    GetNumConnectedComponents                       () const;
+    virtual unsigned int                    GetNumVerticesInConnectedComponent              ( unsigned int ccNum ) const;
 
 };
 

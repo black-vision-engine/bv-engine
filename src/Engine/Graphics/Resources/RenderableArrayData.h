@@ -37,6 +37,7 @@ public:
     virtual const VertexBuffer *        GetVertexBuffer                         () const;
 
     virtual unsigned int                GetNumConnectedComponents               () const = 0;
+    virtual unsigned int                GetNumVerticesInConnectedComponent      ( unsigned int ccNum ) const = 0;
 
 };
 

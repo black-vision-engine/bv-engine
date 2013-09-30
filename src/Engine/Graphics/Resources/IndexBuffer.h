@@ -10,22 +10,24 @@ namespace bv
 class IndexBuffer : public DataBuffer
 {
 private:
-    int         m_curIndex;
+   
+    unsigned int         m_curIndex;
+
 protected:
 
-    int         m_offset;
+    unsigned int         m_offset;
 
 public:
 
-                IndexBuffer	( int numIndices, int indexSize, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_STATIC );
+                IndexBuffer	( unsigned int numIndices, unsigned int indexSize, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_STATIC );
     virtual		~IndexBuffer();
 
-    char *		Data		() const;
+    char *		    Data		() const;
 
-    void		SetOffset	( int offset );
-    int			Offset		() const;
+    void		    SetOffset	( unsigned int offset );
+    unsigned int	Offset		() const;
 
-    void        AddIndex    (int i)
+    void        AddIndex    ( unsigned int i)
     {
         assert(m_curIndex < m_numElts);
         memcpy(m_data + m_curIndex * m_eltSize, &i, m_eltSize);

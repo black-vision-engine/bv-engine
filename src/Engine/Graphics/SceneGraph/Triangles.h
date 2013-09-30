@@ -4,7 +4,7 @@
 
 namespace bv {
 
-class RenderableArrayData;
+class RenderableArrayDataArraysSingleVertexBuffer;
 class RenderableEffect;
 
 class Triangles : public RenderableEntity
@@ -12,11 +12,11 @@ class Triangles : public RenderableEntity
 
 public:
 
-            Triangles               ( RenderableArrayData * rad, RenderableEffect * effect, RenderableType type = RenderableType::RT_TRIANGLES );
+            Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, RenderableEffect * effect, RenderableType type = RenderableType::RT_TRIANGLES );
             ~Triangles              ();
 
-    virtual int     NumTriangles    ( int ccNum ) const = 0;
-    virtual int     NumVertices     ( int ccNum ) const = 0;
+    virtual int     NumTriangles    ( unsigned int ccNum ) const = 0;
+    virtual int     NumVertices     ( unsigned int ccNum ) const = 0;
 
     //TODO:
     //virtual GetVertex
