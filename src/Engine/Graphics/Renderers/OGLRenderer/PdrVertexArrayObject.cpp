@@ -23,7 +23,7 @@ PdrVertexArrayEntry::PdrVertexArrayEntry( PdrVertexBuffer * vb, PdrVertexDescrip
 
 // *******************************
 //
-PdrVertexArrayObject::PdrVertexArrayObject    ( Renderer * renderer, VertexArray * vao )
+PdrVertexArrayObject::PdrVertexArrayObject    ( Renderer * renderer, const VertexArray * vao )
 {
     assert( vao );
 

@@ -33,7 +33,7 @@ private:
 
 public:
 
-            PdrVertexArrayObject    ( Renderer * renderer, VertexArray * vao );
+            PdrVertexArrayObject    ( Renderer * renderer, const VertexArray * vao );
             ~PdrVertexArrayObject   ();
 
     void    Enable                  ( Renderer * renderer );

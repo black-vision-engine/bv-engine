@@ -9,7 +9,8 @@ class IndexBuffer;
 class PdrIndexBuffer
 {
 public:
-    PdrIndexBuffer(Renderer*, IndexBuffer*){}
+
+    PdrIndexBuffer( Renderer *, const IndexBuffer * ) {}
 
     void Enable(Renderer*) {}
 };

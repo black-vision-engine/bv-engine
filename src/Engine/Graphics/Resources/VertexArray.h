@@ -29,7 +29,7 @@ public:
 
     int                     NumEntries          () const;
     void                    AddEntry            ( VertexBuffer * vb, VertexDescriptor * vd );
-    VertexArrayEntry        Entry               ( int i );
+    VertexArrayEntry        Entry               ( int i ) const;
 
 };
 

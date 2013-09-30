@@ -1,17 +1,14 @@
 #include "TriangleStrip.h"
 
-#include "VertexDescriptor.h"
-#include "VertexBuffer.h"
-#include "VertexArray.h"
-#include "IndexBuffer.h"
-#include "RenderableEffect.h"
+#include "Engine\Graphics\Resources\RenderableArrayData.h"
+#include "Engine\Graphics\Shaders\RenderableEffect.h"
 
 namespace bv {
 
 // **************************
 //
-TriangleStrip::TriangleStrip   ( VertexArray * vao, RenderableEffect * effect )
-    : Triangles( vao, nullptr, nullptr, nullptr, effect, RenderableType::RT_TRIANGLE_STRIP )
+TriangleStrip::TriangleStrip   ( RenderableArrayData * rad, RenderableEffect * effect )
+    : Triangles( rad, effect, RenderableType::RT_TRIANGLE_STRIP )
 {
 }
 
@@ -23,16 +20,19 @@ TriangleStrip::~TriangleStrip  ()
 
 // **************************
 //
-int     TriangleStrip::NumTriangles    () const
+int     TriangleStrip::NumTriangles    ( int ccNum ) const
 {
-    return NumVertices() - 2;
+    return NumVertices( ccNum ) - 2;
 }
 
 // **************************
 //
-int     TriangleStrip::NumVertices     () const
+int     TriangleStrip::NumVertices     ( int ccNum ) const
 {
-    return m_vao->Entry( 0 ).vertexBuffer->NumElements();
+    assert( ccNum >= 0 );
+    assert( ccNum < GetNumconnectedComponents() );
+
+    return RAD()->GetCCNumVertices( ccNum );
 }
 
 }

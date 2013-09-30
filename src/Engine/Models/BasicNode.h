@@ -44,7 +44,7 @@ public:
 private:
 
     PrimitiveType                       GetRenderableType       ()                                  const;
-    bool                                CreateRenderableData    ( VertexArray ** vao )              const;
+    bool                                CreateRenderableData    ( /*VertexArray ** vao*/ )              const;
 
     //FIXME: scene building API should be moved to some more appropriate place
     RenderableArrayData *               CreateRenderableArrayData( PrimitiveType type ) const; 

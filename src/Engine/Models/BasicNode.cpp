@@ -91,20 +91,19 @@ SceneNode*                  BasicNode::BuildScene()
 
     RenderableEntity *  renderEnt   = nullptr;
 
-    CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
-    effect = ;
+    //CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
+    //effect = ;
 
-
-    auto renderableType = GetRenderableType();
 
     //FIXME: to powinna ogarniac jakas faktoria-manufaktura
     switch( renderableType )
     {
         case PrimitiveType::PT_TRIANGLE_STRIP:
-            renderEnt = new TriangleStrip( vao, effect );
+            renderEnt = new TriangleStrip( rad, effect );
             break;
         case PrimitiveType::PT_TRIANGLES:
         case PrimitiveType::PT_TRIANGLE_MESH:
+            assert( false );
         default:
             return nullptr;
     }
@@ -203,7 +202,7 @@ PrimitiveType                       BasicNode::GetRenderableType        ()      
 
 // ********************************
 //
-bool                                BasicNode::CreateRenderableData     ( VertexArray ** vao )    const
+bool                                BasicNode::CreateRenderableData     (/* VertexArray ** vao*/ ) const
 {
     if( m_plugins.empty() )
     {
@@ -228,6 +227,7 @@ bool                                BasicNode::CreateRenderableData     ( Vertex
         return nullptr;
     }
 
+    VertexArray ** vao;
     *vao = new VertexArray();
 
     int channelLoc = 0;

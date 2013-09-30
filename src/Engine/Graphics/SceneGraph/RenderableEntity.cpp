@@ -1,20 +1,15 @@
 #include "RenderableEntity.h"
 
-#include "VertexDescriptor.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "RenderableEffect.h"
+#include "Engine\Graphics\Resources\RenderableArrayData.h"
+#include "Engine\Graphics\Shaders\RenderableEffect.h"
 
 namespace bv {
 
 // *********************************
 //
-RenderableEntity::RenderableEntity          ( RenderableType type, VertexArray * vao, VertexDescriptor * vd, VertexBuffer * vb, IndexBuffer * ib, RenderableEffect * effect )
+RenderableEntity::RenderableEntity          ( RenderableType type, RenderableArrayData * rad, RenderableEffect * effect )
     : m_type( type )
-    , m_vDesc( vd )
-    , m_vBuf( vb )
-    , m_iBuf( ib )
-    , m_vao( vao )
+    , m_renderableArrayData( rad )
     , m_effect( effect )
 {
 }
@@ -27,9 +22,37 @@ RenderableEntity::~RenderableEntity         ()
 
 // *********************************
 //
-RenderableEntity::RenderableType RenderableEntity::GetType          () const
+RenderableEntity::RenderableType RenderableEntity::GetType                      () const
 {
     return m_type;
+}
+
+// *********************************
+//
+const RenderableArrayData *     RenderableEntity::GetRenderableArrayData        () const
+{
+    return m_renderableArrayData;
+}
+
+// *********************************
+//
+RenderableEffect *              RenderableEntity::GetRenderableEffect           ()
+{
+    return m_effect;
+}
+
+// *********************************
+//
+int                             RenderableEntity::GetNumconnectedComponents     () const
+{
+    return m_renderableArrayData->GetNumConnectedComponents();
+}
+
+// *********************************
+//
+const RenderableArrayData *     RenderableEntity::RAD                         () const
+{
+    return m_renderableArrayData;
 }
 
 }

@@ -1,13 +1,10 @@
 #pragma once
 
-#include "RenderableEntity.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
 namespace bv {
 
-class VertexDescriptor;
-class VertexBuffer;
-class IndexBuffer;
-class VertexArray;
+class RenderableArrayData;
 class RenderableEffect;
 
 class Triangles : public RenderableEntity
@@ -15,11 +12,11 @@ class Triangles : public RenderableEntity
 
 public:
 
-            Triangles               ( VertexArray * vao, VertexDescriptor * vd, VertexBuffer * vb, IndexBuffer * ib, RenderableEffect * effect, RenderableType type = RenderableType::RT_TRIANGLES );
+            Triangles               ( RenderableArrayData * rad, RenderableEffect * effect, RenderableType type = RenderableType::RT_TRIANGLES );
             ~Triangles              ();
 
-    virtual int     NumTriangles    () const = 0;
-    virtual int     NumVertices     () const = 0;
+    virtual int     NumTriangles    ( int ccNum ) const = 0;
+    virtual int     NumVertices     ( int ccNum ) const = 0;
 
     //TODO:
     //virtual GetVertex

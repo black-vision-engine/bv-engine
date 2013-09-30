@@ -40,7 +40,7 @@ void                    VertexArray::AddEntry            ( VertexBuffer * vb, Ve
 
 // *******************************
 //
-VertexArrayEntry        VertexArray::Entry               ( int i )
+VertexArrayEntry        VertexArray::Entry               ( int i ) const
 {
     assert( i >= 0 );
     assert( i < NumEntries() );

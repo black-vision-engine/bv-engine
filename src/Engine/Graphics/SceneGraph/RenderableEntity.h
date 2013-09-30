@@ -5,11 +5,7 @@
 namespace bv {
 
 class RenderableArrayData;
-class VertexDescriptor;
-class VertexBuffer;
-class IndexBuffer;
 class RenderableEffect;
-class VertexArray;
 
 class RenderableEntity : public TransformableEntity
 {
@@ -27,29 +23,28 @@ public:
 protected:
 
     RenderableType          m_type;
+
     RenderableArrayData *   m_renderableArrayData;
-
     RenderableEffect *      m_effect;
-
-    VertexDescriptor *  m_vDesc;
-    VertexBuffer *      m_vBuf;
-    IndexBuffer *       m_iBuf;
-    VertexArray *       m_vao;
 
 
 public:
                     //FIXME: effect should be registered via some method so that it can be changed during to some other effect during runtime (RenderableEffect or RenderableEffectInstance if needed)
-                    RenderableEntity        ( RenderableType type, VertexArray * vao, VertexDescriptor * vd, VertexBuffer * vb, IndexBuffer * ib, RenderableEffect * effect );
+                    RenderableEntity        ( RenderableType type, RenderableArrayData * rad, RenderableEffect * effect );
     virtual         ~RenderableEntity       ();
 
 public:
 
-    RenderableType          GetType                    () const;
-    VertexDescriptor *      GetVertexDescriptor        () { return m_vDesc; }
-    VertexBuffer *          GetVertexBuffer            () { return m_vBuf; }
-    IndexBuffer *           GetIndexBuffer             () { return m_iBuf; }
-    RenderableEffect *      GetRenderableEffect        () { return m_effect; }
-    VertexArray *           GetVertexArray             () { return m_vao; }
+    RenderableType                  GetType                     () const;
+    const RenderableArrayData *     GetRenderableArrayData      () const;
+    RenderableEffect *              GetRenderableEffect         ();
+
+    int                             GetNumconnectedComponents   () const;
+
+protected:
+
+    const RenderableArrayData *     RAD                         () const;
+
 };
 
 }

@@ -54,12 +54,12 @@ private:
 
     RendererData *		m_RendererData;
 
-    typedef std::hash_map<RenderablePass*, PdrShader*>                  PdrShaderMapType;
-    typedef std::hash_map<VertexBuffer*, PdrVertexBuffer*>              PdrVertexBufferMapType;
-    typedef std::hash_map<IndexBuffer*, PdrIndexBuffer*>                PdrIndexBufferMapType;
-    typedef std::hash_map<VertexDescriptor*, PdrVertexDescriptor*>      PdrVertexDescriptorType;
-    typedef std::hash_map<VertexArray*, PdrVertexArrayObject*>          PdrVertexArrayObjectMapType;
-    typedef std::hash_map< const Texture2D *, PdrTexture2D * >          PdrTexture2DMap;
+    typedef std::hash_map<const RenderablePass*, PdrShader*>                PdrShaderMapType;
+    typedef std::hash_map<const VertexBuffer*, PdrVertexBuffer*>            PdrVertexBufferMapType;
+    typedef std::hash_map<const IndexBuffer*, PdrIndexBuffer*>              PdrIndexBufferMapType;
+    typedef std::hash_map<const VertexDescriptor*, PdrVertexDescriptor*>    PdrVertexDescriptorType;
+    typedef std::hash_map<const VertexArray*, PdrVertexArrayObject*>        PdrVertexArrayObjectMapType;
+    typedef std::hash_map<const Texture2D *, PdrTexture2D * >               PdrTexture2DMap;
 
     PdrShaderMapType                m_PdrShaderMap;
     PdrVertexBufferMapType          m_PdrVertexBufferMap;
@@ -92,9 +92,9 @@ public:
 private:
 
     void    Enable              ( RenderablePass * pass, TransformableEntity * transform );
-    void    Enable              ( VertexBuffer * vb );
-    void    Enable              ( IndexBuffer * ib );
-    void    Enable              ( VertexArray * vao );
+    void    Enable              ( const VertexBuffer * vb );
+    void    Enable              ( const IndexBuffer * ib );
+    void    Enable              ( const VertexArray * vao );
 
 public:
 
@@ -105,10 +105,10 @@ public:
 
 public:
 
-    PdrVertexBuffer *           GetPdrVertexBuffer      ( VertexBuffer * vb );
-    PdrIndexBuffer *            GetPdrIndexBuffer       ( IndexBuffer * ib );
-    PdrVertexDescriptor *       GetPdrVertexDescriptor  ( VertexDescriptor * vd );
-    PdrVertexArrayObject *      GetPdrVertexArray       ( VertexArray * vao );
+    PdrVertexBuffer *           GetPdrVertexBuffer      ( const VertexBuffer * vb );
+    PdrIndexBuffer *            GetPdrIndexBuffer       ( const IndexBuffer * ib );
+    PdrVertexDescriptor *       GetPdrVertexDescriptor  ( const VertexDescriptor * vd );
+    PdrVertexArrayObject *      GetPdrVertexArray       ( const VertexArray * vao );
     PdrTexture2D *              GetPdrTexture2D         ( const Texture2D * texture );
 
     bool                        DrawRenderable          ( RenderableEntity * ent );

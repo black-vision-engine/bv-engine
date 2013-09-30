@@ -1,20 +1,20 @@
 #pragma once
 
-#include "Triangles.h"
+#include "Engine\Graphics\SceneGraph\Triangles.h"
 
 namespace bv {
 
+class RenderableArrayData;
+
 class TriangleStrip : public Triangles
 {
-private:
-
 public:
 
-    TriangleStrip   ( VertexArray * vao, RenderableEffect * effect );
+    TriangleStrip   ( RenderableArrayData * rad, RenderableEffect * effect );
     ~TriangleStrip  ();
 
-    virtual int     NumTriangles    () const override;
-    virtual int     NumVertices     () const override;
+    virtual int     NumTriangles    ( int ccNum ) const override;
+    virtual int     NumVertices     ( int ccNum ) const override;
 
 };
 

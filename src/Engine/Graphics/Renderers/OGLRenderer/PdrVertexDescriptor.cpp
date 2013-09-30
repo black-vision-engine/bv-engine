@@ -9,7 +9,7 @@ namespace bv {
 
 // **************************
 //
-PdrVertexDescriptor::PdrVertexDescriptor            ( Renderer * renderer, VertexDescriptor * vd )
+PdrVertexDescriptor::PdrVertexDescriptor            ( Renderer * renderer, const VertexDescriptor * vd )
     : m_vertexDescriptor( vd )
 {
 }
@@ -26,6 +26,7 @@ void    PdrVertexDescriptor::VertexAttribPointer     ( GLuint index, PdrVertexBu
 {
     vb->Bind();
 
+    //FIXME: FIX-0
     glVertexAttribPointer( (GLuint)index, m_vertexDescriptor->NumComponents( 0 ), GL_FLOAT, GL_FALSE, 0, ((GLubyte *)NULL + (0)) );
 
     //FIXME: implement the right way - with multiple channels and multiple vb objects and different Descriptor signatures

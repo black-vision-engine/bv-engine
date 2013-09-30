@@ -112,14 +112,15 @@ bool    Renderer::PreDraw               ()
 
 // *********************************
 //
-bool    Renderer::DrawRenderable        ( RenderableEntity* ent )
+bool    Renderer::DrawRenderable        ( RenderableEntity * ent )
 {
     RenderableEntity::RenderableType type = ent->GetType();
 
     switch (ent->GetType())
     {
     case RenderableEntity::RenderableType::RT_TRIANGLE_STRIP:
-        glDrawArrays(ConstantsMapper::GlConstant(type), 0, static_cast<TriangleStrip*>(ent)->NumVertices() );
+        //FIXME: FIX-1
+        //glDrawArrays(ConstantsMapper::GlConstant(type), 0, static_cast<TriangleStrip*>(ent)->NumVertices() );
         break;
     default:
         assert(!"Should not be here");
@@ -141,20 +142,7 @@ bool    Renderer::Draw                  ( RenderableEntity * ent )
     //                            Shader->Use
     //                        DrawPrimitive(entity)
     //                           glDrawArrays(vertexArrayObject)
-    auto vd     = ent->GetVertexDescriptor();
-    auto vb     = ent->GetVertexBuffer();
-    auto ib     = ent->GetIndexBuffer();
     auto eff    = ent->GetRenderableEffect();
-    auto vao    = ent->GetVertexArray();
-
-    if (vb)
-        Enable(vb); // FIXME: KOLEJONSC
-
-    if(ib) 
-        Enable(ib);
-
-    if (vao)
-        Enable(vao);
 
     //FIXME: instancing should also be implemented somewhere here
     //FIXME: read how http://www.opengl.org/sdk/docs/man/xhtml/glDrawArraysInstanced.xml
@@ -187,7 +175,7 @@ bool    Renderer::PostDraw              ()
 
 // *********************************
 //
-void    Renderer::Enable              ( RenderablePass* pass, TransformableEntity* transform )
+void    Renderer::Enable              ( RenderablePass * pass, TransformableEntity * transform )
 {
     auto it = m_PdrShaderMap.find(pass);
 
@@ -232,7 +220,7 @@ void    Renderer::Enable              ( RenderablePass* pass, TransformableEntit
 
 // *********************************
 //
-void    Renderer::Enable              ( VertexBuffer * vb )
+void    Renderer::Enable              ( const VertexBuffer * vb )
 {
     PdrVertexBuffer * pvb = GetPdrVertexBuffer( vb );
     pvb->Enable( this );
@@ -240,7 +228,7 @@ void    Renderer::Enable              ( VertexBuffer * vb )
 
 // *********************************
 //
-void    Renderer::Enable              ( IndexBuffer * ib )
+void    Renderer::Enable              ( const IndexBuffer * ib )
 {
     PdrIndexBuffer * pib = GetPdrIndexBuffer( ib );
     pib->Enable( this );
@@ -248,7 +236,7 @@ void    Renderer::Enable              ( IndexBuffer * ib )
 
 // *********************************
 //
-void    Renderer::Enable              ( VertexArray * vao )
+void    Renderer::Enable              ( const VertexArray * vao )
 {
     PdrVertexArrayObject  * pvao = GetPdrVertexArray( vao );
     pvao->Enable( this );    
@@ -272,7 +260,7 @@ void    Renderer::Disable             ( const Texture2D * texture, int textureUn
 
 // *********************************
 //
-PdrVertexBuffer *           Renderer::GetPdrVertexBuffer        ( VertexBuffer * vb )
+PdrVertexBuffer *           Renderer::GetPdrVertexBuffer        ( const VertexBuffer * vb )
 {
     auto it = m_PdrVertexBufferMap.find( vb );
 
@@ -293,7 +281,7 @@ PdrVertexBuffer *           Renderer::GetPdrVertexBuffer        ( VertexBuffer *
 
 // *********************************
 //
-PdrIndexBuffer *            Renderer::GetPdrIndexBuffer         ( IndexBuffer * ib )
+PdrIndexBuffer *            Renderer::GetPdrIndexBuffer         ( const IndexBuffer * ib )
 {
     auto it = m_PdrIndexBufferMap.find( ib );
 
@@ -314,7 +302,7 @@ PdrIndexBuffer *            Renderer::GetPdrIndexBuffer         ( IndexBuffer * 
 
 // *********************************
 //
-PdrVertexDescriptor *       Renderer::GetPdrVertexDescriptor    ( VertexDescriptor* vd  )
+PdrVertexDescriptor *       Renderer::GetPdrVertexDescriptor    ( const VertexDescriptor* vd  )
 {
     auto it = m_PdrVertexDescriptorMap.find( vd );
 
@@ -335,7 +323,7 @@ PdrVertexDescriptor *       Renderer::GetPdrVertexDescriptor    ( VertexDescript
 
 // *********************************
 //
-PdrVertexArrayObject *         Renderer::GetPdrVertexArray         ( VertexArray * vao )
+PdrVertexArrayObject *         Renderer::GetPdrVertexArray         ( const VertexArray * vao )
 {
     auto it = m_PdrVertexArrayObjectMap.find( vao );
 

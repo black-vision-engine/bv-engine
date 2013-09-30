@@ -1,16 +1,15 @@
 #include "Triangles.h"
 
-#include "VertexDescriptor.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "RenderableEffect.h"
+#include "Engine\Graphics\Resources\RenderableArrayData.h"
+#include "Engine\Graphics\Shaders\RenderableEffect.h"
 
-namespace bv {
+namespace bv
+{
 
 // *********************************
 //
-Triangles::Triangles               ( VertexArray * vao, VertexDescriptor * vd, VertexBuffer * vb, IndexBuffer * ib, RenderableEffect * effect, RenderableType type )
-    : RenderableEntity( type, vao, vd, vb, ib, effect )
+Triangles::Triangles               ( RenderableArrayData * rad, RenderableEffect * effect, RenderableType type )
+    : RenderableEntity( type, rad, effect )
 {
 }
 
@@ -18,7 +17,6 @@ Triangles::Triangles               ( VertexArray * vao, VertexDescriptor * vd, V
 //
 Triangles::~Triangles              ()
 {
-
 }
 
 }

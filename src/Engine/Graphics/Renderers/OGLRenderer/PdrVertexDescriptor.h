@@ -15,11 +15,11 @@ class PdrVertexDescriptor
 {
 private:
 
-    VertexDescriptor *  m_vertexDescriptor;
+    const VertexDescriptor *  m_vertexDescriptor;
 
 public:
 
-                PdrVertexDescriptor     ( Renderer * renderer, VertexDescriptor * vd );
+                PdrVertexDescriptor     ( Renderer * renderer, const VertexDescriptor * vd );
                 ~PdrVertexDescriptor    ();
 
         void    VertexAttribPointer     ( GLuint index, PdrVertexBuffer * vb );
