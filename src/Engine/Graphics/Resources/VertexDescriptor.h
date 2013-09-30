@@ -38,7 +38,7 @@ public:
     void						SetAttribute		( unsigned int attr, unsigned int channelLocation, unsigned int offset, AttributeType type, AttributeSemantic semantic );
     void						SetStride			( unsigned int stride );
 
-    int							NumAttrs			() const;
+    unsigned int				NumAttrs			() const;
 
     unsigned int				ChannelLocation     ( unsigned int attr ) const;
     unsigned int				Offset				( unsigned int attr ) const;

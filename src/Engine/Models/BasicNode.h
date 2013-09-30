@@ -54,6 +54,7 @@ private:
     RenderableArrayDataSingleVertexBuffer *         CreateRenderableArrayData           ( PrimitiveType type ) const; 
     RenderableArrayDataArraysSingleVertexBuffer *   CreateRenderableArrayDataTriStrip   () const;
     RenderableArrayDataArraysSingleVertexBuffer *   CreateRenderableArrayDataArrays     ( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc ) const;
+    void                                            AddVertexDataToVBO                  ( char * data, IConnectedComponent * cc, const IGeometryChannelDescriptor * desc ) const;
 
     VertexDescriptor *                  CreateVertexDescriptor          ( const IGeometryChannelDescriptor * desc ) const;
 

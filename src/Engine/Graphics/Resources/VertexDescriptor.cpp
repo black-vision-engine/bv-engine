@@ -114,7 +114,7 @@ void VertexDescriptor::SetStride ( unsigned int stride )
 
 // *********************************
 //
-int VertexDescriptor::NumAttrs		()	const
+unsigned int VertexDescriptor::NumAttrs		()	const
 {
     return m_numAttrs;
 }

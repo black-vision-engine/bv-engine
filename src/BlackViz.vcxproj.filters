@@ -89,6 +89,7 @@
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayData.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataArrays.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataElements.cpp" />
+    <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObjectSingleVB.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -202,6 +203,7 @@
     <ClInclude Include="Engine\Graphics\Resources\RenderableArrayData.h" />
     <ClInclude Include="Engine\Graphics\Resources\RenderableArrayDataArrays.h" />
     <ClInclude Include="Engine\Graphics\Resources\RenderableArrayDataElements.h" />
+    <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObjectSingleVB.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

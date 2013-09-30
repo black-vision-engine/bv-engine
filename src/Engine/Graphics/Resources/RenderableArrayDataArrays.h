@@ -20,7 +20,7 @@ public:
                                             RenderableArrayDataArraysSingleVertexBuffer     ( VertexBuffer * vb, VertexDescriptor * vd );
                                             ~RenderableArrayDataArraysSingleVertexBuffer    ();
 
-    const VertexArraySingleVertexBuffer *   VAO                                             ( int ccNum ) const;
+    const VertexArraySingleVertexBuffer *   VAO                                             ( unsigned int ccNum ) const;
     void                                    AddVAO                                          ( VertexArraySingleVertexBuffer * vao );
 
     virtual unsigned int                    GetNumConnectedComponents                       () const;

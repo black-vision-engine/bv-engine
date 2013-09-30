@@ -28,10 +28,10 @@ RenderableArrayDataArraysSingleVertexBuffer::~RenderableArrayDataArraysSingleVer
 
 // *********************************
 //
-const VertexArraySingleVertexBuffer *   RenderableArrayDataArraysSingleVertexBuffer::VAO        ( int ccNum ) const
+const VertexArraySingleVertexBuffer *   RenderableArrayDataArraysSingleVertexBuffer::VAO        ( unsigned int ccNum ) const
 {
     assert( ccNum >= 0 );
-    assert( ccNum < (int) m_vaoVec.size() );
+    assert( ccNum < m_vaoVec.size() );
 
     return m_vaoVec[ ccNum ];
 }

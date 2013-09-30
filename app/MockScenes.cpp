@@ -376,7 +376,7 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     model::RectComponent *          rect0 = model::RectComponent::Create( w, h, -dist, -dist );
     model::RectComponent *          rect1 = model::RectComponent::Create( w, h, dist, -dist );
     model::RectComponent *          rect2 = model::RectComponent::Create( w, h, dist, dist );
-    model::RectComponent *          rect3 = model::RectComponent::Create( w, h, -dist, -dist );
+    model::RectComponent *          rect3 = model::RectComponent::Create( w, h, -dist, dist );
 
     model::GeometryChannelDescriptor desc;
 
@@ -406,11 +406,24 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     /////////////////////////////// Texture plugin //////////////////////////////////
 
     model::SimpleTexturePlugin    * stpp  = nullptr;
+
+    FloatInterpolator alpha;
+    alpha.addKey( 0.0f, 0.25f ); alpha.setWrapPostMethod( WrapMethod::pingPong );
+    alpha.addKey( 1.0f, 0.05f );
+    alpha.addKey( 2.0f, 0.5f );
+    alpha.addKey( 5.0f, 1.0f );
+    alpha.addKey( 8.0f, 0.75f );
+    alpha.addKey( 10.0f, 0.0f );
+
     TransformF * tx0m = new TransformF();
+    tx0m->addScale( ConstValue( 1.0f ), ConstValue( 1.0f ), ConstValue( 1.0f ) );
+
     TransformF * tx1m = new TransformF();    
+    tx1m->addScale( ConstValue( 1.0f ), ConstValue( 1.0f ), ConstValue( 1.0f ) );
+
     stpp = new model::SimpleTexturePlugin  ( rectPlugin, "simless_01.jpg", "simless_00.jpg" );
 
-    stpp->SetPixelShaderChannel     ( new MyPixelShaderChannel( "../dep/media/shaders/simpletexture.frag", ConstValue( 0.5f ), *tx0m, *tx1m ) );
+    stpp->SetPixelShaderChannel     ( new MyPixelShaderChannel( "../dep/media/shaders/simpletexture.frag", alpha, *tx0m, *tx1m ) );
     stpp->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
 
     root->AddPlugin                 ( stpp );

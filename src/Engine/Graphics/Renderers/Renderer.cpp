@@ -4,11 +4,11 @@
 #include "glutils.h"
 #include <cassert>
 
-#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrShader.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrIndexBuffer.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexBuffer.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexArrayObject.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexArrayObjectSingleVB.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexDescriptor.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrTexture2D.h"
 #include "Engine/Graphics/Shaders/RenderablePass.h"
@@ -17,6 +17,9 @@
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
+#include "Engine\Graphics\Resources\VertexBuffer.h"
+#include "Engine\Graphics\Resources\VertexArray.h"
+#include "Engine\Graphics\Resources\RenderableArrayDataArrays.h"
 //FIXME: add disable methods so that current state can be cleared after frame is rendered
 
 namespace bv {
@@ -119,12 +122,63 @@ bool    Renderer::DrawRenderable        ( RenderableEntity * ent )
     switch (ent->GetType())
     {
     case RenderableEntity::RenderableType::RT_TRIANGLE_STRIP:
+        DrawTriangleStrips( static_cast< TriangleStrip * >( ent ) );
         //FIXME: FIX-1
         //glDrawArrays(ConstantsMapper::GlConstant(type), 0, static_cast<TriangleStrip*>(ent)->NumVertices() );
         break;
     default:
         assert(!"Should not be here");
     }
+
+    return true;
+}
+
+// *********************************
+//
+bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
+{
+    static GLuint mode = ConstantsMapper::GlConstant( RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+    const RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< const RenderableArrayDataArraysSingleVertexBuffer * >( strip->GetRenderableArrayData() );
+
+    const VertexBuffer * vb     = rad->GetVertexBuffer();
+    const VertexDescriptor * vd = rad->GetVertexDecscriptor();
+    
+    unsigned int numCC = rad->GetNumConnectedComponents();
+
+    //FIXME: remove
+    //const float * fData = (const float *) vb->Data();
+    //unsigned int vertSize = 5;
+    //unsigned int rectSize = vertSize * 4;
+    //for( unsigned int i = 0; i < numCC; ++i )
+    //{
+    //    std::cout << std::endl << "Rectangle " << i << std::endl;
+    //    const float * rctData = &fData[ i * rectSize ];
+
+    //    std::cout << "Pos [" << rctData[ 0 ] << ", " << rctData[ 1 ] << ", " << rctData[ 2 ] << "] ";
+    //    std::cout << "[" << rctData[ 5 ] << ", " << rctData[ 6 ] << ", " << rctData[ 7 ] << "] ";
+    //    std::cout << "[" << rctData[ 10 ] << ", " << rctData[ 11 ] << ", " << rctData[ 12 ] << "] ";
+    //    std::cout << "[" << rctData[ 15 ] << ", " << rctData[ 16 ] << ", " << rctData[ 17 ] << "] " << std::endl;
+    //    std::cout << "uv [" << rctData[ 3 ] << ", " << rctData[ 4 ] << "]";
+    //    std::cout << "[" << rctData[ 8 ] << ", " << rctData[ 9 ] << "]";
+    //    std::cout << "[" << rctData[ 13 ] << ", " << rctData[ 14 ] << "]";
+    //    std::cout << "[" << rctData[ 18 ] << ", " << rctData[ 19 ] << "]" << std::endl;
+
+    //}
+
+    Enable( vb );
+
+
+    for( unsigned int i = 0; i < numCC; ++i )
+    {
+        const VertexArraySingleVertexBuffer * vao = rad->VAO( i );
+        unsigned int numVertices = vao->GetNumVertices();
+ 
+        Enable( vao );
+        glDrawArrays( mode , 0, numVertices );
+        Disable( vao );
+    }
+   
+    Disable( vb );
 
     return true;
 }
@@ -148,12 +202,15 @@ bool    Renderer::Draw                  ( RenderableEntity * ent )
     //FIXME: read how http://www.opengl.org/sdk/docs/man/xhtml/glDrawArraysInstanced.xml
     //FIXME: works
     //FIXME: additional rendering branch (and engine/pdr classes are required for glDrawElements call - draw based on indices)
-    Enable(eff->GetPass(0), ent); //FIXME: 1 pass
+    
+    //FIXME: effect should only bind glsl program and set per frame paramters
+    //FIXME: then there should be an instancing loop with MVP binding and then entity rendering
+    Enable( eff->GetPass( 0 ), ent ); //FIXME: 1 pass ONLY RIGHT NOW
+
+    DrawRenderable( ent );
 
     //glPolygonMode(GL_FRONT, GL_LINE);
     //glPolygonMode(GL_BACK, GL_LINE);
-
-    DrawRenderable( ent );
 
     //Disable(eff->GetPass(0));  //FIXME:
     //Disable(vb, vd);
@@ -240,6 +297,30 @@ void    Renderer::Enable              ( const VertexArray * vao )
 {
     PdrVertexArrayObject  * pvao = GetPdrVertexArray( vao );
     pvao->Enable( this );    
+}
+
+// *********************************
+//
+void    Renderer::Enable              ( const VertexArraySingleVertexBuffer * vao )
+{
+    PdrVertexArrayObjectSingleVB  * pvao = GetPdrVertexArraySingleVB( vao );
+    pvao->Enable( this );        
+}
+
+// *********************************
+//
+void    Renderer::Disable             ( const VertexArraySingleVertexBuffer * vao )
+{
+    PdrVertexArrayObjectSingleVB  * pvao = GetPdrVertexArraySingleVB( vao );
+    pvao->Disable( this );        
+}
+
+// *********************************
+//
+void    Renderer::Disable             ( const  VertexBuffer * vb )
+{
+    PdrVertexBuffer * pdrVb = GetPdrVertexBuffer( vb );
+    pdrVb->Disable( this );
 }
 
 // *********************************
@@ -333,6 +414,27 @@ PdrVertexArrayObject *         Renderer::GetPdrVertexArray         ( const Verte
     {
         pdrVao = new PdrVertexArrayObject( this, vao );
         m_PdrVertexArrayObjectMap[ vao ] = pdrVao;
+    }
+    else
+    {
+        pdrVao = it->second;
+    }
+
+    return pdrVao;
+}
+
+// *********************************
+//
+PdrVertexArrayObjectSingleVB *  Renderer::GetPdrVertexArraySingleVB   ( const VertexArraySingleVertexBuffer * vao )
+{
+    auto it = m_PdrVertexArrayObjectSingleVBMap.find( vao );
+
+    PdrVertexArrayObjectSingleVB * pdrVao = nullptr;
+
+    if( it == m_PdrVertexArrayObjectSingleVBMap.end() )
+    {
+        pdrVao = new PdrVertexArrayObjectSingleVB( this, vao );
+        m_PdrVertexArrayObjectSingleVBMap[ vao ] = pdrVao;
     }
     else
     {

@@ -84,10 +84,10 @@ SceneNode*                  BasicNode::BuildScene()
 {
     auto renderableType = GetRenderableType();
 
-    RenderableEffect *  effect                  = CreateRenderaleEffectMockImplementationForCompleteDummies();
-    RenderableArrayDataSingleVertexBuffer * rad = CreateRenderableArrayData( renderableType );
-
+    RenderableEffect *  effect      = CreateRenderaleEffectMockImplementationForCompleteDummies();
     RenderableEntity *  renderEnt   = nullptr;
+    //RenderableArrayDataSingleVertexBuffer * rad = CreateRenderableArrayData( renderableType );
+
 
     //CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
     //effect = ;
@@ -485,7 +485,7 @@ RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDa
         VertexArraySingleVertexBuffer * vao = new VertexArraySingleVertexBuffer( vertexBuffer, vertexDescriptor, numVertices, currentOffset );
 
         //FIXME: implement IMPLEMENT
-        AddVertexDataToVBO( vbData, cc, desc );
+        AddVertexDataToVBO( &vbData[ currentOffset ], cc, desc );
         currentOffset += numVertices * desc->SingleVertexEntrySize();
 
         //Add vertex data to vao
@@ -493,6 +493,29 @@ RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDa
     }
 
     return rad;
+}
+
+// ********************************
+//
+void                            BasicNode::AddVertexDataToVBO              ( char * data, IConnectedComponent * cc, const IGeometryChannelDescriptor * desc ) const
+{
+    unsigned int numVertices = cc->GetNumVertices();
+    unsigned int offset = 0;
+
+    for( unsigned int i = 0; i < numVertices; ++i )
+    {
+        for( auto vach : cc->GetVertexAttributeChannels() )
+        {
+            assert( vach->GetNumEntries() == numVertices );
+
+            auto eltSize = vach->GetDescriptor()->GetEntrySize();
+            const char * eltData = vach->GetData();
+
+            memcpy( &data[ offset ], &eltData[ i * eltSize ], eltSize );
+
+            offset += eltSize;
+        }
+    }
 }
 
 // ********************************
@@ -509,8 +532,10 @@ VertexDescriptor *                  BasicNode::CreateVertexDescriptor          (
 
         //FIXME: default channel location just copied from model channel ordering (maybe it should be a permutation or something)
         vertexDescriptor->SetAttribute( i, i, attributeOffset, channelDesc->GetType(), channelDesc->GetSemantic() );
-        attributeOffset += channelDesc->GetEntrySize();        
+        attributeOffset += channelDesc->GetEntrySize();     
     }
+
+    vertexDescriptor->SetStride( attributeOffset );
 
     return vertexDescriptor;
 }
