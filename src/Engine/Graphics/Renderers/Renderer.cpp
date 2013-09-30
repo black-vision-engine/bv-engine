@@ -138,18 +138,13 @@ bool    Renderer::DrawRenderable        ( RenderableEntity * ent )
 bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
 {
     static GLuint mode = ConstantsMapper::GlConstant( RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
-    const RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< const RenderableArrayDataArraysSingleVertexBuffer * >( strip->GetRenderableArrayData() );
 
-    const VertexBuffer * vb     = rad->GetVertexBuffer();
-    const VertexDescriptor * vd = rad->GetVertexDecscriptor();
-    const VertexArraySingleVertexBuffer * vao = rad->VAO();
-
-    unsigned int numCC = rad->GetNumConnectedComponents();
+    const VertexArraySingleVertexBuffer * vao = static_cast< const RenderableArrayDataArraysSingleVertexBuffer * >( strip->GetRenderableArrayData() )->VAO();
 
     Enable  ( vao );
 
     unsigned int firstVertex = 0;
-    for( unsigned int i = 0; i < numCC; ++i )
+    for( unsigned int i = 0; i < vao->GetNumConnectedComponents(); ++i )
     {
         unsigned int numVertices = vao->GetNumVertices( i );
         glDrawArrays( mode, firstVertex, numVertices );
@@ -157,61 +152,6 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
     }
 
     Disable ( vao );
-
-    //FIXME: remove
-    //const float * fData = (const float *) vb->Data();
-    //unsigned int vertSize = 5;
-    //unsigned int rectSize = vertSize * 4;
-    //for( unsigned int i = 0; i < numCC; ++i )
-    //{
-    //    std::cout << std::endl << "Rectangle " << i << std::endl;
-    //    const float * rctData = &fData[ i * rectSize ];
-
-    //    std::cout << "Pos [" << rctData[ 0 ] << ", " << rctData[ 1 ] << ", " << rctData[ 2 ] << "] ";
-    //    std::cout << "[" << rctData[ 5 ] << ", " << rctData[ 6 ] << ", " << rctData[ 7 ] << "] ";
-    //    std::cout << "[" << rctData[ 10 ] << ", " << rctData[ 11 ] << ", " << rctData[ 12 ] << "] ";
-    //    std::cout << "[" << rctData[ 15 ] << ", " << rctData[ 16 ] << ", " << rctData[ 17 ] << "] " << std::endl;
-    //    std::cout << "uv [" << rctData[ 3 ] << ", " << rctData[ 4 ] << "]";
-    //    std::cout << "[" << rctData[ 8 ] << ", " << rctData[ 9 ] << "]";
-    //    std::cout << "[" << rctData[ 13 ] << ", " << rctData[ 14 ] << "]";
-    //    std::cout << "[" << rctData[ 18 ] << ", " << rctData[ 19 ] << "]" << std::endl;
-
-    //}
-
-    //Enable( vb );
-
-    //for( unsigned int i = 0; i < numCC; ++i )
-    //{
-    //    const VertexArraySingleVertexBuffer * vao = rad->VAO( i );
-    //    unsigned int numVertices = vao->GetNumVertices();
- 
-    //    Enable( vao );
-    //    glDrawArrays( mode , 0, numVertices );
-    //    Disable( vao );
-    //}
-   
-    //for( unsigned int i = 0; i < numCC; ++i )
-    //{
-    //    const VertexArraySingleVertexBuffer * vao = rad->VAO( i ); 
-    //    Enable( vao );
-    //}
-
-    //for( unsigned int i = 0; i < numCC - 3; ++i )
-    //{
-    //    const VertexArraySingleVertexBuffer * vao = rad->VAO( i );
-    //    unsigned int numVertices = vao->GetNumVertices();
- 
-    //    glDrawArrays( mode ,0, 4 );
-    //    //glDrawArrays( mode ,1, 3 );
-    //}
-
-    //for( unsigned int i = 0; i < numCC; ++i )
-    //{
-    //    const VertexArraySingleVertexBuffer * vao = rad->VAO( i );
-    //    Disable( vao );
-    //}
-
-    //Disable( vb );
 
     return true;
 }
@@ -500,3 +440,25 @@ PdrTexture2D *                  Renderer::GetPdrTexture2D         ( const Textur
 
 
 }
+
+
+    //FIXME: remove
+    //const float * fData = (const float *) vb->Data();
+    //unsigned int vertSize = 5;
+    //unsigned int rectSize = vertSize * 4;
+    //for( unsigned int i = 0; i < numCC; ++i )
+    //{
+    //    std::cout << std::endl << "Rectangle " << i << std::endl;
+    //    const float * rctData = &fData[ i * rectSize ];
+
+    //    std::cout << "Pos [" << rctData[ 0 ] << ", " << rctData[ 1 ] << ", " << rctData[ 2 ] << "] ";
+    //    std::cout << "[" << rctData[ 5 ] << ", " << rctData[ 6 ] << ", " << rctData[ 7 ] << "] ";
+    //    std::cout << "[" << rctData[ 10 ] << ", " << rctData[ 11 ] << ", " << rctData[ 12 ] << "] ";
+    //    std::cout << "[" << rctData[ 15 ] << ", " << rctData[ 16 ] << ", " << rctData[ 17 ] << "] " << std::endl;
+    //    std::cout << "uv [" << rctData[ 3 ] << ", " << rctData[ 4 ] << "]";
+    //    std::cout << "[" << rctData[ 8 ] << ", " << rctData[ 9 ] << "]";
+    //    std::cout << "[" << rctData[ 13 ] << ", " << rctData[ 14 ] << "]";
+    //    std::cout << "[" << rctData[ 18 ] << ", " << rctData[ 19 ] << "]" << std::endl;
+
+    //}
+
