@@ -11,6 +11,7 @@ namespace bv
 //
 RenderableArrayDataArraysSingleVertexBuffer::RenderableArrayDataArraysSingleVertexBuffer        ( VertexBuffer * vb, VertexDescriptor * vd )
     : RenderableArrayDataSingleVertexBuffer( RenderableArrayDataEnumKind::RADEK_VAO, vb, vd )
+    , m_vao( nullptr )
 {
 }
 
@@ -19,44 +20,41 @@ RenderableArrayDataArraysSingleVertexBuffer::RenderableArrayDataArraysSingleVert
 RenderableArrayDataArraysSingleVertexBuffer::~RenderableArrayDataArraysSingleVertexBuffer       ()
 {
     //FIXME: for now let's assume that this class owns all added vaos
+    delete m_vao;
+}
 
-    for( auto vao : m_vaoVec )
+// *********************************
+//
+const VertexArraySingleVertexBuffer *   RenderableArrayDataArraysSingleVertexBuffer::VAO        () const
+{
+    return m_vao;
+}
+
+// *********************************
+//
+void                     RenderableArrayDataArraysSingleVertexBuffer::SetVAO                    ( VertexArraySingleVertexBuffer * vao )
+{
+    if ( m_vao != nullptr )
     {
-        delete vao;
+        //FIXME: for now let's assume that this class owns all added vaos
+        delete m_vao;
     }
-}
 
-// *********************************
-//
-const VertexArraySingleVertexBuffer *   RenderableArrayDataArraysSingleVertexBuffer::VAO        ( unsigned int ccNum ) const
-{
-    assert( ccNum >= 0 );
-    assert( ccNum < m_vaoVec.size() );
-
-    return m_vaoVec[ ccNum ];
-}
-
-// *********************************
-//
-void                     RenderableArrayDataArraysSingleVertexBuffer::AddVAO                    ( VertexArraySingleVertexBuffer * vao )
-{
-    m_vaoVec.push_back( vao );
+    m_vao = vao;
 }
 
 // *********************************
 //
 unsigned int             RenderableArrayDataArraysSingleVertexBuffer::GetNumConnectedComponents () const
 {
-    return m_vaoVec.size();
+    return m_vao->GetNumConnectedComponents();
 }
 
 // *********************************
 //
 unsigned int             RenderableArrayDataArraysSingleVertexBuffer::GetNumVerticesInConnectedComponent ( unsigned int ccNum ) const
 {
-    assert( ccNum < m_vaoVec.size() );
-
-    return m_vaoVec[ ccNum ]->GetNumVertices();
+    return m_vao->GetNumVertices( ccNum );
 }
 
 }

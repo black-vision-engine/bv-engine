@@ -168,16 +168,37 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
     Enable( vb );
 
 
+    //for( unsigned int i = 0; i < numCC; ++i )
+    //{
+    //    const VertexArraySingleVertexBuffer * vao = rad->VAO( i );
+    //    unsigned int numVertices = vao->GetNumVertices();
+ 
+    //    Enable( vao );
+    //    glDrawArrays( mode , 0, numVertices );
+    //    Disable( vao );
+    //}
+   
     for( unsigned int i = 0; i < numCC; ++i )
+    {
+        const VertexArraySingleVertexBuffer * vao = rad->VAO( i ); 
+        Enable( vao );
+    }
+
+    for( unsigned int i = 0; i < numCC - 3; ++i )
     {
         const VertexArraySingleVertexBuffer * vao = rad->VAO( i );
         unsigned int numVertices = vao->GetNumVertices();
  
-        Enable( vao );
-        glDrawArrays( mode , 0, numVertices );
+        glDrawArrays( mode ,0, 4 );
+        //glDrawArrays( mode ,1, 3 );
+    }
+
+    for( unsigned int i = 0; i < numCC; ++i )
+    {
+        const VertexArraySingleVertexBuffer * vao = rad->VAO( i );
         Disable( vao );
     }
-   
+
     Disable( vb );
 
     return true;

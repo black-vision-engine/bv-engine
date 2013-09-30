@@ -471,6 +471,7 @@ RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDa
     VertexDescriptor * vertexDescriptor = CreateVertexDescriptor( desc );
 
     RenderableArrayDataArraysSingleVertexBuffer * rad = new RenderableArrayDataArraysSingleVertexBuffer( vertexBuffer, vertexDescriptor );
+    VertexArraySingleVertexBuffer * vao = new VertexArraySingleVertexBuffer( vertexBuffer, vertexDescriptor );
 
     char * vbData = vertexBuffer->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P
 
@@ -482,15 +483,16 @@ RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDa
 
         auto numVertices    = cc->GetNumVertices();
 
-        VertexArraySingleVertexBuffer * vao = new VertexArraySingleVertexBuffer( vertexBuffer, vertexDescriptor, numVertices, currentOffset );
+        vao->AddCCEntry( numVertices, currentOffset );
 
-        //FIXME: implement IMPLEMENT
         AddVertexDataToVBO( &vbData[ currentOffset ], cc, desc );
+
         currentOffset += numVertices * desc->SingleVertexEntrySize();
 
         //Add vertex data to vao
-        rad->AddVAO( vao );
     }
+
+    rad->AddVAO( vao );
 
     return rad;
 }

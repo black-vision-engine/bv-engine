@@ -45,18 +45,26 @@ private:
 
     VertexBuffer *      m_vertexBuffer;
     VertexDescriptor *  m_vertexDescriptor;
-    unsigned int        m_numVertices;
-    unsigned int        m_vertexBuferOffset;
+
+    std::vector< unsigned int >     m_ccVertexNum;
+    std::vector< unsigned int >     m_ccVertexBuffOffsets;
+    //unsigned int        m_numVertices;
+    //unsigned int        m_vertexBuferOffset;
 
 public:
 
-                                        VertexArraySingleVertexBuffer   ( VertexBuffer * vb, VertexDescriptor * vd, unsigned int numVertices, unsigned int vertexBufferOffset );
+                                        VertexArraySingleVertexBuffer   ( VertexBuffer * vb, VertexDescriptor * vd );
                                         ~VertexArraySingleVertexBuffer  ();
 
             const VertexBuffer *        GetVertexBuffer                 () const;
             const VertexDescriptor *    GetVertexDescriptor             () const;
-            unsigned int                GetNumVertices                  () const;
-            unsigned int                GetVertexBufferOffset           () const;
+
+            void                        AddCCEntry                      ( unsigned int numVertices, unsigned int vertexBufferOffset );
+
+            unsigned int                GetNumConnectedComponents       () const;
+
+            unsigned int                GetNumVertices                  ( unsigned int ccNum ) const;
+            unsigned int                GetVertexBufferOffset           ( unsigned int ccNum ) const;
 
 };
 

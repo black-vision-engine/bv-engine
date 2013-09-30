@@ -66,11 +66,9 @@ VertexArrayEntry        VertexArray::Entry               ( int i ) const
 
 // *******************************
 //
-VertexArraySingleVertexBuffer::VertexArraySingleVertexBuffer   ( VertexBuffer * vb, VertexDescriptor * vd, unsigned int numVertices, unsigned int vertexBufferOffset )
+VertexArraySingleVertexBuffer::VertexArraySingleVertexBuffer   ( VertexBuffer * vb, VertexDescriptor * vd )
     : m_vertexBuffer( vb )
     , m_vertexDescriptor( vd )
-    , m_numVertices( numVertices )
-    , m_vertexBuferOffset( vertexBufferOffset )
 {
 }
 
@@ -96,16 +94,34 @@ const VertexDescriptor *    VertexArraySingleVertexBuffer::GetVertexDescriptor  
 
 // *******************************
 //
-unsigned int                VertexArraySingleVertexBuffer::GetNumVertices                  () const
+void                        VertexArraySingleVertexBuffer::AddCCEntry                      ( unsigned int numVertices, unsigned int vertexBufferOffset )
 {
-    return m_numVertices;
+    m_ccVertexNum.push_back( numVertices );
+    m_ccVertexBuffOffsets.push_back( vertexBufferOffset );
 }
 
 // *******************************
 //
-unsigned int                VertexArraySingleVertexBuffer::GetVertexBufferOffset           () const
+unsigned int                VertexArraySingleVertexBuffer::GetNumConnectedComponents       () const
 {
-    return m_vertexBuferOffset;
+    assert( m_ccVertexNum.size() == m_ccVertexBuffOffsets.size() );
+    return m_ccVertexNum.size();
+}
+
+// *******************************
+//
+unsigned int                VertexArraySingleVertexBuffer::GetNumVertices                  ( unsigned int ccNum ) const
+{
+    assert( ccNum < m_ccVertexNum.size() );
+    return m_ccVertexNum[ ccNum ];
+}
+
+// *******************************
+//
+unsigned int                VertexArraySingleVertexBuffer::GetVertexBufferOffset           ( unsigned int ccNum ) const
+{
+    assert( ccNum < m_ccVertexBuffOffsets.size() );
+    return m_ccVertexBuffOffsets[ ccNum ];
 }
 
 }

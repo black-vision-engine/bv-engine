@@ -13,15 +13,15 @@ class RenderableArrayDataArraysSingleVertexBuffer : public RenderableArrayDataSi
 {
 private:
 
-    std::vector< VertexArraySingleVertexBuffer * >    m_vaoVec;
+    VertexArraySingleVertexBuffer *         m_vao;
 
 public:
 
                                             RenderableArrayDataArraysSingleVertexBuffer     ( VertexBuffer * vb, VertexDescriptor * vd );
                                             ~RenderableArrayDataArraysSingleVertexBuffer    ();
 
-    const VertexArraySingleVertexBuffer *   VAO                                             ( unsigned int ccNum ) const;
-    void                                    AddVAO                                          ( VertexArraySingleVertexBuffer * vao );
+    const VertexArraySingleVertexBuffer *   VAO                                             () const;
+    void                                    SetVAO                                          ( VertexArraySingleVertexBuffer * vao );
 
     virtual unsigned int                    GetNumConnectedComponents                       () const;
     virtual unsigned int                    GetNumVerticesInConnectedComponent              ( unsigned int ccNum ) const;
