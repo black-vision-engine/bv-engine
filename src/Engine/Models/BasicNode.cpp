@@ -230,6 +230,7 @@ bool                                BasicNode::CreateRenderableData     (/* Vert
     }
 
     VertexArray ** vao;
+    assert( false );
     *vao = new VertexArray();
 
     int channelLoc = 0;
@@ -470,8 +471,8 @@ RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDa
     VertexBuffer * vertexBuffer         = new VertexBuffer( TotalNumVertices( ccVec ), desc->SingleVertexEntrySize() );
     VertexDescriptor * vertexDescriptor = CreateVertexDescriptor( desc );
 
-    RenderableArrayDataArraysSingleVertexBuffer * rad = new RenderableArrayDataArraysSingleVertexBuffer( vertexBuffer, vertexDescriptor );
     VertexArraySingleVertexBuffer * vao = new VertexArraySingleVertexBuffer( vertexBuffer, vertexDescriptor );
+    RenderableArrayDataArraysSingleVertexBuffer * rad = new RenderableArrayDataArraysSingleVertexBuffer( vao );
 
     char * vbData = vertexBuffer->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P
 
@@ -481,18 +482,12 @@ RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDa
     {
         assert( !cc->GetVertexAttributeChannels().empty() );
 
-        auto numVertices    = cc->GetNumVertices();
-
-        vao->AddCCEntry( numVertices, currentOffset );
+        vao->AddCCEntry( cc->GetNumVertices() );
 
         AddVertexDataToVBO( &vbData[ currentOffset ], cc, desc );
 
-        currentOffset += numVertices * desc->SingleVertexEntrySize();
-
-        //Add vertex data to vao
+        currentOffset += cc->GetNumVertices() * desc->SingleVertexEntrySize();
     }
-
-    rad->AddVAO( vao );
 
     return rad;
 }

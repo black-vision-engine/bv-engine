@@ -19,7 +19,8 @@ class PdrVertexArrayObjectSingleVB
 {
 private:
     
-    GLuint                  m_vaoHandle;
+    GLuint                                  m_vaoHandle;
+    const VertexArraySingleVertexBuffer *   m_vao;
 
 public:
 
@@ -29,8 +30,8 @@ public:
     void    Enable                  ( Renderer * renderer );
     void    Disable                 ( Renderer * renderer );
 
-    void    Bind                    ();
-    void    Unbind                  ();
+    void    Bind                    ( Renderer * renderer );
+    void    Unbind                  ( Renderer * renderer );
 
     void    EnableVertexAttribArray ( GLuint index );
 

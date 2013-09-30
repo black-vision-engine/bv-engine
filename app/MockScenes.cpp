@@ -392,6 +392,23 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     geomCh->AddConnectedComponent( rect2 );
     geomCh->AddConnectedComponent( rect3 );
 
+    for( unsigned int i = 1; i < 6; ++i )
+    {
+        float w = 0.2f;
+        float h = 0.2f;
+        float dist = 0.3f;
+
+        model::RectComponent *  rect0 = model::RectComponent::Create( w, h, -dist * i, 0.f );
+        model::RectComponent *  rect1 = model::RectComponent::Create( w, h, 0.f, -dist * i );
+        model::RectComponent *  rect2 = model::RectComponent::Create( w, h, dist * i, 0.f );
+        model::RectComponent *  rect3 = model::RectComponent::Create( w, h, 0.f, dist * i );
+
+        geomCh->AddConnectedComponent( rect0 );
+        geomCh->AddConnectedComponent( rect1 );
+        geomCh->AddConnectedComponent( rect2 );
+        geomCh->AddConnectedComponent( rect3 );        
+    }
+
     // ******************** Plugin intself *******************************
     model::GeometryRectPlugin    *  rectPlugin  = new model::GeometryRectPlugin( ConstValue( 1.0f ), ConstValue( 1.0f ) );
     model::SimpleTransformChannel  * simpleTransform0  = new model::SimpleTransformChannel();

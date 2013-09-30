@@ -21,6 +21,7 @@ namespace bv
 PdrVertexArrayObjectSingleVB::PdrVertexArrayObjectSingleVB    ( Renderer * renderer, const VertexArraySingleVertexBuffer * vao )
 {
     assert( vao );
+    m_vao = vao;
 
     //glGenVertexArrays         ( 1, &m_VaoHandle );
     //glBindVertexArray         ( m_VaoHandle );
@@ -31,7 +32,7 @@ PdrVertexArrayObjectSingleVB::PdrVertexArrayObjectSingleVB    ( Renderer * rende
 
     GLuint index = 0;
 
-    Bind();
+    Bind( renderer );
 
     const VertexDescriptor * desc = vao->GetVertexDescriptor();
     GLuint numChannels = vao->GetVertexDescriptor()->NumAttrs();
@@ -42,17 +43,14 @@ PdrVertexArrayObjectSingleVB::PdrVertexArrayObjectSingleVB    ( Renderer * rende
         this->EnableVertexAttribArray( location );
     }
 
-    unsigned int vbOffset       = vao->GetVertexBufferOffset();
-    unsigned int numVertices    = vao->GetNumVertices();
     unsigned int stride         = desc->Stride();
-
     unsigned int locOffset      = 0;
 
     for( GLuint index = 0; index < numChannels; ++index )
     {
         unsigned int channel        = desc->ChannelLocation( index );
         unsigned int numComponents  = desc->NumComponents( index );
-        GLubyte * ptrOffset         = (GLubyte*)(vbOffset + locOffset);
+        GLubyte * ptrOffset         = (GLubyte*)(locOffset);
 
         //FIXME: not general enough: component type and normalized to be implemented
         glVertexAttribPointer( (GLuint) channel, numComponents, GL_FLOAT, GL_FALSE, stride, ptrOffset );
@@ -60,7 +58,7 @@ PdrVertexArrayObjectSingleVB::PdrVertexArrayObjectSingleVB    ( Renderer * rende
         locOffset += desc->ComponentSize( index ) * numComponents;
     }
 
-    Unbind();
+    Unbind( renderer );
 }
 
 // *******************************
@@ -74,28 +72,30 @@ PdrVertexArrayObjectSingleVB::~PdrVertexArrayObjectSingleVB   ()
 //
 void    PdrVertexArrayObjectSingleVB::Enable                  ( Renderer * renderer )
 {
-    Bind();
+    Bind( renderer );
 }
 
 // *******************************
 //
 void    PdrVertexArrayObjectSingleVB::Disable                 ( Renderer * renderer )
 {
-    Unbind();
+    Unbind( renderer );
 }
 
 // *******************************
 //
-void    PdrVertexArrayObjectSingleVB::Bind                    ()
+void    PdrVertexArrayObjectSingleVB::Bind                    ( Renderer * renderer )
 {
+    renderer->Enable( m_vao->GetVertexBuffer() );
     glBindVertexArray( m_vaoHandle );
 }
 
 // *******************************
 //
-void    PdrVertexArrayObjectSingleVB::Unbind                  ()
+void    PdrVertexArrayObjectSingleVB::Unbind                  ( Renderer * renderer )
 {
     glBindVertexArray( 0 );
+    renderer->Disable( m_vao->GetVertexBuffer() );
 }
 
 // *******************************

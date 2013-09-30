@@ -17,7 +17,7 @@ private:
 
 public:
 
-                                            RenderableArrayDataArraysSingleVertexBuffer     ( VertexBuffer * vb, VertexDescriptor * vd );
+                                            RenderableArrayDataArraysSingleVertexBuffer     ( VertexArraySingleVertexBuffer * vao );
                                             ~RenderableArrayDataArraysSingleVertexBuffer    ();
 
     const VertexArraySingleVertexBuffer *   VAO                                             () const;

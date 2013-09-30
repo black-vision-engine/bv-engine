@@ -43,28 +43,32 @@ class VertexArraySingleVertexBuffer
 {
 private:
 
-    VertexBuffer *      m_vertexBuffer;
-    VertexDescriptor *  m_vertexDescriptor;
+    VertexBuffer *              m_vertexBuffer;
+    VertexDescriptor *          m_vertexDescriptor;
+    
+    unsigned int                m_numTotalVertices;
+    std::vector< unsigned int > m_ccVertexNum;
 
-    std::vector< unsigned int >     m_ccVertexNum;
-    std::vector< unsigned int >     m_ccVertexBuffOffsets;
     //unsigned int        m_numVertices;
     //unsigned int        m_vertexBuferOffset;
 
 public:
 
-                                        VertexArraySingleVertexBuffer   ( VertexBuffer * vb, VertexDescriptor * vd );
-                                        ~VertexArraySingleVertexBuffer  ();
+                                VertexArraySingleVertexBuffer   ( VertexBuffer * vb, VertexDescriptor * vd );
+                                ~VertexArraySingleVertexBuffer  ();
 
-            const VertexBuffer *        GetVertexBuffer                 () const;
-            const VertexDescriptor *    GetVertexDescriptor             () const;
+    const VertexBuffer *        GetVertexBuffer                 () const;
+    const VertexDescriptor *    GetVertexDescriptor             () const;
 
-            void                        AddCCEntry                      ( unsigned int numVertices, unsigned int vertexBufferOffset );
+    VertexBuffer *              GetVertexBuffer                 ();
+    VertexDescriptor *          GetVertexDescriptor             ();
 
-            unsigned int                GetNumConnectedComponents       () const;
+    void                        AddCCEntry                      ( unsigned int numVertices );
 
-            unsigned int                GetNumVertices                  ( unsigned int ccNum ) const;
-            unsigned int                GetVertexBufferOffset           ( unsigned int ccNum ) const;
+    unsigned int                GetNumConnectedComponents       () const;
+
+    unsigned int                GetNumVertices                  ( unsigned int ccNum ) const;
+    unsigned int                GetNumTotalVertices             () const;
 
 };
 

@@ -142,8 +142,21 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
 
     const VertexBuffer * vb     = rad->GetVertexBuffer();
     const VertexDescriptor * vd = rad->GetVertexDecscriptor();
-    
+    const VertexArraySingleVertexBuffer * vao = rad->VAO();
+
     unsigned int numCC = rad->GetNumConnectedComponents();
+
+    Enable  ( vao );
+
+    unsigned int firstVertex = 0;
+    for( unsigned int i = 0; i < numCC; ++i )
+    {
+        unsigned int numVertices = vao->GetNumVertices( i );
+        glDrawArrays( mode, firstVertex, numVertices );
+        firstVertex += numVertices;
+    }
+
+    Disable ( vao );
 
     //FIXME: remove
     //const float * fData = (const float *) vb->Data();
@@ -165,8 +178,7 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
 
     //}
 
-    Enable( vb );
-
+    //Enable( vb );
 
     //for( unsigned int i = 0; i < numCC; ++i )
     //{
@@ -178,28 +190,28 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
     //    Disable( vao );
     //}
    
-    for( unsigned int i = 0; i < numCC; ++i )
-    {
-        const VertexArraySingleVertexBuffer * vao = rad->VAO( i ); 
-        Enable( vao );
-    }
+    //for( unsigned int i = 0; i < numCC; ++i )
+    //{
+    //    const VertexArraySingleVertexBuffer * vao = rad->VAO( i ); 
+    //    Enable( vao );
+    //}
 
-    for( unsigned int i = 0; i < numCC - 3; ++i )
-    {
-        const VertexArraySingleVertexBuffer * vao = rad->VAO( i );
-        unsigned int numVertices = vao->GetNumVertices();
+    //for( unsigned int i = 0; i < numCC - 3; ++i )
+    //{
+    //    const VertexArraySingleVertexBuffer * vao = rad->VAO( i );
+    //    unsigned int numVertices = vao->GetNumVertices();
  
-        glDrawArrays( mode ,0, 4 );
-        //glDrawArrays( mode ,1, 3 );
-    }
+    //    glDrawArrays( mode ,0, 4 );
+    //    //glDrawArrays( mode ,1, 3 );
+    //}
 
-    for( unsigned int i = 0; i < numCC; ++i )
-    {
-        const VertexArraySingleVertexBuffer * vao = rad->VAO( i );
-        Disable( vao );
-    }
+    //for( unsigned int i = 0; i < numCC; ++i )
+    //{
+    //    const VertexArraySingleVertexBuffer * vao = rad->VAO( i );
+    //    Disable( vao );
+    //}
 
-    Disable( vb );
+    //Disable( vb );
 
     return true;
 }

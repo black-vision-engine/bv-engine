@@ -9,10 +9,11 @@ namespace bv
 
 // *********************************
 //
-RenderableArrayDataArraysSingleVertexBuffer::RenderableArrayDataArraysSingleVertexBuffer        ( VertexBuffer * vb, VertexDescriptor * vd )
-    : RenderableArrayDataSingleVertexBuffer( RenderableArrayDataEnumKind::RADEK_VAO, vb, vd )
-    , m_vao( nullptr )
+RenderableArrayDataArraysSingleVertexBuffer::RenderableArrayDataArraysSingleVertexBuffer        ( VertexArraySingleVertexBuffer * vao )
+    : RenderableArrayDataSingleVertexBuffer( RenderableArrayDataEnumKind::RADEK_VAO, vao->GetVertexBuffer(), vao->GetVertexDescriptor() )
+    , m_vao( vao )
 {
+    assert( vao != nullptr );
 }
 
 // *********************************

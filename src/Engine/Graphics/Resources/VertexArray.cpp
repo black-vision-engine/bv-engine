@@ -94,17 +94,30 @@ const VertexDescriptor *    VertexArraySingleVertexBuffer::GetVertexDescriptor  
 
 // *******************************
 //
-void                        VertexArraySingleVertexBuffer::AddCCEntry                      ( unsigned int numVertices, unsigned int vertexBufferOffset )
+VertexBuffer *              VertexArraySingleVertexBuffer::GetVertexBuffer                 ()
+{
+    return m_vertexBuffer;
+}
+
+// *******************************
+//
+VertexDescriptor *          VertexArraySingleVertexBuffer::GetVertexDescriptor             ()
+{
+    return m_vertexDescriptor;
+}
+
+// *******************************
+//
+void                        VertexArraySingleVertexBuffer::AddCCEntry                      ( unsigned int numVertices )
 {
     m_ccVertexNum.push_back( numVertices );
-    m_ccVertexBuffOffsets.push_back( vertexBufferOffset );
+    m_numTotalVertices += numVertices;
 }
 
 // *******************************
 //
 unsigned int                VertexArraySingleVertexBuffer::GetNumConnectedComponents       () const
 {
-    assert( m_ccVertexNum.size() == m_ccVertexBuffOffsets.size() );
     return m_ccVertexNum.size();
 }
 
@@ -118,10 +131,9 @@ unsigned int                VertexArraySingleVertexBuffer::GetNumVertices       
 
 // *******************************
 //
-unsigned int                VertexArraySingleVertexBuffer::GetVertexBufferOffset           ( unsigned int ccNum ) const
+unsigned int                VertexArraySingleVertexBuffer::GetNumTotalVertices              () const
 {
-    assert( ccNum < m_ccVertexBuffOffsets.size() );
-    return m_ccVertexBuffOffsets[ ccNum ];
+    return m_numTotalVertices;
 }
 
 }
