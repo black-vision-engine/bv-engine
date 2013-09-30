@@ -30,7 +30,7 @@ bool                    Float3VertexAttributeChannel::IsReadOnly   () const
 
 // *********************************
 //
-int                     Float3VertexAttributeChannel::GetNumEntries()   const
+unsigned int            Float3VertexAttributeChannel::GetNumEntries()   const
 {
     return m_attributes.size();
 }
@@ -77,7 +77,7 @@ bool                    Float2VertexAttributeChannel::IsReadOnly   () const
 
 // *********************************
 //
-int                     Float2VertexAttributeChannel::GetNumEntries()   const
+unsigned int            Float2VertexAttributeChannel::GetNumEntries()   const
 {
     return m_attributes.size();
 }

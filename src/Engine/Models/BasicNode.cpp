@@ -8,7 +8,10 @@
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 #include "System/Print.h"
 
-#include "Engine\Graphics\Resources\RenderableArrayData.h"
+#include "Engine\Models\Plugins\Interfaces\IGeometryChannelDescriptor.h"
+#include "Engine\Graphics\Resources\RenderableArrayDataArrays.h"
+#include "Engine\Graphics\Resources\RenderableArrayDataElements.h"
+
 #include "Engine\Graphics\Resources\VertexDescriptor.h"
 #include "Engine\Graphics\Resources\VertexBuffer.h"
 #include "Engine\Graphics\Resources\VertexArray.h"
@@ -83,11 +86,6 @@ SceneNode*                  BasicNode::BuildScene()
 
     RenderableEffect *  effect      = CreateRenderaleEffectMockImplementationForCompleteDummies();
     RenderableArrayData * rad       = CreateRenderableArrayData( renderableType );
-
-    VertexBuffer *      vb          = nullptr;
-    IndexBuffer *       ib          = nullptr;
-    VertexDescriptor *  vd          = nullptr;
-    VertexArray *       vao         = nullptr;
 
     RenderableEntity *  renderEnt   = nullptr;
 
@@ -408,10 +406,25 @@ RenderableEffect *                  BasicNode::CreateRenderaleEffectMockImplemen
 //
 RenderableArrayData *               BasicNode::CreateRenderableArrayData( PrimitiveType type ) const
 {
+    if( m_plugins.empty() )
+    {
+        return nullptr;
+    }
+
+    auto geometryChannel = m_plugins.back()->GetGeometryChannel();
+
+    auto components = geometryChannel->GetComponents();
+    auto geomDesc = geometryChannel->GetDescriptor();
+
+    if( components.empty() )
+    {
+        return nullptr;
+    }
+
     switch( type )
     {
         case PrimitiveType::PT_TRIANGLE_STRIP:
-            return CreateRenderableArrayDataArrays();
+            return CreateRenderableArrayDataArrays( components, geomDesc );
         case PrimitiveType::PT_TRIANGLES:
         case PrimitiveType::PT_TRIANGLE_MESH:
             //FIXME: implement
@@ -423,14 +436,66 @@ RenderableArrayData *               BasicNode::CreateRenderableArrayData( Primit
 
 // ********************************
 //
-RenderableArrayData *               BasicNode::CreateRenderableArrayDataArrays() const
+RenderableArrayData *               BasicNode::CreateRenderableArrayDataArrays( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc ) const
 {
-    return nullptr;
+    VertexBuffer * vb = new VertexBuffer( TotalNumVertices( ccVec ), desc->SingleVertexEntrySize() ); //FIXME: a bit of hack because memory layout will be different than what this constructor suggests
+    
+    RenderableArrayDataArrays * rad = new RenderableArrayDataArrays();
+
+    for( auto cc : ccVec )
+    {
+        auto vertNum        = cc->GetNumVertices();
+        auto attribChannels = cc->GetVertexAttributeChannels();
+
+        assert( !attribChannels.empty() );
+
+        VertexArray ** vao;
+
+    }
+
+    *vao = new VertexArray();
+
+    int channelLoc = 0;
+
+    for( auto attrCh : attribChannels )
+    {
+        auto desc       = attrCh->GetDescriptor();
+        
+        VertexDescriptor*   vd = VertexDescriptor::Create( 1, channelLoc++, desc->GetType(), desc->GetSemantic(), (int)desc->GetSemantic());
+        VertexBuffer*       vb = new VertexBuffer( vertNum, desc->GetEntrySize() );
+
+        vb->WriteToBuffer( attrCh->GetData(), attrCh->GetNumEntries() * desc->GetEntrySize() );
+
+        (*vao)->AddEntry( vb, vd );
+    }
+
+    return true;
 }
 
 // ********************************
 //
-void                                BasicNode::RegisterShaderParameters(const IShaderChannel* shaderChannel, ShaderParameters * shParams)
+unsigned int                        BasicNode::TotalNumVertices       ( const std::vector< IConnectedComponent * > & ccVec ) const
+{
+    unsigned int totalNumVertices = 0;
+
+    for( auto cc : ccVec )
+    {
+        totalNumVertices += cc->GetNumVertices();
+    }
+
+    return totalNumVertices;
+}
+
+// ********************************
+//
+unsigned int                        BasicNode::TotalSize             ( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc ) const
+{
+    return TotalNumVertices( ccVec ) * desc->SingleVertexEntrySize();
+}
+
+// ********************************
+//
+void                                BasicNode::RegisterShaderParameters (const IShaderChannel* shaderChannel, ShaderParameters * shParams)
 {
     for(auto param : shaderChannel->GetValuesList())
     {

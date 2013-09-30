@@ -12,13 +12,14 @@ private:
     int     m_curVertex;
 
 public:
-            VertexBuffer	( int numVertices, int vertexSize, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_STATIC );
+            VertexBuffer	( unsigned int numVertices, unsigned int vertexSize, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_STATIC );
     virtual ~VertexBuffer	();
 
     char *	Data			() const;
 
-    void    WriteToBuffer   ( const char* src, int size );
+    void    WriteToBuffer   ( const char * src, unsigned int size );
 
+    //FIXME: this SUXX PAUKE
     template<class VertexType>
     void    AddVertex       ( const VertexType & data )
     {

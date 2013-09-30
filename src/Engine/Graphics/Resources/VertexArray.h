@@ -10,10 +10,11 @@ class VertexDescriptor;
 
 struct VertexArrayEntry
 {
-    VertexArrayEntry( VertexBuffer * vb, VertexDescriptor * vd );
+    VertexArrayEntry( VertexBuffer * vb, VertexDescriptor * vd, unsigned int vboffset );
 
     VertexBuffer *      vertexBuffer;
     VertexDescriptor *  vertexDescriptor;
+    unsigned int        vertexBufferOffset;
 };
 
 class VertexArray
@@ -28,7 +29,7 @@ public:
                             ~VertexArray        ();
 
     int                     NumEntries          () const;
-    void                    AddEntry            ( VertexBuffer * vb, VertexDescriptor * vd );
+    void                    AddEntry            ( VertexBuffer * vb, VertexDescriptor * vd, unsigned int vertexBufferOffset );
     VertexArrayEntry        Entry               ( int i ) const;
 
 };

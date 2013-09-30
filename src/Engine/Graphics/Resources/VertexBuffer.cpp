@@ -4,8 +4,8 @@ namespace bv {
 
 // *********************************
 //
-VertexBuffer::VertexBuffer ( int numVertices, int vertexSize, DataBuffer::Semantic semantic )
-    : DataBuffer(numVertices, vertexSize, semantic )
+VertexBuffer::VertexBuffer ( unsigned int numVertices, unsigned int vertexSize, DataBuffer::Semantic semantic )
+    : DataBuffer( numVertices, vertexSize, semantic )
     , m_curVertex(0)
 {
 }
@@ -26,7 +26,7 @@ char *	VertexBuffer::Data	() const
 
 // *********************************
 //
-void    VertexBuffer::WriteToBuffer   ( const char* src, int size )
+void    VertexBuffer::WriteToBuffer   ( const char* src, unsigned int size )
 {
     memcpy( m_data, src, size );
 }

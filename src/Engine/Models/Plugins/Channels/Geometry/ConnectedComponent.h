@@ -11,7 +11,8 @@ class VertexAttributeChannel;
 class ConnectedComponent : public IConnectedComponent
 {
 public:
-    std::vector< VertexAttributeChannel* >              m_vertexAttributeChannels;
+
+    std::vector< VertexAttributeChannel * >             m_vertexAttributeChannels;
 
 public:
 
@@ -19,8 +20,8 @@ public:
 
     virtual std::vector< IVertexAttributeChannel* >     GetVertexAttributeChannels  () const;
 
-    virtual int                                         GetNumVertices              () const;
-    virtual int                                         GetNumPrimitives            () const;
+    virtual unsigned int                                GetNumVertices              () const;
+    virtual unsigned int                                GetNumPrimitives            () const;
 
     virtual                                             ~ConnectedComponent         (){};
     explicit                                            ConnectedComponent          ();

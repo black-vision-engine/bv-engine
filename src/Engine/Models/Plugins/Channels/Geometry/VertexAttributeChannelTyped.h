@@ -27,7 +27,7 @@ public:
     virtual void                    Update                          ( float t ){} // FIXME: implement
     virtual bool                    IsReadOnly                      () const;
 
-    virtual int                     GetNumEntries                   ()                      const;
+    virtual unsigned int            GetNumEntries                   ()                      const;
     virtual const char *            GetData                         ()                      const;
 
     //virtual int                     GetEntrySize                    ()                      const;
@@ -51,7 +51,7 @@ public:
     virtual void                    Update                          ( float t ){} // FIXME: implement
     virtual bool                    IsReadOnly                      () const;
 
-    virtual int                     GetNumEntries                   ()                      const;
+    virtual unsigned int            GetNumEntries                   ()                      const;
     virtual const char *            GetData                         ()                      const;
 
     //virtual int                     GetEntrySize                    ()                      const;

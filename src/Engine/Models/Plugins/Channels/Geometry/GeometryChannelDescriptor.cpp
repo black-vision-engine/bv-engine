@@ -62,6 +62,32 @@ const IIndexChannelDescriptor *		        GeometryChannelDescriptor::GetIndexChan
 
 // ************************************
 //
+unsigned int                                GeometryChannelDescriptor::SingleVertexEntrySize       ()                    const
+{
+    unsigned int totalSize = 0;
+
+    for( auto channelDesc : m_vertexAttributeChannelDescriptors )
+    {
+        totalSize += channelDesc->GetEntrySize();
+    }
+
+    return totalSize;
+}
+
+// ************************************
+//
+unsigned int                                GeometryChannelDescriptor::SingleIndexEntrySize        ()                    const
+{
+    if( HasIndexChannel() )
+    {
+        return m_indexChannelDescriptor->GetIndexSize();
+    }
+
+    return 0;
+}
+
+// ************************************
+//
 const VertexAttributeChannelDescriptor *  GeometryChannelDescriptor::AddVertexAttrChannelDesc    ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole )
 {
     VertexAttributeChannelDescriptor * desc = new VertexAttributeChannelDescriptor( attrType, attrSemantic, channelRole );

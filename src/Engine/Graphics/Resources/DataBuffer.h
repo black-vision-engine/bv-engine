@@ -19,29 +19,29 @@ public:
 
 protected:
 
-	int			m_numElts;
-    int			m_eltSize;
+	unsigned int	m_numElts;
+    unsigned int	m_eltSize;
 
-    Semantic	m_semantic;
+    Semantic	    m_semantic;
 
-	int			m_size;
+	unsigned int    m_size;
     
-	char *		m_data;
+	char *		    m_data;
 
 protected:
 
     DataBuffer					();
-    DataBuffer					( int numelts, int eltSize, Semantic semantic );
+    DataBuffer					( unsigned int numelts, unsigned int eltSize, Semantic semantic );
 
 public:
 
     virtual			~DataBuffer ();
 
-    int				NumElements () const;
-    int				ElementSize () const;
+    unsigned int	NumElements () const;
+    unsigned int	ElementSize () const;
     Semantic		GetSemantic	() const;
 
-    int				Size		() const;
+    unsigned int	Size		() const;
     const char *	Data		() const;
 };
 

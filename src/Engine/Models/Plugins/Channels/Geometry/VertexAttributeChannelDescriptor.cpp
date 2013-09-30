@@ -6,11 +6,11 @@
 namespace bv { namespace model
 {
 
-const int VertexAttributeChannelDescriptor::m_sAttrSizea[ (int) AttributeType::AT_TOTAL ] = { sizeof( float ),     //AT_FLOAT1 = 0,
-                                                                                              2 * sizeof( float ), //AT_FLOAT2,
-                                                                                              3 * sizeof( float ), //AT_FLOAT3,
-                                                                                              4 * sizeof( float )  //AT_FLOAT4
-                                                                                            };
+const unsigned int VertexAttributeChannelDescriptor::m_sAttrSize[ (int) AttributeType::AT_TOTAL ] = { sizeof( float ),     //AT_FLOAT1 = 0,
+                                                                                                       2 * sizeof( float ), //AT_FLOAT2,
+                                                                                                       3 * sizeof( float ), //AT_FLOAT3,
+                                                                                                       4 * sizeof( float )  //AT_FLOAT4
+                                                                                                      };
 
 // ************************************
 //
@@ -43,7 +43,7 @@ AttributeSemantic    VertexAttributeChannelDescriptor::GetSemantic              
 
 // ************************************
 //
-int             VertexAttributeChannelDescriptor::GetEntrySize                              ()  const
+unsigned int    VertexAttributeChannelDescriptor::GetEntrySize                              ()  const
 {
     return GetAttrTypeSize( m_attrType );
 }
@@ -64,9 +64,9 @@ std::string     VertexAttributeChannelDescriptor::SuggestedDefaultName          
 
 // ************************************
 //
-int             VertexAttributeChannelDescriptor::GetAttrTypeSize                           ( AttributeType type )
+unsigned int    VertexAttributeChannelDescriptor::GetAttrTypeSize                           ( AttributeType type )
 {
-    return m_sAttrSizea[ (int) type ];
+    return m_sAttrSize[ (int) type ];
 }
 
 // ************************************

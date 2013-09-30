@@ -16,7 +16,7 @@ DataBuffer::DataBuffer ()
 
 // *********************************
 //
-DataBuffer::DataBuffer	( int numElts, int eltSize, DataBuffer::Semantic semantic )
+DataBuffer::DataBuffer	( unsigned int numElts, unsigned int eltSize, DataBuffer::Semantic semantic )
 	: m_numElts( numElts )
 	, m_eltSize( eltSize )
 	, m_semantic( semantic )
@@ -38,35 +38,35 @@ DataBuffer::~DataBuffer ()
 
 // *********************************
 //
-int DataBuffer::NumElements					() const
+unsigned int DataBuffer::NumElements			() const
 {
 	return m_numElts;
 }
 
 // *********************************
 //
-int DataBuffer::ElementSize					() const
+unsigned int DataBuffer::ElementSize	        () const
 {
     return m_eltSize;
 }
 
 // *********************************
 //
-DataBuffer::Semantic DataBuffer::GetSemantic() const
+DataBuffer::Semantic DataBuffer::GetSemantic    () const
 {
 	return m_semantic;
 }
 
 // *********************************
 //
-int DataBuffer::Size						() const
+unsigned int DataBuffer::Size					() const
 {
     return m_size;
 }
 
 // *********************************
 //
-const char * DataBuffer::Data				() const
+const char * DataBuffer::Data				    () const
 {
     return m_data;
 }

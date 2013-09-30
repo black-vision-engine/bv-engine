@@ -18,6 +18,8 @@ class RenderableArrayData;
 namespace model {
 
 class IShaderChannel;
+class IConnectedComponent;
+class IGeometryChannelDescriptor;
 
 typedef std::vector< Node* > TNodeVec;
 
@@ -47,8 +49,11 @@ private:
     bool                                CreateRenderableData    ( /*VertexArray ** vao*/ )              const;
 
     //FIXME: scene building API should be moved to some more appropriate place
-    RenderableArrayData *               CreateRenderableArrayData( PrimitiveType type ) const; 
-    RenderableArrayData *               CreateRenderableArrayDataArrays() const;
+    RenderableArrayData *               CreateRenderableArrayData       ( PrimitiveType type ) const; 
+    RenderableArrayData *               CreateRenderableArrayDataArrays ( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc ) const;
+
+    unsigned int                        TotalNumVertices                ( const std::vector< IConnectedComponent * > & ccVec) const;
+    unsigned int                        TotalSize                       ( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc ) const;
 
     RenderableEffect *                  CreateRenderaleEffectMockImplementationForCompleteDummies() const;
 

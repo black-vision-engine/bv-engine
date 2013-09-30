@@ -18,7 +18,7 @@ public:
 
     virtual std::string                                 GetName         ()  const = 0;
     
-    virtual int                                         GetNumEntries   ()  const = 0;
+    virtual unsigned int                                GetNumEntries   ()  const = 0;
     
     virtual const char *                                GetData         ()  const = 0;
 

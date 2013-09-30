@@ -6,21 +6,29 @@
 namespace bv { namespace model
 {
 
+// ************************************
+//
 ConnectedComponent::ConnectedComponent()
 {
 }
 
+// ************************************
+//
 void                                        ConnectedComponent::Update( float t )
 {
     //FIXME: Forward do channels
 }
 
+// ************************************
+//
 std::vector< IVertexAttributeChannel* >     ConnectedComponent::GetVertexAttributeChannels  () const
 {
     return std::vector< IVertexAttributeChannel* >(m_vertexAttributeChannels.begin(), m_vertexAttributeChannels.end());
 }
 
-int                                         ConnectedComponent::GetNumVertices              () const
+// ************************************
+//
+unsigned int                                ConnectedComponent::GetNumVertices              () const
 {
     if( m_vertexAttributeChannels.empty() )
     {
@@ -28,11 +36,13 @@ int                                         ConnectedComponent::GetNumVertices  
     }
     else
     {
-        return m_vertexAttributeChannels[0]->GetNumEntries();
+        return m_vertexAttributeChannels[ 0 ]->GetNumEntries();
     }
 }
 
-int                                         ConnectedComponent::GetNumPrimitives            () const
+// ************************************
+//
+unsigned int                               ConnectedComponent::GetNumPrimitives            () const
 {
 
     // TODO: co tutaj?

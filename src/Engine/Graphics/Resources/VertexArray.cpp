@@ -6,9 +6,10 @@ namespace bv
 
 // *******************************
 //
-VertexArrayEntry::VertexArrayEntry( VertexBuffer * vb, VertexDescriptor * vd )
+VertexArrayEntry::VertexArrayEntry( VertexBuffer * vb, VertexDescriptor * vd, unsigned int vboffset )
     : vertexBuffer( vb )
     , vertexDescriptor( vd )
+    , vertexBufferOffset( vboffset )
 {
 }
 
@@ -33,9 +34,9 @@ int                     VertexArray::NumEntries          () const
 
 // *******************************
 //
-void                    VertexArray::AddEntry            ( VertexBuffer * vb, VertexDescriptor * vd )
+void                    VertexArray::AddEntry            ( VertexBuffer * vb, VertexDescriptor * vd, unsigned int vertexBufferOffset )
 {
-    m_vaoEntries.push_back( VertexArrayEntry( vb, vd ) );
+    m_vaoEntries.push_back( VertexArrayEntry( vb, vd ,vertexBufferOffset ) );
 }
 
 // *******************************

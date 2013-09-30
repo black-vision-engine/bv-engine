@@ -31,6 +31,9 @@ public:
 	virtual const IVertexAttributeChannelDescriptor *	GetVertexChannelDescriptor	( int channelIndex )	const;
 	virtual const IIndexChannelDescriptor *		        GetIndexChannelDescriptor	()						const;
 
+    virtual unsigned int                                SingleVertexEntrySize       ()                      const;
+    virtual unsigned int                                SingleIndexEntrySize        ()                      const;
+
     const VertexAttributeChannelDescriptor *            AddVertexAttrChannelDesc    ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole );
     void                                                AddVertexAttrChannelDesc    ( const VertexAttributeChannelDescriptor * desc );
 
