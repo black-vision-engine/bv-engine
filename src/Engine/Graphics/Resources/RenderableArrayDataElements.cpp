@@ -7,8 +7,8 @@ namespace bv
 
 // *********************************
 //
-RenderableArrayDataElements::RenderableArrayDataElements ()
-    : RenderableArrayData( RenderableArrayDataEnumKind::RADEK_ELEMENTS )
+RenderableArrayDataElements::RenderableArrayDataElements ( VertexBuffer * vb, VertexDescriptor * vd )
+    : RenderableArrayDataSingleVertexBuffer( RenderableArrayDataEnumKind::RADEK_ELEMENTS, vb, vd )
 {
 }
 
@@ -20,6 +20,37 @@ const IndexBuffer *     RenderableArrayDataElements::GetIndexBuffer( int ccNum )
     assert( ccNum < (int) m_inedxBuffersVec.size() );
 
     return m_inedxBuffersVec[ ccNum ];
+}
+
+//FIXME: delete or uncomment if useful
+//// *********************************
+////
+//unsigned int                    RenderableArrayDataSingleVertexBuffer::GetCCOffset                 ( int ccNum ) const
+//{
+//    assert( ccNum >= 0 );
+//    assert( ccNum < (int) m_ccOffsets.size() );
+//
+//    return m_ccOffsets[ ccNum ];
+//}
+//
+//// *********************************
+////
+//unsigned int                    RenderableArrayDataSingleVertexBuffer::GetCCNumVertices            ( int ccNum ) const
+//{
+//    assert( ccNum >= 0 );
+//    assert( ccNum < (int) m_numVerticesInCC.size() );
+//
+//    return m_numVerticesInCC[ ccNum ];
+//}
+
+// *********************************
+//
+unsigned int                RenderableArrayDataElements::GetNumConnectedComponents   () const
+{
+//    assert( m_numVerticesInCC.size() == m_ccOffsets.size() );
+//    return m_numVerticesInCC.size();
+
+    return m_inedxBuffersVec.size();
 }
 
 }

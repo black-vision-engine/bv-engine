@@ -7,7 +7,7 @@ namespace bv {
 
 // *********************************
 //
-RenderableEntity::RenderableEntity          ( RenderableType type, RenderableArrayData * rad, RenderableEffect * effect )
+RenderableEntity::RenderableEntity          ( RenderableType type, RenderableArrayDataSingleVertexBuffer * rad, RenderableEffect * effect )
     : m_type( type )
     , m_renderableArrayData( rad )
     , m_effect( effect )
@@ -22,35 +22,35 @@ RenderableEntity::~RenderableEntity         ()
 
 // *********************************
 //
-RenderableEntity::RenderableType RenderableEntity::GetType                      () const
+RenderableEntity::RenderableType RenderableEntity::GetType                          () const
 {
     return m_type;
 }
 
 // *********************************
 //
-const RenderableArrayData *     RenderableEntity::GetRenderableArrayData        () const
+const RenderableArrayDataSingleVertexBuffer *  RenderableEntity::GetRenderableArrayData        () const
 {
     return m_renderableArrayData;
 }
 
 // *********************************
 //
-RenderableEffect *              RenderableEntity::GetRenderableEffect           ()
+RenderableEffect *              RenderableEntity::GetRenderableEffect               ()
 {
     return m_effect;
 }
 
 // *********************************
 //
-int                             RenderableEntity::GetNumconnectedComponents     () const
+int                             RenderableEntity::GetNumconnectedComponents         () const
 {
     return m_renderableArrayData->GetNumConnectedComponents();
 }
 
 // *********************************
 //
-const RenderableArrayData *     RenderableEntity::RAD                         () const
+const RenderableArrayDataSingleVertexBuffer *     RenderableEntity::RAD             () const
 {
     return m_renderableArrayData;
 }

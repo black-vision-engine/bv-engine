@@ -9,7 +9,8 @@ namespace bv
 class VertexBuffer : public DataBuffer
 {
 private:
-    int     m_curVertex;
+    
+    unsigned int     m_curVertex;
 
 public:
             VertexBuffer	( unsigned int numVertices, unsigned int vertexSize, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_STATIC );

@@ -10,65 +10,38 @@ namespace bv
 
 // *********************************
 //
-RenderableArrayData::RenderableArrayData         ( RenderableArrayDataEnumKind type )
+RenderableArrayDataSingleVertexBuffer::RenderableArrayDataSingleVertexBuffer                    ( RenderableArrayDataEnumKind type, VertexBuffer * vb, VertexDescriptor * vd )
     : m_type( type )
+    , m_vertexBuffer( vb )
+    , m_vertexDescriptor( vd )
 {
 }
 
 // *********************************
 //
-RenderableArrayData::~RenderableArrayData        ()
+RenderableArrayDataSingleVertexBuffer::~RenderableArrayDataSingleVertexBuffer                   ()
 {
 }
 
 // *********************************
 //
-RenderableArrayDataEnumKind     RenderableArrayData::Type                        () const
+RenderableArrayDataEnumKind     RenderableArrayDataSingleVertexBuffer::Type                     () const
 {
     return m_type;
 }
 
 // *********************************
 //
-const VertexDescriptor *        RenderableArrayData::GetVertexDecscriptor        () const
+const VertexDescriptor *        RenderableArrayDataSingleVertexBuffer::GetVertexDecscriptor     () const
 {
     return m_vertexDescriptor;
 }
 
 // *********************************
 //
-const VertexBuffer *            RenderableArrayData::GetVertexBuffer             () const
+const VertexBuffer *            RenderableArrayDataSingleVertexBuffer::GetVertexBuffer          () const
 {
     return m_vertexBuffer;
-}
-
-// *********************************
-//
-unsigned int                    RenderableArrayData::GetCCOffset                 ( int ccNum ) const
-{
-    assert( ccNum >= 0 );
-    assert( ccNum < (int) m_ccOffsets.size() );
-
-    return m_ccOffsets[ ccNum ];
-}
-
-// *********************************
-//
-unsigned int                    RenderableArrayData::GetCCNumVertices            ( int ccNum ) const
-{
-    assert( ccNum >= 0 );
-    assert( ccNum < (int) m_numVerticesInCC.size() );
-
-    return m_numVerticesInCC[ ccNum ];
-}
-
-// *********************************
-//
-unsigned int                    RenderableArrayData::GetNumConnectedComponents   () const
-{
-    assert( m_numVerticesInCC.size() == m_ccOffsets.size() );
-
-    return m_ccOffsets.size();
 }
 
 }

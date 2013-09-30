@@ -16,32 +16,27 @@ enum class RenderableArrayDataEnumKind : int
     RADT_TOTAL
 };
 
-class RenderableArrayData
+//FIXME: this is designed for singe vertexbuffer <-> vertexdescriptor case (it's general enough, the rest is simply abut the Sdata layout)
+class RenderableArrayDataSingleVertexBuffer
 {
 protected:
 
     VertexBuffer    *   m_vertexBuffer;
     VertexDescriptor *  m_vertexDescriptor;
 
-    std::vector< unsigned int >     m_numVerticesInCC;
-    std::vector< unsigned int >     m_ccOffsets;
-
     RenderableArrayDataEnumKind     m_type;
 
 public:
 
-                                    RenderableArrayData         ( RenderableArrayDataEnumKind type );
-    virtual                         ~RenderableArrayData        () = 0;
+                                        RenderableArrayDataSingleVertexBuffer   ( RenderableArrayDataEnumKind type, VertexBuffer * vb, VertexDescriptor * vd );
+    virtual                             ~RenderableArrayDataSingleVertexBuffer  ();
 
-    RenderableArrayDataEnumKind     Type                        () const;
+    RenderableArrayDataEnumKind         Type                                    () const;
 
-    const VertexDescriptor *        GetVertexDecscriptor        () const;
-    const VertexBuffer *            GetVertexBuffer             () const;
+    virtual const VertexDescriptor *    GetVertexDecscriptor                    () const;
+    virtual const VertexBuffer *        GetVertexBuffer                         () const;
 
-    unsigned int                    GetCCOffset                 ( int ccNum ) const;
-    unsigned int                    GetCCNumVertices            ( int ccNum ) const;
-
-    unsigned int                    GetNumConnectedComponents   () const;
+    virtual unsigned int                GetNumConnectedComponents               () const = 0;
 
 };
 

@@ -438,20 +438,29 @@ RenderableArrayData *               BasicNode::CreateRenderableArrayData( Primit
 //
 RenderableArrayData *               BasicNode::CreateRenderableArrayDataArrays( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc ) const
 {
-    //FIXME: a bit of hackery because memory layout will be different than what this constructor suggests
-    VertexBuffer * vb = new VertexBuffer( TotalNumVertices( ccVec ), desc->SingleVertexEntrySize() );
-    
+    //FIXME: a bit of hackery because memory layout may be different than what this constructor suggests (this time it is not)
+    //FIXME: this code should be moved to some utility classes from this poor BasicNode (not so basic right now)
+    //FIXME: check that plugin's channel signature is the same for all connected components
+    VertexBuffer * vertexBuffer         = new VertexBuffer( TotalNumVertices( ccVec ), desc->SingleVertexEntrySize() );
+    VertexDescriptor * vertexDescriptor = CreateVertexDescriptor( desc );
+
     RenderableArrayDataArrays * rad = new RenderableArrayDataArrays();
+
+    char * vbData = vertexBuffer->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P
+
+    unsigned int currentOffset = 0;
 
     for( auto cc : ccVec )
     {
-        auto vertNum        = cc->GetNumVertices();
-        auto attribChannels = cc->GetVertexAttributeChannels();
+        assert( !cc->GetVertexAttributeChannels().empty() );
 
-        assert( !attribChannels.empty() );
+        auto numVertices    = cc->GetNumVertices();
 
-        VertexArray ** vao;
+        VertexArray * vao = new VertexArray( vertexBuffer, vertexDescriptor, numVertices, currentOffset );
 
+        currentOffset += numVertices * desc->SingleVertexEntrySize();
+
+        rad->
     }
 
     *vao = new VertexArray();
@@ -478,19 +487,19 @@ RenderableArrayData *               BasicNode::CreateRenderableArrayDataArrays( 
 VertexDescriptor *                  BasicNode::CreateVertexDescriptor          ( const IGeometryChannelDescriptor * desc ) const
 {
     VertexDescriptor * vertexDescriptor = new VertexDescriptor( desc->GetNumVertexChannels() );
+
+    unsigned int attributeOffset = 0;
+
     for( unsigned int i = 0; i < desc->GetNumVertexChannels(); ++i )
     {
-        auto channelDesc = desc->GetVertexChannelDescriptor( i );
-        channelDesc->GetType();
+        auto * channelDesc = desc->GetVertexChannelDescriptor( i );
+
+        //FIXME: default channel location just copied from model channel ordering (maybe it should be a permutation or something)
+        vertexDescriptor->SetAttribute( i, i, attributeOffset, channelDesc->GetType(), channelDesc->GetSemantic() );
+        attributeOffset += channelDesc->GetEntrySize();        
     }
-    desc->GetVertexChannelDescriptor(
-    for( auto attrCh : attribChannels )
-    {
-        auto desc       = attrCh->GetDescriptor();
-        
-        VertexDescriptor*   vd = VertexDescriptor::Create( 1, channelLoc++, desc->GetType(), desc->GetSemantic(), (int)desc->GetSemantic());
-        VertexBuffer*       vb = new VertexBuffer( vertNum, desc->GetEntrySize() );
-    }    
+
+    return vertexDescriptor;
 }
 
 // ********************************

@@ -8,19 +8,45 @@ namespace bv
 
 // *********************************
 //
-RenderableArrayDataArrays::RenderableArrayDataArrays   ()
-    : RenderableArrayData( RenderableArrayDataEnumKind::RADEK_VAO )
+RenderableArrayDataArraysSingleVertexBuffer::RenderableArrayDataArraysSingleVertexBuffer        ( VertexBuffer * vb, VertexDescriptor * vd )
+    : RenderableArrayDataSingleVertexBuffer( RenderableArrayDataEnumKind::RADEK_VAO, vb, vd )
 {
 }
 
 // *********************************
 //
-const VertexArray *     RenderableArrayDataArrays::GetVAO( int ccNum ) const
+RenderableArrayDataArraysSingleVertexBuffer::~RenderableArrayDataArraysSingleVertexBuffer       ()
+{
+    //FIXME: for now let's assume that this class owns all added vaos
+
+    for( auto vao : m_vaoVec )
+    {
+        delete vao;
+    }
+}
+
+// *********************************
+//
+const VertexArraySingleVertexBuffer *   RenderableArrayDataArraysSingleVertexBuffer::VAO        ( int ccNum ) const
 {
     assert( ccNum >= 0 );
     assert( ccNum < (int) m_vaoVec.size() );
 
     return m_vaoVec[ ccNum ];
+}
+
+// *********************************
+//
+void                     RenderableArrayDataArraysSingleVertexBuffer::AddVAO                    ( VertexArraySingleVertexBuffer * vao )
+{
+    m_vaoVec.push_back( vao );
+}
+
+// *********************************
+//
+unsigned int             RenderableArrayDataArraysSingleVertexBuffer::GetNumConnectedComponents () const
+{
+    return m_vaoVec.size();
 }
 
 }

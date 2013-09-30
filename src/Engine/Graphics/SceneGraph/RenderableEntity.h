@@ -4,7 +4,7 @@
 
 namespace bv {
 
-class RenderableArrayData;
+class RenderableArrayDataSingleVertexBuffer;
 class RenderableEffect;
 
 class RenderableEntity : public TransformableEntity
@@ -22,28 +22,28 @@ public:
 
 protected:
 
-    RenderableType          m_type;
+    RenderableType                          m_type;
 
-    RenderableArrayData *   m_renderableArrayData;
-    RenderableEffect *      m_effect;
+    RenderableArrayDataSingleVertexBuffer * m_renderableArrayData;
+    RenderableEffect *                      m_effect;
 
 
 public:
                     //FIXME: effect should be registered via some method so that it can be changed during to some other effect during runtime (RenderableEffect or RenderableEffectInstance if needed)
-                    RenderableEntity        ( RenderableType type, RenderableArrayData * rad, RenderableEffect * effect );
+                    RenderableEntity        ( RenderableType type, RenderableArrayDataSingleVertexBuffer * rad, RenderableEffect * effect );
     virtual         ~RenderableEntity       ();
 
 public:
 
-    RenderableType                  GetType                     () const;
-    const RenderableArrayData *     GetRenderableArrayData      () const;
-    RenderableEffect *              GetRenderableEffect         ();
+    RenderableType                                  GetType                     () const;
+    const RenderableArrayDataSingleVertexBuffer *   GetRenderableArrayData      () const;
+    RenderableEffect *                              GetRenderableEffect         ();
 
-    int                             GetNumconnectedComponents   () const;
+    int                                             GetNumconnectedComponents   () const;
 
 protected:
 
-    const RenderableArrayData *     RAD                         () const;
+    const RenderableArrayDataSingleVertexBuffer *   RAD                         () const;
 
 };
 

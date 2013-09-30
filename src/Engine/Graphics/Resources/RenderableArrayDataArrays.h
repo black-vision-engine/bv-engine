@@ -5,19 +5,25 @@
 namespace bv
 {
 
-class VertexArray;
+class VertexBuffer;
+class VertexDescriptor;
+class VertexArraySingleVertexBuffer;
 
-class RenderableArrayDataArrays : public RenderableArrayData
+class RenderableArrayDataArraysSingleVertexBuffer : public RenderableArrayDataSingleVertexBuffer
 {
 private:
 
-    std::vector< VertexArray * >    m_vaoVec;
+    std::vector< VertexArraySingleVertexBuffer * >    m_vaoVec;
 
 public:
 
-                            RenderableArrayDataArrays   ();
+                                            RenderableArrayDataArraysSingleVertexBuffer     ( VertexBuffer * vb, VertexDescriptor * vd );
+                                            ~RenderableArrayDataArraysSingleVertexBuffer    ();
 
-    const VertexArray *     GetVAO                      ( int ccNum ) const;
+    const VertexArraySingleVertexBuffer *   VAO                                             ( int ccNum ) const;
+    void                                    AddVAO                                          ( VertexArraySingleVertexBuffer * vao );
+
+    virtual unsigned int                    GetNumConnectedComponents                       () const;
 
 };
 
