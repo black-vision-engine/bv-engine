@@ -396,7 +396,16 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     model::GeometryRectPlugin    *  rectPlugin  = new model::GeometryRectPlugin( ConstValue( 1.0f ), ConstValue( 1.0f ) );
     model::SimpleTransformChannel  * simpleTransform0  = new model::SimpleTransformChannel();
 
-    simpleTransform0->AddTransform  ( new TransformF() );
+    TransformF * trns = new TransformF();
+
+    FloatInterpolator angle; angle.setWrapPostMethod(bv::WrapMethod::pingPong);
+
+    angle.addKey(0.f, 0.f);
+    angle.addKey(5.f, 360.f);
+
+    trns->addRotation(angle, ConstValue( 0.f ), ConstValue( 0.f ), ConstValue( 1.f ) );
+
+    simpleTransform0->AddTransform  ( trns );
 
     rectPlugin->SetTransformChannel ( simpleTransform0 );
     rectPlugin->SetGeometryChannel( geomCh );
@@ -409,19 +418,19 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
 
     FloatInterpolator alpha;
     alpha.addKey( 0.0f, 0.25f ); alpha.setWrapPostMethod( WrapMethod::pingPong );
-    alpha.addKey( 1.0f, 0.05f );
+    alpha.addKey( 1.0f, 0.09f );
     alpha.addKey( 2.0f, 0.5f );
     alpha.addKey( 5.0f, 1.0f );
     alpha.addKey( 8.0f, 0.75f );
-    alpha.addKey( 10.0f, 0.0f );
+    alpha.addKey( 10.0f, 0.2f );
 
     TransformF * tx0m = new TransformF();
-    tx0m->addScale( ConstValue( 1.0f ), ConstValue( 1.0f ), ConstValue( 1.0f ) );
+    tx0m->addScale( ConstValue( 1.0f ), alpha, ConstValue( 1.0f ) );
 
     TransformF * tx1m = new TransformF();    
-    tx1m->addScale( ConstValue( 1.0f ), ConstValue( 1.0f ), ConstValue( 1.0f ) );
+    tx1m->addScale( alpha, ConstValue( 1.0f ), ConstValue( 1.0f ) );
 
-    stpp = new model::SimpleTexturePlugin  ( rectPlugin, "simless_01.jpg", "simless_00.jpg" );
+    stpp = new model::SimpleTexturePlugin  ( rectPlugin, "simless_00.jpg", "simless_01.jpg" );
 
     stpp->SetPixelShaderChannel     ( new MyPixelShaderChannel( "../dep/media/shaders/simpletexture.frag", alpha, *tx0m, *tx1m ) );
     stpp->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );

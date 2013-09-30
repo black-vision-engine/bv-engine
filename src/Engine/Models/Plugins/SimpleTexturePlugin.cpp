@@ -39,7 +39,7 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin* pre
     , m_textureFileName1( textureFileName1 )
 {
     m_textures.push_back( LoadTexture( "Tex0", textureFileName ) );
-    //m_textures.push_back( LoadTexture( "Tex1", textureFileName1 ) );
+    m_textures.push_back( LoadTexture( "Tex1", textureFileName1 ) );
 
     m_geomChannel = nullptr;
     EvalGeometryChannel( prev );

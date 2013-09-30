@@ -94,7 +94,7 @@ public:
     void    EnableFaceCulling   ();
     void    SetCamera           (Camera* cam);
 
-private:
+public: //FIXME: private
 
     void    Enable              ( RenderablePass * pass, TransformableEntity * transform );
     void    Enable              ( const VertexBuffer * vb );

@@ -21,4 +21,6 @@ void main()
 
 	FragColor = mix( texColor0, texColor1, alpha ).bgra; // vec4(1.0, 1.0,1.0,1.0);
 
+    //vec4 texCor0 = texture( Tex0, texCord );
+    //FragColor = vec4( texCord, 1.0, 1.0 );
 }
