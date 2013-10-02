@@ -45,18 +45,39 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
 
     m_geomChannel = new GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, geomChannelDesc, true, true );
 
+    glm::vec3 translate(0.f);
+    glm::vec3 interspace( 0.07f, 0.f ,0.f );
+    glm::vec3 newLineTranslation( 0.f );
+
     for( auto wch : m_text->GetText() )
     {
+        if( wch == L' ' )
+        {
+            translate += glm::vec3( 0.3, 0.f, 0.f );
+            continue;
+        }
+
+        if( wch == L'\n' )
+        {
+            translate = glm::vec3( 0.f );
+            newLineTranslation += glm::vec3( 0.f, -1.1f, 0.f );
+            continue;
+        }
+
         ConnectedComponent* connComp = new ConnectedComponent();
 
         VertexAttributeChannelDescriptor * desc = new VertexAttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
 
         auto posAttribChannel = new Float3VertexAttributeChannel( desc, "vertexPosition", true );
 
-        posAttribChannel->AddVertexAttribute( glm::vec3( -0.5f, -0.5f, 0.f ) );
-        posAttribChannel->AddVertexAttribute( glm::vec3( 0.5f, -0.5f, 0.f ) );
-        posAttribChannel->AddVertexAttribute( glm::vec3( -0.5f, 0.5f, 0.f ) );
-        posAttribChannel->AddVertexAttribute( glm::vec3( 0.5f, 0.5f, 0.f ) );
+        auto glyph = m_text->GetGlyph( wch );
+
+        glm::vec3 baring = glm::vec3( glyph->bearingX / (float)glyph->size, glyph->bearingY / (float)glyph->size, 0.f );
+
+        posAttribChannel->AddVertexAttribute( glm::vec3( -0.5f, -0.5f, 0.f ) + translate + baring + newLineTranslation );
+        posAttribChannel->AddVertexAttribute( glm::vec3( 0.5f, -0.5f, 0.f ) + translate + baring + newLineTranslation );
+        posAttribChannel->AddVertexAttribute( glm::vec3( -0.5f, 0.5f, 0.f ) + translate + baring + newLineTranslation );
+        posAttribChannel->AddVertexAttribute( glm::vec3( 0.5f, 0.5f, 0.f ) + translate + baring + newLineTranslation );
 
         connComp->m_vertexAttributeChannels.push_back( posAttribChannel );
 
@@ -64,7 +85,7 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
 
         auto verTex0AttrChannel = new model::Float2VertexAttributeChannel( desc1, m_textures[ 0 ].second, true );
 
-        auto glyph = m_text->GetGlyph( wch );
+        
         float left = (float)glyph->textureX / texExtraData->GetWidth();
         float top = (float)glyph->textureY / texExtraData->GetHeight();
 
@@ -79,6 +100,8 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
         connComp->m_vertexAttributeChannels.push_back( verTex0AttrChannel );
 
         m_geomChannel->AddConnectedComponent( connComp );
+
+        translate += glm::vec3( glyph->width / (float)glyph->size, 0.f, 0.f ) + interspace;
     } 
 }
 

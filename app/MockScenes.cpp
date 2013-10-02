@@ -156,7 +156,8 @@ model::BasicNode *     TestScenesFactory::SimpeTextTestScene()
 {
     model::BasicNode * root = new model::BasicNode();
 
-    auto texPlugin = new model::SimpleTextPlugin( L"¹", fontFile );
+    auto texPlugin = new model::SimpleTextPlugin( L"Litwo! Ojczyzno moja! ty jesteœ jak zdrowie.\nIle ci trzeba ceniæ, ten tylko siê dowie,\nKto ciê straci³. Dziœ piêknoœæ tw¹ w ca³ej ozdobie\nWidzê i opisujê, bo têskniê po tobie."
+                                                    , fontFile );
 
     FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
     FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
@@ -166,13 +167,21 @@ model::BasicNode *     TestScenesFactory::SimpeTextTestScene()
     ys.addKey(0.f, 1.f);
     zs.addKey(0.f, 1.f);
 
-
-    xs.addKey(3.f, 5.f);
-    ys.addKey(3.f, 5.f);
-
     TransformF *    trns  = new TransformF                ();
 
     trns->addScale( xs, ys, zs );
+
+    FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
+    FloatInterpolator zt;
+
+    xt.addKey(0.f, -9.f);
+    yt.addKey(0.f, -10.f);
+    zt.addKey(0.f, -5.f);
+
+    yt.addKey(30.f, 75.f);
+
+    trns->addTranslation( xt, yt, zt );
 
     model::SimpleTransformChannel      * stch  = new model::SimpleTransformChannel();
     stch->AddTransform( trns );

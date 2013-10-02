@@ -34,7 +34,7 @@ Text::Text( const std::wstring& text, const std::string& fontFile )
     BuildAtlas();
 }
 
-#define GLYPH_SIZE  256
+#define GLYPH_SIZE  64
 
 void                Text::BuildAtlas()
 {
@@ -88,6 +88,7 @@ void                Text::BuildAtlas()
         newGlyph->height = face->glyph->bitmap.rows;
         newGlyph->bearingX = face->glyph->bitmap_left;
         newGlyph->bearingY = face->glyph->bitmap_top;
+        newGlyph->advance = face->glyph->advance.x;
         gpitch.push_back( face->glyph->bitmap.pitch );
 
         unsigned char* glyphData = (unsigned char*)malloc( newGlyph->height * face->glyph->bitmap.pitch );
