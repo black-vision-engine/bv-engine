@@ -176,12 +176,12 @@ void                Text::BuildAtlas()
 
     memcpy( atlasData, &str[ 0 ], dataStream.str().size() );
 
-    std::ofstream file;
-    file.open( "test.raw", std::ios::out | std::ios::binary );
+    //std::ofstream file;
+    //file.open( "test.raw", std::ios::out | std::ios::binary );
 
-    file << str;
+    //file << str;
 
-    file.close();
+    //file.close();
 }
 
 } // bv
