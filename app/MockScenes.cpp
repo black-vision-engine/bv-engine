@@ -159,6 +159,9 @@ model::BasicNode *     TestScenesFactory::SimpeTextTestScene()
     auto texPlugin = new model::SimpleTextPlugin( L"Litwo! Ojczyzno moja! ty jesteœ jak zdrowie.\nIle ci trzeba ceniæ, ten tylko siê dowie,\nKto ciê straci³. Dziœ piêknoœæ tw¹ w ca³ej ozdobie\nWidzê i opisujê, bo têskniê po tobie."
                                                     , fontFile );
 
+    //auto texPlugin = new model::SimpleTextPlugin( L"L....,,,,\nL...,,,", fontFile );
+        
+
     FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
     FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
     FloatInterpolator zs;
@@ -176,6 +179,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextTestScene()
     FloatInterpolator zt;
 
     xt.addKey(0.f, -9.f);
+    //yt.addKey(0.f, 0.f);
     yt.addKey(0.f, -10.f);
     zt.addKey(0.f, -5.f);
 

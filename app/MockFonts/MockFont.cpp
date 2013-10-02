@@ -34,7 +34,7 @@ Text::Text( const std::wstring& text, const std::string& fontFile )
     BuildAtlas();
 }
 
-#define GLYPH_SIZE  64
+#define GLYPH_SIZE  256
 
 void                Text::BuildAtlas()
 {

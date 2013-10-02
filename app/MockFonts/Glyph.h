@@ -7,12 +7,12 @@ struct Glyph
   unsigned short    code;       // unicode value
   unsigned short    index;      // freetype glyph index
 
-  unsigned char     width;      // width of the glyph in pixels
-  unsigned char     height;     // height of the glyph in pixels
-  unsigned char     advance;    // number of pixels to advance on x axis
+  unsigned int      width;      // width of the glyph in pixels
+  unsigned int      height;     // height of the glyph in pixels
+  unsigned int      advance;    // number of pixels to advance on x axis
 
-  char              bearingX;   // x offset of top-left corner from x axis
-  char              bearingY;   // y offset of top-left corner from y axis
+  int               bearingX;   // x offset of top-left corner from x axis
+  int               bearingY;   // y offset of top-left corner from y axis
 
   unsigned int      textureX;   // x pixel coord of the bitmap's bottom-left corner
   unsigned int      textureY;   // y pixel coord of the bitmap's bottom-left corner
