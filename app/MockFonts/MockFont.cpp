@@ -34,7 +34,7 @@ Text::Text( const std::wstring& text, const std::string& fontFile )
     BuildAtlas();
 }
 
-#define GLYPH_SIZE  256
+#define GLYPH_SIZE  128
 
 void                Text::BuildAtlas()
 {
@@ -54,7 +54,7 @@ void                Text::BuildAtlas()
         return;
     }
 
-    int padding_px          = 6;                // total space in glyph size for outlines
+    int padding_px          = 0;                // total space in glyph size for outlines
     int slot_glyph_size     = GLYPH_SIZE;       // glyph maximum size in pixels
 
     FT_Set_Pixel_Sizes( face, 0, GLYPH_SIZE - padding_px );
