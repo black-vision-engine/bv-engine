@@ -80,7 +80,7 @@ GLSLProgram::~GLSLProgram					    ()
 
 // *******************************
 //
-bool GLSLProgram::CompileShaderFromFile( const char * fileName, GLSLShader::GLSLShaderType type )
+bool GLSLProgram::CompileShaderFromFile( const string & fileName, GLSLShader::GLSLShaderType type )
 {
     if( ! FileExists( fileName ) )
     {
@@ -267,21 +267,21 @@ bool GLSLProgram::IsCompiled() const
 
 // *******************************
 //
-void GLSLProgram::BindAttribLocation( GLuint location, const char * name )
+void GLSLProgram::BindAttribLocation( GLuint location, const string & name )
 {
-    glBindAttribLocation(m_Handle, location, name);
+    glBindAttribLocation(m_Handle, location, name.c_str() );
 }
 
 // *******************************
 //
-void GLSLProgram::BindFragDataLocation( GLuint location, const char * name )
+void GLSLProgram::BindFragDataLocation( GLuint location, const string & name )
 {
-    glBindFragDataLocation(m_Handle, location, name);
+    glBindFragDataLocation(m_Handle, location, name.c_str() );
 }
 
 // *******************************
 //
-void GLSLProgram::SetUniform( const char * name, float x, float y, float z )
+void GLSLProgram::SetUniform( const string & name, float x, float y, float z )
 {
     int loc = GetUniformLocation( name );
 
@@ -291,20 +291,20 @@ void GLSLProgram::SetUniform( const char * name, float x, float y, float z )
     } 
     else 
     {
-        printf( "Uniform: %s not found.\n", name );
+        printf( "Uniform: %s not found.\n", name.c_str() );
     }
 }
 
 // *******************************
 //
-void GLSLProgram::SetUniform( const char *name, const vec3 & v )
+void GLSLProgram::SetUniform( const string & name, const vec3 & v )
 {
     this->SetUniform( name, v.x, v.y, v.z );
 }
 
 // *******************************
 //
-void GLSLProgram::SetUniform( const char *name, const vec4 & v)
+void GLSLProgram::SetUniform( const string & name, const vec4 & v)
 {
     int loc = GetUniformLocation(name);
 
@@ -314,13 +314,13 @@ void GLSLProgram::SetUniform( const char *name, const vec4 & v)
     } 
     else 
     {
-        printf("Uniform: %s not found.\n",name);
+        printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 
 // *******************************
 //
-void GLSLProgram::SetUniform( const char *name, const vec2 & v)
+void GLSLProgram::SetUniform( const string & name, const vec2 & v)
 {
     int loc = GetUniformLocation(name);
 
@@ -330,13 +330,13 @@ void GLSLProgram::SetUniform( const char *name, const vec2 & v)
     } 
     else 
     {
-        printf("Uniform: %s not found.\n",name);
+        printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 
 // *******************************
 //
-void GLSLProgram::SetUniform( const char *name, const mat2 & m)
+void GLSLProgram::SetUniform( const string & name, const mat2 & m)
 {
     int loc = GetUniformLocation(name);
 
@@ -346,13 +346,13 @@ void GLSLProgram::SetUniform( const char *name, const mat2 & m)
     } 
     else 
     {
-        printf("Uniform: %s not found.\n",name);
+        printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 
 // *******************************
 //
-void GLSLProgram::SetUniform( const char *name, const mat3 & m)
+void GLSLProgram::SetUniform( const string & name, const mat3 & m)
 {
     int loc = GetUniformLocation(name);
 
@@ -362,13 +362,13 @@ void GLSLProgram::SetUniform( const char *name, const mat3 & m)
     } 
     else 
     {
-        printf("Uniform: %s not found.\n",name);
+        printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 
 // *******************************
 //
-void GLSLProgram::SetUniform( const char *name, const mat4 & m)
+void GLSLProgram::SetUniform( const string & name, const mat4 & m)
 {
     int loc = GetUniformLocation(name);
 
@@ -378,13 +378,13 @@ void GLSLProgram::SetUniform( const char *name, const mat4 & m)
     } 
     else 
     {
-        printf("Uniform: %s not found.\n",name);
+        printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 
 // *******************************
 //
-void GLSLProgram::SetUniform( const char *name, float val )
+void GLSLProgram::SetUniform( const string & name, float val )
 {
     int loc = GetUniformLocation(name);
 
@@ -394,13 +394,13 @@ void GLSLProgram::SetUniform( const char *name, float val )
     } 
     else 
     {
-        printf("Uniform: %s not found.\n",name);
+        printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 
 // *******************************
 //
-void GLSLProgram::SetUniform( const char *name, int val )
+void GLSLProgram::SetUniform( const string & name, int val )
 {
     int loc = GetUniformLocation(name);
 
@@ -410,13 +410,13 @@ void GLSLProgram::SetUniform( const char *name, int val )
     } 
     else 
     {
-        printf("Uniform: %s not found.\n",name);
+        printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 
 // *******************************
 //
-void GLSLProgram::SetUniform( const char *name, bool val )
+void GLSLProgram::SetUniform( const string & name, bool val )
 {
     int loc = GetUniformLocation(name);
 
@@ -426,7 +426,7 @@ void GLSLProgram::SetUniform( const char *name, bool val )
     } 
     else 
     {
-        printf("Uniform: %s not found.\n",name);
+        printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 
@@ -523,9 +523,19 @@ bool GLSLProgram::Validate()
 
 // *******************************
 //
-int GLSLProgram::GetUniformLocation( const char * name )
+int GLSLProgram::GetUniformLocation( const string & name )
 {
-    return glGetUniformLocation( m_Handle, name );
+    auto it = m_uniformLocations.find( name );
+    
+    if ( it == m_uniformLocations.end() )
+    {
+        int loc = glGetUniformLocation( m_Handle, name.c_str() );
+        m_uniformLocations[ name ] = loc;
+
+        return loc;
+    }
+
+    return it->second;
 }
 
 // *******************************

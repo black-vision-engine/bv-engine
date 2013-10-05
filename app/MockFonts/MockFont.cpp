@@ -34,7 +34,7 @@ Text::Text( const std::wstring& text, const std::string& fontFile )
     BuildAtlas();
 }
 
-#define GLYPH_SIZE  128
+#define GLYPH_SIZE  8
 
 void                Text::BuildAtlas()
 {
@@ -134,9 +134,9 @@ void                Text::BuildAtlas()
         {
     
             // work out which grid slot[col][row] we are in e.g out of 16x16
-            int col = x / GLYPH_SIZE;
-            int row = y / GLYPH_SIZE;
-            int order = row * atlasColumns + col;
+            unsigned int col = x / GLYPH_SIZE;
+            unsigned int row = y / GLYPH_SIZE;
+            unsigned int order = row * atlasColumns + col;
 
             if( order < 0 || order >= glyphVec.size() )
             {
@@ -145,8 +145,8 @@ void                Text::BuildAtlas()
             }
 
             // pixel indices within padded glyph slot area
-            int x_loc = x % GLYPH_SIZE - padding_px / 2;
-            int y_loc = y % GLYPH_SIZE - padding_px / 2;
+            unsigned int x_loc = x % GLYPH_SIZE - padding_px / 2;
+            unsigned int y_loc = y % GLYPH_SIZE - padding_px / 2;
                 
             if (x_loc < 0 || y_loc < 0 || x_loc >= glyphVec[order]->width || y_loc >= glyphVec[order]->height )
             {

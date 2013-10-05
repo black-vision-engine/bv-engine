@@ -227,10 +227,10 @@ model::BasicNode *     TestScenesFactory::SimpeTextTestScene()
 
     xt.addKey(0.f, -9.f);
     //yt.addKey(0.f, 0.f);
-    yt.addKey(0.f, -10.f);
+    yt.addKey(0.f, -5.f);
     zt.addKey(0.f, -5.f);
 
-    yt.addKey(30.f, 500.f);
+    yt.addKey(30.f, 5.f);
 
     trns->addTranslation( xt, yt, zt );
 

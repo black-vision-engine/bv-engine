@@ -4,6 +4,7 @@
 
 #include <string>
 #include <map>
+#include <hash_map>
 using std::string;
 
 #include <glm/glm.hpp>
@@ -30,12 +31,19 @@ namespace GLSLShader {
 class GLSLProgram
 {
 private:
-    int			m_Handle;
-    bool        m_Compiled;
-    bool		m_Linked;
-    string		m_LogString;
 
-    int  GetUniformLocation				( const char * name );
+    typedef     std::hash_map< std::string, int >   TUniformLocations;
+
+private:
+
+    TUniformLocations   m_uniformLocations;
+
+    int			        m_Handle;
+    bool                m_Compiled;
+    bool		        m_Linked;
+    string		        m_LogString;
+
+    int  GetUniformLocation				( const string & name );
     bool FileExists						( const string & fileName );
 
 public:
@@ -44,7 +52,7 @@ public:
     GLSLProgram							( const PixelShader& ps, const VertexShader& vs, const GeometryShader * gs );
     ~GLSLProgram					    ();
 
-    bool   CompileShaderFromFile		( const char * fileName, GLSLShader::GLSLShaderType type );
+    bool   CompileShaderFromFile		( const string & fileName, GLSLShader::GLSLShaderType type );
     bool   CompileShaderFromString		( const string & source, GLSLShader::GLSLShaderType type );
     bool   Link							();
     bool   Validate						();
@@ -56,22 +64,22 @@ public:
     bool   IsLinked                     () const;
     bool   IsCompiled                   () const;
 
-    void   BindAttribLocation			( GLuint location, const char * name );
-    void   BindFragDataLocation			( GLuint location, const char * name );
+    void   BindAttribLocation			( GLuint location, const string & name );
+    void   BindFragDataLocation			( GLuint location, const string & name );
 
-    void   SetUniform					( const char *name, float x, float y, float z );
-    void   SetUniform					( const char *name, const vec2 & v );
-    void   SetUniform					( const char *name, const vec3 & v );
-    void   SetUniform					( const char *name, const vec4 & v );
-    void   SetUniform					( const char *name, const mat2 & m );
-    void   SetUniform					( const char *name, const mat3 & m );
-    void   SetUniform					( const char *name, const mat4 & m );
-    void   SetUniform					( const char *name, float val );
-    void   SetUniform					( const char *name, int val );
-    void   SetUniform					( const char *name, bool val );
+    void   SetUniform					( const string & name, float x, float y, float z );
+    void   SetUniform					( const string & name, const vec2 & v );
+    void   SetUniform					( const string & name, const vec3 & v );
+    void   SetUniform					( const string & name, const vec4 & v );
+    void   SetUniform					( const string & name, const mat2 & m );
+    void   SetUniform					( const string & name, const mat3 & m );
+    void   SetUniform					( const string & name, const mat4 & m );
+    void   SetUniform					( const string & name, float val );
+    void   SetUniform					( const string & name, int val );
+    void   SetUniform					( const string & name, bool val );
 
-    void   PrintActiveUniforms();
-    void   PrintActiveAttribs();
+    void   PrintActiveUniforms          ();
+    void   PrintActiveAttribs           ();
 };
 
 class PixelShader;
