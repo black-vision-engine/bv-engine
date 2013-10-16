@@ -36,6 +36,7 @@ public:
     virtual void OnIdle         ();
     virtual bool OnInitialize   ();
     virtual void OnTerminate    ();
+    virtual void OnResize		( int w, int h );
 
 private:
 

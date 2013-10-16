@@ -189,6 +189,13 @@ void BlackVisionApp::OnTerminate        ()
     WindowedApplication::OnTerminate();
 }
 
+void BlackVisionApp::OnResize		    ( int w, int h )
+{
+    //m_Width = w;
+    //m_Height = h;
+    //m_modelScene->GetCamera()->SetPerspactive( 90.f, float(h) / float(w), 0.1f, 100.f );
+}
+
 // *********************************
 //
 void BlackVisionApp::AddCameraAnimation  ()

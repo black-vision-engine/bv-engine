@@ -34,7 +34,7 @@ Text::Text( const std::wstring& text, const std::string& fontFile )
     BuildAtlas();
 }
 
-#define GLYPH_SIZE  8
+#define GLYPH_SIZE  64
 
 void                Text::BuildAtlas()
 {
@@ -54,10 +54,10 @@ void                Text::BuildAtlas()
         return;
     }
 
-    int padding_px          = 0;                // total space in glyph size for outlines
+    int padding_px          = 32;                // total space in glyph size for outlines
     int slot_glyph_size     = GLYPH_SIZE;       // glyph maximum size in pixels
 
-    FT_Set_Pixel_Sizes( face, 0, GLYPH_SIZE - padding_px );
+    FT_Set_Pixel_Sizes( face, GLYPH_SIZE - padding_px, GLYPH_SIZE - padding_px );
 
     std::vector< unsigned char* >   glyphBuffer;
     std::vector< unsigned int >     gpitch;
@@ -94,7 +94,7 @@ void                Text::BuildAtlas()
         unsigned char* glyphData = (unsigned char*)malloc( newGlyph->height * face->glyph->bitmap.pitch );
 
         // copy buffer because it seems to be overwritten
-        memcpy ( glyphData, face->glyph->bitmap.buffer, face->glyph->bitmap.rows * face->glyph->bitmap.pitch );
+        memcpy ( glyphData, face->glyph->bitmap.buffer, newGlyph->height * face->glyph->bitmap.pitch );
         glyphBuffer.push_back( glyphData );
         glyphVec.push_back( newGlyph );
         m_glyphs[ ch ] = newGlyph;
@@ -176,12 +176,12 @@ void                Text::BuildAtlas()
 
     memcpy( atlasData, &str[ 0 ], dataStream.str().size() );
 
-    //std::ofstream file;
-    //file.open( "test.raw", std::ios::out | std::ios::binary );
+    std::ofstream file;
+    file.open( "test.raw", std::ios::out | std::ios::binary );
 
-    //file << str;
+    file << str;
 
-    //file.close();
+    file.close();
 }
 
 } // bv

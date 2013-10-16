@@ -86,11 +86,11 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
         auto verTex0AttrChannel = new model::Float2VertexAttributeChannel( desc1, m_textures[ 0 ].second, true );
 
         
-        float left = (float)glyph->textureX / texExtraData->GetWidth();
-        float top = (float)glyph->textureY / texExtraData->GetHeight();
+        float left = ((float)glyph->textureX ) / texExtraData->GetWidth();
+        float top = ((float)glyph->textureY ) / texExtraData->GetHeight();
 
-        float width = (float)glyph->size / texExtraData->GetWidth();
-        float height = (float)glyph->size / texExtraData->GetHeight();
+        float width = ((float)glyph->size - 2) / texExtraData->GetWidth();
+        float height = ((float)glyph->size - 2) / texExtraData->GetHeight();
 
         verTex0AttrChannel->AddVertexAttribute( glm::vec2( left, top + height ) );
         verTex0AttrChannel->AddVertexAttribute( glm::vec2( left + width, top + height ) );
