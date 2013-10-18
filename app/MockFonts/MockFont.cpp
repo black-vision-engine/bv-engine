@@ -14,27 +14,28 @@
 
 namespace bv {
 
-TextAtlas::TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel )
+TextAtlas::TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh )
     : m_width( w )
     , m_height( h )
+    , m_glyphWidth( gw )
+    , m_glyphHeight( gh )
     , m_bitsPerPixel( bitsPrePixel )
 {
     m_data = new char[ w * h * bitsPrePixel / 8 ];
 }
 
-TextAtlas*      TextAtlas::Crate           ( unsigned int w, unsigned int h, unsigned int bitsPrePixel )
+TextAtlas*      TextAtlas::Crate           ( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh )
 {
-    return new TextAtlas(w, h, bitsPrePixel);
+    return new TextAtlas(w, h, bitsPrePixel, gw, gh);
 }
 
-Text::Text( const std::wstring& text, const std::string& fontFile )
+Text::Text( const std::wstring& text, const std::string& fontFile, unsigned int fontSize )
     : m_text( text )
     , m_fontFile( fontFile )
+    , m_fontSize( fontSize )
 {
     BuildAtlas();
 }
-
-#define GLYPH_SIZE  64
 
 void                Text::BuildAtlas()
 {
@@ -54,10 +55,10 @@ void                Text::BuildAtlas()
         return;
     }
 
-    int padding_px          = 32;                // total space in glyph size for outlines
-    int slot_glyph_size     = GLYPH_SIZE;       // glyph maximum size in pixels
+    int padding_px          = 2;                // total space in glyph size for outlines
+    int slot_glyph_size     = m_fontSize;       // glyph maximum size in pixels
 
-    FT_Set_Pixel_Sizes( face, GLYPH_SIZE - padding_px, GLYPH_SIZE - padding_px );
+    FT_Set_Pixel_Sizes( face, m_fontSize - padding_px, m_fontSize - padding_px );
 
     std::vector< unsigned char* >   glyphBuffer;
     std::vector< unsigned int >     gpitch;
@@ -83,12 +84,13 @@ void                Text::BuildAtlas()
         // get dimensions of bitmap
         auto newGlyph = new Glyph();
 
-        newGlyph->size = GLYPH_SIZE;
+        newGlyph->size = m_fontSize;
         newGlyph->width = face->glyph->bitmap.width;
         newGlyph->height = face->glyph->bitmap.rows;
         newGlyph->bearingX = face->glyph->bitmap_left;
         newGlyph->bearingY = face->glyph->bitmap_top;
         newGlyph->advance = face->glyph->advance.x;
+        newGlyph->padding = padding_px;
         gpitch.push_back( face->glyph->bitmap.pitch );
 
         unsigned char* glyphData = (unsigned char*)malloc( newGlyph->height * face->glyph->bitmap.pitch );
@@ -117,16 +119,16 @@ void                Text::BuildAtlas()
 
     unsigned int atlasSize = ( unsigned int )std::ceil( sqrt( (float)glyphsNum ) );
 
-    unsigned int altlasWidth = GLYPH_SIZE * atlasSize;
-    unsigned int altlasHeight = GLYPH_SIZE * atlasSize;
+    unsigned int altlasWidth = m_fontSize * atlasSize;
+    unsigned int altlasHeight = m_fontSize * atlasSize;
 
-    m_atlas = TextAtlas::Crate( altlasWidth, altlasHeight, 32 );
+    m_atlas = TextAtlas::Crate( altlasWidth, altlasHeight, 32, m_fontSize, m_fontSize );
 
     char* atlasData = m_atlas->GetWritableData();
 
     std::stringstream dataStream;
 
-    auto atlasColumns  = altlasWidth / GLYPH_SIZE;
+    auto atlasColumns  = altlasWidth / m_fontSize;
 
     for (unsigned int y = 0; y < m_atlas->GetHeight(); y++) 
     {
@@ -134,8 +136,8 @@ void                Text::BuildAtlas()
         {
     
             // work out which grid slot[col][row] we are in e.g out of 16x16
-            unsigned int col = x / GLYPH_SIZE;
-            unsigned int row = y / GLYPH_SIZE;
+            unsigned int col = x / m_fontSize;
+            unsigned int row = y / m_fontSize;
             unsigned int order = row * atlasColumns + col;
 
             if( order < 0 || order >= glyphVec.size() )
@@ -145,8 +147,8 @@ void                Text::BuildAtlas()
             }
 
             // pixel indices within padded glyph slot area
-            unsigned int x_loc = x % GLYPH_SIZE - padding_px / 2;
-            unsigned int y_loc = y % GLYPH_SIZE - padding_px / 2;
+            unsigned int x_loc = x % m_fontSize - padding_px / 2;
+            unsigned int y_loc = y % m_fontSize - padding_px / 2;
                 
             if (x_loc < 0 || y_loc < 0 || x_loc >= glyphVec[order]->width || y_loc >= glyphVec[order]->height )
             {

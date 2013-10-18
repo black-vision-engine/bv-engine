@@ -104,25 +104,36 @@ class TextPluginPD : public BaseParametersDescriptor
 public:
 
     static const std::string            pluginName;
+    static const std::string            colorParam;
 
     explicit TextPluginPD()
         : BaseParametersDescriptor( pluginName )
-    {}
+    {
+        m_params[ colorParam ] = ParamType::PT_FLOAT4;
+    }
 };
 
 const std::string TextPluginPD::pluginName = "SimpleTextPlugin";
+const std::string TextPluginPD::colorParam = "color";
 
 class TextShaderChannel : public model::ShaderChannel< model::IPixelShaderChannel, TextPluginPD >
 {
+    Vec4Interpolator                m_color;
+    model::ValueVec4*               m_colorVal;
+
 public:
     virtual void                    Update( float t )
     {
+        m_colorVal->SetValue( m_color.evaluate( t ) );
         ShaderChannel::Update( t );
     }
 
-    TextShaderChannel( const std::string& shaderFile )
+    TextShaderChannel( const std::string& shaderFile, const Vec4Interpolator& color )
         : ShaderChannel( shaderFile )
+        , m_color(color)
     {
+        m_colorVal = new model::ValueVec4( ParamDesc::colorParam );
+        RegisterValue(m_colorVal);
     }
 };
 
@@ -202,7 +213,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextTestScene()
 
     std::wstring str  = LoadUtf8FileToString( L"text_example.txt");
 
-    auto texPlugin = new model::SimpleTextPlugin( str, fontFile );
+    auto texPlugin = new model::SimpleTextPlugin( str, fontFile, 64 );
     //auto texPlugin = new model::SimpleTextPlugin( L"Litwo! Ojczyzno moja! ty jesteœ jak zdrowie.\nIle ci trzeba ceniæ, ten tylko siê dowie,\nKto ciê straci³. Dziœ piêknoœæ tw¹ w ca³ej ozdobie\nWidzê i opisujê, bo têskniê po tobie."
     //                                                , fontFile );
 
@@ -225,7 +236,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextTestScene()
     FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
     FloatInterpolator zt;
 
-    xt.addKey(0.f, -9.f);
+    xt.addKey(0.f, -1.f);
     //yt.addKey(0.f, 0.f);
     yt.addKey(0.f, -5.f);
     zt.addKey(0.f, -5.f);
@@ -237,8 +248,21 @@ model::BasicNode *     TestScenesFactory::SimpeTextTestScene()
     model::SimpleTransformChannel      * stch  = new model::SimpleTransformChannel();
     stch->AddTransform( trns );
 
+
+    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
+
+    color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+
+    color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+
+    color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+
+    color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+
+
+
     texPlugin->SetTransformChannel( stch );
-    texPlugin->SetPixelShaderChannel     ( new TextShaderChannel( "../dep/media/shaders/text.frag" ) );
+    texPlugin->SetPixelShaderChannel     ( new TextShaderChannel( "../dep/media/shaders/text.frag", color ) );
     texPlugin->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
 
     root->AddPlugin                 ( texPlugin );

@@ -17,6 +17,8 @@ struct Glyph
   unsigned int      textureX;   // x pixel coord of the bitmap's bottom-left corner
   unsigned int      textureY;   // y pixel coord of the bitmap's bottom-left corner
 
+  unsigned int      padding;
+
   unsigned int      size;   // 
 };
 

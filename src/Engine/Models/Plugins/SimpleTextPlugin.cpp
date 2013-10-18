@@ -12,8 +12,8 @@ namespace bv { namespace model {
 
 const std::string SimpleTextPluginPD::pluginName = "SimpleTextPlugin";
 
-SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName )
-    : m_text( new Text( text, fontFileName ) ) // FIXME:
+SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize )
+    : m_text( new Text( text, fontFileName, fontSize * (1.25f) /* points to pixel proportion */) ) // FIXME:
 {
     m_textures.push_back( LoadAtlas( "Tex0" ) );
 
@@ -34,6 +34,9 @@ SimpleTextPlugin::TexturePair SimpleTextPlugin::LoadAtlas( const std::string& na
     return SimpleTextPlugin::TexturePair( altasHandle, name );
 }
 
+#define viewWidth   100
+#define viewHeight  100
+
 void                SimpleTextPlugin::EvalGeometryChannel( )
 {
     auto texExtraData = static_cast< const TextureExtraData* > ( m_textures[ 0 ].first->GetExtra() );
@@ -49,18 +52,21 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
     glm::vec3 interspace( 0.07f, 0.f ,0.f );
     glm::vec3 newLineTranslation( 0.f );
 
+    auto glyphH = m_text->GetAtlas()->GetGlyphHeight();
+    auto glyphW = m_text->GetAtlas()->GetGlyphWidth();
+
     for( auto wch : m_text->GetText() )
     {
         if( wch == L' ' )
         {
-            translate += glm::vec3( 0.3, 0.f, 0.f );
+            translate += glm::vec3( 0.3*(float)glyphW * 0.5/viewWidth, 0.f, 0.f );
             continue;
         }
 
         if( wch == L'\n' )
         {
             translate = glm::vec3( 0.f );
-            newLineTranslation += glm::vec3( 0.f, -1.1f, 0.f );
+            newLineTranslation += glm::vec3( 0.f, (float)glyphH /viewHeight, 0.f );
             continue;
         }
 
@@ -72,12 +78,17 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
 
         auto glyph = m_text->GetGlyph( wch );
 
-        glm::vec3 baring = glm::vec3( glyph->bearingX / (float)glyph->size, glyph->bearingY / (float)glyph->size, 0.f );
+        glm::vec3 baring = glm::vec3( 0.f, (glyph->height - glyph->bearingY) / (float)viewHeight, 0.f );
 
-        posAttribChannel->AddVertexAttribute( glm::vec3( -0.5f, -0.5f, 0.f ) + translate + baring + newLineTranslation );
-        posAttribChannel->AddVertexAttribute( glm::vec3( 0.5f, -0.5f, 0.f ) + translate + baring + newLineTranslation );
-        posAttribChannel->AddVertexAttribute( glm::vec3( -0.5f, 0.5f, 0.f ) + translate + baring + newLineTranslation );
-        posAttribChannel->AddVertexAttribute( glm::vec3( 0.5f, 0.5f, 0.f ) + translate + baring + newLineTranslation );
+        auto quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f );
+        auto quadBottomRight    = glm::vec3( (float)glyph->width / (float)viewWidth, 0.f, 0.f );
+        auto quadTopLeft        = glm::vec3( 0.f, (float)glyph->height / (float)viewHeight, 0.f );
+        auto quadTopRight       = glm::vec3( (float)glyph->width / (float)viewWidth, (float)glyph->height / (float)viewHeight, 0.f );
+
+        posAttribChannel->AddVertexAttribute( quadBottomLeft    + translate - baring + newLineTranslation );
+        posAttribChannel->AddVertexAttribute( quadBottomRight   + translate - baring + newLineTranslation );
+        posAttribChannel->AddVertexAttribute( quadTopLeft       + translate - baring + newLineTranslation );
+        posAttribChannel->AddVertexAttribute( quadTopRight      + translate - baring + newLineTranslation );
 
         connComp->m_vertexAttributeChannels.push_back( posAttribChannel );
 
@@ -85,23 +96,22 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
 
         auto verTex0AttrChannel = new model::Float2VertexAttributeChannel( desc1, m_textures[ 0 ].second, true );
 
-        
-        float left = ((float)glyph->textureX ) / texExtraData->GetWidth();
-        float top = ((float)glyph->textureY ) / texExtraData->GetHeight();
+        float texLeft   = ((float)glyph->textureX) / texExtraData->GetWidth();
+        float texTop    = ((float)glyph->textureY) / texExtraData->GetHeight();
+        float texWidth  = ((float)glyph->width) / texExtraData->GetWidth();
+        float texHeight = ((float)glyph->height) / texExtraData->GetHeight();
 
-        float width = ((float)glyph->size - 2) / texExtraData->GetWidth();
-        float height = ((float)glyph->size - 2) / texExtraData->GetHeight();
 
-        verTex0AttrChannel->AddVertexAttribute( glm::vec2( left, top + height ) );
-        verTex0AttrChannel->AddVertexAttribute( glm::vec2( left + width, top + height ) );
-        verTex0AttrChannel->AddVertexAttribute( glm::vec2( left, top) );
-        verTex0AttrChannel->AddVertexAttribute( glm::vec2( left + width, top ) );
+        verTex0AttrChannel->AddVertexAttribute( glm::vec2( texLeft, texTop + texHeight ) );
+        verTex0AttrChannel->AddVertexAttribute( glm::vec2( texLeft + texWidth, texTop + texHeight ) );
+        verTex0AttrChannel->AddVertexAttribute( glm::vec2( texLeft, texTop) );
+        verTex0AttrChannel->AddVertexAttribute( glm::vec2( texLeft + texWidth, texTop ) );
 
         connComp->m_vertexAttributeChannels.push_back( verTex0AttrChannel );
 
         m_geomChannel->AddConnectedComponent( connComp );
 
-        translate += glm::vec3( glyph->width / (float)glyph->size, 0.f, 0.f ) + interspace;
+        translate += glm::vec3( glyph->width / (float)viewWidth, 0.f, 0.f ) + interspace;
     } 
 }
 

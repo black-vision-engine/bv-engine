@@ -8,7 +8,7 @@
 #include FT_FREETYPE_H
 #include <FreeType/ftglyph.h>
 
-const std::string fontFile = "../dep/Media/fonts/arial.ttf";
+const std::string fontFile = "../dep/Media/fonts/ARIALUNI.TTF";
 FT_Library  GFreeType;
 FT_Face     face;
 
