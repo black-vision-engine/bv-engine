@@ -54,6 +54,22 @@ bool                                    GeometryChannel::IsTimeInvariant     () 
 
 // *********************************
 //
+bool                                    GeometryChannel::NeedsPositionsUpdate( float t ) const
+{
+    //FIXME: reimplement in subclass
+    return false;
+}
+
+// *********************************
+//
+bool                                    GeometryChannel::NeedsTopologyUpdate ( float t ) const
+{
+    //FIXME: reimplement in subclass
+    return false;
+}
+
+// *********************************
+//
 const IGeometryChannelDescriptor *      GeometryChannel::GetDescriptor       () const
 {
     return &m_desc;

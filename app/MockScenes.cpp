@@ -267,10 +267,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextTestScene()
 
     root->AddPlugin                 ( texPlugin );
 
-
     return root;
-
-
 }
 
 // ***************************************
