@@ -27,6 +27,9 @@ public:
 
     virtual bool                                    IsTimeInvariant     ()                              const = 0;
 
+    virtual bool                                    NeedsPositionsUpdate( float t )                     const = 0;
+    virtual bool                                    NeedsTopologyUpdate ( float t )                     const = 0;
+
     //FIXME: implement via plugin when its interface is known
     //virtual bool                                  CanBeConnectedTo    ( IPlugin * plugin )            const = 0;
     virtual bool                                    CanBeConnectedTo    ( IGeometryChannel * channel )  const = 0;

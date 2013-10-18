@@ -32,9 +32,12 @@ public:
     //IChannel
     virtual void                                    Update              ( float t );
     virtual bool                                    IsReadOnly          () const;
-    virtual bool                                    IsTimeInvariant     () const;
 
     //IGeometryChannel
+    virtual bool                                    IsTimeInvariant     ()          const;
+    virtual bool                                    NeedsPositionsUpdate( float t ) const;
+    virtual bool                                    NeedsTopologyUpdate ( float t ) const;
+
     virtual const IGeometryChannelDescriptor *      GetDescriptor       () const;
     virtual PrimitiveType                           GetPrimitiveType    () const;
 
