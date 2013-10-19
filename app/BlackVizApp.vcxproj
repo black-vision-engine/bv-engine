@@ -69,6 +69,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnotherTestScene.cpp" />
     <ClCompile Include="bvApp.cpp" />
     <ClCompile Include="initmess.cpp" />
     <ClCompile Include="MockFonts\fttester.cpp" />
