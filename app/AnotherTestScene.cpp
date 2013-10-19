@@ -5,6 +5,7 @@
 #include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
 #include "Engine/Models/Plugins/SolidColorPlugin.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/AnimatedStripComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannel.h"
@@ -31,7 +32,7 @@ model::BasicNode *          GreenRect()
 
     /// Set Geometry Channel
 
-    model::RectComponent *      rect        = model::RectComponent::Create();
+    model::AnimatedStripComponent *     rect        = model::AnimatedStripComponent::Create( 2.f, 1.f, 10, 0.f );
 
     model::GeometryChannelDescriptor desc;
 
