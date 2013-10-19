@@ -161,8 +161,9 @@ bool BlackVisionApp::OnInitialize       ()
 
     //root->AddChild( root1 );
 
-    model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
+    //model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
     //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
+    model::BasicNode * root = TestScenesFactory::AnotherTestScene();
 
     m_modelScene = model::ModelScene::Create( root, new Camera() );
 
@@ -170,7 +171,7 @@ bool BlackVisionApp::OnInitialize       ()
 
     m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
     //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, -4.f, 3.5f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 0.5f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 1.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
 
     //FIXME: read from configuration file and change appropriately when resoultion changes
     m_modelScene->GetCamera()->SetPerspactive( 90.f, float(m_Width) / float(m_Height), 0.1f, 100.f );

@@ -10,6 +10,7 @@
     <ClCompile Include="MockFonts\fttester.cpp">
       <Filter>MockFonts</Filter>
     </ClCompile>
+    <ClCompile Include="AnotherTestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />

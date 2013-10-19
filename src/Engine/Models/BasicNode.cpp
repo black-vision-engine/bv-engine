@@ -270,7 +270,6 @@ const IVertexShaderChannel* GetVertexShaderChannel( const std::vector< IPlugin* 
         }
     }
 
-    assert( ret );
     return ret;
 }
 

@@ -79,7 +79,6 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelTyped.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\VertexShaderChannel.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\PixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\GeometryShader\GeometryShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Plugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameter.cpp" />
@@ -90,6 +89,8 @@
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataArrays.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataElements.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObjectSingleVB.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\SolidColorShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\SolidColorPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -190,7 +191,6 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelTyped.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexShader\VertexShaderChannel.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\PixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\GeometryShader\GeometryShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\ShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPlugin.h" />
@@ -204,6 +204,8 @@
     <ClInclude Include="Engine\Graphics\Resources\RenderableArrayDataArrays.h" />
     <ClInclude Include="Engine\Graphics\Resources\RenderableArrayDataElements.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObjectSingleVB.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\SolidColorShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\SolidColorPlugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
