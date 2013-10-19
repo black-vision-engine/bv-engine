@@ -90,6 +90,8 @@
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataArrays.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataElements.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObjectSingleVB.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -204,6 +206,8 @@
     <ClInclude Include="Engine\Graphics\Resources\RenderableArrayDataArrays.h" />
     <ClInclude Include="Engine\Graphics\Resources\RenderableArrayDataElements.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObjectSingleVB.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
