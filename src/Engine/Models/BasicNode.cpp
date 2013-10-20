@@ -445,7 +445,7 @@ RenderableArrayDataSingleVertexBuffer * BasicNode::CreateRenderableArrayData( Pr
     switch( type )
     {
         case PrimitiveType::PT_TRIANGLE_STRIP:
-            return CreateRenderableArrayDataArrays( components, geomDesc );
+            return CreateRenderableArrayDataArrays( components, geomDesc, geometryChannel->IsTimeInvariant() );
         case PrimitiveType::PT_TRIANGLES:
         case PrimitiveType::PT_TRIANGLE_MESH:
             //FIXME: implement
@@ -474,17 +474,25 @@ RenderableArrayDataArraysSingleVertexBuffer *   BasicNode::CreateRenderableArray
         return nullptr;
     }
     
-    return CreateRenderableArrayDataArrays( components, geomDesc );
+    return CreateRenderableArrayDataArrays( components, geomDesc, geometryChannel->IsTimeInvariant() );
 }
 
 // ********************************
 //
-RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDataArrays( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc ) const
+RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDataArrays( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc, bool isTimeInvariant ) const
 {
     //FIXME: a bit of hackery because memory layout may be different than what this constructor suggests (this time it is not)
     //FIXME: this code should be moved to some utility classes from this poor BasicNode (not so basic right now)
     //FIXME: check that plugin's channel signature is the same for all connected components
-    VertexBuffer * vertexBuffer         = new VertexBuffer( TotalNumVertices( ccVec ), desc->SingleVertexEntrySize() );
+
+    DataBuffer::Semantic vbSemantic = DataBuffer::Semantic::S_STATIC;
+
+    if ( !isTimeInvariant )
+    {
+        vbSemantic = DataBuffer::Semantic::S_DYNAMIC;
+    }
+
+    VertexBuffer * vertexBuffer         = new VertexBuffer( TotalNumVertices( ccVec ), desc->SingleVertexEntrySize(), vbSemantic );
     VertexDescriptor * vertexDescriptor = CreateVertexDescriptor( desc );
 
     VertexArraySingleVertexBuffer * vao = new VertexArraySingleVertexBuffer( vertexBuffer, vertexDescriptor );
