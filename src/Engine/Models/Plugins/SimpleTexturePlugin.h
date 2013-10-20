@@ -15,10 +15,6 @@ public:
 
     static const std::string            pluginName;
 
-    static const std::string            alphaParamName;
-    static const std::string            txMatrix0ParamName;
-    static const std::string            txMatrix1ParamName;
-
     explicit SimpleTexturePluginPD();
 };
 

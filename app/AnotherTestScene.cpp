@@ -12,6 +12,8 @@
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/SolidColorShaderChannel.h"
 #include "Engine/Models/Plugins/SimpleTexturePlugin.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/VertexShader/TextureVertexShaderChannel.h"
 
 namespace bv
 {
@@ -164,9 +166,15 @@ model::BasicNode *          TexturedRect()
     auto texturePlugin = new model::SimpleTexturePlugin( rectPlugin, textures );
 
     // Set Pixel Shader Channel
-    texturePlugin->SetPixelShaderChannel    ( new model::SolidColorShaderChannel( "../dep/media/shaders/simpletexture.frag", color ) );
-    // Set Vertex Shader Channel
-    texturePlugin->SetVertexShaderChannel    ( new model::SolidColorShaderChannel( "../dep/media/shaders/simpletexture.vert", color ) );
+    std::vector<TransformF> txMat;
+    std::vector<FloatInterpolator> alphas;
+    texturePlugin->SetPixelShaderChannel( new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
+                                        , alphas
+                                        , txMat )
+                                        );
+
+    texturePlugin->SetVertexShaderChannel( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" )
+                                        );
 
     root->AddPlugin(texturePlugin);
 

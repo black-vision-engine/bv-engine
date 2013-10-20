@@ -13,8 +13,6 @@ public:
 
     static const std::string            pluginName;
 
-    static const std::string            solidColor;
-
     explicit SolidColorPluginPD();
 };
 

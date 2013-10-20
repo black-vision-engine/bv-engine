@@ -14,10 +14,6 @@ namespace bv { namespace model {
 //PLUGIN NAME
 const std::string SimpleTexturePluginPD::pluginName( "SimpleTexturePlugin" );
 
-//PLUGIN PARAMETERS
-const std::string SimpleTexturePluginPD::alphaParamName( "alpha" );
-const std::string SimpleTexturePluginPD::txMatrix0ParamName( "txMat0" );
-const std::string SimpleTexturePluginPD::txMatrix1ParamName( "txMat1" );
 
 
 // *************************************
@@ -25,9 +21,6 @@ const std::string SimpleTexturePluginPD::txMatrix1ParamName( "txMat1" );
 SimpleTexturePluginPD::SimpleTexturePluginPD()
     : BaseParametersDescriptor( pluginName )
 {
-    m_params[ alphaParamName ] = ParamType::PT_FLOAT1;
-    m_params[ txMatrix0ParamName ] = ParamType::PT_MAT4;
-    m_params[ txMatrix1ParamName ] = ParamType::PT_MAT4;
 }
 
 // ***************************** PLUGIN ********************************** 

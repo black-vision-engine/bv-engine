@@ -13,16 +13,12 @@ namespace bv { namespace model {
 //PLUGIN NAME
 const std::string SolidColorPluginPD::pluginName( "SolidColorPlugin" );
 
-//PLUGIN PARAMETERS
-const std::string SolidColorPluginPD::solidColor( "solidColor" );
-
 
 // *************************************
 //
 SolidColorPluginPD::SolidColorPluginPD()
     : BaseParametersDescriptor( pluginName )
 {
-    m_params[ solidColor ] = ParamType::PT_FLOAT4;
 }
 
 // ***************************** PLUGIN ********************************** 
