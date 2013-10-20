@@ -8,27 +8,40 @@ namespace bv
 class IUpdater
 {
 public:
-    virtual void                Update(float t) = 0;
+
+    virtual         ~IUpdater   () {}
+
+    virtual void    Update      ( float t ) = 0;
 };
 
 
 class UpdatersManager
 {
 private:
+
     std::vector<IUpdater*> m_updaters;
+
 public:
 
-    void Update(float t)
+    ~UpdatersManager    ()
     {
-        for(auto u : m_updaters)
+        for( auto u : m_updaters )
         {
-            u->Update(t);
+            delete u;
         }
     }
 
-    void RegisterUpdater(IUpdater* up)
+    void Update ( float t )
     {
-        m_updaters.push_back(up);
+        for( auto updater : m_updaters )
+        {
+            updater->Update( t );
+        }
+    }
+
+    void RegisterUpdater    ( IUpdater * updater )
+    {
+        m_updaters.push_back( updater );
     }
 
     static UpdatersManager& get()
@@ -36,6 +49,7 @@ public:
         static UpdatersManager instance = UpdatersManager();
         return instance;
     }
+
 };
 
 

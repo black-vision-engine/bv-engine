@@ -226,6 +226,7 @@
     <ClCompile Include="Engine\Models\Resources\ResourceLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextureLoader.cpp" />
     <ClCompile Include="Engine\Models\Updaters\CameraUpdater.cpp" />
+    <ClCompile Include="Engine\Models\Updaters\GeometryUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\ShaderParamUpdater.cpp" />
     <ClCompile Include="System\HRTimer.cpp" />
     <ClCompile Include="System\Print.cpp" />
@@ -339,6 +340,7 @@
     <ClInclude Include="Engine\Models\Resources\ResourceLoader.h" />
     <ClInclude Include="Engine\Models\Resources\TextureLoader.h" />
     <ClInclude Include="Engine\Models\Updaters\CameraUpdater.h" />
+    <ClInclude Include="Engine\Models\Updaters\GeometryUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\ShaderParamUpdater.h" />
     <ClInclude Include="Engine\Types\Enums.h" />
     <ClInclude Include="System\HRTimer.h" />

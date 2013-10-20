@@ -1,4 +1,11 @@
 #include "BasicNode.h"
+
+#include <fstream>
+#include <sstream>
+#include <sys/stat.h>
+
+#include "System/Print.h"
+
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Graphics/SceneGraph/BasicScene.h"
 #include "Engine/Graphics/Shaders/PixelShader.h"
@@ -6,33 +13,30 @@
 #include "Engine/Graphics/Renderers/OGLRenderer/vborect.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
-#include "System/Print.h"
 
-#include "Engine\Models\Plugins\Interfaces\IGeometryChannelDescriptor.h"
-#include "Engine\Graphics\Resources\RenderableArrayDataArrays.h"
-#include "Engine\Graphics\Resources\RenderableArrayDataElements.h"
+#include "Engine/Models/Plugins/Interfaces/IGeometryChannelDescriptor.h"
+#include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
+#include "Engine/Graphics/Resources/RenderableArrayDataElements.h"
 
-#include "Engine\Graphics\Resources\VertexDescriptor.h"
-#include "Engine\Graphics\Resources\VertexBuffer.h"
-#include "Engine\Graphics\Resources\VertexArray.h"
-#include "Engine\Graphics\Resources\IndexBuffer.h"
-#include "Engine\Graphics\Shaders\RenderableEffect.h"
-#include "Engine\Models\Updaters\TransformUpdater.h"
-#include "Engine\Models\Updaters\ShaderParamUpdater.h"
+#include "Engine/Graphics/Resources/VertexDescriptor.h"
+#include "Engine/Graphics/Resources/VertexBuffer.h"
+#include "Engine/Graphics/Resources/VertexArray.h"
+#include "Engine/Graphics/Resources/IndexBuffer.h"
+#include "Engine/Graphics/Shaders/RenderableEffect.h"
+#include "Engine/Models/Updaters/GeometryUpdater.h"
+#include "Engine/Models/Updaters/TransformUpdater.h"
+#include "Engine/Models/Updaters/GeometryUpdater.h"
+#include "Engine/Models/Updaters/ShaderParamUpdater.h"
 
-#include "Engine\Models\Plugins\Interfaces\IGeometryChannel.h"
-#include "Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h"
-#include "Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h"
-#include "Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h"
-#include "Engine\Models\Plugins\Interfaces\IConnectedComponent.h"
-#include "Engine\Models\Plugins\Interfaces\IVertexAttributeChannel.h"
-#include "Engine\Models\Plugins\Interfaces\IVertexAttributeChannelDescriptor.h"
-#include "Engine\Graphics\Resources\Textures\TextureManager.h"
-#include "Engine\Graphics\Resources\Texture2D.h"
-
-#include <fstream>
-#include <sstream>
-#include <sys/stat.h>
+#include "Engine/Models/Plugins/Interfaces/IGeometryChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
+#include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannelDescriptor.h"
+#include "Engine/Graphics/Resources/Textures/TextureManager.h"
+#include "Engine/Graphics/Resources/Texture2D.h"
 
 namespace bv { namespace model {
 
@@ -139,11 +143,22 @@ SceneNode*                  BasicNode::BuildScene()
 
         if ( p == m_plugins.back() )
         {
-            auto transChannel = p->GetTransformChannel();        
-            assert( transChannel != nullptr );
+            UpdatersManager & updatersManager = UpdatersManager::get();
 
-            TransformUpdater * tu = new TransformUpdater( renderEnt, transChannel );
-            UpdatersManager::get().RegisterUpdater(tu);
+            auto transChannel = p->GetTransformChannel();        
+            auto geomChannel = p->GetGeometryChannel();
+            
+            assert( transChannel != nullptr );
+            assert( geomChannel != nullptr );
+
+            TransformUpdater * transformUpdater = new TransformUpdater( renderEnt, transChannel );
+            updatersManager.RegisterUpdater( transformUpdater );
+
+            if ( !geomChannel->IsTimeInvariant() )
+            {
+                GeometryUpdater * geometryUpdater = new GeometryUpdater( renderEnt, geomChannel );
+                updatersManager.RegisterUpdater( geometryUpdater );
+            }
         }
     }
 
