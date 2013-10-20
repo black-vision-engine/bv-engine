@@ -2,6 +2,8 @@
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/GeometryPluginRing.h"
+
+#include "Engine/Models/Plugins/GeometryPlugin.h"
 #include "Engine/Models/Plugins/GeometryPluginRect.h"
 #include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
 #include "Engine/Models/Plugins/SolidColorPlugin.h"
@@ -30,12 +32,53 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 //#include <cmath>
+#include "Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.h"
+#include "Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.h"
 
 namespace bv
 {
 
 namespace
 {
+// ******************************
+//
+model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned int numSegments, float speedX, float speedY, float cyclesX, float cyclesY, float sizeY, float sizeZ )
+{
+    model::BasicNode * root = new model::BasicNode();
+    
+    ///////////////////////////// Geometry plugin //////////////////////////
+    model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin();
+
+    ///////////////////////////// Channels //////////////////////////
+    model::GeometryChannel *        geomChannel     = model::GeometryChannelAnimatedVertices::Create( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
+
+    TransformF *                    trans           = new TransformF();
+    model::SimpleTransformChannel * trasformChannel = new model::SimpleTransformChannel();
+    trasformChannel->AddTransform( trans );
+
+    geomPlugin->SetGeometryChannel  ( geomChannel );
+    geomPlugin->SetTransformChannel ( trasformChannel );
+    
+    
+    ///////////////////////////// Solid plugin //////////////////////////// 
+    auto solidPlugin = new model::SolidColorPlugin( geomPlugin );
+
+    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
+    color.addKey(0.f, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
+
+    // Set Pixel Shader Channel
+    solidPlugin->SetPixelShaderChannel( new model::SolidColorShaderChannel( "../dep/media/shaders/solid.frag", color ) );
+
+
+    // Add plugins to node
+    root->AddPlugin( geomPlugin );
+    root->AddPlugin( solidPlugin );
+
+    return root;
+}
+
+// ******************************
+//
 model::BasicNode *          GreenRect()
 {
     model::BasicNode * root = new model::BasicNode();
@@ -51,7 +94,7 @@ model::BasicNode *          GreenRect()
 
     /// Set Geometry Channel
 
-    model::AnimatedStripComponent *     rect        = model::AnimatedStripComponent::Create( 2.f, 1.f, 10, 0.f );
+    model::AnimatedStripComponent *     rect        = model::AnimatedStripComponent::Create( 2.f, 1.f, 10, 0.f, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 );
 
     model::GeometryChannelDescriptor desc;
 
@@ -110,6 +153,8 @@ model::BasicNode *          GreenRect()
     return root;
 }
 
+// ******************************
+//
 model::BasicNode *          TexturedRect()
 {
     model::BasicNode * root = new model::BasicNode();
@@ -397,6 +442,8 @@ model::BasicNode *     Text1()
 
 
 
+// ******************************
+//
 model::BasicNode *          TestScenesFactory::AnotherTestScene()
 {
     auto root = GreenRect();
@@ -405,6 +452,27 @@ model::BasicNode *          TestScenesFactory::AnotherTestScene()
     root->AddChild( Text1() );
 
     return root;
+}
+
+// ******************************
+//
+model::BasicNode *      TestScenesFactory::AnimatedTestScene ()
+{
+    float w = 2.5f;
+    float h = 1.f;
+    float z = 0.f;
+    
+    unsigned int numSegments = 10;
+
+    float speedX    = 1.f;
+    float speedY    = 1.f;
+    float cyclesX   = 5.f;
+    float cyclesY   = 3.f;
+    float sizeY     = 1.f;
+    float sizeZ     = .7f;
+
+    //float 
+    return AnimatedSolid( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
 }
 
 } // bv

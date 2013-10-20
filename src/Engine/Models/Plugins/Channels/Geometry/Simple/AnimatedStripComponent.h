@@ -4,16 +4,33 @@
 
 namespace bv { namespace model {
 
+class Float3VertexAttributeChannel;
+
 class AnimatedStripComponent: public ConnectedComponent
 {
 private:
 
-            AnimatedStripComponent                  ( float w, float h, unsigned int numSegments, float z );
-            ~AnimatedStripComponent                 ();
+    float   m_speedX;
+    float   m_speedY;
+    float   m_sclSine;
+    float   m_sclCosine;
+    float   m_h;
+    float   m_z;
+    float   m_sizeY;
+    float   m_sizeZ;
+
+    Float3VertexAttributeChannel * m_positions;
+
+private:
+
+                                        AnimatedStripComponent  ( float w, float h, unsigned int numSegments, float z, float sclSine, float sclCosine, float speedX, float speedY, float sizeY, float sizeZ );
+                                        ~AnimatedStripComponent ();
 
 public:
 
-    static  AnimatedStripComponent *  Create        ( float w, float h, unsigned int numSegments, float z );
+    virtual void                        Update                  ( float t );
+
+    static  AnimatedStripComponent *    Create                  ( float w, float h, unsigned int numSegments, float z, float sclSine, float sclCosine, float speedX, float speedY, float sizeY, float sizeZ );
 
 };
 

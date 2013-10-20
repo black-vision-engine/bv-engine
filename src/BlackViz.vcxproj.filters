@@ -98,6 +98,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\RingComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRing.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\TextPixelShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\GeometryPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -220,6 +221,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\RingComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryPluginRing.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\TextPixelShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\GeometryPlugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
