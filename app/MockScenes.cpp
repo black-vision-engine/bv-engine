@@ -422,11 +422,19 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     
     if( numcall == 0 )
     {
-        stpp = new model::SimpleTexturePlugin  (rectPlugin, "asci_arial_atlas_red.png", "simless_00.jpg" );
+        std::vector< std::string > textures;
+        textures.push_back( "asci_arial_atlas_red.png" );
+        textures.push_back( "simless_00.jpg" );
+
+        stpp = new model::SimpleTexturePlugin  (rectPlugin, textures );
     }
     else
     {
-        stpp = new model::SimpleTexturePlugin  (rectPlugin, "asci_arial_atlas_red.png", "simless_01.jpg" );
+        std::vector< std::string > textures;
+        textures.push_back( "asci_arial_atlas_red.png" );
+        textures.push_back( "simless_01.jpg" );
+
+        stpp = new model::SimpleTexturePlugin  (rectPlugin, textures );
     }
 
 
@@ -527,7 +535,11 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     TransformF * tx1m = new TransformF();    
     tx1m->addScale( alpha, ConstValue( 1.0f ), ConstValue( 1.0f ) );
 
-    stpp = new model::SimpleTexturePlugin  ( rectPlugin, "simless_00.jpg", "simless_01.jpg" );
+    std::vector< std::string > textures;
+    textures.push_back( "simless_00.jpg" );
+    textures.push_back( "simless_01.jpg" );
+
+    stpp = new model::SimpleTexturePlugin  ( rectPlugin, textures );
 
     stpp->SetPixelShaderChannel     ( new MyPixelShaderChannel( "../dep/media/shaders/simpletexture.frag", alpha, *tx0m, *tx1m ) );
     stpp->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );

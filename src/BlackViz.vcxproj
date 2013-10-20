@@ -205,6 +205,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\SolidColorShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\TexturePixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\TranformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannel.cpp" />
@@ -298,6 +299,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\SolidColorShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\TexturePixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\ShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\TranformChannel.h" />

@@ -11,6 +11,7 @@
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/SolidColorShaderChannel.h"
+#include "Engine/Models/Plugins/SimpleTexturePlugin.h"
 
 namespace bv
 {
@@ -90,15 +91,99 @@ model::BasicNode *          GreenRect()
 
     return root;
 }
+
+model::BasicNode *          TexturedRect()
+{
+    model::BasicNode * root = new model::BasicNode();
+
+    ///////////////////////////// Geometry plugin //////////////////////////
+    FloatInterpolator w; w.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator h; h.setWrapPostMethod( bv::WrapMethod::pingPong );
+    
+    w.addKey(0.f, 1.f);
+    h.addKey(0.f, 1.f);
+
+    model::GeometryRectPlugin*          rectPlugin = new model::GeometryRectPlugin(w, h);
+
+    /// Set Geometry Channel
+
+    model::RectComponent *     rect        = model::RectComponent::Create();
+
+    model::GeometryChannelDescriptor desc;
+
+    for( auto compDesc : rect->GetVertexAttributeChannels() )
+    {
+        desc.AddVertexAttrChannelDesc( static_cast< const model::VertexAttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
+    }
+
+    model::GeometryChannel *    geomCh      = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
+    geomCh->AddConnectedComponent( rect );
+    rectPlugin->SetGeometryChannel( geomCh );
+
+
+    /// Set Transform Channel
+    TransformF *    trans  = new TransformF                ();
+
+    FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator zs;
+
+    xs.addKey(0.f, 1.f);
+    ys.addKey(0.f, 1.f);
+    zs.addKey(0.f, 1.f);
+
+    trans->addScale( xs, ys, zs );
+
+    FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
+    FloatInterpolator zt;
+
+    xt.addKey(0.f, 1.f);
+    yt.addKey(0.f, 1.f);
+    zt.addKey(0.f, 0.f);
+
+    trans->addTranslation( xt, yt, zt );
+
+    model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
+    trasformChannel->AddTransform( trans );
+
+
+    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
+    color.addKey(0.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+
+    rectPlugin->SetTransformChannel      ( trasformChannel );
+    root->AddPlugin(rectPlugin);
+
+    ///////////////////////////// Texture plugin //////////////////////////// 
+
+
+    std::vector< std::string > textures;
+
+    textures.push_back( "simless_00.jpg" );
+
+    auto texturePlugin = new model::SimpleTexturePlugin( rectPlugin, textures );
+
+    // Set Pixel Shader Channel
+    texturePlugin->SetPixelShaderChannel    ( new model::SolidColorShaderChannel( "../dep/media/shaders/simpletexture.frag", color ) );
+    // Set Vertex Shader Channel
+    texturePlugin->SetVertexShaderChannel    ( new model::SolidColorShaderChannel( "../dep/media/shaders/simpletexture.vert", color ) );
+
+    root->AddPlugin(texturePlugin);
+
+    return root;
+
+}
+
 } // anonymous
 
 
 
 model::BasicNode *          TestScenesFactory::AnotherTestScene()
 {
-    return GreenRect();
+    auto root = GreenRect();
+    root->AddChild( TexturedRect() );
 
-    //return nullptr;
+    return root;
 }
 
 } // bv

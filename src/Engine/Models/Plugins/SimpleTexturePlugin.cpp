@@ -34,12 +34,12 @@ SimpleTexturePluginPD::SimpleTexturePluginPD()
 
 // *************************************
 //
-SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin* prev, const std::string & textureFileName, const std::string & textureFileName1 )
-    : m_textureFileName( textureFileName )
-    , m_textureFileName1( textureFileName1 )
+SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin* prev, const std::vector< std::string > & texturesFilesNames )
 {
-    m_textures.push_back( LoadTexture( "Tex0", textureFileName ) );
-    m_textures.push_back( LoadTexture( "Tex1", textureFileName1 ) );
+    for(unsigned int i = 0; i < texturesFilesNames.size(); ++i)
+    {
+        m_textures.push_back( LoadTexture( "Tex" + std::to_string( i ), texturesFilesNames[ i ] ) );
+    }
 
     m_geomChannel = nullptr;
     EvalGeometryChannel( prev );
@@ -78,28 +78,20 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
             m_geomChannel = new model::GeometryChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, true );
         }
 
-        auto verTex0AttrChannel = new model::Float2VertexAttributeChannel( desc, m_textures[ 0 ].second, true );
+        for( unsigned int i = 0; i < m_textures.size(); ++i )
+        {
 
-        verTex0AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 0.f ) );
-        verTex0AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 0.f ) );
-        verTex0AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 1.f ) );
-        verTex0AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 1.f ) );
+            auto verTexAttrChannel = new model::Float2VertexAttributeChannel( desc, m_textures[ 0 ].second, true );
 
-        connComp->m_vertexAttributeChannels.push_back( verTex0AttrChannel );
+            verTexAttrChannel->AddVertexAttribute( glm::vec2( 0.f, 0.f ) );
+            verTexAttrChannel->AddVertexAttribute( glm::vec2( 1.f, 0.f ) );
+            verTexAttrChannel->AddVertexAttribute( glm::vec2( 0.f, 1.f ) );
+            verTexAttrChannel->AddVertexAttribute( glm::vec2( 1.f, 1.f ) );
 
+            connComp->m_vertexAttributeChannels.push_back( verTexAttrChannel );
 
-        //auto verTex1AttrChannel = new model::Float2VertexAttributeChannel( desc, m_textures[ 1 ].second, true );
-
-        //verTex1AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 0.f ) );
-        //verTex1AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 0.f ) );
-        //verTex1AttrChannel->AddVertexAttribute( glm::vec2( 0.f, 1.f ) );
-        //verTex1AttrChannel->AddVertexAttribute( glm::vec2( 1.f, 1.f ) );
-
-        //connComp->m_vertexAttributeChannels.push_back( verTex1AttrChannel );
-
-        //geomChannelDesc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-
-        m_geomChannel->AddConnectedComponent( connComp );
+            m_geomChannel->AddConnectedComponent( connComp );
+        }
     }
 }
 
@@ -144,7 +136,10 @@ void                SimpleTexturePlugin::Update              ( float t )
 void                SimpleTexturePlugin::Print               ( std::ostream & out, int tabs ) const
 {
     out << GetName() << debug::EndLine( tabs );
-    out << "Texture: " << m_textureFileName << debug::EndLine( tabs );
+    for( auto t : m_textures )
+    {
+        out << "Texture: " << t.second << debug::EndLine( tabs );
+    }
 }
 
 

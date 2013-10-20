@@ -30,17 +30,13 @@ private:
     typedef std::pair< ResourceHandle*, std::string > TexturePair;
 
 
-    std::string         m_textureFileName;
-    std::string         m_textureFileName1;
-
-
     TexturePair         LoadTexture( const std::string& name, const std::string& path )   const;
 
     void                EvalGeometryChannel( const IPlugin* prev );
 
 public:
 
-    explicit            SimpleTexturePlugin    ( const IPlugin* prev, const std::string & textureFileName, const std::string & textureFileName1 );
+    explicit            SimpleTexturePlugin    ( const IPlugin* prev, const std::vector< std::string > & texturesFilesNames  );
                         ~SimpleTexturePlugin   ();
 
 
