@@ -51,6 +51,13 @@ const char *            Float3VertexAttributeChannel::GetData()         const
 
 // *********************************
 //
+std::vector< glm::vec3 > &      Float3VertexAttributeChannel::GetVertices   ()
+{
+    return m_attributes;
+}
+
+// *********************************
+//
 void                    Float3VertexAttributeChannel::AddVertexAttribute( const glm::vec3 & v )
 {
     m_attributes.push_back( v );
