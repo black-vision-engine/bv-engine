@@ -32,7 +32,7 @@ model::BasicNode *          GreenRect()
 
     /// Set Geometry Channel
 
-    model::AnimatedStripComponent *     rect        = model::AnimatedStripComponent::Create( 2.f, 1.f, 10, 0.f );
+    model::AnimatedStripComponent *     rect        = model::AnimatedStripComponent::Create( 2.f, 1.f, 10, 0.f, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 );
 
     model::GeometryChannelDescriptor desc;
 
