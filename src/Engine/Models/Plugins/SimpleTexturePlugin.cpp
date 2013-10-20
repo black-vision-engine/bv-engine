@@ -76,10 +76,11 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
 
             auto verTexAttrChannel = new model::Float2VertexAttributeChannel( desc, m_textures[ 0 ].second, true );
 
-            verTexAttrChannel->AddVertexAttribute( glm::vec2( 0.f, 0.f ) );
-            verTexAttrChannel->AddVertexAttribute( glm::vec2( 1.f, 0.f ) );
-            verTexAttrChannel->AddVertexAttribute( glm::vec2( 0.f, 1.f ) );
-            verTexAttrChannel->AddVertexAttribute( glm::vec2( 1.f, 1.f ) );
+            for( unsigned int j = 0; j < prevCompChannels[0]->GetNumEntries(); ++j )
+            {
+                const glm::vec3* pos = reinterpret_cast<const glm::vec3*>( prevCompChannels[0]->GetData() );
+                verTexAttrChannel->AddVertexAttribute( glm::vec2( pos[ j ].x, pos[ j ].y ) );
+            }
 
             connComp->m_vertexAttributeChannels.push_back( verTexAttrChannel );
 

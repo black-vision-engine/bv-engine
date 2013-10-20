@@ -95,6 +95,9 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\TexturePixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelUtils.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\RingComponent.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\GeometryPluginRing.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\TextPixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -215,6 +218,9 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\TexturePixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelUtils.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\RingComponent.h" />
+    <ClInclude Include="Engine\Models\Plugins\GeometryPluginRing.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\TextPixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryPlugin.h" />
   </ItemGroup>
   <ItemGroup>

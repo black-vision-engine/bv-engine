@@ -95,46 +95,6 @@ public:
 };
 
 
-
-
-class TextPluginPD : public BaseParametersDescriptor
-{
-public:
-
-    static const std::string            pluginName;
-    static const std::string            colorParam;
-
-    explicit TextPluginPD()
-        : BaseParametersDescriptor( pluginName )
-    {
-        m_params[ colorParam ] = ParamType::PT_FLOAT4;
-    }
-};
-
-const std::string TextPluginPD::pluginName = "SimpleTextPlugin";
-const std::string TextPluginPD::colorParam = "color";
-
-class TextShaderChannel : public model::ShaderChannel< model::IPixelShaderChannel, TextPluginPD >
-{
-    Vec4Interpolator                m_color;
-    model::ValueVec4*               m_colorVal;
-
-public:
-    virtual void                    Update( float t )
-    {
-        m_colorVal->SetValue( m_color.evaluate( t ) );
-        ShaderChannel::Update( t );
-    }
-
-    TextShaderChannel( const std::string& shaderFile, const Vec4Interpolator& color )
-        : ShaderChannel( shaderFile )
-        , m_color(color)
-    {
-        m_colorVal = new model::ValueVec4( ParamDesc::colorParam );
-        RegisterValue(m_colorVal);
-    }
-};
-
 class MyVertexShaderPD : public BaseParametersDescriptor
 {
 };
@@ -165,108 +125,10 @@ namespace {
         return TestParamFactory::ConstantValue( val );
     }
 
-    size_t GetSizeOfFile(const std::wstring& path)
-    {
-        struct _stat fileinfo;
-        _wstat(path.c_str(), &fileinfo);
-        return fileinfo.st_size;
-    }
-
-    std::wstring LoadUtf8FileToString(const std::wstring& filename)
-    {
-        std::wstring buffer;            // stores file contents
-        FILE* f = _wfopen(filename.c_str(), L"rtS, ccs=UTF-8");
-
-        // Failed to open file
-        if (f == NULL)
-        {
-            // ...handle some error...
-            return buffer;
-        }
-
-        size_t filesize = GetSizeOfFile(filename);
-
-        // Read entire file contents in to memory
-        if (filesize > 0)
-        {
-            buffer.resize(filesize);
-            size_t wchars_read = fread(&(buffer.front()), sizeof(wchar_t), filesize, f);
-            buffer.resize(wchars_read);
-            buffer.shrink_to_fit();
-        }
-
-        fclose(f);
-
-        return buffer;
-    }
 
 
 }
 
-// ***************************************
-//
-model::BasicNode *     TestScenesFactory::SimpeTextTestScene()
-{
-    model::BasicNode * root = new model::BasicNode();
-
-    std::wstring str  = LoadUtf8FileToString( L"text_example.txt");
-
-    auto texPlugin = new model::SimpleTextPlugin( str, fontFile, 64 );
-    //auto texPlugin = new model::SimpleTextPlugin( L"Litwo! Ojczyzno moja! ty jesteœ jak zdrowie.\nIle ci trzeba ceniæ, ten tylko siê dowie,\nKto ciê straci³. Dziœ piêknoœæ tw¹ w ca³ej ozdobie\nWidzê i opisujê, bo têskniê po tobie."
-    //                                                , fontFile );
-
-    //auto texPlugin = new model::SimpleTextPlugin( L"Za¿ó³æ gêœl¹ jaŸñ.", fontFile );
-        
-
-    FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator zs;
-
-    xs.addKey(0.f, 1.f);
-    ys.addKey(0.f, 1.f);
-    zs.addKey(0.f, 1.f);
-
-    TransformF *    trns  = new TransformF                ();
-
-    trns->addScale( xs, ys, zs );
-
-    FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
-    FloatInterpolator zt;
-
-    xt.addKey(0.f, -1.f);
-    //yt.addKey(0.f, 0.f);
-    yt.addKey(0.f, -5.f);
-    zt.addKey(0.f, -5.f);
-
-    yt.addKey(30.f, 5.f);
-
-    trns->addTranslation( xt, yt, zt );
-
-    model::SimpleTransformChannel      * stch  = new model::SimpleTransformChannel();
-    stch->AddTransform( trns );
-
-
-    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
-
-    color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-
-    color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-
-    color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-
-    color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
-
-
-
-    texPlugin->SetTransformChannel( stch );
-    texPlugin->SetPixelShaderChannel     ( new TextShaderChannel( "../dep/media/shaders/text.frag", color ) );
-    texPlugin->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
-
-    root->AddPlugin                 ( texPlugin );
-
-    return root;
-}
 
 // ***************************************
 //
