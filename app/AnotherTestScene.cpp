@@ -15,11 +15,21 @@
 #include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/VertexShader/TextureVertexShaderChannel.h"
 
+#include "Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.h"
+#include "Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.h"
+
 namespace bv
 {
 
 namespace
 {
+model::BasicNode *          AnimatedSolid ()
+{
+    model::BasicNode * root = new model::BasicNode();
+
+    return nullptr;
+}
+
 model::BasicNode *          GreenRect()
 {
     model::BasicNode * root = new model::BasicNode();
