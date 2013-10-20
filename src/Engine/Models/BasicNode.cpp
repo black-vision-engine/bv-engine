@@ -134,13 +134,15 @@ SceneNode*                  BasicNode::BuildScene()
             i++;
         }
 
+        //FIXME: Only last plugin should be used here as its output corresponds to the final transformation (list)
+        //FIXME: Updater only sets proper local and world matrices for the geometry and all model transformations have already been updated at this point
 
-        auto transChannel = p->GetTransformChannel();
-        
-        if( transChannel )
+        if ( p == m_plugins.back() )
         {
-            TransformUpdater* tu = new TransformUpdater( renderEnt, transChannel );
+            auto transChannel = p->GetTransformChannel();        
+            assert( transChannel != nullptr );
 
+            TransformUpdater * tu = new TransformUpdater( renderEnt, transChannel );
             UpdatersManager::get().RegisterUpdater(tu);
         }
     }
