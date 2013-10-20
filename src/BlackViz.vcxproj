@@ -200,6 +200,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelUtils.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.cpp" />
@@ -294,6 +295,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelUtils.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.h" />

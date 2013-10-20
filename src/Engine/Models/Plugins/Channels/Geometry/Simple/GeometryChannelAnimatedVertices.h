@@ -14,7 +14,7 @@ private:
 
 private:
 
-                    GeometryChannelAnimatedVertices     ( GeometryChannelDescriptor & desc );
+                    GeometryChannelAnimatedVertices     ();
 
 public:
 
@@ -22,7 +22,7 @@ public:
 
     virtual bool    NeedsPositionsUpdate                ( float t ) const;
 
-    static GeometryChannelAnimatedVertices *    Create  ();
+    static GeometryChannelAnimatedVertices *    Create  ( float w, float h, float z, unsigned int numSegments );
 
 };
 

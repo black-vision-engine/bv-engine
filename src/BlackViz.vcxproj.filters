@@ -94,6 +94,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\TexturePixelShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\TexturePixelShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

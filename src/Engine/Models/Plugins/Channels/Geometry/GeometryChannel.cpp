@@ -11,6 +11,15 @@ namespace bv { namespace model
 
 // *********************************
 //
+GeometryChannel::GeometryChannel     ( PrimitiveType type, bool isReadOnly, bool isTimeInvariant )
+    : m_primitiveType( type )
+    , m_isReadOnly( isReadOnly )
+    , m_isTimeInvariant( isTimeInvariant )
+{
+}
+
+// *********************************
+//
 GeometryChannel::GeometryChannel     ( PrimitiveType type, const GeometryChannelDescriptor& desc, bool isReadOnly, bool isTimeInvariant )
     : m_primitiveType( type )
     , m_desc( desc )
@@ -73,6 +82,13 @@ bool                                    GeometryChannel::NeedsTopologyUpdate ( f
 const IGeometryChannelDescriptor *      GeometryChannel::GetDescriptor       () const
 {
     return &m_desc;
+}
+
+// *********************************
+//
+void                                    GeometryChannel::SetDescriptor       ( const GeometryChannelDescriptor & desc )
+{
+    m_desc = desc;
 }
 
 // *********************************
