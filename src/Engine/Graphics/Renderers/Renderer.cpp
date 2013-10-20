@@ -80,7 +80,7 @@ void	Renderer::SetClearColor		( const glm::vec4 & col )
 void	Renderer::Resize			    ( int w, int h )
 {
     glViewport(0 , 0, w, h);
-    m_Camera->SetPerspactive( 90.f, float(w) / float(h), 0.1f, 100.f );
+    m_Camera->SetPerspective( 90.f, float(w) / float(h), 0.1f, 100.f );
 
     //FIXME: implement
 }

@@ -4,6 +4,9 @@
 
 namespace bv
 {
+
+// *********************************
+//
 Camera::Camera()
     : m_position(0.f, 0.f, 1.f)
     , m_direction(0.f, 0.f, 0.f)
@@ -11,15 +14,21 @@ Camera::Camera()
 {
 }
 
+// *********************************
+//
 Camera::~Camera()
 {
 }
 
-void Camera::SetPerspactive(float fov, float aspectRatio,float near, float far )
+// *********************************
+//
+void Camera::SetPerspective(float fov, float aspectRatio,float near, float far )
 {
     SetProjectionMatrix(glm::perspective(fov, aspectRatio, near, far));
 }
 
+// *********************************
+//
 void Camera::SetFrame(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up)
 {
     m_position = position;
@@ -29,6 +38,8 @@ void Camera::SetFrame(const glm::vec3& position, const glm::vec3& direction, con
     UpdatePVMatrix();
 }
 
+// *********************************
+//
 void Camera::SetPosition(const glm::vec3& position)
 {
     m_position = position;
@@ -36,6 +47,8 @@ void Camera::SetPosition(const glm::vec3& position)
     UpdatePVMatrix();
 }
 
+// *********************************
+//
 void Camera::SetAxes(const glm::vec3& direction, const glm::vec3& up)
 {
     m_direction = direction;
@@ -44,6 +57,8 @@ void Camera::SetAxes(const glm::vec3& direction, const glm::vec3& up)
     UpdatePVMatrix();
 }
 
+// *********************************
+//
 void Camera::SetProjectionMatrix(const glm::mat4& projectionMatrix)
 {
     m_projection = projectionMatrix;
@@ -51,36 +66,50 @@ void Camera::SetProjectionMatrix(const glm::mat4& projectionMatrix)
     UpdatePVMatrix();
 }
 
+// *********************************
+//
 const glm::mat4& Camera::GetViewMatrix() const
 {
     return m_view;
 }
 
+// *********************************
+//
 const glm::mat4& Camera::GetProjectionMatrix() const
 {
     return m_projection;
 }
 
+// *********************************
+//
 const glm::vec3& Camera::GetPosition() const
 {
     return m_position;
 }
 
+// *********************************
+//
 const glm::vec3& Camera::GetDirection() const
 {
     return m_direction;
 }
 
+// *********************************
+//
 const glm::vec3& Camera::GetUp() const
 {
     return m_up;
 }
 
+// *********************************
+//
 const glm::mat4& Camera::GetViewProjectionMatrix() const
 {
     return m_viewProj;
 }
 
+// *********************************
+//
 void Camera::UpdatePVMatrix()
 {
     m_view = glm::lookAt(m_position, m_direction, m_up);

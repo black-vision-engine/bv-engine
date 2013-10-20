@@ -177,7 +177,7 @@ bool BlackVisionApp::OnInitialize       ()
     m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 1.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
     AddCameraAnimation2  ();
     //FIXME: read from configuration file and change appropriately when resoultion changes
-    m_modelScene->GetCamera()->SetPerspactive( 90.f, float(m_Width) / float(m_Height), 0.1f, 100.f );
+    m_modelScene->GetCamera()->SetPerspective( 90.f, float(m_Width) / float(m_Height), 0.1f, 100.f );
 
     //FIXME: state changes should be implemented some other way around
     m_Renderer->DisableFaceCulling();
