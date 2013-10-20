@@ -1,5 +1,9 @@
 #include "SolidColorPlugin.h"
+
+#include <cassert>
+
 #include "System/Print.h"
+
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelTyped.h"
@@ -25,13 +29,18 @@ SolidColorPluginPD::SolidColorPluginPD()
 
 // *************************************
 //
-SolidColorPlugin::SolidColorPlugin                    ( const IPlugin* prev )
+SolidColorPlugin::SolidColorPlugin                    ( const IPlugin * prev )
+    : m_prev( prev )
 {
-    m_geomChannel       = nullptr;
-    m_transformChannel  = nullptr;
+    assert( prev != nullptr );
 
-    m_geomChannel       = const_cast< IGeometryChannel* >( prev->GetGeometryChannel() ); // FIXME: remove const_cast
-    m_transformChannel  = const_cast< ITransformChannel* >( prev->GetTransformChannel() );
+    //FIXME: what was it supposed to do in the first place ????
+    //m_geomChannel       = nullptr;
+    //m_transformChannel  = nullptr;
+
+    //FIXME: what was it supposed to do in the first place ????
+    //m_geomChannel       = const_cast< IGeometryChannel* >( prev->GetGeometryChannel() ); // FIXME: remove const_cast
+    //m_transformChannel  = const_cast< ITransformChannel* >( prev->GetTransformChannel() );
 }
 
 // *************************************
@@ -39,6 +48,20 @@ SolidColorPlugin::SolidColorPlugin                    ( const IPlugin* prev )
 SolidColorPlugin::~SolidColorPlugin   ()
 {
 
+}
+
+// *************************************
+//
+const IGeometryChannel*         SolidColorPlugin::GetGeometryChannel          () const
+{
+    return m_prev->GetGeometryChannel();
+}
+
+// *************************************
+//
+const ITransformChannel*        SolidColorPlugin::GetTransformChannel         () const
+{
+    return m_prev->GetTransformChannel();
 }
 
 // *************************************

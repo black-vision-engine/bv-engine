@@ -164,9 +164,9 @@ bool BlackVisionApp::OnInitialize       ()
     //model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
     //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
 
-    model::BasicNode * root = TestScenesFactory::AnotherTestScene();
+    //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
     
-    //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
+    model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
 
     m_modelScene = model::ModelScene::Create( root, new Camera() );
 
@@ -185,6 +185,8 @@ bool BlackVisionApp::OnInitialize       ()
     return WindowedApplication::OnInitialize();
 }
 
+// *********************************
+//
 void BlackVisionApp::OnTerminate        ()
 {
 #ifdef DEBUG_INFO
@@ -192,13 +194,6 @@ void BlackVisionApp::OnTerminate        ()
 #endif
     WindowedApplication::OnTerminate();
 }
-//
-//void BlackVisionApp::OnResize		    ( int w, int h )
-//{
-//    //m_Width = w;
-//    //m_Height = h;
-//    //m_modelScene->GetCamera()->SetPerspactive( 90.f, float(h) / float(w), 0.1f, 100.f );
-//}
 
 // *********************************
 //

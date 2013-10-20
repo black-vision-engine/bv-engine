@@ -58,17 +58,17 @@ public:
     void                                        RegisterValue               ( IValue * v )                                  { m_values.push_back( v ); }
 
 
-    void                                        SetGeometryChannel          (model::IGeometryChannel* geomChannel)          { m_geomChannel = geomChannel; }
-    void                                        SetTransformChannel         (model::ITransformChannel* transformChannel)    { m_transformChannel = transformChannel; }
-    void                                        SetPixelShaderChannel       (IPixelShaderChannel * pShCh)                   { m_pshaderChannel = pShCh; }
-    void                                        SetVertexShaderChannel      (IVertexShaderChannel * vShCh)                  { m_vshaderChannel = vShCh; }
-    void                                        SetGeometryShaderChannel    (IGeometryShaderChannel * gShCh)                { m_gshaderChannel = gShCh; }
+    void                                        SetGeometryChannel          ( IGeometryChannel* geomChannel )               { m_geomChannel = geomChannel; }
+    void                                        SetTransformChannel         ( ITransformChannel* transformChannel )         { m_transformChannel = transformChannel; }
+    void                                        SetPixelShaderChannel       ( IPixelShaderChannel * pShCh )                 { m_pshaderChannel = pShCh; }
+    void                                        SetVertexShaderChannel      ( IVertexShaderChannel * vShCh )                { m_vshaderChannel = vShCh; }
+    void                                        SetGeometryShaderChannel    ( IGeometryShaderChannel * gShCh )              { m_gshaderChannel = gShCh; }
 
-    const model::IGeometryChannel*              GetGeometryChannel          () const                                        { return m_geomChannel; }
-    const model::ITransformChannel*             GetTransformChannel         () const                                        { return m_transformChannel; }
-    const model::IPixelShaderChannel*           GetPixelShaderChannel       () const                                        { return m_pshaderChannel; }
-    const model::IVertexShaderChannel*          GetVertexShaderChannel      () const                                        { return m_vshaderChannel; }
-    const model::IGeometryShaderChannel*        GetGeometryShaderChannel    () const                                        { return m_gshaderChannel; }
+    virtual const IGeometryChannel*             GetGeometryChannel          () const                                        { return m_geomChannel; }
+    virtual const ITransformChannel*            GetTransformChannel         () const                                        { return m_transformChannel; }
+    virtual const IPixelShaderChannel*          GetPixelShaderChannel       () const                                        { return m_pshaderChannel; }
+    virtual const IVertexShaderChannel*         GetVertexShaderChannel      () const                                        { return m_vshaderChannel; }
+    virtual const IGeometryShaderChannel*       GetGeometryShaderChannel    () const                                        { return m_gshaderChannel; }
 
     virtual const Textures&                     GetTextures                 () const                                        { return m_textures; }
 

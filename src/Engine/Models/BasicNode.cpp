@@ -229,7 +229,7 @@ bool                                BasicNode::CreateRenderableData     (/* Vert
         return nullptr;
     }
 
-    VertexArray ** vao;
+    VertexArray ** vao = {nullptr};
     assert( false );
     *vao = new VertexArray();
 
