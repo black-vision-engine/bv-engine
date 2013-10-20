@@ -31,6 +31,8 @@ public:
 
 
     static  model::BasicNode *      AnotherTestScene        ();
+    static  model::BasicNode *      AnimatedTestScene       ();
+
 };
 
 // ********************************

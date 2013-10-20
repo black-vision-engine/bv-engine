@@ -242,4 +242,25 @@ model::BasicNode *          TestScenesFactory::AnotherTestScene()
     return root;
 }
 
+// ******************************
+//
+model::BasicNode *      TestScenesFactory::AnimatedTestScene ()
+{
+    float w = 2.5f;
+    float h = 1.f;
+    float z = 0.f;
+    
+    unsigned int numSegments = 10;
+
+    float speedX    = 1.f;
+    float speedY    = 1.f;
+    float cyclesX   = 5.f;
+    float cyclesY   = 3.f;
+    float sizeY     = 1.f;
+    float sizeZ     = .7f;
+
+    //float 
+    return AnimatedSolid( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
+}
+
 } // bv
