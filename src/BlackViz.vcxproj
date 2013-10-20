@@ -213,6 +213,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelTyped.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\GeometryPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRect.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleTextPlugin.cpp" />
@@ -309,6 +310,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelTyped.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\GeometryPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryPluginRect.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IConnectedComponent.h" />
