@@ -25,7 +25,7 @@ protected:
     bool                                            m_isTimeInvariant;
 
 public:
-
+                                                    GeometryChannel     ( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false );
                                                     GeometryChannel     ( PrimitiveType type, const GeometryChannelDescriptor& desc, bool isReadOnly = false, bool isTimeInvariant = false );
     virtual                                         ~GeometryChannel    ();
 
@@ -39,6 +39,8 @@ public:
     virtual bool                                    NeedsTopologyUpdate ( float t ) const;
 
     virtual const IGeometryChannelDescriptor *      GetDescriptor       () const;
+    void                                            SetDescriptor       ( const GeometryChannelDescriptor & desc );
+
     virtual PrimitiveType                           GetPrimitiveType    () const;
 
     virtual void                                    AddConnectedComponent( IConnectedComponent * cc );
