@@ -123,7 +123,7 @@ SceneNode*                  BasicNode::BuildScene()
         int i = 0;
         for( auto tex : p->GetTextures() )
         {
-            SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_CLAMP, SamplerWrappingMode::SWM_CLAMP, SamplerWrappingMode::SWM_CLAMP }; 
+            SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT }; 
             auto textureSampler = new TextureSampler( i, tex.second, bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ));
             effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );
 

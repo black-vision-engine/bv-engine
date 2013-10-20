@@ -205,7 +205,9 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\RingComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\SolidColorShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\TextPixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\TexturePixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\TranformChannel.cpp" />
@@ -214,6 +216,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelTyped.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRect.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\GeometryPluginRing.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleTextPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleTexturePlugin.cpp" />
@@ -300,7 +303,9 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\RingComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\SolidColorShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\TextPixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\TexturePixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\ShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.h" />
@@ -310,6 +315,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelTyped.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryPluginRect.h" />
+    <ClInclude Include="Engine\Models\Plugins\GeometryPluginRing.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IConnectedComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryChannel.h" />
@@ -400,7 +406,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram.cd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IGeometryChannelDescriptor.h" />
