@@ -175,7 +175,7 @@ bool BlackVisionApp::OnInitialize       ()
     m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
     //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, -4.f, 3.5f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
     m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 1.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-
+    AddCameraAnimation2  ();
     //FIXME: read from configuration file and change appropriately when resoultion changes
     m_modelScene->GetCamera()->SetPerspactive( 90.f, float(m_Width) / float(m_Height), 0.1f, 100.f );
 
@@ -192,13 +192,13 @@ void BlackVisionApp::OnTerminate        ()
 #endif
     WindowedApplication::OnTerminate();
 }
-
-void BlackVisionApp::OnResize		    ( int w, int h )
-{
-    //m_Width = w;
-    //m_Height = h;
-    //m_modelScene->GetCamera()->SetPerspactive( 90.f, float(h) / float(w), 0.1f, 100.f );
-}
+//
+//void BlackVisionApp::OnResize		    ( int w, int h )
+//{
+//    //m_Width = w;
+//    //m_Height = h;
+//    //m_modelScene->GetCamera()->SetPerspactive( 90.f, float(h) / float(w), 0.1f, 100.f );
+//}
 
 // *********************************
 //

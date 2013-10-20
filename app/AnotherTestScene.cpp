@@ -311,7 +311,7 @@ model::BasicNode *          TexturedRing()
 
     std::vector< std::string > textures;
 
-    textures.push_back( "simless_00.jpg" );
+    textures.push_back( "simless_01.jpg" );
 
     auto texturePlugin = new model::SimpleTexturePlugin( ringPlugin, textures );
 

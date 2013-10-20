@@ -10,5 +10,5 @@ void main()
 {
 	vec4 texColor0 = texture( Tex0, texCord );
 
-	FragColor = texColor0;
+	FragColor = texColor0.bgra;
 }
