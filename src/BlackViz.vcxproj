@@ -195,6 +195,12 @@
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataElements.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\IShaderParamUpdater.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\TextureSampler.cpp" />
+    <ClCompile Include="Engine\Graphics\State\AlphaState.cpp" />
+    <ClCompile Include="Engine\Graphics\State\CullState.cpp" />
+    <ClCompile Include="Engine\Graphics\State\DepthState.cpp" />
+    <ClCompile Include="Engine\Graphics\State\FillState.cpp" />
+    <ClCompile Include="Engine\Graphics\State\OffsetState.cpp" />
+    <ClCompile Include="Engine\Graphics\State\StencilState.cpp" />
     <ClCompile Include="Engine\Models\ModelScene.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\GeometryShader\GeometryShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.cpp" />
@@ -295,6 +301,13 @@
     <ClInclude Include="Engine\Graphics\Shaders\IShaderParamUpdater.h" />
     <ClInclude Include="Engine\Graphics\Shaders\ShaderTypes.h" />
     <ClInclude Include="Engine\Graphics\Shaders\TextureSampler.h" />
+    <ClInclude Include="Engine\Graphics\State\AlphaState.h" />
+    <ClInclude Include="Engine\Graphics\State\CullState.h" />
+    <ClInclude Include="Engine\Graphics\State\DepthState.h" />
+    <ClInclude Include="Engine\Graphics\State\FillState.h" />
+    <ClInclude Include="Engine\Graphics\State\OffsetState.h" />
+    <ClInclude Include="Engine\Graphics\State\StateEnums.h" />
+    <ClInclude Include="Engine\Graphics\State\StencilState.h" />
     <ClInclude Include="Engine\Models\ModelScene.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\GeometryShader\GeometryShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.h" />

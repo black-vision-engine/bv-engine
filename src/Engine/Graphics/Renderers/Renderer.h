@@ -45,6 +45,8 @@ class Renderer
 {
 private:
 
+    //FIXME: add states here and state related variables and properly implement draw methods
+
     int					m_Width;
     int					m_Height;
 

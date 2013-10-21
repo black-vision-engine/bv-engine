@@ -17,6 +17,7 @@ RendererData::RenderState::RenderState			()
 //
 void RendererData::RenderState::InitializeBasic ()
 {
+    //FIXME: add states
     glDisable		( GL_BLEND );
     glDisable		( GL_ALPHA_TEST );
     glEnable		( GL_CULL_FACE );

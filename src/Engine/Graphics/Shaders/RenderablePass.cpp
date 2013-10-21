@@ -7,27 +7,39 @@
 namespace bv
 {
 
+//FIXME: add states here
+
+// *********************************
+//
 RenderablePass::RenderablePass( PixelShader * ps, VertexShader * vs, GeometryShader * gs )
     : m_geometryShader(gs)
     , m_vertexShader(vs)
     , m_pixelShader(ps)
 {}
 
+// *********************************
+//
 PixelShader *       RenderablePass::GetPixelShader         ()
 {
     return m_pixelShader;
 }
 
+// *********************************
+//
 VertexShader *      RenderablePass::GetVertexShader        ()
 {
     return m_vertexShader;
 }
 
+// *********************************
+//
 GeometryShader *    RenderablePass::GetGeometryShader      ()
 {
     return m_geometryShader;
 }
 
+// *********************************
+//
 void                RenderablePass::Update                 ()
 {
     if(m_pixelShader)
@@ -40,6 +52,5 @@ void                RenderablePass::Update                 ()
         m_geometryShader->Update();
 
 }
-
 
 } // bv

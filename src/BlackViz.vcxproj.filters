@@ -100,6 +100,12 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\TextPixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPlugin.cpp" />
     <ClCompile Include="Engine\Models\Updaters\GeometryUpdater.cpp" />
+    <ClCompile Include="Engine\Graphics\State\AlphaState.cpp" />
+    <ClCompile Include="Engine\Graphics\State\CullState.cpp" />
+    <ClCompile Include="Engine\Graphics\State\DepthState.cpp" />
+    <ClCompile Include="Engine\Graphics\State\FillState.cpp" />
+    <ClCompile Include="Engine\Graphics\State\OffsetState.cpp" />
+    <ClCompile Include="Engine\Graphics\State\StencilState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -224,6 +230,13 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\TextPixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryPlugin.h" />
     <ClInclude Include="Engine\Models\Updaters\GeometryUpdater.h" />
+    <ClInclude Include="Engine\Graphics\State\AlphaState.h" />
+    <ClInclude Include="Engine\Graphics\State\CullState.h" />
+    <ClInclude Include="Engine\Graphics\State\DepthState.h" />
+    <ClInclude Include="Engine\Graphics\State\FillState.h" />
+    <ClInclude Include="Engine\Graphics\State\OffsetState.h" />
+    <ClInclude Include="Engine\Graphics\State\StencilState.h" />
+    <ClInclude Include="Engine\Graphics\State\StateEnums.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

@@ -2,7 +2,8 @@
 
 namespace bv
 {
-
+    
+//FIXME: add states and add to renderer
 class AlphaState;
 class CullState;
 class DepthState;

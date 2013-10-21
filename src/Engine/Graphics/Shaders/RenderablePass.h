@@ -6,6 +6,8 @@
 
 namespace bv {
 
+//FIXME: add states here
+
 class RenderablePass
 {
 private:

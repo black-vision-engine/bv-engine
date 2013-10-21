@@ -34,6 +34,8 @@ void	Renderer::Initialize	    ( int w, int h, TextureFormat colorFormat )
     m_Height		= h;
     m_ColorFormat	= colorFormat;
 
+    //FIXME: add states initialization here and properly implement draw methods
+
     //FIXME: add all renderer states (either as separate classes or as bunch of states stored in member variables, possibly add multisampling support)
     //FIXME: possibly add stencil data
  
