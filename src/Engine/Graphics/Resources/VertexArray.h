@@ -52,6 +52,8 @@ private:
     //unsigned int        m_numVertices;
     //unsigned int        m_vertexBuferOffset;
 
+    bool                        m_needsUpdateMemUpload;
+
 public:
 
                                 VertexArraySingleVertexBuffer   ( VertexBuffer * vb, VertexDescriptor * vd );
@@ -70,6 +72,8 @@ public:
     unsigned int                GetNumVertices                  ( unsigned int ccNum ) const;
     unsigned int                GetNumTotalVertices             () const;
 
+    void                        SetNeedsUpdateMemUpload         ( bool needsUpdateMemUpload );
+    bool                        NeedsUpdateMemUpload            () const;
 };
 
 }

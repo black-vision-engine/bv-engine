@@ -32,7 +32,7 @@ RenderableArrayDataEnumKind     RenderableArrayDataSingleVertexBuffer::Type     
 
 // *********************************
 //
-const VertexDescriptor *        RenderableArrayDataSingleVertexBuffer::GetVertexDecscriptor     () const
+const VertexDescriptor *        RenderableArrayDataSingleVertexBuffer::GetVertexDescriptor      () const
 {
     return m_vertexDescriptor;
 }
@@ -40,6 +40,21 @@ const VertexDescriptor *        RenderableArrayDataSingleVertexBuffer::GetVertex
 // *********************************
 //
 const VertexBuffer *            RenderableArrayDataSingleVertexBuffer::GetVertexBuffer          () const
+{
+    return m_vertexBuffer;
+}
+
+
+// *********************************
+//
+VertexDescriptor *        RenderableArrayDataSingleVertexBuffer::GetVertexDescriptor            ()
+{
+    return m_vertexDescriptor;
+}
+
+// *********************************
+//
+VertexBuffer *            RenderableArrayDataSingleVertexBuffer::GetVertexBuffer                ()
 {
     return m_vertexBuffer;
 }

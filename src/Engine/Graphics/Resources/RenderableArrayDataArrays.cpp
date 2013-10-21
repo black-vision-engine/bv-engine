@@ -33,6 +33,13 @@ const VertexArraySingleVertexBuffer *   RenderableArrayDataArraysSingleVertexBuf
 
 // *********************************
 //
+VertexArraySingleVertexBuffer *         RenderableArrayDataArraysSingleVertexBuffer::VAO        ()
+{
+    return m_vao;
+}
+
+// *********************************
+//
 void                     RenderableArrayDataArraysSingleVertexBuffer::SetVAO                    ( VertexArraySingleVertexBuffer * vao )
 {
     if ( m_vao != nullptr )

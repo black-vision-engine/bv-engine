@@ -15,6 +15,8 @@ namespace bv { namespace model {
 const std::string SimpleTexturePluginPD::pluginName( "SimpleTexturePlugin" );
 
 
+//FIXME: dodawanie kanalow w ten sposob (przez przypisanie na m_<xxx>channel powoduje bledy, trzeba to jakos poprawic, zeby bylo wiadomo, o co chodzi
+//FIXME: teraz zle dodanie wychodzi dopiero po odpaleniu silnika, a to jest oczywisty blad
 
 // *************************************
 //
@@ -28,7 +30,10 @@ SimpleTexturePluginPD::SimpleTexturePluginPD()
 // *************************************
 //
 SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin* prev, const std::vector< std::string > & texturesFilesNames )
+    : m_prev( prev )
 {
+    assert( prev != nullptr );
+
     for(unsigned int i = 0; i < texturesFilesNames.size(); ++i)
     {
         m_textures.push_back( LoadTexture( "Tex" + std::to_string( i ), texturesFilesNames[ i ] ) );
@@ -36,6 +41,27 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin* pre
 
     m_geomChannel = nullptr;
     EvalGeometryChannel( prev );
+}
+
+// *************************************
+//
+SimpleTexturePlugin::~SimpleTexturePlugin        ()
+{
+    //delete m_alphaParam;
+    //delete m_alphaValue;
+
+    //delete m_tex0TransformParam;
+    //delete m_tex0TransformValue;
+
+    //delete m_tex1TransformParam;
+    //delete m_tex1TransformValue;
+}
+
+// *************************************
+//
+const ITransformChannel*    SimpleTexturePlugin::GetTransformChannel         () const
+{
+    return m_prev->GetTransformChannel();
 }
 
 // *************************************
@@ -102,24 +128,11 @@ SimpleTexturePlugin::TexturePair SimpleTexturePlugin::LoadTexture( const std::st
 
 // *************************************
 //
-SimpleTexturePlugin::~SimpleTexturePlugin   ()
-{
-    //delete m_alphaParam;
-    //delete m_alphaValue;
-
-    //delete m_tex0TransformParam;
-    //delete m_tex0TransformValue;
-
-    //delete m_tex1TransformParam;
-    //delete m_tex1TransformValue;
-}
-
-// *************************************
-//
 void                SimpleTexturePlugin::Update              ( float t )
 {
     BasePlugin::Update( t );
 
+    //FIXME: update chanels according to parent (e.g. when position data has been changed)
 //    m_alphaValue->SetValue( m_alphaParam->Evaluate( t ) );
 //    m_tex0TransformValue->SetValue( m_tex0TransformParam->Evaluate( t ) );
 //    m_tex1TransformValue->SetValue( m_tex1TransformParam->Evaluate( t ) );

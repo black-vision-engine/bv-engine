@@ -4,12 +4,7 @@
 #include "Engine/Graphics/Resources/VertexBuffer.h"
 #include "Engine/Graphics/Resources/VertexDescriptor.h"
 
-#include "Engine\Graphics\Renderers\Renderer.h"
-
-#include "Renderer.h"
-
-#include "PdrVertexBuffer.h"
-#include "PdrVertexDescriptor.h"
+#include "Engine/Graphics/Renderers/Renderer.h"
 
 #include <cassert>
 
@@ -86,7 +81,13 @@ void    PdrVertexArrayObjectSingleVB::Disable                 ( Renderer * rende
 //
 void    PdrVertexArrayObjectSingleVB::Bind                    ( Renderer * renderer )
 {
+    if( m_vao->NeedsUpdateMemUpload() )
+    {
+        renderer->Update( m_vao->GetVertexBuffer() );
+    }
+    
     renderer->Enable( m_vao->GetVertexBuffer() );
+
     glBindVertexArray( m_vaoHandle );
 }
 

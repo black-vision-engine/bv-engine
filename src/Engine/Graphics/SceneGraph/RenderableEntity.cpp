@@ -36,6 +36,13 @@ const RenderableArrayDataSingleVertexBuffer *  RenderableEntity::GetRenderableAr
 
 // *********************************
 //
+RenderableArrayDataSingleVertexBuffer *        RenderableEntity::GetRenderableArrayData      ()
+{
+    return m_renderableArrayData;
+}
+    
+// *********************************
+//
 RenderableEffect *              RenderableEntity::GetRenderableEffect               ()
 {
     return m_effect;

@@ -23,8 +23,14 @@ public:
 class SimpleTexturePlugin : public BasePlugin< IPlugin, SimpleTexturePluginPD >
 {
 private:
+
     typedef std::pair< ResourceHandle*, std::string > TexturePair;
 
+private:
+
+    const IPlugin * m_prev;
+
+private:
 
     TexturePair         LoadTexture( const std::string& name, const std::string& path )   const;
 
@@ -32,12 +38,13 @@ private:
 
 public:
 
-    explicit            SimpleTexturePlugin    ( const IPlugin* prev, const std::vector< std::string > & texturesFilesNames  );
-                        ~SimpleTexturePlugin   ();
+    explicit                            SimpleTexturePlugin         ( const IPlugin* prev, const std::vector< std::string > & texturesFilesNames  );
+                                        ~SimpleTexturePlugin        ();
 
+    virtual const ITransformChannel*    GetTransformChannel         () const;
 
-    void                Update                      ( float t ) override;
-    void                Print                       ( std::ostream & out, int tabs = 0 ) const override;
+    void                                Update                      ( float t ) override;
+    void                                Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
 };
 

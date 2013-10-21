@@ -52,10 +52,12 @@ AnimatedStripComponent::AnimatedStripComponent                  ( float w, float
 void                     AnimatedStripComponent::Update         ( float t )
 {
     float sclSine   = m_sclSine;
-    float dSine     = fmod( t * m_speedX , (float) TWOPI / m_sclSine );
+    float dSine     = fmod( t * m_speedX , (float) TWOPI );
+//    float dSine     = fmod( t * m_speedX , (float) TWOPI / m_sclSine );
 
     float sclCosine = m_sclCosine;
-    float dCosine   = fmod( t * m_speedY , (float) TWOPI / m_sclCosine );
+    float dCosine   = fmod( t * m_speedY , (float) TWOPI );
+//    float dCosine   = fmod( t * m_speedY , (float) TWOPI / m_sclCosine );
 
     std::vector< glm::vec3 > & vx = m_positions->GetVertices();
 

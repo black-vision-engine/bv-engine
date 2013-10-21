@@ -58,8 +58,7 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 
     geomPlugin->SetGeometryChannel  ( geomChannel );
     geomPlugin->SetTransformChannel ( trasformChannel );
-    
-    
+
     ///////////////////////////// Solid plugin //////////////////////////// 
     auto solidPlugin = new model::SolidColorPlugin( geomPlugin );
 
@@ -75,6 +74,29 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
     root->AddPlugin( solidPlugin );
 
     return root;
+
+
+    ///////////////////////////// Texture plugin //////////////////////////// 
+    std::vector< std::string > textures;
+    textures.push_back( "simless_00.jpg" );
+
+    auto texturePlugin = new model::SimpleTexturePlugin( geomPlugin, textures );
+
+    // Set Pixel Shader Channel
+    std::vector<TransformF> txMat;
+    std::vector<FloatInterpolator> alphas;
+    texturePlugin->SetPixelShaderChannel( new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
+                                        , alphas
+                                        , txMat )
+                                        );
+
+    texturePlugin->SetVertexShaderChannel( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" )
+                                        );
+
+    root->AddPlugin( texturePlugin );
+
+    return root;
+    
 }
 
 // ******************************
@@ -458,18 +480,18 @@ model::BasicNode *          TestScenesFactory::AnotherTestScene()
 //
 model::BasicNode *      TestScenesFactory::AnimatedTestScene ()
 {
-    float w = 2.5f;
+    float w = 5.f;
     float h = 1.f;
     float z = 0.f;
     
-    unsigned int numSegments = 10;
+    unsigned int numSegments = 100;
 
-    float speedX    = 1.f;
+    float speedX    = 5.f;
     float speedY    = 1.f;
-    float cyclesX   = 5.f;
-    float cyclesY   = 3.f;
-    float sizeY     = 1.f;
-    float sizeZ     = .7f;
+    float cyclesX   = 1.5f; //5
+    float cyclesY   = 0.7f; //3
+    float sizeY     = 1.5f;
+    float sizeZ     = 2.f; //0.7
 
     //float 
     return AnimatedSolid( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );

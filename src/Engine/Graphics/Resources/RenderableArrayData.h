@@ -33,8 +33,11 @@ public:
 
     RenderableArrayDataEnumKind         Type                                    () const;
 
-    virtual const VertexDescriptor *    GetVertexDecscriptor                    () const;
+    virtual const VertexDescriptor *    GetVertexDescriptor                     () const;
     virtual const VertexBuffer *        GetVertexBuffer                         () const;
+
+    virtual VertexDescriptor *          GetVertexDescriptor                     ();
+    virtual VertexBuffer *              GetVertexBuffer                         ();
 
     virtual unsigned int                GetNumConnectedComponents               () const = 0;
     virtual unsigned int                GetNumVerticesInConnectedComponent      ( unsigned int ccNum ) const = 0;

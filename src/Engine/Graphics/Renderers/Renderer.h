@@ -105,6 +105,8 @@ public: //FIXME: private
     void    Disable             ( const VertexArraySingleVertexBuffer * vao );
     void    Disable             ( const  VertexBuffer * vb );
 
+    void    Update              ( const VertexBuffer * vb );
+
 public:
 
     void    Enable              ( const Texture2D * texture, int textureUnit );

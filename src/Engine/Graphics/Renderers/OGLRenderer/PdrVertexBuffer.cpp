@@ -68,6 +68,15 @@ void PdrVertexBuffer::Unlock         ()
 
 // *******************************
 //
+void    PdrVertexBuffer::Update              ( const VertexBuffer * vb )
+{
+    void * data = Lock( MemoryLockingType::MLT_WRITE_ONLY );
+    memcpy( data, vb->Data(), vb->Size() );
+    Unlock();
+}
+
+// *******************************
+//
 void    PdrVertexBuffer::Bind                ()
 {
     glBindBuffer( GL_ARRAY_BUFFER, m_bufferHandle );

@@ -21,6 +21,7 @@ public:
                                             ~RenderableArrayDataArraysSingleVertexBuffer    ();
 
     const VertexArraySingleVertexBuffer *   VAO                                             () const;
+    VertexArraySingleVertexBuffer *         VAO                                             ();
     void                                    SetVAO                                          ( VertexArraySingleVertexBuffer * vao );
 
     virtual unsigned int                    GetNumConnectedComponents                       () const;

@@ -28,6 +28,7 @@ public:
     void *  Lock                ( MemoryLockingType mlt );
     void    Unlock              ();
 
+    void    Update              ( const VertexBuffer * vb );
 
     void    Bind                ();
     void    Unbind              ();

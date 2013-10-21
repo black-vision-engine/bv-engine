@@ -37,6 +37,7 @@ public:
 
     RenderableType                                  GetType                     () const;
     const RenderableArrayDataSingleVertexBuffer *   GetRenderableArrayData      () const;
+    RenderableArrayDataSingleVertexBuffer *         GetRenderableArrayData      ();
     RenderableEffect *                              GetRenderableEffect         ();
 
     int                                             GetNumconnectedComponents   () const;

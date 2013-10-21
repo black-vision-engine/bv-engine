@@ -69,6 +69,7 @@ VertexArrayEntry        VertexArray::Entry               ( int i ) const
 VertexArraySingleVertexBuffer::VertexArraySingleVertexBuffer   ( VertexBuffer * vb, VertexDescriptor * vd )
     : m_vertexBuffer( vb )
     , m_vertexDescriptor( vd )
+    , m_needsUpdateMemUpload( false )
 {
 }
 
@@ -134,6 +135,20 @@ unsigned int                VertexArraySingleVertexBuffer::GetNumVertices       
 unsigned int                VertexArraySingleVertexBuffer::GetNumTotalVertices              () const
 {
     return m_numTotalVertices;
+}
+
+// *******************************
+//
+void                        VertexArraySingleVertexBuffer::SetNeedsUpdateMemUpload         ( bool needsUpdateMemUpload )
+{
+    m_needsUpdateMemUpload = needsUpdateMemUpload;
+}
+
+// *******************************
+//
+bool                        VertexArraySingleVertexBuffer::NeedsUpdateMemUpload            () const
+{
+    return m_needsUpdateMemUpload;
 }
 
 }

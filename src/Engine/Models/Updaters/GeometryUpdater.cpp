@@ -2,9 +2,18 @@
 
 #include <cassert>
 
-#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
+#include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IGeometryChannelDescriptor.h"
+#include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
+
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 #include "Engine/Graphics/Resources/RenderableArrayData.h"
+#include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
+#include "Engine/Graphics/Resources/VertexBuffer.h"
+
+#include "Engine/Graphics/Resources/VertexArray.h"
 
 namespace bv {
 
@@ -47,61 +56,61 @@ void    GeometryUpdater::Update      ( float t )
 }
 
 // *********************************
-//
+//FIXME: not positions but something more general (attribute data, contents or something like this which does not involwe recreating the whole thing)
 void    GeometryUpdater::UpdatePositions     ( float t )
 {
-    const RenderableArrayDataSingleVertexBuffer * rad = m_out->GetRenderableArrayData();
+    //FIXME: implement for other types of geometry as well
+    assert( m_out->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
 
-    //VertexBuffer * vertexBuffer = rad-
+    //FIXME: works because we allow only triangle strips here
+    //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessart
+    //FIXME: putting it here is not a good idea (especially when other primitive types are added)
+    RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_out->GetRenderableArrayData() );
 
-    //auto geometryChannel = m_in;
-    //auto components = geometryChannel->GetComponents();
-    //auto geomDesc = geometryChannel->GetDescriptor();
+    VertexArraySingleVertexBuffer * vao = rad->VAO                  (); 
+    VertexBuffer * vb                   = vao->GetVertexBuffer      ();
+    const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
 
-    //VertexBuffer * vertexBuffer         = new VertexBuffer( TotalNumVertices( ccVec ), desc->SingleVertexEntrySize() );
-    //VertexDescriptor * vertexDescriptor = CreateVertexDescriptor( desc );
+    auto geomChannel    = m_in;
+    auto components     = geomChannel->GetComponents();
+    auto geomDesc       = geomChannel->GetDescriptor();
 
-    //VertexArraySingleVertexBuffer * vao = new VertexArraySingleVertexBuffer( vertexBuffer, vertexDescriptor );
-    //RenderableArrayDataArraysSingleVertexBuffer * rad = new RenderableArrayDataArraysSingleVertexBuffer( vao );
+    char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P  TYM RAZEM KURWA PODWOJNA, BO TU NAPRAWDE ZACZYNA SIE ROBIC BURDEL
+    unsigned int currentOffset = 0;
 
-    //char * vbData = vertexBuffer->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P
+    unsigned int k = 0;
 
-    //unsigned int currentOffset = 0;
+    for( auto cc : components )
+    {
+        unsigned int numVertices = cc->GetNumVertices();
 
-    //for( auto cc : ccVec )
-    //{
-    //    assert( !cc->GetVertexAttributeChannels().empty() );
+        assert( numVertices == vao->GetNumVertices( k ) );
+    
+        char * data = &vbData[ currentOffset ];
 
-    //    vao->AddCCEntry( cc->GetNumVertices() );
+        unsigned int offset = 0;
 
+        for( unsigned int i = 0; i < numVertices; ++i )
+        {
+            for( auto vach : cc->GetVertexAttributeChannels() )
+            {
+                assert( vach->GetNumEntries() == numVertices );
 
+                auto eltSize = vach->GetDescriptor()->GetEntrySize();
+                const char * eltData = vach->GetData();
 
-    //        unsigned int numVertices = cc->GetNumVertices();
-    //        unsigned int offset = 0;
+                memcpy( &data[ offset ], &eltData[ i * eltSize ], eltSize );
 
-    //        for( unsigned int i = 0; i < numVertices; ++i )
-    //        {
-    //            for( auto vach : cc->GetVertexAttributeChannels() )
-    //            {
-    //                assert( vach->GetNumEntries() == numVertices );
+                offset += eltSize;
+            }
+        }
 
-    //                auto eltSize = vach->GetDescriptor()->GetEntrySize();
-    //                const char * eltData = vach->GetData();
+        currentOffset += cc->GetNumVertices() * geomDesc->SingleVertexEntrySize();
 
-    //                memcpy( &data[ offset ], &eltData[ i * eltSize ], eltSize );
+        ++k;
+    }
 
-    //                offset += eltSize;
-    //            }
-    //        }
-
-
-
-
-    //    currentOffset += cc->GetNumVertices() * desc->SingleVertexEntrySize();
-    //}
-
-    //return rad;
-
+    vao->SetNeedsUpdateMemUpload( true );
 }
 
 // *********************************

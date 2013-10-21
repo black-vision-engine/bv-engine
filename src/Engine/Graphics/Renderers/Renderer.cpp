@@ -245,7 +245,6 @@ void    Renderer::Enable              ( RenderablePass * pass, TransformableEnti
         gs->UpdateP( projMat );
     }
 
-
     shader->Enable( this );
 }
 
@@ -295,6 +294,14 @@ void    Renderer::Disable             ( const  VertexBuffer * vb )
 {
     PdrVertexBuffer * pdrVb = GetPdrVertexBuffer( vb );
     pdrVb->Disable( this );
+}
+
+// *********************************
+//
+void    Renderer::Update              ( const VertexBuffer * vb )
+{
+    PdrVertexBuffer * pdrVb = GetPdrVertexBuffer( vb );
+    pdrVb->Update( vb );
 }
 
 // *********************************
