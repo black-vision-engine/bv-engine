@@ -202,7 +202,7 @@
     <ClCompile Include="Engine\Graphics\State\OffsetState.cpp" />
     <ClCompile Include="Engine\Graphics\State\StencilState.cpp" />
     <ClCompile Include="Engine\Models\ModelScene.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\GeometryShader\GeometryShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelDescriptor.cpp" />
@@ -309,7 +309,7 @@
     <ClInclude Include="Engine\Graphics\State\StateEnums.h" />
     <ClInclude Include="Engine\Graphics\State\StencilState.h" />
     <ClInclude Include="Engine\Models\ModelScene.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\GeometryShader\GeometryShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelDescriptor.h" />

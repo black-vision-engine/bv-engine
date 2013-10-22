@@ -10,8 +10,8 @@
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
-#include "Engine/Models/Plugins/Channels/GeometryShader/GeometryShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/ShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/GeometryPluginRect.h"
 #include <iostream>

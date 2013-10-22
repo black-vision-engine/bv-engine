@@ -7,11 +7,11 @@ uniform mat4 MVP;
 uniform mat4 MV;
 uniform mat4 P;
 
-out vec2 texCord;
+out vec2 VTexCord;
 
 void main()
 {
 	vec4 dummy = MV * P * vec4(vertexPosition, 1.0);
     gl_Position = MVP * vec4(vertexPosition, 1.0) + dummy - MV * P * vec4(vertexPosition, 1.0);
-    texCord = vertexTexCoord;
+    VTexCord = vertexTexCoord;
 }

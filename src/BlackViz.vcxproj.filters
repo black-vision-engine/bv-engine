@@ -78,7 +78,6 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelTyped.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\GeometryShader\GeometryShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Plugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameter.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.cpp" />
@@ -106,6 +105,7 @@
     <ClCompile Include="Engine\Graphics\State\FillState.cpp" />
     <ClCompile Include="Engine\Graphics\State\OffsetState.cpp" />
     <ClCompile Include="Engine\Graphics\State\StencilState.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -205,7 +205,6 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelTyped.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\GeometryShader\GeometryShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\ShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParameter.h" />
@@ -237,6 +236,7 @@
     <ClInclude Include="Engine\Graphics\State\OffsetState.h" />
     <ClInclude Include="Engine\Graphics\State\StencilState.h" />
     <ClInclude Include="Engine\Graphics\State\StateEnums.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
