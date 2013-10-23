@@ -60,6 +60,7 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
     geomPlugin->SetGeometryChannel  ( geomChannel );
     geomPlugin->SetTransformChannel ( trasformChannel );
 
+
     ///////////////////////////// Solid plugin //////////////////////////// 
     auto solidPlugin = new model::SolidColorPlugin( geomPlugin );
 
@@ -697,7 +698,6 @@ model::BasicNode *          ExtrudedTexturedRing()
     root->AddPlugin(texturePlugin);
 
     return root;
-
 }
 
 } // anonymous

@@ -8,6 +8,8 @@
 #include "WGLRendererInput.h"
 #include "WGLRendererData.h"
 
+#include "Engine/Graphics/State/StateInstance.h"
+
 namespace bv {
 
 class Camera;
@@ -45,7 +47,8 @@ class Renderer
 {
 private:
 
-    //FIXME: add states here and state related variables and properly implement draw methods
+    StateInstance       m_currentStateIstance;
+    StateInstance       m_defaultStateInstance;
 
     int					m_Width;
     int					m_Height;

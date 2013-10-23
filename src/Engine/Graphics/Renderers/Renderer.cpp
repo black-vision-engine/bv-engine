@@ -34,14 +34,23 @@ void	Renderer::Initialize	    ( int w, int h, TextureFormat colorFormat )
     m_Height		= h;
     m_ColorFormat	= colorFormat;
 
-    //FIXME: add states initialization here and properly implement draw methods
 
+    //FIXME: properly implement draw methods
     //FIXME: add all renderer states (either as separate classes or as bunch of states stored in member variables, possibly add multisampling support)
     //FIXME: possibly add stencil data
  
     m_Camera		= nullptr;
     m_ClearColor	= glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f );
     m_ClearDepth	= 1.0f;
+
+    m_defaultStateInstance.SetState( new AlphaState() );
+    m_defaultStateInstance.SetState( new CullState() );
+    m_defaultStateInstance.SetState( new DepthState() );
+    m_defaultStateInstance.SetState( new FillState() );
+    m_defaultStateInstance.SetState( new OffsetState() );
+    m_defaultStateInstance.SetState( new StencilState() );
+
+    m_currentStateIstance = m_defaultStateInstance;
 }
 
 // *********************************

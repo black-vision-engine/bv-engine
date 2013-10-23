@@ -153,6 +153,8 @@ Renderer::~Renderer ()
         ::ReleaseDC( data->m_WindowHandle, data->m_WindowDC );
     }
 
+    m_defaultStateInstance.DeleteStates();
+
     delete( data );
 
     Terminate();
