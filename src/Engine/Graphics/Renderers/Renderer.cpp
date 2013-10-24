@@ -71,6 +71,7 @@ void	Renderer::Terminate         ()
 //
 void	Renderer::ClearBuffers		()
 {
+    //FIXME: it should be set once only, when clear color is changed
     glClearColor( m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a );
     //glClearColor( 0.f, 0.f,0.f,1.f );
     //FIXME: implement
