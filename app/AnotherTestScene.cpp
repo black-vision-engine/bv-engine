@@ -101,34 +101,90 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
     
 }
 
+namespace
+{
+
+model::GeometryRectPlugin*          CreateGeometryRectPlugin            ( float w, float h )
+{
+    FloatInterpolator wi; wi.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator hi; hi.setWrapPostMethod( bv::WrapMethod::pingPong );
+    
+    wi.addKey(0.f, w);
+    hi.addKey(0.f, h);
+
+    return new model::GeometryRectPlugin(wi, hi);
+}
+
+model::GeometryChannel*             CreateGeometryChannel               (model::IConnectedComponent* connComp)
+{
+    model::GeometryChannelDescriptor desc;
+
+    for( auto compDesc : connComp->GetVertexAttributeChannels() )
+    {
+        desc.AddVertexAttrChannelDesc( static_cast< const model::VertexAttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
+    }
+
+    model::GeometryChannel* ret = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
+
+    ret->AddConnectedComponent(connComp);
+
+    return ret;
+}
+
+model::ITransformChannel*           CreateTransformChannel              (TransformF* transformation)
+{
+    model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
+    trasformChannel->AddTransform( transformation );
+
+    return trasformChannel;
+}
+
+model::IPlugin*                     CreateSolidColorPlugin              (model::IPlugin* prevPlugin, const glm::vec4& color)
+{
+    auto solidPlugin = new model::SolidColorPlugin( prevPlugin );
+
+    Vec4Interpolator colori; colori.setWrapPostMethod( bv::WrapMethod::pingPong );
+    colori.addKey(0.f, color );
+
+    // Set Pixel Shader Channel
+    solidPlugin->SetPixelShaderChannel    ( new model::SolidColorShaderChannel( "../dep/media/shaders/solid.frag", colori ) );
+
+    return solidPlugin;
+}
+
+model::IPlugin*                     CreateTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths )
+{
+    auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, texturesPaths );
+
+    // Set Pixel Shader Channel
+    std::vector<TransformF> txMat;
+    std::vector<FloatInterpolator> alphas;
+    texturePlugin->SetPixelShaderChannel( new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
+                                        , alphas
+                                        , txMat )
+                                        );
+
+    texturePlugin->SetVertexShaderChannel( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" )
+                                        );
+
+    return texturePlugin;
+}
+
+}
+
 // ******************************
 //
 model::BasicNode *          GreenRect()
 {
     model::BasicNode * root = new model::BasicNode();
 
-    ///////////////////////////// Geometry plugin //////////////////////////
-    FloatInterpolator w; w.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator h; h.setWrapPostMethod( bv::WrapMethod::pingPong );
-    
-    w.addKey(0.f, 1.f);
-    h.addKey(0.f, 1.f);
-
-    model::GeometryRectPlugin*          rectPlugin = new model::GeometryRectPlugin(w, h);
+    model::GeometryRectPlugin*          rectPlugin = CreateGeometryRectPlugin(1.f, 1.f);
 
     /// Set Geometry Channel
-
     model::AnimatedStripComponent *     rect        = model::AnimatedStripComponent::Create( 2.f, 1.f, 10, 0.f, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 );
 
-    model::GeometryChannelDescriptor desc;
+    model::GeometryChannel *            geomCh      = CreateGeometryChannel( rect );
 
-    for( auto compDesc : rect->GetVertexAttributeChannels() )
-    {
-        desc.AddVertexAttrChannelDesc( static_cast< const model::VertexAttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
-    }
-
-    model::GeometryChannel *    geomCh      = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
-    geomCh->AddConnectedComponent( rect );
     rectPlugin->SetGeometryChannel( geomCh );
 
 
@@ -155,22 +211,14 @@ model::BasicNode *          GreenRect()
 
     trans->addTranslation( xt, yt, zt );
 
-    model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
-    trasformChannel->AddTransform( trans );
+    model::ITransformChannel*           trasformChannel  = CreateTransformChannel( trans );
 
-
-    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
-    color.addKey(0.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-
-    rectPlugin->SetTransformChannel      ( trasformChannel );
+    rectPlugin->SetTransformChannel( trasformChannel );
+    
+    // Add plugin to node.
     root->AddPlugin(rectPlugin);
 
-    ///////////////////////////// Solid plugin //////////////////////////// 
-
-    auto solidPlugin = new model::SolidColorPlugin( rectPlugin );
-
-    // Set Pixel Shader Channel
-    solidPlugin->SetPixelShaderChannel    ( new model::SolidColorShaderChannel( "../dep/media/shaders/solid.frag", color ) );
+    auto solidPlugin = CreateSolidColorPlugin( rectPlugin, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
 
     root->AddPlugin(solidPlugin);
 
@@ -184,27 +232,14 @@ model::BasicNode *          TexturedRect()
     model::BasicNode * root = new model::BasicNode();
 
     ///////////////////////////// Geometry plugin //////////////////////////
-    FloatInterpolator w; w.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator h; h.setWrapPostMethod( bv::WrapMethod::pingPong );
-    
-    w.addKey(0.f, 1.f);
-    h.addKey(0.f, 1.f);
-
-    model::GeometryRectPlugin*          rectPlugin = new model::GeometryRectPlugin(w, h);
+    model::GeometryRectPlugin* rectPlugin   = CreateGeometryRectPlugin(1.f, 1.f);
 
     /// Set Geometry Channel
 
-    model::RectComponent *     rect        = model::RectComponent::Create();
+    model::RectComponent *      rect        = model::RectComponent::Create();
 
-    model::GeometryChannelDescriptor desc;
+    model::GeometryChannel *    geomCh      = CreateGeometryChannel( rect );
 
-    for( auto compDesc : rect->GetVertexAttributeChannels() )
-    {
-        desc.AddVertexAttrChannelDesc( static_cast< const model::VertexAttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
-    }
-
-    model::GeometryChannel *    geomCh      = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
-    geomCh->AddConnectedComponent( rect );
     rectPlugin->SetGeometryChannel( geomCh );
 
 
@@ -231,14 +266,10 @@ model::BasicNode *          TexturedRect()
 
     trans->addTranslation( xt, yt, zt );
 
-    model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
-    trasformChannel->AddTransform( trans );
-
-
-    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
-    color.addKey(0.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    model::ITransformChannel*   trasformChannel =   CreateTransformChannel( trans );
 
     rectPlugin->SetTransformChannel      ( trasformChannel );
+    
     root->AddPlugin(rectPlugin);
 
     ///////////////////////////// Texture plugin //////////////////////////// 
@@ -248,18 +279,7 @@ model::BasicNode *          TexturedRect()
 
     textures.push_back( "simless_00.jpg" );
 
-    auto texturePlugin = new model::SimpleTexturePlugin( rectPlugin, textures );
-
-    // Set Pixel Shader Channel
-    std::vector<TransformF> txMat;
-    std::vector<FloatInterpolator> alphas;
-    texturePlugin->SetPixelShaderChannel( new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
-                                        , alphas
-                                        , txMat )
-                                        );
-
-    texturePlugin->SetVertexShaderChannel( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" )
-                                        );
+    auto texturePlugin = CreateTexturePlugin( rectPlugin, textures );
 
     root->AddPlugin(texturePlugin);
 
@@ -356,10 +376,6 @@ model::BasicNode *          TexturedRing()
 
 }
 
-FloatInterpolator ConstValue( float val )
-{
-    return TestParamFactory::ConstantValue( val );
-}
 
 size_t GetSizeOfFile(const std::wstring& path)
 {
