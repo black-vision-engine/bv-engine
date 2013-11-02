@@ -1,7 +1,6 @@
 #include "VariableTopologyStripComponent.h"
 
 #include "Mathematics/defines.h"
-#include <glm/glm.hpp>
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelTyped.h"
 
 #include <cmath>
@@ -11,12 +10,13 @@ namespace bv { namespace model {
 
 // *******************************
 //
-VariableTopologyStripComponent::VariableTopologyStripComponent                  ( float size, float speed, float duration, int numSegments, float oscilationSpeed, float startX, float startY, float posZ )
+VariableTopologyStripComponent::VariableTopologyStripComponent                  ( float size, float speed, float duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ )
     : m_size( size )
     , m_speed( speed )
     , m_activeDuration( duration )
     , numSegments( numSegments )
     , m_oscilationSpeed( oscilationSpeed )
+    , m_mainScale( mainScale )
     , m_startX( startX )
     , m_startY( startY )
     , m_posZ( posZ )
@@ -26,6 +26,7 @@ VariableTopologyStripComponent::VariableTopologyStripComponent                  
     assert( numSegments >= 1 );
     assert( speed > 0.01f );
     assert( oscilationSpeed > 0.01f );
+    assert( mainScale > 0.001f );
 
     m_segmentDeltaTime = duration /  (float) numSegments;
     m_activeSegment = 0;
@@ -34,47 +35,49 @@ VariableTopologyStripComponent::VariableTopologyStripComponent                  
     const VertexAttributeChannelDescriptor * desc = new VertexAttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
     Float3VertexAttributeChannel * vertArrtF3 = new Float3VertexAttributeChannel( desc, desc->SuggestedDefaultName( 0 ), false );
 
-    glm::vec3 start(startX,startY, posZ);
-    float t = 0.f * oscilationSpeed;
-    float f = sinf( t );
-    glm::vec2 tangent( 1.f, cosf( t ) );
-    glm::vec2 normal2( -tangent.y, tangent.x );
-    normal2 = glm::normalize( normal2 );
+    //First part of first strip
+    glm::vec3 f0 = EvaluateFunction( 0.f );
+    glm::vec3 n0 = EvaluateNormal( EvaluateVelocity( 0.f ) );
 
-    glm::vec3 n( normal2.x, normal2.y, 0.f );
-
-    glm::vec3 x0 = start + n * 0.5f;
-    glm::vec3 x1 = start - n * 0.5f;
-
+    //Second part of first strip
+    glm::vec3 f1 = EvaluateFunction( m_segmentDeltaTime );
+    glm::vec3 n1 = EvaluateNormal( EvaluateVelocity( m_segmentDeltaTime ) );
 
     //Add one segment (just so that something is rendered)
-    //float xStart    = -w * 0.5f;
-    //float yStart    = -h * 0.5f;
+    vertArrtF3->AddVertexAttribute( f0 + n0 * 0.5f );
+    vertArrtF3->AddVertexAttribute( f0 - n0 * 0.5f );
+    vertArrtF3->AddVertexAttribute( f1 - n1 * 0.5f );
+    vertArrtF3->AddVertexAttribute( f1 + n1 * 0.5f );
 
-    //float dx        = w / (float) numSegments;
-    //float dy        = h;
-
-    //vertArrtF3->AddVertexAttribute(glm::vec3( xStart, yStart + dy, z ) );
-    //vertArrtF3->AddVertexAttribute(glm::vec3( xStart, yStart, z ) );
-    //vertArrtF3->AddVertexAttribute(glm::vec3( xStart + dx, yStart + dy, z ) );
-    //vertArrtF3->AddVertexAttribute(glm::vec3( xStart + dx, yStart, z ) );
-    //
-    //for ( unsigned int i = 1; i < numSegments; ++i )
-    //{
-    //    xStart += dx;
-
-    //    vertArrtF3->AddVertexAttribute(glm::vec3( xStart + dx, yStart + dy, z ) );
-    //    vertArrtF3->AddVertexAttribute(glm::vec3( xStart + dx, yStart, z ) );        
-    //}
-
-    //m_vertexAttributeChannels.push_back( vertArrtF3 );
-    //m_positions = vertArrtF3;
+    m_vertexAttributeChannels.push_back( vertArrtF3 );
+    m_positions = vertArrtF3;
 }
 
 // *******************************
 //
 void                     VariableTopologyStripComponent::Update         ( float t )
 {
+    m_topologyChanged = false;
+
+    if ( !IsActive( t ) )
+    {
+        return;
+    }
+
+    t = m_segmentDeltaTime * t * m_speed;
+    int nSegment = (int) t;
+
+    assert( nSegment - m_activeSegment <= 1 );
+
+    if ( nSegment == m_activeSegment )
+    {
+        return;
+    }
+
+    //FIXME: variable number of segments should be allowed - this way we explicitely require fast updates (at most one segment per update)
+    m_topologyChanged = true;
+
+
 //    float sclSine   = m_sclSine;
 //    float dSine     = fmod( t * m_speedX , (float) TWOPI );
 ////    float dSine     = fmod( t * m_speedX , (float) TWOPI / m_sclSine );
@@ -127,11 +130,36 @@ bool                VariableTopologyStripComponent::TopologyChanged             
 
 // *******************************
 //
-VariableTopologyStripComponent *  VariableTopologyStripComponent::Create        ( float size, float speed, float duration, int numSegments, float oscilationSpeed, float startX, float startY, float posZ )
+glm::vec3               VariableTopologyStripComponent::EvaluateFunction                ( float t ) const
+{
+    float val =  m_mainScale * sinf( t * m_oscilationSpeed );
+    float x   = t * m_speed;
+
+    return glm::vec3(x, val, 0.f) + glm::vec3(m_startX,m_startY, m_posZ);
+;
+}
+
+// *******************************
+//
+glm::vec3           VariableTopologyStripComponent::EvaluateVelocity                ( float t ) const
+{
+    return glm::vec3( m_speed, m_oscilationSpeed * m_mainScale * cosf( t * m_oscilationSpeed ), 0.f );
+}
+
+// *******************************
+//
+glm::vec3           VariableTopologyStripComponent::EvaluateNormal                  ( const glm::vec3 & tangent ) const
+{
+    return glm::normalize( glm::vec3( -tangent.y, tangent.x, 0.f ) );
+}
+
+// *******************************
+//
+VariableTopologyStripComponent *  VariableTopologyStripComponent::Create        ( float size, float speed, float duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ )
 {
     assert( numSegments >= 1 );
 
-    return new VariableTopologyStripComponent( size, speed, duration, numSegments, oscilationSpeed, startX, startY, posZ );
+    return new VariableTopologyStripComponent( size, speed, duration, numSegments, oscilationSpeed, mainScale, startX, startY, posZ );
 }
 
 } //model

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
+#include <glm/glm.hpp>
 
 namespace bv { namespace model {
 
@@ -15,6 +16,7 @@ private:
     float   m_oscilationSpeed;
     float   m_segmentDeltaTime;
     float   m_activeDuration;
+    float   m_mainScale;
 
     int     numSegments;
     int     m_activeSegment;
@@ -24,12 +26,11 @@ private:
     float   m_startY;
     float   m_posZ;
 
-
     Float3VertexAttributeChannel * m_positions;
 
 private:
 
-                        VariableTopologyStripComponent  ( float size, float speed, float duration, int numSegments, float oscilationSpeed, float startX, float startY, float posZ );
+                        VariableTopologyStripComponent  ( float size, float speed, float duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ );
                         ~VariableTopologyStripComponent ();
 
 public:
@@ -40,7 +41,13 @@ public:
     virtual void        Update                          ( float t );
 
 
-    static  VariableTopologyStripComponent *    Create  ( float size, float speed, float duration, int numSegments, float oscilationSpeed, float startX, float startY, float posZ );
+private:
+
+    glm::vec3           EvaluateFunction                ( float t ) const;
+    glm::vec3           EvaluateVelocity                ( float t ) const;
+    glm::vec3           EvaluateNormal                  ( const glm::vec3 & tangent ) const;
+
+    static  VariableTopologyStripComponent *    Create  ( float size, float speed, float duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ );
 
 };
 
