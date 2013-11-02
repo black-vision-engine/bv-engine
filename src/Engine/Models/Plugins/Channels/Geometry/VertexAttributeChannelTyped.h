@@ -30,6 +30,7 @@ public:
     virtual unsigned int            GetNumEntries                   ()                      const;
     virtual const char *            GetData                         ()                      const;
 
+
     std::vector< glm::vec3 > &      GetVertices                     ();
 
     //virtual int                     GetEntrySize                    ()                      const;
@@ -55,6 +56,7 @@ public:
 
     virtual unsigned int            GetNumEntries                   ()                      const;
     virtual const char *            GetData                         ()                      const;
+    std::vector< glm::vec2 > &      GetVertices                     ();
 
     //virtual int                     GetEntrySize                    ()                      const;
 

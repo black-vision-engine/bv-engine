@@ -130,6 +130,22 @@ SimpleTexturePlugin::TexturePair SimpleTexturePlugin::LoadTexture( const std::st
 //
 void                SimpleTexturePlugin::Update              ( float t )
 {
+    for( unsigned int i = 0; i < m_geomChannel->GetComponents().size(); ++i )
+    {
+        auto connComp = static_cast< const model::ConnectedComponent* >( m_geomChannel->GetComponents()[ i ] );
+        auto compChannels = connComp->m_vertexAttributeChannels;
+
+        auto verts  = dynamic_cast< Float3VertexAttributeChannel* >(compChannels[0])->GetVertices();
+
+        auto uvs    = dynamic_cast< Float2VertexAttributeChannel* >(compChannels[1])->GetVertices();
+
+        for( unsigned int i = 0; i < verts.size(); ++i )
+        {
+            uvs[ i ].x = verts[ i ].x;
+            uvs[ i ].y = verts[ i ].y;
+        }
+    }
+
     BasePlugin::Update( t );
 
     //FIXME: update chanels according to parent (e.g. when position data has been changed)

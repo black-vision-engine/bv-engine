@@ -41,68 +41,6 @@ namespace bv
 
 namespace
 {
-// ******************************
-//
-model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned int numSegments, float speedX, float speedY, float cyclesX, float cyclesY, float sizeY, float sizeZ )
-{
-    model::BasicNode * root = new model::BasicNode();
-    
-    ///////////////////////////// Geometry plugin //////////////////////////
-    model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin();
-
-    ///////////////////////////// Channels //////////////////////////
-    model::GeometryChannel *        geomChannel     = model::GeometryChannelAnimatedVertices::Create( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
-
-    TransformF *                    trans           = new TransformF();
-    model::SimpleTransformChannel * trasformChannel = new model::SimpleTransformChannel();
-    trasformChannel->AddTransform( trans );
-
-    geomPlugin->SetGeometryChannel  ( geomChannel );
-    geomPlugin->SetTransformChannel ( trasformChannel );
-
-
-    ///////////////////////////// Solid plugin //////////////////////////// 
-    auto solidPlugin = new model::SolidColorPlugin( geomPlugin );
-
-    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
-    color.addKey(0.f, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
-
-    // Set Pixel Shader Channel
-    solidPlugin->SetPixelShaderChannel( new model::SolidColorShaderChannel( "../dep/media/shaders/solid.frag", color ) );
-
-
-    // Add plugins to node
-    root->AddPlugin( geomPlugin );
-    root->AddPlugin( solidPlugin );
-
-    return root;
-
-
-    ///////////////////////////// Texture plugin //////////////////////////// 
-    std::vector< std::string > textures;
-    textures.push_back( "simless_00.jpg" );
-
-    auto texturePlugin = new model::SimpleTexturePlugin( geomPlugin, textures );
-
-    // Set Pixel Shader Channel
-    std::vector<TransformF> txMat;
-    std::vector<FloatInterpolator> alphas;
-    texturePlugin->SetPixelShaderChannel( new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
-                                        , alphas
-                                        , txMat )
-                                        );
-
-    texturePlugin->SetVertexShaderChannel( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" )
-                                        );
-
-    root->AddPlugin( texturePlugin );
-
-    return root;
-    
-}
-
-namespace
-{
 
 FloatInterpolator                   CreateConstValueFloat               ( float val )
 {
@@ -203,6 +141,49 @@ model::IGeometryShaderChannel*      CreateGeometryShaderExtrude         ( float 
     return new model::ExtrudeGeometryShaderChannel("../dep/media/shaders/extrude.geom", extrudeScale);
 }
 
+// ******************************
+//
+model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned int numSegments, float speedX, float speedY, float cyclesX, float cyclesY, float sizeY, float sizeZ )
+{
+    model::BasicNode * root = new model::BasicNode();
+    
+    ///////////////////////////// Geometry plugin //////////////////////////
+    model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin();
+
+    ///////////////////////////// Channels //////////////////////////
+    model::GeometryChannel *        geomChannel     = model::GeometryChannelAnimatedVertices::Create( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
+
+    TransformF *                    trans           = new TransformF();
+    model::SimpleTransformChannel * trasformChannel = new model::SimpleTransformChannel();
+    trasformChannel->AddTransform( trans );
+
+    geomPlugin->SetGeometryChannel  ( geomChannel );
+    geomPlugin->SetTransformChannel ( trasformChannel );
+
+
+    ///////////////////////////// Solid plugin //////////////////////////// 
+
+    //auto solidPlugin = CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
+
+
+
+    //// Add plugins to node
+    root->AddPlugin( geomPlugin );
+    //root->AddPlugin( solidPlugin );
+
+    //return root;
+
+
+    ///////////////////////////// Texture plugin //////////////////////////// 
+    std::vector< std::string > textures;
+    textures.push_back( "simless_00.jpg" );
+
+    auto texturePlugin = CreateTexturePlugin( geomPlugin, textures );
+
+    root->AddPlugin( texturePlugin );
+
+    return root;
+    
 }
 
 // ******************************
