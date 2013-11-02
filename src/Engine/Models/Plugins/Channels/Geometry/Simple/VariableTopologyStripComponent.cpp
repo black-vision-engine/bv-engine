@@ -44,10 +44,10 @@ VariableTopologyStripComponent::VariableTopologyStripComponent                  
     glm::vec3 n1 = EvaluateNormal( EvaluateVelocity( m_segmentDeltaTime ) );
 
     //Add one segment (just so that something is rendered)
-    vertArrtF3->AddVertexAttribute( f0 + n0 * 0.5f );
-    vertArrtF3->AddVertexAttribute( f0 - n0 * 0.5f );
-    vertArrtF3->AddVertexAttribute( f1 - n1 * 0.5f );
-    vertArrtF3->AddVertexAttribute( f1 + n1 * 0.5f );
+    vertArrtF3->AddVertexAttribute( TopPosition( f0, n0 ) );
+    vertArrtF3->AddVertexAttribute( BottomPosition( f0, n0 ) );
+    vertArrtF3->AddVertexAttribute( BottomPosition( f1, n1 ) );
+    vertArrtF3->AddVertexAttribute( TopPosition( f1, n1 ) );
 
     m_vertexAttributeChannels.push_back( vertArrtF3 );
     m_positions = vertArrtF3;
@@ -64,8 +64,7 @@ void                     VariableTopologyStripComponent::Update         ( float 
         return;
     }
 
-    t = m_segmentDeltaTime * t * m_speed;
-    int nSegment = (int) t;
+    int nSegment = (int) ( t * m_speed / m_segmentDeltaTime );
 
     assert( nSegment - m_activeSegment <= 1 );
 
@@ -77,35 +76,13 @@ void                     VariableTopologyStripComponent::Update         ( float 
     //FIXME: variable number of segments should be allowed - this way we explicitely require fast updates (at most one segment per update)
     m_topologyChanged = true;
 
+    //Second part of first strip
+    t = m_segmentDeltaTime * nSegment;
+    glm::vec3 f = EvaluateFunction( t );
+    glm::vec3 n = EvaluateNormal( EvaluateVelocity( t ) );
 
-//    float sclSine   = m_sclSine;
-//    float dSine     = fmod( t * m_speedX , (float) TWOPI );
-////    float dSine     = fmod( t * m_speedX , (float) TWOPI / m_sclSine );
-//
-//    float sclCosine = m_sclCosine;
-//    float dCosine   = fmod( t * m_speedY , (float) TWOPI );
-////    float dCosine   = fmod( t * m_speedY , (float) TWOPI / m_sclCosine );
-//
-//    std::vector< glm::vec3 > & vx = m_positions->GetVertices();
-//
-//    float yStart    = -m_h * 0.5f;
-//
-//    for( unsigned int i = 0; i < vx.size(); i += 2 )
-//    {
-//        glm::vec3 & vt = vx[ i ];
-//        glm::vec3 & vb = vx[ i + 1 ];
-//
-//        float t = vt.x * sclSine + dSine;
-//        float s = vt.x * sclCosine + dCosine;
-//
-//        float dy = m_sizeY * sin( t );
-//        float dz = m_sizeZ * cos( s );
-//
-//        vt.y = yStart + m_h + dy;
-//        vb.y = yStart + dy;
-//
-//        vt.z = vb.z = m_z + dz;
-//    }
+    m_positions->AddVertexAttribute( BottomPosition( f, n ) );
+    m_positions->AddVertexAttribute( TopPosition( f, n ) );
 }
 
 // *******************************
@@ -151,6 +128,20 @@ glm::vec3           VariableTopologyStripComponent::EvaluateVelocity            
 glm::vec3           VariableTopologyStripComponent::EvaluateNormal                  ( const glm::vec3 & tangent ) const
 {
     return glm::normalize( glm::vec3( -tangent.y, tangent.x, 0.f ) );
+}
+
+// *******************************
+//
+glm::vec3           VariableTopologyStripComponent::TopPosition                     ( const glm::vec3 & val, const glm::vec3 & normal ) const
+{
+    return val + normal * 0.5f;
+}
+
+// *******************************
+//
+glm::vec3           VariableTopologyStripComponent::BottomPosition                  ( const glm::vec3 & val, const glm::vec3 & normal ) const
+{
+    return val - normal * 0.5f;
 }
 
 // *******************************
