@@ -545,13 +545,13 @@ model::BasicNode *          ExtrudedTexturedRing()
 //
 model::BasicNode *          TestScenesFactory::AnotherTestScene()
 {
-    auto root = GreenRect();
+    auto root =  Text1();
+    root->AddChild( GreenRect() );
     root->AddChild( TexturedRect() );
-    root->AddChild( Text2() );
-    root->AddChild( ExtrudedTexturedRing() );
+    //root->AddChild( ExtrudedTexturedRing() ); // To nie dziala na mojej karcie.
     root->AddChild( TexturedRing() );
-    root->AddChild( Text1() );
     root->AddChild( ExtrudedRedRect() );
+    root->AddChild( Text2() );
 
     return root;
 }
