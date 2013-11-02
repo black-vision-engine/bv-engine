@@ -430,9 +430,9 @@ model::BasicNode *     Text2()
     Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
 
     color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-    color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-    color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-    color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+    color.addKey(1.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    color.addKey(8.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+    color.addKey(18.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
     auto texPlugin = CreateTextPlugin( str, "../dep/Media/fonts/times.ttf", 128, color, trns );
 
