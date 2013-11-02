@@ -138,7 +138,6 @@ bool BlackVisionApp::RenderNode         ( SceneNode *   node )
     return bSuccess;
 }
 
-
 // *********************************
 //FIXME: implement proper console
 bool BlackVisionApp::OnInitialize       ()
@@ -164,9 +163,9 @@ bool BlackVisionApp::OnInitialize       ()
     //model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
     //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
 
-    model::BasicNode * root = TestScenesFactory::AnotherTestScene();
-    
-    //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
+    //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
+     
+    model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
 
     m_modelScene = model::ModelScene::Create( root, new Camera() );
 

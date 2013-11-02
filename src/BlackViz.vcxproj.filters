@@ -107,6 +107,8 @@
     <ClCompile Include="Engine\Graphics\State\StencilState.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.cpp" />
     <ClCompile Include="Engine\Graphics\State\StateInstance.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelVariableTopology.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -239,6 +241,8 @@
     <ClInclude Include="Engine\Graphics\State\StateEnums.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.h" />
     <ClInclude Include="Engine\Graphics\State\StateInstance.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelVariableTopology.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

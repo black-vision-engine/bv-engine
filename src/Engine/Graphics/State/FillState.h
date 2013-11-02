@@ -14,4 +14,6 @@ public:
 
 };
 
+int loc_test();
+
 } //bv
