@@ -496,26 +496,6 @@ model::BasicNode *          ExtrudedTexturedRing()
     /// Set Transform Channel
     TransformF *    trans  = new TransformF                ();
 
-    FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator zs;
-
-    xs.addKey(0.f, 0.25f);
-    ys.addKey(0.f, 0.25f);
-    zs.addKey(0.f, 1.f);
-
-    trans->addScale( xs, ys, zs );
-
-    FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
-    FloatInterpolator zt;
-
-    xt.addKey(0.f, -1.f);
-    yt.addKey(0.f, -1.f);
-    zt.addKey(0.f, 0.f);
-
-    trans->addTranslation( xt, yt, zt );
-
     trans->addScale( CreateConstValueFloat( 0.25f ), CreateConstValueFloat( 0.25f ), CreateConstValueFloat( 1.f ) );
     trans->addTranslation( CreateConstValueFloat( -1.f ), CreateConstValueFloat( -1.f ), CreateConstValueFloat( 0.f ) );
 
