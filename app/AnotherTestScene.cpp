@@ -104,6 +104,22 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 namespace
 {
 
+FloatInterpolator                   CreateConstValueFloat               ( float val )
+{
+    FloatInterpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
+    inter.addKey( 0.f, val );
+
+    return inter;
+}
+
+Vec4Interpolator                   CreateConstValueVec4                 ( const glm::vec4& val )
+{
+    Vec4Interpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
+    inter.addKey( 0.f, val );
+
+    return inter;
+}
+
 model::GeometryRectPlugin*          CreateGeometryRectPlugin            ( float w, float h )
 {
     FloatInterpolator wi; wi.setWrapPostMethod( bv::WrapMethod::pingPong );
@@ -139,20 +155,17 @@ model::ITransformChannel*           CreateTransformChannel              (Transfo
     return trasformChannel;
 }
 
-model::IPlugin*                     CreateSolidColorPlugin              (model::IPlugin* prevPlugin, const glm::vec4& color)
+model::SolidColorPlugin*            CreateSolidColorPlugin              (model::IPlugin* prevPlugin, const glm::vec4& color)
 {
     auto solidPlugin = new model::SolidColorPlugin( prevPlugin );
 
-    Vec4Interpolator colori; colori.setWrapPostMethod( bv::WrapMethod::pingPong );
-    colori.addKey(0.f, color );
-
     // Set Pixel Shader Channel
-    solidPlugin->SetPixelShaderChannel    ( new model::SolidColorShaderChannel( "../dep/media/shaders/solid.frag", colori ) );
+    solidPlugin->SetPixelShaderChannel    ( new model::SolidColorShaderChannel( "../dep/media/shaders/solid.frag", CreateConstValueVec4( color ) ) );
 
     return solidPlugin;
 }
 
-model::IPlugin*                     CreateTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths )
+model::SimpleTexturePlugin*         CreateTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths )
 {
     auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, texturesPaths );
 
@@ -168,6 +181,26 @@ model::IPlugin*                     CreateTexturePlugin                 ( model:
                                         );
 
     return texturePlugin;
+}
+
+model::SimpleTextPlugin*            CreateTextPlugin                    ( const std::wstring& text, const std::string& fontFile, int size, const Vec4Interpolator& color, TransformF* trans )
+{
+    auto texPlugin = new model::SimpleTextPlugin( text, fontFile, size );
+
+    texPlugin->SetPixelShaderChannel     ( new model::TextPixelShaderChannel( "../dep/media/shaders/text.frag", color ) );
+    texPlugin->SetVertexShaderChannel    ( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
+
+    model::ITransformChannel      * stch  = CreateTransformChannel( trans );
+
+    texPlugin->SetTransformChannel( stch );
+
+    return texPlugin;
+}
+
+model::IGeometryShaderChannel*      CreateGeometryShaderExtrude         ( float scale )
+{
+    FloatInterpolator extrudeScale = CreateConstValueFloat( scale );
+    return new model::ExtrudeGeometryShaderChannel("../dep/media/shaders/extrude.geom", extrudeScale);
 }
 
 }
@@ -191,25 +224,8 @@ model::BasicNode *          GreenRect()
     /// Set Transform Channel
     TransformF *    trans  = new TransformF                ();
 
-    FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator zs;
-
-    xs.addKey(0.f, 1.f);
-    ys.addKey(0.f, 1.f);
-    zs.addKey(0.f, 1.f);
-
-    trans->addScale( xs, ys, zs );
-
-    FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
-    FloatInterpolator zt;
-
-    xt.addKey(0.f, 0.f);
-    yt.addKey(0.f, 0.f);
-    zt.addKey(0.f, 0.f);
-
-    trans->addTranslation( xt, yt, zt );
+    trans->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
+    trans->addTranslation( CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ) );
 
     model::ITransformChannel*           trasformChannel  = CreateTransformChannel( trans );
 
@@ -246,25 +262,8 @@ model::BasicNode *          TexturedRect()
     /// Set Transform Channel
     TransformF *    trans  = new TransformF                ();
 
-    FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator zs;
-
-    xs.addKey(0.f, 1.f);
-    ys.addKey(0.f, 1.f);
-    zs.addKey(0.f, 1.f);
-
-    trans->addScale( xs, ys, zs );
-
-    FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
-    FloatInterpolator zt;
-
-    xt.addKey(0.f, 1.f);
-    yt.addKey(0.f, 1.f);
-    zt.addKey(0.f, 0.f);
-
-    trans->addTranslation( xt, yt, zt );
+    trans->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
+    trans->addTranslation( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 0.f ) );
 
     model::ITransformChannel*   trasformChannel =   CreateTransformChannel( trans );
 
@@ -293,59 +292,25 @@ model::BasicNode *          TexturedRing()
     model::BasicNode * root = new model::BasicNode();
 
     ///////////////////////////// Geometry plugin //////////////////////////
-    FloatInterpolator w; w.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator h; h.setWrapPostMethod( bv::WrapMethod::pingPong );
-    
-    w.addKey(0.f, 1.f);
-    h.addKey(0.f, 1.f);
 
     model::GeometryRingPlugin*          ringPlugin = new model::GeometryRingPlugin();
 
     /// Set Geometry Channel
 
-    model::RingComponent *     ring        = model::RingComponent::Create(0.f, 1.5f * 3.14f, 1.f, 2.f, 200 );
+    model::RingComponent *      ring        = model::RingComponent::Create(0.f, 1.5f * 3.14f, 1.f, 2.f, 200 );
 
-    model::GeometryChannelDescriptor desc;
+    model::GeometryChannel *    geomCh      = CreateGeometryChannel( ring );
 
-    for( auto compDesc : ring->GetVertexAttributeChannels() )
-    {
-        desc.AddVertexAttrChannelDesc( static_cast< const model::VertexAttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
-    }
-
-    model::GeometryChannel *    geomCh      = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
-    geomCh->AddConnectedComponent( ring );
     ringPlugin->SetGeometryChannel( geomCh );
 
 
     /// Set Transform Channel
     TransformF *    trans  = new TransformF                ();
 
-    FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator zs;
+    trans->addScale( CreateConstValueFloat( 0.25f ), CreateConstValueFloat( 0.25f ), CreateConstValueFloat( 1.f ) );
+    trans->addTranslation( CreateConstValueFloat( -1.f ), CreateConstValueFloat( -1.f ), CreateConstValueFloat( 0.f ) );
 
-    xs.addKey(0.f, 0.25f);
-    ys.addKey(0.f, 0.25f);
-    zs.addKey(0.f, 1.f);
-
-    trans->addScale( xs, ys, zs );
-
-    FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
-    FloatInterpolator zt;
-
-    xt.addKey(0.f, -1.f);
-    yt.addKey(0.f, -1.f);
-    zt.addKey(0.f, 0.f);
-
-    trans->addTranslation( xt, yt, zt );
-
-    model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
-    trasformChannel->AddTransform( trans );
-
-
-    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
-    color.addKey(0.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    model::ITransformChannel*   trasformChannel  = CreateTransformChannel( trans );
 
     ringPlugin->SetTransformChannel      ( trasformChannel );
     root->AddPlugin(ringPlugin);
@@ -357,18 +322,7 @@ model::BasicNode *          TexturedRing()
 
     textures.push_back( "simless_01.jpg" );
 
-    auto texturePlugin = new model::SimpleTexturePlugin( ringPlugin, textures );
-
-    // Set Pixel Shader Channel
-    std::vector<TransformF> txMat;
-    std::vector<FloatInterpolator> alphas;
-    texturePlugin->SetPixelShaderChannel( new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
-                                        , alphas
-                                        , txMat )
-                                        );
-
-    texturePlugin->SetVertexShaderChannel( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" )
-                                        );
+    auto texturePlugin = CreateTexturePlugin( ringPlugin, textures );
 
     root->AddPlugin(texturePlugin);
 
@@ -417,33 +371,22 @@ model::BasicNode *     Text1()
 {
     model::BasicNode * root = new model::BasicNode();
 
-    std::wstring str  = LoadUtf8FileToString( L"text_example.txt");
+    std::wstring str    =   LoadUtf8FileToString( L"text_example.txt");
 
-    auto texPlugin = new model::SimpleTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
-    //auto texPlugin = new model::SimpleTextPlugin( L"Litwo! Ojczyzno moja! ty jesteœ jak zdrowie.\nIle ci trzeba ceniæ, ten tylko siê dowie,\nKto ciê straci³. Dziœ piêknoœæ tw¹ w ca³ej ozdobie\nWidzê i opisujê, bo têskniê po tobie."
-    //                                                , fontFile );
+    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
 
-    //auto texPlugin = new model::SimpleTextPlugin( L"Za¿ó³æ gêœl¹ jaŸñ.", fontFile );
-        
-
-    FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator zs;
-
-    xs.addKey(0.f, 1.f);
-    ys.addKey(0.f, 1.f);
-    zs.addKey(0.f, 1.f);
+    color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+    color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+    color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
     TransformF *    trns  = new TransformF                ();
-
-    trns->addScale( xs, ys, zs );
 
     FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
     FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
     FloatInterpolator zt;
 
     xt.addKey(0.f, -1.f);
-    //yt.addKey(0.f, 0.f);
     yt.addKey(0.f, -5.f);
     zt.addKey(0.f, -5.f);
 
@@ -451,27 +394,11 @@ model::BasicNode *     Text1()
 
     trns->addTranslation( xt, yt, zt );
 
-    model::SimpleTransformChannel      * stch  = new model::SimpleTransformChannel();
-    stch->AddTransform( trns );
+    trns->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
 
+    auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64, color, trns );
 
-    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
-
-    color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-
-    color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-
-    color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-
-    color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
-
-
-
-    texPlugin->SetTransformChannel( stch );
-    texPlugin->SetPixelShaderChannel     ( new model::TextPixelShaderChannel( "../dep/media/shaders/text.frag", color ) );
-    texPlugin->SetVertexShaderChannel    ( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
-
-    root->AddPlugin                 ( texPlugin );
+    root->AddPlugin( texPlugin );
 
     return root;
 }
@@ -484,31 +411,15 @@ model::BasicNode *     Text2()
 
     std::wstring str  = LoadUtf8FileToString( L"text_example.txt");
 
-    auto texPlugin = new model::SimpleTextPlugin( str, "../dep/Media/fonts/times.ttf", 128 );
-    //auto texPlugin = new model::SimpleTextPlugin( L"Litwo! Ojczyzno moja! ty jesteœ jak zdrowie.\nIle ci trzeba ceniæ, ten tylko siê dowie,\nKto ciê straci³. Dziœ piêknoœæ tw¹ w ca³ej ozdobie\nWidzê i opisujê, bo têskniê po tobie."
-    //                                                , fontFile );
-
-    //auto texPlugin = new model::SimpleTextPlugin( L"Za¿ó³æ gêœl¹ jaŸñ.", fontFile );
-        
-
-    FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator zs;
-
-    xs.addKey(0.f, 2.f);
-    ys.addKey(0.f, 2.f);
-    zs.addKey(0.f, 2.f);
-
     TransformF *    trns  = new TransformF                ();
 
-    trns->addScale( xs, ys, zs );
+    trns->addScale( CreateConstValueFloat( 2.f ), CreateConstValueFloat( 2.f ), CreateConstValueFloat( 2.f ) );
 
     FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
     FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
     FloatInterpolator zt;
 
     xt.addKey(0.f, -1.f);
-    //yt.addKey(0.f, 0.f);
     yt.addKey(0.f, -5.f);
     zt.addKey(0.f, -0.5f);
 
@@ -516,27 +427,16 @@ model::BasicNode *     Text2()
 
     trns->addTranslation( xt, yt, zt );
 
-    model::SimpleTransformChannel      * stch  = new model::SimpleTransformChannel();
-    stch->AddTransform( trns );
-
-
     Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
 
     color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-
     color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-
     color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-
     color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
+    auto texPlugin = CreateTextPlugin( str, "../dep/Media/fonts/times.ttf", 128, color, trns );
 
-
-    texPlugin->SetTransformChannel( stch );
-    texPlugin->SetPixelShaderChannel     ( new model::TextPixelShaderChannel( "../dep/media/shaders/text.frag", color ) );
-    texPlugin->SetVertexShaderChannel    ( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
-
-    root->AddPlugin                 ( texPlugin );
+    root->AddPlugin( texPlugin );
 
     return root;
 }
@@ -547,76 +447,32 @@ model::BasicNode *          ExtrudedRedRect()
 {
     model::BasicNode * root = new model::BasicNode();
 
-    ///////////////////////////// Geometry plugin //////////////////////////
-    FloatInterpolator w; w.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator h; h.setWrapPostMethod( bv::WrapMethod::pingPong );
-    
-    w.addKey(0.f, 1.f);
-    h.addKey(0.f, 1.f);
-
-    model::GeometryRectPlugin*          rectPlugin = new model::GeometryRectPlugin(w, h);
-
-    /// Set Geometry Channel
+    model::GeometryRectPlugin*          rectPlugin  = CreateGeometryRectPlugin(1.f, 1.f);
 
     model::AnimatedStripComponent *     rect        = model::AnimatedStripComponent::Create( 2.f, 1.f, 10, 0.f, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 );
 
-    model::GeometryChannelDescriptor desc;
+    model::GeometryChannel *            geomCh      = CreateGeometryChannel( rect );
 
-    for( auto compDesc : rect->GetVertexAttributeChannels() )
-    {
-        desc.AddVertexAttrChannelDesc( static_cast< const model::VertexAttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
-    }
-
-    model::GeometryChannel *    geomCh      = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
-    geomCh->AddConnectedComponent( rect );
     rectPlugin->SetGeometryChannel( geomCh );
 
 
     /// Set Transform Channel
     TransformF *    trans  = new TransformF                ();
 
-    FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator zs;
+    trans->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
+    trans->addTranslation( CreateConstValueFloat( -2.f ), CreateConstValueFloat( 1.5f ), CreateConstValueFloat( 0.f ) );
 
-    xs.addKey(0.f, 1.f);
-    ys.addKey(0.f, 1.f);
-    zs.addKey(0.f, 1.f);
+    model::ITransformChannel*      trasformChannel  = CreateTransformChannel( trans );
 
-    trans->addScale( xs, ys, zs );
+    rectPlugin->SetTransformChannel( trasformChannel );
 
-    FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
-    FloatInterpolator zt;
-
-    xt.addKey(0.f, -2.f);
-    yt.addKey(0.f, 1.5f);
-    zt.addKey(0.f, 0.f);
-
-    trans->addTranslation( xt, yt, zt );
-
-    model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
-    trasformChannel->AddTransform( trans );
-
-
-    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
-    color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-
-    rectPlugin->SetTransformChannel      ( trasformChannel );
     root->AddPlugin(rectPlugin);
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
-    auto solidPlugin = new model::SolidColorPlugin( rectPlugin );
+    auto solidPlugin = CreateSolidColorPlugin( rectPlugin, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
 
-    // Set Pixel Shader Channel
-    solidPlugin->SetPixelShaderChannel    ( new model::SolidColorShaderChannel( "../dep/media/shaders/solid.frag", color ) );
-
-    FloatInterpolator extrudeScale; extrudeScale.setWrapPostMethod( bv::WrapMethod::pingPong );
-
-    extrudeScale.addKey(0.f, 1.f);
-
-    solidPlugin->SetGeometryShaderChannel ( new model::ExtrudeGeometryShaderChannel("../dep/media/shaders/extrude.geom", extrudeScale) );
+    solidPlugin->SetGeometryShaderChannel ( CreateGeometryShaderExtrude( 1.f ) );
 
     root->AddPlugin(solidPlugin);
 
@@ -627,28 +483,13 @@ model::BasicNode *          ExtrudedTexturedRing()
 {
     model::BasicNode * root = new model::BasicNode();
 
-    ///////////////////////////// Geometry plugin //////////////////////////
-    FloatInterpolator w; w.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator h; h.setWrapPostMethod( bv::WrapMethod::pingPong );
-    
-    w.addKey(0.f, 1.f);
-    h.addKey(0.f, 1.f);
-
     model::GeometryRingPlugin*          ringPlugin = new model::GeometryRingPlugin();
 
     /// Set Geometry Channel
 
-    model::RingComponent *     ring        = model::RingComponent::Create(0.f, 1.5f * 3.14f, 1.f, 2.f, 200 );
+    model::RingComponent *      ring        = model::RingComponent::Create(0.f, 1.5f * 3.14f, 1.f, 2.f, 200 );
 
-    model::GeometryChannelDescriptor desc;
-
-    for( auto compDesc : ring->GetVertexAttributeChannels() )
-    {
-        desc.AddVertexAttrChannelDesc( static_cast< const model::VertexAttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
-    }
-
-    model::GeometryChannel *    geomCh      = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
-    geomCh->AddConnectedComponent( ring );
+    model::GeometryChannel *    geomCh      = CreateGeometryChannel( ring );
     ringPlugin->SetGeometryChannel( geomCh );
 
 
@@ -675,41 +516,21 @@ model::BasicNode *          ExtrudedTexturedRing()
 
     trans->addTranslation( xt, yt, zt );
 
-    model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
-    trasformChannel->AddTransform( trans );
+    trans->addScale( CreateConstValueFloat( 0.25f ), CreateConstValueFloat( 0.25f ), CreateConstValueFloat( 1.f ) );
+    trans->addTranslation( CreateConstValueFloat( -1.f ), CreateConstValueFloat( -1.f ), CreateConstValueFloat( 0.f ) );
 
-
-    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
-    color.addKey(0.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    auto trasformChannel  = CreateTransformChannel( trans );
 
     ringPlugin->SetTransformChannel      ( trasformChannel );
+
     root->AddPlugin(ringPlugin);
 
-    ///////////////////////////// Texture plugin //////////////////////////// 
-
-
     std::vector< std::string > textures;
-
     textures.push_back( "simless_01.jpg" );
 
-    auto texturePlugin = new model::SimpleTexturePlugin( ringPlugin, textures );
+    auto texturePlugin  = CreateTexturePlugin( ringPlugin, textures );
 
-    // Set Pixel Shader Channel
-    std::vector<TransformF> txMat;
-    std::vector<FloatInterpolator> alphas;
-    texturePlugin->SetPixelShaderChannel( new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
-                                        , alphas
-                                        , txMat )
-                                        );
-
-    texturePlugin->SetVertexShaderChannel( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" )
-                                        );
-
-    FloatInterpolator extrudeScale; extrudeScale.setWrapPostMethod( bv::WrapMethod::pingPong );
-
-    extrudeScale.addKey(0.f, 1.f);
-
-    texturePlugin->SetGeometryShaderChannel ( new model::ExtrudeGeometryShaderChannel("../dep/media/shaders/extrudeTexture.geom", extrudeScale) );
+    texturePlugin->SetGeometryShaderChannel ( CreateGeometryShaderExtrude( 1.f ) );
 
     root->AddPlugin(texturePlugin);
 
