@@ -15,7 +15,7 @@ namespace bv { namespace model {
 
     // ******************************
 //
-GeometryChannelVariableTopology::GeometryChannelVariableTopology     (  float size, float speed, int numSegments, int numComponents )
+GeometryChannelVariableTopology::GeometryChannelVariableTopology     (  float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
     : GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP )
 {
     assert( numSegments >= 1 );
@@ -51,9 +51,9 @@ bool    GeometryChannelVariableTopology::NeedsPositionsUpdate        ( float t )
 
 // ******************************
 //
-GeometryChannelVariableTopology *   GeometryChannelVariableTopology::Create  ( float size, float speed, int numSegments, int numComponents )
+GeometryChannelVariableTopology *   GeometryChannelVariableTopology::Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
 {
-    GeometryChannelVariableTopology * channel = new GeometryChannelVariableTopology( size, speed, numSegments, numComponents );
+    GeometryChannelVariableTopology * channel = new GeometryChannelVariableTopology( size, speed, oscilationSpeed, numSegments, numComponents );
     return channel;
 }
 

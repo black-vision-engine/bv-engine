@@ -23,7 +23,7 @@ private:
 
 private:
 
-                    GeometryChannelVariableTopology     ( float size, float speed, int numSegments, int numComponents );
+                    GeometryChannelVariableTopology     ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents );
 
 public:
 
@@ -34,7 +34,7 @@ public:
     virtual bool    NeedsPositionsUpdate                ( float t ) const;
     virtual bool    NeedsTopologyUpdate                 ( float t ) const;
 
-    static GeometryChannelVariableTopology *    Create  ( float size, float speed, int numSegments, int numComponents );
+    static GeometryChannelVariableTopology *    Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents );
 
 };
 
