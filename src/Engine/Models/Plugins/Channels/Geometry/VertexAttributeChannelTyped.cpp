@@ -105,6 +105,13 @@ const char *            Float2VertexAttributeChannel::GetData()         const
 
 // *********************************
 //
+std::vector< glm::vec2 > &  Float2VertexAttributeChannel::GetVertices()
+{
+    return m_attributes;
+}
+
+// *********************************
+//
 void                    Float2VertexAttributeChannel::AddVertexAttribute ( const glm::vec2 & v )
 {
     m_attributes.push_back(v);

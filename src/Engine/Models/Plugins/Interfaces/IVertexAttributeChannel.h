@@ -21,7 +21,6 @@ public:
     virtual unsigned int                                GetNumEntries   ()  const = 0;
     
     virtual const char *                                GetData         ()  const = 0;
-
 };
 
 } // model
