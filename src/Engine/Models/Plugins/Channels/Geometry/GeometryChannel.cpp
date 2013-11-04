@@ -31,7 +31,12 @@ GeometryChannel::GeometryChannel     ( PrimitiveType type, const GeometryChannel
 // *********************************
 //
 GeometryChannel::~GeometryChannel   ()
-{}
+{
+    for( auto cc : m_connectedComponents )
+    {
+        delete cc;
+    }
+}
 
 // *********************************
 //

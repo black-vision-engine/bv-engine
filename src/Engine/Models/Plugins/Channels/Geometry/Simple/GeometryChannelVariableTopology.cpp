@@ -10,6 +10,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
 
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/VariableTopologyStripComponent.h"
 
 namespace bv { namespace model {
 
@@ -54,6 +55,29 @@ bool    GeometryChannelVariableTopology::NeedsPositionsUpdate        ( float t )
 GeometryChannelVariableTopology *   GeometryChannelVariableTopology::Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
 {
     GeometryChannelVariableTopology * channel = new GeometryChannelVariableTopology( size, speed, oscilationSpeed, numSegments, numComponents );
+    
+    float defaultDuration = 2.0f;
+    float defaultOscilation = oscilationSpeed;
+    float defaultScale = 1.f;
+    float radius = 3.f;
+    float dz = 0.1f;
+
+    for( int i = 0; i < numComponents; ++i )
+    {
+        float alpha = (float) i * TWOPI_F / (float) numComponents;
+
+        float duration = defaultDuration / (float) (i + 1);
+        float oscilation = defaultOscilation / (float) (i + 1);
+        float scale = defaultScale / (float) (i + 1);
+
+        float x = radius * cosf( alpha );
+        float y = radius * sinf( alpha );
+        float z = dz * (float) i;
+
+        //VariableTopologyStripComponent * cc = new VariableTopologyStripComponent( size, speed, duration, numSegments, oscilation, scale, x, y, z );
+
+    }
+
     return channel;
 }
 
