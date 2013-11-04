@@ -11,6 +11,11 @@
       <Filter>MockFonts</Filter>
     </ClCompile>
     <ClCompile Include="AnotherTestScene.cpp" />
+    <ClCompile Include="drzewo\BlackTree.cpp" />
+    <ClCompile Include="drzewo\Scena.cpp" />
+    <ClCompile Include="drzewo\pomocnicze\auxilary.cpp" />
+    <ClCompile Include="drzewo\TreeBuilder.cpp" />
+    <ClCompile Include="TempFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
@@ -24,10 +29,36 @@
     <ClInclude Include="MockFonts\fttester.h">
       <Filter>MockFonts</Filter>
     </ClInclude>
+    <ClInclude Include="drzewo\pomocnicze\auxilary.hpp">
+      <Filter>drzewo</Filter>
+    </ClInclude>
+    <ClInclude Include="drzewo\BlackTree.h">
+      <Filter>drzewo</Filter>
+    </ClInclude>
+    <ClInclude Include="drzewo\rapidxml\rapidxml.hpp">
+      <Filter>drzewo</Filter>
+    </ClInclude>
+    <ClInclude Include="drzewo\rapidxml\rapidxml_iterators.hpp">
+      <Filter>drzewo</Filter>
+    </ClInclude>
+    <ClInclude Include="drzewo\rapidxml\rapidxml_print.hpp">
+      <Filter>drzewo</Filter>
+    </ClInclude>
+    <ClInclude Include="drzewo\rapidxml\rapidxml_utils.hpp">
+      <Filter>drzewo</Filter>
+    </ClInclude>
+    <ClInclude Include="drzewo\Scena.h">
+      <Filter>drzewo</Filter>
+    </ClInclude>
+    <ClInclude Include="drzewo\TreeBuilder.h" />
+    <ClInclude Include="TempFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MockFonts">
       <UniqueIdentifier>{b5ecdda5-27e9-4391-9124-b487985d0b97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="drzewo">
+      <UniqueIdentifier>{6b4e1db7-b59a-4158-9328-e026dca86355}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

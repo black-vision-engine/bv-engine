@@ -1,6 +1,8 @@
 #pragma once
-
+#include "drzewo\TreeBuilder.h"
 #include "Mathematics\Interpolators\Interpolators.h"
+
+
 
 namespace bv
 {
@@ -9,6 +11,8 @@ namespace model
 {
     class BasicNode;
 }
+
+
 
 // ********************************
 class TestParamFactory
@@ -31,6 +35,7 @@ public:
 
 
     static  model::BasicNode *      AnotherTestScene        ();
+	static  model::BasicNode *      XMLTestScene ();
     static  model::BasicNode *      AnimatedTestScene       ();
 
 };

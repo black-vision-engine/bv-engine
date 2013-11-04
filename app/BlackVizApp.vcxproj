@@ -71,10 +71,15 @@
   <ItemGroup>
     <ClCompile Include="AnotherTestScene.cpp" />
     <ClCompile Include="bvApp.cpp" />
+    <ClCompile Include="drzewo\BlackTree.cpp" />
+    <ClCompile Include="drzewo\pomocnicze\auxilary.cpp" />
+    <ClCompile Include="TempFactory.cpp" />
+    <ClCompile Include="drzewo\Scena.cpp" />
     <ClCompile Include="initmess.cpp" />
     <ClCompile Include="MockFonts\fttester.cpp" />
     <ClCompile Include="MockFonts\MockFont.cpp" />
     <ClCompile Include="MockScenes.cpp" />
+    <ClCompile Include="drzewo\TreeBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\BlackViz.vcxproj">
@@ -83,10 +88,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
+    <ClInclude Include="drzewo\BlackTree.h" />
+    <ClInclude Include="drzewo\pomocnicze\auxilary.hpp" />
+    <ClInclude Include="TempFactory.h" />
+    <ClInclude Include="drzewo\rapidxml\rapidxml.hpp" />
+    <ClInclude Include="drzewo\rapidxml\rapidxml_iterators.hpp" />
+    <ClInclude Include="drzewo\rapidxml\rapidxml_print.hpp" />
+    <ClInclude Include="drzewo\rapidxml\rapidxml_utils.hpp" />
+    <ClInclude Include="drzewo\Scena.h" />
     <ClInclude Include="MockFonts\fttester.h" />
     <ClInclude Include="MockFonts\Glyph.h" />
     <ClInclude Include="MockFonts\MockFont.h" />
     <ClInclude Include="MockScenes.h" />
+    <ClInclude Include="drzewo\TreeBuilder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

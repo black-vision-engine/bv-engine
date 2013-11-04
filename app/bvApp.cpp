@@ -102,7 +102,14 @@ void BlackVisionApp::OnIdle		()
         std::cout.precision(4);
         //std::cout << "FPS: " << 1.0 / frameUpdate << std::endl;
         //std::cout << "Vertex "<<vertexCount<<" Model: " << modeldt * 1000.0 << "  Manager: " << managerdt * 1000.0 << "  Engine: " << enginedt * 1000.0 << " Render: " << renderdt * 1000.0 << " Total: " << frameUpdate * 1000.0 << std::endl;
-        std::cout << "FPS: " << 1.0 / frameUpdate << " frame time: " << frameUpdate * 1000.0 << std::endl;
+        
+		
+		std::ostringstream  s;
+		s<<"FPS: " << 1.0 / frameUpdate << " frame time: " << frameUpdate * 1000.0 << std::endl;
+		string ss = s.str();
+		std::wstring stemp = std::wstring(ss.begin(), ss.end());
+		LPCWSTR sw = stemp.c_str();
+		SetWindowTextW(handle,sw);
     }
 }
 
@@ -163,9 +170,9 @@ bool BlackVisionApp::OnInitialize       ()
     //model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
     //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
 
-    //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
+    model::BasicNode * root = TestScenesFactory::XMLTestScene();
      
-    model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
+    //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
 
     m_modelScene = model::ModelScene::Create( root, new Camera() );
 
