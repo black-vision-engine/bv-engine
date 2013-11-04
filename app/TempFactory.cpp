@@ -91,7 +91,7 @@ namespace bv
 
 		model::ITransformChannel      * stch  = CreateTransformChannel( trans );
 
-		texPlugin->SetTransformChannel( stch );	
+		texPlugin->SetTransformChannel( stch );
 
 		return texPlugin;
 	}

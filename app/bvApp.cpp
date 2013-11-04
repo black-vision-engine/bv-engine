@@ -170,9 +170,9 @@ bool BlackVisionApp::OnInitialize       ()
     //model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
     //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
 
-    model::BasicNode * root = TestScenesFactory::XMLTestScene();
+    //model::BasicNode * root = TestScenesFactory::XMLTestScene();
      
-    //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
+    model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
 
     m_modelScene = model::ModelScene::Create( root, new Camera() );
 
