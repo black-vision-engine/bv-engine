@@ -87,6 +87,13 @@ void                     VariableTopologyStripComponent::Update         ( float 
 
 // *******************************
 //
+float               VariableTopologyStripComponent::ComponentDuration           () const
+{
+    return m_segmentDeltaTime / m_speed;
+}
+
+// *******************************
+//
 VariableTopologyStripComponent::~VariableTopologyStripComponent                 ()
 {
 }

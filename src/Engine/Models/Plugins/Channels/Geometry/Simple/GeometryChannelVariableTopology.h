@@ -10,7 +10,7 @@ class GeometryChannelVariableTopology : public GeometryChannel
 {
 private:
 
-    std::vector< VariableTopologyStripComponent  * >    m_allConnectedComponents;
+    std::vector< VariableTopologyStripComponent  * >    m_vtConnectedComponents;
 
     float   m_size;
     float   m_speed;
@@ -18,6 +18,8 @@ private:
     int     m_numSegments;
     int     m_numComponents;
 
+    bool    m_needMoreUpdates;
+    float   m_curComponentStartTime;
     int     m_numActiveComponents;
     int     m_curComponent;
 
@@ -31,8 +33,11 @@ public:
 
     virtual void    Update                              ( float t );
 
+    virtual bool    IsTimeInvariant                     ()          const;
     virtual bool    NeedsPositionsUpdate                ( float t ) const;
     virtual bool    NeedsTopologyUpdate                 ( float t ) const;
+
+    virtual bool    CanBeConnectedTo                    ( IGeometryChannel * channel ) const;
 
     static GeometryChannelVariableTopology *    Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents );
 

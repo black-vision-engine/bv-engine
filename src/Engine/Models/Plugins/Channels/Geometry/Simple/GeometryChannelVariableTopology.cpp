@@ -26,6 +26,9 @@ GeometryChannelVariableTopology::GeometryChannelVariableTopology     (  float si
     m_size = size;
     m_numSegments = numSegments;
     m_numComponents = numComponents;
+    m_curComponentStartTime = 0.f;
+    m_numActiveComponents = 1;
+    m_needMoreUpdates = true;
 }
 
 // ******************************
@@ -38,16 +41,71 @@ GeometryChannelVariableTopology::~GeometryChannelVariableTopology    ()
 //
 void    GeometryChannelVariableTopology::Update                      ( float t )
 {
-    assert( m_connectedComponents.size() == 1 );
+    if( !m_needMoreUpdates )
+    {
+        return;
+    }
 
-    m_connectedComponents[ 0 ]->Update( t );
+    float pauseTime = 1.f;
+    float totalTime = 0.f;
+
+    for( int i = 0; i < m_numActiveComponents; ++i )
+    {
+        totalTime += pauseTime + m_vtConnectedComponents[ i ]->ComponentDuration();
+    }
+
+    float totalActiveTime = totalTime - pauseTime;
+    auto cc = m_vtConnectedComponents[ m_curComponent ];
+
+    if ( totalActiveTime < m_curComponentStartTime + cc->ComponentDuration() ) //active component requires update
+    {
+        cc->Update( t );
+    }
+    else if( totalTime < m_curComponentStartTime + cc->ComponentDuration() ) //pause - do nothing
+    {
+        return;
+    }
+    else //and now to the next component
+    {
+        m_curComponent++;
+
+        if ( m_curComponent >= m_numComponents )
+        {
+            m_needMoreUpdates = false;
+        }
+        else
+        {
+            m_curComponentStartTime = totalTime;
+        }
+    }
 }
 
 // ******************************
 //
 bool    GeometryChannelVariableTopology::NeedsPositionsUpdate        ( float t ) const
 {
-    return true;
+    return false;
+}
+
+// ******************************
+//
+bool    GeometryChannelVariableTopology::NeedsTopologyUpdate         ( float t ) const
+{
+    return m_vtConnectedComponents[ m_curComponent ]->TopologyChanged( t );
+}
+
+// ******************************
+//
+bool    GeometryChannelVariableTopology::IsTimeInvariant            () const
+{
+    return m_needMoreUpdates;
+}
+
+// ******************************
+//
+bool    GeometryChannelVariableTopology::CanBeConnectedTo                    ( IGeometryChannel * channel ) const
+{
+    return false;
 }
 
 // ******************************

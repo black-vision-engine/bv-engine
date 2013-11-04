@@ -40,6 +40,7 @@ public:
 
     virtual void        Update                          ( float t );
 
+    float               ComponentDuration               () const;
 
 private:
 
