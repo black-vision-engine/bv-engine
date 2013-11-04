@@ -74,8 +74,14 @@ GeometryChannelVariableTopology *   GeometryChannelVariableTopology::Create  ( f
         float y = radius * sinf( alpha );
         float z = dz * (float) i;
 
-        //VariableTopologyStripComponent * cc = new VariableTopologyStripComponent( size, speed, duration, numSegments, oscilation, scale, x, y, z );
+        VariableTopologyStripComponent * cc = VariableTopologyStripComponent::Create( size, speed, duration, numSegments, oscilation, scale, x, y, z );
 
+        if ( i == 0 )
+        {
+            channel->SetDescriptor( DescriptorFromConnectedComponent( cc ) );
+        }
+    
+        channel->AddConnectedComponent( cc );
     }
 
     return channel;

@@ -50,6 +50,8 @@ private:
     glm::vec3           TopPosition                     ( const glm::vec3 & val, const glm::vec3 & normal ) const;
     glm::vec3           BottomPosition                  ( const glm::vec3 & val, const glm::vec3 & normal ) const;
 
+public:
+
     static  VariableTopologyStripComponent *    Create  ( float size, float speed, float duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ );
 
 };
