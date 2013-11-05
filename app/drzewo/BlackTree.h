@@ -2,7 +2,7 @@
 
 #include "pomocnicze\auxilary.hpp"
 #include "rapidxml\rapidxml.hpp" //"rapidxml.hpp"
-#include "Scena.h";
+#include "Scena.h"
 #include <iostream>
 #include <string>
 #include <conio.h>

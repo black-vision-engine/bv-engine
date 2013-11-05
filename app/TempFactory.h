@@ -25,15 +25,19 @@ namespace bv
     namespace model 
 	{
 		class BasicNode;
+        class SimpleTransformPlugin;
+        class GeometryRingPlugin;
 	}
 
 
 	FloatInterpolator                   CreateConstValueFloat               ( float val );
 	
-	Vec4Interpolator                   CreateConstValueVec4                 ( const glm::vec4& val );
+	Vec4Interpolator                    CreateConstValueVec4                 ( const glm::vec4& val );
 
 
 	model::GeometryRectPlugin*          CreateGeometryRectPlugin            ( float w, float h );
+
+    model::GeometryRingPlugin*          CreateGeometryRingPlugin            ( float startAngle, float endAngle, float innerRadius, float outerRadius, int segmentsNum );
 	
 	model::GeometryChannel*             CreateGeometryChannel               (model::IConnectedComponent* connComp);
 	
@@ -46,10 +50,11 @@ namespace bv
 
 	model::SimpleTexturePlugin*         CreateTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths );
 	
+    model::SimpleTransformPlugin*       CreateTransformPlugin               ( const model::IPlugin* prev, TransformF* trans );
 
-	model::SimpleTextPlugin*            CreateTextPlugin                    ( const std::wstring& text, const std::string& fontFile, int size, const Vec4Interpolator& color, TransformF* trans );
+	model::SimpleTextPlugin*            CreateTextPlugin                    ( const std::wstring& text, const std::string& fontFile, int size, const Vec4Interpolator& color );
 	model::IGeometryShaderChannel*      CreateGeometryShaderExtrude         ( float scale );
-	size_t GetSizeOfFile(const std::wstring& path);
 
-	std::wstring LoadUtf8FileToString(const std::wstring& filename);
+	size_t                              GetSizeOfFile                       (const std::wstring& path);
+	std::wstring                        LoadUtf8FileToString                (const std::wstring& filename);
 }

@@ -12,8 +12,13 @@ namespace bv { namespace model {
 
 const std::string SimpleTextPluginPD::pluginName = "SimpleTextPlugin";
 
+SimpleTextPlugin* SimpleTextPlugin::Create( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize )
+{
+    return new SimpleTextPlugin( text, fontFileName, fontSize );
+}
+
 SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize )
-    : m_text( new Text( text, fontFileName, fontSize * (1.25f) /* points to pixel proportion */) ) // FIXME:
+    : m_text( new Text( text, fontFileName, int( fontSize * (1.25f) ) /* points to pixel proportion */) ) // FIXME:
 {
     m_textures.push_back( LoadAtlas( "Tex0" ) );
 

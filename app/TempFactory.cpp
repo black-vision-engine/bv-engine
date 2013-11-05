@@ -1,4 +1,6 @@
 #include "TempFactory.h"
+#include "Engine/Models/Plugins/SimpleTransformPlugin.h"
+#include "Engine/Models/Plugins/GeometryPluginRing.h"
 
 namespace bv
 {
@@ -27,8 +29,33 @@ namespace bv
 		wi.addKey(0.f, w);
 		hi.addKey(0.f, h);
 
-		return new model::GeometryRectPlugin(wi, hi);
+        auto rectPlugin = new model::GeometryRectPlugin(wi, hi);
+
+        /// Set Geometry Channel
+        model::RectComponent *     rect        = model::RectComponent::Create( w, h );
+
+        model::GeometryChannel *   geomCh      = CreateGeometryChannel( rect );
+
+        rectPlugin->SetGeometryChannel( geomCh );
+
+		return rectPlugin;
 	}
+
+
+	model::GeometryRingPlugin*          CreateGeometryRingPlugin            ( float startAngle, float endAngle, float innerRadius, float outerRadius, int segmentsNum )
+	{
+        model::GeometryRingPlugin*  ringPlugin = new model::GeometryRingPlugin();
+
+        // Set Geometry Channel
+
+        model::RingComponent *      ring        = model::RingComponent::Create( startAngle, endAngle, innerRadius, outerRadius, segmentsNum );
+
+        model::GeometryChannel *    geomCh      = CreateGeometryChannel( ring );
+
+        ringPlugin->SetGeometryChannel( geomCh );
+
+        return ringPlugin;
+    }
 
 	model::GeometryChannel*             CreateGeometryChannel               (model::IConnectedComponent* connComp)
 	{
@@ -82,19 +109,20 @@ namespace bv
 		return texturePlugin;
 	}
 
-	model::SimpleTextPlugin*            CreateTextPlugin                    ( const std::wstring& text, const std::string& fontFile, int size, const Vec4Interpolator& color, TransformF* trans )
+	model::SimpleTextPlugin*            CreateTextPlugin                    ( const std::wstring& text, const std::string& fontFile, int size, const Vec4Interpolator& color)
 	{
-		auto texPlugin = new model::SimpleTextPlugin( text, fontFile, size );
+        auto texPlugin = model::SimpleTextPlugin::Create( text, fontFile, size );
 
 		texPlugin->SetPixelShaderChannel     ( new model::TextPixelShaderChannel( "../dep/media/shaders/text.frag", color ) );
 		texPlugin->SetVertexShaderChannel    ( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
 
-		model::ITransformChannel      * stch  = CreateTransformChannel( trans );
-
-		texPlugin->SetTransformChannel( stch );
-
 		return texPlugin;
 	}
+
+    model::SimpleTransformPlugin*       CreateTransformPlugin               (  const model::IPlugin* prev, TransformF* trans )
+    {
+        return model::SimpleTransformPlugin::Create( prev, trans );
+    }
 
 	model::IGeometryShaderChannel*      CreateGeometryShaderExtrude         ( float scale )
 	{
@@ -112,7 +140,8 @@ namespace bv
 	std::wstring LoadUtf8FileToString(const std::wstring& filename)
 	{
 		std::wstring buffer;            // stores file contents
-		FILE* f = _wfopen(filename.c_str(), L"rtS, ccs=UTF-8");
+		FILE* f = nullptr;
+        _wfopen_s(&f, filename.c_str(), L"rtS, ccs=UTF-8");
 
 		// Failed to open file
 		if (f == NULL)

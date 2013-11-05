@@ -2,6 +2,7 @@
 #include "TreeBuilder.h"
 #include "Engine/Models/BasicNode.h"
 #include "Mathematics/Transform/MatTransform.h"
+#include "Engine/Models/Plugins/SimpleTransformPlugin.h"
 #include <fstream>
 #include <boost/algorithm/string.hpp>
 
@@ -110,9 +111,12 @@ namespace bv{
 
 		trns->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
 
-		auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64, color, trns );
+		auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64, color );
 
-		root->AddPlugin( texPlugin );
+        root->AddPlugin( texPlugin );
+
+        root->AddPlugin( CreateTransformPlugin( texPlugin, trns ) );
+
 
 		return root;
 	}
