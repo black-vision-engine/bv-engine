@@ -59,11 +59,13 @@ void    GeometryChannelVariableTopology::Update                      ( float t )
     float totalActiveTime = totalTime - pauseTime;
     auto cc = m_vtConnectedComponents[ m_curComponent ];
 
-    if ( totalActiveTime < m_curComponentStartTime + cc->ComponentDuration() ) //active component requires update
+    float locTime = t - m_curComponentStartTime;
+
+    if ( locTime < cc->ComponentDuration() ) //active component requires update
     {
-        cc->Update( t );
+        cc->Update( locTime );
     }
-    else if( totalTime < m_curComponentStartTime + cc->ComponentDuration() ) //pause - do nothing
+    else if( locTime < cc->ComponentDuration() + pauseTime ) //pause - do nothing
     {
         return;
     }
@@ -73,11 +75,12 @@ void    GeometryChannelVariableTopology::Update                      ( float t )
 
         if ( m_curComponent >= m_numComponents )
         {
+            m_curComponent = m_numComponents - 1;
             m_needMoreUpdates = false;
         }
         else
         {
-            m_curComponentStartTime = totalTime;
+            m_curComponentStartTime = m_curComponentStartTime + cc->ComponentDuration() + pauseTime;
         }
     }
 }
@@ -121,14 +124,44 @@ void            GeometryChannelVariableTopology::AddVTConnectedComponent        
 
 // ******************************
 //
+unsigned int    GeometryChannelVariableTopology::TotalNumVertices                    ()          const
+{
+    unsigned int total = 0;
+
+    for ( int i = 0; i <= m_curComponent; ++i )
+    {
+        total += m_vtConnectedComponents[ i ]->GetNumVertices();
+    }
+
+    return total;
+}
+
+// ******************************
+//
+std::vector< IConnectedComponent * >  GeometryChannelVariableTopology::GetComponents () const
+{
+    std::vector< IConnectedComponent* > retv;
+    retv.reserve( m_curComponent + 1 );
+
+    for( int i = 0; i <= m_curComponent; ++i )
+    {
+        retv.push_back( m_vtConnectedComponents[ i ] );
+    }
+
+    return retv;
+}
+
+// ******************************
+//
 GeometryChannelVariableTopology *   GeometryChannelVariableTopology::Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
 {
     GeometryChannelVariableTopology * channel = new GeometryChannelVariableTopology( size, speed, oscilationSpeed, numSegments, numComponents );
     
-    float defaultDuration = 2.0f;
+    float defaultSpeed = speed;
+    float defaultDuration = 4.0f;
     float defaultOscilation = oscilationSpeed;
     float defaultScale = 1.f;
-    float radius = 3.f;
+    float radius = 3.5f;
     float dz = 0.1f;
 
     for( int i = 0; i < numComponents; ++i )
@@ -136,14 +169,15 @@ GeometryChannelVariableTopology *   GeometryChannelVariableTopology::Create  ( f
         float alpha = (float) i * TWOPI_F / (float) numComponents;
 
         float duration = defaultDuration / (float) (i + 1);
-        float oscilation = defaultOscilation / (float) (i + 1);
+        float oscilation = defaultOscilation * (float) (i + 1) * 0.6f;
         float scale = defaultScale / (float) (i + 1);
 
-        float x = radius * cosf( alpha );
+        float x = radius * cosf( alpha ) - 1.f;
         float y = radius * sinf( alpha );
         float z = dz * (float) i;
 
-        VariableTopologyStripComponent * cc = VariableTopologyStripComponent::Create( size, speed, duration, numSegments, oscilation, scale, x, y, z );
+        VariableTopologyStripComponent * cc = VariableTopologyStripComponent::Create( size, speed, defaultDuration, numSegments, oscilation, scale, x, y, z );
+//        VariableTopologyStripComponent * cc = VariableTopologyStripComponent::Create( size, speed, duration, numSegments, oscilation, scale, 0.f, 0.f, 0.f );
 
         if ( i == 0 )
         {

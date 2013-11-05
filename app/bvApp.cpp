@@ -63,6 +63,11 @@ void BlackVisionApp::OnIdle		()
     static DWORD startTime = GetTickCount();
     DWORD curTime = GetTickCount();
 
+    //FIXME: debug timer - don't get fooled
+    static unsigned int frame = 0;
+    //float t = float(frame) * 0.1f; ///10 fps
+    frame++;
+
     float t = float(curTime - startTime) * 0.001f;
 
         m_modelScene->Update( t );

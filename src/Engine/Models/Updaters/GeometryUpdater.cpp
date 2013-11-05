@@ -53,6 +53,14 @@ void    GeometryUpdater::Update      ( float t )
     {
         UpdateTopology( t );
     }
+    else
+    {
+        RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_out->GetRenderableArrayData() );
+        VertexArraySingleVertexBuffer * vao = rad->VAO();
+
+        vao->SetNeedsUpdateMemUpload( false );
+        vao->SetNeedsUpdateRecreation( false );
+    }
 }
 
 // *********************************
@@ -63,7 +71,7 @@ void    GeometryUpdater::UpdatePositions     ( float t )
     assert( m_out->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
 
     //FIXME: works because we allow only triangle strips here
-    //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessart
+    //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessary
     //FIXME: putting it here is not a good idea (especially when other primitive types are added)
     RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_out->GetRenderableArrayData() );
 
@@ -118,7 +126,7 @@ void    GeometryUpdater::UpdateTopology      ( float t )
     unsigned int totalNumVertivces = geomChannel->TotalNumVertices();
     
     //FIXME: works because we allow only triangle strips here
-    //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessart
+    //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessary
     //FIXME: putting it here is not a good idea (especially when other primitive types are added)
     RenderableArrayDataArraysSingleVertexBuffer * radasvb = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_out->GetRenderableArrayData() );
 
@@ -127,6 +135,7 @@ void    GeometryUpdater::UpdateTopology      ( float t )
     const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
 
     vb->Reinitialize( totalNumVertivces, geomDesc->SingleVertexEntrySize(), vbSemantic );
+    vao->ResetState();
 
     char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P
     unsigned int currentOffset = 0;

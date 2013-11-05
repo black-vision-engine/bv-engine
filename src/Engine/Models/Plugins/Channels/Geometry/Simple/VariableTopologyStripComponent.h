@@ -11,20 +11,20 @@ class VariableTopologyStripComponent: public ConnectedComponent
 {
 private:
 
-    float   m_size;
-    float   m_speed;
-    float   m_oscilationSpeed;
-    float   m_segmentDeltaTime;
-    float   m_activeDuration;
-    float   m_mainScale;
+    float           m_size;
+    float           m_speed;
+    float           m_oscilationSpeed;
+    float           m_segmentDeltaTime;
+    float           m_activeDuration;
+    float           m_mainScale;
 
-    int     numSegments;
-    int     m_activeSegment;
-    bool    m_topologyChanged;
+    int             numSegments;
+    int             m_activeSegment;
+    mutable bool    m_topologyChanged;
 
-    float   m_startX;
-    float   m_startY;
-    float   m_posZ;
+    float           m_startX;
+    float           m_startY;
+    float           m_posZ;
 
     Float3VertexAttributeChannel * m_positions;
 

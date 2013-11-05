@@ -580,11 +580,11 @@ model::BasicNode *      TestScenesFactory::AnimatedTestScene ()
 //
 model::BasicNode *      TestScenesFactory::TestSceneVariableTopology   ()
 {
-    float size              = 2.f;
-    float speed             = 0.1f;
+    float size              = 1.0f;
+    float speed             = 1.5f;
     float oscilationSpeed   = 1.f;
-    int numSegments         = 6;
-    int numComponents       = 5;
+    int numSegments         = 30;
+    int numComponents       = 4;
 
     return VariableTopologySolids( size, speed, oscilationSpeed, numSegments, numComponents );
 }

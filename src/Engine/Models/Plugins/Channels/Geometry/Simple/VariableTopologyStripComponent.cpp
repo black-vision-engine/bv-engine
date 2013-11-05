@@ -57,8 +57,6 @@ VariableTopologyStripComponent::VariableTopologyStripComponent                  
 //
 void                     VariableTopologyStripComponent::Update         ( float t )
 {
-    m_topologyChanged = false;
-
     if ( !IsActive( t ) )
     {
         return;
@@ -79,7 +77,7 @@ void                     VariableTopologyStripComponent::Update         ( float 
     m_topologyChanged = true;
 
     //Second part of first strip
-    t = m_segmentDeltaTime * nSegment;
+    t = m_segmentDeltaTime * ( nSegment + 1 );
     glm::vec3 f = EvaluateFunction( t );
     glm::vec3 n = EvaluateNormal( EvaluateVelocity( t ) );
 
@@ -91,7 +89,7 @@ void                     VariableTopologyStripComponent::Update         ( float 
 //
 float               VariableTopologyStripComponent::ComponentDuration           () const
 {
-    return m_segmentDeltaTime / m_speed;
+    return m_activeDuration / m_speed;
 }
 
 // *******************************
@@ -111,7 +109,10 @@ bool                                VariableTopologyStripComponent::IsActive    
 //
 bool                VariableTopologyStripComponent::TopologyChanged             ( float t ) const
 {
-    return m_topologyChanged;
+    bool retVal = m_topologyChanged;
+    m_topologyChanged = false;
+
+    return retVal;
 }
 
 // *******************************
@@ -122,7 +123,6 @@ glm::vec3               VariableTopologyStripComponent::EvaluateFunction        
     float x   = t * m_speed;
 
     return glm::vec3(x, val, 0.f) + glm::vec3(m_startX,m_startY, m_posZ);
-;
 }
 
 // *******************************

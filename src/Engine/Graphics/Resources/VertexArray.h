@@ -79,6 +79,8 @@ public:
     bool                        NeedsUpdateMemUpload            () const;
     bool                        NeedsUpdateRecreation           () const;
 
+    void                        ResetState                      ();
+
 };
 
 }

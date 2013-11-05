@@ -25,21 +25,24 @@ private:
 
 private:
 
-                    GeometryChannelVariableTopology     ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents );
+                            GeometryChannelVariableTopology     ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents );
 
 public:
 
-    virtual         ~GeometryChannelVariableTopology    ();
+    virtual                 ~GeometryChannelVariableTopology    ();
 
-    virtual void    Update                              ( float t );
+    virtual void            Update                              ( float t );
 
-    virtual bool    IsTimeInvariant                     ()          const;
-    virtual bool    NeedsPositionsUpdate                ( float t ) const;
-    virtual bool    NeedsTopologyUpdate                 ( float t ) const;
+    virtual bool            IsTimeInvariant                     ()          const;
+    virtual bool            NeedsPositionsUpdate                ( float t ) const;
+    virtual bool            NeedsTopologyUpdate                 ( float t ) const;
 
-    virtual bool    CanBeConnectedTo                    ( IGeometryChannel * channel ) const;
+    virtual bool            CanBeConnectedTo                    ( IGeometryChannel * channel ) const;
 
-    void            AddVTConnectedComponent             ( VariableTopologyStripComponent * cc );
+    void                    AddVTConnectedComponent             ( VariableTopologyStripComponent * cc );
+    virtual unsigned int    TotalNumVertices                    () const;
+
+    virtual std::vector< IConnectedComponent * >  GetComponents () const;
 
     static GeometryChannelVariableTopology *    Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents );
 

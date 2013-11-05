@@ -71,6 +71,7 @@ VertexArraySingleVertexBuffer::VertexArraySingleVertexBuffer   ( VertexBuffer * 
     , m_vertexDescriptor( vd )
     , m_needsUpdateMemUpload( false )
     , m_needsUpdateRecreation( false )
+    , m_numTotalVertices( 0 )
 {
 }
 
@@ -164,6 +165,16 @@ bool                        VertexArraySingleVertexBuffer::NeedsUpdateMemUpload 
 bool                        VertexArraySingleVertexBuffer::NeedsUpdateRecreation           () const
 {
     return m_needsUpdateRecreation;
+}
+
+// *******************************
+//
+void                        VertexArraySingleVertexBuffer::ResetState                      ()
+{
+    m_numTotalVertices = 0;
+    m_needsUpdateMemUpload = false;
+    m_needsUpdateRecreation = false;
+    m_ccVertexNum.clear();
 }
 
 }
