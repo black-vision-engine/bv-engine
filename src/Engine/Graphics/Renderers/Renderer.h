@@ -111,6 +111,7 @@ public: //FIXME: private
     void    Disable             ( const  VertexBuffer * vb );
 
     void    Update              ( const VertexBuffer * vb );
+    void    Recreate            ( const VertexBuffer * vb );
 
 public:
 

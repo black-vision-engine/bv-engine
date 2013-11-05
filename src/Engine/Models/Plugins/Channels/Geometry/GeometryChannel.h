@@ -38,6 +38,8 @@ public:
     virtual bool                                    NeedsPositionsUpdate( float t ) const;
     virtual bool                                    NeedsTopologyUpdate ( float t ) const;
 
+    virtual unsigned int                            TotalNumVertices    ()          const;
+
     virtual const IGeometryChannelDescriptor *      GetDescriptor       () const;
     void                                            SetDescriptor       ( const GeometryChannelDescriptor & desc );
 

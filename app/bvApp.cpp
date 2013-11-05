@@ -162,10 +162,10 @@ bool BlackVisionApp::OnInitialize       ()
 
     //model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
     //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
+    //model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
+    //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
 
-    //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
-     
-    model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
+    model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
 
     m_modelScene = model::ModelScene::Create( root, new Camera() );
 
@@ -173,8 +173,8 @@ bool BlackVisionApp::OnInitialize       ()
 
     m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
     //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, -4.f, 3.5f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 1.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-    AddCameraAnimation2  ();
+    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 8.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+//    AddCameraAnimation  ();
     //FIXME: read from configuration file and change appropriately when resoultion changes
     m_modelScene->GetCamera()->SetPerspective( 90.f, float(m_Width) / float(m_Height), 0.1f, 100.f );
 

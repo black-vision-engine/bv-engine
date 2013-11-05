@@ -318,6 +318,14 @@ void    Renderer::Update              ( const VertexBuffer * vb )
 
 // *********************************
 //
+void    Renderer::Recreate            ( const VertexBuffer * vb )
+{
+    PdrVertexBuffer * pdrVb = GetPdrVertexBuffer( vb );
+    pdrVb->Recreate( vb );
+}
+
+// *********************************
+//
 void    Renderer::Enable              ( const Texture2D * texture, int textureUnit )
 {
     PdrTexture2D * pdrTex2D = GetPdrTexture2D( texture );

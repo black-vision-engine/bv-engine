@@ -39,6 +39,8 @@ public:
 
     virtual bool    CanBeConnectedTo                    ( IGeometryChannel * channel ) const;
 
+    void            AddVTConnectedComponent             ( VariableTopologyStripComponent * cc );
+
     static GeometryChannelVariableTopology *    Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents );
 
 };

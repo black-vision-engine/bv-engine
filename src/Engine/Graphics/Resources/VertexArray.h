@@ -53,6 +53,7 @@ private:
     //unsigned int        m_vertexBuferOffset;
 
     bool                        m_needsUpdateMemUpload;
+    bool                        m_needsUpdateRecreation;
 
 public:
 
@@ -73,7 +74,11 @@ public:
     unsigned int                GetNumTotalVertices             () const;
 
     void                        SetNeedsUpdateMemUpload         ( bool needsUpdateMemUpload );
+    void                        SetNeedsUpdateRecreation        ( bool needsUpdateRecreation );
+
     bool                        NeedsUpdateMemUpload            () const;
+    bool                        NeedsUpdateRecreation           () const;
+
 };
 
 }

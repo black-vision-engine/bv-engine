@@ -46,8 +46,8 @@ VariableTopologyStripComponent::VariableTopologyStripComponent                  
     //Add one segment (just so that something is rendered)
     vertArrtF3->AddVertexAttribute( TopPosition( f0, n0 ) );
     vertArrtF3->AddVertexAttribute( BottomPosition( f0, n0 ) );
-    vertArrtF3->AddVertexAttribute( BottomPosition( f1, n1 ) );
     vertArrtF3->AddVertexAttribute( TopPosition( f1, n1 ) );
+    vertArrtF3->AddVertexAttribute( BottomPosition( f1, n1 ) );
 
     m_vertexAttributeChannels.push_back( vertArrtF3 );
     m_positions = vertArrtF3;
@@ -73,6 +73,8 @@ void                     VariableTopologyStripComponent::Update         ( float 
         return;
     }
 
+    m_activeSegment = nSegment;
+
     //FIXME: variable number of segments should be allowed - this way we explicitely require fast updates (at most one segment per update)
     m_topologyChanged = true;
 
@@ -81,8 +83,8 @@ void                     VariableTopologyStripComponent::Update         ( float 
     glm::vec3 f = EvaluateFunction( t );
     glm::vec3 n = EvaluateNormal( EvaluateVelocity( t ) );
 
-    m_positions->AddVertexAttribute( BottomPosition( f, n ) );
     m_positions->AddVertexAttribute( TopPosition( f, n ) );
+    m_positions->AddVertexAttribute( BottomPosition( f, n ) );
 }
 
 // *******************************

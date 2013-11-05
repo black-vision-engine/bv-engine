@@ -102,9 +102,10 @@ SceneNode*                  BasicNode::BuildScene()
     {
         case PrimitiveType::PT_TRIANGLE_STRIP:
         {
-            //FIXME: it should be constructed as a righ type RenderableArrayDataArraysSingleVertexBuffer * in the first place
-            RenderableArrayDataArraysSingleVertexBuffer * rad = CreateRenderableArrayDataTriStrip();
-            renderEnt = new TriangleStrip( rad, effect );
+            //FIXME: it should be constructed as a proper type RenderableArrayDataArraysSingleVertexBuffer * in the first place
+            //FIXME: this long type name suggests that something wrong is happening here (easier to name design required)
+            RenderableArrayDataArraysSingleVertexBuffer * radasvb = CreateRenderableArrayDataTriStrip();
+            renderEnt = new TriangleStrip( radasvb, effect );
             break;
         }
         case PrimitiveType::PT_TRIANGLES:
@@ -508,7 +509,7 @@ RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDa
 
         vao->AddCCEntry( cc->GetNumVertices() );
 
-        AddVertexDataToVBO( &vbData[ currentOffset ], cc, desc );
+        AddVertexDataToVBO( &vbData[ currentOffset ], cc );
 
         currentOffset += cc->GetNumVertices() * desc->SingleVertexEntrySize();
     }
@@ -518,7 +519,7 @@ RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDa
 
 // ********************************
 //
-void                            BasicNode::AddVertexDataToVBO              ( char * data, IConnectedComponent * cc, const IGeometryChannelDescriptor * desc ) const
+void                            BasicNode::AddVertexDataToVBO              ( char * data, IConnectedComponent * cc ) const
 {
     unsigned int numVertices = cc->GetNumVertices();
     unsigned int offset = 0;

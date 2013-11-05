@@ -29,6 +29,7 @@ public:
     void    Unlock              ();
 
     void    Update              ( const VertexBuffer * vb );
+    void    Recreate            ( const VertexBuffer * vb );
 
     void    Bind                ();
     void    Unbind              ();
@@ -36,6 +37,7 @@ public:
 private:
 
     void    BufferData          ( const VertexBuffer * vb ) const;
+    void    CreateBuffer        ( const VertexBuffer * vb );
 
 };
 

@@ -35,6 +35,10 @@ public:
 
     void    EnableVertexAttribArray ( GLuint index );
 
+private:
+
+    void    Create                  ( Renderer * renderer, const VertexArraySingleVertexBuffer * vao );
+
 };
 
 }

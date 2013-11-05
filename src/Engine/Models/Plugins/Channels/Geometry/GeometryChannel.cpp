@@ -84,6 +84,20 @@ bool                                    GeometryChannel::NeedsTopologyUpdate ( f
 
 // *********************************
 //
+unsigned int                            GeometryChannel::TotalNumVertices    ()          const
+{
+    unsigned int total = 0;
+
+    for( auto cc : m_connectedComponents )
+    {
+        total += cc->GetNumVertices();
+    }
+
+    return total;
+}
+
+// *********************************
+//
 const IGeometryChannelDescriptor *      GeometryChannel::GetDescriptor       () const
 {
     return &m_desc;

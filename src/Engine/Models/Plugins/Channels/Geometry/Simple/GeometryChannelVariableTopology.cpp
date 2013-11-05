@@ -21,12 +21,14 @@ GeometryChannelVariableTopology::GeometryChannelVariableTopology     (  float si
 {
     assert( numSegments >= 1 );
     assert( numComponents >= 1 );
-    assert( m_speed > 0.01f );
+    assert( speed > 0.01f );
+
     m_speed = speed;
     m_size = size;
     m_numSegments = numSegments;
     m_numComponents = numComponents;
     m_curComponentStartTime = 0.f;
+    m_curComponent = 0;
     m_numActiveComponents = 1;
     m_needMoreUpdates = true;
 }
@@ -98,7 +100,7 @@ bool    GeometryChannelVariableTopology::NeedsTopologyUpdate         ( float t )
 //
 bool    GeometryChannelVariableTopology::IsTimeInvariant            () const
 {
-    return m_needMoreUpdates;
+    return !m_needMoreUpdates;
 }
 
 // ******************************
@@ -106,6 +108,15 @@ bool    GeometryChannelVariableTopology::IsTimeInvariant            () const
 bool    GeometryChannelVariableTopology::CanBeConnectedTo                    ( IGeometryChannel * channel ) const
 {
     return false;
+}
+
+// ******************************
+//
+void            GeometryChannelVariableTopology::AddVTConnectedComponent             ( VariableTopologyStripComponent * cc )
+{
+    GeometryChannelVariableTopology::AddConnectedComponent( cc );
+
+    m_vtConnectedComponents.push_back( cc );
 }
 
 // ******************************
@@ -139,7 +150,7 @@ GeometryChannelVariableTopology *   GeometryChannelVariableTopology::Create  ( f
             channel->SetDescriptor( DescriptorFromConnectedComponent( cc ) );
         }
     
-        channel->AddConnectedComponent( cc );
+        channel->AddVTConnectedComponent( cc );
     }
 
     return channel;

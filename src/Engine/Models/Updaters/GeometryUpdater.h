@@ -9,6 +9,8 @@ class RenderableEntity;
 namespace model
 {
     class IGeometryChannel;
+    class IConnectedComponent;
+    class IGeometryChannelDescriptor;
 }
 
 class GeometryUpdater : public IUpdater
@@ -29,6 +31,8 @@ private:
 
     void    UpdatePositions     ( float t );
     void    UpdateTopology      ( float t );
+
+    void    WriteVertexDataToVBO( char * data, model::IConnectedComponent * cc );
 
 };
 

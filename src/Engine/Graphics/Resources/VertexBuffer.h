@@ -17,31 +17,7 @@ public:
     virtual ~VertexBuffer	();
 
     char *	Data			() const;
-
     void    WriteToBuffer   ( const char * src, unsigned int size );
-
-    //FIXME: this SUXX PAUKE
-    template<class VertexType>
-    void    AddVertex       ( const VertexType & data )
-    {
-        assert(false);
-    }
-
-    template<>
-    void    AddVertex<glm::vec3>(const glm::vec3& data)
-    {
-            assert(m_curVertex < m_numElts);
-            memcpy(m_data + m_curVertex * m_eltSize, &data, m_eltSize);
-            m_curVertex++;
-    }
-
-    template<>
-    void    AddVertex<glm::vec2>(const glm::vec2& data)
-    {
-            assert(m_curVertex < m_numElts);
-            memcpy(m_data + m_curVertex * m_eltSize, &data, m_eltSize);
-            m_curVertex++;
-    }
 
 };
 

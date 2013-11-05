@@ -18,9 +18,9 @@
 #include "Engine/Models/Plugins/SimpleTexturePlugin.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/VertexShader/TextureVertexShaderChannel.h"
-#include "Engine\Models\Plugins\SimpleTextPlugin.h"
-#include "Engine\Models\Plugins\Channels\PixelShader\TextPixelShaderChannel.h"
-#include "Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.h"
+#include "Engine/Models/Plugins/SimpleTextPlugin.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/TextPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/GeometryShader/ExtrudeGeometryShaderChannel.h"
 
 #include <iostream>
 #include <fstream>
@@ -32,9 +32,11 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
-//#include <cmath>
+
 #include "Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.h"
 #include "Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.h"
+#include "Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.h"
+#include "Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelVariableTopology.h"
 
 namespace bv
 {
@@ -163,15 +165,13 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
-    //auto solidPlugin = CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
-
-
+    auto solidPlugin = CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
 
     //// Add plugins to node
     root->AddPlugin( geomPlugin );
-    //root->AddPlugin( solidPlugin );
+    root->AddPlugin( solidPlugin );
 
-    //return root;
+    return root;
 
 
     ///////////////////////////// Texture plugin //////////////////////////// 
@@ -184,6 +184,37 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 
     return root;
     
+}
+
+// ******************************
+//
+model::BasicNode * VariableTopologySolids( float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
+{
+    model::BasicNode * root = new model::BasicNode();
+    
+    ///////////////////////////// Geometry plugin //////////////////////////
+    model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin();
+
+    ///////////////////////////// Channels //////////////////////////
+    model::GeometryChannel *        geomChannel     = model::GeometryChannelVariableTopology::Create( size, speed, oscilationSpeed, numSegments, numComponents );
+
+    TransformF *                    trans           = new TransformF();
+    model::SimpleTransformChannel * trasformChannel = new model::SimpleTransformChannel();
+    trasformChannel->AddTransform( trans );
+
+    geomPlugin->SetGeometryChannel  ( geomChannel );
+    geomPlugin->SetTransformChannel ( trasformChannel );
+
+
+    ///////////////////////////// Solid plugin //////////////////////////// 
+
+    auto solidPlugin = CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
+
+    //// Add plugins to node
+    root->AddPlugin( geomPlugin );
+    root->AddPlugin( solidPlugin );
+
+    return root;
 }
 
 // ******************************
@@ -268,6 +299,8 @@ model::BasicNode *          TexturedRect()
 }
 
 
+// ******************************
+//
 model::BasicNode *          TexturedRing()
 {
     model::BasicNode * root = new model::BasicNode();
@@ -311,7 +344,8 @@ model::BasicNode *          TexturedRing()
 
 }
 
-
+// ******************************
+//
 size_t GetSizeOfFile(const std::wstring& path)
 {
     struct _stat fileinfo;
@@ -319,10 +353,12 @@ size_t GetSizeOfFile(const std::wstring& path)
     return fileinfo.st_size;
 }
 
+// ******************************
+//
 std::wstring LoadUtf8FileToString(const std::wstring& filename)
 {
     std::wstring buffer;            // stores file contents
-    FILE* f = _wfopen(filename.c_str(), L"rtS, ccs=UTF-8");
+    FILE* f = _wfopen(filename.c_str(), L"rtS, ccs=UTF-8"); //FIXME: COMPILER WARNING
 
     // Failed to open file
     if (f == NULL)
@@ -347,7 +383,8 @@ std::wstring LoadUtf8FileToString(const std::wstring& filename)
     return buffer;
 }
 
-
+// ******************************
+//
 model::BasicNode *     Text1()
 {
     model::BasicNode * root = new model::BasicNode();
@@ -384,8 +421,8 @@ model::BasicNode *     Text1()
     return root;
 }
 
-
-
+// ******************************
+//
 model::BasicNode *     Text2()
 {
     model::BasicNode * root = new model::BasicNode();
@@ -460,6 +497,8 @@ model::BasicNode *          ExtrudedRedRect()
     return root;
 }
 
+// ******************************
+//
 model::BasicNode *          ExtrudedTexturedRing()
 {
     model::BasicNode * root = new model::BasicNode();
@@ -501,7 +540,6 @@ model::BasicNode *          ExtrudedTexturedRing()
 } // anonymous
 
 
-
 // ******************************
 //
 model::BasicNode *          TestScenesFactory::AnotherTestScene()
@@ -536,6 +574,19 @@ model::BasicNode *      TestScenesFactory::AnimatedTestScene ()
 
     //float 
     return AnimatedSolid( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
+}
+
+// ******************************
+//
+model::BasicNode *      TestScenesFactory::TestSceneVariableTopology   ()
+{
+    float size              = 2.f;
+    float speed             = 0.1f;
+    float oscilationSpeed   = 1.f;
+    int numSegments         = 6;
+    int numComponents       = 5;
+
+    return VariableTopologySolids( size, speed, oscilationSpeed, numSegments, numComponents );
 }
 
 } // bv

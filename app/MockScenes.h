@@ -25,13 +25,13 @@ class TestScenesFactory
 {
 public:
 
-    static  model::BasicNode *      SimpeTextureTestScene   ();
-    static  model::BasicNode *      SimpeTextTestScene      ();
-    static  model::BasicNode *      SimpleMultiCCScene      ();
+    static  model::BasicNode *      SimpeTextureTestScene       ();
+    static  model::BasicNode *      SimpeTextTestScene          ();
+    static  model::BasicNode *      SimpleMultiCCScene          ();
 
-
-    static  model::BasicNode *      AnotherTestScene        ();
-    static  model::BasicNode *      AnimatedTestScene       ();
+    static  model::BasicNode *      AnotherTestScene            ();
+    static  model::BasicNode *      AnimatedTestScene           ();
+    static  model::BasicNode *      TestSceneVariableTopology   ();
 
 };
 
