@@ -378,7 +378,7 @@ void GLSLProgram::SetUniform( const string & name, const mat4 & m)
     } 
     else 
     {
-        //printf("Uniform: %s not found.\n",name.c_str() );
+        printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 

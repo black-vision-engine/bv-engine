@@ -218,6 +218,11 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\SolidColorShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\TextPixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\TexturePixelShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\AlphaContext.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\CullContext.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\DepthContext.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\FillContext.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\RendererContext.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\TranformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannel.cpp" />
@@ -236,6 +241,7 @@
     <ClCompile Include="Engine\Models\Resources\TextureLoader.cpp" />
     <ClCompile Include="Engine\Models\Updaters\CameraUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\GeometryUpdater.cpp" />
+    <ClCompile Include="Engine\Models\Updaters\RendererStateUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\ShaderParamUpdater.cpp" />
     <ClCompile Include="System\HRTimer.cpp" />
     <ClCompile Include="System\Print.cpp" />
@@ -325,9 +331,15 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\RingComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShaderChannelBase.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\SolidColorShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\TextPixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\TexturePixelShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\AlphaContext.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\CullContext.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\DepthContext.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\FillContext.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\RendererContext.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\ShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\TranformChannel.h" />
@@ -360,6 +372,7 @@
     <ClInclude Include="Engine\Models\Resources\TextureLoader.h" />
     <ClInclude Include="Engine\Models\Updaters\CameraUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\GeometryUpdater.h" />
+    <ClInclude Include="Engine\Models\Updaters\RendererStateUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\ShaderParamUpdater.h" />
     <ClInclude Include="Engine\Types\Enums.h" />
     <ClInclude Include="System\HRTimer.h" />

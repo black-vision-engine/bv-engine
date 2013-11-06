@@ -34,7 +34,7 @@ void TexturePixelShaderChannel::Update( float t )
 TexturePixelShaderChannel::TexturePixelShaderChannel( const std::string& shaderFile
                                                     , const std::vector< FloatInterpolator >& alphas
                                                     , const std::vector< TransformF >& texTransforms )
-    : ShaderChannel( shaderFile )
+    : PixelShaderChannelBase( shaderFile )
 {
     ParamDesc::alphaParamName.resize( alphas.size() );
     for( unsigned int i = 0; i < alphas.size(); ++i )

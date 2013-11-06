@@ -1,11 +1,12 @@
 #pragma once
 
 #include <string>
-#include "Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h"
-#include "Engine\Models\Plugins\Parameter.h"
-#include "Engine\Models\Plugins\Interfaces\IParameter.h"
-#include "Engine\Models\Plugins\Channels\ShaderChannel.h"
-#include "Engine\Models\Plugins\PluginParameters.h"
+
+#include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
+#include "Engine/Models/Plugins/Parameter.h"
+#include "Engine/Models/Plugins/Interfaces/IParameter.h"
+#include "Engine/Models/Plugins/Channels/ShaderChannel.h"
+#include "Engine/Models/Plugins/PluginParameters.h"
 
 namespace bv { namespace model
 {
@@ -26,7 +27,7 @@ public:
 
 
 
-class TextPixelShaderChannel : public model::ShaderChannel< model::IPixelShaderChannel, TextPixelShaderChannelPD >
+class TextPixelShaderChannel : public model::PixelShaderChannelBase< TextPixelShaderChannelPD >
 {
     Vec4Interpolator                m_color;
     model::ValueVec4*               m_colorVal;
@@ -39,7 +40,7 @@ public:
     }
 
     TextPixelShaderChannel( const std::string& shaderFile, const Vec4Interpolator& color )
-        : ShaderChannel( shaderFile )
+        : PixelShaderChannelBase( shaderFile )
         , m_color(color)
     {
         m_colorVal = new model::ValueVec4( ParamDesc::colorParam );

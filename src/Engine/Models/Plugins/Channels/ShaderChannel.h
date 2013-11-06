@@ -1,6 +1,12 @@
 #pragma once
 
+#include <string>
+#include <vector>
+
 namespace bv { namespace model {
+
+class IValue;
+class IParameter;
 
 template< class IFace, class ParameterDescriptor  >
 class ShaderChannel : public IFace

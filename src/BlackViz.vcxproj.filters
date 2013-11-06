@@ -109,6 +109,12 @@
     <ClCompile Include="Engine\Graphics\State\StateInstance.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelVariableTopology.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\RendererContext.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\AlphaContext.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\CullContext.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\DepthContext.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\FillContext.cpp" />
+    <ClCompile Include="Engine\Models\Updaters\RendererStateUpdater.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -243,6 +249,13 @@
     <ClInclude Include="Engine\Graphics\State\StateInstance.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelVariableTopology.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShaderChannelBase.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\RendererContext.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\AlphaContext.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\CullContext.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\DepthContext.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\FillContext.h" />
+    <ClInclude Include="Engine\Models\Updaters\RendererStateUpdater.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

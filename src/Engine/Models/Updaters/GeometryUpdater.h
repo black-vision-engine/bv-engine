@@ -22,10 +22,10 @@ private:
 
 public:
 
-            GeometryUpdater     ( RenderableEntity * out, const model::IGeometryChannel * in ); 
-            ~GeometryUpdater    ();
+                    GeometryUpdater     ( RenderableEntity * out, const model::IGeometryChannel * in ); 
+                    ~GeometryUpdater    ();
 
-    void    Update              ( float t );
+    virtual void    Update              ( float t );
 
 private:
 

@@ -12,6 +12,7 @@ class Camera;
 class CameraUpdater : public IUpdater
 {
 private:
+
     Camera*             m_pCamera;
 
     Vec3Interpolator*   m_pPosition;
@@ -19,6 +20,7 @@ private:
     Vec3Interpolator*   m_pUp;
 
 public:
+
     virtual void            Update(float t);
 
     static CameraUpdater*   Create(Camera* camera, Vec3Interpolator* pos, Vec3Interpolator* dir, Vec3Interpolator* up);
