@@ -94,7 +94,7 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
 
             geomChannelDesc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-            m_geomChannel = new model::GeometryChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, true );
+            m_geomChannel = new model::GeometryChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
         }
 
         for( unsigned int i = 0; i < m_textures.size(); ++i )
@@ -135,9 +135,8 @@ void                SimpleTexturePlugin::Update              ( float t )
         auto connComp = static_cast< const model::ConnectedComponent* >( m_geomChannel->GetComponents()[ i ] );
         auto compChannels = connComp->m_vertexAttributeChannels;
 
-        auto verts  = dynamic_cast< Float3VertexAttributeChannel* >(compChannels[0])->GetVertices();
-
-        auto uvs    = dynamic_cast< Float2VertexAttributeChannel* >(compChannels[1])->GetVertices();
+        auto & verts  = dynamic_cast< Float3VertexAttributeChannel* >(compChannels[0])->GetVertices();
+        auto & uvs    = dynamic_cast< Float2VertexAttributeChannel* >(compChannels[1])->GetVertices();
 
         for( unsigned int i = 0; i < verts.size(); ++i )
         {
