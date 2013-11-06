@@ -113,9 +113,6 @@ namespace bv
 	{
         auto texPlugin = model::SimpleTextPlugin::Create( text, fontFile, size );
 
-		texPlugin->SetPixelShaderChannel     ( new model::TextPixelShaderChannel( "../dep/media/shaders/text.frag", color ) );
-		texPlugin->SetVertexShaderChannel    ( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
-
 		return texPlugin;
 	}
 
@@ -165,5 +162,26 @@ namespace bv
 
 		return buffer;
 	}
+
+
+    model::SimpleColorPlugin*           CreateSimpleColorPlugin             ( model::IPlugin* prevPlugin, const Vec4Interpolator& color)
+    {
+        return new model::SimpleColorPlugin( prevPlugin, color );
+    }
+
+    model::SimplePixelShaderPlugin*     CreateSimplePixelShaderPlugin       ( model::IPlugin* prevPlugin, const std::string& shaderPath)
+    {
+        return new model::SimplePixelShaderPlugin( prevPlugin, shaderPath );
+    }
+
+    model::SimpleVertexShaderPlugin*    CreateSimpleVertexShaderPlugin      ( model::IPlugin* prevPlugin, const std::string& shaderPath)
+    {
+        return new model::SimpleVertexShaderPlugin( prevPlugin, shaderPath );
+    }
+
+    model::SimpleGeometryShaderPlugin*  CreateSimpleGeometryShaderPlugin    ( model::IPlugin* prevPlugin, const std::string& shaderPath)
+    {
+        return new model::SimpleGeometryShaderPlugin( prevPlugin, shaderPath );
+    }
 
 }

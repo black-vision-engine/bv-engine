@@ -66,6 +66,27 @@ const ITransformChannel*        SolidColorPlugin::GetTransformChannel         ()
 
 // *************************************
 //
+//const IPixelShaderChannel*      SolidColorPlugin::GetPixelShaderChannel       () const
+//{
+//    return m_prev->GetPixelShaderChannel();
+//}
+//
+//// *************************************
+////
+//const IVertexShaderChannel*     SolidColorPlugin::GetVertexShaderChannel      () const
+//{
+//    return m_prev->GetVertexShaderChannel();
+//}
+//
+//// *************************************
+////
+//const IGeometryShaderChannel*   SolidColorPlugin::GetGeometryShaderChannel    () const
+//{
+//    return m_prev->GetGeometryShaderChannel();
+//}
+
+// *************************************
+//
 void                SolidColorPlugin::Update              ( float t )
 {
     BasePlugin::Update( t );

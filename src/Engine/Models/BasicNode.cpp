@@ -273,60 +273,26 @@ namespace
 
 const IVertexShaderChannel* GetVertexShaderChannel( const std::vector< IPlugin* >& plugins )
 {
-    const IVertexShaderChannel*   ret = nullptr;
+    if( !plugins.empty() )
+        return plugins.back()->GetVertexShaderChannel();
 
-    for( auto pl : plugins )
-    {
-        auto vsCh = pl->GetVertexShaderChannel();
-        if( vsCh )
-        {
-            if( ret )
-                assert( !"Only one allowed!" );
-
-            ret = vsCh;
-        }
-    }
-
-    return ret;
+    return nullptr;
 }
 
 const IPixelShaderChannel* GetPixelShaderChannel( const std::vector< IPlugin* >& plugins )
 {
-    const IPixelShaderChannel*   ret = nullptr;
+    if( !plugins.empty() )
+        return plugins.back()->GetPixelShaderChannel();
 
-    for( auto pl : plugins )
-    {
-        auto psCh = pl->GetPixelShaderChannel();
-        if( psCh )
-        {
-            if( ret )
-                assert( !"Only one allowed!" );
-
-            ret = psCh;
-        }
-    }
-
-    assert( ret );
-    return ret;
+    return nullptr;
 }
 
 const IGeometryShaderChannel* GetGeometryShaderChannel( const std::vector< IPlugin* >& plugins )
 {
-    const IGeometryShaderChannel*   ret = nullptr;
+    if( !plugins.empty() )
+        return plugins.back()->GetGeometryShaderChannel();
 
-    for( auto pl : plugins )
-    {
-        auto psCh = pl->GetGeometryShaderChannel();
-        if( psCh )
-        {
-            if( ret )
-                assert( !"Only one or zero allowed!" );
-
-            ret = psCh;
-        }
-    }
-
-    return ret;
+    return nullptr;
 }
 
 } // anonymous

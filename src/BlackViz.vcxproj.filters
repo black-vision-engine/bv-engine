@@ -110,6 +110,10 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelVariableTopology.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleTransformPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\SimplePixelShaderPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\SimpleVertexShaderPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\SimpleColorPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\SimpleGeometryShaderPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -245,6 +249,10 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelVariableTopology.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleTransformPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\SimplePixelShaderPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\SimpleVertexShaderPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\SimpleColorPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\SimpleGeometryShaderPlugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
