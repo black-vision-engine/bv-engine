@@ -4,8 +4,31 @@
 
 namespace bv { namespace model {
 
-class SimplePixelShaderChannel : public ShaderChannel< model::IPixelShaderChannel, TexturePixelShaderChannelPD >
+class SimplePixelShaderChannelPD : public BaseParametersDescriptor
 {
+public:
+    static const std::string            pluginName;// FIXME: To jest tu niepotrzebne
+
+    explicit SimplePixelShaderChannelPD()
+        : BaseParametersDescriptor( pluginName ) 
+    {
+    }
+};
+
+const std::string SimplePixelShaderChannelPD::pluginName = "PluginName";
+
+class SimplePixelShaderChannel : public ShaderChannel< model::IPixelShaderChannel, SimplePixelShaderChannelPD >
+{
+public:
+
+    explicit                        SimplePixelShaderChannel( const std::string& shaderFile )
+        : ShaderChannel( shaderFile )
+    {}
+
+    virtual void                    Update( float t )
+    {
+        ShaderChannel::Update( t );
+    }
 
 };
 
@@ -13,6 +36,14 @@ SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( const IPlugin * prev
     : m_prev( prev )
     , m_shaderPath( shaderPath )
 {
+    auto pixelShaderChannel = new SimplePixelShaderChannel( shaderPath );
+
+    for( auto v : prev->GetValuesList() )
+    {
+        pixelShaderChannel->RegisterValue( v );
+    }
+
+    m_pshaderChannel = pixelShaderChannel;
 }
 
 SimplePixelShaderPlugin::~SimplePixelShaderPlugin         ()
@@ -31,7 +62,7 @@ const ITransformChannel*        SimplePixelShaderPlugin::GetTransformChannel    
 
 const IPixelShaderChannel*      SimplePixelShaderPlugin::GetPixelShaderChannel       () const
 {
-
+    return m_pshaderChannel;
 }
 
 const IVertexShaderChannel*     SimplePixelShaderPlugin::GetVertexShaderChannel      () const
@@ -49,7 +80,7 @@ void                            SimplePixelShaderPlugin::Update                 
     BasePlugin::Update( t );
 }
 
-void                            SimplePixelShaderPlugin::Print                       ( std::ostream & out, int tabs = 0 ) const
+void                            SimplePixelShaderPlugin::Print                       ( std::ostream & out, int tabs ) const
 {
     out << GetName() << std::endl;
 }

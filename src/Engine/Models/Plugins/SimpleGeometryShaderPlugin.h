@@ -13,21 +13,22 @@ public:
 
     static const std::string            pluginName;
 
-    explicit SimpleGeometryShaderPD();
+    explicit SimpleGeometryShaderPluginPD();
 };
 
 
 // ***************************** PLUGIN ********************************** 
-class SimpleGeometryShader : public BasePlugin< IPlugin, SimpleGeometryShaderPluginPD >
+class SimpleGeometryShaderPlugin : public BasePlugin< IPlugin, SimpleGeometryShaderPluginPD >
 {
 private:
 
-    const IPlugin * m_prev;
+    const IPlugin*      m_prev;
+    const std::string   m_shaderPath;
 
 public:
 
-    explicit                                SimpleGeometryShader          ( const IPlugin * prev, const std::string& shaderPath );
-                                            ~SimpleGeometryShader         ();
+    explicit                                SimpleGeometryShaderPlugin  ( const IPlugin * prev, const std::string& shaderPath );
+                                            ~SimpleGeometryShaderPlugin ();
 
     virtual const IGeometryChannel*         GetGeometryChannel          () const;
     virtual const ITransformChannel*        GetTransformChannel         () const;
