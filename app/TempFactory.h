@@ -52,6 +52,8 @@ namespace bv
 	
     model::SimpleTransformPlugin*       CreateTransformPlugin               ( const model::IPlugin* prev, TransformF* trans );
 
+
+
 	model::SimpleTextPlugin*            CreateTextPlugin                    ( const std::wstring& text, const std::string& fontFile, int size, const Vec4Interpolator& color );
 	model::IGeometryShaderChannel*      CreateGeometryShaderExtrude         ( float scale );
 
