@@ -20,6 +20,12 @@ public:
 const std::string SimpleColorPixelShaderChannelPD::pluginName       = "PluginName";
 const std::string SimpleColorPixelShaderChannelPD::colorParamName   = "color";
 
+const std::string SimpleColorPluginPD::pluginName       = "PluginName";
+
+SimpleColorPluginPD::SimpleColorPluginPD()
+    : BaseParametersDescriptor( pluginName )
+{}
+
 class SimpleColorPixelShaderChannel : public ShaderChannel< model::IPixelShaderChannel, SimpleColorPixelShaderChannelPD >
 {
     model::ValueVec4*   m_colorVal;

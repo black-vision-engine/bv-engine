@@ -225,6 +225,9 @@ model::BasicNode *     Text1()
 
     root->AddPlugin( CreateTransformPlugin( texPlugin, trns ) );
 
+
+
+
     return root;
 }
 

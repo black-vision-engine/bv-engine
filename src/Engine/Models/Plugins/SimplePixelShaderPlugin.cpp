@@ -32,6 +32,12 @@ public:
 
 };
 
+const std::string SimplePixelShaderPluginPD::pluginName = "PluginName";
+
+SimplePixelShaderPluginPD::SimplePixelShaderPluginPD()
+    : BaseParametersDescriptor( pluginName ) 
+{}
+
 SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( const IPlugin * prev, const std::string& shaderPath )
     : m_prev( prev )
     , m_shaderPath( shaderPath )

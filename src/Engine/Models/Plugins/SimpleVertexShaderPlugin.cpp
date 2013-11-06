@@ -32,6 +32,12 @@ public:
 
 };
 
+const std::string SimpleVertexShaderPluginPD::pluginName = "PluginName";
+
+SimpleVertexShaderPluginPD::SimpleVertexShaderPluginPD()
+    : BaseParametersDescriptor( pluginName )
+{}
+
 SimpleVertexShaderPlugin::SimpleVertexShaderPlugin          ( const IPlugin * prev, const std::string& shaderPath )
     : m_prev( prev )
     , m_shaderPath( shaderPath )

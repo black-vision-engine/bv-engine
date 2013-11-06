@@ -17,6 +17,10 @@
 #include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/VertexShader/TextureVertexShaderChannel.h"
 #include "Engine\Models\Plugins\SimpleTextPlugin.h"
+#include "Engine\Models\Plugins\SimpleGeometryShaderPlugin.h"
+#include "Engine\Models\Plugins\SimplePixelShaderPlugin.h"
+#include "Engine\Models\Plugins\SimpleVertexShaderPlugin.h"
+#include "Engine\Models\Plugins\SimpleColorPlugin.h"
 #include "Engine\Models\Plugins\Channels\PixelShader\TextPixelShaderChannel.h"
 #include "Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.h"
 
@@ -44,8 +48,12 @@ namespace bv
 
 	model::ITransformChannel*           CreateTransformChannel              (TransformF* transformation);
 	
+    model::SimpleColorPlugin*           CreateSimpleColorPlugin             ( model::IPlugin* prevPlugin, const Vec4Interpolator& color);
+    model::SimplePixelShaderPlugin*     CreateSimplePixelShaderPlugin       ( model::IPlugin* prevPlugin, const std::string& shaderPath);
+    model::SimpleVertexShaderPlugin*    CreateSimpleVertexShaderPlugin      ( model::IPlugin* prevPlugin, const std::string& shaderPath);
+    model::SimpleGeometryShaderPlugin*  CreateSimpleGeometryShaderPlugin    ( model::IPlugin* prevPlugin, const std::string& shaderPath);
 
-	model::SolidColorPlugin*            CreateSolidColorPlugin              (model::IPlugin* prevPlugin, const glm::vec4& color);
+	model::SolidColorPlugin*            CreateSolidColorPlugin              ( model::IPlugin* prevPlugin, const glm::vec4& color);
 	
 
 	model::SimpleTexturePlugin*         CreateTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths );

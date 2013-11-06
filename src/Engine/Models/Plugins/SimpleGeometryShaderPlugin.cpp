@@ -32,6 +32,12 @@ public:
 
 };
 
+const std::string SimpleGeometryShaderPluginPD::pluginName = "PluginName";
+
+SimpleGeometryShaderPluginPD::SimpleGeometryShaderPluginPD()
+    : BaseParametersDescriptor( pluginName ) 
+{}
+
 SimpleGeometryShaderPlugin::SimpleGeometryShaderPlugin          ( const IPlugin * prev, const std::string& shaderPath )
     : m_prev( prev )
     , m_shaderPath( shaderPath )
