@@ -42,6 +42,8 @@ public:
     void                    SetState( const OffsetState * os );
     void                    SetState( const StencilState * ss );
 
+    void                    SetStateIgnoreEmptyEntries( const StateInstance & inst );
+
     void                    DeleteStates    ();
 
 };

@@ -1,15 +1,10 @@
 #pragma once
 
+#include "Engine/Graphics/State/StateInstance.h"
+
 namespace bv
 {
     
-//FIXME: add states and add to renderer
-class AlphaState;
-class CullState;
-class DepthState;
-class OffsetState;
-class StencilState;
-class WireState;
 
 //FIXME: tutaj mozna trzymac sobie stan dla wszystkich mozliwych teksture unitow, zeby ewentualnie nie trzeba bylo tego stany co tekstra przepinac - ale to taka mala optymalizacja
 //FIXME: Buffer usage dla texture unitu to jest DYNAMIC_DRAW, to samo trzeba robic dla dynamicznych geometrii, ktore co klatka wymagaja wrzucenia calego kanalu atrybutow !!!!
@@ -21,13 +16,22 @@ public:
     class RenderState
     {
     public:
-        RenderState				();
-		void InitializeBasic	();
 
-        //void Initialize (const AlphaState* astate,
-        //    const CullState* cstate, const DepthState* dstate,
-        //    const OffsetState* ostate, const StencilState* sstate,
-        //    const WireState* wstate);
+        StateInstance   m_curState;
+
+    public:
+
+                RenderState				();
+        void    Initialize         ( const StateInstance & inst );
+
+    private:
+
+        void    InitializeAlphaState    ( const AlphaState * as );
+        void    InitializeCullState     ( const CullState * cs );
+        void    InitializeDepthState    ( const DepthState * ds );
+        void    InitializeFillState     ( const FillState * fs );
+        void    InitializeOffsetState   ( const OffsetState * os );
+        void    InitializeStencilState  ( const StencilState * ss );
 
         //// AlphaState
         //bool mAlphaBlendEnabled;

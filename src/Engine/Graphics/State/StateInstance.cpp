@@ -119,6 +119,29 @@ void                    StateInstance::SetState( const StencilState * ss )
 
 // *********************************
 //
+void                    StateInstance::SetStateIgnoreEmptyEntries( const StateInstance & inst )
+{
+    if( inst.m_alphaState )
+        m_alphaState = inst.m_alphaState;
+
+    if( inst.m_cullState )
+        m_cullState = inst.m_cullState;
+
+    if( inst.m_depthState )
+        m_depthState = inst.m_depthState;
+
+    if( inst.m_fillState )
+        m_fillState = inst.m_fillState;
+
+    if( inst.m_offsetState )
+        m_offsetState = inst.m_offsetState;
+
+    if( inst.m_stencilState )
+        m_stencilState = inst.m_stencilState;
+}
+
+// *********************************
+//
 void                    StateInstance::DeleteStates    ()
 {
     delete m_alphaState;

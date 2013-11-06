@@ -50,48 +50,114 @@ namespace
         GL_LINEAR     // SFM_LINEAR
     };
 
+    GLuint AlphaSrcBlendModeGL[] =
+    {
+        GL_ZERO,                    //ASBM_ZERO,
+        GL_ONE,                     //ASBM_ONE,
+        GL_DST_COLOR,               //ASBM_DST_COLOR,
+        GL_ONE_MINUS_DST_COLOR,     //ASBM_ONE_MINUS_DST_COLOR,
+        GL_SRC_ALPHA,               //ASBM_SRC_ALPHA,
+        GL_ONE_MINUS_SRC_ALPHA,     //ASBM_ONE_MINUS_SRC_ALPHA,
+        GL_DST_ALPHA,               //ASBM_DST_ALPHA,
+        GL_ONE_MINUS_DST_ALPHA,     //ASBM_ONE_MINUS_DST_ALPHA,
+        GL_SRC_ALPHA_SATURATE,      //ASBM_SRC_ALPHA_SATURATE,
+        GL_CONSTANT_COLOR,          //ASBM_CONSTANT_COLOR,
+        GL_ONE_MINUS_CONSTANT_COLOR,//ASBM_ONE_MINUS_CONSTANT_COLOR,
+        GL_CONSTANT_ALPHA,          //ASBM_CONSTANT_ALPHA,
+        GL_ONE_MINUS_CONSTANT_ALPHA //ASBM_ONE_MINUS_CONSTANT_ALPHA,
+    };
+
+    GLuint AlphaDstBlendModeGL[] =
+    {
+        GL_ZERO,                        //ADBM_ZERO,
+        GL_ONE,                         //ADBM_ONE,
+        GL_SRC_COLOR,                   //ADBM_SRC_COLOR,
+        GL_ONE_MINUS_SRC_COLOR,         //ADBM_ONE_MINUS_SRC_COLOR,
+        GL_SRC_ALPHA,                   //ADBM_SRC_ALPHA,
+        GL_ONE_MINUS_SRC_ALPHA,         //ADBM_ONE_MINUS_SRC_ALPHA,
+        GL_DST_ALPHA,                   //ADBM_DST_ALPHA,
+        GL_ONE_MINUS_DST_ALPHA,         //ADBM_ONE_MINUS_DST_ALPHA,
+        GL_CONSTANT_COLOR,              //ADBM_CONSTANT_COLOR,
+        GL_ONE_MINUS_CONSTANT_COLOR,    //ADBM_ONE_MINUS_CONSTANT_COLOR,
+        GL_CONSTANT_ALPHA,              //ADBM_CONSTANT_ALPHA,
+        GL_ONE_MINUS_CONSTANT_ALPHA     //ADBM_ONE_MINUS_CONSTANT_ALPHA,      
+    };
+
+    GLuint AlphaCompareModeGL[] =
+    {
+        GL_NEVER,       //ACM_NEVER = 0,
+        GL_LESS,        //ACM_LESS,
+        GL_EQUAL,       //ACM_EQUAL,
+        GL_LEQUAL,      //ACM_LEQUAL,
+        GL_GREATER,     //ACM_GREATER,
+        GL_NOTEQUAL,    //ACM_NOTEQUAL,
+        GL_GEQUAL,      //ACM_GEQUAL,
+        GL_ALWAYS       //ACM_ALWAYS,
+    };
+
 } //anonymous
 
 // ****************************
 //
-GLuint ConstantsMapper::GlConstant( MemoryLockingType mlt )
+GLuint ConstantsMapper::GLConstant( MemoryLockingType mlt )
 {
     return BufferLockingGL[ (int) mlt ]; 
 }
 
 // ****************************
 //
-GLuint ConstantsMapper::GlConstant( DataBuffer::Semantic semantic )
+GLuint ConstantsMapper::GLConstant( DataBuffer::Semantic semantic )
 {
     return BufferUsageGL[ (int) semantic ];     
 }
 
 // ****************************
 //
-GLuint ConstantsMapper::GlConstant( RenderableEntity::RenderableType type )
+GLuint ConstantsMapper::GLConstant( RenderableEntity::RenderableType type )
 {
     return RenderableTypeGL[ (int) type ];     
 }
 
 // ****************************
 //
-GLuint ConstantsMapper::GlConstant( FaceKind face )
+GLuint ConstantsMapper::GLConstant( FaceKind face )
 {
     return FaceCullingTypeGL[ (int) face ];
 }
 
 // ****************************
 //
-GLuint ConstantsMapper::GlConstant( SamplerWrappingMode wrappingMode )
+GLuint ConstantsMapper::GLConstant( SamplerWrappingMode wrappingMode )
 {
     return WrappingModeGL[ (int) wrappingMode ];
 }
 
 // ****************************
 //
-GLuint ConstantsMapper::GlConstant( SamplerFilteringMode filteringMode )
+GLuint ConstantsMapper::GLConstant( SamplerFilteringMode filteringMode )
 {
     return FilteringModeGL[ (int) filteringMode ];
+}
+
+// ****************************
+//
+GLuint ConstantsMapper::GLConstant( AlphaSrcBlendMode mode )
+{
+    return AlphaSrcBlendModeGL[ (int) mode ];
+}
+
+// ****************************
+//
+GLuint ConstantsMapper::GLConstant( AlphaDstBlendMode mode )
+{
+    return AlphaDstBlendModeGL[ (int) mode ];
+}
+
+// ****************************
+//
+GLuint ConstantsMapper::GLConstant( AlphaCompareMode mode )
+{
+    return AlphaCompareModeGL[ (int) mode ];
 }
 
 }

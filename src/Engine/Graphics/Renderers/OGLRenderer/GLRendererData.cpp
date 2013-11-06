@@ -3,6 +3,9 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
+
+#include <cassert>
 
 namespace bv {
 
@@ -10,24 +13,89 @@ namespace bv {
 //
 RendererData::RenderState::RenderState			()
 {
+    //Don't do anything here -> default renderer state can be set only when OpenGL was properly initialized
+}
+
+// *********************************
+//
+void RendererData::RenderState::Initialize         ( const StateInstance & inst )
+{
+    m_curState.SetStateIgnoreEmptyEntries( inst );
+
+    InitializeAlphaState( inst.GetAlphaState() );
+    InitializeCullState( inst.GetCullState() );
+    InitializeDepthState( inst.GetDepthState() );
+    InitializeFillState( inst.GetFillState() );
+    InitializeOffsetState( inst.GetOffsetState() );
+    InitializeStencilState( inst.GetStencilState() );
+
+    //FIXME: add states
+    glEnable		( GL_CULL_FACE );
+    glCullFace		( GL_BACK );
+    //glEnable		( GL_DEPTH_TEST );
+    //glEnable        ( GL_MULTISAMPLE );
+    glDisable		( GL_STENCIL_TEST );
+    glPolygonMode	( GL_FRONT_AND_BACK, GL_FILL );
+}
+
+// *********************************
+//
+void    RendererData::RenderState::InitializeAlphaState    ( const AlphaState * as )
+{
+    assert( as );
+
+    GLuint srcBlend = ConstantsMapper::GLConstant( as->srcBlendMode );
+    GLuint dstBlend = ConstantsMapper::GLConstant( as->dstBlendMode );
+    GLuint cmpFunc  = ConstantsMapper::GLConstant( as->compareMode );
+
+    const glm::vec4 & blendColor = as->blendColor;
+
+    if ( as->blendEnabled )
+        glEnable( GL_BLEND );
+    else
+        glDisable( GL_BLEND );
+
+    glBlendFunc( srcBlend, dstBlend );
+    
+    if ( as->compareEnabled )
+        glEnable( GL_ALPHA_TEST );
+    else
+        glDisable( GL_ALPHA_TEST );
+
+    glAlphaFunc( cmpFunc, as->alphaReference );
+    glBlendColor( blendColor[ 0 ], blendColor[ 1 ], blendColor[ 2 ], blendColor[ 3 ] );
+}
+
+// *********************************
+//
+void    RendererData::RenderState::InitializeCullState     ( const CullState * cs )
+{
+}
+
+// *********************************
+//
+void    RendererData::RenderState::InitializeDepthState    ( const DepthState * ds )
+{
+}
+
+// *********************************
+//
+void    RendererData::RenderState::InitializeFillState     ( const FillState * fs )
+{
+}
+
+// *********************************
+//
+void    RendererData::RenderState::InitializeOffsetState   ( const OffsetState * os )
+{
     //FIXME: implement
 }
 
 // *********************************
 //
-void RendererData::RenderState::InitializeBasic ()
+void    RendererData::RenderState::InitializeStencilState  ( const StencilState * ss )
 {
-    //FIXME: add states
-    glDisable		( GL_BLEND );
-    glDisable		( GL_ALPHA_TEST );
-    glEnable		( GL_CULL_FACE );
-    glCullFace		( GL_BACK );
-    glEnable        ( GL_BLEND );
-    glBlendFunc     ( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-    //glEnable		( GL_DEPTH_TEST );
-    //glEnable        ( GL_MULTISAMPLE );
-    glDisable		( GL_STENCIL_TEST );
-    glPolygonMode	( GL_FRONT_AND_BACK, GL_FILL );
+    //FIXME: implement
 }
 
 // *********************************
@@ -39,45 +107,6 @@ RendererData::SamplerState::SamplerState ()
 
 }
 
-//
-//
-////----------------------------------------------------------------------------
-//// Support for non-display-list fonts.
-////----------------------------------------------------------------------------
-//void RendererData::DrawCharacter (const BitmapFont& font, char c)
-//{
-//    const BitmapFontChar* bfc = font.mCharacters[(unsigned int)c];
-//
-//    // Save unpack state.
-//    GLint swapBytes, lsbFirst, rowLength, skipRows, skipPixels, alignment;
-//    glGetIntegerv(GL_UNPACK_SWAP_BYTES, &swapBytes);
-//    glGetIntegerv(GL_UNPACK_LSB_FIRST, &lsbFirst);
-//    glGetIntegerv(GL_UNPACK_ROW_LENGTH, &rowLength);
-//    glGetIntegerv(GL_UNPACK_SKIP_ROWS, &skipRows);
-//    glGetIntegerv(GL_UNPACK_SKIP_PIXELS, &skipPixels);
-//    glGetIntegerv(GL_UNPACK_ALIGNMENT, &alignment);
-//
-//    glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
-//    glPixelStorei(GL_UNPACK_LSB_FIRST, GL_FALSE);
-//    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-//    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-//    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-//    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-//    glBitmap(bfc->mXSize, bfc->mYSize, (float)bfc->mXOrigin,
-//        (float)bfc->mYOrigin, (float)bfc->mXSize, 0.0f,
-//        (const GLubyte*)bfc->mBitmap);
-//
-//    // Restore unpack state.
-//    glPixelStorei(GL_UNPACK_SWAP_BYTES, swapBytes);
-//    glPixelStorei(GL_UNPACK_LSB_FIRST, lsbFirst);
-//    glPixelStorei(GL_UNPACK_ROW_LENGTH, rowLength);
-//    glPixelStorei(GL_UNPACK_SKIP_ROWS, skipRows);
-//    glPixelStorei(GL_UNPACK_SKIP_PIXELS, skipPixels);
-//    glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-//}
-////----------------------------------------------------------------------------
-//#endif
-//
 ////----------------------------------------------------------------------------
 //// Render state information to avoid redundant state changes.
 ////----------------------------------------------------------------------------

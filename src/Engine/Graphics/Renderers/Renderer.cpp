@@ -17,9 +17,9 @@
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
-#include "Engine\Graphics\Resources\VertexBuffer.h"
-#include "Engine\Graphics\Resources\VertexArray.h"
-#include "Engine\Graphics\Resources\RenderableArrayDataArrays.h"
+#include "Engine/Graphics/Resources/VertexBuffer.h"
+#include "Engine/Graphics/Resources/VertexArray.h"
+#include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 //FIXME: add disable methods so that current state can be cleared after frame is rendered
 
 namespace bv {
@@ -50,7 +50,7 @@ void	Renderer::Initialize	    ( int w, int h, TextureFormat colorFormat )
     m_defaultStateInstance.SetState( new OffsetState() );
     m_defaultStateInstance.SetState( new StencilState() );
 
-    m_currentStateIstance = m_defaultStateInstance;
+    m_currentStateInstance = m_defaultStateInstance;
 }
 
 // *********************************
@@ -58,6 +58,20 @@ void	Renderer::Initialize	    ( int w, int h, TextureFormat colorFormat )
 void	Renderer::SetCamera         (Camera* cam)
 {
     m_Camera = cam;
+}
+
+// *********************************
+//
+void    Renderer::SetStateInstance    ( const StateInstance & stateInstance )
+{
+    m_currentStateInstance.SetStateIgnoreEmptyEntries( stateInstance );
+    
+    SetAlphaState( m_currentStateInstance.GetAlphaState() );
+    SetCullState( m_currentStateInstance.GetCullState() );
+    SetDepthState( m_currentStateInstance.GetDepthState() );
+    SetFillState( m_currentStateInstance.GetFillState() );
+    SetOffsetState( m_currentStateInstance.GetOffsetState() );
+    SetStencilState( m_currentStateInstance.GetStencilState() );
 }
 
 // *********************************

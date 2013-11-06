@@ -7,7 +7,8 @@
 #include "DataBuffer.h"
 #include "RenderableEntity.h"
 
-#include "Engine\Graphics\Shaders\TextureSampler.h"
+#include "Engine/Graphics/Shaders/TextureSampler.h"
+#include "Engine/Graphics/State/StateEnums.h"
 
 namespace bv {
 
@@ -31,13 +32,15 @@ class ConstantsMapper
 {
 public:
 
-    static GLuint GlConstant( MemoryLockingType mlt );
-    static GLuint GlConstant( DataBuffer::Semantic semantic );
-    static GLuint GlConstant( RenderableEntity::RenderableType type );
-    static GLuint GlConstant( FaceKind face );
-    static GLuint GlConstant( SamplerWrappingMode wrappingMode );
-    static GLuint GlConstant( SamplerFilteringMode filteringMode );
-
+    static GLuint GLConstant( MemoryLockingType mlt );
+    static GLuint GLConstant( DataBuffer::Semantic semantic );
+    static GLuint GLConstant( RenderableEntity::RenderableType type );
+    static GLuint GLConstant( FaceKind face );
+    static GLuint GLConstant( SamplerWrappingMode wrappingMode );
+    static GLuint GLConstant( SamplerFilteringMode filteringMode );
+    static GLuint GLConstant( AlphaSrcBlendMode mode );
+    static GLuint GLConstant( AlphaDstBlendMode mode );
+    static GLuint GLConstant( AlphaCompareMode mode );
 };
 
 

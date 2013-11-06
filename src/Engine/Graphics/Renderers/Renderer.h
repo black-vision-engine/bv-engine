@@ -47,7 +47,7 @@ class Renderer
 {
 private:
 
-    StateInstance       m_currentStateIstance;
+    StateInstance       m_currentStateInstance;
     StateInstance       m_defaultStateInstance;
 
     int					m_Width;
@@ -99,6 +99,10 @@ public:
     void    EnableFaceCulling   ();
     void    SetCamera           (Camera* cam);
 
+public:
+
+    void    SetStateInstance    ( const StateInstance & stateInstance );
+
 public: //FIXME: private
 
     void    Enable              ( RenderablePass * pass, TransformableEntity * transform );
@@ -132,5 +136,15 @@ public:
     bool                        DrawRenderable              ( RenderableEntity * ent );
     bool                        DrawTriangleStrips          ( TriangleStrip * strip );
 
+private:
+
+    void                        SetAlphaState               ( const AlphaState * as );
+    void                        SetCullState                ( const CullState * cs );
+    void                        SetDepthState               ( const DepthState * ds );
+    void                        SetFillState                ( const FillState * fs );
+    void                        SetOffsetState              ( const OffsetState * os );
+    void                        SetStencilState             ( const StencilState * ss );
+
 };
+
 }
