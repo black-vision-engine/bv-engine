@@ -113,9 +113,6 @@ namespace bv
 	{
         auto texPlugin = model::SimpleTextPlugin::Create( text, fontFile, size );
 
-		texPlugin->SetPixelShaderChannel     ( new model::TextPixelShaderChannel( "../dep/media/shaders/text.frag", color ) );
-		texPlugin->SetVertexShaderChannel    ( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
-
 		return texPlugin;
 	}
 

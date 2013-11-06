@@ -223,10 +223,21 @@ model::BasicNode *     Text1()
 
     trns->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
 
-    root->AddPlugin( CreateTransformPlugin( texPlugin, trns ) );
+    auto transPlugin = CreateTransformPlugin( texPlugin, trns );
 
+    root->AddPlugin( transPlugin );
 
+    auto vertexShaderPlugin = CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/simpletexture.vert" );
 
+    root->AddPlugin( vertexShaderPlugin );
+
+    auto colorPlugin = CreateSimpleColorPlugin( vertexShaderPlugin, color );
+
+    root->AddPlugin( colorPlugin );
+
+    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag" );
+
+    root->AddPlugin( pixelShaderPlugin );
 
     return root;
 }
@@ -266,7 +277,21 @@ model::BasicNode *     Text2()
 
     trns->addTranslation( xt, yt, zt );
 
-    root->AddPlugin( CreateTransformPlugin( texPlugin, trns ) );
+    auto transPlugin = CreateTransformPlugin( texPlugin, trns );
+
+    root->AddPlugin( transPlugin );
+
+    auto vertexShaderPlugin = CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/simpletexture.vert" );
+
+    root->AddPlugin( vertexShaderPlugin );
+
+    auto colorPlugin = CreateSimpleColorPlugin( vertexShaderPlugin, color );
+
+    root->AddPlugin( colorPlugin );
+
+    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag" );
+
+    root->AddPlugin( pixelShaderPlugin );
 
     return root;
 }

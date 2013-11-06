@@ -44,7 +44,7 @@ SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( const IPlugin * prev
 {
     auto pixelShaderChannel = new SimplePixelShaderChannel( shaderPath );
 
-    for( auto v : prev->GetValuesList() )
+    for( auto v : prev->GetPixelShaderChannel()->GetValuesList() )
     {
         pixelShaderChannel->RegisterValue( v );
     }

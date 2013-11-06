@@ -71,6 +71,21 @@ const ITransformChannel*        SimpleTransformPlugin::GetTransformChannel      
     return m_transformChannel;
 }
 
+const IPixelShaderChannel*      SimpleTransformPlugin::GetPixelShaderChannel       () const
+{
+    return m_prevPlugin->GetPixelShaderChannel();
+}
+
+const IVertexShaderChannel*     SimpleTransformPlugin::GetVertexShaderChannel      () const
+{
+    return m_prevPlugin->GetVertexShaderChannel();
+}
+
+const IGeometryShaderChannel*   SimpleTransformPlugin::GetGeometryShaderChannel    () const
+{
+    return m_prevPlugin->GetGeometryShaderChannel();
+}
+
 // *************************************
 //
 void                SimpleTransformPlugin::Update              ( float t )
