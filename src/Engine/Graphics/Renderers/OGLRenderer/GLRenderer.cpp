@@ -16,10 +16,11 @@ void Renderer::SetAlphaState ( const AlphaState * as )
 
     const AlphaState * cur = m_RendererData->m_CurrentRS.CurAlphaState();
 
-    if( as == cur )
-    {
-        return;
-    }
+    //FIXME: updater could have changed this state
+    //if( as == cur )
+    //{
+    //    return;
+    //}
 
     if( as->blendEnabled )
     {
@@ -82,10 +83,11 @@ void Renderer::SetCullState     ( const CullState * cs )
 
     const CullState * cur = m_RendererData->m_CurrentRS.CurCullState();
 
-    if( cs == cur )
-    {
-        return;
-    }
+    //FIXME: updater could have changed this state
+    //if( cs == cur )
+    //{
+    //    return;
+    //}
 
     if( cs->enabled )
     {
@@ -117,10 +119,11 @@ void Renderer::SetDepthState    ( const DepthState * ds )
 
     const DepthState * cur = m_RendererData->m_CurrentRS.CurDepthState();
 
-    if( ds == cur )
-    {
-        return;
-    }
+    //FIXME: updater could have changed this state
+    //if( ds == cur )
+    //{
+    //    return;
+    //}
 
     if( ds->enabled )
     {
@@ -158,10 +161,11 @@ void Renderer::SetFillState     ( const FillState * fs )
 
     const FillState * cur = m_RendererData->m_CurrentRS.CurFillState();
 
-    if( fs == cur )
-    {
-        return;
-    }
+    //FIXME: updater could have changed this state
+    //if( fs == cur )
+    //{
+    //    return;
+    //}
 
     if( fs->fillMode != cur->fillMode )
     {
@@ -179,10 +183,11 @@ void Renderer::SetOffsetState   ( const OffsetState * os )
 
     const OffsetState * cur = m_RendererData->m_CurrentRS.CurOffsetState();
 
-    if( os == cur )
-    {
-        return;
-    }
+    //FIXME: updater could have changed this state
+    //if( os == cur )
+    //{
+    //    return;
+    //}
 
     if( os->fillEnabled != cur->fillEnabled )
     {

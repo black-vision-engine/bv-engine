@@ -44,6 +44,8 @@ namespace bv
 namespace
 {
 
+// *********************************
+//
 FloatInterpolator                   CreateConstValueFloat               ( float val )
 {
     FloatInterpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
@@ -52,6 +54,8 @@ FloatInterpolator                   CreateConstValueFloat               ( float 
     return inter;
 }
 
+// *********************************
+//
 Vec4Interpolator                   CreateConstValueVec4                 ( const glm::vec4& val )
 {
     Vec4Interpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
@@ -60,6 +64,8 @@ Vec4Interpolator                   CreateConstValueVec4                 ( const 
     return inter;
 }
 
+// *********************************
+//
 model::GeometryRectPlugin*          CreateGeometryRectPlugin            ( float w, float h )
 {
     FloatInterpolator wi; wi.setWrapPostMethod( bv::WrapMethod::pingPong );
@@ -71,6 +77,8 @@ model::GeometryRectPlugin*          CreateGeometryRectPlugin            ( float 
     return new model::GeometryRectPlugin(wi, hi);
 }
 
+// *********************************
+//
 model::GeometryChannel*             CreateGeometryChannel               (model::IConnectedComponent* connComp)
 {
     model::GeometryChannelDescriptor desc;
@@ -87,6 +95,8 @@ model::GeometryChannel*             CreateGeometryChannel               (model::
     return ret;
 }
 
+// *********************************
+//
 model::ITransformChannel*           CreateTransformChannel              (TransformF* transformation)
 {
     model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
@@ -95,6 +105,8 @@ model::ITransformChannel*           CreateTransformChannel              (Transfo
     return trasformChannel;
 }
 
+// *********************************
+//
 model::SolidColorPlugin*            CreateSolidColorPlugin              (model::IPlugin* prevPlugin, const glm::vec4& color)
 {
     auto solidPlugin = new model::SolidColorPlugin( prevPlugin );
@@ -105,6 +117,8 @@ model::SolidColorPlugin*            CreateSolidColorPlugin              (model::
     return solidPlugin;
 }
 
+// *********************************
+//
 model::SimpleTexturePlugin*         CreateTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths )
 {
     auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, texturesPaths );
@@ -123,6 +137,8 @@ model::SimpleTexturePlugin*         CreateTexturePlugin                 ( model:
     return texturePlugin;
 }
 
+// *********************************
+//
 model::SimpleTextPlugin*            CreateTextPlugin                    ( const std::wstring& text, const std::string& fontFile, int size, const Vec4Interpolator& color, TransformF* trans )
 {
     auto texPlugin = new model::SimpleTextPlugin( text, fontFile, size );
@@ -137,6 +153,8 @@ model::SimpleTextPlugin*            CreateTextPlugin                    ( const 
     return texPlugin;
 }
 
+// *********************************
+//
 model::IGeometryShaderChannel*      CreateGeometryShaderExtrude         ( float scale )
 {
     FloatInterpolator extrudeScale = CreateConstValueFloat( scale );

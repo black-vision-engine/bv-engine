@@ -4,21 +4,23 @@
 
 namespace bv {
 
-//TODO: forward declarations from bv namespace go here
+class StateInstance;
 
 namespace model
 {
-    //TODO: forward declarations from model namespace go here
+    class RendererContext;
 }
 
 class RenderStateUpdater : public IUpdater
 {
 private:
 
+    StateInstance *                 m_out;
+    const model::RendererContext *  m_in;
 
 public:
 
-                    RenderStateUpdater     ( /*Engine side of things , Model side of things */ ); 
+                    RenderStateUpdater     ( StateInstance * out , const model::RendererContext * in ); 
                     ~RenderStateUpdater    ();
 
     virtual void    Update                  ( float t );
