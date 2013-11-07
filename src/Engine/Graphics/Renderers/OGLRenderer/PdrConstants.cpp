@@ -26,13 +26,6 @@ namespace
         GL_TRIANGLE_STRIP
     };
 
-    GLenum FaceCullingTypeGL[] =
-    {
-        GL_FRONT,
-        GL_BACK,
-        GL_FRONT_AND_BACK,
-    };
-
     GLuint WrappingModeGL[] = 
     {
         GL_CLAMP,           //SWM_CLAMP,
@@ -64,7 +57,7 @@ namespace
         GL_CONSTANT_COLOR,          //ASBM_CONSTANT_COLOR,
         GL_ONE_MINUS_CONSTANT_COLOR,//ASBM_ONE_MINUS_CONSTANT_COLOR,
         GL_CONSTANT_ALPHA,          //ASBM_CONSTANT_ALPHA,
-        GL_ONE_MINUS_CONSTANT_ALPHA //ASBM_ONE_MINUS_CONSTANT_ALPHA,
+        GL_ONE_MINUS_CONSTANT_ALPHA //ASBM_ONE_MINUS_CONSTANT_ALPHA
     };
 
     GLuint AlphaDstBlendModeGL[] =
@@ -80,7 +73,7 @@ namespace
         GL_CONSTANT_COLOR,              //ADBM_CONSTANT_COLOR,
         GL_ONE_MINUS_CONSTANT_COLOR,    //ADBM_ONE_MINUS_CONSTANT_COLOR,
         GL_CONSTANT_ALPHA,              //ADBM_CONSTANT_ALPHA,
-        GL_ONE_MINUS_CONSTANT_ALPHA     //ADBM_ONE_MINUS_CONSTANT_ALPHA,      
+        GL_ONE_MINUS_CONSTANT_ALPHA     //ADBM_ONE_MINUS_CONSTANT_ALPHA    
     };
 
     GLuint AlphaCompareModeGL[] =
@@ -92,7 +85,26 @@ namespace
         GL_GREATER,     //ACM_GREATER,
         GL_NOTEQUAL,    //ACM_NOTEQUAL,
         GL_GEQUAL,      //ACM_GEQUAL,
-        GL_ALWAYS       //ACM_ALWAYS,
+        GL_ALWAYS       //ACM_ALWAYS
+    };
+
+    GLuint DepthCompareModeGL[] =
+    {
+        GL_NEVER,       //DCM_NEVER = 0,
+        GL_LESS,        //DCM_LESS,
+        GL_EQUAL,       //DCM_EQUAL,
+        GL_LEQUAL,      //DCM_LEQUAL,
+        GL_GREATER,     //DCM_GREATER,
+        GL_NOTEQUAL,    //DCM_NOTEQUAL,
+        GL_GEQUAL,      //DCM_GEQUAL,
+        GL_ALWAYS       //DCM_ALWAYS
+    };
+
+    GLuint FillStateModeGL[] =
+    {
+        GL_POINT, //FSM_POINTS = 0,
+        GL_LINE, //FSM_LINES,
+        GL_FILL //FSM_POLYGONS
     };
 
 } //anonymous
@@ -116,13 +128,6 @@ GLuint ConstantsMapper::GLConstant( DataBuffer::Semantic semantic )
 GLuint ConstantsMapper::GLConstant( RenderableEntity::RenderableType type )
 {
     return RenderableTypeGL[ (int) type ];     
-}
-
-// ****************************
-//
-GLuint ConstantsMapper::GLConstant( FaceKind face )
-{
-    return FaceCullingTypeGL[ (int) face ];
 }
 
 // ****************************
@@ -160,4 +165,18 @@ GLuint ConstantsMapper::GLConstant( AlphaCompareMode mode )
     return AlphaCompareModeGL[ (int) mode ];
 }
 
+// ****************************
+//
+GLuint ConstantsMapper::GLConstant( DepthCompareMode mode )
+{
+    return DepthCompareModeGL[ (int) mode ];
 }
+
+// ****************************
+//
+GLuint ConstantsMapper::GLConstant( FillStateMode mode )
+{
+    return FillStateModeGL[ (int) mode ];
+}
+
+} //bv

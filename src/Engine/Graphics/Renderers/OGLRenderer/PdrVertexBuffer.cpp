@@ -39,7 +39,7 @@ void * PdrVertexBuffer::Lock         ( MemoryLockingType mlt )
 {
     Bind();
 
-    GLvoid * vidMem = glMapBuffer( GL_ARRAY_BUFFER, ConstantsMapper::GlConstant( mlt ) );
+    GLvoid * vidMem = glMapBuffer( GL_ARRAY_BUFFER, ConstantsMapper::GLConstant( mlt ) );
     
     Unbind();
 
@@ -92,7 +92,7 @@ void    PdrVertexBuffer::Unbind              ()
 //
 void    PdrVertexBuffer::BufferData          ( const VertexBuffer * vb ) const
 {
-    glBufferData( GL_ARRAY_BUFFER, vb->Size(), 0, ConstantsMapper::GlConstant( vb->GetSemantic() ) );
+    glBufferData( GL_ARRAY_BUFFER, vb->Size(), 0, ConstantsMapper::GLConstant( vb->GetSemantic() ) );
 }
 
 // *******************************

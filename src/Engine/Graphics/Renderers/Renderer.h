@@ -22,7 +22,6 @@ class VertexShader;
 class GeometryShader;
 class RenderablePass;
 class Texture2D;
-class PdrTexture2D;
 
 class VertexBuffer;
 class IndexBuffer;
@@ -30,6 +29,7 @@ class VertexDescriptor;
 class VertexArray;
 class VertexArraySingleVertexBuffer;
 
+class PdrTexture2D;
 class PdrVertexBuffer;
 class PdrShader;
 class PdrIndexBuffer;
@@ -94,9 +94,7 @@ public:
     bool    PostDraw            ();
 
     void	DisplayColorBuffer	();
-    void    SetFaceCulling      ( FaceKind face );
-    void    DisableFaceCulling  ();
-    void    EnableFaceCulling   ();
+
     void    SetCamera           (Camera* cam);
 
 public:

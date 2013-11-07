@@ -22,7 +22,10 @@ public:
     public:
 
                 RenderState				();
-        void    Initialize         ( const StateInstance & inst );
+                ~RenderState            ();
+
+        void    Initialize              ( const StateInstance & inst );
+        void    UpdateState             ( const StateInstance & inst );
 
     private:
 
@@ -33,43 +36,14 @@ public:
         void    InitializeOffsetState   ( const OffsetState * os );
         void    InitializeStencilState  ( const StencilState * ss );
 
-        //// AlphaState
-        //bool mAlphaBlendEnabled;
-        //GLenum mAlphaSrcBlend;
-        //GLenum mAlphaDstBlend;
-        //bool mAlphaCompareEnabled;
-        //GLenum mCompareFunction;
-        //float mAlphaReference;
-        //Float4 mBlendColor;
+    public:
 
-        //// CullState
-        //bool mCullEnabled;
-        //bool mCCWOrder;
-
-        //// DepthState
-        //bool mDepthEnabled;
-        //bool mDepthWriteEnabled;
-        //GLenum mDepthCompareFunction;
-
-        //// OffsetState
-        //bool mFillEnabled;
-        //bool mLineEnabled;
-        //bool mPointEnabled;
-        //float mOffsetScale;
-        //float mOffsetBias;
-
-        //// StencilState
-        //bool mStencilEnabled;
-        //GLenum mStencilCompareFunction;
-        //GLuint mStencilReference;
-        //GLuint mStencilMask;
-        //GLuint mStencilWriteMask;
-        //GLenum mStencilOnFail;
-        //GLenum mStencilOnZFail;
-        //GLenum mStencilOnZPass;
-
-        // WireState
-        bool mWireEnabled;
+        const AlphaState *      CurAlphaState   () const;
+        const CullState *       CurCullState    () const;
+        const DepthState *      CurDepthState   () const;
+        const FillState *       CurFillState    () const;
+        const OffsetState *     CurOffsetState  () const;
+        const StencilState *    CurStencilState () const;
     };
 
     RenderState m_CurrentRS;

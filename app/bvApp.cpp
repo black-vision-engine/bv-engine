@@ -183,9 +183,6 @@ bool BlackVisionApp::OnInitialize       ()
     //FIXME: read from configuration file and change appropriately when resoultion changes
     m_modelScene->GetCamera()->SetPerspective( 90.f, float(m_Width) / float(m_Height), 0.1f, 100.f );
 
-    //FIXME: state changes should be implemented some other way around
-    m_Renderer->DisableFaceCulling();
-
     return WindowedApplication::OnInitialize();
 }
 

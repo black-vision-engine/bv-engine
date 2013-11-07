@@ -1,76 +1,215 @@
 #include "Renderer.h"
 
+#include <gl/glew.h>
+#include <gl/wglew.h>
+#include <gl/GL.h>
+
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
+
 namespace bv {
 
 // *********************************
 //
 void Renderer::SetAlphaState ( const AlphaState * as )
 {
-    if ( as->blendEnabled )
+    assert( as );
+
+    const AlphaState * cur = m_RendererData->m_CurrentRS.CurAlphaState();
+
+    if( as == cur )
     {
-        //FIXME: RENDER DATA -> RENDER STATE to verify if necessary
-        if ( true /* renderState->state to change */)
+        return;
+    }
+
+    if( as->blendEnabled )
+    {
+        if( !cur->blendEnabled )
         {
-            mData->mCurrentRS.mAlphaBlendEnabled = true;
-            glEnable(GL_BLEND);
+            glEnable( GL_BLEND );
+        }
+        
+        if( as->srcBlendMode != cur->srcBlendMode || as->dstBlendMode != cur->dstBlendMode )
+        {
+            GLuint srcBlendMode = ConstantsMapper::GLConstant( as->srcBlendMode );
+            GLuint dstBlendMode = ConstantsMapper::GLConstant( as->dstBlendMode );
+            
+            glBlendFunc( srcBlendMode, dstBlendMode );
         }
 
-        GLenum srcBlend = gOGLAlphaSrcBlend[mAlphaState->SrcBlend];
-        GLenum dstBlend = gOGLAlphaDstBlend[mAlphaState->DstBlend];
-        if (srcBlend != mData->mCurrentRS.mAlphaSrcBlend
-        ||  dstBlend != mData->mCurrentRS.mAlphaDstBlend)
+        if( as->blendColor != cur->blendColor )
         {
-            mData->mCurrentRS.mAlphaSrcBlend = srcBlend;
-            mData->mCurrentRS.mAlphaDstBlend = dstBlend;
-            glBlendFunc(srcBlend, dstBlend);
-        }
+            const glm::vec4 & col = as->blendColor;
 
-        if (mAlphaState->ConstantColor != mData->mCurrentRS.mBlendColor)
-        {
-            mData->mCurrentRS.mBlendColor = mAlphaState->ConstantColor;
-            glBlendColor(
-                mData->mCurrentRS.mBlendColor[0],
-                mData->mCurrentRS.mBlendColor[1],
-                mData->mCurrentRS.mBlendColor[2],
-                mData->mCurrentRS.mBlendColor[3]);
+            glBlendColor( col[ 0 ], col[ 1 ], col[ 2 ], col[ 3 ] );
         }
     }
     else
     {
-        if (mData->mCurrentRS.mAlphaBlendEnabled)
+        if( cur->blendEnabled )
         {
-            mData->mCurrentRS.mAlphaBlendEnabled = false;
-            glDisable(GL_BLEND);
+            glDisable( GL_BLEND );
         }
     }
 
-    if (mAlphaState->CompareEnabled)
+    if ( as->compareEnabled )
     {
-        if (!mData->mCurrentRS.mAlphaCompareEnabled)
+        if( !cur->compareEnabled )
         {
-            mData->mCurrentRS.mAlphaCompareEnabled = true;
-            glEnable(GL_ALPHA_TEST);
+            glEnable( GL_ALPHA_TEST );
         }
 
-        GLenum compare = gOGLAlphaCompare[mAlphaState->Compare];
-        float reference = mAlphaState->Reference;
-        if (compare != mData->mCurrentRS.mCompareFunction
-        ||  reference != mData->mCurrentRS.mAlphaReference)
+        if( as->compareMode != cur->compareMode || as->alphaReference != cur->alphaReference )
         {
-            mData->mCurrentRS.mCompareFunction = compare;
-            mData->mCurrentRS.mAlphaReference = reference;
-            glAlphaFunc(compare, reference);
+            GLuint compareMode = ConstantsMapper::GLConstant( as->compareMode );
+
+            glAlphaFunc( compareMode, as->alphaReference );
         }
     }
     else
     {
-        if (mData->mCurrentRS.mAlphaCompareEnabled)
+        if( cur->compareEnabled )
         {
-            mData->mCurrentRS.mAlphaCompareEnabled = false;
-            glDisable(GL_ALPHA_TEST);
+            glDisable( GL_ALPHA_TEST );
         }
     }
 }
 
+// *********************************
+//
+void Renderer::SetCullState     ( const CullState * cs )
+{
+    assert( cs );
+
+    const CullState * cur = m_RendererData->m_CurrentRS.CurCullState();
+
+    if( cs == cur )
+    {
+        return;
+    }
+
+    if( cs->enabled )
+    {
+        if( !cur->enabled )
+        {
+            glEnable( GL_CULL_FACE );
+            glFrontFace( GL_CCW );            
+        }
+
+        if( cs->isCCWOrdered != cur->isCCWOrdered )
+        {
+            glCullFace( cs->isCCWOrdered ? GL_BACK : GL_FRONT );
+        }
+    }
+    else
+    {
+        if( cur->enabled )
+        {
+            glDisable( GL_CULL_FACE );
+        }
+    }
+}
+
+// *********************************
+//
+void Renderer::SetDepthState    ( const DepthState * ds )
+{
+    assert( ds );
+
+    const DepthState * cur = m_RendererData->m_CurrentRS.CurDepthState();
+
+    if( ds == cur )
+    {
+        return;
+    }
+
+    if( ds->enabled )
+    {
+        if( !cur->enabled )
+        {
+            glEnable( GL_DEPTH_TEST );
+        }
+
+        if( ds->compareMode != cur->compareMode )
+        {
+            GLuint compareMode = ConstantsMapper::GLConstant( ds->compareMode );
+
+            glDepthFunc( compareMode );
+        }
+    }
+    else
+    {
+        if( cur->enabled )
+        {
+            glDisable( GL_DEPTH_TEST );
+        }
+    }
+
+    if( ds->writable != cur->writable )
+    {
+        glDepthMask( ds->writable ? GL_TRUE : GL_FALSE );
+    }
+}
+
+// *********************************
+//
+void Renderer::SetFillState     ( const FillState * fs )
+{
+    assert( fs );
+
+    const FillState * cur = m_RendererData->m_CurrentRS.CurFillState();
+
+    if( fs == cur )
+    {
+        return;
+    }
+
+    if( fs->fillMode != cur->fillMode )
+    {
+        GLuint fillMode = ConstantsMapper::GLConstant( fs->fillMode );
+
+        glPolygonMode( GL_FRONT_AND_BACK, fillMode );
+    }
+}
+
+// *********************************
+//
+void Renderer::SetOffsetState   ( const OffsetState * os )
+{
+    assert( os );
+
+    const OffsetState * cur = m_RendererData->m_CurrentRS.CurOffsetState();
+
+    if( os == cur )
+    {
+        return;
+    }
+
+    if( os->fillEnabled != cur->fillEnabled )
+    {
+        os->fillEnabled ? glEnable( GL_POLYGON_OFFSET_FILL ) : glDisable( GL_POLYGON_OFFSET_FILL );
+    }
+
+    if( os->linesEnabled != cur->linesEnabled )
+    {
+        os->linesEnabled ? glEnable( GL_POLYGON_OFFSET_LINE ) : glDisable( GL_POLYGON_OFFSET_LINE );
+    }
+
+    if( os->pointsEnabled != cur->pointsEnabled )
+    {
+        os->pointsEnabled ? glEnable( GL_POLYGON_OFFSET_POINT ) : glDisable( GL_POLYGON_OFFSET_POINT );
+    }
+
+    if( os->scale != cur->scale || os->bias != cur->bias )
+    {
+        glPolygonOffset( os->scale, os->bias );
+    }
+}
+
+// *********************************
+//
+void Renderer::SetStencilState  ( const StencilState * ss )
+{
+    //FIXME: implement
+}
 
 } //bv

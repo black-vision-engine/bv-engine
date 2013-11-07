@@ -61,7 +61,7 @@ void	Renderer::SetCamera         (Camera* cam)
 }
 
 // *********************************
-//
+//FIXME: most probably state can be stored in RenderData only (no currentStateInstance is required) - but let it be that way for the moment
 void    Renderer::SetStateInstance    ( const StateInstance & stateInstance )
 {
     m_currentStateInstance.SetStateIgnoreEmptyEntries( stateInstance );
@@ -72,6 +72,8 @@ void    Renderer::SetStateInstance    ( const StateInstance & stateInstance )
     SetFillState( m_currentStateInstance.GetFillState() );
     SetOffsetState( m_currentStateInstance.GetOffsetState() );
     SetStencilState( m_currentStateInstance.GetStencilState() );
+
+    m_RendererData->m_CurrentRS.UpdateState( stateInstance );
 }
 
 // *********************************
@@ -89,9 +91,9 @@ void	Renderer::ClearBuffers		()
     glClearColor( m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a );
     //glClearColor( 0.f, 0.f,0.f,1.f );
     //FIXME: implement
-    //glClearDepth((GLclampd)mClearDepth);
+    glClearDepth((GLclampd)m_ClearDepth);
     //glClearStencil((GLint)mClearStencil);
-    glClear( GL_COLOR_BUFFER_BIT /*| GL_DEPTH_BUFFER_BIT*/ );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
 // *********************************
@@ -113,28 +115,6 @@ void	Renderer::Resize			    ( int w, int h )
 
 // *********************************
 //
-void    Renderer::SetFaceCulling        ( FaceKind face )
-{
-    glCullFace( ConstantsMapper::GlConstant( face ) );
-}
-
-// *********************************
-//
-void    Renderer::DisableFaceCulling    ()
-{
-    glDisable(GL_CULL_FACE);
-}
-
-// *********************************
-//
-void    Renderer::EnableFaceCulling     ()
-{
-    glEnable(GL_CULL_FACE);
-}
-
-
-// *********************************
-//
 bool    Renderer::PreDraw               ()
 {
     return true;
@@ -151,7 +131,7 @@ bool    Renderer::DrawRenderable        ( RenderableEntity * ent )
     case RenderableEntity::RenderableType::RT_TRIANGLE_STRIP:
         DrawTriangleStrips( static_cast< TriangleStrip * >( ent ) );
         //FIXME: FIX-1
-        //glDrawArrays(ConstantsMapper::GlConstant(type), 0, static_cast<TriangleStrip*>(ent)->NumVertices() );
+        //glDrawArrays(ConstantsMapper::GLConstant(type), 0, static_cast<TriangleStrip*>(ent)->NumVertices() );
         break;
     default:
         assert(!"Should not be here");
@@ -164,7 +144,7 @@ bool    Renderer::DrawRenderable        ( RenderableEntity * ent )
 //
 bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
 {
-    static GLuint mode = ConstantsMapper::GlConstant( RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+    static GLuint mode = ConstantsMapper::GLConstant( RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
 
     const VertexArraySingleVertexBuffer * vao = static_cast< const RenderableArrayDataArraysSingleVertexBuffer * >( strip->GetRenderableArrayData() )->VAO();
 

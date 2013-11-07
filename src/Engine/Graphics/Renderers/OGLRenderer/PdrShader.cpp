@@ -194,12 +194,12 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
             renderer->Enable( static_cast< const Texture2D * >( texture ), textureUnit );
 
             //FIXME: this state may be cached in currentSamplerState in Renderer (for specified target (GL_TEXTURE_2D here and selected texturing unit)
-            GLint wrap_s = (GLint) ConstantsMapper::GlConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
-            GLint wrap_t = (GLint) ConstantsMapper::GlConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_T ) );
+            GLint wrap_s = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
+            GLint wrap_t = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_T ) );
             
             //FIXME: think a bit more about how filtering mag/min (and mipmaps) should be implemented
-            GLint min_filter = (GLint) ConstantsMapper::GlConstant( sampler->FilteringMode() );
-            GLint mag_filter = (GLint) ConstantsMapper::GlConstant( sampler->FilteringMode() );
+            GLint min_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
+            GLint mag_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
 
             glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s );
             glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t );
