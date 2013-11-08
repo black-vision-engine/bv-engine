@@ -113,9 +113,14 @@ model::BasicNode *          GreenRect()
     root->AddPlugin( transformPlugin ); // Plugin with transformation
 
     ///////////////////////////// Material plugin //////////////////////////// 
-    auto solidPlugin = CreateSolidColorPlugin( transformPlugin, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
 
-    root->AddPlugin(solidPlugin); // Plugin with color.
+    auto colorPlugin = CreateSimpleColorPlugin( transformPlugin, CreateConstValueVec4( glm::vec4(0.f, 1.f, 0.f, 1.f ) ) );
+
+    root->AddPlugin( colorPlugin );
+
+    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/solid.frag" );
+
+    root->AddPlugin( pixelShaderPlugin );
 
     return root;
 }
