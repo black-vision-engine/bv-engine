@@ -17,11 +17,24 @@ class IVertexShaderChannel;
 class IGeometryShaderChannel;
 class ResourceHandle;
 
+struct TextureInfo
+{
+    ResourceHandle* m_resHandle;
+    std::string     m_texName;
+    glm::mat4       m_texTransform;
+
+    TextureInfo( ResourceHandle* resHandle, const std::string& texName, const glm::mat4& texTransform = glm::mat4( 1.f ) )
+        : m_resHandle( resHandle )
+        , m_texName( texName )
+        , m_texTransform( texTransform )
+    {}
+};
+
 template< class Iface, class ParameterDescriptor >
 class BasePlugin : public Iface
 {
 public:
-    typedef std::vector< std::pair< ResourceHandle*, std::string > > Textures;
+    typedef typename Iface::Textures Textures;
 
 protected:
     typedef ParameterDescriptor ParamDesc;
@@ -42,7 +55,7 @@ protected:
     IGeometryShaderChannel*        m_gshaderChannel;
 
     ///////////////// Textures //////////////////
-    Textures  m_textures;
+    typename Iface::Textures       m_textures;
 
 public:
 

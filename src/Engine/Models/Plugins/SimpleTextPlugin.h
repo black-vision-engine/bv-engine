@@ -32,7 +32,7 @@ private:
     std::string         m_fontFileName;
 
 
-    TexturePair                 LoadAtlas( const std::string& name )   const;
+    TextureInfo*                LoadAtlas( const std::string& name )   const;
 
     void                        EvalGeometryChannel();
 

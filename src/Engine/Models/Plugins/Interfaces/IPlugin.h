@@ -14,11 +14,12 @@ class IVertexShaderChannel;
 class IGeometryShaderChannel;
 class ResourceHandle;
 
+struct TextureInfo;
+
 class IPlugin
 {
 public:
-
-    typedef std::vector< std::pair< ResourceHandle*, std::string > > Textures;
+    typedef std::vector< TextureInfo* >         Textures;
 
 public:
 

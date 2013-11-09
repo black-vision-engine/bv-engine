@@ -28,7 +28,7 @@ SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::str
 SimpleTextPlugin::~SimpleTextPlugin   ()
 {}
 
-SimpleTextPlugin::TexturePair SimpleTextPlugin::LoadAtlas( const std::string& name )   const
+TextureInfo* SimpleTextPlugin::LoadAtlas( const std::string& name )   const
 {
     auto atlas = m_text->GetAtlas();
     unsigned int texSize = atlas->GetWidth() * atlas->GetHeight() * 4; //FIXME: Add format to atlas
@@ -36,7 +36,7 @@ SimpleTextPlugin::TexturePair SimpleTextPlugin::LoadAtlas( const std::string& na
     TextureExtraData* atlasExtraData = new TextureExtraData( atlas->GetWidth(), atlas->GetHeight(), 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D );
     ResourceHandle* altasHandle = new ResourceHandle( const_cast< char* >(atlas->GetData()), texSize, atlasExtraData );
 
-    return SimpleTextPlugin::TexturePair( altasHandle, name );
+    return new TextureInfo( altasHandle, name );
 }
 
 #define viewWidth   100
@@ -44,7 +44,7 @@ SimpleTextPlugin::TexturePair SimpleTextPlugin::LoadAtlas( const std::string& na
 
 void                SimpleTextPlugin::EvalGeometryChannel( )
 {
-    auto texExtraData = static_cast< const TextureExtraData* > ( m_textures[ 0 ].first->GetExtra() );
+    auto texExtraData = static_cast< const TextureExtraData* > ( m_textures[ 0 ]->m_resHandle->GetExtra() );
 
     GeometryChannelDescriptor geomChannelDesc;
 
@@ -99,7 +99,7 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
 
         VertexAttributeChannelDescriptor * desc1 = new VertexAttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-        auto verTex0AttrChannel = new model::Float2VertexAttributeChannel( desc1, m_textures[ 0 ].second, true );
+        auto verTex0AttrChannel = new model::Float2VertexAttributeChannel( desc1, m_textures[ 0 ]->m_texName, true );
 
         float texLeft   = ((float)glyph->textureX) / texExtraData->GetWidth();
         float texTop    = ((float)glyph->textureY) / texExtraData->GetHeight();

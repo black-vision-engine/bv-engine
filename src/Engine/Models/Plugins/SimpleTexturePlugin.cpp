@@ -101,7 +101,7 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
         for( unsigned int i = 0; i < m_textures.size(); ++i )
         {
 
-            auto verTexAttrChannel = new model::Float2VertexAttributeChannel( desc, m_textures[ 0 ].second, true );
+            auto verTexAttrChannel = new model::Float2VertexAttributeChannel( desc, m_textures[ 0 ]->m_texName, true );
 
             for( unsigned int j = 0; j < prevCompChannels[0]->GetNumEntries(); ++j )
             {
@@ -118,13 +118,13 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
 
 // *************************************
 //
-SimpleTexturePlugin::TexturePair SimpleTexturePlugin::LoadTexture( const std::string& name, const std::string& path ) const
+TextureInfo* SimpleTexturePlugin::LoadTexture( const std::string& name, const std::string& path ) const
 {
     TextureLoader texLoader;
 
     Resource texture( name, path );
 
-    return SimpleTexturePlugin::TexturePair( texLoader.LoadResource( &texture ), name );
+    return new TextureInfo( texLoader.LoadResource( &texture ), name );
 }
 
 // *************************************
@@ -166,7 +166,7 @@ void                SimpleTexturePlugin::Print               ( std::ostream & ou
     out << GetName() << debug::EndLine( tabs );
     for( auto t : m_textures )
     {
-        out << "Texture: " << t.second << debug::EndLine( tabs );
+        out << "Texture: " << t->m_texName << debug::EndLine( tabs );
     }
 }
 
