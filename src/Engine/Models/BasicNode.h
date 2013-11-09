@@ -23,32 +23,39 @@ class IShaderChannel;
 class IConnectedComponent;
 class IGeometryChannelDescriptor;
 
-typedef std::vector< Node* > TNodeVec;
+typedef std::vector< IModelNode* > TNodeVec;
 
-class BasicNode : public Node
+class BasicNode : public IModelNode
 {
 private:
+
+    bool                    m_visible;
+
     TNodeVec                m_children;
     TNodeVec                m_layers;
 
     std::vector< IPlugin* > m_plugins;
 
 public:
+
     explicit BasicNode();
     virtual ~BasicNode(){}
 
     virtual SceneNode*                  BuildScene              ();                              
-    void                                AddChild                ( Node* n );
-    void                                AddLayer                ( Node* n );
+    void                                AddChild                ( IModelNode* n );
+    void                                AddLayer                ( IModelNode* n );
     void                                AddPlugin               ( IPlugin* plugin );
 
-    virtual void                        Print                   (std::ostream& out, int tabs = 0)   const;
-    virtual void                        Update                  (float t);
+    virtual void                        Print                   ( std::ostream& out, int tabs = 0 ) const;
+    virtual void                        Update                  ( float t );
+
+    virtual bool                        IsVisible               ( float t ) const;
+    void                                SetVisible              ( bool visible );
 
 private:
 
     PrimitiveType                       GetRenderableType       ()                                  const;
-    bool                                CreateRenderableData    ( /*VertexArray ** vao*/ )              const;
+    bool                                CreateRenderableData    ( /*VertexArray ** vao*/ )          const;
 
     //FIXME: scene building API should be moved to some more appropriate place
     RenderableArrayDataSingleVertexBuffer *         CreateRenderableArrayData           ( PrimitiveType type ) const; 

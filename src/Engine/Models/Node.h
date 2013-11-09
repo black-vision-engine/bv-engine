@@ -1,21 +1,21 @@
 #pragma once
 #include <iostream>
 
-namespace bv
-{
+namespace bv {
 
 class SceneNode;
 
-class Node
+class IModelNode
 {
 public:
-    virtual SceneNode*      BuildScene  ()                                     = 0;
-    virtual void            Print       (std::ostream& out, int tabs = 0)   const   = 0;
 
-    virtual void            Update      (float t)                                   = 0;
+    virtual SceneNode *     BuildScene  ()                                          = 0;
+    virtual void            Print       ( std::ostream& out, int tabs = 0 ) const   = 0;
 
+    virtual void            Update      ( float t )                                 = 0;
+    virtual bool            IsVisible   ( float t ) const                           = 0;
 
-    virtual ~Node() {};
+    virtual                 ~IModelNode () {};
 
 };
 

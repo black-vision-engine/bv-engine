@@ -133,18 +133,22 @@ bool BlackVisionApp::RenderScene        ()
 //
 bool BlackVisionApp::RenderNode         ( SceneNode *   node )
 {
-    m_Renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
-
     bool bSuccess = true;
-
-    for(int i = 0; i < node->NumTransformables(); ++i)
+    
+    if ( node->IsVisible() )
     {
-        bSuccess &= m_Renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
-    }
+        m_Renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
 
-    for (int i = 0; i < node->NumChildrenNodes(); i++)
-    {
-        bSuccess &= RenderNode( node->GetChild( i ) ); 
+
+        for(int i = 0; i < node->NumTransformables(); ++i)
+        {
+            bSuccess &= m_Renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
+        }
+
+        for (int i = 0; i < node->NumChildrenNodes(); i++)
+        {
+            bSuccess &= RenderNode( node->GetChild( i ) ); 
+        }
     }
 
     return bSuccess;
@@ -192,6 +196,9 @@ bool BlackVisionApp::OnInitialize       ()
     m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
     m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 0.001f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
     //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, -4.f, 3.5f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 8.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+//    AddCameraAnimation  ();
+    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 1.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
     //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 8.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
     //AddCameraAnimation  ();
     //AddCameraAnimation2  ();

@@ -84,7 +84,7 @@ void	Renderer::Terminate         ()
 }
 
 // *********************************
-//
+// FIXME: stencil is not required here so it is just fine, glClearColor and glClearDepth should be set only once, not every buffer clear - but there is no need to optimize it
 void	Renderer::ClearBuffers		()
 {
     //FIXME: it should be set once only, when clear color is changed
