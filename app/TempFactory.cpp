@@ -116,7 +116,7 @@ namespace bv
 		return texturePlugin;
 	}
 
-	model::SimpleTextPlugin*            CreateTextPlugin                    ( const std::wstring& text, const std::string& fontFile, int size, const Vec4Interpolator& color)
+	model::SimpleTextPlugin*            CreateTextPlugin                    ( const std::wstring& text, const std::string& fontFile, int size)
 	{
         auto texPlugin = model::SimpleTextPlugin::Create( text, fontFile, size );
 

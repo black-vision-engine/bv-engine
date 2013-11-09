@@ -243,7 +243,7 @@ model::BasicNode *     Text1()
     color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
     color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
-    auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64, color );
+    auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
 
     root->AddPlugin( texPlugin );
 
@@ -292,16 +292,9 @@ model::BasicNode * Text1Textured()
 {
     model::BasicNode * root = new model::BasicNode();
 
-    std::wstring str    =   LoadUtf8FileToString( L"text_example.txt");
+    std::wstring str    =   LoadUtf8FileToString( L"text_example1.txt");
 
-    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
-
-    color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-    color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-    color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-    color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
-
-    auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64, color );
+    auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/courbd.ttf", 8 );
 
     root->AddPlugin( texPlugin );
 
@@ -313,13 +306,13 @@ model::BasicNode * Text1Textured()
 
     xt.addKey(0.f, -1.f);
     yt.addKey(0.f, -5.f);
-    zt.addKey(0.f, -5.f);
+    zt.addKey(0.f, -2.f);
 
     yt.addKey(30.f, 5.f);
 
     trns->addTranslation( xt, yt, zt );
 
-    trns->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
+    trns->addScale( CreateConstValueFloat( 3.f ), CreateConstValueFloat( 3.f ), CreateConstValueFloat( 1.f ) );
 
     auto transPlugin = CreateTransformPlugin( texPlugin, trns );
 
@@ -362,7 +355,7 @@ model::BasicNode *     Text2()
     color.addKey(8.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
     color.addKey(18.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
-    auto texPlugin = CreateTextPlugin( str, "../dep/Media/fonts/times.ttf", 128, color );
+    auto texPlugin = CreateTextPlugin( str, "../dep/Media/fonts/times.ttf", 128);
 
     root->AddPlugin( texPlugin );
 
@@ -490,14 +483,14 @@ model::BasicNode *          ExtrudedTexturedRing()
 //
 model::BasicNode *          TestScenesFactory::AnotherTestScene()
 {
-    //auto root =  Text1();
-    //root->AddChild( GreenRect() );
-    //root->AddChild( TexturedRect() );
+    auto root =  Text1();
+    root->AddChild( GreenRect() );
+    root->AddChild( TexturedRect() );
     //root->AddChild( ExtrudedTexturedRing() ); // To nie dziala na mojej karcie.
-    //root->AddChild( TexturedRing() );
-    //root->AddChild( ExtrudedRedRect() );
-    auto root =  Text1Textured() ;
-    //root->AddChild( Text2() );
+    root->AddChild( TexturedRing() );
+    root->AddChild( ExtrudedRedRect() );
+    root->AddChild( Text1Textured() );
+    root->AddChild( Text2() );
 
     return root;
 }

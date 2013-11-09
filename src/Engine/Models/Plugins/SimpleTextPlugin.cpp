@@ -64,7 +64,7 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
     {
         if( wch == L' ' )
         {
-            translate += glm::vec3( 0.3*(float)glyphW * 0.5/viewWidth, 0.f, 0.f );
+            translate += glm::vec3( 0.3*(float)glyphW * 0.5/viewWidth, 0.f, 0.f )+ interspace;
             continue;
         }
 

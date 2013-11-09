@@ -13,6 +13,6 @@ void main()
 	vec4 atlasTexColor = texture( AtlasTex, VAtlasTexCord );
 	vec4 texColor = texture( Tex0, VTex0Cord );
 	
-	FragColor = atlasTexColor * texColor;
+	FragColor = atlasTexColor * texColor.bgra;
 
 }
