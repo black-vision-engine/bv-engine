@@ -127,6 +127,44 @@ TextureInfo* SimpleTexturePlugin::LoadTexture( const std::string& name, const st
     return new TextureInfo( texLoader.LoadResource( &texture ), name );
 }
 
+namespace
+{
+
+VertexAttributeChannel*   GetPositionChannel( const std::vector< VertexAttributeChannel* >& channels )
+{
+    if( !channels.empty() )
+    {
+        // try to guess
+        if( channels[ 0 ]->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION )
+            return channels[ 0 ];
+
+        for( auto ch : channels )
+            if( ch->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION )
+                return ch;
+    }
+
+    return nullptr;
+}
+
+VertexAttributeChannel*   GetUVChannel( const std::vector< VertexAttributeChannel* >& channels )
+{
+    if( !channels.empty() )
+    {
+        // try to guess
+        if(     channels.size() > 1 
+            &&  channels[ 1 ]->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_TEXCOORD )
+            return channels[ 1 ];
+
+        for( auto ch : channels )
+            if( ch->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_TEXCOORD )
+                return ch;
+    }
+
+    return nullptr;
+}
+
+} // anonymouse
+
 // *************************************
 //
 void                SimpleTexturePlugin::Update              ( float t )
@@ -138,14 +176,18 @@ void                SimpleTexturePlugin::Update              ( float t )
             auto connComp = static_cast< const model::ConnectedComponent* >( m_geomChannel->GetComponents()[ i ] );
             auto compChannels = connComp->m_vertexAttributeChannels;
 
-            auto & verts  = dynamic_cast< Float3VertexAttributeChannel* >(compChannels[0])->GetVertices();
-            auto & uvs    = dynamic_cast< Float2VertexAttributeChannel* >(compChannels[1])->GetVertices();
+            if( auto posChannel = GetPositionChannel( compChannels ) )
+                if( auto uvChannel = GetPositionChannel( compChannels ) )
+                {
+                    auto & verts  = dynamic_cast< Float3VertexAttributeChannel* >(posChannel)->GetVertices();
+                    auto & uvs    = dynamic_cast< Float2VertexAttributeChannel* >(uvChannel)->GetVertices();
 
-            for( unsigned int i = 0; i < verts.size(); ++i )
-            {
-                uvs[ i ].x = verts[ i ].x;
-                uvs[ i ].y = verts[ i ].y;
-            }
+                    for( unsigned int i = 0; i < verts.size(); ++i )
+                    {
+                        uvs[ i ].x = verts[ i ].x;
+                        uvs[ i ].y = verts[ i ].y;
+                    }
+                }
         }
 
         m_geomChannel->SetNeedsPositionUpdate( true );
