@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
-#include "Engine/Models/Plugins/Channels/ShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
 #include "Engine/Models/Plugins/PluginParameters.h"
 #include "Engine/Models/Plugins/Parameter.h"
 
@@ -21,7 +20,7 @@ public:
     }
 };
 
-class SolidColorShaderChannel : public model::ShaderChannel< IPixelShaderChannel, SolidColorShaderChannelPD >
+class SolidColorShaderChannel : public model::PixelShaderChannelBase< SolidColorShaderChannelPD >
 {
     Vec4Interpolator                m_solidColor;
     model::ValueVec4*               m_solidColorVal;

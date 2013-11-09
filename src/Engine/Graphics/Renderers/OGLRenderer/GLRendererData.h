@@ -1,15 +1,10 @@
 #pragma once
 
+#include "Engine/Graphics/State/StateInstance.h"
+
 namespace bv
 {
     
-//FIXME: add states and add to renderer
-class AlphaState;
-class CullState;
-class DepthState;
-class OffsetState;
-class StencilState;
-class WireState;
 
 //FIXME: tutaj mozna trzymac sobie stan dla wszystkich mozliwych teksture unitow, zeby ewentualnie nie trzeba bylo tego stany co tekstra przepinac - ale to taka mala optymalizacja
 //FIXME: Buffer usage dla texture unitu to jest DYNAMIC_DRAW, to samo trzeba robic dla dynamicznych geometrii, ktore co klatka wymagaja wrzucenia calego kanalu atrybutow !!!!
@@ -21,51 +16,34 @@ public:
     class RenderState
     {
     public:
-        RenderState				();
-		void InitializeBasic	();
 
-        //void Initialize (const AlphaState* astate,
-        //    const CullState* cstate, const DepthState* dstate,
-        //    const OffsetState* ostate, const StencilState* sstate,
-        //    const WireState* wstate);
+        StateInstance   m_curState;
 
-        //// AlphaState
-        //bool mAlphaBlendEnabled;
-        //GLenum mAlphaSrcBlend;
-        //GLenum mAlphaDstBlend;
-        //bool mAlphaCompareEnabled;
-        //GLenum mCompareFunction;
-        //float mAlphaReference;
-        //Float4 mBlendColor;
+    public:
 
-        //// CullState
-        //bool mCullEnabled;
-        //bool mCCWOrder;
+                RenderState				();
+                ~RenderState            ();
 
-        //// DepthState
-        //bool mDepthEnabled;
-        //bool mDepthWriteEnabled;
-        //GLenum mDepthCompareFunction;
+        void    Initialize              ( const StateInstance & inst );
+        void    UpdateState             ( const StateInstance & inst );
 
-        //// OffsetState
-        //bool mFillEnabled;
-        //bool mLineEnabled;
-        //bool mPointEnabled;
-        //float mOffsetScale;
-        //float mOffsetBias;
+    private:
 
-        //// StencilState
-        //bool mStencilEnabled;
-        //GLenum mStencilCompareFunction;
-        //GLuint mStencilReference;
-        //GLuint mStencilMask;
-        //GLuint mStencilWriteMask;
-        //GLenum mStencilOnFail;
-        //GLenum mStencilOnZFail;
-        //GLenum mStencilOnZPass;
+        void    InitializeAlphaState    ( const AlphaState * as );
+        void    InitializeCullState     ( const CullState * cs );
+        void    InitializeDepthState    ( const DepthState * ds );
+        void    InitializeFillState     ( const FillState * fs );
+        void    InitializeOffsetState   ( const OffsetState * os );
+        void    InitializeStencilState  ( const StencilState * ss );
 
-        // WireState
-        bool mWireEnabled;
+    public:
+
+        const AlphaState *      CurAlphaState   () const;
+        const CullState *       CurCullState    () const;
+        const DepthState *      CurDepthState   () const;
+        const FillState *       CurFillState    () const;
+        const OffsetState *     CurOffsetState  () const;
+        const StencilState *    CurStencilState () const;
     };
 
     RenderState m_CurrentRS;

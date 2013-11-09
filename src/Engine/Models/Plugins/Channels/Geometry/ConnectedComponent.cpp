@@ -46,6 +46,7 @@ unsigned int                               ConnectedComponent::GetNumPrimitives 
 {
 
     // TODO: co tutaj?
+    //FIXME: GAWNO
 
     return 0;
 }

@@ -70,6 +70,8 @@ VertexArraySingleVertexBuffer::VertexArraySingleVertexBuffer   ( VertexBuffer * 
     : m_vertexBuffer( vb )
     , m_vertexDescriptor( vd )
     , m_needsUpdateMemUpload( false )
+    , m_needsUpdateRecreation( false )
+    , m_numTotalVertices( 0 )
 {
 }
 
@@ -146,9 +148,33 @@ void                        VertexArraySingleVertexBuffer::SetNeedsUpdateMemUplo
 
 // *******************************
 //
+void                        VertexArraySingleVertexBuffer::SetNeedsUpdateRecreation        ( bool needsUpdateRecreation )
+{
+    m_needsUpdateRecreation = needsUpdateRecreation;
+}
+
+// *******************************
+//
 bool                        VertexArraySingleVertexBuffer::NeedsUpdateMemUpload            () const
 {
     return m_needsUpdateMemUpload;
+}
+
+// *******************************
+//
+bool                        VertexArraySingleVertexBuffer::NeedsUpdateRecreation           () const
+{
+    return m_needsUpdateRecreation;
+}
+
+// *******************************
+//
+void                        VertexArraySingleVertexBuffer::ResetState                      ()
+{
+    m_numTotalVertices = 0;
+    m_needsUpdateMemUpload = false;
+    m_needsUpdateRecreation = false;
+    m_ccVertexNum.clear();
 }
 
 }

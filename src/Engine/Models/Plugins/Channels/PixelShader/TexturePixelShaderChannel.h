@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
-#include "Engine/Models/Plugins/Channels/ShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
 #include "Engine/Models/Plugins/PluginParameters.h"
 #include "Engine/Models/Plugins/Parameter.h"
 
@@ -93,7 +92,7 @@ public:
 };
 
 
-class TexturePixelShaderChannel : public model::ShaderChannel< model::IPixelShaderChannel, TexturePixelShaderChannelPD >
+class TexturePixelShaderChannel : public model::PixelShaderChannelBase< TexturePixelShaderChannelPD >
 {
     std::vector< model::ParamFloat * >      m_alphaParams;
     std::vector< model::ValueFloat * >      m_alphaValues;

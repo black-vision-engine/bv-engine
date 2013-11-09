@@ -27,8 +27,10 @@ public:
 
     virtual bool                                    IsTimeInvariant     ()                              const = 0;
 
-    virtual bool                                    NeedsPositionsUpdate( float t )                     const = 0;
-    virtual bool                                    NeedsTopologyUpdate ( float t )                     const = 0;
+    virtual bool                                    NeedsAttributesUpdate( float t )                    const = 0;
+    virtual bool                                    NeedsTopologyUpdate  ( float t )                    const = 0;
+
+    virtual unsigned int                            TotalNumVertices    ()                              const = 0;
 
     //FIXME: implement via plugin when its interface is known
     //virtual bool                                  CanBeConnectedTo    ( IPlugin * plugin )            const = 0;

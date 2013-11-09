@@ -88,9 +88,11 @@ class VertexShader;
 class GLSLPrograms
 {
 private:
+
     std::map<std::pair<PixelShader*, VertexShader*>, GLSLProgram*> programs;
 
 public:
+
     GLSLProgram* getProgram(PixelShader* ps, VertexShader* vs);
 
     static GLSLPrograms& get();

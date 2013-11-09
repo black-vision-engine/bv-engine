@@ -30,19 +30,22 @@ protected:
 
 protected:
 
-    DataBuffer					();
-    DataBuffer					( unsigned int numelts, unsigned int eltSize, Semantic semantic );
+    DataBuffer					    ();
+    DataBuffer					    ( unsigned int numelts, unsigned int eltSize, Semantic semantic );
 
 public:
 
-    virtual			~DataBuffer ();
+    virtual			~DataBuffer     ();
 
-    unsigned int	NumElements () const;
-    unsigned int	ElementSize () const;
-    Semantic		GetSemantic	() const;
+    unsigned int	NumElements     () const;
+    unsigned int	ElementSize     () const;
+    Semantic		GetSemantic	    () const;
 
-    unsigned int	Size		() const;
-    const char *	Data		() const;
+    unsigned int	Size		    () const;
+    const char *	Data		    () const;
+
+    void            Reinitialize    ( unsigned int numElts, unsigned int eltSize, Semantic semantic );
+
 };
 
 }

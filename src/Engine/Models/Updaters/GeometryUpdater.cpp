@@ -42,7 +42,7 @@ void    GeometryUpdater::Update      ( float t )
 {
     //If registered, it means that it is not time invariant (although may not need update in this frame)
 
-    if ( m_in->NeedsPositionsUpdate( t ) )
+    if ( m_in->NeedsAttributesUpdate( t ) )
     {
         assert( !m_in->NeedsTopologyUpdate( t ) );
 
@@ -52,6 +52,14 @@ void    GeometryUpdater::Update      ( float t )
     else if ( m_in->NeedsTopologyUpdate( t ) )
     {
         UpdateTopology( t );
+    }
+    else
+    {
+        RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_out->GetRenderableArrayData() );
+        VertexArraySingleVertexBuffer * vao = rad->VAO();
+
+        vao->SetNeedsUpdateMemUpload( false );
+        vao->SetNeedsUpdateRecreation( false );
     }
 }
 
@@ -63,7 +71,7 @@ void    GeometryUpdater::UpdatePositions     ( float t )
     assert( m_out->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
 
     //FIXME: works because we allow only triangle strips here
-    //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessart
+    //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessary
     //FIXME: putting it here is not a good idea (especially when other primitive types are added)
     RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_out->GetRenderableArrayData() );
 
@@ -82,28 +90,10 @@ void    GeometryUpdater::UpdatePositions     ( float t )
 
     for( auto cc : components )
     {
-        unsigned int numVertices = cc->GetNumVertices();
-
-        assert( numVertices == vao->GetNumVertices( k ) );
-    
-        char * data = &vbData[ currentOffset ];
-
-        unsigned int offset = 0;
-
-        for( unsigned int i = 0; i < numVertices; ++i )
-        {
-            for( auto vach : cc->GetVertexAttributeChannels() )
-            {
-                assert( vach->GetNumEntries() == numVertices );
-
-                auto eltSize = vach->GetDescriptor()->GetEntrySize();
-                const char * eltData = vach->GetData();
-
-                memcpy( &data[ offset ], &eltData[ i * eltSize ], eltSize );
-
-                offset += eltSize;
-            }
-        }
+        //This is update only, so the number of vertices must match
+        assert( cc->GetNumVertices() == vao->GetNumVertices( k ) );
+ 
+        WriteVertexDataToVBO( &vbData[ currentOffset ], cc );
 
         currentOffset += cc->GetNumVertices() * geomDesc->SingleVertexEntrySize();
 
@@ -117,6 +107,74 @@ void    GeometryUpdater::UpdatePositions     ( float t )
 //
 void    GeometryUpdater::UpdateTopology      ( float t )
 {
+    //FIXME: implement for other types of geometry as well
+    assert( m_out->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+
+    //FIXME: if this is the last update then STATIC semantic should be used but right now it's irrelevant
+    DataBuffer::Semantic vbSemantic = DataBuffer::Semantic::S_DYNAMIC;
+
+    auto geomChannel    = m_in;
+    auto components     = geomChannel->GetComponents();
+    auto geomDesc       = geomChannel->GetDescriptor();
+
+    if( components.empty() )
+    {
+        assert( false ); //FIXME: at this point empty geometry is not allowed
+        return;
+    }
+
+    unsigned int totalNumVertivces = geomChannel->TotalNumVertices();
+    
+    //FIXME: works because we allow only triangle strips here
+    //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessary
+    //FIXME: putting it here is not a good idea (especially when other primitive types are added)
+    RenderableArrayDataArraysSingleVertexBuffer * radasvb = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_out->GetRenderableArrayData() );
+
+    VertexArraySingleVertexBuffer * vao = radasvb->VAO              ();
+    VertexBuffer * vb                   = vao->GetVertexBuffer      ();
+    const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
+
+    vb->Reinitialize( totalNumVertivces, geomDesc->SingleVertexEntrySize(), vbSemantic );
+    vao->ResetState();
+
+    char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P
+    unsigned int currentOffset = 0;
+
+    for( auto cc : components )
+    {
+        assert( !cc->GetVertexAttributeChannels().empty() );
+
+        vao->AddCCEntry( cc->GetNumVertices() );
+
+        WriteVertexDataToVBO( &vbData[ currentOffset ], cc );
+
+        currentOffset += cc->GetNumVertices() * geomDesc->SingleVertexEntrySize();
+    }
+
+    vao->SetNeedsUpdateRecreation( true );
+}
+
+// *********************************
+//FIXME: this should be implemented via VBOAcessor in one place only (VBO utils or some more generic utils) - right now it is copied here and in BasicNode (as AddVertexDataToVBO)
+void    GeometryUpdater::WriteVertexDataToVBO( char * data, model::IConnectedComponent * cc )
+{
+    unsigned int numVertices = cc->GetNumVertices();
+    unsigned int offset = 0;
+
+    for( unsigned int i = 0; i < numVertices; ++i )
+    {
+        for( auto vach : cc->GetVertexAttributeChannels() )
+        {
+            assert( vach->GetNumEntries() == numVertices );
+
+            auto eltSize = vach->GetDescriptor()->GetEntrySize(); //FIXME: most probably not required here (can be safely read from other location_
+            const char * eltData = vach->GetData();
+
+            memcpy( &data[ offset ], &eltData[ i * eltSize ], eltSize );
+
+            offset += eltSize;
+        }
+    }
 }
 
 } //bv

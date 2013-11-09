@@ -44,7 +44,7 @@ void    GeometryChannelAnimatedVertices::Update                      ( float t )
 
 // ******************************
 //
-bool    GeometryChannelAnimatedVertices::NeedsPositionsUpdate        ( float t ) const
+bool    GeometryChannelAnimatedVertices::NeedsAttributesUpdate        ( float t ) const
 {
     return true;
 }

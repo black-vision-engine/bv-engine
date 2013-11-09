@@ -15,6 +15,8 @@ using std::ostringstream;
 #include "Engine/Graphics/Shaders/VertexShader.h"
 #include "Engine/Graphics/Shaders/GeometryShader.h"
 
+const bool GVerboseLogging = false;
+
 namespace bv {
 
 // *******************************
@@ -291,8 +293,8 @@ void GLSLProgram::SetUniform( const string & name, float x, float y, float z )
     } 
     else 
     {
-		//todo: uncomment
-        //printf( "Uniform: %s not found.\n", name.c_str() );
+        if (GVerboseLogging)
+            printf( "Uniform: %s not found.\n", name.c_str() );
     }
 }
 
@@ -315,8 +317,8 @@ void GLSLProgram::SetUniform( const string & name, const vec4 & v)
     } 
     else 
     {
-		//todo: uncomment
-        //printf("Uniform: %s not found.\n",name.c_str() );
+        if (GVerboseLogging)
+            printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 
@@ -332,8 +334,8 @@ void GLSLProgram::SetUniform( const string & name, const vec2 & v)
     } 
     else 
     {
-		//todo: uncomment
-        //printf("Uniform: %s not found.\n",name.c_str() );
+        if (GVerboseLogging)
+            printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 
@@ -349,8 +351,8 @@ void GLSLProgram::SetUniform( const string & name, const mat2 & m)
     } 
     else 
     {
-		//todo: uncomment
-        //printf("Uniform: %s not found.\n",name.c_str() );
+        if (GVerboseLogging)
+            printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 
@@ -366,8 +368,8 @@ void GLSLProgram::SetUniform( const string & name, const mat3 & m)
     } 
     else 
     {
-		//todo: uncomment
-        //printf("Uniform: %s not found.\n",name.c_str() );
+        if (GVerboseLogging)
+            printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 
@@ -383,8 +385,8 @@ void GLSLProgram::SetUniform( const string & name, const mat4 & m)
     } 
     else 
     {
-		//todo: uncomment
-        //printf("Uniform: %s not found.\n",name.c_str() );
+        if (GVerboseLogging)
+            printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 
@@ -400,8 +402,8 @@ void GLSLProgram::SetUniform( const string & name, float val )
     } 
     else 
     {
-		//todo: uncomment
-        //printf("Uniform: %s not found.\n",name.c_str() );
+        if (GVerboseLogging)
+            printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 
@@ -417,8 +419,8 @@ void GLSLProgram::SetUniform( const string & name, int val )
     } 
     else 
     {
-		//todo: uncomment
-        //printf("Uniform: %s not found.\n",name.c_str() );
+        if (GVerboseLogging)
+            printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 
@@ -434,8 +436,8 @@ void GLSLProgram::SetUniform( const string & name, bool val )
     } 
     else 
     {
-		//todo: uncomment
-        //printf("Uniform: %s not found.\n",name.c_str() );
+        if (GVerboseLogging)
+            printf("Uniform: %s not found.\n",name.c_str() );
     }
 }
 

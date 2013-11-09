@@ -6,11 +6,16 @@
 namespace bv { namespace model
 {
 
+class RendererContext;
+
 class IPixelShaderChannel : public IShaderChannel
 {
 public:
 
-    virtual         ~IPixelShaderChannel(){};
+    virtual const RendererContext *     GetRendererContext  () const = 0;
+
+    virtual                             ~IPixelShaderChannel(){};
+
 };
 
 } // model

@@ -11,20 +11,20 @@ class VariableTopologyStripComponent: public ConnectedComponent
 {
 private:
 
-    float   m_size;
-    float   m_speed;
-    float   m_oscilationSpeed;
-    float   m_segmentDeltaTime;
-    float   m_activeDuration;
-    float   m_mainScale;
+    float           m_size;
+    float           m_speed;
+    float           m_oscilationSpeed;
+    float           m_segmentDeltaTime;
+    float           m_activeDuration;
+    float           m_mainScale;
 
-    int     numSegments;
-    int     m_activeSegment;
-    bool    m_topologyChanged;
+    int             numSegments;
+    int             m_activeSegment;
+    mutable bool    m_topologyChanged;
 
-    float   m_startX;
-    float   m_startY;
-    float   m_posZ;
+    float           m_startX;
+    float           m_startY;
+    float           m_posZ;
 
     Float3VertexAttributeChannel * m_positions;
 
@@ -40,6 +40,7 @@ public:
 
     virtual void        Update                          ( float t );
 
+    float               ComponentDuration               () const;
 
 private:
 
@@ -49,6 +50,8 @@ private:
 
     glm::vec3           TopPosition                     ( const glm::vec3 & val, const glm::vec3 & normal ) const;
     glm::vec3           BottomPosition                  ( const glm::vec3 & val, const glm::vec3 & normal ) const;
+
+public:
 
     static  VariableTopologyStripComponent *    Create  ( float size, float speed, float duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ );
 

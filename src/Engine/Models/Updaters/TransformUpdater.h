@@ -26,7 +26,7 @@ public:
             TransformUpdater    ( TransformableEntity * out, const model::ITransformChannel * in ); 
             ~TransformUpdater   ();
 
-    void    Update              ( float t );
+   virtual  void    Update      ( float t );
 
 };
 

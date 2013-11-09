@@ -23,6 +23,8 @@
 #include "Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.h"
 #include "Engine\Models\Plugins\SimpleTransformPlugin.h"
 #include "TempFactory.h"
+#include "Engine/Models/Plugins/SimpleTransformPlugin.h"
+#include "TempFactory.h"
 
 #include <iostream>
 #include <fstream>
@@ -34,9 +36,11 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
-//#include <cmath>
+
 #include "Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.h"
 #include "Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.h"
+#include "Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.h"
+#include "Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelVariableTopology.h"
 
 namespace bv
 {
@@ -44,7 +48,122 @@ namespace bv
 namespace
 {
 
+// *********************************
+//
+FloatInterpolator                   CreateConstValueFloat               ( float val )
+{
+    FloatInterpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
+    inter.addKey( 0.f, val );
 
+    return inter;
+}
+
+// *********************************
+//
+Vec4Interpolator                   CreateConstValueVec4                 ( const glm::vec4& val )
+{
+    Vec4Interpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
+    inter.addKey( 0.f, val );
+
+    return inter;
+}
+
+// *********************************
+//
+model::GeometryRectPlugin*          CreateGeometryRectPlugin            ( float w, float h )
+{
+    FloatInterpolator wi; wi.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator hi; hi.setWrapPostMethod( bv::WrapMethod::pingPong );
+    
+    wi.addKey(0.f, w);
+    hi.addKey(0.f, h);
+
+    return new model::GeometryRectPlugin(wi, hi);
+}
+
+// *********************************
+//
+model::GeometryChannel*             CreateGeometryChannel               (model::IConnectedComponent* connComp)
+{
+    model::GeometryChannelDescriptor desc;
+
+    for( auto compDesc : connComp->GetVertexAttributeChannels() )
+    {
+        desc.AddVertexAttrChannelDesc( static_cast< const model::VertexAttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
+    }
+
+    model::GeometryChannel* ret = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
+
+    ret->AddConnectedComponent(connComp);
+
+    return ret;
+}
+
+// *********************************
+//
+model::ITransformChannel*           CreateTransformChannel              (TransformF* transformation)
+{
+    model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
+    trasformChannel->AddTransform( transformation );
+
+    return trasformChannel;
+}
+
+// *********************************
+//
+model::SolidColorPlugin*            CreateSolidColorPlugin              (model::IPlugin* prevPlugin, const glm::vec4& color)
+{
+    auto solidPlugin = new model::SolidColorPlugin( prevPlugin );
+
+    // Set Pixel Shader Channel
+    solidPlugin->SetPixelShaderChannel    ( new model::SolidColorShaderChannel( "../dep/media/shaders/solid.frag", CreateConstValueVec4( color ) ) );
+
+    return solidPlugin;
+}
+
+// *********************************
+//
+model::SimpleTexturePlugin*         CreateTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths )
+{
+    auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, texturesPaths );
+
+    // Set Pixel Shader Channel
+    std::vector<TransformF> txMat;
+    std::vector<FloatInterpolator> alphas;
+    texturePlugin->SetPixelShaderChannel( new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
+                                        , alphas
+                                        , txMat )
+                                        );
+
+    texturePlugin->SetVertexShaderChannel( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" )
+                                        );
+
+    return texturePlugin;
+}
+
+// *********************************
+//
+model::SimpleTextPlugin*            CreateTextPlugin                    ( const std::wstring& text, const std::string& fontFile, int size, const Vec4Interpolator& color, TransformF* trans )
+{
+    auto texPlugin = new model::SimpleTextPlugin( text, fontFile, size );
+
+    texPlugin->SetPixelShaderChannel     ( new model::TextPixelShaderChannel( "../dep/media/shaders/text.frag", color ) );
+    texPlugin->SetVertexShaderChannel    ( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
+
+    model::ITransformChannel      * stch  = CreateTransformChannel( trans );
+
+    texPlugin->SetTransformChannel( stch );
+
+    return texPlugin;
+}
+
+// *********************************
+//
+model::IGeometryShaderChannel*      CreateGeometryShaderExtrude         ( float scale )
+{
+    FloatInterpolator extrudeScale = CreateConstValueFloat( scale );
+    return new model::ExtrudeGeometryShaderChannel("../dep/media/shaders/extrude.geom", extrudeScale);
+}
 
 // ******************************
 //
@@ -68,15 +187,13 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
-    //auto solidPlugin = CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
-
-
+    auto solidPlugin = CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
 
     //// Add plugins to node
     root->AddPlugin( geomPlugin );
-    //root->AddPlugin( solidPlugin );
+    root->AddPlugin( solidPlugin );
 
-    //return root;
+    return root;
 
 
     ///////////////////////////// Texture plugin //////////////////////////// 
@@ -89,6 +206,37 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 
     return root;
     
+}
+
+// ******************************
+//
+model::BasicNode * VariableTopologySolids( float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
+{
+    model::BasicNode * root = new model::BasicNode();
+    
+    ///////////////////////////// Geometry plugin //////////////////////////
+    model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin();
+
+    ///////////////////////////// Channels //////////////////////////
+    model::GeometryChannel *        geomChannel     = model::GeometryChannelVariableTopology::Create( size, speed, oscilationSpeed, numSegments, numComponents );
+
+    TransformF *                    trans           = new TransformF();
+    model::SimpleTransformChannel * trasformChannel = new model::SimpleTransformChannel();
+    trasformChannel->AddTransform( trans );
+
+    geomPlugin->SetGeometryChannel  ( geomChannel );
+    geomPlugin->SetTransformChannel ( trasformChannel );
+
+
+    ///////////////////////////// Solid plugin //////////////////////////// 
+
+    auto solidPlugin = CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
+
+    //// Add plugins to node
+    root->AddPlugin( geomPlugin );
+    root->AddPlugin( solidPlugin );
+
+    return root;
 }
 
 // ******************************
@@ -161,6 +309,8 @@ model::BasicNode *          TexturedRect()
 }
 
 
+// ******************************
+//
 model::BasicNode *          TexturedRing()
 {
     model::BasicNode * root = new model::BasicNode();
@@ -195,6 +345,8 @@ model::BasicNode *          TexturedRing()
     return root;
 }
 
+// ******************************
+//
 model::BasicNode *     Text1()
 {
     model::BasicNode * root = new model::BasicNode();
@@ -247,8 +399,8 @@ model::BasicNode *     Text1()
     return root;
 }
 
-
-
+// ******************************
+//
 model::BasicNode *     Text2()
 {
     model::BasicNode * root = new model::BasicNode();
@@ -339,6 +491,8 @@ model::BasicNode *          ExtrudedRedRect()
     return root;
 }
 
+// ******************************
+//
 model::BasicNode *          ExtrudedTexturedRing()
 {
     model::BasicNode * root = new model::BasicNode();
@@ -378,7 +532,6 @@ model::BasicNode *          ExtrudedTexturedRing()
 }
 
 } // anonymous
-
 
 
 // ******************************
@@ -437,6 +590,19 @@ model::BasicNode *      TestScenesFactory::AnimatedTestScene ()
 
     //float 
     return AnimatedSolid( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
+}
+
+// ******************************
+//
+model::BasicNode *      TestScenesFactory::TestSceneVariableTopology   ()
+{
+    float size              = 1.0f;
+    float speed             = 1.5f;
+    float oscilationSpeed   = 1.f;
+    int numSegments         = 10;
+    int numComponents       = 4;
+
+    return VariableTopologySolids( size, speed, oscilationSpeed, numSegments, numComponents );
 }
 
 } // bv

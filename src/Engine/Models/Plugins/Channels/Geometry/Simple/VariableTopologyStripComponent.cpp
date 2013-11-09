@@ -46,8 +46,8 @@ VariableTopologyStripComponent::VariableTopologyStripComponent                  
     //Add one segment (just so that something is rendered)
     vertArrtF3->AddVertexAttribute( TopPosition( f0, n0 ) );
     vertArrtF3->AddVertexAttribute( BottomPosition( f0, n0 ) );
-    vertArrtF3->AddVertexAttribute( BottomPosition( f1, n1 ) );
     vertArrtF3->AddVertexAttribute( TopPosition( f1, n1 ) );
+    vertArrtF3->AddVertexAttribute( BottomPosition( f1, n1 ) );
 
     m_vertexAttributeChannels.push_back( vertArrtF3 );
     m_positions = vertArrtF3;
@@ -57,8 +57,6 @@ VariableTopologyStripComponent::VariableTopologyStripComponent                  
 //
 void                     VariableTopologyStripComponent::Update         ( float t )
 {
-    m_topologyChanged = false;
-
     if ( !IsActive( t ) )
     {
         return;
@@ -73,16 +71,25 @@ void                     VariableTopologyStripComponent::Update         ( float 
         return;
     }
 
+    m_activeSegment = nSegment;
+
     //FIXME: variable number of segments should be allowed - this way we explicitely require fast updates (at most one segment per update)
     m_topologyChanged = true;
 
     //Second part of first strip
-    t = m_segmentDeltaTime * nSegment;
+    t = m_segmentDeltaTime * ( nSegment + 1 );
     glm::vec3 f = EvaluateFunction( t );
     glm::vec3 n = EvaluateNormal( EvaluateVelocity( t ) );
 
-    m_positions->AddVertexAttribute( BottomPosition( f, n ) );
     m_positions->AddVertexAttribute( TopPosition( f, n ) );
+    m_positions->AddVertexAttribute( BottomPosition( f, n ) );
+}
+
+// *******************************
+//
+float               VariableTopologyStripComponent::ComponentDuration           () const
+{
+    return m_activeDuration / m_speed;
 }
 
 // *******************************
@@ -102,7 +109,10 @@ bool                                VariableTopologyStripComponent::IsActive    
 //
 bool                VariableTopologyStripComponent::TopologyChanged             ( float t ) const
 {
-    return m_topologyChanged;
+    bool retVal = m_topologyChanged;
+    m_topologyChanged = false;
+
+    return retVal;
 }
 
 // *******************************
@@ -113,7 +123,6 @@ glm::vec3               VariableTopologyStripComponent::EvaluateFunction        
     float x   = t * m_speed;
 
     return glm::vec3(x, val, 0.f) + glm::vec3(m_startX,m_startY, m_posZ);
-;
 }
 
 // *******************************

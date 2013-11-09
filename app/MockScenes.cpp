@@ -11,7 +11,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
-#include "Engine/Models/Plugins/Channels/ShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/GeometryPluginRect.h"
 #include "TempFactory.h"
@@ -56,7 +56,7 @@ const std::string SimpleTexturePluginPD::alphaParamName( "alpha" );
 const std::string SimpleTexturePluginPD::txMatrix0ParamName( "txMat0" );
 const std::string SimpleTexturePluginPD::txMatrix1ParamName( "txMat1" );
 
-class MyPixelShaderChannel : public model::ShaderChannel< model::IPixelShaderChannel, SimpleTexturePluginPD >
+class MyPixelShaderChannel : public model::PixelShaderChannelBase< SimpleTexturePluginPD >
 {
     model::ParamFloat *        m_alphaParam;
     model::ValueFloat *        m_alphaValue;
@@ -78,7 +78,7 @@ public:
     }
 
     MyPixelShaderChannel( const std::string& shaderFile, const FloatInterpolator & alpha, const TransformF & tex0Transform, const TransformF & tex1Transform )
-        : ShaderChannel( shaderFile )
+        : PixelShaderChannelBase( shaderFile )
     {
         m_alphaParam = new model::ParamFloat( ParamDesc::alphaParamName, alpha );
         m_alphaValue = new model::ValueFloat( ParamDesc::alphaParamName );

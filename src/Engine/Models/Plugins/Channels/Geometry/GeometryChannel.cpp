@@ -35,7 +35,12 @@ GeometryChannel::GeometryChannel     ( PrimitiveType type, const GeometryChannel
 // *********************************
 //
 GeometryChannel::~GeometryChannel   ()
-{}
+{
+    for( auto cc : m_connectedComponents )
+    {
+        delete cc;
+    }
+}
 
 // *********************************
 //
@@ -67,7 +72,7 @@ bool                                    GeometryChannel::IsTimeInvariant     () 
 
 // *********************************
 //
-bool                                    GeometryChannel::NeedsPositionsUpdate( float t ) const
+bool                                    GeometryChannel::NeedsAttributesUpdate( float t ) const
 {
     return m_needsPositionUpdate;
 }
@@ -91,6 +96,20 @@ void                                    GeometryChannel::SetNeedsPositionUpdate(
 void                                    GeometryChannel::SetNeedsTopologyUpdate( bool b )
 {
     m_needsTopologyUpdate = b;
+}
+
+// *********************************
+//
+unsigned int                            GeometryChannel::TotalNumVertices    ()          const
+{
+    unsigned int total = 0;
+
+    for( auto cc : m_connectedComponents )
+    {
+        total += cc->GetNumVertices();
+    }
+
+    return total;
 }
 
 // *********************************

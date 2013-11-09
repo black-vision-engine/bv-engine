@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ShaderParameters.h"
-#include "Engine\Graphics\Shaders\TextureSampler.h"
+#include "Engine/Graphics/Shaders/ShaderParameters.h"
+#include "Engine/Graphics/Shaders/TextureSampler.h"
 
 namespace bv {
 

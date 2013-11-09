@@ -18,6 +18,71 @@ PdrVertexArrayObjectSingleVB::PdrVertexArrayObjectSingleVB    ( Renderer * rende
     assert( vao );
     m_vao = vao;
 
+    Create( renderer, vao );
+}
+
+// *******************************
+//
+PdrVertexArrayObjectSingleVB::~PdrVertexArrayObjectSingleVB   ()
+{
+    glDeleteVertexArrays( 1, &m_vaoHandle );
+}
+
+// *******************************
+//
+void    PdrVertexArrayObjectSingleVB::Enable                  ( Renderer * renderer )
+{
+    if( m_vao->NeedsUpdateMemUpload() )
+    {
+        renderer->Update( m_vao->GetVertexBuffer() );
+    }
+    else if( m_vao->NeedsUpdateRecreation() )
+    {
+        renderer->Recreate( m_vao->GetVertexBuffer() );
+
+        glDeleteVertexArrays( 1, &m_vaoHandle );
+        Create( renderer, m_vao );
+    }
+
+    Bind( renderer );
+}
+
+// *******************************
+//
+void    PdrVertexArrayObjectSingleVB::Disable                 ( Renderer * renderer )
+{
+    Unbind( renderer );
+}
+
+// *******************************
+//
+void    PdrVertexArrayObjectSingleVB::Bind                    ( Renderer * renderer )
+{
+    renderer->Enable( m_vao->GetVertexBuffer() );
+    glBindVertexArray( m_vaoHandle );
+}
+
+// *******************************
+//
+void    PdrVertexArrayObjectSingleVB::Unbind                  ( Renderer * renderer )
+{
+    glBindVertexArray( 0 );
+    renderer->Disable( m_vao->GetVertexBuffer() );
+}
+
+// *******************************
+//
+void    PdrVertexArrayObjectSingleVB::EnableVertexAttribArray ( GLuint index )
+{
+    glEnableVertexAttribArray( index );
+}
+
+// *******************************
+//
+void    PdrVertexArrayObjectSingleVB::Create                  ( Renderer * renderer, const VertexArraySingleVertexBuffer * vao )
+{
+    assert( vao );
+
     //glGenVertexArrays         ( 1, &m_VaoHandle );
     //glBindVertexArray         ( m_VaoHandle );
     //glBindBuffer              (GL_ARRAY_BUFFER, handle[0]);
@@ -35,7 +100,7 @@ PdrVertexArrayObjectSingleVB::PdrVertexArrayObjectSingleVB    ( Renderer * rende
     for( GLuint index = 0; index < numChannels; ++index )
     {
         GLuint location = desc->ChannelLocation( index );
-        this->EnableVertexAttribArray( location );
+        EnableVertexAttribArray( location );
     }
 
     unsigned int stride         = desc->Stride();
@@ -54,56 +119,6 @@ PdrVertexArrayObjectSingleVB::PdrVertexArrayObjectSingleVB    ( Renderer * rende
     }
 
     Unbind( renderer );
-}
-
-// *******************************
-//
-PdrVertexArrayObjectSingleVB::~PdrVertexArrayObjectSingleVB   ()
-{
-    glDeleteVertexArrays( 1, &m_vaoHandle );
-}
-
-// *******************************
-//
-void    PdrVertexArrayObjectSingleVB::Enable                  ( Renderer * renderer )
-{
-    Bind( renderer );
-}
-
-// *******************************
-//
-void    PdrVertexArrayObjectSingleVB::Disable                 ( Renderer * renderer )
-{
-    Unbind( renderer );
-}
-
-// *******************************
-//
-void    PdrVertexArrayObjectSingleVB::Bind                    ( Renderer * renderer )
-{
-    if( m_vao->NeedsUpdateMemUpload() )
-    {
-        renderer->Update( m_vao->GetVertexBuffer() );
-    }
-    
-    renderer->Enable( m_vao->GetVertexBuffer() );
-
-    glBindVertexArray( m_vaoHandle );
-}
-
-// *******************************
-//
-void    PdrVertexArrayObjectSingleVB::Unbind                  ( Renderer * renderer )
-{
-    glBindVertexArray( 0 );
-    renderer->Disable( m_vao->GetVertexBuffer() );
-}
-
-// *******************************
-//
-void    PdrVertexArrayObjectSingleVB::EnableVertexAttribArray ( GLuint index )
-{
-    glEnableVertexAttribArray( index );
 }
 
 } //bv

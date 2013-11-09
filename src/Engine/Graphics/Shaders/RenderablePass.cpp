@@ -15,7 +15,18 @@ RenderablePass::RenderablePass( PixelShader * ps, VertexShader * vs, GeometrySha
     : m_geometryShader(gs)
     , m_vertexShader(vs)
     , m_pixelShader(ps)
-{}
+{
+    m_stateInstance = new StateInstance();
+}
+
+// *********************************
+//
+RenderablePass::~RenderablePass         ()
+{
+    m_stateInstance->DeleteStates();
+
+    delete m_stateInstance;
+}
 
 // *********************************
 //
@@ -40,6 +51,13 @@ GeometryShader *    RenderablePass::GetGeometryShader      ()
 
 // *********************************
 //
+StateInstance *     RenderablePass::GetStateInstance        ()
+{
+    return m_stateInstance;
+}
+
+// *********************************
+//
 void                RenderablePass::Update                 ()
 {
     if(m_pixelShader)
@@ -50,7 +68,6 @@ void                RenderablePass::Update                 ()
 
     if(m_geometryShader)
         m_geometryShader->Update();
-
 }
 
 } // bv

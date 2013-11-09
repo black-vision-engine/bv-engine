@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "ShaderParam.h"
+#include "Engine/Graphics/Shaders/ShaderParam.h"
 
 namespace bv {
 

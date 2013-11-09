@@ -114,6 +114,13 @@
     <ClCompile Include="Engine\Models\Plugins\SimpleVertexShaderPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleColorPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleGeometryShaderPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\RendererContext.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\AlphaContext.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\CullContext.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\DepthContext.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\FillContext.cpp" />
+    <ClCompile Include="Engine\Models\Updaters\RendererStateUpdater.cpp" />
+    <ClCompile Include="Engine\Models\Builder\RendererStatesBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -253,6 +260,14 @@
     <ClInclude Include="Engine\Models\Plugins\SimpleColorPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleGeometryShaderPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\TransformChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShaderChannelBase.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\RendererContext.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\AlphaContext.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\CullContext.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\DepthContext.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\FillContext.h" />
+    <ClInclude Include="Engine\Models\Updaters\RendererStateUpdater.h" />
+    <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

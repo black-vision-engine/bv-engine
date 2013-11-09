@@ -9,16 +9,7 @@ namespace bv {
 //
 PdrVertexBuffer::PdrVertexBuffer     ( Renderer * renderer, const VertexBuffer * vb )
 {
-    glGenBuffers( 1, &m_bufferHandle);
-
-    Bind();
-    BufferData( vb );
-    Unbind();
-
-    void * data = Lock( MemoryLockingType::MLT_WRITE_ONLY );
-    memcpy( data, vb->Data(), vb->Size() );
-
-    Unlock();
+    CreateBuffer( vb );
 }
 
 // *******************************
@@ -48,7 +39,7 @@ void * PdrVertexBuffer::Lock         ( MemoryLockingType mlt )
 {
     Bind();
 
-    GLvoid * vidMem = glMapBuffer( GL_ARRAY_BUFFER, ConstantsMapper::GlConstant( mlt ) );
+    GLvoid * vidMem = glMapBuffer( GL_ARRAY_BUFFER, ConstantsMapper::GLConstant( mlt ) );
     
     Unbind();
 
@@ -76,6 +67,14 @@ void    PdrVertexBuffer::Update              ( const VertexBuffer * vb )
 }
 
 // *******************************
+//FIXME: it is much better to simply create larger PdrBuffer and use part of it than recreate it all the time (to be implemented - it is not that difficult)
+void    PdrVertexBuffer::Recreate            ( const VertexBuffer * vb )
+{
+    glDeleteBuffers( 1, &m_bufferHandle );
+    CreateBuffer( vb );
+}
+
+// *******************************
 //
 void    PdrVertexBuffer::Bind                ()
 {
@@ -93,7 +92,23 @@ void    PdrVertexBuffer::Unbind              ()
 //
 void    PdrVertexBuffer::BufferData          ( const VertexBuffer * vb ) const
 {
-    glBufferData( GL_ARRAY_BUFFER, vb->Size(), 0, ConstantsMapper::GlConstant( vb->GetSemantic() ) );
+    glBufferData( GL_ARRAY_BUFFER, vb->Size(), 0, ConstantsMapper::GLConstant( vb->GetSemantic() ) );
+}
+
+// *******************************
+//
+void    PdrVertexBuffer::CreateBuffer        ( const VertexBuffer * vb )
+{
+    glGenBuffers( 1, &m_bufferHandle);
+
+    Bind();
+    BufferData( vb );
+    Unbind();
+
+    void * data = Lock( MemoryLockingType::MLT_WRITE_ONLY );
+    memcpy( data, vb->Data(), vb->Size() );
+
+    Unlock();
 }
 
 }

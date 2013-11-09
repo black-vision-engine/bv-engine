@@ -37,11 +37,12 @@ public:
 
     //IGeometryChannel
     virtual bool                                    IsTimeInvariant     ()          const;
-    virtual bool                                    NeedsPositionsUpdate( float t ) const;
+    virtual bool                                    NeedsAttributesUpdate( float t ) const;
     virtual bool                                    NeedsTopologyUpdate ( float t ) const;
 
     void                                            SetNeedsPositionUpdate( bool b );
     void                                            SetNeedsTopologyUpdate( bool b );
+    virtual unsigned int                            TotalNumVertices    ()          const;
 
     virtual const IGeometryChannelDescriptor *      GetDescriptor       () const;
     void                                            SetDescriptor       ( const GeometryChannelDescriptor & desc );

@@ -63,6 +63,11 @@ void BlackVisionApp::OnIdle		()
     static DWORD startTime = GetTickCount();
     DWORD curTime = GetTickCount();
 
+    //FIXME: debug timer - don't get fooled
+    static unsigned int frame = 0;
+    //float t = float(frame) * 0.1f; ///10 fps
+    frame++;
+
     float t = float(curTime - startTime) * 0.001f;
 
         m_modelScene->Update( t );
@@ -169,10 +174,16 @@ bool BlackVisionApp::OnInitialize       ()
 
     //model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
     //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
+    //model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
+    //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
 
+    //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
+     
+    model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
     //model::BasicNode * root = TestScenesFactory::XMLTestScene();
      
     model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
+    model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
 
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
 
@@ -182,13 +193,10 @@ bool BlackVisionApp::OnInitialize       ()
 
     m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
     //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, -4.f, 3.5f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 1.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-    AddCameraAnimation2  ();
+    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 8.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+//    AddCameraAnimation  ();
     //FIXME: read from configuration file and change appropriately when resoultion changes
     m_modelScene->GetCamera()->SetPerspective( 90.f, float(m_Width) / float(m_Height), 0.1f, 100.f );
-
-    //FIXME: state changes should be implemented some other way around
-    m_Renderer->DisableFaceCulling();
 
     return WindowedApplication::OnInitialize();
 }

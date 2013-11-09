@@ -22,7 +22,6 @@ class VertexShader;
 class GeometryShader;
 class RenderablePass;
 class Texture2D;
-class PdrTexture2D;
 
 class VertexBuffer;
 class IndexBuffer;
@@ -30,6 +29,7 @@ class VertexDescriptor;
 class VertexArray;
 class VertexArraySingleVertexBuffer;
 
+class PdrTexture2D;
 class PdrVertexBuffer;
 class PdrShader;
 class PdrIndexBuffer;
@@ -47,7 +47,7 @@ class Renderer
 {
 private:
 
-    StateInstance       m_currentStateIstance;
+    StateInstance       m_currentStateInstance;
     StateInstance       m_defaultStateInstance;
 
     int					m_Width;
@@ -94,10 +94,12 @@ public:
     bool    PostDraw            ();
 
     void	DisplayColorBuffer	();
-    void    SetFaceCulling      ( FaceKind face );
-    void    DisableFaceCulling  ();
-    void    EnableFaceCulling   ();
+
     void    SetCamera           (Camera* cam);
+
+public:
+
+    void    SetStateInstance    ( const StateInstance & stateInstance );
 
 public: //FIXME: private
 
@@ -111,6 +113,7 @@ public: //FIXME: private
     void    Disable             ( const  VertexBuffer * vb );
 
     void    Update              ( const VertexBuffer * vb );
+    void    Recreate            ( const VertexBuffer * vb );
 
 public:
 
@@ -131,5 +134,15 @@ public:
     bool                        DrawRenderable              ( RenderableEntity * ent );
     bool                        DrawTriangleStrips          ( TriangleStrip * strip );
 
+private:
+
+    void                        SetAlphaState               ( const AlphaState * as );
+    void                        SetCullState                ( const CullState * cs );
+    void                        SetDepthState               ( const DepthState * ds );
+    void                        SetFillState                ( const FillState * fs );
+    void                        SetOffsetState              ( const OffsetState * os );
+    void                        SetStencilState             ( const StencilState * ss );
+
 };
+
 }

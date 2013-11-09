@@ -30,7 +30,7 @@ public:
 
     virtual void    Update                              ( float t );
 
-    virtual bool    NeedsPositionsUpdate                ( float t ) const;
+    virtual bool    NeedsAttributesUpdate                ( float t ) const;
 
     static GeometryChannelAnimatedVertices *    Create  ( float w, float h, float z, unsigned int numSegments, float speedX, float speedY, float cyclesX, float cyclesY, float sizeY, float sizeZ );
 
