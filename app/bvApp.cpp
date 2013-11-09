@@ -192,6 +192,9 @@ bool BlackVisionApp::OnInitialize       ()
     m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
     m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 1.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
     //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, -4.f, 3.5f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 8.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+//    AddCameraAnimation  ();
+    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 1.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
     //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 8.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
     //AddCameraAnimation  ();
     AddCameraAnimation2  ();
