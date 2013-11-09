@@ -4,7 +4,7 @@ namespace bv { namespace model
 {
 
 const std::string SolidColorShaderChannelPD::pluginName = "Solid";
-const std::string SolidColorShaderChannelPD::solidColor = "solidColor";
+const std::string SolidColorShaderChannelPD::solidColor = "color";
 
 SolidColorShaderChannel::SolidColorShaderChannel(const std::string& shaderFile, const Vec4Interpolator& color)
     : PixelShaderChannelBase( shaderFile )

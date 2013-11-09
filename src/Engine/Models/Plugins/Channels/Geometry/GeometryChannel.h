@@ -23,7 +23,7 @@ protected:
     PrimitiveType                                   m_primitiveType;
     bool                                            m_isReadOnly;
     bool                                            m_isTimeInvariant;
-    bool                                            m_needsPositionUpdate;
+    bool                                            m_needsAttributesUpdate;
     bool                                            m_needsTopologyUpdate;
 
 public:

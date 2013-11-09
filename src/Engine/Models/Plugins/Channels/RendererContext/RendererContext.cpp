@@ -5,7 +5,7 @@ namespace bv { namespace model {
 // *****************************
 //
 RendererContext::RendererContext     ()
-    : m_stateChanged( false )
+    : m_stateChanged( true )
     , alphaCtx( nullptr )
     , cullCtx( nullptr )
     , depthCtx( nullptr )
@@ -17,6 +17,10 @@ RendererContext::RendererContext     ()
 //
 RendererContext::~RendererContext    ()
 {
+    delete alphaCtx;
+    delete cullCtx;
+    delete depthCtx;
+    delete fillCtx;
 }
 
 // *****************************

@@ -1,6 +1,7 @@
 #include "TempFactory.h"
 #include "Engine/Models/Plugins/SimpleTransformPlugin.h"
 #include "Engine/Models/Plugins/GeometryPluginRing.h"
+#include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 
 namespace bv
 {
@@ -98,10 +99,16 @@ namespace bv
 		// Set Pixel Shader Channel
 		std::vector<TransformF> txMat;
 		std::vector<FloatInterpolator> alphas;
-		texturePlugin->SetPixelShaderChannel( new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
+
+        auto pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
 											, alphas
-											, txMat )
-											);
+											, txMat );
+
+        auto rendContext = pixelShaderChannel->GetRendererContext();
+        rendContext->cullCtx = new model::CullContext();
+        rendContext->cullCtx->enabled = false;
+
+		texturePlugin->SetPixelShaderChannel( pixelShaderChannel );
 
 		texturePlugin->SetVertexShaderChannel( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" )
 											);

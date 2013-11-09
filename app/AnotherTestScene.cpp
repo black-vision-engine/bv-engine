@@ -70,13 +70,13 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
-    auto solidPlugin = CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
+    //auto solidPlugin = CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
 
-    //// Add plugins to node
+    ////// Add plugins to node
     root->AddPlugin( geomPlugin );
-    root->AddPlugin( solidPlugin );
+    //root->AddPlugin( solidPlugin );
 
-    return root;
+    //return root;
 
 
     ///////////////////////////// Texture plugin //////////////////////////// 

@@ -230,6 +230,9 @@ void    Renderer::Enable              ( RenderablePass * pass, TransformableEnti
 
     pass->Update();
 
+    assert( pass->GetStateInstance() );
+    SetStateInstance( *pass->GetStateInstance() );
+
     auto projMat = glm::mat4(1.f);
 
     if(m_Camera)

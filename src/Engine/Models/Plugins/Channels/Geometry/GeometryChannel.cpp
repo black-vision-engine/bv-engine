@@ -15,7 +15,7 @@ GeometryChannel::GeometryChannel     ( PrimitiveType type, bool isReadOnly, bool
     : m_primitiveType( type )
     , m_isReadOnly( isReadOnly )
     , m_isTimeInvariant( isTimeInvariant )
-    , m_needsPositionUpdate( false )
+    , m_needsAttributesUpdate( false )
     , m_needsTopologyUpdate( false )
 {
 }
@@ -27,7 +27,7 @@ GeometryChannel::GeometryChannel     ( PrimitiveType type, const GeometryChannel
     , m_desc( desc )
     , m_isReadOnly( isReadOnly )
     , m_isTimeInvariant( isTimeInvariant )
-    , m_needsPositionUpdate( false )
+    , m_needsAttributesUpdate( false )
     , m_needsTopologyUpdate( false )
 {
 }
@@ -74,7 +74,7 @@ bool                                    GeometryChannel::IsTimeInvariant     () 
 //
 bool                                    GeometryChannel::NeedsAttributesUpdate( float t ) const
 {
-    return m_needsPositionUpdate;
+    return m_needsAttributesUpdate;
 }
 
 // *********************************
@@ -88,7 +88,7 @@ bool                                    GeometryChannel::NeedsTopologyUpdate ( f
 //
 void                                    GeometryChannel::SetNeedsAttributesUpdate( bool b )
 {
-    m_needsPositionUpdate = b;
+    m_needsAttributesUpdate = b;
 }
 
 // *********************************
