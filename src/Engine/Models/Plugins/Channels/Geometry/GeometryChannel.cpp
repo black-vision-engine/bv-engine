@@ -86,7 +86,7 @@ bool                                    GeometryChannel::NeedsTopologyUpdate ( f
 
 // *********************************
 //
-void                                    GeometryChannel::SetNeedsPositionUpdate( bool b )
+void                                    GeometryChannel::SetNeedsAttributesUpdate( bool b )
 {
     m_needsPositionUpdate = b;
 }

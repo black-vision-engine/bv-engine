@@ -34,12 +34,11 @@ public:
     static  model::BasicNode *      SimpleMultiCCScene          ();
 
 
-    static  model::BasicNode *      AnotherTestScene        ();
-    static  model::BasicNode *      AnimatedTestScene       ();
     static  model::BasicNode *      AnotherTestScene            ();
+    
     static  model::BasicNode *      AnimatedTestScene           ();
     static  model::BasicNode *      TestSceneVariableTopology   ();
-	static  model::BasicNode *      XMLTestScene ();
+	static  model::BasicNode *      XMLTestScene                ();
 
 };
 

@@ -1,6 +1,6 @@
 
 #include "SimplePixelShaderPlugin.h"
-#include "Engine/Models/Plugins/Channels/ShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
 
 namespace bv { namespace model {
 
@@ -17,12 +17,12 @@ public:
 
 const std::string SimplePixelShaderChannelPD::pluginName = "PluginName";
 
-class SimplePixelShaderChannel : public ShaderChannel< model::IPixelShaderChannel, SimplePixelShaderChannelPD >
+class SimplePixelShaderChannel : public PixelShaderChannelBase< SimplePixelShaderChannelPD >
 {
 public:
 
     explicit                        SimplePixelShaderChannel( const std::string& shaderFile )
-        : ShaderChannel( shaderFile )
+        : PixelShaderChannelBase( shaderFile )
     {}
 
     virtual void                    Update( float t )

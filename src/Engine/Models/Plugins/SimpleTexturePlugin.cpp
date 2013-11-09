@@ -169,7 +169,7 @@ VertexAttributeChannel*   GetUVChannel( const std::vector< VertexAttributeChanne
 //
 void                SimpleTexturePlugin::Update              ( float t )
 {
-    if( m_prev->GetGeometryChannel()->NeedsPositionsUpdate( t ) )
+    if( m_prev->GetGeometryChannel()->NeedsAttributesUpdate( t ) )
     {
         for( unsigned int i = 0; i < m_geomChannel->GetComponents().size(); ++i )
         {
@@ -190,7 +190,7 @@ void                SimpleTexturePlugin::Update              ( float t )
                 }
         }
 
-        m_geomChannel->SetNeedsPositionUpdate( true );
+        m_geomChannel->SetNeedsAttributesUpdate( true );
     }
 
     BasePlugin::Update( t );

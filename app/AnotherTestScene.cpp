@@ -101,16 +101,6 @@ model::GeometryChannel*             CreateGeometryChannel               (model::
 
 // *********************************
 //
-model::ITransformChannel*           CreateTransformChannel              (TransformF* transformation)
-{
-    model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
-    trasformChannel->AddTransform( transformation );
-
-    return trasformChannel;
-}
-
-// *********************************
-//
 model::SolidColorPlugin*            CreateSolidColorPlugin              (model::IPlugin* prevPlugin, const glm::vec4& color)
 {
     auto solidPlugin = new model::SolidColorPlugin( prevPlugin );
@@ -145,12 +135,12 @@ model::SimpleTexturePlugin*         CreateTexturePlugin                 ( model:
 //
 model::SimpleTextPlugin*            CreateTextPlugin                    ( const std::wstring& text, const std::string& fontFile, int size, const Vec4Interpolator& color, TransformF* trans )
 {
-    auto texPlugin = new model::SimpleTextPlugin( text, fontFile, size );
+    auto texPlugin = model::SimpleTextPlugin::Create( text, fontFile, size );
 
     texPlugin->SetPixelShaderChannel     ( new model::TextPixelShaderChannel( "../dep/media/shaders/text.frag", color ) );
     texPlugin->SetVertexShaderChannel    ( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
 
-    model::ITransformChannel      * stch  = CreateTransformChannel( trans );
+    auto      * stch  = CreateTransformChannel( trans );
 
     texPlugin->SetTransformChannel( stch );
 

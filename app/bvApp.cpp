@@ -179,10 +179,8 @@ bool BlackVisionApp::OnInitialize       ()
 
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
      
-    model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
     //model::BasicNode * root = TestScenesFactory::XMLTestScene();
      
-    model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
     model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
 
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene();

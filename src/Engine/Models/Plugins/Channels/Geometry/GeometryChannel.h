@@ -40,8 +40,8 @@ public:
     virtual bool                                    NeedsAttributesUpdate( float t ) const;
     virtual bool                                    NeedsTopologyUpdate ( float t ) const;
 
-    void                                            SetNeedsPositionUpdate( bool b );
-    void                                            SetNeedsTopologyUpdate( bool b );
+    void                                            SetNeedsAttributesUpdate( bool b );
+    void                                            SetNeedsTopologyUpdate  ( bool b );
     virtual unsigned int                            TotalNumVertices    ()          const;
 
     virtual const IGeometryChannelDescriptor *      GetDescriptor       () const;

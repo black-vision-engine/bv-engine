@@ -1,6 +1,6 @@
 
 #include "SimpleColorPlugin.h"
-#include "Engine/Models/Plugins/Channels/ShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
 #include "Engine/Models/Plugins/Parameter.h"
 
 namespace bv { namespace model {
@@ -26,7 +26,7 @@ SimpleColorPluginPD::SimpleColorPluginPD()
     : BaseParametersDescriptor( pluginName )
 {}
 
-class SimpleColorPixelShaderChannel : public ShaderChannel< model::IPixelShaderChannel, SimpleColorPixelShaderChannelPD >
+class SimpleColorPixelShaderChannel : public PixelShaderChannelBase< SimpleColorPixelShaderChannelPD >
 {
     model::ValueVec4*   m_colorVal;
     Vec4Interpolator    m_color;
@@ -34,7 +34,7 @@ class SimpleColorPixelShaderChannel : public ShaderChannel< model::IPixelShaderC
 public:
 
     explicit                        SimpleColorPixelShaderChannel( const Vec4Interpolator& color )
-        : ShaderChannel( "" )// FIXME:
+        : PixelShaderChannelBase( "" )// FIXME:
         , m_color( color )
     {
         m_colorVal = new model::ValueVec4( ParamDesc::colorParamName );
