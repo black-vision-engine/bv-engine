@@ -24,6 +24,7 @@ GeometryChannelAnimatedVertices::GeometryChannelAnimatedVertices     (  float w,
     m_speedY    = speedY;
     m_cyclesX   = cyclesX;
     m_cyclesY   = cyclesY;
+    m_needsPositionUpdate = true;
 }
 
 // ******************************

@@ -23,6 +23,8 @@ protected:
     PrimitiveType                                   m_primitiveType;
     bool                                            m_isReadOnly;
     bool                                            m_isTimeInvariant;
+    bool                                            m_needsPositionUpdate;
+    bool                                            m_needsTopologyUpdate;
 
 public:
                                                     GeometryChannel     ( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false );
@@ -37,6 +39,9 @@ public:
     virtual bool                                    IsTimeInvariant     ()          const;
     virtual bool                                    NeedsPositionsUpdate( float t ) const;
     virtual bool                                    NeedsTopologyUpdate ( float t ) const;
+
+    void                                            SetNeedsPositionUpdate( bool b );
+    void                                            SetNeedsTopologyUpdate( bool b );
 
     virtual const IGeometryChannelDescriptor *      GetDescriptor       () const;
     void                                            SetDescriptor       ( const GeometryChannelDescriptor & desc );

@@ -46,7 +46,7 @@ namespace bv
 	model::GeometryChannel*             CreateGeometryChannel               (model::IConnectedComponent* connComp);
 	
 
-	model::ITransformChannel*           CreateTransformChannel              (TransformF* transformation);
+	model::TransformChannel*            CreateTransformChannel              (TransformF* transformation);
 	
     model::SimpleColorPlugin*           CreateSimpleColorPlugin             ( model::IPlugin* prevPlugin, const Vec4Interpolator& color);
     model::SimplePixelShaderPlugin*     CreateSimplePixelShaderPlugin       ( model::IPlugin* prevPlugin, const std::string& shaderPath);

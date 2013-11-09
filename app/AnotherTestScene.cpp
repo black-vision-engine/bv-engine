@@ -322,7 +322,7 @@ model::BasicNode *          ExtrudedRedRect()
     trans->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
     trans->addTranslation( CreateConstValueFloat( -2.f ), CreateConstValueFloat( 1.5f ), CreateConstValueFloat( 0.f ) );
 
-    model::ITransformChannel*      trasformChannel  = CreateTransformChannel( trans );
+    auto trasformChannel  = CreateTransformChannel( trans );
 
     rectPlugin->SetTransformChannel( trasformChannel );
 

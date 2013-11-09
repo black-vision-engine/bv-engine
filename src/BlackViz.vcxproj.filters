@@ -204,7 +204,6 @@
     <ClInclude Include="Engine\Graphics\Shaders\TextureSampler.h" />
     <ClInclude Include="Engine\Graphics\Shaders\IShaderParamUpdater.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IShaderChannel.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\Transform\TranformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannel.h" />
@@ -253,6 +252,7 @@
     <ClInclude Include="Engine\Models\Plugins\SimpleVertexShaderPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleColorPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleGeometryShaderPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Transform\TransformChannel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

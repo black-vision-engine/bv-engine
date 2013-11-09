@@ -94,7 +94,8 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
 
             geomChannelDesc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-            m_geomChannel = new model::GeometryChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+            auto geomChannel = new model::GeometryChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+            m_geomChannel = geomChannel;
         }
 
         for( unsigned int i = 0; i < m_textures.size(); ++i )
@@ -130,19 +131,24 @@ SimpleTexturePlugin::TexturePair SimpleTexturePlugin::LoadTexture( const std::st
 //
 void                SimpleTexturePlugin::Update              ( float t )
 {
-    for( unsigned int i = 0; i < m_geomChannel->GetComponents().size(); ++i )
+    if( m_prev->GetGeometryChannel()->NeedsPositionsUpdate( t ) )
     {
-        auto connComp = static_cast< const model::ConnectedComponent* >( m_geomChannel->GetComponents()[ i ] );
-        auto compChannels = connComp->m_vertexAttributeChannels;
-
-        auto & verts  = dynamic_cast< Float3VertexAttributeChannel* >(compChannels[0])->GetVertices();
-        auto & uvs    = dynamic_cast< Float2VertexAttributeChannel* >(compChannels[1])->GetVertices();
-
-        for( unsigned int i = 0; i < verts.size(); ++i )
+        for( unsigned int i = 0; i < m_geomChannel->GetComponents().size(); ++i )
         {
-            uvs[ i ].x = verts[ i ].x;
-            uvs[ i ].y = verts[ i ].y;
+            auto connComp = static_cast< const model::ConnectedComponent* >( m_geomChannel->GetComponents()[ i ] );
+            auto compChannels = connComp->m_vertexAttributeChannels;
+
+            auto & verts  = dynamic_cast< Float3VertexAttributeChannel* >(compChannels[0])->GetVertices();
+            auto & uvs    = dynamic_cast< Float2VertexAttributeChannel* >(compChannels[1])->GetVertices();
+
+            for( unsigned int i = 0; i < verts.size(); ++i )
+            {
+                uvs[ i ].x = verts[ i ].x;
+                uvs[ i ].y = verts[ i ].y;
+            }
         }
+
+        m_geomChannel->SetNeedsPositionUpdate( true );
     }
 
     BasePlugin::Update( t );

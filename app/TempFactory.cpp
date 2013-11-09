@@ -73,7 +73,7 @@ namespace bv
 		return ret;
 	}
 
-	model::ITransformChannel*           CreateTransformChannel              (TransformF* transformation)
+	model::TransformChannel*           CreateTransformChannel              (TransformF* transformation)
 	{
 		model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
 		trasformChannel->AddTransform( transformation );

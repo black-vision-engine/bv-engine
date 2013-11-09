@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TranformChannel.h"
+#include "TransformChannel.h"
 #include "Mathematics\Transform\MatTransform.h"
 
 namespace bv { namespace model
