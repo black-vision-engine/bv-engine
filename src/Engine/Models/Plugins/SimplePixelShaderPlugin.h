@@ -7,33 +7,34 @@ namespace bv { namespace model {
 
 
 // ***************************** DESCRIPTOR **********************************
-class SolidColorPluginPD : public BaseParametersDescriptor
+class SimplePixelShaderPluginPD : public BaseParametersDescriptor
 {
 public:
 
     static const std::string            pluginName;
 
-    explicit SolidColorPluginPD();
+    explicit SimplePixelShaderPluginPD();
 };
 
 
 // ***************************** PLUGIN ********************************** 
-class SolidColorPlugin : public BasePlugin< IPlugin, SolidColorPluginPD >
+class SimplePixelShaderPlugin : public BasePlugin< IPlugin, SimplePixelShaderPluginPD >
 {
 private:
 
-    const IPlugin * m_prev;
+    const IPlugin *     m_prev;
+    const std::string   m_shaderPath;
 
 public:
 
-    explicit                                SolidColorPlugin            ( const IPlugin * prev );
-                                            ~SolidColorPlugin           ();
+    explicit                                SimplePixelShaderPlugin     ( const IPlugin * prev, const std::string& shaderPath );
+                                            ~SimplePixelShaderPlugin    ();
 
     virtual const IGeometryChannel*         GetGeometryChannel          () const;
     virtual const ITransformChannel*        GetTransformChannel         () const;
-    //virtual const IPixelShaderChannel*      GetPixelShaderChannel       () const;
-    //virtual const IVertexShaderChannel*     GetVertexShaderChannel      () const;
-    //virtual const IGeometryShaderChannel*   GetGeometryShaderChannel    () const;
+    virtual const IPixelShaderChannel*      GetPixelShaderChannel       () const;
+    virtual const IVertexShaderChannel*     GetVertexShaderChannel      () const;
+    virtual const IGeometryShaderChannel*   GetGeometryShaderChannel    () const;
 
     void                                    Update                      ( float t ) override;
     void                                    Print                       ( std::ostream & out, int tabs = 0 ) const override;

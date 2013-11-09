@@ -23,6 +23,8 @@ protected:
     PrimitiveType                                   m_primitiveType;
     bool                                            m_isReadOnly;
     bool                                            m_isTimeInvariant;
+    bool                                            m_needsAttributesUpdate;
+    bool                                            m_needsTopologyUpdate;
 
 public:
                                                     GeometryChannel     ( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false );
@@ -38,6 +40,8 @@ public:
     virtual bool                                    NeedsAttributesUpdate( float t ) const;
     virtual bool                                    NeedsTopologyUpdate ( float t ) const;
 
+    void                                            SetNeedsAttributesUpdate( bool b );
+    void                                            SetNeedsTopologyUpdate  ( bool b );
     virtual unsigned int                            TotalNumVertices    ()          const;
 
     virtual const IGeometryChannelDescriptor *      GetDescriptor       () const;

@@ -3,6 +3,7 @@
 #include "ApplicationBase.h"
 #include <string>
 #include <glm/glm.hpp>
+#include <Windows.h>
 
 namespace bv
 {
@@ -28,6 +29,7 @@ protected:
     glm::vec4		m_ClearColor;
 
     Renderer *		m_Renderer;
+	
 
 protected:
 
@@ -68,6 +70,8 @@ public:
     virtual void	OnPreidle	();
     virtual void	OnDisplay	();
     virtual void	OnIdle		();
+
+	HWND			handle;
     
 protected:
     

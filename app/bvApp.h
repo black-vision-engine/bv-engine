@@ -1,7 +1,9 @@
 #pragma once
 
 #include "WindowedApplication.h"
+#include <iostream>
 #include <fstream>
+#include <sstream>
 
 namespace bv {
 

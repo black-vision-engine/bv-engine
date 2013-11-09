@@ -109,6 +109,11 @@
     <ClCompile Include="Engine\Graphics\State\StateInstance.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelVariableTopology.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\SimpleTransformPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\SimplePixelShaderPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\SimpleVertexShaderPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\SimpleColorPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\SimpleGeometryShaderPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\RendererContext.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\AlphaContext.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\CullContext.cpp" />
@@ -206,7 +211,6 @@
     <ClInclude Include="Engine\Graphics\Shaders\TextureSampler.h" />
     <ClInclude Include="Engine\Graphics\Shaders\IShaderParamUpdater.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IShaderChannel.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\Transform\TranformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannel.h" />
@@ -250,6 +254,12 @@
     <ClInclude Include="Engine\Graphics\State\StateInstance.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelVariableTopology.h" />
+    <ClInclude Include="Engine\Models\Plugins\SimpleTransformPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\SimplePixelShaderPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\SimpleVertexShaderPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\SimpleColorPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\SimpleGeometryShaderPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Transform\TransformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShaderChannelBase.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\RendererContext.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\AlphaContext.h" />

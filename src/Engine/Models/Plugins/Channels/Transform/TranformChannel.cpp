@@ -1,4 +1,4 @@
-#include "TranformChannel.h"
+#include "TransformChannel.h"
 
 namespace bv { namespace model
 {

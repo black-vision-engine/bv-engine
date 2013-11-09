@@ -14,6 +14,7 @@
 #include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/GeometryPluginRect.h"
+#include "TempFactory.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>

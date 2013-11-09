@@ -32,18 +32,21 @@ private:
     std::string         m_fontFileName;
 
 
-    TexturePair         LoadAtlas( const std::string& name )   const;
+    TextureInfo*                LoadAtlas( const std::string& name )   const;
 
-    void                EvalGeometryChannel();
+    void                        EvalGeometryChannel();
+
+    explicit                    SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize );
 
 public:
 
-    explicit            SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize );
-                        ~SimpleTextPlugin   ();
+    static SimpleTextPlugin*    Create( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize );
+
+                                ~SimpleTextPlugin   ();
 
 
-    void                Update                      ( float t ) override;
-    void                Print                       ( std::ostream & out, int tabs = 0 ) const override;
+    void                        Update                      ( float t ) override;
+    void                        Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
 };
 

@@ -94,13 +94,14 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
 
             geomChannelDesc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-            m_geomChannel = new model::GeometryChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, true );
+            auto geomChannel = new model::GeometryChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+            m_geomChannel = geomChannel;
         }
 
         for( unsigned int i = 0; i < m_textures.size(); ++i )
         {
 
-            auto verTexAttrChannel = new model::Float2VertexAttributeChannel( desc, m_textures[ 0 ].second, true );
+            auto verTexAttrChannel = new model::Float2VertexAttributeChannel( desc, m_textures[ 0 ]->m_texName, true );
 
             for( unsigned int j = 0; j < prevCompChannels[0]->GetNumEntries(); ++j )
             {
@@ -117,33 +118,79 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
 
 // *************************************
 //
-SimpleTexturePlugin::TexturePair SimpleTexturePlugin::LoadTexture( const std::string& name, const std::string& path ) const
+TextureInfo* SimpleTexturePlugin::LoadTexture( const std::string& name, const std::string& path ) const
 {
     TextureLoader texLoader;
 
     Resource texture( name, path );
 
-    return SimpleTexturePlugin::TexturePair( texLoader.LoadResource( &texture ), name );
+    return new TextureInfo( texLoader.LoadResource( &texture ), name );
 }
+
+namespace
+{
+
+VertexAttributeChannel*   GetPositionChannel( const std::vector< VertexAttributeChannel* >& channels )
+{
+    if( !channels.empty() )
+    {
+        // try to guess
+        if( channels[ 0 ]->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION )
+            return channels[ 0 ];
+
+        for( auto ch : channels )
+            if( ch->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION )
+                return ch;
+    }
+
+    return nullptr;
+}
+
+VertexAttributeChannel*   GetUVChannel( const std::vector< VertexAttributeChannel* >& channels )
+{
+    if( !channels.empty() )
+    {
+        // try to guess
+        if(     channels.size() > 1 
+            &&  channels[ 1 ]->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_TEXCOORD )
+            return channels[ 1 ];
+
+        for( auto ch : channels )
+            if( ch->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_TEXCOORD )
+                return ch;
+    }
+
+    return nullptr;
+}
+
+} // anonymouse
 
 // *************************************
 //
 void                SimpleTexturePlugin::Update              ( float t )
 {
-    for( unsigned int i = 0; i < m_geomChannel->GetComponents().size(); ++i )
+    if( m_prev->GetGeometryChannel()->NeedsAttributesUpdate( t ) )
     {
-        auto connComp = static_cast< const model::ConnectedComponent* >( m_geomChannel->GetComponents()[ i ] );
-        auto compChannels = connComp->m_vertexAttributeChannels;
-
-        auto verts  = dynamic_cast< Float3VertexAttributeChannel* >(compChannels[0])->GetVertices();
-
-        auto uvs    = dynamic_cast< Float2VertexAttributeChannel* >(compChannels[1])->GetVertices();
-
-        for( unsigned int i = 0; i < verts.size(); ++i )
+        for( unsigned int i = 0; i < m_geomChannel->GetComponents().size(); ++i )
         {
-            uvs[ i ].x = verts[ i ].x;
-            uvs[ i ].y = verts[ i ].y;
+            auto connComp = static_cast< const model::ConnectedComponent* >( m_geomChannel->GetComponents()[ i ] );
+            auto compChannels = connComp->m_vertexAttributeChannels;
+
+            if( auto posChannel = GetPositionChannel( compChannels ) )
+                if( auto uvChannel = GetUVChannel( compChannels ) )
+                {
+                    auto & verts  = dynamic_cast< Float3VertexAttributeChannel* >(posChannel)->GetVertices();
+                    auto & uvs    = dynamic_cast< Float2VertexAttributeChannel* >(uvChannel)->GetVertices();
+
+                    for( unsigned int i = 0; i < verts.size(); ++i )
+                    {
+                        uvs[ i ].x = verts[ i ].x;
+                        uvs[ i ].y = verts[ i ].y;
+                    }
+                }
         }
+
+        m_geomChannel->SetNeedsAttributesUpdate( true );
     }
 
     BasePlugin::Update( t );
@@ -161,7 +208,7 @@ void                SimpleTexturePlugin::Print               ( std::ostream & ou
     out << GetName() << debug::EndLine( tabs );
     for( auto t : m_textures )
     {
-        out << "Texture: " << t.second << debug::EndLine( tabs );
+        out << "Texture: " << t->m_texName << debug::EndLine( tabs );
     }
 }
 

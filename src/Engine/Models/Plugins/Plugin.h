@@ -2,26 +2,39 @@
 
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
-#include "Engine/Models/Plugins/Interfaces/IGeometryChannel.h"
-#include "Engine/Models/Plugins/Interfaces/ITransformChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
+#include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 
 namespace bv { namespace model {
 
-class IGeometryChannel;
-class ITransformChannel;
+class GeometryChannel;
+class TransformChannel;
 class IPixelShaderChannel;
 class IVertexShaderChannel;
 class IGeometryShaderChannel;
 class ResourceHandle;
 
+struct TextureInfo
+{
+    ResourceHandle* m_resHandle;
+    std::string     m_texName;
+    glm::mat4       m_texTransform;
+
+    TextureInfo( ResourceHandle* resHandle, const std::string& texName, const glm::mat4& texTransform = glm::mat4( 1.f ) )
+        : m_resHandle( resHandle )
+        , m_texName( texName )
+        , m_texTransform( texTransform )
+    {}
+};
+
 template< class Iface, class ParameterDescriptor >
 class BasePlugin : public Iface
 {
 public:
-    typedef std::vector< std::pair< ResourceHandle*, std::string > > Textures;
+    typedef typename Iface::Textures Textures;
 
 protected:
     typedef ParameterDescriptor ParamDesc;
@@ -35,14 +48,14 @@ protected:
 
     ///////////////// Channels //////////////////
 
-    IGeometryChannel*               m_geomChannel;
-    ITransformChannel*              m_transformChannel;
-    IPixelShaderChannel*            m_pshaderChannel;
-    IVertexShaderChannel*           m_vshaderChannel;
-    IGeometryShaderChannel*         m_gshaderChannel;
+    GeometryChannel*               m_geomChannel;
+    TransformChannel*              m_transformChannel;
+    IPixelShaderChannel*           m_pshaderChannel;
+    IVertexShaderChannel*          m_vshaderChannel;
+    IGeometryShaderChannel*        m_gshaderChannel;
 
     ///////////////// Textures //////////////////
-    Textures  m_textures;
+    typename Iface::Textures       m_textures;
 
 public:
 
@@ -58,8 +71,8 @@ public:
     void                                        RegisterValue               ( IValue * v )                                  { m_values.push_back( v ); }
 
 
-    void                                        SetGeometryChannel          ( IGeometryChannel* geomChannel )               { m_geomChannel = geomChannel; }
-    void                                        SetTransformChannel         ( ITransformChannel* transformChannel )         { m_transformChannel = transformChannel; }
+    void                                        SetGeometryChannel          ( GeometryChannel* geomChannel )                { m_geomChannel = geomChannel; }
+    void                                        SetTransformChannel         ( TransformChannel* transformChannel )          { m_transformChannel = transformChannel; }
     void                                        SetPixelShaderChannel       ( IPixelShaderChannel * pShCh )                 { m_pshaderChannel = pShCh; }
     void                                        SetVertexShaderChannel      ( IVertexShaderChannel * vShCh )                { m_vshaderChannel = vShCh; }
     void                                        SetGeometryShaderChannel    ( IGeometryShaderChannel * gShCh )              { m_gshaderChannel = gShCh; }

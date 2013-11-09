@@ -131,10 +131,10 @@ SceneNode*                  BasicNode::BuildScene()
         for( auto tex : p->GetTextures() )
         {
             SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT }; 
-            auto textureSampler = new TextureSampler( i, tex.second, bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ));
+            auto textureSampler = new TextureSampler( i, tex->m_texName, bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ));
             effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );
 
-            auto loadedTex = bv::GTextureManager.LoadTexture( tex.first, false );
+            auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
 
             effect->GetPass( 0 )->GetPixelShader()->Parameters()->AddTexture( loadedTex );
 
@@ -298,60 +298,26 @@ namespace
 
 const IVertexShaderChannel* GetVertexShaderChannel( const std::vector< IPlugin* >& plugins )
 {
-    const IVertexShaderChannel*   ret = nullptr;
+    if( !plugins.empty() )
+        return plugins.back()->GetVertexShaderChannel();
 
-    for( auto pl : plugins )
-    {
-        auto vsCh = pl->GetVertexShaderChannel();
-        if( vsCh )
-        {
-            if( ret )
-                assert( !"Only one allowed!" );
-
-            ret = vsCh;
-        }
-    }
-
-    return ret;
+    return nullptr;
 }
 
 const IPixelShaderChannel* GetPixelShaderChannel( const std::vector< IPlugin* >& plugins )
 {
-    const IPixelShaderChannel*   ret = nullptr;
+    if( !plugins.empty() )
+        return plugins.back()->GetPixelShaderChannel();
 
-    for( auto pl : plugins )
-    {
-        auto psCh = pl->GetPixelShaderChannel();
-        if( psCh )
-        {
-            if( ret )
-                assert( !"Only one allowed!" );
-
-            ret = psCh;
-        }
-    }
-
-    assert( ret );
-    return ret;
+    return nullptr;
 }
 
 const IGeometryShaderChannel* GetGeometryShaderChannel( const std::vector< IPlugin* >& plugins )
 {
-    const IGeometryShaderChannel*   ret = nullptr;
+    if( !plugins.empty() )
+        return plugins.back()->GetGeometryShaderChannel();
 
-    for( auto pl : plugins )
-    {
-        auto psCh = pl->GetGeometryShaderChannel();
-        if( psCh )
-        {
-            if( ret )
-                assert( !"Only one or zero allowed!" );
-
-            ret = psCh;
-        }
-    }
-
-    return ret;
+    return nullptr;
 }
 
 } // anonymous

@@ -107,7 +107,14 @@ void BlackVisionApp::OnIdle		()
         std::cout.precision(4);
         //std::cout << "FPS: " << 1.0 / frameUpdate << std::endl;
         //std::cout << "Vertex "<<vertexCount<<" Model: " << modeldt * 1000.0 << "  Manager: " << managerdt * 1000.0 << "  Engine: " << enginedt * 1000.0 << " Render: " << renderdt * 1000.0 << " Total: " << frameUpdate * 1000.0 << std::endl;
-        std::cout << "FPS: " << 1.0 / frameUpdate << " frame time: " << frameUpdate * 1000.0 << std::endl;
+        
+		
+		std::ostringstream  s;
+		s<<"FPS: " << 1.0 / frameUpdate << " frame time: " << frameUpdate * 1000.0 << std::endl;
+		string ss = s.str();
+		std::wstring stemp = std::wstring(ss.begin(), ss.end());
+		LPCWSTR sw = stemp.c_str();
+		SetWindowTextW(handle,sw);
     }
 }
 
@@ -168,18 +175,26 @@ bool BlackVisionApp::OnInitialize       ()
     //model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
     //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
-    //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
+    model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
 
-    model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
+    //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
+     
+    //model::BasicNode * root = TestScenesFactory::XMLTestScene();
+     
+    //model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
+
+    //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
 
     m_modelScene = model::ModelScene::Create( root, new Camera() );
 
     m_Renderer->SetCamera( m_modelScene->GetCamera() );
 
     m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
+    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 1.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
     //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, -4.f, 3.5f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 8.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-//    AddCameraAnimation  ();
+    //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 8.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+    //AddCameraAnimation  ();
+    AddCameraAnimation2  ();
     //FIXME: read from configuration file and change appropriately when resoultion changes
     m_modelScene->GetCamera()->SetPerspective( 90.f, float(m_Width) / float(m_Height), 0.1f, 100.f );
 

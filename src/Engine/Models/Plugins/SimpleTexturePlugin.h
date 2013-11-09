@@ -32,7 +32,7 @@ private:
 
 private:
 
-    TexturePair         LoadTexture( const std::string& name, const std::string& path )   const;
+    TextureInfo*        LoadTexture( const std::string& name, const std::string& path )   const;
 
     void                EvalGeometryChannel( const IPlugin* prev );
 

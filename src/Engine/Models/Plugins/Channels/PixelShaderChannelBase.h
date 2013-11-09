@@ -16,13 +16,13 @@ protected:
 
 public:
 
-            PixelShaderChannelBase  ( const std::string& shaderFile, RendererContext * ctx = nullptr ) : ShaderChannel( shaderFile ), m_rendererContext( ctx ) 
-            {
-                if ( ctx == nullptr )
-                {
-                    m_rendererContext = new RendererContext();
-                }
-            }
+    PixelShaderChannelBase  ( const std::string& shaderFile, RendererContext * ctx = nullptr ) : ShaderChannel( shaderFile ), m_rendererContext( ctx ) 
+    {
+        if ( ctx == nullptr )
+        {
+            m_rendererContext = new RendererContext();
+        }
+    }
 
     virtual ~PixelShaderChannelBase ()
     {

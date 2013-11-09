@@ -2,7 +2,7 @@
 #include "InitSubsystem.h"
 #include "Renderer.h"
 #include "glutils.h"
-#include <Windows.h>
+
 
 
 namespace bv {
@@ -226,7 +226,7 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
         return -1;
     }
 
-    HWND handle = NULL;
+    handle = NULL;
     
     if (!(handle = CreateApplicationWindow( app ) ) )
     {

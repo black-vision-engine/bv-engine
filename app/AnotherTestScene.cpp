@@ -18,9 +18,13 @@
 #include "Engine/Models/Plugins/SimpleTexturePlugin.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/VertexShader/TextureVertexShaderChannel.h"
-#include "Engine/Models/Plugins/SimpleTextPlugin.h"
-#include "Engine/Models/Plugins/Channels/PixelShader/TextPixelShaderChannel.h"
-#include "Engine/Models/Plugins/Channels/GeometryShader/ExtrudeGeometryShaderChannel.h"
+#include "Engine\Models\Plugins\SimpleTextPlugin.h"
+#include "Engine\Models\Plugins\Channels\PixelShader\TextPixelShaderChannel.h"
+#include "Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.h"
+#include "Engine\Models\Plugins\SimpleTransformPlugin.h"
+#include "TempFactory.h"
+#include "Engine/Models/Plugins/SimpleTransformPlugin.h"
+#include "TempFactory.h"
 
 #include <iostream>
 #include <fstream>
@@ -44,123 +48,6 @@ namespace bv
 namespace
 {
 
-// *********************************
-//
-FloatInterpolator                   CreateConstValueFloat               ( float val )
-{
-    FloatInterpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
-    inter.addKey( 0.f, val );
-
-    return inter;
-}
-
-// *********************************
-//
-Vec4Interpolator                   CreateConstValueVec4                 ( const glm::vec4& val )
-{
-    Vec4Interpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
-    inter.addKey( 0.f, val );
-
-    return inter;
-}
-
-// *********************************
-//
-model::GeometryRectPlugin*          CreateGeometryRectPlugin            ( float w, float h )
-{
-    FloatInterpolator wi; wi.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator hi; hi.setWrapPostMethod( bv::WrapMethod::pingPong );
-    
-    wi.addKey(0.f, w);
-    hi.addKey(0.f, h);
-
-    return new model::GeometryRectPlugin(wi, hi);
-}
-
-// *********************************
-//
-model::GeometryChannel*             CreateGeometryChannel               (model::IConnectedComponent* connComp)
-{
-    model::GeometryChannelDescriptor desc;
-
-    for( auto compDesc : connComp->GetVertexAttributeChannels() )
-    {
-        desc.AddVertexAttrChannelDesc( static_cast< const model::VertexAttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
-    }
-
-    model::GeometryChannel* ret = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
-
-    ret->AddConnectedComponent(connComp);
-
-    return ret;
-}
-
-// *********************************
-//
-model::ITransformChannel*           CreateTransformChannel              (TransformF* transformation)
-{
-    model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
-    trasformChannel->AddTransform( transformation );
-
-    return trasformChannel;
-}
-
-// *********************************
-//
-model::SolidColorPlugin*            CreateSolidColorPlugin              (model::IPlugin* prevPlugin, const glm::vec4& color)
-{
-    auto solidPlugin = new model::SolidColorPlugin( prevPlugin );
-
-    // Set Pixel Shader Channel
-    solidPlugin->SetPixelShaderChannel    ( new model::SolidColorShaderChannel( "../dep/media/shaders/solid.frag", CreateConstValueVec4( color ) ) );
-
-    return solidPlugin;
-}
-
-// *********************************
-//
-model::SimpleTexturePlugin*         CreateTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths )
-{
-    auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, texturesPaths );
-
-    // Set Pixel Shader Channel
-    std::vector<TransformF> txMat;
-    std::vector<FloatInterpolator> alphas;
-    texturePlugin->SetPixelShaderChannel( new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
-                                        , alphas
-                                        , txMat )
-                                        );
-
-    texturePlugin->SetVertexShaderChannel( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" )
-                                        );
-
-    return texturePlugin;
-}
-
-// *********************************
-//
-model::SimpleTextPlugin*            CreateTextPlugin                    ( const std::wstring& text, const std::string& fontFile, int size, const Vec4Interpolator& color, TransformF* trans )
-{
-    auto texPlugin = new model::SimpleTextPlugin( text, fontFile, size );
-
-    texPlugin->SetPixelShaderChannel     ( new model::TextPixelShaderChannel( "../dep/media/shaders/text.frag", color ) );
-    texPlugin->SetVertexShaderChannel    ( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
-
-    model::ITransformChannel      * stch  = CreateTransformChannel( trans );
-
-    texPlugin->SetTransformChannel( stch );
-
-    return texPlugin;
-}
-
-// *********************************
-//
-model::IGeometryShaderChannel*      CreateGeometryShaderExtrude         ( float scale )
-{
-    FloatInterpolator extrudeScale = CreateConstValueFloat( scale );
-    return new model::ExtrudeGeometryShaderChannel("../dep/media/shaders/extrude.geom", extrudeScale);
-}
-
 // ******************************
 //
 model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned int numSegments, float speedX, float speedY, float cyclesX, float cyclesY, float sizeY, float sizeZ )
@@ -183,13 +70,13 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
-    auto solidPlugin = CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
+    //auto solidPlugin = CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
 
-    //// Add plugins to node
+    ////// Add plugins to node
     root->AddPlugin( geomPlugin );
-    root->AddPlugin( solidPlugin );
+    //root->AddPlugin( solidPlugin );
 
-    return root;
+    //return root;
 
 
     ///////////////////////////// Texture plugin //////////////////////////// 
@@ -241,32 +128,30 @@ model::BasicNode *          GreenRect()
 {
     model::BasicNode * root = new model::BasicNode();
 
-    model::GeometryRectPlugin*          rectPlugin = CreateGeometryRectPlugin(1.f, 1.f);
+    ///////////////////////////// Geometry plugin //////////////////////////
+    model::GeometryRectPlugin*          rectPlugin  = CreateGeometryRectPlugin(1.f, 1.f);
 
-    /// Set Geometry Channel
-    model::AnimatedStripComponent *     rect        = model::AnimatedStripComponent::Create( 2.f, 1.f, 10, 0.f, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 );
+    root->AddPlugin(rectPlugin); 
 
-    model::GeometryChannel *            geomCh      = CreateGeometryChannel( rect );
-
-    rectPlugin->SetGeometryChannel( geomCh );
-
-
-    /// Set Transform Channel
+    ///////////////////////////// Transform plugin //////////////////////////// 
     TransformF *    trans  = new TransformF                ();
 
     trans->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
     trans->addTranslation( CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ) );
-
-    model::ITransformChannel*           trasformChannel  = CreateTransformChannel( trans );
-
-    rectPlugin->SetTransformChannel( trasformChannel );
     
-    // Add plugin to node.
-    root->AddPlugin(rectPlugin);
+    auto transformPlugin = CreateTransformPlugin( rectPlugin, trans );
 
-    auto solidPlugin = CreateSolidColorPlugin( rectPlugin, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    root->AddPlugin( transformPlugin ); // Plugin with transformation
 
-    root->AddPlugin(solidPlugin);
+    ///////////////////////////// Material plugin //////////////////////////// 
+
+    auto colorPlugin = CreateSimpleColorPlugin( transformPlugin, CreateConstValueVec4( glm::vec4(0.f, 1.f, 0.f, 1.f ) ) );
+
+    root->AddPlugin( colorPlugin );
+
+    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/solid.frag" );
+
+    root->AddPlugin( pixelShaderPlugin );
 
     return root;
 }
@@ -280,35 +165,25 @@ model::BasicNode *          TexturedRect()
     ///////////////////////////// Geometry plugin //////////////////////////
     model::GeometryRectPlugin* rectPlugin   = CreateGeometryRectPlugin(1.f, 1.f);
 
-    /// Set Geometry Channel
+    root->AddPlugin(rectPlugin);
 
-    model::RectComponent *      rect        = model::RectComponent::Create();
-
-    model::GeometryChannel *    geomCh      = CreateGeometryChannel( rect );
-
-    rectPlugin->SetGeometryChannel( geomCh );
-
-
-    /// Set Transform Channel
+    ///////////////////////////// Transform plugin //////////////////////////// 
     TransformF *    trans  = new TransformF                ();
 
     trans->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
     trans->addTranslation( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 0.f ) );
 
-    model::ITransformChannel*   trasformChannel =   CreateTransformChannel( trans );
+    auto transformPlugin = CreateTransformPlugin( rectPlugin, trans );
 
-    rectPlugin->SetTransformChannel      ( trasformChannel );
+    root->AddPlugin( transformPlugin ); // Plugin with transformation
     
-    root->AddPlugin(rectPlugin);
-
-    ///////////////////////////// Texture plugin //////////////////////////// 
-
+    ///////////////////////////// Material plugin //////////////////////////// 
 
     std::vector< std::string > textures;
 
     textures.push_back( "simless_00.jpg" );
 
-    auto texturePlugin = CreateTexturePlugin( rectPlugin, textures );
+    auto texturePlugin = CreateTexturePlugin( transformPlugin, textures );
 
     root->AddPlugin(texturePlugin);
 
@@ -325,80 +200,32 @@ model::BasicNode *          TexturedRing()
 
     ///////////////////////////// Geometry plugin //////////////////////////
 
-    model::GeometryRingPlugin*          ringPlugin = new model::GeometryRingPlugin();
+    model::GeometryRingPlugin*          ringPlugin = CreateGeometryRingPlugin( 0.f, 1.5f * 3.14f, 1.f, 2.f, 200 );
 
-    /// Set Geometry Channel
+    root->AddPlugin(ringPlugin);
 
-    model::RingComponent *      ring        = model::RingComponent::Create(0.f, 1.5f * 3.14f, 1.f, 2.f, 200 );
+    ///////////////////////////// Transform plugin //////////////////////////// 
 
-    model::GeometryChannel *    geomCh      = CreateGeometryChannel( ring );
-
-    ringPlugin->SetGeometryChannel( geomCh );
-
-
-    /// Set Transform Channel
     TransformF *    trans  = new TransformF                ();
 
     trans->addScale( CreateConstValueFloat( 0.25f ), CreateConstValueFloat( 0.25f ), CreateConstValueFloat( 1.f ) );
     trans->addTranslation( CreateConstValueFloat( -1.f ), CreateConstValueFloat( -1.f ), CreateConstValueFloat( 0.f ) );
 
-    model::ITransformChannel*   trasformChannel  = CreateTransformChannel( trans );
+    auto transformPlugin = CreateTransformPlugin( ringPlugin, trans );
+    
+    root->AddPlugin( transformPlugin );
 
-    ringPlugin->SetTransformChannel      ( trasformChannel );
-    root->AddPlugin(ringPlugin);
-
-    ///////////////////////////// Texture plugin //////////////////////////// 
-
+    ///////////////////////////// Material plugin //////////////////////////// 
 
     std::vector< std::string > textures;
 
     textures.push_back( "simless_01.jpg" );
 
-    auto texturePlugin = CreateTexturePlugin( ringPlugin, textures );
+    auto texturePlugin = CreateTexturePlugin( transformPlugin, textures );
 
     root->AddPlugin(texturePlugin);
 
     return root;
-
-}
-
-// ******************************
-//
-size_t GetSizeOfFile(const std::wstring& path)
-{
-    struct _stat fileinfo;
-    _wstat(path.c_str(), &fileinfo);
-    return fileinfo.st_size;
-}
-
-// ******************************
-//
-std::wstring LoadUtf8FileToString(const std::wstring& filename)
-{
-    std::wstring buffer;            // stores file contents
-    FILE* f = _wfopen(filename.c_str(), L"rtS, ccs=UTF-8"); //FIXME: COMPILER WARNING
-
-    // Failed to open file
-    if (f == NULL)
-    {
-        // ...handle some error...
-        return buffer;
-    }
-
-    size_t filesize = GetSizeOfFile(filename);
-
-    // Read entire file contents in to memory
-    if (filesize > 0)
-    {
-        buffer.resize(filesize);
-        size_t wchars_read = fread(&(buffer.front()), sizeof(wchar_t), filesize, f);
-        buffer.resize(wchars_read);
-        buffer.shrink_to_fit();
-    }
-
-    fclose(f);
-
-    return buffer;
 }
 
 // ******************************
@@ -416,6 +243,10 @@ model::BasicNode *     Text1()
     color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
     color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
+    auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64, color );
+
+    root->AddPlugin( texPlugin );
+
     TransformF *    trns  = new TransformF                ();
 
     FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
@@ -432,9 +263,21 @@ model::BasicNode *     Text1()
 
     trns->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
 
-    auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64, color, trns );
+    auto transPlugin = CreateTransformPlugin( texPlugin, trns );
 
-    root->AddPlugin( texPlugin );
+    root->AddPlugin( transPlugin );
+
+    auto vertexShaderPlugin = CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/simpletexture.vert" );
+
+    root->AddPlugin( vertexShaderPlugin );
+
+    auto colorPlugin = CreateSimpleColorPlugin( vertexShaderPlugin, color );
+
+    root->AddPlugin( colorPlugin );
+
+    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag" );
+
+    root->AddPlugin( pixelShaderPlugin );
 
     return root;
 }
@@ -446,6 +289,17 @@ model::BasicNode *     Text2()
     model::BasicNode * root = new model::BasicNode();
 
     std::wstring str  = LoadUtf8FileToString( L"text_example.txt");
+
+    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
+
+    color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+    color.addKey(1.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    color.addKey(8.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+    color.addKey(18.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+
+    auto texPlugin = CreateTextPlugin( str, "../dep/Media/fonts/times.ttf", 128, color );
+
+    root->AddPlugin( texPlugin );
 
     TransformF *    trns  = new TransformF                ();
 
@@ -463,16 +317,21 @@ model::BasicNode *     Text2()
 
     trns->addTranslation( xt, yt, zt );
 
-    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
+    auto transPlugin = CreateTransformPlugin( texPlugin, trns );
 
-    color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-    color.addKey(1.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-    color.addKey(8.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-    color.addKey(18.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+    root->AddPlugin( transPlugin );
 
-    auto texPlugin = CreateTextPlugin( str, "../dep/Media/fonts/times.ttf", 128, color, trns );
+    auto vertexShaderPlugin = CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/simpletexture.vert" );
 
-    root->AddPlugin( texPlugin );
+    root->AddPlugin( vertexShaderPlugin );
+
+    auto colorPlugin = CreateSimpleColorPlugin( vertexShaderPlugin, color );
+
+    root->AddPlugin( colorPlugin );
+
+    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag" );
+
+    root->AddPlugin( pixelShaderPlugin );
 
     return root;
 }
@@ -498,7 +357,7 @@ model::BasicNode *          ExtrudedRedRect()
     trans->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
     trans->addTranslation( CreateConstValueFloat( -2.f ), CreateConstValueFloat( 1.5f ), CreateConstValueFloat( 0.f ) );
 
-    model::ITransformChannel*      trasformChannel  = CreateTransformChannel( trans );
+    auto trasformChannel  = CreateTransformChannel( trans );
 
     rectPlugin->SetTransformChannel( trasformChannel );
 
@@ -572,6 +431,28 @@ model::BasicNode *          TestScenesFactory::AnotherTestScene()
 
     return root;
 }
+
+// ******************************
+//
+model::BasicNode *          TestScenesFactory::XMLTestScene()
+{
+    /*auto root =  Text1();
+    root->AddChild( GreenRect() );
+    root->AddChild( TexturedRect() );
+    root->AddChild( ExtrudedTexturedRing() ); // To nie dziala na mojej karcie.
+    root->AddChild( TexturedRing() );
+    root->AddChild( ExtrudedRedRect() );
+    root->AddChild( Text2() );
+	*/
+
+	TreeBuilder *XMLTree = new TreeBuilder();
+
+	auto root = XMLTree->BuildTree("e:\\temp\\test2.xml");
+
+    return root;
+}
+
+
 
 // ******************************
 //
