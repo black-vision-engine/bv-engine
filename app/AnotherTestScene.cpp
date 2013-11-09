@@ -149,7 +149,7 @@ model::BasicNode *          GreenRect()
 
     root->AddPlugin( colorPlugin );
 
-    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/solid.frag" );
+    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/solid.frag", CreateDefaultRenderableContext() );
 
     root->AddPlugin( pixelShaderPlugin );
 
@@ -209,7 +209,7 @@ model::BasicNode *          TexturedRing()
     TransformF *    trans  = new TransformF                ();
 
     trans->addScale( CreateConstValueFloat( 0.25f ), CreateConstValueFloat( 0.25f ), CreateConstValueFloat( 1.f ) );
-    trans->addTranslation( CreateConstValueFloat( -1.f ), CreateConstValueFloat( -1.f ), CreateConstValueFloat( 0.f ) );
+    trans->addTranslation( CreateConstValueFloat( -1.f ), CreateConstValueFloat( -1.f ), CreateConstValueFloat( 0.001f ) );
 
     auto transformPlugin = CreateTransformPlugin( ringPlugin, trans );
     
@@ -275,7 +275,72 @@ model::BasicNode *     Text1()
 
     root->AddPlugin( colorPlugin );
 
-    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag" );
+    auto ctx = CreateDefaultRenderableContext();
+    ctx->alphaCtx->blendEnabled = true;
+    ctx->depthCtx->enabled = false;
+
+    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag", ctx );
+
+    root->AddPlugin( pixelShaderPlugin );
+
+    return root;
+}
+
+// ******************************
+//
+model::BasicNode * Text1Textured()
+{
+    model::BasicNode * root = new model::BasicNode();
+
+    std::wstring str    =   LoadUtf8FileToString( L"text_example.txt");
+
+    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
+
+    color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+    color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+    color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+
+    auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64, color );
+
+    root->AddPlugin( texPlugin );
+
+    TransformF *    trns  = new TransformF                ();
+
+    FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
+    FloatInterpolator zt;
+
+    xt.addKey(0.f, -1.f);
+    yt.addKey(0.f, -5.f);
+    zt.addKey(0.f, -5.f);
+
+    yt.addKey(30.f, 5.f);
+
+    trns->addTranslation( xt, yt, zt );
+
+    trns->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
+
+    auto transPlugin = CreateTransformPlugin( texPlugin, trns );
+
+    root->AddPlugin( transPlugin );
+
+    std::vector< std::string > textures;
+    textures.push_back( "simless_01.jpg" );
+
+    auto texturePlugin = CreateTexturePlugin( transPlugin, textures );
+
+    root->AddPlugin( texturePlugin );
+
+    auto vertexShaderPlugin = CreateSimpleVertexShaderPlugin( texturePlugin,  "../dep/media/shaders/textured_text.vert" );
+
+    root->AddPlugin( vertexShaderPlugin );
+
+    auto ctx = CreateDefaultRenderableContext();
+    ctx->alphaCtx->blendEnabled = true;
+    ctx->depthCtx->enabled = false;
+
+    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( vertexShaderPlugin,  "../dep/media/shaders/textured_text.frag", ctx );
 
     root->AddPlugin( pixelShaderPlugin );
 
@@ -329,7 +394,11 @@ model::BasicNode *     Text2()
 
     root->AddPlugin( colorPlugin );
 
-    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag" );
+    auto ctx = CreateDefaultRenderableContext();
+    ctx->alphaCtx->blendEnabled = true;
+    ctx->depthCtx->enabled = false;
+
+    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag", ctx );
 
     root->AddPlugin( pixelShaderPlugin );
 
@@ -421,13 +490,14 @@ model::BasicNode *          ExtrudedTexturedRing()
 //
 model::BasicNode *          TestScenesFactory::AnotherTestScene()
 {
-    auto root =  Text1();
-    root->AddChild( GreenRect() );
-    root->AddChild( TexturedRect() );
+    //auto root =  Text1();
+    //root->AddChild( GreenRect() );
+    //root->AddChild( TexturedRect() );
     //root->AddChild( ExtrudedTexturedRing() ); // To nie dziala na mojej karcie.
-    root->AddChild( TexturedRing() );
-    root->AddChild( ExtrudedRedRect() );
-    root->AddChild( Text2() );
+    //root->AddChild( TexturedRing() );
+    //root->AddChild( ExtrudedRedRect() );
+    auto root =  Text1Textured() ;
+    //root->AddChild( Text2() );
 
     return root;
 }

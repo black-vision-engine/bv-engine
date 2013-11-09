@@ -56,6 +56,7 @@ RendererContext *     PixelShaderChannelBase< ParameterDescriptor >::GetRenderer
 template< typename ParameterDescriptor >
 void     PixelShaderChannelBase< ParameterDescriptor >::SetRendererContext  ( RendererContext * ctx )
 {
+    delete m_rendererContext;
     m_rendererContext = ctx;
 }
 

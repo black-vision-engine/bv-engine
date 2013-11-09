@@ -49,7 +49,7 @@ namespace bv
 	model::TransformChannel*            CreateTransformChannel              (TransformF* transformation);
 	
     model::SimpleColorPlugin*           CreateSimpleColorPlugin             ( model::IPlugin* prevPlugin, const Vec4Interpolator& color);
-    model::SimplePixelShaderPlugin*     CreateSimplePixelShaderPlugin       ( model::IPlugin* prevPlugin, const std::string& shaderPath);
+    model::SimplePixelShaderPlugin*     CreateSimplePixelShaderPlugin       ( model::IPlugin* prevPlugin, const std::string& shaderPath, model::RendererContext * ctx = nullptr );
     model::SimpleVertexShaderPlugin*    CreateSimpleVertexShaderPlugin      ( model::IPlugin* prevPlugin, const std::string& shaderPath);
     model::SimpleGeometryShaderPlugin*  CreateSimpleGeometryShaderPlugin    ( model::IPlugin* prevPlugin, const std::string& shaderPath);
 
@@ -67,4 +67,6 @@ namespace bv
 
 	size_t                              GetSizeOfFile                       (const std::wstring& path);
 	std::wstring                        LoadUtf8FileToString                (const std::wstring& filename);
+
+    model::RendererContext*             CreateDefaultRenderableContext      ();
 }

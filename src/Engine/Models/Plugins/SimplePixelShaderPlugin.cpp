@@ -21,8 +21,8 @@ class SimplePixelShaderChannel : public PixelShaderChannelBase< SimplePixelShade
 {
 public:
 
-    explicit                        SimplePixelShaderChannel( const std::string& shaderFile )
-        : PixelShaderChannelBase( shaderFile )
+    explicit                        SimplePixelShaderChannel( const std::string& shaderFile, RendererContext * ctx = nullptr )
+        : PixelShaderChannelBase( shaderFile, ctx )
     {}
 
     virtual void                    Update( float t )
@@ -38,11 +38,11 @@ SimplePixelShaderPluginPD::SimplePixelShaderPluginPD()
     : BaseParametersDescriptor( pluginName ) 
 {}
 
-SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( const IPlugin * prev, const std::string& shaderPath )
+SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( const IPlugin * prev, const std::string& shaderPath, RendererContext * ctx )
     : m_prev( prev )
     , m_shaderPath( shaderPath )
 {
-    auto pixelShaderChannel = new SimplePixelShaderChannel( shaderPath );
+    auto pixelShaderChannel = new SimplePixelShaderChannel( shaderPath, ctx );
 
     for( auto v : prev->GetPixelShaderChannel()->GetValuesList() )
     {

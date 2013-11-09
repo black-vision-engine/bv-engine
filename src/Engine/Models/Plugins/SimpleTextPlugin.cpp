@@ -20,7 +20,7 @@ SimpleTextPlugin* SimpleTextPlugin::Create( const std::wstring& text, const std:
 SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize )
     : m_text( new Text( text, fontFileName, int( fontSize * (1.25f) ) /* points to pixel proportion */) ) // FIXME:
 {
-    m_textures.push_back( LoadAtlas( "Tex0" ) );
+    m_textures.push_back( LoadAtlas( "AtlasTex" ) );
 
     EvalGeometryChannel();
 }

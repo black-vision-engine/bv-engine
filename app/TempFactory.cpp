@@ -104,8 +104,8 @@ namespace bv
 											, alphas
 											, txMat );
 
+        pixelShaderChannel->SetRendererContext( CreateDefaultRenderableContext() );
         auto rendContext = pixelShaderChannel->GetRendererContext();
-        rendContext->cullCtx = new model::CullContext();
         rendContext->cullCtx->enabled = false;
 
 		texturePlugin->SetPixelShaderChannel( pixelShaderChannel );
@@ -176,9 +176,9 @@ namespace bv
         return new model::SimpleColorPlugin( prevPlugin, color );
     }
 
-    model::SimplePixelShaderPlugin*     CreateSimplePixelShaderPlugin       ( model::IPlugin* prevPlugin, const std::string& shaderPath)
+    model::SimplePixelShaderPlugin*     CreateSimplePixelShaderPlugin       ( model::IPlugin* prevPlugin, const std::string& shaderPath, model::RendererContext * ctx )
     {
-        return new model::SimplePixelShaderPlugin( prevPlugin, shaderPath );
+        return new model::SimplePixelShaderPlugin( prevPlugin, shaderPath, ctx );
     }
 
     model::SimpleVertexShaderPlugin*    CreateSimpleVertexShaderPlugin      ( model::IPlugin* prevPlugin, const std::string& shaderPath)
@@ -191,4 +191,14 @@ namespace bv
         return new model::SimpleGeometryShaderPlugin( prevPlugin, shaderPath );
     }
 
+    model::RendererContext*             CreateDefaultRenderableContext()
+    {
+        auto ctx = new model::RendererContext();
+        ctx->alphaCtx = new model::AlphaContext();
+        ctx->cullCtx = new model::CullContext();
+        ctx->depthCtx = new model::DepthContext();
+        ctx->fillCtx = new model::FillContext();
+
+        return ctx;
+    }
 }
