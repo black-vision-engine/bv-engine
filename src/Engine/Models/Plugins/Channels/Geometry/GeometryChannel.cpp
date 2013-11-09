@@ -68,7 +68,7 @@ bool                                    GeometryChannel::IsTimeInvariant     () 
 
 // *********************************
 //
-bool                                    GeometryChannel::NeedsPositionsUpdate( float t ) const
+bool                                    GeometryChannel::NeedsAttributesUpdate( float t ) const
 {
     //FIXME: reimplement in subclass
     return false;

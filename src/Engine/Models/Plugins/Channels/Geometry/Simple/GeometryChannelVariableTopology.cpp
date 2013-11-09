@@ -87,7 +87,7 @@ void    GeometryChannelVariableTopology::Update                      ( float t )
 
 // ******************************
 //
-bool    GeometryChannelVariableTopology::NeedsPositionsUpdate        ( float t ) const
+bool    GeometryChannelVariableTopology::NeedsAttributesUpdate        ( float t ) const
 {
     return false;
 }

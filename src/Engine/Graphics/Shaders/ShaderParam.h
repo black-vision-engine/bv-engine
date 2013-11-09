@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Engine/Types/Enums.h"
+#include "Engine/Graphics/Shaders/ShaderParamDesc.h"
 
-#include "ShaderParamDesc.h"
 #include <cassert>
 #include <vector>
 

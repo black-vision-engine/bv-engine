@@ -1,7 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "RenderablePass.h"
+
+#include "Engine/Graphics/Shaders/RenderablePass.h"
 
 namespace bv {
 

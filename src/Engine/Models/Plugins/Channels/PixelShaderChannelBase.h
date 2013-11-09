@@ -2,10 +2,10 @@
 
 #include "Engine/Models/Plugins/Channels/ShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 
 namespace bv { namespace model {
 
-class RendererContext;
 
 template< typename ParameterDescriptor >
 class PixelShaderChannelBase : public ShaderChannel< IPixelShaderChannel, ParameterDescriptor >
@@ -16,13 +16,20 @@ protected:
 
 public:
 
-            PixelShaderChannelBase  ( const std::string& shaderFile, RendererContext * ctx = nullptr ) : ShaderChannel( shaderFile ), m_rendererContext( ctx ) {}
-    virtual ~PixelShaderChannelBase () {}
+            PixelShaderChannelBase  ( const std::string& shaderFile, RendererContext * ctx = nullptr ) : ShaderChannel( shaderFile ), m_rendererContext( ctx ) 
+            {
+                if ( ctx == nullptr )
+                {
+                    m_rendererContext = new RendererContext();
+                }
+            }
+
+    virtual ~PixelShaderChannelBase ()
+    {
+        delete m_rendererContext;
+    }
 
     virtual const RendererContext *     GetRendererContext  () const;
-
-protected:
-
     RendererContext *                   GetRendererContext  ();
     void                                SetRendererContext  ( RendererContext * ctx );
 

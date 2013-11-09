@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Shader.h"
+#include "Engine/Graphics/Shaders/Shader.h"
 
 namespace bv {
 

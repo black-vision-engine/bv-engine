@@ -115,6 +115,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\DepthContext.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\FillContext.cpp" />
     <ClCompile Include="Engine\Models\Updaters\RendererStateUpdater.cpp" />
+    <ClCompile Include="Engine\Models\Builder\RendererStatesBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -256,6 +257,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\DepthContext.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\FillContext.h" />
     <ClInclude Include="Engine\Models\Updaters\RendererStateUpdater.h" />
+    <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

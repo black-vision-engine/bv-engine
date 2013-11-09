@@ -601,7 +601,7 @@ model::BasicNode *      TestScenesFactory::TestSceneVariableTopology   ()
     float size              = 1.0f;
     float speed             = 1.5f;
     float oscilationSpeed   = 1.f;
-    int numSegments         = 30;
+    int numSegments         = 10;
     int numComponents       = 4;
 
     return VariableTopologySolids( size, speed, oscilationSpeed, numSegments, numComponents );

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Shader.h"
-
+#include "Engine/Graphics/Shaders/Shader.h"
 #include "Engine/Models/Plugins/Parameter.h"
 #include "Engine/Models/Plugins/PluginParameters.h"
 

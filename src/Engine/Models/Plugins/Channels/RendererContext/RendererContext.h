@@ -9,17 +9,26 @@ namespace bv { namespace model {
 
 class RendererContext
 {
-public:
+private:
 
-    AlphaContext * alphaCtx;
-    CullContext  * cullCtx;
-    DepthContext * depthCtx;
-    FillContext  * fillCtx;
+    mutable bool    m_stateChanged;
 
 public:
 
-    RendererContext     ();
-    ~RendererContext    ();
+    AlphaContext *  alphaCtx;
+    CullContext  *  cullCtx;
+    DepthContext *  depthCtx;
+    FillContext  *  fillCtx;
+
+public:
+
+            RendererContext     ();
+            ~RendererContext    ();
+
+
+    bool    StateChanged        () const;
+    void    SetStateChanged     ( bool stateChanged ) const;
+
 };
 
 } //model

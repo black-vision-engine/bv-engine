@@ -4,6 +4,8 @@ namespace bv { namespace model {
 
 class FillContext
 {
+public:
+
     enum class Mode : int
     {
         M_POINTS = 0,

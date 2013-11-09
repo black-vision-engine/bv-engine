@@ -6,6 +6,8 @@
 
 #include "System/Print.h"
 
+#include "Engine/Models/Builder/RendererStatesBuilder.h"
+
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Graphics/SceneGraph/BasicScene.h"
 #include "Engine/Graphics/Shaders/PixelShader.h"
@@ -25,7 +27,7 @@
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 #include "Engine/Models/Updaters/GeometryUpdater.h"
 #include "Engine/Models/Updaters/TransformUpdater.h"
-#include "Engine/Models/Updaters/GeometryUpdater.h"
+#include "Engine/Models/Updaters/RendererStateUpdater.h"
 #include "Engine/Models/Updaters/ShaderParamUpdater.h"
 
 #include "Engine/Models/Plugins/Interfaces/IGeometryChannel.h"
@@ -159,6 +161,28 @@ SceneNode*                  BasicNode::BuildScene()
             {
                 GeometryUpdater * geometryUpdater = new GeometryUpdater( renderEnt, geomChannel );
                 updatersManager.RegisterUpdater( geometryUpdater );
+            }
+
+            auto psc = p->GetPixelShaderChannel();
+            auto renderCtx = psc->GetRendererContext();
+
+            assert( renderCtx );
+
+            for( int i = 0; i < effect->NumPasses(); ++i )
+            {
+                auto inst = effect->GetPass( i )->GetStateInstance();
+
+                assert( !inst->GetAlphaState() );
+                assert( !inst->GetCullState() );
+                assert( !inst->GetDepthState() );
+                assert( !inst->GetFillState() );
+                assert( !inst->GetOffsetState() );
+                assert( !inst->GetStencilState() );
+
+                RendererStatesBuilder::Create( inst, renderCtx );
+
+                RenderStateUpdater * rendererStateUpdater = new RenderStateUpdater( inst, renderCtx );
+                updatersManager.RegisterUpdater( rendererStateUpdater );
             }
         }
     }

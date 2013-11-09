@@ -35,7 +35,7 @@ public:
 
     //IGeometryChannel
     virtual bool                                    IsTimeInvariant     ()          const;
-    virtual bool                                    NeedsPositionsUpdate( float t ) const;
+    virtual bool                                    NeedsAttributesUpdate( float t ) const;
     virtual bool                                    NeedsTopologyUpdate ( float t ) const;
 
     virtual unsigned int                            TotalNumVertices    ()          const;

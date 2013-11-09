@@ -42,7 +42,7 @@ void    GeometryUpdater::Update      ( float t )
 {
     //If registered, it means that it is not time invariant (although may not need update in this frame)
 
-    if ( m_in->NeedsPositionsUpdate( t ) )
+    if ( m_in->NeedsAttributesUpdate( t ) )
     {
         assert( !m_in->NeedsTopologyUpdate( t ) );
 
