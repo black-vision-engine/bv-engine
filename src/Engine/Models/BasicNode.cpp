@@ -199,28 +199,28 @@ SceneNode*                  BasicNode::BuildScene()
 
 // ********************************
 //
-void            BasicNode::AddChild                 ( Node* n )
+void            BasicNode::AddChild                 ( IModelNode * n )
 {
     m_children.push_back( n );
 }
 
 // ********************************
 //
-void            BasicNode::AddLayer                 ( Node* n )
+void            BasicNode::AddLayer                 ( IModelNode * n )
 {
     m_layers.push_back( n );
 }
 
 // ********************************
 //
-void            BasicNode::AddPlugin                ( IPlugin* plugin )
+void            BasicNode::AddPlugin                ( IPlugin * plugin )
 {
-    m_plugins.push_back(plugin);
+    m_plugins.push_back( plugin );
 }
 
 // ********************************
 //
-void BasicNode::Update(float t)
+void BasicNode::Update( float t )
 {
     for(auto l : m_layers)
         l->Update( t );
@@ -230,6 +230,20 @@ void BasicNode::Update(float t)
 
     for(auto ch : m_children)
         ch->Update( t );
+}
+
+// ********************************
+//
+bool  BasicNode::IsVisible               ( float t ) const
+{
+    return m_visible;
+}
+
+// ********************************
+//
+void  BasicNode::SetVisible              ( bool visible )
+{
+    m_visible = visible;
 }
 
 // ********************************

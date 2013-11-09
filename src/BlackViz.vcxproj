@@ -247,6 +247,7 @@
     <ClCompile Include="Engine\Models\Resources\TextureLoader.cpp" />
     <ClCompile Include="Engine\Models\Updaters\CameraUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\GeometryUpdater.cpp" />
+    <ClCompile Include="Engine\Models\Updaters\NodeUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\RendererStateUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\ShaderParamUpdater.cpp" />
     <ClCompile Include="System\HRTimer.cpp" />
@@ -384,6 +385,7 @@
     <ClInclude Include="Engine\Models\Resources\TextureLoader.h" />
     <ClInclude Include="Engine\Models\Updaters\CameraUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\GeometryUpdater.h" />
+    <ClInclude Include="Engine\Models\Updaters\NodeUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\RendererStateUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\ShaderParamUpdater.h" />
     <ClInclude Include="Engine\Types\Enums.h" />

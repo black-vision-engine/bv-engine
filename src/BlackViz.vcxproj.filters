@@ -121,6 +121,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\FillContext.cpp" />
     <ClCompile Include="Engine\Models\Updaters\RendererStateUpdater.cpp" />
     <ClCompile Include="Engine\Models\Builder\RendererStatesBuilder.cpp" />
+    <ClCompile Include="Engine\Models\Updaters\NodeUpdater.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -268,6 +269,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\FillContext.h" />
     <ClInclude Include="Engine\Models\Updaters\RendererStateUpdater.h" />
     <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
+    <ClInclude Include="Engine\Models\Updaters\NodeUpdater.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

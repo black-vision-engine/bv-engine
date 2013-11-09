@@ -133,18 +133,22 @@ bool BlackVisionApp::RenderScene        ()
 //
 bool BlackVisionApp::RenderNode         ( SceneNode *   node )
 {
-    m_Renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
-
     bool bSuccess = true;
-
-    for(int i = 0; i < node->NumTransformables(); ++i)
+    
+    if ( node->IsVisible() )
     {
-        bSuccess &= m_Renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
-    }
+        m_Renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
 
-    for (int i = 0; i < node->NumChildrenNodes(); i++)
-    {
-        bSuccess &= RenderNode( node->GetChild( i ) ); 
+
+        for(int i = 0; i < node->NumTransformables(); ++i)
+        {
+            bSuccess &= m_Renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
+        }
+
+        for (int i = 0; i < node->NumChildrenNodes(); i++)
+        {
+            bSuccess &= RenderNode( node->GetChild( i ) ); 
+        }
     }
 
     return bSuccess;
