@@ -177,7 +177,7 @@ void                SimpleTexturePlugin::Update              ( float t )
             auto compChannels = connComp->m_vertexAttributeChannels;
 
             if( auto posChannel = GetPositionChannel( compChannels ) )
-                if( auto uvChannel = GetPositionChannel( compChannels ) )
+                if( auto uvChannel = GetUVChannel( compChannels ) )
                 {
                     auto & verts  = dynamic_cast< Float3VertexAttributeChannel* >(posChannel)->GetVertices();
                     auto & uvs    = dynamic_cast< Float2VertexAttributeChannel* >(uvChannel)->GetVertices();
