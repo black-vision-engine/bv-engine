@@ -1,6 +1,6 @@
 #include "WindowedApplication.h"
 #include "InitSubsystem.h"
-#include "Renderer.h"
+#include "Engine/Graphics/Renderers/Renderer.h"
 #include "glutils.h"
 
 
@@ -253,6 +253,8 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
 
         ShowWindow	( handle, SW_SHOW );
         UpdateWindow( handle );
+
+        app->OnIdle();
 
         bool quit = false;
         while ( !quit )

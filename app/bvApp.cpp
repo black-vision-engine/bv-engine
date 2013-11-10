@@ -54,19 +54,28 @@ BlackVisionApp::BlackVisionApp	()
 //
 void BlackVisionApp::OnIdle		()
 {
+    static unsigned int frame = 0;
     static double totalPassed = 0.0;
+    static unsigned int longestFrame = 0;
+    static double longestTime = 0.;
+    static DWORD startTime = GetTickCount();
+
+    if( frame == 1 )
+    {
+        totalPassed = 0;
+        longestFrame = 0;
+        longestTime = 0.;
+        startTime = GetTickCount();
+    }
 
     GTimer.StartTimer();
 
     //bv::Profiler pf("One frame " , &std::cout);
 
-    static DWORD startTime = GetTickCount();
     DWORD curTime = GetTickCount();
 
     //FIXME: debug timer - don't get fooled
-    static unsigned int frame = 0;
     //float t = float(frame) * 0.1f; ///10 fps
-    frame++;
 
     float t = float(curTime - startTime) * 0.001f;
 
@@ -94,6 +103,18 @@ void BlackVisionApp::OnIdle		()
 
     double frameUpdate = GTimer.CurElapsed();
 
+    GTimer.StopTimer();
+    double frameTime = GTimer.GetElapsedTime();
+
+    DWORD nextTime = GetTickCount();
+    DWORD delta = nextTime - curTime;
+
+    //if ( delta < 10 )
+    //{
+    //    Sleep( 10 - delta );
+    //    printf( "Sleep\n" );
+    //}
+
     double modeldt = modelUpdate;
     double managerdt = managerUpdate - modelUpdate;
     double enginedt = engineUpdate - managerUpdate;
@@ -101,21 +122,30 @@ void BlackVisionApp::OnIdle		()
 
     totalPassed += frameUpdate;
 
+    if( frameTime > longestTime )
+    {
+        longestTime = frameTime;
+        longestFrame = frame;
+
+        printf( "Longest frame: %d so far took: %f\n", frame, frameTime );
+    }
+
     if ( totalPassed > 0.2 )
     {
         totalPassed = 0.0;
         std::cout.precision(4);
         //std::cout << "FPS: " << 1.0 / frameUpdate << std::endl;
         //std::cout << "Vertex "<<vertexCount<<" Model: " << modeldt * 1000.0 << "  Manager: " << managerdt * 1000.0 << "  Engine: " << enginedt * 1000.0 << " Render: " << renderdt * 1000.0 << " Total: " << frameUpdate * 1000.0 << std::endl;
-        
 		
 		std::ostringstream  s;
-		s<<"FPS: " << 1.0 / frameUpdate << " frame time: " << frameUpdate * 1000.0 << std::endl;
+		s<<"FPS: " << 1.0 / frameUpdate <<  " FPS: " << 1.0 / frameTime << " frame time: " << frameUpdate * 1000.0 << " longest frame: " << longestFrame << " took: " << longestTime * 1000.0 << std::endl;
 		string ss = s.str();
 		std::wstring stemp = std::wstring(ss.begin(), ss.end());
 		LPCWSTR sw = stemp.c_str();
 		SetWindowTextW(handle,sw);
     }
+
+    frame++;
 }
 
 // *********************************
