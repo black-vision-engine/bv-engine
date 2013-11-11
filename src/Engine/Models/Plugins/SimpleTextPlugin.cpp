@@ -7,7 +7,8 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
-
+#include "Engine/Models/Resources/Font/FontLoader.h"
+#include "Engine/Models/Resources/Font/Text.h"
 
 namespace bv { namespace model {
 
@@ -18,9 +19,15 @@ SimpleTextPlugin* SimpleTextPlugin::Create( const std::wstring& text, const std:
     return new SimpleTextPlugin( text, fontFileName, fontSize );
 }
 
-SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize )
-    : m_text( new Text( text, fontFileName, int( fontSize * (1.25f) ) /* points to pixel proportion */) ) // FIXME:
+SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bold, bool italic )
+    : m_text( text )
+    , m_bolded( bold )
+    , m_italic( italic )
 {
+    auto res = LoadFont( fontFileName, fontSize );
+
+    m_fontExtraData = static_cast< const FontExtraData* >( res->GetExtra() );
+
     m_textures.push_back( LoadAtlas( "AtlasTex" ) );
 
     EvalGeometryChannel();
@@ -29,15 +36,52 @@ SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::str
 SimpleTextPlugin::~SimpleTextPlugin   ()
 {}
 
-TextureInfo* SimpleTextPlugin::LoadAtlas( const std::string& name )   const
+TextureInfo* SimpleTextPlugin::LoadAtlas( const std::string& name )
 {
-    auto atlas = m_text->GetAtlas();
-    unsigned int texSize = atlas->GetWidth() * atlas->GetHeight() * 4; //FIXME: Add format to atlas
+    auto f = GetFont();
 
-    TextureExtraData* atlasExtraData = new TextureExtraData( atlas->GetWidth(), atlas->GetHeight(), 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D );
-    ResourceHandle* altasHandle = new ResourceHandle( const_cast< char* >(atlas->GetData()), texSize, atlasExtraData );
+    if( f )
+        m_atlasText = f->GetAtlas();
+
+    if( !m_atlasText )
+    {
+        return nullptr;
+    }
+
+    unsigned int texSize = m_atlasText->GetWidth() * m_atlasText->GetHeight() * 4; //FIXME: Add format to atlas
+
+    TextureExtraData* atlasExtraData = new TextureExtraData( m_atlasText->GetWidth(), m_atlasText->GetHeight(), 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D );
+    ResourceHandle* altasHandle = new ResourceHandle( const_cast< char* >(m_atlasText->GetData()), texSize, atlasExtraData );
 
     return new TextureInfo( altasHandle, name );
+}
+
+
+const Text*         SimpleTextPlugin::GetFont() const
+{
+    if( !m_bolded && !m_italic )
+    { 
+        return m_fontExtraData->GetFont();
+    }
+
+    if( m_bolded && m_italic )
+    {
+        return m_fontExtraData->GetFontBoldItalic();
+    }
+
+    if( m_italic )
+    {
+        return m_fontExtraData->GetFontItalic();
+    }
+
+    if( m_bolded )
+    {
+        return m_fontExtraData->GetFontBold();
+    }
+
+    assert( false );
+
+    return nullptr;
 }
 
 #define viewWidth   100
@@ -58,10 +102,12 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
     glm::vec3 interspace( 0.07f, 0.f ,0.f );
     glm::vec3 newLineTranslation( 0.f );
 
-    auto glyphH = m_text->GetAtlas()->GetGlyphHeight();
-    auto glyphW = m_text->GetAtlas()->GetGlyphWidth();
+    auto glyphH = m_atlasText->GetGlyphHeight();
+    auto glyphW = m_atlasText->GetGlyphWidth();
 
-    for( auto wch : m_text->GetText() )
+    auto f = m_fontExtraData->GetFont();
+
+    for( auto wch : m_text )
     {
         if( wch == L' ' )
         {
@@ -82,7 +128,7 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
 
         auto posAttribChannel = new Float3VertexAttributeChannel( desc, "vertexPosition", true );
 
-        auto glyph = m_text->GetGlyph( wch );
+        auto glyph = f->GetGlyph( wch );
 
         glm::vec3 baring = glm::vec3( 0.f, (glyph->height - glyph->bearingY) / (float)viewHeight, 0.f );
 

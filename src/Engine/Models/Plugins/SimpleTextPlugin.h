@@ -3,12 +3,13 @@
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/PluginParameters.h"
 
-#include "../app/MockFonts/MockFont.h" //FIXME: FIXME: FIXME: FIXME:
-
 
 namespace bv { namespace model {
 
 class Resource;
+class FontExtraData;
+class TextAtlas;
+class Text;
 
 // ***************************** DESCRIPTOR **********************************
 class SimpleTextPluginPD : public BaseParametersDescriptor
@@ -28,18 +29,20 @@ class SimpleTextPlugin : public BasePlugin< IPlugin, SimpleTextPluginPD >
 {
 private:
 
-    typedef std::pair< ResourceHandle*, std::string > TexturePair;
+    const FontExtraData*        m_fontExtraData;
+    TextAtlas const*            m_atlasText;
+    std::wstring                m_text;
+    bool                        m_bolded;
+    bool                        m_italic;
 
-    bv::Text*           m_text;
-    std::string         m_textureFileName;
-    std::string         m_fontFileName;
 
-
-    TextureInfo*                LoadAtlas( const std::string& name )   const;
+    TextureInfo*                LoadAtlas( const std::string& name );
 
     void                        EvalGeometryChannel();
 
-    explicit                    SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize );
+    const Text*                 GetFont() const;
+
+    explicit                    SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bold = false, bool italic = false );
 
 public:
 

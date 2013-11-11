@@ -3,6 +3,7 @@
 #include "Engine/Models/BasicNode.h"
 #include "Mathematics/Transform/MatTransform.h"
 #include "Engine/Models/Plugins/SimpleTransformPlugin.h"
+#include "Engine/Models/Resources/TextHelpers.h"
 #include <fstream>
 #include <boost/algorithm/string.hpp>
 
@@ -84,7 +85,7 @@ namespace bv{
 
 		model::BasicNode * root = new model::BasicNode();
 
-		std::wstring str    =   LoadUtf8FileToString( L"text_example.txt");
+		std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example.txt");
 
 		Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
 

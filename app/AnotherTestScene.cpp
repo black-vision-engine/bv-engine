@@ -26,6 +26,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/GeometryChannelAnimatedVertices.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/VariableTopologyStripComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/GeometryChannelVariableTopology.h"
+#include "Engine/Models/Resources/TextHelpers.h"
 
 #include "TempFactory.h"
 
@@ -289,7 +290,7 @@ model::BasicNode *     Text1()
 {
     model::BasicNode * root = new model::BasicNode();
 
-    std::wstring str    =   LoadUtf8FileToString( L"text_example.txt");
+    std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example.txt");
 
     Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
 
@@ -347,7 +348,7 @@ model::BasicNode * Text1Textured()
 {
     model::BasicNode * root = new model::BasicNode();
 
-    std::wstring str    =   LoadUtf8FileToString( L"text_example1.txt");
+    std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example1.txt");
 
     auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/courbd.ttf", 8 );
 
@@ -401,7 +402,7 @@ model::BasicNode *     Text2()
 {
     model::BasicNode * root = new model::BasicNode();
 
-    std::wstring str  = LoadUtf8FileToString( L"text_example.txt");
+    std::wstring str  = TextHelper::LoadUtf8FileToString( L"text_example.txt");
 
     Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
 
@@ -610,7 +611,7 @@ model::BasicNode *      TestScenesFactory::TestSceneVariableTopology   ()
 //
 model::BasicNode *      TestScenesFactory::SequenceAnimationTestScene  ()
 {
-    return AnimatedSequenceRect( 48, 75, "tmp/IntroTGA/", "Split", "tga" );
+    return AnimatedSequenceRect( 50, 75, "tmp/IntroTGA/", "Split", "tga" );
 }
 
 } // bv
