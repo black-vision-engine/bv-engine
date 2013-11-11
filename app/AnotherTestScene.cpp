@@ -350,7 +350,7 @@ model::BasicNode * Text1Textured()
 
     std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example1.txt");
 
-    auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/courbd.ttf", 8 );
+    auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/cour.ttf", 8 );
 
     root->AddPlugin( texPlugin );
 
@@ -411,7 +411,7 @@ model::BasicNode *     Text2()
     color.addKey(8.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
     color.addKey(18.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
-    auto texPlugin = CreateTextPlugin( str, "../dep/Media/fonts/times.ttf", 128);
+    auto texPlugin = CreateTextPlugin( str, "../dep/Media/fonts/cour.ttf", 128, true, true);
 
     root->AddPlugin( texPlugin );
 

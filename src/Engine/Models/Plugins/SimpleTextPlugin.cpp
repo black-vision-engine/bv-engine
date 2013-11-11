@@ -14,21 +14,22 @@ namespace bv { namespace model {
 
 const std::string SimpleTextPluginPD::pluginName = "SimpleTextPlugin";
 
-SimpleTextPlugin* SimpleTextPlugin::Create( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize )
+SimpleTextPlugin* SimpleTextPlugin::Create( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bold, bool italic )
 {
-    return new SimpleTextPlugin( text, fontFileName, fontSize );
+    return new SimpleTextPlugin( text, fontFileName, fontSize, bold, italic );
 }
 
 SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bold, bool italic )
     : m_text( text )
     , m_bolded( bold )
     , m_italic( italic )
+    , m_atlasText()
 {
     auto res = LoadFont( fontFileName, fontSize );
 
     m_fontExtraData = static_cast< const FontExtraData* >( res->GetExtra() );
 
-    m_textures.push_back( LoadAtlas( "AtlasTex" ) );
+    m_textures.resize( 1 );
 
     EvalGeometryChannel();
 }
@@ -36,8 +37,11 @@ SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::str
 SimpleTextPlugin::~SimpleTextPlugin   ()
 {}
 
-TextureInfo* SimpleTextPlugin::LoadAtlas( const std::string& name )
+void SimpleTextPlugin::LoadAtlas( const std::string& name )
 {
+    delete m_atlasText;
+    m_atlasText = nullptr;
+
     auto f = GetFont();
 
     if( f )
@@ -45,7 +49,7 @@ TextureInfo* SimpleTextPlugin::LoadAtlas( const std::string& name )
 
     if( !m_atlasText )
     {
-        return nullptr;
+        assert(!"Cannot load atlas");
     }
 
     unsigned int texSize = m_atlasText->GetWidth() * m_atlasText->GetHeight() * 4; //FIXME: Add format to atlas
@@ -53,7 +57,12 @@ TextureInfo* SimpleTextPlugin::LoadAtlas( const std::string& name )
     TextureExtraData* atlasExtraData = new TextureExtraData( m_atlasText->GetWidth(), m_atlasText->GetHeight(), 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D );
     ResourceHandle* altasHandle = new ResourceHandle( const_cast< char* >(m_atlasText->GetData()), texSize, atlasExtraData );
 
-    return new TextureInfo( altasHandle, name );
+    if( m_textures[0] )
+    {
+        delete m_textures[0];
+    }
+
+    m_textures[0] = new TextureInfo( altasHandle, name );
 }
 
 
@@ -61,21 +70,25 @@ const Text*         SimpleTextPlugin::GetFont() const
 {
     if( !m_bolded && !m_italic )
     { 
+        assert( m_fontExtraData->GetFont() );
         return m_fontExtraData->GetFont();
     }
 
     if( m_bolded && m_italic )
     {
+        assert( m_fontExtraData->GetFontBoldItalic() );
         return m_fontExtraData->GetFontBoldItalic();
     }
 
     if( m_italic )
     {
+        assert( m_fontExtraData->GetFontItalic() );
         return m_fontExtraData->GetFontItalic();
     }
 
     if( m_bolded )
     {
+        assert( m_fontExtraData->GetFontBold() );
         return m_fontExtraData->GetFontBold();
     }
 
@@ -89,6 +102,8 @@ const Text*         SimpleTextPlugin::GetFont() const
 
 void                SimpleTextPlugin::EvalGeometryChannel( )
 {
+    LoadAtlas( "AtlasTex" ) ;
+
     auto texExtraData = static_cast< const TextureExtraData* > ( m_textures[ 0 ]->m_resHandle->GetExtra() );
 
     GeometryChannelDescriptor geomChannelDesc;
@@ -105,7 +120,7 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
     auto glyphH = m_atlasText->GetGlyphHeight();
     auto glyphW = m_atlasText->GetGlyphWidth();
 
-    auto f = m_fontExtraData->GetFont();
+    auto f = GetFont();
 
     for( auto wch : m_text )
     {

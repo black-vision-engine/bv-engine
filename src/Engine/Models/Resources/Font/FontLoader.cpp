@@ -75,8 +75,12 @@ const Text*         LoadFontFile( const std::string& file, size_t size )
 
 std::string         AddPostfixToFileName( const std::string& file, const std::string& postfix )
 {
-    std::string newPath = boost::filesystem::basename( file ) + postfix;
-    return boost::filesystem::change_extension( newPath, boost::filesystem::extension( file ) ).string();
+    std::string newFileName = boost::filesystem::basename( file ) + postfix;
+
+    auto newPath = boost::filesystem::path( file );
+    newPath.remove_filename() /= newFileName;
+
+    return newPath.replace_extension( boost::filesystem::extension( file ) ).string();
 }
 
 }

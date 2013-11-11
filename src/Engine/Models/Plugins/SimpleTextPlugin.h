@@ -36,17 +36,17 @@ private:
     bool                        m_italic;
 
 
-    TextureInfo*                LoadAtlas( const std::string& name );
+    void                        LoadAtlas( const std::string& name );
 
     void                        EvalGeometryChannel();
 
     const Text*                 GetFont() const;
 
-    explicit                    SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bold = false, bool italic = false );
+    explicit                    SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bold, bool italic );
 
 public:
 
-    static SimpleTextPlugin*    Create( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize );
+    static SimpleTextPlugin*    Create( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bolded = false, bool italic = false );
 
                                 ~SimpleTextPlugin   ();
 

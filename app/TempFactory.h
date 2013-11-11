@@ -72,7 +72,7 @@ namespace bv
 
 
 
-	model::SimpleTextPlugin*            CreateTextPlugin                    ( const std::wstring& text, const std::string& fontFile, int size);
+	model::SimpleTextPlugin*            CreateTextPlugin                    ( const std::wstring& text, const std::string& fontFile, int size, bool bolded = false, bool italic = false);
 	model::IGeometryShaderChannel*      CreateGeometryShaderExtrude         ( float scale );
 
     model::RendererContext*             CreateDefaultRenderableContext      ();

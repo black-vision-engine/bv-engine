@@ -157,9 +157,9 @@ model::SimpleAnimationPlugin *      CreateAnimationPlugin               ( model:
 
 // *******************************
 //
-model::SimpleTextPlugin *            CreateTextPlugin                    ( const std::wstring & text, const std::string & fontFile, int size )
+model::SimpleTextPlugin *            CreateTextPlugin                    ( const std::wstring & text, const std::string & fontFile, int size, bool bolded, bool italic )
 {
-    auto texPlugin = model::SimpleTextPlugin::Create( text, fontFile, size );
+    auto texPlugin = model::SimpleTextPlugin::Create( text, fontFile, size, bolded, italic );
 
 	return texPlugin;
 }
