@@ -2,8 +2,9 @@
 
 #include <cassert>
 
-#include "Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.h"
-#include "Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/IndexChannelDescriptor.h"
+
 
 namespace bv { namespace model
 {

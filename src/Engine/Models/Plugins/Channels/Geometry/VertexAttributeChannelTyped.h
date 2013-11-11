@@ -1,13 +1,14 @@
 #pragma once
 
-#include "Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannel.h"
-#include "Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.h"
-
-#include "Engine\Types\Enums.h"
+#include <vector>
 
 #include <glm/glm.hpp>
 
-#include <vector>
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
+
+#include "Engine/Types/Enums.h"
+
 
 namespace bv { namespace model
 {

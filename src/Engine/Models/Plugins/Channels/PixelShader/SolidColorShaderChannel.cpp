@@ -6,6 +6,8 @@ namespace bv { namespace model
 const std::string SolidColorShaderChannelPD::pluginName = "Solid";
 const std::string SolidColorShaderChannelPD::solidColor = "color";
 
+// ******************************
+//
 SolidColorShaderChannel::SolidColorShaderChannel(const std::string& shaderFile, const Vec4Interpolator& color)
     : PixelShaderChannelBase( shaderFile )
     , m_solidColor(color)
@@ -14,13 +16,19 @@ SolidColorShaderChannel::SolidColorShaderChannel(const std::string& shaderFile, 
     RegisterValue(m_solidColorVal);
 }
 
+// ******************************
+//
 void             SolidColorShaderChannel::Update( float t )
 {
     m_solidColorVal->SetValue( m_solidColor.evaluate( t ) );
     ShaderChannel::Update( t );
 }
 
-SolidColorShaderChannel::~SolidColorShaderChannel() {}
+// ******************************
+//
+SolidColorShaderChannel::~SolidColorShaderChannel()
+{
+}
 
 } // model
 } // bv

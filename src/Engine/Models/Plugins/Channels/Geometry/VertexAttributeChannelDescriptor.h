@@ -1,7 +1,9 @@
 #pragma once
 
 #include <string>
+
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannelDescriptor.h"
+
 
 namespace bv { namespace model
 {

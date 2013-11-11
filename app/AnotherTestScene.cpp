@@ -16,14 +16,17 @@
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/SolidColorShaderChannel.h"
 #include "Engine/Models/Plugins/SimpleTexturePlugin.h"
+#include "Engine/Models/Plugins/SimpleAnimationPlugin.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/VertexShader/TextureVertexShaderChannel.h"
-#include "Engine\Models\Plugins\SimpleTextPlugin.h"
-#include "Engine\Models\Plugins\Channels\PixelShader\TextPixelShaderChannel.h"
-#include "Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.h"
-#include "Engine\Models\Plugins\SimpleTransformPlugin.h"
-#include "TempFactory.h"
+#include "Engine/Models/Plugins/SimpleTextPlugin.h"
+#include "Engine/Models/Plugins/Channels/GeometryShader/ExtrudeGeometryShaderChannel.h"
 #include "Engine/Models/Plugins/SimpleTransformPlugin.h"
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/AnimatedStripComponent.h"
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/GeometryChannelAnimatedVertices.h"
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/VariableTopologyStripComponent.h"
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/GeometryChannelVariableTopology.h"
+
 #include "TempFactory.h"
 
 #include <iostream>
@@ -37,10 +40,6 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#include "Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.h"
-#include "Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.h"
-#include "Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.h"
-#include "Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelVariableTopology.h"
 
 namespace bv
 {
@@ -70,13 +69,13 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
-    //auto solidPlugin = CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
+    auto solidPlugin = CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
 
     ////// Add plugins to node
     root->AddPlugin( geomPlugin );
-    //root->AddPlugin( solidPlugin );
+    root->AddPlugin( solidPlugin );
 
-    //return root;
+    return root;
 
 
     ///////////////////////////// Texture plugin //////////////////////////// 
@@ -118,6 +117,48 @@ model::BasicNode * VariableTopologySolids( float size, float speed, float oscila
     //// Add plugins to node
     root->AddPlugin( geomPlugin );
     root->AddPlugin( solidPlugin );
+
+    return root;
+}
+
+// ******************************
+//
+model::BasicNode * AnimatedSequenceRect( unsigned int animationFPS, unsigned int numFrames, const std::string path, const std::string baseName, const std::string ext )
+{
+    model::BasicNode * root = new model::BasicNode();
+
+    ///////////////////////////// Geometry plugin //////////////////////////
+    model::GeometryRectPlugin * rectPlugin   = CreateGeometryRectPlugin( 1.f, 1.f );
+
+    root->AddPlugin( rectPlugin );
+
+    ///////////////////////////// Transform plugin //////////////////////////// 
+    TransformF *    trans  = new TransformF                ();
+
+    float scl = 1.95f;
+    trans->addScale( CreateConstValueFloat( scl * 1.777777778f ), CreateConstValueFloat( scl * 1.f ), CreateConstValueFloat( 1.f ) );
+    trans->addTranslation( CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ) );
+
+    auto transformPlugin = CreateTransformPlugin( rectPlugin, trans );
+
+    root->AddPlugin( transformPlugin ); // Plugin with transformation
+    
+    ///////////////////////////// Material plugin //////////////////////////// 
+
+    std::vector< std::string > textures;
+
+    for( unsigned int i = 0; i < numFrames; ++i )
+    {
+        char buffer[10];
+        sprintf_s( buffer, 10, "%02d", i );
+        
+        std::string txName( path + baseName + std::string( buffer ) + "." + ext );        
+        textures.push_back( txName );
+    }
+
+    auto animationPlugin = CreateAnimationPlugin( transformPlugin, textures, animationFPS );
+
+    root->AddPlugin( animationPlugin );
 
     return root;
 }
@@ -549,6 +590,13 @@ model::BasicNode *      TestScenesFactory::TestSceneVariableTopology   ()
     int numComponents       = 4;
 
     return VariableTopologySolids( size, speed, oscilationSpeed, numSegments, numComponents );
+}
+
+// ******************************
+//
+model::BasicNode *      TestScenesFactory::SequenceAnimationTestScene  ()
+{
+    return AnimatedSequenceRect( 50, 75, "tmp/IntroTGA/", "Split", "tga" );
 }
 
 } // bv

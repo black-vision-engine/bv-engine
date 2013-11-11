@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 
+
 namespace bv { namespace model {
 
 //FIXME: add different blending modes

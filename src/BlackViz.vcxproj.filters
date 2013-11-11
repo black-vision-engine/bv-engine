@@ -122,6 +122,10 @@
     <ClCompile Include="Engine\Models\Updaters\RendererStateUpdater.cpp" />
     <ClCompile Include="Engine\Models\Builder\RendererStatesBuilder.cpp" />
     <ClCompile Include="Engine\Models\Updaters\NodeUpdater.cpp" />
+    <ClCompile Include="Engine\Graphics\Resources\TextureAnimatedSequence2D.cpp" />
+    <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrTextureAnimatedSequence2D.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\SimpleAnimationPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Updaters\SequenceAnimationUpdater.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -270,6 +274,12 @@
     <ClInclude Include="Engine\Models\Updaters\RendererStateUpdater.h" />
     <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
     <ClInclude Include="Engine\Models\Updaters\NodeUpdater.h" />
+    <ClInclude Include="Engine\Graphics\Resources\TextureAnimatedSequence2D.h" />
+    <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrTextureAnimatedSequence2D.h" />
+    <ClInclude Include="Engine\Models\Plugins\SimpleAnimationPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
+    <ClInclude Include="Engine\Models\Updaters\SequenceAnimationUpdater.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\ISequenceAnimationSource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

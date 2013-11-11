@@ -1,7 +1,9 @@
 #pragma once
 
 #include <vector>
+
 #include "Engine/Types/Enums.h"
+
 
 namespace bv
 {

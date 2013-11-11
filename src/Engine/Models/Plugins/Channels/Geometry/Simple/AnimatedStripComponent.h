@@ -2,6 +2,7 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 
+
 namespace bv { namespace model {
 
 class Float3VertexAttributeChannel;

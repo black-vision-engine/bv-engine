@@ -21,6 +21,8 @@ private:
 
 public:
 
+                    ~PdrTexture2D   ();
+
     void            Enable          ( Renderer * renderer, int textureUnit );
     void            Disable         ( Renderer * renderer, int textureUnit );
 
@@ -29,7 +31,6 @@ public:
 
 
     static PdrTexture2D *   Create  ( const Texture2D * texture );
-
 
 };
 

@@ -1,8 +1,10 @@
 #pragma once
 
-#include "IUpdater.h"
-#include "Transform.h"
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
+#include "Engine/Models/Updaters/IUpdater.h"
+
+#include "Engine/Graphics/Types/Transform.h"
+
 
 namespace bv
 {

@@ -1,9 +1,10 @@
 #pragma once
 
-#include "IChannel.h"
-
 #include <string>
 #include <vector>
+
+#include "Engine/Models/Plugins/Interfaces/IChannel.h"
+
 
 namespace bv { namespace model
 {

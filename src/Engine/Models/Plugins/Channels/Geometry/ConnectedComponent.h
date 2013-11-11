@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Engine\Models\Plugins\Interfaces\IConnectedComponent.h"
+#include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
+
 
 namespace bv { namespace model
 {

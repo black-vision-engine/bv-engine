@@ -1,8 +1,12 @@
 #pragma once
 
+#include "Mathematics/Transform/MatTransform.h"
+
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/PluginParameters.h"
-#include "Mathematics\Transform\MatTransform.h"
+
+#include "Engine/Models/Plugins/PluginEnums.h"
+
 
 namespace bv { namespace model {
 
@@ -22,32 +26,27 @@ public:
 // ***************************** PLUGIN ********************************** 
 class SimpleTexturePlugin : public BasePlugin< IPlugin, SimpleTexturePluginPD >
 {
-public:
-    enum class MappingMode
-    {
-        MM_ATTACHED,
-        MM_FREE,
-    };
-
 private:
-    MappingMode     m_mappingMode;
-    const IPlugin * m_prev;
-    unsigned int    m_texCoordChannelIndex;
+
+    const IPlugin *         m_prev;
+
+    TextureAttachmentMode   m_attachmentMode;
+    unsigned int            m_texCoordChannelIndex;
 
 private:
 
-    TextureInfo*        LoadTexture( const std::string& name, const std::string& path )   const;
+    TextureInfo *       LoadTexture( const std::string & name, const std::string & path )   const;
 
     void                EvalGeometryChannel( const IPlugin* prev );
 
 public:
 
-    explicit                            SimpleTexturePlugin         ( const IPlugin* prev, const std::vector< std::string > & texturesFilesNames, MappingMode mappingType = MappingMode::MM_ATTACHED  );
+    explicit                            SimpleTexturePlugin         ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
                                         ~SimpleTexturePlugin        ();
 
     virtual const ITransformChannel*    GetTransformChannel         () const;
 
-    void                                SetMappingMode              ( MappingMode mm );
+    void                                SetAttachmentMode           ( TextureAttachmentMode mode );
 
     void                                Update                      ( float t ) override;
     void                                Print                       ( std::ostream & out, int tabs = 0 ) const override;

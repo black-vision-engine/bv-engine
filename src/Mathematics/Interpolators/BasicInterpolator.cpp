@@ -1,8 +1,10 @@
 #include "BasicInterpolator.h"
-#include <assert.h>
+
+#include <cassert>
 #include <iostream>
 
 #include <glm/glm.hpp>
+
 
 namespace bv
 {

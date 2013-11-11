@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "Engine\Graphics\Resources\VertexArray.h"
+#include "Engine/Graphics/Resources/VertexArray.h"
 
 namespace bv
 {

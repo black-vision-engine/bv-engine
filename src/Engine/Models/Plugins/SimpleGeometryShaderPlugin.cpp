@@ -1,6 +1,7 @@
-
 #include "SimpleGeometryShaderPlugin.h"
+
 #include "Engine/Models/Plugins/Channels/ShaderChannel.h"
+
 
 namespace bv { namespace model {
 

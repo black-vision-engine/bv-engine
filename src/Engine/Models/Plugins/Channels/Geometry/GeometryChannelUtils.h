@@ -1,7 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "Engine\Models\Plugins\Channels\Geometry\GeometryChannelDescriptor.h"
+
+#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelDescriptor.h"
 
 
 namespace bv { namespace model {

@@ -1,12 +1,13 @@
 #include "SimpleTextPlugin.h"
 
-#include "Engine\Models\Resources\IResource.h"
-#include "Engine\Models\Resources\TextureLoader.h"
+#include "Engine/Models/Resources/IResource.h"
+#include "Engine/Models/Resources/TextureLoader.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
+
 
 namespace bv { namespace model {
 

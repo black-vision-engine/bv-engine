@@ -1,19 +1,22 @@
 #pragma once
 
-#include "oglcore.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/oglcore.h"
 
 #include <string>
 #include <map>
 #include <hash_map>
+
 using std::string;
 
 #include <glm/glm.hpp>
+
 using glm::vec2;
 using glm::vec3;
 using glm::vec4;
 using glm::mat2;
 using glm::mat3;
 using glm::mat4;
+
 
 namespace bv {
 

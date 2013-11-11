@@ -1,7 +1,9 @@
 #include "ShaderParam.h"
-#include "IShaderParamUpdater.h"
 
 #include <cassert>
+
+#include "Engine/Graphics/Shaders/IShaderParamUpdater.h"
+
 
 namespace bv {
 

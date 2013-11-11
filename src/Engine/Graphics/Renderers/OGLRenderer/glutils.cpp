@@ -1,6 +1,6 @@
 #include "glutils.h"
 
-#include "oglcore.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/oglcore.h"
 
 #include <cstdio>
 

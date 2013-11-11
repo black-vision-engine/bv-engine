@@ -1,10 +1,11 @@
 #pragma once
 
+#include <cassert>
+#include <vector>
+
 #include "Engine/Types/Enums.h"
 #include "Engine/Graphics/Shaders/ShaderParamDesc.h"
 
-#include <cassert>
-#include <vector>
 
 namespace bv {
 

@@ -1,5 +1,7 @@
 #include "IndexBuffer.h"
+
 #include <cassert>
+
 
 namespace bv {
 

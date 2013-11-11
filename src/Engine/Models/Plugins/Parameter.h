@@ -1,9 +1,12 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Interfaces/IParameter.h"
 #include "Mathematics/Interpolators/Interpolators.h"
 #include "Mathematics/Transform/MatTransform.h"
+
+#include "Engine/Models/Plugins/Interfaces/IParameter.h"
+
 #include "Engine/Types/Enums.h"
+
 
 namespace bv { namespace model {
 

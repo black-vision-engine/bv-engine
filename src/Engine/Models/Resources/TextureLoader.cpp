@@ -1,10 +1,12 @@
 #include "TextureLoader.h"
 
-#include "FreeImagePlus.h"
-
 #include <iostream>
+
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
+
+#include "FreeImagePlus.h"
+
 
 namespace bv { namespace model {
 

@@ -1,5 +1,7 @@
 #include "DataBuffer.h"
+
 #include <cassert>
+
 
 namespace bv {
 

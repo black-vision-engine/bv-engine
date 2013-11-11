@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Engine\Models\Plugins\Channels\Geometry\GeometryChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
+
 
 namespace bv { namespace model {
 

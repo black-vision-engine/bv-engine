@@ -1,5 +1,7 @@
 #include "BlackTree.h"
 
+// *********************************
+//
 bool BlackTree::LoadFromFile(string path)
 {
 	
@@ -19,6 +21,9 @@ bool BlackTree::LoadFromFile(string path)
 	return true;
 
 }	
+
+// *********************************
+//
 vector<TimeProperty>* BlackTree::FindProperty(Plugin *plugin,string name)
 {
 	for(int i=0;i<plugin->properties.size();i++)
@@ -28,6 +33,9 @@ vector<TimeProperty>* BlackTree::FindProperty(Plugin *plugin,string name)
 	}
 	return NULL;
 }
+
+// *********************************
+//
 string* BlackTree::FindNonLinearProperty(Plugin *plugin,string name)
 {
 	for(int i=0;i<plugin->non_linear_properties.size();i++)
@@ -38,6 +46,8 @@ string* BlackTree::FindNonLinearProperty(Plugin *plugin,string name)
 	return NULL;
 }
 
+// *********************************
+//
 bool BlackTree::ParsePluginProperties(Plugin *plugin, xml_node<> *NewNode)
 {
 		vector<TimeProperty> *current=NULL;
@@ -89,6 +99,9 @@ bool BlackTree::ParsePluginProperties(Plugin *plugin, xml_node<> *NewNode)
 	}
 	return true;
 }
+
+// *********************************
+//
 PluginLinearGradient* BlackTree::CreatePluginLinearGradient(xml_node<> *NewNode)
 {
 	PluginLinearGradient *plugin = new PluginLinearGradient();
@@ -100,6 +113,9 @@ PluginLinearGradient* BlackTree::CreatePluginLinearGradient(xml_node<> *NewNode)
 
 	return plugin;
 }
+
+// *********************************
+//
 PluginRadialGradient* BlackTree::CreatePluginRadialGradient(xml_node<> *NewNode)
 {
 	PluginRadialGradient *plugin = new PluginRadialGradient();
@@ -113,6 +129,9 @@ PluginRadialGradient* BlackTree::CreatePluginRadialGradient(xml_node<> *NewNode)
 
 	return plugin;
 }
+
+// *********************************
+//
 PluginGeometry *BlackTree::CreatePluginGeometry(xml_node<> *NewNode)
 {
 	PluginGeometry *plugin = new PluginGeometry();;
@@ -121,24 +140,36 @@ PluginGeometry *BlackTree::CreatePluginGeometry(xml_node<> *NewNode)
 	//cout<<"parsed..."<<endl;
 	return plugin;
 }
+
+// *********************************
+//
 PluginPrimitive *BlackTree::CreatePluginPrimitive(xml_node<> *NewNode)
 {
 	PluginPrimitive *plugin = new PluginPrimitive();
 	ParsePluginProperties(plugin,NewNode);
 	return plugin;
 }
+
+// *********************************
+//
 PluginTexture* BlackTree::CreatePluginTexture(xml_node<> *NewNode)
 {
 	PluginTexture *plugin = new PluginTexture();
 	ParsePluginProperties(plugin,NewNode);
 	return plugin;
 }
+
+// *********************************
+//
 PluginText* BlackTree::CreatePluginText(xml_node<> *NewNode)
 {
 	PluginText *plugin = new PluginText();
 	ParsePluginProperties(plugin,NewNode);
 	return plugin;
 }
+
+// *********************************
+//
 PluginSolid *BlackTree::CreatePluginSolid(xml_node<> *NewNode)
 {
 	PluginSolid *plugin = new PluginSolid();
@@ -146,6 +177,9 @@ PluginSolid *BlackTree::CreatePluginSolid(xml_node<> *NewNode)
 
 	return plugin;
 }
+
+// *********************************
+//
 PluginExtrude* BlackTree::CreatePluginExtrude(xml_node<> *NewNode)
 {
 	PluginExtrude *plugin = new PluginExtrude();
@@ -153,6 +187,9 @@ PluginExtrude* BlackTree::CreatePluginExtrude(xml_node<> *NewNode)
 
 	return plugin;
 }
+
+// *********************************
+//
 bool BlackTree::CreatePlugin(BlackNode &node, xml_node<> *NewNode)
 {
 	
@@ -197,6 +234,9 @@ bool BlackTree::CreatePlugin(BlackNode &node, xml_node<> *NewNode)
 	node.plugins.push_back(plugin);
 	return true;
 }
+
+// *********************************
+//
 bool BlackTree::ParsePlugins(BlackNode &node, xml_node<> *NewNode)
 {
 	//cout << "---parsing plugins..."<<endl;
@@ -218,6 +258,8 @@ bool BlackTree::ParsePlugins(BlackNode &node, xml_node<> *NewNode)
 	return true;
 }
 
+// *********************************
+//
 bool BlackTree::CreateNode(BlackNode &parrent, xml_node<> *NewNode)
 {
 	xml_attribute<> *nazwa = NewNode->first_attribute("name");
@@ -257,6 +299,8 @@ bool BlackTree::CreateNode(BlackNode &parrent, xml_node<> *NewNode)
 	return true;
 }
 
+// *********************************
+//
 bool BlackTree::ParseXml(xml_document<> &doc)
 {
 
@@ -278,4 +322,3 @@ bool BlackTree::ParseXml(xml_document<> &doc)
 
 	return true;
 }
-

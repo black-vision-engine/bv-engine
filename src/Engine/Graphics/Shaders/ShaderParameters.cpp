@@ -1,5 +1,7 @@
 #include "ShaderParameters.h"
+
 #include <cassert>
+
 
 namespace bv {
 
@@ -67,16 +69,16 @@ const std::vector< Texture * > &  ShaderParameters::Textures() const
 
 // ***********************
 //
-void                            ShaderParameters::AddTexture( Texture * tex )
+void                 ShaderParameters::AddTexture           ( Texture * tex )
 {
     m_textures.push_back( tex );
 }
 
 // ***********************
 //
-void                ShaderParameters::SetValue              ( const std::string& name , const char* pBuf)
+void                ShaderParameters::SetValue              ( const std::string & name , const char * pBuf )
 {
-    GetParam(name)->SetValue(pBuf);
+    GetParam( name )->SetValue( pBuf );
 }
 
 // ***********************

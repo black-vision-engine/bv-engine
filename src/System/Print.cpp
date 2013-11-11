@@ -1,17 +1,20 @@
 #include "Print.h"
 
+
 namespace bv
 {
 namespace debug
 {
-    std::string EndLine(int tabs)
-    {
-        std::string out;
-        out += "\n";
-        for(int t = 0; t < tabs; ++t)
-            out += "\t";
+// *******************************
+//
+std::string EndLine(int tabs)
+{
+    std::string out;
+    out += "\n";
+    for(int t = 0; t < tabs; ++t)
+        out += "\t";
 
-        return out;
-    }
+    return out;
+}
 } // debug
 } // bv

@@ -1,7 +1,9 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include <glm/glm.hpp>
+
+#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
+
 
 namespace bv { namespace model {
 

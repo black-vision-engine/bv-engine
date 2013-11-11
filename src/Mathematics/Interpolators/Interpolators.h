@@ -1,7 +1,9 @@
 #pragma once
 
-#include "BasicInterpolator.h"
 #include <glm/glm.hpp>
+
+#include "Mathematics/Interpolators/BasicInterpolator.h"
+
 
 namespace bv
 {

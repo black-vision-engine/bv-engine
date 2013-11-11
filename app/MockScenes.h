@@ -1,8 +1,6 @@
 #pragma once
-#include "xml\TreeBuilder.h"
-#include "Mathematics\Interpolators\Interpolators.h"
-
-
+#include "xml/TreeBuilder.h"
+#include "Mathematics/Interpolators/Interpolators.h"
 
 namespace bv
 {
@@ -38,6 +36,8 @@ public:
     
     static  model::BasicNode *      AnimatedTestScene           ();
     static  model::BasicNode *      TestSceneVariableTopology   ();
+    static  model::BasicNode *      SequenceAnimationTestScene  ();
+
 	static  model::BasicNode *      XMLTestScene                ();
 
 };

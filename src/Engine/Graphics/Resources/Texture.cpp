@@ -1,7 +1,9 @@
 #include "Texture.h"
 
+#include <cassert>
+
 #include "FreeImagePlus.h"
-#include <assert.h>
+
 
 namespace bv
 {
@@ -30,7 +32,8 @@ Texture::Texture                                ( TextureFormat format, TextureT
 // *********************************
 //
 Texture::~Texture	                            ()
-{}
+{
+}
 
 // *********************************
 //
@@ -101,6 +104,14 @@ bool                    Texture::WriteToBuffer   ( const char * memPtr, size_t d
     }
 
     return true;
+}
+
+// *********************************
+//
+bool                    Texture::HasSequence     () const
+{
+    //FIXME: this sucks as hell
+    return false;
 }
 
 }

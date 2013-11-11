@@ -1,14 +1,15 @@
 #include "PdrVertexArrayObject.h"
 
+#include <cassert>
+
 #include "Engine/Graphics/Resources/VertexArray.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexBuffer.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexDescriptor.h"
-#include "Renderer.h"
+#include "Engine/Graphics/Renderers/Renderer.h"
 
-#include "PdrVertexBuffer.h"
-#include "PdrVertexDescriptor.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexBuffer.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexDescriptor.h"
 
-#include <cassert>
 
 namespace bv
 {

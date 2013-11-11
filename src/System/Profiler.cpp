@@ -1,9 +1,11 @@
 #include "Profiler.h"
 
-#include <string>
 #include <Windows.h>
 
 #include <sys/timeb.h>
+
+#include <string>
+
 
 static bool gsInitializedTime = false;
 static __int64 gsInitialSec = 0;

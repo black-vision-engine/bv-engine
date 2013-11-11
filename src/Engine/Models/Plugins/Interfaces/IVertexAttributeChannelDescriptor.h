@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Engine\Types\Enums.h"
+#include "Engine/Types/Enums.h"
+
 
 namespace bv { namespace model
 {

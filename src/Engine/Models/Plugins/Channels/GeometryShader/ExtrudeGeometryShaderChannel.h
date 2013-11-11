@@ -5,6 +5,7 @@
 #include "Engine/Models/Plugins/PluginParameters.h"
 #include "Engine/Models/Plugins/Parameter.h"
 
+
 namespace bv{ namespace model {
 
 class ExtrudeGeometryShaderChannelPD : public BaseParametersDescriptor

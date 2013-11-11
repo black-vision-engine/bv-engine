@@ -1,7 +1,9 @@
 
 #include "SimpleColorPlugin.h"
+
 #include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
 #include "Engine/Models/Plugins/Parameter.h"
+
 
 namespace bv { namespace model {
 

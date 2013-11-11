@@ -1,6 +1,7 @@
 #pragma once
 
-#include "IResourceLoader.h"
+#include "Engine/Models/Resources/IResourceLoader.h"
+
 
 namespace bv { namespace model {
 

@@ -2,6 +2,7 @@
 
 #include "Engine/Graphics/SceneGraph/IScene.h"
 
+
 namespace bv {
 
 class GlobalState

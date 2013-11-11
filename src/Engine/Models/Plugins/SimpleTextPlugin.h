@@ -2,7 +2,9 @@
 
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/PluginParameters.h"
-#include "../../app/MockFonts/MockFont.h" //FIXME:
+
+#include "../app/MockFonts/MockFont.h" //FIXME: FIXME: FIXME: FIXME:
+
 
 namespace bv { namespace model {
 
@@ -25,6 +27,7 @@ public:
 class SimpleTextPlugin : public BasePlugin< IPlugin, SimpleTextPluginPD >
 {
 private:
+
     typedef std::pair< ResourceHandle*, std::string > TexturePair;
 
     bv::Text*           m_text;

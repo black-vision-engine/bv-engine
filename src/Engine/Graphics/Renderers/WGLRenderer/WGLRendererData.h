@@ -1,7 +1,9 @@
 #pragma once
 
 #include <Windows.h>
-#include "GLRendererData.h"
+
+#include "Engine/Graphics/Renderers/OGLRenderer/GLRendererData.h"
+
 
 namespace bv
 {

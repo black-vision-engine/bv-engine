@@ -1,15 +1,15 @@
 #include "PdrTexture2D.h"
+
 #include "Engine/Graphics/Resources/Texture2D.h"
 
-#include <assert.h>
-
+#include <cassert>
 
 namespace bv
 {
 
 // *******************************
 //FIXME: very simplistic implementation
-//FIXME: proper implementation should use PBOs, Locking for memory transfers, and at least basic MipMapping implementation
+//FIXME: proper implementation should use PBOs, Locking for memory transfers, and at least a basic MipMapping implementation
 PdrTexture2D::PdrTexture2D                      ( const Texture2D * texture )
     : m_textureID( 0 )
     , m_prevTextureID( 0 )
@@ -18,10 +18,18 @@ PdrTexture2D::PdrTexture2D                      ( const Texture2D * texture )
     GLuint prevTex = Bind();
   
     //FIXME: allow more texture types here (not only RGBA - 8 bit per component)
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, texture->GetWidth(), texture->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->GetData() );
+    assert( texture->GetFormat() == TextureFormat::F_A8R8G8B8 );
+    glTexImage2D    ( GL_TEXTURE_2D, 0, GL_RGBA, texture->GetWidth(), texture->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->GetData() );
     glBindTexture   ( GL_TEXTURE_2D, prevTex );
 
     //FIXME: use PBOs and locking here so that fast texture streaming can be performed
+}
+
+// *******************************
+//
+PdrTexture2D::~PdrTexture2D   ()
+{
+    glDeleteTextures( 1, &m_textureID );
 }
 
 // *******************************
@@ -61,7 +69,7 @@ void            PdrTexture2D::Unbind            ()
 
 // *******************************
 //
-PdrTexture2D *   PdrTexture2D::Create            ( const Texture2D* texture )
+PdrTexture2D *   PdrTexture2D::Create            ( const Texture2D * texture )
 {
     return new PdrTexture2D( texture );
 }

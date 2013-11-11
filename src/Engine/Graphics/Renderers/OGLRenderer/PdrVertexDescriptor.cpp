@@ -1,8 +1,10 @@
 #include "PdrVertexDescriptor.h"
-#include "PdrVertexBuffer.h"
 
 #include "Engine/Graphics/Resources/VertexDescriptor.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
+
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexBuffer.h"
+
 
 //FIXME: implement
 namespace bv {

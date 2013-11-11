@@ -1,7 +1,9 @@
 #pragma once
 
-#include "Texture.h"
 #include <vector>
+
+#include "Engine/Graphics/Resources/Texture.h"
+
 
 namespace bv
 {

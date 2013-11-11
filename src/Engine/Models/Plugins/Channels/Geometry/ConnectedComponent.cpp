@@ -1,7 +1,9 @@
 #include "ConnectedComponent.h"
 
-#include "VertexAttributeChannel.h"
-#include "Engine\Models\Plugins\Interfaces\IVertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
+
+#include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannel.h"
+
 
 namespace bv { namespace model
 {

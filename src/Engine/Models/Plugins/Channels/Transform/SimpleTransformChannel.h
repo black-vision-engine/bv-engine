@@ -1,7 +1,9 @@
 #pragma once
 
-#include "TransformChannel.h"
-#include "Mathematics\Transform\MatTransform.h"
+#include "Mathematics/Transform/MatTransform.h"
+
+#include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
+
 
 namespace bv { namespace model
 {

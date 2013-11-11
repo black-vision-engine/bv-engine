@@ -1,8 +1,10 @@
 #include "GeometryPluginRect.h"
-#include "System/Print.h"
-#include "Engine/Models/Resources/TextureLoader.h"
 
+#include "System/Print.h"
+
+#include "Engine/Models/Resources/TextureLoader.h"
 #include "Engine/Models/Plugins/Parameter.h"
+
 
 namespace bv { namespace model {
 

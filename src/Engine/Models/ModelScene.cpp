@@ -1,7 +1,8 @@
 #include "ModelScene.h"
 
 #include "Engine/Models/Updaters/CameraUpdater.h"
-#include "Engine\Models\BasicNode.h"
+#include "Engine/Models/BasicNode.h"
+
 
 namespace bv { namespace model {
 

@@ -1,9 +1,11 @@
 #pragma once
 
+#include <hash_map>
+
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
+
 #include "Engine/Types/Enums.h"
 
-#include <hash_map>
 
 namespace bv
 {

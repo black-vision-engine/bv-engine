@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Engine\Graphics\SceneGraph\Triangles.h"
+#include "Engine/Graphics/SceneGraph/Triangles.h"
+
 
 namespace bv {
 

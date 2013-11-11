@@ -1,7 +1,8 @@
 #include "TriangleStrip.h"
 
-#include "Engine\Graphics\Resources\RenderableArrayDataArrays.h"
-#include "Engine\Graphics\Shaders\RenderableEffect.h"
+#include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
+#include "Engine/Graphics/Shaders/RenderableEffect.h"
+
 
 namespace bv {
 

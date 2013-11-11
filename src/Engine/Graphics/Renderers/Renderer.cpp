@@ -1,9 +1,12 @@
 #include "Renderer.h"
 
-#include <gl/glew.h>
-#include "glutils.h"
 #include <cassert>
 
+#include <gl/glew.h>
+
+#include "Engine/Graphics/Resources/TextureAnimatedSequence2D.h"
+
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrShader.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrIndexBuffer.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexBuffer.h"
@@ -11,15 +14,17 @@
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexArrayObjectSingleVB.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexDescriptor.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrTexture2D.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrTextureAnimatedSequence2D.h"
+
 #include "Engine/Graphics/Shaders/RenderablePass.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
-#include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
 #include "Engine/Graphics/Resources/VertexBuffer.h"
 #include "Engine/Graphics/Resources/VertexArray.h"
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
+
 //FIXME: add disable methods so that current state can be cleared after frame is rendered
 
 namespace bv {
@@ -189,9 +194,7 @@ bool    Renderer::Draw                  ( RenderableEntity * ent )
 
     DrawRenderable( ent );
 
-    //glPolygonMode(GL_FRONT, GL_LINE);
-    //glPolygonMode(GL_BACK, GL_LINE);
-
+    //FIXME: Disable whathever there is to be disabled
     //Disable(eff->GetPass(0));  //FIXME:
     //Disable(vb, vd);
     //if(ib) 
@@ -331,10 +334,32 @@ void    Renderer::Enable              ( const Texture2D * texture, int textureUn
 
 // *********************************
 //
+void    Renderer::Enable              ( const TextureAnimatedSequence2D * texture, int textureUnit )
+{
+    PdrTextureAnimatedSequence2D * pdrTexAnim2D = GetPdrTextureAnimSeq2D( texture );
+    
+    if( texture->NeedsUpdate() )
+    {
+        pdrTexAnim2D->Update( texture );
+    }
+
+    pdrTexAnim2D->Enable( this, textureUnit );
+}
+
+// *********************************
+//
 void    Renderer::Disable             ( const Texture2D * texture, int textureUnit )
 {
     PdrTexture2D * pdrTex2D = GetPdrTexture2D( texture );
     pdrTex2D->Disable( this, textureUnit );
+}
+
+// *********************************
+//
+void    Renderer::Disable             ( const TextureAnimatedSequence2D * texture, int textureUnit )
+{
+    PdrTextureAnimatedSequence2D * pdrTexAnim2D = GetPdrTextureAnimSeq2D( texture );
+    pdrTexAnim2D->Disable( this, textureUnit );
 }
 
 // *********************************
@@ -463,6 +488,26 @@ PdrTexture2D *                  Renderer::GetPdrTexture2D         ( const Textur
     return pdrTex;
 }
 
+// *********************************
+//
+PdrTextureAnimatedSequence2D *  Renderer::GetPdrTextureAnimSeq2D     ( const TextureAnimatedSequence2D * texture )
+{
+    auto it = m_PdrTexturesAnimatedSequence2DMap.find( texture );
+
+    PdrTextureAnimatedSequence2D * pdrTex = nullptr;
+
+    if( it == m_PdrTexturesAnimatedSequence2DMap.end() )
+    {
+        pdrTex = PdrTextureAnimatedSequence2D::Create( texture );
+        m_PdrTexturesAnimatedSequence2DMap[ texture ] = pdrTex;
+    }
+    else
+    {
+        pdrTex = it->second;
+    }
+
+    return pdrTex;    
+}
 
 }
 

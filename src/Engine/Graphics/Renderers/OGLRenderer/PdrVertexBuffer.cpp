@@ -1,7 +1,9 @@
 #include "PdrVertexBuffer.h"
-#include "Renderer.h"
-#include "VertexBuffer.h"
-#include "PdrConstants.h"
+
+#include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Graphics/Resources/VertexBuffer.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
+
 
 namespace bv {
 

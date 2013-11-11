@@ -1,13 +1,13 @@
 #pragma once
 
 #include <vector>
+#include <iostream>
 
-#include "Mathematics/Interpolators/Interpolators.h"
-#include "glm/glm.hpp"
-
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <iostream>
+#include "Mathematics/Interpolators/Interpolators.h"
+
 
 namespace bv
 {

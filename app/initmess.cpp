@@ -39,6 +39,8 @@ bool	fullscreen = false;
 
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
+// *********************************
+//
 GLvoid ReSizeGLScene(GLsizei width, GLsizei height)	
 {
     if (height==0)									
@@ -71,7 +73,9 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)
     glLoadIdentity();								
 }
 
-int InitGL(GLvoid)									
+// *********************************
+//
+int InitGL( GLvoid )
 {
     //glShadeModel(GL_SMOOTH);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);			
@@ -92,6 +96,8 @@ int InitGL(GLvoid)
 //    return TRUE;									
 //}
 
+// *********************************
+//
 void InitGlew()
 {
     glewInit();
@@ -103,6 +109,8 @@ void InitGlew()
     }
 }
 
+// *********************************
+//
 GLvoid KillGLWindow(GLvoid)							
 {
     if (fullscreen)
@@ -195,7 +203,6 @@ BOOL CreateGLWindow(LPCWSTR title, int width, int height, int bits, bool fullscr
         dmScreenSettings.dmBitsPerPel	= bits;					
         dmScreenSettings.dmFields=DM_BITSPERPEL|DM_PELSWIDTH|DM_PELSHEIGHT;
 
-        
         if (ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN)!=DISP_CHANGE_SUCCESSFUL)
         {
             
@@ -334,6 +341,8 @@ BOOL CreateGLWindow(LPCWSTR title, int width, int height, int bits, bool fullscr
     return TRUE;							
 }
 
+// *********************************
+//
 LRESULT CALLBACK WndProc(	HWND	hWnd,	
                             UINT	uMsg,	
                             WPARAM	wParam,	
@@ -412,6 +421,8 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,
     return DefWindowProc(hWnd,uMsg,wParam,lParam);
 }
 
+// *********************************
+//
 void Swap(void)
 {		
     SwapBuffers(hDC);

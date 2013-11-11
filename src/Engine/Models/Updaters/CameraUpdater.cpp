@@ -1,5 +1,7 @@
 #include "CameraUpdater.h"
+
 #include "Engine/Graphics/SceneGraph/Camera.h"
+
 
 namespace bv
 {

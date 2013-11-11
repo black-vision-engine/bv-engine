@@ -1,6 +1,6 @@
 #include "glslprogram.h"
 
-#include "glutils.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/glutils.h"
 
 #include <fstream>
 using std::ifstream;

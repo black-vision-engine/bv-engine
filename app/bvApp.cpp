@@ -1,21 +1,35 @@
 #include "bvApp.h"
-#include "Renderer.h"
-#include "InitSubsystem.h"
-#include "Engine\Models\BasicNode.h"
-#include "Engine\Models\ModelFactory.h"
 
-#include "Engine\Models\BasicNode.h"
-#include "Mathematics\Transform\MatTransform.h"
-#include "Engine\Graphics\SceneGraph\Camera.h"
-#include "Engine\Models\Updaters\IUpdater.h"
-#include "Engine/Models/ModelScene.h"
+#include "System/InitSubsystem.h"
 #include "System/Profiler.h"
 #include "System/HRTimer.h"
+
+#include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Models/ModelFactory.h"
+#include "Engine/Models/BasicNode.h"
+#include "Engine/Graphics/SceneGraph/Camera.h"
+#include "Engine/Models/Updaters/IUpdater.h"
+#include "Engine/Models/ModelScene.h"
+
+#include "MockFonts/fttester.h"
 #include "MockScenes.h"
 
-#include "MockFonts\fttester.h"
-
 bv::HighResolutionTimer GTimer;
+
+#define FULLSCREEN_MODE
+
+#ifdef FULLSCREEN_MODE
+    const bool          GFullScreen = true;
+    const int           GWidth = 1920;
+    const int           GHeight = 1080;
+#else
+    const bool          GFullScreen = false;
+    const int           GWidth = 960;
+    const int           GHeight = 540;
+#endif
+
+const unsigned int  FPS = 5000;
+const unsigned int  GFrameMillis = 1000 / FPS;
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -44,7 +58,7 @@ namespace bv {
 // *********************************
 //
 BlackVisionApp::BlackVisionApp	()
-    : WindowedApplication( "Migajace tlo z klirem dzialajacym jak nalezy to nalezy", 0, 0, 800, 600 )
+    : WindowedApplication( "Migajace tlo z klirem dzialajacym jak nalezy to nalezy", 0, 0, GWidth, GHeight, GFullScreen )
     , m_modelScene(nullptr)
     , m_mockSceneEng(nullptr)
 {
@@ -58,21 +72,29 @@ void BlackVisionApp::OnIdle		()
     static double totalPassed = 0.0;
     static unsigned int longestFrame = 0;
     static double longestTime = 0.;
-    static DWORD startTime = GetTickCount();
+    static unsigned int movingAvgAccum = 0;
+    static unsigned int lastCount = 1;
+    static DWORD movingAvgStart = timeGetTime();
+    static float movingAvgTime = 0.001f;
+    static DWORD startTime = timeGetTime();
 
     if( frame == 1 )
     {
         totalPassed = 0;
         longestFrame = 0;
         longestTime = 0.;
-        startTime = GetTickCount();
+        startTime = timeGetTime();
+        movingAvgAccum = 0;
+        movingAvgStart = startTime;
+        GTimer.StartTimer();
     }
 
-    GTimer.StartTimer();
+    ++movingAvgAccum;
+
 
     //bv::Profiler pf("One frame " , &std::cout);
 
-    DWORD curTime = GetTickCount();
+    DWORD curTime = timeGetTime();
 
     //FIXME: debug timer - don't get fooled
     //float t = float(frame) * 0.1f; ///10 fps
@@ -101,19 +123,17 @@ void BlackVisionApp::OnIdle		()
         RenderScene();
         m_Renderer->DisplayColorBuffer();
 
+    DWORD ftime = timeGetTime() - curTime;
+    if( ftime < GFrameMillis )
+    {
+        Sleep( GFrameMillis - ftime );
+        printf( "Sleeping: %d\n", GFrameMillis - ftime );
+    }
+
     double frameUpdate = GTimer.CurElapsed();
 
     GTimer.StopTimer();
     double frameTime = GTimer.GetElapsedTime();
-
-    DWORD nextTime = GetTickCount();
-    DWORD delta = nextTime - curTime;
-
-    //if ( delta < 10 )
-    //{
-    //    Sleep( 10 - delta );
-    //    printf( "Sleep\n" );
-    //}
 
     double modeldt = modelUpdate;
     double managerdt = managerUpdate - modelUpdate;
@@ -127,25 +147,41 @@ void BlackVisionApp::OnIdle		()
         longestTime = frameTime;
         longestFrame = frame;
 
-        printf( "Longest frame: %d so far took: %f\n", frame, frameTime );
+        printf( "Longest frame: %d so far took: %f\n", frame, 1000. * frameTime );
     }
 
     if ( totalPassed > 0.2 )
     {
-        totalPassed = 0.0;
-        std::cout.precision(4);
-        //std::cout << "FPS: " << 1.0 / frameUpdate << std::endl;
-        //std::cout << "Vertex "<<vertexCount<<" Model: " << modeldt * 1000.0 << "  Manager: " << managerdt * 1000.0 << "  Engine: " << enginedt * 1000.0 << " Render: " << renderdt * 1000.0 << " Total: " << frameUpdate * 1000.0 << std::endl;
-		
 		std::ostringstream  s;
-		s<<"FPS: " << 1.0 / frameUpdate <<  " FPS: " << 1.0 / frameTime << " frame time: " << frameUpdate * 1000.0 << " longest frame: " << longestFrame << " took: " << longestTime * 1000.0 << std::endl;
+        totalPassed = 0.0;
+
+        std::cout.precision(4);
+        s << "FPS: " << 1.0 / frameUpdate <<  " FPS: " << 1.0 / frameTime << " frame time: " << frameUpdate * 1000.0 << " ms longest frame: " << longestFrame << " took: " << longestTime * 1000.0;
+        
+        if( movingAvgAccum >= 38 )
+        {
+            lastCount = movingAvgAccum;
+            movingAvgTime = (float(timeGetTime() - movingAvgStart) * 0.001f) / float(movingAvgAccum);
+            //std::cout << "FPS: " << 1.0 / frameUpdate << std::endl;
+            //std::cout << "Vertex "<<vertexCount<<" Model: " << modeldt * 1000.0 << "  Manager: " << managerdt * 1000.0 << "  Engine: " << enginedt * 1000.0 << " Render: " << renderdt * 1000.0 << " Total: " << frameUpdate * 1000.0 << std::endl;
+		        
+            movingAvgAccum = 0;
+            movingAvgStart = timeGetTime();
+        }
+    
+        s << "     Avg[" << lastCount << "] FPS: " << 1.0f / movingAvgTime << " frame time: " << 1000.0f * movingAvgTime << " ms" << std::endl;
+        s << std::endl;
+
 		string ss = s.str();
 		std::wstring stemp = std::wstring(ss.begin(), ss.end());
 		LPCWSTR sw = stemp.c_str();
 		SetWindowTextW(handle,sw);
+
     }
 
     frame++;
+
+    GTimer.StartTimer();
 }
 
 // *********************************
@@ -210,14 +246,12 @@ bool BlackVisionApp::OnInitialize       ()
     //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
     //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
+    //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
+    //model::BasicNode * root = TestScenesFactory::XMLTestScene();
+    //model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
+    model::BasicNode * root = TestScenesFactory::SequenceAnimationTestScene();
 
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
-     
-    //model::BasicNode * root = TestScenesFactory::XMLTestScene();
-     
-    //model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
-
-    model::BasicNode * root = TestScenesFactory::AnotherTestScene();
 
     m_modelScene = model::ModelScene::Create( root, new Camera() );
 

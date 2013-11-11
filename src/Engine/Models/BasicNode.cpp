@@ -1,8 +1,9 @@
 #include "BasicNode.h"
 
+#include <sys/stat.h>
+
 #include <fstream>
 #include <sstream>
-#include <sys/stat.h>
 
 #include "System/Print.h"
 
@@ -29,7 +30,9 @@
 #include "Engine/Models/Updaters/TransformUpdater.h"
 #include "Engine/Models/Updaters/RendererStateUpdater.h"
 #include "Engine/Models/Updaters/ShaderParamUpdater.h"
+#include "Engine/Models/Updaters/SequenceAnimationUpdater.h"
 
+#include "Engine/Models/Plugins/Interfaces/ISequenceAnimationSource.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
@@ -39,6 +42,7 @@
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannelDescriptor.h"
 #include "Engine/Graphics/Resources/Textures/TextureManager.h"
 #include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/TextureAnimatedSequence2D.h"
 
 namespace bv { namespace model {
 
@@ -124,21 +128,58 @@ SceneNode*                  BasicNode::BuildScene()
 
     renderEnt->SetWorldTransforms( trans );
 
-    // TODO: dodac liste layerow do zwracanego SceneNode
+    //TODO: dodac liste layerow do zwracanego SceneNode
     for( auto p : m_plugins )
     {
-        int i = 0;
-        for( auto tex : p->GetTextures() )
+        RenderablePass * renderablePass = effect->GetPass( 0 ); //FIXME: add code to cope with more render passes
+        auto pixelShader = renderablePass->GetPixelShader();
+
+        if( p->HasAnimatingTexture() )
         {
             SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT }; 
-            auto textureSampler = new TextureSampler( i, tex->m_texName, bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ));
-            effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );
+            auto textureSampler = new TextureSampler( 0, "Animation0", bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ) );
 
-            auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
+            pixelShader->AddTextureSampler( textureSampler );
+            TextureAnimatedSequence2D * animation = nullptr;
 
-            effect->GetPass( 0 )->GetPixelShader()->Parameters()->AddTexture( loadedTex );
+            unsigned int i = 0;
+            for( auto tex : p->GetTextures() )
+            {
+                auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
 
-            i++;
+                if( i == 0 )
+                {
+                    animation = new TextureAnimatedSequence2D( loadedTex->GetFormat(), loadedTex->GetWidth(), loadedTex->GetHeight() );
+                }
+
+                animation->AddTexture( loadedTex );
+                ++i;
+            }
+
+            assert( i > 1 );
+            pixelShader->Parameters()->AddTexture( animation );
+
+            UpdatersManager & updatersManager = UpdatersManager::get();
+
+            SequenceAnimationUpdater * updater = new SequenceAnimationUpdater( animation, p->QuerySequenceAnimationSource() );
+            updatersManager.RegisterUpdater( updater );
+        }
+        else
+        {
+            int i = 0;
+            for( auto tex : p->GetTextures() )
+            {
+                SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT }; 
+                //FIXME: jak to kurwa przez tex->m_texName ????
+                auto textureSampler = new TextureSampler( i, tex->m_texName, bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ));
+                effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );
+
+                auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
+
+                effect->GetPass( 0 )->GetPixelShader()->Parameters()->AddTexture( loadedTex );
+
+                i++;
+            }
         }
 
         //FIXME: Only last plugin should be used here as its output corresponds to the final transformation (list)

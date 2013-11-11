@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+
 namespace bv { namespace model
 {
 
@@ -10,6 +11,8 @@ const std::string TexturePixelShaderChannelPD::pluginName( "SimpleTexturePlugin"
 TexturePixelShaderChannelPD::StringsVector TexturePixelShaderChannelPD::alphaParamName;
 TexturePixelShaderChannelPD::StringsVector TexturePixelShaderChannelPD::txMatrixParamName;
 
+// ******************************
+//
 void TexturePixelShaderChannel::Update( float t )
 {
     ShaderChannel::Update( t );
@@ -31,9 +34,11 @@ void TexturePixelShaderChannel::Update( float t )
 
 }
 
-TexturePixelShaderChannel::TexturePixelShaderChannel( const std::string& shaderFile
-                                                    , const std::vector< FloatInterpolator >& alphas
-                                                    , const std::vector< TransformF >& texTransforms )
+// ******************************
+//
+TexturePixelShaderChannel::TexturePixelShaderChannel( const std::string & shaderFile
+                                                    , const std::vector< FloatInterpolator > & alphas
+                                                    , const std::vector< TransformF > & texTransforms )
     : PixelShaderChannelBase( shaderFile )
 {
     ParamDesc::alphaParamName.resize( alphas.size() );

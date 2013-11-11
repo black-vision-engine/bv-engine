@@ -1,8 +1,9 @@
 #pragma once
 
+#include <sys/timeb.h>
+
 #include <iostream>
 
-#include <sys/timeb.h>
 
 namespace bv
 {

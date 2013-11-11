@@ -1,5 +1,7 @@
 #include "SceneNode.h"
+
 #include <cassert>
+
 
 namespace bv {
 

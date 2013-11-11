@@ -1,10 +1,12 @@
 #include "VariableTopologyStripComponent.h"
 
-#include "Mathematics/defines.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelTyped.h"
-
 #include <cmath>
 #include <cassert>
+
+#include "Mathematics/defines.h"
+
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelTyped.h"
+
 
 namespace bv { namespace model {
 

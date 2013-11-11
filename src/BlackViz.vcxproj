@@ -106,6 +106,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <AdditionalDependencies>glfw.lib;opengl32.lib;glu32.lib;glew32s.lib;FreeImaged.lib;libboost_filesystem.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -188,11 +189,13 @@
     <ClCompile Include="BasicTestScene.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.cpp" />
+    <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrTextureAnimatedSequence2D.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObjectSingleVB.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayData.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataArrays.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataElements.cpp" />
+    <ClCompile Include="Engine\Graphics\Resources\TextureAnimatedSequence2D.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\IShaderParamUpdater.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\TextureSampler.cpp" />
     <ClCompile Include="Engine\Graphics\State\AlphaState.cpp" />
@@ -234,6 +237,7 @@
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRect.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRing.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginParameters.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\SimpleAnimationPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleColorPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleGeometryShaderPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimplePixelShaderPlugin.cpp" />
@@ -249,6 +253,7 @@
     <ClCompile Include="Engine\Models\Updaters\GeometryUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\NodeUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\RendererStateUpdater.cpp" />
+    <ClCompile Include="Engine\Models\Updaters\SequenceAnimationUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\ShaderParamUpdater.cpp" />
     <ClCompile Include="System\HRTimer.cpp" />
     <ClCompile Include="System\Print.cpp" />
@@ -309,11 +314,13 @@
     <ClInclude Include="BasicTestScene.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.h" />
+    <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrTextureAnimatedSequence2D.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObjectSingleVB.h" />
     <ClInclude Include="Engine\Graphics\Resources\RenderableArrayData.h" />
     <ClInclude Include="Engine\Graphics\Resources\RenderableArrayDataArrays.h" />
     <ClInclude Include="Engine\Graphics\Resources\RenderableArrayDataElements.h" />
+    <ClInclude Include="Engine\Graphics\Resources\TextureAnimatedSequence2D.h" />
     <ClInclude Include="Engine\Graphics\Shaders\IShaderParamUpdater.h" />
     <ClInclude Include="Engine\Graphics\Shaders\ShaderTypes.h" />
     <ClInclude Include="Engine\Graphics\Shaders\TextureSampler.h" />
@@ -364,12 +371,15 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IIndexChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\ISequenceAnimationSource.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\ITransformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributeChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributeChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginParameters.h" />
+    <ClInclude Include="Engine\Models\Plugins\SimpleAnimationPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleColorPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleGeometryShaderPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\SimplePixelShaderPlugin.h" />
@@ -387,6 +397,7 @@
     <ClInclude Include="Engine\Models\Updaters\GeometryUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\NodeUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\RendererStateUpdater.h" />
+    <ClInclude Include="Engine\Models\Updaters\SequenceAnimationUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\ShaderParamUpdater.h" />
     <ClInclude Include="Engine\Types\Enums.h" />
     <ClInclude Include="System\HRTimer.h" />

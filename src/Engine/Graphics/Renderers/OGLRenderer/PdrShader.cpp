@@ -1,23 +1,23 @@
 #include "PdrShader.h"
-#include "glslprogram.h"
 
-#include "Engine\Graphics\Renderers\Renderer.h"
+#include "Engine/Graphics/Renderers/Renderer.h"
 
 #include "Engine/Graphics/Shaders/ShaderParam.h"
 #include "Engine/Graphics/Shaders/PixelShader.h"
 #include "Engine/Graphics/Shaders/VertexShader.h"
 #include "Engine/Graphics/Shaders/GeometryShader.h"
 
-#include "Engine\Graphics\Shaders\TextureSampler.h"
-#include "Engine\Graphics\Resources\Texture.h"
+#include "Engine/Graphics/Shaders/TextureSampler.h"
+#include "Engine/Graphics/Resources/Texture.h"
 
-#include "Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 
 //FIXME: implement those textures
-//#include "Engine\Graphics\Resources\Texture1D.h"
-#include "Engine\Graphics\Resources\Texture2D.h"
-//#include "Engine\Graphics\Resources\Texture3D.h"
-//#include "Engine\Graphics\Resources\TextureCubic.h"
+//#include "Engine/Graphics/Resources/Texture1D.h"
+#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/TextureAnimatedSequence2D.h"
+//#include "Engine/Graphics/Resources/Texture3D.h"
+//#include "Engine/Graphics/Resources/TextureCubic.h"
 
 namespace bv 
 {
@@ -191,7 +191,14 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
     {
         case SamplerSamplingMode::SSM_MODE_2D:
         {
-            renderer->Enable( static_cast< const Texture2D * >( texture ), textureUnit );
+            if( texture->HasSequence() )
+            {
+                renderer->Enable( static_cast< const TextureAnimatedSequence2D * >( texture ), textureUnit );
+            }
+            else
+            {
+                renderer->Enable( static_cast< const Texture2D * >( texture ), textureUnit );
+            }
 
             //FIXME: this state may be cached in currentSamplerState in Renderer (for specified target (GL_TEXTURE_2D here and selected texturing unit)
             GLint wrap_s = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );

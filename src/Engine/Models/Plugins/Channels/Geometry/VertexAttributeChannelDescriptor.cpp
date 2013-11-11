@@ -3,10 +3,11 @@
 #include <sstream>
 #include <cassert>
 
+
 namespace bv { namespace model
 {
 
-const unsigned int VertexAttributeChannelDescriptor::m_sAttrSize[ (int) AttributeType::AT_TOTAL ] = { sizeof( float ),     //AT_FLOAT1 = 0,
+const unsigned int VertexAttributeChannelDescriptor::m_sAttrSize[ (int) AttributeType::AT_TOTAL ] = { sizeof( float ),      //AT_FLOAT1 = 0,
                                                                                                        2 * sizeof( float ), //AT_FLOAT2,
                                                                                                        3 * sizeof( float ), //AT_FLOAT3,
                                                                                                        4 * sizeof( float )  //AT_FLOAT4

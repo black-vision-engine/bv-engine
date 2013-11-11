@@ -1,7 +1,8 @@
 #pragma once
 
-#include "glslprogram.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/glslprogram.h"
 #include "Engine/Graphics/Shaders/ShaderParamDesc.h"
+
 #include <glm/glm.hpp>
 
 

@@ -1,10 +1,12 @@
 #include "GeometryChannel.h"
-#include "ConnectedComponent.h"
-
-#include "Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannel.h"
-#include "Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.h"
 
 #include <cassert>
+
+#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
+
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
+
 
 namespace bv { namespace model
 {

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "IShaderChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IShaderChannel.h"
+
 
 namespace bv { namespace model
 {

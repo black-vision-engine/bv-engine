@@ -1,12 +1,15 @@
 #pragma once
 
-#include "IParameter.h"
 #include <string>
 #include <vector>
 #include <iostream>
 
+#include "Engine/Models/Plugins/Interfaces/IParameter.h"
+
+
 namespace bv { namespace model {
 
+class ISequenceAnimationSource;
 class IGeometryChannel;
 class ITransformChannel;
 class IPixelShaderChannel;
@@ -19,25 +22,28 @@ struct TextureInfo;
 class IPlugin
 {
 public:
-    typedef std::vector< TextureInfo* >         Textures;
+
+    typedef std::vector< TextureInfo * >        Textures;
 
 public:
 
     virtual const std::string &                 GetName                     () const = 0;
 
-    virtual const IGeometryChannel*             GetGeometryChannel          () const = 0;
-    virtual const ITransformChannel*            GetTransformChannel         () const = 0;
-    virtual const IPixelShaderChannel*          GetPixelShaderChannel       () const = 0;
-    virtual const IVertexShaderChannel*         GetVertexShaderChannel      () const = 0;
-    virtual const IGeometryShaderChannel*       GetGeometryShaderChannel    () const = 0;
+    virtual const IGeometryChannel *            GetGeometryChannel          () const = 0;
+    virtual const ITransformChannel *           GetTransformChannel         () const = 0;
+    virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const = 0;
+    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const = 0;
+    virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const = 0;
 
-    virtual const Textures&                     GetTextures                 () const = 0; // FIXME: use resources
+    virtual const Textures &                    GetTextures                 () const = 0; // FIXME: use resources
+    virtual bool                                HasAnimatingTexture         () const = 0;
+    virtual ISequenceAnimationSource *          QuerySequenceAnimationSource() = 0;
 
     virtual void                                Update                      ( float t )                                   = 0;
     virtual void                                Print                       ( std::ostream & out, int tabs = 0 )    const = 0;
 
-    virtual const std::vector<IValue*> &        GetValuesList               () const = 0;
-    virtual const std::vector<IParameter*> &    GetParametersList           () const = 0;
+    virtual const std::vector<IValue *> &       GetValuesList               () const = 0;
+    virtual const std::vector<IParameter *> &   GetParametersList           () const = 0;
 
     virtual                                     ~IPlugin                    (){}
 

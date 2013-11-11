@@ -2,13 +2,14 @@
 
 #include <cassert>
 
-#include "Engine\Models\Updaters\ShaderParamUpdater.h"
+#include "Engine/Models/Updaters/ShaderParamUpdater.h"
+
 
 namespace bv {
 
 // *********************************
 //
-Shader::Shader( const std::string& programSource )
+Shader::Shader( const std::string & programSource )
     : m_programSurce( programSource )
     , m_parameters( nullptr )
     , m_paramUpdater( nullptr )
@@ -38,7 +39,7 @@ ShaderParameters *  Shader::GetOrCreateShaderParameters()
 
 // *********************************
 //
-void                Shader::AddTextureSampler( const TextureSampler* sampler )
+void                Shader::AddTextureSampler( const TextureSampler * sampler )
 {
     m_textureSamplers.push_back( sampler );
 }
@@ -46,7 +47,7 @@ void                Shader::AddTextureSampler( const TextureSampler* sampler )
 
 // *********************************
 //
-void                Shader::RegisterUpdater  ( ShaderParamUpdater* updater )
+void                Shader::RegisterUpdater  ( ShaderParamUpdater * updater )
 {
     assert(!m_paramUpdater);
     

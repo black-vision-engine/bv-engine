@@ -3,6 +3,7 @@
 #include "Engine/Graphics/Shaders/ShaderParameters.h"
 #include "Engine/Graphics/Shaders/TextureSampler.h"
 
+
 namespace bv {
 
 //FIXME: sampler tekstury powinien byc osobna klasa

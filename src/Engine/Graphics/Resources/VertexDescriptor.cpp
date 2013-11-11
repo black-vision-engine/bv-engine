@@ -1,8 +1,10 @@
 #include "VertexDescriptor.h"
+
 #include <cassert>
 #include <cstdarg>
 
 #include "Engine/Types/Enums.h"
+
 
 namespace bv {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RenderableArrayData.h"
+#include "Engine/Graphics/Resources/RenderableArrayData.h"
 
 namespace bv
 {

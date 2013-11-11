@@ -1,6 +1,7 @@
 #include "VertexAttributeChannelTyped.h"
 
-#include "Engine\Models\Plugins\Channels\Geometry\VertexAttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
+
 
 namespace bv { namespace model
 {

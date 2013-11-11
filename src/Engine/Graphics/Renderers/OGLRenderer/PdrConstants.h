@@ -4,11 +4,12 @@
 #include <gl/wglew.h>
 #include <gl/gl.h>
 
-#include "DataBuffer.h"
-#include "RenderableEntity.h"
+#include "Engine/Graphics/Resources/DataBuffer.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
 #include "Engine/Graphics/Shaders/TextureSampler.h"
 #include "Engine/Graphics/State/StateEnums.h"
+
 
 namespace bv {
 
@@ -36,6 +37,5 @@ public:
     static GLuint GLConstant( DepthCompareMode mode );
     static GLuint GLConstant( FillStateMode mode );
 };
-
 
 }

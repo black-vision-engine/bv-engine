@@ -1,8 +1,9 @@
 #pragma once
 
+#include <vector>
+
 #include "Engine/Models/Plugins/Interfaces/ITransformChannel.h"
 
-#include <vector>
 
 namespace bv { namespace model
 {

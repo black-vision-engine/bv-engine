@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 using std::ifstream;
+
 #include <sstream>
 #include <string>
 using std::string;
@@ -24,12 +25,16 @@ using std::string;
 
 namespace bv {
 
+// *******************************
+//
 GlobalState::GlobalState(IScene* scene)
     : time(0.f), scene(scene)
 {
     assert(scene);
 }
 
+// *******************************
+//
 void GlobalState::evaluate()
 {
     static DWORD timeStart = GetTickCount();
@@ -47,11 +52,15 @@ void GlobalState::evaluate()
     time = (float)(GetTickCount() - timeStart) / 1000.f;
 }
 
-GlobalState* GlobalState::createGlobalState(IScene* scene)
+// *******************************
+//
+GlobalState * GlobalState::createGlobalState( IScene * scene )
 {
     return new GlobalState(scene);
 }
 
+// *******************************
+//
 IScene* createTestScene()
 {
 //    // SOLID

@@ -1,7 +1,9 @@
 #pragma once
 
-#include "DataBuffer.h"
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
+
+#include "Engine/Graphics/Resources/DataBuffer.h"
+
 
 namespace bv
 {

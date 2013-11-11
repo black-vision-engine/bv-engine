@@ -1,10 +1,11 @@
 #pragma once
 
-#include "IChannel.h"
-
-#include "Engine\Types\Enums.h"
-
 #include <vector>
+
+#include "Engine/Models/Plugins/Interfaces/IChannel.h"
+
+#include "Engine/Types/Enums.h"
+
 
 namespace bv { namespace model
 {

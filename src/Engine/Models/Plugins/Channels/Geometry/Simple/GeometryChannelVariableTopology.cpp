@@ -12,6 +12,7 @@
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/VariableTopologyStripComponent.h"
 
+
 namespace bv { namespace model {
 
     // ******************************

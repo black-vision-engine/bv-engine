@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Engine\Models\Plugins\Channels/Geometry\GeometryChannelDescriptor.h"
+#include <vector>
+
+#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelDescriptor.h"
 
 #include "Engine/Models/Plugins/Interfaces/IGeometryChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
 
-#include <vector>
 
 namespace bv { namespace model
 {

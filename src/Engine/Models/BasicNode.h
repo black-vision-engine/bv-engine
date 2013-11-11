@@ -1,11 +1,13 @@
 #pragma once
 
-#include "Node.h"
+#include <vector>
+
+#include "Engine/Models/Node.h"
+
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
-#include <vector>
 
 namespace bv {
     

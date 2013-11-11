@@ -1,7 +1,9 @@
 #include "RenderTarget.h"
-#include "Texture2D.h"
 
 #include <cassert>
+
+#include "Engine/Graphics/Resources/Texture2D.h"
+
 
 namespace bv {
 

@@ -1,9 +1,12 @@
 #pragma once
 
-#include "IScene.h"
-#include "Mathematics/Interpolators/Interpolators.h"
-#include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 #include <map>
+
+#include "Mathematics/Interpolators/Interpolators.h"
+
+#include "Engine/Graphics/SceneGraph/IScene.h"
+#include "Engine/Models/Plugins/Interfaces/IPlugin.h"
+
 
 namespace bv {
 

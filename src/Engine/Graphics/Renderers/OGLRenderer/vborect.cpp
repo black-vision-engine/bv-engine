@@ -1,13 +1,13 @@
 #include "vborect.h"
-#include "Mathematics/defines.h"
-#include "glutils.h"
-
-#include "oglcore.h"
-
-#include "glutils.h"
 
 #include <cstdio>
 #include <cmath>
+
+#include "Mathematics/defines.h"
+
+#include "Engine/Graphics/Renderers/OGLRenderer/oglcore.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/glutils.h"
+
 
 namespace bv {
 

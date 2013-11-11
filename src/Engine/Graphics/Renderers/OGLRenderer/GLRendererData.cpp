@@ -1,11 +1,13 @@
 #include "GLRendererData.h"
+
+#include <cassert>
+
 #include <gl/glew.h>
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 
-#include <cassert>
 
 namespace bv {
 

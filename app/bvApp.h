@@ -1,6 +1,7 @@
 #pragma once
 
-#include "WindowedApplication.h"
+#include "Application/WindowedApplication.h"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>

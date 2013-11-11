@@ -45,10 +45,11 @@
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../src;../dep/Common/FreeType/include;../dep/Common/FreeImage/Dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../src/System;../src/Application;../src/Engine/Graphics/Renderers;../src/Engine/Graphics/Renderers/OGLRenderer;../src/Engine/Graphics/Renderers/WGLRenderer;../src/Engine/Graphics/Resources;../src/Engine/Graphics/Resources/Textures;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;BOOST_ALL_NO_LIB=1;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>BlackViz.lib;freetype250_D.lib;FreeImagePlus.lib;opengl32.lib;glu32.lib;glew32s.lib;FreeImaged.lib;libboost_filesystem.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>BlackViz.lib;freetype250_D.lib;FreeImagePlus.lib;opengl32.lib;glu32.lib;glew32s.lib;FreeImaged.lib;libboost_filesystem.lib;libboost_system.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(BOOST_LIB);../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/FreeType/objs/win32/vc2010;../dep/Common/FreeImage/Dist;../dep/Common/glew/lib;../dep/Common/glfw/lib/win32;$(OutDir)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>

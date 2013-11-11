@@ -1,14 +1,16 @@
 #include "TextureManager.h"
-#include "Texture2D.h"
-
-#include "FreeImagePlus.h"
-
-#include "Engine\Models\Resources\Resource.h"
-#include "Engine\Models\Resources\TextureLoader.h"
 
 #include <iostream>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
+
+#include "Engine/Graphics/Resources/Texture2D.h"
+
+#include "FreeImagePlus.h"
+
+#include "Engine/Models/Resources/Resource.h"
+#include "Engine/Models/Resources/TextureLoader.h"
+
 
 using namespace boost::filesystem;
 

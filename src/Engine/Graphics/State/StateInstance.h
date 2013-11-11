@@ -7,6 +7,7 @@
 #include "Engine/Graphics/State/OffsetState.h"
 #include "Engine/Graphics/State/StencilState.h"
 
+
 namespace bv {
 
 class StateInstance

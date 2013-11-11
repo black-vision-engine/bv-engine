@@ -4,7 +4,7 @@
 #include <gl/wglew.h>
 #include <gl/gl.h>
 
-#include "PdrConstants.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 
 namespace bv {
 

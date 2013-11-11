@@ -1,5 +1,7 @@
 #include "RenderableEffect.h"
+
 #include <cassert>
+
 
 namespace bv {
 

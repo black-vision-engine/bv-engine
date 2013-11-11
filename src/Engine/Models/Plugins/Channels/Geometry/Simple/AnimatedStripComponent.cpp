@@ -1,10 +1,11 @@
 #include "AnimatedStripComponent.h"
 
+#include <cassert>
+
 #include "Mathematics/defines.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelTyped.h"
 
-#include <cassert>
 
 namespace bv { namespace model {
 

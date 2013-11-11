@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Mathematics\Transform\MatTransform.h"
+#include "Mathematics/Transform/MatTransform.h"
 #include "Mathematics/Interpolators/Interpolators.h"
+
 
 namespace bv { namespace model {
 

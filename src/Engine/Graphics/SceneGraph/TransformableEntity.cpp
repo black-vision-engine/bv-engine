@@ -1,7 +1,9 @@
 #include "TransformableEntity.h"
-#include "TransformUpdater.h"
 
 #include <cassert>
+
+#include "Engine/Models/Updaters/TransformUpdater.h"
+
 
 namespace bv {
 

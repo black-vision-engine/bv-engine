@@ -1,5 +1,7 @@
 #include "SimpleTexturePlugin.h"
+
 #include "System/Print.h"
+
 #include "Engine/Models/Resources/TextureLoader.h"
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
@@ -8,12 +10,12 @@
 
 #include "Engine/Models/Plugins/Parameter.h"
 
+
 namespace bv { namespace model {
 
 // ***************************** DESCRIPTOR ********************************** 
 //PLUGIN NAME
 const std::string SimpleTexturePluginPD::pluginName( "SimpleTexturePlugin" );
-
 
 //FIXME: dodawanie kanalow w ten sposob (przez przypisanie na m_<xxx>channel powoduje bledy, trzeba to jakos poprawic, zeby bylo wiadomo, o co chodzi
 //FIXME: teraz zle dodanie wychodzi dopiero po odpaleniu silnika, a to jest oczywisty blad
@@ -29,9 +31,9 @@ SimpleTexturePluginPD::SimpleTexturePluginPD()
 
 // *************************************
 //
-SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin* prev, const std::vector< std::string > & texturesFilesNames, MappingMode mappingMode )
+SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, TextureAttachmentMode mode )
     : m_prev( prev )
-    , m_mappingMode( mappingMode )
+    , m_attachmentMode( mode )
 {
     assert( prev != nullptr );
 
@@ -60,9 +62,9 @@ SimpleTexturePlugin::~SimpleTexturePlugin        ()
 
 // *************************************
 //
-void                        SimpleTexturePlugin::SetMappingMode              ( MappingMode mm )
+void                        SimpleTexturePlugin::SetAttachmentMode           ( TextureAttachmentMode mode )
 {
-    m_mappingMode = mm;
+    m_attachmentMode = mode;
 }
 
 // *************************************
@@ -128,7 +130,7 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
 
 // *************************************
 //
-TextureInfo* SimpleTexturePlugin::LoadTexture( const std::string& name, const std::string& path ) const
+TextureInfo * SimpleTexturePlugin::LoadTexture( const std::string & name, const std::string & path ) const
 {
     TextureLoader texLoader;
 
@@ -140,7 +142,9 @@ TextureInfo* SimpleTexturePlugin::LoadTexture( const std::string& name, const st
 namespace
 {
 
-VertexAttributeChannel*   GetPositionChannel( const std::vector< VertexAttributeChannel* >& channels )
+// *************************************
+//
+VertexAttributeChannel *   GetPositionChannel( const std::vector< VertexAttributeChannel* > & channels )
 {
     if( !channels.empty() )
     {
@@ -156,6 +160,8 @@ VertexAttributeChannel*   GetPositionChannel( const std::vector< VertexAttribute
     return nullptr;
 }
 
+// *************************************
+//
 VertexAttributeChannel*   GetUVChannel( const std::vector< VertexAttributeChannel* >& channels, unsigned int index )
 {
     assert( !channels.empty() );
@@ -171,7 +177,7 @@ VertexAttributeChannel*   GetUVChannel( const std::vector< VertexAttributeChanne
 //
 void                SimpleTexturePlugin::Update              ( float t )
 {
-    if( m_mappingMode == MappingMode::MM_FREE )
+    if( m_attachmentMode == TextureAttachmentMode::MM_FREE )
     {
         if( m_prev->GetGeometryChannel()->NeedsAttributesUpdate( t ) )
         {

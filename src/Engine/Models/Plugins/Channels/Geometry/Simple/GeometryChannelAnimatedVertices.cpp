@@ -11,6 +11,7 @@
 
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannel.h"
 
+
 namespace bv { namespace model {
 
 // ******************************

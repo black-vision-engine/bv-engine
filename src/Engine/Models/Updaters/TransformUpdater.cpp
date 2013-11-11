@@ -1,8 +1,9 @@
 #include "TransformUpdater.h"
 
-#include "Engine\Graphics\SceneGraph\TransformableEntity.h"
-#include "Engine\Models\Plugins\Interfaces\ITransformChannel.h"
-#include "Mathematics\Transform\MatTransform.h"
+#include "Engine/Graphics/SceneGraph/TransformableEntity.h"
+#include "Engine/Models/Plugins/Interfaces/ITransformChannel.h"
+#include "Mathematics/Transform/MatTransform.h"
+
 
 namespace bv {
 
