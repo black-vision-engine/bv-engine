@@ -5,7 +5,7 @@
 #include <string>
 #include <hash_map>
 
-namespace bv {
+namespace bv { namespace model {
 
 class TextAtlas
 {
@@ -62,4 +62,5 @@ public:
     const Text*                             AddText( const std::wstring& text, const std::string& fontFile );
 };
 
-}
+} // model
+} // bv

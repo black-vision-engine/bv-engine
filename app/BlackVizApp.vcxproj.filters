@@ -4,9 +4,6 @@
     <ClCompile Include="initmess.cpp" />
     <ClCompile Include="bvApp.cpp" />
     <ClCompile Include="MockScenes.cpp" />
-    <ClCompile Include="MockFonts\MockFont.cpp">
-      <Filter>MockFonts</Filter>
-    </ClCompile>
     <ClCompile Include="MockFonts\fttester.cpp">
       <Filter>MockFonts</Filter>
     </ClCompile>
@@ -20,12 +17,6 @@
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
     <ClInclude Include="MockScenes.h" />
-    <ClInclude Include="MockFonts\MockFont.h">
-      <Filter>MockFonts</Filter>
-    </ClInclude>
-    <ClInclude Include="MockFonts\Glyph.h">
-      <Filter>MockFonts</Filter>
-    </ClInclude>
     <ClInclude Include="MockFonts\fttester.h">
       <Filter>MockFonts</Filter>
     </ClInclude>

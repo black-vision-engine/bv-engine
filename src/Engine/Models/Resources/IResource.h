@@ -20,6 +20,7 @@ public:
 enum class ResourceExtraKind : int
 {
     RE_TEXTURE = 0,
+    RE_FONT,
     RE_TOTAL
 };
 

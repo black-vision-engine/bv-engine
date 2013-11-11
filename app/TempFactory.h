@@ -75,8 +75,5 @@ namespace bv
 	model::SimpleTextPlugin*            CreateTextPlugin                    ( const std::wstring& text, const std::string& fontFile, int size);
 	model::IGeometryShaderChannel*      CreateGeometryShaderExtrude         ( float scale );
 
-	size_t                              GetSizeOfFile                       (const std::wstring& path);
-	std::wstring                        LoadUtf8FileToString                (const std::wstring& filename);
-
     model::RendererContext*             CreateDefaultRenderableContext      ();
 }

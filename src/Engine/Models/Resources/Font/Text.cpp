@@ -1,4 +1,4 @@
-#include "MockFont.h"
+#include "Text.h"
 
 #include "Glyph.h"
 
@@ -12,7 +12,7 @@
 #include FT_FREETYPE_H
 #include <FreeType/ftglyph.h>
 
-namespace bv {
+namespace bv { namespace model {
 
 TextAtlas::TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh )
     : m_width( w )
@@ -186,4 +186,5 @@ void                Text::BuildAtlas()
     file.close();
 }
 
+} // model
 } // bv

@@ -78,7 +78,6 @@
     <ClCompile Include="xml\Scena.cpp" />
     <ClCompile Include="initmess.cpp" />
     <ClCompile Include="MockFonts\fttester.cpp" />
-    <ClCompile Include="MockFonts\MockFont.cpp" />
     <ClCompile Include="MockScenes.cpp" />
     <ClCompile Include="xml\TreeBuilder.cpp" />
   </ItemGroup>
@@ -98,8 +97,6 @@
     <ClInclude Include="xml\rapidxml\rapidxml_utils.hpp" />
     <ClInclude Include="xml\Scena.h" />
     <ClInclude Include="MockFonts\fttester.h" />
-    <ClInclude Include="MockFonts\Glyph.h" />
-    <ClInclude Include="MockFonts\MockFont.h" />
     <ClInclude Include="MockScenes.h" />
     <ClInclude Include="xml\TreeBuilder.h" />
   </ItemGroup>
