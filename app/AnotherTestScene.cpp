@@ -135,8 +135,22 @@ model::BasicNode * AnimatedSequenceRect( unsigned int animationFPS, unsigned int
     ///////////////////////////// Transform plugin //////////////////////////// 
     TransformF *    trans  = new TransformF                ();
 
+    FloatInterpolator angle; angle.setWrapPostMethod(bv::WrapMethod::pingPong);
+
+    angle.addKey(0.f, 0.f);
+    angle.addKey(3.5f, 360.f);
+    trans->addRotation(angle, CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ), CreateConstValueFloat( 1.f ) );
+
     float scl = 1.95f;
-    trans->addScale( CreateConstValueFloat( scl * 1.777777778f ), CreateConstValueFloat( scl * 1.f ), CreateConstValueFloat( 1.f ) );
+    FloatInterpolator sx; sx.setWrapPostMethod(bv::WrapMethod::pingPong);
+    FloatInterpolator sy; sy.setWrapPostMethod(bv::WrapMethod::pingPong);
+
+    sx.addKey( 0.f, .2f * scl * 1.777777778f );
+    sy.addKey( 0.f, .2f * scl );
+    sx.addKey( 2.7f, 2.f * scl * 1.777777778f );
+    sy.addKey( 2.7f, 2.f * scl );
+
+    trans->addScale( sx, sy, CreateConstValueFloat( 1.f ) );
     trans->addTranslation( CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ) );
 
     auto transformPlugin = CreateTransformPlugin( rectPlugin, trans );
@@ -596,7 +610,7 @@ model::BasicNode *      TestScenesFactory::TestSceneVariableTopology   ()
 //
 model::BasicNode *      TestScenesFactory::SequenceAnimationTestScene  ()
 {
-    return AnimatedSequenceRect( 50, 75, "tmp/IntroTGA/", "Split", "tga" );
+    return AnimatedSequenceRect( 48, 75, "tmp/IntroTGA/", "Split", "tga" );
 }
 
 } // bv
