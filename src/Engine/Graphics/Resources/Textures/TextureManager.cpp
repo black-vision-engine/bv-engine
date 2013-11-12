@@ -48,7 +48,7 @@ Texture2D * TextureManager::LoadTexture( const model::ResourceHandle * resHandle
     assert( texExtra->GetType() == TextureType::T_2D );
 
     bv::Texture2D * newTex = new bv::Texture2D( texExtra->GetFormat(), texExtra->GetWidth(), texExtra->GetHeight() );
-    newTex->WriteToBuffer( resHandle->GetData(), resHandle->GetSize() );
+    TextureAccessor::WriteData( newTex, resHandle->GetData(), resHandle->GetSize() );
 
     m_txMap[ newTex ] = newTex;
 

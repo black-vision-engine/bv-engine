@@ -19,7 +19,7 @@ PdrTextureAnimatedSequence2D::PdrTextureAnimatedSequence2D                      
 {
     glGenBuffers( 1, &m_pboID );
     glBindBuffer( GL_PIXEL_UNPACK_BUFFER, m_pboID );
-    glBufferData( GL_PIXEL_UNPACK_BUFFER, texture->GetDataSize(), 0, GL_DYNAMIC_DRAW );
+    glBufferData( GL_PIXEL_UNPACK_BUFFER, texture->GetActiveTexture()->GetDataSize(), 0, GL_DYNAMIC_DRAW );
     glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
 
     glGenTextures   ( 1, &m_textureID );

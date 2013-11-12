@@ -126,6 +126,9 @@
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrTextureAnimatedSequence2D.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleAnimationPlugin.cpp" />
     <ClCompile Include="Engine\Models\Updaters\SequenceAnimationUpdater.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\ShaderTextureParameters.cpp" />
+    <ClCompile Include="Engine\Graphics\Resources\TextureBase.cpp" />
+    <ClCompile Include="Engine\Graphics\Resources\TextureAnimatedSequence.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextHelpers.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\FontLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\Text.cpp" />
@@ -283,6 +286,9 @@
     <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
     <ClInclude Include="Engine\Models\Updaters\SequenceAnimationUpdater.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\ISequenceAnimationSource.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\ShaderTextureParameters.h" />
+    <ClInclude Include="Engine\Graphics\Resources\TextureBase.h" />
+    <ClInclude Include="Engine\Graphics\Resources\TextureAnimatedSequence.h" />
     <ClInclude Include="Engine\Models\Resources\TextHelpers.h" />
     <ClInclude Include="Engine\Models\Resources\Font\FontLoader.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Glyph.h" />
