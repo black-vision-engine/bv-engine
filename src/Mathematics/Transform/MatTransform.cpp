@@ -41,7 +41,8 @@ template<typename ParamT>
 Rotation<ParamT>::Rotation(ParamT angle, ParamT p0, ParamT p1, ParamT p2)
     :   SimpleTransform(TransformKind::rotation,p0, p1, p2)
     ,   angle(angle)
-{}
+{
+}
 
 template<typename ParamT>
 CompositeTransform<ParamT>::~CompositeTransform()
@@ -63,19 +64,19 @@ int CompositeTransform<ParamT>::evalToCBuffer(typename ParamT::TimeT t,char * bu
 }
 
 template<typename ParamT>
-void CompositeTransform<ParamT>::addTranslation(ParamT x0, ParamT x1, ParamT x2)
+void CompositeTransform<ParamT>::addTranslation( ParamT x0, ParamT x1, ParamT x2 )
 {
-    transformations.push_back(new SimpleTransform<ParamT>(TransformKind::translation, x0, x1, x2));
+    transformations.push_back( SimpleTransform<ParamT>::CreateTranslation( x0, x1, x2 ) );
 }
 
 template<typename ParamT>
-void CompositeTransform<ParamT>::addScale(ParamT s0, ParamT s1, ParamT s2)
+void CompositeTransform<ParamT>::addScale( ParamT s0, ParamT s1, ParamT s2 )
 {
-    transformations.push_back(new SimpleTransform<ParamT>(TransformKind::scale, s0, s1, s2));
+    transformations.push_back( SimpleTransform<ParamT>::CreateScale( s0, s1, s2 ) );
 }
 
 template<typename ParamT>
-void CompositeTransform<ParamT>::addRotation(ParamT angle, ParamT r0, ParamT r1, ParamT r2)
+void CompositeTransform<ParamT>::addRotation( ParamT angle, ParamT r0, ParamT r1, ParamT r2 )
 {
     transformations.push_back(new Rotation<ParamT>(angle, r0, r1, r2));
 }

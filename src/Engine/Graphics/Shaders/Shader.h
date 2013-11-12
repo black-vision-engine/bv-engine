@@ -34,8 +34,8 @@ public:
 
     //FIXME: some additional code should be added to make paramater creation a bit less error prone (right now we give away parameters and have no control over them)
     ShaderParameters *  GetOrCreateShaderParameters ();
-    void                RegisterUpdater             ( ShaderParamUpdater* updater );
-    void                AddTextureSampler           ( const TextureSampler* sampler );
+    void                RegisterUpdater             ( ShaderParamUpdater * updater );
+    void                AddTextureSampler           ( const TextureSampler * sampler );
     ShaderParameters *  Parameters                  ();
 
     const std::string & ProgramSource               () const;

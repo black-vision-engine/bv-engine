@@ -16,7 +16,7 @@
 
 bv::HighResolutionTimer GTimer;
 
-#define FULLSCREEN_MODE
+#define FULLSCREEN_MODE_S
 
 #ifdef FULLSCREEN_MODE
     const bool          GFullScreen = true;

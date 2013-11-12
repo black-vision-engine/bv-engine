@@ -62,16 +62,16 @@ GenericShaderParam * ShaderParameters::GetParam             ( const std::string 
 
 // ***********************
 //
-const std::vector< Texture * > &  ShaderParameters::Textures() const
+const ShaderTextureParameters &   ShaderParameters::GetTextureParameters            () const
 {
-    return m_textures;
+    return m_textureParams;
 }
 
 // ***********************
 //
-void                 ShaderParameters::AddTexture           ( Texture * tex )
+ShaderTextureParameters &         ShaderParameters::TextureParameters               ()
 {
-    m_textures.push_back( tex );
+    return m_textureParams;
 }
 
 // ***********************

@@ -36,23 +36,37 @@ enum class TransformKind : int
 {
     rotation,
     scale,
-    translation,
+    translation
 };
 
 template<typename ParamT>
 class SimpleTransform
 {
 protected:
+
     TransformKind kind;
 
     ParamT p0; 
     ParamT p1;
     ParamT p2;
 
+protected:
+
+    explicit SimpleTransform( TransformKind kind, ParamT p0, ParamT p1, ParamT p2 );
+
 public:
-    explicit SimpleTransform(TransformKind kind, ParamT p0, ParamT p1, ParamT p2);
 
     virtual glm::mat4x4 evaluate(typename ParamT::TimeT t) const;
+    
+    static SimpleTransform * CreateScale      ( ParamT p0, ParamT p1, ParamT p2 )
+    {
+        return new SimpleTransform( TransformKind::scale, p0, p1, p2 );
+    }
+
+    static SimpleTransform * CreateTranslation( ParamT p0, ParamT p1, ParamT p2 )
+    {
+        return new SimpleTransform( TransformKind::translation, p0, p1, p2 );
+    }
 };
 
 template<typename ParamT>

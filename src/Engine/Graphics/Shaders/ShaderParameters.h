@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Engine/Graphics/Shaders/ShaderParam.h"
+#include "Engine/Graphics/Shaders/ShaderTextureParameters.h"
 
 
 namespace bv {
@@ -22,10 +23,10 @@ private:
 
 private:
 
-    TShaderParamVec m_shaderParams;    
-    Shader *        m_shader;
+    TShaderParamVec             m_shaderParams;    
+    Shader *                    m_shader;
 
-    std::vector< Texture * >    m_textures;
+    ShaderTextureParameters     m_textureParams;
 
 public:
 
@@ -41,8 +42,8 @@ public:
     GenericShaderParam *                GetParam                        ( int id );
     GenericShaderParam *                GetParam                        ( const std::string & name );
 
-    const std::vector< Texture * > &    Textures                        () const;
-    void                                AddTexture                      ( Texture * tex );
+    const ShaderTextureParameters &     GetTextureParameters            () const;
+    ShaderTextureParameters &           TextureParameters               ();
 
     void                                SetValue                        ( const std::string & name , const char * pBuf );
 

@@ -134,7 +134,7 @@ SceneNode*                  BasicNode::BuildScene()
         RenderablePass * renderablePass = effect->GetPass( 0 ); //FIXME: add code to cope with more render passes
         auto pixelShader = renderablePass->GetPixelShader();
 
-        if( p->HasAnimatingTexture() )
+        if( p->HasAnimatingTexture() ) //FIXME: this suxx, some flags should be passed here
         {
             SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT }; 
             auto textureSampler = new TextureSampler( 0, "Animation0", bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ) );
@@ -149,7 +149,7 @@ SceneNode*                  BasicNode::BuildScene()
 
                 if( i == 0 )
                 {
-                    animation = new TextureAnimatedSequence2D( loadedTex->GetFormat(), loadedTex->GetWidth(), loadedTex->GetHeight() );
+                    animation = new TextureAnimatedSequence2D( loadedTex->GetFormat(), loadedTex->GetType(), loadedTex->GetWidth(), loadedTex->GetHeight() );
                 }
 
                 animation->AddTexture( loadedTex );
@@ -157,7 +157,10 @@ SceneNode*                  BasicNode::BuildScene()
             }
 
             assert( i > 1 );
-            pixelShader->Parameters()->AddTexture( animation );
+            ShaderTextureParameters & texParams = pixelShader->Parameters()->TextureParameters();
+            bool bAdded = ShaderTextureParametersAccessor::Add( texParams, animation );
+
+            assert( bAdded );
 
             UpdatersManager & updatersManager = UpdatersManager::get();
 
@@ -176,7 +179,10 @@ SceneNode*                  BasicNode::BuildScene()
 
                 auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
 
-                effect->GetPass( 0 )->GetPixelShader()->Parameters()->AddTexture( loadedTex );
+                ShaderTextureParameters & texParams = effect->GetPass( 0 )->GetPixelShader()->Parameters()->TextureParameters();
+                bool bAdded = ShaderTextureParametersAccessor::Add( texParams, loadedTex );
+
+                assert( bAdded );
 
                 i++;
             }

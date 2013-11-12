@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine/Graphics/Resources/TextureBase.h"
 #include "Engine/Graphics/Resources/DataBuffer.h"
 #include "Engine/Types/Enums.h"
 
@@ -7,14 +8,10 @@
 namespace bv
 {
 
-class Texture
+class Texture : public TextureBase
 {
 protected:
 
-    static int              m_sPixelSize[ TextureFormat::F_TOTAL ];
-
-    TextureFormat           m_format;
-    TextureType             m_type;
     DataBuffer::Semantic    m_semantic;
 
     char *                  m_data;
@@ -22,26 +19,24 @@ protected:
 
 public:
 
-                                    Texture         ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE );
-    virtual			                ~Texture	    ();
+                            Texture         ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE );
+    virtual			        ~Texture	    ();
 
-    virtual TextureFormat           GetFormat	    () const;
-    virtual TextureType             GetType         () const;
-    virtual DataBuffer::Semantic    GetSemantic     () const;
+    size_t                  GetDataSize     () const;
 
-    virtual int                     GetPixelSize    () const;
-    static int                      GetPixelSize    ( TextureFormat format );
+    char *                  GetData         ();
+    const char *            GetData         () const;
 
-    virtual size_t                  GetDataSize     () const;
-
-    virtual char *                  GetData         ();
-    virtual const char *            GetData         () const;
-
-    virtual bool                    WriteToBuffer   ( const char * memPtr, size_t dataSize );
-
-    virtual bool                    HasSequence     () const;
+    friend class TextureAccessor;
 };
 
-}
 
+class TextureAccessor
+{
+public:
 
+    static bool    WriteData( Texture * tx, const char * data, size_t dataSize );
+
+};
+
+} //bv

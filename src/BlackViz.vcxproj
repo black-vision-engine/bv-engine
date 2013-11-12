@@ -196,7 +196,10 @@
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataArrays.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataElements.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\TextureAnimatedSequence2D.cpp" />
+    <ClCompile Include="Engine\Graphics\Resources\TextureAnimatedSequence.cpp" />
+    <ClCompile Include="Engine\Graphics\Resources\TextureBase.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\IShaderParamUpdater.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\ShaderTextureParameters.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\TextureSampler.cpp" />
     <ClCompile Include="Engine\Graphics\State\AlphaState.cpp" />
     <ClCompile Include="Engine\Graphics\State\CullState.cpp" />
@@ -321,7 +324,10 @@
     <ClInclude Include="Engine\Graphics\Resources\RenderableArrayDataArrays.h" />
     <ClInclude Include="Engine\Graphics\Resources\RenderableArrayDataElements.h" />
     <ClInclude Include="Engine\Graphics\Resources\TextureAnimatedSequence2D.h" />
+    <ClInclude Include="Engine\Graphics\Resources\TextureAnimatedSequence.h" />
+    <ClInclude Include="Engine\Graphics\Resources\TextureBase.h" />
     <ClInclude Include="Engine\Graphics\Shaders\IShaderParamUpdater.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\ShaderTextureParameters.h" />
     <ClInclude Include="Engine\Graphics\Shaders\ShaderTypes.h" />
     <ClInclude Include="Engine\Graphics\Shaders\TextureSampler.h" />
     <ClInclude Include="Engine\Graphics\State\AlphaState.h" />

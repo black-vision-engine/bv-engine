@@ -7,6 +7,8 @@
 #include "Engine/Graphics/Shaders/VertexShader.h"
 #include "Engine/Graphics/Shaders/GeometryShader.h"
 
+#include "Engine/Graphics/Shaders/ShaderParameters.h"
+
 #include "Engine/Graphics/Shaders/TextureSampler.h"
 #include "Engine/Graphics/Resources/Texture.h"
 
@@ -18,6 +20,7 @@
 #include "Engine/Graphics/Resources/TextureAnimatedSequence2D.h"
 //#include "Engine/Graphics/Resources/Texture3D.h"
 //#include "Engine/Graphics/Resources/TextureCubic.h"
+
 
 namespace bv 
 {
@@ -163,18 +166,38 @@ int     PdrShader::EnableTextureSamplers   ( Renderer * renderer, Shader * shade
         return 0;
     }
 
-    return EnableTextureSamplers( renderer, shader->Samplers(), shader->GetOrCreateShaderParameters()->Textures(), firstAvailableSamplerIndex );
+    return EnableTextureSamplers( renderer, shader->Samplers(), shader->GetOrCreateShaderParameters()->GetTextureParameters(), firstAvailableSamplerIndex );
 }
 
 // *******************************
 //
-int      PdrShader::EnableTextureSamplers   ( Renderer * renderer, const std::vector< const TextureSampler * > & samplers, const std::vector< Texture * > & textures, int firstAvailableSamplerIndex )
+int      PdrShader::EnableTextureSamplers   ( Renderer * renderer, const std::vector< const TextureSampler * > & samplers, const ShaderTextureParameters & txParams, int firstAvailableSamplerIndex )
 {
-    assert( samplers.size() == textures.size() );
-    
-    for( unsigned int i = 0; i < samplers.size(); ++i )
+    typedef ShaderTextureParametersAccessor Accessor;
+
+    assert( samplers.size() == Accessor::NumEntries( txParams ) );
+
+    if ( Accessor::ContainsTextures( txParams ) )
     {
-        EnableTextureSampler( renderer, samplers[ i ], textures[ i ], i + firstAvailableSamplerIndex );
+        auto texturesPtr = Accessor::GetTextures( txParams );
+        assert( texturesPtr );
+        auto textures = *texturesPtr;
+
+        for( unsigned int i = 0; i < samplers.size(); ++i )
+        {
+            EnableTextureSampler( renderer, samplers[ i ], textures[ i ], i + firstAvailableSamplerIndex );
+        }
+    }
+    else if ( Accessor::ContainsAnimations( txParams ) )
+    {
+        auto animationsPtr = Accessor::GetAnimations( txParams );
+        assert( animationsPtr );
+        auto animations = *animationsPtr;
+
+        for( unsigned int i = 0; i < samplers.size(); ++i )
+        {
+            EnableTextureSampler( renderer, samplers[ i ], animations[ i ], i + firstAvailableSamplerIndex );
+        }
     }
 
     return samplers.size();
@@ -182,7 +205,7 @@ int      PdrShader::EnableTextureSamplers   ( Renderer * renderer, const std::ve
 
 // *******************************
 //
-void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureSampler * sampler, const Texture * texture, int samplerNum )
+void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureSampler * sampler, const Texture2D * texture, int samplerNum )
 {
     int textureUnit = samplerNum;
 
@@ -191,14 +214,53 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
     {
         case SamplerSamplingMode::SSM_MODE_2D:
         {
-            if( texture->HasSequence() )
-            {
-                renderer->Enable( static_cast< const TextureAnimatedSequence2D * >( texture ), textureUnit );
-            }
-            else
-            {
-                renderer->Enable( static_cast< const Texture2D * >( texture ), textureUnit );
-            }
+            renderer->Enable( texture, textureUnit );
+
+            //FIXME: this state may be cached in currentSamplerState in Renderer (for specified target (GL_TEXTURE_2D here and selected texturing unit)
+            GLint wrap_s = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
+            GLint wrap_t = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_T ) );
+            
+            //FIXME: think a bit more about how filtering mag/min (and mipmaps) should be implemented
+            GLint min_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
+            GLint mag_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
+
+            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s );
+            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t );
+
+            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter );
+            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter );
+
+            glTexParameterfv( GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, &sampler->GetBorderColor()[ 0 ] );
+
+            //glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy ); //FIXME: when anisotropy is implemented in texture sampler
+            //glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, lodBias);          //FIXME: when lodbias is implemented in texture sampler
+
+            break;
+        }
+        //FIXME: implement        
+        case SamplerSamplingMode::SSM_MODE_1D:
+        case SamplerSamplingMode::SSM_MODE_3D:
+        case SamplerSamplingMode::SSM_MODE_CUBIC:
+        default:
+            assert( false );
+
+    }
+
+    m_program->SetUniform( sampler->GetName().c_str(), textureUnit );
+}
+
+// *******************************
+//
+void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureSampler * sampler, const TextureAnimatedSequence2D * animation, int samplerNum )
+{
+    int textureUnit = samplerNum;
+
+    //FIXME: assert that texture type corresponds to sampler type
+    switch( sampler->SamplingMode() )
+    {
+        case SamplerSamplingMode::SSM_MODE_2D:
+        {
+            renderer->Enable( animation, textureUnit );
 
             //FIXME: this state may be cached in currentSamplerState in Renderer (for specified target (GL_TEXTURE_2D here and selected texturing unit)
             GLint wrap_s = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
@@ -255,16 +317,36 @@ int    PdrShader::DisableTextureSamplers  ( Renderer * renderer, Shader * shader
         return 0;
     }
 
-    return DisableTextureSamplers( renderer, shader->Samplers(), shader->GetOrCreateShaderParameters()->Textures(), firstAvailableSamplerIndex );
+    return DisableTextureSamplers( renderer, shader->Samplers(), shader->GetOrCreateShaderParameters()->GetTextureParameters(), firstAvailableSamplerIndex );
 }
 
 // *******************************
 //
-int     PdrShader::DisableTextureSamplers  ( Renderer * renderer, const std::vector< const TextureSampler * > & samplers, const std::vector< Texture * > & textures, int firstAvailableSamplerIndex )
+int     PdrShader::DisableTextureSamplers  ( Renderer * renderer, const std::vector< const TextureSampler * > & samplers, const ShaderTextureParameters & txParams, int firstAvailableSamplerIndex )
 {
-    for( unsigned int i = 0; i < samplers.size(); ++i )
+    typedef ShaderTextureParametersAccessor Accessor;
+
+    if ( Accessor::ContainsTextures( txParams ) )
     {
-        DisableTextureSampler( renderer, samplers[ i ], textures[ i ], i + firstAvailableSamplerIndex );
+        auto texturesPtr = Accessor::GetTextures( txParams );
+        assert( texturesPtr );
+        auto textures = *texturesPtr;
+
+        for( unsigned int i = 0; i < samplers.size(); ++i )
+        {
+            DisableTextureSampler( renderer, samplers[ i ], textures[ i ], i + firstAvailableSamplerIndex );
+        }
+    }
+    else if ( Accessor::ContainsAnimations( txParams ) )
+    {
+        auto animationsPtr = Accessor::GetAnimations( txParams );
+        assert( animationsPtr );
+        auto animations = *animationsPtr;
+
+        for( unsigned int i = 0; i < samplers.size(); ++i )
+        {
+            DisableTextureSampler( renderer, samplers[ i ], animations[ i ], i + firstAvailableSamplerIndex );
+        }
     }
 
     return samplers.size();
@@ -272,7 +354,7 @@ int     PdrShader::DisableTextureSamplers  ( Renderer * renderer, const std::vec
 
 // *******************************
 //
-void    PdrShader::DisableTextureSampler   ( Renderer * renderer, const TextureSampler * sampler, const Texture * texture, int samplerNum )
+void    PdrShader::DisableTextureSampler   ( Renderer * renderer, const TextureSampler * sampler, const Texture2D * texture, int samplerNum )
 {
     int textureUnit = samplerNum;
 
@@ -281,7 +363,31 @@ void    PdrShader::DisableTextureSampler   ( Renderer * renderer, const TextureS
     {
         case SamplerSamplingMode::SSM_MODE_2D:
         {
-            renderer->Disable( static_cast< const Texture2D * >( texture ), textureUnit );
+            renderer->Disable( texture, textureUnit );
+            break;
+        }
+        //FIXME: implement        
+        case SamplerSamplingMode::SSM_MODE_1D:
+        case SamplerSamplingMode::SSM_MODE_3D:
+        case SamplerSamplingMode::SSM_MODE_CUBIC:
+        default:
+            assert( false );
+
+    }
+}
+
+// *******************************
+//
+void    PdrShader::DisableTextureSampler   ( Renderer * renderer, const TextureSampler * sampler, const TextureAnimatedSequence2D * animation, int samplerNum )
+{
+    int textureUnit = samplerNum;
+
+    //FIXME: assert that texture type corresponds to sampler type
+    switch( sampler->SamplingMode() )
+    {
+        case SamplerSamplingMode::SSM_MODE_2D:
+        {
+            renderer->Disable( animation, textureUnit );
             break;
         }
         //FIXME: implement        
