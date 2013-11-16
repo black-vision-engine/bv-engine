@@ -684,15 +684,15 @@ model::BasicNode *      TestScenesFactory::SequenceAnimationTestScene  ()
 
     AnimationSequenceDesc intro;
     intro.ext = "tga";
-    intro.baseName = "Split";
-    intro.path = "../../media/sequences/FullHD/IntroTGA/";
+    intro.baseName = "Alfai";
+    intro.path = "../../media/sequences/FullHD/alfai/";
     intro.fps = 100;
     intro.numFrames = 75;
 
     AnimationSequenceDesc kolarstwo;
     kolarstwo.ext = "tga";
-    kolarstwo.baseName = "klasyfikacja";
-    kolarstwo.path = "../../media/sequences/FullHD/kolarstwo/";
+    kolarstwo.baseName = "Alfai";
+    kolarstwo.path = "../../media/sequences/FullHD/alfai/";
     kolarstwo.fps = 10;
     kolarstwo.numFrames = 23;
 

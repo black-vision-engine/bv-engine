@@ -12,7 +12,7 @@ namespace
 {
     int round( double val )
     {
-        return static_cast<int>( std::floor( 0.4999999 + val ) );
+        return static_cast<int>( std::floor( 0.5 + val ) );
     }
 
     template<class TimeValueT, class ValueT>
