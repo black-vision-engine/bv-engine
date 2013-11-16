@@ -1,5 +1,14 @@
 #include "MockScenes.h"
 
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <stdio.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <wchar.h>
+
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/GeometryPluginRing.h"
 
@@ -30,14 +39,6 @@
 
 #include "TempFactory.h"
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <stdio.h>
-#include <stddef.h>
-#include <stdlib.h>
-#include <wchar.h>
-
 #define _USE_MATH_DEFINES
 #include <math.h>
 
@@ -47,6 +48,17 @@ namespace bv
 
 namespace
 {
+
+struct AnimationSequenceDesc
+{
+    unsigned int fps;
+    unsigned int numFrames;
+
+    std::string path;
+    std::string baseName;
+    std::string ext;
+
+};
 
 // ******************************
 //
@@ -124,41 +136,47 @@ model::BasicNode * VariableTopologySolids( float size, float speed, float oscila
 
 // ******************************
 //
-model::BasicNode * AnimatedSequenceRect( unsigned int animationFPS, unsigned int numFrames, const std::string path, const std::string baseName, const std::string ext )
+model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDesc > & animations )
 {
+    unsigned int numAnimations = animations.size();
+
+    assert( numAnimations >= 1 );
+
     model::BasicNode * root = new model::BasicNode();
 
+    float hds = 1.7778f;
+
     ///////////////////////////// Geometry plugin //////////////////////////
-    model::GeometryRectPlugin * rectPlugin   = CreateGeometryRectPlugin( 1.f, 1.f );
+    model::GeometryRectPlugin * rectPlugin   = CreateGeometryRectPlugin( hds, 1.f );
 
     root->AddPlugin( rectPlugin );
 
     ///////////////////////////// Transform plugin //////////////////////////// 
     TransformF *    trans  = new TransformF                ();
 
-    FloatInterpolator angle; angle.setWrapPostMethod(bv::WrapMethod::pingPong);
-
-    angle.addKey(0.f, 0.f);
-    angle.addKey(3.5f, 360.f);
-    trans->addRotation(angle, CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ), CreateConstValueFloat( 1.f ) );
-
-    float scl = 1.95f;
+    float scl = 1.95f / float(numAnimations);
     FloatInterpolator sx; sx.setWrapPostMethod(bv::WrapMethod::pingPong);
     FloatInterpolator sy; sy.setWrapPostMethod(bv::WrapMethod::pingPong);
 
-    sx.addKey( 0.f, .2f * scl * 1.777777778f );
-    sy.addKey( 0.f, .2f * scl );
-    sx.addKey( 2.7f, 2.f * scl * 1.777777778f );
-    sy.addKey( 2.7f, 2.f * scl );
+    //sx.addKey( 0.f, scl * 1.777777778f );
+    //sy.addKey( 0.f, scl * 1.777777778f );
+    sx.addKey( 0.f, 1.2f );
+    sy.addKey( 0.f, 1.2f );
 
     trans->addScale( sx, sy, CreateConstValueFloat( 1.f ) );
-    trans->addTranslation( CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ) );
+    trans->addTranslation( CreateConstValueFloat( -float(numAnimations - 1) * hds / 2.f ), CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ) );
 
     auto transformPlugin = CreateTransformPlugin( rectPlugin, trans );
 
     root->AddPlugin( transformPlugin ); // Plugin with transformation
     
     ///////////////////////////// Material plugin //////////////////////////// 
+
+    unsigned int numFrames = animations[ 0 ].numFrames;
+    unsigned int animationFPS = animations[ 0 ].fps;
+    const std::string & path = animations[ 0 ].path;
+    const std::string & baseName = animations[ 0 ].baseName;
+    const std::string & ext = animations[ 0 ].ext;
 
     std::vector< std::string > textures;
 
@@ -174,6 +192,57 @@ model::BasicNode * AnimatedSequenceRect( unsigned int animationFPS, unsigned int
     auto animationPlugin = CreateAnimationPlugin( transformPlugin, textures, animationFPS );
 
     root->AddPlugin( animationPlugin );
+
+    for( unsigned int i = 1; i < numAnimations; ++i )
+    {
+        model::BasicNode * root1 = new model::BasicNode();
+
+        ///////////////////////////// Geometry plugin //////////////////////////
+        model::GeometryRectPlugin * rectPlugin   = CreateGeometryRectPlugin( 1.77778f * 1.f, 1.f );
+
+        root1->AddPlugin( rectPlugin );
+
+        ///////////////////////////// Transform plugin //////////////////////////// 
+        TransformF *    trans  = new TransformF                ();
+
+        FloatInterpolator sx; sx.setWrapPostMethod(bv::WrapMethod::pingPong);
+        FloatInterpolator sy; sy.setWrapPostMethod(bv::WrapMethod::pingPong);
+
+        sx.addKey( 0.f, 1.f );
+        sy.addKey( 0.f, 1.f );
+
+        trans->addScale( sx, sy, CreateConstValueFloat( 1.f ) );
+        trans->addTranslation( CreateConstValueFloat( float(i) * hds * 1.02f ), CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.1f ) );
+
+        auto transformPlugin = CreateTransformPlugin( rectPlugin, trans );
+
+        root1->AddPlugin( transformPlugin ); // Plugin with transformation
+    
+        ///////////////////////////// Material plugin //////////////////////////// 
+
+        unsigned int numFrames = animations[ i ].numFrames;
+        unsigned int animationFPS = animations[ i ].fps;
+        const std::string & path = animations[ i ].path;
+        const std::string & baseName = animations[ i ].baseName;
+        const std::string & ext = animations[ i ].ext;
+
+        std::vector< std::string > textures;
+
+        for( unsigned int i = 0; i < numFrames; ++i )
+        {
+            char buffer[40];
+            sprintf_s( buffer, 40, "%02d", i );
+        
+            std::string txName( path + baseName + std::string( buffer ) + "." + ext );        
+            textures.push_back( txName );
+        }
+
+        auto animationPlugin = CreateAnimationPlugin( transformPlugin, textures, animationFPS );
+
+        root1->AddPlugin( animationPlugin );
+
+        root->AddChild( root1 );
+    }
 
     return root;
 }
@@ -611,7 +680,26 @@ model::BasicNode *      TestScenesFactory::TestSceneVariableTopology   ()
 //
 model::BasicNode *      TestScenesFactory::SequenceAnimationTestScene  ()
 {
-    return AnimatedSequenceRect( 50, 75, "tmp/IntroTGA/", "Split", "tga" );
+    std::vector< AnimationSequenceDesc >    animations;
+
+    AnimationSequenceDesc intro;
+    intro.ext = "tga";
+    intro.baseName = "Split";
+    intro.path = "../../media/sequences/FullHD/IntroTGA/";
+    intro.fps = 100;
+    intro.numFrames = 75;
+
+    AnimationSequenceDesc kolarstwo;
+    kolarstwo.ext = "tga";
+    kolarstwo.baseName = "klasyfikacja";
+    kolarstwo.path = "../../media/sequences/FullHD/kolarstwo/";
+    kolarstwo.fps = 10;
+    kolarstwo.numFrames = 23;
+
+    animations.push_back( intro );
+    animations.push_back( kolarstwo );
+
+    return AnimatedSequenceRect( animations );
 }
 
 } // bv
