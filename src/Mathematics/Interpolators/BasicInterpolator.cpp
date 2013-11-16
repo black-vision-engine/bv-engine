@@ -10,6 +10,11 @@ namespace bv
 {
 namespace
 {
+    int round( double val )
+    {
+        return static_cast<int>( std::floor( 0.4999999 + val ) );
+    }
+
     template<class TimeValueT, class ValueT>
     ValueT evaluateLinear(const Key<TimeValueT, ValueT>& k0, const Key<TimeValueT, ValueT>& k1, TimeValueT t)
     {
@@ -234,10 +239,14 @@ TimeValueT BasicInterpolator<TimeValueT, ValueT>::calcPreT(TimeValueT t) const
         TimeValueT q = interval;
         TimeValueT r = std::modf(t, &q);
 
-        if(int( q ) % 2 == 0)
+        if(round( q ) % 2 == 0)
+        {
             return tStart + r;
+        }
         else
+        {
             return tStart + interval - r;
+        }
     }
     return t;
 }
@@ -286,10 +295,14 @@ TimeValueT BasicInterpolator<TimeValueT, ValueT>::calcPostT(TimeValueT t) const
         TimeValueT q = interval;
         TimeValueT r = divmod(t, &q);
 
-        if(int( q ) % 2 == 0)
+        if(round( q ) % 2 == 0)
+        {
             return tStart + r;
+        }
         else
+        {
             return tStart + interval - r;
+        }
     }
     return t;
 }
