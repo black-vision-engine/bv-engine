@@ -90,35 +90,48 @@ BasicNode::BasicNode()
 
 // ********************************
 //
-SceneNode*                  BasicNode::BuildScene()
+SceneNode *                 BasicNode::BuildScene()
 {
-    auto renderableType = GetRenderableType();
-
-    RenderableEffect *  effect      = CreateRenderaleEffectMockImplementationForCompleteDummies();
     RenderableEntity *  renderEnt   = nullptr;
-    //RenderableArrayDataSingleVertexBuffer * rad = CreateRenderableArrayData( renderableType );
+    RenderableEffect *  effect      = nullptr;
 
-
-    //CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
-    //effect = ;
-
-
-    //FIXME: to powinna ogarniac jakas faktoria-manufaktura
-    switch( renderableType )
+    if( m_plugins.back()->GetGeometryChannel() )
     {
-        case PrimitiveType::PT_TRIANGLE_STRIP:
+        auto renderableType = GetRenderableType();
+
+        effect = CreateRenderaleEffectMockImplementationForCompleteDummies();
+        //RenderableArrayDataSingleVertexBuffer * rad = CreateRenderableArrayData( renderableType );
+
+
+        //CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
+        //effect = ;
+
+
+        //FIXME: to powinna ogarniac jakas faktoria-manufaktura
+        switch( renderableType )
         {
-            //FIXME: it should be constructed as a proper type RenderableArrayDataArraysSingleVertexBuffer * in the first place
-            //FIXME: this long type name suggests that something wrong is happening here (easier to name design required)
-            RenderableArrayDataArraysSingleVertexBuffer * radasvb = CreateRenderableArrayDataTriStrip();
-            renderEnt = new TriangleStrip( radasvb, effect );
-            break;
+            case PrimitiveType::PT_TRIANGLE_STRIP:
+            {
+                //FIXME: it should be constructed as a proper type RenderableArrayDataArraysSingleVertexBuffer * in the first place
+                //FIXME: this long type name suggests that something wrong is happening here (easier to name design required)
+                RenderableArrayDataArraysSingleVertexBuffer * radasvb = CreateRenderableArrayDataTriStrip();
+
+                if( radasvb )
+                {
+                    renderEnt = new TriangleStrip( radasvb, effect );
+                }
+                break;
+            }
+            case PrimitiveType::PT_TRIANGLES:
+            case PrimitiveType::PT_TRIANGLE_MESH:
+                assert( false );
+            default:
+                return nullptr;
         }
-        case PrimitiveType::PT_TRIANGLES:
-        case PrimitiveType::PT_TRIANGLE_MESH:
-            assert( false );
-        default:
-            return nullptr;
+    }
+    else
+    {
+        renderEnt = new TriangleStrip( nullptr, nullptr );
     }
 
     bv::Transform worldTrans;
@@ -128,117 +141,120 @@ SceneNode*                  BasicNode::BuildScene()
 
     renderEnt->SetWorldTransforms( trans );
 
-    //TODO: dodac liste layerow do zwracanego SceneNode
-    for( auto p : m_plugins )
+    if ( effect ) //create only, if there is any geometry to be rendered
     {
-        RenderablePass * renderablePass = effect->GetPass( 0 ); //FIXME: add code to cope with more render passes
-        auto pixelShader = renderablePass->GetPixelShader();
-
-        if( p->HasAnimatingTexture() ) //FIXME: this suxx, some flags should be passed here
+        //TODO: dodac liste layerow do zwracanego SceneNode
+        for( auto p : m_plugins )
         {
-            SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT }; 
-            auto textureSampler = new TextureSampler( 0, "Animation0", bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ) );
+            RenderablePass * renderablePass = effect->GetPass( 0 ); //FIXME: add code to cope with more render passes
+            auto pixelShader = renderablePass->GetPixelShader();
 
-            pixelShader->AddTextureSampler( textureSampler );
-            TextureAnimatedSequence2D * animation = nullptr;
-
-            unsigned int i = 0;
-            for( auto tex : p->GetTextures() )
-            {
-                auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
-
-                if( i == 0 )
-                {
-                    animation = new TextureAnimatedSequence2D( loadedTex->GetFormat(), loadedTex->GetType(), loadedTex->GetWidth(), loadedTex->GetHeight() );
-                }
-
-                animation->AddTexture( loadedTex );
-                ++i;
-            }
-
-            assert( i > 1 );
-            ShaderTextureParameters & texParams = pixelShader->Parameters()->TextureParameters();
-            bool bAdded = ShaderTextureParametersAccessor::Add( texParams, animation );
-
-            assert( bAdded );
-
-            UpdatersManager & updatersManager = UpdatersManager::get();
-
-            SequenceAnimationUpdater * updater = new SequenceAnimationUpdater( animation, p->QuerySequenceAnimationSource() );
-            updatersManager.RegisterUpdater( updater );
-        }
-        else
-        {
-            int i = 0;
-            for( auto tex : p->GetTextures() )
+            if( p->HasAnimatingTexture() ) //FIXME: this suxx, some flags should be passed here
             {
                 SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT }; 
-                //FIXME: jak to kurwa przez tex->m_texName ????
-                auto textureSampler = new TextureSampler( i, tex->m_texName, bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ));
-                effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );
+                auto textureSampler = new TextureSampler( 0, "Animation0", bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ) );
 
-                auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
+                pixelShader->AddTextureSampler( textureSampler );
+                TextureAnimatedSequence2D * animation = nullptr;
 
-                ShaderTextureParameters & texParams = effect->GetPass( 0 )->GetPixelShader()->Parameters()->TextureParameters();
-                bool bAdded = ShaderTextureParametersAccessor::Add( texParams, loadedTex );
+                unsigned int i = 0;
+                for( auto tex : p->GetTextures() )
+                {
+                    auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
+
+                    if( i == 0 )
+                    {
+                        animation = new TextureAnimatedSequence2D( loadedTex->GetFormat(), loadedTex->GetType(), loadedTex->GetWidth(), loadedTex->GetHeight() );
+                    }
+
+                    animation->AddTexture( loadedTex );
+                    ++i;
+                }
+
+                assert( i > 1 );
+                ShaderTextureParameters & texParams = pixelShader->Parameters()->TextureParameters();
+                bool bAdded = ShaderTextureParametersAccessor::Add( texParams, animation );
 
                 assert( bAdded );
 
-                i++;
+                UpdatersManager & updatersManager = UpdatersManager::get();
+
+                SequenceAnimationUpdater * updater = new SequenceAnimationUpdater( animation, p->QuerySequenceAnimationSource() );
+                updatersManager.RegisterUpdater( updater );
             }
-        }
+            else
+            {
+                int i = 0;
+                for( auto tex : p->GetTextures() )
+                {
+                    SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT }; 
+                    //FIXME: jak to kurwa przez tex->m_texName ????
+                    auto textureSampler = new TextureSampler( i, tex->m_texName, bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ));
+                    effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );
 
-        //FIXME: Only last plugin should be used here as its output corresponds to the final transformation (list)
-        //FIXME: Updater only sets proper local and world matrices for the geometry and all model transformations have already been updated at this point
+                    auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
 
-        if ( p == m_plugins.back() )
-        {
-            UpdatersManager & updatersManager = UpdatersManager::get();
+                    ShaderTextureParameters & texParams = effect->GetPass( 0 )->GetPixelShader()->Parameters()->TextureParameters();
+                    bool bAdded = ShaderTextureParametersAccessor::Add( texParams, loadedTex );
 
-            auto transChannel = p->GetTransformChannel();        
-            auto geomChannel = p->GetGeometryChannel();
+                    assert( bAdded );
+
+                    i++;
+                }
+            }
+
+            //FIXME: Only last plugin should be used here as its output corresponds to the final transformation (list)
+            //FIXME: Updater only sets proper local and world matrices for the geometry and all model transformations have already been updated at this point
+
+            if ( p == m_plugins.back() )
+            {
+                UpdatersManager & updatersManager = UpdatersManager::get();
+
+                auto transChannel = p->GetTransformChannel();        
+                auto geomChannel = p->GetGeometryChannel();
             
-            assert( transChannel != nullptr );
-            assert( geomChannel != nullptr );
+                assert( transChannel != nullptr );
+                assert( geomChannel != nullptr );
 
-            TransformUpdater * transformUpdater = new TransformUpdater( renderEnt, transChannel );
-            updatersManager.RegisterUpdater( transformUpdater );
+                TransformUpdater * transformUpdater = new TransformUpdater( renderEnt, transChannel );
+                updatersManager.RegisterUpdater( transformUpdater );
 
-            if ( !geomChannel->IsTimeInvariant() )
-            {
-                GeometryUpdater * geometryUpdater = new GeometryUpdater( renderEnt, geomChannel );
-                updatersManager.RegisterUpdater( geometryUpdater );
-            }
+                if ( !geomChannel->IsTimeInvariant() )
+                {
+                    GeometryUpdater * geometryUpdater = new GeometryUpdater( renderEnt, geomChannel );
+                    updatersManager.RegisterUpdater( geometryUpdater );
+                }
 
-            auto psc = p->GetPixelShaderChannel();
-            auto renderCtx = psc->GetRendererContext();
+                auto psc = p->GetPixelShaderChannel();
+                auto renderCtx = psc->GetRendererContext();
 
-            assert( renderCtx );
+                assert( renderCtx );
 
-            for( int i = 0; i < effect->NumPasses(); ++i )
-            {
-                auto inst = effect->GetPass( i )->GetStateInstance();
+                for( int i = 0; i < effect->NumPasses(); ++i )
+                {
+                    auto inst = effect->GetPass( i )->GetStateInstance();
 
-                assert( !inst->GetAlphaState() );
-                assert( !inst->GetCullState() );
-                assert( !inst->GetDepthState() );
-                assert( !inst->GetFillState() );
-                assert( !inst->GetOffsetState() );
-                assert( !inst->GetStencilState() );
+                    assert( !inst->GetAlphaState() );
+                    assert( !inst->GetCullState() );
+                    assert( !inst->GetDepthState() );
+                    assert( !inst->GetFillState() );
+                    assert( !inst->GetOffsetState() );
+                    assert( !inst->GetStencilState() );
 
-                RendererStatesBuilder::Create( inst, renderCtx );
+                    RendererStatesBuilder::Create( inst, renderCtx );
 
-                RenderStateUpdater * rendererStateUpdater = new RenderStateUpdater( inst, renderCtx );
-                updatersManager.RegisterUpdater( rendererStateUpdater );
+                    RenderStateUpdater * rendererStateUpdater = new RenderStateUpdater( inst, renderCtx );
+                    updatersManager.RegisterUpdater( rendererStateUpdater );
+                }
             }
         }
     }
 
-    SceneNode* ret = new SceneNode(renderEnt);
+    SceneNode * ret = new SceneNode( renderEnt );
 
     for( auto ch : m_children )
     {
-        ret->AddChildNode(ch->BuildScene());
+        ret->AddChildNode( ch->BuildScene() );
     }
 
     return ret;
@@ -517,6 +533,11 @@ RenderableArrayDataArraysSingleVertexBuffer *   BasicNode::CreateRenderableArray
     }
 
     auto geometryChannel = m_plugins.back()->GetGeometryChannel();
+
+    if( geometryChannel == nullptr )
+    {
+        return nullptr;
+    }
 
     auto components = geometryChannel->GetComponents();
     auto geomDesc = geometryChannel->GetDescriptor();

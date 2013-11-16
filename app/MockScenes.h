@@ -37,6 +37,7 @@ public:
     static  model::BasicNode *      AnimatedTestScene           ();
     static  model::BasicNode *      TestSceneVariableTopology   ();
     static  model::BasicNode *      SequenceAnimationTestScene  ();
+    static  model::BasicNode *      NonGeometryParent           ();
 
 	static  model::BasicNode *      XMLTestScene                ();
 

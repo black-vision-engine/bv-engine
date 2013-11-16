@@ -249,6 +249,83 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
 
 // ******************************
 //
+model::BasicNode * NonGeometryParentRects()
+{
+    model::BasicNode * root = new model::BasicNode();
+
+    model::BasicNode * child1 = new model::BasicNode();
+    model::BasicNode * child2 = new model::BasicNode();
+    model::BasicNode * child3 = new model::BasicNode();
+    model::BasicNode * child4 = new model::BasicNode();
+
+    model::SimpleTransformPlugin * plugin00 = model::SimpleTransformPlugin::Create( nullptr, new TransformF() );
+
+    root->AddPlugin( plugin00 );
+
+    model::GeometryRectPlugin *  rectPlugin11  = CreateGeometryRectPlugin(1.f, 1.f);
+    model::GeometryRectPlugin *  rectPlugin12  = CreateGeometryRectPlugin(1.f, 1.f);
+    model::GeometryRectPlugin *  rectPlugin13  = CreateGeometryRectPlugin(1.f, 1.f);
+    model::GeometryRectPlugin *  rectPlugin14  = CreateGeometryRectPlugin(1.f, 1.f);
+
+    TransformF * trans11  = new TransformF();
+    TransformF * trans12  = new TransformF();
+    TransformF * trans13  = new TransformF();
+    TransformF * trans14  = new TransformF();
+
+    trans11->addTranslation( CreateConstValueFloat( -0.6f ), CreateConstValueFloat( -0.6f ), CreateConstValueFloat( 0.f ) );
+    trans12->addTranslation( CreateConstValueFloat( 0.6f ), CreateConstValueFloat( -0.6f ), CreateConstValueFloat( 0.f ) );
+    trans13->addTranslation( CreateConstValueFloat( -0.6f ), CreateConstValueFloat( 0.6f ), CreateConstValueFloat( 0.f ) );
+    trans14->addTranslation( CreateConstValueFloat( 0.6f ), CreateConstValueFloat( 0.6f ), CreateConstValueFloat( 0.f ) );
+
+    model::SimpleTransformPlugin * tplugin11 = model::SimpleTransformPlugin::Create( rectPlugin11, trans11 );
+    model::SimpleTransformPlugin * tplugin12 = model::SimpleTransformPlugin::Create( rectPlugin12, trans12 );
+    model::SimpleTransformPlugin * tplugin13 = model::SimpleTransformPlugin::Create( rectPlugin13, trans13 );
+    model::SimpleTransformPlugin * tplugin14 = model::SimpleTransformPlugin::Create( rectPlugin14, trans14 );
+
+    auto colorPlugin11 = CreateSimpleColorPlugin( tplugin11, CreateConstValueVec4( glm::vec4(1.f/255.f, 167.f/255.f, 193.f/255.f, 1.f ) ) );
+    auto colorPlugin12 = CreateSimpleColorPlugin( tplugin12, CreateConstValueVec4( glm::vec4(226.f/255.f, 169.f/255.f, 36.f/255.f, 1.f ) ) );
+    auto colorPlugin13 = CreateSimpleColorPlugin( tplugin13, CreateConstValueVec4( glm::vec4(0.898f, 0.25f, 0.f, 1.f ) ) );
+    auto colorPlugin14 = CreateSimpleColorPlugin( tplugin14, CreateConstValueVec4( glm::vec4(0.435f, 172.f / 255.f, 19.f/255.f, 1.f ) ) );
+
+    auto psp11 = CreateSimplePixelShaderPlugin( colorPlugin11,  "../dep/media/shaders/solid.frag", CreateDefaultRenderableContext() );
+    auto psp12 = CreateSimplePixelShaderPlugin( colorPlugin12,  "../dep/media/shaders/solid.frag", CreateDefaultRenderableContext() );
+    auto psp13 = CreateSimplePixelShaderPlugin( colorPlugin13,  "../dep/media/shaders/solid.frag", CreateDefaultRenderableContext() );
+    auto psp14 = CreateSimplePixelShaderPlugin( colorPlugin14,  "../dep/media/shaders/solid.frag", CreateDefaultRenderableContext() );
+
+    child1->AddPlugin( rectPlugin11 );
+    child1->AddPlugin( tplugin11 );
+    child1->AddPlugin( colorPlugin11 );
+    child1->AddPlugin( psp11 );
+
+    child2->AddPlugin( rectPlugin12 );
+    child2->AddPlugin( tplugin12 );
+    child2->AddPlugin( colorPlugin12 );
+    child2->AddPlugin( psp12 );
+
+    child3->AddPlugin( rectPlugin13 );
+    child3->AddPlugin( tplugin13 );
+    child3->AddPlugin( colorPlugin13 );
+    child3->AddPlugin( psp13 );
+
+    child4->AddPlugin( rectPlugin14 );
+    child4->AddPlugin( tplugin14 );
+    child4->AddPlugin( colorPlugin14 );
+    child4->AddPlugin( psp14 );
+
+    ///////////////////////////// Transform plugin //////////////////////////// 
+
+    root->AddPlugin( plugin00 );
+
+    root->AddChild( child1 );
+    root->AddChild( child2 );
+    root->AddChild( child3 );
+    root->AddChild( child4 );
+
+    return root;
+}
+
+// ******************************
+//
 model::BasicNode *          GreenRect()
 {
     model::BasicNode * root = new model::BasicNode();
@@ -696,10 +773,25 @@ model::BasicNode *      TestScenesFactory::SequenceAnimationTestScene  ()
     kolarstwo.fps = 10;
     kolarstwo.numFrames = 23;
 
+    AnimationSequenceDesc alfai;
+    alfai.ext = "tga";
+    alfai.baseName = "alfai";
+    alfai.path = "../../media/sequences/FullHD/alfai/";
+    alfai.fps = 50;
+    alfai.numFrames = 100;
+
     animations.push_back( intro );
-    animations.push_back( kolarstwo );
+//    animations.push_back( kolarstwo );
+    animations.push_back( alfai );
 
     return AnimatedSequenceRect( animations );
+}
+
+// ******************************
+//
+model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
+{
+    return NonGeometryParentRects();
 }
 
 } // bv

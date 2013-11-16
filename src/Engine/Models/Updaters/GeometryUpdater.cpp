@@ -168,7 +168,7 @@ void    GeometryUpdater::WriteVertexDataToVBO( char * data, model::IConnectedCom
         {
             assert( vach->GetNumEntries() == numVertices );
 
-            auto eltSize = vach->GetDescriptor()->GetEntrySize(); //FIXME: most probably not required here (can be safely read from other location_
+            auto eltSize = vach->GetDescriptor()->GetEntrySize(); //FIXME: most probably not required here (can be safely read from other location)
             const char * eltData = vach->GetData();
 
             memcpy( &data[ offset ], &eltData[ i * eltSize ], eltSize );

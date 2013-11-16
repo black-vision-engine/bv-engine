@@ -55,7 +55,10 @@ SimpleTransformPlugin::~SimpleTransformPlugin   ()
 //
 const IGeometryChannel*         SimpleTransformPlugin::GetGeometryChannel          () const
 {
-    return m_prevPlugin->GetGeometryChannel();
+    if( m_prevPlugin )
+        return m_prevPlugin->GetGeometryChannel();
+
+    return nullptr;
 }
 
 // *************************************
