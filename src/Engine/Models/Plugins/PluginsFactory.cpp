@@ -108,22 +108,6 @@ model::SimpleTexturePlugin*         PluginsFactory::CreateTexturePlugin         
 {
 	auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, texturesPaths );
 
-	// Set Pixel Shader Channel
-	std::vector<TransformF> txMat;
-	std::vector<FloatInterpolator> alphas;
-
-    auto pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
-										, alphas
-										, txMat );
-
-    pixelShaderChannel->SetRendererContext( CreateDefaultRenderableContext() );
-    auto rendContext = pixelShaderChannel->GetRendererContext();
-    rendContext->cullCtx->enabled = false;
-
-	texturePlugin->SetPixelShaderChannel( pixelShaderChannel );
-
-	texturePlugin->SetVertexShaderChannel( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" )
-										);
 	return texturePlugin;
 }
 

@@ -10,6 +10,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
+#include "Engine/Models/Plugins/SimpleTransformPlugin.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
@@ -258,25 +259,11 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 
     model::GeometryRectPlugin    * rectPlugin  = new model::GeometryRectPlugin( w, h );
     
-    model::RectComponent *      rect        = model::RectComponent::Create();
-
-    model::GeometryChannelDescriptor desc;
-
-    for( auto compDesc : rect->GetVertexAttributeChannels() )
-    {
-        desc.AddVertexAttrChannelDesc( static_cast< const model::VertexAttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
-    }
-
-    model::GeometryChannel *    geomCh      = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
-    geomCh->AddConnectedComponent( rect );
-    rectPlugin->SetGeometryChannel( geomCh );
-
-
-    model::SimpleTransformChannel      * stch  = new model::SimpleTransformChannel();
-    stch->AddTransform( trns );
-    rectPlugin->SetTransformChannel       ( stch );
-
     root->AddPlugin( rectPlugin );
+
+    model::SimpleTransformPlugin      * stpl  = model::PluginsFactory::CreateTransformPlugin( rectPlugin, trns );
+
+    root->AddPlugin( stpl );
 
     /////////////////////////////// Texture plugin //////////////////////////////////
 
@@ -288,7 +275,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
         textures.push_back( "asci_arial_atlas_red.png" );
         textures.push_back( "simless_00.jpg" );
 
-        stpp = new model::SimpleTexturePlugin  (rectPlugin, textures );
+        stpp = model::PluginsFactory::CreateTexturePlugin( stpl, textures );
     }
     else
     {
@@ -296,12 +283,8 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
         textures.push_back( "asci_arial_atlas_red.png" );
         textures.push_back( "simless_01.jpg" );
 
-        stpp = new model::SimpleTexturePlugin  (rectPlugin, textures );
+        stpp = model::PluginsFactory::CreateTexturePlugin( stpl, textures );
     }
-
-
-    stpp->SetPixelShaderChannel     ( new MyPixelShaderChannel( "../dep/media/shaders/simpletexture.frag", alpha, *tx0m, *tx1m ) );
-    stpp->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
 
     root->AddPlugin                 ( stpp );
 

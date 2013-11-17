@@ -7,6 +7,9 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/VertexShader/TextureVertexShaderChannel.h"
+#include "Engine/Models/Plugins/PluginsFactory.h"
 
 #include "Engine/Models/Plugins/Parameter.h"
 
@@ -44,6 +47,20 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
 
     m_geomChannel = nullptr;
     EvalGeometryChannel( prev );
+
+    // Set Pixel Shader Channel
+	std::vector<TransformF> txMat;
+	std::vector<FloatInterpolator> alphas;
+
+    m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
+										, alphas
+										, txMat );
+
+    m_pixelShaderChannel->SetRendererContext( PluginsFactory::CreateDefaultRenderableContext() );
+    auto rendContext = m_pixelShaderChannel->GetRendererContext();
+    rendContext->cullCtx->enabled = false;
+
+	m_vertexShaderChannel = new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" );
 }
 
 // *************************************
@@ -104,7 +121,10 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
 
             m_texCoordChannelIndex = geomChannelDesc.GetNumVertexChannels();
 
-            geomChannelDesc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+            for( unsigned int i = 0; i < m_textures.size(); ++i )
+            {
+                geomChannelDesc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+            }
 
             auto geomChannel = new model::GeometryChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
             m_geomChannel = geomChannel;
@@ -122,9 +142,9 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
             }
 
             connComp->m_vertexAttributeChannels.push_back( verTexAttrChannel );
-
-            m_geomChannel->AddConnectedComponent( connComp );
         }
+
+        m_geomChannel->AddConnectedComponent( connComp );
     }
 }
 
@@ -204,7 +224,9 @@ void                SimpleTexturePlugin::Update              ( float t )
         }
     }
 
-    BasePlugin::Update( t );
+    m_geomChannel->Update( t );
+    m_pixelShaderChannel->Update( t );
+    m_vertexShaderChannel->Update( t );
 
     //FIXME: update chanels according to parent (e.g. when position data has been changed)
 //    m_alphaValue->SetValue( m_alphaParam->Evaluate( t ) );
@@ -223,47 +245,26 @@ void                SimpleTexturePlugin::Print               ( std::ostream & ou
     }
 }
 
+// *************************************
+//
+const IGeometryChannel *            SimpleTexturePlugin::GetGeometryChannel          () const
+{
+    return m_geomChannel;
+}
 
-//// ***************************** DESCRIPTOR ********************************** 
-////PLUGIN NAME
-//const std::string SimpleTextureVertexPluginPD::pluginName( "SimpleTextureVertex" );
+// *************************************
 //
-//// *************************************
-////
-//SimpleTextureVertexPluginPD::SimpleTextureVertexPluginPD()
-//    : BaseParametersDescriptor( pluginName )
-//{
-//}
+const IPixelShaderChannel *         SimpleTexturePlugin::GetPixelShaderChannel       () const
+{
+    return m_pixelShaderChannel;
+}
+
+// *************************************
 //
-//// ***************************** PLUGIN ********************************** 
-//
-//// *************************************
-////
-//SimpleTextureVertexPlugin::SimpleTextureVertexPlugin            ()
-//{
-//}
-//
-//// *************************************
-////
-//std::string SimpleTextureVertexPlugin::GetShaderFile              () const
-//{
-//    // TODO; do not bind SmpleTexturePlugin with exact shader - at some point it will be provided by GLSL shader service or whatever else resource manager
-//    return "../dep/media/shaders/simpletexture.vert";
-//}
-//
-//// *************************************
-////
-//void                SimpleTextureVertexPlugin::Update              ( float t )
-//{
-//    //FIXME: implement - whatever is required here
-//}
-//
-//// *************************************
-////
-//void                SimpleTextureVertexPlugin::Print               ( std::ostream & out, int tabs ) const
-//{
-//    out << GetName() << debug::EndLine( tabs );
-//}
+const IVertexShaderChannel *        SimpleTexturePlugin::GetVertexShaderChannel      () const
+{
+    return m_vertexShaderChannel;
+}
 
 } // model
 } // bv
