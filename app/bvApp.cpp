@@ -250,7 +250,7 @@ bool BlackVisionApp::OnInitialize       ()
     //model::BasicNode * root = TestScenesFactory::XMLTestScene();
     //model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
     //model::BasicNode * root = TestScenesFactory::SequenceAnimationTestScene();
-    model::BasicNode * root = TestScenesFactory::NonGeometryParent();
+    //model::BasicNode * root = TestScenesFactory::NonGeometryParent();
 
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
 

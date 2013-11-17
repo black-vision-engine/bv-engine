@@ -263,35 +263,35 @@ model::BasicNode * NonGeometryParentRects()
 
     root->AddPlugin( plugin00 );
 
-    model::GeometryRectPlugin *  rectPlugin11  = CreateGeometryRectPlugin(1.f, 1.f);
-    model::GeometryRectPlugin *  rectPlugin12  = CreateGeometryRectPlugin(1.f, 1.f);
-    model::GeometryRectPlugin *  rectPlugin13  = CreateGeometryRectPlugin(1.f, 1.f);
-    model::GeometryRectPlugin *  rectPlugin14  = CreateGeometryRectPlugin(1.f, 1.f);
+    model::GeometryRectPlugin *  rectPlugin11  = PluginsFactory::CreateGeometryRectPlugin(1.f, 1.f);
+    model::GeometryRectPlugin *  rectPlugin12  = PluginsFactory::CreateGeometryRectPlugin(1.f, 1.f);
+    model::GeometryRectPlugin *  rectPlugin13  = PluginsFactory::CreateGeometryRectPlugin(1.f, 1.f);
+    model::GeometryRectPlugin *  rectPlugin14  = PluginsFactory::CreateGeometryRectPlugin(1.f, 1.f);
 
     TransformF * trans11  = new TransformF();
     TransformF * trans12  = new TransformF();
     TransformF * trans13  = new TransformF();
     TransformF * trans14  = new TransformF();
 
-    trans11->addTranslation( CreateConstValueFloat( -0.6f ), CreateConstValueFloat( -0.6f ), CreateConstValueFloat( 0.f ) );
-    trans12->addTranslation( CreateConstValueFloat( 0.6f ), CreateConstValueFloat( -0.6f ), CreateConstValueFloat( 0.f ) );
-    trans13->addTranslation( CreateConstValueFloat( -0.6f ), CreateConstValueFloat( 0.6f ), CreateConstValueFloat( 0.f ) );
-    trans14->addTranslation( CreateConstValueFloat( 0.6f ), CreateConstValueFloat( 0.6f ), CreateConstValueFloat( 0.f ) );
+    trans11->addTranslation( PluginsFactory::CreateConstValueFloat( -0.6f ), PluginsFactory::CreateConstValueFloat( -0.6f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    trans12->addTranslation( PluginsFactory::CreateConstValueFloat( 0.6f ), PluginsFactory::CreateConstValueFloat( -0.6f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    trans13->addTranslation( PluginsFactory::CreateConstValueFloat( -0.6f ), PluginsFactory::CreateConstValueFloat( 0.6f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    trans14->addTranslation( PluginsFactory::CreateConstValueFloat( 0.6f ), PluginsFactory::CreateConstValueFloat( 0.6f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
 
     model::SimpleTransformPlugin * tplugin11 = model::SimpleTransformPlugin::Create( rectPlugin11, trans11 );
     model::SimpleTransformPlugin * tplugin12 = model::SimpleTransformPlugin::Create( rectPlugin12, trans12 );
     model::SimpleTransformPlugin * tplugin13 = model::SimpleTransformPlugin::Create( rectPlugin13, trans13 );
     model::SimpleTransformPlugin * tplugin14 = model::SimpleTransformPlugin::Create( rectPlugin14, trans14 );
 
-    auto colorPlugin11 = CreateSimpleColorPlugin( tplugin11, CreateConstValueVec4( glm::vec4(1.f/255.f, 167.f/255.f, 193.f/255.f, 1.f ) ) );
-    auto colorPlugin12 = CreateSimpleColorPlugin( tplugin12, CreateConstValueVec4( glm::vec4(226.f/255.f, 169.f/255.f, 36.f/255.f, 1.f ) ) );
-    auto colorPlugin13 = CreateSimpleColorPlugin( tplugin13, CreateConstValueVec4( glm::vec4(0.898f, 0.25f, 0.f, 1.f ) ) );
-    auto colorPlugin14 = CreateSimpleColorPlugin( tplugin14, CreateConstValueVec4( glm::vec4(0.435f, 172.f / 255.f, 19.f/255.f, 1.f ) ) );
+    auto colorPlugin11 = PluginsFactory::CreateSimpleColorPlugin( tplugin11, PluginsFactory::CreateConstValueVec4( glm::vec4(1.f/255.f, 167.f/255.f, 193.f/255.f, 1.f ) ) );
+    auto colorPlugin12 = PluginsFactory::CreateSimpleColorPlugin( tplugin12, PluginsFactory::CreateConstValueVec4( glm::vec4(226.f/255.f, 169.f/255.f, 36.f/255.f, 1.f ) ) );
+    auto colorPlugin13 = PluginsFactory::CreateSimpleColorPlugin( tplugin13, PluginsFactory::CreateConstValueVec4( glm::vec4(0.898f, 0.25f, 0.f, 1.f ) ) );
+    auto colorPlugin14 = PluginsFactory::CreateSimpleColorPlugin( tplugin14, PluginsFactory::CreateConstValueVec4( glm::vec4(0.435f, 172.f / 255.f, 19.f/255.f, 1.f ) ) );
 
-    auto psp11 = CreateSimplePixelShaderPlugin( colorPlugin11,  "../dep/media/shaders/solid.frag", CreateDefaultRenderableContext() );
-    auto psp12 = CreateSimplePixelShaderPlugin( colorPlugin12,  "../dep/media/shaders/solid.frag", CreateDefaultRenderableContext() );
-    auto psp13 = CreateSimplePixelShaderPlugin( colorPlugin13,  "../dep/media/shaders/solid.frag", CreateDefaultRenderableContext() );
-    auto psp14 = CreateSimplePixelShaderPlugin( colorPlugin14,  "../dep/media/shaders/solid.frag", CreateDefaultRenderableContext() );
+    auto psp11 = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin11,  "../dep/media/shaders/solid.frag", PluginsFactory::CreateDefaultRenderableContext() );
+    auto psp12 = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin12,  "../dep/media/shaders/solid.frag", PluginsFactory::CreateDefaultRenderableContext() );
+    auto psp13 = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin13,  "../dep/media/shaders/solid.frag", PluginsFactory::CreateDefaultRenderableContext() );
+    auto psp14 = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin14,  "../dep/media/shaders/solid.frag", PluginsFactory::CreateDefaultRenderableContext() );
 
     child1->AddPlugin( rectPlugin11 );
     child1->AddPlugin( tplugin11 );
