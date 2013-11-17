@@ -133,20 +133,6 @@ model::SimpleAnimationPlugin *      PluginsFactory::CreateAnimationPlugin       
 {
 	auto animationPlugin = new model::SimpleAnimationPlugin( prevPlugin, texturesPaths, animationFPS );
 
-	// Set Pixel Shader Channel
-	std::vector<TransformF> txMat;
-	std::vector<FloatInterpolator> alphas;
-
-    auto pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpleanimation.frag", alphas, txMat );
-
-    pixelShaderChannel->SetRendererContext( CreateDefaultRenderableContext() );
-    auto rendContext = pixelShaderChannel->GetRendererContext();
-    rendContext->cullCtx->enabled = false;
-
-	animationPlugin->SetPixelShaderChannel( pixelShaderChannel );
-
-	animationPlugin->SetVertexShaderChannel( new model::TextureVertexShaderChannel( "../dep/media/shaders/simpleanimation.vert" ) );
-
     return animationPlugin;
 }
 

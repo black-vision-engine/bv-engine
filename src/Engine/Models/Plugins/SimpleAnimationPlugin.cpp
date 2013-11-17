@@ -7,6 +7,8 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
+#include "Engine/Models/Plugins/PluginsFactory.h"
 
 #include "Engine/Models/Plugins/Parameter.h"
 
@@ -57,6 +59,17 @@ SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin 
 
     m_numFrames  = texturesFilesNames.size();
 
+    // Set Pixel Shader Channel
+	std::vector<TransformF> txMat;
+	std::vector<FloatInterpolator> alphas;
+
+    m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpleanimation.frag", alphas, txMat );
+
+    m_pixelShaderChannel->SetRendererContext( PluginsFactory::CreateDefaultRenderableContext() );
+    auto rendContext = m_pixelShaderChannel->GetRendererContext();
+    rendContext->cullCtx->enabled = false;
+
+	m_vertexShaderChannel = new model::TextureVertexShaderChannel( "../dep/media/shaders/simpleanimation.vert" );
 }
 
 // *************************************
@@ -259,7 +272,9 @@ void                SimpleAnimationPlugin::Update              ( float t )
         }
     }
 
-    BasePlugin::Update( t );
+    m_geomChannel->Update( t );
+    m_pixelShaderChannel->Update( t );
+    m_vertexShaderChannel->Update( t );
 
     //FIXME: update chanels according to parent (e.g. when position data has been changed)
 //    m_alphaValue->SetValue( m_alphaParam->Evaluate( t ) );
@@ -277,6 +292,22 @@ void                SimpleAnimationPlugin::Print               ( std::ostream & 
         out << "Texture: " << t->m_texName << debug::EndLine( tabs );
     }
 }
+
+const IGeometryChannel *            SimpleAnimationPlugin::GetGeometryChannel          () const
+{
+    return m_geomChannel;
+}
+
+const IPixelShaderChannel *         SimpleAnimationPlugin::GetPixelShaderChannel       () const
+{
+    return m_pixelShaderChannel;
+}
+
+const IVertexShaderChannel *        SimpleAnimationPlugin::GetVertexShaderChannel      () const
+{
+    return m_vertexShaderChannel;
+}
+
 
 } // model
 } // bv

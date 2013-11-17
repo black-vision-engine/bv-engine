@@ -14,6 +14,8 @@
 namespace bv { namespace model {
 
 class Resource;
+class TexturePixelShaderChannel;
+class TextureVertexShaderChannel;
 
 // ***************************** DESCRIPTOR **********************************
 class SimpleAnimationPluginPD : public BaseParametersDescriptor
@@ -39,10 +41,12 @@ class SimpleAnimationPlugin : public BasePlugin< ISequenceAnimationSourcePlugin,
 {
 private:
 
-    GeometryChannel*        m_geomChannel;
+    GeometryChannel*            m_geomChannel;
+    TexturePixelShaderChannel*  m_pixelShaderChannel;
+    TextureVertexShaderChannel* m_vertexShaderChannel;
 
-    TextureAttachmentMode   m_attachmentMode;
-    unsigned int            m_texCoordChannelIndex;
+    TextureAttachmentMode       m_attachmentMode;
+    unsigned int                m_texCoordChannelIndex;
 
     mutable float           m_startTime;
     float                   m_secsPerFrame;
@@ -61,6 +65,11 @@ public:
                                         ~SimpleAnimationPlugin      ();
 
     void                                SetAttachmentMode           ( TextureAttachmentMode mode );
+
+
+    virtual const IGeometryChannel *            GetGeometryChannel          () const override;                                                                           
+    virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;                                       
+    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;                                       
 
     // ISequenceAnimationSource
     virtual unsigned int                CurrentFrame                ( float t ) const;

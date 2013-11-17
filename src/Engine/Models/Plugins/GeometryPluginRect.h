@@ -27,13 +27,12 @@ class GeometryRectPlugin : public BasePlugin< IPlugin, GeometryRectPluginPD >
     FloatInterpolator           m_height;
 
 public:
-
     explicit            GeometryRectPlugin    ( const FloatInterpolator& w, const FloatInterpolator& h );
                         ~GeometryRectPlugin   ();
 
-
-    void                Update                      ( float t ) override;
-    void                Print                       ( std::ostream & out, int tabs = 0 ) const override;
+    virtual const IGeometryChannel *    GetGeometryChannel          () const override;
+    void                                Update                      ( float t ) override;
+    void                                Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
 };
 

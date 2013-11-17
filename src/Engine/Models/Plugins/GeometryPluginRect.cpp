@@ -43,14 +43,21 @@ GeometryRectPlugin::~GeometryRectPlugin   ()
 
 // *************************************
 //
-void                GeometryRectPlugin::Update              ( float t )
+const IGeometryChannel *    GeometryRectPlugin::GetGeometryChannel          () const
 {
-    BasePlugin::Update( t );
+    return m_geomChannel;
 }
 
 // *************************************
 //
-void                GeometryRectPlugin::Print               ( std::ostream & out, int tabs ) const
+void                        GeometryRectPlugin::Update              ( float t )
+{
+    m_geomChannel->Update( t );
+}
+
+// *************************************
+//
+void                        GeometryRectPlugin::Print               ( std::ostream & out, int tabs ) const
 {
 }
 
