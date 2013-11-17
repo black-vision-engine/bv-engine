@@ -67,7 +67,7 @@ struct PluginsFactory
 	static model::SolidColorPlugin*            CreateSolidColorPlugin              ( model::IPlugin* prevPlugin, const glm::vec4& color);
 	
 
-	static model::SimpleTexturePlugin *        CreateTexturePlugin                 ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths );
+    static model::SimpleTexturePlugin *        CreateTexturePlugin                 ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
 	static model::SimpleAnimationPlugin *      CreateAnimationPlugin               ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, unsigned int animationFPS );
 	
     static model::SimpleTransformPlugin*       CreateTransformPlugin               ( const model::IPlugin* prev, TransformF* trans );

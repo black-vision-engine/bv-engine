@@ -85,18 +85,18 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
-    auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( transformPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
+    //auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( transformPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
 
-    root->AddPlugin( solidPlugin );
+    //root->AddPlugin( solidPlugin );
 
-    return root;
+    //return root;
 
 
     ///////////////////////////// Texture plugin //////////////////////////// 
     std::vector< std::string > textures;
     textures.push_back( "simless_00.jpg" );
 
-    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transformPlugin, textures );
+    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transformPlugin, textures, TextureAttachmentMode::MM_ATTACHED );
 
     root->AddPlugin( texturePlugin );
 
