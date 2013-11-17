@@ -3,6 +3,7 @@
 #include "Engine/Models/Plugins/SimpleTransformPlugin.h"
 #include "Engine/Models/Plugins/GeometryPluginRing.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
+#include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
 
 
 namespace bv
@@ -43,6 +44,13 @@ model::GeometryRectPlugin*          PluginsFactory::CreateGeometryRectPlugin    
     auto rectPlugin = new model::GeometryRectPlugin(wi, hi);
 
 	return rectPlugin;
+}
+
+// *******************************
+//
+model::GeometryMultiRectPlugin*       PluginsFactory::CreateGeometryMultiRectPlugin            ()
+{
+    return new model::GeometryMultiRectPlugin();
 }
 
 // *******************************

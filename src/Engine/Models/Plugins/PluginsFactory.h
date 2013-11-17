@@ -41,6 +41,7 @@ namespace model
 class BasicNode;
 class SimpleTransformPlugin;
 class GeometryRingPlugin;
+class GeometryMultiRectPlugin;
 
 struct PluginsFactory
 {
@@ -50,7 +51,7 @@ struct PluginsFactory
 
 
 	static model::GeometryRectPlugin*          CreateGeometryRectPlugin            ( float w, float h );
-
+    static model::GeometryMultiRectPlugin*     CreateGeometryMultiRectPlugin       ();
     static model::GeometryRingPlugin*          CreateGeometryRingPlugin            ( float startAngle, float endAngle, float innerRadius, float outerRadius, int segmentsNum );
 	
 	static model::GeometryChannel*             CreateGeometryChannel               (model::IConnectedComponent* connComp);

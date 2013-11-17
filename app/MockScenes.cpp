@@ -16,6 +16,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/GeometryPluginRect.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
+#include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -306,24 +307,13 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     float h = 1.0f;
     float dist = 0.75f;
 
-    model::RectComponent *          rect0 = model::RectComponent::Create( w, h, -dist, -dist );
-    model::RectComponent *          rect1 = model::RectComponent::Create( w, h, dist, -dist );
-    model::RectComponent *          rect2 = model::RectComponent::Create( w, h, dist, dist );
-    model::RectComponent *          rect3 = model::RectComponent::Create( w, h, -dist, dist );
-
-    model::GeometryChannelDescriptor desc;
-
-    for( auto compDesc : rect0->GetVertexAttributeChannels() )
-    {
-        desc.AddVertexAttrChannelDesc( static_cast< const model::VertexAttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
-    }
-
-    // ******************** Geometry Channel *******************************
-    model::GeometryChannel *    geomCh      = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
-    geomCh->AddConnectedComponent( rect0 );
-    geomCh->AddConnectedComponent( rect1 );
-    geomCh->AddConnectedComponent( rect2 );
-    geomCh->AddConnectedComponent( rect3 );
+    // ******************** Plugin intself *******************************
+    model::GeometryMultiRectPlugin    *  rectPlugin  = model::PluginsFactory::CreateGeometryMultiRectPlugin();
+    rectPlugin->AddRectConnectedComponnent( 1.f, 1.f );
+    rectPlugin->AddRectConnectedComponnent( w, h, -dist, -dist );
+    rectPlugin->AddRectConnectedComponnent( w, h, dist, -dist );
+    rectPlugin->AddRectConnectedComponnent( w, h, dist, dist );
+    rectPlugin->AddRectConnectedComponnent( w, h, -dist, dist );
 
     for( unsigned int i = 1; i < 6; ++i )
     {
@@ -331,20 +321,13 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
         float h = 0.2f;
         float dist = 0.3f;
 
-        model::RectComponent *  rect0 = model::RectComponent::Create( w, h, -dist * i, 0.f );
-        model::RectComponent *  rect1 = model::RectComponent::Create( w, h, 0.f, -dist * i );
-        model::RectComponent *  rect2 = model::RectComponent::Create( w, h, dist * i, 0.f );
-        model::RectComponent *  rect3 = model::RectComponent::Create( w, h, 0.f, dist * i );
-
-        geomCh->AddConnectedComponent( rect0 );
-        geomCh->AddConnectedComponent( rect1 );
-        geomCh->AddConnectedComponent( rect2 );
-        geomCh->AddConnectedComponent( rect3 );        
+        rectPlugin->AddRectConnectedComponnent( w, h, -dist * i, 0.f );
+        rectPlugin->AddRectConnectedComponnent( w, h, 0.f, -dist * i );
+        rectPlugin->AddRectConnectedComponnent( w, h, dist * i, 0.f );
+        rectPlugin->AddRectConnectedComponnent( w, h, 0.f, dist * i );     
     }
-
-    // ******************** Plugin intself *******************************
-    model::GeometryRectPlugin    *  rectPlugin  = new model::GeometryRectPlugin( ConstValue( 1.0f ), ConstValue( 1.0f ) );
-    model::SimpleTransformChannel  * simpleTransform0  = new model::SimpleTransformChannel();
+    
+    root->AddPlugin( rectPlugin );
 
     TransformF * trns = new TransformF();
 
@@ -355,12 +338,9 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
 
     trns->addRotation(angle, ConstValue( 0.f ), ConstValue( 0.f ), ConstValue( 1.f ) );
 
-    simpleTransform0->AddTransform  ( trns );
-
-    rectPlugin->SetTransformChannel ( simpleTransform0 );
-    rectPlugin->SetGeometryChannel( geomCh );
-
-    root->AddPlugin( rectPlugin );
+    auto transformPlugin  =  model::PluginsFactory::CreateTransformPlugin( rectPlugin, trns );
+    
+    root->AddPlugin( transformPlugin );
 
     /////////////////////////////// Texture plugin //////////////////////////////////
 
@@ -384,10 +364,10 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     textures.push_back( "simless_00.jpg" );
     textures.push_back( "simless_01.jpg" );
 
-    stpp = new model::SimpleTexturePlugin  ( rectPlugin, textures );
+    stpp = model::PluginsFactory::CreateTexturePlugin( transformPlugin, textures );
 
-    stpp->SetPixelShaderChannel     ( new MyPixelShaderChannel( "../dep/media/shaders/simpletexture.frag", alpha, *tx0m, *tx1m ) );
-    stpp->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
+    //stpp->SetPixelShaderChannel     ( new MyPixelShaderChannel( "../dep/media/shaders/simpletexture.frag", alpha, *tx0m, *tx1m ) ); // FIXME: add texture transformation
+    //stpp->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
 
     root->AddPlugin                 ( stpp );
 

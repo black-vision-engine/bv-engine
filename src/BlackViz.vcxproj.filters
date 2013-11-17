@@ -133,6 +133,7 @@
     <ClCompile Include="Engine\Models\Resources\Font\FontLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\Text.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginsFactory.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\GeometryMultiRectPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -295,6 +296,7 @@
     <ClInclude Include="Engine\Models\Resources\Font\Glyph.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Text.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginsFactory.h" />
+    <ClInclude Include="Engine\Models\Plugins\GeometryMultiRectPlugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
