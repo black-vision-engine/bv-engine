@@ -107,6 +107,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <AdditionalDependencies>glfw.lib;opengl32.lib;glu32.lib;glew32s.lib;FreeImaged.lib;libboost_filesystem.lib;libboost_system.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -147,9 +148,10 @@
       <PreprocessorDefinitions>BOOS_ALL_NO_LIB=1;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <PrecompiledHeader />
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(BOOST_INC);./;../dep/Common/FreeImage/dist;../dep/Common/FreeType/include;../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;./Engine/Graphics/Renderers/OGLRenderer;./Engine/Graphics/Renderers/WGLRenderer;./Application;./Application/win32;./Engine/Graphics/Renderers;./Engine/Graphics/Resources;./Engine/Graphics/Resources/Textures;./System;./Engine/Graphics/Types;./Engine/Models;./Engine/Models/Mock;./Engine/Graphics/Shaders;./Engine/Graphics/SceneGraph;./Engine/Models/Updaters;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

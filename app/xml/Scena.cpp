@@ -2,7 +2,7 @@
 BlackNode* Scena::FindNode(BlackNode *LookFor,string name)
 {
 	BlackNode* node=NULL;
-	for(int i=0;i<LookFor->children.size();i++)
+	for(unsigned int i=0;i<LookFor->children.size();i++)
 	{
 		if(LookFor->children[i].name==name)
 		{

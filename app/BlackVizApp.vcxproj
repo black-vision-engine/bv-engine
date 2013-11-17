@@ -43,9 +43,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../src;../dep/Common/FreeType/include;../dep/Common/FreeImage/Dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../src/System;../src/Application;../src/Engine/Graphics/Renderers;../src/Engine/Graphics/Renderers/OGLRenderer;../src/Engine/Graphics/Renderers/WGLRenderer;../src/Engine/Graphics/Resources;../src/Engine/Graphics/Resources/Textures;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../src;../dep/Common/FreeType/include;../dep/Common/FreeImage/Dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;BOOST_ALL_NO_LIB=1;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -62,6 +63,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>../src;../dep/Common/FreeType/include;../dep/Common/FreeImage/Dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../src/System;../src/Application;../src/Engine/Graphics/Renderers;../src/Engine/Graphics/Renderers/OGLRenderer;../src/Engine/Graphics/Renderers/WGLRenderer;../src/Engine/Graphics/Resources;../src/Engine/Graphics/Resources/Textures;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

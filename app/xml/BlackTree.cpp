@@ -26,7 +26,7 @@ bool BlackTree::LoadFromFile(string path)
 //
 vector<TimeProperty>* BlackTree::FindProperty(Plugin *plugin,string name)
 {
-	for(int i=0;i<plugin->properties.size();i++)
+	for(unsigned int i=0;i<plugin->properties.size();i++)
 	{
 		if(plugin->properties[i].name==name)
 			return plugin->properties[i].timeproperty;
@@ -38,7 +38,7 @@ vector<TimeProperty>* BlackTree::FindProperty(Plugin *plugin,string name)
 //
 string* BlackTree::FindNonLinearProperty(Plugin *plugin,string name)
 {
-	for(int i=0;i<plugin->non_linear_properties.size();i++)
+	for(unsigned int i=0;i<plugin->non_linear_properties.size();i++)
 	{
 		if(plugin->non_linear_properties[i].name==name)
 			return plugin->non_linear_properties[i].value;

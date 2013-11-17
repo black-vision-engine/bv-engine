@@ -36,7 +36,7 @@ namespace bv{
 		
 
 			//all plugin linear properties
-			for(int j=0;j<CurrentNode.plugins[i]->properties.size();j++)
+			for(unsigned int j=0;j<CurrentNode.plugins[i]->properties.size();j++)
 			{
 				//property name
 				cout<<AddTabs(depth)<<"     # "<<CurrentNode.plugins[i]->properties[j].name<<", size: "<<CurrentNode.plugins[i]->properties[j].timeproperty->size()<<endl;
@@ -44,14 +44,14 @@ namespace bv{
 				//all property values ( at different time values )
 				vector<TimeProperty> *timevals = CurrentNode.plugins[i]->properties[j].timeproperty;
 				//cout<<"udalo sie"<<endl;
-				for(int h=0;h<timevals->size();h++)
+				for(unsigned int h=0;h<timevals->size();h++)
 				{
 					cout<<AddTabs(depth)<<"         ("<<timevals->operator[](h).time<<", "<<timevals->operator[](h).value<<")"<<endl;
 				}
 			}
 
 			//all plugin non linear properties
-			for(int j=0;j<CurrentNode.plugins[i]->non_linear_properties.size();j++)
+			for(unsigned int j=0;j<CurrentNode.plugins[i]->non_linear_properties.size();j++)
 			{
 				//property name and vlaue - note * (asterisk) to extract string value
 				cout<<AddTabs(depth)<<"     # "<<CurrentNode.plugins[i]->non_linear_properties[j].name<<": '"<< *CurrentNode.plugins[i]->non_linear_properties[j].value<<"'"<<endl;
@@ -133,15 +133,15 @@ namespace bv{
 			{
 				for(unsigned int h=0;h<timevals->size();h++)
 				{
-					float tF=atof(timevals->operator[](h).time.c_str());
+					auto tF=atof(timevals->operator[](h).time.c_str());
 					string temp=timevals->operator[](h).value;
 					vector<string> V;
 					//boost::split(V,temp,"|");
-					float rF=atof(V[0].c_str());
-					float gF=atof(V[1].c_str());
-					float bF=atof(V[2].c_str());
-					float aF=atof(V[3].c_str());
-					color.addKey(tF,glm::vec4(rF,gF,bF,aF));						
+					auto rF=atof(V[0].c_str());
+					auto gF=atof(V[1].c_str());
+					auto bF=atof(V[2].c_str());
+					auto aF=atof(V[3].c_str());
+					color.addKey(float(tF),glm::vec4(float(rF),float(gF),float(bF),float(aF)));						
 				}
 			}
 		}
@@ -189,10 +189,10 @@ namespace bv{
 			else if(propertyName=="scaX")
 				Current = &zs;
 
-			for(int h=0;h<timevals->size();h++)
+			for(unsigned int h=0;h<timevals->size();h++)
 			{
-				float tF=atof(timevals->operator[](h).time.c_str());
-				float hF=atof(timevals->operator[](h).value.c_str());
+				float tF=float(atof(timevals->operator[](h).time.c_str()));
+				float hF=float(atof(timevals->operator[](h).value.c_str()));
 
 				Current->addKey(tF,hF);
 			}
@@ -253,7 +253,7 @@ namespace bv{
 			
 		
 			//all plugin linear properties
-			for(int j=0;j<CurrentNode.plugins[i]->properties.size();j++)
+			for(unsigned int j=0;j<CurrentNode.plugins[i]->properties.size();j++)
 			{
 				//property name
 				//cout<<AddTabs(depth)<<"     # "<<CurrentNode.plugins[i]->properties[j].name<<", size: "<<CurrentNode.plugins[i]->properties[j].timeproperty->size()<<endl;
@@ -261,18 +261,18 @@ namespace bv{
 				//all property values ( at different time values )
 				vector<TimeProperty> *timevals = CurrentNode.plugins[i]->properties[j].timeproperty;
 				//cout<<"udalo sie"<<endl;
-				for(int h=0;h<timevals->size();h++)
+				for(unsigned int h=0;h<timevals->size();h++)
 				{
 					//cout<<AddTabs(depth)<<"         ("<<timevals->operator[](h).time<<", "<<timevals->operator[](h).value<<")"<<endl;
 				}
 			
 				string propertyName = CurrentNode.plugins[i]->properties[j].name;
 				vector<pair<float,float>> V;// = new vector<pair<float,float>>();
-				for(int h=0;h<timevals->size();h++)
+				for(unsigned int h=0;h<timevals->size();h++)
 				{
 					//cout<<AddTabs(depth)<<"         ("<<timevals->operator[](h).time<<", "<<timevals->operator[](h).value<<")"<<endl;
-					float tF=atof(timevals->operator[](h).time.c_str());
-					float hF=atof(timevals->operator[](h).value.c_str());
+					float tF=float(atof(timevals->operator[](h).time.c_str()));
+					float hF=float(atof(timevals->operator[](h).value.c_str()));
 
 					V.push_back(make_pair(tF,hF));
 					//onVisit(propertyName,V);
