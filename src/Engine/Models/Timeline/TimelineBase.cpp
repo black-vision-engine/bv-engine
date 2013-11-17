@@ -44,7 +44,7 @@ TimelineBase::TimelineBase          ( const TimelineSettings & settings, TimeTyp
     m_state.Reset();
 
     assert( startTime < endTime );
-    
+
     m_interpolator.addKey( startTime, 0.f );
     m_interpolator.addKey( endTime, scale * ( endTime - startTime ) );
     m_interpolator.setWrapMethod( WrapMethod::clamp, WrapMethod::clamp );
