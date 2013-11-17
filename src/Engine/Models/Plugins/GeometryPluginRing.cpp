@@ -1,7 +1,8 @@
 #include "GeometryPluginRing.h"
 
 #include "System/Print.h"
-
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/RingComponent.h"
+#include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/Plugins/Parameter.h"
 
 
@@ -23,9 +24,13 @@ GeometryRingPluginPD::GeometryRingPluginPD()
 
 // *************************************
 //
-GeometryRingPlugin::GeometryRingPlugin                    ()
+GeometryRingPlugin::GeometryRingPlugin                    ( float startAngle, float endAngle, float innerRadius, float outerRadius, int segmentsNum )
     : BasePlugin( nullptr )
 {
+    // Set Geometry Channel
+    model::RingComponent * ring = model::RingComponent::Create( startAngle, endAngle, innerRadius, outerRadius, segmentsNum );
+
+    m_geomChannel               = model::PluginsFactory::CreateGeometryChannel( ring );
 }
 
 // *************************************
@@ -36,9 +41,16 @@ GeometryRingPlugin::~GeometryRingPlugin   ()
 
 // *************************************
 //
+const IGeometryChannel *    GeometryRingPlugin::GetGeometryChannel          () const
+{
+    return m_geomChannel;
+}
+
+// *************************************
+//
 void                GeometryRingPlugin::Update              ( float t )
 {
-    BasePlugin::Update( t );
+    m_geomChannel->Update( t );
 }
 
 // *************************************

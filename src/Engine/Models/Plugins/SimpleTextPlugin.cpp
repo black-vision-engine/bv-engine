@@ -183,9 +183,14 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
     } 
 }
 
+const IGeometryChannel *    SimpleTextPlugin::GetGeometryChannel          () const
+{
+    return m_geomChannel;
+}
+
 void                SimpleTextPlugin::Update                      ( float t )
 {
-    //BasePlugin::Update( t );
+    m_geomChannel->Update( t );
 }
 
 void                SimpleTextPlugin::Print                       ( std::ostream & out, int tabs ) const

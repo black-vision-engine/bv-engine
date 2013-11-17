@@ -57,15 +57,7 @@ model::GeometryMultiRectPlugin*       PluginsFactory::CreateGeometryMultiRectPlu
 //
 model::GeometryRingPlugin*          PluginsFactory::CreateGeometryRingPlugin            ( float startAngle, float endAngle, float innerRadius, float outerRadius, int segmentsNum )
 {
-    model::GeometryRingPlugin*  ringPlugin = new model::GeometryRingPlugin();
-
-    // Set Geometry Channel
-
-    model::RingComponent *      ring        = model::RingComponent::Create( startAngle, endAngle, innerRadius, outerRadius, segmentsNum );
-
-    model::GeometryChannel *    geomCh      = CreateGeometryChannel( ring );
-
-    ringPlugin->SetGeometryChannel( geomCh );
+    model::GeometryRingPlugin*  ringPlugin = new model::GeometryRingPlugin( startAngle, endAngle, innerRadius, outerRadius, segmentsNum );
 
     return ringPlugin;
 }
@@ -102,10 +94,10 @@ model::TransformChannel*           PluginsFactory::CreateTransformChannel       
 //
 model::SolidColorPlugin*            PluginsFactory::CreateSolidColorPlugin              (model::IPlugin* prevPlugin, const glm::vec4& color)
 {
-	auto solidPlugin = new model::SolidColorPlugin( prevPlugin );
+	auto solidPlugin = new model::SolidColorPlugin( prevPlugin, CreateConstValueVec4( color ) );
 
 	// Set Pixel Shader Channel
-	solidPlugin->SetPixelShaderChannel    ( new model::SolidColorShaderChannel( "../dep/media/shaders/solid.frag", CreateConstValueVec4( color ) ) );
+	
 
 	return solidPlugin;
 }

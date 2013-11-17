@@ -243,8 +243,8 @@ bool BlackVisionApp::OnInitialize       ()
     //root->AddChild( root1 );
 
    // model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
-    model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
-    //model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
+    //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
+    model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
     //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
     //model::BasicNode * root = TestScenesFactory::XMLTestScene();

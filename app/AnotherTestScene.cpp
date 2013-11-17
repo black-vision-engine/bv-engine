@@ -35,6 +35,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/GeometryChannelAnimatedVertices.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/VariableTopologyStripComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/GeometryChannelVariableTopology.h"
+#include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
 #include "Engine/Models/Resources/TextHelpers.h"
 
 #include "Engine/Models/Plugins/PluginsFactory.h"
@@ -531,14 +532,9 @@ model::BasicNode *          ExtrudedRedRect()
 {
     model::BasicNode * root = new model::BasicNode();
 
-    model::GeometryRectPlugin*          rectPlugin  = PluginsFactory::CreateGeometryRectPlugin(1.f, 1.f);
+    auto rectPlugin  = PluginsFactory::CreateGeometryRectPlugin(2.f, 1.f);
 
-    model::AnimatedStripComponent *     rect        = model::AnimatedStripComponent::Create( 2.f, 1.f, 10, 0.f, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 );
-
-    model::GeometryChannel *            geomCh      = PluginsFactory::CreateGeometryChannel( rect );
-
-    rectPlugin->SetGeometryChannel( geomCh );
-
+    root->AddPlugin(rectPlugin);
 
     /// Set Transform Channel
     TransformF *    trans  = new TransformF                ();
@@ -546,19 +542,23 @@ model::BasicNode *          ExtrudedRedRect()
     trans->addScale( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
     trans->addTranslation( PluginsFactory::CreateConstValueFloat( -2.f ), PluginsFactory::CreateConstValueFloat( 1.5f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
 
-    auto trasformChannel  = PluginsFactory::CreateTransformChannel( trans );
+    auto trasformPlugin  = PluginsFactory::CreateTransformPlugin( rectPlugin, trans );
 
-    rectPlugin->SetTransformChannel( trasformChannel );
-
-    root->AddPlugin(rectPlugin);
+    root->AddPlugin(trasformPlugin);
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
     auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( rectPlugin, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
 
-    solidPlugin->SetGeometryShaderChannel ( PluginsFactory::CreateGeometryShaderExtrude( 1.f ) );
-
     root->AddPlugin(solidPlugin);
+
+    auto geomShaderPlugin = PluginsFactory::CreateSimpleGeometryShaderPlugin( solidPlugin, "../dep/media/shaders/extrude.geom" );
+
+    root->AddPlugin(geomShaderPlugin);
+
+//    solidPlugin->SetGeometryShaderChannel ( PluginsFactory::CreateGeometryShaderExtrude( 1.f ) );
+
+    
 
     return root;
 }
@@ -569,15 +569,7 @@ model::BasicNode *          ExtrudedTexturedRing()
 {
     model::BasicNode * root = new model::BasicNode();
 
-    model::GeometryRingPlugin*          ringPlugin = new model::GeometryRingPlugin();
-
-    /// Set Geometry Channel
-
-    model::RingComponent *      ring        = model::RingComponent::Create(0.f, 1.5f * 3.14f, 1.f, 2.f, 200 );
-
-    model::GeometryChannel *    geomCh      = PluginsFactory::CreateGeometryChannel( ring );
-    ringPlugin->SetGeometryChannel( geomCh );
-
+    model::GeometryRingPlugin*          ringPlugin = model::PluginsFactory::CreateGeometryRingPlugin( 0.f, 1.5f * 3.14f, 1.f, 2.f, 200 );
 
     /// Set Transform Channel
     TransformF *    trans  = new TransformF                ();

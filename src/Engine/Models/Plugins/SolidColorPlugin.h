@@ -6,6 +6,7 @@
 
 namespace bv { namespace model {
 
+class SolidColorShaderChannel;
 
 // ***************************** DESCRIPTOR **********************************
 class SolidColorPluginPD : public BaseParametersDescriptor
@@ -23,18 +24,15 @@ class SolidColorPlugin : public BasePlugin< IPlugin, SolidColorPluginPD >
 {
 private:
 
+    SolidColorShaderChannel* m_pixelShaderChannel;
     const IPlugin * m_prev;
 
 public:
 
-    explicit                                SolidColorPlugin            ( const IPlugin * prev );
+    explicit                                SolidColorPlugin            ( const IPlugin * prev, const Vec4Interpolator& color );
                                             ~SolidColorPlugin           ();
 
-    virtual const IGeometryChannel*         GetGeometryChannel          () const;
-    virtual const ITransformChannel*        GetTransformChannel         () const;
-    //virtual const IPixelShaderChannel*      GetPixelShaderChannel       () const;
-    //virtual const IVertexShaderChannel*     GetVertexShaderChannel      () const;
-    //virtual const IGeometryShaderChannel*   GetGeometryShaderChannel    () const;
+    virtual const IPixelShaderChannel*      GetPixelShaderChannel       () const;
 
     void                                    Update                      ( float t ) override;
     void                                    Print                       ( std::ostream & out, int tabs = 0 ) const override;

@@ -7,7 +7,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelTyped.h"
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/SolidColorShaderChannel.h"
 
 #include "Engine/Models/Plugins/Parameter.h"
 
@@ -30,18 +30,11 @@ SolidColorPluginPD::SolidColorPluginPD()
 
 // *************************************
 //
-SolidColorPlugin::SolidColorPlugin                    ( const IPlugin * prev )
+SolidColorPlugin::SolidColorPlugin                    ( const IPlugin * prev, const Vec4Interpolator& color )
     : BasePlugin( prev )
 {
+    m_pixelShaderChannel = new model::SolidColorShaderChannel( "../dep/media/shaders/solid.frag", color );
     assert( prev != nullptr );
-
-    //FIXME: what was it supposed to do in the first place ????
-    //m_geomChannel       = nullptr;
-    //m_transformChannel  = nullptr;
-
-    //FIXME: what was it supposed to do in the first place ????
-    //m_geomChannel       = const_cast< IGeometryChannel* >( prev->GetGeometryChannel() ); // FIXME: remove const_cast
-    //m_transformChannel  = const_cast< ITransformChannel* >( prev->GetTransformChannel() );
 }
 
 // *************************************
@@ -53,38 +46,10 @@ SolidColorPlugin::~SolidColorPlugin   ()
 
 // *************************************
 //
-const IGeometryChannel*         SolidColorPlugin::GetGeometryChannel          () const
+const IPixelShaderChannel*      SolidColorPlugin::GetPixelShaderChannel       () const
 {
-    return m_prev->GetGeometryChannel();
+    return m_pixelShaderChannel;
 }
-
-// *************************************
-//
-const ITransformChannel*        SolidColorPlugin::GetTransformChannel         () const
-{
-    return m_prev->GetTransformChannel();
-}
-
-// *************************************
-//
-//const IPixelShaderChannel*      SolidColorPlugin::GetPixelShaderChannel       () const
-//{
-//    return m_prev->GetPixelShaderChannel();
-//}
-//
-//// *************************************
-////
-//const IVertexShaderChannel*     SolidColorPlugin::GetVertexShaderChannel      () const
-//{
-//    return m_prev->GetVertexShaderChannel();
-//}
-//
-//// *************************************
-////
-//const IGeometryShaderChannel*   SolidColorPlugin::GetGeometryShaderChannel    () const
-//{
-//    return m_prev->GetGeometryShaderChannel();
-//}
 
 // *************************************
 //
