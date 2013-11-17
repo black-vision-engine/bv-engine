@@ -23,8 +23,6 @@ public:
 class SimpleColorPlugin : public BasePlugin< IPlugin, SimpleColorPluginPD >
 {
 private:
-
-    const IPlugin *                     m_prev;
     SimpleColorPixelShaderChannel*      m_pshaderChannel;
 
 public:

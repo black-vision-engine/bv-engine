@@ -548,7 +548,7 @@ model::BasicNode *          ExtrudedRedRect()
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
-    auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( rectPlugin, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+    auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( trasformPlugin, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
 
     root->AddPlugin(solidPlugin);
 

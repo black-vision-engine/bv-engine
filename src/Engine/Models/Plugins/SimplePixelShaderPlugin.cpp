@@ -62,7 +62,7 @@ const IPixelShaderChannel*      SimplePixelShaderPlugin::GetPixelShaderChannel  
 
 void                            SimplePixelShaderPlugin::Update                      ( float t )
 {
-    BasePlugin::Update( t );
+    m_pshaderChannel->Update( t );
 }
 
 void                            SimplePixelShaderPlugin::Print                       ( std::ostream & out, int tabs ) const
