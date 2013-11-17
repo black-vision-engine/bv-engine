@@ -132,6 +132,8 @@
     <ClCompile Include="Engine\Models\Resources\TextHelpers.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\FontLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\Text.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\TimelineBase.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\TimelineState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -293,6 +295,13 @@
     <ClInclude Include="Engine\Models\Resources\Font\FontLoader.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Glyph.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Text.h" />
+    <ClInclude Include="Engine\Models\Timeline\ITimeEvaluator.h" />
+    <ClInclude Include="Engine\Models\Timeline\Timeline.h" />
+    <ClInclude Include="Engine\Models\Timeline\GlobalTimeline.h" />
+    <ClInclude Include="Engine\Models\Timeline\TimelineBase.h" />
+    <ClInclude Include="Engine\Models\Timeline\TimelineSettings.h" />
+    <ClInclude Include="Engine\Models\Timeline\TimelineState.h" />
+    <ClInclude Include="System\BasicTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

@@ -255,6 +255,8 @@
     <ClCompile Include="Engine\Models\Resources\ResourceLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextHelpers.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextureLoader.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\TimelineBase.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\TimelineState.cpp" />
     <ClCompile Include="Engine\Models\Updaters\CameraUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\GeometryUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\NodeUpdater.cpp" />
@@ -406,6 +408,12 @@
     <ClInclude Include="Engine\Models\Resources\ResourceLoader.h" />
     <ClInclude Include="Engine\Models\Resources\TextHelpers.h" />
     <ClInclude Include="Engine\Models\Resources\TextureLoader.h" />
+    <ClInclude Include="Engine\Models\Timeline\GlobalTimeline.h" />
+    <ClInclude Include="Engine\Models\Timeline\ITimeEvaluator.h" />
+    <ClInclude Include="Engine\Models\Timeline\Timeline.h" />
+    <ClInclude Include="Engine\Models\Timeline\TimelineBase.h" />
+    <ClInclude Include="Engine\Models\Timeline\TimelineSettings.h" />
+    <ClInclude Include="Engine\Models\Timeline\TimelineState.h" />
     <ClInclude Include="Engine\Models\Updaters\CameraUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\GeometryUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\NodeUpdater.h" />
@@ -413,6 +421,7 @@
     <ClInclude Include="Engine\Models\Updaters\SequenceAnimationUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\ShaderParamUpdater.h" />
     <ClInclude Include="Engine\Types\Enums.h" />
+    <ClInclude Include="System\BasicTypes.h" />
     <ClInclude Include="System\HRTimer.h" />
     <ClInclude Include="System\Print.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\GLRendererData.h" />
