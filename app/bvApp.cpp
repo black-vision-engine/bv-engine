@@ -16,7 +16,7 @@
 
 bv::HighResolutionTimer GTimer;
 
-//#define FULLSCREEN_MODE
+#define FULLSCREEN_MODEL
 
 #ifdef FULLSCREEN_MODE
     const bool          GFullScreen = true;
@@ -250,6 +250,7 @@ bool BlackVisionApp::OnInitialize       ()
     //model::BasicNode * root = TestScenesFactory::XMLTestScene();
     //model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
     //model::BasicNode * root = TestScenesFactory::SequenceAnimationTestScene();
+    model::BasicNode * root = TestScenesFactory::NonGeometryParent();
 
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
 

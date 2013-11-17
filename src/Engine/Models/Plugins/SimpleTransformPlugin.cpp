@@ -51,6 +51,8 @@ SimpleTransformPlugin::~SimpleTransformPlugin   ()
 {}
 
 
+    return nullptr;
+
 // *************************************
 //
 const ITransformChannel*        SimpleTransformPlugin::GetTransformChannel         () const

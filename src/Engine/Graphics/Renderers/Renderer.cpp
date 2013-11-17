@@ -173,6 +173,7 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
 //FIXME: This one requires one solid reimplementation
 bool    Renderer::Draw                  ( RenderableEntity * ent )
 {
+    assert( ent );
     //Based on Entity Type:
     //                        Enable(vertexbuffer);
     //                        Enable(indexBuffer) -> if present
@@ -190,18 +191,20 @@ bool    Renderer::Draw                  ( RenderableEntity * ent )
     
     //FIXME: effect should only bind glsl program and set per frame paramters
     //FIXME: then there should be an instancing loop with MVP binding and then entity rendering
-    Enable( eff->GetPass( 0 ), ent ); //FIXME: 1 pass ONLY RIGHT NOW
+    if( eff )
+    {
+        Enable( eff->GetPass( 0 ), ent ); //FIXME: 1 pass ONLY RIGHT NOW
 
-    DrawRenderable( ent );
+        DrawRenderable( ent );
 
-    //FIXME: Disable whathever there is to be disabled
-    //Disable(eff->GetPass(0));  //FIXME:
-    //Disable(vb, vd);
-    //if(ib) 
-    //    Disable(ib);
+        //FIXME: Disable whathever there is to be disabled
+        //Disable(eff->GetPass(0));  //FIXME:
+        //Disable(vb, vd);
+        //if(ib) 
+        //    Disable(ib);
 
-    //Disable(vb);
-
+        //Disable(vb);
+    }
 
     return true;
 }
