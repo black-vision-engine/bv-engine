@@ -6,6 +6,7 @@
 
 namespace bv { namespace model {
 
+class SimpleVertexShaderChannel;
 
 // ***************************** DESCRIPTOR **********************************
 class SimpleVertexShaderPluginPD : public BaseParametersDescriptor
@@ -23,8 +24,8 @@ class SimpleVertexShaderPlugin : public BasePlugin< IPlugin, SimpleVertexShaderP
 {
 private:
 
-    const IPlugin*          m_prev;
-    const std::string       m_shaderPath;
+    SimpleVertexShaderChannel*      m_vshaderChannel;
+    const std::string               m_shaderPath;
 
 public:
 

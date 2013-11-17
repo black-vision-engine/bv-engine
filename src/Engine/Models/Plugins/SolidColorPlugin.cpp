@@ -31,7 +31,7 @@ SolidColorPluginPD::SolidColorPluginPD()
 // *************************************
 //
 SolidColorPlugin::SolidColorPlugin                    ( const IPlugin * prev )
-    : m_prev( prev )
+    : BasePlugin( prev )
 {
     assert( prev != nullptr );
 

@@ -46,20 +46,16 @@ protected:
     std::vector< IParameter * >     m_params;
     std::vector< IValue * >         m_values;
 
-    ///////////////// Channels //////////////////
+    ///////////////// Previous plugin ///////////
+    const IPlugin*                  m_prevPlugin;
 
-    GeometryChannel *               m_geomChannel;
-    TransformChannel *              m_transformChannel;
-    IPixelShaderChannel *           m_pshaderChannel;
-    IVertexShaderChannel *          m_vshaderChannel;
-    IGeometryShaderChannel *        m_gshaderChannel;
 
     ///////////////// Textures //////////////////
-    typename Iface::Textures       m_textures;
+    typename Iface::Textures        m_textures;
 
 public:
 
-    explicit                                    BasePlugin                  ();
+    explicit                                    BasePlugin                  ( const IPlugin* prevPlugin );
 
     virtual void                                Update                      ( float t );
 
@@ -71,17 +67,17 @@ public:
     void                                        RegisterValue               ( IValue * v )                                  { m_values.push_back( v ); }
 
 
-    void                                        SetGeometryChannel          ( GeometryChannel* geomChannel )                { m_geomChannel = geomChannel; }
-    void                                        SetTransformChannel         ( TransformChannel* transformChannel )          { m_transformChannel = transformChannel; }
-    void                                        SetPixelShaderChannel       ( IPixelShaderChannel * pShCh )                 { m_pshaderChannel = pShCh; }
-    void                                        SetVertexShaderChannel      ( IVertexShaderChannel * vShCh )                { m_vshaderChannel = vShCh; }
-    void                                        SetGeometryShaderChannel    ( IGeometryShaderChannel * gShCh )              { m_gshaderChannel = gShCh; }
+    virtual void                                SetGeometryChannel          ( GeometryChannel* geomChannel )                { assert(!"Implement in derived class"); }
+    virtual void                                SetTransformChannel         ( TransformChannel* transformChannel )          { assert(!"Implement in derived class"); }
+    virtual void                                SetPixelShaderChannel       ( IPixelShaderChannel * pShCh )                 { assert(!"Implement in derived class"); }
+    virtual void                                SetVertexShaderChannel      ( IVertexShaderChannel * vShCh )                { assert(!"Implement in derived class"); }
+    virtual void                                SetGeometryShaderChannel    ( IGeometryShaderChannel * gShCh )              { assert(!"Implement in derived class"); }
 
-    virtual const IGeometryChannel *            GetGeometryChannel          () const                                        { return m_geomChannel; }
-    virtual const ITransformChannel *           GetTransformChannel         () const                                        { return m_transformChannel; }
-    virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const                                        { return m_pshaderChannel; }
-    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const                                        { return m_vshaderChannel; }
-    virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const                                        { return m_gshaderChannel; }
+    virtual const IGeometryChannel *            GetGeometryChannel          () const;                                       
+    virtual const ITransformChannel *           GetTransformChannel         () const;                                       
+    virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const;                                       
+    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const;                                       
+    virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const;                                       
 
     virtual const Textures &                    GetTextures                 () const                                        { return m_textures; }
 
@@ -100,22 +96,64 @@ protected:
 template<class Iface, class ParameterDescriptor >
 void BasePlugin< Iface, ParameterDescriptor >::Update( float t )
 {
-    if(m_geomChannel) m_geomChannel->Update( t );
-    if(m_transformChannel) m_transformChannel->Update( t );
-    if(m_pshaderChannel) m_pshaderChannel->Update( t );
-    if(m_vshaderChannel) m_vshaderChannel->Update( t );
-    if(m_gshaderChannel) m_gshaderChannel->Update( t );
+    assert( !"Implement in derived class" );
+    //if( GetGeometryChannel() )          GetGeometryChannel()->Update( t );
+    //if( GetTransformChannel() )         GetTransformChannel->Update( t );
+    //if( GetPixelShaderChannel() )       GetPixelShaderChannel->Update( t );
+    //if( GetVertexShaderChannel() )      GetVertexShaderChannel->Update( t );
+    //if( GetGeometryShaderChannel() )    GetGeometryShaderChannel->Update( t );
 }
 
 template<class Iface, class ParameterDescriptor >
-BasePlugin< Iface, ParameterDescriptor >::BasePlugin()
+BasePlugin< Iface, ParameterDescriptor >::BasePlugin( const IPlugin* prevPlugin )
     : m_paramDesc( ParameterDescriptor() )
-    , m_geomChannel( nullptr )
-    , m_transformChannel(nullptr)
-    , m_pshaderChannel(nullptr)
-    , m_vshaderChannel(nullptr)
-    , m_gshaderChannel(nullptr)
+    , m_prevPlugin( prevPlugin )
 {}
+
+template<class Iface, class ParameterDescriptor >
+const IGeometryChannel *            BasePlugin< Iface, ParameterDescriptor >::GetGeometryChannel          () const
+{
+    if( m_prevPlugin ) 
+        return m_prevPlugin->GetGeometryChannel();
+    else
+        return nullptr;
+}
+
+template<class Iface, class ParameterDescriptor >
+const ITransformChannel *           BasePlugin< Iface, ParameterDescriptor >::GetTransformChannel         () const
+{
+    if( m_prevPlugin ) 
+        return m_prevPlugin->GetTransformChannel();
+    else
+        return nullptr;
+}
+
+template<class Iface, class ParameterDescriptor >
+const IPixelShaderChannel *         BasePlugin< Iface, ParameterDescriptor >::GetPixelShaderChannel       () const
+{
+    if( m_prevPlugin ) 
+        return m_prevPlugin->GetPixelShaderChannel();
+    else
+        return nullptr;
+}
+
+template<class Iface, class ParameterDescriptor >
+const IVertexShaderChannel *        BasePlugin< Iface, ParameterDescriptor >::GetVertexShaderChannel      () const
+{
+    if( m_prevPlugin ) 
+        return m_prevPlugin->GetVertexShaderChannel();
+    else
+        return nullptr;
+}
+
+template<class Iface, class ParameterDescriptor >
+const IGeometryShaderChannel *      BasePlugin< Iface, ParameterDescriptor >::GetGeometryShaderChannel    () const
+{
+    if( m_prevPlugin ) 
+        return m_prevPlugin->GetGeometryShaderChannel();
+    else
+        return nullptr;
+}
 
 
 } // model
