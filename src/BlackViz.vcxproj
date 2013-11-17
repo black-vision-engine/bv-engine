@@ -240,6 +240,7 @@
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRect.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRing.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginParameters.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleAnimationPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleColorPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleGeometryShaderPlugin.cpp" />
@@ -388,6 +389,7 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginParameters.h" />
+    <ClInclude Include="Engine\Models\Plugins\PluginsFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleAnimationPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleColorPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleGeometryShaderPlugin.h" />

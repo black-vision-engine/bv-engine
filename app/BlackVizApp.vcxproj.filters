@@ -8,7 +8,6 @@
       <Filter>MockFonts</Filter>
     </ClCompile>
     <ClCompile Include="AnotherTestScene.cpp" />
-    <ClCompile Include="TempFactory.cpp" />
     <ClCompile Include="xml\pomocnicze\auxilary.cpp" />
     <ClCompile Include="xml\BlackTree.cpp" />
     <ClCompile Include="xml\Scena.cpp" />
@@ -20,7 +19,6 @@
     <ClInclude Include="MockFonts\fttester.h">
       <Filter>MockFonts</Filter>
     </ClInclude>
-    <ClInclude Include="TempFactory.h" />
     <ClInclude Include="xml\pomocnicze\auxilary.hpp">
       <Filter>xml</Filter>
     </ClInclude>

@@ -1,4 +1,4 @@
-#include "TempFactory.h"
+#include "PluginsFactory.h"
 
 #include "Engine/Models/Plugins/SimpleTransformPlugin.h"
 #include "Engine/Models/Plugins/GeometryPluginRing.h"
@@ -7,10 +7,12 @@
 
 namespace bv
 {
+namespace model
+{
 
 // *******************************
 //
-FloatInterpolator                   CreateConstValueFloat               ( float val )
+FloatInterpolator                   PluginsFactory::CreateConstValueFloat               ( float val )
 {
 	FloatInterpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
 	inter.addKey( 0.f, val );
@@ -20,7 +22,7 @@ FloatInterpolator                   CreateConstValueFloat               ( float 
 
 // *******************************
 //
-Vec4Interpolator                   CreateConstValueVec4                 ( const glm::vec4& val )
+Vec4Interpolator                   PluginsFactory::CreateConstValueVec4                 ( const glm::vec4& val )
 {
 	Vec4Interpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
 	inter.addKey( 0.f, val );
@@ -30,7 +32,7 @@ Vec4Interpolator                   CreateConstValueVec4                 ( const 
 
 // *******************************
 //
-model::GeometryRectPlugin*          CreateGeometryRectPlugin            ( float w, float h )
+model::GeometryRectPlugin*          PluginsFactory::CreateGeometryRectPlugin            ( float w, float h )
 {
 	FloatInterpolator wi; wi.setWrapPostMethod( bv::WrapMethod::pingPong );
 	FloatInterpolator hi; hi.setWrapPostMethod( bv::WrapMethod::pingPong );
@@ -40,19 +42,12 @@ model::GeometryRectPlugin*          CreateGeometryRectPlugin            ( float 
 
     auto rectPlugin = new model::GeometryRectPlugin(wi, hi);
 
-    /// Set Geometry Channel
-    model::RectComponent *     rect        = model::RectComponent::Create( w, h );
-
-    model::GeometryChannel *   geomCh      = CreateGeometryChannel( rect );
-
-    rectPlugin->SetGeometryChannel( geomCh );
-
 	return rectPlugin;
 }
 
 // *******************************
 //
-model::GeometryRingPlugin*          CreateGeometryRingPlugin            ( float startAngle, float endAngle, float innerRadius, float outerRadius, int segmentsNum )
+model::GeometryRingPlugin*          PluginsFactory::CreateGeometryRingPlugin            ( float startAngle, float endAngle, float innerRadius, float outerRadius, int segmentsNum )
 {
     model::GeometryRingPlugin*  ringPlugin = new model::GeometryRingPlugin();
 
@@ -69,7 +64,7 @@ model::GeometryRingPlugin*          CreateGeometryRingPlugin            ( float 
 
 // *******************************
 //
-model::GeometryChannel*             CreateGeometryChannel               (model::IConnectedComponent* connComp)
+model::GeometryChannel*             PluginsFactory::CreateGeometryChannel               (model::IConnectedComponent* connComp)
 {
 	model::GeometryChannelDescriptor desc;
 
@@ -87,7 +82,7 @@ model::GeometryChannel*             CreateGeometryChannel               (model::
 
 // *******************************
 //
-model::TransformChannel*           CreateTransformChannel              (TransformF* transformation)
+model::TransformChannel*           PluginsFactory::CreateTransformChannel              (TransformF* transformation)
 {
 	model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
 	trasformChannel->AddTransform( transformation );
@@ -97,7 +92,7 @@ model::TransformChannel*           CreateTransformChannel              (Transfor
 
 // *******************************
 //
-model::SolidColorPlugin*            CreateSolidColorPlugin              (model::IPlugin* prevPlugin, const glm::vec4& color)
+model::SolidColorPlugin*            PluginsFactory::CreateSolidColorPlugin              (model::IPlugin* prevPlugin, const glm::vec4& color)
 {
 	auto solidPlugin = new model::SolidColorPlugin( prevPlugin );
 
@@ -109,7 +104,7 @@ model::SolidColorPlugin*            CreateSolidColorPlugin              (model::
 
 // *******************************
 //
-model::SimpleTexturePlugin*         CreateTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths )
+model::SimpleTexturePlugin*         PluginsFactory::CreateTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths )
 {
 	auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, texturesPaths );
 
@@ -134,7 +129,7 @@ model::SimpleTexturePlugin*         CreateTexturePlugin                 ( model:
 
 // *******************************
 //
-model::SimpleAnimationPlugin *      CreateAnimationPlugin               ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, unsigned int animationFPS )
+model::SimpleAnimationPlugin *      PluginsFactory::CreateAnimationPlugin               ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, unsigned int animationFPS )
 {
 	auto animationPlugin = new model::SimpleAnimationPlugin( prevPlugin, texturesPaths, animationFPS );
 
@@ -157,7 +152,7 @@ model::SimpleAnimationPlugin *      CreateAnimationPlugin               ( model:
 
 // *******************************
 //
-model::SimpleTextPlugin *            CreateTextPlugin                    ( const std::wstring & text, const std::string & fontFile, int size, bool bolded, bool italic )
+model::SimpleTextPlugin *            PluginsFactory::CreateTextPlugin                    ( const std::wstring & text, const std::string & fontFile, int size, bool bolded, bool italic )
 {
     auto texPlugin = model::SimpleTextPlugin::Create( text, fontFile, size, bolded, italic );
 
@@ -166,14 +161,14 @@ model::SimpleTextPlugin *            CreateTextPlugin                    ( const
 
 // *******************************
 //
-model::SimpleTransformPlugin *      CreateTransformPlugin               ( const model::IPlugin * prev, TransformF * trans )
+model::SimpleTransformPlugin *      PluginsFactory::CreateTransformPlugin               ( const model::IPlugin * prev, TransformF * trans )
 {
     return model::SimpleTransformPlugin::Create( prev, trans );
 }
 
 // *******************************
 //
-model::IGeometryShaderChannel *     CreateGeometryShaderExtrude         ( float scale )
+model::IGeometryShaderChannel *     PluginsFactory::CreateGeometryShaderExtrude         ( float scale )
 {
 	FloatInterpolator extrudeScale = CreateConstValueFloat( scale );
 	return new model::ExtrudeGeometryShaderChannel("../dep/media/shaders/extrude.geom", extrudeScale);
@@ -181,35 +176,35 @@ model::IGeometryShaderChannel *     CreateGeometryShaderExtrude         ( float 
 
 // *******************************
 //
-model::SimpleColorPlugin*           CreateSimpleColorPlugin             ( model::IPlugin* prevPlugin, const Vec4Interpolator& color)
+model::SimpleColorPlugin*           PluginsFactory::CreateSimpleColorPlugin             ( model::IPlugin* prevPlugin, const Vec4Interpolator& color)
 {
     return new model::SimpleColorPlugin( prevPlugin, color );
 }
 
 // *******************************
 //
-model::SimplePixelShaderPlugin*     CreateSimplePixelShaderPlugin       ( model::IPlugin* prevPlugin, const std::string& shaderPath, model::RendererContext * ctx )
+model::SimplePixelShaderPlugin*     PluginsFactory::CreateSimplePixelShaderPlugin       ( model::IPlugin* prevPlugin, const std::string& shaderPath, model::RendererContext * ctx )
 {
     return new model::SimplePixelShaderPlugin( prevPlugin, shaderPath, ctx );
 }
 
 // *******************************
 //
-model::SimpleVertexShaderPlugin*    CreateSimpleVertexShaderPlugin      ( model::IPlugin* prevPlugin, const std::string& shaderPath)
+model::SimpleVertexShaderPlugin*    PluginsFactory::CreateSimpleVertexShaderPlugin      ( model::IPlugin* prevPlugin, const std::string& shaderPath)
 {
     return new model::SimpleVertexShaderPlugin( prevPlugin, shaderPath );
 }
 
 // *******************************
 //
-model::SimpleGeometryShaderPlugin*  CreateSimpleGeometryShaderPlugin    ( model::IPlugin* prevPlugin, const std::string& shaderPath)
+model::SimpleGeometryShaderPlugin*  PluginsFactory::CreateSimpleGeometryShaderPlugin    ( model::IPlugin* prevPlugin, const std::string& shaderPath)
 {
     return new model::SimpleGeometryShaderPlugin( prevPlugin, shaderPath );
 }
 
 // *******************************
 //
-model::RendererContext*             CreateDefaultRenderableContext()
+model::RendererContext*             PluginsFactory::CreateDefaultRenderableContext()
 {
     auto ctx = new model::RendererContext();
     ctx->alphaCtx = new model::AlphaContext();
@@ -220,4 +215,5 @@ model::RendererContext*             CreateDefaultRenderableContext()
     return ctx;
 }
 
+} // model
 } //bv

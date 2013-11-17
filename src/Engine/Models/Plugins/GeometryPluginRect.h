@@ -22,6 +22,7 @@ public:
 // ***************************** PLUGIN ********************************** 
 class GeometryRectPlugin : public BasePlugin< IPlugin, GeometryRectPluginPD >
 {
+    model::GeometryChannel*     m_geomChannel;
     FloatInterpolator           m_width;
     FloatInterpolator           m_height;
 

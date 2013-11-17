@@ -37,7 +37,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/GeometryChannelVariableTopology.h"
 #include "Engine/Models/Resources/TextHelpers.h"
 
-#include "TempFactory.h"
+#include "Engine/Models/Plugins/PluginsFactory.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -59,6 +59,8 @@ struct AnimationSequenceDesc
     std::string ext;
 
 };
+
+using namespace model;
 
 // ******************************
 //
@@ -82,7 +84,7 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
-    auto solidPlugin = CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
+    auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
 
     ////// Add plugins to node
     root->AddPlugin( geomPlugin );
@@ -95,7 +97,7 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
     std::vector< std::string > textures;
     textures.push_back( "simless_00.jpg" );
 
-    auto texturePlugin = CreateTexturePlugin( geomPlugin, textures );
+    auto texturePlugin = PluginsFactory::CreateTexturePlugin( geomPlugin, textures );
 
     root->AddPlugin( texturePlugin );
 
@@ -125,7 +127,7 @@ model::BasicNode * VariableTopologySolids( float size, float speed, float oscila
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
-    auto solidPlugin = CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
+    auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
 
     //// Add plugins to node
     root->AddPlugin( geomPlugin );
@@ -147,7 +149,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
     float hds = 1.7778f;
 
     ///////////////////////////// Geometry plugin //////////////////////////
-    model::GeometryRectPlugin * rectPlugin   = CreateGeometryRectPlugin( hds, 1.f );
+    model::GeometryRectPlugin * rectPlugin   = PluginsFactory::CreateGeometryRectPlugin( hds, 1.f );
 
     root->AddPlugin( rectPlugin );
 
@@ -163,10 +165,10 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
     sx.addKey( 0.f, 1.2f );
     sy.addKey( 0.f, 1.2f );
 
-    trans->addScale( sx, sy, CreateConstValueFloat( 1.f ) );
-    trans->addTranslation( CreateConstValueFloat( -float(numAnimations - 1) * hds / 2.f ), CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ) );
+    trans->addScale( sx, sy, PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans->addTranslation( PluginsFactory::CreateConstValueFloat( -float(numAnimations - 1) * hds / 2.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
 
-    auto transformPlugin = CreateTransformPlugin( rectPlugin, trans );
+    auto transformPlugin = PluginsFactory::CreateTransformPlugin( rectPlugin, trans );
 
     root->AddPlugin( transformPlugin ); // Plugin with transformation
     
@@ -189,7 +191,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
         textures.push_back( txName );
     }
 
-    auto animationPlugin = CreateAnimationPlugin( transformPlugin, textures, animationFPS );
+    auto animationPlugin = PluginsFactory::CreateAnimationPlugin( transformPlugin, textures, animationFPS );
 
     root->AddPlugin( animationPlugin );
 
@@ -198,7 +200,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
         model::BasicNode * root1 = new model::BasicNode();
 
         ///////////////////////////// Geometry plugin //////////////////////////
-        model::GeometryRectPlugin * rectPlugin   = CreateGeometryRectPlugin( 1.77778f * 1.f, 1.f );
+        model::GeometryRectPlugin * rectPlugin   = PluginsFactory::CreateGeometryRectPlugin( 1.77778f * 1.f, 1.f );
 
         root1->AddPlugin( rectPlugin );
 
@@ -211,10 +213,10 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
         sx.addKey( 0.f, 1.f );
         sy.addKey( 0.f, 1.f );
 
-        trans->addScale( sx, sy, CreateConstValueFloat( 1.f ) );
-        trans->addTranslation( CreateConstValueFloat( float(i) * hds * 1.02f ), CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.1f ) );
+        trans->addScale( sx, sy, PluginsFactory::CreateConstValueFloat( 1.f ) );
+        trans->addTranslation( PluginsFactory::CreateConstValueFloat( float(i) * hds * 1.02f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.1f ) );
 
-        auto transformPlugin = CreateTransformPlugin( rectPlugin, trans );
+        auto transformPlugin = PluginsFactory::CreateTransformPlugin( rectPlugin, trans );
 
         root1->AddPlugin( transformPlugin ); // Plugin with transformation
     
@@ -237,7 +239,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
             textures.push_back( txName );
         }
 
-        auto animationPlugin = CreateAnimationPlugin( transformPlugin, textures, animationFPS );
+        auto animationPlugin = PluginsFactory::CreateAnimationPlugin( transformPlugin, textures, animationFPS );
 
         root1->AddPlugin( animationPlugin );
 
@@ -254,27 +256,27 @@ model::BasicNode *          GreenRect()
     model::BasicNode * root = new model::BasicNode();
 
     ///////////////////////////// Geometry plugin //////////////////////////
-    model::GeometryRectPlugin*          rectPlugin  = CreateGeometryRectPlugin(1.f, 1.f);
+    model::GeometryRectPlugin*          rectPlugin  = PluginsFactory::CreateGeometryRectPlugin(1.f, 1.f);
 
     root->AddPlugin(rectPlugin); 
 
     ///////////////////////////// Transform plugin //////////////////////////// 
     TransformF *    trans  = new TransformF                ();
 
-    trans->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
-    trans->addTranslation( CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ), CreateConstValueFloat( 0.f ) );
+    trans->addScale( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans->addTranslation( PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
     
-    auto transformPlugin = CreateTransformPlugin( rectPlugin, trans );
+    auto transformPlugin = PluginsFactory::CreateTransformPlugin( rectPlugin, trans );
 
     root->AddPlugin( transformPlugin ); // Plugin with transformation
 
     ///////////////////////////// Material plugin //////////////////////////// 
 
-    auto colorPlugin = CreateSimpleColorPlugin( transformPlugin, CreateConstValueVec4( glm::vec4(0.f, 1.f, 0.f, 1.f ) ) );
+    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( transformPlugin, PluginsFactory::CreateConstValueVec4( glm::vec4(0.f, 1.f, 0.f, 1.f ) ) );
 
     root->AddPlugin( colorPlugin );
 
-    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/solid.frag", CreateDefaultRenderableContext() );
+    auto pixelShaderPlugin = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/solid.frag", PluginsFactory::CreateDefaultRenderableContext() );
 
     root->AddPlugin( pixelShaderPlugin );
 
@@ -288,17 +290,17 @@ model::BasicNode *          TexturedRect()
     model::BasicNode * root = new model::BasicNode();
 
     ///////////////////////////// Geometry plugin //////////////////////////
-    model::GeometryRectPlugin* rectPlugin   = CreateGeometryRectPlugin(1.f, 1.f);
+    model::GeometryRectPlugin* rectPlugin   = PluginsFactory::CreateGeometryRectPlugin(1.f, 1.f);
 
     root->AddPlugin(rectPlugin);
 
     ///////////////////////////// Transform plugin //////////////////////////// 
     TransformF *    trans  = new TransformF                ();
 
-    trans->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
-    trans->addTranslation( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 0.f ) );
+    trans->addScale( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans->addTranslation( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
 
-    auto transformPlugin = CreateTransformPlugin( rectPlugin, trans );
+    auto transformPlugin = PluginsFactory::CreateTransformPlugin( rectPlugin, trans );
 
     root->AddPlugin( transformPlugin ); // Plugin with transformation
     
@@ -308,7 +310,7 @@ model::BasicNode *          TexturedRect()
 
     textures.push_back( "simless_00.jpg" );
 
-    auto texturePlugin = CreateTexturePlugin( transformPlugin, textures );
+    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transformPlugin, textures );
 
     root->AddPlugin(texturePlugin);
 
@@ -325,7 +327,7 @@ model::BasicNode *          TexturedRing()
 
     ///////////////////////////// Geometry plugin //////////////////////////
 
-    model::GeometryRingPlugin*          ringPlugin = CreateGeometryRingPlugin( 0.f, 1.5f * 3.14f, 1.f, 2.f, 200 );
+    model::GeometryRingPlugin*          ringPlugin = PluginsFactory::CreateGeometryRingPlugin( 0.f, 1.5f * 3.14f, 1.f, 2.f, 200 );
 
     root->AddPlugin(ringPlugin);
 
@@ -333,10 +335,10 @@ model::BasicNode *          TexturedRing()
 
     TransformF *    trans  = new TransformF                ();
 
-    trans->addScale( CreateConstValueFloat( 0.25f ), CreateConstValueFloat( 0.25f ), CreateConstValueFloat( 1.f ) );
-    trans->addTranslation( CreateConstValueFloat( -1.f ), CreateConstValueFloat( -1.f ), CreateConstValueFloat( 0.001f ) );
+    trans->addScale( PluginsFactory::CreateConstValueFloat( 0.25f ), PluginsFactory::CreateConstValueFloat( 0.25f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans->addTranslation( PluginsFactory::CreateConstValueFloat( -1.f ), PluginsFactory::CreateConstValueFloat( -1.f ), PluginsFactory::CreateConstValueFloat( 0.001f ) );
 
-    auto transformPlugin = CreateTransformPlugin( ringPlugin, trans );
+    auto transformPlugin = PluginsFactory::CreateTransformPlugin( ringPlugin, trans );
     
     root->AddPlugin( transformPlugin );
 
@@ -346,7 +348,7 @@ model::BasicNode *          TexturedRing()
 
     textures.push_back( "simless_01.jpg" );
 
-    auto texturePlugin = CreateTexturePlugin( transformPlugin, textures );
+    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transformPlugin, textures );
 
     root->AddPlugin(texturePlugin);
 
@@ -368,7 +370,7 @@ model::BasicNode *     Text1()
     color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
     color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
-    auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
+    auto texPlugin      =   PluginsFactory::CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
 
     root->AddPlugin( texPlugin );
 
@@ -386,25 +388,25 @@ model::BasicNode *     Text1()
 
     trns->addTranslation( xt, yt, zt );
 
-    trns->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
+    trns->addScale( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
 
-    auto transPlugin = CreateTransformPlugin( texPlugin, trns );
+    auto transPlugin = PluginsFactory::CreateTransformPlugin( texPlugin, trns );
 
     root->AddPlugin( transPlugin );
 
-    auto vertexShaderPlugin = CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/simpletexture.vert" );
+    auto vertexShaderPlugin = PluginsFactory::CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/simpletexture.vert" );
 
     root->AddPlugin( vertexShaderPlugin );
 
-    auto colorPlugin = CreateSimpleColorPlugin( vertexShaderPlugin, color );
+    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( vertexShaderPlugin, color );
 
     root->AddPlugin( colorPlugin );
 
-    auto ctx = CreateDefaultRenderableContext();
+    auto ctx = PluginsFactory::CreateDefaultRenderableContext();
     ctx->alphaCtx->blendEnabled = true;
     ctx->depthCtx->enabled = false;
 
-    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag", ctx );
+    auto pixelShaderPlugin = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag", ctx );
 
     root->AddPlugin( pixelShaderPlugin );
 
@@ -419,7 +421,7 @@ model::BasicNode * Text1Textured()
 
     std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example1.txt");
 
-    auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/cour.ttf", 8 );
+    auto texPlugin      =   PluginsFactory::CreateTextPlugin( str, "../dep/Media/fonts/cour.ttf", 8 );
 
     root->AddPlugin( texPlugin );
 
@@ -437,28 +439,28 @@ model::BasicNode * Text1Textured()
 
     trns->addTranslation( xt, yt, zt );
 
-    trns->addScale( CreateConstValueFloat( 3.f ), CreateConstValueFloat( 3.f ), CreateConstValueFloat( 1.f ) );
+    trns->addScale( PluginsFactory::CreateConstValueFloat( 3.f ), PluginsFactory::CreateConstValueFloat( 3.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
 
-    auto transPlugin = CreateTransformPlugin( texPlugin, trns );
+    auto transPlugin = PluginsFactory::CreateTransformPlugin( texPlugin, trns );
 
     root->AddPlugin( transPlugin );
 
     std::vector< std::string > textures;
     textures.push_back( "simless_01.jpg" );
 
-    auto texturePlugin = CreateTexturePlugin( transPlugin, textures );
+    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transPlugin, textures );
 
     root->AddPlugin( texturePlugin );
 
-    auto vertexShaderPlugin = CreateSimpleVertexShaderPlugin( texturePlugin,  "../dep/media/shaders/textured_text.vert" );
+    auto vertexShaderPlugin = PluginsFactory::CreateSimpleVertexShaderPlugin( texturePlugin,  "../dep/media/shaders/textured_text.vert" );
 
     root->AddPlugin( vertexShaderPlugin );
 
-    auto ctx = CreateDefaultRenderableContext();
+    auto ctx = PluginsFactory::CreateDefaultRenderableContext();
     ctx->alphaCtx->blendEnabled = true;
     ctx->depthCtx->enabled = false;
 
-    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( vertexShaderPlugin,  "../dep/media/shaders/textured_text.frag", ctx );
+    auto pixelShaderPlugin = PluginsFactory::CreateSimplePixelShaderPlugin( vertexShaderPlugin,  "../dep/media/shaders/textured_text.frag", ctx );
 
     root->AddPlugin( pixelShaderPlugin );
 
@@ -480,13 +482,13 @@ model::BasicNode *     Text2()
     color.addKey(8.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
     color.addKey(18.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
-    auto texPlugin = CreateTextPlugin( str, "../dep/Media/fonts/cour.ttf", 128, true, true);
+    auto texPlugin = PluginsFactory::CreateTextPlugin( str, "../dep/Media/fonts/cour.ttf", 128, true, true);
 
     root->AddPlugin( texPlugin );
 
     TransformF *    trns  = new TransformF                ();
 
-    trns->addScale( CreateConstValueFloat( 2.f ), CreateConstValueFloat( 2.f ), CreateConstValueFloat( 2.f ) );
+    trns->addScale( PluginsFactory::CreateConstValueFloat( 2.f ), PluginsFactory::CreateConstValueFloat( 2.f ), PluginsFactory::CreateConstValueFloat( 2.f ) );
 
     FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
     FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
@@ -500,23 +502,23 @@ model::BasicNode *     Text2()
 
     trns->addTranslation( xt, yt, zt );
 
-    auto transPlugin = CreateTransformPlugin( texPlugin, trns );
+    auto transPlugin = PluginsFactory::CreateTransformPlugin( texPlugin, trns );
 
     root->AddPlugin( transPlugin );
 
-    auto vertexShaderPlugin = CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/simpletexture.vert" );
+    auto vertexShaderPlugin = PluginsFactory::CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/simpletexture.vert" );
 
     root->AddPlugin( vertexShaderPlugin );
 
-    auto colorPlugin = CreateSimpleColorPlugin( vertexShaderPlugin, color );
+    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( vertexShaderPlugin, color );
 
     root->AddPlugin( colorPlugin );
 
-    auto ctx = CreateDefaultRenderableContext();
+    auto ctx = PluginsFactory::CreateDefaultRenderableContext();
     ctx->alphaCtx->blendEnabled = true;
     ctx->depthCtx->enabled = false;
 
-    auto pixelShaderPlugin = CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag", ctx );
+    auto pixelShaderPlugin = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag", ctx );
 
     root->AddPlugin( pixelShaderPlugin );
 
@@ -529,11 +531,11 @@ model::BasicNode *          ExtrudedRedRect()
 {
     model::BasicNode * root = new model::BasicNode();
 
-    model::GeometryRectPlugin*          rectPlugin  = CreateGeometryRectPlugin(1.f, 1.f);
+    model::GeometryRectPlugin*          rectPlugin  = PluginsFactory::CreateGeometryRectPlugin(1.f, 1.f);
 
     model::AnimatedStripComponent *     rect        = model::AnimatedStripComponent::Create( 2.f, 1.f, 10, 0.f, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 );
 
-    model::GeometryChannel *            geomCh      = CreateGeometryChannel( rect );
+    model::GeometryChannel *            geomCh      = PluginsFactory::CreateGeometryChannel( rect );
 
     rectPlugin->SetGeometryChannel( geomCh );
 
@@ -541,10 +543,10 @@ model::BasicNode *          ExtrudedRedRect()
     /// Set Transform Channel
     TransformF *    trans  = new TransformF                ();
 
-    trans->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
-    trans->addTranslation( CreateConstValueFloat( -2.f ), CreateConstValueFloat( 1.5f ), CreateConstValueFloat( 0.f ) );
+    trans->addScale( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans->addTranslation( PluginsFactory::CreateConstValueFloat( -2.f ), PluginsFactory::CreateConstValueFloat( 1.5f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
 
-    auto trasformChannel  = CreateTransformChannel( trans );
+    auto trasformChannel  = PluginsFactory::CreateTransformChannel( trans );
 
     rectPlugin->SetTransformChannel( trasformChannel );
 
@@ -552,9 +554,9 @@ model::BasicNode *          ExtrudedRedRect()
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
-    auto solidPlugin = CreateSolidColorPlugin( rectPlugin, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+    auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( rectPlugin, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
 
-    solidPlugin->SetGeometryShaderChannel ( CreateGeometryShaderExtrude( 1.f ) );
+    solidPlugin->SetGeometryShaderChannel ( PluginsFactory::CreateGeometryShaderExtrude( 1.f ) );
 
     root->AddPlugin(solidPlugin);
 
@@ -573,17 +575,17 @@ model::BasicNode *          ExtrudedTexturedRing()
 
     model::RingComponent *      ring        = model::RingComponent::Create(0.f, 1.5f * 3.14f, 1.f, 2.f, 200 );
 
-    model::GeometryChannel *    geomCh      = CreateGeometryChannel( ring );
+    model::GeometryChannel *    geomCh      = PluginsFactory::CreateGeometryChannel( ring );
     ringPlugin->SetGeometryChannel( geomCh );
 
 
     /// Set Transform Channel
     TransformF *    trans  = new TransformF                ();
 
-    trans->addScale( CreateConstValueFloat( 0.25f ), CreateConstValueFloat( 0.25f ), CreateConstValueFloat( 1.f ) );
-    trans->addTranslation( CreateConstValueFloat( -1.f ), CreateConstValueFloat( -1.f ), CreateConstValueFloat( 0.f ) );
+    trans->addScale( PluginsFactory::CreateConstValueFloat( 0.25f ), PluginsFactory::CreateConstValueFloat( 0.25f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans->addTranslation( PluginsFactory::CreateConstValueFloat( -1.f ), PluginsFactory::CreateConstValueFloat( -1.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
 
-    auto trasformChannel  = CreateTransformChannel( trans );
+    auto trasformChannel  = PluginsFactory::CreateTransformChannel( trans );
 
     ringPlugin->SetTransformChannel      ( trasformChannel );
 
@@ -592,9 +594,9 @@ model::BasicNode *          ExtrudedTexturedRing()
     std::vector< std::string > textures;
     textures.push_back( "simless_01.jpg" );
 
-    auto texturePlugin  = CreateTexturePlugin( ringPlugin, textures );
+    auto texturePlugin  = PluginsFactory::CreateTexturePlugin( ringPlugin, textures );
 
-    texturePlugin->SetGeometryShaderChannel ( CreateGeometryShaderExtrude( 1.f ) );
+    texturePlugin->SetGeometryShaderChannel ( PluginsFactory::CreateGeometryShaderExtrude( 1.f ) );
 
     root->AddPlugin(texturePlugin);
 

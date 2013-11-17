@@ -1,4 +1,4 @@
-#include "../TempFactory.h"
+#include "Engine/Models/Plugins/PluginsFactory.h"
 #include "TreeBuilder.h"
 #include "Engine/Models/BasicNode.h"
 #include "Mathematics/Transform/MatTransform.h"
@@ -110,13 +110,13 @@ namespace bv{
 
 		trns->addTranslation( xt, yt, zt );
 
-		trns->addScale( CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ), CreateConstValueFloat( 1.f ) );
+		trns->addScale( bv::model::PluginsFactory::CreateConstValueFloat( 1.f ), bv::model::PluginsFactory::CreateConstValueFloat( 1.f ), bv::model::PluginsFactory::CreateConstValueFloat( 1.f ) );
 
-		auto texPlugin      =   CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
+		auto texPlugin      =   bv::model::PluginsFactory::CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
 
         root->AddPlugin( texPlugin );
 
-        root->AddPlugin( CreateTransformPlugin( texPlugin, trns ) );
+        root->AddPlugin( bv::model::PluginsFactory::CreateTransformPlugin( texPlugin, trns ) );
 
 
 		return root;
@@ -153,7 +153,7 @@ namespace bv{
 		FloatInterpolator xt;
 		FloatInterpolator yt; 
 		FloatInterpolator zt;
-		FloatInterpolator rotation = CreateConstValueFloat(1.f);
+		FloatInterpolator rotation = bv::model::PluginsFactory::CreateConstValueFloat(1.f);
 		FloatInterpolator xr;
 		FloatInterpolator yr; 
 		FloatInterpolator zr;

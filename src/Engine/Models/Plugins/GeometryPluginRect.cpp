@@ -4,6 +4,8 @@
 
 #include "Engine/Models/Resources/TextureLoader.h"
 #include "Engine/Models/Plugins/Parameter.h"
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
+#include "Engine/Models/Plugins/PluginsFactory.h"
 
 
 namespace bv { namespace model {
@@ -29,6 +31,8 @@ GeometryRectPlugin::GeometryRectPlugin                    ( const FloatInterpola
     , m_width( w )
     , m_height( h )
 {
+    model::RectComponent*   rect    = model::RectComponent::Create( w.evaluate( 0.f ), h.evaluate( 0.f ) );
+    m_geomChannel                   = PluginsFactory::CreateGeometryChannel( rect );
 }
 
 // *************************************
