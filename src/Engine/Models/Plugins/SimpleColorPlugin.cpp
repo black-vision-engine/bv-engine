@@ -52,40 +52,18 @@ public:
 };
 
 SimpleColorPlugin::SimpleColorPlugin          ( const IPlugin * prev, const Vec4Interpolator& color )
-    : m_prev( prev )
+    : BasePlugin( prev )
 {
-    auto pixelShaderChannel = new SimpleColorPixelShaderChannel( color );
-
-    m_pshaderChannel = pixelShaderChannel;
+    m_pshaderChannel = new SimpleColorPixelShaderChannel( color );
 }
 
 SimpleColorPlugin::~SimpleColorPlugin         ()
 {
 }
 
-const IGeometryChannel*         SimpleColorPlugin::GetGeometryChannel          () const
-{
-    return m_prev->GetGeometryChannel();
-}
-
-const ITransformChannel*        SimpleColorPlugin::GetTransformChannel         () const
-{
-    return m_prev->GetTransformChannel();
-}
-
 const IPixelShaderChannel*      SimpleColorPlugin::GetPixelShaderChannel       () const
 {
     return m_pshaderChannel;
-}
-
-const IVertexShaderChannel*     SimpleColorPlugin::GetVertexShaderChannel      () const
-{
-    return m_prev->GetVertexShaderChannel();
-}
-
-const IGeometryShaderChannel*   SimpleColorPlugin::GetGeometryShaderChannel    () const
-{
-    return m_prev->GetGeometryShaderChannel();
 }
 
 void                            SimpleColorPlugin::Update                      ( float t )

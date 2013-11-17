@@ -6,6 +6,7 @@
 
 namespace bv { namespace model {
 
+class SimplePixelShaderChannel;
 
 // ***************************** DESCRIPTOR **********************************
 class SimplePixelShaderPluginPD : public BaseParametersDescriptor
@@ -23,19 +24,15 @@ class SimplePixelShaderPlugin : public BasePlugin< IPlugin, SimplePixelShaderPlu
 {
 private:
 
-    const IPlugin *     m_prev;
-    const std::string   m_shaderPath;
+    SimplePixelShaderChannel*   m_pshaderChannel;
+    const std::string           m_shaderPath;
 
 public:
 
     explicit                                SimplePixelShaderPlugin     ( const IPlugin * prev, const std::string& shaderPath, RendererContext * ctx = nullptr );
                                             ~SimplePixelShaderPlugin    ();
 
-    virtual const IGeometryChannel*         GetGeometryChannel          () const;
-    virtual const ITransformChannel*        GetTransformChannel         () const;
     virtual const IPixelShaderChannel*      GetPixelShaderChannel       () const;
-    virtual const IVertexShaderChannel*     GetVertexShaderChannel      () const;
-    virtual const IGeometryShaderChannel*   GetGeometryShaderChannel    () const;
 
     void                                    Update                      ( float t ) override;
     void                                    Print                       ( std::ostream & out, int tabs = 0 ) const override;

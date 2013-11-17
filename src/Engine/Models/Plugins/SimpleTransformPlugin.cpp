@@ -41,9 +41,8 @@ SimpleTransformPlugin*  SimpleTransformPlugin::Create( const IPlugin * prev, Tra
 SimpleTransformPlugin::SimpleTransformPlugin                    ( const IPlugin * prev, TransformF* trans )
     : BasePlugin( prev )
 {
-    auto transformChannel = new model::SimpleTransformChannel();
-    transformChannel->AddTransform( trans );
-    m_transformChannel = transformChannel;
+    m_transformChannel = new model::SimpleTransformChannel();
+    m_transformChannel->AddTransform( trans );
 }
 
 // *************************************

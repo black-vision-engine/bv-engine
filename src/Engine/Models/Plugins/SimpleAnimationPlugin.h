@@ -39,7 +39,7 @@ class SimpleAnimationPlugin : public BasePlugin< ISequenceAnimationSourcePlugin,
 {
 private:
 
-    const IPlugin *         m_prev;
+    GeometryChannel*        m_geomChannel;
 
     TextureAttachmentMode   m_attachmentMode;
     unsigned int            m_texCoordChannelIndex;
@@ -59,8 +59,6 @@ public:
 
     explicit                            SimpleAnimationPlugin       ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, unsigned int fps, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
                                         ~SimpleAnimationPlugin      ();
-
-    virtual const ITransformChannel *   GetTransformChannel         () const;
 
     void                                SetAttachmentMode           ( TextureAttachmentMode mode );
 

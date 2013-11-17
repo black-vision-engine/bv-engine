@@ -40,46 +40,24 @@ SimplePixelShaderPluginPD::SimplePixelShaderPluginPD()
 {}
 
 SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( const IPlugin * prev, const std::string& shaderPath, RendererContext * ctx )
-    : m_prev( prev )
+    : BasePlugin( prev )
     , m_shaderPath( shaderPath )
 {
-    auto pixelShaderChannel = new SimplePixelShaderChannel( shaderPath, ctx );
+    m_pshaderChannel = new SimplePixelShaderChannel( shaderPath, ctx );
 
     for( auto v : prev->GetPixelShaderChannel()->GetValuesList() )
     {
-        pixelShaderChannel->RegisterValue( v );
+        m_pshaderChannel->RegisterValue( v );
     }
-
-    m_pshaderChannel = pixelShaderChannel;
 }
 
 SimplePixelShaderPlugin::~SimplePixelShaderPlugin         ()
 {
 }
 
-const IGeometryChannel*         SimplePixelShaderPlugin::GetGeometryChannel          () const
-{
-    return m_prev->GetGeometryChannel();
-}
-
-const ITransformChannel*        SimplePixelShaderPlugin::GetTransformChannel         () const
-{
-    return m_prev->GetTransformChannel();
-}
-
 const IPixelShaderChannel*      SimplePixelShaderPlugin::GetPixelShaderChannel       () const
 {
     return m_pshaderChannel;
-}
-
-const IVertexShaderChannel*     SimplePixelShaderPlugin::GetVertexShaderChannel      () const
-{
-    return m_prev->GetVertexShaderChannel();
-}
-
-const IGeometryShaderChannel*   SimplePixelShaderPlugin::GetGeometryShaderChannel    () const
-{
-    return m_prev->GetGeometryShaderChannel();
 }
 
 void                            SimplePixelShaderPlugin::Update                      ( float t )

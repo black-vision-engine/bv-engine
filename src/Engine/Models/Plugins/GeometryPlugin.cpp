@@ -19,6 +19,7 @@ GeometryPluginPD::GeometryPluginPD()
 // *******************************
 //
 GeometryPlugin::GeometryPlugin  ()
+    : BasePlugin( nullptr )
 {
 }
 

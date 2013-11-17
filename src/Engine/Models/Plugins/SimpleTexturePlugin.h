@@ -27,11 +27,9 @@ public:
 class SimpleTexturePlugin : public BasePlugin< IPlugin, SimpleTexturePluginPD >
 {
 private:
-
-    const IPlugin *         m_prev;
-
     TextureAttachmentMode   m_attachmentMode;
     unsigned int            m_texCoordChannelIndex;
+    GeometryChannel*        m_geomChannel;
 
 private:
 
@@ -43,8 +41,6 @@ public:
 
     explicit                            SimpleTexturePlugin         ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
                                         ~SimpleTexturePlugin        ();
-
-    virtual const ITransformChannel*    GetTransformChannel         () const;
 
     void                                SetAttachmentMode           ( TextureAttachmentMode mode );
 

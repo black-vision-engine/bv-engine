@@ -8,6 +8,7 @@
 
 namespace bv { namespace model {
 
+class SimpleTransformChannel;
 
 // ***************************** DESCRIPTOR **********************************
 class SimpleTransformPluginPD : public BaseParametersDescriptor
@@ -23,7 +24,7 @@ public:
 // ***************************** PLUGIN ********************************** 
 class SimpleTransformPlugin : public BasePlugin< IPlugin, SimpleTransformPluginPD >
 {
-    const IPlugin*                          m_prevPlugin;
+    SimpleTransformChannel*                 m_transformChannel;
 
 public:
 

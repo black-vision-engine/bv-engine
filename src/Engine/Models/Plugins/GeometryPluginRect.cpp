@@ -25,7 +25,8 @@ GeometryRectPluginPD::GeometryRectPluginPD()
 // *************************************
 //
 GeometryRectPlugin::GeometryRectPlugin                    ( const FloatInterpolator& w, const FloatInterpolator& h )
-    : m_width( w )
+    : BasePlugin( nullptr )
+    , m_width( w )
     , m_height( h )
 {
 }

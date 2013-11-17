@@ -32,7 +32,7 @@ SimpleTexturePluginPD::SimpleTexturePluginPD()
 // *************************************
 //
 SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, TextureAttachmentMode mode )
-    : m_prev( prev )
+    : BasePlugin( prev )
     , m_attachmentMode( mode )
 {
     assert( prev != nullptr );
@@ -69,10 +69,10 @@ void                        SimpleTexturePlugin::SetAttachmentMode           ( T
 
 // *************************************
 //
-const ITransformChannel*    SimpleTexturePlugin::GetTransformChannel         () const
-{
-    return m_prev->GetTransformChannel();
-}
+//const ITransformChannel*    SimpleTexturePlugin::GetTransformChannel         () const
+//{
+//    return m_prev->GetTransformChannel();
+//}
 
 // *************************************
 //
@@ -179,7 +179,7 @@ void                SimpleTexturePlugin::Update              ( float t )
 {
     if( m_attachmentMode == TextureAttachmentMode::MM_FREE )
     {
-        if( m_prev->GetGeometryChannel()->NeedsAttributesUpdate( t ) )
+        if( m_prevPlugin->GetGeometryChannel()->NeedsAttributesUpdate( t ) )
         {
             for( unsigned int i = 0; i < m_geomChannel->GetComponents().size(); ++i )
             {

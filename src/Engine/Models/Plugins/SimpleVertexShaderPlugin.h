@@ -32,11 +32,7 @@ public:
     explicit                                SimpleVertexShaderPlugin    ( const IPlugin * prev, const std::string& shaderPath );
                                             ~SimpleVertexShaderPlugin   ();
 
-    virtual const IGeometryChannel*         GetGeometryChannel          () const;
-    virtual const ITransformChannel*        GetTransformChannel         () const;
-    virtual const IPixelShaderChannel*      GetPixelShaderChannel       () const;
     virtual const IVertexShaderChannel*     GetVertexShaderChannel      () const;
-    virtual const IGeometryShaderChannel*   GetGeometryShaderChannel    () const;
 
     void                                    Update                      ( float t ) override;
     void                                    Print                       ( std::ostream & out, int tabs = 0 ) const override;

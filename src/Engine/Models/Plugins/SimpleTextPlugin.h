@@ -29,6 +29,8 @@ class SimpleTextPlugin : public BasePlugin< IPlugin, SimpleTextPluginPD >
 {
 private:
 
+    GeometryChannel*            m_geomChannel;
+
     const FontExtraData*        m_fontExtraData;
     TextAtlas const*            m_atlasText;
     std::wstring                m_text;

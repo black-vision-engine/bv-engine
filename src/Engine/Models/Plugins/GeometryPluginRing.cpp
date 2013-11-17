@@ -24,6 +24,7 @@ GeometryRingPluginPD::GeometryRingPluginPD()
 // *************************************
 //
 GeometryRingPlugin::GeometryRingPlugin                    ()
+    : BasePlugin( nullptr )
 {
 }
 

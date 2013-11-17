@@ -20,7 +20,8 @@ SimpleTextPlugin* SimpleTextPlugin::Create( const std::wstring& text, const std:
 }
 
 SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bold, bool italic )
-    : m_text( text )
+    : BasePlugin( nullptr )
+    , m_text( text )
     , m_bolded( bold )
     , m_italic( italic )
     , m_atlasText()
@@ -184,7 +185,7 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
 
 void                SimpleTextPlugin::Update                      ( float t )
 {
-    BasePlugin::Update( t );
+    //BasePlugin::Update( t );
 }
 
 void                SimpleTextPlugin::Print                       ( std::ostream & out, int tabs ) const

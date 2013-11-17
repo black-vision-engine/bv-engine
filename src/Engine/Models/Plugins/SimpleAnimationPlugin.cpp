@@ -33,7 +33,7 @@ SimpleAnimationPluginPD::SimpleAnimationPluginPD()
 // *************************************
 //
 SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, unsigned int fps, TextureAttachmentMode mode )
-    : m_prev( prev )
+    : BasePlugin( prev )
     , m_fps( fps )
     , m_attachmentMode( mode )
     , m_startTime( -1.f )
@@ -78,13 +78,6 @@ SimpleAnimationPlugin::~SimpleAnimationPlugin        ()
 void                        SimpleAnimationPlugin::SetAttachmentMode           ( TextureAttachmentMode mode )
 {
     m_attachmentMode = mode;
-}
-
-// *************************************
-//
-const ITransformChannel *   SimpleAnimationPlugin::GetTransformChannel         () const
-{
-    return m_prev->GetTransformChannel();
 }
 
 // *************************************
@@ -241,7 +234,7 @@ void                SimpleAnimationPlugin::Update              ( float t )
 {
     if( m_attachmentMode == TextureAttachmentMode::MM_FREE )
     {
-        if( m_prev->GetGeometryChannel()->NeedsAttributesUpdate( t ) )
+        if( m_prevPlugin->GetGeometryChannel()->NeedsAttributesUpdate( t ) )
         {
             for( unsigned int i = 0; i < m_geomChannel->GetComponents().size(); ++i )
             {
