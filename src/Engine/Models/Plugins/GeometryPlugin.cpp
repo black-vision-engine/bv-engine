@@ -18,8 +18,9 @@ GeometryPluginPD::GeometryPluginPD()
 // ***************************** PLUGIN ********************************** 
 // *******************************
 //
-GeometryPlugin::GeometryPlugin  ()
+GeometryPlugin::GeometryPlugin  ( model::GeometryChannel * geomChannel )
     : BasePlugin( nullptr )
+    , m_geomChannel( geomChannel )
 {
 }
 
@@ -31,9 +32,16 @@ GeometryPlugin::~GeometryPlugin ()
 
 // *******************************
 //
+const IGeometryChannel *   GeometryPlugin::GetGeometryChannel          () const
+{
+    return m_geomChannel;
+}
+
+// *******************************
+//
 void  GeometryPlugin::Update          ( float t )
 {
-    BasePlugin::Update( t );
+    m_geomChannel->Update( t );
 }
 
 // *******************************

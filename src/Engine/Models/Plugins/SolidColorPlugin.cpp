@@ -55,7 +55,7 @@ const IPixelShaderChannel*      SolidColorPlugin::GetPixelShaderChannel       ()
 //
 void                SolidColorPlugin::Update              ( float t )
 {
-    BasePlugin::Update( t );
+    m_pixelShaderChannel->Update( t );
 }
 
 // *************************************

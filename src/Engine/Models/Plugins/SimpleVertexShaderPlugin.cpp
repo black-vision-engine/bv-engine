@@ -55,34 +55,15 @@ SimpleVertexShaderPlugin::~SimpleVertexShaderPlugin         ()
 {
 }
 
-//const IGeometryChannel*         SimpleVertexShaderPlugin::GetGeometryChannel          () const
-//{
-//    return m_prev->GetGeometryChannel();
-//}
-//
-//const ITransformChannel*        SimpleVertexShaderPlugin::GetTransformChannel         () const
-//{
-//    return m_prev->GetTransformChannel();
-//}
-//
-//const IPixelShaderChannel*      SimpleVertexShaderPlugin::GetPixelShaderChannel       () const
-//{
-//    return m_prev->GetPixelShaderChannel();
-//}
 
 const IVertexShaderChannel*     SimpleVertexShaderPlugin::GetVertexShaderChannel      () const
 {
     return m_vshaderChannel;
 }
 
-//const IGeometryShaderChannel*   SimpleVertexShaderPlugin::GetGeometryShaderChannel    () const
-//{
-//    return m_prev->GetGeometryShaderChannel();
-//}
-
 void                            SimpleVertexShaderPlugin::Update                      ( float t )
 {
-    //BasePlugin::Update( t );
+    m_vshaderChannel->Update( t );
 }
 
 void                            SimpleVertexShaderPlugin::Print                       ( std::ostream & out, int tabs ) const

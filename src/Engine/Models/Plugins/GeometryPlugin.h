@@ -8,6 +8,8 @@
 
 namespace bv { namespace model { 
 
+class GeometryChannel;
+
 // ***************************** DESCRIPTOR **********************************
 class GeometryPluginPD : public BaseParametersDescriptor
 {
@@ -21,13 +23,16 @@ public:
 // ***************************** PLUGIN ********************************** 
 class GeometryPlugin : public BasePlugin< IPlugin, GeometryPluginPD >
 {
+    GeometryChannel *   m_geomChannel;
 public:
 
-    explicit            GeometryPlugin  ();
+    explicit            GeometryPlugin  ( model::GeometryChannel * geomChannel );
                         ~GeometryPlugin ();
 
-    void                Update          ( float t ) override;
-    void                Print           ( std::ostream & out, int tabs = 0 ) const override;
+    const IGeometryChannel *    GetGeometryChannel  () const override;
+
+    void                        Update              ( float t ) override;
+    void                        Print               ( std::ostream & out, int tabs = 0 ) const override;
 
 };
 

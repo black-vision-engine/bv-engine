@@ -63,7 +63,7 @@ const IGeometryShaderChannel*   SimpleGeometryShaderPlugin::GetGeometryShaderCha
 
 void                            SimpleGeometryShaderPlugin::Update                      ( float t )
 {
-    BasePlugin::Update( t );
+    m_gshaderChannel->Update( t );
 }
 
 void                            SimpleGeometryShaderPlugin::Print                       ( std::ostream & out, int tabs ) const

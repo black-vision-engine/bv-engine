@@ -68,27 +68,25 @@ using namespace model;
 model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned int numSegments, float speedX, float speedY, float cyclesX, float cyclesY, float sizeY, float sizeZ )
 {
     model::BasicNode * root = new model::BasicNode();
-    
-    ///////////////////////////// Geometry plugin //////////////////////////
-    model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin();
 
     ///////////////////////////// Channels //////////////////////////
     model::GeometryChannel *        geomChannel     = model::GeometryChannelAnimatedVertices::Create( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
 
+    ///////////////////////////// Geometry plugin //////////////////////////
+    model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin( geomChannel );
+
+    root->AddPlugin( geomPlugin );
+
     TransformF *                    trans           = new TransformF();
-    model::SimpleTransformChannel * trasformChannel = new model::SimpleTransformChannel();
-    trasformChannel->AddTransform( trans );
 
-    geomPlugin->SetGeometryChannel  ( geomChannel );
-    geomPlugin->SetTransformChannel ( trasformChannel );
+    auto transformPlugin = PluginsFactory::CreateTransformPlugin( geomPlugin, trans );
 
+    root->AddPlugin( transformPlugin );
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
-    auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
+    auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( transformPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
 
-    ////// Add plugins to node
-    root->AddPlugin( geomPlugin );
     root->AddPlugin( solidPlugin );
 
     return root;
@@ -98,7 +96,7 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
     std::vector< std::string > textures;
     textures.push_back( "simless_00.jpg" );
 
-    auto texturePlugin = PluginsFactory::CreateTexturePlugin( geomPlugin, textures );
+    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transformPlugin, textures );
 
     root->AddPlugin( texturePlugin );
 
@@ -112,26 +110,26 @@ model::BasicNode * VariableTopologySolids( float size, float speed, float oscila
 {
     model::BasicNode * root = new model::BasicNode();
     
-    ///////////////////////////// Geometry plugin //////////////////////////
-    model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin();
-
     ///////////////////////////// Channels //////////////////////////
     model::GeometryChannel *        geomChannel     = model::GeometryChannelVariableTopology::Create( size, speed, oscilationSpeed, numSegments, numComponents );
 
-    TransformF *                    trans           = new TransformF();
-    model::SimpleTransformChannel * trasformChannel = new model::SimpleTransformChannel();
-    trasformChannel->AddTransform( trans );
+    ///////////////////////////// Geometry plugin //////////////////////////
+    model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin( geomChannel );
 
-    geomPlugin->SetGeometryChannel  ( geomChannel );
-    geomPlugin->SetTransformChannel ( trasformChannel );
+    root->AddPlugin( geomPlugin );
+
+    TransformF *                    trans           = new TransformF();
+
+    auto transformPlugin = PluginsFactory::CreateTransformPlugin( geomPlugin, trans );
+
+    root->AddPlugin( transformPlugin );
 
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
-    auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( geomPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
+    auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( transformPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
 
     //// Add plugins to node
-    root->AddPlugin( geomPlugin );
     root->AddPlugin( solidPlugin );
 
     return root;
