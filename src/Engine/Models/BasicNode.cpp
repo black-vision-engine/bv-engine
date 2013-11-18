@@ -250,6 +250,16 @@ SceneNode *                 BasicNode::BuildScene()
             }
         }
     }
+    else
+    {
+        auto p = m_plugins.back();
+
+        auto transChannel = p->GetTransformChannel();
+        assert( transChannel );
+
+        TransformUpdater * transformUpdater = new TransformUpdater( renderEnt, transChannel );
+        UpdatersManager::Get().RegisterUpdater( transformUpdater );
+    }
 
     SceneNode * ret = new SceneNode( renderEnt );
 

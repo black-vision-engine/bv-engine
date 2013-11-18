@@ -839,8 +839,8 @@ model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
 
     model::BasicNode * left = new model::BasicNode();
     TransformF * tl  = new TransformF();
-    tl->addTranslation( PluginsFactory::CreateConstValueFloat( -1.3f ), PluginsFactory::CreateConstValueFloat( 1.0f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
-    tl->addScale( PluginsFactory::CreateConstValueFloat( 0.3f ), PluginsFactory::CreateConstValueFloat( 0.1f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    tl->addTranslation( PluginsFactory::CreateConstValueFloat( -1.3f ), PluginsFactory::CreateConstValueFloat( 0.0f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    //tl->addScale( PluginsFactory::CreateConstValueFloat( 0.3f ), PluginsFactory::CreateConstValueFloat( 0.1f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
     model::SimpleTransformPlugin * ptl = model::SimpleTransformPlugin::Create( nullptr, tl );
     left->AddPlugin( ptl );
     left->AddChild( tlnode );
@@ -848,7 +848,7 @@ model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
     model::BasicNode * right = new model::BasicNode();
     TransformF * tr  = new TransformF();
     tr->addTranslation( PluginsFactory::CreateConstValueFloat( 1.3f ), PluginsFactory::CreateConstValueFloat( 0.0f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
-    tr->addScale( PluginsFactory::CreateConstValueFloat( 0.3f ), PluginsFactory::CreateConstValueFloat( 0.1f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    //tr->addScale( PluginsFactory::CreateConstValueFloat( 0.3f ), PluginsFactory::CreateConstValueFloat( 0.1f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
     model::SimpleTransformPlugin * ptr = model::SimpleTransformPlugin::Create( nullptr, tr );
     right->AddPlugin( ptr );
     right->AddChild( ntlnode );

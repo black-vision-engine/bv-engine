@@ -54,7 +54,7 @@ SimpleTransformPlugin::~SimpleTransformPlugin   ()
 //
 const ITransformChannel*        SimpleTransformPlugin::GetTransformChannel         () const
 {
-    if( m_prevPlugin->GetTransformChannel() )
+    if( m_prevPlugin && m_prevPlugin->GetTransformChannel() )
     {
         //TODO:
 
