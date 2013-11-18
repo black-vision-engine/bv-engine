@@ -304,10 +304,10 @@ model::BasicNode * NonGeometryParentRects   ( TimeType start0, TimeType stop0, T
     Vec4Interpolator colc13; colc13.setWrapPostMethod( bv::WrapMethod::pingPong ); colc13.addKey( TimeType( 0.0 ), col13 ); colc13.addKey( TimeType( 2.0 ), colb );
     Vec4Interpolator colc14; colc14.setWrapPostMethod( bv::WrapMethod::pingPong ); colc14.addKey( TimeType( 0.0 ), col14 ); colc14.addKey( TimeType( 2.0 ), colw );
 
-    ParamVec4 paramCol11 = PluginsFactory::CreateParameter( "color", colc11, timeline0 );
-    ParamVec4 paramCol12 = PluginsFactory::CreateParameter( "color", colc12, timeline1 );
-    ParamVec4 paramCol13 = PluginsFactory::CreateParameter( "color", colc13, timeline2 );
-    ParamVec4 paramCol14 = PluginsFactory::CreateParameter( "color", colc14, timeline3 );
+    ParamVec4 paramCol11 = PluginsFactory::CreateParameter( "color0", colc11, timeline0 );
+    ParamVec4 paramCol12 = PluginsFactory::CreateParameter( "color1", colc12, timeline1 );
+    ParamVec4 paramCol13 = PluginsFactory::CreateParameter( "color2", colc13, timeline2 );
+    ParamVec4 paramCol14 = PluginsFactory::CreateParameter( "color3", colc14, timeline3 );
 
     auto colorPlugin11 = PluginsFactory::CreateSimpleColorPlugin( tplugin11, paramCol11 );
     auto colorPlugin12 = PluginsFactory::CreateSimpleColorPlugin( tplugin12, paramCol12 );

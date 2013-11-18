@@ -222,12 +222,12 @@ void    Renderer::Enable              ( RenderablePass * pass, TransformableEnti
 {
     auto it = m_PdrShaderMap.find(pass);
 
-    PdrShader* shader = nullptr;
+    PdrShader * shader = nullptr;
 
-    if(it == m_PdrShaderMap.end())
+    if( it == m_PdrShaderMap.end() )
     {
-        shader = PdrShader::Create(pass->GetPixelShader(), pass->GetVertexShader(), pass->GetGeometryShader());
-        m_PdrShaderMap[pass] = shader;
+        shader = PdrShader::Create( pass->GetPixelShader(), pass->GetVertexShader(), pass->GetGeometryShader() );
+        m_PdrShaderMap[ pass ] = shader;
     }
     else
     {
@@ -241,7 +241,7 @@ void    Renderer::Enable              ( RenderablePass * pass, TransformableEnti
 
     auto projMat = glm::mat4(1.f);
 
-    if(m_Camera)
+    if( m_Camera )
     {
         projMat = m_Camera->GetProjectionMatrix();
     }

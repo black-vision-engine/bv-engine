@@ -46,7 +46,7 @@ SimplePixelShaderPluginPD::SimplePixelShaderPluginPD()
 
 // *********************************
 //
-SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( const IPlugin * prev, const std::string& shaderPath, RendererContext * ctx )
+SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( const IPlugin * prev, const std::string & shaderPath, RendererContext * ctx )
     : BasePlugin( prev )
     , m_shaderPath( shaderPath )
 {

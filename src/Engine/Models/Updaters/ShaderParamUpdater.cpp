@@ -24,7 +24,7 @@ void                        ShaderParamUpdater::DoUpdate( TimeType t )
 
     for( auto val : m_shaderChannel->GetValuesList())
     {
-        shaderParams->GetParam(val->GetName())->SetValue( val->GetData() );
+        shaderParams->GetParam( val->GetName() )->SetValue( val->GetData() );
     }
 }
 

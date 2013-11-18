@@ -40,7 +40,7 @@ public:
 
     virtual const std::string &         GetPluginName               ()                                      const;
     virtual const StringParamTypeMap &  GetParams                   ()                                      const;
-    virtual bool                        ValidateParameters          ( const std::string& programSource )    const; //FIXME: Add validation
+    virtual bool                        ValidateParameters          ( const std::string & programSource )   const; //FIXME: Add validation
 
     virtual                             ~BaseParametersDescriptor   ();
 

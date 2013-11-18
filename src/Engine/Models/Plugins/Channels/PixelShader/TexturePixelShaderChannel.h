@@ -105,7 +105,8 @@ public:
 
     virtual void                    Update( TimeType t );
 
-    TexturePixelShaderChannel( const std::string& shaderFile, const std::vector< FloatInterpolator >& alphas, const std::vector< TransformF >& texTransforms );
+    TexturePixelShaderChannel( const std::string & shaderFile, const std::vector< FloatInterpolator > & alphas, const std::vector< TransformF > & texTransforms );
+
 };
 
 } // model
