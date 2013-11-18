@@ -1,6 +1,6 @@
-#include "VertexAttributeChannelTyped.h"
+#include "AttributeChannelTyped.h"
 
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 
 
 namespace bv { namespace model
@@ -8,8 +8,8 @@ namespace bv { namespace model
 
 // *********************************
 //
-Float3VertexAttributeChannel::Float3VertexAttributeChannel  ( const VertexAttributeChannelDescriptor * desc, const std::string & name, bool readOnly )
-    : VertexAttributeChannel( desc, name, readOnly )
+Float3AttributeChannel::Float3AttributeChannel  ( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly )
+    : AttributeChannel( desc, name, readOnly )
 {
     //FIXME: typed instances should be created via factories
     assert( desc->GetType() == AttributeType::AT_FLOAT3 );
@@ -18,27 +18,27 @@ Float3VertexAttributeChannel::Float3VertexAttributeChannel  ( const VertexAttrib
 
 // *********************************
 //
-Float3VertexAttributeChannel::~Float3VertexAttributeChannel   ()
+Float3AttributeChannel::~Float3AttributeChannel   ()
 {
 }
 
 // *********************************
 //
-bool                    Float3VertexAttributeChannel::IsReadOnly   () const
+bool                    Float3AttributeChannel::IsReadOnly   () const
 {
     return false;
 }
 
 // *********************************
 //
-unsigned int            Float3VertexAttributeChannel::GetNumEntries()   const
+unsigned int            Float3AttributeChannel::GetNumEntries()   const
 {
     return m_attributes.size();
 }
 
 // *********************************
 //
-const char *            Float3VertexAttributeChannel::GetData()         const
+const char *            Float3AttributeChannel::GetData()         const
 {
     if( m_attributes.empty() )
     {
@@ -52,14 +52,14 @@ const char *            Float3VertexAttributeChannel::GetData()         const
 
 // *********************************
 //
-std::vector< glm::vec3 > &      Float3VertexAttributeChannel::GetVertices   ()
+std::vector< glm::vec3 > &      Float3AttributeChannel::GetVertices   ()
 {
     return m_attributes;
 }
 
 // *********************************
 //
-void                    Float3VertexAttributeChannel::AddVertexAttribute( const glm::vec3 & v )
+void                    Float3AttributeChannel::AddAttribute( const glm::vec3 & v )
 {
     m_attributes.push_back( v );
 }
@@ -68,8 +68,8 @@ void                    Float3VertexAttributeChannel::AddVertexAttribute( const 
 
 // *********************************
 //
-Float2VertexAttributeChannel::Float2VertexAttributeChannel  ( const VertexAttributeChannelDescriptor * desc, const std::string & name, bool readOnly )
-    : VertexAttributeChannel( desc, name, readOnly )
+Float2AttributeChannel::Float2AttributeChannel  ( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly )
+    : AttributeChannel( desc, name, readOnly )
 {
     //FIXME: typed instances should be created via factories
     assert( desc->GetType() == AttributeType::AT_FLOAT2 );
@@ -78,21 +78,21 @@ Float2VertexAttributeChannel::Float2VertexAttributeChannel  ( const VertexAttrib
 
 // *********************************
 //
-bool                    Float2VertexAttributeChannel::IsReadOnly   () const
+bool                    Float2AttributeChannel::IsReadOnly   () const
 {
     return false;
 }
 
 // *********************************
 //
-unsigned int            Float2VertexAttributeChannel::GetNumEntries()   const
+unsigned int            Float2AttributeChannel::GetNumEntries()   const
 {
     return m_attributes.size();
 }
 
 // *********************************
 //
-const char *            Float2VertexAttributeChannel::GetData()         const
+const char *            Float2AttributeChannel::GetData()         const
 {
     if( m_attributes.empty() )
     {
@@ -106,14 +106,14 @@ const char *            Float2VertexAttributeChannel::GetData()         const
 
 // *********************************
 //
-std::vector< glm::vec2 > &  Float2VertexAttributeChannel::GetVertices()
+std::vector< glm::vec2 > &  Float2AttributeChannel::GetVertices()
 {
     return m_attributes;
 }
 
 // *********************************
 //
-void                    Float2VertexAttributeChannel::AddVertexAttribute ( const glm::vec2 & v )
+void                    Float2AttributeChannel::AddAttribute ( const glm::vec2 & v )
 {
     m_attributes.push_back(v);
 }

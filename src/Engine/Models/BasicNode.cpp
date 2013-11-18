@@ -39,8 +39,8 @@
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
-#include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannel.h"
-#include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
 #include "Engine/Graphics/Resources/Textures/TextureManager.h"
 #include "Engine/Graphics/Resources/Texture2D.h"
 #include "Engine/Graphics/Resources/TextureAnimatedSequence2D.h"
@@ -352,7 +352,7 @@ bool                                BasicNode::CreateRenderableData     (/* Vert
 
     auto vertNum    = lastComponent->GetNumVertices();
 
-    auto attribChannels = lastComponent->GetVertexAttributeChannels();
+    auto attribChannels = lastComponent->GetAttributeChannels();
 
     if( attribChannels.empty() )
     {
@@ -588,7 +588,7 @@ RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDa
 
     for( auto cc : ccVec )
     {
-        assert( !cc->GetVertexAttributeChannels().empty() );
+        assert( !cc->GetAttributeChannels().empty() );
 
         vao->AddCCEntry( cc->GetNumVertices() );
 
@@ -609,7 +609,7 @@ void                            BasicNode::AddVertexDataToVBO              ( cha
 
     for( unsigned int i = 0; i < numVertices; ++i )
     {
-        for( auto vach : cc->GetVertexAttributeChannels() )
+        for( auto vach : cc->GetAttributeChannels() )
         {
             assert( vach->GetNumEntries() == numVertices );
 
@@ -633,7 +633,7 @@ VertexDescriptor *                  BasicNode::CreateVertexDescriptor          (
 
     for( unsigned int i = 0; i < desc->GetNumVertexChannels(); ++i )
     {
-        auto * channelDesc = desc->GetVertexChannelDescriptor( i );
+        auto * channelDesc = desc->GetAttrChannelDescriptor( i );
 
         //FIXME: default channel location just copied from model channel ordering (maybe it should be a permutation or something)
         vertexDescriptor->SetAttribute( i, i, attributeOffset, channelDesc->GetType(), channelDesc->GetSemantic() );

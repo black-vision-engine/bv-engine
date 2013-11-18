@@ -10,16 +10,17 @@
 namespace bv { namespace model
 {
 
-class IVertexAttributeChannel;
+class IAttributeChannel;
 
 class IConnectedComponent
 {
 public:
 
-    virtual std::vector< IVertexAttributeChannel* >     GetVertexAttributeChannels  () const = 0;
-    virtual unsigned int                                GetNumVertices              () const = 0;
+    virtual std::vector< IAttributeChannel* >       GetAttributeChannels    () const = 0;
+    virtual unsigned int                            GetNumVertices          () const = 0;
 
-    virtual                                             ~IConnectedComponent        (){};
+    virtual                                         ~IConnectedComponent    (){};
+
 };
 
 } // model

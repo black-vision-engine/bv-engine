@@ -7,7 +7,7 @@
 
 namespace bv { namespace model {
 
-class Float3VertexAttributeChannel;
+class Float3AttributeChannel;
 
 class VariableTopologyStripComponent: public ConnectedComponent
 {
@@ -28,7 +28,7 @@ private:
     float           m_startY;
     float           m_posZ;
 
-    Float3VertexAttributeChannel * m_positions;
+    Float3AttributeChannel *    m_positions;
 
 private:
 

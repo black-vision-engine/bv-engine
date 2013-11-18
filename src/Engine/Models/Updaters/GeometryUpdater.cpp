@@ -2,8 +2,8 @@
 
 #include <cassert>
 
-#include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannel.h"
-#include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryChannelDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
@@ -143,7 +143,7 @@ void    GeometryUpdater::UpdateTopology      ( TimeType t )
 
     for( auto cc : components )
     {
-        assert( !cc->GetVertexAttributeChannels().empty() );
+        assert( !cc->GetAttributeChannels().empty() );
 
         vao->AddCCEntry( cc->GetNumVertices() );
 
@@ -164,7 +164,7 @@ void    GeometryUpdater::WriteVertexDataToVBO( char * data, model::IConnectedCom
 
     for( unsigned int i = 0; i < numVertices; ++i )
     {
-        for( auto vach : cc->GetVertexAttributeChannels() )
+        for( auto vach : cc->GetAttributeChannels() )
         {
             assert( vach->GetNumEntries() == numVertices );
 

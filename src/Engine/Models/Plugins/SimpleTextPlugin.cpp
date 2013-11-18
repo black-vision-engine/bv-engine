@@ -4,8 +4,8 @@
 #include "Engine/Models/Resources/TextureLoader.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
 #include "Engine/Models/Resources/Font/FontLoader.h"
 #include "Engine/Models/Resources/Font/Text.h"
@@ -122,8 +122,8 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
 
     GeometryChannelDescriptor geomChannelDesc;
 
-    geomChannelDesc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-    geomChannelDesc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+    geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
     m_geomChannel = new GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, geomChannelDesc, true, true );
 
@@ -153,9 +153,9 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
 
         ConnectedComponent* connComp = new ConnectedComponent();
 
-        VertexAttributeChannelDescriptor * desc = new VertexAttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+        AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
 
-        auto posAttribChannel = new Float3VertexAttributeChannel( desc, "vertexPosition", true );
+        auto posAttribChannel = new Float3AttributeChannel( desc, "vertexPosition", true );
 
         auto glyph = f->GetGlyph( wch );
 
@@ -166,16 +166,16 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
         auto quadTopLeft        = glm::vec3( 0.f, (float)glyph->height / (float)viewHeight, 0.f );
         auto quadTopRight       = glm::vec3( (float)glyph->width / (float)viewWidth, (float)glyph->height / (float)viewHeight, 0.f );
 
-        posAttribChannel->AddVertexAttribute( quadBottomLeft    + translate - baring + newLineTranslation );
-        posAttribChannel->AddVertexAttribute( quadBottomRight   + translate - baring + newLineTranslation );
-        posAttribChannel->AddVertexAttribute( quadTopLeft       + translate - baring + newLineTranslation );
-        posAttribChannel->AddVertexAttribute( quadTopRight      + translate - baring + newLineTranslation );
+        posAttribChannel->AddAttribute( quadBottomLeft    + translate - baring + newLineTranslation );
+        posAttribChannel->AddAttribute( quadBottomRight   + translate - baring + newLineTranslation );
+        posAttribChannel->AddAttribute( quadTopLeft       + translate - baring + newLineTranslation );
+        posAttribChannel->AddAttribute( quadTopRight      + translate - baring + newLineTranslation );
 
-        connComp->m_vertexAttributeChannels.push_back( posAttribChannel );
+        connComp->m_attributeChannels.push_back( posAttribChannel );
 
-        VertexAttributeChannelDescriptor * desc1 = new VertexAttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+        AttributeChannelDescriptor * desc1 = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-        auto verTex0AttrChannel = new model::Float2VertexAttributeChannel( desc1, m_textures[ 0 ]->m_texName, true );
+        auto verTex0AttrChannel = new model::Float2AttributeChannel( desc1, m_textures[ 0 ]->m_texName, true );
 
         float texLeft   = ((float)glyph->textureX) / texExtraData->GetWidth();
         float texTop    = ((float)glyph->textureY) / texExtraData->GetHeight();
@@ -183,12 +183,12 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
         float texHeight = ((float)glyph->height) / texExtraData->GetHeight();
 
 
-        verTex0AttrChannel->AddVertexAttribute( glm::vec2( texLeft, texTop + texHeight ) );
-        verTex0AttrChannel->AddVertexAttribute( glm::vec2( texLeft + texWidth, texTop + texHeight ) );
-        verTex0AttrChannel->AddVertexAttribute( glm::vec2( texLeft, texTop) );
-        verTex0AttrChannel->AddVertexAttribute( glm::vec2( texLeft + texWidth, texTop ) );
+        verTex0AttrChannel->AddAttribute( glm::vec2( texLeft, texTop + texHeight ) );
+        verTex0AttrChannel->AddAttribute( glm::vec2( texLeft + texWidth, texTop + texHeight ) );
+        verTex0AttrChannel->AddAttribute( glm::vec2( texLeft, texTop) );
+        verTex0AttrChannel->AddAttribute( glm::vec2( texLeft + texWidth, texTop ) );
 
-        connComp->m_vertexAttributeChannels.push_back( verTex0AttrChannel );
+        connComp->m_attributeChannels.push_back( verTex0AttrChannel );
 
         m_geomChannel->AddConnectedComponent( connComp );
 

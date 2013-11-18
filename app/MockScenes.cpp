@@ -9,12 +9,12 @@
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
-#include "Engine/Models/Plugins/SimpleTransformPlugin.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/GeometryPluginRect.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
+#include "Engine/Models/Plugins/SimpleTransformPlugin.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
 #include <iostream>
 #include <fstream>

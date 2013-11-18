@@ -4,8 +4,8 @@
 
 #include "Engine/Models/Resources/TextureLoader.h"
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
@@ -98,7 +98,7 @@ void                        SimpleAnimationPlugin::SetAttachmentMode           (
 void SimpleAnimationPlugin::EvalGeometryChannel( const IPlugin * prev )
 {
     auto prevGeomChannel = prev->GetGeometryChannel();
-    VertexAttributeChannelDescriptor * desc = new VertexAttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
     for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
     {
@@ -106,11 +106,11 @@ void SimpleAnimationPlugin::EvalGeometryChannel( const IPlugin * prev )
         GeometryChannelDescriptor geomChannelDesc;
 
         auto prevConnComp = static_cast< const model::ConnectedComponent* >( prevGeomChannel->GetComponents()[ i ] );
-        auto prevCompChannels = prevConnComp->m_vertexAttributeChannels;
+        auto prevCompChannels = prevConnComp->m_attributeChannels;
 
         for( auto prevCompCh : prevCompChannels )
         {
-            connComp->m_vertexAttributeChannels.push_back( prevCompCh );
+            connComp->m_attributeChannels.push_back( prevCompCh );
         }
 
         if( m_geomChannel == nullptr )
@@ -118,12 +118,12 @@ void SimpleAnimationPlugin::EvalGeometryChannel( const IPlugin * prev )
             for( auto prevCompCh : prevCompChannels )
             {
                 auto prevCompChDesc = prevCompCh->GetDescriptor();
-                geomChannelDesc.AddVertexAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
+                geomChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
             }
 
             m_texCoordChannelIndex = geomChannelDesc.GetNumVertexChannels();
 
-            geomChannelDesc.AddVertexAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+            geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
             auto geomChannel = new model::GeometryChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
             m_geomChannel = geomChannel;
@@ -146,15 +146,15 @@ void SimpleAnimationPlugin::EvalGeometryChannel( const IPlugin * prev )
                 maxY = std::max( maxY, pos[ j ].y );
             }
 
-            auto verTexAttrChannel = new model::Float2VertexAttributeChannel( desc, m_textures[ 0 ]->m_texName, true );
+            auto verTexAttrChannel = new model::Float2AttributeChannel( desc, m_textures[ 0 ]->m_texName, true );
 
             for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
             {
                 const glm::vec3* pos = reinterpret_cast<const glm::vec3*>( prevCompChannels[0]->GetData() );
-                verTexAttrChannel->AddVertexAttribute( glm::vec2( ( pos[ j ].x - minX ) / ( maxX - minX ), ( pos[ j ].y - minY ) / ( maxY - minY ) ) );
+                verTexAttrChannel->AddAttribute( glm::vec2( ( pos[ j ].x - minX ) / ( maxX - minX ), ( pos[ j ].y - minY ) / ( maxY - minY ) ) );
             }
 
-            connComp->m_vertexAttributeChannels.push_back( verTexAttrChannel );
+            connComp->m_attributeChannels.push_back( verTexAttrChannel );
 
             m_geomChannel->AddConnectedComponent( connComp );
         }
@@ -177,7 +177,7 @@ namespace
 
 // *************************************
 //
-VertexAttributeChannel *  GetPositionChannel( const std::vector< VertexAttributeChannel * > & channels )
+AttributeChannel *  GetPositionChannel( const std::vector< AttributeChannel * > & channels )
 {
     if( !channels.empty() )
     {
@@ -195,7 +195,7 @@ VertexAttributeChannel *  GetPositionChannel( const std::vector< VertexAttribute
 
 // *************************************
 //
-VertexAttributeChannel*   GetUVChannel( const std::vector< VertexAttributeChannel* >& channels, unsigned int index )
+AttributeChannel*   GetUVChannel( const std::vector< AttributeChannel* >& channels, unsigned int index )
 {
     assert( !channels.empty() );
     assert( channels.size() > index );
@@ -252,13 +252,13 @@ void                SimpleAnimationPlugin::Update              ( TimeType t )
             for( unsigned int i = 0; i < m_geomChannel->GetComponents().size(); ++i )
             {
                 auto connComp = static_cast< const model::ConnectedComponent* >( m_geomChannel->GetComponents()[ i ] );
-                auto compChannels = connComp->m_vertexAttributeChannels;
+                auto compChannels = connComp->m_attributeChannels;
 
                 if( auto posChannel = GetPositionChannel( compChannels ) )
                     if( auto uvChannel = GetUVChannel( compChannels, m_texCoordChannelIndex ) )
                     {
-                        auto & verts  = dynamic_cast< Float3VertexAttributeChannel* >(posChannel)->GetVertices();
-                        auto & uvs    = dynamic_cast< Float2VertexAttributeChannel* >(uvChannel)->GetVertices();
+                        auto & verts  = dynamic_cast< Float3AttributeChannel* >(posChannel)->GetVertices();
+                        auto & uvs    = dynamic_cast< Float2AttributeChannel* >(uvChannel)->GetVertices();
 
                         for( unsigned int i = 0; i < verts.size(); ++i )
                         {

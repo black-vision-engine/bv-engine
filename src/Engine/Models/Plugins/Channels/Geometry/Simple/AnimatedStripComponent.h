@@ -5,7 +5,7 @@
 
 namespace bv { namespace model {
 
-class Float3VertexAttributeChannel;
+class Float3AttributeChannel;
 
 class AnimatedStripComponent: public ConnectedComponent
 {
@@ -20,7 +20,7 @@ private:
     float   m_sizeY;
     float   m_sizeZ;
 
-    Float3VertexAttributeChannel * m_positions;
+    Float3AttributeChannel *    m_positions;
 
 private:
 

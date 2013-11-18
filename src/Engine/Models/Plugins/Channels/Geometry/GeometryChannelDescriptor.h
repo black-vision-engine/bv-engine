@@ -10,15 +10,16 @@
 namespace bv { namespace model
 {
 
-class VertexAttributeChannelDescriptor;
+class IAttributeChannelDescriptor;
+class AttributeChannelDescriptor;
 class IndexChannelDescriptor;
 
 class GeometryChannelDescriptor : public IGeometryChannelDescriptor
 {
 private:
 
-    std::vector< const VertexAttributeChannelDescriptor * >     m_vertexAttributeChannelDescriptors;
-    IndexChannelDescriptor *                                    m_indexChannelDescriptor;
+    std::vector< const AttributeChannelDescriptor * >   m_attributeChannelDescriptors;
+    IndexChannelDescriptor *                            m_indexChannelDescriptor;
 
 public:
 
@@ -28,17 +29,17 @@ public:
     virtual unsigned int								GetNumVertexChannels		()						const;
 	virtual bool								        HasIndexChannel				()						const;
 
-	virtual const IVertexAttributeChannelDescriptor *	GetVertexChannelDescriptor	( int channelIndex )	const;
+	virtual const IAttributeChannelDescriptor *	        GetAttrChannelDescriptor	( int channelIndex )	const;
 	virtual const IIndexChannelDescriptor *		        GetIndexChannelDescriptor	()						const;
 
     virtual unsigned int                                SingleVertexEntrySize       ()                      const;
     virtual unsigned int                                SingleIndexEntrySize        ()                      const;
 
-    const VertexAttributeChannelDescriptor *            AddVertexAttrChannelDesc    ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole );
-    void                                                AddVertexAttrChannelDesc    ( const VertexAttributeChannelDescriptor * desc );
+    const AttributeChannelDescriptor *                  AddAttrChannelDesc      ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole );
+    void                                                AddAttrChannelDesc      ( const AttributeChannelDescriptor * desc );
 
-    const IndexChannelDescriptor *                      SetIndexAttrChannelDesc     ( IndexType type );
-    void                                                SetIndexAttrChannelDesc     ( IndexChannelDescriptor * desc );
+    const IndexChannelDescriptor *                      SetIndexChannelDesc     ( IndexType type );
+    void                                                SetIndexChannelDesc     ( IndexChannelDescriptor * desc );
 
 };
 

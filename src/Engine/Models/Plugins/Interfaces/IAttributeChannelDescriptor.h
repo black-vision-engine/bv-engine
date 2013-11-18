@@ -6,7 +6,7 @@
 namespace bv { namespace model
 {
 
-class IVertexAttributeChannelDescriptor
+class IAttributeChannelDescriptor
 {
 public:
 
@@ -16,7 +16,7 @@ public:
 
     virtual ChannelRole         GetChannelRole  ()  const = 0;
 
-    virtual ~IVertexAttributeChannelDescriptor  () {}
+    virtual ~IAttributeChannelDescriptor  () {}
 
 };
 

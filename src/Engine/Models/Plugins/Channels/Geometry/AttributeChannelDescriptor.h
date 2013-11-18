@@ -2,14 +2,14 @@
 
 #include <string>
 
-#include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
 
 
 namespace bv { namespace model
 {
 
 // FIXME: Czy kazdy typ moze miec kazda semantyke? I jak ewentualnie wymusic ograniczenia/wiezy?
-class VertexAttributeChannelDescriptor : public IVertexAttributeChannelDescriptor
+class AttributeChannelDescriptor : public IAttributeChannelDescriptor
 {
 private:
 
@@ -21,8 +21,8 @@ private:
 
 public:
 
-                                VertexAttributeChannelDescriptor    ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole );
-    virtual                     ~VertexAttributeChannelDescriptor   ();
+                                AttributeChannelDescriptor          ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole );
+    virtual                     ~AttributeChannelDescriptor         ();
 
     virtual AttributeType       GetType                             ()  const;
     virtual AttributeSemantic   GetSemantic                         ()  const;

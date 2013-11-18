@@ -7,26 +7,26 @@
 namespace bv { namespace model
 {
 
-class IVertexAttributeChannel;
-class VertexAttributeChannel;
+class IAttributeChannel;
+class AttributeChannel;
 
 class ConnectedComponent : public IConnectedComponent, public IUpdatable
 {
 public:
 
-    std::vector< VertexAttributeChannel * >             m_vertexAttributeChannels;
+    std::vector< AttributeChannel * >           m_attributeChannels;
 
 public:
 
-    explicit                                            ConnectedComponent          ();
-    virtual                                             ~ConnectedComponent         ();
+    explicit                                    ConnectedComponent          ();
+    virtual                                     ~ConnectedComponent         ();
 
-    virtual void                                        Update                      ( TimeType t );
+    virtual void                                Update                      ( TimeType t );
 
-    virtual std::vector< IVertexAttributeChannel* >     GetVertexAttributeChannels  () const;
+    virtual std::vector< IAttributeChannel* >   GetAttributeChannels  () const;
 
-    virtual unsigned int                                GetNumVertices              () const;
-    virtual unsigned int                                GetNumPrimitives            () const;
+    virtual unsigned int                        GetNumVertices              () const;
+    virtual unsigned int                        GetNumPrimitives            () const;
 
 };
 

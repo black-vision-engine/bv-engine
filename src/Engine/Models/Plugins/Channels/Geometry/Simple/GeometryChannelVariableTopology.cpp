@@ -7,9 +7,9 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelUtils.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/AnimatedStripComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 
-#include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/VariableTopologyStripComponent.h"
 
 

@@ -1,8 +1,8 @@
 #include "ConnectedComponent.h"
 
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 
-#include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 
 
 namespace bv { namespace model
@@ -29,22 +29,22 @@ void                                        ConnectedComponent::Update( TimeType
 
 // ************************************
 //
-std::vector< IVertexAttributeChannel* >     ConnectedComponent::GetVertexAttributeChannels  () const
+std::vector< IAttributeChannel* >     ConnectedComponent::GetAttributeChannels  () const
 {
-    return std::vector< IVertexAttributeChannel* >(m_vertexAttributeChannels.begin(), m_vertexAttributeChannels.end());
+    return std::vector< IAttributeChannel* >( m_attributeChannels.begin(), m_attributeChannels.end());
 }
 
 // ************************************
 //
 unsigned int                                ConnectedComponent::GetNumVertices              () const
 {
-    if( m_vertexAttributeChannels.empty() )
+    if( m_attributeChannels.empty() )
     {
         return 0;
     }
     else
     {
-        return m_vertexAttributeChannels[ 0 ]->GetNumEntries();
+        return m_attributeChannels[ 0 ]->GetNumEntries();
     }
 }
 

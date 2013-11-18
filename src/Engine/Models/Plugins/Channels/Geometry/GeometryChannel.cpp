@@ -4,8 +4,8 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 
 
 namespace bv { namespace model
@@ -137,7 +137,7 @@ PrimitiveType                           GeometryChannel::GetPrimitiveType    () 
 
 void                                    GeometryChannel::AddConnectedComponent( IConnectedComponent * cc )
 {
-    auto attrChannel = cc->GetVertexAttributeChannels();
+    auto attrChannel = cc->GetAttributeChannels();
 
     assert( !attrChannel.empty() );
     assert( attrChannel.size() == m_desc.GetNumVertexChannels() );
@@ -146,7 +146,7 @@ void                                    GeometryChannel::AddConnectedComponent( 
 
     for( auto attr : attrChannel )
     {
-        assert( attr->GetDescriptor()->GetType() == m_desc.GetVertexChannelDescriptor( i++ )->GetType() );
+        assert( attr->GetDescriptor()->GetType() == m_desc.GetAttrChannelDescriptor( i++ )->GetType() );
     }
 
     m_connectedComponents.push_back( static_cast< ConnectedComponent * >( cc ) );

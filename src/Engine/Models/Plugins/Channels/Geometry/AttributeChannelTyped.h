@@ -4,8 +4,8 @@
 
 #include <glm/glm.hpp>
 
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 
 #include "Engine/Types/Enums.h"
 
@@ -14,7 +14,7 @@ namespace bv { namespace model
 {
 
 //FIXME: typed instances should be created via factories
-class Float3VertexAttributeChannel : public VertexAttributeChannel
+class Float3AttributeChannel : public AttributeChannel
 {
 private:
 
@@ -22,8 +22,8 @@ private:
 
 public:
 
-    explicit                        Float3VertexAttributeChannel    ( const VertexAttributeChannelDescriptor * desc, const std::string & name, bool readOnly );
-    virtual                         ~Float3VertexAttributeChannel   ();
+    explicit                        Float3AttributeChannel          ( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly );
+    virtual                         ~Float3AttributeChannel         ();
 
     virtual void                    Update                          ( TimeType t ){} // FIXME: implement
     virtual bool                    IsReadOnly                      () const;
@@ -36,13 +36,13 @@ public:
 
     //virtual int                     GetEntrySize                    ()                      const;
 
-    void                            AddVertexAttribute              ( const glm::vec3 & v );
+    void                            AddAttribute                    ( const glm::vec3 & v );
 
 };
 
 
 //FIXME: typed instances should be created via factories
-class Float2VertexAttributeChannel : public VertexAttributeChannel
+class Float2AttributeChannel : public AttributeChannel
 {
 private:
 
@@ -50,7 +50,7 @@ private:
 
 public:
 
-    explicit                        Float2VertexAttributeChannel    ( const VertexAttributeChannelDescriptor * desc, const std::string & name, bool readOnly );
+    explicit                        Float2AttributeChannel          ( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly );
 
     virtual void                    Update                          ( TimeType t ){} // FIXME: implement
     virtual bool                    IsReadOnly                      () const;
@@ -61,11 +61,11 @@ public:
 
     //virtual int                     GetEntrySize                    ()                      const;
 
-    void                            AddVertexAttribute              ( const glm::vec2 & v );
+    void                            AddAttribute                    ( const glm::vec2 & v );
 
 };
 
 
-// TODO: Czy kazdy typ moze mieæ ka¿d¹ semantykê? 
+// TODO: Czy kazdy typ moze miec kazda semantyke? 
 } // model
 } // bv

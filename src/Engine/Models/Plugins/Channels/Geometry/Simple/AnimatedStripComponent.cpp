@@ -4,7 +4,7 @@
 
 #include "Mathematics/defines.h"
 
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
 
 namespace bv { namespace model {
@@ -22,8 +22,8 @@ AnimatedStripComponent::AnimatedStripComponent                  ( float w, float
     , m_sizeZ( sizeZ )
 {
     //FIXME: not null desc should be created via factory
-    const VertexAttributeChannelDescriptor * desc = new VertexAttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-    Float3VertexAttributeChannel * vertArrtF3 = new Float3VertexAttributeChannel( desc, desc->SuggestedDefaultName( 0 ), false );
+    const AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+    Float3AttributeChannel * vertArrtF3 = new Float3AttributeChannel( desc, desc->SuggestedDefaultName( 0 ), false );
 
     float xStart    = -w * 0.5f;
     float yStart    = -h * 0.5f;
@@ -31,20 +31,20 @@ AnimatedStripComponent::AnimatedStripComponent                  ( float w, float
     float dx        = w / (float) numSegments;
     float dy        = h;
 
-    vertArrtF3->AddVertexAttribute(glm::vec3( xStart, yStart + dy, z ) );
-    vertArrtF3->AddVertexAttribute(glm::vec3( xStart, yStart, z ) );
-    vertArrtF3->AddVertexAttribute(glm::vec3( xStart + dx, yStart + dy, z ) );
-    vertArrtF3->AddVertexAttribute(glm::vec3( xStart + dx, yStart, z ) );
+    vertArrtF3->AddAttribute(glm::vec3( xStart, yStart + dy, z ) );
+    vertArrtF3->AddAttribute(glm::vec3( xStart, yStart, z ) );
+    vertArrtF3->AddAttribute(glm::vec3( xStart + dx, yStart + dy, z ) );
+    vertArrtF3->AddAttribute(glm::vec3( xStart + dx, yStart, z ) );
     
     for ( unsigned int i = 1; i < numSegments; ++i )
     {
         xStart += dx;
 
-        vertArrtF3->AddVertexAttribute(glm::vec3( xStart + dx, yStart + dy, z ) );
-        vertArrtF3->AddVertexAttribute(glm::vec3( xStart + dx, yStart, z ) );        
+        vertArrtF3->AddAttribute(glm::vec3( xStart + dx, yStart + dy, z ) );
+        vertArrtF3->AddAttribute(glm::vec3( xStart + dx, yStart, z ) );        
     }
 
-    m_vertexAttributeChannels.push_back( vertArrtF3 );
+    m_attributeChannels.push_back( vertArrtF3 );
     m_positions = vertArrtF3;
 }
 

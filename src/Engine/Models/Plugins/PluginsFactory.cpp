@@ -85,12 +85,12 @@ model::GeometryChannel*             PluginsFactory::CreateGeometryChannel       
 {
 	model::GeometryChannelDescriptor desc;
 
-	for( auto compDesc : connComp->GetVertexAttributeChannels() )
+	for( auto compDesc : connComp->GetAttributeChannels() )
 	{
-		desc.AddVertexAttrChannelDesc( static_cast< const model::VertexAttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
+		desc.AddAttrChannelDesc( static_cast< const model::AttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
 	}
 
-	model::GeometryChannel* ret = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
+	model::GeometryChannel * ret = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
 
 	ret->AddConnectedComponent(connComp);
 

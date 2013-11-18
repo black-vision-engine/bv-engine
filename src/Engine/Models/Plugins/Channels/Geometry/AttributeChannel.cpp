@@ -1,8 +1,8 @@
-#include "VertexAttributeChannel.h"
+#include "AttributeChannel.h"
 
 #include <cassert>
 
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 
 
 namespace bv { namespace model
@@ -10,7 +10,7 @@ namespace bv { namespace model
 
 // *********************************
 //
-VertexAttributeChannel::VertexAttributeChannel( const VertexAttributeChannelDescriptor * desc, const std::string & name, bool readOnly )
+AttributeChannel::AttributeChannel( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly )
     : m_desc( desc )
     , m_name( name )
     , m_readOnly( readOnly )
@@ -20,35 +20,35 @@ VertexAttributeChannel::VertexAttributeChannel( const VertexAttributeChannelDesc
 
 // *********************************
 //
-VertexAttributeChannel::~VertexAttributeChannel ()
+AttributeChannel::~AttributeChannel ()
 {
     //FIXME: not an owner of pointed channel descriptor so don't try to touch it here
 }
 
 // *********************************
 //
-void  VertexAttributeChannel::SetReadOnly             ( bool readOnly )
+void  AttributeChannel::SetReadOnly             ( bool readOnly )
 {
     m_readOnly = readOnly;
 }
 
 // *********************************
 //
-bool  VertexAttributeChannel::IsReadOnly              ()  const
+bool  AttributeChannel::IsReadOnly              ()  const
 {
     return m_readOnly;
 }
 
 // *********************************
 //
-const IVertexAttributeChannelDescriptor *   VertexAttributeChannel::GetDescriptor           ()  const
+const IAttributeChannelDescriptor *   AttributeChannel::GetDescriptor           ()  const
 {
     return m_desc;
 }
 
 // *********************************
 //
-std::string                                 VertexAttributeChannel::GetName                 ()  const
+std::string                                 AttributeChannel::GetName                 ()  const
 {
     return m_name;
 }

@@ -5,7 +5,7 @@
 
 #include "Mathematics/defines.h"
 
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
 
 namespace bv { namespace model {
@@ -34,8 +34,8 @@ VariableTopologyStripComponent::VariableTopologyStripComponent                  
     m_activeSegment = 0;
 
     //FIXME: not null desc should be created via factory
-    const VertexAttributeChannelDescriptor * desc = new VertexAttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-    Float3VertexAttributeChannel * vertArrtF3 = new Float3VertexAttributeChannel( desc, desc->SuggestedDefaultName( 0 ), false );
+    const AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+    Float3AttributeChannel * vertArrtF3 = new Float3AttributeChannel( desc, desc->SuggestedDefaultName( 0 ), false );
 
     //First part of first strip
     glm::vec3 f0 = EvaluateFunction( 0.f );
@@ -46,12 +46,12 @@ VariableTopologyStripComponent::VariableTopologyStripComponent                  
     glm::vec3 n1 = EvaluateNormal( EvaluateVelocity( m_segmentDeltaTime ) );
 
     //Add one segment (just so that something is rendered)
-    vertArrtF3->AddVertexAttribute( TopPosition( f0, n0 ) );
-    vertArrtF3->AddVertexAttribute( BottomPosition( f0, n0 ) );
-    vertArrtF3->AddVertexAttribute( TopPosition( f1, n1 ) );
-    vertArrtF3->AddVertexAttribute( BottomPosition( f1, n1 ) );
+    vertArrtF3->AddAttribute( TopPosition( f0, n0 ) );
+    vertArrtF3->AddAttribute( BottomPosition( f0, n0 ) );
+    vertArrtF3->AddAttribute( TopPosition( f1, n1 ) );
+    vertArrtF3->AddAttribute( BottomPosition( f1, n1 ) );
 
-    m_vertexAttributeChannels.push_back( vertArrtF3 );
+    m_attributeChannels.push_back( vertArrtF3 );
     m_positions = vertArrtF3;
 }
 
@@ -83,8 +83,8 @@ void                     VariableTopologyStripComponent::Update         ( TimeTy
     glm::vec3 f = EvaluateFunction( t );
     glm::vec3 n = EvaluateNormal( EvaluateVelocity( t ) );
 
-    m_positions->AddVertexAttribute( TopPosition( f, n ) );
-    m_positions->AddVertexAttribute( BottomPosition( f, n ) );
+    m_positions->AddAttribute( TopPosition( f, n ) );
+    m_positions->AddAttribute( BottomPosition( f, n ) );
 }
 
 // *******************************

@@ -5,9 +5,9 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 
-#include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 
 
 namespace bv { namespace model {
@@ -18,9 +18,9 @@ GeometryChannelDescriptor   DescriptorFromConnectedComponent( const ConnectedCom
 {
     GeometryChannelDescriptor desc;
 
-    for( auto compDesc : cc->GetVertexAttributeChannels() )
+    for( auto compDesc : cc->GetAttributeChannels() )
     {
-        desc.AddVertexAttrChannelDesc( static_cast< const model::VertexAttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
+        desc.AddAttrChannelDesc( static_cast< const model::AttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
     }
 
     return desc;

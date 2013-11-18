@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Interfaces/IVertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 
 #include "Mathematics/Interpolators/Interpolators.h"
 
@@ -19,7 +19,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/AnimatedStripComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RingComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelDescriptor.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
 
 #include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
