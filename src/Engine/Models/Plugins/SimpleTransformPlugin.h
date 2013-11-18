@@ -9,6 +9,7 @@
 namespace bv { namespace model {
 
 class SimpleTransformChannel;
+class ParamTransform;
 
 // ***************************** DESCRIPTOR **********************************
 class SimpleTransformPluginPD : public BaseParametersDescriptor
@@ -30,7 +31,7 @@ private:
 
 public:
 
-    explicit                                SimpleTransformPlugin       ( const IPlugin * prev, TransformF* trans );
+    explicit                                SimpleTransformPlugin       ( const IPlugin * prev, const ParamTransform& trans );
                                             ~SimpleTransformPlugin      ();
 
     virtual const ITransformChannel*        GetTransformChannel         () const;
@@ -38,7 +39,7 @@ public:
     virtual void                            Update                      ( TimeType t ) override;
     virtual void                            Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
-    static  SimpleTransformPlugin*          Create                      ( const IPlugin * prev, TransformF* trans );
+    static  SimpleTransformPlugin*          Create                      ( const IPlugin * prev, const ParamTransform& trans );
 };
 
 } // model

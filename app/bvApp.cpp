@@ -7,7 +7,6 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
-#include "Engine/Models/ModelFactory.h"
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/ModelScene.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"

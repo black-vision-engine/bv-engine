@@ -8,6 +8,7 @@
 
 namespace bv { namespace model {
 
+class ParamFloat;
 
 // ***************************** DESCRIPTOR **********************************
 class GeometryMultiRectPluginPD : public BaseParametersDescriptor
@@ -37,7 +38,7 @@ public:
     void                                Update                      ( TimeType t ) override;
     void                                Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
-    void                                AddRectConnectedComponnent  ( const FloatInterpolator& w, const FloatInterpolator& h, const FloatInterpolator& tx, const FloatInterpolator& ty, const FloatInterpolator& tz );
+    void                                AddRectConnectedComponnent  ( const ParamFloat& w, const ParamFloat& h, const ParamFloat& tx, const ParamFloat& ty, const ParamFloat& tz );
     void                                AddRectConnectedComponnent  ( float w, float h, float tx = 0.f, float ty = 0.f, float tz = 0.f );
 
 };

@@ -24,14 +24,14 @@ public:
 
 class ExtrudeGeometryShaderChannel : public model::ShaderChannel< IGeometryShaderChannel, ExtrudeGeometryShaderChannelPD >
 {
-    FloatInterpolator                m_scale;
-    model::ValueFloat*               m_scaleVal;
+    ParamFloat                      m_scale;
+    model::ValueFloat*              m_scaleVal;
 
 public:
 
     virtual void                    Update                          ( TimeType t );
 
-    explicit                        ExtrudeGeometryShaderChannel    ( const std::string & shaderFile, const FloatInterpolator & scale );
+    explicit                        ExtrudeGeometryShaderChannel    ( const std::string & shaderFile, const ParamFloat & scale );
     virtual                         ~ExtrudeGeometryShaderChannel   ();
 
 };

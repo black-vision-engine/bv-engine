@@ -4,10 +4,10 @@
 
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/PluginParameters.h"
+#include "Engine/Models/Plugins/Parameter.h"
 
 
 namespace bv { namespace model {
-
 
 // ***************************** DESCRIPTOR **********************************
 class GeometryRectPluginPD : public BaseParametersDescriptor
@@ -25,11 +25,11 @@ class GeometryRectPlugin : public BasePlugin< IPlugin, GeometryRectPluginPD >
 private:
 
     model::GeometryChannel *    m_geomChannel;
-    FloatInterpolator           m_width;
-    FloatInterpolator           m_height;
+    ParamFloat                  m_width;
+    ParamFloat                  m_height;
 
 public:
-    explicit            GeometryRectPlugin    ( const FloatInterpolator& w, const FloatInterpolator& h );
+    explicit            GeometryRectPlugin    ( const ParamFloat& w, const ParamFloat& h );
                         ~GeometryRectPlugin   ();
 
     virtual const IGeometryChannel *    GetGeometryChannel          () const override;

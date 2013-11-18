@@ -3,7 +3,7 @@
 #include "Mathematics/Transform/MatTransform.h"
 
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
-
+#include "Engine/Models/Plugins/Parameter.h"
 
 namespace bv { namespace model
 {
@@ -12,13 +12,13 @@ class SimpleTransformChannel : public TransformChannel
 {
 private:
 
-    std::vector< TransformF* >                      m_transformInterpolators;
+    std::vector< ParamTransform >                   m_transformParams;
 
 public:
 
     virtual void                                    Update( TimeType t );
 
-    void                                            AddTransform( TransformF* transInt );
+    void                                            AddTransform( const ParamTransform& transInt );
 
 };
 

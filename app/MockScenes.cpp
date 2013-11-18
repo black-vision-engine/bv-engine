@@ -3,7 +3,6 @@
 #include "Engine/Models/BasicNode.h"
 #include "Mathematics/Transform/MatTransform.h"
 #include "Engine/Models/Plugins/Parameter.h"
-#include "Engine/Models/ModelFactory.h"
 #include "Engine/Models/Plugins/SimpleTexturePlugin.h"
 #include "Engine/Models/Plugins/SimpleTextPlugin.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
@@ -142,7 +141,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 
     model::BasicNode * root = new model::BasicNode();
 
-    TransformF *    trns  = new TransformF                ();
+    TransformF     trns;
 
     FloatInterpolator angle; angle.setWrapPostMethod(bv::WrapMethod::pingPong);
     FloatInterpolator x;
@@ -164,11 +163,11 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
         angle.addKey(6.5f, 0.f);
     }
 
-    trns->addRotation(angle, x, y ,z);
+    trns.addRotation(angle, x, y ,z);
 
 
-    TransformF * tx0m = new TransformF();
-    TransformF * tx1m = new TransformF();
+    TransformF tx0m;
+    TransformF tx1m;
 
     FloatInterpolator alpha;
 
@@ -215,8 +214,8 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
         angTex1.addKey(12.f, 120.f);
     }
 
-    tx0m->addRotation( angTex0, x, y, z ); //FIXME: memory lik
-    tx1m->addRotation( angTex1, x, y, z ); //FIXME: memory lik
+    tx0m.addRotation( angTex0, x, y, z ); //FIXME: memory lik
+    tx1m.addRotation( angTex1, x, y, z ); //FIXME: memory lik
 
     FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
     FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
@@ -240,7 +239,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
         zs.addKey(0.f, 1.f);
     }
 
-    trns->addScale(xs, ys ,zs);
+    trns.addScale(xs, ys ,zs);
 
     if( numcall == 1 )
     {
@@ -248,21 +247,19 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
         FloatInterpolator yt; yt.addKey( 0.0f, 0.0f );
         FloatInterpolator zt; zt.addKey( 0.0f, 0.1f );
 
-        trns->addTranslation( xt, yt, zt );
+        trns.addTranslation( xt, yt, zt );
     }
 
     /////////////////////////////// SimpleRect plugin //////////////////////////////////
 
-    FloatInterpolator w;
-    FloatInterpolator h;
-    w.addKey( 0.f, 1.f );
-    h.addKey( 0.f, 1.f );
+    auto w = model::PluginsFactory::CreateParameter( "width", model::PluginsFactory::CreateConstValueFloat( 1.f ) );
+    auto h = model::PluginsFactory::CreateParameter( "height", model::PluginsFactory::CreateConstValueFloat( 1.f )  );
 
     model::GeometryRectPlugin    * rectPlugin  = new model::GeometryRectPlugin( w, h );
     
     root->AddPlugin( rectPlugin );
 
-    model::SimpleTransformPlugin      * stpl  = model::PluginsFactory::CreateTransformPlugin( rectPlugin, trns );
+    model::SimpleTransformPlugin      * stpl  = model::PluginsFactory::CreateTransformPlugin( rectPlugin, model::PluginsFactory::CreateParameter( "transformation", trns ) );
 
     root->AddPlugin( stpl );
 
@@ -329,16 +326,16 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     
     root->AddPlugin( rectPlugin );
 
-    TransformF * trns = new TransformF();
+    TransformF trns;
 
     FloatInterpolator angle; angle.setWrapPostMethod(bv::WrapMethod::pingPong);
 
     angle.addKey(0.f, 0.f);
     angle.addKey(5.f, 360.f);
 
-    trns->addRotation(angle, ConstValue( 0.f ), ConstValue( 0.f ), ConstValue( 1.f ) );
+    trns.addRotation(angle, ConstValue( 0.f ), ConstValue( 0.f ), ConstValue( 1.f ) );
 
-    auto transformPlugin  =  model::PluginsFactory::CreateTransformPlugin( rectPlugin, trns );
+    auto transformPlugin  =  model::PluginsFactory::CreateTransformPlugin( rectPlugin, model::PluginsFactory::CreateParameter( "transformation", trns ) );
     
     root->AddPlugin( transformPlugin );
 
@@ -354,11 +351,11 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     alpha.addKey( 8.0f, 0.75f );
     alpha.addKey( 10.0f, 0.2f );
 
-    TransformF * tx0m = new TransformF();
-    tx0m->addScale( ConstValue( 1.0f ), alpha, ConstValue( 1.0f ) );
+    TransformF tx0m;
+    tx0m.addScale( ConstValue( 1.0f ), alpha, ConstValue( 1.0f ) );
 
-    TransformF * tx1m = new TransformF();    
-    tx1m->addScale( alpha, ConstValue( 1.0f ), ConstValue( 1.0f ) );
+    TransformF tx1m;    
+    tx1m.addScale( alpha, ConstValue( 1.0f ), ConstValue( 1.0f ) );
 
     std::vector< std::string > textures;
     textures.push_back( "simless_00.jpg" );
@@ -523,8 +520,8 @@ model::BasicNode* SceneExamples::BuildMockScene(bv::model::BasicNode * parent )
     angle.addKey(0.f, 0.f);
     angle.addKey(5.f, 180.f);
 
-    bv::TransformF* trans = new bv::TransformF();
-    trans->addTransform(new bv::RotationF(angle, x,y,z));
+    bv::TransformF trans;
+    trans.addTransform(bv::RotationF(angle, x,y,z));
 //    bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
 
     //FIXME:

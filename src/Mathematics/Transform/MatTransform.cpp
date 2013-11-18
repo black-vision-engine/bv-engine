@@ -46,12 +46,7 @@ Rotation<ParamT>::Rotation(ParamT angle, ParamT p0, ParamT p1, ParamT p2)
 
 template<typename ParamT>
 CompositeTransform<ParamT>::~CompositeTransform()
-{
-    for(unsigned int i = 0; i < transformations.size(); ++i)
-    {
-        delete transformations[i];
-    }
-}
+{}
 
 template<typename ParamT>
 int CompositeTransform<ParamT>::evalToCBuffer(typename ParamT::TimeT t,char * buf) const
@@ -78,11 +73,11 @@ void CompositeTransform<ParamT>::addScale( ParamT s0, ParamT s1, ParamT s2 )
 template<typename ParamT>
 void CompositeTransform<ParamT>::addRotation( ParamT angle, ParamT r0, ParamT r1, ParamT r2 )
 {
-    transformations.push_back(new Rotation<ParamT>(angle, r0, r1, r2));
+    transformations.push_back( Rotation<ParamT>(angle, r0, r1, r2) );
 }
 
 template<typename ParamT>
-void CompositeTransform<ParamT>::addTransform(SimpleTransform<ParamT>* trans)
+void CompositeTransform<ParamT>::addTransform(const SimpleTransform<ParamT>& trans)
 {
     transformations.push_back(trans);
 }
@@ -100,15 +95,13 @@ unsigned int CompositeTransform<ParamT>::size() const
 template<typename ParamT>
 SimpleTransform<ParamT>& CompositeTransform<ParamT>::operator[](unsigned int i)
 {
-    assert(transformations[i] != nullptr);
-    return *transformations[i];
+    return transformations[i];
 }
 
 template<typename ParamT>
 const SimpleTransform<ParamT>& CompositeTransform<ParamT>::operator[](unsigned int i) const
 {
-    assert(transformations[i] != nullptr);
-    return *transformations[i];
+    return transformations[i];
 }
 
 template<typename ParamT>
@@ -117,7 +110,7 @@ glm::mat4x4 CompositeTransform<ParamT>::evaluate(typename ParamT::TimeT t) const
     glm::mat4x4 ret(1.0f);
     for(unsigned int i = 0; i < transformations.size(); ++i)
     {
-        ret *= transformations[i]->evaluate(t);
+        ret *= transformations[i].evaluate(t);
     }
 
     return ret; 

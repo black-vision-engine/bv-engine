@@ -42,15 +42,23 @@ ParamVec4                          PluginsFactory::CreateParameter              
 
 // *******************************
 //
+ParamFloat                          PluginsFactory::CreateParameter                     ( const std::string & name, FloatInterpolator & interpolator, const Timeline * timeline )
+{
+    return ParamFloat( name, interpolator, timeline );
+}
+
+// *******************************
+//
+ParamTransform                       PluginsFactory::CreateParameter                     ( const std::string & name, const TransformF & interpolator, const Timeline * timeline )
+{
+    return ParamTransform( name, interpolator, timeline );
+}
+
+// *******************************
+//
 model::GeometryRectPlugin *         PluginsFactory::CreateGeometryRectPlugin            ( float w, float h )
 {
-	FloatInterpolator wi; wi.setWrapPostMethod( bv::WrapMethod::pingPong );
-	FloatInterpolator hi; hi.setWrapPostMethod( bv::WrapMethod::pingPong );
-    
-	wi.addKey(0.f, w);
-	hi.addKey(0.f, h);
-
-    auto rectPlugin = new model::GeometryRectPlugin(wi, hi);
+    auto rectPlugin = new model::GeometryRectPlugin(CreateParameter("width", CreateConstValueFloat( w )), CreateParameter("height", CreateConstValueFloat( h )));
 
 	return rectPlugin;
 }
@@ -91,7 +99,7 @@ model::GeometryChannel*             PluginsFactory::CreateGeometryChannel       
 
 // *******************************
 //
-model::TransformChannel*           PluginsFactory::CreateTransformChannel              (TransformF* transformation)
+model::TransformChannel*           PluginsFactory::CreateTransformChannel              ( const ParamTransform& transformation )
 {
 	model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
 	trasformChannel->AddTransform( transformation );
@@ -103,7 +111,7 @@ model::TransformChannel*           PluginsFactory::CreateTransformChannel       
 //
 model::SolidColorPlugin*            PluginsFactory::CreateSolidColorPlugin              (model::IPlugin* prevPlugin, const glm::vec4& color)
 {
-	auto solidPlugin = new model::SolidColorPlugin( prevPlugin, CreateConstValueVec4( color ) );
+	auto solidPlugin = new model::SolidColorPlugin( prevPlugin, CreateParameter( "color", CreateConstValueVec4( color ) ) );
 
 	// Set Pixel Shader Channel
 	
@@ -140,16 +148,16 @@ model::SimpleTextPlugin *            PluginsFactory::CreateTextPlugin           
 
 // *******************************
 //
-model::SimpleTransformPlugin *      PluginsFactory::CreateTransformPlugin               ( const model::IPlugin * prev, TransformF * trans )
+model::SimpleTransformPlugin *      PluginsFactory::CreateTransformPlugin               ( const model::IPlugin * prev, const ParamTransform& transformation )
 {
-    return model::SimpleTransformPlugin::Create( prev, trans );
+    return model::SimpleTransformPlugin::Create( prev, transformation );
 }
 
 // *******************************
 //
 model::IGeometryShaderChannel *     PluginsFactory::CreateGeometryShaderExtrude         ( float scale )
 {
-	FloatInterpolator extrudeScale = CreateConstValueFloat( scale );
+    auto extrudeScale = CreateParameter( "scale", CreateConstValueFloat( scale ) );
 	return new model::ExtrudeGeometryShaderChannel("../dep/media/shaders/extrude.geom", extrudeScale);
 }
 

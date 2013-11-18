@@ -7,6 +7,7 @@
 namespace bv { namespace model {
 
 class SolidColorShaderChannel;
+class ParamVec4;
 
 // ***************************** DESCRIPTOR **********************************
 class SolidColorPluginPD : public BaseParametersDescriptor
@@ -29,7 +30,7 @@ private:
 
 public:
 
-    explicit                                SolidColorPlugin            ( const IPlugin * prev, const Vec4Interpolator& color );
+    explicit                                SolidColorPlugin            ( const IPlugin * prev, const ParamVec4& color );
                                             ~SolidColorPlugin           ();
 
     virtual const IPixelShaderChannel *     GetPixelShaderChannel       () const;

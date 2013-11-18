@@ -46,7 +46,6 @@
     <ClCompile Include="Engine\Graphics\SceneGraph\TriangleStrip.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\ShaderParamDesc.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\ShaderParam.cpp" />
-    <ClCompile Include="Engine\Models\ModelFactory.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderableEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderablePass.cpp" />
     <ClCompile Include="Engine\Models\Updaters\TransformUpdater.cpp" />
@@ -193,7 +192,6 @@
     <ClInclude Include="Engine\Graphics\Shaders\ShaderParamDesc.h" />
     <ClInclude Include="Engine\Graphics\Shaders\ShaderParam.h" />
     <ClInclude Include="Engine\Graphics\Shaders\ShaderParameters.h" />
-    <ClInclude Include="Engine\Models\ModelFactory.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderableEffect.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderablePass.h" />
     <ClInclude Include="Engine\Models\Updaters\TransformUpdater.h" />

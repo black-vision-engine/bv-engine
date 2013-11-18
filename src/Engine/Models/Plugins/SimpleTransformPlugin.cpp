@@ -31,14 +31,15 @@ SimpleTransformPluginPD::SimpleTransformPluginPD()
 
 // *************************************
 //
-SimpleTransformPlugin*  SimpleTransformPlugin::Create( const IPlugin * prev, TransformF* trans )
+SimpleTransformPlugin*  SimpleTransformPlugin::Create( const IPlugin * prev, const ParamTransform& trans )
 {
-    return new SimpleTransformPlugin( prev, trans );
+    auto p = new SimpleTransformPlugin( prev, trans );
+    return p;
 }
 
 // *************************************
 //
-SimpleTransformPlugin::SimpleTransformPlugin                    ( const IPlugin * prev, TransformF* trans )
+SimpleTransformPlugin::SimpleTransformPlugin                    ( const IPlugin * prev, const ParamTransform& trans )
     : BasePlugin( prev )
 {
     m_transformChannel = new model::SimpleTransformChannel();

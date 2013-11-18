@@ -8,7 +8,7 @@ const std::string ExtrudeGeometryShaderChannelPD::scaleParamName = "scale";
 
 // ******************************
 //
-ExtrudeGeometryShaderChannel::ExtrudeGeometryShaderChannel(const std::string& shaderFile, const FloatInterpolator& scale)
+ExtrudeGeometryShaderChannel::ExtrudeGeometryShaderChannel(const std::string& shaderFile, const ParamFloat& scale)
     : ShaderChannel( shaderFile  )
     , m_scale( scale )
 {
@@ -27,7 +27,7 @@ ExtrudeGeometryShaderChannel::~ExtrudeGeometryShaderChannel()
 //
 void             ExtrudeGeometryShaderChannel::Update( TimeType t )
 {
-    m_scaleVal->SetValue( m_scale.evaluate( t ) );
+    m_scaleVal->SetValue( m_scale.Evaluate( t ) );
     ShaderChannel::Update( t );
 }
 

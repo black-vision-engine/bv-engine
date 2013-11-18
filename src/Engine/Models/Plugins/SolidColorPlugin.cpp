@@ -30,7 +30,7 @@ SolidColorPluginPD::SolidColorPluginPD()
 
 // *************************************
 //
-SolidColorPlugin::SolidColorPlugin                    ( const IPlugin * prev, const Vec4Interpolator& color )
+SolidColorPlugin::SolidColorPlugin                    ( const IPlugin * prev, const ParamVec4& color )
     : BasePlugin( prev )
 {
     m_pixelShaderChannel = new model::SolidColorShaderChannel( "../dep/media/shaders/solid.frag", color );

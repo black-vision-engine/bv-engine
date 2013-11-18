@@ -96,7 +96,7 @@ namespace bv{
 
 
 
-		TransformF *    trns  = new TransformF                ();
+		TransformF     trns;
 
 		FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
 		FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
@@ -108,15 +108,15 @@ namespace bv{
 
 		yt.addKey(30.f, 5.f);
 
-		trns->addTranslation( xt, yt, zt );
+		trns.addTranslation( xt, yt, zt );
 
-		trns->addScale( bv::model::PluginsFactory::CreateConstValueFloat( 1.f ), bv::model::PluginsFactory::CreateConstValueFloat( 1.f ), bv::model::PluginsFactory::CreateConstValueFloat( 1.f ) );
+		trns.addScale( bv::model::PluginsFactory::CreateConstValueFloat( 1.f ), bv::model::PluginsFactory::CreateConstValueFloat( 1.f ), bv::model::PluginsFactory::CreateConstValueFloat( 1.f ) );
 
 		auto texPlugin      =   bv::model::PluginsFactory::CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
 
         root->AddPlugin( texPlugin );
 
-        root->AddPlugin( bv::model::PluginsFactory::CreateTransformPlugin( texPlugin, trns ) );
+        root->AddPlugin( bv::model::PluginsFactory::CreateTransformPlugin( texPlugin, model::PluginsFactory::CreateParameter( "transformation", trns ) ) );
 
 
 		return root;
@@ -148,7 +148,7 @@ namespace bv{
 	}
 	void AttachGeometryPlugin(model::BasicNode *EngineNode, string pluginName, vector<Property> properties, vector<NonLinearProperty> non_linear_properties)
 	{
-		TransformF *    trns  = new TransformF                ();
+		TransformF     trns;
 		
 		FloatInterpolator xt;
 		FloatInterpolator yt; 
@@ -197,9 +197,9 @@ namespace bv{
 				Current->addKey(tF,hF);
 			}
 		}
-		trns->addTranslation( xt, yt, zt );
-		trns->addScale(xs,ys,zs);
-		trns->addRotation(rotation,xr,yr,zr);
+		trns.addTranslation( xt, yt, zt );
+		trns.addScale(xs,ys,zs);
+		trns.addRotation(rotation,xr,yr,zr);
 	}
 	
 
