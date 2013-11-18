@@ -18,7 +18,7 @@ private:
 
     Camera *            m_pCamera;
 
-    Vec3Interpolator *  m_pPosition;
+    Vec3Interpolator *  m_pPosition; // Change to ParamVec3
     Vec3Interpolator *  m_pDirection;
     Vec3Interpolator *  m_pUp;
 
