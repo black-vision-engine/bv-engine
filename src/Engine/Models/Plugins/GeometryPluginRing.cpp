@@ -48,7 +48,7 @@ const IGeometryChannel *    GeometryRingPlugin::GetGeometryChannel          () c
 
 // *************************************
 //
-void                GeometryRingPlugin::Update              ( float t )
+void                GeometryRingPlugin::Update              ( TimeType t )
 {
     m_geomChannel->Update( t );
 }

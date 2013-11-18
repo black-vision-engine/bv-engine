@@ -25,7 +25,7 @@ void UpdatersManager::UpdateStep        ( TimeType t )
 {
     for( auto updater : m_updaters )
     {
-        updater->Update( t );
+        updater->DoUpdate( t );
     }
 }
 

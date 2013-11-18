@@ -46,7 +46,7 @@ GeometryChannel::~GeometryChannel   ()
 
 // *********************************
 //
-void                                    GeometryChannel::Update              ( float t )
+void                                    GeometryChannel::Update              ( TimeType t )
 {
     //FIXME: not necesarrily like this but it has to be thought over
     //FIXME: it is best to assume that Update is called from the first to last plugin and state is well defined and each plugin just has to read predcessor's state (without calling Update)
@@ -74,14 +74,14 @@ bool                                    GeometryChannel::IsTimeInvariant     () 
 
 // *********************************
 //
-bool                                    GeometryChannel::NeedsAttributesUpdate( float t ) const
+bool                                    GeometryChannel::NeedsAttributesUpdate( TimeType t ) const
 {
     return m_needsAttributesUpdate;
 }
 
 // *********************************
 //
-bool                                    GeometryChannel::NeedsTopologyUpdate ( float t ) const
+bool                                    GeometryChannel::NeedsTopologyUpdate ( TimeType t ) const
 {
     return m_needsTopologyUpdate;
 }

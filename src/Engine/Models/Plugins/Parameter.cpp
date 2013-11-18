@@ -5,28 +5,28 @@ namespace bv { namespace model {
 
 // *******************************
 //
-void            BaseParameter::SetLastEvaluatedTime( float t ) const
+void            BaseParameter::SetLastEvaluatedTime ( TimeType t ) const
 {
     m_lastEvaluatedTime = t;
 }
 
 // *******************************
 //
-float           BaseParameter::GetLastEvaluatedTime()          const
+TimeType        BaseParameter::GetLastEvaluatedTime ()          const
 {
     return m_lastEvaluatedTime;
 }
 
 // *******************************
 //
-bool            BaseParameter::IsEvaluationNeeded( float t )     const
+bool            BaseParameter::IsEvaluationNeeded   ( TimeType t )     const
 {
     return t != m_lastEvaluatedTime;
 }
 
 // *******************************
 //
-BaseParameter::BaseParameter( const std::string& name, ParameterSemantic semantic, const ITimeEvaluator * evaluator )
+BaseParameter::BaseParameter( const std::string & name, ParameterSemantic semantic, const ITimeEvaluator * evaluator )
     : m_lastEvaluatedTime( -1.f ) // TODO: Is it goot idea to set in to -1 ?
     , m_timeEvaluator( evaluator )
 {
@@ -37,7 +37,7 @@ BaseParameter::BaseParameter( const std::string& name, ParameterSemantic semanti
 }
 
 // *******************************
-//
+// 
 ValueFloat::ValueFloat( const std::string& name )
     : BaseValue( name )
 {
@@ -45,14 +45,14 @@ ValueFloat::ValueFloat( const std::string& name )
 
 // *******************************
 //
-ValueVec4::ValueVec4( const std::string& name)
+ValueVec4::ValueVec4( const std::string & name)
     : BaseValue( name )
 {
 }
 
 // *******************************
 //
-ValueMat4::ValueMat4( const std::string& name )
+ValueMat4::ValueMat4( const std::string & name )
     : BaseValue( name )
 {
 }
@@ -61,6 +61,7 @@ ValueMat4::ValueMat4( const std::string& name )
 //                                               
 float       ParamFloat::Evaluate        ( TimeType t )   const
 {                                                
+    t = BaseParameter::GetEvaluationTime( t );
     SetLastEvaluatedTime( t );
     return m_value.evaluate( t );
 }                                                
@@ -69,6 +70,7 @@ float       ParamFloat::Evaluate        ( TimeType t )   const
 //                                               
 glm::vec4       ParamVec4::Evaluate     ( TimeType t )    const
 {
+    t = BaseParameter::GetEvaluationTime( t );
     SetLastEvaluatedTime( t );
     return m_value.evaluate( t );
 }
@@ -77,6 +79,8 @@ glm::vec4       ParamVec4::Evaluate     ( TimeType t )    const
 //
 glm::mat2           ParamMat2::Evaluate ( TimeType t )   const
 {
+    t = BaseParameter::GetEvaluationTime( t );
+
     SetLastEvaluatedTime( t );
     glm::vec4 v = m_value.evaluate( t );
 

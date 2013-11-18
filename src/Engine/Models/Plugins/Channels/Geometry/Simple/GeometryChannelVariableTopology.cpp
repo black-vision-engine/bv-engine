@@ -42,25 +42,25 @@ GeometryChannelVariableTopology::~GeometryChannelVariableTopology    ()
 
 // ******************************
 //
-void    GeometryChannelVariableTopology::Update                      ( float t )
+void    GeometryChannelVariableTopology::Update                      ( TimeType t )
 {
     if( !m_needMoreUpdates )
     {
         return;
     }
 
-    float pauseTime = 1.f;
-    float totalTime = 0.f;
+    TimeType pauseTime = TimeType( 1.0 );
+    TimeType totalTime = TimeType( 0.0 );
 
     for( int i = 0; i < m_numActiveComponents; ++i )
     {
         totalTime += pauseTime + m_vtConnectedComponents[ i ]->ComponentDuration();
     }
 
-    float totalActiveTime = totalTime - pauseTime;
+    TimeType totalActiveTime = totalTime - pauseTime;
     auto cc = m_vtConnectedComponents[ m_curComponent ];
 
-    float locTime = t - m_curComponentStartTime;
+    TimeType locTime = t - m_curComponentStartTime;
 
     if ( locTime < cc->ComponentDuration() ) //active component requires update
     {
@@ -88,14 +88,14 @@ void    GeometryChannelVariableTopology::Update                      ( float t )
 
 // ******************************
 //
-bool    GeometryChannelVariableTopology::NeedsAttributesUpdate        ( float t ) const
+bool    GeometryChannelVariableTopology::NeedsAttributesUpdate        ( TimeType t ) const
 {
     return false;
 }
 
 // ******************************
 //
-bool    GeometryChannelVariableTopology::NeedsTopologyUpdate         ( float t ) const
+bool    GeometryChannelVariableTopology::NeedsTopologyUpdate         ( TimeType t ) const
 {
     return m_vtConnectedComponents[ m_curComponent ]->TopologyChanged( t );
 }
@@ -109,7 +109,7 @@ bool    GeometryChannelVariableTopology::IsTimeInvariant            () const
 
 // ******************************
 //
-bool    GeometryChannelVariableTopology::CanBeConnectedTo                    ( IGeometryChannel * channel ) const
+bool    GeometryChannelVariableTopology::CanBeConnectedTo           ( IGeometryChannel * channel ) const
 {
     return false;
 }
@@ -159,7 +159,7 @@ GeometryChannelVariableTopology *   GeometryChannelVariableTopology::Create  ( f
     GeometryChannelVariableTopology * channel = new GeometryChannelVariableTopology( size, speed, oscilationSpeed, numSegments, numComponents );
     
     float defaultSpeed = speed;
-    float defaultDuration = 4.0f;
+    TimeType defaultDuration = TimeType( 4.0 );
     float defaultOscilation = oscilationSpeed;
     float defaultScale = 1.f;
     float radius = 3.5f;
@@ -169,7 +169,7 @@ GeometryChannelVariableTopology *   GeometryChannelVariableTopology::Create  ( f
     {
         float alpha = (float) i * TWOPI_F / (float) numComponents;
 
-        float duration = defaultDuration / (float) (i + 1);
+        TimeType duration = defaultDuration / (TimeType) (i + 1);
         float oscilation = defaultOscilation * (float) (i + 1) * 0.6f;
         float scale = defaultScale / (float) (i + 1);
 

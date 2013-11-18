@@ -18,13 +18,13 @@ ShaderParamUpdater::ShaderParamUpdater( const model::IShaderChannel * shCh, Shad
 
 // ******************************
 //
-void                        ShaderParamUpdater::Update( float t )
+void                        ShaderParamUpdater::DoUpdate( TimeType t )
 {
     auto shaderParams = m_shader->Parameters();
 
     for( auto val : m_shaderChannel->GetValuesList())
     {
-        shaderParams->GetParam(val->GetName())->SetValue(val->GetData());
+        shaderParams->GetParam(val->GetName())->SetValue( val->GetData() );
     }
 }
 

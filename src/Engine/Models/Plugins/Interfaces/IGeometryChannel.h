@@ -28,8 +28,8 @@ public:
 
     virtual bool                                    IsTimeInvariant     ()                              const = 0;
 
-    virtual bool                                    NeedsAttributesUpdate( float t )                    const = 0;
-    virtual bool                                    NeedsTopologyUpdate  ( float t )                    const = 0;
+    virtual bool                                    NeedsAttributesUpdate( TimeType t )                 const = 0;
+    virtual bool                                    NeedsTopologyUpdate  ( TimeType t )                 const = 0;
 
     virtual unsigned int                            TotalNumVertices    ()                              const = 0;
 

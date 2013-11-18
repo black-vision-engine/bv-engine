@@ -1,5 +1,7 @@
 #pragma once
 
+#include "System/BasicTypes.h"
+
 
 namespace bv
 {
@@ -20,7 +22,7 @@ public:
       This is called prior to every frame. Float
       was chosen arbitrarily now.
       */
-    virtual void	update		( float t )			= 0;
+    virtual void	update		( TimeType t )      = 0;
 
     /**
       Scene drawing. Will be updated during

@@ -25,7 +25,7 @@ TransformUpdater::~TransformUpdater   ()
     //FIXME: Really?
 }
 
-void    TransformUpdater::Update( float t )
+void    TransformUpdater::DoUpdate( TimeType t )
 {
     //FIXME: rili rili
     m_out->m_localTransform.Reset();

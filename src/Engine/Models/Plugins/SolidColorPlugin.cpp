@@ -53,7 +53,7 @@ const IPixelShaderChannel*      SolidColorPlugin::GetPixelShaderChannel       ()
 
 // *************************************
 //
-void                SolidColorPlugin::Update              ( float t )
+void                SolidColorPlugin::Update              ( TimeType t )
 {
     m_pixelShaderChannel->Update( t );
 }

@@ -11,22 +11,22 @@ CameraUpdater*   CameraUpdater::Create(Camera* camera, Vec3Interpolator* pos, Ve
     return new CameraUpdater(camera, pos, dir, up);
 }
 
-void        CameraUpdater::Update(float t)
+void        CameraUpdater::DoUpdate( TimeType t )
 {
     glm::vec3 pos;
     glm::vec3 dir;
     glm::vec3 up;
 
-    if(m_pPosition != nullptr)
-        pos = m_pPosition->evaluate(t);
+    if( m_pPosition != nullptr )
+        pos = m_pPosition->evaluate( t );
 
     if(m_pDirection != nullptr)
-        dir = m_pDirection->evaluate(t);
+        dir = m_pDirection->evaluate( t );
 
     if(m_pUp != nullptr)
-        up = m_pUp->evaluate(t);
+        up = m_pUp->evaluate( t );
 
-    m_pCamera->SetFrame(pos, dir, up);
+    m_pCamera->SetFrame( pos, dir, up );
 }
 
 } // bv

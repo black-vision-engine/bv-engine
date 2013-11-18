@@ -13,7 +13,7 @@ TexturePixelShaderChannelPD::StringsVector TexturePixelShaderChannelPD::txMatrix
 
 // ******************************
 //
-void TexturePixelShaderChannel::Update( float t )
+void TexturePixelShaderChannel::Update( TimeType t )
 {
     ShaderChannel::Update( t );
 

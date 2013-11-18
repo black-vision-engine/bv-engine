@@ -27,7 +27,7 @@ NodeUpdater::~NodeUpdater    ()
 
 // *****************************
 //
-void    NodeUpdater::Update          ( float t )
+void    NodeUpdater::DoUpdate        ( TimeType t )
 {
     //FIXME: it is just a single bool to set, so no there is no fancy machinery for testing whehter any update is necessary 
     m_out->SetVisible( m_in->IsVisible( t ) );

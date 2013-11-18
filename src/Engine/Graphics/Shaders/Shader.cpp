@@ -73,8 +73,8 @@ const std::string & Shader::ProgramSource       () const
 void                Shader::Update              ()
 {
     //FIXME: ?????
-    if(m_paramUpdater)
-        m_paramUpdater->Update(0.f);
+    if( m_paramUpdater )
+        m_paramUpdater->DoUpdate( 0.f );
 }
 
 // *********************************

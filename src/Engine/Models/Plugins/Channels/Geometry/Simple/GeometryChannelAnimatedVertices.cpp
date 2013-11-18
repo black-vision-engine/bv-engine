@@ -35,7 +35,7 @@ GeometryChannelAnimatedVertices::~GeometryChannelAnimatedVertices    ()
 
 // ******************************
 //
-void    GeometryChannelAnimatedVertices::Update                      ( float t )
+void    GeometryChannelAnimatedVertices::Update                      ( TimeType t )
 {
     assert( m_connectedComponents.size() == 1 );
 
@@ -44,7 +44,7 @@ void    GeometryChannelAnimatedVertices::Update                      ( float t )
 
 // ******************************
 //
-bool    GeometryChannelAnimatedVertices::NeedsAttributesUpdate        ( float t ) const
+bool    GeometryChannelAnimatedVertices::NeedsAttributesUpdate      ( TimeType t ) const
 {
     return true;
 }

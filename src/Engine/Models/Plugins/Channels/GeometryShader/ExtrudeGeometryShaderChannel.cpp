@@ -25,7 +25,7 @@ ExtrudeGeometryShaderChannel::~ExtrudeGeometryShaderChannel()
 
 // ******************************
 //
-void             ExtrudeGeometryShaderChannel::Update( float t )
+void             ExtrudeGeometryShaderChannel::Update( TimeType t )
 {
     m_scaleVal->SetValue( m_scale.evaluate( t ) );
     ShaderChannel::Update( t );

@@ -14,11 +14,15 @@ namespace bv { namespace model {
 
 const std::string SimpleTextPluginPD::pluginName = "SimpleTextPlugin";
 
+// *********************************
+//
 SimpleTextPlugin* SimpleTextPlugin::Create( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bold, bool italic )
 {
     return new SimpleTextPlugin( text, fontFileName, fontSize, bold, italic );
 }
 
+// *********************************
+//
 SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bold, bool italic )
     : BasePlugin( nullptr )
     , m_text( text )
@@ -35,9 +39,14 @@ SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::str
     EvalGeometryChannel();
 }
 
+// *********************************
+//
 SimpleTextPlugin::~SimpleTextPlugin   ()
-{}
+{
+}
 
+// *********************************
+//
 void SimpleTextPlugin::LoadAtlas( const std::string& name )
 {
     delete m_atlasText;
@@ -67,6 +76,8 @@ void SimpleTextPlugin::LoadAtlas( const std::string& name )
 }
 
 
+// *********************************
+//
 const Text*         SimpleTextPlugin::GetFont() const
 {
     if( !m_bolded && !m_italic )
@@ -101,6 +112,8 @@ const Text*         SimpleTextPlugin::GetFont() const
 #define viewWidth   100
 #define viewHeight  100
 
+// *********************************
+//
 void                SimpleTextPlugin::EvalGeometryChannel( )
 {
     LoadAtlas( "AtlasTex" ) ;
@@ -183,20 +196,25 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
     } 
 }
 
+// *********************************
+//
 const IGeometryChannel *    SimpleTextPlugin::GetGeometryChannel          () const
 {
     return m_geomChannel;
 }
 
-void                SimpleTextPlugin::Update                      ( float t )
+// *********************************
+//
+void                SimpleTextPlugin::Update                      ( TimeType t )
 {
     m_geomChannel->Update( t );
 }
 
+// *********************************
+//
 void                SimpleTextPlugin::Print                       ( std::ostream & out, int tabs ) const
 {
 }
-
 
 } // model
 } // bv

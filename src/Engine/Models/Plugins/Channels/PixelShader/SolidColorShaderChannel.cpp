@@ -18,7 +18,7 @@ SolidColorShaderChannel::SolidColorShaderChannel(const std::string& shaderFile, 
 
 // ******************************
 //
-void             SolidColorShaderChannel::Update( float t )
+void             SolidColorShaderChannel::Update( TimeType t )
 {
     m_solidColorVal->SetValue( m_solidColor.evaluate( t ) );
     ShaderChannel::Update( t );

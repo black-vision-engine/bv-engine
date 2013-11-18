@@ -30,7 +30,7 @@ SequenceAnimationUpdater::~SequenceAnimationUpdater       ()
 
 // **********************************
 //
-void    SequenceAnimationUpdater::Update                  ( float t )
+void    SequenceAnimationUpdater::DoUpdate                ( TimeType t )
 {
     unsigned int txFrame    = m_out->GetActiveTextureNum();
     unsigned int srcFrame   = m_in->CurrentFrame( t );

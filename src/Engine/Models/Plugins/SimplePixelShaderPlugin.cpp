@@ -8,12 +8,14 @@ namespace bv { namespace model {
 class SimplePixelShaderChannelPD : public BaseParametersDescriptor
 {
 public:
+
     static const std::string            pluginName;// FIXME: To jest tu niepotrzebne
 
     explicit SimplePixelShaderChannelPD()
         : BaseParametersDescriptor( pluginName ) 
     {
     }
+
 };
 
 const std::string SimplePixelShaderChannelPD::pluginName = "PluginName";
@@ -22,11 +24,11 @@ class SimplePixelShaderChannel : public PixelShaderChannelBase< SimplePixelShade
 {
 public:
 
-    explicit                        SimplePixelShaderChannel( const std::string& shaderFile, RendererContext * ctx = nullptr )
+    explicit                        SimplePixelShaderChannel( const std::string & shaderFile, RendererContext * ctx = nullptr )
         : PixelShaderChannelBase( shaderFile, ctx )
     {}
 
-    virtual void                    Update( float t )
+    virtual void                    Update( TimeType t )
     {
         ShaderChannel::Update( t );
     }
@@ -35,10 +37,15 @@ public:
 
 const std::string SimplePixelShaderPluginPD::pluginName = "PluginName";
 
+// *********************************
+//
 SimplePixelShaderPluginPD::SimplePixelShaderPluginPD()
     : BaseParametersDescriptor( pluginName ) 
-{}
+{
+}
 
+// *********************************
+//
 SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( const IPlugin * prev, const std::string& shaderPath, RendererContext * ctx )
     : BasePlugin( prev )
     , m_shaderPath( shaderPath )
@@ -51,16 +58,22 @@ SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( const IPlugin * prev
     }
 }
 
+// *********************************
+//
 SimplePixelShaderPlugin::~SimplePixelShaderPlugin         ()
 {
 }
 
-const IPixelShaderChannel*      SimplePixelShaderPlugin::GetPixelShaderChannel       () const
+// *********************************
+//
+const IPixelShaderChannel *     SimplePixelShaderPlugin::GetPixelShaderChannel       () const
 {
     return m_pshaderChannel;
 }
 
-void                            SimplePixelShaderPlugin::Update                      ( float t )
+// *********************************
+//
+void                            SimplePixelShaderPlugin::Update                      ( TimeType t )
 {
     m_pshaderChannel->Update( t );
 }

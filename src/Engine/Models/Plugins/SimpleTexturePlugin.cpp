@@ -195,7 +195,7 @@ VertexAttributeChannel*   GetUVChannel( const std::vector< VertexAttributeChanne
 
 // *************************************
 //
-void                SimpleTexturePlugin::Update              ( float t )
+void                SimpleTexturePlugin::Update              ( TimeType t )
 {
     if( m_attachmentMode == TextureAttachmentMode::MM_FREE )
     {

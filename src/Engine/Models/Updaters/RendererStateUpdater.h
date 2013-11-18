@@ -24,7 +24,7 @@ public:
                     RenderStateUpdater     ( StateInstance * out , const model::RendererContext * in ); 
                     ~RenderStateUpdater    ();
 
-    virtual void    Update                  ( TimeType t );
+    virtual void    DoUpdate               ( TimeType t );
 
 };
 

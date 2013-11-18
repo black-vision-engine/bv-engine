@@ -48,8 +48,8 @@ private:
     TextureAttachmentMode       m_attachmentMode;
     unsigned int                m_texCoordChannelIndex;
 
-    mutable float           m_startTime;
-    float                   m_secsPerFrame;
+    mutable TimeType            m_startTime;
+    TimeType                    m_secsPerFrame;
 
     unsigned int            m_numFrames;
     unsigned int            m_fps;
@@ -72,8 +72,8 @@ public:
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;                                       
 
     // ISequenceAnimationSource
-    virtual unsigned int                CurrentFrame                ( float t ) const;
-    virtual unsigned int                PredictedNextFrame          ( float t ) const;
+    virtual unsigned int                CurrentFrame                ( TimeType t ) const;
+    virtual unsigned int                PredictedNextFrame          ( TimeType t ) const;
 
     virtual bool                        HasAnimatingTexture         () const;
     virtual ISequenceAnimationSource *  QuerySequenceAnimationSource();

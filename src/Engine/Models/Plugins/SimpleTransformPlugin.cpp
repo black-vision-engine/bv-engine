@@ -66,7 +66,7 @@ const ITransformChannel*        SimpleTransformPlugin::GetTransformChannel      
 
 // *************************************
 //
-void                SimpleTransformPlugin::Update              ( float t )
+void                SimpleTransformPlugin::Update              ( TimeType t )
 {
     m_transformChannel->Update( t );
 }

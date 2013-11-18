@@ -16,8 +16,8 @@ private:
     float           m_size;
     float           m_speed;
     float           m_oscilationSpeed;
-    float           m_segmentDeltaTime;
-    float           m_activeDuration;
+    TimeType        m_segmentDeltaTime;
+    TimeType        m_activeDuration;
     float           m_mainScale;
 
     int             numSegments;
@@ -32,7 +32,7 @@ private:
 
 private:
 
-                        VariableTopologyStripComponent  ( float size, float speed, float duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ );
+                        VariableTopologyStripComponent  ( float size, float speed, TimeType duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ );
                         ~VariableTopologyStripComponent ();
 
 public:
@@ -42,7 +42,7 @@ public:
 
     virtual void        Update                          ( TimeType t );
 
-    float               ComponentDuration               () const;
+    TimeType            ComponentDuration               () const;
 
 private:
 
@@ -55,7 +55,7 @@ private:
 
 public:
 
-    static  VariableTopologyStripComponent *    Create  ( float size, float speed, float duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ );
+    static  VariableTopologyStripComponent *    Create  ( float size, float speed, TimeType duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ );
 
 };
 

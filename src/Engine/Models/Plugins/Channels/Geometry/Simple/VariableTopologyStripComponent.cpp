@@ -12,7 +12,7 @@ namespace bv { namespace model {
 
 // *******************************
 //
-VariableTopologyStripComponent::VariableTopologyStripComponent                  ( float size, float speed, float duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ )
+VariableTopologyStripComponent::VariableTopologyStripComponent                  ( float size, float speed, TimeType duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ )
     : m_size( size )
     , m_speed( speed )
     , m_activeDuration( duration )
@@ -57,7 +57,7 @@ VariableTopologyStripComponent::VariableTopologyStripComponent                  
 
 // *******************************
 //
-void                     VariableTopologyStripComponent::Update         ( float t )
+void                     VariableTopologyStripComponent::Update         ( TimeType t )
 {
     if ( !IsActive( t ) )
     {
@@ -89,9 +89,9 @@ void                     VariableTopologyStripComponent::Update         ( float 
 
 // *******************************
 //
-float               VariableTopologyStripComponent::ComponentDuration           () const
+TimeType               VariableTopologyStripComponent::ComponentDuration           () const
 {
-    return m_activeDuration / m_speed;
+    return m_activeDuration / TimeType( m_speed );
 }
 
 // *******************************
@@ -102,14 +102,14 @@ VariableTopologyStripComponent::~VariableTopologyStripComponent                 
 
 // *******************************
 //
-bool                                VariableTopologyStripComponent::IsActive    ( float t ) const
+bool                                VariableTopologyStripComponent::IsActive    ( TimeType t ) const
 {
     return t * m_speed < m_activeDuration;
 }
 
 // *******************************
 //
-bool                VariableTopologyStripComponent::TopologyChanged             ( float t ) const
+bool                VariableTopologyStripComponent::TopologyChanged             ( TimeType t ) const
 {
     bool retVal = m_topologyChanged;
     m_topologyChanged = false;
@@ -119,19 +119,19 @@ bool                VariableTopologyStripComponent::TopologyChanged             
 
 // *******************************
 //
-glm::vec3               VariableTopologyStripComponent::EvaluateFunction                ( float t ) const
+glm::vec3               VariableTopologyStripComponent::EvaluateFunction        ( TimeType t ) const
 {
-    float val =  m_mainScale * sinf( t * m_oscilationSpeed );
-    float x   = t * m_speed;
+    float val =  m_mainScale * sinf( float( t ) * m_oscilationSpeed );
+    float x   = float( t ) * m_speed;
 
-    return glm::vec3(x, val, 0.f) + glm::vec3(m_startX,m_startY, m_posZ);
+    return glm::vec3( x, val, 0.f ) + glm::vec3( m_startX,m_startY, m_posZ );
 }
 
 // *******************************
 //
-glm::vec3           VariableTopologyStripComponent::EvaluateVelocity                ( float t ) const
+glm::vec3           VariableTopologyStripComponent::EvaluateVelocity            ( TimeType t ) const
 {
-    return glm::vec3( m_speed, m_oscilationSpeed * m_mainScale * cosf( t * m_oscilationSpeed ), 0.f );
+    return glm::vec3( m_speed, m_oscilationSpeed * m_mainScale * cosf( float( t ) * m_oscilationSpeed ), 0.f );
 }
 
 // *******************************
@@ -157,7 +157,7 @@ glm::vec3           VariableTopologyStripComponent::BottomPosition              
 
 // *******************************
 //
-VariableTopologyStripComponent *  VariableTopologyStripComponent::Create        ( float size, float speed, float duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ )
+VariableTopologyStripComponent *  VariableTopologyStripComponent::Create        ( float size, float speed, TimeType duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ )
 {
     assert( numSegments >= 1 );
 

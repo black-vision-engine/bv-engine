@@ -5,6 +5,8 @@
 
 #include <glm/glm.hpp>
 
+#include "System/BasicTypes.h"
+
 
 namespace bv
 {
@@ -16,7 +18,7 @@ namespace
     }
 
     template<class TimeValueT, class ValueT>
-    ValueT evaluateLinear(const Key<TimeValueT, ValueT>& k0, const Key<TimeValueT, ValueT>& k1, TimeValueT t)
+    ValueT evaluateLinear(const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT, ValueT> & k1, TimeValueT t)
     {
         if (!(k0.t <= k1.t && k0.t <= t && t <= k1.t))
         {
@@ -25,13 +27,12 @@ namespace
 
         assert(k0.t <= k1.t && k0.t <= t && t <= k1.t);
 
-        if( k0.t == k1.t)
+        if( k0.t == k1.t )
             return k0.val;
 
-        auto scl = (TimeValueT)1.0 / (k1.t - k0.t);
-        auto w0 = scl * (k1.t - t);
-        auto w1 = (TimeValueT)1.0 - w0;
-
+        ValueT scl =ValueT((TimeValueT)1.0 / (k1.t - k0.t));
+        ValueT w0 = ValueT(scl * ValueT(k1.t - t));
+        ValueT w1 = ValueT((ValueT)1.0 - w0);
 
         ValueT v0 = k0.val;
         ValueT v1 = k1.val;
@@ -366,8 +367,11 @@ template bv::BasicInterpolator<TYPE,TYPE>;
 
 INSTANTIATE(float)
 INSTANTIATE(double)
+INSTANTIATE(bv::TimeType)
 
-template bv::BasicInterpolator<float, glm::vec3>;
-template bv::BasicInterpolator<float, glm::vec4>;
+template bv::BasicInterpolator<bv::TimeType, float>;
+template bv::BasicInterpolator<bv::TimeType, double>;
+template bv::BasicInterpolator<bv::TimeType, glm::vec3>;
+template bv::BasicInterpolator<bv::TimeType, glm::vec4>;
 
 #undef INSTANTIATE

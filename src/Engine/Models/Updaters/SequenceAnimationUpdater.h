@@ -24,7 +24,7 @@ public:
                     SequenceAnimationUpdater        ( TextureAnimatedSequence2D * out , const model::ISequenceAnimationSource * in ); 
                     ~SequenceAnimationUpdater       ();
 
-    virtual void    Update                          ( TimeType t );
+    virtual void    DoUpdate                        ( TimeType t );
 
 };
 

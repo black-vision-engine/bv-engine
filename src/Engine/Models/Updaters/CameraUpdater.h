@@ -16,17 +16,17 @@ class CameraUpdater : public IUpdater
 {
 private:
 
-    Camera*             m_pCamera;
+    Camera *            m_pCamera;
 
-    Vec3Interpolator*   m_pPosition;
-    Vec3Interpolator*   m_pDirection;
-    Vec3Interpolator*   m_pUp;
+    Vec3Interpolator *  m_pPosition;
+    Vec3Interpolator *  m_pDirection;
+    Vec3Interpolator *  m_pUp;
 
 public:
 
-    virtual void            Update( TimeType t );
+    virtual void            DoUpdate    ( TimeType t );
 
-    static CameraUpdater*   Create( Camera* camera, Vec3Interpolator* pos, Vec3Interpolator* dir, Vec3Interpolator* up );
+    static CameraUpdater *  Create      ( Camera* camera, Vec3Interpolator* pos, Vec3Interpolator* dir, Vec3Interpolator* up );
 
 private:
 

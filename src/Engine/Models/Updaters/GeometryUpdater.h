@@ -26,7 +26,7 @@ public:
                     GeometryUpdater     ( RenderableEntity * out, const model::IGeometryChannel * in ); 
                     ~GeometryUpdater    ();
 
-    virtual void    Update              ( TimeType t );
+    virtual void    DoUpdate            ( TimeType t );
 
 private:
 

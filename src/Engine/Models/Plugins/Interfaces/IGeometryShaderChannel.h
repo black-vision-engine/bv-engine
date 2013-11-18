@@ -11,6 +11,7 @@ class IGeometryShaderChannel : public IShaderChannel
 public:
 
     virtual         ~IGeometryShaderChannel(){};
+
 };
 
 } // model

@@ -19,7 +19,7 @@ class BasicScene : public IScene
 public:
 
     virtual void	        initScene();
-    virtual void	        update( float t );
+    virtual void	        update( TimeType t );
     virtual void            render( Renderer* renderer );
     virtual void	        resize( int w, int h );
 

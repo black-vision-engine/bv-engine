@@ -13,16 +13,16 @@ private:
 
     std::vector< VariableTopologyStripComponent  * >    m_vtConnectedComponents;
 
-    float   m_size;
-    float   m_speed;
+    float       m_size;
+    float       m_speed;
 
-    int     m_numSegments;
-    int     m_numComponents;
+    int         m_numSegments;
+    int         m_numComponents;
 
-    bool    m_needMoreUpdates;
-    float   m_curComponentStartTime;
-    int     m_numActiveComponents;
-    int     m_curComponent;
+    bool        m_needMoreUpdates;
+    TimeType    m_curComponentStartTime;
+    int         m_numActiveComponents;
+    int         m_curComponent;
 
 private:
 

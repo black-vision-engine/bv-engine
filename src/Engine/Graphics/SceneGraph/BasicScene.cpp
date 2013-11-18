@@ -27,7 +27,7 @@ void BasicScene::initScene()
 
 // *********************************
 //
-void BasicScene::update( float t )
+void BasicScene::update( TimeType t )
 {
 //    m_treeSceneRoot->update(t);
 }

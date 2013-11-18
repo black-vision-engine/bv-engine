@@ -26,9 +26,10 @@ private:
 
 public:
 
-    virtual void                    Update              ( TimeType t );
+    virtual void                    DoUpdate            ( TimeType t );
+
     static ShaderParamUpdater *     Create              ( const model::IShaderChannel *, Shader * );
 
 };
 
-}
+} //bv

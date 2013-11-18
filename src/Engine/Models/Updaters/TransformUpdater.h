@@ -25,11 +25,11 @@ private:
 
 public:
             //FIXME: transform updater should use new implementation based on channels
-            TransformUpdater    ( TransformableEntity * out, const model::ITransformChannel * in ); 
-            ~TransformUpdater   ();
+                    TransformUpdater    ( TransformableEntity * out, const model::ITransformChannel * in ); 
+                    ~TransformUpdater   ();
 
-   virtual  void    Update      ( TimeType t );
+   virtual  void    DoUpdate            ( TimeType t );
 
 };
 
-}
+} //bv

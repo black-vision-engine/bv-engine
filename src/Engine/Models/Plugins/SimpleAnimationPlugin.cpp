@@ -208,9 +208,9 @@ VertexAttributeChannel*   GetUVChannel( const std::vector< VertexAttributeChanne
 
 // *************************************
 //
-unsigned int        SimpleAnimationPlugin::CurrentFrame        ( float t ) const
+unsigned int        SimpleAnimationPlugin::CurrentFrame        ( TimeType t ) const
 {
-    if( m_startTime < 0.0f )
+    if( m_startTime < TimeType( 0.0 ) )
     {
         m_startTime = t;
     }
@@ -222,9 +222,9 @@ unsigned int        SimpleAnimationPlugin::CurrentFrame        ( float t ) const
 
 // *************************************
 //
-unsigned int        SimpleAnimationPlugin::PredictedNextFrame  ( float t ) const
+unsigned int        SimpleAnimationPlugin::PredictedNextFrame  ( TimeType t ) const
 {
-    return ( 1 + CurrentFrame( t ) ) % m_numFrames;
+    return ( 1 + CurrentFrame( t ) ) % m_numFrames; //FIXME: this sux - it strongly depends on Timeline used possible time modifications (e.g. playing backwards)
 }
 
 // *************************************
@@ -243,7 +243,7 @@ ISequenceAnimationSource *  SimpleAnimationPlugin::QuerySequenceAnimationSource(
 
 // *************************************
 //
-void                SimpleAnimationPlugin::Update              ( float t )
+void                SimpleAnimationPlugin::Update              ( TimeType t )
 {
     if( m_attachmentMode == TextureAttachmentMode::MM_FREE )
     {

@@ -10,6 +10,7 @@ namespace bv { namespace model {
 class SimpleColorPixelShaderChannelPD : public BaseParametersDescriptor
 {
 public:
+
     static const std::string            pluginName;// FIXME: To jest tu niepotrzebne
     static const std::string            colorParamName;
 
@@ -17,6 +18,7 @@ public:
         : BaseParametersDescriptor( pluginName ) 
     {
     }
+
 };
 
 const std::string SimpleColorPixelShaderChannelPD::pluginName       = "PluginName";
@@ -24,9 +26,12 @@ const std::string SimpleColorPixelShaderChannelPD::colorParamName   = "color";
 
 const std::string SimpleColorPluginPD::pluginName       = "PluginName";
 
+// *********************************
+//
 SimpleColorPluginPD::SimpleColorPluginPD()
     : BaseParametersDescriptor( pluginName )
-{}
+{
+}
 
 class SimpleColorPixelShaderChannel : public PixelShaderChannelBase< SimpleColorPixelShaderChannelPD >
 {
@@ -35,7 +40,7 @@ class SimpleColorPixelShaderChannel : public PixelShaderChannelBase< SimpleColor
 
 public:
 
-    explicit                        SimpleColorPixelShaderChannel( const Vec4Interpolator& color )
+    explicit                        SimpleColorPixelShaderChannel( const Vec4Interpolator & color )
         : PixelShaderChannelBase( "" )// FIXME:
         , m_color( color )
     {
@@ -43,7 +48,7 @@ public:
         RegisterValue( m_colorVal );
     }
 
-    virtual void                    Update( float t )
+    virtual void                    Update( TimeType t )
     {
         m_colorVal->SetValue( m_color.evaluate( t ) );
         ShaderChannel::Update( t );
@@ -51,26 +56,36 @@ public:
 
 };
 
-SimpleColorPlugin::SimpleColorPlugin          ( const IPlugin * prev, const Vec4Interpolator& color )
+// *********************************
+//
+SimpleColorPlugin::SimpleColorPlugin          ( const IPlugin * prev, const Vec4Interpolator & color )
     : BasePlugin( prev )
 {
     m_pshaderChannel = new SimpleColorPixelShaderChannel( color );
 }
 
+// *********************************
+//
 SimpleColorPlugin::~SimpleColorPlugin         ()
 {
 }
 
-const IPixelShaderChannel*      SimpleColorPlugin::GetPixelShaderChannel       () const
+// *********************************
+//
+const IPixelShaderChannel *     SimpleColorPlugin::GetPixelShaderChannel       () const
 {
     return m_pshaderChannel;
 }
 
-void                            SimpleColorPlugin::Update                      ( float t )
+// *********************************
+//
+void                            SimpleColorPlugin::Update                      ( TimeType t )
 {
     m_pshaderChannel->Update( t );
 }
 
+// *********************************
+//
 void                            SimpleColorPlugin::Print                       ( std::ostream & out, int tabs ) const
 {
     out << GetName() << std::endl;

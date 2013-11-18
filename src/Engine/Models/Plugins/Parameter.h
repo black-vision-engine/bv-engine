@@ -38,7 +38,7 @@ protected:
 
     std::string             m_name;
     ParameterSemantic       m_semantic;
-    mutable float           m_lastEvaluatedTime;
+    mutable TimeType        m_lastEvaluatedTime;
 
 protected:
 
@@ -47,7 +47,7 @@ protected:
 
 
     void                        SetLastEvaluatedTime    ( TimeType t )  const;
-    float                       GetLastEvaluatedTime    ()              const;
+    TimeType                    GetLastEvaluatedTime    ()              const;
 
     explicit    BaseParameter  ( const std::string& name, ParameterSemantic semantic, const ITimeEvaluator * evaluator = nullptr );
     virtual     ~BaseParameter (){}
@@ -81,15 +81,16 @@ private:
 
 protected:
 
-    explicit BaseValue(const std::string& name)
-        : m_name(name)
-    {}
+    explicit BaseValue( const std::string & name )
+        : m_name( name )
+    {
+    }
 
     virtual ~BaseValue(){}
 
 public:
 
-    virtual const std::string&  GetName     ()              const { return m_name; }
+    virtual const std::string &     GetName ()  const { return m_name; }
 
 };
 
@@ -103,13 +104,14 @@ public:
 
     virtual ParamType   GetParamType     ()          const { return ParamType::PT_FLOAT; }
 
-    float               Evaluate        (TimeType t)   const;
+    float               Evaluate         ( TimeType t )   const;
 
-    explicit ParamFloat(const std::string& name, const FloatInterpolator& value, ParameterSemantic semantic = ParameterSemantic::NONE)
-       : BaseParameter(name, semantic)
-       , m_value(value)
+    explicit ParamFloat( const std::string & name, const FloatInterpolator & value, ParameterSemantic semantic = ParameterSemantic::NONE )
+       : BaseParameter( name, semantic )
+       , m_value( value )
     {
     }
+
 };
 
 class ParamVec4 : public BaseParameter
@@ -124,9 +126,9 @@ public:
 
     glm::vec4           Evaluate        (TimeType t)   const;
 
-    explicit ParamVec4(const std::string& name, const Vec4Interpolator& value, ParameterSemantic semantic = ParameterSemantic::NONE)
-       : BaseParameter(name, semantic)
-       , m_value(value)
+    explicit ParamVec4( const std::string & name, const Vec4Interpolator & value, ParameterSemantic semantic = ParameterSemantic::NONE )
+       : BaseParameter( name, semantic )
+       , m_value( value )
     {
     }
 };
@@ -139,14 +141,16 @@ private:
 
 public:
 
-    virtual ParamType   GetParamType     ()          const { return ParamType::PT_MAT2; }
+    virtual ParamType   GetParamType    ()          const { return ParamType::PT_MAT2; }
 
-    glm::mat2           Evaluate        (TimeType t)   const;
+    glm::mat2           Evaluate        ( TimeType t )  const;
 
-    explicit ParamMat2(const std::string& name, const Vec4Interpolator& value, ParameterSemantic semantic = ParameterSemantic::NONE)
-       : BaseParameter(name, semantic)
-       , m_value(value)
-    {}
+    explicit ParamMat2( const std::string & name, const Vec4Interpolator & value, ParameterSemantic semantic = ParameterSemantic::NONE )
+       : BaseParameter( name, semantic )
+       , m_value( value )
+    {
+    }
+
 };
 
 
@@ -158,13 +162,18 @@ private:
 
 public:
 
-    virtual ParamType   GetParamType     ()          const { return ParamType::PT_MAT4; }
+    virtual ParamType   GetParamType        ()                  const { return ParamType::PT_MAT4; }
 
-    glm::mat4           Evaluate        (TimeType t)   const { SetLastEvaluatedTime(t); return m_value.evaluate(t); }
+    glm::mat4           Evaluate            ( TimeType t )      const 
+    { 
+        t = BaseParameter::GetEvaluationTime( t );
+        SetLastEvaluatedTime( t );
+        return m_value.evaluate( t );
+    }
 
-    explicit ParamTransform(const std::string& name, const TransformF & value, ParameterSemantic semantic = ParameterSemantic::NONE)
-        : BaseParameter(name, semantic)
-        , m_value(value)
+    explicit ParamTransform(const std::string & name, const TransformF & value, ParameterSemantic semantic = ParameterSemantic::NONE )
+        : BaseParameter( name, semantic )
+        , m_value( value )
     {
         m_semantic = semantic;
     }
@@ -182,11 +191,12 @@ public:
     virtual const char*         GetData         ()              const   { return reinterpret_cast<const char*>(&m_value); }
 
     float                       GetValue        ()              const   { return m_value; }
-    void                        SetValue        (const float& v)        { m_value = v; }
+    void                        SetValue        ( const float & v )     { m_value = v; }
 
-    explicit                    ValueFloat      (const std::string& name);
+    explicit                    ValueFloat      ( const std::string & name );
 
     virtual ~ValueFloat(){}
+
 };
 
 
@@ -199,14 +209,15 @@ private:
 public:
 
     virtual ParamType           GetParamType    ()              const   { return ParamType::PT_FLOAT4; }
-    virtual const char*         GetData         ()              const   { return reinterpret_cast<const char*>(&m_value); }
+    virtual const char *        GetData         ()              const   { return reinterpret_cast<const char*>( &m_value ); }
 
-    const glm::vec4&            GetValue        ()              const   { return m_value; }
-    void                        SetValue        (const glm::vec4& v)    { m_value = v; }
+    const glm::vec4 &           GetValue        ()              const   { return m_value; }
+    void                        SetValue        ( const glm::vec4 & v ) { m_value = v; }
 
-    explicit                    ValueVec4       (const std::string& name);
+    explicit                    ValueVec4       ( const std::string & name );
 
     virtual ~ValueVec4(){}
+
 };
 
 class ValueMat2 : public BaseValue
@@ -218,14 +229,15 @@ private:
 public:
 
     virtual ParamType           GetParamType    ()              const   { return ParamType::PT_MAT2; }
-    virtual const char*         GetData         ()              const   { return reinterpret_cast<const char*>(&m_value); }
+    virtual const char*         GetData         ()              const   { return reinterpret_cast<const char*>( &m_value ); }
 
     const glm::mat2&            GetValue        ()              const   { return m_value; }
-    void                        SetValue        (const glm::mat2 & v)   { m_value = v; }
+    void                        SetValue        ( const glm::mat2 & v ) { m_value = v; }
 
-    explicit                    ValueMat2       (const std::string & name);
+    explicit                    ValueMat2       ( const std::string & name );
 
     virtual ~ValueMat2(){}
+
 };
 
 class ValueMat4 : public BaseValue
@@ -237,14 +249,15 @@ private:
 public:
 
     virtual ParamType           GetParamType    ()              const   { return ParamType::PT_MAT4; }
-    virtual const char*         GetData         ()              const   { return reinterpret_cast<const char*>(&m_value); }
+    virtual const char*         GetData         ()              const   { return reinterpret_cast<const char*>( &m_value ); }
 
     const glm::mat4&            GetValue        ()              const   { return m_value; }
-    void                        SetValue        (const glm::mat4& v)    { m_value = v; }
+    void                        SetValue        ( const glm::mat4 & v ) { m_value = v; }
 
-    explicit                    ValueMat4       (const std::string& name);
+    explicit                    ValueMat4       ( const std::string & name );
 
     virtual ~ValueMat4(){}
+
 };
 
 } // model

@@ -20,7 +20,7 @@ public:
                     NodeUpdater     ( SceneNode * out, const IModelNode * in ); 
                     ~NodeUpdater    ();
 
-    virtual void    Update          ( TimeType t );
+    virtual void    DoUpdate        ( TimeType t );
 
 };
 

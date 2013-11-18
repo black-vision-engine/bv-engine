@@ -47,7 +47,7 @@ const IGeometryChannel *    GeometryMultiRectPlugin::GetGeometryChannel         
 
 // *************************************
 //
-void                        GeometryMultiRectPlugin::Update              ( float t )
+void                        GeometryMultiRectPlugin::Update              ( TimeType t )
 {
     m_geomChannel->Update( t );
 }

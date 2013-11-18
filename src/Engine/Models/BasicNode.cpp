@@ -284,21 +284,21 @@ void            BasicNode::AddPlugin                ( IPlugin * plugin )
 
 // ********************************
 //
-void BasicNode::Update( float t )
+void BasicNode::Update( TimeType t )
 {
-    for(auto l : m_layers)
+    for( auto l : m_layers )
         l->Update( t );
 
-    for(auto pl : m_plugins)
+    for( auto pl : m_plugins )
         pl->Update( t );
 
-    for(auto ch : m_children)
+    for( auto ch : m_children )
         ch->Update( t );
 }
 
 // ********************************
 //
-bool  BasicNode::IsVisible               ( float t ) const
+bool  BasicNode::IsVisible               ( TimeType t ) const
 {
     return m_visible;
 }

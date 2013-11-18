@@ -83,7 +83,7 @@ RenderStateUpdater::~RenderStateUpdater    ()
 
 // *******************************
 //
-void    RenderStateUpdater::Update         ( float t )
+void    RenderStateUpdater::DoUpdate       ( TimeType t )
 {
     if ( m_in->StateChanged() )
     {
