@@ -23,7 +23,10 @@ public:
 // ***************************** PLUGIN ********************************** 
 class GeometryPlugin : public BasePlugin< IPlugin, GeometryPluginPD >
 {
+private:
+
     GeometryChannel *   m_geomChannel;
+
 public:
 
     explicit            GeometryPlugin  ( model::GeometryChannel * geomChannel );
@@ -31,10 +34,10 @@ public:
 
     const IGeometryChannel *    GetGeometryChannel  () const override;
 
-    void                        Update              ( TimeType t ) override;
-    void                        Print               ( std::ostream & out, int tabs = 0 ) const override;
+    virtual void                Update              ( TimeType t ) override;
+    virtual void                Print               ( std::ostream & out, int tabs = 0 ) const override;
 
 };
 
-}
-}
+} //model
+} //bv

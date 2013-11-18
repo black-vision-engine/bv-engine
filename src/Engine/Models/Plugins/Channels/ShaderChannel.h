@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include "System/BasicTypes.h"
+
 
 namespace bv { namespace model {
 
@@ -22,7 +24,7 @@ protected:
 
 public:
 
-    virtual void                                    Update                      ( float ) {}
+    virtual void                                    Update                      ( TimeType ) {}
     virtual bool                                    IsReadOnly                  () const { return true; }
 
     virtual const std::string&                      GetShaderFile               () const { return m_shaderFile; }
@@ -31,9 +33,11 @@ public:
 
     void                                            RegisterValue               ( IValue * v ) { m_values.push_back( v ); }
 
-    explicit            ShaderChannel( const std::string& shaderFile )
+    explicit            ShaderChannel( const std::string & shaderFile )
         : m_shaderFile( shaderFile )
-    {}
+    {
+    }
+
 };
 
 } // model

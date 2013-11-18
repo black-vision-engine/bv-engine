@@ -13,18 +13,23 @@ namespace bv { namespace model {
 class GeometryMultiRectPluginPD : public BaseParametersDescriptor
 {
 public:
+
     static const std::string            pluginName;
 
     explicit GeometryMultiRectPluginPD();
+
 };
 
 
 // ***************************** PLUGIN ********************************** 
 class GeometryMultiRectPlugin : public BasePlugin< IPlugin, GeometryMultiRectPluginPD >
 {
+private:
+
     model::GeometryChannel*     m_geomChannel;
 
 public:
+
     explicit            GeometryMultiRectPlugin    ();
                         ~GeometryMultiRectPlugin   ();
 
@@ -34,6 +39,7 @@ public:
 
     void                                AddRectConnectedComponnent  ( const FloatInterpolator& w, const FloatInterpolator& h, const FloatInterpolator& tx, const FloatInterpolator& ty, const FloatInterpolator& tz );
     void                                AddRectConnectedComponnent  ( float w, float h, float tx = 0.f, float ty = 0.f, float tz = 0.f );
+
 };
 
 } // model

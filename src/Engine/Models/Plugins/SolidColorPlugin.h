@@ -24,18 +24,18 @@ class SolidColorPlugin : public BasePlugin< IPlugin, SolidColorPluginPD >
 {
 private:
 
-    SolidColorShaderChannel* m_pixelShaderChannel;
-    const IPlugin * m_prev;
+    SolidColorShaderChannel *   m_pixelShaderChannel;
+    const IPlugin *             m_prev;
 
 public:
 
     explicit                                SolidColorPlugin            ( const IPlugin * prev, const Vec4Interpolator& color );
                                             ~SolidColorPlugin           ();
 
-    virtual const IPixelShaderChannel*      GetPixelShaderChannel       () const;
+    virtual const IPixelShaderChannel *     GetPixelShaderChannel       () const;
 
-    void                                    Update                      ( TimeType t ) override;
-    void                                    Print                       ( std::ostream & out, int tabs = 0 ) const override;
+    virtual void                            Update                      ( TimeType t ) override;
+    virtual void                            Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
 };
 

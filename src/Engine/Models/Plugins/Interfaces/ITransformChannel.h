@@ -13,12 +13,11 @@ class Transform;
 class ITransformChannel : public IChannel
 {
 public:
-    virtual void                                    Update( TimeType t )               = 0;
 
     virtual const std::vector< Transform* >&         GetTransformChannels() const   = 0;
 
-
     virtual         ~ITransformChannel(){};
+
 };
 
 } // model

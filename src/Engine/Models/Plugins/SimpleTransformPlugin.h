@@ -24,7 +24,9 @@ public:
 // ***************************** PLUGIN ********************************** 
 class SimpleTransformPlugin : public BasePlugin< IPlugin, SimpleTransformPluginPD >
 {
-    SimpleTransformChannel*                 m_transformChannel;
+private:
+
+    SimpleTransformChannel *                m_transformChannel;
 
 public:
 
@@ -33,8 +35,8 @@ public:
 
     virtual const ITransformChannel*        GetTransformChannel         () const;
 
-    void                                    Update                      ( TimeType t ) override;
-    void                                    Print                       ( std::ostream & out, int tabs = 0 ) const override;
+    virtual void                            Update                      ( TimeType t ) override;
+    virtual void                            Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
     static  SimpleTransformPlugin*          Create                      ( const IPlugin * prev, TransformF* trans );
 };

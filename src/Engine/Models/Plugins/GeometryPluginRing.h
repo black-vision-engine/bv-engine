@@ -22,7 +22,10 @@ public:
 // ***************************** PLUGIN ********************************** 
 class GeometryRingPlugin : public BasePlugin< IPlugin, GeometryRingPluginPD >
 {
+private:
+
     model::GeometryChannel* m_geomChannel;
+
 public:
 
     explicit            GeometryRingPlugin    ( float startAngle, float endAngle, float innerRadius, float outerRadius, int segmentsNum );
@@ -30,8 +33,8 @@ public:
 
     virtual const IGeometryChannel *    GetGeometryChannel          () const override;
 
-    void                                Update                      ( TimeType t ) override;
-    void                                Print                       ( std::ostream & out, int tabs = 0 ) const override;
+    virtual void                        Update                      ( TimeType t ) override;
+    virtual void                        Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
 };
 

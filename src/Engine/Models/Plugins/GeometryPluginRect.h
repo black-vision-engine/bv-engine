@@ -22,7 +22,9 @@ public:
 // ***************************** PLUGIN ********************************** 
 class GeometryRectPlugin : public BasePlugin< IPlugin, GeometryRectPluginPD >
 {
-    model::GeometryChannel*     m_geomChannel;
+private:
+
+    model::GeometryChannel *    m_geomChannel;
     FloatInterpolator           m_width;
     FloatInterpolator           m_height;
 
@@ -31,8 +33,8 @@ public:
                         ~GeometryRectPlugin   ();
 
     virtual const IGeometryChannel *    GetGeometryChannel          () const override;
-    void                                Update                      ( TimeType t ) override;
-    void                                Print                       ( std::ostream & out, int tabs = 0 ) const override;
+    virtual void                        Update                      ( TimeType t ) override;
+    virtual void                        Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
 };
 

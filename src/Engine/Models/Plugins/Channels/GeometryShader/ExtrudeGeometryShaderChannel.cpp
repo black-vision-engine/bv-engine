@@ -19,6 +19,12 @@ ExtrudeGeometryShaderChannel::ExtrudeGeometryShaderChannel(const std::string& sh
 
 // ******************************
 //
+ExtrudeGeometryShaderChannel::~ExtrudeGeometryShaderChannel()
+{
+}
+
+// ******************************
+//
 void             ExtrudeGeometryShaderChannel::Update( float t )
 {
     m_scaleVal->SetValue( m_scale.evaluate( t ) );

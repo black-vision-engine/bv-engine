@@ -16,7 +16,13 @@ ConnectedComponent::ConnectedComponent()
 
 // ************************************
 //
-void                                        ConnectedComponent::Update( float t )
+ConnectedComponent::~ConnectedComponent()
+{
+}
+
+// ************************************
+//
+void                                        ConnectedComponent::Update( TimeType t )
 {
     //FIXME: Forward do channels
 }

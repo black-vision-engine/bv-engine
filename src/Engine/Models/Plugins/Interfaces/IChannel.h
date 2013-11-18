@@ -1,16 +1,16 @@
 #pragma once
 
 #include "System/BasicTypes.h"
+#include "Engine/Interfaces/IUpdatable.h"
 
 
 namespace bv { namespace model
 {
 
-class IChannel
+class IChannel : public IUpdatable
 {
 public:
 
-    virtual void        Update      ( TimeType t )  = 0;
     virtual bool        IsReadOnly  () const        = 0;
 
     virtual             ~IChannel   (){};

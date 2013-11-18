@@ -23,16 +23,18 @@ public:
 
 class SolidColorShaderChannel : public model::PixelShaderChannelBase< SolidColorShaderChannelPD >
 {
+private:
+
     Vec4Interpolator                m_solidColor;
     model::ValueVec4*               m_solidColorVal;
 
 public:
 
-    virtual void                    Update( TimeType t );
-
-    explicit                        SolidColorShaderChannel(const std::string& shaderFile, const Vec4Interpolator& color);
-
+    explicit                        SolidColorShaderChannel ( const std::string & shaderFile, const Vec4Interpolator & color );
     virtual                         ~SolidColorShaderChannel();
+
+    virtual void                    Update                  ( TimeType t );
+
 };
 
 

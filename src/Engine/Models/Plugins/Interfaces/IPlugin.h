@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
+#include "Engine/Interfaces/IUpdatable.h"
 
 
 namespace bv { namespace model {
@@ -19,7 +20,7 @@ class ResourceHandle;
 
 struct TextureInfo;
 
-class IPlugin
+class IPlugin : public IUpdatable
 {
 public:
 
@@ -39,7 +40,6 @@ public:
     virtual bool                                HasAnimatingTexture         () const = 0;
     virtual ISequenceAnimationSource *          QuerySequenceAnimationSource() = 0;
 
-    virtual void                                Update                      ( TimeType t )                                = 0;
     virtual void                                Print                       ( std::ostream & out, int tabs = 0 )    const = 0;
 
     virtual const std::vector<IValue *> &       GetValuesList               () const = 0;

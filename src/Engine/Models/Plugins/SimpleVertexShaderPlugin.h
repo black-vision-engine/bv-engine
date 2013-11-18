@@ -32,10 +32,10 @@ public:
     explicit                                SimpleVertexShaderPlugin    ( const IPlugin * prev, const std::string& shaderPath );
                                             ~SimpleVertexShaderPlugin   ();
 
-    virtual const IVertexShaderChannel*     GetVertexShaderChannel      () const;
+    virtual const IVertexShaderChannel *    GetVertexShaderChannel      () const;
 
-    void                                    Update                      ( TimeType t ) override;
-    void                                    Print                       ( std::ostream & out, int tabs = 0 ) const override;
+    virtual void                            Update                      ( TimeType t ) override;
+    virtual void                            Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
 };
 
