@@ -8,7 +8,7 @@ const std::string SolidColorShaderChannelPD::solidColor = "color";
 
 // ******************************
 //
-SolidColorShaderChannel::SolidColorShaderChannel(const std::string& shaderFile, const Vec4Interpolator& color)
+SolidColorShaderChannel::SolidColorShaderChannel(const std::string& shaderFile, const ParamVec4& color)
     : PixelShaderChannelBase( shaderFile )
     , m_solidColor(color)
 {
@@ -20,7 +20,7 @@ SolidColorShaderChannel::SolidColorShaderChannel(const std::string& shaderFile, 
 //
 void             SolidColorShaderChannel::Update( TimeType t )
 {
-    m_solidColorVal->SetValue( m_solidColor.evaluate( t ) );
+    m_solidColorVal->SetValue( m_solidColor.Evaluate( t ) );
     ShaderChannel::Update( t );
 }
 

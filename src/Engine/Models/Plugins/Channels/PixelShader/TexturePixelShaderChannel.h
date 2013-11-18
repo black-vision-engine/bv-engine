@@ -95,17 +95,17 @@ public:
 
 class TexturePixelShaderChannel : public model::PixelShaderChannelBase< TexturePixelShaderChannelPD >
 {
-    std::vector< model::ParamFloat * >      m_alphaParams;
+    std::vector< model::ParamFloat >        m_alphaParams;
     std::vector< model::ValueFloat * >      m_alphaValues;
 
-    std::vector< model::ParamTransform * >  m_texTransformParams;
+    std::vector< model::ParamTransform >    m_texTransformParams;
     std::vector< model::ValueMat4 * >       m_texTransformValues;
 
 public:
 
     virtual void                    Update( TimeType t );
 
-    TexturePixelShaderChannel( const std::string & shaderFile, const std::vector< FloatInterpolator > & alphas, const std::vector< TransformF > & texTransforms );
+    TexturePixelShaderChannel( const std::string & shaderFile, const std::vector< ParamFloat > & alphas, const std::vector< ParamTransform > & texTransforms );
 
 };
 

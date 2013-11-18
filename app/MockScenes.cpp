@@ -3,7 +3,6 @@
 #include "Engine/Models/BasicNode.h"
 #include "Mathematics/Transform/MatTransform.h"
 #include "Engine/Models/Plugins/Parameter.h"
-#include "Engine/Models/ModelFactory.h"
 #include "Engine/Models/Plugins/SimpleTexturePlugin.h"
 #include "Engine/Models/Plugins/SimpleTextPlugin.h"
 #include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
@@ -253,16 +252,14 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 
     /////////////////////////////// SimpleRect plugin //////////////////////////////////
 
-    FloatInterpolator w;
-    FloatInterpolator h;
-    w.addKey( 0.f, 1.f );
-    h.addKey( 0.f, 1.f );
+    auto w = model::PluginsFactory::CreateParameter( "width", model::PluginsFactory::CreateConstValueFloat( 1.f ) );
+    auto h = model::PluginsFactory::CreateParameter( "height", model::PluginsFactory::CreateConstValueFloat( 1.f )  );
 
     model::GeometryRectPlugin    * rectPlugin  = new model::GeometryRectPlugin( w, h );
     
     root->AddPlugin( rectPlugin );
 
-    model::SimpleTransformPlugin      * stpl  = model::PluginsFactory::CreateTransformPlugin( rectPlugin, trns );
+    model::SimpleTransformPlugin      * stpl  = model::PluginsFactory::CreateTransformPlugin( rectPlugin, model::PluginsFactory::CreateParameter( "transformation", *trns ) );
 
     root->AddPlugin( stpl );
 
@@ -338,7 +335,7 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
 
     trns->addRotation(angle, ConstValue( 0.f ), ConstValue( 0.f ), ConstValue( 1.f ) );
 
-    auto transformPlugin  =  model::PluginsFactory::CreateTransformPlugin( rectPlugin, trns );
+    auto transformPlugin  =  model::PluginsFactory::CreateTransformPlugin( rectPlugin, model::PluginsFactory::CreateParameter( "transformation", *trns ) );
     
     root->AddPlugin( transformPlugin );
 
@@ -524,7 +521,7 @@ model::BasicNode* SceneExamples::BuildMockScene(bv::model::BasicNode * parent )
     angle.addKey(5.f, 180.f);
 
     bv::TransformF* trans = new bv::TransformF();
-    trans->addTransform(new bv::RotationF(angle, x,y,z));
+    trans->addTransform(bv::RotationF(angle, x,y,z));
 //    bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
 
     //FIXME:

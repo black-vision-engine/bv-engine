@@ -142,7 +142,7 @@ SceneNode *                 BasicNode::BuildScene()
 
     renderEnt->SetWorldTransforms( trans );
 
-    if ( effect ) //create only, if there is any geometry to be rendered
+    if ( effect ) //create only, if there is any geometry to be renderedm
     {
         //TODO: dodac liste layerow do zwracanego SceneNode
         for( auto p : m_plugins )

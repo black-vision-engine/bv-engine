@@ -49,8 +49,8 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
     EvalGeometryChannel( prev );
 
     // Set Pixel Shader Channel
-	std::vector<TransformF> txMat;
-	std::vector<FloatInterpolator> alphas;
+    std::vector<ParamTransform> txMat;
+    std::vector<ParamFloat> alphas;
 
     m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
 										, alphas

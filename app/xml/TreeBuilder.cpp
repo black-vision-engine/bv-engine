@@ -116,7 +116,7 @@ namespace bv{
 
         root->AddPlugin( texPlugin );
 
-        root->AddPlugin( bv::model::PluginsFactory::CreateTransformPlugin( texPlugin, trns ) );
+        root->AddPlugin( bv::model::PluginsFactory::CreateTransformPlugin( texPlugin, model::PluginsFactory::CreateParameter( "transformation", *trns ) ) );
 
 
 		return root;

@@ -58,14 +58,14 @@ public:
 
     virtual glm::mat4x4 evaluate(typename ParamT::TimeT t) const;
     
-    static SimpleTransform * CreateScale      ( ParamT p0, ParamT p1, ParamT p2 )
+    static SimpleTransform CreateScale      ( ParamT p0, ParamT p1, ParamT p2 )
     {
-        return new SimpleTransform( TransformKind::scale, p0, p1, p2 );
+        return SimpleTransform( TransformKind::scale, p0, p1, p2 );
     }
 
-    static SimpleTransform * CreateTranslation( ParamT p0, ParamT p1, ParamT p2 )
+    static SimpleTransform CreateTranslation( ParamT p0, ParamT p1, ParamT p2 )
     {
-        return new SimpleTransform( TransformKind::translation, p0, p1, p2 );
+        return SimpleTransform( TransformKind::translation, p0, p1, p2 );
     }
 };
 
@@ -85,7 +85,7 @@ template<typename ParamT>
 class CompositeTransform : public Interpolator<typename ParamT::TimeT>
 {
 private:
-    std::vector<SimpleTransform<ParamT>*> transformations;
+    std::vector< SimpleTransform<ParamT> > transformations;
 public:
 
     static const int value_size = sizeof(glm::mat4x4);
@@ -93,7 +93,7 @@ public:
     void addTranslation(ParamT x0, ParamT x1, ParamT x2);
     void addScale(ParamT s0, ParamT s1, ParamT s2);
     void addRotation(ParamT angle, ParamT r0, ParamT r1, ParamT r2);
-    void addTransform(SimpleTransform<ParamT>* trans);
+    void addTransform(const SimpleTransform<ParamT>& trans);
 
     unsigned int size() const;
 

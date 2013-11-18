@@ -26,12 +26,12 @@ GeometryRectPluginPD::GeometryRectPluginPD()
 
 // *************************************
 //
-GeometryRectPlugin::GeometryRectPlugin                    ( const FloatInterpolator& w, const FloatInterpolator& h )
+GeometryRectPlugin::GeometryRectPlugin                    ( const ParamFloat& w, const ParamFloat& h )
     : BasePlugin( nullptr )
     , m_width( w )
     , m_height( h )
 {
-    model::RectComponent*   rect    = model::RectComponent::Create( w.evaluate( 0.f ), h.evaluate( 0.f ) );
+    model::RectComponent*   rect    = model::RectComponent::Create( w.Evaluate( 0.f ), h.Evaluate( 0.f ) );
     m_geomChannel                   = PluginsFactory::CreateGeometryChannel( rect );
 }
 

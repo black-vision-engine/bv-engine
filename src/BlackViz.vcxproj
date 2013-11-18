@@ -316,7 +316,6 @@
     <ClCompile Include="Engine\Models\BasicNode.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameter.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Plugin.cpp" />
-    <ClCompile Include="Engine\Models\ModelFactory.cpp" />
     <ClCompile Include="Engine\Models\Updaters\TransformUpdater.cpp" />
     <ClCompile Include="Mathematics\Interpolators\BasicInterpolator.cpp" />
     <ClCompile Include="Mathematics\Transform\MatTransform.cpp" />
@@ -486,7 +485,6 @@
     <ClInclude Include="Engine\Models\Node.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Plugin.h" />
-    <ClInclude Include="Engine\Models\ModelFactory.h" />
     <ClInclude Include="Engine\Models\Updaters\UpdatersManager.h" />
     <ClInclude Include="Engine\Models\Updaters\TransformUpdater.h" />
     <ClInclude Include="Mathematics\defines.h" />

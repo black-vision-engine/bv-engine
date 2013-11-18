@@ -60,8 +60,8 @@ SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin 
     m_numFrames  = texturesFilesNames.size();
 
     // Set Pixel Shader Channel
-	std::vector<TransformF> txMat;
-	std::vector<FloatInterpolator> alphas;
+	std::vector<ParamTransform> txMat;
+	std::vector<ParamFloat> alphas;
 
     m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpleanimation.frag", alphas, txMat );
 

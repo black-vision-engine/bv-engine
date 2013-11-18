@@ -60,9 +60,9 @@ void                        GeometryMultiRectPlugin::Print               ( std::
 
 // *************************************
 //
-void                        GeometryMultiRectPlugin::AddRectConnectedComponnent  ( const FloatInterpolator& w, const FloatInterpolator& h, const FloatInterpolator& tx, const FloatInterpolator& ty, const FloatInterpolator& tz )
+void                        GeometryMultiRectPlugin::AddRectConnectedComponnent  ( const ParamFloat& w, const ParamFloat& h, const ParamFloat& tx, const ParamFloat& ty, const ParamFloat& tz )
 {
-    AddRectConnectedComponnent( w.evaluate( 0.f ), h.evaluate( 0.f ), tx.evaluate( 0.f ), ty.evaluate( 0.f ), tz.evaluate( 0.f ) );
+    AddRectConnectedComponnent( w.Evaluate( 0.f ), h.Evaluate( 0.f ), tx.Evaluate( 0.f ), ty.Evaluate( 0.f ), tz.Evaluate( 0.f ) );
 }
 
 void                        GeometryMultiRectPlugin::AddRectConnectedComponnent  ( float w, float h, float tx, float ty, float tz )

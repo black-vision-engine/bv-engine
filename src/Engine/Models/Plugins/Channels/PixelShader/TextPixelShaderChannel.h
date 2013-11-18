@@ -30,18 +30,18 @@ public:
 
 class TextPixelShaderChannel : public model::PixelShaderChannelBase< TextPixelShaderChannelPD >
 {
-    Vec4Interpolator                m_color;
+    ParamVec4                       m_color;
     model::ValueVec4*               m_colorVal;
 
 public:
 
     virtual void                    Update( TimeType t )
     {
-        m_colorVal->SetValue( m_color.evaluate( t ) );
+        m_colorVal->SetValue( m_color.Evaluate( t ) );
         ShaderChannel::Update( t );
     }
 
-    TextPixelShaderChannel( const std::string& shaderFile, const Vec4Interpolator& color )
+    TextPixelShaderChannel( const std::string& shaderFile, const ParamVec4& color )
         : PixelShaderChannelBase( shaderFile )
         , m_color(color)
     {
