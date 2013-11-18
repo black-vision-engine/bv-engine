@@ -1,16 +1,22 @@
 #pragma once
 
-#include "Engine/Models/Timeline/ITimeEvaluator.h"
+#include "Engine/Models/Timeline/TimelineBase.h"
+
 
 namespace bv { namespace model {
 
-class Timeline : public ITimeEvaluator
+class Timeline : public TimelineBase
 {
 private:
 
-    Timeline
+    const ITimeEvaluator *    m_parent;
+
 public:
 
+                        Timeline    ( ITimeEvaluator * parent, TimeType startTime, TimeType endTime );
+    virtual             ~Timeline   ();
+
+    virtual TimeType    Evaluate    ( TimeType t )  const;
 
 };
 

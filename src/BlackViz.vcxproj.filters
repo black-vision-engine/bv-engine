@@ -136,6 +136,8 @@
     <ClCompile Include="Engine\Models\Timeline\TimelineState.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryMultiRectPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\Timeline.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\GlobalTimeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />

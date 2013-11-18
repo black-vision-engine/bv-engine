@@ -347,6 +347,18 @@ int BasicInterpolator<TimeValueT, ValueT>::evalToCBuffer(TimeValueT time, char* 
     return value_size;
 }
 
+template<class TimeValueT, class ValueT>
+const typename BasicInterpolator<TimeValueT, ValueT>::KeyType &     BasicInterpolator<TimeValueT, ValueT>::FirstKey    () const
+{
+    return keys[ 0 ];
+}
+
+template<class TimeValueT, class ValueT>
+const typename BasicInterpolator<TimeValueT, ValueT>::KeyType &     BasicInterpolator<TimeValueT, ValueT>::LastKey     () const
+{
+    return keys.back();
+}
+
 } // bv
 
 #define INSTANTIATE(TYPE) \

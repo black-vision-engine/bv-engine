@@ -70,30 +70,26 @@ TimelineBase::~TimelineBase         ()
 //
 TimeType    TimelineBase::Evaluate  ( TimeType t ) const
 {
-    return 0.f;
-    //if( t > m_endTime && m_settings.m_preBehavior == TimelineOutBehavior::TOB_CONST_VAL )
-    //    return m_settings.m_constValPre;
+    if( t < StartTime() && m_settings.m_preBehavior == TimelineOutBehavior::TOB_CONST_VAL )
+        return m_settings.m_constValPre;
+    else if( t > EndTime() && m_settings.m_postBehavior == TimelineOutBehavior::TOB_CONST_VAL )
+        return m_settings.m_constValPost;
 
-    //    return EvalPre( t );
-    //else if ( t < m_startTime )
-    //    return EvalPost( t );
-
-    //return t - m_startTime;
-
+    return m_interpolator.evaluate( t );
 }
 
 // *********************************
 //
-TimeType    TimelineBase::EvalPre   ( TimeType t ) const
+TimeType  TimelineBase::StartTime       () const
 {
-    return 0.f;
+    return m_interpolator.FirstKey().t;
 }
 
 // *********************************
 //
-TimeType    TimelineBase::EvalPost  ( TimeType t ) const
+TimeType  TimelineBase::EndTime         () const
 {
-    return 0.f;
+    return m_interpolator.LastKey().t;
 }
 
 } //model

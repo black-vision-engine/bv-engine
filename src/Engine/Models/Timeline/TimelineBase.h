@@ -19,7 +19,7 @@ protected:
 
 public:
 
-                        TimelineBase    ( TimeType m_startTime, TimeType m_endTime, float scale = 1.f );
+                        TimelineBase    ( TimeType startTime, TimeType endTime, float scale = 1.f );
                         TimelineBase    ( const TimelineSettings & settings, TimeType startTime, TimeType endTime, float scale = 1.f );
                         TimelineBase    ( const TimeInterpolator & interpolator, const TimelineSettings & settings );
 
@@ -28,9 +28,6 @@ public:
     virtual TimeType    Evaluate        ( TimeType t ) const;
 
 private:
-
-    TimeType            EvalPre         ( TimeType t ) const;
-    TimeType            EvalPost        ( TimeType t ) const;
 
     TimeType            StartTime       () const;
     TimeType            EndTime         () const;

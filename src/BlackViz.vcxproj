@@ -259,6 +259,8 @@
     <ClCompile Include="Engine\Models\Resources\ResourceLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextHelpers.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextureLoader.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\GlobalTimeline.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\Timeline.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimelineBase.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimelineState.cpp" />
     <ClCompile Include="Engine\Models\Updaters\CameraUpdater.cpp" />

@@ -17,10 +17,12 @@ template<class TimeValueT, class ValueT>
 class Key
 {
 public:
+
     TimeValueT  t;
     ValueT      val;
 
-public: 
+public:
+
     explicit Key(TimeValueT t, ValueT val);
 };
 
@@ -35,6 +37,7 @@ template<class TimeValueT, class ValueT>
 class BasicInterpolator : public Interpolator<TimeValueT>
 {
 private:
+
     std::vector<Key<TimeValueT, ValueT>>    keys;
     TimeValueT                              tolerance;
 
@@ -42,6 +45,9 @@ private:
     WrapMethod wrapPost;
 
 public:
+
+    typedef Key<TimeValueT, ValueT> KeyType;
+
     typedef TimeValueT TimeT;
     typedef ValueT ValT;
     typedef Interpolator<TimeValueT> ParentType;
@@ -69,6 +75,10 @@ public:
     void setWrapMethod(WrapMethod pre, WrapMethod post);
 
     virtual int evalToCBuffer(TimeValueT time, char* buf) const;
+
+    const KeyType &     FirstKey    () const;
+    const KeyType &     LastKey     () const;
+
 };
 
 }
