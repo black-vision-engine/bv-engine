@@ -41,7 +41,7 @@ GeometryRingPlugin::~GeometryRingPlugin   ()
 
 // *************************************
 //
-const IGeometryChannel *    GeometryRingPlugin::GetGeometryChannel          () const
+const IVertexAttributesChannel *    GeometryRingPlugin::GetGeometryChannel          () const
 {
     return m_geomChannel;
 }

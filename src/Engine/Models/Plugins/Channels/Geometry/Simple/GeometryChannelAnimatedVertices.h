@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 
 
 namespace bv { namespace model {
 
 class ConnectedComponent;
 
-class GeometryChannelAnimatedVertices : public GeometryChannel
+class GeometryChannelAnimatedVertices : public VertexAttributesChannel
 {
 private:
 

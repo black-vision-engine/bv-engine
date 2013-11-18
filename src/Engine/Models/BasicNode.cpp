@@ -17,7 +17,7 @@
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 
-#include "Engine/Models/Plugins/Interfaces/IGeometryChannelDescriptor.h"
+#include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannelDescriptor.h"
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 #include "Engine/Graphics/Resources/RenderableArrayDataElements.h"
 
@@ -34,7 +34,7 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 
 #include "Engine/Models/Plugins/Interfaces/ISequenceAnimationSource.h"
-#include "Engine/Models/Plugins/Interfaces/IGeometryChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
@@ -563,7 +563,7 @@ RenderableArrayDataArraysSingleVertexBuffer *   BasicNode::CreateRenderableArray
 
 // ********************************
 //
-RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDataArrays( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc, bool isTimeInvariant ) const
+RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDataArrays( const std::vector< IConnectedComponent * > & ccVec, const IVertexAttributesChannelDescriptor * desc, bool isTimeInvariant ) const
 {
     //FIXME: a bit of hackery because memory layout may be different than what this constructor suggests (this time it is not)
     //FIXME: this code should be moved to some utility classes from this poor BasicNode (not so basic right now)
@@ -625,7 +625,7 @@ void                            BasicNode::AddVertexDataToVBO              ( cha
 
 // ********************************
 //
-VertexDescriptor *                  BasicNode::CreateVertexDescriptor          ( const IGeometryChannelDescriptor * desc ) const
+VertexDescriptor *                  BasicNode::CreateVertexDescriptor          ( const IVertexAttributesChannelDescriptor * desc ) const
 {
     VertexDescriptor * vertexDescriptor = new VertexDescriptor( desc->GetNumVertexChannels() );
 
@@ -661,7 +661,7 @@ unsigned int                        BasicNode::TotalNumVertices       ( const st
 
 // ********************************
 //
-unsigned int                        BasicNode::TotalSize             ( const std::vector< IConnectedComponent * > & ccVec, const IGeometryChannelDescriptor * desc ) const
+unsigned int                        BasicNode::TotalSize             ( const std::vector< IConnectedComponent * > & ccVec, const IVertexAttributesChannelDescriptor * desc ) const
 {
     return TotalNumVertices( ccVec ) * desc->SingleVertexEntrySize();
 }

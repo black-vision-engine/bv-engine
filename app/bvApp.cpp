@@ -247,13 +247,15 @@ bool BlackVisionApp::OnInitialize       ()
     //model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
     //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
-    //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
+    model::BasicNode * root3 = TestScenesFactory::AnimatedTestScene();
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
     //model::BasicNode * root = TestScenesFactory::XMLTestScene();
     //model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
-    //model::BasicNode * root = TestScenesFactory::SequenceAnimationTestScene();
-    model::BasicNode * root = TestScenesFactory::NonGeometryParent();
+    model::BasicNode * root0 = TestScenesFactory::SequenceAnimationTestScene();
+    model::BasicNode * root1 = TestScenesFactory::NonGeometryParent();
 
+    model::BasicNode * rootu = TestScenesFactory::StackThemNow( root0, root1 );
+    model::BasicNode * root = TestScenesFactory::StackThemNow( root3, rootu );
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
 
     m_modelScene = model::ModelScene::Create( root, new Camera() );

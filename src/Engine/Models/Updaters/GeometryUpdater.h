@@ -9,7 +9,7 @@ class RenderableEntity;
 
 namespace model
 {
-    class IGeometryChannel;
+    class IVertexAttributesChannel;
     class IConnectedComponent;
     class IGeometryChannelDescriptor;
 }
@@ -19,11 +19,11 @@ class GeometryUpdater : public IUpdater
 private:
 
     RenderableEntity *                  m_out;
-    const model::IGeometryChannel *     m_in;
+    const model::IVertexAttributesChannel *     m_in;
 
 public:
 
-                    GeometryUpdater     ( RenderableEntity * out, const model::IGeometryChannel * in ); 
+                    GeometryUpdater     ( RenderableEntity * out, const model::IVertexAttributesChannel * in ); 
                     ~GeometryUpdater    ();
 
     virtual void    DoUpdate            ( TimeType t );

@@ -19,10 +19,10 @@
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/AnimatedStripComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RingComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/SolidColorShaderChannel.h"
 #include "Engine/Models/Plugins/SimpleTexturePlugin.h"
 #include "Engine/Models/Plugins/SimpleAnimationPlugin.h"
@@ -73,7 +73,7 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
     model::BasicNode * root = new model::BasicNode();
 
     ///////////////////////////// Channels //////////////////////////
-    model::GeometryChannel *        geomChannel     = model::GeometryChannelAnimatedVertices::Create( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
+    model::VertexAttributesChannel *        geomChannel     = model::GeometryChannelAnimatedVertices::Create( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
 
     ///////////////////////////// Geometry plugin //////////////////////////
     model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin( geomChannel );
@@ -114,7 +114,7 @@ model::BasicNode * VariableTopologySolids( float size, float speed, float oscila
     model::BasicNode * root = new model::BasicNode();
     
     ///////////////////////////// Channels //////////////////////////
-    model::GeometryChannel *        geomChannel     = model::GeometryChannelVariableTopology::Create( size, speed, oscilationSpeed, numSegments, numComponents );
+    model::VertexAttributesChannel *        geomChannel     = model::GeometryChannelVariableTopology::Create( size, speed, oscilationSpeed, numSegments, numComponents );
 
     ///////////////////////////// Geometry plugin //////////////////////////
     model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin( geomChannel );
@@ -855,6 +855,20 @@ model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
 
     root->AddChild( left );
     root->AddChild( right );
+
+    return root;
+}
+
+// ******************************
+//
+model::BasicNode *      TestScenesFactory::StackThemNow                ( model::BasicNode * n0, model::BasicNode * n1 )
+{
+    model::BasicNode * root = new model::BasicNode();
+    model::SimpleTransformPlugin * plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::PluginsFactory::CreateParameter( "transformation", TransformF() ) );
+    root->AddPlugin( plugin00 );
+
+    root->AddChild( n0 );
+    root->AddChild( n1 );
 
     return root;
 }

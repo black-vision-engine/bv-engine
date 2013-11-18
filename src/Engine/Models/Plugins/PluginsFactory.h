@@ -18,9 +18,11 @@
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/AnimatedStripComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RingComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelDescriptor.h"
+
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
+
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 
 #include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
 
@@ -56,7 +58,7 @@ struct PluginsFactory
     static model::GeometryMultiRectPlugin *     CreateGeometryMultiRectPlugin       ();
     static model::GeometryRingPlugin *          CreateGeometryRingPlugin            ( float startAngle, float endAngle, float innerRadius, float outerRadius, int segmentsNum );
 	
-	static model::GeometryChannel *             CreateGeometryChannel               ( model::IConnectedComponent * connComp );
+	static model::VertexAttributesChannel *             CreateGeometryChannel               ( model::IConnectedComponent * connComp );
 	
 
 	static model::TransformChannel *            CreateTransformChannel              ( const ParamTransform& transformation );

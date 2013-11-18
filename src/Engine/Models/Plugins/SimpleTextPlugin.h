@@ -29,7 +29,7 @@ class SimpleTextPlugin : public BasePlugin< IPlugin, SimpleTextPluginPD >
 {
 private:
 
-    GeometryChannel*            m_geomChannel;
+    VertexAttributesChannel*            m_geomChannel;
 
     const FontExtraData*        m_fontExtraData;
     TextAtlas const*            m_atlasText;
@@ -52,7 +52,7 @@ public:
 
                                 ~SimpleTextPlugin   ();
 
-    virtual const IGeometryChannel *    GetGeometryChannel          () const override;
+    virtual const IVertexAttributesChannel *    GetGeometryChannel          () const override;
 
     virtual void                        Update                      ( TimeType t ) override;
     virtual void                        Print                       ( std::ostream & out, int tabs = 0 ) const override;

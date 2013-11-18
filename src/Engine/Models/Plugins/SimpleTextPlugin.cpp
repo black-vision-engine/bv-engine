@@ -6,7 +6,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Resources/Font/FontLoader.h"
 #include "Engine/Models/Resources/Font/Text.h"
 
@@ -120,12 +120,12 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
 
     auto texExtraData = static_cast< const TextureExtraData* > ( m_textures[ 0 ]->m_resHandle->GetExtra() );
 
-    GeometryChannelDescriptor geomChannelDesc;
+    VertexAttributesChannelDescriptor geomChannelDesc;
 
     geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
     geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-    m_geomChannel = new GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, geomChannelDesc, true, true );
+    m_geomChannel = new VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, geomChannelDesc, true, true );
 
     glm::vec3 translate(0.f);
     glm::vec3 interspace( 0.07f, 0.f ,0.f );
@@ -198,7 +198,7 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
 
 // *********************************
 //
-const IGeometryChannel *    SimpleTextPlugin::GetGeometryChannel          () const
+const IVertexAttributesChannel *    SimpleTextPlugin::GetGeometryChannel          () const
 {
     return m_geomChannel;
 }

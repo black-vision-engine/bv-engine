@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 
 
 namespace bv { namespace model {
 
 class VariableTopologyStripComponent;
 
-class GeometryChannelVariableTopology : public GeometryChannel
+class GeometryChannelVariableTopology : public VertexAttributesChannel
 {
 private:
 
@@ -38,7 +38,7 @@ public:
     virtual bool            NeedsAttributesUpdate               ( TimeType t )  const;
     virtual bool            NeedsTopologyUpdate                 ( TimeType t )  const;
 
-    virtual bool            CanBeConnectedTo                    ( IGeometryChannel * channel ) const;
+    virtual bool            CanBeConnectedTo                    ( IVertexAttributesChannel * channel ) const;
 
     void                    AddVTConnectedComponent             ( VariableTopologyStripComponent * cc );
     virtual unsigned int    TotalNumVertices                    () const;

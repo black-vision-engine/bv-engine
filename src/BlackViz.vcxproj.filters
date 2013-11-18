@@ -71,8 +71,6 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\TranformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannel.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Plugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameter.cpp" />
@@ -88,7 +86,6 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\TexturePixelShaderChannel.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelUtils.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\RingComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRing.cpp" />
@@ -139,6 +136,9 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\AttributeChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\AttributeChannelTyped.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\AttributeChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannelUtils.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannelDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -210,7 +210,6 @@
     <ClInclude Include="Engine\Models\Plugins\SimpleTexturePlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IChannel.h" />
-    <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\ITransformChannel.h" />
@@ -227,8 +226,6 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannel.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\ShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPlugin.h" />
@@ -247,7 +244,6 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\TexturePixelShaderChannel.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelUtils.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\RingComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryPluginRing.h" />
@@ -311,11 +307,15 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\AttributeChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IAttributeChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IAttributeChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannelUtils.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannelDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Engine\Models\Plugins\Interfaces\IGeometryChannelDescriptor.h" />
+    <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />
   </ItemGroup>
 </Project>

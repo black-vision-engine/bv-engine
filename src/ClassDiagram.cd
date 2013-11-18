@@ -791,11 +791,11 @@
       <FileName>System\Profiler.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="bv::model::GeometryChannel" Collapsed="true">
+  <Class Name="bv::model::VertexAttributesChannel" Collapsed="true">
     <Position X="7.5" Y="16.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Engine\Models\Plugins\Channels\GeometryChannel.h</FileName>
+      <FileName>Engine\Models\Plugins\Channels\VertexAttributesChannel.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="bv::model::IChannel" Collapsed="true">
@@ -812,11 +812,11 @@
       <FileName>Engine\Models\Plugins\Interfaces\IConnectedComponent.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="bv::model::IGeometryChannel" Collapsed="true">
+  <Class Name="bv::model::IVertexAttributesChannel" Collapsed="true">
     <Position X="7.5" Y="15" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Engine\Models\Plugins\Interfaces\IGeometryChannel.h</FileName>
+      <FileName>Engine\Models\Plugins\Interfaces\IVertexAttributesChannel.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="bv::model::IGeometryShaderChannel" Collapsed="true">

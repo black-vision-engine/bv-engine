@@ -81,16 +81,16 @@ model::GeometryRingPlugin*          PluginsFactory::CreateGeometryRingPlugin    
 
 // *******************************
 //
-model::GeometryChannel*             PluginsFactory::CreateGeometryChannel               (model::IConnectedComponent* connComp)
+model::VertexAttributesChannel*             PluginsFactory::CreateGeometryChannel               (model::IConnectedComponent* connComp)
 {
-	model::GeometryChannelDescriptor desc;
+	model::VertexAttributesChannelDescriptor desc;
 
 	for( auto compDesc : connComp->GetAttributeChannels() )
 	{
 		desc.AddAttrChannelDesc( static_cast< const model::AttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
 	}
 
-	model::GeometryChannel * ret = new model::GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
+	model::VertexAttributesChannel * ret = new model::VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
 
 	ret->AddConnectedComponent(connComp);
 

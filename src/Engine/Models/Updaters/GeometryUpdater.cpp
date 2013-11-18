@@ -4,8 +4,8 @@
 
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
-#include "Engine/Models/Plugins/Interfaces/IGeometryChannel.h"
-#include "Engine/Models/Plugins/Interfaces/IGeometryChannelDescriptor.h"
+#include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannelDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
 
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
@@ -20,7 +20,7 @@ namespace bv {
 
 // *********************************
 //
-GeometryUpdater::GeometryUpdater     ( RenderableEntity * out, const model::IGeometryChannel * in )
+GeometryUpdater::GeometryUpdater     ( RenderableEntity * out, const model::IVertexAttributesChannel * in )
     : m_in( in )
     , m_out( out )
 {

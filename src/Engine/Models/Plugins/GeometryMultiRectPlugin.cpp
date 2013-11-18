@@ -40,7 +40,7 @@ GeometryMultiRectPlugin::~GeometryMultiRectPlugin   ()
 
 // *************************************
 //
-const IGeometryChannel *    GeometryMultiRectPlugin::GetGeometryChannel          () const
+const IVertexAttributesChannel *    GeometryMultiRectPlugin::GetGeometryChannel          () const
 {
     return m_geomChannel;
 }

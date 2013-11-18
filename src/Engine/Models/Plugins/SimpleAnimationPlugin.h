@@ -41,7 +41,7 @@ class SimpleAnimationPlugin : public BasePlugin< ISequenceAnimationSourcePlugin,
 {
 private:
 
-    GeometryChannel*            m_geomChannel;
+    VertexAttributesChannel*            m_geomChannel;
     TexturePixelShaderChannel*  m_pixelShaderChannel;
     TextureVertexShaderChannel* m_vertexShaderChannel;
 
@@ -67,7 +67,7 @@ public:
     void                                SetAttachmentMode           ( TextureAttachmentMode mode );
 
 
-    virtual const IGeometryChannel *            GetGeometryChannel          () const override;                                                                           
+    virtual const IVertexAttributesChannel *            GetGeometryChannel          () const override;                                                                           
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;                                       
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;                                       
 

@@ -11,7 +11,7 @@
 namespace bv { namespace model {
 
 class ISequenceAnimationSource;
-class IGeometryChannel;
+class IVertexAttributesChannel;
 class ITransformChannel;
 class IPixelShaderChannel;
 class IVertexShaderChannel;
@@ -30,7 +30,7 @@ public:
 
     virtual const std::string &                 GetName                     () const = 0;
 
-    virtual const IGeometryChannel *            GetGeometryChannel          () const = 0;
+    virtual const IVertexAttributesChannel *            GetGeometryChannel          () const = 0;
     virtual const ITransformChannel *           GetTransformChannel         () const = 0;
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const = 0;
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const = 0;

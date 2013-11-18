@@ -6,7 +6,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 
@@ -103,7 +103,7 @@ void SimpleAnimationPlugin::EvalGeometryChannel( const IPlugin * prev )
     for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
     {
         ConnectedComponent* connComp = new ConnectedComponent();
-        GeometryChannelDescriptor geomChannelDesc;
+        VertexAttributesChannelDescriptor geomChannelDesc;
 
         auto prevConnComp = static_cast< const model::ConnectedComponent* >( prevGeomChannel->GetComponents()[ i ] );
         auto prevCompChannels = prevConnComp->m_attributeChannels;
@@ -125,7 +125,7 @@ void SimpleAnimationPlugin::EvalGeometryChannel( const IPlugin * prev )
 
             geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-            auto geomChannel = new model::GeometryChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+            auto geomChannel = new model::VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
             m_geomChannel = geomChannel;
         }
 
@@ -293,7 +293,7 @@ void                SimpleAnimationPlugin::Print               ( std::ostream & 
     }
 }
 
-const IGeometryChannel *            SimpleAnimationPlugin::GetGeometryChannel          () const
+const IVertexAttributesChannel *            SimpleAnimationPlugin::GetGeometryChannel          () const
 {
     return m_geomChannel;
 }

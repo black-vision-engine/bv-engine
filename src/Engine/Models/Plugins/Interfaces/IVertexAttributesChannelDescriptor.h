@@ -10,7 +10,7 @@ class IAttributeChannelDescriptor;
 class IIndexChannelDescriptor;
 
 //FIXME: add interface to access groups of channels (position, mapping and so on)
-class IGeometryChannelDescriptor
+class IVertexAttributesChannelDescriptor
 {
 public:
 
@@ -23,7 +23,7 @@ public:
     virtual unsigned int                                SingleVertexEntrySize       ()                      const = 0;
     virtual unsigned int                                SingleIndexEntrySize        ()                      const = 0;
 
-    virtual										        ~IGeometryChannelDescriptor	() {}
+    virtual										        ~IVertexAttributesChannelDescriptor	() {}
 
 };
 

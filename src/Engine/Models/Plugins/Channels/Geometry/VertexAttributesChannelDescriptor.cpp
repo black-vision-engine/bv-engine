@@ -1,4 +1,4 @@
-#include "GeometryChannelDescriptor.h"
+#include "VertexAttributesChannelDescriptor.h"
 
 #include <cassert>
 
@@ -11,7 +11,7 @@ namespace bv { namespace model
 
 // ************************************
 //
-GeometryChannelDescriptor::GeometryChannelDescriptor    ()
+VertexAttributesChannelDescriptor::VertexAttributesChannelDescriptor    ()
     : m_indexChannelDescriptor( nullptr )
 {
     
@@ -19,7 +19,7 @@ GeometryChannelDescriptor::GeometryChannelDescriptor    ()
 
 // ************************************
 //
-GeometryChannelDescriptor::~GeometryChannelDescriptor   ()
+VertexAttributesChannelDescriptor::~VertexAttributesChannelDescriptor   ()
 {
     //FIXME make sure that this is the owner of all descriptors
     //delete m_indexChannelDescriptor;
@@ -32,21 +32,21 @@ GeometryChannelDescriptor::~GeometryChannelDescriptor   ()
 
 // ************************************
 //
-unsigned int GeometryChannelDescriptor::GetNumVertexChannels	() const
+unsigned int VertexAttributesChannelDescriptor::GetNumVertexChannels	() const
 {
     return m_attributeChannelDescriptors.size();
 }
 
 // ************************************
 //
-bool	GeometryChannelDescriptor::HasIndexChannel		() const
+bool	VertexAttributesChannelDescriptor::HasIndexChannel		() const
 {
     return m_indexChannelDescriptor != nullptr;
 }
 
 // ************************************
 //
-const IAttributeChannelDescriptor *	GeometryChannelDescriptor::GetAttrChannelDescriptor	( int channelIndex ) const
+const IAttributeChannelDescriptor *	VertexAttributesChannelDescriptor::GetAttrChannelDescriptor	( int channelIndex ) const
 {
     assert( channelIndex >= 0 );
     assert( channelIndex < (int) m_attributeChannelDescriptors.size() );
@@ -56,14 +56,14 @@ const IAttributeChannelDescriptor *	GeometryChannelDescriptor::GetAttrChannelDes
 
 // ************************************
 //
-const IIndexChannelDescriptor *		        GeometryChannelDescriptor::GetIndexChannelDescriptor	()					 const
+const IIndexChannelDescriptor *		        VertexAttributesChannelDescriptor::GetIndexChannelDescriptor	()					 const
 {
     return m_indexChannelDescriptor;
 }
 
 // ************************************
 //
-unsigned int                                GeometryChannelDescriptor::SingleVertexEntrySize       ()                    const
+unsigned int                                VertexAttributesChannelDescriptor::SingleVertexEntrySize       ()                    const
 {
     unsigned int totalSize = 0;
 
@@ -77,7 +77,7 @@ unsigned int                                GeometryChannelDescriptor::SingleVer
 
 // ************************************
 //
-unsigned int                                GeometryChannelDescriptor::SingleIndexEntrySize        ()                    const
+unsigned int                                VertexAttributesChannelDescriptor::SingleIndexEntrySize        ()                    const
 {
     if( HasIndexChannel() )
     {
@@ -89,7 +89,7 @@ unsigned int                                GeometryChannelDescriptor::SingleInd
 
 // ************************************
 //
-const AttributeChannelDescriptor *  GeometryChannelDescriptor::AddAttrChannelDesc    ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole )
+const AttributeChannelDescriptor *  VertexAttributesChannelDescriptor::AddAttrChannelDesc    ( AttributeType attrType, AttributeSemantic attrSemantic, ChannelRole channelRole )
 {
     AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( attrType, attrSemantic, channelRole );
     AddAttrChannelDesc( desc );
@@ -99,14 +99,14 @@ const AttributeChannelDescriptor *  GeometryChannelDescriptor::AddAttrChannelDes
 
 // ************************************
 //
-void    GeometryChannelDescriptor::AddAttrChannelDesc    ( const AttributeChannelDescriptor * desc )
+void    VertexAttributesChannelDescriptor::AddAttrChannelDesc    ( const AttributeChannelDescriptor * desc )
 {
     m_attributeChannelDescriptors.push_back( desc );
 }
 
 // ************************************
 //
-const IndexChannelDescriptor *   GeometryChannelDescriptor::SetIndexChannelDesc     ( IndexType type )
+const IndexChannelDescriptor *   VertexAttributesChannelDescriptor::SetIndexChannelDesc     ( IndexType type )
 {
     IndexChannelDescriptor * desc = new IndexChannelDescriptor( type );
     SetIndexChannelDesc( desc );
@@ -116,7 +116,7 @@ const IndexChannelDescriptor *   GeometryChannelDescriptor::SetIndexChannelDesc 
 
 // ************************************
 //
-void    GeometryChannelDescriptor::SetIndexChannelDesc     ( IndexChannelDescriptor * desc )
+void    VertexAttributesChannelDescriptor::SetIndexChannelDesc     ( IndexChannelDescriptor * desc )
 {
     if ( m_indexChannelDescriptor != nullptr )
     {

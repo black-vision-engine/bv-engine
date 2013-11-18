@@ -18,7 +18,7 @@ GeometryPluginPD::GeometryPluginPD()
 // ***************************** PLUGIN ********************************** 
 // *******************************
 //
-GeometryPlugin::GeometryPlugin  ( model::GeometryChannel * geomChannel )
+GeometryPlugin::GeometryPlugin  ( model::VertexAttributesChannel * geomChannel )
     : BasePlugin( nullptr )
     , m_geomChannel( geomChannel )
 {
@@ -32,7 +32,7 @@ GeometryPlugin::~GeometryPlugin ()
 
 // *******************************
 //
-const IGeometryChannel *   GeometryPlugin::GetGeometryChannel          () const
+const IVertexAttributesChannel *   GeometryPlugin::GetGeometryChannel          () const
 {
     return m_geomChannel;
 }

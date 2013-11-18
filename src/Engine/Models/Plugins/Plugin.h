@@ -7,7 +7,7 @@
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/ISequenceAnimationSource.h"
 
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
 
 
@@ -67,13 +67,13 @@ public:
     void                                        RegisterValue               ( IValue * v )                                  { m_values.push_back( v ); }
 
 
-    virtual void                                SetGeometryChannel          ( GeometryChannel* geomChannel )                { assert(!"Implement in derived class"); }
+    virtual void                                SetGeometryChannel          ( VertexAttributesChannel* geomChannel )                { assert(!"Implement in derived class"); }
     virtual void                                SetTransformChannel         ( TransformChannel* transformChannel )          { assert(!"Implement in derived class"); }
     virtual void                                SetPixelShaderChannel       ( IPixelShaderChannel * pShCh )                 { assert(!"Implement in derived class"); }
     virtual void                                SetVertexShaderChannel      ( IVertexShaderChannel * vShCh )                { assert(!"Implement in derived class"); }
     virtual void                                SetGeometryShaderChannel    ( IGeometryShaderChannel * gShCh )              { assert(!"Implement in derived class"); }
 
-    virtual const IGeometryChannel *            GetGeometryChannel          () const;                                       
+    virtual const IVertexAttributesChannel *            GetGeometryChannel          () const;                                       
     virtual const ITransformChannel *           GetTransformChannel         () const;                                       
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const;                                       
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const;                                       
@@ -111,7 +111,7 @@ BasePlugin< Iface, ParameterDescriptor >::BasePlugin( const IPlugin* prevPlugin 
 {}
 
 template<class Iface, class ParameterDescriptor >
-const IGeometryChannel *            BasePlugin< Iface, ParameterDescriptor >::GetGeometryChannel          () const
+const IVertexAttributesChannel *            BasePlugin< Iface, ParameterDescriptor >::GetGeometryChannel          () const
 {
     if( m_prevPlugin ) 
         return m_prevPlugin->GetGeometryChannel();

@@ -5,7 +5,7 @@
 
 #include "Mathematics/defines.h"
 
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelUtils.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannelUtils.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/AnimatedStripComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 
@@ -17,7 +17,7 @@ namespace bv { namespace model {
 // ******************************
 //
 GeometryChannelAnimatedVertices::GeometryChannelAnimatedVertices     (  float w, float h, float speedX, float speedY, float cyclesX, float cyclesY )
-    : GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP )
+    : VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP )
 {
     m_w         = w;
     m_h         = h;

@@ -6,7 +6,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/VertexShader/TextureVertexShaderChannel.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
@@ -101,7 +101,7 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
     for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
     {
         ConnectedComponent* connComp = new ConnectedComponent();
-        GeometryChannelDescriptor geomChannelDesc;
+        VertexAttributesChannelDescriptor geomChannelDesc;
 
         auto prevConnComp = static_cast< const model::ConnectedComponent* >( prevGeomChannel->GetComponents()[ i ] );
         auto prevCompChannels = prevConnComp->m_attributeChannels;
@@ -126,7 +126,7 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
                 geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
             }
 
-            auto geomChannel = new model::GeometryChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+            auto geomChannel = new model::VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
             m_geomChannel = geomChannel;
         }
 
@@ -247,7 +247,7 @@ void                SimpleTexturePlugin::Print               ( std::ostream & ou
 
 // *************************************
 //
-const IGeometryChannel *            SimpleTexturePlugin::GetGeometryChannel          () const
+const IVertexAttributesChannel *            SimpleTexturePlugin::GetGeometryChannel          () const
 {
     return m_geomChannel;
 }

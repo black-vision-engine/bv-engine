@@ -43,7 +43,7 @@ GeometryRectPlugin::~GeometryRectPlugin   ()
 
 // *************************************
 //
-const IGeometryChannel *    GeometryRectPlugin::GetGeometryChannel          () const
+const IVertexAttributesChannel *    GeometryRectPlugin::GetGeometryChannel          () const
 {
     return m_geomChannel;
 }

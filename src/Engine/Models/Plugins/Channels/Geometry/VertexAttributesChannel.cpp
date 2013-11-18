@@ -1,4 +1,4 @@
-#include "GeometryChannel.h"
+#include "VertexAttributesChannel.h"
 
 #include <cassert>
 
@@ -13,7 +13,7 @@ namespace bv { namespace model
 
 // *********************************
 //
-GeometryChannel::GeometryChannel     ( PrimitiveType type, bool isReadOnly, bool isTimeInvariant )
+VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, bool isReadOnly, bool isTimeInvariant )
     : m_primitiveType( type )
     , m_isReadOnly( isReadOnly )
     , m_isTimeInvariant( isTimeInvariant )
@@ -24,7 +24,7 @@ GeometryChannel::GeometryChannel     ( PrimitiveType type, bool isReadOnly, bool
 
 // *********************************
 //
-GeometryChannel::GeometryChannel     ( PrimitiveType type, const GeometryChannelDescriptor& desc, bool isReadOnly, bool isTimeInvariant )
+VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, const VertexAttributesChannelDescriptor& desc, bool isReadOnly, bool isTimeInvariant )
     : m_primitiveType( type )
     , m_desc( desc )
     , m_isReadOnly( isReadOnly )
@@ -36,7 +36,7 @@ GeometryChannel::GeometryChannel     ( PrimitiveType type, const GeometryChannel
 
 // *********************************
 //
-GeometryChannel::~GeometryChannel   ()
+VertexAttributesChannel::~VertexAttributesChannel   ()
 {
     for( auto cc : m_connectedComponents )
     {
@@ -46,7 +46,7 @@ GeometryChannel::~GeometryChannel   ()
 
 // *********************************
 //
-void                                    GeometryChannel::Update              ( TimeType t )
+void                                    VertexAttributesChannel::Update              ( TimeType t )
 {
     //FIXME: not necesarrily like this but it has to be thought over
     //FIXME: it is best to assume that Update is called from the first to last plugin and state is well defined and each plugin just has to read predcessor's state (without calling Update)
@@ -60,49 +60,49 @@ void                                    GeometryChannel::Update              ( T
 
 // *********************************
 //
-bool                                    GeometryChannel::IsReadOnly          () const
+bool                                    VertexAttributesChannel::IsReadOnly          () const
 {
     return m_isReadOnly;
 }
 
 // *********************************
 //
-bool                                    GeometryChannel::IsTimeInvariant     () const
+bool                                    VertexAttributesChannel::IsTimeInvariant     () const
 {
     return m_isTimeInvariant;
 }
 
 // *********************************
 //
-bool                                    GeometryChannel::NeedsAttributesUpdate( TimeType t ) const
+bool                                    VertexAttributesChannel::NeedsAttributesUpdate( TimeType t ) const
 {
     return m_needsAttributesUpdate;
 }
 
 // *********************************
 //
-bool                                    GeometryChannel::NeedsTopologyUpdate ( TimeType t ) const
+bool                                    VertexAttributesChannel::NeedsTopologyUpdate ( TimeType t ) const
 {
     return m_needsTopologyUpdate;
 }
 
 // *********************************
 //
-void                                    GeometryChannel::SetNeedsAttributesUpdate( bool b )
+void                                    VertexAttributesChannel::SetNeedsAttributesUpdate( bool b )
 {
     m_needsAttributesUpdate = b;
 }
 
 // *********************************
 //
-void                                    GeometryChannel::SetNeedsTopologyUpdate( bool b )
+void                                    VertexAttributesChannel::SetNeedsTopologyUpdate( bool b )
 {
     m_needsTopologyUpdate = b;
 }
 
 // *********************************
 //
-unsigned int                            GeometryChannel::TotalNumVertices    ()          const
+unsigned int                            VertexAttributesChannel::TotalNumVertices    ()          const
 {
     unsigned int total = 0;
 
@@ -116,26 +116,26 @@ unsigned int                            GeometryChannel::TotalNumVertices    () 
 
 // *********************************
 //
-const IGeometryChannelDescriptor *      GeometryChannel::GetDescriptor       () const
+const IVertexAttributesChannelDescriptor *      VertexAttributesChannel::GetDescriptor       () const
 {
     return &m_desc;
 }
 
 // *********************************
 //
-void                                    GeometryChannel::SetDescriptor       ( const GeometryChannelDescriptor & desc )
+void                                    VertexAttributesChannel::SetDescriptor       ( const VertexAttributesChannelDescriptor & desc )
 {
     m_desc = desc;
 }
 
 // *********************************
 //
-PrimitiveType                           GeometryChannel::GetPrimitiveType    () const
+PrimitiveType                           VertexAttributesChannel::GetPrimitiveType    () const
 {
     return m_primitiveType;
 }
 
-void                                    GeometryChannel::AddConnectedComponent( IConnectedComponent * cc )
+void                                    VertexAttributesChannel::AddConnectedComponent( IConnectedComponent * cc )
 {
     auto attrChannel = cc->GetAttributeChannels();
 
@@ -154,7 +154,7 @@ void                                    GeometryChannel::AddConnectedComponent( 
 
 // *********************************
 //
-int                                     GeometryChannel::GetNumPrimitives   ( IConnectedComponent* connComp ) const
+int                                     VertexAttributesChannel::GetNumPrimitives   ( IConnectedComponent* connComp ) const
 {
     int vertNum = connComp->GetNumVertices();
 
@@ -191,23 +191,23 @@ int                                     GeometryChannel::GetNumPrimitives   ( IC
 
 // *********************************
 //
-std::vector< IConnectedComponent* >     GeometryChannel::GetComponents       () const
+std::vector< IConnectedComponent* >     VertexAttributesChannel::GetComponents       () const
 {
     return std::vector< IConnectedComponent* >( m_connectedComponents.begin(), m_connectedComponents.end() );
 }
 
 //// *********************************
 ////
-//bool                                    GeometryChannel::CanBeConnectedTo    ( IPlugin * plugin ) const
+//bool                                    VertexAttributesChannel::CanBeConnectedTo    ( IPlugin * plugin ) const
 //{
 //    return CanBeConnectedTo( plugin->GetGeometryChannel() );
 //}
 
 // *********************************
 //
-bool                                    GeometryChannel::CanBeConnectedTo    ( IGeometryChannel * channel ) const
+bool                                    VertexAttributesChannel::CanBeConnectedTo    ( IVertexAttributesChannel * channel ) const
 {
-    return CanBeConnectedTo( *static_cast< const GeometryChannelDescriptor * >( channel->GetDescriptor() ) );
+    return CanBeConnectedTo( *static_cast< const VertexAttributesChannelDescriptor * >( channel->GetDescriptor() ) );
 }
 
 } // model

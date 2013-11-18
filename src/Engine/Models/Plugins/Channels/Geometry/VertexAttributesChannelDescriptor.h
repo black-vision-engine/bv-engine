@@ -4,7 +4,7 @@
 
 #include "Engine/Types/Enums.h"
 
-#include "Engine/Models/Plugins/Interfaces/IGeometryChannelDescriptor.h"
+#include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannelDescriptor.h"
 
 
 namespace bv { namespace model
@@ -14,7 +14,7 @@ class IAttributeChannelDescriptor;
 class AttributeChannelDescriptor;
 class IndexChannelDescriptor;
 
-class GeometryChannelDescriptor : public IGeometryChannelDescriptor
+class VertexAttributesChannelDescriptor : public IVertexAttributesChannelDescriptor
 {
 private:
 
@@ -23,8 +23,8 @@ private:
 
 public:
 
-                                                        GeometryChannelDescriptor   ();
-    virtual										        ~GeometryChannelDescriptor	();
+                                                        VertexAttributesChannelDescriptor   ();
+    virtual										        ~VertexAttributesChannelDescriptor	();
 
     virtual unsigned int								GetNumVertexChannels		()						const;
 	virtual bool								        HasIndexChannel				()						const;

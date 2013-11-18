@@ -214,9 +214,9 @@
     <ClCompile Include="Engine\Models\ModelScene.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannel.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelDescriptor.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelUtils.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannelDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannelUtils.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelVariableTopology.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.cpp" />
@@ -357,9 +357,9 @@
     <ClInclude Include="Engine\Models\ModelScene.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannel.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelDescriptor.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\GeometryChannelUtils.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannelDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannelUtils.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelVariableTopology.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.h" />
@@ -389,7 +389,7 @@
     <ClInclude Include="Engine\Models\Plugins\GeometryPluginRing.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IConnectedComponent.h" />
-    <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IIndexChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h" />
@@ -505,7 +505,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Engine\Models\Plugins\Interfaces\IGeometryChannelDescriptor.h" />
+    <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -31,7 +31,7 @@ class SimpleTexturePlugin : public BasePlugin< IPlugin, SimpleTexturePluginPD >
 private:
     TextureAttachmentMode   m_attachmentMode;
     unsigned int            m_texCoordChannelIndex;
-    GeometryChannel*        m_geomChannel;
+    VertexAttributesChannel*        m_geomChannel;
     TexturePixelShaderChannel*  m_pixelShaderChannel;
     TextureVertexShaderChannel* m_vertexShaderChannel;
 
@@ -46,7 +46,7 @@ public:
     explicit                            SimpleTexturePlugin         ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
                                         ~SimpleTexturePlugin        ();
 
-    virtual const IGeometryChannel*     GetGeometryChannel          () const override;                                                                           
+    virtual const IVertexAttributesChannel*     GetGeometryChannel          () const override;                                                                           
     virtual const IPixelShaderChannel*  GetPixelShaderChannel       () const override;                                       
     virtual const IVertexShaderChannel* GetVertexShaderChannel      () const override;       
 

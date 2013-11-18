@@ -5,7 +5,7 @@
 
 #include "Mathematics/defines.h"
 
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelUtils.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannelUtils.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/AnimatedStripComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 
@@ -18,7 +18,7 @@ namespace bv { namespace model {
     // ******************************
 //
 GeometryChannelVariableTopology::GeometryChannelVariableTopology     (  float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
-    : GeometryChannel( PrimitiveType::PT_TRIANGLE_STRIP )
+    : VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP )
 {
     assert( numSegments >= 1 );
     assert( numComponents >= 1 );
@@ -109,7 +109,7 @@ bool    GeometryChannelVariableTopology::IsTimeInvariant            () const
 
 // ******************************
 //
-bool    GeometryChannelVariableTopology::CanBeConnectedTo           ( IGeometryChannel * channel ) const
+bool    GeometryChannelVariableTopology::CanBeConnectedTo           ( IVertexAttributesChannel * channel ) const
 {
     return false;
 }

@@ -1,21 +1,5 @@
 #include "MockScenes.h"
 
-#include "Engine/Models/BasicNode.h"
-#include "Mathematics/Transform/MatTransform.h"
-#include "Engine/Models/Plugins/Parameter.h"
-#include "Engine/Models/Plugins/SimpleTexturePlugin.h"
-#include "Engine/Models/Plugins/SimpleTextPlugin.h"
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/GeometryChannelDescriptor.h"
-#include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
-#include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
-#include "Engine/Models/Plugins/GeometryPluginRect.h"
-#include "Engine/Models/Plugins/PluginsFactory.h"
-#include "Engine/Models/Plugins/SimpleTransformPlugin.h"
-#include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -24,9 +8,27 @@
 #include <stdlib.h>
 #include <wchar.h>
 
+#include "Engine/Models/BasicNode.h"
+#include "Mathematics/Transform/MatTransform.h"
+#include "Engine/Models/Plugins/Parameter.h"
+#include "Engine/Models/Plugins/SimpleTexturePlugin.h"
+#include "Engine/Models/Plugins/SimpleTextPlugin.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
+#include "Engine/Models/Plugins/GeometryPluginRect.h"
+#include "Engine/Models/Plugins/PluginsFactory.h"
+#include "Engine/Models/Plugins/SimpleTransformPlugin.h"
+#include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 //#include <cmath>
+
 
 // *********************************
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro

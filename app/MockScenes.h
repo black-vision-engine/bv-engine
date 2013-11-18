@@ -41,6 +41,8 @@ public:
 
 	static  model::BasicNode *      XMLTestScene                ();
 
+    static  model::BasicNode *      StackThemNow                ( model::BasicNode * n0, model::BasicNode * n1 );
+
 };
 
 // ********************************
