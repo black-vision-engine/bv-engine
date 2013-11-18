@@ -819,7 +819,44 @@ model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
     TimeType stop2 = TimeType( 10.0 );
     TimeType stop3 = TimeType( 15.0 );
 
-    return NonGeometryParentRects( start0, stop0, start1, stop1, start2, stop2, start3, stop3 );
+    model::BasicNode * tlnode = NonGeometryParentRects( start0, stop0, start1, stop1, start2, stop2, start3, stop3 );
+    
+    start0 = TimeType( 4.0 );
+    start1 = TimeType( 4.0 );
+    start2 = TimeType( 4.0 );
+    start3 = TimeType( 4.0 );
+
+    stop0 = TimeType( 6.0 );
+    stop1 = TimeType( 6.0 );
+    stop2 = TimeType( 6.0 );
+    stop3 = TimeType( 6.0 );
+
+    model::BasicNode * ntlnode = NonGeometryParentRects( start0, stop0, start1, stop1, start2, stop2, start3, stop3 );
+
+    model::BasicNode * root = new model::BasicNode();
+    model::SimpleTransformPlugin * plugin00 = model::SimpleTransformPlugin::Create( nullptr, new TransformF() );
+    root->AddPlugin( plugin00 );
+
+    model::BasicNode * left = new model::BasicNode();
+    TransformF * tl  = new TransformF();
+    tl->addTranslation( PluginsFactory::CreateConstValueFloat( -1.3f ), PluginsFactory::CreateConstValueFloat( 1.0f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    tl->addScale( PluginsFactory::CreateConstValueFloat( 0.3f ), PluginsFactory::CreateConstValueFloat( 0.1f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    model::SimpleTransformPlugin * ptl = model::SimpleTransformPlugin::Create( nullptr, tl );
+    left->AddPlugin( ptl );
+    left->AddChild( tlnode );
+
+    model::BasicNode * right = new model::BasicNode();
+    TransformF * tr  = new TransformF();
+    tr->addTranslation( PluginsFactory::CreateConstValueFloat( 1.3f ), PluginsFactory::CreateConstValueFloat( 0.0f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    tr->addScale( PluginsFactory::CreateConstValueFloat( 0.3f ), PluginsFactory::CreateConstValueFloat( 0.1f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    model::SimpleTransformPlugin * ptr = model::SimpleTransformPlugin::Create( nullptr, tr );
+    right->AddPlugin( ptr );
+    right->AddChild( ntlnode );
+
+    root->AddChild( left );
+    root->AddChild( right );
+
+    return root;
 }
 
 } // bv
