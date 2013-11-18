@@ -814,8 +814,8 @@ model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
     TimeType start2 = TimeType( 8.0 );
     TimeType start3 = TimeType( 9.0 );
 
-    TimeType stop0 = TimeType( 13.0 );
-    TimeType stop1 = TimeType( 10.0 );
+    TimeType stop0 = TimeType( 23.0 );
+    TimeType stop1 = TimeType( 14.0 );
     TimeType stop2 = TimeType( 10.0 );
     TimeType stop3 = TimeType( 15.0 );
 
