@@ -27,7 +27,7 @@ public:
     virtual void                                    Update                      ( TimeType ) {}
     virtual bool                                    IsReadOnly                  () const { return true; }
 
-    virtual const std::string&                      GetShaderFile               () const { return m_shaderFile; }
+    virtual const std::string &                     GetShaderFile               () const { return m_shaderFile; }
     virtual const std::vector<IValue*> &            GetValuesList               () const { return m_values; }
     virtual const std::vector<IParameter*> &        GetParametersList           () const { return m_params; }
 

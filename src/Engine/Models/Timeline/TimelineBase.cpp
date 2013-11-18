@@ -68,6 +68,21 @@ TimelineBase::~TimelineBase         ()
 
 // *********************************
 //
+void   TimelineBase::SetInterval    ( TimeType startTime, TimeType endTime, float scale )
+{
+    assert( startTime < endTime );
+
+    TimeInterpolator ti;
+
+    ti.setWrapMethod( m_interpolator.getWrapPreMethod(), m_interpolator.getWrapPostMethod() );
+    ti.addKey( startTime, 0.f );
+    ti.addKey( endTime, scale * ( endTime - startTime ) );
+
+    m_interpolator = ti;
+}
+
+// *********************************
+//
 TimeType    TimelineBase::Evaluate  ( TimeType t ) const
 {
     if( t < StartTime() && m_settings.m_preBehavior == TimelineOutBehavior::TOB_CONST_VAL )

@@ -38,6 +38,9 @@
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
 #include "Engine/Models/Resources/TextHelpers.h"
 
+#include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/Timeline/Timeline.h"
+
 #include "Engine/Models/Plugins/PluginsFactory.h"
 
 #define _USE_MATH_DEFINES
@@ -250,7 +253,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
 
 // ******************************
 //
-model::BasicNode * NonGeometryParentRects()
+model::BasicNode * NonGeometryParentRects   ( TimeType start0, TimeType stop0, TimeType start1, TimeType stop1, TimeType start2, TimeType stop2 ,TimeType start3, TimeType stop3 )
 {
     model::BasicNode * root = new model::BasicNode();
 
@@ -283,10 +286,33 @@ model::BasicNode * NonGeometryParentRects()
     model::SimpleTransformPlugin * tplugin13 = model::SimpleTransformPlugin::Create( rectPlugin13, trans13 );
     model::SimpleTransformPlugin * tplugin14 = model::SimpleTransformPlugin::Create( rectPlugin14, trans14 );
 
-    auto colorPlugin11 = PluginsFactory::CreateSimpleColorPlugin( tplugin11, PluginsFactory::CreateConstValueVec4( glm::vec4(1.f/255.f, 167.f/255.f, 193.f/255.f, 1.f ) ) );
-    auto colorPlugin12 = PluginsFactory::CreateSimpleColorPlugin( tplugin12, PluginsFactory::CreateConstValueVec4( glm::vec4(226.f/255.f, 169.f/255.f, 36.f/255.f, 1.f ) ) );
-    auto colorPlugin13 = PluginsFactory::CreateSimpleColorPlugin( tplugin13, PluginsFactory::CreateConstValueVec4( glm::vec4(0.898f, 0.25f, 0.f, 1.f ) ) );
-    auto colorPlugin14 = PluginsFactory::CreateSimpleColorPlugin( tplugin14, PluginsFactory::CreateConstValueVec4( glm::vec4(0.435f, 172.f / 255.f, 19.f/255.f, 1.f ) ) );
+    model::Timeline * timeline0 = new model::Timeline( nullptr, start0, stop0 );
+    model::Timeline * timeline1 = new model::Timeline( nullptr, start1, stop1 );
+    model::Timeline * timeline2 = new model::Timeline( nullptr, start2, stop2 );
+    model::Timeline * timeline3 = new model::Timeline( nullptr, start3, stop3 );
+
+    glm::vec4 col11( 1.f/255.f, 167.f/255.f, 193.f/255.f, 1.f ); 
+    glm::vec4 col12( 226.f/255.f, 169.f/255.f, 36.f/255.f, 1.f );
+    glm::vec4 col13( 0.898f, 0.25f, 0.f, 1.f );
+    glm::vec4 col14( 0.435f, 172.f / 255.f, 19.f/255.f, 1.f );
+
+    glm::vec4 colb( 0.f, 0.f, 0.f, 1.f );
+    glm::vec4 colw( 1.f, 1.f, 1.f, 1.f );
+
+    Vec4Interpolator colc11; colc11.setWrapPostMethod( bv::WrapMethod::pingPong ); colc11.addKey( TimeType( 0.0 ), col11 ); colc11.addKey( TimeType( 2.0 ), colb );
+    Vec4Interpolator colc12; colc12.setWrapPostMethod( bv::WrapMethod::pingPong ); colc12.addKey( TimeType( 0.0 ), col12 ); colc12.addKey( TimeType( 2.0 ), colw );
+    Vec4Interpolator colc13; colc13.setWrapPostMethod( bv::WrapMethod::pingPong ); colc13.addKey( TimeType( 0.0 ), col13 ); colc13.addKey( TimeType( 2.0 ), colb );
+    Vec4Interpolator colc14; colc14.setWrapPostMethod( bv::WrapMethod::pingPong ); colc14.addKey( TimeType( 0.0 ), col14 ); colc14.addKey( TimeType( 2.0 ), colw );
+
+    ParamVec4 paramCol11 = PluginsFactory::CreateParameter( "color", colc11, timeline0 );
+    ParamVec4 paramCol12 = PluginsFactory::CreateParameter( "color", colc12, timeline1 );
+    ParamVec4 paramCol13 = PluginsFactory::CreateParameter( "color", colc13, timeline2 );
+    ParamVec4 paramCol14 = PluginsFactory::CreateParameter( "color", colc14, timeline3 );
+
+    auto colorPlugin11 = PluginsFactory::CreateSimpleColorPlugin( tplugin11, paramCol11 );
+    auto colorPlugin12 = PluginsFactory::CreateSimpleColorPlugin( tplugin12, paramCol12 );
+    auto colorPlugin13 = PluginsFactory::CreateSimpleColorPlugin( tplugin13, paramCol13 );
+    auto colorPlugin14 = PluginsFactory::CreateSimpleColorPlugin( tplugin14, paramCol14 );
 
     auto psp11 = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin11,  "../dep/media/shaders/solid.frag", PluginsFactory::CreateDefaultRenderableContext() );
     auto psp12 = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin12,  "../dep/media/shaders/solid.frag", PluginsFactory::CreateDefaultRenderableContext() );
@@ -348,7 +374,7 @@ model::BasicNode *          GreenRect()
 
     ///////////////////////////// Material plugin //////////////////////////// 
 
-    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( transformPlugin, PluginsFactory::CreateConstValueVec4( glm::vec4(0.f, 1.f, 0.f, 1.f ) ) );
+    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( transformPlugin, PluginsFactory::CreateParameter( "color", PluginsFactory::CreateConstValueVec4( glm::vec4( 0.f, 1.f, 0.f, 1.f ) ) ) );
 
     root->AddPlugin( colorPlugin );
 
@@ -474,7 +500,7 @@ model::BasicNode *     Text1()
 
     root->AddPlugin( vertexShaderPlugin );
 
-    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( vertexShaderPlugin, color );
+    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( vertexShaderPlugin, PluginsFactory::CreateParameter( "color", color ) );
 
     root->AddPlugin( colorPlugin );
 
@@ -553,12 +579,12 @@ model::BasicNode *     Text2()
 
     Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
 
-    color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-    color.addKey(1.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-    color.addKey(8.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-    color.addKey(18.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+    color.addKey( 0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+    color.addKey( 1.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    color.addKey( 8.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+    color.addKey( 18.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
-    auto texPlugin = PluginsFactory::CreateTextPlugin( str, "../dep/Media/fonts/cour.ttf", 128, true, true);
+    auto texPlugin = PluginsFactory::CreateTextPlugin( str, "../dep/Media/fonts/cour.ttf", 128, true, true );
 
     root->AddPlugin( texPlugin );
 
@@ -586,7 +612,7 @@ model::BasicNode *     Text2()
 
     root->AddPlugin( vertexShaderPlugin );
 
-    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( vertexShaderPlugin, color );
+    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( vertexShaderPlugin, PluginsFactory::CreateParameter( "color", color ) );
 
     root->AddPlugin( colorPlugin );
 
@@ -783,7 +809,17 @@ model::BasicNode *      TestScenesFactory::SequenceAnimationTestScene  ()
 //
 model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
 {
-    return NonGeometryParentRects();
+    TimeType start0 = TimeType( 3.0 );
+    TimeType start1 = TimeType( 5.0 );
+    TimeType start2 = TimeType( 8.0 );
+    TimeType start3 = TimeType( 9.0 );
+
+    TimeType stop0 = TimeType( 13.0 );
+    TimeType stop1 = TimeType( 10.0 );
+    TimeType stop2 = TimeType( 10.0 );
+    TimeType stop3 = TimeType( 15.0 );
+
+    return NonGeometryParentRects( start0, stop0, start1, stop1, start2, stop2, start3, stop3 );
 }
 
 } // bv

@@ -5,6 +5,8 @@
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
 
+#include "Engine/Models/Timeline/Timeline.h"
+
 
 namespace bv
 {
@@ -33,7 +35,14 @@ Vec4Interpolator                   PluginsFactory::CreateConstValueVec4         
 
 // *******************************
 //
-model::GeometryRectPlugin*          PluginsFactory::CreateGeometryRectPlugin            ( float w, float h )
+ParamVec4                          PluginsFactory::CreateParameter                     ( const std::string & name, Vec4Interpolator & interpolator, const Timeline * timeline )
+{
+    return ParamVec4( name, interpolator, timeline );
+}
+
+// *******************************
+//
+model::GeometryRectPlugin *         PluginsFactory::CreateGeometryRectPlugin            ( float w, float h )
 {
 	FloatInterpolator wi; wi.setWrapPostMethod( bv::WrapMethod::pingPong );
 	FloatInterpolator hi; hi.setWrapPostMethod( bv::WrapMethod::pingPong );
@@ -146,14 +155,14 @@ model::IGeometryShaderChannel *     PluginsFactory::CreateGeometryShaderExtrude 
 
 // *******************************
 //
-model::SimpleColorPlugin*           PluginsFactory::CreateSimpleColorPlugin             ( model::IPlugin* prevPlugin, const Vec4Interpolator& color)
+model::SimpleColorPlugin *          PluginsFactory::CreateSimpleColorPlugin             ( model::IPlugin* prevPlugin, const ParamVec4 & color)
 {
     return new model::SimpleColorPlugin( prevPlugin, color );
 }
 
 // *******************************
 //
-model::SimplePixelShaderPlugin*     PluginsFactory::CreateSimplePixelShaderPlugin       ( model::IPlugin* prevPlugin, const std::string& shaderPath, model::RendererContext * ctx )
+model::SimplePixelShaderPlugin *    PluginsFactory::CreateSimplePixelShaderPlugin       ( model::IPlugin* prevPlugin, const std::string& shaderPath, model::RendererContext * ctx )
 {
     return new model::SimplePixelShaderPlugin( prevPlugin, shaderPath, ctx );
 }

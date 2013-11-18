@@ -26,6 +26,8 @@ public:
 
     virtual             ~TimelineBase   ();
 
+    void                SetInterval     ( TimeType startTime, TimeType endTime, float scale = 1.f );
+
     virtual TimeType    Evaluate        ( TimeType t ) const;
 
 private:

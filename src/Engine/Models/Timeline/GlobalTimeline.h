@@ -13,10 +13,12 @@ private:
 
 public:
 
-                        GlobalTimeline    ( TimeType startTime );
-    virtual             ~GlobalTimeline   ();
+                        GlobalTimeline      ( TimeType startTime );
+    virtual             ~GlobalTimeline     ();
 
-    virtual TimeType    Evaluate    ( TimeType t )  const;
+    virtual TimeType    Evaluate            ( TimeType t )  const;
+
+    void                SetStartTime        ( TimeType startTime );
 
 };
 

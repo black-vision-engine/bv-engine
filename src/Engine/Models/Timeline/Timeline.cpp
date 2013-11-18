@@ -11,7 +11,8 @@ Timeline::Timeline    ( ITimeEvaluator * parent, TimeType startTime, TimeType en
     : TimelineBase( startTime, endTime )
     , m_parent( parent )
 {
-    assert( parent );
+    //FIXME: skip it for now - production version should have at least GlobalTimeline added here
+//    assert( parent );
 }
 
 // *********************************
@@ -24,7 +25,8 @@ Timeline::~Timeline   ()
 //
 TimeType    Timeline::Evaluate    ( TimeType t )  const
 {
-    t = m_parent->Evaluate( t );
+    if ( m_parent )
+        t = m_parent->Evaluate( t );
 
     return TimelineBase::Evaluate( t );
 }

@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/PluginParameters.h"
-
+#include "Engine/Models/Plugins/Parameter.h"
 
 namespace bv { namespace model {
 
@@ -27,7 +27,7 @@ private:
 
 public:
 
-    explicit                                SimpleColorPlugin           ( const IPlugin * prev, const Vec4Interpolator& color );
+    explicit                                SimpleColorPlugin           ( const IPlugin * prev, const ParamVec4 & color );
                                             ~SimpleColorPlugin          ();
 
     virtual const IPixelShaderChannel*      GetPixelShaderChannel       () const;

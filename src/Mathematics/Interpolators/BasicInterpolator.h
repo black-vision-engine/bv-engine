@@ -52,29 +52,29 @@ public:
     typedef ValueT ValT;
     typedef Interpolator<TimeValueT> ParentType;
 
-    static const int value_size = sizeof(ValueT);
+    static const int value_size = sizeof( ValueT );
 
-    explicit BasicInterpolator(TimeValueT tolerance = 0.0001);
+    explicit BasicInterpolator( TimeValueT tolerance = 0.0001 );
     virtual ~BasicInterpolator() {};
 
-    void addKey(TimeValueT t, ValueT v);
-    void addKey(const Key<TimeValueT, ValueT>& key);
+    void addKey             ( TimeValueT t, ValueT v );
+    void addKey             ( const Key<TimeValueT, ValueT> & key );
 
-    ValueT evaluate(TimeValueT t) const;
-    ValueT evaluatePoint(TimeValueT t) const;
+    ValueT evaluate         ( TimeValueT t ) const;
+    ValueT evaluatePoint    ( TimeValueT t ) const;
 
-    TimeValueT calcPreT(TimeValueT t) const;
-    TimeValueT calcPostT(TimeValueT t) const;
+    TimeValueT calcPreT     ( TimeValueT t ) const;
+    TimeValueT calcPostT    ( TimeValueT t ) const;
 
-    void setWrapPostMethod(WrapMethod);
-    void setWrapPreMethod(WrapMethod);
+    void setWrapPostMethod  ( WrapMethod );
+    void setWrapPreMethod   ( WrapMethod );
 
     WrapMethod getWrapPostMethod() const;
-    WrapMethod getWrapPreMethod() const;
+    WrapMethod getWrapPreMethod () const;
 
-    void setWrapMethod(WrapMethod pre, WrapMethod post);
+    void setWrapMethod( WrapMethod pre, WrapMethod post );
 
-    virtual int evalToCBuffer(TimeValueT time, char* buf) const;
+    virtual int evalToCBuffer( TimeValueT time, char * buf ) const;
 
     const KeyType &     FirstKey    () const;
     const KeyType &     LastKey     () const;

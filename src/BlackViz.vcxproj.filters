@@ -139,6 +139,7 @@
     <ClCompile Include="Engine\Models\Timeline\Timeline.cpp" />
     <ClCompile Include="Engine\Models\Timeline\GlobalTimeline.cpp" />
     <ClCompile Include="Engine\Models\Updaters\UpdatersManager.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\TimelineManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -311,6 +312,7 @@
     <ClInclude Include="Engine\Interfaces\IUpdater.h" />
     <ClInclude Include="Engine\Interfaces\ITimeEvaluator.h" />
     <ClInclude Include="Engine\Models\Updaters\UpdatersManager.h" />
+    <ClInclude Include="Engine\Models\Timeline\TimelineManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

@@ -106,8 +106,8 @@ public:
 
     float               Evaluate         ( TimeType t )   const;
 
-    explicit ParamFloat( const std::string & name, const FloatInterpolator & value, ParameterSemantic semantic = ParameterSemantic::NONE )
-       : BaseParameter( name, semantic )
+    explicit ParamFloat( const std::string & name, const FloatInterpolator & value, const ITimeEvaluator * evaluator = nullptr, ParameterSemantic semantic = ParameterSemantic::NONE )
+       : BaseParameter( name, semantic, evaluator )
        , m_value( value )
     {
     }
@@ -124,10 +124,10 @@ public:
 
     virtual ParamType   GetParamType     ()          const { return ParamType::PT_FLOAT4; }
 
-    glm::vec4           Evaluate        (TimeType t)   const;
+    glm::vec4           Evaluate        ( TimeType t )   const;
 
-    explicit ParamVec4( const std::string & name, const Vec4Interpolator & value, ParameterSemantic semantic = ParameterSemantic::NONE )
-       : BaseParameter( name, semantic )
+    explicit ParamVec4( const std::string & name, const Vec4Interpolator & value, const ITimeEvaluator * evaluator = nullptr, ParameterSemantic semantic = ParameterSemantic::NONE )
+       : BaseParameter( name, semantic, evaluator )
        , m_value( value )
     {
     }
@@ -145,8 +145,8 @@ public:
 
     glm::mat2           Evaluate        ( TimeType t )  const;
 
-    explicit ParamMat2( const std::string & name, const Vec4Interpolator & value, ParameterSemantic semantic = ParameterSemantic::NONE )
-       : BaseParameter( name, semantic )
+    explicit ParamMat2( const std::string & name, const Vec4Interpolator & value, const ITimeEvaluator * evaluator = nullptr, ParameterSemantic semantic = ParameterSemantic::NONE )
+       : BaseParameter( name, semantic, evaluator )
        , m_value( value )
     {
     }
@@ -171,8 +171,8 @@ public:
         return m_value.evaluate( t );
     }
 
-    explicit ParamTransform(const std::string & name, const TransformF & value, ParameterSemantic semantic = ParameterSemantic::NONE )
-        : BaseParameter( name, semantic )
+    explicit ParamTransform(const std::string & name, const TransformF & value, const ITimeEvaluator * evaluator = nullptr, ParameterSemantic semantic = ParameterSemantic::NONE )
+        : BaseParameter( name, semantic, evaluator )
         , m_value( value )
     {
         m_semantic = semantic;

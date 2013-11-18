@@ -11,6 +11,7 @@
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/ModelScene.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
 
 #include "MockFonts/fttester.h"
 #include "MockScenes.h"
@@ -247,12 +248,12 @@ bool BlackVisionApp::OnInitialize       ()
    // model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
     //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
-    model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
+    //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
     //model::BasicNode * root = TestScenesFactory::XMLTestScene();
     //model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
     //model::BasicNode * root = TestScenesFactory::SequenceAnimationTestScene();
-    //model::BasicNode * root = TestScenesFactory::NonGeometryParent();
+    model::BasicNode * root = TestScenesFactory::NonGeometryParent();
 
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene();
 
@@ -261,13 +262,13 @@ bool BlackVisionApp::OnInitialize       ()
     m_Renderer->SetCamera( m_modelScene->GetCamera() );
 
     m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
-    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 0.001f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+    //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 0.001f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
     //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, -4.f, 3.5f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-    //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 8.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 1.3f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
 //    AddCameraAnimation  ();
     //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 1.2f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
     //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 8.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-    AddCameraAnimation  ();
+    //AddCameraAnimation  ();
     //AddCameraAnimation2  ();
     //FIXME: read from configuration file and change appropriately when resoultion changes
     //m_modelScene->GetCamera()->SetPerspective( 90.f, float(m_Width) / float(m_Height), 0.1f, 100.f );
@@ -282,6 +283,7 @@ void BlackVisionApp::OnTerminate        ()
 #ifdef DEBUG_INFO
     m_file.close();
 #endif
+    model::TimelineManager::Cleanup();
     WindowedApplication::OnTerminate();
 }
 
