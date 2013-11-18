@@ -5,14 +5,16 @@
 #include "System/HRTimer.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Graphics/SceneGraph/Camera.h"
+
 #include "Engine/Models/ModelFactory.h"
 #include "Engine/Models/BasicNode.h"
-#include "Engine/Graphics/SceneGraph/Camera.h"
-#include "Engine/Models/Updaters/IUpdater.h"
 #include "Engine/Models/ModelScene.h"
+#include "Engine/Models/Updaters/UpdatersManager.h"
 
 #include "MockFonts/fttester.h"
 #include "MockScenes.h"
+
 
 bv::HighResolutionTimer GTimer;
 
@@ -99,13 +101,13 @@ void BlackVisionApp::OnIdle		()
     //FIXME: debug timer - don't get fooled
     //float t = float(frame) * 0.1f; ///10 fps
 
-    float t = float(curTime - startTime) * 0.001f;
+    TimeType t = TimeType(curTime - startTime) * TimeType(0.001);
 
         m_modelScene->Update( t );
 
     double modelUpdate = GTimer.CurElapsed();
 
-        UpdatersManager::get().Update( t );
+        UpdatersManager::Get().UpdateStep( t );
 
     double managerUpdate = GTimer.CurElapsed();
 
@@ -114,7 +116,7 @@ void BlackVisionApp::OnIdle		()
         //FIXME:
         std::vector< bv::Transform > vec;
         vec.push_back(Transform(viewMat, glm::inverse(viewMat)));
-        m_mockSceneEng->Update( t, vec);
+        m_mockSceneEng->Update( t, vec );
         //m_mockSceneEng->Update( t, Transform( viewMat, glm::inverse( viewMat ) ) );
 
     double engineUpdate = GTimer.CurElapsed();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/Updaters/IUpdater.h"
+#include "Engine/Interfaces/IUpdater.h"
 
 
 namespace bv {
@@ -26,12 +26,12 @@ public:
                     GeometryUpdater     ( RenderableEntity * out, const model::IGeometryChannel * in ); 
                     ~GeometryUpdater    ();
 
-    virtual void    Update              ( float t );
+    virtual void    Update              ( TimeType t );
 
 private:
 
-    void    UpdatePositions     ( float t );
-    void    UpdateTopology      ( float t );
+    void    UpdatePositions     ( TimeType t );
+    void    UpdateTopology      ( TimeType t );
 
     void    WriteVertexDataToVBO( char * data, model::IConnectedComponent * cc );
 

@@ -39,7 +39,7 @@ public:
     virtual bool                                HasAnimatingTexture         () const = 0;
     virtual ISequenceAnimationSource *          QuerySequenceAnimationSource() = 0;
 
-    virtual void                                Update                      ( float t )                                   = 0;
+    virtual void                                Update                      ( TimeType t )                                = 0;
     virtual void                                Print                       ( std::ostream & out, int tabs = 0 )    const = 0;
 
     virtual const std::vector<IValue *> &       GetValuesList               () const = 0;

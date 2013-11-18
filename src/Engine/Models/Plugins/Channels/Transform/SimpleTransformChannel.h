@@ -16,7 +16,7 @@ private:
 
 public:
 
-    virtual void                                    Update( float t );
+    virtual void                                    Update( TimeType t );
 
     void                                            AddTransform( TransformF* transInt );
 

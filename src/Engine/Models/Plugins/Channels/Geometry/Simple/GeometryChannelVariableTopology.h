@@ -32,11 +32,11 @@ public:
 
     virtual                 ~GeometryChannelVariableTopology    ();
 
-    virtual void            Update                              ( float t );
+    virtual void            Update                              ( TimeType t );
 
-    virtual bool            IsTimeInvariant                     ()          const;
-    virtual bool            NeedsAttributesUpdate                ( float t ) const;
-    virtual bool            NeedsTopologyUpdate                 ( float t ) const;
+    virtual bool            IsTimeInvariant                     ()              const;
+    virtual bool            NeedsAttributesUpdate               ( TimeType t )  const;
+    virtual bool            NeedsTopologyUpdate                 ( TimeType t )  const;
 
     virtual bool            CanBeConnectedTo                    ( IGeometryChannel * channel ) const;
 

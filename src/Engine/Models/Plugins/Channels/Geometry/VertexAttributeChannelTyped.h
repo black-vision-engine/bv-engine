@@ -25,7 +25,7 @@ public:
     explicit                        Float3VertexAttributeChannel    ( const VertexAttributeChannelDescriptor * desc, const std::string & name, bool readOnly );
     virtual                         ~Float3VertexAttributeChannel   ();
 
-    virtual void                    Update                          ( float t ){} // FIXME: implement
+    virtual void                    Update                          ( TimeType t ){} // FIXME: implement
     virtual bool                    IsReadOnly                      () const;
 
     virtual unsigned int            GetNumEntries                   ()                      const;
@@ -52,7 +52,7 @@ public:
 
     explicit                        Float2VertexAttributeChannel    ( const VertexAttributeChannelDescriptor * desc, const std::string & name, bool readOnly );
 
-    virtual void                    Update                          ( float t ){} // FIXME: implement
+    virtual void                    Update                          ( TimeType t ){} // FIXME: implement
     virtual bool                    IsReadOnly                      () const;
 
     virtual unsigned int            GetNumEntries                   ()                      const;

@@ -49,9 +49,9 @@ public:
     void                                AddPlugin               ( IPlugin* plugin );
 
     virtual void                        Print                   ( std::ostream& out, int tabs = 0 ) const;
-    virtual void                        Update                  ( float t );
+    virtual void                        Update                  ( TimeType t );
 
-    virtual bool                        IsVisible               ( float t ) const;
+    virtual bool                        IsVisible               ( TimeType t ) const;
     void                                SetVisible              ( bool visible );
 
 private:

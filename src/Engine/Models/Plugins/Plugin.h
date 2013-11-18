@@ -57,7 +57,7 @@ public:
 
     explicit                                    BasePlugin                  ( const IPlugin* prevPlugin );
 
-    virtual void                                Update                      ( float t );
+    virtual void                                Update                      ( TimeType t );
 
     const std::string &                         GetName                     () const                                        { return ParamDesc::pluginName; } 
 
@@ -94,7 +94,7 @@ protected:
 // Implementation
 
 template<class Iface, class ParameterDescriptor >
-void BasePlugin< Iface, ParameterDescriptor >::Update( float t )
+void BasePlugin< Iface, ParameterDescriptor >::Update( TimeType t )
 {
     assert( !"Implement in derived class" );
     //if( GetGeometryChannel() )          GetGeometryChannel()->Update( t );

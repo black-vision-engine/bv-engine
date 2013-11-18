@@ -29,9 +29,9 @@ public:
 
     virtual         ~GeometryChannelAnimatedVertices    ();
 
-    virtual void    Update                              ( float t );
+    virtual void    Update                              ( TimeType t );
 
-    virtual bool    NeedsAttributesUpdate                ( float t ) const;
+    virtual bool    NeedsAttributesUpdate               ( TimeType t ) const;
 
     static GeometryChannelAnimatedVertices *    Create  ( float w, float h, float z, unsigned int numSegments, float speedX, float speedY, float cyclesX, float cyclesY, float sizeY, float sizeZ );
 

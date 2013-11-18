@@ -269,6 +269,7 @@
     <ClCompile Include="Engine\Models\Updaters\RendererStateUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\SequenceAnimationUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\ShaderParamUpdater.cpp" />
+    <ClCompile Include="Engine\Models\Updaters\UpdatersManager.cpp" />
     <ClCompile Include="System\HRTimer.cpp" />
     <ClCompile Include="System\Print.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\GLRenderer.cpp" />
@@ -349,6 +350,9 @@
     <ClInclude Include="Engine\Graphics\State\StateEnums.h" />
     <ClInclude Include="Engine\Graphics\State\StateInstance.h" />
     <ClInclude Include="Engine\Graphics\State\StencilState.h" />
+    <ClInclude Include="Engine\Interfaces\ITimeEvaluator.h" />
+    <ClInclude Include="Engine\Interfaces\IUpdatable.h" />
+    <ClInclude Include="Engine\Interfaces\IUpdater.h" />
     <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
     <ClInclude Include="Engine\Models\ModelScene.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.h" />
@@ -417,7 +421,6 @@
     <ClInclude Include="Engine\Models\Resources\TextHelpers.h" />
     <ClInclude Include="Engine\Models\Resources\TextureLoader.h" />
     <ClInclude Include="Engine\Models\Timeline\GlobalTimeline.h" />
-    <ClInclude Include="Engine\Models\Timeline\ITimeEvaluator.h" />
     <ClInclude Include="Engine\Models\Timeline\Timeline.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineBase.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineSettings.h" />
@@ -482,7 +485,7 @@
     <ClInclude Include="Engine\Models\Plugins\Parameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Plugin.h" />
     <ClInclude Include="Engine\Models\ModelFactory.h" />
-    <ClInclude Include="Engine\Models\Updaters\IUpdater.h" />
+    <ClInclude Include="Engine\Models\Updaters\UpdatersManager.h" />
     <ClInclude Include="Engine\Models\Updaters\TransformUpdater.h" />
     <ClInclude Include="Mathematics\defines.h" />
     <ClInclude Include="Mathematics\Interpolators\BasicInterpolator.h" />

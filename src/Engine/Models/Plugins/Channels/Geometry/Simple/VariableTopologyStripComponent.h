@@ -37,17 +37,17 @@ private:
 
 public:
 
-    bool                IsActive                        ( float t ) const;
-    bool                TopologyChanged                 ( float t ) const;
+    bool                IsActive                        ( TimeType t ) const;
+    bool                TopologyChanged                 ( TimeType t ) const;
 
-    virtual void        Update                          ( float t );
+    virtual void        Update                          ( TimeType t );
 
     float               ComponentDuration               () const;
 
 private:
 
-    glm::vec3           EvaluateFunction                ( float t ) const;
-    glm::vec3           EvaluateVelocity                ( float t ) const;
+    glm::vec3           EvaluateFunction                ( TimeType t ) const;
+    glm::vec3           EvaluateVelocity                ( TimeType t ) const;
     glm::vec3           EvaluateNormal                  ( const glm::vec3 & tangent ) const;
 
     glm::vec3           TopPosition                     ( const glm::vec3 & val, const glm::vec3 & normal ) const;

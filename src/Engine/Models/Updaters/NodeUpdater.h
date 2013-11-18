@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/Updaters/IUpdater.h"
+#include "Engine/Interfaces/IUpdater.h"
 
 
 namespace bv {
@@ -20,7 +20,7 @@ public:
                     NodeUpdater     ( SceneNode * out, const IModelNode * in ); 
                     ~NodeUpdater    ();
 
-    virtual void    Update          ( float t );
+    virtual void    Update          ( TimeType t );
 
 };
 

@@ -138,6 +138,7 @@
     <ClCompile Include="Engine\Models\Plugins\GeometryMultiRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Timeline.cpp" />
     <ClCompile Include="Engine\Models\Timeline\GlobalTimeline.cpp" />
+    <ClCompile Include="Engine\Models\Updaters\UpdatersManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -196,7 +197,6 @@
     <ClInclude Include="Engine\Graphics\Shaders\RenderablePass.h" />
     <ClInclude Include="Engine\Models\Updaters\TransformUpdater.h" />
     <ClInclude Include="Mathematics\Transform\MatTransform.h" />
-    <ClInclude Include="Engine\Models\Updaters\IUpdater.h" />
     <ClInclude Include="System\Print.h" />
     <ClInclude Include="System\Profiler.h" />
     <ClInclude Include="Engine\Models\Updaters\CameraUpdater.h" />
@@ -299,7 +299,6 @@
     <ClInclude Include="Engine\Models\Resources\Font\FontLoader.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Glyph.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Text.h" />
-    <ClInclude Include="Engine\Models\Timeline\ITimeEvaluator.h" />
     <ClInclude Include="Engine\Models\Timeline\Timeline.h" />
     <ClInclude Include="Engine\Models\Timeline\GlobalTimeline.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineBase.h" />
@@ -308,6 +307,10 @@
     <ClInclude Include="System\BasicTypes.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginsFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryMultiRectPlugin.h" />
+    <ClInclude Include="Engine\Interfaces\IUpdatable.h" />
+    <ClInclude Include="Engine\Interfaces\IUpdater.h" />
+    <ClInclude Include="Engine\Interfaces\ITimeEvaluator.h" />
+    <ClInclude Include="Engine\Models\Updaters\UpdatersManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

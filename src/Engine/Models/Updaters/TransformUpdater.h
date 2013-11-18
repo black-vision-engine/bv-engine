@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
-#include "Engine/Models/Updaters/IUpdater.h"
+#include "Engine/Interfaces/IUpdater.h"
 
 #include "Engine/Graphics/Types/Transform.h"
 
@@ -28,7 +28,7 @@ public:
             TransformUpdater    ( TransformableEntity * out, const model::ITransformChannel * in ); 
             ~TransformUpdater   ();
 
-   virtual  void    Update      ( float t );
+   virtual  void    Update      ( TimeType t );
 
 };
 

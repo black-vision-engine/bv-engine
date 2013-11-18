@@ -32,7 +32,7 @@ public:
 
     virtual const IPixelShaderChannel*      GetPixelShaderChannel       () const;
 
-    void                                    Update                      ( float t ) override;
+    void                                    Update                      ( TimeType t ) override;
     void                                    Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
 };

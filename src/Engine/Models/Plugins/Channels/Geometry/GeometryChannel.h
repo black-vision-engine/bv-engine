@@ -33,13 +33,13 @@ public:
     virtual                                         ~GeometryChannel    ();
 
     //IChannel
-    virtual void                                    Update              ( float t );
+    virtual void                                    Update              ( TimeType t );
     virtual bool                                    IsReadOnly          () const;
 
     //IGeometryChannel
-    virtual bool                                    IsTimeInvariant     ()          const;
-    virtual bool                                    NeedsAttributesUpdate( float t ) const;
-    virtual bool                                    NeedsTopologyUpdate ( float t ) const;
+    virtual bool                                    IsTimeInvariant         ()          const;
+    virtual bool                                    NeedsAttributesUpdate   ( TimeType t ) const;
+    virtual bool                                    NeedsTopologyUpdate     ( TimeType t ) const;
 
     void                                            SetNeedsAttributesUpdate( bool b );
     void                                            SetNeedsTopologyUpdate  ( bool b );

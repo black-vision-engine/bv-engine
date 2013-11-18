@@ -25,9 +25,9 @@ class ModelScene
 
 public:
 
-    static ModelScene*  Create(BasicNode* node, Camera* cam);
+    static ModelScene*  Create( BasicNode* node, Camera* cam );
 
-    void                Update( float t );
+    void                Update( TimeType t );
 
     void                AddCameraInterpolators(Vec3Interpolator* pos, Vec3Interpolator* dir, Vec3Interpolator* up);
 

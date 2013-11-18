@@ -33,7 +33,7 @@ public:
 
     virtual const ITransformChannel*        GetTransformChannel         () const;
 
-    void                                    Update                      ( float t ) override;
+    void                                    Update                      ( TimeType t ) override;
     void                                    Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
     static  SimpleTransformPlugin*          Create                      ( const IPlugin * prev, TransformF* trans );

@@ -26,9 +26,14 @@ bool            BaseParameter::IsEvaluationNeeded( float t )     const
 
 // *******************************
 //
-BaseParameter::BaseParameter( const std::string& name, ParameterSemantic semantic )
+BaseParameter::BaseParameter( const std::string& name, ParameterSemantic semantic, const ITimeEvaluator * evaluator )
     : m_lastEvaluatedTime( -1.f ) // TODO: Is it goot idea to set in to -1 ?
+    , m_timeEvaluator( evaluator )
 {
+    if( evaluator == nullptr )
+    {
+        m_timeEvaluator = DefaultTimeEvaluator::GetDefaultEvaluator();
+    }
 }
 
 // *******************************
@@ -54,7 +59,7 @@ ValueMat4::ValueMat4( const std::string& name )
 
 // *******************************
 //                                               
-float       ParamFloat::Evaluate        ( float t )   const
+float       ParamFloat::Evaluate        ( TimeType t )   const
 {                                                
     SetLastEvaluatedTime( t );
     return m_value.evaluate( t );
@@ -62,7 +67,7 @@ float       ParamFloat::Evaluate        ( float t )   const
                                                  
 // *******************************               
 //                                               
-glm::vec4       ParamVec4::Evaluate     ( float t )    const
+glm::vec4       ParamVec4::Evaluate     ( TimeType t )    const
 {
     SetLastEvaluatedTime( t );
     return m_value.evaluate( t );
@@ -70,7 +75,7 @@ glm::vec4       ParamVec4::Evaluate     ( float t )    const
 
 // *******************************
 //
-glm::mat2           ParamMat2::Evaluate ( float t )   const
+glm::mat2           ParamMat2::Evaluate ( TimeType t )   const
 {
     SetLastEvaluatedTime( t );
     glm::vec4 v = m_value.evaluate( t );

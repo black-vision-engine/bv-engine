@@ -4,43 +4,83 @@
 #include "Mathematics/Transform/MatTransform.h"
 
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
+#include "Engine/Interfaces/ITimeEvaluator.h"
 
 #include "Engine/Types/Enums.h"
 
 
 namespace bv { namespace model {
 
+class DefaultTimeEvaluator : public ITimeEvaluator
+{
+public:
+
+    virtual TimeType    Evaluate        ( TimeType t ) const
+    {
+        return t;
+    }
+
+    static const ITimeEvaluator * GetDefaultEvaluator   ()
+    {
+        static DefaultTimeEvaluator instance;
+
+        return &instance;
+    }
+
+};
+
 //FIXME: this shit deserves some templates :D
 class BaseParameter : public IParameter
 {
 protected:
-    std::string         m_name;
-    ParameterSemantic   m_semantic;
-    mutable float       m_lastEvaluatedTime;
+
+    const ITimeEvaluator *  m_timeEvaluator;
+
+    std::string             m_name;
+    ParameterSemantic       m_semantic;
+    mutable float           m_lastEvaluatedTime;
 
 protected:
 
-    virtual std::string         GetName()       const { return m_name; }
-    virtual ParameterSemantic   GetSemantic()   const { return m_semantic; }
+    virtual std::string         GetName                 ()  const { return m_name; }
+    virtual ParameterSemantic   GetSemantic             ()  const { return m_semantic; }
 
 
-    void                        SetLastEvaluatedTime(float t)   const;
-    float                       GetLastEvaluatedTime()          const;
+    void                        SetLastEvaluatedTime    ( TimeType t )  const;
+    float                       GetLastEvaluatedTime    ()              const;
 
-    explicit BaseParameter(const std::string& name, ParameterSemantic semantic);
-    virtual  ~BaseParameter(){}
+    explicit    BaseParameter  ( const std::string& name, ParameterSemantic semantic, const ITimeEvaluator * evaluator = nullptr );
+    virtual     ~BaseParameter (){}
 
 public:
-    bool                        IsEvaluationNeeded(float t)     const;
+
+    void                        SetTimeEvaluator        ( const ITimeEvaluator * timeEvaluator )
+    {
+        assert( timeEvaluator );
+
+        m_timeEvaluator = timeEvaluator;
+    }
+
+    bool                        IsEvaluationNeeded      ( TimeType t )  const;
+
+protected:
+
+    inline TimeType             GetEvaluationTime       ( TimeType t ) const
+    {
+        return m_timeEvaluator->Evaluate( t );
+    }
+
 };
 
 // TODO: Move to another file
 class BaseValue : public IValue
 {
 private:
+
     std::string             m_name;
 
 protected:
+
     explicit BaseValue(const std::string& name)
         : m_name(name)
     {}
@@ -48,7 +88,9 @@ protected:
     virtual ~BaseValue(){}
 
 public:
+
     virtual const std::string&  GetName     ()              const { return m_name; }
+
 };
 
 class ParamFloat : public BaseParameter
@@ -61,28 +103,32 @@ public:
 
     virtual ParamType   GetParamType     ()          const { return ParamType::PT_FLOAT; }
 
-    float               Evaluate        (float t)   const;
+    float               Evaluate        (TimeType t)   const;
 
     explicit ParamFloat(const std::string& name, const FloatInterpolator& value, ParameterSemantic semantic = ParameterSemantic::NONE)
        : BaseParameter(name, semantic)
        , m_value(value)
-    {}
+    {
+    }
 };
 
 class ParamVec4 : public BaseParameter
 {
 private:
+
     Vec4Interpolator    m_value;
 
 public:
+
     virtual ParamType   GetParamType     ()          const { return ParamType::PT_FLOAT4; }
 
-    glm::vec4           Evaluate        (float t)   const;
+    glm::vec4           Evaluate        (TimeType t)   const;
 
     explicit ParamVec4(const std::string& name, const Vec4Interpolator& value, ParameterSemantic semantic = ParameterSemantic::NONE)
        : BaseParameter(name, semantic)
        , m_value(value)
-    {}
+    {
+    }
 };
 
 class ParamMat2 : public BaseParameter
@@ -95,7 +141,7 @@ public:
 
     virtual ParamType   GetParamType     ()          const { return ParamType::PT_MAT2; }
 
-    glm::mat2           Evaluate        (float t)   const;
+    glm::mat2           Evaluate        (TimeType t)   const;
 
     explicit ParamMat2(const std::string& name, const Vec4Interpolator& value, ParameterSemantic semantic = ParameterSemantic::NONE)
        : BaseParameter(name, semantic)
@@ -114,7 +160,7 @@ public:
 
     virtual ParamType   GetParamType     ()          const { return ParamType::PT_MAT4; }
 
-    glm::mat4           Evaluate        (float t)   const { SetLastEvaluatedTime(t); return m_value.evaluate(t); }
+    glm::mat4           Evaluate        (TimeType t)   const { SetLastEvaluatedTime(t); return m_value.evaluate(t); }
 
     explicit ParamTransform(const std::string& name, const TransformF & value, ParameterSemantic semantic = ParameterSemantic::NONE)
         : BaseParameter(name, semantic)

@@ -9,9 +9,10 @@ namespace bv { namespace model
 class IVertexShaderChannel : public IShaderChannel
 {
 public:
-    virtual         ~IVertexShaderChannel(){};
-};
 
+    virtual         ~IVertexShaderChannel(){};
+
+};
 
 } // model
 } // bv

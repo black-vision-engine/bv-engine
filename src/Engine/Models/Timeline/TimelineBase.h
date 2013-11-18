@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Engine/Models/Timeline/ITimeEvaluator.h"
+#include "Engine/Interfaces/ITimeEvaluator.h"
+
 #include "Engine/Models/Timeline/TimelineSettings.h"
 #include "Engine/Models/Timeline/TimelineState.h"
 #include "Mathematics/Interpolators/Interpolators.h"

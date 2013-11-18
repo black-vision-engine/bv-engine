@@ -34,7 +34,8 @@ class TextPixelShaderChannel : public model::PixelShaderChannelBase< TextPixelSh
     model::ValueVec4*               m_colorVal;
 
 public:
-    virtual void                    Update( float t )
+
+    virtual void                    Update( TimeType t )
     {
         m_colorVal->SetValue( m_color.evaluate( t ) );
         ShaderChannel::Update( t );
@@ -47,6 +48,7 @@ public:
         m_colorVal = new model::ValueVec4( ParamDesc::colorParam );
         RegisterValue(m_colorVal);
     }
+
 };
 
 } // model

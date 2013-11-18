@@ -1,5 +1,6 @@
 #include "ModelScene.h"
 
+#include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Updaters/CameraUpdater.h"
 #include "Engine/Models/BasicNode.h"
 
@@ -17,7 +18,7 @@ ModelScene::ModelScene(BasicNode* node, Camera* cam)
     , m_pSceneRoot(node)
 {}
 
-void            ModelScene::Update( float t )
+void            ModelScene::Update( TimeType t )
 {
     m_pSceneRoot->Update(t);
 }
@@ -28,9 +29,9 @@ void            ModelScene::AddCameraInterpolators(Vec3Interpolator* pos, Vec3In
     m_pCameraPosition   = pos;
     m_pCameraUp         = up;
 
-    CameraUpdater* updater = CameraUpdater::Create(m_pCamera, m_pCameraDirection, m_pCameraPosition, m_pCameraUp);
+    CameraUpdater * updater = CameraUpdater::Create(m_pCamera, m_pCameraDirection, m_pCameraPosition, m_pCameraUp);
 
-    UpdatersManager::get().RegisterUpdater(updater);
+    UpdatersManager::Get().RegisterUpdater(updater);
 }
 
 } // model

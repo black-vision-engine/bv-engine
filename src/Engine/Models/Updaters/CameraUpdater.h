@@ -4,7 +4,7 @@
 
 #include "Mathematics/Interpolators/Interpolators.h"
 
-#include "Engine/Models/Updaters/IUpdater.h"
+#include "Engine/Interfaces/IUpdater.h"
 
 
 namespace bv
@@ -24,9 +24,9 @@ private:
 
 public:
 
-    virtual void            Update(float t);
+    virtual void            Update( TimeType t );
 
-    static CameraUpdater*   Create(Camera* camera, Vec3Interpolator* pos, Vec3Interpolator* dir, Vec3Interpolator* up);
+    static CameraUpdater*   Create( Camera* camera, Vec3Interpolator* pos, Vec3Interpolator* dir, Vec3Interpolator* up );
 
 private:
 

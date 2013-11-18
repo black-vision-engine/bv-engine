@@ -13,7 +13,7 @@ class Transform;
 class ITransformChannel : public IChannel
 {
 public:
-    virtual void                                    Update( float t )               = 0;
+    virtual void                                    Update( TimeType t )               = 0;
 
     virtual const std::vector< Transform* >&         GetTransformChannels() const   = 0;
 

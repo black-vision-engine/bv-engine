@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Engine/Models/Timeline/ITimeEvaluator.h"
+#include "Engine/Interfaces/ITimeEvaluator.h"
+
 
 namespace bv { namespace model {
 

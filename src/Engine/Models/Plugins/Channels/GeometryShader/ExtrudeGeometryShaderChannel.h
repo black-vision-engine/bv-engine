@@ -29,7 +29,7 @@ class ExtrudeGeometryShaderChannel : public model::ShaderChannel< IGeometryShade
 
 public:
 
-    virtual void                    Update( float t );
+    virtual void                    Update( TimeType t );
 
     explicit                        ExtrudeGeometryShaderChannel(const std::string& shaderFile, const FloatInterpolator& scale);
 

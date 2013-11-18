@@ -102,7 +102,7 @@ class TexturePixelShaderChannel : public model::PixelShaderChannelBase< TextureP
     std::vector< model::ValueMat4 * >       m_texTransformValues;
 
 public:
-    virtual void                    Update( float t );
+    virtual void                    Update( TimeType t );
 
     TexturePixelShaderChannel( const std::string& shaderFile, const std::vector< FloatInterpolator >& alphas, const std::vector< TransformF >& texTransforms );
 };

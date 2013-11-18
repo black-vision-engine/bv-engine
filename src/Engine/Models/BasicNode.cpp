@@ -31,6 +31,7 @@
 #include "Engine/Models/Updaters/RendererStateUpdater.h"
 #include "Engine/Models/Updaters/ShaderParamUpdater.h"
 #include "Engine/Models/Updaters/SequenceAnimationUpdater.h"
+#include "Engine/Models/Updaters/UpdatersManager.h"
 
 #include "Engine/Models/Plugins/Interfaces/ISequenceAnimationSource.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryChannel.h"
@@ -177,7 +178,7 @@ SceneNode *                 BasicNode::BuildScene()
 
                 assert( bAdded );
 
-                UpdatersManager & updatersManager = UpdatersManager::get();
+                UpdatersManager & updatersManager = UpdatersManager::Get();
 
                 SequenceAnimationUpdater * updater = new SequenceAnimationUpdater( animation, p->QuerySequenceAnimationSource() );
                 updatersManager.RegisterUpdater( updater );
@@ -208,7 +209,7 @@ SceneNode *                 BasicNode::BuildScene()
 
             if ( p == m_plugins.back() )
             {
-                UpdatersManager & updatersManager = UpdatersManager::get();
+                UpdatersManager & updatersManager = UpdatersManager::Get();
 
                 auto transChannel = p->GetTransformChannel();        
                 auto geomChannel = p->GetGeometryChannel();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/Updaters/IUpdater.h"
+#include "Engine/Interfaces/IUpdater.h"
 
 
 namespace bv
@@ -26,7 +26,7 @@ private:
 
 public:
 
-    virtual void                    Update              ( float t );
+    virtual void                    Update              ( TimeType t );
     static ShaderParamUpdater *     Create              ( const model::IShaderChannel *, Shader * );
 
 };
