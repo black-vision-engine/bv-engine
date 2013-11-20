@@ -46,7 +46,12 @@ Rotation<ParamT>::Rotation(ParamT angle, ParamT p0, ParamT p1, ParamT p2)
 
 template<typename ParamT>
 CompositeTransform<ParamT>::~CompositeTransform()
-{}
+{
+    for( auto t : m_transformations )
+    {
+        delete t;
+    }
+}
 
 template<typename ParamT>
 int CompositeTransform<ParamT>::evalToCBuffer(typename ParamT::TimeT t,char * buf) const
@@ -61,56 +66,74 @@ int CompositeTransform<ParamT>::evalToCBuffer(typename ParamT::TimeT t,char * bu
 template<typename ParamT>
 void CompositeTransform<ParamT>::addTranslation( ParamT x0, ParamT x1, ParamT x2 )
 {
-    transformations.push_back( SimpleTransform<ParamT>::CreateTranslation( x0, x1, x2 ) );
+    m_transformations.push_back( SimpleTransform<ParamT>::CreateTranslation( x0, x1, x2 ) );
 }
 
 template<typename ParamT>
 void CompositeTransform<ParamT>::addScale( ParamT s0, ParamT s1, ParamT s2 )
 {
-    transformations.push_back( SimpleTransform<ParamT>::CreateScale( s0, s1, s2 ) );
+    m_transformations.push_back( SimpleTransform<ParamT>::CreateScale( s0, s1, s2 ) );
 }
 
 template<typename ParamT>
 void CompositeTransform<ParamT>::addRotation( ParamT angle, ParamT r0, ParamT r1, ParamT r2 )
 {
-    transformations.push_back( Rotation<ParamT>(angle, r0, r1, r2) );
+    m_transformations.push_back( new Rotation<ParamT>(angle, r0, r1, r2) );
 }
 
 template<typename ParamT>
-void CompositeTransform<ParamT>::addTransform(const SimpleTransform<ParamT>& trans)
+void CompositeTransform<ParamT>::addTransform( SimpleTransform<ParamT> * trans )
 {
-    transformations.push_back(trans);
+    m_transformations.push_back( trans );
 }
 
 template<typename ParamT>
 CompositeTransform<ParamT>::CompositeTransform()
-{}
+{
+}
+
+template<typename ParamT>
+CompositeTransform<ParamT>::CompositeTransform  ( const CompositeTransform & src )
+{
+    for ( auto t : m_transformations )
+    {
+        delete t;
+    }
+
+    m_transformations.clear();
+
+    for ( auto st : src.m_transformations )
+    {
+        m_transformations.push_back( st->Clone() );
+    }
+}
 
 template<typename ParamT>
 unsigned int CompositeTransform<ParamT>::size() const
 {
-    return transformations.size();
+    return m_transformations.size();
 }
 
 template<typename ParamT>
-SimpleTransform<ParamT>& CompositeTransform<ParamT>::operator[](unsigned int i)
+SimpleTransform<ParamT> * CompositeTransform<ParamT>::operator[](unsigned int i)
 {
-    return transformations[i];
+    return m_transformations[ i ];
 }
 
 template<typename ParamT>
-const SimpleTransform<ParamT>& CompositeTransform<ParamT>::operator[](unsigned int i) const
+const SimpleTransform<ParamT> * CompositeTransform<ParamT>::operator[](unsigned int i) const
 {
-    return transformations[i];
+    return m_transformations[ i ];
 }
 
 template<typename ParamT>
-glm::mat4x4 CompositeTransform<ParamT>::evaluate(typename ParamT::TimeT t) const
+glm::mat4x4 CompositeTransform<ParamT>::evaluate( typename ParamT::TimeT t ) const
 {
     glm::mat4x4 ret(1.0f);
-    for(unsigned int i = 0; i < transformations.size(); ++i)
+
+    for( unsigned int i = 0; i < m_transformations.size(); ++i )
     {
-        ret *= transformations[i].evaluate(t);
+        ret *= m_transformations[ i ]->evaluate( t );
     }
 
     return ret; 
@@ -132,6 +155,12 @@ glm::mat4x4 SimpleTransform<ParamT>::evaluate(typename ParamT::TimeT t) const
         assert(false);
         return glm::mat4(1.0f);
     }
+}
+
+template<typename ParamT>
+SimpleTransform<ParamT> * SimpleTransform<ParamT>::Clone() const
+{
+    return new SimpleTransform( *this );
 }
 
 }

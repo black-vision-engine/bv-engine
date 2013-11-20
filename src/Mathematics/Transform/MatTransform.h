@@ -57,15 +57,16 @@ protected:
 public:
 
     virtual glm::mat4x4 evaluate(typename ParamT::TimeT t) const;
-    
-    static SimpleTransform CreateScale      ( ParamT p0, ParamT p1, ParamT p2 )
+    virtual SimpleTransform * Clone() const;
+
+    static SimpleTransform * CreateScale      ( ParamT p0, ParamT p1, ParamT p2 )
     {
-        return SimpleTransform( TransformKind::scale, p0, p1, p2 );
+        return new SimpleTransform( TransformKind::scale, p0, p1, p2 );
     }
 
-    static SimpleTransform CreateTranslation( ParamT p0, ParamT p1, ParamT p2 )
+    static SimpleTransform * CreateTranslation( ParamT p0, ParamT p1, ParamT p2 )
     {
-        return SimpleTransform( TransformKind::translation, p0, p1, p2 );
+        return new SimpleTransform( TransformKind::translation, p0, p1, p2 );
     }
 };
 
@@ -76,36 +77,45 @@ private:
     ParamT angle;
 
 public:
-    explicit Rotation(ParamT angle, ParamT p0, ParamT p1, ParamT p2);
+    explicit                    Rotation    ( ParamT angle, ParamT p0, ParamT p1, ParamT p2 );
 
-    virtual glm::mat4x4 evaluate(typename ParamT::TimeT t) const override;
+    virtual glm::mat4x4         evaluate    ( typename ParamT::TimeT t ) const override;
+    virtual SimpleTransform *   Clone       () const;
+
 };
 
 template<typename ParamT>
 class CompositeTransform : public Interpolator<typename ParamT::TimeT>
 {
 private:
-    std::vector< SimpleTransform<ParamT> > transformations;
+
+    std::vector< SimpleTransform<ParamT> * > m_transformations;
+
 public:
 
-    static const int value_size = sizeof(glm::mat4x4);
+    static const int value_size = sizeof( glm::mat4x4 );
 
-    void addTranslation(ParamT x0, ParamT x1, ParamT x2);
-    void addScale(ParamT s0, ParamT s1, ParamT s2);
-    void addRotation(ParamT angle, ParamT r0, ParamT r1, ParamT r2);
-    void addTransform(const SimpleTransform<ParamT>& trans);
+public:
 
-    unsigned int size() const;
+    explicit        CompositeTransform  ();
+                    CompositeTransform  ( const CompositeTransform & src );
 
-    SimpleTransform<ParamT>&        operator[](unsigned int i);
-    const SimpleTransform<ParamT>&  operator[](unsigned int i) const;
+    virtual         ~CompositeTransform ();
 
-    glm::mat4x4 evaluate(typename ParamT::TimeT t) const;
+    void            addTranslation      ( ParamT x0, ParamT x1, ParamT x2 );
+    void            addScale            ( ParamT s0, ParamT s1, ParamT s2 );
+    void            addRotation         ( ParamT angle, ParamT r0, ParamT r1, ParamT r2 );
+    void            addTransform        ( SimpleTransform<ParamT> * trans );
 
-    explicit CompositeTransform();
-    virtual ~CompositeTransform();
+    unsigned int    size                () const;
 
-    int evalToCBuffer(typename ParamT::TimeT,char *) const;
+    SimpleTransform<ParamT> *        operator[](unsigned int i);
+    const SimpleTransform<ParamT> *  operator[](unsigned int i) const;
+
+    glm::mat4x4     evaluate            ( typename ParamT::TimeT t ) const;
+
+    int             evalToCBuffer       ( typename ParamT::TimeT,char * ) const;
+
 };
 
 template<typename ParamT>
@@ -114,7 +124,14 @@ glm::mat4x4 Rotation<ParamT>::evaluate(typename ParamT::TimeT t) const
     return glm::rotate(glm::mat4(1.0f), (float)angle.evaluate(t), glm::vec3(p0.evaluate(t), p1.evaluate(t), p2.evaluate(t)));
 }
 
+template<typename ParamT>
+SimpleTransform<ParamT> *   Rotation<ParamT>::Clone       () const
+{
+    return new Rotation( *this );
+}
+
 typedef CompositeTransform<FloatInterpolator> TransformF;
 typedef SimpleTransform<FloatInterpolator> SimpleTransformF;
 typedef Rotation<FloatInterpolator> RotationF;
+
 }

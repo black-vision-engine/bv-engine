@@ -523,7 +523,7 @@ model::BasicNode* SceneExamples::BuildMockScene(bv::model::BasicNode * parent )
     angle.addKey(5.f, 180.f);
 
     bv::TransformF trans;
-    trans.addTransform(bv::RotationF(angle, x,y,z));
+    trans.addTransform( new bv::RotationF(angle, x,y,z) );
 //    bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
 
     //FIXME:

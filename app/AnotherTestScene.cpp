@@ -365,6 +365,7 @@ model::BasicNode *          GreenRect()
     ///////////////////////////// Transform plugin //////////////////////////// 
     TransformF trans;
 
+    trans.addRotation( PluginsFactory::CreateConstValueFloat( 60.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
     trans.addScale( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
     trans.addTranslation( PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
     
@@ -756,6 +757,13 @@ model::BasicNode *      TestScenesFactory::AnimatedTestScene ()
 
     //float 
     return AnimatedSolid( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
+}
+
+// ******************************
+//
+model::BasicNode *      TestScenesFactory::GreenRectTestScene          ()
+{
+    return GreenRect();
 }
 
 // ******************************
