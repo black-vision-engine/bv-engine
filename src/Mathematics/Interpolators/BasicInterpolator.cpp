@@ -333,17 +333,17 @@ WrapMethod BasicInterpolator<TimeValueT, ValueT>::getWrapPreMethod() const
 }
 
 template<class TimeValueT, class ValueT>
-void BasicInterpolator<TimeValueT, ValueT>::setWrapMethod(WrapMethod pre, WrapMethod post)
+void BasicInterpolator<TimeValueT, ValueT>::setWrapMethod( WrapMethod pre, WrapMethod post )
 {
-    setWrapPostMethod(post);
-    setWrapPreMethod(pre);
+    setWrapPostMethod( post );
+    setWrapPreMethod( pre );
 }
 
 template<class TimeValueT, class ValueT>
-int BasicInterpolator<TimeValueT, ValueT>::evalToCBuffer(TimeValueT time, char* buf) const
+int BasicInterpolator<TimeValueT, ValueT>::EvalToCBuffer( TimeValueT time, char * buf ) const
 {
-    ValueT val = evaluate(time);
-    memcpy(buf, &val, value_size);
+    ValueT val = evaluate( time );
+    memcpy( buf, &val, value_size );
 
     return value_size;
 }

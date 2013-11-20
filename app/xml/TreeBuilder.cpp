@@ -108,9 +108,9 @@ namespace bv{
 
 		yt.addKey(30.f, 5.f);
 
-		trns.addTranslation( xt, yt, zt );
+		trns.AddTranslation( xt, yt, zt );
 
-		trns.addScale( bv::model::PluginsFactory::CreateConstValueFloat( 1.f ), bv::model::PluginsFactory::CreateConstValueFloat( 1.f ), bv::model::PluginsFactory::CreateConstValueFloat( 1.f ) );
+		trns.AddScale( bv::model::PluginsFactory::CreateConstValueFloat( 1.f ), bv::model::PluginsFactory::CreateConstValueFloat( 1.f ), bv::model::PluginsFactory::CreateConstValueFloat( 1.f ) );
 
 		auto texPlugin      =   bv::model::PluginsFactory::CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
 
@@ -197,9 +197,9 @@ namespace bv{
 				Current->addKey(tF,hF);
 			}
 		}
-		trns.addTranslation( xt, yt, zt );
-		trns.addScale(xs,ys,zs);
-		trns.addRotation(rotation,xr,yr,zr);
+		trns.AddTranslation( xt, yt, zt );
+		trns.AddScale(xs,ys,zs);
+		trns.AddRotation(rotation,xr,yr,zr);
 	}
 	
 

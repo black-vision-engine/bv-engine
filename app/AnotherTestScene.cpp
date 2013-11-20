@@ -167,8 +167,8 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
     sx.addKey( 0.f, 1.2f );
     sy.addKey( 0.f, 1.2f );
 
-    trans.addScale( sx, sy, PluginsFactory::CreateConstValueFloat( 1.f ) );
-    trans.addTranslation( PluginsFactory::CreateConstValueFloat( -float(numAnimations - 1) * hds / 2.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    trans.AddScale( sx, sy, PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans.AddTranslation( PluginsFactory::CreateConstValueFloat( -float(numAnimations - 1) * hds / 2.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
 
     auto transformPlugin = PluginsFactory::CreateTransformPlugin( rectPlugin, model::PluginsFactory::CreateParameter( "transformation", trans ) );
 
@@ -215,8 +215,8 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
         sx.addKey( 0.f, 1.f );
         sy.addKey( 0.f, 1.f );
 
-        trans.addScale( sx, sy, PluginsFactory::CreateConstValueFloat( 1.f ) );
-        trans.addTranslation( PluginsFactory::CreateConstValueFloat( float(i) * hds * 1.02f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.1f ) );
+        trans.AddScale( sx, sy, PluginsFactory::CreateConstValueFloat( 1.f ) );
+        trans.AddTranslation( PluginsFactory::CreateConstValueFloat( float(i) * hds * 1.02f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.1f ) );
 
         auto transformPlugin = PluginsFactory::CreateTransformPlugin( rectPlugin, model::PluginsFactory::CreateParameter( "transformation", trans ) );
 
@@ -276,10 +276,10 @@ model::BasicNode * NonGeometryParentRects   ( TimeType start0, TimeType stop0, T
     TransformF trans13;
     TransformF trans14;
 
-    trans11.addTranslation( PluginsFactory::CreateConstValueFloat( -0.6f ), PluginsFactory::CreateConstValueFloat( -0.6f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
-    trans12.addTranslation( PluginsFactory::CreateConstValueFloat( 0.6f ), PluginsFactory::CreateConstValueFloat( -0.6f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
-    trans13.addTranslation( PluginsFactory::CreateConstValueFloat( -0.6f ), PluginsFactory::CreateConstValueFloat( 0.6f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
-    trans14.addTranslation( PluginsFactory::CreateConstValueFloat( 0.6f ), PluginsFactory::CreateConstValueFloat( 0.6f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    trans11.AddTranslation( PluginsFactory::CreateConstValueFloat( -0.6f ), PluginsFactory::CreateConstValueFloat( -0.6f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    trans12.AddTranslation( PluginsFactory::CreateConstValueFloat( 0.6f ), PluginsFactory::CreateConstValueFloat( -0.6f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    trans13.AddTranslation( PluginsFactory::CreateConstValueFloat( -0.6f ), PluginsFactory::CreateConstValueFloat( 0.6f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    trans14.AddTranslation( PluginsFactory::CreateConstValueFloat( 0.6f ), PluginsFactory::CreateConstValueFloat( 0.6f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
 
     model::SimpleTransformPlugin * tplugin11 = model::SimpleTransformPlugin::Create( rectPlugin11, model::PluginsFactory::CreateParameter( "transformation", trans11 ) );
     model::SimpleTransformPlugin * tplugin12 = model::SimpleTransformPlugin::Create( rectPlugin12, model::PluginsFactory::CreateParameter( "transformation", trans12 ) );
@@ -370,9 +370,9 @@ model::BasicNode *          GreenRect()
     angle.addKey( 0.f, 0.f );
     angle.addKey( 10.f, 270.f );
 
-    trans.addRotation( angle, PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
-    trans.addScale( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
-    trans.addTranslation( PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    trans.AddRotation( angle, PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans.AddScale( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans.AddTranslation( PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
     
     auto transformPlugin = PluginsFactory::CreateTransformPlugin( rectPlugin, model::PluginsFactory::CreateParameter( "transformation", trans ) );
 
@@ -411,9 +411,9 @@ model::BasicNode *          TexturedRect()
     s.addKey( 0.f, 1.f );
     s.addKey( 8.f, 2.f );
 
-    trans.addRotation( ang, PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
-    trans.addScale( s, s, PluginsFactory::CreateConstValueFloat( 1.f ) );
-    trans.addTranslation( PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    trans.AddRotation( ang, PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans.AddScale( s, s, PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans.AddTranslation( PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
 
     auto transformPlugin = PluginsFactory::CreateTransformPlugin( rectPlugin, model::PluginsFactory::CreateParameter( "transformation", trans ) );
 
@@ -426,9 +426,9 @@ model::BasicNode *          TexturedRect()
     angle.addKey( 6.5f, 270.f );
 
     TransformF txTrans;
-    txTrans.addTranslation( PluginsFactory::CreateConstValueFloat( 0.5f ), PluginsFactory::CreateConstValueFloat( 0.5f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
-    txTrans.addRotation( angle, PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
-    txTrans.addTranslation( PluginsFactory::CreateConstValueFloat( -0.5f ), PluginsFactory::CreateConstValueFloat( -0.5f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    txTrans.AddTranslation( PluginsFactory::CreateConstValueFloat( 0.5f ), PluginsFactory::CreateConstValueFloat( 0.5f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    txTrans.AddRotation( angle, PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    txTrans.AddTranslation( PluginsFactory::CreateConstValueFloat( -0.5f ), PluginsFactory::CreateConstValueFloat( -0.5f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
 
     std::vector< std::string > textures;
     std::vector< TransformF > txTransforms;
@@ -461,8 +461,8 @@ model::BasicNode *          TexturedRing()
 
     TransformF trans;
 
-    trans.addScale( PluginsFactory::CreateConstValueFloat( 0.25f ), PluginsFactory::CreateConstValueFloat( 0.25f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
-    trans.addTranslation( PluginsFactory::CreateConstValueFloat( -1.f ), PluginsFactory::CreateConstValueFloat( -1.f ), PluginsFactory::CreateConstValueFloat( 0.001f ) );
+    trans.AddScale( PluginsFactory::CreateConstValueFloat( 0.25f ), PluginsFactory::CreateConstValueFloat( 0.25f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans.AddTranslation( PluginsFactory::CreateConstValueFloat( -1.f ), PluginsFactory::CreateConstValueFloat( -1.f ), PluginsFactory::CreateConstValueFloat( 0.001f ) );
 
     auto transformPlugin = PluginsFactory::CreateTransformPlugin( ringPlugin, model::PluginsFactory::CreateParameter( "transformation", trans ) );
     
@@ -514,9 +514,9 @@ model::BasicNode *     Text1()
 
     yt.addKey(30.f, 5.f);
 
-    trns.addTranslation( xt, yt, zt );
+    trns.AddTranslation( xt, yt, zt );
 
-    trns.addScale( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trns.AddScale( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
 
     auto transPlugin = PluginsFactory::CreateTransformPlugin( texPlugin, model::PluginsFactory::CreateParameter( "transformation", trns ) );
 
@@ -565,9 +565,9 @@ model::BasicNode * Text1Textured()
 
     yt.addKey(30.f, 5.f);
 
-    trns.addTranslation( xt, yt, zt );
+    trns.AddTranslation( xt, yt, zt );
 
-    trns.addScale( PluginsFactory::CreateConstValueFloat( 3.f ), PluginsFactory::CreateConstValueFloat( 3.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trns.AddScale( PluginsFactory::CreateConstValueFloat( 3.f ), PluginsFactory::CreateConstValueFloat( 3.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
 
     auto transPlugin = PluginsFactory::CreateTransformPlugin( texPlugin, model::PluginsFactory::CreateParameter( "transformation", trns ) );
 
@@ -619,7 +619,7 @@ model::BasicNode *     Text2()
 
     TransformF     trns;
 
-    trns.addScale( PluginsFactory::CreateConstValueFloat( 2.f ), PluginsFactory::CreateConstValueFloat( 2.f ), PluginsFactory::CreateConstValueFloat( 2.f ) );
+    trns.AddScale( PluginsFactory::CreateConstValueFloat( 2.f ), PluginsFactory::CreateConstValueFloat( 2.f ), PluginsFactory::CreateConstValueFloat( 2.f ) );
 
     FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
     FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
@@ -631,7 +631,7 @@ model::BasicNode *     Text2()
 
     yt.addKey(30.f, 5.f);
 
-    trns.addTranslation( xt, yt, zt );
+    trns.AddTranslation( xt, yt, zt );
 
     auto transPlugin = PluginsFactory::CreateTransformPlugin( texPlugin, model::PluginsFactory::CreateParameter( "transformation", trns ) );
 
@@ -669,8 +669,8 @@ model::BasicNode *          ExtrudedRedRect()
     /// Set Transform Channel
     TransformF trans;
 
-    trans.addScale( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
-    trans.addTranslation( PluginsFactory::CreateConstValueFloat( -2.f ), PluginsFactory::CreateConstValueFloat( 1.5f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    trans.AddScale( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans.AddTranslation( PluginsFactory::CreateConstValueFloat( -2.f ), PluginsFactory::CreateConstValueFloat( 1.5f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
 
     auto trasformPlugin  = PluginsFactory::CreateTransformPlugin( rectPlugin, model::PluginsFactory::CreateParameter( "transformation", trans ) );
 
@@ -704,8 +704,8 @@ model::BasicNode *          ExtrudedTexturedRing()
     /// Set Transform Channel
     TransformF trans;
 
-    trans.addScale( PluginsFactory::CreateConstValueFloat( 0.25f ), PluginsFactory::CreateConstValueFloat( 0.25f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
-    trans.addTranslation( PluginsFactory::CreateConstValueFloat( -1.f ), PluginsFactory::CreateConstValueFloat( -1.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    trans.AddScale( PluginsFactory::CreateConstValueFloat( 0.25f ), PluginsFactory::CreateConstValueFloat( 0.25f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans.AddTranslation( PluginsFactory::CreateConstValueFloat( -1.f ), PluginsFactory::CreateConstValueFloat( -1.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
 
     auto trasformChannel  = PluginsFactory::CreateTransformChannel( model::PluginsFactory::CreateParameter( "transformation", trans ) );
 
@@ -885,7 +885,7 @@ model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
 
     model::BasicNode * left = new model::BasicNode();
     TransformF tl;
-    tl.addTranslation( PluginsFactory::CreateConstValueFloat( -1.3f ), PluginsFactory::CreateConstValueFloat( 0.0f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    tl.AddTranslation( PluginsFactory::CreateConstValueFloat( -1.3f ), PluginsFactory::CreateConstValueFloat( 0.0f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
     //tl->addScale( PluginsFactory::CreateConstValueFloat( 0.3f ), PluginsFactory::CreateConstValueFloat( 0.1f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
     model::SimpleTransformPlugin * ptl = model::SimpleTransformPlugin::Create( nullptr, model::PluginsFactory::CreateParameter( "transformation", tl ) );
     left->AddPlugin( ptl );
@@ -893,7 +893,7 @@ model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
 
     model::BasicNode * right = new model::BasicNode();
     TransformF tr;
-    tr.addTranslation( PluginsFactory::CreateConstValueFloat( 1.3f ), PluginsFactory::CreateConstValueFloat( 0.0f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    tr.AddTranslation( PluginsFactory::CreateConstValueFloat( 1.3f ), PluginsFactory::CreateConstValueFloat( 0.0f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
     //tr->addScale( PluginsFactory::CreateConstValueFloat( 0.3f ), PluginsFactory::CreateConstValueFloat( 0.1f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
     model::SimpleTransformPlugin * ptr = model::SimpleTransformPlugin::Create( nullptr, model::PluginsFactory::CreateParameter( "transformation", tr ) );
     right->AddPlugin( ptr );

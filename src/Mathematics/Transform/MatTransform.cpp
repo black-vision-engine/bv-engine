@@ -1,49 +1,82 @@
 #include "Mathematics/Transform/MatTransform.h"
 
 
-namespace bv
-{
+namespace bv { namespace model {
 
-namespace model
-{
-
+// *************************************
+//
 Transform::Transform()
-    : m_mat(glm::mat4x4(1.f))
-{}
-
-Transform::Transform(const glm::mat4x4& m)
-    :   m_mat(m)
-{}
-
-Transform               Transform::operator*    (const Transform& m)    const
+    : m_mat( glm::mat4x4( 1.f ) )
 {
-    return Transform(m_mat * m.m_mat);
 }
 
-void     Transform::SetMatrix   ( const glm::mat4x4& m )
+// *************************************
+//
+Transform::Transform( const glm::mat4x4 & m )
+    :   m_mat( m )
+{
+}
+
+// *************************************
+//
+Transform               Transform::operator *    ( const Transform & m )    const
+{
+    return Transform( m_mat * m.m_mat );
+}
+
+// *************************************
+//
+void     Transform::SetMatrix   ( const glm::mat4x4 & m )
 {
     m_mat = m;
 }
 
-const glm::mat4x4&      Transform::GetMatrix   ()                       const
+// *************************************
+//
+const glm::mat4x4 &      Transform::GetMatrix   ()                       const
 {
     return m_mat;
 }
 
 } // model
 
+// *************************************
+//
 template<typename ParamT>
-SimpleTransform<ParamT>::SimpleTransform(TransformKind kind, ParamT p0, ParamT p1, ParamT p2)
-    : kind(kind), p0(p0), p1(p1), p2(p2)
-{}
-
-template<typename ParamT>
-Rotation<ParamT>::Rotation(ParamT angle, ParamT p0, ParamT p1, ParamT p2)
-    :   SimpleTransform(TransformKind::rotation,p0, p1, p2)
-    ,   angle(angle)
+SimpleTransform<ParamT>::SimpleTransform( TransformKind kind, ParamT p0, ParamT p1, ParamT p2 )
+    : kind( kind ), p0( p0 ), p1( p1 ), p2 (p2 )
 {
 }
 
+// *************************************
+//
+template<typename ParamT>
+SimpleTransform<ParamT>::SimpleTransform( TransformKind kind )
+    : kind( kind )
+{
+}
+
+template<typename ParamT>
+Rotation<ParamT>::Rotation    ( ParamT angle, const Vec3Interpolator & rotAxis )
+    : SimpleTransform( TransformKind::rotation )
+    , angle( angle )
+    , m_hasRotAxisInterpolator( true )
+    , m_rotationAxis( rotAxis ) 
+{
+}
+
+// *************************************
+//
+template<typename ParamT>
+Rotation<ParamT>::Rotation( ParamT angle, ParamT p0, ParamT p1, ParamT p2 )
+    : SimpleTransform( TransformKind::rotation, p0, p1, p2 )
+    , angle( angle )
+    , m_hasRotAxisInterpolator( false )
+{
+}
+
+// *************************************
+//
 template<typename ParamT>
 CompositeTransform<ParamT>::~CompositeTransform()
 {
@@ -53,45 +86,67 @@ CompositeTransform<ParamT>::~CompositeTransform()
     }
 }
 
+// *************************************
+//
 template<typename ParamT>
-int CompositeTransform<ParamT>::evalToCBuffer(typename ParamT::TimeT t,char * buf) const
+int CompositeTransform<ParamT>::EvalToCBuffer( typename ParamT::TimeT t, char * buf ) const
 {
-    glm::mat4x4 val = evaluate(t);
+    glm::mat4x4 val = Evaluate( t );
 
-    memcpy(buf, &val, value_size);
+    memcpy( buf, &val, value_size );
 
     return value_size;
 }
 
+// *************************************
+//
 template<typename ParamT>
-void CompositeTransform<ParamT>::addTranslation( ParamT x0, ParamT x1, ParamT x2 )
+void CompositeTransform<ParamT>::AddTranslation( ParamT x0, ParamT x1, ParamT x2 )
 {
     m_transformations.push_back( SimpleTransform<ParamT>::CreateTranslation( x0, x1, x2 ) );
 }
 
+// *************************************
+//
 template<typename ParamT>
-void CompositeTransform<ParamT>::addScale( ParamT s0, ParamT s1, ParamT s2 )
+void CompositeTransform<ParamT>::AddScale( ParamT s0, ParamT s1, ParamT s2 )
 {
     m_transformations.push_back( SimpleTransform<ParamT>::CreateScale( s0, s1, s2 ) );
 }
 
+// *************************************
+//
 template<typename ParamT>
-void CompositeTransform<ParamT>::addRotation( ParamT angle, ParamT r0, ParamT r1, ParamT r2 )
+void CompositeTransform<ParamT>::AddRotation( ParamT angle, ParamT r0, ParamT r1, ParamT r2 )
 {
-    m_transformations.push_back( new Rotation<ParamT>(angle, r0, r1, r2) );
+    m_transformations.push_back( new Rotation<ParamT>( angle, r0, r1, r2 ) );
 }
 
+// *************************************
+//
 template<typename ParamT>
-void CompositeTransform<ParamT>::addTransform( SimpleTransform<ParamT> * trans )
+void            CompositeTransform<ParamT>::AddRotation         ( ParamT angle, const Vec3Interpolator & rotAxis )
+{
+    m_transformations.push_back( new Rotation<ParamT>( angle, rotAxis ) );    
+}
+
+// *************************************
+//
+template<typename ParamT>
+void CompositeTransform<ParamT>::AddTransform( SimpleTransform<ParamT> * trans )
 {
     m_transformations.push_back( trans );
 }
 
+// *************************************
+//
 template<typename ParamT>
 CompositeTransform<ParamT>::CompositeTransform()
 {
 }
 
+// *************************************
+//
 template<typename ParamT>
 CompositeTransform<ParamT>::CompositeTransform  ( const CompositeTransform & src )
 {
@@ -108,61 +163,71 @@ CompositeTransform<ParamT>::CompositeTransform  ( const CompositeTransform & src
     }
 }
 
+// *************************************
+//
 template<typename ParamT>
-unsigned int CompositeTransform<ParamT>::size() const
+unsigned int CompositeTransform<ParamT>::Size() const
 {
     return m_transformations.size();
 }
 
+// *************************************
+//
 template<typename ParamT>
-SimpleTransform<ParamT> * CompositeTransform<ParamT>::operator[](unsigned int i)
+SimpleTransform<ParamT> * CompositeTransform<ParamT>::operator[]( unsigned int i )
 {
     return m_transformations[ i ];
 }
 
 template<typename ParamT>
-const SimpleTransform<ParamT> * CompositeTransform<ParamT>::operator[](unsigned int i) const
+const SimpleTransform<ParamT> * CompositeTransform<ParamT>::operator[]( unsigned int i ) const
 {
     return m_transformations[ i ];
 }
 
+// *************************************
+//
 template<typename ParamT>
-glm::mat4x4 CompositeTransform<ParamT>::evaluate( typename ParamT::TimeT t ) const
+glm::mat4x4 CompositeTransform<ParamT>::Evaluate( typename ParamT::TimeT t ) const
 {
     glm::mat4x4 ret(1.0f);
 
     for( unsigned int i = 0; i < m_transformations.size(); ++i )
     {
-        ret *= m_transformations[ i ]->evaluate( t );
+        ret *= m_transformations[ i ]->Evaluate( t );
     }
 
     return ret; 
 }
 
+// *************************************
+//
 template<typename ParamT>
-glm::mat4x4 SimpleTransform<ParamT>::evaluate(typename ParamT::TimeT t) const
+glm::mat4x4 SimpleTransform<ParamT>::Evaluate( typename ParamT::TimeT t ) const
 {
     switch(kind)
     {
     case TransformKind::translation:
-        return glm::translate(glm::mat4(1.0f), glm::vec3(p0.evaluate(t), p1.evaluate(t), p2.evaluate(t)));
+        return glm::translate( glm::mat4( 1.0f ), glm::vec3( p0.evaluate( t ), p1.evaluate( t ), p2.evaluate( t ) ) );
     case TransformKind::scale:
-        return glm::scale(glm::mat4(1.0f), glm::vec3(p0.evaluate(t), p1.evaluate(t), p2.evaluate(t)));
+        return glm::scale( glm::mat4( 1.0f ), glm::vec3( p0.evaluate( t ), p1.evaluate( t ), p2.evaluate( t ) ) );
     case TransformKind::rotation:
-        assert(false);
-        return glm::mat4(1.0f);
+        assert( false );
+        return glm::mat4( 1.0f);
     default:
-        assert(false);
-        return glm::mat4(1.0f);
+        assert( false );
+        return glm::mat4( 1.0f );
     }
 }
 
+// *************************************
+//
 template<typename ParamT>
 SimpleTransform<ParamT> * SimpleTransform<ParamT>::Clone() const
 {
     return new SimpleTransform( *this );
 }
 
-}
+} //bv
 
 template class bv::CompositeTransform<bv::FloatInterpolator>;

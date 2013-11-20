@@ -165,7 +165,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
         angle.addKey(6.5f, 0.f);
     }
 
-    trns.addRotation(angle, x, y ,z);
+    trns.AddRotation(angle, x, y ,z);
 
 
     TransformF tx0m;
@@ -216,8 +216,8 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
         angTex1.addKey(12.f, 120.f);
     }
 
-    tx0m.addRotation( angTex0, x, y, z ); //FIXME: memory lik
-    tx1m.addRotation( angTex1, x, y, z ); //FIXME: memory lik
+    tx0m.AddRotation( angTex0, x, y, z ); //FIXME: memory lik
+    tx1m.AddRotation( angTex1, x, y, z ); //FIXME: memory lik
 
     FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
     FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
@@ -241,7 +241,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
         zs.addKey(0.f, 1.f);
     }
 
-    trns.addScale(xs, ys ,zs);
+    trns.AddScale(xs, ys ,zs);
 
     if( numcall == 1 )
     {
@@ -249,7 +249,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
         FloatInterpolator yt; yt.addKey( 0.0f, 0.0f );
         FloatInterpolator zt; zt.addKey( 0.0f, 0.1f );
 
-        trns.addTranslation( xt, yt, zt );
+        trns.AddTranslation( xt, yt, zt );
     }
 
     /////////////////////////////// SimpleRect plugin //////////////////////////////////
@@ -342,7 +342,7 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     angle.addKey(0.f, 0.f);
     angle.addKey(5.f, 360.f);
 
-    trns.addRotation(angle, ConstValue( 0.f ), ConstValue( 0.f ), ConstValue( 1.f ) );
+    trns.AddRotation(angle, ConstValue( 0.f ), ConstValue( 0.f ), ConstValue( 1.f ) );
 
     auto transformPlugin  =  model::PluginsFactory::CreateTransformPlugin( rectPlugin, model::PluginsFactory::CreateParameter( "transformation", trns ) );
     
@@ -361,10 +361,10 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     alpha.addKey( 10.0f, 0.2f );
 
     TransformF tx0m;
-    tx0m.addScale( ConstValue( 1.0f ), alpha, ConstValue( 1.0f ) );
+    tx0m.AddScale( ConstValue( 1.0f ), alpha, ConstValue( 1.0f ) );
 
     TransformF tx1m;    
-    tx1m.addScale( alpha, ConstValue( 1.0f ), ConstValue( 1.0f ) );
+    tx1m.AddScale( alpha, ConstValue( 1.0f ), ConstValue( 1.0f ) );
 
     std::vector< std::string > textures;
     std::vector< TransformF > txTransforms;
@@ -521,33 +521,33 @@ model::BasicNode* SceneExamples::BuildMockScene(bv::model::BasicNode * parent )
 //    mockTree->addGeometryPlugin(new bv::PluginGeometryRect(4.f, 4.f));
 
     // TRANSFORMATION
-    bv::FloatInterpolator angle; angle.setWrapPostMethod(bv::WrapMethod::pingPong);
+    bv::FloatInterpolator angle; angle.setWrapPostMethod (bv::WrapMethod::pingPong );
     bv::FloatInterpolator x;
     bv::FloatInterpolator y;
     bv::FloatInterpolator z;
 
-    x.addKey(0.f, 0.f);
-    y.addKey(0.f, 0.f);
-    z.addKey(0.f, 1.f);
-    angle.addKey(0.f, 0.f);
-    angle.addKey(5.f, 180.f);
+    x.addKey( 0.f, 0.f );
+    y.addKey( 0.f, 0.f );
+    z.addKey( 0.f, 1.f );
+    angle.addKey( 0.f, 0.f );
+    angle.addKey( 5.f, 180.f );
 
     bv::TransformF trans;
-    trans.addTransform( new bv::RotationF(angle, x,y,z) );
+    trans.AddTransform( new bv::RotationF( angle, x,y,z ) );
 //    bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
 
     //FIXME:
     //mockTree->addTransformPlugin(transPlugin);
 
-    if(parent != nullptr)
+    if( parent != nullptr )
     {
-        parent->AddChild(mockTree);
+        parent->AddChild( mockTree );
     }
 
     return mockTree;
 }
 
-model::BasicNode* SceneExamples::BuildMockScene2(bv::model::BasicNode* parent)
+model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent )
 {
     bv::model::BasicNode* mockTree = new bv::model::BasicNode();
 
@@ -591,7 +591,7 @@ model::BasicNode* SceneExamples::BuildMockScene2(bv::model::BasicNode* parent)
     x.setWrapPostMethod(bv::WrapMethod::repeat);
     y.setWrapPostMethod(bv::WrapMethod::repeat);
     
-    bv::TransformF* trans = new bv::TransformF();
+    bv::TransformF * trans = new bv::TransformF();
 
     bv::FloatInterpolator mx;
     bv::FloatInterpolator my;
@@ -605,8 +605,8 @@ model::BasicNode* SceneExamples::BuildMockScene2(bv::model::BasicNode* parent)
     my.addKey(2.f, -2.0f);
     mz.addKey(3.f, 0.f);
 
-    trans->addTranslation(mx, my, mz);
-    trans->addScale(x,y,z);
+    trans->AddTranslation(mx, my, mz);
+    trans->AddScale(x,y,z);
 
 //    bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
 

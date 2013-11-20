@@ -137,9 +137,9 @@ int main(int argc, char** argv)
     bv::DoubleTransformation trans;
     assert(trans.size() == 0);
 
-    trans.addRotation(di, di, di, di);
-    trans.addTranslation(di, di, di);
-    trans.addScale(di, di, di);
+    trans.AddRotation(di, di, di, di);
+    trans.AddTranslation(di, di, di);
+    trans.AddScale(di, di, di);
     assert(trans.size() == 3);
 
     glm::mat4 m = trans.evaluate(1.);

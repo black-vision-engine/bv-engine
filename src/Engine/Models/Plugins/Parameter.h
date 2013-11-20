@@ -168,7 +168,7 @@ public:
     { 
         t = BaseParameter::GetEvaluationTime( t );
         SetLastEvaluatedTime( t );
-        return m_value.evaluate( t );
+        return m_value.Evaluate( t );
     }
 
     explicit ParamTransform(const std::string & name, const TransformF & value, const ITimeEvaluator * evaluator = nullptr, ParameterSemantic semantic = ParameterSemantic::NONE )

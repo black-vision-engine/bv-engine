@@ -72,6 +72,49 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
 
 // *************************************
 //
+SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, const std::vector< TransformF > txTransforms, model::RendererContext * ctx, TextureAttachmentMode mode )
+    : BasePlugin( prev )
+    , m_attachmentMode( mode )
+{
+    assert( prev != nullptr );
+    assert( texturesFilesNames.size() == txTransforms.size() );
+
+    for( unsigned int i = 0; i < texturesFilesNames.size(); ++i )
+    {
+        m_textures.push_back( LoadTexture( "Tex" + std::to_string( i ), texturesFilesNames[ i ] ) );
+    }
+
+    m_geomChannel = nullptr;
+    EvalGeometryChannel( prev );
+
+    // Set Pixel Shader Channel
+    std::vector<ParamTransform> txMat;
+
+    for( auto t : txTransforms )
+    {
+        txMat.push_back( ParamTransform( "txTransform", t ) );
+    }
+
+    std::vector<ParamFloat> alphas;
+
+    m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
+										, alphas
+										, txMat );
+
+    if ( ctx )
+        m_pixelShaderChannel->SetRendererContext( ctx );
+    else
+        m_pixelShaderChannel->SetRendererContext( PluginsFactory::CreateDefaultRenderableContext() );
+
+    auto rendContext = m_pixelShaderChannel->GetRendererContext();
+    rendContext->cullCtx->enabled = false;
+
+	m_vertexShaderChannel = new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" );
+}
+
+
+// *************************************
+//
 SimpleTexturePlugin::~SimpleTexturePlugin        ()
 {
     //delete m_alphaParam;

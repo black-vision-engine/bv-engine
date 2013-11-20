@@ -30,7 +30,9 @@ template<class TimeValueT>
 class Interpolator
 {
 public:
-    virtual int evalToCBuffer(TimeValueT time, char* buf) const = 0;
+
+    virtual int EvalToCBuffer( TimeValueT time, char * buf ) const = 0;
+
 };
 
 template<class TimeValueT, class ValueT>
@@ -74,7 +76,7 @@ public:
 
     void setWrapMethod( WrapMethod pre, WrapMethod post );
 
-    virtual int evalToCBuffer( TimeValueT time, char * buf ) const;
+    virtual int EvalToCBuffer( TimeValueT time, char * buf ) const;
 
     const KeyType &     FirstKey    () const;
     const KeyType &     LastKey     () const;
