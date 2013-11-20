@@ -152,7 +152,7 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
             for( unsigned int j = 0; j < prevCompChannels[0]->GetNumEntries(); ++j )
             {
                 const glm::vec3* pos = reinterpret_cast<const glm::vec3*>( prevCompChannels[0]->GetData() );
-                verTexAttrChannel->AddAttribute( glm::vec2( pos[ j ].x, pos[ j ].y ) );
+                verTexAttrChannel->AddAttribute( glm::vec2( ( pos[ j ].x - minX ) / ( maxX - minX ), ( pos[ j ].y - minY ) / ( maxY - minY ) ) );
             }
 
             connComp->m_attributeChannels.push_back( verTexAttrChannel );
