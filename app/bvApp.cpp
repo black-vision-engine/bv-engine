@@ -18,7 +18,7 @@
 
 bv::HighResolutionTimer GTimer;
 
-#define FULLSCREEN_MODEL
+#define FULLSCREEN_MODE
 
 #ifdef FULLSCREEN_MODE
     const bool          GFullScreen = true;
@@ -279,7 +279,7 @@ bool BlackVisionApp::OnInitialize       ()
     //AddCameraAnimation  ();
     //AddCameraAnimation2  ();
     //FIXME: read from configuration file and change appropriately when resoultion changes
-    //m_modelScene->GetCamera()->SetPerspective( 90.f, float(m_Width) / float(m_Height), 0.1f, 100.f );
+    m_modelScene->GetCamera()->SetPerspective( 90.f, float(m_Width) / float(m_Height), 0.1f, 100.f );
 
     return WindowedApplication::OnInitialize();
 }
