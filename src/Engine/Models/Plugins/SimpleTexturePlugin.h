@@ -43,7 +43,7 @@ private:
 
 public:
 
-    explicit                            SimpleTexturePlugin         ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
+    explicit                            SimpleTexturePlugin         ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, const std::vector< TransformF > txTransforms, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
                                         ~SimpleTexturePlugin        ();
 
     virtual const IVertexAttributesChannel*     GetGeometryChannel          () const override;                                                                           

@@ -89,17 +89,17 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
     //auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( transformPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
-
     //root->AddPlugin( solidPlugin );
-
     //return root;
 
 
     ///////////////////////////// Texture plugin //////////////////////////// 
     std::vector< std::string > textures;
+    std::vector< TransformF > txTransforms;
     textures.push_back( "simless_00.jpg" );
+    txTransforms.push_back( TransformF() );
 
-    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transformPlugin, textures, TextureAttachmentMode::MM_ATTACHED );
+    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transformPlugin, textures, txTransforms, TextureAttachmentMode::MM_ATTACHED );
 
     root->AddPlugin( texturePlugin );
 
@@ -358,14 +358,19 @@ model::BasicNode *          GreenRect()
     model::BasicNode * root = new model::BasicNode();
 
     ///////////////////////////// Geometry plugin //////////////////////////
-    model::GeometryRectPlugin*          rectPlugin  = PluginsFactory::CreateGeometryRectPlugin(1.f, 1.f);
+    model::GeometryRectPlugin * rectPlugin  = PluginsFactory::CreateGeometryRectPlugin( 1.f, 1.f );
 
     root->AddPlugin(rectPlugin); 
 
     ///////////////////////////// Transform plugin //////////////////////////// 
     TransformF trans;
 
-    trans.addRotation( PluginsFactory::CreateConstValueFloat( 60.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    FloatInterpolator angle; angle.setWrapPostMethod( bv::WrapMethod::pingPong );
+
+    angle.addKey( 0.f, 0.f );
+    angle.addKey( 10.f, 270.f );
+
+    trans.addRotation( angle, PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
     trans.addScale( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
     trans.addTranslation( PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
     
@@ -395,27 +400,45 @@ model::BasicNode *          TexturedRect()
     ///////////////////////////// Geometry plugin //////////////////////////
     model::GeometryRectPlugin* rectPlugin   = PluginsFactory::CreateGeometryRectPlugin(1.f, 1.f);
 
-    root->AddPlugin(rectPlugin);
+    root->AddPlugin( rectPlugin );
 
     ///////////////////////////// Transform plugin //////////////////////////// 
     TransformF trans;
+    FloatInterpolator ang; ang.setWrapPostMethod( bv::WrapMethod::pingPong );
+    ang.addKey( 0.f, 0.f );
+    ang.addKey( 9.f, 359.f );
+    FloatInterpolator s; s.setWrapPostMethod( bv::WrapMethod::pingPong );
+    s.addKey( 0.f, 1.f );
+    s.addKey( 8.f, 2.f );
 
-    trans.addScale( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
-    trans.addTranslation( PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    trans.addRotation( ang, PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans.addScale( s, s, PluginsFactory::CreateConstValueFloat( 1.f ) );
+    trans.addTranslation( PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
 
     auto transformPlugin = PluginsFactory::CreateTransformPlugin( rectPlugin, model::PluginsFactory::CreateParameter( "transformation", trans ) );
 
     root->AddPlugin( transformPlugin ); // Plugin with transformation
     
     ///////////////////////////// Material plugin //////////////////////////// 
+    
+    FloatInterpolator angle; angle.setWrapPostMethod( bv::WrapMethod::pingPong );
+    angle.addKey( 0.f, 0.f );
+    angle.addKey( 6.5f, 270.f );
+
+    TransformF txTrans;
+    txTrans.addTranslation( PluginsFactory::CreateConstValueFloat( 0.5f ), PluginsFactory::CreateConstValueFloat( 0.5f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    txTrans.addRotation( angle, PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+    txTrans.addTranslation( PluginsFactory::CreateConstValueFloat( -0.5f ), PluginsFactory::CreateConstValueFloat( -0.5f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
 
     std::vector< std::string > textures;
+    std::vector< TransformF > txTransforms;
 
     textures.push_back( "simless_00.jpg" );
+    txTransforms.push_back( txTrans );
 
-    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transformPlugin, textures );
+    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transformPlugin, textures, txTransforms );
 
-    root->AddPlugin(texturePlugin);
+    root->AddPlugin( texturePlugin );
 
     return root;
 
@@ -448,10 +471,12 @@ model::BasicNode *          TexturedRing()
     ///////////////////////////// Material plugin //////////////////////////// 
 
     std::vector< std::string > textures;
+    std::vector< TransformF > txTransforms;
 
     textures.push_back( "simless_01.jpg" );
+    txTransforms.push_back( TransformF() );
 
-    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transformPlugin, textures );
+    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transformPlugin, textures, txTransforms );
 
     root->AddPlugin(texturePlugin);
 
@@ -551,7 +576,10 @@ model::BasicNode * Text1Textured()
     std::vector< std::string > textures;
     textures.push_back( "simless_01.jpg" );
 
-    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transPlugin, textures );
+    std::vector< TransformF > txTransforms;
+    txTransforms.push_back( TransformF() );
+
+    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transPlugin, textures, txTransforms );
 
     root->AddPlugin( texturePlugin );
 
@@ -688,7 +716,10 @@ model::BasicNode *          ExtrudedTexturedRing()
     std::vector< std::string > textures;
     textures.push_back( "simless_01.jpg" );
 
-    auto texturePlugin  = PluginsFactory::CreateTexturePlugin( ringPlugin, textures );
+    std::vector< TransformF > txTransforms;
+    txTransforms.push_back( TransformF() );
+
+    auto texturePlugin  = PluginsFactory::CreateTexturePlugin( ringPlugin, textures, txTransforms );
 
     texturePlugin->SetGeometryShaderChannel ( PluginsFactory::CreateGeometryShaderExtrude( 1.f ) );
 
@@ -764,6 +795,13 @@ model::BasicNode *      TestScenesFactory::AnimatedTestScene ()
 model::BasicNode *      TestScenesFactory::GreenRectTestScene          ()
 {
     return GreenRect();
+}
+
+// ******************************
+//
+model::BasicNode *      TestScenesFactory::TexturedRectTestScene       ()
+{
+    return TexturedRect();
 }
 
 // ******************************

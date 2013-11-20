@@ -34,11 +34,12 @@ SimpleTexturePluginPD::SimpleTexturePluginPD()
 
 // *************************************
 //
-SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, TextureAttachmentMode mode )
+SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, const std::vector< TransformF > txTransforms, TextureAttachmentMode mode )
     : BasePlugin( prev )
     , m_attachmentMode( mode )
 {
     assert( prev != nullptr );
+    assert( texturesFilesNames.size() == txTransforms.size() );
 
     for(unsigned int i = 0; i < texturesFilesNames.size(); ++i)
     {
@@ -50,6 +51,12 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
 
     // Set Pixel Shader Channel
     std::vector<ParamTransform> txMat;
+
+    for( auto t : txTransforms )
+    {
+        txMat.push_back( ParamTransform( "txTransform", t ) );
+    }
+
     std::vector<ParamFloat> alphas;
 
     m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
@@ -234,9 +241,13 @@ void                SimpleTexturePlugin::Update              ( TimeType t )
                     }
             }
         }
+
     }
 
-    m_geomChannel->SetNeedsAttributesUpdate( true );
+    if ( m_prevPlugin->GetGeometryChannel()->NeedsAttributesUpdate( t ) )
+    {
+        m_geomChannel->SetNeedsAttributesUpdate( true );
+    }
 
     m_geomChannel->Update( t );
     m_pixelShaderChannel->Update( t );

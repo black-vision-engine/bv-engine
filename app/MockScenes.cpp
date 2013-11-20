@@ -145,7 +145,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 
     TransformF     trns;
 
-    FloatInterpolator angle; angle.setWrapPostMethod(bv::WrapMethod::pingPong);
+    FloatInterpolator angle; angle.setWrapPostMethod( bv::WrapMethod::pingPong );
     FloatInterpolator x;
     FloatInterpolator y;
     FloatInterpolator z;
@@ -272,18 +272,25 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     if( numcall == 0 )
     {
         std::vector< std::string > textures;
+        std::vector< TransformF > txTransforms;
+
         textures.push_back( "asci_arial_atlas_red.png" );
         textures.push_back( "simless_00.jpg" );
+        txTransforms.push_back( tx0m );
+        txTransforms.push_back( tx1m );
 
-        stpp = model::PluginsFactory::CreateTexturePlugin( stpl, textures );
+        stpp = model::PluginsFactory::CreateTexturePlugin( stpl, textures, txTransforms );
     }
     else
     {
         std::vector< std::string > textures;
+        std::vector< TransformF > txTransforms;
         textures.push_back( "asci_arial_atlas_red.png" );
         textures.push_back( "simless_01.jpg" );
+        txTransforms.push_back( tx0m );
+        txTransforms.push_back( tx1m );
 
-        stpp = model::PluginsFactory::CreateTexturePlugin( stpl, textures );
+        stpp = model::PluginsFactory::CreateTexturePlugin( stpl, textures, txTransforms );
     }
 
     root->AddPlugin                 ( stpp );
@@ -360,10 +367,13 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     tx1m.addScale( alpha, ConstValue( 1.0f ), ConstValue( 1.0f ) );
 
     std::vector< std::string > textures;
+    std::vector< TransformF > txTransforms;
+    txTransforms.push_back( TransformF() );
+    txTransforms.push_back( TransformF() );
     textures.push_back( "simless_00.jpg" );
     textures.push_back( "simless_01.jpg" );
 
-    stpp = model::PluginsFactory::CreateTexturePlugin( transformPlugin, textures );
+    stpp = model::PluginsFactory::CreateTexturePlugin( transformPlugin, textures, txTransforms );
 
     //stpp->SetPixelShaderChannel     ( new MyPixelShaderChannel( "../dep/media/shaders/simpletexture.frag", alpha, *tx0m, *tx1m ) ); // FIXME: add texture transformation
     //stpp->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );

@@ -12,51 +12,15 @@ class TexturePixelShaderChannelPD : public BaseParametersDescriptor
 {
 public:
 
-    typedef std::vector< std::string > StringsVector;
+    static const std::string    pluginName;
 
-    static const std::string            pluginName;
-
-    static StringsVector                alphaParamName;
-    static StringsVector                txMatrixParamName;
+    static std::string          alphaParamName[];
+    static std::string          txMatrixParamName[];
 
     TexturePixelShaderChannelPD()
         : BaseParametersDescriptor( pluginName )
     {
-        alphaParamName.resize( 15 );
-        alphaParamName[ 0 ] = "alpha0";
-        alphaParamName[ 1 ] = "alpha1";
-        alphaParamName[ 2 ] = "alpha2";
-        alphaParamName[ 3 ] = "alpha3";
-        alphaParamName[ 4 ] = "alpha4";
-        alphaParamName[ 5 ] = "alpha5";
-        alphaParamName[ 6 ] = "alpha6";
-        alphaParamName[ 7 ] = "alpha7";
-        alphaParamName[ 8 ] = "alpha8";
-        alphaParamName[ 9 ] = "alpha9";
-        alphaParamName[ 10 ] = "alpha10";
-        alphaParamName[ 11 ] = "alpha11";
-        alphaParamName[ 12 ] = "alpha12";
-        alphaParamName[ 13 ] = "alpha13";
-        alphaParamName[ 14 ] = "alpha14";
-
-        txMatrixParamName.resize( 16 );
-        txMatrixParamName[ 0 ] = "txMat0";
-        txMatrixParamName[ 1 ] = "txMat1";
-        txMatrixParamName[ 2 ] = "txMat2";
-        txMatrixParamName[ 3 ] = "txMat3";
-        txMatrixParamName[ 4 ] = "txMat4";
-        txMatrixParamName[ 5 ] = "txMat5";
-        txMatrixParamName[ 6 ] = "txMat6";
-        txMatrixParamName[ 7 ] = "txMat7";
-        txMatrixParamName[ 8 ] = "txMat8";
-        txMatrixParamName[ 9 ] = "txMat9";
-        txMatrixParamName[ 10 ] = "txMat10";
-        txMatrixParamName[ 11 ] = "txMat11";
-        txMatrixParamName[ 12 ] = "txMat12";
-        txMatrixParamName[ 13 ] = "txMat13";
-        txMatrixParamName[ 14 ] = "txMat14";
-        txMatrixParamName[ 15 ] = "txMat14";
-
+        //FIXME: this is a static calss which means that initializing anything in constructor makes no sense
         m_params[ "alpha0" ] = ParamType::PT_FLOAT;
         m_params[ "alpha1" ] = ParamType::PT_FLOAT;
         m_params[ "alpha2" ] = ParamType::PT_FLOAT;

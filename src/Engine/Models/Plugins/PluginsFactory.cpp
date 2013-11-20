@@ -121,9 +121,9 @@ model::SolidColorPlugin*            PluginsFactory::CreateSolidColorPlugin      
 
 // *******************************
 //
-model::SimpleTexturePlugin*         PluginsFactory::CreateTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths, TextureAttachmentMode mode )
+model::SimpleTexturePlugin*         PluginsFactory::CreateTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths, const std::vector< TransformF > txTransforms, TextureAttachmentMode mode )
 {
-	auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, texturesPaths, mode );
+	auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, texturesPaths, txTransforms, mode );
 
 	return texturePlugin;
 }

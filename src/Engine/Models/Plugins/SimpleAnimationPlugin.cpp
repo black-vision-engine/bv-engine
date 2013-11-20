@@ -267,10 +267,10 @@ void                SimpleAnimationPlugin::Update              ( TimeType t )
                         }
                     }
             }
-
-            m_geomChannel->SetNeedsAttributesUpdate( true );
         }
     }
+
+    m_geomChannel->SetNeedsAttributesUpdate( true );
 
     m_geomChannel->Update( t );
     m_pixelShaderChannel->Update( t );

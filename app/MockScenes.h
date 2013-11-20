@@ -36,6 +36,7 @@ public:
     
     static  model::BasicNode *      AnimatedTestScene           ();
     static  model::BasicNode *      GreenRectTestScene          ();
+    static  model::BasicNode *      TexturedRectTestScene       ();
     static  model::BasicNode *      TestSceneVariableTopology   ();
     static  model::BasicNode *      SequenceAnimationTestScene  ();
     static  model::BasicNode *      NonGeometryParent           ();
