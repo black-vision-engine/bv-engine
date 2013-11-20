@@ -13,6 +13,7 @@ void TimelineManager::RegisterTimeline( const std::string & name, const ITimeEva
 {
     //FIXME: do not let two identical timelines to be registered
     m_timelines.push_back( timeline );
+    //m_names.push_back( name );
 }
 
 // *********************************

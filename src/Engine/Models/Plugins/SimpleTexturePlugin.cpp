@@ -133,6 +133,20 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
         for( unsigned int i = 0; i < m_textures.size(); ++i )
         {
 
+            float minX = 100000.0f, minY = 100000.0f;
+            float maxX = 0.0f, maxY = 0.0f;
+
+            //convex hull - make sure that prevCompChannels[ 0 ] is indeed a positional channel
+            for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
+            {
+                const glm::vec3 * pos = reinterpret_cast<const glm::vec3*>( prevCompChannels[0]->GetData() );
+
+                minX = std::min( minX, pos[ j ].x );
+                minY = std::min( minY, pos[ j ].y );
+                maxX = std::max( maxX, pos[ j ].x );
+                maxY = std::max( maxY, pos[ j ].y );
+            }
+
             auto verTexAttrChannel = new model::Float2AttributeChannel( desc, m_textures[ 0 ]->m_texName, true );
 
             for( unsigned int j = 0; j < prevCompChannels[0]->GetNumEntries(); ++j )
