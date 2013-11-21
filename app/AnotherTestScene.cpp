@@ -488,6 +488,45 @@ model::BasicNode *          TexturedRing()
 
 // ******************************
 //
+model::BasicNode *     NaiveTimer()
+{
+    model::BasicNode * root = new model::BasicNode();
+
+    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
+    color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+    color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+    color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+
+    std::wstring str    =   L"0123456789:.";
+    auto texPlugin      =   PluginsFactory::CreateTextPlugin( str, "../dep/Media/fonts/cour.ttf", 20 );
+    root->AddPlugin( texPlugin );
+
+    TransformF     trns;
+    trns.AddTranslation( PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ), PluginsFactory::CreateConstValueFloat( 0.f ) );
+    FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
+
+    auto transPlugin = PluginsFactory::CreateTransformPlugin( texPlugin, model::PluginsFactory::CreateParameter( "transformation", trns ) );
+    root->AddPlugin( transPlugin );
+
+    auto vertexShaderPlugin = PluginsFactory::CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/simpletexture.vert" );
+    root->AddPlugin( vertexShaderPlugin );
+
+    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( vertexShaderPlugin, PluginsFactory::CreateParameter( "color", color ) );
+    root->AddPlugin( colorPlugin );
+
+    auto ctx = PluginsFactory::CreateDefaultRenderableContext();
+    //ctx->alphaCtx->blendEnabled = true;
+    //ctx->depthCtx->enabled = false;
+    ctx->cullCtx->enabled = false;
+    auto pixelShaderPlugin = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag", ctx );
+    root->AddPlugin( pixelShaderPlugin );
+
+    return root;
+}
+
+// ******************************
+//
 model::BasicNode *     Text1()
 {
     model::BasicNode * root = new model::BasicNode();
@@ -607,7 +646,7 @@ model::BasicNode *     Text2()
 {
     model::BasicNode * root = new model::BasicNode();
 
-    std::wstring str  = TextHelper::LoadUtf8FileToString( L"text_example.txt");
+    std::wstring str  = TextHelper::LoadUtf8FileToString( L"text_example.txt" );
 
     Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
 
@@ -677,7 +716,7 @@ model::BasicNode *          ExtrudedRedRect()
 
     auto trasformPlugin  = PluginsFactory::CreateTransformPlugin( rectPlugin, model::PluginsFactory::CreateParameter( "transformation", trans ) );
 
-    root->AddPlugin(trasformPlugin);
+    root->AddPlugin( trasformPlugin );
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
@@ -805,6 +844,13 @@ model::BasicNode *      TestScenesFactory::GreenRectTestScene          ()
 model::BasicNode *      TestScenesFactory::TexturedRectTestScene       ()
 {
     return TexturedRect();
+}
+
+// ******************************
+//
+model::BasicNode *      TestScenesFactory::NaiveTimerTestScene         ()
+{
+    return NaiveTimer();
 }
 
 // ******************************
