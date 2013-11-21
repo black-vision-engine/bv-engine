@@ -92,12 +92,15 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
     //root->AddPlugin( solidPlugin );
     //return root;
 
-
     ///////////////////////////// Texture plugin //////////////////////////// 
     std::vector< std::string > textures;
     std::vector< TransformF > txTransforms;
     textures.push_back( "simless_00.jpg" );
-    txTransforms.push_back( TransformF() );
+
+    TransformF txTrans;
+    txTrans.AddScale( PluginsFactory::CreateConstValueFloat( float( w ) / float( h ) ), PluginsFactory::CreateConstValueFloat( 1.f ), PluginsFactory::CreateConstValueFloat( 1.f ) );
+
+    txTransforms.push_back( txTrans );
 
     auto texturePlugin = PluginsFactory::CreateTexturePlugin( transformPlugin, textures, txTransforms, TextureAttachmentMode::MM_ATTACHED );
 
