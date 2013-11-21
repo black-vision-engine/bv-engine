@@ -20,6 +20,7 @@ Debug/bv_params.lib
 *.user
 *.o
 Debug
+Release
 *.sdf
 *.a
 *.orig

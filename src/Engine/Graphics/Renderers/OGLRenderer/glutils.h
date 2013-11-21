@@ -1,5 +1,6 @@
 #pragma once
 
+
 class GLUtils
 {
 public:
@@ -9,4 +10,5 @@ public:
     static int  CheckForOpenGLError ( const char *, int );
     static void DumpGLInfo          ( bool dumpExtensions = false );
     static void DumpGLInfoCaps      ();
+
 };

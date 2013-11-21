@@ -1,8 +1,9 @@
-#include "WindowedApplication.h"
-#include "InitSubsystem.h"
-#include "Engine/Graphics/Renderers/Renderer.h"
-#include "glutils.h"
+#include "Application/WindowedApplication.h"
 
+#include "System/InitSubsystem.h"
+
+#include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/glutils.h"
 
 
 namespace bv {

@@ -22,6 +22,7 @@ private:
 
     static int			m_sNumInitializers;
     static Initializer	m_sInitializers[ MAX_ELEMENTS ];
+
 };
 
 }
