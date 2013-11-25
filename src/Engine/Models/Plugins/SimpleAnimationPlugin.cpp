@@ -34,22 +34,18 @@ SimpleAnimationPluginPD::SimpleAnimationPluginPD()
 
 // *************************************
 //
-SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, unsigned int fps, model::RendererContext * ctx, TextureAttachmentMode mode )
+SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, const ParamFloat & frameCounter, model::RendererContext * ctx, TextureAttachmentMode mode )
     : BasePlugin( prev )
-    , m_fps( fps )
     , m_attachmentMode( mode )
-    , m_startTime( -1.f )
+    , m_frameCounter( frameCounter )
 {
     assert( prev != nullptr );
-    assert( fps > 0 );
-
-    m_secsPerFrame = 1.f / float( fps );
 
     for( unsigned int i = 0; i < texturesFilesNames.size(); ++i )
     {
         m_textures.push_back( LoadTexture( "Tex" + std::to_string( i ), texturesFilesNames[ i ] ) );
     
-        printf( "Loading sequence %d%%\r", (int) ( 100.f * ( (float(i + 1) / texturesFilesNames.size() ) ) ) );
+        printf( "Loading sequence %d%%\r", (int) ( 100.f * ( ( float(i + 1) / texturesFilesNames.size() ) ) ) );
     }
     printf( "\n" );
 
@@ -214,14 +210,10 @@ AttributeChannel*   GetUVChannel( const std::vector< AttributeChannel* >& channe
 //
 unsigned int        SimpleAnimationPlugin::CurrentFrame        ( TimeType t ) const
 {
-    if( m_startTime < TimeType( 0.0 ) )
-    {
-        m_startTime = t;
-    }
+    float fFrame = m_frameCounter.Evaluate( t );
+    int nFrame = (int) fFrame;
 
-    unsigned int frameNum = (unsigned int) ( ( t - m_startTime ) * m_fps );
-
-    return frameNum % m_numFrames;
+    return nFrame % m_numFrames;
 }
 
 // *************************************

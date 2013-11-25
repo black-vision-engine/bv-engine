@@ -55,7 +55,7 @@ namespace
 
 struct AnimationSequenceDesc
 {
-    unsigned int fps;
+    FloatInterpolator frameCounter;
     unsigned int numFrames;
 
     std::string path;
@@ -179,8 +179,10 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
     
     ///////////////////////////// Material plugin //////////////////////////// 
 
+    FloatInterpolator fc = animations[ 0 ].frameCounter;
+    ParamFloat frameCounter = PluginsFactory::CreateParameter( std::string( "animation" ), fc );
+
     unsigned int numFrames = animations[ 0 ].numFrames;
-    unsigned int animationFPS = animations[ 0 ].fps;
     const std::string & path = animations[ 0 ].path;
     const std::string & baseName = animations[ 0 ].baseName;
     const std::string & ext = animations[ 0 ].ext;
@@ -197,7 +199,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
     }
 
     //FIXME: renderer context can be specified here
-    auto animationPlugin = PluginsFactory::CreateAnimationPlugin( transformPlugin, textures, animationFPS );
+    auto animationPlugin = PluginsFactory::CreateAnimationPlugin( transformPlugin, textures, frameCounter );
 
     root->AddPlugin( animationPlugin );
 
@@ -228,8 +230,10 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
     
         ///////////////////////////// Material plugin //////////////////////////// 
 
+        FloatInterpolator fc = animations[ i ].frameCounter;
+        ParamFloat frameCounter = PluginsFactory::CreateParameter( std::string( "animation" ), fc );
+
         unsigned int numFrames = animations[ i ].numFrames;
-        unsigned int animationFPS = animations[ i ].fps;
         const std::string & path = animations[ i ].path;
         const std::string & baseName = animations[ i ].baseName;
         const std::string & ext = animations[ i ].ext;
@@ -245,7 +249,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
             textures.push_back( txName );
         }
 
-        auto animationPlugin = PluginsFactory::CreateAnimationPlugin( transformPlugin, textures, animationFPS );
+        auto animationPlugin = PluginsFactory::CreateAnimationPlugin( transformPlugin, textures, frameCounter );
 
         root1->AddPlugin( animationPlugin );
 
@@ -873,29 +877,33 @@ model::BasicNode *      TestScenesFactory::SequenceAnimationTestScene  ()
 {
     std::vector< AnimationSequenceDesc >    animations;
 
+    FloatInterpolator anim0; anim0.setWrapPostMethod( WrapMethod::pingPong ); anim0.setWrapPreMethod( WrapMethod::clamp );
+    FloatInterpolator anim1; anim1.setWrapPostMethod( WrapMethod::pingPong ); anim1.setWrapPreMethod( WrapMethod::clamp );
+
+    anim0.addKey( TimeType( 5.0 ), 0.0f );
+    anim0.addKey( TimeType( 6.5 ), 50.0f );
+    anim0.addKey( TimeType( 8.0 ), 75.0f );
+
+    anim1.addKey( TimeType( 2.0 ), 75.0f );
+    anim1.addKey( TimeType( 5.0 ), 0.0f );
+    anim1.addKey( TimeType( 9.0 ), 60.0f );
+    anim1.addKey( TimeType( 11.0 ), 0.0f );
+
     AnimationSequenceDesc intro;
     intro.ext = "tga";
     intro.baseName = "Alfai";
     intro.path = "../../media/sequences/FullHD/alfai/";
-    intro.fps = 100;
+    intro.frameCounter = anim0;
     intro.numFrames = 75;
-
-    AnimationSequenceDesc kolarstwo;
-    kolarstwo.ext = "tga";
-    kolarstwo.baseName = "Alfai";
-    kolarstwo.path = "../../media/sequences/FullHD/alfai/";
-    kolarstwo.fps = 10;
-    kolarstwo.numFrames = 23;
 
     AnimationSequenceDesc alfai;
     alfai.ext = "tga";
     alfai.baseName = "alfai";
     alfai.path = "../../media/sequences/FullHD/alfai/";
-    alfai.fps = 50;
+    alfai.frameCounter = anim1;
     alfai.numFrames = 100;
 
     animations.push_back( intro );
-//    animations.push_back( kolarstwo );
     animations.push_back( alfai );
 
     return AnimatedSequenceRect( animations );

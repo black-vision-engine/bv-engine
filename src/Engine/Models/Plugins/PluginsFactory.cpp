@@ -35,7 +35,7 @@ Vec4Interpolator                   PluginsFactory::CreateConstValueVec4         
 
 // *******************************
 //
-ParamVec4                          PluginsFactory::CreateParameter                     ( const std::string & name, Vec4Interpolator & interpolator, const Timeline * timeline )
+ParamVec4                          PluginsFactory::CreateParameter                      ( const std::string & name, Vec4Interpolator & interpolator, const Timeline * timeline )
 {
     return ParamVec4( name, interpolator, timeline );
 }
@@ -49,7 +49,7 @@ ParamFloat                          PluginsFactory::CreateParameter             
 
 // *******************************
 //
-ParamTransform                       PluginsFactory::CreateParameter                     ( const std::string & name, const TransformF & interpolator, const Timeline * timeline )
+ParamTransform                       PluginsFactory::CreateParameter                    ( const std::string & name, const TransformF & interpolator, const Timeline * timeline )
 {
     return ParamTransform( name, interpolator, timeline );
 }
@@ -58,7 +58,7 @@ ParamTransform                       PluginsFactory::CreateParameter            
 //
 model::GeometryRectPlugin *         PluginsFactory::CreateGeometryRectPlugin            ( float w, float h )
 {
-    auto rectPlugin = new model::GeometryRectPlugin(CreateParameter("width", CreateConstValueFloat( w )), CreateParameter("height", CreateConstValueFloat( h )));
+    auto rectPlugin = new model::GeometryRectPlugin( CreateParameter("width", CreateConstValueFloat( w )), CreateParameter("height", CreateConstValueFloat( h ) ) );
 
 	return rectPlugin;
 }
@@ -81,7 +81,7 @@ model::GeometryRingPlugin*          PluginsFactory::CreateGeometryRingPlugin    
 
 // *******************************
 //
-model::VertexAttributesChannel*             PluginsFactory::CreateGeometryChannel               (model::IConnectedComponent* connComp)
+model::VertexAttributesChannel*             PluginsFactory::CreateGeometryChannel               ( model::IConnectedComponent * connComp )
 {
 	model::VertexAttributesChannelDescriptor desc;
 
@@ -99,7 +99,7 @@ model::VertexAttributesChannel*             PluginsFactory::CreateGeometryChanne
 
 // *******************************
 //
-model::TransformChannel*           PluginsFactory::CreateTransformChannel              ( const ParamTransform& transformation )
+model::TransformChannel *           PluginsFactory::CreateTransformChannel              ( const ParamTransform& transformation )
 {
 	model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
 	trasformChannel->AddTransform( transformation );
@@ -109,7 +109,7 @@ model::TransformChannel*           PluginsFactory::CreateTransformChannel       
 
 // *******************************
 //
-model::SolidColorPlugin*            PluginsFactory::CreateSolidColorPlugin              (model::IPlugin* prevPlugin, const glm::vec4& color)
+model::SolidColorPlugin *            PluginsFactory::CreateSolidColorPlugin              ( model::IPlugin* prevPlugin, const glm::vec4& color )
 {
 	auto solidPlugin = new model::SolidColorPlugin( prevPlugin, CreateParameter( "color", CreateConstValueVec4( color ) ) );
 
@@ -139,9 +139,9 @@ model::SimpleTexturePlugin*         PluginsFactory::CreateTexturePlugin         
 
 // *******************************
 //
-model::SimpleAnimationPlugin *      PluginsFactory::CreateAnimationPlugin               ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, unsigned int animationFPS, model::RendererContext * ctx )
+model::SimpleAnimationPlugin *      PluginsFactory::CreateAnimationPlugin               ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, const ParamFloat & frameCounter, model::RendererContext * ctx )
 {
-	auto animationPlugin = new model::SimpleAnimationPlugin( prevPlugin, texturesPaths, animationFPS, ctx );
+	auto animationPlugin = new model::SimpleAnimationPlugin( prevPlugin, texturesPaths, frameCounter, ctx );
 
     return animationPlugin;
 }
@@ -157,7 +157,7 @@ model::SimpleTextPlugin *            PluginsFactory::CreateTextPlugin           
 
 // *******************************
 //
-model::SimpleTransformPlugin *      PluginsFactory::CreateTransformPlugin               ( const model::IPlugin * prev, const ParamTransform& transformation )
+model::SimpleTransformPlugin *      PluginsFactory::CreateTransformPlugin               ( const model::IPlugin * prev, const ParamTransform & transformation )
 {
     return model::SimpleTransformPlugin::Create( prev, transformation );
 }
@@ -179,7 +179,7 @@ model::SimpleColorPlugin *          PluginsFactory::CreateSimpleColorPlugin     
 
 // *******************************
 //
-model::SimplePixelShaderPlugin *    PluginsFactory::CreateSimplePixelShaderPlugin       ( model::IPlugin* prevPlugin, const std::string& shaderPath, model::RendererContext * ctx )
+model::SimplePixelShaderPlugin *    PluginsFactory::CreateSimplePixelShaderPlugin       ( model::IPlugin* prevPlugin, const std::string & shaderPath, model::RendererContext * ctx )
 {
     return new model::SimplePixelShaderPlugin( prevPlugin, shaderPath, ctx );
 }

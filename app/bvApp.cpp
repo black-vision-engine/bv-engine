@@ -252,7 +252,7 @@ bool BlackVisionApp::OnInitialize       ()
     //model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
     //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
 
-    
+    /*
     model::BasicNode * rodos = TestScenesFactory::GreenRectTestScene();
     model::BasicNode * root0 = TestScenesFactory::SequenceAnimationTestScene();
     model::BasicNode * root1 = TestScenesFactory::NonGeometryParent();
@@ -260,12 +260,13 @@ bool BlackVisionApp::OnInitialize       ()
     model::BasicNode * rootu = TestScenesFactory::StackThemNow( root0, root1 );
     model::BasicNode * roota = TestScenesFactory::StackThemNow( root3, rootu );
     model::BasicNode * root  = TestScenesFactory::StackThemNow( roota, rodos );
-    
+    */
 
     //model::BasicNode * root = TestScenesFactory::TexturedRectTestScene();
     //model::BasicNode * root = TestScenesFactory::GreenRectTestScene();
     //model::BasicNode * root = TestScenesFactory::NaiveTimerTestScene();
 
+    model::BasicNode * root = TestScenesFactory::SequenceAnimationTestScene();
     m_modelScene = model::ModelScene::Create( root, new Camera() );
 
     m_Renderer->SetCamera( m_modelScene->GetCamera() );

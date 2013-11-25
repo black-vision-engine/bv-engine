@@ -4,6 +4,7 @@
 
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/PluginParameters.h"
+#include "Engine/Models/Plugins/Parameter.h"
 
 #include "Engine/Models/Plugins/PluginEnums.h"
 #include "Engine/Models/Plugins/SimpleTexturePlugin.h"
@@ -48,11 +49,8 @@ private:
     TextureAttachmentMode           m_attachmentMode;
     unsigned int                    m_texCoordChannelIndex;
 
-    mutable TimeType                m_startTime;
-    TimeType                        m_secsPerFrame;
-
     unsigned int                    m_numFrames;
-    unsigned int                    m_fps;
+    ParamFloat                      m_frameCounter;
 
 private:
 
@@ -61,7 +59,7 @@ private:
 
 public:
 
-    explicit                            SimpleAnimationPlugin       ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, unsigned int fps, model::RendererContext * ctx = nullptr, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
+    explicit                            SimpleAnimationPlugin       ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, const ParamFloat & frameCounter, model::RendererContext * ctx = nullptr, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
                                         ~SimpleAnimationPlugin      ();
 
     void                                SetAttachmentMode           ( TextureAttachmentMode mode );

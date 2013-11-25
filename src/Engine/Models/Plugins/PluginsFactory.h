@@ -74,7 +74,7 @@ struct PluginsFactory
     static model::SimpleTexturePlugin *         CreateTexturePlugin                 ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, const std::vector< TransformF > txTransforms, model::RendererContext * ctx, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
     static model::SimpleTexturePlugin *         CreateTexturePlugin                 ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, const std::vector< TransformF > txTransforms, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
 	
-    static model::SimpleAnimationPlugin *       CreateAnimationPlugin               ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, unsigned int animationFPS, model::RendererContext * ctx = nullptr );
+    static model::SimpleAnimationPlugin *       CreateAnimationPlugin               ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, const ParamFloat & frameCounter, model::RendererContext * ctx = nullptr );
 	
     static model::SimpleTransformPlugin *       CreateTransformPlugin               ( const model::IPlugin * prev, const ParamTransform& transformation );
 
