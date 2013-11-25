@@ -160,13 +160,6 @@ GLuint ConstantsMapper::GLConstant( AlphaDstBlendMode mode )
 
 // ****************************
 //
-GLuint ConstantsMapper::GLConstant( AlphaCompareMode mode )
-{
-    return AlphaCompareModeGL[ (int) mode ];
-}
-
-// ****************************
-//
 GLuint ConstantsMapper::GLConstant( DepthCompareMode mode )
 {
     return DepthCompareModeGL[ (int) mode ];

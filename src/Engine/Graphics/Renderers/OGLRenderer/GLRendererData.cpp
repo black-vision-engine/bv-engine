@@ -69,16 +69,12 @@ void    RendererData::RenderState::InitializeAlphaState     ( const AlphaState *
 
     GLuint srcBlend = ConstantsMapper::GLConstant( as->srcBlendMode );
     GLuint dstBlend = ConstantsMapper::GLConstant( as->dstBlendMode );
-    GLuint cmpFunc  = ConstantsMapper::GLConstant( as->compareMode );
 
     const glm::vec4 & blendColor = as->blendColor;
 
     EnableDisable( as->blendEnabled, GL_BLEND );
     glBlendFunc( srcBlend, dstBlend );
     
-    EnableDisable( as->compareEnabled, GL_ALPHA_TEST );
-    glAlphaFunc( cmpFunc, as->alphaReference );
-
     glBlendColor( blendColor[ 0 ], blendColor[ 1 ], blendColor[ 2 ], blendColor[ 3 ] );
 }
 

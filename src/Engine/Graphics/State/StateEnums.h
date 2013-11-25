@@ -41,20 +41,6 @@ enum class AlphaDstBlendMode : int
     ADBM_TOTAL
 };
 
-enum AlphaCompareMode : int
-{
-    ACM_NEVER = 0,
-    ACM_LESS,
-    ACM_EQUAL,
-    ACM_LEQUAL,
-    ACM_GREATER,
-    ACM_NOTEQUAL,
-    ACM_GEQUAL,
-    ACM_ALWAYS,
-
-    ACM_TOTAL
-};
-
 // ************************* STATE DEPTH *************************
 enum class DepthCompareMode : int
 {

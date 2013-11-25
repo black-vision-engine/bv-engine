@@ -53,27 +53,6 @@ void Renderer::SetAlphaState ( const AlphaState * as )
         }
     }
 
-    if ( as->compareEnabled )
-    {
-        if( !cur->compareEnabled )
-        {
-            glEnable( GL_ALPHA_TEST );
-        }
-
-        if( as->compareMode != cur->compareMode || as->alphaReference != cur->alphaReference )
-        {
-            GLuint compareMode = ConstantsMapper::GLConstant( as->compareMode );
-
-            glAlphaFunc( compareMode, as->alphaReference );
-        }
-    }
-    else
-    {
-        if( cur->compareEnabled )
-        {
-            glDisable( GL_ALPHA_TEST );
-        }
-    }
 }
 
 // *********************************

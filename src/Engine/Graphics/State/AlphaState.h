@@ -15,10 +15,6 @@ public:
     AlphaSrcBlendMode   srcBlendMode;   // ASBM_SRC_ALPHA
     AlphaDstBlendMode   dstBlendMode;   // ADBM_ONE_MINUS_SRC_ALPHA
 
-    bool                compareEnabled; // false
-    AlphaCompareMode    compareMode;    // ACM_ALWAYS
-
-    float               alphaReference; // 0, and always in [0,1]
     glm::vec4           blendColor;     // (0,0,0,0)
 
 public:

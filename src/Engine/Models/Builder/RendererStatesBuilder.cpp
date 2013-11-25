@@ -83,8 +83,6 @@ void RendererStatesBuilder::Create( StateInstance * inst, const model::RendererC
 void RendererStatesBuilder::Assign  ( AlphaState * as, const model::AlphaContext * ac )
 {
     as->blendEnabled = ac->blendEnabled;
-    as->alphaReference = ac->referenceAlpha;
-    as->compareEnabled = ac->testEnabled;
     as->blendColor = ac->blendColor;
 }
 

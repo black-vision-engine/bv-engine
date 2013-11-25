@@ -33,7 +33,6 @@ public:
     static GLuint GLConstant( SamplerFilteringMode filteringMode );
     static GLuint GLConstant( AlphaSrcBlendMode mode );
     static GLuint GLConstant( AlphaDstBlendMode mode );
-    static GLuint GLConstant( AlphaCompareMode mode );
     static GLuint GLConstant( DepthCompareMode mode );
     static GLuint GLConstant( FillStateMode mode );
 };
