@@ -34,7 +34,7 @@ SimpleAnimationPluginPD::SimpleAnimationPluginPD()
 
 // *************************************
 //
-SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, unsigned int fps, TextureAttachmentMode mode )
+SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, unsigned int fps, model::RendererContext * ctx, TextureAttachmentMode mode )
     : BasePlugin( prev )
     , m_fps( fps )
     , m_attachmentMode( mode )
@@ -65,7 +65,11 @@ SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin 
 
     m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpleanimation.frag", alphas, txMat );
 
-    m_pixelShaderChannel->SetRendererContext( PluginsFactory::CreateDefaultRenderableContext() );
+    if( !ctx )
+        ctx = PluginsFactory::CreateDefaultRenderableContext();
+
+    m_pixelShaderChannel->SetRendererContext( ctx );
+
     auto rendContext = m_pixelShaderChannel->GetRendererContext();
     rendContext->cullCtx->enabled = false;
 

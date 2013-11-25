@@ -123,7 +123,7 @@ model::SolidColorPlugin*            PluginsFactory::CreateSolidColorPlugin      
 //
 model::SimpleTexturePlugin*         PluginsFactory::CreateTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths, const std::vector< TransformF > txTransforms,bv::model::RendererContext * ctx, TextureAttachmentMode mode )
 {
-	auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, texturesPaths, txTransforms,ctx, mode );
+	auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, texturesPaths, txTransforms, ctx, mode );
 
 	return texturePlugin;
 }
@@ -139,9 +139,9 @@ model::SimpleTexturePlugin*         PluginsFactory::CreateTexturePlugin         
 
 // *******************************
 //
-model::SimpleAnimationPlugin *      PluginsFactory::CreateAnimationPlugin               ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, unsigned int animationFPS )
+model::SimpleAnimationPlugin *      PluginsFactory::CreateAnimationPlugin               ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, unsigned int animationFPS, model::RendererContext * ctx )
 {
-	auto animationPlugin = new model::SimpleAnimationPlugin( prevPlugin, texturesPaths, animationFPS );
+	auto animationPlugin = new model::SimpleAnimationPlugin( prevPlugin, texturesPaths, animationFPS, ctx );
 
     return animationPlugin;
 }

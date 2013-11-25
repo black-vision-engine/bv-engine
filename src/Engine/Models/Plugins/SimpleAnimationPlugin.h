@@ -41,18 +41,18 @@ class SimpleAnimationPlugin : public BasePlugin< ISequenceAnimationSourcePlugin,
 {
 private:
 
-    VertexAttributesChannel*            m_geomChannel;
-    TexturePixelShaderChannel*  m_pixelShaderChannel;
-    TextureVertexShaderChannel* m_vertexShaderChannel;
+    VertexAttributesChannel *       m_geomChannel;
+    TexturePixelShaderChannel *     m_pixelShaderChannel;
+    TextureVertexShaderChannel *    m_vertexShaderChannel;
 
-    TextureAttachmentMode       m_attachmentMode;
-    unsigned int                m_texCoordChannelIndex;
+    TextureAttachmentMode           m_attachmentMode;
+    unsigned int                    m_texCoordChannelIndex;
 
-    mutable TimeType            m_startTime;
-    TimeType                    m_secsPerFrame;
+    mutable TimeType                m_startTime;
+    TimeType                        m_secsPerFrame;
 
-    unsigned int            m_numFrames;
-    unsigned int            m_fps;
+    unsigned int                    m_numFrames;
+    unsigned int                    m_fps;
 
 private:
 
@@ -61,13 +61,13 @@ private:
 
 public:
 
-    explicit                            SimpleAnimationPlugin       ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, unsigned int fps, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
+    explicit                            SimpleAnimationPlugin       ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, unsigned int fps, model::RendererContext * ctx = nullptr, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
                                         ~SimpleAnimationPlugin      ();
 
     void                                SetAttachmentMode           ( TextureAttachmentMode mode );
 
 
-    virtual const IVertexAttributesChannel *            GetGeometryChannel          () const override;                                                                           
+    virtual const IVertexAttributesChannel *    GetGeometryChannel          () const override;                                                                           
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;                                       
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;                                       
 

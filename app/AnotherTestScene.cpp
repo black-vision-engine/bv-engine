@@ -196,6 +196,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
         textures.push_back( txName );
     }
 
+    //FIXME: renderer context can be specified here
     auto animationPlugin = PluginsFactory::CreateAnimationPlugin( transformPlugin, textures, animationFPS );
 
     root->AddPlugin( animationPlugin );
