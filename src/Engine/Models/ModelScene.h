@@ -6,6 +6,7 @@
 
 #include "Engine/Interfaces/IUpdatable.h"
 
+#include "Engine/Models/Plugins/Parameter.h"
 
 namespace bv {
 
@@ -19,22 +20,22 @@ class BasicNode;
 class ModelScene : public IUpdatable
 {
     Camera *            m_pCamera;
-    Vec3Interpolator *  m_pCameraPosition;
-    Vec3Interpolator *  m_pCameraDirection;
-    Vec3Interpolator *  m_pCameraUp;
+    ParamVec3           m_cameraPosition;
+    ParamVec3           m_cameraDirection;
+    ParamVec3           m_cameraUp;
  
     BasicNode *         m_pSceneRoot;
 
 public:
 
-    static ModelScene * Create( BasicNode* node, Camera* cam );
+    static ModelScene * Create                  ( BasicNode* node, Camera* cam );
 
-    virtual void        Update( TimeType t );
+    virtual void        Update                  ( TimeType t );
 
-    void                AddCameraInterpolators(Vec3Interpolator* pos, Vec3Interpolator* dir, Vec3Interpolator* up);
+    void                SetCamereParameters     ( const ParamVec3& pos, const ParamVec3& dir, const ParamVec3& up );
 
-    Camera *            GetCamera()         const { return m_pCamera; }
-    BasicNode *         GetSceneRoot()      const { return m_pSceneRoot; }
+    Camera *            GetCamera               ()  const;
+    BasicNode *         GetSceneRoot            ()  const;
 
 private:
 

@@ -6,11 +6,14 @@
 
 #include "Engine/Interfaces/IUpdater.h"
 
+#include "Engine/Models/Plugins/Parameter.h"
 
-namespace bv
-{
+
+namespace bv {
 
 class Camera;
+
+namespace model {
 
 class CameraUpdater : public IUpdater
 {
@@ -18,26 +21,27 @@ private:
 
     Camera *            m_pCamera;
 
-    Vec3Interpolator *  m_pPosition; // Change to ParamVec3
-    Vec3Interpolator *  m_pDirection;
-    Vec3Interpolator *  m_pUp;
+    ParamVec3           m_position; // Change to ParamVec3
+    ParamVec3           m_direction;
+    ParamVec3           m_up;
 
 public:
 
     virtual void            DoUpdate    ( TimeType t );
 
-    static CameraUpdater *  Create      ( Camera* camera, Vec3Interpolator* pos, Vec3Interpolator* dir, Vec3Interpolator* up );
+    static CameraUpdater *  Create      ( Camera* camera, const ParamVec3& pos, const ParamVec3& dir, const ParamVec3& up );
 
 private:
 
-    explicit CameraUpdater(Camera* camera, Vec3Interpolator* pos, Vec3Interpolator* dir, Vec3Interpolator* up)
+    explicit CameraUpdater(Camera* camera, const ParamVec3& pos, const ParamVec3& dir,const ParamVec3& up)
         : m_pCamera(camera)
-        , m_pPosition(pos)
-        , m_pDirection(dir)
-        , m_pUp(up)
+        , m_position(pos)
+        , m_direction(dir)
+        , m_up(up)
     {
         assert(m_pCamera != nullptr);
     }
 };
 
+} // model
 } // bv

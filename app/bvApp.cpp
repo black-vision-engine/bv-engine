@@ -11,6 +11,7 @@
 #include "Engine/Models/ModelScene.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/Plugins/PluginsFactory.h"
 
 #include "MockFonts/fttester.h"
 #include "MockScenes.h"
@@ -307,7 +308,9 @@ void BlackVisionApp::AddCameraAnimation  ()
 
     TestParametersFactory::CameraAnimation_ver1( position, direction, up );
 
-    m_modelScene->AddCameraInterpolators( position, direction, up );
+    m_modelScene->SetCamereParameters(  model::PluginsFactory::CreateParameter( "position", *position )
+                                      , model::PluginsFactory::CreateParameter( "direction", *direction )
+                                      , model::PluginsFactory::CreateParameter( "up", *up ) );
 }
 
 // *********************************
@@ -320,7 +323,9 @@ void BlackVisionApp::AddCameraAnimation2  () //smietnik lekko oczyszczony ze smi
 
     TestParametersFactory::CameraAnimation_ver2( position, direction, up );
 
-    m_modelScene->AddCameraInterpolators( position, direction, up );
+    m_modelScene->SetCamereParameters(  model::PluginsFactory::CreateParameter( "position", *position )
+                                      , model::PluginsFactory::CreateParameter( "direction", *direction )
+                                      , model::PluginsFactory::CreateParameter( "up", *up ) );
 }
 
 }

@@ -110,7 +110,7 @@ namespace bv{
 
 		trns.AddTranslation( xt, yt, zt );
 
-		trns.AddScale( bv::model::PluginsFactory::CreateConstValueFloat( 1.f ), bv::model::PluginsFactory::CreateConstValueFloat( 1.f ), bv::model::PluginsFactory::CreateConstValueFloat( 1.f ) );
+		trns.AddScale( bv::model::PluginsFactory::CreateConstValue( 1.f ), bv::model::PluginsFactory::CreateConstValue( 1.f ), bv::model::PluginsFactory::CreateConstValue( 1.f ) );
 
 		auto texPlugin      =   bv::model::PluginsFactory::CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
 
@@ -153,7 +153,7 @@ namespace bv{
 		FloatInterpolator xt;
 		FloatInterpolator yt; 
 		FloatInterpolator zt;
-		FloatInterpolator rotation = bv::model::PluginsFactory::CreateConstValueFloat(1.f);
+		FloatInterpolator rotation = bv::model::PluginsFactory::CreateConstValue(1.f);
 		FloatInterpolator xr;
 		FloatInterpolator yr; 
 		FloatInterpolator zr;

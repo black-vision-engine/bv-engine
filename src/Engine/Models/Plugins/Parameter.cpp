@@ -59,7 +59,7 @@ ValueMat4::ValueMat4( const std::string & name )
 
 // *******************************
 //                                               
-float       ParamFloat::Evaluate        ( TimeType t )   const
+float           ParamFloat::Evaluate        ( TimeType t )   const
 {                                                
     t = BaseParameter::GetEvaluationTime( t );
     SetLastEvaluatedTime( t );
@@ -68,7 +68,16 @@ float       ParamFloat::Evaluate        ( TimeType t )   const
                                                  
 // *******************************               
 //                                               
-glm::vec4       ParamVec4::Evaluate     ( TimeType t )    const
+glm::vec4       ParamVec4::Evaluate         ( TimeType t )    const
+{
+    t = BaseParameter::GetEvaluationTime( t );
+    SetLastEvaluatedTime( t );
+    return m_value.evaluate( t );
+}
+
+// *******************************               
+//  
+glm::vec3       ParamVec3::Evaluate         ( TimeType t )   const
 {
     t = BaseParameter::GetEvaluationTime( t );
     SetLastEvaluatedTime( t );

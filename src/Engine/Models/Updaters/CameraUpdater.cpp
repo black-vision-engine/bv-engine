@@ -3,10 +3,10 @@
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
 
-namespace bv
+namespace bv { namespace model
 {
     
-CameraUpdater*   CameraUpdater::Create(Camera* camera, Vec3Interpolator* pos, Vec3Interpolator* dir, Vec3Interpolator* up)
+CameraUpdater*   CameraUpdater::Create(Camera* camera, const ParamVec3& pos, const ParamVec3& dir, const ParamVec3& up)
 {
     return new CameraUpdater(camera, pos, dir, up);
 }
@@ -17,16 +17,12 @@ void        CameraUpdater::DoUpdate( TimeType t )
     glm::vec3 dir;
     glm::vec3 up;
 
-    if( m_pPosition != nullptr )
-        pos = m_pPosition->evaluate( t );
-
-    if(m_pDirection != nullptr)
-        dir = m_pDirection->evaluate( t );
-
-    if(m_pUp != nullptr)
-        up = m_pUp->evaluate( t );
+    pos = m_position.Evaluate( t );
+    dir = m_direction.Evaluate( t );
+    up = m_up.Evaluate( t );
 
     m_pCamera->SetFrame( pos, dir, up );
 }
 
+} // model
 } // bv
