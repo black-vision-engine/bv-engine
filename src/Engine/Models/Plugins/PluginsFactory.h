@@ -48,8 +48,10 @@ class Timeline;
 
 struct PluginsFactory
 {
-	static FloatInterpolator                    CreateConstValueFloat               ( float val );
-	static Vec4Interpolator                     CreateConstValueVec4                ( const glm::vec4 & val );
+	static FloatInterpolator                    CreateConstValue                    ( float val );
+	static Vec4Interpolator                     CreateConstValue                    ( const glm::vec4 & val );
+    static Vec3Interpolator                     CreateConstValue                    ( const glm::vec3 & val );
+    static ParamVec3                            CreateParameter                     ( const std::string & name, Vec3Interpolator & interpolator, const Timeline * timeline = nullptr );
     static ParamVec4                            CreateParameter                     ( const std::string & name, Vec4Interpolator & interpolator, const Timeline * timeline = nullptr );
     static ParamFloat                           CreateParameter                     ( const std::string & name, FloatInterpolator & interpolator, const Timeline * timeline = nullptr );
     static ParamTransform                       CreateParameter                     ( const std::string & name, const TransformF & interpolator, const Timeline * timeline = nullptr );

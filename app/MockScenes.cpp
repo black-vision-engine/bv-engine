@@ -254,8 +254,8 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 
     /////////////////////////////// SimpleRect plugin //////////////////////////////////
 
-    auto w = model::PluginsFactory::CreateParameter( "width", model::PluginsFactory::CreateConstValueFloat( 1.f ) );
-    auto h = model::PluginsFactory::CreateParameter( "height", model::PluginsFactory::CreateConstValueFloat( 1.f )  );
+    auto w = model::PluginsFactory::CreateParameter( "width", model::PluginsFactory::CreateConstValue( 1.f ) );
+    auto h = model::PluginsFactory::CreateParameter( "height", model::PluginsFactory::CreateConstValue( 1.f )  );
 
     model::GeometryRectPlugin    * rectPlugin  = new model::GeometryRectPlugin( w, h );
     

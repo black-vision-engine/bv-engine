@@ -133,6 +133,25 @@ public:
     }
 };
 
+class ParamVec3 : public BaseParameter
+{
+private:
+
+    Vec3Interpolator    m_value;
+
+public:
+
+    virtual ParamType   GetParamType     ()          const { return ParamType::PT_FLOAT3; }
+
+    glm::vec3           Evaluate        ( TimeType t )   const;
+
+    explicit ParamVec3( const std::string & name, const Vec3Interpolator & value, const ITimeEvaluator * evaluator = nullptr, ParameterSemantic semantic = ParameterSemantic::NONE )
+       : BaseParameter( name, semantic, evaluator )
+       , m_value( value )
+    {
+    }
+};
+
 class ParamMat2 : public BaseParameter
 {
 private:
