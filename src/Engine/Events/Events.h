@@ -40,6 +40,8 @@ public:
 
     const model::IPlugin *          GetPlugin       () const;
 
+    static EventType                Type            ();
+
 };
 
 
@@ -70,6 +72,8 @@ public:
     virtual const std::string &     GetName         () const;
 
     const model::IModelNode *       GetNode         () const;
+
+    static EventType                Type            ();
 
 };
 

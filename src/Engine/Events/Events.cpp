@@ -75,6 +75,13 @@ const model::IPlugin *  PluginAddedEvent::GetPlugin         () const
     return m_addedPlugin;
 }
 
+// *************************************
+//
+EventType                PluginAddedEvent::Type             ()
+{
+    return m_sEventType;
+}
+
 
 // ************************************* NodeAddedEvent *************************************
 
@@ -134,6 +141,13 @@ const std::string &     NodeAddedEvent::GetName             () const
 const model::IModelNode *   NodeAddedEvent::GetNode         () const
 {
     return m_addedNode;
+}
+
+// *************************************
+//
+EventType                NodeAddedEvent::Type               ()
+{
+    return m_sEventType;
 }
 
 }
