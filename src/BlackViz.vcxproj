@@ -195,8 +195,8 @@
     <ClCompile Include="BasicTestScene.cpp" />
     <ClCompile Include="Engine\Events\BaseEvent.cpp" />
     <ClCompile Include="Engine\Events\Events.cpp" />
-    <ClCompile Include="Engine\Events\Queues\EventQueueMT.cpp" />
-    <ClCompile Include="Engine\Events\Queues\EventQueueST.cpp" />
+    <ClCompile Include="Engine\Events\Queues\EventQueueConcurrent.cpp" />
+    <ClCompile Include="Engine\Events\Queues\EventQueue.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrTextureAnimatedSequence2D.cpp" />
@@ -338,12 +338,12 @@
     <ClInclude Include="Application\WindowedApplication.h" />
     <ClInclude Include="BasicTestScene.h" />
     <ClInclude Include="Core\Queue.h" />
-    <ClInclude Include="Core\QueueSync.h" />
+    <ClInclude Include="Core\QueueConcurrent.h" />
     <ClInclude Include="Engine\Events\BaseEvent.h" />
     <ClInclude Include="Engine\Events\Events.h" />
     <ClInclude Include="Engine\Events\Interfaces\IEvent.h" />
-    <ClInclude Include="Engine\Events\Queues\EventQueueMT.h" />
-    <ClInclude Include="Engine\Events\Queues\EventQueueST.h" />
+    <ClInclude Include="Engine\Events\Queues\EventQueueConcurrent.h" />
+    <ClInclude Include="Engine\Events\Queues\EventQueue.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrTextureAnimatedSequence2D.h" />

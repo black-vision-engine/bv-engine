@@ -140,11 +140,11 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannel.cpp" />
     <ClCompile Include="Engine\Events\BaseEvent.cpp" />
-    <ClCompile Include="Engine\Events\Queues\EventQueueMT.cpp" />
-    <ClCompile Include="Engine\Events\Queues\EventQueueST.cpp" />
     <ClCompile Include="Engine\Events\Events.cpp" />
     <ClCompile Include="System\Threading\CriticalSection.cpp" />
     <ClCompile Include="System\Threading\ScopedCriticalSection.cpp" />
+    <ClCompile Include="Engine\Events\Queues\EventQueue.cpp" />
+    <ClCompile Include="Engine\Events\Queues\EventQueueConcurrent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -319,13 +319,13 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannel.h" />
     <ClInclude Include="Engine\Events\Interfaces\IEvent.h" />
     <ClInclude Include="Engine\Events\BaseEvent.h" />
-    <ClInclude Include="Engine\Events\Queues\EventQueueMT.h" />
-    <ClInclude Include="Engine\Events\Queues\EventQueueST.h" />
     <ClInclude Include="Engine\Events\Events.h" />
     <ClInclude Include="Core\Queue.h" />
-    <ClInclude Include="Core\QueueSync.h" />
     <ClInclude Include="System\Threading\CriticalSection.h" />
     <ClInclude Include="System\Threading\ScopedCriticalSection.h" />
+    <ClInclude Include="Core\QueueConcurrent.h" />
+    <ClInclude Include="Engine\Events\Queues\EventQueue.h" />
+    <ClInclude Include="Engine\Events\Queues\EventQueueConcurrent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
