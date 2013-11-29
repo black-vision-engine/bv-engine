@@ -329,6 +329,8 @@
     <ClCompile Include="Mathematics\Transform\MatTransform.cpp" />
     <ClCompile Include="System\InitSubsystem.cpp" />
     <ClCompile Include="System\Profiler.cpp" />
+    <ClCompile Include="System\Threading\CriticalSection.cpp" />
+    <ClCompile Include="System\Threading\ScopedCriticalSection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -508,6 +510,8 @@
     <ClInclude Include="Mathematics\Transform\MatTransform.h" />
     <ClInclude Include="System\InitSubsystem.h" />
     <ClInclude Include="System\Profiler.h" />
+    <ClInclude Include="System\Threading\CriticalSection.h" />
+    <ClInclude Include="System\Threading\ScopedCriticalSection.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Graphics\Resources\Texture2D.cpp">
