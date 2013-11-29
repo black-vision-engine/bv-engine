@@ -335,10 +335,11 @@
     <ClInclude Include="Application\ConsoleApplication.h" />
     <ClInclude Include="Application\WindowedApplication.h" />
     <ClInclude Include="BasicTestScene.h" />
+    <ClInclude Include="Core\Queue.h" />
+    <ClInclude Include="Core\QueueSync.h" />
     <ClInclude Include="Engine\Events\BaseEvent.h" />
     <ClInclude Include="Engine\Events\Events.h" />
     <ClInclude Include="Engine\Events\Interfaces\IEvent.h" />
-    <ClInclude Include="Engine\Events\Interfaces\IEventQueue.h" />
     <ClInclude Include="Engine\Events\Queues\EventQueueMT.h" />
     <ClInclude Include="Engine\Events\Queues\EventQueueST.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h" />
