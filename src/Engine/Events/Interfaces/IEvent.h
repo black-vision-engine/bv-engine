@@ -5,6 +5,8 @@
 
 #include "System/BasicTypes.h"
 
+#include "FastDelegate.h"
+
 
 namespace bv 
 {
@@ -28,5 +30,7 @@ public:
     virtual const std::string &     GetName         () const                            = 0;
 
 };
+
+typedef fastdelegate::FastDelegate1< IEvent * > EventListenerDelegate;
 
 }
