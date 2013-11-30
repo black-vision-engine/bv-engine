@@ -326,6 +326,7 @@
     <ClInclude Include="Core\QueueConcurrent.h" />
     <ClInclude Include="Engine\Events\Queues\EventQueue.h" />
     <ClInclude Include="Engine\Events\Queues\EventQueueConcurrent.h" />
+    <ClInclude Include="Engine\Events\Interfaces\IEventManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
