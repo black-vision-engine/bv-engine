@@ -1,0 +1,53 @@
+#pragma once
+
+#include <list>
+#include <hash_map>
+
+#include "Engine/Events/Interfaces/IEventManager.h"
+
+#include "Engine/Events/Queues/EventQueue.h"
+#include "Engine/Events/Queues/EventQueueConcurrent.h"
+
+
+namespace bv
+{
+
+class EventManager : public IEventManager
+{
+private:
+
+    typedef std::list<EventListenerDelegate>            EventListenerList;
+    typedef std::hash_map<EventType, EventListenerList> EventListenerMap;
+
+    static const unsigned int NUM_QUEUES = 2;
+    static const unsigned int NUM_CONCURRENT_QUEUES = 2;
+
+private:
+
+    EventListenerMap        m_eventListeners;
+
+    EventQueue              m_queues[ NUM_QUEUES ];
+    EventQueueConcurrent    m_concurrentQueues[ NUM_CONCURRENT_QUEUES ];
+
+    int m_activeQueue;
+    int m_activeconcurrentQueue;
+
+public:
+
+    explicit        EventManager            ();
+    virtual         ~EventManager           ();
+
+    virtual bool    AddListener             ( const EventListenerDelegate & eventDelegate, const EventType & type );
+    virtual bool    RemoveListener          ( const EventListenerDelegate & eventDelegate, const EventType & type );
+
+    virtual bool    TriggerEvent            ( const IEvent * evt ) const;
+    virtual bool    QueueEvent              ( const IEvent * evt );
+    virtual bool    ConcurrentQueueEvent    ( const IEvent * evt );
+
+    virtual bool    RemoveEvent             ( const EventType & type, bool allOfType = false );
+
+    virtual bool    Update                  ( unsigned long maxMillis = millisINFINITE );
+
+};
+
+} //bv

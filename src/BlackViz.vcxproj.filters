@@ -145,6 +145,7 @@
     <ClCompile Include="System\Threading\ScopedCriticalSection.cpp" />
     <ClCompile Include="Engine\Events\Queues\EventQueue.cpp" />
     <ClCompile Include="Engine\Events\Queues\EventQueueConcurrent.cpp" />
+    <ClCompile Include="Engine\Events\EventManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -327,6 +328,7 @@
     <ClInclude Include="Engine\Events\Queues\EventQueue.h" />
     <ClInclude Include="Engine\Events\Queues\EventQueueConcurrent.h" />
     <ClInclude Include="Engine\Events\Interfaces\IEventManager.h" />
+    <ClInclude Include="Engine\Events\EventManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

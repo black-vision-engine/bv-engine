@@ -5,7 +5,7 @@
 namespace bv
 {
 
-typedef QueueConcurrent< IEvent * >   EventQueueConcurrent;
+typedef QueueConcurrent< const IEvent * >   EventQueueConcurrent;
 
 EventQueueConcurrent  GetEventQueueConcurrent();
 

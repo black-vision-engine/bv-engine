@@ -5,7 +5,7 @@
 namespace bv
 {
 
-typedef Queue< IEvent * >   EventQueue;
+typedef Queue< const IEvent * >   EventQueue;
 
 EventQueue  GetEventQueue();
 

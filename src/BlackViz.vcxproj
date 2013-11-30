@@ -194,6 +194,7 @@
     <ClCompile Include="Application\WindowedApplication.cpp" />
     <ClCompile Include="BasicTestScene.cpp" />
     <ClCompile Include="Engine\Events\BaseEvent.cpp" />
+    <ClCompile Include="Engine\Events\EventManager.cpp" />
     <ClCompile Include="Engine\Events\Events.cpp" />
     <ClCompile Include="Engine\Events\Queues\EventQueueConcurrent.cpp" />
     <ClCompile Include="Engine\Events\Queues\EventQueue.cpp" />
@@ -340,6 +341,7 @@
     <ClInclude Include="Core\Queue.h" />
     <ClInclude Include="Core\QueueConcurrent.h" />
     <ClInclude Include="Engine\Events\BaseEvent.h" />
+    <ClInclude Include="Engine\Events\EventManager.h" />
     <ClInclude Include="Engine\Events\Events.h" />
     <ClInclude Include="Engine\Events\Interfaces\IEvent.h" />
     <ClInclude Include="Engine\Events\Interfaces\IEventManager.h" />

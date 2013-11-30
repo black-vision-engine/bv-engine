@@ -31,6 +31,6 @@ public:
 
 };
 
-typedef fastdelegate::FastDelegate1< IEvent * > EventListenerDelegate;
+typedef fastdelegate::FastDelegate1< const IEvent * > EventListenerDelegate;
 
 }
