@@ -15,39 +15,10 @@ namespace model
 
 // *******************************
 //
-FloatInterpolator                   PluginsFactory::CreateConstValue                    ( float val )
+GeometryRectPlugin *         PluginsFactory::CreateGeometryRectPlugin            ( float w, float h )
 {
-	FloatInterpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
-	inter.addKey( 0.f, val );
-
-	return inter;
-}
-
-// *******************************
-//
-Vec4Interpolator                    PluginsFactory::CreateConstValue                    ( const glm::vec4& val )
-{
-	Vec4Interpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
-	inter.addKey( 0.f, val );
-
-	return inter;
-}
-
-// *******************************
-//
-Vec3Interpolator                    PluginsFactory::CreateConstValue                    ( const glm::vec3 & val )
-{
-    Vec3Interpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
-	inter.addKey( 0.f, val );
-
-	return inter;
-}
-
-// *******************************
-//
-model::GeometryRectPlugin *         PluginsFactory::CreateGeometryRectPlugin            ( float w, float h )
-{
-    auto rectPlugin = new model::GeometryRectPlugin( ParametersFactory::CreateParameter("width", CreateConstValue( w )), ParametersFactory::CreateParameter("height", CreateConstValue( h ) ) );
+    auto rectPlugin = new GeometryRectPlugin( ParametersFactory::CreateParameter("width", InterpolatorsHelper::CreateConstValue( w ))
+                                            , ParametersFactory::CreateParameter("height", InterpolatorsHelper::CreateConstValue( h ) ) );
 
 	return rectPlugin;
 }
@@ -70,37 +41,9 @@ model::GeometryRingPlugin*          PluginsFactory::CreateGeometryRingPlugin    
 
 // *******************************
 //
-model::VertexAttributesChannel*             PluginsFactory::CreateGeometryChannel               ( model::IConnectedComponent * connComp )
-{
-	model::VertexAttributesChannelDescriptor desc;
-
-	for( auto compDesc : connComp->GetAttributeChannels() )
-	{
-		desc.AddAttrChannelDesc( static_cast< const model::AttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
-	}
-
-	model::VertexAttributesChannel * ret = new model::VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
-
-	ret->AddConnectedComponent(connComp);
-
-	return ret;
-}
-
-// *******************************
-//
-model::TransformChannel *           PluginsFactory::CreateTransformChannel              ( const ParamTransform& transformation )
-{
-	model::SimpleTransformChannel*      trasformChannel  = new model::SimpleTransformChannel();
-	trasformChannel->AddTransform( transformation );
-
-	return trasformChannel;
-}
-
-// *******************************
-//
 model::SolidColorPlugin *            PluginsFactory::CreateSolidColorPlugin              ( model::IPlugin* prevPlugin, const glm::vec4& color )
 {
-	auto solidPlugin = new model::SolidColorPlugin( prevPlugin, ParametersFactory::CreateParameter( "color", CreateConstValue( color ) ) );
+	auto solidPlugin = new model::SolidColorPlugin( prevPlugin, ParametersFactory::CreateParameter( "color", InterpolatorsHelper::CreateConstValue( color ) ) );
 
 	// Set Pixel Shader Channel
 	
@@ -149,14 +92,6 @@ model::SimpleTextPlugin *            PluginsFactory::CreateTextPlugin           
 model::SimpleTransformPlugin *      PluginsFactory::CreateTransformPlugin               ( const model::IPlugin * prev, const ParamTransform & transformation )
 {
     return model::SimpleTransformPlugin::Create( prev, transformation );
-}
-
-// *******************************
-//
-model::IGeometryShaderChannel *     PluginsFactory::CreateGeometryShaderExtrude         ( float scale )
-{
-    auto extrudeScale = ParametersFactory::CreateParameter( "scale", CreateConstValue( scale ) );
-	return new model::ExtrudeGeometryShaderChannel("../dep/media/shaders/extrude.geom", extrudeScale);
 }
 
 // *******************************

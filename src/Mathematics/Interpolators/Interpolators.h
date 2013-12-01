@@ -15,4 +15,15 @@ namespace bv
     typedef bv::BasicInterpolator<TimeType, glm::vec4>  Vec4Interpolator;
 
     typedef bv::Interpolator<float>                     BaseInterpolator;
-}
+
+
+class InterpolatorsHelper
+{
+public:
+
+    static FloatInterpolator        CreateConstValue                    ( float val );
+    static Vec4Interpolator         CreateConstValue                    ( const glm::vec4 & val );
+    static Vec3Interpolator         CreateConstValue                    ( const glm::vec3 & val );
+};
+
+} //bv

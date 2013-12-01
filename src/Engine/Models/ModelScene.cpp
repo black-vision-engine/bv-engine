@@ -20,9 +20,9 @@ ModelScene*     ModelScene::Create(BasicNode* node, Camera* cam)
 ModelScene::ModelScene(BasicNode* node, Camera* cam)
     : m_pCamera(cam)
     , m_pSceneRoot(node)
-    , m_cameraPosition( "camera_position", PluginsFactory::CreateConstValue( glm::vec3( 0.f, 0.f, 1.0f ) ) )
-    , m_cameraDirection( "camera_direction", PluginsFactory::CreateConstValue( glm::vec3( 0.f, 0.f, 0.f ) ) )
-    , m_cameraUp( "camera_up", PluginsFactory::CreateConstValue( glm::vec3( 0.f, 1.f, 0.f ) ) )
+    , m_cameraPosition( "camera_position", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 1.0f ) ) )
+    , m_cameraDirection( "camera_direction", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 0.f ) ) )
+    , m_cameraUp( "camera_up", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 1.f, 0.f ) ) )
 {}
 
 // *******************************

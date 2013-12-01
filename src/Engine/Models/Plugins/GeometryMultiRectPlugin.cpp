@@ -6,7 +6,7 @@
 #include "Engine/Models/Plugins/Parameters/Parameter.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
-
+#include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
 
 namespace bv { namespace model {
 
@@ -70,7 +70,7 @@ void                        GeometryMultiRectPlugin::AddRectConnectedComponnent 
     model::RectComponent*   rect    = model::RectComponent::Create( w, h, tx, ty, tz );
     if( !m_geomChannel )
     {
-        m_geomChannel                   = PluginsFactory::CreateGeometryChannel( rect );
+        m_geomChannel                   = ChannelsFactory::CreateGeometryChannel( rect );
     }
     else
     {

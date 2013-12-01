@@ -4,6 +4,8 @@
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RingComponent.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/Plugins/Parameters/Parameter.h"
+#include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
+
 
 
 namespace bv { namespace model {
@@ -28,9 +30,9 @@ GeometryRingPlugin::GeometryRingPlugin                    ( float startAngle, fl
     : BasePlugin( nullptr )
 {
     // Set Geometry Channel
-    model::RingComponent * ring = model::RingComponent::Create( startAngle, endAngle, innerRadius, outerRadius, segmentsNum );
+    model::RingComponent * ring = RingComponent::Create( startAngle, endAngle, innerRadius, outerRadius, segmentsNum );
 
-    m_geomChannel               = model::PluginsFactory::CreateGeometryChannel( ring );
+    m_geomChannel               = ChannelsFactory::CreateGeometryChannel( ring );
 }
 
 // *************************************

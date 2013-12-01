@@ -24,6 +24,7 @@
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/Plugins/SimpleTransformPlugin.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -254,8 +255,8 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 
     /////////////////////////////// SimpleRect plugin //////////////////////////////////
 
-    auto w = model::ParametersFactory::CreateParameter( "width", model::PluginsFactory::CreateConstValue( 1.f ) );
-    auto h = model::ParametersFactory::CreateParameter( "height", model::PluginsFactory::CreateConstValue( 1.f )  );
+    auto w = model::ParametersFactory::CreateParameter( "width", InterpolatorsHelper::CreateConstValue( 1.f ) );
+    auto h = model::ParametersFactory::CreateParameter( "height", InterpolatorsHelper::CreateConstValue( 1.f )  );
 
     model::GeometryRectPlugin    * rectPlugin  = new model::GeometryRectPlugin( w, h );
     

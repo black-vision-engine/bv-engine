@@ -6,7 +6,7 @@
 #include "Engine/Models/Plugins/Parameters/Parameter.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
-
+#include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
 
 namespace bv { namespace model {
 
@@ -31,8 +31,8 @@ GeometryRectPlugin::GeometryRectPlugin                    ( const ParamFloat& w,
     , m_width( w )
     , m_height( h )
 {
-    model::RectComponent*   rect    = model::RectComponent::Create( w.Evaluate( 0.f ), h.Evaluate( 0.f ) );
-    m_geomChannel                   = PluginsFactory::CreateGeometryChannel( rect );
+    RectComponent*   rect           = RectComponent::Create( w.Evaluate( 0.f ), h.Evaluate( 0.f ) );
+    m_geomChannel                   = ChannelsFactory::CreateGeometryChannel( rect );
 }
 
 // *************************************

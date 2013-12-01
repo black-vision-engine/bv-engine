@@ -50,19 +50,10 @@ class Timeline;
 
 struct PluginsFactory
 {
-	static FloatInterpolator                    CreateConstValue                    ( float val );
-	static Vec4Interpolator                     CreateConstValue                    ( const glm::vec4 & val );
-    static Vec3Interpolator                     CreateConstValue                    ( const glm::vec3 & val );
-
-
 	static model::GeometryRectPlugin *          CreateGeometryRectPlugin            ( float w, float h );
     static model::GeometryMultiRectPlugin *     CreateGeometryMultiRectPlugin       ();
     static model::GeometryRingPlugin *          CreateGeometryRingPlugin            ( float startAngle, float endAngle, float innerRadius, float outerRadius, int segmentsNum );
-	
-	static model::VertexAttributesChannel *             CreateGeometryChannel               ( model::IConnectedComponent * connComp );
-	
 
-	static model::TransformChannel *            CreateTransformChannel              ( const ParamTransform& transformation );
 	
     static model::SimpleColorPlugin *           CreateSimpleColorPlugin             ( model::IPlugin * prevPlugin, const ParamVec4 & color );
     static model::SimplePixelShaderPlugin *     CreateSimplePixelShaderPlugin       ( model::IPlugin * prevPlugin, const std::string & shaderPath, model::RendererContext * ctx = nullptr );
@@ -80,7 +71,6 @@ struct PluginsFactory
     static model::SimpleTransformPlugin *       CreateTransformPlugin               ( const model::IPlugin * prev, const ParamTransform& transformation );
 
 	static model::SimpleTextPlugin *            CreateTextPlugin                    ( const std::wstring & text, const std::string & fontFile, int size, bool bolded = false, bool italic = false );
-	static model::IGeometryShaderChannel *      CreateGeometryShaderExtrude         ( float scale );
 
     static model::RendererContext *             CreateDefaultRenderableContext      ();
 
