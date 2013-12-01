@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <queue>
 
 #include "System/Threading/ScopedCriticalSection.h"
@@ -28,10 +29,24 @@ public:
     bool        IsEmpty             () const;
     size_t      Size                () const;
 
-    void        Push        ( const T & val );
+    void        Push                ( const T & val );
 
-    bool        TryPop      ( T & val );
-    void        WaitAndPop  ( T & val );
+    bool        TryPop              ( T & val );
+    void        WaitAndPop          ( T & val );
+
+    template< void (*deinitializer)( T ) >
+    void        Clear               ()
+    {
+        ScopedCriticalSection lock( m_criticalSection );
+
+        while( !m_queue.empty() )
+        {
+            auto val = m_queue.front();
+            m_queue.pop();
+
+            deinitializer( val );
+        }
+    }
 
 };
 

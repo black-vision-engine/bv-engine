@@ -1,7 +1,7 @@
 #include "EventManager.h"
 
 #include <cassert>
-
+#include <list>
 
 namespace bv
 {
@@ -53,7 +53,7 @@ bool    EventManager::RemoveListener        ( const EventListenerDelegate & even
 
         for( auto it = listeners.begin(); it != listeners.end(); ++it )
         {
-            if ( eventDelegate == (*it) )
+            if ( eventDelegate == ( *it ) )
             {
                 listeners.erase( it );
                 bOK = true;
@@ -137,28 +137,113 @@ bool    EventManager::RemoveEvent           ( const EventType & type, bool allOf
 	assert( m_activeconcurrentQueue >= 0 );
     assert( m_activeconcurrentQueue < NUM_CONCURRENT_QUEUES );
 
-    bool bOK = false;
+    bool bRemoved = false;
 
     EventListenerMap::iterator listenersIt = m_eventListeners.find( type );
 
     if ( listenersIt != m_eventListeners.end() )
     {
         EventQueue & eventQueue = m_queues[ m_activeQueue ];
-        
-        //eventQueue->Remove( evt );
-        //FIXME: implement
+
+        bRemoved = RemoveEventsOfType( eventQueue, type, allOfType );         
     }
 
-	return false;
+	return bRemoved;
 }
 
 // *******************************
 //
-bool    EventManager::Update                ( unsigned long maxMillis )
+bool    EventManager::Update                ( unsigned long maxEvaluationMillis )
 {
-    //FIXME: implement
+	unsigned long curMillis = timeGetTime();
+    unsigned long maxMillis = ( ( maxEvaluationMillis == IEventManager::millisINFINITE ) ? ( IEventManager::millisINFINITE ) : ( curMillis + maxEvaluationMillis ) );
 
-    return false;
+    //Multithreaded part
+    unsigned int activeConcurrentQueue = m_activeconcurrentQueue;
+    m_activeconcurrentQueue = ( m_activeconcurrentQueue + 1 ) % NUM_CONCURRENT_QUEUES;
+
+	ClearEventQueue( m_concurrentQueues[ m_activeconcurrentQueue ] );
+
+	const IEvent *  concurrentEvent = nullptr;
+
+    while ( m_concurrentQueues[ activeConcurrentQueue ].TryPop( concurrentEvent ) )
+    {
+        QueueEvent( concurrentEvent );
+        
+        curMillis = timeGetTime();
+
+        if ( maxEvaluationMillis != IEventManager::millisINFINITE && curMillis >= maxMillis )
+        {
+            assert( !"Concurrent events are DOSing event manager" );
+        }
+    }
+
+    //Regular events
+    unsigned int activeQueue = m_activeQueue;
+    m_activeQueue = ( m_activeQueue + 1 ) % NUM_QUEUES;
+
+    ClearEventQueue( m_queues[ m_activeQueue ] );
+
+    while( !m_queues[ activeQueue ].IsEmpty() )
+    {
+        const IEvent * evt = m_queues[ activeQueue ].Front();
+
+        EventType eventType = evt->GetEventType();
+
+        auto listenersIt = m_eventListeners.find( eventType );
+
+        for( auto listener : listenersIt->second )
+        {
+            listener( evt );
+        }
+
+        PostUpdateEvent( evt );
+
+        curMillis = timeGetTime();
+
+        if ( maxEvaluationMillis != IEventManager::millisINFINITE && curMillis >= maxMillis )
+        {
+            break;
+        }
+    }
+	
+    EventList tmp;
+
+    bool pendingEvents = !m_queues[ activeQueue ].IsEmpty();
+
+    if( pendingEvents )
+    {
+        while ( !m_queues[ activeQueue ].IsEmpty() )
+        {
+            auto evt = m_queues[ activeQueue ].Front();
+            m_queues[ activeQueue ].Pop();
+
+            tmp.push_back( evt );
+	    }
+	
+        while ( !m_queues[ m_activeQueue ].IsEmpty() )
+        {
+            auto evt = m_queues[ m_activeQueue ].Front();
+            m_queues[ activeQueue ].Pop();
+
+            tmp.push_back( evt );
+        }
+
+        for( auto evt : tmp )
+        {
+            m_queues[ m_activeQueue ].Push( evt );
+        }
+    }
+
+    return pendingEvents;
+}
+
+// *******************************
+//
+void            EventManager::PostUpdateEvent         ( const IEvent * evt )
+{
+    //FIXME: should be empty or using smart pointers ;/
+    delete evt;
 }
 
 } //bv
