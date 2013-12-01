@@ -11,5 +11,16 @@ enum class TextureAttachmentMode
     MM_TOTAL
 };
 
+enum class TextureWrappingMode : int
+{
+    TWM_CLAMP = 0,
+    TWM_REPEAT,
+    TWM_MIRROR,
+    TWM_CLAMP_BORDER,
+    TWM_CLAMP_EDGE, 
+
+    TWM_TOTAL
+};
+
 } //model
 } //bv

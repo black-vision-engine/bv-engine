@@ -63,8 +63,8 @@ struct PluginsFactory
     static model::SimpleVertexShaderPlugin *    CreateSimpleVertexShaderPlugin      ( model::IPlugin * prevPlugin, const std::string & shaderPath );
     static model::SimpleGeometryShaderPlugin *  CreateSimpleGeometryShaderPlugin    ( model::IPlugin * prevPlugin, const std::string & shaderPath );
                                                                                                     
-    static model::SimpleTexturePlugin *         CreateSimpleTexturePlugin           ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, const std::vector< TransformF > txTransforms, model::RendererContext * ctx, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
-    static model::SimpleTexturePlugin *         CreateSimpleTexturePlugin           ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, const std::vector< TransformF > txTransforms, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
+    static model::SimpleTexturePlugin *         CreateSimpleTexturePlugin           ( model::IPlugin * prevPlugin, const std::vector< const TextureDescriptor > & textureDescs, model::RendererContext * ctx, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
+    static model::SimpleTexturePlugin *         CreateSimpleTexturePlugin           ( model::IPlugin * prevPlugin, const std::vector< const TextureDescriptor > & textureDescs, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
 	
     static model::SimpleAnimationPlugin *       CreateSimpleAnimationPlugin         ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, const ParamFloat & frameCounter, model::RendererContext * ctx = nullptr );
 	static model::SimpleTextPlugin *            CreateSimpleTextPlugin              ( const std::wstring & text, const std::string & fontFile, int size, bool bolded = false, bool italic = false );

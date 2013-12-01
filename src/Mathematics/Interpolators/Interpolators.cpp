@@ -33,5 +33,4 @@ Vec3Interpolator                    InterpolatorsHelper::CreateConstValue       
 	return inter;
 }
 
-
 } // bv

@@ -9,24 +9,12 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
+#include "Engine/Models/Plugins/Parameters/Parameter.h"
+#include "PluginEnums.h"
+#include "TextureInfo.h"
 
 
 namespace bv { namespace model {
-
-class ResourceHandle;
-
-struct TextureInfo
-{
-    ResourceHandle *    m_resHandle;
-    std::string         m_texName;
-    glm::mat4           m_texTransform;
-
-    TextureInfo( ResourceHandle * resHandle, const std::string & texName, const glm::mat4 & texTransform = glm::mat4( 1.f ) )
-        : m_resHandle( resHandle )
-        , m_texName( texName )
-        , m_texTransform( texTransform )
-    {}
-};
 
 template< class Iface, class ParameterDescriptor >
 class BasePlugin : public Iface

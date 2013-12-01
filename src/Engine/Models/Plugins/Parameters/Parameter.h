@@ -41,8 +41,6 @@ protected:
     mutable TimeType        m_lastEvaluatedTime;
 
 protected:
-
-    virtual std::string         GetName                 ()  const { return m_name; }
     virtual ParameterSemantic   GetSemantic             ()  const { return m_semantic; }
 
 
@@ -53,6 +51,8 @@ protected:
     virtual     ~BaseParameter (){}
 
 public:
+
+    virtual std::string         GetName                 ()  const { return m_name; }
 
     void                        SetTimeEvaluator        ( const ITimeEvaluator * timeEvaluator )
     {

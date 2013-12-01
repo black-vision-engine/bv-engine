@@ -94,16 +94,15 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
     //return root;
 
     ///////////////////////////// Texture plugin //////////////////////////// 
-    std::vector< std::string > textures;
-    std::vector< TransformF > txTransforms;
-    textures.push_back( "simless_00.jpg" );
 
     TransformF txTrans;
     txTrans.AddScale( InterpolatorsHelper::CreateConstValue( float( w ) / float( h ) ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
 
-    txTransforms.push_back( txTrans );
+    std::vector< const model::TextureDescriptor > textures;
+        
+    textures.push_back( model::TextureDescriptor( "simless_00.jpg", ParametersFactory::CreateParameter( "texTransform", txTrans ) ) );
 
-    auto texturePlugin = PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures, txTransforms, TextureAttachmentMode::MM_ATTACHED );
+    auto texturePlugin = PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures, TextureAttachmentMode::MM_ATTACHED );
 
     root->AddPlugin( texturePlugin );
 
@@ -439,13 +438,11 @@ model::BasicNode *          TexturedRect()
     txTrans.AddRotation( angle, InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
     txTrans.AddTranslation( InterpolatorsHelper::CreateConstValue( -0.5f ), InterpolatorsHelper::CreateConstValue( -0.5f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
 
-    std::vector< std::string > textures;
-    std::vector< TransformF > txTransforms;
+    std::vector< const model::TextureDescriptor > textures;
+        
+    textures.push_back( model::TextureDescriptor( "simless_00.jpg", ParametersFactory::CreateParameter( "texTransform", txTrans ) ) );
 
-    textures.push_back( "simless_00.jpg" );
-    txTransforms.push_back( txTrans );
-
-    auto texturePlugin = PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures, txTransforms );
+    auto texturePlugin = PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures );
 
     root->AddPlugin( texturePlugin );
 
@@ -479,13 +476,11 @@ model::BasicNode *          TexturedRing()
 
     ///////////////////////////// Material plugin //////////////////////////// 
 
-    std::vector< std::string > textures;
-    std::vector< TransformF > txTransforms;
+    std::vector< const model::TextureDescriptor > textures;
+        
+    textures.push_back( model::TextureDescriptor( "simless_01.jpg" ) );
 
-    textures.push_back( "simless_01.jpg" );
-    txTransforms.push_back( TransformF() );
-
-    auto texturePlugin = PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures, txTransforms );
+    auto texturePlugin = PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures );
 
     root->AddPlugin(texturePlugin);
 
@@ -621,13 +616,11 @@ model::BasicNode * Text1Textured()
 
     root->AddPlugin( transPlugin );
 
-    std::vector< std::string > textures;
-    textures.push_back( "simless_01.jpg" );
+    std::vector< const model::TextureDescriptor > textures;
+        
+    textures.push_back( model::TextureDescriptor( "simless_01.jpg" ) );
 
-    std::vector< TransformF > txTransforms;
-    txTransforms.push_back( TransformF() );
-
-    auto texturePlugin = PluginsFactory::CreateSimpleTexturePlugin( transPlugin, textures, txTransforms );
+    auto texturePlugin = PluginsFactory::CreateSimpleTexturePlugin( transPlugin, textures );
 
     root->AddPlugin( texturePlugin );
 
@@ -761,13 +754,12 @@ model::BasicNode *          ExtrudedTexturedRing()
 
     root->AddPlugin(ringPlugin);
 
-    std::vector< std::string > textures;
-    textures.push_back( "simless_01.jpg" );
+    std::vector< const model::TextureDescriptor > textures;
+        
+    textures.push_back( model::TextureDescriptor( "simless_01.jpg" ) );
 
-    std::vector< TransformF > txTransforms;
-    txTransforms.push_back( TransformF() );
 
-    auto texturePlugin  = PluginsFactory::CreateSimpleTexturePlugin( ringPlugin, textures, txTransforms );
+    auto texturePlugin  = PluginsFactory::CreateSimpleTexturePlugin( ringPlugin, textures );
 
     texturePlugin->SetGeometryShaderChannel ( ChannelsFactory::CreateGeometryShaderExtrude( 1.f ) );
 

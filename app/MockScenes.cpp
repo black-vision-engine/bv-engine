@@ -272,26 +272,21 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     
     if( numcall == 0 )
     {
-        std::vector< std::string > textures;
-        std::vector< TransformF > txTransforms;
+        std::vector< const model::TextureDescriptor > textures;
+        
+        textures.push_back( model::TextureDescriptor( "asci_arial_atlas_red.png", model::ParametersFactory::CreateParameter( "texTransform", tx0m ) ) );
+        textures.push_back( model::TextureDescriptor( "simless_00.jpg", model::ParametersFactory::CreateParameter( "texTransform", tx1m ) ) );
 
-        textures.push_back( "asci_arial_atlas_red.png" );
-        textures.push_back( "simless_00.jpg" );
-        txTransforms.push_back( tx0m );
-        txTransforms.push_back( tx1m );
-
-        stpp = model::PluginsFactory::CreateSimpleTexturePlugin( stpl, textures, txTransforms );
+        stpp = model::PluginsFactory::CreateSimpleTexturePlugin( stpl, textures );
     }
     else
     {
-        std::vector< std::string > textures;
-        std::vector< TransformF > txTransforms;
-        textures.push_back( "asci_arial_atlas_red.png" );
-        textures.push_back( "simless_01.jpg" );
-        txTransforms.push_back( tx0m );
-        txTransforms.push_back( tx1m );
+        std::vector< const model::TextureDescriptor > textures;
+        
+        textures.push_back( model::TextureDescriptor( "asci_arial_atlas_red.png", model::ParametersFactory::CreateParameter( "texTransform", tx0m ) ) );
+        textures.push_back( model::TextureDescriptor( "simless_01.jpg", model::ParametersFactory::CreateParameter( "texTransform", tx1m ) ) );
 
-        stpp = model::PluginsFactory::CreateSimpleTexturePlugin( stpl, textures, txTransforms );
+        stpp = model::PluginsFactory::CreateSimpleTexturePlugin( stpl, textures );
     }
 
     root->AddPlugin                 ( stpp );
@@ -367,14 +362,12 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     TransformF tx1m;    
     tx1m.AddScale( alpha, ConstValue( 1.0f ), ConstValue( 1.0f ) );
 
-    std::vector< std::string > textures;
-    std::vector< TransformF > txTransforms;
-    txTransforms.push_back( TransformF() );
-    txTransforms.push_back( TransformF() );
-    textures.push_back( "simless_00.jpg" );
-    textures.push_back( "simless_01.jpg" );
+    std::vector< const model::TextureDescriptor > textures;
 
-    stpp = model::PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures, txTransforms );
+    textures.push_back( model::TextureDescriptor( "simless_00.jpg" ) );
+    textures.push_back( model::TextureDescriptor( "simless_01.jpg" ) );
+
+    stpp = model::PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures );
 
     //stpp->SetPixelShaderChannel     ( new MyPixelShaderChannel( "../dep/media/shaders/simpletexture.frag", alpha, *tx0m, *tx1m ) ); // FIXME: add texture transformation
     //stpp->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );

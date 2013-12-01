@@ -9,6 +9,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Resources/Font/FontLoader.h"
 #include "Engine/Models/Resources/Font/Text.h"
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
 namespace bv { namespace model {
 
@@ -72,7 +73,7 @@ void SimpleTextPlugin::LoadAtlas( const std::string& name )
         delete m_textures[0];
     }
 
-    m_textures[0] = new TextureInfo( altasHandle, name );
+    m_textures[0] = new TextureInfo( altasHandle, name, ParametersFactory::CreateParameter( "atlasTransform", TransformF() ), TextureWrappingMode::TWM_CLAMP );
 }
 
 

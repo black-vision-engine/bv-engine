@@ -53,18 +53,18 @@ model::SolidColorPlugin *            PluginsFactory::CreateSolidColorPlugin     
 
 // *******************************
 //
-model::SimpleTexturePlugin*         PluginsFactory::CreateSimpleTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths, const std::vector< TransformF > txTransforms,bv::model::RendererContext * ctx, TextureAttachmentMode mode )
+model::SimpleTexturePlugin*         PluginsFactory::CreateSimpleTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< const TextureDescriptor > & textureDescs, bv::model::RendererContext * ctx, TextureAttachmentMode mode )
 {
-	auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, texturesPaths, txTransforms, ctx, mode );
+	auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, textureDescs, ctx, mode );
 
 	return texturePlugin;
 }
 
 // *******************************
 //
-model::SimpleTexturePlugin*         PluginsFactory::CreateSimpleTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths, const std::vector< TransformF > txTransforms, TextureAttachmentMode mode )
+model::SimpleTexturePlugin*         PluginsFactory::CreateSimpleTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< const TextureDescriptor > & textureDescs, TextureAttachmentMode mode )
 {
-	auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, texturesPaths, txTransforms, mode );
+	auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, textureDescs, mode );
 
 	return texturePlugin;
 }

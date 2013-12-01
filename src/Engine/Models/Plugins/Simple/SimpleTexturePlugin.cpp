@@ -34,16 +34,17 @@ SimpleTexturePluginPD::SimpleTexturePluginPD()
 
 // *************************************
 //
-SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, const std::vector< TransformF > txTransforms, TextureAttachmentMode mode )
+SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, TextureAttachmentMode amode )
     : BasePlugin( prev )
-    , m_attachmentMode( mode )
+    , m_attachmentMode( amode )
 {
     assert( prev != nullptr );
-    assert( texturesFilesNames.size() == txTransforms.size() );
 
-    for(unsigned int i = 0; i < texturesFilesNames.size(); ++i)
+    for(unsigned int i = 0; i < textureDescs.size(); ++i)
     {
-        m_textures.push_back( LoadTexture( "Tex" + std::to_string( i ), texturesFilesNames[ i ] ) );
+        auto texInfo = LoadTexture( textureDescs[ i ], "Tex" + std::to_string( i ) );
+        RegisterValue( texInfo->m_texTransformVal );
+        m_textures.push_back( texInfo );
     }
 
     m_geomChannel = nullptr;
@@ -52,9 +53,9 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
     // Set Pixel Shader Channel
     std::vector<ParamTransform> txMat;
 
-    for( auto t : txTransforms )
+    for( auto t : textureDescs )
     {
-        txMat.push_back( ParamTransform( "txTransform", t ) );
+        txMat.push_back( t.transformParameter );
     }
 
     std::vector<ParamFloat> alphas;
@@ -72,16 +73,17 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
 
 // *************************************
 //
-SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, const std::vector< TransformF > txTransforms, model::RendererContext * ctx, TextureAttachmentMode mode )
+SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, model::RendererContext * ctx, TextureAttachmentMode mode )
     : BasePlugin( prev )
     , m_attachmentMode( mode )
 {
     assert( prev != nullptr );
-    assert( texturesFilesNames.size() == txTransforms.size() );
 
-    for( unsigned int i = 0; i < texturesFilesNames.size(); ++i )
+    for( unsigned int i = 0; i < textureDescs.size(); ++i )
     {
-        m_textures.push_back( LoadTexture( "Tex" + std::to_string( i ), texturesFilesNames[ i ] ) );
+        auto texInfo = LoadTexture( textureDescs[ i ], "Tex" + std::to_string( i ) );
+        RegisterValue( texInfo->m_texTransformVal );
+        m_textures.push_back( texInfo );
     }
 
     m_geomChannel = nullptr;
@@ -90,9 +92,9 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
     // Set Pixel Shader Channel
     std::vector<ParamTransform> txMat;
 
-    for( auto t : txTransforms )
+    for( auto t : textureDescs )
     {
-        txMat.push_back( ParamTransform( "txTransform", t ) );
+        txMat.push_back( t.transformParameter );
     }
 
     std::vector<ParamFloat> alphas;
@@ -116,16 +118,7 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
 // *************************************
 //
 SimpleTexturePlugin::~SimpleTexturePlugin        ()
-{
-    //delete m_alphaParam;
-    //delete m_alphaValue;
-
-    //delete m_tex0TransformParam;
-    //delete m_tex0TransformValue;
-
-    //delete m_tex1TransformParam;
-    //delete m_tex1TransformValue;
-}
+{}
 
 // *************************************
 //
@@ -133,13 +126,6 @@ void                        SimpleTexturePlugin::SetAttachmentMode           ( T
 {
     m_attachmentMode = mode;
 }
-
-// *************************************
-//
-//const ITransformChannel*    SimpleTexturePlugin::GetTransformChannel         () const
-//{
-//    return m_prev->GetTransformChannel();
-//}
 
 // *************************************
 //
@@ -214,13 +200,13 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
 
 // *************************************
 //
-TextureInfo * SimpleTexturePlugin::LoadTexture( const std::string & name, const std::string & path ) const
+TextureInfo * SimpleTexturePlugin::LoadTexture( const TextureDescriptor & texDesc, const std::string& name ) const
 {
     TextureLoader texLoader;
 
-    Resource texture( name, path );
+    Resource texture( name, texDesc.textureFileName );
 
-    return new TextureInfo( texLoader.LoadResource( &texture ), name );
+    return new TextureInfo( texLoader.LoadResource( &texture ), name, texDesc.transformParameter, texDesc.wrappingMode );
 }
 
 namespace
@@ -290,6 +276,11 @@ void                SimpleTexturePlugin::Update              ( TimeType t )
     if ( m_prevPlugin->GetGeometryChannel()->NeedsAttributesUpdate( t ) )
     {
         m_geomChannel->SetNeedsAttributesUpdate( true );
+    }
+
+    for( auto ti : m_textures )
+    {
+        ti->m_texTransformVal->SetValue( ti->m_texTransform.Evaluate( t ) );
     }
 
     m_geomChannel->Update( t );

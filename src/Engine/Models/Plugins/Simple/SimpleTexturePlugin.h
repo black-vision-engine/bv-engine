@@ -6,6 +6,8 @@
 #include "Engine/Models/Plugins/Parameters/PluginParameters.h"
 
 #include "Engine/Models/Plugins/PluginEnums.h"
+#include "Engine/Models/Plugins/Parameters/Parameter.h"
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
 
 namespace bv { namespace model {
@@ -24,37 +26,55 @@ public:
     explicit SimpleTexturePluginPD();
 };
 
+// ***************************** SimpleTexturePlugin TextureDescriptor ***
+
+class TextureDescriptor
+{
+public:
+
+    std::string         textureFileName;
+    ParamTransform      transformParameter;
+    TextureWrappingMode wrappingMode;
+
+    explicit TextureDescriptor  ( const std::string& txFileName
+                                , const ParamTransform& txTransform = ParametersFactory::CreateParameter( "texTransform", TransformF() )
+                                , TextureWrappingMode txWrappingMode = TextureWrappingMode::TWM_REPEAT )
+                                : textureFileName( txFileName )
+                                , transformParameter( txTransform )
+                                , wrappingMode( txWrappingMode )
+    {}
+};
 
 // ***************************** PLUGIN ********************************** 
 class SimpleTexturePlugin : public BasePlugin< IPlugin, SimpleTexturePluginPD >
 {
 private:
-    TextureAttachmentMode   m_attachmentMode;
-    unsigned int            m_texCoordChannelIndex;
+    TextureAttachmentMode           m_attachmentMode;
+    unsigned int                    m_texCoordChannelIndex;
     VertexAttributesChannel*        m_geomChannel;
-    TexturePixelShaderChannel*  m_pixelShaderChannel;
-    TextureVertexShaderChannel* m_vertexShaderChannel;
+    TexturePixelShaderChannel*      m_pixelShaderChannel;
+    TextureVertexShaderChannel*     m_vertexShaderChannel;
 
 private:
 
-    TextureInfo *       LoadTexture( const std::string & name, const std::string & path )   const;
-
-    void                EvalGeometryChannel( const IPlugin* prev );
+    TextureInfo *                               LoadTexture( const TextureDescriptor & texDesc, const std::string& name )   const;
+    void                                        EvalGeometryChannel( const IPlugin* prev );
 
 public:
 
-    explicit                            SimpleTexturePlugin         ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, const std::vector< TransformF > txTransforms, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
-    explicit                            SimpleTexturePlugin         ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, const std::vector< TransformF > txTransforms, model::RendererContext * ctx = nullptr, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
-                                        ~SimpleTexturePlugin        ();
+    explicit                                    SimpleTexturePlugin         ( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, TextureAttachmentMode amode = TextureAttachmentMode::MM_ATTACHED );
+    explicit                                    SimpleTexturePlugin         ( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, model::RendererContext * ctx = nullptr, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
+                                                ~SimpleTexturePlugin        ();
 
     virtual const IVertexAttributesChannel*     GetGeometryChannel          () const override;                                                                           
-    virtual const IPixelShaderChannel*  GetPixelShaderChannel       () const override;                                       
-    virtual const IVertexShaderChannel* GetVertexShaderChannel      () const override;       
+    virtual const IPixelShaderChannel*          GetPixelShaderChannel       () const override;                                       
+    virtual const IVertexShaderChannel*         GetVertexShaderChannel      () const override;       
 
-    void                                SetAttachmentMode           ( TextureAttachmentMode mode );
+    void                                        SetAttachmentMode           ( TextureAttachmentMode mode );
+    void                                        SetWrappingMode             ( TextureWrappingMode mode );
 
-    virtual void                        Update                      ( TimeType t ) override;
-    virtual void                        Print                       ( std::ostream & out, int tabs = 0 ) const override;
+    virtual void                                Update                      ( TimeType t ) override;
+    virtual void                                Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
 };
 
