@@ -29,6 +29,7 @@ bool            BaseParameter::IsEvaluationNeeded   ( TimeType t )     const
 BaseParameter::BaseParameter( const std::string & name, ParameterSemantic semantic, const ITimeEvaluator * evaluator )
     : m_lastEvaluatedTime( -1.f ) // TODO: Is it goot idea to set in to -1 ?
     , m_timeEvaluator( evaluator )
+    , m_name( name )
 {
     if( evaluator == nullptr )
     {

@@ -43,8 +43,6 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
     for(unsigned int i = 0; i < textureDescs.size(); ++i)
     {
         auto texInfo = LoadTexture( textureDescs[ i ], "Tex" + std::to_string( i ) );
-        RegisterValue( texInfo->m_texTransformVal );
-        RegisterValue( texInfo->m_texAlphaVal );
         RegisterValue( texInfo->m_texBorderColorVal );
         m_textures.push_back( texInfo );
     }
@@ -61,6 +59,11 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
     }
 
     std::vector<ParamFloat> alphas;
+
+    for( auto t : textureDescs )
+    {
+        alphas.push_back( t.alpha );
+    }
 
     m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
 										, alphas
@@ -84,8 +87,6 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
     for( unsigned int i = 0; i < textureDescs.size(); ++i )
     {
         auto texInfo = LoadTexture( textureDescs[ i ], "Tex" + std::to_string( i ) );
-        RegisterValue( texInfo->m_texTransformVal );
-        RegisterValue( texInfo->m_texAlphaVal );
         RegisterValue( texInfo->m_texBorderColorVal );
         m_textures.push_back( texInfo );
     }
@@ -102,6 +103,11 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
     }
 
     std::vector<ParamFloat> alphas;
+
+    for( auto t : textureDescs )
+    {
+        alphas.push_back( t.alpha );
+    }
 
     m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
 										, alphas

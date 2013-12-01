@@ -44,7 +44,7 @@ public:
 
     explicit TextureDescriptor  (    const std::string & txFileName
                                 ,    const ParamTransform & txTransform = ParametersFactory::CreateParameter( "texTransform", TransformF() )
-                                ,    const ParamFloat& txAlpha = ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 1.f ) )
+                                ,    const ParamFloat& txAlpha = ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 0.f ) )
                                 ,    const ParamVec4& txBorderColor = ParametersFactory::CreateParameter( "texBorderColor", InterpolatorsHelper::CreateConstValue( glm::vec4( 0.f, 0.f, 1.f, 0.f ) ) )
                                 ,    TextureWrappingMode txWrappingModeX = TextureWrappingMode::TWM_REPEAT 
                                 ,    TextureWrappingMode txWrappingModeY = TextureWrappingMode::TWM_REPEAT
