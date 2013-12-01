@@ -17,9 +17,7 @@ public:
 
     explicit ExtrudeGeometryShaderChannelPD()
         : BaseParametersDescriptor( pluginName ) 
-    {
-        m_params[ scaleParamName ] = ParamType::PT_FLOAT;
-    }
+    {}
 };
 
 class ExtrudeGeometryShaderChannel : public model::ShaderChannel< IGeometryShaderChannel, ExtrudeGeometryShaderChannelPD >

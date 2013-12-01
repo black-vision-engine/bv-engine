@@ -16,9 +16,7 @@ public:
 
     explicit SolidColorShaderChannelPD()
         : BaseParametersDescriptor( pluginName ) 
-    {
-        m_params[ solidColor ] = ParamType::PT_FLOAT4;
-    }
+    {}
 };
 
 class SolidColorShaderChannel : public model::PixelShaderChannelBase< SolidColorShaderChannelPD >

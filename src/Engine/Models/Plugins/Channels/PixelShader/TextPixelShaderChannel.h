@@ -21,9 +21,7 @@ public:
 
     TextPixelShaderChannelPD()
         : BaseParametersDescriptor( pluginName )
-    {
-        m_params[ colorParam ] = ParamType::PT_FLOAT4;
-    }
+    {}
 };
 
 

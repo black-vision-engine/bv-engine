@@ -18,13 +18,6 @@ const std::string &                                     BaseParametersDescriptor
 }
 
 // *******************************
-//
-const BaseParametersDescriptor::StringParamTypeMap &    BaseParametersDescriptor::GetParams                   () const 
-{ 
-    return m_params; 
-}
-
-// *******************************
 // FIXME: Add validation
 bool                                                    BaseParametersDescriptor::ValidateParameters          ( const std::string& programSource )    const 
 { 
