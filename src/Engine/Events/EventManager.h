@@ -46,7 +46,11 @@ public:
 
     virtual bool    RemoveEvent             ( const EventType & type, bool allOfType = false );
 
-    virtual bool    Update                  ( unsigned long maxMillis = millisINFINITE );
+    virtual bool    Update                  ( unsigned long maxEvaluationMillis = millisINFINITE );
+
+private:
+
+    void            PostUpdateEvent         ( const IEvent * evt );
 
 };
 

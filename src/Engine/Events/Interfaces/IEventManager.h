@@ -25,7 +25,7 @@ public:
 
     virtual bool    RemoveEvent             ( const EventType & type, bool allOfType = false )                      = 0;
 
-    virtual bool    Update                  ( unsigned long maxMillis = millisINFINITE )                            = 0;
+    virtual bool    Update                  ( unsigned long maxEvaluationMillis = millisINFINITE )                  = 0;
 
 };
 
