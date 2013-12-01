@@ -44,6 +44,8 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
     {
         auto texInfo = LoadTexture( textureDescs[ i ], "Tex" + std::to_string( i ) );
         RegisterValue( texInfo->m_texTransformVal );
+        RegisterValue( texInfo->m_texAlphaVal );
+        RegisterValue( texInfo->m_texBorderColorVal );
         m_textures.push_back( texInfo );
     }
 
@@ -83,6 +85,8 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
     {
         auto texInfo = LoadTexture( textureDescs[ i ], "Tex" + std::to_string( i ) );
         RegisterValue( texInfo->m_texTransformVal );
+        RegisterValue( texInfo->m_texAlphaVal );
+        RegisterValue( texInfo->m_texBorderColorVal );
         m_textures.push_back( texInfo );
     }
 
@@ -288,6 +292,8 @@ void                SimpleTexturePlugin::Update              ( TimeType t )
     for( auto ti : m_textures )
     {
         ti->m_texTransformVal->SetValue( ti->m_texTransform.Evaluate( t ) );
+        ti->m_texAlphaVal->SetValue( ti->m_texAlpha.Evaluate( t ) );
+        ti->m_texBorderColorVal->SetValue( ti->m_texBorderColor.Evaluate( t ) );
     }
 
     m_geomChannel->Update( t );
