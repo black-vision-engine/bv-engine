@@ -206,7 +206,7 @@ TextureInfo * SimpleTexturePlugin::LoadTexture( const TextureDescriptor & texDes
 
     Resource texture( name, texDesc.textureFileName );
 
-    return new TextureInfo( texLoader.LoadResource( &texture ), name, texDesc.transformParameter, texDesc.wrappingMode );
+    return new TextureInfo( texLoader.LoadResource( &texture ), name, texDesc.transformParameter, texDesc.wrappingModeX, texDesc.wrappingModeY );
 }
 
 namespace

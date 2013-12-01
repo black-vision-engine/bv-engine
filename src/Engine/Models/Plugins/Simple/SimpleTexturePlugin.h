@@ -34,14 +34,17 @@ public:
 
     std::string         textureFileName;
     ParamTransform      transformParameter;
-    TextureWrappingMode wrappingMode;
+    TextureWrappingMode wrappingModeX;
+    TextureWrappingMode wrappingModeY;
 
     explicit TextureDescriptor  ( const std::string& txFileName
                                 , const ParamTransform& txTransform = ParametersFactory::CreateParameter( "texTransform", TransformF() )
-                                , TextureWrappingMode txWrappingMode = TextureWrappingMode::TWM_REPEAT )
+                                , TextureWrappingMode txWrappingModeX = TextureWrappingMode::TWM_REPEAT 
+                                , TextureWrappingMode txWrappingModeY = TextureWrappingMode::TWM_REPEAT )
                                 : textureFileName( txFileName )
                                 , transformParameter( txTransform )
-                                , wrappingMode( txWrappingMode )
+                                , wrappingModeX( txWrappingModeX )
+                                , wrappingModeY( txWrappingModeY )
     {}
 };
 
