@@ -2,14 +2,26 @@
 
 namespace bv { namespace model {
 
-TextureInfo::TextureInfo( ResourceHandle * resHandle, const std::string & texName, const ParamTransform & texTransform, TextureWrappingMode wrappingModeX, TextureWrappingMode wrappingModeY )
+TextureInfo::TextureInfo(   ResourceHandle * resHandle
+                         ,  const std::string & texName
+                         ,  const ParamTransform & texTransform
+                         ,  const ParamFloat& alpha
+                         ,  const ParamVec4& borderColor
+                         ,  TextureWrappingMode wrappingModeX
+                         ,  TextureWrappingMode wrappingModeY 
+                         ,  TextureFilteringMode filteringMode )
     : m_resHandle( resHandle )
     , m_texName( texName )
     , m_texTransform( texTransform )
+    , m_texAlpha( alpha )
+    , m_texBorderColor( borderColor )
     , m_wrappingModeX( wrappingModeX )
     , m_wrappingModeY( wrappingModeY )
+    , m_finteringMode( filteringMode )
 {
-    m_texTransformVal = new ValueMat4( texTransform.GetName() );
+    m_texTransformVal   = new ValueMat4( texTransform.GetName() );
+    m_texAlphaVal       = new ValueFloat( alpha.GetName() );
+    m_texBorderColorVal = new ValueVec4( borderColor.GetName() );
 }
 
 } // model

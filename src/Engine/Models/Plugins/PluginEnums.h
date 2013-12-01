@@ -22,5 +22,13 @@ enum class TextureWrappingMode : int
     TWM_TOTAL
 };
 
+enum class TextureFilteringMode : int
+{
+    TFM_POINT = 0,
+    TFM_LINEAR,
+
+    TFM_TOTAL
+};
+
 } //model
 } //bv

@@ -44,6 +44,7 @@
 #include "Engine/Graphics/Resources/Textures/TextureManager.h"
 #include "Engine/Graphics/Resources/Texture2D.h"
 #include "Engine/Graphics/Resources/TextureAnimatedSequence2D.h"
+#include "Engine/Models/Plugins/ConstantsMapper.h"
 
 namespace bv { namespace model {
 
@@ -188,9 +189,18 @@ SceneNode *                 BasicNode::BuildScene()
                 int i = 0;
                 for( auto tex : p->GetTextures() )
                 {
-                    SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT }; 
+                    SamplerWrappingMode wp[] = {
+                                                    ConstantsMapper::EngineConstant( tex->m_wrappingModeX ) 
+                                                ,   ConstantsMapper::EngineConstant( tex->m_wrappingModeY )
+                                                ,   SamplerWrappingMode::SWM_REPEAT // FIXME: Add 3d texture support
+                                                }; 
                     //FIXME: jak to kurwa przez tex->m_texName ????
-                    auto textureSampler = new TextureSampler( i, tex->m_texName, bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ));
+                    auto textureSampler = new TextureSampler(       i
+                                                                ,   tex->m_texName
+                                                                ,   bv::SamplerSamplingMode::SSM_MODE_2D
+                                                                ,   ConstantsMapper::EngineConstant( tex->m_finteringMode )
+                                                                ,   wp
+                                                                ,   tex->m_texBorderColor.Evaluate( 0.f ) );
                     effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );
 
                     auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );

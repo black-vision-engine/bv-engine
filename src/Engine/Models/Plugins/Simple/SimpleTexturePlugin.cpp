@@ -55,7 +55,7 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
 
     for( auto t : textureDescs )
     {
-        txMat.push_back( t.transformParameter );
+        txMat.push_back( t.transform );
     }
 
     std::vector<ParamFloat> alphas;
@@ -94,7 +94,7 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
 
     for( auto t : textureDescs )
     {
-        txMat.push_back( t.transformParameter );
+        txMat.push_back( t.transform );
     }
 
     std::vector<ParamFloat> alphas;
@@ -204,9 +204,16 @@ TextureInfo * SimpleTexturePlugin::LoadTexture( const TextureDescriptor & texDes
 {
     TextureLoader texLoader;
 
-    Resource texture( name, texDesc.textureFileName );
+    Resource texture( name, texDesc.fileName );
 
-    return new TextureInfo( texLoader.LoadResource( &texture ), name, texDesc.transformParameter, texDesc.wrappingModeX, texDesc.wrappingModeY );
+    return new TextureInfo(     texLoader.LoadResource( &texture )
+                            ,   name
+                            ,   texDesc.transform
+                            ,   texDesc.alpha
+                            ,   texDesc.borderColor
+                            ,   texDesc.wrappingModeX
+                            ,   texDesc.wrappingModeY
+                            ,   texDesc.filteringMode );
 }
 
 namespace

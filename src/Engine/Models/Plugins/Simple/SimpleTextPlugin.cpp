@@ -73,7 +73,7 @@ void SimpleTextPlugin::LoadAtlas( const std::string& name )
         delete m_textures[0];
     }
 
-    m_textures[0] = new TextureInfo( altasHandle, name, ParametersFactory::CreateParameter( "atlasTransform", TransformF() ), TextureWrappingMode::TWM_CLAMP );
+    m_textures[0] = new TextureInfo( altasHandle, name );
 }
 
 
