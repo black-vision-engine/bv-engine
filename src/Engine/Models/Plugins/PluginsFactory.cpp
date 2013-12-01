@@ -1,6 +1,6 @@
 #include "PluginsFactory.h"
 
-#include "Engine/Models/Plugins/SimpleTransformPlugin.h"
+#include "Engine/Models/Plugins/Simple/SimpleTransformPlugin.h"
 #include "Engine/Models/Plugins/GeometryPluginRing.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
@@ -53,7 +53,7 @@ model::SolidColorPlugin *            PluginsFactory::CreateSolidColorPlugin     
 
 // *******************************
 //
-model::SimpleTexturePlugin*         PluginsFactory::CreateTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths, const std::vector< TransformF > txTransforms,bv::model::RendererContext * ctx, TextureAttachmentMode mode )
+model::SimpleTexturePlugin*         PluginsFactory::CreateSimpleTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths, const std::vector< TransformF > txTransforms,bv::model::RendererContext * ctx, TextureAttachmentMode mode )
 {
 	auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, texturesPaths, txTransforms, ctx, mode );
 
@@ -62,7 +62,7 @@ model::SimpleTexturePlugin*         PluginsFactory::CreateTexturePlugin         
 
 // *******************************
 //
-model::SimpleTexturePlugin*         PluginsFactory::CreateTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths, const std::vector< TransformF > txTransforms, TextureAttachmentMode mode )
+model::SimpleTexturePlugin*         PluginsFactory::CreateSimpleTexturePlugin                 ( model::IPlugin* prevPlugin, const std::vector< std::string >& texturesPaths, const std::vector< TransformF > txTransforms, TextureAttachmentMode mode )
 {
 	auto texturePlugin = new model::SimpleTexturePlugin( prevPlugin, texturesPaths, txTransforms, mode );
 
@@ -71,7 +71,7 @@ model::SimpleTexturePlugin*         PluginsFactory::CreateTexturePlugin         
 
 // *******************************
 //
-model::SimpleAnimationPlugin *      PluginsFactory::CreateAnimationPlugin               ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, const ParamFloat & frameCounter, model::RendererContext * ctx )
+model::SimpleAnimationPlugin *      PluginsFactory::CreateSimpleAnimationPlugin               ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, const ParamFloat & frameCounter, model::RendererContext * ctx )
 {
 	auto animationPlugin = new model::SimpleAnimationPlugin( prevPlugin, texturesPaths, frameCounter, ctx );
 
@@ -80,7 +80,7 @@ model::SimpleAnimationPlugin *      PluginsFactory::CreateAnimationPlugin       
 
 // *******************************
 //
-model::SimpleTextPlugin *            PluginsFactory::CreateTextPlugin                    ( const std::wstring & text, const std::string & fontFile, int size, bool bolded, bool italic )
+model::SimpleTextPlugin *            PluginsFactory::CreateSimpleTextPlugin                    ( const std::wstring & text, const std::string & fontFile, int size, bool bolded, bool italic )
 {
     auto texPlugin = model::SimpleTextPlugin::Create( text, fontFile, size, bolded, italic );
 
@@ -89,7 +89,7 @@ model::SimpleTextPlugin *            PluginsFactory::CreateTextPlugin           
 
 // *******************************
 //
-model::SimpleTransformPlugin *      PluginsFactory::CreateTransformPlugin               ( const model::IPlugin * prev, const ParamTransform & transformation )
+model::SimpleTransformPlugin *      PluginsFactory::CreateSimpleTransformPlugin               ( const model::IPlugin * prev, const ParamTransform & transformation )
 {
     return model::SimpleTransformPlugin::Create( prev, transformation );
 }

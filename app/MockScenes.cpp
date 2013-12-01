@@ -11,8 +11,8 @@
 #include "Engine/Models/BasicNode.h"
 #include "Mathematics/Transform/MatTransform.h"
 #include "Engine/Models/Plugins/Parameters/Parameter.h"
-#include "Engine/Models/Plugins/SimpleTexturePlugin.h"
-#include "Engine/Models/Plugins/SimpleTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/SimpleTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/SimpleTextPlugin.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannelDescriptor.h"
@@ -22,7 +22,7 @@
 #include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
 #include "Engine/Models/Plugins/GeometryPluginRect.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
-#include "Engine/Models/Plugins/SimpleTransformPlugin.h"
+#include "Engine/Models/Plugins/Simple/SimpleTransformPlugin.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
@@ -262,7 +262,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     
     root->AddPlugin( rectPlugin );
 
-    model::SimpleTransformPlugin      * stpl  = model::PluginsFactory::CreateTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
+    model::SimpleTransformPlugin      * stpl  = model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
 
     root->AddPlugin( stpl );
 
@@ -280,7 +280,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
         txTransforms.push_back( tx0m );
         txTransforms.push_back( tx1m );
 
-        stpp = model::PluginsFactory::CreateTexturePlugin( stpl, textures, txTransforms );
+        stpp = model::PluginsFactory::CreateSimpleTexturePlugin( stpl, textures, txTransforms );
     }
     else
     {
@@ -291,7 +291,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
         txTransforms.push_back( tx0m );
         txTransforms.push_back( tx1m );
 
-        stpp = model::PluginsFactory::CreateTexturePlugin( stpl, textures, txTransforms );
+        stpp = model::PluginsFactory::CreateSimpleTexturePlugin( stpl, textures, txTransforms );
     }
 
     root->AddPlugin                 ( stpp );
@@ -345,7 +345,7 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
 
     trns.AddRotation(angle, ConstValue( 0.f ), ConstValue( 0.f ), ConstValue( 1.f ) );
 
-    auto transformPlugin  =  model::PluginsFactory::CreateTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
+    auto transformPlugin  =  model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
     
     root->AddPlugin( transformPlugin );
 
@@ -374,7 +374,7 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     textures.push_back( "simless_00.jpg" );
     textures.push_back( "simless_01.jpg" );
 
-    stpp = model::PluginsFactory::CreateTexturePlugin( transformPlugin, textures, txTransforms );
+    stpp = model::PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures, txTransforms );
 
     //stpp->SetPixelShaderChannel     ( new MyPixelShaderChannel( "../dep/media/shaders/simpletexture.frag", alpha, *tx0m, *tx1m ) ); // FIXME: add texture transformation
     //stpp->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );

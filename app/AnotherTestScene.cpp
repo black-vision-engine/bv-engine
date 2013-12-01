@@ -24,13 +24,13 @@
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/SolidColorShaderChannel.h"
-#include "Engine/Models/Plugins/SimpleTexturePlugin.h"
-#include "Engine/Models/Plugins/SimpleAnimationPlugin.h"
+#include "Engine/Models/Plugins/Simple/SimpleTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/SimpleAnimationPlugin.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/VertexShader/TextureVertexShaderChannel.h"
-#include "Engine/Models/Plugins/SimpleTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/SimpleTextPlugin.h"
 #include "Engine/Models/Plugins/Channels/GeometryShader/ExtrudeGeometryShaderChannel.h"
-#include "Engine/Models/Plugins/SimpleTransformPlugin.h"
+#include "Engine/Models/Plugins/Simple/SimpleTransformPlugin.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/AnimatedStripComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/GeometryChannelAnimatedVertices.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/VariableTopologyStripComponent.h"
@@ -83,7 +83,7 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 
     TransformF trans;
 
-    auto transformPlugin = PluginsFactory::CreateTransformPlugin( geomPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( geomPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
 
     root->AddPlugin( transformPlugin );
 
@@ -103,7 +103,7 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 
     txTransforms.push_back( txTrans );
 
-    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transformPlugin, textures, txTransforms, TextureAttachmentMode::MM_ATTACHED );
+    auto texturePlugin = PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures, txTransforms, TextureAttachmentMode::MM_ATTACHED );
 
     root->AddPlugin( texturePlugin );
 
@@ -127,7 +127,7 @@ model::BasicNode * VariableTopologySolids( float size, float speed, float oscila
 
     TransformF trans;
 
-    auto transformPlugin = PluginsFactory::CreateTransformPlugin( geomPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( geomPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
 
     root->AddPlugin( transformPlugin );
 
@@ -174,7 +174,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
     trans.AddScale( sx, sy, InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddTranslation( InterpolatorsHelper::CreateConstValue( -float(numAnimations - 1) * hds / 2.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
 
-    auto transformPlugin = PluginsFactory::CreateTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
 
     root->AddPlugin( transformPlugin ); // Plugin with transformation
     
@@ -200,7 +200,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
     }
 
     //FIXME: renderer context can be specified here
-    auto animationPlugin = PluginsFactory::CreateAnimationPlugin( transformPlugin, textures, frameCounter );
+    auto animationPlugin = PluginsFactory::CreateSimpleAnimationPlugin( transformPlugin, textures, frameCounter );
 
     root->AddPlugin( animationPlugin );
 
@@ -225,7 +225,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
         trans.AddScale( sx, sy, InterpolatorsHelper::CreateConstValue( 1.f ) );
         trans.AddTranslation( InterpolatorsHelper::CreateConstValue( float(i) * hds * 1.02f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.1f ) );
 
-        auto transformPlugin = PluginsFactory::CreateTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+        auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
 
         root1->AddPlugin( transformPlugin ); // Plugin with transformation
     
@@ -250,7 +250,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
             textures.push_back( txName );
         }
 
-        auto animationPlugin = PluginsFactory::CreateAnimationPlugin( transformPlugin, textures, frameCounter );
+        auto animationPlugin = PluginsFactory::CreateSimpleAnimationPlugin( transformPlugin, textures, frameCounter );
 
         root1->AddPlugin( animationPlugin );
 
@@ -383,7 +383,7 @@ model::BasicNode *          GreenRect()
     trans.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddTranslation( InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
     
-    auto transformPlugin = PluginsFactory::CreateTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
 
     root->AddPlugin( transformPlugin ); // Plugin with transformation
 
@@ -424,7 +424,7 @@ model::BasicNode *          TexturedRect()
     trans.AddScale( s, s, InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddTranslation( InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
 
-    auto transformPlugin = PluginsFactory::CreateTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
 
     root->AddPlugin( transformPlugin ); // Plugin with transformation
     
@@ -445,7 +445,7 @@ model::BasicNode *          TexturedRect()
     textures.push_back( "simless_00.jpg" );
     txTransforms.push_back( txTrans );
 
-    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transformPlugin, textures, txTransforms );
+    auto texturePlugin = PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures, txTransforms );
 
     root->AddPlugin( texturePlugin );
 
@@ -473,7 +473,7 @@ model::BasicNode *          TexturedRing()
     trans.AddScale( InterpolatorsHelper::CreateConstValue( 0.25f ), InterpolatorsHelper::CreateConstValue( 0.25f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddTranslation( InterpolatorsHelper::CreateConstValue( -1.f ), InterpolatorsHelper::CreateConstValue( -1.f ), InterpolatorsHelper::CreateConstValue( 0.001f ) );
 
-    auto transformPlugin = PluginsFactory::CreateTransformPlugin( ringPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( ringPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
     
     root->AddPlugin( transformPlugin );
 
@@ -485,7 +485,7 @@ model::BasicNode *          TexturedRing()
     textures.push_back( "simless_01.jpg" );
     txTransforms.push_back( TransformF() );
 
-    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transformPlugin, textures, txTransforms );
+    auto texturePlugin = PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures, txTransforms );
 
     root->AddPlugin(texturePlugin);
 
@@ -505,14 +505,14 @@ model::BasicNode *     NaiveTimer()
     color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
     std::wstring str    =   L"0123456789:.";
-    auto texPlugin      =   PluginsFactory::CreateTextPlugin( str, "../dep/Media/fonts/cour.ttf", 20 );
+    auto texPlugin      =   PluginsFactory::CreateSimpleTextPlugin( str, "../dep/Media/fonts/cour.ttf", 20 );
     root->AddPlugin( texPlugin );
 
     TransformF     trns;
     trns.AddTranslation( InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
     FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
 
-    auto transPlugin = PluginsFactory::CreateTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
+    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
     root->AddPlugin( transPlugin );
 
     auto vertexShaderPlugin = PluginsFactory::CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/simpletexture.vert" );
@@ -546,7 +546,7 @@ model::BasicNode *     Text1()
     color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
     color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
-    auto texPlugin      =   PluginsFactory::CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
+    auto texPlugin      =   PluginsFactory::CreateSimpleTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
 
     root->AddPlugin( texPlugin );
 
@@ -566,7 +566,7 @@ model::BasicNode *     Text1()
 
     trns.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
 
-    auto transPlugin = PluginsFactory::CreateTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
+    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
 
     root->AddPlugin( transPlugin );
 
@@ -597,7 +597,7 @@ model::BasicNode * Text1Textured()
 
     std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example1.txt");
 
-    auto texPlugin      =   PluginsFactory::CreateTextPlugin( str, "../dep/Media/fonts/cour.ttf", 8 );
+    auto texPlugin      =   PluginsFactory::CreateSimpleTextPlugin( str, "../dep/Media/fonts/cour.ttf", 8 );
 
     root->AddPlugin( texPlugin );
 
@@ -617,7 +617,7 @@ model::BasicNode * Text1Textured()
 
     trns.AddScale( InterpolatorsHelper::CreateConstValue( 3.f ), InterpolatorsHelper::CreateConstValue( 3.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
 
-    auto transPlugin = PluginsFactory::CreateTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
+    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
 
     root->AddPlugin( transPlugin );
 
@@ -627,7 +627,7 @@ model::BasicNode * Text1Textured()
     std::vector< TransformF > txTransforms;
     txTransforms.push_back( TransformF() );
 
-    auto texturePlugin = PluginsFactory::CreateTexturePlugin( transPlugin, textures, txTransforms );
+    auto texturePlugin = PluginsFactory::CreateSimpleTexturePlugin( transPlugin, textures, txTransforms );
 
     root->AddPlugin( texturePlugin );
 
@@ -661,7 +661,7 @@ model::BasicNode *     Text2()
     color.addKey( 8.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
     color.addKey( 18.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
-    auto texPlugin = PluginsFactory::CreateTextPlugin( str, "../dep/Media/fonts/cour.ttf", 128, true, true );
+    auto texPlugin = PluginsFactory::CreateSimpleTextPlugin( str, "../dep/Media/fonts/cour.ttf", 128, true, true );
 
     root->AddPlugin( texPlugin );
 
@@ -681,7 +681,7 @@ model::BasicNode *     Text2()
 
     trns.AddTranslation( xt, yt, zt );
 
-    auto transPlugin = PluginsFactory::CreateTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
+    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
 
     root->AddPlugin( transPlugin );
 
@@ -720,7 +720,7 @@ model::BasicNode *          ExtrudedRedRect()
     trans.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddTranslation( InterpolatorsHelper::CreateConstValue( -2.f ), InterpolatorsHelper::CreateConstValue( 1.5f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
 
-    auto trasformPlugin  = PluginsFactory::CreateTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+    auto trasformPlugin  = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
 
     root->AddPlugin( trasformPlugin );
 
@@ -767,7 +767,7 @@ model::BasicNode *          ExtrudedTexturedRing()
     std::vector< TransformF > txTransforms;
     txTransforms.push_back( TransformF() );
 
-    auto texturePlugin  = PluginsFactory::CreateTexturePlugin( ringPlugin, textures, txTransforms );
+    auto texturePlugin  = PluginsFactory::CreateSimpleTexturePlugin( ringPlugin, textures, txTransforms );
 
     texturePlugin->SetGeometryShaderChannel ( ChannelsFactory::CreateGeometryShaderExtrude( 1.f ) );
 

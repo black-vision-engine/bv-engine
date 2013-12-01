@@ -2,7 +2,7 @@
 #include "TreeBuilder.h"
 #include "Engine/Models/BasicNode.h"
 #include "Mathematics/Transform/MatTransform.h"
-#include "Engine/Models/Plugins/SimpleTransformPlugin.h"
+#include "Engine/Models/Plugins/Simple/SimpleTransformPlugin.h"
 #include "Engine/Models/Resources/TextHelpers.h"
 #include <fstream>
 #include <boost/algorithm/string.hpp>
@@ -112,11 +112,11 @@ namespace bv{
 
 		trns.AddScale( bv::InterpolatorsHelper::CreateConstValue( 1.f ), bv::InterpolatorsHelper::CreateConstValue( 1.f ), bv::InterpolatorsHelper::CreateConstValue( 1.f ) );
 
-		auto texPlugin      =   bv::model::PluginsFactory::CreateTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
+		auto texPlugin      =   bv::model::PluginsFactory::CreateSimpleTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
 
         root->AddPlugin( texPlugin );
 
-        root->AddPlugin( bv::model::PluginsFactory::CreateTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) ) );
+        root->AddPlugin( bv::model::PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) ) );
 
 
 		return root;
