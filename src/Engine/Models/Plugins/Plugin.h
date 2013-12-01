@@ -19,10 +19,6 @@ namespace bv { namespace model {
 template< class Iface, class ParameterDescriptor >
 class BasePlugin : public Iface
 {
-public:
-
-    typedef typename Iface::Textures Textures;
-
 protected:
 
     typedef ParameterDescriptor ParamDesc;
@@ -38,9 +34,6 @@ protected:
     const IPlugin*                  m_prevPlugin;
 
 
-    ///////////////// Textures //////////////////
-    typename Iface::Textures        m_textures;
-
 public:
 
     explicit                                    BasePlugin                  ( const IPlugin* prevPlugin );
@@ -55,7 +48,7 @@ public:
     void                                        RegisterValue               ( IValue * v )                                  { m_values.push_back( v ); }
 
 
-    virtual void                                SetGeometryChannel          ( VertexAttributesChannel* geomChannel )                { assert(!"Implement in derived class"); }
+    virtual void                                SetGeometryChannel          ( VertexAttributesChannel* geomChannel )        { assert(!"Implement in derived class"); }
     virtual void                                SetTransformChannel         ( TransformChannel* transformChannel )          { assert(!"Implement in derived class"); }
     virtual void                                SetPixelShaderChannel       ( IPixelShaderChannel * pShCh )                 { assert(!"Implement in derived class"); }
     virtual void                                SetVertexShaderChannel      ( IVertexShaderChannel * vShCh )                { assert(!"Implement in derived class"); }
@@ -67,7 +60,7 @@ public:
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const;                                       
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const;                                       
 
-    virtual const Textures &                    GetTextures                 () const                                        { return m_textures; }
+    virtual Textures                            GetTextures                 () const                                        { return Textures(); }
 
     virtual bool                                HasAnimatingTexture         () const                                        { return false; }
 

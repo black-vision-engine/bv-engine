@@ -256,7 +256,7 @@ AttributeChannel*   GetUVChannel( const std::vector< AttributeChannel* >& channe
 
 // *************************************
 //
-void                SimpleTexturePlugin::Update              ( TimeType t )
+void                                    SimpleTexturePlugin::Update              ( TimeType t )
 {
     if( m_attachmentMode == TextureAttachmentMode::MM_FREE )
     {
@@ -308,7 +308,7 @@ void                SimpleTexturePlugin::Update              ( TimeType t )
 
 // *************************************
 //
-void                SimpleTexturePlugin::Print               ( std::ostream & out, int tabs ) const
+void                                    SimpleTexturePlugin::Print               ( std::ostream & out, int tabs ) const
 {
     out << GetName() << debug::EndLine( tabs );
     for( auto t : m_textures )
@@ -319,23 +319,32 @@ void                SimpleTexturePlugin::Print               ( std::ostream & ou
 
 // *************************************
 //
-const IVertexAttributesChannel *            SimpleTexturePlugin::GetGeometryChannel          () const
+const IVertexAttributesChannel *        SimpleTexturePlugin::GetGeometryChannel          () const
 {
     return m_geomChannel;
 }
 
 // *************************************
 //
-const IPixelShaderChannel *         SimpleTexturePlugin::GetPixelShaderChannel       () const
+const IPixelShaderChannel *             SimpleTexturePlugin::GetPixelShaderChannel       () const
 {
     return m_pixelShaderChannel;
 }
 
 // *************************************
 //
-const IVertexShaderChannel *        SimpleTexturePlugin::GetVertexShaderChannel      () const
+const IVertexShaderChannel *            SimpleTexturePlugin::GetVertexShaderChannel      () const
 {
     return m_vertexShaderChannel;
+}
+
+// *************************************
+//
+Textures                             SimpleTexturePlugin::GetTextures                 () const
+{
+    auto prevTextures = m_prevPlugin->GetTextures();
+    prevTextures.insert( prevTextures.end(), m_textures.begin(), m_textures.end() );
+    return prevTextures;
 }
 
 } // model

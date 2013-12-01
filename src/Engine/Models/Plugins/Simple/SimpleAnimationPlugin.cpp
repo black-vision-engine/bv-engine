@@ -304,6 +304,14 @@ const IVertexShaderChannel *        SimpleAnimationPlugin::GetVertexShaderChanne
     return m_vertexShaderChannel;
 }
 
+// *************************************
+//
+Textures            SimpleAnimationPlugin::GetTextures                 () const
+{
+    auto prevTextures = m_prevPlugin->GetTextures();
+    prevTextures.insert( prevTextures.end(), m_textures.begin(), m_textures.end() );
+    return prevTextures;
+}
 
 } // model
 } // bv

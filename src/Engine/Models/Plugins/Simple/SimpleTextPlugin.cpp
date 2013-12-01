@@ -217,5 +217,14 @@ void                SimpleTextPlugin::Print                       ( std::ostream
 {
 }
 
+// *************************************
+//
+Textures            SimpleTextPlugin::GetTextures                 () const
+{
+    auto prevTextures = m_prevPlugin->GetTextures();
+    prevTextures.insert( prevTextures.end(), m_textures.begin(), m_textures.end() );
+    return prevTextures;
+}
+
 } // model
 } // bv

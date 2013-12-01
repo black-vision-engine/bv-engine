@@ -31,6 +31,8 @@ private:
 
     VertexAttributesChannel*            m_geomChannel;
 
+    Textures                    m_textures;
+
     const FontExtraData*        m_fontExtraData;
     TextAtlas const*            m_atlasText;
     std::wstring                m_text;
@@ -53,6 +55,7 @@ public:
                                 ~SimpleTextPlugin   ();
 
     virtual const IVertexAttributesChannel *    GetGeometryChannel          () const override;
+    virtual Textures                            GetTextures                 () const override;
 
     virtual void                        Update                      ( TimeType t ) override;
     virtual void                        Print                       ( std::ostream & out, int tabs = 0 ) const override;

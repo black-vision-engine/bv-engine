@@ -45,6 +45,7 @@ private:
     VertexAttributesChannel *       m_geomChannel;
     TexturePixelShaderChannel *     m_pixelShaderChannel;
     TextureVertexShaderChannel *    m_vertexShaderChannel;
+    Textures                        m_textures;
 
     TextureAttachmentMode           m_attachmentMode;
     unsigned int                    m_texCoordChannelIndex;
@@ -67,7 +68,8 @@ public:
 
     virtual const IVertexAttributesChannel *    GetGeometryChannel          () const override;                                                                           
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;                                       
-    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;                                       
+    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
+    virtual Textures                            GetTextures                 () const override;
 
     // ISequenceAnimationSource
     virtual unsigned int                CurrentFrame                ( TimeType t ) const;
