@@ -10,7 +10,7 @@
 
 #include "Engine/Models/BasicNode.h"
 #include "Mathematics/Transform/MatTransform.h"
-#include "Engine/Models/Plugins/Parameter.h"
+#include "Engine/Models/Plugins/Parameters/Parameter.h"
 #include "Engine/Models/Plugins/SimpleTexturePlugin.h"
 #include "Engine/Models/Plugins/SimpleTextPlugin.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
@@ -254,14 +254,14 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 
     /////////////////////////////// SimpleRect plugin //////////////////////////////////
 
-    auto w = model::PluginsFactory::CreateParameter( "width", model::PluginsFactory::CreateConstValue( 1.f ) );
-    auto h = model::PluginsFactory::CreateParameter( "height", model::PluginsFactory::CreateConstValue( 1.f )  );
+    auto w = model::ParametersFactory::CreateParameter( "width", model::PluginsFactory::CreateConstValue( 1.f ) );
+    auto h = model::ParametersFactory::CreateParameter( "height", model::PluginsFactory::CreateConstValue( 1.f )  );
 
     model::GeometryRectPlugin    * rectPlugin  = new model::GeometryRectPlugin( w, h );
     
     root->AddPlugin( rectPlugin );
 
-    model::SimpleTransformPlugin      * stpl  = model::PluginsFactory::CreateTransformPlugin( rectPlugin, model::PluginsFactory::CreateParameter( "transformation", trns ) );
+    model::SimpleTransformPlugin      * stpl  = model::PluginsFactory::CreateTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
 
     root->AddPlugin( stpl );
 
@@ -344,7 +344,7 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
 
     trns.AddRotation(angle, ConstValue( 0.f ), ConstValue( 0.f ), ConstValue( 1.f ) );
 
-    auto transformPlugin  =  model::PluginsFactory::CreateTransformPlugin( rectPlugin, model::PluginsFactory::CreateParameter( "transformation", trns ) );
+    auto transformPlugin  =  model::PluginsFactory::CreateTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
     
     root->AddPlugin( transformPlugin );
 

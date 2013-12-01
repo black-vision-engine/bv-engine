@@ -3,8 +3,8 @@
 #include "Mathematics/Transform/MatTransform.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
-#include "Engine/Models/Plugins/PluginParameters.h"
-#include "Engine/Models/Plugins/Parameter.h"
+#include "Engine/Models/Plugins/Parameters/PluginParameters.h"
+#include "Engine/Models/Plugins/Parameters/Parameter.h"
 
 #include "Engine/Models/Plugins/PluginEnums.h"
 #include "Engine/Models/Plugins/SimpleTexturePlugin.h"

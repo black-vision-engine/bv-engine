@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Plugin.h"
-#include "Engine/Models/Plugins/PluginParameters.h"
+#include "Engine/Models/Plugins/Parameters/PluginParameters.h"
 
 
 namespace bv { namespace model {

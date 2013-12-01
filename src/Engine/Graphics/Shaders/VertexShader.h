@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Engine/Graphics/Shaders/Shader.h"
-#include "Engine/Models/Plugins/Parameter.h"
-#include "Engine/Models/Plugins/PluginParameters.h"
+#include "Engine/Models/Plugins/Parameters/Parameter.h"
+#include "Engine/Models/Plugins/Parameters/PluginParameters.h"
 
 
 namespace bv {

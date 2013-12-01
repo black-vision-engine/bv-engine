@@ -11,7 +11,7 @@
 #include "Engine/Models/Plugins/Channels/VertexShader/TextureVertexShaderChannel.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 
-#include "Engine/Models/Plugins/Parameter.h"
+#include "Engine/Models/Plugins/Parameters/Parameter.h"
 
 
 namespace bv { namespace model {

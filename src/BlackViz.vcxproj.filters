@@ -61,7 +61,6 @@
     <ClCompile Include="Engine\Models\Updaters\ShaderParamUpdater.cpp" />
     <ClCompile Include="System\HRTimer.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\Texture2D.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\PluginParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleTexturePlugin.cpp" />
     <ClCompile Include="Engine\Models\Resources\ResourceLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\Resource.cpp" />
@@ -73,7 +72,6 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Plugin.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Parameter.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRect.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleTextPlugin.cpp" />
@@ -146,6 +144,9 @@
     <ClCompile Include="Engine\Events\Queues\EventQueue.cpp" />
     <ClCompile Include="Engine\Events\Queues\EventQueueConcurrent.cpp" />
     <ClCompile Include="Engine\Events\EventManager.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\Parameter.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\PluginParameters.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\ParametersFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -213,7 +214,6 @@
     <ClInclude Include="Engine\Graphics\Shaders\ShaderTypes.h" />
     <ClInclude Include="Engine\Models\Updaters\ShaderParamUpdater.h" />
     <ClInclude Include="System\HRTimer.h" />
-    <ClInclude Include="Engine\Models\Plugins\PluginParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleTexturePlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IChannel.h" />
@@ -238,7 +238,6 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Plugin.h" />
-    <ClInclude Include="Engine\Models\Plugins\Parameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryPluginRect.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleTextPlugin.h" />
@@ -329,6 +328,9 @@
     <ClInclude Include="Engine\Events\Queues\EventQueueConcurrent.h" />
     <ClInclude Include="Engine\Events\Interfaces\IEventManager.h" />
     <ClInclude Include="Engine\Events\EventManager.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\Parameter.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\PluginParameters.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\ParametersFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

@@ -9,7 +9,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/SolidColorShaderChannel.h"
 
-#include "Engine/Models/Plugins/Parameter.h"
+#include "Engine/Models/Plugins/Parameters/Parameter.h"
 
 
 namespace bv { namespace model {

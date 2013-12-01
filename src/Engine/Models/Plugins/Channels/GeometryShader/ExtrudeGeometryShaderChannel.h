@@ -2,8 +2,8 @@
 
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/ShaderChannel.h"
-#include "Engine/Models/Plugins/PluginParameters.h"
-#include "Engine/Models/Plugins/Parameter.h"
+#include "Engine/Models/Plugins/Parameters/PluginParameters.h"
+#include "Engine/Models/Plugins/Parameters/Parameter.h"
 
 
 namespace bv{ namespace model {

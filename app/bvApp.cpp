@@ -308,9 +308,9 @@ void BlackVisionApp::AddCameraAnimation  ()
 
     TestParametersFactory::CameraAnimation_ver1( position, direction, up );
 
-    m_modelScene->SetCamereParameters(  model::PluginsFactory::CreateParameter( "position", *position )
-                                      , model::PluginsFactory::CreateParameter( "direction", *direction )
-                                      , model::PluginsFactory::CreateParameter( "up", *up ) );
+    m_modelScene->SetCamereParameters(  model::ParametersFactory::CreateParameter( "position", *position )
+                                      , model::ParametersFactory::CreateParameter( "direction", *direction )
+                                      , model::ParametersFactory::CreateParameter( "up", *up ) );
 }
 
 // *********************************
@@ -323,9 +323,9 @@ void BlackVisionApp::AddCameraAnimation2  () //smietnik lekko oczyszczony ze smi
 
     TestParametersFactory::CameraAnimation_ver2( position, direction, up );
 
-    m_modelScene->SetCamereParameters(  model::PluginsFactory::CreateParameter( "position", *position )
-                                      , model::PluginsFactory::CreateParameter( "direction", *direction )
-                                      , model::PluginsFactory::CreateParameter( "up", *up ) );
+    m_modelScene->SetCamereParameters(  model::ParametersFactory::CreateParameter( "position", *position )
+                                      , model::ParametersFactory::CreateParameter( "direction", *direction )
+                                      , model::ParametersFactory::CreateParameter( "up", *up ) );
 }
 
 }

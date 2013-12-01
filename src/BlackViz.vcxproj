@@ -251,7 +251,8 @@
     <ClCompile Include="Engine\Models\Plugins\GeometryMultiRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRect.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRing.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\PluginParameters.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\ParametersFactory.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\PluginParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleAnimationPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\SimpleColorPlugin.cpp" />
@@ -323,7 +324,7 @@
     <ClCompile Include="Engine\Graphics\Shaders\VertexShader.cpp" />
     <ClCompile Include="Engine\Graphics\Types\Transform.cpp" />
     <ClCompile Include="Engine\Models\BasicNode.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Parameter.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\Parameter.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Plugin.cpp" />
     <ClCompile Include="Engine\Models\Updaters\TransformUpdater.cpp" />
     <ClCompile Include="Mathematics\Interpolators\BasicInterpolator.cpp" />
@@ -419,8 +420,9 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IAttributeChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IAttributeChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\ParametersFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
-    <ClInclude Include="Engine\Models\Plugins\PluginParameters.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\PluginParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginsFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleAnimationPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\SimpleColorPlugin.h" />
@@ -503,7 +505,7 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPlugin.h" />
     <ClInclude Include="Engine\Models\Node.h" />
-    <ClInclude Include="Engine\Models\Plugins\Parameter.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\Parameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Plugin.h" />
     <ClInclude Include="Engine\Models\Updaters\UpdatersManager.h" />
     <ClInclude Include="Engine\Models\Updaters\TransformUpdater.h" />

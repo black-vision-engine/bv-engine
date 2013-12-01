@@ -3,7 +3,7 @@
 #include "System/Print.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RingComponent.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
-#include "Engine/Models/Plugins/Parameter.h"
+#include "Engine/Models/Plugins/Parameters/Parameter.h"
 
 
 namespace bv { namespace model {
