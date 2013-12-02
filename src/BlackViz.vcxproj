@@ -284,6 +284,9 @@
     <ClCompile Include="Engine\Models\Updaters\SequenceAnimationUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\ShaderParamUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\UpdatersManager.cpp" />
+    <ClCompile Include="Engine\Processes\Process.cpp" />
+    <ClCompile Include="Engine\Processes\ProcessManager.cpp" />
+    <ClCompile Include="Engine\Processes\ProcessThreaded.cpp" />
     <ClCompile Include="Mathematics\Interpolators\Interpolators.cpp" />
     <ClCompile Include="System\HRTimer.cpp" />
     <ClCompile Include="System\Print.cpp" />
@@ -461,6 +464,9 @@
     <ClInclude Include="Engine\Models\Updaters\RendererStateUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\SequenceAnimationUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\ShaderParamUpdater.h" />
+    <ClInclude Include="Engine\Processes\Process.h" />
+    <ClInclude Include="Engine\Processes\ProcessManager.h" />
+    <ClInclude Include="Engine\Processes\ProcessThreaded.h" />
     <ClInclude Include="Engine\Types\Enums.h" />
     <ClInclude Include="System\BasicTypes.h" />
     <ClInclude Include="System\HRTimer.h" />

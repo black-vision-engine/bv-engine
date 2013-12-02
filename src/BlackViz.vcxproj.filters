@@ -151,6 +151,9 @@
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleVertexShaderPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\TextureInfo.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ConstantsMapper.cpp" />
+    <ClCompile Include="Engine\Processes\Process.cpp" />
+    <ClCompile Include="Engine\Processes\ProcessManager.cpp" />
+    <ClCompile Include="Engine\Processes\ProcessThreaded.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -338,6 +341,9 @@
     <ClInclude Include="Engine\Models\Plugins\TextureInfo.h" />
     <ClInclude Include="Engine\Models\Plugins\ConstantsMapper.h" />
     <ClInclude Include="Engine\Models\Node.h" />
+    <ClInclude Include="Engine\Processes\Process.h" />
+    <ClInclude Include="Engine\Processes\ProcessManager.h" />
+    <ClInclude Include="Engine\Processes\ProcessThreaded.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
