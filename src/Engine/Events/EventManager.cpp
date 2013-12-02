@@ -129,7 +129,7 @@ bool    EventManager::ConcurrentQueueEvent  ( const IEventPtr & evt )
 }
 
 // *******************************
-//
+//FIXME: also from threaded queues
 bool    EventManager::AbortEvent            ( const EventType & type, bool allOfType )
 {
 	assert( m_activeQueue >= 0 );

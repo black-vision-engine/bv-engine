@@ -9,8 +9,6 @@ namespace bv
 
 class ProcessThreaded : public Process, public Thread
 {
-private:
-
 public:
 
                     ProcessThreaded     ();
