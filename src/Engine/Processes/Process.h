@@ -43,7 +43,7 @@ public:
 	
 protected:
 
-    virtual void    OnUpdate    ( unsigned long deltaMs ) = 0;
+    virtual void    OnUpdate    ( unsigned long millis ) = 0;
     
     virtual void    OnInit      ();
     virtual void    OnSuccess   ();

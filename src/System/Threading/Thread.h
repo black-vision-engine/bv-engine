@@ -25,8 +25,9 @@ public:
     void            Start       ();
     void            Join        ();
 
-    virtual void    Run         () = 0;
+protected:
 
+    virtual void    Run         () = 0;
 
 };
 
