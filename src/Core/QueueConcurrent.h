@@ -34,19 +34,7 @@ public:
     bool        TryPop              ( T & val );
     void        WaitAndPop          ( T & val );
 
-    template< void (*deinitializer)( T ) >
-    void        Clear               ()
-    {
-        ScopedCriticalSection lock( m_criticalSection );
-
-        while( !m_queue.empty() )
-        {
-            auto val = m_queue.front();
-            m_queue.pop();
-
-            deinitializer( val );
-        }
-    }
+    void        Clear               ();
 
 };
 
@@ -121,7 +109,7 @@ bool        QueueConcurrent< T >::TryPop      ( T & val )
 // *************************************
 //
 template< typename T >
-void        QueueConcurrent< T >::WaitAndPop  ( T & val )
+void        QueueConcurrent< T >::WaitAndPop    ( T & val )
 {
     ScopedCriticalSection lock( m_criticalSection );
 
@@ -132,6 +120,21 @@ void        QueueConcurrent< T >::WaitAndPop  ( T & val )
 
     val = m_queue.front();
     m_queue.pop();
+}
+
+// *************************************
+//
+template< typename T >
+void        QueueConcurrent< T >::Clear         ()
+{
+    ScopedCriticalSection lock( m_criticalSection );
+
+    while( !m_queue.empty() )
+    {
+        auto val = m_queue.front();
+        m_queue.pop();
+
+    }
 }
 
 } //bv

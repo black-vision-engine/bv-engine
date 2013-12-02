@@ -8,11 +8,10 @@
 namespace bv
 {
 
-typedef Queue< const IEvent * >     EventQueue;
-typedef std::list< const IEvent * > EventList;
+typedef Queue< IEventPtr >     EventQueue;
+typedef std::list< IEventPtr > EventList;
 
 EventQueue  GetEventQueue       ();
-void        ClearEventQueue     ( EventQueue & queue );
 bool        RemoveEventsOfType  ( EventQueue & queue, EventType type, bool allOfType );
 
 } //bv

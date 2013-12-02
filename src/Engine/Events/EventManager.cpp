@@ -68,7 +68,7 @@ bool    EventManager::RemoveListener        ( const EventListenerDelegate & even
 
 // *******************************
 //
-bool    EventManager::TriggerEvent          ( const IEvent * evt ) const
+bool    EventManager::TriggerEvent          ( const IEventPtr & evt ) const
 {
     bool bOK = false;
 
@@ -88,7 +88,7 @@ bool    EventManager::TriggerEvent          ( const IEvent * evt ) const
 
 // *******************************
 //
-bool    EventManager::QueueEvent            ( const IEvent * evt )
+bool    EventManager::QueueEvent            ( const IEventPtr & evt )
 {
 	assert( m_activeQueue >= 0 );
     assert( m_activeQueue < NUM_QUEUES );
@@ -109,7 +109,7 @@ bool    EventManager::QueueEvent            ( const IEvent * evt )
 
 // *******************************
 //
-bool    EventManager::ConcurrentQueueEvent  ( const IEvent * evt )
+bool    EventManager::ConcurrentQueueEvent  ( const IEventPtr & evt )
 {
 	assert( m_activeconcurrentQueue >= 0 );
     assert( m_activeconcurrentQueue < NUM_CONCURRENT_QUEUES );
@@ -129,8 +129,8 @@ bool    EventManager::ConcurrentQueueEvent  ( const IEvent * evt )
 }
 
 // *******************************
-//FIXME: concurrent queues as well
-bool    EventManager::RemoveEvent           ( const EventType & type, bool allOfType )
+//
+bool    EventManager::AbortEvent            ( const EventType & type, bool allOfType )
 {
 	assert( m_activeQueue >= 0 );
     assert( m_activeQueue < NUM_QUEUES );
@@ -162,9 +162,9 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
     unsigned int activeConcurrentQueue = m_activeconcurrentQueue;
     m_activeconcurrentQueue = ( m_activeconcurrentQueue + 1 ) % NUM_CONCURRENT_QUEUES;
 
-	ClearEventQueue( m_concurrentQueues[ m_activeconcurrentQueue ] );
+	m_concurrentQueues[ m_activeconcurrentQueue ].Clear();
 
-	const IEvent *  concurrentEvent = nullptr;
+	IEventPtr  concurrentEvent;
 
     while ( m_concurrentQueues[ activeConcurrentQueue ].TryPop( concurrentEvent ) )
     {
@@ -182,11 +182,11 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
     unsigned int activeQueue = m_activeQueue;
     m_activeQueue = ( m_activeQueue + 1 ) % NUM_QUEUES;
 
-    ClearEventQueue( m_queues[ m_activeQueue ] );
+    m_queues[ m_activeQueue ].Clear();
 
     while( !m_queues[ activeQueue ].IsEmpty() )
     {
-        const IEvent * evt = m_queues[ activeQueue ].Front();
+        IEventPtr evt = m_queues[ activeQueue ].Front();
 
         EventType eventType = evt->GetEventType();
 
@@ -196,8 +196,6 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
         {
             listener( evt );
         }
-
-        PostUpdateEvent( evt );
 
         curMillis = timeGetTime();
 
@@ -236,14 +234,6 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
     }
 
     return pendingEvents;
-}
-
-// *******************************
-//
-void            EventManager::PostUpdateEvent         ( const IEvent * evt )
-{
-    //FIXME: should be empty or using smart pointers ;/
-    delete evt;
 }
 
 } //bv

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <sstream>
 
@@ -31,6 +32,7 @@ public:
 
 };
 
-typedef fastdelegate::FastDelegate1< const IEvent * > EventListenerDelegate;
+typedef std::shared_ptr<IEvent>                 IEventPtr;
+typedef fastdelegate::FastDelegate1<IEventPtr>  EventListenerDelegate;
 
 }

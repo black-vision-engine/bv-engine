@@ -40,17 +40,13 @@ public:
     virtual bool    AddListener             ( const EventListenerDelegate & eventDelegate, const EventType & type );
     virtual bool    RemoveListener          ( const EventListenerDelegate & eventDelegate, const EventType & type );
 
-    virtual bool    TriggerEvent            ( const IEvent * evt ) const;
-    virtual bool    QueueEvent              ( const IEvent * evt );
-    virtual bool    ConcurrentQueueEvent    ( const IEvent * evt );
+    virtual bool    TriggerEvent            ( const IEventPtr & evt ) const;
+    virtual bool    QueueEvent              ( const IEventPtr & evt );
+    virtual bool    ConcurrentQueueEvent    ( const IEventPtr & evt );
 
-    virtual bool    RemoveEvent             ( const EventType & type, bool allOfType = false );
+    virtual bool    AbortEvent              ( const EventType & type, bool allOfType = false );
 
     virtual bool    Update                  ( unsigned long maxEvaluationMillis = millisINFINITE );
-
-private:
-
-    void            PostUpdateEvent         ( const IEvent * evt );
 
 };
 

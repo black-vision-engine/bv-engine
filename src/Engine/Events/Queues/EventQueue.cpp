@@ -14,19 +14,6 @@ EventQueue  GetEventQueue   ()
 
 // *************************************
 //
-void        ClearEventQueue ( EventQueue & queue )
-{
-    while( !queue.IsEmpty() )
-    {
-        auto val = queue.Front();
-        queue.Pop();
-
-        delete val;
-    }
-}
-
-// *************************************
-//
 bool        RemoveEventsOfType  ( EventQueue & queue, EventType type, bool allOfType )
 {
     EventList tmp;
@@ -54,20 +41,12 @@ bool        RemoveEventsOfType  ( EventQueue & queue, EventType type, bool allOf
             {
                 if( !oneSkipped )
                 {
-                    delete evt;
-
                     oneSkipped = true;
                 }
                 else
                 {
                     queue.Push( evt );
-
-                    removed = true;
                 }
-            }
-            else
-            {
-                delete evt;
             }
         }
     }

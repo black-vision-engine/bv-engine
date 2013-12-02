@@ -32,6 +32,8 @@ public:
 
     void        Swap        ( Queue & other );
 
+    void        Clear       ();
+
 };
 
 // *************************************
@@ -118,6 +120,19 @@ template< typename T >
 void        Queue< T >::Swap        ( Queue & other )
 {
     m_queue.swap( other.m_queue );
+}
+
+// *************************************
+//
+template< typename T >
+void        Queue< T >::Clear       ()
+{
+    while( !m_queue.empty() )
+    {
+        auto val = m_queue.front();
+        m_queue.pop();
+
+    }
 }
 
 }
