@@ -154,6 +154,7 @@
     <ClCompile Include="Engine\Processes\Process.cpp" />
     <ClCompile Include="Engine\Processes\ProcessManager.cpp" />
     <ClCompile Include="Engine\Processes\ProcessThreaded.cpp" />
+    <ClCompile Include="System\Threading\Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -344,6 +345,7 @@
     <ClInclude Include="Engine\Processes\Process.h" />
     <ClInclude Include="Engine\Processes\ProcessManager.h" />
     <ClInclude Include="Engine\Processes\ProcessThreaded.h" />
+    <ClInclude Include="System\Threading\Thread.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

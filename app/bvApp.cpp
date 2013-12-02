@@ -16,6 +16,35 @@
 #include "MockFonts/fttester.h"
 #include "MockScenes.h"
 
+#include "System/Threading/Thread.h"
+
+namespace bv
+{
+class ThSleep : public Thread
+{
+public:
+    //@see: http://antonym.org/2009/05/threading-with-boost---part-i-creating-threads.html
+    virtual void Run()
+    {
+        boost::posix_time::seconds workTime( 3 );
+        printf( "LTH: Thread running\n" );
+        boost::this_thread::sleep( workTime );
+        printf( "LTH: Thread joined\n" );
+    }
+};
+
+}
+void tth()
+{
+    bv::ThSleep ts;
+
+    printf( "MTH: Starting Sleep Thread\n" );
+    ts.Start();
+    printf( "MTH: Sleep Thread Started\n" );
+    ts.Join();
+    printf( "MTH: Sleep Thread Finished\n" );
+}
+
 
 bv::HighResolutionTimer GTimer;
 
@@ -234,6 +263,8 @@ bool BlackVisionApp::OnInitialize       ()
         freopen_s(&dummy, "CONOUT$", "wb", stdout);
         freopen_s(&dummy, "CONOUT$", "wb", stderr);
     }
+
+    tth();
 
     //FIXME: remove me pleaZe
     //const std::string fontFile = "../dep/Media/fonts/arial.ttf";

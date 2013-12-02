@@ -340,6 +340,7 @@
     <ClCompile Include="System\Profiler.cpp" />
     <ClCompile Include="System\Threading\CriticalSection.cpp" />
     <ClCompile Include="System\Threading\ScopedCriticalSection.cpp" />
+    <ClCompile Include="System\Threading\Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -530,6 +531,7 @@
     <ClInclude Include="System\Profiler.h" />
     <ClInclude Include="System\Threading\CriticalSection.h" />
     <ClInclude Include="System\Threading\ScopedCriticalSection.h" />
+    <ClInclude Include="System\Threading\Thread.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Graphics\Resources\Texture2D.cpp">
