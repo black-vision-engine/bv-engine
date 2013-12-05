@@ -17,6 +17,7 @@
 
 #include "MockFonts/fttester.h"
 #include "MockScenes.h"
+#include "MockFrameReader.h"
 
 #include "System/Threading/Thread.h"
 
@@ -140,6 +141,8 @@ void BlackVisionApp::OnIdle		()
         RenderScene();
         m_Renderer->DisplayColorBuffer();
 
+        GEventManager->TriggerEvent( m_frameRenderedEvent );
+
     DWORD ftime = timeGetTime() - curTime;
     if( ftime < GFrameMillis )
     {
@@ -241,15 +244,21 @@ bool BlackVisionApp::RenderNode         ( SceneNode *   node )
 //FIXME: implement proper console
 bool BlackVisionApp::OnInitialize       ()
 {
-    if(AllocConsole())
+    if( AllocConsole())
     {
         FILE * dummy;
-        SetConsoleTitleA("Debug Console");
-        freopen_s(&dummy, "CONOUT$", "wb", stdout);
-        freopen_s(&dummy, "CONOUT$", "wb", stderr);
+
+        SetConsoleTitleA( "Debug Console" );
+    
+        freopen_s( &dummy, "CONOUT$", "wb", stdout );
+        freopen_s( &dummy, "CONOUT$", "wb", stderr );
     }
 
+    //FIXME: temporary hack to enable access to framebuffer readbacks
     GEventManager = &bv::GetDefaultEventManager();
+    m_frameRenderedEvent = FrameRenderedEventPtr( new bv::FrameRenderedEvent() );
+    m_mockFrameReader = new MockFrameReader();
+
 
     //FIXME: remove me pleaZe
     //const std::string fontFile = "../dep/Media/fonts/arial.ttf";

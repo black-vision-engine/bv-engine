@@ -44,6 +44,8 @@ public:
 
 };
 
+typedef std::shared_ptr<PluginAddedEvent> PluginAddEventPtr;
+
 
 // ************************************* NodeAddedEvent *************************************
 class NodeAddedEvent : public BaseEvent
@@ -77,6 +79,9 @@ public:
 
 };
 
+typedef std::shared_ptr<NodeAddedEvent> NodeAddedEventPtr;
+
+
 // ************************************* FrameRenderedEvent *************************************
 class FrameRenderedEvent : public BaseEvent
 {
@@ -102,10 +107,14 @@ public:
 
     virtual const std::string &     GetName             () const;
 
+    void                            SetFrameDataPtr     ( const char * data );
     const char *                    FrameDataPtr        () const;
 
     static EventType                Type                ();
 
 };
+
+typedef std::shared_ptr<FrameRenderedEvent> FrameRenderedEventPtr;
+
 
 } //bv

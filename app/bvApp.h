@@ -1,10 +1,12 @@
 #pragma once
 
-#include "Application/WindowedApplication.h"
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
+
+#include "Application/WindowedApplication.h"
+#include "Engine/Events/Events.h"
+#include "MockFrameReader.h"
 
 namespace bv {
 
@@ -16,15 +18,19 @@ namespace model
 
 class SceneNode;
 class Camera;
-
+class MockFrameReader;
 
 class BlackVisionApp : public WindowedApplication
 {
 private:
-    model::ModelScene*  m_modelScene;
-    SceneNode*          m_mockSceneEng;
 
-    std::ofstream       m_file; // For debugging
+    model::ModelScene *         m_modelScene;
+    SceneNode *                 m_mockSceneEng;
+
+    std::ofstream               m_file; // For debugging
+
+    FrameRenderedEventPtr       m_frameRenderedEvent;
+    MockFrameReader *           m_mockFrameReader;
 
 public:
 

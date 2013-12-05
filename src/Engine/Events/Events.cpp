@@ -201,6 +201,13 @@ const std::string &     FrameRenderedEvent::GetName             () const
 
 // *************************************
 //
+void                    FrameRenderedEvent::SetFrameDataPtr     ( const char * data )
+{
+    m_frameData = data;
+}
+
+// *************************************
+//
 const char *            FrameRenderedEvent::FrameDataPtr        () const
 {
     return m_frameData;

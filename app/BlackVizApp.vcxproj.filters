@@ -12,6 +12,7 @@
     <ClCompile Include="xml\BlackTree.cpp" />
     <ClCompile Include="xml\Scena.cpp" />
     <ClCompile Include="xml\TreeBuilder.cpp" />
+    <ClCompile Include="MockFrameReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
@@ -41,6 +42,7 @@
       <Filter>xml</Filter>
     </ClInclude>
     <ClInclude Include="xml\TreeBuilder.h" />
+    <ClInclude Include="MockFrameReader.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MockFonts">

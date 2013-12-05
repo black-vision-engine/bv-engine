@@ -18,6 +18,7 @@ EventManager::EventManager                  ()
 //
 EventManager::~EventManager                 ()
 {
+    printf( "Default Event Manager shutdown\n" );
 }
 
 // *******************************

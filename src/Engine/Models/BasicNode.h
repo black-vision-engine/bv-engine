@@ -27,7 +27,7 @@ class IVertexAttributesChannelDescriptor;
 
 typedef std::vector< IModelNode* > TNodeVec;
 
-class BasicNode : public IModelNode
+class BasicNode : public bv::IModelNode
 {
 private:
 
