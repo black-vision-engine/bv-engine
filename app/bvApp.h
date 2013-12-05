@@ -32,6 +32,8 @@ private:
     FrameRenderedEventPtr       m_frameRenderedEvent;
     MockFrameReader *           m_mockFrameReader;
 
+    char *                      m_frameData;
+
 public:
 
     static void			StaticInitializer	();
@@ -41,6 +43,7 @@ public:
 public:
 
     BlackVisionApp		        ();
+    ~BlackVisionApp		        ();
 
     virtual void OnIdle         ();
     virtual bool OnInitialize   ();
@@ -52,7 +55,10 @@ private:
     void    AddCameraAnimation2 ();
 
     bool    RenderScene         ();
-    bool    RenderNode          ( SceneNode* node);
+    bool    RenderNode          ( SceneNode * node );
+
+    //FIXME: hack to be removed
+    void    ReadBackFrameBuffer ();
 
 };
 

@@ -28,6 +28,7 @@ bv::IEventManager * GEventManager = nullptr;
 
 bv::HighResolutionTimer GTimer;
 
+#define USE_READBACK_API
 #define FULLSCREEN_MODEL
 
 #ifdef FULLSCREEN_MODE
@@ -70,10 +71,18 @@ namespace bv {
 // *********************************
 //
 BlackVisionApp::BlackVisionApp	()
-    : WindowedApplication( "Migajace tlo z klirem dzialajacym jak nalezy to nalezy", 0, 0, GWidth, GHeight, GFullScreen )
-    , m_modelScene(nullptr)
-    , m_mockSceneEng(nullptr)
+    : WindowedApplication( "BlackVision prealpha test app", 0, 0, GWidth, GHeight, GFullScreen )
+    , m_modelScene( nullptr )
+    , m_mockSceneEng( nullptr )
 {
+}
+
+// *********************************
+//
+BlackVisionApp::~BlackVisionApp ()
+{
+    delete m_mockFrameReader;
+    delete m_frameData;
 }
 
 // *********************************
@@ -141,7 +150,8 @@ void BlackVisionApp::OnIdle		()
         RenderScene();
         m_Renderer->DisplayColorBuffer();
 
-        GEventManager->TriggerEvent( m_frameRenderedEvent );
+        //FIXME: hack
+        ReadBackFrameBuffer();
 
     DWORD ftime = timeGetTime() - curTime;
     if( ftime < GFrameMillis )
@@ -226,12 +236,12 @@ bool BlackVisionApp::RenderNode         ( SceneNode *   node )
         m_Renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
 
 
-        for(int i = 0; i < node->NumTransformables(); ++i)
+        for( int i = 0; i < node->NumTransformables(); ++i )
         {
             bSuccess &= m_Renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
         }
 
-        for (int i = 0; i < node->NumChildrenNodes(); i++)
+        for ( int i = 0; i < node->NumChildrenNodes(); i++ )
         {
             bSuccess &= RenderNode( node->GetChild( i ) ); 
         }
@@ -258,7 +268,7 @@ bool BlackVisionApp::OnInitialize       ()
     GEventManager = &bv::GetDefaultEventManager();
     m_frameRenderedEvent = FrameRenderedEventPtr( new bv::FrameRenderedEvent() );
     m_mockFrameReader = new MockFrameReader();
-
+    m_frameData = new char[ 2048 * 2048 * 4 ]; //FIXME: overly pessimistic assumption
 
     //FIXME: remove me pleaZe
     //const std::string fontFile = "../dep/Media/fonts/arial.ttf";
@@ -353,4 +363,15 @@ void BlackVisionApp::AddCameraAnimation2  () //smietnik lekko oczyszczony ze smi
                                       , model::ParametersFactory::CreateParameter( "up", *up ) );
 }
 
+// *********************************
+//
+void BlackVisionApp::ReadBackFrameBuffer ()
+{
+#ifdef USE_READBACK_API
+    m_Renderer->NaiveReadback( m_frameData, m_Width, m_Height );
+    m_frameRenderedEvent->SetFrameDataPtr( m_frameData, m_Width, m_Height );
+    GEventManager->TriggerEvent( m_frameRenderedEvent );
+#endif
 }
+
+} //bv

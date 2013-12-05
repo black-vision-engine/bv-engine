@@ -112,9 +112,11 @@ void	Renderer::SetClearColor		( const glm::vec4 & col )
 //
 void	Renderer::Resize			    ( int w, int h )
 {
-    glViewport(0 , 0, w, h);
+    glViewport( 0 , 0, w, h );
     m_Camera->SetPerspective( 90.f, float(w) / float(h), 0.1f, 100.f );
 
+    m_Width = w;
+    m_Height = h;
     //FIXME: implement
 }
 
@@ -510,6 +512,17 @@ PdrTextureAnimatedSequence2D *  Renderer::GetPdrTextureAnimSeq2D     ( const Tex
     }
 
     return pdrTex;    
+}
+
+// *********************************
+//
+void  Renderer::NaiveReadback       ( char * buf, int w, int h )
+{
+    assert( w == m_Width );
+    assert( h == m_Height );
+    assert( buf );
+
+    glReadPixels( 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, buf );
 }
 
 }

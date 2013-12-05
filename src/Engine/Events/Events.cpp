@@ -201,8 +201,10 @@ const std::string &     FrameRenderedEvent::GetName             () const
 
 // *************************************
 //
-void                    FrameRenderedEvent::SetFrameDataPtr     ( const char * data )
+void                    FrameRenderedEvent::SetFrameDataPtr     ( const char * data, int w, int h )
 {
+    m_width = w;
+    m_height = h;
     m_frameData = data;
 }
 
@@ -211,6 +213,20 @@ void                    FrameRenderedEvent::SetFrameDataPtr     ( const char * d
 const char *            FrameRenderedEvent::FrameDataPtr        () const
 {
     return m_frameData;
+}
+
+// *************************************
+//
+int                     FrameRenderedEvent::Width               () const
+{
+    return m_width;
+}
+
+// *************************************
+//
+int                     FrameRenderedEvent::Height              () const
+{
+    return m_height;
 }
 
 // *************************************

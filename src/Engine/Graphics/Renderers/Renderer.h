@@ -99,7 +99,9 @@ public:
 
     void	DisplayColorBuffer	();
 
-    void    SetCamera           (Camera* cam);
+    void    NaiveReadback       ( char * buf, int w, int h );
+
+    void    SetCamera           ( Camera * cam );
 
 public:
 
