@@ -169,4 +169,11 @@ ProcessPtr Process::PeekChild   ()
     return m_childProcess; 
 }
 
+// *******************************
+//
+void        Process::SetState    ( ProcessState state )
+{
+    m_state = state;
+}
+
 } //bv

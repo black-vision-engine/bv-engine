@@ -68,7 +68,11 @@ public:
     void            AttachChild ( ProcessPtr child );
     ProcessPtr      RemoveChild ();
     ProcessPtr      PeekChild   ();
-    
+
+private:
+
+    void            SetState    ( ProcessState state );
+
 };
 
 } //bv

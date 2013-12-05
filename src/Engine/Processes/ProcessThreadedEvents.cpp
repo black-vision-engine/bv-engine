@@ -24,7 +24,7 @@ void ProcessThreadedEventSender::Run                    ()
     { 
         IEventPtr e; //FIXME: some concrete event
         m_eventManager->ConcurrentQueueEvent( e );
-        Sleep(10); //FIXME: wait for another event to be sent
+        Sleep( 10 ); //FIXME: wait for another event to be sent
     } 
 
     Succeed();
