@@ -12,6 +12,9 @@
 namespace bv 
 {
 
+class IEvent;
+typedef std::shared_ptr<IEvent>                 IEventPtr;
+
 typedef unsigned long EventType;
 
 class IEvent
@@ -20,7 +23,7 @@ public:
 
     virtual                         ~IEvent         () {}
 
-    virtual IEvent *                Clone           () const                            = 0;
+    virtual IEventPtr               Clone           () const                            = 0;
 
     virtual EventType               GetEventType    () const                            = 0;
     virtual TimeType                GetTimeStamp    () const                            = 0;
@@ -32,7 +35,6 @@ public:
 
 };
 
-typedef std::shared_ptr<IEvent>                 IEventPtr;
 typedef fastdelegate::FastDelegate1<IEventPtr>  EventListenerDelegate;
 
 }

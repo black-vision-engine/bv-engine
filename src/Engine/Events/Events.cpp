@@ -8,11 +8,14 @@ namespace bv
 
 // ************************************* Static Events' Definitions *************************************
 
-const EventType PluginAddedEvent::m_sEventType  = 0x00000001;
-std::string PluginAddedEvent::m_sEventName      = "Event_PluginAdded";
+const EventType PluginAddedEvent::m_sEventType      = 0x00000001;
+std::string PluginAddedEvent::m_sEventName          = "Event_PluginAdded";
 
-const EventType NodeAddedEvent::m_sEventType    = 0x00000002;
-std::string NodeAddedEvent::m_sEventName        = "Event_NodeAdded";
+const EventType NodeAddedEvent::m_sEventType        = 0x00000002;
+std::string NodeAddedEvent::m_sEventName            = "Event_NodeAdded";
+
+const EventType FrameRenderedEvent::m_sEventType    = 0x00000003;
+std::string FrameRenderedEvent::m_sEventName        = "Event_FrameRendered";
 
 
 // ************************************* PluginAddedEvent *************************************
@@ -56,9 +59,9 @@ void                    PluginAddedEvent::Deserialize       ( std::istringstream
 
 // *************************************
 //
-IEvent *                PluginAddedEvent::Clone             () const
+IEventPtr               PluginAddedEvent::Clone             () const
 {
-    return new PluginAddedEvent( *this );
+    return IEventPtr( new PluginAddedEvent( *this ) );
 }
 
 // *************************************
@@ -77,7 +80,7 @@ const model::IPlugin *  PluginAddedEvent::GetPlugin         () const
 
 // *************************************
 //
-EventType                PluginAddedEvent::Type             ()
+EventType               PluginAddedEvent::Type              ()
 {
     return m_sEventType;
 }
@@ -124,9 +127,9 @@ void                    NodeAddedEvent::Deserialize         ( std::istringstream
 
 // *************************************
 //
-IEvent *                NodeAddedEvent::Clone               () const
+IEventPtr               NodeAddedEvent::Clone               () const
 {
-    return new NodeAddedEvent( *this );
+    return IEventPtr( new NodeAddedEvent( *this ) );
 }
 
 // *************************************
@@ -145,7 +148,67 @@ const model::IModelNode *   NodeAddedEvent::GetNode         () const
 
 // *************************************
 //
-EventType                NodeAddedEvent::Type               ()
+EventType                   NodeAddedEvent::Type            ()
+{
+    return m_sEventType;
+}
+
+// ************************************* FrameRenderedEvent *************************************
+
+// *************************************
+//
+FrameRenderedEvent::FrameRenderedEvent                          ()
+    : m_frameData( nullptr )
+{
+}
+
+// *************************************
+//
+EventType               FrameRenderedEvent::GetEventType        () const
+{
+    return m_sEventType;
+}
+
+// *************************************
+//
+void                    FrameRenderedEvent::Serialize           ( std::ostringstream & out ) const
+{
+    std::string err = GetName() + " should not be serialized";
+    assert( !err.c_str()  );
+}
+
+// *************************************
+//
+void                    FrameRenderedEvent::Deserialize         ( std::istringstream & in )
+{
+    std::string err = GetName() + " should not be deserialized";
+    assert( !err.c_str()  );
+}
+
+// *************************************
+//
+IEventPtr               FrameRenderedEvent::Clone               () const
+{
+    return IEventPtr( new FrameRenderedEvent( *this ) );
+}
+
+// *************************************
+//
+const std::string &     FrameRenderedEvent::GetName             () const
+{
+    return m_sEventName;
+}
+
+// *************************************
+//
+const char *            FrameRenderedEvent::FrameDataPtr        () const
+{
+    return m_frameData;
+}
+
+// *************************************
+//
+EventType               FrameRenderedEvent::Type                ()
 {
     return m_sEventType;
 }

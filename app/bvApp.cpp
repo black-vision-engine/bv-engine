@@ -23,7 +23,7 @@
 
 unsigned long EVENT_EVAL_MILLIS = 20; //FIXME: move to global configuration settings
 
-bv::IEventManager & GEventManager = bv::GetDefaultEventManager();
+bv::IEventManager * GEventManager = nullptr;
 
 bv::HighResolutionTimer GTimer;
 
@@ -110,7 +110,7 @@ void BlackVisionApp::OnIdle		()
 
     if( frame >= 1 )
     {
-        GEventManager.Update( EVENT_EVAL_MILLIS );
+        GEventManager->Update( EVENT_EVAL_MILLIS );
     }
 
     //FIXME: debug timer - don't get fooled
@@ -248,6 +248,8 @@ bool BlackVisionApp::OnInitialize       ()
         freopen_s(&dummy, "CONOUT$", "wb", stdout);
         freopen_s(&dummy, "CONOUT$", "wb", stderr);
     }
+
+    GEventManager = &bv::GetDefaultEventManager();
 
     //FIXME: remove me pleaZe
     //const std::string fontFile = "../dep/Media/fonts/arial.ttf";

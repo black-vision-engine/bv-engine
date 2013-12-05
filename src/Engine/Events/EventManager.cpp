@@ -240,6 +240,14 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
 IEventManager &     GetDefaultEventManager  ()
 {
     static EventManager instance;
+    static bool initialized = false;
+
+    if( !initialized )
+    {
+        initialized = true;
+
+        printf( "Default Event Manager initialized\n" );
+    }
 
     return instance;
 }

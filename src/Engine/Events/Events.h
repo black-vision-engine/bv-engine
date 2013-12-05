@@ -34,7 +34,7 @@ public:
     virtual void                    Serialize       ( std::ostringstream & out ) const;
     virtual void                    Deserialize     ( std::istringstream & in );
 
-    virtual IEvent *                Clone           () const;
+    virtual IEventPtr               Clone           () const;
 
     virtual const std::string &     GetName         () const;
 
@@ -67,13 +67,44 @@ public:
     virtual void                    Serialize       ( std::ostringstream & out ) const;
     virtual void                    Deserialize     ( std::istringstream & in );
 
-    virtual IEvent *                Clone           () const;
+    virtual IEventPtr               Clone           () const;
 
     virtual const std::string &     GetName         () const;
 
     const model::IModelNode *       GetNode         () const;
 
     static EventType                Type            ();
+
+};
+
+// ************************************* FrameRenderedEvent *************************************
+class FrameRenderedEvent : public BaseEvent
+{
+private:
+
+    const char *   m_frameData;
+
+public:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+
+public:
+
+    explicit                        FrameRenderedEvent  ();
+
+    virtual EventType               GetEventType        () const;
+
+    virtual void                    Serialize           ( std::ostringstream & out ) const;
+    virtual void                    Deserialize         ( std::istringstream & in );
+
+    virtual IEventPtr               Clone               () const;
+
+    virtual const std::string &     GetName             () const;
+
+    const char *                    FrameDataPtr        () const;
+
+    static EventType                Type                ();
 
 };
 
