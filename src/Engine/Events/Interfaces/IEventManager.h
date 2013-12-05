@@ -23,10 +23,13 @@ public:
     virtual bool    QueueEvent              ( const IEventPtr & evt )                                               = 0;
     virtual bool    ConcurrentQueueEvent    ( const IEventPtr & evt )                                               = 0;
 
-    virtual bool    RemoveEvent             ( const EventType & type, bool allOfType = false )                      = 0;
+    virtual bool    AbortEvent              ( const EventType & type, bool allOfType = false )                      = 0;
 
     virtual bool    Update                  ( unsigned long maxEvaluationMillis = millisINFINITE )                  = 0;
 
 };
 
-}
+//FIXME: hack - should be created by means of Engine object or some global object responsible for application state and services
+IEventManager &     GetDefaultEventManager  ();
+
+} //bv

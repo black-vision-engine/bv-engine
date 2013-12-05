@@ -236,4 +236,12 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
     return pendingEvents;
 }
 
+//FIXME: hack - should be created by means of Engine object or some global object responsible for application state and services
+IEventManager &     GetDefaultEventManager  ()
+{
+    static EventManager instance;
+
+    return instance;
+}
+
 } //bv

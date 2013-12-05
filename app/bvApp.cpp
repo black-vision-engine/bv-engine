@@ -13,11 +13,17 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 
+#include "Engine/Events/Interfaces/IEventManager.h"
+
 #include "MockFonts/fttester.h"
 #include "MockScenes.h"
 
 #include "System/Threading/Thread.h"
 
+
+unsigned long EVENT_EVAL_MILLIS = 20; //FIXME: move to global configuration settings
+
+bv::IEventManager & GEventManager = bv::GetDefaultEventManager();
 
 bv::HighResolutionTimer GTimer;
 
@@ -83,7 +89,7 @@ void BlackVisionApp::OnIdle		()
     static float movingAvgTime = 0.001f;
     static DWORD startTime = timeGetTime();
 
-    if( frame == 1 )
+    if( frame == 1 ) //FIXME: to jest szit dopiero
     {
         totalPassed = 0;
         longestFrame = 0;
@@ -94,12 +100,18 @@ void BlackVisionApp::OnIdle		()
         GTimer.StartTimer();
     }
 
+
     ++movingAvgAccum;
 
 
     //bv::Profiler pf("One frame " , &std::cout);
 
     DWORD curTime = timeGetTime();
+
+    if( frame >= 1 )
+    {
+        GEventManager.Update( EVENT_EVAL_MILLIS );
+    }
 
     //FIXME: debug timer - don't get fooled
     //float t = float(frame) * 0.1f; ///10 fps
