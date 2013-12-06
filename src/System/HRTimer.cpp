@@ -37,24 +37,4 @@ double  HighResolutionTimer::GetElapsedTime  () const
     return ToSecs( time );
 }
 
-// *********************************
-//
-double  HighResolutionTimer::CurElapsed      () const
-{
-    LARGE_INTEGER curTime;
-    QueryPerformanceCounter( &curTime );
-
-    LARGE_INTEGER time;
-    time.QuadPart = curTime.QuadPart - m_StartTime.QuadPart;
-
-    return ToSecs( time );
-}
-
-// *********************************
-//
-inline double  HighResolutionTimer::ToSecs          ( LARGE_INTEGER & time ) const
-{
-    return ( (double) time.QuadPart / (double) m_Frequency.QuadPart );
-}
-
 }

@@ -29,7 +29,7 @@ bv::IEventManager * GEventManager = nullptr;
 bv::HighResolutionTimer GTimer;
 
 #define USE_READBACK_API
-#define FULLSCREEN_MODEL
+#define FULLSCREEN_MODE
 
 #ifdef FULLSCREEN_MODE
     const bool          GFullScreen = true;
@@ -126,7 +126,7 @@ void BlackVisionApp::OnIdle		()
     //FIXME: debug timer - don't get fooled
     //float t = float(frame) * 0.1f; ///10 fps
 
-    TimeType t = TimeType(curTime - startTime) * TimeType(0.001);
+    TimeType t = TimeType( curTime - startTime ) * TimeType( 0.001 );
 
         m_modelScene->Update( t );
 
@@ -368,9 +368,40 @@ void BlackVisionApp::AddCameraAnimation2  () //smietnik lekko oczyszczony ze smi
 void BlackVisionApp::ReadBackFrameBuffer ()
 {
 #ifdef USE_READBACK_API
+
+    static double totalElapsed = 0.0;
+    static int nFrames = 1;
+    static int nPasses = 0;
+
+    double readbackStart = GTimer.CurElapsed();
     m_Renderer->NaiveReadback( m_frameData, m_Width, m_Height );
+    double readbackTime = GTimer.CurElapsed() - readbackStart;
+
+    totalElapsed += readbackTime;
+
+    if( nFrames % 50 == 0 )
+    {
+        double avg = totalElapsed / (double) nFrames;
+
+        nPasses++;
+        totalElapsed = 0.0;
+
+        if (nPasses % 3 == 0 )
+        {
+            nPasses = 0;
+
+            printf( "Avg readback time from last %d frames took %.4f ms\n", nFrames, avg * 1000 );
+        }
+
+        nFrames = 0;
+    }
+
+    nFrames++;
+
     m_frameRenderedEvent->SetFrameDataPtr( m_frameData, m_Width, m_Height );
     GEventManager->TriggerEvent( m_frameRenderedEvent );
+
+
 #endif
 }
 
