@@ -5,21 +5,21 @@ namespace bv { namespace model {
 
 // *******************************
 //
-ParamVec3                          ParametersFactory::CreateParameter                      ( const std::string & name, Vec3Interpolator & interpolator, const Timeline * timeline )
+ParamVec3                          ParametersFactory::CreateParameter                      ( const std::string & name, const Vec3Interpolator & interpolator, const Timeline * timeline )
 {
     return ParamVec3( name, interpolator, timeline );
 }
 
 // *******************************
 //
-ParamVec4                          ParametersFactory::CreateParameter                      ( const std::string & name, Vec4Interpolator & interpolator, const Timeline * timeline )
+ParamVec4                          ParametersFactory::CreateParameter                      ( const std::string & name, const Vec4Interpolator & interpolator, const Timeline * timeline )
 {
     return ParamVec4( name, interpolator, timeline );
 }
 
 // *******************************
 //
-ParamFloat                          ParametersFactory::CreateParameter                     ( const std::string & name, FloatInterpolator & interpolator, const Timeline * timeline )
+ParamFloat                          ParametersFactory::CreateParameter                     ( const std::string & name, const FloatInterpolator & interpolator, const Timeline * timeline )
 {
     return ParamFloat( name, interpolator, timeline );
 }
