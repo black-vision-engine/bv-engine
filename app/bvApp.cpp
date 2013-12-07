@@ -29,7 +29,7 @@ bv::IEventManager * GEventManager = nullptr;
 bv::HighResolutionTimer GTimer;
 
 #define USE_READBACK_API
-#define FULLSCREEN_MODE
+//#define FULLSCREEN_MODE
 
 #ifdef FULLSCREEN_MODE
     const bool          GFullScreen = true;
@@ -275,7 +275,7 @@ bool BlackVisionApp::OnInitialize       ()
     //simple_freetype_test();
     //basic_write_atlas( fontFile, "ascii_arial_atlas.raw" );
 
-    //model::BasicNode * root = TestScenesFactory::SimpeTextureTestScene();
+    model::BasicNode * root = TestScenesFactory::SimpeTextureTestScene();
     //model::BasicNode * root1 = TestScenesFactory::SimpeTextureTestScene();
 
     //root->AddChild( root1 );
@@ -302,7 +302,7 @@ bool BlackVisionApp::OnInitialize       ()
     //model::BasicNode * root = TestScenesFactory::GreenRectTestScene();
     //model::BasicNode * root = TestScenesFactory::NaiveTimerTestScene();
 
-    model::BasicNode * root = TestScenesFactory::SequenceAnimationTestScene();
+    //model::BasicNode * root = TestScenesFactory::SequenceAnimationTestScene();
     m_modelScene = model::ModelScene::Create( root, new Camera() );
 
     m_Renderer->SetCamera( m_modelScene->GetCamera() );

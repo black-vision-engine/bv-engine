@@ -337,7 +337,6 @@
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleGeometryShaderPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimplePixelShaderPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleTextPlugin.h" />
-    <ClInclude Include="Engine\Models\Plugins\Simple\SimpleTexturePlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleTransformPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleVertexShaderPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\TextureInfo.h" />
@@ -348,6 +347,7 @@
     <ClInclude Include="Engine\Processes\ProcessThreaded.h" />
     <ClInclude Include="System\Threading\Thread.h" />
     <ClInclude Include="Engine\Processes\ProcessThreadedEvents.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\SimpleTexturePlugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

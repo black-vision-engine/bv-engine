@@ -65,7 +65,9 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
         alphas.push_back( t.alpha );
     }
 
-    m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
+    int texturesNum = textureDescs.size();
+
+    m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture/simpletexture" + std::to_string( texturesNum ) +".frag"
 										, alphas
 										, txMat );
 
@@ -73,7 +75,7 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
     auto rendContext = m_pixelShaderChannel->GetRendererContext();
     rendContext->cullCtx->enabled = false;
 
-	m_vertexShaderChannel = new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" );
+	m_vertexShaderChannel = new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture/simpletexture" + std::to_string( texturesNum ) + ".vert" );
 }
 
 // *************************************

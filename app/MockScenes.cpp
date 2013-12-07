@@ -270,24 +270,18 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 
     model::SimpleTexturePlugin    * stpp  = nullptr;
     
-    if( numcall == 0 )
-    {
-        std::vector< const model::TextureDescriptor > textures;
+    std::vector< const model::TextureDescriptor > textures;
         
-        textures.push_back( model::TextureDescriptor( "asci_arial_atlas_red.png", model::ParametersFactory::CreateParameter( "texTransform", tx0m ) ) );
-        textures.push_back( model::TextureDescriptor( "simless_00.jpg", model::ParametersFactory::CreateParameter( "texTransform", tx1m ) ) );
+    textures.push_back( model::TextureDescriptor( "asci_arial_atlas_red.png", model::ParametersFactory::CreateParameter( "texTransform", tx0m ) ) );
+    textures.push_back( model::TextureDescriptor( "pliczek_z_kwiatkiem.jpg", model::ParametersFactory::CreateParameter( "texTransform", tx1m ) ) );
+    textures[0].alpha = model::ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 0.4f) );
+    textures[1].wrappingModeX = model::TextureWrappingMode::TWM_CLAMP_BORDER;
+    textures[1].wrappingModeY = model::TextureWrappingMode::TWM_CLAMP_BORDER;
+    textures[1].filteringMode = model::TextureFilteringMode::TFM_LINEAR;
+    textures[1].alpha = model::ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 1.f) );
+    textures[1].borderColor = model::ParametersFactory::CreateParameter( "texBorderColor", InterpolatorsHelper::CreateConstValue( glm::vec4( 0.f, 0.f, 0.f, 0.f ) ) );
 
-        stpp = model::PluginsFactory::CreateSimpleTexturePlugin( stpl, textures );
-    }
-    else
-    {
-        std::vector< const model::TextureDescriptor > textures;
-        
-        textures.push_back( model::TextureDescriptor( "asci_arial_atlas_red.png", model::ParametersFactory::CreateParameter( "texTransform", tx0m ) ) );
-        textures.push_back( model::TextureDescriptor( "simless_01.jpg", model::ParametersFactory::CreateParameter( "texTransform", tx1m ) ) );
-
-        stpp = model::PluginsFactory::CreateSimpleTexturePlugin( stpl, textures );
-    }
+    stpp = model::PluginsFactory::CreateSimpleTexturePlugin( stpl, textures );
 
     root->AddPlugin                 ( stpp );
 
