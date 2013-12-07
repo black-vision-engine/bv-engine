@@ -4,6 +4,7 @@
 #include "Engine/Models/Plugins/GeometryPluginRing.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
+#include "Engine/Models/BasicNode.h"
 
 #include "Engine/Models/Timeline/Timeline.h"
 
@@ -41,14 +42,15 @@ model::GeometryRingPlugin*          PluginsFactory::CreateGeometryRingPlugin    
 
 // *******************************
 //
-model::SolidColorPlugin *            PluginsFactory::CreateSolidColorPlugin              ( model::IPlugin* prevPlugin, const glm::vec4& color )
+model::IPlugin *                     PluginsFactory::CreateSolidColorPlugin              ( BasicNode* root, model::IPlugin* prevPlugin, const glm::vec4& color )
 {
-	auto solidPlugin = new model::SolidColorPlugin( prevPlugin, ParametersFactory::CreateParameter( "color", InterpolatorsHelper::CreateConstValue( color ) ) );
+    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( prevPlugin, ParametersFactory::CreateParameter( "color", InterpolatorsHelper::CreateConstValue( color ) ) );
+    root->AddPlugin( colorPlugin );
 
-	// Set Pixel Shader Channel
-	
+    auto colorShaderPlugin = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin, "../dep/media/shaders/solid.frag" );
+    root->AddPlugin( colorShaderPlugin );
 
-	return solidPlugin;
+    return colorShaderPlugin;
 }
 
 // *******************************

@@ -13,7 +13,6 @@
 #include "Engine/Models/Plugins/Simple/SimpleColorPlugin.h"
 #include "Engine/Models/Plugins/GeometryPlugin.h"
 #include "Engine/Models/Plugins/GeometryPluginRect.h"
-#include "Engine/Models/Plugins/SolidColorPlugin.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/AnimatedStripComponent.h"
@@ -69,13 +68,9 @@ struct PluginsFactory
     static model::SimpleAnimationPlugin *       CreateSimpleAnimationPlugin         ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, const ParamFloat & frameCounter, model::RendererContext * ctx = nullptr );
 	static model::SimpleTextPlugin *            CreateSimpleTextPlugin              ( const std::wstring & text, const std::string & fontFile, int size, bool bolded = false, bool italic = false );
 
-
-    // To jest jeszcze jakis smietnik 
-
-    static model::SolidColorPlugin *            CreateSolidColorPlugin              ( model::IPlugin * prevPlugin, const glm::vec4 & color);
-
-    static model::RendererContext *             CreateDefaultRenderableContext      ();
-
+    // More complex plugins.
+    // return last plugin added to root node.
+    static model::IPlugin *                     CreateSolidColorPlugin              ( BasicNode* root, model::IPlugin * prevPlugin, const glm::vec4 & color);
 };
 
 } // model

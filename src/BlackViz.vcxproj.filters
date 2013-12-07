@@ -78,7 +78,6 @@
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataElements.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObjectSingleVB.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\SolidColorShaderChannel.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\SolidColorPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\TexturePixelShaderChannel.cpp" />
@@ -252,7 +251,6 @@
     <ClInclude Include="Engine\Graphics\Resources\RenderableArrayDataElements.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObjectSingleVB.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\SolidColorShaderChannel.h" />
-    <ClInclude Include="Engine\Models\Plugins\SolidColorPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\GeometryChannelAnimatedVertices.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\TexturePixelShaderChannel.h" />

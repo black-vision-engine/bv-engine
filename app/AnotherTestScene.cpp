@@ -15,7 +15,6 @@
 #include "Engine/Models/Plugins/GeometryPlugin.h"
 #include "Engine/Models/Plugins/GeometryPluginRect.h"
 #include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
-#include "Engine/Models/Plugins/SolidColorPlugin.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/AnimatedStripComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RingComponent.h"
@@ -133,10 +132,9 @@ model::BasicNode * VariableTopologySolids( float size, float speed, float oscila
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
-    auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( transformPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
-
+    PluginsFactory::CreateSolidColorPlugin( root, transformPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
     //// Add plugins to node
-    root->AddPlugin( solidPlugin );
+    
 
     return root;
 }
@@ -719,7 +717,7 @@ model::BasicNode *          ExtrudedRedRect()
 
     ///////////////////////////// Solid plugin //////////////////////////// 
 
-    auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( trasformPlugin, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+    auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( root, trasformPlugin, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
 
     root->AddPlugin(solidPlugin);
 
