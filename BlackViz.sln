@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BlackVizApp", "app\BlackVizApp.vcxproj", "{0495E984-E89D-40C7-9DC7-FC9EB9E7D904}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqlite", "sqlite\sqlite.vcxproj", "{1ED3FCA5-5419-488E-9E0C-CAC8196E4E11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -33,6 +35,12 @@ Global
 		{0495E984-E89D-40C7-9DC7-FC9EB9E7D904}.Release|Win32.ActiveCfg = Release|Win32
 		{0495E984-E89D-40C7-9DC7-FC9EB9E7D904}.Release|Win32.Build.0 = Release|Win32
 		{0495E984-E89D-40C7-9DC7-FC9EB9E7D904}.Release|x64.ActiveCfg = Release|Win32
+		{1ED3FCA5-5419-488E-9E0C-CAC8196E4E11}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1ED3FCA5-5419-488E-9E0C-CAC8196E4E11}.Debug|Win32.Build.0 = Debug|Win32
+		{1ED3FCA5-5419-488E-9E0C-CAC8196E4E11}.Debug|x64.ActiveCfg = Debug|Win32
+		{1ED3FCA5-5419-488E-9E0C-CAC8196E4E11}.Release|Win32.ActiveCfg = Release|Win32
+		{1ED3FCA5-5419-488E-9E0C-CAC8196E4E11}.Release|Win32.Build.0 = Release|Win32
+		{1ED3FCA5-5419-488E-9E0C-CAC8196E4E11}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
