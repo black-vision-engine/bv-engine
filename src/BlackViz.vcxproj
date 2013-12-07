@@ -284,6 +284,7 @@
     <ClCompile Include="Engine\Models\Updaters\SequenceAnimationUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\ShaderParamUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\UpdatersManager.cpp" />
+    <ClCompile Include="Engine\Processes\InitProcess.cpp" />
     <ClCompile Include="Engine\Processes\Process.cpp" />
     <ClCompile Include="Engine\Processes\ProcessManager.cpp" />
     <ClCompile Include="Engine\Processes\ProcessThreaded.cpp" />
@@ -466,6 +467,7 @@
     <ClInclude Include="Engine\Models\Updaters\RendererStateUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\SequenceAnimationUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\ShaderParamUpdater.h" />
+    <ClInclude Include="Engine\Processes\InitProcess.h" />
     <ClInclude Include="Engine\Processes\Process.h" />
     <ClInclude Include="Engine\Processes\ProcessManager.h" />
     <ClInclude Include="Engine\Processes\ProcessThreaded.h" />
