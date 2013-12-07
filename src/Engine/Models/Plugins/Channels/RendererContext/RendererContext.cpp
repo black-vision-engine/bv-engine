@@ -26,16 +26,36 @@ RendererContext::~RendererContext    ()
 
 // *****************************
 //
-bool    RendererContext::StateChanged       () const
+bool                RendererContext::StateChanged       () const
 {
     return m_stateChanged;
 }
 
 // *****************************
 //
-void    RendererContext::SetStateChanged    ( bool stateChanged ) const
+void                RendererContext::SetStateChanged    ( bool stateChanged ) const
 {
     m_stateChanged = stateChanged;
+}
+
+// *****************************
+//
+RendererContext*    RendererContext::Create       ()
+{
+    return new model::RendererContext();
+}
+
+// *****************************
+//
+RendererContext*    RendererContext::CreateDefault       ()
+{
+    auto ctx        = Create();
+    ctx->alphaCtx   = new model::AlphaContext();
+    ctx->cullCtx    = new model::CullContext();
+    ctx->depthCtx   = new model::DepthContext();
+    ctx->fillCtx    = new model::FillContext();
+
+    return ctx;
 }
 
 } //model

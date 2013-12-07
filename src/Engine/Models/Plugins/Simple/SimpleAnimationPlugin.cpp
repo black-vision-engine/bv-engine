@@ -62,7 +62,7 @@ SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin 
     m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpleanimation.frag", alphas, txMat );
 
     if( !ctx )
-        ctx = PluginsFactory::CreateDefaultRenderableContext();
+        ctx = RendererContext::CreateDefault();
 
     m_pixelShaderChannel->SetRendererContext( ctx );
 

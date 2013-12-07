@@ -71,7 +71,7 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
 										, alphas
 										, txMat );
 
-    m_pixelShaderChannel->SetRendererContext( PluginsFactory::CreateDefaultRenderableContext() );
+    m_pixelShaderChannel->SetRendererContext( RendererContext::CreateDefault() );
     auto rendContext = m_pixelShaderChannel->GetRendererContext();
     rendContext->cullCtx->enabled = false;
 
@@ -118,7 +118,7 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
     if ( ctx )
         m_pixelShaderChannel->SetRendererContext( ctx );
     else
-        m_pixelShaderChannel->SetRendererContext( PluginsFactory::CreateDefaultRenderableContext() );
+        m_pixelShaderChannel->SetRendererContext( RendererContext::CreateDefault() );
 
     auto rendContext = m_pixelShaderChannel->GetRendererContext();
     rendContext->cullCtx->enabled = false;

@@ -122,18 +122,5 @@ model::SimpleGeometryShaderPlugin*  PluginsFactory::CreateSimpleGeometryShaderPl
     return new model::SimpleGeometryShaderPlugin( prevPlugin, shaderPath );
 }
 
-// *******************************
-//
-model::RendererContext*             PluginsFactory::CreateDefaultRenderableContext()
-{
-    auto ctx = new model::RendererContext();
-    ctx->alphaCtx = new model::AlphaContext();
-    ctx->cullCtx = new model::CullContext();
-    ctx->depthCtx = new model::DepthContext();
-    ctx->fillCtx = new model::FillContext();
-
-    return ctx;
-}
-
 } // model
 } //bv

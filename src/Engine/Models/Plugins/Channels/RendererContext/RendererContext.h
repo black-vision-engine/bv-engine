@@ -21,15 +21,17 @@ public:
     DepthContext *  depthCtx;
     FillContext  *  fillCtx;
 
-public:
+private:
 
             RendererContext     ();
+public:
             ~RendererContext    ();
 
+    bool                        StateChanged        () const;
+    void                        SetStateChanged     ( bool stateChanged ) const;
 
-    bool    StateChanged        () const;
-    void    SetStateChanged     ( bool stateChanged ) const;
-
+    static RendererContext*     Create              ();
+    static RendererContext*     CreateDefault       ();
 };
 
 } //model

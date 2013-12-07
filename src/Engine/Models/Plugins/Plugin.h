@@ -54,7 +54,7 @@ public:
     virtual void                                SetVertexShaderChannel      ( IVertexShaderChannel * vShCh )                { assert(!"Implement in derived class"); }
     virtual void                                SetGeometryShaderChannel    ( IGeometryShaderChannel * gShCh )              { assert(!"Implement in derived class"); }
 
-    virtual const IVertexAttributesChannel *            GetGeometryChannel          () const;                                       
+    virtual const IVertexAttributesChannel *    GetGeometryChannel          () const;                                       
     virtual const ITransformChannel *           GetTransformChannel         () const;                                       
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const;                                       
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const;                                       

@@ -322,10 +322,10 @@ model::BasicNode * NonGeometryParentRects   ( TimeType start0, TimeType stop0, T
     auto colorPlugin13 = PluginsFactory::CreateSimpleColorPlugin( tplugin13, paramCol13 );
     auto colorPlugin14 = PluginsFactory::CreateSimpleColorPlugin( tplugin14, paramCol14 );
 
-    auto psp11 = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin11,  "../dep/media/shaders/solid.frag", PluginsFactory::CreateDefaultRenderableContext() );
-    auto psp12 = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin12,  "../dep/media/shaders/solid.frag", PluginsFactory::CreateDefaultRenderableContext() );
-    auto psp13 = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin13,  "../dep/media/shaders/solid.frag", PluginsFactory::CreateDefaultRenderableContext() );
-    auto psp14 = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin14,  "../dep/media/shaders/solid.frag", PluginsFactory::CreateDefaultRenderableContext() );
+    auto psp11 = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin11,  "../dep/media/shaders/solid.frag", RendererContext::CreateDefault() );
+    auto psp12 = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin12,  "../dep/media/shaders/solid.frag", RendererContext::CreateDefault() );
+    auto psp13 = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin13,  "../dep/media/shaders/solid.frag", RendererContext::CreateDefault() );
+    auto psp14 = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin14,  "../dep/media/shaders/solid.frag", RendererContext::CreateDefault() );
 
     child1->AddPlugin( rectPlugin11 );
     child1->AddPlugin( tplugin11 );
@@ -392,7 +392,7 @@ model::BasicNode *          GreenRect()
 
     root->AddPlugin( colorPlugin );
 
-    auto pixelShaderPlugin = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/solid.frag", PluginsFactory::CreateDefaultRenderableContext() );
+    auto pixelShaderPlugin = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/solid.frag", RendererContext::CreateDefault() );
 
     root->AddPlugin( pixelShaderPlugin );
 
@@ -516,7 +516,7 @@ model::BasicNode *     NaiveTimer()
     auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( vertexShaderPlugin, ParametersFactory::CreateParameter( "color", color ) );
     root->AddPlugin( colorPlugin );
 
-    auto ctx = PluginsFactory::CreateDefaultRenderableContext();
+    auto ctx = RendererContext::CreateDefault();
     //ctx->alphaCtx->blendEnabled = true;
     //ctx->depthCtx->enabled = false;
     ctx->cullCtx->enabled = false;
@@ -573,7 +573,7 @@ model::BasicNode *     Text1()
 
     root->AddPlugin( colorPlugin );
 
-    auto ctx = PluginsFactory::CreateDefaultRenderableContext();
+    auto ctx = RendererContext::CreateDefault();
     ctx->alphaCtx->blendEnabled = true;
     ctx->depthCtx->enabled = false;
 
@@ -628,7 +628,7 @@ model::BasicNode * Text1Textured()
 
     root->AddPlugin( vertexShaderPlugin );
 
-    auto ctx = PluginsFactory::CreateDefaultRenderableContext();
+    auto ctx = RendererContext::CreateDefault();
     ctx->alphaCtx->blendEnabled = true;
     ctx->depthCtx->enabled = false;
 
@@ -686,7 +686,7 @@ model::BasicNode *     Text2()
 
     root->AddPlugin( colorPlugin );
 
-    auto ctx = PluginsFactory::CreateDefaultRenderableContext();
+    auto ctx = RendererContext::CreateDefault();
     ctx->alphaCtx->blendEnabled = true;
     ctx->depthCtx->enabled = false;
 

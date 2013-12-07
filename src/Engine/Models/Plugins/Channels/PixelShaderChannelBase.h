@@ -21,7 +21,7 @@ public:
     {
         if ( ctx == nullptr )
         {
-            m_rendererContext = new RendererContext();
+            m_rendererContext = RendererContext::Create();
         }
     }
 
