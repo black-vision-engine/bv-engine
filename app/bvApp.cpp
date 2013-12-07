@@ -28,7 +28,7 @@ bv::IEventManager * GEventManager = nullptr;
 
 bv::HighResolutionTimer GTimer;
 
-#define USE_READBACK_API
+//#define USE_READBACK_API
 //#define FULLSCREEN_MODE
 
 #ifdef FULLSCREEN_MODE
@@ -254,6 +254,66 @@ bool BlackVisionApp::RenderNode         ( SceneNode *   node )
 //FIXME: implement proper console
 bool BlackVisionApp::OnInitialize       ()
 {
+    InitializeConsole       ();
+    InitializeModelScene    ();
+    InitializeReadback      ();
+
+    return WindowedApplication::OnInitialize();
+}
+
+// *********************************
+//
+void BlackVisionApp::OnTerminate        ()
+{
+#ifdef DEBUG_INFO
+    m_file.close();
+#endif
+    model::TimelineManager::Cleanup();
+    WindowedApplication::OnTerminate();
+}
+
+// *********************************
+//
+void BlackVisionApp::AddCameraAnimation  ()
+{
+    Vec3Interpolator * position     = new Vec3Interpolator();
+    Vec3Interpolator * direction    = new Vec3Interpolator();
+    Vec3Interpolator * up           = new Vec3Interpolator();
+
+    TestParametersFactory::CameraAnimation_ver1( position, direction, up );
+
+    m_modelScene->SetCamereParameters(  model::ParametersFactory::CreateParameter( "position", *position )
+                                      , model::ParametersFactory::CreateParameter( "direction", *direction )
+                                      , model::ParametersFactory::CreateParameter( "up", *up ) );
+
+    delete position;
+    delete direction;
+    delete up;
+}
+
+// *********************************
+//
+void BlackVisionApp::AddCameraAnimation2  () //smietnik lekko oczyszczony ze smieci
+{
+    Vec3Interpolator * position     = new Vec3Interpolator();
+    Vec3Interpolator * direction    = new Vec3Interpolator();
+    Vec3Interpolator * up           = new Vec3Interpolator();
+
+    TestParametersFactory::CameraAnimation_ver2( position, direction, up );
+
+    m_modelScene->SetCamereParameters(  model::ParametersFactory::CreateParameter( "position", *position )
+                                      , model::ParametersFactory::CreateParameter( "direction", *direction )
+                                      , model::ParametersFactory::CreateParameter( "up", *up ) );
+
+    delete position;
+    delete direction;
+    delete up;
+}
+
+// *********************************
+//
+void    BlackVisionApp::InitializeConsole   ()
+{
     if( AllocConsole())
     {
         FILE * dummy;
@@ -263,13 +323,12 @@ bool BlackVisionApp::OnInitialize       ()
         freopen_s( &dummy, "CONOUT$", "wb", stdout );
         freopen_s( &dummy, "CONOUT$", "wb", stderr );
     }
+}
 
-    //FIXME: temporary hack to enable access to framebuffer readbacks
-    GEventManager = &bv::GetDefaultEventManager();
-    m_frameRenderedEvent = FrameRenderedEventPtr( new bv::FrameRenderedEvent() );
-    m_mockFrameReader = new MockFrameReader();
-    m_frameData = new char[ 2048 * 2048 * 4 ]; //FIXME: overly pessimistic assumption
-
+// *********************************
+//
+void    BlackVisionApp::InitializeModelScene()
+{
     //FIXME: remove me pleaZe
     //const std::string fontFile = "../dep/Media/fonts/arial.ttf";
     //simple_freetype_test();
@@ -318,49 +377,17 @@ bool BlackVisionApp::OnInitialize       ()
     //AddCameraAnimation2  ();
     //FIXME: read from configuration file and change appropriately when resoultion changes
     m_modelScene->GetCamera()->SetPerspective( 90.f, float(m_Width) / float(m_Height), 0.1f, 100.f );
-
-    return WindowedApplication::OnInitialize();
 }
 
 // *********************************
 //
-void BlackVisionApp::OnTerminate        ()
+void    BlackVisionApp::InitializeReadback  ()
 {
-#ifdef DEBUG_INFO
-    m_file.close();
-#endif
-    model::TimelineManager::Cleanup();
-    WindowedApplication::OnTerminate();
-}
-
-// *********************************
-//
-void BlackVisionApp::AddCameraAnimation  ()
-{
-    Vec3Interpolator * position     = new Vec3Interpolator();
-    Vec3Interpolator * direction    = new Vec3Interpolator();
-    Vec3Interpolator * up           = new Vec3Interpolator();
-
-    TestParametersFactory::CameraAnimation_ver1( position, direction, up );
-
-    m_modelScene->SetCamereParameters(  model::ParametersFactory::CreateParameter( "position", *position )
-                                      , model::ParametersFactory::CreateParameter( "direction", *direction )
-                                      , model::ParametersFactory::CreateParameter( "up", *up ) );
-}
-
-// *********************************
-//
-void BlackVisionApp::AddCameraAnimation2  () //smietnik lekko oczyszczony ze smieci
-{
-    Vec3Interpolator * position     = new Vec3Interpolator();
-    Vec3Interpolator * direction    = new Vec3Interpolator();
-    Vec3Interpolator * up           = new Vec3Interpolator();
-
-    TestParametersFactory::CameraAnimation_ver2( position, direction, up );
-
-    m_modelScene->SetCamereParameters(  model::ParametersFactory::CreateParameter( "position", *position )
-                                      , model::ParametersFactory::CreateParameter( "direction", *direction )
-                                      , model::ParametersFactory::CreateParameter( "up", *up ) );
+    //FIXME: temporary hack to enable access to framebuffer readbacks
+    GEventManager = &bv::GetDefaultEventManager();
+    m_frameRenderedEvent = FrameRenderedEventPtr( new bv::FrameRenderedEvent() );
+    m_mockFrameReader = new MockFrameReader();
+    m_frameData = new char[ 2048 * 2048 * 4 ]; //FIXME: overly pessimistic assumption
 }
 
 // *********************************

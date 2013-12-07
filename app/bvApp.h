@@ -57,6 +57,10 @@ private:
     bool    RenderScene         ();
     bool    RenderNode          ( SceneNode * node );
 
+    void    InitializeConsole   ();
+    void    InitializeModelScene();
+    void    InitializeReadback  ();
+
     //FIXME: hack to be removed
     void    ReadBackFrameBuffer ();
 
