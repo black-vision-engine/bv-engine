@@ -15,6 +15,8 @@ public:
 protected:
 
     virtual void    Run             ();
+    
+    virtual void    Init            () = 0;
 
 };
 

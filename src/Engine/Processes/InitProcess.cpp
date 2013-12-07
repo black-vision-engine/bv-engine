@@ -19,6 +19,7 @@ InitProcess::~InitProcess       ()
 //
 void    InitProcess::Run        ()
 {
+    Init            ();
 }
 
 } //bv
