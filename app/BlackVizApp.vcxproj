@@ -87,6 +87,9 @@
     <ClCompile Include="xml\TreeBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\sqlite\sqlite.vcxproj">
+      <Project>{1ed3fca5-5419-488e-9e0c-cac8196e4e11}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\src\BlackViz.vcxproj">
       <Project>{10a4584e-1897-4657-b496-9e72a89b101a}</Project>
     </ProjectReference>

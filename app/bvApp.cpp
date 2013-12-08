@@ -12,6 +12,7 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
+#include "Engine/Models/Resources/Font/AtlasCache.h"
 
 #include "Engine/Events/Interfaces/IEventManager.h"
 
@@ -83,6 +84,13 @@ BlackVisionApp::~BlackVisionApp ()
 {
     delete m_mockFrameReader;
     delete m_frameData;
+}
+
+// *********************************
+//
+void BlackVisionApp::OnKey( unsigned char c )
+{
+
 }
 
 // *********************************
@@ -329,6 +337,13 @@ void    BlackVisionApp::InitializeConsole   ()
 //
 void    BlackVisionApp::InitializeModelScene()
 {
+    //auto atlasCache = model::FontAtlasCache::Load( "fontcache.db" );
+
+    //model::FontAtlasCacheData data( nullptr, 0, 0, 0 );
+
+    //atlasCache->AddEntry( data, "dupa", 0, "dupa_file" );
+    //atlasCache->GetEntry( "dupa", 0, "dupa_file" );
+
     //FIXME: remove me pleaZe
     //const std::string fontFile = "../dep/Media/fonts/arial.ttf";
     //simple_freetype_test();

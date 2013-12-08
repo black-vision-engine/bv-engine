@@ -70,6 +70,8 @@ LRESULT CALLBACK DefaultWindowEventHandler ( HWND handle, UINT msg, WPARAM wPara
                 return 0;
             }
 
+            app->OnKey( key );
+
             return 0;
         }
         case WM_DESTROY:

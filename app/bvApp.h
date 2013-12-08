@@ -45,6 +45,7 @@ public:
     BlackVisionApp		        ();
     ~BlackVisionApp		        ();
 
+    virtual void OnKey          ( unsigned char c );
     virtual void OnIdle         ();
     virtual bool OnInitialize   ();
     virtual void OnTerminate    ();

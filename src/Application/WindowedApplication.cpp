@@ -147,6 +147,13 @@ void	WindowedApplication::OnTerminate			()
 
 // *********************************
 //
+void	WindowedApplication::OnKey					( unsigned char c )
+{
+    //To be implemented in derived class
+}
+
+// *********************************
+//
 void	WindowedApplication::OnMove					( int x, int y )
 {
     m_xPos	= x;

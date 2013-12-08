@@ -99,7 +99,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(BOOST_INC);../dep/Common/FreeImage/dist;../dep/Common/FreeType/include;../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../dep/Common/FastDelegate;./;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BOOST_INC);../dep/Common/FreeImage/dist;../dep/Common/FreeType/include;../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../dep/Common/FastDelegate;./;../sqlite/src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
