@@ -266,7 +266,6 @@ std::string SetTextEvent::m_sEventName        = "Event_SetText";
 void                SimpleTextPlugin::SetText                     ( const std::wstring& newText )
 {
     m_text = newText;
-    EvalGeometryChannel( );
 }
 
 // *************************************
