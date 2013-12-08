@@ -6,6 +6,7 @@
 
 #include "Application/WindowedApplication.h"
 #include "Engine/Events/Events.h"
+#include "Engine/Models/Plugins/Simple/SimpleTextPlugin.h"
 #include "MockFrameReader.h"
 
 namespace bv {
@@ -30,6 +31,7 @@ private:
     std::ofstream               m_file; // For debugging
 
     FrameRenderedEventPtr       m_frameRenderedEvent;
+    model::SetTextEventPtr      m_frameSetTextEvent;
     MockFrameReader *           m_mockFrameReader;
 
     char *                      m_frameData;

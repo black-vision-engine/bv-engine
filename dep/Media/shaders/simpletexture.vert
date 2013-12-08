@@ -15,5 +15,5 @@ void main()
 {
 	vec4 dummy = MV * P * vec4(vertexPosition, 1.0);
     gl_Position = MVP * vec4(vertexPosition, 1.0) + dummy - MV * P * vec4(vertexPosition, 1.0);
-    VTexCord = ( txMat0 * vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;
+    VTexCord = ( vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;
 }

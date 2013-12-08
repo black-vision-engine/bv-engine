@@ -90,7 +90,8 @@ BlackVisionApp::~BlackVisionApp ()
 //
 void BlackVisionApp::OnKey( unsigned char c )
 {
-
+    m_frameSetTextEvent->SetChar( c );
+    GetDefaultEventManager().QueueEvent( m_frameSetTextEvent );
 }
 
 // *********************************
@@ -349,7 +350,7 @@ void    BlackVisionApp::InitializeModelScene()
     //simple_freetype_test();
     //basic_write_atlas( fontFile, "ascii_arial_atlas.raw" );
 
-    model::BasicNode * root = TestScenesFactory::SimpeTextureTestScene();
+    //model::BasicNode * root = TestScenesFactory::SimpeTextureTestScene();
     //model::BasicNode * root1 = TestScenesFactory::SimpeTextureTestScene();
 
     //root->AddChild( root1 );
@@ -357,7 +358,7 @@ void    BlackVisionApp::InitializeModelScene()
 
     //model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
     //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
-    //model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
+    model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
     //model::BasicNode * root = TestScenesFactory::XMLTestScene();
     //model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
     //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
@@ -401,6 +402,7 @@ void    BlackVisionApp::InitializeReadback  ()
     //FIXME: temporary hack to enable access to framebuffer readbacks
     GEventManager = &bv::GetDefaultEventManager();
     m_frameRenderedEvent = FrameRenderedEventPtr( new bv::FrameRenderedEvent() );
+    m_frameSetTextEvent = model::SetTextEventPtr( new model::SetTextEvent() );
     m_mockFrameReader = new MockFrameReader();
     m_frameData = new char[ 2048 * 2048 * 4 ]; //FIXME: overly pessimistic assumption
 }

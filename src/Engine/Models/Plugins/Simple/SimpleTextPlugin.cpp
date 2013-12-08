@@ -10,6 +10,7 @@
 #include "Engine/Models/Resources/Font/FontLoader.h"
 #include "Engine/Models/Resources/Font/Text.h"
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
+#include "Engine/Events/Interfaces/IEventManager.h"
 
 namespace bv { namespace model {
 
@@ -37,7 +38,29 @@ SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::str
 
     m_textures.resize( 1 );
 
+    LoadAtlas( "AtlasTex" ) ;
+
     EvalGeometryChannel();
+
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &SimpleTextPlugin::OnSetText ), SetTextEvent::Type() );
+}
+
+namespace
+{
+
+
+}
+
+// *********************************
+//
+void SimpleTextPlugin::OnSetText                   ( IEventPtr evt )
+{
+    if( evt->GetEventType() == SetTextEvent::m_sEventType)
+    {
+        SetTextEventPtr evtTyped = std::static_pointer_cast<SetTextEvent>( evt );
+        wchar_t c[2] = {evtTyped->GetChar() , '\0'};
+        SetText( m_text + std::wstring( c ) );
+    }
 }
 
 // *********************************
@@ -117,8 +140,6 @@ const Text*         SimpleTextPlugin::GetFont() const
 //
 void                SimpleTextPlugin::EvalGeometryChannel( )
 {
-    LoadAtlas( "AtlasTex" ) ;
-
     auto texExtraData = static_cast< const TextureExtraData* > ( m_textures[ 0 ]->m_resHandle->GetExtra() );
 
     VertexAttributesChannelDescriptor geomChannelDesc;
@@ -126,7 +147,9 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
     geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
     geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-    m_geomChannel = new VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, geomChannelDesc, true, true );
+    m_geomChannel = new VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, geomChannelDesc);
+
+    m_geomChannel->SetNeedsTopologyUpdate(true);
 
     glm::vec3 translate(0.f);
     glm::vec3 interspace( 0.07f, 0.f ,0.f );
@@ -221,9 +244,76 @@ void                SimpleTextPlugin::Print                       ( std::ostream
 //
 Textures            SimpleTextPlugin::GetTextures                 () const
 {
-    auto prevTextures = m_prevPlugin->GetTextures();
+    std::vector< TextureInfo* > prevTextures;
+    if( m_prevPlugin )
+    {
+        prevTextures = m_prevPlugin->GetTextures();
+    }
     prevTextures.insert( prevTextures.end(), m_textures.begin(), m_textures.end() );
     return prevTextures;
+}
+
+
+// *************************************
+//
+const EventType SetTextEvent::m_sEventType    = 0x00000004;
+// *************************************
+//
+std::string SetTextEvent::m_sEventName        = "Event_SetText";
+
+// *************************************
+//
+void                SimpleTextPlugin::SetText                     ( const std::wstring& newText )
+{
+    m_text = newText;
+    EvalGeometryChannel( );
+}
+
+// *************************************
+//
+SetTextEvent::SetTextEvent        ()
+{}
+
+// *************************************
+//
+EventType               SetTextEvent::GetEventType      () const
+{
+    return m_sEventType;
+}
+
+// *************************************
+//
+IEventPtr               SetTextEvent::Clone             () const
+{
+    return IEventPtr( new SetTextEvent( *this ) );
+}
+
+// *************************************
+//
+const std::string &     SetTextEvent::GetName           () const
+{
+    return m_sEventName;
+}
+
+// *************************************
+//
+void                    SetTextEvent::SetChar             ( unsigned char  c )
+{
+    m_char = c;
+}
+
+// *************************************
+//
+unsigned char           SetTextEvent::GetChar             () const
+{
+    return m_char;
+}
+
+// *************************************
+//
+EventType               SetTextEvent::Type                ()
+{
+    return m_sEventType;
 }
 
 } // model

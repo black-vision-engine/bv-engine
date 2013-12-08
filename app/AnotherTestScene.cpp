@@ -534,12 +534,12 @@ model::BasicNode *     Text1()
 
     Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
 
-    color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-    color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-    color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-    color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+    color.addKey(0.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+    //color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    //color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+    //color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
-    auto texPlugin      =   PluginsFactory::CreateSimpleTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
+    auto texPlugin      =   PluginsFactory::CreateSimpleTextPlugin( L"DUPA", "../dep/Media/fonts/ARIALUNI.TTF", 64 );
 
     root->AddPlugin( texPlugin );
 
@@ -555,7 +555,7 @@ model::BasicNode *     Text1()
 
     yt.addKey(30.f, 5.f);
 
-    trns.AddTranslation( xt, yt, zt );
+    //trns.AddTranslation( xt, yt, zt );
 
     trns.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
 
@@ -565,6 +565,10 @@ model::BasicNode *     Text1()
 
     auto vertexShaderPlugin = PluginsFactory::CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/simpletexture.vert" );
 
+    auto txMat = new ValueMat4("txMat0"); // MEMLEAK
+    txMat->SetValue( glm::mat4(1.f) );
+    vertexShaderPlugin->RegisterValue( txMat );
+
     root->AddPlugin( vertexShaderPlugin );
 
     auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( vertexShaderPlugin, ParametersFactory::CreateParameter( "color", color ) );
@@ -572,8 +576,8 @@ model::BasicNode *     Text1()
     root->AddPlugin( colorPlugin );
 
     auto ctx = RendererContext::CreateDefault();
-    ctx->alphaCtx->blendEnabled = true;
-    ctx->depthCtx->enabled = false;
+    //ctx->alphaCtx->blendEnabled = true;
+    //ctx->depthCtx->enabled = false;
 
     auto pixelShaderPlugin = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag", ctx );
 
@@ -774,13 +778,13 @@ model::BasicNode *          ExtrudedTexturedRing()
 model::BasicNode *          TestScenesFactory::AnotherTestScene()
 {
     auto root =  Text1();
-    root->AddChild( GreenRect() );
-    root->AddChild( TexturedRect() );
+    //root->AddChild( GreenRect() );
+    //root->AddChild( TexturedRect() );
     //root->AddChild( ExtrudedTexturedRing() ); // To nie dziala na mojej karcie.
-    root->AddChild( TexturedRing() );
-    root->AddChild( ExtrudedRedRect() );
-    root->AddChild( Text1Textured() );
-    root->AddChild( Text2() );
+    //root->AddChild( TexturedRing() );
+    //root->AddChild( ExtrudedRedRect() );
+    //root->AddChild( Text1Textured() );
+    //root->AddChild( Text2() );
 
     return root;
 }
