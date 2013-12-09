@@ -51,6 +51,7 @@
     <ClInclude Include="MainInitProcess.h" />
     <ClInclude Include="BVAppLogic.h" />
     <ClInclude Include="BVConfig.h" />
+    <ClInclude Include="BVForwards.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MockFonts">

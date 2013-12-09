@@ -3,23 +3,13 @@
 #include "Engine/Events/Events.h"
 #include "MockFrameReader.h"
 
-#include <windows.h>
+#include "BVForwards.h"
+
+#include <windows.h> //FIXME: remove when this code is refactored
 
 
 namespace bv
 {
-
-namespace model
-{
-    class BasicNode;
-    class ModelScene;
-}
-
-class Renderer;
-class SceneNode;
-class Camera;
-class MockFrameReader;
-class ProcessManager;
 
 //FIXME: possibly add an interface such as IAppLogic (if necessary)
 class BVAppLogic
