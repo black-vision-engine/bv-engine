@@ -17,34 +17,15 @@
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Processes/ProcessManager.h"
 
-#include "MockFonts/fttester.h"
 #include "MockScenes.h"
-#include "MockFrameReader.h"
 
-#include "System/Threading/Thread.h"
 
+#include "BVConfig.h"
 
 bv::IEventManager * GEventManager = nullptr;
 
 bv::HighResolutionTimer GTimer;
 
-unsigned long EVENT_EVAL_MILLIS = 20; //FIXME: move to global configuration settings
-
-//#define USE_READBACK_API
-//#define FULLSCREEN_MODE
-
-#ifdef FULLSCREEN_MODE
-    const bool          GFullScreen = true;
-    const int           GWidth = 1920;
-    const int           GHeight = 1080;
-#else
-    const bool          GFullScreen = false;
-    const int           GWidth = 960;
-    const int           GHeight = 540;
-#endif
-
-const unsigned int  FPS = 5000;
-const unsigned int  GFrameMillis = 1000 / FPS;
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -73,7 +54,7 @@ namespace bv {
 // *********************************
 //
 BlackVisionApp::BlackVisionApp	()
-    : WindowedApplication( "BlackVision prealpha test app", 0, 0, GWidth, GHeight, GFullScreen )
+    : WindowedApplication( "BlackVision prealpha test app", 0, 0, DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.FullScreenMode() )
     , m_modelScene( nullptr )
     , m_mockSceneEng( nullptr )
     , m_processManager( nullptr )
@@ -104,7 +85,7 @@ void BlackVisionApp::OnIdle		()
 {
     DWORD curTime = timeGetTime();
 
-    GEventManager->Update( EVENT_EVAL_MILLIS );
+    GEventManager->Update( DefaultConfig.EventLoopUpdateMillis() );
     m_processManager->Update( curTime );
 
     static unsigned int frame = 0;
@@ -137,7 +118,7 @@ void BlackVisionApp::OnIdle		()
 
     if( frame >= 1 )
     {
-        GEventManager->Update( EVENT_EVAL_MILLIS );
+        GEventManager->Update( DefaultConfig.EventLoopUpdateMillis() );
     }
 
     //FIXME: debug timer - don't get fooled
@@ -171,10 +152,10 @@ void BlackVisionApp::OnIdle		()
         ReadBackFrameBuffer();
 
     DWORD ftime = timeGetTime() - curTime;
-    if( ftime < GFrameMillis )
+    if( ftime < DefaultConfig.FrameTimeMillis() )
     {
-        Sleep( GFrameMillis - ftime );
-        printf( "Sleeping: %d\n", GFrameMillis - ftime );
+        Sleep( DefaultConfig.FrameTimeMillis() - ftime );
+        printf( "Sleeping: %d\n", DefaultConfig.FrameTimeMillis() - ftime );
     }
 
     double frameUpdate = GTimer.CurElapsed();
@@ -421,7 +402,10 @@ void    BlackVisionApp::InitializeReadback  ()
 //
 void BlackVisionApp::ReadBackFrameBuffer ()
 {
-#ifdef USE_READBACK_API
+    if ( !DefaultConfig.ReadbackFlag() )
+    {
+        return;
+    }
 
     static double totalElapsed = 0.0;
     static int nFrames = 1;
@@ -454,9 +438,6 @@ void BlackVisionApp::ReadBackFrameBuffer ()
 
     m_frameRenderedEvent->SetFrameDataPtr( m_frameData, m_Width, m_Height );
     GEventManager->TriggerEvent( m_frameRenderedEvent );
-
-
-#endif
 }
 
 } //bv

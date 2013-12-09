@@ -38,6 +38,8 @@ public:
 
 };
 
+#define DefaultConfig   BVConfig::Instance()
+
 } //bv
 
 #include "BVConfig.inl"
