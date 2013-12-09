@@ -78,6 +78,7 @@
     <ClCompile Include="AnotherTestScene.cpp" />
     <ClCompile Include="bvApp.cpp" />
     <ClCompile Include="BVAppLogic.cpp" />
+    <ClCompile Include="BVConfig.cpp" />
     <ClCompile Include="MainInitProcess.cpp" />
     <ClCompile Include="MainLoopProcess.cpp" />
     <ClCompile Include="MockFrameReader.cpp" />
@@ -100,6 +101,7 @@
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
     <ClInclude Include="BVAppLogic.h" />
+    <ClInclude Include="BVConfig.h" />
     <ClInclude Include="MainInitProcess.h" />
     <ClInclude Include="MainLoopProcess.h" />
     <ClInclude Include="MockFrameReader.h" />

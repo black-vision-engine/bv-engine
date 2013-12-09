@@ -12,6 +12,8 @@ namespace model
     class IModelNode;
 }
 
+class Renderer;
+
 // ************************************* PluginAddedEvent *************************************
 class PluginAddedEvent : public BaseEvent
 {
@@ -87,9 +89,11 @@ class FrameRenderedEvent : public BaseEvent
 {
 private:
 
-    const char *    m_frameData;
-    int             m_width;
-    int             m_height;
+    const Renderer *    m_renderer;
+
+    const char *        m_frameData;
+    int                 m_width;
+    int                 m_height;
 
 public:
 
@@ -98,7 +102,7 @@ public:
 
 public:
 
-    explicit                        FrameRenderedEvent  ();
+    explicit                        FrameRenderedEvent  ( const Renderer * renderer );
 
     virtual EventType               GetEventType        () const;
 

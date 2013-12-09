@@ -157,8 +157,8 @@ EventType                   NodeAddedEvent::Type            ()
 
 // *************************************
 //
-FrameRenderedEvent::FrameRenderedEvent                          ()
-    : m_frameData( nullptr )
+FrameRenderedEvent::FrameRenderedEvent                          ( const Renderer * renderer )
+    : m_renderer( renderer )
 {
 }
 

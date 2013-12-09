@@ -411,7 +411,7 @@ void    BlackVisionApp::InitializeReadback  ()
 {
     //FIXME: temporary hack to enable access to framebuffer readbacks
     GEventManager = &bv::GetDefaultEventManager();
-    m_frameRenderedEvent = FrameRenderedEventPtr( new bv::FrameRenderedEvent() );
+    m_frameRenderedEvent = FrameRenderedEventPtr( new bv::FrameRenderedEvent( m_Renderer ) );
     m_frameSetTextEvent = model::SetTextEventPtr( new model::SetTextEvent() );
     m_mockFrameReader = new MockFrameReader();
     m_frameData = new char[ 2048 * 2048 * 4 ]; //FIXME: overly pessimistic assumption

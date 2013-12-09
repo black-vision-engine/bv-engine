@@ -16,6 +16,7 @@
     <ClCompile Include="MainLoopProcess.cpp" />
     <ClCompile Include="MainInitProcess.cpp" />
     <ClCompile Include="BVAppLogic.cpp" />
+    <ClCompile Include="BVConfig.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
@@ -49,6 +50,7 @@
     <ClInclude Include="MainLoopProcess.h" />
     <ClInclude Include="MainInitProcess.h" />
     <ClInclude Include="BVAppLogic.h" />
+    <ClInclude Include="BVConfig.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MockFonts">
