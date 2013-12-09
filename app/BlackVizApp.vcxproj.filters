@@ -13,6 +13,9 @@
     <ClCompile Include="xml\Scena.cpp" />
     <ClCompile Include="xml\TreeBuilder.cpp" />
     <ClCompile Include="MockFrameReader.cpp" />
+    <ClCompile Include="MainLoopProcess.cpp" />
+    <ClCompile Include="MainInitProcess.cpp" />
+    <ClCompile Include="BVAppLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
@@ -43,6 +46,9 @@
     </ClInclude>
     <ClInclude Include="xml\TreeBuilder.h" />
     <ClInclude Include="MockFrameReader.h" />
+    <ClInclude Include="MainLoopProcess.h" />
+    <ClInclude Include="MainInitProcess.h" />
+    <ClInclude Include="BVAppLogic.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MockFonts">

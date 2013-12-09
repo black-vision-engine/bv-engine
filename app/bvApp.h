@@ -20,6 +20,7 @@ namespace model
 class SceneNode;
 class Camera;
 class MockFrameReader;
+class ProcessManager;
 
 class BlackVisionApp : public WindowedApplication
 {
@@ -33,6 +34,8 @@ private:
     FrameRenderedEventPtr       m_frameRenderedEvent;
     model::SetTextEventPtr      m_frameSetTextEvent;
     MockFrameReader *           m_mockFrameReader;
+
+    ProcessManager *            m_processManager; //FIXME: move to engine object
 
     char *                      m_frameData;
 

@@ -15,6 +15,7 @@
 #include "Engine/Models/Resources/Font/AtlasCache.h"
 
 #include "Engine/Events/Interfaces/IEventManager.h"
+#include "Engine/Processes/ProcessManager.h"
 
 #include "MockFonts/fttester.h"
 #include "MockScenes.h"
@@ -75,6 +76,7 @@ BlackVisionApp::BlackVisionApp	()
     : WindowedApplication( "BlackVision prealpha test app", 0, 0, GWidth, GHeight, GFullScreen )
     , m_modelScene( nullptr )
     , m_mockSceneEng( nullptr )
+    , m_processManager( nullptr )
 {
 }
 
@@ -84,6 +86,8 @@ BlackVisionApp::~BlackVisionApp ()
 {
     delete m_mockFrameReader;
     delete m_frameData;
+    m_processManager->AbortAll( true );
+    delete m_processManager;
 }
 
 // *********************************
@@ -98,6 +102,11 @@ void BlackVisionApp::OnKey( unsigned char c )
 //
 void BlackVisionApp::OnIdle		()
 {
+    DWORD curTime = timeGetTime();
+
+    GEventManager->Update( EVENT_EVAL_MILLIS );
+    m_processManager->Update( curTime );
+
     static unsigned int frame = 0;
     static double totalPassed = 0.0;
     static unsigned int longestFrame = 0;
@@ -125,7 +134,6 @@ void BlackVisionApp::OnIdle		()
 
     //bv::Profiler pf("One frame " , &std::cout);
 
-    DWORD curTime = timeGetTime();
 
     if( frame >= 1 )
     {
@@ -263,6 +271,8 @@ bool BlackVisionApp::RenderNode         ( SceneNode *   node )
 //FIXME: implement proper console
 bool BlackVisionApp::OnInitialize       ()
 {
+    m_processManager = new ProcessManager();
+
     InitializeConsole       ();
     InitializeModelScene    ();
     InitializeReadback      ();
