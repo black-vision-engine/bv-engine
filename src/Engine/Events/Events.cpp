@@ -17,6 +17,8 @@ std::string NodeAddedEvent::m_sEventName            = "Event_NodeAdded";
 const EventType FrameRenderedEvent::m_sEventType    = 0x00000003;
 std::string FrameRenderedEvent::m_sEventName        = "Event_FrameRendered";
 
+const EventType TransformSetEvent::m_sEventType     = 0x00000004;
+std::string TransformSetEvent::m_sEventName        = "Event_TransformSet";
 
 // ************************************* PluginAddedEvent *************************************
 
@@ -153,6 +155,7 @@ EventType                   NodeAddedEvent::Type            ()
     return m_sEventType;
 }
 
+
 // ************************************* FrameRenderedEvent *************************************
 
 // *************************************
@@ -231,6 +234,65 @@ int                     FrameRenderedEvent::Height              () const
 // *************************************
 //
 EventType               FrameRenderedEvent::Type                ()
+{
+    return m_sEventType;
+}
+
+
+// ************************************* FrameRenderedEvent *************************************
+
+// *************************************
+//
+TransformSetEvent::TransformSetEvent                        ( TransformF * transform )
+    : m_transform( transform )
+{
+}
+
+// *************************************
+//
+EventType           TransformSetEvent::GetEventType         () const
+{
+    return m_sEventType;
+}
+
+// *************************************
+//
+void                TransformSetEvent::Serialize            ( std::ostringstream & out ) const
+{
+    assert( false );
+}
+
+// *************************************
+//
+void                TransformSetEvent::Deserialize          ( std::istringstream & in )
+{
+    assert( false );
+}
+
+// *************************************
+//
+IEventPtr           TransformSetEvent::Clone                () const
+{
+    return IEventPtr( new TransformSetEvent( *this ) );
+}
+
+// *************************************
+//
+const std::string & TransformSetEvent::GetName              () const
+{
+    return m_sEventName;
+}
+
+// *************************************
+//
+const TransformF *  TransformSetEvent::Transform            () const
+{
+    return m_transform;
+}
+
+// *************************************
+//
+EventType           TransformSetEvent::Type                 ()
 {
     return m_sEventType;
 }

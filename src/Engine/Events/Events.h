@@ -13,6 +13,7 @@ namespace model
 }
 
 class Renderer;
+class TransformF;
 
 // ************************************* PluginAddedEvent *************************************
 class PluginAddedEvent : public BaseEvent
@@ -125,5 +126,37 @@ public:
 
 typedef std::shared_ptr<FrameRenderedEvent> FrameRenderedEventPtr;
 
+// ************************************* TransformSetEvent *************************************
+class TransformSetEvent : public BaseEvent
+{
+private:
+
+    TransformF *        m_transform;
+
+public:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+
+public:
+
+    explicit                        TransformSetEvent   ( TransformF * transform );
+
+    virtual EventType               GetEventType        () const;
+
+    virtual void                    Serialize           ( std::ostringstream & out ) const;
+    virtual void                    Deserialize         ( std::istringstream & in );
+
+    virtual IEventPtr               Clone               () const;
+
+    virtual const std::string &     GetName             () const;
+
+    const TransformF *              Transform           () const;
+
+    static EventType                Type                ();
+
+};
+
+typedef std::shared_ptr<FrameRenderedEvent> FrameRenderedEventPtr;
 
 } //bv
