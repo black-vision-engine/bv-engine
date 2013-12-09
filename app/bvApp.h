@@ -7,10 +7,6 @@
 #include "Application/WindowedApplication.h"
 #include "Engine/Models/Plugins/Simple/SimpleTextPlugin.h"
 
-//FIXME: REMOVEVEVEEVEVEVVE
-#include "MockFrameReader.h"
-
-
 
 namespace bv {
 
@@ -33,9 +29,6 @@ class BlackVisionApp : public WindowedApplication
 private:
 
     BVAppLogic *                m_app;
-
-    std::ofstream               m_file; // For debugging
-
     ProcessManager *            m_processManager; //FIXME: move to engine object
 
 public:

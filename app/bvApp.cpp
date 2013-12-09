@@ -107,9 +107,6 @@ bool BlackVisionApp::OnInitialize       ()
 //
 void BlackVisionApp::OnTerminate        ()
 {
-#ifdef DEBUG_INFO
-    m_file.close();
-#endif
     model::TimelineManager::Cleanup();
     WindowedApplication::OnTerminate();
 }

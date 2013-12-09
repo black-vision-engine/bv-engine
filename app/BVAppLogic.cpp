@@ -126,7 +126,7 @@ void BVAppLogic::InitCamera         ( Renderer * renderer, int w, int h )
     //AddCameraAnimation  ();
     //AddCameraAnimation2  ();
     //FIXME: read from configuration file and change appropriately when resoultion changes
-    m_modelScene->GetCamera()->SetPerspective( 90.f, float( w ) / float( h ), 0.1f, 100.f ); //FIXME: move to BVConfig
+    m_modelScene->GetCamera()->SetPerspective( DefaultConfig.FOV(), float( w ) / float( h ), DefaultConfig.NearClippingPlane(), DefaultConfig.FarClippingPlane() );
 }
 
 // *********************************
@@ -323,7 +323,6 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
     if ( node->IsVisible() )
     {
         renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
-
 
         for( int i = 0; i < node->NumTransformables(); ++i )
         {

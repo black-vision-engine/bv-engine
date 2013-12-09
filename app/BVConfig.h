@@ -17,6 +17,10 @@ private:
     bool            m_fullscreeMode;
     bool            m_readbackOn;
 
+    float           m_defaultFOV;
+    float           m_defaultNearClippingPlane;
+    float           m_defaultFarClippingPlane;
+
 private:
 
     BVConfig();
@@ -33,6 +37,10 @@ public:
     inline unsigned int EventLoopUpdateMillis   () const;
     inline unsigned int FPS                     () const;
     inline unsigned int FrameTimeMillis         () const;
+
+    inline float        FOV                     () const;
+    inline float        NearClippingPlane       () const;
+    inline float        FarClippingPlane        () const;
 
     static const BVConfig & Instance  ();
 

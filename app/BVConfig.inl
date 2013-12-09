@@ -52,4 +52,25 @@ inline unsigned int BVConfig::FrameTimeMillis       () const
     return m_frameTimeMillis;
 }
 
+// *********************************
+//
+inline float        BVConfig::FOV                     () const
+{
+    return m_defaultFOV;
+}
+
+// *********************************
+//
+inline float        BVConfig::NearClippingPlane       () const
+{
+    return m_defaultNearClippingPlane;
+}
+
+// *********************************
+//
+inline float        BVConfig::FarClippingPlane        () const
+{
+    return m_defaultFarClippingPlane;
+}
+
 } //bv
