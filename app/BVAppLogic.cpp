@@ -37,6 +37,7 @@ BVAppLogic::BVAppLogic              ()
     : m_startTime( 0 )
     , m_modelScene( nullptr )
     , m_mockSceneEng( nullptr )
+    , m_state( BVAppState::BVS_INVALID )
 {
 }
 
@@ -140,113 +141,130 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
 //
 void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer, HWND handle )
 {
-    static unsigned int frame = 0;
-    static double totalPassed = 0.0;
-    static unsigned int longestFrame = 0;
-    static double longestTime = 0.;
-    static unsigned int movingAvgAccum = 0;
-    static unsigned int lastCount = 1;
-    static DWORD movingAvgStart = timeGetTime();
-    static float movingAvgTime = 0.001f;
-    static DWORD startTime = timeGetTime();
-    static bool init = true;
+    assert( m_state != BVAppState::BVS_INVALID );
+
+    if( m_state == BVAppState::BVS_RUNNING )
+    {
+        static unsigned int frame = 0;
+        static double totalPassed = 0.0;
+        static unsigned int longestFrame = 0;
+        static double longestTime = 0.;
+        static unsigned int movingAvgAccum = 0;
+        static unsigned int lastCount = 1;
+        static DWORD movingAvgStart = timeGetTime();
+        static float movingAvgTime = 0.001f;
+        static DWORD startTime = timeGetTime();
+        static bool init = true;
     
-    if( init ) //FIXME: to jest szit dopiero
-    {
-        init = false;
-        GTimer.StartTimer();
-    }
-
-    ++movingAvgAccum;
-
-    //bv::Profiler pf("One frame " , &std::cout);
-
-    //FIXME: debug timer - don't get fooled
-    //float t = float(frame) * 0.1f; ///10 fps
-
-    TimeType t = TimeType( millis - startTime ) * TimeType( 0.001 );
-
-        m_modelScene->Update( t );
-
-    double modelUpdate = GTimer.CurElapsed();
-
-        UpdatersManager::Get().UpdateStep( t );
-
-    double managerUpdate = GTimer.CurElapsed();
-
-        auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
-
-        //FIXME:
-        std::vector< bv::Transform > vec;
-        vec.push_back(Transform(viewMat, glm::inverse(viewMat)));
-        m_mockSceneEng->Update( t, vec );
-        //m_mockSceneEng->Update( t, Transform( viewMat, glm::inverse( viewMat ) ) );
-
-    double engineUpdate = GTimer.CurElapsed();
-
-        renderer->ClearBuffers();
-        RenderScene( renderer );
-        renderer->DisplayColorBuffer();
-
-    DWORD ftime = timeGetTime() - millis;
-    if( ftime < DefaultConfig.FrameTimeMillis() )
-    {
-        Sleep( DefaultConfig.FrameTimeMillis() - ftime );
-        printf( "Sleeping: %d\n", DefaultConfig.FrameTimeMillis() - ftime );
-    }
-
-    double frameUpdate = GTimer.CurElapsed();
-
-    GTimer.StopTimer();
-    double frameTime = GTimer.GetElapsedTime();
-
-    double modeldt = modelUpdate;
-    double managerdt = managerUpdate - modelUpdate;
-    double enginedt = engineUpdate - managerUpdate;
-    double renderdt = frameUpdate - engineUpdate;
-
-    totalPassed += frameUpdate;
-
-    if( frameTime > longestTime )
-    {
-        longestTime = frameTime;
-        longestFrame = frame;
-
-        printf( "Longest frame: %d so far took: %f\n", frame, 1000. * frameTime );
-    }
-
-    if ( totalPassed > 0.2 )
-    {
-		std::ostringstream  s;
-        totalPassed = 0.0;
-
-        std::cout.precision(4);
-        s << "FPS: " << 1.0 / frameUpdate <<  " FPS: " << 1.0 / frameTime << " frame time: " << frameUpdate * 1000.0 << " ms longest frame: " << longestFrame << " took: " << longestTime * 1000.0;
-        
-        if( movingAvgAccum >= 38 )
+        if( init ) //FIXME: to jest szit dopiero
         {
-            lastCount = movingAvgAccum;
-            movingAvgTime = (float(timeGetTime() - movingAvgStart) * 0.001f) / float(movingAvgAccum);
-            //std::cout << "FPS: " << 1.0 / frameUpdate << std::endl;
-            //std::cout << "Vertex "<<vertexCount<<" Model: " << modeldt * 1000.0 << "  Manager: " << managerdt * 1000.0 << "  Engine: " << enginedt * 1000.0 << " Render: " << renderdt * 1000.0 << " Total: " << frameUpdate * 1000.0 << std::endl;
-		        
-            movingAvgAccum = 0;
-            movingAvgStart = timeGetTime();
+            init = false;
+            GTimer.StartTimer();
         }
+
+        ++movingAvgAccum;
+
+        //bv::Profiler pf("One frame " , &std::cout);
+
+        //FIXME: debug timer - don't get fooled
+        //float t = float(frame) * 0.1f; ///10 fps
+
+        TimeType t = TimeType( millis - startTime ) * TimeType( 0.001 );
+
+            m_modelScene->Update( t );
+
+        double modelUpdate = GTimer.CurElapsed();
+
+            UpdatersManager::Get().UpdateStep( t );
+
+        double managerUpdate = GTimer.CurElapsed();
+
+            auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
+
+            //FIXME:
+            std::vector< bv::Transform > vec;
+            vec.push_back(Transform(viewMat, glm::inverse(viewMat)));
+            m_mockSceneEng->Update( t, vec );
+            //m_mockSceneEng->Update( t, Transform( viewMat, glm::inverse( viewMat ) ) );
+
+        double engineUpdate = GTimer.CurElapsed();
+
+            renderer->ClearBuffers();
+            RenderScene( renderer );
+            renderer->DisplayColorBuffer();
+
+        DWORD ftime = timeGetTime() - millis;
+        if( ftime < DefaultConfig.FrameTimeMillis() )
+        {
+            Sleep( DefaultConfig.FrameTimeMillis() - ftime );
+            printf( "Sleeping: %d\n", DefaultConfig.FrameTimeMillis() - ftime );
+        }
+
+        double frameUpdate = GTimer.CurElapsed();
+
+        GTimer.StopTimer();
+        double frameTime = GTimer.GetElapsedTime();
+
+        double modeldt = modelUpdate;
+        double managerdt = managerUpdate - modelUpdate;
+        double enginedt = engineUpdate - managerUpdate;
+        double renderdt = frameUpdate - engineUpdate;
+
+        totalPassed += frameUpdate;
+
+        if( frameTime > longestTime )
+        {
+            longestTime = frameTime;
+            longestFrame = frame;
+
+            printf( "Longest frame: %d so far took: %f\n", frame, 1000. * frameTime );
+        }
+
+        if ( totalPassed > 0.2 )
+        {
+		    std::ostringstream  s;
+            totalPassed = 0.0;
+
+            std::cout.precision(4);
+            s << "FPS: " << 1.0 / frameUpdate <<  " FPS: " << 1.0 / frameTime << " frame time: " << frameUpdate * 1000.0 << " ms longest frame: " << longestFrame << " took: " << longestTime * 1000.0;
+        
+            if( movingAvgAccum >= 38 )
+            {
+                lastCount = movingAvgAccum;
+                movingAvgTime = (float(timeGetTime() - movingAvgStart) * 0.001f) / float(movingAvgAccum);
+                //std::cout << "FPS: " << 1.0 / frameUpdate << std::endl;
+                //std::cout << "Vertex "<<vertexCount<<" Model: " << modeldt * 1000.0 << "  Manager: " << managerdt * 1000.0 << "  Engine: " << enginedt * 1000.0 << " Render: " << renderdt * 1000.0 << " Total: " << frameUpdate * 1000.0 << std::endl;
+		        
+                movingAvgAccum = 0;
+                movingAvgStart = timeGetTime();
+            }
     
-        s << "     Avg[" << lastCount << "] FPS: " << 1.0f / movingAvgTime << " frame time: " << 1000.0f * movingAvgTime << " ms" << std::endl;
-        s << std::endl;
+            s << "     Avg[" << lastCount << "] FPS: " << 1.0f / movingAvgTime << " frame time: " << 1000.0f * movingAvgTime << " ms" << std::endl;
+            s << std::endl;
 
-		std::string ss = s.str();
-		std::wstring stemp = std::wstring( ss.begin(), ss.end() );
-		LPCWSTR sw = stemp.c_str();
-		SetWindowTextW(handle,sw);
+		    std::string ss = s.str();
+		    std::wstring stemp = std::wstring( ss.begin(), ss.end() );
+		    LPCWSTR sw = stemp.c_str();
+		    SetWindowTextW(handle,sw);
 
+        }
+
+        frame++;
+
+        GTimer.StartTimer();    
+    }
+}
+
+// *********************************
+//
+void BVAppLogic::ChangeState     ( BVAppState state )
+{
+    if( state == BVAppState::BVS_INITALIZING )
+    {
+        assert( m_state != BVAppState::BVS_RUNNING );
     }
 
-    frame++;
-
-    GTimer.StartTimer();    
+    m_state = state;
 }
 
 // *********************************

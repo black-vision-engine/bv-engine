@@ -11,10 +11,21 @@
 namespace bv
 {
 
+enum class BVAppState : int
+{
+    BVS_INITALIZING = 0,
+    BVS_RUNNING,
+    BVS_INVALID,
+
+    BVS_TOTAL
+};
+
 //FIXME: possibly add an interface such as IAppLogic (if necessary)
 class BVAppLogic
 {
 private:
+
+    BVAppState                  m_state;
 
     model::ModelScene *         m_modelScene;
     SceneNode *                 m_mockSceneEng;
@@ -35,7 +46,8 @@ public:
     void            SetStartTime    ( unsigned long millis );
 
     virtual void    OnUpdate        ( unsigned long millis, Renderer * renderer, HWND handle );
-    //virtual void  OnChangeState   (<type> state); //FIXME: implement if necessary and any interesting states are added to the main loop
+
+    virtual void    ChangeState     ( BVAppState state );
 
     virtual void    ShutDown        ();
 

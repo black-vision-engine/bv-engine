@@ -78,7 +78,8 @@ void BlackVisionApp::OnIdle		()
     if( firstPass )
     {
         firstPass = false;
-        m_app->SetStartTime( curTime ); 
+        m_app->SetStartTime( curTime );
+        m_app->ChangeState( BVAppState::BVS_RUNNING );
     }
 
     GEventManager->Update( DefaultConfig.EventLoopUpdateMillis() );
