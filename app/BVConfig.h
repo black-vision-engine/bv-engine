@@ -7,11 +7,15 @@ class BVConfig
 {
 private:
 
-    int     m_defaultWidth;
-    int     m_defaultHeight;
+    int             m_defaultWidth;
+    int             m_defaultHeight;
 
-    bool    m_fullscreeMode;
-    bool    m_readbackOn;
+    unsigned int    m_eventLoopUpdateMillis;
+    unsigned int    m_fps;
+    unsigned int    m_frameTimeMillis;
+
+    bool            m_fullscreeMode;
+    bool            m_readbackOn;
 
 private:
 
@@ -20,14 +24,20 @@ private:
 
 public:
 
-    int     DefaultWidth        () const;
-    int     DefaultHeight       () const;
+    inline int          DefaultWidth            () const;
+    inline int          DefaultHeight           () const;
 
-    bool    FullScreenMode      () const;
-    bool    ReadbackFlag        () const;
+    inline bool         FullScreenMode          () const;
+    inline bool         ReadbackFlag            () const;
+
+    inline unsigned int EventLoopUpdateMillis   () const;
+    inline unsigned int FPS                     () const;
+    inline unsigned int FrameTimeMillis         () const;
 
     static const BVConfig & Instance  ();
 
 };
 
 } //bv
+
+#include "BVConfig.inl"

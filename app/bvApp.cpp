@@ -24,11 +24,11 @@
 #include "System/Threading/Thread.h"
 
 
-unsigned long EVENT_EVAL_MILLIS = 20; //FIXME: move to global configuration settings
-
 bv::IEventManager * GEventManager = nullptr;
 
 bv::HighResolutionTimer GTimer;
+
+unsigned long EVENT_EVAL_MILLIS = 20; //FIXME: move to global configuration settings
 
 //#define USE_READBACK_API
 //#define FULLSCREEN_MODE

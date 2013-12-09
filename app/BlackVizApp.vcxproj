@@ -116,6 +116,9 @@
     <ClInclude Include="MockScenes.h" />
     <ClInclude Include="xml\TreeBuilder.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="BVConfig.inl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

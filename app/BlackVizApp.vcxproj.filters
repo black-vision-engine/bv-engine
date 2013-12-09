@@ -60,4 +60,7 @@
       <UniqueIdentifier>{6b4e1db7-b59a-4158-9328-e026dca86355}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="BVConfig.inl" />
+  </ItemGroup>
 </Project>
