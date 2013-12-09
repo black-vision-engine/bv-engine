@@ -1,6 +1,6 @@
 #include "BVConfig.h"
 
-#define USE_READBACK_API
+//#define USE_READBACK_API
 //#define FULLSCREEN_MODE
 
 

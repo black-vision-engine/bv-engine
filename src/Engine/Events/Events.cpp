@@ -157,7 +157,7 @@ EventType                   NodeAddedEvent::Type            ()
 
 // *************************************
 //
-FrameRenderedEvent::FrameRenderedEvent                          ( const Renderer * renderer )
+FrameRenderedEvent::FrameRenderedEvent                          ( bv::Renderer * renderer )
     : m_renderer( renderer )
 {
 }
@@ -201,18 +201,17 @@ const std::string &     FrameRenderedEvent::GetName             () const
 
 // *************************************
 //
-void                    FrameRenderedEvent::SetFrameDataPtr     ( const char * data, int w, int h )
+Renderer *              FrameRenderedEvent::Renderer            ()
 {
-    m_width = w;
-    m_height = h;
-    m_frameData = data;
+    return m_renderer;
 }
 
 // *************************************
 //
-const char *            FrameRenderedEvent::FrameDataPtr        () const
+void                    FrameRenderedEvent::SetResolution       ( int w, int h )
 {
-    return m_frameData;
+    m_width = w;
+    m_height = h;
 }
 
 // *************************************
@@ -236,4 +235,4 @@ EventType               FrameRenderedEvent::Type                ()
     return m_sEventType;
 }
 
-}
+} //bv

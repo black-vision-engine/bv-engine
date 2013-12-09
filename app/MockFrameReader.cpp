@@ -44,7 +44,7 @@ void MockFrameReader::ProcessFrame  ( IEventPtr evt )
     }
 
     //TODO: instead of this memcpy some functions pushing data to DeckLink should be called here
-    memcpy( m_buf, evtTyped->FrameDataPtr(), w * h * 4 );
+    //memcpy( m_buf, evtTyped->FrameDataPtr(), w * h * 4 );
 }
 
 } //bv

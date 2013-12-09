@@ -8,7 +8,6 @@
 #include "Engine/Models/Plugins/Simple/SimpleTextPlugin.h"
 
 //FIXME: REMOVEVEVEEVEVEVVE
-#include "Engine/Events/Events.h"
 #include "MockFrameReader.h"
 
 
@@ -21,27 +20,23 @@ namespace model
     class ModelScene;
 }
 
+
 class SceneNode;
 class Camera;
 class MockFrameReader;
 class ProcessManager;
 
+class BVAppLogic;
+
 class BlackVisionApp : public WindowedApplication
 {
 private:
 
-    model::ModelScene *         m_modelScene;
-    SceneNode *                 m_mockSceneEng;
+    BVAppLogic *                m_app;
 
     std::ofstream               m_file; // For debugging
 
-    FrameRenderedEventPtr       m_frameRenderedEvent;
-    model::SetTextEventPtr      m_frameSetTextEvent;
-    MockFrameReader *           m_mockFrameReader;
-
     ProcessManager *            m_processManager; //FIXME: move to engine object
-
-    char *                      m_frameData;
 
 public:
 
@@ -61,14 +56,8 @@ public:
 
 private:
 
-    void    AddCameraAnimation  ();
-    void    AddCameraAnimation2 ();
-
-    bool    RenderScene         ();
-    bool    RenderNode          ( SceneNode * node );
-
     void    InitializeConsole   ();
-    void    InitializeModelScene();
+    void    InitializeAppLogic  ();
     void    InitializeReadback  ();
 
     //FIXME: hack to be removed

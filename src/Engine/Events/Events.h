@@ -89,9 +89,8 @@ class FrameRenderedEvent : public BaseEvent
 {
 private:
 
-    const Renderer *    m_renderer;
+    Renderer *          m_renderer;
 
-    const char *        m_frameData;
     int                 m_width;
     int                 m_height;
 
@@ -102,7 +101,7 @@ public:
 
 public:
 
-    explicit                        FrameRenderedEvent  ( const Renderer * renderer );
+    explicit                        FrameRenderedEvent  ( Renderer * renderer );
 
     virtual EventType               GetEventType        () const;
 
@@ -113,9 +112,10 @@ public:
 
     virtual const std::string &     GetName             () const;
 
-    void                            SetFrameDataPtr     ( const char * data, int w, int h );
+    Renderer *                      Renderer            ();
 
-    const char *                    FrameDataPtr        () const;
+    void                            SetResolution       ( int w, int h );
+
     int                             Width               () const;
     int                             Height              () const;
 
