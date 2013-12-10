@@ -188,6 +188,7 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
     while( !m_queues[ activeQueue ].IsEmpty() )
     {
         IEventPtr evt = m_queues[ activeQueue ].Front();
+        m_queues[ activeQueue ].Pop();
 
         EventType eventType = evt->GetEventType();
 
