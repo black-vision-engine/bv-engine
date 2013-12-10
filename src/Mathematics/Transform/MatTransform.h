@@ -17,16 +17,19 @@ namespace model
 class Transform
 {
 private:
+
     glm::mat4x4 m_mat;
 
 public:
-    Transform               operator *  (const Transform& m)        const;
 
-    void                    SetMatrix   ( const glm::mat4x4& m );
+    explicit                Transform   ( const glm::mat4x4 & m );
+                            Transform   ();
+
+    Transform               operator *  ( const Transform & m )     const;
+
+    void                    SetMatrix   ( const glm::mat4x4 & m );
     const glm::mat4x4&      GetMatrix   ()                          const;
 
-    explicit                Transform   (const glm::mat4x4& m);
-    Transform();
 };
 
 }
@@ -71,6 +74,17 @@ public:
         return new SimpleTransform( TransformKind::translation, p0, p1, p2 );
     }
 
+    void  SetValues ( TimeType t, float v0, float v1, float v2 )
+    {
+        p0.addKey( t, v0 );
+        p1.addKey( t, v1 );
+        p2.addKey( t, v2 );
+    }
+
+    TransformKind   KindKurwaMac()
+    {
+        return kind;
+    }
 };
 
 template<typename ParamT>

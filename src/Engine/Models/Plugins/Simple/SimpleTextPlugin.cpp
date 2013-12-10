@@ -12,6 +12,9 @@
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 
+#include "Engine/Events/Events.h"
+
+
 namespace bv { namespace model {
 
 const std::string SimpleTextPluginPD::pluginName = "SimpleTextPlugin";
@@ -32,6 +35,7 @@ SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::str
     , m_italic( italic )
     , m_atlasText()
 {
+
     auto res = LoadFont( fontFileName, fontSize );
 
     m_fontExtraData = static_cast< const FontExtraData* >( res->GetExtra() );
@@ -43,6 +47,7 @@ SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::str
     EvalGeometryChannel();
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &SimpleTextPlugin::OnSetText ), SetTextEvent::Type() );
+
 }
 
 namespace
@@ -91,18 +96,18 @@ void SimpleTextPlugin::LoadAtlas( const std::string& name )
     TextureExtraData* atlasExtraData = new TextureExtraData( m_atlasText->GetWidth(), m_atlasText->GetHeight(), 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D );
     ResourceHandle* altasHandle = new ResourceHandle( const_cast< char* >(m_atlasText->GetData()), texSize, atlasExtraData );
 
-    if( m_textures[0] )
+    if( m_textures[ 0 ] )
     {
-        delete m_textures[0];
+        delete m_textures[ 0 ];
     }
 
-    m_textures[0] = new TextureInfo( altasHandle, name );
+    m_textures[ 0 ] = new TextureInfo( altasHandle, name );
 }
 
 
 // *********************************
 //
-const Text*         SimpleTextPlugin::GetFont() const
+const Text *        SimpleTextPlugin::GetFont() const
 {
     if( !m_bolded && !m_italic )
     { 
@@ -256,7 +261,8 @@ Textures            SimpleTextPlugin::GetTextures                 () const
 
 // *************************************
 //
-const EventType SetTextEvent::m_sEventType    = 0x00000004;
+const EventType SetTextEvent::m_sEventType    = 0x12345674; //FIXME: nie pisac na pale tych idkow, bo sie rozjada z innymi - dlatego powinny byc generowane zbiorczo
+
 // *************************************
 //
 std::string SetTextEvent::m_sEventName        = "Event_SetText";

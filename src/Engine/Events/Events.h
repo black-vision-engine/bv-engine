@@ -2,6 +2,8 @@
 
 #include "Engine/Events/BaseEvent.h"
 
+#include  "glm/glm.hpp"
+
 
 namespace bv
 {
@@ -13,7 +15,6 @@ namespace model
 }
 
 class Renderer;
-class TransformF;
 
 // ************************************* PluginAddedEvent *************************************
 class PluginAddedEvent : public BaseEvent
@@ -131,7 +132,8 @@ class TransformSetEvent : public BaseEvent
 {
 private:
 
-    TransformF *        m_transform;
+    glm::vec3   m_translation;
+    glm::vec3   m_scale;
 
 public:
 
@@ -140,7 +142,7 @@ public:
 
 public:
 
-    explicit                        TransformSetEvent   ( TransformF * transform );
+    explicit                        TransformSetEvent   ();
 
     virtual EventType               GetEventType        () const;
 
@@ -151,12 +153,16 @@ public:
 
     virtual const std::string &     GetName             () const;
 
-    const TransformF *              Transform           () const;
+    void                            SetTranslation      ( const glm::vec3 & translation );
+    void                            SetScale            ( const glm::vec3 & scale );
+
+    const glm::vec3 &               Translation         () const;
+    const glm::vec3 &               Scale               () const;
 
     static EventType                Type                ();
 
 };
 
-typedef std::shared_ptr<FrameRenderedEvent> FrameRenderedEventPtr;
+typedef std::shared_ptr<TransformSetEvent> TransformSetEventPtr;
 
 } //bv

@@ -558,6 +558,7 @@ model::BasicNode *     Text1()
     //trns.AddTranslation( xt, yt, zt );
 
     trns.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
+    trns.AddTranslation( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
 
     auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
 
@@ -565,7 +566,7 @@ model::BasicNode *     Text1()
 
     auto vertexShaderPlugin = PluginsFactory::CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/simpletexture.vert" );
 
-    auto txMat = new ValueMat4("txMat0"); // MEMLEAK
+    auto txMat = new ValueMat4( "txMat0" ); //FIXME: MEMLEAK
     txMat->SetValue( glm::mat4(1.f) );
     vertexShaderPlugin->RegisterValue( txMat );
 

@@ -29,6 +29,19 @@ namespace
 
     //FIXME: temporary
     char * GfbBuf = nullptr;
+
+    TransformSetEventPtr  GTransformSetEvent;
+
+    void GownoWFormieKebaba( TimeType t )
+    {
+        float tx = float( sin( t ) );
+        glm::vec3 kebab( tx, 0.f, 0.f );
+    
+        //gowno
+        GTransformSetEvent->SetTranslation( kebab );
+    
+        GetDefaultEventManager().QueueEvent( GTransformSetEvent );
+    }
 }
 
 // *********************************
@@ -39,6 +52,7 @@ BVAppLogic::BVAppLogic              ()
     , m_mockSceneEng( nullptr )
     , m_state( BVAppState::BVS_INVALID )
 {
+    GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
 }
 
 // *********************************
@@ -170,6 +184,7 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
         //float t = float(frame) * 0.1f; ///10 fps
 
         TimeType t = TimeType( millis - startTime ) * TimeType( 0.001 );
+        GownoWFormieKebaba( t );
 
             m_modelScene->Update( t );
 

@@ -16,10 +16,14 @@ private:
 
 public:
 
-    virtual void                                    Update( TimeType t );
+    virtual void                                    Update                  ( TimeType t );
 
-    void                                            AddTransform( const ParamTransform& transInt );
+    void                                            AddTransform            ( const ParamTransform& transInt );
 
+    ParamTransform &                                AccessFirstParamTransform() //FIXME: hackish
+    {
+        return m_transformParams[ 0 ];
+    }
 };
 
 } // model

@@ -243,8 +243,9 @@ EventType               FrameRenderedEvent::Type                ()
 
 // *************************************
 //
-TransformSetEvent::TransformSetEvent                        ( TransformF * transform )
-    : m_transform( transform )
+TransformSetEvent::TransformSetEvent                        ()
+    : m_translation( 0.f, 0.f, 0.f )
+    , m_scale( 1.f, 1.f, 1.f )
 {
 }
 
@@ -285,9 +286,30 @@ const std::string & TransformSetEvent::GetName              () const
 
 // *************************************
 //
-const TransformF *  TransformSetEvent::Transform            () const
+void                TransformSetEvent::SetTranslation       ( const glm::vec3 & translation )
 {
-    return m_transform;
+    m_translation = translation;
+}
+
+// *************************************
+//
+void                TransformSetEvent::SetScale             ( const glm::vec3 & scale )
+{
+    m_scale = scale;
+}
+
+// *************************************
+//
+const glm::vec3 &   TransformSetEvent::Translation          () const
+{
+    return m_translation;
+}
+
+// *************************************
+//
+const glm::vec3 &   TransformSetEvent::Scale                () const
+{
+    return m_scale;
 }
 
 // *************************************

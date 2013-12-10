@@ -14,7 +14,7 @@ class ITransformChannel : public IChannel
 {
 public:
 
-    virtual const std::vector< Transform* >&         GetTransformChannels() const   = 0;
+    virtual const std::vector< Transform * > &      GetTransformChannels()  const   = 0;
 
     virtual         ~ITransformChannel(){};
 

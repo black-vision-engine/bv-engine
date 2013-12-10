@@ -81,6 +81,8 @@ public:
     virtual const IVertexAttributesChannel *    GetGeometryChannel          () const override;
     virtual Textures                            GetTextures                 () const override;
     void                                        SetText                     ( const std::wstring& newText );
+
+    //delegates
     void                                        OnSetText                   ( IEventPtr evt );
 
     virtual void                        Update                      ( TimeType t ) override;

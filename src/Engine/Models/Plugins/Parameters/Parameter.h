@@ -190,11 +190,16 @@ public:
         return m_value.Evaluate( t );
     }
 
-    explicit ParamTransform(const std::string & name, const TransformF & value, const ITimeEvaluator * evaluator = nullptr, ParameterSemantic semantic = ParameterSemantic::NONE )
+    explicit ParamTransform( const std::string & name, const TransformF & value, const ITimeEvaluator * evaluator = nullptr, ParameterSemantic semantic = ParameterSemantic::NONE )
         : BaseParameter( name, semantic, evaluator )
         , m_value( value )
     {
         m_semantic = semantic;
+    }
+
+    TransformF &        TransformRef    ()
+    {
+        return m_value;
     }
 };
 
