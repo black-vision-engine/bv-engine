@@ -12,7 +12,6 @@
     <ClCompile Include="xml\BlackTree.cpp" />
     <ClCompile Include="xml\Scena.cpp" />
     <ClCompile Include="xml\TreeBuilder.cpp" />
-    <ClCompile Include="MockFrameReader.cpp" />
     <ClCompile Include="MainLoopProcess.cpp" />
     <ClCompile Include="MainInitProcess.cpp" />
     <ClCompile Include="BVAppLogic.cpp" />
@@ -46,7 +45,6 @@
       <Filter>xml</Filter>
     </ClInclude>
     <ClInclude Include="xml\TreeBuilder.h" />
-    <ClInclude Include="MockFrameReader.h" />
     <ClInclude Include="MainLoopProcess.h" />
     <ClInclude Include="MainInitProcess.h" />
     <ClInclude Include="BVAppLogic.h" />

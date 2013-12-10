@@ -157,6 +157,7 @@
     <ClCompile Include="Engine\Processes\ProcessThreadedEvents.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\AtlasCache.cpp" />
     <ClCompile Include="Engine\Processes\InitProcess.cpp" />
+    <ClCompile Include="System\SimpleTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -350,6 +351,7 @@
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleTexturePlugin.h" />
     <ClInclude Include="Engine\Models\Resources\Font\AtlasCache.h" />
     <ClInclude Include="Engine\Processes\InitProcess.h" />
+    <ClInclude Include="System\SimpleTimer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

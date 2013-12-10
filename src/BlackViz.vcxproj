@@ -340,6 +340,7 @@
     <ClCompile Include="Mathematics\Transform\MatTransform.cpp" />
     <ClCompile Include="System\InitSubsystem.cpp" />
     <ClCompile Include="System\Profiler.cpp" />
+    <ClCompile Include="System\SimpleTimer.cpp" />
     <ClCompile Include="System\Threading\CriticalSection.cpp" />
     <ClCompile Include="System\Threading\ScopedCriticalSection.cpp" />
     <ClCompile Include="System\Threading\Thread.cpp" />
@@ -533,6 +534,7 @@
     <ClInclude Include="Mathematics\Transform\MatTransform.h" />
     <ClInclude Include="System\InitSubsystem.h" />
     <ClInclude Include="System\Profiler.h" />
+    <ClInclude Include="System\SimpleTimer.h" />
     <ClInclude Include="System\Threading\CriticalSection.h" />
     <ClInclude Include="System\Threading\ScopedCriticalSection.h" />
     <ClInclude Include="System\Threading\Thread.h" />

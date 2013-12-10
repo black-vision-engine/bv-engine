@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Engine/Events/Events.h"
-#include "MockFrameReader.h"
-
 #include "BVForwards.h"
 
 #include <windows.h> //FIXME: remove when this code is refactored
