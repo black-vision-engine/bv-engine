@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Engine/Events/Events.h"
-#include "BVForwards.h"
-
 #include <windows.h> //FIXME: remove when this code is refactored
+
+#include "Engine/Events/Events.h"
+
+#include "BVForwards.h"
 
 
 namespace bv
@@ -44,6 +45,7 @@ public:
     void            SetStartTime    ( unsigned long millis );
 
     virtual void    OnUpdate        ( unsigned long millis, Renderer * renderer, HWND handle );
+    virtual void    OnKey           ( unsigned char c );
 
     virtual void    ChangeState     ( BVAppState state );
 

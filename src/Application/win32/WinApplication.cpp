@@ -259,6 +259,8 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
 
         app->OnIdle();
 
+        app->OnPreMainLoop();
+
         bool quit = false;
         while ( !quit )
         {
@@ -285,7 +287,7 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
         }
     }
 
-    app->OnTerminate		();
+    app->OnTerminate();
 
     delete m_Renderer;
 
@@ -294,4 +296,4 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
     return 0;
 }
 
-}
+} //bv

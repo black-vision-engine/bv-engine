@@ -8,6 +8,7 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/ModelScene.h"
+
 #include "MockScenes.h"
 
 #include "System/HRTimer.h"
@@ -22,7 +23,6 @@ namespace bv
 
 namespace
 {
-
     bv::HighResolutionTimer GTimer;
 
     IEventManager *         GEventManager = nullptr;
@@ -70,11 +70,6 @@ BVAppLogic::~BVAppLogic             ()
 void BVAppLogic::Initialize         ()
 {
     GEventManager = &bv::GetDefaultEventManager();
-
-    //Initialize all known listeners
-    GEventManager->AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::FrameRendered ), FrameRenderedEvent::Type() );
-    //FIXME: temporary
-    GfbBuf = new char[ 2048 * 2048 * 4 ];
 }
 
 // *********************************
@@ -183,7 +178,7 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
         //FIXME: debug timer - don't get fooled
         //float t = float(frame) * 0.1f; ///10 fps
 
-        TimeType t = TimeType( millis - startTime ) * TimeType( 0.001 );
+        TimeType t = TimeType( millis ) * TimeType( 0.001 );
         GownoWFormieKebaba( t );
 
             m_modelScene->Update( t );
@@ -268,6 +263,13 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
 
         GTimer.StartTimer();    
     }
+}
+
+// *********************************
+//
+void BVAppLogic::OnKey           ( unsigned char c )
+{
+    //TODO: implement whatever you want here
 }
 
 // *********************************
@@ -368,5 +370,18 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
         }
     }
 }
+
+//// *********************************
+////
+//void BlackVisionApp::ReadBackFrameBuffer ()
+//{
+//    if ( !DefaultConfig.ReadbackFlag() )
+//    {
+//        return;
+//    }
+//
+//    GframeRenderedEvent->SetResolution( m_Width, m_Height );
+//    GEventManager->TriggerEvent( GframeRenderedEvent );
+//}
 
 } //bv

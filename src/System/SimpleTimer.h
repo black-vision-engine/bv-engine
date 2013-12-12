@@ -14,8 +14,9 @@ private:
 
     bool            m_paused;
     unsigned long   m_startMillis;
-    unsigned long   m_pausedTime;
+
     unsigned long   m_startPause;
+    unsigned long   m_totalPausedTime;
 
 public:
 
@@ -23,11 +24,19 @@ public:
                             ~SimpleTimer    ();
 
     void                    Start           ();
+
     void                    Pause           ();
     void                    UnPause         ();
 
     inline TimeType         ElapsedTime     () const;
     inline unsigned long    ElapsedMillis   () const;
+
+private:
+
+    inline TimeType         MillisToTime    ( unsigned long millis ) const
+    {
+        return TimeType( millis ) * TimeType( 0.001 );
+    }
 
 };
 
@@ -35,16 +44,19 @@ public:
 //
 TimeType         SimpleTimer::ElapsedTime     () const
 {
-    //FIXME: implement pause
-    return TimeType( ElapsedMillis() ) * TimeType( 0.001 );
+    return MillisToTime( ElapsedMillis() );
 }
 
 // *********************************
 //
 unsigned long    SimpleTimer::ElapsedMillis   () const
 {
-    //FIXME: implement pause
-    return timeGetTime() - m_startMillis;
+    if( m_paused )
+    {
+        return m_startPause - m_startMillis - m_totalPausedTime;
+    }
+
+    return timeGetTime() - m_startMillis - m_totalPausedTime;
 }
 
 } //bv

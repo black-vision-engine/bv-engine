@@ -5,7 +5,7 @@
 #include <sstream>
 
 #include "Application/WindowedApplication.h"
-#include "Engine/Models/Plugins/Simple/SimpleTextPlugin.h"
+#include "System/SimpleTimer.h"
 
 
 namespace bv {
@@ -31,31 +31,36 @@ private:
     BVAppLogic *                m_app;
     ProcessManager *            m_processManager; //FIXME: move to engine object
 
+    SimpleTimer                 m_timer;
+
 public:
 
-    static void			StaticInitializer	();
-    static bool			RegisterInitializer	();
     static bool			m_sWindowedApplicationInitialized;
 
 public:
 
-    BlackVisionApp		        ();
-    ~BlackVisionApp		        ();
+    static void			StaticInitializer	();
+    static bool			RegisterInitializer ();
 
-    virtual void OnKey          ( unsigned char c );
-    virtual void OnIdle         ();
-    virtual bool OnInitialize   ();
-    virtual void OnTerminate    ();
+public:
+
+                    BlackVisionApp		();
+                    ~BlackVisionApp	    ();
+
+    virtual void    OnKey               ( unsigned char c );
+    virtual void    OnPreidle	        ();
+    virtual void    OnIdle              ();
+    virtual void    OnPreMainLoop       ();
+    virtual bool    OnInitialize        ();
+    virtual void    OnTerminate         ();
 
 private:
 
-    void    InitializeConsole   ();
-    void    InitializeAppLogic  ();
-    void    InitializeReadback  ();
+    void            UpdateSubsystems    ( unsigned long millis );
 
-    //FIXME: hack to be removed
-    void    ReadBackFrameBuffer ();
+    void            InitializeConsole   ();
+    void            InitializeAppLogic  ();
 
 };
 
-}
+} //bv

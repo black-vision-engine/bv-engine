@@ -10,12 +10,6 @@
 #include "BVConfig.h"
 
 
-bv::IEventManager * GEventManager = nullptr;
-
-bv::FrameRenderedEventPtr  GframeRenderedEvent;
-bv::model::SetTextEventPtr GframeSetTextEvent;
-
-
 // *********************************
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
 void			bv::BlackVisionApp::StaticInitializer	()
@@ -63,43 +57,45 @@ BlackVisionApp::~BlackVisionApp ()
 //
 void BlackVisionApp::OnKey( unsigned char c )
 {
-    GframeSetTextEvent->SetChar( c );
-    GEventManager->QueueEvent( GframeSetTextEvent );
+    m_app->OnKey( c );
+}
+
+// *********************************
+//
+void BlackVisionApp::OnPreidle  ()
+{
+    m_timer.Start();
+    m_app->SetStartTime( m_timer.ElapsedMillis() );
+    m_app->ChangeState( BVAppState::BVS_RUNNING );    
 }
 
 // *********************************
 //
 void BlackVisionApp::OnIdle		()
 {
-    static bool firstPass = true;
+    unsigned long millis = m_timer.ElapsedMillis();
 
-    DWORD curTime = timeGetTime();
+    UpdateSubsystems( millis );
 
-    if( firstPass )
-    {
-        firstPass = false;
-        m_app->SetStartTime( curTime );
-        m_app->ChangeState( BVAppState::BVS_RUNNING );
-    }
-
-    GEventManager->Update( DefaultConfig.EventLoopUpdateMillis() );
-    m_processManager->Update( curTime );
-
-    m_app->OnUpdate( curTime, m_Renderer, handle );
-
-    ReadBackFrameBuffer(); //FIXME: move to OnUpdate of BVAppLogic - it is not needed here at all
-
+    m_app->OnUpdate( millis, m_Renderer, handle );
 }
 
 // *********************************
-//FIXME: implement proper console
+//
+void BlackVisionApp::OnPreMainLoop  ()
+{
+    m_timer.Start();
+    m_app->SetStartTime( m_timer.ElapsedMillis() );
+}
+
+// *********************************
+//FIXME: implement proper console and console handler
 bool BlackVisionApp::OnInitialize       ()
 {
     m_processManager = new ProcessManager();
 
     InitializeConsole       ();
     InitializeAppLogic      ();
-    InitializeReadback      ();
 
     return WindowedApplication::OnInitialize();
 }
@@ -112,6 +108,14 @@ void BlackVisionApp::OnTerminate        ()
     WindowedApplication::OnTerminate();
 }
 
+// *********************************
+//
+void    BlackVisionApp::UpdateSubsystems    ( unsigned long millis )
+{
+    GetDefaultEventManager().Update( DefaultConfig.EventLoopUpdateMillis() );
+
+    m_processManager->Update( millis );
+}
 
 // *********************************
 //
@@ -133,34 +137,10 @@ void    BlackVisionApp::InitializeConsole   ()
 void    BlackVisionApp::InitializeAppLogic  ()
 {
     m_app = new BVAppLogic();
-    m_app->Initialize();
 
+    m_app->Initialize();
     m_app->LoadScene();
     m_app->InitCamera( m_Renderer, m_Width, m_Height );
-}
-
-// *********************************
-//
-void    BlackVisionApp::InitializeReadback  ()
-{
-    //FIXME: temporary hack to enable access to framebuffer readbacks
-    GEventManager = &bv::GetDefaultEventManager ();
-
-    GframeRenderedEvent = FrameRenderedEventPtr ( new bv::FrameRenderedEvent( m_Renderer ) );
-    GframeSetTextEvent  = model::SetTextEventPtr( new model::SetTextEvent() );
-}
-
-// *********************************
-//
-void BlackVisionApp::ReadBackFrameBuffer ()
-{
-    if ( !DefaultConfig.ReadbackFlag() )
-    {
-        return;
-    }
-
-    GframeRenderedEvent->SetResolution( m_Width, m_Height );
-    GEventManager->TriggerEvent( GframeRenderedEvent );
 }
 
 } //bv

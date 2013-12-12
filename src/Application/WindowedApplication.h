@@ -67,10 +67,13 @@ public:
     virtual void	OnKey		    ( unsigned char c );
     virtual void	OnResize		( int w, int h );
 
-    virtual bool	OnPrecreate ();
-    virtual void	OnPreidle	();
-    virtual void	OnDisplay	();
-    virtual void	OnIdle		();
+    virtual bool	OnPrecreate     ();
+    virtual void	OnPreidle	    ();
+    virtual void	OnDisplay	    ();
+    virtual void	OnIdle		    ();
+    virtual void    OnPreMainLoop   ();
+
+protected:
 
 	HWND			handle;
     

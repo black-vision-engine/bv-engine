@@ -207,6 +207,13 @@ void	WindowedApplication::OnIdle					()
 
 // *********************************
 //
+void    WindowedApplication::OnPreMainLoop          ()
+{
+    //To be implemented in derived classes
+}
+
+// *********************************
+//
 int WindowedApplication::MainImpl					( int argc, char ** argv )
 {
     return static_cast< WindowedApplication * >( ApplicationBase::ApplicationInstance )->MainFun( argc, argv );

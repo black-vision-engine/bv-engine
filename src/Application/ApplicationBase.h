@@ -6,7 +6,7 @@ class ApplicationBase
 {
 protected:
 
-	//So that it never can only get instantiated by a derived class
+	//So that it can only get instantiated by a derived class
 	ApplicationBase				();
 
 public:
@@ -26,6 +26,7 @@ protected:
 	{
 		return static_cast< Derived * >( ApplicationBase::ApplicationInstance )->MainFun( argc, argv );
 	}
+
 };
 
-}
+} //bv
