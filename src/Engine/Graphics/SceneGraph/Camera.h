@@ -12,6 +12,10 @@ private:
 
     bool        m_isPrespactive;
 
+    float       m_FOV;
+    float       m_nearClippingPlane;
+    float       m_farClippingPlane;
+
     glm::mat4   m_view;
     glm::mat4   m_projection;
     glm::mat4   m_viewProj;
@@ -27,22 +31,24 @@ public:
     virtual             ~Camera                 ();
 
     void                SetPerspective          ( float fov, float aspectRatio,float near, float far );
-    void                SetFrame                ( const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up );
-    void                SetPosition             ( const glm::vec3& position );
-    void                SetAxes                 ( const glm::vec3& direction, const glm::vec3& up );
-    void                SetProjectionMatrix     ( const glm::mat4& projectionMatrix );
+    void                SetPerspective          ( float aspectRatio );
+    void                SetFrame                ( const glm::vec3 & position, const glm::vec3 & direction, const glm::vec3 & up );
+    void                SetPosition             ( const glm::vec3 & position );
+    void                SetAxes                 ( const glm::vec3 & direction, const glm::vec3 & up );
+    void                SetProjectionMatrix     ( const glm::mat4 & projectionMatrix );
 
-    const glm::mat4&    GetViewMatrix           () const;
-    const glm::mat4&    GetProjectionMatrix     () const;
-    const glm::mat4&    GetViewProjectionMatrix () const;
-    const glm::vec3&    GetPosition             () const;
-    const glm::vec3&    GetDirection            () const;
-    const glm::vec3&    GetUp                   () const;
-    const glm::vec3&    GetRight                () const;
+    const glm::mat4 &   GetViewMatrix           () const;
+    const glm::mat4 &   GetProjectionMatrix     () const;
+    const glm::mat4 &   GetViewProjectionMatrix () const;
+    const glm::vec3 &   GetPosition             () const;
+    const glm::vec3 &   GetDirection            () const;
+    const glm::vec3 &   GetUp                   () const;
+    const glm::vec3 &   GetRight                () const;
 
 private:
 
     void                UpdatePVMatrix          ();
+
 };
 
 } // bv

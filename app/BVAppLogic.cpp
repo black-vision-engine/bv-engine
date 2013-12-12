@@ -25,8 +25,6 @@ namespace
 {
     bv::HighResolutionTimer GTimer;
 
-    IEventManager *         GEventManager = nullptr;
-
     //FIXME: temporary
     char * GfbBuf = nullptr;
 
@@ -53,6 +51,7 @@ BVAppLogic::BVAppLogic              ()
     , m_state( BVAppState::BVS_INVALID )
 {
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
+    GfbBuf = new char[ 2048 * 2048 * 4 ]; //FIXME: naive hack
 }
 
 // *********************************
@@ -69,7 +68,6 @@ BVAppLogic::~BVAppLogic             ()
 //
 void BVAppLogic::Initialize         ()
 {
-    GEventManager = &bv::GetDefaultEventManager();
 }
 
 // *********************************
@@ -125,18 +123,22 @@ void BVAppLogic::LoadScene          ( void )
 //
 void BVAppLogic::InitCamera         ( Renderer * renderer, int w, int h )
 {
-    renderer->SetCamera( m_modelScene->GetCamera() );
+    Camera * cam = m_modelScene->GetCamera();
 
-    //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 0.001f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-    //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, -4.f, 3.5f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-    m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 1.3f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+    renderer->SetCamera( cam );
+
+    cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
+    cam->SetPerspective( DefaultConfig.FOV(), float( w ) / float( h ), DefaultConfig.NearClippingPlane(), DefaultConfig.FarClippingPlane() );
+
+    //cam->SetFrame( glm::vec3( 0.f, 0.f, 0.001f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+    //cam->SetFrame( glm::vec3( 0.f, -4.f, 3.5f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+    cam->SetFrame( glm::vec3( 0.f, 0.f, 1.3f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
 //    AddCameraAnimation  ();
-    //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 1.2f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-    //m_modelScene->GetCamera()->SetFrame( glm::vec3( 0.f, 0.f, 8.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+    //cam->SetFrame( glm::vec3( 0.f, 0.f, 1.2f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+    //cam->SetFrame( glm::vec3( 0.f, 0.f, 8.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
     //AddCameraAnimation  ();
     //AddCameraAnimation2  ();
     //FIXME: read from configuration file and change appropriately when resoultion changes
-    m_modelScene->GetCamera()->SetPerspective( DefaultConfig.FOV(), float( w ) / float( h ), DefaultConfig.NearClippingPlane(), DefaultConfig.FarClippingPlane() );
 }
 
 // *********************************
@@ -203,6 +205,7 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
             RenderScene( renderer );
             renderer->DisplayColorBuffer();
 
+            FrameRendered( renderer );
         DWORD ftime = timeGetTime() - millis;
         if( ftime < DefaultConfig.FrameTimeMillis() )
         {
@@ -293,18 +296,20 @@ void BVAppLogic::ShutDown           ()
 
 // *********************************
 //
-void BVAppLogic::FrameRendered      ( IEventPtr evt )
+void BVAppLogic::FrameRendered      ( Renderer * renderer )
 {
     static int w = 0;
     static int h = 0;
 
-    FrameRenderedEventPtr frameRenderedEvent = std::static_pointer_cast<FrameRenderedEvent>( evt );
-    Renderer * renderer = frameRenderedEvent->Renderer();
-
-    if( w != frameRenderedEvent->Width() || h != frameRenderedEvent->Height() )
+    if( !DefaultConfig.ReadbackFlag() )
     {
-        w = frameRenderedEvent->Width();
-        h = frameRenderedEvent->Height();
+        return;
+    }
+
+    if( w != renderer->GetWidth() || h != renderer->GetHeight() )
+    {
+        w = renderer->GetWidth();
+        h = renderer->GetHeight();
 
         printf( "Framebuffer resulotion changed to %dx%d\n", w, h );
     }
@@ -338,7 +343,7 @@ void BVAppLogic::FrameRendered      ( IEventPtr evt )
 
     nFrames++;
 
-    //TODO: code used to push data to 
+    //TODO: code used to push data to playback cards
 }
 
 // *********************************

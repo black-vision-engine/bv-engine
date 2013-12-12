@@ -1,5 +1,8 @@
 #pragma once
 
+#include "glm/glm.hpp"
+
+
 namespace bv
 {
 
@@ -21,6 +24,10 @@ private:
     float           m_defaultNearClippingPlane;
     float           m_defaultFarClippingPlane;
 
+    glm::vec3       m_defaultCameraPosition;
+    glm::vec3       m_defaultCameraUp;
+    glm::vec3       m_defaultCameraDirection;
+
 private:
 
     BVConfig();
@@ -28,19 +35,23 @@ private:
 
 public:
 
-    inline int          DefaultWidth            () const;
-    inline int          DefaultHeight           () const;
+    inline int                  DefaultWidth            () const;
+    inline int                  DefaultHeight           () const;
 
-    inline bool         FullScreenMode          () const;
-    inline bool         ReadbackFlag            () const;
+    inline bool                 FullScreenMode          () const;
+    inline bool                 ReadbackFlag            () const;
 
-    inline unsigned int EventLoopUpdateMillis   () const;
-    inline unsigned int FPS                     () const;
-    inline unsigned int FrameTimeMillis         () const;
+    inline unsigned int         EventLoopUpdateMillis   () const;
+    inline unsigned int         FPS                     () const;
+    inline unsigned int         FrameTimeMillis         () const;
 
-    inline float        FOV                     () const;
-    inline float        NearClippingPlane       () const;
-    inline float        FarClippingPlane        () const;
+    inline float                FOV                     () const;
+    inline float                NearClippingPlane       () const;
+    inline float                FarClippingPlane        () const;
+
+    inline const glm::vec3 &    CameraPosition          () const;
+    inline const glm::vec3 &    CameraUp                () const;
+    inline const glm::vec3 &    CameraDirection         () const;
 
     static const BVConfig & Instance  ();
 

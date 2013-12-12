@@ -36,6 +36,9 @@ BVConfig::BVConfig                      ()
     m_defaultNearClippingPlane  = 0.1f;
     m_defaultFarClippingPlane   = 100.f;
 
+    m_defaultCameraPosition  = glm::vec3( 0.f, 0.f, 1.f );
+    m_defaultCameraDirection = glm::vec3( 0.f, 0.f, 0.f );
+    m_defaultCameraUp        = glm::vec3( 0.f, 1.f, 0.f );
 }
 
 // *********************************

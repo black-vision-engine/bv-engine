@@ -51,8 +51,7 @@ public:
 
     virtual void    ShutDown        ();
 
-    //Delegates
-    void            FrameRendered   ( IEventPtr evt );
+    void            FrameRendered   ( Renderer * renderer );
 
 private:
 

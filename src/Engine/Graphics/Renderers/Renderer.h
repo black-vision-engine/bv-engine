@@ -97,6 +97,9 @@ public:
     bool    Draw                ( RenderableEntity * ent );
     bool    PostDraw            ();
 
+    int     GetWidth            () const;
+    int     GetHeight           () const;
+
     void	DisplayColorBuffer	();
 
     void    NaiveReadback       ( char * buf, int w, int h );

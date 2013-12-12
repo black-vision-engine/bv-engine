@@ -113,7 +113,7 @@ void	Renderer::SetClearColor		( const glm::vec4 & col )
 void	Renderer::Resize			    ( int w, int h )
 {
     glViewport( 0 , 0, w, h );
-    m_Camera->SetPerspective( 90.f, float(w) / float(h), 0.1f, 100.f );
+    m_Camera->SetPerspective( float( w ) / float( h ) );
 
     m_Width = w;
     m_Height = h;
@@ -133,7 +133,7 @@ bool    Renderer::DrawRenderable        ( RenderableEntity * ent )
 {
     RenderableEntity::RenderableType type = ent->GetType();
 
-    switch (ent->GetType())
+    switch ( ent->GetType() )
     {
     case RenderableEntity::RenderableType::RT_TRIANGLE_STRIP:
         DrawTriangleStrips( static_cast< TriangleStrip * >( ent ) );
@@ -216,6 +216,20 @@ bool    Renderer::Draw                  ( RenderableEntity * ent )
 bool    Renderer::PostDraw              ()
 {
     return true;
+}
+
+// *********************************
+//
+int     Renderer::GetWidth            () const
+{
+    return m_Width;
+}
+
+// *********************************
+//
+int     Renderer::GetHeight           () const
+{
+    return m_Height;
 }
 
 // *********************************
