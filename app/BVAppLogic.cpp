@@ -352,15 +352,19 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
 //
 FrameStats BVAppLogic::HandleProfiler   ()
 {
-    static unsigned int numFrames = 0;
+    FrameStats stats;
 
-    numFrames++;
+    unsigned int frame = HPROFILER_GET_NUM_FRAMES() - 1;
+    const ProfilerSample * samples = HPROFILER_GET_ONE_FRAME_SAMPLES( frame );
 
-    if ( numFrames % 100 == 0 )
-    {
-        numFrames = 0;
-    
-        const ProfilerSample * samples = HPROFILER_GET_ONE_FRAME_SAMPLES( 3 );
+    double duration = samples[ 0 ].durationSecs;
+
+    stats.frameMillis = float( duration * 1000.0 );
+    stats.fps = 1.f / stats.frameMillis;
+
+    if ( frame % 3 == 0 )
+    { 
+        const ProfilerSample * samples = HPROFILER_GET_ONE_FRAME_SAMPLES( frame );
         unsigned int numSamples = HPROFILER_GET_NUM_SAMPLES();
 
         for( unsigned int i = 0; i < numSamples; ++i )
@@ -372,7 +376,7 @@ FrameStats BVAppLogic::HandleProfiler   ()
         }
     }
 
-    return FrameStats();
+    return stats;
 
 }
 
