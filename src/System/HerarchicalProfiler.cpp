@@ -112,7 +112,7 @@ const ProfilerSample *   AutoProfile::AveragedSamples ()
 
     for( unsigned int i = 0; i < numSamples; ++i )
     {
-        m_samples[ i ].duration.QuadPart = accum[ i ].QuadPart / numFrames;
+        m_samples[ i ].duration.QuadPart = accum[ i ].QuadPart / numFrames; //FIXME: maybe double should be used here instead
     }
 
     return m_samples;

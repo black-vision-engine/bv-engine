@@ -3,12 +3,11 @@
 #include <windows.h>
 
 #define MAX_PROFILER_SAMPLES 200
-#define MAX_PROFILER_FRAMES 50
+#define MAX_PROFILER_FRAMES 200
 
 
 namespace bv
 {
-
 
 enum class AutoProfileType : int
 {
@@ -24,20 +23,11 @@ enum class AutoProfileState : int
 
 struct ProfilerSample
 {
-public:
-
     const char *        name;
 
     LARGE_INTEGER       duration;
-
     AutoProfileType     type;
-
     unsigned int        depth;
-
-public:
-
-    double  Duration    () const;
-
 };
 
 struct ProfilerLiveSample
@@ -45,7 +35,6 @@ struct ProfilerLiveSample
     const char *        name;
    
     LARGE_INTEGER       timestamp;
-
     AutoProfileType     type;
     AutoProfileState    state;
 };
@@ -76,5 +65,14 @@ public:
 };
 
 } //bv
+
+#define PROFILE_FRAME_START() AutoProfile::StartFrame()
+#define PROFILE_FRAME_END() AutoProfile::EndFrame()
+
+#define PROFILE_FUNCTION( name ) AutoProfile( name, AutoProfileType::APT_FUNCTION )
+#define PROFILE_SECTION( name ) AutoProfile( name, AutoProfileType::APT_SECTION )
+
+#define PROFILE_GET_ONE_FRAME_SAMPLES( frame ) AutoProfile::OneFrameSamples( frame )
+#define PROFILE_GET_AVERAGWED_SAMPLES() AutoProfile::AveragedSamples()
 
 #include "HerarchicalProfiler.inl"
