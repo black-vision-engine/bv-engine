@@ -53,6 +53,8 @@ public:
 
     void            FrameRendered   ( Renderer * renderer );
 
+    void            HandleProfiler  ();
+
 private:
 
     void            RenderScene     ( Renderer * renderer );

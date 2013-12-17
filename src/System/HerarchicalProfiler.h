@@ -66,6 +66,7 @@ public:
 
 } //bv
 
+
 #define PROFILE_FRAME_START() AutoProfile::StartFrame()
 #define PROFILE_FRAME_END() AutoProfile::EndFrame()
 
@@ -74,5 +75,6 @@ public:
 
 #define PROFILE_GET_ONE_FRAME_SAMPLES( frame ) AutoProfile::OneFrameSamples( frame )
 #define PROFILE_GET_AVERAGWED_SAMPLES() AutoProfile::AveragedSamples()
+
 
 #include "HerarchicalProfiler.inl"

@@ -6,6 +6,8 @@
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Processes/ProcessManager.h"
 
+#include "System/HerarchicalProfiler.h"
+
 #include "BVAppLogic.h"
 #include "BVConfig.h"
 
@@ -78,6 +80,8 @@ void BlackVisionApp::OnIdle		()
     UpdateSubsystems( millis );
 
     m_app->OnUpdate( millis, m_Renderer, handle );
+
+    m_app->HandleProfiler();
 }
 
 // *********************************

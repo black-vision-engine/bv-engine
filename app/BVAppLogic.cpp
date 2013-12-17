@@ -348,6 +348,13 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
 
 // *********************************
 //
+void BVAppLogic::HandleProfiler  ()
+{
+    //TODO: something useful here
+}
+
+// *********************************
+//
 void BVAppLogic::RenderScene     ( Renderer * renderer )
 {
     renderer->PreDraw();
