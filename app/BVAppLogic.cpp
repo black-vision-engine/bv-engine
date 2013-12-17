@@ -360,7 +360,7 @@ void BVAppLogic::HandleProfiler  ()
     {
         numFrames = 0;
     
-        const ProfilerSample * samples = HPROFILER_GET_ONE_FRAME_SAMPLES( 90 );
+        const ProfilerSample * samples = HPROFILER_GET_ONE_FRAME_SAMPLES( 3 );
         unsigned int numSamples = HPROFILER_GET_NUM_SAMPLES();
 
         for( unsigned int i = 0; i < numSamples; ++i )

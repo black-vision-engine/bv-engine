@@ -2,8 +2,8 @@
 
 #include <windows.h>
 
-#define MAX_PROFILER_SAMPLES 200
-#define MAX_PROFILER_FRAMES 200
+#define MAX_PROFILER_SAMPLES 6
+#define MAX_PROFILER_FRAMES 5
 
 
 namespace bv
@@ -58,8 +58,12 @@ public:
     inline                  AutoProfile             ( const char * name, AutoProfileType type );
     inline                  ~AutoProfile            ();
 
+private:
+
     static  void            StartFrame              ();
     static  void            EndFrame                ();
+
+public:
 
     static unsigned int     NumSamples              ();
     static unsigned int     NumFrames               ();
@@ -69,13 +73,22 @@ public:
     static const ProfilerSample *   OneFrameSamples ( unsigned int frame );
     static const ProfilerSample *   AveragedSamples ();
 
+    friend class AutoFrameProfile;
+};
+
+class AutoFrameProfile
+{
+public:
+
+    inline  AutoFrameProfile    ();
+    inline  ~AutoFrameProfile   ();
+
 };
 
 } //bv
 
 
-#define HPROFILER_FRAME_START()                     AutoProfile::StartFrame()
-#define HPROFILER_FRAME_END()                       AutoProfile::EndFrame()
+#define HPROFILER_NEW_FRAME()                       AutoFrameProfile()
 
 #define HPROFILER_FUNCTION( name )                  AutoProfile( name, AutoProfileType::APT_FUNCTION )
 #define HPROFILER_SECTION( name )                   AutoProfile( name, AutoProfileType::APT_SECTION )

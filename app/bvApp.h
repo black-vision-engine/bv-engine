@@ -61,6 +61,7 @@ private:
     void            InitializeConsole   ();
     void            InitializeAppLogic  ();
 
+    void            PostFrame           ();
 };
 
 } //bv

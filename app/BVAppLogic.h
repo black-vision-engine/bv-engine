@@ -3,6 +3,7 @@
 #include <windows.h> //FIXME: remove when this code is refactored
 
 #include "Engine/Events/Events.h"
+#include "FrameStats.h"
 
 #include "BVForwards.h"
 
@@ -53,7 +54,7 @@ public:
 
     void            FrameRendered   ( Renderer * renderer );
 
-    void            HandleProfiler  ();
+    FrameStats      HandleProfiler  ();
 
 private:
 

@@ -76,7 +76,7 @@ void BlackVisionApp::OnPreidle  ()
 void BlackVisionApp::OnIdle		()
 {
     {
-        HPROFILER_FRAME_START();
+        HPROFILER_NEW_FRAME();
 
         HPROFILER_FUNCTION( "BlackVisionApp::OnIdle" );
 
@@ -92,11 +92,9 @@ void BlackVisionApp::OnIdle		()
 
             m_app->OnUpdate( millis, m_Renderer, handle );
         }
-
-        HPROFILER_FRAME_END();
     }
 
-    m_app->HandleProfiler();
+    PostFrame();
 }
 
 // *********************************
@@ -160,6 +158,33 @@ void    BlackVisionApp::InitializeAppLogic  ()
     m_app->Initialize();
     m_app->LoadScene();
     m_app->InitCamera( m_Renderer, m_Width, m_Height );
+}
+
+// *********************************
+//
+void    BlackVisionApp::PostFrame           ()
+{
+#ifndef PRODUCTION_BUILD
+    FrameStats stats = m_app->HandleProfiler();
+    
+    static float totalTime = 0.0;
+
+    totalTime += stats.frameMillis;
+
+    if( totalTime > .2f )
+    {
+        std::ostringstream  s;
+        std::cout.precision( 4 );
+        s << "FPS: " << stats.fps << " frame time: " << stats.frameMillis << " ms " << std::endl;
+        
+		std::string ss = s.str();
+		std::wstring stemp = std::wstring( ss.begin(), ss.end() );
+		LPCWSTR sw = stemp.c_str();
+		SetWindowTextW( handle,sw );
+
+        totalTime = 0.f;
+    }
+#endif
 }
 
 } //bv

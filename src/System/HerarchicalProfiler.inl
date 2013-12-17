@@ -5,7 +5,7 @@ namespace bv
 //
 inline                     AutoProfile::AutoProfile     ( const char * name, AutoProfileType type )
 {
-    ProfilerLiveSample & sample = m_liveSamples[ m_curSample++ ];
+    ProfilerLiveSample & sample = m_liveSamples[ 2 * m_curFrame * MAX_PROFILER_SAMPLES + m_curSample++ ];
 
     sample.name = name;
     sample.type = type;
@@ -17,10 +17,24 @@ inline                     AutoProfile::AutoProfile     ( const char * name, Aut
 //
 inline                     AutoProfile::~AutoProfile    ()
 {
-    ProfilerLiveSample & sample = m_liveSamples[ m_curSample++ ];
+    ProfilerLiveSample & sample = m_liveSamples[ 2 * m_curFrame * MAX_PROFILER_SAMPLES + m_curSample++ ];
     
     sample.state = AutoProfileState::APS_END;
     QueryPerformanceCounter( &sample.timestamp );
+}
+
+// *********************************
+//
+inline  AutoFrameProfile::AutoFrameProfile    ()
+{
+    AutoProfile::StartFrame();
+}
+
+// *********************************
+//
+inline  AutoFrameProfile::~AutoFrameProfile   ()
+{
+    AutoProfile::EndFrame();
 }
 
 } //bv
