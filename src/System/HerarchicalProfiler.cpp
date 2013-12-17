@@ -61,6 +61,16 @@ unsigned int    AutoProfile::NumFrames          ()
 
 // *******************************
 //
+unsigned int     AutoProfile::CurFrame                ()
+{
+    if( m_curFrame == 0 )
+        return MAX_PROFILER_FRAMES - 1;
+
+    return m_curFrame - 1;
+}
+
+// *******************************
+//
 const ProfilerSample *   AutoProfile::OneFrameSamples ( unsigned int frame )
 {
     LARGE_INTEGER freq = QueryCounterFrequency();
@@ -96,9 +106,9 @@ const ProfilerSample *   AutoProfile::OneFrameSamples ( unsigned int frame )
         }
         else //APS_END
         {
-            sample.duration.QuadPart = liveSample.timestamp.QuadPart - stack[ depth ]->duration.QuadPart;
-            sample.durationSecs = (double) sample.duration.QuadPart / freqd;
             --depth;
+            stack[ depth ]->duration.QuadPart = liveSample.timestamp.QuadPart - stack[ depth ]->duration.QuadPart;
+            stack[ depth ]->durationSecs = (double) stack[ depth ]->duration.QuadPart / freqd;
         }
     }
 

@@ -87,11 +87,9 @@ void BlackVisionApp::OnIdle		()
 
             UpdateSubsystems( millis );
         }
-        {
-            HPROFILER_SECTION( "m_app->Update" );
 
-            m_app->OnUpdate( millis, m_Renderer, handle );
-        }
+        m_app->OnUpdate( millis, m_Renderer, handle );
+
     }
 
     PostFrame();
@@ -171,7 +169,7 @@ void    BlackVisionApp::PostFrame           ()
 
     totalTime += stats.frameMillis;
 
-    if( totalTime > .2f )
+    if( totalTime > 200.f )
     {
         std::ostringstream  s;
         std::cout.precision( 4 );

@@ -7,6 +7,8 @@ inline                     AutoProfile::AutoProfile     ( const char * name, Aut
 {
     ProfilerLiveSample & sample = m_liveSamples[ 2 * m_curFrame * MAX_PROFILER_SAMPLES + m_curSample++ ];
 
+    m_name = name;
+
     sample.name = name;
     sample.type = type;
     sample.state = AutoProfileState::APS_START;
@@ -19,6 +21,7 @@ inline                     AutoProfile::~AutoProfile    ()
 {
     ProfilerLiveSample & sample = m_liveSamples[ 2 * m_curFrame * MAX_PROFILER_SAMPLES + m_curSample++ ];
     
+    sample.name = m_name;
     sample.state = AutoProfileState::APS_END;
     QueryPerformanceCounter( &sample.timestamp );
 }
