@@ -1,4 +1,3 @@
-#include "BVConfig.h"
 
 namespace bv
 {

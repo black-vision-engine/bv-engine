@@ -158,6 +158,7 @@
     <ClCompile Include="Engine\Models\Resources\Font\AtlasCache.cpp" />
     <ClCompile Include="Engine\Processes\InitProcess.cpp" />
     <ClCompile Include="System\SimpleTimer.cpp" />
+    <ClCompile Include="System\HerarchicalProfiler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -352,9 +353,11 @@
     <ClInclude Include="Engine\Models\Resources\Font\AtlasCache.h" />
     <ClInclude Include="Engine\Processes\InitProcess.h" />
     <ClInclude Include="System\SimpleTimer.h" />
+    <ClInclude Include="System\HerarchicalProfiler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="System\HerarchicalProfiler.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />
