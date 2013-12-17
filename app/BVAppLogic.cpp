@@ -350,7 +350,7 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
 
 // *********************************
 //
-void BVAppLogic::HandleProfiler  ()
+FrameStats BVAppLogic::HandleProfiler   ()
 {
     static unsigned int numFrames = 0;
 
@@ -371,6 +371,9 @@ void BVAppLogic::HandleProfiler  ()
             printf( "%*s %s duration: %2.4 ms\n", sample.depth * 4, sample.name, section, sample.durationSecs * 1000.0 );
         }
     }
+
+    return FrameStats();
+
 }
 
 // *********************************
