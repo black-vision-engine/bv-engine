@@ -9,6 +9,8 @@
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/ModelScene.h"
 
+#include "System/HerarchicalProfiler.h"
+
 #include "MockScenes.h"
 
 #include "System/HRTimer.h"
@@ -350,7 +352,25 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
 //
 void BVAppLogic::HandleProfiler  ()
 {
-    //TODO: something useful here
+    static unsigned int numFrames = 0;
+
+    numFrames++;
+
+    if ( numFrames % 100 == 0 )
+    {
+        numFrames = 0;
+    
+        const ProfilerSample * samples = HPROFILER_GET_ONE_FRAME_SAMPLES( 90 );
+        unsigned int numSamples = HPROFILER_GET_NUM_SAMPLES();
+
+        for( unsigned int i = 0; i < numSamples; ++i )
+        {
+            const ProfilerSample & sample = samples[ i ];
+            const char * section = sample.type == AutoProfileType::APT_FUNCTION ? "function" : "senction";
+
+            printf( "%*s %s duration: %2.4 ms\n", sample.depth * 4, sample.name, section, sample.durationSecs * 1000.0 );
+        }
+    }
 }
 
 // *********************************

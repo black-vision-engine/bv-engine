@@ -9,8 +9,8 @@ namespace bv
 ProfilerLiveSample  AutoProfile::m_liveSamples[ 2 * MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
 ProfilerSample      AutoProfile::m_samples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
 
-unsigned int AutoProfile::m_curSample = 0;
-unsigned int AutoProfile::m_curFrame = 0;
+unsigned int    AutoProfile::m_curSample = 0;
+unsigned int    AutoProfile::m_curFrame = 0;
 
 
 // *******************************
@@ -41,6 +41,17 @@ unsigned int    AutoProfile::NumSamples         ()
 
 // *******************************
 //
+LARGE_INTEGER    AutoProfile::QueryCounterFrequency   ()
+{
+    LARGE_INTEGER pf;
+
+    QueryPerformanceFrequency( &pf );
+
+    return pf;
+}
+
+// *******************************
+//
 unsigned int    AutoProfile::NumFrames          ()
 {
     assert( m_curFrame <= MAX_PROFILER_FRAMES );
@@ -52,6 +63,9 @@ unsigned int    AutoProfile::NumFrames          ()
 //
 const ProfilerSample *   AutoProfile::OneFrameSamples ( unsigned int frame )
 {
+    LARGE_INTEGER freq = QueryCounterFrequency();
+    double freqd = (double) freq.QuadPart;
+
     LARGE_INTEGER startTimes[ MAX_PROFILER_SAMPLES ];
 
     unsigned int numSamples = NumSamples();
@@ -80,7 +94,7 @@ const ProfilerSample *   AutoProfile::OneFrameSamples ( unsigned int frame )
         else //APS_END
         {
             sample.duration.QuadPart = liveSample.timestamp.QuadPart - startTimes[ k ].QuadPart;
-
+            sample.durationSecs = (double) sample.duration.QuadPart / freqd;
             --k;
         }
     }
@@ -93,7 +107,10 @@ const ProfilerSample *   AutoProfile::OneFrameSamples ( unsigned int frame )
 const ProfilerSample *   AutoProfile::AveragedSamples ()
 {
     LARGE_INTEGER accum[ MAX_PROFILER_SAMPLES ];
+    double accumSecs[ MAX_PROFILER_SAMPLES ];
+
     memset( accum, 0, MAX_PROFILER_SAMPLES * sizeof( LARGE_INTEGER ) );
+    memset( accumSecs, 0, MAX_PROFILER_SAMPLES * sizeof( double ) );
 
     unsigned int numFrames = NumFrames();
     for( unsigned int i = 0; i < numFrames; ++i )
@@ -107,12 +124,14 @@ const ProfilerSample *   AutoProfile::AveragedSamples ()
         for( unsigned int fr = 0; fr < numFrames; ++fr )
         {
             accum[ i ].QuadPart += m_samples[ fr * MAX_PROFILER_SAMPLES + i ].duration.QuadPart;
+            accumSecs[ i ] += m_samples[ fr * MAX_PROFILER_SAMPLES + i ].durationSecs;
         }
     }
 
     for( unsigned int i = 0; i < numSamples; ++i )
     {
-        m_samples[ i ].duration.QuadPart = accum[ i ].QuadPart / numFrames; //FIXME: maybe double should be used here instead
+        m_samples[ i ].duration.QuadPart = accum[ i ].QuadPart / numFrames;
+        m_samples[ i ].durationSecs = accumSecs[ i ] / (double) numFrames;
     }
 
     return m_samples;

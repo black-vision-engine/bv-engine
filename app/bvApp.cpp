@@ -75,11 +75,26 @@ void BlackVisionApp::OnPreidle  ()
 //
 void BlackVisionApp::OnIdle		()
 {
-    unsigned long millis = m_timer.ElapsedMillis();
+    {
+        HPROFILER_FRAME_START();
 
-    UpdateSubsystems( millis );
+        HPROFILER_FUNCTION( "BlackVisionApp::OnIdle" );
 
-    m_app->OnUpdate( millis, m_Renderer, handle );
+        unsigned long millis = m_timer.ElapsedMillis();
+
+        {
+            HPROFILER_SECTION( "UpdateSubsystems" );
+
+            UpdateSubsystems( millis );
+        }
+        {
+            HPROFILER_SECTION( "m_app->Update" );
+
+            m_app->OnUpdate( millis, m_Renderer, handle );
+        }
+
+        HPROFILER_FRAME_END();
+    }
 
     m_app->HandleProfiler();
 }
