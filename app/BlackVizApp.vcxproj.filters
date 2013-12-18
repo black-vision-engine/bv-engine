@@ -17,6 +17,7 @@
     <ClCompile Include="BVAppLogic.cpp" />
     <ClCompile Include="BVConfig.cpp" />
     <ClCompile Include="FrameStats.cpp" />
+    <ClCompile Include="FrameStatsService.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
@@ -52,6 +53,7 @@
     <ClInclude Include="BVConfig.h" />
     <ClInclude Include="BVForwards.h" />
     <ClInclude Include="FrameStats.h" />
+    <ClInclude Include="FrameStatsService.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MockFonts">
