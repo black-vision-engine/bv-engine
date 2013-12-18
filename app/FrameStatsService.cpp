@@ -178,6 +178,8 @@ void    FrameStatsCalculator::RecalculateStats        ()
     {
         auto name = it.first;
         auto data = it.second;
+
+        data.RecalculateStats();
     }
 }
 
