@@ -3,6 +3,7 @@
 #include <windows.h> //FIXME: remove when this code is refactored
 
 #include "Engine/Events/Events.h"
+#include "FrameStatsService.h"
 #include "FrameStats.h"
 
 #include "BVForwards.h"
@@ -26,6 +27,8 @@ class BVAppLogic
 private:
 
     BVAppState                  m_state;
+
+    FrameStatsCalculator        m_statsCalculator;
 
     model::ModelScene *         m_modelScene;
     SceneNode *                 m_mockSceneEng;

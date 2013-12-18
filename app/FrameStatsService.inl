@@ -33,18 +33,18 @@ inline void MovingAverageData::AddNextSample        ( const FrameStatsSample & s
 
 // *********************************
 //
-inline void    FrameStatsCalculator::StartSection   ( const char * name, unsigned int frame )
+inline void    FrameStatsCalculator::StartSection   ( const char * name )
 {
     FrameStatsSample & sample = m_stateBuffer[ name ];
 
-    sample.frame = frame;
+    sample.frame = m_frame;
     m_timer.Timestamp( &sample.startTime );
     sample.duration = -1.0;
 }
 
 // *********************************
 //
-inline void    FrameStatsCalculator::StopSection    ( const char * name, unsigned int frame )
+inline void    FrameStatsCalculator::EndSection     ( const char * name )
 {
     FrameStatsSample & sample = m_stateBuffer[ name ];
     assert( sample.duration == -1.0 );

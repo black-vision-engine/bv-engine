@@ -131,6 +131,7 @@ double  MovingAverageData::MaxVal           ( unsigned int * frame ) const
 //
 FrameStatsCalculator::FrameStatsCalculator  ( unsigned int movingAverageWindowSize )
     : m_windowSize( movingAverageWindowSize )
+    , m_frame( 0 )
 {
     assert( m_windowSize > 0 );
 }
@@ -143,7 +144,28 @@ FrameStatsCalculator::~FrameStatsCalculator ()
 
 // *********************************
 //
-void    FrameStatsCalculator::ResetTimer              ()
+unsigned int FrameStatsCalculator::CurFrame         () const
+{
+    return m_frame;
+}
+
+// *********************************
+//
+unsigned int FrameStatsCalculator:: WindowSize      () const
+{
+    return m_windowSize;
+}
+
+// *********************************
+//
+unsigned int FrameStatsCalculator::NextFrame        ()
+{
+    return m_frame++;
+}
+
+// *********************************
+//
+void    FrameStatsCalculator::ResetTimer            ()
 {
     m_timer.Reinitialize();
 }

@@ -65,6 +65,8 @@ private:
 
     unsigned int        m_windowSize;
 
+    unsigned int        m_frame;
+
     TSamplersMap        m_samplers;
     TSingleSamplesMap   m_stateBuffer;
 
@@ -75,10 +77,14 @@ public:
             FrameStatsCalculator    ( unsigned int movingAverageWindowSize );
             ~FrameStatsCalculator   ();
 
-    void    ResetTimer              ();
+    unsigned int    CurFrame        () const;
+    unsigned int    WindowSize      () const;
 
-    inline void StartSection        ( const char * name, unsigned int frame );
-    inline void StopSection         ( const char * name, unsigned int frame );
+    unsigned int    NextFrame       ();
+    void            ResetTimer      ();
+
+    inline void StartSection        ( const char * name);
+    inline void EndSection          ( const char * name );
 
     void        RecalculateStats    ();
 

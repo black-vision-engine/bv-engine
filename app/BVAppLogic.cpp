@@ -51,6 +51,8 @@ BVAppLogic::BVAppLogic              ()
     , m_modelScene( nullptr )
     , m_mockSceneEng( nullptr )
     , m_state( BVAppState::BVS_INVALID )
+    , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
+
 {
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GfbBuf = new char[ 2048 * 2048 * 4 ]; //FIXME: naive hack
@@ -154,6 +156,9 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
 //
 void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer, HWND handle )
 {
+    m_statsCalculator.ResetTimer();
+    m_statsCalculator.StartSection( "Frame" );
+
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate" );
 
     assert( m_state != BVAppState::BVS_INVALID );
@@ -167,14 +172,19 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
         GownoWFormieKebaba( t );
 
         {
+            m_statsCalculator.StartSection( "model Update" );
             HPROFILER_SECTION( "m_modelScene->Update" );
             m_modelScene->Update( t );
+            m_statsCalculator.EndSection( "model Update" );
         }
         {
+            m_statsCalculator.StartSection( "updaters manager Update" );
             HPROFILER_SECTION( "UpdatersManager::Get().UpdateStep" );
             UpdatersManager::Get().UpdateStep( t );
+            m_statsCalculator.EndSection( "updaters manager Update" );
         }
         {
+            m_statsCalculator.StartSection( "engine scene Update" );
             HPROFILER_SECTION( "m_mockSceneEng->Update" );
 
             auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
@@ -183,8 +193,10 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
             std::vector< bv::Transform > vec;
             vec.push_back(Transform(viewMat, glm::inverse(viewMat)));
             m_mockSceneEng->Update( t, vec );
+            m_statsCalculator.EndSection( "engine scene Update" );
         }
         {
+            m_statsCalculator.StartSection( "Render" );
             HPROFILER_SECTION( "Render" );
 
             renderer->ClearBuffers();
@@ -192,7 +204,11 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
             renderer->DisplayColorBuffer();
 
             FrameRendered( renderer );
+            m_statsCalculator.EndSection( "Render" );
         }
+
+        m_statsCalculator.EndSection( "Frame" );
+        m_statsCalculator.NextFrame();
 
         DWORD ftime = timeGetTime() - millis;
         if( ftime < DefaultConfig.FrameTimeMillis() )
@@ -285,6 +301,12 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
 //
 FrameStats BVAppLogic::HandleProfiler   ()
 {
+    if( m_statsCalculator.CurFrame() == 2 * m_statsCalculator.WindowSize() )
+    {
+        m_statsCalculator.RecalculateStats();
+        printf( "O TU JEST TO OBLICZENIE WAZNE BARDZO\n" );
+    }
+
     static unsigned int srame = 0;
     srame++;
     FrameStats stats;
