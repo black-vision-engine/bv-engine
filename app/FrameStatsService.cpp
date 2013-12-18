@@ -143,6 +143,13 @@ FrameStatsCalculator::~FrameStatsCalculator ()
 
 // *********************************
 //
+void    FrameStatsCalculator::ResetTimer              ()
+{
+    m_timer.Reinitialize();
+}
+
+// *********************************
+//
 void    FrameStatsCalculator::RecalculateStats        ()
 {
     for ( auto it : m_samplers )

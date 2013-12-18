@@ -19,11 +19,13 @@ public:
 	
     HighResolutionTimer     ();
 
-    void    Renitialize     ();
+    void    Reinitialize    ();
 
     void    StartTimer      ();
 	void    StopTimer       ();
 	
+    inline void Timestamp   ( LARGE_INTEGER * timestamp ) const;
+
     inline double CurElapsed() const;
     double  GetElapsedTime  () const;
 
@@ -33,6 +35,13 @@ private:
     inline double Duration  ( const LARGE_INTEGER & tStart, const LARGE_INTEGER & tEnd ) const;
 
 };
+
+// *********************************
+//
+inline void HighResolutionTimer::Timestamp ( LARGE_INTEGER * timestamp ) const
+{
+    QueryPerformanceCounter( timestamp );
+}
 
 // *********************************
 //

@@ -73,6 +73,8 @@ public:
             FrameStatsCalculator    ( unsigned int movingAverageWindowSize );
             ~FrameStatsCalculator   ();
 
+    void    ResetTimer              ();
+
     inline void StartSection        ( const char * name, unsigned int frame );
     inline void StopSection         ( const char * name, unsigned int frame );
 

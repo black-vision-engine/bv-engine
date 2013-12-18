@@ -4,31 +4,40 @@
 namespace bv
 {
 	
-HighResolutionTimer::HighResolutionTimer     ()
+// *********************************
+//
+HighResolutionTimer::HighResolutionTimer    ()
+{
+    Reinitialize();
+}
+
+// *********************************
+//
+void HighResolutionTimer::Reinitialize      ()
 {
     m_StartTime.QuadPart    = 0;
     m_StopTime.QuadPart     = 0;
 
     QueryPerformanceFrequency( &m_Frequency );
 }
-	
+
 // *********************************
 //
-void    HighResolutionTimer::StartTimer      ()
+void    HighResolutionTimer::StartTimer     ()
 {
     QueryPerformanceCounter( &m_StartTime );
 }
 
 // *********************************
 //
-void    HighResolutionTimer::StopTimer       ()
+void    HighResolutionTimer::StopTimer      ()
 {
     QueryPerformanceCounter( &m_StopTime );
 }
 
 // *********************************
 //
-double  HighResolutionTimer::GetElapsedTime  () const
+double  HighResolutionTimer::GetElapsedTime () const
 {
 	LARGE_INTEGER time;
 
@@ -37,4 +46,4 @@ double  HighResolutionTimer::GetElapsedTime  () const
     return ToSecs( time );
 }
 
-}
+} //bv
