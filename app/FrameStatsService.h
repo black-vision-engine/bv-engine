@@ -13,6 +13,8 @@ struct FrameStatsSample
 {
     unsigned int    frame;
     double          duration;
+
+    LARGE_INTEGER   startTime;
 };
 
 struct MovingAverageData
@@ -34,6 +36,8 @@ public:
 
 private:
 
+    void    Initialize          ( unsigned int numSamples );
+
     void    ResetAccumStats     ();
 
     void    RecalculateStats    ();
@@ -43,6 +47,8 @@ private:
     double  Variance            () const;
     double  MinVal              ( unsigned int * frame = nullptr ) const;
     double  MaxVal              ( unsigned int * frame = nullptr ) const;
+
+    inline void AddNextSample   ( const FrameStatsSample & sample );
 
     friend class FrameStatsCalculator;
 
@@ -67,21 +73,22 @@ public:
             FrameStatsCalculator    ( unsigned int movingAverageWindowSize );
             ~FrameStatsCalculator   ();
 
+    inline void StartSection        ( const char * name, unsigned int frame );
+    inline void StopSection         ( const char * name, unsigned int frame );
 
-    void    StartSection            ( const char * name, unsigned int frame );
-    void    StopSection             ( const char * name, unsigned int frame );
+    void        RecalculateStats    ();
 
-    void    RecalculateStats        ();
-
-    double  ExpectedValue           ( const char * name ) const;
-    double  Variance                ( const char * name ) const;
-    double  MinVal                  ( const char * name, unsigned int * frame = nullptr ) const;
-    double  MaxVal                  ( const char * name, unsigned int * frame = nullptr ) const;
+    double      ExpectedValue       ( const char * name ) const;
+    double      Variance            ( const char * name ) const;
+    double      MinVal              ( const char * name, unsigned int * frame = nullptr ) const;
+    double      MaxVal              ( const char * name, unsigned int * frame = nullptr ) const;
 
 private:
 
-    void    InitializeSampler       ( const char * name );
+    void        InitializeSampler   ( const char * name );
 
 };
 
 } //bv
+
+#include "FrameStatsService.inl"

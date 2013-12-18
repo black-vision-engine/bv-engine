@@ -15,6 +15,24 @@ MovingAverageData::MovingAverageData        ()
 
 // *********************************
 //
+void MovingAverageData::Initialize          ( unsigned int numSamples )
+{
+    assert( samples.size() == 0 );
+
+    ResetAccumStats();
+
+    FrameStatsSample sample;
+    sample.duration = 0.0;
+    sample.frame = 0;
+
+    for( unsigned int i = 0; i < numSamples; ++i )
+    {
+        samples.push( sample );
+    } 
+}
+
+// *********************************
+//
 void MovingAverageData::ResetAccumStats     ()
 {
     minDuration             = 10000000.0;
@@ -176,15 +194,8 @@ void    FrameStatsCalculator::InitializeSampler       ( const char * name )
 {
     assert( m_samplers.find( name ) == m_samplers.end() );
 
-    FrameStatsSample sample;
-    sample.duration = 0.0;
-    sample.frame = 0;
-
-    MovingAverageData & data = m_samplers[ name ];
-    for( unsigned int i = 0; i < m_windowSize; ++i )
-    {
-        data.samples.push( sample );
-    }
+    auto & sampler = m_samplers[ name ];
+    sampler.Initialize( m_windowSize );
 }
 
 } //bv

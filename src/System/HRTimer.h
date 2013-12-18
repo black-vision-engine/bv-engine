@@ -18,7 +18,9 @@ private:
 public:
 	
     HighResolutionTimer     ();
-	
+
+    void    Renitialize     ();
+
     void    StartTimer      ();
 	void    StopTimer       ();
 	
@@ -27,7 +29,8 @@ public:
 
 private:
 
-    inline double  ToSecs   ( LARGE_INTEGER & time ) const;
+    inline double ToSecs    ( LARGE_INTEGER & time ) const;
+    inline double Duration  ( const LARGE_INTEGER & tStart, const LARGE_INTEGER & tEnd ) const;
 
 };
 
@@ -46,9 +49,17 @@ inline double  HighResolutionTimer::CurElapsed() const
 
 // *********************************
 //
-inline double  HighResolutionTimer::ToSecs          ( LARGE_INTEGER & time ) const
+inline double  HighResolutionTimer::ToSecs  ( LARGE_INTEGER & time ) const
 {
     return ( (double) time.QuadPart / (double) m_Frequency.QuadPart );
+}
+
+// *********************************
+//
+inline double HighResolutionTimer::Duration ( const LARGE_INTEGER & tStart, const LARGE_INTEGER & tEnd ) const
+{
+    return ( (double) ( tEnd.QuadPart - tStart.QuadPart ) / (double) m_Frequency.QuadPart );
+
 }
 
 } //bv
