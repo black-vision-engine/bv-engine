@@ -35,26 +35,28 @@ inline void MovingAverageData::AddNextSample        ( const FrameStatsSample & s
 //
 inline void    FrameStatsCalculator::StartSection   ( const char * name, unsigned int frame )
 {
-    MovingAverageData & data = m_samplers[ name ];
+    FrameStatsSample & sample = m_stateBuffer[ name ];
 
-    if( data.samples.size() == 0 )
-    {
-        data.Initialize( m_windowSize );
-    }
-
-    FrameStatsSample sample;
     sample.frame = frame;
     m_timer.Timestamp( &sample.startTime );
+    sample.duration = -1.0;
 }
 
 // *********************************
 //
 inline void    FrameStatsCalculator::StopSection    ( const char * name, unsigned int frame )
 {
-    MovingAverageData & data = m_samplers[ name ];
-    assert( data.samples.size() == m_windowSize );
+    FrameStatsSample & sample = m_stateBuffer[ name ];
+    assert( sample.duration == -1.0 );
+    sample.duration = m_timer.CurElapsed( sample.startTime );
 
-    //FIXME: implement
+    MovingAverageData & data = m_samplers[ name ];
+    if( data.samples.size() == 0 )
+    {
+        data.Initialize( m_windowSize );
+    }
+
+    data.AddNextSample( sample );
 }
 
 } //bv

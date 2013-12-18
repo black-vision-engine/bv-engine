@@ -59,12 +59,14 @@ class FrameStatsCalculator
 private:
 
     typedef std::hash_map< const char *, MovingAverageData > TSamplersMap;
+    typedef std::hash_map< const char *, FrameStatsSample >  TSingleSamplesMap;
 
 private:
 
     unsigned int        m_windowSize;
 
     TSamplersMap        m_samplers;
+    TSingleSamplesMap   m_stateBuffer;
 
     HighResolutionTimer m_timer;
 

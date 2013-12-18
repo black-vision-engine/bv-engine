@@ -26,6 +26,7 @@ public:
 	
     inline void Timestamp   ( LARGE_INTEGER * timestamp ) const;
 
+    inline double CurElapsed( const LARGE_INTEGER & timestamp ) const;
     inline double CurElapsed() const;
     double  GetElapsedTime  () const;
 
@@ -45,7 +46,17 @@ inline void HighResolutionTimer::Timestamp ( LARGE_INTEGER * timestamp ) const
 
 // *********************************
 //
-inline double  HighResolutionTimer::CurElapsed() const
+inline double HighResolutionTimer::CurElapsed( const LARGE_INTEGER & timestamp ) const
+{
+    LARGE_INTEGER curTime;
+    QueryPerformanceCounter( &curTime );
+
+    return Duration( timestamp, curTime );
+}
+
+// *********************************
+//
+inline double HighResolutionTimer::CurElapsed() const
 {
     LARGE_INTEGER curTime;
     QueryPerformanceCounter( &curTime );

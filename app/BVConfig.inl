@@ -93,4 +93,11 @@ inline const glm::vec3 &    BVConfig::CameraDirection   () const
     return m_defaultCameraDirection;
 }
 
+// *********************************
+//
+inline unsigned int         BVConfig::StatsMAWindowSize () const
+{
+    return m_defaultStatsMovingAverageWindowSize;
+}
+
 } //bv

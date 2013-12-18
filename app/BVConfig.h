@@ -28,6 +28,8 @@ private:
     glm::vec3       m_defaultCameraUp;
     glm::vec3       m_defaultCameraDirection;
 
+    unsigned int    m_defaultStatsMovingAverageWindowSize;
+
 private:
 
     BVConfig();
@@ -52,6 +54,8 @@ public:
     inline const glm::vec3 &    CameraPosition          () const;
     inline const glm::vec3 &    CameraUp                () const;
     inline const glm::vec3 &    CameraDirection         () const;
+
+    inline unsigned int         StatsMAWindowSize       () const;
 
     static const BVConfig & Instance  ();
 
