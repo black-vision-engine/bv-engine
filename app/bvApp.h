@@ -61,7 +61,7 @@ private:
     void            InitializeConsole   ();
     void            InitializeAppLogic  ();
 
-    void            PostFrame           ( unsigned int millis );
+    void            PostFrame           ( unsigned int milli );
 };
 
 } //bv

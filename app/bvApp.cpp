@@ -77,8 +77,7 @@ void BlackVisionApp::OnPreidle  ()
 void BlackVisionApp::OnIdle		()
 {
     HPROFILER_NEW_FRAME();
-
-//    HPROFILER_FUNCTION( "BlackVisionApp::OnIdle" );
+    HPROFILER_FUNCTION( "BlackVisionApp::OnIdle" );
 
     unsigned long millis = m_timer.ElapsedMillis();
 
@@ -152,6 +151,9 @@ void    BlackVisionApp::InitializeConsole   ()
 //
 void    BlackVisionApp::InitializeAppLogic  ()
 {
+    HPROFILER_SET_DISPLAY_WAIT_MILLIS( DefaultConfig.ProfilerDispWaitMillis() );
+    HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToConsole );
+
     m_app = new BVAppLogic();
 
     m_app->Initialize();

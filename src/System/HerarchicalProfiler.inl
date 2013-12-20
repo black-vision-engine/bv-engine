@@ -37,7 +37,16 @@ inline  AutoFrameProfile::AutoFrameProfile    ()
 //
 inline  AutoFrameProfile::~AutoFrameProfile   ()
 {
+    static unsigned long startMillis = timeGetTime();
+
     AutoProfile::EndFrame();
+
+    unsigned int timestamp = timeGetTime();
+    if( timestamp - startMillis > AutoProfile::GetStatsDisplayWaitMs() )
+    {
+        m_displayCallback();
+        startMillis = timestamp;
+    }
 }
 
 } //bv

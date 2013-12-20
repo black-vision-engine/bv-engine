@@ -123,6 +123,13 @@ inline unsigned int         BVConfig::StatsRecalcFramesDelta  () const
 
 // *********************************
 //
+inline unsigned int         BVConfig::ProfilerDispWaitMillis  () const
+{
+    return m_defaultProfilerDisplayWaitMillis;
+}
+
+// *********************************
+//
 inline const char *         BVConfig::FrameStatsSection () const
 {
     return "FRAME";

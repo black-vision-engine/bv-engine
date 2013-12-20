@@ -36,12 +36,14 @@ void    ProfilerDataFormatter::PrintToConsole  ()
 //
 void    FrameStatsFormatter::PrintToConsole     ( const FrameStatsCalculator & fsc, const char * name )
 {
+    //TODO: implement if necessary
 }
 
 // *********************************
 //
 void    FrameStatsFormatter::PrintToConsole     ( const FrameStatsCalculator & fsc )
 {
+    //TODO: implement if necessary
 }
 
 // *********************************

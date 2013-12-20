@@ -44,6 +44,7 @@ BVConfig::BVConfig                      ()
     m_defaultWarmupRoundsStatsMAV           = 10; //10
     m_defaultStatsRefreshMillisDelta        = 300;
     m_defaultStatsRecalcFramesDelta         = m_defaultStatsMovingAverageWindowSize * m_defaultWarmupRoundsStatsMAV; //* 30
+    m_defaultProfilerDisplayWaitMillis      = 1000;
 }
 
 // *********************************

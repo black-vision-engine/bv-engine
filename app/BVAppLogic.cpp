@@ -139,7 +139,7 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
 //
 void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer, HWND handle )
 {
-    //HPROFILER_FUNCTION( "BVAppLogic::OnUpdate" );
+    HPROFILER_FUNCTION( "BVAppLogic::OnUpdate" );
 
     assert( m_state != BVAppState::BVS_INVALID );
 
@@ -157,22 +157,22 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
 
             {
                 //FRAME_STATS_SECTION( "update total" );
-                //HPROFILER_SECTION( "update total" );
+                HPROFILER_SECTION( "update total" );
 
                 {
                     //FRAME_STATS_SECTION( "model Update" );
-                    //HPROFILER_SECTION( "m_modelScene->Update" );
+                    HPROFILER_SECTION( "m_modelScene->Update" );
 
                     m_modelScene->Update( t );
                 }
                 {
                     //FRAME_STATS_SECTION( "updaters manager Update" );
-                    //HPROFILER_SECTION( "UpdatersManager::Get().UpdateStep" );
+                    HPROFILER_SECTION( "UpdatersManager::Get().UpdateStep" );
                     UpdatersManager::Get().UpdateStep( t );
                 }
                 {
                     //FRAME_STATS_SECTION( "engine scene Update" );
-                    //HPROFILER_SECTION( "m_mockSceneEng->Update" );
+                    HPROFILER_SECTION( "m_mockSceneEng->Update" );
 
                     auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
 
@@ -184,7 +184,7 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
             }
             {
                 //FRAME_STATS_SECTION( "Render" );
-                //HPROFILER_SECTION( "Render" );
+                HPROFILER_SECTION( "Render" );
 
                 renderer->ClearBuffers();
                 RenderScene( renderer );
@@ -195,28 +195,12 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
 
         } //Frame Stats Collecting
 
-//        if( m_statsCalculator )
-//        {
-//        }
-
-        //static unsigned int frame = 0;
-        //    static TimeType tt = TimeType( 0 );
-        //    double elasp = GTimer.CurElapsed();
-        //    if( elasp > 0.01 )
-        //    {
-        //        printf ( "%d %1.4f s -> g: %1.4f u: %1.4f r: %1.4f \n", frame, 1000. * elasp, 1000. * ( ge - gs ), 1000. * ( ue - us ), 1000. * ( GTimer.Re() ) );
-        //        t = TimeType( 0 );
-        //    }
-   
-        //    tt += t;
-        //    frame++;
-
-        DWORD ftime = timeGetTime() - millis;
-        if( ftime < DefaultConfig.FrameTimeMillis() )
-        {
-            Sleep( DefaultConfig.FrameTimeMillis() - ftime );
-            printf( "Sleeping: %d\n", DefaultConfig.FrameTimeMillis() - ftime );
-        }
+        //DWORD ftime = timeGetTime() - millis;
+        //if( ftime < DefaultConfig.FrameTimeMillis() )
+        //{
+        //    Sleep( DefaultConfig.FrameTimeMillis() - ftime );
+        //    printf( "Sleeping: %d\n", DefaultConfig.FrameTimeMillis() - ftime );
+        //}
     }
 
     GTimer.StartTimer();
@@ -307,41 +291,7 @@ void    BVAppLogic::PostFrameLogic   ( unsigned int millis )
     if( m_statsCalculator.CurFrame() == DefaultConfig.MAVWarmupRounds() * m_statsCalculator.WindowSize() || m_statsCalculator.CurFrame() % DefaultConfig.StatsRecalcFramesDelta() == 0 )
     {
         m_statsCalculator.RecalculateStats();
-        printf( "Recalc done\n" );
     }
-    /*
-    static unsigned int srame = 0;
-    srame++;
-    FrameStats stats;
-
-    unsigned int frame = HPROFILER_GET_ACTIVE_FRAME();
-    const ProfilerSample * samples = HPROFILER_GET_ONE_FRAME_SAMPLES( frame );
-
-    double duration = samples[ 0 ].durationSecs;
-
-    stats.frameMillis = float( duration * 1000.0 );
-    stats.fps = 1.f / float( duration );
-
-    if ( srame % 1500 == 0 )
-    { 
-        const ProfilerSample * samples = HPROFILER_GET_ONE_FRAME_SAMPLES( frame );
-        unsigned int numSamples = HPROFILER_GET_NUM_SAMPLES();
-
-        for( unsigned int i = 0; i < numSamples; ++i )
-        {
-            const ProfilerSample & sample = samples[ i ];
-            const char * section = sample.type == AutoProfileType::APT_FUNCTION ? "F" : "S";
-
-            for( unsigned int k = 0; k < sample.depth * 2; ++k )
-                printf( " " );
-
-            printf( "%s %s    %2.4f ms\n", section, sample.name, sample.durationSecs * 1000.0 );
-            //printf( "%*s %s duration: %2.4f ms\n", sample.depth * 6, section, sample.name, sample.durationSecs * 1000.0 );
-        }
-    }
-    */
-    //return stats;
-
 }
 
 // *********************************
@@ -367,7 +317,7 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 {
     if ( node->IsVisible() )
     {
-        //HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
+        HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
         renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
 
         for( int i = 0; i < node->NumTransformables(); ++i )
@@ -396,5 +346,18 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 //    GframeRenderedEvent->SetResolution( m_Width, m_Height );
 //    GEventManager->TriggerEvent( GframeRenderedEvent );
 //}
+
+//SOME code for hands-on profiling
+        //static unsigned int frame = 0;
+        //    static TimeType tt = TimeType( 0 );
+        //    double elasp = GTimer.CurElapsed();
+        //    if( elasp > 0.01 )
+        //    {
+        //        printf ( "%d %1.4f s -> g: %1.4f u: %1.4f r: %1.4f \n", frame, 1000. * elasp, 1000. * ( ge - gs ), 1000. * ( ue - us ), 1000. * ( GTimer.Re() ) );
+        //        t = TimeType( 0 );
+        //    }
+   
+        //    tt += t;
+        //    frame++;
 
 } //bv

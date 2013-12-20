@@ -32,6 +32,7 @@ private:
     unsigned int    m_defaultWarmupRoundsStatsMAV;
     unsigned int    m_defaultStatsRefreshMillisDelta;
     unsigned int    m_defaultStatsRecalcFramesDelta;
+    unsigned int    m_defaultProfilerDisplayWaitMillis;
 
 private:
 
@@ -62,6 +63,8 @@ public:
     inline unsigned int         MAVWarmupRounds         () const;
     inline unsigned int         StatsRefreshMillisDelta () const;
     inline unsigned int         StatsRecalcFramesDelta  () const;
+
+    inline unsigned int         ProfilerDispWaitMillis  () const;
 
     inline const char *         FrameStatsSection       () const;
 

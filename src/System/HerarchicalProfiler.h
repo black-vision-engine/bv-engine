@@ -56,6 +56,7 @@ private:
     static unsigned int         m_curSample;
     static unsigned int         m_curFrame;
     static unsigned int         m_activeFrame;
+    static unsigned int         m_displayStatsWaitMillis;
 
     const char *                m_name;
 
@@ -70,6 +71,9 @@ private:
     static  void            EndFrame                ();
 
 public:
+
+    static void             SetStatsDisplayWaitMs   ( unsigned int millis );
+    static unsigned int     GetStatsDisplayWaitMs   ();
 
     static unsigned int     NumSamples              ();
     static unsigned int     NumFrames               ();
@@ -87,8 +91,18 @@ class AutoFrameProfile
 {
 public:
 
+    typedef void (*PtrDisplayCallback)();
+
+private:
+
+    static PtrDisplayCallback   m_displayCallback;
+
+public:
+
     inline  AutoFrameProfile    ();
     inline  ~AutoFrameProfile   ();
+
+    static void    RegisterDisplayCallback ( PtrDisplayCallback callback );
 
 };
 
@@ -105,5 +119,8 @@ public:
 #define HPROFILER_GET_NUM_SAMPLES()                 AutoProfile::NumSamples()
 #define HPROFILER_GET_NUM_FRAMES()                  AutoProfile::NumFrames()
 #define HPROFILER_GET_ACTIVE_FRAME()                AutoProfile::ActiveFrame()
+
+#define HPROFILER_SET_DISPLAY_WAIT_MILLIS( millis ) AutoProfile::SetStatsDisplayWaitMs( millis )
+#define HPROFILER_REGISTER_DISPLAY_CALLBACK( cb )   AutoFrameProfile::RegisterDisplayCallback( cb )
 
 #include "HerarchicalProfiler.inl"

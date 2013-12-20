@@ -12,6 +12,9 @@ ProfilerSample      AutoProfile::m_samples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_
 unsigned int    AutoProfile::m_curSample = 0;
 unsigned int    AutoProfile::m_curFrame = 0;
 unsigned int    AutoProfile::m_activeFrame = 0;
+unsigned int    AutoProfile::m_displayStatsWaitMillis = 500;
+
+AutoFrameProfile::PtrDisplayCallback  AutoFrameProfile::m_displayCallback = nullptr;
 
 
 // *******************************
@@ -30,6 +33,20 @@ void            AutoProfile::EndFrame           ()
     m_curFrame = ( m_curFrame + 1 ) % MAX_PROFILER_FRAMES;
 
     //TODO: anything useful
+}
+
+// *******************************
+//
+void            AutoProfile::SetStatsDisplayWaitMs   ( unsigned int millis )
+{
+    m_displayStatsWaitMillis = millis;
+}
+
+// *******************************
+//
+unsigned int    AutoProfile::GetStatsDisplayWaitMs   ()
+{
+    return m_displayStatsWaitMillis;
 }
 
 // *******************************
@@ -147,6 +164,13 @@ const ProfilerSample *   AutoProfile::AveragedSamples ()
     }
 
     return m_samples;
+}
+
+// *******************************
+//
+void    AutoFrameProfile::RegisterDisplayCallback ( PtrDisplayCallback callback )
+{
+    m_displayCallback = callback;
 }
 
 } // bv
