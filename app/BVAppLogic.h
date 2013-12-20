@@ -57,7 +57,7 @@ public:
 
     void            FrameRendered   ( Renderer * renderer );
 
-    FrameStats      HandleProfiler  ();
+    void            PostFrameLogic  ();
 
 private:
 

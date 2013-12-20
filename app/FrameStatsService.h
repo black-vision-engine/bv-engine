@@ -99,6 +99,49 @@ private:
 
 };
 
+class FrameStatsFrameScope
+{
+private:
+
+    FrameStatsCalculator * m_calc;
+
+public:
+
+    inline FrameStatsFrameScope     ( FrameStatsCalculator * fsc )
+        : m_calc( fsc )
+    {
+        fsc->ResetTimer();
+    }
+
+    inline ~FrameStatsFrameScope    ()
+    {
+        m_calc->NextFrame();
+    }
+
+};
+
+class FrameStatsSectionScope
+{
+private:
+
+    FrameStatsCalculator *  m_calc;
+    const char *            m_sectionName;
+
+public:
+
+    inline FrameStatsSectionScope     ( FrameStatsCalculator * fsc, const char * sectionName )
+        : m_calc( fsc )
+        , m_sectionName( sectionName )
+    {
+        fsc->StartSection( sectionName );
+    }
+
+    inline ~FrameStatsSectionScope    ()
+    {
+        m_calc->EndSection( m_sectionName );
+    }
+};
+
 } //bv
 
 #include "FrameStatsService.inl"

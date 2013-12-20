@@ -299,7 +299,7 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
 
 // *********************************
 //
-FrameStats BVAppLogic::HandleProfiler   ()
+void    BVAppLogic::PostFrameLogic   ()
 {
     if( m_statsCalculator.CurFrame() == 2 * m_statsCalculator.WindowSize() )
     {
@@ -337,7 +337,7 @@ FrameStats BVAppLogic::HandleProfiler   ()
         }
     }
 
-    return stats;
+    //return stats;
 
 }
 
