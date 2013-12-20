@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+
+
 namespace bv
 {
 
@@ -7,7 +10,7 @@ class ProfilerDataFormatter
 {
 public:
 
-    void    PrintToConsole  ();
+    static void    PrintToConsole  ();
 
 };
 
@@ -15,8 +18,10 @@ class FrameStatsFormatter
 {
 public:
 
-    void    PrintToConsole  ( const class FrameStatsCalculator & fsc, const char * name );
-    void    PrintToConsole  ( const class FrameStatsCalculator & fsc );
+    static void         PrintToConsole  ( const class FrameStatsCalculator & fsc, const char * name );
+    static void         PrintToConsole  ( const class FrameStatsCalculator & fsc );
+
+    static std::wstring FPSStatsLine    ( const class FrameStatsCalculator & fsc );
 
 };
 

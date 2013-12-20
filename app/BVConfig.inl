@@ -100,4 +100,32 @@ inline unsigned int         BVConfig::StatsMAWindowSize () const
     return m_defaultStatsMovingAverageWindowSize;
 }
 
+// *********************************
+//
+inline unsigned int         BVConfig::MAVWarmupRounds   () const
+{
+    return m_defaultWarmupRoundsStatsMAV;
+}
+
+// *********************************
+//
+inline unsigned int         BVConfig::StatsRefreshMillisDelta () const
+{
+    return m_defaultStatsRefreshMillisDelta;
+}
+
+// *********************************
+//
+inline unsigned int         BVConfig::StatsRecalcFramesDelta  () const
+{
+    return m_defaultStatsRecalcFramesDelta;
+}
+
+// *********************************
+//
+inline const char *         BVConfig::FrameStatsSection () const
+{
+    return "FRAME";
+}
+
 } //bv

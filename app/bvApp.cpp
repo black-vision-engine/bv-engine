@@ -8,6 +8,7 @@
 
 #include "System/HerarchicalProfiler.h"
 
+#include "StatsFormatters.h"
 #include "BVAppLogic.h"
 #include "BVConfig.h"
 
@@ -91,8 +92,7 @@ void BlackVisionApp::OnIdle		()
 
     {
 //        HPROFILER_SECTION( "PostFrame" );
-        //PostFrame();
-        //FIXME: uncomment
+        PostFrame( millis );
     }
 }
 
@@ -161,30 +161,18 @@ void    BlackVisionApp::InitializeAppLogic  ()
 
 // *********************************
 //
-void    BlackVisionApp::PostFrame           ()
+void    BlackVisionApp::PostFrame           ( unsigned int millis )
 {
 #ifndef PRODUCTION_BUILD
+    static unsigned int startMillis = millis;
 
-    m_app->PostFrameLogic();
+    m_app->PostFrameLogic( millis );
     
-    static float totalTime = 0.0;
-
-    //totalTime += stats.frameMillis;
-
-    if( totalTime > 200.f )
+    if( millis - startMillis > DefaultConfig.StatsRefreshMillisDelta() )
     {
-        std::ostringstream  s;
-        std::cout.precision( 4 );
-        //s << "FPS: " << stats.fps << " frame time: " << stats.frameMillis << " ms " << std::endl;
-        
-		std::string ss = s.str();
-		std::wstring stemp = std::wstring( ss.begin(), ss.end() );
-		LPCWSTR sw = stemp.c_str();
-		SetWindowTextW( handle,sw );
-
-        totalTime = 0.f;
+		SetWindowTextW( handle, FrameStatsFormatter::FPSStatsLine( m_app->FrameStats() ).c_str() );
+        startMillis = millis;
     }
-
 #endif
 }
 

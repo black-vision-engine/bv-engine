@@ -221,6 +221,15 @@ double  FrameStatsCalculator::MaxVal                  ( const char * name, unsig
 
 // *********************************
 //
+FrameStatsSample    FrameStatsCalculator::NewestSample( const char * name ) const
+{
+    assert( m_samplers.find( name ) != m_samplers.end() );
+
+    return m_samplers.find( name )->second.samples.front();
+}
+
+// *********************************
+//
 void    FrameStatsCalculator::InitializeSampler       ( const char * name )
 {
     assert( m_samplers.find( name ) == m_samplers.end() );

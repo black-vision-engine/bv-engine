@@ -57,7 +57,9 @@ public:
 
     void            FrameRendered   ( Renderer * renderer );
 
-    void            PostFrameLogic  ();
+    void            PostFrameLogic  ( unsigned int millis );
+
+    const FrameStatsCalculator &     FrameStats () const;
 
 private:
 

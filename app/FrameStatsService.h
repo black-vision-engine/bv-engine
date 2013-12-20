@@ -83,7 +83,7 @@ public:
     unsigned int    NextFrame       ();
     void            ResetTimer      ();
 
-    inline void StartSection        ( const char * name);
+    inline void StartSection        ( const char * name );
     inline void EndSection          ( const char * name );
 
     void        RecalculateStats    ();
@@ -92,6 +92,8 @@ public:
     double      Variance            ( const char * name ) const;
     double      MinVal              ( const char * name, unsigned int * frame = nullptr ) const;
     double      MaxVal              ( const char * name, unsigned int * frame = nullptr ) const;
+
+    FrameStatsSample    NewestSample( const char * name ) const;
 
 private:
 

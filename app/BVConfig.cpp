@@ -40,7 +40,10 @@ BVConfig::BVConfig                      ()
     m_defaultCameraDirection = glm::vec3( 0.f, 0.f, 0.f );
     m_defaultCameraUp        = glm::vec3( 0.f, 1.f, 0.f );
 
-    m_defaultStatsMovingAverageWindowSize = 500;
+    m_defaultStatsMovingAverageWindowSize   = 500;
+    m_defaultWarmupRoundsStatsMAV           = 10;
+    m_defaultStatsRefreshMillisDelta        = 300;
+    m_defaultStatsRecalcFramesDelta         = m_defaultStatsMovingAverageWindowSize * 10;
 }
 
 // *********************************

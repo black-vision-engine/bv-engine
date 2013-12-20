@@ -29,11 +29,14 @@ private:
     glm::vec3       m_defaultCameraDirection;
 
     unsigned int    m_defaultStatsMovingAverageWindowSize;
+    unsigned int    m_defaultWarmupRoundsStatsMAV;
+    unsigned int    m_defaultStatsRefreshMillisDelta;
+    unsigned int    m_defaultStatsRecalcFramesDelta;
 
 private:
 
-    BVConfig();
-    ~BVConfig();
+    BVConfig    ();
+    ~BVConfig   ();
 
 public:
 
@@ -56,6 +59,11 @@ public:
     inline const glm::vec3 &    CameraDirection         () const;
 
     inline unsigned int         StatsMAWindowSize       () const;
+    inline unsigned int         MAVWarmupRounds         () const;
+    inline unsigned int         StatsRefreshMillisDelta () const;
+    inline unsigned int         StatsRecalcFramesDelta  () const;
+
+    inline const char *         FrameStatsSection       () const;
 
     static const BVConfig & Instance  ();
 

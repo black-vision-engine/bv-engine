@@ -146,17 +146,15 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
     if( m_state == BVAppState::BVS_RUNNING )
     {
         {
-            //FRAME_STATS_FRAME();
-            //FRAME_STATS_SECTION( "Frame" );
+            FRAME_STATS_FRAME();
+            FRAME_STATS_SECTION( DefaultConfig.FrameStatsSection() );
 
             //FIXME: debug timer - don't get fooled
             //float t = float(frame) * 0.1f; ///10 fps
 
             TimeType t = TimeType( millis ) * TimeType( 0.001 );
-            double gs = GTimer.CurElapsed();
             GownoWFormieKebaba( t );
-            double ge = GTimer.CurElapsed();
-            double us, ue;
+
             {
                 //FRAME_STATS_SECTION( "update total" );
                 //HPROFILER_SECTION( "update total" );
@@ -165,9 +163,7 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
                     //FRAME_STATS_SECTION( "model Update" );
                     //HPROFILER_SECTION( "m_modelScene->Update" );
 
-                    us = GTimer.CurElapsed();
                     m_modelScene->Update( t );
-                    ue = GTimer.CurElapsed();
                 }
                 {
                     //FRAME_STATS_SECTION( "updaters manager Update" );
@@ -197,19 +193,23 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
                 FrameRendered( renderer );
             }
 
-            static unsigned int frame = 0;
-            static TimeType tt = TimeType( 0 );
-            double elasp = GTimer.CurElapsed();
-            if( elasp > 0.01 )
-            {
-                printf ( "%d %1.4f s -> g: %1.4f u: %1.4f r: %1.4f \n", frame, 1000. * elasp, 1000. * ( ge - gs ), 1000. * ( ue - us ), 1000. * ( GTimer.Re() ) );
-                t = TimeType( 0 );
-            }
-   
-            tt += t;
-            frame++;
-
         } //Frame Stats Collecting
+
+//        if( m_statsCalculator )
+//        {
+//        }
+
+        //static unsigned int frame = 0;
+        //    static TimeType tt = TimeType( 0 );
+        //    double elasp = GTimer.CurElapsed();
+        //    if( elasp > 0.01 )
+        //    {
+        //        printf ( "%d %1.4f s -> g: %1.4f u: %1.4f r: %1.4f \n", frame, 1000. * elasp, 1000. * ( ge - gs ), 1000. * ( ue - us ), 1000. * ( GTimer.Re() ) );
+        //        t = TimeType( 0 );
+        //    }
+   
+        //    tt += t;
+        //    frame++;
 
         DWORD ftime = timeGetTime() - millis;
         if( ftime < DefaultConfig.FrameTimeMillis() )
@@ -302,11 +302,12 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
 
 // *********************************
 //
-void    BVAppLogic::PostFrameLogic   ()
+void    BVAppLogic::PostFrameLogic   ( unsigned int millis )
 {
-    if( m_statsCalculator.CurFrame() == 5 * m_statsCalculator.WindowSize() )
+    if( m_statsCalculator.CurFrame() == DefaultConfig.MAVWarmupRounds() * m_statsCalculator.WindowSize() || m_statsCalculator.CurFrame() % DefaultConfig.StatsRecalcFramesDelta() == 0 )
     {
         m_statsCalculator.RecalculateStats();
+        printf( "Recalc done\n" );
     }
     /*
     static unsigned int srame = 0;
@@ -341,6 +342,13 @@ void    BVAppLogic::PostFrameLogic   ()
     */
     //return stats;
 
+}
+
+// *********************************
+//
+const FrameStatsCalculator &     BVAppLogic::FrameStats () const
+{
+    return m_statsCalculator;
 }
 
 // *********************************
