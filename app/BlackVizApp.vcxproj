@@ -83,6 +83,7 @@
     <ClCompile Include="FrameStatsService.cpp" />
     <ClCompile Include="MainInitProcess.cpp" />
     <ClCompile Include="MainLoopProcess.cpp" />
+    <ClCompile Include="StatsFormatters.cpp" />
     <ClCompile Include="xml\BlackTree.cpp" />
     <ClCompile Include="xml\pomocnicze\auxilary.cpp" />
     <ClCompile Include="xml\Scena.cpp" />
@@ -108,6 +109,7 @@
     <ClInclude Include="FrameStatsService.h" />
     <ClInclude Include="MainInitProcess.h" />
     <ClInclude Include="MainLoopProcess.h" />
+    <ClInclude Include="StatsFormatters.h" />
     <ClInclude Include="xml\BlackTree.h" />
     <ClInclude Include="xml\pomocnicze\auxilary.hpp" />
     <ClInclude Include="xml\rapidxml\rapidxml.hpp" />

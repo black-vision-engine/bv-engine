@@ -3,7 +3,9 @@
 
 namespace bv
 {
-	
+
+HighResolutionTimer GTimer;
+
 // *********************************
 //
 HighResolutionTimer::HighResolutionTimer    ()

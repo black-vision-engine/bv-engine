@@ -5,8 +5,8 @@
 #include "System/BasicMacros.h"
 
 
-#define MAX_PROFILER_SAMPLES 100
-#define MAX_PROFILER_FRAMES 100
+#define MAX_PROFILER_SAMPLES 20
+#define MAX_PROFILER_FRAMES 10
 
 
 namespace bv
@@ -55,6 +55,7 @@ private:
 
     static unsigned int         m_curSample;
     static unsigned int         m_curFrame;
+    static unsigned int         m_activeFrame;
 
     const char *                m_name;
 
@@ -72,7 +73,7 @@ public:
 
     static unsigned int     NumSamples              ();
     static unsigned int     NumFrames               ();
-    static unsigned int     CurFrame                ();
+    static unsigned int     ActiveFrame             ();
 
     static LARGE_INTEGER    QueryCounterFrequency   ();
 
@@ -103,6 +104,6 @@ public:
 
 #define HPROFILER_GET_NUM_SAMPLES()                 AutoProfile::NumSamples()
 #define HPROFILER_GET_NUM_FRAMES()                  AutoProfile::NumFrames()
-#define HPROFILER_GET_CUR_FRAME()                   AutoProfile::CurFrame()
+#define HPROFILER_GET_ACTIVE_FRAME()                AutoProfile::ActiveFrame()
 
 #include "HerarchicalProfiler.inl"

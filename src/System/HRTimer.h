@@ -15,11 +15,32 @@ private:
 
     LARGE_INTEGER m_Frequency;
 
+    LARGE_INTEGER m_StartRe;
+    LARGE_INTEGER m_StopRe;
+
 public:
 	
     HighResolutionTimer     ();
 
     void    Reinitialize    ();
+
+    inline void    StartRe  ()
+    {
+        QueryPerformanceCounter( &m_StartRe );
+    }
+
+    inline void    StopRe   ()
+    {
+        QueryPerformanceCounter( &m_StopRe );
+    }
+
+    inline double    Re     () const
+    {
+        LARGE_INTEGER time;
+        time.QuadPart = m_StopRe.QuadPart - m_StartRe.QuadPart;
+
+        return ToSecs( time );
+    }
 
     void    StartTimer      ();
 	void    StopTimer       ();

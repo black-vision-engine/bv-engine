@@ -4,8 +4,12 @@
 #include "Engine/Graphics/Resources/VertexBuffer.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 
+#include "System/HRTimer.h"
+
 
 namespace bv {
+
+extern HighResolutionTimer GTimer;
 
 // *******************************
 //
@@ -94,14 +98,22 @@ void    PdrVertexBuffer::Unbind              ()
 //
 void    PdrVertexBuffer::BufferData          ( const VertexBuffer * vb ) const
 {
+    //FIXME: tutaj w trybie DEBUG (odpalanie przez F5) jest zwiecha co 4096 ramkê, jeœli ta pamiêæ jest co ramkê reuploadowana - czyli co ramkê bufor jest od zera zapisywany na nowo (to jest drastyczny przypadek, ale 
+    //testowo takie rzeczy warto sprawdzaæ). Semantic jest ustawione na DYNAMIC_DRAW wiec lepiej sie nie da od tej strony. Problem nie wystepuje, jesli appka jest odpalona przez Ctrl+F5 (czyli Run) i nie jest podpieta
+    //do debuggera
     glBufferData( GL_ARRAY_BUFFER, vb->Size(), 0, ConstantsMapper::GLConstant( vb->GetSemantic() ) );
+
+    //GTimer.StartRe();
+    //glBufferData( GL_ARRAY_BUFFER, vb->Size(), 0, ConstantsMapper::GLConstant( vb->GetSemantic() ) );
+    //GTimer.StopRe();
 }
 
 // *******************************
 //
 void    PdrVertexBuffer::CreateBuffer        ( const VertexBuffer * vb )
 {
-    glGenBuffers( 1, &m_bufferHandle);
+    //FIXME: Odpalany czesto powoduje przy F5 problemy ze zwiechami co 4096 ramek
+    glGenBuffers( 1, &m_bufferHandle );
 
     Bind();
     BufferData( vb );

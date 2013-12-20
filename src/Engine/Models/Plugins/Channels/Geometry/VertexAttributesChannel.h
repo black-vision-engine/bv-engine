@@ -44,6 +44,7 @@ public:
 
     void                                                SetNeedsAttributesUpdate( bool b );
     void                                                SetNeedsTopologyUpdate  ( bool b );
+
     virtual unsigned int                                TotalNumVertices        ()          const;
 
     virtual const IVertexAttributesChannelDescriptor *  GetDescriptor           () const;

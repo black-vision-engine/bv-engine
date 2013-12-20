@@ -19,14 +19,11 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-
 namespace bv
 {
-
+extern HighResolutionTimer GTimer;
 namespace
 {
-    bv::HighResolutionTimer GTimer;
-
     //FIXME: temporary
     char * GfbBuf = nullptr;
 
@@ -56,6 +53,7 @@ BVAppLogic::BVAppLogic              ()
 {
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GfbBuf = new char[ 2048 * 2048 * 4 ]; //FIXME: naive hack
+    GTimer.StartTimer();
 }
 
 // *********************************
@@ -78,8 +76,8 @@ void BVAppLogic::Initialize         ()
 //
 void BVAppLogic::LoadScene          ( void )
 {
+    //FIXME: czy ten caly smietnik jest tu potrzebny?
     //auto atlasCache = model::FontAtlasCache::Load( "fontcache.db" );
-
     //model::FontAtlasCacheData data( nullptr, 0, 0, 0 );
 
     //atlasCache->AddEntry( data, "dupa", 0, "dupa_file" );
@@ -90,15 +88,10 @@ void BVAppLogic::LoadScene          ( void )
     //simple_freetype_test();
     //basic_write_atlas( fontFile, "ascii_arial_atlas.raw" );
 
-    //model::BasicNode * root = TestScenesFactory::SimpeTextureTestScene();
-    //model::BasicNode * root1 = TestScenesFactory::SimpeTextureTestScene();
-
-    //root->AddChild( root1 );
-
 
     //model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
     //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
-    model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
+    //model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
     //model::BasicNode * root = TestScenesFactory::XMLTestScene();
     //model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
     //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
@@ -111,16 +104,13 @@ void BVAppLogic::LoadScene          ( void )
     model::BasicNode * rootu = TestScenesFactory::StackThemNow( root0, root1 );
     model::BasicNode * roota = TestScenesFactory::StackThemNow( root3, rootu );
     model::BasicNode * root  = TestScenesFactory::StackThemNow( roota, rodos );
+    model::BasicNode * root = TestScenesFactory::TexturedRectTestScene();
+    model::BasicNode * root = TestScenesFactory::NaiveTimerTestScene();
     */
 
-    //model::BasicNode * root = TestScenesFactory::TexturedRectTestScene();
-    //model::BasicNode * root = TestScenesFactory::GreenRectTestScene();
-    //model::BasicNode * root = TestScenesFactory::NaiveTimerTestScene();
-
-    //model::BasicNode * root = TestScenesFactory::SequenceAnimationTestScene();
+    model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
     m_modelScene = model::ModelScene::Create( root, new Camera() );
     m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
-
 }
 
 // *********************************
@@ -133,15 +123,8 @@ void BVAppLogic::InitCamera         ( Renderer * renderer, int w, int h )
 
     cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
     cam->SetPerspective( DefaultConfig.FOV(), float( w ) / float( h ), DefaultConfig.NearClippingPlane(), DefaultConfig.FarClippingPlane() );
-
-    //cam->SetFrame( glm::vec3( 0.f, 0.f, 0.001f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-    //cam->SetFrame( glm::vec3( 0.f, -4.f, 3.5f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
     cam->SetFrame( glm::vec3( 0.f, 0.f, 1.3f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-//    AddCameraAnimation  ();
-    //cam->SetFrame( glm::vec3( 0.f, 0.f, 1.2f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-    //cam->SetFrame( glm::vec3( 0.f, 0.f, 8.0f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-    //AddCameraAnimation  ();
-    //AddCameraAnimation2  ();
+
     //FIXME: read from configuration file and change appropriately when resoultion changes
 }
 
@@ -156,40 +139,44 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
 //
 void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer, HWND handle )
 {
-    HPROFILER_FUNCTION( "BVAppLogic::OnUpdate" );
+    //HPROFILER_FUNCTION( "BVAppLogic::OnUpdate" );
 
     assert( m_state != BVAppState::BVS_INVALID );
 
     if( m_state == BVAppState::BVS_RUNNING )
     {
         {
-            FRAME_STATS_FRAME();
-            FRAME_STATS_SECTION( "Frame" );
+            //FRAME_STATS_FRAME();
+            //FRAME_STATS_SECTION( "Frame" );
 
             //FIXME: debug timer - don't get fooled
             //float t = float(frame) * 0.1f; ///10 fps
 
             TimeType t = TimeType( millis ) * TimeType( 0.001 );
+            double gs = GTimer.CurElapsed();
             GownoWFormieKebaba( t );
-
+            double ge = GTimer.CurElapsed();
+            double us, ue;
             {
-                FRAME_STATS_SECTION( "update total" );
-                HPROFILER_SECTION( "update total" );
+                //FRAME_STATS_SECTION( "update total" );
+                //HPROFILER_SECTION( "update total" );
 
                 {
-                    FRAME_STATS_SECTION( "model Update" );
-                    HPROFILER_SECTION( "m_modelScene->Update" );
+                    //FRAME_STATS_SECTION( "model Update" );
+                    //HPROFILER_SECTION( "m_modelScene->Update" );
 
+                    us = GTimer.CurElapsed();
                     m_modelScene->Update( t );
+                    ue = GTimer.CurElapsed();
                 }
                 {
-                    FRAME_STATS_SECTION( "updaters manager Update" );
-                    HPROFILER_SECTION( "UpdatersManager::Get().UpdateStep" );
+                    //FRAME_STATS_SECTION( "updaters manager Update" );
+                    //HPROFILER_SECTION( "UpdatersManager::Get().UpdateStep" );
                     UpdatersManager::Get().UpdateStep( t );
                 }
                 {
-                    FRAME_STATS_SECTION( "engine scene Update" );
-                    HPROFILER_SECTION( "m_mockSceneEng->Update" );
+                    //FRAME_STATS_SECTION( "engine scene Update" );
+                    //HPROFILER_SECTION( "m_mockSceneEng->Update" );
 
                     auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
 
@@ -200,8 +187,8 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
                 }
             }
             {
-                FRAME_STATS_SECTION( "Render" );
-                HPROFILER_SECTION( "Render" );
+                //FRAME_STATS_SECTION( "Render" );
+                //HPROFILER_SECTION( "Render" );
 
                 renderer->ClearBuffers();
                 RenderScene( renderer );
@@ -209,6 +196,19 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
 
                 FrameRendered( renderer );
             }
+
+            static unsigned int frame = 0;
+            static TimeType tt = TimeType( 0 );
+            double elasp = GTimer.CurElapsed();
+            if( elasp > 0.01 )
+            {
+                printf ( "%d %1.4f s -> g: %1.4f u: %1.4f r: %1.4f \n", frame, 1000. * elasp, 1000. * ( ge - gs ), 1000. * ( ue - us ), 1000. * ( GTimer.Re() ) );
+                t = TimeType( 0 );
+            }
+   
+            tt += t;
+            frame++;
+
         } //Frame Stats Collecting
 
         DWORD ftime = timeGetTime() - millis;
@@ -218,6 +218,8 @@ void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer,
             printf( "Sleeping: %d\n", DefaultConfig.FrameTimeMillis() - ftime );
         }
     }
+
+    GTimer.StartTimer();
 }
 
 // *********************************
@@ -302,17 +304,16 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
 //
 void    BVAppLogic::PostFrameLogic   ()
 {
-    if( m_statsCalculator.CurFrame() == 2 * m_statsCalculator.WindowSize() )
+    if( m_statsCalculator.CurFrame() == 5 * m_statsCalculator.WindowSize() )
     {
         m_statsCalculator.RecalculateStats();
-        printf( "O TU JEST TO OBLICZENIE WAZNE BARDZO\n" );
     }
-
+    /*
     static unsigned int srame = 0;
     srame++;
     FrameStats stats;
 
-    unsigned int frame = HPROFILER_GET_CUR_FRAME();
+    unsigned int frame = HPROFILER_GET_ACTIVE_FRAME();
     const ProfilerSample * samples = HPROFILER_GET_ONE_FRAME_SAMPLES( frame );
 
     double duration = samples[ 0 ].durationSecs;
@@ -337,7 +338,7 @@ void    BVAppLogic::PostFrameLogic   ()
             //printf( "%*s %s duration: %2.4f ms\n", sample.depth * 6, section, sample.name, sample.durationSecs * 1000.0 );
         }
     }
-
+    */
     //return stats;
 
 }
@@ -358,18 +359,18 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 {
     if ( node->IsVisible() )
     {
-        HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
+        //HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
         renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
 
         for( int i = 0; i < node->NumTransformables(); ++i )
         {
-            HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
+            //HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
             renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
         }
 
         for ( int i = 0; i < node->NumChildrenNodes(); i++ )
         {
-            HPROFILER_SECTION( "RenderNode::RenderNode" );
+            //HPROFILER_SECTION( "RenderNode::RenderNode" );
             RenderNode( renderer, node->GetChild( i ) ); 
         }
     }

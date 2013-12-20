@@ -11,6 +11,7 @@ ProfilerSample      AutoProfile::m_samples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_
 
 unsigned int    AutoProfile::m_curSample = 0;
 unsigned int    AutoProfile::m_curFrame = 0;
+unsigned int    AutoProfile::m_activeFrame = 0;
 
 
 // *******************************
@@ -18,6 +19,7 @@ unsigned int    AutoProfile::m_curFrame = 0;
 void            AutoProfile::StartFrame         ()
 {
     m_curSample = 0;
+    m_activeFrame = m_curFrame;
 }
 
 // *******************************
@@ -56,17 +58,14 @@ unsigned int    AutoProfile::NumFrames          ()
 {
     assert( m_curFrame <= MAX_PROFILER_FRAMES );
 
-    return m_curFrame;
+    return m_activeFrame + 1;
 }
 
 // *******************************
 //
-unsigned int     AutoProfile::CurFrame                ()
+unsigned int     AutoProfile::ActiveFrame             ()
 {
-    if( m_curFrame == 0 )
-        return MAX_PROFILER_FRAMES - 1;
-
-    return m_curFrame - 1;
+    return m_activeFrame;
 }
 
 // *******************************

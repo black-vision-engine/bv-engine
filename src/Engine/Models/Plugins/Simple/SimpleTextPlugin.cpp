@@ -34,6 +34,7 @@ SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::str
     , m_bolded( bold )
     , m_italic( italic )
     , m_atlasText()
+    , m_textSet( true )
 {
 
     auto res = LoadFont( fontFileName, fontSize );
@@ -154,7 +155,10 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
 
     m_geomChannel = new VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, geomChannelDesc);
 
-    m_geomChannel->SetNeedsTopologyUpdate(true);
+    m_geomChannel->SetNeedsTopologyUpdate( true ); //FIXME: TAK NIE WOLNO ROBIC, BO TO POWODUJE ODTWARZANIE GEMOETRII CO RAMKE, CHOCIAZ WCALE NIE TRZEBA
+
+    //FIXME: zmieniam na false - Vig
+    m_geomChannel->SetNeedsTopologyUpdate( false );
 
     glm::vec3 translate(0.f);
     glm::vec3 interspace( 0.07f, 0.f ,0.f );
@@ -236,7 +240,11 @@ const IVertexAttributesChannel *    SimpleTextPlugin::GetGeometryChannel        
 //
 void                SimpleTextPlugin::Update                      ( TimeType t )
 {
+    //FIXME: to jest nieco syf, ale nie taki, jak byl
+    m_geomChannel->SetNeedsTopologyUpdate( m_textSet );
     m_geomChannel->Update( t );
+
+    m_textSet = false;
 }
 
 // *********************************
@@ -269,8 +277,9 @@ std::string SetTextEvent::m_sEventName        = "Event_SetText";
 
 // *************************************
 //
-void                SimpleTextPlugin::SetText                     ( const std::wstring& newText )
+void                SimpleTextPlugin::SetText                     ( const std::wstring & newText )
 {
+    m_textSet = true;
     m_text = newText;
 }
 

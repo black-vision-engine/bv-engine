@@ -75,24 +75,25 @@ void BlackVisionApp::OnPreidle  ()
 //
 void BlackVisionApp::OnIdle		()
 {
+    HPROFILER_NEW_FRAME();
+
+//    HPROFILER_FUNCTION( "BlackVisionApp::OnIdle" );
+
+    unsigned long millis = m_timer.ElapsedMillis();
+
     {
-        HPROFILER_NEW_FRAME();
+//        HPROFILER_SECTION( "UpdateSubsystems" );
 
-        HPROFILER_FUNCTION( "BlackVisionApp::OnIdle" );
-
-        unsigned long millis = m_timer.ElapsedMillis();
-
-        {
-            HPROFILER_SECTION( "UpdateSubsystems" );
-
-            UpdateSubsystems( millis );
-        }
-
-        m_app->OnUpdate( millis, m_Renderer, handle );
-
+        UpdateSubsystems( millis );
     }
 
-    PostFrame();
+    m_app->OnUpdate( millis, m_Renderer, handle );
+
+    {
+//        HPROFILER_SECTION( "PostFrame" );
+        //PostFrame();
+        //FIXME: uncomment
+    }
 }
 
 // *********************************
@@ -163,6 +164,7 @@ void    BlackVisionApp::InitializeAppLogic  ()
 void    BlackVisionApp::PostFrame           ()
 {
 #ifndef PRODUCTION_BUILD
+
     m_app->PostFrameLogic();
     
     static float totalTime = 0.0;
@@ -182,6 +184,7 @@ void    BlackVisionApp::PostFrame           ()
 
         totalTime = 0.f;
     }
+
 #endif
 }
 

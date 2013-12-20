@@ -64,6 +64,11 @@ private:
     bool                        m_bolded;
     bool                        m_italic;
 
+    bool                        m_textSet;
+
+private:
+
+
     void                        LoadAtlas( const std::string& name );
 
     void                        EvalGeometryChannel();

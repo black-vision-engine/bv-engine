@@ -25,9 +25,13 @@
 #include "Engine/Graphics/Resources/VertexArray.h"
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 
+#include "System/HRTimer.h"
+
 //FIXME: add disable methods so that current state can be cleared after frame is rendered
 
 namespace bv {
+
+extern HighResolutionTimer GTimer;
 
 // *********************************
 //
@@ -308,7 +312,7 @@ void    Renderer::Enable              ( const VertexArray * vao )
 void    Renderer::Enable              ( const VertexArraySingleVertexBuffer * vao )
 {
     PdrVertexArrayObjectSingleVB  * pvao = GetPdrVertexArraySingleVB( vao );
-    pvao->Enable( this );        
+    pvao->Enable( this );
 }
 
 // *********************************

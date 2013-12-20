@@ -6,10 +6,15 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
+#include "System/HRTimer.h"
+
 #include <cassert>
+
 
 namespace bv
 {
+
+extern HighResolutionTimer GTimer;
 
 // *******************************
 //
@@ -38,6 +43,7 @@ void    PdrVertexArrayObjectSingleVB::Enable                  ( Renderer * rende
     }
     else if( m_vao->NeedsUpdateRecreation() )
     {
+        //FIXME: Odpalany czesto powoduje przy F5 problemy ze zwiechami co 4096 ramek na moim kompie - Vig
         renderer->Recreate( m_vao->GetVertexBuffer() );
 
         glDeleteVertexArrays( 1, &m_vaoHandle );
