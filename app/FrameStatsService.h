@@ -32,7 +32,7 @@ struct MovingAverageData
 
 public:
 
-            MovingAverageData   ();
+            MovingAverageData   ( unsigned int numSamples );
 
 private:
 
@@ -58,8 +58,8 @@ class FrameStatsCalculator
 {
 private:
 
-    typedef std::hash_map< const char *, MovingAverageData > TSamplersMap;
-    typedef std::hash_map< const char *, FrameStatsSample >  TSingleSamplesMap;
+    typedef std::hash_map< const char *, MovingAverageData * >  TSamplersMap;
+    typedef std::hash_map< const char *, FrameStatsSample >     TSingleSamplesMap;
 
 private:
 
@@ -93,11 +93,7 @@ public:
     double      MinVal              ( const char * name, unsigned int * frame = nullptr ) const;
     double      MaxVal              ( const char * name, unsigned int * frame = nullptr ) const;
 
-    FrameStatsSample    NewestSample( const char * name ) const;
-
-private:
-
-    void        InitializeSampler   ( const char * name );
+    FrameStatsSample RecentSample   ( const char * name ) const;
 
 };
 

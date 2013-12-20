@@ -50,7 +50,7 @@ std::wstring FrameStatsFormatter::FPSStatsLine  ( const FrameStatsCalculator & f
 {
     const char * fnm = DefaultConfig.FrameStatsSection();
 
-    auto sample = fsc.NewestSample( fnm );
+    auto sample = fsc.RecentSample( fnm );
 
     double lastDuration = sample.duration * 1000.f;
     double avgDuration = fsc.ExpectedValue( fnm ) * 1000.0;

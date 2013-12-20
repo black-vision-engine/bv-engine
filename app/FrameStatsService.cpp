@@ -8,9 +8,9 @@ namespace bv
 
 // *********************************
 //
-MovingAverageData::MovingAverageData        ()
+MovingAverageData::MovingAverageData        ( unsigned int numSamples )
 {
-    ResetAccumStats();
+    Initialize( numSamples );
 }
 
 // *********************************
@@ -140,6 +140,10 @@ FrameStatsCalculator::FrameStatsCalculator  ( unsigned int movingAverageWindowSi
 //
 FrameStatsCalculator::~FrameStatsCalculator ()
 {
+    for( auto it : m_samplers )
+    {
+        delete it.second;
+    }
 }
 
 // *********************************
@@ -176,10 +180,8 @@ void    FrameStatsCalculator::RecalculateStats        ()
 {
     for ( auto it : m_samplers )
     {
-        auto name = it.first;
-        auto data = it.second;
-
-        data.RecalculateStats();
+        const char * name = it.first;
+        it.second->RecalculateStats();
     }
 }
 
@@ -189,7 +191,8 @@ double  FrameStatsCalculator::ExpectedValue           ( const char * name ) cons
 {
     assert( m_samplers.find( name ) != m_samplers.end() );
 
-    return m_samplers.find( name )->second.ExpectedValue();
+    const auto it = m_samplers.find( name );
+    return it->second->ExpectedValue();
 }
 
 // *********************************
@@ -198,7 +201,8 @@ double  FrameStatsCalculator::Variance                ( const char * name ) cons
 {
     assert( m_samplers.find( name ) != m_samplers.end() );
 
-    return m_samplers.find( name )->second.Variance();
+    const auto it = m_samplers.find( name );
+    return it->second->Variance();
 }
 
 // *********************************
@@ -207,7 +211,8 @@ double  FrameStatsCalculator::MinVal                  ( const char * name, unsig
 {
     assert( m_samplers.find( name ) != m_samplers.end() );
 
-    return m_samplers.find( name )->second.MinVal( frame );
+    const auto it = m_samplers.find( name );
+    return it->second->MinVal( frame );
 }
 
 // *********************************
@@ -216,26 +221,18 @@ double  FrameStatsCalculator::MaxVal                  ( const char * name, unsig
 {
     assert( m_samplers.find( name ) != m_samplers.end() );
 
-    return m_samplers.find( name )->second.MaxVal( frame );
+    const auto it = m_samplers.find( name );
+    return it->second->MaxVal( frame );
 }
 
 // *********************************
 //
-FrameStatsSample    FrameStatsCalculator::NewestSample( const char * name ) const
+FrameStatsSample    FrameStatsCalculator::RecentSample( const char * name ) const
 {
     assert( m_samplers.find( name ) != m_samplers.end() );
 
-    return m_samplers.find( name )->second.samples.front();
-}
-
-// *********************************
-//
-void    FrameStatsCalculator::InitializeSampler       ( const char * name )
-{
-    assert( m_samplers.find( name ) == m_samplers.end() );
-
-    auto & sampler = m_samplers[ name ];
-    sampler.Initialize( m_windowSize );
+    const auto it = m_samplers.find( name );
+    return it->second->samples.front();
 }
 
 } //bv

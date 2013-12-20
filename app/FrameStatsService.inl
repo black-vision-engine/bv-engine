@@ -50,13 +50,16 @@ inline void    FrameStatsCalculator::EndSection     ( const char * name )
     assert( sample.duration == -1.0 );
     sample.duration = m_timer.CurElapsed( sample.startTime );
 
-    MovingAverageData & data = m_samplers[ name ];
-    if( data.samples.size() == 0 )
+    //MovingAverageData & data = m_samplers[ name ]; //FIXME: why the heck does it make a copy???
+    MovingAverageData * data = nullptr;
+    if( m_samplers.find( name ) == m_samplers.end() )
     {
-        data.Initialize( m_windowSize );
+        MovingAverageData * data = new MovingAverageData( m_windowSize );
+        m_samplers[ name ] = data;
     }
 
-    data.AddNextSample( sample );
+    data = m_samplers[ name ];
+    data->AddNextSample( sample );
 }
 
 } //bv
