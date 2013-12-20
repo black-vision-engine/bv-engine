@@ -156,59 +156,60 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
 //
 void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer, HWND handle )
 {
-    m_statsCalculator.ResetTimer();
-    m_statsCalculator.StartSection( "Frame" );
-
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate" );
 
     assert( m_state != BVAppState::BVS_INVALID );
 
     if( m_state == BVAppState::BVS_RUNNING )
     {
-        //FIXME: debug timer - don't get fooled
-        //float t = float(frame) * 0.1f; ///10 fps
-
-        TimeType t = TimeType( millis ) * TimeType( 0.001 );
-        GownoWFormieKebaba( t );
-
         {
-            m_statsCalculator.StartSection( "model Update" );
-            HPROFILER_SECTION( "m_modelScene->Update" );
-            m_modelScene->Update( t );
-            m_statsCalculator.EndSection( "model Update" );
-        }
-        {
-            m_statsCalculator.StartSection( "updaters manager Update" );
-            HPROFILER_SECTION( "UpdatersManager::Get().UpdateStep" );
-            UpdatersManager::Get().UpdateStep( t );
-            m_statsCalculator.EndSection( "updaters manager Update" );
-        }
-        {
-            m_statsCalculator.StartSection( "engine scene Update" );
-            HPROFILER_SECTION( "m_mockSceneEng->Update" );
+            FRAME_STATS_FRAME();
+            FRAME_STATS_SECTION( "Frame" );
 
-            auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
+            //FIXME: debug timer - don't get fooled
+            //float t = float(frame) * 0.1f; ///10 fps
 
-            //FIXME:
-            std::vector< bv::Transform > vec;
-            vec.push_back(Transform(viewMat, glm::inverse(viewMat)));
-            m_mockSceneEng->Update( t, vec );
-            m_statsCalculator.EndSection( "engine scene Update" );
-        }
-        {
-            m_statsCalculator.StartSection( "Render" );
-            HPROFILER_SECTION( "Render" );
+            TimeType t = TimeType( millis ) * TimeType( 0.001 );
+            GownoWFormieKebaba( t );
 
-            renderer->ClearBuffers();
-            RenderScene( renderer );
-            renderer->DisplayColorBuffer();
+            {
+                FRAME_STATS_SECTION( "update total" );
+                HPROFILER_SECTION( "update total" );
 
-            FrameRendered( renderer );
-            m_statsCalculator.EndSection( "Render" );
-        }
+                {
+                    FRAME_STATS_SECTION( "model Update" );
+                    HPROFILER_SECTION( "m_modelScene->Update" );
 
-        m_statsCalculator.EndSection( "Frame" );
-        m_statsCalculator.NextFrame();
+                    m_modelScene->Update( t );
+                }
+                {
+                    FRAME_STATS_SECTION( "updaters manager Update" );
+                    HPROFILER_SECTION( "UpdatersManager::Get().UpdateStep" );
+                    UpdatersManager::Get().UpdateStep( t );
+                }
+                {
+                    FRAME_STATS_SECTION( "engine scene Update" );
+                    HPROFILER_SECTION( "m_mockSceneEng->Update" );
+
+                    auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
+
+                    //FIXME:
+                    std::vector< bv::Transform > vec;
+                    vec.push_back(Transform(viewMat, glm::inverse(viewMat)));
+                    m_mockSceneEng->Update( t, vec );
+                }
+            }
+            {
+                FRAME_STATS_SECTION( "Render" );
+                HPROFILER_SECTION( "Render" );
+
+                renderer->ClearBuffers();
+                RenderScene( renderer );
+                renderer->DisplayColorBuffer();
+
+                FrameRendered( renderer );
+            }
+        } //Frame Stats Collecting
 
         DWORD ftime = timeGetTime() - millis;
         if( ftime < DefaultConfig.FrameTimeMillis() )

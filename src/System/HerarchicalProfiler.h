@@ -2,6 +2,9 @@
 
 #include <windows.h>
 
+#include "System/BasicMacros.h"
+
+
 #define MAX_PROFILER_SAMPLES 100
 #define MAX_PROFILER_FRAMES 100
 
@@ -89,9 +92,6 @@ public:
 };
 
 } //bv
-
-#define COMBINE1(X,Y) X##Y  // helper macro
-#define COMBINE(X,Y) COMBINE1(X,Y)
 
 #define HPROFILER_NEW_FRAME()                       AutoFrameProfile COMBINE(frame_sample_,__LINE__)
 

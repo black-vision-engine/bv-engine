@@ -354,6 +354,7 @@
     <ClInclude Include="Engine\Processes\InitProcess.h" />
     <ClInclude Include="System\SimpleTimer.h" />
     <ClInclude Include="System\HerarchicalProfiler.h" />
+    <ClInclude Include="System\BasicMacros.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

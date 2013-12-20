@@ -475,6 +475,7 @@
     <ClInclude Include="Engine\Processes\ProcessThreaded.h" />
     <ClInclude Include="Engine\Processes\ProcessThreadedEvents.h" />
     <ClInclude Include="Engine\Types\Enums.h" />
+    <ClInclude Include="System\BasicMacros.h" />
     <ClInclude Include="System\BasicTypes.h" />
     <ClInclude Include="System\HerarchicalProfiler.h" />
     <ClInclude Include="System\HRTimer.h" />

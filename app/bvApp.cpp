@@ -163,17 +163,17 @@ void    BlackVisionApp::InitializeAppLogic  ()
 void    BlackVisionApp::PostFrame           ()
 {
 #ifndef PRODUCTION_BUILD
-    FrameStats stats = m_app->HandleProfiler();
+    m_app->PostFrameLogic();
     
     static float totalTime = 0.0;
 
-    totalTime += stats.frameMillis;
+    //totalTime += stats.frameMillis;
 
     if( totalTime > 200.f )
     {
         std::ostringstream  s;
         std::cout.precision( 4 );
-        s << "FPS: " << stats.fps << " frame time: " << stats.frameMillis << " ms " << std::endl;
+        //s << "FPS: " << stats.fps << " frame time: " << stats.frameMillis << " ms " << std::endl;
         
 		std::string ss = s.str();
 		std::wstring stemp = std::wstring( ss.begin(), ss.end() );
