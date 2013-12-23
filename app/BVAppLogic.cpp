@@ -13,6 +13,7 @@
 
 #include "MockScenes.h"
 
+#include "System/SimpleTimer.h"
 #include "System/HRTimer.h"
 #include "BVConfig.h"
 
@@ -137,70 +138,59 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
 
 // *********************************
 //
-void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer, HWND handle )
+void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & timer, Renderer * renderer, HWND handle )
 {
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate" );
 
     assert( m_state != BVAppState::BVS_INVALID );
-
     if( m_state == BVAppState::BVS_RUNNING )
     {
+        FRAME_STATS_FRAME();
+        FRAME_STATS_SECTION( DefaultConfig.FrameStatsSection() );
+
+        //FIXME: debug timer - don't get fooled
+        //float t = float(frame) * 0.1f; ///10 fps
+
+        TimeType t = TimeType( millis ) * TimeType( 0.001 );
+        GownoWFormieKebaba( t );
+
         {
-            FRAME_STATS_FRAME();
-            FRAME_STATS_SECTION( DefaultConfig.FrameStatsSection() );
-
-            //FIXME: debug timer - don't get fooled
-            //float t = float(frame) * 0.1f; ///10 fps
-
-            TimeType t = TimeType( millis ) * TimeType( 0.001 );
-            GownoWFormieKebaba( t );
+            //FRAME_STATS_SECTION( "update total" );
+            HPROFILER_SECTION( "update total" );
 
             {
-                //FRAME_STATS_SECTION( "update total" );
-                HPROFILER_SECTION( "update total" );
+                //FRAME_STATS_SECTION( "model Update" );
+                HPROFILER_SECTION( "m_modelScene->Update" );
 
-                {
-                    //FRAME_STATS_SECTION( "model Update" );
-                    HPROFILER_SECTION( "m_modelScene->Update" );
-
-                    m_modelScene->Update( t );
-                }
-                {
-                    //FRAME_STATS_SECTION( "updaters manager Update" );
-                    HPROFILER_SECTION( "UpdatersManager::Get().UpdateStep" );
-                    UpdatersManager::Get().UpdateStep( t );
-                }
-                {
-                    //FRAME_STATS_SECTION( "engine scene Update" );
-                    HPROFILER_SECTION( "m_mockSceneEng->Update" );
-
-                    auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
-
-                    //FIXME:
-                    std::vector< bv::Transform > vec;
-                    vec.push_back(Transform(viewMat, glm::inverse(viewMat)));
-                    m_mockSceneEng->Update( t, vec );
-                }
+                m_modelScene->Update( t );
             }
             {
-                //FRAME_STATS_SECTION( "Render" );
-                HPROFILER_SECTION( "Render" );
-
-                renderer->ClearBuffers();
-                RenderScene( renderer );
-                renderer->DisplayColorBuffer();
-
-                FrameRendered( renderer );
+                //FRAME_STATS_SECTION( "updaters manager Update" );
+                HPROFILER_SECTION( "UpdatersManager::Get().UpdateStep" );
+                UpdatersManager::Get().UpdateStep( t );
             }
+            {
+                //FRAME_STATS_SECTION( "engine scene Update" );
+                HPROFILER_SECTION( "m_mockSceneEng->Update" );
 
-        } //Frame Stats Collecting
+                auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
 
-        //DWORD ftime = timeGetTime() - millis;
-        //if( ftime < DefaultConfig.FrameTimeMillis() )
-        //{
-        //    Sleep( DefaultConfig.FrameTimeMillis() - ftime );
-        //    printf( "Sleeping: %d\n", DefaultConfig.FrameTimeMillis() - ftime );
-        //}
+                //FIXME:
+                std::vector< bv::Transform > vec;
+                vec.push_back(Transform(viewMat, glm::inverse(viewMat)));
+                m_mockSceneEng->Update( t, vec );
+            }
+        }
+        {
+            //FRAME_STATS_SECTION( "Render" );
+            HPROFILER_SECTION( "Render" );
+
+            renderer->ClearBuffers();
+            RenderScene( renderer );
+            renderer->DisplayColorBuffer();
+
+            FrameRendered( renderer );
+        }
     }
 
     GTimer.StartTimer();
@@ -286,11 +276,18 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
 
 // *********************************
 //
-void    BVAppLogic::PostFrameLogic   ( unsigned int millis )
+void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int millis )
 {
     if( m_statsCalculator.CurFrame() == DefaultConfig.MAVWarmupRounds() * m_statsCalculator.WindowSize() || m_statsCalculator.CurFrame() % DefaultConfig.StatsRecalcFramesDelta() == 0 )
     {
         m_statsCalculator.RecalculateStats();
+    }
+
+    unsigned long frameMillis = timer.ElapsedMillis() - millis;
+    if( frameMillis < DefaultConfig.FrameTimeMillis() )
+    {
+        Sleep( DefaultConfig.FrameTimeMillis() - frameMillis );
+        printf( "Sleeping: %d\n", DefaultConfig.FrameTimeMillis() - frameMillis );
     }
 }
 

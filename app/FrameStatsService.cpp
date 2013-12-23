@@ -27,7 +27,7 @@ void MovingAverageData::Initialize          ( unsigned int numSamples )
 
     for( unsigned int i = 0; i < numSamples; ++i )
     {
-        samples.push( sample );
+        samples.push_back( sample );
     } 
 }
 
@@ -53,20 +53,9 @@ void MovingAverageData::RecalculateStats    ()
 
     double numEltsDouble = (double) samples.size();
 
-    std::list< FrameStatsSample > tmpSamples;
-
-    while( !samples.empty() )
-    {
-        auto sample = samples.front();
-        samples.pop();
-        tmpSamples.push_back( sample );
-    }
-
-    for( auto sample : tmpSamples )
+    for( const auto & sample : samples )
     {
         AccumulateSample( sample );
-
-        samples.push( sample );
     }
 }
 
@@ -233,6 +222,22 @@ FrameStatsSample    FrameStatsCalculator::RecentSample( const char * name ) cons
 
     const auto it = m_samplers.find( name );
     return it->second->samples.front();
+}
+
+// *********************************
+//
+FrameStatsCalculator::TSingleSamplesMap   FrameStatsCalculator::FrameStats  ( unsigned int frame ) const
+{
+    FrameStatsCalculator::TSingleSamplesMap retMap;
+
+    for( auto it : m_samplers )
+    {
+        for( auto sample : it.second->samples )
+        {
+        }
+    }
+
+    return retMap;
 }
 
 } //bv

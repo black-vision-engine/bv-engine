@@ -81,18 +81,11 @@ void BlackVisionApp::OnIdle		()
 
     unsigned long millis = m_timer.ElapsedMillis();
 
-    {
-//        HPROFILER_SECTION( "UpdateSubsystems" );
+    UpdateSubsystems( millis );
 
-        UpdateSubsystems( millis );
-    }
+    m_app->OnUpdate( millis, m_timer, m_Renderer, handle );
 
-    m_app->OnUpdate( millis, m_Renderer, handle );
-
-    {
-//        HPROFILER_SECTION( "PostFrame" );
-        PostFrame( millis );
-    }
+    PostFrame( millis );
 }
 
 // *********************************
@@ -168,7 +161,7 @@ void    BlackVisionApp::PostFrame           ( unsigned int millis )
 #ifndef PRODUCTION_BUILD
     static unsigned int startMillis = millis;
 
-    m_app->PostFrameLogic( millis );
+    m_app->PostFrameLogic( m_timer, millis );
     
     if( millis - startMillis > DefaultConfig.StatsRefreshMillisDelta() )
     {

@@ -27,8 +27,8 @@ inline void MovingAverageData::AddNextSample        ( const FrameStatsSample & s
         }
     }
 
-    samples.pop();
-    samples.push( sample );
+    samples.pop_front();
+    samples.push_back( sample );
 }
 
 // *********************************

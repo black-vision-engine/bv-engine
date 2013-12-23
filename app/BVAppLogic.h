@@ -12,6 +12,8 @@
 namespace bv
 {
 
+class SimpleTimer;
+
 enum class BVAppState : int
 {
     BVS_INITALIZING = 0,
@@ -48,7 +50,7 @@ public:
 
     void            SetStartTime    ( unsigned long millis );
 
-    virtual void    OnUpdate        ( unsigned long millis, Renderer * renderer, HWND handle );
+    virtual void    OnUpdate        ( unsigned int millis, const SimpleTimer & timer, Renderer * renderer, HWND handle );
     virtual void    OnKey           ( unsigned char c );
 
     virtual void    ChangeState     ( BVAppState state );
@@ -57,7 +59,7 @@ public:
 
     void            FrameRendered   ( Renderer * renderer );
 
-    void            PostFrameLogic  ( unsigned int millis );
+    void            PostFrameLogic  ( const SimpleTimer & timer, unsigned int millis );
 
     const FrameStatsCalculator &     FrameStats () const;
 

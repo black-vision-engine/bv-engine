@@ -1,4 +1,4 @@
-#include <queue>
+#include <deque>
 #include <hash_map>
 
 #include "System/HRTimer.h"
@@ -19,7 +19,7 @@ struct FrameStatsSample
 
 struct MovingAverageData
 {
-    std::queue< FrameStatsSample >  samples;
+    std::deque< FrameStatsSample >  samples;
 
     double          minDuration;
     unsigned int    minDurationFrame;
@@ -94,6 +94,8 @@ public:
     double      MaxVal              ( const char * name, unsigned int * frame = nullptr ) const;
 
     FrameStatsSample RecentSample   ( const char * name ) const;
+
+    TSingleSamplesMap   FrameStats  ( unsigned int frame ) const;
 
 };
 
