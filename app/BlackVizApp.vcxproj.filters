@@ -16,7 +16,6 @@
     <ClCompile Include="MainInitProcess.cpp" />
     <ClCompile Include="BVAppLogic.cpp" />
     <ClCompile Include="BVConfig.cpp" />
-    <ClCompile Include="FrameStats.cpp" />
     <ClCompile Include="FrameStatsService.cpp" />
     <ClCompile Include="StatsFormatters.cpp" />
   </ItemGroup>
@@ -53,7 +52,6 @@
     <ClInclude Include="BVAppLogic.h" />
     <ClInclude Include="BVConfig.h" />
     <ClInclude Include="BVForwards.h" />
-    <ClInclude Include="FrameStats.h" />
     <ClInclude Include="FrameStatsService.h" />
     <ClInclude Include="StatsFormatters.h" />
   </ItemGroup>

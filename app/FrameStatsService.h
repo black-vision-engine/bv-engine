@@ -73,8 +73,8 @@ private:
 
     TSamplersMap        m_samplers;
     TSingleSamplesMap   m_stateBuffer;
-    std::hash_map< const char *, bool >            m_minFlags;
-    std::hash_map< const char *, bool >            m_maxFlags;
+    TFlagMap            m_minFlags;
+    TFlagMap            m_maxFlags;
     TSectionsNamesVec   m_sectionsNames;
 
     HighResolutionTimer m_timer;

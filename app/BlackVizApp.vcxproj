@@ -79,7 +79,6 @@
     <ClCompile Include="bvApp.cpp" />
     <ClCompile Include="BVAppLogic.cpp" />
     <ClCompile Include="BVConfig.cpp" />
-    <ClCompile Include="FrameStats.cpp" />
     <ClCompile Include="FrameStatsService.cpp" />
     <ClCompile Include="MainInitProcess.cpp" />
     <ClCompile Include="MainLoopProcess.cpp" />
@@ -105,7 +104,6 @@
     <ClInclude Include="BVAppLogic.h" />
     <ClInclude Include="BVConfig.h" />
     <ClInclude Include="BVForwards.h" />
-    <ClInclude Include="FrameStats.h" />
     <ClInclude Include="FrameStatsService.h" />
     <ClInclude Include="MainInitProcess.h" />
     <ClInclude Include="MainLoopProcess.h" />
