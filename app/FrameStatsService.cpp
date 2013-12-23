@@ -8,14 +8,14 @@ namespace bv
 
 // *********************************
 //
-MovingAverageData::MovingAverageData        ( unsigned int numSamples )
+MovingAverageData::MovingAverageData            ( unsigned int numSamples )
 {
     Initialize( numSamples );
 }
 
 // *********************************
 //
-void MovingAverageData::Initialize          ( unsigned int numSamples )
+void MovingAverageData::Initialize              ( unsigned int numSamples )
 {
     assert( samples.size() == 0 );
 
@@ -33,7 +33,7 @@ void MovingAverageData::Initialize          ( unsigned int numSamples )
 
 // *********************************
 //
-void MovingAverageData::ResetAccumStats     ()
+void MovingAverageData::ResetAccumStats         ()
 {
     minDuration             = 10000000.0;
     minDurationFrame        = 0xFFFFFFFF;
@@ -47,7 +47,7 @@ void MovingAverageData::ResetAccumStats     ()
 
 // *********************************
 //
-void MovingAverageData::RecalculateStats    ()
+void MovingAverageData::RecalculateStats        ()
 {
     ResetAccumStats();
 
@@ -61,7 +61,7 @@ void MovingAverageData::RecalculateStats    ()
 
 // *********************************
 //
-void    MovingAverageData::AccumulateSample    ( const FrameStatsSample & sample )
+void    MovingAverageData::AccumulateSample     ( const FrameStatsSample & sample )
 {
     accumDuration += sample.duration;
     accumDurationSquares += sample.duration * sample.duration;
@@ -81,14 +81,14 @@ void    MovingAverageData::AccumulateSample    ( const FrameStatsSample & sample
 
 // *********************************
 //
-double  MovingAverageData::ExpectedValue    () const
+double  MovingAverageData::ExpectedValue        () const
 {
     return accumDuration / (double) samples.size();
 }
 
 // *********************************
 //
-double  MovingAverageData::Variance         () const
+double  MovingAverageData::Variance             () const
 {
     double EX2 = ExpectedValue();
     EX2 *= EX2;
@@ -98,7 +98,7 @@ double  MovingAverageData::Variance         () const
 
 // *********************************
 //
-double  MovingAverageData::MinVal           ( unsigned int * frame ) const
+double  MovingAverageData::MinVal               ( unsigned int * frame ) const
 {
     if( frame )
         *frame = minDurationFrame;
@@ -108,7 +108,7 @@ double  MovingAverageData::MinVal           ( unsigned int * frame ) const
 
 // *********************************
 //
-double  MovingAverageData::MaxVal           ( unsigned int * frame ) const
+double  MovingAverageData::MaxVal               ( unsigned int * frame ) const
 {
     if( frame )
         *frame = maxDurationFrame;
@@ -118,7 +118,21 @@ double  MovingAverageData::MaxVal           ( unsigned int * frame ) const
 
 // *********************************
 //
-FrameStatsCalculator::FrameStatsCalculator  ( unsigned int movingAverageWindowSize )
+FrameStatsSample MovingAverageData::FrameStats  ( unsigned int frame ) const
+{
+    for( auto sample : samples )
+    {
+        if( sample.frame == frame )
+            return sample;
+    }
+
+    assert( false );
+    return FrameStatsSample();
+}
+
+// *********************************
+//
+FrameStatsCalculator::FrameStatsCalculator      ( unsigned int movingAverageWindowSize )
     : m_windowSize( movingAverageWindowSize )
     , m_frame( 0 )
 {
@@ -127,7 +141,7 @@ FrameStatsCalculator::FrameStatsCalculator  ( unsigned int movingAverageWindowSi
 
 // *********************************
 //
-FrameStatsCalculator::~FrameStatsCalculator ()
+FrameStatsCalculator::~FrameStatsCalculator     ()
 {
     for( auto it : m_samplers )
     {
@@ -137,35 +151,35 @@ FrameStatsCalculator::~FrameStatsCalculator ()
 
 // *********************************
 //
-unsigned int FrameStatsCalculator::CurFrame         () const
+unsigned int FrameStatsCalculator::CurFrame     () const
 {
     return m_frame;
 }
 
 // *********************************
 //
-unsigned int FrameStatsCalculator:: WindowSize      () const
+unsigned int FrameStatsCalculator:: WindowSize  () const
 {
     return m_windowSize;
 }
 
 // *********************************
 //
-unsigned int FrameStatsCalculator::NextFrame        ()
+unsigned int FrameStatsCalculator::NextFrame    ()
 {
     return m_frame++;
 }
 
 // *********************************
 //
-void    FrameStatsCalculator::ResetTimer            ()
+void    FrameStatsCalculator::ResetTimer        ()
 {
     m_timer.Reinitialize();
 }
 
 // *********************************
 //
-void    FrameStatsCalculator::RecalculateStats        ()
+void    FrameStatsCalculator::RecalculateStats  ()
 {
     for ( auto it : m_samplers )
     {
@@ -176,7 +190,7 @@ void    FrameStatsCalculator::RecalculateStats        ()
 
 // *********************************
 //
-double  FrameStatsCalculator::ExpectedValue           ( const char * name ) const
+double  FrameStatsCalculator::ExpectedValue     ( const char * name ) const
 {
     assert( m_samplers.find( name ) != m_samplers.end() );
 
@@ -186,7 +200,7 @@ double  FrameStatsCalculator::ExpectedValue           ( const char * name ) cons
 
 // *********************************
 //
-double  FrameStatsCalculator::Variance                ( const char * name ) const
+double  FrameStatsCalculator::Variance          ( const char * name ) const
 {
     assert( m_samplers.find( name ) != m_samplers.end() );
 
@@ -196,7 +210,7 @@ double  FrameStatsCalculator::Variance                ( const char * name ) cons
 
 // *********************************
 //
-double  FrameStatsCalculator::MinVal                  ( const char * name, unsigned int * frame ) const
+double  FrameStatsCalculator::MinVal            ( const char * name, unsigned int * frame ) const
 {
     assert( m_samplers.find( name ) != m_samplers.end() );
 
@@ -206,7 +220,7 @@ double  FrameStatsCalculator::MinVal                  ( const char * name, unsig
 
 // *********************************
 //
-double  FrameStatsCalculator::MaxVal                  ( const char * name, unsigned int * frame ) const
+double  FrameStatsCalculator::MaxVal            ( const char * name, unsigned int * frame ) const
 {
     assert( m_samplers.find( name ) != m_samplers.end() );
 
@@ -232,12 +246,17 @@ FrameStatsCalculator::TSingleSamplesMap   FrameStatsCalculator::FrameStats  ( un
 
     for( auto it : m_samplers )
     {
-        for( auto sample : it.second->samples )
-        {
-        }
+        retMap[ it.first ] = it.second->FrameStats( frame );
     }
 
     return retMap;
+}
+
+// *********************************
+//
+const FrameStatsCalculator::TSectionsNamesVec &    FrameStatsCalculator::RegisteredSections  () const
+{
+    return m_sectionsNames;
 }
 
 } //bv

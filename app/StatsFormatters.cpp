@@ -34,16 +34,44 @@ void    ProfilerDataFormatter::PrintToConsole  ()
 
 // *********************************
 //
-void    FrameStatsFormatter::PrintToConsole     ( const FrameStatsCalculator & fsc, const char * name )
+void    FrameStatsFormatter::PrintToConsole     ( const FrameStatsCalculator & fsc, const char * name, unsigned int nameLen )
 {
-    //TODO: implement if necessary
+    unsigned int minFrame = 0;
+    unsigned int maxFrame = 0;
+
+    double minDuration = fsc.MinVal( name, &minFrame ) * 1000.0;
+    double maxDuration = fsc.MaxVal( name, &maxFrame ) * 1000.0;
+    double avg = fsc.ExpectedValue( name ) * 1000.0;
+    double dev = sqrt( fsc.Variance( name ) ) * 1000.0;
+
+    printf( "%*s: Min[%6d] %3.4f ms Max[%6d] %3.4f ms (%3.4f ms / %3.4f ms)\n", nameLen, name, minFrame, minDuration, maxFrame, maxDuration, avg, dev );
 }
 
 // *********************************
 //
 void    FrameStatsFormatter::PrintToConsole     ( const FrameStatsCalculator & fsc )
 {
-    //TODO: implement if necessary
+    unsigned int maxLen = 0;
+    for( auto name : fsc.RegisteredSections() )
+    {
+        maxLen = std::max( maxLen, strlen( name ) );
+    }
+
+    PrintToConsole( fsc, DefaultConfig.FrameStatsSection(), maxLen );
+    for( auto name : fsc.RegisteredSections() )
+    {
+        if( name != DefaultConfig.FrameStatsSection() )
+            PrintToConsole( fsc, name, maxLen );
+    }
+
+    unsigned int minFrame = 0;
+    unsigned int maxFrame = 0;
+
+    fsc.MinVal( DefaultConfig.FrameStatsSection(), &minFrame );
+    fsc.MaxVal( DefaultConfig.FrameStatsSection(), &maxFrame );
+
+    PrintFrameStatsToConsole( minFrame, fsc, "MinFrame", maxLen );
+    PrintFrameStatsToConsole( maxFrame, fsc, "MaxFrame", maxLen );
 }
 
 // *********************************
@@ -56,7 +84,7 @@ std::wstring FrameStatsFormatter::FPSStatsLine  ( const FrameStatsCalculator & f
 
     double lastDuration = sample.duration * 1000.f;
     double avgDuration = fsc.ExpectedValue( fnm ) * 1000.0;
-    double dev = sqrt( fsc.Variance( fnm ) * 1000.0 );
+    double dev = sqrt( fsc.Variance( fnm ) * 1000.0 * 1000.0 );
 
     unsigned int minFrame = 0;
     unsigned int maxFrame = 0;
@@ -76,6 +104,27 @@ std::wstring FrameStatsFormatter::FPSStatsLine  ( const FrameStatsCalculator & f
     std::wstring stemp = std::wstring( ss.begin(), ss.end() );
 
     return stemp;
+}
+
+// *********************************
+//
+void  FrameStatsFormatter::PrintFrameStatsToConsole( unsigned int frame, const FrameStatsCalculator & fsc, const char * sectionName, unsigned int frameLen )
+{
+    auto stats = fsc.FrameStats( frame );
+
+    printf( "Frame stats for frame %d - %s: ", frame, sectionName );
+
+    for( auto stat : stats )
+    {
+        if( stat.first == DefaultConfig.FrameStatsSection() )
+            printf( "%3.4f ms \n", stat.second.duration * 1000.0 );
+    }
+
+    for( auto stat : stats )
+    {
+        if( stat.first != DefaultConfig.FrameStatsSection() )
+            printf( "    %*s: %3.4f ms\n", frameLen, stat.first, stat.second.duration * 1000.0 );
+    }
 }
 
 } //bv

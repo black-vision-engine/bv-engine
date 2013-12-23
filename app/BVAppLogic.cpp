@@ -11,6 +11,7 @@
 
 #include "System/HerarchicalProfiler.h"
 
+#include "StatsFormatters.h"
 #include "MockScenes.h"
 
 #include "System/SimpleTimer.h"
@@ -155,22 +156,22 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
         GownoWFormieKebaba( t );
 
         {
-            //FRAME_STATS_SECTION( "update total" );
+            FRAME_STATS_SECTION( "Update" );
             HPROFILER_SECTION( "update total" );
 
             {
-                //FRAME_STATS_SECTION( "model Update" );
+                FRAME_STATS_SECTION( "Model-u" );
                 HPROFILER_SECTION( "m_modelScene->Update" );
 
                 m_modelScene->Update( t );
             }
             {
-                //FRAME_STATS_SECTION( "updaters manager Update" );
+                FRAME_STATS_SECTION( "Manager-u" );
                 HPROFILER_SECTION( "UpdatersManager::Get().UpdateStep" );
                 UpdatersManager::Get().UpdateStep( t );
             }
             {
-                //FRAME_STATS_SECTION( "engine scene Update" );
+                FRAME_STATS_SECTION( "EngScn-u" );
                 HPROFILER_SECTION( "m_mockSceneEng->Update" );
 
                 auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
@@ -182,7 +183,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
             }
         }
         {
-            //FRAME_STATS_SECTION( "Render" );
+            FRAME_STATS_SECTION( "Render" );
             HPROFILER_SECTION( "Render" );
 
             renderer->ClearBuffers();
@@ -281,6 +282,7 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
     if( m_statsCalculator.CurFrame() == DefaultConfig.MAVWarmupRounds() * m_statsCalculator.WindowSize() || m_statsCalculator.CurFrame() % DefaultConfig.StatsRecalcFramesDelta() == 0 )
     {
         m_statsCalculator.RecalculateStats();
+        FrameStatsFormatter::PrintToConsole( m_statsCalculator );
     }
 
     unsigned long frameMillis = timer.ElapsedMillis() - millis;

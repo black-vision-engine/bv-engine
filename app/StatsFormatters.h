@@ -18,11 +18,12 @@ class FrameStatsFormatter
 {
 public:
 
-    static void         PrintToConsole  ( const class FrameStatsCalculator & fsc, const char * name );
-    static void         PrintToConsole  ( const class FrameStatsCalculator & fsc );
+    static void         PrintToConsole          ( const class FrameStatsCalculator & fsc, const char * name, unsigned int nameLen );
+    static void         PrintToConsole          ( const class FrameStatsCalculator & fsc );
 
-    static std::wstring FPSStatsLine    ( const class FrameStatsCalculator & fsc );
+    static std::wstring FPSStatsLine            ( const class FrameStatsCalculator & fsc );
 
+    static void         PrintFrameStatsToConsole( unsigned int frame, const class FrameStatsCalculator & fsc, const char * sectionName, unsigned int frameLen );
 };
 
 

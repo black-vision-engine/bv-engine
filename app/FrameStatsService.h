@@ -48,6 +48,8 @@ private:
     double  MinVal              ( unsigned int * frame = nullptr ) const;
     double  MaxVal              ( unsigned int * frame = nullptr ) const;
 
+    FrameStatsSample FrameStats ( unsigned int frame ) const;
+
     inline void AddNextSample   ( const FrameStatsSample & sample );
 
     friend class FrameStatsCalculator;
@@ -60,6 +62,7 @@ private:
 
     typedef std::hash_map< const char *, MovingAverageData * >  TSamplersMap;
     typedef std::hash_map< const char *, FrameStatsSample >     TSingleSamplesMap;
+    typedef std::vector< const char * >                         TSectionsNamesVec;
 
 private:
 
@@ -69,6 +72,7 @@ private:
 
     TSamplersMap        m_samplers;
     TSingleSamplesMap   m_stateBuffer;
+    TSectionsNamesVec   m_sectionsNames;
 
     HighResolutionTimer m_timer;
 
@@ -96,6 +100,8 @@ public:
     FrameStatsSample RecentSample   ( const char * name ) const;
 
     TSingleSamplesMap   FrameStats  ( unsigned int frame ) const;
+
+    const TSectionsNamesVec &   RegisteredSections  () const;
 
 };
 
