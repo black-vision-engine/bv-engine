@@ -4,7 +4,6 @@
 
 #include "Engine/Events/Events.h"
 #include "FrameStatsService.h"
-#include "FrameStats.h"
 
 #include "BVForwards.h"
 
