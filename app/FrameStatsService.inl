@@ -6,9 +6,12 @@ namespace bv
 
 // *********************************
 //
-inline void MovingAverageData::AddNextSample        ( const FrameStatsSample & sample )
+inline void MovingAverageData::AddNextSample        ( const FrameStatsSample & sample, bool * minFlag, bool * maxFlag )
 {
     {
+        assert( minFlag );
+        assert( maxFlag );
+
         const FrameStatsSample & last = samples.front();
 
         accumDuration += sample.duration - last.duration;
@@ -18,12 +21,14 @@ inline void MovingAverageData::AddNextSample        ( const FrameStatsSample & s
         {
             minDuration = sample.duration;
             minDurationFrame = sample.frame;
+            *minFlag = true;
         }
 
         if ( sample.duration > maxDuration )
         {
             maxDuration = sample.duration;
             maxDurationFrame = sample.frame;
+            *maxFlag = true;
         }
     }
 
@@ -36,6 +41,9 @@ inline void MovingAverageData::AddNextSample        ( const FrameStatsSample & s
 inline void    FrameStatsCalculator::StartSection   ( const char * name )
 {
     FrameStatsSample & sample = m_stateBuffer[ name ];
+
+    m_minFlags[ name ] = false;
+    m_maxFlags[ name ] = false;
 
     sample.frame = m_frame;
     m_timer.Timestamp( &sample.startTime );
@@ -60,7 +68,12 @@ inline void    FrameStatsCalculator::EndSection     ( const char * name )
     }
 
     data = m_samplers[ name ];
-    data->AddNextSample( sample );
+    bool minFlag = false;
+    bool maxFlag = false;
+    data->AddNextSample( sample, &minFlag, &maxFlag );
+
+    m_minFlags[ name ] = minFlag;
+    m_maxFlags[ name ] = maxFlag;
 }
 
 } //bv

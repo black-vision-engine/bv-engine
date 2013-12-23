@@ -230,6 +230,28 @@ double  FrameStatsCalculator::MaxVal            ( const char * name, unsigned in
 
 // *********************************
 //
+bool FrameStatsCalculator::WasSampledMinVal( const char * name ) const
+{
+    assert( m_minFlags.find( name ) != m_minFlags.end() );
+
+    const auto it = m_minFlags.find( name );
+
+    return it->second;
+}
+
+// *********************************
+//
+bool FrameStatsCalculator::WasSampledMaxVal( const char * name ) const
+{
+    assert( m_maxFlags.find( name ) != m_maxFlags.end() );
+
+    const auto it = m_maxFlags.find( name );
+
+    return it->second;
+}
+
+// *********************************
+//
 FrameStatsSample    FrameStatsCalculator::RecentSample( const char * name ) const
 {
     assert( m_samplers.find( name ) != m_samplers.end() );

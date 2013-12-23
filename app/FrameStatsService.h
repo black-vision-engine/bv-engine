@@ -50,7 +50,7 @@ private:
 
     FrameStatsSample FrameStats ( unsigned int frame ) const;
 
-    inline void AddNextSample   ( const FrameStatsSample & sample );
+    inline void AddNextSample   ( const FrameStatsSample & sample, bool * minFlag, bool * maxFlag );
 
     friend class FrameStatsCalculator;
 
@@ -62,6 +62,7 @@ private:
 
     typedef std::hash_map< const char *, MovingAverageData * >  TSamplersMap;
     typedef std::hash_map< const char *, FrameStatsSample >     TSingleSamplesMap;
+    typedef std::hash_map< const char *, bool >                 TFlagMap;
     typedef std::vector< const char * >                         TSectionsNamesVec;
 
 private:
@@ -72,9 +73,14 @@ private:
 
     TSamplersMap        m_samplers;
     TSingleSamplesMap   m_stateBuffer;
+    std::hash_map< const char *, bool >            m_minFlags;
+    std::hash_map< const char *, bool >            m_maxFlags;
     TSectionsNamesVec   m_sectionsNames;
 
     HighResolutionTimer m_timer;
+
+    bool                m_wasMin;
+    bool                m_wasMax;
 
 public:
 
@@ -96,6 +102,9 @@ public:
     double      Variance            ( const char * name ) const;
     double      MinVal              ( const char * name, unsigned int * frame = nullptr ) const;
     double      MaxVal              ( const char * name, unsigned int * frame = nullptr ) const;
+
+    bool        WasSampledMinVal    ( const char * name ) const;
+    bool        WasSampledMaxVal    ( const char * name ) const;
 
     FrameStatsSample RecentSample   ( const char * name ) const;
 
