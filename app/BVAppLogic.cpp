@@ -284,6 +284,7 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
         unsigned int frame = m_statsCalculator.CurFrame() - 1;
         
         FrameStatsFormatter::PrintFrameStatsToConsole( frame, m_statsCalculator, "LONGEST FRAME SO FAR", 10 );
+        HPROFILER_SET_FORCED_DISPLAY();
     }
 
     if( m_statsCalculator.CurFrame() == DefaultConfig.MAVWarmupRounds() * m_statsCalculator.WindowSize() || m_statsCalculator.CurFrame() % DefaultConfig.StatsRecalcFramesDelta() == 0 )

@@ -13,11 +13,13 @@ namespace bv
 
 // *********************************
 //
-void    ProfilerDataFormatter::PrintToConsole  ()
+void    ProfilerDataFormatter::PrintToConsole  ( const char * msg )
 {
     unsigned int frame = HPROFILER_GET_ACTIVE_FRAME();
     const ProfilerSample * samples = HPROFILER_GET_ONE_FRAME_SAMPLES( frame );
     unsigned int numSamples = HPROFILER_GET_NUM_SAMPLES();
+
+    printf( "%s\n", msg );
 
     for( unsigned int i = 0; i < numSamples; ++i )
     {

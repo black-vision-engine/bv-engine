@@ -14,6 +14,8 @@ unsigned int    AutoProfile::m_curFrame = 0;
 unsigned int    AutoProfile::m_activeFrame = 0;
 unsigned int    AutoProfile::m_displayStatsWaitMillis = 500;
 
+bool            AutoFrameProfile::m_showStats = false;
+
 AutoFrameProfile::PtrDisplayCallback  AutoFrameProfile::m_displayCallback = nullptr;
 
 
@@ -168,7 +170,14 @@ const ProfilerSample *   AutoProfile::AveragedSamples ()
 
 // *******************************
 //
-void    AutoFrameProfile::RegisterDisplayCallback ( PtrDisplayCallback callback )
+void    AutoFrameProfile::SetDisplayStats           ()
+{
+    m_showStats = true;
+}
+
+// *******************************
+//
+void    AutoFrameProfile::RegisterDisplayCallback   ( PtrDisplayCallback callback )
 {
     m_displayCallback = callback;
 }

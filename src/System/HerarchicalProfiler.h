@@ -91,10 +91,11 @@ class AutoFrameProfile
 {
 public:
 
-    typedef void (*PtrDisplayCallback)();
+    typedef void (*PtrDisplayCallback)( const char * );
 
 private:
 
+    static bool                 m_showStats;
     static PtrDisplayCallback   m_displayCallback;
 
 public:
@@ -102,7 +103,8 @@ public:
     inline  AutoFrameProfile    ();
     inline  ~AutoFrameProfile   ();
 
-    static void    RegisterDisplayCallback ( PtrDisplayCallback callback );
+    static void    SetDisplayStats          ();
+    static void    RegisterDisplayCallback  ( PtrDisplayCallback callback );
 
 };
 
@@ -122,5 +124,6 @@ public:
 
 #define HPROFILER_SET_DISPLAY_WAIT_MILLIS( millis ) AutoProfile::SetStatsDisplayWaitMs( millis )
 #define HPROFILER_REGISTER_DISPLAY_CALLBACK( cb )   AutoFrameProfile::RegisterDisplayCallback( cb )
+#define HPROFILER_SET_FORCED_DISPLAY()              AutoFrameProfile::SetDisplayStats()
 
 #include "HerarchicalProfiler.inl"

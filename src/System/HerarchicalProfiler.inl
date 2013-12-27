@@ -42,9 +42,16 @@ inline  AutoFrameProfile::~AutoFrameProfile   ()
     AutoProfile::EndFrame();
 
     unsigned int timestamp = timeGetTime();
-    if( timestamp - startMillis > AutoProfile::GetStatsDisplayWaitMs() )
+
+    if( m_showStats )
     {
-        m_displayCallback();
+        m_displayCallback( "FRAME TIME - FORCED DISPLAY" );
+        startMillis = timestamp;
+        m_showStats = false;   
+    }
+    else if( timestamp - startMillis > AutoProfile::GetStatsDisplayWaitMs() )
+    {
+        m_displayCallback( "FRAME TIME - REGULAR SAMPLE" );
         startMillis = timestamp;
     }
 }
