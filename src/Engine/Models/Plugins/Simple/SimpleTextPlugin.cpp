@@ -45,9 +45,11 @@ SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::str
 
     LoadAtlas( "AtlasTex" ) ;
 
-    EvalGeometryChannel();
+    m_geomChannel = CreateVertexAttributesChannel();
 
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &SimpleTextPlugin::OnSetText ), SetTextEvent::Type() );
+    EvalGeometryChannel( m_geomChannel );
+
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &SimpleTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
 }
 
@@ -61,9 +63,9 @@ namespace
 //
 void SimpleTextPlugin::OnSetText                   ( IEventPtr evt )
 {
-    if( evt->GetEventType() == SetTextEvent::m_sEventType)
+    if( evt->GetEventType() == KeyPressedEvent::m_sEventType)
     {
-        SetTextEventPtr evtTyped = std::static_pointer_cast<SetTextEvent>( evt );
+        KeyPressedEventPtr evtTyped = std::static_pointer_cast<KeyPressedEvent>( evt );
         wchar_t c[2] = {evtTyped->GetChar() , '\0'};
         SetText( m_text + std::wstring( c ) );
     }
@@ -139,26 +141,31 @@ const Text *        SimpleTextPlugin::GetFont() const
     return nullptr;
 }
 
-#define viewWidth   100
-#define viewHeight  100
-
 // *********************************
 //
-void                SimpleTextPlugin::EvalGeometryChannel( )
+VertexAttributesChannel*    SimpleTextPlugin::CreateVertexAttributesChannel()
 {
-    auto texExtraData = static_cast< const TextureExtraData* > ( m_textures[ 0 ]->m_resHandle->GetExtra() );
-
     VertexAttributesChannelDescriptor geomChannelDesc;
 
     geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
     geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-    m_geomChannel = new VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, geomChannelDesc);
+    return new VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, geomChannelDesc);
+}
 
-    m_geomChannel->SetNeedsTopologyUpdate( true ); //FIXME: TAK NIE WOLNO ROBIC, BO TO POWODUJE ODTWARZANIE GEMOETRII CO RAMKE, CHOCIAZ WCALE NIE TRZEBA
+#define viewWidth   100
+#define viewHeight  100
+
+// *********************************
+//
+void                SimpleTextPlugin::EvalGeometryChannel( VertexAttributesChannel* geomChannel )
+{
+    auto texExtraData = static_cast< const TextureExtraData* > ( m_textures[ 0 ]->m_resHandle->GetExtra() );
+
+    geomChannel->SetNeedsTopologyUpdate( true ); //FIXME: TAK NIE WOLNO ROBIC, BO TO POWODUJE ODTWARZANIE GEMOETRII CO RAMKE, CHOCIAZ WCALE NIE TRZEBA
 
     //FIXME: zmieniam na false - Vig
-    m_geomChannel->SetNeedsTopologyUpdate( false );
+    geomChannel->SetNeedsTopologyUpdate( false );
 
     glm::vec3 translate(0.f);
     glm::vec3 interspace( 0.07f, 0.f ,0.f );
@@ -177,10 +184,10 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
             continue;
         }
 
-        if( wch == L'\n' )
+        if( wch == L'\n' || wch == L'\r' )
         {
             translate = glm::vec3( 0.f );
-            newLineTranslation += glm::vec3( 0.f, (float)glyphH /viewHeight, 0.f );
+            newLineTranslation += glm::vec3( 0.f, -(float)glyphH /viewHeight, 0.f );
             continue;
         }
 
@@ -223,7 +230,7 @@ void                SimpleTextPlugin::EvalGeometryChannel( )
 
         connComp->m_attributeChannels.push_back( verTex0AttrChannel );
 
-        m_geomChannel->AddConnectedComponent( connComp );
+        geomChannel->AddConnectedComponent( connComp );
 
         translate += glm::vec3( glyph->width / (float)viewWidth, 0.f, 0.f ) + interspace;
     } 
@@ -269,65 +276,14 @@ Textures            SimpleTextPlugin::GetTextures                 () const
 
 // *************************************
 //
-const EventType SetTextEvent::m_sEventType    = 0x12345674; //FIXME: nie pisac na pale tych idkow, bo sie rozjada z innymi - dlatego powinny byc generowane zbiorczo
-
-// *************************************
-//
-std::string SetTextEvent::m_sEventName        = "Event_SetText";
-
-// *************************************
-//
 void                SimpleTextPlugin::SetText                     ( const std::wstring & newText )
 {
     m_textSet = true;
     m_text = newText;
-}
 
-// *************************************
-//
-SetTextEvent::SetTextEvent        ()
-{}
+    m_geomChannel->ClearConnectedComponent();
 
-// *************************************
-//
-EventType               SetTextEvent::GetEventType      () const
-{
-    return m_sEventType;
-}
-
-// *************************************
-//
-IEventPtr               SetTextEvent::Clone             () const
-{
-    return IEventPtr( new SetTextEvent( *this ) );
-}
-
-// *************************************
-//
-const std::string &     SetTextEvent::GetName           () const
-{
-    return m_sEventName;
-}
-
-// *************************************
-//
-void                    SetTextEvent::SetChar             ( unsigned char  c )
-{
-    m_char = c;
-}
-
-// *************************************
-//
-unsigned char           SetTextEvent::GetChar             () const
-{
-    return m_char;
-}
-
-// *************************************
-//
-EventType               SetTextEvent::Type                ()
-{
-    return m_sEventType;
+    EvalGeometryChannel( m_geomChannel );
 }
 
 } // model

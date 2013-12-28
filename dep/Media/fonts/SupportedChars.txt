@@ -1,5 +1,5 @@
-﻿abcdefghijklmnopqrstuvxyząęćźżłśóń
-ABCDEFGHIJKLMNOPQRSTUVXYZĄĘĆŹŻŁŚÓŃ
+﻿abcdefghijklmnopqrstwuvxyząęćźżłśóń
+ABCDEFGHIJKLMNOPQRSTWUVXYZĄĘĆŹŻŁŚÓŃ
 ÄÖÜ
 AAOAŠŽ
 n

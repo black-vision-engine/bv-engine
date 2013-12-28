@@ -165,4 +165,30 @@ public:
 
 typedef std::shared_ptr<TransformSetEvent> TransformSetEventPtr;
 
+// ***************************** SET TEXT EVENT *************************
+class KeyPressedEvent : public BaseEvent
+{
+    char        m_char;
+
+public:
+
+    explicit                        KeyPressedEvent     ();
+
+    virtual EventType               GetEventType        () const;
+
+    virtual IEventPtr               Clone               () const;
+
+    virtual const std::string &     GetName             () const;
+
+    void                            SetChar             ( unsigned char c );
+    unsigned char                   GetChar             () const;
+
+    static EventType                Type                ();
+
+    static const EventType          m_sEventType;
+    static std::string              m_sEventName;
+};
+
+typedef std::shared_ptr<KeyPressedEvent> KeyPressedEventPtr;
+
 } //bv

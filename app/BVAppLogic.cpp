@@ -41,6 +41,15 @@ namespace
     
         GetDefaultEventManager().QueueEvent( GTransformSetEvent );
     }
+
+    KeyPressedEventPtr  GKeyPressedEvent;
+
+    void KeyPressedSendEvent( unsigned char c )
+    {
+        GKeyPressedEvent->SetChar( c );
+
+        GetDefaultEventManager().QueueEvent( GKeyPressedEvent );
+    }
 }
 
 // *********************************
@@ -54,6 +63,7 @@ BVAppLogic::BVAppLogic              ()
 
 {
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
+    GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
     GfbBuf = new char[ 2048 * 2048 * 4 ]; //FIXME: naive hack
     GTimer.StartTimer();
 }
@@ -201,6 +211,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
 //
 void BVAppLogic::OnKey           ( unsigned char c )
 {
+    KeyPressedSendEvent( c );
     //TODO: implement whatever you want here
 }
 

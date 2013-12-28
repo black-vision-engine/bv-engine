@@ -152,6 +152,11 @@ void                                    VertexAttributesChannel::AddConnectedCom
     m_connectedComponents.push_back( static_cast< ConnectedComponent * >( cc ) );
 }
 
+void                                    VertexAttributesChannel::ClearConnectedComponent ( )
+{
+    m_connectedComponents.clear();
+}
+
 // *********************************
 //
 int                                     VertexAttributesChannel::GetNumPrimitives   ( IConnectedComponent* connComp ) const

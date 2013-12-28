@@ -53,6 +53,7 @@ public:
     virtual PrimitiveType                               GetPrimitiveType        () const;
 
     virtual void                                        AddConnectedComponent   ( IConnectedComponent * cc );
+    void                                                ClearConnectedComponent ( );
 
     virtual int                                         GetNumPrimitives        ( IConnectedComponent * cc ) const;
     virtual std::vector< IConnectedComponent * >        GetComponents           () const;

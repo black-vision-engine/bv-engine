@@ -18,7 +18,10 @@ const EventType FrameRenderedEvent::m_sEventType    = 0x00000003;
 std::string FrameRenderedEvent::m_sEventName        = "Event_FrameRendered";
 
 const EventType TransformSetEvent::m_sEventType     = 0x00000004;
-std::string TransformSetEvent::m_sEventName        = "Event_TransformSet";
+std::string TransformSetEvent::m_sEventName         = "Event_TransformSet";
+
+const EventType KeyPressedEvent::m_sEventType       = 0x00000005;
+std::string KeyPressedEvent::m_sEventName           = "Event_KeyPressedEvent";
 
 // ************************************* PluginAddedEvent *************************************
 
@@ -318,5 +321,53 @@ EventType           TransformSetEvent::Type                 ()
 {
     return m_sEventType;
 }
+
+// *************************************
+//
+KeyPressedEvent::KeyPressedEvent        ()
+{}
+
+// *************************************
+//
+EventType               KeyPressedEvent::GetEventType      () const
+{
+    return m_sEventType;
+}
+
+// *************************************
+//
+IEventPtr               KeyPressedEvent::Clone             () const
+{
+    return IEventPtr( new KeyPressedEvent( *this ) );
+}
+
+// *************************************
+//
+const std::string &     KeyPressedEvent::GetName           () const
+{
+    return m_sEventName;
+}
+
+// *************************************
+//
+void                    KeyPressedEvent::SetChar             ( unsigned char  c )
+{
+    m_char = c;
+}
+
+// *************************************
+//
+unsigned char           KeyPressedEvent::GetChar             () const
+{
+    return m_char;
+}
+
+// *************************************
+//
+EventType               KeyPressedEvent::Type                ()
+{
+    return m_sEventType;
+}
+
 
 } //bv

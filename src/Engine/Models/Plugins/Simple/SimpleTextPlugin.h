@@ -23,32 +23,6 @@ public:
     {}
 };
 
-// ***************************** SET TEXT EVENT *************************
-class SetTextEvent : public BaseEvent
-{
-    char        m_char;
-
-public:
-
-    explicit                        SetTextEvent        ();
-
-    virtual EventType               GetEventType        () const;
-
-    virtual IEventPtr               Clone               () const;
-
-    virtual const std::string &     GetName             () const;
-
-    void                            SetChar             ( unsigned char c );
-    unsigned char                   GetChar             () const;
-
-    static EventType                Type                ();
-
-    static const EventType          m_sEventType;
-    static std::string              m_sEventName;
-};
-
-typedef std::shared_ptr<SetTextEvent> SetTextEventPtr;
-
 // ***************************** PLUGIN ********************************** 
 class SimpleTextPlugin : public BasePlugin< IPlugin, SimpleTextPluginPD >
 {
@@ -71,7 +45,8 @@ private:
 
     void                        LoadAtlas( const std::string& name );
 
-    void                        EvalGeometryChannel();
+    VertexAttributesChannel*    CreateVertexAttributesChannel();
+    void                        EvalGeometryChannel( VertexAttributesChannel* geomChannel );
 
     const Text*                 GetFont() const;
 
