@@ -67,7 +67,14 @@ void SimpleTextPlugin::OnSetText                   ( IEventPtr evt )
     {
         KeyPressedEventPtr evtTyped = std::static_pointer_cast<KeyPressedEvent>( evt );
         wchar_t c[2] = {evtTyped->GetChar() , '\0'};
-        SetText( m_text + std::wstring( c ) );
+
+        if( c[0] == L'\b' && !m_text.empty() )
+        {
+            m_text.pop_back();
+            SetText( m_text );
+        }
+        else
+            SetText( m_text + std::wstring( c ) );
     }
 }
 
