@@ -34,6 +34,9 @@ private:
     unsigned int    m_defaultStatsRecalcFramesDelta;
     unsigned int    m_defaultProfilerDisplayWaitMillis;
 
+    glm::vec4       m_defaultClearColor;
+    float           m_defaultClearDepth;
+
 private:
 
     BVConfig    ();
@@ -58,6 +61,9 @@ public:
     inline const glm::vec3 &    CameraPosition          () const;
     inline const glm::vec3 &    CameraUp                () const;
     inline const glm::vec3 &    CameraDirection         () const;
+
+    inline const glm::vec4 &    ClearColor              () const;
+    inline float                ClearDepth              () const;
 
     inline unsigned int         StatsMAWindowSize       () const;
     inline unsigned int         MAVWarmupRounds         () const;

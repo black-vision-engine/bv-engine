@@ -112,6 +112,8 @@ void	WindowedApplication::SetWindowId			( int id )
 void	WindowedApplication::SetClearColor			( const glm::vec4 & col )
 {
     m_ClearColor = col;
+
+    m_Renderer->SetClearColor( col );
 }
 
 // *********************************

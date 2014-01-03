@@ -60,6 +60,7 @@ private:
 
     void            InitializeConsole   ();
     void            InitializeAppLogic  ();
+    void            InitializeSelfState ();
 
     void            PostFrame           ( unsigned int milli );
 };

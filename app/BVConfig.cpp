@@ -1,6 +1,6 @@
 #include "BVConfig.h"
 
-//#define USE_READBACK_API
+#define USE_READBACK_API
 //#define FULLSCREEN_MODE
 
 
@@ -45,6 +45,10 @@ BVConfig::BVConfig                      ()
     m_defaultStatsRefreshMillisDelta        = 300;
     m_defaultStatsRecalcFramesDelta         = m_defaultStatsMovingAverageWindowSize * m_defaultWarmupRoundsStatsMAV; //* 30
     m_defaultProfilerDisplayWaitMillis      = 10000; //1000
+
+    m_defaultClearColor     = glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f );
+    m_defaultClearDepth     = 1.0f;
+
 }
 
 // *********************************

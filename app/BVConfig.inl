@@ -95,6 +95,20 @@ inline const glm::vec3 &    BVConfig::CameraDirection   () const
 
 // *********************************
 //
+inline const glm::vec4 &    BVConfig::ClearColor        () const
+{
+    return m_defaultClearColor;
+}
+
+// *********************************
+//
+inline float                BVConfig::ClearDepth        () const
+{
+    return m_defaultClearDepth;
+}
+
+// *********************************
+//
 inline unsigned int         BVConfig::StatsMAWindowSize () const
 {
     return m_defaultStatsMovingAverageWindowSize;

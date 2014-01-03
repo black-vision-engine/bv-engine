@@ -104,6 +104,7 @@ bool BlackVisionApp::OnInitialize       ()
 
     InitializeConsole       ();
     InitializeAppLogic      ();
+    InitializeSelfState     ();
 
     return WindowedApplication::OnInitialize();
 }
@@ -152,6 +153,13 @@ void    BlackVisionApp::InitializeAppLogic  ()
     m_app->Initialize();
     m_app->LoadScene();
     m_app->InitCamera( m_Renderer, m_Width, m_Height );
+}
+
+// *********************************
+//
+void    BlackVisionApp::InitializeSelfState ()
+{
+    WindowedApplication::SetClearColor( DefaultConfig.ClearColor() );
 }
 
 // *********************************
