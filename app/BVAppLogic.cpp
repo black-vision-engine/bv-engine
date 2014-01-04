@@ -101,7 +101,6 @@ void BVAppLogic::LoadScene          ( void )
     //basic_write_atlas( fontFile, "ascii_arial_atlas.raw" );
 
 
-    //model::BasicNode * root = TestScenesFactory::SimpeTextTestScene();
     //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
     //model::BasicNode * root = TestScenesFactory::XMLTestScene();

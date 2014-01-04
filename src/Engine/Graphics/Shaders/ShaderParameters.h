@@ -47,12 +47,10 @@ public:
 
     void                                SetValue                        ( const std::string & name , const char * pBuf );
 
-    void                                Update                          ( /* ???? */ );
-
 private:
 
     UniformShaderParam *                FindParam                       ( const std::string & name ) const;
 
 };
 
-}
+} //bv

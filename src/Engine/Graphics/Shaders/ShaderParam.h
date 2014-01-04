@@ -9,22 +9,18 @@
 
 namespace bv {
 
-class IShaderParamUpdater;
-
 class UniformShaderParam
 {
 private:
 
     char *                  m_buffer;
     ShaderParamDesc         m_desc;
-    IShaderParamUpdater *   m_updater;
 
 private:
-                                UniformShaderParam  ( const ShaderParamDesc & desc, char * pBuf );
-public:
 
-    void                        RegisterUpdater     ( IShaderParamUpdater * updater );
-    void                        Update              ();
+                                UniformShaderParam  ( const ShaderParamDesc & desc, char * pBuf );
+
+public:
 
     void                        SetValue            ( const char * mem );
 

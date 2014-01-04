@@ -74,6 +74,8 @@ protected:
 
 // Implementation
 
+// *******************************
+//
 template<class Iface, class ParameterDescriptor >
 void BasePlugin< Iface, ParameterDescriptor >::Update( TimeType t )
 {
@@ -85,12 +87,17 @@ void BasePlugin< Iface, ParameterDescriptor >::Update( TimeType t )
     //if( GetGeometryShaderChannel() )    GetGeometryShaderChannel->Update( t );
 }
 
+// *******************************
+//
 template<class Iface, class ParameterDescriptor >
 BasePlugin< Iface, ParameterDescriptor >::BasePlugin( const IPlugin* prevPlugin )
     : m_paramDesc( ParameterDescriptor() )
     , m_prevPlugin( prevPlugin )
-{}
+{
+}
 
+// *******************************
+//
 template<class Iface, class ParameterDescriptor >
 const IVertexAttributesChannel *            BasePlugin< Iface, ParameterDescriptor >::GetGeometryChannel          () const
 {
@@ -100,6 +107,8 @@ const IVertexAttributesChannel *            BasePlugin< Iface, ParameterDescript
         return nullptr;
 }
 
+// *******************************
+//
 template<class Iface, class ParameterDescriptor >
 const ITransformChannel *           BasePlugin< Iface, ParameterDescriptor >::GetTransformChannel         () const
 {
@@ -109,6 +118,8 @@ const ITransformChannel *           BasePlugin< Iface, ParameterDescriptor >::Ge
         return nullptr;
 }
 
+// *******************************
+//
 template<class Iface, class ParameterDescriptor >
 const IPixelShaderChannel *         BasePlugin< Iface, ParameterDescriptor >::GetPixelShaderChannel       () const
 {
@@ -118,6 +129,8 @@ const IPixelShaderChannel *         BasePlugin< Iface, ParameterDescriptor >::Ge
         return nullptr;
 }
 
+// *******************************
+//
 template<class Iface, class ParameterDescriptor >
 const IVertexShaderChannel *        BasePlugin< Iface, ParameterDescriptor >::GetVertexShaderChannel      () const
 {
@@ -127,6 +140,8 @@ const IVertexShaderChannel *        BasePlugin< Iface, ParameterDescriptor >::Ge
         return nullptr;
 }
 
+// *******************************
+//
 template<class Iface, class ParameterDescriptor >
 const IGeometryShaderChannel *      BasePlugin< Iface, ParameterDescriptor >::GetGeometryShaderChannel    () const
 {

@@ -82,16 +82,6 @@ void                ShaderParameters::SetValue              ( const std::string 
 }
 
 // ***********************
-//FIXME: add some arguments - if any arguments are required
-void                 ShaderParameters::Update               ()
-{
-    for ( auto param : m_shaderParams )
-    {
-        param->Update();
-    }
-}
-
-// ***********************
 //
 UniformShaderParam * ShaderParameters::FindParam            ( const std::string & name ) const
 {

@@ -42,7 +42,7 @@ void            ModelScene::SetCamereParameters(const ParamVec3& pos, const Para
 
     CameraUpdater * updater = CameraUpdater::Create(m_pCamera, m_cameraDirection, m_cameraPosition, m_cameraUp);
 
-    UpdatersManager::Get().RegisterUpdater(updater);
+    UpdatersManager::Get().RegisterUpdater( updater );
 }
 
 // *******************************

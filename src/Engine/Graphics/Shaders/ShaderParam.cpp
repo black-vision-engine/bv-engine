@@ -12,23 +12,8 @@ namespace bv {
 UniformShaderParam::UniformShaderParam  ( const ShaderParamDesc & desc, char * pMem )
     : m_buffer( pMem )
     , m_desc( desc )
-    , m_updater( nullptr )
 {
     assert( pMem );
-}
-
-// ***********************
-//
-void                        UniformShaderParam::RegisterUpdater ( IShaderParamUpdater * updater )
-{
-    m_updater = updater;
-}
-
-// ***********************
-//
-void                        UniformShaderParam::Update          ()
-{
-    m_updater->Update( this );
 }
 
 // ***********************
