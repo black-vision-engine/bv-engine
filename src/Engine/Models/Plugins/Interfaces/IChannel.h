@@ -11,9 +11,11 @@ class IChannel : public IUpdatable
 {
 public:
 
-    virtual bool        IsReadOnly  () const        = 0;
+    virtual bool        IsReadOnly  ()  const = 0;
 
-    virtual             ~IChannel   (){};
+    virtual             ~IChannel   ()
+    {
+    }
 
 };
 

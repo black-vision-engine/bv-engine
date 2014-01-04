@@ -159,6 +159,7 @@
     <ClCompile Include="Engine\Processes\InitProcess.cpp" />
     <ClCompile Include="System\SimpleTimer.cpp" />
     <ClCompile Include="System\HerarchicalProfiler.cpp" />
+    <ClCompile Include="System\FileIO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -355,6 +356,7 @@
     <ClInclude Include="System\SimpleTimer.h" />
     <ClInclude Include="System\HerarchicalProfiler.h" />
     <ClInclude Include="System\BasicMacros.h" />
+    <ClInclude Include="System\FileIO.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

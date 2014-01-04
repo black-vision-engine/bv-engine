@@ -101,10 +101,12 @@ BasePlugin< Iface, ParameterDescriptor >::BasePlugin( const IPlugin* prevPlugin 
 template<class Iface, class ParameterDescriptor >
 const IVertexAttributesChannel *            BasePlugin< Iface, ParameterDescriptor >::GetGeometryChannel          () const
 {
-    if( m_prevPlugin ) 
+    if( m_prevPlugin )
+    {
         return m_prevPlugin->GetGeometryChannel();
-    else
-        return nullptr;
+    }
+
+    return nullptr;
 }
 
 // *******************************
@@ -112,10 +114,12 @@ const IVertexAttributesChannel *            BasePlugin< Iface, ParameterDescript
 template<class Iface, class ParameterDescriptor >
 const ITransformChannel *           BasePlugin< Iface, ParameterDescriptor >::GetTransformChannel         () const
 {
-    if( m_prevPlugin ) 
+    if( m_prevPlugin )
+    {
         return m_prevPlugin->GetTransformChannel();
-    else
-        return nullptr;
+    }
+
+    return nullptr;
 }
 
 // *******************************
@@ -123,10 +127,12 @@ const ITransformChannel *           BasePlugin< Iface, ParameterDescriptor >::Ge
 template<class Iface, class ParameterDescriptor >
 const IPixelShaderChannel *         BasePlugin< Iface, ParameterDescriptor >::GetPixelShaderChannel       () const
 {
-    if( m_prevPlugin ) 
+    if( m_prevPlugin )
+    {
         return m_prevPlugin->GetPixelShaderChannel();
-    else
-        return nullptr;
+    }
+
+    return nullptr;
 }
 
 // *******************************
@@ -135,9 +141,11 @@ template<class Iface, class ParameterDescriptor >
 const IVertexShaderChannel *        BasePlugin< Iface, ParameterDescriptor >::GetVertexShaderChannel      () const
 {
     if( m_prevPlugin ) 
+    {
         return m_prevPlugin->GetVertexShaderChannel();
-    else
-        return nullptr;
+    }
+
+    return nullptr;
 }
 
 // *******************************
@@ -145,10 +153,12 @@ const IVertexShaderChannel *        BasePlugin< Iface, ParameterDescriptor >::Ge
 template<class Iface, class ParameterDescriptor >
 const IGeometryShaderChannel *      BasePlugin< Iface, ParameterDescriptor >::GetGeometryShaderChannel    () const
 {
-    if( m_prevPlugin ) 
+    if( m_prevPlugin )
+    {
         return m_prevPlugin->GetGeometryShaderChannel();
-    else
-        return nullptr;
+    }
+
+    return nullptr;
 }
 
 

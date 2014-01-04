@@ -1,10 +1,5 @@
 #include "BasicNode.h"
 
-#include <sys/stat.h>
-
-#include <fstream>
-#include <sstream>
-
 #include "System/Print.h"
 
 #include "Engine/Models/Builder/RendererStatesBuilder.h"
@@ -46,49 +41,17 @@
 #include "Engine/Graphics/Resources/TextureAnimatedSequence2D.h"
 #include "Engine/Models/Plugins/ConstantsMapper.h"
 
-namespace bv { namespace model {
+namespace bv 
+{ 
 
-namespace
+namespace model
 {
-    bool FileExists( const std::string& fileName )
-    {
-        struct stat info;
-        int ret = -1;
-
-        ret = stat(fileName.c_str(), &info);
-        return 0 == ret;
-    }
-
-    bool ReadFile(std::ostream& out, const std::string& fileName)
-    {    
-        if( ! FileExists(fileName) )
-        {
-            return false;
-        }
-
-        std::ifstream inFile( fileName, std::ios::in );
-        if( !inFile )
-        {
-            return false;
-        }
-
-        while( inFile.good() )
-        {
-            int c = inFile.get();
-            if( ! inFile.eof() )
-                out << (char) c;
-        }
-
-        inFile.close();
-
-        return true;
-    }
-}
 
 // ********************************
 //
 BasicNode::BasicNode()
-{}
+{
+}
 
 // ********************************
 //
@@ -390,125 +353,32 @@ bool                                BasicNode::CreateRenderableData     (/* Vert
     return true;
 }
 
-namespace
-{
-
-
 // ********************************
 //
-const IVertexShaderChannel * GetVertexShaderChannel( const std::vector< IPlugin* > & plugins )
+PixelShader *                       BasicNode::CreatePixelShader       ()   const
 {
-    if( !plugins.empty() )
-    {
-        return plugins.back()->GetVertexShaderChannel();
-    }
-
-    return nullptr;
+    return CreateShader< PixelShader, IPixelShaderChannel >();
 }
 
 // ********************************
 //
-const IPixelShaderChannel * GetPixelShaderChannel( const std::vector< IPlugin* > & plugins )
+VertexShader *                      BasicNode::CreateVertexShader      ()   const
 {
-    if( !plugins.empty() )
+    auto vs = CreateShader< VertexShader, IVertexShaderChannel >();
+
+    if( vs == nullptr )
     {
-        return plugins.back()->GetPixelShaderChannel();
+        vs = new PassThroughVertexShader( new PassThroughVertexShaderParametersDescriptor() );
     }
 
-    return nullptr;
+    return vs;
 }
 
 // ********************************
 //
-const IGeometryShaderChannel * GetGeometryShaderChannel( const std::vector< IPlugin* > & plugins )
+GeometryShader *                    BasicNode::CreateGeometryShader    ()   const
 {
-    if( !plugins.empty() )
-    {
-        return plugins.back()->GetGeometryShaderChannel();
-    }
-
-    return nullptr;
-}
-
-} // anonymous
-
-// ********************************
-//
-PixelShader *                       BasicNode::CreatePixelShader       ()                                                               const
-{
-    auto psCh = GetPixelShaderChannel( m_plugins );
-
-    if( psCh != nullptr )
-    {
-        std::stringstream code;
-
-        ReadFile( code, psCh->GetShaderFile() );
-
-        PixelShader * s = new PixelShader( code.str() );
-
-        BasicNode::RegisterShaderParameters( psCh, s->GetOrCreateShaderParameters() );
-        
-        s->RegisterUpdater( ShaderParamUpdater::Create( psCh, s ) );
-
-        return s;
-    }
-    else
-    {
-        // FIXME:
-        return nullptr;
-    }
-}
-
-// ********************************
-//
-VertexShader *                      BasicNode::CreateVertexShader      ()                                                               const
-{
-    auto vsCh = GetVertexShaderChannel( m_plugins );
-
-    if( vsCh != nullptr )
-    {
-        std::stringstream code;
-
-        ReadFile( code, vsCh->GetShaderFile() );
-
-        VertexShader * s = new VertexShader( code.str() );
-
-        BasicNode::RegisterShaderParameters( vsCh, s->GetOrCreateShaderParameters() );
-        
-        s->RegisterUpdater( ShaderParamUpdater::Create( vsCh, s ) );
-
-        return s;
-    }
-    else
-    {
-        return new PassThroughVertexShader( new PassThroughVertexShaderParametersDescriptor() );
-    }
-}
-
-// ********************************
-//
-GeometryShader *                    BasicNode::CreateGeometryShader    ()                                                               const
-{
-    auto gsCh = GetGeometryShaderChannel( m_plugins );
-
-    if( gsCh != nullptr )
-    {
-        std::stringstream code;
-
-        ReadFile( code, gsCh->GetShaderFile() );
-
-        GeometryShader * s = new GeometryShader( code.str() );
-
-        BasicNode::RegisterShaderParameters( gsCh, s->GetOrCreateShaderParameters() );
-        
-        s->RegisterUpdater( ShaderParamUpdater::Create( gsCh, s ) );
-
-        return s;
-    }
-    else
-    {
-        return nullptr;
-    }
+    return CreateShader< GeometryShader, IGeometryShaderChannel >();
 }
 
 // ********************************
@@ -720,11 +590,11 @@ void            BasicNode::Print                    (std::ostream& out, int tabs
     //if(m_gshaderPlugin != nullptr)
     //    m_gshaderPlugin->Print(out, tabs + 1);
 
-    out << debug::EndLine(tabs) << "------------------PARENT OF---------------- : " << m_children.size() << debug::EndLine(tabs + 1);
-    for(auto ch : m_children)
+    out << debug::EndLine(tabs) << "------------------PARENT OF---------------- : " << m_children.size() << debug::EndLine( tabs + 1 );
+    for( auto ch : m_children )
     {
-        ch->Print(out, tabs + 1);
-        out << debug::EndLine(tabs + 1);
+        ch->Print( out, tabs + 1 );
+        out << debug::EndLine( tabs + 1 );
     }
 }
 

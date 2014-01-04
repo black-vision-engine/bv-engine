@@ -31,24 +31,27 @@ class BasicNode : public bv::IModelNode
 {
 private:
 
-    bool                    m_visible;
+    bool                        m_visible;
 
-    TNodeVec                m_children;
-    TNodeVec                m_layers;
+    TNodeVec                    m_children;
+    TNodeVec                    m_layers;
 
-    std::vector< IPlugin* > m_plugins;
+    std::vector< IPlugin * >    m_plugins;
 
 public:
 
     explicit BasicNode();
-    virtual ~BasicNode(){}
+    virtual ~BasicNode()
+    {
+    }
 
-    virtual SceneNode*                  BuildScene              ();                              
-    void                                AddChild                ( IModelNode* n );
-    void                                AddLayer                ( IModelNode* n );
-    void                                AddPlugin               ( IPlugin* plugin );
+    virtual SceneNode *                 BuildScene              ();
 
-    virtual void                        Print                   ( std::ostream& out, int tabs = 0 ) const;
+    void                                AddChild                ( IModelNode * n );
+    void                                AddLayer                ( IModelNode * n );
+    void                                AddPlugin               ( IPlugin * plugin );
+
+    virtual void                        Print                   ( std::ostream & out, int tabs = 0 ) const;
     virtual void                        Update                  ( TimeType t );
 
     virtual bool                        IsVisible               ( TimeType t ) const;
@@ -76,9 +79,78 @@ private:
     VertexShader *                      CreateVertexShader      ()                      const;   
     GeometryShader *                    CreateGeometryShader    ()                      const;
 
+
+    // ********************************
+    //
+    template< typename ShaderType, typename ChannelType >
+    const ChannelType * GetShaderChannel  () const
+    {
+        return nullptr;
+    }
+
+    // ********************************
+    //
+    template<>
+    const IPixelShaderChannel *   GetShaderChannel< PixelShader, IPixelShaderChannel >    () const
+    {
+        if( !m_plugins.empty() )
+        {
+            return m_plugins.back()->GetPixelShaderChannel();
+        }
+
+        return nullptr;
+    }
+
+    // ********************************
+    //
+    template<>
+    const IVertexShaderChannel *   GetShaderChannel< VertexShader, IVertexShaderChannel >    () const
+    {
+        if( !m_plugins.empty() )
+        {
+            return m_plugins.back()->GetVertexShaderChannel();
+        }
+
+        return nullptr;
+    }
+
+    // ********************************
+    //
+    template<>
+    const IGeometryShaderChannel *   GetShaderChannel< GeometryShader, IGeometryShaderChannel >    () const
+    {
+        if( !m_plugins.empty() )
+        {
+            return m_plugins.back()->GetGeometryShaderChannel();
+        }
+
+        return nullptr;
+    }
+
+    // ********************************
+    //
+    template< typename ShaderType, typename ShaderChannel >
+    ShaderType *                        CreateShader            ()                      const
+    {
+        auto sCh = GetShaderChannel< ShaderType, ShaderChannel >();
+
+        if( sCh != nullptr )
+        {
+            ShaderType * s = new ShaderType( sCh->GetShaderSource() );
+
+            BasicNode::RegisterShaderParameters( sCh, s->GetOrCreateShaderParameters() );
+        
+            s->RegisterUpdater( ShaderParamUpdater::Create( sCh, s ) );
+
+            return s;
+        }
+
+        return nullptr;
+    }
+
 public:
 
-    static void                         RegisterShaderParameters(const IShaderChannel* shaderPlugin, ShaderParameters * shParams);
+    static void                         RegisterShaderParameters( const IShaderChannel * shaderPlugin, ShaderParameters * shParams );
 
 };
 

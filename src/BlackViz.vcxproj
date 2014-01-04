@@ -290,6 +290,7 @@
     <ClCompile Include="Engine\Processes\ProcessThreaded.cpp" />
     <ClCompile Include="Engine\Processes\ProcessThreadedEvents.cpp" />
     <ClCompile Include="Mathematics\Interpolators\Interpolators.cpp" />
+    <ClCompile Include="System\FileIO.cpp" />
     <ClCompile Include="System\HerarchicalProfiler.cpp" />
     <ClCompile Include="System\HRTimer.cpp" />
     <ClCompile Include="System\Print.cpp" />
@@ -477,6 +478,7 @@
     <ClInclude Include="Engine\Types\Enums.h" />
     <ClInclude Include="System\BasicMacros.h" />
     <ClInclude Include="System\BasicTypes.h" />
+    <ClInclude Include="System\FileIO.h" />
     <ClInclude Include="System\HerarchicalProfiler.h" />
     <ClInclude Include="System\HRTimer.h" />
     <ClInclude Include="System\Print.h" />

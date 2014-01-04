@@ -23,7 +23,7 @@ public:
 class ExtrudeGeometryShaderChannel : public model::ShaderChannel< IGeometryShaderChannel, ExtrudeGeometryShaderChannelPD >
 {
     ParamFloat                      m_scale;
-    model::ValueFloat*              m_scaleVal;
+    model::ValueFloat *             m_scaleVal;
 
 public:
 

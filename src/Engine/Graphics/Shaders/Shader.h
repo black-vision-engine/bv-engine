@@ -27,7 +27,7 @@ protected:
 
 protected:
 
-                        Shader                      ( const std::string& programSource );
+                        Shader                      ( const std::string & programSource );
                         ~Shader                     ();
 
 public:  

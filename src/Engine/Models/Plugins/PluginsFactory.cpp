@@ -98,7 +98,7 @@ model::SimpleTransformPlugin *      PluginsFactory::CreateSimpleTransformPlugin 
 
 // *******************************
 //
-model::SimpleColorPlugin *          PluginsFactory::CreateSimpleColorPlugin             ( model::IPlugin* prevPlugin, const ParamVec4 & color)
+model::SimpleColorPlugin *          PluginsFactory::CreateSimpleColorPlugin             ( model::IPlugin* prevPlugin, const ParamVec4 & color )
 {
     return new model::SimpleColorPlugin( prevPlugin, color );
 }
@@ -112,14 +112,14 @@ model::SimplePixelShaderPlugin *    PluginsFactory::CreateSimplePixelShaderPlugi
 
 // *******************************
 //
-model::SimpleVertexShaderPlugin*    PluginsFactory::CreateSimpleVertexShaderPlugin      ( model::IPlugin* prevPlugin, const std::string& shaderPath)
+model::SimpleVertexShaderPlugin*    PluginsFactory::CreateSimpleVertexShaderPlugin      ( model::IPlugin* prevPlugin, const std::string& shaderPath )
 {
     return new model::SimpleVertexShaderPlugin( prevPlugin, shaderPath );
 }
 
 // *******************************
 //
-model::SimpleGeometryShaderPlugin*  PluginsFactory::CreateSimpleGeometryShaderPlugin    ( model::IPlugin* prevPlugin, const std::string& shaderPath)
+model::SimpleGeometryShaderPlugin*  PluginsFactory::CreateSimpleGeometryShaderPlugin    ( model::IPlugin* prevPlugin, const std::string& shaderPath )
 {
     return new model::SimpleGeometryShaderPlugin( prevPlugin, shaderPath );
 }

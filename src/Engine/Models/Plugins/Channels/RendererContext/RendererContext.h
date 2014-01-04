@@ -30,8 +30,9 @@ public:
     bool                        StateChanged        () const;
     void                        SetStateChanged     ( bool stateChanged ) const;
 
-    static RendererContext*     Create              ();
-    static RendererContext*     CreateDefault       ();
+    static RendererContext *    Create              ();
+    static RendererContext *    CreateDefault       ();
+
 };
 
 } //model
