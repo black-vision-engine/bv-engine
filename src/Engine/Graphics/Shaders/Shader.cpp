@@ -28,10 +28,10 @@ Shader::~Shader ()
 //
 ShaderParameters *  Shader::GetOrCreateShaderParameters()
 {
-    if(!m_parameters)
+    if( !m_parameters )
     {
         m_parameters = new ShaderParameters();
-        m_parameters->SetOwner(this);
+        m_parameters->SetOwner( this );
     }
     
     return m_parameters;

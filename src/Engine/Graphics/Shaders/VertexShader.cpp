@@ -32,47 +32,47 @@ VertexShader::VertexShader( const std::string & programSource )
 {
     ShaderParameters* ret   = GetOrCreateShaderParameters();
 
-    m_MVP                   = new model::ValueMat4("MVP");
-    UniformShaderParam* genShaderParam = ShaderParamFactory::Get().Create( m_MVP->GetName(), m_MVP->GetParamType() );
-    ret->RegisterParameter(genShaderParam);
+    m_MVP                   = new model::ValueMat4( "MVP" );
+    UniformShaderParam * uniShaderParam = ShaderParamFactory::Get().Create( m_MVP->GetName(), m_MVP->GetParamType() );
+    ret->RegisterParameter( uniShaderParam );
 
-    m_MV                    = new model::ValueMat4("MV");
-    genShaderParam          = ShaderParamFactory::Get().Create( m_MV->GetName(), m_MV->GetParamType() );
-    ret->RegisterParameter(genShaderParam);
+    m_MV                    = new model::ValueMat4( "MV" );
+    uniShaderParam          = ShaderParamFactory::Get().Create( m_MV->GetName(), m_MV->GetParamType() );
+    ret->RegisterParameter( uniShaderParam );
 
-    m_P                     = new model::ValueMat4("P");
-    genShaderParam          = ShaderParamFactory::Get().Create( m_P->GetName(), m_P->GetParamType() );
-    ret->RegisterParameter(genShaderParam);
+    m_P                     = new model::ValueMat4( "P" );
+    uniShaderParam          = ShaderParamFactory::Get().Create( m_P->GetName(), m_P->GetParamType() );
+    ret->RegisterParameter( uniShaderParam );
 }
 
 // *********************************
 //
-void        VertexShader::UpdateMVP( const glm::mat4& MVP )
+void        VertexShader::UpdateMVP( const glm::mat4 & MVP )
 {
-    UniformShaderParam* mvp = m_parameters->GetParam("MVP");
-    assert(mvp);
+    UniformShaderParam * mvp = m_parameters->GetParam( "MVP" );
+    assert( mvp );
 
-    mvp->GenericSetVal(&MVP);
+    mvp->GenericSetVal( &MVP );
 }
 
 // *********************************
 //
-void        VertexShader::UpdateMV( const glm::mat4& MV )
+void        VertexShader::UpdateMV( const glm::mat4 & MV )
 {
-    UniformShaderParam* mv = m_parameters->GetParam("MV");
-    assert(mv);
+    UniformShaderParam * mv = m_parameters->GetParam( "MV" );
+    assert( mv );
 
-    mv->GenericSetVal(&MV);
+    mv->GenericSetVal( &MV );
 }
 
 // *********************************
 //
-void        VertexShader::UpdateP( const glm::mat4& P )
+void        VertexShader::UpdateP( const glm::mat4 & P )
 {
-    UniformShaderParam* p = m_parameters->GetParam("P");
-    assert(p);
+    UniformShaderParam * p = m_parameters->GetParam( "P" );
+    assert( p );
 
-    p->GenericSetVal(&P);
+    p->GenericSetVal( &P );
 }
 
 // ***************************** DESCRIPTOR **********************************

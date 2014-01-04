@@ -74,17 +74,25 @@ class ShaderParamInt  : public UniformShaderParam
 class ShaderParamFactory
 {
 private:
-    std::vector<char*> m_ParamsData;
 
-    ShaderParamFactory(){}
+    std::vector< char * >   m_ParamsData;
+
+private:
+
+    ShaderParamFactory()
+    {
+    }
+
     ~ShaderParamFactory();
 
 public:
-    UniformShaderParam* Create   ( const ShaderParamDesc & desc, char * pBuf );
-    UniformShaderParam* Create   ( const ShaderParamDesc & desc );
-    UniformShaderParam* Create   ( const std::string& name, ParamType type, char* pBuf = nullptr);
 
-    static ShaderParamFactory& Get();
+    UniformShaderParam * Create   ( const ShaderParamDesc & desc, char * pBuf );
+    UniformShaderParam * Create   ( const ShaderParamDesc & desc );
+    UniformShaderParam * Create   ( const std::string & name, ParamType type, char * pBuf = nullptr );
+
+    static ShaderParamFactory & Get();
+
 };
 
 } //bv
