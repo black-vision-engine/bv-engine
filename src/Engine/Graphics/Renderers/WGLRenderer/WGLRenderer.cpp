@@ -28,6 +28,7 @@ bool	InitializeGLContext( RendererInput & ri, WGLRendererData * data )
     pfd.iPixelType = PFD_TYPE_RGBA;
     pfd.cColorBits = 32;
     pfd.cDepthBits = 24;
+    pfd.cAlphaBits = 8; //FIXME: NVIDIA CARDS HACK
     pfd.cStencilBits = 8;
 
     //FIXME: For multisampling verify that: input.mPixelFormat == 0 ? true : false)
