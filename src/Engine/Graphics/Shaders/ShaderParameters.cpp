@@ -31,7 +31,7 @@ bool    ShaderParameters::IsRegistered                      ( const std::string 
 
 // ***********************
 //
-void    ShaderParameters::RegisterParameter                 ( GenericShaderParam * param )
+void    ShaderParameters::RegisterParameter                 ( UniformShaderParam * param )
 {
     m_shaderParams.push_back( param );
 }
@@ -45,7 +45,7 @@ int     ShaderParameters::NumParameters                     () const
 
 // ***********************
 //
-GenericShaderParam * ShaderParameters::GetParam             ( int id )
+UniformShaderParam * ShaderParameters::GetParam             ( int id )
 {
     assert( id >= 0 );
     assert( id < NumParameters() );
@@ -55,7 +55,7 @@ GenericShaderParam * ShaderParameters::GetParam             ( int id )
 
 // ***********************
 //
-GenericShaderParam * ShaderParameters::GetParam             ( const std::string & name )
+UniformShaderParam * ShaderParameters::GetParam             ( const std::string & name )
 {
     return FindParam( name );
 }
@@ -82,7 +82,7 @@ void                ShaderParameters::SetValue              ( const std::string 
 }
 
 // ***********************
-//FIXME: add some argumentsc if any argumetns are required
+//FIXME: add some arguments - if any arguments are required
 void                 ShaderParameters::Update               ()
 {
     for ( auto param : m_shaderParams )
@@ -93,7 +93,7 @@ void                 ShaderParameters::Update               ()
 
 // ***********************
 //
-GenericShaderParam * ShaderParameters::FindParam            ( const std::string & name ) const
+UniformShaderParam * ShaderParameters::FindParam            ( const std::string & name ) const
 {
     for( auto param : m_shaderParams )
     {

@@ -104,7 +104,7 @@ void    PdrShader::SetUniforms     ( Shader * shader )
 
 // *******************************
 //FIXME: reimplement this method so that switch-case statement is not called here but rather in GenericParameter or even better - in shader desc
-void    PdrShader::SetUniformParam ( GenericShaderParam * param )
+void    PdrShader::SetUniformParam ( UniformShaderParam * param )
 {
     switch( param->Type() )
     {

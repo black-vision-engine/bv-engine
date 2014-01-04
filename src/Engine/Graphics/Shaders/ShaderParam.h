@@ -11,7 +11,7 @@ namespace bv {
 
 class IShaderParamUpdater;
 
-class GenericShaderParam
+class UniformShaderParam
 {
 private:
 
@@ -20,7 +20,7 @@ private:
     IShaderParamUpdater *   m_updater;
 
 private:
-                                GenericShaderParam  ( const ShaderParamDesc & desc, char * pBuf );
+                                UniformShaderParam  ( const ShaderParamDesc & desc, char * pBuf );
 public:
 
     void                        RegisterUpdater     ( IShaderParamUpdater * updater );
@@ -51,21 +51,21 @@ public:
 };
 
 // ******************************
-class ShaderParamFloat : public GenericShaderParam
+class ShaderParamFloat : public UniformShaderParam
 {
     void    Set    ( const float * mem );
 };
 
 
 // ******************************
-class ShaderParamBool : public GenericShaderParam
+class ShaderParamBool : public UniformShaderParam
 {
     void    Set    ( const bool * mem );
 };
 
 
 // ******************************
-class ShaderParamInt  : public GenericShaderParam
+class ShaderParamInt  : public UniformShaderParam
 {
     void    Set    ( const int * mem );
 };
@@ -80,9 +80,9 @@ private:
     ~ShaderParamFactory();
 
 public:
-    GenericShaderParam* Create   ( const ShaderParamDesc & desc, char * pBuf );
-    GenericShaderParam* Create   ( const ShaderParamDesc & desc );
-    GenericShaderParam* Create   ( const std::string& name, ParamType type, char* pBuf = nullptr);
+    UniformShaderParam* Create   ( const ShaderParamDesc & desc, char * pBuf );
+    UniformShaderParam* Create   ( const ShaderParamDesc & desc );
+    UniformShaderParam* Create   ( const std::string& name, ParamType type, char* pBuf = nullptr);
 
     static ShaderParamFactory& Get();
 };

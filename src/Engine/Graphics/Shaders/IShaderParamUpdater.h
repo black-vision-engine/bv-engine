@@ -3,13 +3,13 @@
 
 namespace bv {
 
-class GenericShaderParam;
+class UniformShaderParam;
 
 class IShaderParamUpdater
 {
 public:
 
-    virtual void Update             ( GenericShaderParam * param ) = 0;
+    virtual void Update             ( UniformShaderParam * param ) = 0;
     virtual ~IShaderParamUpdater    ();
 };
 

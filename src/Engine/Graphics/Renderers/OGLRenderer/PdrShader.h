@@ -14,7 +14,7 @@ class Shader;
 class PixelShader;
 class VertexShader;
 class GeometryShader;
-class GenericShaderParam;
+class UniformShaderParam;
 class TextureSampler;
 
 class Texture2D;
@@ -53,10 +53,10 @@ public:
 private:
 
     void    SetUniforms             ( Shader * shader );
-    void    SetUniformParam         ( GenericShaderParam * param );
+    void    SetUniformParam         ( UniformShaderParam * param );
 
     template< ParamType paramType >
-    void    SetUniformDispatcher    ( GenericShaderParam * param )
+    void    SetUniformDispatcher    ( UniformShaderParam * param )
     {
         typedef ShaderParamTypeMapper< paramType >::type ValType;
         m_program->SetUniform( param->Name().c_str(), param->GenericGetVal< ValType >() );

@@ -9,7 +9,7 @@ namespace bv {
 
 // ***********************
 //
-GenericShaderParam::GenericShaderParam  ( const ShaderParamDesc & desc, char * pMem )
+UniformShaderParam::UniformShaderParam  ( const ShaderParamDesc & desc, char * pMem )
     : m_buffer( pMem )
     , m_desc( desc )
     , m_updater( nullptr )
@@ -19,49 +19,49 @@ GenericShaderParam::GenericShaderParam  ( const ShaderParamDesc & desc, char * p
 
 // ***********************
 //
-void                        GenericShaderParam::RegisterUpdater ( IShaderParamUpdater * updater )
+void                        UniformShaderParam::RegisterUpdater ( IShaderParamUpdater * updater )
 {
     m_updater = updater;
 }
 
 // ***********************
 //
-void                        GenericShaderParam::Update              ()
+void                        UniformShaderParam::Update              ()
 {
     m_updater->Update( this );
 }
 
 // ***********************
 //
-void                        GenericShaderParam::SetValue    ( const char * mem )
+void                        UniformShaderParam::SetValue    ( const char * mem )
 {
     memcpy( m_buffer, mem, m_desc.Size() );
 }
 
 // ***********************
 //
-const ShaderParamDesc &     GenericShaderParam::Descriptor  () const
+const ShaderParamDesc &     UniformShaderParam::Descriptor  () const
 {
     return m_desc;
 }
 
 // ***********************
 //
-ParamType  GenericShaderParam::Type        () const
+ParamType  UniformShaderParam::Type        () const
 {
     return m_desc.Type();
 }
 
 // ***********************
 //
-const std::string &         GenericShaderParam::Name         () const
+const std::string &         UniformShaderParam::Name         () const
 {
     return m_desc.Name();
 }
 
 // ***********************
 //
-const char *                GenericShaderParam::Data        () const
+const char *                UniformShaderParam::Data        () const
 {
     return m_buffer;
 }
@@ -89,14 +89,14 @@ void    ShaderParamInt::Set    ( const int * mem )
 
 // ***********************
 //
-GenericShaderParam* ShaderParamFactory::Create   ( const ShaderParamDesc & desc, char * pBuf )
+UniformShaderParam* ShaderParamFactory::Create   ( const ShaderParamDesc & desc, char * pBuf )
 {
-    return new GenericShaderParam(desc, pBuf);
+    return new UniformShaderParam(desc, pBuf);
 }
 
 // ***********************
 //
-GenericShaderParam* ShaderParamFactory::Create   ( const ShaderParamDesc & desc )
+UniformShaderParam* ShaderParamFactory::Create   ( const ShaderParamDesc & desc )
 {
     char* data = new char[desc.Size()];
     m_ParamsData.push_back(data);
@@ -105,7 +105,7 @@ GenericShaderParam* ShaderParamFactory::Create   ( const ShaderParamDesc & desc 
 
 // ***********************
 //
-GenericShaderParam* ShaderParamFactory::Create   ( const std::string& name, ParamType type, char* pBuf)
+UniformShaderParam* ShaderParamFactory::Create   ( const std::string& name, ParamType type, char* pBuf)
 {
     ShaderParamDesc desc = ShaderParamDesc::Create(name, type);
 

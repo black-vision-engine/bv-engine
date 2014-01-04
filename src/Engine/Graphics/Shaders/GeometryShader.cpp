@@ -13,7 +13,7 @@ GeometryShader::GeometryShader(const std::string& programSource )
     ShaderParameters* ret   = GetOrCreateShaderParameters();
 
     m_MVP                   = new model::ValueMat4("MVP");
-    GenericShaderParam* genShaderParam = ShaderParamFactory::Get().Create( m_MVP->GetName(), m_MVP->GetParamType() );
+    UniformShaderParam* genShaderParam = ShaderParamFactory::Get().Create( m_MVP->GetName(), m_MVP->GetParamType() );
     ret->RegisterParameter(genShaderParam);
 
     m_MV                    = new model::ValueMat4("MV");
@@ -27,7 +27,7 @@ GeometryShader::GeometryShader(const std::string& programSource )
 
 void GeometryShader::UpdateMVP( const glm::mat4& MVP )
 {
-    GenericShaderParam* mvp = m_parameters->GetParam("MVP");
+    UniformShaderParam* mvp = m_parameters->GetParam("MVP");
     assert(mvp);
 
     mvp->GenericSetVal(&MVP);
@@ -35,7 +35,7 @@ void GeometryShader::UpdateMVP( const glm::mat4& MVP )
 
 void GeometryShader::UpdateMV( const glm::mat4& MV )
 {
-    GenericShaderParam* mv = m_parameters->GetParam("MV");
+    UniformShaderParam* mv = m_parameters->GetParam("MV");
     assert(mv);
 
     mv->GenericSetVal(&MV);
@@ -43,7 +43,7 @@ void GeometryShader::UpdateMV( const glm::mat4& MV )
 
 void GeometryShader::UpdateP( const glm::mat4& P )
 {
-    GenericShaderParam* p = m_parameters->GetParam("P");
+    UniformShaderParam* p = m_parameters->GetParam("P");
     assert(p);
 
     p->GenericSetVal(&P);

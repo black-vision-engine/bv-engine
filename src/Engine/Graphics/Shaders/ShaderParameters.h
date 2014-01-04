@@ -19,7 +19,7 @@ class ShaderParameters
 {
 private:
 
-    typedef std::vector< GenericShaderParam * > TShaderParamVec;
+    typedef std::vector< UniformShaderParam * > TShaderParamVec;
 
 private:
 
@@ -36,11 +36,11 @@ public:
 
     bool                                IsRegistered                    ( const std::string & name ) const;
 
-    void                                RegisterParameter               ( GenericShaderParam * param );
+    void                                RegisterParameter               ( UniformShaderParam * param );
     int                                 NumParameters                   () const;
 
-    GenericShaderParam *                GetParam                        ( int id );
-    GenericShaderParam *                GetParam                        ( const std::string & name );
+    UniformShaderParam *                GetParam                        ( int id );
+    UniformShaderParam *                GetParam                        ( const std::string & name );
 
     const ShaderTextureParameters &     GetTextureParameters            () const;
     ShaderTextureParameters &           TextureParameters               ();
@@ -51,7 +51,7 @@ public:
 
 private:
 
-    GenericShaderParam *                FindParam                       ( const std::string & name ) const;
+    UniformShaderParam *                FindParam                       ( const std::string & name ) const;
 
 };
 

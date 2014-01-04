@@ -33,7 +33,7 @@ VertexShader::VertexShader( const std::string & programSource )
     ShaderParameters* ret   = GetOrCreateShaderParameters();
 
     m_MVP                   = new model::ValueMat4("MVP");
-    GenericShaderParam* genShaderParam = ShaderParamFactory::Get().Create( m_MVP->GetName(), m_MVP->GetParamType() );
+    UniformShaderParam* genShaderParam = ShaderParamFactory::Get().Create( m_MVP->GetName(), m_MVP->GetParamType() );
     ret->RegisterParameter(genShaderParam);
 
     m_MV                    = new model::ValueMat4("MV");
@@ -49,7 +49,7 @@ VertexShader::VertexShader( const std::string & programSource )
 //
 void        VertexShader::UpdateMVP( const glm::mat4& MVP )
 {
-    GenericShaderParam* mvp = m_parameters->GetParam("MVP");
+    UniformShaderParam* mvp = m_parameters->GetParam("MVP");
     assert(mvp);
 
     mvp->GenericSetVal(&MVP);
@@ -59,7 +59,7 @@ void        VertexShader::UpdateMVP( const glm::mat4& MVP )
 //
 void        VertexShader::UpdateMV( const glm::mat4& MV )
 {
-    GenericShaderParam* mv = m_parameters->GetParam("MV");
+    UniformShaderParam* mv = m_parameters->GetParam("MV");
     assert(mv);
 
     mv->GenericSetVal(&MV);
@@ -69,7 +69,7 @@ void        VertexShader::UpdateMV( const glm::mat4& MV )
 //
 void        VertexShader::UpdateP( const glm::mat4& P )
 {
-    GenericShaderParam* p = m_parameters->GetParam("P");
+    UniformShaderParam* p = m_parameters->GetParam("P");
     assert(p);
 
     p->GenericSetVal(&P);
