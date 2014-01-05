@@ -9,16 +9,13 @@ class SimpleVertexShaderChannelPD : public BaseParametersDescriptor
 {
 public:
 
-    static const std::string            pluginName;// FIXME: To jest tu niepotrzebne
 
     explicit SimpleVertexShaderChannelPD()
-        : BaseParametersDescriptor( pluginName ) 
     {
     }
 
 };
 
-const std::string SimpleVertexShaderChannelPD::pluginName = "PluginName";
 
 class SimpleVertexShaderChannel : public ShaderChannel< model::IVertexShaderChannel, SimpleVertexShaderChannelPD >
 {

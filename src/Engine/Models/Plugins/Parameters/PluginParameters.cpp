@@ -5,16 +5,8 @@ namespace bv {
 
 // *******************************
 //
-BaseParametersDescriptor::BaseParametersDescriptor    ( const std::string & pluginName )
-    : m_pluginName( pluginName )
+BaseParametersDescriptor::BaseParametersDescriptor    ( )
 {
-}
-
-// *******************************
-//
-const std::string &                                     BaseParametersDescriptor::GetPluginName               () const
-{
-    return m_pluginName;
 }
 
 // *******************************

@@ -9,16 +9,13 @@ class SimpleGeometryShaderChannelPD : public BaseParametersDescriptor
 {
 public:
 
-    static const std::string            pluginName;// FIXME: To jest tu niepotrzebne
 
     explicit SimpleGeometryShaderChannelPD()
-        : BaseParametersDescriptor( pluginName ) 
     {
     }
 
 };
 
-const std::string SimpleGeometryShaderChannelPD::pluginName = "PluginName";
 
 class SimpleGeometryShaderChannel : public ShaderChannel< model::IGeometryShaderChannel, SimpleGeometryShaderChannelPD >
 {

@@ -3,7 +3,6 @@
 namespace bv { namespace model
 {
 
-const std::string SolidColorShaderChannelPD::pluginName = "Solid";
 const std::string SolidColorShaderChannelPD::solidColor = "color";
 
 // ******************************

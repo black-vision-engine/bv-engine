@@ -19,7 +19,6 @@ public:
 public:
 
     //FIXME: add category and other required fileds here (some dependencies and so on)
-    virtual const std::string &         GetPluginName           ()                                      const = 0;
     virtual bool                        ValidateParameters      ( const std::string & programSource )   const = 0;
 
     virtual                             ~IParametersDescriptor  (){}
@@ -28,15 +27,10 @@ public:
 
 class BaseParametersDescriptor : public IParametersDescriptor
 {
-protected:
-
-    std::string                         m_pluginName;
-
 public:
 
-    explicit                            BaseParametersDescriptor    ( const std::string & pluginName );
+    explicit                            BaseParametersDescriptor    ( );
 
-    virtual const std::string &         GetPluginName               ()                                      const;
     virtual bool                        ValidateParameters          ( const std::string & programSource )   const; //FIXME: Add validation
 
     virtual                             ~BaseParametersDescriptor   ();

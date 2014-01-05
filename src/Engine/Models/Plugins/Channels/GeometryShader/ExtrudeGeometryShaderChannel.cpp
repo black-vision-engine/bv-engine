@@ -3,7 +3,6 @@
 
 namespace bv{ namespace model {
 
-const std::string ExtrudeGeometryShaderChannelPD::pluginName = "PluginName";
 const std::string ExtrudeGeometryShaderChannelPD::scaleParamName = "scale";
 
 // ******************************

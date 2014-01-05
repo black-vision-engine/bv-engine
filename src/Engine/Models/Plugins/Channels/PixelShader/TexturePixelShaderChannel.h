@@ -19,7 +19,6 @@ public:
     static std::string          borderColorsParamName[];
 
     TexturePixelShaderChannelPD()
-        : BaseParametersDescriptor( pluginName )
     {}
 };
 

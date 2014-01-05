@@ -9,16 +9,13 @@ class SimplePixelShaderChannelPD : public BaseParametersDescriptor
 {
 public:
 
-    static const std::string            pluginName;// FIXME: To jest tu niepotrzebne
 
     explicit SimplePixelShaderChannelPD()
-        : BaseParametersDescriptor( pluginName ) 
     {
     }
 
 };
 
-const std::string SimplePixelShaderChannelPD::pluginName = "PluginName";
 
 class SimplePixelShaderChannel : public PixelShaderChannelBase< SimplePixelShaderChannelPD >
 {

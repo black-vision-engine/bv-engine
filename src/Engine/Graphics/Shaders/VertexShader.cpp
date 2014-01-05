@@ -85,7 +85,7 @@ const std::string  PassThroughVertexShaderParametersDescriptor::MVPParamName( "M
 // *********************************
 //
 PassThroughVertexShaderParametersDescriptor::PassThroughVertexShaderParametersDescriptor()
-    : BaseParametersDescriptor( "passthroughvertexshader" )
+    : BaseParametersDescriptor( )
 {}
 
 // *********************************

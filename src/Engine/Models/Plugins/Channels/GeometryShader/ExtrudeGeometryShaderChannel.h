@@ -11,12 +11,10 @@ namespace bv{ namespace model {
 class ExtrudeGeometryShaderChannelPD : public BaseParametersDescriptor
 {
 public:
-
-    static const std::string            pluginName;// FIXME: To jest tu niepotrzebne
     static const std::string            scaleParamName;
 
     explicit ExtrudeGeometryShaderChannelPD()
-        : BaseParametersDescriptor( pluginName ) 
+        : BaseParametersDescriptor( ) 
     {}
 };
 

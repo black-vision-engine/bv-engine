@@ -16,11 +16,9 @@ class TextPixelShaderChannelPD : public BaseParametersDescriptor
 {
 public:
 
-    static const std::string            pluginName;
     static const std::string            colorParam;
 
     TextPixelShaderChannelPD()
-        : BaseParametersDescriptor( pluginName )
     {}
 };
 

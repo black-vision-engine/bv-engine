@@ -11,11 +11,10 @@ class SolidColorShaderChannelPD : public BaseParametersDescriptor
 {
 public:
 
-    static const std::string            pluginName;// FIXME: To jest tu niepotrzebne
     static const std::string            solidColor;
 
     explicit SolidColorShaderChannelPD()
-        : BaseParametersDescriptor( pluginName ) 
+        : BaseParametersDescriptor( ) 
     {}
 };
 
