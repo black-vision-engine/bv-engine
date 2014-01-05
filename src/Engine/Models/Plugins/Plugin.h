@@ -20,8 +20,6 @@ template< class Iface, class UIDType >
 class BasePlugin : public Iface
 {
 protected:
-    std::vector< IValue * >         m_values;
-
     ///////////////// Previous plugin ///////////
     const IPlugin *                 m_prevPlugin;
 

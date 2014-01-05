@@ -332,7 +332,6 @@
     <ClCompile Include="Engine\Graphics\Types\Transform.cpp" />
     <ClCompile Include="Engine\Models\BasicNode.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\Parameter.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Plugin.cpp" />
     <ClCompile Include="Engine\Models\Updaters\TransformUpdater.cpp" />
     <ClCompile Include="Mathematics\Interpolators\BasicInterpolator.cpp" />
     <ClCompile Include="Mathematics\Transform\MatTransform.cpp" />

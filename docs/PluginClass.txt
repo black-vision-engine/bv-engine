@@ -1,0 +1,47 @@
+IUpdatable:
+	- interfejs po krórym dziedzicz¹ wszystkie klasy które przeci¹¿aj¹ metodê Update(TimeType t) w celu aktualizcji w danym czasie.
+
+IPlugin : IUpdatable
+	- interfejs, który powinnu implementowaæ wszystkie pluginy w modelu.
+	
+template< class Iface, class UIDType >			(IFace zawsze musi byæ typu IPlugin)
+class BasePlugin : public Iface					(UIDType typ odpowiadaj¹cy za nadanie statycznego UID pluginowi)
+	- klasa implemetuj¹ca czêœciowo domyœlne metody interfejsu IPlugin.
+	Uwagi:
+	Metody: GetTextures HasAnimatingTexture QuerySequenceAnimationSource powinny zostaæ zmienione bo teraz implemetuj¹ chwilowe rozwi¹zanie pozwalaj¹ce obs³ugiwaæ resource'y w poziomu pluginu. Zostanie to poprawione w momencie zaimplementowania poprawnego Resource managera.
+	
+	Membery:
+		m_prevPlugin - poprzedni plugin w stosunku do akualnego w Nodzie. Pole to jest niezbêdne do poprawnego generowania geometrii i wielu innych rzeczy.
+	
+	Metody:
+	wirtualne:
+		SetGeometryChannel          	- Metody do obs³ugi pobierania i ustawiania kana³ów z pluginie. Settery domyœlnie assertuj¹. Gettery próbuj¹ pobraæ kana³ z poprzedniego pluginu
+		SetTransformChannel         
+		SetPixelShaderChannel       
+		SetVertexShaderChannel      
+		SetGeometryShaderChannel    
+		GetGeometryChannel          
+		GetTransformChannel         
+		GetPixelShaderChannel       
+		GetVertexShaderChannel      
+		GetGeometryShaderChannel
+		GetTextures             		- Metoda pobieraj¹ca textury. Domyœlnie zwraca pusty wektor.    
+        HasAnimatingTexture         	- Metody do obs³ugi animacji. Do przerobienia razem z GetTextures
+        QuerySequenceAnimationSource		
+		Update							- Tego nie trzeba t³umaczyæ. Assertuje jeœli nie zostanie przeci¹¿ony.
+		
+	niewirtualne:
+		GetName - zwraca nazwê pluginu przekazan¹ przez klasê UIDType
+		
+		
+TODO:
+		
+IPixelShaderChannel:
+IVertexShaderChannel:
+IGeometryShaderChannel:
+VertexAttributesChannel:
+TransformChannel:
+
+Textures:
+
+ISequenceAnimationSource:
