@@ -1,0 +1,51 @@
+Model:
+
+UniformShaderParam - generyczny runtajmowy parametr do shadera odpowiadaj¹cy za uniform variable w shaderze
+                     sk³ada siê z deskryptora (kwalifikowan¹ nazwa parametru, która jest u¿ywana w kodzie shadera jako uniform variable, typ parametru:
+                     float, float1, float2, float3, float4, mat2, mat3, mat4, int, bool oraz rozmiar parametru (sizeof)), 
+                     nieotypowanego bufora, który trzyma te dane (char*) - na podstawie deskryptora mo¿na ten bufor ustawiæ oraz wskaŸnik na updater,
+                     który potrafi poprawnie ustawiæ ten parametr - na podstawie modelu ustawaia wartoœæ paramtru shadera po stronie modelu (opisane dalej)
+                     metoda Update tego parametru wywo³uje zarejestrowany updater na sobie - w za³o¿eniu ten uprader ma byæ w stanie poprawnie ustawiæ
+                     wartoœæ danego parametru
+                     
+ShaderTextureParameters - Stores either textures or animations - not the best implementation though (at this point at most one animation anyway)
+
+ShaderParameters - klasa, która przechowuje parametry shadera (uniformy oraz tekstury) po stronie modelu i potem je pozwala wrzucaæ do shadera po stronie silnika
+                   trzyma listê GenericShaderParam oraz ShaderTextureParameters oraz wskaŸnik na shader, do którego te parametry nale¿¹ (sensowne)
+                   do tego pozwala na dostawanie siê do poszczególnych parametrów przez nazwê i indeks oraz generyczne ustawianie wartoœci (z danych
+                   zapisanych jako char *) - SetValue. Ma te¿ swoj¹ metodê Update, która odpala update na ka¿dym UbniformShaderParam (ale na teksturach
+                   ju¿ nie) - ten update w ka¿dym
+                   
+ShaderParamFactory - klaska s³u¿¹ca do tworzenia parametrów odpowiedniego typu na podstawie nazwy i paramtype, dodatkowo potrafi alokowaæ bufor dla
+                     poszczególnych parametrów (pewnie nale¿a³oby tutaj dodaæ jakiœ mempool, a nie na pa³ê alokowaæ te ma³e fragmenty pamiêci, ewentualnie
+                     zawsze statycznie przydzielaæ ka¿demu parametrowi 16 floatów (mat4) i siê nie przejmowaæ, ale to jest nieco marnowanie miejsca)
+     
+RendererContext - kontekst renderera (stany alfa, cull, depth i fill)
+     
+IShaderChannel - interfejs, która dziedziczy po IUpdatable (Update) -> IChannel (IsReadOnly() ) -> IShaderChannel (GetShaderFile, GetValuesList, GetParametersList)
+
+IVertexShaderChannel - to samo, co IShaderChannel
+IGeometryShaderChannel - to samo, co IShaderChannel
+IPixelShaderChannel - to samo, co IShaderChannel plus mo¿liwoœæ pobrania RendererContext (klasa, która trzyma RendererContext, te stany odpowiadaj¹ 
+                       potem za stan renderera OpenGL)
+
+IPlugin - 
+IUpdater - interfejs maj¹cy metod¹ DoUpdate( czas )
+IValue - interfejs wartoœci od dowolnym typie (taki g³upi IVariant) - nazwa, paramType oraz dane przechowywane jako char*
+
+ShaderChannel - bazowa implementacja IShaderChannel
+
+ShaderParamUpdater - klaska, która dziedziczy po IUpdater i odpowiada za aktualizacjê stanu (w tej chwili tylko uniform parameters) Shadera 
+                     na podstawie parametrów pobranych z kana³u shadera:
+                     algorytm - przeiteruj IValue z shaderChannel->GetValuesList() 
+                     pobierz parametry Shadera (ShaderParameters) i znajdŸ parametr o nazwie IValue::GetName() - istaw mu wartoœæ tak¹, jak ma IValue::GetData()
+
+
+Shader - sk³ada siê z updatera (ShaderParamUpdater), który potrafi ustawiæ jego parametry         
+IModelNode - build scene, is visible
+  BasicNode - dodawanie dzieci, dodawanie layerów, dodawanie pluginów, du¿o niskopoziomowego œmiecia, które robi renderable (powinno byæ na zewn¹trz)
+              pobieranie shaderów (geom, pixel, vertex), tworzenie renderable effect jak¹œ niebyt wyrafinowan¹ metod¹
+              oraz RegisterShaderParameters do rejestrowania parametrów shadera
+              
+              
+MVP, MV oraz P w GS i VS s¹ rejestrowane z updaterami
