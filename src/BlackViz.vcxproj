@@ -100,7 +100,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(BOOST_INC);../dep/Common/FreeImage/dist;../dep/Common/FreeType/include;../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../dep/Common/FastDelegate;./;../sqlite/src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;WIN32;_DEBUG;_LIB;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -149,7 +149,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;WIN32;NDEBUG;_LIB;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -192,7 +192,6 @@
     <ClCompile Include="Application\ConsoleApplication.cpp" />
     <ClCompile Include="Application\win32\WinApplication.cpp" />
     <ClCompile Include="Application\WindowedApplication.cpp" />
-    <ClCompile Include="BasicTestScene.cpp" />
     <ClCompile Include="Engine\Events\BaseEvent.cpp" />
     <ClCompile Include="Engine\Events\EventManager.cpp" />
     <ClCompile Include="Engine\Events\Events.cpp" />
@@ -304,7 +303,6 @@
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrTexture2D.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexDescriptor.cpp" />
-    <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\vborect.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\Renderer.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\WGLRenderer\WGLRenderer.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\DataBuffer.cpp" />
@@ -315,7 +313,6 @@
     <ClCompile Include="Engine\Graphics\Resources\VertexArray.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\VertexBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\VertexDescriptor.cpp" />
-    <ClCompile Include="Engine\Graphics\SceneGraph\BasicScene.cpp" />
     <ClCompile Include="Engine\Graphics\SceneGraph\Camera.cpp" />
     <ClCompile Include="Engine\Graphics\SceneGraph\RenderableEntity.cpp" />
     <ClCompile Include="Engine\Graphics\SceneGraph\SceneNode.cpp" />
@@ -324,7 +321,6 @@
     <ClCompile Include="Engine\Graphics\SceneGraph\Triangles.cpp" />
     <ClCompile Include="Engine\Graphics\SceneGraph\TriangleStrip.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\GeometryShader.cpp" />
-    <ClCompile Include="Engine\Graphics\Shaders\Parameters.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\PixelShader.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderableEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderablePass.cpp" />
@@ -351,7 +347,6 @@
     <ClInclude Include="Application\ApplicationBase.h" />
     <ClInclude Include="Application\ConsoleApplication.h" />
     <ClInclude Include="Application\WindowedApplication.h" />
-    <ClInclude Include="BasicTestScene.h" />
     <ClInclude Include="Core\Queue.h" />
     <ClInclude Include="Core\QueueConcurrent.h" />
     <ClInclude Include="Engine\Events\BaseEvent.h" />
@@ -492,7 +487,6 @@
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrTexture2D.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexDescriptor.h" />
-    <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\vborect.h" />
     <ClInclude Include="Engine\Graphics\Renderers\Renderer.h" />
     <ClInclude Include="Engine\Graphics\Renderers\WGLRenderer\WGLRendererData.h" />
     <ClInclude Include="Engine\Graphics\Renderers\WGLRenderer\WGLRendererInput.h" />
@@ -505,9 +499,7 @@
     <ClInclude Include="Engine\Graphics\Resources\VertexArray.h" />
     <ClInclude Include="Engine\Graphics\Resources\VertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\Resources\VertexDescriptor.h" />
-    <ClInclude Include="Engine\Graphics\SceneGraph\BasicScene.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\Camera.h" />
-    <ClInclude Include="Engine\Graphics\SceneGraph\IScene.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\RenderableEntity.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\SceneNode.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\TransformableEntity.h" />
@@ -515,7 +507,6 @@
     <ClInclude Include="Engine\Graphics\SceneGraph\Triangles.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\TriangleStrip.h" />
     <ClInclude Include="Engine\Graphics\Shaders\GeometryShader.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\Parameters.h" />
     <ClInclude Include="Engine\Graphics\Shaders\PixelShader.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderableEffect.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderablePass.h" />
@@ -526,7 +517,7 @@
     <ClInclude Include="Engine\Graphics\Shaders\VertexShader.h" />
     <ClInclude Include="Engine\Graphics\Types\Transform.h" />
     <ClInclude Include="Engine\Models\BasicNode.h" />
-    <ClInclude Include="Engine\Models\Plugins\Interfaces\IParameter.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IValue.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPlugin.h" />
     <ClInclude Include="Engine\Models\Node.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\Parameter.h" />

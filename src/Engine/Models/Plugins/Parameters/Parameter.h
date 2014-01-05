@@ -3,7 +3,7 @@
 #include "Mathematics/Interpolators/Interpolators.h"
 #include "Mathematics/Transform/MatTransform.h"
 
-#include "Engine/Models/Plugins/Interfaces/IParameter.h"
+#include "Engine/Models/Plugins/Interfaces/IValue.h"
 #include "Engine/Interfaces/ITimeEvaluator.h"
 
 #include "Engine/Types/Enums.h"
@@ -30,7 +30,7 @@ public:
 };
 
 //FIXME: this shit deserves some templates :D
-class BaseParameter : public IParameter
+class BaseParameter
 {
 protected:
 
@@ -41,8 +41,8 @@ protected:
     mutable TimeType        m_lastEvaluatedTime;
 
 protected:
-    virtual ParameterSemantic   GetSemantic             ()  const { return m_semantic; }
 
+    virtual ParameterSemantic   GetSemantic             ()  const { return m_semantic; }
 
     void                        SetLastEvaluatedTime    ( TimeType t )  const;
     TimeType                    GetLastEvaluatedTime    ()              const;

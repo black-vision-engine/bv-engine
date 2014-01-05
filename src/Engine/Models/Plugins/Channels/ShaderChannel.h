@@ -11,7 +11,6 @@
 namespace bv { namespace model {
 
 class IValue;
-class IParameter;
 
 template< class IFace, class ParameterDescriptor  >
 class ShaderChannel : public IFace
@@ -22,7 +21,6 @@ protected:
 
     std::string                     m_shaderSource;
     std::vector< IValue* >          m_values; 
-    std::vector< IParameter* >      m_params;
 
 public:
 
@@ -34,7 +32,6 @@ public:
 
     virtual const std::string &                     GetShaderSource             () const { return m_shaderSource; }
     virtual const std::vector< IValue* > &          GetValuesList               () const { return m_values; }
-    virtual const std::vector< IParameter* > &      GetParametersList           () const { return m_params; }
 
     void                                            RegisterValue               ( IValue * v ) { m_values.push_back( v ); }
 

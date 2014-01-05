@@ -4,7 +4,7 @@
 
 #include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
 #include "Engine/Models/Plugins/Parameters/Parameter.h"
-#include "Engine/Models/Plugins/Interfaces/IParameter.h"
+#include "Engine/Models/Plugins/Interfaces/IValue.h"
 #include "Engine/Models/Plugins/Channels/ShaderChannel.h"
 #include "Engine/Models/Plugins/Parameters/PluginParameters.h"
 

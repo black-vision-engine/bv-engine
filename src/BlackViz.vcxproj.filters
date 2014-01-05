@@ -5,17 +5,13 @@
     <ClCompile Include="Application\ConsoleApplication.cpp" />
     <ClCompile Include="Application\win32\WinApplication.cpp" />
     <ClCompile Include="Application\WindowedApplication.cpp" />
-    <ClCompile Include="BasicTestScene.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\glslprogram.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\glutils.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\gl_core_4_3.c" />
-    <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\vborect.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\Textures\TextureManager.cpp" />
-    <ClCompile Include="Engine\Graphics\SceneGraph\BasicScene.cpp" />
     <ClCompile Include="Engine\Graphics\SceneGraph\Camera.cpp" />
     <ClCompile Include="Engine\Graphics\SceneGraph\SceneNode.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\GeometryShader.cpp" />
-    <ClCompile Include="Engine\Graphics\Shaders\Parameters.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\PixelShader.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Shader.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\VertexShader.cpp" />
@@ -165,19 +161,14 @@
     <ClInclude Include="Application\ApplicationBase.h" />
     <ClInclude Include="Application\ConsoleApplication.h" />
     <ClInclude Include="Application\WindowedApplication.h" />
-    <ClInclude Include="BasicTestScene.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\glslprogram.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\glutils.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\gl_core_4_3.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\oglcore.h" />
-    <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\vborect.h" />
     <ClInclude Include="Engine\Graphics\Resources\Textures\TextureManager.h" />
-    <ClInclude Include="Engine\Graphics\SceneGraph\BasicScene.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\Camera.h" />
-    <ClInclude Include="Engine\Graphics\SceneGraph\IScene.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\SceneNode.h" />
     <ClInclude Include="Engine\Graphics\Shaders\GeometryShader.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\Parameters.h" />
     <ClInclude Include="Engine\Graphics\Shaders\PixelShader.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Shader.h" />
     <ClInclude Include="Engine\Graphics\Shaders\VertexShader.h" />
@@ -247,7 +238,6 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\ShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPlugin.h" />
-    <ClInclude Include="Engine\Models\Plugins\Interfaces\IParameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Plugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryPluginRect.h" />
@@ -357,6 +347,7 @@
     <ClInclude Include="System\HerarchicalProfiler.h" />
     <ClInclude Include="System\BasicMacros.h" />
     <ClInclude Include="System\FileIO.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IValue.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

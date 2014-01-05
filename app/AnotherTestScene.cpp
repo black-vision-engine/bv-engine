@@ -535,9 +535,9 @@ model::BasicNode *     Text1()
     Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
 
     color.addKey(0.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
-    //color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-    //color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-    //color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+    color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+    color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
     auto texPlugin      =   PluginsFactory::CreateSimpleTextPlugin( L"DUPA", "../dep/Media/fonts/ARIALUNI.TTF", 64 );
 
@@ -549,11 +549,11 @@ model::BasicNode *     Text1()
     FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
     FloatInterpolator zt;
 
-    xt.addKey(0.f, -1.f);
-    yt.addKey(0.f, -5.f);
-    zt.addKey(0.f, -5.f);
+    xt.addKey( 0.f, -1.f );
+    yt.addKey( 0.f, -5.f );
+    zt.addKey( 0.f, -5.f );
 
-    yt.addKey(30.f, 5.f);
+    yt.addKey( 30.f, 5.f );
 
     //trns.AddTranslation( xt, yt, zt );
 

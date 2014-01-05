@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
-#include "Engine/Models/Plugins/Interfaces/IParameter.h"
+#include "Engine/Models/Plugins/Interfaces/IValue.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
@@ -27,11 +27,10 @@ protected:
 
     ParamDesc                       m_paramDesc;
 
-    std::vector< IParameter * >     m_params;
     std::vector< IValue * >         m_values;
 
     ///////////////// Previous plugin ///////////
-    const IPlugin*                  m_prevPlugin;
+    const IPlugin *                 m_prevPlugin;
 
 
 public:
@@ -43,10 +42,8 @@ public:
     const std::string &                         GetName                     () const                                        { return ParamDesc::pluginName; } 
 
     virtual const std::vector< IValue * > &     GetValuesList               () const                                        { return m_values; }
-    virtual const std::vector< IParameter * > & GetParametersList           () const                                        { return m_params; };
 
     void                                        RegisterValue               ( IValue * v )                                  { m_values.push_back( v ); }
-
 
     virtual void                                SetGeometryChannel          ( VertexAttributesChannel* geomChannel )        { assert(!"Implement in derived class"); }
     virtual void                                SetTransformChannel         ( TransformChannel* transformChannel )          { assert(!"Implement in derived class"); }

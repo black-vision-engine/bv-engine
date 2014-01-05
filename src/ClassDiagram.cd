@@ -529,21 +529,21 @@
     <Position X="3" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EAAAAAAAAAAAgAAAAAIAAAAAQAAAAAAAAAAEAAIAAIA=</HashCode>
-      <FileName>Engine\Models\IParameter.h</FileName>
+      <FileName>Engine\Models\IValue.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="bv::IValue" Collapsed="true">
     <Position X="15" Y="13.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAEAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAABIA=</HashCode>
-      <FileName>Engine\Models\IParameter.h</FileName>
+      <FileName>Engine\Models\IValue.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="bv::BaseValue" Collapsed="true">
     <Position X="15" Y="15" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAABAA=</HashCode>
-      <FileName>Engine\Models\IParameter.h</FileName>
+      <FileName>Engine\Models\IValue.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="bv::IPlugin" Collapsed="true">
@@ -1285,7 +1285,7 @@
     <Position X="34" Y="8" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAQAAAAAAAAQAAACAAAAAAAAAAAA=</HashCode>
-      <FileName>Engine\Models\IParameter.h</FileName>
+      <FileName>Engine\Models\IValue.h</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="bv::PluginsGroups" Collapsed="true">
