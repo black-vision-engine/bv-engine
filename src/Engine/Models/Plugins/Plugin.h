@@ -77,11 +77,6 @@ template<class Iface, class ParameterDescriptor >
 void BasePlugin< Iface, ParameterDescriptor >::Update( TimeType t )
 {
     assert( !"Implement in derived class" );
-    //if( GetGeometryChannel() )          GetGeometryChannel()->Update( t );
-    //if( GetTransformChannel() )         GetTransformChannel->Update( t );
-    //if( GetPixelShaderChannel() )       GetPixelShaderChannel->Update( t );
-    //if( GetVertexShaderChannel() )      GetVertexShaderChannel->Update( t );
-    //if( GetGeometryShaderChannel() )    GetGeometryShaderChannel->Update( t );
 }
 
 // *******************************
