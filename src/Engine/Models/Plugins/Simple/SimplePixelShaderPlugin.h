@@ -8,19 +8,16 @@ namespace bv { namespace model {
 
 class SimplePixelShaderChannel;
 
-// ***************************** DESCRIPTOR **********************************
-class SimplePixelShaderPluginPD : public BaseParametersDescriptor
+// ***************************** UID **********************************
+class SimplePixelShaderPluginUID
 {
 public:
-
-    static const std::string            pluginName;
-
-    explicit SimplePixelShaderPluginPD();
+    static const char*       GetName()        { return "simple_pixel_shader_plugin"; }
 };
 
 
 // ***************************** PLUGIN ********************************** 
-class SimplePixelShaderPlugin : public BasePlugin< IPlugin, SimplePixelShaderPluginPD >
+class SimplePixelShaderPlugin : public BasePlugin< IPlugin, SimplePixelShaderPluginUID >
 {
 private:
 

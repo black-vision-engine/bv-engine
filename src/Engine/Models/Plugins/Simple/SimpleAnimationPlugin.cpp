@@ -15,20 +15,8 @@
 
 namespace bv { namespace model {
 
-// ***************************** DESCRIPTOR ********************************** 
-//PLUGIN NAME
-const std::string SimpleAnimationPluginPD::pluginName( "SimpleAnimationPlugin" );
-
-
 //FIXME: dodawanie kanalow w ten sposob (przez przypisanie na m_<xxx>channel powoduje bledy, trzeba to jakos poprawic, zeby bylo wiadomo, o co chodzi
 //FIXME: teraz zle dodanie wychodzi dopiero po odpaleniu silnika, a to jest oczywisty blad
-
-// *************************************
-//
-SimpleAnimationPluginPD::SimpleAnimationPluginPD()
-    : BaseParametersDescriptor( pluginName )
-{
-}
 
 // ***************************** PLUGIN ********************************** 
 
@@ -58,8 +46,9 @@ SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin 
     // Set Pixel Shader Channel
 	std::vector<ParamTransform> txMat;
 	std::vector<ParamFloat> alphas;
+    std::vector<ParamVec4> bc;
 
-    m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpleanimation.frag", alphas, txMat );
+    m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpleanimation.frag", alphas, txMat, bc );
 
     if( !ctx )
         ctx = RendererContext::CreateDefault();

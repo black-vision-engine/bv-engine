@@ -17,7 +17,6 @@
 
 namespace bv { namespace model {
 
-const std::string SimpleTextPluginPD::pluginName = "SimpleTextPlugin";
 
 // *********************************
 //

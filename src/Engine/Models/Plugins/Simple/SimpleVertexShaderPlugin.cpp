@@ -36,15 +36,6 @@ public:
 
 };
 
-const std::string SimpleVertexShaderPluginPD::pluginName = "PluginName";
-
-// *********************************
-//
-SimpleVertexShaderPluginPD::SimpleVertexShaderPluginPD()
-    : BaseParametersDescriptor( pluginName )
-{
-}
-
 // *********************************
 //
 SimpleVertexShaderPlugin::SimpleVertexShaderPlugin          ( const IPlugin * prev, const std::string& shaderPath )
@@ -53,10 +44,10 @@ SimpleVertexShaderPlugin::SimpleVertexShaderPlugin          ( const IPlugin * pr
 {
     m_vshaderChannel = new SimpleVertexShaderChannel( shaderPath );
 
-    for( auto v : prev->GetValuesList() )
-    {
-        m_vshaderChannel->RegisterValue( v );
-    }
+    //for( auto v : prev->GetValuesList() )
+    //{
+    //    m_vshaderChannel->RegisterValue( v );
+    //}
 }
 
 // *********************************

@@ -11,20 +11,15 @@ class FontExtraData;
 class TextAtlas;
 class Text;
 
-// ***************************** DESCRIPTOR **********************************
-class SimpleTextPluginPD : public BaseParametersDescriptor
+// ***************************** UID **********************************
+class SimpleTextPluginUID
 {
 public:
-
-    static const std::string pluginName;
-
-    explicit SimpleTextPluginPD()
-        : BaseParametersDescriptor( "SimpleTextPlugin" )
-    {}
+    static const char*       GetName()        { return "simple_text_plugin"; }
 };
 
 // ***************************** PLUGIN ********************************** 
-class SimpleTextPlugin : public BasePlugin< IPlugin, SimpleTextPluginPD >
+class SimpleTextPlugin : public BasePlugin< IPlugin, SimpleTextPluginUID >
 {
 private:
 

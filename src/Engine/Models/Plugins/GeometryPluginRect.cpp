@@ -10,18 +10,6 @@
 
 namespace bv { namespace model {
 
-// ***************************** DESCRIPTOR ********************************** 
-//PLUGIN NAME
-const std::string GeometryRectPluginPD::pluginName( "GeometryRectPlugin" );
-
-
-// *************************************
-//
-GeometryRectPluginPD::GeometryRectPluginPD()
-    : BaseParametersDescriptor( pluginName )
-{
-}
-
 // ***************************** PLUGIN ********************************** 
 
 // *************************************

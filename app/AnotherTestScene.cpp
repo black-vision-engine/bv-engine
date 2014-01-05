@@ -564,11 +564,7 @@ model::BasicNode *     Text1()
 
     root->AddPlugin( transPlugin );
 
-    auto vertexShaderPlugin = PluginsFactory::CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/simpletexture.vert" );
-
-    auto txMat = new ValueMat4( "txMat0" ); //FIXME: MEMLEAK
-    txMat->SetValue( glm::mat4(1.f) );
-    vertexShaderPlugin->RegisterValue( txMat );
+    auto vertexShaderPlugin = PluginsFactory::CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/text.vert" );
 
     root->AddPlugin( vertexShaderPlugin );
 

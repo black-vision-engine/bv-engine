@@ -7,20 +7,7 @@
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
 
 
-
 namespace bv { namespace model {
-
-// ***************************** DESCRIPTOR ********************************** 
-//PLUGIN NAME
-const std::string GeometryRingPluginPD::pluginName( "GeometryRingPlugin" );
-
-
-// *************************************
-//
-GeometryRingPluginPD::GeometryRingPluginPD()
-    : BaseParametersDescriptor( pluginName )
-{
-}
 
 // ***************************** PLUGIN ********************************** 
 

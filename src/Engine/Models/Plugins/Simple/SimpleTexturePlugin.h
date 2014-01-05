@@ -16,14 +16,11 @@ class Resource;
 class TexturePixelShaderChannel;
 class TextureVertexShaderChannel;
 
-// ***************************** DESCRIPTOR **********************************
-class SimpleTexturePluginPD : public BaseParametersDescriptor
+// ***************************** UID **********************************
+class SimpleTexturePluginUID
 {
 public:
-
-    static const std::string            pluginName;
-
-    explicit SimpleTexturePluginPD();
+    static const char*       GetName()        { return "simple_texture_shader_plugin"; }
 };
 
 // ***************************** SimpleTexturePlugin TextureDescriptor ***
@@ -61,7 +58,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class SimpleTexturePlugin : public BasePlugin< IPlugin, SimpleTexturePluginPD >
+class SimpleTexturePlugin : public BasePlugin< IPlugin, SimpleTexturePluginUID >
 {
 private:
     TextureAttachmentMode           m_attachmentMode;

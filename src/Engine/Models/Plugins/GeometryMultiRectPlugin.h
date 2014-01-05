@@ -10,20 +10,16 @@ namespace bv { namespace model {
 
 class ParamFloat;
 
-// ***************************** DESCRIPTOR **********************************
-class GeometryMultiRectPluginPD : public BaseParametersDescriptor
+// ***************************** UID **********************************
+class GeometryMultiRectPluginUID
 {
 public:
-
-    static const std::string            pluginName;
-
-    explicit GeometryMultiRectPluginPD();
-
+    static const char*       GetName()        { return "geometry_multi_rect_plugin"; }
 };
 
 
 // ***************************** PLUGIN ********************************** 
-class GeometryMultiRectPlugin : public BasePlugin< IPlugin, GeometryMultiRectPluginPD >
+class GeometryMultiRectPlugin : public BasePlugin< IPlugin, GeometryMultiRectPluginUID >
 {
 private:
 

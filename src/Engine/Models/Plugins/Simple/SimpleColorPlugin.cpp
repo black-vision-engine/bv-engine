@@ -24,15 +24,6 @@ public:
 const std::string SimpleColorPixelShaderChannelPD::pluginName       = "PluginName";
 const std::string SimpleColorPixelShaderChannelPD::colorParamName   = "color";
 
-const std::string SimpleColorPluginPD::pluginName       = "PluginName";
-
-// *********************************
-//
-SimpleColorPluginPD::SimpleColorPluginPD()
-    : BaseParametersDescriptor( pluginName )
-{
-}
-
 //FIXME: param is not registered in descriptor because it won't be used to pass values to the shader (oh r'ly)?
 class SimpleColorPixelShaderChannel : public PixelShaderChannelBase< SimpleColorPixelShaderChannelPD >
 {

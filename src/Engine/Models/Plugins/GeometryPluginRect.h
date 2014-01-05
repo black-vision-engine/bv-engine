@@ -9,18 +9,16 @@
 
 namespace bv { namespace model {
 
-// ***************************** DESCRIPTOR **********************************
-class GeometryRectPluginPD : public BaseParametersDescriptor
+// ***************************** UID **********************************
+class GeometryRectPluginUID
 {
 public:
-    static const std::string            pluginName;
-
-    explicit GeometryRectPluginPD();
+    static const char*       GetName()        { return "geometry_rect_plugin"; }
 };
 
 
 // ***************************** PLUGIN ********************************** 
-class GeometryRectPlugin : public BasePlugin< IPlugin, GeometryRectPluginPD >
+class GeometryRectPlugin : public BasePlugin< IPlugin, GeometryRectPluginUID >
 {
 private:
 

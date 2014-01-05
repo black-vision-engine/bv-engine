@@ -10,18 +10,16 @@ namespace bv { namespace model {
 
 class VertexAttributesChannel;
 
-// ***************************** DESCRIPTOR **********************************
-class GeometryPluginPD : public BaseParametersDescriptor
+// ***************************** UID **********************************
+class GeometryPluginUID
 {
 public:
-    static const std::string            pluginName;
-
-    explicit GeometryPluginPD();
+    static const char*       GetName()        { return "geometry_plugin"; }
 };
 
 
 // ***************************** PLUGIN ********************************** 
-class GeometryPlugin : public BasePlugin< IPlugin, GeometryPluginPD >
+class GeometryPlugin : public BasePlugin< IPlugin, GeometryPluginUID >
 {
 private:
 

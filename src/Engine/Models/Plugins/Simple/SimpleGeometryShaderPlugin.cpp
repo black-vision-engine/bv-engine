@@ -36,15 +36,6 @@ public:
 
 };
 
-const std::string SimpleGeometryShaderPluginPD::pluginName = "PluginName";
-
-// *********************************
-//
-SimpleGeometryShaderPluginPD::SimpleGeometryShaderPluginPD()
-    : BaseParametersDescriptor( pluginName ) 
-{
-}
-
 // *********************************
 //
 SimpleGeometryShaderPlugin::SimpleGeometryShaderPlugin          ( const IPlugin * prev, const std::string & shaderPath )
@@ -53,10 +44,10 @@ SimpleGeometryShaderPlugin::SimpleGeometryShaderPlugin          ( const IPlugin 
 {
     m_gshaderChannel = new SimpleGeometryShaderChannel( shaderPath );
 
-    for( auto v : prev->GetValuesList() )
-    {
-        m_gshaderChannel->RegisterValue( v );
-    }
+    //for( auto v : prev->GetValuesList() )
+    //{
+    //    m_gshaderChannel->RegisterValue( v );
+    //}
 }
 
 // *********************************

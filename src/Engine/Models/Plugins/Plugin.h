@@ -16,17 +16,10 @@
 
 namespace bv { namespace model {
 
-template< class Iface, class ParameterDescriptor >
+template< class Iface, class UIDType >
 class BasePlugin : public Iface
 {
 protected:
-
-    typedef ParameterDescriptor ParamDesc;
-
-protected:
-
-    ParamDesc                       m_paramDesc;
-
     std::vector< IValue * >         m_values;
 
     ///////////////// Previous plugin ///////////
@@ -39,11 +32,7 @@ public:
 
     virtual void                                Update                      ( TimeType t );
 
-    const std::string &                         GetName                     () const                                        { return ParamDesc::pluginName; } 
-
-    virtual const std::vector< IValue * > &     GetValuesList               () const                                        { return m_values; }
-
-    void                                        RegisterValue               ( IValue * v )                                  { m_values.push_back( v ); }
+    const char*                                 GetName                     () const                                        { return UIDType::GetName(); } 
 
     virtual void                                SetGeometryChannel          ( VertexAttributesChannel* geomChannel )        { assert(!"Implement in derived class"); }
     virtual void                                SetTransformChannel         ( TransformChannel* transformChannel )          { assert(!"Implement in derived class"); }
@@ -62,36 +51,30 @@ public:
     virtual bool                                HasAnimatingTexture         () const                                        { return false; }
 
     virtual ISequenceAnimationSource *          QuerySequenceAnimationSource()                                              { return nullptr; }
-
-protected:
-
-    const ParamDesc &                           PluginParamDesc             () const                                        { return m_paramDesc; }
-
 };
 
 // Implementation
 
 // *******************************
 //
-template<class Iface, class ParameterDescriptor >
-void BasePlugin< Iface, ParameterDescriptor >::Update( TimeType t )
+template<class Iface, class UIDType >
+void BasePlugin< Iface, UIDType >::Update( TimeType t )
 {
     assert( !"Implement in derived class" );
 }
 
 // *******************************
 //
-template<class Iface, class ParameterDescriptor >
-BasePlugin< Iface, ParameterDescriptor >::BasePlugin( const IPlugin* prevPlugin )
-    : m_paramDesc( ParameterDescriptor() )
-    , m_prevPlugin( prevPlugin )
+template<class Iface, class UIDType >
+BasePlugin< Iface, UIDType >::BasePlugin( const IPlugin* prevPlugin )
+    : m_prevPlugin( prevPlugin )
 {
 }
 
 // *******************************
 //
-template<class Iface, class ParameterDescriptor >
-const IVertexAttributesChannel *            BasePlugin< Iface, ParameterDescriptor >::GetGeometryChannel          () const
+template<class Iface, class UIDType  >
+const IVertexAttributesChannel *            BasePlugin< Iface, UIDType >::GetGeometryChannel          () const
 {
     if( m_prevPlugin )
     {
@@ -103,8 +86,8 @@ const IVertexAttributesChannel *            BasePlugin< Iface, ParameterDescript
 
 // *******************************
 //
-template<class Iface, class ParameterDescriptor >
-const ITransformChannel *           BasePlugin< Iface, ParameterDescriptor >::GetTransformChannel         () const
+template<class Iface, class UIDType >
+const ITransformChannel *           BasePlugin< Iface, UIDType >::GetTransformChannel         () const
 {
     if( m_prevPlugin )
     {
@@ -116,8 +99,8 @@ const ITransformChannel *           BasePlugin< Iface, ParameterDescriptor >::Ge
 
 // *******************************
 //
-template<class Iface, class ParameterDescriptor >
-const IPixelShaderChannel *         BasePlugin< Iface, ParameterDescriptor >::GetPixelShaderChannel       () const
+template<class Iface, class UIDType >
+const IPixelShaderChannel *         BasePlugin< Iface, UIDType >::GetPixelShaderChannel       () const
 {
     if( m_prevPlugin )
     {
@@ -129,8 +112,8 @@ const IPixelShaderChannel *         BasePlugin< Iface, ParameterDescriptor >::Ge
 
 // *******************************
 //
-template<class Iface, class ParameterDescriptor >
-const IVertexShaderChannel *        BasePlugin< Iface, ParameterDescriptor >::GetVertexShaderChannel      () const
+template<class Iface, class UIDType >
+const IVertexShaderChannel *        BasePlugin< Iface, UIDType >::GetVertexShaderChannel      () const
 {
     if( m_prevPlugin ) 
     {
@@ -142,8 +125,8 @@ const IVertexShaderChannel *        BasePlugin< Iface, ParameterDescriptor >::Ge
 
 // *******************************
 //
-template<class Iface, class ParameterDescriptor >
-const IGeometryShaderChannel *      BasePlugin< Iface, ParameterDescriptor >::GetGeometryShaderChannel    () const
+template<class Iface, class UIDType >
+const IGeometryShaderChannel *      BasePlugin< Iface, UIDType >::GetGeometryShaderChannel    () const
 {
     if( m_prevPlugin )
     {

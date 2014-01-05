@@ -12,19 +12,16 @@ namespace bv { namespace model {
 class SimpleTransformChannel;
 class ParamTransform;
 
-// ***************************** DESCRIPTOR **********************************
-class SimpleTransformPluginPD : public BaseParametersDescriptor
+// ***************************** UID **********************************
+class SimpleTransformPluginUID
 {
 public:
-
-    static const std::string            pluginName;
-
-    explicit SimpleTransformPluginPD();
+    static const char*       GetName()        { return "simple_transform_plugin"; }
 };
 
 
 // ***************************** PLUGIN ********************************** 
-class SimpleTransformPlugin : public BasePlugin< IPlugin, SimpleTransformPluginPD >
+class SimpleTransformPlugin : public BasePlugin< IPlugin, SimpleTransformPluginUID >
 {
 private:
 

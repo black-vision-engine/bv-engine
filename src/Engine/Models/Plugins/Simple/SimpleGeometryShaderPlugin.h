@@ -8,19 +8,16 @@ namespace bv { namespace model {
 
 class SimpleGeometryShaderChannel;
 
-// ***************************** DESCRIPTOR **********************************
-class SimpleGeometryShaderPluginPD : public BaseParametersDescriptor
+// ***************************** UID **********************************
+class SimpleGeometryShaderPluginUID
 {
 public:
-
-    static const std::string            pluginName;
-
-    explicit SimpleGeometryShaderPluginPD();
+    static const char*       GetName()        { return "simple_geometry_shader_plugin"; }
 };
 
 
 // ***************************** PLUGIN ********************************** 
-class SimpleGeometryShaderPlugin : public BasePlugin< IPlugin, SimpleGeometryShaderPluginPD >
+class SimpleGeometryShaderPlugin : public BasePlugin< IPlugin, SimpleGeometryShaderPluginUID >
 {
 private:
 

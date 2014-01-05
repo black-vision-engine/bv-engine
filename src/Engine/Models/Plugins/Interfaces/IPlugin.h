@@ -25,7 +25,7 @@ class IPlugin : public IUpdatable
 {
 public:
 
-    virtual const std::string &                 GetName                     () const = 0;
+    virtual const char*                         GetName                     () const = 0;
 
     virtual const IVertexAttributesChannel *    GetGeometryChannel          () const = 0;
     virtual const ITransformChannel *           GetTransformChannel         () const = 0;
@@ -38,8 +38,6 @@ public:
     virtual ISequenceAnimationSource *          QuerySequenceAnimationSource() = 0;
 
     virtual void                                Print                       ( std::ostream & out, int tabs = 0 )    const = 0;
-
-    virtual const std::vector<IValue *> &       GetValuesList               () const = 0;
 
     virtual                                     ~IPlugin                    (){}
 

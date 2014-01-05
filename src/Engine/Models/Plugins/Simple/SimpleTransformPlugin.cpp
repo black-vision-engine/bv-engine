@@ -16,17 +16,6 @@
 
 namespace bv { namespace model {
 
-// ***************************** DESCRIPTOR ********************************** 
-//PLUGIN NAME
-const std::string SimpleTransformPluginPD::pluginName( "SimpleTransformPlugin" );
-
-
-// *************************************
-//
-SimpleTransformPluginPD::SimpleTransformPluginPD()
-    : BaseParametersDescriptor( pluginName )
-{
-}
 
 // ***************************** PLUGIN ********************************** 
 

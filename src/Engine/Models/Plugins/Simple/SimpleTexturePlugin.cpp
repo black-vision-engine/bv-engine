@@ -16,19 +16,8 @@
 
 namespace bv { namespace model {
 
-// ***************************** DESCRIPTOR ********************************** 
-//PLUGIN NAME
-const std::string SimpleTexturePluginPD::pluginName( "SimpleTexturePlugin" );
-
 //FIXME: dodawanie kanalow w ten sposob (przez przypisanie na m_<xxx>channel powoduje bledy, trzeba to jakos poprawic, zeby bylo wiadomo, o co chodzi
 //FIXME: teraz zle dodanie wychodzi dopiero po odpaleniu silnika, a to jest oczywisty blad
-
-// *************************************
-//
-SimpleTexturePluginPD::SimpleTexturePluginPD()
-    : BaseParametersDescriptor( pluginName )
-{
-}
 
 // ***************************** PLUGIN ********************************** 
 
@@ -43,7 +32,6 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
     for(unsigned int i = 0; i < textureDescs.size(); ++i)
     {
         auto texInfo = LoadTexture( textureDescs[ i ], "Tex" + std::to_string( i ) );
-        RegisterValue( texInfo->m_texBorderColorVal );
         m_textures.push_back( texInfo );
     }
 
@@ -52,24 +40,23 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
 
     // Set Pixel Shader Channel
     std::vector<ParamTransform> txMat;
+    std::vector<ParamFloat>     alphas;
+    std::vector<ParamVec4>      borderColors;
 
     for( auto t : textureDescs )
     {
         txMat.push_back( t.transform );
-    }
-
-    std::vector<ParamFloat> alphas;
-
-    for( auto t : textureDescs )
-    {
         alphas.push_back( t.alpha );
+        borderColors.push_back( t.borderColor );
     }
 
     int texturesNum = textureDescs.size();
 
     m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture/simpletexture" + std::to_string( texturesNum ) +".frag"
 										, alphas
-										, txMat );
+										, txMat 
+                                        , borderColors
+                                        );
 
     m_pixelShaderChannel->SetRendererContext( RendererContext::CreateDefault() );
     auto rendContext = m_pixelShaderChannel->GetRendererContext();
@@ -89,7 +76,6 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
     for( unsigned int i = 0; i < textureDescs.size(); ++i )
     {
         auto texInfo = LoadTexture( textureDescs[ i ], "Tex" + std::to_string( i ) );
-        RegisterValue( texInfo->m_texBorderColorVal );
         m_textures.push_back( texInfo );
     }
 
@@ -97,23 +83,22 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
     EvalGeometryChannel( prev );
 
     // Set Pixel Shader Channel
+    // Set Pixel Shader Channel
     std::vector<ParamTransform> txMat;
+    std::vector<ParamFloat>     alphas;
+    std::vector<ParamVec4>      borderColors;
 
     for( auto t : textureDescs )
     {
         txMat.push_back( t.transform );
-    }
-
-    std::vector<ParamFloat> alphas;
-
-    for( auto t : textureDescs )
-    {
         alphas.push_back( t.alpha );
+        borderColors.push_back( t.borderColor );
     }
 
     m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
 										, alphas
-										, txMat );
+										, txMat 
+                                        , borderColors);
 
     if ( ctx )
         m_pixelShaderChannel->SetRendererContext( ctx );

@@ -18,14 +18,11 @@ class Resource;
 class TexturePixelShaderChannel;
 class TextureVertexShaderChannel;
 
-// ***************************** DESCRIPTOR **********************************
-class SimpleAnimationPluginPD : public BaseParametersDescriptor
+// ***************************** UID **********************************
+class SimpleAnimationPluginUID
 {
 public:
-
-    static const std::string            pluginName;
-
-    explicit SimpleAnimationPluginPD();
+    static const char*       GetName()        { return "simple_animation_plugin"; }
 };
 
 //Just to avoid mixing multiple inheritance of interface and implementation (it is not a problem here, but this way it is cleaner)
@@ -38,7 +35,7 @@ public:
 };
 
 // ***************************** PLUGIN **********************************
-class SimpleAnimationPlugin : public BasePlugin< ISequenceAnimationSourcePlugin, SimpleAnimationPluginPD >
+class SimpleAnimationPlugin : public BasePlugin< ISequenceAnimationSourcePlugin, SimpleAnimationPluginUID >
 {
 private:
 
