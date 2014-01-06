@@ -24,7 +24,7 @@ public:
     virtual bool                                    IsReadOnly          () const;
     virtual const std::vector< Transform * > &      GetTransformChannels() const;
 
-    virtual ~TransformChannel(){}
+    virtual ~TransformChannel();
 
 };
 

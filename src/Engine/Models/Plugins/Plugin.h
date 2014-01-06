@@ -21,7 +21,7 @@ class BasePlugin : public Iface
 {
 protected:
     ///////////////// Previous plugin ///////////
-    const IPlugin *                 m_prevPlugin;
+    const IPlugin *                             m_prevPlugin;
 
 
 public:

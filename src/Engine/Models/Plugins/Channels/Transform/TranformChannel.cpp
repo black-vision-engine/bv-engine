@@ -1,5 +1,6 @@
 #include "TransformChannel.h"
 
+#include "Mathematics/Transform/MatTransform.h"
 
 namespace bv { namespace model
 {
@@ -17,6 +18,12 @@ bool                                    TransformChannel::IsReadOnly          ()
 const std::vector< Transform* >&         TransformChannel::GetTransformChannels() const
 {
     return m_transformations;
+}
+
+TransformChannel::~TransformChannel()
+{
+    for( auto t : m_transformations )
+        delete t;
 }
 
 } // model
