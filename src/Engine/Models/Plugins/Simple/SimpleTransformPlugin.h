@@ -3,7 +3,6 @@
 #include "Mathematics/Transform/MatTransform.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
-#include "Engine/Models/Plugins/Parameters/PluginParameters.h"
 #include "Engine/Events/Events.h"
 
 
@@ -16,7 +15,9 @@ class ParamTransform;
 class SimpleTransformPluginUID
 {
 public:
-    static const char*       GetName()        { return "simple_transform_plugin"; }
+
+    static const char * GetName ()    { return "simple_transform_plugin"; }
+
 };
 
 

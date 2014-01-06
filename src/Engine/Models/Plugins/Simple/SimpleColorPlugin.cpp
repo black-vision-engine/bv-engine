@@ -7,15 +7,11 @@
 
 namespace bv { namespace model {
 
-class SimpleColorPixelShaderChannelPD : public BaseParametersDescriptor
+class SimpleColorPixelShaderChannelPD
 {
 public:
 
     static const std::string            colorParamName;
-
-    explicit SimpleColorPixelShaderChannelPD()
-    {
-    }
 
 };
 

@@ -84,66 +84,12 @@ const std::string  PassThroughVertexShaderParametersDescriptor::MVPParamName( "M
 
 // *********************************
 //
-PassThroughVertexShaderParametersDescriptor::PassThroughVertexShaderParametersDescriptor()
-    : BaseParametersDescriptor( )
-{}
-
-// *********************************
-//
-PassThroughVertexShader::PassThroughVertexShader(PassThroughVertexShaderParametersDescriptor* desc)
+PassThroughVertexShader::PassThroughVertexShader( PassThroughVertexShaderParametersDescriptor * desc )
     : VertexShader( PassThroughVertexShader::m_programSource )
 {
     //FIXME: pass params in constructor
-    desc->ValidateParameters(PassThroughVertexShader::m_programSource);
 }
 
 
 
 } //bv
-
-//#include <fstream>
-//using std::ifstream;
-//using std::ios;
-//
-//#include <sstream>
-//using std::ostringstream;
-//
-//#include <sys/stat.h>
-//
-//namespace bv {
-//
-//VertexShader::VertexShader(const std::string& programName, int inputNum, int outputNum)
-//    : Shader(programName, inputNum, outputNum)
-//{}
-//
-//
-//VertexShader* VertexShader::create(const std::string& programFile, const std::string& programName, int inputNum, int outputNum)
-//{
-//    if( ! fileExists(programFile) )
-//    {
-//        return nullptr;
-//    }
-//
-//    ifstream inFile( programFile, ios::in );
-//    if( !inFile ) {
-//        return false;
-//    }
-//
-//    ostringstream code;
-//    while( inFile.good() )
-//    {
-//        int c = inFile.get();
-//        if( ! inFile.eof() )
-//            code << (char) c;
-//    }
-//
-//    inFile.close();
-//
-//    VertexShader* ret = new VertexShader(programName, inputNum, outputNum);
-//
-//    ret->programSource = code.str();
-//
-//    return ret;
-//}
-//
-//} // bv

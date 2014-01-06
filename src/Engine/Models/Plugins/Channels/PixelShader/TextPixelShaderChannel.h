@@ -6,20 +6,17 @@
 #include "Engine/Models/Plugins/Parameters/Parameter.h"
 #include "Engine/Models/Plugins/Interfaces/IValue.h"
 #include "Engine/Models/Plugins/Channels/ShaderChannel.h"
-#include "Engine/Models/Plugins/Parameters/PluginParameters.h"
 
 
 namespace bv { namespace model
 {
 
-class TextPixelShaderChannelPD : public BaseParametersDescriptor
+class TextPixelShaderChannelPD
 {
 public:
 
     static const std::string            colorParam;
 
-    TextPixelShaderChannelPD()
-    {}
 };
 
 
@@ -27,7 +24,7 @@ public:
 class TextPixelShaderChannel : public model::PixelShaderChannelBase< TextPixelShaderChannelPD >
 {
     ParamVec4                       m_color;
-    model::ValueVec4*               m_colorVal;
+    model::ValueVec4 *              m_colorVal;
 
 public:
 

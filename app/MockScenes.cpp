@@ -38,7 +38,7 @@ namespace bv
 
 
 
-class SimpleTexturePluginPD : public BaseParametersDescriptor
+class SimpleTexturePluginPD
 {
 public:
 
@@ -48,7 +48,6 @@ public:
     static const std::string            txMatrix0ParamName;
     static const std::string            txMatrix1ParamName;
 
-    explicit SimpleTexturePluginPD();
 };
 
 // ***************************** DESCRIPTOR ********************************** 
@@ -72,6 +71,7 @@ class MyPixelShaderChannel : public model::PixelShaderChannelBase< SimpleTexture
     model::ValueMat4 *         m_tex1TransformValue;
 
 public:
+
     virtual void                    Update( float t )
     {
         ShaderChannel::Update( t );
@@ -99,17 +99,14 @@ public:
     }
 };
 
-
-class MyVertexShaderPD : public BaseParametersDescriptor
-{
-};
-
-class MyVertexShaderChannel : public model::ShaderChannel< model::IVertexShaderChannel, MyVertexShaderPD >
+class MyVertexShaderChannel : public model::ShaderChannel< model::IVertexShaderChannel >
 {
 public:
-    MyVertexShaderChannel( const std::string& shaderFile )
+
+    MyVertexShaderChannel( const std::string & shaderFile )
         : ShaderChannel( shaderFile )
     {}
+
 };
 
 const std::string fontFile = "../dep/Media/fonts/ARIALUNI.TTF";
@@ -124,14 +121,12 @@ FloatInterpolator    TestParamFactory::ConstantValue( float val )
     return ret;
 }
 
-namespace {
+namespace
+{
     FloatInterpolator ConstValue( float val )
     {
         return TestParamFactory::ConstantValue( val );
     }
-
-
-
 }
 
 

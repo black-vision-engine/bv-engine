@@ -5,19 +5,7 @@
 
 namespace bv { namespace model {
 
-class SimpleVertexShaderChannelPD : public BaseParametersDescriptor
-{
-public:
-
-
-    explicit SimpleVertexShaderChannelPD()
-    {
-    }
-
-};
-
-
-class SimpleVertexShaderChannel : public ShaderChannel< model::IVertexShaderChannel, SimpleVertexShaderChannelPD >
+class SimpleVertexShaderChannel : public ShaderChannel< IVertexShaderChannel >
 {
 public:
 

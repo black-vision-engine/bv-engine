@@ -1,21 +1,17 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
-#include "Engine/Models/Plugins/Parameters/PluginParameters.h"
 #include "Engine/Models/Plugins/Parameters/Parameter.h"
 
 
 namespace bv{ namespace model {
 
-class SolidColorShaderChannelPD : public BaseParametersDescriptor
+class SolidColorShaderChannelPD
 {
 public:
 
     static const std::string            solidColor;
 
-    explicit SolidColorShaderChannelPD()
-        : BaseParametersDescriptor( ) 
-    {}
 };
 
 class SolidColorShaderChannel : public model::PixelShaderChannelBase< SolidColorShaderChannelPD >

@@ -47,7 +47,7 @@ protected:
     void                        SetLastEvaluatedTime    ( TimeType t )  const;
     TimeType                    GetLastEvaluatedTime    ()              const;
 
-    explicit    BaseParameter  ( const std::string& name, ParameterSemantic semantic, const ITimeEvaluator * evaluator = nullptr );
+    explicit    BaseParameter  ( const std::string & name, ParameterSemantic semantic, const ITimeEvaluator * evaluator = nullptr );
     virtual     ~BaseParameter (){}
 
 public:

@@ -5,19 +5,8 @@
 
 namespace bv { namespace model {
 
-class SimpleGeometryShaderChannelPD : public BaseParametersDescriptor
-{
-public:
 
-
-    explicit SimpleGeometryShaderChannelPD()
-    {
-    }
-
-};
-
-
-class SimpleGeometryShaderChannel : public ShaderChannel< model::IGeometryShaderChannel, SimpleGeometryShaderChannelPD >
+class SimpleGeometryShaderChannel : public ShaderChannel< model::IGeometryShaderChannel >
 {
 public:
 

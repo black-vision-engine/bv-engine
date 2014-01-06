@@ -1,14 +1,13 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
-#include "Engine/Models/Plugins/Parameters/PluginParameters.h"
 #include "Engine/Models/Plugins/Parameters/Parameter.h"
 
 
 namespace bv { namespace model
 {
 
-class TexturePixelShaderChannelPD : public BaseParametersDescriptor
+class TexturePixelShaderChannelPD
 {
 public:
 
@@ -18,8 +17,6 @@ public:
     static std::string          txMatrixParamName[];
     static std::string          borderColorsParamName[];
 
-    TexturePixelShaderChannelPD()
-    {}
 };
 
 

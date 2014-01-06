@@ -1,0 +1,3 @@
+IValue - interfejs wartoœci od dowolnym typie (taki g³upi IVariant) - nazwa, paramType oraz dane przechowywane jako char*
+
+Wszystkie te wartoœci s¹ przechowywane w pluginach, a konkretnie - w kana³ach pluginów.

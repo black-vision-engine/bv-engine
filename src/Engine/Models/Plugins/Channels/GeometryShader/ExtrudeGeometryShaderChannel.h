@@ -2,20 +2,17 @@
 
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/ShaderChannel.h"
-#include "Engine/Models/Plugins/Parameters/PluginParameters.h"
 #include "Engine/Models/Plugins/Parameters/Parameter.h"
 
 
 namespace bv{ namespace model {
 
-class ExtrudeGeometryShaderChannelPD : public BaseParametersDescriptor
+class ExtrudeGeometryShaderChannelPD
 {
 public:
+
     static const std::string            scaleParamName;
 
-    explicit ExtrudeGeometryShaderChannelPD()
-        : BaseParametersDescriptor( ) 
-    {}
 };
 
 class ExtrudeGeometryShaderChannel : public model::ShaderChannel< IGeometryShaderChannel, ExtrudeGeometryShaderChannelPD >

@@ -12,7 +12,11 @@ namespace bv { namespace model {
 
 class IValue;
 
-template< class IFace, class ParameterDescriptor  >
+class EmptyParameterDescriptor
+{
+};
+
+template< class IFace, class ParameterDescriptor = EmptyParameterDescriptor  >
 class ShaderChannel : public IFace
 {
 protected:

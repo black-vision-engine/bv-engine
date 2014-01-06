@@ -5,15 +5,8 @@
 
 namespace bv { namespace model {
 
-class SimplePixelShaderChannelPD : public BaseParametersDescriptor
+class SimplePixelShaderChannelPD
 {
-public:
-
-
-    explicit SimplePixelShaderChannelPD()
-    {
-    }
-
 };
 
 

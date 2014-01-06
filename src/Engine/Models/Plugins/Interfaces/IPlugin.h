@@ -19,7 +19,7 @@ class IGeometryShaderChannel;
 class ResourceHandle;
 
 struct TextureInfo;
-typedef std::vector< TextureInfo* > Textures;
+typedef std::vector< TextureInfo * > Textures;
 
 class IPlugin : public IUpdatable
 {

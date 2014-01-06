@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Plugin.h"
-#include "Engine/Models/Plugins/Parameters/PluginParameters.h"
 #include "Engine/Events/BaseEvent.h"
+
 
 namespace bv { namespace model {
 
