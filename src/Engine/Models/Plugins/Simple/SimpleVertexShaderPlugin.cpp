@@ -27,12 +27,7 @@ SimpleVertexShaderPlugin::SimpleVertexShaderPlugin          ( const IPlugin * pr
     : BasePlugin( prev )
     , m_shaderPath( shaderPath )
 {
-    m_vshaderChannel = new SimpleVertexShaderChannel( shaderPath );
-
-    //for( auto v : prev->GetValuesList() )
-    //{
-    //    m_vshaderChannel->RegisterValue( v );
-    //}
+    m_vshaderChannel = SimpleVertexShaderChannelPtr( new SimpleVertexShaderChannel( shaderPath ) );
 }
 
 // *********************************
@@ -46,7 +41,7 @@ SimpleVertexShaderPlugin::~SimpleVertexShaderPlugin         ()
 //
 const IVertexShaderChannel *    SimpleVertexShaderPlugin::GetVertexShaderChannel      () const
 {
-    return m_vshaderChannel;
+    return m_vshaderChannel.get();
 }
 
 // *********************************

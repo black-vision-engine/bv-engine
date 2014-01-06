@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
 #include "Engine/Models/Plugins/Parameters/TypedParameters.h"
 #include "Engine/Models/Plugins/Parameters/Parameter.h"
@@ -36,6 +38,8 @@ public:
     TexturePixelShaderChannel( const std::string & shaderFile, const std::vector< ParamFloat > & alphas, const std::vector< ParamTransform > & texTransforms, const std::vector< ParamVec4 > & borderColors );
 
 };
+
+typedef std::shared_ptr< TexturePixelShaderChannel >    TexturePixelShaderChannelPtr;
 
 } // model
 } // bv

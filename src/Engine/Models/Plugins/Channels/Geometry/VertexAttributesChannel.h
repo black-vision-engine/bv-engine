@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannelDescriptor.h"
 
@@ -18,7 +19,7 @@ class VertexAttributesChannel : public IVertexAttributesChannel
 {
 protected:
 
-    VertexAttributesChannelDescriptor                       m_desc;
+    VertexAttributesChannelDescriptor               m_desc;
 
     std::vector< ConnectedComponent* >              m_connectedComponents;
     PrimitiveType                                   m_primitiveType;
@@ -66,6 +67,8 @@ protected:
     virtual bool                                    CanBeConnectedTo    ( const VertexAttributesChannelDescriptor & desc ) const { return true; }
 
 };
+
+typedef std::shared_ptr< VertexAttributesChannel >      VertexAttributesChannelPtr;
 
 } // model
 } // bv

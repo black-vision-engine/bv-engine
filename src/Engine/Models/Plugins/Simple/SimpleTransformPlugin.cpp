@@ -32,7 +32,7 @@ SimpleTransformPlugin*  SimpleTransformPlugin::Create( const IPlugin * prev, con
 SimpleTransformPlugin::SimpleTransformPlugin                    ( const IPlugin * prev, const ParamTransform& trans )
     : BasePlugin( prev )
 {
-    m_transformChannel = new model::SimpleTransformChannel();
+    m_transformChannel = SimpleTransformChannelPtr( new SimpleTransformChannel() );
     m_transformChannel->AddTransform( trans );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &SimpleTransformPlugin::OnSetTransform ), TransformSetEvent::Type() );
@@ -55,7 +55,7 @@ const ITransformChannel *       SimpleTransformPlugin::GetTransformChannel      
         assert(!"prev plugin transform channel is not empty");
     }
 
-    return m_transformChannel;
+    return m_transformChannel.get();
 }
 
 // *************************************

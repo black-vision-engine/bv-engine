@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
+
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Events/BaseEvent.h"
 
@@ -23,7 +25,7 @@ class SimpleTextPlugin : public BasePlugin< IPlugin, SimpleTextPluginUID >
 {
 private:
 
-    VertexAttributesChannel*            m_geomChannel;
+    VertexAttributesChannelPtr  m_geomChannel;
 
     Textures                    m_textures;
 

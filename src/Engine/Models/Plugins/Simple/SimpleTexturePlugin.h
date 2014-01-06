@@ -2,6 +2,9 @@
 
 #include "Mathematics/Transform/MatTransform.h"
 
+#include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/VertexShader/TextureVertexShaderChannel.h"
+
 #include "Engine/Models/Plugins/Plugin.h"
 
 #include "Engine/Models/Plugins/PluginEnums.h"
@@ -62,9 +65,9 @@ class SimpleTexturePlugin : public BasePlugin< IPlugin, SimpleTexturePluginUID >
 private:
     TextureAttachmentMode           m_attachmentMode;
     unsigned int                    m_texCoordChannelIndex;
-    VertexAttributesChannel*        m_geomChannel;
-    TexturePixelShaderChannel*      m_pixelShaderChannel;
-    TextureVertexShaderChannel*     m_vertexShaderChannel;
+    VertexAttributesChannelPtr      m_geomChannel;
+    TexturePixelShaderChannelPtr    m_pixelShaderChannel;
+    TextureVertexShaderChannelPtr   m_vertexShaderChannel;
     Textures                        m_textures;
 
 private:

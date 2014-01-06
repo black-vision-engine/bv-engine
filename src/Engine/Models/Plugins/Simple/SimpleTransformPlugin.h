@@ -2,6 +2,7 @@
 
 #include "Mathematics/Transform/MatTransform.h"
 
+#include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Events/Events.h"
 
@@ -26,7 +27,7 @@ class SimpleTransformPlugin : public BasePlugin< IPlugin, SimpleTransformPluginU
 {
 private:
 
-    SimpleTransformChannel *                m_transformChannel;
+    SimpleTransformChannelPtr               m_transformChannel;
 
 public:
 

@@ -44,9 +44,9 @@ SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::str
 
     LoadAtlas( "AtlasTex" ) ;
 
-    m_geomChannel = CreateVertexAttributesChannel();
+    m_geomChannel = VertexAttributesChannelPtr( CreateVertexAttributesChannel() );
 
-    EvalGeometryChannel( m_geomChannel );
+    EvalGeometryChannel( m_geomChannel.get() );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &SimpleTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
@@ -246,7 +246,7 @@ void                SimpleTextPlugin::EvalGeometryChannel( VertexAttributesChann
 //
 const IVertexAttributesChannel *    SimpleTextPlugin::GetGeometryChannel          () const
 {
-    return m_geomChannel;
+    return m_geomChannel.get();
 }
 
 // *********************************
@@ -289,7 +289,7 @@ void                SimpleTextPlugin::SetText                     ( const std::w
 
     m_geomChannel->ClearConnectedComponent();
 
-    EvalGeometryChannel( m_geomChannel );
+    EvalGeometryChannel( m_geomChannel.get() );
 }
 
 } // model

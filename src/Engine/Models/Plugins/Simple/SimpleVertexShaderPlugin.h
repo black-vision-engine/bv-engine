@@ -1,11 +1,15 @@
 #pragma once
 
+#include <memory>
+
 #include "Engine/Models/Plugins/Plugin.h"
 
 
 namespace bv { namespace model {
 
 class SimpleVertexShaderChannel;
+
+typedef std::shared_ptr< SimpleVertexShaderChannel >    SimpleVertexShaderChannelPtr;
 
 // ***************************** UID **********************************
 class SimpleVertexShaderPluginUID
@@ -20,7 +24,7 @@ class SimpleVertexShaderPlugin : public BasePlugin< IPlugin, SimpleVertexShaderP
 {
 private:
 
-    SimpleVertexShaderChannel*      m_vshaderChannel;
+    SimpleVertexShaderChannelPtr    m_vshaderChannel;
     const std::string               m_shaderPath;
 
 public:

@@ -52,17 +52,17 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
 
     int texturesNum = textureDescs.size();
 
-    m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture/simpletexture" + std::to_string( texturesNum ) +".frag"
+    m_pixelShaderChannel = TexturePixelShaderChannelPtr( new TexturePixelShaderChannel( "../dep/media/shaders/simpletexture/simpletexture" + std::to_string( texturesNum ) +".frag"
 										, alphas
 										, txMat 
                                         , borderColors
-                                        );
+                                        ) );
 
     m_pixelShaderChannel->SetRendererContext( RendererContext::CreateDefault() );
     auto rendContext = m_pixelShaderChannel->GetRendererContext();
     rendContext->cullCtx->enabled = false;
 
-	m_vertexShaderChannel = new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture/simpletexture" + std::to_string( texturesNum ) + ".vert" );
+	m_vertexShaderChannel = TextureVertexShaderChannelPtr( new TextureVertexShaderChannel( "../dep/media/shaders/simpletexture/simpletexture" + std::to_string( texturesNum ) + ".vert" ) );
 }
 
 // *************************************
@@ -95,10 +95,10 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
         borderColors.push_back( t.borderColor );
     }
 
-    m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
+    m_pixelShaderChannel = TexturePixelShaderChannelPtr( new TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
 										, alphas
 										, txMat 
-                                        , borderColors);
+                                        , borderColors) );
 
     if ( ctx )
         m_pixelShaderChannel->SetRendererContext( ctx );
@@ -108,7 +108,7 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
     auto rendContext = m_pixelShaderChannel->GetRendererContext();
     rendContext->cullCtx->enabled = false;
 
-	m_vertexShaderChannel = new model::TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" );
+	m_vertexShaderChannel = TextureVertexShaderChannelPtr( new TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
 }
 
 
@@ -159,7 +159,7 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
                 geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
             }
 
-            auto geomChannel = new model::VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+            auto geomChannel = VertexAttributesChannelPtr( new VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, prevGeomChannel->IsTimeInvariant() ) );
             m_geomChannel = geomChannel;
         }
 
@@ -314,21 +314,21 @@ void                                    SimpleTexturePlugin::Print              
 //
 const IVertexAttributesChannel *        SimpleTexturePlugin::GetGeometryChannel          () const
 {
-    return m_geomChannel;
+    return m_geomChannel.get();
 }
 
 // *************************************
 //
 const IPixelShaderChannel *             SimpleTexturePlugin::GetPixelShaderChannel       () const
 {
-    return m_pixelShaderChannel;
+    return m_pixelShaderChannel.get();
 }
 
 // *************************************
 //
 const IVertexShaderChannel *            SimpleTexturePlugin::GetVertexShaderChannel      () const
 {
-    return m_vertexShaderChannel;
+    return m_vertexShaderChannel.get();
 }
 
 // *************************************

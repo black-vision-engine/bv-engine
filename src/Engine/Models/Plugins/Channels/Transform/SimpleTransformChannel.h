@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Mathematics/Transform/MatTransform.h"
 
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
@@ -25,6 +27,8 @@ public:
         return m_transformParams[ 0 ];
     }
 };
+
+typedef std::shared_ptr< SimpleTransformChannel >   SimpleTransformChannelPtr;
 
 } // model
 } // bv
