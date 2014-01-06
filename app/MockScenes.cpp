@@ -38,11 +38,9 @@ namespace bv
 
 
 
-class SimpleTexturePluginPD
+class TexturePixelShaderChannelPD
 {
 public:
-
-    static const std::string            pluginName;
 
     static const std::string            alphaParamName;
     static const std::string            txMatrix0ParamName;
@@ -51,15 +49,13 @@ public:
 };
 
 // ***************************** DESCRIPTOR ********************************** 
-//PLUGIN NAME
-const std::string SimpleTexturePluginPD::pluginName( "SimpleTexturePlugin" );
 
 //PLUGIN PARAMETERS
-const std::string SimpleTexturePluginPD::alphaParamName( "alpha" );
-const std::string SimpleTexturePluginPD::txMatrix0ParamName( "txMat0" );
-const std::string SimpleTexturePluginPD::txMatrix1ParamName( "txMat1" );
+const std::string TexturePixelShaderChannelPD::alphaParamName( "alpha" );
+const std::string TexturePixelShaderChannelPD::txMatrix0ParamName( "txMat0" );
+const std::string TexturePixelShaderChannelPD::txMatrix1ParamName( "txMat1" );
 
-class MyPixelShaderChannel : public model::PixelShaderChannelBase< SimpleTexturePluginPD >
+class MyPixelShaderChannel : public model::PixelShaderChannelBase< TexturePixelShaderChannelPD >
 {
     model::ParamFloat *        m_alphaParam;
     model::ValueFloat *        m_alphaValue;
@@ -98,6 +94,8 @@ public:
         RegisterValue( m_tex1TransformValue );
     }
 };
+
+
 
 class MyVertexShaderChannel : public model::ShaderChannel< model::IVertexShaderChannel >
 {

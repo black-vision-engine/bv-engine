@@ -10,8 +10,6 @@ namespace bv { namespace model
 //FIXME: this constant should be stored in other place - some file responsible for storing static engine configuration
 const unsigned int MAX_NUM_TEXTURES = 16;
 
-const std::string TexturePixelShaderChannelPD::pluginName( "SimpleTexturePlugin" );
-
 //FIXME: should be initialized after GL initialization
 std::string TexturePixelShaderChannelPD::alphaParamName[ MAX_NUM_TEXTURES ]     = { "Alpha0", "Alpha1", "Alpha2", "Alpha3", "Alpha4", "Alpha5", "Alpha6", "Alpha7", "Alpha8"
                                                                                     "Alpha9", "Alpha10", "Alpha11", "Alpha12", "Alpha13", "Alpha14", "Alpha15" };
