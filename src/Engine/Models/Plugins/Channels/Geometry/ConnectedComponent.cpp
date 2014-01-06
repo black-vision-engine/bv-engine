@@ -18,6 +18,8 @@ ConnectedComponent::ConnectedComponent()
 //
 ConnectedComponent::~ConnectedComponent()
 {
+    for( auto vaChannel : m_attributeChannels )
+        delete vaChannel;
 }
 
 // ************************************
