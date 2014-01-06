@@ -65,14 +65,9 @@ SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin 
 //
 SimpleAnimationPlugin::~SimpleAnimationPlugin        ()
 {
-    //delete m_alphaParam;
-    //delete m_alphaValue;
-
-    //delete m_tex0TransformParam;
-    //delete m_tex0TransformValue;
-
-    //delete m_tex1TransformParam;
-    //delete m_tex1TransformValue;
+    delete m_geomChannel;
+    delete m_pixelShaderChannel;
+    delete m_vertexShaderChannel;
 }
 
 // *************************************

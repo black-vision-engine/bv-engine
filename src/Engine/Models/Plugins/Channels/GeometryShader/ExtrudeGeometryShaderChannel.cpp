@@ -1,7 +1,7 @@
 #include "ExtrudeGeometryShaderChannel.h"
 
 
-namespace bv{ namespace model {
+namespace bv { namespace model {
 
 const std::string ExtrudeGeometryShaderChannelPD::scaleParamName = "scale";
 
@@ -11,8 +11,8 @@ ExtrudeGeometryShaderChannel::ExtrudeGeometryShaderChannel(const std::string& sh
     : ShaderChannel( shaderFile  )
     , m_scale( scale )
 {
-    m_scaleVal = new model::ValueFloat( ParamDesc::scaleParamName );
-    RegisterValue( m_scaleVal );
+    m_scaleVal = ValueFloatPtr( new ValueFloat( ParamDesc::scaleParamName ) );
+    RegisterValue( m_scaleVal.get() );
 
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include "Engine/Models/Plugins/Interfaces/ITransformChannel.h"
 
@@ -14,7 +15,7 @@ class TransformChannel : public ITransformChannel
 {
 protected:
 
-    std::vector< Transform * >                      m_transformations;
+    std::vector< TransformPtr >                     m_transformations;
     bool                                            m_readOnly;
 
 public:
@@ -22,7 +23,7 @@ public:
                                                     TransformChannel    ( bool readOnly = false );
 
     virtual bool                                    IsReadOnly          () const;
-    virtual const std::vector< Transform * > &      GetTransformChannels() const;
+    virtual const std::vector< TransformPtr > &     GetTransformChannels() const;
 
     virtual ~TransformChannel();
 

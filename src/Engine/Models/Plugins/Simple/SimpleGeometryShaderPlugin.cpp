@@ -40,6 +40,7 @@ SimpleGeometryShaderPlugin::SimpleGeometryShaderPlugin          ( const IPlugin 
 //
 SimpleGeometryShaderPlugin::~SimpleGeometryShaderPlugin         ()
 {
+    delete m_gshaderChannel;
 }
 
 // *********************************

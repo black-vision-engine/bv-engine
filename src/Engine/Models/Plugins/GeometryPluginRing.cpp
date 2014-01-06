@@ -26,6 +26,7 @@ GeometryRingPlugin::GeometryRingPlugin                    ( float startAngle, fl
 //
 GeometryRingPlugin::~GeometryRingPlugin   ()
 {
+    delete m_geomChannel;
 }
 
 // *************************************

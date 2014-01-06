@@ -16,6 +16,7 @@ GeometryPlugin::GeometryPlugin  ( model::VertexAttributesChannel * geomChannel )
 //
 GeometryPlugin::~GeometryPlugin ()
 {
+    delete m_geomChannel;
 }
 
 // *******************************

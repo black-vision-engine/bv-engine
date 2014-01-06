@@ -43,6 +43,7 @@ SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( const IPlugin * prev
 //
 SimplePixelShaderPlugin::~SimplePixelShaderPlugin         ()
 {
+    delete m_pshaderChannel;
 }
 
 // *********************************

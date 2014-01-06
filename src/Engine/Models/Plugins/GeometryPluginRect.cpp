@@ -27,6 +27,7 @@ GeometryRectPlugin::GeometryRectPlugin                    ( const ParamFloat& w,
 //
 GeometryRectPlugin::~GeometryRectPlugin   ()
 {
+    delete m_geomChannel;
 }
 
 // *************************************

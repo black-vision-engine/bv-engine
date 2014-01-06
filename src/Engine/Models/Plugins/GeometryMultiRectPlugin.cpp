@@ -24,6 +24,7 @@ GeometryMultiRectPlugin::GeometryMultiRectPlugin                    ()
 //
 GeometryMultiRectPlugin::~GeometryMultiRectPlugin   ()
 {
+    delete m_geomChannel;
 }
 
 // *************************************

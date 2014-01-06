@@ -53,6 +53,7 @@ SimpleColorPlugin::SimpleColorPlugin          ( const IPlugin * prev, const Para
 //
 SimpleColorPlugin::~SimpleColorPlugin         ()
 {
+    delete m_pshaderChannel;
 }
 
 // *********************************

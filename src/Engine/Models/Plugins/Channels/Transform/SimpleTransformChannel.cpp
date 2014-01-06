@@ -20,7 +20,7 @@ void                                    SimpleTransformChannel::Update( TimeType
 void                                    SimpleTransformChannel::AddTransform( const ParamTransform&  transInt )
 {
     m_transformParams.push_back( transInt );
-    m_transformations.push_back( new Transform() );
+    m_transformations.push_back( TransformPtr( new Transform() ) );
 }
 
 } // model

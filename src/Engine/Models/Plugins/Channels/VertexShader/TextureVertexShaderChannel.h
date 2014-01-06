@@ -9,7 +9,7 @@
 
 namespace bv{ namespace model {
 
-class TextureVertexShaderChannel : public model::ShaderChannel< model::IVertexShaderChannel >
+class TextureVertexShaderChannel : public ShaderChannel< IVertexShaderChannel >
 {
 public:
 

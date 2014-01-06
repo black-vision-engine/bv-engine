@@ -15,15 +15,13 @@ bool                                    TransformChannel::IsReadOnly          ()
     return m_readOnly;
 }
 
-const std::vector< Transform* >&         TransformChannel::GetTransformChannels() const
+const std::vector< TransformPtr >&         TransformChannel::GetTransformChannels() const
 {
     return m_transformations;
 }
 
 TransformChannel::~TransformChannel()
 {
-    for( auto t : m_transformations )
-        delete t;
 }
 
 } // model
