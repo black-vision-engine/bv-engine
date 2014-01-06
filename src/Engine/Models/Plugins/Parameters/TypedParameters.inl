@@ -33,7 +33,6 @@ inline  glm::vec3   ParamVec3::Evaluate         ( TimeType t )  const
 inline  glm::mat2   ParamMat2::Evaluate         ( TimeType t )  const
 {
     t = BaseParameter::GetEvaluationTime( t );
-
     SetLastEvaluatedTime( t );
     glm::vec4 v = m_value.evaluate( t );
 
