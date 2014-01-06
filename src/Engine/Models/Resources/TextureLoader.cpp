@@ -53,7 +53,7 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource* res )  c
             return nullptr;
         }
 
-        delete bufToRead;
+        delete[] bufToRead;
     }
     else
     {
