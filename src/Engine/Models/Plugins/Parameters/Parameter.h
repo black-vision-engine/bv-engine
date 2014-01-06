@@ -8,69 +8,10 @@
 
 #include "Engine/Types/Enums.h"
 
+#include "Engine/Models/Plugins/Parameters/BaseParameter.h"
+
 
 namespace bv { namespace model {
-
-class DefaultTimeEvaluator : public ITimeEvaluator
-{
-public:
-
-    virtual TimeType    Evaluate        ( TimeType t ) const
-    {
-        return t;
-    }
-
-    static const ITimeEvaluator * GetDefaultEvaluator   ()
-    {
-        static DefaultTimeEvaluator instance;
-
-        return &instance;
-    }
-
-};
-
-//FIXME: this shit deserves some templates :D
-class BaseParameter
-{
-protected:
-
-    const ITimeEvaluator *  m_timeEvaluator;
-
-    std::string             m_name;
-    ParameterSemantic       m_semantic;
-    mutable TimeType        m_lastEvaluatedTime;
-
-protected:
-
-    virtual ParameterSemantic   GetSemantic             ()  const { return m_semantic; }
-
-    void                        SetLastEvaluatedTime    ( TimeType t )  const;
-    TimeType                    GetLastEvaluatedTime    ()              const;
-
-    explicit    BaseParameter  ( const std::string & name, ParameterSemantic semantic, const ITimeEvaluator * evaluator = nullptr );
-    virtual     ~BaseParameter (){}
-
-public:
-
-    virtual std::string         GetName                 ()  const { return m_name; }
-
-    void                        SetTimeEvaluator        ( const ITimeEvaluator * timeEvaluator )
-    {
-        assert( timeEvaluator );
-
-        m_timeEvaluator = timeEvaluator;
-    }
-
-    bool                        IsEvaluationNeeded      ( TimeType t )  const;
-
-protected:
-
-    inline TimeType             GetEvaluationTime       ( TimeType t ) const
-    {
-        return m_timeEvaluator->Evaluate( t );
-    }
-
-};
 
 // TODO: Move to another file
 class BaseValue : public IValue
@@ -106,8 +47,8 @@ public:
 
     float               Evaluate         ( TimeType t )   const;
 
-    explicit ParamFloat( const std::string & name, const FloatInterpolator & value, const ITimeEvaluator * evaluator = nullptr, ParameterSemantic semantic = ParameterSemantic::NONE )
-       : BaseParameter( name, semantic, evaluator )
+    explicit ParamFloat( const std::string & name, const FloatInterpolator & value, const ITimeEvaluator * evaluator = nullptr )
+       : BaseParameter( name, evaluator )
        , m_value( value )
     {
     }
@@ -126,8 +67,8 @@ public:
 
     glm::vec4           Evaluate        ( TimeType t )   const;
 
-    explicit ParamVec4( const std::string & name, const Vec4Interpolator & value, const ITimeEvaluator * evaluator = nullptr, ParameterSemantic semantic = ParameterSemantic::NONE )
-       : BaseParameter( name, semantic, evaluator )
+    explicit ParamVec4( const std::string & name, const Vec4Interpolator & value, const ITimeEvaluator * evaluator = nullptr )
+       : BaseParameter( name, evaluator )
        , m_value( value )
     {
     }
@@ -145,8 +86,8 @@ public:
 
     glm::vec3           Evaluate        ( TimeType t )   const;
 
-    explicit ParamVec3( const std::string & name, const Vec3Interpolator & value, const ITimeEvaluator * evaluator = nullptr, ParameterSemantic semantic = ParameterSemantic::NONE )
-       : BaseParameter( name, semantic, evaluator )
+    explicit ParamVec3( const std::string & name, const Vec3Interpolator & value, const ITimeEvaluator * evaluator = nullptr )
+       : BaseParameter( name, evaluator )
        , m_value( value )
     {
     }
@@ -164,8 +105,8 @@ public:
 
     glm::mat2           Evaluate        ( TimeType t )  const;
 
-    explicit ParamMat2( const std::string & name, const Vec4Interpolator & value, const ITimeEvaluator * evaluator = nullptr, ParameterSemantic semantic = ParameterSemantic::NONE )
-       : BaseParameter( name, semantic, evaluator )
+    explicit ParamMat2( const std::string & name, const Vec4Interpolator & value, const ITimeEvaluator * evaluator = nullptr )
+       : BaseParameter( name, evaluator )
        , m_value( value )
     {
     }
@@ -190,11 +131,10 @@ public:
         return m_value.Evaluate( t );
     }
 
-    explicit ParamTransform( const std::string & name, const TransformF & value, const ITimeEvaluator * evaluator = nullptr, ParameterSemantic semantic = ParameterSemantic::NONE )
-        : BaseParameter( name, semantic, evaluator )
+    explicit ParamTransform( const std::string & name, const TransformF & value, const ITimeEvaluator * evaluator = nullptr )
+        : BaseParameter( name, evaluator )
         , m_value( value )
     {
-        m_semantic = semantic;
     }
 
     TransformF &        TransformRef    ()
@@ -212,7 +152,7 @@ private:
 
 public:
     virtual ParamType           GetParamType    ()              const   { return ParamType::PT_FLOAT; }
-    virtual const char*         GetData         ()              const   { return reinterpret_cast<const char*>(&m_value); }
+    virtual const char*         GetData         ()              const   { return reinterpret_cast<const char*>( &m_value ); }
 
     float                       GetValue        ()              const   { return m_value; }
     void                        SetValue        ( const float & v )     { m_value = v; }
@@ -273,9 +213,9 @@ private:
 public:
 
     virtual ParamType           GetParamType    ()              const   { return ParamType::PT_MAT4; }
-    virtual const char*         GetData         ()              const   { return reinterpret_cast<const char*>( &m_value ); }
+    virtual const char *        GetData         ()              const   { return reinterpret_cast<const char*>( &m_value ); }
 
-    const glm::mat4&            GetValue        ()              const   { return m_value; }
+    const glm::mat4 &           GetValue        ()              const   { return m_value; }
     void                        SetValue        ( const glm::mat4 & v ) { m_value = v; }
 
     explicit                    ValueMat4       ( const std::string & name );

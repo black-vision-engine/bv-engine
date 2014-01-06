@@ -154,6 +154,8 @@
     <ClCompile Include="System\SimpleTimer.cpp" />
     <ClCompile Include="System\HerarchicalProfiler.cpp" />
     <ClCompile Include="System\FileIO.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\BaseParameter.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\BaseValue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -345,10 +347,13 @@
     <ClInclude Include="System\BasicMacros.h" />
     <ClInclude Include="System\FileIO.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IValue.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\BaseParameter.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\BaseValue.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
     <None Include="System\HerarchicalProfiler.inl" />
+    <None Include="Engine\Models\Plugins\Parameters\BaseParameter.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />

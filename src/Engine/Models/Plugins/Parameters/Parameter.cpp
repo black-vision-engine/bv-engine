@@ -4,42 +4,8 @@
 namespace bv { namespace model {
 
 // *******************************
-//
-void            BaseParameter::SetLastEvaluatedTime ( TimeType t ) const
-{
-    m_lastEvaluatedTime = t;
-}
-
-// *******************************
-//
-TimeType        BaseParameter::GetLastEvaluatedTime ()          const
-{
-    return m_lastEvaluatedTime;
-}
-
-// *******************************
-//
-bool            BaseParameter::IsEvaluationNeeded   ( TimeType t )     const
-{
-    return t != m_lastEvaluatedTime;
-}
-
-// *******************************
-//
-BaseParameter::BaseParameter( const std::string & name, ParameterSemantic semantic, const ITimeEvaluator * evaluator )
-    : m_lastEvaluatedTime( -1.f ) // TODO: Is it goot idea to set in to -1 ?
-    , m_timeEvaluator( evaluator )
-    , m_name( name )
-{
-    if( evaluator == nullptr )
-    {
-        m_timeEvaluator = DefaultTimeEvaluator::GetDefaultEvaluator();
-    }
-}
-
-// *******************************
 // 
-ValueFloat::ValueFloat( const std::string& name )
+ValueFloat::ValueFloat( const std::string & name )
     : BaseValue( name )
 {
 }

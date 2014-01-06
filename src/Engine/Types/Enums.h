@@ -37,14 +37,6 @@ enum class ParamType : int
     PT_TOTAL
 };
 
-//FIXME: TOTOTOTO KURWA TRZEBA WYPIERDOLIC I POCZYSCIC KOD Z DEPRECATED KODEN BASEN FAK
-enum class ParameterSemantic : int
-{
-    NONE,
-    COLOR,
-    LOCAL_TRANSFORM,
-};
-
 enum class AttributeType : int
 {
     AT_FLOAT1 = 0,

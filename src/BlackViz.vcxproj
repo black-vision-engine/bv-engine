@@ -252,6 +252,8 @@
     <ClCompile Include="Engine\Models\Plugins\GeometryMultiRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRect.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRing.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\BaseParameter.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\BaseValue.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\ParametersFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleAnimationPlugin.cpp" />
@@ -428,6 +430,8 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IAttributeChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IAttributeChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\BaseParameter.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\BaseValue.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\ParametersFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginsFactory.h" />
@@ -541,6 +545,7 @@
     <None Include="ClassDiagram.cd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Engine\Models\Plugins\Parameters\BaseParameter.inl" />
     <None Include="System\HerarchicalProfiler.inl" />
   </ItemGroup>
   <ItemGroup>
