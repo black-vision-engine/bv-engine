@@ -29,7 +29,6 @@ IGeometryShaderChannel - to samo, co IShaderChannel
 IPixelShaderChannel - to samo, co IShaderChannel plus mo¿liwoœæ pobrania RendererContext (klasa, która trzyma RendererContext, te stany odpowiadaj¹ 
                        potem za stan renderera OpenGL)
 
-IPlugin - 
 IUpdater - interfejs maj¹cy metod¹ DoUpdate( czas )
 IValue - interfejs wartoœci od dowolnym typie (taki g³upi IVariant) - nazwa, paramType oraz dane przechowywane jako char*
 

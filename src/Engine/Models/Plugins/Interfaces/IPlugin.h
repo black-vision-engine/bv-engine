@@ -25,7 +25,7 @@ class IPlugin : public IUpdatable
 {
 public:
 
-    virtual const char*                         GetName                     () const = 0;
+    virtual const char *                        GetName                     () const = 0;
 
     virtual const IVertexAttributesChannel *    GetGeometryChannel          () const = 0;
     virtual const ITransformChannel *           GetTransformChannel         () const = 0;
@@ -35,7 +35,7 @@ public:
 
     virtual Textures                            GetTextures                 () const = 0; // FIXME: use resources
     virtual bool                                HasAnimatingTexture         () const = 0;
-    virtual ISequenceAnimationSource *          QuerySequenceAnimationSource() = 0;
+    virtual ISequenceAnimationSource *          QuerySequenceAnimationSource() = 0; // FIXME: use generic interface for querying resources that can be 
 
     virtual void                                Print                       ( std::ostream & out, int tabs = 0 )    const = 0;
 
