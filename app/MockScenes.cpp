@@ -37,7 +37,6 @@ namespace bv
 {
 
 
-
 class TexturePixelShaderChannelPD
 {
 public:
@@ -57,6 +56,8 @@ const std::string TexturePixelShaderChannelPD::txMatrix1ParamName( "txMat1" );
 
 class MyPixelShaderChannel : public model::PixelShaderChannelBase< TexturePixelShaderChannelPD >
 {
+private:
+
     model::ParamFloat *        m_alphaParam;
     model::ValueFloat *        m_alphaValue;
 
@@ -77,7 +78,7 @@ public:
         m_tex1TransformValue->SetValue( m_tex1TransformParam->Evaluate( t ) );
     }
 
-    MyPixelShaderChannel( const std::string& shaderFile, const FloatInterpolator & alpha, const TransformF & tex0Transform, const TransformF & tex1Transform )
+    MyPixelShaderChannel( const std::string & shaderFile, const FloatInterpolator & alpha, const TransformF & tex0Transform, const TransformF & tex1Transform )
         : PixelShaderChannelBase( shaderFile )
     {
         m_alphaParam = new model::ParamFloat( ParamDesc::alphaParamName, alpha );
@@ -94,7 +95,6 @@ public:
         RegisterValue( m_tex1TransformValue );
     }
 };
-
 
 
 class MyVertexShaderChannel : public model::ShaderChannel< model::IVertexShaderChannel >
