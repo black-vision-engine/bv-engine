@@ -30,9 +30,6 @@ public:
 class PassThroughVertexShaderParametersDescriptor : public BaseParametersDescriptor
 {
 public:
-    static const std::string pluginName;
-
-    static const std::string MVPParamName;
 
     explicit PassThroughVertexShaderParametersDescriptor();
 };

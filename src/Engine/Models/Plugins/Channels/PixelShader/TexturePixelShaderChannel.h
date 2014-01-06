@@ -11,9 +11,6 @@ namespace bv { namespace model
 class TexturePixelShaderChannelPD : public BaseParametersDescriptor
 {
 public:
-
-    static const std::string    pluginName;
-
     static std::string          alphaParamName[];
     static std::string          txMatrixParamName[];
     static std::string          borderColorsParamName[];
