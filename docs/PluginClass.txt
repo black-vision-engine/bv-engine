@@ -37,8 +37,11 @@ class BasePlugin : public Iface					(UIDType typ odpowiadaj¹cy za nadanie statyc
 TODO:
 		
 IPixelShaderChannel:
+	- interfejs kana³u shadera pixela.
 IVertexShaderChannel:
+	- interfejs kana³u shadera wierzcho³ka.
 IGeometryShaderChannel:
+	- interfejs kana³u shadera geometrii.
 VertexAttributesChannel:
 	- Kana³ atrybutów wierzcho³ków.
 	- Zawiera wektor connected komponentów, czyli prymitywów reprezentuj¹cych kszta³ty w scenie.
@@ -47,6 +50,19 @@ VertexAttributesChannel:
 TransformChannel:
 	- Kana³ transformacji. Przechowuje wector klas bv::model::Transform.
 
+template< class IFace, class ParameterDescriptor = EmptyParamDescriptor >
+class ShaderChannel : public IFace
+	- klasa implementuj¹ca bazow¹ implementacjê kana³u dowolnego shadera.
+	- przechowuje kod shadera oraz zarejestrowane IValue. Bêdê one przekazane do shadera w runtime.
+	- Update nastêpuje poprzez przeci¹zenei odpowiednie przeci¹zenie fuckcji Update w klasie pochodnej. Domyœlna implemetacja jest pusta.
+	- Plugin przechowuje kana³y po swojej stronie lub pobiera je z poprzedniego pluginu w nodzie. Jeœli plugin przechowuje kana³ to przeci¹¿enie fukcji IPlugin::Update powinno wywo³ywaæ Update na przechowywanym kanale.
+	- ParameterDescriptor klasa przechowuj¹ca identyfikatory parametrów shadera w statycznych memberach typu std::string.
+	
+	
+	
 Textures:
 
 ISequenceAnimationSource:
+
+
+
