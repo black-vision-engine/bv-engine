@@ -6,7 +6,7 @@
 
 #include "Engine/Interfaces/IUpdater.h"
 
-#include "Engine/Models/Plugins/Parameters/Parameter.h"
+#include "Engine/Models/Plugins/Parameters/TypedParameters.h"
 
 
 namespace bv {
@@ -29,17 +29,17 @@ public:
 
     virtual void            DoUpdate    ( TimeType t );
 
-    static CameraUpdater *  Create      ( Camera* camera, const ParamVec3& pos, const ParamVec3& dir, const ParamVec3& up );
+    static CameraUpdater *  Create      ( Camera * camera, const ParamVec3 & pos, const ParamVec3 & dir, const ParamVec3 & up );
 
 private:
 
-    explicit CameraUpdater(Camera* camera, const ParamVec3& pos, const ParamVec3& dir,const ParamVec3& up)
-        : m_pCamera(camera)
-        , m_position(pos)
-        , m_direction(dir)
-        , m_up(up)
+    explicit CameraUpdater( Camera * camera, const ParamVec3 & pos, const ParamVec3 & dir,const ParamVec3 & up )
+        : m_pCamera( camera )
+        , m_position( pos )
+        , m_direction( dir )
+        , m_up( up )
     {
-        assert(m_pCamera != nullptr);
+        assert( m_pCamera != nullptr );
     }
 };
 

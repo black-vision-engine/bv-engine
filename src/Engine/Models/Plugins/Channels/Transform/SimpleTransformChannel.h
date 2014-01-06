@@ -3,7 +3,7 @@
 #include "Mathematics/Transform/MatTransform.h"
 
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
-#include "Engine/Models/Plugins/Parameters/Parameter.h"
+#include "Engine/Models/Plugins/Parameters/TypedParameters.h"
 
 namespace bv { namespace model
 {

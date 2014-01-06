@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
+#include "Engine/Models/Plugins/Parameters/TypedParameters.h"
 #include "Engine/Models/Plugins/Parameters/Parameter.h"
 
 
@@ -19,7 +20,7 @@ class SolidColorShaderChannel : public model::PixelShaderChannelBase< SolidColor
 private:
 
     ParamVec4                       m_solidColor;
-    model::ValueVec4*               m_solidColorVal;
+    model::ValueVec4 *              m_solidColorVal;
 
 public:
 

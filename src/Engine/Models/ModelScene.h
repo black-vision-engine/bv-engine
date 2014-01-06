@@ -6,7 +6,7 @@
 
 #include "Engine/Interfaces/IUpdatable.h"
 
-#include "Engine/Models/Plugins/Parameters/Parameter.h"
+#include "Engine/Models/Plugins/Parameters/TypedParameters.h"
 
 namespace bv {
 

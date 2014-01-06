@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
+#include "Engine/Models/Plugins/Parameters/TypedParameters.h"
 #include "Engine/Models/Plugins/Parameters/Parameter.h"
 
 

@@ -433,6 +433,7 @@
     <ClInclude Include="Engine\Models\Plugins\Parameters\BaseParameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\BaseValue.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\ParametersFactory.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\TypedParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginsFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleAnimationPlugin.h" />
@@ -546,6 +547,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Engine\Models\Plugins\Parameters\BaseParameter.inl" />
+    <None Include="Engine\Models\Plugins\Parameters\TypedParameters.inl" />
     <None Include="System\HerarchicalProfiler.inl" />
   </ItemGroup>
   <ItemGroup>

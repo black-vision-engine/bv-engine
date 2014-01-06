@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Parameter.h"
+#include "Engine/Models/Plugins/Parameters/TypedParameters.h"
+
 
 namespace bv { namespace model {
 
@@ -14,6 +15,7 @@ public:
     static ParamVec4            CreateParameter                     ( const std::string & name, const Vec4Interpolator & interpolator, const Timeline * timeline = nullptr );
     static ParamFloat           CreateParameter                     ( const std::string & name, const FloatInterpolator & interpolator, const Timeline * timeline = nullptr );
     static ParamTransform       CreateParameter                     ( const std::string & name, const TransformF & interpolator, const Timeline * timeline = nullptr );
+
 };
 
 } // model

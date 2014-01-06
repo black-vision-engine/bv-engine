@@ -349,11 +349,13 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IValue.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\BaseParameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\BaseValue.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\TypedParameters.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
     <None Include="System\HerarchicalProfiler.inl" />
     <None Include="Engine\Models\Plugins\Parameters\BaseParameter.inl" />
+    <None Include="Engine\Models\Plugins\Parameters\TypedParameters.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />
