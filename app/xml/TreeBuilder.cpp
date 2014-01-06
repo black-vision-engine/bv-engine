@@ -7,6 +7,7 @@
 #include <fstream>
 #include <boost/algorithm/string.hpp>
 
+
 namespace bv{
 	// for mantainging clear output
 	string AddTabs(int depth)
@@ -94,8 +95,6 @@ namespace bv{
 		color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
 		color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
-
-
 		TransformF     trns;
 
 		FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
@@ -121,6 +120,7 @@ namespace bv{
 
 		return root;
 	}
+
 	void AttachSolidPlugin(model::BasicNode *EngineNode, string pluginName, vector<Property> properties, vector<NonLinearProperty> non_linear_properties)
 	{
 		Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
@@ -146,6 +146,7 @@ namespace bv{
 			}
 		}
 	}
+
 	void AttachGeometryPlugin(model::BasicNode *EngineNode, string pluginName, vector<Property> properties, vector<NonLinearProperty> non_linear_properties)
 	{
 		TransformF     trns;

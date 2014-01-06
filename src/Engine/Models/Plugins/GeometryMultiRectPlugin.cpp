@@ -1,12 +1,8 @@
 #include "GeometryMultiRectPlugin.h"
 
-#include "System/Print.h"
-
-#include "Engine/Models/Resources/TextureLoader.h"
-#include "Engine/Models/Plugins/Parameters/Parameter.h"
-#include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
+
 
 namespace bv { namespace model {
 

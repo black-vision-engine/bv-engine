@@ -9,7 +9,6 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
-#include "Engine/Models/Plugins/Parameters/Parameter.h"
 #include "PluginEnums.h"
 #include "TextureInfo.h"
 

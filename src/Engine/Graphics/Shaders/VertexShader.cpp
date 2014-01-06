@@ -79,7 +79,7 @@ void        VertexShader::UpdateP( const glm::mat4 & P )
 
 // *********************************
 //
-PassThroughVertexShader::PassThroughVertexShader( PassThroughVertexShaderParametersDescriptor * desc )
+PassThroughVertexShader::PassThroughVertexShader()
     : VertexShader( PassThroughVertexShader::m_programSource )
 {
     //FIXME: pass params in constructor

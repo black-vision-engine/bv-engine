@@ -1,9 +1,6 @@
 #pragma once
 
-#include "Mathematics/Transform/MatTransform.h"
-
 #include "Engine/Models/Plugins/Plugin.h"
-#include "Engine/Models/Plugins/Parameters/Parameter.h"
 
 
 namespace bv { namespace model {
@@ -12,7 +9,9 @@ namespace bv { namespace model {
 class GeometryRectPluginUID
 {
 public:
-    static const char*       GetName()        { return "geometry_rect_plugin"; }
+
+    static const char * GetName()   { return "geometry_rect_plugin"; }
+
 };
 
 
@@ -22,16 +21,19 @@ class GeometryRectPlugin : public BasePlugin< IPlugin, GeometryRectPluginUID >
 private:
 
     model::VertexAttributesChannel *    m_geomChannel;
-    ParamFloat                  m_width;
-    ParamFloat                  m_height;
+
+    ParamFloat                          m_width;
+    ParamFloat                          m_height;
 
 public:
-    explicit            GeometryRectPlugin    ( const ParamFloat& w, const ParamFloat& h );
+
+    explicit            GeometryRectPlugin    ( const ParamFloat & w, const ParamFloat& h );
                         ~GeometryRectPlugin   ();
 
-    virtual const IVertexAttributesChannel *    GetGeometryChannel          () const override;
-    virtual void                        Update                      ( TimeType t ) override;
-    virtual void                        Print                       ( std::ostream & out, int tabs = 0 ) const override;
+    virtual const IVertexAttributesChannel *    GetGeometryChannel  () const override;
+
+    virtual void                                Update              ( TimeType t ) override;
+    virtual void                                Print               ( std::ostream & out, int tabs = 0 ) const override;
 
 };
 

@@ -1,13 +1,7 @@
 #pragma once
 
-#include "Mathematics/Transform/MatTransform.h"
-
-#include "Engine/Models/Plugins/Plugin.h"
-#include "Engine/Models/Plugins/Parameters/Parameter.h"
-
-#include "Engine/Models/Plugins/PluginEnums.h"
 #include "Engine/Models/Plugins/Simple/SimpleTexturePlugin.h"
-
+#include "Engine/Models/Plugins/Parameters/TypedParameters.h"
 #include "Engine/Models/Plugins/Interfaces/ISequenceAnimationSource.h"
 
 
@@ -21,7 +15,8 @@ class TextureVertexShaderChannel;
 class SimpleAnimationPluginUID
 {
 public:
-    static const char*       GetName()        { return "simple_animation_plugin"; }
+
+    static const char *      GetName()        { return "simple_animation_plugin"; }
 };
 
 //Just to avoid mixing multiple inheritance of interface and implementation (it is not a problem here, but this way it is cleaner)

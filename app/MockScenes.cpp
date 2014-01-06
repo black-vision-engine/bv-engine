@@ -1,30 +1,9 @@
 #include "MockScenes.h"
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <stdio.h>
-#include <stddef.h>
-#include <stdlib.h>
-#include <wchar.h>
-
 #include "Engine/Models/BasicNode.h"
-#include "Mathematics/Transform/MatTransform.h"
-#include "Engine/Models/Plugins/Parameters/Parameter.h"
-#include "Engine/Models/Plugins/Simple/SimpleTexturePlugin.h"
-#include "Engine/Models/Plugins/Simple/SimpleTextPlugin.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannelDescriptor.h"
-#include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
-#include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
-#include "Engine/Models/Plugins/GeometryPluginRect.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/Plugins/Simple/SimpleTransformPlugin.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
-#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -35,7 +14,6 @@
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
 namespace bv
 {
-
 
 class TexturePixelShaderChannelPD
 {
@@ -142,9 +120,9 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     FloatInterpolator y;
     FloatInterpolator z;
 
-    x.addKey(0.f, 0.f);
-    y.addKey(0.f, 0.f);
-    z.addKey(0.f, 1.f);
+    x.addKey( 0.f, 0.f );
+    y.addKey( 0.f, 0.f );
+    z.addKey( 0.f, 1.f );
 
     if( numcall == 0 ) 
     {

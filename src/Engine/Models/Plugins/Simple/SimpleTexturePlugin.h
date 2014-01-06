@@ -8,7 +8,6 @@
 #include "Engine/Models/Plugins/Plugin.h"
 
 #include "Engine/Models/Plugins/PluginEnums.h"
-#include "Engine/Models/Plugins/Parameters/Parameter.h"
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
 
@@ -22,7 +21,9 @@ class TextureVertexShaderChannel;
 class SimpleTexturePluginUID
 {
 public:
-    static const char*       GetName()        { return "simple_texture_shader_plugin"; }
+
+    static const char * GetName()   { return "simple_texture_shader_plugin"; }
+
 };
 
 // ***************************** SimpleTexturePlugin TextureDescriptor ***
@@ -72,8 +73,8 @@ private:
 
 private:
 
-    TextureInfo *                               LoadTexture( const TextureDescriptor & texDesc, const std::string& name )   const;
-    void                                        EvalGeometryChannel( const IPlugin* prev );
+    TextureInfo *                               LoadTexture( const TextureDescriptor & texDesc, const std::string & name )   const;
+    void                                        EvalGeometryChannel( const IPlugin * prev );
 
 public:
 
@@ -81,9 +82,9 @@ public:
     explicit                                    SimpleTexturePlugin         ( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, model::RendererContext * ctx = nullptr, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
                                                 ~SimpleTexturePlugin        ();
 
-    virtual const IVertexAttributesChannel*     GetGeometryChannel          () const override;                                                                           
-    virtual const IPixelShaderChannel*          GetPixelShaderChannel       () const override;                                       
-    virtual const IVertexShaderChannel*         GetVertexShaderChannel      () const override;     
+    virtual const IVertexAttributesChannel *    GetGeometryChannel          () const override;                                                                           
+    virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;                                       
+    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;     
 
     virtual Textures                            GetTextures                 () const override;
 

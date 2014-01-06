@@ -366,7 +366,7 @@ VertexShader *                      BasicNode::CreateVertexShader      ()   cons
 
     if( vs == nullptr )
     {
-        vs = new PassThroughVertexShader( new PassThroughVertexShaderParametersDescriptor() );
+        vs = new PassThroughVertexShader();
     }
 
     return vs;
