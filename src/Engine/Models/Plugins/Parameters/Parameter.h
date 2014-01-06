@@ -27,7 +27,9 @@ protected:
     {
     }
 
-    virtual ~BaseValue(){}
+    virtual ~BaseValue()
+    {
+    }
 
 public:
 
@@ -73,7 +75,9 @@ public:
 
     explicit                    ValueVec4       ( const std::string & name );
 
-    virtual ~ValueVec4(){}
+    virtual ~ValueVec4()
+    {
+    }
 
 };
 

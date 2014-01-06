@@ -59,5 +59,12 @@ BasicNode *     ModelScene::GetSceneRoot            ()  const
     return m_pSceneRoot;
 }
 
+// *******************************
+//
+ModelScene::~ModelScene()
+{
+    delete m_pSceneRoot;
+}
+
 } // model
 } // bv

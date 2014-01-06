@@ -37,6 +37,8 @@ public:
     Camera *            GetCamera               ()  const;
     BasicNode *         GetSceneRoot            ()  const;
 
+    ~ModelScene();
+
 private:
 
     explicit ModelScene( BasicNode * node, Camera * cam );
