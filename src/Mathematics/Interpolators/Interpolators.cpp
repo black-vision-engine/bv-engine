@@ -7,8 +7,8 @@ namespace bv
 //
 FloatInterpolator                   InterpolatorsHelper::CreateConstValue                    ( float val )
 {
-	FloatInterpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
-	inter.addKey( 0.f, val );
+	FloatInterpolator inter; inter.SetWrapPostMethod( bv::WrapMethod::pingPong );
+	inter.AddKey( 0.f, val );
 
 	return inter;
 }
@@ -17,8 +17,8 @@ FloatInterpolator                   InterpolatorsHelper::CreateConstValue       
 //
 Vec4Interpolator                    InterpolatorsHelper::CreateConstValue                    ( const glm::vec4& val )
 {
-	Vec4Interpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
-	inter.addKey( 0.f, val );
+	Vec4Interpolator inter; inter.SetWrapPostMethod( bv::WrapMethod::pingPong );
+	inter.AddKey( 0.f, val );
 
 	return inter;
 }
@@ -27,8 +27,8 @@ Vec4Interpolator                    InterpolatorsHelper::CreateConstValue       
 //
 Vec3Interpolator                    InterpolatorsHelper::CreateConstValue                    ( const glm::vec3 & val )
 {
-    Vec3Interpolator inter; inter.setWrapPostMethod( bv::WrapMethod::pingPong );
-	inter.addKey( 0.f, val );
+    Vec3Interpolator inter; inter.SetWrapPostMethod( bv::WrapMethod::pingPong );
+	inter.AddKey( 0.f, val );
 
 	return inter;
 }

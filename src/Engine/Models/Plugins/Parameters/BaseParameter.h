@@ -13,7 +13,6 @@ namespace bv { namespace model {
 
 class ITimeEvaluator;
 
-//FIXME: this shit deserves some templates :D
 class BaseParameter
 {
 protected:

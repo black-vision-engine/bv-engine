@@ -64,11 +64,15 @@ public:
 class SimpleTexturePlugin : public BasePlugin< IPlugin, SimpleTexturePluginUID >
 {
 private:
+
     TextureAttachmentMode           m_attachmentMode;
+
     unsigned int                    m_texCoordChannelIndex;
+
     VertexAttributesChannelPtr      m_geomChannel;
     TexturePixelShaderChannelPtr    m_pixelShaderChannel;
     TextureVertexShaderChannelPtr   m_vertexShaderChannel;
+
     Textures                        m_textures;
 
 private:

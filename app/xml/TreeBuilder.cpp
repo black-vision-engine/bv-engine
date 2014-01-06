@@ -88,24 +88,24 @@ namespace bv{
 
 		std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example.txt");
 
-		Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
+		Vec4Interpolator color; color.SetWrapPostMethod( bv::WrapMethod::pingPong );
 
-		color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-		color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-		color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-		color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+		color.AddKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+		color.AddKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+		color.AddKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+		color.AddKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
 		TransformF     trns;
 
-		FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
-		FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
+		FloatInterpolator xt; xt.SetWrapPostMethod( bv::WrapMethod::pingPong );
+		FloatInterpolator yt; yt.SetWrapPostMethod( bv::WrapMethod::repeat );
 		FloatInterpolator zt;
 
-		xt.addKey(0.f, -1.f);
-		yt.addKey(0.f, -5.f);
-		zt.addKey(0.f, -5.f);
+		xt.AddKey(0.f, -1.f);
+		yt.AddKey(0.f, -5.f);
+		zt.AddKey(0.f, -5.f);
 
-		yt.addKey(30.f, 5.f);
+		yt.AddKey(30.f, 5.f);
 
 		trns.AddTranslation( xt, yt, zt );
 
@@ -123,7 +123,7 @@ namespace bv{
 
 	void AttachSolidPlugin(model::BasicNode *EngineNode, string pluginName, vector<Property> properties, vector<NonLinearProperty> non_linear_properties)
 	{
-		Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
+		Vec4Interpolator color; color.SetWrapPostMethod( bv::WrapMethod::pingPong );
 		for(unsigned int i=0;i<properties.size();i++)
 		{
 			vector<TimeProperty> *timevals = properties[i].timeproperty;				
@@ -141,7 +141,7 @@ namespace bv{
 					auto gF=atof(V[1].c_str());
 					auto bF=atof(V[2].c_str());
 					auto aF=atof(V[3].c_str());
-					color.addKey(float(tF),glm::vec4(float(rF),float(gF),float(bF),float(aF)));						
+					color.AddKey(float(tF),glm::vec4(float(rF),float(gF),float(bF),float(aF)));						
 				}
 			}
 		}
@@ -162,8 +162,8 @@ namespace bv{
 		FloatInterpolator ys; 
 		FloatInterpolator zs;
 
-		xt.setWrapPostMethod( bv::WrapMethod::pingPong );
-		yt.setWrapPostMethod( bv::WrapMethod::repeat );
+		xt.SetWrapPostMethod( bv::WrapMethod::pingPong );
+		yt.SetWrapPostMethod( bv::WrapMethod::repeat );
 		
 		FloatInterpolator *Current;
 		for(unsigned int i=0;i<properties.size();i++)
@@ -195,7 +195,7 @@ namespace bv{
 				float tF=float(atof(timevals->operator[](h).time.c_str()));
 				float hF=float(atof(timevals->operator[](h).value.c_str()));
 
-				Current->addKey(tF,hF);
+				Current->AddKey(tF,hF);
 			}
 		}
 		trns.AddTranslation( xt, yt, zt );

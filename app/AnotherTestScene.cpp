@@ -160,13 +160,13 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
     TransformF trans;
 
     float scl = 1.95f / float(numAnimations);
-    FloatInterpolator sx; sx.setWrapPostMethod(bv::WrapMethod::pingPong);
-    FloatInterpolator sy; sy.setWrapPostMethod(bv::WrapMethod::pingPong);
+    FloatInterpolator sx; sx.SetWrapPostMethod(bv::WrapMethod::pingPong);
+    FloatInterpolator sy; sy.SetWrapPostMethod(bv::WrapMethod::pingPong);
 
-    //sx.addKey( 0.f, scl * 1.777777778f );
-    //sy.addKey( 0.f, scl * 1.777777778f );
-    sx.addKey( 0.f, 1.2f );
-    sy.addKey( 0.f, 1.2f );
+    //sx.AddKey( 0.f, scl * 1.777777778f );
+    //sy.AddKey( 0.f, scl * 1.777777778f );
+    sx.AddKey( 0.f, 1.2f );
+    sy.AddKey( 0.f, 1.2f );
 
     trans.AddScale( sx, sy, InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddTranslation( InterpolatorsHelper::CreateConstValue( -float(numAnimations - 1) * hds / 2.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
@@ -213,11 +213,11 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
         ///////////////////////////// Transform plugin //////////////////////////// 
         TransformF trans;
 
-        FloatInterpolator sx; sx.setWrapPostMethod(bv::WrapMethod::pingPong);
-        FloatInterpolator sy; sy.setWrapPostMethod(bv::WrapMethod::pingPong);
+        FloatInterpolator sx; sx.SetWrapPostMethod(bv::WrapMethod::pingPong);
+        FloatInterpolator sy; sy.SetWrapPostMethod(bv::WrapMethod::pingPong);
 
-        sx.addKey( 0.f, 1.f );
-        sy.addKey( 0.f, 1.f );
+        sx.AddKey( 0.f, 1.f );
+        sy.AddKey( 0.f, 1.f );
 
         trans.AddScale( sx, sy, InterpolatorsHelper::CreateConstValue( 1.f ) );
         trans.AddTranslation( InterpolatorsHelper::CreateConstValue( float(i) * hds * 1.02f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.1f ) );
@@ -305,10 +305,10 @@ model::BasicNode * NonGeometryParentRects   ( TimeType start0, TimeType stop0, T
     glm::vec4 colb( 0.f, 0.f, 0.f, 1.f );
     glm::vec4 colw( 1.f, 1.f, 1.f, 1.f );
 
-    Vec4Interpolator colc11; colc11.setWrapPostMethod( bv::WrapMethod::pingPong ); colc11.addKey( TimeType( 0.0 ), col11 ); colc11.addKey( TimeType( 2.0 ), colb );
-    Vec4Interpolator colc12; colc12.setWrapPostMethod( bv::WrapMethod::pingPong ); colc12.addKey( TimeType( 0.0 ), col12 ); colc12.addKey( TimeType( 2.0 ), colw );
-    Vec4Interpolator colc13; colc13.setWrapPostMethod( bv::WrapMethod::pingPong ); colc13.addKey( TimeType( 0.0 ), col13 ); colc13.addKey( TimeType( 2.0 ), colb );
-    Vec4Interpolator colc14; colc14.setWrapPostMethod( bv::WrapMethod::pingPong ); colc14.addKey( TimeType( 0.0 ), col14 ); colc14.addKey( TimeType( 2.0 ), colw );
+    Vec4Interpolator colc11; colc11.SetWrapPostMethod( bv::WrapMethod::pingPong ); colc11.AddKey( TimeType( 0.0 ), col11 ); colc11.AddKey( TimeType( 2.0 ), colb );
+    Vec4Interpolator colc12; colc12.SetWrapPostMethod( bv::WrapMethod::pingPong ); colc12.AddKey( TimeType( 0.0 ), col12 ); colc12.AddKey( TimeType( 2.0 ), colw );
+    Vec4Interpolator colc13; colc13.SetWrapPostMethod( bv::WrapMethod::pingPong ); colc13.AddKey( TimeType( 0.0 ), col13 ); colc13.AddKey( TimeType( 2.0 ), colb );
+    Vec4Interpolator colc14; colc14.SetWrapPostMethod( bv::WrapMethod::pingPong ); colc14.AddKey( TimeType( 0.0 ), col14 ); colc14.AddKey( TimeType( 2.0 ), colw );
 
     ParamVec4 paramCol11 = ParametersFactory::CreateParameter( "color0", colc11, timeline0 );
     ParamVec4 paramCol12 = ParametersFactory::CreateParameter( "color1", colc12, timeline1 );
@@ -371,10 +371,10 @@ model::BasicNode *          GreenRect()
     ///////////////////////////// Transform plugin //////////////////////////// 
     TransformF trans;
 
-    FloatInterpolator angle; angle.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator angle; angle.SetWrapPostMethod( bv::WrapMethod::pingPong );
 
-    angle.addKey( 0.f, 0.f );
-    angle.addKey( 10.f, 270.f );
+    angle.AddKey( 0.f, 0.f );
+    angle.AddKey( 10.f, 270.f );
 
     trans.AddRotation( angle, InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
@@ -410,12 +410,12 @@ model::BasicNode *          TexturedRect()
 
     ///////////////////////////// Transform plugin //////////////////////////// 
     TransformF trans;
-    FloatInterpolator ang; ang.setWrapPostMethod( bv::WrapMethod::pingPong );
-    ang.addKey( 0.f, 0.f );
-    ang.addKey( 9.f, 359.f );
-    FloatInterpolator s; s.setWrapPostMethod( bv::WrapMethod::pingPong );
-    s.addKey( 0.f, 1.f );
-    s.addKey( 8.f, 2.f );
+    FloatInterpolator ang; ang.SetWrapPostMethod( bv::WrapMethod::pingPong );
+    ang.AddKey( 0.f, 0.f );
+    ang.AddKey( 9.f, 359.f );
+    FloatInterpolator s; s.SetWrapPostMethod( bv::WrapMethod::pingPong );
+    s.AddKey( 0.f, 1.f );
+    s.AddKey( 8.f, 2.f );
 
     trans.AddRotation( ang, InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddScale( s, s, InterpolatorsHelper::CreateConstValue( 1.f ) );
@@ -427,9 +427,9 @@ model::BasicNode *          TexturedRect()
     
     ///////////////////////////// Material plugin //////////////////////////// 
     
-    FloatInterpolator angle; angle.setWrapPostMethod( bv::WrapMethod::pingPong );
-    angle.addKey( 0.f, 0.f );
-    angle.addKey( 6.5f, 270.f );
+    FloatInterpolator angle; angle.SetWrapPostMethod( bv::WrapMethod::pingPong );
+    angle.AddKey( 0.f, 0.f );
+    angle.AddKey( 6.5f, 270.f );
 
     TransformF txTrans;
     txTrans.AddTranslation( InterpolatorsHelper::CreateConstValue( 0.5f ), InterpolatorsHelper::CreateConstValue( 0.5f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
@@ -491,11 +491,11 @@ model::BasicNode *     NaiveTimer()
 {
     model::BasicNode * root = new model::BasicNode();
 
-    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
-    color.addKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-    color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-    color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-    color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+    Vec4Interpolator color; color.SetWrapPostMethod( bv::WrapMethod::pingPong );
+    color.AddKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+    color.AddKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    color.AddKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+    color.AddKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
     std::wstring str    =   L"0123456789:.";
     auto texPlugin      =   PluginsFactory::CreateSimpleTextPlugin( str, "../dep/Media/fonts/cour.ttf", 20 );
@@ -503,7 +503,7 @@ model::BasicNode *     NaiveTimer()
 
     TransformF     trns;
     trns.AddTranslation( InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
-    FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator xt; xt.SetWrapPostMethod( bv::WrapMethod::pingPong );
 
     auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
     root->AddPlugin( transPlugin );
@@ -532,12 +532,12 @@ model::BasicNode *     Text1()
 
     std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example.txt");
 
-    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
+    Vec4Interpolator color; color.SetWrapPostMethod( bv::WrapMethod::pingPong );
 
-    color.addKey(0.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
-    color.addKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-    color.addKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-    color.addKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+    color.AddKey(0.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+    color.AddKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    color.AddKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+    color.AddKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
     auto texPlugin      =   PluginsFactory::CreateSimpleTextPlugin( L"DUPA", "../dep/Media/fonts/ARIALUNI.TTF", 64 );
 
@@ -545,15 +545,15 @@ model::BasicNode *     Text1()
 
     TransformF     trns;
 
-    FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
+    FloatInterpolator xt; xt.SetWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator yt; yt.SetWrapPostMethod( bv::WrapMethod::repeat );
     FloatInterpolator zt;
 
-    xt.addKey( 0.f, -1.f );
-    yt.addKey( 0.f, -5.f );
-    zt.addKey( 0.f, -5.f );
+    xt.AddKey( 0.f, -1.f );
+    yt.AddKey( 0.f, -5.f );
+    zt.AddKey( 0.f, -5.f );
 
-    yt.addKey( 30.f, 5.f );
+    yt.AddKey( 30.f, 5.f );
 
     //trns.AddTranslation( xt, yt, zt );
 
@@ -597,15 +597,15 @@ model::BasicNode * Text1Textured()
 
     TransformF     trns;
 
-    FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
+    FloatInterpolator xt; xt.SetWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator yt; yt.SetWrapPostMethod( bv::WrapMethod::repeat );
     FloatInterpolator zt;
 
-    xt.addKey(0.f, -1.f);
-    yt.addKey(0.f, -5.f);
-    zt.addKey(0.f, -2.f);
+    xt.AddKey(0.f, -1.f);
+    yt.AddKey(0.f, -5.f);
+    zt.AddKey(0.f, -2.f);
 
-    yt.addKey(30.f, 5.f);
+    yt.AddKey(30.f, 5.f);
 
     trns.AddTranslation( xt, yt, zt );
 
@@ -646,12 +646,12 @@ model::BasicNode *     Text2()
 
     std::wstring str  = TextHelper::LoadUtf8FileToString( L"text_example.txt" );
 
-    Vec4Interpolator color; color.setWrapPostMethod( bv::WrapMethod::pingPong );
+    Vec4Interpolator color; color.SetWrapPostMethod( bv::WrapMethod::pingPong );
 
-    color.addKey( 0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-    color.addKey( 1.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-    color.addKey( 8.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-    color.addKey( 18.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+    color.AddKey( 0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+    color.AddKey( 1.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    color.AddKey( 8.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+    color.AddKey( 18.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
     auto texPlugin = PluginsFactory::CreateSimpleTextPlugin( str, "../dep/Media/fonts/cour.ttf", 128, true, true );
 
@@ -661,15 +661,15 @@ model::BasicNode *     Text2()
 
     trns.AddScale( InterpolatorsHelper::CreateConstValue( 2.f ), InterpolatorsHelper::CreateConstValue( 2.f ), InterpolatorsHelper::CreateConstValue( 2.f ) );
 
-    FloatInterpolator xt; xt.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator yt; yt.setWrapPostMethod( bv::WrapMethod::repeat );
+    FloatInterpolator xt; xt.SetWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator yt; yt.SetWrapPostMethod( bv::WrapMethod::repeat );
     FloatInterpolator zt;
 
-    xt.addKey(0.f, -1.f);
-    yt.addKey(0.f, -5.f);
-    zt.addKey(0.f, -0.5f);
+    xt.AddKey(0.f, -1.f);
+    yt.AddKey(0.f, -5.f);
+    zt.AddKey(0.f, -0.5f);
 
-    yt.addKey(30.f, 5.f);
+    yt.AddKey(30.f, 5.f);
 
     trns.AddTranslation( xt, yt, zt );
 
@@ -869,17 +869,17 @@ model::BasicNode *      TestScenesFactory::SequenceAnimationTestScene  ()
 {
     std::vector< AnimationSequenceDesc >    animations;
 
-    FloatInterpolator anim0; anim0.setWrapPostMethod( WrapMethod::pingPong ); anim0.setWrapPreMethod( WrapMethod::clamp );
-    FloatInterpolator anim1; anim1.setWrapPostMethod( WrapMethod::pingPong ); anim1.setWrapPreMethod( WrapMethod::clamp );
+    FloatInterpolator anim0; anim0.SetWrapPostMethod( WrapMethod::pingPong ); anim0.SetWrapPreMethod( WrapMethod::clamp );
+    FloatInterpolator anim1; anim1.SetWrapPostMethod( WrapMethod::pingPong ); anim1.SetWrapPreMethod( WrapMethod::clamp );
 
-    anim0.addKey( TimeType( 5.0 ), 0.0f );
-    anim0.addKey( TimeType( 6.5 ), 50.0f );
-    anim0.addKey( TimeType( 8.0 ), 75.0f );
+    anim0.AddKey( TimeType( 5.0 ), 0.0f );
+    anim0.AddKey( TimeType( 6.5 ), 50.0f );
+    anim0.AddKey( TimeType( 8.0 ), 75.0f );
 
-    anim1.addKey( TimeType( 2.0 ), 75.0f );
-    anim1.addKey( TimeType( 5.0 ), 0.0f );
-    anim1.addKey( TimeType( 9.0 ), 60.0f );
-    anim1.addKey( TimeType( 11.0 ), 0.0f );
+    anim1.AddKey( TimeType( 2.0 ), 75.0f );
+    anim1.AddKey( TimeType( 5.0 ), 0.0f );
+    anim1.AddKey( TimeType( 9.0 ), 60.0f );
+    anim1.AddKey( TimeType( 11.0 ), 0.0f );
 
     AnimationSequenceDesc intro;
     intro.ext = "tga";

@@ -76,9 +76,9 @@ public:
 
     void  SetValues ( TimeType t, float v0, float v1, float v2 )
     {
-        p0.addKey( t, v0 );
-        p1.addKey( t, v1 );
-        p2.addKey( t, v2 );
+        p0.AddKey( t, v0 );
+        p1.AddKey( t, v1 );
+        p2.AddKey( t, v2 );
     }
 
     TransformKind   KindKurwaMac()
@@ -149,11 +149,11 @@ glm::mat4x4 Rotation<ParamT>::Evaluate(typename ParamT::TimeT t) const
 {
     if( m_hasRotAxisInterpolator )
     {
-        return glm::rotate( glm::mat4( 1.0f ), (float) angle.evaluate( t ), m_rotationAxis.evaluate( t ) );        
+        return glm::rotate( glm::mat4( 1.0f ), (float) angle.Evaluate( t ), m_rotationAxis.Evaluate( t ) );        
     }
     else
     {
-        return glm::rotate( glm::mat4( 1.0f ), (float) angle.evaluate( t ), glm::vec3( p0.evaluate ( t ), p1.evaluate( t ), p2.evaluate( t ) ) );
+        return glm::rotate( glm::mat4( 1.0f ), (float) angle.Evaluate( t ), glm::vec3( p0.Evaluate ( t ), p1.Evaluate( t ), p2.Evaluate( t ) ) );
     }
 }
 

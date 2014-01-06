@@ -208,9 +208,9 @@ glm::mat4x4 SimpleTransform<ParamT>::Evaluate( typename ParamT::TimeT t ) const
     switch(kind)
     {
     case TransformKind::translation:
-        return glm::translate( glm::mat4( 1.0f ), glm::vec3( p0.evaluate( t ), p1.evaluate( t ), p2.evaluate( t ) ) );
+        return glm::translate( glm::mat4( 1.0f ), glm::vec3( p0.Evaluate( t ), p1.Evaluate( t ), p2.Evaluate( t ) ) );
     case TransformKind::scale:
-        return glm::scale( glm::mat4( 1.0f ), glm::vec3( p0.evaluate( t ), p1.evaluate( t ), p2.evaluate( t ) ) );
+        return glm::scale( glm::mat4( 1.0f ), glm::vec3( p0.Evaluate( t ), p1.Evaluate( t ), p2.Evaluate( t ) ) );
     case TransformKind::rotation:
         assert( false );
         return glm::mat4( 1.0f);

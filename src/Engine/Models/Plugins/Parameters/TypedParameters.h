@@ -9,101 +9,79 @@
 namespace bv { namespace model {
 
 // *******************************************
-class ParamFloat : public BaseParameter
+template< typename InterpolatorType, typename ValueType >
+class ParamImpl : public BaseParameter
 {
-private:
+protected:
 
-    FloatInterpolator   m_value;
+    InterpolatorType m_interpolator;
 
 public:
 
+    explicit            ParamImpl   ( const std::string & name, const InterpolatorType & interpolator, const ITimeEvaluator * evaluator = nullptr );
+                        ~ParamImpl  ();
 
-    explicit ParamFloat( const std::string & name, const FloatInterpolator & value, const ITimeEvaluator * evaluator = nullptr )
-       : BaseParameter( name, evaluator )
-       , m_value( value )
-    {
-    }
-
-    inline float        Evaluate    ( TimeType t )  const;
+    inline  ValueType   Evaluate    ( TimeType t ) const;
 
 };
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType >
+ParamImpl< InterpolatorType, ValueType >::ParamImpl   ( const std::string & name, const InterpolatorType & interpolator, const ITimeEvaluator * evaluator )
+    : BaseParameter( name, evaluator )
+    , m_interpolator( interpolator )
+{
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType >
+ParamImpl< InterpolatorType, ValueType >::~ParamImpl  ()
+{
+}
+
 
 // *******************************************
-class ParamVec4 : public BaseParameter
+class ParamTransform : public ParamImpl< TransformF, glm::mat4 >
 {
 private:
 
-    Vec4Interpolator    m_value;
+    typedef ParamImpl< TransformF, glm::mat4 > Parent;
 
 public:
 
-    explicit ParamVec4( const std::string & name, const Vec4Interpolator & value, const ITimeEvaluator * evaluator = nullptr )
-       : BaseParameter( name, evaluator )
-       , m_value( value )
-    {
-    }
-
-    inline glm::vec4    Evaluate    ( TimeType t )  const;
-
-};
-
-// *******************************************
-class ParamVec3 : public BaseParameter
-{
-private:
-
-    Vec3Interpolator    m_value;
-
-public:
-
-    explicit ParamVec3( const std::string & name, const Vec3Interpolator & value, const ITimeEvaluator * evaluator = nullptr )
-       : BaseParameter( name, evaluator )
-       , m_value( value )
-    {
-    }
-
-    inline glm::vec3    Evaluate    ( TimeType t )  const;
-
-};
-
-// *******************************************
-class ParamMat2 : public BaseParameter
-{
-private:
-
-    Vec4Interpolator    m_value;
-
-public:
-
-    explicit ParamMat2( const std::string & name, const Vec4Interpolator & value, const ITimeEvaluator * evaluator = nullptr )
-       : BaseParameter( name, evaluator )
-       , m_value( value )
-    {
-    }
-
-    inline glm::mat2    Evaluate    ( TimeType t )  const;
-
-};
-
-
-class ParamTransform : public BaseParameter
-{
-private:
-
-    TransformF          m_value;
-
-public:
-
-    explicit ParamTransform( const std::string & name, const TransformF & value, const ITimeEvaluator * evaluator = nullptr )
-        : BaseParameter( name, evaluator )
-        , m_value( value )
+    explicit    ParamTransform  ( const std::string & name, const TransformF & transform, const ITimeEvaluator * evaluator = nullptr )
+        : Parent( name, transform, evaluator )
     {
     }
 
     inline TransformF & TransformRef();
-    inline glm::mat4    Evaluate    ( TimeType t )  const;
 
 };
+
+// *******************************************
+class ParamMat2 : public ParamImpl< Vec4Interpolator, glm::vec4 >
+{
+private:
+
+    typedef ParamImpl< Vec4Interpolator, glm::vec4 > Parent;
+
+public:
+
+    explicit    ParamMat2   ( const std::string & name, const Vec4Interpolator & transform, const ITimeEvaluator * evaluator = nullptr )
+        : Parent( name, transform, evaluator )
+    {
+    }
+
+    inline  glm::mat2   Evaluate    ( TimeType t ) const;
+
+};
+
+
+typedef ParamImpl< FloatInterpolator, float >       ParamFloat;
+typedef ParamImpl< Vec4Interpolator, glm::vec4 >    ParamVec4;
+typedef ParamImpl< Vec3Interpolator, glm::vec3 >    ParamVec3;
 
 } //model
 } //bv

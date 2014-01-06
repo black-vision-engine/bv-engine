@@ -90,7 +90,7 @@ const std::string fontFile = "../dep/Media/fonts/ARIALUNI.TTF";
 FloatInterpolator    TestParamFactory::ConstantValue( float val )
 {
     FloatInterpolator ret;
-    ret.addKey( 0.0f, val );
+    ret.AddKey( 0.0f, val );
 
     return ret;
 }
@@ -115,24 +115,24 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 
     TransformF     trns;
 
-    FloatInterpolator angle; angle.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator angle; angle.SetWrapPostMethod( bv::WrapMethod::pingPong );
     FloatInterpolator x;
     FloatInterpolator y;
     FloatInterpolator z;
 
-    x.addKey( 0.f, 0.f );
-    y.addKey( 0.f, 0.f );
-    z.addKey( 0.f, 1.f );
+    x.AddKey( 0.f, 0.f );
+    y.AddKey( 0.f, 0.f );
+    z.AddKey( 0.f, 1.f );
 
     if( numcall == 0 ) 
     {
-        angle.addKey(0.f, 0.f);
-        angle.addKey(5.f, 180.f);
+        angle.AddKey(0.f, 0.f);
+        angle.AddKey(5.f, 180.f);
     }
     else
     {
-        angle.addKey(0.f, 300.f);
-        angle.addKey(6.5f, 0.f);
+        angle.AddKey(0.f, 300.f);
+        angle.AddKey(6.5f, 0.f);
     }
 
     trns.AddRotation(angle, x, y ,z);
@@ -145,79 +145,79 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 
     if( numcall == 0 ) 
     {
-        alpha.addKey( 0.0f, 0.25f ); alpha.setWrapPostMethod( WrapMethod::pingPong );
-        alpha.addKey( 1.0f, 0.05f );
-        alpha.addKey( 2.0f, 0.5f );
-        alpha.addKey( 5.0f, 1.0f );
-        alpha.addKey( 8.0f, 0.75f );
-        alpha.addKey( 10.0f, 0.0f );
+        alpha.AddKey( 0.0f, 0.25f ); alpha.SetWrapPostMethod( WrapMethod::pingPong );
+        alpha.AddKey( 1.0f, 0.05f );
+        alpha.AddKey( 2.0f, 0.5f );
+        alpha.AddKey( 5.0f, 1.0f );
+        alpha.AddKey( 8.0f, 0.75f );
+        alpha.AddKey( 10.0f, 0.0f );
     }
     else
     {
-        alpha.addKey( 0.0f, 0.25f ); alpha.setWrapPostMethod( WrapMethod::pingPong );
-        alpha.addKey( 2.0f, 0.05f );
-        alpha.addKey( 3.0f, 0.5f );
-        alpha.addKey( 5.0f, 1.0f );
-        alpha.addKey( 7.0f, 0.75f );
-        alpha.addKey( 8.0f, 0.0f );
+        alpha.AddKey( 0.0f, 0.25f ); alpha.SetWrapPostMethod( WrapMethod::pingPong );
+        alpha.AddKey( 2.0f, 0.05f );
+        alpha.AddKey( 3.0f, 0.5f );
+        alpha.AddKey( 5.0f, 1.0f );
+        alpha.AddKey( 7.0f, 0.75f );
+        alpha.AddKey( 8.0f, 0.0f );
     }
 
-    FloatInterpolator angTex0; angTex0.setWrapPostMethod( WrapMethod::pingPong );
-    FloatInterpolator angTex1; angTex1.setWrapPostMethod( WrapMethod::pingPong );
+    FloatInterpolator angTex0; angTex0.SetWrapPostMethod( WrapMethod::pingPong );
+    FloatInterpolator angTex1; angTex1.SetWrapPostMethod( WrapMethod::pingPong );
 
     if( numcall == 0 ) 
     {
-        angTex0.addKey(0.f, 0.f);
-        angTex0.addKey(3.f, 180.f);
-        angTex0.addKey(4.f, 30.f);
+        angTex0.AddKey(0.f, 0.f);
+        angTex0.AddKey(3.f, 180.f);
+        angTex0.AddKey(4.f, 30.f);
 
-        angTex1.addKey(0.f, 180.f);
-        angTex1.addKey(4.f, 0.f);
-        angTex1.addKey(8.f, 120.f);
+        angTex1.AddKey(0.f, 180.f);
+        angTex1.AddKey(4.f, 0.f);
+        angTex1.AddKey(8.f, 120.f);
     }
     else
     {
-        angTex0.addKey(0.f, 0.f);
-        angTex0.addKey(2.f, 80.f);
-        angTex0.addKey(5.f, -230.f);
+        angTex0.AddKey(0.f, 0.f);
+        angTex0.AddKey(2.f, 80.f);
+        angTex0.AddKey(5.f, -230.f);
 
-        angTex1.addKey(0.f, 280.f);
-        angTex1.addKey(7.f, 0.f);
-        angTex1.addKey(12.f, 120.f);
+        angTex1.AddKey(0.f, 280.f);
+        angTex1.AddKey(7.f, 0.f);
+        angTex1.AddKey(12.f, 120.f);
     }
 
     tx0m.AddRotation( angTex0, x, y, z ); //FIXME: memory lik
     tx1m.AddRotation( angTex1, x, y, z ); //FIXME: memory lik
 
-    FloatInterpolator xs; xs.setWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator ys; ys.setWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator xs; xs.SetWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator ys; ys.SetWrapPostMethod( bv::WrapMethod::pingPong );
     FloatInterpolator zs;
 
     
     if( numcall == 0 )
     {
-        xs.addKey(0.f, 0.5f);
-        xs.addKey(13.f, 4.f);
-        ys.addKey(0.f, 0.5f);
-        ys.addKey(13.f, 4.f);
-        zs.addKey(0.f, 1.f);
+        xs.AddKey(0.f, 0.5f);
+        xs.AddKey(13.f, 4.f);
+        ys.AddKey(0.f, 0.5f);
+        ys.AddKey(13.f, 4.f);
+        zs.AddKey(0.f, 1.f);
     }
     else
     {
-        xs.addKey(0.f, 0.2f);
-        xs.addKey(1.5f, 0.7f);
-        ys.addKey(0.f, 0.2f);
-        ys.addKey(1.5f, 0.67f);
-        zs.addKey(0.f, 1.f);
+        xs.AddKey(0.f, 0.2f);
+        xs.AddKey(1.5f, 0.7f);
+        ys.AddKey(0.f, 0.2f);
+        ys.AddKey(1.5f, 0.67f);
+        zs.AddKey(0.f, 1.f);
     }
 
     trns.AddScale(xs, ys ,zs);
 
     if( numcall == 1 )
     {
-        FloatInterpolator xt; xt.addKey( 0.0f, 0.0f );
-        FloatInterpolator yt; yt.addKey( 0.0f, 0.0f );
-        FloatInterpolator zt; zt.addKey( 0.0f, 0.1f );
+        FloatInterpolator xt; xt.AddKey( 0.0f, 0.0f );
+        FloatInterpolator yt; yt.AddKey( 0.0f, 0.0f );
+        FloatInterpolator zt; zt.AddKey( 0.0f, 0.1f );
 
         trns.AddTranslation( xt, yt, zt );
     }
@@ -296,10 +296,10 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
 
     TransformF trns;
 
-    FloatInterpolator angle; angle.setWrapPostMethod(bv::WrapMethod::pingPong);
+    FloatInterpolator angle; angle.SetWrapPostMethod(bv::WrapMethod::pingPong);
 
-    angle.addKey(0.f, 0.f);
-    angle.addKey(5.f, 360.f);
+    angle.AddKey(0.f, 0.f);
+    angle.AddKey(5.f, 360.f);
 
     trns.AddRotation(angle, ConstValue( 0.f ), ConstValue( 0.f ), ConstValue( 1.f ) );
 
@@ -312,12 +312,12 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     model::SimpleTexturePlugin    * stpp  = nullptr;
 
     FloatInterpolator alpha;
-    alpha.addKey( 0.0f, 0.25f ); alpha.setWrapPostMethod( WrapMethod::pingPong );
-    alpha.addKey( 1.0f, 0.09f );
-    alpha.addKey( 2.0f, 0.5f );
-    alpha.addKey( 5.0f, 1.0f );
-    alpha.addKey( 8.0f, 0.75f );
-    alpha.addKey( 10.0f, 0.2f );
+    alpha.AddKey( 0.0f, 0.25f ); alpha.SetWrapPostMethod( WrapMethod::pingPong );
+    alpha.AddKey( 1.0f, 0.09f );
+    alpha.AddKey( 2.0f, 0.5f );
+    alpha.AddKey( 5.0f, 1.0f );
+    alpha.AddKey( 8.0f, 0.75f );
+    alpha.AddKey( 10.0f, 0.2f );
 
     TransformF tx0m;
     tx0m.AddScale( ConstValue( 1.0f ), alpha, ConstValue( 1.0f ) );
@@ -349,11 +349,11 @@ namespace {
             float z = 2.5f * cosf(alpha);
             float x = 2.5f * sinf(alpha);
             int dev = rand();
-            it->addKey(t, glm::vec3(x, float(dev) / float(RAND_MAX), z));
+            it->AddKey(t, glm::vec3(x, float(dev) / float(RAND_MAX), z));
             t += 0.1f;
         }
 
-        it->addKey(t, glm::vec3(1.f, 1.f, 1.f));
+        it->AddKey(t, glm::vec3(1.f, 1.f, 1.f));
 
         return alpha;
     }
@@ -363,7 +363,7 @@ namespace {
 //    
 void TestParametersFactory::CameraAnimation_ver1( Vec3Interpolator * direction, Vec3Interpolator * position, Vec3Interpolator * up )
 {
-    position->setWrapMethod(WrapMethod::repeat, WrapMethod::repeat);
+    position->SetWrapMethod(WrapMethod::repeat, WrapMethod::repeat);
 
     float t = 0.f;
     double endTime = 2. * M_PI;
@@ -383,12 +383,12 @@ void TestParametersFactory::CameraAnimation_ver1( Vec3Interpolator * direction, 
     //    float z = 2 * cosf(alpha);
     //    float x = 2 * sinf(alpha);
     //    int dev = rand();
-    //    position->addKey(t, glm::vec3(x, float(dev) / float(RAND_MAX), z));
+    //    position->AddKey(t, glm::vec3(x, float(dev) / float(RAND_MAX), z));
     //    t += 0.1f;
     //}
 
-    direction->addKey(0.f, glm::vec3(0.f, 0.f, 0.f));
-    up->addKey(0.f, glm::vec3(0.f, 1.f, 0.f));
+    direction->AddKey(0.f, glm::vec3(0.f, 0.f, 0.f));
+    up->AddKey(0.f, glm::vec3(0.f, 1.f, 0.f));
 
     //m_modelScene->AddCameraInterpolators(direction, position, up);
 }
@@ -397,13 +397,13 @@ void TestParametersFactory::CameraAnimation_ver1( Vec3Interpolator * direction, 
 //    
 void TestParametersFactory::CameraAnimation_ver2( Vec3Interpolator * direction, Vec3Interpolator * position, Vec3Interpolator * up )
 {
-    position->setWrapMethod(WrapMethod::repeat, WrapMethod::pingPong);
+    position->SetWrapMethod(WrapMethod::repeat, WrapMethod::pingPong);
 
     float t = 0.f;
     double endTime = 2. * M_PI;
     double dt = endTime / 10.f;
-    position->addKey(0.f, glm::vec3(-2.f, 0.1f, 3.f));
-    position->addKey(20.f, glm::vec3(2.f, 0.1f, 3.f));
+    position->AddKey(0.f, glm::vec3(-2.f, 0.1f, 3.f));
+    position->AddKey(20.f, glm::vec3(2.f, 0.1f, 3.f));
     
 
     //float alpha = 0.f;
@@ -412,14 +412,14 @@ void TestParametersFactory::CameraAnimation_ver2( Vec3Interpolator * direction, 
     //    float z = 2 * cosf(alpha);
     //    float x = 2 * sinf(alpha);
     //    int dev = rand();
-    //    position->addKey(t, glm::vec3(x, float(dev) / float(RAND_MAX), z));
+    //    position->AddKey(t, glm::vec3(x, float(dev) / float(RAND_MAX), z));
     //    t += 0.1f;
     //}
 
-    direction->addKey(0.f, glm::vec3(0.f, 0.f, 0.f));
+    direction->AddKey(0.f, glm::vec3(0.f, 0.f, 0.f));
 
-    up->addKey(0.f, glm::vec3(0.f, 1.f, 0.f));
-    up->addKey(3.f, glm::vec3(0.f, 1.f, 0.f));
+    up->AddKey(0.f, glm::vec3(0.f, 1.f, 0.f));
+    up->AddKey(3.f, glm::vec3(0.f, 1.f, 0.f));
 
     //m_modelScene->AddCameraInterpolators(direction, position, up);
 }
@@ -450,16 +450,16 @@ model::BasicNode* SceneExamples::BuildMockScene(bv::model::BasicNode * parent )
 
     float rs = 10.f;
 
-    color.addKey(rs * .25f, glm::vec4(0,0,1,0.7f));
-    //color.addKey(rs *.5f, glm::vec4(0.3,0.4,0.5,1));
-    //color.addKey(rs *.75f, glm::vec4(0.1,1.0,0.8,0));
-    //color.addKey(rs *.95f, glm::vec4(0.7,0.2,0.4,1));
-    //color.addKey(rs *1.15f, glm::vec4(0.4,0.1,1.,0));
-    //color.addKey(rs *1.33f, glm::vec4(1,1.0,0.1,1));
-    //color.addKey(rs *1.6f, glm::vec4(1,0.4,0.2,0));
-    //color.addKey(rs *1.9f, glm::vec4(0,0.4,1.0,1));
+    color.AddKey(rs * .25f, glm::vec4(0,0,1,0.7f));
+    //color.AddKey(rs *.5f, glm::vec4(0.3,0.4,0.5,1));
+    //color.AddKey(rs *.75f, glm::vec4(0.1,1.0,0.8,0));
+    //color.AddKey(rs *.95f, glm::vec4(0.7,0.2,0.4,1));
+    //color.AddKey(rs *1.15f, glm::vec4(0.4,0.1,1.,0));
+    //color.AddKey(rs *1.33f, glm::vec4(1,1.0,0.1,1));
+    //color.AddKey(rs *1.6f, glm::vec4(1,0.4,0.2,0));
+    //color.AddKey(rs *1.9f, glm::vec4(0,0.4,1.0,1));
 
-    color.setWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
+    color.SetWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
 
 //    bv::SolidColorPlugin* solid1 = new bv::SolidColorPlugin(color);
 
@@ -467,27 +467,27 @@ model::BasicNode* SceneExamples::BuildMockScene(bv::model::BasicNode * parent )
 
     //bv::FloatInterpolator si;
 
-    //si.setWrapMethod(bv::WrapMethod::repeat, bv::WrapMethod::pingPong);
+    //si.SetWrapMethod(bv::WrapMethod::repeat, bv::WrapMethod::pingPong);
     //float s = 5.0f;
-    ////si.addKey(0.f, 0.5f);si.addKey(0.4f, 0.5f);si.addKey(0.5f, s * 0.6f);si.addKey(0.65f, 0.4f);si.addKey(0.8f, s * 0.9f);si.addKey(0.95f, 0.35f);si.addKey(1.05f, 0.5f);
-    //si.addKey(0.f, 0.1f);
-    //si.addKey(2.4f, 2.5f);//si.addKey(0.5f, s * 0.6f);si.addKey(0.65f, 0.4f);si.addKey(0.8f, s * 0.9f);si.addKey(0.95f, 0.35f);si.addKey(1.05f, 0.5f);
+    ////si.AddKey(0.f, 0.5f);si.AddKey(0.4f, 0.5f);si.AddKey(0.5f, s * 0.6f);si.AddKey(0.65f, 0.4f);si.AddKey(0.8f, s * 0.9f);si.AddKey(0.95f, 0.35f);si.AddKey(1.05f, 0.5f);
+    //si.AddKey(0.f, 0.1f);
+    //si.AddKey(2.4f, 2.5f);//si.AddKey(0.5f, s * 0.6f);si.AddKey(0.65f, 0.4f);si.AddKey(0.8f, s * 0.9f);si.AddKey(0.95f, 0.35f);si.AddKey(1.05f, 0.5f);
     
     //mockTree->setGeometryShaderPlugin(new bv::ExtrudePlugin(si));
 
 //    mockTree->addGeometryPlugin(new bv::PluginGeometryRect(4.f, 4.f));
 
     // TRANSFORMATION
-    bv::FloatInterpolator angle; angle.setWrapPostMethod (bv::WrapMethod::pingPong );
+    bv::FloatInterpolator angle; angle.SetWrapPostMethod (bv::WrapMethod::pingPong );
     bv::FloatInterpolator x;
     bv::FloatInterpolator y;
     bv::FloatInterpolator z;
 
-    x.addKey( 0.f, 0.f );
-    y.addKey( 0.f, 0.f );
-    z.addKey( 0.f, 1.f );
-    angle.addKey( 0.f, 0.f );
-    angle.addKey( 5.f, 180.f );
+    x.AddKey( 0.f, 0.f );
+    y.AddKey( 0.f, 0.f );
+    z.AddKey( 0.f, 1.f );
+    angle.AddKey( 0.f, 0.f );
+    angle.AddKey( 5.f, 180.f );
 
     bv::TransformF trans;
     trans.AddTransform( new bv::RotationF( angle, x,y,z ) );
@@ -511,13 +511,13 @@ model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent 
     // SOLID
     bv::Vec4Interpolator color;
 
-    color.addKey(.0f, glm::vec4(1,0,0,0.5f));
-    //color.addKey(3.f, glm::vec4(0.3,0.4,0.5,1.f));
-    //color.addKey(1.f, glm::vec4(0.1,0.2,0.8,1.f));
+    color.AddKey(.0f, glm::vec4(1,0,0,0.5f));
+    //color.AddKey(3.f, glm::vec4(0.3,0.4,0.5,1.f));
+    //color.AddKey(1.f, glm::vec4(0.1,0.2,0.8,1.f));
 
-    //color.addKey(2.f, glm::vec4(1,0.4,0.5,1.f));
+    //color.AddKey(2.f, glm::vec4(1,0.4,0.5,1.f));
 
-    color.setWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
+    color.SetWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
 
 //    bv::SolidColorPlugin* solid1 = new bv::SolidColorPlugin(color);
 
@@ -525,10 +525,10 @@ model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent 
 
     //bv::FloatInterpolator scaleInt;
 
-    //scaleInt.setWrapMethod(bv::WrapMethod::pingPong, bv::WrapMethod::pingPong);
+    //scaleInt.SetWrapMethod(bv::WrapMethod::pingPong, bv::WrapMethod::pingPong);
 
-    //scaleInt.addKey(0.f, -3.5f);
-    //scaleInt.addKey(-1.30f, 3.5f);
+    //scaleInt.AddKey(0.f, -3.5f);
+    //scaleInt.AddKey(-1.30f, 3.5f);
 
     //mockTree->setGeometryShaderPlugin(new bv::ExtrudePlugin(scaleInt));
 
@@ -541,12 +541,12 @@ model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent 
 
     float s = 2.0f;
     float l = 1.4f;
-    x.addKey(0.f, 0.5f);x.addKey(0.4f, 0.5f);x.addKey(0.5f, s * 0.6f);x.addKey(0.65f, 0.4f);x.addKey(0.8f, s * 0.9f);x.addKey(0.95f, 0.35f);x.addKey(1.05f, 0.5f);
-    y.addKey(0.f, 0.5f);y.addKey(0.4f, 0.5f);y.addKey(0.5f, l * 0.6f);y.addKey(0.65f, 0.4f);y.addKey(0.8f, l * 0.9f);y.addKey(0.95f, 0.35f);y.addKey(1.05f, 0.5f);
-    z.addKey(0.f, 1.f);
+    x.AddKey(0.f, 0.5f);x.AddKey(0.4f, 0.5f);x.AddKey(0.5f, s * 0.6f);x.AddKey(0.65f, 0.4f);x.AddKey(0.8f, s * 0.9f);x.AddKey(0.95f, 0.35f);x.AddKey(1.05f, 0.5f);
+    y.AddKey(0.f, 0.5f);y.AddKey(0.4f, 0.5f);y.AddKey(0.5f, l * 0.6f);y.AddKey(0.65f, 0.4f);y.AddKey(0.8f, l * 0.9f);y.AddKey(0.95f, 0.35f);y.AddKey(1.05f, 0.5f);
+    z.AddKey(0.f, 1.f);
 
-    x.setWrapPostMethod(bv::WrapMethod::repeat);
-    y.setWrapPostMethod(bv::WrapMethod::repeat);
+    x.SetWrapPostMethod(bv::WrapMethod::repeat);
+    y.SetWrapPostMethod(bv::WrapMethod::repeat);
     
     bv::TransformF * trans = new bv::TransformF();
 
@@ -554,13 +554,13 @@ model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent 
     bv::FloatInterpolator my;
     bv::FloatInterpolator mz;
 
-    mx.addKey(0.f, 0.0f);
-    my.addKey(0.f, 0.0f);
-    mz.addKey(0.f, 0.0f);
+    mx.AddKey(0.f, 0.0f);
+    my.AddKey(0.f, 0.0f);
+    mz.AddKey(0.f, 0.0f);
 
-    mx.addKey(1.f, 1.0f);
-    my.addKey(2.f, -2.0f);
-    mz.addKey(3.f, 0.f);
+    mx.AddKey(1.f, 1.0f);
+    my.AddKey(2.f, -2.0f);
+    mz.AddKey(3.f, 0.f);
 
     trans->AddTranslation(mx, my, mz);
     trans->AddScale(x,y,z);
@@ -583,11 +583,11 @@ model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent 
 //{
 //    bv::TransformF* trans = new bv::TransformF();
 //    bv::FloatInterpolator transX;
-//    transX.addKey(0.f,x);
+//    transX.AddKey(0.f,x);
 //    bv::FloatInterpolator transY;
-//    transY.addKey(0.f,y);
+//    transY.AddKey(0.f,y);
 //    bv::FloatInterpolator transZ;
-//    transZ.addKey(0.f,z);
+//    transZ.AddKey(0.f,z);
 //    trans->addTranslation(transX,transY,transZ);
 //    bv::PluginTransformSimple* transPlugin = bv::ModelFactory::CreatePluginTransformSimple(*trans);
 //    return transPlugin;
@@ -600,28 +600,28 @@ model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent 
 //    bv::BasicNode* lineUp = new bv::BasicNode();
 //    bv::Vec4Interpolator color;
 //    
-//    color.addKey(0.01f, glm::vec4(0,0,1,1));
-//    color.setWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
+//    color.AddKey(0.01f, glm::vec4(0,0,1,1));
+//    color.SetWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
 //    bv::SolidColorPlugin* solidRect = new bv::SolidColorPlugin(color);
 //    lineUp->setPixelShaderPlugin(solidRect);
 ////	lineUp->addGeometryPlugin(new bv::PluginGeometryRect(0.1f,0.1f));
 //    
 //    //bez sensu
 //    bv::FloatInterpolator si;
-//    si.setWrapMethod(bv::WrapMethod::repeat, bv::WrapMethod::pingPong);
+//    si.SetWrapMethod(bv::WrapMethod::repeat, bv::WrapMethod::pingPong);
 //    float s = 5.0f;
-//    si.addKey(0.f, 0.1f);
+//    si.AddKey(0.f, 0.1f);
 //    lineUp->setGeometryShaderPlugin(new bv::ExtrudePlugin(si));
 //
 //
 //    bv::FloatInterpolator identity; 
-//    identity.addKey(0.f, 1.f);
+//    identity.AddKey(0.f, 1.f);
 //
 //
 //    bv::FloatInterpolator scaleX; 
-//    scaleX.setWrapPostMethod(bv::WrapMethod::clamp);
-//    scaleX.addKey(0.f, 1.f);
-//    scaleX.addKey(2.f, 10.0f);
+//    scaleX.SetWrapPostMethod(bv::WrapMethod::clamp);
+//    scaleX.AddKey(0.f, 1.f);
+//    scaleX.AddKey(2.f, 10.0f);
 //    
 //    bv::TransformF* trans = new bv::TransformF();
 //    trans->addScale(scaleX,identity,identity);
@@ -650,18 +650,18 @@ model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent 
 //{
 //    bv::BasicNode* rectNode = new bv::BasicNode();
 //    bv::Vec4Interpolator color;
-//    color.addKey(0, glm::vec4(1,0,0,1));
-//    color.setWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
+//    color.AddKey(0, glm::vec4(1,0,0,1));
+//    color.SetWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
 //    bv::SolidColorPlugin* solidRect = new bv::SolidColorPlugin(color);
 //    rectNode->setPixelShaderPlugin(solidRect);
 //
 //    //extrude
 //    bv::FloatInterpolator si;
-//    si.setWrapMethod(bv::WrapMethod::repeat, bv::WrapMethod::pingPong);
+//    si.SetWrapMethod(bv::WrapMethod::repeat, bv::WrapMethod::pingPong);
 //    float s = 5.0f;
-//    si.addKey(0.f, 0.1f);
-//    si.addKey(1.f, -0.1f);
-//    //si.addKey(2.4f, 2.5f);//si.addKey(0.5f, s * 0.6f);si.addKey(0.65f, 0.4f);si.addKey(0.8f, s * 0.9f);si.addKey(0.95f, 0.35f);si.addKey(1.05f, 0.5f);
+//    si.AddKey(0.f, 0.1f);
+//    si.AddKey(1.f, -0.1f);
+//    //si.AddKey(2.4f, 2.5f);//si.AddKey(0.5f, s * 0.6f);si.AddKey(0.65f, 0.4f);si.AddKey(0.8f, s * 0.9f);si.AddKey(0.95f, 0.35f);si.AddKey(1.05f, 0.5f);
 //    rectNode->setGeometryShaderPlugin(new bv::ExtrudePlugin(si));
 //   
 //    //FIXME: not enaf paramiters
@@ -672,11 +672,11 @@ model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent 
 //    // b edzie sie rozszerzal
 //
 //    bv::FloatInterpolator identity; 
-//    identity.addKey(0.f, 1.f);
+//    identity.AddKey(0.f, 1.f);
 //
-//    bv::FloatInterpolator scaleX; scaleX.setWrapPostMethod(bv::WrapMethod::pingPong);
-//    scaleX.addKey(0.f, 1.f);
-//    scaleX.addKey(5.f, 1.2f);
+//    bv::FloatInterpolator scaleX; scaleX.SetWrapPostMethod(bv::WrapMethod::pingPong);
+//    scaleX.AddKey(0.f, 1.f);
+//    scaleX.AddKey(5.f, 1.2f);
 //    
 //    bv::TransformF* trans = new bv::TransformF();
 //    trans->addScale(scaleX,identity,identity);
@@ -703,10 +703,10 @@ model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent 
 //
 //    float rs = 10.f;
 //
-//    color.addKey(2, glm::vec4(0.1,0,0,1));
-//    color.addKey(5, glm::vec4(1,0,0,1));
+//    color.AddKey(2, glm::vec4(0.1,0,0,1));
+//    color.AddKey(5, glm::vec4(1,0,0,1));
 // 
-//    color.setWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
+//    color.SetWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
 //
 //    bv::SolidColorPlugin* solid1 = new bv::SolidColorPlugin(color);
 //
@@ -714,11 +714,11 @@ model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent 
 //
 //    bv::FloatInterpolator si;
 //
-//    si.setWrapMethod(bv::WrapMethod::repeat, bv::WrapMethod::pingPong);
+//    si.SetWrapMethod(bv::WrapMethod::repeat, bv::WrapMethod::pingPong);
 //    float s = 5.0f;
-//    si.addKey(0.f, 0.1f);
-//    si.addKey(0.2f, 1.2f);
-//    //si.addKey(2.4f, 2.5f);//si.addKey(0.5f, s * 0.6f);si.addKey(0.65f, 0.4f);si.addKey(0.8f, s * 0.9f);si.addKey(0.95f, 0.35f);si.addKey(1.05f, 0.5f);
+//    si.AddKey(0.f, 0.1f);
+//    si.AddKey(0.2f, 1.2f);
+//    //si.AddKey(2.4f, 2.5f);//si.AddKey(0.5f, s * 0.6f);si.AddKey(0.65f, 0.4f);si.AddKey(0.8f, s * 0.9f);si.AddKey(0.95f, 0.35f);si.AddKey(1.05f, 0.5f);
 //
 //    mockTree->setGeometryShaderPlugin(new bv::ExtrudePlugin(si));
 //
@@ -727,35 +727,35 @@ model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent 
 //    FloatInterpolator start;
 //    FloatInterpolator end;
 //
-//    radIn.addKey(0.f, 1.7f);
-//    radOut.addKey(0.f, 2.f);
-//    start.addKey(0.f, startAngle);
-//    end.addKey(0.f, endAngle);
+//    radIn.AddKey(0.f, 1.7f);
+//    radOut.AddKey(0.f, 2.f);
+//    start.AddKey(0.f, startAngle);
+//    end.AddKey(0.f, endAngle);
 ////	   mockTree->addGeometryPlugin(new bv::PluginGeometryRing(radIn, radOut, start, end, 3));
 //    //mockTree->addGeometryPlugin(new bv::PluginGeometryRect());
 //
 //    // TRANSFORMATION
-//    bv::FloatInterpolator angle; angle.setWrapPostMethod(bv::WrapMethod::pingPong);
+//    bv::FloatInterpolator angle; angle.SetWrapPostMethod(bv::WrapMethod::pingPong);
 //    bv::FloatInterpolator x;
 //    bv::FloatInterpolator y;
 //    bv::FloatInterpolator z;
 //
-//    x.addKey(0.f, 0.f);
-//    y.addKey(0.f, 0.f);
-//    z.addKey(0.f, -1.1f);
-//    angle.addKey(0.f, 0.f);
-//    //angle.addKey(5.f, 180.f);
+//    x.AddKey(0.f, 0.f);
+//    y.AddKey(0.f, 0.f);
+//    z.AddKey(0.f, -1.1f);
+//    angle.AddKey(0.f, 0.f);
+//    //angle.AddKey(5.f, 180.f);
 //
 //    bv::TransformF* trans = new bv::TransformF();
 //    
 //    bv::FloatInterpolator transX;
-//    transX.addKey(0.f,offsetX);
+//    transX.AddKey(0.f,offsetX);
 //
 //    bv::FloatInterpolator transY;
-//    transY.addKey(0.f,offsetY);
+//    transY.AddKey(0.f,offsetY);
 //    
 //    bv::FloatInterpolator transZ;
-//    transZ.addKey(0.f,offsetZ);
+//    transZ.AddKey(0.f,offsetZ);
 //
 //    trans->addTranslation(transX,transY,transZ);
 //
@@ -781,22 +781,22 @@ model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent 
 //    bv::BasicNode* rectNode = new bv::BasicNode();
 //    bv::Vec4Interpolator color;
 //    float atom=0.1f;
-//    color.addKey(number*atom, glm::vec4(0,0,0,0));
-//    color.addKey(number*atom+2, glm::vec4(0,0,0,0));
-//    color.addKey(number*atom+3, glm::vec4(1,0,0,1));
-//    color.addKey(number*atom+4, glm::vec4(0,0,0,0));
-//    color.addKey(number*atom+6, glm::vec4(0,0,0,0));
-//    color.setWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::repeat);
+//    color.AddKey(number*atom, glm::vec4(0,0,0,0));
+//    color.AddKey(number*atom+2, glm::vec4(0,0,0,0));
+//    color.AddKey(number*atom+3, glm::vec4(1,0,0,1));
+//    color.AddKey(number*atom+4, glm::vec4(0,0,0,0));
+//    color.AddKey(number*atom+6, glm::vec4(0,0,0,0));
+//    color.SetWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::repeat);
 //    bv::SolidColorPlugin* solidRect = new bv::SolidColorPlugin(color);
 //    rectNode->setPixelShaderPlugin(solidRect);
 //
 //    //extrude
 //    bv::FloatInterpolator si;
-//    si.setWrapMethod(bv::WrapMethod::repeat, bv::WrapMethod::pingPong);
+//    si.SetWrapMethod(bv::WrapMethod::repeat, bv::WrapMethod::pingPong);
 //    float s = 5.0f;
-//    si.addKey(0.f, 0.1f);
-//    //si.addKey(1.f, 0.3f);
-//    //si.addKey(2.4f, 2.5f);//si.addKey(0.5f, s * 0.6f);si.addKey(0.65f, 0.4f);si.addKey(0.8f, s * 0.9f);si.addKey(0.95f, 0.35f);si.addKey(1.05f, 0.5f);
+//    si.AddKey(0.f, 0.1f);
+//    //si.AddKey(1.f, 0.3f);
+//    //si.AddKey(2.4f, 2.5f);//si.AddKey(0.5f, s * 0.6f);si.AddKey(0.65f, 0.4f);si.AddKey(0.8f, s * 0.9f);si.AddKey(0.95f, 0.35f);si.AddKey(1.05f, 0.5f);
 //    rectNode->setGeometryShaderPlugin(new bv::ExtrudePlugin(si));
 //    
 //    //rectNode->addGeometryPlugin(new bv::PluginGeometryRect(RectWidth,0.1f));
@@ -804,11 +804,11 @@ model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent 
 //    // b edzie sie rozszerzal
 //
 //    bv::FloatInterpolator identity; 
-//    identity.addKey(0.f, 1.f);
+//    identity.AddKey(0.f, 1.f);
 //
-//    bv::FloatInterpolator scaleX; scaleX.setWrapPostMethod(bv::WrapMethod::pingPong);
-//    scaleX.addKey(0.f, 1.f);
-//    scaleX.addKey(5.f, 1.2f);
+//    bv::FloatInterpolator scaleX; scaleX.SetWrapPostMethod(bv::WrapMethod::pingPong);
+//    scaleX.AddKey(0.f, 1.f);
+//    scaleX.AddKey(5.f, 1.2f);
 //    
 //    bv::TransformF* trans = new bv::TransformF();
 //    trans->addScale(scaleX,identity,identity);

@@ -96,10 +96,10 @@ void TestScene()
 	bv::FloatInterpolator attrB;
 	bv::FloatInterpolator attrA;
 
-	attrR.addKey( t0, 1.0f ); attrR.addKey( t1, 0.0f );
-	attrG.addKey( t0, 0.2f ); attrG.addKey( (t1 + t0)  * 0.5f, 0.9f ); attrG.addKey( t1, 0.2f );
-	attrB.addKey( t0, 0.0 ); attrB.addKey( t1, 1.0 );
-	attrA.addKey( t0, 1.0 ); attrA.addKey( ( t1 + t0 ) * 0.5f, 0.2f ); attrA.addKey( t1, 0.0 );
+	attrR.AddKey( t0, 1.0f ); attrR.AddKey( t1, 0.0f );
+	attrG.AddKey( t0, 0.2f ); attrG.AddKey( (t1 + t0)  * 0.5f, 0.9f ); attrG.AddKey( t1, 0.2f );
+	attrB.AddKey( t0, 0.0 ); attrB.AddKey( t1, 1.0 );
+	attrA.AddKey( t0, 1.0 ); attrA.AddKey( ( t1 + t0 ) * 0.5f, 0.2f ); attrA.AddKey( t1, 0.0 );
 
 //	bv::MaterialSolidColorF mat0( attrR, attrG, attrB, attrA );
 //	bv::BaseObject * pRect0 = new bv::Rectangle( 200, 50, mat0 );
@@ -116,23 +116,23 @@ int main(int argc, char** argv)
 {
     bv::DoubleInterpolator di = bv::DoubleInterpolator(0.00005);
     
-    di.addKey( 0.0, 1.0 );
+    di.AddKey( 0.0, 1.0 );
     di.evaluate( -1.0 );
     di.evaluate( 0.0 );
     di.evaluate( 1.0 );
-    di.addKey( 0.0, -2.0 );
+    di.AddKey( 0.0, -2.0 );
     di.evaluate( -1.0 );
     di.evaluate( 0.0 );
     di.evaluate( 1.0 );
-    di.addKey( 0.0, 1.0 );
-    di.addKey( -1.0, -2.0 );
+    di.AddKey( 0.0, 1.0 );
+    di.AddKey( -1.0, -2.0 );
 
     bv::FloatInterpolator fi = bv::FloatInterpolator(0.0000001f);
     
-    fi.addKey( 0.0, 0.0 );
-    fi.addKey( 0.0, -2.0 );
-    fi.addKey( 0.0, 0.0 );
-    fi.addKey( -1.0, -2.0 );
+    fi.AddKey( 0.0, 0.0 );
+    fi.AddKey( 0.0, -2.0 );
+    fi.AddKey( 0.0, 0.0 );
+    fi.AddKey( -1.0, -2.0 );
 
     bv::DoubleTransformation trans;
     assert(trans.size() == 0);

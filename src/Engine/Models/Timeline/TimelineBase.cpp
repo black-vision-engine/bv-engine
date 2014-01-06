@@ -23,9 +23,9 @@ TimelineBase::TimelineBase          ( TimeType startTime, TimeType endTime, floa
  
     assert( startTime < endTime );
     
-    m_interpolator.addKey( startTime, 0.f );
-    m_interpolator.addKey( endTime, scale * ( endTime - startTime ) );
-    m_interpolator.setWrapMethod( WrapMethod::clamp, WrapMethod::clamp );
+    m_interpolator.AddKey( startTime, 0.f );
+    m_interpolator.AddKey( endTime, scale * ( endTime - startTime ) );
+    m_interpolator.SetWrapMethod( WrapMethod::clamp, WrapMethod::clamp );
 }
 
 // *********************************
@@ -45,18 +45,18 @@ TimelineBase::TimelineBase          ( const TimelineSettings & settings, TimeTyp
 
     assert( startTime < endTime );
 
-    m_interpolator.addKey( startTime, 0.f );
-    m_interpolator.addKey( endTime, scale * ( endTime - startTime ) );
-    m_interpolator.setWrapMethod( WrapMethod::clamp, WrapMethod::clamp );
+    m_interpolator.AddKey( startTime, 0.f );
+    m_interpolator.AddKey( endTime, scale * ( endTime - startTime ) );
+    m_interpolator.SetWrapMethod( WrapMethod::clamp, WrapMethod::clamp );
 
     if( m_settings.m_preBehavior != TimelineOutBehavior::TOB_CONST_VAL )
     {
-        m_interpolator.setWrapPreMethod( tob_2_wrap[ (int) m_settings.m_preBehavior ] );
+        m_interpolator.SetWrapPreMethod( tob_2_wrap[ (int) m_settings.m_preBehavior ] );
     }
 
     if( m_settings.m_postBehavior != TimelineOutBehavior::TOB_CONST_VAL )
     {
-        m_interpolator.setWrapPostMethod( tob_2_wrap[ (int) m_settings.m_postBehavior ] );
+        m_interpolator.SetWrapPostMethod( tob_2_wrap[ (int) m_settings.m_postBehavior ] );
     }
 }
 
@@ -74,9 +74,9 @@ void   TimelineBase::SetInterval    ( TimeType startTime, TimeType endTime, floa
 
     TimeInterpolator ti;
 
-    ti.setWrapMethod( m_interpolator.getWrapPreMethod(), m_interpolator.getWrapPostMethod() );
-    ti.addKey( startTime, 0.f );
-    ti.addKey( endTime, scale * ( endTime - startTime ) );
+    ti.SetWrapMethod( m_interpolator.GetWrapPreMethod(), m_interpolator.GetWrapPostMethod() );
+    ti.AddKey( startTime, 0.f );
+    ti.AddKey( endTime, scale * ( endTime - startTime ) );
 
     m_interpolator = ti;
 }
@@ -90,7 +90,7 @@ TimeType    TimelineBase::Evaluate  ( TimeType t ) const
     else if( t > EndTime() && m_settings.m_postBehavior == TimelineOutBehavior::TOB_CONST_VAL )
         return m_settings.m_constValPost;
 
-    return m_interpolator.evaluate( t );
+    return m_interpolator.Evaluate( t );
 }
 
 // *********************************

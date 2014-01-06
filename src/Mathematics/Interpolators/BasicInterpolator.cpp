@@ -12,80 +12,97 @@ namespace bv
 {
 namespace
 {
-    int round( double val )
-    {
-        return static_cast<int>( std::floor( 0.5 + val ) );
-    }
 
-    template<class TimeValueT, class ValueT>
-    ValueT evaluateLinear(const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT, ValueT> & k1, TimeValueT t)
-    {
-        if (!(k0.t <= k1.t && k0.t <= t && t <= k1.t))
-        {
-            std::cerr << "Invalid interval ("<< k0.t <<", " << k1.t << ") or param " << t;
-        }
-
-        assert(k0.t <= k1.t && k0.t <= t && t <= k1.t);
-
-        if( k0.t == k1.t )
-            return k0.val;
-
-        ValueT scl =ValueT((TimeValueT)1.0 / (k1.t - k0.t));
-        ValueT w0 = ValueT(scl * ValueT(k1.t - t));
-        ValueT w1 = ValueT((ValueT)1.0 - w0);
-
-        ValueT v0 = k0.val;
-        ValueT v1 = k1.val;
-
-        v0 *= w0;
-        v1 *= w1;
-
-        return ValueT(v0 + v1);
-    }
-
-    template<class TimeValueT, class ValueT>
-    ValueT evaluatePoint(const Key<TimeValueT, ValueT>& k0, const Key<TimeValueT, ValueT>& k1, TimeValueT t)
-    {
-        if (!(k0.t <= k1.t && k0.t <= t && t <= k1.t))
-        {
-            std::cerr << "Invalid interval ("<< k0.t <<", " << k1.t << ") or param " << t;
-        }
-
-        assert(k0.t <= k1.t && k0.t <= t && t <= k1.t);
-
-        if ( k1.t == t )
-            return k1.val;
-    
-        return k0.val;
-    }
-
+// *************************************
+//
+int round( double val )
+{
+    return static_cast<int>( std::floor( 0.5 + val ) );
 }
+
+// *************************************
+//
+template<class TimeValueT, class ValueT>
+ValueT EvaluateLinear( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT, ValueT> & k1, TimeValueT t )
+{
+    if ( !( k0.t <= k1.t && k0.t <= t && t <= k1.t ) )
+    {
+        std::cerr << "Invalid interval ("<< k0.t <<", " << k1.t << ") or param " << t;
+    }
+
+    assert( k0.t <= k1.t && k0.t <= t && t <= k1.t );
+
+    if( k0.t == k1.t )
+        return k0.val;
+
+    ValueT scl =ValueT( ( TimeValueT )1.0 / ( k1.t - k0.t ) );
+    ValueT w0 = ValueT( scl * ValueT( k1.t - t ) );
+    ValueT w1 = ValueT( ( ValueT )1.0 - w0 );
+
+    ValueT v0 = k0.val;
+    ValueT v1 = k1.val;
+
+    v0 *= w0;
+    v1 *= w1;
+
+    return ValueT( v0 + v1 );
+}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT>
+ValueT EvaluatePoint( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT, ValueT> & k1, TimeValueT t )
+{
+    if ( !( k0.t <= k1.t && k0.t <= t && t <= k1.t ) )
+    {
+        std::cerr << "Invalid interval ("<< k0.t <<", " << k1.t << ") or param " << t;
+    }
+
+    assert( k0.t <= k1.t && k0.t <= t && t <= k1.t );
+
+    if ( k1.t == t )
+        return k1.val;
+    
+    return k0.val;
+}
+
+} //anonynous
+// *************************************
+//
 
 template<class TimeValueT, class ValueT>
 Key<TimeValueT, ValueT>::Key(TimeValueT t, ValueT val)
     : t(t), val(val)
-{}
+{
+}
 
-
+// *************************************
+//
 template<class TimeValueT, class ValueT>
 BasicInterpolator<TimeValueT, ValueT>::BasicInterpolator(TimeValueT tolerance)
-    : tolerance(tolerance), wrapPost(WrapMethod::clamp), wrapPre(WrapMethod::clamp)
+    : tolerance( tolerance )
+    , wrapPost( WrapMethod::clamp )
+    , wrapPre( WrapMethod::clamp )
 {
-    assert(tolerance > static_cast<TimeValueT>(0.));
+    assert( tolerance > static_cast<TimeValueT>(0.) );
 }
 
+// *************************************
+//
 template<class TimeValueT, class ValueT>
-void BasicInterpolator<TimeValueT, ValueT>::addKey(TimeValueT t, ValueT v)
+void BasicInterpolator<TimeValueT, ValueT>::AddKey( TimeValueT t, ValueT v )
 {
-    addKey(Key<TimeValueT, ValueT>(t,v));
+    AddKey( Key<TimeValueT, ValueT>( t, v ) );
 }
 
+// *************************************
+//
 template<class TimeValueT, class ValueT>
-void BasicInterpolator<TimeValueT, ValueT>::addKey(const Key<TimeValueT, ValueT>& key)
+void BasicInterpolator<TimeValueT, ValueT>::AddKey( const Key<TimeValueT, ValueT> & key )
 {
-    if(keys.size() == 0)
+    if( keys.size() == 0 )
     {
-        keys.push_back(key);
+        keys.push_back( key );
         return;
     }
     
@@ -95,37 +112,37 @@ void BasicInterpolator<TimeValueT, ValueT>::addKey(const Key<TimeValueT, ValueT>
     TimeValueT tStart = keys.front().t;
     TimeValueT tEnd = keys.back().t;
 
-    if (t < tStart)
+    if ( t < tStart )
     {
-        if (tStart - t > tolerance)
+        if ( tStart - t > tolerance )
         {
-            keys.insert(keys.begin(),key);
+            keys.insert( keys.begin(), key );
         }
         else
         {
-            keys[0].val = v;
+            keys[ 0 ].val = v;
         }
 
         return;
     }
 
-    if (t > tEnd)
+    if ( t > tEnd )
     {
-        if (t - tEnd > tolerance)
+        if ( t - tEnd > tolerance )
         {
-            keys.push_back(key);
+            keys.push_back( key );
         }
         else
         {
-            (*keys.end()).val = v;
+            ( *keys.end() ).val = v;
         }
 
         return;
     }
 
-    for(auto it = keys.begin(); it != keys.end(); ++it)
+    for( auto it = keys.begin(); it != keys.end(); ++it )
     {
-        if (std::fabs( (*it).t - t ) <= tolerance)
+        if ( std::fabs( (*it).t - t ) <= tolerance )
         {
             (*it).val = v;
             return;
@@ -135,35 +152,74 @@ void BasicInterpolator<TimeValueT, ValueT>::addKey(const Key<TimeValueT, ValueT>
 
         if (    t > (*it).t 
             &&  t < (*next).t
-            &&  std::fabs( t - (*next).t) > tolerance)
+            &&  std::fabs( t - (*next).t) > tolerance )
         {
             keys.insert( next, key );
+
             return;
         }
 
     }
-
 }
 
+// *************************************
+//
 template<class TimeValueT, class ValueT>
-ValueT BasicInterpolator<TimeValueT, ValueT>::evaluate(TimeValueT t) const
+ValueT BasicInterpolator<TimeValueT, ValueT>::Evaluate( TimeValueT t ) const
 {
-    assert(keys.size() > 0 && "No keys added to the interpolator");
+    assert( keys.size() > 0 && "No keys added to the interpolator" );
 
     TimeValueT tStart = keys.front().t;
     TimeValueT tEnd = keys.back().t;
 
-    if (t < tStart)
-        t = calcPreT( t );
+    if ( t < tStart )
+        t = CalcPreT( t );
     else
-        if(t > tEnd)
-            t = calcPostT( t );
+        if( t > tEnd )
+            t = CalcPostT( t );
 
     auto maxKeyIdx = keys.size() - 1;
 
-    for (unsigned int i = 0; i < keys.size(); ++i)
+    for ( unsigned int i = 0; i < keys.size(); ++i )
     {
-        if(t >= keys[i].t)
+        if( t >= keys[ i ].t )
+        {
+            auto i0 = i;
+            auto i1 = std::min( maxKeyIdx, i + 1 );
+
+            auto k1 = keys[ i1 ];
+
+            if( t <= k1.t )
+            {
+                return EvaluateLinear( keys[ i0 ], keys[ i1 ], t );
+            }
+        }
+    }
+
+    return EvaluateLinear( keys[ maxKeyIdx ], keys[ maxKeyIdx ], t );
+}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT>
+ValueT BasicInterpolator<TimeValueT, ValueT>::EvaluatePoint( TimeValueT t ) const
+{
+    assert( keys.size() > 0 && "No keys added to the interpolator" );
+
+    TimeValueT tStart = keys.front().t;
+    TimeValueT tEnd = keys.back().t;
+
+    if ( t < tStart )
+        t = CalcPreT( t );
+    else
+        if( t > tEnd )
+            t = CalcPostT( t );
+
+    auto maxKeyIdx = keys.size() - 1;
+
+    for ( unsigned int i = 0; i < keys.size(); ++i )
+    {
+        if( t >= keys[ i ].t )
         {
             auto i0 = i;
             auto i1 = std::min( maxKeyIdx, i + 1 );
@@ -172,75 +228,42 @@ ValueT BasicInterpolator<TimeValueT, ValueT>::evaluate(TimeValueT t) const
 
             if(t <= k1.t)
             {
-                return evaluateLinear(keys[i0], keys[ i1 ], t);
+                return bv::EvaluatePoint( keys[ i0 ], keys[ i1 ], t );
             }
         }
     }
 
-    return evaluateLinear(keys[maxKeyIdx], keys[maxKeyIdx], t);
+    return bv::EvaluatePoint( keys[ maxKeyIdx ], keys[ maxKeyIdx ], t );
 }
 
+// *************************************
+//
 template<class TimeValueT, class ValueT>
-ValueT BasicInterpolator<TimeValueT, ValueT>::evaluatePoint(TimeValueT t) const
-{
-    assert(keys.size() > 0 && "No keys added to the interpolator");
-
-    TimeValueT tStart = keys.front().t;
-    TimeValueT tEnd = keys.back().t;
-
-    if (t < tStart)
-        t = calcPreT( t );
-    else
-        if(t > tEnd)
-            t = calcPostT( t );
-
-    auto maxKeyIdx = keys.size() - 1;
-
-    for (unsigned int i = 0; i < keys.size(); ++i)
-    {
-        if(t >= keys[i].t)
-        {
-            auto i0 = i;
-            auto i1 = std::min( maxKeyIdx, i + 1 );
-
-            auto k1 = keys[ i1 ];
-
-            if(t <= k1.t)
-            {
-                return bv::evaluatePoint(keys[i0], keys[ i1 ], t);
-            }
-        }
-    }
-
-    return bv::evaluatePoint(keys[maxKeyIdx], keys[maxKeyIdx], t);
-}
-
-template<class TimeValueT, class ValueT>
-TimeValueT BasicInterpolator<TimeValueT, ValueT>::calcPreT(TimeValueT t) const
+TimeValueT BasicInterpolator<TimeValueT, ValueT>::CalcPreT( TimeValueT t ) const
 {
     TimeValueT tStart = keys.front().t;
     TimeValueT tEnd = keys.back().t;
 
     auto interval = tEnd - tStart;
-    if(interval <= tolerance)
+    if( interval <= tolerance )
         return tStart;
 
     t = t - tStart;
 
-    if(wrapPre == WrapMethod::clamp)
+    if( wrapPre == WrapMethod::clamp )
         return tStart;
-    else if(wrapPost == WrapMethod::repeat)
+    else if( wrapPost == WrapMethod::repeat )
     {
         TimeValueT q = interval;
-        TimeValueT r = std::modf(t, &q);
+        TimeValueT r = std::modf( t, &q );
         return tStart + r;
     }
-    else if (wrapPost == WrapMethod::pingPong)
+    else if ( wrapPost == WrapMethod::pingPong )
     {
         TimeValueT q = interval;
-        TimeValueT r = std::modf(t, &q);
+        TimeValueT r = std::modf( t, &q );
 
-        if(round( q ) % 2 == 0)
+        if( round( q ) % 2 == 0 )
         {
             return tStart + r;
         }
@@ -249,54 +272,61 @@ TimeValueT BasicInterpolator<TimeValueT, ValueT>::calcPreT(TimeValueT t) const
             return tStart + interval - r;
         }
     }
+
     return t;
 }
 
 namespace 
 {
-    double divmod(double t, double* i)
-    {
-        double ret = std::fmod(t, *i);
-        *i = (t - ret) / *i;
 
-        return ret;
-    }
+// *************************************
+//
+double divmod( double t, double * i )
+{
+    double ret = std::fmod( t, *i );
+    *i = ( t - ret ) / *i;
 
-    float divmod(float t, float* i)
-    {
-        float ret = std::fmod(t, *i);
-        *i = (t - ret) / *i;
+    return ret;
+}
 
-        return ret;
-    }
+// *************************************
+//
+float divmod( float t, float * i )
+{
+    float ret = std::fmod( t, *i );
+    *i = ( t - ret ) / *i;
+
+    return ret;
+}
+
 }
 
 template<class TimeValueT, class ValueT>
-TimeValueT BasicInterpolator<TimeValueT, ValueT>::calcPostT(TimeValueT t) const
+TimeValueT BasicInterpolator<TimeValueT, ValueT>::CalcPostT( TimeValueT t ) const
 {
     TimeValueT tStart = keys.front().t;
     TimeValueT tEnd = keys.back().t;
 
     auto interval = tEnd - tStart;
-    if(interval <= tolerance)
+    if( interval <= tolerance )
         return tEnd;
 
     t = t - tStart;
 
-    if(wrapPost == WrapMethod::clamp)
+    if( wrapPost == WrapMethod::clamp )
         return tEnd;
-    else if(wrapPost == WrapMethod::repeat)
+    else if( wrapPost == WrapMethod::repeat )
     {
         TimeValueT q = interval;
-        TimeValueT r = divmod(t, &q);
+        TimeValueT r = divmod( t, &q );
         return tStart + r;
     }
-    else if(wrapPost == WrapMethod::pingPong)
+    else if( wrapPost == WrapMethod::pingPong )
     {
         TimeValueT q = interval;
         TimeValueT r = divmod(t, &q);
 
-        if(round( q ) % 2 == 0)
+        if( round( q ) % 2 == 0 )
         {
             return tStart + r;
         }
@@ -305,55 +335,72 @@ TimeValueT BasicInterpolator<TimeValueT, ValueT>::calcPostT(TimeValueT t) const
             return tStart + interval - r;
         }
     }
+
     return t;
 }
 
+// *************************************
+//
 template<class TimeValueT, class ValueT>
-void BasicInterpolator<TimeValueT, ValueT>::setWrapPostMethod(WrapMethod wm)
+void BasicInterpolator<TimeValueT, ValueT>::SetWrapPostMethod( WrapMethod wm )
 {
     wrapPost = wm;
 }
 
+// *************************************
+//
 template<class TimeValueT, class ValueT>
-void BasicInterpolator<TimeValueT, ValueT>::setWrapPreMethod(WrapMethod wm)
+void BasicInterpolator<TimeValueT, ValueT>::SetWrapPreMethod (WrapMethod wm )
 {
     wrapPre= wm;
 }
 
+// *************************************
+//
 template<class TimeValueT, class ValueT>
-WrapMethod BasicInterpolator<TimeValueT, ValueT>::getWrapPostMethod() const
+WrapMethod BasicInterpolator<TimeValueT, ValueT>::GetWrapPostMethod() const
 {
     return wrapPost;
 }
 
+// *************************************
+//
 template<class TimeValueT, class ValueT>
-WrapMethod BasicInterpolator<TimeValueT, ValueT>::getWrapPreMethod() const
+WrapMethod BasicInterpolator<TimeValueT, ValueT>::GetWrapPreMethod() const
 {
     return wrapPre;
 }
 
+// *************************************
+//
 template<class TimeValueT, class ValueT>
-void BasicInterpolator<TimeValueT, ValueT>::setWrapMethod( WrapMethod pre, WrapMethod post )
+void BasicInterpolator<TimeValueT, ValueT>::SetWrapMethod( WrapMethod pre, WrapMethod post )
 {
-    setWrapPostMethod( post );
-    setWrapPreMethod( pre );
+    SetWrapPostMethod( post );
+    SetWrapPreMethod( pre );
 }
 
+// *************************************
+//
 template<class TimeValueT, class ValueT>
 int BasicInterpolator<TimeValueT, ValueT>::EvalToCBuffer( TimeValueT time, char * buf ) const
 {
-    ValueT val = evaluate( time );
+    ValueT val = Evaluate( time );
     memcpy( buf, &val, value_size );
 
     return value_size;
 }
 
+// *************************************
+//
 template<class TimeValueT, class ValueT>
 const typename BasicInterpolator<TimeValueT, ValueT>::KeyType &     BasicInterpolator<TimeValueT, ValueT>::FirstKey    () const
 {
     return keys[ 0 ];
 }
 
+// *************************************
+//
 template<class TimeValueT, class ValueT>
 const typename BasicInterpolator<TimeValueT, ValueT>::KeyType &     BasicInterpolator<TimeValueT, ValueT>::LastKey     () const
 {

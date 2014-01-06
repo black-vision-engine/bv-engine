@@ -2,18 +2,18 @@
 
 #include "Mathematics/Transform/MatTransform.h"
 
+#include "Engine/Models/Plugins/Parameters/TypedParameters.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
 
 namespace bv { namespace model {
 
-class ParamFloat;
-
 // ***************************** UID **********************************
 class GeometryMultiRectPluginUID
 {
 public:
-    static const char*       GetName()        { return "geometry_multi_rect_plugin"; }
+
+    static const char *       GetName()       { return "geometry_multi_rect_plugin"; }
 };
 
 
@@ -22,7 +22,7 @@ class GeometryMultiRectPlugin : public BasePlugin< IPlugin, GeometryMultiRectPlu
 {
 private:
 
-    model::VertexAttributesChannel*     m_geomChannel;
+    model::VertexAttributesChannel *    m_geomChannel;
 
 public:
 

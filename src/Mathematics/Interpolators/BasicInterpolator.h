@@ -23,7 +23,7 @@ public:
 
 public:
 
-    explicit Key(TimeValueT t, ValueT val);
+    explicit Key( TimeValueT t, ValueT val );
 };
 
 template<class TimeValueT>
@@ -50,31 +50,33 @@ public:
 
     typedef Key<TimeValueT, ValueT> KeyType;
 
-    typedef TimeValueT TimeT;
-    typedef ValueT ValT;
-    typedef Interpolator<TimeValueT> ParentType;
+    typedef TimeValueT                  TimeT;
+    typedef ValueT                      ValT;
+    typedef Interpolator<TimeValueT>    ParentType;
 
     static const int value_size = sizeof( ValueT );
 
-    explicit BasicInterpolator( TimeValueT tolerance = 0.0001 );
-    virtual ~BasicInterpolator() {};
+public:
 
-    void addKey             ( TimeValueT t, ValueT v );
-    void addKey             ( const Key<TimeValueT, ValueT> & key );
+    explicit BasicInterpolator  ( TimeValueT tolerance = 0.0001 );
+    virtual ~BasicInterpolator  () {};
 
-    ValueT evaluate         ( TimeValueT t ) const;
-    ValueT evaluatePoint    ( TimeValueT t ) const;
+    void AddKey             ( TimeValueT t, ValueT v );
+    void AddKey             ( const Key<TimeValueT, ValueT> & key );
 
-    TimeValueT calcPreT     ( TimeValueT t ) const;
-    TimeValueT calcPostT    ( TimeValueT t ) const;
+    ValueT Evaluate         ( TimeValueT t ) const;
+    ValueT EvaluatePoint    ( TimeValueT t ) const;
 
-    void setWrapPostMethod  ( WrapMethod );
-    void setWrapPreMethod   ( WrapMethod );
+    TimeValueT CalcPreT     ( TimeValueT t ) const;
+    TimeValueT CalcPostT    ( TimeValueT t ) const;
 
-    WrapMethod getWrapPostMethod() const;
-    WrapMethod getWrapPreMethod () const;
+    void SetWrapPostMethod  ( WrapMethod );
+    void SetWrapPreMethod   ( WrapMethod );
 
-    void setWrapMethod( WrapMethod pre, WrapMethod post );
+    WrapMethod GetWrapPostMethod() const;
+    WrapMethod GetWrapPreMethod () const;
+
+    void SetWrapMethod( WrapMethod pre, WrapMethod post );
 
     virtual int EvalToCBuffer( TimeValueT time, char * buf ) const;
 
@@ -83,4 +85,4 @@ public:
 
 };
 
-}
+} //bv
