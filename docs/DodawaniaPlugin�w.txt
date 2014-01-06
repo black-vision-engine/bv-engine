@@ -1,0 +1,14 @@
+Klasa bv::model::BasicNode przechwuje listê pliginów w postaci std::vector< IPlugin* >
+Dodawanie pluginów do tej listy powinno odbywaæ siê w ustalonej kolejnoœci.
+
+Podstawowe za³o¿enie jakie powinny spe³niaæ pluginy w tej liœcie to:
+
+1. Na pocz¹tku listy zostaj¹ umieszczone tylko i wy³acznie pluginy modyfikuj¹ce geometriê lub transformacjê.
+2. Na koñcu powinny pojawiæ siê pluginy które definiuj¹ Shadery. 
+
+Taka kolejnoœæ jest wymagana poniewa¿ kana³ geometrii mo¿e dodaæ nowe kana³y do connected komponentów. Zatem implemetacja shadera musi odpowiednio ich uzywaæ.
+
+Wszyskie potrzebne za³o¿enia powinnien sprawdzaæ Finalize plugin który bêdzie zaimplementowany póŸniej.
+
+Na razie nie dopuszczmy, ¿e w liœcie pluginów jest wiecej ni¿ jeden ShaderChannel z ka¿dego rodzaju. Wynika to, ¿e tego ¿e na razie nie mamy zaimplementowanej maszynerii do sk³adania kodu shaderów.
+
