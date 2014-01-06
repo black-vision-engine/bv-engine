@@ -76,11 +76,6 @@ void        VertexShader::UpdateP( const glm::mat4 & P )
 }
 
 // ***************************** DESCRIPTOR **********************************
-//PLUGIN NAME
-const std::string PassThroughVertexShaderParametersDescriptor::pluginName( "pastruvertexszader" );
-
-//PLUGIN PARAMETERS
-const std::string  PassThroughVertexShaderParametersDescriptor::MVPParamName( "MVP" );
 
 // *********************************
 //
