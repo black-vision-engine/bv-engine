@@ -37,6 +37,8 @@ Text::Text( const std::wstring& text, const std::string& fontFile, unsigned int 
     BuildAtlas();
 }
 
+// #define GENERATE_TEST_RAW_FILE
+
 void                Text::BuildAtlas()
 {
     unsigned int glyphsNum = 0;
@@ -178,12 +180,15 @@ void                Text::BuildAtlas()
 
     memcpy( atlasData, &str[ 0 ], dataStream.str().size() );
 
+#ifdef GENERATE_TEST_RAW_FILE
     std::ofstream file;
     file.open( "test.raw", std::ios::out | std::ios::binary );
 
     file << str;
 
     file.close();
+
+#endif // GENERATE_TEST_RAW_FILE
 }
 
 } // model
