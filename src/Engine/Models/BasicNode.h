@@ -25,7 +25,7 @@ class IShaderChannel;
 class IConnectedComponent;
 class IVertexAttributesChannelDescriptor;
 
-typedef std::vector< IModelNode* > TNodeVec;
+typedef std::vector< IModelNodePtr > TNodeVec;
 
 class BasicNode : public bv::IModelNode
 {
@@ -36,7 +36,7 @@ private:
     TNodeVec                    m_children;
     TNodeVec                    m_layers;
 
-    std::vector< IPlugin * >    m_plugins;
+    std::vector< IPluginPtr >   m_plugins;
 
 public:
 

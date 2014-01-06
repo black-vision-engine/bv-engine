@@ -1,20 +1,16 @@
 #pragma once
 
 #include "Engine/Graphics/Shaders/Shader.h"
+#include "Engine/Models/Plugins/Parameters/Parameter.h"
 
 
 namespace bv {
 
-namespace model
-{
-    class ValueMat4;
-}
-
 class GeometryShader : public Shader
 {
-    model::ValueMat4*          m_MVP;
-    model::ValueMat4*          m_MV;
-    model::ValueMat4*          m_P;
+    model::ValueMat4Ptr         m_MVP;
+    model::ValueMat4Ptr         m_MV;
+    model::ValueMat4Ptr         m_P;
 
 public:
 

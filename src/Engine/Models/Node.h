@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 
 #include "Engine/Interfaces/IUpdatable.h"
 
@@ -20,5 +21,7 @@ public:
     virtual                 ~IModelNode () {};
 
 };
+
+typedef std::shared_ptr< IModelNode >       IModelNodePtr;
 
 } //bv

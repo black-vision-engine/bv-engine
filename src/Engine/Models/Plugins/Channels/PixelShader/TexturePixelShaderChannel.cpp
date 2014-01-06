@@ -55,23 +55,23 @@ TexturePixelShaderChannel::TexturePixelShaderChannel( const std::string & shader
     m_alphaParams = alphas;
     for( unsigned int i = 0; i < alphas.size(); ++i )
     {    
-        m_alphaValues.push_back( new model::ValueFloat( ParamDesc::alphaParamName[ i ] ) );
-        RegisterValue( m_alphaValues[ i ] );
+        m_alphaValues.push_back( ValueFloatPtr( new ValueFloat( ParamDesc::alphaParamName[ i ] ) ) );
+        RegisterValue( m_alphaValues[ i ].get() );
     }
 
 
     m_texTransformParams = texTransforms;
     for( unsigned int i = 0; i < texTransforms.size(); ++i )
     {
-        m_texTransformValues.push_back( new model::ValueMat4( ParamDesc::txMatrixParamName[ i ] ) );
-        RegisterValue( m_texTransformValues[ i ] );
+        m_texTransformValues.push_back( ValueMat4Ptr( new ValueMat4( ParamDesc::txMatrixParamName[ i ] ) ) );
+        RegisterValue( m_texTransformValues[ i ].get() );
     }
 
     m_borderColorParams = borderColors;
     for( unsigned int i = 0; i < borderColors.size(); ++i )
     {
-        m_borderColorValues.push_back( new model::ValueVec4( ParamDesc::borderColorsParamName[ i ] ) );
-        RegisterValue( m_borderColorValues[ i ] );
+        m_borderColorValues.push_back( ValueVec4Ptr( new ValueVec4( ParamDesc::borderColorsParamName[ i ] ) ) );
+        RegisterValue( m_borderColorValues[ i ].get() );
     }
 }
 

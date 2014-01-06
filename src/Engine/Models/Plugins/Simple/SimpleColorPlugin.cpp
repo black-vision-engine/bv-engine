@@ -20,7 +20,7 @@ const std::string SimpleColorPixelShaderChannelPD::colorParamName   = "color";
 //FIXME: param is not registered in descriptor because it won't be used to pass values to the shader (oh r'ly)?
 class SimpleColorPixelShaderChannel : public PixelShaderChannelBase< SimpleColorPixelShaderChannelPD >
 {
-    model::ValueVec4 *  m_colorVal;
+    ValueVec4Ptr        m_colorVal;
     ParamVec4           m_color;
 
 public:
@@ -29,8 +29,8 @@ public:
         : PixelShaderChannelBase( "" )// FIXME:
         , m_color( color )
     {
-        m_colorVal = new model::ValueVec4( ParamDesc::colorParamName );
-        RegisterValue( m_colorVal );
+        m_colorVal = ValueVec4Ptr( new model::ValueVec4( ParamDesc::colorParamName ) );
+        RegisterValue( m_colorVal.get() );
     }
 
     virtual void                    Update( TimeType t )

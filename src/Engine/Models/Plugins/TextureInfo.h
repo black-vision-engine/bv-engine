@@ -17,13 +17,13 @@ struct TextureInfo
     std::string             m_texName;
 
     ParamTransform          m_texTransform;
-    ValueMat4*              m_texTransformVal;
+    ValueMat4Ptr            m_texTransformVal;
 
     ParamFloat              m_texAlpha;
-    ValueFloat*             m_texAlphaVal;
+    ValueFloatPtr           m_texAlphaVal;
 
     ParamVec4               m_texBorderColor;
-    ValueVec4*              m_texBorderColorVal;
+    ValueVec4Ptr            m_texBorderColorVal;
 
     TextureWrappingMode     m_wrappingModeX;
     TextureWrappingMode     m_wrappingModeY;

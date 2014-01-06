@@ -58,14 +58,14 @@ class MyPixelShaderChannel : public model::PixelShaderChannelBase< TexturePixelS
 {
 private:
 
-    model::ParamFloat *        m_alphaParam;
-    model::ValueFloat *        m_alphaValue;
+    model::ParamFloat           m_alphaParam;
+    model::ValueFloatPtr        m_alphaValue;
 
-    model::ParamTransform *    m_tex0TransformParam;
-    model::ValueMat4 *         m_tex0TransformValue;
+    model::ParamTransform       m_tex0TransformParam;
+    model::ValueMat4Ptr         m_tex0TransformValue;
 
-    model::ParamTransform *    m_tex1TransformParam;
-    model::ValueMat4 *         m_tex1TransformValue;
+    model::ParamTransform       m_tex1TransformParam;
+    model::ValueMat4Ptr         m_tex1TransformValue;
 
 public:
 
@@ -73,26 +73,24 @@ public:
     {
         ShaderChannel::Update( t );
 
-        m_alphaValue->SetValue( m_alphaParam->Evaluate( t ) );
-        m_tex0TransformValue->SetValue( m_tex0TransformParam->Evaluate( t ) );
-        m_tex1TransformValue->SetValue( m_tex1TransformParam->Evaluate( t ) );
+        m_alphaValue->SetValue( m_alphaParam.Evaluate( t ) );
+        m_tex0TransformValue->SetValue( m_tex0TransformParam.Evaluate( t ) );
+        m_tex1TransformValue->SetValue( m_tex1TransformParam.Evaluate( t ) );
     }
 
     MyPixelShaderChannel( const std::string & shaderFile, const FloatInterpolator & alpha, const TransformF & tex0Transform, const TransformF & tex1Transform )
         : PixelShaderChannelBase( shaderFile )
+        , m_alphaParam( ParamDesc::alphaParamName, alpha )
+        , m_tex0TransformParam( ParamDesc::txMatrix0ParamName, tex0Transform )
+        , m_tex1TransformParam( ParamDesc::txMatrix1ParamName, tex1Transform )
     {
-        m_alphaParam = new model::ParamFloat( ParamDesc::alphaParamName, alpha );
-        m_alphaValue = new model::ValueFloat( ParamDesc::alphaParamName );
+        m_alphaValue            = model::ValueFloatPtr( new model::ValueFloat( ParamDesc::alphaParamName ) );
+        m_tex0TransformValue    = model::ValueMat4Ptr( new model::ValueMat4( ParamDesc::txMatrix0ParamName ) );
+        m_tex1TransformValue    = model::ValueMat4Ptr( new model::ValueMat4( ParamDesc::txMatrix1ParamName ) );
 
-        m_tex0TransformParam = new model::ParamTransform( ParamDesc::txMatrix0ParamName, tex0Transform );
-        m_tex0TransformValue = new model::ValueMat4( ParamDesc::txMatrix0ParamName );
-
-        m_tex1TransformParam = new model::ParamTransform( ParamDesc::txMatrix1ParamName, tex1Transform );
-        m_tex1TransformValue = new model::ValueMat4( ParamDesc::txMatrix1ParamName);
-
-        RegisterValue( m_alphaValue );
-        RegisterValue( m_tex0TransformValue );
-        RegisterValue( m_tex1TransformValue );
+        RegisterValue( m_alphaValue.get() );
+        RegisterValue( m_tex0TransformValue.get() );
+        RegisterValue( m_tex1TransformValue.get() );
     }
 };
 

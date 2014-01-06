@@ -23,7 +23,7 @@ public:
 class TextPixelShaderChannel : public model::PixelShaderChannelBase< TextPixelShaderChannelPD >
 {
     ParamVec4                       m_color;
-    model::ValueVec4 *              m_colorVal;
+    ValueVec4Ptr                    m_colorVal;
 
 public:
 
@@ -37,8 +37,8 @@ public:
         : PixelShaderChannelBase( shaderFile )
         , m_color(color)
     {
-        m_colorVal = new model::ValueVec4( ParamDesc::colorParam );
-        RegisterValue(m_colorVal);
+        m_colorVal = ValueVec4Ptr( new model::ValueVec4( ParamDesc::colorParam ) );
+        RegisterValue(m_colorVal.get());
     }
 
 };

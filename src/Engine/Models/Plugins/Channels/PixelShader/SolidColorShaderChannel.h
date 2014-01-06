@@ -20,7 +20,7 @@ class SolidColorShaderChannel : public model::PixelShaderChannelBase< SolidColor
 private:
 
     ParamVec4                       m_solidColor;
-    model::ValueVec4 *              m_solidColorVal;
+    ValueVec4Ptr                    m_solidColorVal;
 
 public:
 

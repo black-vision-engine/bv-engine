@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <memory>
 
 #include "Engine/Models/Plugins/Interfaces/IValue.h"
 #include "Engine/Interfaces/IUpdatable.h"
@@ -42,6 +43,8 @@ public:
     virtual                                     ~IPlugin                    (){}
 
 };
+
+typedef std::shared_ptr<IPlugin>        IPluginPtr;
 
 } // model
 } // bv

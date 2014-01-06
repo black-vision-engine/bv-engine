@@ -246,21 +246,21 @@ SceneNode *                 BasicNode::BuildScene()
 //
 void            BasicNode::AddChild                 ( IModelNode * n )
 {
-    m_children.push_back( n );
+    m_children.push_back( IModelNodePtr( n ) );
 }
 
 // ********************************
 //
 void            BasicNode::AddLayer                 ( IModelNode * n )
 {
-    m_layers.push_back( n );
+    m_layers.push_back( IModelNodePtr( n ) );
 }
 
 // ********************************
 //
 void            BasicNode::AddPlugin                ( IPlugin * plugin )
 {
-    m_plugins.push_back( plugin );
+    m_plugins.push_back( IPluginPtr( plugin ) );
 }
 
 // ********************************

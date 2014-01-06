@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Mathematics/Interpolators/Interpolators.h"
 #include "Mathematics/Transform/MatTransform.h"
 
@@ -114,6 +116,11 @@ public:
     virtual ~ValueMat4(){}
 
 };
+
+typedef     std::shared_ptr< ValueMat4 >    ValueMat4Ptr;
+typedef     std::shared_ptr< ValueMat2 >    ValueMat2Ptr;
+typedef     std::shared_ptr< ValueVec4 >    ValueVec4Ptr;
+typedef     std::shared_ptr< ValueFloat >   ValueFloatPtr;
 
 } // model
 } // bv

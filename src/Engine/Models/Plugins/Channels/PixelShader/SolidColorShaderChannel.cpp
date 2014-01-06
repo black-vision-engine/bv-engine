@@ -11,8 +11,8 @@ SolidColorShaderChannel::SolidColorShaderChannel(const std::string& shaderFile, 
     : PixelShaderChannelBase( shaderFile )
     , m_solidColor(color)
 {
-    m_solidColorVal = new model::ValueVec4( ParamDesc::solidColor );
-    RegisterValue(m_solidColorVal);
+    m_solidColorVal = ValueVec4Ptr( new model::ValueVec4( ParamDesc::solidColor ) );
+    RegisterValue(m_solidColorVal.get());
 }
 
 // ******************************

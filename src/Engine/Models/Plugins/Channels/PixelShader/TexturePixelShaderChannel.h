@@ -20,14 +20,14 @@ public:
 
 class TexturePixelShaderChannel : public model::PixelShaderChannelBase< TexturePixelShaderChannelPD >
 {
-    std::vector< model::ParamFloat >        m_alphaParams;
-    std::vector< model::ValueFloat * >      m_alphaValues;
+    std::vector< ParamFloat >       m_alphaParams;
+    std::vector< ValueFloatPtr >    m_alphaValues;
 
-    std::vector< model::ParamTransform >    m_texTransformParams;
-    std::vector< model::ValueMat4 * >       m_texTransformValues;
+    std::vector< ParamTransform >   m_texTransformParams;
+    std::vector< ValueMat4Ptr >     m_texTransformValues;
 
-    std::vector< model::ParamVec4 >         m_borderColorParams;
-    std::vector< model::ValueVec4 * >       m_borderColorValues;
+    std::vector< ParamVec4 >        m_borderColorParams;
+    std::vector< ValueVec4Ptr >     m_borderColorValues;
 
 public:
 

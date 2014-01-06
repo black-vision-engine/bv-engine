@@ -6,16 +6,11 @@
 
 namespace bv {
 
-namespace model
-{
-    class ValueMat4;
-}
-
 class VertexShader : public Shader
 {
-    model::ValueMat4 *  m_MVP;
-    model::ValueMat4 *  m_MV;
-    model::ValueMat4 *  m_P;
+    model::ValueMat4Ptr         m_MVP;
+    model::ValueMat4Ptr         m_MV;
+    model::ValueMat4Ptr         m_P;
 
 public:
 
