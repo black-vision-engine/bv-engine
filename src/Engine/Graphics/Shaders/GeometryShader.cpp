@@ -1,6 +1,6 @@
 #include "GeometryShader.h"
 
-#include "Engine/Models/Plugins/Parameters/Parameter.h"
+#include "Engine/Models/Plugins/Parameters/TypedValues.h"
 
 
 namespace bv {

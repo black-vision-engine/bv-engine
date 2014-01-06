@@ -1,16 +1,6 @@
 #include "SimpleTransformPlugin.h"
 
-#include <cassert>
-
 #include "System/Print.h"
-
-#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
-#include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
-
-#include "Engine/Models/Plugins/Parameters/Parameter.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 
 
@@ -21,7 +11,7 @@ namespace bv { namespace model {
 
 // *************************************
 //
-SimpleTransformPlugin*  SimpleTransformPlugin::Create( const IPlugin * prev, const ParamTransform& trans )
+SimpleTransformPlugin * SimpleTransformPlugin::Create( const IPlugin * prev, const ParamTransform & trans )
 {
     auto p = new SimpleTransformPlugin( prev, trans );
     return p;
@@ -29,7 +19,7 @@ SimpleTransformPlugin*  SimpleTransformPlugin::Create( const IPlugin * prev, con
 
 // *************************************
 //
-SimpleTransformPlugin::SimpleTransformPlugin                    ( const IPlugin * prev, const ParamTransform& trans )
+SimpleTransformPlugin::SimpleTransformPlugin                    ( const IPlugin * prev, const ParamTransform & trans )
     : BasePlugin( prev )
 {
     m_transformChannel = SimpleTransformChannelPtr( new SimpleTransformChannel() );

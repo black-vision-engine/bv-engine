@@ -1,13 +1,15 @@
 #pragma once
 
 #include "Engine/Graphics/Shaders/Shader.h"
-#include "Engine/Models/Plugins/Parameters/Parameter.h"
+#include "Engine/Models/Plugins/Parameters/TypedValues.h"
 
 
 namespace bv {
 
 class VertexShader : public Shader
 {
+private:
+
     model::ValueMat4Ptr         m_MVP;
     model::ValueMat4Ptr         m_MV;
     model::ValueMat4Ptr         m_P;
@@ -22,22 +24,14 @@ public:
 
 };
 
-class PassThroughVertexShaderParametersDescriptor
-{
-public:
-
-
-};
-
 class PassThroughVertexShader : public VertexShader
 {
     static std::string m_programSource;
 
 public:
 
-    PassThroughVertexShader( PassThroughVertexShaderParametersDescriptor * desc );
+    PassThroughVertexShader();
 
 };
-
 
 } // bv

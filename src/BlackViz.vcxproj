@@ -332,7 +332,6 @@
     <ClCompile Include="Engine\Graphics\Shaders\VertexShader.cpp" />
     <ClCompile Include="Engine\Graphics\Types\Transform.cpp" />
     <ClCompile Include="Engine\Models\BasicNode.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Parameters\Parameter.cpp" />
     <ClCompile Include="Engine\Models\Updaters\TransformUpdater.cpp" />
     <ClCompile Include="Mathematics\Interpolators\BasicInterpolator.cpp" />
     <ClCompile Include="Mathematics\Transform\MatTransform.cpp" />
@@ -434,6 +433,7 @@
     <ClInclude Include="Engine\Models\Plugins\Parameters\BaseValue.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\ParametersFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\TypedParameters.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\TypedValues.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginsFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleAnimationPlugin.h" />
@@ -522,7 +522,6 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IValue.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPlugin.h" />
     <ClInclude Include="Engine\Models\Node.h" />
-    <ClInclude Include="Engine\Models\Plugins\Parameters\Parameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Plugin.h" />
     <ClInclude Include="Engine\Models\Updaters\UpdatersManager.h" />
     <ClInclude Include="Engine\Models\Updaters\TransformUpdater.h" />

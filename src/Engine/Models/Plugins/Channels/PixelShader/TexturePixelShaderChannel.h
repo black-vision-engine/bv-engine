@@ -4,7 +4,7 @@
 
 #include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
 #include "Engine/Models/Plugins/Parameters/TypedParameters.h"
-#include "Engine/Models/Plugins/Parameters/Parameter.h"
+#include "Engine/Models/Plugins/Parameters/TypedValues.h"
 
 
 namespace bv { namespace model
@@ -13,6 +13,7 @@ namespace bv { namespace model
 class TexturePixelShaderChannelPD
 {
 public:
+
     static std::string          alphaParamName[];
     static std::string          txMatrixParamName[];
     static std::string          borderColorsParamName[];

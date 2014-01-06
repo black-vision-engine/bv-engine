@@ -3,15 +3,8 @@
 #include "System/Print.h"
 
 #include "Engine/Models/Resources/TextureLoader.h"
-#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
-#include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
-#include "Engine/Models/Plugins/Channels/VertexShader/TextureVertexShaderChannel.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
-
-#include "Engine/Models/Plugins/Parameters/Parameter.h"
 
 
 namespace bv { namespace model {
