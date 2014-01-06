@@ -8,8 +8,6 @@
 
 #include "Engine/Types/Enums.h"
 
-#include "Engine/Models/Plugins/Parameters/BaseParameter.h"
-
 
 namespace bv { namespace model {
 
