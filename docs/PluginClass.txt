@@ -46,7 +46,17 @@ VertexAttributesChannel:
 	- Kana³ atrybutów wierzcho³ków.
 	- Zawiera wektor connected komponentów, czyli prymitywów reprezentuj¹cych kszta³ty w scenie.
 	- Zawiera deskryptor opisuj¹cy typy poszczególnych danych dla wierzcho³ków. (np. xyz, uv0, uv1, ....)
+	- Definiuje równie¿ typ prymitywu, czyli co tak naprawdê reprezentuj¹ podane wierzcho³ki.
+	- W trakcie renderowania jest mo¿liwoœæ dodawania wierzcho³ków i aktualizacji topoligii.
 	
+ConnectedComponent
+	- klasa definiuj¹ca kszta³t w renderowanej scenie za pomoc¹ wierzcho³ków ( nie musi byæ to tylko po³o¿enie w przestrzeni ale na przyk³ad dopiête do ka¿dego z nich po³o¿enie w teksturze/teksturach ) Nazywamy je kana³ami wierzcho³ka.
+	- Ka¿dy kana³ w wierzchlku jest reprezentowany przez klasê ArributeChannel
+	
+ArrtibuteChannel
+	- Klasa któr¹ implementuja wszystkie typy kana³ów wierzcho³ków takie jak Float3AttributeChannel
+	- Ka¿dy ArrtibuteChannel przechowuje wektor wartoœci danego atrybutu dla wszystkich wierzcho³ków CC. Dziêki temu pamieæ poszczególnych wierzcho³ków lezy obok siebie w cachu.
+
 TransformChannel:
 	- Kana³ transformacji. Przechowuje wector klas bv::model::Transform.
 
