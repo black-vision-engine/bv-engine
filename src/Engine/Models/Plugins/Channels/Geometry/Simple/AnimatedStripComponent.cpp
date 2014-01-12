@@ -44,7 +44,7 @@ AnimatedStripComponent::AnimatedStripComponent                  ( float w, float
         vertArrtF3->AddAttribute(glm::vec3( xStart + dx, yStart, z ) );        
     }
 
-    AddAttributeChannel( AttributeChannelPtr( vertArrtF3 ) );
+    AddAttributeChannel( AttributeChannelPtr( vertArrtF3 ) ); // FIXME: Need to be sure that can take ownership
     m_positions = vertArrtF3;
 }
 
