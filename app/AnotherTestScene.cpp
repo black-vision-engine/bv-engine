@@ -438,7 +438,7 @@ model::BasicNode *          TexturedRect()
 
     std::vector< const model::TextureDescriptor > textures;
         
-    textures.push_back( model::TextureDescriptor( "simless_00.jpg", ParametersFactory::CreateParameter( "texTransform", txTrans ) ) );
+    textures.push_back( model::TextureDescriptor( "pliczek_z_kwiatkiem.jpg", ParametersFactory::CreateParameter( "texTransform", txTrans ) ) );
 
     auto texturePlugin = PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures );
 

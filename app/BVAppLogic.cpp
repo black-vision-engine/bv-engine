@@ -88,18 +88,6 @@ void BVAppLogic::Initialize         ()
 //
 void BVAppLogic::LoadScene          ( void )
 {
-    //FIXME: czy ten caly smietnik jest tu potrzebny?
-    //auto atlasCache = model::FontAtlasCache::Load( "fontcache.db" );
-    //model::FontAtlasCacheData data( nullptr, 0, 0, 0 );
-
-    //atlasCache->AddEntry( data, "dupa", 0, "dupa_file" );
-    //atlasCache->GetEntry( "dupa", 0, "dupa_file" );
-
-    //FIXME: remove me pleaZe
-    //const std::string fontFile = "../dep/Media/fonts/arial.ttf";
-    //simple_freetype_test();
-    //basic_write_atlas( fontFile, "ascii_arial_atlas.raw" );
-
 
     //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
     //model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
@@ -107,19 +95,19 @@ void BVAppLogic::LoadScene          ( void )
     //model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
     //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
 
-    /*
-    model::BasicNode * rodos = TestScenesFactory::GreenRectTestScene();
-    model::BasicNode * root0 = TestScenesFactory::SequenceAnimationTestScene();
-    model::BasicNode * root1 = TestScenesFactory::NonGeometryParent();
-    model::BasicNode * root3 = TestScenesFactory::AnimatedTestScene();
-    model::BasicNode * rootu = TestScenesFactory::StackThemNow( root0, root1 );
-    model::BasicNode * roota = TestScenesFactory::StackThemNow( root3, rootu );
-    model::BasicNode * root  = TestScenesFactory::StackThemNow( roota, rodos );
-    model::BasicNode * root = TestScenesFactory::TexturedRectTestScene();
-    model::BasicNode * root = TestScenesFactory::NaiveTimerTestScene();
-    */
 
-    model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
+    //model::BasicNode * rodos = TestScenesFactory::GreenRectTestScene();
+    //model::BasicNode * root0 = TestScenesFactory::SequenceAnimationTestScene();
+    //model::BasicNode * root1 = TestScenesFactory::NonGeometryParent();
+    //model::BasicNode * root3 = TestScenesFactory::AnimatedTestScene();
+    //model::BasicNode * rootu = TestScenesFactory::StackThemNow( root0, root1 );
+    //model::BasicNode * roota = TestScenesFactory::StackThemNow( root3, rootu );
+    //model::BasicNode * root  = TestScenesFactory::StackThemNow( roota, rodos );
+    model::BasicNode * root = TestScenesFactory::TexturedRectTestScene();
+    //model::BasicNode * root = TestScenesFactory::NaiveTimerTestScene();
+    
+
+    //model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
     m_modelScene = model::ModelScene::Create( root, new Camera() );
     m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
 }

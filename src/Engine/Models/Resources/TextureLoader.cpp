@@ -1,9 +1,7 @@
 #include "TextureLoader.h"
 
-#include <iostream>
-
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
+#include <sstream>
+#include "System/FileIO.h"
 
 #include "FreeImagePlus.h"
 
@@ -20,10 +18,9 @@ TextureLoader::TextureLoader( bool loadFormMemory )
 //
 ResourceHandle *        TextureLoader::LoadResource        ( IResource* res )  const
 {
-    boost::filesystem::path filepath( res->GetFilePath() );
     std::string errMsg( "Cannot read file: " + res->GetFilePath() ); 
 
-    if( !exists( filepath ) )
+    if( !File::Exists( res->GetFilePath() ) )
     {
         throw std::runtime_error( errMsg );
         return nullptr;
@@ -33,17 +30,11 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource* res )  c
 
     if( m_loadFromMemory )
     {
-        boost::filesystem::ifstream file( filepath, std::ifstream::binary );
+        char* bufToRead = new char[ File::Size( res->GetFilePath() ) ]; 
 
-        file.seekg (0, file.end);
-        auto size = file.tellg();
-        file.seekg (0, file.beg);
+        int bytes = File::Read( bufToRead, res->GetFilePath() );
 
-        char* bufToRead = new char[ ( unsigned int ) size ];
-    
-        file.read( bufToRead, size );
-
-        fipMemoryIO fipIO( ( BYTE * ) bufToRead, ( DWORD ) size );
+        fipMemoryIO fipIO( ( BYTE * ) bufToRead, ( DWORD ) bytes );
 
         FREE_IMAGE_FORMAT type = fipIO.getFileType();
 

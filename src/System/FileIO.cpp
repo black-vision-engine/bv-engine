@@ -21,6 +21,7 @@ public:
 
     int                 Read        ( std::ostream & out) const;
     int                 Read        ( std::ostream & out, long numBytes ) const;
+    int                 Read        ( char* out, long numBytes ) const;
 
     bool                Write       ( std::istream & in );
     bool                Write       ( std::istream & in , long numBytes );
@@ -30,6 +31,7 @@ public:
     static bool         Exists      ( const std::string & fileName );
     static FileImpl*    Open        ( const std::string & fileName, File::OpenMode openMode );
     static int          Read        ( std::ostream & out, const std::string & fileName );
+    static int          Read        ( char* out, const std::string & fileName );
     static int          Write       ( std::istream & in, const std::string & fileName );
     static int          Size        ( const std::string & fileName );
 };
@@ -62,15 +64,25 @@ int         FileImpl::Read        ( std::ostream & out, long numBytes ) const
     int bytesRead = 0;
     while( m_fileHandle->good() && numBytes > 0 )
     {
-        unsigned char b = m_fileHandle->get();
-        if( ! m_fileHandle->eof() )
-            out << b;
+        out << (char)m_fileHandle->get();
 
         bytesRead++;
         numBytes--;
     }
 
     return bytesRead;
+}
+
+// *******************************
+//
+int         FileImpl::Read        ( char* out, long numBytes ) const
+{
+    if( m_fileHandle->good() && numBytes > 0 )
+    {
+        m_fileHandle->read( out, numBytes );
+    }
+
+    return numBytes;
 }
 
 // *******************************
@@ -130,9 +142,9 @@ FileImpl*   FileImpl::Open        ( const std::string & fileName, File::OpenMode
     FileImpl* impl = new FileImpl( fileName );
 
     if( openMode == File::FOMReadOnly )
-        impl->m_fileHandle = new std::fstream( fileName, std::ios::in );
+        impl->m_fileHandle = new std::fstream( fileName, std::ios::in | std::ios::binary );
     else if ( openMode == File::FOMReadWrite )
-        impl->m_fileHandle = new std::fstream( fileName, std::ios::in | std::ios::out );
+        impl->m_fileHandle = new std::fstream( fileName, std::ios::out | std::ios::binary );
 
     if( impl->m_fileHandle->good() )
         return impl;
@@ -149,6 +161,14 @@ int         FileImpl::Read        ( std::ostream & out, const std::string & file
 {
     auto f = Open( fileName, File::FOMReadOnly );
     return f->Read( out );
+}
+
+// *******************************
+//
+int         FileImpl::Read        ( char* out, const std::string & fileName )
+{
+    auto f = Open( fileName, File::FOMReadOnly );
+    return f->Read( out, FileImpl::Size( fileName ) );
 }
 
 // *******************************
@@ -202,6 +222,20 @@ int         File::Write       ( std::istream & in , int numBytes )
 
 // *******************************
 //
+void        File::operator << ( std::istream& in )
+{
+    m_impl->Write( in );
+}
+
+// *******************************
+//
+void        File::operator >> ( std::ostream& out )
+{
+    m_impl->Read( out );
+}
+
+// *******************************
+//
 int         File::Size        ( const std::string & fileName )
 {
     return FileImpl::Size( fileName );
@@ -224,6 +258,13 @@ File        File::Open        ( const std::string & fileName, OpenMode openMode 
 // *******************************
 //
 int         File::Read        ( std::ostream & out, const std::string & fileName )
+{
+    return FileImpl::Read( out, fileName );
+}
+
+// *******************************
+//
+int         File::Read        ( char* out, const std::string & fileName )
 {
     return FileImpl::Read( out, fileName );
 }

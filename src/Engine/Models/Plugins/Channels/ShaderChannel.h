@@ -45,7 +45,9 @@ public:
     {
         std::stringstream shaderSource;
 
-        File::Read( shaderSource, shaderFile );
+        File::Open( shaderFile ) >> shaderSource;
+
+        //File::Read( shaderSource, shaderFile );
 
         m_shaderSource = shaderSource.str(); 
     }
