@@ -542,9 +542,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Engine\Models\Plugins\Parameters\BaseParameter.inl" />
     <None Include="Engine\Models\Plugins\Parameters\TypedParameters.inl" />
     <None Include="System\HerarchicalProfiler.inl" />

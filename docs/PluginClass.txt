@@ -32,23 +32,43 @@ class BasePlugin : public Iface					(UIDType typ odpowiadaj¹cy za nadanie statyc
 		
 	niewirtualne:
 		GetName - zwraca nazwê pluginu przekazan¹ przez klasê UIDType
-		
-		
-TODO:
-		
-IPixelShaderChannel:
-	- interfejs kana³u shadera pixela.
-IVertexShaderChannel:
-	- interfejs kana³u shadera wierzcho³ka.
-IGeometryShaderChannel:
-	- interfejs kana³u shadera geometrii.
-VertexAttributesChannel:
-	- Kana³ atrybutów wierzcho³ków.
-	- Zawiera wektor connected komponentów, czyli prymitywów reprezentuj¹cych kszta³ty w scenie.
-	- Zawiera deskryptor opisuj¹cy typy poszczególnych danych dla wierzcho³ków. (np. xyz, uv0, uv1, ....)
-	- Definiuje równie¿ typ prymitywu, czyli co tak naprawdê reprezentuj¹ podane wierzcho³ki.
-	- W trakcie renderowania jest mo¿liwoœæ dodawania wierzcho³ków i aktualizacji topoligii.
 	
+Opis:
+	BasePlugin jest klas¹ podstawow¹ ka¿dego pluginu. Posiada on domyœlne implementacje funckji do pobierania i ustawiania kana³ów w Pluginie. Ka¿du plugin posiada 5 kana³ów odpowiadaj¹cych za efakty które implemetuje.
+	S¹ to:
+	- 3 kana³y opisuj¹ce shadery: geometry, vertex i pixel(fragment) shader.
+	- kana³ transformacji
+	- kana³ geometrii (nie myliæ z "geometry shader channel")
+
+Kana³y shader'ów:
+Kana³y te nie ró¿ni¹ siê miedzy sob¹ znacznie implemetacj¹, a tylko ich u¿yciem przez silnik renderuj¹cy. Ich interfejsy wygl¹daj¹ podobnie. Wszyskie implemetuj¹ inteface IShaderChannel, który jest interfejsem
+maj¹cym za zadanie zwróciæ Ÿród³o odpowiedniego shadera oraz listê IValue, czyli wartoœci parametów przekazywanych do danego shadera.
+	IPixelShaderChannel:
+		- interfejs kana³u shadera pixela.
+	IVertexShaderChannel:
+		- interfejs kana³u shadera wierzcho³ka.
+	IGeometryShaderChannel:
+		- interfejs kana³u shadera geometrii.
+
+Kana³ geometrii:
+Kana³ ten to najbardziej skomplikowany kana³ w pluginie. Odpowiada on za zdefiniowania komponentów w scenie.
+	VertexAttributesChannel:
+		- Kana³ atrybutów wierzcho³ków.
+		- Zawiera wektor connected komponentów, czyli zbiorów wierzchoków reprezentuj¹cych kszta³ty w scenie.
+		- Zawiera deskryptor opisuj¹cy typy poszczególnych danych dla wierzcho³ków. (np. xyz, uv0, uv1, ....)
+		- Definiuje równie¿ typ prymitywu, czyli co tak naprawdê reprezentuj¹ podane wierzcho³ki.
+		- W trakcie renderowania jest mo¿liwoœæ dodawania wierzcho³ków i aktualizacji topoligii.
+		
+Kana³ transformacji:
+	TransformChannel:
+		- Kana³ transformacji. Przechowuje wector klas bv::model::Transform.
+
+		
+		
+		
+		
+Sk³adniki kana³u VertexAttributesChannel
+		
 ConnectedComponent
 	- klasa definiuj¹ca kszta³t w renderowanej scenie za pomoc¹ wierzcho³ków ( nie musi byæ to tylko po³o¿enie w przestrzeni ale na przyk³ad dopiête do ka¿dego z nich po³o¿enie w teksturze/teksturach ) Nazywamy je kana³ami wierzcho³ka.
 	- Ka¿dy kana³ w wierzchlku jest reprezentowany przez klasê ArributeChannel
@@ -57,9 +77,10 @@ ArrtibuteChannel
 	- Klasa któr¹ implementuja wszystkie typy kana³ów wierzcho³ków takie jak Float3AttributeChannel
 	- Ka¿dy ArrtibuteChannel przechowuje wektor wartoœci danego atrybutu dla wszystkich wierzcho³ków CC. Dziêki temu pamieæ poszczególnych wierzcho³ków lezy obok siebie w cachu.
 
-TransformChannel:
-	- Kana³ transformacji. Przechowuje wector klas bv::model::Transform.
+	
 
+	
+Implementacja kana³ów Shaderów.
 template< class IFace, class ParameterDescriptor = EmptyParamDescriptor >
 class ShaderChannel : public IFace
 	- klasa implementuj¹ca bazow¹ implementacjê kana³u dowolnego shadera.
