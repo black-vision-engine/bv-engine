@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 
 
@@ -28,6 +29,9 @@ public:
     virtual const IAttributeChannelDescriptor *     GetDescriptor       ()  const;
     virtual std::string                             GetName             ()  const;
 
+
+    static IAttributeChannel *                      GetPositionChannel( const std::vector< IAttributeChannel* > & channels );
+    static IAttributeChannel*                       GetUVChannel( const std::vector< IAttributeChannel* >& channels, unsigned int index );
 };
 
 } // model

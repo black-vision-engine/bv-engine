@@ -39,7 +39,7 @@ RingComponent::RingComponent( float startAngle, float endAngle, float innerRadiu
         vertArrtF3->AddAttribute(glm::vec3(xyInner.x, xyInner.y, 0.f) );
 	} 
     
-    m_attributeChannels.push_back( vertArrtF3 );
+    m_attributeChannels.push_back( AttributeChannelPtr( vertArrtF3 ) );
 }
 
 RingComponent *              RingComponent::Create                      ( float startAngle, float endAngle, float innerRadius, float outerRadius, int fragmentsNum )

@@ -17,10 +17,7 @@ ConnectedComponent::ConnectedComponent()
 // ************************************
 //
 ConnectedComponent::~ConnectedComponent()
-{
-    for( auto vaChannel : m_attributeChannels )
-        delete vaChannel;
-}
+{}
 
 // ************************************
 //
@@ -33,7 +30,13 @@ void                                        ConnectedComponent::Update( TimeType
 //
 std::vector< IAttributeChannel* >     ConnectedComponent::GetAttributeChannels  () const
 {
-    return std::vector< IAttributeChannel* >( m_attributeChannels.begin(), m_attributeChannels.end());
+    std::vector< IAttributeChannel* > ret;
+    ret.reserve( m_attributeChannels.size() );
+
+    for( auto att : m_attributeChannels )
+        ret.push_back( att.get() );
+
+    return ret;
 }
 
 // ************************************

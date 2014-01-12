@@ -65,7 +65,6 @@ public:
 
 };
 
-
 // TODO: Czy kazdy typ moze miec kazda semantyke? 
 } // model
 } // bv

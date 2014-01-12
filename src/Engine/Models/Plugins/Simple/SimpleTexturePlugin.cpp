@@ -181,7 +181,7 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
                 verTexAttrChannel->AddAttribute( glm::vec2( ( pos[ j ].x - minX ) / ( maxX - minX ), ( pos[ j ].y - minY ) / ( maxY - minY ) ) );
             }
 
-            connComp->m_attributeChannels.push_back( verTexAttrChannel );
+            connComp->m_attributeChannels.push_back( AttributeChannelPtr( verTexAttrChannel ) );
         }
 
         m_geomChannel->AddConnectedComponent( connComp );
@@ -206,40 +206,6 @@ TextureInfo * SimpleTexturePlugin::LoadTexture( const TextureDescriptor & texDes
                             ,   texDesc.filteringMode );
 }
 
-namespace
-{
-
-// *************************************
-//
-AttributeChannel *   GetPositionChannel( const std::vector< AttributeChannel* > & channels )
-{
-    if( !channels.empty() )
-    {
-        // try to guess
-        if( channels[ 0 ]->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION )
-            return channels[ 0 ];
-
-        for( auto ch : channels )
-            if( ch->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION )
-                return ch;
-    }
-
-    return nullptr;
-}
-
-// *************************************
-//
-AttributeChannel*   GetUVChannel( const std::vector< AttributeChannel* >& channels, unsigned int index )
-{
-    assert( !channels.empty() );
-    assert( channels.size() > index );
-    assert( channels[index]->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_TEXCOORD );
-
-    return channels[index];
-}
-
-} // anonymouse
-
 // *************************************
 //
 void                                    SimpleTexturePlugin::Update              ( TimeType t )
@@ -251,10 +217,10 @@ void                                    SimpleTexturePlugin::Update             
             for( unsigned int i = 0; i < m_geomChannel->GetComponents().size(); ++i )
             {
                 auto connComp = static_cast< const model::ConnectedComponent* >( m_geomChannel->GetComponents()[ i ] );
-                auto compChannels = connComp->m_attributeChannels;
+                auto compChannels = connComp->GetAttributeChannels();
 
-                if( auto posChannel = GetPositionChannel( compChannels ) )
-                    if( auto uvChannel = GetUVChannel( compChannels, m_texCoordChannelIndex ) )
+                if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
+                    if( auto uvChannel = AttributeChannel::GetUVChannel( compChannels, m_texCoordChannelIndex ) )
                     {
                         auto & verts  = dynamic_cast< Float3AttributeChannel* >(posChannel)->GetVertices();
                         auto & uvs    = dynamic_cast< Float2AttributeChannel* >(uvChannel)->GetVertices();

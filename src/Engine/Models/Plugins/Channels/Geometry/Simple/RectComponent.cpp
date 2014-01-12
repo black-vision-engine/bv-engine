@@ -22,7 +22,7 @@ RectComponent::RectComponent(float w, float h, float tx, float ty, float tz )
     vertArrtF3->AddAttribute(glm::vec3( -w / 2.f + tx, h / 2.f  + ty, tz ) );
     vertArrtF3->AddAttribute(glm::vec3( w / 2.f  + tx, h / 2.f + ty,  tz ) );
 
-    m_attributeChannels.push_back( vertArrtF3 );
+    m_attributeChannels.push_back( AttributeChannelPtr( vertArrtF3 ) );
 }
 
 RectComponent *              RectComponent::Create                      ( float w, float h, float tx, float ty, float tz )
