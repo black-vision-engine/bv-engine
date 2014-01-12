@@ -16,7 +16,7 @@ typedef std::shared_ptr< AttributeChannel >    AttributeChannelPtr;
 
 class ConnectedComponent : public IConnectedComponent, public IUpdatable
 {
-public:
+private:
 
     std::vector< AttributeChannelPtr >          m_attributeChannels;
 
@@ -27,11 +27,14 @@ public:
 
     virtual void                                Update                      ( TimeType t );
 
-    virtual std::vector< IAttributeChannel* >   GetAttributeChannels  () const;
+    virtual std::vector< IAttributeChannel* >   GetAttributeChannels        () const;
 
     virtual unsigned int                        GetNumVertices              () const;
     virtual unsigned int                        GetNumPrimitives            () const;
 
+    const std::vector< AttributeChannelPtr > &  GetAttributeChannelsPtr     () const;
+
+    void                                        AddAttributeChannel         ( const AttributeChannelPtr& attr );
 };
 
 } // model

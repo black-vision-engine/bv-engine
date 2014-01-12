@@ -84,11 +84,11 @@ void SimpleAnimationPlugin::EvalGeometryChannel( const IPlugin * prev )
         VertexAttributesChannelDescriptor geomChannelDesc;
 
         auto prevConnComp = static_cast< const model::ConnectedComponent* >( prevGeomChannel->GetComponents()[ i ] );
-        auto prevCompChannels = prevConnComp->m_attributeChannels;
+        auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
 
         for( auto prevCompCh : prevCompChannels )
         {
-            connComp->m_attributeChannels.push_back( prevCompCh );
+            connComp->AddAttributeChannel( prevCompCh );
         }
 
         if( m_geomChannel == nullptr )
@@ -132,7 +132,7 @@ void SimpleAnimationPlugin::EvalGeometryChannel( const IPlugin * prev )
                 verTexAttrChannel->AddAttribute( glm::vec2( ( pos[ j ].x - minX ) / ( maxX - minX ), ( pos[ j ].y - minY ) / ( maxY - minY ) ) );
             }
 
-            connComp->m_attributeChannels.push_back( AttributeChannelPtr( verTexAttrChannel ) );
+            connComp->AddAttributeChannel( AttributeChannelPtr( verTexAttrChannel ) );
 
             m_geomChannel->AddConnectedComponent( connComp );
         }

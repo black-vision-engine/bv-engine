@@ -51,7 +51,7 @@ VariableTopologyStripComponent::VariableTopologyStripComponent                  
     vertArrtF3->AddAttribute( TopPosition( f1, n1 ) );
     vertArrtF3->AddAttribute( BottomPosition( f1, n1 ) );
 
-    m_attributeChannels.push_back( AttributeChannelPtr( vertArrtF3 ) );
+    AddAttributeChannel( AttributeChannelPtr( vertArrtF3 ) );
     m_positions = vertArrtF3;
 }
 

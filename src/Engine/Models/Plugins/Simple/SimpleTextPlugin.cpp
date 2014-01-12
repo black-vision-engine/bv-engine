@@ -217,7 +217,7 @@ void                SimpleTextPlugin::EvalGeometryChannel( VertexAttributesChann
         posAttribChannel->AddAttribute( quadTopLeft       + translate - baring + newLineTranslation );
         posAttribChannel->AddAttribute( quadTopRight      + translate - baring + newLineTranslation );
 
-        connComp->m_attributeChannels.push_back( AttributeChannelPtr( posAttribChannel ) );
+        connComp->AddAttributeChannel( AttributeChannelPtr( posAttribChannel ) );
 
         AttributeChannelDescriptor * desc1 = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
@@ -234,7 +234,7 @@ void                SimpleTextPlugin::EvalGeometryChannel( VertexAttributesChann
         verTex0AttrChannel->AddAttribute( glm::vec2( texLeft, texTop) );
         verTex0AttrChannel->AddAttribute( glm::vec2( texLeft + texWidth, texTop ) );
 
-        connComp->m_attributeChannels.push_back( AttributeChannelPtr( verTex0AttrChannel ) );
+        connComp->AddAttributeChannel( AttributeChannelPtr( verTex0AttrChannel ) );
 
         geomChannel->AddConnectedComponent( connComp );
 

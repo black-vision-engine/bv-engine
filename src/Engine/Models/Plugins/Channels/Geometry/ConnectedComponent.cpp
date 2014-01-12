@@ -64,5 +64,20 @@ unsigned int                               ConnectedComponent::GetNumPrimitives 
     return 0;
 }
 
+// ************************************
+//
+const std::vector< AttributeChannelPtr > &  ConnectedComponent::GetAttributeChannelsPtr     () const
+{
+    return m_attributeChannels;
+}
+
+// ************************************
+//
+void                                        ConnectedComponent::AddAttributeChannel         ( const AttributeChannelPtr& attr )
+{
+    m_attributeChannels.push_back( attr );
+}
+
+
 } // model
 } // bv
