@@ -38,7 +38,7 @@ Text::Text( const std::wstring& text, const std::string& fontFile, unsigned int 
     BuildAtlas();
 }
 
-#define GENERATE_TEST_RAW_FILE
+// #define GENERATE_TEST_RAW_FILE
 
 void                Text::BuildAtlas()
 {
