@@ -112,6 +112,9 @@ const ResourceHandle *      TextHelper::GetAtlasTextureInfo ( const ResourceHand
 //
 void                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const ResourceHandle * fontResource, const std::wstring& text, bool bolded, bool italic )
 {
+    assert( vertexAttributeChannel );
+    assert( fontResource );
+
     auto fontExtraData = static_cast< const FontExtraData* > ( fontResource->GetExtra() );
 
     auto f = GetFont( fontResource, bolded, italic );
