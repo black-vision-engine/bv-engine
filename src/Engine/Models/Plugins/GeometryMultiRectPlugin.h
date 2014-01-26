@@ -29,7 +29,7 @@ public:
     explicit            GeometryMultiRectPlugin    ();
                         ~GeometryMultiRectPlugin   ();
 
-    virtual const IVertexAttributesChannel *    GetGeometryChannel          () const override;
+    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel          () const override;
     void                                Update                      ( TimeType t ) override;
     void                                Print                       ( std::ostream & out, int tabs = 0 ) const override;
 

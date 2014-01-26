@@ -20,7 +20,7 @@ TimerPlugin*                        TimerPlugin::Create     ( const ParamFloat& 
 
 ////////////////////////////
 //
-const IVertexAttributesChannel *    TimerPlugin::GetGeometryChannel          () const
+const IVertexAttributesChannel *    TimerPlugin::GetVertexAttributesChannel          () const
 {
     return m_vertexAttributeChannel.get();
 }

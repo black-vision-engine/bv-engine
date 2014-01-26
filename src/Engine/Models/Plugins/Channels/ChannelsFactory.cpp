@@ -11,7 +11,7 @@ namespace bv { namespace model {
 
 // *******************************
 //
-VertexAttributesChannel*        ChannelsFactory::CreateGeometryChannel               ( IConnectedComponent * connComp )
+VertexAttributesChannel *       ChannelsFactory::CreateVertexAttributesChannel               ( IConnectedComponent * connComp )
 {
 	VertexAttributesChannelDescriptor desc;
 

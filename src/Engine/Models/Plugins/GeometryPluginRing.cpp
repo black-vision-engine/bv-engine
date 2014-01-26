@@ -16,7 +16,7 @@ GeometryRingPlugin::GeometryRingPlugin                    ( float startAngle, fl
     // Set Geometry Channel
     model::RingComponent * ring = RingComponent::Create( startAngle, endAngle, innerRadius, outerRadius, segmentsNum );
 
-    m_geomChannel               = ChannelsFactory::CreateGeometryChannel( ring );
+    m_geomChannel               = ChannelsFactory::CreateVertexAttributesChannel( ring );
 }
 
 // *************************************
@@ -28,7 +28,7 @@ GeometryRingPlugin::~GeometryRingPlugin   ()
 
 // *************************************
 //
-const IVertexAttributesChannel *    GeometryRingPlugin::GetGeometryChannel          () const
+const IVertexAttributesChannel *    GeometryRingPlugin::GetVertexAttributesChannel          () const
 {
     return m_geomChannel;
 }

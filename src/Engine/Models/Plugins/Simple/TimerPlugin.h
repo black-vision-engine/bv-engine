@@ -36,7 +36,7 @@ public:
     static TimerPlugin*                         Create                      ( const ParamFloat& timeParam );
 
 
-    virtual const IVertexAttributesChannel *    GetGeometryChannel          () const override;
+    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel          () const override;
     virtual Textures                            GetTextures                 () const override;
 
     virtual void                                Update                      ( TimeType t ) override;

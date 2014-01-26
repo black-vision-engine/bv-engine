@@ -57,7 +57,7 @@ public:
     void                                SetAttachmentMode           ( TextureAttachmentMode mode );
 
 
-    virtual const IVertexAttributesChannel *    GetGeometryChannel          () const override;                                                                           
+    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel          () const override;                                                                           
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;                                       
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
     virtual Textures                            GetTextures                 () const override;

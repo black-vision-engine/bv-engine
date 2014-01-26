@@ -75,7 +75,7 @@ void                        SimpleAnimationPlugin::SetAttachmentMode           (
 //
 void SimpleAnimationPlugin::EvalGeometryChannel( const IPlugin * prev )
 {
-    auto prevGeomChannel = prev->GetGeometryChannel();
+    auto prevGeomChannel = prev->GetVertexAttributesChannel();
     AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
     for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
@@ -187,7 +187,7 @@ void                SimpleAnimationPlugin::Update              ( TimeType t )
 {
     if( m_attachmentMode == TextureAttachmentMode::MM_FREE )
     {
-        if( m_prevPlugin->GetGeometryChannel()->NeedsAttributesUpdate( t ) )
+        if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate( t ) )
         {
             for( unsigned int i = 0; i < m_geomChannel->GetComponents().size(); ++i )
             {
@@ -233,7 +233,7 @@ void                SimpleAnimationPlugin::Print               ( std::ostream & 
     }
 }
 
-const IVertexAttributesChannel *            SimpleAnimationPlugin::GetGeometryChannel          () const
+const IVertexAttributesChannel *            SimpleAnimationPlugin::GetVertexAttributesChannel          () const
 {
     return m_geomChannel;
 }

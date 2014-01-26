@@ -205,7 +205,7 @@ std::vector< IConnectedComponent* >     VertexAttributesChannel::GetComponents  
 ////
 //bool                                    VertexAttributesChannel::CanBeConnectedTo    ( IPlugin * plugin ) const
 //{
-//    return CanBeConnectedTo( plugin->GetGeometryChannel() );
+//    return CanBeConnectedTo( plugin->GetVertexAttributesChannel() );
 //}
 
 // *********************************

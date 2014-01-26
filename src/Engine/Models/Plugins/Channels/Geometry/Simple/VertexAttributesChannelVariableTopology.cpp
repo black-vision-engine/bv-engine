@@ -1,4 +1,4 @@
-#include "GeometryChannelVariableTopology.h"
+#include "VertexAttributesChannelVariableTopology.h"
 
 #include <cassert>
 #include <cmath>
@@ -17,7 +17,7 @@ namespace bv { namespace model {
 
     // ******************************
 //
-GeometryChannelVariableTopology::GeometryChannelVariableTopology     (  float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
+VertexAttributesChannelVariableTopology::VertexAttributesChannelVariableTopology     (  float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
     : VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP )
 {
     assert( numSegments >= 1 );
@@ -36,13 +36,13 @@ GeometryChannelVariableTopology::GeometryChannelVariableTopology     (  float si
 
 // ******************************
 //
-GeometryChannelVariableTopology::~GeometryChannelVariableTopology    ()
+VertexAttributesChannelVariableTopology::~VertexAttributesChannelVariableTopology    ()
 {
 }
 
 // ******************************
 //
-void    GeometryChannelVariableTopology::Update                      ( TimeType t )
+void    VertexAttributesChannelVariableTopology::Update                      ( TimeType t )
 {
     if( !m_needMoreUpdates )
     {
@@ -88,44 +88,44 @@ void    GeometryChannelVariableTopology::Update                      ( TimeType 
 
 // ******************************
 //
-bool    GeometryChannelVariableTopology::NeedsAttributesUpdate        ( TimeType t ) const
+bool    VertexAttributesChannelVariableTopology::NeedsAttributesUpdate        ( TimeType t ) const
 {
     return false;
 }
 
 // ******************************
 //
-bool    GeometryChannelVariableTopology::NeedsTopologyUpdate         ( TimeType t ) const
+bool    VertexAttributesChannelVariableTopology::NeedsTopologyUpdate         ( TimeType t ) const
 {
     return m_vtConnectedComponents[ m_curComponent ]->TopologyChanged( t );
 }
 
 // ******************************
 //
-bool    GeometryChannelVariableTopology::IsTimeInvariant            () const
+bool    VertexAttributesChannelVariableTopology::IsTimeInvariant            () const
 {
     return !m_needMoreUpdates;
 }
 
 // ******************************
 //
-bool    GeometryChannelVariableTopology::CanBeConnectedTo           ( IVertexAttributesChannel * channel ) const
+bool    VertexAttributesChannelVariableTopology::CanBeConnectedTo           ( IVertexAttributesChannel * channel ) const
 {
     return false;
 }
 
 // ******************************
 //
-void            GeometryChannelVariableTopology::AddVTConnectedComponent             ( VariableTopologyStripComponent * cc )
+void            VertexAttributesChannelVariableTopology::AddVTConnectedComponent             ( VariableTopologyStripComponent * cc )
 {
-    GeometryChannelVariableTopology::AddConnectedComponent( cc );
+    VertexAttributesChannelVariableTopology::AddConnectedComponent( cc );
 
     m_vtConnectedComponents.push_back( cc );
 }
 
 // ******************************
 //
-unsigned int    GeometryChannelVariableTopology::TotalNumVertices                    ()          const
+unsigned int    VertexAttributesChannelVariableTopology::TotalNumVertices                    ()          const
 {
     unsigned int total = 0;
 
@@ -139,7 +139,7 @@ unsigned int    GeometryChannelVariableTopology::TotalNumVertices               
 
 // ******************************
 //
-std::vector< IConnectedComponent * >  GeometryChannelVariableTopology::GetComponents () const
+std::vector< IConnectedComponent * >  VertexAttributesChannelVariableTopology::GetComponents () const
 {
     std::vector< IConnectedComponent* > retv;
     retv.reserve( m_curComponent + 1 );
@@ -154,9 +154,9 @@ std::vector< IConnectedComponent * >  GeometryChannelVariableTopology::GetCompon
 
 // ******************************
 //
-GeometryChannelVariableTopology *   GeometryChannelVariableTopology::Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
+VertexAttributesChannelVariableTopology *   VertexAttributesChannelVariableTopology::Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
 {
-    GeometryChannelVariableTopology * channel = new GeometryChannelVariableTopology( size, speed, oscilationSpeed, numSegments, numComponents );
+    VertexAttributesChannelVariableTopology * channel = new VertexAttributesChannelVariableTopology( size, speed, oscilationSpeed, numSegments, numComponents );
     
     float defaultSpeed = speed;
     TimeType defaultDuration = TimeType( 4.0 );

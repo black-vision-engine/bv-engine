@@ -11,14 +11,13 @@ namespace model
 {
     class IVertexAttributesChannel;
     class IConnectedComponent;
-    class IGeometryChannelDescriptor;
 }
 
 class GeometryUpdater : public IUpdater
 {
 private:
 
-    RenderableEntity *                  m_out;
+    RenderableEntity *                          m_out;
     const model::IVertexAttributesChannel *     m_in;
 
 public:

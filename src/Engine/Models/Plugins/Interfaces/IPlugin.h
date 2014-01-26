@@ -28,7 +28,7 @@ public:
 
     virtual const char *                        GetName                     () const = 0;
 
-    virtual const IVertexAttributesChannel *    GetGeometryChannel          () const = 0;
+    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const = 0;
     virtual const ITransformChannel *           GetTransformChannel         () const = 0;
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const = 0;
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const = 0;

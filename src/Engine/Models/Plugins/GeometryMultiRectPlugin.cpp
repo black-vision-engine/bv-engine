@@ -25,7 +25,7 @@ GeometryMultiRectPlugin::~GeometryMultiRectPlugin   ()
 
 // *************************************
 //
-const IVertexAttributesChannel *    GeometryMultiRectPlugin::GetGeometryChannel          () const
+const IVertexAttributesChannel *    GeometryMultiRectPlugin::GetVertexAttributesChannel          () const
 {
     return m_geomChannel;
 }
@@ -55,7 +55,7 @@ void                        GeometryMultiRectPlugin::AddRectConnectedComponnent 
     model::RectComponent*   rect    = model::RectComponent::Create( w, h, tx, ty, tz );
     if( !m_geomChannel )
     {
-        m_geomChannel                   = ChannelsFactory::CreateGeometryChannel( rect );
+        m_geomChannel                   = ChannelsFactory::CreateVertexAttributesChannel( rect );
     }
     else
     {

@@ -7,7 +7,7 @@ namespace bv { namespace model {
 
 class VariableTopologyStripComponent;
 
-class GeometryChannelVariableTopology : public VertexAttributesChannel
+class VertexAttributesChannelVariableTopology : public VertexAttributesChannel
 {
 private:
 
@@ -26,11 +26,11 @@ private:
 
 private:
 
-                            GeometryChannelVariableTopology     ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents );
+                            VertexAttributesChannelVariableTopology     ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents );
 
 public:
 
-    virtual                 ~GeometryChannelVariableTopology    ();
+    virtual                 ~VertexAttributesChannelVariableTopology    ();
 
     virtual void            Update                              ( TimeType t );
 
@@ -45,7 +45,7 @@ public:
 
     virtual std::vector< IConnectedComponent * >  GetComponents () const;
 
-    static GeometryChannelVariableTopology *    Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents );
+    static VertexAttributesChannelVariableTopology *    Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents );
 
 };
 

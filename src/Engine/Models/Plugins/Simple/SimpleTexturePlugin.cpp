@@ -121,7 +121,7 @@ void                        SimpleTexturePlugin::SetAttachmentMode           ( T
 //
 void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
 {
-    auto prevGeomChannel = prev->GetGeometryChannel();
+    auto prevGeomChannel = prev->GetVertexAttributesChannel();
     AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
     for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
@@ -212,7 +212,7 @@ void                                    SimpleTexturePlugin::Update             
 {
     if( m_attachmentMode == TextureAttachmentMode::MM_FREE )
     {
-        if( m_prevPlugin->GetGeometryChannel()->NeedsAttributesUpdate( t ) )
+        if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate( t ) )
         {
             for( unsigned int i = 0; i < m_geomChannel->GetComponents().size(); ++i )
             {
@@ -236,7 +236,7 @@ void                                    SimpleTexturePlugin::Update             
 
     }
 
-    if ( m_prevPlugin->GetGeometryChannel()->NeedsAttributesUpdate( t ) )
+    if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate( t ) )
     {
         m_geomChannel->SetNeedsAttributesUpdate( true );
     }
@@ -271,7 +271,7 @@ void                                    SimpleTexturePlugin::Print              
 
 // *************************************
 //
-const IVertexAttributesChannel *        SimpleTexturePlugin::GetGeometryChannel          () const
+const IVertexAttributesChannel *        SimpleTexturePlugin::GetVertexAttributesChannel          () const
 {
     return m_geomChannel.get();
 }

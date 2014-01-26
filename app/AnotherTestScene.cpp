@@ -31,9 +31,9 @@
 #include "Engine/Models/Plugins/Channels/GeometryShader/ExtrudeGeometryShaderChannel.h"
 #include "Engine/Models/Plugins/Simple/SimpleTransformPlugin.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/AnimatedStripComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/Simple/GeometryChannelAnimatedVertices.h"
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/VertexAttributesChannelAnimatedVertices.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/VariableTopologyStripComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/Simple/GeometryChannelVariableTopology.h"
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/VertexAttributesChannelVariableTopology.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
 #include "Engine/Models/Resources/TextHelpers.h"
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
@@ -73,7 +73,7 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
     model::BasicNode * root = new model::BasicNode();
 
     ///////////////////////////// Channels //////////////////////////
-    model::VertexAttributesChannel *        geomChannel     = model::GeometryChannelAnimatedVertices::Create( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
+    model::VertexAttributesChannel *        geomChannel     = model::VertexAttributesChannelAnimatedVertices::Create( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
 
     ///////////////////////////// Geometry plugin //////////////////////////
     model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin( geomChannel );
@@ -116,7 +116,7 @@ model::BasicNode * VariableTopologySolids( float size, float speed, float oscila
     model::BasicNode * root = new model::BasicNode();
     
     ///////////////////////////// Channels //////////////////////////
-    model::VertexAttributesChannel *        geomChannel     = model::GeometryChannelVariableTopology::Create( size, speed, oscilationSpeed, numSegments, numComponents );
+    model::VertexAttributesChannel *        geomChannel     = model::VertexAttributesChannelVariableTopology::Create( size, speed, oscilationSpeed, numSegments, numComponents );
 
     ///////////////////////////// Geometry plugin //////////////////////////
     model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin( geomChannel );

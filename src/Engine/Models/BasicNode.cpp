@@ -58,7 +58,7 @@ SceneNode *                 BasicNode::BuildScene()
     RenderableEntity *  renderEnt   = nullptr;
     RenderableEffect *  effect      = nullptr;
 
-    if( m_plugins.back()->GetGeometryChannel() )
+    if( m_plugins.back()->GetVertexAttributesChannel() )
     {
         auto renderableType = GetRenderableType();
 
@@ -183,7 +183,7 @@ SceneNode *                 BasicNode::BuildScene()
                 UpdatersManager & updatersManager = UpdatersManager::Get();
 
                 auto transChannel = p->GetTransformChannel();        
-                auto geomChannel = p->GetGeometryChannel();
+                auto geomChannel = p->GetVertexAttributesChannel();
             
                 assert( transChannel != nullptr );
                 assert( geomChannel != nullptr );
@@ -300,7 +300,7 @@ PrimitiveType                       BasicNode::GetRenderableType        ()      
         assert(false);
     }
 
-    return m_plugins.back()->GetGeometryChannel()->GetPrimitiveType();
+    return m_plugins.back()->GetVertexAttributesChannel()->GetPrimitiveType();
 }
 
 // ********************************
@@ -312,7 +312,7 @@ bool                                BasicNode::CreateRenderableData     (/* Vert
         return false;
     }
 
-    auto components = m_plugins.back()->GetGeometryChannel()->GetComponents();
+    auto components = m_plugins.back()->GetVertexAttributesChannel()->GetComponents();
 
     if( components.empty() )
     {
@@ -401,10 +401,10 @@ RenderableArrayDataSingleVertexBuffer * BasicNode::CreateRenderableArrayData( Pr
         return nullptr;
     }
 
-    auto geometryChannel = m_plugins.back()->GetGeometryChannel();
+    auto vaChannel = m_plugins.back()->GetVertexAttributesChannel();
 
-    auto components = geometryChannel->GetComponents();
-    auto geomDesc = geometryChannel->GetDescriptor();
+    auto components = vaChannel->GetComponents();
+    auto geomDesc = vaChannel->GetDescriptor();
 
     if( components.empty() )
     {
@@ -414,7 +414,7 @@ RenderableArrayDataSingleVertexBuffer * BasicNode::CreateRenderableArrayData( Pr
     switch( type )
     {
         case PrimitiveType::PT_TRIANGLE_STRIP:
-            return CreateRenderableArrayDataArrays( components, geomDesc, geometryChannel->IsTimeInvariant() );
+            return CreateRenderableArrayDataArrays( components, geomDesc, vaChannel->IsTimeInvariant() );
         case PrimitiveType::PT_TRIANGLES:
         case PrimitiveType::PT_TRIANGLE_MESH:
             //FIXME: implement
@@ -433,22 +433,22 @@ RenderableArrayDataArraysSingleVertexBuffer *   BasicNode::CreateRenderableArray
         return nullptr;
     }
 
-    auto geometryChannel = m_plugins.back()->GetGeometryChannel();
+    auto vaChannel = m_plugins.back()->GetVertexAttributesChannel();
 
-    if( geometryChannel == nullptr )
+    if( vaChannel == nullptr )
     {
         return nullptr;
     }
 
-    auto components = geometryChannel->GetComponents();
-    auto geomDesc = geometryChannel->GetDescriptor();
+    auto components = vaChannel->GetComponents();
+    auto geomDesc = vaChannel->GetDescriptor();
 
     if( components.empty() )
     {
         return nullptr;
     }
     
-    return CreateRenderableArrayDataArrays( components, geomDesc, geometryChannel->IsTimeInvariant() );
+    return CreateRenderableArrayDataArrays( components, geomDesc, vaChannel->IsTimeInvariant() );
 }
 
 // ********************************

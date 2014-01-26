@@ -48,7 +48,7 @@ public:
 
                                 ~SimpleTextPlugin   ();
 
-    virtual const IVertexAttributesChannel *    GetGeometryChannel          () const override;
+    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel          () const override;
     virtual Textures                            GetTextures                 () const override;
     void                                        SetText                     ( const std::wstring& newText );
 

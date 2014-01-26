@@ -7,7 +7,7 @@ namespace bv { namespace model {
 
 class ConnectedComponent;
 
-class GeometryChannelAnimatedVertices : public VertexAttributesChannel
+class VertexAttributesChannelAnimatedVertices : public VertexAttributesChannel
 {
 private:
 
@@ -23,17 +23,17 @@ private:
 
 private:
 
-                    GeometryChannelAnimatedVertices     ( float w, float h, float speedX, float speedY, float cyclesX, float cyclesY );
+                    VertexAttributesChannelAnimatedVertices     ( float w, float h, float speedX, float speedY, float cyclesX, float cyclesY );
 
 public:
 
-    virtual         ~GeometryChannelAnimatedVertices    ();
+    virtual         ~VertexAttributesChannelAnimatedVertices    ();
 
     virtual void    Update                              ( TimeType t );
 
     virtual bool    NeedsAttributesUpdate               ( TimeType t ) const;
 
-    static GeometryChannelAnimatedVertices *    Create  ( float w, float h, float z, unsigned int numSegments, float speedX, float speedY, float cyclesX, float cyclesY, float sizeY, float sizeZ );
+    static VertexAttributesChannelAnimatedVertices *    Create  ( float w, float h, float z, unsigned int numSegments, float speedX, float speedY, float cyclesX, float cyclesY, float sizeY, float sizeZ );
 
 };
 

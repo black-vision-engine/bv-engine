@@ -21,7 +21,7 @@ GeometryPlugin::~GeometryPlugin ()
 
 // *******************************
 //
-const IVertexAttributesChannel *   GeometryPlugin::GetGeometryChannel          () const
+const IVertexAttributesChannel *   GeometryPlugin::GetVertexAttributesChannel          () const
 {
     return m_geomChannel;
 }

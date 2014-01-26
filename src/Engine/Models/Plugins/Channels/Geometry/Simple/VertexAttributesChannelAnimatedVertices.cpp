@@ -1,4 +1,4 @@
-#include "GeometryChannelAnimatedVertices.h"
+#include "VertexAttributesChannelAnimatedVertices.h"
 
 #include <cassert>
 #include <cmath>
@@ -16,7 +16,7 @@ namespace bv { namespace model {
 
 // ******************************
 //
-GeometryChannelAnimatedVertices::GeometryChannelAnimatedVertices     (  float w, float h, float speedX, float speedY, float cyclesX, float cyclesY )
+VertexAttributesChannelAnimatedVertices::VertexAttributesChannelAnimatedVertices     (  float w, float h, float speedX, float speedY, float cyclesX, float cyclesY )
     : VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP )
 {
     m_w         = w;
@@ -29,13 +29,13 @@ GeometryChannelAnimatedVertices::GeometryChannelAnimatedVertices     (  float w,
 
 // ******************************
 //
-GeometryChannelAnimatedVertices::~GeometryChannelAnimatedVertices    ()
+VertexAttributesChannelAnimatedVertices::~VertexAttributesChannelAnimatedVertices    ()
 {
 }
 
 // ******************************
 //
-void    GeometryChannelAnimatedVertices::Update                      ( TimeType t )
+void    VertexAttributesChannelAnimatedVertices::Update                      ( TimeType t )
 {
     assert( m_connectedComponents.size() == 1 );
 
@@ -44,19 +44,19 @@ void    GeometryChannelAnimatedVertices::Update                      ( TimeType 
 
 // ******************************
 //
-bool    GeometryChannelAnimatedVertices::NeedsAttributesUpdate      ( TimeType t ) const
+bool    VertexAttributesChannelAnimatedVertices::NeedsAttributesUpdate      ( TimeType t ) const
 {
     return true;
 }
 
 // ******************************
 //
-GeometryChannelAnimatedVertices *   GeometryChannelAnimatedVertices::Create  ( float w, float h, float z, unsigned int numSegments, float speedX, float speedY, float cyclesX, float cyclesY, float sizeY, float sizeZ )
+VertexAttributesChannelAnimatedVertices *   VertexAttributesChannelAnimatedVertices::Create  ( float w, float h, float z, unsigned int numSegments, float speedX, float speedY, float cyclesX, float cyclesY, float sizeY, float sizeZ )
 {
     float sclSine   = (float) TWOPI * cyclesX / w;
     float sclCosine = (float) TWOPI * cyclesY / w;
 
-    GeometryChannelAnimatedVertices * channel = new GeometryChannelAnimatedVertices( w, h, speedX, speedY, cyclesX, cyclesY );
+    VertexAttributesChannelAnimatedVertices * channel = new VertexAttributesChannelAnimatedVertices( w, h, speedX, speedY, cyclesX, cyclesY );
     AnimatedStripComponent * cc = AnimatedStripComponent::Create( w, h, numSegments, z, sclSine, sclCosine, speedX, speedY, sizeY, sizeZ );
 
     ChannelFromConnectedComponents( channel, 1, cc );
