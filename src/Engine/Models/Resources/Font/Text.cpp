@@ -1,6 +1,7 @@
 #include "Text.h"
 
 #include "Glyph.h"
+#include "System/FileIO.h"
 
 #include <iostream>
 #include <fstream>
@@ -37,7 +38,7 @@ Text::Text( const std::wstring& text, const std::string& fontFile, unsigned int 
     BuildAtlas();
 }
 
-// #define GENERATE_TEST_RAW_FILE
+#define GENERATE_TEST_RAW_FILE
 
 void                Text::BuildAtlas()
 {
@@ -181,12 +182,12 @@ void                Text::BuildAtlas()
     memcpy( atlasData, &str[ 0 ], dataStream.str().size() );
 
 #ifdef GENERATE_TEST_RAW_FILE
-    std::ofstream file;
-    file.open( "test.raw", std::ios::out | std::ios::binary );
 
-    file << str;
+    auto file = File::Open( "test.raw", File::FOMReadWrite );
 
-    file.close();
+    file << dataStream;
+
+    file.Close();
 
 #endif // GENERATE_TEST_RAW_FILE
 }

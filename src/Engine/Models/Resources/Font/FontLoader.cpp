@@ -1,10 +1,11 @@
 #include "FontLoader.h"
 #include "Text.h"
 #include "Engine/Models/Resources/TextHelpers.h"
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem/operations.hpp>
+#include "System/FileIO.h"
+
+
 #include <boost/filesystem/convenience.hpp>
+#include <assert.h>
 
 namespace bv { namespace model {
 
@@ -89,7 +90,7 @@ std::string         AddPostfixToFileName( const std::string& file, const std::st
 //
 const Text*             FontLoader::TryLoadFont             ( const std::string& file, size_t size ) const
 {
-    if( boost::filesystem::exists(file) )
+    if( File::Exists(file) )
     {
         return LoadFontFile( file, size );
     }
@@ -104,7 +105,7 @@ const Text*             FontLoader::TryLoadFont             ( const std::string&
 const Text*             FontLoader::TryLoadFontBold         ( const std::string& file, size_t size ) const
 {
     auto filebd = AddPostfixToFileName( file, "bd" );
-    if( boost::filesystem::exists( filebd ) )
+    if( File::Exists( filebd ) )
     {
         return LoadFontFile( filebd, size );
     }
@@ -119,7 +120,7 @@ const Text*             FontLoader::TryLoadFontBold         ( const std::string&
 const Text*             FontLoader::TryLoadFontBoldItalic   ( const std::string& file, size_t size ) const
 {
     auto filebd = AddPostfixToFileName( file, "bi" );
-    if( boost::filesystem::exists( filebd ) )
+    if( File::Exists( filebd ) )
     {
         return LoadFontFile( filebd, size );
     }
@@ -134,7 +135,7 @@ const Text*             FontLoader::TryLoadFontBoldItalic   ( const std::string&
 const Text*             FontLoader::TryLoadFontItalic       ( const std::string& file, size_t size ) const
 {
     auto filebd = AddPostfixToFileName( file, "i" );
-    if( boost::filesystem::exists( filebd ) )
+    if( File::Exists( filebd ) )
     {
         return LoadFontFile( filebd, size );
     }

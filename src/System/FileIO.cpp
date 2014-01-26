@@ -26,6 +26,8 @@ public:
     bool                Write       ( std::istream & in );
     bool                Write       ( std::istream & in , long numBytes );
 
+    void                Close       ();
+
     virtual             ~FileImpl   ();
 
     static bool         Exists      ( const std::string & fileName );
@@ -110,6 +112,13 @@ bool        FileImpl::Write       ( std::istream & in , long numBytes)
     }
 
     return numBytes == 0;
+}
+
+// *******************************
+//
+void        FileImpl::Close       ()
+{
+    m_fileHandle->close();
 }
 
 // *******************************
@@ -218,6 +227,13 @@ int         File::Write       ( std::istream & in )
 int         File::Write       ( std::istream & in , int numBytes )
 {
     return m_impl->Write( in, numBytes );
+}
+
+// *******************************
+//
+void        File::Close       ()
+{
+    return m_impl->Close();
 }
 
 // *******************************

@@ -30,6 +30,8 @@ public:
     int                 Write       ( std::istream & in );
     int                 Write       ( std::istream & in , int numBytes );
 
+    void                Close       ();
+
     void                operator << ( std::istream& );
     void                operator >> ( std::ostream& );
 
