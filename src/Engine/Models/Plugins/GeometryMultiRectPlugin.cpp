@@ -12,7 +12,7 @@ namespace bv { namespace model {
 //
 GeometryMultiRectPlugin::GeometryMultiRectPlugin                    ()
     : BasePlugin( nullptr )
-    , m_geomChannel( nullptr )
+    , m_vaChannel( nullptr )
 {
 }
 
@@ -20,21 +20,21 @@ GeometryMultiRectPlugin::GeometryMultiRectPlugin                    ()
 //
 GeometryMultiRectPlugin::~GeometryMultiRectPlugin   ()
 {
-    delete m_geomChannel;
+    delete m_vaChannel;
 }
 
 // *************************************
 //
 const IVertexAttributesChannel *    GeometryMultiRectPlugin::GetVertexAttributesChannel          () const
 {
-    return m_geomChannel;
+    return m_vaChannel;
 }
 
 // *************************************
 //
 void                        GeometryMultiRectPlugin::Update              ( TimeType t )
 {
-    m_geomChannel->Update( t );
+    m_vaChannel->Update( t );
 }
 
 // *************************************
@@ -53,13 +53,13 @@ void                        GeometryMultiRectPlugin::AddRectConnectedComponnent 
 void                        GeometryMultiRectPlugin::AddRectConnectedComponnent  ( float w, float h, float tx, float ty, float tz )
 {
     model::RectComponent*   rect    = model::RectComponent::Create( w, h, tx, ty, tz );
-    if( !m_geomChannel )
+    if( !m_vaChannel )
     {
-        m_geomChannel                   = ChannelsFactory::CreateVertexAttributesChannel( rect );
+        m_vaChannel                   = ChannelsFactory::CreateVertexAttributesChannel( rect );
     }
     else
     {
-        m_geomChannel->AddConnectedComponent( rect );
+        m_vaChannel->AddConnectedComponent( rect );
     }
 }
 

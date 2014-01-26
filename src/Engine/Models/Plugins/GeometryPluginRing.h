@@ -21,7 +21,7 @@ class GeometryRingPlugin : public BasePlugin< IPlugin, GeometryRingPluginUID >
 {
 private:
 
-    model::VertexAttributesChannel* m_geomChannel;
+    model::VertexAttributesChannel* m_vaChannel;
 
 public:
 

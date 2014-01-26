@@ -22,7 +22,7 @@ class GeometryMultiRectPlugin : public BasePlugin< IPlugin, GeometryMultiRectPlu
 {
 private:
 
-    model::VertexAttributesChannel *    m_geomChannel;
+    model::VertexAttributesChannel *    m_vaChannel;
 
 public:
 

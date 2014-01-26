@@ -80,9 +80,9 @@ void    GeometryUpdater::UpdatePositions     ( TimeType t )
     VertexBuffer * vb                   = vao->GetVertexBuffer      ();
     const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
 
-    auto geomChannel    = m_in;
-    auto components     = geomChannel->GetComponents();
-    auto geomDesc       = geomChannel->GetDescriptor();
+    auto vaChannel    = m_in;
+    auto components     = vaChannel->GetComponents();
+    auto geomDesc       = vaChannel->GetDescriptor();
 
     char * vbData = vb->Data(); //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P  TYM RAZEM KURWA PODWOJNA, BO TU NAPRAWDE ZACZYNA SIE ROBIC BURDEL
     unsigned int currentOffset = 0;
@@ -114,9 +114,9 @@ void    GeometryUpdater::UpdateTopology      ( TimeType t )
     //FIXME: if this is the last update then STATIC semantic should be used but right now it's irrelevant
     DataBuffer::Semantic vbSemantic = DataBuffer::Semantic::S_DYNAMIC;
 
-    auto geomChannel    = m_in;
-    auto components     = geomChannel->GetComponents();
-    auto geomDesc       = geomChannel->GetDescriptor();
+    auto vaChannel    = m_in;
+    auto components     = vaChannel->GetComponents();
+    auto geomDesc       = vaChannel->GetDescriptor();
 
     if( components.empty() )
     {
@@ -124,7 +124,7 @@ void    GeometryUpdater::UpdateTopology      ( TimeType t )
         return;
     }
 
-    unsigned int totalNumVertivces = geomChannel->TotalNumVertices();
+    unsigned int totalNumVertivces = vaChannel->TotalNumVertices();
     
     //FIXME: works because we allow only triangle strips here
     //FIXME: this code used to update vertex bufer and vao from model should be written in some utility function/class and used where necessary

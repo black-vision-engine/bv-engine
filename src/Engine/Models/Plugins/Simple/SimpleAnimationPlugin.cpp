@@ -31,7 +31,7 @@ SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin 
     }
     printf( "\n" );
 
-    m_geomChannel = nullptr;
+    m_vaChannel = nullptr;
 
     EvalGeometryChannel( prev );
 
@@ -59,7 +59,7 @@ SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin 
 //
 SimpleAnimationPlugin::~SimpleAnimationPlugin        ()
 {
-    delete m_geomChannel;
+    delete m_vaChannel;
     delete m_pixelShaderChannel;
     delete m_vertexShaderChannel;
 }
@@ -81,7 +81,7 @@ void SimpleAnimationPlugin::EvalGeometryChannel( const IPlugin * prev )
     for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
     {
         ConnectedComponent* connComp = new ConnectedComponent();
-        VertexAttributesChannelDescriptor geomChannelDesc;
+        VertexAttributesChannelDescriptor vaChannelDesc;
 
         auto prevConnComp = static_cast< const model::ConnectedComponent* >( prevGeomChannel->GetComponents()[ i ] );
         auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
@@ -91,20 +91,20 @@ void SimpleAnimationPlugin::EvalGeometryChannel( const IPlugin * prev )
             connComp->AddAttributeChannel( prevCompCh );
         }
 
-        if( m_geomChannel == nullptr )
+        if( m_vaChannel == nullptr )
         {
             for( auto prevCompCh : prevCompChannels )
             {
                 auto prevCompChDesc = prevCompCh->GetDescriptor();
-                geomChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
+                vaChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
             }
 
-            m_texCoordChannelIndex = geomChannelDesc.GetNumVertexChannels();
+            m_texCoordChannelIndex = vaChannelDesc.GetNumVertexChannels();
 
-            geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+            vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-            auto geomChannel = new model::VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
-            m_geomChannel = geomChannel;
+            auto vaChannel = new model::VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+            m_vaChannel = vaChannel;
         }
 
         //Only one animation is added
@@ -134,7 +134,7 @@ void SimpleAnimationPlugin::EvalGeometryChannel( const IPlugin * prev )
 
             connComp->AddAttributeChannel( AttributeChannelPtr( verTexAttrChannel ) );
 
-            m_geomChannel->AddConnectedComponent( connComp );
+            m_vaChannel->AddConnectedComponent( connComp );
         }
     }
 }
@@ -189,9 +189,9 @@ void                SimpleAnimationPlugin::Update              ( TimeType t )
     {
         if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate( t ) )
         {
-            for( unsigned int i = 0; i < m_geomChannel->GetComponents().size(); ++i )
+            for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
             {
-                auto connComp = static_cast< const model::ConnectedComponent* >( m_geomChannel->GetComponents()[ i ] );
+                auto connComp = static_cast< const model::ConnectedComponent* >( m_vaChannel->GetComponents()[ i ] );
                 auto compChannels = connComp->GetAttributeChannels();
 
                 if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
@@ -210,9 +210,9 @@ void                SimpleAnimationPlugin::Update              ( TimeType t )
         }
     }
 
-    m_geomChannel->SetNeedsAttributesUpdate( true );
+    m_vaChannel->SetNeedsAttributesUpdate( true );
 
-    m_geomChannel->Update( t );
+    m_vaChannel->Update( t );
     m_pixelShaderChannel->Update( t );
     m_vertexShaderChannel->Update( t );
 
@@ -235,7 +235,7 @@ void                SimpleAnimationPlugin::Print               ( std::ostream & 
 
 const IVertexAttributesChannel *            SimpleAnimationPlugin::GetVertexAttributesChannel          () const
 {
-    return m_geomChannel;
+    return m_vaChannel;
 }
 
 const IPixelShaderChannel *         SimpleAnimationPlugin::GetPixelShaderChannel       () const

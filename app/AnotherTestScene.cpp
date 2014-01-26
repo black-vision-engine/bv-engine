@@ -73,10 +73,10 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
     model::BasicNode * root = new model::BasicNode();
 
     ///////////////////////////// Channels //////////////////////////
-    model::VertexAttributesChannel *        geomChannel     = model::VertexAttributesChannelAnimatedVertices::Create( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
+    model::VertexAttributesChannel *        vaChannel     = model::VertexAttributesChannelAnimatedVertices::Create( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
 
     ///////////////////////////// Geometry plugin //////////////////////////
-    model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin( geomChannel );
+    model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin( vaChannel );
 
     root->AddPlugin( geomPlugin );
 
@@ -116,10 +116,10 @@ model::BasicNode * VariableTopologySolids( float size, float speed, float oscila
     model::BasicNode * root = new model::BasicNode();
     
     ///////////////////////////// Channels //////////////////////////
-    model::VertexAttributesChannel *        geomChannel     = model::VertexAttributesChannelVariableTopology::Create( size, speed, oscilationSpeed, numSegments, numComponents );
+    model::VertexAttributesChannel *        vaChannel     = model::VertexAttributesChannelVariableTopology::Create( size, speed, oscilationSpeed, numSegments, numComponents );
 
     ///////////////////////////// Geometry plugin //////////////////////////
-    model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin( geomChannel );
+    model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin( vaChannel );
 
     root->AddPlugin( geomPlugin );
 

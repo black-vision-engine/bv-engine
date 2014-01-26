@@ -16,28 +16,28 @@ GeometryRectPlugin::GeometryRectPlugin                    ( const ParamFloat& w,
     , m_height( h )
 {
     RectComponent*   rect           = RectComponent::Create( w.Evaluate( 0.f ), h.Evaluate( 0.f ) );
-    m_geomChannel                   = ChannelsFactory::CreateVertexAttributesChannel( rect );
+    m_vaChannel                   = ChannelsFactory::CreateVertexAttributesChannel( rect );
 }
 
 // *************************************
 //
 GeometryRectPlugin::~GeometryRectPlugin   ()
 {
-    delete m_geomChannel;
+    delete m_vaChannel;
 }
 
 // *************************************
 //
 const IVertexAttributesChannel *    GeometryRectPlugin::GetVertexAttributesChannel          () const
 {
-    return m_geomChannel;
+    return m_vaChannel;
 }
 
 // *************************************
 //
 void                        GeometryRectPlugin::Update              ( TimeType t )
 {
-    m_geomChannel->Update( t );
+    m_vaChannel->Update( t );
 }
 
 // *************************************

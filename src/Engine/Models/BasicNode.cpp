@@ -183,17 +183,17 @@ SceneNode *                 BasicNode::BuildScene()
                 UpdatersManager & updatersManager = UpdatersManager::Get();
 
                 auto transChannel = p->GetTransformChannel();        
-                auto geomChannel = p->GetVertexAttributesChannel();
+                auto vaChannel = p->GetVertexAttributesChannel();
             
                 assert( transChannel != nullptr );
-                assert( geomChannel != nullptr );
+                assert( vaChannel != nullptr );
 
                 TransformUpdater * transformUpdater = new TransformUpdater( renderEnt, transChannel );
                 updatersManager.RegisterUpdater( transformUpdater );
 
-                if ( !geomChannel->IsTimeInvariant() )
+                if ( !vaChannel->IsTimeInvariant() )
                 {
-                    GeometryUpdater * geometryUpdater = new GeometryUpdater( renderEnt, geomChannel );
+                    GeometryUpdater * geometryUpdater = new GeometryUpdater( renderEnt, vaChannel );
                     updatersManager.RegisterUpdater( geometryUpdater );
                 }
 

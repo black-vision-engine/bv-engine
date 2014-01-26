@@ -28,7 +28,7 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
         m_textures.push_back( texInfo );
     }
 
-    m_geomChannel = nullptr;
+    m_vaChannel = nullptr;
     EvalGeometryChannel( prev );
 
     // Set Pixel Shader Channel
@@ -72,7 +72,7 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
         m_textures.push_back( texInfo );
     }
 
-    m_geomChannel = nullptr;
+    m_vaChannel = nullptr;
     EvalGeometryChannel( prev );
 
     // Set Pixel Shader Channel
@@ -127,7 +127,7 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
     for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
     {
         ConnectedComponent* connComp = new ConnectedComponent();
-        VertexAttributesChannelDescriptor geomChannelDesc;
+        VertexAttributesChannelDescriptor vaChannelDesc;
 
         auto prevConnComp = static_cast< const model::ConnectedComponent* >( prevGeomChannel->GetComponents()[ i ] );
         auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
@@ -137,23 +137,23 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
             connComp->AddAttributeChannel( prevCompCh );
         }
 
-        if( m_geomChannel == nullptr )
+        if( m_vaChannel == nullptr )
         {
             for( auto prevCompCh : prevCompChannels )
             {
                 auto prevCompChDesc = prevCompCh->GetDescriptor();
-                geomChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
+                vaChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
             }
 
-            m_texCoordChannelIndex = geomChannelDesc.GetNumVertexChannels();
+            m_texCoordChannelIndex = vaChannelDesc.GetNumVertexChannels();
 
             for( unsigned int i = 0; i < m_textures.size(); ++i )
             {
-                geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+                vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
             }
 
-            auto geomChannel = VertexAttributesChannelPtr( new VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), geomChannelDesc, true, prevGeomChannel->IsTimeInvariant() ) );
-            m_geomChannel = geomChannel;
+            auto vaChannel = VertexAttributesChannelPtr( new VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() ) );
+            m_vaChannel = vaChannel;
         }
 
         for( unsigned int i = 0; i < m_textures.size(); ++i )
@@ -184,7 +184,7 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
             connComp->AddAttributeChannel( AttributeChannelPtr( verTexAttrChannel ) );
         }
 
-        m_geomChannel->AddConnectedComponent( connComp );
+        m_vaChannel->AddConnectedComponent( connComp );
     }
 }
 
@@ -214,9 +214,9 @@ void                                    SimpleTexturePlugin::Update             
     {
         if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate( t ) )
         {
-            for( unsigned int i = 0; i < m_geomChannel->GetComponents().size(); ++i )
+            for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
             {
-                auto connComp = static_cast< const model::ConnectedComponent* >( m_geomChannel->GetComponents()[ i ] );
+                auto connComp = static_cast< const model::ConnectedComponent* >( m_vaChannel->GetComponents()[ i ] );
                 auto compChannels = connComp->GetAttributeChannels();
 
                 if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
@@ -238,7 +238,7 @@ void                                    SimpleTexturePlugin::Update             
 
     if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate( t ) )
     {
-        m_geomChannel->SetNeedsAttributesUpdate( true );
+        m_vaChannel->SetNeedsAttributesUpdate( true );
     }
 
     for( auto ti : m_textures )
@@ -248,7 +248,7 @@ void                                    SimpleTexturePlugin::Update             
         ti->m_texBorderColorVal->SetValue( ti->m_texBorderColor.Evaluate( t ) );
     }
 
-    m_geomChannel->Update( t );
+    m_vaChannel->Update( t );
     m_pixelShaderChannel->Update( t );
     m_vertexShaderChannel->Update( t );
 
@@ -273,7 +273,7 @@ void                                    SimpleTexturePlugin::Print              
 //
 const IVertexAttributesChannel *        SimpleTexturePlugin::GetVertexAttributesChannel          () const
 {
-    return m_geomChannel.get();
+    return m_vaChannel.get();
 }
 
 // *************************************

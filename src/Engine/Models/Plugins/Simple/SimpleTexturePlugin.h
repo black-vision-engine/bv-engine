@@ -69,7 +69,7 @@ private:
 
     unsigned int                    m_texCoordChannelIndex;
 
-    VertexAttributesChannelPtr      m_geomChannel;
+    VertexAttributesChannelPtr      m_vaChannel;
     TexturePixelShaderChannelPtr    m_pixelShaderChannel;
     TextureVertexShaderChannelPtr   m_vertexShaderChannel;
 

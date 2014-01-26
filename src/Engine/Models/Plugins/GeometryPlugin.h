@@ -24,11 +24,11 @@ class GeometryPlugin : public BasePlugin< IPlugin, GeometryPluginUID >
 {
 private:
 
-    VertexAttributesChannel *   m_geomChannel;
+    VertexAttributesChannel *   m_vaChannel;
 
 public:
 
-    explicit            GeometryPlugin  ( model::VertexAttributesChannel * geomChannel );
+    explicit            GeometryPlugin  ( model::VertexAttributesChannel * vaChannel );
                         ~GeometryPlugin ();
 
     const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;

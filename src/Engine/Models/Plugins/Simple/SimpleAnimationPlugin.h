@@ -33,7 +33,7 @@ class SimpleAnimationPlugin : public BasePlugin< ISequenceAnimationSourcePlugin,
 {
 private:
 
-    VertexAttributesChannel *       m_geomChannel;
+    VertexAttributesChannel *       m_vaChannel;
     TexturePixelShaderChannel *     m_pixelShaderChannel;
     TextureVertexShaderChannel *    m_vertexShaderChannel;
     Textures                        m_textures;

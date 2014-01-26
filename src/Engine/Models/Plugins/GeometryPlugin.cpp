@@ -6,9 +6,9 @@ namespace bv { namespace model {
 // ***************************** PLUGIN ********************************** 
 // *******************************
 //
-GeometryPlugin::GeometryPlugin  ( model::VertexAttributesChannel * geomChannel )
+GeometryPlugin::GeometryPlugin  ( model::VertexAttributesChannel * vaChannel )
     : BasePlugin( nullptr )
-    , m_geomChannel( geomChannel )
+    , m_vaChannel( vaChannel )
 {
 }
 
@@ -16,21 +16,21 @@ GeometryPlugin::GeometryPlugin  ( model::VertexAttributesChannel * geomChannel )
 //
 GeometryPlugin::~GeometryPlugin ()
 {
-    delete m_geomChannel;
+    delete m_vaChannel;
 }
 
 // *******************************
 //
 const IVertexAttributesChannel *   GeometryPlugin::GetVertexAttributesChannel          () const
 {
-    return m_geomChannel;
+    return m_vaChannel;
 }
 
 // *******************************
 //
 void  GeometryPlugin::Update          ( TimeType t )
 {
-    m_geomChannel->Update( t );
+    m_vaChannel->Update( t );
 }
 
 // *******************************

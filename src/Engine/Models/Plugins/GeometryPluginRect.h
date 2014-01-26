@@ -20,7 +20,7 @@ class GeometryRectPlugin : public BasePlugin< IPlugin, GeometryRectPluginUID >
 {
 private:
 
-    model::VertexAttributesChannel *    m_geomChannel;
+    model::VertexAttributesChannel *    m_vaChannel;
 
     ParamFloat                          m_width;
     ParamFloat                          m_height;
