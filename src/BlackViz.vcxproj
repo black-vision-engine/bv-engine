@@ -267,6 +267,7 @@
     <ClCompile Include="Engine\Models\Plugins\Simple\TimerPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\TextureInfo.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\AtlasCache.cpp" />
+    <ClCompile Include="Engine\Models\Resources\Font\TextHelper.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\FontLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\Text.cpp" />
     <ClCompile Include="Engine\Models\Resources\Resource.cpp" />
@@ -448,6 +449,7 @@
     <ClInclude Include="Engine\Models\Plugins\Simple\TimerPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\TextureInfo.h" />
     <ClInclude Include="Engine\Models\Resources\Font\AtlasCache.h" />
+    <ClInclude Include="Engine\Models\Resources\Font\TextHelper.h" />
     <ClInclude Include="Engine\Models\Resources\Font\FontLoader.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Glyph.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Text.h" />

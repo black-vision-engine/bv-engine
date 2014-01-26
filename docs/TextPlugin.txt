@@ -2,7 +2,7 @@ SimpleTextPlugin
 
 Plugin implementuj¹cy interaktywny tekst.
 
-Przep³yw:
+Przep³yw inicjalizacji:
 # Wybór czcionki i wielkoœci oraz napisu.
 # (SimpleTextPlugin::LoadFont) Wczytanie z pliku z definicj¹ czcionki atlatsów dla zwyk³ego fonta, pogrubionego, kursywy itd..
     # Na podstawie wielkoœci i pliku z definici¹ czcionki generowany jest atlasy (zwyk³y oraz B I U) wszystkich wspieranych znaków zapisanych w pliku SupportedChars.txt

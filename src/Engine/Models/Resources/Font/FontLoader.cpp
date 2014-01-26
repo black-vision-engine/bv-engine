@@ -9,20 +9,6 @@
 
 namespace bv { namespace model {
 
-ResourceHandle *        LoadFont( const std::string& fontFileName, size_t size )
-{
-    auto fRes = FontResource( fontFileName, size );
-
-    FontLoader fLoader;
-
-    auto ret = fLoader.LoadResource( &fRes );
-
-    assert( ret->GetExtra() );
-    assert( ret->GetExtra()->GetResourceExtraKind() == ResourceExtraKind::RE_FONT );
-
-    return ret;
-}
-
 ///////////////////////////////
 //
 FontResource::FontResource( const std::string& filePath, size_t fontSize )

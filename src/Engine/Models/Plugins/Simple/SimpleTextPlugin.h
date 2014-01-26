@@ -3,6 +3,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
+#include "Engine/Models/Resources/IResource.h"
 #include "Engine/Events/BaseEvent.h"
 
 
@@ -25,13 +26,13 @@ class SimpleTextPlugin : public BasePlugin< IPlugin, SimpleTextPluginUID >
 {
 private:
 
-    VertexAttributesChannelPtr  m_geomChannel;
+    VertexAttributesChannelPtr  m_vertexAttributeChannel;
 
     Textures                    m_textures;
 
-    const FontExtraData*        m_fontExtraData;
-    TextAtlas const*            m_atlasText;
+    const ResourceHandle*       m_fontResource;
     std::wstring                m_text;
+
     bool                        m_bolded;
     bool                        m_italic;
 
@@ -39,13 +40,7 @@ private:
 
 private:
 
-
-    void                        LoadAtlas( const std::string& name );
-
     VertexAttributesChannel*    CreateVertexAttributesChannel();
-    void                        EvalGeometryChannel( VertexAttributesChannel* geomChannel );
-
-    const Text*                 GetFont() const;
 
     explicit                    SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bold, bool italic );
 

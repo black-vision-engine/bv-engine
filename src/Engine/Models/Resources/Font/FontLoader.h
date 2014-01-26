@@ -59,9 +59,5 @@ public:
     explicit                FontExtraData       ( const Text* font, const Text* fontBold, const Text* fontItalic, const Text* fontBoldItalic, const Text* fontUnderlined, size_t fontSize );
 };
 
-
-ResourceHandle *            LoadFont( const std::string& fontFileName, size_t size );
-
-
 } // model
 } // bv
