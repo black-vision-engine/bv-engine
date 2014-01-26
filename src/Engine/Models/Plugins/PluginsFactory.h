@@ -46,6 +46,7 @@ class SimpleTransformPlugin;
 class GeometryRingPlugin;
 class GeometryMultiRectPlugin;
 class Timeline;
+class TimerPlugin;
 
 struct PluginsFactory
 {
@@ -67,6 +68,8 @@ struct PluginsFactory
 	
     static model::SimpleAnimationPlugin *       CreateSimpleAnimationPlugin         ( model::IPlugin * prevPlugin, const std::vector< std::string > & texturesPaths, const ParamFloat & frameCounter, model::RendererContext * ctx = nullptr );
 	static model::SimpleTextPlugin *            CreateSimpleTextPlugin              ( const std::wstring & text, const std::string & fontFile, int size, bool bolded = false, bool italic = false );
+
+    static model::TimerPlugin *                 CreateTimerPlugin                   ( const ParamFloat & time, unsigned int size );
 
     // More complex plugins.
     // return last plugin added to root node.

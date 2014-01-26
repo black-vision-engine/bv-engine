@@ -5,6 +5,7 @@
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
 #include "Engine/Models/BasicNode.h"
+#include "Engine/Models/Plugins/Simple/TimerPlugin.h"
 
 #include "Engine/Models/Timeline/Timeline.h"
 
@@ -87,6 +88,15 @@ model::SimpleTextPlugin *            PluginsFactory::CreateSimpleTextPlugin     
     auto texPlugin = model::SimpleTextPlugin::Create( text, fontFile, size, bolded, italic );
 
 	return texPlugin;
+}
+
+// *******************************
+//
+model::TimerPlugin *                 PluginsFactory::CreateTimerPlugin                          ( const ParamFloat & time, unsigned int size )
+{
+    auto timerPlugin = model::TimerPlugin::Create( time, size );
+
+	return timerPlugin;
 }
 
 // *******************************
