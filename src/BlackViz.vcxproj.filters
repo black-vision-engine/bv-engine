@@ -155,6 +155,7 @@
     <ClCompile Include="System\FileIO.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\BaseParameter.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\BaseValue.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\TimerPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -349,6 +350,7 @@
     <ClInclude Include="Engine\Models\Plugins\Parameters\BaseValue.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\TypedParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\TypedValues.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\TimerPlugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

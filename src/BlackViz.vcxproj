@@ -264,6 +264,7 @@
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleTexturePlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleTransformPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleVertexShaderPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\TimerPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\TextureInfo.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\AtlasCache.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\FontLoader.cpp" />
@@ -444,6 +445,7 @@
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleTexturePlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleTransformPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleVertexShaderPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\TimerPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\TextureInfo.h" />
     <ClInclude Include="Engine\Models\Resources\Font\AtlasCache.h" />
     <ClInclude Include="Engine\Models\Resources\Font\FontLoader.h" />
