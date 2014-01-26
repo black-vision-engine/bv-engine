@@ -19,7 +19,7 @@ FontResource::FontResource( const std::string& filePath, size_t fontSize, const 
 
 ///////////////////////////////
 //
-size_t FontResource::GetFontSize     ()   const
+size_t                  FontResource::GetFontSize     ()   const
 {
     return m_fontSize;
 }

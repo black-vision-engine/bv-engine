@@ -4,6 +4,8 @@
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Resources/IResource.h"
 
+#include <map>
+
 
 namespace bv { namespace model {
 
@@ -25,15 +27,26 @@ class TimerPlugin : public BasePlugin< IPlugin, TimerPluginUID >
     ParamFloat                  m_timeParam;
     float                       m_currentTime;
 
+    std::map< int, glm::vec2 >  m_digits;
+
     VertexAttributesChannelPtr  m_vertexAttributeChannel;
 
     Textures                    m_textures;
 
-    explicit                TimerPlugin( const ParamFloat& timeParam );
+    const ResourceHandle*       m_fontResource;
+
+    explicit                    TimerPlugin     ( const ParamFloat& timeParam, unsigned int fontSize );
+
+    unsigned int                GetSecond       ( float t );
+    unsigned int                GetHOAS         ( float t );
+    unsigned int                GetMinute       ( float t );
+    unsigned int                GetHour         ( float t );
+
+    void                        BuildDigitsMap  ();
 
 public:
 
-    static TimerPlugin*                         Create                      ( const ParamFloat& timeParam );
+    static TimerPlugin*                         Create                      ( const ParamFloat& timeParam, unsigned int fontSize );
 
 
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel          () const override;

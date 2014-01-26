@@ -28,6 +28,7 @@
 #include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/VertexShader/TextureVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Simple/SimpleTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/TimerPlugin.h"
 #include "Engine/Models/Plugins/Channels/GeometryShader/ExtrudeGeometryShaderChannel.h"
 #include "Engine/Models/Plugins/Simple/SimpleTransformPlugin.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/AnimatedStripComponent.h"
@@ -573,8 +574,8 @@ model::BasicNode *     Text1()
     root->AddPlugin( colorPlugin );
 
     auto ctx = RendererContext::CreateDefault();
-    //ctx->alphaCtx->blendEnabled = true;
-    //ctx->depthCtx->enabled = false;
+    ctx->alphaCtx->blendEnabled = true;
+    ctx->depthCtx->enabled = false;
 
     auto pixelShaderPlugin = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag", ctx );
 
@@ -582,6 +583,66 @@ model::BasicNode *     Text1()
 
     return root;
 }
+
+// ******************************
+//
+model::BasicNode *     Timer()
+{
+    model::BasicNode * root = new model::BasicNode();
+
+    std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example.txt");
+
+    FloatInterpolator time; time.SetWrapPostMethod( bv::WrapMethod::pingPong );
+
+    time.AddKey(0.f, 0.f );
+
+    auto timerPlugin      =   PluginsFactory::CreateTimerPlugin( model::ParametersFactory::CreateParameter("time", time ), 64 );
+
+    root->AddPlugin( timerPlugin );
+
+    TransformF     trns;
+
+    FloatInterpolator xt; xt.SetWrapPostMethod( bv::WrapMethod::pingPong );
+    FloatInterpolator yt; yt.SetWrapPostMethod( bv::WrapMethod::repeat );
+    FloatInterpolator zt;
+
+    xt.AddKey( 0.f, -1.f );
+    yt.AddKey( 0.f, -5.f );
+    zt.AddKey( 0.f, -5.f );
+
+    yt.AddKey( 30.f, 5.f );
+
+
+    trns.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
+    trns.AddTranslation( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
+
+    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( timerPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
+
+    root->AddPlugin( transPlugin );
+
+    auto vertexShaderPlugin = PluginsFactory::CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/text.vert" );
+
+    root->AddPlugin( vertexShaderPlugin );
+
+    Vec4Interpolator color; color.SetWrapPostMethod( bv::WrapMethod::pingPong );
+
+    color.AddKey(0.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+
+    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( vertexShaderPlugin, ParametersFactory::CreateParameter( "color", color ) );
+
+    root->AddPlugin( colorPlugin );
+
+    auto ctx = RendererContext::CreateDefault();
+    ctx->alphaCtx->blendEnabled = true;
+    ctx->depthCtx->enabled = false;
+
+    auto pixelShaderPlugin = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag", ctx );
+
+    root->AddPlugin( pixelShaderPlugin );
+
+    return root;
+}
+
 
 // ******************************
 //
@@ -774,7 +835,8 @@ model::BasicNode *          ExtrudedTexturedRing()
 //
 model::BasicNode *          TestScenesFactory::AnotherTestScene()
 {
-    auto root =  Text1();
+    auto root =  Timer();
+    root->AddChild( Text1() );
     //root->AddChild( GreenRect() );
     //root->AddChild( TexturedRect() );
     //root->AddChild( ExtrudedTexturedRing() ); // To nie dziala na mojej karcie.
