@@ -43,7 +43,7 @@ SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::str
 
     m_textures.push_back( new TextureInfo( textureResource, "AtlasTex" ) );
 
-    m_vertexAttributeChannel = VertexAttributesChannelPtr( TextHelper::CreateVACForText() );
+    m_vertexAttributeChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
     TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_fontResource, m_text );
 

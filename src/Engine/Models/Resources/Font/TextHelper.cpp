@@ -14,9 +14,9 @@ namespace bv { namespace model {
 
 ///////////////////////////////
 //
-const ResourceHandle *      TextHelper::LoadFont( const std::string& fontFileName, size_t size )
+const ResourceHandle *      TextHelper::LoadFont( const std::string& fontFileName, size_t size, const std::wstring& atlasCharSetFile )
 {
-    auto fRes = FontResource( fontFileName, size );
+    auto fRes = FontResource( fontFileName, size, atlasCharSetFile );
 
     FontLoader fLoader;
 
@@ -30,7 +30,7 @@ const ResourceHandle *      TextHelper::LoadFont( const std::string& fontFileNam
 
 // *********************************
 //
-VertexAttributesChannel*    TextHelper::CreateVACForText()
+VertexAttributesChannel*    TextHelper::CreateEmptyVACForText()
 {
     VertexAttributesChannelDescriptor vacDesc;
 

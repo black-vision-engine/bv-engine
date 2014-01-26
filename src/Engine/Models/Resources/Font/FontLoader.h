@@ -14,21 +14,23 @@ class FontResource : public Resource
 {
 private:
     size_t          m_fontSize;
+    std::wstring    m_atlasCharSetFile;
 
 public:
-    size_t          GetFontSize     ()   const;
+    size_t                  GetFontSize             ()  const;
+    const std::wstring&     GetAtlasCharSetFile     ()  const;
 
-    explicit        FontResource    ( const std::string& filePath, size_t fontSize );
+    explicit        FontResource    ( const std::string& filePath, size_t fontSize, const std::wstring& atlasCharSetFile );
 };
 
 class FontLoader : public ResourceLoader
 {
 private:
 
-    const Text*             TryLoadFont             ( const std::string& file, size_t size ) const;
-    const Text*             TryLoadFontBold         ( const std::string& file, size_t size ) const;
-    const Text*             TryLoadFontBoldItalic   ( const std::string& file, size_t size ) const;
-    const Text*             TryLoadFontItalic       ( const std::string& file, size_t size ) const;
+    const Text*             TryLoadFont             ( const std::string& file, size_t size, const std::wstring& atlasCharSetFile ) const;
+    const Text*             TryLoadFontBold         ( const std::string& file, size_t size, const std::wstring& atlasCharSetFile ) const;
+    const Text*             TryLoadFontBoldItalic   ( const std::string& file, size_t size, const std::wstring& atlasCharSetFile ) const;
+    const Text*             TryLoadFontItalic       ( const std::string& file, size_t size, const std::wstring& atlasCharSetFile ) const;
 
 public:
     ResourceHandle *        LoadResource        ( IResource* res )  const;

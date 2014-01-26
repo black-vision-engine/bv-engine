@@ -5,13 +5,15 @@
 
 namespace bv { namespace model {
 
+#define SUPPROTED_CHARS_FILE L"../dep/Media/fonts/SupportedChars.txt"
+
 class TextHelper
 {
 public:
     /////////////////////////////////////
     // This function loads font definition from file. Builds font atlases with the specified size.
     // Returns ResourceHandle of this font
-    static const ResourceHandle *       LoadFont            ( const std::string& fontFileName, size_t size );
+    static const ResourceHandle *       LoadFont            ( const std::string& fontFileName, size_t size, const std::wstring& atlasCharSetFile = SUPPROTED_CHARS_FILE );
 
     /////////////////////////////////////
     // This function creates TextureInfo from atlas specified atlas ind fontReasource.
@@ -20,7 +22,7 @@ public:
 
     /////////////////////////////////////
     // This function creates empty VertexAttributeChannel for text with proper attribute descriptor. ( position, texture cord )
-    static VertexAttributesChannel*     CreateVACForText    ();
+    static VertexAttributesChannel*     CreateEmptyVACForText   ();
 
     /////////////////////////////////////
     // This function builds VertexAttributeChannel for text and fontResource.
