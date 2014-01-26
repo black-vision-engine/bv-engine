@@ -13,7 +13,7 @@ class ResourceHandle;
 
 struct TextureInfo
 {
-    ResourceHandle *        m_resHandle;
+    const ResourceHandle *  m_resHandle;
     std::string             m_texName;
 
     ParamTransform          m_texTransform;
@@ -29,7 +29,7 @@ struct TextureInfo
     TextureWrappingMode     m_wrappingModeY;
     TextureFilteringMode    m_finteringMode;
 
-    TextureInfo(    ResourceHandle * resHandle
+    TextureInfo(    const ResourceHandle * resHandle
                ,    const std::string & texName
                ,    const ParamTransform & texTransform = ParametersFactory::CreateParameter( "texTransform", TransformF() )
                ,    const ParamFloat& alpha = ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 1.f ) )

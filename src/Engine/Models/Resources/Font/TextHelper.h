@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Engine/Models/Resources/IResource.h"
-#include "Engine/Models/Plugins/TextureInfo.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 
 namespace bv { namespace model {
@@ -17,12 +16,14 @@ public:
     /////////////////////////////////////
     // This function creates TextureInfo from atlas specified atlas ind fontReasource.
     // Returns new TextureInfo with texture name specified in texName.
-    static TextureInfo *                GetAtlasTextureInfo ( const ResourceHandle * fontResource, const std::string& texName, bool bolded = false, bool italic = false );
+    static const ResourceHandle *       GetAtlasTextureInfo ( const ResourceHandle * fontResource, bool bolded = false, bool italic = false );
 
+    /////////////////////////////////////
+    // This function creates empty VertexAttributeChannel for text with proper attribute descriptor. ( position, texture cord )
     static VertexAttributesChannel*     CreateVACForText    ();
 
     /////////////////////////////////////
-    // 
+    // This function builds VertexAttributeChannel for text and fontResource.
     static void                         BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const ResourceHandle * fontResource, const std::wstring& text, bool bolded = false, bool italic = false );
 };
 

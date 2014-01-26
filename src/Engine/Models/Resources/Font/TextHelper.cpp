@@ -83,7 +83,7 @@ const Text*             GetFont( const ResourceHandle * fontResource, bool bolde
 
 ///////////////////////////////
 //
-TextureInfo *           TextHelper::GetAtlasTextureInfo ( const ResourceHandle * fontResource, const std::string& texName, bool bolded, bool italic )
+const ResourceHandle *      TextHelper::GetAtlasTextureInfo ( const ResourceHandle * fontResource, bool bolded, bool italic )
 {
     auto f = GetFont( fontResource, bolded, italic );
 
@@ -102,7 +102,7 @@ TextureInfo *           TextHelper::GetAtlasTextureInfo ( const ResourceHandle *
     TextureExtraData* atlasExtraData = new TextureExtraData( textAtlas->GetWidth(), textAtlas->GetHeight(), 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D );
     ResourceHandle* altasHandle = new ResourceHandle( const_cast< char* >(textAtlas->GetData()), texSize, atlasExtraData );
 
-    return new TextureInfo( altasHandle, texName );
+    return altasHandle;
 }
 
 #define viewWidth   100

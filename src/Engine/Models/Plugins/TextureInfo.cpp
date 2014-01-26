@@ -2,7 +2,7 @@
 
 namespace bv { namespace model {
 
-TextureInfo::TextureInfo(   ResourceHandle * resHandle
+TextureInfo::TextureInfo(   const ResourceHandle * resHandle
                          ,  const std::string & texName
                          ,  const ParamTransform & texTransform
                          ,  const ParamFloat& alpha
