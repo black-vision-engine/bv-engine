@@ -40,8 +40,6 @@ private:
 
 private:
 
-    VertexAttributesChannel*    CreateVertexAttributesChannel();
-
     explicit                    SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bold, bool italic );
 
 public:

@@ -19,6 +19,8 @@ public:
     // Returns new TextureInfo with texture name specified in texName.
     static TextureInfo *                GetAtlasTextureInfo ( const ResourceHandle * fontResource, const std::string& texName, bool bolded = false, bool italic = false );
 
+    static VertexAttributesChannel*     CreateVACForText    ();
+
     /////////////////////////////////////
     // 
     static void                         BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const ResourceHandle * fontResource, const std::wstring& text, bool bolded = false, bool italic = false );

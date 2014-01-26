@@ -28,6 +28,18 @@ const ResourceHandle *      TextHelper::LoadFont( const std::string& fontFileNam
     return ret;
 }
 
+// *********************************
+//
+VertexAttributesChannel*    TextHelper::CreateVACForText()
+{
+    VertexAttributesChannelDescriptor vacDesc;
+
+    vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+    vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+
+    return new VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, vacDesc);
+}
+
 namespace
 {
 ///////////////////////////////

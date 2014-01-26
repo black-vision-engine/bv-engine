@@ -41,7 +41,7 @@ SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::str
 
     m_textures.push_back( TextHelper::GetAtlasTextureInfo( m_fontResource, "AtlasTex" ) );
 
-    m_vertexAttributeChannel = VertexAttributesChannelPtr( CreateVertexAttributesChannel() );
+    m_vertexAttributeChannel = VertexAttributesChannelPtr( TextHelper::CreateVACForText() );
 
     TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_fontResource, m_text );
 
@@ -72,18 +72,6 @@ void SimpleTextPlugin::OnSetText                   ( IEventPtr evt )
 //
 SimpleTextPlugin::~SimpleTextPlugin   ()
 {
-}
-
-// *********************************
-//
-VertexAttributesChannel*    SimpleTextPlugin::CreateVertexAttributesChannel()
-{
-    VertexAttributesChannelDescriptor geomChannelDesc;
-
-    geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-    geomChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-
-    return new VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, geomChannelDesc);
 }
 
 // *********************************
