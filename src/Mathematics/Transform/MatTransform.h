@@ -28,7 +28,7 @@ public:
     Transform               operator *  ( const Transform & m )     const;
 
     void                    SetMatrix   ( const glm::mat4x4 & m );
-    const glm::mat4x4&      GetMatrix   ()                          const;
+    const glm::mat4x4 &     GetMatrix   ()                          const;
 
 };
 

@@ -20,7 +20,7 @@ public:
 
     virtual void                                    Update                  ( TimeType t );
 
-    void                                            AddTransform            ( const ParamTransform& transInt );
+    void                                            AddTransform            ( const ParamTransform & transInt );
 
     ParamTransform &                                AccessFirstParamTransform() //FIXME: hackish
     {

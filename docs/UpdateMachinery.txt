@@ -1,0 +1,13 @@
+Fazy updatowania:
+
+I. ModelScene::Update( t )
+  BasicNode::Update( t ) - odpala Update( t ) na Layerach (IModelNode -> BasicNode), na dzieciach (IModelNode -> BasicNode) (rekursja)
+  oraz na Pluginach przechowywanych w tym wêŸle
+    IPlugin->Update( t ) - to ju¿ jest zale¿ne od pluginu - updatuje swój stan, np.
+      - Odpala update na ka¿dym z kana³ów
+        - VertexAttributeChannel
+        - TransformChannel
+        - ShaderChannel
+      - connected componenty (kana³y atrybutów, np. uv, po³o¿enia lokalne //FIXME: teraz CC ma swoj¹ metodê update, a to jest Ÿle -> CC ma miec tylko
+      - transform channel
+      

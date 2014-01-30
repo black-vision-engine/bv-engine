@@ -1,0 +1,20 @@
+IUpdatable->IChannel
+  ::Update( TimeType t )
+
+  ->ITransformChannel
+    ::GetTransformChannels() -> pobiera wektor Transformacji (czyli nie ma jawnego powi¹zania z czasem)
+    ->TransformChannel (to jest jedyna implementacja, trzyma wektor Transformacji (TransformPtr) i flagê readOnly)
+      ->SimpleTransformChannel - trzyma wektor parametrów opisuj¹cych transformacjê (ParamTransform)
+        ::Update( TimeType t ) - Ewaluuje ka¿dy ParamTransform::Evaluate( t ) i ustawia go w odpowiednie miejsce wektora Transformacji (TransformPtr) z 
+                                 TransformChannel
+        
+      
+  ->IVertexAttributesChannel
+    Stan sk³ada siê z:
+    *IVertexAttributeDescriptor
+      Stan sk³ada siê z:
+      *IAttributeChannelDescriptor
+      *IIndexChannelDescriptor
+    *PrimitiveType
+    *Listy IConnectedComponent
+    *Flag mówi¹cych zmianie atrybutów oraz topologii

@@ -25,19 +25,19 @@ protected:
 
 public:
 
-    explicit                                    BasePlugin                  ( const IPlugin* prevPlugin );
+    explicit                                    BasePlugin                  ( const IPlugin * prevPlugin );
 
     virtual void                                Update                      ( TimeType t );
 
     const char*                                 GetName                     () const                                        { return UIDType::GetName(); } 
 
-    virtual void                                SetGeometryChannel          ( VertexAttributesChannel* vaChannel )        { assert(!"Implement in derived class"); }
-    virtual void                                SetTransformChannel         ( TransformChannel* transformChannel )          { assert(!"Implement in derived class"); }
+    virtual void                                SetGeometryChannel          ( VertexAttributesChannel * vaChannel )         { assert(!"Implement in derived class"); }
+    virtual void                                SetTransformChannel         ( TransformChannel * transformChannel )         { assert(!"Implement in derived class"); }
     virtual void                                SetPixelShaderChannel       ( IPixelShaderChannel * pShCh )                 { assert(!"Implement in derived class"); }
     virtual void                                SetVertexShaderChannel      ( IVertexShaderChannel * vShCh )                { assert(!"Implement in derived class"); }
     virtual void                                SetGeometryShaderChannel    ( IGeometryShaderChannel * gShCh )              { assert(!"Implement in derived class"); }
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel          () const;                                       
+    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const;                                       
     virtual const ITransformChannel *           GetTransformChannel         () const;                                       
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const;                                       
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const;                                       

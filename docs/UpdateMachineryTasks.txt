@@ -1,0 +1,29 @@
+Wyszyæ z implementacji CC Update (i nie dziedziczyæ z IUpdatable). CC z za³o¿enia tylko przechowuje stan, ale nie ma ¿adnej logiki - logika zmiana
+stanu CC le¿y po stronie plugina, który odpowiednie wygenerowa³ (albo modyfikuje).
+
+Dodaæ odpowiednie helpery do operowania na CC oraz kana³ach atrybutów (ustawianie UV, otoczki wypuk³e, takie duperele).
+
+Kana³y te¿ powinny byæ bezlogikowe, a tylko updatowane za pomoc¹ publicznego API w pluginach. Dziêki temu nie trzeba bêdzie pisaæ tony g³upich klas
+dziedzicz¹cych po bazowej implementacji VertexAttributeChannel, a tylko pluginy bêd¹ za pomoc¹ tego API odpowiednio modyfikowaæ swoje kana³y.
+
+Zmieniæ GetTransformChannels na GetTransformations lub coœ analogicznego.
+
+Dodaæ bazow¹ klasê Channel, która trzyma ten biedny read only, ¿eby nie trzeba go by³o propagowaæ do ka¿dej podklasy.
+
+Usun¹æ AccessFirstParamTransform z SimpleTransformChannel (i upewniæ siê, ¿e transfom channel w ogóle ma byæ taki, jaki jest)
+
+Zastanowiæ siê, dlaczego powsta³a klasa SimpleTransform - bo ona udaje SQT -> przepisaæ tê klaskê na SQT po ludzku, a nie takie coœ.
+
+Przenieœæ GetPrimitiveType() const z IVertexAttributesChannel do IVertexAttributesChannelDescriptor
+
+Dopisaæ API helperowe do tworzenia kana³ów, pluginów, akcesory do odpowiednich pó³ w kana³ach, deskryptorach, do sprawdzania flag kana³ów
+
+Dodaæ API/helper do obs³ugi VertexAttribute klas i analogiczny akcesor do dostêpu do VertexBuffer po stronie silnika (ju¿ od dawna le¿y jako bug do
+naprawienia)
+
+Zmieniæ nazwy NeedsAttributesUpdate i NeedsTopologyUpdate na AttributesStateChanged, TopologyStateChanged
+
+RegisterValue z ShaderChannel powinno zapisywaæ te wartoœci chyba jednak w innym miejscu (nie w wektorze w klasie bazowej ShaderChannel tylko jakoœ
+bardziej globalnie - na przyk³ad w pluginie - to jest dobry moment, ¿eby przemyœleæ, gdzie te wartoœci powinny byæ trzymane. Lokalnie s¹ potrzebne
+do updatowania stanu shaderów po stronie silnika
+
