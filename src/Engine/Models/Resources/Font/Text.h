@@ -7,6 +7,35 @@
 
 namespace bv { namespace model {
 
+class Text;
+
+struct GlyphCoords
+{
+    unsigned int            textureX;
+    unsigned int            textureY;
+
+    unsigned int            width;
+    unsigned int            height;
+
+    unsigned int            bearingX;
+    unsigned int            bearingY;
+
+    GlyphCoords(unsigned int tX,
+                unsigned int tY,
+                unsigned int w,
+                unsigned int h,
+                unsigned int bX,
+                unsigned int bY)
+                : textureX( tX )
+                , textureY( tY )
+                , width( w )
+                , height( h )
+                , bearingX( bX )
+                , bearingY( bX )
+
+    {}
+};
+
 class TextAtlas
 {
 private:
@@ -14,22 +43,33 @@ private:
     char*                   m_data;
     unsigned int            m_width;
     unsigned int            m_height;
-    unsigned int            m_glyphWidth;
-    unsigned int            m_glyphHeight;
     unsigned int            m_bitsPerPixel;
+
+    std::hash_map< wchar_t, GlyphCoords >   m_glyphsPositions;
+
+    void                    SetGlyphCoords  ( wchar_t wch, const GlyphCoords& coords );
 
 public:
 
-    unsigned int            GetWidth        () const    { return m_width; }
-    unsigned int            GetHeight       () const    { return m_height; }
-    unsigned int            GetGlyphWidth   () const    { return m_glyphWidth; }
-    unsigned int            GetGlyphHeight  () const    { return m_glyphHeight; }
-    const char*             GetData         () const    { return m_data; }
-    char*                   GetWritableData ()          { return m_data; }
+    unsigned int            GetWidth        () const;
+    unsigned int            GetHeight       () const;
+    
+    unsigned int            GetGlyphX       ( wchar_t c ) const;
+    unsigned int            GetGlyphY       ( wchar_t c ) const;
+
+    unsigned int            GetGlyphWidth   ( wchar_t c ) const;
+    unsigned int            GetGlyphHeight  ( wchar_t c ) const;
+
+    const GlyphCoords&      GetGlyphCoords  ( wchar_t c ) const;
+
+    const char*             GetData         () const;
+    char*                   GetWritableData ();
 
     TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh );
 
     static TextAtlas*       Crate           ( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh );
+
+    friend class Text;
 };
 
 class Text

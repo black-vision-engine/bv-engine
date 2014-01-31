@@ -81,16 +81,23 @@ const Text*             GetFont( const ResourceHandle * fontResource, bool bolde
 } // anonymous
 
 
-///////////////////////////////
-//
-const ResourceHandle *      TextHelper::GetAtlasTextureInfo ( const ResourceHandle * fontResource, bool bolded, bool italic )
+const TextAtlas *           TextHelper::GetAtlas            ( const ResourceHandle * fontResource, bool bolded , bool italic )
 {
     auto f = GetFont( fontResource, bolded, italic );
 
     const TextAtlas* textAtlas = nullptr;
 
     if( f )
-        textAtlas = f->GetAtlas();
+        return f->GetAtlas();
+    else
+        return nullptr;
+}
+
+///////////////////////////////
+//
+const ResourceHandle *      TextHelper::GetAtlasTextureInfo ( const ResourceHandle * fontResource, bool bolded, bool italic )
+{
+    auto textAtlas = GetAtlas( fontResource, bolded, italic );
 
     if( !textAtlas )
     {
@@ -110,38 +117,35 @@ const ResourceHandle *      TextHelper::GetAtlasTextureInfo ( const ResourceHand
 
 // *********************************
 //
-void                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const ResourceHandle * fontResource, const std::wstring& text, bool bolded, bool italic )
+void                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, bool bolded, bool italic )
 {
     assert( vertexAttributeChannel );
-    assert( fontResource );
-
-    auto fontExtraData = static_cast< const FontExtraData* > ( fontResource->GetExtra() );
-
-    auto f = GetFont( fontResource, bolded, italic );
-
-    auto atlas = f->GetAtlas();
+    assert( textAtlas );
 
     glm::vec3 translate(0.f);
     glm::vec3 interspace( 0.07f, 0.f ,0.f );
     glm::vec3 newLineTranslation( 0.f );
 
-    auto glyphH = atlas->GetGlyphHeight();
-    auto glyphW = atlas->GetGlyphWidth();
+    auto spaceGlyphWidth    = 0.3*(float)textAtlas->GetGlyphHeight( L'0' ) * 0.5/viewWidth;
+    auto newLineShift       = -(float)textAtlas->GetGlyphWidth( L'0' ) / viewHeight;
 
     for( auto wch : text )
     {
         if( wch == L' ' )
         {
-            translate += glm::vec3( 0.3*(float)glyphW * 0.5/viewWidth, 0.f, 0.f )+ interspace;
+            translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f )+ interspace;
             continue;
         }
 
         if( wch == L'\n' || wch == L'\r' )
         {
             translate = glm::vec3( 0.f );
-            newLineTranslation += glm::vec3( 0.f, -(float)glyphH /viewHeight, 0.f );
+            newLineTranslation += glm::vec3( 0.f, newLineShift , 0.f );
             continue;
         }
+
+        auto glyphH = textAtlas->GetGlyphHeight( wch );
+        auto glyphW = textAtlas->GetGlyphWidth( wch );
 
         ConnectedComponent* connComp = new ConnectedComponent();
 
@@ -149,14 +153,14 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
 
         auto posAttribChannel = new Float3AttributeChannel( desc, "vertexPosition", true );
 
-        auto glyph = f->GetGlyph( wch );
+        auto glyphCoord = textAtlas->GetGlyphCoord( wch );
 
-        glm::vec3 baring = glm::vec3( 0.f, (glyph->height - glyph->bearingY) / (float)viewHeight, 0.f );
+        glm::vec3 baring = glm::vec3( 0.f, (glyphCoord.height - glyphCoord.bearingY) / (float)viewHeight, 0.f );
 
         auto quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f );
-        auto quadBottomRight    = glm::vec3( (float)glyph->width / (float)viewWidth, 0.f, 0.f );
-        auto quadTopLeft        = glm::vec3( 0.f, (float)glyph->height / (float)viewHeight, 0.f );
-        auto quadTopRight       = glm::vec3( (float)glyph->width / (float)viewWidth, (float)glyph->height / (float)viewHeight, 0.f );
+        auto quadBottomRight    = glm::vec3( (float)glyphCoord.width / (float)viewWidth, 0.f, 0.f );
+        auto quadTopLeft        = glm::vec3( 0.f, (float)glyphCoord.height / (float)viewHeight, 0.f );
+        auto quadTopRight       = glm::vec3( (float)glyphCoord.width / (float)viewWidth, (float)glyphCoord.height / (float)viewHeight, 0.f );
 
         posAttribChannel->AddAttribute( quadBottomLeft    + translate - baring + newLineTranslation );
         posAttribChannel->AddAttribute( quadBottomRight   + translate - baring + newLineTranslation );
@@ -169,10 +173,10 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
 
         auto verTex0AttrChannel = new model::Float2AttributeChannel( desc1, "textAtlasPosition", true );
 
-        float texLeft   = ((float)glyph->textureX) / atlas->GetWidth();
-        float texTop    = ((float)glyph->textureY) / atlas->GetHeight();
-        float texWidth  = ((float)glyph->width) / atlas->GetWidth();
-        float texHeight = ((float)glyph->height) / atlas->GetHeight();
+        float texLeft   = ((float)glyphCoord.textureX)  / textAtlas->GetWidth();
+        float texTop    = ((float)glyphCoord.textureY)  / textAtlas->GetHeight();
+        float texWidth  = ((float)glyphCoord.width)     / textAtlas->GetWidth();
+        float texHeight = ((float)glyphCoord.height)    / textAtlas->GetHeight();
 
 
         verTex0AttrChannel->AddAttribute( glm::vec2( texLeft, texTop + texHeight ) );
@@ -184,7 +188,7 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
 
         vertexAttributeChannel->AddConnectedComponent( connComp );
 
-        translate += glm::vec3( glyph->width / (float)viewWidth, 0.f, 0.f ) + interspace;
+        translate += glm::vec3( glyphCoord.width / (float)viewWidth, 0.f, 0.f ) + interspace;
     } 
 }
 

@@ -18,8 +18,6 @@ namespace bv { namespace model {
 TextAtlas::TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh )
     : m_width( w )
     , m_height( h )
-    , m_glyphWidth( gw )
-    , m_glyphHeight( gh )
     , m_bitsPerPixel( bitsPrePixel )
 {
     m_data = new char[ w * h * bitsPrePixel / 8 ];
@@ -36,6 +34,59 @@ Text::Text( const std::wstring& text, const std::string& fontFile, unsigned int 
     , m_fontSize( fontSize )
 {
     BuildAtlas();
+}
+
+const char*             TextAtlas::GetData         () const
+{
+    return m_data;
+}
+
+char*                   TextAtlas::GetWritableData ()
+{
+    return m_data;
+}
+
+unsigned int            TextAtlas::GetWidth        () const
+{
+    return m_width;
+}
+
+unsigned int            TextAtlas::GetHeight       () const
+{
+    return m_height;
+}
+
+const GlyphCoords&      TextAtlas::GetGlyphCoords  ( wchar_t c ) const
+{
+    auto it = m_glyphsPositions.find(c);
+
+    if( it != m_glyphsPositions.end() )
+    {
+        return it->second;
+    }
+
+    assert("Cannot find glyph for char" + c);
+    throw;
+}
+
+unsigned int            TextAtlas::GetGlyphX       ( wchar_t c ) const
+{
+    return GetGlyphCoords( c ).textureX;
+}
+
+unsigned int            TextAtlas::GetGlyphY       ( wchar_t c ) const
+{
+    return GetGlyphCoords( c ).textureY;
+}
+
+unsigned int            TextAtlas::GetGlyphWidth   ( wchar_t c ) const
+{
+    return GetGlyphCoords( c ).width;
+}
+
+unsigned int            TextAtlas::GetGlyphHeight  ( wchar_t c ) const
+{
+    return GetGlyphCoords( c ).height;
 }
 
 // #define GENERATE_TEST_RAW_FILE

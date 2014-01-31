@@ -15,7 +15,7 @@ TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
     : BasePlugin( nullptr )
     , m_timeParam( timeParam )
 {
-    m_fontResource = TextHelper::LoadFont( "../dep/Media/fonts/digital-7.ttf", fontSize, L"../dep/Media/fonts/TimerChars.txt" );
+    auto m_fontResource = TextHelper::LoadFont( "../dep/Media/fonts/digital-7.ttf", fontSize, L"../dep/Media/fonts/TimerChars.txt" );
 
     auto textureResource = TextHelper::GetAtlasTextureInfo( m_fontResource );
 
