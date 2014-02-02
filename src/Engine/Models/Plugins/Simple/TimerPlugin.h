@@ -36,6 +36,8 @@ class TimerPlugin : public BasePlugin< IPlugin, TimerPluginUID >
     const ResourceHandle*       m_fontResource;
     const TextAtlas*            m_currentAtlas;
 
+    std::string                 m_timePatern;
+
     explicit                    TimerPlugin     ( const ParamFloat& timeParam, unsigned int fontSize );
 
     unsigned int                GetSecond       ( float t );
@@ -45,10 +47,14 @@ class TimerPlugin : public BasePlugin< IPlugin, TimerPluginUID >
 
     void                        BuildDigitsMap  ();
 
+    bool                        CheckTimeConsistency ( const std::string& time ) const;
+
 public:
 
     static TimerPlugin*                         Create                      ( const ParamFloat& timeParam, unsigned int fontSize );
 
+    void                                        SetTimePatern               ( const std::string& patern );
+    void                                        SetTime                     ( const std::string& time );
 
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel          () const override;
     virtual Textures                            GetTextures                 () const override;

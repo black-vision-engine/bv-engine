@@ -61,6 +61,54 @@ TimerPlugin*                        TimerPlugin::Create     ( const ParamFloat& 
 
 ////////////////////////////
 //
+void                                TimerPlugin::SetTimePatern  ( const std::string& patern )
+{
+    m_timePatern = patern;
+}
+
+////////////////////////////
+//
+bool                                TimerPlugin::CheckTimeConsistency ( const std::string& time ) const
+{
+    if( m_timePatern.size() != time.size() )
+        return false;
+
+    for( unsigned int i = 0; i < m_timePatern.size(); ++i )
+    {
+        if( m_timePatern[ i ] == '#' )
+        {
+            if( time[ i ] >= '0' && time[ i ] <= '9' )
+            {
+                continue;
+            }
+        }
+        else
+        {
+            if( m_timePatern[ i ] == time[ i ] )
+                continue;
+        }
+
+        return false;
+    }
+
+    return true;
+}
+
+////////////////////////////
+//
+void                                TimerPlugin::SetTime        ( const std::string& time )
+{
+    if( !CheckTimeConsistency( time ) )
+    {
+        std::cerr << time << " doesn't match patern " << m_timePatern << std::endl;
+        return;
+    }
+
+    assert(!"Implement");
+}
+
+////////////////////////////
+//
 const IVertexAttributesChannel *    TimerPlugin::GetVertexAttributesChannel          () const
 {
     return m_vertexAttributeChannel.get();
