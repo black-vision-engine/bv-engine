@@ -8,13 +8,13 @@ class TransformChannel;
 class VertexAttributesChannel;
 class IGeometryShaderChannel;
 class ParamTransform;
-class IConnectedComponent;
+class ConnectedComponent;
 
 class ChannelsFactory
 {
 public:
 
-    static VertexAttributesChannel *            CreateVertexAttributesChannel               ( IConnectedComponent * connComp );
+    static VertexAttributesChannel *            CreateVertexAttributesChannel       ( ConnectedComponent * connComp );
     static TransformChannel *                   CreateTransformChannel              ( const ParamTransform& transformation );
     static IGeometryShaderChannel *             CreateGeometryShaderExtrude         ( float scale );
 
