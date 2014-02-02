@@ -27,3 +27,5 @@ RegisterValue z ShaderChannel powinno zapisywaæ te wartoœci chyba jednak w innym
 bardziej globalnie - na przyk³ad w pluginie - to jest dobry moment, ¿eby przemyœleæ, gdzie te wartoœci powinny byæ trzymane. Lokalnie s¹ potrzebne
 do updatowania stanu shaderów po stronie silnika
 
+Pojedyncze CC powinny mieæ w sobie flagê, ¿e zmieni³ siê stan, ¿eby tylko przepisywaæ VB tych CC, które uleg³y zmianie.
+
