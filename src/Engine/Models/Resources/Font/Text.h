@@ -45,11 +45,16 @@ private:
     unsigned int            m_height;
     unsigned int            m_bitsPerPixel;
 
+
     std::hash_map< wchar_t, GlyphCoords >   m_glyphsPositions;
 
     void                    SetGlyphCoords  ( wchar_t wch, const GlyphCoords& coords );
 
 public:
+
+    unsigned int            m_glyphWidth;
+    unsigned int            m_glyphHeight;
+
 
     unsigned int            GetBitsPerPixel () const;
 
