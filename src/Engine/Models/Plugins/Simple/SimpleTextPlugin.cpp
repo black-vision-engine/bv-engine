@@ -34,18 +34,21 @@ SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::str
     , m_text( text )
     , m_bolded( bold )
     , m_italic( italic )
+    , m_textAtlas()
     , m_fontResource()
     , m_textSet( true )
 {
     m_fontResource = TextHelper::LoadFont( fontFileName, fontSize );
 
-    auto textureResource = TextHelper::GetAtlasTextureInfo( m_fontResource );
+    m_textAtlas = TextHelper::GetAtlas( m_fontResource, m_bolded, m_italic );
+
+    auto textureResource = TextHelper::GetAtlasTextureInfo( m_textAtlas );
 
     m_textures.push_back( new TextureInfo( textureResource, "AtlasTex" ) );
 
     m_vertexAttributeChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
-    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_fontResource, m_text );
+    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_textAtlas, m_text );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &SimpleTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
@@ -123,7 +126,7 @@ void                SimpleTextPlugin::SetText                     ( const std::w
 
     m_vertexAttributeChannel->ClearConnectedComponent();
 
-    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_fontResource, m_text );
+    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_textAtlas, m_text );
 }
 
 } // model

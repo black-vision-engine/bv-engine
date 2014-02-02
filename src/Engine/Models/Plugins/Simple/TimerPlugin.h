@@ -34,6 +34,7 @@ class TimerPlugin : public BasePlugin< IPlugin, TimerPluginUID >
     Textures                    m_textures;
 
     const ResourceHandle*       m_fontResource;
+    const TextAtlas*            m_currentAtlas;
 
     explicit                    TimerPlugin     ( const ParamFloat& timeParam, unsigned int fontSize );
 

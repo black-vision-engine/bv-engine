@@ -12,6 +12,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <FreeType/ftglyph.h>
+#include "FreeImagePlus.h"
 
 namespace bv { namespace model {
 
@@ -20,7 +21,7 @@ TextAtlas::TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel,
     , m_height( h )
     , m_bitsPerPixel( bitsPrePixel )
 {
-    m_data = new char[ w * h * bitsPrePixel / 8 ];
+    m_data = new char[ GetSizeInBytes() ];
 }
 
 TextAtlas*      TextAtlas::Crate           ( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh )
@@ -44,6 +45,21 @@ const char*             TextAtlas::GetData         () const
 char*                   TextAtlas::GetWritableData ()
 {
     return m_data;
+}
+
+unsigned int            TextAtlas::GetSizeInBytes  () const
+{
+    return ( m_bitsPerPixel / 8 ) * m_height * m_width;
+}
+
+void                    TextAtlas::SetGlyphCoords  ( wchar_t wch, const GlyphCoords& coords )
+{
+    m_glyphsPositions.insert(std::make_pair( wch, coords ) );
+}
+
+unsigned int            TextAtlas::GetBitsPerPixel () const
+{
+    return m_bitsPerPixel;
 }
 
 unsigned int            TextAtlas::GetWidth        () const
@@ -89,7 +105,39 @@ unsigned int            TextAtlas::GetGlyphHeight  ( wchar_t c ) const
     return GetGlyphCoords( c ).height;
 }
 
-// #define GENERATE_TEST_RAW_FILE
+// #define GENERATE_TEST_BMP_FILE
+
+struct GlyphDataInfo
+{
+    Glyph*          glyph;
+    unsigned int    pitch;
+    char*           data;
+
+    GlyphDataInfo( Glyph* g, unsigned int p, char* d)
+        : glyph( g )
+        , pitch( p )
+        , data( d )
+    {}
+};
+
+namespace 
+{
+
+void WriteBMP( const std::string& file, char* data, int width, int height, int bpp )
+{
+    fipImage*  fipImg = new fipImage( FREE_IMAGE_TYPE::FIT_BITMAP, width, height, bpp );
+
+    auto pixels = fipImg->accessPixels();
+
+    memcpy( pixels, data, width * height * bpp / 8 );
+
+    fipImg->flipVertical();
+
+    fipImg->save( file.c_str() );
+}
+
+
+} // anonymous
 
 void                Text::BuildAtlas()
 {
@@ -114,9 +162,7 @@ void                Text::BuildAtlas()
 
     FT_Set_Pixel_Sizes( face, m_fontSize - padding_px, m_fontSize - padding_px );
 
-    std::vector< unsigned char* >   glyphBuffer;
-    std::vector< unsigned int >     gpitch;
-    std::vector< Glyph* >           glyphVec;
+    std::vector< GlyphDataInfo >    glyphsDataInfos;
 
     for ( auto ch : m_text )
     {
@@ -138,6 +184,7 @@ void                Text::BuildAtlas()
         // get dimensions of bitmap
         auto newGlyph = new Glyph();
 
+        newGlyph->code = ch;
         newGlyph->size = m_fontSize;
         newGlyph->width = face->glyph->bitmap.width;
         newGlyph->height = face->glyph->bitmap.rows;
@@ -145,31 +192,16 @@ void                Text::BuildAtlas()
         newGlyph->bearingY = face->glyph->bitmap_top;
         newGlyph->advance = face->glyph->advance.x;
         newGlyph->padding = padding_px;
-        gpitch.push_back( face->glyph->bitmap.pitch );
 
-        unsigned char* glyphData = (unsigned char*)malloc( newGlyph->height * face->glyph->bitmap.pitch );
+        char* glyphData = (char*)malloc( newGlyph->height * face->glyph->bitmap.pitch );
 
         // copy buffer because it seems to be overwritten
         memcpy ( glyphData, face->glyph->bitmap.buffer, newGlyph->height * face->glyph->bitmap.pitch );
-        glyphBuffer.push_back( glyphData );
-        glyphVec.push_back( newGlyph );
+        glyphsDataInfos.push_back( GlyphDataInfo( newGlyph, face->glyph->bitmap.pitch, glyphData ) );
         m_glyphs[ ch ] = newGlyph;
-        // get y-offset to place glyphs on baseline. this is in the bounding box structure
-        //FT_Glyph glyph; // a handle to the glyph image
-        //if (FT_Get_Glyph (face->glyph, &glyph))
-        //{
-        //    std::cerr << "Could not get glyph handle " << i << std::endl;
-        //    return;
-        //}
 
-        //// get bbox. "truncated" mode means get dimensions in pixels
-        //FT_BBox bbox;
-        //FT_Glyph_Get_CBox (glyph, FT_GLYPH_BBOX_TRUNCATE, &bbox);
-        //gymin[i] = bbox.yMin;
         glyphsNum++;
     }
-
-    std::vector< bool >             glyphVecTexSet( glyphsNum, false);
 
     unsigned int atlasSize = ( unsigned int )std::ceil( sqrt( (float)glyphsNum ) );
 
@@ -180,13 +212,13 @@ void                Text::BuildAtlas()
 
     char* atlasData = m_atlas->GetWritableData();
 
-    std::stringstream dataStream;
-
     auto atlasColumns  = altlasWidth / m_fontSize;
+
+    std::vector<bool>   textureCoordsSet( glyphsDataInfos.size(), false );
 
     for (unsigned int y = 0; y < m_atlas->GetHeight(); y++) 
     {
-        for (unsigned int x = 0; x < m_atlas->GetHeight(); x++)
+        for (unsigned int x = 0; x < m_atlas->GetWidth(); x++)
         {
     
             // work out which grid slot[col][row] we are in e.g out of 16x16
@@ -194,53 +226,59 @@ void                Text::BuildAtlas()
             unsigned int row = y / m_fontSize;
             unsigned int order = row * atlasColumns + col;
 
-            if( order < 0 || order >= glyphVec.size() )
+            unsigned int dataElem = y * m_atlas->GetWidth() * m_atlas->GetBitsPerPixel() / 8 + ( x * m_atlas->GetBitsPerPixel() / 8 );
+
+            if( order < 0 || order >= glyphsDataInfos.size() )
             {
-                dataStream << (unsigned char)0 << (unsigned char)0 << (unsigned char)0 << (unsigned char)0;
+                atlasData[ dataElem ] = 0;
+                atlasData[ dataElem + 1 ] = 0;
+                atlasData[ dataElem + 2 ] = 0;
+                atlasData[ dataElem + 3 ] = 0;
                 continue;
             }
 
             // pixel indices within padded glyph slot area
-            unsigned int x_loc = x % m_fontSize - padding_px / 2;
-            unsigned int y_loc = y % m_fontSize - padding_px / 2;
+            int x_loc = x % m_fontSize - padding_px / 2;
+            int y_loc = y % m_fontSize - padding_px / 2;
                 
-            if (x_loc < 0 || y_loc < 0 || x_loc >= glyphVec[order]->width || y_loc >= glyphVec[order]->height )
+            if (x_loc < 0 || y_loc < 0 || x_loc >= (int)glyphsDataInfos[order].glyph->width || y_loc >= (int)glyphsDataInfos[order].glyph->height )
             {
-                dataStream << (unsigned char)0 << (unsigned char)0 << (unsigned char)0 << (unsigned char)0;
+                atlasData[ dataElem ] = 0;
+                atlasData[ dataElem + 1 ] = 0;
+                atlasData[ dataElem + 2 ] = 0;
+                atlasData[ dataElem + 3 ] = 0;
             } 
             else 
             {
-                if( !glyphVecTexSet[ order ] )
+                if( !textureCoordsSet[ order ] )
                 {
-                    glyphVec[order]->textureX = x;
-                    glyphVec[order]->textureY = y;
-                    glyphVecTexSet[ order ] = true;
+                    glyphsDataInfos[order].glyph->textureX = x;
+                    glyphsDataInfos[order].glyph->textureY = y;
+                    textureCoordsSet[ order ] = true;
+                    m_atlas->SetGlyphCoords(
+                            glyphsDataInfos[order].glyph->code
+                        ,   GlyphCoords( x, y, glyphsDataInfos[order].glyph->width, glyphsDataInfos[order].glyph->height, glyphsDataInfos[order].glyph->bearingX, glyphsDataInfos[order].glyph->bearingY )
+                        );
                 }
                 // this is 1, but it's safer to put it in anyway
-                int bytes_per_pixel = glyphVec[order]->width / gpitch[order];
-                int bytes_in_glyph = glyphVec[order]->height * gpitch[order];
-                int byte_order_in_glyph = y_loc * glyphVec[order]->width + x_loc;
+                int bytes_per_pixel = glyphsDataInfos[order].glyph->width / glyphsDataInfos[order].pitch;
+                int bytes_in_glyph  = glyphsDataInfos[order].glyph->height * glyphsDataInfos[order].pitch;
+                int byte_order_in_glyph = y_loc * glyphsDataInfos[order].glyph->width + x_loc;
                 // print byte from glyph
-                dataStream << glyphBuffer[order][byte_order_in_glyph] << glyphBuffer[order][byte_order_in_glyph] << glyphBuffer[order][byte_order_in_glyph] << glyphBuffer[order][byte_order_in_glyph];
+                auto p = glyphsDataInfos[order].data[byte_order_in_glyph];
+                atlasData[ dataElem ] = p;
+                atlasData[ dataElem + 1 ] = p;
+                atlasData[ dataElem + 2 ] = p;
+                atlasData[ dataElem + 3 ] = p;
             }
         }
     }
 
-    auto str = dataStream.str();
+#ifdef GENERATE_TEST_BMP_FILE
 
-    assert(str.size() == m_atlas->GetHeight() * m_atlas->GetWidth() * 4); // FIXME:
+    WriteBMP( "test.bmp", atlasData, m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() );
 
-    memcpy( atlasData, &str[ 0 ], dataStream.str().size() );
-
-#ifdef GENERATE_TEST_RAW_FILE
-
-    auto file = File::Open( "test.raw", File::FOMReadWrite );
-
-    file << dataStream;
-
-    file.Close();
-
-#endif // GENERATE_TEST_RAW_FILE
+#endif // GENERATE_TEST_BMP_FILE
 }
 
 } // model

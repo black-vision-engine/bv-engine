@@ -14,10 +14,14 @@ namespace bv { namespace model {
 TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
     : BasePlugin( nullptr )
     , m_timeParam( timeParam )
+    , m_fontResource()
+    , m_currentAtlas()
 {
-    auto m_fontResource = TextHelper::LoadFont( "../dep/Media/fonts/digital-7.ttf", fontSize, L"../dep/Media/fonts/TimerChars.txt" );
+    m_fontResource = TextHelper::LoadFont( "../dep/Media/fonts/digital-7.ttf", fontSize, L"../dep/Media/fonts/TimerChars.txt" );
 
-    auto textureResource = TextHelper::GetAtlasTextureInfo( m_fontResource );
+    m_currentAtlas = TextHelper::GetAtlas( m_fontResource );
+
+    auto textureResource = TextHelper::GetAtlasTextureInfo( m_currentAtlas );
 
     BuildDigitsMap();
 
@@ -25,7 +29,7 @@ TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
 
     m_vertexAttributeChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
-    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_fontResource, L"00:00:00" );
+    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_currentAtlas, L"00:00:00" );
 }
 
 ////////////////////////////
@@ -73,31 +77,31 @@ Textures                            TimerPlugin::GetTextures                 () 
 //
 void                                TimerPlugin::Update                      ( TimeType t )
 {
-    m_currentTime = t;
+    //m_currentTime = t;
 
-    auto sec = GetSecond( m_currentTime);
+    //auto sec = GetSecond( m_currentTime);
 
-    auto firstDigit = sec % 10;
-    auto sekondDigit = sec / 10;
+    //auto firstDigit = sec % 10;
+    //auto sekondDigit = sec / 10;
 
-    for( unsigned int i = 0; i < m_vertexAttributeChannel->GetComponents().size(); ++i )
-    {
-        auto connComp = static_cast< const model::ConnectedComponent* >( m_vertexAttributeChannel->GetComponents()[ i ] );
-        auto compChannels = connComp->GetAttributeChannels();
+    //for( unsigned int i = 0; i < m_vertexAttributeChannel->GetComponents().size(); ++i )
+    //{
+    //    auto connComp = static_cast< const model::ConnectedComponent* >( m_vertexAttributeChannel->GetComponents()[ i ] );
+    //    auto compChannels = connComp->GetAttributeChannels();
 
-        if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
-            if( auto uvChannel = AttributeChannel::GetUVChannel( compChannels, 1 ) )
-            {
-                auto & verts  = dynamic_cast< Float3AttributeChannel* >(posChannel)->GetVertices();
-                auto & uvs    = dynamic_cast< Float2AttributeChannel* >(uvChannel)->GetVertices();
+    //    if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
+    //        if( auto uvChannel = AttributeChannel::GetUVChannel( compChannels, 1 ) )
+    //        {
+    //            auto & verts  = dynamic_cast< Float3AttributeChannel* >(posChannel)->GetVertices();
+    //            auto & uvs    = dynamic_cast< Float2AttributeChannel* >(uvChannel)->GetVertices();
 
-                for( unsigned int i = 0; i < verts.size(); ++i )
-                {
-                    uvs[ i ].x = m_digits[ firstDigit ].x;
-                    uvs[ i ].y = m_digits[ firstDigit ].y;
-                }
-            }
-    }
+    //            for( unsigned int i = 0; i < verts.size(); ++i )
+    //            {
+    //                uvs[ i ].x = m_digits[ firstDigit ].x;
+    //                uvs[ i ].y = m_digits[ firstDigit ].y;
+    //            }
+    //        }
+    //}
 
     m_vertexAttributeChannel->SetNeedsAttributesUpdate( true );
 

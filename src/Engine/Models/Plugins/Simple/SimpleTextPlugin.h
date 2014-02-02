@@ -31,6 +31,7 @@ private:
     Textures                    m_textures;
 
     const ResourceHandle*       m_fontResource;
+    const TextAtlas*            m_textAtlas;
     std::wstring                m_text;
 
     bool                        m_bolded;

@@ -29,6 +29,7 @@ public:
 
     int                 Write       ( std::istream & in );
     int                 Write       ( std::istream & in , int numBytes );
+    void                Write       ( const char* in , int numBytes );
 
     void                Close       ();
 

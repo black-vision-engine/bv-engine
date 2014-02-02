@@ -95,14 +95,9 @@ const TextAtlas *           TextHelper::GetAtlas            ( const ResourceHand
 
 ///////////////////////////////
 //
-const ResourceHandle *      TextHelper::GetAtlasTextureInfo ( const ResourceHandle * fontResource, bool bolded, bool italic )
+const ResourceHandle *      TextHelper::GetAtlasTextureInfo ( const TextAtlas * textAtlas )
 {
-    auto textAtlas = GetAtlas( fontResource, bolded, italic );
-
-    if( !textAtlas )
-    {
-        assert(!"Cannot load atlas");
-    }
+    assert( textAtlas );
 
     unsigned int texSize = textAtlas->GetWidth() * textAtlas->GetHeight() * 4; //FIXME: Add format to atlas
 
@@ -153,7 +148,7 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
 
         auto posAttribChannel = new Float3AttributeChannel( desc, "vertexPosition", true );
 
-        auto glyphCoord = textAtlas->GetGlyphCoord( wch );
+        auto glyphCoord = textAtlas->GetGlyphCoords( wch );
 
         glm::vec3 baring = glm::vec3( 0.f, (glyphCoord.height - glyphCoord.bearingY) / (float)viewHeight, 0.f );
 

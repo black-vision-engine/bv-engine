@@ -51,6 +51,8 @@ private:
 
 public:
 
+    unsigned int            GetBitsPerPixel () const;
+
     unsigned int            GetWidth        () const;
     unsigned int            GetHeight       () const;
     
@@ -64,6 +66,7 @@ public:
 
     const char*             GetData         () const;
     char*                   GetWritableData ();
+    unsigned int            GetSizeInBytes  () const;
 
     TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh );
 

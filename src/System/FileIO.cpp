@@ -25,6 +25,7 @@ public:
 
     bool                Write       ( std::istream & in );
     bool                Write       ( std::istream & in , long numBytes );
+    void                Write       ( const char* in , long numBytes);
 
     void                Close       ();
 
@@ -112,6 +113,13 @@ bool        FileImpl::Write       ( std::istream & in , long numBytes)
     }
 
     return numBytes == 0;
+}
+
+// *******************************
+//
+void        FileImpl::Write       ( const char* in , long numBytes)
+{
+    m_fileHandle->write( in, numBytes );
 }
 
 // *******************************
@@ -227,6 +235,13 @@ int         File::Write       ( std::istream & in )
 int         File::Write       ( std::istream & in , int numBytes )
 {
     return m_impl->Write( in, numBytes );
+}
+
+// *******************************
+//
+void         File::Write       ( const char* in , int numBytes )
+{
+    m_impl->Write( in, numBytes );
 }
 
 // *******************************

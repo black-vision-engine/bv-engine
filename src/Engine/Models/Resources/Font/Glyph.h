@@ -20,6 +20,7 @@ struct Glyph
   unsigned int      padding;
 
   unsigned int      size;   // 
+
 };
 
 }
