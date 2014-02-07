@@ -13,6 +13,7 @@ class Resource;
 class FontExtraData;
 class TextAtlas;
 class Text;
+struct GlyphCoords;
 
 // ***************************** UID **********************************
 class TimerPluginUID
@@ -27,8 +28,6 @@ class TimerPlugin : public BasePlugin< IPlugin, TimerPluginUID >
     ParamFloat                  m_timeParam;
     float                       m_currentTime;
 
-    std::map< int, glm::vec2 >  m_digits;
-
     VertexAttributesChannelPtr  m_vertexAttributeChannel;
 
     Textures                    m_textures;
@@ -36,27 +35,23 @@ class TimerPlugin : public BasePlugin< IPlugin, TimerPluginUID >
     const ResourceHandle*       m_fontResource;
     const TextAtlas*            m_currentAtlas;
 
-    std::string                 m_timePatern;
+    std::wstring                m_timePatern;
 
     explicit                    TimerPlugin     ( const ParamFloat& timeParam, unsigned int fontSize );
 
-    unsigned int                GetSecond       ( float t );
-    unsigned int                GetHOAS         ( float t );
-    unsigned int                GetMinute       ( float t );
-    unsigned int                GetHour         ( float t );
+    bool                        CheckTimeConsistency ( const std::wstring& time ) const;
 
-    void                        BuildDigitsMap  ();
-
-    bool                        CheckTimeConsistency ( const std::string& time ) const;
+    void                        SetValue        ( unsigned int connComp, wchar_t wch );
+    const GlyphCoords&          GetGlyphCoords  ( wchar_t wch ) const;
 
 public:
 
     static TimerPlugin*                         Create                      ( const ParamFloat& timeParam, unsigned int fontSize );
 
-    void                                        SetTimePatern               ( const std::string& patern );
-    void                                        SetTime                     ( const std::string& time );
+    void                                        SetTimePatern               ( const std::wstring& patern );
+    void                                        SetTime                     ( const std::wstring& time );
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel          () const override;
+    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
     virtual Textures                            GetTextures                 () const override;
 
     virtual void                                Update                      ( TimeType t ) override;

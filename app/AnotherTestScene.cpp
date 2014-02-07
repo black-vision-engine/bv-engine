@@ -598,6 +598,10 @@ model::BasicNode *     Timer()
 
     auto timerPlugin      =   PluginsFactory::CreateTimerPlugin( model::ParametersFactory::CreateParameter("time", time ), 64 );
 
+    timerPlugin->SetTimePatern( L"##:##:##" );
+
+    timerPlugin->SetTime( L"11:11:11" );
+
     root->AddPlugin( timerPlugin );
 
     TransformF     trns;
@@ -836,7 +840,7 @@ model::BasicNode *          ExtrudedTexturedRing()
 model::BasicNode *          TestScenesFactory::AnotherTestScene()
 {
     auto root =  Timer();
-    root->AddChild( Text1() );
+    //root->AddChild( Text1() );
     //root->AddChild( GreenRect() );
     //root->AddChild( TexturedRect() );
     //root->AddChild( ExtrudedTexturedRing() ); // To nie dziala na mojej karcie.

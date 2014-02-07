@@ -19,6 +19,8 @@ namespace bv { namespace model {
 TextAtlas::TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh )
     : m_width( w )
     , m_height( h )
+    , m_glyphWidth( gw )
+    , m_glyphHeight( gh )
     , m_bitsPerPixel( bitsPrePixel )
 {
     m_data = new char[ GetSizeInBytes() ];
@@ -105,7 +107,7 @@ unsigned int            TextAtlas::GetGlyphHeight  ( wchar_t c ) const
     return GetGlyphCoords( c ).height;
 }
 
-// #define GENERATE_TEST_BMP_FILE
+ #define GENERATE_TEST_BMP_FILE
 
 struct GlyphDataInfo
 {
@@ -164,6 +166,9 @@ void                Text::BuildAtlas()
 
     std::vector< GlyphDataInfo >    glyphsDataInfos;
 
+    int maxWidth = 0;
+    int maxHeight = 0;
+
     for ( auto ch : m_text )
     {
         auto it = m_glyphs.find( ch );
@@ -188,6 +193,14 @@ void                Text::BuildAtlas()
         newGlyph->size = m_fontSize;
         newGlyph->width = face->glyph->bitmap.width;
         newGlyph->height = face->glyph->bitmap.rows;
+
+        if( (int)newGlyph->height > maxHeight )
+            maxHeight = newGlyph->height;
+
+        if( (int)newGlyph->width > maxWidth )
+            maxWidth = newGlyph->width;
+
+
         newGlyph->bearingX = face->glyph->bitmap_left;
         newGlyph->bearingY = face->glyph->bitmap_top;
         newGlyph->advance = face->glyph->advance.x;
@@ -205,14 +218,14 @@ void                Text::BuildAtlas()
 
     unsigned int atlasSize = ( unsigned int )std::ceil( sqrt( (float)glyphsNum ) );
 
-    unsigned int altlasWidth = m_fontSize * atlasSize;
-    unsigned int altlasHeight = m_fontSize * atlasSize;
+    unsigned int altlasWidth = maxWidth * atlasSize;
+    unsigned int altlasHeight = maxHeight * atlasSize;
 
-    m_atlas = TextAtlas::Crate( altlasWidth, altlasHeight, 32, m_fontSize, m_fontSize );
+    m_atlas = TextAtlas::Crate( altlasWidth, altlasHeight, 32, maxWidth, maxHeight );
 
     char* atlasData = m_atlas->GetWritableData();
 
-    auto atlasColumns  = altlasWidth / m_fontSize;
+    auto atlasColumns  =  altlasWidth / maxWidth;
 
     std::vector<bool>   textureCoordsSet( glyphsDataInfos.size(), false );
 
@@ -222,8 +235,8 @@ void                Text::BuildAtlas()
         {
     
             // work out which grid slot[col][row] we are in e.g out of 16x16
-            unsigned int col = x / m_fontSize;
-            unsigned int row = y / m_fontSize;
+            unsigned int col = x / maxWidth;
+            unsigned int row = y / maxHeight;
             unsigned int order = row * atlasColumns + col;
 
             unsigned int dataElem = y * m_atlas->GetWidth() * m_atlas->GetBitsPerPixel() / 8 + ( x * m_atlas->GetBitsPerPixel() / 8 );
@@ -237,9 +250,22 @@ void                Text::BuildAtlas()
                 continue;
             }
 
+
+            if( !textureCoordsSet[ order ] )
+            {
+                glyphsDataInfos[order].glyph->textureX = x - padding_px / 2;
+                glyphsDataInfos[order].glyph->textureY = y - padding_px / 2;
+                textureCoordsSet[ order ] = true;
+                m_atlas->SetGlyphCoords(
+                        glyphsDataInfos[order].glyph->code
+                    ,   GlyphCoords( glyphsDataInfos[order].glyph->textureX, glyphsDataInfos[order].glyph->textureY, glyphsDataInfos[order].glyph->width, glyphsDataInfos[order].glyph->height, glyphsDataInfos[order].glyph->bearingX, glyphsDataInfos[order].glyph->bearingY )
+                    );
+            }
+
+
             // pixel indices within padded glyph slot area
-            int x_loc = x % m_fontSize - padding_px / 2;
-            int y_loc = y % m_fontSize - padding_px / 2;
+            int x_loc = (x % maxWidth - padding_px / 2) - ( maxWidth - (int)glyphsDataInfos[order].glyph->width );
+            int y_loc = (y % maxHeight - padding_px / 2)  - ( maxHeight - (int)glyphsDataInfos[order].glyph->height );
                 
             if (x_loc < 0 || y_loc < 0 || x_loc >= (int)glyphsDataInfos[order].glyph->width || y_loc >= (int)glyphsDataInfos[order].glyph->height )
             {
@@ -250,16 +276,6 @@ void                Text::BuildAtlas()
             } 
             else 
             {
-                if( !textureCoordsSet[ order ] )
-                {
-                    glyphsDataInfos[order].glyph->textureX = x;
-                    glyphsDataInfos[order].glyph->textureY = y;
-                    textureCoordsSet[ order ] = true;
-                    m_atlas->SetGlyphCoords(
-                            glyphsDataInfos[order].glyph->code
-                        ,   GlyphCoords( x, y, glyphsDataInfos[order].glyph->width, glyphsDataInfos[order].glyph->height, glyphsDataInfos[order].glyph->bearingX, glyphsDataInfos[order].glyph->bearingY )
-                        );
-                }
                 // this is 1, but it's safer to put it in anyway
                 int bytes_per_pixel = glyphsDataInfos[order].glyph->width / glyphsDataInfos[order].pitch;
                 int bytes_in_glyph  = glyphsDataInfos[order].glyph->height * glyphsDataInfos[order].pitch;
