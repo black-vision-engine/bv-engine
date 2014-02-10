@@ -17,6 +17,8 @@
     <ClCompile Include="BVConfig.cpp" />
     <ClCompile Include="FrameStatsService.cpp" />
     <ClCompile Include="StatsFormatters.cpp" />
+    <ClCompile Include="ModelInteractionLayer.cpp" />
+    <ClCompile Include="ModelInteractionEvents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
@@ -53,6 +55,8 @@
     <ClInclude Include="BVForwards.h" />
     <ClInclude Include="FrameStatsService.h" />
     <ClInclude Include="StatsFormatters.h" />
+    <ClInclude Include="ModelInteractionLayer.h" />
+    <ClInclude Include="ModelInteractionEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MockFonts">
