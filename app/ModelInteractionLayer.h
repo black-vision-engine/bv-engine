@@ -21,7 +21,7 @@ public:
     void    static SetRot       ( const std::string & name, const glm::vec3 & rotAxis, float angle );
     void    static SetScl       ( const std::string & name, const glm::vec3 & scale );
 
-    static std::vector< std::string > ParseParamName( const std::string & name );
+    static std::vector< std::string > ParseParamName( const std::string & name, const std::string & delimiter = "/" );
 };
 
 }

@@ -157,6 +157,7 @@
     <ClCompile Include="Engine\Models\Resources\Font\TextHelper.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelAnimatedVertices.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelVariableTopology.cpp" />
+    <ClCompile Include="Engine\Models\ModelAccessors.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -353,6 +354,7 @@
     <ClInclude Include="Engine\Models\Resources\Font\TextHelper.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelAnimatedVertices.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelVariableTopology.h" />
+    <ClInclude Include="Engine\Models\ModelAccessors.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

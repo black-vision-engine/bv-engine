@@ -1,7 +1,8 @@
 #include "ModelInteractionLayer.h"
 
-#include "Engine/Events/Interfaces/IEventManager.h"
+#include <boost/algorithm/string.hpp>
 
+#include "Engine/Events/Interfaces/IEventManager.h"
 
 namespace bv
 {
@@ -49,10 +50,15 @@ void    ModelInteractionLayer::SetScl      ( const std::string & name, const glm
 }
 
 // *************************************
-// TODO: implement and implement delegate in bvAppLogic to service these events (this is going to be mentioned public access API in some ridimentary, stub form)
-std::vector< std::string > ModelInteractionLayer::ParseParamName( const std::string & name )
+//
+std::vector< std::string > ModelInteractionLayer::ParseParamName( const std::string & name, const std::string & delimiter )
 {
     std::vector< std::string > ret;
+
+    char sep[] = " ";
+    sep[ 0 ] = delimiter.c_str()[ 0 ];
+
+    boost::split( ret, name, boost::is_any_of( sep ) );
 
     return ret;
 }

@@ -47,7 +47,8 @@ namespace model
 
 // ********************************
 //
-BasicNode::BasicNode()
+BasicNode::BasicNode( const std::string & name )
+    : m_name( name )
 {
 }
 
@@ -289,6 +290,13 @@ bool  BasicNode::IsVisible               ( TimeType t ) const
 void  BasicNode::SetVisible              ( bool visible )
 {
     m_visible = visible;
+}
+
+// ********************************
+//
+const std::string & BasicNode::GetName      () const
+{
+    return m_name;
 }
 
 // ********************************

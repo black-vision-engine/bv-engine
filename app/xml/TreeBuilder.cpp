@@ -84,7 +84,7 @@ namespace bv{
 	model::BasicNode*  deleteMe()
 	{
 
-		model::BasicNode * root = new model::BasicNode();
+		model::BasicNode * root = new model::BasicNode( "deleteMeNode" );
 
 		std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example.txt");
 
@@ -238,7 +238,7 @@ namespace bv{
 		//cout<<AddTabs(depth)<<" [plugins "<<CurrentNode.plugins.size()<<"]"<<endl;
 		
 		//onNodeBegin(CurrentNode.name,depth);
-		model::BasicNode * newNode = new model::BasicNode();
+        model::BasicNode * newNode = new model::BasicNode( CurrentNode.name );
 
 		for(unsigned int i=0;i<CurrentNode.plugins.size();i++)
 		{
@@ -306,7 +306,7 @@ namespace bv{
 
 	model::BasicNode* TreeBuilder::BuildTree(string path){
 		
-		model::BasicNode * root = new model::BasicNode();
+		model::BasicNode * root = new model::BasicNode( "Nie ma nazwy na pustyni FIXME:" );
 
 
 		BlackTree Tree;

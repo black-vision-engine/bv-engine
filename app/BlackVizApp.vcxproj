@@ -46,7 +46,6 @@
       <AdditionalIncludeDirectories>../dep/Common/FreeType/include;../dep/Common/FreeImage/Dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../src;../dep/Common/FastDelegate;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;BOOST_ALL_NO_LIB=1;_UNICODE;UNICODE;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

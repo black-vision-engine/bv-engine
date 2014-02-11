@@ -43,6 +43,7 @@ private:
 
     explicit ModelScene( BasicNode * node, Camera * cam );
 
+    friend class ModelAccessors;
 };
 
 } // model

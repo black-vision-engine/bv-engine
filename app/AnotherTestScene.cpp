@@ -71,7 +71,7 @@ using namespace model;
 //
 model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned int numSegments, float speedX, float speedY, float cyclesX, float cyclesY, float sizeY, float sizeZ )
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "AnimatedSolidRoot" );
 
     ///////////////////////////// Channels //////////////////////////
     model::VertexAttributesChannel *        vaChannel     = model::VertexAttributesChannelAnimatedVertices::Create( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
@@ -114,7 +114,7 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 //
 model::BasicNode * VariableTopologySolids( float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "VarTopologySolidsRoot" );
     
     ///////////////////////////// Channels //////////////////////////
     model::VertexAttributesChannel *        vaChannel     = model::VertexAttributesChannelVariableTopology::Create( size, speed, oscilationSpeed, numSegments, numComponents );
@@ -148,7 +148,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
 
     assert( numAnimations >= 1 );
 
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "AnimatedSequenceRoot" );
 
     float hds = 1.7778f;
 
@@ -204,7 +204,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
 
     for( unsigned int i = 1; i < numAnimations; ++i )
     {
-        model::BasicNode * root1 = new model::BasicNode();
+        model::BasicNode * root1 = new model::BasicNode( "FIXME:" );
 
         ///////////////////////////// Geometry plugin //////////////////////////
         model::GeometryRectPlugin * rectPlugin   = PluginsFactory::CreateGeometryRectPlugin( 1.77778f * 1.f, 1.f );
@@ -262,12 +262,12 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
 //
 model::BasicNode * NonGeometryParentRects   ( TimeType start0, TimeType stop0, TimeType start1, TimeType stop1, TimeType start2, TimeType stop2 ,TimeType start3, TimeType stop3 )
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "NonGeometryRoot" );
 
-    model::BasicNode * child1 = new model::BasicNode();
-    model::BasicNode * child2 = new model::BasicNode();
-    model::BasicNode * child3 = new model::BasicNode();
-    model::BasicNode * child4 = new model::BasicNode();
+    model::BasicNode * child1 = new model::BasicNode( "NonGeometryC0" );
+    model::BasicNode * child2 = new model::BasicNode( "NonGeometryC1" );
+    model::BasicNode * child3 = new model::BasicNode( "NonGeometryC2" );
+    model::BasicNode * child4 = new model::BasicNode( "NonGeometryC3" );
 
     model::SimpleTransformPlugin * plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", TransformF() ) );
 
@@ -362,7 +362,7 @@ model::BasicNode * NonGeometryParentRects   ( TimeType start0, TimeType stop0, T
 //
 model::BasicNode *          GreenRect()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "GreenRectRoot" );
 
     ///////////////////////////// Geometry plugin //////////////////////////
     model::GeometryRectPlugin * rectPlugin  = PluginsFactory::CreateGeometryRectPlugin( 1.f, 1.f );
@@ -402,7 +402,7 @@ model::BasicNode *          GreenRect()
 //
 model::BasicNode *          TexturedRect()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "TxRectRoot" );
 
     ///////////////////////////// Geometry plugin //////////////////////////
     model::GeometryRectPlugin* rectPlugin   = PluginsFactory::CreateGeometryRectPlugin(1.f, 1.f);
@@ -454,7 +454,7 @@ model::BasicNode *          TexturedRect()
 //
 model::BasicNode *          TexturedRing()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "TxRingRoot" );
 
     ///////////////////////////// Geometry plugin //////////////////////////
 
@@ -490,7 +490,7 @@ model::BasicNode *          TexturedRing()
 //
 model::BasicNode *     NaiveTimer()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "NaiveTimerRoot" );
 
     Vec4Interpolator color; color.SetWrapPostMethod( bv::WrapMethod::pingPong );
     color.AddKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
@@ -529,7 +529,7 @@ model::BasicNode *     NaiveTimer()
 //
 model::BasicNode *     Text1()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "Tex1Root" );
 
     std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example.txt");
 
@@ -588,7 +588,7 @@ model::BasicNode *     Text1()
 //
 model::BasicNode *     Timer()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "TimerRoot" );
 
     std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example.txt");
 
@@ -648,7 +648,7 @@ model::BasicNode *     Timer()
 //
 model::BasicNode * Text1Textured()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "Tex1TexRoot" );
 
     std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example1.txt");
 
@@ -703,7 +703,7 @@ model::BasicNode * Text1Textured()
 //
 model::BasicNode *     Text2()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "Tx2root" );
 
     std::wstring str  = TextHelper::LoadUtf8FileToString( L"text_example.txt" );
 
@@ -761,7 +761,7 @@ model::BasicNode *     Text2()
 //
 model::BasicNode *          ExtrudedRedRect()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "ExtrudedRectRoot" );
 
     auto rectPlugin  = PluginsFactory::CreateGeometryRectPlugin(2.f, 1.f);
 
@@ -798,7 +798,7 @@ model::BasicNode *          ExtrudedRedRect()
 //
 model::BasicNode *          ExtrudedTexturedRing()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "ExtrudedRingRoot" );
 
     model::GeometryRingPlugin*          ringPlugin = model::PluginsFactory::CreateGeometryRingPlugin( 0.f, 1.5f * 3.14f, 1.f, 2.f, 200 );
 
@@ -991,11 +991,11 @@ model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
 
     model::BasicNode * ntlnode = NonGeometryParentRects( start0, stop0, start1, stop1, start2, stop2, start3, stop3 );
 
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "NGRoot" );
     model::SimpleTransformPlugin * plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", TransformF() ) );
     root->AddPlugin( plugin00 );
 
-    model::BasicNode * left = new model::BasicNode();
+    model::BasicNode * left = new model::BasicNode( "LeftChild" );
     TransformF tl;
     tl.AddTranslation( InterpolatorsHelper::CreateConstValue( -1.3f ), InterpolatorsHelper::CreateConstValue( 0.0f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
     //tl->addScale( InterpolatorsHelper::CreateConstValue( 0.3f ), InterpolatorsHelper::CreateConstValue( 0.1f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
@@ -1003,7 +1003,7 @@ model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
     left->AddPlugin( ptl );
     left->AddChild( tlnode );
 
-    model::BasicNode * right = new model::BasicNode();
+    model::BasicNode * right = new model::BasicNode( "RightChild" );
     TransformF tr;
     tr.AddTranslation( InterpolatorsHelper::CreateConstValue( 1.3f ), InterpolatorsHelper::CreateConstValue( 0.0f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
     //tr->addScale( InterpolatorsHelper::CreateConstValue( 0.3f ), InterpolatorsHelper::CreateConstValue( 0.1f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
@@ -1021,7 +1021,7 @@ model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
 //
 model::BasicNode *      TestScenesFactory::StackThemNow                ( model::BasicNode * n0, model::BasicNode * n1 )
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "StackNodeRoot" );
     model::SimpleTransformPlugin * plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", TransformF() ) );
     root->AddPlugin( plugin00 );
 

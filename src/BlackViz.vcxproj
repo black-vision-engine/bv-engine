@@ -219,6 +219,7 @@
     <ClCompile Include="Engine\Graphics\State\StateInstance.cpp" />
     <ClCompile Include="Engine\Graphics\State\StencilState.cpp" />
     <ClCompile Include="Engine\Models\Builder\RendererStatesBuilder.cpp" />
+    <ClCompile Include="Engine\Models\ModelAccessors.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ConstantsMapper.cpp" />
     <ClCompile Include="Engine\Models\ModelScene.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\ChannelsFactory.cpp" />
@@ -384,6 +385,7 @@
     <ClInclude Include="Engine\Interfaces\IUpdatable.h" />
     <ClInclude Include="Engine\Interfaces\IUpdater.h" />
     <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
+    <ClInclude Include="Engine\Models\ModelAccessors.h" />
     <ClInclude Include="Engine\Models\Plugins\ConstantsMapper.h" />
     <ClInclude Include="Engine\Models\ModelScene.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\ChannelsFactory.h" />

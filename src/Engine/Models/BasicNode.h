@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
 #include "Engine/Models/Node.h"
 
@@ -31,6 +32,8 @@ class BasicNode : public bv::IModelNode
 {
 private:
 
+    const std::string           m_name;
+
     bool                        m_visible;
 
     TNodeVec                    m_children;
@@ -40,7 +43,7 @@ private:
 
 public:
 
-    explicit BasicNode();
+    explicit BasicNode( const std::string & name );
     virtual ~BasicNode()
     {
     }
@@ -56,6 +59,8 @@ public:
 
     virtual bool                        IsVisible               ( TimeType t ) const;
     void                                SetVisible              ( bool visible );
+
+    virtual const std::string &         GetName                 () const;
 
 private:
 
@@ -151,6 +156,8 @@ private:
 public:
 
     static void                         RegisterShaderParameters( const IShaderChannel * shaderPlugin, ShaderParameters * shParams );
+
+    friend class ModelAccessors;
 
 };
 
