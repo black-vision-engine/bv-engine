@@ -22,6 +22,7 @@ public:
                         ~ParamImpl  ();
 
     inline  ValueType   Evaluate    ( TimeType t ) const;
+    inline  void        SetVal      ( const ValueType & val, TimeType t );
 
 };
 
@@ -58,6 +59,11 @@ public:
 
     inline TransformF & TransformRef();
 
+    inline   void       SetVal          ( const glm::mat4 & val, TimeType t );
+    inline   void       SetRotation     ( const glm::vec3 & rotAxis, float angle, TimeType t );
+    inline   void       SetScale        ( const glm::vec3 & scale, TimeType t );
+    inline   void       SetTranslation  ( const glm::vec3 & translation, TimeType t );
+
 };
 
 // *******************************************
@@ -75,6 +81,7 @@ public:
     }
 
     inline  glm::mat2   Evaluate    ( TimeType t ) const;
+    inline   void       SetVal      ( const glm::mat2 & val, TimeType t );
 
 };
 

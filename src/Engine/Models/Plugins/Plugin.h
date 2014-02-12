@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
-#include "Engine/Models/Plugins/Interfaces/IValue.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"

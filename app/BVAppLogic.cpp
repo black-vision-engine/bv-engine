@@ -115,7 +115,7 @@ void BVAppLogic::LoadScene          ( void )
     
 
     model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
-    m_modelScene = model::ModelScene::Create( root, new Camera() );
+    m_modelScene = model::ModelScene::Create( root, new Camera(), "BasicScene" );
     m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
 }
 

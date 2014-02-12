@@ -105,6 +105,11 @@ public:
     virtual glm::mat4x4         Evaluate    ( typename ParamT::TimeT t ) const override;
     virtual SimpleTransform *   Clone       () const;
 
+    void                        SetRotation ( TimeType t, const glm::vec3 & rotAxis, float angle_ )
+    {
+        angle.AddKey( t, angle_ );
+        m_rotationAxis.AddKey( t, rotAxis );
+    }
 };
 
 template<typename ParamT>

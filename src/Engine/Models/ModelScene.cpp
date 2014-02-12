@@ -10,26 +10,27 @@ namespace bv { namespace model {
 
 // *******************************
 //
-ModelScene*     ModelScene::Create(BasicNode* node, Camera* cam)
+ModelScene*     ModelScene::Create( BasicNode * node, Camera * cam, const std::string & name )
 {
-    return new ModelScene(node, cam);
+    return new ModelScene( node, cam, name );
 }
 
 // *******************************
 //
-ModelScene::ModelScene(BasicNode* node, Camera* cam)
-    : m_pCamera(cam)
-    , m_pSceneRoot(node)
+ModelScene::ModelScene( BasicNode * node, Camera * cam, const std::string & name )
+    : m_pCamera( cam )
+    , m_pSceneRoot( node )
     , m_cameraPosition( "camera_position", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 1.0f ) ) )
     , m_cameraDirection( "camera_direction", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 0.f ) ) )
     , m_cameraUp( "camera_up", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 1.f, 0.f ) ) )
+    , m_name( name )
 {}
 
 // *******************************
 //
 void            ModelScene::Update( TimeType t )
 {
-    m_pSceneRoot->Update(t);
+    m_pSceneRoot->Update( t );
 }
 
 // *******************************
@@ -57,6 +58,13 @@ Camera *        ModelScene::GetCamera               ()  const
 BasicNode *     ModelScene::GetSceneRoot            ()  const
 {
     return m_pSceneRoot;
+}
+
+// *******************************
+//
+const std::string & ModelScene::GetName             () const
+{
+    return m_name;
 }
 
 // *******************************

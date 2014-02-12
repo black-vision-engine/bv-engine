@@ -61,7 +61,7 @@ public:
     explicit BasicInterpolator  ( TimeValueT tolerance = 0.0001 );
     virtual ~BasicInterpolator  () {};
 
-    void AddKey             ( TimeValueT t, ValueT v );
+    void AddKey             ( TimeValueT t, const ValueT & v );
     void AddKey             ( const Key<TimeValueT, ValueT> & key );
 
     ValueT Evaluate         ( TimeValueT t ) const;
