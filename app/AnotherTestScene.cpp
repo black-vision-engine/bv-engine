@@ -387,7 +387,11 @@ model::BasicNode *          GreenRect()
 
     ///////////////////////////// Material plugin //////////////////////////// 
 
-    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( transformPlugin, ParametersFactory::CreateParameter( "color", InterpolatorsHelper::CreateConstValue( glm::vec4( 0.f, 1.f, 0.f, 1.f ) ) ) );
+    Vec4Interpolator col; col.SetWrapPostMethod( bv::WrapMethod::pingPong );
+    col.AddKey( 0.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    col.AddKey( 10.f, glm::vec4( 0.9f, 0.9f, 0.98f, 1.f ) );
+
+    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( transformPlugin, ParametersFactory::CreateParameter( "color", col ) );
 
     root->AddPlugin( colorPlugin );
 
@@ -835,8 +839,9 @@ model::BasicNode *          ExtrudedTexturedRing()
 //
 model::BasicNode *          TestScenesFactory::AnotherTestScene()
 {
-    auto root =  Timer();
-    root->AddChild( Text1() );
+    auto root = GreenRect();
+    //auto root =  Timer();
+    //root->AddChild( Text1() );
     //root->AddChild( GreenRect() );
     //root->AddChild( TexturedRect() );
     //root->AddChild( ExtrudedTexturedRing() ); // To nie dziala na mojej karcie.
