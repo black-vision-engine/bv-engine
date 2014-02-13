@@ -81,6 +81,11 @@ public:
         p2.AddKey( t, v2 );
     }
 
+    void  SetVecVal ( TimeType t, const glm::vec3 & v )
+    {
+        SetValues( t, v[ 0 ], v[ 1 ], v[ 2 ] );
+    }
+
     TransformKind   KindKurwaMac()
     {
         return kind;

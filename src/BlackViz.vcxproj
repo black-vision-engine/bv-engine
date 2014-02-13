@@ -255,7 +255,9 @@
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRing.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\BaseValue.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\ParametersFactory.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleAnimationPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleColorPlugin.cpp" />
@@ -436,8 +438,9 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\BaseValue.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\ParametersFactory.h" />
-    <ClInclude Include="Engine\Models\Plugins\Parameters\TypedParameters.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\TypedValues.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginsFactory.h" />
@@ -550,7 +553,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />
-    <None Include="Engine\Models\Plugins\Parameters\TypedParameters.inl" />
+    <None Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />
+    <None Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.inl" />
     <None Include="System\HerarchicalProfiler.inl" />
   </ItemGroup>
   <ItemGroup>

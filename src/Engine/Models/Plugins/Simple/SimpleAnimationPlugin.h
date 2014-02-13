@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Simple/SimpleTexturePlugin.h"
-#include "Engine/Models/Plugins/Parameters/TypedParameters.h"
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 #include "Engine/Models/Plugins/Interfaces/ISequenceAnimationSource.h"
 
 

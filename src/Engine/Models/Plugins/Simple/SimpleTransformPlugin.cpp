@@ -72,22 +72,22 @@ void                SimpleTransformPlugin::OnSetTransform      ( IEventPtr evt )
     const glm::vec3 & scale         = tevt->Scale();
 
     ParamTransform & pt = m_transformChannel->AccessFirstParamTransform(); //FIXME: kolejny kurwa mega hack
-    TransformF & t = pt.TransformRef();
+    //TransformF & t = pt.TransformRef();
 
-    for( unsigned int i = 0; i < t.Size(); ++i )
-    {
-        const auto st = t[ i ];
-        
-        if( st->KindKurwaMac() == TransformKind::scale )
-        {
-            st->SetValues( 0.f, scale[ 0 ], scale[ 1 ], scale[ 2 ] );
-        }
+    //for( unsigned int i = 0; i < t.Size(); ++i )
+    //{
+    //    const auto st = t[ i ];
+    //    
+    //    if( st->KindKurwaMac() == TransformKind::scale )
+    //    {
+    //        st->SetValues( 0.f, scale[ 0 ], scale[ 1 ], scale[ 2 ] );
+    //    }
 
-        if( st->KindKurwaMac() == TransformKind::translation )
-        {
-            st->SetValues( 0.f, translation[ 0 ], translation[ 1 ], translation[ 2 ] );
-        }
-    }
+    //    if( st->KindKurwaMac() == TransformKind::translation )
+    //    {
+    //        st->SetValues( 0.f, translation[ 0 ], translation[ 1 ], translation[ 2 ] );
+    //    }
+    //}
 }
 
 } // model

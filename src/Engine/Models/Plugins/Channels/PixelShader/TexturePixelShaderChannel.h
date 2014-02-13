@@ -3,7 +3,8 @@
 #include <memory>
 
 #include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
-#include "Engine/Models/Plugins/Parameters/TypedParameters.h"
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
+#include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 #include "Engine/Models/Plugins/Parameters/TypedValues.h"
 
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "System/BasicTypes.h" //FIXME: store in PCH
 
 

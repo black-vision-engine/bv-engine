@@ -13,10 +13,10 @@ private:
 
 public:
 
-                        Timeline    ( ITimeEvaluator * parent, TimeType startTime, TimeType endTime );
+                        Timeline    ( ITimeEvaluator * parent, TimeType startTime, TimeType endTime, const std::string & name );
     virtual             ~Timeline   ();
 
-    virtual TimeType    Evaluate    ( TimeType t )  const;
+    virtual TimeType    Evaluate    ( TimeType t )  const override;
 
 };
 

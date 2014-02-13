@@ -12,7 +12,8 @@ namespace {
 
 // *********************************
 //
-TimelineBase::TimelineBase          ( TimeType startTime, TimeType endTime, float scale )
+TimelineBase::TimelineBase          ( TimeType startTime, TimeType endTime, const std::string & name, float scale )
+    : m_name( name )
 {
     m_settings.m_constValPre    = 0.f;
     m_settings.m_constValPost   = endTime - startTime;
@@ -30,16 +31,18 @@ TimelineBase::TimelineBase          ( TimeType startTime, TimeType endTime, floa
 
 // *********************************
 //
-TimelineBase::TimelineBase          ( const TimeInterpolator & interpolator, const TimelineSettings & settings )
+TimelineBase::TimelineBase          ( const TimeInterpolator & interpolator, const TimelineSettings & settings, const std::string & name )
     : m_settings( settings )
+    , m_name( name )
 {
     m_state.Reset();
 }
 
 // *********************************
 //
-TimelineBase::TimelineBase          ( const TimelineSettings & settings, TimeType startTime, TimeType endTime, float scale )
+TimelineBase::TimelineBase          ( const TimelineSettings & settings, TimeType startTime, TimeType endTime, const std::string & name, float scale )
     : m_settings( settings )
+    , m_name( name )
 {
     m_state.Reset();
 
@@ -79,6 +82,13 @@ void   TimelineBase::SetInterval    ( TimeType startTime, TimeType endTime, floa
     ti.AddKey( endTime, scale * ( endTime - startTime ) );
 
     m_interpolator = ti;
+}
+
+// *********************************
+//
+const std::string & TimelineBase::GetName () const
+{
+    return m_name;
 }
 
 // *********************************

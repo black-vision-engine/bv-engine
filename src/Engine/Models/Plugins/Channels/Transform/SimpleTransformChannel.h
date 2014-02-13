@@ -5,7 +5,7 @@
 #include "Mathematics/Transform/MatTransform.h"
 
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
-#include "Engine/Models/Plugins/Parameters/TypedParameters.h"
+#include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 
 namespace bv { namespace model
 {

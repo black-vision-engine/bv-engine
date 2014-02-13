@@ -293,10 +293,10 @@ model::BasicNode * NonGeometryParentRects   ( TimeType start0, TimeType stop0, T
     model::SimpleTransformPlugin * tplugin13 = model::SimpleTransformPlugin::Create( rectPlugin13, model::ParametersFactory::CreateParameter( "transformation", trans13 ) );
     model::SimpleTransformPlugin * tplugin14 = model::SimpleTransformPlugin::Create( rectPlugin14, model::ParametersFactory::CreateParameter( "transformation", trans14 ) );
 
-    model::Timeline * timeline0 = new model::Timeline( nullptr, start0, stop0 );
-    model::Timeline * timeline1 = new model::Timeline( nullptr, start1, stop1 );
-    model::Timeline * timeline2 = new model::Timeline( nullptr, start2, stop2 );
-    model::Timeline * timeline3 = new model::Timeline( nullptr, start3, stop3 );
+    model::Timeline * timeline0 = new model::Timeline( nullptr, start0, stop0, "timeline0" );
+    model::Timeline * timeline1 = new model::Timeline( nullptr, start1, stop1, "timeline1" );
+    model::Timeline * timeline2 = new model::Timeline( nullptr, start2, stop2, "timeline2" );
+    model::Timeline * timeline3 = new model::Timeline( nullptr, start3, stop3, "timeline3" );
 
     glm::vec4 col11( 1.f/255.f, 167.f/255.f, 193.f/255.f, 1.f ); 
     glm::vec4 col12( 226.f/255.f, 169.f/255.f, 36.f/255.f, 1.f );

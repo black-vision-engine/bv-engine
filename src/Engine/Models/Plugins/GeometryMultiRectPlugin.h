@@ -2,7 +2,7 @@
 
 #include "Mathematics/Transform/MatTransform.h"
 
-#include "Engine/Models/Plugins/Parameters/TypedParameters.h"
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
 

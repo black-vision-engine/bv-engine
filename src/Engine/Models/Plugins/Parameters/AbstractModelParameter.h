@@ -24,7 +24,7 @@ protected:
 
 protected:
 
-    explicit                    AbstractModelParameter  ( const std::string & name, ModelParamType type, const ITimeEvaluator * evaluator = nullptr );
+    explicit                    AbstractModelParameter  ( const std::string & name, ModelParamType type, const ITimeEvaluator * evaluator );
     virtual                     ~AbstractModelParameter ();
 
     template< typename DerivedClass >
@@ -38,7 +38,9 @@ public:
     virtual const std::string & GetName                 () const;
     virtual ModelParamType      GetType                 () const;
 
-    inline void                 SetTimeEvaluator        ( const ITimeEvaluator * timeEvaluator );
+    inline  void                SetTimeEvaluator        ( const ITimeEvaluator * timeEvaluator );
+
+    inline  TimeType            GetLocalEvaluationTime  ( TimeType t ) const;
 
 };
 
