@@ -151,13 +151,13 @@
     <ClCompile Include="System\SimpleTimer.cpp" />
     <ClCompile Include="System\HerarchicalProfiler.cpp" />
     <ClCompile Include="System\FileIO.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Parameters\BaseParameter.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\BaseValue.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\TimerPlugin.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\TextHelper.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelAnimatedVertices.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelVariableTopology.cpp" />
     <ClCompile Include="Engine\Models\ModelAccessors.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -346,7 +346,6 @@
     <ClInclude Include="System\BasicMacros.h" />
     <ClInclude Include="System\FileIO.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IValue.h" />
-    <ClInclude Include="Engine\Models\Plugins\Parameters\BaseParameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\BaseValue.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\TypedParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\TypedValues.h" />
@@ -355,11 +354,13 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelAnimatedVertices.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelVariableTopology.h" />
     <ClInclude Include="Engine\Models\ModelAccessors.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IParameter.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
-    <None Include="Engine\Models\Plugins\Parameters\BaseParameter.inl" />
     <None Include="Engine\Models\Plugins\Parameters\TypedParameters.inl" />
+    <None Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />

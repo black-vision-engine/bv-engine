@@ -67,6 +67,14 @@ public:
 };
 
 // *******************************************
+class ParamTransformVec : public BaseParameter
+{
+private:
+
+
+}
+
+// *******************************************
 class ParamMat2 : public ParamImpl< Vec4Interpolator, glm::vec4 >
 {
 private:
