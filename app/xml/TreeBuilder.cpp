@@ -101,11 +101,11 @@ namespace bv{
 		FloatInterpolator yt; yt.SetWrapPostMethod( bv::WrapMethod::repeat );
 		FloatInterpolator zt;
 
-		xt.AddKey(0.f, -1.f);
-		yt.AddKey(0.f, -5.f);
-		zt.AddKey(0.f, -5.f);
-
-		yt.AddKey(30.f, 5.f);
+		xt.AddKey( 0.f, -1.f );
+		yt.AddKey( 0.f, -5.f );
+		zt.AddKey( 0.f, -5.f );
+                             
+		yt.AddKey( 30.f, 5.f );
 
 		trns.AddTranslation( xt, yt, zt );
 
@@ -115,8 +115,7 @@ namespace bv{
 
         root->AddPlugin( texPlugin );
 
-        root->AddPlugin( bv::model::PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) ) );
-
+        root->AddPlugin( bv::model::PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) ) );
 
 		return root;
 	}

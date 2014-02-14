@@ -26,9 +26,16 @@ ParamFloat                          ParametersFactory::CreateParameter          
 
 // *******************************
 //
-ParamTransform                      ParametersFactory::CreateParameter                    ( const std::string & name, const TransformF & interpolator, const Timeline * timeline )
+ParamTransform                      ParametersFactory::CreateParameter                     ( const std::string & name, const TransformF & interpolator, const Timeline * timeline )
 {
     return ParamTransform( name, interpolator, timeline );
+}
+
+// *******************************
+//
+ParamTransformVec                   ParametersFactory::CreateParameter                     ( const std::string & name, const TransformF & interpolator, const Timeline * timeline, int dummy )
+{
+    return ParamTransformVec( name, interpolator, timeline );
 }
 
 } // model

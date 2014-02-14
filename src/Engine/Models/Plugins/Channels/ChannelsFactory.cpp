@@ -30,10 +30,9 @@ VertexAttributesChannel *       ChannelsFactory::CreateVertexAttributesChannel  
 
 // *******************************
 //
-TransformChannel *              ChannelsFactory::CreateTransformChannel              ( const ParamTransform& transformation )
+TransformChannel *              ChannelsFactory::CreateTransformChannel              ( const ParamTransformVec & transformVec )
 {
-	SimpleTransformChannel*      trasformChannel  = new SimpleTransformChannel();
-	trasformChannel->AddTransform( transformation );
+	SimpleTransformChannel*      trasformChannel  = new SimpleTransformChannel( transformVec );
 
 	return trasformChannel;
 }

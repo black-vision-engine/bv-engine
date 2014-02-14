@@ -101,9 +101,9 @@ model::TimerPlugin *                 PluginsFactory::CreateTimerPlugin          
 
 // *******************************
 //
-model::SimpleTransformPlugin *      PluginsFactory::CreateSimpleTransformPlugin               ( const model::IPlugin * prev, const ParamTransform & transformation )
+model::SimpleTransformPlugin *      PluginsFactory::CreateSimpleTransformPlugin               ( const model::IPlugin * prev, const ParamTransformVec & transformVec )
 {
-    return model::SimpleTransformPlugin::Create( prev, transformation );
+    return model::SimpleTransformPlugin::Create( prev, transformVec );
 }
 
 // *******************************

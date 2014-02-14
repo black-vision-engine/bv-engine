@@ -231,7 +231,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     
     root->AddPlugin( rectPlugin );
 
-    model::SimpleTransformPlugin      * stpl  = model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
+    model::SimpleTransformPlugin      * stpl  = model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
 
     root->AddPlugin( stpl );
 
@@ -303,7 +303,7 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
 
     trns.AddRotation(angle, ConstValue( 0.f ), ConstValue( 0.f ), ConstValue( 1.f ) );
 
-    auto transformPlugin  =  model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
+    auto transformPlugin  =  model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
     
     root->AddPlugin( transformPlugin );
 

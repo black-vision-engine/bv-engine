@@ -11,19 +11,18 @@ namespace bv { namespace model {
 
 // *************************************
 //
-SimpleTransformPlugin * SimpleTransformPlugin::Create( const IPlugin * prev, const ParamTransform & trans )
+SimpleTransformPlugin * SimpleTransformPlugin::Create( const IPlugin * prev, const ParamTransformVec & transformVec )
 {
-    auto p = new SimpleTransformPlugin( prev, trans );
+    auto p = new SimpleTransformPlugin( prev, transformVec );
     return p;
 }
 
 // *************************************
 //
-SimpleTransformPlugin::SimpleTransformPlugin                    ( const IPlugin * prev, const ParamTransform & trans )
+SimpleTransformPlugin::SimpleTransformPlugin                    ( const IPlugin * prev, const ParamTransformVec & transformVec )
     : BasePlugin( prev )
 {
-    m_transformChannel = SimpleTransformChannelPtr( new SimpleTransformChannel() );
-    m_transformChannel->AddTransform( trans );
+    m_transformChannel = SimpleTransformChannelPtr( new SimpleTransformChannel( transformVec ) );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &SimpleTransformPlugin::OnSetTransform ), TransformSetEvent::Type() );
 }
@@ -71,7 +70,7 @@ void                SimpleTransformPlugin::OnSetTransform      ( IEventPtr evt )
     const glm::vec3 & translation   = tevt->Translation();
     const glm::vec3 & scale         = tevt->Scale();
 
-    ParamTransform & pt = m_transformChannel->AccessFirstParamTransform(); //FIXME: kolejny kurwa mega hack
+    //ParamTransform & pt = m_transformChannel->AccessFirstParamTransform(); //FIXME: kolejny kurwa mega hack
     //TransformF & t = pt.TransformRef();
 
     //for( unsigned int i = 0; i < t.Size(); ++i )

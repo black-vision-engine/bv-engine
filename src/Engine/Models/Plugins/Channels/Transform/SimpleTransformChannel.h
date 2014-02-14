@@ -14,18 +14,18 @@ class SimpleTransformChannel : public TransformChannel
 {
 private:
 
-    std::vector< ParamTransform >                   m_transformParams;
+    ParamTransformVec   m_transformParams;
 
 public:
 
-    virtual void                                    Update                  ( TimeType t );
+    explicit            SimpleTransformChannel  ( const ParamTransformVec & paramTransformVec );
 
-    void                                            AddTransform            ( const ParamTransform & transInt );
+    virtual void        Update                  ( TimeType t );
 
-    ParamTransform &                                AccessFirstParamTransform() //FIXME: hackish
-    {
-        return m_transformParams[ 0 ];
-    }
+//    void                                            AddTransform            ( const ParamTransform & transInt );
+
+    ParamTransformVec * GetParamTransformVec    ();
+
 };
 
 typedef std::shared_ptr< SimpleTransformChannel >   SimpleTransformChannelPtr;
