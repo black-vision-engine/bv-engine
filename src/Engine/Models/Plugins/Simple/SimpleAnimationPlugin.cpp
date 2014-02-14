@@ -38,14 +38,16 @@ SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin 
     m_numFrames  = texturesFilesNames.size();
 
     // Set Pixel Shader Channel
-	std::vector<ParamTransform> txMat;
+    ParamTransformVec       txMat( "TxParamTransform" );
 	std::vector<ParamFloat> alphas;
-    std::vector<ParamVec4> bc;
+    std::vector<ParamVec4>  bc;
 
     m_pixelShaderChannel = new model::TexturePixelShaderChannel( "../dep/media/shaders/simpleanimation.frag", alphas, txMat, bc );
 
     if( !ctx )
+    {
         ctx = RendererContext::CreateDefault();
+    }
 
     m_pixelShaderChannel->SetRendererContext( ctx );
 

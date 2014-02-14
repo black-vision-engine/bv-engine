@@ -27,6 +27,10 @@ public:
 
     virtual void *      QueryParamTyped ();
 
+    const TransformF &  GetTransformF   () const
+    {
+        return m_transformModel;
+    }
 };
 
 // *******************************************

@@ -28,16 +28,16 @@ void TexturePixelShaderChannel::Update( TimeType t )
 
     assert( m_alphaParams.size() == m_alphaValues.size() );
 
-    assert( m_texTransformParams.size() == m_texTransformValues.size() );
+    assert( m_texTransformParams.NumTransforms() == m_texTransformValues.size() );
 
     for( unsigned int i = 0; i < m_alphaParams.size(); ++i )
     {
         m_alphaValues[ i ]->SetValue( m_alphaParams[ i ].Evaluate( t ) );
     }
 
-    for( unsigned int i = 0; i < m_texTransformParams.size(); ++i )
+    for( unsigned int i = 0; i < m_texTransformParams.NumTransforms(); ++i )
     {
-        m_texTransformValues[ i ]->SetValue( m_texTransformParams[ i ].Evaluate( t ) );
+        m_texTransformValues[ i ]->SetValue( m_texTransformParams.Evaluate( i , t ) );
     }
 }
 
@@ -45,12 +45,13 @@ void TexturePixelShaderChannel::Update( TimeType t )
 //
 TexturePixelShaderChannel::TexturePixelShaderChannel( const std::string & shaderFile
                                                     , const std::vector< ParamFloat > & alphas
-                                                    , const std::vector< ParamTransform > & texTransforms
+                                                    , const ParamTransformVec & texTransforms
                                                     , const std::vector< ParamVec4 > & borderColors )
     : PixelShaderChannelBase( shaderFile )
+    , m_texTransformParams( texTransforms )
 {
     assert( alphas.size() <= MAX_NUM_TEXTURES );
-    assert( texTransforms.size() <= MAX_NUM_TEXTURES );
+    assert( texTransforms.NumTransforms() <= MAX_NUM_TEXTURES );
 
     m_alphaParams = alphas;
     for( unsigned int i = 0; i < alphas.size(); ++i )
@@ -61,7 +62,7 @@ TexturePixelShaderChannel::TexturePixelShaderChannel( const std::string & shader
 
 
     m_texTransformParams = texTransforms;
-    for( unsigned int i = 0; i < texTransforms.size(); ++i )
+    for( unsigned int i = 0; i < texTransforms.NumTransforms(); ++i )
     {
         m_texTransformValues.push_back( ValueMat4Ptr( new ValueMat4( ParamDesc::txMatrixParamName[ i ] ) ) );
         RegisterValue( m_texTransformValues[ i ].get() );
@@ -73,6 +74,12 @@ TexturePixelShaderChannel::TexturePixelShaderChannel( const std::string & shader
         m_borderColorValues.push_back( ValueVec4Ptr( new ValueVec4( ParamDesc::borderColorsParamName[ i ] ) ) );
         RegisterValue( m_borderColorValues[ i ].get() );
     }
+}
+
+// ******************************
+//
+TexturePixelShaderChannel::~TexturePixelShaderChannel  ()
+{
 }
 
 } // model

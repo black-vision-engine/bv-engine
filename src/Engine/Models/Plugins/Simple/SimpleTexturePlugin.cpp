@@ -32,13 +32,13 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
     EvalGeometryChannel( prev );
 
     // Set Pixel Shader Channel
-    std::vector<ParamTransform> txMat;
+    ParamTransformVec           txMat( "TxParamTransform" );
     std::vector<ParamFloat>     alphas;
     std::vector<ParamVec4>      borderColors;
 
     for( auto t : textureDescs )
     {
-        txMat.push_back( t.transform );
+        txMat.AppendTransform( t.transform.GetTransformF() );
         alphas.push_back( t.alpha );
         borderColors.push_back( t.borderColor );
     }
@@ -77,13 +77,13 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
 
     // Set Pixel Shader Channel
     // Set Pixel Shader Channel
-    std::vector<ParamTransform> txMat;
+    ParamTransformVec           txMat( "TxParamTransform" );
     std::vector<ParamFloat>     alphas;
     std::vector<ParamVec4>      borderColors;
 
     for( auto t : textureDescs )
     {
-        txMat.push_back( t.transform );
+        txMat.AppendTransform( t.transform.GetTransformF() );
         alphas.push_back( t.alpha );
         borderColors.push_back( t.borderColor );
     }
@@ -91,12 +91,16 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
     m_pixelShaderChannel = TexturePixelShaderChannelPtr( new TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
 										, alphas
 										, txMat 
-                                        , borderColors) );
+                                        , borderColors ) );
 
     if ( ctx )
+    {
         m_pixelShaderChannel->SetRendererContext( ctx );
+    }
     else
+    {
         m_pixelShaderChannel->SetRendererContext( RendererContext::CreateDefault() );
+    }
 
     auto rendContext = m_pixelShaderChannel->GetRendererContext();
     rendContext->cullCtx->enabled = false;
