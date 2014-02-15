@@ -24,7 +24,7 @@ SimpleTransformPlugin::SimpleTransformPlugin                    ( const IPlugin 
 {
     m_transformChannel = SimpleTransformChannelPtr( new SimpleTransformChannel( transformVec ) );
 
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &SimpleTransformPlugin::OnSetTransform ), TransformSetEvent::Type() );
+//    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &SimpleTransformPlugin::OnSetTransform ), TransformSetEvent::Type() );
 }
 
 // *************************************
@@ -61,14 +61,14 @@ void                SimpleTransformPlugin::Print               ( std::ostream & 
     out << GetName() << debug::EndLine( tabs );
 }
 
-// *************************************
-//FIXME: JEDEN KURWA WIELKI HACK
-void                SimpleTransformPlugin::OnSetTransform      ( IEventPtr evt )
-{
-    TransformSetEventPtr tevt = std::static_pointer_cast<TransformSetEvent>( evt );
+//// *************************************
+////FIXME: JEDEN KURWA WIELKI HACK
+//void                SimpleTransformPlugin::OnSetTransform      ( IEventPtr evt )
+//{
+    //TransformSetEventPtr tevt = std::static_pointer_cast<TransformSetEvent>( evt );
 
-    const glm::vec3 & translation   = tevt->Translation();
-    const glm::vec3 & scale         = tevt->Scale();
+    //const glm::vec3 & translation   = tevt->Translation();
+    //const glm::vec3 & scale         = tevt->Scale();
 
     //ParamTransform & pt = m_transformChannel->AccessFirstParamTransform(); //FIXME: kolejny kurwa mega hack
     //TransformF & t = pt.TransformRef();
@@ -87,7 +87,7 @@ void                SimpleTransformPlugin::OnSetTransform      ( IEventPtr evt )
     //        st->SetValues( 0.f, translation[ 0 ], translation[ 1 ], translation[ 2 ] );
     //    }
     //}
-}
+//}
 
 } // model
 } // bv

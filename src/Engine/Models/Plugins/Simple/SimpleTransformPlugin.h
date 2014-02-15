@@ -39,7 +39,7 @@ public:
     virtual void                            Update                      ( TimeType t ) override;
     virtual void                            Print                       ( std::ostream & out, int tabs = 0 ) const override;
 
-    void                                    OnSetTransform              ( IEventPtr evt );
+    //void                                    OnSetTransform              ( IEventPtr evt );
 
     static  SimpleTransformPlugin *         Create                      ( const IPlugin * prev, const ParamTransformVec & transformVec );
 

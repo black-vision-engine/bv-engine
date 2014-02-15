@@ -31,3 +31,22 @@ SimpleAnimationPlugin
 ShaderChannel - przechowuje swój stan dynamiczny (wartoœci) oraz statyczny (parametry i ich typy) oraz na podstawie 
 tego stanu statycznego powinien byæ w stanie wygenerowaæ kod shadera na dan¹ architekturê (u nas OpenGL) - w tym momencie to
 siê sprowadza do wczytania kodu shadera z pliku.
+
+Kana³y transformacji:
+    TransformChannel:
+        Ma w sobie mo¿liwoœæ zwrócenia wektora transformacji
+    SimpleTransformChannel:
+        dodatkowo ma w sobie model z parametrem opisuj¹cym transformacjê po stronie modelu (teraz ta gówniana, docelowo SQT)
+
+ShaderChannels:
+    VertexShaderChannel
+        TextureVertexShaderChannel - ma tylko kod shadera (z pliku)
+    PixelShaderChannel
+        SolidColorPixelShaderChannel - ma tylko parametr z kolorem (vec4)
+        TextPixelShaderChannel - ma tylko parametrz kolorem (vec4)
+        TexturePixelShaderChannel - ma w sobie listy parmetrów (alfy, transformacje, border kolory)
+    GeometryShaderChannel
+        ExtrudeGemoetryShaderChannel - ma w sobie tylko parametr ze skal¹
+
+AtrributeChannels:
+    

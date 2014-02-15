@@ -367,21 +367,20 @@ model::BasicNode *          GreenRect()
     ///////////////////////////// Geometry plugin //////////////////////////
     model::GeometryRectPlugin * rectPlugin  = PluginsFactory::CreateGeometryRectPlugin( 1.f, 1.f );
 
-    root->AddPlugin(rectPlugin); 
+    root->AddPlugin( rectPlugin ); 
 
     ///////////////////////////// Transform plugin //////////////////////////// 
     TransformF trans;
 
     FloatInterpolator angle; angle.SetWrapPostMethod( bv::WrapMethod::pingPong );
-
     angle.AddKey( 0.f, 0.f );
     angle.AddKey( 10.f, 270.f );
 
     trans.AddRotation( angle, InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddTranslation( InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
-    
-    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
+
+    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transform", trans, nullptr, 0 ) );
 
     root->AddPlugin( transformPlugin ); // Plugin with transformation
 
@@ -838,8 +837,8 @@ model::BasicNode *          ExtrudedTexturedRing()
 //
 model::BasicNode *          TestScenesFactory::AnotherTestScene()
 {
-    //auto root = GreenRect();
-    auto root =  Timer();
+    auto root = GreenRect();
+    //auto root =  Timer();
     //root->AddChild( Text1() );
     //root->AddChild( GreenRect() );
     //root->AddChild( TexturedRect() );
