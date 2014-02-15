@@ -48,5 +48,9 @@ ShaderChannels:
     GeometryShaderChannel
         ExtrudeGemoetryShaderChannel - ma w sobie tylko parametr ze skal¹
 
-AtrributeChannels:
+VertexAtrributeChannels:
+    Tutaj trzeba przemyœleæ dok³adnie strukturê i minimalne API, które powinno byæ zaimplementowane po stronie takiego kana³u
+    To jest jedyny kana³, który dostarcza dane w postaci du¿ych chunków pamiêci - pozosta³e kana³y dostarczaj¹ tylko i wy³¹cznie
+    uniformy (parametry po stronie modelu), które s¹ potem interpretowane przez shadery (i ewentualnie na ich podstawie kana³y coœ
+    tam sobie potrafi¹ zbudowaæ)
     
