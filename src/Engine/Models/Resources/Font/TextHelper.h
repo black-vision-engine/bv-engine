@@ -33,7 +33,7 @@ public:
 
     /////////////////////////////////////
     // This function builds VertexAttributeChannel for text and fontResource.
-    static void                         BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, bool bolded = false, bool italic = false );
+    static void                         BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, const std::wstring& textPatern = std::wstring(), bool bolded = false, bool italic = false );
 };
 
 

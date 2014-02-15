@@ -20,16 +20,30 @@ struct GlyphCoords
     unsigned int            bearingX;
     unsigned int            bearingY;
 
+    unsigned int            glyphX;
+    unsigned int            glyphY;
+
+    unsigned int            glyphWidth;
+    unsigned int            glyphHeight;
+
     GlyphCoords(unsigned int tX,
                 unsigned int tY,
                 unsigned int w,
                 unsigned int h,
+                unsigned int gX,
+                unsigned int gY,
+                unsigned int gw,
+                unsigned int gh,
                 unsigned int bX,
                 unsigned int bY)
                 : textureX( tX )
                 , textureY( tY )
                 , width( w )
                 , height( h )
+                , glyphX( gX )
+                , glyphY( gY )
+                , glyphWidth( gw )
+                , glyphHeight( gh )
                 , bearingX( bX )
                 , bearingY( bX )
 
