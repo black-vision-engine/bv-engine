@@ -84,7 +84,7 @@ namespace bv{
 	model::BasicNode*  deleteMe()
 	{
 
-		model::BasicNode * root = new model::BasicNode();
+		model::BasicNode * root = new model::BasicNode( "deleteMeNode" );
 
 		std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example.txt");
 
@@ -101,11 +101,11 @@ namespace bv{
 		FloatInterpolator yt; yt.SetWrapPostMethod( bv::WrapMethod::repeat );
 		FloatInterpolator zt;
 
-		xt.AddKey(0.f, -1.f);
-		yt.AddKey(0.f, -5.f);
-		zt.AddKey(0.f, -5.f);
-
-		yt.AddKey(30.f, 5.f);
+		xt.AddKey( 0.f, -1.f );
+		yt.AddKey( 0.f, -5.f );
+		zt.AddKey( 0.f, -5.f );
+                             
+		yt.AddKey( 30.f, 5.f );
 
 		trns.AddTranslation( xt, yt, zt );
 
@@ -115,8 +115,7 @@ namespace bv{
 
         root->AddPlugin( texPlugin );
 
-        root->AddPlugin( bv::model::PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) ) );
-
+        root->AddPlugin( bv::model::PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) ) );
 
 		return root;
 	}
@@ -238,7 +237,7 @@ namespace bv{
 		//cout<<AddTabs(depth)<<" [plugins "<<CurrentNode.plugins.size()<<"]"<<endl;
 		
 		//onNodeBegin(CurrentNode.name,depth);
-		model::BasicNode * newNode = new model::BasicNode();
+        model::BasicNode * newNode = new model::BasicNode( CurrentNode.name );
 
 		for(unsigned int i=0;i<CurrentNode.plugins.size();i++)
 		{
@@ -306,7 +305,7 @@ namespace bv{
 
 	model::BasicNode* TreeBuilder::BuildTree(string path){
 		
-		model::BasicNode * root = new model::BasicNode();
+		model::BasicNode * root = new model::BasicNode( "Nie ma nazwy na pustyni FIXME:" );
 
 
 		BlackTree Tree;

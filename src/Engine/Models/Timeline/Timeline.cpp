@@ -7,8 +7,8 @@ namespace bv { namespace model {
 
 // *********************************
 //
-Timeline::Timeline    ( ITimeEvaluator * parent, TimeType startTime, TimeType endTime )
-    : TimelineBase( startTime, endTime )
+Timeline::Timeline    ( ITimeEvaluator * parent, TimeType startTime, TimeType endTime, const std::string & name )
+    : TimelineBase( startTime, endTime, name )
     , m_parent( parent )
 {
     //FIXME: skip it for now - production version should have at least GlobalTimeline added here

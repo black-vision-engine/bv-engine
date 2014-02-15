@@ -3,7 +3,8 @@
 #include <memory>
 
 #include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
-#include "Engine/Models/Plugins/Parameters/TypedParameters.h"
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
+#include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 #include "Engine/Models/Plugins/Parameters/TypedValues.h"
 
 
@@ -26,7 +27,7 @@ class TexturePixelShaderChannel : public model::PixelShaderChannelBase< TextureP
     std::vector< ParamFloat >       m_alphaParams;
     std::vector< ValueFloatPtr >    m_alphaValues;
 
-    std::vector< ParamTransform >   m_texTransformParams;
+    ParamTransformVec               m_texTransformParams;
     std::vector< ValueMat4Ptr >     m_texTransformValues;
 
     std::vector< ParamVec4 >        m_borderColorParams;
@@ -34,9 +35,10 @@ class TexturePixelShaderChannel : public model::PixelShaderChannelBase< TextureP
 
 public:
 
-    virtual void                    Update( TimeType t );
+    virtual void    Update      ( TimeType t );
 
-    TexturePixelShaderChannel( const std::string & shaderFile, const std::vector< ParamFloat > & alphas, const std::vector< ParamTransform > & texTransforms, const std::vector< ParamVec4 > & borderColors );
+    TexturePixelShaderChannel   ( const std::string & shaderFile, const std::vector< ParamFloat > & alphas, const ParamTransformVec & texTransforms, const std::vector< ParamVec4 > & borderColors );
+    ~TexturePixelShaderChannel  ();
 
 };
 

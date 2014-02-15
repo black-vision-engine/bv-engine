@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "System/BasicTypes.h" //FIXME: store in PCH
 
 
@@ -9,9 +10,10 @@ class ITimeEvaluator
 {
 public:
 
-    virtual TimeType    Evaluate        ( TimeType t ) const = 0;
+    virtual const std::string & GetName         () const                = 0;
+    virtual TimeType            Evaluate        ( TimeType t ) const    = 0;
 
-    virtual             ~ITimeEvaluator () {}
+    virtual                     ~ITimeEvaluator () {}
 
 };
 

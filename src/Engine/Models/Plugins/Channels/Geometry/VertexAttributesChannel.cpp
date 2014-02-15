@@ -135,7 +135,9 @@ PrimitiveType                           VertexAttributesChannel::GetPrimitiveTyp
     return m_primitiveType;
 }
 
-void                                    VertexAttributesChannel::AddConnectedComponent( IConnectedComponent * cc )
+// *********************************
+//
+void                                    VertexAttributesChannel::AddConnectedComponent( ConnectedComponent * cc )
 {
     auto attrChannel = cc->GetAttributeChannels();
 
@@ -149,9 +151,11 @@ void                                    VertexAttributesChannel::AddConnectedCom
         assert( attr->GetDescriptor()->GetType() == m_desc.GetAttrChannelDescriptor( i++ )->GetType() );
     }
 
-    m_connectedComponents.push_back( static_cast< ConnectedComponent * >( cc ) );
+    m_connectedComponents.push_back( cc );
 }
 
+// *********************************
+//
 void                                    VertexAttributesChannel::ClearConnectedComponent ( )
 {
     m_connectedComponents.clear();

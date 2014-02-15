@@ -1,0 +1,31 @@
+W tym momencie ka¿dy kana³ jest œmietnikiem, który ma pomieszan¹ logikê, stan i ewentualnie jakieœ odwo³ania do zewnêtrznych obiektów, a to niekoniecznie
+jest niezbêdne, bo wiadomo, jaka jest struktura oraz jaki jest przep³yw sterowania w ka¿dym kanale. St¹d propozycja (bez podawania czy to maj¹ byæ
+interfejsy czy jakieœ konkretne implementacje - to pewnie wyjdzie w praniu) takiego podzia³u implementacji pojedynczego kana³u (strza³ki oznaczaj¹ przep³yw danych):
+
+CHANNEL STRUCTURE AND LOGIC:
+
+Previous Plugin ------> Assembler ------> State Snapshot
+                            ^
+                            |
+                            |
+                            |
+                            |
+                          Model
+
+* State Snapshot to stan kana³u w danym momencie (np. dla Transform Channel to bêdzie lista klasek Transform, dla VertexAttributesChannel to bêdzie
+lista kana³ów z atrybutami (vertex, uv, normal, itd.), jeszcze nie wiadomo dok³adnie czym bêdzie ten stan dla shaderów, bo to jest temat rozwojowy.
+Nie ma w sobie ¿adnej logiki
+
+* Model - To jakaœ implementacja modelu dla danego kana³u (to jest komponent, mo¿e byæ dowolny i musi mieæ mo¿liwoœæ ewaluacji w czasie t - metoda
+Evaluate( t ) oraz publiczne API pozwalaj¹ce dostaæ siê do wyników tego obliczenia (zapewne wystarczy, ¿e bêdzie to odpowiedni typ zwracany z
+metody Evaluate).
+
+* Previous Plugin - poprzedni na liœcie pluginów w danym wêŸle. W praktyce powinna wystarczyæ lista kana³ów poprzednika, ale mo¿e okazaæ siê, ¿e
+potrzebne te¿ s¹ dane z samego plugina, wiêc ten wskaŸnik akurat mo¿na tu trzymaæ. Logika taka, jak normalnie w pluginie.
+
+* Assembler - klasa odpowiedzialna za logikê konwertowania wyniku ewaluacji modelu w danym czasie na State Snapshot. Moze mieæ swoje jakieœ parametry
+niezale¿ne od modelu, ale zale¿ne od ustawieñ silnika (nie wiem w tej chwili, jakie mog¹ byæ, ale taki stan raczej warto trzymaæ nawet dla debugu).
+Na bazie modelu i poprzedniego plugina w danym czasie t potrafi wygenerowaæ State Snapshot dla danego kana³u. Warto mieæ dostêp do ca³ego poprzedniego
+plugin, ¿eby mieæ mo¿liwoœæ generowania bogatszej palety wyników (np. lokalne przekszta³cenie VertexAttributów w taki sposób, ¿eby zerowa³o siê
+z przekszta³ceniami z poprzednich kana³ów - to oczywiœcie ma ma³y sens praktyczny, ale dziêki dostêpowi do danych tak siê to w³aœnie da
+zrobiæ.

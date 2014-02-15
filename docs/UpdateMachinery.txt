@@ -1,13 +1,27 @@
 Fazy updatowania:
 
-I. ModelScene::Update( t )
+I. ModelScene::Update( t ) jak nazwa wskazuje tutaj jest aktualizowany stan modelu w danym czasie t
   BasicNode::Update( t ) - odpala Update( t ) na Layerach (IModelNode -> BasicNode), na dzieciach (IModelNode -> BasicNode) (rekursja)
-  oraz na Pluginach przechowywanych w tym wêŸle
+  oraz na Pluginach przechowywanych w tym wêŸle (w kolejnoœci layery, pluginy, dzieci)
     IPlugin->Update( t ) - to ju¿ jest zale¿ne od pluginu - updatuje swój stan, np.
-      - Odpala update na ka¿dym z kana³ów
+      - Odpala update na ka¿dym z kana³ów (nie ka¿dy plugin ma wszystkie kana³y - mog¹ byæ takie, które prawie nic nie maj¹)
         - VertexAttributeChannel
+            - connected componenty (kana³y atrybutów, np. uv, po³o¿enia lokalne //FIXME: teraz CC ma swoj¹ metodê update, a to jest Ÿle -> CC ma miec tylko
         - TransformChannel
+            - pobiera transformParamsy i oblicza je dla czasu t i ustawia wyniki transformacjom (Values) -> do przerobienia na modl z SQT i ca³¹ reszt¹
         - ShaderChannel
-      - connected componenty (kana³y atrybutów, np. uv, po³o¿enia lokalne //FIXME: teraz CC ma swoj¹ metodê update, a to jest Ÿle -> CC ma miec tylko
-      - transform channel
+            - vertex shader channel - domyœlnie leci update z bazowej klasy (czyli pusty)
+            - pixel shader channel - apdejtuje swoje Values obliczaj¹c model (czyli parameters), a potem z nadklasy - czyli nic
+              values s¹ z za³o¿enia porejestrowane w nadklasie w liœcie valuesów, wiêc w tej liœcie maj¹ ju¿ zaktualizowane wartoœci
       
+      
+II. UpdatersManager::UpdateStep( t ) - pobiera listê updaterów i na ka¿dym wykonuje update - to jest moment w którym stan modelu (obliczony poprzednio) jest zapisywany do sceny po stronie silnika
+  TransformUpdater::DoUpdate( t ) - pobiera listê transformacji i oblicza local i world i przekazuje to TransformableEntity, któremu odpowiada
+    UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zbêdny)
+  GeometryUpdater - po pierwsze queruje model, a konkretnie kana³ VertexAttributesChannel metodami NeedsTopologyUpdate oraz NeedsAttributesUpdate,
+  (które maj¹ byæ zmienione na AttributesStateChanged, TopologyStateChanged) i jesli trzeba, odpala UpdatePosition( t ) ewentualnie UpdateTopology( t )
+    UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zbêdny)
+  RenderStateUpdater - sprawdza w  model::RendererContext czy zmieni³y siê stany i jeœli tak, to je aktualizuje po stronie silnika (StateInstance)
+    UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zbêdny)
+  
+    

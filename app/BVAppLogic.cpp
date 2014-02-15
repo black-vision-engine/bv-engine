@@ -9,6 +9,8 @@
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/ModelScene.h"
 
+#include "ModelInteractionEvents.h"
+
 #include "System/HerarchicalProfiler.h"
 
 #include "StatsFormatters.h"
@@ -72,6 +74,9 @@ BVAppLogic::BVAppLogic              ()
 //
 BVAppLogic::~BVAppLogic             ()
 {
+    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
+    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
+
     delete m_modelScene;
     delete m_mockSceneEng;
 
@@ -82,6 +87,8 @@ BVAppLogic::~BVAppLogic             ()
 //
 void BVAppLogic::Initialize         ()
 {
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
 }
 
 // *********************************
@@ -108,7 +115,7 @@ void BVAppLogic::LoadScene          ( void )
     
 
     model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
-    m_modelScene = model::ModelScene::Create( root, new Camera() );
+    m_modelScene = model::ModelScene::Create( root, new Camera(), "BasicScene" );
     m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
 }
 
@@ -336,6 +343,13 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
             RenderNode( renderer, node->GetChild( i ) ); 
         }
     }
+}
+
+// *********************************
+//
+void            BVAppLogic::OnUpdateParam   ( IEventPtr evt )
+{
+    
 }
 
 //// *********************************

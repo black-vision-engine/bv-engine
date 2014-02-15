@@ -27,5 +27,20 @@ RegisterValue z ShaderChannel powinno zapisywaæ te wartoœci chyba jednak w innym
 bardziej globalnie - na przyk³ad w pluginie - to jest dobry moment, ¿eby przemyœleæ, gdzie te wartoœci powinny byæ trzymane. Lokalnie s¹ potrzebne
 do updatowania stanu shaderów po stronie silnika
 
-Pojedyncze CC powinny mieæ w sobie flagê, ¿e zmieni³ siê stan, ¿eby tylko przepisywaæ VB tych CC, które uleg³y zmianie.
+Pojedyncze CC powinny mieæ w sobie flagê, ¿e zmieni³ siê stan, ¿eby tylko przepisywaæ VB tych CC, które uleg³y zmianie (NeedsAttributesUpdate).
 
+Trzeba zagwarantowaæ (w obecnej implementacji), ¿e jest tylko jeden shader channel, który dostarcza kod shadera - wczeœniejsze kana³y shadera mog¹ dostarczaæ 
+co najwy¿ej parametry (chocia¿ pewnie te¿ nie powinny)
+
+Zamieniæ TransformChannel::GetTransformChannels na TransformChannel::GetTransformList lub GetTransformations (bo o to chodzi, tu ju¿ nie ma zabawy w kana³y)
+
+GeometryUpdater przemianowaæ na VertexAttributesUpdater (o ile ca³a ta maszyneria siê jeszcze bardziej nie uproœci)
+
+UpdatePosition( t ) i UpdateTopology( t ) w GeometryUpdater nale¿y przerobiæ tak, ¿eby korzysta³y z helperów, które s³u¿¹ do budowania
+VertexBuffora oraz odpowiedniego uk³adania danych w kana³ach. Trzeba to koniecznie zrobiæ, bo siê coraz bardziej panoszy œmieciowy
+kod, którego nawet nie da siê przeczytaæ ze zrozumieniem. Jest tam te¿ taka zaœlepka WriteVertexDataToVBO, która ju¿ powinna le¿eæ w
+helperach do tworzenia i modyfikowania veretex buffer obiektów.
+
+RenderableArrayDataArraysSingleVertexBuffer wypada³oby przemianowaæ na coœ o mniejszej liczbie znaków.
+
+Wyszyæ parametr t z UpdatersManagera (a ju¿ na pewno z tych kana³ów, które nie potrzebuj¹ tego parametru do poprawnej ewaluacji)

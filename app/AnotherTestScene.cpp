@@ -71,7 +71,7 @@ using namespace model;
 //
 model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned int numSegments, float speedX, float speedY, float cyclesX, float cyclesY, float sizeY, float sizeZ )
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "AnimatedSolidRoot" );
 
     ///////////////////////////// Channels //////////////////////////
     model::VertexAttributesChannel *        vaChannel     = model::VertexAttributesChannelAnimatedVertices::Create( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
@@ -83,7 +83,7 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 
     TransformF trans;
 
-    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( geomPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( geomPlugin, model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
 
     root->AddPlugin( transformPlugin );
 
@@ -114,7 +114,7 @@ model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned 
 //
 model::BasicNode * VariableTopologySolids( float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "VarTopologySolidsRoot" );
     
     ///////////////////////////// Channels //////////////////////////
     model::VertexAttributesChannel *        vaChannel     = model::VertexAttributesChannelVariableTopology::Create( size, speed, oscilationSpeed, numSegments, numComponents );
@@ -126,7 +126,7 @@ model::BasicNode * VariableTopologySolids( float size, float speed, float oscila
 
     TransformF trans;
 
-    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( geomPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( geomPlugin, model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
 
     root->AddPlugin( transformPlugin );
 
@@ -148,7 +148,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
 
     assert( numAnimations >= 1 );
 
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "AnimatedSequenceRoot" );
 
     float hds = 1.7778f;
 
@@ -172,7 +172,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
     trans.AddScale( sx, sy, InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddTranslation( InterpolatorsHelper::CreateConstValue( -float(numAnimations - 1) * hds / 2.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
 
-    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
 
     root->AddPlugin( transformPlugin ); // Plugin with transformation
     
@@ -204,7 +204,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
 
     for( unsigned int i = 1; i < numAnimations; ++i )
     {
-        model::BasicNode * root1 = new model::BasicNode();
+        model::BasicNode * root1 = new model::BasicNode( "FIXME:" );
 
         ///////////////////////////// Geometry plugin //////////////////////////
         model::GeometryRectPlugin * rectPlugin   = PluginsFactory::CreateGeometryRectPlugin( 1.77778f * 1.f, 1.f );
@@ -223,7 +223,7 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
         trans.AddScale( sx, sy, InterpolatorsHelper::CreateConstValue( 1.f ) );
         trans.AddTranslation( InterpolatorsHelper::CreateConstValue( float(i) * hds * 1.02f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.1f ) );
 
-        auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+        auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
 
         root1->AddPlugin( transformPlugin ); // Plugin with transformation
     
@@ -262,14 +262,14 @@ model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDes
 //
 model::BasicNode * NonGeometryParentRects   ( TimeType start0, TimeType stop0, TimeType start1, TimeType stop1, TimeType start2, TimeType stop2 ,TimeType start3, TimeType stop3 )
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "NonGeometryRoot" );
 
-    model::BasicNode * child1 = new model::BasicNode();
-    model::BasicNode * child2 = new model::BasicNode();
-    model::BasicNode * child3 = new model::BasicNode();
-    model::BasicNode * child4 = new model::BasicNode();
+    model::BasicNode * child1 = new model::BasicNode( "NonGeometryC0" );
+    model::BasicNode * child2 = new model::BasicNode( "NonGeometryC1" );
+    model::BasicNode * child3 = new model::BasicNode( "NonGeometryC2" );
+    model::BasicNode * child4 = new model::BasicNode( "NonGeometryC3" );
 
-    model::SimpleTransformPlugin * plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", TransformF() ) );
+    model::SimpleTransformPlugin * plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", TransformF(), nullptr, 0 ) );
 
     root->AddPlugin( plugin00 );
 
@@ -288,15 +288,15 @@ model::BasicNode * NonGeometryParentRects   ( TimeType start0, TimeType stop0, T
     trans13.AddTranslation( InterpolatorsHelper::CreateConstValue( -0.6f ), InterpolatorsHelper::CreateConstValue( 0.6f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
     trans14.AddTranslation( InterpolatorsHelper::CreateConstValue( 0.6f ), InterpolatorsHelper::CreateConstValue( 0.6f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
 
-    model::SimpleTransformPlugin * tplugin11 = model::SimpleTransformPlugin::Create( rectPlugin11, model::ParametersFactory::CreateParameter( "transformation", trans11 ) );
-    model::SimpleTransformPlugin * tplugin12 = model::SimpleTransformPlugin::Create( rectPlugin12, model::ParametersFactory::CreateParameter( "transformation", trans12 ) );
-    model::SimpleTransformPlugin * tplugin13 = model::SimpleTransformPlugin::Create( rectPlugin13, model::ParametersFactory::CreateParameter( "transformation", trans13 ) );
-    model::SimpleTransformPlugin * tplugin14 = model::SimpleTransformPlugin::Create( rectPlugin14, model::ParametersFactory::CreateParameter( "transformation", trans14 ) );
+    model::SimpleTransformPlugin * tplugin11 = model::SimpleTransformPlugin::Create( rectPlugin11, model::ParametersFactory::CreateParameter( "transformation", trans11, nullptr, 0 ) );
+    model::SimpleTransformPlugin * tplugin12 = model::SimpleTransformPlugin::Create( rectPlugin12, model::ParametersFactory::CreateParameter( "transformation", trans12, nullptr, 0 ) );
+    model::SimpleTransformPlugin * tplugin13 = model::SimpleTransformPlugin::Create( rectPlugin13, model::ParametersFactory::CreateParameter( "transformation", trans13, nullptr, 0 ) );
+    model::SimpleTransformPlugin * tplugin14 = model::SimpleTransformPlugin::Create( rectPlugin14, model::ParametersFactory::CreateParameter( "transformation", trans14, nullptr, 0 ) );
 
-    model::Timeline * timeline0 = new model::Timeline( nullptr, start0, stop0 );
-    model::Timeline * timeline1 = new model::Timeline( nullptr, start1, stop1 );
-    model::Timeline * timeline2 = new model::Timeline( nullptr, start2, stop2 );
-    model::Timeline * timeline3 = new model::Timeline( nullptr, start3, stop3 );
+    model::Timeline * timeline0 = new model::Timeline( nullptr, start0, stop0, "timeline0" );
+    model::Timeline * timeline1 = new model::Timeline( nullptr, start1, stop1, "timeline1" );
+    model::Timeline * timeline2 = new model::Timeline( nullptr, start2, stop2, "timeline2" );
+    model::Timeline * timeline3 = new model::Timeline( nullptr, start3, stop3, "timeline3" );
 
     glm::vec4 col11( 1.f/255.f, 167.f/255.f, 193.f/255.f, 1.f ); 
     glm::vec4 col12( 226.f/255.f, 169.f/255.f, 36.f/255.f, 1.f );
@@ -362,7 +362,7 @@ model::BasicNode * NonGeometryParentRects   ( TimeType start0, TimeType stop0, T
 //
 model::BasicNode *          GreenRect()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "GreenRectRoot" );
 
     ///////////////////////////// Geometry plugin //////////////////////////
     model::GeometryRectPlugin * rectPlugin  = PluginsFactory::CreateGeometryRectPlugin( 1.f, 1.f );
@@ -381,13 +381,17 @@ model::BasicNode *          GreenRect()
     trans.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddTranslation( InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
     
-    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
 
     root->AddPlugin( transformPlugin ); // Plugin with transformation
 
     ///////////////////////////// Material plugin //////////////////////////// 
 
-    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( transformPlugin, ParametersFactory::CreateParameter( "color", InterpolatorsHelper::CreateConstValue( glm::vec4( 0.f, 1.f, 0.f, 1.f ) ) ) );
+    Vec4Interpolator col; col.SetWrapPostMethod( bv::WrapMethod::pingPong );
+    col.AddKey( 0.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    col.AddKey( 10.f, glm::vec4( 0.9f, 0.9f, 0.98f, 1.f ) );
+
+    auto colorPlugin = PluginsFactory::CreateSimpleColorPlugin( transformPlugin, ParametersFactory::CreateParameter( "color", col ) );
 
     root->AddPlugin( colorPlugin );
 
@@ -402,7 +406,7 @@ model::BasicNode *          GreenRect()
 //
 model::BasicNode *          TexturedRect()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "TxRectRoot" );
 
     ///////////////////////////// Geometry plugin //////////////////////////
     model::GeometryRectPlugin* rectPlugin   = PluginsFactory::CreateGeometryRectPlugin(1.f, 1.f);
@@ -422,7 +426,7 @@ model::BasicNode *          TexturedRect()
     trans.AddScale( s, s, InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddTranslation( InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
 
-    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
 
     root->AddPlugin( transformPlugin ); // Plugin with transformation
     
@@ -454,7 +458,7 @@ model::BasicNode *          TexturedRect()
 //
 model::BasicNode *          TexturedRing()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "TxRingRoot" );
 
     ///////////////////////////// Geometry plugin //////////////////////////
 
@@ -469,7 +473,7 @@ model::BasicNode *          TexturedRing()
     trans.AddScale( InterpolatorsHelper::CreateConstValue( 0.25f ), InterpolatorsHelper::CreateConstValue( 0.25f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddTranslation( InterpolatorsHelper::CreateConstValue( -1.f ), InterpolatorsHelper::CreateConstValue( -1.f ), InterpolatorsHelper::CreateConstValue( 0.001f ) );
 
-    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( ringPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( ringPlugin, model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
     
     root->AddPlugin( transformPlugin );
 
@@ -490,7 +494,7 @@ model::BasicNode *          TexturedRing()
 //
 model::BasicNode *     NaiveTimer()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "NaiveTimerRoot" );
 
     Vec4Interpolator color; color.SetWrapPostMethod( bv::WrapMethod::pingPong );
     color.AddKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
@@ -506,7 +510,7 @@ model::BasicNode *     NaiveTimer()
     trns.AddTranslation( InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
     FloatInterpolator xt; xt.SetWrapPostMethod( bv::WrapMethod::pingPong );
 
-    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
+    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
     root->AddPlugin( transPlugin );
 
     auto vertexShaderPlugin = PluginsFactory::CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/simpletexture.vert" );
@@ -529,7 +533,7 @@ model::BasicNode *     NaiveTimer()
 //
 model::BasicNode *     Text1()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "Tex1Root" );
 
     std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example.txt");
 
@@ -561,7 +565,7 @@ model::BasicNode *     Text1()
     trns.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
     trns.AddTranslation( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
 
-    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
+    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
 
     root->AddPlugin( transPlugin );
 
@@ -588,7 +592,7 @@ model::BasicNode *     Text1()
 //
 model::BasicNode *     Timer()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "TimerRoot" );
 
     std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example.txt");
 
@@ -604,25 +608,20 @@ model::BasicNode *     Timer()
 
     root->AddPlugin( timerPlugin );
 
-    TransformF     trns;
+    TransformF trans;
 
-    FloatInterpolator xt; xt.SetWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator yt; yt.SetWrapPostMethod( bv::WrapMethod::repeat );
-    FloatInterpolator zt;
+    FloatInterpolator angle; angle.SetWrapPostMethod( bv::WrapMethod::pingPong );
 
-    xt.AddKey( 0.f, -1.f );
-    yt.AddKey( 0.f, -5.f );
-    zt.AddKey( 0.f, -5.f );
+    angle.AddKey( 0.f, 0.f );
+    angle.AddKey( 10.f, 270.f );
 
-    yt.AddKey( 30.f, 5.f );
+    trans.AddRotation( angle, InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
+    trans.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
+    trans.AddTranslation( InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
+    
+    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( timerPlugin, model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
 
-
-    trns.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
-    trns.AddTranslation( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
-
-    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( timerPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
-
-    root->AddPlugin( transPlugin );
+    root->AddPlugin( transPlugin ); // Plugin with transformation
 
     auto vertexShaderPlugin = PluginsFactory::CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/text.vert" );
 
@@ -652,7 +651,7 @@ model::BasicNode *     Timer()
 //
 model::BasicNode * Text1Textured()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "Tex1TexRoot" );
 
     std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example1.txt");
 
@@ -676,7 +675,7 @@ model::BasicNode * Text1Textured()
 
     trns.AddScale( InterpolatorsHelper::CreateConstValue( 3.f ), InterpolatorsHelper::CreateConstValue( 3.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
 
-    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
+    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
 
     root->AddPlugin( transPlugin );
 
@@ -707,7 +706,7 @@ model::BasicNode * Text1Textured()
 //
 model::BasicNode *     Text2()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "Tx2root" );
 
     std::wstring str  = TextHelper::LoadUtf8FileToString( L"text_example.txt" );
 
@@ -738,7 +737,7 @@ model::BasicNode *     Text2()
 
     trns.AddTranslation( xt, yt, zt );
 
-    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
+    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
 
     root->AddPlugin( transPlugin );
 
@@ -765,7 +764,7 @@ model::BasicNode *     Text2()
 //
 model::BasicNode *          ExtrudedRedRect()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "ExtrudedRectRoot" );
 
     auto rectPlugin  = PluginsFactory::CreateGeometryRectPlugin(2.f, 1.f);
 
@@ -777,7 +776,7 @@ model::BasicNode *          ExtrudedRedRect()
     trans.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddTranslation( InterpolatorsHelper::CreateConstValue( -2.f ), InterpolatorsHelper::CreateConstValue( 1.5f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
 
-    auto trasformPlugin  = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans ) );
+    auto trasformPlugin  = PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
 
     root->AddPlugin( trasformPlugin );
 
@@ -802,7 +801,7 @@ model::BasicNode *          ExtrudedRedRect()
 //
 model::BasicNode *          ExtrudedTexturedRing()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "ExtrudedRingRoot" );
 
     model::GeometryRingPlugin*          ringPlugin = model::PluginsFactory::CreateGeometryRingPlugin( 0.f, 1.5f * 3.14f, 1.f, 2.f, 200 );
 
@@ -812,7 +811,7 @@ model::BasicNode *          ExtrudedTexturedRing()
     trans.AddScale( InterpolatorsHelper::CreateConstValue( 0.25f ), InterpolatorsHelper::CreateConstValue( 0.25f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
     trans.AddTranslation( InterpolatorsHelper::CreateConstValue( -1.f ), InterpolatorsHelper::CreateConstValue( -1.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
 
-    auto trasformChannel  = ChannelsFactory::CreateTransformChannel( model::ParametersFactory::CreateParameter( "transformation", trans ) );
+    auto trasformChannel  = ChannelsFactory::CreateTransformChannel( model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
 
     ringPlugin->SetTransformChannel      ( trasformChannel );
 
@@ -839,6 +838,7 @@ model::BasicNode *          ExtrudedTexturedRing()
 //
 model::BasicNode *          TestScenesFactory::AnotherTestScene()
 {
+    //auto root = GreenRect();
     auto root =  Timer();
     //root->AddChild( Text1() );
     //root->AddChild( GreenRect() );
@@ -995,23 +995,23 @@ model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
 
     model::BasicNode * ntlnode = NonGeometryParentRects( start0, stop0, start1, stop1, start2, stop2, start3, stop3 );
 
-    model::BasicNode * root = new model::BasicNode();
-    model::SimpleTransformPlugin * plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", TransformF() ) );
+    model::BasicNode * root = new model::BasicNode( "NGRoot" );
+    model::SimpleTransformPlugin * plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", TransformF(), nullptr, 0 ) );
     root->AddPlugin( plugin00 );
 
-    model::BasicNode * left = new model::BasicNode();
+    model::BasicNode * left = new model::BasicNode( "LeftChild" );
     TransformF tl;
     tl.AddTranslation( InterpolatorsHelper::CreateConstValue( -1.3f ), InterpolatorsHelper::CreateConstValue( 0.0f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
     //tl->addScale( InterpolatorsHelper::CreateConstValue( 0.3f ), InterpolatorsHelper::CreateConstValue( 0.1f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
-    model::SimpleTransformPlugin * ptl = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", tl ) );
+    model::SimpleTransformPlugin * ptl = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", tl, nullptr, 0 ) );
     left->AddPlugin( ptl );
     left->AddChild( tlnode );
 
-    model::BasicNode * right = new model::BasicNode();
+    model::BasicNode * right = new model::BasicNode( "RightChild" );
     TransformF tr;
     tr.AddTranslation( InterpolatorsHelper::CreateConstValue( 1.3f ), InterpolatorsHelper::CreateConstValue( 0.0f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
     //tr->addScale( InterpolatorsHelper::CreateConstValue( 0.3f ), InterpolatorsHelper::CreateConstValue( 0.1f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
-    model::SimpleTransformPlugin * ptr = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", tr ) );
+    model::SimpleTransformPlugin * ptr = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", tr, nullptr, 0 ) );
     right->AddPlugin( ptr );
     right->AddChild( ntlnode );
 
@@ -1025,8 +1025,8 @@ model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
 //
 model::BasicNode *      TestScenesFactory::StackThemNow                ( model::BasicNode * n0, model::BasicNode * n1 )
 {
-    model::BasicNode * root = new model::BasicNode();
-    model::SimpleTransformPlugin * plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", TransformF() ) );
+    model::BasicNode * root = new model::BasicNode( "StackNodeRoot" );
+    model::SimpleTransformPlugin * plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", TransformF(), nullptr, 0 ) );
     root->AddPlugin( plugin00 );
 
     root->AddChild( n0 );

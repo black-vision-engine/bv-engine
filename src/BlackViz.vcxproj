@@ -219,6 +219,7 @@
     <ClCompile Include="Engine\Graphics\State\StateInstance.cpp" />
     <ClCompile Include="Engine\Graphics\State\StencilState.cpp" />
     <ClCompile Include="Engine\Models\Builder\RendererStatesBuilder.cpp" />
+    <ClCompile Include="Engine\Models\ModelAccessors.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ConstantsMapper.cpp" />
     <ClCompile Include="Engine\Models\ModelScene.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\ChannelsFactory.cpp" />
@@ -252,9 +253,11 @@
     <ClCompile Include="Engine\Models\Plugins\GeometryMultiRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRect.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRing.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Parameters\BaseParameter.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\BaseValue.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\ParametersFactory.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleAnimationPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleColorPlugin.cpp" />
@@ -384,6 +387,7 @@
     <ClInclude Include="Engine\Interfaces\IUpdatable.h" />
     <ClInclude Include="Engine\Interfaces\IUpdater.h" />
     <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
+    <ClInclude Include="Engine\Models\ModelAccessors.h" />
     <ClInclude Include="Engine\Models\Plugins\ConstantsMapper.h" />
     <ClInclude Include="Engine\Models\ModelScene.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\ChannelsFactory.h" />
@@ -421,6 +425,7 @@
     <ClInclude Include="Engine\Models\Plugins\GeometryPluginRing.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IConnectedComponent.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IParameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IIndexChannelDescriptor.h" />
@@ -431,10 +436,11 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IAttributeChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IAttributeChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h" />
-    <ClInclude Include="Engine\Models\Plugins\Parameters\BaseParameter.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\BaseValue.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\ParametersFactory.h" />
-    <ClInclude Include="Engine\Models\Plugins\Parameters\TypedParameters.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\TypedValues.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginsFactory.h" />
@@ -546,8 +552,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Engine\Models\Plugins\Parameters\BaseParameter.inl" />
-    <None Include="Engine\Models\Plugins\Parameters\TypedParameters.inl" />
+    <None Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />
+    <None Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />
+    <None Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.inl" />
     <None Include="System\HerarchicalProfiler.inl" />
   </ItemGroup>
   <ItemGroup>

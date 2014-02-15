@@ -31,7 +31,7 @@ private:
 
 public:
 
-    explicit                                SimpleTransformPlugin       ( const IPlugin * prev, const ParamTransform & trans );
+    explicit                                SimpleTransformPlugin       ( const IPlugin * prev, const ParamTransformVec & transformVec );
                                             ~SimpleTransformPlugin      ();
 
     virtual const ITransformChannel *       GetTransformChannel         () const;
@@ -41,7 +41,7 @@ public:
 
     void                                    OnSetTransform              ( IEventPtr evt );
 
-    static  SimpleTransformPlugin *         Create                      ( const IPlugin * prev, const ParamTransform & trans );
+    static  SimpleTransformPlugin *         Create                      ( const IPlugin * prev, const ParamTransformVec & transformVec );
 
 };
 

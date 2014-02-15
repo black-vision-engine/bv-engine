@@ -1,0 +1,19 @@
+Wszystkie parametry dziedzicz¹ po BaseParameter, który odpowiada za dodawanie referencji do tajmlajnów o raz nazwê
+
+    ParamTransform  - parametr owrapowuj¹cy CompositeTransform (takie ze skal¹, rotacj¹ i translacj¹, ale nie SQT tylko dowolnie i chuj)
+    ParamMat2       - parametr owrapowuj¹cy Vec4Interpolator interpretowany jako macierz 2x2
+    ParamVec4       - parametr owrapowuj¹cy Vec4Interpolator
+    ParamVec3       - parametr owrapowuj¹cy Vec3Interpolator
+    ParamFloat      - parametr owrapowuj¹cy FloatInterpolator
+    
+Gdzie s¹ przechowywane modele:
+
+    PixelShaderChannel      - wektor paramtransform - do tekstur oraz dowolne inne (np. float)
+    SimpleTransformChannel  - wektor paramtransform - transformacje w przestrzeni modelu
+    
+    
+Modele - rodzaje:
+
+    SimpleTransformChannel  - wektor paramtransformów
+    PixelShaderChannel      - wektor paramtransformów jako macierze tekstury oraz dodatkowe dowolne inne steruj¹ce (uniformy)
+    

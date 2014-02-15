@@ -111,7 +111,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     //FIXME: worst of hacks
     static int numcall = 0;
 
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "SimpleTextureRoot" );
 
     TransformF     trns;
 
@@ -231,7 +231,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     
     root->AddPlugin( rectPlugin );
 
-    model::SimpleTransformPlugin      * stpl  = model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
+    model::SimpleTransformPlugin      * stpl  = model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
 
     root->AddPlugin( stpl );
 
@@ -263,7 +263,7 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 //
 model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
 {
-    model::BasicNode * root = new model::BasicNode();
+    model::BasicNode * root = new model::BasicNode( "SimpleMultiCCSceneRoot" );
 
     /////////////////////////////// SimpleRect plugin //////////////////////////////////
 
@@ -303,7 +303,7 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
 
     trns.AddRotation(angle, ConstValue( 0.f ), ConstValue( 0.f ), ConstValue( 1.f ) );
 
-    auto transformPlugin  =  model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns ) );
+    auto transformPlugin  =  model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
     
     root->AddPlugin( transformPlugin );
 
@@ -443,7 +443,7 @@ void RenderMockScene(bv::model::BasicNode* tree, std::ostream& out)
 
 model::BasicNode* SceneExamples::BuildMockScene(bv::model::BasicNode * parent )
 {
-    bv::model::BasicNode* mockTree = new bv::model::BasicNode();
+    bv::model::BasicNode* mockTree = new bv::model::BasicNode( "MockRoot" );
 
     // SOLID
     bv::Vec4Interpolator color;
@@ -506,7 +506,7 @@ model::BasicNode* SceneExamples::BuildMockScene(bv::model::BasicNode * parent )
 
 model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent )
 {
-    bv::model::BasicNode* mockTree = new bv::model::BasicNode();
+    bv::model::BasicNode* mockTree = new bv::model::BasicNode( "Mock2Root" );
 
     // SOLID
     bv::Vec4Interpolator color;

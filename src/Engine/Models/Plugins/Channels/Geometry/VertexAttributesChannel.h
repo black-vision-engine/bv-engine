@@ -39,7 +39,7 @@ public:
     virtual bool                                        IsReadOnly              () const;
 
     //IVertexAttributesChannel
-    virtual bool                                        IsTimeInvariant         ()          const;
+    virtual bool                                        IsTimeInvariant         ()  const;
     virtual bool                                        NeedsAttributesUpdate   ( TimeType t ) const;
     virtual bool                                        NeedsTopologyUpdate     ( TimeType t ) const;
 
@@ -53,7 +53,7 @@ public:
 
     virtual PrimitiveType                               GetPrimitiveType        () const;
 
-    virtual void                                        AddConnectedComponent   ( IConnectedComponent * cc );
+    void                                                AddConnectedComponent   ( ConnectedComponent * cc );
     void                                                ClearConnectedComponent ( );
 
     virtual int                                         GetNumPrimitives        ( IConnectedComponent * cc ) const;

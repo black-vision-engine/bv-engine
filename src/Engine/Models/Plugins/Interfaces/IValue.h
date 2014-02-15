@@ -2,8 +2,6 @@
 
 #include <string>
 
-//#include "Mathematics/Interpolators/Interpolators.h"
-//#include "Engine/Graphics/Shaders/ShaderTypes.h"
 #include "Engine/Types/Enums.h"
 
 

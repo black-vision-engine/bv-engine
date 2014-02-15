@@ -90,7 +90,7 @@ BasicInterpolator<TimeValueT, ValueT>::BasicInterpolator(TimeValueT tolerance)
 // *************************************
 //
 template<class TimeValueT, class ValueT>
-void BasicInterpolator<TimeValueT, ValueT>::AddKey( TimeValueT t, ValueT v )
+void BasicInterpolator<TimeValueT, ValueT>::AddKey( TimeValueT t, const ValueT & v )
 {
     AddKey( Key<TimeValueT, ValueT>( t, v ) );
 }

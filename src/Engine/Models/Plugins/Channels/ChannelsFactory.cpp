@@ -6,12 +6,13 @@
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Models/Plugins/Channels/GeometryShader/ExtrudeGeometryShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 
 namespace bv { namespace model {
 
 // *******************************
 //
-VertexAttributesChannel *       ChannelsFactory::CreateVertexAttributesChannel               ( IConnectedComponent * connComp )
+VertexAttributesChannel *       ChannelsFactory::CreateVertexAttributesChannel               ( ConnectedComponent * connComp )
 {
 	VertexAttributesChannelDescriptor desc;
 
@@ -22,17 +23,16 @@ VertexAttributesChannel *       ChannelsFactory::CreateVertexAttributesChannel  
 
 	VertexAttributesChannel * ret = new model::VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc );
 
-	ret->AddConnectedComponent(connComp);
+	ret->AddConnectedComponent( connComp);
 
 	return ret;
 }
 
 // *******************************
 //
-TransformChannel *              ChannelsFactory::CreateTransformChannel              ( const ParamTransform& transformation )
+TransformChannel *              ChannelsFactory::CreateTransformChannel              ( const ParamTransformVec & transformVec )
 {
-	SimpleTransformChannel*      trasformChannel  = new SimpleTransformChannel();
-	trasformChannel->AddTransform( transformation );
+	SimpleTransformChannel*      trasformChannel  = new SimpleTransformChannel( transformVec );
 
 	return trasformChannel;
 }

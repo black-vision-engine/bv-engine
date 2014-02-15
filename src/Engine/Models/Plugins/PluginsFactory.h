@@ -57,7 +57,7 @@ struct PluginsFactory
     // Simple plugins builders.
     static model::SimpleColorPlugin *           CreateSimpleColorPlugin             ( model::IPlugin * prevPlugin, const ParamVec4 & color );
 
-    static model::SimpleTransformPlugin *       CreateSimpleTransformPlugin         ( const model::IPlugin * prev, const ParamTransform& transformation );
+    static model::SimpleTransformPlugin *       CreateSimpleTransformPlugin         ( const model::IPlugin * prev, const ParamTransformVec & transformVec );
 
     static model::SimplePixelShaderPlugin *     CreateSimplePixelShaderPlugin       ( model::IPlugin * prevPlugin, const std::string & shaderPath, model::RendererContext * ctx = nullptr );
     static model::SimpleVertexShaderPlugin *    CreateSimpleVertexShaderPlugin      ( model::IPlugin * prevPlugin, const std::string & shaderPath );

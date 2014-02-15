@@ -7,15 +7,15 @@ namespace bv { namespace model {
 class TransformChannel;
 class VertexAttributesChannel;
 class IGeometryShaderChannel;
-class ParamTransform;
-class IConnectedComponent;
+class ParamTransformVec;
+class ConnectedComponent;
 
 class ChannelsFactory
 {
 public:
 
-    static VertexAttributesChannel *            CreateVertexAttributesChannel               ( IConnectedComponent * connComp );
-    static TransformChannel *                   CreateTransformChannel              ( const ParamTransform& transformation );
+    static VertexAttributesChannel *            CreateVertexAttributesChannel       ( ConnectedComponent * connComp );
+    static TransformChannel *                   CreateTransformChannel              ( const ParamTransformVec & transformVec );
     static IGeometryShaderChannel *             CreateGeometryShaderExtrude         ( float scale );
 
 };

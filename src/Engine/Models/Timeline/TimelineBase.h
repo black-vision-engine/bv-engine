@@ -18,17 +18,20 @@ protected:
 
     TimeInterpolator    m_interpolator;
 
+    std::string         m_name;
+
 public:
 
-                        TimelineBase    ( TimeType startTime, TimeType endTime, float scale = 1.f );
-                        TimelineBase    ( const TimelineSettings & settings, TimeType startTime, TimeType endTime, float scale = 1.f );
-                        TimelineBase    ( const TimeInterpolator & interpolator, const TimelineSettings & settings );
+                        TimelineBase    ( TimeType startTime, TimeType endTime, const std::string & name, float scale = 1.f );
+                        TimelineBase    ( const TimelineSettings & settings, TimeType startTime, TimeType endTime, const std::string & name, float scale = 1.f );
+                        TimelineBase    ( const TimeInterpolator & interpolator, const TimelineSettings & settings, const std::string & name );
 
     virtual             ~TimelineBase   ();
 
     void                SetInterval     ( TimeType startTime, TimeType endTime, float scale = 1.f );
 
-    virtual TimeType    Evaluate        ( TimeType t ) const;
+    virtual const std::string & GetName () const override;
+    virtual TimeType            Evaluate( TimeType t ) const override;
 
 private:
 
