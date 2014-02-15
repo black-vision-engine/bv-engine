@@ -604,25 +604,20 @@ model::BasicNode *     Timer()
 
     root->AddPlugin( timerPlugin );
 
-    TransformF     trns;
+    TransformF trans;
 
-    FloatInterpolator xt; xt.SetWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator yt; yt.SetWrapPostMethod( bv::WrapMethod::repeat );
-    FloatInterpolator zt;
+    FloatInterpolator angle; angle.SetWrapPostMethod( bv::WrapMethod::pingPong );
 
-    xt.AddKey( 0.f, -1.f );
-    yt.AddKey( 0.f, -5.f );
-    zt.AddKey( 0.f, -5.f );
+    angle.AddKey( 0.f, 0.f );
+    angle.AddKey( 10.f, 270.f );
 
-    yt.AddKey( 30.f, 5.f );
+    trans.AddRotation( angle, InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
+    trans.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
+    trans.AddTranslation( InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
+    
+    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( timerPlugin, model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
 
-
-    trns.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
-    trns.AddTranslation( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
-
-    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( timerPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
-
-    root->AddPlugin( transPlugin );
+    root->AddPlugin( transPlugin ); // Plugin with transformation
 
     auto vertexShaderPlugin = PluginsFactory::CreateSimpleVertexShaderPlugin( transPlugin,  "../dep/media/shaders/text.vert" );
 
@@ -839,8 +834,8 @@ model::BasicNode *          ExtrudedTexturedRing()
 //
 model::BasicNode *          TestScenesFactory::AnotherTestScene()
 {
-    auto root = GreenRect();
-    //auto root =  Timer();
+    //auto root = GreenRect();
+    auto root =  Timer();
     //root->AddChild( Text1() );
     //root->AddChild( GreenRect() );
     //root->AddChild( TexturedRect() );
