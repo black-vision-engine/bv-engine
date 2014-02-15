@@ -7,7 +7,7 @@ const std::string SolidColorShaderChannelPD::solidColor = "color";
 
 // ******************************
 //
-SolidColorShaderChannel::SolidColorShaderChannel(const std::string& shaderFile, const ParamVec4& color)
+SolidColorShaderChannel::SolidColorShaderChannel( const std::string & shaderFile, const ParamVec4 & color )
     : PixelShaderChannelBase( shaderFile )
     , m_solidColor(color)
 {

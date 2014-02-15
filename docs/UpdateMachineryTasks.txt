@@ -44,3 +44,8 @@ helperach do tworzenia i modyfikowania veretex buffer obiektów.
 RenderableArrayDataArraysSingleVertexBuffer wypada³oby przemianowaæ na coœ o mniejszej liczbie znaków.
 
 Wyszyæ parametr t z UpdatersManagera (a ju¿ na pewno z tych kana³ów, które nie potrzebuj¹ tego parametru do poprawnej ewaluacji)
+
+Przeprojektowaæ i zrefaktorowaæ AttributeChannel, VertexAttributesChannel, ConnectedComponent (wszystkie te implementacje).
+W szczególnoœci GetPositionChannel i GetUVChannel to s³abe nieco w implementacji AttributeChannel - to powinno byæ jakieœ ogólne, a nie
+takie otypowane querowanie zaimplementowane jawnie w AttributeChannel. W ogóle nale¿y to pozmieniaæ i przerobiæ, bo na przyk³ad
+poszczególne kana³y z atrutami, powinny siê nazywaæ data czy jakoœ tak, a nie tak, jak kana³y pluginu.
