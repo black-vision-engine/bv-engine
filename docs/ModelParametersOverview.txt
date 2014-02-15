@@ -10,10 +10,24 @@ Gdzie s¹ przechowywane modele:
 
     PixelShaderChannel      - wektor paramtransform - do tekstur oraz dowolne inne (np. float)
     SimpleTransformChannel  - wektor paramtransform - transformacje w przestrzeni modelu
-    
+    Plugin                  - dowolne, które jakoœ steruj¹ stanem
+    TextureInfo             - alfa, border color, param transform (transformacja dla tej tekstury)
     
 Modele - rodzaje:
 
     SimpleTransformChannel  - wektor paramtransformów
     PixelShaderChannel      - wektor paramtransformów jako macierze tekstury oraz dodatkowe dowolne inne steruj¹ce (uniformy)
     
+    
+Na stan modelu sk³adaj¹ siê:
+  Parametry - interpolowane
+  Vaulesy - wyniki ewaluacji parametrów
+  Stany struktur poœrednich (np vertexattributesarray, która ma StateChanged).
+  
+Plugin powinien sam byæ w stanie utworzyæ swoje wszystkie kana³y na bazie poprzedniego pluginu.
+
+SimpleAnimationPlugin
+
+ShaderChannel - przechowuje swój stan dynamiczny (wartoœci) oraz statyczny (parametry i ich typy) oraz na podstawie 
+tego stanu statycznego powinien byæ w stanie wygenerowaæ kod shadera na dan¹ architekturê (u nas OpenGL) - w tym momencie to
+siê sprowadza do wczytania kodu shadera z pliku.
