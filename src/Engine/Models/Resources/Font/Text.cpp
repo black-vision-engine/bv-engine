@@ -159,10 +159,10 @@ void                Text::BuildAtlas()
         return;
     }
 
-    int padding_px          = 2;                // total space in glyph size for outlines
+    //int padding_px          = 0;                // total space in glyph size for outlines
     int slot_glyph_size     = m_fontSize;       // glyph maximum size in pixels
 
-    FT_Set_Pixel_Sizes( face, m_fontSize - padding_px, m_fontSize - padding_px );
+    FT_Set_Pixel_Sizes( face, m_fontSize, m_fontSize );
 
     std::vector< GlyphDataInfo >    glyphsDataInfos;
 
@@ -204,7 +204,7 @@ void                Text::BuildAtlas()
         newGlyph->bearingX = face->glyph->bitmap_left;
         newGlyph->bearingY = face->glyph->bitmap_top;
         newGlyph->advance = face->glyph->advance.x;
-        newGlyph->padding = padding_px;
+        //newGlyph->padding = padding_px;
 
         char* glyphData = (char*)malloc( newGlyph->height * face->glyph->bitmap.pitch );
 
@@ -218,6 +218,11 @@ void                Text::BuildAtlas()
 
     unsigned int atlasSize = ( unsigned int )std::ceil( sqrt( (float)glyphsNum ) );
 
+    int padding = 1;
+
+    maxWidth  = maxWidth + padding * 2;
+    maxHeight = maxHeight + padding * 2;
+
     unsigned int altlasWidth = maxWidth * atlasSize;
     unsigned int altlasHeight = maxHeight * atlasSize;
 
@@ -228,6 +233,7 @@ void                Text::BuildAtlas()
     auto atlasColumns  =  altlasWidth / maxWidth;
 
     std::vector<bool>   textureCoordsSet( glyphsDataInfos.size(), false );
+
 
     for (unsigned int y = 0; y < m_atlas->GetHeight(); y++) 
     {
@@ -250,22 +256,30 @@ void                Text::BuildAtlas()
                 continue;
             }
 
+            // pixel indices within padded glyph slot area
+            int x_loc = (x % maxWidth) - ( maxWidth - ((int)glyphsDataInfos[order].glyph->width ) ) + padding;
+            int y_loc = (y % maxHeight)  - ( maxHeight - ((int)glyphsDataInfos[order].glyph->height) ) + padding;
+
 
             if( !textureCoordsSet[ order ] )
             {
-                glyphsDataInfos[order].glyph->textureX = x - padding_px / 2;
-                glyphsDataInfos[order].glyph->textureY = y - padding_px / 2;
+                glyphsDataInfos[order].glyph->textureX = x + padding;
+                glyphsDataInfos[order].glyph->textureY = y + padding;
                 textureCoordsSet[ order ] = true;
                 m_atlas->SetGlyphCoords(
                         glyphsDataInfos[order].glyph->code
-                    ,   GlyphCoords( glyphsDataInfos[order].glyph->textureX, glyphsDataInfos[order].glyph->textureY, glyphsDataInfos[order].glyph->width, glyphsDataInfos[order].glyph->height, glyphsDataInfos[order].glyph->bearingX, glyphsDataInfos[order].glyph->bearingY )
+                    ,   GlyphCoords(    glyphsDataInfos[order].glyph->textureX
+                                    ,   glyphsDataInfos[order].glyph->textureY
+                                    ,   maxWidth - 2 * padding
+                                    ,   maxHeight - 2 * padding
+                                    ,   (maxWidth - 2 * padding ) - (int)glyphsDataInfos[order].glyph->width
+                                    ,   (maxHeight - 2 * padding ) - (int)glyphsDataInfos[order].glyph->height
+                                    ,   glyphsDataInfos[order].glyph->width
+                                    ,   glyphsDataInfos[order].glyph->height
+                                    ,   glyphsDataInfos[order].glyph->bearingX
+                                    ,   glyphsDataInfos[order].glyph->bearingY )
                     );
             }
-
-
-            // pixel indices within padded glyph slot area
-            int x_loc = (x % maxWidth - padding_px / 2) - ( maxWidth - (int)glyphsDataInfos[order].glyph->width );
-            int y_loc = (y % maxHeight - padding_px / 2)  - ( maxHeight - (int)glyphsDataInfos[order].glyph->height );
                 
             if (x_loc < 0 || y_loc < 0 || x_loc >= (int)glyphsDataInfos[order].glyph->width || y_loc >= (int)glyphsDataInfos[order].glyph->height )
             {

@@ -26,7 +26,7 @@ public:
 class TimerPlugin : public BasePlugin< IPlugin, TimerPluginUID >
 {
     ParamFloat                  m_timeParam;
-    float                       m_currentTime;
+    std::wstring                m_currentTime;
 
     VertexAttributesChannelPtr  m_vertexAttributeChannel;
 

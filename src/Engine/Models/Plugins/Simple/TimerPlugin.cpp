@@ -16,6 +16,7 @@ TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
     , m_timeParam( timeParam )
     , m_fontResource()
     , m_currentAtlas()
+    , m_timePatern( L"##:##:##" )
 {
     m_fontResource = TextHelper::LoadFont( "../dep/Media/fonts/digital-7.ttf", fontSize, L"../dep/Media/fonts/TimerChars.txt" );
 
@@ -27,7 +28,7 @@ TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
 
     m_vertexAttributeChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
-    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_currentAtlas, L"00:00:00" );
+    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_currentAtlas, L"00:00:00", m_timePatern );
 }
 
 ////////////////////////////
@@ -62,25 +63,26 @@ void                                TimerPlugin::SetValue       ( unsigned int c
     auto textureXNorm = ( float )coords.textureX / m_currentAtlas->GetWidth();
     auto textureYNorm = ( float )coords.textureY / m_currentAtlas->GetHeight();
 
-    auto widthNorm  = ( float )m_currentAtlas->m_glyphWidth / m_currentAtlas->GetWidth();
-    auto heightNorm = ( float )m_currentAtlas->m_glyphHeight / m_currentAtlas->GetHeight();
+    auto widthNorm  = ( float )coords.width / m_currentAtlas->GetWidth();
+    auto heightNorm = ( float )coords.height / m_currentAtlas->GetHeight();
 
-    if( connComp < comps.size() )
-    {
-        if( comps[ connComp ]->GetNumVertices() == 4 )
+    if( m_timePatern[ connComp ] == L'#' )
+        if( connComp < comps.size() )
         {
-            auto channels = comps[ connComp ]->GetAttributeChannels();
+            if( comps[ connComp ]->GetNumVertices() == 4 )
+            {
+                auto channels = comps[ connComp ]->GetAttributeChannels();
 
-            auto uvChannel = static_cast< Float2AttributeChannel* >( AttributeChannel::GetUVChannel( channels, 1 ) );
+                auto uvChannel = static_cast< Float2AttributeChannel* >( AttributeChannel::GetUVChannel( channels, 1 ) );
 
-            auto& verts = uvChannel->GetVertices();
+                auto& verts = uvChannel->GetVertices();
 
-            verts[ 0 ] = glm::vec2( textureXNorm, textureYNorm + heightNorm );
-            verts[ 1 ] = glm::vec2( textureXNorm  + widthNorm, textureYNorm + heightNorm );
-            verts[ 2 ] = glm::vec2( textureXNorm ,textureYNorm );
-            verts[ 3 ] = glm::vec2( textureXNorm + widthNorm, textureYNorm );
+                verts[ 0 ] = glm::vec2( textureXNorm, textureYNorm + heightNorm );
+                verts[ 1 ] = glm::vec2( textureXNorm  + widthNorm, textureYNorm + heightNorm );
+                verts[ 2 ] = glm::vec2( textureXNorm ,textureYNorm );
+                verts[ 3 ] = glm::vec2( textureXNorm + widthNorm, textureYNorm );
+            }
         }
-    }
 }
 
 ////////////////////////////
@@ -145,6 +147,23 @@ Textures                            TimerPlugin::GetTextures                 () 
 //
 void                                TimerPlugin::Update                      ( TimeType t )
 {
+    float time = m_timeParam.Evaluate( t );
+
+    int setSec = int(time * 100) % 100;
+    int sec = int(time) % 60;
+    int min = int(time / 60) % 60;
+
+    std::wstring newTime =      ( std::to_wstring( min ).size() == 2 ? std::to_wstring( min ) : ( L"0" + std::to_wstring( min ) ) )
+                            +   L":"
+                            +   ( std::to_wstring( sec ).size() == 2 ? std::to_wstring( sec ) : ( L"0" + std::to_wstring( sec ) ) )
+                            +   L":"
+                            +   ( std::to_wstring( setSec ).size() == 2 ? std::to_wstring( setSec ) : ( L"0" + std::to_wstring( setSec ) ) );
+
+    if( newTime != m_currentTime )
+    {
+        SetTime( newTime );
+        m_vertexAttributeChannel->SetNeedsAttributesUpdate( true );
+    }
 }
 
 ////////////////////////////

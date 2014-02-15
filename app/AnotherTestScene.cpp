@@ -548,24 +548,18 @@ model::BasicNode *     Text1()
 
     root->AddPlugin( texPlugin );
 
-    TransformF     trns;
+    TransformF trans;
 
-    FloatInterpolator xt; xt.SetWrapPostMethod( bv::WrapMethod::pingPong );
-    FloatInterpolator yt; yt.SetWrapPostMethod( bv::WrapMethod::repeat );
-    FloatInterpolator zt;
+    FloatInterpolator angle; angle.SetWrapPostMethod( bv::WrapMethod::pingPong );
 
-    xt.AddKey( 0.f, -1.f );
-    yt.AddKey( 0.f, -5.f );
-    zt.AddKey( 0.f, -5.f );
+    angle.AddKey( 0.f, 0.f );
+    angle.AddKey( 10.f, 270.f );
 
-    yt.AddKey( 30.f, 5.f );
+    trans.AddRotation( angle, InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
+    trans.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
+    trans.AddTranslation( InterpolatorsHelper::CreateConstValue( -1.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
 
-    //trns.AddTranslation( xt, yt, zt );
-
-    trns.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
-    trns.AddTranslation( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
-
-    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
+    auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
 
     root->AddPlugin( transPlugin );
 
@@ -599,12 +593,9 @@ model::BasicNode *     Timer()
     FloatInterpolator time; time.SetWrapPostMethod( bv::WrapMethod::pingPong );
 
     time.AddKey(0.f, 0.f );
+    time.AddKey(10.f, 10.f );
 
     auto timerPlugin      =   PluginsFactory::CreateTimerPlugin( model::ParametersFactory::CreateParameter("time", time ), 64 );
-
-    timerPlugin->SetTimePatern( L"##:##:##" );
-
-    timerPlugin->SetTime( L"11:11:11" );
 
     root->AddPlugin( timerPlugin );
 
@@ -615,9 +606,9 @@ model::BasicNode *     Timer()
     angle.AddKey( 0.f, 0.f );
     angle.AddKey( 10.f, 270.f );
 
-    trans.AddRotation( angle, InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
-    trans.AddScale( InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
-    trans.AddTranslation( InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
+    //trans.AddRotation( angle, InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
+    trans.AddScale( InterpolatorsHelper::CreateConstValue( 0.3f ), InterpolatorsHelper::CreateConstValue( 0.3f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
+    trans.AddTranslation( InterpolatorsHelper::CreateConstValue( -1.f ), InterpolatorsHelper::CreateConstValue( 0.f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
     
     auto transPlugin = PluginsFactory::CreateSimpleTransformPlugin( timerPlugin, model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
 
@@ -637,7 +628,7 @@ model::BasicNode *     Timer()
 
     auto ctx = RendererContext::CreateDefault();
     ctx->alphaCtx->blendEnabled = true;
-    ctx->depthCtx->enabled = false;
+    ctx->depthCtx->enabled = true;
 
     auto pixelShaderPlugin = PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/text.frag", ctx );
 
@@ -840,7 +831,7 @@ model::BasicNode *          TestScenesFactory::AnotherTestScene()
 {
     //auto root = GreenRect();
     auto root =  Timer();
-    //root->AddChild( Text1() );
+    root->AddChild( Text1() );
     //root->AddChild( GreenRect() );
     //root->AddChild( TexturedRect() );
     //root->AddChild( ExtrudedTexturedRing() ); // To nie dziala na mojej karcie.
