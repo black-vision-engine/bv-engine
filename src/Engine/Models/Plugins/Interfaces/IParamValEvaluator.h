@@ -1,16 +1,19 @@
 #pragma once
 
+#include "System/BasicTypes.h"
+
 #include "Engine/Models/Plugins/Interfaces/IParamSet.h"
+#include "Engine/Models/Plugins/Interfaces/IValueSet.h"
 
 namespace bv { namespace model {
 
 class IValue;
 
-class IParamValEvaluator : public IParamSet
+class IParamValEvaluator : public IParamSet, public IValueSet
 {
 public:
 
-    virtual IValue *    GetValue                () = 0;
+    virtual     void    Evaluate                ( TimeType t ) = 0;
 
     virtual             ~IParamValEvaluator     () {}
 

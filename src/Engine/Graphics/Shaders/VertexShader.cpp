@@ -30,18 +30,18 @@ std::string PassThroughVertexShader::m_programSource = "   #version 400 \n \
 VertexShader::VertexShader( const std::string & programSource )
     : Shader( programSource )
 {
-    ShaderParameters* ret   = GetOrCreateShaderParameters();
+    ShaderParameters * ret   = GetOrCreateShaderParameters();
 
     m_MVP                   = model::ValueMat4Ptr( new model::ValueMat4( "MVP" ) );
-    UniformShaderParam * uniShaderParam = ShaderParamFactory::Get().Create( m_MVP->GetName(), m_MVP->GetParamType() );
+    UniformShaderParam * uniShaderParam = ShaderParamFactory::Get().Create( m_MVP->GetName(), m_MVP->GetType() );
     ret->RegisterParameter( uniShaderParam );
 
     m_MV                    = model::ValueMat4Ptr( new model::ValueMat4( "MV" ) );
-    uniShaderParam          = ShaderParamFactory::Get().Create( m_MV->GetName(), m_MV->GetParamType() );
+    uniShaderParam          = ShaderParamFactory::Get().Create( m_MV->GetName(), m_MV->GetType() );
     ret->RegisterParameter( uniShaderParam );
 
     m_P                     = model::ValueMat4Ptr( new model::ValueMat4( "P" ) );
-    uniShaderParam          = ShaderParamFactory::Get().Create( m_P->GetName(), m_P->GetParamType() );
+    uniShaderParam          = ShaderParamFactory::Get().Create( m_P->GetName(), m_P->GetType() );
     ret->RegisterParameter( uniShaderParam );
 }
 

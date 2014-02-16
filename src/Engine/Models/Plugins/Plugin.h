@@ -144,6 +144,5 @@ const IGeometryShaderChannel *      BasePlugin< Iface, UIDType >::GetGeometrySha
     return nullptr;
 }
 
-
 } // model
 } // bv

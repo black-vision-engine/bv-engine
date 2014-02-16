@@ -220,6 +220,7 @@
     <ClCompile Include="Engine\Graphics\State\StencilState.cpp" />
     <ClCompile Include="Engine\Models\Builder\RendererStatesBuilder.cpp" />
     <ClCompile Include="Engine\Models\ModelAccessors.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ConstantsMapper.cpp" />
     <ClCompile Include="Engine\Models\ModelScene.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\ChannelsFactory.cpp" />
@@ -266,6 +267,7 @@
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleTextPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleTexturePlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleTransformPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\SimpleTransformPluginNM.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleVertexShaderPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\TimerPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\TextureInfo.cpp" />
@@ -388,6 +390,7 @@
     <ClInclude Include="Engine\Interfaces\IUpdater.h" />
     <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
     <ClInclude Include="Engine\Models\ModelAccessors.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\ConstantsMapper.h" />
     <ClInclude Include="Engine\Models\ModelScene.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\ChannelsFactory.h" />
@@ -456,6 +459,7 @@
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleTextPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleTexturePlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleTransformPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\SimpleTransformPluginNM.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleVertexShaderPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\TimerPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\TextureInfo.h" />

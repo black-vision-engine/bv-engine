@@ -20,5 +20,15 @@ public:
 
 };
 
+// *********************************
+//
+template< typename ParamType >
+ParamType * QueryTypedParam( IParameter * param )
+{
+    assert( param->GetType() == ParamType::Type() );
+
+    return static_cast< ParamType * >( param->QueryParamTyped() );
+}
+
 } //model
 } //bv

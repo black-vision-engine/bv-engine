@@ -160,6 +160,8 @@
     <ClCompile Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\SimpleTransformPluginNM.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -364,6 +366,8 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamValModel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IValueSet.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginParamValModel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\SimpleTransformPluginNM.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

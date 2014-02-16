@@ -38,8 +38,10 @@ public:
             ValueImpl   ( const std::string & name );
     virtual ~ValueImpl  ();
 
-    virtual ParamType       GetParamType    () const override;
+    virtual ParamType       GetType         () const override;
     virtual const char *    GetData         () const override;
+
+    virtual void *          QueryValueTyped () override;
 
     // *******************************
     //
@@ -55,6 +57,13 @@ public:
         m_value = v;
     }
  
+    // *******************************
+    //
+    static ParamType        Type            ()
+    {
+        return paramType;
+    }
+
 };
 
 
@@ -76,7 +85,7 @@ ValueImpl< ValueType, paramType >::~ValueImpl()
 // *******************************
 //
 template< typename ValueType, ParamType paramType >
-ParamType   ValueImpl< ValueType, paramType >::GetParamType () const
+ParamType   ValueImpl< ValueType, paramType >::GetType      () const
 {
     return paramType;
 }
@@ -87,6 +96,14 @@ template< typename ValueType, ParamType paramType >
 const char *    ValueImpl< ValueType, paramType >::GetData  () const
 {
     return reinterpret_cast< const char * >( &m_value );
+}
+
+// *******************************
+//
+template< typename ValueType, ParamType paramType >
+void *          ValueImpl< ValueType, paramType >::QueryValueTyped ()
+{
+    return static_cast< void * >( this );
 }
 
 } //model

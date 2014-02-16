@@ -566,11 +566,11 @@ unsigned int                        BasicNode::TotalSize             ( const std
 
 // ********************************
 //
-void                                BasicNode::RegisterShaderParameters (const IShaderChannel* shaderChannel, ShaderParameters * shParams)
+void                                BasicNode::RegisterShaderParameters ( const IShaderChannel * shaderChannel, ShaderParameters * shParams )
 {
     for(auto param : shaderChannel->GetValuesList())
     {
-        UniformShaderParam* genShaderParam = ShaderParamFactory::Get().Create( param->GetName(), param->GetParamType() );
+        UniformShaderParam* genShaderParam = ShaderParamFactory::Get().Create( param->GetName(), param->GetType() );
         shParams->RegisterParameter(genShaderParam);
     }
 }

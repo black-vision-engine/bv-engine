@@ -13,9 +13,7 @@ public:
 
     virtual bool        IsReadOnly  ()  const = 0;
 
-    virtual             ~IChannel   ()
-    {
-    }
+    virtual             ~IChannel   ()  {}
 
 };
 
