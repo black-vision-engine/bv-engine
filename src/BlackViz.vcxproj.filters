@@ -359,6 +359,10 @@
     <ClInclude Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamSet.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamValEvaluator.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamValModel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IValueSet.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

@@ -426,6 +426,10 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IConnectedComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParameter.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamSet.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamValEvaluator.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamValModel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IValueSet.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IIndexChannelDescriptor.h" />
