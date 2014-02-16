@@ -12,14 +12,14 @@ namespace bv { namespace model
 DefaultTransformChannel::DefaultTransformChannel( IPlugin * prev, const ValueMat4PtrVec & values, bool isReadOnly )
     : m_values( values )
     , m_isReadOnly( isReadOnly )
-    , m_prevChannel( nullptr )
+    , m_prevValues( nullptr )
 {
     if( prev != nullptr )
     {
-
-        //TODO: implement
+        m_prevValues = static_cast< const ValueMat4PtrVec * >( &prev->GetDefaultTransformChannel()->GetTransformValues() );
+    
+        assert( m_prevValues->size() == values.size() );
     }
-
 }
 
 // *********************************
@@ -54,6 +54,18 @@ bool                        DefaultTransformChannel::IsReadOnly          ()  con
 //
 void                        DefaultTransformChannel::PostUpdate          () 
 {
+    if( m_prevValues )
+    {
+        for( unsigned int i = 0; i < m_values.size(); ++i )
+        {
+            
+            ValueMat4 & m   = *m_values[ i ];
+            ValueMat4 & mp  = *(*m_prevValues)[ i ];
+
+            m.SetValue( m.GetValue()  * mp.GetValue() );
+        }
+    }
+
     //TODO: concatenate with prev plugin results
 }
 

@@ -30,25 +30,27 @@ public:
     virtual IPluginParamValModel *              GetPluginModelParameters    ();
     virtual void                                Update                      ( TimeType t );
 
-    const char*                                 GetName                     () const                                        { return UIDType::GetName(); } 
+    const char*                                 GetName                     () const                                            { return UIDType::GetName(); } 
 
-    virtual void                                SetGeometryChannel          ( VertexAttributesChannel * vaChannel )         { assert(!"Implement in derived class"); }
-    virtual void                                SetTransformChannel         ( TransformChannel * transformChannel )         { assert(!"Implement in derived class"); }
-    virtual void                                SetPixelShaderChannel       ( IPixelShaderChannel * pShCh )                 { assert(!"Implement in derived class"); }
-    virtual void                                SetVertexShaderChannel      ( IVertexShaderChannel * vShCh )                { assert(!"Implement in derived class"); }
-    virtual void                                SetGeometryShaderChannel    ( IGeometryShaderChannel * gShCh )              { assert(!"Implement in derived class"); }
+    virtual void                                SetGeometryChannel          ( VertexAttributesChannel * vaChannel ) { assert(!"Implement in derived class"); }
+    virtual void                                SetTransformChannel         ( TransformChannel * transformChannel ) { assert(!"Implement in derived class"); }
+    virtual void                                SetPixelShaderChannel       ( IPixelShaderChannel * pShCh )         { assert(!"Implement in derived class"); }
+    virtual void                                SetVertexShaderChannel      ( IVertexShaderChannel * vShCh )        { assert(!"Implement in derived class"); }
+    virtual void                                SetGeometryShaderChannel    ( IGeometryShaderChannel * gShCh )      { assert(!"Implement in derived class"); }
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const;                                       
-    virtual const ITransformChannel *           GetTransformChannel         () const;                                       
-    virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const;                                       
-    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const;                                       
-    virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const;                                       
+    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
+    virtual const ITransformChannel *           GetTransformChannel         () const override;
+    virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;
+    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
+    virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const override;
+    virtual const IDefaultTransformChannel *    GetDefaultTransformChannel  () const override;
 
-    virtual Textures                            GetTextures                 () const                                        { return Textures(); }
+    virtual Textures                            GetTextures                 () const                                            { return Textures(); }
 
-    virtual bool                                HasAnimatingTexture         () const                                        { return false; }
+    virtual bool                                HasAnimatingTexture         () const                                            { return false; }
 
-    virtual ISequenceAnimationSource *          QuerySequenceAnimationSource()                                              { return nullptr; }
+    virtual ISequenceAnimationSource *          QuerySequenceAnimationSource()                                                  { return nullptr; }
+
 };
 
 // Implementation
@@ -139,6 +141,19 @@ const IGeometryShaderChannel *      BasePlugin< Iface, UIDType >::GetGeometrySha
     if( m_prevPlugin )
     {
         return m_prevPlugin->GetGeometryShaderChannel();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+template<class Iface, class UIDType >
+const IDefaultTransformChannel *    BasePlugin< Iface, UIDType >::GetDefaultTransformChannel  () const
+{
+    if( m_prevPlugin )
+    {
+        return m_prevPlugin->GetDefaultTransformChannel();
     }
 
     return nullptr;

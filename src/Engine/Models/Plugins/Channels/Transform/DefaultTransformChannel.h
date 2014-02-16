@@ -15,7 +15,7 @@ class DefaultTransformChannel : public IDefaultTransformChannel
 private:
 
     ValueMat4PtrVec             m_values;
-    IDefaultTransformChannel *  m_prevChannel;
+    const ValueMat4PtrVec *     m_prevValues;
 
     bool                        m_isReadOnly;
 
