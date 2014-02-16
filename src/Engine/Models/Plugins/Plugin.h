@@ -27,7 +27,7 @@ public:
 
     explicit                                    BasePlugin                  ( const IPlugin * prevPlugin );
 
-    virtual const std::vector< IParameter * > & QueryModelParameters        ();
+    virtual IPluginParamValModel *              GetPluginModelParameters    ();
     virtual void                                Update                      ( TimeType t );
 
     const char*                                 GetName                     () const                                        { return UIDType::GetName(); } 
@@ -56,9 +56,11 @@ public:
 // *******************************
 //
 template<class Iface, class UIDType >
-const std::vector< IParameter * > & BasePlugin< Iface, UIDType >::QueryModelParameters        ()
+IPluginParamValModel *              BasePlugin< Iface, UIDType >::GetPluginModelParameters    ()
 {
-    return m_modelParameters;
+    assert( false );
+
+    return nullptr;
 }
 
 // *******************************
