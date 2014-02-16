@@ -19,6 +19,7 @@ class IVertexShaderChannel;
 class IGeometryShaderChannel;
 class ResourceHandle;
 class IParameter;
+class IPluginParamValModel;
 
 struct TextureInfo;
 typedef std::vector< TextureInfo * > Textures;
@@ -29,7 +30,7 @@ public:
 
     virtual const char *                        GetName                     () const = 0;
 
-    virtual const std::vector< IParameter * > & QueryModelParameters        () = 0;
+    virtual IPluginParamValModel *              GetPluginModelParameters    () = 0;
 
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const = 0;
     virtual const ITransformChannel *           GetTransformChannel         () const = 0;
