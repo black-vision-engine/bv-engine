@@ -10,7 +10,7 @@ class IValueSet
 {
 public:
 
-    virtual std::vector< IValue * > &       QueryValues () = 0;
+    virtual std::vector< IValue * > &       GetValues   () = 0;
 
     virtual ~IValueSet(){}
 

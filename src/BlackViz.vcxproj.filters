@@ -363,6 +363,7 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamValEvaluator.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamValModel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IValueSet.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginParamValModel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

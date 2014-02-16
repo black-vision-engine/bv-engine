@@ -10,7 +10,7 @@ class IParamSet
 {
 public:
 
-    virtual std::vector< IParameter * > &       QueryParameters     () = 0;
+    virtual std::vector< IParameter * > &       GetParameters       () = 0;
 
     virtual ~IParamSet(){}
 

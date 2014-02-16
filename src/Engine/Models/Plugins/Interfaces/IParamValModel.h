@@ -11,7 +11,7 @@ class IParamValModel : public IValueSet, public IParamSet
 {
 public:
 
-    virtual std::vector< IParamValEvaluator * > &   QueryEvaluators     () = 0;
+    virtual std::vector< IParamValEvaluator * > &   GetEvaluators       () = 0;
 
     virtual ~IParamValModel()   {}
 

@@ -10,7 +10,7 @@ class IParamValEvaluator : public IParamSet
 {
 public:
 
-    virtual IValue *    QueryValue              () = 0;
+    virtual IValue *    GetValue                () = 0;
 
     virtual             ~IParamValEvaluator     () {}
 
