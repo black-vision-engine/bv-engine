@@ -828,8 +828,8 @@ model::BasicNode *          ExtrudedTexturedRing()
 //
 model::BasicNode *          TestScenesFactory::AnotherTestScene()
 {
-    auto root = GreenRect();
-    //auto root =  Timer();
+    //auto root = GreenRect();
+    auto root =  Timer();
     root->AddChild( Text1() );
     //root->AddChild( GreenRect() );
     //root->AddChild( TexturedRect() );

@@ -60,10 +60,22 @@ No to wracaj¹c do logiki i modeli (parametry w pluginach):
     
 Jak¹ logikê maj¹ w sobie kana³y tak naprawdê:
     TransformChannel - przelatuje listê transfor paramów i robi SetMatrix( Evaluate( kana³, czas ) ) - nie ró¿ni siê niczym od mat4 value
+        Oraz dodatkowo na zewaluowanym stanie robi konkatenacjê z ewentualnym stanem z poprzedniego pluginu
     TexturePixelShaderChannel - SetValue( Evaluate( ... ) ) na alfach i macierzech (valiusem jest mat4val) - czyli nic dupourywaj¹cego
     SolidColorPixelShaderChannel - SetValue( Evaluate( ... ) ) na kolorze
     ExtrudeGeometryChannel - SetValue( WEvaluate( ... ) ) na skali
-    VertexAttributesChannel - ¿adnej, tylko rutuje Update do konekted komponentu
+    VertexAttributesChannel - ¿adnej, tylko rutuje Update do konekted komponentu - czyli nic tu siê nie dzieje, bo ten kana³ i tak jest
+                              budowany od zera przez plugin w jego apdejcie lub apdejcie CC - i chuj
+    VertexAttributesChannelAnimatedVertices - odpala update CC
+    ConnectedComponent - nie ma ¿adnej logiki w apdejcie
+    AnimatedStripComponent - animuje poszczególne vertexy
+    RectComponent - nic nie ma
+    RingComponent - nic nie ma
+    VariableTopologyStripComponent - Dodaje kolejne wertexy do geometrii - nic szczzególnego, ale taki apdejt
+    
+   
+                              
+    
     
     
     

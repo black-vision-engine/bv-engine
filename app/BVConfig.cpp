@@ -1,7 +1,7 @@
 #include "BVConfig.h"
 
-//#define USE_READBACK_API
-//#define FULLSCREEN_MODE
+#define USE_READBACK_API
+#define FULLSCREEN_MODE
 
 
 namespace bv
@@ -21,7 +21,7 @@ BVConfig::BVConfig                      ()
     m_fullscreeMode     = false;
 #endif
 
-    m_fps               = 2500;
+    m_fps               = 60000;
     m_frameTimeMillis   = 1000 / m_fps;
 
 #ifdef USE_READBACK_API
