@@ -31,7 +31,7 @@ public:
 
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel          () const override;
     void                                Update                      ( TimeType t ) override;
-    void                                Print                       ( std::ostream & out, int tabs = 0 ) const override;
+    void                                Print                       ( std::ostream & out, int tabs = 0 ) const;
 
     void                                AddRectConnectedComponnent  ( const ParamFloat& w, const ParamFloat& h, const ParamFloat& tx, const ParamFloat& ty, const ParamFloat& tz );
     void                                AddRectConnectedComponnent  ( float w, float h, float tx = 0.f, float ty = 0.f, float tz = 0.f );

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Engine/Models/Plugins/Interfaces/ITransformChannel.h"
 #include "Engine/Models/Plugins/Parameters/TypedValues.h"
 
@@ -21,19 +23,21 @@ private:
 
 private:
 
-    explicit                            DefaultTransformChannel( IPlugin * prev, const ValueMat4PtrVec & values, bool isReadOnly );
+    explicit                            DefaultTransformChannel ( const IPlugin * prev, const ValueMat4PtrVec & values, bool isReadOnly );
 
 public:
 
-    static  DefaultTransformChannel *   Create              ( IPlugin * prev, IValueSet * values, bool isReadOnly = false );
+    static  DefaultTransformChannel *   Create                  ( const IPlugin * prev, IValueSet * values, bool isReadOnly = false );
 
-    virtual const ValueMat4PtrVec &     GetTransformValues  ()  const override;
+    virtual const ValueMat4PtrVec &     GetTransformValues      ()  const override;
 
-    virtual bool                        IsReadOnly          ()  const override;  //IChannel
+    virtual bool                        IsReadOnly              ()  const override;  //IChannel
 
-    virtual void                        PostUpdate          ()  override;         //Should also be IChannel
+    virtual void                        PostUpdate              ()  override;         //Should also be IChannel
 
 };
+
+typedef std::shared_ptr< DefaultTransformChannel > DefaultTransformChannelPtr;
 
 } // model
 } // bv

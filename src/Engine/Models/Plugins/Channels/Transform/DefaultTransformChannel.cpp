@@ -9,7 +9,7 @@ namespace bv { namespace model
 
 // *********************************
 //
-DefaultTransformChannel::DefaultTransformChannel( IPlugin * prev, const ValueMat4PtrVec & values, bool isReadOnly )
+DefaultTransformChannel::DefaultTransformChannel( const IPlugin * prev, const ValueMat4PtrVec & values, bool isReadOnly )
     : m_values( values )
     , m_isReadOnly( isReadOnly )
     , m_prevValues( nullptr )
@@ -24,8 +24,10 @@ DefaultTransformChannel::DefaultTransformChannel( IPlugin * prev, const ValueMat
 
 // *********************************
 //
-DefaultTransformChannel *   DefaultTransformChannel::Create              ( IPlugin * prev, IValueSet * values, bool isReadOnly )
+DefaultTransformChannel *   DefaultTransformChannel::Create              ( const IPlugin * prev, IValueSet * values, bool isReadOnly )
 {
+    assert( values );
+
     ValueMat4PtrVec typedVals;
 
     for( auto val : values->GetValues() )

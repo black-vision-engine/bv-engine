@@ -1,10 +1,13 @@
 #pragma once
 
+#include "Engine/Interfaces/IUpdatable.h"
+
 #include "Engine/Models/Plugins/Interfaces/IParamValModel.h"
+
 
 namespace bv { namespace model {
 
-class IPluginParamValModel
+class IPluginParamValModel : public IUpdatable
 {
 public:
 
