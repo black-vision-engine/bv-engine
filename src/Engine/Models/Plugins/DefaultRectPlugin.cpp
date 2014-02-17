@@ -2,6 +2,9 @@
 
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
+#include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
+#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
+#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 
 
 namespace bv { namespace model {
@@ -66,6 +69,40 @@ void                                DefaultRectPlugin::Update                   
 
     m_lastW = w;
     m_lastH = h;
+}
+
+
+// ********************************************************* DESCRIPTOR *********************************************************
+
+// *************************************
+//
+DefaultPluginParamValModel * DefaultRectPluginDesc::CreateModel ( bool setDefaultValues )
+{
+    DefaultPluginParamValModel * model          = new DefaultPluginParamValModel();
+    DefaultParamValModel * pluginModel          = new DefaultParamValModel();
+
+    ParamFloat * paramWidth                     = ParametersFactory::CreateParameterFloat( "width" );
+    ParamFloat * paramHeight                    = ParametersFactory::CreateParameterFloat( "height" );
+
+    pluginModel->AddParameter( paramWidth );
+    pluginModel->AddParameter( paramHeight );
+
+    model->SetTransformChannelModel( pluginModel );
+
+    if ( setDefaultValues )
+    {
+        paramWidth->SetVal( 0.f, 1.f );
+        paramHeight->SetVal( 0.f, 1.f );
+    }
+
+    return model;
+}
+
+// *************************************
+//
+DefaultRectPlugin *          DefaultRectPluginDesc::CreatePlugin( const IPlugin * prev, bool setDefaultValues )
+{
+    return new DefaultRectPlugin( prev, DefaultPluginParamValModelPtr( DefaultRectPluginDesc::CreateModel( setDefaultValues ) ) );    
 }
 
 } // model

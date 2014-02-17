@@ -49,7 +49,7 @@ public:
 
     virtual void                                Update                      ( TimeType t ) override;
 
-    friend class GeometryRectPluginDesc;
+    friend class DefaultRectPluginDesc;
 
 };
 

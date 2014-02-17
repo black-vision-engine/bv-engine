@@ -39,12 +39,8 @@ void                                DefaultTransformPlugin::Update              
     m_transformChannel->PostUpdate();
 }
 
-// *************************************
-//
-DefaultTransformPlugin *            DefaultTransformPluginDesc::CreatePlugin            ( const IPlugin * prev, bool setDefaultValues )
-{
-    return new DefaultTransformPlugin( prev, DefaultPluginParamValModelPtr( DefaultTransformPluginDesc::CreateModel( setDefaultValues ) ) );
-}
+
+// ********************************************************* DESCRIPTOR *********************************************************
 
 // *************************************
 //
@@ -63,6 +59,13 @@ DefaultPluginParamValModel * DefaultTransformPluginDesc::CreateModel ( bool setD
     }
 
     return model;
+}
+
+// *************************************
+//
+DefaultTransformPlugin *            DefaultTransformPluginDesc::CreatePlugin            ( const IPlugin * prev, bool setDefaultValues )
+{
+    return new DefaultTransformPlugin( prev, DefaultPluginParamValModelPtr( DefaultTransformPluginDesc::CreateModel( setDefaultValues ) ) );
 }
 
 } // model
