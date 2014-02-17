@@ -259,6 +259,10 @@
     <ClCompile Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\ParametersFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\ParamValModel\DefaultParamValModel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\ParamValModel\DefaultPluginParamValModel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleAnimationPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleColorPlugin.cpp" />
@@ -450,6 +454,11 @@
     <ClInclude Include="Engine\Models\Plugins\Parameters\ParametersFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\TypedValues.h" />
+    <ClInclude Include="Engine\Models\Plugins\ParamValModel\DefaultParamValModel.h" />
+    <ClInclude Include="Engine\Models\Plugins\ParamValModel\DefaultPluginParamValModel.h" />
+    <ClInclude Include="Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.h" />
+    <ClInclude Include="Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.h" />
+    <ClInclude Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginsFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleAnimationPlugin.h" />

@@ -10,7 +10,7 @@ namespace bv { namespace model {
 
 class IParamValEvaluator;
 
-class IParamValModel : public IValueSet, public IParamSet, public IUpdatable
+class IParamValModel : public IParamSet, public IValueSet, public IUpdatable
 {
 public:
 

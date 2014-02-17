@@ -11,13 +11,13 @@ class IPluginParamValModel : public IUpdatable
 {
 public:
 
-    virtual     IParamValModel *    GetPluginModel          () = 0;
+    virtual     IParamValModel *    GetPluginModel                  () = 0;
 
-    virtual     IParamValModel *    GetTransformModel       () = 0;
-    virtual     IParamValModel *    GetVertexAttributesModel() = 0;
-    virtual     IParamValModel *    GetPixelShaderModel     () = 0;
-    virtual     IParamValModel *    GetVertexShaderModel    () = 0;
-    virtual     IParamValModel *    GetGeometryShaderModel  () = 0;
+    virtual     IParamValModel *    GetTransformChannelModel        () = 0;
+    virtual     IParamValModel *    GetVertexAttributesChannelModel () = 0;
+    virtual     IParamValModel *    GetPixelShaderChannelModel      () = 0;
+    virtual     IParamValModel *    GetVertexShaderChannelModel     () = 0;
+    virtual     IParamValModel *    GetGeometryShaderChannelModel   () = 0;
 
     virtual     ~IPluginParamValModel   () {} 
 

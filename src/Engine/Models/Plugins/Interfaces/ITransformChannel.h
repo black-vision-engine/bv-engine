@@ -9,8 +9,6 @@
 namespace bv { namespace model
 {
 
-typedef std::vector< ValueMat4 * >  ValueMat4PtrVec;
-
 class IDefaultTransformChannel
 {
 public:

@@ -162,6 +162,10 @@
     <ClCompile Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultTransformPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\ParamValModel\DefaultParamValModel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\ParamValModel\DefaultPluginParamValModel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -368,6 +372,11 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginParamValModel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultTransformPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\ParamValModel\DefaultParamValModel.h" />
+    <ClInclude Include="Engine\Models\Plugins\ParamValModel\DefaultPluginParamValModel.h" />
+    <ClInclude Include="Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.h" />
+    <ClInclude Include="Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.h" />
+    <ClInclude Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

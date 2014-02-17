@@ -12,7 +12,7 @@ DefaultTransformPlugin::DefaultTransformPlugin  ( const IPlugin * prev, IPluginP
     , m_transformChannel( nullptr )
     , m_paramValModel( model )
 { 
-    m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( prev, m_paramValModel->GetTransformModel(), false ) );
+    m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( prev, m_paramValModel->GetTransformChannelModel(), false ) );
 }
 
 // *************************************

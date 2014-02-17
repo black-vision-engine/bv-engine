@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
+#include "Engine/Models/Plugins/Interfaces/IPluginParamValModel.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
@@ -20,12 +21,15 @@ class BasePlugin : public Iface
 protected:
     ///////////////// Previous plugin ///////////
     const IPlugin *                             m_prevPlugin;
+    IPluginParamValModel *                      m_pluginParamValModel;
 
-    std::vector< IParameter * >                 m_modelParameters;
+protected:
+
+    explicit                                    BasePlugin                  ( const IPlugin * prevPlugin, IPluginParamValModel * model = nullptr );
 
 public:
 
-    explicit                                    BasePlugin                  ( const IPlugin * prevPlugin );
+    virtual                                     ~BasePlugin                 ();
 
     virtual IPluginParamValModel *              GetPluginModelParameters    ();
     virtual void                                Update                      ( TimeType t );
@@ -76,9 +80,18 @@ void BasePlugin< Iface, UIDType >::Update( TimeType t )
 // *******************************
 //
 template<class Iface, class UIDType >
-BasePlugin< Iface, UIDType >::BasePlugin( const IPlugin* prevPlugin )
+BasePlugin< Iface, UIDType >::BasePlugin( const IPlugin * prevPlugin, IPluginParamValModel * model )
     : m_prevPlugin( prevPlugin )
+    , m_pluginParamValModel( model )
 {
+}
+
+// *******************************
+//
+template<class Iface, class UIDType >
+BasePlugin< Iface, UIDType >::~BasePlugin()
+{
+    delete m_pluginParamValModel;
 }
 
 // *******************************

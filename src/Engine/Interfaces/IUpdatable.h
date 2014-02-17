@@ -15,6 +15,7 @@ public:
     }
 
     virtual void    Update          ( TimeType t ) = 0;
+
 };
 
 
