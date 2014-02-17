@@ -36,13 +36,13 @@ public:
     virtual     IParamValModel *    GetGeometryShaderChannelModel   () override;
 
 
-    IParamValModel *                PluginModelImpl                 ();
+    DefaultParamValModel *         PluginModelImpl                 ();
 
-    IParamValModel *                TransformChannelModelImpl       ();
-    IParamValModel *                VertexAttributesChannelModelImpl();
-    IParamValModel *                PixelShaderChannelModelImpl     ();
-    IParamValModel *                VertexShaderChannelModelImpl    ();
-    IParamValModel *                GeometryShaderChannelModelImpl  ();
+    DefaultParamValModel *         TransformChannelModelImpl       ();
+    DefaultParamValModel *         VertexAttributesChannelModelImpl();
+    DefaultParamValModel *         PixelShaderChannelModelImpl     ();
+    DefaultParamValModel *         VertexShaderChannelModelImpl    ();
+    DefaultParamValModel *         GeometryShaderChannelModelImpl  ();
 
     
     void                            SetPluginModel                  ( DefaultParamValModel * model );

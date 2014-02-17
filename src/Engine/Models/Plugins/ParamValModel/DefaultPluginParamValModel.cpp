@@ -99,42 +99,42 @@ IParamValModel *    DefaultPluginParamValModel::GetGeometryShaderChannelModel   
 
 // *******************************
 //
-IParamValModel *    DefaultPluginParamValModel::PluginModelImpl                 ()
+DefaultParamValModel *    DefaultPluginParamValModel::PluginModelImpl           ()
 {
     return m_pluginModel;
 }
 
 // *******************************
 //
-IParamValModel *    DefaultPluginParamValModel::TransformChannelModelImpl       ()
+DefaultParamValModel *    DefaultPluginParamValModel::TransformChannelModelImpl ()
 {
     return m_transformChannelModel;
 }
 
 // *******************************
 //
-IParamValModel *    DefaultPluginParamValModel::VertexAttributesChannelModelImpl()
+DefaultParamValModel *    DefaultPluginParamValModel::VertexAttributesChannelModelImpl()
 {
     return m_vertexAttributesChannelModel;
 }
 
 // *******************************
 //
-IParamValModel *    DefaultPluginParamValModel::PixelShaderChannelModelImpl     ()
+DefaultParamValModel *    DefaultPluginParamValModel::PixelShaderChannelModelImpl   ()
 {
     return m_pixelShaderChannelModel;
 }
 
 // *******************************
 //
-IParamValModel *    DefaultPluginParamValModel::VertexShaderChannelModelImpl    ()
+DefaultParamValModel *    DefaultPluginParamValModel::VertexShaderChannelModelImpl  ()
 {
     return m_vertexShaderChannelModel;
 }
 
 // *******************************
 //
-IParamValModel *    DefaultPluginParamValModel::GeometryShaderChannelModelImpl  ()
+DefaultParamValModel *    DefaultPluginParamValModel::GeometryShaderChannelModelImpl()
 {
     return m_geometryShaderChannelModel;
 }
