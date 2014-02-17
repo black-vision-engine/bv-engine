@@ -43,5 +43,19 @@ void                            TransformVecParamValEvaluator::Evaluate        (
     }
 }
 
+// ********************************
+//
+ParamTransformVec *             TransformVecParamValEvaluator::Param           ()
+{
+    return m_param;
+}
+
+// ********************************
+//
+ValueMat4PtrVec &               TransformVecParamValEvaluator::Value           ()
+{
+    return m_mat4Values;
+}
+
 } //model
 } //bv

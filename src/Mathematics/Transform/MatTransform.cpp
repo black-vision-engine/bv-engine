@@ -78,6 +78,35 @@ Rotation<ParamT>::Rotation( ParamT angle, ParamT p0, ParamT p1, ParamT p2 )
 // *************************************
 //
 template<typename ParamT>
+void            CompositeTransform<ParamT>::InitializeDefaultSRT()
+{
+    for( auto t : m_transformations )
+    {
+        delete t;
+    }
+
+    ParamT sx, sy, sz;
+    ParamT angle;
+    ParamT rx, ry, rz;
+    ParamT tx, ty, tz;
+
+    ParamT::TimeType    t   = ParamT::TimeType( 0 );
+    ParamT::ValueType   v0  = ParamT::ValueType( 0.0 );
+    ParamT::ValueType   v1  = ParamT::ValueType( 1.0 );
+
+    sx.AddKey( t, v1 ); sy.AddKey( t, v1 ); sz.AddKey( t, v1 );
+    angle.AddKey( t, v0 );
+    rx.AddKey( t, v0 ); ry.AddKey( t, v0 ); rz.AddKey( t, v1 );
+    tx.AddKey( t, v0 ); ty.AddKey( t, v0 ); tz.AddKey( t, v0 );
+
+    AddScale( sx, sy, sz );
+    AddRotation( angle, rx, ry, ry );
+    AddTranslation( tx, ty, tz );
+}
+
+// *************************************
+//
+template<typename ParamT>
 CompositeTransform<ParamT>::~CompositeTransform()
 {
     for( auto t : m_transformations )

@@ -112,9 +112,8 @@ void BVAppLogic::LoadScene          ( void )
     //model::BasicNode * root  = TestScenesFactory::StackThemNow( roota, rodos );
     //model::BasicNode * root = TestScenesFactory::TexturedRectTestScene();
     //model::BasicNode * root = TestScenesFactory::NaiveTimerTestScene();
-    
 
-    model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
+    model::BasicNode * root = TestScenesFactory::NewModelTestScene(); 
     m_modelScene = model::ModelScene::Create( root, new Camera(), "BasicScene" );
     m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
 }

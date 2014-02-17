@@ -133,6 +133,8 @@ public:
     explicit        CompositeTransform  ();
                     CompositeTransform  ( const CompositeTransform & src );
 
+    void            InitializeDefaultSRT();
+
     virtual         ~CompositeTransform ();
 
     void            AddTranslation      ( ParamT x0, ParamT x1, ParamT x2 );

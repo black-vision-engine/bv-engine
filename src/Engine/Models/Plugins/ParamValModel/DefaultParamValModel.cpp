@@ -85,5 +85,22 @@ void                                    DefaultParamValModel::AddEvaluator      
     m_evaluators.push_back( evaluator );
 }
 
+// *******************************
+//
+void                                    DefaultParamValModel::RegisterAll     ( IParamValEvaluator * evaluator )
+{
+    AddEvaluator( evaluator );
+
+    for( auto param : evaluator->GetParameters() )
+    {
+        AddParameter( param );
+    }
+
+    for( auto value : evaluator->GetValues() )
+    {
+        AddValue( value );
+    }
+}
+
 } //model
 } //bv

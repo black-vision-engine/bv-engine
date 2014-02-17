@@ -49,6 +49,13 @@ inline   void       ParamTransform::SetTranslation  ( const glm::vec3 & translat
 
 // *******************************
 // FIXME: reimplement with SQT paramter model
+inline  TransformF& ParamTransform::Transform       ()
+{
+    return m_transformModel;
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
 inline  glm::mat4   ParamTransform::Evaluate        ( TimeType t ) const
 {
     return m_transformModel.Evaluate( t );
@@ -112,6 +119,15 @@ inline  void        ParamTransformVec::SetTranslation   ( unsigned int transform
             return;
         }
     }
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+inline  TransformF& ParamTransformVec::Transform        ( unsigned int transformNum )
+{
+    assert( transformNum < NumTransforms() );
+
+    return m_transformModelVec[ transformNum ];
 }
 
 // *******************************

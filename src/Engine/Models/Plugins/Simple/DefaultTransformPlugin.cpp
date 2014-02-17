@@ -1,14 +1,17 @@
 #include "DefaultTransformPlugin.h"
 
 #include "Engine/Models/Plugins/Interfaces/IPluginParamValModel.h"
+#include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
+#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
+#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 
 
 namespace bv { namespace model {
 
 // *************************************
 //
-DefaultTransformPlugin::DefaultTransformPlugin  ( const IPlugin * prev, IPluginParamValModel * model )
-    : BasePlugin( prev )
+DefaultTransformPlugin::DefaultTransformPlugin  ( const IPlugin * prev, DefaultPluginParamValModelPtr model )
+    : BasePlugin( prev,  std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_transformChannel( nullptr )
     , m_paramValModel( model )
 { 
@@ -19,7 +22,6 @@ DefaultTransformPlugin::DefaultTransformPlugin  ( const IPlugin * prev, IPluginP
 //
 DefaultTransformPlugin::~DefaultTransformPlugin ()
 {
-    delete m_paramValModel;
 }
 
 // *************************************
@@ -39,13 +41,28 @@ void                                DefaultTransformPlugin::Update              
 
 // *************************************
 //
-DefaultTransformPlugin *            DefaultTransformPlugin::Create                      ( const IPlugin * prev )
+DefaultTransformPlugin *            DefaultTransformPlugin::Create                      ( const IPlugin * prev, bool setDefaultValues )
 {
-    //FIXME: create model
-    //IPluginParamValModel * model = CreateModel();
-    IPluginParamValModel * model = nullptr;
+    return new DefaultTransformPlugin( prev, DefaultPluginParamValModelPtr( DefaultTransformPluginDesc::CreateModel( setDefaultValues ) ) );
+}
 
-    return new DefaultTransformPlugin( prev, model );
+// *************************************
+//
+DefaultPluginParamValModel * DefaultTransformPluginDesc::CreateModel ( bool setDefaultValues )
+{
+    DefaultPluginParamValModel * model          = new DefaultPluginParamValModel();
+    DefaultParamValModel * trModel              = new DefaultParamValModel();
+    TransformVecParamValEvaluator * evaluator   = ParamValEvaluatorFactory::CreateTransformVecEvaluator( "simple_transform" );
+
+    trModel->RegisterAll( evaluator );
+    model->SetTransformChannelModel( trModel );
+
+    if ( setDefaultValues )
+    {
+        evaluator->Param()->Transform( 0 ).InitializeDefaultSRT();
+    }
+
+    return model;
 }
 
 } // model

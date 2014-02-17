@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Engine/Models/Plugins/Interfaces/IPluginParamValModel.h"
 
 
@@ -54,6 +56,8 @@ public:
     void                            SetGeometryShaderChannelModel   ( DefaultParamValModel * model );
 
 };
+
+typedef std::shared_ptr< DefaultPluginParamValModel > DefaultPluginParamValModelPtr;
 
 } //model
 } //bv

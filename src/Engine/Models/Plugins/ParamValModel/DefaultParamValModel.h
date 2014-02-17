@@ -29,6 +29,7 @@ public:
     void                                            AddParameter    ( IParameter * param );
     void                                            AddValue        ( IValue * val );
     void                                            AddEvaluator    ( IParamValEvaluator * evaluator );
+    void                                            RegisterAll     ( IParamValEvaluator * evaluator );
 
 };
 

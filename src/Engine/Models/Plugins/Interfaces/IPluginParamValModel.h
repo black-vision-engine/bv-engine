@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Engine/Interfaces/IUpdatable.h"
+#include <memory>
 
+#include "Engine/Interfaces/IUpdatable.h"
 #include "Engine/Models/Plugins/Interfaces/IParamValModel.h"
 
 
@@ -22,6 +23,8 @@ public:
     virtual     ~IPluginParamValModel   () {} 
 
 };
+
+typedef std::shared_ptr< IPluginParamValModel > IPluginParamValModelPtr;
 
 } //model
 } //bv

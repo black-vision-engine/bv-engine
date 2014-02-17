@@ -28,6 +28,9 @@ public:
     virtual std::vector< IValue * > &       GetValues       () override;
     virtual void                            Evaluate        ( TimeType t ) override;
 
+    ParamTransformVec *                     Param           ();
+    ValueMat4PtrVec &                       Value           ();
+
     friend class ParamValEvaluatorFactory;
 
 };

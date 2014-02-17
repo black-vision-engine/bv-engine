@@ -23,6 +23,8 @@ public:
     inline  void        SetScale        ( const glm::vec3 & scale, TimeType t );
     inline  void        SetTranslation  ( const glm::vec3 & translation, TimeType t );
 
+    inline  TransformF& Transform       ();
+
     inline  glm::mat4   Evaluate        ( TimeType t ) const;
 
     virtual void *      QueryParamTyped ();
@@ -52,6 +54,8 @@ public:
     inline  void        SetRotation         ( unsigned int transformNum, const glm::vec3 & rotAxis, float angle, TimeType t );
     inline  void        SetScale            ( unsigned int transformNum, const glm::vec3 & scale, TimeType t );
     inline  void        SetTranslation      ( unsigned int transformNum, const glm::vec3 & translation, TimeType t );
+
+    inline  TransformF& Transform           ( unsigned int transformNum );
 
     inline  glm::mat4   Evaluate            ( unsigned int transformNum, TimeType t ) const;
 

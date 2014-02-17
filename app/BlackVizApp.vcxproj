@@ -83,6 +83,7 @@
     <ClCompile Include="MainLoopProcess.cpp" />
     <ClCompile Include="ModelInteractionEvents.cpp" />
     <ClCompile Include="ModelInteractionLayer.cpp" />
+    <ClCompile Include="NewModelTestScenes.cpp" />
     <ClCompile Include="StatsFormatters.cpp" />
     <ClCompile Include="xml\BlackTree.cpp" />
     <ClCompile Include="xml\pomocnicze\auxilary.cpp" />

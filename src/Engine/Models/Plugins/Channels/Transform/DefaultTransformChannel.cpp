@@ -4,6 +4,7 @@
 #include "Engine/Models/Plugins/Interfaces/IValueSet.h"
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 
+
 namespace bv { namespace model
 {
 
@@ -67,8 +68,6 @@ void                        DefaultTransformChannel::PostUpdate          ()
             m.SetValue( m.GetValue()  * mp.GetValue() );
         }
     }
-
-    //TODO: concatenate with prev plugin results
 }
 
 } // model

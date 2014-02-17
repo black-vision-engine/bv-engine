@@ -103,7 +103,6 @@ namespace
     }
 }
 
-
 // ***************************************
 //
 model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()

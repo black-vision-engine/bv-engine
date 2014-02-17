@@ -31,6 +31,10 @@ class Interpolator
 {
 public:
 
+    typedef TimeValueT TimeType;
+
+public:
+
     virtual int EvalToCBuffer( TimeValueT time, char * buf ) const = 0;
 
 };
@@ -38,6 +42,11 @@ public:
 template<class TimeValueT, class ValueT>
 class BasicInterpolator : public Interpolator<TimeValueT>
 {
+public:
+
+    typedef TimeValueT  TimeType;
+    typedef ValueT      ValueType;
+
 private:
 
     std::vector<Key<TimeValueT, ValueT>>    keys;

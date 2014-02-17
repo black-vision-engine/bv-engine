@@ -19,6 +19,7 @@
     <ClCompile Include="StatsFormatters.cpp" />
     <ClCompile Include="ModelInteractionLayer.cpp" />
     <ClCompile Include="ModelInteractionEvents.cpp" />
+    <ClCompile Include="NewModelTestScenes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />

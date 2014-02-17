@@ -31,7 +31,7 @@ public:
 
     virtual const char *                        GetName                     () const = 0;
 
-    virtual IPluginParamValModel *              GetPluginModelParameters    () = 0;
+    virtual IPluginParamValModel *              GetPluginParamValModel      () = 0;
 
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const = 0;
     virtual const ITransformChannel *           GetTransformChannel         () const = 0;
