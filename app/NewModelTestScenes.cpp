@@ -15,8 +15,8 @@ namespace {
 model::BasicNode *  DefaultTransformPluginOnly  ()
 {
     //NEW API
-    auto firstPlugin    = model::DefaultTransformPluginDesc::CreatePlugin( nullptr, true );
-    auto secondPlugin   = model::DefaultRectPluginDesc::CreatePlugin( firstPlugin, true );
+    auto firstPlugin    = model::DefaultRectPluginDesc::CreatePlugin( nullptr, true );
+    auto secondPlugin   = model::DefaultTransformPluginDesc::CreatePlugin( firstPlugin, true );
    
     model::BasicNode * root = new model::BasicNode( "Root" );
 

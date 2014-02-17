@@ -15,11 +15,11 @@ DefaultTransformChannel::DefaultTransformChannel( const IPlugin * prev, const Va
     , m_isReadOnly( isReadOnly )
     , m_prevValues( nullptr )
 {
-    if( prev != nullptr )
+    if( prev != nullptr && prev->GetTransformChannel() != nullptr )
     {
-        m_prevValues = static_cast< const ValueMat4PtrVec * >( &prev->GetTransformChannel()->GetTransformValues() );
-    
         assert( m_prevValues->size() == values.size() );
+
+        m_prevValues = static_cast< const ValueMat4PtrVec * >( &prev->GetTransformChannel()->GetTransformValues() );
     }
 }
 
