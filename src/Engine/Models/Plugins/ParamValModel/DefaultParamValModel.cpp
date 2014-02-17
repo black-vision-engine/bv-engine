@@ -56,6 +56,36 @@ std::vector< IParamValEvaluator * > &   DefaultParamValModel::GetEvaluators     
 
 // *******************************
 //
+IParameter *                            DefaultParamValModel::GetParameter    ( const std::string & name )
+{
+    for( auto param : m_parameters )
+    {
+        if( param->GetName() == name )
+        {
+            return param;
+        }
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+IValue *                                DefaultParamValModel::GetValue        ( const std::string & name )
+{
+    for( auto value : m_values )
+    {
+        if( value->GetName() == name )
+        {
+            return value;
+        }
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
 void                                    DefaultParamValModel::Update            ( TimeType t )
 {
     for( IParamValEvaluator * evaluator : m_evaluators )

@@ -3,21 +3,22 @@
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 #include "Engine/Models/Plugins/Channels/Transform/DefaultTransformChannel.h"
 #include "Engine/Models/Plugins/Plugin.h"
-#include "Engine/Events/Events.h"
 
 
 namespace bv { namespace model {
 
 class DefaultTransformChannel;
 class IPluginParamValModel;
+class DefaultTransformPlugin;
 
 // ***************************** Desc **********************************
 class DefaultTransformPluginDesc
 {
 public:
 
-    static const char *                 GetName     ()  { return "default_transform_plugin"; }
-    static DefaultPluginParamValModel * CreateModel ( bool setDefaultValues );
+    static const char *                 GetName         ()  { return "default_transform_plugin"; }
+    static DefaultPluginParamValModel * CreateModel     ( bool setDefaultValues );
+    static DefaultTransformPlugin *     CreatePlugin    ( const IPlugin * prev, bool setDefaultValues = true );
 
 };
 
@@ -38,13 +39,11 @@ public:
 
                                                 ~DefaultTransformPlugin     ();
 
-    virtual const IDefaultTransformChannel *    GetDefaultTransformChannel  () const override;
+    virtual const ITransformChannel *           GetTransformChannel         () const override;
 
     virtual void                                Update                      ( TimeType t ) override;
 
-public:
-
-    static  DefaultTransformPlugin *            Create                      ( const IPlugin * prev, bool setDefaultValues = true );
+    friend class DefaultTransformPluginDesc;
 
 };
 

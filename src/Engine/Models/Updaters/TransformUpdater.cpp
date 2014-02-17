@@ -9,11 +9,11 @@ namespace bv {
 
 // *********************************
 //
-TransformUpdater::TransformUpdater    ( TransformableEntity* out, const model::ITransformChannel* in )
-    : m_out(out), m_in(in)
+TransformUpdater::TransformUpdater    ( TransformableEntity * out, const model::ITransformChannel * in )
+    : m_out( out ), m_in( in )
 {
-    assert(m_out != nullptr);
-    assert(m_in != nullptr);
+    assert( m_out != nullptr );
+    assert( m_in != nullptr );
 }
 
 // *********************************
@@ -29,11 +29,11 @@ void    TransformUpdater::DoUpdate( TimeType t )
 {
     //FIXME: rili rili
     m_out->m_localTransform.Reset();
-    for( auto t : m_in->GetTransformChannels() )
+    for( auto t : m_in->GetTransformValues() )
     {
-        const glm::mat4& mat = t->GetMatrix();
+        const glm::mat4 & mat = t->GetValue();
         m_out->m_localTransform = m_out->m_localTransform * Transform( mat, glm::inverse(mat));
     }
 }
 
-}
+} //bv

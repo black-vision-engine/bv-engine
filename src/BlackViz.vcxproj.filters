@@ -166,6 +166,7 @@
     <ClCompile Include="Engine\Models\Plugins\ParamValModel\DefaultPluginParamValModel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\DefaultRectPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -377,6 +378,7 @@
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.h" />
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.h" />
+    <ClInclude Include="Engine\Models\Plugins\DefaultRectPlugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

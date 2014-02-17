@@ -14,7 +14,7 @@ model::BasicNode *  DefaultTransformPluginOnly  ()
 {
     model::BasicNode * root = new model::BasicNode( "Root" );
 
-    root->AddPlugin( model::DefaultTransformPlugin::Create( nullptr, true ) );
+    root->AddPlugin( model::DefaultTransformPluginDesc::CreatePlugin( nullptr, true ) );
 
     return root;
 }

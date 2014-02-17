@@ -38,7 +38,6 @@ public:
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const = 0;
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const = 0;
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const = 0;
-    virtual const IDefaultTransformChannel *    GetDefaultTransformChannel  () const = 0;
 
     virtual Textures                            GetTextures                 () const = 0; // FIXME: use resources
     virtual bool                                HasAnimatingTexture         () const = 0;

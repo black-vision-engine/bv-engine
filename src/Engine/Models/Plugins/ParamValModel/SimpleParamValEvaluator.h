@@ -30,7 +30,14 @@ public:
 
     virtual std::vector< IParameter * > &   GetParameters   () override;
     virtual std::vector< IValue * > &       GetValues       () override;
+    
+    virtual IParameter *                    GetParameter    ( const std::string & name ) override;
+    virtual IValue *                        GetValue        ( const std::string & name ) override;
+
     virtual void                            Evaluate        ( TimeType t ) override;
+
+    ParamType *                             Parameter       ();
+    ValueType *                             Value           ();
 
     friend class ParamValEvaluatorFactory;
 
@@ -66,9 +73,51 @@ std::vector< IValue * > &       SimpleParamValEvaluator< ParamType, ValueType >:
 // *******************************
 //
 template< typename ParamType, typename ValueType >
+IParameter *                    SimpleParamValEvaluator< ParamType, ValueType >::GetParameter    ( const std::string & name )
+{
+    if( m_param->GetName() == name )
+    {
+        return m_param;
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+template< typename ParamType, typename ValueType >
+IValue *                        SimpleParamValEvaluator< ParamType, ValueType >::GetValue        ( const std::string & name )
+{
+    if( m_value->GetName() == name )
+    {
+        return m_value;
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+template< typename ParamType, typename ValueType >
 void    SimpleParamValEvaluator< ParamType, ValueType >::Evaluate       ( TimeType t )
 {
     m_value->SetValue( m_param->Evaluate( t ) );
+}
+
+// *******************************
+//
+template< typename ParamType, typename ValueType >
+ParamType *                             SimpleParamValEvaluator< ParamType, ValueType >::Parameter       ()
+{
+    return m_param;
+}
+
+// *******************************
+//
+template< typename ParamType, typename ValueType >
+ValueType *                             SimpleParamValEvaluator< ParamType, ValueType >::Value           ()
+{
+    return m_value;
 }
 
 typedef SimpleParamValEvaluator< ParamFloat, ValueFloat >       SimpleFloatEvaluator;

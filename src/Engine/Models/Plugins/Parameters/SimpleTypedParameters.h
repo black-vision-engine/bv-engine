@@ -18,13 +18,15 @@ protected:
 
 public:
 
-    explicit            SimpleParameterImpl ( const std::string & name, const InterpolatorType & interpolator, const ITimeEvaluator * evaluator = nullptr );
-                        ~SimpleParameterImpl();
+    explicit                SimpleParameterImpl ( const std::string & name, const InterpolatorType & interpolator, const ITimeEvaluator * evaluator = nullptr );
+                            ~SimpleParameterImpl();
 
-    inline  ValueType   Evaluate            ( TimeType t ) const;
-    inline  void        SetVal              ( const ValueType & val, TimeType t );
+    inline  ValueType       Evaluate            ( TimeType t ) const;
+    inline  void            SetVal              ( const ValueType & val, TimeType t );
 
-    virtual void *      QueryParamTyped     () override;
+    virtual void *          QueryParamTyped     () override;
+
+    inline static  ModelParamType  Type         ();
 
 };
 
@@ -38,12 +40,14 @@ private:
 
 public:
 
-    inline explicit     ParamMat2       ( const std::string & name, const Vec4Interpolator & transform, const ITimeEvaluator * evaluator = nullptr );
+    inline explicit         ParamMat2       ( const std::string & name, const Vec4Interpolator & transform, const ITimeEvaluator * evaluator = nullptr );
 
-    inline  glm::mat2   Evaluate        ( TimeType t ) const;
-    inline  void        SetVal          ( const glm::mat2 & val, TimeType t );
+    inline  glm::mat2       Evaluate        ( TimeType t ) const;
+    inline  void            SetVal          ( const glm::mat2 & val, TimeType t );
 
-    virtual void *      QueryParamTyped () override;
+    virtual void *          QueryParamTyped () override;
+
+    inline static  ModelParamType  Type     ();
 
 };
 

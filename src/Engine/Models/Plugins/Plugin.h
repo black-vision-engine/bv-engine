@@ -47,7 +47,6 @@ public:
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const override;
-    virtual const IDefaultTransformChannel *    GetDefaultTransformChannel  () const override;
 
     virtual Textures                            GetTextures                 () const                                            { return Textures(); }
 
@@ -151,19 +150,6 @@ const IGeometryShaderChannel *      BasePlugin< Iface, DescType >::GetGeometrySh
     if( m_prevPlugin )
     {
         return m_prevPlugin->GetGeometryShaderChannel();
-    }
-
-    return nullptr;
-}
-
-// *******************************
-//
-template<class Iface, class DescType >
-const IDefaultTransformChannel *    BasePlugin< Iface, DescType >::GetDefaultTransformChannel   () const
-{
-    if( m_prevPlugin )
-    {
-        return m_prevPlugin->GetDefaultTransformChannel();
     }
 
     return nullptr;

@@ -250,6 +250,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\AttributeChannelDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\AttributeChannelTyped.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\DefaultRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryMultiRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRect.cpp" />
@@ -426,6 +427,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\AttributeChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\AttributeChannelTyped.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\DefaultRectPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryMultiRectPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryPluginRect.h" />

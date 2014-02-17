@@ -17,7 +17,7 @@ DefaultTransformChannel::DefaultTransformChannel( const IPlugin * prev, const Va
 {
     if( prev != nullptr )
     {
-        m_prevValues = static_cast< const ValueMat4PtrVec * >( &prev->GetDefaultTransformChannel()->GetTransformValues() );
+        m_prevValues = static_cast< const ValueMat4PtrVec * >( &prev->GetTransformChannel()->GetTransformValues() );
     
         assert( m_prevValues->size() == values.size() );
     }

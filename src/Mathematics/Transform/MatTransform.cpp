@@ -100,7 +100,7 @@ void            CompositeTransform<ParamT>::InitializeDefaultSRT()
     tx.AddKey( t, v0 ); ty.AddKey( t, v0 ); tz.AddKey( t, v0 );
 
     AddScale( sx, sy, sz );
-    AddRotation( angle, rx, ry, ry );
+    AddRotation( angle, rx, ry, rz );
     AddTranslation( tx, ty, tz );
 }
 

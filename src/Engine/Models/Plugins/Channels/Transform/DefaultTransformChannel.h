@@ -12,7 +12,7 @@ namespace bv { namespace model
 class IValueSet;
 class IPlugin;
 
-class DefaultTransformChannel : public IDefaultTransformChannel
+class DefaultTransformChannel : public ITransformChannel
 {
 private:
 

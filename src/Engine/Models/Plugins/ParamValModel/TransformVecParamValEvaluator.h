@@ -26,6 +26,10 @@ public:
 
     virtual std::vector< IParameter * > &   GetParameters   () override;
     virtual std::vector< IValue * > &       GetValues       () override;
+
+    virtual IParameter *                    GetParameter    ( const std::string & name ) override;
+    virtual IValue *                        GetValue        ( const std::string & name ) override;
+
     virtual void                            Evaluate        ( TimeType t ) override;
 
     ParamTransformVec *                     Param           ();

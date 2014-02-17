@@ -26,7 +26,7 @@ DefaultTransformPlugin::~DefaultTransformPlugin ()
 
 // *************************************
 //
-const IDefaultTransformChannel *    DefaultTransformPlugin::GetDefaultTransformChannel  () const
+const ITransformChannel *           DefaultTransformPlugin::GetTransformChannel         () const
 {
     return m_transformChannel.get();
 }
@@ -41,7 +41,7 @@ void                                DefaultTransformPlugin::Update              
 
 // *************************************
 //
-DefaultTransformPlugin *            DefaultTransformPlugin::Create                      ( const IPlugin * prev, bool setDefaultValues )
+DefaultTransformPlugin *            DefaultTransformPluginDesc::CreatePlugin            ( const IPlugin * prev, bool setDefaultValues )
 {
     return new DefaultTransformPlugin( prev, DefaultPluginParamValModelPtr( DefaultTransformPluginDesc::CreateModel( setDefaultValues ) ) );
 }

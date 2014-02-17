@@ -43,6 +43,15 @@ void *      SimpleParameterImpl< InterpolatorType, ValueType, type >::QueryParam
 
 // *******************************
 //
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+inline ModelParamType  SimpleParameterImpl< InterpolatorType, ValueType, type >::Type   ()
+{
+    return type;
+}
+
+
+// *******************************
+//
 inline  ParamMat2::ParamMat2( const std::string & name, const Vec4Interpolator & transform, const ITimeEvaluator * evaluator )
     : Parent( name, transform, evaluator )
 {
@@ -62,6 +71,13 @@ inline  glm::mat2   ParamMat2::Evaluate    ( TimeType t ) const
 inline  void        ParamMat2::SetVal    ( const glm::mat2 & val, TimeType t )
 {
     m_interpolator.AddKey( t, glm::vec4( val[ 0 ][ 0 ], val[ 1 ][ 0 ], val[ 1 ][ 0 ], val[ 1 ][ 1 ] ) );
+}
+
+// *******************************
+//
+inline ModelParamType  ParamMat2::Type     ()
+{
+    return ModelParamType::MPT_MAT2;
 }
 
 } //model

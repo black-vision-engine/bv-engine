@@ -33,6 +33,12 @@ public:
     {
         return m_transformModel;
     }
+
+    static  ModelParamType  Type        ()
+    {
+        return ModelParamType::MPT_TRANSFORM;
+    }
+
 };
 
 // *******************************************
@@ -60,6 +66,11 @@ public:
     inline  glm::mat4   Evaluate            ( unsigned int transformNum, TimeType t ) const;
 
     virtual void *      QueryParamTyped     ();
+
+    static  ModelParamType  Type        ()
+    {
+        return ModelParamType::MPT_TRANSFORM_VEC;
+    }
 
 };
 

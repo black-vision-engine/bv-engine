@@ -27,12 +27,6 @@ protected:
     explicit                    AbstractModelParameter  ( const std::string & name, ModelParamType type, const ITimeEvaluator * evaluator );
     virtual                     ~AbstractModelParameter ();
 
-    template< typename DerivedClass >
-    DerivedClass *              QueryImpl               ()
-    {
-        return static_cast< DerivedClass * >( QueryParamTyped() );
-    }
-
 public:
 
     virtual const std::string & GetName                 () const;

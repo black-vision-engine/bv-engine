@@ -35,6 +35,33 @@ std::vector< IValue * > &       TransformVecParamValEvaluator::GetValues       (
 
 // ********************************
 //
+IParameter *                    TransformVecParamValEvaluator::GetParameter    ( const std::string & name )
+{
+    if( m_param->GetName() == name )
+    {
+        return m_param;
+    }
+
+    return nullptr;
+}
+
+// ********************************
+//
+IValue *                        TransformVecParamValEvaluator::GetValue        ( const std::string & name )
+{
+    for( auto value : m_values )
+    {
+        if( value->GetName() == name )
+        {
+            return value;
+        }
+    }
+
+    return nullptr;
+}
+
+// ********************************
+//
 void                            TransformVecParamValEvaluator::Evaluate        ( TimeType t )
 {
     for( unsigned int i = 0; i < m_param->NumTransforms(); ++i )

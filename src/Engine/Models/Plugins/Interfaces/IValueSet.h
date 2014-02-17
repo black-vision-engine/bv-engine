@@ -11,6 +11,7 @@ class IValueSet
 public:
 
     virtual std::vector< IValue * > &       GetValues   () = 0;
+    virtual IValue *                        GetValue    ( const std::string & name ) = 0;
 
     virtual ~IValueSet(){}
 

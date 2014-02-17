@@ -9,7 +9,7 @@
 namespace bv { namespace model
 {
 
-class IDefaultTransformChannel
+class ITransformChannel
 {
 public:
 
@@ -19,7 +19,7 @@ public:
 
     virtual void                    PostUpdate                  () = 0;         //Should also be IChannel
 
-    virtual                         ~IDefaultTransformChannel   () {}
+    virtual                         ~ITransformChannel          () {}
 
 };
 
@@ -28,14 +28,14 @@ class Transform;
 typedef std::shared_ptr< Transform >    TransformPtr;
 
 //FIXME: remove this in favor of the previous one
-class ITransformChannel : public IChannel
-{
-public:
-
-    virtual const std::vector< TransformPtr > &      GetTransformChannels()  const   = 0;
-
-    virtual         ~ITransformChannel() {};
-};
+//class ITransformChannel : public IChannel
+//{
+//public:
+//
+//    //virtual const std::vector< TransformPtr > &      GetTransformChannels()  const   = 0;
+//
+//    //virtual         ~ITransformChannel() {};
+//};
 
 } // model
 } // bv
