@@ -87,7 +87,7 @@ DefaultPluginParamValModel * DefaultRectPluginDesc::CreateModel ( bool setDefaul
     pluginModel->AddParameter( paramWidth );
     pluginModel->AddParameter( paramHeight );
 
-    model->SetTransformChannelModel( pluginModel );
+    model->SetPluginModel( pluginModel );
 
     if ( setDefaultValues )
     {
