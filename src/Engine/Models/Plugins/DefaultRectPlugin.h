@@ -14,7 +14,8 @@ class DefaultRectPluginDesc
 {
 public:
 
-    static const char *                 GetName()   { return "default_rect_plugin"; }
+    static const char *                 GetName     ()   { return "default_rect_plugin"; }
+
     static DefaultPluginParamValModel * CreateModel ( bool setDefaultValues );
     static DefaultRectPlugin *          CreatePlugin( const IPlugin * prev, bool setDefaultValues = true );
 
@@ -27,7 +28,7 @@ class DefaultRectPlugin : public BasePlugin< IPlugin, DefaultRectPluginDesc >
 private:
 
     DefaultPluginParamValModelPtr       m_paramValModel;
-    model::VertexAttributesChannel *    m_vaChannel;
+    VertexAttributesChannel *           m_vaChannel;
 
     ParamFloat *                        m_widthParam;
     ParamFloat *                        m_heightParam;

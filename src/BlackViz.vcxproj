@@ -220,6 +220,8 @@
     <ClCompile Include="Engine\Graphics\State\StencilState.cpp" />
     <ClCompile Include="Engine\Models\Builder\RendererStatesBuilder.cpp" />
     <ClCompile Include="Engine\Models\ModelAccessors.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShaderChannelBase.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\ShaderChannel.inl" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ConstantsMapper.cpp" />
     <ClCompile Include="Engine\Models\ModelScene.cpp" />
@@ -265,6 +267,7 @@
     <ClCompile Include="Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginsFactory.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\DefaultColorPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleAnimationPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleColorPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleGeometryShaderPlugin.cpp" />
@@ -463,6 +466,7 @@
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginsFactory.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\DefaultColorPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleAnimationPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleColorPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleGeometryShaderPlugin.h" />

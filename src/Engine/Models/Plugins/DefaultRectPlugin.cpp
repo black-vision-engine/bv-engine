@@ -20,7 +20,7 @@ DefaultRectPlugin::DefaultRectPlugin    ( const IPlugin * prev, DefaultPluginPar
     , m_widthParam( nullptr )
     , m_heightParam( nullptr )
 {
-    auto params = model->GetPluginModel()->GetParameters();
+    auto params = VertexAttributesChannelModel()->GetParameters();
 
     assert( params.size() == 2 );
 
@@ -79,15 +79,15 @@ void                                DefaultRectPlugin::Update                   
 DefaultPluginParamValModel * DefaultRectPluginDesc::CreateModel ( bool setDefaultValues )
 {
     DefaultPluginParamValModel * model          = new DefaultPluginParamValModel();
-    DefaultParamValModel * pluginModel          = new DefaultParamValModel();
+    DefaultParamValModel * vacModel             = new DefaultParamValModel();
 
     ParamFloat * paramWidth                     = ParametersFactory::CreateParameterFloat( "width" );
     ParamFloat * paramHeight                    = ParametersFactory::CreateParameterFloat( "height" );
 
-    pluginModel->AddParameter( paramWidth );
-    pluginModel->AddParameter( paramHeight );
+    vacModel->AddParameter( paramWidth );
+    vacModel->AddParameter( paramHeight );
 
-    model->SetPluginModel( pluginModel );
+    model->SetVertexAttributesChannelModel( vacModel );
 
     if ( setDefaultValues )
     {

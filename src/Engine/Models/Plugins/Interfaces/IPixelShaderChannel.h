@@ -3,7 +3,6 @@
 #include "Engine/Models/Plugins/Interfaces/IShaderChannel.h"
 
 
-//FIXME: add renderer state to this channel (alpha b;lending, z-sorting, stencil and so on)
 namespace bv { namespace model
 {
 
@@ -15,7 +14,7 @@ public:
 
     virtual const RendererContext *     GetRendererContext  () const = 0;
 
-    virtual                             ~IPixelShaderChannel(){};
+    virtual                             ~IPixelShaderChannel() {};
 
 };
 

@@ -167,6 +167,9 @@
     <ClCompile Include="Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Plugins\DefaultRectPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\DefaultColorPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\ShaderChannel.inl" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShaderChannelBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -379,6 +382,7 @@
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.h" />
     <ClInclude Include="Engine\Models\Plugins\DefaultRectPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\DefaultColorPlugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

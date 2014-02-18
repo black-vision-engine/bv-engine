@@ -54,6 +54,15 @@ public:
 
     virtual ISequenceAnimationSource *          QuerySequenceAnimationSource()                                                  { return nullptr; }
 
+protected:
+
+    IParamValModel *                            PluginModel                 ();
+    IParamValModel *                            TransformChannelModel       ();
+    IParamValModel *                            VertexAttributesChannelModel();
+    IParamValModel *                            PixelShaderChannelModel     ();
+    IParamValModel *                            VertexShaderChannelModel    ();
+    IParamValModel *                            GeometryShaderChannelModel  ();
+
 };
 
 // Implementation
@@ -153,6 +162,54 @@ const IGeometryShaderChannel *      BasePlugin< Iface, DescType >::GetGeometrySh
     }
 
     return nullptr;
+}
+
+// *******************************
+//
+template<class Iface, class DescType >
+IParamValModel *                            BasePlugin< Iface, DescType >::PluginModel                  ()
+{
+    return m_pluginParamValModel->GetPluginModel();
+}
+
+// *******************************
+//
+template<class Iface, class DescType >
+IParamValModel *                            BasePlugin< Iface, DescType >::TransformChannelModel        ()
+{
+    return m_pluginParamValModel->GetTransformChannelModel();
+}
+
+// *******************************
+//
+template<class Iface, class DescType >
+IParamValModel *                            BasePlugin< Iface, DescType >::VertexAttributesChannelModel ()
+{
+    return m_pluginParamValModel->GetVertexAttributesChannelModel();
+}
+
+// *******************************
+//
+template<class Iface, class DescType >
+IParamValModel *                            BasePlugin< Iface, DescType >::PixelShaderChannelModel      ()
+{
+    return m_pluginParamValModel->GetPixelShaderChannelModel();
+}
+
+// *******************************
+//
+template<class Iface, class DescType >
+IParamValModel *                            BasePlugin< Iface, DescType >::VertexShaderChannelModel     ()
+{
+    return m_pluginParamValModel->GetVertexShaderChannelModel();
+}
+
+// *******************************
+//
+template<class Iface, class DescType >
+IParamValModel *                            BasePlugin< Iface, DescType >::GeometryShaderChannelModel   ()
+{
+    return m_pluginParamValModel->GetGeometryShaderChannelModel();
 }
 
 } // model

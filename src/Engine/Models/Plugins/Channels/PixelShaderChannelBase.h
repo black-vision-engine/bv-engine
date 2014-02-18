@@ -8,8 +8,7 @@
 namespace bv { namespace model {
 
 
-template< typename ParameterDescriptor >
-class PixelShaderChannelBase : public ShaderChannel< IPixelShaderChannel, ParameterDescriptor >
+class PixelShaderChannelBase : public ShaderChannel< IPixelShaderChannel >
 {
 protected:
 
@@ -17,49 +16,14 @@ protected:
 
 public:
 
-    PixelShaderChannelBase  ( const std::string& shaderFile, RendererContext * ctx = nullptr ) : ShaderChannel( shaderFile ), m_rendererContext( ctx ) 
-    {
-        if ( ctx == nullptr )
-        {
-            m_rendererContext = RendererContext::Create();
-        }
-    }
-
-    virtual ~PixelShaderChannelBase ()
-    {
-        delete m_rendererContext;
-    }
+            PixelShaderChannelBase                          ( const std::string & shaderFile, std::vector< IValue * > * values, RendererContext * ctx = nullptr );
+    virtual ~PixelShaderChannelBase                         ();
 
     virtual const RendererContext *     GetRendererContext  () const;
     RendererContext *                   GetRendererContext  ();
     void                                SetRendererContext  ( RendererContext * ctx );
 
 };
-
-// ******************************
-//
-template< typename ParameterDescriptor >
-const RendererContext *     PixelShaderChannelBase< ParameterDescriptor >::GetRendererContext  () const
-{
-    return m_rendererContext;
-}
-
-// ******************************
-//
-template< typename ParameterDescriptor >
-RendererContext *     PixelShaderChannelBase< ParameterDescriptor >::GetRendererContext  ()
-{
-    return m_rendererContext;
-}
-
-// ******************************
-//
-template< typename ParameterDescriptor >
-void     PixelShaderChannelBase< ParameterDescriptor >::SetRendererContext  ( RendererContext * ctx )
-{
-    delete m_rendererContext;
-    m_rendererContext = ctx;
-}
 
 } //model
 } //bv

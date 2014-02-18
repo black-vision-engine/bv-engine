@@ -17,6 +17,7 @@ class DefaultTransformPluginDesc
 public:
 
     static const char *                 GetName         ()  { return "default_transform_plugin"; }
+
     static DefaultPluginParamValModel * CreateModel     ( bool setDefaultValues );
     static DefaultTransformPlugin *     CreatePlugin    ( const IPlugin * prev, bool setDefaultValues = true );
 
