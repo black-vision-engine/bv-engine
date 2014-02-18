@@ -1,4 +1,3 @@
-
 namespace bv { namespace model {
 
 // *********************************
@@ -46,6 +45,20 @@ template< typename ShaderChannelIface >
 std::vector< IValue* > &    ShaderChannel< ShaderChannelIface >::GetValues        () 
 {
     return *m_values; 
+}
+
+// *********************************
+//
+template< typename ShaderChannelIface >
+IValue *                    ShaderChannel< ShaderChannelIface >::GetValue           ( const std::string & name )
+{
+    for( auto value : *m_values )
+    {
+        if( value->GetName() == name )
+        {
+            return value;
+        }
+    }
 }
 
 } // model

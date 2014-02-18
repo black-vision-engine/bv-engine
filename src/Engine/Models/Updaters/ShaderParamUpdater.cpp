@@ -10,7 +10,7 @@ namespace bv
 
 // ******************************
 //
-ShaderParamUpdater::ShaderParamUpdater( const model::IShaderChannel * shCh, Shader * sh )
+ShaderParamUpdater::ShaderParamUpdater( model::IShaderChannel * shCh, Shader * sh )
     : m_shaderChannel( shCh )
     , m_shader( sh )
 {
@@ -30,7 +30,7 @@ void                        ShaderParamUpdater::DoUpdate( TimeType t )
 
 // ******************************
 //
-ShaderParamUpdater *         ShaderParamUpdater::Create( const model::IShaderChannel * shCh, Shader * sh )
+ShaderParamUpdater *         ShaderParamUpdater::Create( model::IShaderChannel * shCh, Shader * sh )
 {
     return new ShaderParamUpdater( shCh, sh );
 }

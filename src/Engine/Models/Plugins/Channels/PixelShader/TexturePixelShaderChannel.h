@@ -22,7 +22,7 @@ public:
 };
 
 
-class TexturePixelShaderChannel : public model::PixelShaderChannelBase< TexturePixelShaderChannelPD >
+class TexturePixelShaderChannel : public model::PixelShaderChannelBase
 {
     std::vector< ParamFloat >       m_alphaParams;
     std::vector< ValueFloatPtr >    m_alphaValues;

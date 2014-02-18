@@ -214,9 +214,9 @@ void                SimpleAnimationPlugin::Update              ( TimeType t )
 
     m_vaChannel->SetNeedsAttributesUpdate( true );
 
-    m_vaChannel->Update( t );
-    m_pixelShaderChannel->Update( t );
-    m_vertexShaderChannel->Update( t );
+    //m_vaChannel->Update( t );
+    //m_pixelShaderChannel->Update( t );
+    //m_vertexShaderChannel->Update( t );
 
     //FIXME: update chanels according to parent (e.g. when position data has been changed)
 //    m_alphaValue->SetValue( m_alphaParam->Evaluate( t ) );

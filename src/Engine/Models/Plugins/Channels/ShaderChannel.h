@@ -6,13 +6,13 @@
 #include <cassert>
 
 #include "Engine/Models/Plugins/Interfaces/IShaderChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IValue.h"
 #include "System/BasicTypes.h"
 #include "System/FileIO.h"
 
 
 namespace bv { namespace model {
 
-class IValue;
 
 template< typename ShaderChannelIface >
 class ShaderChannel : public ShaderChannelIface
@@ -31,6 +31,7 @@ public:
     virtual void                        PostUpdate                  () override;      //Should also be in IChannel
 
     virtual std::vector< IValue* > &    GetValues                   () override;
+    virtual IValue *                    GetValue                    ( const std::string & name ) override;
 
 };
 

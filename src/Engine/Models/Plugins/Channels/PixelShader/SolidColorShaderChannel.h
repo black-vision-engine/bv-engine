@@ -15,7 +15,7 @@ public:
 
 };
 
-class SolidColorShaderChannel : public model::PixelShaderChannelBase< SolidColorShaderChannelPD >
+class SolidColorShaderChannel : public model::PixelShaderChannelBase
 {
 private:
 

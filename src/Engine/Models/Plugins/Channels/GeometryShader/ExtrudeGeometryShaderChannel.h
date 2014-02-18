@@ -16,7 +16,7 @@ public:
 
 };
 
-class ExtrudeGeometryShaderChannel : public model::ShaderChannel< IGeometryShaderChannel, ExtrudeGeometryShaderChannelPD >
+class ExtrudeGeometryShaderChannel : public ShaderChannel< IGeometryShaderChannel >
 {
 private:
 

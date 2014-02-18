@@ -11,13 +11,13 @@ class SimpleGeometryShaderChannel : public ShaderChannel< model::IGeometryShader
 public:
 
     explicit                        SimpleGeometryShaderChannel( const std::string & shaderFile )
-        : ShaderChannel( shaderFile )
+        : ShaderChannel( shaderFile, nullptr )
     {
     }
 
     virtual void                    Update( TimeType t )
     {
-        ShaderChannel::Update( t );
+        //ShaderChannel::Update( t );
     }
 
 };

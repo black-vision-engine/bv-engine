@@ -19,7 +19,7 @@ public:
 
 };
 
-class TextPixelShaderChannel : public model::PixelShaderChannelBase< TextPixelShaderChannelPD >
+class TextPixelShaderChannel : public PixelShaderChannelBase
 {
     ParamVec4                       m_color;
     ValueVec4Ptr                    m_colorVal;
@@ -29,15 +29,15 @@ public:
     virtual void                    Update( TimeType t )
     {
         m_colorVal->SetValue( m_color.Evaluate( t ) );
-        ShaderChannel::Update( t );
+        //ShaderChannel::Update( t );
     }
 
     TextPixelShaderChannel( const std::string& shaderFile, const ParamVec4& color )
-        : PixelShaderChannelBase( shaderFile )
+        : PixelShaderChannelBase( shaderFile, nullptr )
         , m_color(color)
     {
-        m_colorVal = ValueVec4Ptr( new model::ValueVec4( ParamDesc::colorParam ) );
-        RegisterValue(m_colorVal.get());
+        //m_colorVal = ValueVec4Ptr( new model::ValueVec4( ParamDesc::colorParam ) );
+        //RegisterValue(m_colorVal.get());
     }
 
 };
