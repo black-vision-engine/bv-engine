@@ -221,7 +221,6 @@
     <ClCompile Include="Engine\Models\Builder\RendererStatesBuilder.cpp" />
     <ClCompile Include="Engine\Models\ModelAccessors.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShaderChannelBase.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\ShaderChannel.inl" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ConstantsMapper.cpp" />
     <ClCompile Include="Engine\Models\ModelScene.cpp" />
@@ -576,6 +575,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Engine\Models\Plugins\Channels\ShaderChannel.inl" />
     <None Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />
     <None Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />
     <None Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.inl" />

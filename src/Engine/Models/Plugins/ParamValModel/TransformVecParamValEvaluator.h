@@ -25,10 +25,10 @@ private:
 public:
 
     virtual std::vector< IParameter * > &   GetParameters   () override;
-    virtual std::vector< IValue * > &       GetValues       () override;
+    virtual const std::vector< IValue * > & GetValues       () const override;
 
     virtual IParameter *                    GetParameter    ( const std::string & name ) override;
-    virtual IValue *                        GetValue        ( const std::string & name ) override;
+    virtual IValue *                        GetValue        ( const std::string & name ) const override;
 
     virtual void                            Evaluate        ( TimeType t ) override;
 

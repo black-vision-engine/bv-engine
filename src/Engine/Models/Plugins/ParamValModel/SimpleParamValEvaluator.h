@@ -29,10 +29,10 @@ private:
 public:
 
     virtual std::vector< IParameter * > &   GetParameters   () override;
-    virtual std::vector< IValue * > &       GetValues       () override;
+    virtual const std::vector< IValue * > & GetValues       () const override;
     
     virtual IParameter *                    GetParameter    ( const std::string & name ) override;
-    virtual IValue *                        GetValue        ( const std::string & name ) override;
+    virtual IValue *                        GetValue        ( const std::string & name ) const override;
 
     virtual void                            Evaluate        ( TimeType t ) override;
 
@@ -65,7 +65,7 @@ std::vector< IParameter * > &   SimpleParamValEvaluator< ParamType, ValueType >:
 // *******************************
 //
 template< typename ParamType, typename ValueType >
-std::vector< IValue * > &       SimpleParamValEvaluator< ParamType, ValueType >::GetValues       ()
+const std::vector< IValue * > &       SimpleParamValEvaluator< ParamType, ValueType >::GetValues () const
 {
     return m_valueWrapper;
 }
@@ -86,7 +86,7 @@ IParameter *                    SimpleParamValEvaluator< ParamType, ValueType >:
 // *******************************
 //
 template< typename ParamType, typename ValueType >
-IValue *                        SimpleParamValEvaluator< ParamType, ValueType >::GetValue        ( const std::string & name )
+IValue *                        SimpleParamValEvaluator< ParamType, ValueType >::GetValue        ( const std::string & name ) const
 {
     if( m_value->GetName() == name )
     {

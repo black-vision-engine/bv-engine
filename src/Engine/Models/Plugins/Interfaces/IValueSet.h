@@ -10,8 +10,8 @@ class IValueSet
 {
 public:
 
-    virtual std::vector< IValue * > &       GetValues   () = 0;
-    virtual IValue *                        GetValue    ( const std::string & name ) = 0;
+    virtual const std::vector< IValue * > & GetValues   () const = 0;
+    virtual IValue *                        GetValue    ( const std::string & name ) const = 0;
 
     virtual ~IValueSet(){}
 

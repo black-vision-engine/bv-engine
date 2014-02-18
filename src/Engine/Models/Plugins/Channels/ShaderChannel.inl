@@ -15,10 +15,11 @@ ShaderChannel< ShaderChannelIface >::ShaderChannel  ( const std::string & shader
     m_shaderSource = shaderSource.str(); 
 }
 
+
 // *********************************
 //
 template< typename ShaderChannelIface >
-const std::string &         ShaderChannel< ShaderChannelIface >::GetShaderSource  () const
+const std::string &         ShaderChannel< ShaderChannelIface >::GetShaderSource    () const
 {
     return m_shaderSource; 
 }
@@ -26,7 +27,7 @@ const std::string &         ShaderChannel< ShaderChannelIface >::GetShaderSource
 // *********************************
 //
 template< typename ShaderChannelIface >
-bool                        ShaderChannel< ShaderChannelIface >::IsReadOnly       () const
+bool                        ShaderChannel< ShaderChannelIface >::IsReadOnly         () const
 {
     return true; 
 }
@@ -34,7 +35,7 @@ bool                        ShaderChannel< ShaderChannelIface >::IsReadOnly     
 // *********************************
 //
 template< typename ShaderChannelIface >
-void                        ShaderChannel< ShaderChannelIface >::PostUpdate       ()
+void                        ShaderChannel< ShaderChannelIface >::PostUpdate         ()
 {
     //Default implementation is empty
 }
@@ -42,7 +43,7 @@ void                        ShaderChannel< ShaderChannelIface >::PostUpdate     
 // *********************************
 //
 template< typename ShaderChannelIface >
-std::vector< IValue* > &    ShaderChannel< ShaderChannelIface >::GetValues        () 
+const std::vector< IValue* > &  ShaderChannel< ShaderChannelIface >::GetValues      () const
 {
     return *m_values; 
 }
@@ -50,7 +51,7 @@ std::vector< IValue* > &    ShaderChannel< ShaderChannelIface >::GetValues      
 // *********************************
 //
 template< typename ShaderChannelIface >
-IValue *                    ShaderChannel< ShaderChannelIface >::GetValue           ( const std::string & name )
+IValue *                        ShaderChannel< ShaderChannelIface >::GetValue       ( const std::string & name ) const
 {
     for( auto value : *m_values )
     {
@@ -59,6 +60,8 @@ IValue *                    ShaderChannel< ShaderChannelIface >::GetValue       
             return value;
         }
     }
+
+    return nullptr;
 }
 
 } // model

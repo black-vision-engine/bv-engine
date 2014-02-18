@@ -28,7 +28,7 @@ std::vector< IParameter * > &   TransformVecParamValEvaluator::GetParameters   (
 
 // ********************************
 //
-std::vector< IValue * > &       TransformVecParamValEvaluator::GetValues       ()
+const std::vector< IValue * > & TransformVecParamValEvaluator::GetValues       () const
 {
     return m_values;
 }
@@ -47,7 +47,7 @@ IParameter *                    TransformVecParamValEvaluator::GetParameter    (
 
 // ********************************
 //
-IValue *                        TransformVecParamValEvaluator::GetValue        ( const std::string & name )
+IValue *                        TransformVecParamValEvaluator::GetValue        ( const std::string & name ) const
 {
     for( auto value : m_values )
     {

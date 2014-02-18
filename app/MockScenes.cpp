@@ -32,7 +32,7 @@ const std::string TexturePixelShaderChannelPD::alphaParamName( "alpha" );
 const std::string TexturePixelShaderChannelPD::txMatrix0ParamName( "txMat0" );
 const std::string TexturePixelShaderChannelPD::txMatrix1ParamName( "txMat1" );
 
-class MyPixelShaderChannel : public model::PixelShaderChannelBase< TexturePixelShaderChannelPD >
+class MyPixelShaderChannel : public model::PixelShaderChannelBase
 {
 private:
 
@@ -49,26 +49,26 @@ public:
 
     virtual void                    Update( float t )
     {
-        ShaderChannel::Update( t );
+        //ShaderChannel::Update( t );
 
-        m_alphaValue->SetValue( m_alphaParam.Evaluate( t ) );
-        m_tex0TransformValue->SetValue( m_tex0TransformParam.Evaluate( t ) );
-        m_tex1TransformValue->SetValue( m_tex1TransformParam.Evaluate( t ) );
+        //m_alphaValue->SetValue( m_alphaParam.Evaluate( t ) );
+        //m_tex0TransformValue->SetValue( m_tex0TransformParam.Evaluate( t ) );
+        //m_tex1TransformValue->SetValue( m_tex1TransformParam.Evaluate( t ) );
     }
 
     MyPixelShaderChannel( const std::string & shaderFile, const FloatInterpolator & alpha, const TransformF & tex0Transform, const TransformF & tex1Transform )
-        : PixelShaderChannelBase( shaderFile )
-        , m_alphaParam( ParamDesc::alphaParamName, alpha )
-        , m_tex0TransformParam( ParamDesc::txMatrix0ParamName, tex0Transform )
-        , m_tex1TransformParam( ParamDesc::txMatrix1ParamName, tex1Transform )
+        : PixelShaderChannelBase( shaderFile, nullptr )
+        , m_alphaParam( TexturePixelShaderChannelPD::alphaParamName, alpha )
+        , m_tex0TransformParam( TexturePixelShaderChannelPD::txMatrix0ParamName, tex0Transform )
+        , m_tex1TransformParam( TexturePixelShaderChannelPD::txMatrix1ParamName, tex1Transform )
     {
-        m_alphaValue            = model::ValueFloatPtr( new model::ValueFloat( ParamDesc::alphaParamName ) );
-        m_tex0TransformValue    = model::ValueMat4Ptr( new model::ValueMat4( ParamDesc::txMatrix0ParamName ) );
-        m_tex1TransformValue    = model::ValueMat4Ptr( new model::ValueMat4( ParamDesc::txMatrix1ParamName ) );
+        //m_alphaValue            = model::ValueFloatPtr( new model::ValueFloat( ParamDesc::alphaParamName ) );
+        //m_tex0TransformValue    = model::ValueMat4Ptr( new model::ValueMat4( ParamDesc::txMatrix0ParamName ) );
+        //m_tex1TransformValue    = model::ValueMat4Ptr( new model::ValueMat4( ParamDesc::txMatrix1ParamName ) );
 
-        RegisterValue( m_alphaValue.get() );
-        RegisterValue( m_tex0TransformValue.get() );
-        RegisterValue( m_tex1TransformValue.get() );
+        //RegisterValue( m_alphaValue.get() );
+        //RegisterValue( m_tex0TransformValue.get() );
+        //RegisterValue( m_tex1TransformValue.get() );
     }
 };
 
@@ -78,7 +78,7 @@ class MyVertexShaderChannel : public model::ShaderChannel< model::IVertexShaderC
 public:
 
     MyVertexShaderChannel( const std::string & shaderFile )
-        : ShaderChannel( shaderFile )
+        : ShaderChannel( shaderFile, nullptr )
     {}
 
 };

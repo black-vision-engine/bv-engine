@@ -168,7 +168,6 @@
     <ClCompile Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Plugins\DefaultRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultColorPlugin.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\ShaderChannel.inl" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShaderChannelBase.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -389,6 +388,7 @@
     <None Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />
     <None Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.inl" />
     <None Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />
+    <None Include="Engine\Models\Plugins\Channels\ShaderChannel.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />

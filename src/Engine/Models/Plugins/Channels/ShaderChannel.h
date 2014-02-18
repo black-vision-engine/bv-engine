@@ -13,7 +13,6 @@
 
 namespace bv { namespace model {
 
-
 template< typename ShaderChannelIface >
 class ShaderChannel : public ShaderChannelIface
 {
@@ -24,14 +23,14 @@ protected:
 
 public:
 
-    explicit                            ShaderChannel               ( const std::string & shaderFile, std::vector< IValue * > * values );
+    explicit                                ShaderChannel               ( const std::string & shaderFile, std::vector< IValue * > * values );
 
-    virtual const std::string &         GetShaderSource             () const override;
-    virtual bool                        IsReadOnly                  () const override;
-    virtual void                        PostUpdate                  () override;      //Should also be in IChannel
+    virtual const std::string &             GetShaderSource             () const override;
+    virtual bool                            IsReadOnly                  () const override;
+    virtual void                            PostUpdate                  () override;      //Should also be in IChannel
 
-    virtual std::vector< IValue* > &    GetValues                   () override;
-    virtual IValue *                    GetValue                    ( const std::string & name ) override;
+    virtual const std::vector< IValue* > &  GetValues                   () const override;
+    virtual IValue *                        GetValue                    ( const std::string & name ) const override;
 
 };
 

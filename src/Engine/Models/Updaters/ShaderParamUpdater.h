@@ -17,18 +17,18 @@ class ShaderParamUpdater : public IUpdater
 {
 private:
 
-    model::IShaderChannel *   m_shaderChannel;
+    const model::IShaderChannel *   m_shaderChannel;
     Shader *                        m_shader;
 
 private:
 
-                                    ShaderParamUpdater  ( model::IShaderChannel *, Shader * );
+                                    ShaderParamUpdater  ( const model::IShaderChannel *, Shader * );
 
 public:
 
     virtual void                    DoUpdate            ( TimeType t );
 
-    static ShaderParamUpdater *     Create              ( model::IShaderChannel *, Shader * );
+    static ShaderParamUpdater *     Create              ( const model::IShaderChannel *, Shader * );
 
 };
 

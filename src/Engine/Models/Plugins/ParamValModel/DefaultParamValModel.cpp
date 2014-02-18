@@ -42,7 +42,7 @@ std::vector< IParameter * > &           DefaultParamValModel::GetParameters     
 
 // *******************************
 //
-std::vector< IValue * > &               DefaultParamValModel::GetValues         ()
+const std::vector< IValue * > &         DefaultParamValModel::GetValues         () const
 {
     return m_values;
 }
@@ -71,7 +71,7 @@ IParameter *                            DefaultParamValModel::GetParameter    ( 
 
 // *******************************
 //
-IValue *                                DefaultParamValModel::GetValue        ( const std::string & name )
+IValue *                                DefaultParamValModel::GetValue        ( const std::string & name ) const
 {
     for( auto value : m_values )
     {
