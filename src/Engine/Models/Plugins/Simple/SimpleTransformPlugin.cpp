@@ -20,7 +20,7 @@ SimpleTransformPlugin * SimpleTransformPlugin::Create( const IPlugin * prev, con
 // *************************************
 //
 SimpleTransformPlugin::SimpleTransformPlugin                    ( const IPlugin * prev, const ParamTransformVec & transformVec )
-    : BasePlugin( prev )
+    : BasePlugin( "dupa", "dupa", prev, nullptr )
 {
 //    m_transformChannel = SimpleTransformChannelPtr( new SimpleTransformChannel( transformVec ) );
     m_transformChannel = nullptr; //FIXME: NM_CONFORMANCE

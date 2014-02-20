@@ -17,7 +17,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-class SimpleColorPlugin : public BasePlugin< IPlugin, SimpleColorPluginUID >
+class SimpleColorPlugin : public BasePlugin< IPlugin >
 {
 private:
 

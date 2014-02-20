@@ -16,7 +16,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-class SimplePixelShaderPlugin : public BasePlugin< IPlugin, SimplePixelShaderPluginUID >
+class SimplePixelShaderPlugin : public BasePlugin< IPlugin >
 {
 private:
 

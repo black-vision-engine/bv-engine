@@ -23,7 +23,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-class DefaultRectPlugin : public BasePlugin< IPlugin, DefaultRectPluginDesc >
+class DefaultRectPlugin : public BasePlugin< IPlugin >
 {
 private:
 

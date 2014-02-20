@@ -17,7 +17,7 @@ namespace bv { namespace model {
 // *************************************
 //
 SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, TextureAttachmentMode amode )
-    : BasePlugin( prev )
+    : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_attachmentMode( amode )
 {
     assert( prev != nullptr );
@@ -61,7 +61,7 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
 // *************************************
 //
 SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, model::RendererContext * ctx, TextureAttachmentMode mode )
-    : BasePlugin( prev )
+    : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_attachmentMode( mode )
 {
     assert( prev != nullptr );

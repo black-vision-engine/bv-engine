@@ -11,7 +11,7 @@ namespace bv { namespace model {
 // *************************************
 //
 GeometryMultiRectPlugin::GeometryMultiRectPlugin                    ()
-    : BasePlugin( nullptr )
+    : BasePlugin( "dupa", "dupa", nullptr, nullptr )
     , m_vaChannel( nullptr )
 {
 }

@@ -1,0 +1,28 @@
+#include "DefaultPlugins.h"
+
+#include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
+#include "Engine/Models/Plugins/DefaultRectPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
+
+
+namespace bv { namespace model {
+
+// *********************************
+//
+std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
+{
+    std::vector< IPluginDescriptor * > descriptors;
+    
+    //descriptors.push_back( new DefaultTransformPluginDesc() );
+    //descriptors.push_back( new DefaultRectPluginDesc() );
+
+    for( auto descr : descriptors )
+    {
+        printf( "Registered %s\n", descr->GetPluginTypeUID().c_str() ); 
+    }
+
+    return descriptors;
+}
+
+} //model
+} //bv

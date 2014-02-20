@@ -14,7 +14,7 @@ namespace bv { namespace model {
 // *************************************
 //
 DefaultRectPlugin::DefaultRectPlugin    ( const IPlugin * prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin( prev,  std::static_pointer_cast< IPluginParamValModel >( model ) )
+    : BasePlugin( "dupa", "dupa", prev,  std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
     , m_widthParam( nullptr )

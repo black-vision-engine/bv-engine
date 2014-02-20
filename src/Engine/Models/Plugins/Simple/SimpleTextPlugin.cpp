@@ -30,7 +30,7 @@ SimpleTextPlugin* SimpleTextPlugin::Create( const std::wstring& text, const std:
 // *********************************
 //
 SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bold, bool italic )
-    : BasePlugin( nullptr )
+    : BasePlugin( "dupa", "dupa", nullptr, nullptr )
     , m_text( text )
     , m_bolded( bold )
     , m_italic( italic )

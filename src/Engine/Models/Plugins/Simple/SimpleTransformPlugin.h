@@ -23,7 +23,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-class SimpleTransformPlugin : public BasePlugin< IPlugin, SimpleTransformPluginUID >
+class SimpleTransformPlugin : public BasePlugin< IPlugin >
 {
 private:
 

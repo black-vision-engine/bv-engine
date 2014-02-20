@@ -61,7 +61,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class SimpleTexturePlugin : public BasePlugin< IPlugin, SimpleTexturePluginUID >
+class SimpleTexturePlugin : public BasePlugin< IPlugin >
 {
 private:
 

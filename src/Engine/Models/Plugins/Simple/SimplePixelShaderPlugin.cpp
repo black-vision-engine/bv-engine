@@ -28,7 +28,7 @@ public:
 // *********************************
 //
 SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( const IPlugin * prev, const std::string & shaderPath, RendererContext * ctx )
-    : BasePlugin( prev )
+    : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_shaderPath( shaderPath )
 {
     m_pshaderChannel = new SimplePixelShaderChannel( shaderPath, ctx );

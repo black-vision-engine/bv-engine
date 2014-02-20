@@ -20,7 +20,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-class SimpleVertexShaderPlugin : public BasePlugin< IPlugin, SimpleVertexShaderPluginUID >
+class SimpleVertexShaderPlugin : public BasePlugin< IPlugin >
 {
 private:
 

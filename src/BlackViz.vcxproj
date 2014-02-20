@@ -252,10 +252,12 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\AttributeChannelTyped.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\DefaultRectPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Descriptor\BasePluginDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryMultiRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRect.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPluginRing.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Manager\PluginsManager.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\BaseValue.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.cpp" />
@@ -430,6 +432,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\AttributeChannelTyped.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\DefaultRectPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Descriptor\BasePluginDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryMultiRectPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryPluginRect.h" />
@@ -440,6 +443,7 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamSet.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamValEvaluator.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamValModel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginParamValModel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IValueSet.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannel.h" />
@@ -452,6 +456,7 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IAttributeChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IAttributeChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Manager\PluginsManager.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\BaseValue.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.h" />

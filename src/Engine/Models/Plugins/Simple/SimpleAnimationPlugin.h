@@ -29,7 +29,7 @@ public:
 };
 
 // ***************************** PLUGIN **********************************
-class SimpleAnimationPlugin : public BasePlugin< ISequenceAnimationSourcePlugin, SimpleAnimationPluginUID >
+class SimpleAnimationPlugin : public BasePlugin< ISequenceAnimationSourcePlugin >
 {
 private:
 

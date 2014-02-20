@@ -29,7 +29,8 @@ class IPlugin : public IUpdatable
 {
 public:
 
-    virtual const char *                        GetName                     () const = 0;
+    virtual const std::string &                 GetName                     () const = 0;
+    virtual const std::string &                 GetTypeUid                  () const = 0;
 
     virtual IPluginParamValModel *              GetPluginParamValModel      () = 0;
 

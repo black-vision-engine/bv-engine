@@ -16,7 +16,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-class SimpleGeometryShaderPlugin : public BasePlugin< IPlugin, SimpleGeometryShaderPluginUID >
+class SimpleGeometryShaderPlugin : public BasePlugin< IPlugin >
 {
 private:
 

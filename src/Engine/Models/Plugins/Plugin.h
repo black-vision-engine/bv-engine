@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 #include "Engine/Models/Plugins/Interfaces/IPluginParamValModel.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
@@ -15,17 +16,21 @@
 
 namespace bv { namespace model {
 
-template< class Iface, class DescType >
+template< class Iface = IPlugin >
 class BasePlugin : public Iface
 {
 protected:
     ///////////////// Previous plugin ///////////
     const IPlugin *                             m_prevPlugin;
+
+    std::string                                 m_name;
+    std::string                                 m_uid;
+
     IPluginParamValModelPtr                     m_pluginParamValModel;
 
 protected:
 
-    explicit                                    BasePlugin                  ( const IPlugin * prevPlugin, IPluginParamValModelPtr model = nullptr );
+    explicit                                    BasePlugin                  ( const std::string & name, const std::string & uid, const IPlugin * prevPlugin, IPluginParamValModelPtr model );
 
 public:
 
@@ -34,7 +39,8 @@ public:
     virtual IPluginParamValModel *              GetPluginParamValModel      ();
     virtual void                                Update                      ( TimeType t );
 
-    const char*                                 GetName                     () const                                            { return DescType::GetName(); } 
+    const std::string &                         GetName                     () const    { return m_name; } 
+    const std::string &                         GetTypeUid                  () const    { return m_uid; } 
 
     virtual void                                SetGeometryChannel          ( VertexAttributesChannel * vaChannel ) { assert(!"Implement in derived class"); }
     virtual void                                SetTransformChannel         ( TransformChannel * transformChannel ) { assert(!"Implement in derived class"); }
@@ -69,40 +75,42 @@ protected:
 
 // *******************************
 //
-template<class Iface, class DescType >
-void BasePlugin< Iface, DescType >::Update  ( TimeType t )
+template< class Iface >
+void BasePlugin< Iface >::Update  ( TimeType t )
 {
     assert( !"Implement in derived class" );
 }
 
 // *******************************
 //
-template<class Iface, class DescType >
-BasePlugin< Iface, DescType >::BasePlugin   ( const IPlugin * prevPlugin, IPluginParamValModelPtr model )
+template< class Iface >
+BasePlugin< Iface >::BasePlugin   ( const std::string & name, const std::string & uid, const IPlugin * prevPlugin, IPluginParamValModelPtr model )
     : m_prevPlugin( prevPlugin )
     , m_pluginParamValModel( model )
+    , m_name( name )
+    , m_uid( uid )
 {
 }
 
 // *******************************
 //
-template<class Iface, class DescType >
-BasePlugin< Iface, DescType >::~BasePlugin()
+template< class Iface >
+BasePlugin< Iface >::~BasePlugin()
 {
 }
 
 // *******************************
 //
-template<class Iface, class DescType >
-IPluginParamValModel *   BasePlugin< Iface, DescType >::GetPluginParamValModel  ()
+template< class Iface >
+IPluginParamValModel *   BasePlugin< Iface >::GetPluginParamValModel  ()
 {
     return m_pluginParamValModel.get();
 }
 
 // *******************************
 //
-template<class Iface, class DescType  >
-const IVertexAttributesChannel *            BasePlugin< Iface, DescType >::GetVertexAttributesChannel   () const
+template< class Iface >
+const IVertexAttributesChannel *            BasePlugin< Iface >::GetVertexAttributesChannel   () const
 {
     if( m_prevPlugin )
     {
@@ -114,8 +122,8 @@ const IVertexAttributesChannel *            BasePlugin< Iface, DescType >::GetVe
 
 // *******************************
 //
-template<class Iface, class DescType >
-const ITransformChannel *           BasePlugin< Iface, DescType >::GetTransformChannel          () const
+template< class Iface >
+const ITransformChannel *           BasePlugin< Iface >::GetTransformChannel          () const
 {
     if( m_prevPlugin )
     {
@@ -127,8 +135,8 @@ const ITransformChannel *           BasePlugin< Iface, DescType >::GetTransformC
 
 // *******************************
 //
-template<class Iface, class DescType >
-const IPixelShaderChannel *         BasePlugin< Iface, DescType >::GetPixelShaderChannel        () const
+template< class Iface >
+const IPixelShaderChannel *         BasePlugin< Iface >::GetPixelShaderChannel        () const
 {
     if( m_prevPlugin )
     {
@@ -140,8 +148,8 @@ const IPixelShaderChannel *         BasePlugin< Iface, DescType >::GetPixelShade
 
 // *******************************
 //
-template<class Iface, class DescType >
-const IVertexShaderChannel *        BasePlugin< Iface, DescType >::GetVertexShaderChannel       () const
+template< class Iface >
+const IVertexShaderChannel *        BasePlugin< Iface >::GetVertexShaderChannel       () const
 {
     if( m_prevPlugin ) 
     {
@@ -153,8 +161,8 @@ const IVertexShaderChannel *        BasePlugin< Iface, DescType >::GetVertexShad
 
 // *******************************
 //
-template<class Iface, class DescType >
-const IGeometryShaderChannel *      BasePlugin< Iface, DescType >::GetGeometryShaderChannel     () const
+template< class Iface >
+const IGeometryShaderChannel *      BasePlugin< Iface >::GetGeometryShaderChannel     () const
 {
     if( m_prevPlugin )
     {
@@ -166,48 +174,48 @@ const IGeometryShaderChannel *      BasePlugin< Iface, DescType >::GetGeometrySh
 
 // *******************************
 //
-template<class Iface, class DescType >
-IParamValModel *                            BasePlugin< Iface, DescType >::PluginModel                  ()
+template< class Iface >
+IParamValModel *                            BasePlugin< Iface >::PluginModel                  ()
 {
     return m_pluginParamValModel->GetPluginModel();
 }
 
 // *******************************
 //
-template<class Iface, class DescType >
-IParamValModel *                            BasePlugin< Iface, DescType >::TransformChannelModel        ()
+template< class Iface >
+IParamValModel *                            BasePlugin< Iface >::TransformChannelModel        ()
 {
     return m_pluginParamValModel->GetTransformChannelModel();
 }
 
 // *******************************
 //
-template<class Iface, class DescType >
-IParamValModel *                            BasePlugin< Iface, DescType >::VertexAttributesChannelModel ()
+template< class Iface >
+IParamValModel *                            BasePlugin< Iface >::VertexAttributesChannelModel ()
 {
     return m_pluginParamValModel->GetVertexAttributesChannelModel();
 }
 
 // *******************************
 //
-template<class Iface, class DescType >
-IParamValModel *                            BasePlugin< Iface, DescType >::PixelShaderChannelModel      ()
+template< class Iface >
+IParamValModel *                            BasePlugin< Iface >::PixelShaderChannelModel      ()
 {
     return m_pluginParamValModel->GetPixelShaderChannelModel();
 }
 
 // *******************************
 //
-template<class Iface, class DescType >
-IParamValModel *                            BasePlugin< Iface, DescType >::VertexShaderChannelModel     ()
+template< class Iface >
+IParamValModel *                            BasePlugin< Iface >::VertexShaderChannelModel     ()
 {
     return m_pluginParamValModel->GetVertexShaderChannelModel();
 }
 
 // *******************************
 //
-template<class Iface, class DescType >
-IParamValModel *                            BasePlugin< Iface, DescType >::GeometryShaderChannelModel   ()
+template< class Iface >
+IParamValModel *                            BasePlugin< Iface >::GeometryShaderChannelModel   ()
 {
     return m_pluginParamValModel->GetGeometryShaderChannelModel();
 }

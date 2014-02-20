@@ -22,7 +22,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class SimpleTextPlugin : public BasePlugin< IPlugin, SimpleTextPluginUID >
+class SimpleTextPlugin : public BasePlugin< IPlugin >
 {
 private:
 

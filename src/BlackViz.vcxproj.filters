@@ -169,6 +169,8 @@
     <ClCompile Include="Engine\Models\Plugins\DefaultRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultColorPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShaderChannelBase.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Manager\PluginsManager.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Descriptor\BasePluginDescriptor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -382,6 +384,9 @@
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.h" />
     <ClInclude Include="Engine\Models\Plugins\DefaultRectPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultColorPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Manager\PluginsManager.h" />
+    <ClInclude Include="Engine\Models\Plugins\Descriptor\BasePluginDescriptor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

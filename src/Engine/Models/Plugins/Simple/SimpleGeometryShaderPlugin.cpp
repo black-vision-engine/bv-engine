@@ -25,7 +25,7 @@ public:
 // *********************************
 //
 SimpleGeometryShaderPlugin::SimpleGeometryShaderPlugin          ( const IPlugin * prev, const std::string & shaderPath )
-    : BasePlugin( prev )
+    : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_shaderPath( shaderPath )
 {
     m_gshaderChannel = new SimpleGeometryShaderChannel( shaderPath );

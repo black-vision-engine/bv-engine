@@ -3,6 +3,7 @@
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 #include "Engine/Models/Plugins/Channels/Transform/DefaultTransformChannel.h"
 #include "Engine/Models/Plugins/Plugin.h"
+#include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
 
 
 namespace bv { namespace model {
@@ -12,9 +13,19 @@ class IPluginParamValModel;
 class DefaultTransformPlugin;
 
 // ***************************** Desc **********************************
-class DefaultTransformPluginDesc
+class DefaultTransformPluginDesc : public IPluginDescriptor
 {
+private:
+
+    std::string     m_uid;
+
 public:
+
+    virtual const std::string &     GetPluginTypeUID() const override;
+
+    virtual bool                    CanBeAttachedTo ( const IPlugin * plugin )  const override;
+    virtual IPlugin *               CreatePlugin    ( const std::string & name, const IPlugin * prev ) const override;
+    virtual IPluginParamValModel *  CreateModel     () const override;
 
     static const char *                 GetName         ()  { return "default_transform_plugin"; }
 
@@ -25,7 +36,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-class DefaultTransformPlugin : public BasePlugin< IPlugin, DefaultTransformPluginDesc >
+class DefaultTransformPlugin : public BasePlugin< IPlugin >
 {
 private:
 

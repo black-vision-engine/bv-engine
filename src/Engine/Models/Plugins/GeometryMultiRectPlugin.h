@@ -18,7 +18,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-class GeometryMultiRectPlugin : public BasePlugin< IPlugin, GeometryMultiRectPluginUID >
+class GeometryMultiRectPlugin : public BasePlugin< IPlugin >
 {
 private:
 

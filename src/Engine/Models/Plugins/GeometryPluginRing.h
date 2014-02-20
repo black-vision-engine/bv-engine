@@ -17,7 +17,7 @@ public:
 
 
 // ***************************** PLUGIN ********************************** 
-class GeometryRingPlugin : public BasePlugin< IPlugin, GeometryRingPluginUID >
+class GeometryRingPlugin : public BasePlugin< IPlugin >
 {
 private:
 

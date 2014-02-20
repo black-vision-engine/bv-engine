@@ -11,7 +11,7 @@ namespace bv { namespace model {
 // *************************************
 //
 DefaultTransformPlugin::DefaultTransformPlugin  ( const IPlugin * prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin( prev,  std::static_pointer_cast< IPluginParamValModel >( model ) )
+    : BasePlugin( "dupa", "dupa", prev,  std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_transformChannel( nullptr )
     , m_paramValModel( model )
 { 

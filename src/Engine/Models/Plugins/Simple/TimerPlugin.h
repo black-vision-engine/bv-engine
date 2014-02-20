@@ -23,7 +23,7 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class TimerPlugin : public BasePlugin< IPlugin, TimerPluginUID >
+class TimerPlugin : public BasePlugin< IPlugin >
 {
     ParamFloat                  m_timeParam;
     std::wstring                m_currentTime;
