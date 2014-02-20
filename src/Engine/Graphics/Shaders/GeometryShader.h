@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Graphics/Shaders/Shader.h"
-#include "Engine/Types/Values/TypedValues.h"
+#include "Engine/Types/Values/ValuesFactory.h"
 
 
 namespace bv {

@@ -11,7 +11,7 @@ ExtrudeGeometryShaderChannel::ExtrudeGeometryShaderChannel(const std::string& sh
     : ShaderChannel( shaderFile, nullptr )
     , m_scale( scale )
 {
-    //m_scaleVal = ValueFloatPtr( new ValueFloat( ParamDesc::scaleParamName ) );
+    //m_scaleVal = ValueFloatPtr( ValuesFactory::CreateValueFloat( ParamDesc::scaleParamName ) );
     //RegisterValue( m_scaleVal.get() );
 
 }

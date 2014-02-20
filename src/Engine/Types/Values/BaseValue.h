@@ -5,10 +5,10 @@
 #include "Engine/Interfaces/IValue.h"
 
 
-namespace bv { namespace model {
+namespace bv {
 
 // *************************************
-class NamedValue : public bv::IValue
+class NamedValue : public IValue
 {
 private:
 
@@ -21,7 +21,7 @@ protected:
 
 public:
 
-    virtual const std::string & GetName () const;
+    virtual const std::string & GetName () const override;
 
 };
 
@@ -33,10 +33,13 @@ private:
 
     ValueType m_value;
 
+private:
+
+    explicit                ValueImpl       ( const std::string & name );
+
 public:
 
-            ValueImpl   ( const std::string & name );
-    virtual ~ValueImpl  ();
+    virtual                 ~ValueImpl      ();
 
     virtual ParamType       GetType         () const override;
     virtual const char *    GetData         () const override;
@@ -64,6 +67,7 @@ public:
         return paramType;
     }
 
+    friend class ValuesFactory;
 };
 
 
@@ -106,5 +110,4 @@ void *          ValueImpl< ValueType, paramType >::QueryValueTyped ()
     return static_cast< void * >( this );
 }
 
-} //model
 } //bv

@@ -1,7 +1,7 @@
 #include "BaseValue.h"
 
 
-namespace bv { namespace model {
+namespace bv {
 
 // *******************************
 //
@@ -23,5 +23,4 @@ const std::string & NamedValue::GetName      ()  const
     return m_name;
 }
 
-} //model
 } //bv

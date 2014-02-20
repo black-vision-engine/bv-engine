@@ -19,9 +19,9 @@ TextureInfo::TextureInfo(   const ResourceHandle * resHandle
     , m_wrappingModeY( wrappingModeY )
     , m_finteringMode( filteringMode )
 {
-    m_texTransformVal   = ValueMat4Ptr( new ValueMat4( texTransform.GetName() ) );
-    m_texAlphaVal       = ValueFloatPtr( new ValueFloat( alpha.GetName() ) );
-    m_texBorderColorVal = ValueVec4Ptr( new ValueVec4( borderColor.GetName() ) );
+    m_texTransformVal   = ValuesFactory::CreateValueMat4Ptr( texTransform.GetName() );
+    m_texAlphaVal       = ValuesFactory::CreateValueFloatPtr( alpha.GetName() );
+    m_texBorderColorVal = ValuesFactory::CreateValueVec4Ptr( borderColor.GetName() );
 }
 
 } // model

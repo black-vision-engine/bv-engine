@@ -1,6 +1,7 @@
 #include "ParamValEvaluatorFactory.h"
 
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
+#include "Engine/Types/Values/ValuesFactory.h"
 
 
 namespace bv { namespace model {
@@ -18,7 +19,7 @@ SimpleFloatEvaluator *       ParamValEvaluatorFactory::CreateSimpleFloatEvaluato
 //
 SimpleFloatEvaluator *       ParamValEvaluatorFactory::CreateSimpleFloatEvaluator      ( ParamFloat * param, const std::string & valueName )
 {
-    return CreateSimpleFloatEvaluator( param, new ValueFloat( valueName ) );
+    return CreateSimpleFloatEvaluator( param, ValuesFactory::CreateValueFloat( valueName ) );
 }
 
 // *******************************
@@ -56,7 +57,7 @@ SimpleVec4Evaluator *        ParamValEvaluatorFactory::CreateSimpleVec4Evaluator
 //
 SimpleVec4Evaluator *        ParamValEvaluatorFactory::CreateSimpleVec4Evaluator       ( ParamVec4 * param, const std::string & valueName )
 {
-    return CreateSimpleVec4Evaluator( param, new ValueVec4( valueName ) );
+    return CreateSimpleVec4Evaluator( param, ValuesFactory::CreateValueVec4( valueName ) );
 }
 
 // *******************************
@@ -94,7 +95,7 @@ SimpleVec3Evaluator *        ParamValEvaluatorFactory::CreateSimpleVec3Evaluator
 //
 SimpleVec3Evaluator *        ParamValEvaluatorFactory::CreateSimpleVec3Evaluator       ( ParamVec3 * param, const std::string & valueName )
 {
-    return CreateSimpleVec3Evaluator( param, new ValueVec3( valueName ) );
+    return CreateSimpleVec3Evaluator( param, ValuesFactory::CreateValueVec3( valueName ) );
 }
 
 // *******************************
@@ -132,7 +133,7 @@ SimpleMat2Evaluator *        ParamValEvaluatorFactory::CreateSimpleMat2Evaluator
 //
 SimpleMat2Evaluator *        ParamValEvaluatorFactory::CreateSimpleMat2Evaluator       ( ParamMat2 * param, const std::string & valueName )
 {
-    return CreateSimpleMat2Evaluator( param, new ValueMat2( valueName ) );
+    return CreateSimpleMat2Evaluator( param, ValuesFactory::CreateValueMat2( valueName ) );
 }
 
 // *******************************
@@ -170,7 +171,7 @@ SimpleTransformEvaluator *   ParamValEvaluatorFactory::CreateSimpleTransformEval
 //
 SimpleTransformEvaluator *   ParamValEvaluatorFactory::CreateSimpleTransformEvaluator  ( ParamTransform * param, const std::string & valueName )
 {
-    return CreateSimpleTransformEvaluator( param, new ValueMat4( valueName ) );
+    return CreateSimpleTransformEvaluator( param, ValuesFactory::CreateValueMat4( valueName ) );
 }
 
 // *******************************
@@ -218,7 +219,7 @@ TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEv
 //
 TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEvaluator( const std::string & paramName, const std::string & valueName )
 {
-    return CreateTransformVecEvaluator( paramName, new ValueMat4( valueName ) );    
+    return CreateTransformVecEvaluator( paramName, ValuesFactory::CreateValueMat4( valueName ) );    
 }
 
 // *******************************
@@ -241,7 +242,7 @@ TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEv
 
     for( unsigned int i = 0; i < param->NumTransforms(); ++i )
     {
-        values.push_back( new ValueMat4( valueName ) );
+        values.push_back( ValuesFactory::CreateValueMat4( valueName ) );
     }
 
     return CreateTransformVecEvaluator( param, values );
@@ -258,7 +259,7 @@ TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEv
 
     for( auto name : valueNames )
     {
-        values.push_back( new ValueMat4( name ) );
+        values.push_back( ValuesFactory::CreateValueMat4( name ) );
     }
 
     return CreateTransformVecEvaluator( param, values );
@@ -274,7 +275,7 @@ TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEv
 
     for( unsigned int i = 0; i < param->NumTransforms(); ++i )
     {
-        values.push_back( new ValueMat4( param->GetName() ) );
+        values.push_back( ValuesFactory::CreateValueMat4( param->GetName() ) );
     }
 
     return CreateTransformVecEvaluator( param, values );
@@ -299,7 +300,7 @@ TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEv
 
     for( unsigned int i = 0; i < numTransformations; ++i )
     {
-        values.push_back( new ValueMat4( valueName ) );
+        values.push_back( ValuesFactory::CreateValueMat4( valueName ) );
     }
 
     return CreateTransformVecEvaluator( ptv, values );
@@ -317,7 +318,7 @@ TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEv
 
     for( auto name : valueNames )
     {
-        values.push_back( new ValueMat4( name ) );
+        values.push_back( ValuesFactory::CreateValueMat4( name ) );
     }
 
     return CreateTransformVecEvaluator( ptv, values );
