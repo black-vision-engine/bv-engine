@@ -47,7 +47,7 @@ TexturePixelShaderChannel::TexturePixelShaderChannel( const std::string & shader
                                                     , const std::vector< ParamFloat > & alphas
                                                     , const ParamTransformVec & texTransforms
                                                     , const std::vector< ParamVec4 > & borderColors )
-    : PixelShaderChannelBase( shaderFile, nullptr )
+    : DefaultPixelShaderChannel( shaderFile, nullptr )
     , m_texTransformParams( texTransforms )
 {
 //    assert( alphas.size() <= MAX_NUM_TEXTURES );

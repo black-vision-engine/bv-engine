@@ -1,81 +1,116 @@
-#include "SimpleColorPlugin.h"
+#include "DefaultColorPlugin.h"
 
-#include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
+#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
+#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 
 
 namespace bv { namespace model {
 
-//class SimpleColorPixelShaderChannelPD
-//{
-//public:
+// ************************************************************************* DESCRIPTOR *************************************************************************
+
+// *******************************
 //
-//    static const std::string            colorParamName;
+DefaultColorPluginDesc::DefaultColorPluginDesc                          ()
+    : BasePluginDescriptor( UID() )    
+{
+}
+
+// *******************************
 //
-//};
+IPlugin *               DefaultColorPluginDesc::CreatePlugin                ( const std::string & name, const IPlugin * prev ) const
+{
+    return CreatePluginTyped< DefaultColorPlugin >( name, prev );
+}
+
+// *******************************
 //
-//const std::string SimpleColorPixelShaderChannelPD::colorParamName   = "color";
+DefaultPluginParamValModel *    DefaultColorPluginDesc::CreateDefaultModel  () const
+{
+    DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
+    DefaultParamValModel * psModel      = new DefaultParamValModel();
+    SimpleVec4Evaluator * evaluator     = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color" );
+
+    psModel->RegisterAll( evaluator );
+    model->SetPixelShaderChannelModel( psModel );
+
+    //Set default values
+    evaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
+
+    return model;
+}
+
+// *******************************
 //
-////FIXME: param is not registered in descriptor because it won't be used to pass values to the shader (oh r'ly)?
-//class SimpleColorPixelShaderChannel : public PixelShaderChannelBase
-//{
-//private:
+std::string             DefaultColorPluginDesc::UID                         ()
+{
+    return "DEFAULT_COLOR";
+}
+
+// *******************************
 //
-//    ValueVec4Ptr        m_colorVal;
-//    ParamVec4           m_color;
+std::string             DefaultColorPluginDesc::PixelShaderSource           ()
+{
+    return "../dep/media/shaders/solid.frag";
+}
+
+// *******************************
 //
-//public:
+std::string             DefaultColorPluginDesc::VertexShaderSource          ()
+{
+    return "../dep/media/shaders/solid.vert";    
+}
+
+
+// ************************************************************************* PLUGIN ************************************************************************* 
+
+// *******************************
 //
-//    explicit                        SimpleColorPixelShaderChannel( const ParamVec4 & color )
-//        : PixelShaderChannelBase( "", nullptr )// FIXME:
-//        , m_color( color )
-//    {
-//        //m_colorVal = ValueVec4Ptr( new model::ValueVec4( ParamDesc::colorParamName ) );
-//        //RegisterValue( m_colorVal.get() );
-//    }
+DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model )
+    : BasePlugin( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
+    , m_pixelShaderChannel( nullptr )
+    , m_vertexShaderChannel( nullptr )
+    , m_paramValModel( model )
+{ 
+    m_pixelShaderChannel = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultColorPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), false ) );
+
+    if( !( prev != nullptr && prev->GetVertexShaderChannel() != nullptr ) )
+    {
+        m_vertexShaderChannel = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultColorPluginDesc::VertexShaderSource(), nullptr ) );
+    }
+}
+
+// *************************************
 //
-//    virtual void                    Update( TimeType t )
-//    {
-//        //m_colorVal->SetValue( m_color.Evaluate( t ) );
-//        //ShaderChannel::Update( t );
-//    }
+DefaultColorPlugin::~DefaultColorPlugin ()
+{
+}
+
+// *************************************
 //
-//};
+const IPixelShaderChannel *         DefaultColorPlugin::GetPixelShaderChannel       () const
+{
+    return m_pixelShaderChannel.get();
+}
+
+// *************************************
 //
-//// *********************************
-////
-//SimpleColorPlugin::SimpleColorPlugin          ( const IPlugin * prev, const ParamVec4 & color )
-//    : BasePlugin( "dupa", "dupa", prev, nullptr )
-//{
-//    m_pshaderChannel = new SimpleColorPixelShaderChannel( color );
-//}
+const IVertexShaderChannel *        DefaultColorPlugin::GetVertexShaderChannel      () const
+{
+    if( m_vertexShaderChannel.get() == nullptr )
+    {
+        return BasePlugin::GetVertexShaderChannel();
+    }
+
+    return m_vertexShaderChannel.get();
+}
+
+// *************************************
 //
-//// *********************************
-////
-//SimpleColorPlugin::~SimpleColorPlugin         ()
-//{
-//    delete m_pshaderChannel;
-//}
-//
-//// *********************************
-////
-//const IPixelShaderChannel *     SimpleColorPlugin::GetPixelShaderChannel       () const
-//{
-//    return m_pshaderChannel;
-//}
-//
-//// *********************************
-////
-//void                            SimpleColorPlugin::Update                      ( TimeType t )
-//{
-//    m_pshaderChannel->Update( t );
-//}
-//
-//// *********************************
-////
-//void                            SimpleColorPlugin::Print                       ( std::ostream & out, int tabs ) const
-//{
-//    out << GetName() << std::endl;
-//}
+void                                DefaultColorPlugin::Update                      ( TimeType t )
+{
+    m_paramValModel->Update( t );
+    m_pixelShaderChannel->PostUpdate();
+}
 
 } // model
 } // bv

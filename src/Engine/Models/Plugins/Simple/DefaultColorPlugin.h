@@ -1,43 +1,50 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Plugin.h"
+#include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/Transform/DefaultTransformChannel.h"
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
+#include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
+#include "Engine/Models/Plugins/Plugin.h"
 
 
 namespace bv { namespace model {
 
-class SimpleColorPixelShaderChannel;
-class DefaultColorPlugin;
-
 // ***************************** DESCRIPTOR **********************************
-class SimpleColorPluginDesc
+class DefaultColorPluginDesc : public BasePluginDescriptor
 {
 public:
 
-    static const char *                 GetName     ()   { return "default_color_plugin"; }
+    DefaultColorPluginDesc                                      ();
 
-    static DefaultPluginParamValModel * CreateModel ( bool setDefaultValues );
-    static DefaultColorPlugin *         CreatePlugin( const IPlugin * prev, bool setDefaultValues = true );
+    virtual IPlugin *                       CreatePlugin        ( const std::string & name, const IPlugin * prev ) const override;
+    virtual DefaultPluginParamValModel *    CreateDefaultModel  () const override;
+   
+    static  std::string                     UID                 ();
 
+    static  std::string                     PixelShaderSource   ();
+    static  std::string                     VertexShaderSource  ();
 };
 
 
 // ***************************** PLUGIN ********************************** 
-class DefaultColorPlugin : public BasePlugin< IPlugin, SimpleColorPluginDesc >
+class DefaultColorPlugin : public BasePlugin< IPlugin >
 {
 private:
 
-    SimpleColorPixelShaderChannel *         m_pshaderChannel;
+    DefaultPixelShaderChannelPtr            m_pixelShaderChannel;
+    DefaultVertexShaderChannelPtr           m_vertexShaderChannel;
+    DefaultPluginParamValModelPtr           m_paramValModel;
 
 public:
 
-    explicit                                DefaultColorPlugin          ( const IPlugin * prev, const ParamVec4 & color );
+    explicit                                DefaultColorPlugin          ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model );
                                             ~DefaultColorPlugin         ();
 
-    virtual const IPixelShaderChannel *     GetPixelShaderChannel       () const;
+    virtual const IPixelShaderChannel *     GetPixelShaderChannel       () const override;
+    virtual const IVertexShaderChannel *    GetVertexShaderChannel      () const override;
 
     virtual void                            Update                      ( TimeType t ) override;
-    virtual void                            Print                       ( std::ostream & out, int tabs = 0 ) const;
 
 };
 

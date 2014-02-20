@@ -19,15 +19,15 @@ class ShaderChannel : public ShaderChannelIface
 protected:
 
     std::string                 m_shaderSource;
-    std::vector< IValue * > *   m_values; 
+    const IValueSet *           m_values; 
 
 public:
 
-    explicit                                ShaderChannel               ( const std::string & shaderFile, std::vector< IValue * > * values );
+    explicit                                ShaderChannel               ( const std::string & shaderFile, const IValueSet * valueSet );
 
     virtual const std::string &             GetShaderSource             () const override;
-    virtual bool                            IsReadOnly                  () const override;
-    virtual void                            PostUpdate                  () override;      //Should also be in IChannel
+    virtual bool                            IsReadOnly                  () const override;  //Should also be in IChannel
+    virtual void                            PostUpdate                  () override;        //Should also be in IChannel
 
     virtual const std::vector< IValue* > &  GetValues                   () const override;
     virtual IValue *                        GetValue                    ( const std::string & name ) const override;

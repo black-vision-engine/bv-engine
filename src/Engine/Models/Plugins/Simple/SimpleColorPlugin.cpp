@@ -1,22 +1,14 @@
 #include "SimpleColorPlugin.h"
 
-#include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
+#include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 
 
 namespace bv { namespace model {
 
-class SimpleColorPixelShaderChannelPD
-{
-public:
-
-    static const std::string            colorParamName;
-
-};
-
-const std::string SimpleColorPixelShaderChannelPD::colorParamName   = "color";
+//const std::string SimpleColorPixelShaderChannelPD::colorParamName   = "color";
 
 //FIXME: param is not registered in descriptor because it won't be used to pass values to the shader (oh r'ly)?
-class SimpleColorPixelShaderChannel : public PixelShaderChannelBase
+class SimpleColorPixelShaderChannel : public DefaultPixelShaderChannel
 {
 private:
 
@@ -26,7 +18,7 @@ private:
 public:
 
     explicit                        SimpleColorPixelShaderChannel( const ParamVec4 & color )
-        : PixelShaderChannelBase( "", nullptr )// FIXME:
+        : DefaultPixelShaderChannel( "", nullptr )// FIXME:
         , m_color( color )
     {
         //m_colorVal = ValueVec4Ptr( new model::ValueVec4( ParamDesc::colorParamName ) );

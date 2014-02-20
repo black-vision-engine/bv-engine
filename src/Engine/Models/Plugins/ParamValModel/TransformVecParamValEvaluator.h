@@ -32,7 +32,7 @@ public:
 
     virtual void                            Evaluate        ( TimeType t ) override;
 
-    ParamTransformVec *                     Param           ();
+    ParamTransformVec *                     Parameter       ();
     ValueMat4PtrVec &                       Value           ();
 
     friend class ParamValEvaluatorFactory;

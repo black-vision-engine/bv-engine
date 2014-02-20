@@ -1,6 +1,6 @@
 #include "SimplePixelShaderPlugin.h"
 
-#include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
+#include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 
 
 namespace bv { namespace model {
@@ -10,12 +10,12 @@ class SimplePixelShaderChannelPD
 };
 
 
-class SimplePixelShaderChannel : public PixelShaderChannelBase
+class SimplePixelShaderChannel : public DefaultPixelShaderChannel
 {
 public:
 
     explicit                        SimplePixelShaderChannel( const std::string & shaderFile, RendererContext * ctx = nullptr )
-        : PixelShaderChannelBase( shaderFile, nullptr, ctx )
+        : DefaultPixelShaderChannel( shaderFile, nullptr, ctx )
     {}
 
     virtual void                    Update( TimeType t )

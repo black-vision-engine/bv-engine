@@ -1,5 +1,6 @@
 #include "SolidColorShaderChannel.h"
 
+
 namespace bv { namespace model
 {
 
@@ -8,7 +9,7 @@ const std::string SolidColorShaderChannelPD::solidColor = "color";
 // ******************************
 //
 SolidColorShaderChannel::SolidColorShaderChannel( const std::string & shaderFile, const ParamVec4 & color )
-    : PixelShaderChannelBase( shaderFile, nullptr )
+    : DefaultPixelShaderChannel( shaderFile, nullptr )
     , m_solidColor(color)
 {
 //    m_solidColorVal = ValueVec4Ptr( new model::ValueVec4( ParamDesc::solidColor ) );

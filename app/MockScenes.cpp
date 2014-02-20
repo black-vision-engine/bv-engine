@@ -32,7 +32,7 @@ const std::string TexturePixelShaderChannelPD::alphaParamName( "alpha" );
 const std::string TexturePixelShaderChannelPD::txMatrix0ParamName( "txMat0" );
 const std::string TexturePixelShaderChannelPD::txMatrix1ParamName( "txMat1" );
 
-class MyPixelShaderChannel : public model::PixelShaderChannelBase
+class MyPixelShaderChannel : public model::DefaultPixelShaderChannel
 {
 private:
 
@@ -57,7 +57,7 @@ public:
     }
 
     MyPixelShaderChannel( const std::string & shaderFile, const FloatInterpolator & alpha, const TransformF & tex0Transform, const TransformF & tex1Transform )
-        : PixelShaderChannelBase( shaderFile, nullptr )
+        : DefaultPixelShaderChannel( shaderFile, nullptr )
         , m_alphaParam( TexturePixelShaderChannelPD::alphaParamName, alpha )
         , m_tex0TransformParam( TexturePixelShaderChannelPD::txMatrix0ParamName, tex0Transform )
         , m_tex1TransformParam( TexturePixelShaderChannelPD::txMatrix1ParamName, tex1Transform )

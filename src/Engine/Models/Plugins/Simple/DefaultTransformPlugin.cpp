@@ -6,7 +6,6 @@
 
 namespace bv { namespace model {
 
-
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
 // *******************************
@@ -35,7 +34,7 @@ DefaultPluginParamValModel *    DefaultTransformPluginDesc::CreateDefaultModel  
     model->SetTransformChannelModel( trModel );
 
     //Set default values
-    evaluator->Param()->Transform( 0 ).InitializeDefaultSRT();
+    evaluator->Parameter()->Transform( 0 ).InitializeDefaultSRT();
 
     return model;
 }

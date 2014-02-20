@@ -72,7 +72,7 @@ void                            TransformVecParamValEvaluator::Evaluate        (
 
 // ********************************
 //
-ParamTransformVec *             TransformVecParamValEvaluator::Param           ()
+ParamTransformVec *             TransformVecParamValEvaluator::Parameter       ()
 {
     return m_param;
 }

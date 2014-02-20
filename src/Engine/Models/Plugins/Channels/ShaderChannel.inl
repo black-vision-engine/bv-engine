@@ -3,16 +3,11 @@ namespace bv { namespace model {
 // *********************************
 //
 template< typename ShaderChannelIface >
-ShaderChannel< ShaderChannelIface >::ShaderChannel  ( const std::string & shaderFile, std::vector< IValue * > * values )
-    : m_values( values )
+ShaderChannel< ShaderChannelIface >::ShaderChannel  ( const std::string & shaderSource, const IValueSet * valueSet )
+    : m_values( valueSet )
+    , m_shaderSource( shaderSource )
 {
-    assert( values != nullptr );
-
-    std::stringstream shaderSource;
-
-    File::Open( shaderFile ) >> shaderSource;
-
-    m_shaderSource = shaderSource.str(); 
+    assert( valueSet != nullptr );
 }
 
 
@@ -45,7 +40,7 @@ void                        ShaderChannel< ShaderChannelIface >::PostUpdate     
 template< typename ShaderChannelIface >
 const std::vector< IValue* > &  ShaderChannel< ShaderChannelIface >::GetValues      () const
 {
-    return *m_values; 
+    return m_values->GetValues(); 
 }
 
 // *********************************
@@ -53,7 +48,7 @@ const std::vector< IValue* > &  ShaderChannel< ShaderChannelIface >::GetValues  
 template< typename ShaderChannelIface >
 IValue *                        ShaderChannel< ShaderChannelIface >::GetValue       ( const std::string & name ) const
 {
-    for( auto value : *m_values )
+    for( auto value : m_values->GetValues() )
     {
         if( value->GetName() == name )
         {

@@ -11,44 +11,52 @@ namespace {
 
 // *****************************
 //
-model::BasicNode *  DefaultTransformPluginOnly  ( const model::PluginsManager * pluginsManager )
+model::BasicNode *  DefaultTestWithValidation   ( const model::PluginsManager * pluginsManager )
 {
     using namespace model;
 
     //NEW API
-    IPlugin * firstPlugin   = nullptr;
-    IPlugin * secondPlugin  = nullptr;
+    IPluginPtr firstPlugin  = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_TRANSFORM", "transform0", nullptr ) );
 
-    firstPlugin = pluginsManager->CreatePlugin( "DEFAULT_TRANSFORM", "transform0", nullptr );
-
-    if( !pluginsManager->CanBeAttachedTo( "DEFAULT_RECTANGLE", firstPlugin ) )
+    if( !pluginsManager->CanBeAttachedTo( "DEFAULT_RECTANGLE", firstPlugin.get() ) )
     {
-        delete firstPlugin;
-
         return nullptr;
     }
 
-    secondPlugin    = pluginsManager->CreatePlugin( "DEFAULT_RECTANGLE", "rect0", firstPlugin );
+    IPluginPtr secondPlugin = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_RECTANGLE", "rect0", firstPlugin.get() ) );
  
+    if( !pluginsManager->CanBeAttachedTo( "DEFAULT_COLOR", secondPlugin.get() ) )
+    {
+        return nullptr;
+    }
+
+    IPluginPtr thirdPlugin  = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin.get() ) );
+
     BasicNode * root = new BasicNode( "Root" );
 
     root->AddPlugin( firstPlugin );
-    root->AddPlugin( secondPlugin ); 
+    root->AddPlugin( secondPlugin );
+    root->AddPlugin( thirdPlugin );
 
-    //OLD API - FIXME: implement shader channels in new model
-    ///////////////////////////// Material plugin //////////////////////////// 
+    return root;
+}
 
-    Vec4Interpolator col; col.SetWrapPostMethod( bv::WrapMethod::pingPong );
-    col.AddKey( 0.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-    col.AddKey( 10.f, glm::vec4( 0.9f, 0.9f, 0.98f, 1.f ) );
+// *****************************
+//
+model::BasicNode *  DefaultTestNoValidation     ( const model::PluginsManager * pluginsManager )
+{
+    using namespace model;
 
-    auto colorPlugin = model::PluginsFactory::CreateSimpleColorPlugin( secondPlugin, model::ParametersFactory::CreateParameter( "color", col ) );
+    //NEW API
+    auto firstPlugin  = pluginsManager->CreatePlugin( "DEFAULT_TRANSFORM", "transform0", nullptr );
+    auto secondPlugin = pluginsManager->CreatePlugin( "DEFAULT_RECTANGLE", "rect0", firstPlugin );
+    auto thirdPlugin  = pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin );
 
-    root->AddPlugin( colorPlugin );
+    BasicNode * root = new BasicNode( "Root" );
 
-    auto pixelShaderPlugin = model::PluginsFactory::CreateSimplePixelShaderPlugin( colorPlugin,  "../dep/media/shaders/solid.frag", model::RendererContext::CreateDefault() );
-
-    root->AddPlugin( pixelShaderPlugin );
+    root->AddPlugin( firstPlugin );
+    root->AddPlugin( secondPlugin );
+    root->AddPlugin( thirdPlugin );
 
     return root;
 }
@@ -59,7 +67,7 @@ model::BasicNode *  DefaultTransformPluginOnly  ( const model::PluginsManager * 
 //
 model::BasicNode *     TestScenesFactory::NewModelTestScene    ( const model::PluginsManager * pluginsManager )
 {
-    auto root =  DefaultTransformPluginOnly ( pluginsManager );
+    model::BasicNode * root =  DefaultTestWithValidation ( pluginsManager );
 
     return root;
 }

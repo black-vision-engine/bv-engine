@@ -168,9 +168,10 @@
     <ClCompile Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Plugins\DefaultRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultColorPlugin.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShaderChannelBase.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Manager\PluginsManager.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Descriptor\BasePluginDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\DefaultPixelShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -280,7 +281,6 @@
     <ClInclude Include="Engine\Graphics\State\StateInstance.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\TransformChannel.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShaderChannelBase.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\RendererContext.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\AlphaContext.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\CullContext.h" />
@@ -387,6 +387,8 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Manager\PluginsManager.h" />
     <ClInclude Include="Engine\Models\Plugins\Descriptor\BasePluginDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\DefaultPixelShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

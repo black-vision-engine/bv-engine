@@ -53,6 +53,7 @@ public:
     void                                AddChild                ( IModelNode * n );
     void                                AddLayer                ( IModelNode * n );
     void                                AddPlugin               ( IPlugin * plugin );
+    void                                AddPlugin               ( IPluginPtr plugin );
 
     virtual void                        Print                   ( std::ostream & out, int tabs = 0 ) const;
     virtual void                        Update                  ( TimeType t );

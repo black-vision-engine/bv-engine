@@ -3,6 +3,7 @@
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
 #include "Engine/Models/Plugins/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
 
 
 namespace bv { namespace model {
@@ -15,6 +16,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
 
     descriptors.push_back( new DefaultTransformPluginDesc() );
     descriptors.push_back( new DefaultRectPluginDesc() );
+    descriptors.push_back( new DefaultColorPluginDesc() );
 
     for( auto descr : descriptors )
     {

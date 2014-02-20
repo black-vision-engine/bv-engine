@@ -266,6 +266,13 @@ void            BasicNode::AddPlugin                ( IPlugin * plugin )
 
 // ********************************
 //
+void            BasicNode::AddPlugin                ( IPluginPtr plugin )
+{
+    m_plugins.push_back( plugin );
+}
+
+// ********************************
+//
 void BasicNode::Update( TimeType t )
 {
     for( auto l : m_layers )

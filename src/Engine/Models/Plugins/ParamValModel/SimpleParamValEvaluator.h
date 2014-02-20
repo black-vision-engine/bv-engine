@@ -49,6 +49,8 @@ template< typename ParamType, typename ValueType >
 SimpleParamValEvaluator< ParamType, ValueType >::SimpleParamValEvaluator( ParamType * param, ValueType * val )
     : m_paramWrapper( 1, param )
     , m_valueWrapper( 1, val )
+    , m_param( param )
+    , m_value( val )
 {
     assert( param );
     assert( val );

@@ -220,7 +220,8 @@
     <ClCompile Include="Engine\Graphics\State\StencilState.cpp" />
     <ClCompile Include="Engine\Models\Builder\RendererStatesBuilder.cpp" />
     <ClCompile Include="Engine\Models\ModelAccessors.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShaderChannelBase.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\DefaultPixelShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ConstantsMapper.cpp" />
     <ClCompile Include="Engine\Models\ModelScene.cpp" />
@@ -399,6 +400,7 @@
     <ClInclude Include="Engine\Interfaces\IUpdater.h" />
     <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
     <ClInclude Include="Engine\Models\ModelAccessors.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\ConstantsMapper.h" />
     <ClInclude Include="Engine\Models\ModelScene.h" />
@@ -415,7 +417,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\RingComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShaderChannelBase.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\DefaultPixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\SolidColorShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\TextPixelShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\TexturePixelShaderChannel.h" />

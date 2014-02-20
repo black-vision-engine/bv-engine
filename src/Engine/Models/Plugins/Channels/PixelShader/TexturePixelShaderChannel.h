@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
+#include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 #include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 #include "Engine/Models/Plugins/Parameters/TypedValues.h"
@@ -22,7 +22,7 @@ public:
 };
 
 
-class TexturePixelShaderChannel : public model::PixelShaderChannelBase
+class TexturePixelShaderChannel : public DefaultPixelShaderChannel
 {
     std::vector< ParamFloat >       m_alphaParams;
     std::vector< ValueFloatPtr >    m_alphaValues;

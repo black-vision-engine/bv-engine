@@ -48,11 +48,11 @@ IPlugin *                       DefaultRectPluginDesc::CreatePlugin         ( co
 //
 DefaultPluginParamValModel *    DefaultRectPluginDesc::CreateDefaultModel   () const
 {
-    DefaultPluginParamValModel * model          = new DefaultPluginParamValModel();
-    DefaultParamValModel * vacModel             = new DefaultParamValModel();
+    DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
+    DefaultParamValModel * vacModel     = new DefaultParamValModel();
 
-    ParamFloat * paramWidth                     = ParametersFactory::CreateParameterFloat( "width" );
-    ParamFloat * paramHeight                    = ParametersFactory::CreateParameterFloat( "height" );
+    ParamFloat * paramWidth             = ParametersFactory::CreateParameterFloat( "width" );
+    ParamFloat * paramHeight            = ParametersFactory::CreateParameterFloat( "height" );
 
     vacModel->AddParameter( paramWidth );
     vacModel->AddParameter( paramHeight );
