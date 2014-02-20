@@ -1,7 +1,6 @@
 #include "MockScenes.h"
 
-#include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
-#include "Engine/Models/Plugins/DefaultRectPlugin.h"
+#include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/BasicNode.h"
 
 #include "Engine/Models/Plugins/PluginsFactory.h"
@@ -12,13 +11,26 @@ namespace {
 
 // *****************************
 //
-model::BasicNode *  DefaultTransformPluginOnly  ()
+model::BasicNode *  DefaultTransformPluginOnly  ( const model::PluginsManager * pluginsManager )
 {
+    using namespace model;
+
     //NEW API
-    auto firstPlugin    = model::DefaultRectPluginDesc::CreatePlugin( nullptr, true );
-    auto secondPlugin   = model::DefaultTransformPluginDesc::CreatePlugin( firstPlugin, true );
-   
-    model::BasicNode * root = new model::BasicNode( "Root" );
+    IPlugin * firstPlugin   = nullptr;
+    IPlugin * secondPlugin  = nullptr;
+
+    firstPlugin = pluginsManager->CreatePlugin( "DEFAULT_TRANSFORM", "transform0", nullptr );
+
+    if( !pluginsManager->CanBeAttachedTo( "DEFAULT_RECTANGLE", firstPlugin ) )
+    {
+        delete firstPlugin;
+
+        return nullptr;
+    }
+
+    secondPlugin    = pluginsManager->CreatePlugin( "DEFAULT_RECTANGLE", "rect0", firstPlugin );
+ 
+    BasicNode * root = new BasicNode( "Root" );
 
     root->AddPlugin( firstPlugin );
     root->AddPlugin( secondPlugin ); 
@@ -45,9 +57,9 @@ model::BasicNode *  DefaultTransformPluginOnly  ()
 
 // *****************************
 //
-model::BasicNode *     TestScenesFactory::NewModelTestScene    ()
+model::BasicNode *     TestScenesFactory::NewModelTestScene    ( const model::PluginsManager * pluginsManager )
 {
-    auto root =  DefaultTransformPluginOnly ();
+    auto root =  DefaultTransformPluginOnly ( pluginsManager );
 
     return root;
 }

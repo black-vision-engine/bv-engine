@@ -10,6 +10,7 @@ namespace bv
 namespace model 
 {
     class BasicNode;
+    class PluginsManager;
 }
 
 
@@ -29,7 +30,7 @@ class TestScenesFactory
 {
 public:
 
-    static  model::BasicNode *      NewModelTestScene           ();
+    static  model::BasicNode *      NewModelTestScene           ( const model::PluginsManager * pluginsManager );
 
     static  model::BasicNode *      SimpeTextureTestScene       ();
     static  model::BasicNode *      SimpleMultiCCScene          ();

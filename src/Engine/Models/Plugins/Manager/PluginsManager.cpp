@@ -77,7 +77,7 @@ bool                                        PluginsManager::CanBeAttachedTo     
 
 // *********************************
 //
-const IPlugin *                             PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, const IPlugin * prev ) const
+IPlugin *                                   PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, const IPlugin * prev ) const
 {
     if( !CanBeAttachedTo( uid, prev ) )
     {

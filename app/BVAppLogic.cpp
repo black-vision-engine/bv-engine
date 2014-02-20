@@ -20,6 +20,9 @@
 #include "System/HRTimer.h"
 #include "BVConfig.h"
 
+#include "DefaultPlugins.h"
+
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 
@@ -60,6 +63,7 @@ BVAppLogic::BVAppLogic              ()
     : m_startTime( 0 )
     , m_modelScene( nullptr )
     , m_mockSceneEng( nullptr )
+    , m_pluginsManager( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
 
@@ -89,6 +93,8 @@ void BVAppLogic::Initialize         ()
 {
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
+
+    m_pluginsManager = static_cast< const model::PluginsManager * >( &model::PluginsManager::DefaultInstance( model::DefaultBVPluginDescriptors() ) );
 }
 
 // *********************************
@@ -113,7 +119,7 @@ void BVAppLogic::LoadScene          ( void )
     //model::BasicNode * root = TestScenesFactory::TexturedRectTestScene();
     //model::BasicNode * root = TestScenesFactory::NaiveTimerTestScene();
 
-    model::BasicNode * root = TestScenesFactory::NewModelTestScene(); 
+    model::BasicNode * root = TestScenesFactory::NewModelTestScene( m_pluginsManager ); 
     m_modelScene = model::ModelScene::Create( root, new Camera(), "BasicScene" );
     m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
 }

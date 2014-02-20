@@ -32,7 +32,7 @@ public:
     const IPluginDescriptor *                   GetDescriptor           ( const std::string & uid ) const;
     
     bool                                        CanBeAttachedTo         ( const std::string & uid, const IPlugin * prev ) const;
-    const IPlugin *                             CreatePlugin            ( const std::string & uid, const std::string & name, const IPlugin * prev ) const;
+    IPlugin *                                   CreatePlugin            ( const std::string & uid, const std::string & name, const IPlugin * prev ) const;
     std::vector< const IPluginDescriptor * >    GetRegisteredDescriptors();
 
 public:
