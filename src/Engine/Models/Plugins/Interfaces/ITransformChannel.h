@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Models/Plugins/Interfaces/IChannel.h"
-#include "Engine/Models/Plugins/Parameters/TypedValues.h"
+#include "Engine/Types/Values/TypedValues.h"
 
 
 namespace bv { namespace model

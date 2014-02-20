@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Plugins/Interfaces/IParamValEvaluator.h"
 
-#include "Engine/Models/Plugins/Parameters/TypedValues.h"
+#include "Engine/Types/Values/TypedValues.h"
 #include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 
 

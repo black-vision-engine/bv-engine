@@ -151,7 +151,6 @@
     <ClCompile Include="System\SimpleTimer.cpp" />
     <ClCompile Include="System\HerarchicalProfiler.cpp" />
     <ClCompile Include="System\FileIO.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Parameters\BaseValue.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\TimerPlugin.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\TextHelper.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelAnimatedVertices.cpp" />
@@ -172,6 +171,7 @@
     <ClCompile Include="Engine\Models\Plugins\Descriptor\BasePluginDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultPixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.cpp" />
+    <ClCompile Include="Engine\Types\Values\BaseValue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -358,8 +358,6 @@
     <ClInclude Include="System\HerarchicalProfiler.h" />
     <ClInclude Include="System\BasicMacros.h" />
     <ClInclude Include="System\FileIO.h" />
-    <ClInclude Include="Engine\Models\Plugins\Parameters\BaseValue.h" />
-    <ClInclude Include="Engine\Models\Plugins\Parameters\TypedValues.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\TimerPlugin.h" />
     <ClInclude Include="Engine\Models\Resources\Font\TextHelper.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelAnimatedVertices.h" />
@@ -389,6 +387,8 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.h" />
     <ClInclude Include="Engine\Interfaces\IValue.h" />
     <ClInclude Include="Engine\Interfaces\IValueSet.h" />
+    <ClInclude Include="Engine\Types\Values\BaseValue.h" />
+    <ClInclude Include="Engine\Types\Values\TypedValues.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
