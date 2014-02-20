@@ -30,7 +30,7 @@ public:
     virtual void                                    Update          ( TimeType t ) override;
 
     void                                            AddParameter    ( IParameter * param );
-    void                                            AddValue        ( IValue * val );
+    void                                            AddValue        ( bv::IValue * val );
     void                                            AddEvaluator    ( IParamValEvaluator * evaluator );
     void                                            RegisterAll     ( IParamValEvaluator * evaluator );
 

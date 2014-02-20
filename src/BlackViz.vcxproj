@@ -306,6 +306,7 @@
     <ClCompile Include="Engine\Processes\ProcessThreaded.cpp" />
     <ClCompile Include="Engine\Processes\ProcessThreadedEvents.cpp" />
     <ClCompile Include="Engine\Types\Values\BaseValue.cpp" />
+    <ClCompile Include="Engine\Types\Values\ValuesFactory.cpp" />
     <ClCompile Include="Mathematics\Interpolators\Interpolators.cpp" />
     <ClCompile Include="System\FileIO.cpp" />
     <ClCompile Include="System\HerarchicalProfiler.cpp" />
@@ -514,6 +515,7 @@
     <ClInclude Include="Engine\Types\Enums.h" />
     <ClInclude Include="Engine\Types\Values\BaseValue.h" />
     <ClInclude Include="Engine\Types\Values\TypedValues.h" />
+    <ClInclude Include="Engine\Types\Values\ValuesFactory.h" />
     <ClInclude Include="System\BasicMacros.h" />
     <ClInclude Include="System\BasicTypes.h" />
     <ClInclude Include="System\FileIO.h" />

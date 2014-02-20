@@ -172,6 +172,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultPixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Types\Values\BaseValue.cpp" />
+    <ClCompile Include="Engine\Types\Values\ValuesFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -389,6 +390,7 @@
     <ClInclude Include="Engine\Interfaces\IValueSet.h" />
     <ClInclude Include="Engine\Types\Values\BaseValue.h" />
     <ClInclude Include="Engine\Types\Values\TypedValues.h" />
+    <ClInclude Include="Engine\Types\Values\ValuesFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
