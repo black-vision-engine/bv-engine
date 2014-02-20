@@ -2,13 +2,13 @@
 
 #include <string>
 
-#include "Engine/Models/Plugins/Interfaces/IValue.h"
+#include "Engine/Interfaces/IValue.h"
 
 
 namespace bv { namespace model {
 
 // *************************************
-class NamedValue : public IValue
+class NamedValue : public bv::IValue
 {
 private:
 

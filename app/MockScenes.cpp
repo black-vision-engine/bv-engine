@@ -36,14 +36,14 @@ class MyPixelShaderChannel : public model::DefaultPixelShaderChannel
 {
 private:
 
-    model::ParamFloat           m_alphaParam;
-    model::ValueFloatPtr        m_alphaValue;
+    model::ParamFloat       m_alphaParam;
+    ValueFloatPtr           m_alphaValue;
 
-    model::ParamTransform       m_tex0TransformParam;
-    model::ValueMat4Ptr         m_tex0TransformValue;
+    model::ParamTransform   m_tex0TransformParam;
+    ValueMat4Ptr            m_tex0TransformValue;
 
-    model::ParamTransform       m_tex1TransformParam;
-    model::ValueMat4Ptr         m_tex1TransformValue;
+    model::ParamTransform   m_tex1TransformParam;
+    ValueMat4Ptr            m_tex1TransformValue;
 
 public:
 

@@ -1,7 +1,5 @@
 #include "DefaultTransformChannel.h"
 
-#include "Engine/Models/Plugins/Interfaces/IValue.h"
-#include "Engine/Models/Plugins/Interfaces/IValueSet.h"
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 
 

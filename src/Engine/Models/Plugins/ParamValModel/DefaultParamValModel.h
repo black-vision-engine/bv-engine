@@ -12,7 +12,7 @@ class DefaultParamValModel : public IParamValModel
 private:
 
     std::vector< IParameter * >             m_parameters;
-    std::vector< IValue * >                 m_values;
+    std::vector< bv::IValue * >             m_values;
     std::vector< IParamValEvaluator * >     m_evaluators;
 
 public:
@@ -21,11 +21,11 @@ public:
             ~DefaultParamValModel           ();
                                         
     virtual std::vector< IParameter * > &           GetParameters   () override;
-    virtual const std::vector< IValue * > &         GetValues       () const override;
+    virtual const std::vector< bv::IValue * > &     GetValues       () const override;
     virtual std::vector< IParamValEvaluator * > &   GetEvaluators   () override;
 
     virtual IParameter *                            GetParameter    ( const std::string & name ) override;
-    virtual IValue *                                GetValue        ( const std::string & name ) const override;
+    virtual bv::IValue *                            GetValue        ( const std::string & name ) const override;
 
     virtual void                                    Update          ( TimeType t ) override;
 

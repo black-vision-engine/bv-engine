@@ -21,21 +21,21 @@ TransformVecParamValEvaluator::TransformVecParamValEvaluator ( ParamTransformVec
 
 // ********************************
 //
-std::vector< IParameter * > &   TransformVecParamValEvaluator::GetParameters   ()
+std::vector< IParameter * > &       TransformVecParamValEvaluator::GetParameters   ()
 {
     return m_paramWrapper;
 }
 
 // ********************************
 //
-const std::vector< IValue * > & TransformVecParamValEvaluator::GetValues       () const
+const std::vector< bv::IValue * > & TransformVecParamValEvaluator::GetValues       () const
 {
     return m_values;
 }
 
 // ********************************
 //
-IParameter *                    TransformVecParamValEvaluator::GetParameter    ( const std::string & name )
+IParameter *                        TransformVecParamValEvaluator::GetParameter    ( const std::string & name )
 {
     if( m_param->GetName() == name )
     {
@@ -47,7 +47,7 @@ IParameter *                    TransformVecParamValEvaluator::GetParameter    (
 
 // ********************************
 //
-IValue *                        TransformVecParamValEvaluator::GetValue        ( const std::string & name ) const
+bv::IValue *                        TransformVecParamValEvaluator::GetValue        ( const std::string & name ) const
 {
     for( auto value : m_values )
     {
@@ -62,7 +62,7 @@ IValue *                        TransformVecParamValEvaluator::GetValue        (
 
 // ********************************
 //
-void                            TransformVecParamValEvaluator::Evaluate        ( TimeType t )
+void                                TransformVecParamValEvaluator::Evaluate        ( TimeType t )
 {
     for( unsigned int i = 0; i < m_param->NumTransforms(); ++i )
     {
@@ -72,14 +72,14 @@ void                            TransformVecParamValEvaluator::Evaluate        (
 
 // ********************************
 //
-ParamTransformVec *             TransformVecParamValEvaluator::Parameter       ()
+ParamTransformVec *                 TransformVecParamValEvaluator::Parameter       ()
 {
     return m_param;
 }
 
 // ********************************
 //
-ValueMat4PtrVec &               TransformVecParamValEvaluator::Value           ()
+ValueMat4PtrVec &                   TransformVecParamValEvaluator::Value           ()
 {
     return m_mat4Values;
 }

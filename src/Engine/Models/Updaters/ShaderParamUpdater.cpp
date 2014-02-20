@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Plugins/Interfaces/IShaderChannel.h"
 #include "Engine/Graphics/Shaders/Shader.h"
-#include "Engine/Models/Plugins/Interfaces/IValue.h"
+#include "Engine/Interfaces/IValue.h"
 
 
 namespace bv

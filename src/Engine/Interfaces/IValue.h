@@ -6,7 +6,7 @@
 #include "Engine/Types/Enums.h"
 
 
-namespace bv { namespace model {
+namespace bv {
 
 class IValue
 {
@@ -32,5 +32,4 @@ ValueType * QueryTypedValue( IValue * val )
     return static_cast< ValueType * >( val->QueryValueTyped() );
 }
 
-} // model
 } // bv

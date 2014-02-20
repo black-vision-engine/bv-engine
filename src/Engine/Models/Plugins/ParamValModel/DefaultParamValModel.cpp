@@ -1,7 +1,7 @@
 #include "DefaultParamValModel.h"
 
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
-#include "Engine/Models/Plugins/Interfaces/IValue.h"
+#include "Engine/Interfaces/IValue.h"
 #include "Engine/Models/Plugins/Interfaces/IParamValEvaluator.h"
 
 
@@ -42,7 +42,7 @@ std::vector< IParameter * > &           DefaultParamValModel::GetParameters     
 
 // *******************************
 //
-const std::vector< IValue * > &         DefaultParamValModel::GetValues         () const
+const std::vector< bv::IValue * > &     DefaultParamValModel::GetValues         () const
 {
     return m_values;
 }
@@ -71,7 +71,7 @@ IParameter *                            DefaultParamValModel::GetParameter    ( 
 
 // *******************************
 //
-IValue *                                DefaultParamValModel::GetValue        ( const std::string & name ) const
+bv::IValue *                            DefaultParamValModel::GetValue        ( const std::string & name ) const
 {
     for( auto value : m_values )
     {
@@ -103,7 +103,7 @@ void                                    DefaultParamValModel::AddParameter      
 
 // *******************************
 //
-void                                    DefaultParamValModel::AddValue          ( IValue * val )
+void                                    DefaultParamValModel::AddValue          ( bv::IValue * val )
 {
     m_values.push_back( val );
 }

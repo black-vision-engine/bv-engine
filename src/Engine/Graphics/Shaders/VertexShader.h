@@ -10,9 +10,9 @@ class VertexShader : public Shader
 {
 private:
 
-    model::ValueMat4Ptr         m_MVP;
-    model::ValueMat4Ptr         m_MV;
-    model::ValueMat4Ptr         m_P;
+    ValueMat4Ptr         m_MVP;
+    ValueMat4Ptr         m_MV;
+    ValueMat4Ptr         m_P;
 
 public:
 

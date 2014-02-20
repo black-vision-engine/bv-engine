@@ -24,7 +24,7 @@ model::BasicNode *  DefaultTestWithValidation   ( const model::PluginsManager * 
     }
 
     IPluginPtr secondPlugin = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_RECTANGLE", "rect0", firstPlugin.get() ) );
- 
+
     if( !pluginsManager->CanBeAttachedTo( "DEFAULT_COLOR", secondPlugin.get() ) )
     {
         return nullptr;

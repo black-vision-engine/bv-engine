@@ -12,15 +12,15 @@ GeometryShader::GeometryShader( const std::string & programSource )
 {
     ShaderParameters * ret  = GetOrCreateShaderParameters();
 
-    m_MVP                   = model::ValueMat4Ptr( new model::ValueMat4( "MVP" ) );
+    m_MVP                   = ValueMat4Ptr( new ValueMat4( "MVP" ) );
     UniformShaderParam * uniShaderParam = ShaderParamFactory::Get().Create( m_MVP->GetName(), m_MVP->GetType() );
     ret->RegisterParameter( uniShaderParam );
 
-    m_MV                    = model::ValueMat4Ptr( new model::ValueMat4( "MV" ) );
+    m_MV                    = ValueMat4Ptr( new ValueMat4( "MV" ) );
     uniShaderParam          = ShaderParamFactory::Get().Create( m_MV->GetName(), m_MV->GetType() );
     ret->RegisterParameter( uniShaderParam );
 
-    m_P                     = model::ValueMat4Ptr( new model::ValueMat4( "P" ) );
+    m_P                     = ValueMat4Ptr( new ValueMat4( "P" ) );
     uniShaderParam          = ShaderParamFactory::Get().Create( m_P->GetName(), m_P->GetType() );
     ret->RegisterParameter( uniShaderParam );
 }

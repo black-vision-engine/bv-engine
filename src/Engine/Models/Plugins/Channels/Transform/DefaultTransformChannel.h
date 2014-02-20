@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "Engine/Interfaces/IValueSet.h"
 #include "Engine/Models/Plugins/Interfaces/ITransformChannel.h"
 #include "Engine/Models/Plugins/Parameters/TypedValues.h"
 
@@ -9,7 +10,6 @@
 namespace bv { namespace model
 {
 
-class IValueSet;
 class IPlugin;
 
 class DefaultTransformChannel : public ITransformChannel

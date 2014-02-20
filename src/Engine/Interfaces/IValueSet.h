@@ -1,10 +1,10 @@
 #pragma once
 
 #include <vector>
+#include "Engine/Interfaces/IValue.h"
 
-namespace bv { namespace model {
 
-class IValue;
+namespace bv {
 
 class IValueSet
 {
@@ -17,5 +17,4 @@ public:
 
 };
 
-} //model
 } //bv

@@ -398,6 +398,8 @@
     <ClInclude Include="Engine\Interfaces\ITimeEvaluator.h" />
     <ClInclude Include="Engine\Interfaces\IUpdatable.h" />
     <ClInclude Include="Engine\Interfaces\IUpdater.h" />
+    <ClInclude Include="Engine\Interfaces\IValue.h" />
+    <ClInclude Include="Engine\Interfaces\IValueSet.h" />
     <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
     <ClInclude Include="Engine\Models\ModelAccessors.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.h" />
@@ -447,7 +449,6 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamValModel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginParamValModel.h" />
-    <ClInclude Include="Engine\Models\Plugins\Interfaces\IValueSet.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IIndexChannelDescriptor.h" />
@@ -559,7 +560,6 @@
     <ClInclude Include="Engine\Graphics\Shaders\VertexShader.h" />
     <ClInclude Include="Engine\Graphics\Types\Transform.h" />
     <ClInclude Include="Engine\Models\BasicNode.h" />
-    <ClInclude Include="Engine\Models\Plugins\Interfaces\IValue.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPlugin.h" />
     <ClInclude Include="Engine\Models\Node.h" />
     <ClInclude Include="Engine\Models\Plugins\Plugin.h" />

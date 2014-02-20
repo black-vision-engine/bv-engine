@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Engine/Models/Plugins/Interfaces/IValueSet.h"
+#include "Engine/Interfaces/IValueSet.h"
 
 
 namespace bv { namespace model

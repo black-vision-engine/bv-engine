@@ -16,7 +16,7 @@ private:
     ValueMat4PtrVec         m_mat4Values;
 
     std::vector< IParameter * >     m_paramWrapper;
-    std::vector< IValue * >         m_values;
+    std::vector< bv::IValue * >     m_values;
 
 private:
 
@@ -24,16 +24,16 @@ private:
 
 public:
 
-    virtual std::vector< IParameter * > &   GetParameters   () override;
-    virtual const std::vector< IValue * > & GetValues       () const override;
+    virtual std::vector< IParameter * > &       GetParameters   () override;
+    virtual const std::vector< bv::IValue * > & GetValues       () const override;
 
-    virtual IParameter *                    GetParameter    ( const std::string & name ) override;
-    virtual IValue *                        GetValue        ( const std::string & name ) const override;
+    virtual IParameter *                        GetParameter    ( const std::string & name ) override;
+    virtual bv::IValue *                        GetValue        ( const std::string & name ) const override;
 
-    virtual void                            Evaluate        ( TimeType t ) override;
+    virtual void                                Evaluate        ( TimeType t ) override;
 
-    ParamTransformVec *                     Parameter       ();
-    ValueMat4PtrVec &                       Value           ();
+    ParamTransformVec *                         Parameter       ();
+    ValueMat4PtrVec &                           Value           ();
 
     friend class ParamValEvaluatorFactory;
 
