@@ -53,13 +53,6 @@ std::string             DefaultColorPluginDesc::PixelShaderSource           ()
     return "../dep/media/shaders/solid.frag";
 }
 
-// *******************************
-//
-std::string             DefaultColorPluginDesc::VertexShaderSource          ()
-{
-    return "../dep/media/shaders/solid.vert";    
-}
-
 
 // ************************************************************************* PLUGIN ************************************************************************* 
 
@@ -73,9 +66,9 @@ DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::s
 { 
     m_pixelShaderChannel = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultColorPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), false ) );
 
-    if( !( prev != nullptr && prev->GetVertexShaderChannel() != nullptr ) )
+    if( prev == nullptr || prev->GetVertexShaderChannel() == nullptr )
     {
-        m_vertexShaderChannel = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultColorPluginDesc::VertexShaderSource(), nullptr ) );
+        m_vertexShaderChannel = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create() );
     }
 }
 

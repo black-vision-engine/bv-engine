@@ -6,11 +6,15 @@
 namespace bv { namespace model
 {
     
-CameraUpdater*   CameraUpdater::Create(Camera* camera, const ParamVec3& pos, const ParamVec3& dir, const ParamVec3& up)
+// *******************************
+//
+CameraUpdater *   CameraUpdater::Create( Camera * camera, const ParamVec3 & pos, const ParamVec3 & dir, const ParamVec3 & up )
 {
-    return new CameraUpdater(camera, pos, dir, up);
+    return new CameraUpdater( camera, pos, dir, up );
 }
 
+// *******************************
+//
 void        CameraUpdater::DoUpdate( TimeType t )
 {
     glm::vec3 pos;

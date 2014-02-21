@@ -17,7 +17,7 @@ protected:
 
 protected:
 
-            DefaultPixelShaderChannel                       ( const std::string & shaderFile, const IValueSet * valueSet, RendererContext * ctx = nullptr );
+            DefaultPixelShaderChannel                       ( const std::string & shaderSource, const IValueSet * valueSet, RendererContext * ctx = nullptr );
 
 public:
 

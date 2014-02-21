@@ -23,5 +23,9 @@ II. UpdatersManager::UpdateStep( t ) - pobiera listę updaterów i na każdym wy
     UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zbędny)
   RenderStateUpdater - sprawdza w  model::RendererContext czy zmieniły się stany i jeśli tak, to je aktualizuje po stronie silnika (StateInstance)
     UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zbędny)
-  
-    
+  NodeUpdater  - Aktualizuje stan SceneNode na bazie IModelNodel czyli sprawdza IsVisible( t ) (które ma tylko flagę m_visible i jest
+    zupełnie od t niezależne.
+    UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zbędny)
+  SequenceAnimationUpdater - pobiera aktualną klatkę dla danej animacji i sprawdza czy trzeba ją zmienić (tutaj akurat chwilowo t jes
+    potrzebne, ale pewnie jak się przemyśli te animacje, to przestanie być)
+  CameraUpdater - po jaki chuj to tu jest dodane to ja nie wiem

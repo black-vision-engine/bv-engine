@@ -48,6 +48,7 @@ private:
     explicit ModelScene( BasicNode * node, Camera * cam, const std::string & name );
 
     friend class ModelAccessors;
+
 };
 
 } // model

@@ -13,11 +13,11 @@ class DefaultVertexShaderChannel : public ShaderChannel< IVertexShaderChannel >
 {
 protected:
 
-            DefaultVertexShaderChannel                       ( const std::string & shaderFile, const IValueSet * valueSet );
+            DefaultVertexShaderChannel                       ( const std::string & shaderSource, const IValueSet * valueSet );
 
 public:
 
-    static  DefaultVertexShaderChannel * Create              ( const std::string & shaderFile, const IValueSet * values );
+    static  DefaultVertexShaderChannel * Create              ();
 
 };
 

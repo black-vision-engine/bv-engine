@@ -13,28 +13,29 @@ DefaultVertexShaderChannel::DefaultVertexShaderChannel  ( const std::string & sh
 {
 }
 
+namespace {
+
+    // *********************************
+//
+std::string shaderSource   = " #version 400 \n \
+                                \
+                                layout (location = 0) in vec3 vertexPosition; \n \
+                                \
+                                uniform mat4 MVP; \n \
+                                \
+                                void main() \n \
+                                {\n \
+                                    gl_Position = MVP * vec4( vertexPosition, 1.0 );\n \
+                                }\n \
+                            ";
+
+}
+
 // ******************************
 //
-DefaultVertexShaderChannel * DefaultVertexShaderChannel::Create              ( const std::string & shaderFile, const IValueSet * values )
+DefaultVertexShaderChannel * DefaultVertexShaderChannel::Create ()
 {
-    const IValueSet * vs = values;
-
-    if( !values )
-    {
-        vs = new DefaultParamValModel();
-    }
-
-    std::stringstream shaderSource;
-
-    //FIXME: move reading file to superclass or utility code
-    File::Open( shaderFile ) >> shaderSource;
-
-    if( shaderSource.str() == "" )
-    {
-        return nullptr;
-    }
-
-    return new DefaultVertexShaderChannel( shaderSource.str(), vs );
+    return new DefaultVertexShaderChannel( shaderSource, new DefaultParamValModel() ); //FIXME: remove this DefaultParamValModel construction from here (implement decent ShaderChannel in case of nullptr input IValueSet - simply return empty vector there
 }
 
 } //model
