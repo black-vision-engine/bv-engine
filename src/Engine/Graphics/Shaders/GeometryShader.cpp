@@ -10,16 +10,13 @@ GeometryShader::GeometryShader( const std::string & programSource )
 {
     ShaderParameters * ret  = GetOrCreateShaderParameters();
 
-    m_MVP                   = ValuesFactory::CreateValueMat4Ptr( "MVP" );
-    UniformShaderParam * uniShaderParam = ShaderParamFactory::Get().Create( m_MVP->GetName(), m_MVP->GetType() );
+    UniformShaderParam * uniShaderParam = ShaderParamFactory::Get().Create( "MVP", ParamType::PT_FLOAT4 );
     ret->RegisterParameter( uniShaderParam );
 
-    m_MV                    = ValuesFactory::CreateValueMat4Ptr( "MV" );
-    uniShaderParam          = ShaderParamFactory::Get().Create( m_MV->GetName(), m_MV->GetType() );
+    uniShaderParam          = ShaderParamFactory::Get().Create( "MV", ParamType::PT_FLOAT4 );
     ret->RegisterParameter( uniShaderParam );
 
-    m_P                     = ValuesFactory::CreateValueMat4Ptr( "P" );
-    uniShaderParam          = ShaderParamFactory::Get().Create( m_P->GetName(), m_P->GetType() );
+    uniShaderParam          = ShaderParamFactory::Get().Create( "P", ParamType::PT_FLOAT4 );
     ret->RegisterParameter( uniShaderParam );
 }
 

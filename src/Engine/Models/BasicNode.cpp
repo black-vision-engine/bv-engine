@@ -578,7 +578,7 @@ void                                BasicNode::RegisterShaderParameters ( const 
     for( auto param : shaderChannel->GetValues() )
     {
         UniformShaderParam * genShaderParam = ShaderParamFactory::Get().Create( param->GetName(), param->GetType() );
-        shParams->RegisterParameter(genShaderParam);
+        shParams->RegisterParameter( genShaderParam );
     }
 }
 

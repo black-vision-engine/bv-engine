@@ -26,6 +26,28 @@ II. UpdatersManager::UpdateStep( t ) - pobiera listę updaterów i na każdym wy
   NodeUpdater  - Aktualizuje stan SceneNode na bazie IModelNodel czyli sprawdza IsVisible( t ) (które ma tylko flagę m_visible i jest
     zupełnie od t niezależne.
     UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zbędny)
+  ShaderParamUpdater - pobiera Values z IShaderChannel i ustawia je jako wartości Shaderowi po stronie silnika (uniform params)
+    UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zbędny)
   SequenceAnimationUpdater - pobiera aktualną klatkę dla danej animacji i sprawdza czy trzeba ją zmienić (tutaj akurat chwilowo t jes
     potrzebne, ale pewnie jak się przemyśli te animacje, to przestanie być)
   CameraUpdater - po jaki chuj to tu jest dodane to ja nie wiem
+
+Uwagi ogólne:
+  Jak widać do aktualizacji stanu noda po stronie silnika potrzebne są standardowo następujące updatery, które niejawnie odwołują się do
+  stanu plugina (finalize w danym nodzie):
+    - TransformUpdater - updatuje transformy w TransformableEntities (po stronie silnika) - potem już renderer w momencie enablowania passa
+      Renderer::Enable( RenderablePass* , TransformableEntity * ) pobiera sobie wszystkie te macierze i je ustawia w vertex shaderze
+      Czyli to się odbywa już po stronie silnika i nie korzysta z ShaderParamUpdatera, który odpowiada za wszystkie inne parametry, ale
+      ten jest tak podstawowy, że jest obliczany osobno (dzięki temu składanie przekształceń model-world może się odbywać też
+      po stronie silnika, a nie kombinowanie na siłę po stronie modelu, który zgodnie z nazwą powinien mieć tylko własne przekształcenia
+      w model space - i tak teraz jest - dopiero przekazanie danych (kamera, model) do silnika składa odpowiednio macierze mvp i
+      już można sobie wszystko ładnie renderować)
+    - GeometryUpdater (powinien nazywać się VertexAttributesChannelUpdater, ale i tak leci w kosmos, więc nie ma co zmieniać)
+      będzie trzeba do niego dopisać koniecznie klaski usługowe, które będą assemblowały VertexAttributesChannel. Dużo kodu powtarza
+      się w BasicNode, więc tym bardziej trzeba to ogarnąć
+    - ShaderParamUpdater - updatuje parametry shaderów na bazie inputów pobranych z różnych źródeł
+      pobiera z IShaderChannel jego valiusy i potem ustawia je jako wartości parametrów shadera po stronie silnika (po nazwach - nazwach parametrów channela,
+      które mapują sie na nazwy parametrów shadera silnikowego)
+      ShaderParamy są tworzone po nazwie za pomocą shader param factory (ShaderParamFactory) - w przypadku VS to są jawnie wpisane
+      stringi ("M", "MV", "MVP") i tam tworzone są od razu i valiusy i shader paramy z identycznymi nazwami i typami valiusów.
+      Przypadek parametru generycznego (tworzonego z poziomu shader channela): 

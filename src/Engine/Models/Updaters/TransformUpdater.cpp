@@ -32,7 +32,7 @@ void    TransformUpdater::DoUpdate( TimeType t )
     for( auto t : m_in->GetTransformValues() )
     {
         const glm::mat4 & mat = t->GetValue();
-        m_out->m_localTransform = m_out->m_localTransform * Transform( mat, glm::inverse(mat));
+        m_out->m_localTransform = m_out->m_localTransform * Transform( mat, glm::inverse( mat ) );
     }
 }
 

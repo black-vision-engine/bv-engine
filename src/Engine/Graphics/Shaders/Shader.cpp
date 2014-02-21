@@ -49,7 +49,7 @@ void                Shader::AddTextureSampler( const TextureSampler * sampler )
 //
 void                Shader::RegisterUpdater  ( ShaderParamUpdater * updater )
 {
-    assert(!m_paramUpdater);
+    assert( !m_paramUpdater );
     
     m_paramUpdater = updater;
 }

@@ -266,13 +266,13 @@ void    Renderer::Enable              ( RenderablePass * pass, TransformableEnti
     }
 
     //FIXME: add proper loop here
-    auto worldTrans = transformable->WorldTransforms()[0].Matrix(); //FIXME: instancing to be added here
+    auto worldTrans = transformable->WorldTransforms()[ 0 ].Matrix(); //FIXME: instancing to be added here
     auto mvp        = projMat * worldTrans;
     pass->GetVertexShader()->UpdateMVP( mvp );
     pass->GetVertexShader()->UpdateMV( worldTrans );
     pass->GetVertexShader()->UpdateP( projMat );
 
-    if(auto gs = pass->GetGeometryShader())
+    if( auto gs = pass->GetGeometryShader() )
     {
         gs->UpdateMVP( mvp );
         gs->UpdateMV( worldTrans );

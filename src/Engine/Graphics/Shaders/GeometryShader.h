@@ -1,19 +1,15 @@
 #pragma once
 
 #include "Engine/Graphics/Shaders/Shader.h"
-#include "Engine/Types/Values/ValuesFactory.h"
+
+#include <string>
+#include <glm/glm.hpp>
 
 
 namespace bv {
 
 class GeometryShader : public Shader
 {
-private:
-
-    ValueMat4Ptr         m_MVP;
-    ValueMat4Ptr         m_MV;
-    ValueMat4Ptr         m_P;
-
 public:
 
     void        UpdateMVP   ( const glm::mat4 & MVP );
