@@ -449,6 +449,8 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamValEvaluator.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamValModel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginList.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginListFinalized.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginParamValModel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IGeometryShaderChannel.h" />

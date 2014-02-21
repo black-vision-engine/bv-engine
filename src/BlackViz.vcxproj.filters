@@ -391,6 +391,8 @@
     <ClInclude Include="Engine\Types\Values\BaseValue.h" />
     <ClInclude Include="Engine\Types\Values\TypedValues.h" />
     <ClInclude Include="Engine\Types\Values\ValuesFactory.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginList.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginListFinalized.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
