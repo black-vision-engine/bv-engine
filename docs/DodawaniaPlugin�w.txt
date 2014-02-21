@@ -1,14 +1,14 @@
-Klasa bv::model::BasicNode przechwuje listê pliginów w postaci std::vector< IPlugin* >
-Dodawanie pluginów do tej listy powinno odbywaæ siê w ustalonej kolejnoœci.
+Klasa bv::model::BasicNode przechwuje listÄ™ pliginÃ³w w postaci std::vector< IPlugin* >
+Dodawanie pluginÃ³w do tej listy powinno odbywaÄ‡ siÄ™ w ustalonej kolejnoÅ›ci.
 
-Podstawowe za³o¿enie jakie powinny spe³niaæ pluginy w tej liœcie to:
+Podstawowe zaÅ‚oÅ¼enie jakie powinny speÅ‚niaÄ‡ pluginy w tej liÅ›cie to:
 
-1. Na pocz¹tku listy zostaj¹ umieszczone tylko i wy³acznie pluginy modyfikuj¹ce geometriê lub transformacjê.
-2. Na koñcu powinny pojawiæ siê pluginy które definiuj¹ Shadery. 
+1. Na poczÄ…tku listy zostajÄ… umieszczone tylko i wyÅ‚acznie pluginy modyfikujÄ…ce geometriÄ™ lub transformacjÄ™.
+2. Na koÅ„cu powinny pojawiÄ‡ siÄ™ pluginy ktÃ³re definiujÄ… Shadery. 
 
-Taka kolejnoœæ jest wymagana poniewa¿ kana³ geometrii mo¿e dodaæ nowe kana³y do connected komponentów. Zatem implemetacja shadera musi odpowiednio ich uzywaæ.
+Taka kolejnoÅ›Ä‡ jest wymagana poniewaÅ¼ kanaÅ‚ geometrii moÅ¼e dodaÄ‡ nowe kanaÅ‚y do connected komponentÃ³w. Zatem implemetacja shadera musi odpowiednio ich uzywaÄ‡.
 
-Wszyskie potrzebne za³o¿enia powinnien sprawdzaæ Finalize plugin który bêdzie zaimplementowany póŸniej.
+Wszyskie potrzebne zaÅ‚oÅ¼enia powinnien sprawdzaÄ‡ Finalize plugin ktÃ³ry bÄ™dzie zaimplementowany pÃ³Åºniej.
 
-Na razie nie dopuszczmy, ¿e w liœcie pluginów jest wiecej ni¿ jeden ShaderChannel z ka¿dego rodzaju. Wynika to, ¿e tego ¿e na razie nie mamy zaimplementowanej maszynerii do sk³adania kodu shaderów.
+Na razie nie dopuszczmy, Å¼e w liÅ›cie pluginÃ³w jest wiecej niÅ¼ jeden ShaderChannel z kaÅ¼dego rodzaju. Wynika to, Å¼e tego Å¼e na razie nie mamy zaimplementowanej maszynerii do skÅ‚adania kodu shaderÃ³w.
 

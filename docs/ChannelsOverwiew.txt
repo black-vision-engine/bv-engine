@@ -1,13 +1,13 @@
-Plusy Update w kana³ach:
-  Plugin nie musi przejmowaæ sie logik¹ (do pewnego stopnia)
-  Wewnêtrzna struktura kana³u mo¿e byæ przezroczysta dla pluginu (co pozwala implementowaæ kana³y komponentowo oraz przez dziedziczenie)
-Minusy Update w kana³ach
-  Kana³y musz¹ mieæ zaimplementowan¹ logikê i nie s¹ reu¿ywalnymi komponentami
+Plusy Update w kanaÅ‚ach:
+  Plugin nie musi przejmowaÄ‡ sie logikÄ… (do pewnego stopnia)
+  WewnÄ™trzna struktura kanaÅ‚u moÅ¼e byÄ‡ przezroczysta dla pluginu (co pozwala implementowaÄ‡ kanaÅ‚y komponentowo oraz przez dziedziczenie)
+Minusy Update w kanaÅ‚ach
+  KanaÅ‚y muszÄ… mieÄ‡ zaimplementowanÄ… logikÄ™ i nie sÄ… reuÅ¼ywalnymi komponentami
 
-Plusy Update na zewn¹trz kana³u
-Minusy Update na zewn¹trz kana³u
+Plusy Update na zewnÄ…trz kanaÅ‚u
+Minusy Update na zewnÄ…trz kanaÅ‚u
 
 
-Alternatywne propozycje przechowywania kana³ów/pluginów
+Alternatywne propozycje przechowywania kanaÅ‚Ã³w/pluginÃ³w
 
 Sens trzymania Pixel/Vertex/Geometry ShaderChannel - jaki jest ich cel
