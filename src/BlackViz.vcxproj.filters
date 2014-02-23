@@ -173,6 +173,8 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Types\Values\BaseValue.cpp" />
     <ClCompile Include="Engine\Types\Values\ValuesFactory.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\DefaultPluginListFinalized.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\DefaultFinalizePlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -393,6 +395,8 @@
     <ClInclude Include="Engine\Types\Values\ValuesFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginList.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginListFinalized.h" />
+    <ClInclude Include="Engine\Models\Plugins\DefaultPluginListFinalized.h" />
+    <ClInclude Include="Engine\Models\Plugins\DefaultFinalizePlugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

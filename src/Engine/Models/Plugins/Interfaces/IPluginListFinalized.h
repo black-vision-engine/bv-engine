@@ -11,9 +11,13 @@ class IPluginListFinalized : public IPluginList
 {
 public:
 
-    virtual ~IPluginListFinalized   () {}
+    virtual const IPlugin * GetFinalizePlugin       ( const std::string & name ) const  = 0;
+
+    virtual                 ~IPluginListFinalized   () {}
 
 };
+
+typedef std::shared_ptr< IPluginListFinalized > IPluginListFinalizedPtr;
 
 } //model
 } //bv

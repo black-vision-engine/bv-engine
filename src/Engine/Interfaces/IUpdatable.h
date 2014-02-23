@@ -10,11 +10,9 @@ class IUpdatable
 {
 public:
 
-    virtual         ~IUpdatable     () 
-    {
-    }
-
     virtual void    Update          ( TimeType t ) = 0;
+
+    virtual         ~IUpdatable     () {}
 
 };
 
