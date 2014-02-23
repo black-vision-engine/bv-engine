@@ -36,9 +36,9 @@ public:
     IPlugin *                                   CreatePlugin            ( const std::string & uid, const std::string & name, const IPlugin * prev ) const;
     std::vector< const IPluginDescriptor * >    GetRegisteredDescriptors();
 
-    IPluginListFinalized *                      CreatePlugins           ( const std::vector< std::string > & uids );
-    IPluginListFinalized *                      CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names );
-    IPluginListFinalized *                      CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins );
+    IPluginListFinalized *                      CreatePlugins           ( const std::vector< std::string > & uids ) const;
+    IPluginListFinalized *                      CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names ) const;
+    IPluginListFinalized *                      CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins ) const;
 
 public:
 

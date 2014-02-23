@@ -1,13 +1,33 @@
 #include "MockScenes.h"
 
+#include "Engine/Models/Plugins/Interfaces/IPluginListFinalized.h"
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/BasicNode.h"
 
 #include "Engine/Models/Plugins/PluginsFactory.h"
 
+
 namespace bv {
 
 namespace {
+
+// *****************************
+//
+model::BasicNode *  DefaultTesNewAPI   ( const model::PluginsManager * pluginsManager )
+{
+    std::vector< std::string > uids;
+
+    uids.push_back( "DEFAULT_TRANSFORM" );
+    uids.push_back( "DEFAULT_RECTANGLE" );
+    uids.push_back( "DEFAULT_COLOR" );
+
+    model::IPluginListFinalizedPtr pluginsList( pluginsManager->CreatePlugins( uids ) );
+
+    model::BasicNode * root = new model::BasicNode( "Root" );
+
+    //FIXME: add list to the node
+    return root;
+}
 
 // *****************************
 //

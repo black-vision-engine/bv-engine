@@ -99,7 +99,7 @@ std::vector< const IPluginDescriptor * >    PluginsManager::GetRegisteredDescrip
 
 // *********************************
 //
-IPluginListFinalized *                      PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids )
+IPluginListFinalized *                      PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids ) const
 {
     std::vector< std::pair< std::string, std::string > > plugins;
 
@@ -120,7 +120,7 @@ IPluginListFinalized *                      PluginsManager::CreatePlugins       
 
 // *********************************
 //
-IPluginListFinalized *                      PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names )
+IPluginListFinalized *                      PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names ) const
 {
     assert( uids.size() == names.size() );
 
@@ -143,7 +143,7 @@ IPluginListFinalized *                      PluginsManager::CreatePlugins       
 
 // *********************************
 //
-IPluginListFinalized *                      PluginsManager::CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins )
+IPluginListFinalized *                      PluginsManager::CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins ) const
 {
     std::vector< IPluginPtr > tmpList;
     const IPlugin * prev = nullptr;
