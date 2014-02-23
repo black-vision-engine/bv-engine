@@ -16,6 +16,8 @@ private:
 public:
 
                 DefaultPluginListFinalized      ();
+                DefaultPluginListFinalized      ( const std::vector< IPluginPtr > & plugins );
+                                                                
     virtual     ~DefaultPluginListFinalized     ();
 
 

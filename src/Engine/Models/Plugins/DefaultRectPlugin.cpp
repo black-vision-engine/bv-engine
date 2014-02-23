@@ -15,7 +15,7 @@ namespace bv { namespace model {
 // *******************************
 //
 DefaultRectPluginDesc::DefaultRectPluginDesc                                ()
-    : BasePluginDescriptor( UID() )
+    : BasePluginDescriptor( UID(), "rectangle" )
 {
 }
 

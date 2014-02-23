@@ -9,6 +9,7 @@ namespace bv { namespace model {
 
 class IPluginDescriptor;
 class IPlugin;
+class IPluginListFinalized;
 
 class PluginsManager
 {
@@ -34,6 +35,10 @@ public:
     bool                                        CanBeAttachedTo         ( const std::string & uid, const IPlugin * prev ) const;
     IPlugin *                                   CreatePlugin            ( const std::string & uid, const std::string & name, const IPlugin * prev ) const;
     std::vector< const IPluginDescriptor * >    GetRegisteredDescriptors();
+
+    IPluginListFinalized *                      CreatePlugins           ( const std::vector< std::string > & uids );
+    IPluginListFinalized *                      CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names );
+    IPluginListFinalized *                      CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins );
 
 public:
 

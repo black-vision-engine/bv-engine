@@ -11,7 +11,7 @@ namespace bv { namespace model {
 // *******************************
 //
 DefaultTransformPluginDesc::DefaultTransformPluginDesc                          ()
-    : BasePluginDescriptor( UID() )    
+    : BasePluginDescriptor( UID(), "transform" )    
 {
 }
 

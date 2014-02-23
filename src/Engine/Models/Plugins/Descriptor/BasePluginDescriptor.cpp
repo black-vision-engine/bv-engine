@@ -5,8 +5,9 @@ namespace bv { namespace model {
 
 // *********************************
 //
-BasePluginDescriptor::BasePluginDescriptor                      ( const std::string & uid )
+BasePluginDescriptor::BasePluginDescriptor                      ( const std::string & uid, const std::string & defaultName )
     : m_uid( uid )
+    , m_defaultName( defaultName )
 {
 }
 
@@ -15,6 +16,13 @@ BasePluginDescriptor::BasePluginDescriptor                      ( const std::str
 const std::string &     BasePluginDescriptor::GetPluginTypeUID  () const
 {
     return m_uid;
+}
+
+// *********************************
+//
+const std::string &     BasePluginDescriptor::DefaultPluginName () const
+{
+    return m_defaultName;
 }
 
 // *********************************

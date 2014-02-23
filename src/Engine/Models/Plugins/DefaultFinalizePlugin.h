@@ -36,7 +36,7 @@ public:
 
     virtual void                                Update                      ( TimeType t ) override;
 
-    void                                        RegisterPrevPlugin          ( const IPlugin * plugin );
+    void                                        SetPrevPlugin               ( const IPlugin * plugin );
     void                                        SetName                     ( const std::string & name );
 
 };

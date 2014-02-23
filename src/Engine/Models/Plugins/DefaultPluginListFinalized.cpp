@@ -12,6 +12,16 @@ DefaultPluginListFinalized::DefaultPluginListFinalized      ()
 
 // *******************************
 //
+DefaultPluginListFinalized::DefaultPluginListFinalized      ( const std::vector< IPluginPtr > & plugins )
+    : m_finalizePlugin( new DefaultFinalizePlugin() )
+{
+    assert( plugins.size() > 0 );
+   
+    m_finalizePlugin->SetPrevPlugin( plugins.back().get() );
+}
+
+// *******************************
+//
 DefaultPluginListFinalized::~DefaultPluginListFinalized     ()
 {
 }
