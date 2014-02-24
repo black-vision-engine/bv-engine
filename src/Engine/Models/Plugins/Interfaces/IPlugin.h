@@ -42,7 +42,7 @@ public:
 
     virtual TextureInfoVec                      GetTextures                 () const = 0; // FIXME: use resources
     virtual bool                                HasAnimatingTexture         () const = 0;
-    virtual ISequenceAnimationSource *          QuerySequenceAnimationSource() = 0; // FIXME: use generic interface for querying resources that can be 
+    virtual const ISequenceAnimationSource *    QuerySequenceAnimationSource() const = 0; // FIXME: use generic interface for querying resources that can be 
 
     virtual                                     ~IPlugin                    (){}
 

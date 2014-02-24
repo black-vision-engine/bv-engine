@@ -54,11 +54,10 @@ public:
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const override;
 
-    virtual TextureInfoVec                      GetTextures                 () const;
+    virtual TextureInfoVec                      GetTextures                 () const override;
 
-    virtual bool                                HasAnimatingTexture         () const                                            { return false; }
-
-    virtual ISequenceAnimationSource *          QuerySequenceAnimationSource()                                                  { return nullptr; }
+    virtual bool                                HasAnimatingTexture         () const override                       { return false; }
+    virtual const ISequenceAnimationSource *    QuerySequenceAnimationSource() const override                       { return nullptr; }
 
 protected:
 

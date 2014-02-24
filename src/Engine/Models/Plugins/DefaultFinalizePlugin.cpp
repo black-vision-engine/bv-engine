@@ -47,7 +47,8 @@ IPluginParamValModel *              DefaultFinalizePlugin::GetPluginParamValMode
 const IVertexAttributesChannel *    DefaultFinalizePlugin::GetVertexAttributesChannel   () const
 {
     assert( m_prevPlugin );
-    return nullptr;
+
+    return m_prevPlugin->GetVertexAttributesChannel();
 }
 
 // *******************************
@@ -55,7 +56,8 @@ const IVertexAttributesChannel *    DefaultFinalizePlugin::GetVertexAttributesCh
 const ITransformChannel *           DefaultFinalizePlugin::GetTransformChannel          () const
 {
     assert( m_prevPlugin );
-    return nullptr;
+
+    return m_prevPlugin->GetTransformChannel();
 }
 
 // *******************************
@@ -63,7 +65,8 @@ const ITransformChannel *           DefaultFinalizePlugin::GetTransformChannel  
 const IPixelShaderChannel *         DefaultFinalizePlugin::GetPixelShaderChannel        () const
 {
     assert( m_prevPlugin );
-    return nullptr;
+
+    return m_prevPlugin->GetPixelShaderChannel();
 }
 
 // *******************************
@@ -71,7 +74,8 @@ const IPixelShaderChannel *         DefaultFinalizePlugin::GetPixelShaderChannel
 const IVertexShaderChannel *        DefaultFinalizePlugin::GetVertexShaderChannel       () const
 {
     assert( m_prevPlugin );
-    return nullptr;
+
+    return m_prevPlugin->GetVertexShaderChannel();
 }
 
 // *******************************
@@ -79,7 +83,8 @@ const IVertexShaderChannel *        DefaultFinalizePlugin::GetVertexShaderChanne
 const IGeometryShaderChannel *      DefaultFinalizePlugin::GetGeometryShaderChannel     () const
 {
     assert( m_prevPlugin );
-    return nullptr;
+
+    return m_prevPlugin->GetGeometryShaderChannel();
 }
 
 // *******************************
@@ -95,14 +100,18 @@ TextureInfoVec                            DefaultFinalizePlugin::GetTextures    
 //
 bool                                DefaultFinalizePlugin::HasAnimatingTexture          () const
 {
-    return false;   //FIXME: fix it somehow
+    assert( m_prevPlugin );
+
+    return m_prevPlugin->HasAnimatingTexture();
 }
 
 // *******************************
 //
-ISequenceAnimationSource *          DefaultFinalizePlugin::QuerySequenceAnimationSource () // FIXME: use generic interface for querying resources that can be
+const ISequenceAnimationSource *    DefaultFinalizePlugin::QuerySequenceAnimationSource () const// FIXME: use generic interface for querying resources that can be
 {
-    return nullptr; //FIXME: fix int somehow
+    assert( m_prevPlugin );
+
+    return m_prevPlugin->QuerySequenceAnimationSource();
 }
 
 // *******************************
