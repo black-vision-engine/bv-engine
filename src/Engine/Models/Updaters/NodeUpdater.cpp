@@ -11,7 +11,7 @@ namespace bv
 
 // *****************************
 //
-NodeUpdater::NodeUpdater     ( SceneNode * out, const IModelNode * in )
+NodeUpdater::NodeUpdater     ( SceneNode * out, const model::IModelNode * in )
     : m_out( out )
     , m_in( in )
 {

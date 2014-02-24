@@ -13,7 +13,7 @@ namespace {
 
 // *****************************
 //
-model::BasicNode *  DefaultTesNewAPI   ( const model::PluginsManager * pluginsManager )
+model::BasicNode *  DefaultTestNewAPI  ( const model::PluginsManager * pluginsManager )
 {
     std::vector< std::string > uids;
 
@@ -26,6 +26,23 @@ model::BasicNode *  DefaultTesNewAPI   ( const model::PluginsManager * pluginsMa
     model::BasicNode * root = new model::BasicNode( "Root" );
 
     //FIXME: add list to the node
+    return root;
+}
+
+// *****************************
+//
+model::BasicNode *  DefaultTestNewNodeImpl  ( const model::PluginsManager * pluginsManager )
+{
+    model::BasicNode * root = new model::BasicNode( "Root", pluginsManager );
+
+    bool success = true;
+
+    success &= root->AddPlugin( "DEFAULT_TRANSFORM" );
+    success &= root->AddPlugin( "DEFAULT_RECTANGLE" );
+    success &= root->AddPlugin( "DEFAULT_COLOR" );
+
+    assert( success );
+
     return root;
 }
 

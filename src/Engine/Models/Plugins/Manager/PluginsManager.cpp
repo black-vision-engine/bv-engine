@@ -2,12 +2,14 @@
 
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
-#include "Engine/Models/Plugins/Interfaces/IPluginListFinalized.h"
 
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
 
 
 namespace bv { namespace model {
+
+//Default instance
+PluginsManager PluginsManager::m_instance;
 
 // *********************************
 //
@@ -34,17 +36,23 @@ PluginsManager::~PluginsManager ()
 
 // *********************************
 //
-void                                        PluginsManager::RegisterDescriptors     ( std::vector< IPluginDescriptor * > descriptors )
+unsigned int                                PluginsManager::RegisterDescriptors     ( std::vector< IPluginDescriptor * > descriptors )
 {
+    unsigned int i = 0;
+
     for( auto descr : descriptors )
     {
         if( !IsRegistered( descr->GetPluginTypeUID() ) )
         {
             m_descrMap[ descr->GetPluginTypeUID() ] = descr;
+            
+            ++i;
         }
 
         m_descrVec.push_back( descr );
     }
+
+    return i;
 }
 
 // *********************************
@@ -92,6 +100,18 @@ IPlugin *                                   PluginsManager::CreatePlugin        
 
 // *********************************
 //
+IPlugin *                                   PluginsManager::CreatePlugin            ( const std::string & uid, const IPlugin * prev ) const
+{
+    if( !CanBeAttachedTo( uid, prev ) )
+    {
+        return nullptr;
+    }
+
+    return CreatePlugin( uid, GetDescriptor( uid )->DefaultPluginName(), prev );
+}
+
+// *********************************
+//
 std::vector< const IPluginDescriptor * >    PluginsManager::GetRegisteredDescriptors()
 {
     return m_descrVec;
@@ -100,6 +120,27 @@ std::vector< const IPluginDescriptor * >    PluginsManager::GetRegisteredDescrip
 // *********************************
 //
 IPluginListFinalized *                      PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids ) const
+{
+    return CreatePluginsDefaultImpl( uids );
+}
+
+// *********************************
+//
+IPluginListFinalized *                      PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names ) const
+{
+    return CreatePluginsDefaultImpl( uids, names );
+}
+
+// *********************************
+//
+IPluginListFinalized *                      PluginsManager::CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins ) const
+{
+    return CreatePluginsDefaultImpl( plugins );
+}
+
+// *********************************
+//
+DefaultPluginListFinalized *                PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::string > & uids ) const
 {
     std::vector< std::pair< std::string, std::string > > plugins;
 
@@ -115,12 +156,12 @@ IPluginListFinalized *                      PluginsManager::CreatePlugins       
         plugins.push_back( std::make_pair( uid, GetDescriptor( uid )->DefaultPluginName() ) );
     }
 
-    return CreatePlugins( plugins );
+    return CreatePluginsDefaultImpl( plugins );
 }
 
 // *********************************
 //
-IPluginListFinalized *                      PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names ) const
+DefaultPluginListFinalized *                PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::string > & uids, const std::vector< std::string > & names ) const
 {
     assert( uids.size() == names.size() );
 
@@ -138,12 +179,12 @@ IPluginListFinalized *                      PluginsManager::CreatePlugins       
         plugins.push_back( std::make_pair( uids[ i ], names[ i ] ) );
     }    
 
-    return CreatePlugins( plugins );
+    return CreatePluginsDefaultImpl( plugins );
 }
 
 // *********************************
 //
-IPluginListFinalized *                      PluginsManager::CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins ) const
+DefaultPluginListFinalized *                PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::pair< std::string, std::string > > & plugins ) const
 {
     std::vector< IPluginPtr > tmpList;
     const IPlugin * prev = nullptr;
@@ -180,20 +221,16 @@ IPluginListFinalized *                      PluginsManager::CreatePlugins       
 
 // *********************************
 //
-const PluginsManager &                      PluginsManager::DefaultInstance         ( std::vector< IPluginDescriptor * > descriptors )
+PluginsManager &                            PluginsManager::DefaultInstanceRef      ()
 {
-    static bool initialized = false;
-    static PluginsManager instance;
+    return m_instance;
+}
 
-    if( !initialized )
-    {
-        instance.RegisterDescriptors( descriptors );
-
-        initialized = true;
-    }
-
-    return instance;
-
+// *********************************
+//
+const PluginsManager &                      PluginsManager::DefaultInstance         ()
+{
+    return m_instance;
 }
 
 } //model

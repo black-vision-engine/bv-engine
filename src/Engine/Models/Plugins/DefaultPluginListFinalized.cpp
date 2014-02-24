@@ -52,6 +52,15 @@ const IPlugin * DefaultPluginListFinalized::GetPlugin           ( unsigned int i
 
 // *******************************
 //
+const IPlugin * DefaultPluginListFinalized::GetLastPlugin       () const
+{
+    assert( m_plugins.size() > 0 );
+
+    return m_plugins.back().get();
+}
+
+// *******************************
+//
 unsigned int    DefaultPluginListFinalized::NumPlugins          () const
 {
     return m_plugins.size();
@@ -59,7 +68,7 @@ unsigned int    DefaultPluginListFinalized::NumPlugins          () const
 
 // *******************************
 //
-const IPlugin * DefaultPluginListFinalized::GetFinalizePlugin   ( const std::string & name ) const
+const IPlugin * DefaultPluginListFinalized::GetFinalizePlugin   () const
 {
     return m_finalizePlugin.get();
 }
@@ -68,6 +77,7 @@ const IPlugin * DefaultPluginListFinalized::GetFinalizePlugin   ( const std::str
 //
 void            DefaultPluginListFinalized::Update              ( TimeType t )
 {
+    //UPDATE ORDER IS CRUCIAL HERE - following plugins must be able to read their predcessor's state
     for( auto plugin : m_plugins )
     {
         plugin->Update( t );
@@ -80,6 +90,8 @@ void            DefaultPluginListFinalized::Update              ( TimeType t )
 //
 void            DefaultPluginListFinalized::AttachPlugin        ( IPlugin * plugin )
 {
+    assert( plugin != nullptr );
+
     m_plugins.push_back( IPluginPtr( plugin ) );
 }
 

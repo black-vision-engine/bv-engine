@@ -6,18 +6,22 @@
 namespace bv {
 
 class SceneNode;
-class IModelNode;
+
+namespace model
+{
+    class IModelNode;
+}
 
 class NodeUpdater : public IUpdater
 {
 private:
 
-    SceneNode *         m_out;
-    const IModelNode *  m_in;
+    SceneNode *                 m_out;
+    const model::IModelNode *   m_in;
 
 public:
 
-                    NodeUpdater     ( SceneNode * out, const IModelNode * in ); 
+                    NodeUpdater     ( SceneNode * out, const model::IModelNode * in ); 
                     ~NodeUpdater    ();
 
     virtual void    DoUpdate        ( TimeType t );

@@ -94,7 +94,8 @@ void BVAppLogic::Initialize         ()
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
 
-    m_pluginsManager = static_cast< const model::PluginsManager * >( &model::PluginsManager::DefaultInstance( model::DefaultBVPluginDescriptors() ) );
+    model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
+    m_pluginsManager = static_cast< const model::PluginsManager * >( &model::PluginsManager::DefaultInstance() );
 }
 
 // *********************************

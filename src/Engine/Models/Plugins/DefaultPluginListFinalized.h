@@ -23,9 +23,11 @@ public:
 
     virtual const IPlugin * GetPlugin           ( const std::string & name ) const override;
     virtual const IPlugin * GetPlugin           ( unsigned int idx ) const override;
+    virtual const IPlugin * GetLastPlugin       () const override;
+
     virtual unsigned int    NumPlugins          () const override;
 
-    virtual const IPlugin * GetFinalizePlugin   ( const std::string & name ) const override;
+    virtual const IPlugin * GetFinalizePlugin   () const override;
 
     virtual void            Update              ( TimeType t ) override;
 

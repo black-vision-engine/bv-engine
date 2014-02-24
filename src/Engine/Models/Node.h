@@ -9,21 +9,33 @@ namespace bv {
 
 class SceneNode;
 
-class IModelNode : public IUpdatable
+namespace model {
+
+class IPlugin;
+class IPluginListFinalized;
+
+class IModelNode : public bv::IUpdatable
 {
 public:
 
-    virtual SceneNode *         BuildScene  ()                                          = 0;
-    virtual void                Print       ( std::ostream& out, int tabs = 0 ) const   = 0;
+    virtual const std::string &             GetName         () const                                    = 0;
 
-    virtual bool                IsVisible   ( TimeType t ) const                        = 0;
+    virtual const IPlugin *                 GetPlugin       ( const std::string & name ) const          = 0;
+    virtual const IModelNode *              GetChild        ( const std::string & name ) const          = 0;
+    virtual const IModelNode *              GetLayer        ( const std::string & name ) const          = 0;
 
-    virtual const std::string & GetName     () const                                    = 0;
+    virtual const IPluginListFinalized *    GetPluginList   () const                                    = 0;
 
-    virtual                     ~IModelNode () {};
+    virtual SceneNode *                     BuildScene      ()                                          = 0;
+    virtual void                            Print           ( std::ostream & out, int tabs = 0 ) const  = 0;
+
+    virtual bool                            IsVisible       ( TimeType t ) const                        = 0;
+
+    virtual                                 ~IModelNode     () {};
 
 };
 
 typedef std::shared_ptr< IModelNode >       IModelNodePtr;
 
+} //model
 } //bv
