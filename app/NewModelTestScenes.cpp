@@ -165,7 +165,6 @@ void QueryPluginPropertiesGeneric   ( const model::IPlugin * plugin )
     QueryModelPropertiesGeneric( model->GetVertexShaderChannelModel(), "VertexShader Channel Model" );
     QueryModelPropertiesGeneric( model->GetPixelShaderChannelModel(), "PixelShader Channel Model" );
     QueryModelPropertiesGeneric( model->GetGeometryShaderChannelModel(), "GeometryShader Channel Model" );
-
 }
 
 // *****************************
