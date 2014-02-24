@@ -138,7 +138,7 @@ const IVertexAttributesChannel *    TimerPlugin::GetVertexAttributesChannel     
 
 ////////////////////////////
 //
-Textures                            TimerPlugin::GetTextures                 () const
+TextureInfoVec                      TimerPlugin::GetTextures                 () const
 {
     return m_textures;
 }

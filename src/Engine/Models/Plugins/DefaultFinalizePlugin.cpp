@@ -84,9 +84,11 @@ const IGeometryShaderChannel *      DefaultFinalizePlugin::GetGeometryShaderChan
 
 // *******************************
 //
-Textures                            DefaultFinalizePlugin::GetTextures                  () const // FIXME: use resources
+TextureInfoVec                            DefaultFinalizePlugin::GetTextures            () const // FIXME: use resources
 {
-    return Textures();
+    assert( m_prevPlugin );
+
+    return m_prevPlugin->GetTextures();
 }
 
 // *******************************

@@ -73,7 +73,7 @@ private:
     TexturePixelShaderChannelPtr    m_pixelShaderChannel;
     TextureVertexShaderChannelPtr   m_vertexShaderChannel;
 
-    Textures                        m_textures;
+    TextureInfoVec                  m_textures;
 
 private:
 
@@ -86,11 +86,11 @@ public:
     explicit                                    SimpleTexturePlugin         ( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, model::RendererContext * ctx = nullptr, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
                                                 ~SimpleTexturePlugin        ();
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel          () const override;                                                                           
+    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;                                                                           
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;                                       
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;     
 
-    virtual Textures                            GetTextures                 () const override;
+    virtual TextureInfoVec                      GetTextures                 () const override;
 
     void                                        SetAttachmentMode           ( TextureAttachmentMode mode );
     void                                        SetWrappingMode             ( TextureWrappingMode mode );

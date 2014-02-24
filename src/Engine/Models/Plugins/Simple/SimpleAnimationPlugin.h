@@ -36,7 +36,7 @@ private:
     VertexAttributesChannel *       m_vaChannel;
     TexturePixelShaderChannel *     m_pixelShaderChannel;
     TextureVertexShaderChannel *    m_vertexShaderChannel;
-    Textures                        m_textures;
+    TextureInfoVec                  m_textures;
 
     TextureAttachmentMode           m_attachmentMode;
     unsigned int                    m_texCoordChannelIndex;
@@ -57,10 +57,10 @@ public:
     void                                SetAttachmentMode           ( TextureAttachmentMode mode );
 
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel          () const override;                                                                           
+    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;                                                                           
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;                                       
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
-    virtual Textures                            GetTextures                 () const override;
+    virtual TextureInfoVec                      GetTextures                 () const override;
 
     // ISequenceAnimationSource
     virtual unsigned int                CurrentFrame                ( TimeType t ) const;

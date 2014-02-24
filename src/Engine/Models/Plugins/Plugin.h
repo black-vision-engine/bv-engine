@@ -54,7 +54,7 @@ public:
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const override;
 
-    virtual Textures                            GetTextures                 () const                                            { return Textures(); }
+    virtual TextureInfoVec                      GetTextures                 () const;
 
     virtual bool                                HasAnimatingTexture         () const                                            { return false; }
 
@@ -149,7 +149,7 @@ const IPixelShaderChannel *         BasePlugin< Iface >::GetPixelShaderChannel  
 // *******************************
 //
 template< class Iface >
-const IVertexShaderChannel *        BasePlugin< Iface >::GetVertexShaderChannel       () const
+const IVertexShaderChannel *        BasePlugin< Iface >::GetVertexShaderChannel         () const
 {
     if( m_prevPlugin ) 
     {
@@ -162,7 +162,7 @@ const IVertexShaderChannel *        BasePlugin< Iface >::GetVertexShaderChannel 
 // *******************************
 //
 template< class Iface >
-const IGeometryShaderChannel *      BasePlugin< Iface >::GetGeometryShaderChannel     () const
+const IGeometryShaderChannel *      BasePlugin< Iface >::GetGeometryShaderChannel       () const
 {
     if( m_prevPlugin )
     {
@@ -170,6 +170,19 @@ const IGeometryShaderChannel *      BasePlugin< Iface >::GetGeometryShaderChanne
     }
 
     return nullptr;
+}
+
+// *******************************
+//
+template< class Iface >
+TextureInfoVec                      BasePlugin< Iface >::GetTextures                    () const
+{
+    if( m_prevPlugin )
+    {
+        return m_prevPlugin->GetTextures();
+    }
+
+    return TextureInfoVec(); 
 }
 
 // *******************************

@@ -23,7 +23,7 @@ class IParameter;
 class IPluginParamValModel;
 
 struct TextureInfo;
-typedef std::vector< TextureInfo * > Textures;
+typedef std::vector< TextureInfo * > TextureInfoVec;
 
 class IPlugin : public IUpdatable
 {
@@ -40,7 +40,7 @@ public:
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const = 0;
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const = 0;
 
-    virtual Textures                            GetTextures                 () const = 0; // FIXME: use resources
+    virtual TextureInfoVec                      GetTextures                 () const = 0; // FIXME: use resources
     virtual bool                                HasAnimatingTexture         () const = 0;
     virtual ISequenceAnimationSource *          QuerySequenceAnimationSource() = 0; // FIXME: use generic interface for querying resources that can be 
 

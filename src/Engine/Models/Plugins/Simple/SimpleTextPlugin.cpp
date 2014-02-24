@@ -105,14 +105,17 @@ void                SimpleTextPlugin::Print                       ( std::ostream
 
 // *************************************
 //
-Textures            SimpleTextPlugin::GetTextures                 () const
+TextureInfoVec      SimpleTextPlugin::GetTextures                 () const
 {
-    std::vector< TextureInfo* > prevTextures;
+    std::vector< TextureInfo * > prevTextures;
+
     if( m_prevPlugin )
     {
         prevTextures = m_prevPlugin->GetTextures();
     }
+
     prevTextures.insert( prevTextures.end(), m_textures.begin(), m_textures.end() );
+
     return prevTextures;
 }
 
