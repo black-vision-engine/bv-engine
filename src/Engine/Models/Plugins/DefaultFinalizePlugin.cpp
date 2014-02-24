@@ -37,7 +37,7 @@ const std::string &                 DefaultFinalizePlugin::GetTypeUid           
 
 // *******************************
 //
-IPluginParamValModel *              DefaultFinalizePlugin::GetPluginParamValModel       ()
+IPluginParamValModel *              DefaultFinalizePlugin::GetPluginParamValModel       () const
 {
     return nullptr;
 }

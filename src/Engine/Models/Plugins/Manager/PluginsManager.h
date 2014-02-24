@@ -31,28 +31,28 @@ private:
 
 public:
 
-    unsigned int                                RegisterDescriptors     ( std::vector< IPluginDescriptor * > descriptors );
+    unsigned int                                        RegisterDescriptors     ( std::vector< IPluginDescriptor * > descriptors );
 
-    bool                                        IsRegistered            ( const std::string & uid ) const;
-    const IPluginDescriptor *                   GetDescriptor           ( const std::string & uid ) const;
+    bool                                                IsRegistered            ( const std::string & uid ) const;
+    const IPluginDescriptor *                           GetDescriptor           ( const std::string & uid ) const;
     
-    bool                                        CanBeAttachedTo         ( const std::string & uid, const IPlugin * prev ) const;
-    IPlugin *                                   CreatePlugin            ( const std::string & uid, const std::string & name, const IPlugin * prev ) const;
-    IPlugin *                                   CreatePlugin            ( const std::string & uid, const IPlugin * prev ) const;
-    std::vector< const IPluginDescriptor * >    GetRegisteredDescriptors();
+    bool                                                CanBeAttachedTo         ( const std::string & uid, const IPlugin * prev ) const;
+    IPlugin *                                           CreatePlugin            ( const std::string & uid, const std::string & name, const IPlugin * prev ) const;
+    IPlugin *                                           CreatePlugin            ( const std::string & uid, const IPlugin * prev ) const;
+    const std::vector< const IPluginDescriptor * > &    GetRegisteredDescriptors() const;
 
-    IPluginListFinalized *                      CreatePlugins           ( const std::vector< std::string > & uids ) const;
-    IPluginListFinalized *                      CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names ) const;
-    IPluginListFinalized *                      CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins ) const;
+    IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::string > & uids ) const;
+    IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names ) const;
+    IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins ) const;
 
-    DefaultPluginListFinalized *                CreatePluginsDefaultImpl( const std::vector< std::string > & uids ) const;
-    DefaultPluginListFinalized *                CreatePluginsDefaultImpl( const std::vector< std::string > & uids, const std::vector< std::string > & names ) const;
-    DefaultPluginListFinalized *                CreatePluginsDefaultImpl( const std::vector< std::pair< std::string, std::string > > & plugins ) const;
+    DefaultPluginListFinalized *                        CreatePluginsDefaultImpl( const std::vector< std::string > & uids ) const;
+    DefaultPluginListFinalized *                        CreatePluginsDefaultImpl( const std::vector< std::string > & uids, const std::vector< std::string > & names ) const;
+    DefaultPluginListFinalized *                        CreatePluginsDefaultImpl( const std::vector< std::pair< std::string, std::string > > & plugins ) const;
 
 public:
 
-    static PluginsManager &                     DefaultInstanceRef      ();
-    static const PluginsManager &               DefaultInstance         ();
+    static PluginsManager &                             DefaultInstanceRef      ();
+    static const PluginsManager &                       DefaultInstance         ();
 
 };
 

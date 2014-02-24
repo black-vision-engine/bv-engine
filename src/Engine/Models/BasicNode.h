@@ -68,6 +68,7 @@ public:
 
     //Utility API - plugins can be added on-the-fly by user using an editor
     bool                                    AddPlugin               ( IPlugin * plugin );
+    bool                                    AddPlugin               ( IPluginPtr plugin );
     bool                                    AddPlugin               ( const std::string & uid );
     bool                                    AddPlugin               ( const std::string & uid, const std::string & name );
 

@@ -36,7 +36,7 @@ public:
 
     virtual                                     ~BasePlugin                 ();
 
-    virtual IPluginParamValModel *              GetPluginParamValModel      ();
+    virtual IPluginParamValModel *              GetPluginParamValModel      () const;
     virtual void                                Update                      ( TimeType t );
 
     const std::string &                         GetName                     () const    { return m_name; } 
@@ -101,7 +101,7 @@ BasePlugin< Iface >::~BasePlugin()
 // *******************************
 //
 template< class Iface >
-IPluginParamValModel *   BasePlugin< Iface >::GetPluginParamValModel  ()
+IPluginParamValModel *   BasePlugin< Iface >::GetPluginParamValModel  () const
 {
     return m_pluginParamValModel.get();
 }

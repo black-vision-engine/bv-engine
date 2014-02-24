@@ -174,117 +174,114 @@ SceneNode *                 BasicNode::BuildScene()
     if ( effect ) //create only, if there is any geometry to be renderedm
     {
         //TODO: dodac liste layerow do zwracanego SceneNode
-        for( unsigned int i = 0; i < 1; ++i )
+        RenderablePass * renderablePass = effect->GetPass( 0 ); //FIXME: add code to cope with more render passes
+        auto pixelShader = renderablePass->GetPixelShader();
+
+        if( finalizer->HasAnimatingTexture() ) //FIXME: this suxx, some flags should be passed here
         {
-            RenderablePass * renderablePass = effect->GetPass( 0 ); //FIXME: add code to cope with more render passes
-            auto pixelShader = renderablePass->GetPixelShader();
+            SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT }; 
+            auto textureSampler = new TextureSampler( 0, "Animation0", bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ) );
 
-            if( finalizer->HasAnimatingTexture() ) //FIXME: this suxx, some flags should be passed here
+            pixelShader->AddTextureSampler( textureSampler );
+            TextureAnimatedSequence2D * animation = nullptr;
+
+            unsigned int i = 0;
+            for( auto tex : finalizer->GetTextures() )
             {
-                SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT }; 
-                auto textureSampler = new TextureSampler( 0, "Animation0", bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ) );
+                auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
 
-                pixelShader->AddTextureSampler( textureSampler );
-                TextureAnimatedSequence2D * animation = nullptr;
-
-                unsigned int i = 0;
-                for( auto tex : finalizer->GetTextures() )
+                if( i == 0 )
                 {
-                    auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
-
-                    if( i == 0 )
-                    {
-                        animation = new TextureAnimatedSequence2D( loadedTex->GetFormat(), loadedTex->GetType(), loadedTex->GetWidth(), loadedTex->GetHeight() );
-                    }
-
-                    animation->AddTexture( loadedTex );
-                    ++i;
+                    animation = new TextureAnimatedSequence2D( loadedTex->GetFormat(), loadedTex->GetType(), loadedTex->GetWidth(), loadedTex->GetHeight() );
                 }
 
-                assert( i > 1 );
-                ShaderTextureParameters & texParams = pixelShader->Parameters()->TextureParameters();
-                bool bAdded = ShaderTextureParametersAccessor::Add( texParams, animation );
+                animation->AddTexture( loadedTex );
+                ++i;
+            }
+
+            assert( i > 1 );
+            ShaderTextureParameters & texParams = pixelShader->Parameters()->TextureParameters();
+            bool bAdded = ShaderTextureParametersAccessor::Add( texParams, animation );
+
+            assert( bAdded );
+
+            UpdatersManager & updatersManager = UpdatersManager::Get();
+
+            SequenceAnimationUpdater * updater = new SequenceAnimationUpdater( animation, finalizer->QuerySequenceAnimationSource() );
+            updatersManager.RegisterUpdater( updater );
+        }
+        else
+        {
+            int i = 0;
+            for( auto tex : finalizer->GetTextures() )
+            {
+                SamplerWrappingMode wp[] = {
+                                                ConstantsMapper::EngineConstant( tex->m_wrappingModeX ) 
+                                            ,   ConstantsMapper::EngineConstant( tex->m_wrappingModeY )
+                                            ,   SamplerWrappingMode::SWM_REPEAT // FIXME: Add 3d texture support
+                                            }; 
+                //FIXME: jak to kurwa przez tex->m_texName ????
+                auto textureSampler = new TextureSampler(       i
+                                                            ,   tex->m_texName
+                                                            ,   bv::SamplerSamplingMode::SSM_MODE_2D
+                                                            ,   ConstantsMapper::EngineConstant( tex->m_finteringMode )
+                                                            ,   wp
+                                                            ,   tex->m_texBorderColor.Evaluate( 0.f ) );
+                effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );
+
+                auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
+
+                ShaderTextureParameters & texParams = effect->GetPass( 0 )->GetPixelShader()->Parameters()->TextureParameters();
+                bool bAdded = ShaderTextureParametersAccessor::Add( texParams, loadedTex );
 
                 assert( bAdded );
 
-                UpdatersManager & updatersManager = UpdatersManager::Get();
-
-                SequenceAnimationUpdater * updater = new SequenceAnimationUpdater( animation, finalizer->QuerySequenceAnimationSource() );
-                updatersManager.RegisterUpdater( updater );
+                i++;
             }
-            else
-            {
-                int i = 0;
-                for( auto tex : finalizer->GetTextures() )
-                {
-                    SamplerWrappingMode wp[] = {
-                                                    ConstantsMapper::EngineConstant( tex->m_wrappingModeX ) 
-                                                ,   ConstantsMapper::EngineConstant( tex->m_wrappingModeY )
-                                                ,   SamplerWrappingMode::SWM_REPEAT // FIXME: Add 3d texture support
-                                                }; 
-                    //FIXME: jak to kurwa przez tex->m_texName ????
-                    auto textureSampler = new TextureSampler(       i
-                                                                ,   tex->m_texName
-                                                                ,   bv::SamplerSamplingMode::SSM_MODE_2D
-                                                                ,   ConstantsMapper::EngineConstant( tex->m_finteringMode )
-                                                                ,   wp
-                                                                ,   tex->m_texBorderColor.Evaluate( 0.f ) );
-                    effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );
+        }
 
-                    auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
+        //FIXME: Only last plugin should be used here as its output corresponds to the final transformation (list)
+        //FIXME: Updater only sets proper local and world matrices for the geometry and all model transformations have already been updated at this point
 
-                    ShaderTextureParameters & texParams = effect->GetPass( 0 )->GetPixelShader()->Parameters()->TextureParameters();
-                    bool bAdded = ShaderTextureParametersAccessor::Add( texParams, loadedTex );
+        if ( true )
+        {
+            UpdatersManager & updatersManager = UpdatersManager::Get();
 
-                    assert( bAdded );
-
-                    i++;
-                }
-            }
-
-            //FIXME: Only last plugin should be used here as its output corresponds to the final transformation (list)
-            //FIXME: Updater only sets proper local and world matrices for the geometry and all model transformations have already been updated at this point
-
-            if ( true )
-            {
-                UpdatersManager & updatersManager = UpdatersManager::Get();
-
-                auto transChannel = finalizer->GetTransformChannel();        
-                auto vaChannel = finalizer->GetVertexAttributesChannel();
+            auto transChannel = finalizer->GetTransformChannel();        
+            auto vaChannel = finalizer->GetVertexAttributesChannel();
             
-                assert( transChannel != nullptr );
-                assert( vaChannel != nullptr );
+            assert( transChannel != nullptr );
+            assert( vaChannel != nullptr );
 
-                TransformUpdater * transformUpdater = new TransformUpdater( renderEnt, transChannel );
-                updatersManager.RegisterUpdater( transformUpdater );
+            TransformUpdater * transformUpdater = new TransformUpdater( renderEnt, transChannel );
+            updatersManager.RegisterUpdater( transformUpdater );
 
-                if ( !vaChannel->IsTimeInvariant() )
-                {
-                    GeometryUpdater * geometryUpdater = new GeometryUpdater( renderEnt, vaChannel );
-                    updatersManager.RegisterUpdater( geometryUpdater );
-                }
+            if ( !vaChannel->IsTimeInvariant() )
+            {
+                GeometryUpdater * geometryUpdater = new GeometryUpdater( renderEnt, vaChannel );
+                updatersManager.RegisterUpdater( geometryUpdater );
+            }
 
-                auto psc = finalizer->GetPixelShaderChannel();
-                auto renderCtx = psc->GetRendererContext();
+            auto psc = finalizer->GetPixelShaderChannel();
+            auto renderCtx = psc->GetRendererContext();
 
-                assert( renderCtx );
+            assert( renderCtx );
 
-                for( int i = 0; i < effect->NumPasses(); ++i )
-                {
-                    auto inst = effect->GetPass( i )->GetStateInstance();
+            for( int i = 0; i < effect->NumPasses(); ++i )
+            {
+                auto inst = effect->GetPass( i )->GetStateInstance();
 
-                    assert( !inst->GetAlphaState() );
-                    assert( !inst->GetCullState() );
-                    assert( !inst->GetDepthState() );
-                    assert( !inst->GetFillState() );
-                    assert( !inst->GetOffsetState() );
-                    assert( !inst->GetStencilState() );
+                assert( !inst->GetAlphaState() );
+                assert( !inst->GetCullState() );
+                assert( !inst->GetDepthState() );
+                assert( !inst->GetFillState() );
+                assert( !inst->GetOffsetState() );
+                assert( !inst->GetStencilState() );
 
-                    RendererStatesBuilder::Create( inst, renderCtx );
+                RendererStatesBuilder::Create( inst, renderCtx );
 
-                    RenderStateUpdater * rendererStateUpdater = new RenderStateUpdater( inst, renderCtx );
-                    updatersManager.RegisterUpdater( rendererStateUpdater );
-                }
+                RenderStateUpdater * rendererStateUpdater = new RenderStateUpdater( inst, renderCtx );
+                updatersManager.RegisterUpdater( rendererStateUpdater );
             }
         }
     }
@@ -344,6 +341,13 @@ bool            BasicNode::AddPlugin                ( IPlugin * plugin )
     m_pluginList->AttachPlugin( plugin );
 
     return true;
+}
+
+// ********************************
+//
+bool            BasicNode::AddPlugin               ( IPluginPtr plugin )
+{
+    return AddPlugin( plugin.get() );
 }
 
 // ********************************

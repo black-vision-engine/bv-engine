@@ -22,7 +22,7 @@ public:
     virtual const std::string &                 GetName                     () const override;
     virtual const std::string &                 GetTypeUid                  () const override;
                                                                                      
-    virtual IPluginParamValModel *              GetPluginParamValModel      () override;
+    virtual IPluginParamValModel *              GetPluginParamValModel      () const override;
                                                                                      
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
     virtual const ITransformChannel *           GetTransformChannel         () const override;

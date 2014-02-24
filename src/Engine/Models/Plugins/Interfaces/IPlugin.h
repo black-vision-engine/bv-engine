@@ -32,7 +32,7 @@ public:
     virtual const std::string &                 GetName                     () const = 0;
     virtual const std::string &                 GetTypeUid                  () const = 0;
 
-    virtual IPluginParamValModel *              GetPluginParamValModel      () = 0;
+    virtual IPluginParamValModel *              GetPluginParamValModel      () const = 0; //FIXME: czy tu nie powinno byc tez od razu const przy zwracanym wskazniku?
 
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const = 0;
     virtual const ITransformChannel *           GetTransformChannel         () const = 0;
