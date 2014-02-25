@@ -12,6 +12,10 @@ namespace bv { namespace model {
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
 class SimpleParameterImpl : public AbstractModelParameter
 {
+public:
+
+    typedef ValueType ValType;
+
 protected:
 
     InterpolatorType m_interpolator;
@@ -34,6 +38,10 @@ public:
 // *******************************************
 class ParamMat2 : public SimpleParameterImpl< Vec4Interpolator, glm::vec4, ModelParamType::MPT_MAT2 >
 {
+public:
+
+    typedef glm::mat2 ValType;
+
 private:
 
     typedef SimpleParameterImpl< Vec4Interpolator, glm::vec4, ModelParamType::MPT_MAT2 > Parent;

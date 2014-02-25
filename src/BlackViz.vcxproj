@@ -263,6 +263,7 @@
     <ClCompile Include="Engine\Models\Plugins\Manager\PluginsManager.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\ParametersFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ParamValModel\DefaultParamValModel.cpp" />
@@ -469,6 +470,7 @@
     <ClInclude Include="Engine\Models\Plugins\Manager\PluginsManager.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\ParametersFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.h" />
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\DefaultParamValModel.h" />
@@ -593,6 +595,7 @@
     <None Include="Engine\Models\Plugins\Channels\ShaderChannel.inl" />
     <None Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />
     <None Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />
+    <None Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.inl" />
     <None Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.inl" />
     <None Include="System\HerarchicalProfiler.inl" />
   </ItemGroup>

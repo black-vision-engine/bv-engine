@@ -2,9 +2,11 @@
 
 #include "Engine/Models/Plugins/Interfaces/IPluginListFinalized.h"
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
-#include "Engine/Models/BasicNode.h"
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 #include "Engine/Models/Plugins/PluginsFactory.h"
+
+#include "Engine/Models/BasicNode.h"
 
 
 namespace bv {
@@ -238,15 +240,36 @@ void  QueryPropertiesDefaultSceneConvenienceAPI ( const model::PluginsManager * 
 
     model::IParameter * color_p     = node->GetPlugin( "solid color" )->GetParameter( "color" );
     const IValue * color_v          = node->GetPlugin( "solid color" )->GetValue( "color" );
+}
 
-    //Oczywiscie mozna pobierac wszystkie parametry/valiusy dla danego pluginu jedna metoda, ale jest tez to API powyzsze do dobierania sie do nich pojedynczo
+// *****************************
+//
+void  QueryPropertiesDefaultSceneConvenienceAPIParameterSetters ( const model::PluginsManager * pluginsManager )
+{
+    using namespace model;
 
-    //FIXME: dodac generic setter API dla propertiesow (i moze tez dla valiusow)
-    //cos w stylu bool SetProperty( IProperty *, TimeType, typed_value ); //bool, bo typy moga sie nie zgadzac i wtedy properties nie zostanie ustawiony
-    //dla valiusow bedzie nieco latwiej bool SetValue( IValue *, typed_value ); //bool tak samo, jak wyzej - ale to API moze nie jest potrzebnem bo u nas valiusy sa ustawiane chyba tylko w evaluatorach, a w pozostalych
-    //miejscach tylko oczytywane, wiec nie ma wielkiego problemu
+    BasicNode *  node = DefaultTestNodeNewNodeImpl( pluginsManager );
 
-    //FIXME: wszystkie FIXME z tego pliku dodac do pivotala (sety generyczne, api dstepowe do dzieci i layerow w nodzie)
+    IParameter * transform_p = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+
+    //Rectangle plugin nie ma valiusow, a tylko parametry
+    IParameter * width_p     = node->GetPlugin( "rectangle" )->GetParameter( "width" );
+    IParameter * height_p    = node->GetPlugin( "rectangle" )->GetParameter( "height" );
+
+    IParameter * color_p     = node->GetPlugin( "solid color" )->GetParameter( "color" );
+
+    bool success = true;
+
+    success &= SetParameterRotation( transform_p, 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 90.f );
+    success &= SetParameterScale( transform_p, 0, 0.0f, glm::vec3( 1.f, 2.f, 1.f ) );
+    success &= SetParameterTranslation( transform_p, 0, 0.0f, glm::vec3( 0.f, 1.f, -2.f ) );
+
+    success &= SetParameter( width_p, 0.f, 1.0f );
+    success &= SetParameter( height_p, 0.f, 1.0f );
+
+    success &= SetParameter( color_p, 0.f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
+
+    assert( success );
 }
 
 } // anonymous

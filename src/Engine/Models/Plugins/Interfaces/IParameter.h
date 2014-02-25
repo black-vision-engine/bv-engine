@@ -25,7 +25,10 @@ public:
 template< typename ParamType >
 ParamType * QueryTypedParam( IParameter * param )
 {
-    assert( param->GetType() == ParamType::Type() );
+    if( param->GetType() != ParamType::Type() )
+    {
+        return nullptr;
+    }
 
     return static_cast< ParamType * >( param->QueryParamTyped() );
 }

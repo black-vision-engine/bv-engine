@@ -27,7 +27,10 @@ public:
 template< typename ValueType >
 ValueType * QueryTypedValue( IValue * val )
 {
-    assert( val->GetType() == ValueType::Type() );
+    if( val->GetType() != ValueType::Type() )
+    {
+        return nullptr;
+    }
 
     return static_cast< ValueType * >( val->QueryValueTyped() );
 }

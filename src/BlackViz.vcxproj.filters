@@ -175,6 +175,7 @@
     <ClCompile Include="Engine\Types\Values\ValuesFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\DefaultPluginListFinalized.cpp" />
     <ClCompile Include="Engine\Models\Plugins\DefaultFinalizePlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -397,6 +398,7 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginListFinalized.h" />
     <ClInclude Include="Engine\Models\Plugins\DefaultPluginListFinalized.h" />
     <ClInclude Include="Engine\Models\Plugins\DefaultFinalizePlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
@@ -404,6 +406,7 @@
     <None Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.inl" />
     <None Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />
     <None Include="Engine\Models\Plugins\Channels\ShaderChannel.inl" />
+    <None Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />
