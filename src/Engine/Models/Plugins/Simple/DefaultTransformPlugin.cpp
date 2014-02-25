@@ -56,7 +56,18 @@ DefaultTransformPlugin::DefaultTransformPlugin  ( const std::string & name, cons
     , m_transformChannel( nullptr )
     , m_paramValModel( model )
 { 
-    m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( prev, model->GetTransformChannelModel(), false ) );
+    auto trModel = model->TransformChannelModelImpl();
+
+    assert( trModel );
+
+    ValueMat4PtrVec typedVals;
+
+    for( auto val : trModel->GetValuesNC() )
+    {
+        typedVals.push_back( QueryTypedValue< ValueMat4 >( val ) );
+    }
+
+    m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( prev, typedVals, false ) );
 }
 
 // *************************************

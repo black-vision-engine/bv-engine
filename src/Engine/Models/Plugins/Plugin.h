@@ -36,11 +36,14 @@ public:
 
     virtual                                     ~BasePlugin                 ();
 
-    virtual IPluginParamValModel *              GetPluginParamValModel      () const;
+    virtual IPluginParamValModel *              GetPluginParamValModel      () const override;
+    virtual IParameter *                        GetParameter                ( const std::string & name ) const override;
+    virtual const bv::IValue *                  GetValue                    ( const std::string & name ) const override;
+
     virtual void                                Update                      ( TimeType t );
 
-    const std::string &                         GetName                     () const    { return m_name; } 
-    const std::string &                         GetTypeUid                  () const    { return m_uid; } 
+    const std::string &                         GetName                     () const override   { return m_name; } 
+    const std::string &                         GetTypeUid                  () const override   { return m_uid; } 
 
     virtual void                                SetGeometryChannel          ( VertexAttributesChannel * vaChannel ) { assert(!"Implement in derived class"); }
     virtual void                                SetTransformChannel         ( TransformChannel * transformChannel ) { assert(!"Implement in derived class"); }
@@ -101,9 +104,65 @@ BasePlugin< Iface >::~BasePlugin()
 // *******************************
 //
 template< class Iface >
-IPluginParamValModel *   BasePlugin< Iface >::GetPluginParamValModel  () const
+IPluginParamValModel *      BasePlugin< Iface >::GetPluginParamValModel () const
 {
     return m_pluginParamValModel.get();
+}
+
+// *******************************
+//
+template< class Iface >
+IParameter *                BasePlugin< Iface >::GetParameter           ( const std::string & name ) const
+{
+    IPluginParamValModel * pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
+    
+    IParamValModel * models[] = {     pvm->GetPluginModel()
+                                    , pvm->GetTransformChannelModel()
+                                    , pvm->GetVertexAttributesChannelModel()
+                                    , pvm->GetPixelShaderChannelModel()
+                                    , pvm->GetVertexShaderChannelModel()
+                                    , pvm->GetGeometryShaderChannelModel() 
+                                };
+
+    IParameter * retParam = nullptr;
+
+    for( auto model : models )
+    {
+        if( model && ( retParam = model->GetParameter( name ) ) )
+        {
+            return retParam;
+        }
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+template< class Iface >
+const bv::IValue *          BasePlugin< Iface >::GetValue           ( const std::string & name ) const
+{
+    IPluginParamValModel * pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
+    
+    IParamValModel * models[] = {     pvm->GetPluginModel()
+                                    , pvm->GetTransformChannelModel()
+                                    , pvm->GetVertexAttributesChannelModel()
+                                    , pvm->GetPixelShaderChannelModel()
+                                    , pvm->GetVertexShaderChannelModel()
+                                    , pvm->GetGeometryShaderChannelModel() 
+                                };
+
+    const bv::IValue * retVal = nullptr;
+
+    for( auto model : models )
+    {
+        if( model && ( retVal = model->GetValue( name ) ) )
+        {
+            return retVal;
+        }
+    }
+
+    return nullptr;
 }
 
 // *******************************

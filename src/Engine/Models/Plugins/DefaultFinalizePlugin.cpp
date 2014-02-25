@@ -44,6 +44,20 @@ IPluginParamValModel *              DefaultFinalizePlugin::GetPluginParamValMode
 
 // *******************************
 //
+IParameter *                        DefaultFinalizePlugin::GetParameter                 ( const std::string & name ) const
+{
+    return nullptr;
+}
+
+// *******************************
+//
+const bv::IValue *                  DefaultFinalizePlugin::GetValue                    ( const std::string & name ) const
+{
+    return nullptr;
+}
+
+// *******************************
+//
 const IVertexAttributesChannel *    DefaultFinalizePlugin::GetVertexAttributesChannel   () const
 {
     assert( m_prevPlugin );

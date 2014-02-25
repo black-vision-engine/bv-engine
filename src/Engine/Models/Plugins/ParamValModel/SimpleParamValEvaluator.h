@@ -19,8 +19,8 @@ private:
     ParamType *     m_param;
     ValueType *     m_value;
 
-    std::vector< IParameter * >     m_paramWrapper;
-    std::vector< bv::IValue * >     m_valueWrapper;
+    std::vector< IParameter * >         m_paramWrapper;
+    std::vector< const bv::IValue * >   m_valueWrapper;
 
 private:
 
@@ -28,16 +28,16 @@ private:
 
 public:
 
-    virtual std::vector< IParameter * > &       GetParameters   () override;
-    virtual const std::vector< bv::IValue * > & GetValues       () const override;
+    virtual std::vector< IParameter * > &               GetParameters   () override;
+    virtual const std::vector< const bv::IValue * > &   GetValues       () const override;
     
-    virtual IParameter *                        GetParameter    ( const std::string & name ) override;
-    virtual bv::IValue *                        GetValue        ( const std::string & name ) const override;
+    virtual IParameter *                                GetParameter    ( const std::string & name ) override;
+    virtual const bv::IValue *                          GetValue        ( const std::string & name ) const override;
 
-    virtual void                                Evaluate        ( TimeType t ) override;
+    virtual void                                        Evaluate        ( TimeType t ) override;
 
-    ParamType *                                 Parameter       ();
-    ValueType *                                 Value           ();
+    ParamType *                                         Parameter       ();
+    ValueType *                                         Value           ();
 
     friend class ParamValEvaluatorFactory;
 
@@ -59,7 +59,7 @@ SimpleParamValEvaluator< ParamType, ValueType >::SimpleParamValEvaluator( ParamT
 // *******************************
 //
 template< typename ParamType, typename ValueType >
-std::vector< IParameter * > &   SimpleParamValEvaluator< ParamType, ValueType >::GetParameters   ()
+std::vector< IParameter * > &               SimpleParamValEvaluator< ParamType, ValueType >::GetParameters   ()
 {
     return m_paramWrapper;
 }
@@ -67,7 +67,7 @@ std::vector< IParameter * > &   SimpleParamValEvaluator< ParamType, ValueType >:
 // *******************************
 //
 template< typename ParamType, typename ValueType >
-const std::vector< bv::IValue * > &   SimpleParamValEvaluator< ParamType, ValueType >::GetValues () const
+const std::vector< const bv::IValue * > &   SimpleParamValEvaluator< ParamType, ValueType >::GetValues () const
 {
     return m_valueWrapper;
 }
@@ -75,7 +75,7 @@ const std::vector< bv::IValue * > &   SimpleParamValEvaluator< ParamType, ValueT
 // *******************************
 //
 template< typename ParamType, typename ValueType >
-IParameter *                    SimpleParamValEvaluator< ParamType, ValueType >::GetParameter    ( const std::string & name )
+IParameter *                                SimpleParamValEvaluator< ParamType, ValueType >::GetParameter    ( const std::string & name )
 {
     if( m_param->GetName() == name )
     {
@@ -88,7 +88,7 @@ IParameter *                    SimpleParamValEvaluator< ParamType, ValueType >:
 // *******************************
 //
 template< typename ParamType, typename ValueType >
-bv::IValue *                    SimpleParamValEvaluator< ParamType, ValueType >::GetValue        ( const std::string & name ) const
+const bv::IValue *                          SimpleParamValEvaluator< ParamType, ValueType >::GetValue        ( const std::string & name ) const
 {
     if( m_value->GetName() == name )
     {
@@ -101,7 +101,7 @@ bv::IValue *                    SimpleParamValEvaluator< ParamType, ValueType >:
 // *******************************
 //
 template< typename ParamType, typename ValueType >
-void    SimpleParamValEvaluator< ParamType, ValueType >::Evaluate       ( TimeType t )
+void                                        SimpleParamValEvaluator< ParamType, ValueType >::Evaluate       ( TimeType t )
 {
     m_value->SetValue( m_param->Evaluate( t ) );
 }
@@ -109,7 +109,7 @@ void    SimpleParamValEvaluator< ParamType, ValueType >::Evaluate       ( TimeTy
 // *******************************
 //
 template< typename ParamType, typename ValueType >
-ParamType *                             SimpleParamValEvaluator< ParamType, ValueType >::Parameter       ()
+ParamType *                                 SimpleParamValEvaluator< ParamType, ValueType >::Parameter       ()
 {
     return m_param;
 }
@@ -117,7 +117,7 @@ ParamType *                             SimpleParamValEvaluator< ParamType, Valu
 // *******************************
 //
 template< typename ParamType, typename ValueType >
-ValueType *                             SimpleParamValEvaluator< ParamType, ValueType >::Value           ()
+ValueType *                                 SimpleParamValEvaluator< ParamType, ValueType >::Value           ()
 {
     return m_value;
 }

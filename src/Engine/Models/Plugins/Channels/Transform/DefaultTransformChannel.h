@@ -27,7 +27,7 @@ private:
 
 public:
 
-    static  DefaultTransformChannel *   Create                  ( const IPlugin * prev, IValueSet * values, bool isReadOnly = false );
+    static  DefaultTransformChannel *   Create                  ( const IPlugin * prev, const ValueMat4PtrVec & values, bool isReadOnly = false );
 
     virtual const ValueMat4PtrVec &     GetTransformValues      ()  const override;
 

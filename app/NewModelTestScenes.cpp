@@ -124,7 +124,7 @@ void QueryParametersGeneric    ( const std::vector< model::IParameter * > & para
 
 // *****************************
 //
-void QueryValuesGeneric    ( const std::vector< IValue * > & values )
+void QueryValuesGeneric    ( const std::vector< const IValue * > & values )
 {
     printf( "Parameters:\n");
 
@@ -212,6 +212,32 @@ void  QueryPropertiesDefaultScene   ( const model::PluginsManager * pluginsManag
 
     const model::IParameter * color_p       = node->GetPlugin( "solid color" )->GetPluginParamValModel()->GetTransformChannelModel()->GetParameter( "color" );
     const IValue * color_v                  = node->GetPlugin( "solid color" )->GetPluginParamValModel()->GetTransformChannelModel()->GetValue( "color" );
+
+    //Oczywiscie mozna pobierac wszystkie parametry/valiusy dla danego pluginu jedna metoda, ale jest tez to API powyzsze do dobierania sie do nich pojedynczo
+
+    //FIXME: dodac generic setter API dla propertiesow (i moze tez dla valiusow)
+    //cos w stylu bool SetProperty( IProperty *, TimeType, typed_value ); //bool, bo typy moga sie nie zgadzac i wtedy properties nie zostanie ustawiony
+    //dla valiusow bedzie nieco latwiej bool SetValue( IValue *, typed_value ); //bool tak samo, jak wyzej - ale to API moze nie jest potrzebnem bo u nas valiusy sa ustawiane chyba tylko w evaluatorach, a w pozostalych
+    //miejscach tylko oczytywane, wiec nie ma wielkiego problemu
+
+    //FIXME: wszystkie FIXME z tego pliku dodac do pivotala (sety generyczne, api dstepowe do dzieci i layerow w nodzie)
+}
+
+// *****************************
+//
+void  QueryPropertiesDefaultSceneConvenienceAPI ( const model::PluginsManager * pluginsManager )
+{
+    model::BasicNode *  node = DefaultTestNodeNewNodeImpl( pluginsManager );
+
+    model::IParameter * transform_p = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    const IValue * transform_v      = node->GetPlugin( "transform" )->GetValue( "simple_transform" );
+
+    //Rectangle plugin nie ma valiusow, a tylko parametry
+    model::IParameter * width_p     = node->GetPlugin( "rectangle" )->GetParameter( "width" );
+    model::IParameter * height_p    = node->GetPlugin( "rectangle" )->GetParameter( "height" );
+
+    model::IParameter * color_p     = node->GetPlugin( "solid color" )->GetParameter( "color" );
+    const IValue * color_v          = node->GetPlugin( "solid color" )->GetValue( "color" );
 
     //Oczywiscie mozna pobierac wszystkie parametry/valiusy dla danego pluginu jedna metoda, ale jest tez to API powyzsze do dobierania sie do nich pojedynczo
 
