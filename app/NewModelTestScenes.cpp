@@ -272,6 +272,50 @@ void  QueryPropertiesDefaultSceneConvenienceAPIParameterSetters ( const model::P
     assert( success );
 }
 
+// *****************************
+//
+void  QueryPropertiesDefaultSceneConvenienceAPIParameterSettersNoErrorChecking ( const model::PluginsManager * pluginsManager )
+{
+    model::BasicNode *  n = DefaultTestNodeNewNodeImpl( pluginsManager );
+
+    SetParameterRotation    ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 90.f );
+    SetParameterScale       ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, 2.f, 1.f ) );
+    SetParameterTranslation ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 1.f, -2.f ) );
+
+    SetParameter( n->GetPlugin( "rectangle" )->GetParameter( "width" ), 0.f, 1.0f );
+    SetParameter( n->GetPlugin( "rectangle" )->GetParameter( "height" ), 0.f, 1.0f );
+
+    SetParameter( n->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
+}
+
+class A
+{
+public:
+
+    typedef void (A::*fvptr)();
+    typedef void (A::*ffptr)(float);
+    typedef int (A::*fiptr)(double);
+
+public:
+
+    static void f(int) {};
+    void        f() {};
+    void        f(float) {};
+    int         f(double) { return 0; };
+
+    void * return_f()
+    {
+        fvptr f0 = &A::f;
+        ffptr f1 = &A::f;
+        fiptr f2 = &A::f;
+
+        //Won't compile
+        //auto i_chuj = &A::f;
+
+        return nullptr;
+    }
+};
+
 } // anonymous
 
 // *****************************
@@ -284,3 +328,5 @@ model::BasicNode *     TestScenesFactory::NewModelTestScene     ( const model::P
 }
 
 } //bv
+
+ 
