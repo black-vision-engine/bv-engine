@@ -51,3 +51,13 @@ Uwagi ogólne:
       ShaderParamy są tworzone po nazwie za pomocą shader param factory (ShaderParamFactory) - w przypadku VS to są jawnie wpisane
       stringi ("M", "MV", "MVP") i tam tworzone są od razu i valiusy i shader paramy z identycznymi nazwami i typami valiusów.
       Przypadek parametru generycznego (tworzonego z poziomu shader channela): 
+        np. kolor w starej implementacji solid koloru
+
+Czyli TransformUpdater,GeometryUpdater,ShaderParamUpdater - te wszystkie mogą być bezpieczne updatowane mechanizmem
+    GenericUpdater( finalize_plugin -> TransformableEntity(querowane na RenderableEntity) )
+    ShaderParamUpdater zdecydowanie wymaga jeszcze przemyślenia i doprojektowania, bo na razie jest rejestrowany do środka shadera poprzez
+    register updater, a pewnie można by go było jakoś ogarnąć tak, żeby to był w stanie pobierać dane po prostu czytając z valiusów
+    samemu, jako dorosły shader, a nie poprzez jakiś dziwny, sztuczny dla niego updater). Do ogarnięcia i przemyślenia.
+    
+    Do ogarnięcia zostaje NodeUpdater i RenderStateUpdater, które trzeba gdzieś dobrze i sensownie wpasować. CameraUpdater ssie
+    i należy go wywalić

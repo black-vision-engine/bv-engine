@@ -201,10 +201,6 @@ void  QueryPropertiesDefaultScene   ( const model::PluginsManager * pluginsManag
 {
     model::BasicNode *  node = DefaultTestNodeNewNodeImpl( pluginsManager );
 
-    //Teoretycznie plugin juz moglby miec API dostepowe do odpowiednich modeli dla kanalow, ale poniewaz caly model jeszcze moze sie zmieniac
-    //wiec lepiej, zeby byl wyizolowany w oddzielnej klasce (IPluginParamValModel), a jak juz nie bedzie wiekszych zmian, to mozna bedzie dodac to API i wtedy wywolanie sie uprosci do
-    //node->GetPlugin( "transform" )->GetTransformChannelModel()->GetParameter( "simple_transform" ) //prosciej sie na razie nie da, bo kanaly moga miec parametry o tych samych nazwach
-
     const model::IParameter * transform_p   = node->GetPlugin( "transform" )->GetPluginParamValModel()->GetTransformChannelModel()->GetParameter( "simple_transform" );
     const IValue * transform_v              = node->GetPlugin( "transform" )->GetPluginParamValModel()->GetTransformChannelModel()->GetValue( "simple_transform" );
 
@@ -216,13 +212,6 @@ void  QueryPropertiesDefaultScene   ( const model::PluginsManager * pluginsManag
     const IValue * color_v                  = node->GetPlugin( "solid color" )->GetPluginParamValModel()->GetTransformChannelModel()->GetValue( "color" );
 
     //Oczywiscie mozna pobierac wszystkie parametry/valiusy dla danego pluginu jedna metoda, ale jest tez to API powyzsze do dobierania sie do nich pojedynczo
-
-    //FIXME: dodac generic setter API dla propertiesow (i moze tez dla valiusow)
-    //cos w stylu bool SetProperty( IProperty *, TimeType, typed_value ); //bool, bo typy moga sie nie zgadzac i wtedy properties nie zostanie ustawiony
-    //dla valiusow bedzie nieco latwiej bool SetValue( IValue *, typed_value ); //bool tak samo, jak wyzej - ale to API moze nie jest potrzebnem bo u nas valiusy sa ustawiane chyba tylko w evaluatorach, a w pozostalych
-    //miejscach tylko oczytywane, wiec nie ma wielkiego problemu
-
-    //FIXME: wszystkie FIXME z tego pliku dodac do pivotala (sety generyczne, api dstepowe do dzieci i layerow w nodzie)
 }
 
 // *****************************
