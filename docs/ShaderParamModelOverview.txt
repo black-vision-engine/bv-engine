@@ -1,0 +1,49 @@
+﻿Parametry w BV
+
+Shader trzyma wskaźnik na swoje parametry (ShaderParameters)
+ShaderParameters - lista UniformShaderParam - i one sa takie bardzo generyczne, a tutaj można by było trochę potypować
+  czyli mieć float, int, bool i tak dalej
+  do tego każdy z nich może mieć odpowiednio dużo slotów w pamięci (czyli wektory) - trzeba się nad tym zastanowić
+Update odbywa się w momencie jakimś z dupy, bo wewnątrz ShaderUpdate jest odpalany jakiś sztuczny updater->Update( czas ), co
+dopiero updatuje ShaderParamsy - bez sensu i bez sensu.
+
+Update powinno być w rendererze i powodować update w parametrach, ale tylko tyle, bez jakiejś bezsensownej, pośredniej warstwy, która
+nic nie wnosi, a do tego jest wywoływana przez jakąś dupę.
+
+Uwaga: W WM wszystkie updaty odbywają się w draw i to jest OK, bo izoluje renderer generyczny od implementacji na platformę (np. gl)
+u nas się to odbywa wewnątrz Enable dla RenderablePass i TransormableEntity - co nie jest aż tak dobre bo Enable powinny być tylko
+dla platform dependent render (GL), a logika updatu generyczna powinna się odbywać wcześniej, nawet jeśli w wyspecjalizowanej funkcji.
+Enable powinno tylko tworzyć PDR i odpalać na tym PDR jego ENABLE już GLowe (platform dependent).
+
+Przykladowe parametry shaderów w WM
+- Tworzone podczas CreateScene(), w ramach tworzonego efektu. 
+- Shader ma tylko sloty z pamięcią na odpowiednie dane, ale poza nazwą i numrem slota ma tylko rozmiar pamięci na uniform, ale za to
+  żadnych danych
+
+Powstaja w ramach tworzenia efektu, a raczej efekt tworzy effect instance, a tam tworzone są już parametry shaderów na bazie tej instancji
+Potem dla każdego shader uniforma zarejestrowanego w shaderze (ale to nie jest w żaden sposób walidowane - po prostu instance ma być
+zaimplementowane poprawnie) jest tworzony shaderFloat odpowiedniego typu i on jest rejestrowany w shader parmeterach.
+Ten shader float ma w sobie model, z którego umie wczytać parametr odpowiedniego typu, który trafia do shadera PDR.
+Tak po prawdzie to tekstura też jest ustawiana w effect instance
+
+Draw z jakiegoś powodu dostaje visual do wyrenderowania oraz effect instance dla tego biednego visuala (a effect instance da się pobrać
+z visuala zupełnie niezaleznie, tylko to docelowo wymaga rzutowania, bo visual jest przechowywany jako byt transformowalny, a nie renderowalny, 
+więc może dlatego taka zabawa).
+
+Pobierane są wszystkie niezbędne byfory (vertex, index oraz format VB). Enable na każdym - to nam daje vertexy z atrybutami oraz ich
+topologię (index lub strip)
+
+Pobiera passy dla VisualEffectInstance
+  dla każdego passa pobiera parametry shaderów tego passa (właśnie z instance->GetXXXShaderParams( passNum );
+  ShaderParameters * params = instance->GetXXXShaderParams( passNum );
+  
+  Odpala dla każdego zestawu parametrów - UpdateConstants( visual, camera ); //Dlaczego akurat visual i camera, to akurat w tym momencie nie wiem
+  
+  ShaderParameters::UpdateConstants( visual, camera ) - iteruje po swoich zarejestrowanych stałych i na każdej odpala
+    Update( visual, camera );
+      to już trafia do otypowanego shaderfloata (constanta, bo tu są póki co same floaty) i ten constant potrafi się ze swojego modelu
+      zaktualizować (czyli na bazie modelu zapisać taką wartość, którą potem można już przepisaś do PDR shadera jako wartość uniforma)
+      - xxxparams->UpdateConstants( visual, camera );
+      - Enable( xxxshader, xxxparams )
+        - przeiteruj się po uniformach i ustaw parametry shadera PDR(glsl)
+          oraz na koniec ustaw odpowiednio samplery tego shadera)
