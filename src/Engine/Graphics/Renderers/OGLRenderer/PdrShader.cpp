@@ -2,7 +2,7 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
-#include "Engine/Graphics/Shaders/ShaderParam.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParam.h"
 #include "Engine/Graphics/Shaders/PixelShader.h"
 #include "Engine/Graphics/Shaders/VertexShader.h"
 #include "Engine/Graphics/Shaders/GeometryShader.h"
@@ -27,7 +27,7 @@ namespace bv
 
 // *******************************
 //
-PdrShader::PdrShader   ( GLSLProgram * program, PixelShader * ps, VertexShader * vs, GeometryShader * gs )
+PdrShader::PdrShader   ( PdrGLSLProgram * program, PixelShader * ps, VertexShader * vs, GeometryShader * gs )
     : m_program( program )
     , m_pixelShader( ps )
     , m_vertexShader( vs )
@@ -51,7 +51,7 @@ PdrShader *  PdrShader::Create( PixelShader * ps, VertexShader * vs, GeometrySha
         return nullptr;
     }
 
-    GLSLProgram * program = new GLSLProgram( *ps, *vs, gs );
+    PdrGLSLProgram * program = new PdrGLSLProgram( *ps, *vs, gs );
 
     if ( !program->IsCompiled() )
     {

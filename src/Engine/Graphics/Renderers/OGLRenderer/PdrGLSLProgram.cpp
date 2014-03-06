@@ -1,4 +1,4 @@
-#include "glslprogram.h"
+#include "PdrGLSLProgram.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/glutils.h"
 
@@ -21,14 +21,15 @@ namespace bv {
 
 // *******************************
 //
-GLSLProgram::GLSLProgram() 
+PdrGLSLProgram::PdrGLSLProgram() 
     : m_Handle( 0 )
     , m_Linked( false )
     , m_Compiled( false )
+    , m_verboseLogging( GVerboseLogging )
 { 
 }
 
-bool compileAndLinkProgram  ( GLSLProgram & prog, const std::string & vs, const std::string & ps, const std::string & gs )
+bool compileAndLinkProgram  ( PdrGLSLProgram & prog, const std::string & vs, const std::string & ps, const std::string & gs )
 {
     if( !prog.CompileShaderFromString( vs.c_str(),GLSLShader::VERTEX ) )
     {
@@ -65,9 +66,9 @@ bool compileAndLinkProgram  ( GLSLProgram & prog, const std::string & vs, const 
 
 // *******************************
 //
-GLSLProgram::GLSLProgram( const PixelShader& ps, const VertexShader& vs, const GeometryShader * gs )
-    : m_Handle(0)
-    , m_Linked(false) 
+PdrGLSLProgram::PdrGLSLProgram( const PixelShader & ps, const VertexShader & vs, const GeometryShader * gs )
+    : m_Handle( 0 )
+    , m_Linked( false ) 
 {
     m_Compiled = compileAndLinkProgram( *this, vs.ProgramSource(), ps.ProgramSource(), gs ? gs->ProgramSource() : "" );
     assert( m_Compiled ); //FIXME: this error should be handled in somehow different manner
@@ -75,16 +76,16 @@ GLSLProgram::GLSLProgram( const PixelShader& ps, const VertexShader& vs, const G
 
 // *******************************
 //
-GLSLProgram::~GLSLProgram					    ()
+PdrGLSLProgram::~PdrGLSLProgram					    ()
 {
     glDeleteProgram( m_Handle );
 }
 
 // *******************************
 //
-bool GLSLProgram::CompileShaderFromFile( const string & fileName, GLSLShader::GLSLShaderType type )
+bool PdrGLSLProgram::CompileShaderFromFile( const string & fileName, GLSLShader::GLSLShaderType type )
 {
-    if( ! FileExists( fileName ) )
+    if( !FileExists( fileName ) )
     {
         m_LogString = "File not found.";
         return false;
@@ -120,7 +121,7 @@ bool GLSLProgram::CompileShaderFromFile( const string & fileName, GLSLShader::GL
 
 // *******************************
 //
-bool GLSLProgram::CompileShaderFromString( const string & source, GLSLShader::GLSLShaderType type )
+bool PdrGLSLProgram::CompileShaderFromString( const string & source, GLSLShader::GLSLShaderType type )
 {
     if( m_Handle <= 0 )
     {
@@ -189,7 +190,7 @@ bool GLSLProgram::CompileShaderFromString( const string & source, GLSLShader::GL
 
 // *******************************
 //
-bool GLSLProgram::Link()
+bool PdrGLSLProgram::Link()
 {
     if( m_Linked ) 
         return true;
@@ -231,7 +232,7 @@ bool GLSLProgram::Link()
 
 // *******************************
 //
-void GLSLProgram::Use()
+void PdrGLSLProgram::Use()
 {
     if( m_Handle <= 0 || (!m_Linked) )
         return;
@@ -241,209 +242,65 @@ void GLSLProgram::Use()
 
 // *******************************
 //
-string GLSLProgram::Log() const
+string PdrGLSLProgram::Log() const
 {
     return m_LogString;
 }
 
 // *******************************
 //
-int GLSLProgram::GetHandle() const
+int PdrGLSLProgram::GetHandle() const
 {
     return m_Handle;
 }
 
 // *******************************
 //
-bool GLSLProgram::IsLinked() const
+bool PdrGLSLProgram::IsLinked() const
 {
     return m_Linked;
 }
 
 // *******************************
 //
-bool GLSLProgram::IsCompiled() const
+bool PdrGLSLProgram::IsCompiled() const
 {
     return m_Compiled;
 }
 
 // *******************************
 //
-void GLSLProgram::BindAttribLocation( GLuint location, const string & name )
+void PdrGLSLProgram::BindAttribLocation( GLuint location, const string & name )
 {
     glBindAttribLocation(m_Handle, location, name.c_str() );
 }
 
 // *******************************
 //
-void GLSLProgram::BindFragDataLocation( GLuint location, const string & name )
+void PdrGLSLProgram::BindFragDataLocation( GLuint location, const string & name )
 {
     glBindFragDataLocation(m_Handle, location, name.c_str() );
 }
 
 // *******************************
 //
-void GLSLProgram::SetUniform( const string & name, float x, float y, float z )
+void          PdrGLSLProgram::PostSetUniformFail    ( const string & name )
 {
-    int loc = GetUniformLocation( name );
-
-    if( loc >= 0 )
-    {
-        glUniform3f( loc, x, y, z );
-    } 
-    else 
-    {
-        if (GVerboseLogging)
-            printf( "Uniform: %s not found.\n", name.c_str() );
-    }
+    if ( m_verboseLogging )
+        printf( "Uniform: %s not found.\n", name.c_str() );
 }
 
 // *******************************
 //
-void GLSLProgram::SetUniform( const string & name, const vec3 & v )
+void          PdrGLSLProgram::PostSetUniformFail    ( int loc )
 {
-    this->SetUniform( name, v.x, v.y, v.z );
+    if ( m_verboseLogging )
+        printf("Uniform at loc: %d not found.\n", loc );
 }
 
 // *******************************
 //
-void GLSLProgram::SetUniform( const string & name, const vec4 & v)
-{
-    int loc = GetUniformLocation(name);
-
-    if( loc >= 0 )
-    {
-        glUniform4f(loc,v.x,v.y,v.z,v.w);
-    } 
-    else 
-    {
-        if (GVerboseLogging)
-            printf("Uniform: %s not found.\n",name.c_str() );
-    }
-}
-
-// *******************************
-//
-void GLSLProgram::SetUniform( const string & name, const vec2 & v)
-{
-    int loc = GetUniformLocation(name);
-
-    if( loc >= 0 )
-    {
-        glUniform2f(loc,v.x,v.y);
-    } 
-    else 
-    {
-        if (GVerboseLogging)
-            printf("Uniform: %s not found.\n",name.c_str() );
-    }
-}
-
-// *******************************
-//
-void GLSLProgram::SetUniform( const string & name, const mat2 & m)
-{
-    int loc = GetUniformLocation(name);
-
-    if( loc >= 0 )
-    {
-        glUniformMatrix2fv(loc, 1, GL_FALSE, &m[0][0]);
-    } 
-    else 
-    {
-        if (GVerboseLogging)
-            printf("Uniform: %s not found.\n",name.c_str() );
-    }
-}
-
-// *******************************
-//
-void GLSLProgram::SetUniform( const string & name, const mat3 & m)
-{
-    int loc = GetUniformLocation(name);
-
-    if( loc >= 0 )
-    {
-        glUniformMatrix3fv(loc, 1, GL_FALSE, &m[0][0]);
-    } 
-    else 
-    {
-        if (GVerboseLogging)
-            printf("Uniform: %s not found.\n",name.c_str() );
-    }
-}
-
-// *******************************
-//
-void GLSLProgram::SetUniform( const string & name, const mat4 & m)
-{
-    int loc = GetUniformLocation(name);
-
-    if( loc >= 0 )
-    {
-        glUniformMatrix4fv(loc, 1, GL_FALSE, &m[0][0]);
-    } 
-    else 
-    {
-        if (GVerboseLogging)
-            printf("Uniform: %s not found.\n",name.c_str() );
-    }
-}
-
-// *******************************
-//
-void GLSLProgram::SetUniform( const string & name, float val )
-{
-    int loc = GetUniformLocation(name);
-
-    if( loc >= 0 )
-    {
-        glUniform1f(loc, val);
-    } 
-    else 
-    {
-        if (GVerboseLogging)
-            printf("Uniform: %s not found.\n",name.c_str() );
-    }
-}
-
-// *******************************
-//
-void GLSLProgram::SetUniform( const string & name, int val )
-{
-    int loc = GetUniformLocation(name);
-
-    if( loc >= 0 )
-    {
-        glUniform1i(loc, val);
-    } 
-    else 
-    {
-        if (GVerboseLogging)
-            printf("Uniform: %s not found.\n",name.c_str() );
-    }
-}
-
-// *******************************
-//
-void GLSLProgram::SetUniform( const string & name, bool val )
-{
-    int loc = GetUniformLocation(name);
-
-    if( loc >= 0 )
-    {
-        glUniform1i(loc, val);
-    } 
-    else 
-    {
-        if (GVerboseLogging)
-            printf("Uniform: %s not found.\n",name.c_str() );
-    }
-}
-
-// *******************************
-//
-void GLSLProgram::PrintActiveUniforms()
+void PdrGLSLProgram::PrintActiveUniforms()
 {
 
     GLint nUniforms, size, location, maxLen;
@@ -472,7 +329,7 @@ void GLSLProgram::PrintActiveUniforms()
 
 // *******************************
 //
-void GLSLProgram::PrintActiveAttribs()
+void PdrGLSLProgram::PrintActiveAttribs()
 {
 
     GLint written, size, location, maxLength, nAttribs;
@@ -499,7 +356,7 @@ void GLSLProgram::PrintActiveAttribs()
 
 // *******************************
 //
-bool GLSLProgram::Validate()
+bool PdrGLSLProgram::Validate()
 {
     if( !IsLinked() ) 
         return false;
@@ -534,52 +391,40 @@ bool GLSLProgram::Validate()
 
 // *******************************
 //
-int GLSLProgram::GetUniformLocation( const string & name )
-{
-    auto it = m_uniformLocations.find( name );
-    
-    if ( it == m_uniformLocations.end() )
-    {
-        int loc = glGetUniformLocation( m_Handle, name.c_str() );
-        m_uniformLocations[ name ] = loc;
-
-        return loc;
-    }
-
-    return it->second;
-}
-
-// *******************************
-//
-bool GLSLProgram::FileExists( const string & fileName )
+bool PdrGLSLProgram::FileExists( const string & fileName ) const
 {
     struct stat info;
     int ret = -1;
 
-    ret = stat(fileName.c_str(), &info);
+    ret = stat( fileName.c_str(), &info );
+
     return 0 == ret;
 }
 
 //********************** GLSLPrograms ******************//
 
-GLSLProgram* GLSLPrograms::getProgram(PixelShader* ps, VertexShader* vs)
+// *******************************
+//
+PdrGLSLProgram *  PdrGLSLPrograms::getProgram( PixelShader * ps, VertexShader * vs )
 {
-    assert(ps && vs);
+    assert( ps && vs );
     auto it = programs.find(std::make_pair(ps,vs));
 
     if(it != programs.end())
         return it->second;
     else
     {
-        auto ret = new GLSLProgram( *ps,*vs, nullptr );
+        auto ret = new PdrGLSLProgram( *ps,*vs, nullptr );
         programs[std::make_pair(ps,vs)] = ret;
         return ret;
     }
 }
 
-GLSLPrograms& GLSLPrograms::get()
+// *******************************
+//
+PdrGLSLPrograms & PdrGLSLPrograms::get()
 {
-    static GLSLPrograms& instance = GLSLPrograms();
+    static PdrGLSLPrograms & instance = PdrGLSLPrograms();
 
     return instance;
 }

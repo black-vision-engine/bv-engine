@@ -305,6 +305,28 @@ public:
     }
 };
 
+class AmbigTester
+{
+public:
+
+    int    move(int dw, int dz);
+    int    move(float dw, float dz);
+    int    move(double dx, double dy);
+    int    move(double dx, float dy);
+
+    static void Test()
+    {
+        AmbigTester at;
+
+        at.move( 10, 10 );
+        at.move( (short)10, (short)10 );
+        at.move( (unsigned char)10, (char )10 );
+        at.move( 10.f, 10.f );
+        at.move( 10.0, 10.0 );
+        at.move( 10.0, 10.f );
+    }
+};
+
 } // anonymous
 
 // *****************************

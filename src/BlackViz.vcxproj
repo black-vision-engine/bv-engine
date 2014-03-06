@@ -198,6 +198,7 @@
     <ClCompile Include="Engine\Events\Queues\EventQueueConcurrent.cpp" />
     <ClCompile Include="Engine\Events\Queues\EventQueue.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.cpp" />
+    <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrTextureAnimatedSequence2D.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.cpp" />
@@ -209,6 +210,8 @@
     <ClCompile Include="Engine\Graphics\Resources\TextureAnimatedSequence.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\TextureBase.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\IShaderParamUpdater.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParam.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamDesc.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\ShaderTextureParameters.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\TextureSampler.cpp" />
     <ClCompile Include="Engine\Graphics\State\AlphaState.cpp" />
@@ -317,7 +320,6 @@
     <ClCompile Include="System\Print.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\GLRenderer.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\GLRendererData.cpp" />
-    <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\glslprogram.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\glutils.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\gl_core_4_3.c" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrIndexBuffer.cpp" />
@@ -347,8 +349,6 @@
     <ClCompile Include="Engine\Graphics\Shaders\RenderableEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderablePass.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Shader.cpp" />
-    <ClCompile Include="Engine\Graphics\Shaders\ShaderParam.cpp" />
-    <ClCompile Include="Engine\Graphics\Shaders\ShaderParamDesc.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\ShaderParameters.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\VertexShader.cpp" />
     <ClCompile Include="Engine\Graphics\Types\Transform.cpp" />
@@ -377,6 +377,7 @@
     <ClInclude Include="Engine\Events\Queues\EventQueueConcurrent.h" />
     <ClInclude Include="Engine\Events\Queues\EventQueue.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h" />
+    <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrTextureAnimatedSequence2D.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.h" />
@@ -388,6 +389,10 @@
     <ClInclude Include="Engine\Graphics\Resources\TextureAnimatedSequence.h" />
     <ClInclude Include="Engine\Graphics\Resources\TextureBase.h" />
     <ClInclude Include="Engine\Graphics\Shaders\IShaderParamUpdater.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParam.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamBase.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamDesc.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.h" />
     <ClInclude Include="Engine\Graphics\Shaders\ShaderTextureParameters.h" />
     <ClInclude Include="Engine\Graphics\Shaders\ShaderTypes.h" />
     <ClInclude Include="Engine\Graphics\Shaders\TextureSampler.h" />
@@ -531,7 +536,6 @@
     <ClInclude Include="System\HRTimer.h" />
     <ClInclude Include="System\Print.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\GLRendererData.h" />
-    <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\glslprogram.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\glutils.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\gl_core_4_3.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\oglcore.h" />
@@ -564,8 +568,6 @@
     <ClInclude Include="Engine\Graphics\Shaders\RenderableEffect.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderablePass.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Shader.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\ShaderParam.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\ShaderParamDesc.h" />
     <ClInclude Include="Engine\Graphics\Shaders\ShaderParameters.h" />
     <ClInclude Include="Engine\Graphics\Shaders\VertexShader.h" />
     <ClInclude Include="Engine\Graphics\Types\Transform.h" />
@@ -592,6 +594,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
     <None Include="Engine\Models\Plugins\Channels\ShaderChannel.inl" />
     <None Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />
     <None Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />

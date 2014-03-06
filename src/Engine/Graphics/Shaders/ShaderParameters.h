@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Engine/Graphics/Shaders/ShaderParam.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParam.h"
 #include "Engine/Graphics/Shaders/ShaderTextureParameters.h"
 
 

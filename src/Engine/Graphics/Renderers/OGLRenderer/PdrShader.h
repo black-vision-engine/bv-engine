@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Engine/Graphics/Renderers/OGLRenderer/glslprogram.h"
-#include "Engine/Graphics/Shaders/ShaderParamDesc.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrGLSLProgram.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamDesc.h"
 
 #include <glm/glm.hpp>
 
@@ -26,7 +26,7 @@ class PdrShader
 {
 private:
 
-    GLSLProgram *       m_program;
+    PdrGLSLProgram *    m_program;
 
     PixelShader *       m_pixelShader;
     VertexShader *      m_vertexShader;
@@ -34,7 +34,7 @@ private:
 
 private:
 
-    PdrShader                       ( GLSLProgram * program, PixelShader * ps, VertexShader * vs, GeometryShader * gs );
+    PdrShader                       ( PdrGLSLProgram * program, PixelShader * ps, VertexShader * vs, GeometryShader * gs );
 
 public:
 

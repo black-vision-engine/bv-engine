@@ -5,7 +5,6 @@
     <ClCompile Include="Application\ConsoleApplication.cpp" />
     <ClCompile Include="Application\win32\WinApplication.cpp" />
     <ClCompile Include="Application\WindowedApplication.cpp" />
-    <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\glslprogram.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\glutils.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\gl_core_4_3.c" />
     <ClCompile Include="Engine\Graphics\Resources\Textures\TextureManager.cpp" />
@@ -40,8 +39,6 @@
     <ClCompile Include="Engine\Graphics\SceneGraph\TriangleMesh.cpp" />
     <ClCompile Include="Engine\Graphics\SceneGraph\Triangles.cpp" />
     <ClCompile Include="Engine\Graphics\SceneGraph\TriangleStrip.cpp" />
-    <ClCompile Include="Engine\Graphics\Shaders\ShaderParamDesc.cpp" />
-    <ClCompile Include="Engine\Graphics\Shaders\ShaderParam.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderableEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderablePass.cpp" />
     <ClCompile Include="Engine\Models\Updaters\TransformUpdater.cpp" />
@@ -176,12 +173,14 @@
     <ClCompile Include="Engine\Models\Plugins\DefaultPluginListFinalized.cpp" />
     <ClCompile Include="Engine\Models\Plugins\DefaultFinalizePlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParam.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamDesc.cpp" />
+    <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
     <ClInclude Include="Application\ConsoleApplication.h" />
     <ClInclude Include="Application\WindowedApplication.h" />
-    <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\glslprogram.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\glutils.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\gl_core_4_3.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\oglcore.h" />
@@ -220,8 +219,6 @@
     <ClInclude Include="Engine\Graphics\SceneGraph\TriangleMesh.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\Triangles.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\TriangleStrip.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\ShaderParamDesc.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\ShaderParam.h" />
     <ClInclude Include="Engine\Graphics\Shaders\ShaderParameters.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderableEffect.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderablePass.h" />
@@ -399,6 +396,11 @@
     <ClInclude Include="Engine\Models\Plugins\DefaultPluginListFinalized.h" />
     <ClInclude Include="Engine\Models\Plugins\DefaultFinalizePlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParam.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamDesc.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamBase.h" />
+    <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
@@ -407,6 +409,7 @@
     <None Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />
     <None Include="Engine\Models\Plugins\Channels\ShaderChannel.inl" />
     <None Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.inl" />
+    <None Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />

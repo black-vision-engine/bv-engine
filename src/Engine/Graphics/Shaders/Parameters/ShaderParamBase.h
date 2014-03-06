@@ -4,10 +4,21 @@
 #include <vector>
 
 #include "Engine/Types/Enums.h"
-#include "Engine/Graphics/Shaders/ShaderParamDesc.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamDesc.h"
 
 
 namespace bv {
+
+class ShaderParamBase
+{
+public:
+
+                ShaderParamBase();
+    virtual     ~ShaderParamBase    ();
+
+    virtual     void Update         () = 0;
+
+};
 
 class UniformShaderParam
 {
