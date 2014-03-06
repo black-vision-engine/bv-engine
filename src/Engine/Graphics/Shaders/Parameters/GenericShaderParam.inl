@@ -5,6 +5,7 @@ namespace bv {
 template< typename ValType >
 const ValType &             GenericShaderParam::GenericGetValue () const
 {
+    //FIXME: add proper assert heree
     //FIXME: implement
     return ValType();   
 }
