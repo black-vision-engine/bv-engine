@@ -210,8 +210,10 @@
     <ClCompile Include="Engine\Graphics\Resources\TextureAnimatedSequence.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\TextureBase.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\IShaderParamUpdater.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParam.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamDesc.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\ShaderTextureParameters.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\TextureSampler.cpp" />
     <ClCompile Include="Engine\Graphics\State\AlphaState.cpp" />
@@ -390,7 +392,7 @@
     <ClInclude Include="Engine\Graphics\Resources\TextureBase.h" />
     <ClInclude Include="Engine\Graphics\Shaders\IShaderParamUpdater.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParam.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamBase.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamDesc.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.h" />
     <ClInclude Include="Engine\Graphics\Shaders\ShaderTextureParameters.h" />
@@ -595,6 +597,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
+    <None Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.inl" />
     <None Include="Engine\Models\Plugins\Channels\ShaderChannel.inl" />
     <None Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />
     <None Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />

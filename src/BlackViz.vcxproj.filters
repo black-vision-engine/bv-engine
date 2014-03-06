@@ -176,6 +176,8 @@
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParam.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamDesc.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -398,9 +400,9 @@
     <ClInclude Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParam.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamDesc.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamBase.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
@@ -410,6 +412,7 @@
     <None Include="Engine\Models\Plugins\Channels\ShaderChannel.inl" />
     <None Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.inl" />
     <None Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
+    <None Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />
