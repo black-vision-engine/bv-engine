@@ -74,16 +74,16 @@ public:
     void   BindAttribLocation			( GLuint location, const string & name );
     void   BindFragDataLocation			( GLuint location, const string & name );
 
-    inline void   SetUniform            ( const string & name, float x, float y, float z );
-    inline void   SetUniform            ( const string & name, const vec2 & v );
-    inline void   SetUniform            ( const string & name, const vec3 & v );
-    inline void   SetUniform            ( const string & name, const vec4 & v );
-    inline void   SetUniform            ( const string & name, const mat2 & m );
-    inline void   SetUniform            ( const string & name, const mat3 & m );
-    inline void   SetUniform            ( const string & name, const mat4 & m );
-    inline void   SetUniform            ( const string & name, float val );
-    inline void   SetUniform            ( const string & name, int val );
-    inline void   SetUniform            ( const string & name, bool val );
+    inline int    SetUniform            ( const string & name, float x, float y, float z );
+    inline int    SetUniform            ( const string & name, const vec2 & v );
+    inline int    SetUniform            ( const string & name, const vec3 & v );
+    inline int    SetUniform            ( const string & name, const vec4 & v );
+    inline int    SetUniform            ( const string & name, const mat2 & m );
+    inline int    SetUniform            ( const string & name, const mat3 & m );
+    inline int    SetUniform            ( const string & name, const mat4 & m );
+    inline int    SetUniform            ( const string & name, float val );
+    inline int    SetUniform            ( const string & name, int val );
+    inline int    SetUniform            ( const string & name, bool val );
 
     inline void   SetUniform            ( int loc, float x, float y, float z );
     inline void   SetUniform            ( int loc, const vec2 & v );

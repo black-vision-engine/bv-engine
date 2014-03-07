@@ -144,8 +144,6 @@ private:
             ShaderType * s = new ShaderType( sCh->GetShaderSource() );
 
             BasicNode::RegisterShaderParameters( sCh, s->GetOrCreateShaderParameters() );
-        
-            s->RegisterUpdater( ShaderParamUpdater::Create( sCh, s ) );
 
             return s;
         }

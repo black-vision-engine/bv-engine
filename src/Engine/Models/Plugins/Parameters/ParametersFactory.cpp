@@ -7,6 +7,13 @@ namespace bv { namespace model {
 
 // *******************************
 //
+ParamMat2                          ParametersFactory::CreateParameterMat2                 ( const std::string & name, const Vec4Interpolator & interpolator, const Timeline * timeline )
+{
+    return ParamMat2( name, interpolator, timeline );
+}
+
+// *******************************
+//
 ParamVec3                          ParametersFactory::CreateParameter                      ( const std::string & name, const Vec3Interpolator & interpolator, const Timeline * timeline )
 {
     return ParamVec3( name, interpolator, timeline );

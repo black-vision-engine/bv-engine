@@ -8,7 +8,7 @@ namespace bv {
 // ****************************
 //
 ShaderParamVec4::ShaderParamVec4                ( const std::string & name, const ValueVec4 * value )
-    : GenericShaderParam( ParamType::PT_FLOAT4, name )
+    : GenericShaderParam( ShaderParamTypeTraits< ValueVec4::ValueType >::paramType, name )
     , m_valModel( value )
 {
     assert( value != nullptr );

@@ -15,6 +15,9 @@ u nas się to odbywa wewnątrz Enable dla RenderablePass i TransormableEntity - 
 dla platform dependent render (GL), a logika updatu generyczna powinna się odbywać wcześniej, nawet jeśli w wyspecjalizowanej funkcji.
 Enable powinno tylko tworzyć PDR i odpalać na tym PDR jego ENABLE już GLowe (platform dependent).
 
+Ponadto tekstury są trzymane w ShaderParameters - co ma sens. Dodatkowo trzeba mieć spójny mechanizm trzymania animacji i tekstury
+w jakiś zunifikowany sposób.
+
 Przykladowe parametry shaderów w WM
 - Tworzone podczas CreateScene(), w ramach tworzonego efektu. 
 - Shader ma tylko sloty z pamięcią na odpowiednie dane, ale poza nazwą i numrem slota ma tylko rozmiar pamięci na uniform, ale za to

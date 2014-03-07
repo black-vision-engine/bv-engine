@@ -27,6 +27,13 @@ const ValType &             GenericShaderParam::GenericGetValue () const
 
 // ****************************
 //
+inline  int                 GenericShaderParam::IntID           () const
+{
+    return m_id; 
+}
+
+// ****************************
+//
 inline ParamType            GenericShaderParam::Type            () const
 {
     return m_paramType;

@@ -19,7 +19,7 @@ inline int  PdrGLSLProgram::GetUniformLocation( const string & name )
 
 // *******************************
 //
-inline void PdrGLSLProgram::SetUniform( const string & name, float x, float y, float z )
+inline int  PdrGLSLProgram::SetUniform( const string & name, float x, float y, float z )
 {
     int loc = GetUniformLocation( name );
 
@@ -31,11 +31,13 @@ inline void PdrGLSLProgram::SetUniform( const string & name, float x, float y, f
     {
         PostSetUniformFail( name );
     }
+
+    return loc;
 }
 
 // *******************************
 //
-inline void PdrGLSLProgram::SetUniform( const string & name, const vec3 & v )
+inline int  PdrGLSLProgram::SetUniform( const string & name, const vec3 & v )
 {
     int loc = GetUniformLocation( name );
 
@@ -47,11 +49,13 @@ inline void PdrGLSLProgram::SetUniform( const string & name, const vec3 & v )
     {
         PostSetUniformFail( name );
     }
+
+    return loc;
 }
 
 // *******************************
 //
-inline void PdrGLSLProgram::SetUniform( const string & name, const vec4 & v )
+inline int  PdrGLSLProgram::SetUniform( const string & name, const vec4 & v )
 {
     int loc = GetUniformLocation( name );
 
@@ -63,11 +67,13 @@ inline void PdrGLSLProgram::SetUniform( const string & name, const vec4 & v )
     {
         PostSetUniformFail( name );
     }
+
+    return loc;
 }
 
 // *******************************
 //
-inline void PdrGLSLProgram::SetUniform( const string & name, const vec2 & v )
+inline int  PdrGLSLProgram::SetUniform( const string & name, const vec2 & v )
 {
     int loc = GetUniformLocation( name );
 
@@ -79,11 +85,13 @@ inline void PdrGLSLProgram::SetUniform( const string & name, const vec2 & v )
     {
         PostSetUniformFail( name );
     }
+
+    return loc;
 }
 
 // *******************************
 //
-inline void PdrGLSLProgram::SetUniform( const string & name, const mat2 & m )
+inline int  PdrGLSLProgram::SetUniform( const string & name, const mat2 & m )
 {
     int loc = GetUniformLocation( name );
 
@@ -95,11 +103,13 @@ inline void PdrGLSLProgram::SetUniform( const string & name, const mat2 & m )
     {
         PostSetUniformFail( name );
     }
+
+    return loc;
 }
 
 // *******************************
 //
-inline void PdrGLSLProgram::SetUniform( const string & name, const mat3 & m )
+inline int  PdrGLSLProgram::SetUniform( const string & name, const mat3 & m )
 {
     int loc = GetUniformLocation( name );
 
@@ -111,11 +121,13 @@ inline void PdrGLSLProgram::SetUniform( const string & name, const mat3 & m )
     {
         PostSetUniformFail( name );
     }
+
+    return loc;
 }
 
 // *******************************
 //
-inline void PdrGLSLProgram::SetUniform( const string & name, const mat4 & m )
+inline int  PdrGLSLProgram::SetUniform( const string & name, const mat4 & m )
 {
     int loc = GetUniformLocation( name );
 
@@ -127,11 +139,13 @@ inline void PdrGLSLProgram::SetUniform( const string & name, const mat4 & m )
     {
         PostSetUniformFail( name );
     }
+
+    return loc;
 }
 
 // *******************************
 //
-inline void PdrGLSLProgram::SetUniform( const string & name, float val )
+inline int  PdrGLSLProgram::SetUniform( const string & name, float val )
 {
     int loc = GetUniformLocation( name );
 
@@ -143,11 +157,13 @@ inline void PdrGLSLProgram::SetUniform( const string & name, float val )
     {
         PostSetUniformFail( name );
     }
+
+    return loc;
 }
 
 // *******************************
 //
-inline void PdrGLSLProgram::SetUniform( const string & name, int val )
+inline int  PdrGLSLProgram::SetUniform( const string & name, int val )
 {
     int loc = GetUniformLocation( name );
 
@@ -159,11 +175,13 @@ inline void PdrGLSLProgram::SetUniform( const string & name, int val )
     {
         PostSetUniformFail( name );
     }
+
+    return loc;
 }
 
 // *******************************
 //
-inline void PdrGLSLProgram::SetUniform( const string & name, bool val )
+inline int  PdrGLSLProgram::SetUniform( const string & name, bool val )
 {
     int loc = GetUniformLocation( name );
 
@@ -175,6 +193,8 @@ inline void PdrGLSLProgram::SetUniform( const string & name, bool val )
     {
         PostSetUniformFail( name );
     }
+
+    return loc;
 }
 
 // *******************************

@@ -19,11 +19,11 @@
 #include "Engine/Models/Updaters/GeometryUpdater.h"
 #include "Engine/Models/Updaters/TransformUpdater.h"
 #include "Engine/Models/Updaters/RendererStateUpdater.h"
-#include "Engine/Models/Updaters/ShaderParamUpdater.h"
 #include "Engine/Models/Updaters/SequenceAnimationUpdater.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
 
 #include "Engine/Models/Builder/RendererStatesBuilder.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
 
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 #include "Engine/Graphics/Resources/RenderableArrayDataElements.h"
@@ -666,16 +666,18 @@ unsigned int                        BasicNode::TotalSize             ( const std
 //
 void                                BasicNode::RegisterShaderParameters ( const IShaderChannel * shaderChannel, ShaderParameters * shParams )
 {
-    for( auto param : shaderChannel->GetValues() )
+    for( auto value : shaderChannel->GetValues() )
     {
-        UniformShaderParam * genShaderParam = ShaderParamFactory::Get().Create( param->GetName(), param->GetType() );
-        shParams->RegisterParameter( genShaderParam );
+        GenericShaderParam * genShaderParam = ShaderParamFactory::CreateParameter( value );
+        assert( genShaderParam != nullptr );
+
+        shParams->AddParameter( genShaderParam );
     }
 }
 
 // ********************************
 //
-void            BasicNode::Print                    (std::ostream& out, int tabs) const
+void            BasicNode::Print                    ( std::ostream& out, int tabs ) const
 {
     out << "------------------NODE-------------------- : " << this << debug::EndLine(tabs);
     //out << "Transform plugins: " << m_transformPlugins.size() << debug::EndLine(tabs + 1);

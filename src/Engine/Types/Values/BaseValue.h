@@ -26,12 +26,16 @@ public:
 };
 
 // *************************************
-template< typename ValueType, ParamType paramType >
+template< typename ValType, ParamType paramType >
 class ValueImpl : public NamedValue
 {
+public:
+
+    typedef ValType ValueType;
+
 private:
 
-    ValueType m_value;
+    ValType     m_value;
 
 private:
 
@@ -48,14 +52,14 @@ public:
 
     // *******************************
     //
-    const ValueType &       GetValue        () const
+    const ValType &         GetValue        () const
     {
         return m_value;
     }
 
     // *******************************
     //
-    void                    SetValue        ( const ValueType & v )
+    void                    SetValue        ( const ValType & v )
     {
         m_value = v;
     }
@@ -73,39 +77,39 @@ public:
 
 // *******************************
 //
-template< typename ValueType, ParamType paramType >
-ValueImpl< ValueType, paramType >::ValueImpl( const std::string & name )
+template< typename ValType, ParamType paramType >
+ValueImpl< ValType, paramType >::ValueImpl( const std::string & name )
     : NamedValue( name )
 {
 }
 
 // *******************************
 //
-template< typename ValueType, ParamType paramType >
-ValueImpl< ValueType, paramType >::~ValueImpl()
+template< typename ValType, ParamType paramType >
+ValueImpl< ValType, paramType >::~ValueImpl()
 {
 }
 
 // *******************************
 //
-template< typename ValueType, ParamType paramType >
-ParamType   ValueImpl< ValueType, paramType >::GetType      () const
+template< typename ValType, ParamType paramType >
+ParamType   ValueImpl< ValType, paramType >::GetType      () const
 {
     return paramType;
 }
 
 // *******************************
 //
-template< typename ValueType, ParamType paramType >
-const char *    ValueImpl< ValueType, paramType >::GetData  () const
+template< typename ValType, ParamType paramType >
+const char *    ValueImpl< ValType, paramType >::GetData  () const
 {
     return reinterpret_cast< const char * >( &m_value );
 }
 
 // *******************************
 //
-template< typename ValueType, ParamType paramType >
-void *          ValueImpl< ValueType, paramType >::QueryValueTyped ()
+template< typename ValType, ParamType paramType >
+void *          ValueImpl< ValType, paramType >::QueryValueTyped ()
 {
     return static_cast< void * >( this );
 }

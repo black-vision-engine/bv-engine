@@ -43,7 +43,6 @@
     <ClCompile Include="Engine\Graphics\Shaders\RenderablePass.cpp" />
     <ClCompile Include="Engine\Models\Updaters\TransformUpdater.cpp" />
     <ClCompile Include="Mathematics\Transform\MatTransform.cpp" />
-    <ClCompile Include="Engine\Graphics\Shaders\ShaderParameters.cpp" />
     <ClCompile Include="System\Print.cpp" />
     <ClCompile Include="System\Profiler.cpp" />
     <ClCompile Include="Engine\Models\Updaters\CameraUpdater.cpp" />
@@ -51,7 +50,6 @@
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.cpp" />
-    <ClCompile Include="Engine\Models\Updaters\ShaderParamUpdater.cpp" />
     <ClCompile Include="System\HRTimer.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\Texture2D.cpp" />
     <ClCompile Include="Engine\Models\Resources\ResourceLoader.cpp" />
@@ -98,7 +96,6 @@
     <ClCompile Include="Engine\Graphics\Resources\TextureAnimatedSequence2D.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrTextureAnimatedSequence2D.cpp" />
     <ClCompile Include="Engine\Models\Updaters\SequenceAnimationUpdater.cpp" />
-    <ClCompile Include="Engine\Graphics\Shaders\ShaderTextureParameters.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\TextureBase.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\TextureAnimatedSequence.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextHelpers.cpp" />
@@ -178,6 +175,10 @@
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParameters.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderTextureParameters.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamFactory.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -221,7 +222,6 @@
     <ClInclude Include="Engine\Graphics\SceneGraph\TriangleMesh.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\Triangles.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\TriangleStrip.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\ShaderParameters.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderableEffect.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderablePass.h" />
     <ClInclude Include="Engine\Models\Updaters\TransformUpdater.h" />
@@ -233,8 +233,6 @@
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\ShaderTypes.h" />
-    <ClInclude Include="Engine\Models\Updaters\ShaderParamUpdater.h" />
     <ClInclude Include="System\HRTimer.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IChannel.h" />
@@ -297,7 +295,6 @@
     <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
     <ClInclude Include="Engine\Models\Updaters\SequenceAnimationUpdater.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\ISequenceAnimationSource.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\ShaderTextureParameters.h" />
     <ClInclude Include="Engine\Graphics\Resources\TextureBase.h" />
     <ClInclude Include="Engine\Graphics\Resources\TextureAnimatedSequence.h" />
     <ClInclude Include="Engine\Models\Resources\TextHelpers.h" />
@@ -403,6 +400,10 @@
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParameters.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderTextureParameters.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamFactory.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat4.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
@@ -413,6 +414,7 @@
     <None Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.inl" />
     <None Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
     <None Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.inl" />
+    <None Include="Engine\Graphics\Shaders\Parameters\ShaderParameters.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />

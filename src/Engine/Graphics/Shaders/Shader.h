@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/Shaders/ShaderParameters.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParameters.h"
 #include "Engine/Graphics/Shaders/TextureSampler.h"
 
 

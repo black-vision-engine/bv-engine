@@ -12,6 +12,7 @@ class ParametersFactory
 {
 public:
 
+    static ParamMat2            CreateParameterMat2                 ( const std::string & name, const Vec4Interpolator & interpolator, const Timeline * timeline = nullptr );
     static ParamVec3            CreateParameter                     ( const std::string & name, const Vec3Interpolator & interpolator, const Timeline * timeline = nullptr );
     static ParamVec4            CreateParameter                     ( const std::string & name, const Vec4Interpolator & interpolator, const Timeline * timeline = nullptr );
     static ParamFloat           CreateParameter                     ( const std::string & name, const FloatInterpolator & interpolator, const Timeline * timeline = nullptr );

@@ -35,4 +35,17 @@ ValueType * QueryTypedValue( IValue * val )
     return static_cast< ValueType * >( val->QueryValueTyped() );
 }
 
+// *********************************
+//
+template< typename ValueType >
+const ValueType * QueryTypedValue( const IValue * val )
+{
+    if( val->GetType() != ValueType::Type() )
+    {
+        return nullptr;
+    }
+
+    return static_cast< const ValueType * >( const_cast< IValue * >( val )->QueryValueTyped() );
+}
+
 } // bv
