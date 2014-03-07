@@ -79,6 +79,7 @@ const ITransformChannel *           DefaultFinalizePlugin::GetTransformChannel  
 const IPixelShaderChannel *         DefaultFinalizePlugin::GetPixelShaderChannel        () const
 {
     assert( m_prevPlugin );
+    assert( m_prevPlugin->GetPixelShaderChannel() );
 
     return m_prevPlugin->GetPixelShaderChannel();
 }
@@ -89,7 +90,14 @@ const IVertexShaderChannel *        DefaultFinalizePlugin::GetVertexShaderChanne
 {
     assert( m_prevPlugin );
 
-    return m_prevPlugin->GetVertexShaderChannel();
+    auto vsc = m_prevPlugin->GetVertexShaderChannel();
+
+    if( vsc == nullptr )
+    {
+        vsc = &m_defaultVSChannel;
+    }
+
+    return vsc;
 }
 
 // *******************************

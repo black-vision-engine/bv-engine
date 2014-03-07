@@ -29,7 +29,7 @@ void    GenericShaderParam::SetIntID    ( int id )
 
 // ****************************
 //
-void    GenericShaderParam::Update      ()
+void    GenericShaderParam::Update      ( RenderableEntity * renderable, Camera * camera )
 {
     //Intentionally left empty
 }

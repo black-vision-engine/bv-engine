@@ -110,9 +110,9 @@ public:
 
     void    SetStateInstance    ( const StateInstance & stateInstance );
 
-public: //FIXME: private
+private: //FIXME: private
 
-    void    Enable              ( RenderablePass * pass, TransformableEntity * transform );
+    void    Enable              ( RenderablePass * pass, RenderableEntity * renderable );
     void    Enable              ( const VertexBuffer * vb );
     void    Enable              ( const IndexBuffer * ib );
     void    Enable              ( const VertexArray * vao );

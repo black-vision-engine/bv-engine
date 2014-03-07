@@ -197,6 +197,7 @@
     <ClCompile Include="Engine\Events\Events.cpp" />
     <ClCompile Include="Engine\Events\Queues\EventQueueConcurrent.cpp" />
     <ClCompile Include="Engine\Events\Queues\EventQueue.cpp" />
+    <ClCompile Include="Engine\Graphics\Effects\DefaultEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.cpp" />
@@ -218,6 +219,7 @@
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat4.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderTextureParameters.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\RenderableEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\TextureSampler.cpp" />
     <ClCompile Include="Engine\Graphics\State\AlphaState.cpp" />
     <ClCompile Include="Engine\Graphics\State\CullState.cpp" />
@@ -231,6 +233,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultPixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\DefaultVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ConstantsMapper.cpp" />
     <ClCompile Include="Engine\Models\ModelScene.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\ChannelsFactory.cpp" />
@@ -350,7 +353,6 @@
     <ClCompile Include="Engine\Graphics\SceneGraph\TriangleStrip.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\GeometryShader.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\PixelShader.cpp" />
-    <ClCompile Include="Engine\Graphics\Shaders\RenderableEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderablePass.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Shader.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\VertexShader.cpp" />
@@ -379,6 +381,7 @@
     <ClInclude Include="Engine\Events\Interfaces\IEventManager.h" />
     <ClInclude Include="Engine\Events\Queues\EventQueueConcurrent.h" />
     <ClInclude Include="Engine\Events\Queues\EventQueue.h" />
+    <ClInclude Include="Engine\Graphics\Effects\DefaultEffect.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.h" />
@@ -400,6 +403,7 @@
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat4.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderTextureParameters.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\RenderableEffect.h" />
     <ClInclude Include="Engine\Graphics\Shaders\TextureSampler.h" />
     <ClInclude Include="Engine\Graphics\State\AlphaState.h" />
     <ClInclude Include="Engine\Graphics\State\CullState.h" />
@@ -409,6 +413,7 @@
     <ClInclude Include="Engine\Graphics\State\StateEnums.h" />
     <ClInclude Include="Engine\Graphics\State\StateInstance.h" />
     <ClInclude Include="Engine\Graphics\State\StencilState.h" />
+    <ClInclude Include="Engine\Interfaces\IShaderDataSource.h" />
     <ClInclude Include="Engine\Interfaces\ITimeEvaluator.h" />
     <ClInclude Include="Engine\Interfaces\IUpdatable.h" />
     <ClInclude Include="Engine\Interfaces\IUpdater.h" />
@@ -418,6 +423,7 @@
     <ClInclude Include="Engine\Models\ModelAccessors.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\VertexShader\DefaultVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\ConstantsMapper.h" />
     <ClInclude Include="Engine\Models\ModelScene.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\ChannelsFactory.h" />
@@ -569,7 +575,6 @@
     <ClInclude Include="Engine\Graphics\SceneGraph\TriangleStrip.h" />
     <ClInclude Include="Engine\Graphics\Shaders\GeometryShader.h" />
     <ClInclude Include="Engine\Graphics\Shaders\PixelShader.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\RenderableEffect.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderablePass.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Shader.h" />
     <ClInclude Include="Engine\Graphics\Shaders\VertexShader.h" />
@@ -600,6 +605,7 @@
     <None Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
     <None Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.inl" />
     <None Include="Engine\Graphics\Shaders\Parameters\ShaderParameters.inl" />
+    <None Include="Engine\Graphics\Shaders\RenderableEffect.inl" />
     <None Include="Engine\Models\Plugins\Channels\ShaderChannel.inl" />
     <None Include="Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />
     <None Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />

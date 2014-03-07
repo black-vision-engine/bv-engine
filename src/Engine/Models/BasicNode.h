@@ -93,6 +93,7 @@ private:
     unsigned int                        TotalNumVertices                ( const std::vector< IConnectedComponent * > & ccVec) const;
     unsigned int                        TotalSize                       ( const std::vector< IConnectedComponent * > & ccVec, const IVertexAttributesChannelDescriptor * desc ) const;
 
+    RenderableEffect *                  CreateDefaultEffect             ( const IPlugin * finalizer ) const;
     RenderableEffect *                  CreateRenderaleEffectMockImplementationForCompleteDummies() const;
 
     PixelShader *                       CreatePixelShader       ()                      const;

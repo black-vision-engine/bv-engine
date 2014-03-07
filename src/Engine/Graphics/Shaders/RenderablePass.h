@@ -9,6 +9,9 @@
 
 namespace bv {
 
+class RenderableEntity;
+class Camera;
+
 class RenderablePass
 {
 private:
@@ -24,7 +27,7 @@ public:
                         RenderablePass          ( PixelShader * ps, VertexShader * vs, GeometryShader * gs );
                         ~RenderablePass         ();
 
-    void                Update                  ();
+    void                Update                  ( RenderableEntity * renderable, Camera * camera );
 
     PixelShader *       GetPixelShader          ();
     VertexShader *      GetVertexShader         ();

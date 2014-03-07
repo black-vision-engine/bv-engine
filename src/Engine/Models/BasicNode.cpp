@@ -480,9 +480,21 @@ VertexShader *                      BasicNode::CreateVertexShader      ()   cons
 
 // ********************************
 //
-GeometryShader *                    BasicNode::CreateGeometryShader    ()   const
+GeometryShader *                    BasicNode::CreateGeometryShader    () const
 {
     return CreateShader< GeometryShader, IGeometryShaderChannel >();
+}
+
+// ********************************
+//
+RenderableEffect *                  BasicNode::CreateDefaultEffect     ( const IPlugin * finalizer ) const
+{
+    auto psChannel = finalizer->GetPixelShaderChannel();
+    auto vsChannel = finalizer->GetVertexShaderChannel();
+    auto gsChannel = finalizer->GetGeometryShaderChannel();
+
+    assert( psChannel != nullptr );
+
 }
 
 // ********************************
@@ -668,7 +680,7 @@ void                                BasicNode::RegisterShaderParameters ( const 
 {
     for( auto value : shaderChannel->GetValues() )
     {
-        GenericShaderParam * genShaderParam = ShaderParamFactory::CreateParameter( value );
+        GenericShaderParam * genShaderParam = ShaderParamFactory::CreateGenericParameter( value );
         assert( genShaderParam != nullptr );
 
         shParams->AddParameter( genShaderParam );

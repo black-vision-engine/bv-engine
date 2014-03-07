@@ -8,15 +8,15 @@
 
 namespace bv { namespace model {
 
-class TextureVertexShaderChannel : public ShaderChannel< IVertexShaderChannel >
+class DefaultVertexShaderChannel : public ShaderChannel< IVertexShaderChannel >
 {
 public:
 
-    TextureVertexShaderChannel( const std::string & shaderSource );
+    DefaultVertexShaderChannel();
 
 };
 
-typedef std::shared_ptr< TextureVertexShaderChannel >    TextureVertexShaderChannelPtr;
+typedef std::shared_ptr< DefaultVertexShaderChannel >    DefaultVertexShaderChannelPtr;
 
 } // model
 } // bv

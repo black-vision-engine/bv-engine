@@ -11,7 +11,7 @@ class ShaderParamFactory
 {
 public:
 
-    static GenericShaderParam *     CreateParameter( const IValue * value );    
+    static GenericShaderParam *     CreateGenericParameter( const IValue * value );    
 
 };
 

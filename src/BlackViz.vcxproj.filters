@@ -39,7 +39,6 @@
     <ClCompile Include="Engine\Graphics\SceneGraph\TriangleMesh.cpp" />
     <ClCompile Include="Engine\Graphics\SceneGraph\Triangles.cpp" />
     <ClCompile Include="Engine\Graphics\SceneGraph\TriangleStrip.cpp" />
-    <ClCompile Include="Engine\Graphics\Shaders\RenderableEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderablePass.cpp" />
     <ClCompile Include="Engine\Models\Updaters\TransformUpdater.cpp" />
     <ClCompile Include="Mathematics\Transform\MatTransform.cpp" />
@@ -179,6 +178,9 @@
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderTextureParameters.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamFactory.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat4.cpp" />
+    <ClCompile Include="Engine\Graphics\Effects\DefaultEffect.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\RenderableEffect.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\DefaultVertexShaderChannel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -222,7 +224,6 @@
     <ClInclude Include="Engine\Graphics\SceneGraph\TriangleMesh.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\Triangles.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\TriangleStrip.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\RenderableEffect.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderablePass.h" />
     <ClInclude Include="Engine\Models\Updaters\TransformUpdater.h" />
     <ClInclude Include="Mathematics\Transform\MatTransform.h" />
@@ -404,6 +405,10 @@
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderTextureParameters.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamFactory.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat4.h" />
+    <ClInclude Include="Engine\Graphics\Effects\DefaultEffect.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\RenderableEffect.h" />
+    <ClInclude Include="Engine\Interfaces\IShaderDataSource.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\VertexShader\DefaultVertexShaderChannel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
@@ -415,6 +420,7 @@
     <None Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
     <None Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.inl" />
     <None Include="Engine\Graphics\Shaders\Parameters\ShaderParameters.inl" />
+    <None Include="Engine\Graphics\Shaders\RenderableEffect.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />

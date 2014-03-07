@@ -2,8 +2,6 @@
 
 #include <cassert>
 
-#include "Engine/Models/Updaters/ShaderParamUpdater.h"
-
 
 namespace bv {
 
@@ -12,7 +10,6 @@ namespace bv {
 Shader::Shader( const std::string & programSource )
     : m_programSurce( programSource )
     , m_parameters( nullptr )
-    , m_paramUpdater( nullptr )
 {
 }
 
@@ -20,7 +17,6 @@ Shader::Shader( const std::string & programSource )
 //
 Shader::~Shader ()
 {
-    delete m_paramUpdater;
     delete m_parameters;
 }
 
@@ -31,7 +27,6 @@ ShaderParameters *  Shader::GetOrCreateShaderParameters()
     if( !m_parameters )
     {
         m_parameters = new ShaderParameters();
-        m_parameters->SetOwner( this );
     }
     
     return m_parameters;
@@ -42,16 +37,6 @@ ShaderParameters *  Shader::GetOrCreateShaderParameters()
 void                Shader::AddTextureSampler( const TextureSampler * sampler )
 {
     m_textureSamplers.push_back( sampler );
-}
-
-
-// *********************************
-//
-void                Shader::RegisterUpdater  ( ShaderParamUpdater * updater )
-{
-    assert( !m_paramUpdater );
-    
-    m_paramUpdater = updater;
 }
 
 // *********************************
@@ -70,11 +55,9 @@ const std::string & Shader::ProgramSource       () const
 
 // *********************************
 //
-void                Shader::Update              ()
+void                Shader::Update              ( RenderableEntity * renderable, Camera * camera )
 {
-    //FIXME: ?????
-    if( m_paramUpdater )
-        m_paramUpdater->DoUpdate( 0.f );
+    m_parameters->UpdateParameters( renderable, camera );
 }
 
 // *********************************

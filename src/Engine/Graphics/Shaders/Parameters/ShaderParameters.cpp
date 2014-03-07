@@ -23,11 +23,11 @@ ShaderParameters::~ShaderParameters                         ()
 
 // ***************************
 //
-void                ShaderParameters::UpdateParameters      ()
+void                ShaderParameters::UpdateParameters      ( RenderableEntity * renderable, Camera * camera )
 {
     for( auto param : m_shaderParams )
     {
-        param->Update();
+        param->Update( renderable, camera );
     }
 }
 

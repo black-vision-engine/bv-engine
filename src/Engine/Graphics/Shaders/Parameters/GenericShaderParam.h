@@ -8,18 +8,8 @@
 
 namespace bv {
 
-template< ParamType paramType >
-struct ShaderValueTypeTraits
-{
-    typedef void ValueType;
-};
-
-template< typename ValueType >
-struct ShaderParamTypeTraits
-{
-    static const ParamType paramType = ParamType::PT_TOTAL;
-};
-
+class RenderableEntity;
+class Camera;
 
 class GenericShaderParam
 {
@@ -42,7 +32,7 @@ public:
     inline ParamType            Type                () const;
     inline const std::string &  Name                () const;
 
-    virtual void                Update              ();
+    virtual void                Update              ( RenderableEntity * renderable, Camera * camera );
 
     template< typename ValType >
     const ValType &             GenericGetValue     () const;
@@ -53,6 +43,20 @@ protected:
 
 };
 
+
+// *****************************************
+template< ParamType paramType >
+struct ShaderValueTypeTraits
+{
+    typedef void ValueType;
+};
+
+// *****************************************
+template< typename ValueType >
+struct ShaderParamTypeTraits
+{
+    static const ParamType paramType = ParamType::PT_TOTAL;
+};
 
 #define SPECIALIZE_SHADER_TRAIT( parameterType, valueType ) \
 template<> \

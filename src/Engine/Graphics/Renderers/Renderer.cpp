@@ -237,9 +237,9 @@ int     Renderer::GetHeight           () const
 
 // *********************************
 //
-void    Renderer::Enable              ( RenderablePass * pass, TransformableEntity * transformable )
+void    Renderer::Enable              ( RenderablePass * pass, RenderableEntity * renderable )
 {
-    auto it = m_PdrShaderMap.find(pass);
+    auto it = m_PdrShaderMap.find( pass );
 
     PdrShader * shader = nullptr;
 
@@ -253,7 +253,7 @@ void    Renderer::Enable              ( RenderablePass * pass, TransformableEnti
         shader = it->second;
     }
 
-    pass->Update();
+    pass->Update( renderable, m_Camera );
 
     assert( pass->GetStateInstance() );
     SetStateInstance( *pass->GetStateInstance() );
@@ -266,7 +266,7 @@ void    Renderer::Enable              ( RenderablePass * pass, TransformableEnti
     }
 
     //FIXME: add proper loop here
-    auto worldTrans = transformable->WorldTransforms()[ 0 ].Matrix(); //FIXME: instancing to be added here
+    auto worldTrans = renderable->WorldTransforms()[ 0 ].Matrix(); //FIXME: instancing to be added here
     auto mvp        = projMat * worldTrans;
     pass->GetVertexShader()->UpdateMVP( mvp );
     pass->GetVertexShader()->UpdateMV( worldTrans );
