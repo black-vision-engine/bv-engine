@@ -216,7 +216,10 @@
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamDesc.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParameters.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamFactory.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamP.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat4.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamMV.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamMVP.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderTextureParameters.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderableEffect.cpp" />
@@ -400,7 +403,10 @@
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamDesc.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParameters.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamFactory.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamP.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat4.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamMV.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamMVP.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderTextureParameters.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderableEffect.h" />

@@ -494,7 +494,9 @@ RenderableEffect *                  BasicNode::CreateDefaultEffect     ( const I
     auto gsChannel = finalizer->GetGeometryShaderChannel();
 
     assert( psChannel != nullptr );
+    assert( vsChannel != nullptr );
 
+    //DefaultPass(); 
 }
 
 // ********************************

@@ -24,7 +24,7 @@ ShaderParamVec4::~ShaderParamVec4               ()
 //
 const void *    ShaderParamVec4::GetValuePtr    () const
 {
-    return static_cast< const void * >( &m_valModel->GetValue() );
+    return &m_valModel->GetValue();
 }
 
 } //bv

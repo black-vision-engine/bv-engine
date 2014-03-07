@@ -181,6 +181,9 @@
     <ClCompile Include="Engine\Graphics\Effects\DefaultEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderableEffect.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\DefaultVertexShaderChannel.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamMVP.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamMV.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamP.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -409,6 +412,9 @@
     <ClInclude Include="Engine\Graphics\Shaders\RenderableEffect.h" />
     <ClInclude Include="Engine\Interfaces\IShaderDataSource.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexShader\DefaultVertexShaderChannel.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamMVP.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamMV.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamP.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
