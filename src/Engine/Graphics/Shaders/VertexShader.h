@@ -12,21 +12,7 @@ class VertexShader : public Shader
 {
 public:
 
-    void        UpdateMVP   ( const glm::mat4 & MVP );
-    void        UpdateMV    ( const glm::mat4 & MV );
-    void        UpdateP     ( const glm::mat4 & MV );
-
-    VertexShader            ( const std::string & programSource );
-
-};
-
-class PassThroughVertexShader : public VertexShader
-{
-    static std::string m_programSource;
-
-public:
-
-    PassThroughVertexShader();
+    VertexShader            ( const std::string & programSource, ShaderParameters * params );
 
 };
 

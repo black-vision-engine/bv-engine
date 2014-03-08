@@ -55,7 +55,6 @@
     <ClCompile Include="Engine\Models\Resources\Resource.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextureLoader.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\TextureSampler.cpp" />
-    <ClCompile Include="Engine\Graphics\Shaders\IShaderParamUpdater.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\TranformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.cpp" />
@@ -169,7 +168,6 @@
     <ClCompile Include="Engine\Models\Plugins\DefaultPluginListFinalized.cpp" />
     <ClCompile Include="Engine\Models\Plugins\DefaultFinalizePlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.cpp" />
-    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParam.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamDesc.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.cpp" />
@@ -252,7 +250,6 @@
     <ClInclude Include="Engine\Models\Resources\IResourceLoader.h" />
     <ClInclude Include="Engine\Models\Resources\TextureLoader.h" />
     <ClInclude Include="Engine\Graphics\Shaders\TextureSampler.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\IShaderParamUpdater.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.h" />
@@ -399,7 +396,6 @@
     <ClInclude Include="Engine\Models\Plugins\DefaultPluginListFinalized.h" />
     <ClInclude Include="Engine\Models\Plugins\DefaultFinalizePlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParam.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamDesc.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.h" />

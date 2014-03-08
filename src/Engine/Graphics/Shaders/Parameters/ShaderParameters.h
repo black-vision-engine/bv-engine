@@ -30,7 +30,7 @@ public:
                                             ShaderParameters                ();
                                             ~ShaderParameters               ();
 
-    void                                    UpdateParameters                ();
+    void                                    UpdateParameters                ( RenderableEntity * renderable, Camera * camera );
 
     void                                    AddParameter                    ( GenericShaderParam * param );
 
@@ -41,7 +41,6 @@ public:
 
     inline const ShaderTextureParameters &  GetTextureParameters            () const;
     inline ShaderTextureParameters &        TextureParameters               ();
-
 
 };
 

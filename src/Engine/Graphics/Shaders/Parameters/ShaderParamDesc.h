@@ -3,7 +3,6 @@
 #include <string>
 #include <glm/glm.hpp>
 
-#include "Engine/Graphics/Shaders/ShaderTypes.h"
 #include "Engine/Types/Enums.h"
 
 

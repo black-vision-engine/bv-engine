@@ -110,7 +110,7 @@ public:
 
     void    SetStateInstance    ( const StateInstance & stateInstance );
 
-private: //FIXME: private
+public: //FIXME: private
 
     void    Enable              ( RenderablePass * pass, RenderableEntity * renderable );
     void    Enable              ( const VertexBuffer * vb );

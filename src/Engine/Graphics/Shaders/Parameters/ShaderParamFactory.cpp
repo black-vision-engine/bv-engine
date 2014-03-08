@@ -6,13 +6,16 @@
 
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamVec4.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamMat4.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamMVP.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamMV.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamP.h"
 
 
 namespace bv {
 
 // ********************************
 //
-GenericShaderParam *    ShaderParamFactory::CreateParameter( const IValue * value )
+GenericShaderParam *    ShaderParamFactory::CreateGenericParameter  ( const IValue * value )
 {
     assert( value != nullptr );
 
@@ -31,6 +34,27 @@ GenericShaderParam *    ShaderParamFactory::CreateParameter( const IValue * valu
     }
 
     return nullptr;
+}
+
+// ********************************
+//
+GenericShaderParam *     ShaderParamFactory::CreateMVPParameter      ()
+{
+    return new ShaderParamMVP( "MVP" );
+}
+
+// ********************************
+//
+GenericShaderParam *     ShaderParamFactory::CreateMVParameter       ()
+{
+    return new ShaderParamMVP( "MV" );
+}
+
+// ********************************
+//
+GenericShaderParam *     ShaderParamFactory::CreatePParameter        ()
+{
+    return new ShaderParamMVP( "P" );
 }
 
 } //bv

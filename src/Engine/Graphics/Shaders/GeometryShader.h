@@ -12,11 +12,7 @@ class GeometryShader : public Shader
 {
 public:
 
-    void        UpdateMVP   ( const glm::mat4 & MVP );
-    void        UpdateMV    ( const glm::mat4 & MV );
-    void        UpdateP     ( const glm::mat4 & P );
-
-    GeometryShader( const std::string & programSource );
+    GeometryShader( const std::string & programSource, ShaderParameters * params );
 
 };
 

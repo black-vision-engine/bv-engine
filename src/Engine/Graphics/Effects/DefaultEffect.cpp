@@ -1,44 +1,109 @@
-#include "RenderableEffect.h"
+#include "DefaultEffect.h"
 
 #include <cassert>
+
+#include "Engine/Interfaces/IShaderDataSource.h"
+
+#include "Engine/Graphics/Shaders/Parameters/ShaderParameters.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
 
 
 namespace bv {
 
 // *********************************
 //
-RenderableEffect::RenderableEffect    ()
+DefaultEffect::DefaultEffect    ( const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds )
+{
+    assert( psds != nullptr );
+    assert( vsds != nullptr );
+
+    ShaderParameters * psparams = DefaultParamsPS( psds );
+    ShaderParameters * vsparams = DefaultParamsVS( psds );
+
+    assert( psparams != nullptr );
+    assert( vsparams != nullptr );
+
+    PixelShader * ps    = new PixelShader( psds->GetShaderSource(), psparams );
+    VertexShader * vs   = new VertexShader( vsds->GetShaderSource(), vsparams );
+    GeometryShader * gs = nullptr;
+
+    if ( gsds != nullptr )
+    {
+        ShaderParameters * gsparams = DefaultParamsGS( gsds );
+
+        assert( gsparams != nullptr );
+
+        gs = new GeometryShader( gsds->GetShaderSource(), gsparams );
+    }
+
+    RenderablePass * pass = new RenderablePass( ps, vs, gs );
+    AddPass( pass );
+}
+
+// *********************************
+//
+DefaultEffect::~DefaultEffect   ()
 {
 }
 
 // *********************************
 //
-RenderableEffect::~RenderableEffect   ()
+ShaderParameters * DefaultEffect::DefaultParamsPS  ( const IShaderDataSource * ds ) const
 {
+    return DefaultParamsImpl( ds );
 }
 
 // *********************************
 //
-int                 RenderableEffect::NumPasses             () const
+ShaderParameters * DefaultEffect::DefaultParamsVS  ( const IShaderDataSource * ds ) const
 {
-    return m_passes.size();
+    auto params = DefaultParamsImpl( ds );
+
+    assert( params != nullptr );
+
+    auto mvpParam   = ShaderParamFactory::CreateMVPParameter();
+    auto mvParam    = ShaderParamFactory::CreateMVParameter ();
+    auto pParam     = ShaderParamFactory::CreatePParameter  ();
+
+    params->AddParameter( mvpParam );
+    params->AddParameter( mvParam );
+    params->AddParameter( pParam );
+
+    return params;
 }
 
 // *********************************
 //
-void                RenderableEffect::AddPass               ( RenderablePass * pass )
+ShaderParameters * DefaultEffect::DefaultParamsGS  ( const IShaderDataSource * ds ) const
 {
-    m_passes.push_back( pass );
+    if( ds )
+    {
+        return DefaultParamsVS( ds );
+    }
+
+    return nullptr;
 }
 
 // *********************************
 //
-RenderablePass *  RenderableEffect::GetPass                 ( int index )
+ShaderParameters * DefaultEffect::DefaultParamsImpl( const IShaderDataSource * ds ) const
 {
-    assert( index >= 0 );
-    assert( index < NumPasses() );
+    ShaderParameters * sp = nullptr;
 
-    return m_passes[ index ];
+    if( ds != nullptr )
+    {
+        sp = new ShaderParameters();
+
+        for( auto value : ds->GetValues() )
+        {
+            GenericShaderParam * param = ShaderParamFactory::CreateGenericParameter( value );
+            assert( param != nullptr );
+
+            sp->AddParameter( param );
+        }
+    }
+
+    return sp;
 }
 
-}
+} //bv

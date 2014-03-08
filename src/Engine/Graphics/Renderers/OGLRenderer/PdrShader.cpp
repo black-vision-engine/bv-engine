@@ -2,12 +2,9 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
-#include "Engine/Graphics/Shaders/Parameters/ShaderParam.h"
 #include "Engine/Graphics/Shaders/PixelShader.h"
 #include "Engine/Graphics/Shaders/VertexShader.h"
 #include "Engine/Graphics/Shaders/GeometryShader.h"
-
-#include "Engine/Graphics/Shaders/ShaderParameters.h"
 
 #include "Engine/Graphics/Shaders/TextureSampler.h"
 #include "Engine/Graphics/Resources/Texture.h"

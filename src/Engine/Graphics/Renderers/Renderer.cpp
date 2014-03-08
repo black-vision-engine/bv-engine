@@ -258,27 +258,6 @@ void    Renderer::Enable              ( RenderablePass * pass, RenderableEntity 
     assert( pass->GetStateInstance() );
     SetStateInstance( *pass->GetStateInstance() );
 
-    auto projMat = glm::mat4(1.f);
-
-    if( m_Camera )
-    {
-        projMat = m_Camera->GetProjectionMatrix();
-    }
-
-    //FIXME: add proper loop here
-    auto worldTrans = renderable->WorldTransforms()[ 0 ].Matrix(); //FIXME: instancing to be added here
-    auto mvp        = projMat * worldTrans;
-    pass->GetVertexShader()->UpdateMVP( mvp );
-    pass->GetVertexShader()->UpdateMV( worldTrans );
-    pass->GetVertexShader()->UpdateP( projMat );
-
-    if( auto gs = pass->GetGeometryShader() )
-    {
-        gs->UpdateMVP( mvp );
-        gs->UpdateMV( worldTrans );
-        gs->UpdateP( projMat );
-    }
-
     shader->Enable( this );
 }
 

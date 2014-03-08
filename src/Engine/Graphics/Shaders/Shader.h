@@ -27,20 +27,19 @@ protected:
 
 protected:
 
-                        Shader                      ( const std::string & programSource );
-                        ~Shader                     ();
+                        Shader              ( const std::string & programSource, ShaderParameters * params );
+                        ~Shader             ();
 
 public:  
 
-    //FIXME: some additional code should be added to make paramater creation a bit less error prone (right now we give away parameters and have no control over them)
-    ShaderParameters *  GetOrCreateShaderParameters ();
+    ShaderParameters *  GetParameters       ();
 
-    void                AddTextureSampler           ( const TextureSampler * sampler );
-    ShaderParameters *  Parameters                  ();
+    void                AddTextureSampler   ( const TextureSampler * sampler );
+    ShaderParameters *  Parameters          ();
 
-    const std::string & ProgramSource               () const;
+    const std::string & ProgramSource       () const;
 
-    void                Update                      ( RenderableEntity * renderable, Camera * camera );
+    void                Update              ( RenderableEntity * renderable, Camera * camera );
 
     const std::vector< const TextureSampler * > &  Samplers  () const;
 

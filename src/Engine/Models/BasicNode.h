@@ -94,63 +94,6 @@ private:
     unsigned int                        TotalSize                       ( const std::vector< IConnectedComponent * > & ccVec, const IVertexAttributesChannelDescriptor * desc ) const;
 
     RenderableEffect *                  CreateDefaultEffect             ( const IPlugin * finalizer ) const;
-    RenderableEffect *                  CreateRenderaleEffectMockImplementationForCompleteDummies() const;
-
-    PixelShader *                       CreatePixelShader       ()                      const;
-    VertexShader *                      CreateVertexShader      ()                      const;   
-    GeometryShader *                    CreateGeometryShader    ()                      const;
-
-
-    // ********************************
-    //
-    template< typename ShaderType, typename ChannelType >
-    const ChannelType * GetShaderChannel  () const
-    {
-        return nullptr;
-    }
-
-    // ********************************
-    //
-    template<>
-    const IPixelShaderChannel *   GetShaderChannel< PixelShader, IPixelShaderChannel >    () const
-    {
-        return m_pluginList->GetFinalizePlugin()->GetPixelShaderChannel();
-    }
-
-    // ********************************
-    //
-    template<>
-    const IVertexShaderChannel *   GetShaderChannel< VertexShader, IVertexShaderChannel >    () const
-    {
-        return m_pluginList->GetFinalizePlugin()->GetVertexShaderChannel();
-    }
-
-    // ********************************
-    //
-    template<>
-    const IGeometryShaderChannel *   GetShaderChannel< GeometryShader, IGeometryShaderChannel >    () const
-    {
-        return m_pluginList->GetFinalizePlugin()->GetGeometryShaderChannel();
-    }
-
-    // ********************************
-    //
-    template< typename ShaderType, typename ShaderChannel >
-    ShaderType *                        CreateShader            ()                      const
-    {
-        auto sCh = GetShaderChannel< ShaderType, ShaderChannel >();
-
-        if( sCh != nullptr )
-        {
-            ShaderType * s = new ShaderType( sCh->GetShaderSource() );
-
-            BasicNode::RegisterShaderParameters( sCh, s->GetOrCreateShaderParameters() );
-
-            return s;
-        }
-
-        return nullptr;
-    }
 
 public:
 

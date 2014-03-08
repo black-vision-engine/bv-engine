@@ -23,7 +23,8 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 
 #include "Engine/Models/Builder/RendererStatesBuilder.h"
-#include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
+
+#include "Engine/Graphics/Effects/DefaultEffect.h"
 
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 #include "Engine/Graphics/Resources/RenderableArrayDataElements.h"
@@ -129,7 +130,7 @@ SceneNode *                 BasicNode::BuildScene()
     {
         auto renderableType = finalizer->GetVertexAttributesChannel()->GetPrimitiveType();
 
-        effect = CreateRenderaleEffectMockImplementationForCompleteDummies();
+        effect = CreateDefaultEffect( finalizer );
         //RenderableArrayDataSingleVertexBuffer * rad = CreateRenderableArrayData( renderableType );
 
 
@@ -459,34 +460,6 @@ bool                                BasicNode::CreateRenderableData     (/* Vert
 
 // ********************************
 //
-PixelShader *                       BasicNode::CreatePixelShader       ()   const
-{
-    return CreateShader< PixelShader, IPixelShaderChannel >();
-}
-
-// ********************************
-//
-VertexShader *                      BasicNode::CreateVertexShader      ()   const
-{
-    auto vs = CreateShader< VertexShader, IVertexShaderChannel >();
-
-    if( vs == nullptr )
-    {
-        vs = new PassThroughVertexShader();
-    }
-
-    return vs;
-}
-
-// ********************************
-//
-GeometryShader *                    BasicNode::CreateGeometryShader    () const
-{
-    return CreateShader< GeometryShader, IGeometryShaderChannel >();
-}
-
-// ********************************
-//
 RenderableEffect *                  BasicNode::CreateDefaultEffect     ( const IPlugin * finalizer ) const
 {
     auto psChannel = finalizer->GetPixelShaderChannel();
@@ -496,20 +469,7 @@ RenderableEffect *                  BasicNode::CreateDefaultEffect     ( const I
     assert( psChannel != nullptr );
     assert( vsChannel != nullptr );
 
-    //DefaultPass(); 
-}
-
-// ********************************
-//FIXME: reimplement someday
-RenderableEffect *                  BasicNode::CreateRenderaleEffectMockImplementationForCompleteDummies   ()                                                              const
-{
-    RenderableEffect *  ret = new RenderableEffect();
-
-    RenderablePass *    renderPass = new RenderablePass( CreatePixelShader(), CreateVertexShader(), CreateGeometryShader() );
-
-    ret->AddPass( renderPass );
-
-    return ret;
+    return new DefaultEffect( psChannel, vsChannel, gsChannel ); 
 }
 
 // ********************************
@@ -676,18 +636,6 @@ unsigned int                        BasicNode::TotalSize             ( const std
     return TotalNumVertices( ccVec ) * desc->SingleVertexEntrySize();
 }
 
-// ********************************
-//
-void                                BasicNode::RegisterShaderParameters ( const IShaderChannel * shaderChannel, ShaderParameters * shParams )
-{
-    for( auto value : shaderChannel->GetValues() )
-    {
-        GenericShaderParam * genShaderParam = ShaderParamFactory::CreateGenericParameter( value );
-        assert( genShaderParam != nullptr );
-
-        shParams->AddParameter( genShaderParam );
-    }
-}
 
 // ********************************
 //

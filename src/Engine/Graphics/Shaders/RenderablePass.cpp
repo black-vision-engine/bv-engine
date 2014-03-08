@@ -16,7 +16,7 @@ namespace bv
 //
 RenderablePass::RenderablePass( PixelShader * ps, VertexShader * vs, GeometryShader * gs )
     : m_geometryShader( gs )
-    , m_vertexShader( vs 
+    , m_vertexShader( vs )
     , m_pixelShader( ps )
 {
     m_stateInstance = new StateInstance();
@@ -63,11 +63,12 @@ StateInstance *     RenderablePass::GetStateInstance        ()
 //
 void                RenderablePass::Update                 ( RenderableEntity * renderable, Camera * camera )
 {
-    if( m_pixelShader )
-        m_pixelShader->Update( renderable, camera );
+    //PixelShader and VertexShader must allways be present, no if is necessary here
+    //if( m_pixelShader )
+    m_pixelShader->Update( renderable, camera );
 
-    if( m_vertexShader )
-        m_vertexShader->Update( renderable, camera );
+    //if( m_vertexShader )
+    m_vertexShader->Update( renderable, camera );
 
     if( m_geometryShader )
         m_geometryShader->Update( renderable, camera );
