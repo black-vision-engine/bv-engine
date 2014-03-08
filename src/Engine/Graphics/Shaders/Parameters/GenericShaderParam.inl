@@ -2,12 +2,15 @@ namespace bv {
 
 // ****************************************************** ShaderTraits specializations ******************************************************
 
-SPECIALIZE_SHADER_TRAIT( ParamType::PT_FLOAT, float );
+SPECIALIZE_SHADER_TRAIT( ParamType::PT_FLOAT1, float );
 SPECIALIZE_SHADER_TRAIT( ParamType::PT_FLOAT2, glm::vec2 );
 SPECIALIZE_SHADER_TRAIT( ParamType::PT_FLOAT3, glm::vec3 );
 SPECIALIZE_SHADER_TRAIT( ParamType::PT_FLOAT4, glm::vec4 );
 SPECIALIZE_SHADER_TRAIT( ParamType::PT_MAT2, glm::mat2 );
+SPECIALIZE_SHADER_TRAIT( ParamType::PT_MAT3, glm::mat3 );
 SPECIALIZE_SHADER_TRAIT( ParamType::PT_MAT4, glm::mat4 );
+SPECIALIZE_SHADER_TRAIT( ParamType::PT_INT, int );
+SPECIALIZE_SHADER_TRAIT( ParamType::PT_BOOL, bool );
 
 
 // *********************************************************** Inline implementations **********************************************************
@@ -15,9 +18,9 @@ SPECIALIZE_SHADER_TRAIT( ParamType::PT_MAT4, glm::mat4 );
 // ****************************
 //
 template< typename ValType >
-const ValType &             GenericShaderParam::GenericGetValue () const
+inline const ValType &      GenericShaderParam::GenericGetValue () const
 {
-    assert( ShaderParamTypeTraits< ValType >::paramType = m_paramType );
+    assert( ShaderParamTypeTraits< ValType >::paramType == m_paramType );
 
     const void * rawVal = GetValuePtr();
     assert( rawVal != nullptr );
@@ -46,5 +49,11 @@ inline const std::string &  GenericShaderParam::Name            () const
     return m_paramName;
 }
 
+// ****************************
+//
+inline bool                 GenericShaderParam::IsUpdateble     () const
+{
+    return m_updatable;
+}
 
 } //bv

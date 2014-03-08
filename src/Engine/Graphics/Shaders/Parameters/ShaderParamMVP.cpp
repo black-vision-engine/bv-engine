@@ -28,14 +28,17 @@ const void *    ShaderParamMVP::GetValuePtr () const
 //
 void            ShaderParamMVP::Update      ( RenderableEntity * renderable, Camera * camera )
 {
-    assert( camera != nullptr );
-    assert( renderable != nullptr );
+    if( IsUpdateble() )
+    {
+        assert( camera != nullptr );
+        assert( renderable != nullptr );
 
-    auto projMat = camera->GetProjectionMatrix();
+        auto projMat = camera->GetProjectionMatrix();
 
-    //FIXME: add proper loop here
-    auto worldTrans = renderable->WorldTransforms()[ 0 ].Matrix(); //FIXME: instancing to be added here
-    m_mvp        = projMat * worldTrans;
+        //FIXME: add proper loop here
+        auto worldTrans = renderable->WorldTransforms()[ 0 ].Matrix(); //FIXME: instancing to be added here
+        m_mvp        = projMat * worldTrans;
+    }
 }
 
 } //bv

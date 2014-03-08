@@ -34,9 +34,9 @@ public:
 
     void                                    AddParameter                    ( GenericShaderParam * param );
 
-    inline int                              NumParameters                   () const;
+    inline unsigned int                     NumParameters                   () const;
 
-    inline const GenericShaderParam *       GetParam                        ( int idx ) const;
+    inline const GenericShaderParam *       GetParam                        ( unsigned int idx ) const;
     inline const GenericShaderParam *       GetParam                        ( const std::string & name ) const;
 
     inline const ShaderTextureParameters &  GetTextureParameters            () const;

@@ -2,6 +2,8 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
+#include "Engine/Graphics/Shaders/Parameters/GenericShaderParam.h"
+
 #include "Engine/Graphics/Shaders/PixelShader.h"
 #include "Engine/Graphics/Shaders/VertexShader.h"
 #include "Engine/Graphics/Shaders/GeometryShader.h"
@@ -30,6 +32,11 @@ PdrShader::PdrShader   ( PdrGLSLProgram * program, PixelShader * ps, VertexShade
     , m_vertexShader( vs )
     , m_geometryShader( gs )
 {
+    m_program->Use();
+
+    InitParamsLocations( ps );
+    InitParamsLocations( vs );
+    InitParamsLocations( gs );
 }
 
 // *******************************
@@ -92,7 +99,7 @@ void    PdrShader::SetUniforms     ( Shader * shader )
     {
         ShaderParameters * params = shader->Parameters();
 
-        for ( int i = 0; i < params->NumParameters(); ++i )
+        for ( unsigned int i = 0; i < params->NumParameters(); ++i )
         {
             SetUniformParam( params->GetParam( i ) );
         }
@@ -101,39 +108,76 @@ void    PdrShader::SetUniforms     ( Shader * shader )
 
 // *******************************
 //FIXME: reimplement this method so that switch-case statement is not called here but rather in GenericParameter or even better - in shader desc
-void    PdrShader::SetUniformParam ( UniformShaderParam * param )
+void    PdrShader::SetUniformParam ( const GenericShaderParam * param )
 {
     switch( param->Type() )
     {
-        case ParamType::PT_FLOAT:
-            SetUniformDispatcher< ParamType::PT_FLOAT >( param );
-            break;
         case ParamType::PT_FLOAT1:
-            SetUniformDispatcher< ParamType::PT_FLOAT1 >( param );
+            SetUniform< ParamType::PT_FLOAT1 >( param );
             break;
         case ParamType::PT_FLOAT2:
-            SetUniformDispatcher< ParamType::PT_FLOAT2 >( param );
+            SetUniform< ParamType::PT_FLOAT2 >( param );
             break;
         case ParamType::PT_FLOAT3:
-            SetUniformDispatcher< ParamType::PT_FLOAT3 >( param );
+            SetUniform< ParamType::PT_FLOAT3 >( param );
             break;
         case ParamType::PT_FLOAT4:
-            SetUniformDispatcher< ParamType::PT_FLOAT4 >( param );
+            SetUniform< ParamType::PT_FLOAT4 >( param );
             break;
         case ParamType::PT_MAT2:
-            SetUniformDispatcher< ParamType::PT_MAT2 >( param );
+            SetUniform< ParamType::PT_MAT2 >( param );
             break;
         case ParamType::PT_MAT3:
-            SetUniformDispatcher< ParamType::PT_MAT3 >( param );
+            SetUniform< ParamType::PT_MAT3 >( param );
             break;
         case ParamType::PT_MAT4:
-            SetUniformDispatcher< ParamType::PT_MAT4 >( param );
+            SetUniform< ParamType::PT_MAT4 >( param );
             break;
         case ParamType::PT_INT:
-            SetUniformDispatcher< ParamType::PT_INT >( param );
+            SetUniform< ParamType::PT_INT >( param );
             break;
         case ParamType::PT_BOOL:
-            SetUniformDispatcher< ParamType::PT_BOOL >( param );
+            SetUniform< ParamType::PT_BOOL >( param );
+            break;
+        default:
+            assert( false );
+            break;
+    }
+}
+
+// *******************************
+//FIXME: reimplement this method so that switch-case statement is not called here but rather in GenericParameter or even better - in shader desc
+// FIXME: if enabled or something should be used here
+void     PdrShader::InitSetUniformParam     ( const GenericShaderParam * param )
+{
+    switch( param->Type() )
+    {
+        case ParamType::PT_FLOAT1:
+            InitSetUniform< ParamType::PT_FLOAT1 >( param );
+            break;
+        case ParamType::PT_FLOAT2:
+            InitSetUniform< ParamType::PT_FLOAT2 >( param );
+            break;
+        case ParamType::PT_FLOAT3:
+            InitSetUniform< ParamType::PT_FLOAT3 >( param );
+            break;
+        case ParamType::PT_FLOAT4:
+            InitSetUniform< ParamType::PT_FLOAT4 >( param );
+            break;
+        case ParamType::PT_MAT2:
+            InitSetUniform< ParamType::PT_MAT2 >( param );
+            break;
+        case ParamType::PT_MAT3:
+            InitSetUniform< ParamType::PT_MAT3 >( param );
+            break;
+        case ParamType::PT_MAT4:
+            InitSetUniform< ParamType::PT_MAT4 >( param );
+            break;
+        case ParamType::PT_INT:
+            InitSetUniform< ParamType::PT_INT >( param );
+            break;
+        case ParamType::PT_BOOL:
+            InitSetUniform< ParamType::PT_BOOL >( param );
             break;
         default:
             assert( false );
@@ -163,7 +207,7 @@ int     PdrShader::EnableTextureSamplers   ( Renderer * renderer, Shader * shade
         return 0;
     }
 
-    return EnableTextureSamplers( renderer, shader->Samplers(), shader->GetOrCreateShaderParameters()->GetTextureParameters(), firstAvailableSamplerIndex );
+    return EnableTextureSamplers( renderer, shader->Samplers(), shader->GetParameters()->GetTextureParameters(), firstAvailableSamplerIndex );
 }
 
 // *******************************
@@ -314,7 +358,7 @@ int    PdrShader::DisableTextureSamplers  ( Renderer * renderer, Shader * shader
         return 0;
     }
 
-    return DisableTextureSamplers( renderer, shader->Samplers(), shader->GetOrCreateShaderParameters()->GetTextureParameters(), firstAvailableSamplerIndex );
+    return DisableTextureSamplers( renderer, shader->Samplers(), shader->GetParameters()->GetTextureParameters(), firstAvailableSamplerIndex );
 }
 
 // *******************************
@@ -396,5 +440,22 @@ void    PdrShader::DisableTextureSampler   ( Renderer * renderer, const TextureS
 
     }
 }
+
+// *******************************
+//
+void    PdrShader::InitParamsLocations     ( Shader * shader )
+{
+    if( shader )
+    {
+        ShaderParameters * params = shader->GetParameters();
+
+        for( unsigned int i = 0; i < params->NumParameters(); ++i )
+        {
+            const GenericShaderParam * param = params->GetParam( i );
+            InitSetUniformParam( params->GetParam( i ) );
+        }
+    }
+}
+
 
 } //bv

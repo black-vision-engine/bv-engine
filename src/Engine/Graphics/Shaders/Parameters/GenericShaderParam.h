@@ -15,7 +15,10 @@ class GenericShaderParam
 {
 private:
 
-    int                 m_id;
+    mutable int         m_id;
+    
+    mutable bool        m_updatable;
+    
     ParamType           m_paramType;
     std::string         m_paramName;
 
@@ -26,16 +29,18 @@ public:
 
     virtual                     ~GenericShaderParam ();
 
-    void                        SetIntID            ( int id );
+    void                        SetIntID            ( int id ) const;
+    void                        SetUpdatable        ( bool updatable ) const;
 
     inline  int                 IntID               () const;
     inline ParamType            Type                () const;
     inline const std::string &  Name                () const;
+    inline bool                 IsUpdateble         () const;
 
     virtual void                Update              ( RenderableEntity * renderable, Camera * camera );
 
     template< typename ValType >
-    const ValType &             GenericGetValue     () const;
+    inline const ValType &      GenericGetValue     () const;
 
 protected:
 

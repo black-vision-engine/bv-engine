@@ -168,7 +168,6 @@
     <ClCompile Include="Engine\Models\Plugins\DefaultPluginListFinalized.cpp" />
     <ClCompile Include="Engine\Models\Plugins\DefaultFinalizePlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.cpp" />
-    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamDesc.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.cpp" />
@@ -178,10 +177,14 @@
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat4.cpp" />
     <ClCompile Include="Engine\Graphics\Effects\DefaultEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderableEffect.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\DefaultVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamMVP.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamMV.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamP.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamFloat.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat2.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat3.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec2.cpp" />
+    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -396,7 +399,6 @@
     <ClInclude Include="Engine\Models\Plugins\DefaultPluginListFinalized.h" />
     <ClInclude Include="Engine\Models\Plugins\DefaultFinalizePlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamDesc.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.h" />
@@ -407,10 +409,14 @@
     <ClInclude Include="Engine\Graphics\Effects\DefaultEffect.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderableEffect.h" />
     <ClInclude Include="Engine\Interfaces\IShaderDataSource.h" />
-    <ClInclude Include="Engine\Models\Plugins\Channels\VertexShader\DefaultVertexShaderChannel.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamMVP.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamMV.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamP.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamFloat.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat2.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat3.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec2.h" />
+    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec3.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
@@ -423,6 +429,7 @@
     <None Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.inl" />
     <None Include="Engine\Graphics\Shaders\Parameters\ShaderParameters.inl" />
     <None Include="Engine\Graphics\Shaders\RenderableEffect.inl" />
+    <None Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />

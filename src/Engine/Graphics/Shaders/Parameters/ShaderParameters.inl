@@ -2,16 +2,15 @@ namespace bv {
 
 // ***************************
 //
-inline int  ShaderParameters::NumParameters                             () const
+inline unsigned int                 ShaderParameters::NumParameters     () const
 {
     return m_shaderParams.size();   
 }
 
 // ***************************
 //
-inline const GenericShaderParam *   ShaderParameters::GetParam          ( int idx ) const
+inline const GenericShaderParam *   ShaderParameters::GetParam          ( unsigned int idx ) const
 {
-    assert( idx >= 0 );
     assert( idx < NumParameters() );
 
     return m_shaderParams[ idx ];

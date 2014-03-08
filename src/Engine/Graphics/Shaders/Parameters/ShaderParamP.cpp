@@ -28,9 +28,12 @@ const void *    ShaderParamP::GetValuePtr   () const
 //
 void            ShaderParamP::Update        ( RenderableEntity * renderable, Camera * camera )
 {
-    assert( camera != nullptr );
+    if( IsUpdateble() )
+    {
+        assert( camera != nullptr );
 
-    m_p = camera->GetProjectionMatrix();
+        m_p = camera->GetProjectionMatrix();
+    }
 }
 
 } //bv

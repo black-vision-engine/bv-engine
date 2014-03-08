@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
-#include "Engine/Models/Plugins/Channels/VertexShader/DefaultVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
 
 
 namespace bv { namespace model {
@@ -10,12 +10,12 @@ class DefaultFinalizePlugin : public IPlugin
 {
 private:
 
-    const IPlugin *             m_prevPlugin;
+    const IPlugin *                 m_prevPlugin;
     
-    std::string                 m_name;
-    static std::string          m_uid;
+    std::string                     m_name;
+    static std::string              m_uid;
 
-    DefaultVertexShaderChannel  m_defaultVSChannel;
+    DefaultVertexShaderChannel *    m_defaultVSChannel;
 
 public:
 

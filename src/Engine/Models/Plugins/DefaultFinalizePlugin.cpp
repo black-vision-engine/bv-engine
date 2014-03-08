@@ -13,12 +13,14 @@ DefaultFinalizePlugin::DefaultFinalizePlugin       ()
     : m_prevPlugin( nullptr )
     , m_name( "finalizer" )
 {
+    m_defaultVSChannel = DefaultVertexShaderChannel::Create();
 }
 
 // *******************************
 //
 DefaultFinalizePlugin::~DefaultFinalizePlugin      ()
 {
+    delete m_defaultVSChannel;
 }
                                     
 // *******************************
@@ -94,7 +96,7 @@ const IVertexShaderChannel *        DefaultFinalizePlugin::GetVertexShaderChanne
 
     if( vsc == nullptr )
     {
-        vsc = &m_defaultVSChannel;
+        vsc = m_defaultVSChannel;
     }
 
     return vsc;

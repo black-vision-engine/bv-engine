@@ -28,10 +28,13 @@ const void *    ShaderParamMV::GetValuePtr  () const
 //
 void            ShaderParamMV::Update       ( RenderableEntity * renderable, Camera * camera )
 {
-    assert( renderable != nullptr );
+    if( IsUpdateble() )
+    {
+        assert( renderable != nullptr );
 
-    //FIXME: add proper loop here
-    m_mv = renderable->WorldTransforms()[ 0 ].Matrix(); //FIXME: instancing to be added here
+        //FIXME: add proper loop here
+        m_mv = renderable->WorldTransforms()[ 0 ].Matrix(); //FIXME: instancing to be added here
+    }
 }
 
 } //bv

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrGLSLProgram.h"
-#include "Engine/Graphics/Shaders/Parameters/ShaderParamDesc.h"
+#include "Engine/Types/Enums.h"
 
 #include <glm/glm.hpp>
 
@@ -14,7 +14,7 @@ class Shader;
 class PixelShader;
 class VertexShader;
 class GeometryShader;
-class UniformShaderParam;
+class GenericShaderParam;
 class TextureSampler;
 
 class Texture2D;
@@ -53,14 +53,8 @@ public:
 private:
 
     void    SetUniforms             ( Shader * shader );
-    void    SetUniformParam         ( UniformShaderParam * param );
-
-    template< ParamType paramType >
-    void    SetUniformDispatcher    ( UniformShaderParam * param )
-    {
-        typedef ShaderParamTypeMapper< paramType >::type ValType;
-        m_program->SetUniform( param->Name().c_str(), param->GenericGetVal< ValType >() );
-    }
+    void    SetUniformParam         ( const GenericShaderParam * param );
+    void    InitSetUniformParam     ( const GenericShaderParam * param );
 
     //FIXME: this API should  be moved to some helper class as it looks shitty ang pretty uglu over here (as if PdrShader was responsible mostly for enabling samplers and textures)
     int     EnableTextureSamplers   ( Renderer * renderer );
@@ -79,6 +73,16 @@ private:
     void    DisableTextureSampler   ( Renderer * renderer, const TextureSampler * sampler, const Texture2D * texture, int samplerNum );
     void    DisableTextureSampler   ( Renderer * renderer, const TextureSampler * sampler, const TextureAnimatedSequence2D * animation, int samplerNum );
     
+    void    InitParamsLocations     ( Shader * shader );
+
+    template< ParamType paramType >
+    inline void InitSetUniform      ( const GenericShaderParam * param );
+
+    template< ParamType paramType >
+    inline void SetUniform          ( const GenericShaderParam * param );
+
 };
 
 } //bv
+
+#include "PdrShader.inl"
