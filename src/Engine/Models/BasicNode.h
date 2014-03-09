@@ -71,6 +71,8 @@ public:
     bool                                    AddPlugin               ( IPluginPtr plugin );
     bool                                    AddPlugin               ( const std::string & uid );
     bool                                    AddPlugin               ( const std::string & uid, const std::string & name );
+    bool                                    AddPlugins              ( const std::vector< std::string > & uids );
+    bool                                    AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names );
 
     virtual void                            Print                   ( std::ostream & out, int tabs = 0 ) const;
     virtual void                            Update                  ( TimeType t );

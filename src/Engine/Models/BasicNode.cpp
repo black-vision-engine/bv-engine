@@ -313,6 +313,41 @@ bool            BasicNode::AddPlugin               ( const std::string & uid, co
 
 // ********************************
 //
+bool           BasicNode::AddPlugins              ( const std::vector< std::string > & uids )
+{
+    for( auto uid : uids )
+    {
+        if( !AddPlugin( uid ) )
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// ********************************
+//
+bool           BasicNode::AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names )
+{
+    if( uids.size() != names.size() )
+    {
+        return false;
+    }
+
+    for( unsigned int i = 0; i < names.size(); ++i )
+    {
+        if( !AddPlugin( uids[ i ], names[ i ] ) )
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// ********************************
+//
 void BasicNode::Update( TimeType t )
 {
     for( auto l : m_layers )

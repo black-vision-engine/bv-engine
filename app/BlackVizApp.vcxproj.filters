@@ -21,6 +21,7 @@
     <ClCompile Include="ModelInteractionEvents.cpp" />
     <ClCompile Include="NewModelTestScenes.cpp" />
     <ClCompile Include="DefaultPlugins.cpp" />
+    <ClCompile Include="NewModelTestNodes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
@@ -60,6 +61,7 @@
     <ClInclude Include="ModelInteractionLayer.h" />
     <ClInclude Include="ModelInteractionEvents.h" />
     <ClInclude Include="DefaultPlugins.h" />
+    <ClInclude Include="NewModelTestNodes.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MockFonts">

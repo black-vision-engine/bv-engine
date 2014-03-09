@@ -61,3 +61,8 @@ Czyli TransformUpdater,GeometryUpdater,ShaderParamUpdater - te wszystkie mogą b
     
     Do ogarnięcia zostaje NodeUpdater i RenderStateUpdater, które trzeba gdzieś dobrze i sensownie wpasować. CameraUpdater ssie
     i należy go wywalić
+
+Obecne algo
+  Jeżeli jest efekt, to tworzony jest TransformUpdater, GeometryUpdater, RenderStateUpdater (od finalizer, renderable entity)
+  a jeśli nie, to tylko transformable (jeszcze jeśli geometria jest zmienna w czasie, to jest GeomUpdater rejestrowany, inaczej
+  nie jest).
