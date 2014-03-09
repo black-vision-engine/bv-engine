@@ -1,11 +1,11 @@
-#include "StateInstance.h"
+#include "RendererStateInstance.h"
 
 
 namespace bv {
 
 // *********************************
 //
-StateInstance::StateInstance   ()
+RendererStateInstance::RendererStateInstance   ()
     : m_alphaState( nullptr )
     , m_cullState( nullptr )
     , m_depthState( nullptr )
@@ -17,7 +17,7 @@ StateInstance::StateInstance   ()
 
 // *********************************
 //
-StateInstance::StateInstance   ( AlphaState * as, CullState * cs, DepthState * ds, FillState * fs, OffsetState * os, StencilState * ss )
+RendererStateInstance::RendererStateInstance   ( AlphaState * as, CullState * cs, DepthState * ds, FillState * fs, OffsetState * os, StencilState * ss )
     : m_alphaState( as )
     , m_cullState( cs )
     , m_depthState( ds )
@@ -29,97 +29,97 @@ StateInstance::StateInstance   ( AlphaState * as, CullState * cs, DepthState * d
 
 // *********************************
 //
-StateInstance::~StateInstance  ()
+RendererStateInstance::~RendererStateInstance  ()
 {
 }
 
 // *********************************
 //
-const AlphaState *      StateInstance::GetAlphaState   () const
+const AlphaState *      RendererStateInstance::GetAlphaState   () const
 {
     return m_alphaState;
 }
 
 // *********************************
 //
-const CullState *       StateInstance::GetCullState    () const
+const CullState *       RendererStateInstance::GetCullState    () const
 {
     return m_cullState;
 }
 
 // *********************************
 //
-const DepthState *      StateInstance::GetDepthState   () const
+const DepthState *      RendererStateInstance::GetDepthState   () const
 {
     return m_depthState;
 }
 
 // *********************************
 //
-const FillState *       StateInstance::GetFillState    () const
+const FillState *       RendererStateInstance::GetFillState    () const
 {
     return m_fillState;
 }
 
 // *********************************
 //
-const OffsetState *     StateInstance::GetOffsetState  () const
+const OffsetState *     RendererStateInstance::GetOffsetState  () const
 {
     return m_offsetState;
 }
 
 // *********************************
 //
-const StencilState *    StateInstance::GetStencilState () const
+const StencilState *    RendererStateInstance::GetStencilState () const
 {
     return m_stencilState;
 }
 
 // *********************************
 //
-void                    StateInstance::SetState( AlphaState * as )
+void                    RendererStateInstance::SetState( AlphaState * as )
 {
     m_alphaState = as;
 }
 
 // *********************************
 //
-void                    StateInstance::SetState( CullState * cs )
+void                    RendererStateInstance::SetState( CullState * cs )
 {
     m_cullState = cs;
 }
 
 // *********************************
 //
-void                    StateInstance::SetState( DepthState * ds )
+void                    RendererStateInstance::SetState( DepthState * ds )
 {
     m_depthState = ds;
 }
 
 // *********************************
 //
-void                    StateInstance::SetState( FillState * fs )
+void                    RendererStateInstance::SetState( FillState * fs )
 {
     m_fillState = fs;
 }
 
 // *********************************
 //
-void                    StateInstance::SetState( OffsetState * os )
+void                    RendererStateInstance::SetState( OffsetState * os )
 {
     m_offsetState = os;
 }
 
 // *********************************
 //
-void                    StateInstance::SetState( StencilState * ss )
+void                    RendererStateInstance::SetState( StencilState * ss )
 {
     m_stencilState = ss;
 }
 
 // *********************************
 //
-void                    StateInstance::SetStateIgnoreEmptyEntries( const StateInstance & inst )
+void                    RendererStateInstance::SetStateIgnoreEmptyEntries( const RendererStateInstance & inst )
 {
     if( inst.m_alphaState )
         m_alphaState = inst.m_alphaState;
@@ -142,7 +142,7 @@ void                    StateInstance::SetStateIgnoreEmptyEntries( const StateIn
 
 // *********************************
 //
-void                    StateInstance::DeleteStates    ()
+void                    RendererStateInstance::DeleteStates    ()
 {
     delete m_alphaState;
     delete m_cullState;
@@ -155,42 +155,42 @@ void                    StateInstance::DeleteStates    ()
 
 // *********************************
 //
-AlphaState *     RenderStateAccessor::AccessAlphaState( StateInstance * inst )
+AlphaState *     RenderStateAccessor::AccessAlphaState( RendererStateInstance * inst )
 {
     return inst->m_alphaState;
 }
 
 // *********************************
 //
-CullState *      RenderStateAccessor::AccessCullState( StateInstance * inst )
+CullState *      RenderStateAccessor::AccessCullState( RendererStateInstance * inst )
 {
     return inst->m_cullState;
 }
 
 // *********************************
 //
-DepthState *     RenderStateAccessor::AccessDepthState( StateInstance * inst )
+DepthState *     RenderStateAccessor::AccessDepthState( RendererStateInstance * inst )
 {
     return inst->m_depthState;
 }
 
 // *********************************
 //
-FillState *      RenderStateAccessor::AccessFillState( StateInstance * inst )
+FillState *      RenderStateAccessor::AccessFillState( RendererStateInstance * inst )
 {
     return inst->m_fillState;
 }
 
 // *********************************
 //
-OffsetState *    RenderStateAccessor::AccessOffsetState( StateInstance * inst )
+OffsetState *    RenderStateAccessor::AccessOffsetState( RendererStateInstance * inst )
 {
     return inst->m_offsetState;
 }
 
 // *********************************
 //
-StencilState *   RenderStateAccessor::AccessStencilState( StateInstance * inst )
+StencilState *   RenderStateAccessor::AccessStencilState( RendererStateInstance * inst )
 {
     return inst->m_stencilState;
 }

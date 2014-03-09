@@ -44,6 +44,9 @@ private:
     unsigned int                    m_numFrames;
     ParamFloat                      m_frameCounter;
 
+    unsigned int                    m_curFrame;
+    unsigned int                    m_nextFrame;
+
 private:
 
     TextureInfo *       LoadTexture         ( const std::string & name, const std::string & path )   const;
@@ -63,8 +66,8 @@ public:
     virtual TextureInfoVec                      GetTextures                 () const override;
 
     // ISequenceAnimationSource
-    virtual unsigned int                CurrentFrame                ( TimeType t ) const;
-    virtual unsigned int                PredictedNextFrame          ( TimeType t ) const;
+    virtual unsigned int                CurrentFrame                () const;
+    virtual unsigned int                PredictedNextFrame          () const;
 
     virtual bool                        HasAnimatingTexture         () const;
     virtual ISequenceAnimationSource *  QuerySequenceAnimationSource();

@@ -32,18 +32,18 @@ public:
 
     virtual                 ~VertexAttributesChannelVariableTopology    ();
 
-    virtual void            Update                              ( TimeType t );
+    virtual void            Update                              ( TimeType t )  override;
 
-    virtual bool            IsTimeInvariant                     ()              const;
-    virtual bool            NeedsAttributesUpdate               ( TimeType t )  const;
-    virtual bool            NeedsTopologyUpdate                 ( TimeType t )  const;
+    virtual bool            IsTimeInvariant                     ()  const  override;
+    virtual bool            NeedsAttributesUpdate               ()  const  override;
+    virtual bool            NeedsTopologyUpdate                 ()  const  override;
 
-    virtual bool            CanBeConnectedTo                    ( IVertexAttributesChannel * channel ) const;
+    virtual bool            CanBeConnectedTo                    ( IVertexAttributesChannel * channel ) const  override;
 
     void                    AddVTConnectedComponent             ( VariableTopologyStripComponent * cc );
-    virtual unsigned int    TotalNumVertices                    () const;
+    virtual unsigned int    TotalNumVertices                    ()  const  override;
 
-    virtual std::vector< IConnectedComponent * >  GetComponents () const;
+    virtual std::vector< IConnectedComponent * >  GetComponents ()  const  override;
 
     static VertexAttributesChannelVariableTopology *    Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents );
 

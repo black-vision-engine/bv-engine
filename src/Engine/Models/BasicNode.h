@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-#include "Engine/Models/Node.h"
+#include "Engine/Models/Interfaces/IModelNode.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
@@ -75,7 +75,7 @@ public:
     virtual void                            Print                   ( std::ostream & out, int tabs = 0 ) const;
     virtual void                            Update                  ( TimeType t );
 
-    virtual bool                            IsVisible               ( TimeType t ) const;
+    virtual bool                            IsVisible               () const override;
     void                                    SetVisible              ( bool visible );
 
 private:

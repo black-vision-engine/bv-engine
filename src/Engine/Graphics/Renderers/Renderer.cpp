@@ -71,7 +71,7 @@ void	Renderer::SetCamera         (Camera* cam)
 
 // *********************************
 //FIXME: most probably state can be stored in RenderData only (no currentStateInstance is required) - but let it be that way for the moment
-void    Renderer::SetStateInstance    ( const StateInstance & stateInstance )
+void    Renderer::SetStateInstance    ( const RendererStateInstance & stateInstance )
 {
     m_currentStateInstance.SetStateIgnoreEmptyEntries( stateInstance );
     

@@ -216,7 +216,7 @@ void                                    SimpleTexturePlugin::Update             
 {
     if( m_attachmentMode == TextureAttachmentMode::MM_FREE )
     {
-        if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate( t ) )
+        if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
         {
             for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
             {
@@ -240,7 +240,7 @@ void                                    SimpleTexturePlugin::Update             
 
     }
 
-    if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate( t ) )
+    if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
     {
         m_vaChannel->SetNeedsAttributesUpdate( true );
     }

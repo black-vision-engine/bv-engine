@@ -177,7 +177,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
             {
                 FRAME_STATS_SECTION( "Manager-u" );
                 HPROFILER_SECTION( "UpdatersManager::Get().UpdateStep" );
-                UpdatersManager::Get().UpdateStep( t );
+                UpdatersManager::Get().UpdateStep();
             }
             {
                 FRAME_STATS_SECTION( "EngScn-u" );

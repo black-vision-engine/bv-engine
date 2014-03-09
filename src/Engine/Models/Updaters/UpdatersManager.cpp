@@ -21,11 +21,11 @@ UpdatersManager::~UpdatersManager       ()
 
 // *******************************
 //
-void UpdatersManager::UpdateStep        ( TimeType t )
+void UpdatersManager::UpdateStep        ()
 {
     for( auto updater : m_updaters )
     {
-        updater->DoUpdate( t );
+        updater->DoUpdate();
     }
 }
 

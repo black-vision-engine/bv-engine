@@ -24,7 +24,7 @@ public:
 
                             ~RenderableEffect   ();
 
-    inline int              NumPasses           () const;
+    inline unsigned int     NumPasses           () const;
 
 protected:
 
@@ -32,7 +32,7 @@ protected:
 
 public:
 
-    inline RenderablePass * GetPass             ( int index );
+    inline RenderablePass * GetPass             ( unsigned int index );
 
 };
 

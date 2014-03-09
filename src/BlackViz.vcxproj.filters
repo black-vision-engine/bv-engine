@@ -40,11 +40,9 @@
     <ClCompile Include="Engine\Graphics\SceneGraph\Triangles.cpp" />
     <ClCompile Include="Engine\Graphics\SceneGraph\TriangleStrip.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderablePass.cpp" />
-    <ClCompile Include="Engine\Models\Updaters\TransformUpdater.cpp" />
     <ClCompile Include="Mathematics\Transform\MatTransform.cpp" />
     <ClCompile Include="System\Print.cpp" />
     <ClCompile Include="System\Profiler.cpp" />
-    <ClCompile Include="Engine\Models\Updaters\CameraUpdater.cpp" />
     <ClCompile Include="Engine\Models\ModelScene.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.cpp" />
@@ -81,14 +79,12 @@
     <ClCompile Include="Engine\Graphics\State\OffsetState.cpp" />
     <ClCompile Include="Engine\Graphics\State\StencilState.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.cpp" />
-    <ClCompile Include="Engine\Graphics\State\StateInstance.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\RendererContext.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\AlphaContext.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\CullContext.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\DepthContext.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\FillContext.cpp" />
-    <ClCompile Include="Engine\Models\Updaters\RendererStateUpdater.cpp" />
     <ClCompile Include="Engine\Models\Builder\RendererStatesBuilder.cpp" />
     <ClCompile Include="Engine\Models\Updaters\NodeUpdater.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\TextureAnimatedSequence2D.cpp" />
@@ -185,6 +181,7 @@
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat3.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec2.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec3.cpp" />
+    <ClCompile Include="Engine\Graphics\State\RendererStateInstance.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -229,11 +226,9 @@
     <ClInclude Include="Engine\Graphics\SceneGraph\Triangles.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\TriangleStrip.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderablePass.h" />
-    <ClInclude Include="Engine\Models\Updaters\TransformUpdater.h" />
     <ClInclude Include="Mathematics\Transform\MatTransform.h" />
     <ClInclude Include="System\Print.h" />
     <ClInclude Include="System\Profiler.h" />
-    <ClInclude Include="Engine\Models\Updaters\CameraUpdater.h" />
     <ClInclude Include="Engine\Models\ModelScene.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.h" />
@@ -281,9 +276,7 @@
     <ClInclude Include="Engine\Graphics\State\FillState.h" />
     <ClInclude Include="Engine\Graphics\State\OffsetState.h" />
     <ClInclude Include="Engine\Graphics\State\StencilState.h" />
-    <ClInclude Include="Engine\Graphics\State\StateEnums.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.h" />
-    <ClInclude Include="Engine\Graphics\State\StateInstance.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\TransformChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\RendererContext.h" />
@@ -291,7 +284,6 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\CullContext.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\DepthContext.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\FillContext.h" />
-    <ClInclude Include="Engine\Models\Updaters\RendererStateUpdater.h" />
     <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
     <ClInclude Include="Engine\Models\Updaters\NodeUpdater.h" />
     <ClInclude Include="Engine\Graphics\Resources\TextureAnimatedSequence2D.h" />
@@ -315,7 +307,6 @@
     <ClInclude Include="Engine\Models\Plugins\GeometryMultiRectPlugin.h" />
     <ClInclude Include="Engine\Interfaces\IUpdatable.h" />
     <ClInclude Include="Engine\Interfaces\IUpdater.h" />
-    <ClInclude Include="Engine\Interfaces\ITimeEvaluator.h" />
     <ClInclude Include="Engine\Models\Updaters\UpdatersManager.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineManager.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\AttributeChannelDescriptor.h" />
@@ -349,7 +340,6 @@
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleVertexShaderPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\TextureInfo.h" />
     <ClInclude Include="Engine\Models\Plugins\ConstantsMapper.h" />
-    <ClInclude Include="Engine\Models\Node.h" />
     <ClInclude Include="Engine\Processes\Process.h" />
     <ClInclude Include="Engine\Processes\ProcessManager.h" />
     <ClInclude Include="Engine\Processes\ProcessThreaded.h" />
@@ -417,6 +407,10 @@
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat3.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec2.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec3.h" />
+    <ClInclude Include="Engine\Graphics\State\RendererStateInstance.h" />
+    <ClInclude Include="Engine\Graphics\State\RendererStateEnums.h" />
+    <ClInclude Include="Engine\Models\Interfaces\IModelNode.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITimeEvaluator.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
@@ -430,6 +424,8 @@
     <None Include="Engine\Graphics\Shaders\Parameters\ShaderParameters.inl" />
     <None Include="Engine\Graphics\Shaders\RenderableEffect.inl" />
     <None Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.inl" />
+    <None Include="Engine\Models\Updaters\NodeUpdater.inl" />
+    <None Include="Engine\Graphics\SceneGraph\TransformableEntity.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />

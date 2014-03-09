@@ -5,6 +5,7 @@
 
 #include "Engine/Interfaces/IUpdatable.h"
 
+
 namespace bv {
 
 class SceneNode;
@@ -29,7 +30,7 @@ public:
     virtual SceneNode *                     BuildScene      ()                                          = 0;
     virtual void                            Print           ( std::ostream & out, int tabs = 0 ) const  = 0;
 
-    virtual bool                            IsVisible       ( TimeType t ) const                        = 0;
+    virtual bool                            IsVisible       () const                                    = 0;
 
     virtual                                 ~IModelNode     () {};
 

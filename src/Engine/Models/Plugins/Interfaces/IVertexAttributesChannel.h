@@ -22,14 +22,14 @@ public:
     virtual PrimitiveType                               GetPrimitiveType            ()                              const = 0;
 
     virtual int                                         GetNumPrimitives            ( IConnectedComponent * cc )    const = 0;
-    virtual std::vector< IConnectedComponent* >         GetComponents               ()                              const = 0;
+    virtual std::vector< IConnectedComponent * >        GetComponents               ()                              const = 0;
 
     //virtual void                                        AddConnectedComponent       ( IConnectedComponent * cc )   = 0;
 
     virtual bool                                        IsTimeInvariant             ()                              const = 0;
 
-    virtual bool                                        NeedsAttributesUpdate       ( TimeType t )                  const = 0;
-    virtual bool                                        NeedsTopologyUpdate         ( TimeType t )                  const = 0;
+    virtual bool                                        NeedsAttributesUpdate       ()                              const = 0;
+    virtual bool                                        NeedsTopologyUpdate         ()                              const = 0;
 
     virtual unsigned int                                TotalNumVertices            ()                              const = 0;
 

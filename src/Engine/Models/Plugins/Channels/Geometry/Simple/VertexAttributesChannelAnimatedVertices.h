@@ -29,9 +29,9 @@ public:
 
     virtual         ~VertexAttributesChannelAnimatedVertices    ();
 
-    virtual void    Update                              ( TimeType t );
+    virtual void    Update                              ( TimeType t ) override;
 
-    virtual bool    NeedsAttributesUpdate               ( TimeType t ) const;
+    virtual bool    NeedsAttributesUpdate               () const override;
 
     static VertexAttributesChannelAnimatedVertices *    Create  ( float w, float h, float z, unsigned int numSegments, float speedX, float speedY, float cyclesX, float cyclesY, float sizeY, float sizeZ );
 

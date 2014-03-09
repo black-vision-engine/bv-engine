@@ -1,59 +1,18 @@
 #include "TransformableEntity.h"
 
-#include <cassert>
-
-#include "Engine/Models/Updaters/TransformUpdater.h"
-
 
 namespace bv {
 
 // *********************************
 //
-TransformableEntity::TransformableEntity                            ( TransformUpdater * locTransformUpdater )
-{
-    RegisterTransformUpdater( locTransformUpdater );
-}
-
-// *********************************
-//
-TransformableEntity::~TransformableEntity                           ()
+TransformableEntity::TransformableEntity                                ()
 {
 }
 
 // *********************************
 //
-void                TransformableEntity::RegisterTransformUpdater    ( TransformUpdater * locTransformUpdater )
+TransformableEntity::~TransformableEntity                               ()
 {
-    m_locTransformUpdater = locTransformUpdater;
-}
-
-// *********************************
-//
-const Transform &   TransformableEntity::LocalTransform                 () const
-{
-    return m_localTransform;
-}
-
-// *********************************
-//
-void                TransformableEntity::SetLocalTransform              ( const Transform & t )
-{
-    m_localTransform = t;
-}
-
-// *********************************
-//
-const std::vector< Transform > &  TransformableEntity::WorldTransforms  () const
-{
-    return m_worldTransforms;
-}
-
-    
-// *********************************
-//
-void  TransformableEntity::SetWorldTransforms                           ( const std::vector< Transform > & transforms )
-{
-    m_worldTransforms = transforms;
 }
 
 // *********************************
@@ -75,4 +34,4 @@ void                TransformableEntity::UpdateSetWorldTransform        ( const 
     }
 }
 
-}
+} //bv

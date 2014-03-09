@@ -19,13 +19,12 @@ public:
                                 UpdatersManager     ();
                                 ~UpdatersManager    ();
 
-    void                        UpdateStep          ( TimeType t );
+    void                        UpdateStep          ();
 
     void                        RegisterUpdater     ( IUpdater * updater );
 
     static UpdatersManager &    Get                 ();
 
 };
-
 
 } // bv

@@ -231,7 +231,7 @@
     <ClCompile Include="Engine\Graphics\State\DepthState.cpp" />
     <ClCompile Include="Engine\Graphics\State\FillState.cpp" />
     <ClCompile Include="Engine\Graphics\State\OffsetState.cpp" />
-    <ClCompile Include="Engine\Graphics\State\StateInstance.cpp" />
+    <ClCompile Include="Engine\Graphics\State\RendererStateInstance.cpp" />
     <ClCompile Include="Engine\Graphics\State\StencilState.cpp" />
     <ClCompile Include="Engine\Models\Builder\RendererStatesBuilder.cpp" />
     <ClCompile Include="Engine\Models\ModelAccessors.cpp" />
@@ -311,10 +311,8 @@
     <ClCompile Include="Engine\Models\Timeline\TimelineBase.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimelineManager.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimelineState.cpp" />
-    <ClCompile Include="Engine\Models\Updaters\CameraUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\GeometryUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\NodeUpdater.cpp" />
-    <ClCompile Include="Engine\Models\Updaters\RendererStateUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\SequenceAnimationUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\UpdatersManager.cpp" />
     <ClCompile Include="Engine\Processes\InitProcess.cpp" />
@@ -362,7 +360,6 @@
     <ClCompile Include="Engine\Graphics\Shaders\VertexShader.cpp" />
     <ClCompile Include="Engine\Graphics\Types\Transform.cpp" />
     <ClCompile Include="Engine\Models\BasicNode.cpp" />
-    <ClCompile Include="Engine\Models\Updaters\TransformUpdater.cpp" />
     <ClCompile Include="Mathematics\Interpolators\BasicInterpolator.cpp" />
     <ClCompile Include="Mathematics\Transform\MatTransform.cpp" />
     <ClCompile Include="System\InitSubsystem.cpp" />
@@ -419,16 +416,17 @@
     <ClInclude Include="Engine\Graphics\State\DepthState.h" />
     <ClInclude Include="Engine\Graphics\State\FillState.h" />
     <ClInclude Include="Engine\Graphics\State\OffsetState.h" />
-    <ClInclude Include="Engine\Graphics\State\StateEnums.h" />
-    <ClInclude Include="Engine\Graphics\State\StateInstance.h" />
+    <ClInclude Include="Engine\Graphics\State\RendererStateEnums.h" />
+    <ClInclude Include="Engine\Graphics\State\RendererStateInstance.h" />
     <ClInclude Include="Engine\Graphics\State\StencilState.h" />
     <ClInclude Include="Engine\Interfaces\IShaderDataSource.h" />
-    <ClInclude Include="Engine\Interfaces\ITimeEvaluator.h" />
     <ClInclude Include="Engine\Interfaces\IUpdatable.h" />
     <ClInclude Include="Engine\Interfaces\IUpdater.h" />
     <ClInclude Include="Engine\Interfaces\IValue.h" />
     <ClInclude Include="Engine\Interfaces\IValueSet.h" />
     <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
+    <ClInclude Include="Engine\Models\Interfaces\IModelNode.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITimeEvaluator.h" />
     <ClInclude Include="Engine\Models\ModelAccessors.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.h" />
@@ -533,10 +531,8 @@
     <ClInclude Include="Engine\Models\Timeline\TimelineManager.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineSettings.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineState.h" />
-    <ClInclude Include="Engine\Models\Updaters\CameraUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\GeometryUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\NodeUpdater.h" />
-    <ClInclude Include="Engine\Models\Updaters\RendererStateUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\SequenceAnimationUpdater.h" />
     <ClInclude Include="Engine\Processes\InitProcess.h" />
     <ClInclude Include="Engine\Processes\Process.h" />
@@ -589,10 +585,8 @@
     <ClInclude Include="Engine\Graphics\Types\Transform.h" />
     <ClInclude Include="Engine\Models\BasicNode.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPlugin.h" />
-    <ClInclude Include="Engine\Models\Node.h" />
     <ClInclude Include="Engine\Models\Plugins\Plugin.h" />
     <ClInclude Include="Engine\Models\Updaters\UpdatersManager.h" />
-    <ClInclude Include="Engine\Models\Updaters\TransformUpdater.h" />
     <ClInclude Include="Mathematics\defines.h" />
     <ClInclude Include="Mathematics\Interpolators\BasicInterpolator.h" />
     <ClInclude Include="Mathematics\Interpolators\Interpolators.h" />
@@ -612,6 +606,7 @@
   <ItemGroup>
     <None Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
     <None Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.inl" />
+    <None Include="Engine\Graphics\SceneGraph\TransformableEntity.inl" />
     <None Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.inl" />
     <None Include="Engine\Graphics\Shaders\Parameters\ShaderParameters.inl" />
     <None Include="Engine\Graphics\Shaders\RenderableEffect.inl" />
@@ -620,6 +615,7 @@
     <None Include="Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />
     <None Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.inl" />
     <None Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.inl" />
+    <None Include="Engine\Models\Updaters\NodeUpdater.inl" />
     <None Include="System\HerarchicalProfiler.inl" />
   </ItemGroup>
   <ItemGroup>

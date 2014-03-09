@@ -4,7 +4,7 @@
 #include "Engine/Graphics/Shaders/VertexShader.h"
 #include "Engine/Graphics/Shaders/GeometryShader.h"
 
-#include "Engine/Graphics/State/StateInstance.h"
+#include "Engine/Graphics/State/RendererStateInstance.h"
 
 
 namespace bv {
@@ -16,7 +16,7 @@ class RenderablePass
 {
 private:
 
-    StateInstance *     m_stateInstance;
+    RendererStateInstance *     m_stateInstance;
 
     PixelShader *       m_pixelShader;
     VertexShader *      m_vertexShader;
@@ -33,7 +33,7 @@ public:
     VertexShader *      GetVertexShader         ();
     GeometryShader *    GetGeometryShader       ();
 
-    StateInstance *     GetStateInstance        ();
+    RendererStateInstance *     GetStateInstance        ();
 
 };
 

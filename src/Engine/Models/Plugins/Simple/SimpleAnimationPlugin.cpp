@@ -55,6 +55,9 @@ SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin 
     rendContext->cullCtx->enabled = false;
 
 	m_vertexShaderChannel = new model::TextureVertexShaderChannel( "../dep/media/shaders/simpleanimation.vert" );
+
+    m_curFrame = 0;
+    m_nextFrame = 0;
 }
 
 // *************************************
@@ -154,19 +157,16 @@ TextureInfo * SimpleAnimationPlugin::LoadTexture( const std::string& name, const
 
 // *************************************
 //
-unsigned int        SimpleAnimationPlugin::CurrentFrame        ( TimeType t ) const
+unsigned int        SimpleAnimationPlugin::CurrentFrame        () const
 {
-    float fFrame = m_frameCounter.Evaluate( t );
-    int nFrame = (int) fFrame;
-
-    return nFrame % m_numFrames;
+    return m_curFrame;
 }
 
 // *************************************
 //
-unsigned int        SimpleAnimationPlugin::PredictedNextFrame  ( TimeType t ) const
+unsigned int        SimpleAnimationPlugin::PredictedNextFrame  () const
 {
-    return ( 1 + CurrentFrame( t ) ) % m_numFrames; //FIXME: this sux - it strongly depends on Timeline used possible time modifications (e.g. playing backwards)
+    return m_nextFrame;
 }
 
 // *************************************
@@ -189,7 +189,7 @@ void                SimpleAnimationPlugin::Update              ( TimeType t )
 {
     if( m_attachmentMode == TextureAttachmentMode::MM_FREE )
     {
-        if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate( t ) )
+        if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate( ) )
         {
             for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
             {
@@ -222,6 +222,12 @@ void                SimpleAnimationPlugin::Update              ( TimeType t )
 //    m_alphaValue->SetValue( m_alphaParam->Evaluate( t ) );
 //    m_tex0TransformValue->SetValue( m_tex0TransformParam->Evaluate( t ) );
 //    m_tex1TransformValue->SetValue( m_tex1TransformParam->Evaluate( t ) );
+
+    float fFrame = m_frameCounter.Evaluate( t );
+    unsigned int nFrame = (int) fFrame;
+        
+    m_curFrame = nFrame % m_numFrames;
+    m_nextFrame = ( 1 + m_curFrame ) % m_numFrames; //FIXME: this suxx - it strongly depends on used Timeline and possible time modifications (e.g. playing backwards)
 }
 
 // *************************************

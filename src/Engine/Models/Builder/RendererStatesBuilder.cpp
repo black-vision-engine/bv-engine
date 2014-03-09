@@ -1,6 +1,6 @@
 #include "RendererStatesBuilder.h"
 
-#include "Engine/Graphics/State/StateInstance.h"
+#include "Engine/Graphics/State/RendererStateInstance.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 
 
@@ -61,7 +61,7 @@ FillState *     RendererStatesBuilder::CreateStateFromCtx( const model::FillCont
 
 // *********************************
 //
-void RendererStatesBuilder::Create( StateInstance * inst, const model::RendererContext * ctx )
+void RendererStatesBuilder::Create( RendererStateInstance * inst, const model::RendererContext * ctx )
 {
     if ( ctx->alphaCtx )
         inst->SetState( CreateStateFromCtx( ctx->alphaCtx ) );

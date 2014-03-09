@@ -44,7 +44,7 @@ void    VertexAttributesChannelAnimatedVertices::Update                      ( T
 
 // ******************************
 //
-bool    VertexAttributesChannelAnimatedVertices::NeedsAttributesUpdate      ( TimeType t ) const
+bool    VertexAttributesChannelAnimatedVertices::NeedsAttributesUpdate      () const
 {
     return true;
 }

@@ -14,7 +14,7 @@ namespace model {
 
 } //model
 
-class StateInstance;
+class RendererStateInstance;
 
 class AlphaState;
 class CullState;
@@ -36,7 +36,7 @@ private:
 
 public:
 
-    static void Create  ( StateInstance * inst, const model::RendererContext * ctx ); 
+    static void Create  ( RendererStateInstance * inst, const model::RendererContext * ctx ); 
 
     static void Assign  ( AlphaState * as, const model::AlphaContext * ac );
     static void Assign  ( CullState * cs, const model::CullContext * cc );

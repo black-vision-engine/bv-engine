@@ -10,7 +10,7 @@
 
 namespace bv {
 
-class StateInstance
+class RendererStateInstance
 {
 private:
 
@@ -24,10 +24,10 @@ private:
 
 public:
 
-            StateInstance   ();
-            StateInstance   ( AlphaState * as, CullState * cs, DepthState * ds, FillState * fs, OffsetState * os, StencilState * ss );
+            RendererStateInstance   ();
+            RendererStateInstance   ( AlphaState * as, CullState * cs, DepthState * ds, FillState * fs, OffsetState * os, StencilState * ss );
 
-            ~StateInstance  ();
+            ~RendererStateInstance  ();
 
     const AlphaState *      GetAlphaState   () const;
     const CullState *       GetCullState    () const;
@@ -43,7 +43,7 @@ public:
     void                    SetState( OffsetState * os );
     void                    SetState( StencilState * ss );
 
-    void                    SetStateIgnoreEmptyEntries( const StateInstance & inst );
+    void                    SetStateIgnoreEmptyEntries( const RendererStateInstance & inst );
 
     void                    DeleteStates    ();
 
@@ -54,12 +54,12 @@ class RenderStateAccessor
 {
 public:
 
-    static AlphaState *     AccessAlphaState( StateInstance * inst );
-    static CullState *      AccessCullState( StateInstance * inst );
-    static DepthState *     AccessDepthState( StateInstance * inst );
-    static FillState *      AccessFillState( StateInstance * inst );
-    static OffsetState *    AccessOffsetState( StateInstance * inst );
-    static StencilState *   AccessStencilState( StateInstance * inst );
+    static AlphaState *     AccessAlphaState    ( RendererStateInstance * inst );
+    static CullState *      AccessCullState     ( RendererStateInstance * inst );
+    static DepthState *     AccessDepthState    ( RendererStateInstance * inst );
+    static FillState *      AccessFillState     ( RendererStateInstance * inst );
+    static OffsetState *    AccessOffsetState   ( RendererStateInstance * inst );
+    static StencilState *   AccessStencilState  ( RendererStateInstance * inst );
 };
 
 }

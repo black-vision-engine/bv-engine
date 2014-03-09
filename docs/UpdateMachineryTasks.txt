@@ -49,3 +49,25 @@ Przeprojektować i zrefaktorować AttributeChannel, VertexAttributesChannel, Con
 W szczególności GetPositionChannel i GetUVChannel to słabe nieco w implementacji AttributeChannel - to powinno być jakieś ogólne, a nie
 takie otypowane querowanie zaimplementowane jawnie w AttributeChannel. W ogóle należy to pozmieniać i przerobić, bo na przykład
 poszczególne kanały z atrybutami, powinny się nazywać data czy jakoś tak, a nie tak, jak kanały pluginu.
+
+Dodatkowo to, co teraz obsługuje tekstury po stronie basic node powinno odbywać się w efekcie, ewentualnie częściowo nawet po stronie
+parametrów shadera silnikowego. (FIXME w BasicNode::BuildScene()). To analogiczna praca, co przeniesienie tworzenia parametrów
+shaderów do efektu i parametrów shaderów. Po prostu ta logika może prawie w całości być przeniesiona dalej, do silnika - tylko
+trzeba udostępnić odpowiedni interfejs po stronie modelu, który poda dane (tekstury, animacje, odpowiednie formaty danych - pewnie
+jako deskryptory).
+
+Zastanowić się, co zrobić z renderable entity bez mesha (czyli nie ma czego renderować i efektu pewnie też nie ma). 
+
+Czy SceneNode musi trzymać listę Transformabli (może tak) i skoro tak już jest to jakie są założenia, jak to ma być wykorzystywane
+i jak się wpasowuje w aktualny schemat.
+
+W node updaterze - Czy jesli node nie jest widoczne to trzeba w ogole updatowac stan - zakladam, ze nie, ale trzeba sie upewnic.
+Skoro nie widac, a nie ma efektow ubocznych innych, niz to widac w przerenderowanym nodzie, to chyba nie ma co się tutaj spinać
+i na siłę aktualizować, bo żadnych wyników i tak nie będzie, a jak się już stanie widoczna, to sobie zaczyta stan z modelu.
+
+Updatery nie zależą od t. I nie mają zależeć, bo one tylko z USTALONEGO W CZASIE t STANU MODELU przepisują (ewentualnie konwertując)
+odpowiednie dane do silnika - nic więcej, żadnych ewaluacji zależnych od czasu tu nie ma prawa być, bo tym się zajmuje model i do
+updaterów przekazuje tylko gotowy stan, który sobie można sprawdzać do woli, bez konieczności odczytywania czasu.
+
+Jeśli chcemu mieć animowaną kamerę, to animujemy jej model w momencie aktualizacji modelu do kurwy nędzy, a nie model poprzez updatery
+w jakiejś silnikowej dupie.

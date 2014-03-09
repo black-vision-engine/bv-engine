@@ -39,20 +39,20 @@ GeometryUpdater::~GeometryUpdater    ()
 
 // *********************************
 //
-void    GeometryUpdater::DoUpdate    ( TimeType t )
+void    GeometryUpdater::DoUpdate    ()
 {
     //If registered, it means that it is not time invariant (although may not need update in this frame)
 
-    if ( m_in->NeedsAttributesUpdate( t ) )
+    if ( m_in->NeedsAttributesUpdate() )
     {
-        assert( !m_in->NeedsTopologyUpdate( t ) );
+        assert( !m_in->NeedsTopologyUpdate() );
 
-        UpdatePositions( t );
+        UpdatePositions();
     
     }
-    else if ( m_in->NeedsTopologyUpdate( t ) )
+    else if ( m_in->NeedsTopologyUpdate() )
     {
-        UpdateTopology( t );
+        UpdateTopology();
     }
     else
     {
@@ -66,7 +66,7 @@ void    GeometryUpdater::DoUpdate    ( TimeType t )
 
 // *********************************
 //FIXME: not positions but something more general (attribute data, contents or something like this which does not involwe recreating the whole thing)
-void    GeometryUpdater::UpdatePositions     ( TimeType t )
+void    GeometryUpdater::UpdatePositions     ()
 {
     //FIXME: implement for other types of geometry as well
     assert( m_out->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
@@ -106,7 +106,7 @@ void    GeometryUpdater::UpdatePositions     ( TimeType t )
 
 // *********************************
 //
-void    GeometryUpdater::UpdateTopology      ( TimeType t )
+void    GeometryUpdater::UpdateTopology      ()
 {
     //FIXME: implement for other types of geometry as well
     assert( m_out->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );

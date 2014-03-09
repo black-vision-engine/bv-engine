@@ -1,46 +1,23 @@
 #include "BasicNode.h"
 
-#include "System/Print.h"
+//FIXME: node na INode
 
-#include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannelDescriptor.h"
-#include "Engine/Models/Plugins/Interfaces/ISequenceAnimationSource.h"
-#include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
-#include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
-#include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
-#include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
-#include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
-#include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
-#include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
+#include "System/Print.h"
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/ConstantsMapper.h"
-#include "Engine/Models/Plugins/Plugin.h"
 
-#include "Engine/Models/Updaters/GeometryUpdater.h"
-#include "Engine/Models/Updaters/TransformUpdater.h"
-#include "Engine/Models/Updaters/RendererStateUpdater.h"
 #include "Engine/Models/Updaters/SequenceAnimationUpdater.h"
+#include "Engine/Models/Updaters/NodeUpdater.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
-
-#include "Engine/Models/Builder/RendererStatesBuilder.h"
 
 #include "Engine/Graphics/Effects/DefaultEffect.h"
 
-#include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
-#include "Engine/Graphics/Resources/RenderableArrayDataElements.h"
-#include "Engine/Graphics/Resources/VertexDescriptor.h"
-#include "Engine/Graphics/Resources/VertexBuffer.h"
-#include "Engine/Graphics/Resources/VertexArray.h"
-#include "Engine/Graphics/Resources/IndexBuffer.h"
+#include "Engine/Graphics/Resources/VertexDescriptor.h" //FIXME: ten kod, ktory potrzebuje tego deskryptora, tekstur i animacji powinien byc w default effect lub cos, a nie tutaj - to do przerobienia koniecznie
 #include "Engine/Graphics/Resources/Textures/TextureManager.h"
 #include "Engine/Graphics/Resources/Texture2D.h"
 #include "Engine/Graphics/Resources/TextureAnimatedSequence2D.h"
 
-#include "Engine/Graphics/Shaders/PixelShader.h"
-#include "Engine/Graphics/Shaders/VertexShader.h"
-#include "Engine/Graphics/Shaders/RenderableEffect.h"
-
-#include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 
 
@@ -121,7 +98,7 @@ const std::string &             BasicNode::GetName                 () const
 //
 SceneNode *                 BasicNode::BuildScene()
 {
-    RenderableEntity *  renderEnt   = nullptr;
+    RenderableEntity *  renderable  = nullptr;
     RenderableEffect *  effect      = nullptr;
 
     const IPlugin * finalizer = m_pluginList->GetFinalizePlugin();
@@ -131,12 +108,10 @@ SceneNode *                 BasicNode::BuildScene()
         auto renderableType = finalizer->GetVertexAttributesChannel()->GetPrimitiveType();
 
         effect = CreateDefaultEffect( finalizer );
+
         //RenderableArrayDataSingleVertexBuffer * rad = CreateRenderableArrayData( renderableType );
-
-
         //CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
         //effect = ;
-
 
         //FIXME: to powinna ogarniac jakas faktoria-manufaktura
         switch( renderableType )
@@ -149,7 +124,7 @@ SceneNode *                 BasicNode::BuildScene()
 
                 if( radasvb )
                 {
-                    renderEnt = new TriangleStrip( radasvb, effect );
+                    renderable = new TriangleStrip( radasvb, effect );
                 }
                 break;
             }
@@ -162,7 +137,7 @@ SceneNode *                 BasicNode::BuildScene()
     }
     else
     {
-        renderEnt = new TriangleStrip( nullptr, nullptr );
+        renderable = new TriangleStrip( nullptr, nullptr );
     }
 
     bv::Transform worldTrans;
@@ -170,8 +145,9 @@ SceneNode *                 BasicNode::BuildScene()
     std::vector< bv::Transform > trans;
     trans.push_back( worldTrans );
 
-    renderEnt->SetWorldTransforms( trans );
+    renderable->SetWorldTransforms( trans );
 
+    //FIXME: tekstury powinny byc rowniez przeniesione do efektu i parametrow, a nie tak jak teraz
     if ( effect ) //create only, if there is any geometry to be renderedm
     {
         //TODO: dodac liste layerow do zwracanego SceneNode
@@ -208,7 +184,7 @@ SceneNode *                 BasicNode::BuildScene()
 
             UpdatersManager & updatersManager = UpdatersManager::Get();
 
-            SequenceAnimationUpdater * updater = new SequenceAnimationUpdater( animation, finalizer->QuerySequenceAnimationSource() );
+            SequenceAnimationUpdater * updater = new SequenceAnimationUpdater( animation, finalizer->QuerySequenceAnimationSource() ); //asert fals - do dupy ten syf
             updatersManager.RegisterUpdater( updater );
         }
         else
@@ -241,68 +217,20 @@ SceneNode *                 BasicNode::BuildScene()
             }
         }
 
-        //FIXME: Only last plugin should be used here as its output corresponds to the final transformation (list)
-        //FIXME: Updater only sets proper local and world matrices for the geometry and all model transformations have already been updated at this point
-
-        if ( true )
-        {
-            UpdatersManager & updatersManager = UpdatersManager::Get();
-
-            auto transChannel = finalizer->GetTransformChannel();        
-            auto vaChannel = finalizer->GetVertexAttributesChannel();
-            
-            assert( transChannel != nullptr );
-            assert( vaChannel != nullptr );
-
-            TransformUpdater * transformUpdater = new TransformUpdater( renderEnt, transChannel );
-            updatersManager.RegisterUpdater( transformUpdater );
-
-            if ( !vaChannel->IsTimeInvariant() )
-            {
-                GeometryUpdater * geometryUpdater = new GeometryUpdater( renderEnt, vaChannel );
-                updatersManager.RegisterUpdater( geometryUpdater );
-            }
-
-            auto psc = finalizer->GetPixelShaderChannel();
-            auto renderCtx = psc->GetRendererContext();
-
-            assert( renderCtx );
-
-            for( int i = 0; i < effect->NumPasses(); ++i )
-            {
-                auto inst = effect->GetPass( i )->GetStateInstance();
-
-                assert( !inst->GetAlphaState() );
-                assert( !inst->GetCullState() );
-                assert( !inst->GetDepthState() );
-                assert( !inst->GetFillState() );
-                assert( !inst->GetOffsetState() );
-                assert( !inst->GetStencilState() );
-
-                RendererStatesBuilder::Create( inst, renderCtx );
-
-                RenderStateUpdater * rendererStateUpdater = new RenderStateUpdater( inst, renderCtx );
-                updatersManager.RegisterUpdater( rendererStateUpdater );
-            }
-        }
-    }
-    else
-    {
-        auto transChannel = finalizer->GetTransformChannel();
-        assert( transChannel );
-
-        TransformUpdater * transformUpdater = new TransformUpdater( renderEnt, transChannel );
-        UpdatersManager::Get().RegisterUpdater( transformUpdater );
+        //BE AWARE: Updater only sets proper local and world matrices for the geometry and all model transformations have already been updated at this point
     }
 
-    SceneNode * ret = new SceneNode( renderEnt );
+    SceneNode * retNode = new SceneNode( renderable );
+
+    NodeUpdater * nodeUpdater = new NodeUpdater( renderable, retNode, this );
+    UpdatersManager::Get().RegisterUpdater( nodeUpdater );
 
     for( auto ch : m_children )
     {
-        ret->AddChildNode( ch->BuildScene() );
+        retNode->AddChildNode( ch->BuildScene() );
     }
 
-    return ret;
+    return retNode;
 }
 
 // ********************************
@@ -398,7 +326,7 @@ void BasicNode::Update( TimeType t )
 
 // ********************************
 //
-bool  BasicNode::IsVisible               ( TimeType t ) const
+bool  BasicNode::IsVisible               () const
 {
     return m_visible;
 }

@@ -25,12 +25,12 @@ public:
                     GeometryUpdater     ( RenderableEntity * out, const model::IVertexAttributesChannel * in ); 
                     ~GeometryUpdater    ();
 
-    virtual void    DoUpdate            ( TimeType t );
+    virtual void    DoUpdate            ();
 
 private:
 
-    void    UpdatePositions     ( TimeType t );
-    void    UpdateTopology      ( TimeType t );
+    void    UpdatePositions     ();
+    void    UpdateTopology      ();
 
     void    WriteVertexDataToVBO( char * data, model::IConnectedComponent * cc );
 
