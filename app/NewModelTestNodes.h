@@ -14,6 +14,7 @@ class SimpleNodesFactory
 public:
 
     static model::BasicNode *  CreateGreenRectNode();
+    static model::BasicNode *  CreateGreenRectNodeNoAssert();
 
 };
 
