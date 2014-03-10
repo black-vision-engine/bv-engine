@@ -60,8 +60,8 @@ DefaultPluginParamValModel *    DefaultRectPluginDesc::CreateDefaultModel   () c
     model->SetVertexAttributesChannelModel( vacModel );
 
     //Set default parameters
-    paramWidth->SetVal( 0.f, 1.f );
-    paramHeight->SetVal( 0.f, 1.f );
+    paramWidth->SetVal( 1.f, 0.f );
+    paramHeight->SetVal( 1.f, 0.f );
 
     return model;
 }

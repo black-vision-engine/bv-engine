@@ -78,11 +78,11 @@ Rotation<ParamT>::Rotation( ParamT angle, ParamT p0, ParamT p1, ParamT p2 )
 // *************************************
 //
 template<typename ParamT>
-void            CompositeTransform<ParamT>::InitializeDefaultSRT()
+void            CompositeTransform<ParamT>::InitializeDefaultSRT( TimeType t )
 {
-    for( auto t : m_transformations )
+    for( auto tr : m_transformations )
     {
-        delete t;
+        delete tr;
     }
 
     ParamT sx, sy, sz;
@@ -90,7 +90,6 @@ void            CompositeTransform<ParamT>::InitializeDefaultSRT()
     ParamT rx, ry, rz;
     ParamT tx, ty, tz;
 
-    ParamT::TimeType    t   = ParamT::TimeType( 0 );
     ParamT::ValueType   v0  = ParamT::ValueType( 0.0 );
     ParamT::ValueType   v1  = ParamT::ValueType( 1.0 );
 
@@ -234,7 +233,7 @@ glm::mat4x4 CompositeTransform<ParamT>::Evaluate( typename ParamT::TimeT t ) con
 template<typename ParamT>
 glm::mat4x4 SimpleTransform<ParamT>::Evaluate( typename ParamT::TimeT t ) const
 {
-    switch(kind)
+    switch( kind )
     {
     case TransformKind::translation:
         return glm::translate( glm::mat4( 1.0f ), glm::vec3( p0.Evaluate( t ), p1.Evaluate( t ), p2.Evaluate( t ) ) );
@@ -259,4 +258,5 @@ SimpleTransform<ParamT> * SimpleTransform<ParamT>::Clone() const
 
 } //bv
 
+//explicit instantiation - this way class' implementation can be stored in cpp file (like here)
 template class bv::CompositeTransform<bv::FloatInterpolator>;

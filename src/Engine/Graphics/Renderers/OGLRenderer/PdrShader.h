@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrGLSLProgram.h"
+
+#include "Engine/Graphics/Shaders/Parameters/GenericShaderParam.h"
+
 #include "Engine/Types/Enums.h"
 
 #include <glm/glm.hpp>
@@ -14,7 +17,6 @@ class Shader;
 class PixelShader;
 class VertexShader;
 class GeometryShader;
-class GenericShaderParam;
 class TextureSampler;
 
 class Texture2D;
@@ -52,9 +54,9 @@ public:
 
 private:
 
-    void    SetUniforms             ( Shader * shader );
-    void    SetUniformParam         ( const GenericShaderParam * param );
-    void    InitSetUniformParam     ( const GenericShaderParam * param );
+    void        SetUniforms         ( Shader * shader );
+    inline void SetUniformParam     ( const GenericShaderParam * param );
+    void        InitSetUniformParam ( const GenericShaderParam * param );
 
     //FIXME: this API should  be moved to some helper class as it looks shitty ang pretty uglu over here (as if PdrShader was responsible mostly for enabling samplers and textures)
     int     EnableTextureSamplers   ( Renderer * renderer );

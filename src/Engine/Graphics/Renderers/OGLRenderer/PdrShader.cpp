@@ -2,8 +2,6 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
-#include "Engine/Graphics/Shaders/Parameters/GenericShaderParam.h"
-
 #include "Engine/Graphics/Shaders/PixelShader.h"
 #include "Engine/Graphics/Shaders/VertexShader.h"
 #include "Engine/Graphics/Shaders/GeometryShader.h"
@@ -74,8 +72,8 @@ void PdrShader::Enable         ( Renderer * renderer )
     m_program->Use();
 
     SetUniforms( m_vertexShader );
-    SetUniforms( m_pixelShader );
     SetUniforms( m_geometryShader );
+    SetUniforms( m_pixelShader );
 
     //FIXME: possibly use numSamplers somehow (debug and/or logging)
     int numSamplers = EnableTextureSamplers( renderer );
@@ -101,47 +99,14 @@ void    PdrShader::SetUniforms     ( Shader * shader )
 
         for ( unsigned int i = 0; i < params->NumParameters(); ++i )
         {
-            SetUniformParam( params->GetParam( i ) );
-        }
-    }
-}
+            auto param = params->GetParam( i );
 
-// *******************************
-//FIXME: reimplement this method so that switch-case statement is not called here but rather in GenericParameter or even better - in shader desc
-void    PdrShader::SetUniformParam ( const GenericShaderParam * param )
-{
-    switch( param->Type() )
-    {
-        case ParamType::PT_FLOAT1:
-            SetUniform< ParamType::PT_FLOAT1 >( param );
-            break;
-        case ParamType::PT_FLOAT2:
-            SetUniform< ParamType::PT_FLOAT2 >( param );
-            break;
-        case ParamType::PT_FLOAT3:
-            SetUniform< ParamType::PT_FLOAT3 >( param );
-            break;
-        case ParamType::PT_FLOAT4:
-            SetUniform< ParamType::PT_FLOAT4 >( param );
-            break;
-        case ParamType::PT_MAT2:
-            SetUniform< ParamType::PT_MAT2 >( param );
-            break;
-        case ParamType::PT_MAT3:
-            SetUniform< ParamType::PT_MAT3 >( param );
-            break;
-        case ParamType::PT_MAT4:
-            SetUniform< ParamType::PT_MAT4 >( param );
-            break;
-        case ParamType::PT_INT:
-            SetUniform< ParamType::PT_INT >( param );
-            break;
-        case ParamType::PT_BOOL:
-            SetUniform< ParamType::PT_BOOL >( param );
-            break;
-        default:
-            assert( false );
-            break;
+            //FIXME: maybe this is not necessary, but for the time being may stay here (until active uniforms set is added or something similar is implemented)
+            if ( param->IntID() >= 0 )
+            {
+                SetUniformParam( param );
+            }
+        }
     }
 }
 
@@ -452,7 +417,7 @@ void    PdrShader::InitParamsLocations     ( Shader * shader )
         for( unsigned int i = 0; i < params->NumParameters(); ++i )
         {
             const GenericShaderParam * param = params->GetParam( i );
-            InitSetUniformParam( params->GetParam( i ) );
+            InitSetUniformParam( param );
         }
     }
 }

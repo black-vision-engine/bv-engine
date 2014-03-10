@@ -34,7 +34,7 @@ DefaultPluginParamValModel *    DefaultTransformPluginDesc::CreateDefaultModel  
     model->SetTransformChannelModel( trModel );
 
     //Set default values
-    evaluator->Parameter()->Transform( 0 ).InitializeDefaultSRT();
+    evaluator->Parameter()->Transform( 0 ).InitializeDefaultSRT( TimeType( 0.0 ) );
 
     return model;
 }

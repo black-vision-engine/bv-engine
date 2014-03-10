@@ -21,7 +21,7 @@ SimpleParameterImpl< InterpolatorType, ValueType, type >::~SimpleParameterImpl  
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
 inline ValueType SimpleParameterImpl< InterpolatorType, ValueType, type >::Evaluate ( TimeType t ) const
 {
-    t = AbstractModelParameter::GetLocalEvaluationTime( t );
+    t = GetLocalEvaluationTime( t );
     return m_interpolator.Evaluate( t );
 }
 

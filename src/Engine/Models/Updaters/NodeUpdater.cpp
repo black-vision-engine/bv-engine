@@ -55,11 +55,12 @@ NodeUpdater::NodeUpdater     ( RenderableEntity * renderable, SceneNode * sceneN
             assert( !inst->GetStencilState() );
 
             RendererStatesBuilder::Create( inst, m_rendererContext );
+
+            m_redererStateInstanceVec.push_back( inst );
         }
     }
 
     m_hasEffect = effect != nullptr;
-
 }
 
 // *****************************
