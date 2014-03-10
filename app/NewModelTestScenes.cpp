@@ -335,6 +335,7 @@ public:
 //
 model::BasicNode *     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager )
 {
+//    return SimpleNodesFactory::CreateGreenRectNode();
     return SimpleNodesFactory::CreateGreenRectNodeNoAssert();
 }
 

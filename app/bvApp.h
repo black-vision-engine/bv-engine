@@ -62,7 +62,7 @@ private:
     void            InitializeAppLogic  ();
     void            InitializeSelfState ();
 
-    void            PostFrame           ( unsigned int milli );
+    void            PostFrame           ( unsigned int millis );
 };
 
 } //bv
