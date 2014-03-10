@@ -15,6 +15,10 @@ RenderableEffect::RenderableEffect              ()
 //
 RenderableEffect::~RenderableEffect             ()
 {
+    for( auto pass : m_passes )
+    {
+        delete pass;
+    }
 }
 
 // *********************************

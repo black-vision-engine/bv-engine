@@ -21,7 +21,7 @@ NodeUpdater::NodeUpdater     ( RenderableEntity * renderable, SceneNode * sceneN
     assert( sceneNode != nullptr );
     assert( modelNode != nullptr );
     assert( renderable != nullptr );
-    assert( static_cast< void * >( renderable ) == static_cast< void * >( sceneNode->GetTransformable( 0 ) ) ); //FIXME: why do we need more than one transformable per node and how to use it?
+    assert( static_cast< void * >( renderable ) == static_cast< void * >( sceneNode->GetAnchor() ) ); //FIXME: why do we need more than one transformable per node and how to use it?
 
     m_timeInvariantVertexData = false;
 

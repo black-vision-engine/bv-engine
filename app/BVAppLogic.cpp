@@ -175,8 +175,8 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
 
                 //FIXME:
                 std::vector< bv::Transform > vec;
-                vec.push_back(Transform(viewMat, glm::inverse(viewMat)));
-                m_mockSceneEng->Update( t, vec );
+                vec.push_back( Transform( viewMat, glm::inverse( viewMat ) ) );
+                m_mockSceneEng->Update( vec );
             }
         }
         {

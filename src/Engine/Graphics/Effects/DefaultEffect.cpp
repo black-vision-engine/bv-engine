@@ -18,7 +18,7 @@ DefaultEffect::DefaultEffect    ( const IShaderDataSource * psds, const IShaderD
     assert( vsds != nullptr );
 
     ShaderParameters * psparams = DefaultParamsPS( psds );
-    ShaderParameters * vsparams = DefaultParamsVS( psds );
+    ShaderParameters * vsparams = DefaultParamsVS( vsds );
 
     assert( psparams != nullptr );
     assert( vsparams != nullptr );
@@ -44,6 +44,9 @@ DefaultEffect::DefaultEffect    ( const IShaderDataSource * psds, const IShaderD
 //
 DefaultEffect::~DefaultEffect   ()
 {
+    delete GetPass( 0 )->GetPixelShader();
+    delete GetPass( 0 )->GetVertexShader();
+    delete GetPass( 0 )->GetGeometryShader();
 }
 
 // *********************************

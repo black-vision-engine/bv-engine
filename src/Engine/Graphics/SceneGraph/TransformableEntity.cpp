@@ -17,7 +17,7 @@ TransformableEntity::~TransformableEntity                               ()
 
 // *********************************
 //
-void   TransformableEntity::UpdateTransforms                            ( double t, const std::vector< Transform > & transforms )
+void   TransformableEntity::UpdateTransforms                            ( const std::vector< Transform > & transforms )
 {
     UpdateSetWorldTransform( transforms );
 }
