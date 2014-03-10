@@ -13,8 +13,20 @@ namespace bv {
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode(  const model::PluginsManager * pluginsManager  )
+model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode()
 {
+    std::vector< std::string > uids;
+
+    uids.push_back( "DEFAULT_TRANSFORM" );
+    uids.push_back( "DEFAULT_RECTANGLE" );
+    uids.push_back( "DEFAULT_COLOR" );
+
+    model::BasicNode * root = new model::BasicNode( "Root" );
+
+    bool success = root->AddPlugins( uids );
+
+    return root;
+
     //model::BasicNode * root = new model::BasicNode( "GreenRectRoot" );
 
     /////////////////////////////// Geometry plugin //////////////////////////

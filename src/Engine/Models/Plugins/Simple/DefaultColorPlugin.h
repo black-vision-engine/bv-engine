@@ -42,7 +42,6 @@ public:
                                             ~DefaultColorPlugin         ();
 
     virtual const IPixelShaderChannel *     GetPixelShaderChannel       () const override;
-    virtual const IVertexShaderChannel *    GetVertexShaderChannel      () const override;
 
     virtual void                            Update                      ( TimeType t ) override;
 

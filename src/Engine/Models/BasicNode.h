@@ -66,6 +66,12 @@ public:
     //Convenience API (so that list can be created from external source and simply attached to this node)
     void                                    SetPlugins              ( DefaultPluginListFinalizedPtr plugins );
 
+private:
+
+    void                                    NonNullPluginsListGuard ();
+
+public:
+
     //Utility API - plugins can be added on-the-fly by user using an editor
     bool                                    AddPlugin               ( IPlugin * plugin );
     bool                                    AddPlugin               ( IPluginPtr plugin );

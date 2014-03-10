@@ -8,6 +8,8 @@
 
 #include "Engine/Models/BasicNode.h"
 
+#include "NewModelTestNodes.h"
+
 
 namespace bv {
 
@@ -333,9 +335,7 @@ public:
 //
 model::BasicNode *     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager )
 {
-    model::BasicNode * root =  DefaultTestNodeNewNodeImpl ( pluginsManager );
-
-    return root;
+    return SimpleNodesFactory::CreateGreenRectNode();
 }
 
 } //bv

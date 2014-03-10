@@ -13,7 +13,7 @@ class SimpleNodesFactory
 {
 public:
 
-    model::BasicNode *  CreateGreenRectNode(  const model::PluginsManager * pluginsManager  );
+    static model::BasicNode *  CreateGreenRectNode();
 
 };
 

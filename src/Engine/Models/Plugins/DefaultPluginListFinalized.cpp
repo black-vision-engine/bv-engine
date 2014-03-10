@@ -93,6 +93,8 @@ void            DefaultPluginListFinalized::AttachPlugin        ( IPlugin * plug
     assert( plugin != nullptr );
 
     m_plugins.push_back( IPluginPtr( plugin ) );
+
+    m_finalizePlugin->SetPrevPlugin( plugin );
 }
 
 } // model

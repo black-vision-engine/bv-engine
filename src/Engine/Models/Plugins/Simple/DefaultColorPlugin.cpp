@@ -65,11 +65,6 @@ DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::s
     , m_paramValModel( model )
 { 
     m_pixelShaderChannel = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultColorPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), false ) );
-
-    if( prev == nullptr || prev->GetVertexShaderChannel() == nullptr )
-    {
-        m_vertexShaderChannel = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create() );
-    }
 }
 
 // *************************************
@@ -83,18 +78,6 @@ DefaultColorPlugin::~DefaultColorPlugin ()
 const IPixelShaderChannel *         DefaultColorPlugin::GetPixelShaderChannel       () const
 {
     return m_pixelShaderChannel.get();
-}
-
-// *************************************
-//
-const IVertexShaderChannel *        DefaultColorPlugin::GetVertexShaderChannel      () const
-{
-    if( m_vertexShaderChannel.get() == nullptr )
-    {
-        return BasePlugin::GetVertexShaderChannel();
-    }
-
-    return m_vertexShaderChannel.get();
 }
 
 // *************************************
