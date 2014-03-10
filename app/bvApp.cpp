@@ -113,7 +113,6 @@ bool BlackVisionApp::OnInitialize       ()
 //
 void BlackVisionApp::OnTerminate        ()
 {
-    model::TimelineManager::Cleanup();
     WindowedApplication::OnTerminate();
 }
 

@@ -9,18 +9,83 @@
 
 namespace bv { namespace model {
 
-// ***************************** PLUGIN ********************************** 
+
+// ************************************************************************* DESCRIPTOR *************************************************************************
+
+// *******************************
+//
+DefaultRectPluginDesc::DefaultRectPluginDesc                                ()
+    : BasePluginDescriptor( UID(), "rectangle" )
+{
+}
+
+// *******************************
+//
+bool                            DefaultRectPluginDesc::CanBeAttachedTo      ( const IPlugin * plugin )  const
+{
+    if( !BasePluginDescriptor::CanBeAttachedTo( plugin ) )
+    {
+        return false;
+    }
+
+    //Geometry generator cannot be attached to a plugin which generates geometry itself
+    if( plugin && plugin->GetVertexAttributesChannel() )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+// *******************************
+//
+IPlugin *                       DefaultRectPluginDesc::CreatePlugin         ( const std::string & name, const IPlugin * prev ) const
+{
+    return CreatePluginTyped< DefaultRectPlugin >( name, prev );
+}
+
+// *******************************
+//
+DefaultPluginParamValModel *    DefaultRectPluginDesc::CreateDefaultModel   () const
+{
+    DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
+    DefaultParamValModel * vacModel     = new DefaultParamValModel();
+
+    ParamFloat * paramWidth             = ParametersFactory::CreateParameterFloat( "width" );
+    ParamFloat * paramHeight            = ParametersFactory::CreateParameterFloat( "height" );
+
+    vacModel->AddParameter( paramWidth );
+    vacModel->AddParameter( paramHeight );
+
+    model->SetVertexAttributesChannelModel( vacModel );
+
+    //Set default parameters
+    paramWidth->SetVal( 1.f, 0.f );
+    paramHeight->SetVal( 1.f, 0.f );
+
+    return model;
+}
+
+// *******************************
+//
+std::string                     DefaultRectPluginDesc::UID                  ()
+{
+    return "DEFAULT_RECTANGLE";
+}
+
+
+// ************************************************************************* PLUGIN *************************************************************************
 
 // *************************************
 //
-DefaultRectPlugin::DefaultRectPlugin    ( const IPlugin * prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin( prev,  std::static_pointer_cast< IPluginParamValModel >( model ) )
+DefaultRectPlugin::DefaultRectPlugin    ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model )
+    : BasePlugin( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
     , m_widthParam( nullptr )
     , m_heightParam( nullptr )
 {
-    auto params = model->GetPluginModel()->GetParameters();
+    auto params = VertexAttributesChannelModel()->GetParameters();
 
     assert( params.size() == 2 );
 
@@ -31,7 +96,7 @@ DefaultRectPlugin::DefaultRectPlugin    ( const IPlugin * prev, DefaultPluginPar
     m_lastH = m_heightParam->Evaluate( 0.f );
 
     RectComponent * rect = RectComponent::Create( m_lastW, m_lastH );
-    m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( rect );
+    m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( rect, true );
 
     m_rct = rect;
 }
@@ -69,40 +134,6 @@ void                                DefaultRectPlugin::Update                   
 
     m_lastW = w;
     m_lastH = h;
-}
-
-
-// ********************************************************* DESCRIPTOR *********************************************************
-
-// *************************************
-//
-DefaultPluginParamValModel * DefaultRectPluginDesc::CreateModel ( bool setDefaultValues )
-{
-    DefaultPluginParamValModel * model          = new DefaultPluginParamValModel();
-    DefaultParamValModel * pluginModel          = new DefaultParamValModel();
-
-    ParamFloat * paramWidth                     = ParametersFactory::CreateParameterFloat( "width" );
-    ParamFloat * paramHeight                    = ParametersFactory::CreateParameterFloat( "height" );
-
-    pluginModel->AddParameter( paramWidth );
-    pluginModel->AddParameter( paramHeight );
-
-    model->SetPluginModel( pluginModel );
-
-    if ( setDefaultValues )
-    {
-        paramWidth->SetVal( 0.f, 1.f );
-        paramHeight->SetVal( 0.f, 1.f );
-    }
-
-    return model;
-}
-
-// *************************************
-//
-DefaultRectPlugin *          DefaultRectPluginDesc::CreatePlugin( const IPlugin * prev, bool setDefaultValues )
-{
-    return new DefaultRectPlugin( prev, DefaultPluginParamValModelPtr( DefaultRectPluginDesc::CreateModel( setDefaultValues ) ) );    
 }
 
 } // model

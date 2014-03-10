@@ -9,7 +9,7 @@ class PixelShader : public Shader
 {
 public:
 
-    PixelShader( const std::string & programSource );
+    PixelShader( const std::string & programSource, ShaderParameters * params );
 
 };
 

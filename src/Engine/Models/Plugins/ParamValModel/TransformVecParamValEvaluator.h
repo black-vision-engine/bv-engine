@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Plugins/Interfaces/IParamValEvaluator.h"
 
-#include "Engine/Models/Plugins/Parameters/TypedValues.h"
+#include "Engine/Types/Values/TypedValues.h"
 #include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 
 
@@ -15,8 +15,8 @@ private:
     ParamTransformVec *     m_param;
     ValueMat4PtrVec         m_mat4Values;
 
-    std::vector< IParameter * >     m_paramWrapper;
-    std::vector< IValue * >         m_values;
+    std::vector< IParameter * >         m_paramWrapper;
+    std::vector< const bv::IValue * >   m_values;
 
 private:
 
@@ -24,16 +24,16 @@ private:
 
 public:
 
-    virtual std::vector< IParameter * > &   GetParameters   () override;
-    virtual std::vector< IValue * > &       GetValues       () override;
+    virtual std::vector< IParameter * > &               GetParameters   () override;
+    virtual const std::vector< const bv::IValue * > &   GetValues       () const override;
 
-    virtual IParameter *                    GetParameter    ( const std::string & name ) override;
-    virtual IValue *                        GetValue        ( const std::string & name ) override;
+    virtual IParameter *                                GetParameter    ( const std::string & name ) override;
+    virtual const bv::IValue *                          GetValue        ( const std::string & name ) const override;
 
-    virtual void                            Evaluate        ( TimeType t ) override;
+    virtual void                                        Evaluate        ( TimeType t ) override;
 
-    ParamTransformVec *                     Param           ();
-    ValueMat4PtrVec &                       Value           ();
+    ParamTransformVec *                                 Parameter       ();
+    ValueMat4PtrVec &                                   Value           ();
 
     friend class ParamValEvaluatorFactory;
 

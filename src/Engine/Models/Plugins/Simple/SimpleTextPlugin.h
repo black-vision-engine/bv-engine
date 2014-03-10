@@ -22,13 +22,13 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class SimpleTextPlugin : public BasePlugin< IPlugin, SimpleTextPluginUID >
+class SimpleTextPlugin : public BasePlugin< IPlugin >
 {
 private:
 
     VertexAttributesChannelPtr  m_vertexAttributeChannel;
 
-    Textures                    m_textures;
+    TextureInfoVec              m_textures;
 
     const ResourceHandle*       m_fontResource;
     const TextAtlas*            m_textAtlas;
@@ -49,9 +49,9 @@ public:
 
                                 ~SimpleTextPlugin   ();
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel          () const override;
-    virtual Textures                            GetTextures                 () const override;
-    void                                        SetText                     ( const std::wstring& newText );
+    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
+    virtual TextureInfoVec                      GetTextures                 () const override;
+    void                                        SetText                     ( const std::wstring & newText );
 
     //delegates
     void                                        OnSetText                   ( IEventPtr evt );

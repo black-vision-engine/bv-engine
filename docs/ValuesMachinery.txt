@@ -1,4 +1,4 @@
-IValue - interfejs wartoúci od dowolnym typie (taki g≥upi IVariant) - nazwa, paramType oraz dane przechowywane jako char*
+IValue - interfejs warto≈õci od dowolnym typie (taki g≈Çupi IVariant) - nazwa, paramType oraz dane przechowywane jako char*
 
 IShaderChannel
   - shader source
@@ -9,4 +9,4 @@ IShaderChannel
   * GetShaderSource
   * GetValuesList
 
-Wszystkie te wartoúci sπ przechowywane w pluginach, a konkretnie - w kana≥ach pluginÛw, ktÛre majπ takie wartoúci - IShaderChannel.
+Wszystkie te warto≈õci sƒÖ przechowywane w pluginach, a konkretnie - w kana≈Çach plugin√≥w, kt√≥re majƒÖ takie warto≈õci - IShaderChannel.

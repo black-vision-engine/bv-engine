@@ -10,21 +10,21 @@ class SimpleVertexShaderChannel : public ShaderChannel< IVertexShaderChannel >
 public:
 
     explicit                        SimpleVertexShaderChannel( const std::string & shaderFile )
-        : ShaderChannel( shaderFile )
+        : ShaderChannel( shaderFile, nullptr )
     {
     }
 
-    virtual void                    Update( TimeType t )
-    {
-        ShaderChannel::Update( t );
-    }
+    //virtual void                    Update( TimeType t )
+    //{
+    //    ShaderChannel::Update( t );
+    //}
 
 };
 
 // *********************************
 //
 SimpleVertexShaderPlugin::SimpleVertexShaderPlugin          ( const IPlugin * prev, const std::string& shaderPath )
-    : BasePlugin( prev )
+    : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_shaderPath( shaderPath )
 {
     m_vshaderChannel = SimpleVertexShaderChannelPtr( new SimpleVertexShaderChannel( shaderPath ) );
@@ -48,7 +48,7 @@ const IVertexShaderChannel *    SimpleVertexShaderPlugin::GetVertexShaderChannel
 //
 void                            SimpleVertexShaderPlugin::Update                      ( TimeType t )
 {
-    m_vshaderChannel->Update( t );
+//    m_vshaderChannel->Update( t );
 }
 
 // *********************************

@@ -24,7 +24,7 @@ VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, bool 
 
 // *********************************
 //
-VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, const VertexAttributesChannelDescriptor& desc, bool isReadOnly, bool isTimeInvariant )
+VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, const VertexAttributesChannelDescriptor & desc, bool isReadOnly, bool isTimeInvariant )
     : m_primitiveType( type )
     , m_desc( desc )
     , m_isReadOnly( isReadOnly )
@@ -46,7 +46,7 @@ VertexAttributesChannel::~VertexAttributesChannel   ()
 
 // *********************************
 //
-void                                    VertexAttributesChannel::Update              ( TimeType t )
+void                                    VertexAttributesChannel::Update                 ( TimeType t )
 {
     //FIXME: not necesarrily like this but it has to be thought over
     //FIXME: it is best to assume that Update is called from the first to last plugin and state is well defined and each plugin just has to read predcessor's state (without calling Update)
@@ -60,28 +60,28 @@ void                                    VertexAttributesChannel::Update         
 
 // *********************************
 //
-bool                                    VertexAttributesChannel::IsReadOnly          () const
+bool                                    VertexAttributesChannel::IsReadOnly             () const
 {
     return m_isReadOnly;
 }
 
 // *********************************
 //
-bool                                    VertexAttributesChannel::IsTimeInvariant     () const
+bool                                    VertexAttributesChannel::IsTimeInvariant        () const
 {
     return m_isTimeInvariant;
 }
 
 // *********************************
 //
-bool                                    VertexAttributesChannel::NeedsAttributesUpdate( TimeType t ) const
+bool                                    VertexAttributesChannel::NeedsAttributesUpdate  () const
 {
     return m_needsAttributesUpdate;
 }
 
 // *********************************
 //
-bool                                    VertexAttributesChannel::NeedsTopologyUpdate ( TimeType t ) const
+bool                                    VertexAttributesChannel::NeedsTopologyUpdate    () const
 {
     return m_needsTopologyUpdate;
 }
@@ -95,14 +95,14 @@ void                                    VertexAttributesChannel::SetNeedsAttribu
 
 // *********************************
 //
-void                                    VertexAttributesChannel::SetNeedsTopologyUpdate( bool b )
+void                                    VertexAttributesChannel::SetNeedsTopologyUpdate ( bool b )
 {
     m_needsTopologyUpdate = b;
 }
 
 // *********************************
 //
-unsigned int                            VertexAttributesChannel::TotalNumVertices    ()          const
+unsigned int                            VertexAttributesChannel::TotalNumVertices       ()          const
 {
     unsigned int total = 0;
 
@@ -116,28 +116,28 @@ unsigned int                            VertexAttributesChannel::TotalNumVertice
 
 // *********************************
 //
-const IVertexAttributesChannelDescriptor *      VertexAttributesChannel::GetDescriptor       () const
+const IVertexAttributesChannelDescriptor *      VertexAttributesChannel::GetDescriptor  () const
 {
     return &m_desc;
 }
 
 // *********************************
 //
-void                                    VertexAttributesChannel::SetDescriptor       ( const VertexAttributesChannelDescriptor & desc )
+void                                    VertexAttributesChannel::SetDescriptor          ( const VertexAttributesChannelDescriptor & desc )
 {
     m_desc = desc;
 }
 
 // *********************************
 //
-PrimitiveType                           VertexAttributesChannel::GetPrimitiveType    () const
+PrimitiveType                           VertexAttributesChannel::GetPrimitiveType       () const
 {
     return m_primitiveType;
 }
 
 // *********************************
 //
-void                                    VertexAttributesChannel::AddConnectedComponent( ConnectedComponent * cc )
+void                                    VertexAttributesChannel::AddConnectedComponent  ( ConnectedComponent * cc )
 {
     auto attrChannel = cc->GetAttributeChannels();
 
@@ -156,7 +156,7 @@ void                                    VertexAttributesChannel::AddConnectedCom
 
 // *********************************
 //
-void                                    VertexAttributesChannel::ClearConnectedComponent ( )
+void                                    VertexAttributesChannel::ClearConnectedComponent()
 {
     m_connectedComponents.clear();
 }

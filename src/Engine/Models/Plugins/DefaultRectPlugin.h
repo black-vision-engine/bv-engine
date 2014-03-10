@@ -1,7 +1,8 @@
 #pragma once
 
+#include "Engine/Models/Plugins/Channels/Transform/DefaultTransformChannel.h"
+#include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
-#include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 
 
 namespace bv { namespace model {
@@ -10,24 +11,29 @@ class DefaultRectPlugin;
 class RectComponent;
 
 // ***************************** DESC **********************************
-class DefaultRectPluginDesc
+class DefaultRectPluginDesc : public BasePluginDescriptor
 {
 public:
 
-    static const char *                 GetName()   { return "default_rect_plugin"; }
-    static DefaultPluginParamValModel * CreateModel ( bool setDefaultValues );
-    static DefaultRectPlugin *          CreatePlugin( const IPlugin * prev, bool setDefaultValues = true );
+    DefaultRectPluginDesc                                       ();
+
+    virtual bool                            CanBeAttachedTo     ( const IPlugin * plugin )  const override;
+    virtual IPlugin *                       CreatePlugin        ( const std::string & name, const IPlugin * prev ) const override;
+    virtual DefaultPluginParamValModel *    CreateDefaultModel  () const override;
+   
+    static  std::string                     UID                 ();
 
 };
 
 
 // ***************************** PLUGIN ********************************** 
-class DefaultRectPlugin : public BasePlugin< IPlugin, DefaultRectPluginDesc >
+class DefaultRectPlugin : public BasePlugin< IPlugin >
 {
 private:
 
+    //FIXME: move to base class
     DefaultPluginParamValModelPtr       m_paramValModel;
-    model::VertexAttributesChannel *    m_vaChannel;
+    VertexAttributesChannel *           m_vaChannel;
 
     ParamFloat *                        m_widthParam;
     ParamFloat *                        m_heightParam;
@@ -37,19 +43,13 @@ private:
 
     RectComponent *                     m_rct;
 
-private:
-
-    explicit            DefaultRectPlugin    ( const IPlugin * prev, DefaultPluginParamValModelPtr model );
-
 public:
 
+    explicit            DefaultRectPlugin    ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model );
                         ~DefaultRectPlugin   ();
 
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
-
     virtual void                                Update                      ( TimeType t ) override;
-
-    friend class DefaultRectPluginDesc;
 
 };
 

@@ -38,9 +38,9 @@ private:
 public:
 
     bool                IsActive                        ( TimeType t ) const;
-    bool                TopologyChanged                 ( TimeType t ) const;
+    bool                TopologyChanged                 () const;
 
-    virtual void        Update                          ( TimeType t );
+    virtual void        Update                          ( TimeType t )  override;
 
     TimeType            ComponentDuration               () const;
 

@@ -1,51 +1,73 @@
-Wyszyæ z implementacji CC Update (i nie dziedziczyæ z IUpdatable). CC z za³o¿enia tylko przechowuje stan, ale nie ma ¿adnej logiki - logika zmiana
-stanu CC le¿y po stronie plugina, który odpowiednie wygenerowa³ (albo modyfikuje).
+WyszyÄ‡ z implementacji CC Update (i nie dziedziczyÄ‡ z IUpdatable). CC z zaÅ‚oÅ¼enia tylko przechowuje stan, ale nie ma Å¼adnej logiki - logika zmiana
+stanu CC leÅ¼y po stronie plugina, ktÃ³ry odpowiednie wygenerowaÅ‚ (albo modyfikuje).
 
-Dodaæ odpowiednie helpery do operowania na CC oraz kana³ach atrybutów (ustawianie UV, otoczki wypuk³e, takie duperele).
+DodaÄ‡ odpowiednie helpery do operowania na CC oraz kanaÅ‚ach atrybutÃ³w (ustawianie UV, otoczki wypukÅ‚e, takie duperele).
 
-Kana³y te¿ powinny byæ bezlogikowe, a tylko updatowane za pomoc¹ publicznego API w pluginach. Dziêki temu nie trzeba bêdzie pisaæ tony g³upich klas
-dziedzicz¹cych po bazowej implementacji VertexAttributeChannel, a tylko pluginy bêd¹ za pomoc¹ tego API odpowiednio modyfikowaæ swoje kana³y.
+KanaÅ‚y teÅ¼ powinny byÄ‡ bezlogikowe, a tylko updatowane za pomocÄ… publicznego API w pluginach. DziÄ™ki temu nie trzeba bÄ™dzie pisaÄ‡ tony gÅ‚upich klas
+dziedziczÄ…cych po bazowej implementacji VertexAttributeChannel, a tylko pluginy bÄ™dÄ… za pomocÄ… tego API odpowiednio modyfikowaÄ‡ swoje kanaÅ‚y.
 
-Zmieniæ GetTransformChannels na GetTransformations lub coœ analogicznego.
+ZmieniÄ‡ GetTransformChannels na GetTransformations lub coÅ› analogicznego.
 
-Dodaæ bazow¹ klasê Channel, która trzyma ten biedny read only, ¿eby nie trzeba go by³o propagowaæ do ka¿dej podklasy.
+DodaÄ‡ bazowÄ… klasÄ™ Channel, ktÃ³ra trzyma ten biedny read only, Å¼eby nie trzeba go byÅ‚o propagowaÄ‡ do kaÅ¼dej podklasy.
 
-Usun¹æ AccessFirstParamTransform z SimpleTransformChannel (i upewniæ siê, ¿e transfom channel w ogóle ma byæ taki, jaki jest)
+UsunÄ…Ä‡ AccessFirstParamTransform z SimpleTransformChannel (i upewniÄ‡ siÄ™, Å¼e transfom channel w ogÃ³le ma byÄ‡ taki, jaki jest)
 
-Zastanowiæ siê, dlaczego powsta³a klasa SimpleTransform - bo ona udaje SQT -> przepisaæ tê klaskê na SQT po ludzku, a nie takie coœ.
+ZastanowiÄ‡ siÄ™, dlaczego powstaÅ‚a klasa SimpleTransform - bo ona udaje SQT -> przepisaÄ‡ tÄ™ klaskÄ™ na SQT po ludzku, a nie takie coÅ›.
 
-Przenieœæ GetPrimitiveType() const z IVertexAttributesChannel do IVertexAttributesChannelDescriptor
+PrzenieÅ›Ä‡ GetPrimitiveType() const z IVertexAttributesChannel do IVertexAttributesChannelDescriptor
 
-Dopisaæ API helperowe do tworzenia kana³ów, pluginów, akcesory do odpowiednich pó³ w kana³ach, deskryptorach, do sprawdzania flag kana³ów
+DopisaÄ‡ API helperowe do tworzenia kanaÅ‚Ã³w, pluginÃ³w, akcesory do odpowiednich pÃ³Å‚ w kanaÅ‚ach, deskryptorach, do sprawdzania flag kanaÅ‚Ã³w
 
-Dodaæ API/helper do obs³ugi VertexAttribute klas i analogiczny akcesor do dostêpu do VertexBuffer po stronie silnika (ju¿ od dawna le¿y jako bug do
+DodaÄ‡ API/helper do obsÅ‚ugi VertexAttribute klas i analogiczny akcesor do dostÄ™pu do VertexBuffer po stronie silnika (juÅ¼ od dawna leÅ¼y jako bug do
 naprawienia)
 
-Zmieniæ nazwy NeedsAttributesUpdate i NeedsTopologyUpdate na AttributesStateChanged, TopologyStateChanged
+ZmieniÄ‡ nazwy NeedsAttributesUpdate i NeedsTopologyUpdate na AttributesStateChanged, TopologyStateChanged
 
-RegisterValue z ShaderChannel powinno zapisywaæ te wartoœci chyba jednak w innym miejscu (nie w wektorze w klasie bazowej ShaderChannel tylko jakoœ
-bardziej globalnie - na przyk³ad w pluginie - to jest dobry moment, ¿eby przemyœleæ, gdzie te wartoœci powinny byæ trzymane. Lokalnie s¹ potrzebne
-do updatowania stanu shaderów po stronie silnika
+RegisterValue z ShaderChannel powinno zapisywaÄ‡ te wartoÅ›ci chyba jednak w innym miejscu (nie w wektorze w klasie bazowej ShaderChannel tylko jakoÅ›
+bardziej globalnie - na przykÅ‚ad w pluginie - to jest dobry moment, Å¼eby przemyÅ›leÄ‡, gdzie te wartoÅ›ci powinny byÄ‡ trzymane. Lokalnie sÄ… potrzebne
+do updatowania stanu shaderÃ³w po stronie silnika
 
-Pojedyncze CC powinny mieæ w sobie flagê, ¿e zmieni³ siê stan, ¿eby tylko przepisywaæ VB tych CC, które uleg³y zmianie (NeedsAttributesUpdate).
+Pojedyncze CC powinny mieÄ‡ w sobie flagÄ™, Å¼e zmieniÅ‚ siÄ™ stan, Å¼eby tylko przepisywaÄ‡ VB tych CC, ktÃ³re ulegÅ‚y zmianie (NeedsAttributesUpdate).
 
-Trzeba zagwarantowaæ (w obecnej implementacji), ¿e jest tylko jeden shader channel, który dostarcza kod shadera - wczeœniejsze kana³y shadera mog¹ dostarczaæ 
-co najwy¿ej parametry (chocia¿ pewnie te¿ nie powinny)
+Trzeba zagwarantowaÄ‡ (w obecnej implementacji), Å¼e jest tylko jeden shader channel, ktÃ³ry dostarcza kod shadera - wczeÅ›niejsze kanaÅ‚y shadera mogÄ… dostarczaÄ‡ 
+co najwyÅ¼ej parametry (chociaÅ¼ pewnie teÅ¼ nie powinny)
 
-Zamieniæ TransformChannel::GetTransformChannels na TransformChannel::GetTransformList lub GetTransformations (bo o to chodzi, tu ju¿ nie ma zabawy w kana³y)
+ZamieniÄ‡ TransformChannel::GetTransformChannels na TransformChannel::GetTransformList lub GetTransformations (bo o to chodzi, tu juÅ¼ nie ma zabawy w kanaÅ‚y)
 
-GeometryUpdater przemianowaæ na VertexAttributesUpdater (o ile ca³a ta maszyneria siê jeszcze bardziej nie uproœci)
+GeometryUpdater przemianowaÄ‡ na VertexAttributesUpdater (o ile caÅ‚a ta maszyneria siÄ™ jeszcze bardziej nie uproÅ›ci)
 
-UpdatePosition( t ) i UpdateTopology( t ) w GeometryUpdater nale¿y przerobiæ tak, ¿eby korzysta³y z helperów, które s³u¿¹ do budowania
-VertexBuffora oraz odpowiedniego uk³adania danych w kana³ach. Trzeba to koniecznie zrobiæ, bo siê coraz bardziej panoszy œmieciowy
-kod, którego nawet nie da siê przeczytaæ ze zrozumieniem. Jest tam te¿ taka zaœlepka WriteVertexDataToVBO, która ju¿ powinna le¿eæ w
-helperach do tworzenia i modyfikowania veretex buffer obiektów.
+UpdatePosition( t ) i UpdateTopology( t ) w GeometryUpdater naleÅ¼y przerobiÄ‡ tak, Å¼eby korzystaÅ‚y z helperÃ³w, ktÃ³re sÅ‚uÅ¼Ä… do budowania
+VertexBuffora oraz odpowiedniego ukÅ‚adania danych w kanaÅ‚ach. Trzeba to koniecznie zrobiÄ‡, bo siÄ™ coraz bardziej panoszy Å›mieciowy
+kod, ktÃ³rego nawet nie da siÄ™ przeczytaÄ‡ ze zrozumieniem. Jest tam teÅ¼ taka zaÅ›lepka WriteVertexDataToVBO, ktÃ³ra juÅ¼ powinna leÅ¼eÄ‡ w
+helperach do tworzenia i modyfikowania veretex buffer obiektÃ³w.
 
-RenderableArrayDataArraysSingleVertexBuffer wypada³oby przemianowaæ na coœ o mniejszej liczbie znaków.
+RenderableArrayDataArraysSingleVertexBuffer wypadaÅ‚oby przemianowaÄ‡ na coÅ› o mniejszej liczbie znakÃ³w.
 
-Wyszyæ parametr t z UpdatersManagera (a ju¿ na pewno z tych kana³ów, które nie potrzebuj¹ tego parametru do poprawnej ewaluacji)
+WyszyÄ‡ parametr t z UpdatersManagera (a juÅ¼ na pewno z tych kanaÅ‚Ã³w, ktÃ³re nie potrzebujÄ… tego parametru do poprawnej ewaluacji)
 
-Przeprojektowaæ i zrefaktorowaæ AttributeChannel, VertexAttributesChannel, ConnectedComponent (wszystkie te implementacje).
-W szczególnoœci GetPositionChannel i GetUVChannel to s³abe nieco w implementacji AttributeChannel - to powinno byæ jakieœ ogólne, a nie
-takie otypowane querowanie zaimplementowane jawnie w AttributeChannel. W ogóle nale¿y to pozmieniaæ i przerobiæ, bo na przyk³ad
-poszczególne kana³y z atrybutami, powinny siê nazywaæ data czy jakoœ tak, a nie tak, jak kana³y pluginu.
+PrzeprojektowaÄ‡ i zrefaktorowaÄ‡ AttributeChannel, VertexAttributesChannel, ConnectedComponent (wszystkie te implementacje).
+W szczegÃ³lnoÅ›ci GetPositionChannel i GetUVChannel to sÅ‚abe nieco w implementacji AttributeChannel - to powinno byÄ‡ jakieÅ› ogÃ³lne, a nie
+takie otypowane querowanie zaimplementowane jawnie w AttributeChannel. W ogÃ³le naleÅ¼y to pozmieniaÄ‡ i przerobiÄ‡, bo na przykÅ‚ad
+poszczegÃ³lne kanaÅ‚y z atrybutami, powinny siÄ™ nazywaÄ‡ data czy jakoÅ› tak, a nie tak, jak kanaÅ‚y pluginu.
+
+Dodatkowo to, co teraz obsÅ‚uguje tekstury po stronie basic node powinno odbywaÄ‡ siÄ™ w efekcie, ewentualnie czÄ™Å›ciowo nawet po stronie
+parametrÃ³w shadera silnikowego. (FIXME w BasicNode::BuildScene()). To analogiczna praca, co przeniesienie tworzenia parametrÃ³w
+shaderÃ³w do efektu i parametrÃ³w shaderÃ³w. Po prostu ta logika moÅ¼e prawie w caÅ‚oÅ›ci byÄ‡ przeniesiona dalej, do silnika - tylko
+trzeba udostÄ™pniÄ‡ odpowiedni interfejs po stronie modelu, ktÃ³ry poda dane (tekstury, animacje, odpowiednie formaty danych - pewnie
+jako deskryptory).
+
+ZastanowiÄ‡ siÄ™, co zrobiÄ‡ z renderable entity bez mesha (czyli nie ma czego renderowaÄ‡ i efektu pewnie teÅ¼ nie ma). 
+
+Czy SceneNode musi trzymaÄ‡ listÄ™ Transformabli (moÅ¼e tak) i skoro tak juÅ¼ jest to jakie sÄ… zaÅ‚oÅ¼enia, jak to ma byÄ‡ wykorzystywane
+i jak siÄ™ wpasowuje w aktualny schemat.
+
+W node updaterze - Czy jesli node nie jest widoczne to trzeba w ogole updatowac stan - zakladam, ze nie, ale trzeba sie upewnic.
+Skoro nie widac, a nie ma efektow ubocznych innych, niz to widac w przerenderowanym nodzie, to chyba nie ma co siÄ™ tutaj spinaÄ‡
+i na siÅ‚Ä™ aktualizowaÄ‡, bo Å¼adnych wynikÃ³w i tak nie bÄ™dzie, a jak siÄ™ juÅ¼ stanie widoczna, to sobie zaczyta stan z modelu.
+
+Updatery nie zaleÅ¼Ä… od t. I nie majÄ… zaleÅ¼eÄ‡, bo one tylko z USTALONEGO W CZASIE t STANU MODELU przepisujÄ… (ewentualnie konwertujÄ…c)
+odpowiednie dane do silnika - nic wiÄ™cej, Å¼adnych ewaluacji zaleÅ¼nych od czasu tu nie ma prawa byÄ‡, bo tym siÄ™ zajmuje model i do
+updaterÃ³w przekazuje tylko gotowy stan, ktÃ³ry sobie moÅ¼na sprawdzaÄ‡ do woli, bez koniecznoÅ›ci odczytywania czasu.
+
+JeÅ›li chcemu mieÄ‡ animowanÄ… kamerÄ™, to animujemy jej model w momencie aktualizacji modelu do kurwy nÄ™dzy, a nie model poprzez updatery
+w jakiejÅ› silnikowej dupie.

@@ -1,6 +1,6 @@
 #include "SimplePixelShaderPlugin.h"
 
-#include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
+#include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 
 
 namespace bv { namespace model {
@@ -10,17 +10,17 @@ class SimplePixelShaderChannelPD
 };
 
 
-class SimplePixelShaderChannel : public PixelShaderChannelBase< SimplePixelShaderChannelPD >
+class SimplePixelShaderChannel : public DefaultPixelShaderChannel
 {
 public:
 
     explicit                        SimplePixelShaderChannel( const std::string & shaderFile, RendererContext * ctx = nullptr )
-        : PixelShaderChannelBase( shaderFile, ctx )
+        : DefaultPixelShaderChannel( shaderFile, nullptr, ctx )
     {}
 
     virtual void                    Update( TimeType t )
     {
-        ShaderChannel::Update( t );
+        //ShaderChannel::Update( t );
     }
 
 };
@@ -28,15 +28,15 @@ public:
 // *********************************
 //
 SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( const IPlugin * prev, const std::string & shaderPath, RendererContext * ctx )
-    : BasePlugin( prev )
+    : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_shaderPath( shaderPath )
 {
     m_pshaderChannel = new SimplePixelShaderChannel( shaderPath, ctx );
 
-    for( auto v : prev->GetPixelShaderChannel()->GetValuesList() )
-    {
-        m_pshaderChannel->RegisterValue( v );
-    }
+    //for( auto v : prev->GetPixelShaderChannel()->GetValuesList() )
+    //{
+    //    m_pshaderChannel->RegisterValue( v );
+    //}
 }
 
 // *********************************

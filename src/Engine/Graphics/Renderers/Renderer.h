@@ -8,7 +8,7 @@
 #include "Engine/Graphics/Renderers/WGLRenderer/WGLRendererInput.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/GLRendererData.h"
 
-#include "Engine/Graphics/State/StateInstance.h"
+#include "Engine/Graphics/State/RendererStateInstance.h"
 
 namespace bv {
 
@@ -49,8 +49,8 @@ class Renderer
 {
 private:
 
-    StateInstance       m_currentStateInstance;
-    StateInstance       m_defaultStateInstance;
+    RendererStateInstance       m_currentStateInstance;
+    RendererStateInstance       m_defaultStateInstance;
 
     int					m_Width;
     int					m_Height;
@@ -108,11 +108,11 @@ public:
 
 public:
 
-    void    SetStateInstance    ( const StateInstance & stateInstance );
+    void    SetStateInstance    ( const RendererStateInstance & stateInstance );
 
 public: //FIXME: private
 
-    void    Enable              ( RenderablePass * pass, TransformableEntity * transform );
+    void    Enable              ( RenderablePass * pass, RenderableEntity * renderable );
     void    Enable              ( const VertexBuffer * vb );
     void    Enable              ( const IndexBuffer * ib );
     void    Enable              ( const VertexArray * vao );

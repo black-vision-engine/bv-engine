@@ -12,7 +12,7 @@ public:
 
     virtual         ~IUpdater   () {}
 
-    virtual void    DoUpdate    ( TimeType t ) = 0;
+    virtual void    DoUpdate    () = 0;
 
 };
 

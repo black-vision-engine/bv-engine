@@ -3,7 +3,7 @@
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/ShaderChannel.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
-#include "Engine/Models/Plugins/Parameters/TypedValues.h"
+#include "Engine/Types/Values/TypedValues.h"
 
 
 namespace bv{ namespace model {
@@ -16,7 +16,7 @@ public:
 
 };
 
-class ExtrudeGeometryShaderChannel : public model::ShaderChannel< IGeometryShaderChannel, ExtrudeGeometryShaderChannelPD >
+class ExtrudeGeometryShaderChannel : public ShaderChannel< IGeometryShaderChannel >
 {
 private:
 

@@ -12,7 +12,7 @@ namespace bv { namespace model {
 ////////////////////////////
 //
 TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
-    : BasePlugin( nullptr )
+    : BasePlugin( "dupa", "dupa", nullptr, nullptr )
     , m_timeParam( timeParam )
     , m_fontResource()
     , m_currentAtlas()
@@ -138,7 +138,7 @@ const IVertexAttributesChannel *    TimerPlugin::GetVertexAttributesChannel     
 
 ////////////////////////////
 //
-Textures                            TimerPlugin::GetTextures                 () const
+TextureInfoVec                      TimerPlugin::GetTextures                 () const
 {
     return m_textures;
 }

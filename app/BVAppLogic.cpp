@@ -20,6 +20,9 @@
 #include "System/HRTimer.h"
 #include "BVConfig.h"
 
+#include "DefaultPlugins.h"
+
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 
@@ -60,6 +63,7 @@ BVAppLogic::BVAppLogic              ()
     : m_startTime( 0 )
     , m_modelScene( nullptr )
     , m_mockSceneEng( nullptr )
+    , m_pluginsManager( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
 
@@ -89,6 +93,9 @@ void BVAppLogic::Initialize         ()
 {
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
+
+    model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
+    m_pluginsManager = static_cast< const model::PluginsManager * >( &model::PluginsManager::DefaultInstance() );
 }
 
 // *********************************
@@ -96,26 +103,14 @@ void BVAppLogic::Initialize         ()
 void BVAppLogic::LoadScene          ( void )
 {
 
-    //model::BasicNode * root = TestScenesFactory::SimpleMultiCCScene();
-    //model::BasicNode * root = TestScenesFactory::AnotherTestScene(); 
-    //model::BasicNode * root = TestScenesFactory::XMLTestScene();
-    //model::BasicNode * root = TestScenesFactory::TestSceneVariableTopology();
-    //model::BasicNode * root = TestScenesFactory::AnimatedTestScene();
+    model::BasicNode * root = TestScenesFactory::NewModelTestScene( m_pluginsManager );
+    assert( root );
 
+    m_mockSceneEng  = root->BuildScene();
+    assert( m_mockSceneEng );
 
-    //model::BasicNode * rodos = TestScenesFactory::GreenRectTestScene();
-    //model::BasicNode * root0 = TestScenesFactory::SequenceAnimationTestScene();
-    //model::BasicNode * root1 = TestScenesFactory::NonGeometryParent();
-    //model::BasicNode * root3 = TestScenesFactory::AnimatedTestScene();
-    //model::BasicNode * rootu = TestScenesFactory::StackThemNow( root0, root1 );
-    //model::BasicNode * roota = TestScenesFactory::StackThemNow( root3, rootu );
-    //model::BasicNode * root  = TestScenesFactory::StackThemNow( roota, rodos );
-    //model::BasicNode * root = TestScenesFactory::TexturedRectTestScene();
-    //model::BasicNode * root = TestScenesFactory::NaiveTimerTestScene();
-
-    model::BasicNode * root = TestScenesFactory::NewModelTestScene(); 
-    m_modelScene = model::ModelScene::Create( root, new Camera(), "BasicScene" );
-    m_mockSceneEng = m_modelScene->GetSceneRoot()->BuildScene();    
+    m_modelScene    = model::ModelScene::Create( root, new Camera(), "BasicScene" );
+    assert( m_modelScene );    
 }
 
 // *********************************
@@ -170,7 +165,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
             {
                 FRAME_STATS_SECTION( "Manager-u" );
                 HPROFILER_SECTION( "UpdatersManager::Get().UpdateStep" );
-                UpdatersManager::Get().UpdateStep( t );
+                UpdatersManager::Get().UpdateStep();
             }
             {
                 FRAME_STATS_SECTION( "EngScn-u" );
@@ -180,8 +175,8 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
 
                 //FIXME:
                 std::vector< bv::Transform > vec;
-                vec.push_back(Transform(viewMat, glm::inverse(viewMat)));
-                m_mockSceneEng->Update( t, vec );
+                vec.push_back( Transform( viewMat, glm::inverse( viewMat ) ) );
+                m_mockSceneEng->Update( vec );
             }
         }
         {

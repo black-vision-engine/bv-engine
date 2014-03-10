@@ -24,21 +24,21 @@ std::string TexturePixelShaderChannelPD::borderColorsParamName[ MAX_NUM_TEXTURES
 //
 void TexturePixelShaderChannel::Update( TimeType t )
 {
-    ShaderChannel::Update( t );
+    //ShaderChannel::Update( t );
 
-    assert( m_alphaParams.size() == m_alphaValues.size() );
+    //assert( m_alphaParams.size() == m_alphaValues.size() );
 
-    assert( m_texTransformParams.NumTransforms() == m_texTransformValues.size() );
+    //assert( m_texTransformParams.NumTransforms() == m_texTransformValues.size() );
 
-    for( unsigned int i = 0; i < m_alphaParams.size(); ++i )
-    {
-        m_alphaValues[ i ]->SetValue( m_alphaParams[ i ].Evaluate( t ) );
-    }
+    //for( unsigned int i = 0; i < m_alphaParams.size(); ++i )
+    //{
+    //    m_alphaValues[ i ]->SetValue( m_alphaParams[ i ].Evaluate( t ) );
+    //}
 
-    for( unsigned int i = 0; i < m_texTransformParams.NumTransforms(); ++i )
-    {
-        m_texTransformValues[ i ]->SetValue( m_texTransformParams.Evaluate( i , t ) );
-    }
+    //for( unsigned int i = 0; i < m_texTransformParams.NumTransforms(); ++i )
+    //{
+    //    m_texTransformValues[ i ]->SetValue( m_texTransformParams.Evaluate( i , t ) );
+    //}
 }
 
 // ******************************
@@ -47,33 +47,33 @@ TexturePixelShaderChannel::TexturePixelShaderChannel( const std::string & shader
                                                     , const std::vector< ParamFloat > & alphas
                                                     , const ParamTransformVec & texTransforms
                                                     , const std::vector< ParamVec4 > & borderColors )
-    : PixelShaderChannelBase( shaderFile )
+    : DefaultPixelShaderChannel( shaderFile, nullptr )
     , m_texTransformParams( texTransforms )
 {
-    assert( alphas.size() <= MAX_NUM_TEXTURES );
-    assert( texTransforms.NumTransforms() <= MAX_NUM_TEXTURES );
-
-    m_alphaParams = alphas;
-    for( unsigned int i = 0; i < alphas.size(); ++i )
-    {    
-        m_alphaValues.push_back( ValueFloatPtr( new ValueFloat( ParamDesc::alphaParamName[ i ] ) ) );
-        RegisterValue( m_alphaValues[ i ].get() );
-    }
-
-
-    m_texTransformParams = texTransforms;
-    for( unsigned int i = 0; i < texTransforms.NumTransforms(); ++i )
-    {
-        m_texTransformValues.push_back( ValueMat4Ptr( new ValueMat4( ParamDesc::txMatrixParamName[ i ] ) ) );
-        RegisterValue( m_texTransformValues[ i ].get() );
-    }
-
-    m_borderColorParams = borderColors;
-    for( unsigned int i = 0; i < borderColors.size(); ++i )
-    {
-        m_borderColorValues.push_back( ValueVec4Ptr( new ValueVec4( ParamDesc::borderColorsParamName[ i ] ) ) );
-        RegisterValue( m_borderColorValues[ i ].get() );
-    }
+//    assert( alphas.size() <= MAX_NUM_TEXTURES );
+//    assert( texTransforms.NumTransforms() <= MAX_NUM_TEXTURES );
+//
+//    m_alphaParams = alphas;
+//    for( unsigned int i = 0; i < alphas.size(); ++i )
+//    {    
+//        m_alphaValues.push_back( ValueFloatPtr( ValuesFactory::CreateValueFloat( ParamDesc::alphaParamName[ i ] ) ) );
+//        RegisterValue( m_alphaValues[ i ].get() );
+//    }
+//
+//
+//    m_texTransformParams = texTransforms;
+//    for( unsigned int i = 0; i < texTransforms.NumTransforms(); ++i )
+//    {
+//        m_texTransformValues.push_back( ValueMat4Ptr( ValuesFactory::CreateValueMat4( ParamDesc::txMatrixParamName[ i ] ) ) );
+//        RegisterValue( m_texTransformValues[ i ].get() );
+//    }
+//
+//    m_borderColorParams = borderColors;
+//    for( unsigned int i = 0; i < borderColors.size(); ++i )
+//    {
+//        m_borderColorValues.push_back( ValueVec4Ptr( ValuesFactory::CreateValueVec4( ParamDesc::borderColorsParamName[ i ] ) ) );
+//        RegisterValue( m_borderColorValues[ i ].get() );
+//    }
 }
 
 // ******************************

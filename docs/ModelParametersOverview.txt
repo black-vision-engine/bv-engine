@@ -1,42 +1,42 @@
-Wszystkie parametry dziedzicz¹ po BaseParameter, który odpowiada za dodawanie referencji do tajmlajnów o raz nazwê
+Wszystkie parametry dziedziczÄ… po BaseParameter, ktÃ³ry odpowiada za dodawanie referencji do tajmlajnÃ³w o raz nazwÄ™
 
-    ParamTransform  - parametr owrapowuj¹cy CompositeTransform (takie ze skal¹, rotacj¹ i translacj¹, ale nie SQT tylko dowolnie i chuj)
-    ParamMat2       - parametr owrapowuj¹cy Vec4Interpolator interpretowany jako macierz 2x2
-    ParamVec4       - parametr owrapowuj¹cy Vec4Interpolator
-    ParamVec3       - parametr owrapowuj¹cy Vec3Interpolator
-    ParamFloat      - parametr owrapowuj¹cy FloatInterpolator
+    ParamTransform  - parametr owrapowujÄ…cy CompositeTransform (takie ze skalÄ…, rotacjÄ… i translacjÄ…, ale nie SQT tylko dowolnie i chuj)
+    ParamMat2       - parametr owrapowujÄ…cy Vec4Interpolator interpretowany jako macierz 2x2
+    ParamVec4       - parametr owrapowujÄ…cy Vec4Interpolator
+    ParamVec3       - parametr owrapowujÄ…cy Vec3Interpolator
+    ParamFloat      - parametr owrapowujÄ…cy FloatInterpolator
     
-Gdzie s¹ przechowywane modele:
+Gdzie sÄ… przechowywane modele:
 
     PixelShaderChannel      - wektor paramtransform - do tekstur oraz dowolne inne (np. float)
     SimpleTransformChannel  - wektor paramtransform - transformacje w przestrzeni modelu
-    Plugin                  - dowolne, które jakoœ steruj¹ stanem
+    Plugin                  - dowolne, ktÃ³re jakoÅ› sterujÄ… stanem
     TextureInfo             - alfa, border color, param transform (transformacja dla tej tekstury)
     
 Modele - rodzaje:
 
-    SimpleTransformChannel  - wektor paramtransformów
-    PixelShaderChannel      - wektor paramtransformów jako macierze tekstury oraz dodatkowe dowolne inne steruj¹ce (uniformy)
+    SimpleTransformChannel  - wektor paramtransformÃ³w
+    PixelShaderChannel      - wektor paramtransformÃ³w jako macierze tekstury oraz dodatkowe dowolne inne sterujÄ…ce (uniformy)
     
     
-Na stan modelu sk³adaj¹ siê:
+Na stan modelu skÅ‚adajÄ… siÄ™:
   Parametry - interpolowane
-  Vaulesy - wyniki ewaluacji parametrów
-  Stany struktur poœrednich (np vertexattributesarray, która ma StateChanged).
+  Vaulesy - wyniki ewaluacji parametrÃ³w
+  Stany struktur poÅ›rednich (np vertexattributesarray, ktÃ³ra ma StateChanged).
   
-Plugin powinien sam byæ w stanie utworzyæ swoje wszystkie kana³y na bazie poprzedniego pluginu.
+Plugin powinien sam byÄ‡ w stanie utworzyÄ‡ swoje wszystkie kanaÅ‚y na bazie poprzedniego pluginu.
 
 SimpleAnimationPlugin
 
-ShaderChannel - przechowuje swój stan dynamiczny (wartoœci) oraz statyczny (parametry i ich typy) oraz na podstawie 
-tego stanu statycznego powinien byæ w stanie wygenerowaæ kod shadera na dan¹ architekturê (u nas OpenGL) - w tym momencie to
-siê sprowadza do wczytania kodu shadera z pliku.
+ShaderChannel - przechowuje swÃ³j stan dynamiczny (wartoÅ›ci) oraz statyczny (parametry i ich typy) oraz na podstawie 
+tego stanu statycznego powinien byÄ‡ w stanie wygenerowaÄ‡ kod shadera na danÄ… architekturÄ™ (u nas OpenGL) - w tym momencie to
+siÄ™ sprowadza do wczytania kodu shadera z pliku.
 
-Kana³y transformacji:
+KanaÅ‚y transformacji:
     TransformChannel:
-        Ma w sobie mo¿liwoœæ zwrócenia wektora transformacji
+        Ma w sobie moÅ¼liwoÅ›Ä‡ zwrÃ³cenia wektora transformacji
     SimpleTransformChannel:
-        dodatkowo ma w sobie model z parametrem opisuj¹cym transformacjê po stronie modelu (teraz ta gówniana, docelowo SQT)
+        dodatkowo ma w sobie model z parametrem opisujÄ…cym transformacjÄ™ po stronie modelu (teraz ta gÃ³wniana, docelowo SQT)
 
 ShaderChannels:
     VertexShaderChannel
@@ -44,34 +44,34 @@ ShaderChannels:
     PixelShaderChannel
         SolidColorPixelShaderChannel - ma tylko parametr z kolorem (vec4)
         TextPixelShaderChannel - ma tylko parametrz kolorem (vec4)
-        TexturePixelShaderChannel - ma w sobie listy parmetrów (alfy, transformacje, border kolory)
+        TexturePixelShaderChannel - ma w sobie listy parmetrÃ³w (alfy, transformacje, border kolory)
     GeometryShaderChannel
-        ExtrudeGemoetryShaderChannel - ma w sobie tylko parametr ze skal¹
+        ExtrudeGemoetryShaderChannel - ma w sobie tylko parametr ze skalÄ…
 
 VertexAtrributeChannels:
-    Tutaj trzeba przemyœleæ dok³adnie strukturê i minimalne API, które powinno byæ zaimplementowane po stronie takiego kana³u
-    To jest jedyny kana³, który dostarcza dane w postaci du¿ych chunków pamiêci - pozosta³e kana³y dostarczaj¹ tylko i wy³¹cznie
-    uniformy (parametry po stronie modelu), które s¹ potem interpretowane przez shadery (i ewentualnie na ich podstawie kana³y coœ
-    tam sobie potrafi¹ zbudowaæ)
+    Tutaj trzeba przemyÅ›leÄ‡ dokÅ‚adnie strukturÄ™ i minimalne API, ktÃ³re powinno byÄ‡ zaimplementowane po stronie takiego kanaÅ‚u
+    To jest jedyny kanaÅ‚, ktÃ³ry dostarcza dane w postaci duÅ¼ych chunkÃ³w pamiÄ™ci - pozostaÅ‚e kanaÅ‚y dostarczajÄ… tylko i wyÅ‚Ä…cznie
+    uniformy (parametry po stronie modelu), ktÃ³re sÄ… potem interpretowane przez shadery (i ewentualnie na ich podstawie kanaÅ‚y coÅ›
+    tam sobie potrafiÄ… zbudowaÄ‡)
     
-No to wracaj¹c do logiki i modeli (parametry w pluginach):
-    Po pierwsze pluginy nie powinny pobieraæ w konstruktorach ¿adnych parametrów !!! Pluginy mog¹ zwracaæ parametry, które udostêpniaj¹
-    ale podawanie tych parametrów przez konstruktor to jest przepomyUka - i tak byæ nie powinny w ¿yciu i nigdy.
+No to wracajÄ…c do logiki i modeli (parametry w pluginach):
+    Po pierwsze pluginy nie powinny pobieraÄ‡ w konstruktorach Å¼adnych parametrÃ³w !!! Pluginy mogÄ… zwracaÄ‡ parametry, ktÃ³re udostÄ™pniajÄ…
+    ale podawanie tych parametrÃ³w przez konstruktor to jest przepomyUka - i tak byÄ‡ nie powinny w Å¼yciu i nigdy.
     
-Jak¹ logikê maj¹ w sobie kana³y tak naprawdê:
-    TransformChannel - przelatuje listê transfor paramów i robi SetMatrix( Evaluate( kana³, czas ) ) - nie ró¿ni siê niczym od mat4 value
-        Oraz dodatkowo na zewaluowanym stanie robi konkatenacjê z ewentualnym stanem z poprzedniego pluginu
-    TexturePixelShaderChannel - SetValue( Evaluate( ... ) ) na alfach i macierzech (valiusem jest mat4val) - czyli nic dupourywaj¹cego
+JakÄ… logikÄ™ majÄ… w sobie kanaÅ‚y tak naprawdÄ™:
+    TransformChannel - przelatuje listÄ™ transfor paramÃ³w i robi SetMatrix( Evaluate( kanaÅ‚, czas ) ) - nie rÃ³Å¼ni siÄ™ niczym od mat4 value
+        Oraz dodatkowo na zewaluowanym stanie robi konkatenacjÄ™ z ewentualnym stanem z poprzedniego pluginu
+    TexturePixelShaderChannel - SetValue( Evaluate( ... ) ) na alfach i macierzech (valiusem jest mat4val) - czyli nic dupourywajÄ…cego
     SolidColorPixelShaderChannel - SetValue( Evaluate( ... ) ) na kolorze
     ExtrudeGeometryChannel - SetValue( WEvaluate( ... ) ) na skali
-    VertexAttributesChannel - ¿adnej, tylko rutuje Update do konekted komponentu - czyli nic tu siê nie dzieje, bo ten kana³ i tak jest
+    VertexAttributesChannel - Å¼adnej, tylko rutuje Update do konekted komponentu - czyli nic tu siÄ™ nie dzieje, bo ten kanaÅ‚ i tak jest
                               budowany od zera przez plugin w jego apdejcie lub apdejcie CC - i chuj
     VertexAttributesChannelAnimatedVertices - odpala update CC
-    ConnectedComponent - nie ma ¿adnej logiki w apdejcie
-    AnimatedStripComponent - animuje poszczególne vertexy
+    ConnectedComponent - nie ma Å¼adnej logiki w apdejcie
+    AnimatedStripComponent - animuje poszczegÃ³lne vertexy
     RectComponent - nic nie ma
     RingComponent - nic nie ma
-    VariableTopologyStripComponent - Dodaje kolejne wertexy do geometrii - nic szczzególnego, ale taki apdejt
+    VariableTopologyStripComponent - Dodaje kolejne wertexy do geometrii - nic szczzegÃ³lnego, ale taki apdejt
     
    
                               

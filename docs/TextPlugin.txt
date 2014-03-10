@@ -1,11 +1,11 @@
 SimpleTextPlugin
 
-Plugin implementujπcy interaktywny tekst.
+Plugin implementujƒÖcy interaktywny tekst.
 
-Przep≥yw inicjalizacji:
-# WybÛr czcionki i wielkoúci oraz napisu.
-# (SimpleTextPlugin::LoadFont) Wczytanie z pliku z definicjπ czcionki atlatsÛw dla zwyk≥ego fonta, pogrubionego, kursywy itd..
-    # Na podstawie wielkoúci i pliku z definiciπ czcionki generowany jest atlasy (zwyk≥y oraz B I U) wszystkich wspieranych znakÛw zapisanych w pliku SupportedChars.txt
-# (SimpleTextPlugin::LoadAtlas) Na podstawie wczytanej wczeúniej czcionki rejestrowana jest textura w pluginie Text.
-# Na podtawie zawartoúci tekstu jaki ma byc wyúwietlony budowany jest kana≥ VertexAttributeChannel.
+Przep≈Çyw inicjalizacji:
+# Wyb√≥r czcionki i wielko≈õci oraz napisu.
+# (SimpleTextPlugin::LoadFont) Wczytanie z pliku z definicjƒÖ czcionki atlats√≥w dla zwyk≈Çego fonta, pogrubionego, kursywy itd..
+    # Na podstawie wielko≈õci i pliku z definiciƒÖ czcionki generowany jest atlasy (zwyk≈Çy oraz B I U) wszystkich wspieranych znak√≥w zapisanych w pliku SupportedChars.txt
+# (SimpleTextPlugin::LoadAtlas) Na podstawie wczytanej wcze≈õniej czcionki rejestrowana jest textura w pluginie Text.
+# Na podtawie zawarto≈õci tekstu jaki ma byc wy≈õwietlony budowany jest kana≈Ç VertexAttributeChannel.
 

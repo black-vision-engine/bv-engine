@@ -1,4 +1,6 @@
-#include "Engine/Graphics/State/StateEnums.h"
+#pragma once
+
+#include "Engine/Graphics/State/RendererStateEnums.h"
 
 
 namespace bv {

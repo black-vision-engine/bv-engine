@@ -30,7 +30,7 @@ SimpleTextPlugin* SimpleTextPlugin::Create( const std::wstring& text, const std:
 // *********************************
 //
 SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bold, bool italic )
-    : BasePlugin( nullptr )
+    : BasePlugin( "dupa", "dupa", nullptr, nullptr )
     , m_text( text )
     , m_bolded( bold )
     , m_italic( italic )
@@ -105,14 +105,17 @@ void                SimpleTextPlugin::Print                       ( std::ostream
 
 // *************************************
 //
-Textures            SimpleTextPlugin::GetTextures                 () const
+TextureInfoVec      SimpleTextPlugin::GetTextures                 () const
 {
-    std::vector< TextureInfo* > prevTextures;
+    std::vector< TextureInfo * > prevTextures;
+
     if( m_prevPlugin )
     {
         prevTextures = m_prevPlugin->GetTextures();
     }
+
     prevTextures.insert( prevTextures.end(), m_textures.begin(), m_textures.end() );
+
     return prevTextures;
 }
 

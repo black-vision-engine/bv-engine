@@ -1,12 +1,12 @@
 #include "TextureVertexShaderChannel.h"
 
 
-namespace bv{ namespace model {
+namespace bv { namespace model {
 
 // ******************************
 //
-TextureVertexShaderChannel::TextureVertexShaderChannel( const std::string& shaderFile )
-    : ShaderChannel( shaderFile )
+TextureVertexShaderChannel::TextureVertexShaderChannel( const std::string & shaderSource )
+    : ShaderChannel( shaderSource, nullptr )
 {
 }
 

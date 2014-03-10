@@ -17,16 +17,25 @@ private:
 
     TRenderablePassVector   m_passes;
 
+protected:
+
+                            RenderableEffect    ();
 public:
 
-                        RenderableEffect    ();
-                        ~RenderableEffect   ();
+                            ~RenderableEffect   ();
 
-    int                 NumPasses           () const;
+    inline unsigned int     NumPasses           () const;
 
-    void                AddPass             ( RenderablePass * pass );
-    RenderablePass *    GetPass             ( int index );
+protected:
+
+    void                    AddPass             ( RenderablePass * pass );
+
+public:
+
+    inline RenderablePass * GetPass             ( unsigned int index );
 
 };
 
-}
+} //bv
+
+#include "RenderableEffect.inl"

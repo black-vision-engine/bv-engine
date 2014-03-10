@@ -14,7 +14,7 @@ class ChannelsFactory
 {
 public:
 
-    static VertexAttributesChannel *            CreateVertexAttributesChannel       ( ConnectedComponent * connComp );
+    static VertexAttributesChannel *            CreateVertexAttributesChannel       ( ConnectedComponent * connComp, bool isTimeInvariant );
     static TransformChannel *                   CreateTransformChannel              ( const ParamTransformVec & transformVec );
     static IGeometryShaderChannel *             CreateGeometryShaderExtrude         ( float scale );
 

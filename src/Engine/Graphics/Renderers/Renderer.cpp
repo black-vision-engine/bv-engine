@@ -71,7 +71,7 @@ void	Renderer::SetCamera         (Camera* cam)
 
 // *********************************
 //FIXME: most probably state can be stored in RenderData only (no currentStateInstance is required) - but let it be that way for the moment
-void    Renderer::SetStateInstance    ( const StateInstance & stateInstance )
+void    Renderer::SetStateInstance    ( const RendererStateInstance & stateInstance )
 {
     m_currentStateInstance.SetStateIgnoreEmptyEntries( stateInstance );
     
@@ -237,9 +237,9 @@ int     Renderer::GetHeight           () const
 
 // *********************************
 //
-void    Renderer::Enable              ( RenderablePass * pass, TransformableEntity * transformable )
+void    Renderer::Enable              ( RenderablePass * pass, RenderableEntity * renderable )
 {
-    auto it = m_PdrShaderMap.find(pass);
+    auto it = m_PdrShaderMap.find( pass );
 
     PdrShader * shader = nullptr;
 
@@ -253,31 +253,10 @@ void    Renderer::Enable              ( RenderablePass * pass, TransformableEnti
         shader = it->second;
     }
 
-    pass->Update();
+    pass->Update( renderable, m_Camera );
 
     assert( pass->GetStateInstance() );
     SetStateInstance( *pass->GetStateInstance() );
-
-    auto projMat = glm::mat4(1.f);
-
-    if( m_Camera )
-    {
-        projMat = m_Camera->GetProjectionMatrix();
-    }
-
-    //FIXME: add proper loop here
-    auto worldTrans = transformable->WorldTransforms()[0].Matrix(); //FIXME: instancing to be added here
-    auto mvp        = projMat * worldTrans;
-    pass->GetVertexShader()->UpdateMVP( mvp );
-    pass->GetVertexShader()->UpdateMV( worldTrans );
-    pass->GetVertexShader()->UpdateP( projMat );
-
-    if(auto gs = pass->GetGeometryShader())
-    {
-        gs->UpdateMVP( mvp );
-        gs->UpdateMV( worldTrans );
-        gs->UpdateP( projMat );
-    }
 
     shader->Enable( this );
 }

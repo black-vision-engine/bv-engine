@@ -11,7 +11,7 @@ namespace bv { namespace model {
 // *************************************
 //
 GeometryMultiRectPlugin::GeometryMultiRectPlugin                    ()
-    : BasePlugin( nullptr )
+    : BasePlugin( "dupa", "dupa", nullptr, nullptr )
     , m_vaChannel( nullptr )
 {
 }
@@ -55,7 +55,7 @@ void                        GeometryMultiRectPlugin::AddRectConnectedComponnent 
     model::RectComponent*   rect    = model::RectComponent::Create( w, h, tx, ty, tz );
     if( !m_vaChannel )
     {
-        m_vaChannel                   = ChannelsFactory::CreateVertexAttributesChannel( rect );
+        m_vaChannel                   = ChannelsFactory::CreateVertexAttributesChannel( rect, true );
     }
     else
     {

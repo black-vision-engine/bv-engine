@@ -2,9 +2,9 @@
 
 #include <windows.h> //FIXME: remove when this code is refactored
 
+#include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Events/Events.h"
 #include "FrameStatsService.h"
-
 #include "BVForwards.h"
 
 
@@ -27,14 +27,16 @@ class BVAppLogic
 {
 private:
 
-    BVAppState                  m_state;
+    BVAppState                      m_state;
 
-    FrameStatsCalculator        m_statsCalculator;
+    FrameStatsCalculator            m_statsCalculator;
 
-    model::ModelScene *         m_modelScene;
-    SceneNode *                 m_mockSceneEng;
+    const model::PluginsManager *   m_pluginsManager;
 
-    unsigned long               m_startTime;
+    model::ModelScene *             m_modelScene;
+    SceneNode *                     m_mockSceneEng;
+
+    unsigned long                   m_startTime;
 
 public:
 

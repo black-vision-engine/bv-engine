@@ -42,7 +42,7 @@ RendererData::RenderState::~RenderState         ()
 
 // *********************************
 //
-void RendererData::RenderState::Initialize         ( const StateInstance & inst )
+void RendererData::RenderState::Initialize         ( const RendererStateInstance & inst )
 {
     m_curState.SetStateIgnoreEmptyEntries( inst );
 
@@ -56,7 +56,7 @@ void RendererData::RenderState::Initialize         ( const StateInstance & inst 
 
 // *********************************
 //
-void   RendererData::RenderState::UpdateState               ( const StateInstance & inst )
+void   RendererData::RenderState::UpdateState               ( const RendererStateInstance & inst )
 {
     m_curState.SetStateIgnoreEmptyEntries( inst );
 }

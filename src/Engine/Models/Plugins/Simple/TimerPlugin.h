@@ -23,14 +23,14 @@ public:
 };
 
 // ***************************** PLUGIN ********************************** 
-class TimerPlugin : public BasePlugin< IPlugin, TimerPluginUID >
+class TimerPlugin : public BasePlugin< IPlugin >
 {
     ParamFloat                  m_timeParam;
     std::wstring                m_currentTime;
 
     VertexAttributesChannelPtr  m_vertexAttributeChannel;
 
-    Textures                    m_textures;
+    TextureInfoVec              m_textures;
 
     const ResourceHandle*       m_fontResource;
     const TextAtlas*            m_currentAtlas;
@@ -52,7 +52,7 @@ public:
     void                                        SetTime                     ( const std::wstring& time );
 
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
-    virtual Textures                            GetTextures                 () const override;
+    virtual TextureInfoVec                      GetTextures                 () const override;
 
     virtual void                                Update                      ( TimeType t ) override;
     virtual void                                Print                       ( std::ostream & out, int tabs = 0 ) const;

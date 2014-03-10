@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/State/StateInstance.h"
+#include "Engine/Graphics/State/RendererStateInstance.h"
 
 namespace bv
 {
@@ -17,15 +17,15 @@ public:
     {
     public:
 
-        StateInstance   m_curState;
+        RendererStateInstance   m_curState;
 
     public:
 
                 RenderState				();
                 ~RenderState            ();
 
-        void    Initialize              ( const StateInstance & inst );
-        void    UpdateState             ( const StateInstance & inst );
+        void    Initialize              ( const RendererStateInstance & inst );
+        void    UpdateState             ( const RendererStateInstance & inst );
 
     private:
 

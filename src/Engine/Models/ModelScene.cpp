@@ -1,7 +1,6 @@
 #include "ModelScene.h"
 
 #include "Engine/Models/Updaters/UpdatersManager.h"
-#include "Engine/Models/Updaters/CameraUpdater.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/BasicNode.h"
 
@@ -35,15 +34,11 @@ void            ModelScene::Update( TimeType t )
 
 // *******************************
 //
-void            ModelScene::SetCamereParameters(const ParamVec3& pos, const ParamVec3& dir, const ParamVec3& up)
+void            ModelScene::SetCamereParameters( const ParamVec3 & pos, const ParamVec3 & dir, const ParamVec3 & up )
 {
     m_cameraDirection  = dir;
     m_cameraPosition   = pos;
     m_cameraUp         = up;
-
-    CameraUpdater * updater = CameraUpdater::Create(m_pCamera, m_cameraDirection, m_cameraPosition, m_cameraUp);
-
-    UpdatersManager::Get().RegisterUpdater( updater );
 }
 
 // *******************************

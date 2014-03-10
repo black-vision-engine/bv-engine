@@ -4,6 +4,8 @@
 #include "Engine/Graphics/Shaders/VertexShader.h"
 #include "Engine/Graphics/Shaders/GeometryShader.h"
 
+#include "Engine/Graphics/SceneGraph/Camera.h"
+
 
 namespace bv
 {
@@ -13,11 +15,11 @@ namespace bv
 // *********************************
 //
 RenderablePass::RenderablePass( PixelShader * ps, VertexShader * vs, GeometryShader * gs )
-    : m_geometryShader(gs)
-    , m_vertexShader(vs)
-    , m_pixelShader(ps)
+    : m_geometryShader( gs )
+    , m_vertexShader( vs )
+    , m_pixelShader( ps )
 {
-    m_stateInstance = new StateInstance();
+    m_stateInstance = new RendererStateInstance();
 }
 
 // *********************************
@@ -52,23 +54,24 @@ GeometryShader *    RenderablePass::GetGeometryShader      ()
 
 // *********************************
 //
-StateInstance *     RenderablePass::GetStateInstance        ()
+RendererStateInstance *     RenderablePass::GetStateInstance        ()
 {
     return m_stateInstance;
 }
 
 // *********************************
 //
-void                RenderablePass::Update                 ()
+void                RenderablePass::Update                 ( RenderableEntity * renderable, Camera * camera )
 {
-    if(m_pixelShader)
-        m_pixelShader->Update();
+    //PixelShader and VertexShader must allways be present, no if is necessary here
+    //if( m_pixelShader )
+    m_pixelShader->Update( renderable, camera );
 
-    if(m_vertexShader)
-        m_vertexShader->Update();
+    //if( m_vertexShader )
+    m_vertexShader->Update( renderable, camera );
 
-    if(m_geometryShader)
-        m_geometryShader->Update();
+    if( m_geometryShader )
+        m_geometryShader->Update( renderable, camera );
 }
 
 } // bv

@@ -2,14 +2,14 @@
 
 #include <memory>
 
+#include "Engine/Interfaces/IValueSet.h"
 #include "Engine/Models/Plugins/Interfaces/ITransformChannel.h"
-#include "Engine/Models/Plugins/Parameters/TypedValues.h"
+#include "Engine/Types/Values/TypedValues.h"
 
 
 namespace bv { namespace model
 {
 
-class IValueSet;
 class IPlugin;
 
 class DefaultTransformChannel : public ITransformChannel
@@ -27,7 +27,7 @@ private:
 
 public:
 
-    static  DefaultTransformChannel *   Create                  ( const IPlugin * prev, IValueSet * values, bool isReadOnly = false );
+    static  DefaultTransformChannel *   Create                  ( const IPlugin * prev, const ValueMat4PtrVec & values, bool isReadOnly = false );
 
     virtual const ValueMat4PtrVec &     GetTransformValues      ()  const override;
 

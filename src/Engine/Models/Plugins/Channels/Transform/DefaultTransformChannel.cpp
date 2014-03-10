@@ -1,7 +1,5 @@
 #include "DefaultTransformChannel.h"
 
-#include "Engine/Models/Plugins/Interfaces/IValue.h"
-#include "Engine/Models/Plugins/Interfaces/IValueSet.h"
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 
 
@@ -25,18 +23,9 @@ DefaultTransformChannel::DefaultTransformChannel( const IPlugin * prev, const Va
 
 // *********************************
 //
-DefaultTransformChannel *   DefaultTransformChannel::Create              ( const IPlugin * prev, IValueSet * values, bool isReadOnly )
+DefaultTransformChannel *   DefaultTransformChannel::Create              ( const IPlugin * prev, const ValueMat4PtrVec & values, bool isReadOnly )
 {
-    assert( values );
-
-    ValueMat4PtrVec typedVals;
-
-    for( auto val : values->GetValues() )
-    {
-        typedVals.push_back( QueryTypedValue< ValueMat4 >( val ) );
-    }
-
-    return new DefaultTransformChannel( prev, typedVals, isReadOnly );
+    return new DefaultTransformChannel( prev, values, isReadOnly );
 }
 
 // *********************************
@@ -65,10 +54,11 @@ void                        DefaultTransformChannel::PostUpdate          ()
             ValueMat4 & m   = *m_values[ i ];
             ValueMat4 & mp  = *(*m_prevValues)[ i ];
 
-            m.SetValue( m.GetValue()  * mp.GetValue() );
+            m.SetValue( mp.GetValue() * m.GetValue() ); //FIXME: be careful with multiplication order
         }
     }
 }
 
 } // model
 } // bv
+

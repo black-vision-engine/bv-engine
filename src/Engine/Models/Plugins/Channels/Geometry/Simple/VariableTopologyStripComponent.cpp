@@ -109,7 +109,7 @@ bool                                VariableTopologyStripComponent::IsActive    
 
 // *******************************
 //
-bool                VariableTopologyStripComponent::TopologyChanged             ( TimeType t ) const
+bool                VariableTopologyStripComponent::TopologyChanged             () const
 {
     bool retVal = m_topologyChanged;
     m_topologyChanged = false;

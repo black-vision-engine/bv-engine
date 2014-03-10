@@ -1,7 +1,16 @@
 #include "ParametersFactory.h"
+
 #include "Engine/Models/Timeline/Timeline.h"
 
+
 namespace bv { namespace model {
+
+// *******************************
+//
+ParamMat2                          ParametersFactory::CreateParameterMat2                 ( const std::string & name, const Vec4Interpolator & interpolator, const Timeline * timeline )
+{
+    return ParamMat2( name, interpolator, timeline );
+}
 
 // *******************************
 //

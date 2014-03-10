@@ -29,20 +29,23 @@ public:
 };
 
 // ***************************** PLUGIN **********************************
-class SimpleAnimationPlugin : public BasePlugin< ISequenceAnimationSourcePlugin, SimpleAnimationPluginUID >
+class SimpleAnimationPlugin : public BasePlugin< ISequenceAnimationSourcePlugin >
 {
 private:
 
     VertexAttributesChannel *       m_vaChannel;
     TexturePixelShaderChannel *     m_pixelShaderChannel;
     TextureVertexShaderChannel *    m_vertexShaderChannel;
-    Textures                        m_textures;
+    TextureInfoVec                  m_textures;
 
     TextureAttachmentMode           m_attachmentMode;
     unsigned int                    m_texCoordChannelIndex;
 
     unsigned int                    m_numFrames;
     ParamFloat                      m_frameCounter;
+
+    unsigned int                    m_curFrame;
+    unsigned int                    m_nextFrame;
 
 private:
 
@@ -57,14 +60,14 @@ public:
     void                                SetAttachmentMode           ( TextureAttachmentMode mode );
 
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel          () const override;                                                                           
+    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;                                                                           
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;                                       
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
-    virtual Textures                            GetTextures                 () const override;
+    virtual TextureInfoVec                      GetTextures                 () const override;
 
     // ISequenceAnimationSource
-    virtual unsigned int                CurrentFrame                ( TimeType t ) const;
-    virtual unsigned int                PredictedNextFrame          ( TimeType t ) const;
+    virtual unsigned int                CurrentFrame                () const;
+    virtual unsigned int                PredictedNextFrame          () const;
 
     virtual bool                        HasAnimatingTexture         () const;
     virtual ISequenceAnimationSource *  QuerySequenceAnimationSource();

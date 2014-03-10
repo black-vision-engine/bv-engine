@@ -3,9 +3,11 @@
 #include <vector>
 #include <string>
 
-#include "Engine/Models/Node.h"
+#include "Engine/Models/Interfaces/IModelNode.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
+#include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
+
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
@@ -22,50 +24,71 @@ class RenderableArrayDataArraysSingleVertexBuffer;
 
 namespace model {
 
+class PluginsManager;
 class IShaderChannel;
 class IConnectedComponent;
 class IVertexAttributesChannelDescriptor;
-
+    
 typedef std::vector< IModelNodePtr > TNodeVec;
 
-class BasicNode : public bv::IModelNode
+class BasicNode : public IModelNode
 {
 private:
 
-    const std::string           m_name;
+    const std::string               m_name;
 
-    bool                        m_visible;
+    const PluginsManager *          m_pluginsManager;
+    bool                            m_visible;
 
-    TNodeVec                    m_children;
-    TNodeVec                    m_layers;
+    TNodeVec                        m_children;
+    TNodeVec                        m_layers;
 
-    std::vector< IPluginPtr >   m_plugins;
+    DefaultPluginListFinalizedPtr   m_pluginList;
 
 public:
 
-    explicit BasicNode( const std::string & name );
-    virtual ~BasicNode()
-    {
-    }
+    explicit BasicNode( const std::string & name, const PluginsManager * pluginsManager = nullptr );
+    virtual ~BasicNode();
 
-    virtual SceneNode *                 BuildScene              ();
+    virtual const IPlugin *                 GetPlugin               ( const std::string & name ) const;
+    virtual const IModelNode *              GetChild                ( const std::string & name ) const;
+    virtual const IModelNode *              GetLayer                ( const std::string & name ) const;
 
-    void                                AddChild                ( IModelNode * n );
-    void                                AddLayer                ( IModelNode * n );
-    void                                AddPlugin               ( IPlugin * plugin );
+    virtual const IPluginListFinalized *    GetPluginList           () const;
 
-    virtual void                        Print                   ( std::ostream & out, int tabs = 0 ) const;
-    virtual void                        Update                  ( TimeType t );
+    virtual const std::string &             GetName                 () const;
 
-    virtual bool                        IsVisible               ( TimeType t ) const;
-    void                                SetVisible              ( bool visible );
+    virtual SceneNode *                     BuildScene              ();
 
-    virtual const std::string &         GetName                 () const;
+    void                                    AddChild                ( IModelNode * n );
+    void                                    AddLayer                ( IModelNode * n );
+
+    //Convenience API (so that list can be created from external source and simply attached to this node)
+    void                                    SetPlugins              ( DefaultPluginListFinalizedPtr plugins );
 
 private:
 
-    PrimitiveType                       GetRenderableType       ()                                  const;
-    bool                                CreateRenderableData    ( /*VertexArray ** vao*/ )          const;
+    void                                    NonNullPluginsListGuard ();
+
+public:
+
+    //Utility API - plugins can be added on-the-fly by user using an editor
+    bool                                    AddPlugin               ( IPlugin * plugin );
+    bool                                    AddPlugin               ( IPluginPtr plugin );
+    bool                                    AddPlugin               ( const std::string & uid );
+    bool                                    AddPlugin               ( const std::string & uid, const std::string & name );
+    bool                                    AddPlugins              ( const std::vector< std::string > & uids );
+    bool                                    AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names );
+
+    virtual void                            Print                   ( std::ostream & out, int tabs = 0 ) const;
+    virtual void                            Update                  ( TimeType t );
+
+    virtual bool                            IsVisible               () const override;
+    void                                    SetVisible              ( bool visible );
+
+private:
+
+    bool                                    CreateRenderableData    ( /*VertexArray ** vao*/ )          const;
 
     //FIXME: scene building API should be moved to some more appropriate place
     RenderableArrayDataSingleVertexBuffer *         CreateRenderableArrayData           ( PrimitiveType type ) const; 
@@ -78,80 +101,7 @@ private:
     unsigned int                        TotalNumVertices                ( const std::vector< IConnectedComponent * > & ccVec) const;
     unsigned int                        TotalSize                       ( const std::vector< IConnectedComponent * > & ccVec, const IVertexAttributesChannelDescriptor * desc ) const;
 
-    RenderableEffect *                  CreateRenderaleEffectMockImplementationForCompleteDummies() const;
-
-    PixelShader *                       CreatePixelShader       ()                      const;
-    VertexShader *                      CreateVertexShader      ()                      const;   
-    GeometryShader *                    CreateGeometryShader    ()                      const;
-
-
-    // ********************************
-    //
-    template< typename ShaderType, typename ChannelType >
-    const ChannelType * GetShaderChannel  () const
-    {
-        return nullptr;
-    }
-
-    // ********************************
-    //
-    template<>
-    const IPixelShaderChannel *   GetShaderChannel< PixelShader, IPixelShaderChannel >    () const
-    {
-        if( !m_plugins.empty() )
-        {
-            return m_plugins.back()->GetPixelShaderChannel();
-        }
-
-        return nullptr;
-    }
-
-    // ********************************
-    //
-    template<>
-    const IVertexShaderChannel *   GetShaderChannel< VertexShader, IVertexShaderChannel >    () const
-    {
-        if( !m_plugins.empty() )
-        {
-            return m_plugins.back()->GetVertexShaderChannel();
-        }
-
-        return nullptr;
-    }
-
-    // ********************************
-    //
-    template<>
-    const IGeometryShaderChannel *   GetShaderChannel< GeometryShader, IGeometryShaderChannel >    () const
-    {
-        if( !m_plugins.empty() )
-        {
-            return m_plugins.back()->GetGeometryShaderChannel();
-        }
-
-        return nullptr;
-    }
-
-    // ********************************
-    //
-    template< typename ShaderType, typename ShaderChannel >
-    ShaderType *                        CreateShader            ()                      const
-    {
-        auto sCh = GetShaderChannel< ShaderType, ShaderChannel >();
-
-        if( sCh != nullptr )
-        {
-            ShaderType * s = new ShaderType( sCh->GetShaderSource() );
-
-            BasicNode::RegisterShaderParameters( sCh, s->GetOrCreateShaderParameters() );
-        
-            s->RegisterUpdater( ShaderParamUpdater::Create( sCh, s ) );
-
-            return s;
-        }
-
-        return nullptr;
-    }
+    RenderableEffect *                  CreateDefaultEffect             ( const IPlugin * finalizer ) const;
 
 public:
 

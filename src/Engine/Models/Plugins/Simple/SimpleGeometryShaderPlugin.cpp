@@ -11,13 +11,13 @@ class SimpleGeometryShaderChannel : public ShaderChannel< model::IGeometryShader
 public:
 
     explicit                        SimpleGeometryShaderChannel( const std::string & shaderFile )
-        : ShaderChannel( shaderFile )
+        : ShaderChannel( shaderFile, nullptr )
     {
     }
 
     virtual void                    Update( TimeType t )
     {
-        ShaderChannel::Update( t );
+        //ShaderChannel::Update( t );
     }
 
 };
@@ -25,7 +25,7 @@ public:
 // *********************************
 //
 SimpleGeometryShaderPlugin::SimpleGeometryShaderPlugin          ( const IPlugin * prev, const std::string & shaderPath )
-    : BasePlugin( prev )
+    : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_shaderPath( shaderPath )
 {
     m_gshaderChannel = new SimpleGeometryShaderChannel( shaderPath );

@@ -12,7 +12,7 @@ class TextureVertexShaderChannel : public ShaderChannel< IVertexShaderChannel >
 {
 public:
 
-    TextureVertexShaderChannel( const std::string & shaderFile );
+    TextureVertexShaderChannel( const std::string & shaderSource );
 
 };
 

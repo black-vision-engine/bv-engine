@@ -88,16 +88,16 @@ void    VertexAttributesChannelVariableTopology::Update                      ( T
 
 // ******************************
 //
-bool    VertexAttributesChannelVariableTopology::NeedsAttributesUpdate        ( TimeType t ) const
+bool    VertexAttributesChannelVariableTopology::NeedsAttributesUpdate        () const
 {
     return false;
 }
 
 // ******************************
 //
-bool    VertexAttributesChannelVariableTopology::NeedsTopologyUpdate         ( TimeType t ) const
+bool    VertexAttributesChannelVariableTopology::NeedsTopologyUpdate         () const
 {
-    return m_vtConnectedComponents[ m_curComponent ]->TopologyChanged( t );
+    return m_vtConnectedComponents[ m_curComponent ]->TopologyChanged();
 }
 
 // ******************************

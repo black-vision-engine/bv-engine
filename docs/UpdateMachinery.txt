@@ -2,26 +2,67 @@ Fazy updatowania:
 
 I. ModelScene::Update( t ) jak nazwa wskazuje tutaj jest aktualizowany stan modelu w danym czasie t
   BasicNode::Update( t ) - odpala Update( t ) na Layerach (IModelNode -> BasicNode), na dzieciach (IModelNode -> BasicNode) (rekursja)
-  oraz na Pluginach przechowywanych w tym w�le (w kolejno�ci layery, pluginy, dzieci)
-    IPlugin->Update( t ) - to ju� jest zale�ne od pluginu - updatuje sw�j stan, np.
-      - Odpala update na ka�dym z kana��w (nie ka�dy plugin ma wszystkie kana�y - mog� by� takie, kt�re prawie nic nie maj�)
+  oraz na Pluginach przechowywanych w tym węźle (w kolejności layery, pluginy, dzieci)
+    IPlugin->Update( t ) - to już jest zależne od pluginu - updatuje swój stan, np.
+      - Odpala update na każdym z kanałów (nie każdy plugin ma wszystkie kanały - mogą być takie, które prawie nic nie mają)
         - VertexAttributeChannel
-            - connected componenty (kana�y atrybut�w, np. uv, po�o�enia lokalne //FIXME: teraz CC ma swoj� metod� update, a to jest �le -> CC ma miec tylko
+            - connected componenty (kanały atrybutów, np. uv, położenia lokalne //FIXME: teraz CC ma swoją metodę update, a to jest źle -> CC ma miec tylko
         - TransformChannel
-            - pobiera transformParamsy i oblicza je dla czasu t i ustawia wyniki transformacjom (Values) -> do przerobienia na modl z SQT i ca�� reszt�
+            - pobiera transformParamsy i oblicza je dla czasu t i ustawia wyniki transformacjom (Values) -> do przerobienia na modl z SQT i całą resztą
         - ShaderChannel
-            - vertex shader channel - domy�lnie leci update z bazowej klasy (czyli pusty)
-            - pixel shader channel - apdejtuje swoje Values obliczaj�c model (czyli parameters), a potem z nadklasy - czyli nic
-              values s� z za�o�enia porejestrowane w nadklasie w li�cie values�w, wi�c w tej li�cie maj� ju� zaktualizowane warto�ci
+            - vertex shader channel - domyślnie leci update z bazowej klasy (czyli pusty)
+            - pixel shader channel - apdejtuje swoje Values obliczając model (czyli parameters), a potem z nadklasy - czyli nic
+              values są z założenia porejestrowane w nadklasie w liście valuesów, więc w tej liście mają już zaktualizowane wartości
       
       
-II. UpdatersManager::UpdateStep( t ) - pobiera list� updater�w i na ka�dym wykonuje update - to jest moment w kt�rym stan modelu (obliczony poprzednio) jest zapisywany do sceny po stronie silnika
-  TransformUpdater::DoUpdate( t ) - pobiera list� transformacji i oblicza local i world i przekazuje to TransformableEntity, kt�remu odpowiada
-    UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zb�dny)
-  GeometryUpdater - po pierwsze queruje model, a konkretnie kana� VertexAttributesChannel metodami NeedsTopologyUpdate oraz NeedsAttributesUpdate,
-  (kt�re maj� by� zmienione na AttributesStateChanged, TopologyStateChanged) i jesli trzeba, odpala UpdatePosition( t ) ewentualnie UpdateTopology( t )
-    UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zb�dny)
-  RenderStateUpdater - sprawdza w  model::RendererContext czy zmieni�y si� stany i je�li tak, to je aktualizuje po stronie silnika (StateInstance)
-    UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zb�dny)
-  
+II. UpdatersManager::UpdateStep( t ) - pobiera listę updaterów i na każdym wykonuje update - to jest moment w którym stan modelu (obliczony poprzednio) jest zapisywany do sceny po stronie silnika
+  TransformUpdater::DoUpdate( t ) - pobiera listę transformacji i oblicza local i world i przekazuje to TransformableEntity, któremu odpowiada
+    UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zbędny)
+  GeometryUpdater - po pierwsze queruje model, a konkretnie kanał VertexAttributesChannel metodami NeedsTopologyUpdate oraz NeedsAttributesUpdate,
+  (które mają być zmienione na AttributesStateChanged, TopologyStateChanged) i jesli trzeba, odpala UpdatePosition( t ) ewentualnie UpdateTopology( t )
+    UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zbędny)
+  RenderStateUpdater - sprawdza w  model::RendererContext czy zmieniły się stany i jeśli tak, to je aktualizuje po stronie silnika (StateInstance)
+    UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zbędny)
+  NodeUpdater  - Aktualizuje stan SceneNode na bazie IModelNodel czyli sprawdza IsVisible( t ) (które ma tylko flagę m_visible i jest
+    zupełnie od t niezależne.
+    UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zbędny)
+  ShaderParamUpdater - pobiera Values z IShaderChannel i ustawia je jako wartości Shaderowi po stronie silnika (uniform params)
+    UWAGA: TUTAJ NIE JEST POTRZEBNY CZAS (parametr t jest zbędny)
+  SequenceAnimationUpdater - pobiera aktualną klatkę dla danej animacji i sprawdza czy trzeba ją zmienić (tutaj akurat chwilowo t jes
+    potrzebne, ale pewnie jak się przemyśli te animacje, to przestanie być)
+  CameraUpdater - po jaki chuj to tu jest dodane to ja nie wiem
+
+Uwagi ogólne:
+  Jak widać do aktualizacji stanu noda po stronie silnika potrzebne są standardowo następujące updatery, które niejawnie odwołują się do
+  stanu plugina (finalize w danym nodzie):
+    - TransformUpdater - updatuje transformy w TransformableEntities (po stronie silnika) - potem już renderer w momencie enablowania passa
+      Renderer::Enable( RenderablePass* , TransformableEntity * ) pobiera sobie wszystkie te macierze i je ustawia w vertex shaderze
+      Czyli to się odbywa już po stronie silnika i nie korzysta z ShaderParamUpdatera, który odpowiada za wszystkie inne parametry, ale
+      ten jest tak podstawowy, że jest obliczany osobno (dzięki temu składanie przekształceń model-world może się odbywać też
+      po stronie silnika, a nie kombinowanie na siłę po stronie modelu, który zgodnie z nazwą powinien mieć tylko własne przekształcenia
+      w model space - i tak teraz jest - dopiero przekazanie danych (kamera, model) do silnika składa odpowiednio macierze mvp i
+      już można sobie wszystko ładnie renderować)
+    - GeometryUpdater (powinien nazywać się VertexAttributesChannelUpdater, ale i tak leci w kosmos, więc nie ma co zmieniać)
+      będzie trzeba do niego dopisać koniecznie klaski usługowe, które będą assemblowały VertexAttributesChannel. Dużo kodu powtarza
+      się w BasicNode, więc tym bardziej trzeba to ogarnąć
+    - ShaderParamUpdater - updatuje parametry shaderów na bazie inputów pobranych z różnych źródeł
+      pobiera z IShaderChannel jego valiusy i potem ustawia je jako wartości parametrów shadera po stronie silnika (po nazwach - nazwach parametrów channela,
+      które mapują sie na nazwy parametrów shadera silnikowego)
+      ShaderParamy są tworzone po nazwie za pomocą shader param factory (ShaderParamFactory) - w przypadku VS to są jawnie wpisane
+      stringi ("M", "MV", "MVP") i tam tworzone są od razu i valiusy i shader paramy z identycznymi nazwami i typami valiusów.
+      Przypadek parametru generycznego (tworzonego z poziomu shader channela): 
+        np. kolor w starej implementacji solid koloru
+
+Czyli TransformUpdater,GeometryUpdater,ShaderParamUpdater - te wszystkie mogą być bezpieczne updatowane mechanizmem
+    GenericUpdater( finalize_plugin -> TransformableEntity(querowane na RenderableEntity) )
+    ShaderParamUpdater zdecydowanie wymaga jeszcze przemyślenia i doprojektowania, bo na razie jest rejestrowany do środka shadera poprzez
+    register updater, a pewnie można by go było jakoś ogarnąć tak, żeby to był w stanie pobierać dane po prostu czytając z valiusów
+    samemu, jako dorosły shader, a nie poprzez jakiś dziwny, sztuczny dla niego updater). Do ogarnięcia i przemyślenia.
     
+    Do ogarnięcia zostaje NodeUpdater i RenderStateUpdater, które trzeba gdzieś dobrze i sensownie wpasować. CameraUpdater ssie
+    i należy go wywalić
+
+Obecne algo
+  Jeżeli jest efekt, to tworzony jest TransformUpdater, GeometryUpdater, RenderStateUpdater (od finalizer, renderable entity)
+  a jeśli nie, to tylko transformable (jeszcze jeśli geometria jest zmienna w czasie, to jest GeomUpdater rejestrowany, inaczej
+  nie jest).

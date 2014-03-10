@@ -27,7 +27,7 @@ public:
 
     inline  glm::mat4   Evaluate        ( TimeType t ) const;
 
-    virtual void *      QueryParamTyped ();
+    virtual void *      QueryParamTyped () override;
 
     const TransformF &  GetTransformF   () const
     {
@@ -65,7 +65,7 @@ public:
 
     inline  glm::mat4   Evaluate            ( unsigned int transformNum, TimeType t ) const;
 
-    virtual void *      QueryParamTyped     ();
+    virtual void *      QueryParamTyped     () override;
 
     static  ModelParamType  Type        ()
     {

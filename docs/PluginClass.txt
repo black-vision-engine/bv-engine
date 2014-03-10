@@ -1,21 +1,21 @@
 IUpdatable:
-	- interfejs po krórym dziedzicz¹ wszystkie klasy które przeci¹¿aj¹ metodê Update(TimeType t) w celu aktualizcji w danym czasie.
+	- interfejs po krÃ³rym dziedziczÄ… wszystkie klasy ktÃ³re przeciÄ…Å¼ajÄ… metodÄ™ Update(TimeType t) w celu aktualizcji w danym czasie.
 
 IPlugin : IUpdatable
-	- interfejs, który powinnu implementowaæ wszystkie pluginy w modelu.
+	- interfejs, ktÃ³ry powinnu implementowaÄ‡ wszystkie pluginy w modelu.
 	
-template< class Iface, class UIDType >			(IFace zawsze musi byæ typu IPlugin)
-class BasePlugin : public Iface					(UIDType typ odpowiadaj¹cy za nadanie statycznego UID pluginowi)
-	- klasa implemetuj¹ca czêœciowo domyœlne metody interfejsu IPlugin.
+template< class Iface, class UIDType >			(IFace zawsze musi byÄ‡ typu IPlugin)
+class BasePlugin : public Iface					(UIDType typ odpowiadajÄ…cy za nadanie statycznego UID pluginowi)
+	- klasa implemetujÄ…ca czÄ™Å›ciowo domyÅ›lne metody interfejsu IPlugin.
 	Uwagi:
-	Metody: GetTextures HasAnimatingTexture QuerySequenceAnimationSource powinny zostaæ zmienione bo teraz implemetuj¹ chwilowe rozwi¹zanie pozwalaj¹ce obs³ugiwaæ resource'y w poziomu pluginu. Zostanie to poprawione w momencie zaimplementowania poprawnego Resource managera.
+	Metody: GetTextures HasAnimatingTexture QuerySequenceAnimationSource powinny zostaÄ‡ zmienione bo teraz implemetujÄ… chwilowe rozwiÄ…zanie pozwalajÄ…ce obsÅ‚ugiwaÄ‡ resource'y w poziomu pluginu. Zostanie to poprawione w momencie zaimplementowania poprawnego Resource managera.
 	
 	Membery:
-		m_prevPlugin - poprzedni plugin w stosunku do akualnego w Nodzie. Pole to jest niezbêdne do poprawnego generowania geometrii i wielu innych rzeczy.
+		m_prevPlugin - poprzedni plugin w stosunku do akualnego w Nodzie. Pole to jest niezbÄ™dne do poprawnego generowania geometrii i wielu innych rzeczy.
 	
 	Metody:
 	wirtualne:
-		SetGeometryChannel          	- Metody do obs³ugi pobierania i ustawiania kana³ów z pluginie. Settery domyœlnie assertuj¹. Gettery próbuj¹ pobraæ kana³ z poprzedniego pluginu
+		SetGeometryChannel          	- Metody do obsÅ‚ugi pobierania i ustawiania kanaÅ‚Ã³w z pluginie. Settery domyÅ›lnie assertujÄ…. Gettery prÃ³bujÄ… pobraÄ‡ kanaÅ‚ z poprzedniego pluginu
 		SetTransformChannel         
 		SetPixelShaderChannel       
 		SetVertexShaderChannel      
@@ -25,72 +25,72 @@ class BasePlugin : public Iface					(UIDType typ odpowiadaj¹cy za nadanie statyc
 		GetPixelShaderChannel       
 		GetVertexShaderChannel      
 		GetGeometryShaderChannel
-		GetTextures             		- Metoda pobieraj¹ca textury. Domyœlnie zwraca pusty wektor.    
-        HasAnimatingTexture         	- Metody do obs³ugi animacji. Do przerobienia razem z GetTextures
+		GetTextures             		- Metoda pobierajÄ…ca textury. DomyÅ›lnie zwraca pusty wektor.    
+        HasAnimatingTexture         	- Metody do obsÅ‚ugi animacji. Do przerobienia razem z GetTextures
         QuerySequenceAnimationSource		
-		Update							- Tego nie trzeba t³umaczyæ. Assertuje jeœli nie zostanie przeci¹¿ony.
+		Update							- Tego nie trzeba tÅ‚umaczyÄ‡. Assertuje jeÅ›li nie zostanie przeciÄ…Å¼ony.
 		
 	niewirtualne:
-		GetName - zwraca nazwê pluginu przekazan¹ przez klasê UIDType
+		GetName - zwraca nazwÄ™ pluginu przekazanÄ… przez klasÄ™ UIDType
 	
 Opis:
-	BasePlugin jest klas¹ podstawow¹ ka¿dego pluginu. Posiada on domyœlne implementacje funckji do pobierania i ustawiania kana³ów w Pluginie. Ka¿du plugin posiada 5 kana³ów odpowiadaj¹cych za efakty które implemetuje.
-	S¹ to:
-	- 3 kana³y opisuj¹ce shadery: geometry, vertex i pixel(fragment) shader.
-	- kana³ transformacji
-	- kana³ geometrii (nie myliæ z "geometry shader channel")
+	BasePlugin jest klasÄ… podstawowÄ… kaÅ¼dego pluginu. Posiada on domyÅ›lne implementacje funckji do pobierania i ustawiania kanaÅ‚Ã³w w Pluginie. KaÅ¼du plugin posiada 5 kanaÅ‚Ã³w odpowiadajÄ…cych za efakty ktÃ³re implemetuje.
+	SÄ… to:
+	- 3 kanaÅ‚y opisujÄ…ce shadery: geometry, vertex i pixel(fragment) shader.
+	- kanaÅ‚ transformacji
+	- kanaÅ‚ geometrii (nie myliÄ‡ z "geometry shader channel")
 
-Kana³y shader'ów:
-Kana³y te nie ró¿ni¹ siê miedzy sob¹ znacznie implemetacj¹, a tylko ich u¿yciem przez silnik renderuj¹cy. Ich interfejsy wygl¹daj¹ podobnie. Wszyskie implemetuj¹ inteface IShaderChannel, który jest interfejsem
-maj¹cym za zadanie zwróciæ Ÿród³o odpowiedniego shadera oraz listê IValue, czyli wartoœci parametów przekazywanych do danego shadera.
+KanaÅ‚y shader'Ã³w:
+KanaÅ‚y te nie rÃ³Å¼niÄ… siÄ™ miedzy sobÄ… znacznie implemetacjÄ…, a tylko ich uÅ¼yciem przez silnik renderujÄ…cy. Ich interfejsy wyglÄ…dajÄ… podobnie. Wszyskie implemetujÄ… inteface IShaderChannel, ktÃ³ry jest interfejsem
+majÄ…cym za zadanie zwrÃ³ciÄ‡ ÅºrÃ³dÅ‚o odpowiedniego shadera oraz listÄ™ IValue, czyli wartoÅ›ci parametÃ³w przekazywanych do danego shadera.
 	IPixelShaderChannel:
-		- interfejs kana³u shadera pixela.
+		- interfejs kanaÅ‚u shadera pixela.
 	IVertexShaderChannel:
-		- interfejs kana³u shadera wierzcho³ka.
+		- interfejs kanaÅ‚u shadera wierzchoÅ‚ka.
 	IGeometryShaderChannel:
-		- interfejs kana³u shadera geometrii.
+		- interfejs kanaÅ‚u shadera geometrii.
 
-Kana³ geometrii:
-Kana³ ten to najbardziej skomplikowany kana³ w pluginie. Odpowiada on za zdefiniowania komponentów w scenie.
+KanaÅ‚ geometrii:
+KanaÅ‚ ten to najbardziej skomplikowany kanaÅ‚ w pluginie. Odpowiada on za zdefiniowania komponentÃ³w w scenie.
 	VertexAttributesChannel:
-		- Kana³ atrybutów wierzcho³ków.
-		- Zawiera wektor connected komponentów, czyli zbiorów wierzchoków reprezentuj¹cych kszta³ty w scenie.
-		- Zawiera deskryptor opisuj¹cy typy poszczególnych danych dla wierzcho³ków. (np. xyz, uv0, uv1, ....)
-		- Definiuje równie¿ typ prymitywu, czyli co tak naprawdê reprezentuj¹ podane wierzcho³ki.
-		- W trakcie renderowania jest mo¿liwoœæ dodawania wierzcho³ków i aktualizacji topoligii.
+		- KanaÅ‚ atrybutÃ³w wierzchoÅ‚kÃ³w.
+		- Zawiera wektor connected komponentÃ³w, czyli zbiorÃ³w wierzchokÃ³w reprezentujÄ…cych ksztaÅ‚ty w scenie.
+		- Zawiera deskryptor opisujÄ…cy typy poszczegÃ³lnych danych dla wierzchoÅ‚kÃ³w. (np. xyz, uv0, uv1, ....)
+		- Definiuje rÃ³wnieÅ¼ typ prymitywu, czyli co tak naprawdÄ™ reprezentujÄ… podane wierzchoÅ‚ki.
+		- W trakcie renderowania jest moÅ¼liwoÅ›Ä‡ dodawania wierzchoÅ‚kÃ³w i aktualizacji topoligii.
 		
-Kana³ transformacji:
+KanaÅ‚ transformacji:
 	TransformChannel:
-		- Kana³ transformacji. Przechowuje wector klas bv::model::Transform.
+		- KanaÅ‚ transformacji. Przechowuje wector klas bv::model::Transform.
 
 		
 		
 		
 		
-Sk³adniki kana³u VertexAttributesChannel
+SkÅ‚adniki kanaÅ‚u VertexAttributesChannel
 		
 ConnectedComponent
-	- klasa definiuj¹ca kszta³t w renderowanej scenie za pomoc¹ wierzcho³ków ( nie musi byæ to tylko po³o¿enie w przestrzeni ale na przyk³ad dopiête do ka¿dego z nich po³o¿enie w teksturze/teksturach ) Nazywamy je kana³ami wierzcho³ka.
-	- Ka¿dy kana³ w wierzchlku jest reprezentowany przez klasê ArributeChannel
+	- klasa definiujÄ…ca ksztaÅ‚t w renderowanej scenie za pomocÄ… wierzchoÅ‚kÃ³w ( nie musi byÄ‡ to tylko poÅ‚oÅ¼enie w przestrzeni ale na przykÅ‚ad dopiÄ™te do kaÅ¼dego z nich poÅ‚oÅ¼enie w teksturze/teksturach ) Nazywamy je kanaÅ‚ami wierzchoÅ‚ka.
+	- KaÅ¼dy kanaÅ‚ w wierzchlku jest reprezentowany przez klasÄ™ ArributeChannel
 	
 ArrtibuteChannel
-	- Klasa któr¹ implementuja wszystkie typy kana³ów wierzcho³ków takie jak Float3AttributeChannel
-	- Ka¿dy ArrtibuteChannel przechowuje wektor wartoœci danego atrybutu dla wszystkich wierzcho³ków CC. Dziêki temu pamieæ poszczególnych wierzcho³ków lezy obok siebie w cachu.
+	- Klasa ktÃ³rÄ… implementuja wszystkie typy kanaÅ‚Ã³w wierzchoÅ‚kÃ³w takie jak Float3AttributeChannel
+	- KaÅ¼dy ArrtibuteChannel przechowuje wektor wartoÅ›ci danego atrybutu dla wszystkich wierzchoÅ‚kÃ³w CC. DziÄ™ki temu pamieÄ‡ poszczegÃ³lnych wierzchoÅ‚kÃ³w lezy obok siebie w cachu.
 
 	
 
 	
-Implementacja kana³ów Shaderów.
+Implementacja kanaÅ‚Ã³w ShaderÃ³w.
 template< class IFace, class ParameterDescriptor = EmptyParamDescriptor >
 class ShaderChannel : public IFace
-	- klasa implementuj¹ca bazow¹ implementacjê kana³u dowolnego shadera.
-	- przechowuje kod shadera oraz zarejestrowane IValue. Bêdê one przekazane do shadera w runtime. 
-	- RegisterValue( IValue * v ) funckja rejestruj¹ca IValue w ShaderChannel.
+	- klasa implementujÄ…ca bazowÄ… implementacjÄ™ kanaÅ‚u dowolnego shadera.
+	- przechowuje kod shadera oraz zarejestrowane IValue. BÄ™dÄ™ one przekazane do shadera w runtime. 
+	- RegisterValue( IValue * v ) funckja rejestrujÄ…ca IValue w ShaderChannel.
 	- GetValueList pobieranie zarejetrowanych IValue z ShaderChannel
-	- Update nastêpuje poprzez odpowiednie przeci¹zenie fuckcji Update w klasie pochodnej. Domyœlna implemetacja jest pusta.
-	- Plugin przechowuje kana³y po swojej stronie lub pobiera je z poprzedniego pluginu w nodzie. Jeœli plugin przechowuje kana³ to przeci¹¿enie fukcji IPlugin::Update powinno wywo³ywaæ Update na przechowywanym kanale.
-	- ParameterDescriptor klasa przechowuj¹ca identyfikatory parametrów shadera w statycznych memberach typu std::string.
-	- SahderChannel w kontruktorze przyjmuje string ze œcie¿k¹ do pliku ze Ÿród³em shareda i wczytuje go. Kompilacja nastêpuje ju¿ po wstonie silnika po pobraniu z ShaderChannel Ÿróde³ shadera za pomoc¹ GetShaderSource.
+	- Update nastÄ™puje poprzez odpowiednie przeciÄ…zenie fuckcji Update w klasie pochodnej. DomyÅ›lna implemetacja jest pusta.
+	- Plugin przechowuje kanaÅ‚y po swojej stronie lub pobiera je z poprzedniego pluginu w nodzie. JeÅ›li plugin przechowuje kanaÅ‚ to przeciÄ…Å¼enie fukcji IPlugin::Update powinno wywoÅ‚ywaÄ‡ Update na przechowywanym kanale.
+	- ParameterDescriptor klasa przechowujÄ…ca identyfikatory parametrÃ³w shadera w statycznych memberach typu std::string.
+	- SahderChannel w kontruktorze przyjmuje string ze Å›cieÅ¼kÄ… do pliku ze ÅºrÃ³dÅ‚em shareda i wczytuje go. Kompilacja nastÄ™puje juÅ¼ po wstonie silnika po pobraniu z ShaderChannel ÅºrÃ³deÅ‚ shadera za pomocÄ… GetShaderSource.
 	
 Textures:
 

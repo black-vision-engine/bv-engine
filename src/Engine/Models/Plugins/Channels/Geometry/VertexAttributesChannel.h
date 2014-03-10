@@ -35,37 +35,39 @@ public:
     virtual                                             ~VertexAttributesChannel        ();
 
     //IChannel
-    virtual void                                        Update                  ( TimeType t );
-    virtual bool                                        IsReadOnly              () const;
+    virtual void                                        Update                  ( TimeType t ) override;
+    virtual bool                                        IsReadOnly              () const override;
 
     //IVertexAttributesChannel
-    virtual bool                                        IsTimeInvariant         ()  const;
-    virtual bool                                        NeedsAttributesUpdate   ( TimeType t ) const;
-    virtual bool                                        NeedsTopologyUpdate     ( TimeType t ) const;
+    virtual bool                                        IsTimeInvariant         () const override;
+    virtual bool                                        NeedsAttributesUpdate   () const override;
+    virtual bool                                        NeedsTopologyUpdate     () const override;
 
     void                                                SetNeedsAttributesUpdate( bool b );
     void                                                SetNeedsTopologyUpdate  ( bool b );
 
-    virtual unsigned int                                TotalNumVertices        ()          const;
+    virtual unsigned int                                TotalNumVertices        () const override;
 
-    virtual const IVertexAttributesChannelDescriptor *  GetDescriptor           () const;
+    virtual const IVertexAttributesChannelDescriptor *  GetDescriptor           () const override;
     void                                                SetDescriptor           ( const VertexAttributesChannelDescriptor & desc );
 
-    virtual PrimitiveType                               GetPrimitiveType        () const;
+    virtual PrimitiveType                               GetPrimitiveType        () const override;
 
     void                                                AddConnectedComponent   ( ConnectedComponent * cc );
     void                                                ClearConnectedComponent ( );
 
-    virtual int                                         GetNumPrimitives        ( IConnectedComponent * cc ) const;
-    virtual std::vector< IConnectedComponent * >        GetComponents           () const;
+    virtual int                                         GetNumPrimitives        ( IConnectedComponent * cc ) const override;
+    virtual std::vector< IConnectedComponent * >        GetComponents           () const override;
 
     //virtual bool                                      CanBeConnectedTo        ( IPlugin * plugin ) const;
-    virtual bool                                        CanBeConnectedTo        ( IVertexAttributesChannel * channel ) const;
+    virtual bool                                        CanBeConnectedTo        ( IVertexAttributesChannel * channel ) const override;
 
 protected:
 
-    virtual bool                                    CanBeConnectedTo    ( const VertexAttributesChannelDescriptor & desc ) const { return true; }
-
+    virtual bool                                        CanBeConnectedTo        ( const VertexAttributesChannelDescriptor & desc ) const
+    { 
+        return true;
+    }
 };
 
 typedef std::shared_ptr< VertexAttributesChannel >      VertexAttributesChannelPtr;

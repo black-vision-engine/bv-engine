@@ -24,6 +24,7 @@ public:
     
     virtual const char *                            GetData         ()  const = 0;
 
+    virtual ~IAttributeChannel() {}
 };
 
 } // model

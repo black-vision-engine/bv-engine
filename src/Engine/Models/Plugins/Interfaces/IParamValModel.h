@@ -3,7 +3,7 @@
 #include "Engine/Interfaces/IUpdatable.h"
 
 #include "Engine/Models/Plugins/Interfaces/IParamSet.h"
-#include "Engine/Models/Plugins/Interfaces/IValueSet.h"
+#include "Engine/Interfaces/IValueSet.h"
 
 
 namespace bv { namespace model {

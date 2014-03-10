@@ -7,38 +7,25 @@ namespace bv {
 
 // *********************************
 //
-RenderableEffect::RenderableEffect    ()
+RenderableEffect::RenderableEffect              ()
 {
 }
 
 // *********************************
 //
-RenderableEffect::~RenderableEffect   ()
+RenderableEffect::~RenderableEffect             ()
 {
+    for( auto pass : m_passes )
+    {
+        delete pass;
+    }
 }
 
 // *********************************
 //
-int                 RenderableEffect::NumPasses             () const
-{
-    return m_passes.size();
-}
-
-// *********************************
-//
-void                RenderableEffect::AddPass               ( RenderablePass * pass )
+void                RenderableEffect::AddPass   ( RenderablePass * pass )
 {
     m_passes.push_back( pass );
-}
-
-// *********************************
-//
-RenderablePass *  RenderableEffect::GetPass                 ( int index )
-{
-    assert( index >= 0 );
-    assert( index < NumPasses() );
-
-    return m_passes[ index ];
 }
 
 }

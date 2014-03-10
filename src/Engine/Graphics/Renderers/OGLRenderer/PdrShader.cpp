@@ -2,12 +2,9 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
-#include "Engine/Graphics/Shaders/ShaderParam.h"
 #include "Engine/Graphics/Shaders/PixelShader.h"
 #include "Engine/Graphics/Shaders/VertexShader.h"
 #include "Engine/Graphics/Shaders/GeometryShader.h"
-
-#include "Engine/Graphics/Shaders/ShaderParameters.h"
 
 #include "Engine/Graphics/Shaders/TextureSampler.h"
 #include "Engine/Graphics/Resources/Texture.h"
@@ -27,12 +24,17 @@ namespace bv
 
 // *******************************
 //
-PdrShader::PdrShader   ( GLSLProgram * program, PixelShader * ps, VertexShader * vs, GeometryShader * gs )
+PdrShader::PdrShader   ( PdrGLSLProgram * program, PixelShader * ps, VertexShader * vs, GeometryShader * gs )
     : m_program( program )
     , m_pixelShader( ps )
     , m_vertexShader( vs )
     , m_geometryShader( gs )
 {
+    m_program->Use();
+
+    InitParamsLocations( ps );
+    InitParamsLocations( vs );
+    InitParamsLocations( gs );
 }
 
 // *******************************
@@ -51,7 +53,7 @@ PdrShader *  PdrShader::Create( PixelShader * ps, VertexShader * vs, GeometrySha
         return nullptr;
     }
 
-    GLSLProgram * program = new GLSLProgram( *ps, *vs, gs );
+    PdrGLSLProgram * program = new PdrGLSLProgram( *ps, *vs, gs );
 
     if ( !program->IsCompiled() )
     {
@@ -70,8 +72,8 @@ void PdrShader::Enable         ( Renderer * renderer )
     m_program->Use();
 
     SetUniforms( m_vertexShader );
-    SetUniforms( m_pixelShader );
     SetUniforms( m_geometryShader );
+    SetUniforms( m_pixelShader );
 
     //FIXME: possibly use numSamplers somehow (debug and/or logging)
     int numSamplers = EnableTextureSamplers( renderer );
@@ -95,48 +97,52 @@ void    PdrShader::SetUniforms     ( Shader * shader )
     {
         ShaderParameters * params = shader->Parameters();
 
-        for ( int i = 0; i < params->NumParameters(); ++i )
+        for ( unsigned int i = 0; i < params->NumParameters(); ++i )
         {
-            SetUniformParam( params->GetParam( i ) );
+            auto param = params->GetParam( i );
+
+            //FIXME: maybe this is not necessary, but for the time being may stay here (until active uniforms set is added or something similar is implemented)
+            if ( param->IntID() >= 0 )
+            {
+                SetUniformParam( param );
+            }
         }
     }
 }
 
 // *******************************
 //FIXME: reimplement this method so that switch-case statement is not called here but rather in GenericParameter or even better - in shader desc
-void    PdrShader::SetUniformParam ( UniformShaderParam * param )
+// FIXME: if enabled or something should be used here
+void     PdrShader::InitSetUniformParam     ( const GenericShaderParam * param )
 {
     switch( param->Type() )
     {
-        case ParamType::PT_FLOAT:
-            SetUniformDispatcher< ParamType::PT_FLOAT >( param );
-            break;
         case ParamType::PT_FLOAT1:
-            SetUniformDispatcher< ParamType::PT_FLOAT1 >( param );
+            InitSetUniform< ParamType::PT_FLOAT1 >( param );
             break;
         case ParamType::PT_FLOAT2:
-            SetUniformDispatcher< ParamType::PT_FLOAT2 >( param );
+            InitSetUniform< ParamType::PT_FLOAT2 >( param );
             break;
         case ParamType::PT_FLOAT3:
-            SetUniformDispatcher< ParamType::PT_FLOAT3 >( param );
+            InitSetUniform< ParamType::PT_FLOAT3 >( param );
             break;
         case ParamType::PT_FLOAT4:
-            SetUniformDispatcher< ParamType::PT_FLOAT4 >( param );
+            InitSetUniform< ParamType::PT_FLOAT4 >( param );
             break;
         case ParamType::PT_MAT2:
-            SetUniformDispatcher< ParamType::PT_MAT2 >( param );
+            InitSetUniform< ParamType::PT_MAT2 >( param );
             break;
         case ParamType::PT_MAT3:
-            SetUniformDispatcher< ParamType::PT_MAT3 >( param );
+            InitSetUniform< ParamType::PT_MAT3 >( param );
             break;
         case ParamType::PT_MAT4:
-            SetUniformDispatcher< ParamType::PT_MAT4 >( param );
+            InitSetUniform< ParamType::PT_MAT4 >( param );
             break;
         case ParamType::PT_INT:
-            SetUniformDispatcher< ParamType::PT_INT >( param );
+            InitSetUniform< ParamType::PT_INT >( param );
             break;
         case ParamType::PT_BOOL:
-            SetUniformDispatcher< ParamType::PT_BOOL >( param );
+            InitSetUniform< ParamType::PT_BOOL >( param );
             break;
         default:
             assert( false );
@@ -166,7 +172,7 @@ int     PdrShader::EnableTextureSamplers   ( Renderer * renderer, Shader * shade
         return 0;
     }
 
-    return EnableTextureSamplers( renderer, shader->Samplers(), shader->GetOrCreateShaderParameters()->GetTextureParameters(), firstAvailableSamplerIndex );
+    return EnableTextureSamplers( renderer, shader->Samplers(), shader->GetParameters()->GetTextureParameters(), firstAvailableSamplerIndex );
 }
 
 // *******************************
@@ -317,7 +323,7 @@ int    PdrShader::DisableTextureSamplers  ( Renderer * renderer, Shader * shader
         return 0;
     }
 
-    return DisableTextureSamplers( renderer, shader->Samplers(), shader->GetOrCreateShaderParameters()->GetTextureParameters(), firstAvailableSamplerIndex );
+    return DisableTextureSamplers( renderer, shader->Samplers(), shader->GetParameters()->GetTextureParameters(), firstAvailableSamplerIndex );
 }
 
 // *******************************
@@ -399,5 +405,22 @@ void    PdrShader::DisableTextureSampler   ( Renderer * renderer, const TextureS
 
     }
 }
+
+// *******************************
+//
+void    PdrShader::InitParamsLocations     ( Shader * shader )
+{
+    if( shader )
+    {
+        ShaderParameters * params = shader->GetParameters();
+
+        for( unsigned int i = 0; i < params->NumParameters(); ++i )
+        {
+            const GenericShaderParam * param = params->GetParam( i );
+            InitSetUniformParam( param );
+        }
+    }
+}
+
 
 } //bv

@@ -41,7 +41,7 @@ public:
     void                    RegisterTransformRep( TransformableEntity * transformable );
 
 //    void                    Update              ( double t, const Transform & parentTransform ); 
-    void                    Update              ( double t, const std::vector< Transform > & parentTransforms );
+    void                    Update              ( const std::vector< Transform > & parentTransforms );
 
     bool                    IsVisible           () const;
     void                    SetVisible          ( bool visible );

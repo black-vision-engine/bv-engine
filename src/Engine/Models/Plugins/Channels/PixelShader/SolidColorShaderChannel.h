@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Channels/PixelShaderChannelBase.h"
+#include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
-#include "Engine/Models/Plugins/Parameters/TypedValues.h"
+#include "Engine/Types/Values/TypedValues.h"
 
 
 namespace bv{ namespace model {
@@ -15,7 +15,7 @@ public:
 
 };
 
-class SolidColorShaderChannel : public model::PixelShaderChannelBase< SolidColorShaderChannelPD >
+class SolidColorShaderChannel : public DefaultPixelShaderChannel
 {
 private:
 

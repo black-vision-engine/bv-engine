@@ -21,7 +21,7 @@ BVConfig::BVConfig                      ()
     m_fullscreeMode     = false;
 #endif
 
-    m_fps               = 60000;
+    m_fps               = 6000;
     m_frameTimeMillis   = 1000 / m_fps;
 
 #ifdef USE_READBACK_API

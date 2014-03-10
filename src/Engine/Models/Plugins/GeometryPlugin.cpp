@@ -7,7 +7,7 @@ namespace bv { namespace model {
 // *******************************
 //
 GeometryPlugin::GeometryPlugin  ( model::VertexAttributesChannel * vaChannel )
-    : BasePlugin( nullptr )
+    : BasePlugin( "dupa", "dupa", nullptr, nullptr )
     , m_vaChannel( vaChannel )
 {
 }

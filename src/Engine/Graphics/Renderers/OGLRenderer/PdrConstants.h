@@ -8,7 +8,7 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
 #include "Engine/Graphics/Shaders/TextureSampler.h"
-#include "Engine/Graphics/State/StateEnums.h"
+#include "Engine/Graphics/State/RendererStateEnums.h"
 
 
 namespace bv {
