@@ -3,7 +3,10 @@
 #include <windows.h> //FIXME: remove when this code is refactored
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
+
 #include "Engine/Events/Events.h"
+
 #include "FrameStatsService.h"
 #include "BVForwards.h"
 
@@ -31,6 +34,7 @@ private:
 
     FrameStatsCalculator            m_statsCalculator;
 
+    model::TimelineManager *        m_timelineManager;
     const model::PluginsManager *   m_pluginsManager;
 
     model::ModelScene *             m_modelScene;
@@ -70,6 +74,12 @@ private:
     void            RenderNode      ( Renderer * renderer, SceneNode * node );
 
     void            OnUpdateParam   ( IEventPtr evt );
+
+public:
+
+    //Convenience API - generalized model accessors
+    model::TimelineManager *    GetTimelineManager  ();
+    model::ModelScene *         GetModelScene       ();
 
 };
 

@@ -7,6 +7,8 @@
 
 namespace bv { namespace model {
 
+class ITimeEvaluator;
+
 class IParameter
 {
 public:
@@ -45,6 +47,8 @@ const ParamType * QueryTypedParam( const IParameter * param )
 
     return static_cast< ParamType * >( const_cast< IParameter * >( param )->QueryParamTyped() );
 }
+
+void    SetParamTimeline( IParameter * param, const ITimeEvaluator * timeline );
 
 } //model
 } //bv

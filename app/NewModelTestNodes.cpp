@@ -3,8 +3,10 @@
 #include "Engine/Models/Plugins/Interfaces/IPluginListFinalized.h"
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
-
 #include "Engine/Models/Plugins/PluginsFactory.h"
+
+#include "Engine/Models/Timeline/TimelineManager.h"
+
 
 #include "Engine/Models/BasicNode.h"
 
@@ -17,7 +19,7 @@ namespace bv {
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode()
+model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode( model::TimelineManager * timelineManager )
 {
     //Plugin list
     std::vector< std::string > uids;
@@ -44,7 +46,7 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode()
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateGreenRectNodeNoAssert()
+model::BasicNode *  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::TimelineManager * timelineManager )
 {
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins, GSimplePlugins + 3 );
 
@@ -58,6 +60,9 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNodeNoAssert()
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 20.f, glm::vec4( 0.f, 1.f, 1.f, 1.f ) );
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 25.f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 30.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+
+    timelineManager->RegisterDefaultTimeline( nullptr, 15.0f, 45.0f, "timeline0" );
+    timelineManager->AddParamToTimeline( node->GetPlugin( "solid color" )->GetParameter( "color" ), "timeline0" );
 
     SetParameterRotation ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
     SetParameterRotation ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 30.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );

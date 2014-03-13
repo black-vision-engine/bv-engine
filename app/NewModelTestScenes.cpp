@@ -333,10 +333,10 @@ public:
 
 // *****************************
 //
-model::BasicNode *     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager )
+model::BasicNode *     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )
 {
 //    return SimpleNodesFactory::CreateGreenRectNode();
-    return SimpleNodesFactory::CreateGreenRectNodeNoAssert();
+    return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager );
 }
 
 } //bv

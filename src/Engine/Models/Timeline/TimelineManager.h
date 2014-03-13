@@ -5,6 +5,7 @@
 #include <string>
 
 #include "Engine/Models/Plugins/Interfaces/IParamSet.h"
+#include "System/BasicTypes.h"
 
 
 namespace bv { namespace model {
@@ -13,6 +14,10 @@ class ITimeEvaluator;
 
 class SimpleIParamSet : public IParamSet
 {
+private:
+
+    std::vector< IParameter * >     m_parameters;
+
 public:
 
     virtual std::vector< IParameter * > &       GetParameters       () override;
@@ -20,7 +25,7 @@ public:
 
     bool                                        AddParameter        ( IParameter * param );
     bool                                        RemoveParameter     ( IParameter * param );
-    bool                                        RemoveParameter     ( const std::string & name );
+    unsigned int                                RemoveParameters    ( const std::string & name );
 
 };
 
@@ -29,9 +34,7 @@ class TimelineManager
 {
 private:
 
-    std::vector< const ITimeEvaluator * >                       m_timelinesVec;
     std::hash_map< std::string, const ITimeEvaluator * >        m_timelinesMap;
-
     std::hash_map< const ITimeEvaluator *, SimpleIParamSet * >  m_registeredParams;
 
 public:
@@ -44,14 +47,20 @@ public:
     IParamSet *             GetRegisteredParameters ( const ITimeEvaluator * timeline );
     IParamSet *             GetRegisteredParameters ( const std::string & name );
 
-    bool                    RegisterDefaultTimeline ( const std::string & name );
+    bool                    RegisterDefaultTimeline ( ITimeEvaluator * parent, TimeType startTime, TimeType endTime, const std::string & name );
+    bool                    RegisterDefaultTimeline ( TimeType startTime, TimeType endTime, const std::string & name );
     bool                    RegisterTimeline        ( const ITimeEvaluator * timeline );
 
     bool                    AddParamToTimeline      ( IParameter * param, const std::string & timelineName );
     bool                    AddParamToTimeline      ( IParameter * param, const ITimeEvaluator * timeline );
 
-    bool                    RemoveFromTimeline      ( const std::string & paramName, const std::string & timelineName );
+    unsigned int            RemoveFromTimeline      ( const std::string & paramName, const std::string & timelineName );
     bool                    RemoveFromTimeline      ( IParameter * param, const std::string & timelineName );
+
+private:
+
+    SimpleIParamSet *       GetSimpleIParamSet      ( const std::string & timelineName );
+    bool                    AddParamToTimelineImpl  ( IParameter * param, const ITimeEvaluator * timeline );
 
 };
 

@@ -61,6 +61,7 @@ namespace
 //
 BVAppLogic::BVAppLogic              ()
     : m_startTime( 0 )
+    , m_timelineManager( new model::TimelineManager() )
     , m_modelScene( nullptr )
     , m_mockSceneEng( nullptr )
     , m_pluginsManager( nullptr )
@@ -81,6 +82,7 @@ BVAppLogic::~BVAppLogic             ()
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
 
+    delete m_timelineManager;
     delete m_modelScene;
     delete m_mockSceneEng;
 
@@ -103,7 +105,7 @@ void BVAppLogic::Initialize         ()
 void BVAppLogic::LoadScene          ( void )
 {
 
-    model::BasicNode * root = TestScenesFactory::NewModelTestScene( m_pluginsManager );
+    model::BasicNode * root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager );
     assert( root );
 
     m_mockSceneEng  = root->BuildScene();
@@ -344,6 +346,20 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 void            BVAppLogic::OnUpdateParam   ( IEventPtr evt )
 {
     
+}
+
+// *********************************
+//
+model::TimelineManager *    BVAppLogic::GetTimelineManager  ()
+{
+    return m_timelineManager;
+}
+
+// *********************************
+//FIXME: unsafe - consider returning const variant of this class (IParameters * without const should be accessible anyway)
+model::ModelScene *         BVAppLogic::GetModelScene       ()
+{
+    return m_modelScene;
 }
 
 //// *********************************

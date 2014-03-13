@@ -11,6 +11,7 @@ namespace model
 {
     class BasicNode;
     class PluginsManager;
+    class TimelineManager;
 }
 
 
@@ -30,7 +31,7 @@ class TestScenesFactory
 {
 public:
 
-    static  model::BasicNode *      NewModelTestScene           ( const model::PluginsManager * pluginsManager );
+    static  model::BasicNode *      NewModelTestScene           ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager );
 
     static  model::BasicNode *      SimpeTextureTestScene       ();
     static  model::BasicNode *      SimpleMultiCCScene          ();

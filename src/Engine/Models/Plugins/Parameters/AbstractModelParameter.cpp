@@ -68,5 +68,14 @@ ModelParamType      AbstractModelParameter::GetType () const
     return m_type;
 }
 
+// *******************************
+//
+void    SetParamTimeline( IParameter * param, const ITimeEvaluator * timeline )
+{
+    AbstractModelParameter * typedParam = static_cast< AbstractModelParameter * >( param );
+
+    typedParam->SetTimeEvaluator( timeline );
+}
+
 } //model
 } //bv
