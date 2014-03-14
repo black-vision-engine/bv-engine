@@ -67,10 +67,11 @@ bool    TextureAccessor::WriteData( Texture * tx, const char * data, size_t data
     {
         delete[] tx->m_data;
         tx->m_data = new char[ dataSize ];
-        memcpy( tx->m_data, data, dataSize );
-        tx->m_dataSize = dataSize;
-        tx->SetChanged( true );
     }
+
+    memcpy( tx->m_data, data, dataSize );
+    tx->m_dataSize = dataSize;
+    tx->SetChanged( true );
 
     return true;
 }
