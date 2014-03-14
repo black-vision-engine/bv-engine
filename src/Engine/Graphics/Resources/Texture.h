@@ -17,6 +17,8 @@ protected:
     char *                  m_data;
     int                     m_dataSize;
 
+    bool                    m_changed;
+
 public:
 
                             Texture         ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE );
@@ -26,6 +28,9 @@ public:
 
     char *                  GetData         ();
     const char *            GetData         () const;
+
+    void                    SetChanged      ( bool changed );
+    bool                    Changed         () const;
 
     friend class TextureAccessor;
 };

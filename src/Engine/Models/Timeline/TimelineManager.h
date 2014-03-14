@@ -32,6 +32,10 @@ public:
 
 class TimelineManager
 {
+public:
+
+    typedef std::vector< const ITimeEvaluator * >               TEvaluatorVec;
+
 private:
 
     std::hash_map< std::string, const ITimeEvaluator * >        m_timelinesMap;
@@ -42,6 +46,8 @@ public:
                             TimelineManager         ();
                             ~TimelineManager        ();
 
+
+    TEvaluatorVec           GetTimelines            () const;
 
     const ITimeEvaluator *  GetTimeline             ( const std::string & name ) const;
     IParamSet *             GetRegisteredParameters ( const ITimeEvaluator * timeline );

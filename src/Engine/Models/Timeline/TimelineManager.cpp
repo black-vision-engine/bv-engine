@@ -105,6 +105,20 @@ TimelineManager::~TimelineManager        ()
 
 // *********************************
 //
+auto                    TimelineManager::GetTimelines            () const -> TEvaluatorVec
+{
+    TEvaluatorVec retVec;
+
+    for( auto elt : m_timelinesMap )
+    {
+        retVec.push_back( elt.second );
+    }
+
+    return retVec;
+}
+
+// *********************************
+//
 const ITimeEvaluator *  TimelineManager::GetTimeline             ( const std::string & name ) const
 {
     auto it = m_timelinesMap.find( name );

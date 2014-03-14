@@ -46,6 +46,21 @@ const char *            Texture::GetData	    () const
 
 // *********************************
 //
+void                    Texture::SetChanged     ( bool changed )
+{
+    m_changed = changed;
+}
+
+// *********************************
+//
+bool                    Texture::Changed        () const
+{
+    return m_changed;
+}
+
+
+// *********************************
+//
 bool    TextureAccessor::WriteData( Texture * tx, const char * data, size_t dataSize )
 {
     if ( tx->GetDataSize() != dataSize )
@@ -54,6 +69,7 @@ bool    TextureAccessor::WriteData( Texture * tx, const char * data, size_t data
         tx->m_data = new char[ dataSize ];
         memcpy( tx->m_data, data, dataSize );
         tx->m_dataSize = dataSize;
+        tx->SetChanged( true );
     }
 
     return true;
