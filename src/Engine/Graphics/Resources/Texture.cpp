@@ -25,7 +25,7 @@ Texture::~Texture	                            ()
 
 // *********************************
 //
-size_t                   Texture::GetDataSize     () const
+size_t                   Texture::GetDataSize   () const
 {
     return m_dataSize;
 }

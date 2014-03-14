@@ -14,20 +14,17 @@ protected:
 
     DataBuffer::Semantic    m_semantic;
 
-    char *                  m_data;
-    int                     m_dataSize;
-
     bool                    m_changed;
 
 public:
 
                             Texture         ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE );
-    virtual			        ~Texture	    ();
+    virtual			        ~Texture	    () = 0;
 
-    size_t                  GetDataSize     () const;
+    virtual size_t          GetDataSize     () const = 0;
 
-    char *                  GetData         ();
-    const char *            GetData         () const;
+    virtual char *          GetData         () = 0;
+    virtual const char *    GetData         () const = 0;
 
     void                    SetChanged      ( bool changed );
     bool                    Changed         () const;

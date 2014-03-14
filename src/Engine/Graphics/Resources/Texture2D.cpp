@@ -7,8 +7,8 @@ namespace bv {
 //
 Texture2D::Texture2D                    ( TextureFormat format, int width, int height, DataBuffer::Semantic semantic )
     : Texture( format, TextureType::T_2D, semantic )
-    , m_width( width)
-    , m_height( height)
+    , m_width( width )
+    , m_height( height )
 {
 }
 
@@ -32,5 +32,4 @@ int         Texture2D::GetHeight        () const
     return m_height;
 }
 
-
-}
+} //bv
