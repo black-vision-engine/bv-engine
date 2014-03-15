@@ -4,7 +4,7 @@
 
 #include <gl/glew.h>
 
-#include "Engine/Graphics/Resources/TextureAnimatedSequence2D.h"
+#include "Engine/Graphics/Resources/Texture2D.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrShader.h"

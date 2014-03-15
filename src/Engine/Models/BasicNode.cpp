@@ -15,8 +15,8 @@
 
 #include "Engine/Graphics/Resources/VertexDescriptor.h" //FIXME: ten kod, ktory potrzebuje tego deskryptora, tekstur i animacji powinien byc w default effect lub cos, a nie tutaj - to do przerobienia koniecznie
 #include "Engine/Graphics/Resources/Textures/TextureManager.h"
-#include "Engine/Graphics/Resources/Texture2D.h"
-#include "Engine/Graphics/Resources/TextureAnimatedSequence2D.h"
+#include "Engine/Graphics/Resources/Texture2DImpl.h"
+#include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
 
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 
@@ -161,31 +161,31 @@ SceneNode *                 BasicNode::BuildScene()
             auto textureSampler = new TextureSampler( 0, "Animation0", bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ) );
 
             pixelShader->AddTextureSampler( textureSampler );
-            TextureAnimatedSequence2D * animation = nullptr;
+            Texture2DSequenceImpl * sequence = nullptr;
 
             unsigned int i = 0;
             for( auto tex : finalizer->GetTextures() )
             {
-                auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
-
                 if( i == 0 )
                 {
-                    animation = new TextureAnimatedSequence2D( loadedTex->GetFormat(), loadedTex->GetType(), loadedTex->GetWidth(), loadedTex->GetHeight() );
+                    sequence = GTextureManager.CreateEmpty2DSequence( tex->m_resHandle ); 
                 }
 
-                animation->AddTexture( loadedTex );
+                bool bAdded = GTextureManager.AddFrame( sequence, tex->m_resHandle ); 
+                assert( bAdded );
+
                 ++i;
             }
 
             assert( i > 1 );
             ShaderTextureParameters & texParams = pixelShader->Parameters()->TextureParameters();
-            bool bAdded = ShaderTextureParametersAccessor::Add( texParams, animation );
+            bool bAdded = ShaderTextureParametersAccessor::Add( texParams, sequence );
 
             assert( bAdded );
 
             UpdatersManager & updatersManager = UpdatersManager::Get();
 
-            SequenceAnimationUpdater * updater = new SequenceAnimationUpdater( animation, finalizer->QuerySequenceAnimationSource() ); //asert fals - do dupy ten syf
+            SequenceAnimationUpdater * updater = new SequenceAnimationUpdater( sequence, finalizer->QuerySequenceAnimationSource() ); //asert fals - do dupy ten syf
             updatersManager.RegisterUpdater( updater );
         }
         else

@@ -15,6 +15,8 @@ namespace model
 
 class Texture;
 class Texture2D;
+class Texture2DImpl;
+class Texture2DSequenceImpl;
 
 class TextureManager
 {
@@ -24,11 +26,15 @@ class TextureManager
 
 public:
     
-                TextureManager  ();
-    virtual     ~TextureManager ();
+                            TextureManager          ();
+    virtual                 ~TextureManager         ();
 
-    Texture2D*  LoadTexture     ( const model::ResourceHandle * resHandle, bool loadFromMemory = true );
-    void        FreeTexture     ( Texture * tx );
+    Texture2D *             LoadTexture             ( const model::ResourceHandle * resHandle, bool loadFromMemory = true );
+    void                    FreeTexture             ( Texture * tx );
+
+    bool                    AddFrame                ( Texture2DSequenceImpl * anim, const model::ResourceHandle * resHandle, bool loadFromMemory = true );
+
+    Texture2DSequenceImpl * CreateEmpty2DSequence   ( const model::ResourceHandle * resHandle );
 
 };
 

@@ -1,4 +1,4 @@
-#include "TextureAnimatedSequence2D.h"
+#include "Texture2DSequenceImpl.h"
 
 #include <cassert>
 
@@ -7,10 +7,9 @@ namespace bv {
 
 // *********************************
 //  
-TextureAnimatedSequence2D::TextureAnimatedSequence2D                ( TextureFormat format, TextureType type, int width, int height )
-    : TextureAnimatedSequence( format, type )
-    , m_width( width )
-    , m_height( height )
+Texture2DSequenceImpl::Texture2DSequenceImpl                    ( TextureFormat format, int width, int height )
+    : Texture2D( format, width, height, DataBuffer::Semantic::S_TEXTURE ) //FIXME: are there any chances that other semantics can be used for animations??
+    , m_activeTexture( 0 )
 {
     assert( width > 0 );
     assert( height > 0 );
@@ -18,58 +17,83 @@ TextureAnimatedSequence2D::TextureAnimatedSequence2D                ( TextureFor
 
 // *********************************
 //  
-TextureAnimatedSequence2D::~TextureAnimatedSequence2D               ()
+Texture2DSequenceImpl::~Texture2DSequenceImpl                   ()
 {
+    for( auto rawMem : m_data )
+    {
+        delete[] rawMem;
+    }
 }
 
 // *********************************
 //  
-int                 TextureAnimatedSequence2D::GetWidth             () const
+bool                Texture2DSequenceImpl::AddTextureWritingBits( const char * data, TextureFormat format, int width, int height )
 {
-    return m_width;
-}
+    if( format != GetFormat() || width != GetWidth() || height != GetHeight() )
+    {
+        return false;
+    }
 
+    auto newSize = width * height * GetPixelSize();
+    auto dstData = new char[ width * height * GetPixelSize() ];
 
-// *********************************
-//  
-int                 TextureAnimatedSequence2D::GetHeight            () const
-{
-    return m_height;
-}
+    memcpy( dstData, data, newSize );
+    m_data.push_back( dstData );
 
-// *********************************
-//  
-bool                TextureAnimatedSequence2D::AddTexture           ( Texture2D * tx )
-{
-    return Parent::AddTexture( tx );
-}
+    SetChanged( true );
 
-// *********************************
-//  
-const Texture2D *   TextureAnimatedSequence2D::GetActiveTexture     () const
-{
-    return static_cast< const Texture2D * >( Parent::GetActiveTexture() );
+    return true;
 }
 
 // *********************************
 //  
-const Texture2D *   TextureAnimatedSequence2D::GetNextActiveTexture () const
+unsigned int         Texture2DSequenceImpl::NumTextures         () const
 {
-    return static_cast< const Texture2D * >( Parent::GetNextActiveTexture() );
+    return m_data.size();
 }
 
 // *********************************
 //  
-bool                TextureAnimatedSequence2D::PreAddValidate       ( Texture * tx ) const
+void                  Texture2DSequenceImpl::SetActiveTexture   ( unsigned int txNum )
 {
-    return PreAddValidate( static_cast< Texture2D * >( tx ) );
+    assert( txNum < NumTextures() );
+
+    auto changed = txNum != m_activeTexture;
+    m_activeTexture = txNum;
+
+    SetChanged( changed );
 }
 
 // *********************************
 //  
-bool                TextureAnimatedSequence2D::PreAddValidate       ( Texture2D * tx ) const
+unsigned int    Texture2DSequenceImpl::GetActiveTextureNum     () const
 {
-    return tx && tx->GetFormat() == m_format&& tx->GetType() == m_type && tx->GetHeight() == m_height && tx->GetWidth() == m_width;
+    return m_activeTexture;
+}
+
+// *********************************
+//  
+size_t          Texture2DSequenceImpl::GetDataSize             () const
+{
+    return NumTextures() * GetPixelSize() * GetWidth() * GetHeight();
+}
+
+// *********************************
+//  
+char *          Texture2DSequenceImpl::GetData                 ()
+{
+    assert( NumTextures() > 0 );
+
+    return m_data[ m_activeTexture ];
+}
+
+// *********************************
+//  
+const char *    Texture2DSequenceImpl::GetData                 () const
+{
+    assert( NumTextures() > 0 );
+
+    return m_data[ m_activeTexture ];
 }
 
 } //bv

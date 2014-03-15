@@ -5,7 +5,7 @@
 
 namespace bv {
 
-class TextureAnimatedSequence2D;
+class Texture2DSequenceImpl;
 
 namespace model
 {
@@ -16,12 +16,12 @@ class SequenceAnimationUpdater : public IUpdater
 {
 private:
 
-    TextureAnimatedSequence2D *              m_out;
-    const model::ISequenceAnimationSource *  m_in;
+    Texture2DSequenceImpl *                     m_out;
+    const model::ISequenceAnimationSource *     m_in;
 
 public:
 
-                    SequenceAnimationUpdater        ( TextureAnimatedSequence2D * out , const model::ISequenceAnimationSource * in ); 
+                    SequenceAnimationUpdater        ( Texture2DSequenceImpl * out , const model::ISequenceAnimationSource * in ); 
                     ~SequenceAnimationUpdater       ();
 
     virtual void    DoUpdate                        ();

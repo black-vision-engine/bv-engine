@@ -15,7 +15,7 @@ private:
 
 public:
 
-                            Texture2DImpl   ( TextureFormat format, int width, int height );
+                            Texture2DImpl   ( TextureFormat format, int width, int height, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE );
     virtual                 ~Texture2DImpl  ();
 
     virtual size_t          GetDataSize     () const override;
@@ -23,7 +23,7 @@ public:
     virtual char *          GetData         () override;
     virtual const char *    GetData         () const override;
 
-    void                    WriteBits       ( const char * data, TextureFormat format, int width, int height );
+    bool                    WriteBits       ( const char * data, TextureFormat format, int width, int height );
 
 };
 

@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "Engine/Graphics/Resources/Texture2D.h"
-#include "Engine/Graphics/Resources/TextureAnimatedSequence.h"
 
 
 namespace bv {
@@ -12,39 +11,25 @@ class Texture2DSequenceImpl : public Texture2D
 {
 private:
 
-    std::vector< char * >   m_sequence;
+    std::vector< char * >   m_data;
+    unsigned int            m_activeTexture;
 
 public:
 
-                        Texture2DSequenceImpl   ( TextureFormat format, int width, int height );
-    virtual             ~Texture2DSequenceImpl  ();
-
-    int                 GetWidth                () const;
-    int                 GetHeight               () const;
+                            Texture2DSequenceImpl   ( TextureFormat format, int width, int height );
+    virtual                 ~Texture2DSequenceImpl  ();
     
-    bool                AddTexture              ( char * data, TextureFormat format, int width, int height );
+    bool                    AddTextureWritingBits   ( const char * data, TextureFormat format, int width, int height );
 
-    unsigned int        NumTextures             () const;
+    unsigned int            NumTextures             () const;
 
-    void                SetActiveTexture            ( unsigned int txNum );
-    void                SetNextActiveTexture        ( unsigned int txNum );
+    void                    SetActiveTexture        ( unsigned int txNum );
+    unsigned int            GetActiveTextureNum     () const;
 
-    unsigned int        GetActiveTextureNum         () const;
-    unsigned int        GetNextActiveTextureNum     () const;
+    virtual size_t          GetDataSize             () const override;
 
-    bool                AddTexture                  ( Texture * tx );
-    const Texture *     GetTexture                  ( unsigned int txNum ) const;
-
-    bool                NeedsUpdate                 () const;
-    void                SetNeedsUpdate              ( bool needsUpdate ) const;
-
-protected:
-
-    virtual bool        PreAddValidate          ( Texture * tx ) const;
-
-private:
-
-    bool                PreAddValidate          ( Texture2D * tx ) const;
+    virtual char *          GetData                 () override;
+    virtual const char *    GetData                 () const override;
 
 };
 

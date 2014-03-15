@@ -208,9 +208,7 @@
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataArrays.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\RenderableArrayDataElements.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\Texture2DImpl.cpp" />
-    <ClCompile Include="Engine\Graphics\Resources\Texture2DSequence.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\Texture2DSequenceImpl.cpp" />
-    <ClCompile Include="Engine\Graphics\Resources\TextureAnimatedSequence.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\TextureBase.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParameters.cpp" />
@@ -395,9 +393,7 @@
     <ClInclude Include="Engine\Graphics\Resources\RenderableArrayDataArrays.h" />
     <ClInclude Include="Engine\Graphics\Resources\RenderableArrayDataElements.h" />
     <ClInclude Include="Engine\Graphics\Resources\Texture2DImpl.h" />
-    <ClInclude Include="Engine\Graphics\Resources\Texture2DSequence.h" />
     <ClInclude Include="Engine\Graphics\Resources\Texture2DSequenceImpl.h" />
-    <ClInclude Include="Engine\Graphics\Resources\TextureAnimatedSequence.h" />
     <ClInclude Include="Engine\Graphics\Resources\TextureBase.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParameters.h" />

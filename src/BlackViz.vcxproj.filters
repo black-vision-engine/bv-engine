@@ -90,7 +90,6 @@
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrTextureAnimatedSequence2D.cpp" />
     <ClCompile Include="Engine\Models\Updaters\SequenceAnimationUpdater.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\TextureBase.cpp" />
-    <ClCompile Include="Engine\Graphics\Resources\TextureAnimatedSequence.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextHelpers.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\FontLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\Text.cpp" />
@@ -181,7 +180,6 @@
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec2.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec3.cpp" />
     <ClCompile Include="Engine\Graphics\State\RendererStateInstance.cpp" />
-    <ClCompile Include="Engine\Graphics\Resources\Texture2DSequence.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\Texture2DImpl.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\Texture2DSequenceImpl.cpp" />
   </ItemGroup>
@@ -411,8 +409,6 @@
     <ClInclude Include="Engine\Graphics\State\RendererStateEnums.h" />
     <ClInclude Include="Engine\Models\Interfaces\IModelNode.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITimeEvaluator.h" />
-    <ClInclude Include="Engine\Graphics\Resources\TextureAnimatedSequence.h" />
-    <ClInclude Include="Engine\Graphics\Resources\Texture2DSequence.h" />
     <ClInclude Include="Engine\Graphics\Resources\Texture2DImpl.h" />
     <ClInclude Include="Engine\Graphics\Resources\Texture2DSequenceImpl.h" />
   </ItemGroup>
