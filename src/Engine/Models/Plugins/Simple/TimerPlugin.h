@@ -22,11 +22,23 @@ public:
     static const char*       GetName()        { return "timer_plugin"; }
 };
 
+struct TimeValue
+{
+    int     setSecond;
+    int     second;
+    int     minute;
+    int     hour;
+
+    explicit    TimeValue( double time );
+
+    bool        operator!=(const TimeValue& other) const;
+};
+
 // ***************************** PLUGIN ********************************** 
 class TimerPlugin : public BasePlugin< IPlugin, TimerPluginUID >
 {
     ParamFloat                  m_timeParam;
-    std::wstring                m_currentTime;
+    TimeValue                   m_currentTime;
 
     VertexAttributesChannelPtr  m_vertexAttributeChannel;
 
@@ -50,6 +62,7 @@ public:
 
     void                                        SetTimePatern               ( const std::wstring& patern );
     void                                        SetTime                     ( const std::wstring& time );
+    void                                        SetTime                     ( double time );
 
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
     virtual Textures                            GetTextures                 () const override;

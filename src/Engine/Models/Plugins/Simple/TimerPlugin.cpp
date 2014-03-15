@@ -11,12 +11,33 @@ namespace bv { namespace model {
 
 ////////////////////////////
 //
+bool    TimeValue::operator!=(const TimeValue& other) const
+{
+    return  other.setSecond == this->setSecond
+        ||  other.second == this->second
+        ||  other.minute == this->minute
+        ||  other.hour == this->hour;
+}
+
+////////////////////////////
+//
+TimeValue::TimeValue( double time )
+{
+    this->setSecond = int( time * 100 ) % 100;
+    this->second    = int( time ) % 60;
+    this->minute    = int( time / 60 ) % 60;
+    this->hour      = int( time / (60 * 60 ) ) % 60;
+}
+
+////////////////////////////
+//
 TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
     : BasePlugin( nullptr )
     , m_timeParam( timeParam )
     , m_fontResource()
     , m_currentAtlas()
     , m_timePatern( L"##:##:##" )
+    , m_currentTime( 0.0 )
 {
     m_fontResource = TextHelper::LoadFont( "../dep/Media/fonts/digital-7.ttf", fontSize, L"../dep/Media/fonts/TimerChars.txt" );
 
@@ -131,6 +152,25 @@ void                                TimerPlugin::SetTime        ( const std::wst
 
 ////////////////////////////
 //
+void                                TimerPlugin::SetTime        ( double time )
+{
+    TimeValue   newTime( time );
+
+    if( m_currentTime  != newTime )
+    {
+        std::wstring newTimeString =        ( std::to_wstring( newTime.minute ).size() == 2 ? std::to_wstring( newTime.minute ) : ( L"0" + std::to_wstring( newTime.minute ) ) )
+                                        +   L":"
+                                        +   ( std::to_wstring( newTime.second ).size() == 2 ? std::to_wstring( newTime.second ) : ( L"0" + std::to_wstring( newTime.second ) ) )
+                                        +   L":"
+                                        +   ( std::to_wstring( newTime.setSecond ).size() == 2 ? std::to_wstring( newTime.setSecond ) : ( L"0" + std::to_wstring( newTime.setSecond ) ) );
+        SetTime( newTimeString );
+        m_currentTime = newTime;
+        m_vertexAttributeChannel->SetNeedsAttributesUpdate( true );
+    }
+}
+
+////////////////////////////
+//
 const IVertexAttributesChannel *    TimerPlugin::GetVertexAttributesChannel          () const
 {
     return m_vertexAttributeChannel.get();
@@ -149,21 +189,7 @@ void                                TimerPlugin::Update                      ( T
 {
     float time = m_timeParam.Evaluate( t );
 
-    int setSec = int(time * 100) % 100;
-    int sec = int(time) % 60;
-    int min = int(time / 60) % 60;
-
-    std::wstring newTime =      ( std::to_wstring( min ).size() == 2 ? std::to_wstring( min ) : ( L"0" + std::to_wstring( min ) ) )
-                            +   L":"
-                            +   ( std::to_wstring( sec ).size() == 2 ? std::to_wstring( sec ) : ( L"0" + std::to_wstring( sec ) ) )
-                            +   L":"
-                            +   ( std::to_wstring( setSec ).size() == 2 ? std::to_wstring( setSec ) : ( L"0" + std::to_wstring( setSec ) ) );
-
-    if( newTime != m_currentTime )
-    {
-        SetTime( newTime );
-        m_vertexAttributeChannel->SetNeedsAttributesUpdate( true );
-    }
+    SetTime( time );
 }
 
 ////////////////////////////
