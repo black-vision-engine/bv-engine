@@ -14,7 +14,7 @@ protected:
 
     DataBuffer::Semantic    m_semantic;
 
-    bool                    m_changed;
+    mutable bool             m_changed;
 
 public:
 
@@ -26,7 +26,7 @@ public:
     virtual char *          GetData         () = 0;
     virtual const char *    GetData         () const = 0;
 
-    void                    SetChanged      ( bool changed );
+    void                    SetChanged      ( bool changed ) const;
     bool                    Changed         () const;
 
     friend class TextureAccessor;

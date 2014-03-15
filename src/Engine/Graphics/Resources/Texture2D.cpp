@@ -32,4 +32,11 @@ int         Texture2D::GetHeight        () const
     return m_height;
 }
 
+// *********************************
+//
+unsigned int    Texture2D::RawFrameSize () const
+{
+    return GetPixelSize() * GetWidth() * GetHeight();
+}
+
 } //bv

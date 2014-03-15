@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "Engine/Graphics/Resources/TextureAnimatedSequence2D.h"
+#include "Engine/Graphics/Resources/Texture2D.h"
 
 
 namespace bv
@@ -10,7 +10,7 @@ namespace bv
 
 // *******************************
 // FIXME: implement streaming via two PBOs to make prebuffering "blazingly" fast
-PdrTextureAnimatedSequence2D::PdrTextureAnimatedSequence2D                      ( const TextureAnimatedSequence2D * texture )
+PdrTextureAnimatedSequence2D::PdrTextureAnimatedSequence2D                      ( const Texture2D * texture )
     : m_textureID( 0 )
     , m_prevTextureID( 0 )
     , m_pboID( 0 )
@@ -19,7 +19,7 @@ PdrTextureAnimatedSequence2D::PdrTextureAnimatedSequence2D                      
 {
     glGenBuffers( 1, &m_pboID );
     glBindBuffer( GL_PIXEL_UNPACK_BUFFER, m_pboID );
-    glBufferData( GL_PIXEL_UNPACK_BUFFER, texture->GetActiveTexture()->GetDataSize(), 0, GL_DYNAMIC_DRAW );
+    glBufferData( GL_PIXEL_UNPACK_BUFFER, texture->RawFrameSize(), 0, GL_DYNAMIC_DRAW );
     glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
 
     glGenTextures   ( 1, &m_textureID );
@@ -103,14 +103,12 @@ void            PdrTextureAnimatedSequence2D::Unlock          ()
 
 // *******************************
 //
-void            PdrTextureAnimatedSequence2D::Update          ( const TextureAnimatedSequence2D * texture )
+void            PdrTextureAnimatedSequence2D::Update          ( const Texture2D * texture )
 {
-    const Texture2D * tx = texture->GetActiveTexture();
     void * data = Lock( MemoryLockingType::MLT_WRITE_ONLY );
-    memcpy( data, tx->GetData(), tx->GetDataSize() );
+    memcpy( data, texture->GetData(), texture->GetDataSize() );
     Unlock();
-
-    texture->SetNeedsUpdate( false ); //FIXME: maybe this should be moved to renderer (to be discussed and decided)
+    texture->SetChanged( false );//FIXME: maybe this should be moved to renderer (to be discussed and decided)
 }
 
 // *******************************
@@ -134,7 +132,7 @@ void            PdrTextureAnimatedSequence2D::Unbind            ()
 
 // *******************************
 //
-PdrTextureAnimatedSequence2D *   PdrTextureAnimatedSequence2D::Create            ( const TextureAnimatedSequence2D* texture )
+PdrTextureAnimatedSequence2D *   PdrTextureAnimatedSequence2D::Create            ( const Texture2D * texture )
 {
     return new PdrTextureAnimatedSequence2D( texture );
 }

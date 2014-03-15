@@ -75,7 +75,7 @@ unsigned int    Texture2DSequenceImpl::GetActiveTextureNum     () const
 //  
 size_t          Texture2DSequenceImpl::GetDataSize             () const
 {
-    return NumTextures() * GetPixelSize() * GetWidth() * GetHeight();
+    return NumTextures() * RawFrameSize();
 }
 
 // *********************************

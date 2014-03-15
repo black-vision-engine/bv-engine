@@ -15,11 +15,13 @@ private:
 
 public:
 
-                 Texture2D      ( TextureFormat format, int width, int height, DataBuffer::Semantic semantic );
-    virtual     ~Texture2D      () = 0;
+                    Texture2D      ( TextureFormat format, int width, int height, DataBuffer::Semantic semantic );
+    virtual         ~Texture2D      () = 0;
 
-    int         GetWidth        () const;
-    int         GetHeight       () const;
+    int             GetWidth        () const;
+    int             GetHeight       () const;
+
+    unsigned int    RawFrameSize    () const;
 
 };
 

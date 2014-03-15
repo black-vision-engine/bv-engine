@@ -24,7 +24,7 @@ Texture::~Texture	                            ()
 
 // *********************************
 //
-void                    Texture::SetChanged     ( bool changed )
+void                    Texture::SetChanged     ( bool changed ) const
 {
     m_changed = changed;
 }

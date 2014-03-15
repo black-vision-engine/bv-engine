@@ -15,6 +15,13 @@ private:
     GLuint          m_textureID;
     GLuint          m_prevTextureID;
 
+    GLuint          m_pboID;
+
+    GLuint          m_prevTextureID;
+
+    bool            m_writeLock;
+    void *          m_lockedMemoryPtr;
+
 private:
 
     explicit        PdrTexture2D    ( const Texture2D * texture );
@@ -25,6 +32,11 @@ public:
 
     void            Enable          ( Renderer * renderer, int textureUnit );
     void            Disable         ( Renderer * renderer, int textureUnit );
+
+    void *          Lock            ( MemoryLockingType mlt );
+    void            Unlock          ();
+
+    void            Update          ( const TextureAnimatedSequence2D * texture );
 
     GLuint          Bind            ();
     void            Unbind          ();

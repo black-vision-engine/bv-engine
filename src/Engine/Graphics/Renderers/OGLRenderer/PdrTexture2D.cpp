@@ -34,7 +34,7 @@ PdrTexture2D::~PdrTexture2D   ()
 
 // *******************************
 //
-void            PdrTexture2D::Enable            ( Renderer * renderer, int textureUnit )
+void            PdrTexture2D::Enable        ( Renderer * renderer, int textureUnit )
 {
     glActiveTexture( GL_TEXTURE0 + textureUnit );
     m_prevTextureID = Bind();
@@ -42,7 +42,7 @@ void            PdrTexture2D::Enable            ( Renderer * renderer, int textu
 
 // *******************************
 //
-void            PdrTexture2D::Disable           ( Renderer * renderer, int textureUnit )
+void            PdrTexture2D::Disable       ( Renderer * renderer, int textureUnit )
 {
     glActiveTexture ( GL_TEXTURE0 + textureUnit );
     Unbind();
@@ -50,7 +50,25 @@ void            PdrTexture2D::Disable           ( Renderer * renderer, int textu
 
 // *******************************
 //
-GLuint            PdrTexture2D::Bind             ()
+void *      PdrTexture2D::Lock              ( MemoryLockingType mlt )
+{
+}
+
+// *******************************
+//
+void        PdrTexture2D::Unlock            ()
+{
+}
+
+// *******************************
+//
+void        PdrTexture2D::Update            ( const TextureAnimatedSequence2D * texture )
+{
+}
+
+// *******************************
+//
+GLuint      PdrTexture2D::Bind             ()
 {
     GLint current = 0;
 
@@ -62,7 +80,7 @@ GLuint            PdrTexture2D::Bind             ()
 
 // *******************************
 //
-void            PdrTexture2D::Unbind            ()
+void        PdrTexture2D::Unbind            ()
 {
     glBindTexture   ( GL_TEXTURE_2D, m_prevTextureID );     
 }

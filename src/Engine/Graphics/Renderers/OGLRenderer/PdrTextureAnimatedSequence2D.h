@@ -8,7 +8,7 @@
 namespace bv
 {
 
-class TextureAnimatedSequence2D;
+class Texture2D;
 class Renderer;
 
 class PdrTextureAnimatedSequence2D
@@ -28,7 +28,7 @@ private:
 
 private:
 
-    explicit        PdrTextureAnimatedSequence2D    ( const TextureAnimatedSequence2D * texture );
+    explicit        PdrTextureAnimatedSequence2D    ( const Texture2D * texture );
 
 public:
 
@@ -40,7 +40,7 @@ public:
     void *          Lock            ( MemoryLockingType mlt );
     void            Unlock          ();
 
-    void            Update          ( const TextureAnimatedSequence2D * texture );
+    void            Update          ( const Texture2D * texture );
 
     GLuint          Bind            ();
     void            Unbind          ();
@@ -49,7 +49,7 @@ private:
 
 public:
 
-    static PdrTextureAnimatedSequence2D *   Create  ( const TextureAnimatedSequence2D * texture );
+    static PdrTextureAnimatedSequence2D *   Create  ( const Texture2D * texture );
 
 };
 

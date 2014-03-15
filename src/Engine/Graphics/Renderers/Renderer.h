@@ -22,7 +22,6 @@ class VertexShader;
 class GeometryShader;
 class RenderablePass;
 class Texture2D;
-class TextureAnimatedSequence2D;
 
 class VertexBuffer;
 class IndexBuffer;
@@ -31,7 +30,6 @@ class VertexArray;
 class VertexArraySingleVertexBuffer;
 
 class PdrTexture2D;
-class PdrTextureAnimatedSequence2D;
 class PdrVertexBuffer;
 class PdrShader;
 class PdrIndexBuffer;
@@ -71,7 +69,6 @@ private:
     typedef std::hash_map<const VertexArray*, PdrVertexArrayObject*>                            PdrVertexArrayObjectMapType;
     typedef std::hash_map<const VertexArraySingleVertexBuffer*, PdrVertexArrayObjectSingleVB*>  PdrVertexArrayObjectSingleVBMapType;
     typedef std::hash_map<const Texture2D *, PdrTexture2D * >                                   PdrTexture2DMap;
-    typedef std::hash_map<const TextureAnimatedSequence2D *, PdrTextureAnimatedSequence2D * >   PdrTextureAnimatedSequence2DMap;
 
     PdrShaderMapType                    m_PdrShaderMap;
     PdrVertexBufferMapType              m_PdrVertexBufferMap;
@@ -79,7 +76,6 @@ private:
     PdrVertexDescriptorType             m_PdrVertexDescriptorMap;
     PdrVertexArrayObjectMapType         m_PdrVertexArrayObjectMap;
     PdrTexture2DMap                     m_PdrTextures2DMap;
-    PdrTextureAnimatedSequence2DMap     m_PdrTexturesAnimatedSequence2DMap;
     PdrVertexArrayObjectSingleVBMapType m_PdrVertexArrayObjectSingleVBMap;
 
 public:
