@@ -38,15 +38,8 @@ class ShaderTextureParametersAccessor
 {
 public:
 
-    static bool                                                 Add                 ( ShaderTextureParameters & params, Texture2D * tx );
-    static bool                                                 Add                 ( ShaderTextureParameters & params, TextureAnimatedSequence2D * anim );
-                                                                                                      
+    static bool                                                 Add                 ( ShaderTextureParameters & params, Texture2D * tx );                                                                                                      
     static const std::vector< Texture2D * > *                   GetTextures         ( const ShaderTextureParameters & params );
-    static const std::vector< TextureAnimatedSequence2D * > *   GetAnimations       ( const ShaderTextureParameters & params );
-                                                                                                      
-    static bool                                                 ContainsTextures    ( const ShaderTextureParameters & params );
-    static bool                                                 ContainsAnimations  ( const ShaderTextureParameters & params );
-
     static unsigned int                                         NumEntries          ( const ShaderTextureParameters & params );
 };
 

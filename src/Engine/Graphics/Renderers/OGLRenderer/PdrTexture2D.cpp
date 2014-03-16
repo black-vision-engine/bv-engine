@@ -109,9 +109,6 @@ void        PdrTexture2D::Update            ( const Texture2D * texture )
     void * data = Lock( MemoryLockingType::MLT_WRITE_ONLY );
     memcpy( data, texture->GetData(), texture->RawFrameSize() );
     Unlock();
-
-    //FIXME: maybe this should be moved to the renderer (to be discussed and decided)
-    texture->SetChanged( false );
 }
 
 // *******************************

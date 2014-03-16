@@ -41,76 +41,23 @@ void    ShaderTextureParameters::AddAnimation       ( TextureAnimatedSequence2D 
 //  
 bool                                                ShaderTextureParametersAccessor::Add                ( ShaderTextureParameters & params, Texture2D * tx )
 {
-    if( !params.m_containsAnimations )
-    {
-        params.m_containsTextures = true;
+    params.AddTexture( tx );
 
-        params.AddTexture( tx );
-
-        return true;
-    }
-
-    return false;
-}
-
-// *********************************
-//  
-bool                                                ShaderTextureParametersAccessor::Add                ( ShaderTextureParameters & params, TextureAnimatedSequence2D * anim )
-{
-    if( !params.m_containsTextures )
-    {
-        params.m_containsAnimations= true;
-
-        params.AddAnimation( anim );
-
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 // *********************************
 //  
 const std::vector< Texture2D * > *                  ShaderTextureParametersAccessor::GetTextures        ( const ShaderTextureParameters & params )
 {
-    return params.m_containsTextures ? &params.m_textures : nullptr;
-}
-
-// *********************************
-//  
-const std::vector< TextureAnimatedSequence2D * > *  ShaderTextureParametersAccessor::GetAnimations      ( const ShaderTextureParameters & params )
-{
-    return params.m_containsAnimations ? &params.m_animations : nullptr;
-}
-
-// *********************************
-//  
-bool                                                ShaderTextureParametersAccessor::ContainsTextures   ( const ShaderTextureParameters & params )
-{
-    return params.m_containsTextures;
-}
-
-// *********************************
-//  
-bool                                                ShaderTextureParametersAccessor::ContainsAnimations ( const ShaderTextureParameters & params )
-{
-    return params.m_containsAnimations;
+    return &params.m_textures;
 }
 
 // *********************************
 //  
 unsigned int                                        ShaderTextureParametersAccessor::NumEntries         ( const ShaderTextureParameters & params )
 {
-    if( params.m_containsAnimations )
-    {
-        return params.m_animations.size();
-    }
-    else if ( params.m_containsTextures )
-    {
-        return params.m_textures.size();
-    }
-
-    return 0;
+    return params.m_textures.size();
 }
 
 } //bv

@@ -93,6 +93,8 @@ Texture2DSequenceImpl * TextureManager::CreateEmpty2DSequence   ( const model::R
     assert( texExtra->GetType() == TextureType::T_2D );
 
     auto sequence = new Texture2DSequenceImpl( texExtra->GetFormat(), texExtra->GetWidth(), texExtra->GetHeight() );
+
+    return sequence;
 }
 
 } // bv

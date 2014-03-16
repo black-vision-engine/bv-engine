@@ -14,7 +14,6 @@
 //FIXME: implement those textures
 //#include "Engine/Graphics/Resources/Texture1D.h"
 #include "Engine/Graphics/Resources/Texture2D.h"
-#include "Engine/Graphics/Resources/TextureAnimatedSequence2D.h"
 //#include "Engine/Graphics/Resources/Texture3D.h"
 //#include "Engine/Graphics/Resources/TextureCubic.h"
 
@@ -183,27 +182,13 @@ int      PdrShader::EnableTextureSamplers   ( Renderer * renderer, const std::ve
 
     assert( samplers.size() == Accessor::NumEntries( txParams ) );
 
-    if ( Accessor::ContainsTextures( txParams ) )
-    {
-        auto texturesPtr = Accessor::GetTextures( txParams );
-        assert( texturesPtr );
-        auto textures = *texturesPtr;
+    auto texturesPtr = Accessor::GetTextures( txParams );
+    assert( texturesPtr );
+    auto textures = *texturesPtr;
 
-        for( unsigned int i = 0; i < samplers.size(); ++i )
-        {
-            EnableTextureSampler( renderer, samplers[ i ], textures[ i ], i + firstAvailableSamplerIndex );
-        }
-    }
-    else if ( Accessor::ContainsAnimations( txParams ) )
+    for( unsigned int i = 0; i < samplers.size(); ++i )
     {
-        auto animationsPtr = Accessor::GetAnimations( txParams );
-        assert( animationsPtr );
-        auto animations = *animationsPtr;
-
-        for( unsigned int i = 0; i < samplers.size(); ++i )
-        {
-            EnableTextureSampler( renderer, samplers[ i ], animations[ i ], i + firstAvailableSamplerIndex );
-        }
+        EnableTextureSampler( renderer, samplers[ i ], textures[ i ], i + firstAvailableSamplerIndex );
     }
 
     return samplers.size();
@@ -221,52 +206,6 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
         case SamplerSamplingMode::SSM_MODE_2D:
         {
             renderer->Enable( texture, textureUnit );
-
-            //FIXME: this state may be cached in currentSamplerState in Renderer (for specified target (GL_TEXTURE_2D here and selected texturing unit)
-            GLint wrap_s = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
-            GLint wrap_t = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_T ) );
-            
-            //FIXME: think a bit more about how filtering mag/min (and mipmaps) should be implemented
-            GLint min_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
-            GLint mag_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
-
-            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s );
-            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t );
-
-            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter );
-            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter );
-
-            glTexParameterfv( GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, &sampler->GetBorderColor()[ 0 ] );
-
-            //glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy ); //FIXME: when anisotropy is implemented in texture sampler
-            //glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, lodBias);          //FIXME: when lodbias is implemented in texture sampler
-
-            break;
-        }
-        //FIXME: implement        
-        case SamplerSamplingMode::SSM_MODE_1D:
-        case SamplerSamplingMode::SSM_MODE_3D:
-        case SamplerSamplingMode::SSM_MODE_CUBIC:
-        default:
-            assert( false );
-
-    }
-
-    m_program->SetUniform( sampler->GetName().c_str(), textureUnit );
-}
-
-// *******************************
-//
-void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureSampler * sampler, const TextureAnimatedSequence2D * animation, int samplerNum )
-{
-    int textureUnit = samplerNum;
-
-    //FIXME: assert that texture type corresponds to sampler type
-    switch( sampler->SamplingMode() )
-    {
-        case SamplerSamplingMode::SSM_MODE_2D:
-        {
-            renderer->Enable( animation, textureUnit );
 
             //FIXME: this state may be cached in currentSamplerState in Renderer (for specified target (GL_TEXTURE_2D here and selected texturing unit)
             GLint wrap_s = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
@@ -332,27 +271,13 @@ int     PdrShader::DisableTextureSamplers  ( Renderer * renderer, const std::vec
 {
     typedef ShaderTextureParametersAccessor Accessor;
 
-    if ( Accessor::ContainsTextures( txParams ) )
-    {
-        auto texturesPtr = Accessor::GetTextures( txParams );
-        assert( texturesPtr );
-        auto textures = *texturesPtr;
+    auto texturesPtr = Accessor::GetTextures( txParams );
+    assert( texturesPtr );
+    auto textures = *texturesPtr;
 
-        for( unsigned int i = 0; i < samplers.size(); ++i )
-        {
-            DisableTextureSampler( renderer, samplers[ i ], textures[ i ], i + firstAvailableSamplerIndex );
-        }
-    }
-    else if ( Accessor::ContainsAnimations( txParams ) )
+    for( unsigned int i = 0; i < samplers.size(); ++i )
     {
-        auto animationsPtr = Accessor::GetAnimations( txParams );
-        assert( animationsPtr );
-        auto animations = *animationsPtr;
-
-        for( unsigned int i = 0; i < samplers.size(); ++i )
-        {
-            DisableTextureSampler( renderer, samplers[ i ], animations[ i ], i + firstAvailableSamplerIndex );
-        }
+        DisableTextureSampler( renderer, samplers[ i ], textures[ i ], i + firstAvailableSamplerIndex );
     }
 
     return samplers.size();
@@ -384,30 +309,6 @@ void    PdrShader::DisableTextureSampler   ( Renderer * renderer, const TextureS
 
 // *******************************
 //
-void    PdrShader::DisableTextureSampler   ( Renderer * renderer, const TextureSampler * sampler, const TextureAnimatedSequence2D * animation, int samplerNum )
-{
-    int textureUnit = samplerNum;
-
-    //FIXME: assert that texture type corresponds to sampler type
-    switch( sampler->SamplingMode() )
-    {
-        case SamplerSamplingMode::SSM_MODE_2D:
-        {
-            renderer->Disable( animation, textureUnit );
-            break;
-        }
-        //FIXME: implement        
-        case SamplerSamplingMode::SSM_MODE_1D:
-        case SamplerSamplingMode::SSM_MODE_3D:
-        case SamplerSamplingMode::SSM_MODE_CUBIC:
-        default:
-            assert( false );
-
-    }
-}
-
-// *******************************
-//
 void    PdrShader::InitParamsLocations     ( Shader * shader )
 {
     if( shader )
@@ -421,6 +322,5 @@ void    PdrShader::InitParamsLocations     ( Shader * shader )
         }
     }
 }
-
 
 } //bv

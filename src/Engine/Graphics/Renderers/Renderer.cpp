@@ -14,7 +14,6 @@
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexArrayObjectSingleVB.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexDescriptor.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrTexture2D.h"
-#include "Engine/Graphics/Renderers/OGLRenderer/PdrTextureAnimatedSequence2D.h"
 
 #include "Engine/Graphics/Shaders/RenderablePass.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
@@ -27,7 +26,7 @@
 
 #include "System/HRTimer.h"
 
-//FIXME: add disable methods so that current state can be cleared after frame is rendered
+//FIXME: add disable methods so that current state can be cleared after a frame is rendered
 
 namespace bv {
 
@@ -330,21 +329,14 @@ void    Renderer::Recreate            ( const VertexBuffer * vb )
 void    Renderer::Enable              ( const Texture2D * texture, int textureUnit )
 {
     PdrTexture2D * pdrTex2D = GetPdrTexture2D( texture );
-    pdrTex2D->Enable( this, textureUnit );
-}
 
-// *********************************
-//
-void    Renderer::Enable              ( const TextureAnimatedSequence2D * texture, int textureUnit )
-{
-    PdrTextureAnimatedSequence2D * pdrTexAnim2D = GetPdrTextureAnimSeq2D( texture );
-    
-    if( texture->NeedsUpdate() )
+    if( texture->Changed() )
     {
-        pdrTexAnim2D->Update( texture );
+        pdrTex2D->Update( texture );
+        texture->SetChanged( false );
     }
 
-    pdrTexAnim2D->Enable( this, textureUnit );
+    pdrTex2D->Enable( this, textureUnit );
 }
 
 // *********************************
@@ -353,14 +345,6 @@ void    Renderer::Disable             ( const Texture2D * texture, int textureUn
 {
     PdrTexture2D * pdrTex2D = GetPdrTexture2D( texture );
     pdrTex2D->Disable( this, textureUnit );
-}
-
-// *********************************
-//
-void    Renderer::Disable             ( const TextureAnimatedSequence2D * texture, int textureUnit )
-{
-    PdrTextureAnimatedSequence2D * pdrTexAnim2D = GetPdrTextureAnimSeq2D( texture );
-    pdrTexAnim2D->Disable( this, textureUnit );
 }
 
 // *********************************
@@ -491,27 +475,6 @@ PdrTexture2D *                  Renderer::GetPdrTexture2D         ( const Textur
 
 // *********************************
 //
-PdrTextureAnimatedSequence2D *  Renderer::GetPdrTextureAnimSeq2D     ( const TextureAnimatedSequence2D * texture )
-{
-    auto it = m_PdrTexturesAnimatedSequence2DMap.find( texture );
-
-    PdrTextureAnimatedSequence2D * pdrTex = nullptr;
-
-    if( it == m_PdrTexturesAnimatedSequence2DMap.end() )
-    {
-        pdrTex = PdrTextureAnimatedSequence2D::Create( texture );
-        m_PdrTexturesAnimatedSequence2DMap[ texture ] = pdrTex;
-    }
-    else
-    {
-        pdrTex = it->second;
-    }
-
-    return pdrTex;    
-}
-
-// *********************************
-//
 void  Renderer::NaiveReadback       ( char * buf, int w, int h )
 {
     assert( w == m_Width );
@@ -521,26 +484,4 @@ void  Renderer::NaiveReadback       ( char * buf, int w, int h )
     glReadPixels( 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, buf );
 }
 
-}
-
-
-    //FIXME: remove
-    //const float * fData = (const float *) vb->Data();
-    //unsigned int vertSize = 5;
-    //unsigned int rectSize = vertSize * 4;
-    //for( unsigned int i = 0; i < numCC; ++i )
-    //{
-    //    std::cout << std::endl << "Rectangle " << i << std::endl;
-    //    const float * rctData = &fData[ i * rectSize ];
-
-    //    std::cout << "Pos [" << rctData[ 0 ] << ", " << rctData[ 1 ] << ", " << rctData[ 2 ] << "] ";
-    //    std::cout << "[" << rctData[ 5 ] << ", " << rctData[ 6 ] << ", " << rctData[ 7 ] << "] ";
-    //    std::cout << "[" << rctData[ 10 ] << ", " << rctData[ 11 ] << ", " << rctData[ 12 ] << "] ";
-    //    std::cout << "[" << rctData[ 15 ] << ", " << rctData[ 16 ] << ", " << rctData[ 17 ] << "] " << std::endl;
-    //    std::cout << "uv [" << rctData[ 3 ] << ", " << rctData[ 4 ] << "]";
-    //    std::cout << "[" << rctData[ 8 ] << ", " << rctData[ 9 ] << "]";
-    //    std::cout << "[" << rctData[ 13 ] << ", " << rctData[ 14 ] << "]";
-    //    std::cout << "[" << rctData[ 18 ] << ", " << rctData[ 19 ] << "]" << std::endl;
-
-    //}
-
+} //bv

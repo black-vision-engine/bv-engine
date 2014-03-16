@@ -65,7 +65,6 @@ private:
 
     //FIXME: implement other texture types
     void    EnableTextureSampler    ( Renderer * renderer, const TextureSampler * sampler, const Texture2D * texture, int samplerNum );
-    void    EnableTextureSampler    ( Renderer * renderer, const TextureSampler * sampler, const TextureAnimatedSequence2D * animation, int samplerNum );
 
     int     DisableTextureSamplers  ( Renderer * renderer );
     int     DisableTextureSamplers  ( Renderer * renderer, Shader * shader, int firstAvailableSamplerIndex );
@@ -73,7 +72,6 @@ private:
 
     //FIXME: implement other texture types
     void    DisableTextureSampler   ( Renderer * renderer, const TextureSampler * sampler, const Texture2D * texture, int samplerNum );
-    void    DisableTextureSampler   ( Renderer * renderer, const TextureSampler * sampler, const TextureAnimatedSequence2D * animation, int samplerNum );
     
     void    InitParamsLocations     ( Shader * shader );
 

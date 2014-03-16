@@ -123,11 +123,9 @@ public: //FIXME: private
 public:
 
     void    Enable              ( const Texture2D * texture, int textureUnit );
-    void    Enable              ( const TextureAnimatedSequence2D * texture, int textureUnit );
 
     //FIXME: add disable methods so that current state can be cleared after frame is rendered
     void    Disable             ( const Texture2D * texture, int textureUnit );
-    void    Disable             ( const TextureAnimatedSequence2D * texture, int textureUnit );
 
 public:
 
@@ -137,7 +135,6 @@ public:
     PdrVertexArrayObject *          GetPdrVertexArray           ( const VertexArray * vao );
     PdrVertexArrayObjectSingleVB *  GetPdrVertexArraySingleVB   ( const VertexArraySingleVertexBuffer * vao );
     PdrTexture2D *                  GetPdrTexture2D             ( const Texture2D * texture );
-    PdrTextureAnimatedSequence2D *  GetPdrTextureAnimSeq2D      ( const TextureAnimatedSequence2D * texture );
 
     bool                        DrawRenderable              ( RenderableEntity * ent );
     bool                        DrawTriangleStrips          ( TriangleStrip * strip );
