@@ -1,6 +1,8 @@
 #pragma once
 
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 #include "gl/glew.h"
+
 
 namespace bv
 {
@@ -17,10 +19,11 @@ private:
 
     GLuint          m_pboID;
 
-    GLuint          m_prevTextureID;
-
     bool            m_writeLock;
     void *          m_lockedMemoryPtr;
+
+    unsigned int    m_width;
+    unsigned int    m_height;
 
 private:
 
@@ -36,7 +39,7 @@ public:
     void *          Lock            ( MemoryLockingType mlt );
     void            Unlock          ();
 
-    void            Update          ( const TextureAnimatedSequence2D * texture );
+    void            Update          ( const Texture2D * texture );
 
     GLuint          Bind            ();
     void            Unbind          ();
