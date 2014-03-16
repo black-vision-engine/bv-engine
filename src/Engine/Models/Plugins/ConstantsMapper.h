@@ -1,8 +1,8 @@
 #pragma once
 
-#include "PluginEnums.h"
-
 #include "Engine/Graphics/Shaders/TextureSampler.h"
+#include "Engine/Types/Enums.h"
+
 
 namespace bv { namespace model {
 

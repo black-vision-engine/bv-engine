@@ -14,11 +14,10 @@ public:
     {
     }
 
-    //virtual void                    Update( TimeType t )
-    //{
-    //    ShaderChannel::Update( t );
-    //}
-
+    virtual ITexturesData * GetTexturesData() const override
+    {
+        return nullptr;
+    }
 };
 
 // *********************************

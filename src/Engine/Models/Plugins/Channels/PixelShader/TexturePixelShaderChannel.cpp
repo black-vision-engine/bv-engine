@@ -22,8 +22,8 @@ std::string TexturePixelShaderChannelPD::borderColorsParamName[ MAX_NUM_TEXTURES
 
 // ******************************
 //
-void TexturePixelShaderChannel::Update( TimeType t )
-{
+//void TexturePixelShaderChannel::Update( TimeType t )
+//{
     //ShaderChannel::Update( t );
 
     //assert( m_alphaParams.size() == m_alphaValues.size() );
@@ -39,7 +39,7 @@ void TexturePixelShaderChannel::Update( TimeType t )
     //{
     //    m_texTransformValues[ i ]->SetValue( m_texTransformParams.Evaluate( i , t ) );
     //}
-}
+//}
 
 // ******************************
 //

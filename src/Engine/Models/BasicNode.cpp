@@ -155,7 +155,7 @@ SceneNode *                 BasicNode::BuildScene()
         RenderablePass * renderablePass = effect->GetPass( 0 ); //FIXME: add code to cope with more render passes
         auto pixelShader = renderablePass->GetPixelShader();
 
-        if( finalizer->HasAnimatingTexture() ) //FIXME: this suxx, some flags should be passed here
+        if( false /*finalizer->HasAnimatingTexture()*/ ) //FIXME: this suxx, some flags should be passed here
         {
             SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT }; 
             auto textureSampler = new TextureSampler( 0, "Animation0", bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ) );
@@ -183,8 +183,8 @@ SceneNode *                 BasicNode::BuildScene()
 
             UpdatersManager & updatersManager = UpdatersManager::Get();
 
-            SequenceAnimationUpdater * updater = new SequenceAnimationUpdater( sequence, finalizer->QuerySequenceAnimationSource() ); //asert fals - do dupy ten syf
-            updatersManager.RegisterUpdater( updater );
+            //SequenceAnimationUpdater * updater = new SequenceAnimationUpdater( sequence, finalizer->QuerySequenceAnimationSource() ); //asert fals - do dupy ten syf
+            //updatersManager.RegisterUpdater( updater );
         }
         else
         {
@@ -200,7 +200,7 @@ SceneNode *                 BasicNode::BuildScene()
                 auto textureSampler = new TextureSampler(       i
                                                             ,   tex->m_texName
                                                             ,   bv::SamplerSamplingMode::SSM_MODE_2D
-                                                            ,   ConstantsMapper::EngineConstant( tex->m_finteringMode )
+                                                            ,   ConstantsMapper::EngineConstant( tex->m_filteringMode )
                                                             ,   wp
                                                             ,   tex->m_texBorderColor.Evaluate( 0.f ) );
                 effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );

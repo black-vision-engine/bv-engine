@@ -27,6 +27,7 @@ enum class ResourceExtraKind : int
 class IResourceExtraData
 {
 public:
+
     virtual ResourceExtraKind       GetResourceExtraKind        () const = 0;
 
     virtual ~IResourceExtraData() {}

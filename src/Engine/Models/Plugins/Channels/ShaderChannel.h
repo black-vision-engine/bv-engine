@@ -32,6 +32,8 @@ public:
     virtual const std::vector< const bv::IValue * > &   GetValues                   () const override;
     virtual const bv::IValue *                          GetValue                    ( const std::string & name ) const override;
 
+    virtual ITexturesData *                             GetTexturesData             () const override;
+
 };
 
 } // model

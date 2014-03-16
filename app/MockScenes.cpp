@@ -4,6 +4,8 @@
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/Plugins/Simple/SimpleTransformPlugin.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
+#include "Engine/Types/Enums.h"
+
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -243,9 +245,9 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     textures.push_back( model::TextureDescriptor( "asci_arial_atlas_red.png", model::ParametersFactory::CreateParameter( "texTransform", tx0m ) ) );
     textures.push_back( model::TextureDescriptor( "pliczek_z_kwiatkiem.jpg", model::ParametersFactory::CreateParameter( "texTransform", tx1m ) ) );
     textures[0].alpha = model::ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 0.4f) );
-    textures[1].wrappingModeX = model::TextureWrappingMode::TWM_CLAMP_BORDER;
-    textures[1].wrappingModeY = model::TextureWrappingMode::TWM_CLAMP_EDGE;
-    textures[1].filteringMode = model::TextureFilteringMode::TFM_LINEAR;
+    textures[1].wrappingModeX = TextureWrappingMode::TWM_CLAMP_BORDER;
+    textures[1].wrappingModeY = TextureWrappingMode::TWM_CLAMP_EDGE;
+    textures[1].filteringMode = TextureFilteringMode::TFM_LINEAR;
     textures[1].alpha = model::ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 1.f) );
     textures[1].borderColor = model::ParametersFactory::CreateParameter( "texBorderColor", InterpolatorsHelper::CreateConstValue( glm::vec4( 0.f, 1.f, 0.f, 0.3f ) ) );
 

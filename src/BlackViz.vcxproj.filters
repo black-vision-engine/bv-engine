@@ -284,7 +284,6 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\FillContext.h" />
     <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
     <ClInclude Include="Engine\Models\Updaters\NodeUpdater.h" />
-    <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
     <ClInclude Include="Engine\Models\Updaters\SequenceAnimationUpdater.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\ISequenceAnimationSource.h" />
     <ClInclude Include="Engine\Graphics\Resources\TextureBase.h" />
@@ -407,6 +406,9 @@
     <ClInclude Include="Engine\Models\Interfaces\ITimeEvaluator.h" />
     <ClInclude Include="Engine\Graphics\Resources\Texture2DImpl.h" />
     <ClInclude Include="Engine\Graphics\Resources\Texture2DSequenceImpl.h" />
+    <ClInclude Include="Engine\Models\Interfaces\IAnimationDescriptor.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITextureDescriptor.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITexturesData.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

@@ -421,7 +421,10 @@
     <ClInclude Include="Engine\Interfaces\IValue.h" />
     <ClInclude Include="Engine\Interfaces\IValueSet.h" />
     <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
+    <ClInclude Include="Engine\Models\Interfaces\IAnimationDescriptor.h" />
     <ClInclude Include="Engine\Models\Interfaces\IModelNode.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITextureDescriptor.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITexturesData.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITimeEvaluator.h" />
     <ClInclude Include="Engine\Models\ModelAccessors.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.h" />
@@ -496,7 +499,6 @@
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.h" />
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.h" />
-    <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginsFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultColorPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleAnimationPlugin.h" />

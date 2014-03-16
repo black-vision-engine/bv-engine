@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Engine/Models/Plugins/PluginEnums.h"
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Types/Values/ValuesFactory.h"
 
@@ -27,7 +26,7 @@ struct TextureInfo
 
     TextureWrappingMode     m_wrappingModeX;
     TextureWrappingMode     m_wrappingModeY;
-    TextureFilteringMode    m_finteringMode;
+    TextureFilteringMode    m_filteringMode;
 
     TextureInfo(    const ResourceHandle * resHandle
                ,    const std::string & texName
