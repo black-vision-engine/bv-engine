@@ -122,24 +122,6 @@ TextureInfoVec                            DefaultFinalizePlugin::GetTextures    
 
 // *******************************
 //
-bool                                DefaultFinalizePlugin::HasAnimatingTexture          () const
-{
-    assert( m_prevPlugin );
-
-    return m_prevPlugin->HasAnimatingTexture();
-}
-
-// *******************************
-//
-const ISequenceAnimationSource *    DefaultFinalizePlugin::QuerySequenceAnimationSource () const// FIXME: use generic interface for querying resources that can be
-{
-    assert( m_prevPlugin );
-
-    return m_prevPlugin->QuerySequenceAnimationSource();
-}
-
-// *******************************
-//
 void                                DefaultFinalizePlugin::Update                       ( TimeType t )
 {
     //TODO: implement if there is logic that should be run

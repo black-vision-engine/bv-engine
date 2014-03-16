@@ -59,9 +59,6 @@ public:
 
     virtual TextureInfoVec                      GetTextures                 () const override;
 
-    virtual bool                                HasAnimatingTexture         () const override                       { return false; }
-    virtual const ISequenceAnimationSource *    QuerySequenceAnimationSource() const override                       { return nullptr; }
-
 protected:
 
     IParamValModel *                            PluginModel                 ();

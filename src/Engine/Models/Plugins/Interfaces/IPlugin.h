@@ -11,7 +11,6 @@
 
 namespace bv { namespace model {
 
-class ISequenceAnimationSource;
 class IVertexAttributesChannel;
 class IDefaultTransformChannel;
 class ITransformChannel;
@@ -45,8 +44,6 @@ public:
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const = 0;
 
     virtual TextureInfoVec                      GetTextures                 () const = 0; // FIXME: use resources
-    virtual bool                                HasAnimatingTexture         () const = 0;
-    virtual const ISequenceAnimationSource *    QuerySequenceAnimationSource() const = 0; // FIXME: use generic interface for querying resources that can be 
 
     virtual                                     ~IPlugin                    (){}
 

@@ -36,8 +36,6 @@ public:
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const override;
                                                                                      
     virtual TextureInfoVec                      GetTextures                 () const override; // FIXME: use resources
-    virtual bool                                HasAnimatingTexture         () const override;
-    virtual const ISequenceAnimationSource *    QuerySequenceAnimationSource() const override; // FIXME: use generic interface for querying resources that can be 
 
     virtual void                                Update                      ( TimeType t ) override;
 
