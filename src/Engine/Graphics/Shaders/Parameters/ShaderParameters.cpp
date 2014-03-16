@@ -19,6 +19,11 @@ ShaderParameters::~ShaderParameters                         ()
     {
         delete param;
     }
+
+    for( auto texture : m_textures )
+    {
+        delete texture;
+    }
 }
 
 // ***************************
