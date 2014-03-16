@@ -18,9 +18,11 @@ public:
 
 protected:
 
-    ShaderParameters * DefaultParamsPS  ( const IShaderDataSource * ds ) const;
-    ShaderParameters * DefaultParamsVS  ( const IShaderDataSource * ds ) const;
-    ShaderParameters * DefaultParamsGS  ( const IShaderDataSource * ds ) const;
+    ShaderParameters *  DefaultParamsPS ( const IShaderDataSource * ds ) const;
+    ShaderParameters *  DefaultParamsVS ( const IShaderDataSource * ds ) const;
+    ShaderParameters *  DefaultParamsGS ( const IShaderDataSource * ds ) const;
+
+    void                AddTextures     ( Shader * shader, const ITexturesData * txData );
 
 private:
 
