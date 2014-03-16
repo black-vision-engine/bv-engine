@@ -3,7 +3,7 @@
 #include <vector>
 
 
-namespace bv { namespace model {
+namespace bv {
 
 class ITextureDescriptor;
 class IAnimationDescriptor;
@@ -18,5 +18,4 @@ public:
     virtual ~ITexturesData ()   {}
 };
 
-} //model
 } //bv

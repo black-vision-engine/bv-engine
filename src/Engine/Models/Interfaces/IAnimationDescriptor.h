@@ -3,7 +3,7 @@
 #include "Engine/Types/Enums.h"
 
 
-namespace bv { namespace model {
+namespace bv {
 
 class ITextureDescriptor;
 
@@ -25,5 +25,4 @@ public:
 
 };
 
-} //model
 } //bv

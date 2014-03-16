@@ -3,7 +3,7 @@
 #include "Engine/Types/Enums.h"
 
 
-namespace bv { namespace model {
+namespace bv {
 
 class ITextureDescriptor
 {
@@ -28,9 +28,4 @@ public:
 //    ParamFloat              alpha;
 //    ParamVec4               borderColor;
 
-//    TextureWrappingMode     wrappingModeX;
-//    TextureWrappingMode     wrappingModeY;
-//    TextureFilteringMode    filteringMode;
-
-} //model
 } //bv
