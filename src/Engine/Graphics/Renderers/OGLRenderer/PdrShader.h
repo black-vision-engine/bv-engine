@@ -1,12 +1,10 @@
 #pragma once
 
-#include "Engine/Graphics/Renderers/OGLRenderer/PdrGLSLProgram.h"
-
-#include "Engine/Graphics/Shaders/Parameters/GenericShaderParam.h"
-
-#include "Engine/Types/Enums.h"
-
 #include <glm/glm.hpp>
+
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrGLSLProgram.h"
+#include "Engine/Graphics/Shaders/Parameters/GenericShaderParam.h"
+#include "Engine/Types/Enums.h"
 
 
 namespace bv
@@ -22,7 +20,7 @@ class TextureSampler;
 class Texture2D;
 class TextureAnimatedSequence2D;
 
-class ShaderTextureParameters;
+class ShaderParameters;
 
 class PdrShader
 {
@@ -61,16 +59,14 @@ private:
     //FIXME: this API should  be moved to some helper class as it looks shitty ang pretty uglu over here (as if PdrShader was responsible mostly for enabling samplers and textures)
     int     EnableTextureSamplers   ( Renderer * renderer );
     int     EnableTextureSamplers   ( Renderer * renderer, Shader * shader, int firstAvailableSamplerIndex );
-    int     EnableTextureSamplers   ( Renderer * renderer, const std::vector< const TextureSampler * > & samplers, const ShaderTextureParameters & txParams, int firstAvailableSamplerIndex );
 
-    //FIXME: implement other texture types
+    //FIXME: implement additional texture types
     void    EnableTextureSampler    ( Renderer * renderer, const TextureSampler * sampler, const Texture2D * texture, int samplerNum );
 
     int     DisableTextureSamplers  ( Renderer * renderer );
     int     DisableTextureSamplers  ( Renderer * renderer, Shader * shader, int firstAvailableSamplerIndex );
-    int     DisableTextureSamplers  ( Renderer * renderer, const std::vector< const TextureSampler * > & samplers, const ShaderTextureParameters & txParams, int firstAvailableSamplerIndex );
 
-    //FIXME: implement other texture types
+    //FIXME: implement additioonal texture types
     void    DisableTextureSampler   ( Renderer * renderer, const TextureSampler * sampler, const Texture2D * texture, int samplerNum );
     
     void    InitParamsLocations     ( Shader * shader );

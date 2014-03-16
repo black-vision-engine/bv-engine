@@ -33,16 +33,18 @@ inline const GenericShaderParam *   ShaderParameters::GetParam          ( const 
 
 // ***************************
 //
-inline const ShaderTextureParameters &  ShaderParameters::GetTextureParameters  () const
+unsigned int                        ShaderParameters::NumTextures       () const
 {
-    return m_textureParams;
+    return m_textures.size();
 }
 
 // ***************************
 //
-inline ShaderTextureParameters &        ShaderParameters::TextureParameters     ()
+const Texture2D *                   ShaderParameters::GetTexture        ( unsigned int idx ) const
 {
-    return m_textureParams;
+    assert( idx < NumTextures() );
+
+    return m_textures[ idx ];
 }
 
 } //bv

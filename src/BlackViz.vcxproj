@@ -222,7 +222,6 @@
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec2.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec3.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.cpp" />
-    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderTextureParameters.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\RenderableEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\TextureSampler.cpp" />
     <ClCompile Include="Engine\Graphics\State\AlphaState.cpp" />
@@ -406,7 +405,6 @@
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec2.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec3.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderTextureParameters.h" />
     <ClInclude Include="Engine\Graphics\Shaders\RenderableEffect.h" />
     <ClInclude Include="Engine\Graphics\Shaders\TextureSampler.h" />
     <ClInclude Include="Engine\Graphics\State\AlphaState.h" />

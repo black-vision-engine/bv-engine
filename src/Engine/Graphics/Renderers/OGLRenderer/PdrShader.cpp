@@ -166,28 +166,22 @@ int     PdrShader::EnableTextureSamplers   ( Renderer * renderer )
 //
 int     PdrShader::EnableTextureSamplers   ( Renderer * renderer, Shader * shader, int firstAvailableSamplerIndex )
 {
-    if ( shader == nullptr )
+    if( shader != nullptr )
     {
-        return 0;
+        auto samplers = shader->Samplers();
+        auto params = shader->GetParameters();
+
+        assert( samplers.size() == params->NumTextures() );
+
+        for( unsigned int i = 0; i < samplers.size(); ++i )
+        {
+            EnableTextureSampler( renderer, samplers[ i ], params->GetTexture( i ), i + firstAvailableSamplerIndex );
+        }
+
+        return samplers.size();
     }
 
-    return EnableTextureSamplers( renderer, shader->Samplers(), shader->GetParameters()->GetTextureParameters(), firstAvailableSamplerIndex );
-}
-
-// *******************************
-//
-int      PdrShader::EnableTextureSamplers   ( Renderer * renderer, const std::vector< const TextureSampler * > & samplers, const ShaderTextureParameters & txParams, int firstAvailableSamplerIndex )
-{
-    assert( samplers.size() == txParams.NumTextures() );
-
-    auto textures = txParams.Textures();
-
-    for( unsigned int i = 0; i < samplers.size(); ++i )
-    {
-        EnableTextureSampler( renderer, samplers[ i ], textures[ i ], i + firstAvailableSamplerIndex );
-    }
-
-    return samplers.size();
+    return 0;
 }
 
 // *******************************
@@ -253,26 +247,20 @@ int     PdrShader::DisableTextureSamplers  ( Renderer * renderer )
 //
 int    PdrShader::DisableTextureSamplers  ( Renderer * renderer, Shader * shader, int firstAvailableSamplerIndex )
 {
-    if ( shader == nullptr )
+    if ( shader != nullptr )
     {
-        return 0;
+        auto samplers = shader->Samplers();
+        auto params = shader->GetParameters();
+
+        for( unsigned int i = 0; i < samplers.size(); ++i )
+        {
+            DisableTextureSampler( renderer, samplers[ i ], params->GetTexture( i ), i + firstAvailableSamplerIndex );
+        }
+
+        return samplers.size();
     }
 
-    return DisableTextureSamplers( renderer, shader->Samplers(), shader->GetParameters()->GetTextureParameters(), firstAvailableSamplerIndex );
-}
-
-// *******************************
-//
-int     PdrShader::DisableTextureSamplers  ( Renderer * renderer, const std::vector< const TextureSampler * > & samplers, const ShaderTextureParameters & txParams, int firstAvailableSamplerIndex )
-{
-    auto textures = txParams.Textures();
-
-    for( unsigned int i = 0; i < samplers.size(); ++i )
-    {
-        DisableTextureSampler( renderer, samplers[ i ], textures[ i ], i + firstAvailableSamplerIndex );
-    }
-
-    return samplers.size();
+    return 0;
 }
 
 // *******************************

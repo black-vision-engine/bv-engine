@@ -38,4 +38,11 @@ void    ShaderParameters::AddParameter                      ( GenericShaderParam
     m_shaderParams.push_back( param );
 }
 
+// ***************************
+//
+void               ShaderParameters::AddTexture             ( Texture2D * texture )
+{
+    m_textures.push_back( texture );
+}
+
 } //bv

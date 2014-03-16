@@ -178,8 +178,8 @@ SceneNode *                 BasicNode::BuildScene()
             }
 
             assert( i > 1 );
-            ShaderTextureParameters & texParams = pixelShader->Parameters()->TextureParameters();
-            texParams.AddTexture( sequence ); 
+            auto shaderParams = pixelShader->Parameters();
+            shaderParams->AddTexture( sequence ); 
 
             UpdatersManager & updatersManager = UpdatersManager::Get();
 
@@ -206,9 +206,8 @@ SceneNode *                 BasicNode::BuildScene()
                 effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );
 
                 auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
-
-                ShaderTextureParameters & texParams = effect->GetPass( 0 )->GetPixelShader()->Parameters()->TextureParameters();
-                texParams.AddTexture( loadedTex );
+                auto shaderParams = effect->GetPass( 0 )->GetPixelShader()->Parameters();
+                shaderParams->AddTexture( loadedTex );
 
                 i++;
             }
