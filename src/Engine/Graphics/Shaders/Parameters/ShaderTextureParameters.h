@@ -8,39 +8,28 @@ namespace bv {
 class Texture2D;
 class TextureAnimatedSequence2D;
 
-
 class ShaderTextureParameters
 {
 private:
 
     std::vector< Texture2D * >                  m_textures;
-    std::vector< TextureAnimatedSequence2D * >  m_animations;
-
-    bool                                        m_containsTextures;
-    bool                                        m_containsAnimations;
 
 public:
 
-            ShaderTextureParameters     ();
-            ~ShaderTextureParameters    ();
+                    ShaderTextureParameters     ();
+                    ~ShaderTextureParameters    ();
 
-private:
-
-    void    AddTexture                  ( Texture2D * tx );            
-    void    AddAnimation                ( TextureAnimatedSequence2D * anim );
+    void            AddTexture                  ( Texture2D * tx );
+    unsigned int    NumTextures                 () const
+    {
+        return m_textures.size();
+    }
     
-    //FIXME: add other texture types as well and think of better implementation of ShaderTextureParameters for 1D, 3D and CUBIC textures (by means of templates or something - to be thought over)
-    friend class ShaderTextureParametersAccessor;
+    const std::vector< Texture2D * > & Textures     () const
+    {
+        return m_textures;
+    }
 
-};
-
-class ShaderTextureParametersAccessor
-{
-public:
-
-    static bool                                                 Add                 ( ShaderTextureParameters & params, Texture2D * tx );                                                                                                      
-    static const std::vector< Texture2D * > *                   GetTextures         ( const ShaderTextureParameters & params );
-    static unsigned int                                         NumEntries          ( const ShaderTextureParameters & params );
 };
 
 } //bv

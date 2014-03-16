@@ -48,9 +48,13 @@ Texture2D * TextureManager::LoadTexture( const model::ResourceHandle * resHandle
 
     assert( texExtra->GetType() == TextureType::T_2D );
 
-    Texture2D * newTex = new bv::Texture2DImpl( texExtra->GetFormat(), texExtra->GetWidth(), texExtra->GetHeight() );
-    TextureAccessor::WriteData( newTex, resHandle->GetData(), resHandle->GetSize() );
+    auto format = texExtra->GetFormat();
+    auto width  = texExtra->GetWidth();
+    auto height = texExtra->GetHeight();
 
+    //FIXME: add asserts for invalid dimensions (i.e. too large)
+    auto newTex = new bv::Texture2DImpl( format, width, height );
+    newTex->WriteBits( resHandle->GetData(), format, width, height );
     m_txMap[ newTex ] = newTex;
 
     return newTex;

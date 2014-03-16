@@ -29,16 +29,6 @@ public:
     void                    SetChanged      ( bool changed ) const;
     bool                    Changed         () const;
 
-    friend class TextureAccessor;
-};
-
-
-class TextureAccessor
-{
-public:
-
-    static bool    WriteData( Texture * tx, const char * data, size_t dataSize );
-
 };
 
 } //bv

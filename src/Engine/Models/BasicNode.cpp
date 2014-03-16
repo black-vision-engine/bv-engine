@@ -166,7 +166,7 @@ SceneNode *                 BasicNode::BuildScene()
             unsigned int i = 0;
             for( auto tex : finalizer->GetTextures() )
             {
-                if( i == 0 )
+                if( i == 0 ) //FIXME: to brzydkie jak noc jest, poprawic trzeba (tworzenie pustej kolekcji, dodawanie ramek)
                 {
                     sequence = GTextureManager.CreateEmpty2DSequence( tex->m_resHandle ); 
                 }
@@ -179,9 +179,7 @@ SceneNode *                 BasicNode::BuildScene()
 
             assert( i > 1 );
             ShaderTextureParameters & texParams = pixelShader->Parameters()->TextureParameters();
-            bool bAdded = ShaderTextureParametersAccessor::Add( texParams, sequence );
-
-            assert( bAdded );
+            texParams.AddTexture( sequence ); 
 
             UpdatersManager & updatersManager = UpdatersManager::Get();
 
@@ -210,9 +208,7 @@ SceneNode *                 BasicNode::BuildScene()
                 auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
 
                 ShaderTextureParameters & texParams = effect->GetPass( 0 )->GetPixelShader()->Parameters()->TextureParameters();
-                bool bAdded = ShaderTextureParametersAccessor::Add( texParams, loadedTex );
-
-                assert( bAdded );
+                texParams.AddTexture( loadedTex );
 
                 i++;
             }

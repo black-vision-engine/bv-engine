@@ -178,13 +178,9 @@ int     PdrShader::EnableTextureSamplers   ( Renderer * renderer, Shader * shade
 //
 int      PdrShader::EnableTextureSamplers   ( Renderer * renderer, const std::vector< const TextureSampler * > & samplers, const ShaderTextureParameters & txParams, int firstAvailableSamplerIndex )
 {
-    typedef ShaderTextureParametersAccessor Accessor;
+    assert( samplers.size() == txParams.NumTextures() );
 
-    assert( samplers.size() == Accessor::NumEntries( txParams ) );
-
-    auto texturesPtr = Accessor::GetTextures( txParams );
-    assert( texturesPtr );
-    auto textures = *texturesPtr;
+    auto textures = txParams.Textures();
 
     for( unsigned int i = 0; i < samplers.size(); ++i )
     {
@@ -269,11 +265,7 @@ int    PdrShader::DisableTextureSamplers  ( Renderer * renderer, Shader * shader
 //
 int     PdrShader::DisableTextureSamplers  ( Renderer * renderer, const std::vector< const TextureSampler * > & samplers, const ShaderTextureParameters & txParams, int firstAvailableSamplerIndex )
 {
-    typedef ShaderTextureParametersAccessor Accessor;
-
-    auto texturesPtr = Accessor::GetTextures( txParams );
-    assert( texturesPtr );
-    auto textures = *texturesPtr;
+    auto textures = txParams.Textures();
 
     for( unsigned int i = 0; i < samplers.size(); ++i )
     {
