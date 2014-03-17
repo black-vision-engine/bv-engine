@@ -5,6 +5,7 @@
 #include "Engine/Models/Plugins/Channels/ShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultTexturesData.h"
 
 
 namespace bv { namespace model {
@@ -13,7 +14,8 @@ class DefaultPixelShaderChannel : public ShaderChannel< IPixelShaderChannel >
 {
 protected:
 
-    RendererContext *   m_rendererContext;
+    RendererContext *       m_rendererContext;
+    DefaultTexturesData *   m_texturesData;
 
 protected:
 

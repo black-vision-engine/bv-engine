@@ -13,6 +13,8 @@ DefaultPixelShaderChannel::DefaultPixelShaderChannel  ( const std::string & shad
     {
         m_rendererContext = RendererContext::Create();
     }
+
+    m_texturesData = new DefaultTexturesData();
 }
 
 // ******************************
@@ -20,6 +22,7 @@ DefaultPixelShaderChannel::DefaultPixelShaderChannel  ( const std::string & shad
 DefaultPixelShaderChannel::~DefaultPixelShaderChannel ()
 {
     delete m_rendererContext;
+    delete m_texturesData;
 }
 
 // ******************************
@@ -49,7 +52,7 @@ void                        DefaultPixelShaderChannel::SetRendererContext  ( Ren
 //
 const ITexturesData *       DefaultPixelShaderChannel::GetTexturesData     () const
 {
-    return nullptr;
+    return m_texturesData;
 }
 
 // ******************************
