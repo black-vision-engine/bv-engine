@@ -88,7 +88,10 @@ public:
 
 private:
 
-    bool                                    CreateRenderableData    ( /*VertexArray ** vao*/ )          const;
+    RenderableEntity *                      CreateRenderable        ( const IPlugin * finalizer ) const;
+    std::vector< bv::Transform >            CreateTransformVec      ( const IPlugin * finalizer ) const;
+
+    bool                                    CreateRenderableData    ( /*VertexArray ** vao*/ ) const;
 
     //FIXME: scene building API should be moved to some more appropriate place
     RenderableArrayDataSingleVertexBuffer *         CreateRenderableArrayData           ( PrimitiveType type ) const; 

@@ -99,58 +99,10 @@ const std::string &             BasicNode::GetName                 () const
 //
 SceneNode *                 BasicNode::BuildScene()
 {
-    RenderableEntity *  renderable  = nullptr;
-    RenderableEffect *  effect      = nullptr;
+    RenderableEntity *  renderable  = CreateRenderable( m_pluginList->GetFinalizePlugin() );
 
-    const IPlugin * finalizer = m_pluginList->GetFinalizePlugin();
-
-    if( finalizer->GetVertexAttributesChannel() )
-    {
-        auto renderableType = finalizer->GetVertexAttributesChannel()->GetPrimitiveType();
-
-        effect = CreateDefaultEffect( finalizer );
-
-        //RenderableArrayDataSingleVertexBuffer * rad = CreateRenderableArrayData( renderableType );
-        //CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
-        //effect = ;
-
-        //FIXME: to powinna ogarniac jakas faktoria-manufaktura
-        switch( renderableType )
-        {
-            case PrimitiveType::PT_TRIANGLE_STRIP:
-            {
-                //FIXME: it should be constructed as a proper type RenderableArrayDataArraysSingleVertexBuffer * in the first place
-                //FIXME: this long type name suggests that something wrong is happening here (easier to name design required)
-                RenderableArrayDataArraysSingleVertexBuffer * radasvb = CreateRenderableArrayDataTriStrip();
-
-                if( radasvb )
-                {
-                    renderable = new TriangleStrip( radasvb, effect );
-                }
-                break;
-            }
-            case PrimitiveType::PT_TRIANGLES:
-            case PrimitiveType::PT_TRIANGLE_MESH:
-                assert( false );
-            default:
-                return nullptr;
-        }
-    }
-    else
-    {
-        renderable = new TriangleStrip( nullptr, nullptr );
-    }
-
-    bv::Transform worldTrans;
-
-    std::vector< bv::Transform > trans;
-    trans.push_back( worldTrans );
-
-    renderable->SetWorldTransforms( trans );
-
-    SceneNode * retNode = new SceneNode( renderable );
-
-    NodeUpdater * nodeUpdater = new NodeUpdater( renderable, retNode, this );
+    SceneNode * retNode         = new SceneNode( renderable );
+    NodeUpdater * nodeUpdater   = new NodeUpdater( renderable, retNode, this );
     UpdatersManager::Get().RegisterUpdater( nodeUpdater );
 
     for( auto ch : m_children )
@@ -315,6 +267,77 @@ bool  BasicNode::IsVisible               () const
 void  BasicNode::SetVisible              ( bool visible )
 {
     m_visible = visible;
+}
+
+// ********************************
+//
+RenderableEntity *                  BasicNode::CreateRenderable         ( const IPlugin * finalizer ) const
+{
+    RenderableEntity * renderable = nullptr;
+
+    if( finalizer->GetVertexAttributesChannel() )
+    {
+        auto renderableType = finalizer->GetVertexAttributesChannel()->GetPrimitiveType();
+
+        RenderableEffect * effect = CreateDefaultEffect( finalizer );
+
+        //RenderableArrayDataSingleVertexBuffer * rad = CreateRenderableArrayData( renderableType );
+        //CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
+        //effect = ;
+
+        //FIXME: to powinna ogarniac jakas faktoria-manufaktura
+        switch( renderableType )
+        {
+            case PrimitiveType::PT_TRIANGLE_STRIP:
+            {
+                //FIXME: it should be constructed as a proper type RenderableArrayDataArraysSingleVertexBuffer * in the first place
+                //FIXME: this long type name suggests that something wrong is happening here (easier to name design required)
+                RenderableArrayDataArraysSingleVertexBuffer * radasvb = CreateRenderableArrayDataTriStrip();
+
+                if( radasvb )
+                {
+                    renderable = new TriangleStrip( radasvb, effect );
+                }
+                break;
+            }
+            case PrimitiveType::PT_TRIANGLES:
+            case PrimitiveType::PT_TRIANGLE_MESH:
+                assert( false );
+            default:
+                return nullptr;
+        }
+    }
+    else
+    {
+        renderable = new TriangleStrip( nullptr, nullptr );
+    }
+
+    auto worldTransformVec = CreateTransformVec( finalizer );
+
+    renderable->SetWorldTransforms( worldTransformVec );
+
+    return renderable;
+}
+
+// ********************************
+//
+std::vector< bv::Transform >        BasicNode::CreateTransformVec      ( const IPlugin * finalizer ) const
+{
+    auto tc = finalizer->GetTransformChannel();
+    assert( tc );
+
+    auto numTransforms = tc->GetTransformValues().size();
+    assert( numTransforms > 0 );
+
+    std::vector< bv::Transform > worldTransformVec;
+
+    for( unsigned int i = 0; i < numTransforms; ++i )
+    {
+        bv::Transform worldTrans;
+        worldTransformVec.push_back( worldTrans );
+    }
+
+    return worldTransformVec;
 }
 
 // ********************************
