@@ -105,12 +105,12 @@ ShaderParameters * DefaultEffect::DefaultParamsGS  ( const IShaderDataSource * d
 }
 
 // *********************************
-//
+// FIXME: only 2D textures right now
 void               DefaultEffect::AddTextures       ( Shader * shader, const ITexturesData * txData )
 {
     unsigned int samplerNum = 0;
 
-    if ( shader ) //FIXME: only 2D textures right now
+    if ( shader )
     {
         auto params     = shader->GetParameters ();
         auto textures   = txData->GetTextures   ();
@@ -151,7 +151,6 @@ ShaderParameters *      DefaultEffect::DefaultParamsImpl ( const IShaderDataSour
 
     if( ds != nullptr )
     {
-        //Register parameters
         sp = new ShaderParameters();
 
         for( auto value : ds->GetValues() )
@@ -187,72 +186,33 @@ TextureSampler *        DefaultEffect::CreateSampler   ( const ITextureParams * 
 //
 Texture2DImpl *         DefaultEffect::CreateTexture       ( const ITextureDescriptor * txParams ) const
 {
-    return nullptr;
+    auto format = txParams->GetFormat();
+    auto width  = txParams->GetWidth();
+    auto height = txParams->GetHeight();
+
+    auto texture = new Texture2DImpl( format, width, height );
+    texture->WriteBits( txParams->GetBits(), format, width, height );
+
+    return texture;
 }
 
 // *********************************
 //
 Texture2DSequenceImpl * DefaultEffect::CreateSequence       ( const IAnimationDescriptor * animParams ) const
 {
-    auto sampler    = CreateSampler( anim, samplerNum );
-    auto sequence   = CreateEmptySequence( anim );
-    auto format     = anim->GetFormat();
-    auto width      = 
+    auto format = animParams->GetFormat();
+    auto width  = animParams->GetWidth();
+    auto height = animParams->GetHeight();
+
+    auto sequence   = new Texture2DSequenceImpl( format, width, height );
             
-    for( unsigned int i = 0; i < anim->NumTextures(); ++i )
+    for( unsigned int i = 0; i < animParams->NumTextures(); ++i )
     {
-        char * frameData = anim->GetBits( i );
-        sequence->AddTextureWritingBits( anim->GetBits( i ), ani
+        bool bAdded = sequence->AddTextureWritingBits( animParams->GetBits( i ), format, width, height );
+        assert( bAdded );
     }
-}
 
-    /*
-        //Register textures and animations
-        auto textures   = ds->GetTexturesData()->GetTextures();
-        auto animations = ds->GetTexturesData()->GetAnimations();
-
-        for( auto tx : textures )
-        {
-        }
-
-        if( animations.size() > 0 )
-        {
-            for( auto anim : animations )
-            {
-            }
-        }
-
-        for( auto txData : ds->
-                    int i = 0;
-            for( auto tex : finalizer->GetTextures() )
-            {
-                SamplerWrappingMode wp[] = {
-                                                ConstantsMapper::EngineConstant( tex->m_wrappingModeX ) 
-                                            ,   ConstantsMapper::EngineConstant( tex->m_wrappingModeY )
-                                            ,   SamplerWrappingMode::SWM_REPEAT // FIXME: Add 3d texture support
-                                            }; 
-                //FIXME: jak to kurwa przez tex->m_texName ????
-                auto textureSampler = new TextureSampler(       i
-                                                            ,   tex->m_texName
-                                                            ,   bv::SamplerSamplingMode::SSM_MODE_2D
-                                                            ,   ConstantsMapper::EngineConstant( tex->m_filteringMode )
-                                                            ,   wp
-                                                            ,   tex->m_texBorderColor.Evaluate( 0.f ) );
-                effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );
-
-                auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
-                auto shaderParams = effect->GetPass( 0 )->GetPixelShader()->Parameters();
-                shaderParams->AddTexture( loadedTex );
-
-                i++;
-            }
-
-
-
-    }
-    */
-    return sp;
-
+    return sequence;
 }
 
 } //bv

@@ -424,6 +424,7 @@
     <ClInclude Include="Engine\Models\Interfaces\IAnimationDescriptor.h" />
     <ClInclude Include="Engine\Models\Interfaces\IModelNode.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITextureDescriptor.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITextureParams.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITexturesData.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITimeEvaluator.h" />
     <ClInclude Include="Engine\Models\ModelAccessors.h" />

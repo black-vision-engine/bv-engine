@@ -409,6 +409,7 @@
     <ClInclude Include="Engine\Models\Interfaces\IAnimationDescriptor.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITextureDescriptor.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITexturesData.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITextureParams.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

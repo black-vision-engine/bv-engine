@@ -6,7 +6,11 @@
 namespace bv {
 
 class IShaderDataSource;
-class ShaderParameters;
+class ITexturesData;
+class ITextureParams;
+class ITextureDescriptor;
+class IAnimationDescriptor;
+
 class Texture2DImpl;
 class Texture2DSequenceImpl;
 

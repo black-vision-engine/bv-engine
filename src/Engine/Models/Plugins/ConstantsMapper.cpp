@@ -1,6 +1,6 @@
 #include "ConstantsMapper.h"
 
-namespace bv { namespace model {
+namespace bv {
 
 SamplerWrappingMode              ConstantsMapper::EngineConstant( TextureWrappingMode textureMappingMode )
 {
@@ -12,6 +12,4 @@ SamplerFilteringMode             ConstantsMapper::EngineConstant( TextureFilteri
     return SamplerFilteringMode( (int)textureFilteringMode );
 }
 
-
-} // model
 } // bv
