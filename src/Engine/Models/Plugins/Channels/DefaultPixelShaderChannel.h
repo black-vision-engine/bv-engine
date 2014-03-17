@@ -30,6 +30,7 @@ public:
     void                                SetRendererContext  ( RendererContext * ctx );
 
     virtual const ITexturesData *       GetTexturesData     () const override;
+    DefaultTexturesData *               GetTexturesDataImpl ();
 
     static  DefaultPixelShaderChannel * Create              ( const std::string & shaderFile, const IValueSet * values, RendererContext * ctx = nullptr );
 

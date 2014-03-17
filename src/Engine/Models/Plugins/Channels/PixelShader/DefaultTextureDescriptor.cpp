@@ -1,5 +1,7 @@
 #include "DefaultTextureDescriptor.h"
 
+#include "Engine/Models/Resources/TextureLoader.h"
+
 #include "Engine/Graphics/Resources/Texture.h"
 
 
@@ -168,6 +170,56 @@ void                    DefaultTextureDescriptor::SetFilteringMode  ( TextureFil
 void                    DefaultTextureDescriptor::SetBorderColor    ( const glm::vec4 & bc )
 {
     m_params.SetBorderColor( bc );
+}
+
+// **************************
+//
+void                        DefaultTextureDescriptor::SetDefaults     ( DefaultTextureDescriptor * desc )
+{
+    desc->SetBits( nullptr );
+    desc->SetName( "" );
+    desc->SetWidth( 0 );
+    desc->SetHeight( 0 );
+    desc->SetFormat( TextureFormat::F_A8R8G8B8 );
+    desc->SetWrappingModeX( TextureWrappingMode::TWM_REPEAT );
+    desc->SetWrappingModeY( TextureWrappingMode::TWM_REPEAT );
+    desc->SetFilteringMode( TextureFilteringMode::TFM_LINEAR );
+    desc->SetBorderColor( glm::vec4( 0.f, 0.f, 0.f, 1.f ) );
+}
+
+// **************************
+//
+DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const std::string & textureFile, const std::string & name )
+{
+    Resource texture( name, textureFile );
+
+    TextureLoader texLoader;
+    ResourceHandle * handle = texLoader.LoadResource( &texture );
+
+    if ( handle == nullptr )
+    {
+        return nullptr;
+    }
+
+    auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+    assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
+
+    auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
+    assert( texExtra->GetType() == TextureType::T_2D );
+
+    auto format = texExtra->GetFormat();
+    auto width  = texExtra->GetWidth();
+    auto height = texExtra->GetHeight();
+
+    DefaultTextureDescriptor * desc = new DefaultTextureDescriptor();
+    SetDefaults( desc );
+
+    desc->SetBits( handle->GetData(), format, width, height );
+    desc->SetName( name );
+
+    delete handle;
+
+    return desc;
 }
 
 } //model

@@ -20,15 +20,15 @@ class SimplePixelShaderPlugin : public BasePlugin< IPlugin >
 {
 private:
 
-    SimplePixelShaderChannel*   m_pshaderChannel;
+    SimplePixelShaderChannel *  m_pshaderChannel;
     const std::string           m_shaderPath;
 
 public:
 
-    explicit                                SimplePixelShaderPlugin     ( const IPlugin * prev, const std::string& shaderPath, RendererContext * ctx = nullptr );
+    explicit                                SimplePixelShaderPlugin     ( const IPlugin * prev, const std::string & shaderPath, RendererContext * ctx = nullptr );
                                             ~SimplePixelShaderPlugin    ();
 
-    virtual const IPixelShaderChannel*      GetPixelShaderChannel       () const;
+    virtual const IPixelShaderChannel *     GetPixelShaderChannel       () const;
 
     virtual void                            Update                      ( TimeType t ) override;
     virtual void                            Print                       ( std::ostream & out, int tabs = 0 ) const;

@@ -79,11 +79,17 @@ private:
 
     unsigned int                    m_texCoordChannelIndex;
 
+    DefaultPixelShaderChannelPtr    m_psc;
+
     VertexAttributesChannelPtr      m_vaChannel;
     TexturePixelShaderChannelPtr    m_pixelShaderChannel;
     TextureVertexShaderChannelPtr   m_vertexShaderChannel;
 
     TextureInfoVec                  m_textures;
+
+public:
+
+    bool                            SetTexture( const std::string & textureFile, const std::string & name );
 
 private:
 

@@ -57,6 +57,13 @@ const ITexturesData *       DefaultPixelShaderChannel::GetTexturesData     () co
 
 // ******************************
 //
+DefaultTexturesData *       DefaultPixelShaderChannel::GetTexturesDataImpl ()
+{
+    return m_texturesData;
+}
+
+// ******************************
+//
 DefaultPixelShaderChannel * DefaultPixelShaderChannel::Create              ( const std::string & shaderFile, const IValueSet * values, RendererContext * ctx )
 {
     assert( values );

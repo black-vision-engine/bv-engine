@@ -41,6 +41,10 @@ public:
     void                            SetWrappingModeY( TextureWrappingMode wm );
     void                            SetFilteringMode( TextureFilteringMode fm );
     void                            SetBorderColor  ( const glm::vec4 & bc );
+    
+    static void                     SetDefaults     ( DefaultTextureDescriptor * desc );
+
+    static DefaultTextureDescriptor * LoadTexture   ( const std::string & textureFile, const std::string & name );
 
 };
 

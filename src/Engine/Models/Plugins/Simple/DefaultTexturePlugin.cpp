@@ -73,6 +73,33 @@ std::string             DefaultTexturePluginDesc::PixelShaderSource         ()
 
 //// ***************************** PLUGIN ********************************** 
 //
+
+// *************************************
+//
+bool                            DefaultTexturePlugin::SetTexture( const std::string & textureFile, const std::string & name )
+{
+    auto txData = m_psc->GetTexturesDataImpl();
+    assert( txData->GetTextures().size() <= 1 );
+
+    auto txDesc = DefaultTextureDescriptor::LoadTexture( textureFile, name );
+
+    if( txDesc != nullptr )
+    {
+        if( txData->GetTextures().size() == 0 )
+        {
+            txData->AddTexture( txDesc );
+        }
+        else
+        {
+            txData->SetTexture( 0, txDesc );
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
 //// *************************************
 ////
 //SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, TextureAttachmentMode amode )
