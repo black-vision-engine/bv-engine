@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <glm/glm.hpp>
 
 #include "Engine/Types/Enums.h"
 
@@ -19,6 +20,7 @@ public:
     virtual TextureWrappingMode     GetWrappingModeX    () const = 0;
     virtual TextureWrappingMode     GetWrappingModeY    () const = 0;
     virtual TextureFilteringMode    GetFilteringMode    () const = 0;
+    virtual glm::vec4               DefaultBorderColor  () const = 0;
 
     virtual ~ITextureParams () {}
 

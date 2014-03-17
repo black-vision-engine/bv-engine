@@ -4,6 +4,14 @@
 
 #include "Engine/Interfaces/IShaderDataSource.h"
 
+#include "Engine/Models/Interfaces/ITextureDescriptor.h"
+#include "Engine/Models/Interfaces/IAnimationDescriptor.h"
+
+#include "Engine/Models/Plugins/ConstantsMapper.h"
+
+#include "Engine/Graphics/Resources/Texture2DImpl.h"
+#include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
+
 #include "Engine/Graphics/Shaders/Parameters/ShaderParameters.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
 
@@ -49,9 +57,13 @@ DefaultEffect::DefaultEffect    ( const IShaderDataSource * psds, const IShaderD
 //
 DefaultEffect::~DefaultEffect   ()
 {
-    delete GetPass( 0 )->GetPixelShader();
-    delete GetPass( 0 )->GetVertexShader();
-    delete GetPass( 0 )->GetGeometryShader();
+    assert( NumPasses() == 1 );
+
+    auto pass = GetPass( 0 );
+
+    delete pass->GetPixelShader();
+    delete pass->GetVertexShader();
+    delete pass->GetGeometryShader();
 }
 
 // *********************************
@@ -96,39 +108,44 @@ ShaderParameters * DefaultEffect::DefaultParamsGS  ( const IShaderDataSource * d
 //
 void               DefaultEffect::AddTextures       ( Shader * shader, const ITexturesData * txData )
 {
-    if ( shader )
+    unsigned int samplerNum = 0;
+
+    if ( shader ) //FIXME: only 2D textures right now
     {
+        auto params     = shader->GetParameters ();
         auto textures   = txData->GetTextures   ();
         auto animations = txData->GetAnimations ();
 
         for( auto tx : textures )
         {
-                SamplerWrappingMode wp[] = {
-                                                ConstantsMapper::EngineConstant( tex->m_wrappingModeX ) 
-                                            ,   ConstantsMapper::EngineConstant( tex->m_wrappingModeY )
-                                            ,   SamplerWrappingMode::SWM_REPEAT // FIXME: Add 3d texture support
-                                            }; 
-                //FIXME: jak to kurwa przez tex->m_texName ????
-                auto textureSampler = new TextureSampler(       i
-                                                            ,   tex->m_texName
-                                                            ,   bv::SamplerSamplingMode::SSM_MODE_2D
-                                                            ,   ConstantsMapper::EngineConstant( tex->m_filteringMode )
-                                                            ,   wp
-                                                            ,   tex->m_texBorderColor.Evaluate( 0.f ) );
-                effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );
+            auto sampler = CreateSampler( tx, samplerNum );
+            auto texture = CreateTexture( tx );
 
-                auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
-                auto shaderParams = effect->GetPass( 0 )->GetPixelShader()->Parameters();
-                shaderParams->AddTexture( loadedTex );
+            shader->AddTextureSampler( sampler );
+            params->AddTexture( texture );
 
-                i++;
+            samplerNum++;
+        }
+
+        for( auto anim : animations )
+        {
+            if( anim->NumTextures() > 0 )
+            {
+                auto sampler    = CreateSampler( anim, samplerNum );
+                auto sequence   = CreateSequence( anim );
+
+                shader->AddTextureSampler( sampler );
+                params->AddTexture( sequence );
+
+                samplerNum++;
+            }
         }
     }
 }
 
 // *********************************
 //
-ShaderParameters * DefaultEffect::DefaultParamsImpl ( const IShaderDataSource * ds ) const
+ShaderParameters *      DefaultEffect::DefaultParamsImpl ( const IShaderDataSource * ds ) const
 {
     ShaderParameters * sp = nullptr;
 
@@ -145,6 +162,50 @@ ShaderParameters * DefaultEffect::DefaultParamsImpl ( const IShaderDataSource * 
             sp->AddParameter( param );
         }
     }
+
+    return sp;
+}
+
+// *********************************
+//
+TextureSampler *        DefaultEffect::CreateSampler   ( const ITextureParams * txParams, unsigned int samplerNum ) const
+{
+    auto wrapX          = ConstantsMapper::EngineConstant( txParams->GetWrappingModeX() );
+    auto wrapY          = ConstantsMapper::EngineConstant( txParams->GetWrappingModeY() );            
+    auto samplingMode   = SamplerSamplingMode::SSM_MODE_2D; //FIXME: only 2D textures right now
+    auto filteringMode  = ConstantsMapper::EngineConstant( txParams->GetFilteringMode() );
+    auto borderColor    = txParams->DefaultBorderColor();
+
+    SamplerWrappingMode wrappingMode[] = { wrapX, wrapY, SamplerWrappingMode::SWM_REPEAT };
+
+    auto sampler = new TextureSampler( samplerNum, txParams->GetName(), samplingMode, filteringMode, wrappingMode, borderColor ); 
+
+    return sampler;
+}
+
+// *********************************
+//
+Texture2DImpl *         DefaultEffect::CreateTexture       ( const ITextureDescriptor * txParams ) const
+{
+    return nullptr;
+}
+
+// *********************************
+//
+Texture2DSequenceImpl * DefaultEffect::CreateSequence       ( const IAnimationDescriptor * animParams ) const
+{
+    auto sampler    = CreateSampler( anim, samplerNum );
+    auto sequence   = CreateEmptySequence( anim );
+    auto format     = anim->GetFormat();
+    auto width      = 
+            
+    for( unsigned int i = 0; i < anim->NumTextures(); ++i )
+    {
+        char * frameData = anim->GetBits( i );
+        sequence->AddTextureWritingBits( anim->GetBits( i ), ani
+    }
+}
+
     /*
         //Register textures and animations
         auto textures   = ds->GetTexturesData()->GetTextures();

@@ -17,6 +17,11 @@ Shader::Shader( const std::string & programSource, ShaderParameters * params )
 //
 Shader::~Shader ()
 {
+    for( auto sampler : m_textureSamplers )
+    {
+        delete sampler;
+    }
+
     delete m_parameters;
 }
 

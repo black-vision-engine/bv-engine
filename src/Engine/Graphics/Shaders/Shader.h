@@ -22,7 +22,6 @@ protected:
     ShaderParameters *        m_parameters;
     std::string               m_programSurce;
     
-    //FIXME: who owns TextureSamplers?
     std::vector< const TextureSampler * >   m_textureSamplers;
 
 protected:

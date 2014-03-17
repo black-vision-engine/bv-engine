@@ -4,7 +4,7 @@
 #include "Engine/Types/Enums.h"
 
 
-namespace bv { namespace model {
+namespace bv {
 
 struct ConstantsMapper
 {
@@ -12,5 +12,4 @@ struct ConstantsMapper
     static SamplerFilteringMode             EngineConstant( TextureFilteringMode textureFilteringMode );
 };
 
-} // model
 } // bv

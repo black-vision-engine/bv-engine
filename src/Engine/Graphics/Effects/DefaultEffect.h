@@ -7,7 +7,8 @@ namespace bv {
 
 class IShaderDataSource;
 class ShaderParameters;
-
+class Texture2DImpl;
+class Texture2DSequenceImpl;
 
 class DefaultEffect : public RenderableEffect
 {
@@ -26,7 +27,12 @@ protected:
 
 private:
 
-    ShaderParameters * DefaultParamsImpl( const IShaderDataSource * ds ) const;
+    ShaderParameters *      DefaultParamsImpl   ( const IShaderDataSource * ds ) const;
+
+    TextureSampler *        CreateSampler       ( const ITextureParams * txParams, unsigned int samplerNum ) const;
+
+    Texture2DImpl *         CreateTexture       ( const ITextureDescriptor * txParams ) const;
+    Texture2DSequenceImpl * CreateSequence      ( const IAnimationDescriptor * animParams ) const;
 
 };
 
