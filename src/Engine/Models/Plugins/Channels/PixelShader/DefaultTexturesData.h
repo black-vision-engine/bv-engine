@@ -20,6 +20,9 @@ public:
     virtual const std::vector< ITextureDescriptor * > &     GetTextures     () const override;
     virtual const std::vector< IAnimationDescriptor * > &   GetAnimations   () const override;
 
+    void                                                    AddTexture      ( ITextureDescriptor * textureDesc );
+    void                                                    AddAnimation    ( IAnimationDescriptor * animationDesc );
+
 };
 
 } //model

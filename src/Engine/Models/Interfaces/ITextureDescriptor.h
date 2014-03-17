@@ -15,10 +15,4 @@ public:
 
 };
 
-//    std::string             fileName;
-//    ParamTransform          transform;
-
-//    ParamFloat              alpha;
-//    ParamVec4               borderColor;
-
 } //bv

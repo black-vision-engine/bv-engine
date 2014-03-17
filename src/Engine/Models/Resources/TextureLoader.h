@@ -10,11 +10,13 @@ namespace bv { namespace model {
 
 class TextureLoader : public ResourceLoader
 {
+private:
+
     bool                    m_loadFromMemory;
-    
 
 public:
-    ResourceHandle *        LoadResource        ( IResource* res )  const;
+
+    ResourceHandle *        LoadResource        ( IResource * res )  const;
 
     explicit                TextureLoader( bool loadFormMemory = true );
 
@@ -37,7 +39,7 @@ public:
     TextureFormat           GetFormat           () const;
     TextureType             GetType             () const;
 
-    explicit                TextureExtraData    (int w, int h, int bitsPerPixel, TextureFormat format, TextureType type );
+    explicit                TextureExtraData    ( int w, int h, int bitsPerPixel, TextureFormat format, TextureType type );
 
 };
 

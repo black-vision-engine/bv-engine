@@ -61,6 +61,11 @@ std::string             DefaultTexturePluginDesc::PixelShaderSource         ()
     return "../dep/media/shaders/defaulttexture.frag";
 }
 
+//    std::string             fileName;
+//    ParamTransform          transform;
+
+//    ParamFloat              alpha;
+//    ParamVec4               borderColor;
 
 
 //FIXME: dodawanie kanalow w ten sposob (przez przypisanie na m_<xxx>channel powoduje bledy, trzeba to jakos poprawic, zeby bylo wiadomo, o co chodzi

@@ -5,7 +5,7 @@
 
 namespace bv { namespace model {
 
-class DefaultTexturesData : public ITextureParams
+class DefaultTextureParams : public ITextureParams
 {
 private:
 
@@ -20,12 +20,11 @@ private:
 
 public:
 
-            DefaultTexturesData ();
-            DefaultTexturesData ( const std::string & name, unsigned int w, unsigned int h, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc );
-            ~DefaultTexturesData();
+            DefaultTextureParams ();
+            DefaultTextureParams ( const std::string & name, unsigned int w, unsigned int h, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc );
+            ~DefaultTextureParams();
 
     virtual const std::string       GetName         () const override;
-
     virtual unsigned int            GetWidth        () const override;
     virtual unsigned int            GetHeight       () const override;
     virtual TextureFormat           GetFormat       () const override;
@@ -37,7 +36,7 @@ public:
     void                            SetName         ( const std::string & name );
     void                            SetWidth        ( unsigned int w );
     void                            SetHeight       ( unsigned int h );
-    void                            SetFormat       ( TextureFormat format );
+    void                            SetFormat       ( TextureFormat fmt );
     void                            SetWrappingModeX( TextureWrappingMode wm );
     void                            SetWrappingModeY( TextureWrappingMode wm );
     void                            SetFilteringMode( TextureFilteringMode fm );

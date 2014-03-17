@@ -16,7 +16,7 @@ TextureLoader::TextureLoader( bool loadFormMemory )
 
 // ******************************
 //
-ResourceHandle *        TextureLoader::LoadResource        ( IResource* res )  const
+ResourceHandle *        TextureLoader::LoadResource        ( IResource * res )  const
 {
     std::string errMsg( "Cannot read file: " + res->GetFilePath() ); 
 
@@ -26,7 +26,8 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource* res )  c
         return nullptr;
     }
 
-    fipImage*  fipImg = new fipImage();
+    //FIXME: gdzie to jest usuwane?
+    fipImage * fipImg = new fipImage();
 
     if( m_loadFromMemory )
     {
@@ -60,7 +61,7 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource* res )  c
         throw std::runtime_error( "Cannot convert texture to bitmap" );
     }
 
-    //FIXME: Add maping freeimage types to bv types
+    //FIXME: Add mapping of freeimage types to bv types
     auto texExtra = new TextureExtraData( fipImg->getWidth(), fipImg->getHeight(), fipImg->getBitsPerPixel(), TextureFormat::F_A8R8G8B8, TextureType::T_2D );
 
     //FIXME: memcpy
