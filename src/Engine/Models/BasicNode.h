@@ -88,6 +88,7 @@ public:
 
 private:
 
+    SceneNode *                             CreateSceneNode         ( const IPlugin * finalizer ) const;
     RenderableEntity *                      CreateRenderable        ( const IPlugin * finalizer ) const;
     std::vector< bv::Transform >            CreateTransformVec      ( const IPlugin * finalizer ) const;
 

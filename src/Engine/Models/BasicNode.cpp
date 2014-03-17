@@ -99,18 +99,16 @@ const std::string &             BasicNode::GetName                 () const
 //
 SceneNode *                 BasicNode::BuildScene()
 {
-    RenderableEntity *  renderable  = CreateRenderable( m_pluginList->GetFinalizePlugin() );
+    const IPlugin * finalizer = m_pluginList->GetFinalizePlugin();
 
-    SceneNode * retNode         = new SceneNode( renderable );
-    NodeUpdater * nodeUpdater   = new NodeUpdater( renderable, retNode, this );
-    UpdatersManager::Get().RegisterUpdater( nodeUpdater );
+    SceneNode * node = CreateSceneNode( finalizer );
 
     for( auto ch : m_children )
     {
-        retNode->AddChildNode( ch->BuildScene() );
+        node->AddChildNode( ch->BuildScene() );
     }
 
-    return retNode;
+    return node;
 }
 
 // ********************************
@@ -267,6 +265,19 @@ bool  BasicNode::IsVisible               () const
 void  BasicNode::SetVisible              ( bool visible )
 {
     m_visible = visible;
+}
+
+// ********************************
+//
+SceneNode *                         BasicNode::CreateSceneNode          ( const IPlugin * finalizer ) const
+{
+    RenderableEntity * renderable = CreateRenderable( finalizer );
+
+    SceneNode * node        = new SceneNode( renderable );
+    NodeUpdater * updater   = new NodeUpdater( renderable, node, this );
+    UpdatersManager::Get().RegisterUpdater( updater );
+
+    return node;
 }
 
 // ********************************
