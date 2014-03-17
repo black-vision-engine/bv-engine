@@ -180,6 +180,11 @@
     <ClCompile Include="Engine\Graphics\State\RendererStateInstance.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\Texture2DImpl.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\Texture2DSequenceImpl.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\DefaultTexturePlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultaAnimationDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -410,6 +415,11 @@
     <ClInclude Include="Engine\Models\Interfaces\ITextureDescriptor.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITexturesData.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITextureParams.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\DefaultTexturePlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

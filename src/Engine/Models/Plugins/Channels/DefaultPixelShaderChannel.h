@@ -23,9 +23,11 @@ public:
 
     virtual ~DefaultPixelShaderChannel                      ();
 
-    virtual const RendererContext *     GetRendererContext  () const;
+    virtual const RendererContext *     GetRendererContext  () const override;
     RendererContext *                   GetRendererContext  ();
     void                                SetRendererContext  ( RendererContext * ctx );
+
+    virtual const ITexturesData *       GetTexturesData     () const override;
 
     static  DefaultPixelShaderChannel * Create              ( const std::string & shaderFile, const IValueSet * values, RendererContext * ctx = nullptr );
 

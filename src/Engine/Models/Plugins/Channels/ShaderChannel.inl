@@ -62,7 +62,7 @@ const bv::IValue *                          ShaderChannel< ShaderChannelIface >:
 // *********************************
 //
 template< typename ShaderChannelIface >
-ITexturesData *                             ShaderChannel< ShaderChannelIface >::GetTexturesData    () const
+const ITexturesData *                       ShaderChannel< ShaderChannelIface >::GetTexturesData    () const
 {
     return nullptr;
 }

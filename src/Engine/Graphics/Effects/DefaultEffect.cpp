@@ -110,7 +110,7 @@ void               DefaultEffect::AddTextures       ( Shader * shader, const ITe
 {
     unsigned int samplerNum = 0;
 
-    if ( shader )
+    if ( shader && txData )
     {
         auto params     = shader->GetParameters ();
         auto textures   = txData->GetTextures   ();

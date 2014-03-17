@@ -18,7 +18,7 @@ public:
         : DefaultPixelShaderChannel( shaderFile, nullptr, ctx )
     {}
 
-    virtual ITexturesData * GetTexturesData() const override
+    virtual const ITexturesData * GetTexturesData() const override
     {
         return nullptr;
     }
