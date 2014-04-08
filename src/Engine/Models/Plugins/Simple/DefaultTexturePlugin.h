@@ -98,6 +98,11 @@ private:
 
 public:
 
+    explicit                                    DefaultTexturePlugin         ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model )
+        : BasePlugin< IPlugin >(  name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
+    {
+    }
+
     explicit                                    DefaultTexturePlugin         ( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, TextureAttachmentMode amode = TextureAttachmentMode::MM_ATTACHED );
     explicit                                    DefaultTexturePlugin         ( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, model::RendererContext * ctx = nullptr, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
                                                 ~DefaultTexturePlugin        ();
