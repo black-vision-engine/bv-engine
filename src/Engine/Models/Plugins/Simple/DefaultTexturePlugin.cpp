@@ -7,12 +7,12 @@
 namespace bv { namespace model {
 
 
-    // ************************************************************************* DESCRIPTOR *************************************************************************
+// ************************************************************************* DESCRIPTOR *************************************************************************
 
 // *******************************
 //
 DefaultTexturePluginDesc::DefaultTexturePluginDesc                          ()
-    : BasePluginDescriptor( UID(), "solid color" )
+    : BasePluginDescriptor( UID(), "texture" )
 {
 }
 
@@ -29,13 +29,20 @@ DefaultPluginParamValModel *    DefaultTexturePluginDesc::CreateDefaultModel() c
 {
     DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
     DefaultParamValModel * psModel      = new DefaultParamValModel();
-    SimpleVec4Evaluator * evaluator     = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color" );
+    DefaultParamValModel * vsModel      = new DefaultParamValModel();
+    
+    SimpleFloatEvaluator *     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha" );
+    SimpleTransformEvaluator * trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat" );
 
-    psModel->RegisterAll( evaluator );
+    vsModel->RegisterAll( trTxEvaluator );
+    psModel->RegisterAll( alphaEvaluator );
+
+    model->SetVertexShaderChannelModel( vsModel );
     model->SetPixelShaderChannelModel( psModel );
 
     //Set default values
-    evaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
+    alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT( TimeType( 0.0 ) );
 
     return model;
 }
@@ -83,7 +90,7 @@ bool                            DefaultTexturePlugin::SetTexture( const std::str
 
     auto txDesc = DefaultTextureDescriptor::LoadTexture( textureFile, name );
 
-    FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
+    // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if( txDesc != nullptr )
     {
         if( txData->GetTextures().size() == 0 )

@@ -432,6 +432,7 @@
     <ClInclude Include="Engine\Models\Interfaces\ITextureParams.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITexturesData.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITimeEvaluator.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITimeline.h" />
     <ClInclude Include="Engine\Models\ModelAccessors.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.h" />

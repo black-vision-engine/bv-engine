@@ -2,13 +2,12 @@
 
 layout (location = 0) out vec4 FragColor;
 
-in vec2 VTexCord;
-uniform sampler2D Tex0;
-uniform float Alpha0;
+in vec2 uvCoord;
+uniform sampler2D tex;
+uniform float alpha;
 
 void main()
 {
-	vec4 texColor0 = texture( Tex0, VTexCord );
-
-	FragColor = texColor0.bgra * Alpha0;
+	vec4 col = texture( tex, uvCoord );
+	FragColor = col.bgra * alpha;
 }

@@ -420,6 +420,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITimeline.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
