@@ -44,7 +44,7 @@ class IAnimationResourceDescr : public IPluginResourceDescr
 {
 public:
 
-    virtual const std::vector< std::wstring > & GetFrames   () const = 0;
+    virtual const std::vector< std::string > & GetFrames   () const = 0;
 
     virtual ~IAnimationResourceDescr () {}
 

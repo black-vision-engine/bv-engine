@@ -13,7 +13,7 @@ private:
 
 public:
 
-    static std::vector< std::wstring >  ListFiles( const std::wstring & path, const std::wstring & wildcardFilter );
+    static std::vector< std::string >  ListFiles( const std::string & path, const std::string & wildcardFilter );
 
 };
 

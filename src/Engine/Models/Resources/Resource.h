@@ -14,11 +14,11 @@ private:
 
 public:
 
-    virtual const std::string&            GetName     () const;
-    virtual const std::string&            GetFilePath () const;
+    virtual const std::string &            GetName     () const;
+    virtual const std::string &            GetFilePath () const;
 
-    Resource( const std::string& name, const std::string& filePath );
-    virtual ~Resource(){}
+                Resource    ( const std::string & name, const std::string & filePath );
+    virtual     ~Resource   () {}
 };
 
 class ResourceExtraData : public IResourceExtraData

@@ -10,14 +10,14 @@ namespace bv {
 
 // *******************************
 //
-std::vector< std::wstring > Dir::ListFiles( const std::wstring & path, const std::wstring & wildcardFilter )
+std::vector< std::string > Dir::ListFiles( const std::string & path, const std::string & wildcardFilter )
 {
     fs::path rootDir( path );
     fs::path filePattern( wildcardFilter );
 
     fs::path fullPath = rootDir / filePattern;
 
-    std::vector< std::wstring > foundFiles;
+    std::vector< std::string > foundFiles;
 
     WIN32_FIND_DATA fd;
     HANDLE h = FindFirstFile( fullPath.c_str(), &fd );
