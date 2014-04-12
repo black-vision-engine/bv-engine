@@ -187,6 +187,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\AnimationResourceDescr.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\TextureResourceDescr.cpp" />
+    <ClCompile Include="System\DirIO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -426,6 +427,7 @@
     <ClInclude Include="Engine\Models\Resources\IPluginResourceDescr.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\AnimationResourceDescr.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\TextureResourceDescr.h" />
+    <ClInclude Include="System\DirIO.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

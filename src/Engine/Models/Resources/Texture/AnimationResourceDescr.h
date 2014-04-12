@@ -13,19 +13,19 @@ private:
 
     std::string                 m_name;
 
-    std::vector< std::string >  m_frames;
+    std::vector< std::wstring > m_frames;
 
 public:
 
-                                        AnimationResourceDescr  ( const std::vector< std::string > & frames, const std::string & name );
+                                        AnimationResourceDescr  ( const std::vector< std::wstring > & frames, const std::string & name );
                                         ~AnimationResourceDescr ();
 
     virtual const std::string &         GetName                 () const;
     virtual PluginResourceType          GetResourceType         () const;
 
-    const std::vector< std::string > &  GetFrames               () const;
+    const std::vector< std::wstring > & GetFrames               () const;
 
-    static AnimationResourceDescr *     CreateFromDirFrames     ( const std::string & path, const std::string & filter );
+    static AnimationResourceDescr *     CreateFromDirFrames     ( const std::wstring & path, const std::wstring & filter, const std::string & name );
 
 };
 

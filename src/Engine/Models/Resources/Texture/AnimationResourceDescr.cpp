@@ -1,11 +1,13 @@
 #include "AnimationResourceDescr.h"
 
+#include "System/DirIO.h"
+
 
 namespace bv { namespace model {
 
 // *******************************
 //
-AnimationResourceDescr::AnimationResourceDescr                          ( const std::vector< std::string > & frames, const std::string & name )
+AnimationResourceDescr::AnimationResourceDescr                          ( const std::vector< std::wstring > & frames, const std::string & name )
     : m_name( name )
     , m_frames( frames )
 {
@@ -33,17 +35,24 @@ PluginResourceType          AnimationResourceDescr::GetResourceType     () const
 
 // *******************************
 //
-const std::vector< std::string > &  AnimationResourceDescr::GetFrames   () const
+const std::vector< std::wstring > & AnimationResourceDescr::GetFrames   () const
 {
     return m_frames;
 }
 
 // *******************************
 //
-AnimationResourceDescr *     AnimationResourceDescr::CreateFromDirFrames( const std::string & path, const std::string & filter )
+AnimationResourceDescr *     AnimationResourceDescr::CreateFromDirFrames( const std::wstring & path, const std::wstring & filter, const std::string & name )
 {
-}
+    auto files = Dir::ListFiles( path, filter );
 
+    if ( files.size() > 0 )
+    {
+        return new AnimationResourceDescr( files, name );
+    }
+
+    return nullptr;
+}
 
 } //model
 } //bv

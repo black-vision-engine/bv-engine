@@ -328,6 +328,7 @@
     <ClCompile Include="Engine\Types\Values\BaseValue.cpp" />
     <ClCompile Include="Engine\Types\Values\ValuesFactory.cpp" />
     <ClCompile Include="Mathematics\Interpolators\Interpolators.cpp" />
+    <ClCompile Include="System\DirIO.cpp" />
     <ClCompile Include="System\FileIO.cpp" />
     <ClCompile Include="System\HerarchicalProfiler.cpp" />
     <ClCompile Include="System\HRTimer.cpp" />
@@ -560,6 +561,7 @@
     <ClInclude Include="Engine\Types\Values\ValuesFactory.h" />
     <ClInclude Include="System\BasicMacros.h" />
     <ClInclude Include="System\BasicTypes.h" />
+    <ClInclude Include="System\DirIO.h" />
     <ClInclude Include="System\FileIO.h" />
     <ClInclude Include="System\HerarchicalProfiler.h" />
     <ClInclude Include="System\HRTimer.h" />
