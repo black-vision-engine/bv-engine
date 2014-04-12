@@ -21,6 +21,7 @@ class ResourceHandle;
 class IParameter;
 class IValue;
 class IPluginParamValModel;
+class IPluginResourceDescr;
 
 struct TextureInfo;
 typedef std::vector< TextureInfo * > TextureInfoVec;
@@ -43,6 +44,8 @@ public:
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const = 0;
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const = 0;
 
+    //FIXME: implement a more generic interface for resource loading
+    virtual bool                                LoadResource                ( 
     virtual TextureInfoVec                      GetTextures                 () const = 0; // FIXME: use resources
 
     virtual                                     ~IPlugin                    (){}

@@ -36,39 +36,6 @@ class Resource;
 class TexturePixelShaderChannel;
 class TextureVertexShaderChannel;
 
-// ***************************** DefaultTexturePlugin TextureDescriptor ***
-
-class TextureDescriptor
-{
-public:
-
-    std::string             fileName;
-    ParamTransform          transform;
-
-    ParamFloat              alpha;
-    ParamVec4               borderColor;
-
-    TextureWrappingMode     wrappingModeX;
-    TextureWrappingMode     wrappingModeY;
-    TextureFilteringMode    filteringMode;
-
-    explicit TextureDescriptor  (    const std::string & txFileName
-                                ,    const ParamTransform & txTransform = ParametersFactory::CreateParameter( "texTransform", TransformF() )
-                                ,    const ParamFloat& txAlpha = ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 1.f ) )
-                                ,    const ParamVec4& txBorderColor = ParametersFactory::CreateParameter( "texBorderColor", InterpolatorsHelper::CreateConstValue( glm::vec4( 0.f, 0.f, 0.f, 0.f ) ) )
-                                ,    TextureWrappingMode txWrappingModeX = TextureWrappingMode::TWM_REPEAT 
-                                ,    TextureWrappingMode txWrappingModeY = TextureWrappingMode::TWM_REPEAT
-                                ,    TextureFilteringMode txFilteringMode = TextureFilteringMode::TFM_LINEAR
-                                )
-                                : fileName( txFileName )
-                                , transform( txTransform )
-                                , alpha( txAlpha )
-                                , borderColor( txBorderColor )
-                                , wrappingModeX( txWrappingModeX )
-                                , wrappingModeY( txWrappingModeY )
-                                , filteringMode( txFilteringMode )
-    {}
-};
 
 // ***************************** PLUGIN ********************************** 
 class DefaultTexturePlugin : public BasePlugin< IPlugin >

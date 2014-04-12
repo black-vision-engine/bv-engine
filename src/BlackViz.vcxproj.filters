@@ -421,6 +421,9 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITimeline.h" />
+    <ClInclude Include="Engine\Models\Resources\IPluginResourceDescr.h" />
+    <ClInclude Include="Engine\Models\Resources\Texture\AnimationResourceDescr.h" />
+    <ClInclude Include="Engine\Models\Resources\Texture\TextureResourceDescr.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

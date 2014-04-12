@@ -31,18 +31,33 @@ DefaultPluginParamValModel *    DefaultTexturePluginDesc::CreateDefaultModel() c
     DefaultParamValModel * psModel      = new DefaultParamValModel();
     DefaultParamValModel * vsModel      = new DefaultParamValModel();
     
+    SimpleVec4Evaluator *      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor" );
     SimpleFloatEvaluator *     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha" );
     SimpleTransformEvaluator * trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat" );
 
+    ParamFloat *  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX" );
+    ParamFloat *  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY" );
+    ParamFloat *  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode" );
+
     vsModel->RegisterAll( trTxEvaluator );
+    psModel->RegisterAll( borderColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
+    psModel->AddParameter( paramWrapModeX );
+    psModel->AddParameter( paramWrapModeY );
+    psModel->AddParameter( paramFilteringMode );
 
     model->SetVertexShaderChannelModel( vsModel );
     model->SetPixelShaderChannelModel( psModel );
 
     //Set default values
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+    borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT( TimeType( 0.0 ) );
+
+    //FIXME: integer parmeters should be used here
+    paramWrapModeX->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
+    paramWrapModeY->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
+    paramFilteringMode->SetVal( (float) TextureFilteringMode::TFM_LINEAR, TimeType( 0.f ) );
 
     return model;
 }
@@ -67,12 +82,6 @@ std::string             DefaultTexturePluginDesc::PixelShaderSource         ()
 {
     return "../dep/media/shaders/defaulttexture.frag";
 }
-
-//    std::string             fileName;
-//    ParamTransform          transform;
-
-//    ParamFloat              alpha;
-//    ParamVec4               borderColor;
 
 
 //FIXME: dodawanie kanalow w ten sposob (przez przypisanie na m_<xxx>channel powoduje bledy, trzeba to jakos poprawic, zeby bylo wiadomo, o co chodzi

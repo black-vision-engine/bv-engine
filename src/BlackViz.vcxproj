@@ -529,12 +529,15 @@
     <ClInclude Include="Engine\Models\Resources\Font\FontLoader.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Glyph.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Text.h" />
+    <ClInclude Include="Engine\Models\Resources\IPluginResourceDescr.h" />
     <ClInclude Include="Engine\Models\Resources\IResource.h" />
     <ClInclude Include="Engine\Models\Resources\IResourceLoader.h" />
     <ClInclude Include="Engine\Models\Resources\Resource.h" />
     <ClInclude Include="Engine\Models\Resources\ResourceLoader.h" />
     <ClInclude Include="Engine\Models\Resources\TextHelpers.h" />
     <ClInclude Include="Engine\Models\Resources\TextureLoader.h" />
+    <ClInclude Include="Engine\Models\Resources\Texture\AnimationResourceDescr.h" />
+    <ClInclude Include="Engine\Models\Resources\Texture\TextureResourceDescr.h" />
     <ClInclude Include="Engine\Models\Timeline\GlobalTimeline.h" />
     <ClInclude Include="Engine\Models\Timeline\Timeline.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineBase.h" />

@@ -133,4 +133,12 @@ enum class TextureFilteringMode : int
     TFM_TOTAL
 };
 
+enum class PluginResourceType : int
+{
+    PRT_TEXTURE = 0,
+    PRT_ANIMATION,
+
+    PRT_TOTAL
+};
+
 } // bv
