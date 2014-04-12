@@ -54,5 +54,17 @@ AnimationResourceDescr *     AnimationResourceDescr::CreateFromDirFrames( const 
     return nullptr;
 }
 
+// *******************************
+//
+const ITextureResourceDescr *   QueryTextureResourceDescr   ( const IPluginResourceDescr * resDescr )
+{
+    if ( resDescr->GetResourceType() == PluginResourceType::PRT_TEXTURE )
+    {
+        return static_cast< const ITextureResourceDescr * >( resDescr );
+    }
+
+    return nullptr;
+}
+
 } //model
 } //bv

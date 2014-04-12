@@ -1,13 +1,11 @@
 #pragma once
 
-#include <vector>
-
 #include "Engine/Models/Resources/IPluginResourceDescr.h"
 
 
 namespace bv { namespace model {
 
-class AnimationResourceDescr : public IPluginResourceDescr
+    class AnimationResourceDescr : public IAnimationResourceDescr
 {
 private:
 
@@ -17,15 +15,15 @@ private:
 
 public:
 
-                                        AnimationResourceDescr  ( const std::vector< std::wstring > & frames, const std::string & name );
-                                        ~AnimationResourceDescr ();
+                                                AnimationResourceDescr  ( const std::vector< std::wstring > & frames, const std::string & name );
+                                                ~AnimationResourceDescr ();
 
-    virtual const std::string &         GetName                 () const override;
-    virtual PluginResourceType          GetResourceType         () const override;
+    virtual const std::string &                 GetName                 () const override;
+    virtual PluginResourceType                  GetResourceType         () const override;
 
-    const std::vector< std::wstring > & GetFrames               () const;
+    virtual const std::vector< std::wstring > & GetFrames               () const override;
 
-    static AnimationResourceDescr *     CreateFromDirFrames     ( const std::wstring & path, const std::wstring & filter, const std::string & name );
+    static AnimationResourceDescr *             CreateFromDirFrames     ( const std::wstring & path, const std::wstring & filter, const std::string & name );
 
 };
 

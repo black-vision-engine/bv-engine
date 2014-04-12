@@ -5,7 +5,7 @@
 
 namespace bv { namespace model {
 
-class TextureResourceDescr : public IPluginResourceDescr
+class TextureResourceDescr : public ITextureResourceDescr
 {
 private:
 
@@ -21,7 +21,7 @@ public:
     virtual const std::string &         GetName                 () const override;
     virtual PluginResourceType          GetResourceType         () const override;
 
-    const std::string &                 GetTextureFile          () const;
+    virtual const std::string &         GetTextureFile          () const override;
 
 };
 

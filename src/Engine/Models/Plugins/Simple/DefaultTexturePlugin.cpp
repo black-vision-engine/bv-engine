@@ -96,15 +96,20 @@ std::string             DefaultTexturePluginDesc::PixelShaderSource         ()
 // 
 bool                            DefaultTexturePlugin::LoadResource  ( const IPluginResourceDescr * resDescr )
 {
-    if ( resDescr->GetResourceType() != PluginResourceType::PRT_TEXTURE )
+    auto txResDescr = QueryTextureResourceDescr( resDescr );
+
+    if ( txResDescr != nullptr )
     {
-        return false;
+        auto txData = m_psc->GetTexturesDataImpl();
+        assert( txData->GetTextures().size() <= 1 );
+
+        auto txDesc = DefaultTextureDescriptor::LoadTexture( textureFile, name );
+
     }
 
-    auto txData = m_psc->GetTexturesDataImpl();
-    assert( txData->GetTextures().size() <= 1 );
+    return false;
 
-    auto txDesc = DefaultTextureDescriptor::LoadTexture( textureFile, name );
+
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if( txDesc != nullptr )
