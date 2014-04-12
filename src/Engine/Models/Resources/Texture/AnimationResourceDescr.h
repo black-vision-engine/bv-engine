@@ -11,7 +11,9 @@ class AnimationResourceDescr : public IPluginResourceDescr
 {
 private:
 
-    std::vector< std::string > m_frames;
+    std::string                 m_name;
+
+    std::vector< std::string >  m_frames;
 
 public:
 
@@ -23,9 +25,11 @@ public:
 
     const std::vector< std::string > &  GetFrames               () const;
 
-    static AnimationResourceDescr *     CreateFromDirFrames     ( const std::string & path );
+    static AnimationResourceDescr *     CreateFromDirFrames     ( const std::string & path, const std::string & filter );
 
 };
+
+typedef std::shared_ptr< AnimationResourceDescr > AnimationResourceDescrPtr;
 
 } //model
 } //bv

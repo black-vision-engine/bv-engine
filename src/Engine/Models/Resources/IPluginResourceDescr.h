@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 #include "Engine/Types/Enums.h"
@@ -17,6 +18,8 @@ public:
     virtual ~IPluginResourceDescr() {}
 
 };
+
+typedef std::shared_ptr< IPluginResourceDescr > IPluginResourceDescrPtr;
 
 } //model
 } //bv

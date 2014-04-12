@@ -309,6 +309,8 @@
     <ClCompile Include="Engine\Models\Resources\ResourceLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextHelpers.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextureLoader.cpp" />
+    <ClCompile Include="Engine\Models\Resources\Texture\AnimationResourceDescr.cpp" />
+    <ClCompile Include="Engine\Models\Resources\Texture\TextureResourceDescr.cpp" />
     <ClCompile Include="Engine\Models\Timeline\GlobalTimeline.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Timeline.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimelineBase.cpp" />
