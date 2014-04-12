@@ -70,6 +70,8 @@ public:
     {
     }
 
+
+    virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr ) override;
     explicit                                    DefaultTexturePlugin         ( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, TextureAttachmentMode amode = TextureAttachmentMode::MM_ATTACHED );
     explicit                                    DefaultTexturePlugin         ( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, model::RendererContext * ctx = nullptr, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
                                                 ~DefaultTexturePlugin        ();

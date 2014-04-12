@@ -56,6 +56,7 @@ public:
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const override;
 
+    virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr );
     virtual TextureInfoVec                      GetTextures                 () const override;
 
 protected:
@@ -229,6 +230,14 @@ const IGeometryShaderChannel *      BasePlugin< Iface >::GetGeometryShaderChanne
 // *******************************
 //
 template< class Iface >
+bool                                BasePlugin< Iface >::LoadResource                   ( const IPluginResourceDescr * resDescr )
+{
+    return false;
+}
+
+// *******************************
+//
+template< class Iface >
 TextureInfoVec                      BasePlugin< Iface >::GetTextures                    () const
 {
     if( m_prevPlugin )
@@ -242,7 +251,7 @@ TextureInfoVec                      BasePlugin< Iface >::GetTextures            
 // *******************************
 //
 template< class Iface >
-IParamValModel *                            BasePlugin< Iface >::PluginModel                  ()
+IParamValModel *                            BasePlugin< Iface >::PluginModel            ()
 {
     return m_pluginParamValModel->GetPluginModel();
 }

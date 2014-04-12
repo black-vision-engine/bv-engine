@@ -20,8 +20,8 @@ public:
                                         AnimationResourceDescr  ( const std::vector< std::wstring > & frames, const std::string & name );
                                         ~AnimationResourceDescr ();
 
-    virtual const std::string &         GetName                 () const;
-    virtual PluginResourceType          GetResourceType         () const;
+    virtual const std::string &         GetName                 () const override;
+    virtual PluginResourceType          GetResourceType         () const override;
 
     const std::vector< std::wstring > & GetFrames               () const;
 

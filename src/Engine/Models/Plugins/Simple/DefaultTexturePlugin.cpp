@@ -3,6 +3,8 @@
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 
+#include "Engine/Models/Resources/IPluginResourceDescr.h"
+
 
 namespace bv { namespace model {
 
@@ -89,6 +91,38 @@ std::string             DefaultTexturePluginDesc::PixelShaderSource         ()
 
 //// ***************************** PLUGIN ********************************** 
 //
+
+// *************************************
+// 
+bool                            DefaultTexturePlugin::LoadResource  ( const IPluginResourceDescr * resDescr )
+{
+    if ( resDescr->GetResourceType() != PluginResourceType::PRT_TEXTURE )
+    {
+        return false;
+    }
+
+    auto txData = m_psc->GetTexturesDataImpl();
+    assert( txData->GetTextures().size() <= 1 );
+
+    auto txDesc = DefaultTextureDescriptor::LoadTexture( textureFile, name );
+
+    // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
+    if( txDesc != nullptr )
+    {
+        if( txData->GetTextures().size() == 0 )
+        {
+            txData->AddTexture( txDesc );
+        }
+        else
+        {
+            txData->SetTexture( 0, txDesc );
+        }
+
+        return true;
+    }
+
+    return false;
+}
 
 // *************************************
 // 
