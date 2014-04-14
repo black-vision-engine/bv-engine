@@ -19,6 +19,7 @@ template< class Iface = IPlugin >
 class BasePlugin : public Iface
 {
 protected:
+
     ///////////////// Previous plugin ///////////
     const IPlugin *                             m_prevPlugin;
 
@@ -57,7 +58,6 @@ public:
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const override;
 
     virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr );
-    virtual TextureInfoVec                      GetTextures                 () const override;
 
 protected:
 
@@ -233,19 +233,6 @@ template< class Iface >
 bool                                BasePlugin< Iface >::LoadResource                   ( const IPluginResourceDescr * resDescr )
 {
     return false;
-}
-
-// *******************************
-//
-template< class Iface >
-TextureInfoVec                      BasePlugin< Iface >::GetTextures                    () const
-{
-    if( m_prevPlugin )
-    {
-        return m_prevPlugin->GetTextures();
-    }
-
-    return TextureInfoVec(); 
 }
 
 // *******************************

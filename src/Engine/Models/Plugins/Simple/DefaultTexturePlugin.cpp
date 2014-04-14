@@ -29,10 +29,12 @@ IPlugin *               DefaultTexturePluginDesc::CreatePlugin              ( co
 //
 DefaultPluginParamValModel *    DefaultTexturePluginDesc::CreateDefaultModel() const
 {
+    //Create all models
     DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
     DefaultParamValModel * psModel      = new DefaultParamValModel();
     DefaultParamValModel * vsModel      = new DefaultParamValModel();
     
+    //Create all parameters and evaluators
     SimpleVec4Evaluator *      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor" );
     SimpleFloatEvaluator *     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha" );
     SimpleTransformEvaluator * trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat" );
@@ -40,18 +42,22 @@ DefaultPluginParamValModel *    DefaultTexturePluginDesc::CreateDefaultModel() c
     ParamFloat *  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX" );
     ParamFloat *  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY" );
     ParamFloat *  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode" );
+    ParamFloat *  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachementMode" );
 
+    //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
     psModel->RegisterAll( borderColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
     psModel->AddParameter( paramWrapModeX );
     psModel->AddParameter( paramWrapModeY );
     psModel->AddParameter( paramFilteringMode );
+    psModel->AddParameter( paramAttachMode );
 
+    //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
     model->SetPixelShaderChannelModel( psModel );
 
-    //Set default values
+    //Set default values of all parameters
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT( TimeType( 0.0 ) );
@@ -60,6 +66,7 @@ DefaultPluginParamValModel *    DefaultTexturePluginDesc::CreateDefaultModel() c
     paramWrapModeX->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
     paramWrapModeY->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
     paramFilteringMode->SetVal( (float) TextureFilteringMode::TFM_LINEAR, TimeType( 0.f ) );
+    paramAttachMode->SetVal( (float) TextureAttachmentMode::MM_ATTACHED, TimeType( 0.f ) );
 
     return model;
 }
@@ -89,8 +96,13 @@ std::string             DefaultTexturePluginDesc::PixelShaderSource         ()
 //FIXME: dodawanie kanalow w ten sposob (przez przypisanie na m_<xxx>channel powoduje bledy, trzeba to jakos poprawic, zeby bylo wiadomo, o co chodzi
 //FIXME: teraz zle dodanie wychodzi dopiero po odpaleniu silnika, a to jest oczywisty blad
 
-//// ***************************** PLUGIN ********************************** 
-//
+// ************************************************************************* PLUGIN *************************************************************************
+
+DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model )
+    : BasePlugin< IPlugin >(  name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
+{
+}
+
 
 // *************************************
 // 
@@ -98,59 +110,27 @@ bool                            DefaultTexturePlugin::LoadResource  ( const IPlu
 {
     auto txResDescr = QueryTextureResourceDescr( resDescr );
 
+    // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txResDescr != nullptr )
     {
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() <= 1 );
 
-        auto txDesc = DefaultTextureDescriptor::LoadTexture( textureFile, name );
+        //FIXME: use some better API to handle resources in general and textures in this specific case
+        auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), txResDescr->GetName() );
 
-    }
-
-    return false;
-
-
-
-    // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
-    if( txDesc != nullptr )
-    {
-        if( txData->GetTextures().size() == 0 )
+        if( txDesc != nullptr )
         {
-            txData->AddTexture( txDesc );
+            if( txData->GetTextures().size() == 0 )
+            {
+                txData->AddTexture( txDesc );
+            }
+            else
+            {
+                txData->SetTexture( 0, txDesc );
+            }
+            return true;
         }
-        else
-        {
-            txData->SetTexture( 0, txDesc );
-        }
-
-        return true;
-    }
-
-    return false;
-}
-
-// *************************************
-// 
-bool                            DefaultTexturePlugin::SetTexture( const std::string & textureFile, const std::string & name )
-{
-    auto txData = m_psc->GetTexturesDataImpl();
-    assert( txData->GetTextures().size() <= 1 );
-
-    auto txDesc = DefaultTextureDescriptor::LoadTexture( textureFile, name );
-
-    // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
-    if( txDesc != nullptr )
-    {
-        if( txData->GetTextures().size() == 0 )
-        {
-            txData->AddTexture( txDesc );
-        }
-        else
-        {
-            txData->SetTexture( 0, txDesc );
-        }
-
-        return true;
     }
 
     return false;

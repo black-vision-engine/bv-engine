@@ -46,7 +46,6 @@ public:
 
     //FIXME: implement a more generic interface for resource loading
     virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr ) = 0;
-    virtual TextureInfoVec                      GetTextures                 () const = 0; // FIXME: use resources
 
     virtual                                     ~IPlugin                    (){}
 
