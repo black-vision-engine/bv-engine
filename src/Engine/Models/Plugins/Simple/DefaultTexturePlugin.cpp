@@ -2,6 +2,10 @@
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
+#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
 #include "Engine/Models/Resources/IPluginResourceDescr.h"
 
@@ -33,7 +37,7 @@ DefaultPluginParamValModel *    DefaultTexturePluginDesc::CreateDefaultModel() c
     DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
     DefaultParamValModel * psModel      = new DefaultParamValModel();
     DefaultParamValModel * vsModel      = new DefaultParamValModel();
-   
+
     //Create all parameters and evaluators
     SimpleVec4Evaluator *      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor" );
     SimpleFloatEvaluator *     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha" );
@@ -202,7 +206,7 @@ void                                DefaultTexturePlugin::Update                
         {
             for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
             {
-                auto connComp = static_cast< const model::ConnectedComponent* >( m_vaChannel->GetComponents()[ i ] );
+                auto connComp = m_vaChannel->GetConnectedComponent( i ) );
                 auto compChannels = connComp->GetAttributeChannels();
 
                 if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
@@ -228,17 +232,78 @@ void                                DefaultTexturePlugin::Update                
     }
 
     m_vsc->PostUpdate();
-    m_psc->PostUpdate();
+    m_psc->PostUpdate();    
+}
 
-//    m_vaChannel->Update( t );
-//    m_pixelShaderChannel->Update( t );
-//    m_vertexShaderChannel->Update( t );
+// *************************************
+//
+void DefaultTexturePlugin::InitAttributesChannel( const IPlugin * prev )
+{
+    auto prevGeomChannel = prev->GetVertexAttributesChannel();
+    AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-    //FIXME: update chanels according to parent (e.g. when position data has been changed)
-//    m_alphaValue->SetValue( m_alphaParam->Evaluate( t ) );
-//    m_tex0TransformValue->SetValue( m_tex0TransformParam->Evaluate( t ) );
-//    m_tex1TransformValue->SetValue( m_tex1TransformParam->Evaluate( t ) );
-    
+    for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
+    {
+        ConnectedComponent* connComp = new ConnectedComponent();
+        VertexAttributesChannelDescriptor vaChannelDesc;
+
+        auto prevConnComp = static_cast< const model::ConnectedComponent * >( prevGeomChannel->GetComponents()[ i ] );
+        auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
+
+        for( auto prevCompCh : prevCompChannels )
+        {
+            connComp->AddAttributeChannel( prevCompCh );
+        }
+
+        if( m_vaChannel == nullptr )
+        {
+            for( auto prevCompCh : prevCompChannels )
+            {
+                auto prevCompChDesc = prevCompCh->GetDescriptor();
+                vaChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
+            }
+
+            m_texCoordChannelIndex = vaChannelDesc.GetNumVertexChannels();
+
+            for( unsigned int i = 0; i < m_textures.size(); ++i )
+            {
+                vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+            }
+
+            auto vaChannel = VertexAttributesChannelPtr( new VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() ) );
+            m_vaChannel = vaChannel;
+        }
+
+        for( unsigned int i = 0; i < m_textures.size(); ++i )
+        {
+
+            float minX = 100000.0f, minY = 100000.0f;
+            float maxX = 0.0f, maxY = 0.0f;
+
+            //convex hull - make sure that prevCompChannels[ 0 ] is indeed a positional channel
+            for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
+            {
+                const glm::vec3 * pos = reinterpret_cast<const glm::vec3*>( prevCompChannels[0]->GetData() );
+
+                minX = std::min( minX, pos[ j ].x );
+                minY = std::min( minY, pos[ j ].y );
+                maxX = std::max( maxX, pos[ j ].x );
+                maxY = std::max( maxY, pos[ j ].y );
+            }
+
+            auto verTexAttrChannel = new model::Float2AttributeChannel( desc, m_textures[ 0 ]->m_texName, true );
+
+            for( unsigned int j = 0; j < prevCompChannels[0]->GetNumEntries(); ++j )
+            {
+                const glm::vec3* pos = reinterpret_cast<const glm::vec3*>( prevCompChannels[0]->GetData() );
+                verTexAttrChannel->AddAttribute( glm::vec2( ( pos[ j ].x - minX ) / ( maxX - minX ), ( pos[ j ].y - minY ) / ( maxY - minY ) ) );
+            }
+
+            connComp->AddAttributeChannel( AttributeChannelPtr( verTexAttrChannel ) );
+        }
+
+        m_vaChannel->AddConnectedComponent( connComp );
+    }
 }
 
 namespace {

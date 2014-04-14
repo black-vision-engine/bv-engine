@@ -49,6 +49,8 @@ private:
 
     VertexAttributesChannelPtr      m_vaChannel;
 
+    unsigned int                    m_texCoordChannelIndex;
+
     ParamFloat *                    m_paramWrapModeX;
     ParamFloat *                    m_paramWrapModeY;
     ParamFloat *                    m_paramFilteringMode;
@@ -74,7 +76,7 @@ public:
 
 private:
 
-    void                                        InitGeometryChannel         ( const IPlugin * prev );
+    void                                        InitAttributesChannel       ( const IPlugin * prev );
 
     TextureWrappingMode                         GetWrapModeX                ( TimeType t ) const;
     TextureWrappingMode                         GetWrapModeY                ( TimeType t ) const;

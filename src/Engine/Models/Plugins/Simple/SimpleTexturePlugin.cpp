@@ -123,7 +123,7 @@ void                        SimpleTexturePlugin::SetAttachmentMode           ( T
 
 // *************************************
 //
-void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin* prev )
+void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin * prev )
 {
     auto prevGeomChannel = prev->GetVertexAttributesChannel();
     AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );

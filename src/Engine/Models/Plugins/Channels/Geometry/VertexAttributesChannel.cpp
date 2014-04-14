@@ -167,7 +167,7 @@ int                                     VertexAttributesChannel::GetNumPrimitive
 {
     int vertNum = connComp->GetNumVertices();
 
-    switch(GetPrimitiveType())
+    switch( GetPrimitiveType() )
     {
         case PrimitiveType::PT_POINTS:
             return vertNum;
@@ -217,6 +217,15 @@ std::vector< IConnectedComponent* >     VertexAttributesChannel::GetComponents  
 bool                                    VertexAttributesChannel::CanBeConnectedTo    ( IVertexAttributesChannel * channel ) const
 {
     return CanBeConnectedTo( *static_cast< const VertexAttributesChannelDescriptor * >( channel->GetDescriptor() ) );
+}
+
+// *********************************
+//
+ConnectedComponent *                    VertexAttributesChannel::GetConnectedComponent   ( unsigned int idx )
+{
+    assert( idx < m_connectedComponents.size() );
+
+    m_connectedComponents[ idx ];
 }
 
 } // model

@@ -62,6 +62,8 @@ public:
     //virtual bool                                      CanBeConnectedTo        ( IPlugin * plugin ) const;
     virtual bool                                        CanBeConnectedTo        ( IVertexAttributesChannel * channel ) const override;
 
+    ConnectedComponent *                                GetConnectedComponent   ( unsigned int idx );
+
 protected:
 
     virtual bool                                        CanBeConnectedTo        ( const VertexAttributesChannelDescriptor & desc ) const
