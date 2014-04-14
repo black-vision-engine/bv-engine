@@ -66,19 +66,16 @@ DefaultTexturesData *       DefaultPixelShaderChannel::GetTexturesDataImpl ()
 //
 DefaultPixelShaderChannel * DefaultPixelShaderChannel::Create              ( const std::string & shaderFile, const IValueSet * values, RendererContext * ctx )
 {
-    assert( values );
+    auto shaderSource = ReadShaderFromFile( shaderFile );
 
-    std::stringstream shaderSource;
-
-    //FIXME: move reading file to superclass or utility code
-    File::Open( shaderFile ) >> shaderSource;
-
-    if( shaderSource.str() == "" )
+    if( shaderSource != "" )
     {
-        return nullptr;
+        assert( values );
+        
+        return new DefaultPixelShaderChannel( shaderSource, values, ctx );
     }
 
-    return new DefaultPixelShaderChannel( shaderSource.str(), values, ctx );
+    return nullptr;
 }
 
 } //model

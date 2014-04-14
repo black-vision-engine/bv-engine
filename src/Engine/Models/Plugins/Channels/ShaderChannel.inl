@@ -67,5 +67,17 @@ const ITexturesData *                       ShaderChannel< ShaderChannelIface >:
     return nullptr;
 }
 
+// *********************************
+//
+template< typename ShaderChannelIface >
+const std::string                           ShaderChannel< ShaderChannelIface >::ReadShaderFromFile ( const std::string & fileName )
+{
+    std::stringstream shaderSource;
+
+    File::Open( fileName ) >> shaderSource;
+
+    return shaderSource.str();
+}
+
 } // model
 } // bv

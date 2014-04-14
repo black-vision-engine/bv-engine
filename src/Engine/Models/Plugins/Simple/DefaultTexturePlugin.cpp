@@ -102,7 +102,14 @@ std::string             DefaultTexturePluginDesc::PixelShaderSource         ()
 // 
 DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model )
     : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
+    , m_psc( nullptr )
+    , m_vsc( nullptr )
+    , m_vaChannel( nullptr )
+    , m_paramValModel( model )
 {
+    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTexturePluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), false ) );
+    m_vsc = DefaultPixelShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultTexturePluginDesc::VertexShaderSource(), model->GetPixelShaderChannelModel(), false ) );
+
 }
 
 // *************************************

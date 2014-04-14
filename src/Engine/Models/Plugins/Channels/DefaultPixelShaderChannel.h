@@ -17,12 +17,9 @@ protected:
     RendererContext *       m_rendererContext;
     DefaultTexturesData *   m_texturesData;
 
-protected:
-
-            DefaultPixelShaderChannel                       ( const std::string & shaderSource, const IValueSet * valueSet, RendererContext * ctx = nullptr );
-
 public:
 
+            DefaultPixelShaderChannel                       ( const std::string & shaderSource, const IValueSet * valueSet, RendererContext * ctx = nullptr );
     virtual ~DefaultPixelShaderChannel                      ();
 
     virtual const RendererContext *     GetRendererContext  () const override;

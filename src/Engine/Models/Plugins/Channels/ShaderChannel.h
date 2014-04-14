@@ -34,6 +34,10 @@ public:
 
     virtual const ITexturesData *                       GetTexturesData             () const override;
 
+protected:
+
+    static const std::string                            ReadShaderFromFile          ( const std::string & fileName );
+
 };
 
 } // model

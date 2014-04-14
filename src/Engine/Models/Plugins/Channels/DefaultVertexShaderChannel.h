@@ -4,7 +4,7 @@
 
 #include "Engine/Models/Plugins/Channels/ShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
-#include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultTexturesData.h"
 
 
 namespace bv { namespace model {
@@ -13,11 +13,18 @@ class DefaultVertexShaderChannel : public ShaderChannel< IVertexShaderChannel >
 {
 protected:
 
-            DefaultVertexShaderChannel                       ( const std::string & shaderSource, const IValueSet * valueSet );
+    DefaultTexturesData *   m_texturesData;
 
 public:
 
-    static  DefaultVertexShaderChannel * Create              ();
+            DefaultVertexShaderChannel                      ( const std::string & shaderSource, const IValueSet * valueSet );
+    virtual ~DefaultVertexShaderChannel                     ();
+
+    virtual const ITexturesData *       GetTexturesData     () const override;
+    DefaultTexturesData *               GetTexturesDataImpl ();
+
+    static  DefaultVertexShaderChannel * Create             ();
+    static  DefaultVertexShaderChannel * Create             ( const std::string & shaderFile, const IValueSet * values );
 
 };
 
