@@ -63,7 +63,7 @@ DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::s
     , m_pixelShaderChannel( nullptr )
     , m_paramValModel( model )
 { 
-    m_pixelShaderChannel = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultColorPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), false ) );
+    m_pixelShaderChannel = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultColorPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
 }
 
 // *************************************

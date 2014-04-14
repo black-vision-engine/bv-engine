@@ -26,21 +26,35 @@ DefaultTexturesData::~DefaultTexturesData()
 
 // ******************************
 //
-const std::vector< ITextureDescriptor * > &     DefaultTexturesData::GetTextures     () const
+const std::vector< ITextureDescriptor * > &     DefaultTexturesData::GetTextures        () const
 {
     return m_textureDescriptors;
 }
 
 // ******************************
 //
-const std::vector< IAnimationDescriptor * > &   DefaultTexturesData::GetAnimations   () const
+const std::vector< IAnimationDescriptor * > &   DefaultTexturesData::GetAnimations      () const
 {
     return m_animationDescriptors;
 }
 
 // ******************************
 //
-void                                            DefaultTexturesData::SetTexture      ( unsigned int idx, DefaultTextureDescriptor * textureDesc )
+void                                            DefaultTexturesData::SetTextureParams   ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor )
+{
+    assert( idx < m_textureDescriptors.size() );
+
+    auto desc = static_cast< DefaultTextureDescriptor * >( m_textureDescriptors[ idx ] );
+
+    desc->SetWrappingModeX( wrapModeX );
+    desc->SetWrappingModeY( wrapModeY );
+    desc->SetFilteringMode( filteringMode );
+    desc->SetBorderColor( borderColor );
+}
+
+// ******************************
+//
+void                                            DefaultTexturesData::SetTexture         ( unsigned int idx, DefaultTextureDescriptor * textureDesc )
 {
     assert( idx < m_textureDescriptors.size() );
 
@@ -50,14 +64,28 @@ void                                            DefaultTexturesData::SetTexture 
 
 // ******************************
 //
-void                                            DefaultTexturesData::AddTexture      ( DefaultTextureDescriptor * textureDesc )
+void                                            DefaultTexturesData::AddTexture         ( DefaultTextureDescriptor * textureDesc )
 {
     m_textureDescriptors.push_back( textureDesc );
 }
 
 // ******************************
 //
-void                                            DefaultTexturesData::SetAnimation    ( unsigned int idx, DefaultAnimationDescriptor * animationDesc )
+void                                            DefaultTexturesData::SetAnimationParams ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor )
+{
+    assert( idx < m_animationDescriptors.size() );
+
+    auto desc = static_cast< DefaultAnimationDescriptor * >( m_animationDescriptors[ idx ] );
+
+    desc->SetWrappingModeX( wrapModeX );
+    desc->SetWrappingModeY( wrapModeY );
+    desc->SetFilteringMode( filteringMode );
+    desc->SetBorderColor( borderColor );
+}
+
+// ******************************
+//
+void                                            DefaultTexturesData::SetAnimation       ( unsigned int idx, DefaultAnimationDescriptor * animationDesc )
 {
     assert( idx < m_animationDescriptors.size() );
 
@@ -67,7 +95,7 @@ void                                            DefaultTexturesData::SetAnimatio
 
 // ******************************
 //
-void                                            DefaultTexturesData::AddAnimation    ( DefaultAnimationDescriptor * animationDesc )
+void                                            DefaultTexturesData::AddAnimation       ( DefaultAnimationDescriptor * animationDesc )
 {
     m_animationDescriptors.push_back( animationDesc );
 }

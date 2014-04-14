@@ -49,6 +49,16 @@ private:
 
     VertexAttributesChannelPtr      m_vaChannel;
 
+    ParamFloat *                    m_paramWrapModeX;
+    ParamFloat *                    m_paramWrapModeY;
+    ParamFloat *                    m_paramFilteringMode;
+    ParamFloat *                    m_paramAttachMode;
+
+    TextureWrappingMode             m_lastTextureWrapModeX;
+    TextureWrappingMode             m_lastTextureWrapModeY;
+    TextureFilteringMode            m_lastTextureFilteringMode;
+    TextureAttachmentMode           m_lastTextureAttachMode;
+
 public:
 
     explicit                                    DefaultTexturePlugin        ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model );
@@ -56,15 +66,23 @@ public:
 
     virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr ) override;
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;                                                                           
-    virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;                                       
-    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;     
+    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
+    virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;
+    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
 
     virtual void                                Update                      ( TimeType t ) override;
 
 private:
 
-    void                                        EvalGeometryChannel         ( const IPlugin * prev );
+    void                                        InitGeometryChannel         ( const IPlugin * prev );
+
+    TextureWrappingMode                         GetWrapModeX                ( TimeType t ) const;
+    TextureWrappingMode                         GetWrapModeY                ( TimeType t ) const;
+    TextureFilteringMode                        GetFilteringMode            ( TimeType t ) const;
+    TextureAttachmentMode                       GetAttachementMode          ( TimeType t ) const;
+
+    bool                                        StateChanged                ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am ) const;
+    bool                                        UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am );
 
 };
 
