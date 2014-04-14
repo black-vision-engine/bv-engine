@@ -149,6 +149,12 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
 
 // *************************************
 // 
+DefaultTexturePlugin::~DefaultTexturePlugin         ()
+{
+}
+
+// *************************************
+// 
 bool                            DefaultTexturePlugin::LoadResource  ( const IPluginResourceDescr * resDescr )
 {
     auto txResDescr = QueryTextureResourceDescr( resDescr );
