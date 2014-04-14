@@ -260,9 +260,10 @@ const IVertexShaderChannel *        SimpleAnimationPlugin::GetVertexShaderChanne
 //
 TextureInfoVec            SimpleAnimationPlugin::GetTextures                 () const
 {
-    auto prevTextures = m_prevPlugin->GetTextures();
-    prevTextures.insert( prevTextures.end(), m_textures.begin(), m_textures.end() );
-    return prevTextures;
+//    auto prevTextures = m_prevPlugin->GetTextures();
+//    prevTextures.insert( prevTextures.end(), m_textures.begin(), m_textures.end() );
+//    return prevTextures;
+    return TextureInfoVec();
 }
 
 } // model

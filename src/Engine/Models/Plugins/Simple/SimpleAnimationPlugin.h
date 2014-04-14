@@ -50,7 +50,7 @@ private:
 private:
 
     TextureInfo *       LoadTexture         ( const std::string & name, const std::string & path )   const;
-    void                EvalGeometryChannel ( const IPlugin* prev );
+    void                EvalGeometryChannel ( const IPlugin * prev );
 
 public:
 
@@ -63,7 +63,7 @@ public:
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;                                                                           
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;                                       
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
-    virtual TextureInfoVec                      GetTextures                 () const override;
+    virtual TextureInfoVec                      GetTextures                 () const;
 
     // ISequenceAnimationSource
     virtual unsigned int                CurrentFrame                () const;

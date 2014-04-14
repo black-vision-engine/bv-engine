@@ -173,7 +173,7 @@ TextureSampler *        DefaultEffect::CreateSampler   ( const ITextureParams * 
     auto wrapY          = ConstantsMapper::EngineConstant( txParams->GetWrappingModeY() );            
     auto samplingMode   = SamplerSamplingMode::SSM_MODE_2D; //FIXME: only 2D textures right now
     auto filteringMode  = ConstantsMapper::EngineConstant( txParams->GetFilteringMode() );
-    auto borderColor    = txParams->DefaultBorderColor();
+    auto borderColor    = txParams->BorderColor();
 
     SamplerWrappingMode wrappingMode[] = { wrapX, wrapY, SamplerWrappingMode::SWM_REPEAT };
 

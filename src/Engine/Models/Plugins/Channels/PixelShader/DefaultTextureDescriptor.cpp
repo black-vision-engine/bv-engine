@@ -19,7 +19,7 @@ DefaultTextureDescriptor::DefaultTextureDescriptor        ()
 DefaultTextureDescriptor::DefaultTextureDescriptor        ( const char * data, const std::string & name, unsigned int w, unsigned int h, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc )
     : m_data( nullptr )
 {
-    SetBits( data );
+    SetBits( data, fmt, w, h );
     SetName( name );
     SetWidth( w );
     SetHeight( h );
@@ -176,7 +176,7 @@ void                    DefaultTextureDescriptor::SetBorderColor    ( const glm:
 //
 void                        DefaultTextureDescriptor::SetDefaults     ( DefaultTextureDescriptor * desc )
 {
-    desc->SetBits( nullptr );
+    desc->SetBits( nullptr, TextureFormat::F_A8R8G8B8, 0, 0 );
     desc->SetName( "" );
     desc->SetWidth( 0 );
     desc->SetHeight( 0 );

@@ -34,8 +34,8 @@ public:
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const override;
-                                                                                     
-    virtual TextureInfoVec                      GetTextures                 () const override; // FIXME: use resources
+                                         
+    virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr ) override;
 
     virtual void                                Update                      ( TimeType t ) override;
 

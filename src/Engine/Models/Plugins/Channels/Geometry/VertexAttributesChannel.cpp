@@ -225,7 +225,7 @@ ConnectedComponent *                    VertexAttributesChannel::GetConnectedCom
 {
     assert( idx < m_connectedComponents.size() );
 
-    m_connectedComponents[ idx ];
+    return m_connectedComponents[ idx ];
 }
 
 } // model
