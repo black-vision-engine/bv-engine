@@ -1,7 +1,9 @@
 #include "DirIO.h"
 
-#include <boost/filesystem.hpp>
 #include <windows.h>
+#include <boost/filesystem.hpp>
+
+#include "Core/StringHeplers.h"
 
 namespace fs = boost::filesystem;
 
@@ -29,7 +31,7 @@ std::vector< std::string > Dir::ListFiles( const std::string & path, const std::
  
     while( true )
     {
-        foundFiles.push_back( fd.cFileName );
+        foundFiles.push_back( WStringToString( fd.cFileName ) );
  
         if( FindNextFile( h, &fd ) == FALSE )
             break;

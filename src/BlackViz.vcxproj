@@ -192,6 +192,7 @@
     <ClCompile Include="Application\ConsoleApplication.cpp" />
     <ClCompile Include="Application\win32\WinApplication.cpp" />
     <ClCompile Include="Application\WindowedApplication.cpp" />
+    <ClCompile Include="Core\StringHeplers.cpp" />
     <ClCompile Include="Engine\Events\BaseEvent.cpp" />
     <ClCompile Include="Engine\Events\EventManager.cpp" />
     <ClCompile Include="Engine\Events\Events.cpp" />
@@ -381,6 +382,7 @@
     <ClInclude Include="Application\WindowedApplication.h" />
     <ClInclude Include="Core\Queue.h" />
     <ClInclude Include="Core\QueueConcurrent.h" />
+    <ClInclude Include="Core\StringHeplers.h" />
     <ClInclude Include="Engine\Events\BaseEvent.h" />
     <ClInclude Include="Engine\Events\EventManager.h" />
     <ClInclude Include="Engine\Events\Events.h" />
