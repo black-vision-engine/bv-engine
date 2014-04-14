@@ -40,4 +40,22 @@ std::vector< std::string > Dir::ListFiles( const std::string & path, const std::
     return foundFiles;
 }
 
+// *******************************
+//
+std::string                  Dir::WorkingDirectory  ()
+{
+    wchar_t pBuf[ 1024 ];
+
+    int bytes = GetModuleFileName( NULL, pBuf, 1024 );
+
+    if( bytes == 0 )
+    {
+	    return std::string( "" );
+    }
+    else
+    {
+	    return WStringToString( std::wstring( pBuf ) );
+    }
+}
+
 } //bv

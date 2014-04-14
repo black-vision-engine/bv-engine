@@ -154,7 +154,7 @@ bool        FileImpl::Exists      ( const std::string & fileName )
 
 // *******************************
 //
-FileImpl*   FileImpl::Open        ( const std::string & fileName, File::OpenMode openMode )
+FileImpl *  FileImpl::Open        ( const std::string & fileName, File::OpenMode openMode )
 {
     FileImpl* impl = new FileImpl( fileName );
 

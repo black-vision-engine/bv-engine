@@ -77,6 +77,30 @@ DefaultPluginParamValModel *    DefaultTexturePluginDesc::CreateDefaultModel() c
 
 // *******************************
 //
+bool                   DefaultTexturePluginDesc::CanBeAttachedTo     ( const IPlugin * plugin ) const
+{
+    if ( plugin == nullptr )
+    {
+        return false;
+    }
+
+    auto  vac = plugin->GetVertexAttributesChannel();
+    if ( vac == nullptr )
+    {
+        return false;
+    }
+
+    auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
+    if ( numChannels != 1 ) //only vertex attribute data allowed here
+    {
+        return false;
+    }
+
+    return true;
+}
+
+// *******************************
+//
 std::string             DefaultTexturePluginDesc::UID                       ()
 {
     return "DEFAULT_TEXTURE";
@@ -140,11 +164,12 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
     assert( m_paramFilteringMode );
     assert( m_paramAttachMode );
 
-    m_lastTextureWrapModeX;
-    m_lastTextureWrapModeY;
-    m_lastTextureFilteringMode;
-    m_lastTextureAttachMode;
+    auto wX = GetWrapModeX( TimeType( 0.f ) );
+    auto wY = GetWrapModeY( TimeType( 0.f ) );
+    auto fm = GetFilteringMode( TimeType( 0.f ) );
+    auto am = GetAttachementMode( TimeType( 0.f ) );
 
+    UpdateState( wX, wY, fm, am );
 }
 
 // *************************************
@@ -178,6 +203,7 @@ bool                            DefaultTexturePlugin::LoadResource  ( const IPlu
             {
                 txData->SetTexture( 0, txDesc );
             }
+
             return true;
         }
     }
@@ -311,7 +337,7 @@ void DefaultTexturePlugin::InitAttributesChannel( const IPlugin * prev )
             maxY = std::max( maxY, pos[ j ].y );
         }
 
-        auto verTexAttrChannel = new model::Float2AttributeChannel( desc, m_texturesData->GetTexture( 0 )->GetName(), true );
+        auto verTexAttrChannel = new model::Float2AttributeChannel( desc, DefaultTexturePluginDesc::TextureName(), true );
 
         for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
         {

@@ -25,6 +25,8 @@ public:
     virtual IPlugin *                       CreatePlugin        ( const std::string & name, const IPlugin * prev ) const override;
     virtual DefaultPluginParamValModel *    CreateDefaultModel  () const override;
    
+    virtual bool                            CanBeAttachedTo     ( const IPlugin * plugin )  const override;
+
     static  std::string                     UID                 ();
 
     static  std::string                     VertexShaderSource  ();

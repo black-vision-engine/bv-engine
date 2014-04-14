@@ -104,7 +104,6 @@ void BVAppLogic::Initialize         ()
 //
 void BVAppLogic::LoadScene          ( void )
 {
-
     model::BasicNode * root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager );
     assert( root );
 

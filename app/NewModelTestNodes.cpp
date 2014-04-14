@@ -103,10 +103,9 @@ model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineM
     auto success = node->AddPlugins( GSimplePluginsUIDS );
     assert( success );
 
-    SetDefaultColorChangeAnim   ( node->GetPlugin( "solid color" ) );
     SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
 
-    success = model::LoadTexture( node->GetPlugin( "texture" ), "simless_01.jpg" );
+    success = model::LoadTexture( node->GetPlugin( "texture" ), "simless_00.jpg" );
     assert( success );
 
     return node;    

@@ -22,7 +22,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
 
     for( auto descr : descriptors )
     {
-        printf( "Registered plugin desc: %s/n", descr->GetPluginTypeUID().c_str() ); 
+        printf( "Registered plugin desc: %s\n", descr->GetPluginTypeUID().c_str() ); 
     }
 
     return descriptors;

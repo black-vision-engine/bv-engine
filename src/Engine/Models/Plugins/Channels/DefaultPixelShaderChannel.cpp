@@ -11,7 +11,7 @@ DefaultPixelShaderChannel::DefaultPixelShaderChannel  ( const std::string & shad
 {
     if ( ctx == nullptr )
     {
-        m_rendererContext = RendererContext::Create();
+        m_rendererContext = RendererContext::CreateDefault();
     }
 
     m_texturesData = new DefaultTexturesData();

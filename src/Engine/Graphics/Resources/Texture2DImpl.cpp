@@ -10,6 +10,7 @@ namespace bv {
 Texture2DImpl::Texture2DImpl  ( TextureFormat format, int width, int height, DataBuffer::Semantic semantic )
     : Texture2D( format, width, height, semantic )
     , m_dataSize( 0 )
+    , m_data( nullptr )
 {
 }
 
