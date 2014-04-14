@@ -62,7 +62,7 @@ BasicNode::~BasicNode()
 
 // ********************************
 //
-const IPlugin *                 BasicNode::GetPlugin               ( const std::string & name ) const
+IPlugin *                       BasicNode::GetPlugin               ( const std::string & name ) const
 {
     return m_pluginList->GetPlugin( name );
 }

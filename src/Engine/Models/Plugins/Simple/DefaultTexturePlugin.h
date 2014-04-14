@@ -30,6 +30,8 @@ public:
     static  std::string                     VertexShaderSource  ();
     static  std::string                     PixelShaderSource   ();
 
+    static  std::string                     TextureName         ();
+
 };
 
 // ***************************** PLUGIN ********************************** 

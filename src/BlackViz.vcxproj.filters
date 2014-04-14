@@ -189,6 +189,7 @@
     <ClCompile Include="Engine\Models\Resources\Texture\TextureResourceDescr.cpp" />
     <ClCompile Include="System\DirIO.cpp" />
     <ClCompile Include="Core\StringHeplers.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\PluginUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -430,6 +431,7 @@
     <ClInclude Include="Engine\Models\Resources\Texture\TextureResourceDescr.h" />
     <ClInclude Include="System\DirIO.h" />
     <ClInclude Include="Core\StringHeplers.h" />
+    <ClInclude Include="Engine\Models\Plugins\PluginUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

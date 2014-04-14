@@ -15,10 +15,9 @@ private:
 
 public:
 
-                                        TextureResourceDescr    ( const std::string & textureFile, const std::string & name );
+                                        TextureResourceDescr    ( const std::string & textureFile );
                                         ~TextureResourceDescr   ();
 
-    virtual const std::string &         GetName                 () const override;
     virtual PluginResourceType          GetResourceType         () const override;
 
     virtual const std::string &         GetTextureFile          () const override;

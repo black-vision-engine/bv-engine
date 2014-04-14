@@ -50,7 +50,7 @@ public:
     explicit BasicNode( const std::string & name, const PluginsManager * pluginsManager = nullptr );
     virtual ~BasicNode();
 
-    virtual const IPlugin *                 GetPlugin               ( const std::string & name ) const;
+    virtual IPlugin *                       GetPlugin               ( const std::string & name ) const;
     virtual const IModelNode *              GetChild                ( const std::string & name ) const;
     virtual const IModelNode *              GetLayer                ( const std::string & name ) const;
 

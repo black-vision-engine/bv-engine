@@ -7,9 +7,8 @@ namespace bv { namespace model {
 
 // *******************************
 //
-AnimationResourceDescr::AnimationResourceDescr                          ( const std::vector< std::string > & frames, const std::string & name )
-    : m_name( name )
-    , m_frames( frames )
+AnimationResourceDescr::AnimationResourceDescr                          ( const std::vector< std::string > & frames )
+    : m_frames( frames )
 {
 }
 
@@ -17,13 +16,6 @@ AnimationResourceDescr::AnimationResourceDescr                          ( const 
 //
 AnimationResourceDescr::~AnimationResourceDescr                         ()
 {
-}
-
-// *******************************
-//
-const std::string &         AnimationResourceDescr::GetName             () const
-{
-    return m_name;
 }
 
 // *******************************
@@ -42,13 +34,13 @@ const std::vector< std::string > & AnimationResourceDescr::GetFrames   () const
 
 // *******************************
 //
-AnimationResourceDescr *     AnimationResourceDescr::CreateFromDirFrames( const std::string & path, const std::string & filter, const std::string & name )
+AnimationResourceDescr *     AnimationResourceDescr::CreateFromDirFrames( const std::string & path, const std::string & filter )
 {
     auto files = Dir::ListFiles( path, filter );
 
     if ( files.size() > 0 )
     {
-        return new AnimationResourceDescr( files, name );
+        return new AnimationResourceDescr( files );
     }
 
     return nullptr;

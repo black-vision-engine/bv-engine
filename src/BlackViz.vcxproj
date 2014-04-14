@@ -289,6 +289,7 @@
     <ClCompile Include="Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginsFactory.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\PluginUtils.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultColorPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultTexturePlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleAnimationPlugin.cpp" />
@@ -516,6 +517,7 @@
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.h" />
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginsFactory.h" />
+    <ClInclude Include="Engine\Models\Plugins\PluginUtils.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultColorPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultTexturePlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleAnimationPlugin.h" />

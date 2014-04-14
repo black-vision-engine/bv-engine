@@ -13,7 +13,6 @@ class IPluginResourceDescr
 {
 public:
 
-    virtual const std::string &     GetName         () const = 0;
     virtual PluginResourceType      GetResourceType () const = 0;
 
     virtual ~IPluginResourceDescr() {}

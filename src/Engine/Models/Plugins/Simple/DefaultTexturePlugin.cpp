@@ -96,6 +96,12 @@ std::string             DefaultTexturePluginDesc::PixelShaderSource         ()
     return "../dep/media/shaders/defaulttexture.frag";
 }
 
+// *******************************
+//
+std::string             DefaultTexturePluginDesc::TextureName               ()
+{
+    return "Tex0";
+}
 
 //FIXME: dodawanie kanalow w ten sposob (przez przypisanie na m_<xxx>channel powoduje bledy, trzeba to jakos poprawic, zeby bylo wiadomo, o co chodzi
 //FIXME: teraz zle dodanie wychodzi dopiero po odpaleniu silnika, a to jest oczywisty blad
@@ -154,7 +160,7 @@ bool                            DefaultTexturePlugin::LoadResource  ( const IPlu
         assert( txData->GetTextures().size() <= 1 );
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), txResDescr->GetName() );
+        auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), DefaultTexturePluginDesc::TextureName() );
 
         if( txDesc != nullptr )
         {
