@@ -33,7 +33,6 @@ class DefaultColorPlugin : public BasePlugin< IPlugin >
 private:
 
     DefaultPixelShaderChannelPtr            m_pixelShaderChannel;
-    DefaultVertexShaderChannelPtr           m_vertexShaderChannel;
     DefaultPluginParamValModelPtr           m_paramValModel;
 
 public:

@@ -42,9 +42,9 @@ class DefaultTexturePlugin : public BasePlugin< IPlugin >
 {
 private:
 
-    TextureAttachmentMode           m_attachmentMode;
-
     unsigned int                    m_texCoordChannelIndex;
+
+    DefaultPluginParamValModelPtr   m_paramValModel;
 
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;

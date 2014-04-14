@@ -98,11 +98,12 @@ std::string             DefaultTexturePluginDesc::PixelShaderSource         ()
 
 // ************************************************************************* PLUGIN *************************************************************************
 
+// *************************************
+// 
 DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >(  name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
+    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
 {
 }
-
 
 // *************************************
 // 
