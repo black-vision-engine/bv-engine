@@ -16,6 +16,7 @@ public:
     virtual const std::vector< IAnimationDescriptor * > &   GetAnimations   () const = 0;
 
     virtual ~ITexturesData ()   {}
+
 };
 
 } //bv

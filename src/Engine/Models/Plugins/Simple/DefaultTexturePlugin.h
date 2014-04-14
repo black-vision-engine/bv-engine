@@ -32,11 +32,6 @@ public:
 
 };
 
-class Resource;
-class TexturePixelShaderChannel;
-class TextureVertexShaderChannel;
-
-
 // ***************************** PLUGIN ********************************** 
 class DefaultTexturePlugin : public BasePlugin< IPlugin >
 {
@@ -48,6 +43,8 @@ private:
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
+
+    DefaultTexturesData *           m_texturesData;
 
     unsigned int                    m_texCoordChannelIndex;
 
@@ -84,7 +81,7 @@ private:
     TextureAttachmentMode                       GetAttachementMode          ( TimeType t ) const;
 
     bool                                        StateChanged                ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am ) const;
-    bool                                        UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am );
+    void                                        UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am );
 
 };
 

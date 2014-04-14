@@ -89,7 +89,7 @@ public:
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;                                       
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;     
 
-    virtual TextureInfoVec                      GetTextures                 () const override;
+    virtual TextureInfoVec                      GetTextures                 () const;
 
     void                                        SetAttachmentMode           ( TextureAttachmentMode mode );
     void                                        SetWrappingMode             ( TextureWrappingMode mode );

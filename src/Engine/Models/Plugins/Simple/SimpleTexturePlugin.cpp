@@ -112,7 +112,8 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
 // *************************************
 //
 SimpleTexturePlugin::~SimpleTexturePlugin        ()
-{}
+{
+}
 
 // *************************************
 //
@@ -140,7 +141,7 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin * prev )
         {
             connComp->AddAttributeChannel( prevCompCh );
         }
-
+        
         if( m_vaChannel == nullptr )
         {
             for( auto prevCompCh : prevCompChannels )
@@ -194,7 +195,7 @@ void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin * prev )
 
 // *************************************
 //
-TextureInfo * SimpleTexturePlugin::LoadTexture( const TextureDescriptor & texDesc, const std::string& name ) const
+TextureInfo * SimpleTexturePlugin::LoadTexture( const TextureDescriptor & texDesc, const std::string & name ) const
 {
     TextureLoader texLoader;
 

@@ -23,6 +23,9 @@ public:
     virtual const std::vector< ITextureDescriptor * > &     GetTextures     () const override;
     virtual const std::vector< IAnimationDescriptor * > &   GetAnimations   () const override;
 
+    ITextureDescriptor *                                    GetTexture          ( unsigned int idx );
+    IAnimationDescriptor *                                  GetAnimation        ( unsigned int idx );
+
     void                                                    SetTextureParams    ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor );
     void                                                    SetTexture          ( unsigned int idx, DefaultTextureDescriptor * textureDesc );
     void                                                    AddTexture          ( DefaultTextureDescriptor * textureDesc );

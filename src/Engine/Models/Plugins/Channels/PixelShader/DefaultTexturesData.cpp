@@ -40,6 +40,24 @@ const std::vector< IAnimationDescriptor * > &   DefaultTexturesData::GetAnimatio
 
 // ******************************
 //
+ITextureDescriptor *                            DefaultTexturesData::GetTexture          ( unsigned int idx )
+{
+    assert( idx < m_textureDescriptors.size() );
+
+    return m_textureDescriptors[ idx ];
+}
+
+// ******************************
+//
+IAnimationDescriptor *                          DefaultTexturesData::GetAnimation        ( unsigned int idx )
+{
+    assert( idx < m_animationDescriptors.size() );
+
+    return m_animationDescriptors[ idx ];
+}
+
+// ******************************
+//
 void                                            DefaultTexturesData::SetTextureParams   ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor )
 {
     assert( idx < m_textureDescriptors.size() );
