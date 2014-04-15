@@ -14,6 +14,7 @@
 namespace {
     std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR" };
     std::string GSimplePlugins1[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_TEXTURE" };
+    std::string GSimplePlugins2[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_ANIMATION" };
 
     // *****************************
     //
@@ -106,6 +107,28 @@ model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineM
     SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
 
     success = model::LoadTexture( node->GetPlugin( "texture" ), "simless_00.jpg" );
+    assert( success );
+
+    return node;    
+}
+
+// *****************************
+//
+model::BasicNode *  SimpleNodesFactory::CreateTextureAnimationRectNode( model::TimelineManager * timelineManager )
+{
+    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins2, GSimplePlugins2 + 3 );
+
+    auto node = new model::BasicNode( "Root" );
+
+    auto success = node->AddPlugins( GSimplePluginsUIDS );
+    assert( success );
+
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 0.f ), 0.f );
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 4.f ), 99.f );
+
+    SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
+
+    success = model::LoadAnimation( node->GetPlugin( "texture" ), "../../media/sequences/FullHD/alfai", "*.jpg" );
     assert( success );
 
     return node;    

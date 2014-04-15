@@ -18,6 +18,7 @@ public:
     static model::BasicNode *  CreateGreenRectNodeNoAssert( model::TimelineManager * timelineManager );
 
     static model::BasicNode *  CreateTexturedRectNode( model::TimelineManager * timelineManager );
+    static model::BasicNode *  CreateTextureAnimationRectNode( model::TimelineManager * timelineManager );
 };
 
 } //bv
