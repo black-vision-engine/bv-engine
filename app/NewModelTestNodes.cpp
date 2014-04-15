@@ -128,7 +128,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
 
     SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
 
-    success = model::LoadAnimation( node->GetPlugin( "texture" ), "../../media/sequences/FullHD/alfai", "*.jpg" );
+    success = model::LoadAnimation( node->GetPlugin( "animation" ), "../../media/sequences/FullHD/alfai", "*.tga" );
     assert( success );
 
     return node;    

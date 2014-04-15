@@ -31,7 +31,9 @@ std::vector< std::string > Dir::ListFiles( const std::string & path, const std::
  
     while( true )
     {
-        foundFiles.push_back( WStringToString( fd.cFileName ) );
+        fs::path fullFilePath = rootDir / fs::path( WStringToString( fd.cFileName ) );
+
+        foundFiles.push_back( fullFilePath.string() );
  
         if( FindNextFile( h, &fd ) == FALSE )
             break;
