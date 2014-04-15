@@ -26,7 +26,7 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource * res )  
         return nullptr;
     }
 
-    //FIXME: gdzie to jest usuwane?
+    //FIXME: gdzie to jest usuwane? Nigidzie kurwa - i jeszcze rzucanie wyjatkami do chuja wafla
     fipImage * fipImg = new fipImage();
 
     if( m_loadFromMemory )
@@ -64,8 +64,16 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource * res )  
     //FIXME: Add mapping of freeimage types to bv types
     auto texExtra = new TextureExtraData( fipImg->getWidth(), fipImg->getHeight(), fipImg->getBitsPerPixel(), TextureFormat::F_A8R8G8B8, TextureType::T_2D );
 
-    //FIXME: memcpy
-    return new ResourceHandle( (char*)fipImg->accessPixels(), fipImg->getWidth() * fipImg->getHeight() * ( fipImg->getBitsPerPixel() / 8 ), texExtra );
+    auto numBytes = fipImg->getWidth() * fipImg->getHeight() * ( fipImg->getBitsPerPixel() / 8 );
+
+    char * pixels = new char[ numBytes ];
+    memcpy( pixels, fipImg->accessPixels(), numBytes );
+
+    auto retVal = new ResourceHandle( pixels, numBytes, texExtra );
+
+    delete fipImg;
+
+    return retVal;
 }
 
 // ******************************
