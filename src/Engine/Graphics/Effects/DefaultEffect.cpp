@@ -105,7 +105,7 @@ ShaderParameters * DefaultEffect::DefaultParamsGS  ( const IShaderDataSource * d
 }
 
 // *********************************
-// FIXME: only 2D textures right now -
+// FIXME: only 2D textures right now
 void               DefaultEffect::AddTextures       ( Shader * shader, const ITexturesData * txData )
 {
     unsigned int samplerNum = 0;
