@@ -46,6 +46,12 @@ public:
     void                            SetFilteringMode( TextureFilteringMode fm );
     void                            SetBorderColor  ( const glm::vec4 & bc );
 
+    static DefaultAnimationDescriptor * LoadAnimation   ( const std::vector< std::string > & frames, const std::string & name );
+
+private:
+
+    static unsigned int                 LoadFrame       ( const std::string & frame, TextureFormat * fmt, unsigned int * w, unsigned int * h, const char ** ppData );
+
 };
 
 } //model

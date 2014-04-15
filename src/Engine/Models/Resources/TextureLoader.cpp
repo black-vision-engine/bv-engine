@@ -70,21 +70,21 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource * res )  
 
 // ******************************
 //
-int TextureExtraData::GetWidth            () const
+unsigned int TextureExtraData::GetWidth            () const
 {
     return m_width;
 }
 
 // ******************************
 //
-int TextureExtraData::GetHeight           () const
+unsigned int TextureExtraData::GetHeight           () const
 {
     return m_height;
 }
 
 // ******************************
 //
-int TextureExtraData::GetBitsPerPixel     () const
+unsigned int TextureExtraData::GetBitsPerPixel     () const
 {
     return m_bitsPerPixel;
 }
@@ -106,7 +106,7 @@ TextureType TextureExtraData::GetType     () const
 
 // ******************************
 //
-TextureExtraData::TextureExtraData(int w, int h, int bitsPerPixel, TextureFormat format, TextureType type)
+TextureExtraData::TextureExtraData( unsigned int w, unsigned int h, unsigned int bitsPerPixel, TextureFormat format, TextureType type )
     : ResourceExtraData( ResourceExtraKind::RE_TEXTURE )
     , m_width( w )
     , m_height( h )

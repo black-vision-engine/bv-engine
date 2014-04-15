@@ -38,23 +38,30 @@ class ResourceHandle //FIXME: where is the destructor of this class
 {
 private:
 
-    int                     m_size;
+    unsigned int            m_size;
     char *                  m_data;
 
     IResourceExtraData *    m_extra;
 
 public:
 
-    int                         GetSize             () const { return m_size; }
+    unsigned int                GetSize             () const { return m_size; }
     const char *                GetData             () const { return m_data; }
     char *                      GetWritableData     () const { return m_data; }
     const IResourceExtraData *  GetExtra            () const { return m_extra; }
-    
-    ResourceHandle( char * data, int size, IResourceExtraData * extra = nullptr )
+    void                        SetData             ( char * pData ) { m_data = pData; }
+
+    ResourceHandle( char * data, unsigned int size, IResourceExtraData * extra = nullptr )
         : m_data( data )
         , m_size( size )
         , m_extra( extra )
     {
+    }
+
+    ~ResourceHandle()
+    {
+        delete[] m_data;
+        delete m_extra;
     }
 };
 

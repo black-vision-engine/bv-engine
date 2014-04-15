@@ -190,6 +190,7 @@
     <ClCompile Include="System\DirIO.cpp" />
     <ClCompile Include="Core\StringHeplers.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginUtils.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\DefaultAnimationPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -432,6 +433,7 @@
     <ClInclude Include="System\DirIO.h" />
     <ClInclude Include="Core\StringHeplers.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginUtils.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\DefaultAnimationPlugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
