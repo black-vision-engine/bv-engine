@@ -17,6 +17,12 @@ NodeUpdater::NodeUpdater     ( RenderableEntity * renderable, SceneNode * sceneN
     : m_sceneNode( sceneNode )
     , m_modelNode( modelNode )
     , m_renderable( renderable )
+    , m_psTexturesData( nullptr )
+    , m_vsTexturesData( nullptr )
+    , m_gsTexturesData( nullptr )
+    , m_psShaderParameters( nullptr )
+    , m_vsShaderParameters( nullptr )
+    , m_gsShaderParameters( nullptr )
 {
     assert( sceneNode != nullptr );
     assert( modelNode != nullptr );
@@ -43,9 +49,15 @@ NodeUpdater::NodeUpdater     ( RenderableEntity * renderable, SceneNode * sceneN
         m_rendererContext = finalizer->GetPixelShaderChannel()->GetRendererContext();
         assert( m_rendererContext );
 
+        auto psc = finalizer->GetPixelShaderChannel();
+        auto vsc = finalizer->GetVertexShaderChannel();
+        auto gsc = finalizer->GetGeometryShaderChannel();
+
         for( unsigned int i = 0; i < effect->NumPasses(); ++i )
         {
-            auto inst = effect->GetPass( i )->GetStateInstance();
+            auto pass = effect->GetPass( i );
+
+            auto inst = pass->GetStateInstance();
 
             assert( !inst->GetAlphaState() );
             assert( !inst->GetCullState() );
@@ -57,6 +69,10 @@ NodeUpdater::NodeUpdater     ( RenderableEntity * renderable, SceneNode * sceneN
             RendererStatesBuilder::Create( inst, m_rendererContext );
 
             m_redererStateInstanceVec.push_back( inst );
+
+            RegisterTexturesData( &psc, pass->GetPixelShader()->GetParameters() );
+            RegisterTexturesData( &vsc, pass->GetVertexShader()->GetParameters() );
+            RegisterTexturesData( &vsc, pass->GetGeometryShader()->GetParameters() );
         }
     }
 
@@ -92,6 +108,16 @@ void    NodeUpdater::DoUpdate        ()
 
             UpdateRendererState();
         }
+    }
+}
+
+// *****************************
+//
+void    NodeUpdater::RegisterTexturesData( const IShaderDataSource *& texturesData, ShaderParameters *& shaderParameters )
+{
+    if( texturesData )
+    {
+        
     }
 }
 

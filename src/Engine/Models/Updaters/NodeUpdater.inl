@@ -188,4 +188,11 @@ inline  void    NodeUpdater::UpdateTopology      ()
     vao->SetNeedsUpdateRecreation( true );
 }
 
+// *****************************
+//
+inline void    NodeUpdater::UpdateTexturesData  ()
+{
+    
+}
+
 } //bv

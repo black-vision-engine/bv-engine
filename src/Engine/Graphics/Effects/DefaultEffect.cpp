@@ -25,8 +25,8 @@ DefaultEffect::DefaultEffect    ( const IShaderDataSource * psds, const IShaderD
     assert( psds != nullptr );
     assert( vsds != nullptr );
 
-    ShaderParameters * psparams = DefaultParamsPS( psds );
-    ShaderParameters * vsparams = DefaultParamsVS( vsds );
+    ShaderParameters * psparams = CreateDefaultParamsPS( psds );
+    ShaderParameters * vsparams = CreateDefaultParamsVS( vsds );
 
     assert( psparams != nullptr );
     assert( vsparams != nullptr );
@@ -40,7 +40,7 @@ DefaultEffect::DefaultEffect    ( const IShaderDataSource * psds, const IShaderD
     GeometryShader * gs = nullptr;
     if ( gsds != nullptr )
     {
-        ShaderParameters * gsparams = DefaultParamsGS( gsds );
+        ShaderParameters * gsparams = CreateDefaultParamsGS( gsds );
 
         assert( gsparams != nullptr );
 
@@ -68,16 +68,16 @@ DefaultEffect::~DefaultEffect   ()
 
 // *********************************
 //
-ShaderParameters * DefaultEffect::DefaultParamsPS  ( const IShaderDataSource * ds ) const
+ShaderParameters * DefaultEffect::CreateDefaultParamsPS  ( const IShaderDataSource * ds ) const
 {
-    return DefaultParamsImpl( ds );
+    return CreateDefaultParamsImpl( ds );
 }
 
 // *********************************
 //
-ShaderParameters * DefaultEffect::DefaultParamsVS  ( const IShaderDataSource * ds ) const
+ShaderParameters * DefaultEffect::CreateDefaultParamsVS  ( const IShaderDataSource * ds ) const
 {
-    auto params = DefaultParamsImpl( ds );
+    auto params = CreateDefaultParamsImpl( ds );
 
     assert( params != nullptr );
 
@@ -94,11 +94,11 @@ ShaderParameters * DefaultEffect::DefaultParamsVS  ( const IShaderDataSource * d
 
 // *********************************
 //
-ShaderParameters * DefaultEffect::DefaultParamsGS  ( const IShaderDataSource * ds ) const
+ShaderParameters * DefaultEffect::CreateDefaultParamsGS  ( const IShaderDataSource * ds ) const
 {
     if( ds )
     {
-        return DefaultParamsVS( ds );
+        return CreateDefaultParamsVS( ds );
     }
 
     return nullptr;
@@ -145,7 +145,7 @@ void               DefaultEffect::AddTextures       ( Shader * shader, const ITe
 
 // *********************************
 //
-ShaderParameters *      DefaultEffect::DefaultParamsImpl ( const IShaderDataSource * ds ) const
+ShaderParameters *      DefaultEffect::CreateDefaultParamsImpl ( const IShaderDataSource * ds ) const
 {
     ShaderParameters * sp = nullptr;
 

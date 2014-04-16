@@ -32,13 +32,33 @@ namespace bv {
 class SceneNode;
 class RenderableEntity;
 class RendererStateInstance;
+class ShaderParameters;
+class IShaderDataSource;
 
 namespace model
 {
     class IModelNode;
     class ITransformChannel;
     class IVertexAttributesChannel;
+    class ITexturesData;
 }
+
+struct Tex2ParamsInstance
+{
+    Tex2ParamsInstance()
+    {
+        psTexturesData = vsTexturesData = gsTexturesData = nullptr;
+        psShaderParam = vsShaderParams = gsShaderParams = nullptr;
+    }
+
+    const model::ITexturesData *    psTexturesData;
+    const model::ITexturesData *    vsTexturesData;
+    const model::ITexturesData *    gsTexturesData;
+
+    ShaderParameters *  psShaderParam;
+    ShaderParameters *  vsShaderParams;
+    ShaderParameters *  gsShaderParams;
+};
 
 class NodeUpdater : public IUpdater
 {
@@ -57,6 +77,8 @@ private:
     std::vector< RendererStateInstance * >      m_redererStateInstanceVec;
     const model::RendererContext *              m_rendererContext;
 
+    std::vector< Tex2ParamsInstance >           m_tex2ParamsVec;
+
 public:
 
                     NodeUpdater         ( RenderableEntity * renderable, SceneNode * sceneNode, const model::IModelNode * modelNode ); 
@@ -66,12 +88,17 @@ public:
 
 private:
 
+    FIXMI: tex2paramsinstance
+    void            RegisterTexturesData( const IShaderDataSource * texturesData, ShaderParameters * shaderParameters );
+
     inline  void    UpdateTransform     ();
     inline  void    UpdateGeometry      ();
     inline  void    UpdateRendererState ();
 
     inline  void    UpdatePositions     ();
     inline  void    UpdateTopology      ();
+
+    inline  void    UpdateTexturesData  ();
 
 };
 
