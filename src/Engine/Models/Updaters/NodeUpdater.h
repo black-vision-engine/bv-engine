@@ -6,7 +6,6 @@
 
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Interfaces/ITransformChannel.h"
-#include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 
 #include "Engine/Models/Builder/RendererStatesBuilder.h"
 
@@ -88,8 +87,7 @@ public:
 
 private:
 
-    FIXMI: tex2paramsinstance
-    void            RegisterTexturesData( const IShaderDataSource * texturesData, ShaderParameters * shaderParameters );
+    void            RegisterTexturesData( const IShaderDataSource * psTxData, const IShaderDataSource * vsTxData, const IShaderDataSource * gsTxData, RenderablePass * pass );
 
     inline  void    UpdateTransform     ();
     inline  void    UpdateGeometry      ();
