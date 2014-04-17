@@ -23,6 +23,9 @@ public:
 
     virtual const char *            GetBits         () const override;
 
+    FIXME: Implement all this along with all dependencies in the following methods (so that frame num and the whole state is preserved)
+    virtual bool                    BitsChanged     () const;
+
     virtual const std::string       GetName         () const override;
     virtual unsigned int            GetWidth        () const override;
     virtual unsigned int            GetHeight       () const override;
