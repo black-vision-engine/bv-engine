@@ -42,22 +42,7 @@ namespace model
     class ITexturesData;
 }
 
-struct Tex2ParamsInstance
-{
-    Tex2ParamsInstance()
-    {
-        psTexturesData = vsTexturesData = gsTexturesData = nullptr;
-        psShaderParam = vsShaderParams = gsShaderParams = nullptr;
-    }
-
-    const model::ITexturesData *    psTexturesData;
-    const model::ITexturesData *    vsTexturesData;
-    const model::ITexturesData *    gsTexturesData;
-
-    ShaderParameters *  psShaderParam;
-    ShaderParameters *  vsShaderParams;
-    ShaderParameters *  gsShaderParams;
-};
+typedef std::pair< const model::ITexturesData *, ShaderParameters * > Tex2ParamsPair;
 
 class NodeUpdater : public IUpdater
 {
@@ -76,7 +61,7 @@ private:
     std::vector< RendererStateInstance * >      m_redererStateInstanceVec;
     const model::RendererContext *              m_rendererContext;
 
-    std::vector< Tex2ParamsInstance >           m_tex2ParamsVec;
+    std::vector< Tex2ParamsPair >               m_tex2ParamsVec;
 
 public:
 
@@ -88,6 +73,8 @@ public:
 private:
 
     void            RegisterTexturesData( const IShaderDataSource * psTxData, const IShaderDataSource * vsTxData, const IShaderDataSource * gsTxData, RenderablePass * pass );
+    bool            CanBeRegistered     ( const IShaderDataSource * shaderDataSrc, ShaderParameters * shaderParams );
+    Tex2ParamsPair  RegisterTex2Params  ( const model::ITexturesData * texturesData, ShaderParameters * shaderParams );
 
     inline  void    UpdateTransform     ();
     inline  void    UpdateGeometry      ();

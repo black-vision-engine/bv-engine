@@ -115,8 +115,23 @@ void    NodeUpdater::DoUpdate        ()
 //
 void    NodeUpdater::RegisterTexturesData( const IShaderDataSource * psTxData, const IShaderDataSource * vsTxData, const IShaderDataSource * gsTxData, RenderablePass * pass )
 {
+//    psTxData->GetTexturesData(
     //FIXME: implement
     //sprawdz czy trzeba w ogole dodawac (czyli czy jest choc jedna tekstura lub animacja i jesli jest, to dodaj)
+}
+
+// *****************************
+//
+bool   NodeUpdater::CanBeRegistered     ( const IShaderDataSource * shaderDataSrc, ShaderParameters * shaderParams )
+{
+    return false;
+}
+
+// *****************************
+//
+Tex2ParamsPair  NodeUpdater::RegisterTex2Params ( const model::ITexturesData * texturesData, ShaderParameters * shaderParams )
+{
+    return Tex2ParamsPair();
 }
 
 } //bv
