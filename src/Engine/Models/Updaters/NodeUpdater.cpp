@@ -113,25 +113,62 @@ void    NodeUpdater::DoUpdate        ()
 
 // *****************************
 //
-void    NodeUpdater::RegisterTexturesData( const IShaderDataSource * psTxData, const IShaderDataSource * vsTxData, const IShaderDataSource * gsTxData, RenderablePass * pass )
+void    NodeUpdater::RegisterTexturesData   ( const IShaderDataSource * psTxData, const IShaderDataSource * vsTxData, const IShaderDataSource * gsTxData, RenderablePass * pass )
 {
-//    psTxData->GetTexturesData(
-    //FIXME: implement
-    //sprawdz czy trzeba w ogole dodawac (czyli czy jest choc jedna tekstura lub animacja i jesli jest, to dodaj)
+    RegisterTypedTexturesData( psTxData, pass->GetPixelShader() );
+    RegisterTypedTexturesData( vsTxData, pass->GetVertexShader() );
+    RegisterTypedTexturesData( gsTxData, pass->GetGeometryShader() );
 }
 
 // *****************************
 //
-bool   NodeUpdater::CanBeRegistered     ( const IShaderDataSource * shaderDataSrc, ShaderParameters * shaderParams )
+bool   NodeUpdater::MustBeRegistered        ( const IShaderDataSource * shaderDataSrc, ShaderParameters * shaderParams )
 {
-    return false;
+    if( shaderDataSrc == nullptr || shaderParams == nullptr )
+    {
+        return false;
+    }
+
+    auto txData = shaderDataSrc->GetTexturesData();
+
+    if( txData == nullptr )
+    {
+        return false;
+    }
+
+    auto textures = txData->GetTextures();
+    auto animations = txData->GetAnimations();
+
+    if( textures.size() == 0 && animations.size() == 0 )
+    {
+        return false;
+    }
+
+    auto totalNumEntries = animations.size() + textures.size();
+
+    assert( totalNumEntries == shaderParams->NumTextures() );
+
+    return true;
 }
 
 // *****************************
 //
-Tex2ParamsPair  NodeUpdater::RegisterTex2Params ( const model::ITexturesData * texturesData, ShaderParameters * shaderParams )
+void            NodeUpdater::RegisterTex2Params  ( const ITexturesData * texturesData, ShaderParameters * shaderParams )
 {
-    return Tex2ParamsPair();
+    auto textures = texturesData->GetTextures();
+    auto animations = texturesData->GetAnimations();
+
+    //FIXME: make sure that textures and animations from model are passed in this exact order (textures first and animations next)
+    unsigned int j = 0;
+    for( unsigned int i = 0; i < textures.size(); ++i, ++j )
+    {
+        m_texMappingVec.push_back( std::make_pair( textures[ i ], shaderParams->GetTexture( j ) ) );
+    }
+
+    for( unsigned int i = 0; i < animations.size(); ++i, ++j )
+    {
+        m_animMappingVec.push_back( std::make_pair( animations[ i ], shaderParams->GetTexture( j ) ) );
+    }
 }
 
 } //bv

@@ -33,16 +33,21 @@ class RenderableEntity;
 class RendererStateInstance;
 class ShaderParameters;
 class IShaderDataSource;
+class ITextureDescriptor;
+class IAnimationDescriptor;
+class Texture2D;
+
+class ITexturesData;
 
 namespace model
 {
     class IModelNode;
     class ITransformChannel;
     class IVertexAttributesChannel;
-    class ITexturesData;
 }
 
-typedef std::pair< const model::ITexturesData *, ShaderParameters * > Tex2ParamsPair;
+typedef std::pair< const ITextureDescriptor *, Texture2D * > Tex2Tex2DPair;
+typedef std::pair< const IAnimationDescriptor *, Texture2D * > Anim2Tex2DPair;
 
 class NodeUpdater : public IUpdater
 {
@@ -61,7 +66,8 @@ private:
     std::vector< RendererStateInstance * >      m_redererStateInstanceVec;
     const model::RendererContext *              m_rendererContext;
 
-    std::vector< Tex2ParamsPair >               m_tex2ParamsVec;
+    std::vector< Tex2Tex2DPair >                m_texMappingVec;
+    std::vector< Anim2Tex2DPair >               m_animMappingVec;
 
 public:
 
@@ -73,8 +79,18 @@ public:
 private:
 
     void            RegisterTexturesData( const IShaderDataSource * psTxData, const IShaderDataSource * vsTxData, const IShaderDataSource * gsTxData, RenderablePass * pass );
-    bool            CanBeRegistered     ( const IShaderDataSource * shaderDataSrc, ShaderParameters * shaderParams );
-    Tex2ParamsPair  RegisterTex2Params  ( const model::ITexturesData * texturesData, ShaderParameters * shaderParams );
+    bool            MustBeRegistered    ( const IShaderDataSource * shaderDataSrc, ShaderParameters * shaderParams );
+
+    template< typename ShaderType >
+    void RegisterTypedTexturesData( const IShaderDataSource * txData, ShaderType * shader )
+    {
+        if ( shader != nullptr && MustBeRegistered( txData, shader->GetParameters() ) )
+        {
+            RegisterTex2Params( txData->GetTexturesData(), shader->GetParameters() );
+        }
+    }
+
+    void            RegisterTex2Params  ( const ITexturesData * texturesData, ShaderParameters * shaderParams );
 
     inline  void    UpdateTransform     ();
     inline  void    UpdateGeometry      ();

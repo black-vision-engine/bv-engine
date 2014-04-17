@@ -192,7 +192,29 @@ inline  void    NodeUpdater::UpdateTopology      ()
 //
 inline void    NodeUpdater::UpdateTexturesData  ()
 {
+    for( auto ptx : m_texMappingVec )
+    {
+        auto texDesc = ptx.first;
+        auto tex2D   = ptx.second; 
     
+        //FIXME: some query
+        if ( true /* texDesc-> */ )
+        {
+            //FIXME: some code
+        }
+    }
+
+    for( auto ptx : m_animMappingVec )
+    {
+        auto animDesc   = ptx.first;
+        auto tex2D      = ptx.second; 
+
+        //FIXME: some query
+        if ( true /* animDesc-> */ )
+        {
+            //FIXME: some code
+        }
+    }
 }
 
 } //bv

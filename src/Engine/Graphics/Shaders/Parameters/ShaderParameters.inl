@@ -40,7 +40,7 @@ unsigned int                        ShaderParameters::NumTextures       () const
 
 // ***************************
 //
-const Texture2D *                   ShaderParameters::GetTexture        ( unsigned int idx ) const
+Texture2D *                         ShaderParameters::GetTexture        ( unsigned int idx )
 {
     assert( idx < NumTextures() );
 

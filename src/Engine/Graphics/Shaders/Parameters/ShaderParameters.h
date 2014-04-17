@@ -42,7 +42,7 @@ public:
     void                                    AddTexture                      ( Texture2D * texture );
     inline unsigned int                     NumTextures                     () const;
 
-    inline const Texture2D *                GetTexture                      ( unsigned int idx ) const; //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
+    inline Texture2D *                      GetTexture                      ( unsigned int idx ); //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
 
 };
 
