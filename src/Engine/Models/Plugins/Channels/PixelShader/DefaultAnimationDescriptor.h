@@ -30,7 +30,6 @@ public:
     virtual unsigned int            NumTextures         () const override;
     virtual const char *            GetBits             ( unsigned int idx ) const override;
 
-    FIXME: Implement all this along with all dependencies in the following methods (so that frame num and the whole state is preserved)
     virtual bool                    BitsChanged         ( unsigned int * frameNum ) const override;
     virtual unsigned int            CurrentFrame        () const override;
     virtual unsigned int            PreviousFrame       () const override;

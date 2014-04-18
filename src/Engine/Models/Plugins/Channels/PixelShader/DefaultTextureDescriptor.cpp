@@ -10,6 +10,7 @@ namespace bv { namespace model {
 //
 DefaultTextureDescriptor::DefaultTextureDescriptor        ()
     : m_data( nullptr )
+    , m_bitsChanged( false )
 {
 }
 
@@ -17,6 +18,7 @@ DefaultTextureDescriptor::DefaultTextureDescriptor        ()
 //
 DefaultTextureDescriptor::DefaultTextureDescriptor        ( const char * data, const std::string & name, unsigned int w, unsigned int h, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc )
     : m_data( nullptr )
+    , m_bitsChanged( true )
 {
     SetBits( data, fmt, w, h );
     SetName( name );
@@ -41,6 +43,13 @@ DefaultTextureDescriptor::~DefaultTextureDescriptor       ()
 const char *            DefaultTextureDescriptor::GetBits           () const
 {
     return m_data;
+}
+
+// **************************
+//
+bool                    DefaultTextureDescriptor::BitsChanged       () const
+{
+    return m_bitsChanged;
 }
 
 // **************************
@@ -113,6 +122,15 @@ void                    DefaultTextureDescriptor::SetBits           ( const char
     m_data = new char[ dataSize ];
 
     memcpy( m_data, data, dataSize );
+
+    SetBitsChanged( true );
+}
+
+// **************************
+//
+void                    DefaultTextureDescriptor::SetBitsChanged    ( bool bitsChanged )
+{
+    m_bitsChanged = bitsChanged;
 }
 
 // **************************

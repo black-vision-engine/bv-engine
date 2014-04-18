@@ -14,6 +14,7 @@ private:
     char *                  m_data;
 
     DefaultTextureParams    m_params;
+    bool                    m_bitsChanged;
 
 public:
 
@@ -23,8 +24,7 @@ public:
 
     virtual const char *            GetBits         () const override;
 
-    FIXME: Implement all this along with all dependencies in the following methods (so that frame num and the whole state is preserved)
-    virtual bool                    BitsChanged     () const;
+    virtual bool                    BitsChanged     () const override;
 
     virtual const std::string       GetName         () const override;
     virtual unsigned int            GetWidth        () const override;
@@ -36,6 +36,9 @@ public:
     virtual glm::vec4               BorderColor     () const override;
 
     void                            SetBits         ( const char * data, TextureFormat fmt, unsigned int w, unsigned int h );
+
+    void                            SetBitsChanged  ( bool bitsChanged );
+
     void                            SetName         ( const std::string & name );
     void                            SetWidth        ( unsigned int w );
     void                            SetHeight       ( unsigned int h );

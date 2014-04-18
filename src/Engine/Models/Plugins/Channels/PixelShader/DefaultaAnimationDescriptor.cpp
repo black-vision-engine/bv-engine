@@ -10,6 +10,7 @@ namespace bv { namespace model {
 //
 DefaultAnimationDescriptor::DefaultAnimationDescriptor        ()
 {
+    //FIXME: implement BitsChanged
 }
 
 // *******************************
@@ -50,6 +51,29 @@ const char *            DefaultAnimationDescriptor::GetBits             ( unsign
     assert( idx < NumTextures() );
 
     return m_frames[ idx ];
+}
+
+// *******************************
+//
+bool                    DefaultAnimationDescriptor::BitsChanged         ( unsigned int * frameNum ) const
+{
+    //FIXME: implement
+    assert( false && "Implement" );
+    return false;
+}
+
+// *******************************
+//
+unsigned int            DefaultAnimationDescriptor::CurrentFrame        () const
+{
+    return m_curFrame;
+}
+
+// *******************************
+//
+unsigned int            DefaultAnimationDescriptor::PreviousFrame       () const
+{
+    return m_lastFrame;
 }
 
 // *******************************
@@ -141,6 +165,22 @@ void                     DefaultAnimationDescriptor::AddBits            ( const 
     memcpy( newData, data, dataSize );
 
     m_frames.push_back( newData );
+}
+
+// *******************************
+//
+void                     DefaultAnimationDescriptor::SetBitsChanged      ( unsigned int frameNum, bool bitsChanged )
+{
+    //FIXME: implement
+    assert( false && "Implement" );
+}
+
+// *******************************
+//
+void                     DefaultAnimationDescriptor::SetCurrentFrame     ( unsigned int frameNum )
+{
+    m_lastFrame = m_curFrame;
+    m_curFrame = frameNum;
 }
 
 // *******************************
