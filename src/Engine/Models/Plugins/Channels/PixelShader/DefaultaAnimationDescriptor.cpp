@@ -55,11 +55,27 @@ const char *            DefaultAnimationDescriptor::GetBits             ( unsign
 
 // *******************************
 //
-bool                    DefaultAnimationDescriptor::BitsChanged         ( unsigned int * frameNum ) const
+bool                    DefaultAnimationDescriptor::BitsChanged         () const
+{
+    //FIXME: implement
+    assert( false );
+    return false;
+}
+
+// *******************************
+//
+bool                    DefaultAnimationDescriptor::BitsChanged         ( unsigned int frameNum ) const
 {
     //FIXME: implement
     assert( false && "Implement" );
-    return false;
+    return m_frameBiteChanged[ frameNum ];
+}
+
+// *******************************
+//
+void                    DefaultAnimationDescriptor::ResetBitsChanged    ( unsigned int frameNum )
+{
+    m_frameBiteChanged[ frameNum ] = false;
 }
 
 // *******************************

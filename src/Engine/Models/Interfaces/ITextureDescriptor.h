@@ -11,6 +11,7 @@ public:
 
     virtual const char *            GetBits             () const = 0;
     virtual bool                    BitsChanged         () const = 0;
+    virtual void                    ResetBitsChanged    () = 0;
 
     virtual ~ITextureDescriptor() {}
 

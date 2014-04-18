@@ -14,7 +14,7 @@ class DefaultAnimationDescriptor : public IAnimationDescriptor
 private:
 
     std::vector< char * >   m_frames;
-    std::vector< bool >     m_frameChanged;
+    std::vector< bool >     m_frameBiteChanged;
 
     DefaultTextureParams    m_params;
 
@@ -30,7 +30,10 @@ public:
     virtual unsigned int            NumTextures         () const override;
     virtual const char *            GetBits             ( unsigned int idx ) const override;
 
-    virtual bool                    BitsChanged         ( unsigned int * frameNum ) const override;
+    virtual bool                    BitsChanged         () const override;
+    virtual bool                    BitsChanged         ( unsigned int frameNum ) const override;
+    virtual void                    ResetBitsChanged    ( unsigned int frameNum ) override;
+
     virtual unsigned int            CurrentFrame        () const override;
     virtual unsigned int            PreviousFrame       () const override;
 

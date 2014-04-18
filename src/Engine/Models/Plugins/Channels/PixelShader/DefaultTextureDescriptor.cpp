@@ -54,6 +54,13 @@ bool                    DefaultTextureDescriptor::BitsChanged       () const
 
 // **************************
 //
+void                    DefaultTextureDescriptor::ResetBitsChanged  ()
+{
+    SetBitsChanged( false );
+}
+
+// **************************
+//
 const std::string       DefaultTextureDescriptor::GetName           () const
 {
     return m_params.GetName();

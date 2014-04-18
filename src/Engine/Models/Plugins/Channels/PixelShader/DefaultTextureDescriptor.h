@@ -25,6 +25,7 @@ public:
     virtual const char *            GetBits         () const override;
 
     virtual bool                    BitsChanged     () const override;
+    virtual void                    ResetBitsChanged() override;
 
     virtual const std::string       GetName         () const override;
     virtual unsigned int            GetWidth        () const override;
