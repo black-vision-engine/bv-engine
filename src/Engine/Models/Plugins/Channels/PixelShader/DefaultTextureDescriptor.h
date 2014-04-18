@@ -14,7 +14,7 @@ private:
     char *                  m_data;
 
     DefaultTextureParams    m_params;
-    bool                    m_bitsChanged;
+    mutable bool            m_bitsChanged;
 
 public:
 
@@ -25,7 +25,7 @@ public:
     virtual const char *            GetBits         () const override;
 
     virtual bool                    BitsChanged     () const override;
-    virtual void                    ResetBitsChanged() override;
+    virtual void                    ResetBitsChanged() const override;
 
     virtual const std::string       GetName         () const override;
     virtual unsigned int            GetWidth        () const override;
@@ -38,7 +38,7 @@ public:
 
     void                            SetBits         ( const char * data, TextureFormat fmt, unsigned int w, unsigned int h );
 
-    void                            SetBitsChanged  ( bool bitsChanged );
+    void                            SetBitsChanged  ( bool bitsChanged ) const;
 
     void                            SetName         ( const std::string & name );
     void                            SetWidth        ( unsigned int w );

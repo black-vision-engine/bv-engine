@@ -54,7 +54,7 @@ bool                    DefaultTextureDescriptor::BitsChanged       () const
 
 // **************************
 //
-void                    DefaultTextureDescriptor::ResetBitsChanged  ()
+void                    DefaultTextureDescriptor::ResetBitsChanged  () const
 {
     SetBitsChanged( false );
 }
@@ -135,7 +135,7 @@ void                    DefaultTextureDescriptor::SetBits           ( const char
 
 // **************************
 //
-void                    DefaultTextureDescriptor::SetBitsChanged    ( bool bitsChanged )
+void                    DefaultTextureDescriptor::SetBitsChanged    ( bool bitsChanged ) const
 {
     m_bitsChanged = bitsChanged;
 }

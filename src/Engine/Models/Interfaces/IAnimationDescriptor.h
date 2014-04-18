@@ -14,7 +14,7 @@ public:
 
     virtual bool                    BitsChanged         () const = 0;
     virtual bool                    BitsChanged         ( unsigned int frameNum ) const = 0;
-    virtual void                    ResetBitsChanged    ( unsigned int frameNum ) = 0;
+    virtual void                    ResetBitsChanged    ( unsigned int frameNum ) const = 0;
 
     virtual unsigned int            CurrentFrame        () const = 0;
     virtual unsigned int            PreviousFrame       () const = 0;

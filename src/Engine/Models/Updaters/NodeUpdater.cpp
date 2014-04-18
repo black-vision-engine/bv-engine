@@ -162,12 +162,14 @@ void            NodeUpdater::RegisterTex2Params  ( const ITexturesData * texture
     unsigned int j = 0;
     for( unsigned int i = 0; i < textures.size(); ++i, ++j )
     {
-        m_texMappingVec.push_back( std::make_pair( textures[ i ], shaderParams->GetTexture( j ) ) );
+        auto tex2D = static_cast< Texture2DImpl * >( shaderParams->GetTexture( j ) );
+        m_texMappingVec.push_back( std::make_pair( textures[ i ], tex2D ) );
     }
 
     for( unsigned int i = 0; i < animations.size(); ++i, ++j )
     {
-        m_animMappingVec.push_back( std::make_pair( animations[ i ], shaderParams->GetTexture( j ) ) );
+        auto tex2DSeq = static_cast< Texture2DSequenceImpl * >( shaderParams->GetTexture( j ) );
+        m_animMappingVec.push_back( std::make_pair( animations[ i ], tex2DSeq ) );
     }
 }
 

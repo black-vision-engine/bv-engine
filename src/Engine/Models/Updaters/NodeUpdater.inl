@@ -197,22 +197,28 @@ inline void    NodeUpdater::UpdateTexturesData  ()
         auto texDesc = ptx.first;
         auto tex2D   = ptx.second; 
     
-        //FIXME: some query
-        if ( true /* texDesc-> */ )
+        if ( texDesc->BitsChanged() )
         {
-            //FIXME: some code
+            auto format = texDesc->GetFormat();
+            auto width  = texDesc->GetWidth();
+            auto height = texDesc->GetHeight();
+            auto data   = texDesc->GetBits();
+
+            tex2D->WriteBits( data, format, width, height );
+
+            texDesc->ResetBitsChanged();
         }
     }
 
+    //FIXME: implement or disallow  bits changed in an animation
     for( auto ptx : m_animMappingVec )
     {
         auto animDesc   = ptx.first;
         auto tex2D      = ptx.second; 
 
-        //FIXME: some query
-        if ( true /* animDesc-> */ )
+        if ( animDesc->CurrentFrame() != animDesc->PreviousFrame() )
         {
-            //FIXME: some code
+            tex2D->SetActiveTexture( animDesc->CurrentFrame() );
         }
     }
 }

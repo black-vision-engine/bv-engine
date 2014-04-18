@@ -6,6 +6,8 @@
 
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Interfaces/ITransformChannel.h"
+#include "Engine/Models/Interfaces/ITextureDescriptor.h"
+#include "Engine/Models/Interfaces/IAnimationDescriptor.h"
 
 #include "Engine/Models/Builder/RendererStatesBuilder.h"
 
@@ -13,6 +15,9 @@
 
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
+
+#include "Engine/Graphics/Resources/Texture2DImpl.h"
+#include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
 
 //FIXME: this part suxx as hell
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
@@ -35,7 +40,8 @@ class ShaderParameters;
 class IShaderDataSource;
 class ITextureDescriptor;
 class IAnimationDescriptor;
-class Texture2D;
+class Texture2DImpl;
+class Texture2DSequenceImpl;
 
 class ITexturesData;
 
@@ -46,8 +52,8 @@ namespace model
     class IVertexAttributesChannel;
 }
 
-typedef std::pair< const ITextureDescriptor *, Texture2D * > Tex2Tex2DPair;
-typedef std::pair< const IAnimationDescriptor *, Texture2D * > Anim2Tex2DPair;
+typedef std::pair< const ITextureDescriptor *, Texture2DImpl * > Tex2Tex2DPair;
+typedef std::pair< const IAnimationDescriptor *, Texture2DSequenceImpl * > Anim2Tex2DPair;
 
 class NodeUpdater : public IUpdater
 {

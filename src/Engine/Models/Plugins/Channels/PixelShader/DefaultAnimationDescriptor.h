@@ -13,13 +13,13 @@ class DefaultAnimationDescriptor : public IAnimationDescriptor
 {
 private:
 
-    std::vector< char * >   m_frames;
-    std::vector< bool >     m_frameBiteChanged;
+    std::vector< char * >       m_frames;
+    mutable std::vector< bool > m_frameBiteChanged;
 
-    DefaultTextureParams    m_params;
+    DefaultTextureParams        m_params;
 
-    unsigned int            m_curFrame;
-    unsigned int            m_lastFrame;
+    unsigned int                m_curFrame;
+    unsigned int                m_lastFrame;
 
 public:
 
@@ -32,7 +32,7 @@ public:
 
     virtual bool                    BitsChanged         () const override;
     virtual bool                    BitsChanged         ( unsigned int frameNum ) const override;
-    virtual void                    ResetBitsChanged    ( unsigned int frameNum ) override;
+    virtual void                    ResetBitsChanged    ( unsigned int frameNum ) const override;
 
     virtual unsigned int            CurrentFrame        () const override;
     virtual unsigned int            PreviousFrame       () const override;
@@ -49,7 +49,7 @@ public:
     void                            SetBits             ( unsigned int idx, const char * data, TextureFormat fmt, unsigned int w, unsigned int h );
     void                            AddBits             ( const char * data, TextureFormat fmt, unsigned int w, unsigned int h );
 
-    void                            SetBitsChanged      ( unsigned int frameNum, bool bitsChanged );
+    void                            SetBitsChanged      ( unsigned int frameNum, bool bitsChanged ) const;
     void                            SetCurrentFrame     ( unsigned int frameNum );
 
     void                            SetName             ( const std::string & name );

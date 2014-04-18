@@ -10,7 +10,6 @@ namespace bv { namespace model {
 //
 DefaultAnimationDescriptor::DefaultAnimationDescriptor        ()
 {
-    //FIXME: implement BitsChanged
 }
 
 // *******************************
@@ -25,6 +24,8 @@ DefaultAnimationDescriptor::DefaultAnimationDescriptor        ( const std::strin
     SetWrappingModeY( wmy );
     SetFilteringMode( fm );
     SetBorderColor( bc );
+    SetCurrentFrame( 0 ); //current
+    SetCurrentFrame( 0 ); //previous
 }
 
 // *******************************
@@ -73,9 +74,9 @@ bool                    DefaultAnimationDescriptor::BitsChanged         ( unsign
 
 // *******************************
 //
-void                    DefaultAnimationDescriptor::ResetBitsChanged    ( unsigned int frameNum )
+void                    DefaultAnimationDescriptor::ResetBitsChanged    ( unsigned int frameNum ) const
 {
-    m_frameBiteChanged[ frameNum ] = false;
+    SetBitsChanged( frameNum, false );
 }
 
 // *******************************
@@ -185,10 +186,11 @@ void                     DefaultAnimationDescriptor::AddBits            ( const 
 
 // *******************************
 //
-void                     DefaultAnimationDescriptor::SetBitsChanged      ( unsigned int frameNum, bool bitsChanged )
+void                     DefaultAnimationDescriptor::SetBitsChanged      ( unsigned int frameNum, bool bitsChanged ) const
 {
     //FIXME: implement
     assert( false && "Implement" );
+    m_frameBiteChanged[ frameNum ] = bitsChanged;
 }
 
 // *******************************
