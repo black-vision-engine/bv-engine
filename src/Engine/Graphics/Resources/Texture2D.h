@@ -23,6 +23,11 @@ public:
 
     unsigned int    RawFrameSize    () const;
 
+protected:
+
+    void            SetWidth        ( unsigned int width );
+    void            SetHeight       ( unsigned int height );
+
 };
 
 } //bv

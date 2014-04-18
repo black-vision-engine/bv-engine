@@ -39,4 +39,18 @@ unsigned int    Texture2D::RawFrameSize () const
     return GetPixelSize() * GetWidth() * GetHeight();
 }
 
+// *********************************
+//
+void            Texture2D::SetWidth     ( unsigned int width )
+{
+    m_width = width;
+}
+
+// *********************************
+//
+void            Texture2D::SetHeight    ( unsigned int height )
+{
+    m_height = height;
+}
+
 } //bv

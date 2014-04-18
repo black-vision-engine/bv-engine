@@ -46,12 +46,11 @@ const char *    Texture2DImpl::GetData         () const
 //
 bool            Texture2DImpl::WriteBits       ( const char * data, TextureFormat format, int width, int height )
 {
-    if( width != GetWidth() || height != GetHeight() || format != GetFormat() )
-    {
-        return false;
-    }
-
     unsigned int newSize = GetPixelSize( format ) * width * height;
+
+    SetFormat( format );
+    SetWidth( width );
+    SetHeight( height );
 
     if( GetDataSize() != newSize )
     {
@@ -61,6 +60,7 @@ bool            Texture2DImpl::WriteBits       ( const char * data, TextureForma
 
     memcpy( m_data, data, newSize );
     m_dataSize = newSize;
+
     SetChanged( true );
 
     return true;
