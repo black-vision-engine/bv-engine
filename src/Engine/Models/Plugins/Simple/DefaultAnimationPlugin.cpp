@@ -276,6 +276,8 @@ void                                DefaultAnimationPlugin::Update              
     auto wY = GetWrapModeY( t );
     auto fm = GetFilteringMode( t );
 
+    m_texturesData->SetAnimationFrame( 0, (unsigned int )m_paramFrameNum->Evaluate( t ) );
+
     if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() || StateChanged( wX, wY, fm, attachmentMode ) )
     {
         UpdateState( wX, wY, fm, attachmentMode );

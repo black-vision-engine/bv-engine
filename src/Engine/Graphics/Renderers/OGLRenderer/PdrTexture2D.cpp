@@ -106,6 +106,7 @@ void        PdrTexture2D::Unlock            ()
 //
 void        PdrTexture2D::Update            ( const Texture2D * texture )
 {
+    //FIXME: add pbo regeneration - in case the texture was reloaded
     void * data = Lock( MemoryLockingType::MLT_WRITE_ONLY );
     memcpy( data, texture->GetData(), texture->RawFrameSize() );
     Unlock();

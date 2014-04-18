@@ -34,6 +34,8 @@ public:
     void                                                    SetAnimation        ( unsigned int idx, DefaultAnimationDescriptor * animationDesc );
     void                                                    AddAnimation        ( DefaultAnimationDescriptor * animationDesc );
 
+    void                                                    SetAnimationFrame   ( unsigned int idx, unsigned int frameNum );
+
 };
 
 } //model

@@ -106,6 +106,7 @@ void    NodeUpdater::DoUpdate        ()
                 UpdateGeometry();
             }
 
+            UpdateTexturesData();
             UpdateRendererState();
         }
     }

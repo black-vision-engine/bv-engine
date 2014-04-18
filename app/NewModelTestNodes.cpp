@@ -124,7 +124,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     assert( success );
 
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 0.f ), 0.f );
-    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 4.f ), 99.f );
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 140.f ), 99.f );
 
     SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
 

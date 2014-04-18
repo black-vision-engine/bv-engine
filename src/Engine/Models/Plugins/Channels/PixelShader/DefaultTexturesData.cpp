@@ -118,5 +118,15 @@ void                                            DefaultTexturesData::AddAnimatio
     m_animationDescriptors.push_back( animationDesc );
 }
 
+// ******************************
+//
+void                                            DefaultTexturesData::SetAnimationFrame   ( unsigned int idx, unsigned int frameNum )
+{
+    assert( idx < m_animationDescriptors.size() );
+
+    auto desc = static_cast< DefaultAnimationDescriptor * >( m_animationDescriptors[ idx ] );
+    desc->SetCurrentFrame( frameNum );
+}
+
 } //model
 } //bv
