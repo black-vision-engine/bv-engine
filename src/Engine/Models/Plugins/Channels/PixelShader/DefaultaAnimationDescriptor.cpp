@@ -292,7 +292,7 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
         unsigned int lh = 0;
         TextureFormat lfmt = TextureFormat::F_A8R8G8B8;
 
-        auto numBytes = LoadFrame( frames[ 0 ], &lfmt, &lw, &lh, &data );
+        auto numBytes = LoadFrame( frames[ i ], &lfmt, &lw, &lh, &data );
 
         if( lfmt != fmt || lw != w || lh != h )
         {
