@@ -192,6 +192,48 @@ inline  void    NodeUpdater::UpdateTopology      ()
 //
 inline void    NodeUpdater::UpdateTexturesData  ()
 {
+    for( auto txDataPair : m_texDataMappingVec )
+    {
+        auto texData        = txDataPair.first;
+        auto shaderParams   = txDataPair.second;
+    
+        auto textures   = texData->GetTextures();
+        auto animations = texData->GetAnimations();
+
+        //FIXME: make sure that textures and animations from model are passed in this exact order (textures first and animations next)
+        unsigned int j = 0;
+        for( unsigned int i = 0; i < textures.size(); ++i, ++j )
+        {
+            auto tex2D      = static_cast< Texture2DImpl * >( shaderParams->GetTexture( j ) );
+            auto texDesc    = textures[ i ];
+
+            if ( texDesc->BitsChanged() )
+            {
+                auto format = texDesc->GetFormat();
+                auto width  = texDesc->GetWidth();
+                auto height = texDesc->GetHeight();
+                auto data   = texDesc->GetBits();
+
+                tex2D->WriteBits( data, format, width, height );
+
+                texDesc->ResetBitsChanged();
+            }
+        }
+
+        for( unsigned int i = 0; i < animations.size(); ++i, ++j )
+        {
+            auto tex2DSeq   = static_cast< Texture2DSequenceImpl * >( shaderParams->GetTexture( j ) );
+            auto animDesc   = animations[ i ];
+
+            if ( animDesc->CurrentFrame() != animDesc->PreviousFrame() )
+            {
+                tex2DSeq->SetActiveTexture( animDesc->CurrentFrame() );
+            }
+        }
+
+    }
+
+/*
     for( auto ptx : m_texMappingVec )
     {
         auto texDesc = ptx.first;
@@ -221,6 +263,7 @@ inline void    NodeUpdater::UpdateTexturesData  ()
             tex2D->SetActiveTexture( animDesc->CurrentFrame() );
         }
     }
+*/
 }
 
 } //bv

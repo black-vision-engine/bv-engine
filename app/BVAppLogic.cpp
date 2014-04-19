@@ -22,6 +22,9 @@
 
 #include "DefaultPlugins.h"
 
+//FIXME: remove
+#include "Engine/Models/Plugins/PluginUtils.h"
+
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -135,6 +138,31 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
     m_startTime = millis;
 }
 
+namespace {
+
+void DupaTextureReloadTestUpdate( BVAppLogic * app, TimeType t )
+{
+    static TimeType lastTime = t;
+    static TimeType delta = TimeType( 0.0 );
+    static unsigned int curTx = 0;
+    static const char * locTx[] = { "test.bmp", "simless_00.jpg", "Split32.tga", "alfai00.tga" };
+
+    auto root = app->GetModelScene()->GetSceneRoot();
+    auto plugin = root->GetPlugin( "texture" );
+    
+    if ( plugin )
+    {
+        if ( ( t - lastTime ) > TimeType( 2.0 ) )
+        {
+            curTx = ( curTx + 1 ) % 4;
+            lastTime = t;
+            model::LoadTexture( plugin, locTx[ curTx ] );
+        }
+    }
+}
+
+}
+
 // *********************************
 //
 void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & timer, Renderer * renderer, HWND handle )
@@ -161,6 +189,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
                 FRAME_STATS_SECTION( "Model-u" );
                 HPROFILER_SECTION( "m_modelScene->Update" );
 
+                DupaTextureReloadTestUpdate( this, t );
                 m_modelScene->Update( t );
             }
             {
@@ -359,6 +388,13 @@ model::TimelineManager *    BVAppLogic::GetTimelineManager  ()
 model::ModelScene *         BVAppLogic::GetModelScene       ()
 {
     return m_modelScene;
+}
+
+// *********************************
+//
+const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
+{
+    return m_pluginsManager;
 }
 
 //// *********************************

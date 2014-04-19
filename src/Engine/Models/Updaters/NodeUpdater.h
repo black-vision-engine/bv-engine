@@ -11,6 +11,7 @@
 
 #include "Engine/Models/Builder/RendererStatesBuilder.h"
 
+#include "Engine/Models/Interfaces/ITexturesData.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
@@ -43,8 +44,6 @@ class IAnimationDescriptor;
 class Texture2DImpl;
 class Texture2DSequenceImpl;
 
-class ITexturesData;
-
 namespace model
 {
     class IModelNode;
@@ -52,6 +51,7 @@ namespace model
     class IVertexAttributesChannel;
 }
 
+typedef std::pair< const ITexturesData *, ShaderParameters * > TexData2ShaderParams;
 typedef std::pair< const ITextureDescriptor *, Texture2DImpl * > Tex2Tex2DPair;
 typedef std::pair< const IAnimationDescriptor *, Texture2DSequenceImpl * > Anim2Tex2DPair;
 
@@ -74,6 +74,8 @@ private:
 
     std::vector< Tex2Tex2DPair >                m_texMappingVec;
     std::vector< Anim2Tex2DPair >               m_animMappingVec;
+
+    std::vector< TexData2ShaderParams >         m_texDataMappingVec;
 
 public:
 

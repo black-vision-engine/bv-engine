@@ -78,9 +78,9 @@ private:
 public:
 
     //Convenience API - generalized model accessors
-    model::TimelineManager *    GetTimelineManager  ();
-    model::ModelScene *         GetModelScene       ();
-
+    model::TimelineManager *        GetTimelineManager  ();
+    model::ModelScene *             GetModelScene       ();
+    const model::PluginsManager *   GetPluginsManager   () const;
 };
 
 } //bv

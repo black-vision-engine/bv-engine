@@ -159,6 +159,14 @@ void            NodeUpdater::RegisterTex2Params  ( const ITexturesData * texture
     auto textures = texturesData->GetTextures();
     auto animations = texturesData->GetAnimations();
 
+    if( textures.size() != 0 || animations.size() != 0 )
+    {
+        m_texDataMappingVec.push_back( std::make_pair( texturesData, shaderParams ) );
+    }
+/*
+    auto textures = texturesData->GetTextures();
+    auto animations = texturesData->GetAnimations();
+
     //FIXME: make sure that textures and animations from model are passed in this exact order (textures first and animations next)
     unsigned int j = 0;
     for( unsigned int i = 0; i < textures.size(); ++i, ++j )
@@ -172,6 +180,7 @@ void            NodeUpdater::RegisterTex2Params  ( const ITexturesData * texture
         auto tex2DSeq = static_cast< Texture2DSequenceImpl * >( shaderParams->GetTexture( j ) );
         m_animMappingVec.push_back( std::make_pair( animations[ i ], tex2DSeq ) );
     }
+*/
 }
 
 } //bv
