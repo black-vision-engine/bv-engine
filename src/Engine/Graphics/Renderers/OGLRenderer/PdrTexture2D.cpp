@@ -16,6 +16,15 @@ PdrTexture2D::PdrTexture2D                      ( const Texture2D * texture )
     , m_pboID( 0 )
     , m_writeLock( false )
     , m_lockedMemoryPtr( nullptr )
+    , m_width( 0 )
+    , m_height( 0 )
+{
+    Update( texture );
+}
+
+// *******************************
+//
+void    PdrTexture2D::Initialize      ( const Texture2D * texture )
 {
     glGenBuffers( 1, &m_pboID );
     glBindBuffer( GL_PIXEL_UNPACK_BUFFER, m_pboID );
@@ -32,16 +41,30 @@ PdrTexture2D::PdrTexture2D                      ( const Texture2D * texture )
     assert( texture->GetFormat() == TextureFormat::F_A8R8G8B8 );
     glTexImage2D    ( GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
     glBindTexture   ( GL_TEXTURE_2D, prevTex );
+}
 
-    Update( texture );
+// *******************************
+//
+void    PdrTexture2D::Deinitialize    ()
+{
+    glDeleteTextures( 1, &m_textureID );
+    glDeleteBuffers( 1, &m_pboID );
+}
+
+// *******************************
+//
+void    PdrTexture2D::UpdateTexData     ( const Texture2D * texture )
+{
+    void * data = Lock( MemoryLockingType::MLT_WRITE_ONLY );
+    memcpy( data, texture->GetData(), texture->RawFrameSize() );
+    Unlock();
 }
 
 // *******************************
 //
 PdrTexture2D::~PdrTexture2D   ()
 {
-    glDeleteTextures( 1, &m_textureID );
-    glDeleteBuffers( 1, &m_pboID );
+    Deinitialize();
 }
 
 // *******************************
@@ -106,10 +129,13 @@ void        PdrTexture2D::Unlock            ()
 //
 void        PdrTexture2D::Update            ( const Texture2D * texture )
 {
-    //FIXME: add pbo regeneration - in case the texture was reloaded
-    void * data = Lock( MemoryLockingType::MLT_WRITE_ONLY );
-    memcpy( data, texture->GetData(), texture->RawFrameSize() );
-    Unlock();
+    if ( m_width != texture->GetWidth() || m_height != texture->GetHeight() )
+    {
+        Deinitialize();
+        Initialize( texture );
+    }
+
+    UpdateTexData( texture );
 }
 
 // *******************************

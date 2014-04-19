@@ -29,6 +29,11 @@ private:
 
     explicit        PdrTexture2D    ( const Texture2D * texture );
 
+    void            Initialize      ( const Texture2D * texture );
+    void            Deinitialize    ();
+
+    void            UpdateTexData   ( const Texture2D * texture );
+
 public:
 
                     ~PdrTexture2D   ();
