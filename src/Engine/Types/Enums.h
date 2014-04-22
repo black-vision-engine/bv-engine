@@ -141,4 +141,22 @@ enum class PluginResourceType : int
     PRT_TOTAL
 };
 
+enum class TimelineEventType : int
+{
+    TET_STOP = 0,
+    TET_LOOP,
+    TET_NULL,
+
+    TET_TOTAL
+};
+
+enum class LoopEventAction : int
+{
+    LEA_REVERSE = 0,
+    LEA_RESTART,
+    LEA_GOTO,
+
+    LEA_TOTAL
+};
+
 } // bv

@@ -434,6 +434,7 @@
     <ClInclude Include="Core\StringHeplers.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginUtils.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultAnimationPlugin.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITimelineEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
