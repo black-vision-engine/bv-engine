@@ -15,12 +15,12 @@ class ITimelineEvent
 {
 public:
 
-    virtual std::string         GetName     () const = 0;
-    virtual TimelineEventType   GetType     () const = 0;
+    virtual std::string         GetName         () const = 0;
+    virtual TimelineEventType   GetType         () const = 0;
 
-    virtual TimeType            GetEventTime() const = 0;
+    virtual TimeType            GetEventTime    () const = 0;
 
-    virtual const ITimeline *   GetTimeline () const = 0;
+    virtual const ITimeline *   GetOwnerTimeline() const = 0;
 
     virtual ~ITimelineEvent() {}
 

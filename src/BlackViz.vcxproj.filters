@@ -191,6 +191,9 @@
     <ClCompile Include="Core\StringHeplers.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginUtils.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultAnimationPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventLoop.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventNull.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -435,6 +438,10 @@
     <ClInclude Include="Engine\Models\Plugins\PluginUtils.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultAnimationPlugin.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITimelineEvent.h" />
+    <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventLoop.h" />
+    <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventNull.h" />
+    <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.h" />
+    <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
@@ -450,6 +457,7 @@
     <None Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.inl" />
     <None Include="Engine\Models\Updaters\NodeUpdater.inl" />
     <None Include="Engine\Graphics\SceneGraph\TransformableEntity.inl" />
+    <None Include="Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />
