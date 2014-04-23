@@ -13,8 +13,8 @@ private:
 
 public:
 
-        TimelineEventStop   ( const std::string & name, TimeType eventTime, const ITimeline * owner =  nullptr );
-        ~TimelineEventStop  ();
+    TimelineEventStop   ( const std::string & name, TimeType eventTime, const ITimeline * owner =  nullptr );
+    ~TimelineEventStop  ();
 
 };
 
