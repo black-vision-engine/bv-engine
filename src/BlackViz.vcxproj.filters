@@ -96,7 +96,6 @@
     <ClCompile Include="Engine\Models\Timeline\TimelineState.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryMultiRectPlugin.cpp" />
-    <ClCompile Include="Engine\Models\Timeline\Timeline.cpp" />
     <ClCompile Include="Engine\Models\Timeline\GlobalTimeline.cpp" />
     <ClCompile Include="Engine\Models\Updaters\UpdatersManager.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimelineManager.cpp" />
@@ -195,6 +194,7 @@
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventNull.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\Static\Timeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -306,7 +306,6 @@
     <ClInclude Include="Engine\Models\Resources\Font\FontLoader.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Glyph.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Text.h" />
-    <ClInclude Include="Engine\Models\Timeline\Timeline.h" />
     <ClInclude Include="Engine\Models\Timeline\GlobalTimeline.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineBase.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineSettings.h" />
@@ -444,6 +443,7 @@
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.h" />
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />
     <ClInclude Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
+    <ClInclude Include="Engine\Models\Timeline\Static\Timeline.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

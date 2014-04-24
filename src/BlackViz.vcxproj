@@ -319,7 +319,7 @@
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventNull.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.cpp" />
     <ClCompile Include="Engine\Models\Timeline\GlobalTimeline.cpp" />
-    <ClCompile Include="Engine\Models\Timeline\Timeline.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\Static\Timeline.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimelineBase.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimelineManager.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimelineState.cpp" />
@@ -558,7 +558,7 @@
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventNull.h" />
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.h" />
     <ClInclude Include="Engine\Models\Timeline\GlobalTimeline.h" />
-    <ClInclude Include="Engine\Models\Timeline\Timeline.h" />
+    <ClInclude Include="Engine\Models\Timeline\Static\Timeline.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineBase.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineManager.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineSettings.h" />
