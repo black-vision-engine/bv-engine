@@ -194,6 +194,7 @@
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventLoop.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventNull.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -442,6 +443,7 @@
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventNull.h" />
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.h" />
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />
+    <ClInclude Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

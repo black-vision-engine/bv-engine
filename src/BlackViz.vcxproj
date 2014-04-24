@@ -314,6 +314,7 @@
     <ClCompile Include="Engine\Models\Resources\TextureLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\AnimationResourceDescr.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\TextureResourceDescr.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventLoop.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventNull.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.cpp" />
@@ -551,6 +552,7 @@
     <ClInclude Include="Engine\Models\Resources\TextureLoader.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\AnimationResourceDescr.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\TextureResourceDescr.h" />
+    <ClInclude Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventLoop.h" />
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventNull.h" />

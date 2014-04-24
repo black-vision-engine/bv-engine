@@ -150,6 +150,14 @@ enum class TimelineEventType : int
     TET_TOTAL
 };
 
+enum class TimelinePlayDirection : int
+{
+    TPD_FORWAD = 0,
+    TPD_BACKWARD,
+
+    TPD_TOTAL
+};
+
 enum class LoopEventAction : int
 {
     LEA_REVERSE = 0,
