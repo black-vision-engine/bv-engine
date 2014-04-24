@@ -1,8 +1,8 @@
 #include "Engine/Models/Interfaces/ITimeline.h"
+#include "Mathematics/Interpolators/Interpolators.h"
 
 
 namespace bv { namespace model {
-
 
 class DefaultTimeline : public ITimeline
 {
