@@ -47,9 +47,14 @@ class TimeSegmentEval:
 
     DIR_FORWARD = 0
     DIR_BACKWARD = 1
+   
+    BEHAVIOR_CLAMP = 0
+    BEHAVIOR_REPEAT = 1
+    BEHAVIOR_MIRROR = 2
+
     PREC = 1000.0
    
-    def __init__( self, duration, direction = DIR_FORWARD ):
+    def __init__( self, duration, preb = BEHAVIOR_CLAMP, postb = BEHAVIOR_CLAMP, direction = DIR_FORWARD ):
         self.duration = duration
         self.direction = direction
         self.t = 0.0
@@ -59,6 +64,9 @@ class TimeSegmentEval:
         self.paused = False
         self.pauseDuration = 0.0
         self.pauseDurationBack = 0.0
+
+        self.preEvaluator = self._evalPreClamp
+        self.postEvaluator = self._evalPostClamp
 
     def update( self, t ):
         prevT = self.t
@@ -98,10 +106,41 @@ class TimeSegmentEval:
         self._printT()
 
     def getLocalTime( self ):
+        t = self._getLocalTimeNoClamp()
+
+        return self._clamp( t )
+
+    def _getLocalTimeNoClamp( self ):
         if self.direction == self.DIR_FORWARD:
             return self.t - self.startTime - self.pauseDuration
         else:
             return 2.0 * self.startTimeBack - self.startTime - self.t + self.pauseDuration
+
+    def _clamp( self, t ):
+        if t > self.duration:
+            return self.postEvaluator( t )
+        elif t < 0.0:
+            return self.preEvaluator( t )
+        else:
+            return t
+
+    def _evalPostClamp( self, t ):
+        return self.duration
+
+    def _evalPreClamp( self, t ):
+        return 0.0
+
+    def _evalRepeat( self, t ):        
+        return divmod( t, self.duration )[ 1 ]
+
+    def _evalMirror( self, t ):
+        c, q = divmod( t, self.duration )
+        c = int( c )
+
+        if c % 2 == 0:
+            return q
+        else:
+            return self.duration - q
 
     def _dirMultiplier( self ):
         if self.direction == self.DIR_FORWARD:
@@ -140,6 +179,15 @@ def prepareCommands( e ):
     return cmds
 
 ############################
+def prepareCommands1( e ):
+    cmds = []
+
+    cmds.append( [ 1.0, CommandStart( 0.0, e ), False, 0.0 ] )
+    cmds.append( [ 15.0, CommandReverse( 4.0, e ), False, 4.0 ] )
+
+    return cmds
+
+############################
 def evalCommand( cmds, prevT, curT ):
     for c in cmds:
         if prevT < c[ 0 ] and curT >= c[ 0 ] and c[ 2 ] == False:
@@ -149,8 +197,16 @@ def evalCommand( cmds, prevT, curT ):
 
 if __name__ == "__main__":
 
+    import sys
 
-    tse = TimeSegmentEval( 30.0 )
+    print divmod( 12.2, 15.6 )
+    print divmod( 15.6, 15.6 )
+    print divmod( 2 * 12.2, 15.6 )
+    print divmod( 0.0, 15.6 )
+    print divmod( -1.0, 15.6 )
+    print divmod( -17.0, 15.6 )
+
+    tse = TimeSegmentEval( 5.0 )
 
     cmds = prepareCommands( tse )
 
