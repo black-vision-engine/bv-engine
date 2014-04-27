@@ -2,6 +2,7 @@
 #include <functional>
 
 #include "System/BasicTypes.h"
+#include "Mathematics/Core/mathfuncs.h"
 
 #include "Engine/Types/Enums.h"
 

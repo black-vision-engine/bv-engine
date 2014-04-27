@@ -9,17 +9,9 @@
 #include "Mathematics/Core/mathfuncs.h"
 
 
-namespace bv
-{
-namespace
-{
+namespace bv {
 
-// *************************************
-//
-int round( double val )
-{
-    return static_cast<int>( std::floor( 0.5 + val ) );
-}
+namespace {
 
 // *************************************
 //

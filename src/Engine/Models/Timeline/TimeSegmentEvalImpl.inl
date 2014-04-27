@@ -63,13 +63,27 @@ inline TimeType TimeSegmentEvalImpl::EvalPostClamp       ( TimeType t ) const
 //
 inline TimeType TimeSegmentEvalImpl::EvalRepeat          ( TimeType t ) const
 {
-    
+    TimeType q = m_duration;
+    TimeType r = divmod( t, &q );
+
+    return r;
 }
 
 // *******************************
 //
 inline TimeType TimeSegmentEvalImpl::EvalMirror          ( TimeType t ) const
 {
+    TimeType q = m_duration;
+    TimeType r = divmod( t, &q );
+
+    if( round( q ) % 2 == 0 )
+    {
+        return r;
+    }
+    else
+    {
+        return m_duration - r;
+    }
 }
 
 // *******************************
