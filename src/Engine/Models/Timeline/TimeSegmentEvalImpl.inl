@@ -1,38 +1,90 @@
-#include "System/BasicTypes.h"
-#include "Engine/Types/Enums.h"
-
-
 namespace bv { namespace model {
 
-class TimeSegmentEvalImpl
+// *******************************
+//
+inline TimeType TimeSegmentEvalImpl::ResetLocalTimeTo    ( TimeType t )
 {
-private:
+    m_pauseDuration = TimeType( 0.0 );
+    m_startTime     = m_globalTime - t;
 
-    TimeType    m_duration;
+    if( m_playDirection == TimelinePlayDirection::TPD_BACKWARD )
+    {
+        m_backwardStartTime = m_globalTime;
+    }
+}
 
-public:
+// *******************************
+//
+inline TimeType TimeSegmentEvalImpl::GetLocalTimeNoClamp () const
+{
+    if( m_playDirection == TimelinePlayDirection::TPD_FORWAD )
+    {
+        return  m_globalTime - m_startTime - m_pauseDuration;
+    }
+    else
+    {
+        return TimeType( 2.0 ) * m_backwardStartTime - m_startTime - m_globalTime + m_pauseDuration;
+    }
+}
 
-                TimeSegmentEvalImpl ( TimeType duration, TimelinePlayDirection direction = TimelinePlayDirection::TPD_FORWAD, TimelineWrapMethod preMethod = TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod postMethod = TimelineWrapMethod::TWM_CLAMP );
-                ~TimeSegmentEvalImpl();
-                
-    void        Start               ();
-    void        Stop                ();
-    void        Reverse             ();
-    void        Reset               ();
+// *******************************
+//
+inline TimeType TimeSegmentEvalImpl::Clamp               ( TimeType t ) const
+{
+    if( t > m_duration )
+    {
+        return EvalPost( t );
+    }
+    else if( t < TimeType( 0.0 ) )
+    {
+        return EvalPre( t );
+    }
+    else
+    {
+        return t;
+    }
+}
 
-    void        SetGlobalTime       ( TimeType t );
-    TimeType    GetLocatTime        () const;
+// *******************************
+//
+inline TimeType TimeSegmentEvalImpl::EvalPreClamp        ( TimeType t ) const
+{
+    return TimeType( 0.0 );
+}
 
-    void        SetWrapPreBehavior  ( TimelineWrapMethod method );
-    void        SetWrapPostBehavior ( TimelineWrapMethod method );
-    void        SetWrapBehavior     ( TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
+// *******************************
+//
+inline TimeType TimeSegmentEvalImpl::EvalPostClamp       ( TimeType t ) const
+{
+    return m_duration;
+}
 
-private:
+// *******************************
+//
+inline TimeType TimeSegmentEvalImpl::EvalRepeat          ( TimeType t ) const
+{
+    
+}
 
-    TimeType    GetLocalTimeNoClamp () const;
-    TimeType    Clamp               ( TimeType t );
+// *******************************
+//
+inline TimeType TimeSegmentEvalImpl::EvalMirror          ( TimeType t ) const
+{
+}
 
-};
+// *******************************
+//
+inline TimeType TimeSegmentEvalImpl::EvalPre             ( TimeType t ) const
+{
+    return m_wrapEvaluatorPre( t );
+}
+
+// *******************************
+//
+inline TimeType TimeSegmentEvalImpl::EvalPost            ( TimeType t ) const
+{
+    return m_wrapEvaluatorPost( t );
+}
 
 } //model
 } //bv

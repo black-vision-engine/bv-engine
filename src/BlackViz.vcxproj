@@ -323,6 +323,7 @@
     <ClCompile Include="Engine\Models\Timeline\TimelineBase.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimelineManager.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimelineState.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\TimeSegmentEvalImpl.cpp" />
     <ClCompile Include="Engine\Models\Updaters\GeometryUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\NodeUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\SequenceAnimationUpdater.cpp" />
@@ -334,6 +335,7 @@
     <ClCompile Include="Engine\Processes\ProcessThreadedEvents.cpp" />
     <ClCompile Include="Engine\Types\Values\BaseValue.cpp" />
     <ClCompile Include="Engine\Types\Values\ValuesFactory.cpp" />
+    <ClCompile Include="Mathematics\Core\mathfuncs.cpp" />
     <ClCompile Include="Mathematics\Interpolators\Interpolators.cpp" />
     <ClCompile Include="System\DirIO.cpp" />
     <ClCompile Include="System\FileIO.cpp" />
@@ -559,11 +561,11 @@
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.h" />
     <ClInclude Include="Engine\Models\Timeline\GlobalTimeline.h" />
     <ClInclude Include="Engine\Models\Timeline\Static\Timeline.h" />
-    <ClInclude Include="Engine\Models\Timeline\TimeSegmentEvalImpl.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineBase.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineManager.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineSettings.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineState.h" />
+    <ClInclude Include="Engine\Models\Timeline\TimeSegmentEvalImpl.h" />
     <ClInclude Include="Engine\Models\Updaters\GeometryUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\NodeUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\SequenceAnimationUpdater.h" />
@@ -576,6 +578,7 @@
     <ClInclude Include="Engine\Types\Values\BaseValue.h" />
     <ClInclude Include="Engine\Types\Values\TypedValues.h" />
     <ClInclude Include="Engine\Types\Values\ValuesFactory.h" />
+    <ClInclude Include="Mathematics\Core\mathfuncs.h" />
     <ClInclude Include="System\BasicMacros.h" />
     <ClInclude Include="System\BasicTypes.h" />
     <ClInclude Include="System\DirIO.h" />
@@ -650,6 +653,7 @@
     <None Include="Engine\Models\Plugins\Parameters\GenericParameterSetters.inl" />
     <None Include="Engine\Models\Plugins\Parameters\SimpleTypedParameters.inl" />
     <None Include="Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.inl" />
+    <None Include="Engine\Models\Timeline\TimeSegmentEvalImpl.inl" />
     <None Include="Engine\Models\Updaters\NodeUpdater.inl" />
     <None Include="System\HerarchicalProfiler.inl" />
   </ItemGroup>

@@ -195,6 +195,8 @@
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Static\Timeline.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\TimeSegmentEvalImpl.cpp" />
+    <ClCompile Include="Mathematics\Core\mathfuncs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -445,6 +447,7 @@
     <ClInclude Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
     <ClInclude Include="Engine\Models\Timeline\Static\Timeline.h" />
     <ClInclude Include="Engine\Models\Timeline\TimeSegmentEvalImpl.h" />
+    <ClInclude Include="Mathematics\Core\mathfuncs.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
@@ -461,6 +464,7 @@
     <None Include="Engine\Models\Updaters\NodeUpdater.inl" />
     <None Include="Engine\Graphics\SceneGraph\TransformableEntity.inl" />
     <None Include="Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.inl" />
+    <None Include="Engine\Models\Timeline\TimeSegmentEvalImpl.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />

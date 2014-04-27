@@ -1,4 +1,8 @@
+#include <vector>
+#include <functional>
+
 #include "System/BasicTypes.h"
+
 #include "Engine/Types/Enums.h"
 
 
@@ -8,7 +12,28 @@ class TimeSegmentEvalImpl
 {
 private:
 
-    TimeType    m_duration;
+    typedef std::function<TimeType(TimeType)> WrapEvaluator;
+    typedef std::vector< std::function<TimeType(TimeType)> > WrapEvaluators;
+
+private:
+
+    TimeType                m_globalTime;
+
+    TimeType                m_duration;
+    TimeType                m_pauseDuration;
+    TimeType                m_startTime;
+    TimeType                m_backwardStartTime;
+
+    TimelinePlayDirection   m_playDirection;
+
+    TimelineWrapMethod      m_wrapPreBehavior;
+    TimelineWrapMethod      m_wrapPostBehavior;
+
+    WrapEvaluators          m_wrapEvaluatorsPre;
+    WrapEvaluators          m_wrapEvaluatorsPost;
+
+    WrapEvaluator           m_wrapEvaluatorPre;
+    WrapEvaluator           m_wrapEvaluatorPost;
 
 public:
 
@@ -29,10 +54,28 @@ public:
 
 private:
 
-    TimeType    GetLocalTimeNoClamp () const;
-    TimeType    Clamp               ( TimeType t );
+    void            InitWrapEvaluators  ( TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
+
+    void            SetWrapEvaluatorPre ( TimelineWrapMethod method );
+    void            SetWrapEvaluatorPost( TimelineWrapMethod method );
+
+    inline TimeType ResetLocalTimeTo    ( TimeType t );
+
+    inline TimeType GetLocalTimeNoClamp () const;
+
+    inline TimeType Clamp               ( TimeType t ) const;
+
+    inline TimeType EvalPreClamp        ( TimeType t ) const;
+    inline TimeType EvalPostClamp       ( TimeType t ) const;
+    inline TimeType EvalRepeat          ( TimeType t ) const;
+    inline TimeType EvalMirror          ( TimeType t ) const;
+
+    inline TimeType EvalPre             ( TimeType t ) const;
+    inline TimeType EvalPost            ( TimeType t ) const;
 
 };
 
 } //model
 } //bv
+
+#include "TimeSegmentEvalImpl.inl"

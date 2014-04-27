@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 
 #include "System/BasicTypes.h"
+#include "Mathematics/Core/mathfuncs.h"
 
 
 namespace bv
@@ -274,31 +275,6 @@ TimeValueT BasicInterpolator<TimeValueT, ValueT>::CalcPreT( TimeValueT t ) const
     }
 
     return t;
-}
-
-namespace 
-{
-
-// *************************************
-//
-double divmod( double t, double * i )
-{
-    double ret = std::fmod( t, *i );
-    *i = ( t - ret ) / *i;
-
-    return ret;
-}
-
-// *************************************
-//
-float divmod( float t, float * i )
-{
-    float ret = std::fmod( t, *i );
-    *i = ( t - ret ) / *i;
-
-    return ret;
-}
-
 }
 
 template<class TimeValueT, class ValueT>
