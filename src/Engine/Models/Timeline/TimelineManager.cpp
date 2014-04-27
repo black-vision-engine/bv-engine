@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
-#include "Engine/Models/Timeline/Timeline.h"
+#include "Engine/Models/Timeline/Static/Timeline.h"
 
 
 namespace bv { namespace model {

@@ -158,6 +158,15 @@ enum class TimelinePlayDirection : int
     TPD_TOTAL
 };
 
+enum class TimelineWrapMethod : int
+{
+    TWM_CLAMP = 0,
+    TWM_REPEAT,
+    TWM_MIRROR,
+
+    TWM_TOTAL
+};
+
 enum class LoopEventAction : int
 {
     LEA_REVERSE = 0,

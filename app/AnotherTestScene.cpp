@@ -40,7 +40,7 @@
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
-#include "Engine/Models/Timeline/Timeline.h"
+#include "Engine/Models/Timeline/Static/Timeline.h"
 
 #include "Engine/Models/Plugins/PluginsFactory.h"
 

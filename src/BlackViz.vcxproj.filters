@@ -444,6 +444,7 @@
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />
     <ClInclude Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
     <ClInclude Include="Engine\Models\Timeline\Static\Timeline.h" />
+    <ClInclude Include="Engine\Models\Timeline\TimeSegmentEvalImpl.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
