@@ -33,7 +33,6 @@ void        TimeSegmentEvalImpl::Start               ()
 {
     if( !m_started )
     {
-        m_startTime = m_globalTime;
         m_started = true;
     }
 
@@ -41,6 +40,8 @@ void        TimeSegmentEvalImpl::Start               ()
     {
         m_paused = false;
     }
+
+    ResetLocalTimeTo( TimeType( 0.0 ) );
 }
 
 // *********************************
@@ -94,7 +95,7 @@ void        TimeSegmentEvalImpl::UpdateGlobalTime   ( TimeType t )
         m_startTime = t;
     }
 
-    //FIXME: this is not the best way to accumulate paused times but should suffice for the time being
+    //FIXME: this is not the best way to accumulate pause times but should suffice for the time being
     if( m_paused )
     {
         m_pauseDuration += t - prevGlobalTime;
@@ -106,9 +107,7 @@ void        TimeSegmentEvalImpl::UpdateGlobalTime   ( TimeType t )
 //
 TimeType    TimeSegmentEvalImpl::GetLocalTime        () const
 {
-    auto t = GetLocalTimeNoClamp();
-
-    return EvalClamp( t );
+    return EvalClamp( GetLocalTimeNoClamp() );
 }
 
 // *********************************

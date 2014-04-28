@@ -1,5 +1,6 @@
 #include "Engine/Models/Interfaces/ITimeline.h"
-#include "Mathematics/Interpolators/Interpolators.h"
+
+#include "Engine/Models/Timeline/TimeSegmentEvalImpl.h"
 
 
 namespace bv { namespace model {
@@ -9,7 +10,7 @@ class DefaultTimeline : public ITimeline
 private:
 
     std::string                     m_name;
-    TimeType                        m_duration;
+    TimeSegmentEvalImpl             m_timeEvalImpl;
 
     std::vector< IParameter * >     m_registeredParameters;
 

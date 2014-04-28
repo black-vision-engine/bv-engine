@@ -34,6 +34,7 @@ private:
     TimelineWrapMethod      m_wrapPreBehavior;
     TimelineWrapMethod      m_wrapPostBehavior;
 
+    //FIXME: may be static
     WrapEvaluators          m_wrapEvaluatorsPre;
     WrapEvaluators          m_wrapEvaluatorsPost;
 
