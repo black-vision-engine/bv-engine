@@ -40,8 +40,10 @@ void        TimeSegmentEvalImpl::Start               ()
     {
         m_paused = false;
     }
-
-    ResetLocalTimeTo( TimeType( 0.0 ) );
+    else
+    {
+        ResetLocalTimeTo( TimeType( 0.0 ) );
+    }
 }
 
 // *********************************

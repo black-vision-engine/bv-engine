@@ -51,55 +51,94 @@ namespace
     
         GetDefaultEventManager().QueueEvent( GTransformSetEvent );
 
-        float ts[] = { 2.0f, 4.f, 6.f, 8.f, 12.f, 14.f, 18.f, 22.f, 24.f, 30.f };
+        static float ts[] = { 2.0f, 4.f, 6.f, 8.f, 11.f, 14.f, 18.f, 22.f, 24.f, 30.f, 35.f };
 
         te.UpdateGlobalTime( t );
         printf( "\rGT: %3.3f LT: %3.3f      ", t, te.GetLocalTime() );
 
-        if( t < ts[ 0 ] )
+        if( t >= ts[ 0 ] )
+        {
+            TimeType q = 10.0f;
+            TimeType r = divmod( 2.5f, &q );
+            printf( "\ndivmod( 2.5f, 10.0f ) = ( q = %f, r = %f )\n", q, r ); 
+
+            q = 10.0f;
+            r = divmod( 12.5f, &q );
+            printf( "divmod( 12.5f, 10.0f ) = ( q = %f, r = %f )\n", q, r ); 
+
+            q = 10.0f;
+            r = divmod( -2.5f, &q );
+            printf( "divmod( -2.5f, 10.0f ) = ( q = %f, r = %f )\n", q, r ); 
+
+            q = 10.0f;
+            r = divmod( -12.5f, &q );
+            printf( "divmod( -12.5f, 10.0f ) = ( q = %f, r = %f )\n", q, r ); 
+
+            te.Start();
+            printf( "  ACTION: %3.3f -> Start\n", t );
+            ts[ 0 ] = 10000.0f;
+        }
+        else if( t >= ts[ 1 ] )
+        {
+            te.Stop();
+            printf( "  ACTION: %3.3f -> Stop\n", t );
+            ts[ 1 ] = 10000.0f;
+        }
+        else if( t >= ts[ 2 ] )
         {
             te.Start();
             printf( "  ACTION: %3.3f -> Start\n", t );
-            ts[ 0 ] = 0.0f;
+            ts[ 2 ] = 10000.0f;
         }
-        else if( t < ts[ 1 ] )
+        else if( t >= ts[ 3 ] ) 
         {
-            ts[ 1 ] = 0.0f;
+            te.Reverse();
+            printf( "  ACTION: %3.3f -> Reverse\n", t );
+            ts[ 3 ] = 10000.0f;
         }
-        else if( t < ts[ 2 ] )
+        else if( t >= ts[ 4 ] ) 
         {
-            ts[ 2 ] = 0.0f;
+            te.Stop();
+            printf( "  ACTION: %3.3f -> Stop\n", t );
+            ts[ 4 ] = 10000.0f;
         }
-        else if( t < ts[ 3 ] ) 
+        else if( t >= ts[ 5 ] ) 
         {
-            ts[ 3 ] = 0.0f;
+            te.Reverse();
+            printf( "  ACTION: %3.3f -> Reverse\n", t );
+            ts[ 5 ] = 10000.0f;
         }
-        else if( t < ts[ 4 ] ) 
+        else if( t >= ts[ 6 ] ) 
         {
-            ts[ 4 ] = 0.0f;
+            te.Start();
+            printf( "  ACTION: %3.3f -> Start\n", t );
+            ts[ 6 ] = 10000.0f;
         }
-        else if( t < ts[ 5 ] ) 
+        else if( t >= ts[ 7 ] ) 
         {
-            ts[ 5 ] = 0.0f;
+            te.Reset();
+            printf( "  ACTION: %3.3f -> Reset\n", t );
+            ts[ 7 ] = 10000.0f;
         }
-        else if( t < ts[ 6 ] ) 
+        else if( t >= ts[ 8 ] ) 
         {
-            ts[ 6 ] = 0.0f;
+            te.Start();
+            printf( "  ACTION: %3.3f -> Start\n", t );
+            ts[ 8 ] = 10000.0f;
         }
-        else if( t < ts[ 7 ] ) 
+        else if( t >= ts[ 9 ] ) 
         {
-            ts[ 7 ] = 0.0f;
+            te.SetWrapBehaviorPost( TimelineWrapMethod::TWM_REPEAT );
+            printf( "  ACTION: %3.3f -> SetWrapBehaviorPost( REPEAT )\n", t );
+            ts[ 9 ] = 10000.0f;
         }
-        else if( t < ts[ 8 ] ) 
+        else if( t >= ts[ 10 ] )
         {
-            ts[ 8 ] = 0.0f;
-        }
-        else if( t < ts[ 9 ] ) 
-        {
-            ts[ 9 ] = 0.0f;
-        }
-        else
-        {
+            te.Reverse();
+            printf( "  ACTION: %3.3f -> Reverse\n", t );
+//            te.SetWrapBehaviorPre( TimelineWrapMethod::TWM_MIRROR );
+//            printf( "  ACTION: %3.3f -> SetWrapBehaviorPre( MIRROR )\n", t );
+            ts[ 10 ] = 10000.0f;
         }
     }
 
