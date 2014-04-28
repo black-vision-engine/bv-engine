@@ -28,6 +28,8 @@ public:
     virtual void                    SetTimeAndStop      ( TimeType t ) = 0; 
     virtual void                    SetTimeAndPlay      ( TimeType t ) = 0; 
 
+    virtual void                    SetWrapBehavior     ( TimelineWrapMethod preMethod, TimelineWrapMethod postMethod ) = 0;
+
     virtual void                    SetLocalTime        ( TimeType t ) = 0;
     virtual TimeType                GetLocalTime        () const = 0;
 

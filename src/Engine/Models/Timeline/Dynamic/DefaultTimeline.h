@@ -43,6 +43,8 @@ public:
     virtual void                                SetTimeAndStop      ( TimeType t ) override; 
     virtual void                                SetTimeAndPlay      ( TimeType t ) override; 
 
+    virtual void                                SetWrapBehavior     ( TimelineWrapMethod preMethod, TimelineWrapMethod postMethod ) override;
+
     virtual void                                SetLocalTime        ( TimeType t ) override;
     virtual TimeType                            GetLocalTime        () const override;
 

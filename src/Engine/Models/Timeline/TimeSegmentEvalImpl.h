@@ -58,14 +58,14 @@ public:
     void        SetWrapBehaviorPost ( TimelineWrapMethod method );
     void        SetWrapBehavior     ( TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
 
+    inline void ResetLocalTimeTo    ( TimeType t );
+
 private:
 
     void            InitWrapEvaluators  ( TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
 
     void            SetWrapEvaluatorPre ( TimelineWrapMethod method );
     void            SetWrapEvaluatorPost( TimelineWrapMethod method );
-
-    inline void     ResetLocalTimeTo    ( TimeType t );
 
     inline TimeType GetLocalTimeNoClamp () const;
 
