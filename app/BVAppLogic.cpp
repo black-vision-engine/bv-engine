@@ -41,7 +41,7 @@ namespace
 
     void GownoWFormieKebaba( TimeType t )
     {
-        static model::TimeSegmentEvalImpl te( 10.0f );
+        static model::TimeSegmentEvalImpl te( 5.0f );
 
         float tx = float( sin( t ) );
         glm::vec3 kebab( tx, 0.f, 0.f );
@@ -58,87 +58,19 @@ namespace
 
         if( t >= ts[ 0 ] )
         {
-            TimeType q = 10.0f;
-            TimeType r = divmod( 2.5f, &q );
-            printf( "\ndivmod( 2.5f, 10.0f ) = ( q = %f, r = %f )\n", q, r ); 
-
-            q = 10.0f;
-            r = divmod( 12.5f, &q );
-            printf( "divmod( 12.5f, 10.0f ) = ( q = %f, r = %f )\n", q, r ); 
-
-            q = 10.0f;
-            r = divmod( -2.5f, &q );
-            printf( "divmod( -2.5f, 10.0f ) = ( q = %f, r = %f )\n", q, r ); 
-
-            q = 10.0f;
-            r = divmod( -12.5f, &q );
-            printf( "divmod( -12.5f, 10.0f ) = ( q = %f, r = %f )\n", q, r ); 
-
             te.Start();
             printf( "  ACTION: %3.3f -> Start\n", t );
+            te.SetWrapBehaviorPost( TimelineWrapMethod::TWM_MIRROR );
+            printf( "  ACTION: %3.3f -> SetWrapBehaviorPost( MIRROR )\n", t );
+            te.SetWrapBehaviorPre( TimelineWrapMethod::TWM_MIRROR );
+            printf( "  ACTION: %3.3f -> SetWrapBehaviorPre( MIRROR )\n", t );
             ts[ 0 ] = 10000.0f;
         }
         else if( t >= ts[ 1 ] )
         {
-            te.Stop();
-            printf( "  ACTION: %3.3f -> Stop\n", t );
+            te.Reverse();
+            printf( "  ACTION: %3.3f -> Reverse\n", t );
             ts[ 1 ] = 10000.0f;
-        }
-        else if( t >= ts[ 2 ] )
-        {
-            te.Start();
-            printf( "  ACTION: %3.3f -> Start\n", t );
-            ts[ 2 ] = 10000.0f;
-        }
-        else if( t >= ts[ 3 ] ) 
-        {
-            te.Reverse();
-            printf( "  ACTION: %3.3f -> Reverse\n", t );
-            ts[ 3 ] = 10000.0f;
-        }
-        else if( t >= ts[ 4 ] ) 
-        {
-            te.Stop();
-            printf( "  ACTION: %3.3f -> Stop\n", t );
-            ts[ 4 ] = 10000.0f;
-        }
-        else if( t >= ts[ 5 ] ) 
-        {
-            te.Reverse();
-            printf( "  ACTION: %3.3f -> Reverse\n", t );
-            ts[ 5 ] = 10000.0f;
-        }
-        else if( t >= ts[ 6 ] ) 
-        {
-            te.Start();
-            printf( "  ACTION: %3.3f -> Start\n", t );
-            ts[ 6 ] = 10000.0f;
-        }
-        else if( t >= ts[ 7 ] ) 
-        {
-            te.Reset();
-            printf( "  ACTION: %3.3f -> Reset\n", t );
-            ts[ 7 ] = 10000.0f;
-        }
-        else if( t >= ts[ 8 ] ) 
-        {
-            te.Start();
-            printf( "  ACTION: %3.3f -> Start\n", t );
-            ts[ 8 ] = 10000.0f;
-        }
-        else if( t >= ts[ 9 ] ) 
-        {
-            te.SetWrapBehaviorPost( TimelineWrapMethod::TWM_REPEAT );
-            printf( "  ACTION: %3.3f -> SetWrapBehaviorPost( REPEAT )\n", t );
-            ts[ 9 ] = 10000.0f;
-        }
-        else if( t >= ts[ 10 ] )
-        {
-            te.Reverse();
-            printf( "  ACTION: %3.3f -> Reverse\n", t );
-//            te.SetWrapBehaviorPre( TimelineWrapMethod::TWM_MIRROR );
-//            printf( "  ACTION: %3.3f -> SetWrapBehaviorPre( MIRROR )\n", t );
-            ts[ 10 ] = 10000.0f;
         }
     }
 

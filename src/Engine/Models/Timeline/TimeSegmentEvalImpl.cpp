@@ -109,7 +109,9 @@ void        TimeSegmentEvalImpl::UpdateGlobalTime   ( TimeType t )
 //
 TimeType    TimeSegmentEvalImpl::GetLocalTime        () const
 {
-    return EvalClamp( GetLocalTimeNoClamp() );
+    auto t = GetLocalTimeNoClamp();
+    printf( " %f", t );
+    return EvalClamp( t );
 }
 
 // *********************************

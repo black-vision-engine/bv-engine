@@ -11,6 +11,8 @@ inline void     TimeSegmentEvalImpl::ResetLocalTimeTo    ( TimeType t )
     {
         m_backwardStartTime = m_globalTime;
     }
+
+    printf( "%f %f %f\n", m_startTime, m_backwardStartTime, m_pauseDuration );
 }
 
 // *******************************
@@ -76,6 +78,8 @@ inline TimeType TimeSegmentEvalImpl::EvalMirror          ( TimeType t ) const
     TimeType q = m_duration;
     TimeType r = divmod( t, &q );
 
+    printf( " %f %d %d", q, round( q ), round( q ) % 2 );
+
     if( round( q ) % 2 == 0 )
     {
         return r;
@@ -90,6 +94,7 @@ inline TimeType TimeSegmentEvalImpl::EvalMirror          ( TimeType t ) const
 //
 inline TimeType TimeSegmentEvalImpl::EvalPre             ( TimeType t ) const
 {
+    printf( " evalpre" );
     return m_wrapEvaluatorPre( t );
 }
 

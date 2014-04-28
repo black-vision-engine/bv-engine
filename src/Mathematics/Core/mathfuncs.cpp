@@ -28,6 +28,7 @@ double divmod( double t, double * i )
     *i = ( t - ret ) / *i;
 
     if ( ret < 0.0 )
+        *i -= 1.0;
         return dura + ret;
 
     return ret;
@@ -42,6 +43,7 @@ float divmod( float t, float * i )
     *i = ( t - ret ) / *i;
 
     if ( ret < 0.0f )
+        *i -= 1.0f;
         return dura + ret;
 
     return ret;
