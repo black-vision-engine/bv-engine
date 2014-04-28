@@ -51,10 +51,10 @@ namespace
     
         GetDefaultEventManager().QueueEvent( GTransformSetEvent );
 
-        static float ts[] = { 2.0f, 4.f, 6.f, 8.f, 11.f, 14.f, 18.f, 22.f, 24.f, 30.f, 35.f };
+        static float ts[] = { 1.0f, 2.f, 6.f, 8.f, 11.f, 14.f, 18.f, 22.f, 24.f, 30.f, 35.f };
 
         te.UpdateGlobalTime( t );
-        printf( "\rGT: %3.3f LT: %3.3f      ", t, te.GetLocalTime() );
+        printf( "\rGT: %3.3f LT: %3.3f", t, te.GetLocalTime() );
 
         if( t >= ts[ 0 ] )
         {
@@ -68,8 +68,8 @@ namespace
         }
         else if( t >= ts[ 1 ] )
         {
-            te.Reverse();
-            printf( "  ACTION: %3.3f -> Reverse\n", t );
+            //te.Reverse();
+            //printf( "  ACTION: %3.3f -> Reverse\n", t );
             ts[ 1 ] = 10000.0f;
         }
     }

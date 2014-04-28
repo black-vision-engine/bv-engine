@@ -1,6 +1,7 @@
 #include "mathfuncs.h"
 
 #include <cmath>
+#include <cstdio>
 
 
 namespace bv {
@@ -27,9 +28,13 @@ double divmod( double t, double * i )
     double dura = *i;
     *i = ( t - ret ) / *i;
 
+    printf( " D:%.2f", ret );
+
     if ( ret < 0.0 )
+    {
         *i -= 1.0;
         return dura + ret;
+    }
 
     return ret;
 }
@@ -42,9 +47,13 @@ float divmod( float t, float * i )
     float dura = *i;
     *i = ( t - ret ) / *i;
 
+    printf( " F:%.2f", ret );
+    
     if ( ret < 0.0f )
+    {
         *i -= 1.0f;
         return dura + ret;
+    }
 
     return ret;
 }
