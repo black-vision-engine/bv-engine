@@ -2,7 +2,7 @@ namespace bv { namespace model {
 
 // *******************************
 //
-inline TimeType TimeSegmentEvalImpl::ResetLocalTimeTo    ( TimeType t )
+inline void     TimeSegmentEvalImpl::ResetLocalTimeTo    ( TimeType t )
 {
     m_pauseDuration = TimeType( 0.0 );
     m_startTime     = m_globalTime - t;

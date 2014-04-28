@@ -3,6 +3,10 @@
 
 namespace bv { namespace model {
 
+DefaultTimeline::DefaultTimeline     ( const std::string & name, TimeType duration, ITimeEvaluator * parent )
+{
+}
+
 } //model
 } //bv
 

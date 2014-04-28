@@ -137,13 +137,16 @@ void        TimeSegmentEvalImpl::SetWrapBehavior     ( TimelineWrapMethod preMet
 //
 void    TimeSegmentEvalImpl::InitWrapEvaluators ( TimelineWrapMethod preMethod, TimelineWrapMethod postMethod )
 {
-    m_wrapEvaluatorsPre.push_back( std::bind( &TimeSegmentEvalImpl::EvalPreClamp, this ) );
-    m_wrapEvaluatorsPre.push_back( std::bind( &TimeSegmentEvalImpl::EvalRepeat, this ) );
-    m_wrapEvaluatorsPre.push_back( std::bind( &TimeSegmentEvalImpl::EvalMirror, this ) );
+    //@see: http://en.cppreference.com/w/cpp/utility/functional/placeholders
+    using std::placeholders::_1;
 
-    m_wrapEvaluatorsPost.push_back( std::bind( &TimeSegmentEvalImpl::EvalPostClamp, this ) );
-    m_wrapEvaluatorsPost.push_back( std::bind( &TimeSegmentEvalImpl::EvalRepeat, this ) );
-    m_wrapEvaluatorsPost.push_back( std::bind( &TimeSegmentEvalImpl::EvalMirror, this ) );
+    m_wrapEvaluatorsPre.push_back( std::bind( &TimeSegmentEvalImpl::EvalPreClamp, this, _1 ) );
+    m_wrapEvaluatorsPre.push_back( std::bind( &TimeSegmentEvalImpl::EvalRepeat, this, _1 ) );
+    m_wrapEvaluatorsPre.push_back( std::bind( &TimeSegmentEvalImpl::EvalMirror, this, _1 ) );
+
+    m_wrapEvaluatorsPost.push_back( std::bind( &TimeSegmentEvalImpl::EvalPostClamp, this, _1 ) );
+    m_wrapEvaluatorsPost.push_back( std::bind( &TimeSegmentEvalImpl::EvalRepeat, this, _1 ) );
+    m_wrapEvaluatorsPost.push_back( std::bind( &TimeSegmentEvalImpl::EvalMirror, this, _1 ) );
 
     SetWrapEvaluatorPre( preMethod );
     SetWrapEvaluatorPost( postMethod );
