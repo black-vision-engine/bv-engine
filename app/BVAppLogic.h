@@ -10,6 +10,8 @@
 #include "FrameStatsService.h"
 #include "BVForwards.h"
 
+#define HIDE_PROFILE_STATS
+
 
 namespace bv
 {

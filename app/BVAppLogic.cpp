@@ -24,7 +24,7 @@
 
 //FIXME: remove
 #include "Engine/Models/Plugins/PluginUtils.h"
-
+#include "Engine/Models/Timeline/TimeSegmentEvalImpl.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -41,6 +41,8 @@ namespace
 
     void GownoWFormieKebaba( TimeType t )
     {
+        static model::TimeSegmentEvalImpl te( 10.0f );
+
         float tx = float( sin( t ) );
         glm::vec3 kebab( tx, 0.f, 0.f );
     
@@ -48,6 +50,42 @@ namespace
         GTransformSetEvent->SetTranslation( kebab );
     
         GetDefaultEventManager().QueueEvent( GTransformSetEvent );
+
+        float ts[] = { 2.0f, 4.f, 6.f, 8.f, 12.f, 14.f, 18.f, 22.f, 24.f, 30.f };
+
+        if( t < ts[ 0 ] )
+        {
+        }
+        else if( t < ts[ 1 ] )
+        {
+        }
+        else if( t < ts[ 2 ] )
+        {
+        }
+        else if( t < ts[ 3 ] ) 
+        {
+        }
+        else if( t < ts[ 4 ] ) 
+        {
+        }
+        else if( t < ts[ 5 ] ) 
+        {
+        }
+        else if( t < ts[ 6 ] ) 
+        {
+        }
+        else if( t < ts[ 7 ] ) 
+        {
+        }
+        else if( t < ts[ 8 ] ) 
+        {
+        }
+        else if( t < ts[ 9 ] ) 
+        {
+        }
+        else
+        {
+        }
     }
 
     KeyPressedEventPtr  GKeyPressedEvent;
@@ -357,13 +395,17 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 
         for( int i = 0; i < node->NumTransformables(); ++i )
         {
-            //HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
+#ifndef HIDE_PROFILE_STATS
+            HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
+#endif
             renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
         }
 
         for ( int i = 0; i < node->NumChildrenNodes(); i++ )
         {
-            //HPROFILER_SECTION( "RenderNode::RenderNode" );
+#ifndef HIDE_PROFILE_STATS
+            HPROFILER_SECTION( "RenderNode::RenderNode" );
+#endif
             RenderNode( renderer, node->GetChild( i ) ); 
         }
     }

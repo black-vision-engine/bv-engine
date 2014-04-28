@@ -36,6 +36,12 @@ void    ProfilerDataFormatter::PrintToConsole  ( const char * msg )
 
 // *********************************
 //
+void    ProfilerDataFormatter::PrintToDevNull   ( const char * msg )
+{
+}
+
+// *********************************
+//
 void    FrameStatsFormatter::PrintToConsole     ( const FrameStatsCalculator & fsc, const char * name, unsigned int nameLen )
 {
     unsigned int minFrame = 0;
