@@ -53,35 +53,50 @@ namespace
 
         float ts[] = { 2.0f, 4.f, 6.f, 8.f, 12.f, 14.f, 18.f, 22.f, 24.f, 30.f };
 
+        te.UpdateGlobalTime( t );
+        printf( "\rGT: %3.3f LT: %3.3f      ", t, te.GetLocalTime() );
+
         if( t < ts[ 0 ] )
         {
+            te.Start();
+            printf( "  ACTION: %3.3f -> Start\n", t );
+            ts[ 0 ] = 0.0f;
         }
         else if( t < ts[ 1 ] )
         {
+            ts[ 1 ] = 0.0f;
         }
         else if( t < ts[ 2 ] )
         {
+            ts[ 2 ] = 0.0f;
         }
         else if( t < ts[ 3 ] ) 
         {
+            ts[ 3 ] = 0.0f;
         }
         else if( t < ts[ 4 ] ) 
         {
+            ts[ 4 ] = 0.0f;
         }
         else if( t < ts[ 5 ] ) 
         {
+            ts[ 5 ] = 0.0f;
         }
         else if( t < ts[ 6 ] ) 
         {
+            ts[ 6 ] = 0.0f;
         }
         else if( t < ts[ 7 ] ) 
         {
+            ts[ 7 ] = 0.0f;
         }
         else if( t < ts[ 8 ] ) 
         {
+            ts[ 8 ] = 0.0f;
         }
         else if( t < ts[ 9 ] ) 
         {
+            ts[ 9 ] = 0.0f;
         }
         else
         {
@@ -349,14 +364,18 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
     {
         unsigned int frame = m_statsCalculator.CurFrame() - 1;
         
+#ifndef HIDE_PROFILE_STATS
         FrameStatsFormatter::PrintFrameStatsToConsole( frame, m_statsCalculator, "LONGEST FRAME SO FAR", 10 );
         HPROFILER_SET_FORCED_DISPLAY();
+#endif
     }
 
     if( m_statsCalculator.CurFrame() == DefaultConfig.MAVWarmupRounds() * m_statsCalculator.WindowSize() || m_statsCalculator.CurFrame() % DefaultConfig.StatsRecalcFramesDelta() == 0 )
     {
         m_statsCalculator.RecalculateStats();
+#ifndef HIDE_PROFILE_STATS
         FrameStatsFormatter::PrintToConsole( m_statsCalculator );
+#endif
     }
 
     unsigned long frameMillis = timer.ElapsedMillis() - millis;
@@ -395,17 +414,13 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 
         for( int i = 0; i < node->NumTransformables(); ++i )
         {
-#ifndef HIDE_PROFILE_STATS
             HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
-#endif
             renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
         }
 
         for ( int i = 0; i < node->NumChildrenNodes(); i++ )
         {
-#ifndef HIDE_PROFILE_STATS
             HPROFILER_SECTION( "RenderNode::RenderNode" );
-#endif
             RenderNode( renderer, node->GetChild( i ) ); 
         }
     }
