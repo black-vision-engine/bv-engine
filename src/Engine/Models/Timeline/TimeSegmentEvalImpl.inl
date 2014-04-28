@@ -29,7 +29,7 @@ inline TimeType TimeSegmentEvalImpl::GetLocalTimeNoClamp () const
 
 // *******************************
 //
-inline TimeType TimeSegmentEvalImpl::Clamp               ( TimeType t ) const
+inline TimeType TimeSegmentEvalImpl::EvalClamp          ( TimeType t ) const
 {
     if( t > m_duration )
     {
