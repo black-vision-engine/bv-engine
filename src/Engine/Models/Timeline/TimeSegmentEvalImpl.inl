@@ -78,9 +78,6 @@ inline TimeType TimeSegmentEvalImpl::EvalMirror          ( TimeType t ) const
     TimeType q = m_duration;
     TimeType r = divmod( t, &q );
 
-    printf( " r = %.1f", r );
-    //printf( " t = %.2f, q = %.2f r = %.1f, r(q) == %d", t, q, r, round( q ) );
-
     if( round( q ) % 2 == 0 )
     {
         return r;
@@ -95,7 +92,6 @@ inline TimeType TimeSegmentEvalImpl::EvalMirror          ( TimeType t ) const
 //
 inline TimeType TimeSegmentEvalImpl::EvalPre             ( TimeType t ) const
 {
-    printf( " pre" );
     return m_wrapEvaluatorPre( t );
 }
 
@@ -103,7 +99,6 @@ inline TimeType TimeSegmentEvalImpl::EvalPre             ( TimeType t ) const
 //
 inline TimeType TimeSegmentEvalImpl::EvalPost            ( TimeType t ) const
 {
-    printf( " post" );
     return m_wrapEvaluatorPost( t );
 }
 

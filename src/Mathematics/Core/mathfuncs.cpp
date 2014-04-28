@@ -46,8 +46,6 @@ float divmod( float t, float * i )
     float ret = std::fmod( t, *i );
     float dura = *i;
     *i = ( t - ret ) / *i;
-
-    printf( " F:%.2f", ret );
     
     if ( ret < 0.0f )
     {
