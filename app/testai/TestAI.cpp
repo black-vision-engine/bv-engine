@@ -6,6 +6,8 @@
 
 #include "testai/AICommands.h"
 
+#include "Engine/Models/Timeline/Dynamic/DefaultTimeline.h"
+
 
 namespace bv {
 
@@ -22,7 +24,8 @@ bool aiCommandComparator( AICommandBase * c0, AICommandBase * c1 )
 
 // *********************************
 //
-TestAI::TestAI      ()
+TestAI::TestAI      ( model::DefaultTimeline * timeline )
+    : m_timeline( timeline )
 {
 }
 
@@ -40,14 +43,20 @@ TestAI::~TestAI     ()
 //
 void    TestAI::EvalAt  ( TimeType t )
 {
+    m_timeline->Update( t );
+
+    printf( "\rGT: %0.3f LC: %0.3f ", t, m_timeline->GetLocalTime() );
+
     for( auto cmd : m_commands )
     {
-        if ( std::abs( cmd->GetTriggerTime() - t ) < TimeType( 0.1 ) )
+        auto tt = cmd->GetTriggerTime();
+
+        if ( std::abs( tt - t ) < TimeType( 0.05 ) )
         {
             if( cmd->TriggerCommand( t ) )
             {
                 std::stringstream ss;
-                ss << "Triggered: " << cmd->Repr() << " at " << cmd->GetTriggerTime() << std::endl;
+                ss << std::endl << "TRIGGERED: " << cmd->Repr() << " at " << cmd->GetTriggerTime() << std::endl;
                 printf( "%s", ss.str().c_str() );
 
                 return;

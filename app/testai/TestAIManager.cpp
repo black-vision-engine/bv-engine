@@ -15,9 +15,10 @@ namespace bv {
 TestAIManager::TestAIManager   ()
 {
     m_presets.reserve( 1 );
+    m_timelines.reserve( 1 );
 
-    m_presets[ 0 ] = nullptr;
-    m_timelines[ 0 ] = nullptr;
+    m_presets.push_back( nullptr );
+    m_timelines.push_back( nullptr );
 }
 
 // *********************************
@@ -85,7 +86,7 @@ TestAI *        TestAIManager::PreparePreset0   () const
     auto c8 = new AICommandReverse( timeline, TimeType( 24.0 ) );
     auto c9 = new AICommandStop( timeline, TimeType( 29.0 ) );
 
-    TestAI * ai = new TestAI();
+    TestAI * ai = new TestAI( timeline );
 
     ai->AddCommand( c0 );
     ai->AddCommand( c1 );

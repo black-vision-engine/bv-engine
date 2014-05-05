@@ -9,15 +9,20 @@ namespace bv {
 
 class AICommandBase;
 
+namespace model {
+class DefaultTimeline;
+}
+
 class TestAI
 {
 private:
 
     std::vector< AICommandBase * >  m_commands;
+    model::DefaultTimeline *        m_timeline;
 
 private:
 
-                TestAI      ();
+                TestAI      ( model::DefaultTimeline * timeline );
                 ~TestAI     ();
 
 

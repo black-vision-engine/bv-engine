@@ -34,7 +34,7 @@ TimeType    AICommandBase::GetTriggerTime  () const
 //
 bool        AICommandBase::TriggerCommand  ( TimeType t )
 {
-    if( std::abs( m_lastTriggerTime - t ) > TimeType( 0.1 ) )
+    if( std::abs( m_lastTriggerTime - t ) > TimeType( 0.15 ) )
     {
         m_lastTriggerTime = t;
 
@@ -179,7 +179,7 @@ AICommandSetTimeAndStop::AICommandSetTimeAndStop    ( model::DefaultTimeline * t
     , m_timeline( timeline )
     , m_eventTime( eventTime )
 {
-    SetRepr( std::string( "SET TIME AND STOP at " ) + std::to_string( eventTime ) );
+    SetRepr( std::string( "SET TIME AND STOP -> " ) + std::to_string( eventTime ) );
 }
 
 // *********************************
@@ -207,7 +207,7 @@ AICommandSetTimeAndPlay::AICommandSetTimeAndPlay    ( model::DefaultTimeline * t
     , m_timeline( timeline )
     , m_eventTime( eventTime )
 {
-    SetRepr( std::string( "SET TIME AND PLAY at " ) + std::to_string( eventTime ) );
+    SetRepr( std::string( "SET TIME AND PLAY -> " ) + std::to_string( eventTime ) );
 }
 
 // *********************************
