@@ -22,6 +22,10 @@
     <ClCompile Include="NewModelTestScenes.cpp" />
     <ClCompile Include="DefaultPlugins.cpp" />
     <ClCompile Include="NewModelTestNodes.cpp" />
+    <ClCompile Include="testai\TestAI.cpp">
+      <Filter>testai</Filter>
+    </ClCompile>
+    <ClCompile Include="testai\AICommands.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
@@ -62,6 +66,11 @@
     <ClInclude Include="ModelInteractionEvents.h" />
     <ClInclude Include="DefaultPlugins.h" />
     <ClInclude Include="NewModelTestNodes.h" />
+    <ClInclude Include="testai\TestAI.h">
+      <Filter>testai</Filter>
+    </ClInclude>
+    <ClInclude Include="testai\IAICommand.h" />
+    <ClInclude Include="testai\AICommands.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MockFonts">
@@ -69,6 +78,9 @@
     </Filter>
     <Filter Include="xml">
       <UniqueIdentifier>{6b4e1db7-b59a-4158-9328-e026dca86355}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="testai">
+      <UniqueIdentifier>{e2b388f5-68c3-4827-a679-517f8d1882d0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -43,7 +43,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../dep/Common/FreeType/include;../dep/Common/FreeImage/Dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../src;../dep/Common/FastDelegate;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../dep/Common/FreeType/include;../dep/Common/FreeImage/Dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../src;../dep/Common/FastDelegate;./;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;BOOST_ALL_NO_LIB=1;_UNICODE;UNICODE;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
@@ -62,7 +62,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>../dep/Common/FreeType/include;../dep/Common/FreeImage/Dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../src;../dep/Common/FastDelegate;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../dep/Common/FreeType/include;../dep/Common/FreeImage/Dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../src;../dep/Common/FastDelegate;./;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;BOOST_ALL_NO_LIB=1;_UNICODE;UNICODE;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -87,6 +87,8 @@
     <ClCompile Include="NewModelTestNodes.cpp" />
     <ClCompile Include="NewModelTestScenes.cpp" />
     <ClCompile Include="StatsFormatters.cpp" />
+    <ClCompile Include="testai\AICommands.cpp" />
+    <ClCompile Include="testai\TestAI.cpp" />
     <ClCompile Include="xml\BlackTree.cpp" />
     <ClCompile Include="xml\pomocnicze\auxilary.cpp" />
     <ClCompile Include="xml\Scena.cpp" />
@@ -115,6 +117,9 @@
     <ClInclude Include="ModelInteractionLayer.h" />
     <ClInclude Include="NewModelTestNodes.h" />
     <ClInclude Include="StatsFormatters.h" />
+    <ClInclude Include="testai\AICommands.h" />
+    <ClInclude Include="testai\IAICommand.h" />
+    <ClInclude Include="testai\TestAI.h" />
     <ClInclude Include="xml\BlackTree.h" />
     <ClInclude Include="xml\pomocnicze\auxilary.hpp" />
     <ClInclude Include="xml\rapidxml\rapidxml.hpp" />
