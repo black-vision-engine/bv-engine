@@ -14,8 +14,10 @@ private:
     std::string                             m_name;
     TimeSegmentEvalImpl                     m_timeEvalImpl;
 
+    ITimelineEvent *                        m_lastTriggeredEvent;
+
     std::vector< const IParameter * >       m_registeredParameters;
-    std::vector< const ITimelineEvent * >   m_keyFrameEvents;
+    std::vector< ITimelineEvent * >         m_keyFrameEvents;
 
     static const TimeType                   ms_evtTimeSeparation;
 
@@ -58,7 +60,7 @@ public:
 
     virtual unsigned int                        NumKeyFrames        () const override;
 
-    virtual bool                                AddKeyFrame         ( const ITimelineEvent * evt ) override;
+    virtual bool                                AddKeyFrame         ( ITimelineEvent * evt ) override;
 
     virtual const ITimelineEvent *              GetKeyFrameEvent    ( const std::string & name ) const override;
     virtual const ITimelineEvent *              GetKeyFrameEvent    ( unsigned int idx ) const override;
@@ -67,6 +69,7 @@ public:
     virtual bool                                RemoveKeyFrameEvent ( const std::string & name ) override;
 
     virtual const ITimelineEvent *              CurrentEvent        () const override;
+    virtual const ITimelineEvent *              LastTriggeredEvent  () const override;
 
     virtual bool                                AddParameter        ( const IParameter * param ) override;
 
@@ -75,7 +78,11 @@ public:
 
 private:
 
+    ITimelineEvent *                            CurrentEventNC      () const;
+
     bool                                        CanBeInserted       ( const ITimelineEvent * evt ) const;
+
+    void                                        TriggerEvent        ( ITimelineEvent * evt, TimeType globalTime );
 
 };
 

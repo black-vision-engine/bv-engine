@@ -6,6 +6,9 @@
 #include "Engine/Models/Interfaces/ITimelineEvent.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
 
+#include "Engine/Models/Timeline/Dynamic/TimelineEventLoop.h"
+#include "Engine/Models/Timeline/Dynamic/TimelineEventNull.h"
+#include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
 
 namespace bv { namespace model {
 
@@ -13,7 +16,7 @@ namespace {
 
 // *********************************
 //
-bool timelineEventComparator( const ITimelineEvent * e0, const ITimelineEvent * e1 )
+bool timelineEventComparator( ITimelineEvent * e0, ITimelineEvent * e1 )
 {
     return e0->GetLastTriggerTime() < e1->GetLastTriggerTime();
 }
@@ -61,6 +64,13 @@ TimeType                            DefaultTimeline::Evaluate            ( TimeT
 void                                DefaultTimeline::Update              ( TimeType t )
 {
     m_timeEvalImpl.UpdateGlobalTime( t );
+
+    auto evt = CurrentEventNC();
+
+    if( evt != nullptr )
+    {
+        TriggerEvent( evt, t );
+    }
 }
 
 // *********************************
@@ -154,7 +164,7 @@ unsigned int                        DefaultTimeline::NumKeyFrames        () cons
 
 // *********************************
 //
-bool                                DefaultTimeline::AddKeyFrame         ( const ITimelineEvent * evt )
+bool                                DefaultTimeline::AddKeyFrame         ( ITimelineEvent * evt )
 {
     if( !CanBeInserted( evt ) )
     {
@@ -227,17 +237,16 @@ bool                                DefaultTimeline::RemoveKeyFrameEvent ( const
 //
 const ITimelineEvent *              DefaultTimeline::CurrentEvent        () const
 {
-    if( m_timeEvalImpl.IsActive() )
+    return CurrentEventNC();
+}
+
+// *********************************
+//
+const ITimelineEvent *              DefaultTimeline::LastTriggeredEvent  () const
+{
+    if( CurrentEventNC() == m_lastTriggeredEvent )
     {
-        auto t = m_timeEvalImpl.GetLocalTime();
-        
-        for( auto evt : m_keyFrameEvents )
-        {
-            if( std::abs( evt->GetEventTime()  - t ) < ms_evtTimeSeparation )
-            {
-                return evt;
-            }
-        }
+        return m_lastTriggeredEvent;
     }
 
     return nullptr;
@@ -298,6 +307,26 @@ unsigned int                        DefaultTimeline::RemoveParameters     ( cons
 
 // *********************************
 //
+ITimelineEvent *                    DefaultTimeline::CurrentEventNC      () const
+{
+    if( m_timeEvalImpl.IsActive() )
+    {
+        auto t = m_timeEvalImpl.GetLocalTime();
+        
+        for( auto evt : m_keyFrameEvents )
+        {
+            if( std::abs( evt->GetEventTime()  - t ) < ms_evtTimeSeparation )
+            {
+                return evt;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+// *********************************
+//
 bool                                DefaultTimeline::CanBeInserted       ( const ITimelineEvent * evt ) const
 {
     if ( evt == nullptr )
@@ -314,6 +343,62 @@ bool                                DefaultTimeline::CanBeInserted       ( const
     }
 
     return true;
+}
+
+// *********************************
+//
+void                                DefaultTimeline::TriggerEvent        ( ITimelineEvent * evt, TimeType globalTime )
+{
+    if( std::abs( evt->GetLastTriggerTime() - globalTime ) > ms_evtTimeSeparation )
+    {
+        m_lastTriggeredEvent = evt;
+
+        switch( evt->GetType() )
+        {
+            case TimelineEventType::TET_STOP:
+            {
+                auto evtImpl = static_cast< TimelineEventStop * >( evt );
+                evtImpl->SetLastTriggerTime( globalTime );
+                m_timeEvalImpl.Stop();
+                
+                break;
+            }
+            case TimelineEventType::TET_LOOP:
+            {
+                auto evtImpl = static_cast< TimelineEventLoop * >( evt );
+                evtImpl->SetLastTriggerTime( globalTime );
+
+                switch( evtImpl->GetActionType() )
+                {
+                    case LoopEventAction::LEA_GOTO:
+                        m_timeEvalImpl.ResetLocalTimeTo( evtImpl->GetTargetTime() );
+                        break;
+                    case LoopEventAction::LEA_RESTART:
+                        m_timeEvalImpl.Reset();
+                        m_timeEvalImpl.Start(); //FIXME: really start or should we wait for the user to trigger this timeline?
+                        break;
+                    case LoopEventAction::LEA_REVERSE:
+                        m_timeEvalImpl.Reverse();
+                        break;
+                    default:
+                        assert( false );
+                }
+
+                evtImpl->IncLoopCount();
+
+                break;
+            }
+            case TimelineEventType::TET_NULL:
+            {
+                auto evtImpl = static_cast< TimelineEventNull * >( evt );
+                evtImpl->SetLastTriggerTime( globalTime );
+
+                break;
+            }
+            default:
+                assert( false );
+        }
+    }
 }
 
 } //model

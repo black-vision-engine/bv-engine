@@ -38,7 +38,7 @@ public:
 
     virtual unsigned int            NumKeyFrames        () const = 0;
 
-    virtual bool                    AddKeyFrame         ( const ITimelineEvent * evt ) = 0;
+    virtual bool                    AddKeyFrame         ( ITimelineEvent * evt ) = 0;
 
     virtual const ITimelineEvent *  GetKeyFrameEvent    ( const std::string & name ) const = 0;
     virtual const ITimelineEvent *  GetKeyFrameEvent    ( unsigned int idx ) const = 0;
@@ -47,6 +47,7 @@ public:
     virtual bool                    RemoveKeyFrameEvent ( const std::string & name ) = 0;
 
     virtual const ITimelineEvent *  CurrentEvent        () const = 0;
+    virtual const ITimelineEvent *  LastTriggeredEvent  () const = 0;
 
     virtual bool                    AddParameter        ( const IParameter * param ) = 0;
 

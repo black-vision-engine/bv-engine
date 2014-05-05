@@ -8,6 +8,7 @@ inline TimelineEventBaseMixin< ITimelineEventIface >::TimelineEventBaseMixin    
     , m_type( type )
 {
     SetEventTime( eventTime );
+    SetLastTriggerTime( -1.f ); //FIXME: magic number - negative time seems to be good enough for this purpose though (as negative global time id not allowed)
     SetOwnerTimeline( owner );
 }
 
