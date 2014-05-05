@@ -30,16 +30,16 @@ public:
     virtual TimelineEventType   GetType             () const override;
     
     virtual bool                IsActive            () const override;
+    virtual void                SetActive           ( bool active ) override;
 
     virtual TimeType            GetEventTime        () const override;
     virtual TimeType            GetLastTriggerTime  () const override;
+    virtual void                SetLastTriggerTime  ( TimeType triggerTime ) override;
     
     virtual const ITimeline *   GetOwnerTimeline    () const override;
 
-    void                        SetActive           ( bool active );
     void                        SetOwnerTimeline    ( const ITimeline * owner );
     void                        SetEventTime        ( TimeType eventTime );
-    void                        SetLastTriggerTime  ( TimeType triggerTime );
 
     virtual ~TimelineEventBaseMixin() {}
 

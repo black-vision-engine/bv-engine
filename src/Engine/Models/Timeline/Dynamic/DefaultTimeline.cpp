@@ -34,6 +34,7 @@ DefaultTimeline::DefaultTimeline     ( const std::string & name, TimeType durati
     , m_prevTime( TimeType( 0.0 ) )
     , m_name( name )
     , m_parent( parent )
+    , m_lastTriggeredEvent( nullptr )
 {
 }
 
@@ -409,6 +410,11 @@ void                                DefaultTimeline::TriggerEvent        ( ITime
 {
     if( evt->IsActive() )
     {
+        if( m_lastTriggeredEvent )
+        {
+            m_lastTriggeredEvent->SetActive( true );
+        }
+
         m_lastTriggeredEvent = evt;
 
         switch( evt->GetType() )

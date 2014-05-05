@@ -40,6 +40,14 @@ inline bool                 TimelineEventBaseMixin< ITimelineEventIface >::IsAct
 // *********************************
 //
 template< typename ITimelineEventIface >
+inline void             TimelineEventBaseMixin< ITimelineEventIface >::SetActive                ( bool active )
+{
+    m_active = active;
+}
+
+// *********************************
+//
+template< typename ITimelineEventIface >
 inline TimeType         TimelineEventBaseMixin< ITimelineEventIface >::GetEventTime             () const
 {
     return m_eventTime;
@@ -56,17 +64,17 @@ inline TimeType         TimelineEventBaseMixin< ITimelineEventIface >::GetLastTr
 // *********************************
 //
 template< typename ITimelineEventIface >
-const ITimeline *       TimelineEventBaseMixin< ITimelineEventIface >::GetOwnerTimeline         () const
+inline void                 TimelineEventBaseMixin< ITimelineEventIface >::SetLastTriggerTime   ( TimeType triggerTime )
 {
-    return m_owner;
+    m_lastTriggerTime = triggerTime;
 }
 
 // *********************************
 //
 template< typename ITimelineEventIface >
-inline void             TimelineEventBaseMixin< ITimelineEventIface >::SetActive                ( bool active )
+const ITimeline *       TimelineEventBaseMixin< ITimelineEventIface >::GetOwnerTimeline         () const
 {
-    m_active = active;
+    return m_owner;
 }
 
 // *********************************
@@ -83,14 +91,6 @@ template< typename ITimelineEventIface >
 inline void                 TimelineEventBaseMixin< ITimelineEventIface >::SetEventTime         ( TimeType eventTime )
 {
     m_eventTime = eventTime;
-}
-
-// *********************************
-//
-template< typename ITimelineEventIface >
-inline void                 TimelineEventBaseMixin< ITimelineEventIface >::SetLastTriggerTime   ( TimeType triggerTime )
-{
-    m_lastTriggerTime = triggerTime;
 }
 
 } //model

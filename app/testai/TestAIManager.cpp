@@ -118,17 +118,26 @@ TestAI *        TestAIManager::PreparePreset0   () const
 TestAI *        TestAIManager::PreparePreset1   () const
 {
     auto timeline = new model::DefaultTimeline( "timeline preset 0", TimeType( 20.0 ), TimelineWrapMethod::TWM_REPEAT, TimelineWrapMethod::TWM_CLAMP );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop", TimeType( 5.0 ), timeline ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop0", TimeType( 5.0 ), timeline ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop1", TimeType( 10.0 ), timeline ) );
 
     auto c0 = new AICommandPlay( timeline, TimeType( 2.0 ) );
-    auto c1 = new AICommandPlay( timeline, TimeType( 12.0 ) );
-    auto c2 = new AICommandStop( timeline, TimeType( 27.0 ) );
+    auto c1 = new AICommandPlay( timeline, TimeType( 9.0 ) );
+    auto c2 = new AICommandPlay( timeline, TimeType( 16.0 ) );
+    auto c3 = new AICommandSetTimeAndStop( timeline, TimeType( 25.0 ), TimeType( 0.0 ) );
+    auto c4 = new AICommandPlay( timeline, TimeType( 27.0 ) );
+    auto c5 = new AICommandPlay( timeline, TimeType( 35.0 ) );
+    auto c6 = new AICommandPlay( timeline, TimeType( 40.0 ) );
 
     TestAI * ai = new TestAI( timeline );
 
     ai->AddCommand( c0 );
     ai->AddCommand( c1 );
     ai->AddCommand( c2 );
+    ai->AddCommand( c3 );
+    ai->AddCommand( c4 );
+    ai->AddCommand( c5 );
+    ai->AddCommand( c6 );
 
     return ai;
 }
