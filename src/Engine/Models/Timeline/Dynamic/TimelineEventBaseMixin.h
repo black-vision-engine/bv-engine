@@ -15,6 +15,7 @@ private:
     TimelineEventType   m_type;
 
     const ITimeline *   m_owner;
+    bool                m_active;
 
     TimeType            m_eventTime;
     TimeType            m_lastTriggerTime;
@@ -28,11 +29,14 @@ public:
     virtual std::string         GetName             () const override;
     virtual TimelineEventType   GetType             () const override;
     
+    virtual bool                IsActive            () const override;
+
     virtual TimeType            GetEventTime        () const override;
     virtual TimeType            GetLastTriggerTime  () const override;
     
     virtual const ITimeline *   GetOwnerTimeline    () const override;
 
+    void                        SetActive           ( bool active );
     void                        SetOwnerTimeline    ( const ITimeline * owner );
     void                        SetEventTime        ( TimeType eventTime );
     void                        SetLastTriggerTime  ( TimeType triggerTime );

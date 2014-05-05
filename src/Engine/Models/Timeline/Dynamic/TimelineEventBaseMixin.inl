@@ -6,6 +6,7 @@ template< typename ITimelineEventIface >
 inline TimelineEventBaseMixin< ITimelineEventIface >::TimelineEventBaseMixin                    ( const std::string & name, TimelineEventType type, TimeType eventTime, const ITimeline * owner )
     : m_name( name )
     , m_type( type )
+    , m_active( true )
 {
     SetEventTime( eventTime );
     SetLastTriggerTime( -1.f ); //FIXME: magic number - negative time seems to be good enough for this purpose though (as negative global time id not allowed)
@@ -31,6 +32,14 @@ inline TimelineEventType    TimelineEventBaseMixin< ITimelineEventIface >::GetTy
 // *********************************
 //
 template< typename ITimelineEventIface >
+inline bool                 TimelineEventBaseMixin< ITimelineEventIface >::IsActive             () const
+{
+    return m_active;
+}
+
+// *********************************
+//
+template< typename ITimelineEventIface >
 inline TimeType         TimelineEventBaseMixin< ITimelineEventIface >::GetEventTime             () const
 {
     return m_eventTime;
@@ -50,6 +59,14 @@ template< typename ITimelineEventIface >
 const ITimeline *       TimelineEventBaseMixin< ITimelineEventIface >::GetOwnerTimeline         () const
 {
     return m_owner;
+}
+
+// *********************************
+//
+template< typename ITimelineEventIface >
+inline void             TimelineEventBaseMixin< ITimelineEventIface >::SetActive                ( bool active )
+{
+    m_active = active;
 }
 
 // *********************************

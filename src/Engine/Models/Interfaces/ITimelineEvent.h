@@ -18,6 +18,8 @@ public:
     virtual std::string         GetName             () const = 0;
     virtual TimelineEventType   GetType             () const = 0;
 
+    virtual bool                IsActive            () const = 0;
+
     virtual TimeType            GetEventTime        () const = 0;
     virtual TimeType            GetLastTriggerTime  () const = 0;
 

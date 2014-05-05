@@ -15,6 +15,8 @@ namespace bv { namespace model {
 
 namespace {
 
+const TimeType GEvtTimeSeparation = TimeType( 0.1 );
+
 // *********************************
 //
 bool timelineEventComparator( ITimelineEvent * e0, ITimelineEvent * e1 )
@@ -25,13 +27,11 @@ bool timelineEventComparator( ITimelineEvent * e0, ITimelineEvent * e1 )
 } //anonymous
 
 
-const TimeType DefaultTimeline::ms_evtTimeSeparation = TimeType( 0.1 );
-
-
 // *********************************
 //
 DefaultTimeline::DefaultTimeline     ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod, ITimeEvaluator * parent )
     : m_timeEvalImpl( duration, TimelinePlayDirection::TPD_FORWAD, preMethod, postMethod )
+    , m_prevTime( TimeType( 0.0 ) )
     , m_name( name )
     , m_parent( parent )
 {
@@ -93,6 +93,7 @@ void                                DefaultTimeline::Update              ( TimeT
     }
 
     m_timeEvalImpl.UpdateGlobalTime( t );
+    auto tOld = m_timeEvalImpl.GetLocalTime();
 
     auto evt = CurrentEventNC();
 
@@ -100,6 +101,8 @@ void                                DefaultTimeline::Update              ( TimeT
     {
         TriggerEvent( evt, t );
     }
+
+    m_prevTime = tOld;
 }
 
 // *********************************
@@ -363,9 +366,14 @@ ITimelineEvent *                    DefaultTimeline::CurrentEventNC      () cons
     {
         auto t = m_timeEvalImpl.GetLocalTime();
         
+        auto t0 = std::min( t, m_prevTime );
+        auto t1 = std::max( t, m_prevTime );
+
         for( auto evt : m_keyFrameEvents )
         {
-            if( std::abs( evt->GetEventTime()  - t ) < ms_evtTimeSeparation )
+            auto eventTime = evt->GetEventTime();
+
+            if( eventTime > t0 && eventTime <= t1 )
             {
                 return evt;
             }
@@ -386,7 +394,7 @@ bool                                DefaultTimeline::CanBeInserted       ( const
 
     for( auto e : m_keyFrameEvents )
     {
-        if( std::abs( e->GetEventTime() - evt->GetEventTime() ) < ms_evtTimeSeparation )
+        if( std::abs( e->GetEventTime() - evt->GetEventTime() ) < GEvtTimeSeparation )
         {
             return false;
         }
@@ -399,7 +407,7 @@ bool                                DefaultTimeline::CanBeInserted       ( const
 //
 void                                DefaultTimeline::TriggerEvent        ( ITimelineEvent * evt, TimeType globalTime )
 {
-    if( std::abs( evt->GetLastTriggerTime() - globalTime ) > ms_evtTimeSeparation )
+    if( evt->IsActive() )
     {
         m_lastTriggeredEvent = evt;
 
@@ -409,8 +417,10 @@ void                                DefaultTimeline::TriggerEvent        ( ITime
             {
                 auto evtImpl = static_cast< TimelineEventStop * >( evt );
                 evtImpl->SetLastTriggerTime( globalTime );
+                evtImpl->SetActive( false );
                 m_timeEvalImpl.Stop();
-                
+                printf( "Event STOP\n" );
+
                 break;
             }
             case TimelineEventType::TET_LOOP:
@@ -435,6 +445,8 @@ void                                DefaultTimeline::TriggerEvent        ( ITime
                 }
 
                 evtImpl->IncLoopCount();
+                
+                printf( "Event LOOP %d\n", evtImpl->GetLoopCount() );
 
                 break;
             }
@@ -442,6 +454,9 @@ void                                DefaultTimeline::TriggerEvent        ( ITime
             {
                 auto evtImpl = static_cast< TimelineEventNull * >( evt );
                 evtImpl->SetLastTriggerTime( globalTime );
+                evtImpl->SetActive( false );
+
+                printf( "Event NULL\n" );
 
                 break;
             }

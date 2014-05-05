@@ -7,6 +7,10 @@
 
 #include "Engine/Models/Timeline/Dynamic/DefaultTimeline.h"
 
+#include "Engine/Models/Timeline/Dynamic/TimelineEventLoop.h"
+#include "Engine/Models/Timeline/Dynamic/TimelineEventNull.h"
+#include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
+
 
 namespace bv {
 
@@ -14,10 +18,13 @@ namespace bv {
 //
 TestAIManager::TestAIManager   ()
 {
-    m_presets.reserve( 1 );
-    m_timelines.reserve( 1 );
+    m_presets.reserve( 2 );
+    m_timelines.reserve( 2 );
 
     m_presets.push_back( nullptr );
+    m_presets.push_back( nullptr );
+
+    m_timelines.push_back( nullptr );
     m_timelines.push_back( nullptr );
 }
 
@@ -65,6 +72,10 @@ TestAI *        TestAIManager::PreparePreset    ( unsigned int idx ) const
     {
         return PreparePreset0();
     }
+    else if( idx == 1 )
+    {
+        return PreparePreset1();
+    }
 
     return nullptr;
 }
@@ -106,7 +117,20 @@ TestAI *        TestAIManager::PreparePreset0   () const
 //
 TestAI *        TestAIManager::PreparePreset1   () const
 {
-    return nullptr;
+    auto timeline = new model::DefaultTimeline( "timeline preset 0", TimeType( 20.0 ), TimelineWrapMethod::TWM_REPEAT, TimelineWrapMethod::TWM_CLAMP );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop", TimeType( 5.0 ), timeline ) );
+
+    auto c0 = new AICommandPlay( timeline, TimeType( 2.0 ) );
+    auto c1 = new AICommandPlay( timeline, TimeType( 12.0 ) );
+    auto c2 = new AICommandStop( timeline, TimeType( 27.0 ) );
+
+    TestAI * ai = new TestAI( timeline );
+
+    ai->AddCommand( c0 );
+    ai->AddCommand( c1 );
+    ai->AddCommand( c2 );
+
+    return ai;
 }
 
 // *********************************

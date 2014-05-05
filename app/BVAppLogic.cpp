@@ -42,7 +42,7 @@ namespace
 
     void GownoWFormieKebaba( TimeType t )
     {
-        static auto ai = TestAIManager::Instance().GetAIPreset( 0 );
+        static auto ai = TestAIManager::Instance().GetAIPreset( 1 );
         static TimeType tt = TimeType( 0.0 );
 
         float tx = float( sin( t ) );

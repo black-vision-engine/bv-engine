@@ -15,13 +15,12 @@ private:
 
     std::string                     m_name;
     TimeSegmentEvalImpl             m_timeEvalImpl;
+    TimeType                        m_prevTime;
 
     ITimelineEvent *                m_lastTriggeredEvent;
 
     std::vector< IParameter * >     m_registeredParameters;
     std::vector< ITimelineEvent * > m_keyFrameEvents;
-
-    static const TimeType                   ms_evtTimeSeparation;
 
 public:
 
