@@ -17,6 +17,7 @@ TestAIManager::TestAIManager   ()
     m_presets.reserve( 1 );
 
     m_presets[ 0 ] = nullptr;
+    m_timelines[ 0 ] = nullptr;
 }
 
 // *********************************
@@ -27,24 +28,29 @@ TestAIManager::~TestAIManager  ()
     {
         delete ai;
     }
+
+    for( auto tm : m_timelines )
+    {
+        delete tm;
+    }
 }
 
 // *********************************
 //
-unsigned int    TestAIManager::NumAIPresets ()
+unsigned int    TestAIManager::NumAIPresets () const
 {
     return m_presets.size();
 }
 
 // *********************************
 //
-TestAI *        TestAIManager::GetAIPreset  ( unsigned int idx, model::DefaultTimeline * timeline )
+TestAI *        TestAIManager::GetAIPreset  ( unsigned int idx )
 {
     assert( idx < NumAIPresets() );
 
     if( m_presets[ idx ] == nullptr )
     {
-        m_presets[ idx ] = PreparePreset( idx, timeline );
+        m_presets[ idx ] = PreparePreset( idx );
     }
 
     return m_presets[ idx ];
@@ -52,11 +58,11 @@ TestAI *        TestAIManager::GetAIPreset  ( unsigned int idx, model::DefaultTi
 
 // *********************************
 //
-TestAI *        TestAIManager::PreparePreset    ( unsigned int idx, model::DefaultTimeline * timeline )
+TestAI *        TestAIManager::PreparePreset    ( unsigned int idx ) const
 {
     if( idx == 0 )
     {
-        return PreparePreset0( timeline );
+        return PreparePreset0();
     }
 
     return nullptr;
@@ -64,8 +70,10 @@ TestAI *        TestAIManager::PreparePreset    ( unsigned int idx, model::Defau
 
 // *********************************
 //
-TestAI *        TestAIManager::PreparePreset0   ( model::DefaultTimeline * timeline )
+TestAI *        TestAIManager::PreparePreset0   () const
 {
+    auto timeline = new model::DefaultTimeline( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+
     auto c0 = new AICommandPlay( timeline, TimeType( 2.0 ) );
     auto c1 = new AICommandStop( timeline, TimeType( 4.0 ) );
     auto c2 = new AICommandPlay( timeline, TimeType( 7.0 ) );
@@ -95,35 +103,35 @@ TestAI *        TestAIManager::PreparePreset0   ( model::DefaultTimeline * timel
 
 // *********************************
 //
-TestAI *        TestAIManager::PreparePreset1   ( model::DefaultTimeline * timeline )
+TestAI *        TestAIManager::PreparePreset1   () const
 {
     return nullptr;
 }
 
 // *********************************
 //
-TestAI *        TestAIManager::PreparePreset2   ( model::DefaultTimeline * timeline )
+TestAI *        TestAIManager::PreparePreset2   () const
 {
     return nullptr;    
 }
 
 // *********************************
 //
-TestAI *        TestAIManager::PreparePreset3   ( model::DefaultTimeline * timeline )
+TestAI *        TestAIManager::PreparePreset3   () const
 {
     return nullptr;
 }
 
 // *********************************
 //
-TestAI *        TestAIManager::PreparePreset4   ( model::DefaultTimeline * timeline )
+TestAI *        TestAIManager::PreparePreset4   () const
 {
     return nullptr;
 }
 
 // *********************************
 //
-TestAI *        TestAIManager::PreparePreset5   ( model::DefaultTimeline * timeline )
+TestAI *        TestAIManager::PreparePreset5   () const
 {
     return nullptr;
 }

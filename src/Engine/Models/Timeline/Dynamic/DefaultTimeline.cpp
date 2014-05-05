@@ -32,6 +32,7 @@ const TimeType DefaultTimeline::ms_evtTimeSeparation = TimeType( 0.1 );
 DefaultTimeline::DefaultTimeline     ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod, ITimeEvaluator * parent )
     : m_timeEvalImpl( duration, TimelinePlayDirection::TPD_FORWAD, preMethod, postMethod )
     , m_name( name )
+    , m_parent( parent )
 {
 }
 
@@ -61,8 +62,35 @@ TimeType                            DefaultTimeline::Evaluate            ( TimeT
 
 // *********************************
 //
+std::vector< IParameter * > &       DefaultTimeline::GetParameters       ()
+{
+    return m_registeredParameters;
+}
+
+// *********************************
+//
+IParameter *                        DefaultTimeline::GetParameter        ( const std::string & name )
+{
+    for( auto p : m_registeredParameters )
+    {
+        if( p->GetName() == name )
+        {
+            return p;
+        }
+    }
+
+    return nullptr;
+}
+
+// *********************************
+//
 void                                DefaultTimeline::Update              ( TimeType t )
 {
+    if( m_parent )
+    {
+        t = m_parent->Evaluate( t );
+    }
+
     m_timeEvalImpl.UpdateGlobalTime( t );
 
     auto evt = CurrentEventNC();
@@ -146,6 +174,20 @@ void                                DefaultTimeline::SetTimeAndPlay      ( TimeT
 void                                DefaultTimeline::SetWrapBehavior     ( TimelineWrapMethod preMethod, TimelineWrapMethod postMethod )
 {
     m_timeEvalImpl.SetWrapBehavior( preMethod, postMethod );
+}
+
+// *********************************
+//
+TimelineWrapMethod                  DefaultTimeline::GetWrapBehaviorPre  () const
+{
+    return m_timeEvalImpl.GetWrapPre();
+}
+
+// *********************************
+//
+TimelineWrapMethod                  DefaultTimeline::GetWrapBehaviorPost () const
+{
+    return m_timeEvalImpl.GetWrapPost();
 }
 
 // *********************************
@@ -261,7 +303,7 @@ const ITimelineEvent *              DefaultTimeline::LastTriggeredEvent  () cons
 
 // *********************************
 //
-bool                                DefaultTimeline::AddParameter        ( const IParameter * param )
+bool                                DefaultTimeline::AddParameter        ( IParameter * param )
 {
     if( std::find( m_registeredParameters.begin(), m_registeredParameters.end(), param ) == m_registeredParameters.end() )
     {

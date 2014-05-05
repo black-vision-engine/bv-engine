@@ -61,6 +61,9 @@ public:
     void        SetWrapBehaviorPost ( TimelineWrapMethod method );
     void        SetWrapBehavior     ( TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
 
+    TimelineWrapMethod      GetWrapPre          () const;
+    TimelineWrapMethod      GetWrapPost         () const;
+
     TimeType                GetDuration         () const;
 
     TimelinePlayDirection   GetDirection        () const;

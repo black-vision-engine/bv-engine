@@ -25,6 +25,7 @@
 //FIXME: remove
 #include "Engine/Models/Plugins/PluginUtils.h"
 #include "Engine/Models/Timeline/TimeSegmentEvalImpl.h"
+#include "testai/TestAIManager.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>

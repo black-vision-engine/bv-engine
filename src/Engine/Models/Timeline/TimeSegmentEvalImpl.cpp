@@ -152,6 +152,20 @@ void        TimeSegmentEvalImpl::SetWrapBehavior     ( TimelineWrapMethod preMet
 
 // *********************************
 //
+TimelineWrapMethod      TimeSegmentEvalImpl::GetWrapPre          () const
+{
+    return m_wrapPreBehavior;
+}
+
+// *********************************
+//
+TimelineWrapMethod      TimeSegmentEvalImpl::GetWrapPost         () const
+{
+    return m_wrapPostBehavior;
+}
+
+// *********************************
+//
 TimeType    TimeSegmentEvalImpl::GetDuration         () const
 {
     return m_duration;

@@ -50,7 +50,7 @@ public:
     virtual const ITimelineEvent *  CurrentEvent        () const = 0;
     virtual const ITimelineEvent *  LastTriggeredEvent  () const = 0;
 
-    virtual bool                    AddParameter        ( const IParameter * param ) = 0;
+    virtual bool                    AddParameter        ( IParameter * param ) = 0;
 
     virtual bool                    RemoveParameter     ( const IParameter * param ) = 0;
     virtual unsigned int            RemoveParameters    ( const std::string & name ) = 0;

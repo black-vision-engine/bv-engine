@@ -16,7 +16,8 @@ class TestAIManager
 {
 private:
 
-    std::vector< TestAI * > m_presets;
+    std::vector< TestAI * >                 m_presets;
+    std::vector< model::DefaultTimeline * > m_timelines;
 
 private:
 
@@ -26,20 +27,20 @@ private:
 
 public:
 
-    unsigned int    NumAIPresets        ();
+    unsigned int    NumAIPresets        () const;
 
-    TestAI *        GetAIPreset         ( unsigned int idx, model::DefaultTimeline * timeline );
+    TestAI *        GetAIPreset         ( unsigned int idx );
 
 private:
 
-    TestAI *        PreparePreset       ( unsigned int idx, model::DefaultTimeline * timeline );
+    TestAI *        PreparePreset       ( unsigned int idx ) const;
     
-    TestAI *        PreparePreset0      ( model::DefaultTimeline * timeline );
-    TestAI *        PreparePreset1      ( model::DefaultTimeline * timeline );
-    TestAI *        PreparePreset2      ( model::DefaultTimeline * timeline );
-    TestAI *        PreparePreset3      ( model::DefaultTimeline * timeline );
-    TestAI *        PreparePreset4      ( model::DefaultTimeline * timeline );
-    TestAI *        PreparePreset5      ( model::DefaultTimeline * timeline );
+    TestAI *        PreparePreset0      () const;
+    TestAI *        PreparePreset1      () const;
+    TestAI *        PreparePreset2      () const;
+    TestAI *        PreparePreset3      () const;
+    TestAI *        PreparePreset4      () const;
+    TestAI *        PreparePreset5      () const;
 
 public:
 

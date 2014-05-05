@@ -11,19 +11,21 @@ class DefaultTimeline : public ITimeline
 {
 private:
 
-    std::string                             m_name;
-    TimeSegmentEvalImpl                     m_timeEvalImpl;
+    ITimeEvaluator *                m_parent;
 
-    ITimelineEvent *                        m_lastTriggeredEvent;
+    std::string                     m_name;
+    TimeSegmentEvalImpl             m_timeEvalImpl;
 
-    std::vector< const IParameter * >       m_registeredParameters;
-    std::vector< ITimelineEvent * >         m_keyFrameEvents;
+    ITimelineEvent *                m_lastTriggeredEvent;
+
+    std::vector< IParameter * >     m_registeredParameters;
+    std::vector< ITimelineEvent * > m_keyFrameEvents;
 
     static const TimeType                   ms_evtTimeSeparation;
 
 public:
 
-                                                DefaultTimeline     ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod, ITimeEvaluator * parent );
+                                                DefaultTimeline     ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod, ITimeEvaluator * parent = nullptr );
                                                 ~DefaultTimeline    ();
 
     //ITimeEvaluator
@@ -38,7 +40,7 @@ public:
     virtual void                                Update              ( TimeType t ) override;
 
     //ITimeline
-    virtual TimeType                            GetDuration         () const = 0;
+    virtual TimeType                            GetDuration         () const override;
 
     virtual void                                Restart             () override;
 
@@ -72,7 +74,7 @@ public:
     virtual const ITimelineEvent *              CurrentEvent        () const override;
     virtual const ITimelineEvent *              LastTriggeredEvent  () const override;
 
-    virtual bool                                AddParameter        ( const IParameter * param ) override;
+    virtual bool                                AddParameter        ( IParameter * param ) override;
 
     virtual bool                                RemoveParameter     ( const IParameter * param ) override;
     virtual unsigned int                        RemoveParameters    ( const std::string & name ) override;
