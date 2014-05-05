@@ -1,3 +1,5 @@
+#pragma once
+
 #include "System/BasicTypes.h"
 
 #include <string>

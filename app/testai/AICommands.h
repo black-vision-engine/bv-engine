@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Engine/Types/Enums.h"
 
 #include "testai/IAICommand.h"
