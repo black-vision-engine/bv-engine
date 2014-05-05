@@ -1,3 +1,5 @@
+#include "Engine/Types/Enums.h"
+
 #include "testai/IAICommand.h"
 
 
@@ -28,6 +30,7 @@ public:
     virtual bool        TriggerCommand  ( TimeType t ) override;
 
     virtual std::string Repr            () const override;
+    void                SetRepr         ( const std::string & repr );
 
 protected:
 
@@ -83,6 +86,63 @@ public:
 
                         AICommandReverse    ( model::DefaultTimeline * timeline, TimeType triggerTime );
                         ~AICommandReverse   ();
+
+protected:
+
+    virtual bool        TriggerImpl         ( TimeType t ) override;
+
+};
+
+// ************************************
+class AICommandSetPlayDirection : public AICommandBase
+{
+private:
+
+    model::DefaultTimeline  *   m_timeline;
+    TimelinePlayDirection       m_direction;
+
+public:
+
+                        AICommandSetPlayDirection    ( model::DefaultTimeline * timeline, TimeType triggerTime, TimelinePlayDirection direction );
+                        ~AICommandSetPlayDirection   ();
+
+protected:
+
+    virtual bool        TriggerImpl         ( TimeType t ) override;
+
+};
+
+// ************************************
+class AICommandSetTimeAndStop : public AICommandBase
+{
+private:
+
+    model::DefaultTimeline  *   m_timeline;
+    TimeType                    m_eventTime;
+
+public:
+
+                        AICommandSetTimeAndStop     ( model::DefaultTimeline * timeline, TimeType triggerTime, TimeType eventTime );
+                        ~AICommandSetTimeAndStop    ();
+
+protected:
+
+    virtual bool        TriggerImpl         ( TimeType t ) override;
+
+};
+
+// ************************************
+class AICommandSetTimeAndPlay : public AICommandBase
+{
+private:
+
+    model::DefaultTimeline  *   m_timeline;
+    TimeType                    m_eventTime;
+
+public:
+
+                        AICommandSetTimeAndPlay     ( model::DefaultTimeline * timeline, TimeType triggerTime, TimeType eventTime );
+                        ~AICommandSetTimeAndPlay    ();
 
 protected:
 

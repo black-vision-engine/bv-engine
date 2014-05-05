@@ -44,6 +44,7 @@ public:
 
     virtual void                                SetPlayDirection    ( TimelinePlayDirection direction ) override;
     virtual TimelinePlayDirection               GetPlayDirection    () const override;
+    virtual void                                Reverse             () override;
 
     virtual void                                Play                () override;
     virtual void                                Stop                () override;

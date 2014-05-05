@@ -51,6 +51,13 @@ std::string AICommandBase::Repr            () const
     return m_repr;
 }
 
+// *********************************
+//
+void        AICommandBase::SetRepr         ( const std::string & repr )
+{
+    m_repr = repr;
+}
+
 
 // ************************************************************ AI COMMAND START ************************************************************
 
@@ -98,6 +105,8 @@ AICommandStop::~AICommandStop  ()
 //
 bool        AICommandStop::TriggerImpl     ( TimeType t )
 {
+    m_timeline->Stop();
+
     return true;
 }
 
@@ -121,6 +130,98 @@ AICommandReverse::~AICommandReverse   ()
 //
 bool        AICommandReverse::TriggerImpl         ( TimeType t )
 {
+    m_timeline->Reverse();
+
+    return true;
+}
+
+
+// ************************************************************ AI COMMAND SET PLAY DIRECTION ************************************************************
+
+// *********************************
+//
+AICommandSetPlayDirection::AICommandSetPlayDirection    ( model::DefaultTimeline * timeline, TimeType triggerTime, TimelinePlayDirection direction )
+    : AICommandBase( triggerTime, "" )
+    , m_timeline( timeline )
+    , m_direction( direction )
+{
+    if( direction == TimelinePlayDirection::TPD_FORWAD )
+    {
+        SetRepr( std::string( "SET PLAY DIRECTION " ) + std::string( "FORWARD" ) );
+    }
+    else
+    {
+        SetRepr( std::string( "SET PLAY DIRECTION " ) + std::string( "BACKWARD" ) );
+    }
+}
+
+// *********************************
+//
+AICommandSetPlayDirection::~AICommandSetPlayDirection   ()
+{
+}
+
+// *********************************
+//
+bool        AICommandSetPlayDirection::TriggerImpl      ( TimeType t )
+{
+    m_timeline->SetPlayDirection( m_direction );
+
+    return true;
+}
+
+// ************************************************************ AI COMMAND SET TIME AND STOP ************************************************************
+
+// *********************************
+//
+AICommandSetTimeAndStop::AICommandSetTimeAndStop    ( model::DefaultTimeline * timeline, TimeType triggerTime, TimeType eventTime )
+    : AICommandBase( triggerTime, "" )
+    , m_timeline( timeline )
+    , m_eventTime( eventTime )
+{
+    SetRepr( std::string( "SET TIME AND STOP at " ) + std::to_string( eventTime ) );
+}
+
+// *********************************
+//
+AICommandSetTimeAndStop::~AICommandSetTimeAndStop   ()
+{
+}
+
+// *********************************
+//
+bool        AICommandSetTimeAndStop::TriggerImpl    ( TimeType t )
+{
+    m_timeline->SetTimeAndStop( m_eventTime );
+
+    return true;
+}
+
+
+// ************************************************************ AI COMMAND SET TIME AND PLAY ************************************************************
+
+// *********************************
+//
+AICommandSetTimeAndPlay::AICommandSetTimeAndPlay    ( model::DefaultTimeline * timeline, TimeType triggerTime, TimeType eventTime )
+    : AICommandBase( triggerTime, "" )
+    , m_timeline( timeline )
+    , m_eventTime( eventTime )
+{
+    SetRepr( std::string( "SET TIME AND PLAY at " ) + std::to_string( eventTime ) );
+}
+
+// *********************************
+//
+AICommandSetTimeAndPlay::~AICommandSetTimeAndPlay   ()
+{
+}
+
+// *********************************
+//
+bool        AICommandSetTimeAndPlay::TriggerImpl    ( TimeType t )
+{
+    m_timeline->SetTimeAndPlay( m_eventTime );
+
     return true;
 }
 

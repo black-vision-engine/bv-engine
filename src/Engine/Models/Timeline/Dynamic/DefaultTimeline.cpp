@@ -106,6 +106,13 @@ TimelinePlayDirection               DefaultTimeline::GetPlayDirection    () cons
 
 // *********************************
 //
+void                                DefaultTimeline::Reverse             ()
+{
+    m_timeEvalImpl.Reverse();
+}
+
+// *********************************
+//
 void                                DefaultTimeline::Play                ()
 {
     m_timeEvalImpl.Start();

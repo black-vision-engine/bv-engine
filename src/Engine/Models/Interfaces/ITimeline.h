@@ -22,6 +22,7 @@ public:
 
     virtual void                    SetPlayDirection    ( TimelinePlayDirection direction ) = 0;
     virtual TimelinePlayDirection   GetPlayDirection    () const = 0;
+    virtual void                    Reverse             () = 0;
 
     virtual void                    Play                () = 0;
     virtual void                    Stop                () = 0;
