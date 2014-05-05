@@ -1,3 +1,5 @@
+#include <list>
+
 #include "Engine/Models/Interfaces/ITimeline.h"
 
 #include "Engine/Models/Timeline/TimeSegmentEvalImpl.h"
@@ -9,14 +11,17 @@ class DefaultTimeline : public ITimeline
 {
 private:
 
-    std::string                     m_name;
-    TimeSegmentEvalImpl             m_timeEvalImpl;
+    std::string                             m_name;
+    TimeSegmentEvalImpl                     m_timeEvalImpl;
 
-    std::vector< IParameter * >     m_registeredParameters;
+    std::vector< const IParameter * >       m_registeredParameters;
+    std::vector< const ITimelineEvent * >   m_keyFrameEvents;
+
+    static const TimeType                   ms_evtTimeSeparation;
 
 public:
 
-                                                DefaultTimeline     ( const std::string & name, TimeType duration, ITimeEvaluator * parent );
+                                                DefaultTimeline     ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod, ITimeEvaluator * parent );
                                                 ~DefaultTimeline    ();
 
     //ITimeEvaluator
@@ -36,6 +41,7 @@ public:
     virtual void                                Restart             () override;
 
     virtual void                                SetPlayDirection    ( TimelinePlayDirection direction ) override;
+    virtual TimelinePlayDirection               GetPlayDirection    () const override;
 
     virtual void                                Play                () override;
     virtual void                                Stop                () override;
@@ -44,13 +50,15 @@ public:
     virtual void                                SetTimeAndPlay      ( TimeType t ) override; 
 
     virtual void                                SetWrapBehavior     ( TimelineWrapMethod preMethod, TimelineWrapMethod postMethod ) override;
+    virtual TimelineWrapMethod                  GetWrapBehaviorPre  () const override;
+    virtual TimelineWrapMethod                  GetWrapBehaviorPost () const override;
 
     virtual void                                SetLocalTime        ( TimeType t ) override;
     virtual TimeType                            GetLocalTime        () const override;
 
     virtual unsigned int                        NumKeyFrames        () const override;
 
-    virtual void                                AddKeyFrame         ( const ITimelineEvent * evt ) override;
+    virtual bool                                AddKeyFrame         ( const ITimelineEvent * evt ) override;
 
     virtual const ITimelineEvent *              GetKeyFrameEvent    ( const std::string & name ) const override;
     virtual const ITimelineEvent *              GetKeyFrameEvent    ( unsigned int idx ) const override;
@@ -60,10 +68,14 @@ public:
 
     virtual const ITimelineEvent *              CurrentEvent        () const override;
 
-    virtual void                                AddParameter        ( const IParameter * param ) override;
+    virtual bool                                AddParameter        ( const IParameter * param ) override;
 
     virtual bool                                RemoveParameter     ( const IParameter * param ) override;
-    virtual bool                                RemoveParameter     ( const std::string & name ) override;
+    virtual unsigned int                        RemoveParameters    ( const std::string & name ) override;
+
+private:
+
+    bool                                        CanBeInserted       ( const ITimelineEvent * evt ) const;
 
 };
 

@@ -11,21 +11,26 @@ inline void     TimeSegmentEvalImpl::ResetLocalTimeTo    ( TimeType t )
     {
         m_backwardStartTime = m_globalTime;
     }
-
-    printf( "%f %f %f\n", m_startTime, m_backwardStartTime, m_pauseDuration );
 }
 
 // *******************************
 //
 inline TimeType TimeSegmentEvalImpl::GetLocalTimeNoClamp () const
 {
+    return GetLocalTimeNoClamp( m_globalTime );
+}
+
+// *******************************
+//
+inline TimeType TimeSegmentEvalImpl::GetLocalTimeNoClamp ( TimeType globalTime ) const
+{
     if( m_playDirection == TimelinePlayDirection::TPD_FORWAD )
     {
-        return  m_globalTime - m_startTime - m_pauseDuration;
+        return  globalTime - m_startTime - m_pauseDuration;
     }
     else
     {
-        return TimeType( 2.0 ) * m_backwardStartTime - m_startTime - m_globalTime + m_pauseDuration;
+        return TimeType( 2.0 ) * m_backwardStartTime - m_startTime - globalTime + m_pauseDuration;
     }
 }
 

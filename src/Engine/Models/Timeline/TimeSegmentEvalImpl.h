@@ -45,20 +45,27 @@ public:
 
                 TimeSegmentEvalImpl ( TimeType duration, TimelinePlayDirection direction = TimelinePlayDirection::TPD_FORWAD, TimelineWrapMethod preMethod = TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod postMethod = TimelineWrapMethod::TWM_CLAMP );
                 ~TimeSegmentEvalImpl();
-                
+             
     void        Start               ();
     void        Stop                ();
     void        Reverse             ();
     void        Reset               ( TimelinePlayDirection direction = TimelinePlayDirection::TPD_FORWAD );
 
+    bool        IsActive            () const;
+
     void        UpdateGlobalTime    ( TimeType t );
     TimeType    GetLocalTime        () const;
+    TimeType    GlobalToLocal       ( TimeType t ) const;
 
     void        SetWrapBehaviorPre  ( TimelineWrapMethod method );
     void        SetWrapBehaviorPost ( TimelineWrapMethod method );
     void        SetWrapBehavior     ( TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
 
-    inline void ResetLocalTimeTo    ( TimeType t );
+    TimeType                GetDuration         () const;
+
+    TimelinePlayDirection   GetDirection        () const;
+
+    inline void             ResetLocalTimeTo    ( TimeType t );
 
 private:
 
@@ -68,6 +75,7 @@ private:
     void            SetWrapEvaluatorPost( TimelineWrapMethod method );
 
     inline TimeType GetLocalTimeNoClamp () const;
+    inline TimeType GetLocalTimeNoClamp ( TimeType globalTime ) const;
 
     inline TimeType EvalClamp           ( TimeType t ) const;
 

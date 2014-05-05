@@ -87,6 +87,13 @@ void        TimeSegmentEvalImpl::Reset               ( TimelinePlayDirection dir
 
 // *********************************
 //
+bool        TimeSegmentEvalImpl::IsActive           () const
+{
+    return m_started;
+}
+
+// *********************************
+//
 void        TimeSegmentEvalImpl::UpdateGlobalTime   ( TimeType t )
 {
     auto prevGlobalTime = m_globalTime;
@@ -109,8 +116,16 @@ void        TimeSegmentEvalImpl::UpdateGlobalTime   ( TimeType t )
 //
 TimeType    TimeSegmentEvalImpl::GetLocalTime        () const
 {
-    auto t = GetLocalTimeNoClamp();
+    auto t = GetLocalTimeNoClamp( m_globalTime );
     return EvalClamp( t );
+}
+
+// *********************************
+//
+TimeType    TimeSegmentEvalImpl::GlobalToLocal      ( TimeType t ) const
+{
+    auto tnc = GetLocalTimeNoClamp( t );
+    return EvalClamp( tnc );
 }
 
 // *********************************
@@ -133,6 +148,20 @@ void        TimeSegmentEvalImpl::SetWrapBehavior     ( TimelineWrapMethod preMet
 {
     SetWrapBehaviorPre( preMethod );
     SetWrapBehaviorPost( postMethod );
+}
+
+// *********************************
+//
+TimeType    TimeSegmentEvalImpl::GetDuration         () const
+{
+    return m_duration;
+}
+
+// *********************************
+//
+TimelinePlayDirection   TimeSegmentEvalImpl::GetDirection        () const
+{
+    return m_playDirection;
 }
 
 // *********************************

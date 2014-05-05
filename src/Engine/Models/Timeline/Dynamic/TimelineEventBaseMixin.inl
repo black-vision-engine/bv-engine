@@ -3,7 +3,7 @@ namespace bv { namespace model {
 // *********************************
 //
 template< typename ITimelineEventIface >
-inline TimelineEventBaseMixin< ITimelineEventIface >::TimelineEventBaseMixin                ( const std::string & name, TimelineEventType type, TimeType eventTime, const ITimeline * owner )
+inline TimelineEventBaseMixin< ITimelineEventIface >::TimelineEventBaseMixin                    ( const std::string & name, TimelineEventType type, TimeType eventTime, const ITimeline * owner )
     : m_name( name )
     , m_type( type )
 {
@@ -14,7 +14,7 @@ inline TimelineEventBaseMixin< ITimelineEventIface >::TimelineEventBaseMixin    
 // *********************************
 //
 template< typename ITimelineEventIface >
-inline std::string          TimelineEventBaseMixin< ITimelineEventIface >::GetName          () const
+inline std::string          TimelineEventBaseMixin< ITimelineEventIface >::GetName              () const
 {
     return m_name;
 }
@@ -22,7 +22,7 @@ inline std::string          TimelineEventBaseMixin< ITimelineEventIface >::GetNa
 // *********************************
 //
 template< typename ITimelineEventIface >
-inline TimelineEventType    TimelineEventBaseMixin< ITimelineEventIface >::GetType          () const
+inline TimelineEventType    TimelineEventBaseMixin< ITimelineEventIface >::GetType              () const
 {
     return m_type;
 }
@@ -30,15 +30,23 @@ inline TimelineEventType    TimelineEventBaseMixin< ITimelineEventIface >::GetTy
 // *********************************
 //
 template< typename ITimelineEventIface >
-inline TimeType         TimelineEventBaseMixin< ITimelineEventIface >::GetEventTime         () const
+inline TimeType         TimelineEventBaseMixin< ITimelineEventIface >::GetEventTime             () const
 {
     return m_eventTime;
 }
-    
+
 // *********************************
 //
 template< typename ITimelineEventIface >
-const ITimeline *       TimelineEventBaseMixin< ITimelineEventIface >::GetOwnerTimeline     () const
+inline TimeType         TimelineEventBaseMixin< ITimelineEventIface >::GetLastTriggerTime       () const
+{
+    return m_lastTriggerTime;
+}
+
+// *********************************
+//
+template< typename ITimelineEventIface >
+const ITimeline *       TimelineEventBaseMixin< ITimelineEventIface >::GetOwnerTimeline         () const
 {
     return m_owner;
 }
@@ -46,7 +54,7 @@ const ITimeline *       TimelineEventBaseMixin< ITimelineEventIface >::GetOwnerT
 // *********************************
 //
 template< typename ITimelineEventIface >
-inline void                 TimelineEventBaseMixin< ITimelineEventIface >::SetOwnerTimeline ( const ITimeline * owner )
+inline void                 TimelineEventBaseMixin< ITimelineEventIface >::SetOwnerTimeline     ( const ITimeline * owner )
 {
     m_owner = owner;
 }
@@ -54,9 +62,17 @@ inline void                 TimelineEventBaseMixin< ITimelineEventIface >::SetOw
 // *********************************
 //
 template< typename ITimelineEventIface >
-inline void                 TimelineEventBaseMixin< ITimelineEventIface >::SetEventTime     ( TimeType eventTime )
+inline void                 TimelineEventBaseMixin< ITimelineEventIface >::SetEventTime         ( TimeType eventTime )
 {
     m_eventTime = eventTime;
+}
+
+// *********************************
+//
+template< typename ITimelineEventIface >
+inline void                 TimelineEventBaseMixin< ITimelineEventIface >::SetLastTriggerTime   ( TimeType triggerTime )
+{
+    m_lastTriggerTime = triggerTime;
 }
 
 } //model
