@@ -1,7 +1,15 @@
 #include "testai/IAICommand.h"
 
+
 namespace bv {
 
+namespace model {
+
+class DefaultTimeline;
+
+} //model
+
+// ************************************
 class AICommandBase : public IAICommand
 {
 private:
@@ -9,29 +17,77 @@ private:
     TimeType    m_triggerTime;
     TimeType    m_lastTriggerTime;
 
+    std::string m_repr;
+
 public:
+
+    AICommandBase( TimeType triggerTime, const std::string & repr );
 
     virtual TimeType    LastTriggerTime () const override;
     virtual TimeType    GetTriggerTime  () const override;
+    virtual bool        TriggerCommand  ( TimeType t ) override;
+
+    virtual std::string Repr            () const override;
+
+protected:
+
+    virtual bool        TriggerImpl     ( TimeType t ) = 0;
 
 };
 
-class AICommandStart : public AICommandBase
+// ************************************
+class AICommandPlay : public AICommandBase
 {
 private:
 
+    model::DefaultTimeline  * m_timeline;
+
 public:
 
+                        AICommandPlay   ( model::DefaultTimeline * timeline, TimeType triggerTime );
+                        ~AICommandPlay  ();
+
+
+protected:
+
+    virtual bool        TriggerImpl     ( TimeType t ) override;
 
 };
 
+// ************************************
 class AICommandStop : public AICommandBase
 {
+private:
+
+    model::DefaultTimeline  * m_timeline;
+
+public:
+
+                        AICommandStop   ( model::DefaultTimeline * timeline, TimeType triggerTime );
+                        ~AICommandStop  ();
+
+protected:
+
+    virtual bool        TriggerImpl     ( TimeType t ) override;
+
 };
 
+// ************************************
 class AICommandReverse : public AICommandBase
 {
+private:
+
+    model::DefaultTimeline  * m_timeline;
+
+public:
+
+                        AICommandReverse    ( model::DefaultTimeline * timeline, TimeType triggerTime );
+                        ~AICommandReverse   ();
+
+protected:
+
+    virtual bool        TriggerImpl         ( TimeType t ) override;
+
 };
 
 } //bv
-
