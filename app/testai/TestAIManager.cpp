@@ -114,7 +114,7 @@ TestAI *        TestAIManager::PreparePreset0   () const
 }
 
 // *********************************
-//
+//FIXME: test and fix in runtime
 TestAI *        TestAIManager::PreparePreset1   () const
 {
     auto timeline = new model::DefaultTimeline( "timeline preset 0", TimeType( 20.0 ), TimelineWrapMethod::TWM_REPEAT, TimelineWrapMethod::TWM_CLAMP );
