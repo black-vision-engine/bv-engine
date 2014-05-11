@@ -10,11 +10,12 @@ class ITimeEvaluator
 {
 public:
 
-    virtual const std::string & GetName         () const                = 0;
-    virtual TimeType            Evaluate        ( TimeType t ) const    = 0;
+    virtual const std::string & GetName         () const        = 0;
+
+    virtual void                SetGlobalTime   ( TimeType t )  = 0;
+    virtual TimeType            GetLocalTime    () const        = 0;
 
     virtual                     ~ITimeEvaluator () {}
-
 };
 
 } //model
