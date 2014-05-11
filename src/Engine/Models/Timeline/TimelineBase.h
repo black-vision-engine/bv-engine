@@ -31,7 +31,6 @@ public:
     void                SetInterval     ( TimeType startTime, TimeType endTime, float scale = 1.f );
 
     virtual const std::string & GetName () const override;
-    virtual TimeType            Evaluate( TimeType t ) const override;
 
 private:
 

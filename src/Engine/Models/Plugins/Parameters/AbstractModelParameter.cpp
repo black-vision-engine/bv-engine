@@ -8,28 +8,28 @@ namespace bv { namespace model {
 namespace
 {
 
-class DefaultTimeEvaluator : public ITimeEvaluator
-{
-public:
-
-    virtual const std::string & GetName () const
-    {
-        static std::string name = "DefaultTimeEvaluator";
-        return name;
-    }
-
-    virtual TimeType    Evaluate        ( TimeType t ) const
-    {
-        return t;
-    }
-
-    static const ITimeEvaluator * GetDefaultEvaluator   ()
-    {
-        static DefaultTimeEvaluator instance;
-
-        return &instance;
-    }
-};
+//class DefaultTimeEvaluator : public ITimeEvaluator
+//{
+//public:
+//
+//    virtual const std::string & GetName () const
+//    {
+//        static std::string name = "DefaultTimeEvaluator";
+//        return name;
+//    }
+//
+//    virtual TimeType    Evaluate        ( TimeType t ) const
+//    {
+//        return t;
+//    }
+//
+//    static const ITimeEvaluator * GetDefaultEvaluator   ()
+//    {
+//        static DefaultTimeEvaluator instance;
+//
+//        return &instance;
+//    }
+//};
 
 } //anonynous
 
@@ -42,10 +42,6 @@ AbstractModelParameter::AbstractModelParameter  ( const std::string & name, Mode
     , m_name( name )
     , m_type( type )
 {
-    if( evaluator == nullptr )
-    {
-        m_timeEvaluator = DefaultTimeEvaluator::GetDefaultEvaluator();
-    }
 }
 
 // *******************************

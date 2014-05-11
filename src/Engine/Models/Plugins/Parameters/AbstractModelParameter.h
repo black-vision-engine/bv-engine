@@ -34,7 +34,7 @@ public:
 
     inline  void                SetTimeEvaluator        ( const ITimeEvaluator * timeEvaluator );
 
-    inline  TimeType            GetLocalEvaluationTime  ( TimeType t ) const;
+    inline  TimeType            GetLocalEvaluationTime  () const;
 
 };
 

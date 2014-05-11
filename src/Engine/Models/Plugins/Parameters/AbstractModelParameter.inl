@@ -9,9 +9,10 @@ inline void AbstractModelParameter::SetTimeEvaluator                ( const ITim
 
 // *******************************
 //
-inline  TimeType  AbstractModelParameter::GetLocalEvaluationTime    ( TimeType t ) const
+inline  TimeType  AbstractModelParameter::GetLocalEvaluationTime    () const
 {
-    return m_timeEvaluator->Evaluate( t );
+    assert( m_timeEvaluator );
+    return m_timeEvaluator->GetLocalTime();
 }
 
 } //model
