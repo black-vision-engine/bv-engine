@@ -199,6 +199,7 @@
     <ClCompile Include="Mathematics\Core\mathfuncs.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\TimeEvaluatorBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -452,6 +453,7 @@
     <ClInclude Include="Mathematics\Core\mathfuncs.h" />
     <ClInclude Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.h" />
     <ClInclude Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.h" />
+    <ClInclude Include="Engine\Models\Timeline\TimeEvaluatorBase.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

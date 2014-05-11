@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <memory>
+
 #include "System/BasicTypes.h" //FIXME: store in PCH
 
 
@@ -17,6 +19,8 @@ public:
 
     virtual                     ~ITimeEvaluator () {}
 };
+
+typedef std::shared_ptr< ITimeEvaluator > ITimeEvaluatorPtr;
 
 } //model
 } //bv

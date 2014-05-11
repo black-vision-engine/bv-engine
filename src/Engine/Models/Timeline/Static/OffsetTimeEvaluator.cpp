@@ -5,7 +5,7 @@ namespace bv { namespace model {
 // *******************************
 //
 OffsetTimeEvaluator::OffsetTimeEvaluator                ( const std::string & name, TimeType offsetTime )
-    : m_name( name )
+    : TimeEvaluatorBase( name )
     , m_globalTime( 0.f )
     , m_timeOffset( offsetTime )
 {
@@ -22,13 +22,6 @@ OffsetTimeEvaluator::~OffsetTimeEvaluator               ()
 void                OffsetTimeEvaluator::SetTimeOffset  ( TimeType t )
 {
     m_timeOffset = t;
-}
-
-// *******************************
-//
-const std::string & OffsetTimeEvaluator::GetName        () const
-{
-    return m_name;
 }
 
 // *******************************
