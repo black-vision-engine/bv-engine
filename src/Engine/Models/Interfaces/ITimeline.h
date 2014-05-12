@@ -57,5 +57,7 @@ public:
 
 };
 
+typedef std::shared_ptr< ITimeline > ITimelinePtr;
+
 } //model
 } //bv

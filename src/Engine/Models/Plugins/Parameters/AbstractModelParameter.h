@@ -26,10 +26,11 @@ protected:
 
 public:
 
-    virtual const std::string & GetName                 () const;
-    virtual ModelParamType      GetType                 () const;
+    virtual const std::string & GetName                 () const override;
+    virtual ModelParamType      GetType                 () const override;
 
-    inline  void                SetTimeEvaluator        ( ITimeEvaluatorPtr timeEvaluator );
+    virtual ITimeEvaluatorPtr   GetTimeEvaluator        () override;
+    virtual void                SetTimeEvaluator        ( ITimeEvaluatorPtr timeEvaluator ) override;
 
     inline  TimeType            GetLocalEvaluationTime  () const;
 

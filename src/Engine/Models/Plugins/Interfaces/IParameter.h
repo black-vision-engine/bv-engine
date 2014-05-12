@@ -18,6 +18,9 @@ public:
     virtual const std::string &     GetName         () const = 0;
     virtual ModelParamType          GetType         () const = 0;
 
+    virtual ITimeEvaluatorPtr       GetTimeEvaluator() = 0;
+    virtual void                    SetTimeEvaluator( ITimeEvaluatorPtr timeEvaluator ) = 0;
+
     virtual void *                  QueryParamTyped () = 0;
 
     virtual ~IParameter() {}

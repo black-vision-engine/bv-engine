@@ -85,9 +85,8 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Time
 
     SetDefaultColorChangeAnim( node->GetPlugin( "solid color" ) );
 
-    //FIXME: do poprawy
-    //timelineManager->RegisterDefaultTimeline( nullptr, 15.0f, 45.0f, "timeline0" );
-    timelineManager->AddParamToTimeline( node->GetPlugin( "solid color" )->GetParameter( "color" ), "timeline0" );
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluatorStartingAt( "timeline0" , TimeType( 15.0 ) );
+    node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( localTimeline );
 
     SetDefaultTransformAnim( node->GetPlugin( "transform" ) );
 
@@ -106,6 +105,11 @@ model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineM
     assert( success );
 
     SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
+
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluatorStartingAt( "timeline0" , TimeType( 15.0 ) );
+    node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( localTimeline );
+
+    timeEvaluator->AddChild( localTimeline );
 
     success = model::LoadTexture( node->GetPlugin( "texture" ), "simless_00.jpg" );
     assert( success );

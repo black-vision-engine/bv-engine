@@ -42,15 +42,17 @@ namespace
 
     void GownoWFormieKebaba( TimeType t )
     {
-        static auto ai = TestAIManager::Instance().GetAIPreset( 1 );
-        static TimeType tt = TimeType( 0.0 );
+        //DETERMINSTIC TIME INTERVALS
+        //static TimeType tt = TimeType( 0.0 );
+        //tt += TimeType( 0.001 );
 
+        //TEST AI
+        static auto ai = TestAIManager::Instance().GetAIPreset( 1 );
+        ai->EvalAt( t );
+
+        //PRE GOWNO
         float tx = float( sin( t ) );
         glm::vec3 kebab( tx, 0.f, 0.f );
-
-        //pregowno
-        //tt += TimeType( 0.001 );
-        ai->EvalAt( t );
 
         //gowno
         GTransformSetEvent->SetTranslation( kebab );
@@ -144,6 +146,7 @@ void BVAppLogic::InitCamera         ( Renderer * renderer, int w, int h )
 void BVAppLogic::SetStartTime       ( unsigned long millis )
 {
     m_startTime = millis;
+    m_globalTimeline->SetTimeOffset( -TimeType( millis ) * TimeType( 0.001 ) );
 }
 
 namespace {
@@ -198,6 +201,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
                 HPROFILER_SECTION( "m_modelScene->Update" );
 
                 //DupaTextureReloadTestUpdate( this, t );
+                m_globalTimeline->SetGlobalTime( t );
                 m_modelScene->Update( t );
             }
             {
