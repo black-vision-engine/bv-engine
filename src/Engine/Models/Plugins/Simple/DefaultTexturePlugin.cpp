@@ -24,14 +24,14 @@ DefaultTexturePluginDesc::DefaultTexturePluginDesc                          ()
 
 // *******************************
 //
-IPlugin *               DefaultTexturePluginDesc::CreatePlugin              ( const std::string & name, const IPlugin * prev ) const
+IPlugin *               DefaultTexturePluginDesc::CreatePlugin              ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePluginTyped< DefaultTexturePlugin >( name, prev );
+    return CreatePluginTyped< DefaultTexturePlugin >( name, prev, timeEvaluator );
 }
 
 // *******************************
 //
-DefaultPluginParamValModel *    DefaultTexturePluginDesc::CreateDefaultModel() const
+DefaultPluginParamValModel *    DefaultTexturePluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     //Create all models
     DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
@@ -39,14 +39,14 @@ DefaultPluginParamValModel *    DefaultTexturePluginDesc::CreateDefaultModel() c
     DefaultParamValModel * vsModel      = new DefaultParamValModel();
 
     //Create all parameters and evaluators
-    SimpleVec4Evaluator *      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor" );
-    SimpleFloatEvaluator *     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha" );
-    SimpleTransformEvaluator * trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat" );
+    SimpleVec4Evaluator *      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
+    SimpleFloatEvaluator *     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
+    SimpleTransformEvaluator * trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
 
-    ParamFloat *  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX" );
-    ParamFloat *  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY" );
-    ParamFloat *  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode" );
-    ParamFloat *  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachmentMode" );
+    ParamFloat *  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX", timeEvaluator );
+    ParamFloat *  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY", timeEvaluator );
+    ParamFloat *  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode", timeEvaluator );
+    ParamFloat *  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachmentMode", timeEvaluator );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
@@ -64,7 +64,7 @@ DefaultPluginParamValModel *    DefaultTexturePluginDesc::CreateDefaultModel() c
     //Set default values of all parameters
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
-    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT( TimeType( 0.0 ) );
+    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
 
     //FIXME: integer parmeters should be used here
     paramWrapModeX->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );

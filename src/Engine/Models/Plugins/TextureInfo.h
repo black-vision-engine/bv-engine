@@ -30,9 +30,9 @@ struct TextureInfo
 
     TextureInfo(    const ResourceHandle * resHandle
                ,    const std::string & texName
-               ,    const ParamTransform & texTransform = ParametersFactory::CreateParameter( "texTransform", TransformF() )
-               ,    const ParamFloat& alpha = ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 1.f ) )
-               ,    const ParamVec4& borderColor = ParametersFactory::CreateParameter( "texBorderColor", InterpolatorsHelper::CreateConstValue( glm::vec4( 0.f, 0.f, 1.f, 0.f ) ) )
+               ,    const ParamTransform & texTransform = ParametersFactory::CreateParameter( "texTransform", TransformF(), nullptr )
+               ,    const ParamFloat& alpha = ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 1.f ), nullptr )
+               ,    const ParamVec4& borderColor = ParametersFactory::CreateParameter( "texBorderColor", InterpolatorsHelper::CreateConstValue( glm::vec4( 0.f, 0.f, 1.f, 0.f ) ), nullptr )
                ,    TextureWrappingMode wrappingModeX = TextureWrappingMode::TWM_REPEAT 
                ,    TextureWrappingMode wrappingModeY = TextureWrappingMode::TWM_REPEAT
                ,    TextureFilteringMode filteringMode = TextureFilteringMode::TFM_LINEAR

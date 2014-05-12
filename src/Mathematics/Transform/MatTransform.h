@@ -133,7 +133,7 @@ public:
     explicit        CompositeTransform  ();
                     CompositeTransform  ( const CompositeTransform & src );
 
-    void            InitializeDefaultSRT( TimeType t );
+    void            InitializeDefaultSRT();
 
     virtual         ~CompositeTransform ();
 

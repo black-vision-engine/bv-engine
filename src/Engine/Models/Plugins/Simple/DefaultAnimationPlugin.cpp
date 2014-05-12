@@ -24,14 +24,14 @@ DefaultAnimationPluginDesc::DefaultAnimationPluginDesc                          
 
 // *******************************
 //
-IPlugin *               DefaultAnimationPluginDesc::CreatePlugin              ( const std::string & name, const IPlugin * prev ) const
+IPlugin *               DefaultAnimationPluginDesc::CreatePlugin              ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePluginTyped< DefaultAnimationPlugin >( name, prev );
+    return CreatePluginTyped< DefaultAnimationPlugin >( name, prev, timeEvaluator );
 }
 
 // *******************************
 //
-DefaultPluginParamValModel *    DefaultAnimationPluginDesc::CreateDefaultModel() const
+DefaultPluginParamValModel *    DefaultAnimationPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     //Create all models
     DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
@@ -39,15 +39,15 @@ DefaultPluginParamValModel *    DefaultAnimationPluginDesc::CreateDefaultModel()
     DefaultParamValModel * vsModel      = new DefaultParamValModel();
 
     //Create all parameters and evaluators
-    SimpleVec4Evaluator *      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor" );
-    SimpleFloatEvaluator *     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha" );
-    SimpleTransformEvaluator * trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat" );
+    SimpleVec4Evaluator *      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
+    SimpleFloatEvaluator *     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
+    SimpleTransformEvaluator * trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
 
-    ParamFloat *  paramFrameNum      = ParametersFactory::CreateParameterFloat( "frameNum" );
-    ParamFloat *  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX" );
-    ParamFloat *  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY" );
-    ParamFloat *  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode" );
-    ParamFloat *  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachmentMode" );
+    ParamFloat *  paramFrameNum      = ParametersFactory::CreateParameterFloat( "frameNum", timeEvaluator );
+    ParamFloat *  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX", timeEvaluator );
+    ParamFloat *  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY", timeEvaluator );
+    ParamFloat *  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode", timeEvaluator );
+    ParamFloat *  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachmentMode", timeEvaluator );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
@@ -66,7 +66,7 @@ DefaultPluginParamValModel *    DefaultAnimationPluginDesc::CreateDefaultModel()
     //Set default values of all parameters
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
-    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT( TimeType( 0.0 ) );
+    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
 
     //FIXME: integer parmeters should be used here
     paramFrameNum->SetVal( 0.f, TimeType( 0.f ) );

@@ -31,16 +31,16 @@ SimpleFloatEvaluator *       ParamValEvaluatorFactory::CreateSimpleFloatEvaluato
 
 // *******************************
 //
-SimpleFloatEvaluator *       ParamValEvaluatorFactory::CreateSimpleFloatEvaluator      ( const std::string & paramName )
+SimpleFloatEvaluator *       ParamValEvaluatorFactory::CreateSimpleFloatEvaluator      ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator )
 {
-    return CreateSimpleFloatEvaluator( ParametersFactory::CreateParameterFloat( paramName ), paramName );
+    return CreateSimpleFloatEvaluator( ParametersFactory::CreateParameterFloat( paramName, timeEvaluator ), paramName );
 }
 
 // *******************************
 //
-SimpleFloatEvaluator *       ParamValEvaluatorFactory::CreateSimpleFloatEvaluator      ( const std::string & paramName, const std::string & valueName )
+SimpleFloatEvaluator *       ParamValEvaluatorFactory::CreateSimpleFloatEvaluator      ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName )
 {
-    return CreateSimpleFloatEvaluator( ParametersFactory::CreateParameterFloat( paramName ), valueName );
+    return CreateSimpleFloatEvaluator( ParametersFactory::CreateParameterFloat( paramName, timeEvaluator ), valueName );
 }
 
 
@@ -69,16 +69,16 @@ SimpleVec4Evaluator *        ParamValEvaluatorFactory::CreateSimpleVec4Evaluator
 
 // *******************************
 //
-SimpleVec4Evaluator *        ParamValEvaluatorFactory::CreateSimpleVec4Evaluator       ( const std::string & paramName )
+SimpleVec4Evaluator *        ParamValEvaluatorFactory::CreateSimpleVec4Evaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator )
 {
-    return CreateSimpleVec4Evaluator( ParametersFactory::CreateParameterVec4( paramName ), paramName );
+    return CreateSimpleVec4Evaluator( ParametersFactory::CreateParameterVec4( paramName, timeEvaluator ), paramName );
 }
 
 // *******************************
 //
-SimpleVec4Evaluator *        ParamValEvaluatorFactory::CreateSimpleVec4Evaluator       ( const std::string & paramName, const std::string & valueName )
+SimpleVec4Evaluator *        ParamValEvaluatorFactory::CreateSimpleVec4Evaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName )
 {
-    return CreateSimpleVec4Evaluator( ParametersFactory::CreateParameterVec4( paramName ), valueName );
+    return CreateSimpleVec4Evaluator( ParametersFactory::CreateParameterVec4( paramName, timeEvaluator ), valueName );
 }
 
 
@@ -107,16 +107,16 @@ SimpleVec3Evaluator *        ParamValEvaluatorFactory::CreateSimpleVec3Evaluator
 
 // *******************************
 //
-SimpleVec3Evaluator *        ParamValEvaluatorFactory::CreateSimpleVec3Evaluator       ( const std::string & paramName )
+SimpleVec3Evaluator *        ParamValEvaluatorFactory::CreateSimpleVec3Evaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator )
 {
-    return CreateSimpleVec3Evaluator( ParametersFactory::CreateParameterVec3( paramName ), paramName );
+    return CreateSimpleVec3Evaluator( ParametersFactory::CreateParameterVec3( paramName, timeEvaluator ), paramName );
 }
 
 // *******************************
 //
-SimpleVec3Evaluator *        ParamValEvaluatorFactory::CreateSimpleVec3Evaluator       ( const std::string & paramName, const std::string & valueName )
+SimpleVec3Evaluator *        ParamValEvaluatorFactory::CreateSimpleVec3Evaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName )
 {
-    return CreateSimpleVec3Evaluator( ParametersFactory::CreateParameterVec3( paramName ), valueName );
+    return CreateSimpleVec3Evaluator( ParametersFactory::CreateParameterVec3( paramName, timeEvaluator ), valueName );
 }
 
 
@@ -145,16 +145,16 @@ SimpleMat2Evaluator *        ParamValEvaluatorFactory::CreateSimpleMat2Evaluator
 
 // *******************************
 //
-SimpleMat2Evaluator *        ParamValEvaluatorFactory::CreateSimpleMat2Evaluator       ( const std::string & paramName )
+SimpleMat2Evaluator *        ParamValEvaluatorFactory::CreateSimpleMat2Evaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator )
 {
-    return CreateSimpleMat2Evaluator( ParametersFactory::CreateParameterMat2( paramName ), paramName );
+    return CreateSimpleMat2Evaluator( ParametersFactory::CreateParameterMat2( paramName, timeEvaluator ), paramName );
 }
 
 // *******************************
 //
-SimpleMat2Evaluator *        ParamValEvaluatorFactory::CreateSimpleMat2Evaluator       ( const std::string & paramName, const std::string & valueName )
+SimpleMat2Evaluator *        ParamValEvaluatorFactory::CreateSimpleMat2Evaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName )
 {
-    return CreateSimpleMat2Evaluator( ParametersFactory::CreateParameterMat2( paramName ), valueName );
+    return CreateSimpleMat2Evaluator( ParametersFactory::CreateParameterMat2( paramName, timeEvaluator ), valueName );
 }
 
 
@@ -183,16 +183,16 @@ SimpleTransformEvaluator *   ParamValEvaluatorFactory::CreateSimpleTransformEval
 
 // *******************************
 //
-SimpleTransformEvaluator *   ParamValEvaluatorFactory::CreateSimpleTransformEvaluator  ( const std::string & paramName )
+SimpleTransformEvaluator *   ParamValEvaluatorFactory::CreateSimpleTransformEvaluator  ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator )
 {
-    return CreateSimpleTransformEvaluator( ParametersFactory::CreateParameterTransform( paramName ), paramName );
+    return CreateSimpleTransformEvaluator( ParametersFactory::CreateParameterTransform( paramName, timeEvaluator ), paramName );
 }
 
 // *******************************
 //
-SimpleTransformEvaluator *   ParamValEvaluatorFactory::CreateSimpleTransformEvaluator  ( const std::string & paramName, const std::string & valueName )
+SimpleTransformEvaluator *   ParamValEvaluatorFactory::CreateSimpleTransformEvaluator  ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName )
 {
-    return CreateSimpleTransformEvaluator( ParametersFactory::CreateParameterTransform( paramName ), valueName );
+    return CreateSimpleTransformEvaluator( ParametersFactory::CreateParameterTransform( paramName, timeEvaluator ), valueName );
 }
 
 
@@ -200,26 +200,26 @@ SimpleTransformEvaluator *   ParamValEvaluatorFactory::CreateSimpleTransformEval
 
 // *******************************
 //
-TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEvaluator( const std::string & paramName, ValueMat4 * value )
+TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEvaluator( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, ValueMat4 * value )
 {
     ValueMat4PtrVec values( 1, value );
-    ParamTransformVec * ptv = ParametersFactory::CreateParameterTransformVec( paramName, 1 );
+    ParamTransformVec * ptv = ParametersFactory::CreateParameterTransformVec( paramName, timeEvaluator, 1 );
 
     return CreateTransformVecEvaluator( ptv, values );
 }
 
 // *******************************
 //
-TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEvaluator( const std::string & paramName )
+TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEvaluator( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator )
 {
-    return CreateTransformVecEvaluator( paramName, paramName );
+    return CreateTransformVecEvaluator( paramName, timeEvaluator, paramName );
 }
 
 // *******************************
 //
-TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEvaluator( const std::string & paramName, const std::string & valueName )
+TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEvaluator( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName )
 {
-    return CreateTransformVecEvaluator( paramName, ValuesFactory::CreateValueMat4( valueName ) );    
+    return CreateTransformVecEvaluator( paramName, timeEvaluator, ValuesFactory::CreateValueMat4( valueName ) );    
 }
 
 // *******************************
@@ -283,18 +283,18 @@ TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEv
 
 // *******************************
 //
-TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEvaluator( const std::string & paramName, unsigned int numTransformations )
+TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEvaluator( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, unsigned int numTransformations )
 {
-    return CreateTransformVecEvaluator( paramName, paramName, numTransformations );
+    return CreateTransformVecEvaluator( paramName, timeEvaluator, paramName, numTransformations );
 }
 
 // *******************************
 //
-TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEvaluator( const std::string & paramName, const std::string & valueName, unsigned int numTransformations )
+TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEvaluator( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName, unsigned int numTransformations )
 {
     assert( numTransformations > 0 );
 
-    ParamTransformVec * ptv = ParametersFactory::CreateParameterTransformVec( paramName, numTransformations );
+    ParamTransformVec * ptv = ParametersFactory::CreateParameterTransformVec( paramName, timeEvaluator, numTransformations );
 
     ValueMat4PtrVec values( numTransformations );
 
@@ -308,11 +308,11 @@ TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEv
 
 // *******************************
 //
-TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEvaluator( const std::string & paramName, const std::vector< std::string > & valueNames )
+TransformVecParamValEvaluator *   ParamValEvaluatorFactory::CreateTransformVecEvaluator( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::vector< std::string > & valueNames )
 {
     assert( valueNames.size() > 0 );
 
-    ParamTransformVec * ptv = ParametersFactory::CreateParameterTransformVec( paramName, valueNames.size() );
+    ParamTransformVec * ptv = ParametersFactory::CreateParameterTransformVec( paramName, timeEvaluator, valueNames.size() );
 
     ValueMat4PtrVec values( valueNames.size() );
 

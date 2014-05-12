@@ -17,18 +17,18 @@ DefaultColorPluginDesc::DefaultColorPluginDesc                          ()
 
 // *******************************
 //
-IPlugin *               DefaultColorPluginDesc::CreatePlugin                ( const std::string & name, const IPlugin * prev ) const
+IPlugin *               DefaultColorPluginDesc::CreatePlugin                ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePluginTyped< DefaultColorPlugin >( name, prev );
+    return CreatePluginTyped< DefaultColorPlugin >( name, prev, timeEvaluator );
 }
 
 // *******************************
 //
-DefaultPluginParamValModel *    DefaultColorPluginDesc::CreateDefaultModel  () const
+DefaultPluginParamValModel *    DefaultColorPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
     DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
     DefaultParamValModel * psModel      = new DefaultParamValModel();
-    SimpleVec4Evaluator * evaluator     = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color" );
+    SimpleVec4Evaluator * evaluator     = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
 
     psModel->RegisterAll( evaluator );
     model->SetPixelShaderChannelModel( psModel );
