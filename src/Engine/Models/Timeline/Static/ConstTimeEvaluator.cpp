@@ -5,7 +5,7 @@ namespace bv { namespace model {
 // *******************************
 //
 ConstTimeEvaluator::ConstTimeEvaluator                      ( const std::string & name, TimeType val )
-    : TimeEvaluatorBase( name )
+    : Parent( name )
     , m_timeVal( val )
 {
 }
@@ -25,7 +25,7 @@ void                ConstTimeEvaluator::SetConstTimeValue   ( TimeType t )
 
 // *******************************
 //
-void                ConstTimeEvaluator::SetGlobalTime       ( TimeType t )
+void                ConstTimeEvaluator::SetGlobalTimeImpl   ( TimeType t )
 {
 }
 

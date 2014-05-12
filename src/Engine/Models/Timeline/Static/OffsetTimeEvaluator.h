@@ -5,8 +5,12 @@
 
 namespace bv { namespace model {
 
-class OffsetTimeEvaluator : public TimeEvaluatorBase
+class OffsetTimeEvaluator : public TimeEvaluatorBase< ITimeEvaluator >
 {
+private:
+
+    typedef TimeEvaluatorBase< ITimeEvaluator > Parent;
+
 private:
 
     TimeType        m_timeOffset;
@@ -14,13 +18,13 @@ private:
 
 public:
 
-            OffsetTimeEvaluator                 ( const std::string & name, TimeType offsetTime );
-            ~OffsetTimeEvaluator                ();
+            OffsetTimeEvaluator                     ( const std::string & name, TimeType offsetTime );
+            ~OffsetTimeEvaluator                    ();
 
-    void    SetTimeOffset                       ( TimeType t );
+    void    SetTimeOffset                           ( TimeType t );
 
-    virtual void                SetGlobalTime   ( TimeType t ) override;
-    virtual TimeType            GetLocalTime    () const override;
+    virtual void                SetGlobalTimeImpl   ( TimeType t ) override;
+    virtual TimeType            GetLocalTime        () const override;
 
 };
 

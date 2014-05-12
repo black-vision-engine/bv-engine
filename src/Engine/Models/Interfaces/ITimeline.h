@@ -4,7 +4,6 @@
 
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
 #include "Engine/Models/Plugins/Interfaces/IParamSet.h"
-#include "Engine/Interfaces/IUpdatable.h"
 
 
 namespace bv { namespace model {
@@ -12,7 +11,7 @@ namespace bv { namespace model {
 class ITimelineEvent;
 class IParameter;
 
-class ITimeline : public ITimeEvaluator, public IParamSet, public IUpdatable
+class ITimeline : public ITimeEvaluator, public IParamSet
 {
 public:
 
@@ -35,7 +34,6 @@ public:
     virtual TimelineWrapMethod      GetWrapBehaviorPost () const = 0;
 
     virtual void                    SetLocalTime        ( TimeType t ) = 0;
-    virtual TimeType                GetLocalTime        () const = 0;
 
     virtual unsigned int            NumKeyFrames        () const = 0;
 

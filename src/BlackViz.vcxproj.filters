@@ -194,12 +194,11 @@
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventNull.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
-    <ClCompile Include="Engine\Models\Timeline\Static\Timeline.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimeSegmentEvalImpl.cpp" />
     <ClCompile Include="Mathematics\Core\mathfuncs.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
-    <ClCompile Include="Engine\Models\Timeline\TimeEvaluatorBase.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\TimeEvaluatorBase.inl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -448,7 +447,6 @@
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.h" />
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />
     <ClInclude Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
-    <ClInclude Include="Engine\Models\Timeline\Static\Timeline.h" />
     <ClInclude Include="Engine\Models\Timeline\TimeSegmentEvalImpl.h" />
     <ClInclude Include="Mathematics\Core\mathfuncs.h" />
     <ClInclude Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.h" />

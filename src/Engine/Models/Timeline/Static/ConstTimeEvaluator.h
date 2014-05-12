@@ -5,21 +5,25 @@
 
 namespace bv { namespace model {
 
-class ConstTimeEvaluator : public TimeEvaluatorBase
+class ConstTimeEvaluator : public TimeEvaluatorBase< ITimeEvaluator >
 {
+private:
+
+    typedef TimeEvaluatorBase< ITimeEvaluator > Parent;
+
 private:
 
     TimeType        m_timeVal;
 
 public:
 
-            ConstTimeEvaluator                  ( const std::string & name, TimeType val );
-            ~ConstTimeEvaluator                 ();
+            ConstTimeEvaluator                      ( const std::string & name, TimeType val );
+            ~ConstTimeEvaluator                     ();
 
-    void    SetConstTimeValue                   ( TimeType t );
+    void    SetConstTimeValue                       ( TimeType t );
 
-    virtual void                SetGlobalTime   ( TimeType t ) override;
-    virtual TimeType            GetLocalTime    () const override;
+    virtual void                SetGlobalTimeImpl   ( TimeType t ) override;
+    virtual TimeType            GetLocalTime        () const override;
 
 };
 

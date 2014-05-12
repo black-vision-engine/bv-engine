@@ -2,18 +2,20 @@
 
 #include "Engine/Models/Interfaces/ITimeline.h"
 
+#include "Engine/Models/Timeline/TimeEvaluatorBase.h"
 #include "Engine/Models/Timeline/TimeSegmentEvalImpl.h"
 
 
 namespace bv { namespace model {
 
-class DefaultTimeline : public ITimeline
+class DefaultTimeline : public TimeEvaluatorBase< ITimeline >
 {
 private:
 
-    ITimeEvaluator *                m_parent;
+    typedef TimeEvaluatorBase< ITimeline > Parent;
 
-    std::string                     m_name;
+private:
+
     TimeSegmentEvalImpl             m_timeEvalImpl;
     TimeType                        m_prevTime;
 
@@ -24,22 +26,21 @@ private:
 
 public:
 
-                                                DefaultTimeline     ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod, ITimeEvaluator * parent = nullptr );
+                                                DefaultTimeline     ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
                                                 ~DefaultTimeline    ();
-
-    //ITimeEvaluator
-    virtual const std::string &                 GetName             () const override;
-    virtual TimeType                            Evaluate            ( TimeType t ) const override;
 
     //IParamSet
     virtual std::vector< IParameter * > &       GetParameters       () override;
     virtual IParameter *                        GetParameter        ( const std::string & name ) override;
 
-    //IUpdatable
-    virtual void                                Update              ( TimeType t ) override;
-
     //ITimeline
     virtual TimeType                            GetDuration         () const override;
+
+    //ITimeEvaluator
+    virtual void                                SetGlobalTimeImpl   ( TimeType t ) override;
+    virtual TimeType                            GetLocalTime        () const override;
+
+    virtual void                                SetLocalTime        ( TimeType t ) override;
 
     virtual void                                Restart             () override;
 
@@ -56,9 +57,6 @@ public:
     virtual void                                SetWrapBehavior     ( TimelineWrapMethod preMethod, TimelineWrapMethod postMethod ) override;
     virtual TimelineWrapMethod                  GetWrapBehaviorPre  () const override;
     virtual TimelineWrapMethod                  GetWrapBehaviorPost () const override;
-
-    virtual void                                SetLocalTime        ( TimeType t ) override;
-    virtual TimeType                            GetLocalTime        () const override;
 
     virtual unsigned int                        NumKeyFrames        () const override;
 

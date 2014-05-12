@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <vector>
 
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
@@ -7,7 +8,8 @@
 
 namespace bv { namespace model {
 
-class TimeEvaluatorBase : public ITimeEvaluator
+template< typename ITimeEvaluatorIface >
+class TimeEvaluatorBase : public ITimeEvaluatorIface
 {
 protected:
 
@@ -30,7 +32,15 @@ public:
 
     virtual const std::string &                 GetName             () const override;
 
+    virtual void                                SetGlobalTime       ( TimeType t ) override;
+
+protected:
+
+    virtual void                                SetGlobalTimeImpl   ( TimeType t ) = 0;
+
 };
 
 } //model
 } //bv
+
+#include "TimeEvaluatorBase.inl"

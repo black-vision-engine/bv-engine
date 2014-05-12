@@ -321,8 +321,7 @@
     <ClCompile Include="Engine\Models\Timeline\GlobalTimeline.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
-    <ClCompile Include="Engine\Models\Timeline\Static\Timeline.cpp" />
-    <ClCompile Include="Engine\Models\Timeline\TimeEvaluatorBase.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\TimeEvaluatorBase.inl" />
     <ClCompile Include="Engine\Models\Timeline\TimelineBase.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimelineManager.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimelineState.cpp" />
@@ -565,7 +564,6 @@
     <ClInclude Include="Engine\Models\Timeline\GlobalTimeline.h" />
     <ClInclude Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.h" />
     <ClInclude Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.h" />
-    <ClInclude Include="Engine\Models\Timeline\Static\Timeline.h" />
     <ClInclude Include="Engine\Models\Timeline\TimeEvaluatorBase.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineBase.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineManager.h" />

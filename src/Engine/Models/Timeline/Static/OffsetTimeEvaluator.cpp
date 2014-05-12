@@ -4,8 +4,8 @@ namespace bv { namespace model {
 
 // *******************************
 //
-OffsetTimeEvaluator::OffsetTimeEvaluator                ( const std::string & name, TimeType offsetTime )
-    : TimeEvaluatorBase( name )
+OffsetTimeEvaluator::OffsetTimeEvaluator                    ( const std::string & name, TimeType offsetTime )
+    : Parent( name )
     , m_globalTime( 0.f )
     , m_timeOffset( offsetTime )
 {
@@ -13,27 +13,27 @@ OffsetTimeEvaluator::OffsetTimeEvaluator                ( const std::string & na
 
 // *******************************
 //
-OffsetTimeEvaluator::~OffsetTimeEvaluator               ()
+OffsetTimeEvaluator::~OffsetTimeEvaluator                   ()
 {
 }
 
 // *******************************
 //
-void                OffsetTimeEvaluator::SetTimeOffset  ( TimeType t )
+void                OffsetTimeEvaluator::SetTimeOffset      ( TimeType t )
 {
     m_timeOffset = t;
 }
 
 // *******************************
 //
-void                OffsetTimeEvaluator::SetGlobalTime  ( TimeType t )
+void                OffsetTimeEvaluator::SetGlobalTimeImpl  ( TimeType t )
 {
     m_globalTime = t;
 }
 
 // *******************************
 //
-TimeType            OffsetTimeEvaluator::GetLocalTime   () const
+TimeType            OffsetTimeEvaluator::GetLocalTime       () const
 {
     return m_globalTime + m_timeOffset;
 }
