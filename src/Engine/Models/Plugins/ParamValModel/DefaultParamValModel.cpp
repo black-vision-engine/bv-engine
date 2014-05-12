@@ -86,11 +86,11 @@ const bv::IValue *                          DefaultParamValModel::GetValue      
 
 // *******************************
 //
-void                                        DefaultParamValModel::Update            ( TimeType t )
+void                                        DefaultParamValModel::Update            ()
 {
     for( IParamValEvaluator * evaluator : m_evaluators )
     {
-        evaluator->Evaluate( t );
+        evaluator->Evaluate();
     }
 }
 
