@@ -144,6 +144,7 @@ void                                DefaultTimeline::Reverse            ()
 void                                DefaultTimeline::Play               ()
 {
     m_timeEvalImpl.Start();
+    ActivateLastEvent();
 }
 
 // *********************************
@@ -167,6 +168,7 @@ void                                DefaultTimeline::SetTimeAndPlay     ( TimeTy
 {
     m_timeEvalImpl.ResetLocalTimeTo( t );
     m_timeEvalImpl.Start();
+    ActivateLastEvent();
 }
 
 // *********************************
@@ -391,11 +393,6 @@ void                                DefaultTimeline::TriggerEvent       ( ITimel
 {
     if( evt->IsActive() )
     {
-        if( m_lastTriggeredEvent )
-        {
-            m_lastTriggeredEvent->SetActive( true );
-        }
-
         m_lastTriggeredEvent = evt;
 
         switch( evt->GetType() )
@@ -450,6 +447,16 @@ void                                DefaultTimeline::TriggerEvent       ( ITimel
             default:
                 assert( false );
         }
+    }
+}
+
+// *********************************
+//
+void                                DefaultTimeline::ActivateLastEvent   ()
+{
+    if( m_lastTriggeredEvent && !m_lastTriggeredEvent->IsActive() )
+    {
+        m_lastTriggeredEvent->SetActive( true );
     }
 }
 

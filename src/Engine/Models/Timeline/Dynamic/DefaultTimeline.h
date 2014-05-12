@@ -83,6 +83,7 @@ private:
     bool                                        CanBeInserted       ( const ITimelineEvent * evt ) const;
 
     void                                        TriggerEvent        ( ITimelineEvent * evt, TimeType globalTime );
+    void                                        ActivateLastEvent   ();
 
 };
 

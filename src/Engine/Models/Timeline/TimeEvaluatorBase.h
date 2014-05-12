@@ -19,24 +19,24 @@ protected:
 
 public:
 
-                                                TimeEvaluatorBase   ( const std::string & name );
-    virtual                                     ~TimeEvaluatorBase  ();
+                                                        TimeEvaluatorBase   ( const std::string & name );
+    virtual                                             ~TimeEvaluatorBase  ();
 
-    void                                        AddChild            ( ITimeEvaluatorPtr child );
+    virtual void                                        AddChild            ( ITimeEvaluatorPtr child ) override;
 
-    ITimeEvaluatorPtr                           GetChild            ( const std::string & name );
-    const std::vector< ITimeEvaluatorPtr > &    GetChildren         ();
+    virtual ITimeEvaluatorPtr                           GetChild            ( const std::string & name ) override;
+    virtual const std::vector< ITimeEvaluatorPtr > &    GetChildren         () override;
 
-    bool                                        RemoveChild         ( ITimeEvaluatorPtr child );
-    bool                                        RemoveChild         ( const std::string & name );
+    virtual bool                                        RemoveChild         ( ITimeEvaluatorPtr child ) override;
+    virtual bool                                        RemoveChild         ( const std::string & name ) override;
 
-    virtual const std::string &                 GetName             () const override;
+    virtual const std::string &                         GetName             () const override;
 
-    virtual void                                SetGlobalTime       ( TimeType t ) override;
+    virtual void                                        SetGlobalTime       ( TimeType t ) override;
 
 protected:
 
-    virtual void                                SetGlobalTimeImpl   ( TimeType t ) = 0;
+    virtual void                                        SetGlobalTimeImpl   ( TimeType t ) = 0;
 
 };
 

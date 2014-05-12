@@ -43,7 +43,7 @@ TestAI::~TestAI     ()
 //
 void    TestAI::EvalAt  ( TimeType t )
 {
-    m_timeline->Update( t );
+    m_timeline->SetGlobalTime( t );
 
     printf( "\rGT: %0.3f LC: %0.3f ", t, m_timeline->GetLocalTime() );
 

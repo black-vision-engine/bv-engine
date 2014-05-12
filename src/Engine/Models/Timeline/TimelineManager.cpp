@@ -1,8 +1,9 @@
 #include "TimelineManager.h"
 
+#include <cassert>
+
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
-#include "Engine/Models/Timeline/Static/Timeline.h"
 
 
 namespace bv { namespace model {
@@ -96,46 +97,39 @@ TimelineManager::TimelineManager         ()
 //
 TimelineManager::~TimelineManager        ()
 {
-    for( auto elt : m_registeredParams )
-    {
-        delete elt.first;
-        delete elt.second;
-    }
 }
 
 // *********************************
 //
-auto                    TimelineManager::GetTimelines            () const -> TEvaluatorVec
+void                    TimelineManager::RegisterRootTimeline    ( ITimeEvaluatorPtr root )
 {
-    TEvaluatorVec retVec;
-
-    for( auto elt : m_timelinesMap )
-    {
-        retVec.push_back( elt.second );
-    }
-
-    return retVec;
+    //FIXME: implement
 }
 
 // *********************************
 //
-const ITimeEvaluator *  TimelineManager::GetTimeline             ( const std::string & name ) const
+ITimeEvaluatorPtr       TimelineManager::GetRootTimeline         ()
 {
-    auto it = m_timelinesMap.find( name );
-
-    if( it != m_timelinesMap.end() )
-    {
-        return it->second;
-    }
-
+    //FIXME: implement
     return nullptr;
 }
 
 // *********************************
 //
-IParamSet *             TimelineManager::GetRegisteredParameters ( const ITimeEvaluator * timeline )
+ITimeEvaluatorPtr       TimelineManager::GetTimeline             ( const std::string & name )
 {
-    auto it = m_registeredParams.find( timeline );
+    //FIXME: implement
+    return nullptr;
+}
+
+// *********************************
+//
+IParamSet *             TimelineManager::GetRegisteredParameters ( ITimeEvaluatorPtr timeline )
+{
+    //FIXME: implement
+    return nullptr;
+
+    auto it = m_registeredParams.find( timeline.get() );
 
     if( it != m_registeredParams.end() )
     {
@@ -152,41 +146,28 @@ IParamSet *             TimelineManager::GetRegisteredParameters ( const std::st
     return GetRegisteredParameters( GetTimeline( name ) );
 }
 
+
 // *********************************
 //
-bool                    TimelineManager::RegisterDefaultTimeline ( ITimeEvaluator * parent, TimeType startTime, TimeType endTime, const std::string & name )
+bool                    TimelineManager::RegisterOffsetTimeline  ( const std::string & name, TimeType offsetTime, std::string & parentName )
 {
-    if( GetTimeline( name ) == nullptr )
-    {
-        ITimeEvaluator * timeline = new Timeline( parent, startTime, endTime, name );
-
-        return RegisterTimeline( timeline );
-    }
-
+    //FIXME: implement
     return false;
 }
 
 // *********************************
 //
-bool                    TimelineManager::RegisterDefaultTimeline ( TimeType startTime, TimeType endTime, const std::string & name )
+bool                    TimelineManager::RegisterConstTimeline   ( const std::string & name, TimeType constTime, std::string & parentName )
 {
-    return RegisterDefaultTimeline( nullptr, startTime, endTime, name );
+    //FIXME: implement
+    return false;
 }
 
 // *********************************
 //
-bool                    TimelineManager::RegisterTimeline        ( const ITimeEvaluator * timeline )
+bool                    TimelineManager::RegisterTimeline        ( ITimeEvaluatorPtr timeline )
 {
-    if( GetTimeline( timeline->GetName() ) == nullptr )
-    {
-        assert( m_registeredParams.find( timeline ) == m_registeredParams.end() );
-        
-        m_timelinesMap[ timeline->GetName() ] = timeline;
-        m_registeredParams[ timeline ] = new SimpleIParamSet();
-
-        return true;
-    }
-
+    //FIXME: implement
     return false;
 }
 
@@ -194,6 +175,9 @@ bool                    TimelineManager::RegisterTimeline        ( const ITimeEv
 //
 bool                    TimelineManager::AddParamToTimeline      ( IParameter * param, const std::string & timelineName )
 {
+    //FIXME: implement
+    return false;
+
     auto timeline = GetTimeline( timelineName );
 
     if( timeline != nullptr )
@@ -206,11 +190,13 @@ bool                    TimelineManager::AddParamToTimeline      ( IParameter * 
 
 // *********************************
 //
-bool                    TimelineManager::AddParamToTimeline      ( IParameter * param, const ITimeEvaluator * timeline )
+bool                    TimelineManager::AddParamToTimeline      ( IParameter * param, ITimeEvaluatorPtr timeline )
 {
+    //FIXME: implement
+    return false;
+
     auto tl = GetTimeline( timeline-> GetName() );
 
-    assert( tl == nullptr || tl == timeline );
 
     if( tl != nullptr )
     {
@@ -231,6 +217,9 @@ bool                    TimelineManager::AddParamToTimeline      ( IParameter * 
 //
 unsigned int            TimelineManager::RemoveFromTimeline      ( const std::string & paramName, const std::string & timelineName )
 {
+    //FIXME: implement
+    return 0;
+
     auto paramSet = GetSimpleIParamSet( timelineName );
 
     if( paramSet )
@@ -245,6 +234,9 @@ unsigned int            TimelineManager::RemoveFromTimeline      ( const std::st
 //
 bool                    TimelineManager::RemoveFromTimeline      ( IParameter * param, const std::string & timelineName )
 {
+    //FIXME: implement
+    return false;
+
     auto paramSet = GetSimpleIParamSet( timelineName );
 
     if( paramSet )
@@ -259,13 +251,17 @@ bool                    TimelineManager::RemoveFromTimeline      ( IParameter * 
 //
 SimpleIParamSet *       TimelineManager::GetSimpleIParamSet      ( const std::string & timelineName )
 {
+    //FIXME: implement
+    return nullptr;
+
     auto tl = GetTimeline( timelineName );
 
     if( tl != nullptr )
     {
-        assert( m_registeredParams.find( tl ) != m_registeredParams.end() );
+        //assert( m_registeredParams.find( tl ) != m_registeredParams.end() );
 
-        return m_registeredParams[ tl ];
+        //return m_registeredParams[ tl ];
+        return nullptr;
     }
 
     return nullptr;
@@ -273,9 +269,12 @@ SimpleIParamSet *       TimelineManager::GetSimpleIParamSet      ( const std::st
 
 // *********************************
 //
-bool                    TimelineManager::AddParamToTimelineImpl ( IParameter * param, const ITimeEvaluator * timeline )
+bool                    TimelineManager::AddParamToTimelineImpl ( IParameter * param, ITimeEvaluatorPtr timeline )
 {
-    auto paramSet = m_registeredParams[ timeline ];
+    //FIXME: implement
+    return false;
+
+    auto paramSet = m_registeredParams[ timeline.get() ];
 
     assert( paramSet != nullptr );
 
@@ -283,7 +282,7 @@ bool                    TimelineManager::AddParamToTimelineImpl ( IParameter * p
     
     if ( bAdded )
     {
-        SetParamTimeline( param, timeline );
+        //SetParamTimeline( param, timeline );
     }
 
     return bAdded;

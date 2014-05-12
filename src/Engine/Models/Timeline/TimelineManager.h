@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+#include "Engine/Models/Interfaces/ITimeEvaluator.h"
+
 #include "Engine/Models/Plugins/Interfaces/IParamSet.h"
 #include "System/BasicTypes.h"
 
@@ -32,33 +34,32 @@ public:
 
 class TimelineManager
 {
-public:
-
-    typedef std::vector< const ITimeEvaluator * >               TEvaluatorVec;
-
 private:
 
-    std::hash_map< std::string, const ITimeEvaluator * >        m_timelinesMap;
-    std::hash_map< const ITimeEvaluator *, SimpleIParamSet * >  m_registeredParams;
+    std::hash_map< std::string, ITimeEvaluatorPtr >         m_timelinesMap;
+    std::hash_map< ITimeEvaluator *, SimpleIParamSet * >   m_registeredParams;
 
+    ITimeEvaluatorPtr                                       m_rootTimeline;
 public:
 
                             TimelineManager         ();
                             ~TimelineManager        ();
 
+    void                    RegisterRootTimeline    ( ITimeEvaluatorPtr root );
 
-    TEvaluatorVec           GetTimelines            () const;
+    ITimeEvaluatorPtr       GetRootTimeline         ();
 
-    const ITimeEvaluator *  GetTimeline             ( const std::string & name ) const;
-    IParamSet *             GetRegisteredParameters ( const ITimeEvaluator * timeline );
+    ITimeEvaluatorPtr       GetTimeline             ( const std::string & name );
+    IParamSet *             GetRegisteredParameters ( ITimeEvaluatorPtr timeline );
     IParamSet *             GetRegisteredParameters ( const std::string & name );
 
-    bool                    RegisterDefaultTimeline ( ITimeEvaluator * parent, TimeType startTime, TimeType endTime, const std::string & name );
-    bool                    RegisterDefaultTimeline ( TimeType startTime, TimeType endTime, const std::string & name );
-    bool                    RegisterTimeline        ( const ITimeEvaluator * timeline );
+    bool                    RegisterOffsetTimeline  ( const std::string & name, TimeType offsetTime, std::string & parentName );
+    bool                    RegisterConstTimeline   ( const std::string & name, TimeType constTime, std::string & parentName );
+
+    bool                    RegisterTimeline        ( ITimeEvaluatorPtr timeline );
 
     bool                    AddParamToTimeline      ( IParameter * param, const std::string & timelineName );
-    bool                    AddParamToTimeline      ( IParameter * param, const ITimeEvaluator * timeline );
+    bool                    AddParamToTimeline      ( IParameter * param, ITimeEvaluatorPtr timeline );
 
     unsigned int            RemoveFromTimeline      ( const std::string & paramName, const std::string & timelineName );
     bool                    RemoveFromTimeline      ( IParameter * param, const std::string & timelineName );
@@ -66,7 +67,10 @@ public:
 private:
 
     SimpleIParamSet *       GetSimpleIParamSet      ( const std::string & timelineName );
-    bool                    AddParamToTimelineImpl  ( IParameter * param, const ITimeEvaluator * timeline );
+    bool                    AddParamToTimelineImpl  ( IParameter * param, ITimeEvaluatorPtr timeline );
+
+    bool                    RegisterOffsetTimeline  ( const std::string & name, TimeType offsetTime, ITimeEvaluatorPtr parent );
+    bool                    RegisterConstTimeline   ( const std::string & name, TimeType constTime, ITimeEvaluatorPtr parent );
 
 };
 
