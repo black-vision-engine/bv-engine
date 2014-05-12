@@ -40,9 +40,9 @@ TransformChannel *              ChannelsFactory::CreateTransformChannel         
 
 // *******************************
 //
-IGeometryShaderChannel *        ChannelsFactory::CreateGeometryShaderExtrude         ( float scale )
+IGeometryShaderChannel *        ChannelsFactory::CreateGeometryShaderExtrude         ( float scale, ITimeEvaluatorPtr timeEvaluator )
 {
-    auto extrudeScale = ParametersFactory::CreateParameter( "scale", InterpolatorsHelper::CreateConstValue( scale ) );
+    auto extrudeScale = ParametersFactory::CreateParameter( "scale", InterpolatorsHelper::CreateConstValue( scale ), timeEvaluator );
 	return new ExtrudeGeometryShaderChannel("../dep/media/shaders/extrude.geom", extrudeScale);
 }
 

@@ -27,5 +27,7 @@ public:
 
 };
 
+typedef std::shared_ptr< ConstTimeEvaluator > ConstTimeEvaluatorPtr;
+
 } //model
 } //bv

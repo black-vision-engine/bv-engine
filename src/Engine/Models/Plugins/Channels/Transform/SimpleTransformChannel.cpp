@@ -25,7 +25,7 @@ void                                    SimpleTransformChannel::Update( TimeType
 
     for( unsigned int i = 0; i < m_transformations.size(); ++i )
     {
-        m_transformations[ i ]->SetMatrix( m_transformParams.Evaluate( i, t ) );
+        m_transformations[ i ]->SetMatrix( m_transformParams.Evaluate( i ) );
     }
 }
 

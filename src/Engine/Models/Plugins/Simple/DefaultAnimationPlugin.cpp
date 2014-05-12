@@ -241,7 +241,7 @@ const IVertexShaderChannel *        DefaultAnimationPlugin::GetVertexShaderChann
 // 
 void                                DefaultAnimationPlugin::Update                      ( TimeType t )
 {
-    m_paramValModel->Update( t );
+    m_paramValModel->Update();
 
     auto attachmentMode = GetAttachementMode();
 

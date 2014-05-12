@@ -171,7 +171,7 @@ bool            BasicNode::AddPlugin               ( IPluginPtr plugin )
 
 // ********************************
 //
-bool            BasicNode::AddPlugin               ( const std::string & uid )
+bool            BasicNode::AddPlugin               ( const std::string & uid, ITimeEvaluatorPtr timeEvaluator )
 {
     NonNullPluginsListGuard ();
 
@@ -182,14 +182,14 @@ bool            BasicNode::AddPlugin               ( const std::string & uid )
         return false;
     }
 
-    m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, prev ) );
+    m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, prev, timeEvaluator ) );
 
     return true;
 }
 
 // ********************************
 //
-bool            BasicNode::AddPlugin               ( const std::string & uid, const std::string & name )
+bool            BasicNode::AddPlugin               ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
 {
     NonNullPluginsListGuard ();
 
@@ -200,18 +200,18 @@ bool            BasicNode::AddPlugin               ( const std::string & uid, co
         return false;
     }
 
-    m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, name, prev ) );
+    m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, name, prev, timeEvaluator ) );
 
     return true;
 }
 
 // ********************************
 //
-bool           BasicNode::AddPlugins              ( const std::vector< std::string > & uids )
+bool           BasicNode::AddPlugins              ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator )
 {
     for( auto uid : uids )
     {
-        if( !AddPlugin( uid ) )
+        if( !AddPlugin( uid, timeEvaluator ) )
         {
             return false;
         }
@@ -222,7 +222,7 @@ bool           BasicNode::AddPlugins              ( const std::vector< std::stri
 
 // ********************************
 //
-bool           BasicNode::AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names )
+bool           BasicNode::AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator )
 {
     if( uids.size() != names.size() )
     {
@@ -231,7 +231,7 @@ bool           BasicNode::AddPlugins              ( const std::vector< std::stri
 
     for( unsigned int i = 0; i < names.size(); ++i )
     {
-        if( !AddPlugin( uids[ i ], names[ i ] ) )
+        if( !AddPlugin( uids[ i ], names[ i ], timeEvaluator ) )
         {
             return false;
         }

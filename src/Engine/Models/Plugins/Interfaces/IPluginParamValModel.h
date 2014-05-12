@@ -2,15 +2,16 @@
 
 #include <memory>
 
-#include "Engine/Interfaces/IUpdatable.h"
 #include "Engine/Models/Plugins/Interfaces/IParamValModel.h"
 
 
 namespace bv { namespace model {
 
-class IPluginParamValModel : public IUpdatable
+class IPluginParamValModel
 {
 public:
+
+    virtual     void                Update                          () = 0;
 
     virtual     IParamValModel *    GetPluginModel                  () = 0;
 

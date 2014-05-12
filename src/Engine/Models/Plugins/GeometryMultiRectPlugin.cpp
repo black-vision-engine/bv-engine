@@ -45,17 +45,17 @@ void                        GeometryMultiRectPlugin::Print               ( std::
 
 // *************************************
 //
-void                        GeometryMultiRectPlugin::AddRectConnectedComponnent  ( const ParamFloat& w, const ParamFloat& h, const ParamFloat& tx, const ParamFloat& ty, const ParamFloat& tz )
+void                        GeometryMultiRectPlugin::AddRectConnectedComponnent  ( const ParamFloat & w, const ParamFloat & h, const ParamFloat & tx, const ParamFloat & ty, const ParamFloat & tz )
 {
-    AddRectConnectedComponnent( w.Evaluate( 0.f ), h.Evaluate( 0.f ), tx.Evaluate( 0.f ), ty.Evaluate( 0.f ), tz.Evaluate( 0.f ) );
+    AddRectConnectedComponnent( w.Evaluate(), h.Evaluate(), tx.Evaluate(), ty.Evaluate(), tz.Evaluate() );
 }
 
 void                        GeometryMultiRectPlugin::AddRectConnectedComponnent  ( float w, float h, float tx, float ty, float tz )
 {
-    model::RectComponent*   rect    = model::RectComponent::Create( w, h, tx, ty, tz );
+    model::RectComponent *  rect    = model::RectComponent::Create( w, h, tx, ty, tz );
     if( !m_vaChannel )
     {
-        m_vaChannel                   = ChannelsFactory::CreateVertexAttributesChannel( rect, true );
+        m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( rect, true );
     }
     else
     {

@@ -49,7 +49,7 @@ namespace bv {
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode( model::TimelineManager * timelineManager )
+model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     //Plugin list
     std::vector< std::string > uids;
@@ -61,7 +61,7 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMana
     //Create a model
     model::BasicNode * root = new model::BasicNode( "Root" );
 
-    bool success = root->AddPlugins( uids );
+    bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
 
     //Set some values to make it look like a scene
@@ -76,16 +76,17 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMana
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::TimelineManager * timelineManager )
+model::BasicNode *  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins0, GSimplePlugins0 + 3 );
 
     auto node = new model::BasicNode( "Root" );
-    node->AddPlugins( GSimplePluginsUIDS );
+    node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
 
     SetDefaultColorChangeAnim( node->GetPlugin( "solid color" ) );
 
-    timelineManager->RegisterDefaultTimeline( nullptr, 15.0f, 45.0f, "timeline0" );
+    //FIXME: do poprawy
+    //timelineManager->RegisterDefaultTimeline( nullptr, 15.0f, 45.0f, "timeline0" );
     timelineManager->AddParamToTimeline( node->GetPlugin( "solid color" )->GetParameter( "color" ), "timeline0" );
 
     SetDefaultTransformAnim( node->GetPlugin( "transform" ) );
@@ -95,13 +96,13 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Time
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineManager * timelineManager )
+model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 3 );
 
     auto node = new model::BasicNode( "Root" );
 
-    auto success = node->AddPlugins( GSimplePluginsUIDS );
+    auto success = node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
     assert( success );
 
     SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
@@ -114,13 +115,13 @@ model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineM
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateTextureAnimationRectNode( model::TimelineManager * timelineManager )
+model::BasicNode *  SimpleNodesFactory::CreateTextureAnimationRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins2, GSimplePlugins2 + 3 );
 
     auto node = new model::BasicNode( "Root" );
 
-    auto success = node->AddPlugins( GSimplePluginsUIDS );
+    auto success = node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
     assert( success );
 
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 0.f ), 0.f );

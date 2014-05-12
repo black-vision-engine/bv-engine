@@ -27,7 +27,7 @@ public:
                                     DefaultPluginParamValModel      ();
                                     ~DefaultPluginParamValModel     ();
     
-    virtual void                    Update                          ( TimeType t ) override;
+    virtual void                    Update                          () override;
 
     virtual     IParamValModel *    GetPluginModel                  () override;
 

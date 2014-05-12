@@ -87,7 +87,7 @@ const ITransformChannel *           DefaultTransformPlugin::GetTransformChannel 
 //
 void                                DefaultTransformPlugin::Update                      ( TimeType t )
 {
-    m_paramValModel->Update( t );
+    m_paramValModel->Update();
     m_transformChannel->PostUpdate();
 }
 

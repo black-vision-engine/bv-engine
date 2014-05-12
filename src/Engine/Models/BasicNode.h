@@ -75,10 +75,10 @@ public:
     //Utility API - plugins can be added on-the-fly by user using an editor
     bool                                    AddPlugin               ( IPlugin * plugin );
     bool                                    AddPlugin               ( IPluginPtr plugin );
-    bool                                    AddPlugin               ( const std::string & uid );
-    bool                                    AddPlugin               ( const std::string & uid, const std::string & name );
-    bool                                    AddPlugins              ( const std::vector< std::string > & uids );
-    bool                                    AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names );
+    bool                                    AddPlugin               ( const std::string & uid, ITimeEvaluatorPtr timeEvaluator );
+    bool                                    AddPlugin               ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
+    bool                                    AddPlugins              ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator );
+    bool                                    AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator );
 
     virtual void                            Print                   ( std::ostream & out, int tabs = 0 ) const;
     virtual void                            Update                  ( TimeType t );

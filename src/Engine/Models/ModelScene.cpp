@@ -9,21 +9,22 @@ namespace bv { namespace model {
 
 // *******************************
 //
-ModelScene*     ModelScene::Create( BasicNode * node, Camera * cam, const std::string & name )
+ModelScene *    ModelScene::Create( BasicNode * node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
 {
-    return new ModelScene( node, cam, name );
+    return new ModelScene( node, cam, name, timeEvaluator );
 }
 
 // *******************************
 //
-ModelScene::ModelScene( BasicNode * node, Camera * cam, const std::string & name )
+ModelScene::ModelScene( BasicNode * node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
     : m_pCamera( cam )
     , m_pSceneRoot( node )
-    , m_cameraPosition( "camera_position", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 1.0f ) ) )
-    , m_cameraDirection( "camera_direction", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 0.f ) ) )
-    , m_cameraUp( "camera_up", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 1.f, 0.f ) ) )
+    , m_cameraPosition( "camera_position", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 1.0f ) ), timeEvaluator )
+    , m_cameraDirection( "camera_direction", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 0.f ) ), timeEvaluator )
+    , m_cameraUp( "camera_up", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 1.f, 0.f ) ), timeEvaluator )
     , m_name( name )
-{}
+{
+}
 
 // *******************************
 //

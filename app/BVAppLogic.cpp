@@ -78,7 +78,7 @@ BVAppLogic::BVAppLogic              ()
     , m_pluginsManager( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
-
+    , m_globalTimeline( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) )
 {
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
@@ -115,13 +115,13 @@ void BVAppLogic::Initialize         ()
 //
 void BVAppLogic::LoadScene          ( void )
 {
-    model::BasicNode * root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager );
+    model::BasicNode * root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
     assert( root );
 
     m_mockSceneEng  = root->BuildScene();
     assert( m_mockSceneEng );
 
-    m_modelScene    = model::ModelScene::Create( root, new Camera(), "BasicScene" );
+    m_modelScene    = model::ModelScene::Create( root, new Camera(), "BasicScene", m_globalTimeline );
     assert( m_modelScene );    
 }
 

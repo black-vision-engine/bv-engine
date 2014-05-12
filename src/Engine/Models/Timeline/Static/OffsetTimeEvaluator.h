@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Engine/Models/Timeline/TimeEvaluatorBase.h"
 
 
@@ -27,6 +29,8 @@ public:
     virtual TimeType            GetLocalTime        () const override;
 
 };
+
+typedef std::shared_ptr< OffsetTimeEvaluator > OffsetTimeEvaluatorPtr;
 
 } //model
 } //bv

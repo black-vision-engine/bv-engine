@@ -236,7 +236,7 @@ const IVertexShaderChannel *        DefaultTexturePlugin::GetVertexShaderChannel
 // 
 void                                DefaultTexturePlugin::Update                      ( TimeType t )
 {
-    m_paramValModel->Update( t );
+    m_paramValModel->Update();
 
     auto attachmentMode = GetAttachementMode();
 

@@ -17,7 +17,7 @@ namespace {
 
 // *****************************
 //
-model::BasicNode *  DefaultTestNewAPI   ( const model::PluginsManager * pluginsManager )
+model::BasicNode *  DefaultTestNewAPI   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     std::vector< std::string > uids;
 
@@ -25,7 +25,7 @@ model::BasicNode *  DefaultTestNewAPI   ( const model::PluginsManager * pluginsM
     uids.push_back( "DEFAULT_RECTANGLE" );
     uids.push_back( "DEFAULT_COLOR" );
 
-    model::IPluginListFinalizedPtr pluginsList( pluginsManager->CreatePlugins( uids ) );
+    model::IPluginListFinalizedPtr pluginsList( pluginsManager->CreatePlugins( uids, timeEvaluator ) );
 
     model::BasicNode * root = new model::BasicNode( "Root" );
 
@@ -35,15 +35,15 @@ model::BasicNode *  DefaultTestNewAPI   ( const model::PluginsManager * pluginsM
 
 // *****************************
 //
-model::BasicNode *  DefaultTestNodeNewNodeImpl  ( const model::PluginsManager * pluginsManager )
+model::BasicNode *  DefaultTestNodeNewNodeImpl  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     model::BasicNode * root = new model::BasicNode( "Root", pluginsManager );
 
     bool success = true;
 
-    success &= root->AddPlugin( "DEFAULT_TRANSFORM", "transform" );  //success &= root->AddPlugin( "DEFAULT_TRANSFORM" ); //uses the default plugin name
-    success &= root->AddPlugin( "DEFAULT_RECTANGLE", "rectangle" );  //success &= root->AddPlugin( "DEFAULT_RECTANGLE" ); //uses the default plugin name
-    success &= root->AddPlugin( "DEFAULT_COLOR", "solid color" );    //success &= root->AddPlugin( "DEFAULT_COLOR" );     //uses the default plugin name
+    success &= root->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEvaluator );  //success &= root->AddPlugin( "DEFAULT_TRANSFORM" ); //uses the default plugin name
+    success &= root->AddPlugin( "DEFAULT_RECTANGLE", "rectangle", timeEvaluator );  //success &= root->AddPlugin( "DEFAULT_RECTANGLE" ); //uses the default plugin name
+    success &= root->AddPlugin( "DEFAULT_COLOR", "solid color", timeEvaluator );    //success &= root->AddPlugin( "DEFAULT_COLOR" );     //uses the default plugin name
 
     assert( success );
 
@@ -52,26 +52,26 @@ model::BasicNode *  DefaultTestNodeNewNodeImpl  ( const model::PluginsManager * 
 
 // *****************************
 //
-model::BasicNode *  DefaultTestWithValidation   ( const model::PluginsManager * pluginsManager )
+model::BasicNode *  DefaultTestWithValidation   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     using namespace model;
 
     //NEW API
-    IPluginPtr firstPlugin  = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_TRANSFORM", "transform0", nullptr ) );
+    IPluginPtr firstPlugin  = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_TRANSFORM", "transform0", nullptr, timeEvaluator ) );
 
     if( !pluginsManager->CanBeAttachedTo( "DEFAULT_RECTANGLE", firstPlugin.get() ) )
     {
         return nullptr;
     }
 
-    IPluginPtr secondPlugin = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_RECTANGLE", "rect0", firstPlugin.get() ) );
+    IPluginPtr secondPlugin = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_RECTANGLE", "rect0", firstPlugin.get(), timeEvaluator ) );
 
     if( !pluginsManager->CanBeAttachedTo( "DEFAULT_COLOR", secondPlugin.get() ) )
     {
         return nullptr;
     }
 
-    IPluginPtr thirdPlugin  = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin.get() ) );
+    IPluginPtr thirdPlugin  = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin.get(), timeEvaluator ) );
 
     BasicNode * root = new BasicNode( "Root" );
 
@@ -84,14 +84,14 @@ model::BasicNode *  DefaultTestWithValidation   ( const model::PluginsManager * 
 
 // *****************************
 //
-model::BasicNode *  DefaultTestNoValidation     ( const model::PluginsManager * pluginsManager )
+model::BasicNode *  DefaultTestNoValidation     ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     using namespace model;
 
     //NEW API
-    auto firstPlugin  = pluginsManager->CreatePlugin( "DEFAULT_TRANSFORM", "transform0", nullptr );
-    auto secondPlugin = pluginsManager->CreatePlugin( "DEFAULT_RECTANGLE", "rect0", firstPlugin );
-    auto thirdPlugin  = pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin );
+    auto firstPlugin  = pluginsManager->CreatePlugin( "DEFAULT_TRANSFORM", "transform0", nullptr, timeEvaluator );
+    auto secondPlugin = pluginsManager->CreatePlugin( "DEFAULT_RECTANGLE", "rect0", firstPlugin, timeEvaluator );
+    auto thirdPlugin  = pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin, timeEvaluator );
 
     BasicNode * root = new BasicNode( "Root" );
 
@@ -199,9 +199,9 @@ void  QueryPluginsNodesGeneric      ( model::BasicNode * node )
 
 // *****************************
 //
-void  QueryPropertiesDefaultScene   ( const model::PluginsManager * pluginsManager )
+void  QueryPropertiesDefaultScene   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNode *  node = DefaultTestNodeNewNodeImpl( pluginsManager );
+    model::BasicNode *  node = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
 
     const model::IParameter * transform_p   = node->GetPlugin( "transform" )->GetPluginParamValModel()->GetTransformChannelModel()->GetParameter( "simple_transform" );
     const IValue * transform_v              = node->GetPlugin( "transform" )->GetPluginParamValModel()->GetTransformChannelModel()->GetValue( "simple_transform" );
@@ -218,9 +218,9 @@ void  QueryPropertiesDefaultScene   ( const model::PluginsManager * pluginsManag
 
 // *****************************
 //
-void  QueryPropertiesDefaultSceneConvenienceAPI ( const model::PluginsManager * pluginsManager )
+void  QueryPropertiesDefaultSceneConvenienceAPI ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNode *  node = DefaultTestNodeNewNodeImpl( pluginsManager );
+    model::BasicNode *  node = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
 
     model::IParameter * transform_p = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
     const IValue * transform_v      = node->GetPlugin( "transform" )->GetValue( "simple_transform" );
@@ -235,11 +235,11 @@ void  QueryPropertiesDefaultSceneConvenienceAPI ( const model::PluginsManager * 
 
 // *****************************
 //
-void  QueryPropertiesDefaultSceneConvenienceAPIParameterSetters ( const model::PluginsManager * pluginsManager )
+void  QueryPropertiesDefaultSceneConvenienceAPIParameterSetters ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     using namespace model;
 
-    BasicNode *  node = DefaultTestNodeNewNodeImpl( pluginsManager );
+    BasicNode *  node = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
 
     IParameter * transform_p = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
@@ -265,9 +265,9 @@ void  QueryPropertiesDefaultSceneConvenienceAPIParameterSetters ( const model::P
 
 // *****************************
 //
-void  QueryPropertiesDefaultSceneConvenienceAPIParameterSettersNoErrorChecking ( const model::PluginsManager * pluginsManager )
+void  QueryPropertiesDefaultSceneConvenienceAPIParameterSettersNoErrorChecking ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNode *  n = DefaultTestNodeNewNodeImpl( pluginsManager );
+    model::BasicNode *  n = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
 
     SetParameterRotation    ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 90.f );
     SetParameterScale       ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, 2.f, 1.f ) );
@@ -333,11 +333,11 @@ public:
 
 // *****************************
 //
-model::BasicNode *     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )
+model::BasicNode *     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
 //    return SimpleNodesFactory::CreateGreenRectNode();
     //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager );
-    return SimpleNodesFactory::CreateTexturedRectNode( timelineManager );
+    return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager );
 }
 

@@ -8,6 +8,7 @@
 
 #include "Engine/Models/Plugins/Interfaces/IParamSet.h"
 #include "System/BasicTypes.h"
+#include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
 
 
 namespace bv { namespace model {

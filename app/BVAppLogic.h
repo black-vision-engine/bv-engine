@@ -38,6 +38,7 @@ private:
 
     model::TimelineManager *        m_timelineManager;
     const model::PluginsManager *   m_pluginsManager;
+    model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
     model::ModelScene *             m_modelScene;
     SceneNode *                     m_mockSceneEng;

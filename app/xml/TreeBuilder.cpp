@@ -84,41 +84,44 @@ namespace bv{
 	model::BasicNode*  deleteMe()
 	{
 
-		model::BasicNode * root = new model::BasicNode( "deleteMeNode" );
+		//model::BasicNode * root = new model::BasicNode( "deleteMeNode" );
 
-		std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example.txt");
+		//std::wstring str    =   TextHelper::LoadUtf8FileToString( L"text_example.txt");
 
-		Vec4Interpolator color; color.SetWrapPostMethod( bv::WrapMethod::pingPong );
+		//Vec4Interpolator color; color.SetWrapPostMethod( bv::WrapMethod::pingPong );
 
-		color.AddKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-		color.AddKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-		color.AddKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-		color.AddKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+		//color.AddKey(0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+		//color.AddKey(3.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+		//color.AddKey(5.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+		//color.AddKey(7.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
 
-		TransformF     trns;
+		//TransformF     trns;
 
-		FloatInterpolator xt; xt.SetWrapPostMethod( bv::WrapMethod::pingPong );
-		FloatInterpolator yt; yt.SetWrapPostMethod( bv::WrapMethod::repeat );
-		FloatInterpolator zt;
+		//FloatInterpolator xt; xt.SetWrapPostMethod( bv::WrapMethod::pingPong );
+		//FloatInterpolator yt; yt.SetWrapPostMethod( bv::WrapMethod::repeat );
+		//FloatInterpolator zt;
 
-		xt.AddKey( 0.f, -1.f );
-		yt.AddKey( 0.f, -5.f );
-		zt.AddKey( 0.f, -5.f );
-                             
-		yt.AddKey( 30.f, 5.f );
+		//xt.AddKey( 0.f, -1.f );
+		//yt.AddKey( 0.f, -5.f );
+		//zt.AddKey( 0.f, -5.f );
+  //                           
+		//yt.AddKey( 30.f, 5.f );
 
-		trns.AddTranslation( xt, yt, zt );
+		//trns.AddTranslation( xt, yt, zt );
 
-		trns.AddScale( bv::InterpolatorsHelper::CreateConstValue( 1.f ), bv::InterpolatorsHelper::CreateConstValue( 1.f ), bv::InterpolatorsHelper::CreateConstValue( 1.f ) );
+		//trns.AddScale( bv::InterpolatorsHelper::CreateConstValue( 1.f ), bv::InterpolatorsHelper::CreateConstValue( 1.f ), bv::InterpolatorsHelper::CreateConstValue( 1.f ) );
 
-		auto texPlugin      =   bv::model::PluginsFactory::CreateSimpleTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
+		//auto texPlugin  =   bv::model::PluginsFactory::CreateSimpleTextPlugin( str, "../dep/Media/fonts/ARIALUNI.TTF", 64 );
 
-        root->AddPlugin( texPlugin );
+  //      root->AddPlugin( texPlugin );
 
-        root->AddPlugin( bv::model::PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) ) );
+  //      root->AddPlugin( bv::model::PluginsFactory::CreateSimpleTransformPlugin( texPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) ) );
 
-		return root;
-	}
+		//return root;
+
+        //FIXME: fix
+        return nullptr;
+    }
 
 	void AttachSolidPlugin(model::BasicNode *EngineNode, string pluginName, vector<Property> properties, vector<NonLinearProperty> non_linear_properties)
 	{

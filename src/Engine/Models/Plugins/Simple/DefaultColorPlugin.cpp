@@ -83,7 +83,7 @@ const IPixelShaderChannel *         DefaultColorPlugin::GetPixelShaderChannel   
 //
 void                                DefaultColorPlugin::Update                      ( TimeType t )
 {
-    m_paramValModel->Update( t );
+    m_paramValModel->Update();
     m_pixelShaderChannel->PostUpdate();
 }
 
