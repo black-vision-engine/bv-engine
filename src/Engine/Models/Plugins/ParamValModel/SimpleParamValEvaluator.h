@@ -34,7 +34,7 @@ public:
     virtual IParameter *                                GetParameter    ( const std::string & name ) override;
     virtual const bv::IValue *                          GetValue        ( const std::string & name ) const override;
 
-    virtual void                                        Evaluate        ( TimeType t ) override;
+    virtual void                                        Evaluate        () override;
 
     ParamType *                                         Parameter       ();
     ValueType *                                         Value           ();
@@ -101,9 +101,9 @@ const bv::IValue *                          SimpleParamValEvaluator< ParamType, 
 // *******************************
 //
 template< typename ParamType, typename ValueType >
-void                                        SimpleParamValEvaluator< ParamType, ValueType >::Evaluate       ( TimeType t )
+void                                        SimpleParamValEvaluator< ParamType, ValueType >::Evaluate       ()
 {
-    m_value->SetValue( m_param->Evaluate( t ) );
+    m_value->SetValue( m_param->Evaluate() );
 }
 
 // *******************************

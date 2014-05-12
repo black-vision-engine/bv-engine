@@ -169,10 +169,10 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
     assert( m_paramFilteringMode );
     assert( m_paramAttachMode );
 
-    auto wX = GetWrapModeX( TimeType( 0.f ) );
-    auto wY = GetWrapModeY( TimeType( 0.f ) );
-    auto fm = GetFilteringMode( TimeType( 0.f ) );
-    auto am = GetAttachementMode( TimeType( 0.f ) );
+    auto wX = GetWrapModeX();
+    auto wY = GetWrapModeY();
+    auto fm = GetFilteringMode();
+    auto am = GetAttachementMode();
 
     UpdateState( wX, wY, fm, am );
 }
@@ -243,7 +243,7 @@ void                                DefaultAnimationPlugin::Update              
 {
     m_paramValModel->Update( t );
 
-    auto attachmentMode = GetAttachementMode( t );
+    auto attachmentMode = GetAttachementMode();
 
     if( attachmentMode == TextureAttachmentMode::MM_FREE )
     {
@@ -272,11 +272,11 @@ void                                DefaultAnimationPlugin::Update              
         }
     }
 
-    auto wX = GetWrapModeX( t );
-    auto wY = GetWrapModeY( t );
-    auto fm = GetFilteringMode( t );
+    auto wX = GetWrapModeX();
+    auto wY = GetWrapModeY();
+    auto fm = GetFilteringMode();
 
-    m_texturesData->SetAnimationFrame( 0, (unsigned int )m_paramFrameNum->Evaluate( t ) );
+    m_texturesData->SetAnimationFrame( 0, (unsigned int )m_paramFrameNum->Evaluate() );
 
     if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() || StateChanged( wX, wY, fm, attachmentMode ) )
     {
@@ -363,9 +363,9 @@ namespace {
 // *************************************
 // FIXME: implement int parameters and bool parameters
 template< typename EnumClassType >
-inline EnumClassType EvaluateAsInt( ParamFloat * param, TimeType t )
+inline EnumClassType EvaluateAsInt( ParamFloat * param )
 {
-    int val = int( param->Evaluate( t ) );
+    int val = int( param->Evaluate() );
 
     return EnumClassType( val );
 }
@@ -374,42 +374,42 @@ inline EnumClassType EvaluateAsInt( ParamFloat * param, TimeType t )
 
 // *************************************
 // 
-TextureWrappingMode                         DefaultAnimationPlugin::GetWrapModeX          ( TimeType t ) const
+TextureWrappingMode                         DefaultAnimationPlugin::GetWrapModeX            () const
 {
-    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeX, t );
+    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeX );
 }
 
 // *************************************
 // 
-TextureWrappingMode                         DefaultAnimationPlugin::GetWrapModeY          ( TimeType t ) const
+TextureWrappingMode                         DefaultAnimationPlugin::GetWrapModeY            () const
 {
-    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeY, t );
+    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeY );
 }
 
 // *************************************
 // 
-TextureFilteringMode                        DefaultAnimationPlugin::GetFilteringMode      ( TimeType t ) const
+TextureFilteringMode                        DefaultAnimationPlugin::GetFilteringMode        () const
 {
-    return EvaluateAsInt< TextureFilteringMode >( m_paramFilteringMode, t );
+    return EvaluateAsInt< TextureFilteringMode >( m_paramFilteringMode );
 }
 
 // *************************************
 // 
-TextureAttachmentMode                       DefaultAnimationPlugin::GetAttachementMode    ( TimeType t ) const
+TextureAttachmentMode                       DefaultAnimationPlugin::GetAttachementMode      () const
 {
-    return EvaluateAsInt< TextureAttachmentMode >( m_paramAttachMode, t );
+    return EvaluateAsInt< TextureAttachmentMode >( m_paramAttachMode );
 }
 
 // *************************************
 // 
-bool                                        DefaultAnimationPlugin::StateChanged                ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am ) const
+bool                                        DefaultAnimationPlugin::StateChanged            ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am ) const
 {
     return wmX != m_lastTextureWrapModeX || wmY != m_lastTextureWrapModeY || fm != m_lastTextureFilteringMode || am != m_lastTextureAttachMode;
 }
 
 // *************************************
 // 
-void                                        DefaultAnimationPlugin::UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am )
+void                                        DefaultAnimationPlugin::UpdateState             ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am )
 {
     m_lastTextureWrapModeX      = wmX;
     m_lastTextureWrapModeY      = wmY;

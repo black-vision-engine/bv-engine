@@ -92,8 +92,6 @@
     <ClCompile Include="Engine\Models\Resources\TextHelpers.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\FontLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\Text.cpp" />
-    <ClCompile Include="Engine\Models\Timeline\TimelineBase.cpp" />
-    <ClCompile Include="Engine\Models\Timeline\TimelineState.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryMultiRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Timeline\GlobalTimeline.cpp" />
@@ -311,9 +309,6 @@
     <ClInclude Include="Engine\Models\Resources\Font\Glyph.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Text.h" />
     <ClInclude Include="Engine\Models\Timeline\GlobalTimeline.h" />
-    <ClInclude Include="Engine\Models\Timeline\TimelineBase.h" />
-    <ClInclude Include="Engine\Models\Timeline\TimelineSettings.h" />
-    <ClInclude Include="Engine\Models\Timeline\TimelineState.h" />
     <ClInclude Include="System\BasicTypes.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginsFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryMultiRectPlugin.h" />

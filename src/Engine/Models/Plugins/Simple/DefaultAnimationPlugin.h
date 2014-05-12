@@ -80,10 +80,10 @@ private:
 
     void                                        InitAttributesChannel       ( const IPlugin * prev );
 
-    TextureWrappingMode                         GetWrapModeX                ( TimeType t ) const;
-    TextureWrappingMode                         GetWrapModeY                ( TimeType t ) const;
-    TextureFilteringMode                        GetFilteringMode            ( TimeType t ) const;
-    TextureAttachmentMode                       GetAttachementMode          ( TimeType t ) const;
+    TextureWrappingMode                         GetWrapModeX                () const;
+    TextureWrappingMode                         GetWrapModeY                () const;
+    TextureFilteringMode                        GetFilteringMode            () const;
+    TextureAttachmentMode                       GetAttachementMode          () const;
 
     bool                                        StateChanged                ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am ) const;
     void                                        UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am );

@@ -3,7 +3,6 @@
 #include <cassert>
 
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
-#include "Engine/Models/Interfaces/ITimeEvaluator.h"
 #include "Engine/Types/Enums.h"
 
 #include "System/BasicTypes.h"
@@ -11,20 +10,18 @@
 
 namespace bv { namespace model {
 
-class ITimeEvaluator;
-
 class AbstractModelParameter : public IParameter
 {
 protected:
 
-    const ITimeEvaluator *  m_timeEvaluator;
+    ITimeEvaluatorPtr       m_timeEvaluator;
 
     std::string             m_name;
     ModelParamType          m_type;
 
 protected:
 
-    explicit                    AbstractModelParameter  ( const std::string & name, ModelParamType type, const ITimeEvaluator * evaluator );
+    explicit                    AbstractModelParameter  ( const std::string & name, ModelParamType type, ITimeEvaluatorPtr evaluator );
     virtual                     ~AbstractModelParameter ();
 
 public:
@@ -32,7 +29,7 @@ public:
     virtual const std::string & GetName                 () const;
     virtual ModelParamType      GetType                 () const;
 
-    inline  void                SetTimeEvaluator        ( const ITimeEvaluator * timeEvaluator );
+    inline  void                SetTimeEvaluator        ( ITimeEvaluatorPtr timeEvaluator );
 
     inline  TimeType            GetLocalEvaluationTime  () const;
 

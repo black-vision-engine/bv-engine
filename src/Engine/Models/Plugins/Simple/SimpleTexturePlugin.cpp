@@ -20,42 +20,42 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
     : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_attachmentMode( amode )
 {
-    assert( prev != nullptr );
+ //   assert( prev != nullptr );
 
-    for(unsigned int i = 0; i < textureDescs.size(); ++i)
-    {
-        auto texInfo = LoadTexture( textureDescs[ i ], "Tex" + std::to_string( i ) );
-        m_textures.push_back( texInfo );
-    }
+ //   for(unsigned int i = 0; i < textureDescs.size(); ++i)
+ //   {
+ //       auto texInfo = LoadTexture( textureDescs[ i ], "Tex" + std::to_string( i ) );
+ //       m_textures.push_back( texInfo );
+ //   }
 
-    m_vaChannel = nullptr;
-    EvalGeometryChannel( prev );
+ //   m_vaChannel = nullptr;
+ //   EvalGeometryChannel( prev );
 
-    // Set Pixel Shader Channel
-    ParamTransformVec           txMat( "TxParamTransform" );
-    std::vector<ParamFloat>     alphas;
-    std::vector<ParamVec4>      borderColors;
+ //   // Set Pixel Shader Channel
+ //   //ParamTransformVec           txMat( "TxParamTransform" );
+ //   std::vector<ParamFloat>     alphas;
+ //   std::vector<ParamVec4>      borderColors;
 
-    for( auto t : textureDescs )
-    {
-        txMat.AppendTransform( t.transform.GetTransformF() );
-        alphas.push_back( t.alpha );
-        borderColors.push_back( t.borderColor );
-    }
+ //   for( auto t : textureDescs )
+ //   {
+ //       //txMat.AppendTransform( t.transform.GetTransformF() );
+ //       alphas.push_back( t.alpha );
+ //       borderColors.push_back( t.borderColor );
+ //   }
 
-    int texturesNum = textureDescs.size();
+ //   int texturesNum = textureDescs.size();
 
-    m_pixelShaderChannel = TexturePixelShaderChannelPtr( new TexturePixelShaderChannel( "../dep/media/shaders/simpletexture/simpletexture" + std::to_string( texturesNum ) +".frag"
-										, alphas
-										, txMat 
-                                        , borderColors
-                                        ) );
+ //   m_pixelShaderChannel = TexturePixelShaderChannelPtr( new TexturePixelShaderChannel( "../dep/media/shaders/simpletexture/simpletexture" + std::to_string( texturesNum ) +".frag"
+	//									, alphas
+	//									, txMat 
+ //                                       , borderColors
+ //                                       ) );
 
-    m_pixelShaderChannel->SetRendererContext( RendererContext::CreateDefault() );
-    auto rendContext = m_pixelShaderChannel->GetRendererContext();
-    rendContext->cullCtx->enabled = false;
+ //   m_pixelShaderChannel->SetRendererContext( RendererContext::CreateDefault() );
+ //   auto rendContext = m_pixelShaderChannel->GetRendererContext();
+ //   rendContext->cullCtx->enabled = false;
 
-	m_vertexShaderChannel = TextureVertexShaderChannelPtr( new TextureVertexShaderChannel( "../dep/media/shaders/simpletexture/simpletexture" + std::to_string( texturesNum ) + ".vert" ) );
+	//m_vertexShaderChannel = TextureVertexShaderChannelPtr( new TextureVertexShaderChannel( "../dep/media/shaders/simpletexture/simpletexture" + std::to_string( texturesNum ) + ".vert" ) );
 }
 
 // *************************************
@@ -64,48 +64,48 @@ SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vecto
     : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_attachmentMode( mode )
 {
-    assert( prev != nullptr );
+ //   assert( prev != nullptr );
 
-    for( unsigned int i = 0; i < textureDescs.size(); ++i )
-    {
-        auto texInfo = LoadTexture( textureDescs[ i ], "Tex" + std::to_string( i ) );
-        m_textures.push_back( texInfo );
-    }
+ //   for( unsigned int i = 0; i < textureDescs.size(); ++i )
+ //   {
+ //       auto texInfo = LoadTexture( textureDescs[ i ], "Tex" + std::to_string( i ) );
+ //       m_textures.push_back( texInfo );
+ //   }
 
-    m_vaChannel = nullptr;
-    EvalGeometryChannel( prev );
+ //   m_vaChannel = nullptr;
+ //   EvalGeometryChannel( prev );
 
-    // Set Pixel Shader Channel
-    // Set Pixel Shader Channel
-    ParamTransformVec           txMat( "TxParamTransform" );
-    std::vector<ParamFloat>     alphas;
-    std::vector<ParamVec4>      borderColors;
+ //   // Set Pixel Shader Channel
+ //   // Set Pixel Shader Channel
+ //   ParamTransformVec           txMat( "TxParamTransform" );
+ //   std::vector<ParamFloat>     alphas;
+ //   std::vector<ParamVec4>      borderColors;
 
-    for( auto t : textureDescs )
-    {
-        txMat.AppendTransform( t.transform.GetTransformF() );
-        alphas.push_back( t.alpha );
-        borderColors.push_back( t.borderColor );
-    }
+ //   for( auto t : textureDescs )
+ //   {
+ //       txMat.AppendTransform( t.transform.GetTransformF() );
+ //       alphas.push_back( t.alpha );
+ //       borderColors.push_back( t.borderColor );
+ //   }
 
-    m_pixelShaderChannel = TexturePixelShaderChannelPtr( new TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
-										, alphas
-										, txMat 
-                                        , borderColors ) );
+ //   m_pixelShaderChannel = TexturePixelShaderChannelPtr( new TexturePixelShaderChannel( "../dep/media/shaders/simpletexture.frag"
+	//									, alphas
+	//									, txMat 
+ //                                       , borderColors ) );
 
-    if ( ctx )
-    {
-        m_pixelShaderChannel->SetRendererContext( ctx );
-    }
-    else
-    {
-        m_pixelShaderChannel->SetRendererContext( RendererContext::CreateDefault() );
-    }
+ //   if ( ctx )
+ //   {
+ //       m_pixelShaderChannel->SetRendererContext( ctx );
+ //   }
+ //   else
+ //   {
+ //       m_pixelShaderChannel->SetRendererContext( RendererContext::CreateDefault() );
+ //   }
 
-    auto rendContext = m_pixelShaderChannel->GetRendererContext();
-    rendContext->cullCtx->enabled = false;
+ //   auto rendContext = m_pixelShaderChannel->GetRendererContext();
+ //   rendContext->cullCtx->enabled = false;
 
-	m_vertexShaderChannel = TextureVertexShaderChannelPtr( new TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
+	//m_vertexShaderChannel = TextureVertexShaderChannelPtr( new TextureVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
 }
 
 
@@ -215,52 +215,52 @@ TextureInfo * SimpleTexturePlugin::LoadTexture( const TextureDescriptor & texDes
 //
 void                                    SimpleTexturePlugin::Update              ( TimeType t )
 {
-    if( m_attachmentMode == TextureAttachmentMode::MM_FREE )
-    {
-        if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-        {
-            for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
-            {
-                auto connComp = static_cast< const model::ConnectedComponent* >( m_vaChannel->GetComponents()[ i ] );
-                auto compChannels = connComp->GetAttributeChannels();
-
-                if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
-                    if( auto uvChannel = AttributeChannel::GetUVChannel( compChannels, m_texCoordChannelIndex ) )
-                    {
-                        auto & verts  = dynamic_cast< Float3AttributeChannel* >(posChannel)->GetVertices();
-                        auto & uvs    = dynamic_cast< Float2AttributeChannel* >(uvChannel)->GetVertices();
-
-                        for( unsigned int i = 0; i < verts.size(); ++i )
-                        {
-                            uvs[ i ].x = verts[ i ].x;
-                            uvs[ i ].y = verts[ i ].y;
-                        }
-                    }
-            }
-        }
-
-    }
-
-    if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-    {
-        m_vaChannel->SetNeedsAttributesUpdate( true );
-    }
-
-    for( auto ti : m_textures )
-    {
-        ti->m_texTransformVal->SetValue( ti->m_texTransform.Evaluate( t ) );
-        ti->m_texAlphaVal->SetValue( ti->m_texAlpha.Evaluate( t ) );
-        ti->m_texBorderColorVal->SetValue( ti->m_texBorderColor.Evaluate( t ) );
-    }
-
-//    m_vaChannel->Update( t );
-//    m_pixelShaderChannel->Update( t );
-//    m_vertexShaderChannel->Update( t );
-
-    //FIXME: update chanels according to parent (e.g. when position data has been changed)
-//    m_alphaValue->SetValue( m_alphaParam->Evaluate( t ) );
-//    m_tex0TransformValue->SetValue( m_tex0TransformParam->Evaluate( t ) );
-//    m_tex1TransformValue->SetValue( m_tex1TransformParam->Evaluate( t ) );
+//    if( m_attachmentMode == TextureAttachmentMode::MM_FREE )
+//    {
+//        if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
+//        {
+//            for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
+//            {
+//                auto connComp = static_cast< const model::ConnectedComponent* >( m_vaChannel->GetComponents()[ i ] );
+//                auto compChannels = connComp->GetAttributeChannels();
+//
+//                if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
+//                    if( auto uvChannel = AttributeChannel::GetUVChannel( compChannels, m_texCoordChannelIndex ) )
+//                    {
+//                        auto & verts  = dynamic_cast< Float3AttributeChannel* >(posChannel)->GetVertices();
+//                        auto & uvs    = dynamic_cast< Float2AttributeChannel* >(uvChannel)->GetVertices();
+//
+//                        for( unsigned int i = 0; i < verts.size(); ++i )
+//                        {
+//                            uvs[ i ].x = verts[ i ].x;
+//                            uvs[ i ].y = verts[ i ].y;
+//                        }
+//                    }
+//            }
+//        }
+//
+//    }
+//
+//    if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
+//    {
+//        m_vaChannel->SetNeedsAttributesUpdate( true );
+//    }
+//
+//    for( auto ti : m_textures )
+//    {
+//        ti->m_texTransformVal->SetValue( ti->m_texTransform.Evaluate( t ) );
+//        ti->m_texAlphaVal->SetValue( ti->m_texAlpha.Evaluate( /* t */ ) );
+//        ti->m_texBorderColorVal->SetValue( ti->m_texBorderColor.Evaluate( t ) );
+//    }
+//
+////    m_vaChannel->Update( t );
+////    m_pixelShaderChannel->Update( t );
+////    m_vertexShaderChannel->Update( t );
+//
+//    //FIXME: update chanels according to parent (e.g. when position data has been changed)
+////    m_alphaValue->SetValue( m_alphaParam->Evaluate( t ) );
+////    m_tex0TransformValue->SetValue( m_tex0TransformParam->Evaluate( t ) );
+////    m_tex1TransformValue->SetValue( m_tex1TransformParam->Evaluate( t ) );
 }
 
 // *************************************

@@ -30,7 +30,7 @@ public:
     virtual IParameter *                                GetParameter    ( const std::string & name ) override;
     virtual const bv::IValue *                          GetValue        ( const std::string & name ) const override;
 
-    virtual void                                        Evaluate        ( TimeType t ) override;
+    virtual void                                        Evaluate        () override;
 
     ParamTransformVec *                                 Parameter       ();
     ValueMat4PtrVec &                                   Value           ();

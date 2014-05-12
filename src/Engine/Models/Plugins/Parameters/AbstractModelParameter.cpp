@@ -37,7 +37,7 @@ namespace
 
 // *******************************
 //
-AbstractModelParameter::AbstractModelParameter  ( const std::string & name, ModelParamType type, const ITimeEvaluator * evaluator )
+AbstractModelParameter::AbstractModelParameter  ( const std::string & name, ModelParamType type, ITimeEvaluatorPtr evaluator )
     : m_timeEvaluator( evaluator )
     , m_name( name )
     , m_type( type )
@@ -66,7 +66,7 @@ ModelParamType      AbstractModelParameter::GetType () const
 
 // *******************************
 //
-void    SetParamTimeline( IParameter * param, const ITimeEvaluator * timeline )
+void    SetParamTimeline( IParameter * param, ITimeEvaluatorPtr timeline )
 {
     AbstractModelParameter * typedParam = static_cast< AbstractModelParameter * >( param );
 

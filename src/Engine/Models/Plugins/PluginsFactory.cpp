@@ -7,8 +7,6 @@
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Simple/TimerPlugin.h"
 
-#include "Engine/Models/Timeline/Static/Timeline.h"
-
 
 namespace bv
 {

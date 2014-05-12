@@ -3,7 +3,7 @@ namespace bv { namespace model {
 // *******************************
 //
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
-SimpleParameterImpl< InterpolatorType, ValueType, type >::SimpleParameterImpl( const std::string & name, const InterpolatorType & interpolator, const ITimeEvaluator * evaluator )
+SimpleParameterImpl< InterpolatorType, ValueType, type >::SimpleParameterImpl( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator )
     : AbstractModelParameter( name, type, evaluator )
     , m_interpolator( interpolator )
 {
@@ -19,9 +19,10 @@ SimpleParameterImpl< InterpolatorType, ValueType, type >::~SimpleParameterImpl  
 // *******************************
 //
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
-inline ValueType SimpleParameterImpl< InterpolatorType, ValueType, type >::Evaluate ( TimeType t ) const
+inline ValueType SimpleParameterImpl< InterpolatorType, ValueType, type >::Evaluate () const
 {
-    t = GetLocalEvaluationTime( t );
+    auto t = GetLocalEvaluationTime();
+
     return m_interpolator.Evaluate( t );
 }
 
@@ -52,16 +53,16 @@ inline ModelParamType  SimpleParameterImpl< InterpolatorType, ValueType, type >:
 
 // *******************************
 //
-inline  ParamMat2::ParamMat2( const std::string & name, const Vec4Interpolator & transform, const ITimeEvaluator * evaluator )
+inline  ParamMat2::ParamMat2( const std::string & name, const Vec4Interpolator & transform, ITimeEvaluatorPtr evaluator )
     : Parent( name, transform, evaluator )
 {
 }
 
 // *******************************
 //
-inline  glm::mat2   ParamMat2::Evaluate    ( TimeType t ) const
+inline  glm::mat2   ParamMat2::Evaluate    () const
 {
-    glm::vec4 v = Parent::Evaluate( t );
+    glm::vec4 v = Parent::Evaluate();
 
     return glm::mat2( v[ 0 ], v[ 1 ], v[ 2 ], v [ 3 ] );
 }

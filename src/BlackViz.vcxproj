@@ -322,9 +322,7 @@
     <ClCompile Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimeEvaluatorBase.inl" />
-    <ClCompile Include="Engine\Models\Timeline\TimelineBase.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimelineManager.cpp" />
-    <ClCompile Include="Engine\Models\Timeline\TimelineState.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimeSegmentEvalImpl.cpp" />
     <ClCompile Include="Engine\Models\Updaters\GeometryUpdater.cpp" />
     <ClCompile Include="Engine\Models\Updaters\NodeUpdater.cpp" />
@@ -565,10 +563,7 @@
     <ClInclude Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.h" />
     <ClInclude Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.h" />
     <ClInclude Include="Engine\Models\Timeline\TimeEvaluatorBase.h" />
-    <ClInclude Include="Engine\Models\Timeline\TimelineBase.h" />
     <ClInclude Include="Engine\Models\Timeline\TimelineManager.h" />
-    <ClInclude Include="Engine\Models\Timeline\TimelineSettings.h" />
-    <ClInclude Include="Engine\Models\Timeline\TimelineState.h" />
     <ClInclude Include="Engine\Models\Timeline\TimeSegmentEvalImpl.h" />
     <ClInclude Include="Engine\Models\Updaters\GeometryUpdater.h" />
     <ClInclude Include="Engine\Models\Updaters\NodeUpdater.h" />

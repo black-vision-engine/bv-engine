@@ -6,7 +6,7 @@ namespace bv { namespace model {
 
 // *******************************
 //
-ParamTransform::ParamTransform  ( const std::string & name, const TransformF & transform, const ITimeEvaluator * evaluator )
+ParamTransform::ParamTransform  ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator )
     : AbstractModelParameter( name, ModelParamType::MPT_TRANSFORM, evaluator )
     , m_transformModel( transform )
 {
@@ -24,7 +24,7 @@ void *     ParamTransform::QueryParamTyped  ()
 
 // *******************************
 //
-ParamTransformVec::ParamTransformVec                ( const std::string & name, const TransformF & transform, const ITimeEvaluator * evaluator )
+ParamTransformVec::ParamTransformVec                ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator )
     : AbstractModelParameter( name, ModelParamType::MPT_TRANSFORM_VEC, evaluator )
 {
     AppendTransform( transform );
@@ -32,7 +32,7 @@ ParamTransformVec::ParamTransformVec                ( const std::string & name, 
 
 // *******************************
 //
-ParamTransformVec::ParamTransformVec                ( const std::string & name, const ITimeEvaluator * evaluator )
+ParamTransformVec::ParamTransformVec                ( const std::string & name, ITimeEvaluatorPtr evaluator )
     : AbstractModelParameter( name, ModelParamType::MPT_TRANSFORM_VEC, evaluator )
 {
 }

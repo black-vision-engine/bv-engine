@@ -62,11 +62,11 @@ const bv::IValue *                          TransformVecParamValEvaluator::GetVa
 
 // ********************************
 //
-void                                        TransformVecParamValEvaluator::Evaluate        ( TimeType t )
+void                                        TransformVecParamValEvaluator::Evaluate        ()
 {
     for( unsigned int i = 0; i < m_param->NumTransforms(); ++i )
     {
-        m_mat4Values[ i ]->SetValue( m_param->Evaluate( i, t ) );
+        m_mat4Values[ i ]->SetValue( m_param->Evaluate( i ) );
     }
 }
 

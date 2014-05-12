@@ -164,10 +164,10 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
     assert( m_paramFilteringMode );
     assert( m_paramAttachMode );
 
-    auto wX = GetWrapModeX( TimeType( 0.f ) );
-    auto wY = GetWrapModeY( TimeType( 0.f ) );
-    auto fm = GetFilteringMode( TimeType( 0.f ) );
-    auto am = GetAttachementMode( TimeType( 0.f ) );
+    auto wX = GetWrapModeX();
+    auto wY = GetWrapModeY();
+    auto fm = GetFilteringMode();
+    auto am = GetAttachementMode();
 
     UpdateState( wX, wY, fm, am );
 }
@@ -238,7 +238,7 @@ void                                DefaultTexturePlugin::Update                
 {
     m_paramValModel->Update( t );
 
-    auto attachmentMode = GetAttachementMode( t );
+    auto attachmentMode = GetAttachementMode();
 
     if( attachmentMode == TextureAttachmentMode::MM_FREE )
     {
@@ -267,9 +267,9 @@ void                                DefaultTexturePlugin::Update                
         }
     }
 
-    auto wX = GetWrapModeX( t );
-    auto wY = GetWrapModeY( t );
-    auto fm = GetFilteringMode( t );
+    auto wX = GetWrapModeX();
+    auto wY = GetWrapModeY();
+    auto fm = GetFilteringMode();
 
     if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() || StateChanged( wX, wY, fm, attachmentMode ) )
     {
@@ -356,9 +356,9 @@ namespace {
 // *************************************
 // FIXME: implement int parameters and bool parameters
 template< typename EnumClassType >
-inline EnumClassType EvaluateAsInt( ParamFloat * param, TimeType t )
+inline EnumClassType EvaluateAsInt( ParamFloat * param )
 {
-    int val = int( param->Evaluate( t ) );
+    int val = int( param->Evaluate() );
 
     return EnumClassType( val );
 }
@@ -367,30 +367,30 @@ inline EnumClassType EvaluateAsInt( ParamFloat * param, TimeType t )
 
 // *************************************
 // 
-TextureWrappingMode                         DefaultTexturePlugin::GetWrapModeX          ( TimeType t ) const
+TextureWrappingMode                         DefaultTexturePlugin::GetWrapModeX          () const
 {
-    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeX, t );
+    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeX );
 }
 
 // *************************************
 // 
-TextureWrappingMode                         DefaultTexturePlugin::GetWrapModeY          ( TimeType t ) const
+TextureWrappingMode                         DefaultTexturePlugin::GetWrapModeY          () const
 {
-    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeY, t );
+    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeY );
 }
 
 // *************************************
 // 
-TextureFilteringMode                        DefaultTexturePlugin::GetFilteringMode      ( TimeType t ) const
+TextureFilteringMode                        DefaultTexturePlugin::GetFilteringMode      () const
 {
-    return EvaluateAsInt< TextureFilteringMode >( m_paramFilteringMode, t );
+    return EvaluateAsInt< TextureFilteringMode >( m_paramFilteringMode );
 }
 
 // *************************************
 // 
-TextureAttachmentMode                       DefaultTexturePlugin::GetAttachementMode    ( TimeType t ) const
+TextureAttachmentMode                       DefaultTexturePlugin::GetAttachementMode    () const
 {
-    return EvaluateAsInt< TextureAttachmentMode >( m_paramAttachMode, t );
+    return EvaluateAsInt< TextureAttachmentMode >( m_paramAttachMode );
 }
 
 // *************************************
