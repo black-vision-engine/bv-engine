@@ -47,7 +47,7 @@ namespace
         //tt += TimeType( 0.001 );
 
         //TEST AI
-        static auto ai = TestAIManager::Instance().GetAIPreset( 1 );
+        static auto ai = TestAIManager::Instance().GetAIPreset( 2 );
         ai->EvalAt( t );
 
         //PRE GOWNO

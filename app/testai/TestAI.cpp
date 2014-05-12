@@ -24,7 +24,7 @@ bool aiCommandComparator( AICommandBase * c0, AICommandBase * c1 )
 
 // *********************************
 //
-TestAI::TestAI      ( model::DefaultTimeline * timeline )
+TestAI::TestAI      ( model::DefaultTimelinePtr timeline )
     : m_timeline( timeline )
 {
 }
@@ -79,6 +79,18 @@ std::string TestAI::Repr    () const
     }
 
     return ss.str();
+}
+
+// *********************************
+//
+void    TestAI::SetTimeline ( model::DefaultTimelinePtr timeline )
+{
+    m_timeline = timeline;
+
+    for( auto c : m_commands )
+    {
+        c->SetTimeline( timeline );
+    }
 }
 
 // *********************************

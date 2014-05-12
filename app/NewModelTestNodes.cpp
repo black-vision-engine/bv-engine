@@ -10,6 +10,8 @@
 
 #include "Engine/Models/BasicNode.h"
 
+#include "testai/TestAIManager.h"
+
 
 namespace {
     std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR" };
@@ -97,22 +99,33 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Time
 //
 model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    //Timeline stuff
+    auto someTimelineWithEvents = timelineManager->CreateDefaultTimeline( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluatorStartingAt( "timeline0" , TimeType( 3.0 ) );
+
+    someTimelineWithEvents->AddChild( localTimeline );
+    timeEvaluator->AddChild( someTimelineWithEvents );
+
+    //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 3 );
 
     auto node = new model::BasicNode( "Root" );
 
-    auto success = node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
+    auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
 
     SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
 
-    auto localTimeline = timelineManager->CreateOffsetTimeEvaluatorStartingAt( "timeline0" , TimeType( 15.0 ) );
-    node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( localTimeline );
-
-    timeEvaluator->AddChild( localTimeline );
+    //node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( localTimeline );
 
     success = model::LoadTexture( node->GetPlugin( "texture" ), "simless_00.jpg" );
     assert( success );
+
+    auto ai = TestAIManager::Instance().GetAIPreset( 2 );
+    ai->SetTimeline( someTimelineWithEvents );
 
     return node;    
 }

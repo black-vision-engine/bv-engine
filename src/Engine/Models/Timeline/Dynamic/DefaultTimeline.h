@@ -1,3 +1,5 @@
+#pragma once
+
 #include <list>
 
 #include "Engine/Models/Interfaces/ITimeline.h"

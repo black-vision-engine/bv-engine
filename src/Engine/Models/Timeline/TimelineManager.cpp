@@ -118,10 +118,10 @@ ITimeEvaluatorPtr       TimelineManager::CreateConstTimeEvaluator               
 
 // *********************************
 //
-ITimelinePtr            TimelineManager::CreateDefaultTimeline               ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod )
+DefaultTimelinePtr      TimelineManager::CreateDefaultTimeline               ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod )
 {
     assert( duration > TimeType( 0.0 ) );
-    auto timeline = ITimelinePtr( new DefaultTimeline( name, duration, preMethod, postMethod ) );
+    auto timeline = DefaultTimelinePtr( new DefaultTimeline( name, duration, preMethod, postMethod ) );
 
     return timeline;
 }

@@ -55,7 +55,7 @@ public:
 
     ITimeEvaluatorPtr       CreateOffsetTimeEvaluatorStartingAt ( const std::string & name, TimeType startTime );
     ITimeEvaluatorPtr       CreateConstTimeEvaluator            ( const std::string & name, TimeType timeVal );
-    ITimelinePtr            CreateDefaultTimeline               ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
+    DefaultTimelinePtr      CreateDefaultTimeline               ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
     
     bool                    AddStopEventToTimeline              ( ITimelinePtr timeline, const std::string & eventName, TimeType stopTime );
 

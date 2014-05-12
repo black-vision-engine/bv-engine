@@ -63,7 +63,7 @@ void        AICommandBase::SetRepr         ( const std::string & repr )
 
 // *********************************
 //
-AICommandPlay::AICommandPlay    ( model::DefaultTimeline * timeline, TimeType triggerTime )
+AICommandPlay::AICommandPlay    ( model::DefaultTimelinePtr timeline, TimeType triggerTime )
     : AICommandBase( triggerTime, "PLAY" )
     , m_timeline( timeline )
 {
@@ -73,6 +73,13 @@ AICommandPlay::AICommandPlay    ( model::DefaultTimeline * timeline, TimeType tr
 //
 AICommandPlay::~AICommandPlay   ()
 {
+}
+
+// *********************************
+//
+void        AICommandPlay::SetTimeline     ( model::DefaultTimelinePtr timeline )
+{
+    m_timeline = timeline;
 }
 
 // *********************************
@@ -89,7 +96,7 @@ bool        AICommandPlay::TriggerImpl     ( TimeType t )
 
 // *********************************
 //
-AICommandStop::AICommandStop   ( model::DefaultTimeline * timeline, TimeType triggerTime )
+AICommandStop::AICommandStop   ( model::DefaultTimelinePtr timeline, TimeType triggerTime )
     : AICommandBase( triggerTime, "STOP" )
     , m_timeline( timeline )
 {
@@ -99,6 +106,13 @@ AICommandStop::AICommandStop   ( model::DefaultTimeline * timeline, TimeType tri
 //
 AICommandStop::~AICommandStop  ()
 {
+}
+
+// *********************************
+//
+void        AICommandStop::SetTimeline     ( model::DefaultTimelinePtr timeline )
+{
+    m_timeline = timeline;
 }
 
 // *********************************
@@ -114,7 +128,7 @@ bool        AICommandStop::TriggerImpl     ( TimeType t )
 
 // *********************************
 //
-AICommandReverse::AICommandReverse    ( model::DefaultTimeline * timeline, TimeType triggerTime )
+AICommandReverse::AICommandReverse    ( model::DefaultTimelinePtr timeline, TimeType triggerTime )
     : AICommandBase( triggerTime, "REVERSE" )
     , m_timeline( timeline )
 {
@@ -124,6 +138,13 @@ AICommandReverse::AICommandReverse    ( model::DefaultTimeline * timeline, TimeT
 //
 AICommandReverse::~AICommandReverse   ()
 {
+}
+
+// *********************************
+//
+void        AICommandReverse::SetTimeline     ( model::DefaultTimelinePtr timeline )
+{
+    m_timeline = timeline;
 }
 
 // *********************************
@@ -140,7 +161,7 @@ bool        AICommandReverse::TriggerImpl         ( TimeType t )
 
 // *********************************
 //
-AICommandSetPlayDirection::AICommandSetPlayDirection    ( model::DefaultTimeline * timeline, TimeType triggerTime, TimelinePlayDirection direction )
+AICommandSetPlayDirection::AICommandSetPlayDirection    ( model::DefaultTimelinePtr timeline, TimeType triggerTime, TimelinePlayDirection direction )
     : AICommandBase( triggerTime, "" )
     , m_timeline( timeline )
     , m_direction( direction )
@@ -163,6 +184,13 @@ AICommandSetPlayDirection::~AICommandSetPlayDirection   ()
 
 // *********************************
 //
+void        AICommandSetPlayDirection::SetTimeline     ( model::DefaultTimelinePtr timeline )
+{
+    m_timeline = timeline;
+}
+
+// *********************************
+//
 bool        AICommandSetPlayDirection::TriggerImpl      ( TimeType t )
 {
     m_timeline->SetPlayDirection( m_direction );
@@ -174,7 +202,7 @@ bool        AICommandSetPlayDirection::TriggerImpl      ( TimeType t )
 
 // *********************************
 //
-AICommandSetTimeAndStop::AICommandSetTimeAndStop    ( model::DefaultTimeline * timeline, TimeType triggerTime, TimeType eventTime )
+AICommandSetTimeAndStop::AICommandSetTimeAndStop    ( model::DefaultTimelinePtr timeline, TimeType triggerTime, TimeType eventTime )
     : AICommandBase( triggerTime, "" )
     , m_timeline( timeline )
     , m_eventTime( eventTime )
@@ -186,6 +214,13 @@ AICommandSetTimeAndStop::AICommandSetTimeAndStop    ( model::DefaultTimeline * t
 //
 AICommandSetTimeAndStop::~AICommandSetTimeAndStop   ()
 {
+}
+
+// *********************************
+//
+void        AICommandSetTimeAndStop::SetTimeline     ( model::DefaultTimelinePtr timeline )
+{
+    m_timeline = timeline;
 }
 
 // *********************************
@@ -202,7 +237,7 @@ bool        AICommandSetTimeAndStop::TriggerImpl    ( TimeType t )
 
 // *********************************
 //
-AICommandSetTimeAndPlay::AICommandSetTimeAndPlay    ( model::DefaultTimeline * timeline, TimeType triggerTime, TimeType eventTime )
+AICommandSetTimeAndPlay::AICommandSetTimeAndPlay    ( model::DefaultTimelinePtr timeline, TimeType triggerTime, TimeType eventTime )
     : AICommandBase( triggerTime, "" )
     , m_timeline( timeline )
     , m_eventTime( eventTime )
@@ -214,6 +249,13 @@ AICommandSetTimeAndPlay::AICommandSetTimeAndPlay    ( model::DefaultTimeline * t
 //
 AICommandSetTimeAndPlay::~AICommandSetTimeAndPlay   ()
 {
+}
+
+// *********************************
+//
+void        AICommandSetTimeAndPlay::SetTimeline     ( model::DefaultTimelinePtr timeline )
+{
+    m_timeline = timeline;
 }
 
 // *********************************
