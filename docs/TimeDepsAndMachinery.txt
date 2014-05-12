@@ -31,4 +31,6 @@ Propozycja (implementowana) jest taka, żeby model czasu oddzielić w pełni od 
     gdzie n - liczba parametrów, m - średnia głębokość hierarchii tajmlajnów. Po zmianie to jest O(n + m) - raz ustawiamy
     czas, i potem jeden odczyt per parametr - cute.
 
-    
+W zasadzie zostaje tylko pełna (zgodnie z wymaganiami) implementacja TimelineManagera. W tym momencie potrzebne jest
+głównie API do tworzenia otypowanych tajmlajnów, a w dalszej perspektywie do budowania drzewek tajmlajnów i rejestrowania
+parametrów (bardzo ważne, żeby to było zgodne z jus kejsami, a nie pisane na czas, żeby było cokolwiek).
