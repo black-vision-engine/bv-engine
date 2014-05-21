@@ -34,3 +34,9 @@ Propozycja (implementowana) jest taka, żeby model czasu oddzielić w pełni od 
 W zasadzie zostaje tylko pełna (zgodnie z wymaganiami) implementacja TimelineManagera. W tym momencie potrzebne jest
 głównie API do tworzenia otypowanych tajmlajnów, a w dalszej perspektywie do budowania drzewek tajmlajnów i rejestrowania
 parametrów (bardzo ważne, żeby to było zgodne z jus kejsami, a nie pisane na czas, żeby było cokolwiek).
+
+Timeline manager.
+Jego obecnym zadaniem jest uproszczenie "współżycia" z tajmlajnami i parametrami. Z punktu widzenia modelu i logiki tajmlajny są dodawane
+do parametrów. Z punktu widzenia użytkownika - parametry są dodawane do tajmlajnów. TimelineManager jest użytkową klaską czyli ma służyć nomen omen użytkownikowi.
+Dodatkowo powinien upraszczać zadania związane z zarządzaniem samymi tajmlajnami (dodawanie, usuwanie, takie rzeczy). Ewentualnie tworzenie parametrów od razu w jakimś offsecie (to się
+powinno okazać po tym, jak już ktoś poużywa tego mechanizmu realnie).
