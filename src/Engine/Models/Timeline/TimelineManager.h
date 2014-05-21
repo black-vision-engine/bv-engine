@@ -44,7 +44,7 @@ class TimelineManager
 private:
 
     std::hash_map< std::string, ITimeEvaluatorPtr >         m_timelinesMap;
-    std::hash_map< ITimeEvaluator *, SimpleIParamSet * >   m_registeredParams;
+    std::hash_map< ITimeEvaluator *, SimpleIParamSet * >    m_registeredParams;
 
     ITimeEvaluatorPtr                                       m_rootTimeline;
 

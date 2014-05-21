@@ -40,3 +40,10 @@ Jego obecnym zadaniem jest uproszczenie "współżycia" z tajmlajnami i parametr
 do parametrów. Z punktu widzenia użytkownika - parametry są dodawane do tajmlajnów. TimelineManager jest użytkową klaską czyli ma służyć nomen omen użytkownikowi.
 Dodatkowo powinien upraszczać zadania związane z zarządzaniem samymi tajmlajnami (dodawanie, usuwanie, takie rzeczy). Ewentualnie tworzenie parametrów od razu w jakimś offsecie (to się
 powinno okazać po tym, jak już ktoś poużywa tego mechanizmu realnie).
+
+Podsumowując:
+  - API służące do tworzenia otypowanych tajmlajnów
+  - API służące do zarządzania parametrami
+  - API służące do interakcji między tajmlajnami
+  
+Dodatkowo sztuczne metody służące do zarządzania parametrami w ITimeline należy wyrzucić.

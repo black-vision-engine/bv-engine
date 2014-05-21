@@ -23,17 +23,12 @@ private:
 
     ITimelineEvent *                m_lastTriggeredEvent;
 
-    std::vector< IParameter * >     m_registeredParameters;
     std::vector< ITimelineEvent * > m_keyFrameEvents;
 
 public:
 
                                                 DefaultTimeline     ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
                                                 ~DefaultTimeline    ();
-
-    //IParamSet
-    virtual std::vector< IParameter * > &       GetParameters       () override;
-    virtual IParameter *                        GetParameter        ( const std::string & name ) override;
 
     //ITimeline
     virtual TimeType                            GetDuration         () const override;
@@ -72,11 +67,6 @@ public:
 
     virtual const ITimelineEvent *              CurrentEvent        () const override;
     virtual const ITimelineEvent *              LastTriggeredEvent  () const override;
-
-    virtual bool                                AddParameter        ( IParameter * param ) override;
-
-    virtual bool                                RemoveParameter     ( const IParameter * param ) override;
-    virtual unsigned int                        RemoveParameters    ( const std::string & name ) override;
 
 private:
 

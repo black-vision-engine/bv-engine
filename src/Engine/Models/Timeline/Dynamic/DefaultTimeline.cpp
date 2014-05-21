@@ -49,28 +49,6 @@ DefaultTimeline::~DefaultTimeline    ()
 
 // *********************************
 //
-std::vector< IParameter * > &       DefaultTimeline::GetParameters      ()
-{
-    return m_registeredParameters;
-}
-
-// *********************************
-//
-IParameter *                        DefaultTimeline::GetParameter       ( const std::string & name )
-{
-    for( auto p : m_registeredParameters )
-    {
-        if( p->GetName() == name )
-        {
-            return p;
-        }
-    }
-
-    return nullptr;
-}
-
-// *********************************
-//
 TimeType                            DefaultTimeline::GetDuration        () const
 {
     return m_timeEvalImpl.GetDuration();

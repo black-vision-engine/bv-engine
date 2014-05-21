@@ -3,7 +3,6 @@
 #include "Engine/Types/Enums.h"
 
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
-#include "Engine/Models/Plugins/Interfaces/IParamSet.h"
 
 
 namespace bv { namespace model {
@@ -11,7 +10,7 @@ namespace bv { namespace model {
 class ITimelineEvent;
 class IParameter;
 
-class ITimeline : public ITimeEvaluator, public IParamSet
+class ITimeline : public ITimeEvaluator
 {
 public:
 
@@ -47,11 +46,6 @@ public:
 
     virtual const ITimelineEvent *  CurrentEvent        () const = 0;
     virtual const ITimelineEvent *  LastTriggeredEvent  () const = 0;
-
-    virtual bool                    AddParameter        ( IParameter * param ) = 0;
-
-    virtual bool                    RemoveParameter     ( const IParameter * param ) = 0;
-    virtual unsigned int            RemoveParameters    ( const std::string & name ) = 0;
 
     virtual                         ~ITimeline      () {}
 
