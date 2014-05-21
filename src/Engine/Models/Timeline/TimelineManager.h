@@ -90,3 +90,56 @@ public:
 
 } //model
 } //bv
+
+//// *********************************
+////
+//bool                                DefaultTimeline::AddParameter       ( IParameter * param )
+//{
+//    if( std::find( m_registeredParameters.begin(), m_registeredParameters.end(), param ) == m_registeredParameters.end() )
+//    {
+//        m_registeredParameters.push_back( param );
+//        
+//        return true;
+//    }
+//
+//    return false;
+//}
+//
+//// *********************************
+////
+//bool                                DefaultTimeline::RemoveParameter    ( const IParameter * param )
+//{
+//    auto it = std::find( m_registeredParameters.begin(), m_registeredParameters.end(), param );
+//
+//    if( it != m_registeredParameters.end() )
+//    {
+//        m_registeredParameters.erase( it );
+//
+//        return true;
+//    }
+//
+//    return false;    
+//}
+//
+//// *********************************
+////
+//unsigned int                        DefaultTimeline::RemoveParameters   ( const std::string & name )
+//{
+//    unsigned int erasedElements = 0;
+//
+//    for( auto it = m_registeredParameters.begin(); it != m_registeredParameters.end(); )
+//    {
+//        if( name == (*it)->GetName() )
+//        {
+//            it = m_registeredParameters.erase( it );
+//
+//            ++erasedElements;
+//        }
+//        else
+//        {
+//            ++it;
+//        }
+//    }
+//
+//    return erasedElements;
+//}
