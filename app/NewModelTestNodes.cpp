@@ -87,7 +87,7 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Time
 
     SetDefaultColorChangeAnim( node->GetPlugin( "solid color" ) );
 
-    auto localTimeline = timelineManager->CreateOffsetTimeEvaluatorStartingAt( "timeline0" , TimeType( 15.0 ) );
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 15.0 ) );
     node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( localTimeline );
 
     SetDefaultTransformAnim( node->GetPlugin( "transform" ) );
@@ -100,11 +100,11 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Time
 model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     //Timeline stuff
-    auto someTimelineWithEvents = timelineManager->CreateDefaultTimeline( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = timelineManager->CreateOffsetTimeEvaluatorStartingAt( "timeline0" , TimeType( 3.0 ) );
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 3.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );

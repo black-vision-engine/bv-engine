@@ -50,14 +50,21 @@ private:
 
 public:
 
-                            TimelineManager             ();
-                            ~TimelineManager            ();
+                            TimelineManager                 ();
+                            ~TimelineManager                ();
 
-    ITimeEvaluatorPtr       CreateOffsetTimeEvaluatorStartingAt ( const std::string & name, TimeType startTime );
-    ITimeEvaluatorPtr       CreateConstTimeEvaluator            ( const std::string & name, TimeType timeVal );
-    DefaultTimelinePtr      CreateDefaultTimeline               ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
+    ITimeEvaluatorPtr       CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime );
+    ITimeEvaluatorPtr       CreateConstTimeEvaluator        ( const std::string & name, TimeType timeVal );
+    ITimelinePtr            CreateDefaultTimeline           ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
+
+    OffsetTimeEvaluatorPtr  CreateOffsetTimeEvaluatorImpl   ( const std::string & name, TimeType startTime );
+    ConstTimeEvaluatorPtr   CreateConstTimeEvaluatorImpl    ( const std::string & name, TimeType timeVal );
+    DefaultTimelinePtr      CreateDefaultTimelineImpl       ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
     
-    bool                    AddStopEventToTimeline              ( ITimelinePtr timeline, const std::string & eventName, TimeType stopTime );
+    bool                    AddStopEventToTimeline          ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime );
+    bool                    AddLoopEventToTimeline          ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount, TimeType jumpToTime );
+    bool                    AddNullEventToTimeline          ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime );
+
 
 //    void                    RegisterRootTimeline    ( ITimeEvaluatorPtr root );
 //

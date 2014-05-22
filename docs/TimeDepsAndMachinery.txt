@@ -43,6 +43,7 @@ powinno okazać po tym, jak już ktoś poużywa tego mechanizmu realnie).
 
 Podsumowując:
   - API służące do tworzenia otypowanych tajmlajnów
+  - API służące do ułatwionego korzystania z tajmlajnów (rejestracja eventów)
   - API służące do zarządzania parametrami
   - API służące do interakcji między tajmlajnami
   
