@@ -166,7 +166,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager *
     timeEvaluator->AddChild( someTimelineWithEvents );
 
     //Plugin stuff
-    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 2 );
+    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins3, GSimplePlugins3 + 2 );
 
     auto node = new model::BasicNode( "Root" );
 
