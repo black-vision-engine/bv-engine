@@ -53,5 +53,22 @@ typedef std::shared_ptr< IAnimationResourceDescr > IAnimationResourceDescrPtr;
 
 const IAnimationResourceDescr * QueryAnimationResourceDescr( const IPluginResourceDescr * resDescr );
 
+//FIXME: move to a separate file
+class IFontResourceDescr : public IPluginResourceDescr
+{
+public:
+
+    virtual const std::string &     GetFontFile  () const = 0;
+
+    virtual ~IFontResourceDescr () {}
+
+};
+
+typedef std::shared_ptr< IFontResourceDescr > IFontResourceDescrPtr;
+
+const IFontResourceDescr * QueryFontResourceDescr( const IPluginResourceDescr * resDescr );
+
+
+
 } //model
 } //bv

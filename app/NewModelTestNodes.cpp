@@ -17,6 +17,7 @@ namespace {
     std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR" };
     std::string GSimplePlugins1[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_TEXTURE" };
     std::string GSimplePlugins2[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_ANIMATION" };
+    std::string GSimplePlugins3[] = { "DEFAULT_TRANSFORM", "DEFAULT_TEXT" };
 
     // *****************************
     //
@@ -148,6 +149,39 @@ model::BasicNode *  SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
 
     success = model::LoadAnimation( node->GetPlugin( "animation" ), "../../media/sequences/FullHD/alfai", "*.tga" );
     assert( success );
+
+    return node;    
+}
+
+model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    //Timeline stuff
+    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 3.0 ) );
+
+    someTimelineWithEvents->AddChild( localTimeline );
+    timeEvaluator->AddChild( someTimelineWithEvents );
+
+    //Plugin stuff
+    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 2 );
+
+    auto node = new model::BasicNode( "Root" );
+
+    auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
+    assert( success );
+
+    SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
+
+    //node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( localTimeline );
+
+    success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/ARIALUNI.TTF" );
+    assert( success );
+
+    auto ai = TestAIManager::Instance().GetAIPreset( 2 );
+    ai->SetTimeline( someTimelineWithEvents );
 
     return node;    
 }

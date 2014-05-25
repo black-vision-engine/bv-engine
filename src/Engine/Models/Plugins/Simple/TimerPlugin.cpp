@@ -11,13 +11,119 @@ namespace bv { namespace model {
 
 ////////////////////////////
 //
+namespace
+{
+
+bool IsPlaceHolder(wchar_t wch)
+{
+    return  wch == L'H'
+        ||  wch == L'M'
+        ||  wch == L'S'
+        ||  wch == L's';
+}
+
+void TimeFormatError()
+{
+    throw std::exception("wrong time format");
+}
+
+TimeInfo ParseTimePatern(const std::wstring& timePatern)
+{
+    bool HPHPossible = true;
+    bool MPHPossible = true;
+    bool SPHPossible = true;
+    bool FSPHPossible = true;
+
+    TimeInfo timeInfo = {0,0,0,0};
+
+    int i = 0;
+    int whiteSpaces = 0;
+    for( auto wch : timePatern )
+    {
+        if(IsPlaceHolder(wch))
+        {
+            switch ( wch )
+            {
+            case L'H':
+                if( !HPHPossible ) TimeFormatError();
+                if( timeInfo.hoursPlaceholderSize == 0 ) timeInfo.hoursPHStart = i - whiteSpaces;
+                timeInfo.hoursPlaceholderSize++;
+                break;
+            case L'M':
+                if(!MPHPossible) TimeFormatError();
+                if( timeInfo.minutesPlaceHolderSize == 0 ) timeInfo.minutesPHStart = i - whiteSpaces;
+                HPHPossible = false;
+                if(timeInfo.minutesPlaceHolderSize < 2)
+                    timeInfo.minutesPlaceHolderSize++;
+                else
+                    TimeFormatError();
+                break;
+            case L'S':
+                if(!SPHPossible) TimeFormatError();
+                if( timeInfo.secondsPlaceHolderSize == 0 ) timeInfo.secondsPHStart = i - whiteSpaces;
+                HPHPossible = false;
+                MPHPossible = false;
+                if(timeInfo.secondsPlaceHolderSize < 2)
+                    timeInfo.secondsPlaceHolderSize++;
+                else
+                    TimeFormatError();
+                break;
+            case L's':
+                if( timeInfo.fracOfSecondsPlaceholderSize == 0 ) timeInfo.fosPHStart = i - whiteSpaces;
+                HPHPossible = false;
+                MPHPossible = false;
+                SPHPossible = false;
+                if(!FSPHPossible) TimeFormatError();
+                timeInfo.fracOfSecondsPlaceholderSize++;
+                break;
+            }
+        }
+
+        if(isspace(wch))
+            whiteSpaces++;
+
+        ++i;
+    }
+
+    return timeInfo;
+}
+
+} // anonymous
+
+
+////////////////////////////
+//
+bool    TimeValue::operator!=(const TimeValue& other) const
+{
+    return  other.fracOfSecond == this->fracOfSecond
+        ||  other.second == this->second
+        ||  other.minute == this->minute
+        ||  other.hour == this->hour;
+}
+
+////////////////////////////
+//
+TimeValue::TimeValue( double time, int accuracy )
+{
+    this->fracOfSecond = int( ( time - floor( time ) ) * pow( 10, accuracy ) );
+    this->second    = int( time ) % 60;
+    this->minute    = int( time / 60 ) % 60;
+    this->hour      = int( time / (60 * 60 ) );
+}
+
+////////////////////////////
+//
 TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
     : BasePlugin( "dupa", "dupa", nullptr, nullptr )
     , m_timeParam( timeParam )
     , m_fontResource()
     , m_currentAtlas()
-    , m_timePatern( L"##:##:##" )
+    , m_timePatern( L"HHHH:MM:SS:ssssss" )
+    , m_currentTime( 0.0 )
+    , m_defaultSeparator(L':')
 {
+    m_timePaternInfo = ParseTimePatern( m_timePatern );
+
     m_fontResource = TextHelper::LoadFont( "../dep/Media/fonts/digital-7.ttf", fontSize, L"../dep/Media/fonts/TimerChars.txt" );
 
     m_currentAtlas = TextHelper::GetAtlas( m_fontResource );
@@ -28,7 +134,7 @@ TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
 
     m_vertexAttributeChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
-    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_currentAtlas, L"00:00:00", m_timePatern );
+    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_currentAtlas, L"0000:00:00:000000", m_timePatern );
 }
 
 ////////////////////////////
@@ -52,6 +158,106 @@ const GlyphCoords&                  TimerPlugin::GetGlyphCoords  ( wchar_t wch )
     return m_currentAtlas->GetGlyphCoords( wch );
 }
 
+
+int TimeInfo::GetSize() const
+{
+    return  hoursPlaceholderSize
+        +   minutesPlaceHolderSize
+        +   secondsPlaceHolderSize
+        +   fracOfSecondsPlaceholderSize;
+}
+
+
+
+////////////////////////////
+//
+void                                TimerPlugin::Refresh         ()
+{
+    int hPHSize = m_timePaternInfo.hoursPlaceholderSize;
+    int shift = m_timePaternInfo.hoursPHStart;
+    if( hPHSize > 0 )
+    {
+        int hour = m_currentTime.hour;
+        auto hourStr = std::to_wstring( hour );
+
+        int zerosBefore = hPHSize > (int)hourStr.size() ? ( hPHSize - (int)hourStr.size() ) : 0;
+
+        int i = 0;
+        for(; i < zerosBefore ; ++i )
+        {
+            SetValue( shift + i, L'0' );
+        }
+
+        for(; i < hPHSize; ++i )
+        {
+            SetValue( shift + i, hourStr[i - zerosBefore] );
+        }       
+    }
+
+    shift = m_timePaternInfo.minutesPHStart;
+    int mPHSize = m_timePaternInfo.minutesPlaceHolderSize;
+    if( mPHSize > 0 )
+    {
+        int minute = m_currentTime.minute;
+        auto minuteStr = std::to_wstring( minute );
+
+        int zerosBefore = mPHSize > (int)minuteStr.size() ? ( mPHSize - (int)minuteStr.size() ) : 0;
+
+        int i = 0;
+        for(; i < zerosBefore ; ++i )
+        {
+            SetValue( shift + i, L'0' );
+        }
+
+        for(; i < mPHSize; ++i )
+        {
+            SetValue( shift + i, minuteStr[i - zerosBefore] );
+        }       
+    }
+
+    shift = m_timePaternInfo.secondsPHStart;
+    int sPHSize = m_timePaternInfo.secondsPlaceHolderSize;
+    if( sPHSize > 0 )
+    {
+        int second = m_currentTime.second;
+        auto secondStr = std::to_wstring( second );
+
+        int zerosBefore = sPHSize > (int)secondStr.size() ? ( sPHSize - (int)secondStr.size() ) : 0;
+
+        int i = 0;
+        for(; i < zerosBefore ; ++i )
+        {
+            SetValue( shift + i, L'0' );
+        }
+
+        for(; i < sPHSize; ++i )
+        {
+            SetValue( shift + i, secondStr[i - zerosBefore] );
+        }       
+    }
+
+    shift = m_timePaternInfo.fosPHStart;
+    int fosPHSize = m_timePaternInfo.fracOfSecondsPlaceholderSize;
+    if( fosPHSize > 0 )
+    {
+        int fos = m_currentTime.fracOfSecond;
+        auto fosStr = std::to_wstring( fos );
+
+        int zerosBefore = fosPHSize > (int)fosStr.size() ? ( fosPHSize - (int)fosStr.size() ) : 0;
+
+        int i = 0;
+        for(; i < zerosBefore ; ++i )
+        {
+            SetValue( shift + i, L'0' );
+        }
+
+        for(; i < fosPHSize; ++i )
+        {
+            SetValue( shift + i, fosStr[i - zerosBefore] );
+        }       
+    }
+}
+
 ////////////////////////////
 //
 void                                TimerPlugin::SetValue       ( unsigned int connComp, wchar_t wch )
@@ -66,7 +272,7 @@ void                                TimerPlugin::SetValue       ( unsigned int c
     auto widthNorm  = ( float )coords.width / m_currentAtlas->GetWidth();
     auto heightNorm = ( float )coords.height / m_currentAtlas->GetHeight();
 
-    if( m_timePatern[ connComp ] == L'#' )
+    if( IsPlaceHolder( m_timePatern[ connComp ] ) )
         if( connComp < comps.size() )
         {
             if( comps[ connComp ]->GetNumVertices() == 4 )
@@ -131,6 +337,20 @@ void                                TimerPlugin::SetTime        ( const std::wst
 
 ////////////////////////////
 //
+void                                TimerPlugin::SetTime        ( double time )
+{
+    TimeValue   newTime( time, m_timePaternInfo.fracOfSecondsPlaceholderSize );
+
+    if( m_currentTime  != newTime )
+    {
+        m_currentTime = newTime;
+        Refresh();
+        m_vertexAttributeChannel->SetNeedsAttributesUpdate( true );
+    }
+}
+
+////////////////////////////
+//
 const IVertexAttributesChannel *    TimerPlugin::GetVertexAttributesChannel          () const
 {
     return m_vertexAttributeChannel.get();
@@ -150,21 +370,7 @@ void                                TimerPlugin::Update                      ( T
     //FIXME: UPDATER TO FIX
     float time = m_timeParam.Evaluate();
 
-    int setSec = int(time * 100) % 100;
-    int sec = int(time) % 60;
-    int min = int(time / 60) % 60;
-
-    std::wstring newTime =      ( std::to_wstring( min ).size() == 2 ? std::to_wstring( min ) : ( L"0" + std::to_wstring( min ) ) )
-                            +   L":"
-                            +   ( std::to_wstring( sec ).size() == 2 ? std::to_wstring( sec ) : ( L"0" + std::to_wstring( sec ) ) )
-                            +   L":"
-                            +   ( std::to_wstring( setSec ).size() == 2 ? std::to_wstring( setSec ) : ( L"0" + std::to_wstring( setSec ) ) );
-
-    if( newTime != m_currentTime )
-    {
-        SetTime( newTime );
-        m_vertexAttributeChannel->SetNeedsAttributesUpdate( true );
-    }
+    SetTime( time );
 }
 
 ////////////////////////////

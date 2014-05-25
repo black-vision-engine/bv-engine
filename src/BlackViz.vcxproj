@@ -292,6 +292,7 @@
     <ClCompile Include="Engine\Models\Plugins\PluginUtils.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultAnimationPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultColorPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\DefaultTextPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultTexturePlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleAnimationPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleColorPlugin.cpp" />
@@ -313,6 +314,7 @@
     <ClCompile Include="Engine\Models\Resources\TextHelpers.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextureLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\AnimationResourceDescr.cpp" />
+    <ClCompile Include="Engine\Models\Resources\Texture\FontResourceDescr.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\TextureResourceDescr.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventLoop.cpp" />
@@ -321,7 +323,9 @@
     <ClCompile Include="Engine\Models\Timeline\GlobalTimeline.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
-    <ClCompile Include="Engine\Models\Timeline\TimeEvaluatorBase.inl" />
+    <None Include="Engine\Models\Timeline\TimeEvaluatorBase.inl">
+      <FileType>Document</FileType>
+    </None>
     <ClCompile Include="Engine\Models\Timeline\TimelineManager.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimeSegmentEvalImpl.cpp" />
     <ClCompile Include="Engine\Models\Updaters\GeometryUpdater.cpp" />
@@ -528,6 +532,7 @@
     <ClInclude Include="Engine\Models\Plugins\PluginUtils.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultAnimationPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultColorPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\DefaultTextPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultTexturePlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleAnimationPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleColorPlugin.h" />
@@ -553,6 +558,7 @@
     <ClInclude Include="Engine\Models\Resources\TextHelpers.h" />
     <ClInclude Include="Engine\Models\Resources\TextureLoader.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\AnimationResourceDescr.h" />
+    <ClInclude Include="Engine\Models\Resources\Texture\FontResourceDescr.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\TextureResourceDescr.h" />
     <ClInclude Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />

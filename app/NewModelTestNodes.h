@@ -22,6 +22,8 @@ public:
 
     static model::BasicNode *  CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static model::BasicNode *  CreateTextureAnimationRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+
+    static model::BasicNode *  CreateTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 };
 
 } //bv
