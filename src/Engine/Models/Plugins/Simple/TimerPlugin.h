@@ -22,11 +22,38 @@ public:
     static const char*       GetName()        { return "timer_plugin"; }
 };
 
+struct TimeValue
+{
+    int     fracOfSecond;
+    int     second;
+    int     minute;
+    int     hour;
+
+    explicit    TimeValue( double time, int accuracy = 2 );
+
+    bool        operator!=(const TimeValue& other) const;
+};
+
+struct TimeInfo
+{
+    int hoursPHStart;
+    int hoursPlaceholderSize; // 0..
+    int minutesPHStart;
+    int minutesPlaceHolderSize; // 0..2
+    int secondsPHStart;
+    int secondsPlaceHolderSize; // 0..2
+    int fosPHStart;
+    int fracOfSecondsPlaceholderSize; // 0..
+
+    int GetSize() const;
+};
+
 // ***************************** PLUGIN ********************************** 
 class TimerPlugin : public BasePlugin< IPlugin >
 {
     ParamFloat                  m_timeParam;
-    std::wstring                m_currentTime;
+    TimeValue                   m_currentTime;
+    const wchar_t               m_defaultSeparator;
 
     VertexAttributesChannelPtr  m_vertexAttributeChannel;
 
@@ -36,6 +63,7 @@ class TimerPlugin : public BasePlugin< IPlugin >
     const TextAtlas*            m_currentAtlas;
 
     std::wstring                m_timePatern;
+    TimeInfo                    m_timePaternInfo;
 
     explicit                    TimerPlugin     ( const ParamFloat& timeParam, unsigned int fontSize );
 
@@ -43,6 +71,7 @@ class TimerPlugin : public BasePlugin< IPlugin >
 
     void                        SetValue        ( unsigned int connComp, wchar_t wch );
     const GlyphCoords&          GetGlyphCoords  ( wchar_t wch ) const;
+    void                        Refresh         ();
 
 public:
 
@@ -50,6 +79,11 @@ public:
 
     void                                        SetTimePatern               ( const std::wstring& patern );
     void                                        SetTime                     ( const std::wstring& time );
+    void                                        SetTime                     ( double time );
+    void                                        SetHOSecond                 ( int hoSec );
+    void                                        SetSecond                   ( int sec );
+    void                                        SetMinute                   ( int min );
+    void                                        SetHour                     ( int h );
 
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
     virtual TextureInfoVec                      GetTextures                 () const override;
