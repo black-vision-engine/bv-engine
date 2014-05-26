@@ -50,15 +50,28 @@ public:
     bool                    AddLoopRestartEventToTimeline   ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount );
     bool                    AddNullEventToTimeline          ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime );
 
+    void                    RegisterRootTimeline            ( ITimeEvaluatorPtr root );
 
-//    void                    RegisterRootTimeline    ( ITimeEvaluatorPtr root );
-//
-//    ITimeEvaluatorPtr       GetRootTimeline         ();
-//
-//    ITimeEvaluatorPtr       GetTimeline             ( const std::string & name );
-//    IParamSet *             GetRegisteredParameters ( ITimeEvaluatorPtr timeline );
-//    IParamSet *             GetRegisteredParameters ( const std::string & name );
-//
+    ITimeEvaluatorPtr       GetRootTimeline                 ();
+
+    ITimeEvaluatorPtr       GetTimeline                     ( const std::string & name );
+    ITimeEvaluatorPtr       GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
+
+    bool                    AddTimeline                     ( ITimeEvaluatorPtr timeline );
+    bool                    AddTimelineToTimeline           ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline );
+    bool                    AddTimelineToTimeline           ( ITimeEvaluatorPtr timeline, const std::string & parentName );
+
+    bool                    RemoveTimelineFromTimeline      ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline );
+    bool                    RemoveTimelineFromTimeline      ( ITimeEvaluatorPtr timeline, const std::string & parentName );
+    bool                    RemoveTimelineFromTimeline      ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
+    bool                    RemoveTimelineFromTimeline      ( const std::string & name, const std::string & parentName );
+
+    bool                    RemoveAllChildren               ( ITimeEvaluatorPtr timeline );
+    bool                    RemoveAllChildren               ( const std::string & name );
+
+    IParamSet *             GetRegisteredParameters ( ITimeEvaluatorPtr timeline );
+    IParamSet *             GetRegisteredParameters ( const std::string & name );
+
 //    bool                    RegisterOffsetTimeline  ( const std::string & name, TimeType offsetTime, std::string & parentName );
 //    bool                    RegisterConstTimeline   ( const std::string & name, TimeType constTime, std::string & parentName );
 //
