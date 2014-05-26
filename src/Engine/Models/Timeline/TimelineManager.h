@@ -83,8 +83,9 @@ public:
 //    unsigned int            RemoveFromTimeline      ( const std::string & paramName, const std::string & timelineName );
 //    bool                    RemoveFromTimeline      ( IParameter * param, const std::string & timelineName );
 //
-//private:
-//
+private:
+
+    ITimeEvaluatorPtr       FindTimelineByName              ( const std::string & name, ITimeEvaluatorPtr root );
 //    SimpleIParamSet *       GetSimpleIParamSet      ( const std::string & timelineName );
 //    bool                    AddParamToTimelineImpl  ( IParameter * param, ITimeEvaluatorPtr timeline );
 //

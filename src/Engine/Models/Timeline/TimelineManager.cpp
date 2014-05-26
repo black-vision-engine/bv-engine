@@ -8,6 +8,7 @@ namespace bv { namespace model {
 // *********************************
 //
 TimelineManager::TimelineManager         ()
+    : m_rootTimeline( nullptr )
 {
 }
 
@@ -61,10 +62,10 @@ DefaultTimelinePtr      TimelineManager::CreateDefaultTimelineImpl      ( const 
 
     return timeline;
 }
-    
+
 // *********************************
 //
-bool                    TimelineManager::AddStopEventToTimeline              ( ITimelinePtr timeline, const std::string & eventName, TimeType stopTime )
+bool                    TimelineManager::AddStopEventToTimeline          ( ITimelinePtr timeline, const std::string & eventName, TimeType stopTime )
 {
     assert( timeline != nullptr );
 
@@ -100,7 +101,7 @@ bool                    TimelineManager::AddLoopRestartEventToTimeline   ( ITime
 
 // *********************************
 //
-bool                    TimelineManager::AddNullEventToTimeline          ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime )
+bool                    TimelineManager::AddNullEventToTimeline     ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime )
 {
     assert( timeline != nullptr );
 
@@ -109,30 +110,43 @@ bool                    TimelineManager::AddNullEventToTimeline          ( ITime
 
 // *********************************
 //
-void                    TimelineManager::RegisterRootTimeline    ( ITimeEvaluatorPtr root )
+void                    TimelineManager::RegisterRootTimeline       ( ITimeEvaluatorPtr root )
 {
     m_rootTimeline = root;
 }
 
 // *********************************
 //
-ITimeEvaluatorPtr       TimelineManager::GetRootTimeline         ()
+ITimeEvaluatorPtr       TimelineManager::GetRootTimeline            ()
 {
     return m_rootTimeline;
 }
 
 // *********************************
 //
-ITimeEvaluatorPtr       TimelineManager::GetTimeline             ( const std::string & name )
+ITimeEvaluatorPtr       TimelineManager::GetTimeline                ( const std::string & name )
 {
-    //FIXME: implement
-    return nullptr;
+    return FindTimelineByName( name, m_rootTimeline );
 }
 
 // *********************************
 //
-ITimeEvaluatorPtr       TimelineManager::GetTimeline            ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
+ITimeEvaluatorPtr       TimelineManager::GetTimeline                ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
 {
+    if( parentTimeline != nullptr )
+    {
+        for( auto child : parentTimeline->GetChildren() )
+        {
+            auto retVal = FindTimelineByName( name, child );
+            
+            if( retVal != nullptr )
+            {
+                return retVal;
+            }
+        }
+    }
+
+    return nullptr;
 }
 
 // *********************************
@@ -283,6 +297,31 @@ IParamSet *             TimelineManager::GetRegisteredParameters ( const std::st
 //
 //    return bAdded;
 //}
+
+ITimeEvaluatorPtr       TimelineManager::FindTimelineByName             ( const std::string & name, ITimeEvaluatorPtr root )
+{
+    if( root != nullptr )
+    {
+        if( root->GetName() == name )
+        {
+            return root;
+        }
+        else
+        {
+            for( auto child : root->GetChildren() )
+            {
+                auto retTimeline = FindTimelineByName( name, child );
+
+                if( retTimeline != nullptr )
+                {
+                    return retTimeline;
+                }
+            }
+        }
+    }
+
+    return nullptr;
+}
 
 } //model
 } //bv
