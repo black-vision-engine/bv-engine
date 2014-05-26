@@ -26,7 +26,6 @@ class TimelineManager
 {
 private:
 
-    std::hash_map< std::string, ITimeEvaluatorPtr >         m_timelinesMap;
     std::hash_map< ITimeEvaluator *, SimpleIParamSet * >    m_registeredParams;
 
     ITimeEvaluatorPtr                                       m_rootTimeline;
@@ -75,19 +74,15 @@ public:
     bool                    AddParamToTimeline              ( IParameter * param, const std::string & timelineName );
     bool                    AddParamToTimeline              ( IParameter * param, ITimeEvaluatorPtr timeline );
 
-    unsigned int            RemoveFromTimeline              ( const std::string & paramName, const std::string & timelineName );
-    bool                    RemoveFromTimeline              ( IParameter * param, const std::string & timelineName );
-    bool                    RemoveFromTimeline              ( IParameter * param, const ITimeEvaluatorPtr timeline );
+    unsigned int            RemoveParamFromTimeline         ( const std::string & paramName, const std::string & timelineName );
+    bool                    RemoveParamFromTimeline         ( IParameter * param, const std::string & timelineName );
+    bool                    RemoveParamFromTimeline         ( IParameter * param, const ITimeEvaluatorPtr timeline );
 
 private:
 
     ITimeEvaluatorPtr       FindTimelineByName              ( const std::string & name, ITimeEvaluatorPtr root );
-
     SimpleIParamSet *       GetParamSet                     ( ITimeEvaluatorPtr timeline );
-
-//    SimpleIParamSet *       GetSimpleIParamSet      ( const std::string & timelineName );
-//    bool                    AddParamToTimelineImpl  ( IParameter * param, ITimeEvaluatorPtr timeline );
-//
+    bool                    DeregisterParam                 ( IParameter * param, ITimeEvaluatorPtr timeline );
 
 };
 
