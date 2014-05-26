@@ -88,6 +88,30 @@ void            DefaultPluginListFinalized::Update              ( TimeType t )
 
 // *******************************
 //
+IPlugin *       DefaultPluginListFinalized::GetPlugin           ( const std::string & name )
+{
+    for( auto plugin : m_plugins )
+    {
+        if( plugin->GetName() == name )
+        {
+            return plugin.get();
+        }
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+IPlugin *       DefaultPluginListFinalized::GetPlugin           ( unsigned int idx )
+{
+    assert( idx < m_plugins.size() );
+
+    return m_plugins[ idx ].get();
+}
+
+// *******************************
+//
 void            DefaultPluginListFinalized::AttachPlugin        ( IPlugin * plugin )
 {
     assert( plugin != nullptr );

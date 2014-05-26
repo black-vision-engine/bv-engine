@@ -30,7 +30,7 @@ class ModelScene : public IUpdatable
 
 public:
 
-    static ModelScene * Create                  ( BasicNode * node, Camera * cam, const std::string & name );
+    static ModelScene * Create                  ( BasicNode * node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
 
     virtual void        Update                  ( TimeType t );
 
@@ -45,7 +45,7 @@ public:
 
 private:
 
-    explicit ModelScene( BasicNode * node, Camera * cam, const std::string & name );
+    explicit ModelScene( BasicNode * node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
 
     friend class ModelAccessors;
 

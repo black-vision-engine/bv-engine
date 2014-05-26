@@ -15,8 +15,8 @@
 
 #include "Engine/Graphics/Resources/VertexDescriptor.h" //FIXME: ten kod, ktory potrzebuje tego deskryptora, tekstur i animacji powinien byc w default effect lub cos, a nie tutaj - to do przerobienia koniecznie
 #include "Engine/Graphics/Resources/Textures/TextureManager.h"
-#include "Engine/Graphics/Resources/Texture2D.h"
-#include "Engine/Graphics/Resources/TextureAnimatedSequence2D.h"
+#include "Engine/Graphics/Resources/Texture2DImpl.h"
+#include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
 
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 
@@ -62,7 +62,7 @@ BasicNode::~BasicNode()
 
 // ********************************
 //
-const IPlugin *                 BasicNode::GetPlugin               ( const std::string & name ) const
+IPlugin *                       BasicNode::GetPlugin               ( const std::string & name ) const
 {
     return m_pluginList->GetPlugin( name );
 }
@@ -99,139 +99,16 @@ const std::string &             BasicNode::GetName                 () const
 //
 SceneNode *                 BasicNode::BuildScene()
 {
-    RenderableEntity *  renderable  = nullptr;
-    RenderableEffect *  effect      = nullptr;
-
     const IPlugin * finalizer = m_pluginList->GetFinalizePlugin();
 
-    if( finalizer->GetVertexAttributesChannel() )
-    {
-        auto renderableType = finalizer->GetVertexAttributesChannel()->GetPrimitiveType();
-
-        effect = CreateDefaultEffect( finalizer );
-
-        //RenderableArrayDataSingleVertexBuffer * rad = CreateRenderableArrayData( renderableType );
-        //CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
-        //effect = ;
-
-        //FIXME: to powinna ogarniac jakas faktoria-manufaktura
-        switch( renderableType )
-        {
-            case PrimitiveType::PT_TRIANGLE_STRIP:
-            {
-                //FIXME: it should be constructed as a proper type RenderableArrayDataArraysSingleVertexBuffer * in the first place
-                //FIXME: this long type name suggests that something wrong is happening here (easier to name design required)
-                RenderableArrayDataArraysSingleVertexBuffer * radasvb = CreateRenderableArrayDataTriStrip();
-
-                if( radasvb )
-                {
-                    renderable = new TriangleStrip( radasvb, effect );
-                }
-                break;
-            }
-            case PrimitiveType::PT_TRIANGLES:
-            case PrimitiveType::PT_TRIANGLE_MESH:
-                assert( false );
-            default:
-                return nullptr;
-        }
-    }
-    else
-    {
-        renderable = new TriangleStrip( nullptr, nullptr );
-    }
-
-    bv::Transform worldTrans;
-
-    std::vector< bv::Transform > trans;
-    trans.push_back( worldTrans );
-
-    renderable->SetWorldTransforms( trans );
-
-    //FIXME: tekstury powinny byc rowniez przeniesione do efektu i parametrow, a nie tak jak teraz
-    if ( effect ) //create only, if there is any geometry to be renderedm
-    {
-        //TODO: dodac liste layerow do zwracanego SceneNode
-        RenderablePass * renderablePass = effect->GetPass( 0 ); //FIXME: add code to cope with more render passes
-        auto pixelShader = renderablePass->GetPixelShader();
-
-        if( finalizer->HasAnimatingTexture() ) //FIXME: this suxx, some flags should be passed here
-        {
-            SamplerWrappingMode wp[] = { SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT, SamplerWrappingMode::SWM_REPEAT }; 
-            auto textureSampler = new TextureSampler( 0, "Animation0", bv::SamplerSamplingMode::SSM_MODE_2D, SamplerFilteringMode::SFM_LINEAR, wp, glm::vec4( 0.f, 0.f, 1.f, 0.f ) );
-
-            pixelShader->AddTextureSampler( textureSampler );
-            TextureAnimatedSequence2D * animation = nullptr;
-
-            unsigned int i = 0;
-            for( auto tex : finalizer->GetTextures() )
-            {
-                auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
-
-                if( i == 0 )
-                {
-                    animation = new TextureAnimatedSequence2D( loadedTex->GetFormat(), loadedTex->GetType(), loadedTex->GetWidth(), loadedTex->GetHeight() );
-                }
-
-                animation->AddTexture( loadedTex );
-                ++i;
-            }
-
-            assert( i > 1 );
-            ShaderTextureParameters & texParams = pixelShader->Parameters()->TextureParameters();
-            bool bAdded = ShaderTextureParametersAccessor::Add( texParams, animation );
-
-            assert( bAdded );
-
-            UpdatersManager & updatersManager = UpdatersManager::Get();
-
-            SequenceAnimationUpdater * updater = new SequenceAnimationUpdater( animation, finalizer->QuerySequenceAnimationSource() ); //asert fals - do dupy ten syf
-            updatersManager.RegisterUpdater( updater );
-        }
-        else
-        {
-            int i = 0;
-            for( auto tex : finalizer->GetTextures() )
-            {
-                SamplerWrappingMode wp[] = {
-                                                ConstantsMapper::EngineConstant( tex->m_wrappingModeX ) 
-                                            ,   ConstantsMapper::EngineConstant( tex->m_wrappingModeY )
-                                            ,   SamplerWrappingMode::SWM_REPEAT // FIXME: Add 3d texture support
-                                            }; 
-                //FIXME: jak to kurwa przez tex->m_texName ????
-                auto textureSampler = new TextureSampler(       i
-                                                            ,   tex->m_texName
-                                                            ,   bv::SamplerSamplingMode::SSM_MODE_2D
-                                                            ,   ConstantsMapper::EngineConstant( tex->m_finteringMode )
-                                                            ,   wp
-                                                            ,   tex->m_texBorderColor.Evaluate( 0.f ) );
-                effect->GetPass( 0 )->GetPixelShader()->AddTextureSampler( textureSampler );
-
-                auto loadedTex = bv::GTextureManager.LoadTexture( tex->m_resHandle, false );
-
-                ShaderTextureParameters & texParams = effect->GetPass( 0 )->GetPixelShader()->Parameters()->TextureParameters();
-                bool bAdded = ShaderTextureParametersAccessor::Add( texParams, loadedTex );
-
-                assert( bAdded );
-
-                i++;
-            }
-        }
-
-        //BE AWARE: Updater only sets proper local and world matrices for the geometry and all model transformations have already been updated at this point
-    }
-
-    SceneNode * retNode = new SceneNode( renderable );
-
-    NodeUpdater * nodeUpdater = new NodeUpdater( renderable, retNode, this );
-    UpdatersManager::Get().RegisterUpdater( nodeUpdater );
+    SceneNode * node = CreateSceneNode( finalizer );
 
     for( auto ch : m_children )
     {
-        retNode->AddChildNode( ch->BuildScene() );
+        node->AddChildNode( ch->BuildScene() );
     }
 
-    return retNode;
+    return node;
 }
 
 // ********************************
@@ -294,7 +171,7 @@ bool            BasicNode::AddPlugin               ( IPluginPtr plugin )
 
 // ********************************
 //
-bool            BasicNode::AddPlugin               ( const std::string & uid )
+bool            BasicNode::AddPlugin               ( const std::string & uid, ITimeEvaluatorPtr timeEvaluator )
 {
     NonNullPluginsListGuard ();
 
@@ -305,14 +182,14 @@ bool            BasicNode::AddPlugin               ( const std::string & uid )
         return false;
     }
 
-    m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, prev ) );
+    m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, prev, timeEvaluator ) );
 
     return true;
 }
 
 // ********************************
 //
-bool            BasicNode::AddPlugin               ( const std::string & uid, const std::string & name )
+bool            BasicNode::AddPlugin               ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
 {
     NonNullPluginsListGuard ();
 
@@ -323,18 +200,18 @@ bool            BasicNode::AddPlugin               ( const std::string & uid, co
         return false;
     }
 
-    m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, name, prev ) );
+    m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, name, prev, timeEvaluator ) );
 
     return true;
 }
 
 // ********************************
 //
-bool           BasicNode::AddPlugins              ( const std::vector< std::string > & uids )
+bool           BasicNode::AddPlugins              ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator )
 {
     for( auto uid : uids )
     {
-        if( !AddPlugin( uid ) )
+        if( !AddPlugin( uid, timeEvaluator ) )
         {
             return false;
         }
@@ -345,7 +222,7 @@ bool           BasicNode::AddPlugins              ( const std::vector< std::stri
 
 // ********************************
 //
-bool           BasicNode::AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names )
+bool           BasicNode::AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator )
 {
     if( uids.size() != names.size() )
     {
@@ -354,7 +231,7 @@ bool           BasicNode::AddPlugins              ( const std::vector< std::stri
 
     for( unsigned int i = 0; i < names.size(); ++i )
     {
-        if( !AddPlugin( uids[ i ], names[ i ] ) )
+        if( !AddPlugin( uids[ i ], names[ i ], timeEvaluator ) )
         {
             return false;
         }
@@ -388,6 +265,90 @@ bool  BasicNode::IsVisible               () const
 void  BasicNode::SetVisible              ( bool visible )
 {
     m_visible = visible;
+}
+
+// ********************************
+//
+SceneNode *                         BasicNode::CreateSceneNode          ( const IPlugin * finalizer ) const
+{
+    RenderableEntity * renderable = CreateRenderable( finalizer );
+
+    SceneNode * node        = new SceneNode( renderable );
+    NodeUpdater * updater   = new NodeUpdater( renderable, node, this );
+    UpdatersManager::Get().RegisterUpdater( updater );
+
+    return node;
+}
+
+// ********************************
+//
+RenderableEntity *                  BasicNode::CreateRenderable         ( const IPlugin * finalizer ) const
+{
+    RenderableEntity * renderable = nullptr;
+
+    if( finalizer->GetVertexAttributesChannel() )
+    {
+        auto renderableType = finalizer->GetVertexAttributesChannel()->GetPrimitiveType();
+
+        RenderableEffect * effect = CreateDefaultEffect( finalizer );
+
+        //RenderableArrayDataSingleVertexBuffer * rad = CreateRenderableArrayData( renderableType );
+        //CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
+        //effect = ;
+
+        //FIXME: to powinna ogarniac jakas faktoria-manufaktura
+        switch( renderableType )
+        {
+            case PrimitiveType::PT_TRIANGLE_STRIP:
+            {
+                //FIXME: it should be constructed as a proper type RenderableArrayDataArraysSingleVertexBuffer * in the first place
+                //FIXME: this long type name suggests that something wrong is happening here (easier to name design required)
+                RenderableArrayDataArraysSingleVertexBuffer * radasvb = CreateRenderableArrayDataTriStrip();
+
+                if( radasvb )
+                {
+                    renderable = new TriangleStrip( radasvb, effect );
+                }
+                break;
+            }
+            case PrimitiveType::PT_TRIANGLES:
+            case PrimitiveType::PT_TRIANGLE_MESH:
+                assert( false );
+            default:
+                return nullptr;
+        }
+    }
+    else
+    {
+        renderable = new TriangleStrip( nullptr, nullptr );
+    }
+
+    auto worldTransformVec = CreateTransformVec( finalizer );
+
+    renderable->SetWorldTransforms( worldTransformVec );
+
+    return renderable;
+}
+
+// ********************************
+//
+std::vector< bv::Transform >        BasicNode::CreateTransformVec      ( const IPlugin * finalizer ) const
+{
+    auto tc = finalizer->GetTransformChannel();
+    assert( tc );
+
+    auto numTransforms = tc->GetTransformValues().size();
+    assert( numTransforms > 0 );
+
+    std::vector< bv::Transform > worldTransformVec;
+
+    for( unsigned int i = 0; i < numTransforms; ++i )
+    {
+        bv::Transform worldTrans;
+        worldTransformVec.push_back( worldTrans );
+    }
+
+    return worldTransformVec;
 }
 
 // ********************************

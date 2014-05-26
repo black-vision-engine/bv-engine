@@ -17,18 +17,18 @@ DefaultColorPluginDesc::DefaultColorPluginDesc                          ()
 
 // *******************************
 //
-IPlugin *               DefaultColorPluginDesc::CreatePlugin                ( const std::string & name, const IPlugin * prev ) const
+IPlugin *               DefaultColorPluginDesc::CreatePlugin                ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePluginTyped< DefaultColorPlugin >( name, prev );
+    return CreatePluginTyped< DefaultColorPlugin >( name, prev, timeEvaluator );
 }
 
 // *******************************
 //
-DefaultPluginParamValModel *    DefaultColorPluginDesc::CreateDefaultModel  () const
+DefaultPluginParamValModel *    DefaultColorPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
     DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
     DefaultParamValModel * psModel      = new DefaultParamValModel();
-    SimpleVec4Evaluator * evaluator     = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color" );
+    SimpleVec4Evaluator * evaluator     = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
 
     psModel->RegisterAll( evaluator );
     model->SetPixelShaderChannelModel( psModel );
@@ -61,10 +61,9 @@ std::string             DefaultColorPluginDesc::PixelShaderSource           ()
 DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model )
     : BasePlugin( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_pixelShaderChannel( nullptr )
-    , m_vertexShaderChannel( nullptr )
     , m_paramValModel( model )
 { 
-    m_pixelShaderChannel = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultColorPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), false ) );
+    m_pixelShaderChannel = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultColorPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
 }
 
 // *************************************
@@ -84,7 +83,7 @@ const IPixelShaderChannel *         DefaultColorPlugin::GetPixelShaderChannel   
 //
 void                                DefaultColorPlugin::Update                      ( TimeType t )
 {
-    m_paramValModel->Update( t );
+    m_paramValModel->Update();
     m_pixelShaderChannel->PostUpdate();
 }
 

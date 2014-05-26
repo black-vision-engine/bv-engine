@@ -106,4 +106,74 @@ enum class IndexType : int
     IT_TOTAL
 };
 
+enum class TextureAttachmentMode : int
+{
+    MM_ATTACHED = 0,
+    MM_FREE,
+
+    MM_TOTAL
+};
+
+enum class TextureWrappingMode : int
+{
+    TWM_CLAMP = 0,
+    TWM_REPEAT,
+    TWM_MIRROR,
+    TWM_CLAMP_BORDER,
+    TWM_CLAMP_EDGE, 
+
+    TWM_TOTAL
+};
+
+enum class TextureFilteringMode : int
+{
+    TFM_POINT = 0,
+    TFM_LINEAR,
+
+    TFM_TOTAL
+};
+
+enum class PluginResourceType : int
+{
+    PRT_TEXTURE = 0,
+    PRT_ANIMATION,
+
+    PRT_TOTAL
+};
+
+enum class TimelineEventType : int
+{
+    TET_STOP = 0,
+    TET_LOOP,
+    TET_NULL,
+
+    TET_TOTAL
+};
+
+enum class TimelinePlayDirection : int
+{
+    TPD_FORWAD = 0,
+    TPD_BACKWARD,
+
+    TPD_TOTAL
+};
+
+enum class TimelineWrapMethod : int
+{
+    TWM_CLAMP = 0,
+    TWM_REPEAT,
+    TWM_MIRROR,
+
+    TWM_TOTAL
+};
+
+enum class LoopEventAction : int
+{
+    LEA_REVERSE = 0,
+    LEA_RESTART,
+    LEA_GOTO,
+
+    LEA_TOTAL
+};
+
 } // bv

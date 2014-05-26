@@ -6,19 +6,12 @@
 #include <glm/glm.hpp>
 
 #include "System/BasicTypes.h"
+#include "Mathematics/Core/mathfuncs.h"
 
 
-namespace bv
-{
-namespace
-{
+namespace bv {
 
-// *************************************
-//
-int round( double val )
-{
-    return static_cast<int>( std::floor( 0.5 + val ) );
-}
+namespace {
 
 // *************************************
 //
@@ -274,31 +267,6 @@ TimeValueT BasicInterpolator<TimeValueT, ValueT>::CalcPreT( TimeValueT t ) const
     }
 
     return t;
-}
-
-namespace 
-{
-
-// *************************************
-//
-double divmod( double t, double * i )
-{
-    double ret = std::fmod( t, *i );
-    *i = ( t - ret ) / *i;
-
-    return ret;
-}
-
-// *************************************
-//
-float divmod( float t, float * i )
-{
-    float ret = std::fmod( t, *i );
-    *i = ( t - ret ) / *i;
-
-    return ret;
-}
-
 }
 
 template<class TimeValueT, class ValueT>

@@ -19,6 +19,11 @@ ShaderParameters::~ShaderParameters                         ()
     {
         delete param;
     }
+
+    for( auto texture : m_textures )
+    {
+        delete texture;
+    }
 }
 
 // ***************************
@@ -36,6 +41,13 @@ void                ShaderParameters::UpdateParameters      ( RenderableEntity *
 void    ShaderParameters::AddParameter                      ( GenericShaderParam * param )
 {
     m_shaderParams.push_back( param );
+}
+
+// ***************************
+//
+void               ShaderParameters::AddTexture             ( Texture2D * texture )
+{
+    m_textures.push_back( texture );
 }
 
 } //bv

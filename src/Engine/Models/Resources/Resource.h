@@ -14,11 +14,11 @@ private:
 
 public:
 
-    virtual const std::string&            GetName     () const;
-    virtual const std::string&            GetFilePath () const;
+    virtual const std::string &            GetName     () const;
+    virtual const std::string &            GetFilePath () const;
 
-    Resource( const std::string& name, const std::string& filePath );
-    virtual ~Resource(){}
+                Resource    ( const std::string & name, const std::string & filePath );
+    virtual     ~Resource   () {}
 };
 
 class ResourceExtraData : public IResourceExtraData
@@ -26,6 +26,7 @@ class ResourceExtraData : public IResourceExtraData
     ResourceExtraKind               m_kind;
 
 public:
+
     virtual ResourceExtraKind       GetResourceExtraKind        () const { return m_kind; }
 
     explicit                        ResourceExtraData           ( ResourceExtraKind kind );

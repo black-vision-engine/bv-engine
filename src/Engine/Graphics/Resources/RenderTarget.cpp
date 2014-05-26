@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Texture2DImpl.h"
 
 
 namespace bv {
@@ -21,7 +21,7 @@ RenderTarget::RenderTarget ( int numTargets, TextureFormat format, int w, int h,
 
     for( i = 0; i < numTargets; ++i )
     {
-        m_ColorTextures.push_back( new Texture2D( format, w, h, DataBuffer::Semantic::S_RENDERTARGET ) );
+        m_ColorTextures.push_back( new Texture2DImpl( format, w, h, DataBuffer::Semantic::S_RENDERTARGET ) );
     }
 
 }

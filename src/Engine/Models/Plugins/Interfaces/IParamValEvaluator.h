@@ -13,7 +13,7 @@ class IParamValEvaluator : public IParamSet, public IValueSet
 {
 public:
 
-    virtual     void    Evaluate                ( TimeType t ) = 0;
+    virtual     void    Evaluate                () = 0;
 
     virtual             ~IParamValEvaluator     () {}
 

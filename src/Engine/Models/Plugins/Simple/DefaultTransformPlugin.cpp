@@ -17,24 +17,24 @@ DefaultTransformPluginDesc::DefaultTransformPluginDesc                          
 
 // *******************************
 //
-IPlugin *               DefaultTransformPluginDesc::CreatePlugin                ( const std::string & name, const IPlugin * prev ) const
+IPlugin *               DefaultTransformPluginDesc::CreatePlugin                ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePluginTyped< DefaultTransformPlugin >( name, prev );
+    return CreatePluginTyped< DefaultTransformPlugin >( name, prev, timeEvaluator );
 }
 
 // *******************************
 //
-DefaultPluginParamValModel *    DefaultTransformPluginDesc::CreateDefaultModel  () const
+DefaultPluginParamValModel *    DefaultTransformPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
     DefaultPluginParamValModel * model          = new DefaultPluginParamValModel();
     DefaultParamValModel * trModel              = new DefaultParamValModel();
-    TransformVecParamValEvaluator * evaluator   = ParamValEvaluatorFactory::CreateTransformVecEvaluator( "simple_transform" );
+    TransformVecParamValEvaluator * evaluator   = ParamValEvaluatorFactory::CreateTransformVecEvaluator( "simple_transform", timeEvaluator );
 
     trModel->RegisterAll( evaluator );
     model->SetTransformChannelModel( trModel );
 
     //Set default values
-    evaluator->Parameter()->Transform( 0 ).InitializeDefaultSRT( TimeType( 0.0 ) );
+    evaluator->Parameter()->Transform( 0 ).InitializeDefaultSRT();
 
     return model;
 }
@@ -87,7 +87,7 @@ const ITransformChannel *           DefaultTransformPlugin::GetTransformChannel 
 //
 void                                DefaultTransformPlugin::Update                      ( TimeType t )
 {
-    m_paramValModel->Update( t );
+    m_paramValModel->Update();
     m_transformChannel->PostUpdate();
 }
 

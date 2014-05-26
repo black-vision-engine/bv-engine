@@ -87,19 +87,13 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\RendererContext\FillContext.cpp" />
     <ClCompile Include="Engine\Models\Builder\RendererStatesBuilder.cpp" />
     <ClCompile Include="Engine\Models\Updaters\NodeUpdater.cpp" />
-    <ClCompile Include="Engine\Graphics\Resources\TextureAnimatedSequence2D.cpp" />
-    <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrTextureAnimatedSequence2D.cpp" />
     <ClCompile Include="Engine\Models\Updaters\SequenceAnimationUpdater.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\TextureBase.cpp" />
-    <ClCompile Include="Engine\Graphics\Resources\TextureAnimatedSequence.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextHelpers.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\FontLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\Text.cpp" />
-    <ClCompile Include="Engine\Models\Timeline\TimelineBase.cpp" />
-    <ClCompile Include="Engine\Models\Timeline\TimelineState.cpp" />
     <ClCompile Include="Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryMultiRectPlugin.cpp" />
-    <ClCompile Include="Engine\Models\Timeline\Timeline.cpp" />
     <ClCompile Include="Engine\Models\Timeline\GlobalTimeline.cpp" />
     <ClCompile Include="Engine\Models\Updaters\UpdatersManager.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimelineManager.cpp" />
@@ -168,7 +162,6 @@
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParameters.cpp" />
-    <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderTextureParameters.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamFactory.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat4.cpp" />
     <ClCompile Include="Engine\Graphics\Effects\DefaultEffect.cpp" />
@@ -182,6 +175,29 @@
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec2.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec3.cpp" />
     <ClCompile Include="Engine\Graphics\State\RendererStateInstance.cpp" />
+    <ClCompile Include="Engine\Graphics\Resources\Texture2DImpl.cpp" />
+    <ClCompile Include="Engine\Graphics\Resources\Texture2DSequenceImpl.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\DefaultTexturePlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultaAnimationDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.cpp" />
+    <ClCompile Include="Engine\Models\Resources\Texture\AnimationResourceDescr.cpp" />
+    <ClCompile Include="Engine\Models\Resources\Texture\TextureResourceDescr.cpp" />
+    <ClCompile Include="System\DirIO.cpp" />
+    <ClCompile Include="Core\StringHeplers.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\PluginUtils.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\DefaultAnimationPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventLoop.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventNull.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\TimeSegmentEvalImpl.cpp" />
+    <ClCompile Include="Mathematics\Core\mathfuncs.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\TimeEvaluatorBase.inl" />
+    <ClCompile Include="Engine\Models\Timeline\SimpleIParamSet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -286,22 +302,14 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\RendererContext\FillContext.h" />
     <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
     <ClInclude Include="Engine\Models\Updaters\NodeUpdater.h" />
-    <ClInclude Include="Engine\Graphics\Resources\TextureAnimatedSequence2D.h" />
-    <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrTextureAnimatedSequence2D.h" />
-    <ClInclude Include="Engine\Models\Plugins\PluginEnums.h" />
     <ClInclude Include="Engine\Models\Updaters\SequenceAnimationUpdater.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\ISequenceAnimationSource.h" />
     <ClInclude Include="Engine\Graphics\Resources\TextureBase.h" />
-    <ClInclude Include="Engine\Graphics\Resources\TextureAnimatedSequence.h" />
     <ClInclude Include="Engine\Models\Resources\TextHelpers.h" />
     <ClInclude Include="Engine\Models\Resources\Font\FontLoader.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Glyph.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Text.h" />
-    <ClInclude Include="Engine\Models\Timeline\Timeline.h" />
     <ClInclude Include="Engine\Models\Timeline\GlobalTimeline.h" />
-    <ClInclude Include="Engine\Models\Timeline\TimelineBase.h" />
-    <ClInclude Include="Engine\Models\Timeline\TimelineSettings.h" />
-    <ClInclude Include="Engine\Models\Timeline\TimelineState.h" />
     <ClInclude Include="System\BasicTypes.h" />
     <ClInclude Include="Engine\Models\Plugins\PluginsFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryMultiRectPlugin.h" />
@@ -393,7 +401,6 @@
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamVec4.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\GenericShaderParam.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParameters.h" />
-    <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderTextureParameters.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamFactory.h" />
     <ClInclude Include="Engine\Graphics\Shaders\Parameters\ShaderParamMat4.h" />
     <ClInclude Include="Engine\Graphics\Effects\DefaultEffect.h" />
@@ -411,6 +418,37 @@
     <ClInclude Include="Engine\Graphics\State\RendererStateEnums.h" />
     <ClInclude Include="Engine\Models\Interfaces\IModelNode.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITimeEvaluator.h" />
+    <ClInclude Include="Engine\Graphics\Resources\Texture2DImpl.h" />
+    <ClInclude Include="Engine\Graphics\Resources\Texture2DSequenceImpl.h" />
+    <ClInclude Include="Engine\Models\Interfaces\IAnimationDescriptor.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITextureDescriptor.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITexturesData.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITextureParams.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\DefaultTexturePlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITimeline.h" />
+    <ClInclude Include="Engine\Models\Resources\IPluginResourceDescr.h" />
+    <ClInclude Include="Engine\Models\Resources\Texture\AnimationResourceDescr.h" />
+    <ClInclude Include="Engine\Models\Resources\Texture\TextureResourceDescr.h" />
+    <ClInclude Include="System\DirIO.h" />
+    <ClInclude Include="Core\StringHeplers.h" />
+    <ClInclude Include="Engine\Models\Plugins\PluginUtils.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\DefaultAnimationPlugin.h" />
+    <ClInclude Include="Engine\Models\Interfaces\ITimelineEvent.h" />
+    <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventLoop.h" />
+    <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventNull.h" />
+    <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.h" />
+    <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />
+    <ClInclude Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
+    <ClInclude Include="Engine\Models\Timeline\TimeSegmentEvalImpl.h" />
+    <ClInclude Include="Mathematics\Core\mathfuncs.h" />
+    <ClInclude Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.h" />
+    <ClInclude Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.h" />
+    <ClInclude Include="Engine\Models\Timeline\TimeEvaluatorBase.h" />
+    <ClInclude Include="Engine\Models\Timeline\SimpleIParamSet.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
@@ -426,6 +464,8 @@
     <None Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.inl" />
     <None Include="Engine\Models\Updaters\NodeUpdater.inl" />
     <None Include="Engine\Graphics\SceneGraph\TransformableEntity.inl" />
+    <None Include="Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.inl" />
+    <None Include="Engine\Models\Timeline\TimeSegmentEvalImpl.inl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Engine\Models\Plugins\Interfaces\IVertexAttributesChannelDescriptor.h" />

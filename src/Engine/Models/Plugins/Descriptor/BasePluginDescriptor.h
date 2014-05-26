@@ -23,14 +23,14 @@ public:
     virtual const std::string &             DefaultPluginName   () const override;
 
     virtual bool                            CanBeAttachedTo     ( const IPlugin * plugin )  const override;
-    virtual IPluginParamValModel *          CreateModel         () const override;
+    virtual IPluginParamValModel *          CreateModel         ( ITimeEvaluatorPtr timeEvaluator ) const override;
 
-    virtual DefaultPluginParamValModel *    CreateDefaultModel  () const = 0;
+    virtual DefaultPluginParamValModel *    CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const = 0;
 
     template< typename PluginType >
-    PluginType *                           CreatePluginTyped    ( const std::string & name, const IPlugin * prev ) const
+    PluginType *                           CreatePluginTyped    ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator  ) const
     {
-        return new PluginType( name, GetPluginTypeUID(), prev, DefaultPluginParamValModelPtr( CreateDefaultModel() ) );
+        return new PluginType( name, GetPluginTypeUID(), prev, DefaultPluginParamValModelPtr( CreateDefaultModel( timeEvaluator ) ) );
     }
 
     virtual ~BasePluginDescriptor () {}

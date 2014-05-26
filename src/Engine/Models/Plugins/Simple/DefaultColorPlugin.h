@@ -17,8 +17,8 @@ public:
 
     DefaultColorPluginDesc                                      ();
 
-    virtual IPlugin *                       CreatePlugin        ( const std::string & name, const IPlugin * prev ) const override;
-    virtual DefaultPluginParamValModel *    CreateDefaultModel  () const override;
+    virtual IPlugin *                       CreatePlugin        ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual DefaultPluginParamValModel *    CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
     static  std::string                     UID                 ();
 
@@ -33,7 +33,6 @@ class DefaultColorPlugin : public BasePlugin< IPlugin >
 private:
 
     DefaultPixelShaderChannelPtr            m_pixelShaderChannel;
-    DefaultVertexShaderChannelPtr           m_vertexShaderChannel;
     DefaultPluginParamValModelPtr           m_paramValModel;
 
 public:

@@ -10,6 +10,8 @@
 #include "FrameStatsService.h"
 #include "BVForwards.h"
 
+#define HIDE_PROFILE_STATS
+
 
 namespace bv
 {
@@ -36,6 +38,7 @@ private:
 
     model::TimelineManager *        m_timelineManager;
     const model::PluginsManager *   m_pluginsManager;
+    model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
     model::ModelScene *             m_modelScene;
     SceneNode *                     m_mockSceneEng;
@@ -78,9 +81,9 @@ private:
 public:
 
     //Convenience API - generalized model accessors
-    model::TimelineManager *    GetTimelineManager  ();
-    model::ModelScene *         GetModelScene       ();
-
+    model::TimelineManager *        GetTimelineManager  ();
+    model::ModelScene *             GetModelScene       ();
+    const model::PluginsManager *   GetPluginsManager   () const;
 };
 
 } //bv

@@ -26,6 +26,11 @@ public:
     int                     GetPixelSize    () const;
     static int              GetPixelSize    ( TextureFormat format );
 
+protected:
+
+    void                    SetFormat       ( TextureFormat format );
+    void                    SetType         ( TextureType type );
+
 };
 
 }

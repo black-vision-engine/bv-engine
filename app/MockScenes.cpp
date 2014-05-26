@@ -4,6 +4,8 @@
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/Plugins/Simple/SimpleTransformPlugin.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
+#include "Engine/Types/Enums.h"
+
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -58,9 +60,9 @@ public:
 
     MyPixelShaderChannel( const std::string & shaderFile, const FloatInterpolator & alpha, const TransformF & tex0Transform, const TransformF & tex1Transform )
         : DefaultPixelShaderChannel( shaderFile, nullptr )
-        , m_alphaParam( TexturePixelShaderChannelPD::alphaParamName, alpha )
-        , m_tex0TransformParam( TexturePixelShaderChannelPD::txMatrix0ParamName, tex0Transform )
-        , m_tex1TransformParam( TexturePixelShaderChannelPD::txMatrix1ParamName, tex1Transform )
+        , m_alphaParam( TexturePixelShaderChannelPD::alphaParamName, alpha, nullptr )
+        , m_tex0TransformParam( TexturePixelShaderChannelPD::txMatrix0ParamName, tex0Transform, nullptr )
+        , m_tex1TransformParam( TexturePixelShaderChannelPD::txMatrix1ParamName, tex1Transform, nullptr )
     {
         //m_alphaValue            = model::ValueFloatPtr( new model::ValueFloat( ParamDesc::alphaParamName ) );
         //m_tex0TransformValue    = model::ValueMat4Ptr( new model::ValueMat4( ParamDesc::txMatrix0ParamName ) );
@@ -223,14 +225,14 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 
     /////////////////////////////// SimpleRect plugin //////////////////////////////////
 
-    auto w = model::ParametersFactory::CreateParameter( "width", InterpolatorsHelper::CreateConstValue( 1.f ) );
-    auto h = model::ParametersFactory::CreateParameter( "height", InterpolatorsHelper::CreateConstValue( 1.f )  );
+    auto w = model::ParametersFactory::CreateParameter( "width", InterpolatorsHelper::CreateConstValue( 1.f ), nullptr );
+    auto h = model::ParametersFactory::CreateParameter( "height", InterpolatorsHelper::CreateConstValue( 1.f ), nullptr  );
 
     model::GeometryRectPlugin    * rectPlugin  = new model::GeometryRectPlugin( w, h );
     
     root->AddPlugin( rectPlugin );
 
-    model::SimpleTransformPlugin      * stpl  = model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
+    model::SimpleTransformPlugin      * stpl  = nullptr; //model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
 
     root->AddPlugin( stpl );
 
@@ -240,20 +242,20 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     
     std::vector< const model::TextureDescriptor > textures;
         
-    textures.push_back( model::TextureDescriptor( "asci_arial_atlas_red.png", model::ParametersFactory::CreateParameter( "texTransform", tx0m ) ) );
-    textures.push_back( model::TextureDescriptor( "pliczek_z_kwiatkiem.jpg", model::ParametersFactory::CreateParameter( "texTransform", tx1m ) ) );
-    textures[0].alpha = model::ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 0.4f) );
-    textures[1].wrappingModeX = model::TextureWrappingMode::TWM_CLAMP_BORDER;
-    textures[1].wrappingModeY = model::TextureWrappingMode::TWM_CLAMP_EDGE;
-    textures[1].filteringMode = model::TextureFilteringMode::TFM_LINEAR;
-    textures[1].alpha = model::ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 1.f) );
-    textures[1].borderColor = model::ParametersFactory::CreateParameter( "texBorderColor", InterpolatorsHelper::CreateConstValue( glm::vec4( 0.f, 1.f, 0.f, 0.3f ) ) );
+    //textures.push_back( model::TextureDescriptor( "asci_arial_atlas_red.png", model::ParametersFactory::CreateParameter( "texTransform", tx0m ) ) );
+    //textures.push_back( model::TextureDescriptor( "pliczek_z_kwiatkiem.jpg", model::ParametersFactory::CreateParameter( "texTransform", tx1m ) ) );
+    //textures[0].alpha = model::ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 0.4f) );
+    //textures[1].wrappingModeX = TextureWrappingMode::TWM_CLAMP_BORDER;
+    //textures[1].wrappingModeY = TextureWrappingMode::TWM_CLAMP_EDGE;
+    //textures[1].filteringMode = TextureFilteringMode::TFM_LINEAR;
+    //textures[1].alpha = model::ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 1.f) );
+    //textures[1].borderColor = model::ParametersFactory::CreateParameter( "texBorderColor", InterpolatorsHelper::CreateConstValue( glm::vec4( 0.f, 1.f, 0.f, 0.3f ) ) );
 
-    stpp = model::PluginsFactory::CreateSimpleTexturePlugin( stpl, textures );
+    //stpp = model::PluginsFactory::CreateSimpleTexturePlugin( stpl, textures );
 
-    root->AddPlugin                 ( stpp );
+    //root->AddPlugin                 ( stpp );
 
-    numcall++;
+    //numcall++;
 
     return root;
 }
@@ -272,69 +274,69 @@ model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
     float dist = 0.75f;
 
     // ******************** Plugin intself *******************************
-    model::GeometryMultiRectPlugin    *  rectPlugin  = model::PluginsFactory::CreateGeometryMultiRectPlugin();
-    rectPlugin->AddRectConnectedComponnent( 1.f, 1.f );
-    rectPlugin->AddRectConnectedComponnent( w, h, -dist, -dist );
-    rectPlugin->AddRectConnectedComponnent( w, h, dist, -dist );
-    rectPlugin->AddRectConnectedComponnent( w, h, dist, dist );
-    rectPlugin->AddRectConnectedComponnent( w, h, -dist, dist );
+    //model::GeometryMultiRectPlugin    *  rectPlugin  = model::PluginsFactory::CreateGeometryMultiRectPlugin();
+    //rectPlugin->AddRectConnectedComponnent( 1.f, 1.f );
+    //rectPlugin->AddRectConnectedComponnent( w, h, -dist, -dist );
+    //rectPlugin->AddRectConnectedComponnent( w, h, dist, -dist );
+    //rectPlugin->AddRectConnectedComponnent( w, h, dist, dist );
+    //rectPlugin->AddRectConnectedComponnent( w, h, -dist, dist );
 
-    for( unsigned int i = 1; i < 6; ++i )
-    {
-        float w = 0.2f;
-        float h = 0.2f;
-        float dist = 0.3f;
+    //for( unsigned int i = 1; i < 6; ++i )
+    //{
+    //    float w = 0.2f;
+    //    float h = 0.2f;
+    //    float dist = 0.3f;
 
-        rectPlugin->AddRectConnectedComponnent( w, h, -dist * i, 0.f );
-        rectPlugin->AddRectConnectedComponnent( w, h, 0.f, -dist * i );
-        rectPlugin->AddRectConnectedComponnent( w, h, dist * i, 0.f );
-        rectPlugin->AddRectConnectedComponnent( w, h, 0.f, dist * i );     
-    }
-    
-    root->AddPlugin( rectPlugin );
+    //    rectPlugin->AddRectConnectedComponnent( w, h, -dist * i, 0.f );
+    //    rectPlugin->AddRectConnectedComponnent( w, h, 0.f, -dist * i );
+    //    rectPlugin->AddRectConnectedComponnent( w, h, dist * i, 0.f );
+    //    rectPlugin->AddRectConnectedComponnent( w, h, 0.f, dist * i );     
+    //}
+    //
+    //root->AddPlugin( rectPlugin );
 
-    TransformF trns;
+    //TransformF trns;
 
-    FloatInterpolator angle; angle.SetWrapPostMethod(bv::WrapMethod::pingPong);
+    //FloatInterpolator angle; angle.SetWrapPostMethod(bv::WrapMethod::pingPong);
 
-    angle.AddKey(0.f, 0.f);
-    angle.AddKey(5.f, 360.f);
+    //angle.AddKey(0.f, 0.f);
+    //angle.AddKey(5.f, 360.f);
 
-    trns.AddRotation(angle, ConstValue( 0.f ), ConstValue( 0.f ), ConstValue( 1.f ) );
+    //trns.AddRotation(angle, ConstValue( 0.f ), ConstValue( 0.f ), ConstValue( 1.f ) );
 
-    auto transformPlugin  =  model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
-    
-    root->AddPlugin( transformPlugin );
+    //auto transformPlugin  =  model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
+    //
+    //root->AddPlugin( transformPlugin );
 
-    /////////////////////////////// Texture plugin //////////////////////////////////
+    ///////////////////////////////// Texture plugin //////////////////////////////////
 
-    model::SimpleTexturePlugin    * stpp  = nullptr;
+    //model::SimpleTexturePlugin    * stpp  = nullptr;
 
-    FloatInterpolator alpha;
-    alpha.AddKey( 0.0f, 0.25f ); alpha.SetWrapPostMethod( WrapMethod::pingPong );
-    alpha.AddKey( 1.0f, 0.09f );
-    alpha.AddKey( 2.0f, 0.5f );
-    alpha.AddKey( 5.0f, 1.0f );
-    alpha.AddKey( 8.0f, 0.75f );
-    alpha.AddKey( 10.0f, 0.2f );
+    //FloatInterpolator alpha;
+    //alpha.AddKey( 0.0f, 0.25f ); alpha.SetWrapPostMethod( WrapMethod::pingPong );
+    //alpha.AddKey( 1.0f, 0.09f );
+    //alpha.AddKey( 2.0f, 0.5f );
+    //alpha.AddKey( 5.0f, 1.0f );
+    //alpha.AddKey( 8.0f, 0.75f );
+    //alpha.AddKey( 10.0f, 0.2f );
 
-    TransformF tx0m;
-    tx0m.AddScale( ConstValue( 1.0f ), alpha, ConstValue( 1.0f ) );
+    //TransformF tx0m;
+    //tx0m.AddScale( ConstValue( 1.0f ), alpha, ConstValue( 1.0f ) );
 
-    TransformF tx1m;    
-    tx1m.AddScale( alpha, ConstValue( 1.0f ), ConstValue( 1.0f ) );
+    //TransformF tx1m;    
+    //tx1m.AddScale( alpha, ConstValue( 1.0f ), ConstValue( 1.0f ) );
 
-    std::vector< const model::TextureDescriptor > textures;
+    //std::vector< const model::TextureDescriptor > textures;
 
-    textures.push_back( model::TextureDescriptor( "simless_00.jpg" ) );
-    textures.push_back( model::TextureDescriptor( "simless_01.jpg" ) );
+    //textures.push_back( model::TextureDescriptor( "simless_00.jpg" ) );
+    //textures.push_back( model::TextureDescriptor( "simless_01.jpg" ) );
 
-    stpp = model::PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures );
+    //stpp = model::PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures );
 
-    //stpp->SetPixelShaderChannel     ( new MyPixelShaderChannel( "../dep/media/shaders/simpletexture.frag", alpha, *tx0m, *tx1m ) ); // FIXME: add texture transformation
-    //stpp->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
+    ////stpp->SetPixelShaderChannel     ( new MyPixelShaderChannel( "../dep/media/shaders/simpletexture.frag", alpha, *tx0m, *tx1m ) ); // FIXME: add texture transformation
+    ////stpp->SetVertexShaderChannel    ( new MyVertexShaderChannel( "../dep/media/shaders/simpletexture.vert" ) );
 
-    root->AddPlugin                 ( stpp );
+    //root->AddPlugin                 ( stpp );
 
     return root;
 }

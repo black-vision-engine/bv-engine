@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/Models/Interfaces/ITimeEvaluator.h"
+
 #include "xml/TreeBuilder.h"
 #include "Mathematics/Interpolators/Interpolators.h"
 
@@ -31,7 +33,7 @@ class TestScenesFactory
 {
 public:
 
-    static  model::BasicNode *      NewModelTestScene           ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager );
+    static  model::BasicNode *      NewModelTestScene           ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 
     static  model::BasicNode *      SimpeTextureTestScene       ();
     static  model::BasicNode *      SimpleMultiCCScene          ();

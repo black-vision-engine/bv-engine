@@ -10,11 +10,13 @@ namespace bv { namespace model {
 
 class TextureLoader : public ResourceLoader
 {
+private:
+
     bool                    m_loadFromMemory;
-    
 
 public:
-    ResourceHandle *        LoadResource        ( IResource* res )  const;
+
+    ResourceHandle *        LoadResource        ( IResource * res )  const;
 
     explicit                TextureLoader( bool loadFormMemory = true );
 
@@ -23,21 +25,21 @@ public:
 
 class TextureExtraData : public ResourceExtraData
 {
-    int                     m_width;
-    int                     m_height;
-    int                     m_bitsPerPixel;
+    unsigned int            m_width;
+    unsigned int            m_height;
+    unsigned int            m_bitsPerPixel;
     TextureFormat           m_format;
     TextureType             m_type;
 
 public:
 
-    int                     GetWidth            () const;
-    int                     GetHeight           () const;
-    int                     GetBitsPerPixel     () const;
+    unsigned int            GetWidth            () const;
+    unsigned int            GetHeight           () const;
+    unsigned int            GetBitsPerPixel     () const;
     TextureFormat           GetFormat           () const;
     TextureType             GetType             () const;
 
-    explicit                TextureExtraData    (int w, int h, int bitsPerPixel, TextureFormat format, TextureType type );
+    explicit                TextureExtraData    ( unsigned int w, unsigned int h, unsigned int bitsPerPixel, TextureFormat format, TextureType type );
 
 };
 

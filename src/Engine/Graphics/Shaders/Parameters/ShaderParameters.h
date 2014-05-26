@@ -3,12 +3,12 @@
 #include <vector>
 
 #include "Engine/Graphics/Shaders/Parameters/GenericShaderParam.h"
-#include "Engine/Graphics/Shaders/Parameters/ShaderTextureParameters.h"
+#include "Engine/Graphics/Resources/Texture2D.h" //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
 
 
 namespace bv {
 
-class Texture;
+class Texture2D;
 
 //FIXME: Textura - klasa Texture, nawet niekoniecznie Texture2D trafia tutaj (a w zasadzie wszystkie tekstury, z których korzysta shader)
 //FIXME: potem mapowanie texture unitow na konkretne tekstury (to juz shader + pdr) wiazanie z konkretnymi texture unitami odbywa sie juz w pdr - dodajemy do zerowej tekstury
@@ -19,11 +19,12 @@ class ShaderParameters
 private:
 
     typedef std::vector< GenericShaderParam * > TShaderParamVec;
+    typedef std::vector< Texture2D * >          TTexture2DVec; //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
 
 private:
 
     TShaderParamVec             m_shaderParams;
-    ShaderTextureParameters     m_textureParams;
+    TTexture2DVec               m_textures; //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
 
 public:
 
@@ -32,15 +33,16 @@ public:
 
     void                                    UpdateParameters                ( RenderableEntity * renderable, Camera * camera );
 
-    void                                    AddParameter                    ( GenericShaderParam * param );
-
+    void                                    AddParameter                    ( GenericShaderParam * param ); //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
     inline unsigned int                     NumParameters                   () const;
 
     inline const GenericShaderParam *       GetParam                        ( unsigned int idx ) const;
     inline const GenericShaderParam *       GetParam                        ( const std::string & name ) const;
 
-    inline const ShaderTextureParameters &  GetTextureParameters            () const;
-    inline ShaderTextureParameters &        TextureParameters               ();
+    void                                    AddTexture                      ( Texture2D * texture );
+    inline unsigned int                     NumTextures                     () const;
+
+    inline Texture2D *                      GetTexture                      ( unsigned int idx ); //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
 
 };
 

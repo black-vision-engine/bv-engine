@@ -50,7 +50,7 @@ public:
     explicit BasicNode( const std::string & name, const PluginsManager * pluginsManager = nullptr );
     virtual ~BasicNode();
 
-    virtual const IPlugin *                 GetPlugin               ( const std::string & name ) const;
+    virtual IPlugin *                       GetPlugin               ( const std::string & name ) const;
     virtual const IModelNode *              GetChild                ( const std::string & name ) const;
     virtual const IModelNode *              GetLayer                ( const std::string & name ) const;
 
@@ -75,10 +75,10 @@ public:
     //Utility API - plugins can be added on-the-fly by user using an editor
     bool                                    AddPlugin               ( IPlugin * plugin );
     bool                                    AddPlugin               ( IPluginPtr plugin );
-    bool                                    AddPlugin               ( const std::string & uid );
-    bool                                    AddPlugin               ( const std::string & uid, const std::string & name );
-    bool                                    AddPlugins              ( const std::vector< std::string > & uids );
-    bool                                    AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names );
+    bool                                    AddPlugin               ( const std::string & uid, ITimeEvaluatorPtr timeEvaluator );
+    bool                                    AddPlugin               ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
+    bool                                    AddPlugins              ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator );
+    bool                                    AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator );
 
     virtual void                            Print                   ( std::ostream & out, int tabs = 0 ) const;
     virtual void                            Update                  ( TimeType t );
@@ -88,7 +88,11 @@ public:
 
 private:
 
-    bool                                    CreateRenderableData    ( /*VertexArray ** vao*/ )          const;
+    SceneNode *                             CreateSceneNode         ( const IPlugin * finalizer ) const;
+    RenderableEntity *                      CreateRenderable        ( const IPlugin * finalizer ) const;
+    std::vector< bv::Transform >            CreateTransformVec      ( const IPlugin * finalizer ) const;
+
+    bool                                    CreateRenderableData    ( /*VertexArray ** vao*/ ) const;
 
     //FIXME: scene building API should be moved to some more appropriate place
     RenderableArrayDataSingleVertexBuffer *         CreateRenderableArrayData           ( PrimitiveType type ) const; 

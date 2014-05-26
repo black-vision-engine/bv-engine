@@ -18,9 +18,9 @@ public:
         : DefaultPixelShaderChannel( shaderFile, nullptr, ctx )
     {}
 
-    virtual void                    Update( TimeType t )
+    virtual const ITexturesData * GetTexturesData() const override
     {
-        //ShaderChannel::Update( t );
+        return nullptr;
     }
 
 };
@@ -57,7 +57,6 @@ const IPixelShaderChannel *     SimplePixelShaderPlugin::GetPixelShaderChannel  
 //
 void                            SimplePixelShaderPlugin::Update                      ( TimeType t )
 {
-    m_pshaderChannel->Update( t );
 }
 
 void                            SimplePixelShaderPlugin::Print                       ( std::ostream & out, int tabs ) const

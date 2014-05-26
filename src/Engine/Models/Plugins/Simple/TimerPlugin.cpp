@@ -147,7 +147,8 @@ TextureInfoVec                      TimerPlugin::GetTextures                 () 
 //
 void                                TimerPlugin::Update                      ( TimeType t )
 {
-    float time = m_timeParam.Evaluate( t );
+    //FIXME: UPDATER TO FIX
+    float time = m_timeParam.Evaluate();
 
     int setSec = int(time * 100) % 100;
     int sec = int(time) % 60;

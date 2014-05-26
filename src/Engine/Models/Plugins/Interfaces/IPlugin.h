@@ -11,7 +11,6 @@
 
 namespace bv { namespace model {
 
-class ISequenceAnimationSource;
 class IVertexAttributesChannel;
 class IDefaultTransformChannel;
 class ITransformChannel;
@@ -22,6 +21,7 @@ class ResourceHandle;
 class IParameter;
 class IValue;
 class IPluginParamValModel;
+class IPluginResourceDescr;
 
 struct TextureInfo;
 typedef std::vector< TextureInfo * > TextureInfoVec;
@@ -44,9 +44,8 @@ public:
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const = 0;
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const = 0;
 
-    virtual TextureInfoVec                      GetTextures                 () const = 0; // FIXME: use resources
-    virtual bool                                HasAnimatingTexture         () const = 0;
-    virtual const ISequenceAnimationSource *    QuerySequenceAnimationSource() const = 0; // FIXME: use generic interface for querying resources that can be 
+    //FIXME: implement a more generic interface for resource loading
+    virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr ) = 0;
 
     virtual                                     ~IPlugin                    (){}
 

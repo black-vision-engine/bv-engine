@@ -113,29 +113,9 @@ const IGeometryShaderChannel *      DefaultFinalizePlugin::GetGeometryShaderChan
 
 // *******************************
 //
-TextureInfoVec                            DefaultFinalizePlugin::GetTextures            () const // FIXME: use resources
+bool                                DefaultFinalizePlugin::LoadResource                ( const IPluginResourceDescr * resDescr )
 {
-    assert( m_prevPlugin );
-
-    return m_prevPlugin->GetTextures();
-}
-
-// *******************************
-//
-bool                                DefaultFinalizePlugin::HasAnimatingTexture          () const
-{
-    assert( m_prevPlugin );
-
-    return m_prevPlugin->HasAnimatingTexture();
-}
-
-// *******************************
-//
-const ISequenceAnimationSource *    DefaultFinalizePlugin::QuerySequenceAnimationSource () const// FIXME: use generic interface for querying resources that can be
-{
-    assert( m_prevPlugin );
-
-    return m_prevPlugin->QuerySequenceAnimationSource();
+    return false;
 }
 
 // *******************************

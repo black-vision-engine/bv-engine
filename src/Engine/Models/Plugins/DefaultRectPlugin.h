@@ -18,8 +18,8 @@ public:
     DefaultRectPluginDesc                                       ();
 
     virtual bool                            CanBeAttachedTo     ( const IPlugin * plugin )  const override;
-    virtual IPlugin *                       CreatePlugin        ( const std::string & name, const IPlugin * prev ) const override;
-    virtual DefaultPluginParamValModel *    CreateDefaultModel  () const override;
+    virtual IPlugin *                       CreatePlugin        ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual DefaultPluginParamValModel *    CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
     static  std::string                     UID                 ();
 

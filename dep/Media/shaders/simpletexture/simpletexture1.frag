@@ -8,7 +8,7 @@ uniform float Alpha0;
 
 void main()
 {
-	vec4 texColor0 = texture( Tex0, VTexCord);
+	vec4 texColor0 = texture( Tex0, VTexCord );
 
 	FragColor = texColor0.bgra * Alpha0;
 }

@@ -52,7 +52,7 @@ public:
     void                                        SetTime                     ( const std::wstring& time );
 
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
-    virtual TextureInfoVec                      GetTextures                 () const override;
+    virtual TextureInfoVec                      GetTextures                 () const; //FIXME: remove
 
     virtual void                                Update                      ( TimeType t ) override;
     virtual void                                Print                       ( std::ostream & out, int tabs = 0 ) const;

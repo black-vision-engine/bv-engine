@@ -40,14 +40,14 @@ void                RendererContext::SetStateChanged    ( bool stateChanged ) co
 
 // *****************************
 //
-RendererContext*    RendererContext::Create       ()
+RendererContext *   RendererContext::Create             ()
 {
     return new model::RendererContext();
 }
 
 // *****************************
 //
-RendererContext*    RendererContext::CreateDefault       ()
+RendererContext *    RendererContext::CreateDefault     ()
 {
     auto ctx        = Create();
     ctx->alphaCtx   = new model::AlphaContext();

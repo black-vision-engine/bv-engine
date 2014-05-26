@@ -35,8 +35,6 @@ class TexturePixelShaderChannel : public DefaultPixelShaderChannel
 
 public:
 
-    virtual void    Update      ( TimeType t );
-
     TexturePixelShaderChannel   ( const std::string & shaderFile, const std::vector< ParamFloat > & alphas, const ParamTransformVec & texTransforms, const std::vector< ParamVec4 > & borderColors );
     ~TexturePixelShaderChannel  ();
 

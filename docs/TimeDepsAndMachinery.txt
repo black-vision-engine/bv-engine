@@ -1,0 +1,50 @@
+﻿Dla każdego pluginu dane są dwie warstwy na poziomie modelu:
+  1. Model parametrów (jakaś drzewiasta hierarchia - teraz zapewne lista)
+  2. Model ewaluacji czasu, który przyisuje odpowiednim parametrom silniki przetwarzające globalny czas na ich lokalny
+  
+W starej wersji (do teraz) każdy parametr podczas metody Update miał podawany czas globaly i ten czas trafiał do zarejestrowanych
+ewaluatorów i potem do krzywej, co pozwalało obliczyć wartość w danym momencie. Jedyną zaletą tego rozwiązania jest
+względna prostota aktualizacji, ale niestety główną wadą jest jawne powiązanie modelu parametrów z modelem obliczania
+czasu (czyli zmiennej logiki ze statycznyn modelem - o kant dupy). Dodatkowo (nie wiem czy to plus czy minus), parametr
+mógł funkcjonować bez przypisanego time evalera i wtedy zakładał, że czas globalny == czas lokalny. Nie jest to bardzo
+senowne, bo dlaczego tak, a nie na przykład przesunąc o sekundę... Logika powinna leżeć tylko po stronie implementacji
+klasek odpowiedzialnych za czas, a parametr ma z nich TYLKO korzystać.
+
+Propozycja (implementowana) jest taka, żeby model czasu oddzielić w pełni od modelu parametrów. Oznacza to, że:
+1. Zmiany w parametrach
+    a) Parametry już sie nie aktualizują, bo nie ma takiej potrzeby.
+    b) Każdy parametr musi mieć zarejestrowany timeevaler - logika
+    c) Parametry podczas ewaluacji krzywych pobierają czas ze swoich evalerów i tyle - założenie jest taki, że te time
+       evalery mają poprawnie zaimplementowaną logikę oraz w każdym momencie poprawnie zaktualizowany stan
+2. W Tajmlajnach
+    a) Aktualizacja musi hierarchicznie przejść się po tajmlajnach i ustawić im czas - łatwiej niż teraz, bo łatwo zadać hierarchię
+    tajmlajnów - global tajmlajn (offset evaler) do którego są porejestrowane pozostałe tajmlajny (być może one też mają
+    swoje tajmlajny). Update odpala się tylko na global tajmlajnie, a on hierarchicznie puszcza to w dół do dzieci.
+    b) Uproszczenie interfejsu - nie potrzeba Evaluate( t )
+    c) Tajmlajny są stanowe (poprzednie nie musiały, ale mogły) i pamiętają ostatnio ustawiany global time
+3. W Update 
+    Uproszczenie - nie trzeba robić update( t ) w modelu, wystarczy na Tajmlajnach. Model powinien się po aktualizacji czasu
+    ewaluować za pomocą EvalSnapshot lub czegoś takiego
+4. Uwagi
+    W tej wersji mamy zoptymalizowane obliczenia czasu. Tylko jedno ustawienie czasu i potem tylko odczyty przy ewaluacji
+    parametrów. W poprzedniej implementacji każdy parametr musiał prosić cały upstream tajmlajnów o obliczenie - czas O(n*m),
+    gdzie n - liczba parametrów, m - średnia głębokość hierarchii tajmlajnów. Po zmianie to jest O(n + m) - raz ustawiamy
+    czas, i potem jeden odczyt per parametr - cute.
+
+W zasadzie zostaje tylko pełna (zgodnie z wymaganiami) implementacja TimelineManagera. W tym momencie potrzebne jest
+głównie API do tworzenia otypowanych tajmlajnów, a w dalszej perspektywie do budowania drzewek tajmlajnów i rejestrowania
+parametrów (bardzo ważne, żeby to było zgodne z jus kejsami, a nie pisane na czas, żeby było cokolwiek).
+
+Timeline manager.
+Jego obecnym zadaniem jest uproszczenie "współżycia" z tajmlajnami i parametrami. Z punktu widzenia modelu i logiki tajmlajny są dodawane
+do parametrów. Z punktu widzenia użytkownika - parametry są dodawane do tajmlajnów. TimelineManager jest użytkową klaską czyli ma służyć nomen omen użytkownikowi.
+Dodatkowo powinien upraszczać zadania związane z zarządzaniem samymi tajmlajnami (dodawanie, usuwanie, takie rzeczy). Ewentualnie tworzenie parametrów od razu w jakimś offsecie (to się
+powinno okazać po tym, jak już ktoś poużywa tego mechanizmu realnie).
+
+Podsumowując:
+  - API służące do tworzenia otypowanych tajmlajnów
+  - API służące do ułatwionego korzystania z tajmlajnów (rejestracja eventów)
+  - API służące do zarządzania parametrami
+  - API służące do interakcji między tajmlajnami
+  
+Dodatkowo sztuczne metody służące do zarządzania parametrami w ITimeline należy wyrzucić.

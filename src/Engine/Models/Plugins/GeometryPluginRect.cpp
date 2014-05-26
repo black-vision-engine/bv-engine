@@ -10,13 +10,13 @@ namespace bv { namespace model {
 
 // *************************************
 //
-GeometryRectPlugin::GeometryRectPlugin                    ( const ParamFloat& w, const ParamFloat& h )
+GeometryRectPlugin::GeometryRectPlugin                    ( const ParamFloat & w, const ParamFloat & h )
     : BasePlugin( "dupa", "dupa", nullptr, nullptr )
     , m_width( w )
     , m_height( h )
 {
-    RectComponent*   rect           = RectComponent::Create( w.Evaluate( 0.f ), h.Evaluate( 0.f ) );
-    m_vaChannel                   = ChannelsFactory::CreateVertexAttributesChannel( rect, true );
+    RectComponent *   rect  = RectComponent::Create( w.Evaluate(), h.Evaluate() );
+    m_vaChannel             = ChannelsFactory::CreateVertexAttributesChannel( rect, true );
 }
 
 // *************************************

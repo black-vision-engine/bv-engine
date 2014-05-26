@@ -78,8 +78,10 @@ Rotation<ParamT>::Rotation( ParamT angle, ParamT p0, ParamT p1, ParamT p2 )
 // *************************************
 //
 template<typename ParamT>
-void            CompositeTransform<ParamT>::InitializeDefaultSRT( TimeType t )
+void            CompositeTransform<ParamT>::InitializeDefaultSRT()
 {
+    auto t =  TimeType( 0.0 );
+
     for( auto tr : m_transformations )
     {
         delete tr;

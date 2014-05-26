@@ -17,7 +17,7 @@ private:
 
 public:
 
-    explicit            ParamTransform  ( const std::string & name, const TransformF & transform, const ITimeEvaluator * evaluator = nullptr );
+    explicit            ParamTransform  ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator );
 
     inline  void        SetRotation     ( const glm::vec3 & rotAxis, float angle, TimeType t );
     inline  void        SetScale        ( const glm::vec3 & scale, TimeType t );
@@ -25,7 +25,7 @@ public:
 
     inline  TransformF& Transform       ();
 
-    inline  glm::mat4   Evaluate        ( TimeType t ) const;
+    inline  glm::mat4   Evaluate        () const;
 
     virtual void *      QueryParamTyped () override;
 
@@ -50,8 +50,8 @@ private:
 
 public:
 
-    explicit            ParamTransformVec   ( const std::string & name, const TransformF & transform, const ITimeEvaluator * evaluator = nullptr );
-    explicit            ParamTransformVec   ( const std::string & name, const ITimeEvaluator * evaluator = nullptr );
+    explicit            ParamTransformVec   ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator );
+    explicit            ParamTransformVec   ( const std::string & name, const ITimeEvaluatorPtr evaluator );
 
     void                AppendTransform     ( const TransformF & transform );
 
@@ -63,7 +63,7 @@ public:
 
     inline  TransformF& Transform           ( unsigned int transformNum );
 
-    inline  glm::mat4   Evaluate            ( unsigned int transformNum, TimeType t ) const;
+    inline  glm::mat4   Evaluate            ( unsigned int transformNum ) const;
 
     virtual void *      QueryParamTyped     () override;
 

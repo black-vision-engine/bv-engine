@@ -12,7 +12,7 @@ class FileImpl
 {
 private:
 
-    std::fstream*       m_fileHandle;
+    std::fstream *      m_fileHandle;
     std::string         m_fileName;
 
     FileImpl            ( const std::string & fileName );
@@ -32,7 +32,7 @@ public:
     virtual             ~FileImpl   ();
 
     static bool         Exists      ( const std::string & fileName );
-    static FileImpl*    Open        ( const std::string & fileName, File::OpenMode openMode );
+    static FileImpl *   Open        ( const std::string & fileName, File::OpenMode openMode );
     static int          Read        ( std::ostream & out, const std::string & fileName );
     static int          Read        ( char* out, const std::string & fileName );
     static int          Write       ( std::istream & in, const std::string & fileName );
@@ -154,7 +154,7 @@ bool        FileImpl::Exists      ( const std::string & fileName )
 
 // *******************************
 //
-FileImpl*   FileImpl::Open        ( const std::string & fileName, File::OpenMode openMode )
+FileImpl *  FileImpl::Open        ( const std::string & fileName, File::OpenMode openMode )
 {
     FileImpl* impl = new FileImpl( fileName );
 

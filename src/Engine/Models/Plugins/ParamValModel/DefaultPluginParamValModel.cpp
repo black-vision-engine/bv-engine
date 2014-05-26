@@ -34,25 +34,25 @@ DefaultPluginParamValModel::~DefaultPluginParamValModel     ()
 
 // *******************************
 //
-void                DefaultPluginParamValModel::Update                          ( TimeType t )
+void                DefaultPluginParamValModel::Update      ()
 {
     if( m_pluginModel )
-        m_pluginModel->Update( t );
+        m_pluginModel->Update();
 
     if( m_transformChannelModel )
-        m_transformChannelModel->Update( t );
+        m_transformChannelModel->Update();
 
     if( m_vertexAttributesChannelModel )
-        m_vertexAttributesChannelModel->Update( t );
+        m_vertexAttributesChannelModel->Update();
 
     if( m_pixelShaderChannelModel )
-        m_pixelShaderChannelModel->Update( t );
+        m_pixelShaderChannelModel->Update();
 
     if( m_vertexShaderChannelModel )
-        m_vertexShaderChannelModel->Update( t );
+        m_vertexShaderChannelModel->Update();
 
     if( m_geometryShaderChannelModel )
-        m_geometryShaderChannelModel->Update( t );
+        m_geometryShaderChannelModel->Update();
 }
 
 // *******************************

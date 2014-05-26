@@ -4,7 +4,8 @@
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Texture2DImpl.h"
+#include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
 
 #include "FreeImagePlus.h"
 
@@ -43,13 +44,17 @@ Texture2D * TextureManager::LoadTexture( const model::ResourceHandle * resHandle
 
     assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
-    auto texExtra = static_cast< const model::TextureExtraData* >( resHandle->GetExtra() );
+    auto texExtra = static_cast< const model::TextureExtraData * >( resHandle->GetExtra() );
 
     assert( texExtra->GetType() == TextureType::T_2D );
 
-    bv::Texture2D * newTex = new bv::Texture2D( texExtra->GetFormat(), texExtra->GetWidth(), texExtra->GetHeight() );
-    TextureAccessor::WriteData( newTex, resHandle->GetData(), resHandle->GetSize() );
+    auto format = texExtra->GetFormat();
+    auto width  = texExtra->GetWidth();
+    auto height = texExtra->GetHeight();
 
+    //FIXME: add asserts for invalid dimensions (i.e. too large)
+    auto newTex = new bv::Texture2DImpl( format, width, height );
+    newTex->WriteBits( resHandle->GetData(), format, width, height );
     m_txMap[ newTex ] = newTex;
 
     return newTex;
@@ -66,6 +71,34 @@ void TextureManager::FreeTexture( Texture * tx )
         delete it->second;
         m_txMap[ tx ] = nullptr;
     }
+}
+
+// *********************************
+//
+bool    TextureManager::AddFrame    ( Texture2DSequenceImpl * anim, const model::ResourceHandle * resHandle, bool loadFromMemory )
+{
+    auto extraKind = resHandle->GetExtra()->GetResourceExtraKind();
+    assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
+
+    auto texExtra = static_cast< const model::TextureExtraData * >( resHandle->GetExtra() );
+    assert( texExtra->GetType() == TextureType::T_2D );
+
+    return anim->AddTextureWritingBits( resHandle->GetData(), texExtra->GetFormat(), texExtra->GetWidth(), texExtra->GetHeight() );    
+}
+
+// *********************************
+//
+Texture2DSequenceImpl * TextureManager::CreateEmpty2DSequence   ( const model::ResourceHandle * resHandle )
+{
+    auto extraKind = resHandle->GetExtra()->GetResourceExtraKind();
+    assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
+
+    auto texExtra = static_cast< const model::TextureExtraData * >( resHandle->GetExtra() );
+    assert( texExtra->GetType() == TextureType::T_2D );
+
+    auto sequence = new Texture2DSequenceImpl( texExtra->GetFormat(), texExtra->GetWidth(), texExtra->GetHeight() );
+
+    return sequence;
 }
 
 } // bv

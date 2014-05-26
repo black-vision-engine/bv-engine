@@ -16,7 +16,7 @@ TextureLoader::TextureLoader( bool loadFormMemory )
 
 // ******************************
 //
-ResourceHandle *        TextureLoader::LoadResource        ( IResource* res )  const
+ResourceHandle *        TextureLoader::LoadResource        ( IResource * res )  const
 {
     std::string errMsg( "Cannot read file: " + res->GetFilePath() ); 
 
@@ -26,7 +26,8 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource* res )  c
         return nullptr;
     }
 
-    fipImage*  fipImg = new fipImage();
+    //FIXME: gdzie to jest usuwane? Nigidzie kurwa - i jeszcze rzucanie wyjatkami do chuja wafla
+    fipImage * fipImg = new fipImage();
 
     if( m_loadFromMemory )
     {
@@ -60,30 +61,38 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource* res )  c
         throw std::runtime_error( "Cannot convert texture to bitmap" );
     }
 
-    //FIXME: Add maping freeimage types to bv types
+    //FIXME: Add mapping of freeimage types to bv types
     auto texExtra = new TextureExtraData( fipImg->getWidth(), fipImg->getHeight(), fipImg->getBitsPerPixel(), TextureFormat::F_A8R8G8B8, TextureType::T_2D );
 
-    //FIXME: memcpy
-    return new ResourceHandle( (char*)fipImg->accessPixels(), fipImg->getWidth() * fipImg->getHeight() * ( fipImg->getBitsPerPixel() / 8 ), texExtra );
+    auto numBytes = fipImg->getWidth() * fipImg->getHeight() * ( fipImg->getBitsPerPixel() / 8 );
+
+    char * pixels = new char[ numBytes ];
+    memcpy( pixels, fipImg->accessPixels(), numBytes );
+
+    auto retVal = new ResourceHandle( pixels, numBytes, texExtra );
+
+    delete fipImg;
+
+    return retVal;
 }
 
 // ******************************
 //
-int TextureExtraData::GetWidth            () const
+unsigned int TextureExtraData::GetWidth            () const
 {
     return m_width;
 }
 
 // ******************************
 //
-int TextureExtraData::GetHeight           () const
+unsigned int TextureExtraData::GetHeight           () const
 {
     return m_height;
 }
 
 // ******************************
 //
-int TextureExtraData::GetBitsPerPixel     () const
+unsigned int TextureExtraData::GetBitsPerPixel     () const
 {
     return m_bitsPerPixel;
 }
@@ -105,7 +114,7 @@ TextureType TextureExtraData::GetType     () const
 
 // ******************************
 //
-TextureExtraData::TextureExtraData(int w, int h, int bitsPerPixel, TextureFormat format, TextureType type)
+TextureExtraData::TextureExtraData( unsigned int w, unsigned int h, unsigned int bitsPerPixel, TextureFormat format, TextureType type )
     : ResourceExtraData( ResourceExtraKind::RE_TEXTURE )
     , m_width( w )
     , m_height( h )

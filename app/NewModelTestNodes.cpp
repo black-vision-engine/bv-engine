@@ -6,20 +6,52 @@
 #include "Engine/Models/Plugins/PluginsFactory.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
-
+#include "Engine/Models/Plugins/PluginUtils.h"
 
 #include "Engine/Models/BasicNode.h"
 
+#include "testai/TestAIManager.h"
+
 
 namespace {
-    std::string GSimplePlugins[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR" };
+    std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR" };
+    std::string GSimplePlugins1[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_TEXTURE" };
+    std::string GSimplePlugins2[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_ANIMATION" };
+
+    // *****************************
+    //
+    void SetDefaultColorChangeAnim( bv::model::IPlugin * plugin )
+    {
+        auto param = plugin->GetParameter( "color" );
+        assert( param );
+
+        SetParameter( param, 0.f,  glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+        SetParameter( param, 5.f,  glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+        SetParameter( param, 10.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+        SetParameter( param, 15.f, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
+        SetParameter( param, 20.f, glm::vec4( 0.f, 1.f, 1.f, 1.f ) );
+        SetParameter( param, 25.f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
+        SetParameter( param, 30.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    }
+
+    // *****************************
+    //
+    void SetDefaultTransformAnim( bv::model::IPlugin * plugin )
+    {
+        auto param = plugin->GetParameter( "simple_transform" );
+        assert( param );
+
+        SetParameterRotation ( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
+        SetParameterRotation ( param, 0, 30.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+    }
+
 } //anonymous
 
 namespace bv {
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode( model::TimelineManager * timelineManager )
+model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     //Plugin list
     std::vector< std::string > uids;
@@ -31,7 +63,7 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMana
     //Create a model
     model::BasicNode * root = new model::BasicNode( "Root" );
 
-    bool success = root->AddPlugins( uids );
+    bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
 
     //Set some values to make it look like a scene
@@ -46,28 +78,78 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMana
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::TimelineManager * timelineManager )
+model::BasicNode *  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins, GSimplePlugins + 3 );
+    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins0, GSimplePlugins0 + 3 );
 
     auto node = new model::BasicNode( "Root" );
-    node->AddPlugins( GSimplePluginsUIDS );
+    node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
 
-    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f,  glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 5.f,  glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 10.f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 15.f, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
-    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 20.f, glm::vec4( 0.f, 1.f, 1.f, 1.f ) );
-    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 25.f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
-    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 30.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    SetDefaultColorChangeAnim( node->GetPlugin( "solid color" ) );
 
-    timelineManager->RegisterDefaultTimeline( nullptr, 15.0f, 45.0f, "timeline0" );
-    timelineManager->AddParamToTimeline( node->GetPlugin( "solid color" )->GetParameter( "color" ), "timeline0" );
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 15.0 ) );
+    node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( localTimeline );
 
-    SetParameterRotation ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
-    SetParameterRotation ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 30.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+    SetDefaultTransformAnim( node->GetPlugin( "transform" ) );
 
     return node;
+}
+
+// *****************************
+//
+model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    //Timeline stuff
+    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 3.0 ) );
+
+    someTimelineWithEvents->AddChild( localTimeline );
+    timeEvaluator->AddChild( someTimelineWithEvents );
+
+    //Plugin stuff
+    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 3 );
+
+    auto node = new model::BasicNode( "Root" );
+
+    auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
+    assert( success );
+
+    SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
+
+    //node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( localTimeline );
+
+    success = model::LoadTexture( node->GetPlugin( "texture" ), "simless_00.jpg" );
+    assert( success );
+
+    auto ai = TestAIManager::Instance().GetAIPreset( 2 );
+    ai->SetTimeline( someTimelineWithEvents );
+
+    return node;    
+}
+
+// *****************************
+//
+model::BasicNode *  SimpleNodesFactory::CreateTextureAnimationRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins2, GSimplePlugins2 + 3 );
+
+    auto node = new model::BasicNode( "Root" );
+
+    auto success = node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
+    assert( success );
+
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 0.f ), 0.f );
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 5.f ), 99.f );
+
+    SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
+
+    success = model::LoadAnimation( node->GetPlugin( "animation" ), "../../media/sequences/FullHD/alfai", "*.tga" );
+    assert( success );
+
+    return node;    
 }
 
 } //bv

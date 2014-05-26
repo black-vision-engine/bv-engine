@@ -28,7 +28,7 @@ public:
     virtual IParameter *                                GetParameter    ( const std::string & name ) override;
     virtual const bv::IValue *                          GetValue        ( const std::string & name ) const override;
 
-    virtual void                                        Update          ( TimeType t ) override;
+    virtual void                                        Update          () override;
 
     void                                                AddParameter    ( IParameter * param );
     void                                                AddValue        ( bv::IValue * val );

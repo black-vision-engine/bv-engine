@@ -10,7 +10,6 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
-#include "PluginEnums.h"
 #include "TextureInfo.h"
 
 
@@ -20,6 +19,7 @@ template< class Iface = IPlugin >
 class BasePlugin : public Iface
 {
 protected:
+
     ///////////////// Previous plugin ///////////
     const IPlugin *                             m_prevPlugin;
 
@@ -57,10 +57,7 @@ public:
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const override;
 
-    virtual TextureInfoVec                      GetTextures                 () const override;
-
-    virtual bool                                HasAnimatingTexture         () const override                       { return false; }
-    virtual const ISequenceAnimationSource *    QuerySequenceAnimationSource() const override                       { return nullptr; }
+    virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr );
 
 protected:
 
@@ -233,20 +230,15 @@ const IGeometryShaderChannel *      BasePlugin< Iface >::GetGeometryShaderChanne
 // *******************************
 //
 template< class Iface >
-TextureInfoVec                      BasePlugin< Iface >::GetTextures                    () const
+bool                                BasePlugin< Iface >::LoadResource                   ( const IPluginResourceDescr * resDescr )
 {
-    if( m_prevPlugin )
-    {
-        return m_prevPlugin->GetTextures();
-    }
-
-    return TextureInfoVec(); 
+    return false;
 }
 
 // *******************************
 //
 template< class Iface >
-IParamValModel *                            BasePlugin< Iface >::PluginModel                  ()
+IParamValModel *                            BasePlugin< Iface >::PluginModel            ()
 {
     return m_pluginParamValModel->GetPluginModel();
 }

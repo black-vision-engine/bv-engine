@@ -28,7 +28,8 @@ public:
 
     virtual void                    Update( TimeType t )
     {
-        m_colorVal->SetValue( m_color.Evaluate( t ) );
+        //FIXME: UPDATER
+        m_colorVal->SetValue( m_color.Evaluate() );
         //ShaderChannel::Update( t );
     }
 

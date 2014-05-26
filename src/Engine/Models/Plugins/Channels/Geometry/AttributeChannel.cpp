@@ -48,14 +48,14 @@ const IAttributeChannelDescriptor *   AttributeChannel::GetDescriptor           
 
 // *********************************
 //
-std::string                                 AttributeChannel::GetName                 ()  const
+std::string                                 AttributeChannel::GetName           ()  const
 {
     return m_name;
 }
 
 // *************************************
 //
-IAttributeChannel *                         AttributeChannel::GetPositionChannel( const std::vector< IAttributeChannel* > & channels )
+IAttributeChannel *                         AttributeChannel::GetPositionChannel( const std::vector< IAttributeChannel * > & channels )
 {
     if( !channels.empty() )
     {

@@ -10,7 +10,8 @@ class ProfilerDataFormatter
 {
 public:
 
-    static void    PrintToConsole  ( const char * msg );
+    static void     PrintToConsole  ( const char * msg );
+    static void     PrintToDevNull  ( const char * msg );
 
 };
 

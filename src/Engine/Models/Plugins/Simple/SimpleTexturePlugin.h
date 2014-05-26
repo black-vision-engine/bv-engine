@@ -7,7 +7,6 @@
 
 #include "Engine/Models/Plugins/Plugin.h"
 
-#include "Engine/Models/Plugins/PluginEnums.h"
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
 
@@ -43,9 +42,9 @@ public:
     TextureFilteringMode    filteringMode;
 
     explicit TextureDescriptor  (    const std::string & txFileName
-                                ,    const ParamTransform & txTransform = ParametersFactory::CreateParameter( "texTransform", TransformF() )
-                                ,    const ParamFloat& txAlpha = ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 1.f ) )
-                                ,    const ParamVec4& txBorderColor = ParametersFactory::CreateParameter( "texBorderColor", InterpolatorsHelper::CreateConstValue( glm::vec4( 0.f, 0.f, 0.f, 0.f ) ) )
+                                ,    const ParamTransform & txTransform = ParametersFactory::CreateParameter( "texTransform", TransformF(), nullptr )
+                                ,    const ParamFloat& txAlpha = ParametersFactory::CreateParameter( "texAlpha", InterpolatorsHelper::CreateConstValue( 1.f ), nullptr )
+                                ,    const ParamVec4& txBorderColor = ParametersFactory::CreateParameter( "texBorderColor", InterpolatorsHelper::CreateConstValue( glm::vec4( 0.f, 0.f, 0.f, 0.f ) ), nullptr )
                                 ,    TextureWrappingMode txWrappingModeX = TextureWrappingMode::TWM_REPEAT 
                                 ,    TextureWrappingMode txWrappingModeY = TextureWrappingMode::TWM_REPEAT
                                 ,    TextureFilteringMode txFilteringMode = TextureFilteringMode::TFM_LINEAR
@@ -90,7 +89,7 @@ public:
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;                                       
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;     
 
-    virtual TextureInfoVec                      GetTextures                 () const override;
+    virtual TextureInfoVec                      GetTextures                 () const;
 
     void                                        SetAttachmentMode           ( TextureAttachmentMode mode );
     void                                        SetWrappingMode             ( TextureWrappingMode mode );

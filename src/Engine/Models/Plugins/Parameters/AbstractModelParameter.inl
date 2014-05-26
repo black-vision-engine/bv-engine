@@ -2,16 +2,24 @@ namespace bv { namespace model {
 
 // *******************************
 //
-inline void AbstractModelParameter::SetTimeEvaluator                ( const ITimeEvaluator * timeEvaluator )
+inline ITimeEvaluatorPtr   AbstractModelParameter::GetTimeEvaluator    ()
+{
+    return m_timeEvaluator;
+}
+
+// *******************************
+//
+inline void AbstractModelParameter::SetTimeEvaluator                   ( ITimeEvaluatorPtr timeEvaluator )
 {
     m_timeEvaluator = timeEvaluator;
 }
 
 // *******************************
 //
-inline  TimeType  AbstractModelParameter::GetLocalEvaluationTime    ( TimeType t ) const
+inline TimeType  AbstractModelParameter::GetLocalEvaluationTime        () const
 {
-    return m_timeEvaluator->Evaluate( t );
+    assert( m_timeEvaluator );
+    return m_timeEvaluator->GetLocalTime();
 }
 
 } //model

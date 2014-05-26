@@ -1,6 +1,8 @@
 #pragma once
 
+#include "Engine/Models/Interfaces/ITimeEvaluator.h"
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
+
 
 namespace bv { namespace model {
 
@@ -16,7 +18,7 @@ public:
 
     static VertexAttributesChannel *            CreateVertexAttributesChannel       ( ConnectedComponent * connComp, bool isTimeInvariant );
     static TransformChannel *                   CreateTransformChannel              ( const ParamTransformVec & transformVec );
-    static IGeometryShaderChannel *             CreateGeometryShaderExtrude         ( float scale );
+    static IGeometryShaderChannel *             CreateGeometryShaderExtrude         ( float scale, ITimeEvaluatorPtr timeEvaluator );
 
 };
 

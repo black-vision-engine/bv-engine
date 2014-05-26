@@ -55,4 +55,18 @@ int                 TextureBase::GetPixelSize   ( TextureFormat format )
     return m_sPixelSize[ static_cast< int >( format ) ];
 }
 
+// *********************************
+//
+void                TextureBase::SetFormat       ( TextureFormat format )
+{
+    m_format = format;
+}
+
+// *********************************
+//
+void                TextureBase::SetType         ( TextureType type )
+{
+    m_type = type;
+}
+
 }

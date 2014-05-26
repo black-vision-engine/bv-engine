@@ -12,9 +12,10 @@ class FileImpl;
 class File
 {
 private:
-    FileImpl*           m_impl;
 
-    explicit            File( FileImpl* impl );
+    FileImpl *          m_impl;
+
+    explicit            File( FileImpl * impl );
 
 public:
 

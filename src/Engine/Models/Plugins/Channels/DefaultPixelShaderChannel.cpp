@@ -11,8 +11,10 @@ DefaultPixelShaderChannel::DefaultPixelShaderChannel  ( const std::string & shad
 {
     if ( ctx == nullptr )
     {
-        m_rendererContext = RendererContext::Create();
+        m_rendererContext = RendererContext::CreateDefault();
     }
+
+    m_texturesData = new DefaultTexturesData();
 }
 
 // ******************************
@@ -20,6 +22,7 @@ DefaultPixelShaderChannel::DefaultPixelShaderChannel  ( const std::string & shad
 DefaultPixelShaderChannel::~DefaultPixelShaderChannel ()
 {
     delete m_rendererContext;
+    delete m_texturesData;
 }
 
 // ******************************
@@ -47,21 +50,32 @@ void                        DefaultPixelShaderChannel::SetRendererContext  ( Ren
 
 // ******************************
 //
+const ITexturesData *       DefaultPixelShaderChannel::GetTexturesData     () const
+{
+    return m_texturesData;
+}
+
+// ******************************
+//
+DefaultTexturesData *       DefaultPixelShaderChannel::GetTexturesDataImpl ()
+{
+    return m_texturesData;
+}
+
+// ******************************
+//
 DefaultPixelShaderChannel * DefaultPixelShaderChannel::Create              ( const std::string & shaderFile, const IValueSet * values, RendererContext * ctx )
 {
-    assert( values );
+    auto shaderSource = ReadShaderFromFile( shaderFile );
 
-    std::stringstream shaderSource;
-
-    //FIXME: move reading file to superclass or utility code
-    File::Open( shaderFile ) >> shaderSource;
-
-    if( shaderSource.str() == "" )
+    if( shaderSource != "" )
     {
-        return nullptr;
+        assert( values );
+        
+        return new DefaultPixelShaderChannel( shaderSource, values, ctx );
     }
 
-    return new DefaultPixelShaderChannel( shaderSource.str(), values, ctx );
+    return nullptr;
 }
 
 } //model

@@ -8,6 +8,7 @@
 
 namespace bv { namespace model {
 
+
 //Default instance
 PluginsManager PluginsManager::m_instance;
 
@@ -89,26 +90,26 @@ bool                                                PluginsManager::CanBeAttache
 
 // *********************************
 //
-IPlugin *                                           PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, const IPlugin * prev ) const
+IPlugin *                                           PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     if( !CanBeAttachedTo( uid, prev ) )
     {
         return nullptr;
     }
 
-    return GetDescriptor( uid )->CreatePlugin( name, prev );
+    return GetDescriptor( uid )->CreatePlugin( name, prev, timeEvaluator );
 }
 
 // *********************************
 //
-IPlugin *                                           PluginsManager::CreatePlugin            ( const std::string & uid, const IPlugin * prev ) const
+IPlugin *                                           PluginsManager::CreatePlugin            ( const std::string & uid, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     if( !CanBeAttachedTo( uid, prev ) )
     {
         return nullptr;
     }
 
-    return CreatePlugin( uid, GetDescriptor( uid )->DefaultPluginName(), prev );
+    return CreatePlugin( uid, GetDescriptor( uid )->DefaultPluginName(), prev, timeEvaluator );
 }
 
 // *********************************
@@ -120,28 +121,28 @@ const std::vector< const IPluginDescriptor * > &    PluginsManager::GetRegistere
 
 // *********************************
 //
-IPluginListFinalized *                              PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids ) const
+IPluginListFinalized *                              PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePluginsDefaultImpl( uids );
+    return CreatePluginsDefaultImpl( uids, timeEvaluator );
 }
 
 // *********************************
 //
-IPluginListFinalized *                              PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names ) const
+IPluginListFinalized *                              PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePluginsDefaultImpl( uids, names );
+    return CreatePluginsDefaultImpl( uids, names, timeEvaluator );
 }
 
 // *********************************
 //
-IPluginListFinalized *                              PluginsManager::CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins ) const
+IPluginListFinalized *                              PluginsManager::CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePluginsDefaultImpl( plugins );
+    return CreatePluginsDefaultImpl( plugins, timeEvaluator );
 }
 
 // *********************************
 //
-DefaultPluginListFinalized *                        PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::string > & uids ) const
+DefaultPluginListFinalized *                        PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator ) const
 {
     std::vector< std::pair< std::string, std::string > > plugins;
 
@@ -157,12 +158,12 @@ DefaultPluginListFinalized *                        PluginsManager::CreatePlugin
         plugins.push_back( std::make_pair( uid, GetDescriptor( uid )->DefaultPluginName() ) );
     }
 
-    return CreatePluginsDefaultImpl( plugins );
+    return CreatePluginsDefaultImpl( plugins, timeEvaluator );
 }
 
 // *********************************
 //
-DefaultPluginListFinalized *                        PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::string > & uids, const std::vector< std::string > & names ) const
+DefaultPluginListFinalized *                        PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator ) const
 {
     assert( uids.size() == names.size() );
 
@@ -180,12 +181,12 @@ DefaultPluginListFinalized *                        PluginsManager::CreatePlugin
         plugins.push_back( std::make_pair( uids[ i ], names[ i ] ) );
     }    
 
-    return CreatePluginsDefaultImpl( plugins );
+    return CreatePluginsDefaultImpl( plugins, timeEvaluator );
 }
 
 // *********************************
 //
-DefaultPluginListFinalized *                        PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::pair< std::string, std::string > > & plugins ) const
+DefaultPluginListFinalized *                        PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::pair< std::string, std::string > > & plugins, ITimeEvaluatorPtr timeEvaluator ) const
 {
     std::vector< IPluginPtr > tmpList;
     const IPlugin * prev = nullptr;
@@ -210,7 +211,7 @@ DefaultPluginListFinalized *                        PluginsManager::CreatePlugin
             return nullptr;
         }
     
-        IPluginPtr plugin( CreatePlugin( uid, name, prev ) );
+        IPluginPtr plugin( CreatePlugin( uid, name, prev, timeEvaluator ) );
 
         tmpList.push_back( plugin );
 

@@ -8,28 +8,28 @@ namespace bv { namespace model {
 namespace
 {
 
-class DefaultTimeEvaluator : public ITimeEvaluator
-{
-public:
-
-    virtual const std::string & GetName () const
-    {
-        static std::string name = "DefaultTimeEvaluator";
-        return name;
-    }
-
-    virtual TimeType    Evaluate        ( TimeType t ) const
-    {
-        return t;
-    }
-
-    static const ITimeEvaluator * GetDefaultEvaluator   ()
-    {
-        static DefaultTimeEvaluator instance;
-
-        return &instance;
-    }
-};
+//class DefaultTimeEvaluator : public ITimeEvaluator
+//{
+//public:
+//
+//    virtual const std::string & GetName () const
+//    {
+//        static std::string name = "DefaultTimeEvaluator";
+//        return name;
+//    }
+//
+//    virtual TimeType    Evaluate        ( TimeType t ) const
+//    {
+//        return t;
+//    }
+//
+//    static const ITimeEvaluator * GetDefaultEvaluator   ()
+//    {
+//        static DefaultTimeEvaluator instance;
+//
+//        return &instance;
+//    }
+//};
 
 } //anonynous
 
@@ -37,15 +37,11 @@ public:
 
 // *******************************
 //
-AbstractModelParameter::AbstractModelParameter  ( const std::string & name, ModelParamType type, const ITimeEvaluator * evaluator )
+AbstractModelParameter::AbstractModelParameter  ( const std::string & name, ModelParamType type, ITimeEvaluatorPtr evaluator )
     : m_timeEvaluator( evaluator )
     , m_name( name )
     , m_type( type )
 {
-    if( evaluator == nullptr )
-    {
-        m_timeEvaluator = DefaultTimeEvaluator::GetDefaultEvaluator();
-    }
 }
 
 // *******************************
@@ -70,7 +66,7 @@ ModelParamType      AbstractModelParameter::GetType () const
 
 // *******************************
 //
-void    SetParamTimeline( IParameter * param, const ITimeEvaluator * timeline )
+void    SetParamTimeline( IParameter * param, ITimeEvaluatorPtr timeline )
 {
     AbstractModelParameter * typedParam = static_cast< AbstractModelParameter * >( param );
 

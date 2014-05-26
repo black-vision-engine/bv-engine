@@ -35,9 +35,9 @@ bool                    BasePluginDescriptor::CanBeAttachedTo   ( const IPlugin 
 
 // *********************************
 //
-IPluginParamValModel *  BasePluginDescriptor::CreateModel       () const
+IPluginParamValModel *  BasePluginDescriptor::CreateModel       ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreateDefaultModel();
+    return CreateDefaultModel( timeEvaluator );
 }
 
 } //model

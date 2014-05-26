@@ -22,10 +22,10 @@ protected:
 
 public:
 
-    explicit                SimpleParameterImpl ( const std::string & name, const InterpolatorType & interpolator, const ITimeEvaluator * evaluator = nullptr );
+    explicit                SimpleParameterImpl ( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator );
                             ~SimpleParameterImpl();
 
-    inline  ValueType       Evaluate            ( TimeType t ) const;
+    inline  ValueType       Evaluate            () const;
     inline  void            SetVal              ( const ValueType & val, TimeType t );
 
     virtual void *          QueryParamTyped     () override;
@@ -48,9 +48,9 @@ private:
 
 public:
 
-    inline explicit         ParamMat2       ( const std::string & name, const Vec4Interpolator & transform, const ITimeEvaluator * evaluator = nullptr );
+    inline explicit         ParamMat2       ( const std::string & name, const Vec4Interpolator & transform, ITimeEvaluatorPtr evaluator );
 
-    inline  glm::mat2       Evaluate        ( TimeType t ) const;
+    inline  glm::mat2       Evaluate        () const;
     inline  void            SetVal          ( const glm::mat2 & val, TimeType t );
 
     virtual void *          QueryParamTyped () override;

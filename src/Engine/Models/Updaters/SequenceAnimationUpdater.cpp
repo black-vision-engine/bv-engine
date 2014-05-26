@@ -3,14 +3,14 @@
 #include <cassert>
 
 #include "Engine/Models/Plugins/Interfaces/ISequenceAnimationSource.h"
-#include "Engine/Graphics/Resources/TextureAnimatedSequence2D.h"
+#include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
 
 
 namespace bv {
 
 // **********************************
 //
-SequenceAnimationUpdater::SequenceAnimationUpdater        ( TextureAnimatedSequence2D * out , const model::ISequenceAnimationSource * in )
+SequenceAnimationUpdater::SequenceAnimationUpdater        ( Texture2DSequenceImpl * out , const model::ISequenceAnimationSource * in )
     : m_out( out )
     , m_in( in )
 {
@@ -38,7 +38,6 @@ void    SequenceAnimationUpdater::DoUpdate                ()
     if( txFrame != srcFrame )
     {
         m_out->SetActiveTexture( srcFrame );
-        m_out->SetNeedsUpdate( true );
     }
 }
 

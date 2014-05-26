@@ -56,8 +56,9 @@ inline  TransformF& ParamTransform::Transform       ()
 
 // *******************************
 // FIXME: reimplement with SQT paramter model
-inline  glm::mat4   ParamTransform::Evaluate        ( TimeType t ) const
+inline  glm::mat4   ParamTransform::Evaluate        () const
 {
+    auto t = AbstractModelParameter::GetLocalEvaluationTime();
     return m_transformModel.Evaluate( t );
 }
 
@@ -132,9 +133,11 @@ inline  TransformF& ParamTransformVec::Transform        ( unsigned int transform
 
 // *******************************
 // FIXME: reimplement with SQT paramter model
-inline  glm::mat4   ParamTransformVec::Evaluate         ( unsigned int transformNum, TimeType t ) const
+inline  glm::mat4   ParamTransformVec::Evaluate         ( unsigned int transformNum ) const
 {
     assert( transformNum < NumTransforms() );
+
+    auto t = AbstractModelParameter::GetLocalEvaluationTime();
 
     return m_transformModelVec[ transformNum ].Evaluate( t );
 }

@@ -39,20 +39,20 @@ bool                            DefaultRectPluginDesc::CanBeAttachedTo      ( co
 
 // *******************************
 //
-IPlugin *                       DefaultRectPluginDesc::CreatePlugin         ( const std::string & name, const IPlugin * prev ) const
+IPlugin *                       DefaultRectPluginDesc::CreatePlugin         ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePluginTyped< DefaultRectPlugin >( name, prev );
+    return CreatePluginTyped< DefaultRectPlugin >( name, prev, timeEvaluator );
 }
 
 // *******************************
 //
-DefaultPluginParamValModel *    DefaultRectPluginDesc::CreateDefaultModel   () const
+DefaultPluginParamValModel *    DefaultRectPluginDesc::CreateDefaultModel   ( ITimeEvaluatorPtr timeEvaluator ) const
 {
     DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
     DefaultParamValModel * vacModel     = new DefaultParamValModel();
 
-    ParamFloat * paramWidth             = ParametersFactory::CreateParameterFloat( "width" );
-    ParamFloat * paramHeight            = ParametersFactory::CreateParameterFloat( "height" );
+    ParamFloat * paramWidth             = ParametersFactory::CreateParameterFloat( "width", timeEvaluator );
+    ParamFloat * paramHeight            = ParametersFactory::CreateParameterFloat( "height", timeEvaluator );
 
     vacModel->AddParameter( paramWidth );
     vacModel->AddParameter( paramHeight );
@@ -92,8 +92,8 @@ DefaultRectPlugin::DefaultRectPlugin    ( const std::string & name, const std::s
     m_widthParam    = QueryTypedParam< ParamFloat >( params[ 0 ] );
     m_heightParam   = QueryTypedParam< ParamFloat >( params[ 1 ] );
 
-    m_lastW = m_widthParam->Evaluate( 0.f );
-    m_lastH = m_heightParam->Evaluate( 0.f );
+    m_lastW = m_widthParam->Evaluate();
+    m_lastH = m_heightParam->Evaluate();
 
     RectComponent * rect = RectComponent::Create( m_lastW, m_lastH );
     m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( rect, true );
@@ -120,11 +120,11 @@ const IVertexAttributesChannel *    DefaultRectPlugin::GetVertexAttributesChanne
 void                                DefaultRectPlugin::Update                      ( TimeType t )
 {
     //FIXME: reimplement va channel (no time, no explicit update and so on)
-    m_paramValModel->Update( t );
+    m_paramValModel->Update();
 
     //This code has to be executed in a plugin as only plugin knows how to translate its state to geometry representation
-    float w = m_widthParam->Evaluate( t );
-    float h = m_heightParam->Evaluate( t );
+    float w = m_widthParam->Evaluate();
+    float h = m_heightParam->Evaluate();
 
     if( ( fabs( m_lastW - w ) + fabs( m_lastH - h ) ) > 0.001f )
     {

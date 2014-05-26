@@ -21,7 +21,7 @@ public:
 
     virtual const std::string &             GetName         () const                                    = 0;
 
-    virtual const IPlugin *                 GetPlugin       ( const std::string & name ) const          = 0;
+    virtual IPlugin *                       GetPlugin       ( const std::string & name ) const          = 0;
     virtual const IModelNode *              GetChild        ( const std::string & name ) const          = 0;
     virtual const IModelNode *              GetLayer        ( const std::string & name ) const          = 0;
 

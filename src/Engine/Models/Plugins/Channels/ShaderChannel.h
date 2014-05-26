@@ -32,6 +32,12 @@ public:
     virtual const std::vector< const bv::IValue * > &   GetValues                   () const override;
     virtual const bv::IValue *                          GetValue                    ( const std::string & name ) const override;
 
+    virtual const ITexturesData *                       GetTexturesData             () const override;
+
+protected:
+
+    static const std::string                            ReadShaderFromFile          ( const std::string & fileName );
+
 };
 
 } // model

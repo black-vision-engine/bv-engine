@@ -27,7 +27,7 @@ private:
 
 public:
 
-    explicit            GeometryRectPlugin    ( const ParamFloat & w, const ParamFloat& h );
+    explicit            GeometryRectPlugin    ( const ParamFloat & w, const ParamFloat & h );
                         ~GeometryRectPlugin   ();
 
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;

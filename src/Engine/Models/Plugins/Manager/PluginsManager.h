@@ -4,6 +4,8 @@
 #include <hash_map>
 #include <vector>
 
+#include "Engine/Models/Interfaces/ITimeEvaluator.h"
+
 
 namespace bv { namespace model {
 
@@ -37,17 +39,17 @@ public:
     const IPluginDescriptor *                           GetDescriptor           ( const std::string & uid ) const;
     
     bool                                                CanBeAttachedTo         ( const std::string & uid, const IPlugin * prev ) const;
-    IPlugin *                                           CreatePlugin            ( const std::string & uid, const std::string & name, const IPlugin * prev ) const;
-    IPlugin *                                           CreatePlugin            ( const std::string & uid, const IPlugin * prev ) const;
+    IPlugin *                                           CreatePlugin            ( const std::string & uid, const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const;
+    IPlugin *                                           CreatePlugin            ( const std::string & uid, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const;
     const std::vector< const IPluginDescriptor * > &    GetRegisteredDescriptors() const;
 
-    IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::string > & uids ) const;
-    IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names ) const;
-    IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins ) const;
+    IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator ) const;
+    IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator ) const;
+    IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins, ITimeEvaluatorPtr timeEvaluator ) const;
 
-    DefaultPluginListFinalized *                        CreatePluginsDefaultImpl( const std::vector< std::string > & uids ) const;
-    DefaultPluginListFinalized *                        CreatePluginsDefaultImpl( const std::vector< std::string > & uids, const std::vector< std::string > & names ) const;
-    DefaultPluginListFinalized *                        CreatePluginsDefaultImpl( const std::vector< std::pair< std::string, std::string > > & plugins ) const;
+    DefaultPluginListFinalized *                        CreatePluginsDefaultImpl( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator ) const;
+    DefaultPluginListFinalized *                        CreatePluginsDefaultImpl( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator ) const;
+    DefaultPluginListFinalized *                        CreatePluginsDefaultImpl( const std::vector< std::pair< std::string, std::string > > & plugins, ITimeEvaluatorPtr timeEvaluator ) const;
 
 public:
 

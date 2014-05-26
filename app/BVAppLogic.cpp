@@ -22,6 +22,10 @@
 
 #include "DefaultPlugins.h"
 
+//FIXME: remove
+#include "Engine/Models/Plugins/PluginUtils.h"
+#include "Engine/Models/Timeline/TimeSegmentEvalImpl.h"
+#include "testai/TestAIManager.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -38,9 +42,18 @@ namespace
 
     void GownoWFormieKebaba( TimeType t )
     {
+        //DETERMINSTIC TIME INTERVALS
+        //static TimeType tt = TimeType( 0.0 );
+        //tt += TimeType( 0.001 );
+
+        //TEST AI
+        static auto ai = TestAIManager::Instance().GetAIPreset( 2 );
+        ai->EvalAt( t );
+
+        //PRE GOWNO
         float tx = float( sin( t ) );
         glm::vec3 kebab( tx, 0.f, 0.f );
-    
+
         //gowno
         GTransformSetEvent->SetTranslation( kebab );
     
@@ -67,7 +80,7 @@ BVAppLogic::BVAppLogic              ()
     , m_pluginsManager( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
-
+    , m_globalTimeline( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) )
 {
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
@@ -104,14 +117,13 @@ void BVAppLogic::Initialize         ()
 //
 void BVAppLogic::LoadScene          ( void )
 {
-
-    model::BasicNode * root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager );
+    model::BasicNode * root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
     assert( root );
 
     m_mockSceneEng  = root->BuildScene();
     assert( m_mockSceneEng );
 
-    m_modelScene    = model::ModelScene::Create( root, new Camera(), "BasicScene" );
+    m_modelScene    = model::ModelScene::Create( root, new Camera(), "BasicScene", m_globalTimeline );
     assert( m_modelScene );    
 }
 
@@ -134,6 +146,32 @@ void BVAppLogic::InitCamera         ( Renderer * renderer, int w, int h )
 void BVAppLogic::SetStartTime       ( unsigned long millis )
 {
     m_startTime = millis;
+    m_globalTimeline->SetTimeOffset( -TimeType( millis ) * TimeType( 0.001 ) );
+}
+
+namespace {
+
+void DupaTextureReloadTestUpdate( BVAppLogic * app, TimeType t )
+{
+    static TimeType lastTime = t;
+    static TimeType delta = TimeType( 0.0 );
+    static unsigned int curTx = 0;
+    static const char * locTx[] = { "test.bmp", "simless_00.jpg", "Split32.tga", "alfai00.tga" };
+
+    auto root = app->GetModelScene()->GetSceneRoot();
+    auto plugin = root->GetPlugin( "texture" );
+    
+    if ( plugin )
+    {
+        if ( ( t - lastTime ) > TimeType( 2.0 ) )
+        {
+            curTx = ( curTx + 1 ) % 4;
+            lastTime = t;
+            model::LoadTexture( plugin, locTx[ curTx ] );
+        }
+    }
+}
+
 }
 
 // *********************************
@@ -162,6 +200,8 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
                 FRAME_STATS_SECTION( "Model-u" );
                 HPROFILER_SECTION( "m_modelScene->Update" );
 
+                //DupaTextureReloadTestUpdate( this, t );
+                m_globalTimeline->SetGlobalTime( t );
                 m_modelScene->Update( t );
             }
             {
@@ -283,14 +323,18 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
     {
         unsigned int frame = m_statsCalculator.CurFrame() - 1;
         
+#ifndef HIDE_PROFILE_STATS
         FrameStatsFormatter::PrintFrameStatsToConsole( frame, m_statsCalculator, "LONGEST FRAME SO FAR", 10 );
         HPROFILER_SET_FORCED_DISPLAY();
+#endif
     }
 
     if( m_statsCalculator.CurFrame() == DefaultConfig.MAVWarmupRounds() * m_statsCalculator.WindowSize() || m_statsCalculator.CurFrame() % DefaultConfig.StatsRecalcFramesDelta() == 0 )
     {
         m_statsCalculator.RecalculateStats();
+#ifndef HIDE_PROFILE_STATS
         FrameStatsFormatter::PrintToConsole( m_statsCalculator );
+#endif
     }
 
     unsigned long frameMillis = timer.ElapsedMillis() - millis;
@@ -329,13 +373,13 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 
         for( int i = 0; i < node->NumTransformables(); ++i )
         {
-            //HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
+            HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
             renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
         }
 
         for ( int i = 0; i < node->NumChildrenNodes(); i++ )
         {
-            //HPROFILER_SECTION( "RenderNode::RenderNode" );
+            HPROFILER_SECTION( "RenderNode::RenderNode" );
             RenderNode( renderer, node->GetChild( i ) ); 
         }
     }
@@ -360,6 +404,13 @@ model::TimelineManager *    BVAppLogic::GetTimelineManager  ()
 model::ModelScene *         BVAppLogic::GetModelScene       ()
 {
     return m_modelScene;
+}
+
+// *********************************
+//
+const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
+{
+    return m_pluginsManager;
 }
 
 //// *********************************

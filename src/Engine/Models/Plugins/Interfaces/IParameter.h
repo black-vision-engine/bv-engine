@@ -4,6 +4,8 @@
 
 #include "Engine/Types/Enums.h"
 
+#include "Engine/Models/Interfaces/ITimeEvaluator.h"
+
 
 namespace bv { namespace model {
 
@@ -15,6 +17,9 @@ public:
 
     virtual const std::string &     GetName         () const = 0;
     virtual ModelParamType          GetType         () const = 0;
+
+    virtual ITimeEvaluatorPtr       GetTimeEvaluator() = 0;
+    virtual void                    SetTimeEvaluator( ITimeEvaluatorPtr timeEvaluator ) = 0;
 
     virtual void *                  QueryParamTyped () = 0;
 
@@ -48,7 +53,7 @@ const ParamType * QueryTypedParam( const IParameter * param )
     return static_cast< ParamType * >( const_cast< IParameter * >( param )->QueryParamTyped() );
 }
 
-void    SetParamTimeline( IParameter * param, const ITimeEvaluator * timeline );
+void    SetParamTimeline( IParameter * param, ITimeEvaluatorPtr timeline );
 
 } //model
 } //bv
