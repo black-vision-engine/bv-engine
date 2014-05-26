@@ -182,10 +182,63 @@ bool                    TimelineManager::AddTimelineToTimeline           ( ITime
     assert( timeline != nullptr );
 
     ITimeEvaluatorPtr parent = GetTimeline( parentName );
-    
+   
     if( parent != nullptr )
     {
         return AddTimelineToTimeline( timeline, parent );
+    }
+
+    return false;
+}
+
+// *********************************
+//
+bool                    TimelineManager::RemoveTimelineFromTimeline      ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline )
+{
+    assert( timeline != nullptr );
+    assert( parentTimeline != nullptr );
+    
+    return parentTimeline->RemoveChild( timeline );
+}
+
+// *********************************
+//
+bool                    TimelineManager::RemoveTimelineFromTimeline      ( ITimeEvaluatorPtr timeline, const std::string & parentName )
+{
+    ITimeEvaluatorPtr parent = GetTimeline( parentName );
+
+    if( parent != nullptr )
+    {
+        return RemoveTimelineFromTimeline( timeline, parent );
+    }
+
+    return false;
+}
+
+// *********************************
+//
+bool                    TimelineManager::RemoveTimelineFromTimeline      ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
+{
+    ITimeEvaluatorPtr timeline = GetTimeline( name );
+
+    if( timeline != nullptr )
+    {
+        return RemoveTimelineFromTimeline( timeline, parentTimeline );
+    }
+
+    return false;
+}
+
+// *********************************
+//
+bool                    TimelineManager::RemoveTimelineFromTimeline      ( const std::string & name, const std::string & parentName )
+{
+    ITimeEvaluatorPtr parentTimeline = GetTimeline( parentName );
+    ITimeEvaluatorPtr timeline = GetTimeline( name );
+
+    if( parentTimeline != nullptr && timeline != nullptr )
+    {
+        return RemoveTimelineFromTimeline( timeline, parentTimeline );
     }
 
     return false;
