@@ -197,6 +197,7 @@
     <ClCompile Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Timeline\TimeEvaluatorBase.inl" />
+    <ClCompile Include="Engine\Models\Timeline\SimpleIParamSet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -447,6 +448,7 @@
     <ClInclude Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.h" />
     <ClInclude Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.h" />
     <ClInclude Include="Engine\Models\Timeline\TimeEvaluatorBase.h" />
+    <ClInclude Include="Engine\Models\Timeline\SimpleIParamSet.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

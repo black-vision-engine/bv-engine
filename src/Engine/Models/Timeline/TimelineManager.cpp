@@ -2,93 +2,8 @@
 
 #include <cassert>
 
-#include "Engine/Models/Interfaces/ITimeEvaluator.h"
-#include "Engine/Models/Plugins/Interfaces/IParameter.h"
-
-#include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
-#include "Engine/Models/Timeline/Static/ConstTimeEvaluator.h"
-
 
 namespace bv { namespace model {
-
-// ******************************************************** SimpleIParamSet ********************************************************
-
-// *********************************
-//
-std::vector< IParameter * > &       SimpleIParamSet::GetParameters       ()
-{
-    return m_parameters;
-}
-
-// *********************************
-//
-IParameter *                        SimpleIParamSet::GetParameter        ( const std::string & name )
-{
-    for( auto param : m_parameters )
-    {
-        if( param->GetName() == name )
-        {
-            return param;
-        }
-    }
-
-    return nullptr;
-}
-
-// *********************************
-//Name duplicates are allowed, but stored pointers must me be unique
-bool                             SimpleIParamSet::AddParameter        ( IParameter * param )
-{
-    if( std::find( m_parameters.begin(), m_parameters.end(), param ) == m_parameters.end() )
-    {
-        m_parameters.push_back( param );
-        
-        return true;
-    }
-
-    return false;
-}
-
-// *********************************
-//
-bool                                SimpleIParamSet::RemoveParameter     ( IParameter * param )
-{
-    auto it = std::find( m_parameters.begin(), m_parameters.end(), param );
-
-    if( it != m_parameters.end() )
-    {
-        m_parameters.erase( it );
-
-        return true;
-    }
-
-    return false;    
-}
-
-// *********************************
-//
-unsigned int                        SimpleIParamSet::RemoveParameters    ( const std::string & name )
-{
-    unsigned int erasedElements = 0;
-
-    for( auto elt = m_parameters.begin(); elt != m_parameters.end(); )
-    {
-        if( name == (*elt)->GetName() )
-        {
-            elt = m_parameters.erase( elt );
-
-            ++erasedElements;
-        }
-        else
-        {
-            ++elt;
-        }
-    }
-
-    return erasedElements;
-}
-
-// ******************************************************** TimelineManager ********************************************************
 
 // *********************************
 //
@@ -154,6 +69,42 @@ bool                    TimelineManager::AddStopEventToTimeline              ( I
     assert( timeline != nullptr );
 
     return timeline->AddKeyFrame( new model::TimelineEventStop( eventName, stopTime, timeline.get() ) );
+}
+
+// *********************************
+//
+bool                    TimelineManager::AddLoopReverseEventToTimeline   ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount )
+{
+    assert( timeline != nullptr );
+
+    return timeline->AddKeyFrame( new model::TimelineEventLoop( eventName, eventTime, LoopEventAction::LEA_REVERSE, totalLoopCount, TimeType( 0.0 ), timeline.get() ) );
+}
+
+// *********************************
+//
+bool                    TimelineManager::AddLoopJumpEventToTimeline      ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount, TimeType jumpToTime )
+{
+    assert( timeline != nullptr );
+
+    return timeline->AddKeyFrame( new model::TimelineEventLoop( eventName, eventTime, LoopEventAction::LEA_GOTO, totalLoopCount, jumpToTime, timeline.get() ) );
+}
+
+// *********************************
+//
+bool                    TimelineManager::AddLoopRestartEventToTimeline   ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount )
+{
+    assert( timeline != nullptr );
+
+    return timeline->AddKeyFrame( new model::TimelineEventLoop( eventName, eventTime, LoopEventAction::LEA_RESTART, totalLoopCount, TimeType( 0.0 ), timeline.get() ) );
+}
+
+// *********************************
+//
+bool                    TimelineManager::AddNullEventToTimeline          ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime )
+{
+    assert( timeline != nullptr );
+
+    return timeline->AddKeyFrame( new model::TimelineEventNull( eventName, eventTime, timeline.get() ) );
 }
 
 //// *********************************

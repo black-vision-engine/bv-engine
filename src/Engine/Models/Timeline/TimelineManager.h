@@ -6,8 +6,9 @@
 
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
 
-#include "Engine/Models/Plugins/Interfaces/IParamSet.h"
 #include "System/BasicTypes.h"
+
+#include "Engine/Models/Timeline/SimpleIParamSet.h"
 
 #include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
 #include "Engine/Models/Timeline/Static/ConstTimeEvaluator.h"
@@ -20,24 +21,6 @@
 
 
 namespace bv { namespace model {
-
-class SimpleIParamSet : public IParamSet
-{
-private:
-
-    std::vector< IParameter * >     m_parameters;
-
-public:
-
-    virtual std::vector< IParameter * > &       GetParameters       () override;
-    virtual IParameter *                        GetParameter        ( const std::string & name ) override;
-
-    bool                                        AddParameter        ( IParameter * param );
-    bool                                        RemoveParameter     ( IParameter * param );
-    unsigned int                                RemoveParameters    ( const std::string & name );
-
-};
-
 
 class TimelineManager
 {
@@ -62,7 +45,9 @@ public:
     DefaultTimelinePtr      CreateDefaultTimelineImpl       ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
     
     bool                    AddStopEventToTimeline          ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime );
-    bool                    AddLoopEventToTimeline          ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount, TimeType jumpToTime );
+    bool                    AddLoopReverseEventToTimeline   ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount );
+    bool                    AddLoopJumpEventToTimeline      ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount, TimeType jumpToTime );
+    bool                    AddLoopRestartEventToTimeline   ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount );
     bool                    AddNullEventToTimeline          ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime );
 
 
