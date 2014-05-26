@@ -151,6 +151,48 @@ ITimeEvaluatorPtr       TimelineManager::GetTimeline                ( const std:
 
 // *********************************
 //
+bool                    TimelineManager::AddTimeline                     ( ITimeEvaluatorPtr timeline )
+{
+    assert( timeline != nullptr );
+
+    if( m_rootTimeline != nullptr )
+    {
+        return AddTimelineToTimeline( timeline, m_rootTimeline );
+    }
+
+    return false;
+}
+
+// *********************************
+//
+bool                    TimelineManager::AddTimelineToTimeline           ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline )
+{
+    assert( parentTimeline != nullptr );
+    assert( timeline != nullptr );
+
+    parentTimeline->AddChild( timeline );
+
+    return true;    
+}
+
+// *********************************
+//
+bool                    TimelineManager::AddTimelineToTimeline           ( ITimeEvaluatorPtr timeline, const std::string & parentName )
+{
+    assert( timeline != nullptr );
+
+    ITimeEvaluatorPtr parent = GetTimeline( parentName );
+    
+    if( parent != nullptr )
+    {
+        return AddTimelineToTimeline( timeline, parent );
+    }
+
+    return false;
+}
+
+// *********************************
+//
 IParamSet *             TimelineManager::GetRegisteredParameters ( ITimeEvaluatorPtr timeline )
 {
     //FIXME: implement
