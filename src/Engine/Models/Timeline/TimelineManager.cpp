@@ -246,6 +246,36 @@ bool                    TimelineManager::RemoveTimelineFromTimeline      ( const
 
 // *********************************
 //
+bool                    TimelineManager::RemoveAllChildren               ( ITimeEvaluatorPtr timeline )
+{
+    if( timeline != nullptr )
+    {
+        std::vector< ITimeEvaluatorPtr > ccopy = timeline->GetChildren();
+
+        for( auto child : ccopy )
+        {
+            timeline->RemoveChild( child );
+
+            RemoveAllChildren( timeline );
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+// *********************************
+//
+bool                    TimelineManager::RemoveAllChildren               ( const std::string & name )
+{
+    auto timeline = GetTimeline( name );
+
+    return RemoveAllChildren( timeline );
+}
+
+// *********************************
+//
 IParamSet *             TimelineManager::GetRegisteredParameters ( ITimeEvaluatorPtr timeline )
 {
     //FIXME: implement
