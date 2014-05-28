@@ -337,8 +337,9 @@ model::BasicNode *     TestScenesFactory::NewModelTestScene     ( const model::P
 {
 //    return SimpleNodesFactory::CreateGreenRectNode();
     //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager );
-    return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator );
+    //return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager );
+    return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator );
 }
 
 } //bv

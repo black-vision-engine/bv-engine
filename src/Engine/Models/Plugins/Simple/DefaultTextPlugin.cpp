@@ -78,17 +78,11 @@ bool                   DefaultTextPluginDesc::CanBeAttachedTo   ( const IPlugin 
 {
     if ( plugin == nullptr )
     {
-        return false;
+        return true;
     }
 
     auto  vac = plugin->GetVertexAttributesChannel();
-    if ( vac == nullptr )
-    {
-        return false;
-    }
-
-    auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
-    if ( numChannels != 1 ) //only vertex attribute data allowed here
+    if ( vac != nullptr )
     {
         return false;
     }
@@ -140,11 +134,11 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
     , m_textSet( true )
+    , m_textAtlas( nullptr )
+    , m_text( L"DEFAULT_TEXT" )
 {
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTextPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultTextPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
-
-    InitAttributesChannel( prev );
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
@@ -202,9 +196,11 @@ bool                            DefaultTextPlugin::LoadResource  ( const IPlugin
                 txData->SetTexture( 0, txDesc );
             }
 
+            InitAttributesChannel( m_prevPlugin );
+
             return true;
         }
-    }
+    }    
 
     return false;
 }
@@ -240,14 +236,14 @@ void                                DefaultTextPlugin::Update                   
 
     m_textSet = false;
 
-    if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-    {
-        m_vaChannel->SetNeedsAttributesUpdate( true );
-    }
-    else
-    {
-        m_vaChannel->SetNeedsAttributesUpdate( false );
-    }
+    //if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
+    //{
+    //    m_vaChannel->SetNeedsAttributesUpdate( true );
+    //}
+    //else
+    //{
+    //    m_vaChannel->SetNeedsAttributesUpdate( false );
+    //}
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
