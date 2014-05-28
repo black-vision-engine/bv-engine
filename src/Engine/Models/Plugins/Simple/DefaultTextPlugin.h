@@ -83,6 +83,8 @@ private:
     void                                        InitAttributesChannel       ( const IPlugin * prev );
 };
 
+bool            SetTextPluginContent( IPlugin* textPlugin, const std::wstring& text );
+
 } // model
 } // bv
 
