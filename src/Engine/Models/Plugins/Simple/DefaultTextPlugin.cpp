@@ -150,6 +150,8 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     m_texturesData = m_psc->GetTexturesDataImpl();
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultTextPlugin::OnSetText ), KeyPressedEvent::Type() );
+
+    m_fontSizeParam = QueryTypedParam< ParamFloat >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
 }
 
 // *************************************
@@ -170,7 +172,7 @@ bool                            DefaultTextPlugin::LoadResource  ( const IPlugin
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() <= 1 );
 
-        auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), 60 );
+        auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ) );
 
         m_textAtlas = TextHelper::GetAtlas( fontResource, false, false );
 

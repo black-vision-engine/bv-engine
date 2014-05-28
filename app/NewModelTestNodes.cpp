@@ -175,6 +175,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager *
 
     SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
 
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 60.f );
     //node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( localTimeline );
 
     success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/ARIALUNI.TTF" );

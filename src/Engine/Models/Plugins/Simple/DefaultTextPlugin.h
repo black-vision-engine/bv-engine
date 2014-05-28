@@ -60,6 +60,8 @@ private:
     const TextAtlas*                m_textAtlas;
     bool                            m_textSet;
 
+    ParamFloat*                     m_fontSizeParam;
+
 public:
 
     //delegates
