@@ -122,7 +122,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineM
 
     //node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( localTimeline );
 
-    success = model::LoadTexture( node->GetPlugin( "texture" ), "simless_00.jpg" );
+    success = model::LoadTexture( node->GetPlugin( "texture" ), "pliczek_z_kwiatkiem.jpg" );
     assert( success );
 
     auto ai = TestAIManager::Instance().GetAIPreset( 2 );

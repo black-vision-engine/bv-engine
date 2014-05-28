@@ -48,6 +48,7 @@ DefaultPluginParamValModel *    DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     //Create all parameters and evaluators
     SimpleVec4Evaluator *      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
+    SimpleVec4Evaluator *      colorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
     SimpleFloatEvaluator *     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluator * trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
     SimpleFloatEvaluator *     fontSizeEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
@@ -55,7 +56,9 @@ DefaultPluginParamValModel *    DefaultTextPluginDesc::CreateDefaultModel( ITime
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
     psModel->RegisterAll( borderColorEvaluator );
+    psModel->RegisterAll( colorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
+
     plModel->RegisterAll( fontSizeEvaluator );
 
     //Set models structure
@@ -64,8 +67,9 @@ DefaultPluginParamValModel *    DefaultTextPluginDesc::CreateDefaultModel( ITime
     model->SetPluginModel( plModel );
 
     //Set default values of all parameters
-    alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+    alphaEvaluator->Parameter()->SetVal( 0.1f, TimeType( 0.0 ) );
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
+    colorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
     fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
 
@@ -166,7 +170,7 @@ bool                            DefaultTextPlugin::LoadResource  ( const IPlugin
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() <= 1 );
 
-        auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), 8 );
+        auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), 60 );
 
         m_textAtlas = TextHelper::GetAtlas( fontResource, false, false );
 
