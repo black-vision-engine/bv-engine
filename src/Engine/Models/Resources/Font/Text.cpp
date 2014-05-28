@@ -74,37 +74,36 @@ unsigned int            TextAtlas::GetHeight       () const
     return m_height;
 }
 
-const GlyphCoords&      TextAtlas::GetGlyphCoords  ( wchar_t c ) const
+const GlyphCoords*      TextAtlas::GetGlyphCoords  ( wchar_t c ) const
 {
     auto it = m_glyphsPositions.find(c);
 
     if( it != m_glyphsPositions.end() )
     {
-        return it->second;
+        return &( it->second );
     }
 
-    assert("Cannot find glyph for char" + c);
-    throw;
+    return nullptr;
 }
 
 unsigned int            TextAtlas::GetGlyphX       ( wchar_t c ) const
 {
-    return GetGlyphCoords( c ).textureX;
+    return GetGlyphCoords( c )->textureX;
 }
 
 unsigned int            TextAtlas::GetGlyphY       ( wchar_t c ) const
 {
-    return GetGlyphCoords( c ).textureY;
+    return GetGlyphCoords( c )->textureY;
 }
 
 unsigned int            TextAtlas::GetGlyphWidth   ( wchar_t c ) const
 {
-    return GetGlyphCoords( c ).width;
+    return GetGlyphCoords( c )->width;
 }
 
 unsigned int            TextAtlas::GetGlyphHeight  ( wchar_t c ) const
 {
-    return GetGlyphCoords( c ).height;
+    return GetGlyphCoords( c )->height;
 }
 
  #define GENERATE_TEST_BMP_FILE

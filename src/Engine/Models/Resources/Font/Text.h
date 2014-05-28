@@ -81,7 +81,7 @@ public:
     unsigned int            GetGlyphWidth   ( wchar_t c ) const;
     unsigned int            GetGlyphHeight  ( wchar_t c ) const;
 
-    const GlyphCoords&      GetGlyphCoords  ( wchar_t c ) const;
+    const GlyphCoords*      GetGlyphCoords  ( wchar_t c ) const;
 
     const char*             GetData         () const;
     char*                   GetWritableData ();

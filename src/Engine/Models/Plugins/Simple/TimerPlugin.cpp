@@ -155,7 +155,12 @@ void                                TimerPlugin::SetTimePatern  ( const std::wst
 //
 const GlyphCoords&                  TimerPlugin::GetGlyphCoords  ( wchar_t wch ) const
 {
-    return m_currentAtlas->GetGlyphCoords( wch );
+    auto glyphCoords = m_currentAtlas->GetGlyphCoords( wch );
+    if( glyphCoords )
+        return *glyphCoords;
+    else
+        assert( !( "Cannot find glyph for char " + wch) );
+        throw;
 }
 
 
