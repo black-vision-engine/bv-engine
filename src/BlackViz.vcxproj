@@ -321,6 +321,7 @@
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventNull.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.cpp" />
     <ClCompile Include="Engine\Models\Timeline\GlobalTimeline.cpp" />
+    <ClCompile Include="Engine\Models\Timeline\SimpleIParamSet.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
     <None Include="Engine\Models\Timeline\TimeEvaluatorBase.inl">
@@ -566,6 +567,7 @@
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventNull.h" />
     <ClInclude Include="Engine\Models\Timeline\Dynamic\TimelineEventStop.h" />
     <ClInclude Include="Engine\Models\Timeline\GlobalTimeline.h" />
+    <ClInclude Include="Engine\Models\Timeline\SimpleIParamSet.h" />
     <ClInclude Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.h" />
     <ClInclude Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.h" />
     <ClInclude Include="Engine\Models\Timeline\TimeEvaluatorBase.h" />

@@ -2,97 +2,13 @@
 
 #include <cassert>
 
-#include "Engine/Models/Interfaces/ITimeEvaluator.h"
-#include "Engine/Models/Plugins/Interfaces/IParameter.h"
-
-#include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
-#include "Engine/Models/Timeline/Static/ConstTimeEvaluator.h"
-
 
 namespace bv { namespace model {
-
-// ******************************************************** SimpleIParamSet ********************************************************
-
-// *********************************
-//
-std::vector< IParameter * > &       SimpleIParamSet::GetParameters       ()
-{
-    return m_parameters;
-}
-
-// *********************************
-//
-IParameter *                        SimpleIParamSet::GetParameter        ( const std::string & name )
-{
-    for( auto param : m_parameters )
-    {
-        if( param->GetName() == name )
-        {
-            return param;
-        }
-    }
-
-    return nullptr;
-}
-
-// *********************************
-//Name duplicates are allowed, but stored pointers must me be unique
-bool                             SimpleIParamSet::AddParameter        ( IParameter * param )
-{
-    if( std::find( m_parameters.begin(), m_parameters.end(), param ) == m_parameters.end() )
-    {
-        m_parameters.push_back( param );
-        
-        return true;
-    }
-
-    return false;
-}
-
-// *********************************
-//
-bool                                SimpleIParamSet::RemoveParameter     ( IParameter * param )
-{
-    auto it = std::find( m_parameters.begin(), m_parameters.end(), param );
-
-    if( it != m_parameters.end() )
-    {
-        m_parameters.erase( it );
-
-        return true;
-    }
-
-    return false;    
-}
-
-// *********************************
-//
-unsigned int                        SimpleIParamSet::RemoveParameters    ( const std::string & name )
-{
-    unsigned int erasedElements = 0;
-
-    for( auto elt = m_parameters.begin(); elt != m_parameters.end(); )
-    {
-        if( name == (*elt)->GetName() )
-        {
-            elt = m_parameters.erase( elt );
-
-            ++erasedElements;
-        }
-        else
-        {
-            ++elt;
-        }
-    }
-
-    return erasedElements;
-}
-
-// ******************************************************** TimelineManager ********************************************************
 
 // *********************************
 //
 TimelineManager::TimelineManager         ()
+    : m_rootTimeline( nullptr )
 {
 }
 
@@ -100,6 +16,10 @@ TimelineManager::TimelineManager         ()
 //
 TimelineManager::~TimelineManager        ()
 {
+    for( auto it = m_registeredParams.begin(); it != m_registeredParams.end(); ++it )
+    {
+        delete it->second;
+    }
 }
 
 // *********************************
@@ -146,204 +66,403 @@ DefaultTimelinePtr      TimelineManager::CreateDefaultTimelineImpl      ( const 
 
     return timeline;
 }
-    
+
 // *********************************
 //
-bool                    TimelineManager::AddStopEventToTimeline              ( ITimelinePtr timeline, const std::string & eventName, TimeType stopTime )
+bool                    TimelineManager::AddStopEventToTimeline          ( ITimelinePtr timeline, const std::string & eventName, TimeType stopTime )
 {
     assert( timeline != nullptr );
 
     return timeline->AddKeyFrame( new model::TimelineEventStop( eventName, stopTime, timeline.get() ) );
 }
 
-//// *********************************
-////
-//void                    TimelineManager::RegisterRootTimeline    ( ITimeEvaluatorPtr root )
-//{
-//    //FIXME: implement
-//}
+// *********************************
 //
-//// *********************************
-////
-//ITimeEvaluatorPtr       TimelineManager::GetRootTimeline         ()
-//{
-//    //FIXME: implement
-//    return nullptr;
-//}
+bool                    TimelineManager::AddLoopReverseEventToTimeline   ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount )
+{
+    assert( timeline != nullptr );
+
+    return timeline->AddKeyFrame( new model::TimelineEventLoop( eventName, eventTime, LoopEventAction::LEA_REVERSE, totalLoopCount, TimeType( 0.0 ), timeline.get() ) );
+}
+
+// *********************************
 //
-//// *********************************
-////
-//ITimeEvaluatorPtr       TimelineManager::GetTimeline             ( const std::string & name )
-//{
-//    //FIXME: implement
-//    return nullptr;
-//}
+bool                    TimelineManager::AddLoopJumpEventToTimeline      ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount, TimeType jumpToTime )
+{
+    assert( timeline != nullptr );
+
+    return timeline->AddKeyFrame( new model::TimelineEventLoop( eventName, eventTime, LoopEventAction::LEA_GOTO, totalLoopCount, jumpToTime, timeline.get() ) );
+}
+
+// *********************************
 //
-//// *********************************
-////
-//IParamSet *             TimelineManager::GetRegisteredParameters ( ITimeEvaluatorPtr timeline )
-//{
-//    //FIXME: implement
-//    return nullptr;
+bool                    TimelineManager::AddLoopRestartEventToTimeline   ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount )
+{
+    assert( timeline != nullptr );
+
+    return timeline->AddKeyFrame( new model::TimelineEventLoop( eventName, eventTime, LoopEventAction::LEA_RESTART, totalLoopCount, TimeType( 0.0 ), timeline.get() ) );
+}
+
+// *********************************
 //
-//    auto it = m_registeredParams.find( timeline.get() );
+bool                    TimelineManager::AddNullEventToTimeline     ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime )
+{
+    assert( timeline != nullptr );
+
+    return timeline->AddKeyFrame( new model::TimelineEventNull( eventName, eventTime, timeline.get() ) );
+}
+
+// *********************************
 //
-//    if( it != m_registeredParams.end() )
-//    {
-//        return it->second;
-//    }
-//    
-//    return nullptr;
-//}
+void                    TimelineManager::RegisterRootTimeline       ( ITimeEvaluatorPtr root )
+{
+    m_rootTimeline = root;
+}
+
+// *********************************
 //
-//// *********************************
-////
-//IParamSet *             TimelineManager::GetRegisteredParameters ( const std::string & name )
-//{
-//    return GetRegisteredParameters( GetTimeline( name ) );
-//}
+ITimeEvaluatorPtr       TimelineManager::GetRootTimeline            ()
+{
+    return m_rootTimeline;
+}
+
+// *********************************
 //
+ITimeEvaluatorPtr       TimelineManager::GetTimeline                ( const std::string & name )
+{
+    return FindTimelineByName( name, m_rootTimeline );
+}
+
+// *********************************
 //
-//// *********************************
-////
-//bool                    TimelineManager::RegisterOffsetTimeline  ( const std::string & name, TimeType offsetTime, std::string & parentName )
-//{
-//    //FIXME: implement
-//    return false;
-//}
+ITimeEvaluatorPtr       TimelineManager::GetTimeline                ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
+{
+    if( parentTimeline != nullptr )
+    {
+        for( auto child : parentTimeline->GetChildren() )
+        {
+            auto retVal = FindTimelineByName( name, child );
+            
+            if( retVal != nullptr )
+            {
+                return retVal;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+// *********************************
 //
-//// *********************************
-////
-//bool                    TimelineManager::RegisterConstTimeline   ( const std::string & name, TimeType constTime, std::string & parentName )
-//{
-//    //FIXME: implement
-//    return false;
-//}
+bool                    TimelineManager::AddTimeline                     ( ITimeEvaluatorPtr timeline )
+{
+    assert( timeline != nullptr );
+
+    if( m_rootTimeline != nullptr )
+    {
+        return AddTimelineToTimeline( timeline, m_rootTimeline );
+    }
+
+    return false;
+}
+
+// *********************************
 //
-//// *********************************
-////
-//bool                    TimelineManager::RegisterTimeline        ( ITimeEvaluatorPtr timeline )
-//{
-//    //FIXME: implement
-//    return false;
-//}
+bool                    TimelineManager::AddTimelineToTimeline           ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline )
+{
+    assert( parentTimeline != nullptr );
+    assert( timeline != nullptr );
+
+    parentTimeline->AddChild( timeline );
+
+    return true;    
+}
+
+// *********************************
 //
-//// *********************************
-////
-//bool                    TimelineManager::AddParamToTimeline      ( IParameter * param, const std::string & timelineName )
-//{
-//    //FIXME: implement
-//    return false;
+bool                    TimelineManager::AddTimelineToTimeline           ( ITimeEvaluatorPtr timeline, const std::string & parentName )
+{
+    assert( timeline != nullptr );
+
+    ITimeEvaluatorPtr parent = GetTimeline( parentName );
+   
+    if( parent != nullptr )
+    {
+        return AddTimelineToTimeline( timeline, parent );
+    }
+
+    return false;
+}
+
+// *********************************
 //
-//    auto timeline = GetTimeline( timelineName );
+bool                    TimelineManager::RemoveTimelineFromTimeline      ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline )
+{
+    assert( timeline != nullptr );
+    assert( parentTimeline != nullptr );
+    
+    return parentTimeline->RemoveChild( timeline );
+}
+
+// *********************************
 //
-//    if( timeline != nullptr )
-//    {
-//        return AddParamToTimelineImpl( param, timeline );
-//    }
+bool                    TimelineManager::RemoveTimelineFromTimeline      ( ITimeEvaluatorPtr timeline, const std::string & parentName )
+{
+    ITimeEvaluatorPtr parent = GetTimeline( parentName );
+
+    if( parent != nullptr )
+    {
+        return RemoveTimelineFromTimeline( timeline, parent );
+    }
+
+    return false;
+}
+
+// *********************************
 //
-//    return false;
-//}
+bool                    TimelineManager::RemoveTimelineFromTimeline      ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
+{
+    ITimeEvaluatorPtr timeline = GetTimeline( name );
+
+    if( timeline != nullptr )
+    {
+        return RemoveTimelineFromTimeline( timeline, parentTimeline );
+    }
+
+    return false;
+}
+
+// *********************************
 //
-//// *********************************
-////
-//bool                    TimelineManager::AddParamToTimeline      ( IParameter * param, ITimeEvaluatorPtr timeline )
-//{
-//    //FIXME: implement
-//    return false;
+bool                    TimelineManager::RemoveTimelineFromTimeline      ( const std::string & name, const std::string & parentName )
+{
+    ITimeEvaluatorPtr parentTimeline = GetTimeline( parentName );
+    ITimeEvaluatorPtr timeline = GetTimeline( name );
+
+    if( parentTimeline != nullptr && timeline != nullptr )
+    {
+        return RemoveTimelineFromTimeline( timeline, parentTimeline );
+    }
+
+    return false;
+}
+
+// *********************************
 //
-//    auto tl = GetTimeline( timeline-> GetName() );
+bool                    TimelineManager::RemoveAllChildren               ( ITimeEvaluatorPtr timeline )
+{
+    if( timeline != nullptr )
+    {
+        std::vector< ITimeEvaluatorPtr > ccopy = timeline->GetChildren();
+
+        for( auto child : ccopy )
+        {
+            timeline->RemoveChild( child );
+
+            RemoveAllChildren( child );
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+// *********************************
 //
+bool                    TimelineManager::RemoveAllChildren              ( const std::string & name )
+{
+    auto timeline = GetTimeline( name );
+
+    return RemoveAllChildren( timeline );
+}
+
+// *********************************
 //
-//    if( tl != nullptr )
-//    {
-//        return AddParamToTimelineImpl( param, tl );
-//    }
+IParamSet *             TimelineManager::GetRegisteredParameters        ( ITimeEvaluatorPtr timeline )
+{
+    if( timeline != nullptr )
+    {
+        return GetParamSet( timeline );
+    }
+
+    return nullptr;
+}
+
+// *********************************
 //
-//    if ( !RegisterTimeline( timeline ) )
-//    {
-//        assert( false );
+IParamSet *             TimelineManager::GetRegisteredParameters        ( const std::string & name )
+{
+    return GetRegisteredParameters( GetTimeline( name ) );
+}
+
+// *********************************
 //
-//        return false;
-//    }
+bool                    TimelineManager::AddParamToTimeline             ( IParameter * param, const std::string & timelineName )
+{
+    assert( param != nullptr );
+
+    auto timeline = GetTimeline( timelineName );
+
+    return AddParamToTimeline( param, timeline );
+}
+
+// *********************************
 //
-//    return AddParamToTimeline( param, timeline );
-//}
+bool                    TimelineManager::AddParamToTimeline             ( IParameter * param, ITimeEvaluatorPtr timeline )
+{
+    assert( param != nullptr );
+
+    if( timeline != nullptr )
+    {
+        RemoveParamFromTimeline( param, param->GetTimeEvaluator() );
+
+        auto it = m_registeredParams.find( timeline.get() );
+
+        if( it == m_registeredParams.end() )
+        {
+            auto paramSet = new SimpleIParamSet();
+
+            m_registeredParams[ timeline.get() ] = paramSet;
+
+            it = m_registeredParams.find( timeline.get() );
+
+            assert( it != m_registeredParams.end() );
+        }
+    
+        param->SetTimeEvaluator( timeline );
+
+        it->second->AddParameter( param );
+
+        return true;
+    }
+
+    return false;
+}
+
+// *********************************
 //
-//// *********************************
-////
-//unsigned int            TimelineManager::RemoveFromTimeline      ( const std::string & paramName, const std::string & timelineName )
-//{
-//    //FIXME: implement
-//    return 0;
+unsigned int            TimelineManager::RemoveParamFromTimeline        ( const std::string & paramName, const std::string & timelineName )
+{
+    auto timeline = GetTimeline( timelineName );
+    auto params = GetParamSet( timeline );
+
+    if( params != nullptr )
+    {
+        std::vector< IParameter * > paramBuf;
+
+        for( auto param : params->GetParameters() )
+        {
+            if( param->GetName() == paramName )
+            {
+                paramBuf.push_back( param );
+            }
+        }
+
+        unsigned int numParams = paramBuf.size();
+
+        for( auto param : paramBuf )
+        {
+            RemoveParamFromTimeline( param, timeline );
+        }
+  
+        return numParams;
+    }
+
+    return 0;
+}
+
+// *********************************
 //
-//    auto paramSet = GetSimpleIParamSet( timelineName );
+bool                    TimelineManager::RemoveParamFromTimeline        ( IParameter * param, const std::string & timelineName )
+{
+    auto timeline = GetTimeline( timelineName );
+    
+    return RemoveParamFromTimeline( param, timeline );
+}
+
+// *********************************
 //
-//    if( paramSet )
-//    {
-//        return paramSet->RemoveParameters( paramName );
-//    }
+bool                    TimelineManager::RemoveParamFromTimeline        ( IParameter * param, const ITimeEvaluatorPtr timeline )
+{
+    assert( param != nullptr );
+
+    if( timeline != nullptr )
+    {
+        return DeregisterParam( param, timeline );
+    }
+
+    return false;
+}
+
+// *********************************
 //
-//    return 0;
-//}
+ITimeEvaluatorPtr       TimelineManager::FindTimelineByName             ( const std::string & name, ITimeEvaluatorPtr root )
+{
+    if( root != nullptr )
+    {
+        if( root->GetName() == name )
+        {
+            return root;
+        }
+        else
+        {
+            for( auto child : root->GetChildren() )
+            {
+                auto retTimeline = FindTimelineByName( name, child );
+
+                if( retTimeline != nullptr )
+                {
+                    return retTimeline;
+                }
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+// *********************************
 //
-//// *********************************
-////
-//bool                    TimelineManager::RemoveFromTimeline      ( IParameter * param, const std::string & timelineName )
-//{
-//    //FIXME: implement
-//    return false;
+SimpleIParamSet *       TimelineManager::GetParamSet                     ( ITimeEvaluatorPtr timeline )
+{
+    auto it = m_registeredParams.find( timeline.get() );
+
+    if( it != m_registeredParams.end() )
+    {
+        return it->second;
+    }
+
+    return nullptr;
+}
+
+// *********************************
 //
-//    auto paramSet = GetSimpleIParamSet( timelineName );
-//
-//    if( paramSet )
-//    {
-//        paramSet->RemoveParameter( param );
-//    }
-//
-//    return false;
-//}
-//
-//// *********************************
-////
-//SimpleIParamSet *       TimelineManager::GetSimpleIParamSet      ( const std::string & timelineName )
-//{
-//    //FIXME: implement
-//    return nullptr;
-//
-//    auto tl = GetTimeline( timelineName );
-//
-//    if( tl != nullptr )
-//    {
-//        //assert( m_registeredParams.find( tl ) != m_registeredParams.end() );
-//
-//        //return m_registeredParams[ tl ];
-//        return nullptr;
-//    }
-//
-//    return nullptr;
-//}
-//
-//// *********************************
-////
-//bool                    TimelineManager::AddParamToTimelineImpl ( IParameter * param, ITimeEvaluatorPtr timeline )
-//{
-//    //FIXME: implement
-//    return false;
-//
-//    auto paramSet = m_registeredParams[ timeline.get() ];
-//
-//    assert( paramSet != nullptr );
-//
-//    bool bAdded = paramSet->AddParameter( param );
-//    
-//    if ( bAdded )
-//    {
-//        //SetParamTimeline( param, timeline );
-//    }
-//
-//    return bAdded;
-//}
+bool                    TimelineManager::DeregisterParam                 ( IParameter * param, ITimeEvaluatorPtr timeline )
+{
+    if( param->GetTimeEvaluator() == timeline )
+    {
+        auto it = m_registeredParams.find( timeline.get() );
+
+        assert( it != m_registeredParams.end() );
+
+        it->second->RemoveParameter( param );
+
+        if( it->second->GetParameters().size() == 0 )
+        {
+            delete it->second;
+
+            m_registeredParams.erase( it );
+        }
+
+        param->SetTimeEvaluator( nullptr );
+
+        return true;
+    }
+
+    return false;
+}
 
 } //model
 } //bv
