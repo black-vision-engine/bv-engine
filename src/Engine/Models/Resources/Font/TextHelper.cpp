@@ -189,7 +189,7 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
 
         if( auto glyphCoord = textAtlas->GetGlyphCoords( wch ) )
         {
-            glm::vec3 baring = glm::vec3( 0.f, (glyphCoord->height - glyphCoord->bearingY) / (float)viewHeight, 0.f );
+            glm::vec3 baring = glm::vec3( 0.f, (glyphCoord->glyphHeight - glyphCoord->bearingY) / (float)viewHeight, 0.f );
 
             glm::vec3 quadBottomLeft;
             glm::vec3 quadBottomRight;

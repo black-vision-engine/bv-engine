@@ -45,7 +45,7 @@ struct GlyphCoords
                 , glyphWidth( gw )
                 , glyphHeight( gh )
                 , bearingX( bX )
-                , bearingY( bX )
+                , bearingY( bY )
 
     {}
 };

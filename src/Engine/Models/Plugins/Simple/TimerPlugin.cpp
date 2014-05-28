@@ -165,7 +165,8 @@ const GlyphCoords&                  TimerPlugin::GetGlyphCoords  ( wchar_t wch )
     }
 }
 
-
+////////////////////////////
+//
 int TimeInfo::GetSize() const
 {
     return  hoursPlaceholderSize
@@ -173,8 +174,6 @@ int TimeInfo::GetSize() const
         +   secondsPlaceHolderSize
         +   fracOfSecondsPlaceholderSize;
 }
-
-
 
 ////////////////////////////
 //
