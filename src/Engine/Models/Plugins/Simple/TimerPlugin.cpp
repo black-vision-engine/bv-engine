@@ -159,8 +159,10 @@ const GlyphCoords&                  TimerPlugin::GetGlyphCoords  ( wchar_t wch )
     if( glyphCoords )
         return *glyphCoords;
     else
+    {
         assert( !( "Cannot find glyph for char " + wch) );
         throw;
+    }
 }
 
 
