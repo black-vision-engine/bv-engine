@@ -139,7 +139,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     , m_paramValModel( model )
     , m_textSet( true )
     , m_textAtlas( nullptr )
-    , m_text( L"DEFAULT_TEXT" )
+    , m_text( L"" )
 {
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTextPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultTextPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
@@ -271,10 +271,13 @@ void DefaultTextPlugin::OnSetText                   ( IEventPtr evt )
         KeyPressedEventPtr evtTyped = std::static_pointer_cast<KeyPressedEvent>( evt );
         wchar_t c[2] = {evtTyped->GetChar() , '\0'};
 
-        if( c[0] == L'\b' && !m_text.empty() )
+        if( c[0] == L'\b' )
         {
-            m_text.pop_back();
-            SetText( m_text );
+            if( !m_text.empty() )
+            {
+                m_text.pop_back();
+                SetText( m_text );
+            }
         }
         else
             SetText( m_text + std::wstring( c ) );

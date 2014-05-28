@@ -78,6 +78,35 @@ const Text*             GetFont( const ResourceHandle * fontResource, bool bolde
     return nullptr;
 }
 
+ConnectedComponent*         CreateEmptyCC()
+{
+    ConnectedComponent* connComp = new ConnectedComponent();
+
+    AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+
+    auto posAttribChannel = new Float3AttributeChannel( desc, "vertexPosition", true );
+
+    posAttribChannel->AddAttribute( glm::vec3() );
+    posAttribChannel->AddAttribute( glm::vec3() );
+    posAttribChannel->AddAttribute( glm::vec3() );
+    posAttribChannel->AddAttribute( glm::vec3() );
+
+    connComp->AddAttributeChannel( AttributeChannelPtr( posAttribChannel ) );
+
+    AttributeChannelDescriptor * desc1 = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+
+    auto verTex0AttrChannel = new model::Float2AttributeChannel( desc1, "textAtlasPosition", true );
+
+    verTex0AttrChannel->AddAttribute( glm::vec2() );
+    verTex0AttrChannel->AddAttribute( glm::vec2() );
+    verTex0AttrChannel->AddAttribute( glm::vec2() );
+    verTex0AttrChannel->AddAttribute( glm::vec2() );
+
+    connComp->AddAttributeChannel( AttributeChannelPtr( verTex0AttrChannel ) );
+
+    return connComp;
+}
+
 } // anonymous
 
 
@@ -231,7 +260,12 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
         {
             translate += glm::vec3( glyphCoord.glyphWidth / (float)viewWidth, 0.f, 0.f ) + interspace;
         }
-    } 
+    }
+
+    if( vertexAttributeChannel->GetComponents().empty() ) // FIXME: We add one empty CC because of bug #72174842
+    {
+        vertexAttributeChannel->AddConnectedComponent( CreateEmptyCC() );
+    }
 }
 
 
