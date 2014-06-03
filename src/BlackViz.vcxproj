@@ -547,6 +547,7 @@
     <ClInclude Include="Engine\Models\Plugins\Simple\TimerPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\TextureInfo.h" />
     <ClInclude Include="Engine\Models\Resources\Font\AtlasCache.h" />
+    <ClInclude Include="Engine\Models\Resources\Font\Serialize.h" />
     <ClInclude Include="Engine\Models\Resources\Font\TextHelper.h" />
     <ClInclude Include="Engine\Models\Resources\Font\FontLoader.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Glyph.h" />

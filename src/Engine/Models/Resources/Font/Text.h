@@ -3,7 +3,7 @@
 #include "Glyph.h"
 
 #include <string>
-#include <hash_map>
+#include <map>
 
 namespace bv { namespace model {
 
@@ -25,6 +25,8 @@ struct GlyphCoords
 
     unsigned int            glyphWidth;
     unsigned int            glyphHeight;
+
+    GlyphCoords(){}
 
     GlyphCoords(unsigned int tX,
                 unsigned int tY,
@@ -48,11 +50,15 @@ struct GlyphCoords
                 , bearingY( bY )
 
     {}
+
+    // serialization
+    void        save( std::ostream& out ) const;
+    void        load( std::istream& in );
 };
 
 class TextAtlas
 {
-private:
+public: // Only to non intrusive serialization. Should be private
 
     char*                   m_data;
     unsigned int            m_width;
@@ -60,7 +66,7 @@ private:
     unsigned int            m_bitsPerPixel;
 
 
-    std::hash_map< wchar_t, GlyphCoords >   m_glyphsPositions;
+    std::map< wchar_t, GlyphCoords >   m_glyphsPositions;
 
     void                    SetGlyphCoords  ( wchar_t wch, const GlyphCoords& coords );
 
@@ -87,11 +93,16 @@ public:
     char*                   GetWritableData ();
     unsigned int            GetSizeInBytes  () const;
 
+    TextAtlas();
     TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh );
 
     static TextAtlas*       Crate           ( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh );
 
     friend class Text;
+
+    // serialization
+    void                    save( std::ostream& out ) const;
+    void                    load( std::istream& in );
 };
 
 class Text
@@ -101,7 +112,7 @@ private:
     std::string                         m_fontFile;
     TextAtlas*                          m_atlas;
     unsigned int                        m_fontSize;
-    std::hash_map< wchar_t, Glyph * >   m_glyphs;
+    std::map< wchar_t, Glyph * >        m_glyphs;
 
     void                                BuildAtlas();
 
@@ -118,7 +129,7 @@ class MockFontEngine
 {
 private:
 
-    std::hash_map< Text*, Text* >           m_textMap;
+    std::map< Text*, Text* >                m_textMap;
 
 public:
     const Text*                             AddText( const std::wstring& text, const std::string& fontFile );

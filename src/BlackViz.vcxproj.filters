@@ -198,7 +198,6 @@
     <ClCompile Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultTextPlugin.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\FontResourceDescr.cpp" />
-    <ClCompile Include="Engine\Models\Timeline\TimeEvaluatorBase.inl" />
     <ClCompile Include="Engine\Models\Timeline\SimpleIParamSet.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -453,6 +452,7 @@
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultTextPlugin.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\FontResourceDescr.h" />
     <ClInclude Include="Engine\Models\Timeline\SimpleIParamSet.h" />
+    <ClInclude Include="Engine\Models\Resources\Font\Serialize.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

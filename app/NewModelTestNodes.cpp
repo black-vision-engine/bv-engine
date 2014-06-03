@@ -182,7 +182,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager *
     success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/ARIALUNI.TTF" );
     assert( success );
 
-    model::SetTextPluginContent( node->GetPlugin( "text" ), L"text dupa nic" );
+    model::SetTextPluginContent( node->GetPlugin( "text" ), L"bla bla" );
 
     auto ai = TestAIManager::Instance().GetAIPreset( 2 );
     ai->SetTimeline( someTimelineWithEvents );
