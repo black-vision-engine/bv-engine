@@ -7,6 +7,7 @@ namespace bv { namespace model {
 
 bool    LoadTexture     ( IPlugin * plugin, const std::string & textureFile );
 bool    LoadAnimation   ( IPlugin * plugin, const std::string & animationPath, const std::string & filter );
+bool    LoadFont        ( IPlugin * plugin, const std::string & fontFile );
 
 } //model
 } //bv

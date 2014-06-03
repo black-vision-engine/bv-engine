@@ -276,7 +276,7 @@ void                                DefaultAnimationPlugin::Update              
     auto wY = GetWrapModeY();
     auto fm = GetFilteringMode();
 
-    m_texturesData->SetAnimationFrame( 0, (unsigned int )m_paramFrameNum->Evaluate() );
+    m_texturesData->SetAnimationFrame( 0, (unsigned int )m_paramFrameNum->Evaluate() ); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
 
     if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() || StateChanged( wX, wY, fm, attachmentMode ) )
     {

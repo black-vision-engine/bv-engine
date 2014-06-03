@@ -1,4 +1,5 @@
 #include "Text.h"
+#include "Serialize.h"
 
 #include "Glyph.h"
 #include "System/FileIO.h"
@@ -6,7 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
+#include <vector>
 #include <cassert>
 
 #include <ft2build.h>
@@ -15,6 +16,27 @@
 #include "FreeImagePlus.h"
 
 namespace bv { namespace model {
+
+void GlyphCoords::save( std::ostream& out ) const
+{
+    boost::archive::text_oarchive oa( out );
+    oa << *this;
+}
+
+void GlyphCoords::load( std::istream& in )
+{
+    boost::archive::text_iarchive ia( in );
+    ia >> *this;
+}
+
+TextAtlas::TextAtlas()
+    : m_width( 0 )
+    , m_height( 0 )
+    , m_glyphWidth( 0 )
+    , m_glyphHeight( 0 )
+    , m_bitsPerPixel( 0 )
+    , m_data( nullptr )
+{}
 
 TextAtlas::TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh )
     : m_width( w )
@@ -74,40 +96,52 @@ unsigned int            TextAtlas::GetHeight       () const
     return m_height;
 }
 
-const GlyphCoords&      TextAtlas::GetGlyphCoords  ( wchar_t c ) const
+const GlyphCoords*      TextAtlas::GetGlyphCoords  ( wchar_t c ) const
 {
     auto it = m_glyphsPositions.find(c);
 
     if( it != m_glyphsPositions.end() )
     {
-        return it->second;
+        return &( it->second );
     }
 
-    assert("Cannot find glyph for char" + c);
-    throw;
+    return nullptr;
 }
 
 unsigned int            TextAtlas::GetGlyphX       ( wchar_t c ) const
 {
-    return GetGlyphCoords( c ).textureX;
+    return GetGlyphCoords( c )->textureX;
 }
 
 unsigned int            TextAtlas::GetGlyphY       ( wchar_t c ) const
 {
-    return GetGlyphCoords( c ).textureY;
+    return GetGlyphCoords( c )->textureY;
 }
 
 unsigned int            TextAtlas::GetGlyphWidth   ( wchar_t c ) const
 {
-    return GetGlyphCoords( c ).width;
+    return GetGlyphCoords( c )->width;
 }
 
 unsigned int            TextAtlas::GetGlyphHeight  ( wchar_t c ) const
 {
-    return GetGlyphCoords( c ).height;
+    return GetGlyphCoords( c )->height;
 }
 
- #define GENERATE_TEST_BMP_FILE
+void                    TextAtlas::save( std::ostream& out ) const
+{
+    boost::archive::text_oarchive oa( out );
+    oa << *this;
+}
+
+void                    TextAtlas::load( std::istream& in )
+{
+    boost::archive::text_iarchive ia( in );
+    ia >> *this;
+}
+
+
+#define GENERATE_TEST_BMP_FILE
 
 struct GlyphDataInfo
 {

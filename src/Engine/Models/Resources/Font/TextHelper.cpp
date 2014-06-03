@@ -78,6 +78,35 @@ const Text*             GetFont( const ResourceHandle * fontResource, bool bolde
     return nullptr;
 }
 
+ConnectedComponent*         CreateEmptyCC()
+{
+    ConnectedComponent* connComp = new ConnectedComponent();
+
+    AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+
+    auto posAttribChannel = new Float3AttributeChannel( desc, "vertexPosition", true );
+
+    posAttribChannel->AddAttribute( glm::vec3() );
+    posAttribChannel->AddAttribute( glm::vec3() );
+    posAttribChannel->AddAttribute( glm::vec3() );
+    posAttribChannel->AddAttribute( glm::vec3() );
+
+    connComp->AddAttributeChannel( AttributeChannelPtr( posAttribChannel ) );
+
+    AttributeChannelDescriptor * desc1 = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+
+    auto verTex0AttrChannel = new model::Float2AttributeChannel( desc1, "textAtlasPosition", true );
+
+    verTex0AttrChannel->AddAttribute( glm::vec2() );
+    verTex0AttrChannel->AddAttribute( glm::vec2() );
+    verTex0AttrChannel->AddAttribute( glm::vec2() );
+    verTex0AttrChannel->AddAttribute( glm::vec2() );
+
+    connComp->AddAttributeChannel( AttributeChannelPtr( verTex0AttrChannel ) );
+
+    return connComp;
+}
+
 } // anonymous
 
 
@@ -158,80 +187,90 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
 
         auto posAttribChannel = new Float3AttributeChannel( desc, "vertexPosition", true );
 
-        auto glyphCoord = textAtlas->GetGlyphCoords( wch );
-
-        glm::vec3 baring = glm::vec3( 0.f, (glyphCoord.height - glyphCoord.bearingY) / (float)viewHeight, 0.f );
-
-        glm::vec3 quadBottomLeft;
-        glm::vec3 quadBottomRight;
-        glm::vec3 quadTopLeft;
-        glm::vec3 quadTopRight;
-
-        if( usePatern && textPatern[i] == L'#' )
+        if( auto glyphCoord = textAtlas->GetGlyphCoords( wch ) )
         {
-            quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f );
-            quadBottomRight    = glm::vec3( (float)glyphCoord.width / (float)viewWidth, 0.f, 0.f );
-            quadTopLeft        = glm::vec3( 0.f, (float)glyphCoord.height / (float)viewHeight, 0.f );
-            quadTopRight       = glm::vec3( (float)glyphCoord.width / (float)viewWidth, (float)glyphCoord.height / (float)viewHeight, 0.f );
+            glm::vec3 baring = glm::vec3( 0.f, (glyphCoord->glyphHeight - glyphCoord->bearingY) / (float)viewHeight, 0.f );
+
+            glm::vec3 quadBottomLeft;
+            glm::vec3 quadBottomRight;
+            glm::vec3 quadTopLeft;
+            glm::vec3 quadTopRight;
+
+            if( usePatern && textPatern[i] == L'#' )
+            {
+                quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f );
+                quadBottomRight    = glm::vec3( (float)glyphCoord->width / (float)viewWidth, 0.f, 0.f );
+                quadTopLeft        = glm::vec3( 0.f, (float)glyphCoord->height / (float)viewHeight, 0.f );
+                quadTopRight       = glm::vec3( (float)glyphCoord->width / (float)viewWidth, (float)glyphCoord->height / (float)viewHeight, 0.f );
+            }
+            else
+            {
+                quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f );
+                quadBottomRight    = glm::vec3( (float)glyphCoord->glyphWidth / (float)viewWidth, 0.f, 0.f );
+                quadTopLeft        = glm::vec3( 0.f, (float)glyphCoord->glyphHeight / (float)viewHeight, 0.f );
+                quadTopRight       = glm::vec3( (float)glyphCoord->glyphWidth / (float)viewWidth, (float)glyphCoord->glyphHeight / (float)viewHeight, 0.f );
+            }
+
+            posAttribChannel->AddAttribute( quadBottomLeft    + translate - baring + newLineTranslation );
+            posAttribChannel->AddAttribute( quadBottomRight   + translate - baring + newLineTranslation );
+            posAttribChannel->AddAttribute( quadTopLeft       + translate - baring + newLineTranslation );
+            posAttribChannel->AddAttribute( quadTopRight      + translate - baring + newLineTranslation );
+
+            connComp->AddAttributeChannel( AttributeChannelPtr( posAttribChannel ) );
+
+            AttributeChannelDescriptor * desc1 = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+
+            auto verTex0AttrChannel = new model::Float2AttributeChannel( desc1, "textAtlasPosition", true );
+
+            float texLeft;
+            float texTop;
+            float texWidth;
+            float texHeight;
+
+            if( usePatern && textPatern[i] == L'#' )
+            {
+                texLeft   = ((float)glyphCoord->textureX)  / textAtlas->GetWidth();
+                texTop    = ((float)glyphCoord->textureY)  / textAtlas->GetHeight();
+                texWidth  = ((float)glyphCoord->width)     / textAtlas->GetWidth();
+                texHeight = ((float)glyphCoord->height)    / textAtlas->GetHeight();
+            }
+            else
+            {
+                texLeft   = ((float)glyphCoord->textureX + (float)glyphCoord->glyphX)  / textAtlas->GetWidth();
+                texTop    = ((float)glyphCoord->textureY + (float)glyphCoord->glyphY)  / textAtlas->GetHeight();
+                texWidth  = ((float)glyphCoord->glyphWidth)     / textAtlas->GetWidth();
+                texHeight = ((float)glyphCoord->glyphHeight)    / textAtlas->GetHeight();
+            }
+
+
+            verTex0AttrChannel->AddAttribute( glm::vec2( texLeft, texTop + texHeight ) );
+            verTex0AttrChannel->AddAttribute( glm::vec2( texLeft + texWidth, texTop + texHeight ) );
+            verTex0AttrChannel->AddAttribute( glm::vec2( texLeft, texTop) );
+            verTex0AttrChannel->AddAttribute( glm::vec2( texLeft + texWidth, texTop ) );
+
+            connComp->AddAttributeChannel( AttributeChannelPtr( verTex0AttrChannel ) );
+
+            vertexAttributeChannel->AddConnectedComponent( connComp );
+
+            if( usePatern && textPatern[i] == L'#' )
+            {
+                translate += glm::vec3( glyphCoord->width / (float)viewWidth, 0.f, 0.f ) + interspace;
+            }
+            else
+            {
+                translate += glm::vec3( glyphCoord->glyphWidth / (float)viewWidth, 0.f, 0.f ) + interspace;
+            }
         }
         else
         {
-            quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f );
-            quadBottomRight    = glm::vec3( (float)glyphCoord.glyphWidth / (float)viewWidth, 0.f, 0.f );
-            quadTopLeft        = glm::vec3( 0.f, (float)glyphCoord.glyphHeight / (float)viewHeight, 0.f );
-            quadTopRight       = glm::vec3( (float)glyphCoord.glyphWidth / (float)viewWidth, (float)glyphCoord.glyphHeight / (float)viewHeight, 0.f );
+            assert( !( "Cannot find glyph for char " + wch) );
         }
+    }
 
-        posAttribChannel->AddAttribute( quadBottomLeft    + translate - baring + newLineTranslation );
-        posAttribChannel->AddAttribute( quadBottomRight   + translate - baring + newLineTranslation );
-        posAttribChannel->AddAttribute( quadTopLeft       + translate - baring + newLineTranslation );
-        posAttribChannel->AddAttribute( quadTopRight      + translate - baring + newLineTranslation );
-
-        connComp->AddAttributeChannel( AttributeChannelPtr( posAttribChannel ) );
-
-        AttributeChannelDescriptor * desc1 = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-
-        auto verTex0AttrChannel = new model::Float2AttributeChannel( desc1, "textAtlasPosition", true );
-
-        float texLeft;
-        float texTop;
-        float texWidth;
-        float texHeight;
-
-        if( usePatern && textPatern[i] == L'#' )
-        {
-            texLeft   = ((float)glyphCoord.textureX)  / textAtlas->GetWidth();
-            texTop    = ((float)glyphCoord.textureY)  / textAtlas->GetHeight();
-            texWidth  = ((float)glyphCoord.width)     / textAtlas->GetWidth();
-            texHeight = ((float)glyphCoord.height)    / textAtlas->GetHeight();
-        }
-        else
-        {
-            texLeft   = ((float)glyphCoord.textureX + (float)glyphCoord.glyphX)  / textAtlas->GetWidth();
-            texTop    = ((float)glyphCoord.textureY + (float)glyphCoord.glyphY)  / textAtlas->GetHeight();
-            texWidth  = ((float)glyphCoord.glyphWidth)     / textAtlas->GetWidth();
-            texHeight = ((float)glyphCoord.glyphHeight)    / textAtlas->GetHeight();
-        }
-
-
-        verTex0AttrChannel->AddAttribute( glm::vec2( texLeft, texTop + texHeight ) );
-        verTex0AttrChannel->AddAttribute( glm::vec2( texLeft + texWidth, texTop + texHeight ) );
-        verTex0AttrChannel->AddAttribute( glm::vec2( texLeft, texTop) );
-        verTex0AttrChannel->AddAttribute( glm::vec2( texLeft + texWidth, texTop ) );
-
-        connComp->AddAttributeChannel( AttributeChannelPtr( verTex0AttrChannel ) );
-
-        vertexAttributeChannel->AddConnectedComponent( connComp );
-
-        if( usePatern && textPatern[i] == L'#' )
-        {
-            translate += glm::vec3( glyphCoord.width / (float)viewWidth, 0.f, 0.f ) + interspace;
-        }
-        else
-        {
-            translate += glm::vec3( glyphCoord.glyphWidth / (float)viewWidth, 0.f, 0.f ) + interspace;
-        }
-    } 
+    if( vertexAttributeChannel->GetComponents().empty() ) // FIXME: We add one empty CC because of bug #72174842
+    {
+        vertexAttributeChannel->AddConnectedComponent( CreateEmptyCC() );
+    }
 }
 
 
