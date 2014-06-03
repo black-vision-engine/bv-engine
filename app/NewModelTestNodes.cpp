@@ -4,6 +4,7 @@
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
+#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
@@ -180,6 +181,8 @@ model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager *
 
     success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/ARIALUNI.TTF" );
     assert( success );
+
+    model::SetTextPluginContent( node->GetPlugin( "text" ), L"text dupa nic" );
 
     auto ai = TestAIManager::Instance().GetAIPreset( 2 );
     ai->SetTimeline( someTimelineWithEvents );
