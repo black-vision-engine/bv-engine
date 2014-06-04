@@ -104,7 +104,7 @@ void                    FontAtlasCache::InitFontCachedTable ()
     if ( m_dataBase != nullptr )
     {
         static std::string sql = "CREATE TABLE IF NOT EXISTS cached_fonts(font_name TEXT, font_size INTEGER, font_file_name TEXT \
-                            , bold_flag BOOL, italic_flag BOOL, tesxt_atlas BLOB, PRIMARY KEY( font_name , font_size, bold_flag, italic_flag ) )";
+                            , bold_flag BOOL, italic_flag BOOL, text_atlas BLOB, PRIMARY KEY( font_name , font_size, bold_flag, italic_flag ) )";
 
         char* err = nullptr;
 
@@ -127,12 +127,16 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
 {
     auto out = static_cast< FontAtlasCacheEntry* >( data );
 
-    //assert(argsNum == 6);
+    assert(argsNum == 6);
 
-    //out->m_fontName = args[0];
-    //out->m_fontSize = args[1];
-    //out->m_data = new FontAtlasCacheData(  );
-    //out->m_data->
+    out->m_fontName     = args[ 0 ];
+    out->m_fontSize     = std::atoi( args[ 1 ] );
+    out->m_fontFilePath = args[ 2 ];
+    out->m_bold         = std::atoi( args[ 3 ] ) == 0 ? false : true;
+    out->m_italic       = std::atoi( args[ 4 ] ) == 0 ? false : true;
+    out->m_textAtlas    = new TextAtlas();
+    std::stringstream str(  args[5] );
+    out->m_textAtlas->Load( str );    
 
     return 0;
 }
@@ -149,11 +153,14 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fo
 
     auto ret = new FontAtlasCacheEntry();
 
-    static const char* sql = "SELECT * from cached_fonts";
+    std::string sql = "SELECT * FROM cached_fonts WHERE font_name=\'" + fontName + "\'" +
+                            " AND font_size = " + std::to_string( fontSize ) +
+                            " AND bold_flag = " + std::to_string( bold ) +
+                            " AND italic_flag = " + std::to_string( italic ) + ";";
 
     char* err = nullptr;
 
-    auto res = sqlite3_exec( m_dataBase, sql, GetEntryCallback, ret, &err );
+    auto res = sqlite3_exec( m_dataBase, sql.c_str(), GetEntryCallback, ret, &err );
 
 
     if( res != SQLITE_OK )
@@ -191,7 +198,7 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
     std::string sqlAdd = std::string( "INSERT OR REPLACE INTO cached_fonts VALUES(" ) 
         + "\'" + data.m_fontName + "\'" + ", " 
         + std::to_string( data.m_fontSize ) + ", " 
-        + data.m_fontFilePath + ", " 
+        + "\'" + data.m_fontFilePath + "\'" + ", " 
         + std::to_string( data.m_bold ) + ", " 
         + std::to_string( data.m_italic ) + ", " 
         + "?)";
