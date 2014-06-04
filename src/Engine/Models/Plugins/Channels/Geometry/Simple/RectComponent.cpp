@@ -31,7 +31,8 @@ RectComponent::RectComponent( float w, float h, float tx, float ty, float tz )
 //
 void                    RectComponent::SetRectSize     ( float w, float h )
 {
-    auto data = m_v3Attrs->GetVertices();
+    //std::vector< glm::vec3 > &
+    auto & data = m_v3Attrs->GetVertices();
     assert( data.size() == 4 );
 
     float tx = 0.f;
