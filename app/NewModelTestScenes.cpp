@@ -335,10 +335,10 @@ public:
 //
 model::BasicNode *     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-//    return SimpleNodesFactory::CreateGreenRectNode();
+    return SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager );
     //return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator );
-    return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator );
+    //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator );
 }
 

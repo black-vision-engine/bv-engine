@@ -96,7 +96,7 @@ DefaultRectPlugin::DefaultRectPlugin    ( const std::string & name, const std::s
     m_lastH = m_heightParam->Evaluate();
 
     RectComponent * rect = RectComponent::Create( m_lastW, m_lastH );
-    m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( rect, true );
+    m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( rect, false );
 
     m_rct = rect;
 }
@@ -130,10 +130,10 @@ void                                DefaultRectPlugin::Update                   
     {
         m_rct->SetRectSize( w, h );
         m_vaChannel->SetNeedsAttributesUpdate( true );
-    }
 
-    m_lastW = w;
-    m_lastH = h;
+        m_lastW = w;
+        m_lastH = h;
+    }
 }
 
 } // model
