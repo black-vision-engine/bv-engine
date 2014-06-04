@@ -1,10 +1,5 @@
 #include "TextureLoader.h"
-
-#include <sstream>
-#include "System/FileIO.h"
-
-#include "FreeImagePlus.h"
-
+#include "TextureHelpers.h"
 
 namespace bv { namespace model {
 
@@ -18,62 +13,19 @@ TextureLoader::TextureLoader( bool loadFormMemory )
 //
 ResourceHandle *        TextureLoader::LoadResource        ( IResource * res )  const
 {
-    std::string errMsg( "Cannot read file: " + res->GetFilePath() ); 
+    int width   = 0;
+    int height  = 0;
+    int bpp     = 0;
 
-    if( !File::Exists( res->GetFilePath() ) )
+    char* data = TextureHelper::LoadImg( res->GetFilePath(), &width, &height, &bpp );
+
+    if ( data != nullptr )
     {
-        throw std::runtime_error( errMsg );
-        return nullptr;
-    }
-
-    //FIXME: gdzie to jest usuwane? Nigidzie kurwa - i jeszcze rzucanie wyjatkami do chuja wafla
-    fipImage * fipImg = new fipImage();
-
-    if( m_loadFromMemory )
-    {
-        char* bufToRead = new char[ File::Size( res->GetFilePath() ) ]; 
-
-        int bytes = File::Read( bufToRead, res->GetFilePath() );
-
-        fipMemoryIO fipIO( ( BYTE * ) bufToRead, ( DWORD ) bytes );
-
-        FREE_IMAGE_FORMAT type = fipIO.getFileType();
-
-        if( !fipImg->loadFromMemory( fipIO ) )
-        {
-            throw std::runtime_error( errMsg );
-            return nullptr;
-        }
-
-        delete[] bufToRead;
+        auto texExtra = new TextureExtraData( width, height, bpp, TextureFormat::F_A8R8G8B8, TextureType::T_2D );
+        return new ResourceHandle( data, width * height * bpp / 8, texExtra );
     }
     else
-    {
-        if( !fipImg->load( res->GetFilePath().c_str() ) )
-        {
-            throw std::runtime_error( errMsg );
-            return nullptr;
-        }
-    }
-
-    if(!fipImg->convertTo32Bits())
-    {
-        throw std::runtime_error( "Cannot convert texture to bitmap" );
-    }
-
-    //FIXME: Add mapping of freeimage types to bv types
-    auto texExtra = new TextureExtraData( fipImg->getWidth(), fipImg->getHeight(), fipImg->getBitsPerPixel(), TextureFormat::F_A8R8G8B8, TextureType::T_2D );
-
-    auto numBytes = fipImg->getWidth() * fipImg->getHeight() * ( fipImg->getBitsPerPixel() / 8 );
-
-    char * pixels = new char[ numBytes ];
-    memcpy( pixels, fipImg->accessPixels(), numBytes );
-
-    auto retVal = new ResourceHandle( pixels, numBytes, texExtra );
-
-    delete fipImg;
-
-    return retVal;
+        return nullptr;
 }
 
 // ******************************

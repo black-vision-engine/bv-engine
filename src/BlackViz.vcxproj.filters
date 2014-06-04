@@ -199,6 +199,7 @@
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultTextPlugin.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\FontResourceDescr.cpp" />
     <ClCompile Include="Engine\Models\Timeline\SimpleIParamSet.cpp" />
+    <ClCompile Include="Engine\Models\Resources\TextureHelpers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -453,6 +454,7 @@
     <ClInclude Include="Engine\Models\Resources\Texture\FontResourceDescr.h" />
     <ClInclude Include="Engine\Models\Timeline\SimpleIParamSet.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Serialize.h" />
+    <ClInclude Include="Engine\Models\Resources\TextureHelpers.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

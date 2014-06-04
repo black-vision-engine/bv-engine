@@ -2,7 +2,9 @@
 #include "Serialize.h"
 
 #include "Glyph.h"
+#include "AtlasCache.h"
 #include "System/FileIO.h"
+#include "Engine/Models/Resources/TextureHelpers.h"
 
 #include <iostream>
 #include <fstream>
@@ -13,22 +15,27 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <FreeType/ftglyph.h>
-#include "FreeImagePlus.h"
 
 namespace bv { namespace model {
 
-void GlyphCoords::save( std::ostream& out ) const
+// *********************************
+//
+void GlyphCoords::Save( std::ostream& out ) const
 {
     boost::archive::text_oarchive oa( out );
     oa << *this;
 }
 
-void GlyphCoords::load( std::istream& in )
+// *********************************
+//
+void GlyphCoords::Load( std::istream& in )
 {
     boost::archive::text_iarchive ia( in );
     ia >> *this;
 }
 
+// *********************************
+//
 TextAtlas::TextAtlas()
     : m_width( 0 )
     , m_height( 0 )
@@ -38,6 +45,8 @@ TextAtlas::TextAtlas()
     , m_data( nullptr )
 {}
 
+// *********************************
+//
 TextAtlas::TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh )
     : m_width( w )
     , m_height( h )
@@ -48,11 +57,15 @@ TextAtlas::TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel,
     m_data = new char[ GetSizeInBytes() ];
 }
 
+// *********************************
+//
 TextAtlas*      TextAtlas::Crate           ( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh )
 {
     return new TextAtlas(w, h, bitsPrePixel, gw, gh);
 }
 
+// *********************************
+//
 Text::Text( const std::wstring& text, const std::string& fontFile, unsigned int fontSize )
     : m_text( text )
     , m_fontFile( fontFile )
@@ -61,41 +74,57 @@ Text::Text( const std::wstring& text, const std::string& fontFile, unsigned int 
     BuildAtlas();
 }
 
+// *********************************
+//
 const char*             TextAtlas::GetData         () const
 {
     return m_data;
 }
 
+// *********************************
+//
 char*                   TextAtlas::GetWritableData ()
 {
     return m_data;
 }
 
+// *********************************
+//
 unsigned int            TextAtlas::GetSizeInBytes  () const
 {
     return ( m_bitsPerPixel / 8 ) * m_height * m_width;
 }
 
+// *********************************
+//
 void                    TextAtlas::SetGlyphCoords  ( wchar_t wch, const GlyphCoords& coords )
 {
     m_glyphsPositions.insert(std::make_pair( wch, coords ) );
 }
 
+// *********************************
+//
 unsigned int            TextAtlas::GetBitsPerPixel () const
 {
     return m_bitsPerPixel;
 }
 
+// *********************************
+//
 unsigned int            TextAtlas::GetWidth        () const
 {
     return m_width;
 }
 
+// *********************************
+//
 unsigned int            TextAtlas::GetHeight       () const
 {
     return m_height;
 }
 
+// *********************************
+//
 const GlyphCoords*      TextAtlas::GetGlyphCoords  ( wchar_t c ) const
 {
     auto it = m_glyphsPositions.find(c);
@@ -108,38 +137,52 @@ const GlyphCoords*      TextAtlas::GetGlyphCoords  ( wchar_t c ) const
     return nullptr;
 }
 
+// *********************************
+//
 unsigned int            TextAtlas::GetGlyphX       ( wchar_t c ) const
 {
     return GetGlyphCoords( c )->textureX;
 }
 
+// *********************************
+//
 unsigned int            TextAtlas::GetGlyphY       ( wchar_t c ) const
 {
     return GetGlyphCoords( c )->textureY;
 }
 
+// *********************************
+//
 unsigned int            TextAtlas::GetGlyphWidth   ( wchar_t c ) const
 {
     return GetGlyphCoords( c )->width;
 }
 
+// *********************************
+//
 unsigned int            TextAtlas::GetGlyphHeight  ( wchar_t c ) const
 {
     return GetGlyphCoords( c )->height;
 }
 
-void                    TextAtlas::save( std::ostream& out ) const
+// *********************************
+//
+void                    TextAtlas::Save( std::ostream& out ) const
 {
     boost::archive::text_oarchive oa( out );
     oa << *this;
 }
 
-void                    TextAtlas::load( std::istream& in )
+// *********************************
+//
+void                    TextAtlas::Load( std::istream& in )
 {
     boost::archive::text_iarchive ia( in );
     ia >> *this;
 }
 
+// *********************************
+//
 
 #define GENERATE_TEST_BMP_FILE
 
@@ -156,27 +199,29 @@ struct GlyphDataInfo
     {}
 };
 
-namespace 
+// *********************************
+//
+TextAtlas*          Text::LoadFromCache()
 {
+    auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
 
-void WriteBMP( const std::string& file, char* data, int width, int height, int bpp )
-{
-    fipImage*  fipImg = new fipImage( FREE_IMAGE_TYPE::FIT_BITMAP, width, height, bpp );
+    auto entry = fac->GetEntry( "ARIAL", m_fontSize, m_fontFile, false, false );
 
-    auto pixels = fipImg->accessPixels();
-
-    memcpy( pixels, data, width * height * bpp / 8 );
-
-    fipImg->flipVertical();
-
-    fipImg->save( file.c_str() );
+    if( entry != nullptr )
+        return entry->m_textAtlas;
+    else
+        return nullptr;
 }
 
-
-} // anonymous
-
+// *********************************
+//
 void                Text::BuildAtlas()
 {
+    m_atlas = LoadFromCache();
+
+    if( m_atlas != nullptr )
+        return;
+
     unsigned int glyphsNum = 0;
 
     FT_Library ft;
@@ -338,9 +383,13 @@ void                Text::BuildAtlas()
         }
     }
 
+    auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
+    auto entry = new FontAtlasCacheEntry( m_atlas, "ARIAL", m_fontSize, m_fontFile, false, false );
+    fac->AddEntry( *entry );
+
 #ifdef GENERATE_TEST_BMP_FILE
 
-    WriteBMP( "test.bmp", atlasData, m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() );
+    TextureHelper::WriteBMP( "test.bmp", atlasData, m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() );
 
 #endif // GENERATE_TEST_BMP_FILE
 }

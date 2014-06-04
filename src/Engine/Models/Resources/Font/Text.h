@@ -52,13 +52,13 @@ struct GlyphCoords
     {}
 
     // serialization
-    void        save( std::ostream& out ) const;
-    void        load( std::istream& in );
+    void        Save( std::ostream& out ) const;
+    void        Load( std::istream& in );
 };
 
 class TextAtlas
 {
-public: // Only to non intrusive serialization. Should be private
+public: // Only for non intrusive serialization. Should be private
 
     char*                   m_data;
     unsigned int            m_width;
@@ -101,8 +101,8 @@ public:
     friend class Text;
 
     // serialization
-    void                    save( std::ostream& out ) const;
-    void                    load( std::istream& in );
+    void                    Save( std::ostream& out ) const;
+    void                    Load( std::istream& in );
 };
 
 class Text
@@ -114,7 +114,8 @@ private:
     unsigned int                        m_fontSize;
     std::map< wchar_t, Glyph * >        m_glyphs;
 
-    void                                BuildAtlas();
+    void                                BuildAtlas      ();
+    TextAtlas*                          LoadFromCache   ();
 
 public:
 
