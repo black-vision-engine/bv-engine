@@ -69,6 +69,12 @@ FontAtlasCache*     FontAtlasCache::Load            ( const std::string& filePat
         std::cout << "File does not exist: " << filePath << std::endl;
         std::cout << "Creating new atlas cache file: " << filePath << std::endl;
 
+        boost::filesystem::path p(filePath);
+        auto dir = p.parent_path().string();
+
+        if( (! boost::filesystem::exists( dir ) ) && ( ! dir.empty() ) )
+            boost::filesystem::create_directory( dir );
+
         std::ofstream file;
         file.open( filePath.c_str() );
         file.close();
@@ -86,12 +92,6 @@ FontAtlasCache*     FontAtlasCache::Load            ( const std::string& filePat
 sqlite3 *               FontAtlasCache::OpenDataBase    ( const std::string& dbFilePath )
 {
     sqlite3 * db = nullptr;
-
-    boost::filesystem::path p(dbFilePath);
-    auto dir = p.parent_path().string();
-
-    if( (! boost::filesystem::exists( dir ) ) && ( ! dir.empty() ) )
-        boost::filesystem::create_directory( dir );
 
     auto res = sqlite3_open( dbFilePath.c_str(), &db );
 
