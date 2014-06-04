@@ -90,7 +90,7 @@ sqlite3 *               FontAtlasCache::OpenDataBase    ( const std::string& dbF
     boost::filesystem::path p(dbFilePath);
     auto dir = p.parent_path().string();
 
-    if( ! boost::filesystem::exists( dir ) )
+    if( (! boost::filesystem::exists( dir ) ) && ( ! dir.empty() ) )
         boost::filesystem::create_directory( dir );
 
     auto res = sqlite3_open( dbFilePath.c_str(), &db );
