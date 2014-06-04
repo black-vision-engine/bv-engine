@@ -17,7 +17,7 @@ class SimpleNodesFactory
 {
 public:
 
-    static model::BasicNode *  CreateGreenRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static model::BasicNode *  CreateGreenRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & nodeName );
     static model::BasicNode *  CreateGreenRectNodeNoAssert( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 
     static model::BasicNode *  CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );

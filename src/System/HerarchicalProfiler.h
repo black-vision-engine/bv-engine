@@ -5,7 +5,7 @@
 #include "System/BasicMacros.h"
 
 
-#define MAX_PROFILER_SAMPLES 20
+#define MAX_PROFILER_SAMPLES 120
 #define MAX_PROFILER_FRAMES 10
 
 

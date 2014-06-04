@@ -53,7 +53,7 @@ namespace bv {
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & nodeName )
 {
     //Plugin list
     std::vector< std::string > uids;
@@ -63,7 +63,7 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMana
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNode * root = new model::BasicNode( "Root" );
+    model::BasicNode * root = new model::BasicNode( nodeName );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );

@@ -1,6 +1,8 @@
 #include "BasicNode.h"
 
 //FIXME: node na INode
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/join.hpp>
 
 #include "System/Print.h"
 
@@ -65,6 +67,38 @@ BasicNode::~BasicNode()
 IPlugin *                       BasicNode::GetPlugin               ( const std::string & name ) const
 {
     return m_pluginList->GetPlugin( name );
+}
+
+// ********************************
+//
+const IModelNode *              BasicNode::GetNode                 ( const std::string & path, const std::string & separator ) const
+{
+    std::string suffix = path;
+
+    auto name = SplitPrefix( suffix, separator );
+
+    if( name == "" || name == GetName() )
+    {
+        if( suffix.size() > 0 )
+        {
+            return GetNode( suffix, separator );
+        }
+        else
+        {
+            return this;
+        }
+    }
+    else
+    {
+        auto child = GetChild( name );
+
+        if( child != nullptr )
+        {
+            return child->GetNode( suffix );
+        }
+    }
+
+    return nullptr;
 }
 
 // ********************************
@@ -413,6 +447,34 @@ RenderableEffect *                  BasicNode::CreateDefaultEffect     ( const I
     return new DefaultEffect( psChannel, vsChannel, gsChannel ); 
 }
 
+
+// ********************************
+//
+std::string                         BasicNode::SplitPrefix              ( std::string & str, const std::string & separator ) const
+{
+    assert( separator.length() == 1 );
+
+    std::vector< std::string > ret;
+
+    //FIXME: _SCL_SECURE_NO_WARNINGS is defined due to this fuckin line (or fuckin VS)
+    boost::split( ret, str, boost::is_any_of( separator ) );
+
+    if( ret.size() == 0 )
+    {
+        return "";
+    }
+    else if ( ret.size() == 1 )
+    {
+        str = "";
+
+        return ret[ 0 ];
+    }
+
+    str = boost::algorithm::join( std::vector< std::string >( ret.begin() + 1, ret.end() ), separator );
+
+    return ret[ 0 ];
+}
+
 // ********************************
 //
 RenderableArrayDataSingleVertexBuffer * BasicNode::CreateRenderableArrayData( PrimitiveType type ) const
@@ -576,7 +638,6 @@ unsigned int                        BasicNode::TotalSize             ( const std
 {
     return TotalNumVertices( ccVec ) * desc->SingleVertexEntrySize();
 }
-
 
 // ********************************
 //

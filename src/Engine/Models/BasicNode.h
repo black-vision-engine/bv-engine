@@ -50,15 +50,16 @@ public:
     explicit BasicNode( const std::string & name, const PluginsManager * pluginsManager = nullptr );
     virtual ~BasicNode();
 
-    virtual IPlugin *                       GetPlugin               ( const std::string & name ) const;
-    virtual const IModelNode *              GetChild                ( const std::string & name ) const;
-    virtual const IModelNode *              GetLayer                ( const std::string & name ) const;
+    virtual IPlugin *                       GetPlugin               ( const std::string & name ) const override;
+    virtual const IModelNode *              GetNode                 ( const std::string & path, const std::string & separator = "/" ) const override;
+    virtual const IModelNode *              GetChild                ( const std::string & name ) const override;
+    virtual const IModelNode *              GetLayer                ( const std::string & name ) const override;
 
-    virtual const IPluginListFinalized *    GetPluginList           () const;
+    virtual const IPluginListFinalized *    GetPluginList           () const override;
 
-    virtual const std::string &             GetName                 () const;
+    virtual const std::string &             GetName                 () const override;
 
-    virtual SceneNode *                     BuildScene              ();
+    virtual SceneNode *                     BuildScene              () override;
 
     void                                    AddChild                ( IModelNode * n );
     void                                    AddLayer                ( IModelNode * n );
@@ -80,8 +81,8 @@ public:
     bool                                    AddPlugins              ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator );
     bool                                    AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator );
 
-    virtual void                            Print                   ( std::ostream & out, int tabs = 0 ) const;
-    virtual void                            Update                  ( TimeType t );
+    virtual void                            Print                   ( std::ostream & out, int tabs = 0 ) const override;
+    virtual void                            Update                  ( TimeType t ) override;
 
     virtual bool                            IsVisible               () const override;
     void                                    SetVisible              ( bool visible );
@@ -106,6 +107,8 @@ private:
     unsigned int                        TotalSize                       ( const std::vector< IConnectedComponent * > & ccVec, const IVertexAttributesChannelDescriptor * desc ) const;
 
     RenderableEffect *                  CreateDefaultEffect             ( const IPlugin * finalizer ) const;
+
+    std::string                         SplitPrefix                     ( std::string & str, const std::string & separator = "/" ) const;
 
 public:
 

@@ -331,15 +331,131 @@ public:
 
 } // anonymous
 
+void test_get_node( model::IModelNode * n, const std::string & path, bool res )
+{
+    printf( "Querying [%s] for [%s]\n", n->GetName().c_str(), path.c_str() );
+
+    auto result = n->GetNode( path );
+
+    if( result )
+    {
+        if( res )
+        {
+            printf( "   SUCCESS Found node [%s]\n", result->GetName().c_str() );
+        }
+        else
+        {
+            printf( "   FAILURE Found node [%s]\n", result->GetName().c_str() );
+        }
+    }
+    else
+    {
+        if( res )
+        {
+            printf( "   FAILURE Failed to query node\n" );
+        }
+        else
+        {
+            printf( "   SUCCESS Node [%s] not found \n", path.c_str() );
+        }
+    }
+}
+
+// *****************************
+//
+void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
+{
+    //GetNode tester - do not use:
+    auto rt = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "." );
+    auto n0 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node0" );
+    auto n1 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node01" );
+    auto n2 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node02" );
+    auto n3 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node011" );
+    auto n4 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node012" );
+    auto n5 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node013" );
+    auto n6 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node021" );
+    auto n7 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node022" );
+    auto n8 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node023" );
+    auto n9 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node024" );
+
+    rt->AddChild( n0 );
+
+    n0->AddChild( n1 );
+    n0->AddChild( n2 );
+
+    n1->AddChild( n3 );
+    n1->AddChild( n4 );
+    n1->AddChild( n5 );
+
+    n2->AddChild( n6 );
+    n2->AddChild( n7 );
+    n2->AddChild( n8 );
+    n2->AddChild( n9 );
+
+    test_get_node( rt, "", true );
+    test_get_node( rt, "/", true );
+    test_get_node( rt, ".", true );
+    test_get_node( rt, "./", true );
+    test_get_node( rt, "./node0", true );
+    test_get_node( rt, "/node0", true );
+    test_get_node( rt, "node0", true );
+    test_get_node( rt, "node1", false );
+    test_get_node( rt, "./node2", false );
+
+    test_get_node( rt, "./node0/node01", true );
+    test_get_node( rt, "./node0/node01", true );
+    test_get_node( rt, "./node0/node01/node011", true );
+    test_get_node( rt, "./node0/node01/node012", true );
+    test_get_node( rt, "./node0/node01/node013", true );
+    test_get_node( rt, "./node0/node01/node021", false );
+    test_get_node( rt, "./node0/node01/node022", false );
+    test_get_node( rt, "./node0/node01/node023", false );
+    test_get_node( rt, "./node0/node01/node024", false );
+
+    test_get_node( rt, "/node0/node01", true );
+    test_get_node( rt, "/node0/node01", true );
+    test_get_node( rt, "/node0/node01/node011", true );
+    test_get_node( rt, "/node0/node01/node012", true );
+    test_get_node( rt, "/node0/node01/node013", true );
+    test_get_node( rt, "/node0/node01/node021", false );
+    test_get_node( rt, "/node0/node01/node022", false );
+    test_get_node( rt, "/node0/node01/node023", false );
+    test_get_node( rt, "/node0/node01/node024", false );
+
+    test_get_node( rt, "node0/node01", true );
+    test_get_node( rt, "node0/node01", true );
+    test_get_node( rt, "node0/node01/node011", true );
+    test_get_node( rt, "node0/node01/node012", true );
+    test_get_node( rt, "node0/node01/node013", true );
+    test_get_node( rt, "node0/node01/node021", false );
+    test_get_node( rt, "node0/node01/node022", false );
+    test_get_node( rt, "node0/node01/node023", false );
+    test_get_node( rt, "node0/node01/node024", false );
+
+    test_get_node( n2, "node02", true );
+    test_get_node( n2, "node02/node021", true );
+    test_get_node( n2, "/node02/node022", true );
+    test_get_node( n2, "node02/node023", true );
+    test_get_node( n2, "/node02/node011", false );
+    test_get_node( n2, "node01/node022", false );
+    test_get_node( n2, "node02/node013", false );
+    test_get_node( n2, "node024", true );
+    test_get_node( n1, "node024", false );
+
+    delete n0;
+}
+
 // *****************************
 //
 model::BasicNode *     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    return SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator );
+    TestQueryNode( timelineManager, timeEvaluator ); //FIXME: remove or uncomment after tests
+    return SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node0" );
     //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager );
     //return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator );
+
 }
 
 } //bv
