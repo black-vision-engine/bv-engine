@@ -34,7 +34,7 @@ public:
 };
 
 
-class ResourceHandle //FIXME: where is the destructor of this class
+class ResourceHandle
 {
 private:
 

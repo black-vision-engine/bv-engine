@@ -7,8 +7,13 @@
 #include <sstream>
 
 #include "Text.h"
-
+#include "Engine\Models\Resources\Texture\TextureResourceDescr.h"
 #include "sqlite3.h"
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include <FreeType/ftglyph.h>
+#include "FreeImagePlus.h"
 
 
 namespace bv { namespace model {
@@ -104,7 +109,7 @@ void                    FontAtlasCache::InitFontCachedTable ()
     if ( m_dataBase != nullptr )
     {
         static std::string sql = "CREATE TABLE IF NOT EXISTS cached_fonts(font_name TEXT, font_size INTEGER, font_file_name TEXT \
-                            , bold_flag BOOL, italic_flag BOOL, text_atlas BLOB, PRIMARY KEY( font_name , font_size, bold_flag, italic_flag ) )";
+                            , bold_flag BOOL, italic_flag BOOL, text_atlas BLOB, test_atlas_data_file TEXT, PRIMARY KEY( font_name , font_size, bold_flag, italic_flag ) )";
 
         char* err = nullptr;
 
@@ -127,7 +132,7 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
 {
     auto out = static_cast< FontAtlasCacheEntry* >( data );
 
-    assert(argsNum == 6);
+    assert( argsNum == 7 );
 
     out->m_fontName     = args[ 0 ];
     out->m_fontSize     = std::atoi( args[ 1 ] );
@@ -184,7 +189,23 @@ int AddEntryCallback( void* data, int argsNum, char** args, char** columnName )
     return 0;
 }
 
+
+// *********************************
+//
+void WriteBMP( const std::string& file, const char* data, int width, int height, int bpp )
+{
+    fipImage*  fipImg = new fipImage( FREE_IMAGE_TYPE::FIT_BITMAP, width, height, bpp );
+
+    auto pixels = fipImg->accessPixels();
+
+    memcpy( pixels, data, width * height * bpp / 8 );
+
+    fipImg->flipVertical();
+
+    fipImg->save( file.c_str() );
 }
+
+} // anonymous
 
 // *********************************
 //
@@ -201,7 +222,11 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
         + "\'" + data.m_fontFilePath + "\'" + ", " 
         + std::to_string( data.m_bold ) + ", " 
         + std::to_string( data.m_italic ) + ", " 
-        + "?)";
+        + "?, "
+        + "fontatlas.bmp" + ")";
+
+
+    WriteBMP( "fontatlas.bmp", data.m_textAtlas->GetData(), data.m_textAtlas->GetWidth(), data.m_textAtlas->GetHeight(), data.m_textAtlas->GetBitsPerPixel() );
 
     sqlite3_stmt* stmt;
     const char* parsed;

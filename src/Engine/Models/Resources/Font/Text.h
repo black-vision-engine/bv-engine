@@ -58,9 +58,9 @@ struct GlyphCoords
 
 class TextAtlas
 {
-public: // Only to non intrusive serialization. Should be private
+public: // Only for non intrusive serialization. Should be private
 
-    char*                   m_data;
+    const ResourceHandle*   m_resHandle;
     unsigned int            m_width;
     unsigned int            m_height;
     unsigned int            m_bitsPerPixel;
