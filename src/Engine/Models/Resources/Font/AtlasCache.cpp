@@ -87,6 +87,12 @@ sqlite3 *               FontAtlasCache::OpenDataBase    ( const std::string& dbF
 {
     sqlite3 * db = nullptr;
 
+    boost::filesystem::path p(dbFilePath);
+    auto dir = p.parent_path().string();
+
+    if( ! boost::filesystem::exists( dir ) )
+        boost::filesystem::create_directory( dir );
+
     auto res = sqlite3_open( dbFilePath.c_str(), &db );
 
     if( res )
@@ -179,8 +185,13 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fo
 
     if( res != SQLITE_OK )
     {
-        std::cerr << "SQL Error: " << std::string( err ) << std::endl;
-        sqlite3_free(err);
+        if( err != nullptr )
+        {
+            std::cerr << "SQL Error: " << std::string( err ) << std::endl;
+            sqlite3_free(err);
+        }
+        else
+            std::cerr << "SQL Error: " << res << std::endl;
     }
 
     if( ret->m_textAtlas != nullptr )
@@ -215,7 +226,7 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
     auto textAtlasStr =  textAtlasStream.str();
 
     auto sha1 = sha1wrapper();
-    auto fontAtlasTextureFileName = sha1.getHashFromString( textAtlasStr );
+    auto fontAtlasTextureFileName = CACHE_DIRECTORY + sha1.getHashFromString( textAtlasStr ) + ".bmp";
 
     std::string sqlAdd = std::string( "INSERT OR REPLACE INTO cached_fonts VALUES(" ) 
         + "\'" + data.m_fontName + "\'" + ", " 
@@ -227,7 +238,10 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
         + "\'" + fontAtlasTextureFileName + "\'" + ")";
 
 
-    TextureHelper::WriteBMP( "fontAtlasTextureFileName", data.m_textAtlas->GetData(), data.m_textAtlas->GetWidth(), data.m_textAtlas->GetHeight(), data.m_textAtlas->GetBitsPerPixel() );
+    if( ! boost::filesystem::exists( CACHE_DIRECTORY ) )
+        boost::filesystem::create_directory( CACHE_DIRECTORY );
+
+    TextureHelper::WriteBMP( fontAtlasTextureFileName, data.m_textAtlas->GetData(), data.m_textAtlas->GetWidth(), data.m_textAtlas->GetHeight(), data.m_textAtlas->GetBitsPerPixel() );
 
     sqlite3_stmt* stmt;
     const char* parsed;

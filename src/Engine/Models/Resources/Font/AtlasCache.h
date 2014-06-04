@@ -4,6 +4,9 @@
 
 struct sqlite3;
 
+#define CACHE_DIRECTORY std::string("cache/")
+#define CACHE_DB_FILE_NAME std::string("fontscache.db")
+
 namespace bv { namespace model {
 
 class TextAtlas;

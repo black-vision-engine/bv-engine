@@ -203,7 +203,7 @@ struct GlyphDataInfo
 //
 TextAtlas*          Text::LoadFromCache()
 {
-    auto fac = FontAtlasCache::Load( "fontscache.db" );
+    auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
 
     auto entry = fac->GetEntry( "ARIAL", m_fontSize, m_fontFile, false, false );
 
@@ -383,7 +383,7 @@ void                Text::BuildAtlas()
         }
     }
 
-    auto fac = FontAtlasCache::Load( "fontscache.db" );
+    auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
     auto entry = new FontAtlasCacheEntry( m_atlas, "ARIAL", m_fontSize, m_fontFile, false, false );
     fac->AddEntry( *entry );
 
