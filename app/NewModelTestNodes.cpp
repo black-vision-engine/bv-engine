@@ -84,7 +84,7 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMana
     success &= SetParameter( h, 20.f, 2.f );
 
     success &= SetParameter( color, 0.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
-    
+
     assert( success );
 
     return root;

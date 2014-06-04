@@ -53,8 +53,11 @@ public:
 
     ITimeEvaluatorPtr       GetRootTimeline                 ();
 
-    ITimeEvaluatorPtr       GetTimeline                     ( const std::string & name );
-    ITimeEvaluatorPtr       GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
+    ITimeEvaluatorPtr       GetTimeEvaluator                ( const std::string & name );
+    ITimeEvaluatorPtr       GetTimeEvaluator                ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
+
+    //ITimelinePtr            GetTimeline                     ( const std::string & name );
+    //ITimelinePtr            GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
 
     bool                    AddTimeline                     ( ITimeEvaluatorPtr timeline );
     bool                    AddTimelineToTimeline           ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline );
