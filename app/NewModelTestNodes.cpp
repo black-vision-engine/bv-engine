@@ -136,6 +136,17 @@ model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineM
 //
 model::BasicNode *  SimpleNodesFactory::CreateTextureAnimationRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    //Timeline stuff
+    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 3.0 ) );
+
+    someTimelineWithEvents->AddChild( localTimeline );
+    timeEvaluator->AddChild( someTimelineWithEvents );
+
+    //Plugin stuf
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins2, GSimplePlugins2 + 3 );
 
     auto node = new model::BasicNode( "Root" );
@@ -144,12 +155,17 @@ model::BasicNode *  SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     assert( success );
 
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 0.f ), 0.f );
-    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 5.f ), 99.f );
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 10.f ), 99.f );
+
+    node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( someTimelineWithEvents );
 
     SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
 
     success = model::LoadAnimation( node->GetPlugin( "animation" ), "../../media/sequences/FullHD/alfai", "*.tga" );
     assert( success );
+
+    auto ai = TestAIManager::Instance().GetAIPreset( 2 );
+    ai->SetTimeline( someTimelineWithEvents );
 
     return node;    
 }
