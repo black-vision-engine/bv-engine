@@ -99,8 +99,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(BOOST_INC);../dep/Common/FreeImage/dist;../dep/Common/FreeType/include;../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../dep/Common/FastDelegate;./;../sqlite/src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>BOOST_ALL_NO_LIB=1;WIN32;_DEBUG;_LIB;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BOOST_INC);../dep/Common/FreeImage/dist;../dep/Common/FreeType/include;../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../dep/Common/FastDelegate;./;../sqlite/src/;../hashlib2plus/src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;BOOST_ALL_NO_LIB=1;WIN32;_DEBUG;_LIB;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -155,7 +155,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(BOOST_INC);../dep/Common/FreeImage/dist;../dep/Common/FreeType/include;../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../dep/Common/FastDelegate;./;../sqlite/src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BOOST_INC);../dep/Common/FreeImage/dist;../dep/Common/FreeType/include;../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../dep/Common/FastDelegate;./;../sqlite/src/;../hashlib2plus/src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -312,6 +312,7 @@
     <ClCompile Include="Engine\Models\Resources\Resource.cpp" />
     <ClCompile Include="Engine\Models\Resources\ResourceLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextHelpers.cpp" />
+    <ClCompile Include="Engine\Models\Resources\TextureHelpers.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextureLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\AnimationResourceDescr.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\FontResourceDescr.cpp" />
@@ -558,6 +559,7 @@
     <ClInclude Include="Engine\Models\Resources\Resource.h" />
     <ClInclude Include="Engine\Models\Resources\ResourceLoader.h" />
     <ClInclude Include="Engine\Models\Resources\TextHelpers.h" />
+    <ClInclude Include="Engine\Models\Resources\TextureHelpers.h" />
     <ClInclude Include="Engine\Models\Resources\TextureLoader.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\AnimationResourceDescr.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\FontResourceDescr.h" />

@@ -7,14 +7,12 @@
 #include <sstream>
 
 #include "Text.h"
-#include "Engine\Models\Resources\Texture\TextureResourceDescr.h"
+
 #include "sqlite3.h"
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-#include <FreeType/ftglyph.h>
-#include "FreeImagePlus.h"
+#include "Engine/Models/Resources/TextureHelpers.h"
 
+#include "hashlibpp.h"
 
 namespace bv { namespace model {
 
@@ -69,7 +67,7 @@ FontAtlasCache*     FontAtlasCache::Load            ( const std::string& filePat
     else
     {
         std::cout << "File does not exist: " << filePath << std::endl;
-        std::cout << "Creating new atlas cache file: " << std::endl;
+        std::cout << "Creating new atlas cache file: " << filePath << std::endl;
 
         std::ofstream file;
         file.open( filePath.c_str() );
@@ -117,7 +115,7 @@ void                    FontAtlasCache::InitFontCachedTable ()
 
         if( res != SQLITE_OK )
         {
-            std::cerr << "SQL Error: " << *err << std::endl;
+            std::cerr << "SQL Error: " << std::string( err ) << std::endl;
             sqlite3_free(err);
             return;
         }
@@ -143,6 +141,18 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
     std::stringstream str(  args[5] );
     out->m_textAtlas->Load( str );    
 
+    int width   = 0;
+    int height  = 0;
+    int bpp     = 0;
+    auto texData = TextureHelper::LoadImg( args[ 6 ], &width, &height, &bpp );
+
+    assert( texData != nullptr );
+    assert( width == out->m_textAtlas->GetWidth() );
+    assert( height == out->m_textAtlas->GetHeight() );
+    assert( bpp == out->m_textAtlas->GetBitsPerPixel() );
+
+    out->m_textAtlas->m_data = texData;
+
     return 0;
 }
 
@@ -167,10 +177,9 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fo
 
     auto res = sqlite3_exec( m_dataBase, sql.c_str(), GetEntryCallback, ret, &err );
 
-
     if( res != SQLITE_OK )
     {
-        std::cerr << "SQL Error: " << *err << std::endl;
+        std::cerr << "SQL Error: " << std::string( err ) << std::endl;
         sqlite3_free(err);
     }
 
@@ -189,22 +198,6 @@ int AddEntryCallback( void* data, int argsNum, char** args, char** columnName )
     return 0;
 }
 
-
-// *********************************
-//
-void WriteBMP( const std::string& file, const char* data, int width, int height, int bpp )
-{
-    fipImage*  fipImg = new fipImage( FREE_IMAGE_TYPE::FIT_BITMAP, width, height, bpp );
-
-    auto pixels = fipImg->accessPixels();
-
-    memcpy( pixels, data, width * height * bpp / 8 );
-
-    fipImg->flipVertical();
-
-    fipImg->save( file.c_str() );
-}
-
 } // anonymous
 
 // *********************************
@@ -216,6 +209,14 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
         m_dataBase = OpenDataBase( m_cacheFile );
     }
 
+    std::stringstream textAtlasStream;
+    data.m_textAtlas->Save( textAtlasStream );
+
+    auto textAtlasStr =  textAtlasStream.str();
+
+    auto sha1 = sha1wrapper();
+    auto fontAtlasTextureFileName = sha1.getHashFromString( textAtlasStr );
+
     std::string sqlAdd = std::string( "INSERT OR REPLACE INTO cached_fonts VALUES(" ) 
         + "\'" + data.m_fontName + "\'" + ", " 
         + std::to_string( data.m_fontSize ) + ", " 
@@ -223,10 +224,10 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
         + std::to_string( data.m_bold ) + ", " 
         + std::to_string( data.m_italic ) + ", " 
         + "?, "
-        + "fontatlas.bmp" + ")";
+        + "\'" + fontAtlasTextureFileName + "\'" + ")";
 
 
-    WriteBMP( "fontatlas.bmp", data.m_textAtlas->GetData(), data.m_textAtlas->GetWidth(), data.m_textAtlas->GetHeight(), data.m_textAtlas->GetBitsPerPixel() );
+    TextureHelper::WriteBMP( "fontAtlasTextureFileName", data.m_textAtlas->GetData(), data.m_textAtlas->GetWidth(), data.m_textAtlas->GetHeight(), data.m_textAtlas->GetBitsPerPixel() );
 
     sqlite3_stmt* stmt;
     const char* parsed;
@@ -237,11 +238,6 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
         std::cerr << "SQL Error: " << "prepare" << std::endl;
         return;
     }
-
-    std::stringstream textAtlasStream;
-    data.m_textAtlas->Save( textAtlasStream );
-
-    auto textAtlasStr =  textAtlasStream.str();
 
     res = sqlite3_bind_blob(stmt, 1, textAtlasStr.c_str(), textAtlasStr.size(), SQLITE_TRANSIENT);
 

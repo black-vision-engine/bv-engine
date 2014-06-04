@@ -7,8 +7,6 @@
 #include "Engine/Graphics/Resources/Texture2DImpl.h"
 #include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
 
-#include "FreeImagePlus.h"
-
 #include "Engine/Models/Resources/Resource.h"
 #include "Engine/Models/Resources/TextureLoader.h"
 

@@ -60,7 +60,7 @@ class TextAtlas
 {
 public: // Only for non intrusive serialization. Should be private
 
-    const ResourceHandle*   m_resHandle;
+    char*                   m_data;
     unsigned int            m_width;
     unsigned int            m_height;
     unsigned int            m_bitsPerPixel;

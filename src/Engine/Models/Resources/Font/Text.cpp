@@ -4,6 +4,7 @@
 #include "Glyph.h"
 #include "AtlasCache.h"
 #include "System/FileIO.h"
+#include "Engine/Models/Resources/TextureHelpers.h"
 
 #include <iostream>
 #include <fstream>
@@ -14,7 +15,6 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <FreeType/ftglyph.h>
-#include "FreeImagePlus.h"
 
 namespace bv { namespace model {
 
@@ -198,27 +198,6 @@ struct GlyphDataInfo
         , data( d )
     {}
 };
-
-namespace 
-{
-
-// *********************************
-//
-void WriteBMP( const std::string& file, char* data, int width, int height, int bpp )
-{
-    fipImage*  fipImg = new fipImage( FREE_IMAGE_TYPE::FIT_BITMAP, width, height, bpp );
-
-    auto pixels = fipImg->accessPixels();
-
-    memcpy( pixels, data, width * height * bpp / 8 );
-
-    fipImg->flipVertical();
-
-    fipImg->save( file.c_str() );
-}
-
-
-} // anonymous
 
 // *********************************
 //
@@ -410,7 +389,7 @@ void                Text::BuildAtlas()
 
 #ifdef GENERATE_TEST_BMP_FILE
 
-    WriteBMP( "test.bmp", atlasData, m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() );
+    TextureHelper::WriteBMP( "test.bmp", atlasData, m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() );
 
 #endif // GENERATE_TEST_BMP_FILE
 }

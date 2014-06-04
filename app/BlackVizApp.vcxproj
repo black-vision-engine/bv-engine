@@ -98,6 +98,9 @@
     <ClCompile Include="xml\TreeBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\hashlib2plus\hashlib2plus.vcxproj">
+      <Project>{5875c0cd-76ef-4b35-b8c0-740fac21f9de}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\sqlite\sqlite.vcxproj">
       <Project>{1ed3fca5-5419-488e-9e0c-cac8196e4e11}</Project>
     </ProjectReference>
