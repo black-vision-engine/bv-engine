@@ -95,6 +95,10 @@ void    NodeUpdater::DoUpdate        ()
 
     m_sceneNode->SetVisible( isVisible );
 
+    //FIXME: Globalne ustawienia stanu obejmuja na teraz
+    //1. Visibility
+    //2. Overridden parameters
+    //3. Overridden renderer state (render ctx)
     if( isVisible )
     {
         UpdateTransform();
@@ -109,6 +113,16 @@ void    NodeUpdater::DoUpdate        ()
             UpdateTexturesData();
             UpdateRendererState();
         }
+
+        //if ( m_modelNode->OverridesParameters() )
+        //{
+        //    //Update overriden parameters (override values)
+        //}
+
+        //if( m_modelNode->OverridesRedererState() )
+        //{
+        //    //Override renderer state
+        //}
     }
 }
 
