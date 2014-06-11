@@ -200,6 +200,7 @@
     <ClCompile Include="Engine\Models\Resources\Texture\FontResourceDescr.cpp" />
     <ClCompile Include="Engine\Models\Timeline\SimpleIParamSet.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextureHelpers.cpp" />
+    <ClCompile Include="Engine\Models\BasicOverrideState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -456,6 +457,7 @@
     <ClInclude Include="Engine\Models\Resources\Font\Serialize.h" />
     <ClInclude Include="Engine\Models\Resources\TextureHelpers.h" />
     <ClInclude Include="Engine\Models\Interfaces\IOverrideState.h" />
+    <ClInclude Include="Engine\Models\BasicOverrideState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

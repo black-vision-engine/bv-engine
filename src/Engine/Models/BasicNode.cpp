@@ -22,6 +22,8 @@
 
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 
+#include "Engine/Models/BasicOverrideState.h"
+
 
 namespace bv { namespace model {
 
@@ -44,22 +46,25 @@ const IModelNode *  FindNode( const TNodeVec & vec, const std::string & name )
 
 // ********************************
 //
-BasicNode::BasicNode( const std::string & name,  const PluginsManager * pluginsManager )
+BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager )
     : m_name( name )
     , m_pluginList( nullptr )
     , m_pluginsManager( pluginsManager )
+    , m_overrideState( nullptr )
 {
     if( pluginsManager == nullptr )
     {
         m_pluginsManager = &PluginsManager::DefaultInstance();
     }
 
+    m_overrideState = new BasicOverrideState( timeEvaluator );
 }
 
 // ********************************
 //
 BasicNode::~BasicNode()
 {
+    delete m_overrideState;
 }
 
 // ********************************
@@ -124,6 +129,63 @@ const IPluginListFinalized *    BasicNode::GetPluginList           () const
 
 // ********************************
 //
+void                            BasicNode::EnableOverrideState     ()
+{
+    m_overrideState->Enable();
+
+    PropagateOverrideState( m_overrideState );
+}
+
+// ********************************
+//
+void                            BasicNode::DisableOverrideState    ()
+{
+    m_overrideState->Disable();
+
+    for( auto l : m_layers )
+    {
+        l->DisableOverrideState();
+    }
+
+    for( auto c : m_children )
+    {
+        c->DisableOverrideState();
+    }
+}
+
+// ********************************
+//
+void                            BasicNode::PropagateOverrideState ( IOverrideState * state )
+{
+    m_overrideState->SetCurAlphaVal( state->GetCurAlphaVal() );
+
+    for( auto l : m_layers )
+    {
+        l->PropagateOverrideState( state );
+    }
+
+    for( auto c : m_children )
+    {
+        c->PropagateOverrideState( state );
+    }
+}
+
+// ********************************
+//
+bool                            BasicNode::IsStateOverriden        () const
+{
+    return m_overrideState->IsEnabled();
+}
+
+// ********************************
+//
+IOverrideState *                BasicNode::GetOverrideState        ()
+{
+    return m_overrideState;
+}
+
+// ********************************
+//
 const std::string &             BasicNode::GetName                 () const
 {
     return m_name;
@@ -147,16 +209,16 @@ SceneNode *                 BasicNode::BuildScene()
 
 // ********************************
 //
-void            BasicNode::AddChild                 ( IModelNode * n )
+void            BasicNode::AddChild                 ( BasicNode * n )
 {
-    m_children.push_back( IModelNodePtr( n ) );
+    m_children.push_back( BasicNodePtr( n ) );
 }
 
 // ********************************
 //
-void            BasicNode::AddLayer                 ( IModelNode * n )
+void            BasicNode::AddLayer                 ( BasicNode * n )
 {
-    m_layers.push_back( IModelNodePtr( n ) );
+    m_layers.push_back( BasicNodePtr( n ) );
 }
 
 // ********************************

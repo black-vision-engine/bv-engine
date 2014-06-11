@@ -112,7 +112,8 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     //FIXME: worst of hacks
     static int numcall = 0;
 
-    model::BasicNode * root = new model::BasicNode( "SimpleTextureRoot" );
+    assert( false );
+    model::BasicNode * root = new model::BasicNode( "SimpleTextureRoot", nullptr );
 
     TransformF     trns;
 
@@ -264,7 +265,8 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
 //
 model::BasicNode *      TestScenesFactory::SimpleMultiCCScene      ()
 {
-    model::BasicNode * root = new model::BasicNode( "SimpleMultiCCSceneRoot" );
+    assert( false );
+    model::BasicNode * root = new model::BasicNode( "SimpleMultiCCSceneRoot", nullptr );
 
     /////////////////////////////// SimpleRect plugin //////////////////////////////////
 
@@ -442,9 +444,10 @@ void RenderMockScene(bv::model::BasicNode* tree, std::ostream& out)
     //t += 0.1f;
 }
 
-model::BasicNode* SceneExamples::BuildMockScene(bv::model::BasicNode * parent )
+model::BasicNode * SceneExamples::BuildMockScene(bv::model::BasicNode * parent )
 {
-    bv::model::BasicNode* mockTree = new bv::model::BasicNode( "MockRoot" );
+    assert( false );
+    bv::model::BasicNode* mockTree = new bv::model::BasicNode( "MockRoot", nullptr );
 
     // SOLID
     bv::Vec4Interpolator color;
@@ -460,7 +463,7 @@ model::BasicNode* SceneExamples::BuildMockScene(bv::model::BasicNode * parent )
     //color.AddKey(rs *1.6f, glm::vec4(1,0.4,0.2,0));
     //color.AddKey(rs *1.9f, glm::vec4(0,0.4,1.0,1));
 
-    color.SetWrapMethod(bv::WrapMethod::clamp, bv::WrapMethod::pingPong);
+    color.SetWrapMethod( bv::WrapMethod::clamp, bv::WrapMethod::pingPong );
 
 //    bv::SolidColorPlugin* solid1 = new bv::SolidColorPlugin(color);
 
@@ -479,7 +482,7 @@ model::BasicNode* SceneExamples::BuildMockScene(bv::model::BasicNode * parent )
 //    mockTree->addGeometryPlugin(new bv::PluginGeometryRect(4.f, 4.f));
 
     // TRANSFORMATION
-    bv::FloatInterpolator angle; angle.SetWrapPostMethod (bv::WrapMethod::pingPong );
+    bv::FloatInterpolator angle; angle.SetWrapPostMethod ( bv::WrapMethod::pingPong );
     bv::FloatInterpolator x;
     bv::FloatInterpolator y;
     bv::FloatInterpolator z;
@@ -505,9 +508,10 @@ model::BasicNode* SceneExamples::BuildMockScene(bv::model::BasicNode * parent )
     return mockTree;
 }
 
-model::BasicNode* SceneExamples::BuildMockScene2( bv::model::BasicNode * parent )
+model::BasicNode * SceneExamples::BuildMockScene2( bv::model::BasicNode * parent )
 {
-    bv::model::BasicNode* mockTree = new bv::model::BasicNode( "Mock2Root" );
+    assert( false );
+    bv::model::BasicNode * mockTree = new bv::model::BasicNode( "Mock2Root", nullptr );
 
     // SOLID
     bv::Vec4Interpolator color;

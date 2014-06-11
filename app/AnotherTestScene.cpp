@@ -1022,7 +1022,8 @@ model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
 //
 model::BasicNode *      TestScenesFactory::StackThemNow                ( model::BasicNode * n0, model::BasicNode * n1 )
 {
-    model::BasicNode * root = new model::BasicNode( "StackNodeRoot" );
+    assert( false );
+    model::BasicNode * root = new model::BasicNode( "StackNodeRoot", nullptr );
     model::SimpleTransformPlugin * plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", TransformF(), nullptr, 0 ) );
     root->AddPlugin( plugin00 );
 

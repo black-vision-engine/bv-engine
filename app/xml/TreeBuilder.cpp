@@ -240,7 +240,8 @@ namespace bv{
 		//cout<<AddTabs(depth)<<" [plugins "<<CurrentNode.plugins.size()<<"]"<<endl;
 		
 		//onNodeBegin(CurrentNode.name,depth);
-        model::BasicNode * newNode = new model::BasicNode( CurrentNode.name );
+        assert( false ); //FIXME: timeline cannot be null
+        model::BasicNode * newNode = new model::BasicNode( CurrentNode.name, nullptr );
 
 		for(unsigned int i=0;i<CurrentNode.plugins.size();i++)
 		{
@@ -308,7 +309,8 @@ namespace bv{
 
 	model::BasicNode* TreeBuilder::BuildTree(string path){
 		
-		model::BasicNode * root = new model::BasicNode( "Nie ma nazwy na pustyni FIXME:" );
+        assert(false);
+		model::BasicNode * root = new model::BasicNode( "Nie ma nazwy na pustyni FIXME:", nullptr );
 
 
 		BlackTree Tree;

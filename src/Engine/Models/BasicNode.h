@@ -8,6 +8,8 @@
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
 
+//#include "Engine/Models/Interfaces/ITimeEvaluator.h"
+
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
@@ -28,8 +30,14 @@ class PluginsManager;
 class IShaderChannel;
 class IConnectedComponent;
 class IVertexAttributesChannelDescriptor;
-    
-typedef std::vector< IModelNodePtr > TNodeVec;
+
+class IOverrideState;
+class BasicOverrideState;
+
+class BasicNode;
+typedef std::shared_ptr< BasicNode > BasicNodePtr;
+
+typedef std::vector< BasicNodePtr > TNodeVec;
 
 class BasicNode : public IModelNode
 {
@@ -40,6 +48,8 @@ private:
     const PluginsManager *          m_pluginsManager;
     bool                            m_visible;
 
+    BasicOverrideState *            m_overrideState;
+
     TNodeVec                        m_children;
     TNodeVec                        m_layers;
 
@@ -47,7 +57,7 @@ private:
 
 public:
 
-    explicit BasicNode( const std::string & name, const PluginsManager * pluginsManager = nullptr );
+    explicit BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager = nullptr );
     virtual ~BasicNode();
 
     virtual IPlugin *                       GetPlugin               ( const std::string & name ) const override;
@@ -57,12 +67,24 @@ public:
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
 
+    virtual void                            EnableOverrideState     () override;
+    virtual void                            DisableOverrideState    () override;
+
+private:
+
+    void                                    PropagateOverrideState ( IOverrideState * state );
+
+public:
+
+    virtual bool                            IsStateOverriden        () const override;
+    virtual IOverrideState *                GetOverrideState        () override;
+
     virtual const std::string &             GetName                 () const override;
 
     virtual SceneNode *                     BuildScene              () override;
 
-    void                                    AddChild                ( IModelNode * n );
-    void                                    AddLayer                ( IModelNode * n );
+    void                                    AddChild                ( BasicNode * n );
+    void                                    AddLayer                ( BasicNode * n );
 
     //Convenience API (so that list can be created from external source and simply attached to this node)
     void                                    SetPlugins              ( DefaultPluginListFinalizedPtr plugins );

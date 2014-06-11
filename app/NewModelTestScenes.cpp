@@ -27,7 +27,7 @@ model::BasicNode *  DefaultTestNewAPI   ( const model::PluginsManager * pluginsM
 
     model::IPluginListFinalizedPtr pluginsList( pluginsManager->CreatePlugins( uids, timeEvaluator ) );
 
-    model::BasicNode * root = new model::BasicNode( "Root" );
+    model::BasicNode * root = new model::BasicNode( "Root", timeEvaluator );
 
     //FIXME: add list to the node
     return root;
@@ -37,7 +37,7 @@ model::BasicNode *  DefaultTestNewAPI   ( const model::PluginsManager * pluginsM
 //
 model::BasicNode *  DefaultTestNodeNewNodeImpl  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNode * root = new model::BasicNode( "Root", pluginsManager );
+    model::BasicNode * root = new model::BasicNode( "Root", timeEvaluator, pluginsManager );
 
     bool success = true;
 
@@ -73,7 +73,7 @@ model::BasicNode *  DefaultTestWithValidation   ( const model::PluginsManager * 
 
     IPluginPtr thirdPlugin  = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin.get(), timeEvaluator ) );
 
-    BasicNode * root = new BasicNode( "Root" );
+    BasicNode * root = new BasicNode( "Root", timeEvaluator );
 
     root->AddPlugin( firstPlugin );
     root->AddPlugin( secondPlugin );
@@ -93,7 +93,7 @@ model::BasicNode *  DefaultTestNoValidation     ( const model::PluginsManager * 
     auto secondPlugin = pluginsManager->CreatePlugin( "DEFAULT_RECTANGLE", "rect0", firstPlugin, timeEvaluator );
     auto thirdPlugin  = pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin, timeEvaluator );
 
-    BasicNode * root = new BasicNode( "Root" );
+    BasicNode * root = new BasicNode( "Root", timeEvaluator );
 
     root->AddPlugin( firstPlugin );
     root->AddPlugin( secondPlugin );

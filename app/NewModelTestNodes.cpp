@@ -63,7 +63,7 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMana
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNode * root = new model::BasicNode( nodeName );
+    model::BasicNode * root = new model::BasicNode( nodeName, timeEvaluator );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -96,7 +96,7 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Time
 {
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins0, GSimplePlugins0 + 3 );
 
-    auto node = new model::BasicNode( "Root" );
+    auto node = new model::BasicNode( "Root", timeEvaluator );
     node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
 
     SetDefaultColorChangeAnim( node->GetPlugin( "solid color" ) );
@@ -126,7 +126,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineM
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 3 );
 
-    auto node = new model::BasicNode( "Root" );
+    auto node = new model::BasicNode( "Root", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -161,7 +161,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     //Plugin stuf
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins2, GSimplePlugins2 + 3 );
 
-    auto node = new model::BasicNode( "Root" );
+    auto node = new model::BasicNode( "Root", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
     assert( success );
@@ -197,7 +197,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager *
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins3, GSimplePlugins3 + 2 );
 
-    auto node = new model::BasicNode( "Root" );
+    auto node = new model::BasicNode( "Root", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
