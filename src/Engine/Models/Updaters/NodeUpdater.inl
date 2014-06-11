@@ -200,7 +200,7 @@ inline void    NodeUpdater::UpdateTexturesData  ()
         auto textures   = texData->GetTextures();
         auto animations = texData->GetAnimations();
 
-        //FIXME: make sure that textures and animations from model are passed in this exact order (textures first and animations next)
+        //FIXME: make sure that textures and animations from model are passed in this exact order (textures first and animations afterwards)
         unsigned int j = 0;
         for( unsigned int i = 0; i < textures.size(); ++i, ++j )
         {

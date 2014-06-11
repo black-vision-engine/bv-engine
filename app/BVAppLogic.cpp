@@ -215,7 +215,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
 
                 auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
 
-                //FIXME:
+                //FIXME: use transform vector consistenlty
                 std::vector< bv::Transform > vec;
                 vec.push_back( Transform( viewMat, glm::inverse( viewMat ) ) );
                 m_mockSceneEng->Update( vec );
@@ -366,6 +366,7 @@ void BVAppLogic::RenderScene     ( Renderer * renderer )
 //
 void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 {
+    //FIXME: rendering order
     if ( node->IsVisible() )
     {
         HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
