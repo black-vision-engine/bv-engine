@@ -9,8 +9,6 @@
 
 namespace bv { namespace model {
 
-class ITimeEvaluator;
-
 class IParameter
 {
 public:

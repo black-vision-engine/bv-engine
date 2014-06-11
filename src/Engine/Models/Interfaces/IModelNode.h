@@ -14,6 +14,7 @@ namespace model {
 
 class IPlugin;
 class IPluginListFinalized;
+class IOverrideState;
 
 class IModelNode : public bv::IUpdatable
 {
@@ -28,6 +29,8 @@ public:
     virtual const IModelNode *              GetLayer        ( const std::string & name ) const                                      = 0;
 
     virtual const IPluginListFinalized *    GetPluginList   () const                                                                = 0;
+
+    virtual IOverrideState *                GetOverrideState()                                                                      = 0;
 
     virtual SceneNode *                     BuildScene      ()                                                                      = 0;
     virtual void                            Print           ( std::ostream & out, int tabs = 0 ) const                              = 0;

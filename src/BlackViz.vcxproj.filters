@@ -455,6 +455,7 @@
     <ClInclude Include="Engine\Models\Timeline\SimpleIParamSet.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Serialize.h" />
     <ClInclude Include="Engine\Models\Resources\TextureHelpers.h" />
+    <ClInclude Include="Engine\Models\Interfaces\IOverrideState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
