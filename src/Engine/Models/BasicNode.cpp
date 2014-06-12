@@ -29,7 +29,7 @@ namespace bv { namespace model {
 
 namespace {
 
-const IModelNode *  FindNode( const TNodeVec & vec, const std::string & name )
+IModelNode *  FindNode( const TNodeVec & vec, const std::string & name )
 {
     for( auto node : vec )
     {
@@ -76,7 +76,7 @@ IPlugin *                       BasicNode::GetPlugin               ( const std::
 
 // ********************************
 //
-const IModelNode *              BasicNode::GetNode                 ( const std::string & path, const std::string & separator ) const
+IModelNode *                    BasicNode::GetNode                 ( const std::string & path, const std::string & separator )
 {
     std::string suffix = path;
 
@@ -108,14 +108,14 @@ const IModelNode *              BasicNode::GetNode                 ( const std::
 
 // ********************************
 //
-const IModelNode *              BasicNode::GetChild                ( const std::string & name ) const
+IModelNode *                    BasicNode::GetChild                ( const std::string & name )
 {
     return FindNode( m_children, name );
 }
 
 // ********************************
 //
-const IModelNode *              BasicNode::GetLayer                ( const std::string & name ) const
+IModelNode *                    BasicNode::GetLayer                ( const std::string & name )
 {
     return FindNode( m_layers, name );
 }

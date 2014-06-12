@@ -18,6 +18,8 @@ BasicOverrideState::BasicOverrideState  ( ITimeEvaluatorPtr timeEvaluator )
     m_param = new ParamFloat( "overrideAlpha", FloatInterpolator(), timeEvaluator );
     m_value = ValuesFactory::CreateValueFloat("overrideAlpha" );
 
+    m_param->SetVal( 1.f, 0.f ); //Default model
+
     Disable();
 }
 

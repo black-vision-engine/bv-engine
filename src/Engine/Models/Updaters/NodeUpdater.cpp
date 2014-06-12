@@ -96,6 +96,7 @@ void    NodeUpdater::DoUpdate        ()
 
     m_sceneNode->SetVisible( isVisible );
     m_sceneNode->SetOverriden( isOverriden );
+    m_rendererContext->SetStateChanged( m_modelNode->OverrideStateChanged() );
 
     //FIXME: Globalne ustawienia stanu obejmuja na teraz
     //1. Visibility

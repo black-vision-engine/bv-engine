@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
-
+#include <glm/glm.hpp>
 
 namespace bv {
 
@@ -16,6 +16,11 @@ namespace model
 class SimpleNodesFactory
 {
 public:
+
+    static model::BasicNode *  CreateSolidRectNode      ( const std::string & name, float w, float h, const glm::vec3 & pos, const glm::vec4 col, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static model::BasicNode *  CreateTexturedRectNode   ( const std::string & name, float w, float h, const glm::vec3 & pos, const std::string & txFileName, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+
+    static model::BasicNode *  CreateOverrideAlphaTest  ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 
     static model::BasicNode *  CreateGreenRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & nodeName );
     static model::BasicNode *  CreateGreenRectNodeNoAssert( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
