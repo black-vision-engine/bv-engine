@@ -114,7 +114,7 @@ IParameter *        BasicOverrideState::GetAlphaParam       ()
 
 // ****************************
 //
-IValue *            BasicOverrideState::GetAlphaValue       ()
+const IValue *      BasicOverrideState::GetAlphaValue       () const
 {
     return m_value;
 }

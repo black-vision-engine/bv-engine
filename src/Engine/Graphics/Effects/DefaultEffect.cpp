@@ -70,7 +70,9 @@ DefaultEffect::~DefaultEffect   ()
 //
 ShaderParameters * DefaultEffect::CreateDefaultParamsPS  ( const model::IOverrideState * state, const IShaderDataSource * ds ) const
 {
-    return CreateDefaultParamsImpl( ds );
+    auto sp = CreateDefaultParamsImpl( ds );
+
+    return sp;
 }
 
 // *********************************
@@ -102,6 +104,32 @@ ShaderParameters * DefaultEffect::CreateDefaultParamsGS  ( const model::IOverrid
     }
 
     return nullptr;
+}
+
+// *********************************
+//
+void              DefaultEffect::AddOverrideParamsPS ( ShaderParameters * paramsPS, const model::IOverrideState * state ) const
+{
+    if( paramsPS && state )
+    {
+        GenericShaderParam * param = ShaderParamFactory::CreateGenericParameter( state->GetAlphaValue() );
+        
+        paramsPS->AddParameter( param );
+    }
+}
+
+// *********************************
+//
+void              DefaultEffect::AddOverrideParamsVS ( ShaderParameters * paramsVS, const model::IOverrideState * state ) const
+{
+    //FIXME: to be implemented later (when overriden state applies to GS)
+}
+
+// *********************************
+//
+void              DefaultEffect::AddOverrideParamsGS ( ShaderParameters * paramsGS, const model::IOverrideState * state ) const
+{
+    //FIXME: to be implemented later (when overriden state applies to GS)
 }
 
 // *********************************
@@ -147,7 +175,6 @@ void               DefaultEffect::AddTextures       ( Shader * shader, const ITe
 //
 ShaderParameters *      DefaultEffect::CreateDefaultParamsImpl ( const IShaderDataSource * ds ) const
 {
-    FIXME: here we are
     ShaderParameters * sp = nullptr;
 
     if( ds != nullptr )

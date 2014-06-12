@@ -128,7 +128,7 @@ private:
     unsigned int                        TotalNumVertices                ( const std::vector< IConnectedComponent * > & ccVec) const;
     unsigned int                        TotalSize                       ( const std::vector< IConnectedComponent * > & ccVec, const IVertexAttributesChannelDescriptor * desc ) const;
 
-    RenderableEffect *                  CreateDefaultEffect             ( const IPlugin * finalizer );
+    RenderableEffect *                  CreateDefaultEffect             ( const IPlugin * finalizer ) const;
 
     std::string                         SplitPrefix                     ( std::string & str, const std::string & separator = "/" ) const;
 

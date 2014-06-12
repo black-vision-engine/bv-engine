@@ -28,7 +28,7 @@ public:
     virtual void                EnableAlpha     ()                      = 0;
 
     virtual IParameter *        GetAlphaParam   ()                      = 0;
-    virtual IValue *            GetAlphaValue   ()                      = 0;
+    virtual const IValue *      GetAlphaValue   () const                = 0;
 
     virtual void                SetCurAlphaVal  ( const IValue * val )  = 0;
     virtual const IValue *      GetCurAlphaVal  () const                = 0;

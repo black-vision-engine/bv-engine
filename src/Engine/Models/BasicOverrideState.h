@@ -41,7 +41,7 @@ public:
     virtual void                EnableAlpha         () override;
 
     virtual IParameter *        GetAlphaParam       () override;
-    virtual IValue *            GetAlphaValue       () override;
+    virtual const IValue *      GetAlphaValue       () const override;
 
     virtual void                SetCurAlphaVal      ( const IValue * val ) override;
     virtual const IValue *      GetCurAlphaVal      () const override;

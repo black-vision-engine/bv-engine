@@ -33,6 +33,10 @@ protected:
 
 private:
 
+    void                    AddOverrideParamsPS ( ShaderParameters * paramsPS, const model::IOverrideState * state ) const;
+    void                    AddOverrideParamsVS ( ShaderParameters * paramsVS, const model::IOverrideState * state ) const;
+    void                    AddOverrideParamsGS ( ShaderParameters * paramsGS, const model::IOverrideState * state ) const;
+
     ShaderParameters *      CreateDefaultParamsImpl ( const IShaderDataSource * ds ) const;
 
     TextureSampler *        CreateSampler           ( const ITextureParams * txParams, unsigned int samplerNum ) const;
