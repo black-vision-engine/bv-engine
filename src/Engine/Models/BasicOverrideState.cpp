@@ -26,6 +26,31 @@ BasicOverrideState::~BasicOverrideState ()
 
 // ****************************
 //
+void                BasicOverrideState::Update              ( TimeType t )
+{
+    //Update alpha
+    if( IsEnabled() )
+    {
+        if( IsOverriden() )
+        {
+            m_value->SetValue( m_curVal->GetValue() );
+        }
+        else
+        {
+            m_value->SetValue( m_param->Evaluate() );
+        }
+    }
+}
+
+// ****************************
+//
+bool                BasicOverrideState::IsOverriden         () const
+{
+    return IsAlphaOverriden();
+}
+
+// ****************************
+//
 bool                BasicOverrideState::IsEnabled           () const
 {
     return IsAlphaEnabled();
@@ -49,7 +74,14 @@ void                BasicOverrideState::Enable              ()
 //
 bool                BasicOverrideState::IsAlphaEnabled      () const
 {
-    return m_curVal != nullptr;
+    return m_enabled;
+}
+
+// ****************************
+//
+bool                BasicOverrideState::IsAlphaOverriden    () const
+{
+    return m_overriden;
 }
 
 // ****************************
@@ -57,6 +89,11 @@ bool                BasicOverrideState::IsAlphaEnabled      () const
 void                BasicOverrideState::DisableAlpha        ()
 {
     SetCurAlphaVal( nullptr );
+
+    m_value->SetValue( 1.0f );
+
+    m_enabled = false;
+    m_overriden = false;
 }
 
 // ****************************
@@ -86,6 +123,17 @@ void                BasicOverrideState::SetCurAlphaVal      ( const IValue * val
 {
     auto tv = QueryTypedValue< ValueFloat >( val );
     assert( tv != nullptr );
+
+    if( tv != m_value )
+    {
+        m_overriden = true;
+    }
+    else
+    {
+        m_overriden = false;
+    }
+
+    m_enabled = true;
 
     m_curVal = tv;
 }

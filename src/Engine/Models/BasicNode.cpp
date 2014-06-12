@@ -340,6 +340,8 @@ bool           BasicNode::AddPlugins              ( const std::vector< std::stri
 //
 void BasicNode::Update( TimeType t )
 {
+    m_overrideState->Update( t );
+
     for( auto l : m_layers )
         l->Update( t );
 
