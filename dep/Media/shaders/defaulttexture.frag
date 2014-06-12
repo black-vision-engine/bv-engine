@@ -6,9 +6,10 @@ in vec2 uvCoord;
 
 uniform sampler2D Tex0;
 uniform float alpha;
+uniform float overrideAlpha;
 
 void main()
 {
 	vec4 col = texture( Tex0, uvCoord );
-	FragColor = col.bgra * alpha;
+	FragColor = col.bgra * alpha * overrideAlpha;
 }

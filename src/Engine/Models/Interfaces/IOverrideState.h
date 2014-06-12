@@ -15,6 +15,8 @@ class IOverrideState : public bv::IUpdatable
 {
 public:
 
+    virtual bool                Changed         () const                = 0;
+
     virtual bool                IsOverriden     () const                = 0;
     virtual bool                IsEnabled       () const                = 0;
     

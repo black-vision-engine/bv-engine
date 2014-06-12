@@ -72,6 +72,8 @@ ShaderParameters * DefaultEffect::CreateDefaultParamsPS  ( const model::IOverrid
 {
     auto sp = CreateDefaultParamsImpl( ds );
 
+    AddOverrideParamsPS( sp, state );
+
     return sp;
 }
 
@@ -91,6 +93,8 @@ ShaderParameters * DefaultEffect::CreateDefaultParamsVS  ( const model::IOverrid
     params->AddParameter( mvParam );
     params->AddParameter( pParam );
 
+    AddOverrideParamsVS( params, state );
+
     return params;
 }
 
@@ -100,7 +104,11 @@ ShaderParameters * DefaultEffect::CreateDefaultParamsGS  ( const model::IOverrid
 {
     if( ds )
     {
-        return CreateDefaultParamsVS( state, ds );
+        auto gs = CreateDefaultParamsVS( state, ds );
+    
+        AddOverrideParamsGS( gs, state );
+
+        return gs;
     }
 
     return nullptr;

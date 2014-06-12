@@ -20,6 +20,7 @@ private:
 
     bool                m_enabled;
     bool                m_overriden;
+    bool                m_changed;
 
 public:
 
@@ -27,6 +28,9 @@ public:
                                 ~BasicOverrideState ();
 
     virtual void                Update              ( TimeType t ) override;
+
+    virtual bool                Changed             () const override;
+    void                        SetChanged          ( bool changed );
 
     virtual bool                IsOverriden         () const override;
     virtual bool                IsEnabled           () const override;

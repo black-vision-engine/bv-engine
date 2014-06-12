@@ -33,6 +33,9 @@ public:
     virtual void                            EnableOverrideState ()                                                                      = 0;
     virtual void                            DisableOverrideState()                                                                      = 0;
 
+    virtual bool                            OverrideStateChanged() const                                                                = 0;
+    virtual void                            SetOverrideStateChg ( bool changed )                                                        = 0;
+
     virtual bool                            IsStateOverriden    () const                                                                = 0;
     virtual IOverrideState *                GetOverrideState    ()                                                                      = 0;
 

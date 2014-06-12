@@ -155,6 +155,20 @@ void                            BasicNode::DisableOverrideState    ()
 
 // ********************************
 //
+bool                            BasicNode::OverrideStateChanged    () const
+{
+    return m_overrideState->Changed();
+}
+
+// ********************************
+//
+void                            BasicNode::SetOverrideStateChg     ( bool changed )
+{
+    return m_overrideState->SetChanged( changed );
+}
+
+// ********************************
+//
 void                            BasicNode::PropagateOverrideState ( IOverrideState * state )
 {
     m_overrideState->SetCurAlphaVal( state->GetCurAlphaVal() );

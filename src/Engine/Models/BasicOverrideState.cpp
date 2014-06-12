@@ -13,9 +13,12 @@ BasicOverrideState::BasicOverrideState  ( ITimeEvaluatorPtr timeEvaluator )
     , m_curVal( nullptr )
     , m_enabled( false )
     , m_overriden( false )
+    , m_changed( false )
 {
     m_param = new ParamFloat( "overrideAlpha", FloatInterpolator(), timeEvaluator );
     m_value = ValuesFactory::CreateValueFloat("overrideAlpha" );
+
+    Disable();
 }
 
 // ****************************
@@ -42,6 +45,20 @@ void                BasicOverrideState::Update              ( TimeType t )
             m_value->SetValue( m_param->Evaluate() );
         }
     }
+}
+
+// ****************************
+//
+bool                BasicOverrideState::Changed             () const
+{
+    return m_changed;
+}
+
+// ****************************
+//
+void                BasicOverrideState::SetChanged          ( bool changed )
+{
+    m_changed = changed;
 }
 
 // ****************************
@@ -90,6 +107,11 @@ bool                BasicOverrideState::IsAlphaOverriden    () const
 //
 void                BasicOverrideState::DisableAlpha        ()
 {
+    if( m_curVal != nullptr || m_enabled || m_overriden )
+    {
+        SetChanged( true );
+    }
+
     SetCurAlphaVal( nullptr );
 
     m_value->SetValue( 1.0f );
@@ -102,6 +124,11 @@ void                BasicOverrideState::DisableAlpha        ()
 //
 void                BasicOverrideState::EnableAlpha         ()
 {
+    if( m_curVal != m_value || !m_enabled || !m_overriden )
+    {
+        SetChanged( true );
+    }
+
     SetCurAlphaVal( m_value );
 }
 
@@ -122,22 +149,29 @@ const IValue *      BasicOverrideState::GetAlphaValue       () const
 // ****************************
 //
 void                BasicOverrideState::SetCurAlphaVal      ( const IValue * val )
-{
-    auto tv = QueryTypedValue< ValueFloat >( val );
-    assert( tv != nullptr );
-
-    if( tv != m_value )
+{    
+    if( val == nullptr )
     {
-        m_overriden = true;
+        m_curVal = nullptr;
     }
     else
     {
-        m_overriden = false;
+        auto tv = QueryTypedValue< ValueFloat >( val );
+        assert( tv != nullptr );
+
+        if( tv != m_value )
+        {
+            m_overriden = true;
+        }
+        else
+        {
+            m_overriden = false;
+        }
+
+        m_enabled = true;
+
+        m_curVal = tv;
     }
-
-    m_enabled = true;
-
-    m_curVal = tv;
 }
 
 // ****************************

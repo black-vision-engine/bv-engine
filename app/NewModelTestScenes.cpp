@@ -333,7 +333,7 @@ public:
 
 void test_get_node( model::IModelNode * n, const std::string & path, bool res )
 {
-    printf( "Querying [%s] for [%s]\n", n->GetName().c_str(), path.c_str() );
+    printf( "Querying [%s] for [%s] - ", n->GetName().c_str(), path.c_str() );
 
     auto result = n->GetNode( path );
 
@@ -341,22 +341,22 @@ void test_get_node( model::IModelNode * n, const std::string & path, bool res )
     {
         if( res )
         {
-            printf( "   SUCCESS Found node [%s]\n", result->GetName().c_str() );
+            printf( " SUCCESS -> node found\n" );
         }
         else
         {
-            printf( "   FAILURE Found node [%s]\n", result->GetName().c_str() );
+            printf( " FAILURE -> node found\n" );
         }
     }
     else
     {
         if( res )
         {
-            printf( "   FAILURE Failed to query node\n" );
+            printf( " FAILURE -> Failed to query node\n" );
         }
         else
         {
-            printf( "   SUCCESS Node [%s] not found \n", path.c_str() );
+            printf( " SUCCESS -> Node not found \n" );
         }
     }
 }

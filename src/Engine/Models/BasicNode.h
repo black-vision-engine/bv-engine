@@ -70,6 +70,9 @@ public:
     virtual void                            EnableOverrideState     () override;
     virtual void                            DisableOverrideState    () override;
 
+    virtual bool                            OverrideStateChanged    () const override;
+    virtual void                            SetOverrideStateChg     ( bool changed ) override;
+
 private:
 
     void                                    PropagateOverrideState ( IOverrideState * state );

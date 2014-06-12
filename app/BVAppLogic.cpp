@@ -359,7 +359,6 @@ void BVAppLogic::RenderScene     ( Renderer * renderer )
     renderer->PreDraw();
     RenderNode( renderer, m_mockSceneEng );
     renderer->PostDraw();
-
 }
 
 // *********************************
