@@ -369,19 +369,39 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
     //FIXME: rendering order
     if ( node->IsVisible() )
     {
-        HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
-        renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
-
-        for( int i = 0; i < node->NumTransformables(); ++i )
+        if( node->IsOverriden() )
         {
-            HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
-            renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
+            for ( int i = 0; i < node->NumChildrenNodes(); i++ )
+            {
+                HPROFILER_SECTION( "RenderNode::RenderNode - overriden" );
+                RenderNode( renderer, node->GetChild( i ) ); 
+            }
+
+            for( int i = 0; i < node->NumTransformables(); ++i )
+            {
+                HPROFILER_SECTION( "RenderNode::renderer->Draw sibling - overriden" );
+                renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
+            }
+
+            HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor - overriden" );
+            renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
         }
-
-        for ( int i = 0; i < node->NumChildrenNodes(); i++ )
+        else
         {
-            HPROFILER_SECTION( "RenderNode::RenderNode" );
-            RenderNode( renderer, node->GetChild( i ) ); 
+            HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
+            renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
+
+            for( int i = 0; i < node->NumTransformables(); ++i )
+            {
+                HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
+                renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
+            }
+
+            for ( int i = 0; i < node->NumChildrenNodes(); i++ )
+            {
+                HPROFILER_SECTION( "RenderNode::RenderNode" );
+                RenderNode( renderer, node->GetChild( i ) ); 
+            }
         }
     }
 }

@@ -103,6 +103,7 @@ private:
     inline  void    UpdateTransform     ();
     inline  void    UpdateGeometry      ();
     inline  void    UpdateRendererState ();
+    inline  void    UpdateOverridenState();
 
     inline  void    UpdatePositions     ();
     inline  void    UpdateTopology      ();

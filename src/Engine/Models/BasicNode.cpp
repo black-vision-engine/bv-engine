@@ -499,16 +499,17 @@ bool                                BasicNode::CreateRenderableData     (/* Vert
 
 // ********************************
 //
-RenderableEffect *                  BasicNode::CreateDefaultEffect     ( const IPlugin * finalizer ) const
+RenderableEffect *                  BasicNode::CreateDefaultEffect     ( const IPlugin * finalizer )
 {
-    auto psChannel = finalizer->GetPixelShaderChannel();
-    auto vsChannel = finalizer->GetVertexShaderChannel();
-    auto gsChannel = finalizer->GetGeometryShaderChannel();
+    auto psChannel      = finalizer->GetPixelShaderChannel();
+    auto vsChannel      = finalizer->GetVertexShaderChannel();
+    auto gsChannel      = finalizer->GetGeometryShaderChannel();
+    auto overridenState = this->GetOverrideState();
 
     assert( psChannel != nullptr );
     assert( vsChannel != nullptr );
 
-    return new DefaultEffect( psChannel, vsChannel, gsChannel ); 
+    return new DefaultEffect( this, psChannel, vsChannel, gsChannel ); 
 }
 
 

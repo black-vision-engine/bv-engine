@@ -17,6 +17,7 @@ class SceneNode
 private:
 
     bool                    m_visible;
+    bool                    m_overridenState;
 
     TransformableEntityVec  m_transformables;
     SceneNodeVec            m_sceneNodes;
@@ -45,6 +46,9 @@ public:
 
     bool                    IsVisible           () const;
     void                    SetVisible          ( bool visible );
+
+    bool                    IsOverriden         () const;
+    void                    SetOverriden        ( bool overriden );
 
 };
 

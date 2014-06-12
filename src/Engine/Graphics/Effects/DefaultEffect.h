@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
+#include "Engine/Models/Interfaces/IOverrideState.h"
 
 
 namespace bv {
@@ -14,18 +15,19 @@ class IAnimationDescriptor;
 class Texture2DImpl;
 class Texture2DSequenceImpl;
 
+
 class DefaultEffect : public RenderableEffect
 {
 public:
 
-        DefaultEffect   ( const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds );
+        DefaultEffect   ( const model::IOverrideState * state, const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds );
         ~DefaultEffect  ();
 
 protected:
 
-    ShaderParameters *  CreateDefaultParamsPS   ( const IShaderDataSource * ds ) const;
-    ShaderParameters *  CreateDefaultParamsVS   ( const IShaderDataSource * ds ) const;
-    ShaderParameters *  CreateDefaultParamsGS   ( const IShaderDataSource * ds ) const;
+    ShaderParameters *  CreateDefaultParamsPS   ( const model::IOverrideState * state, const IShaderDataSource * ds ) const;
+    ShaderParameters *  CreateDefaultParamsVS   ( const model::IOverrideState * state, const IShaderDataSource * ds ) const;
+    ShaderParameters *  CreateDefaultParamsGS   ( const model::IOverrideState * state, const IShaderDataSource * ds ) const;
 
     void                AddTextures             ( Shader * shader, const ITexturesData * txData );
 

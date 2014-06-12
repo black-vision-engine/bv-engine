@@ -11,6 +11,8 @@ BasicOverrideState::BasicOverrideState  ( ITimeEvaluatorPtr timeEvaluator )
     : m_param( nullptr )
     , m_value( nullptr )
     , m_curVal( nullptr )
+    , m_enabled( false )
+    , m_overriden( false )
 {
     m_param = new ParamFloat( "overrideAlpha", FloatInterpolator(), timeEvaluator );
     m_value = ValuesFactory::CreateValueFloat("overrideAlpha" );
