@@ -48,7 +48,6 @@ DefaultPluginParamValModel *    DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     //Create all parameters and evaluators
     SimpleVec4Evaluator *      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
-    SimpleVec4Evaluator *      colorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
     SimpleFloatEvaluator *     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluator * trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
     SimpleFloatEvaluator *     fontSizeEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
@@ -56,7 +55,6 @@ DefaultPluginParamValModel *    DefaultTextPluginDesc::CreateDefaultModel( ITime
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
     psModel->RegisterAll( borderColorEvaluator );
-    psModel->RegisterAll( colorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
 
     plModel->RegisterAll( fontSizeEvaluator );
@@ -67,9 +65,8 @@ DefaultPluginParamValModel *    DefaultTextPluginDesc::CreateDefaultModel( ITime
     model->SetPluginModel( plModel );
 
     //Set default values of all parameters
-    alphaEvaluator->Parameter()->SetVal( 0.1f, TimeType( 0.0 ) );
+    alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
-    colorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
     fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
 
@@ -141,6 +138,32 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     , m_textAtlas( nullptr )
     , m_text( L"" )
 {
+
+    auto colorParam = prev->GetParameter( "color" );
+
+    if ( colorParam == nullptr )
+    {
+        auto bcParam = this->GetParameter( "borderColor" );
+        SimpleVec4Evaluator *      colorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", bcParam->GetTimeEvaluator() );
+        static_cast< DefaultParamValModel * >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( colorEvaluator );
+        colorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
+    }
+    else
+    {
+        auto evaluators = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
+        for( unsigned int i = 0; i < evaluators.size(); ++i )
+        {
+            auto colorParam = evaluators[ i ]->GetParameter( "color" );
+            if( colorParam != nullptr )
+            {
+                static_cast< DefaultParamValModel * >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluators[ i ] );
+                break;
+            }
+        }
+        
+    }
+
+
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTextPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultTextPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
 

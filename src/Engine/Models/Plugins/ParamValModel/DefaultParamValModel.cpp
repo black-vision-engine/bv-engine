@@ -19,17 +19,17 @@ DefaultParamValModel::~DefaultParamValModel                                     
 {
     for( auto param : m_parameters )
     {
-        delete param;
+        //delete param; FIXME: when parameter has to owners this line craches.
     }
 
     for( auto value : m_values )
     {
-        delete value;
+        // delete value; FIXME: when parameter has to owners this line craches.
     }
 
     for( auto evaluator : m_evaluators )
     {
-        delete evaluator;
+        //delete evaluator; FIXME: when parameter has to owners this line craches.
     }
 }
 
