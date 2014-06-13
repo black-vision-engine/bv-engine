@@ -112,8 +112,8 @@ model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode   ( const std::st
 model::BasicNode *  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     auto root = CreateTexturedRectNode( ".", 3.4f, 0.7f, glm::vec3( 0.f, -.6f, 0.f ), "simless_01.jpg", timelineManager, timeEvaluator );
-    auto c0 = CreateSolidRectNode( "node0", .85f, 0.31f, glm::vec3( 0.f, -0.17f, .01f ), glm::vec4( 0.f, 1.f, 1.f, 1.f ), timelineManager, timeEvaluator );
-    auto c1 = CreateSolidRectNode( "node1", .85f, 0.31f, glm::vec3( 0.f, 0.17f, 0.01f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ), timelineManager, timeEvaluator );
+    auto c0 = CreateSolidRectNode( "node0", .85f, 0.31f, glm::vec3( 0.f, -0.17f, -5.5f ), glm::vec4( 0.f, 1.f, 1.f, 1.f ), timelineManager, timeEvaluator );
+    auto c1 = CreateSolidRectNode( "node1", .85f, 0.31f, glm::vec3( 0.f, 0.17f, 5.5f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ), timelineManager, timeEvaluator );
 
     auto c00 = CreateSolidRectNode( "node00", .3f, 0.2f, glm::vec3( -0.2f, 0.0f, 0.01f ), glm::vec4( 1.f, 0.f, 0.f, 1.f ), timelineManager, timeEvaluator );
     auto c01 = CreateTexturedRectNode( "node01", .3f, 0.23f, glm::vec3( 0.25f, 0.0f, 0.01f ), "simless_00.jpg", timelineManager, timeEvaluator );

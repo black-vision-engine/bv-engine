@@ -28,6 +28,8 @@
 #include "testai/TestAIManager.h"
 #include "Engine/Models/Interfaces/IOverrideState.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+#include "Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h"
+#include "Engine\Models\Plugins\Channels\RendererContext\RendererContext.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -194,12 +196,12 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
         TimeType t = TimeType( millis ) * TimeType( 0.001 );
         GownoWFormieKebaba( t );
 
-        //FIXME: remove
+        //FIXME: remove START
         static bool alphaFired = false;
         if (t > 3.f && !alphaFired )
         {
             alphaFired = true;
-            auto node = m_modelScene->GetSceneRoot()->GetNode("node0");
+            auto node = m_modelScene->GetSceneRoot();//->GetNode("node0");
             
             auto state = node->GetOverrideState();
             auto alpha = state->GetAlphaParam();
@@ -208,17 +210,21 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
             SetParameter( alpha, 6.f, 1.f );
             node->EnableOverrideState();
 
-            //success &= SetParameter( wp, 0.f, w );
-
+            auto txplugin = m_modelScene->GetSceneRoot()->GetPlugin("texture");
+            //txplugin->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->blendEnabled = true;
         }
 
         if (t > 6.f && alphaFired )
         {
             auto root = m_modelScene->GetSceneRoot();
-            root->GetNode("node0")->DisableOverrideState();
+            root->DisableOverrideState();
+            //root->GetNode("node0")->DisableOverrideState();
+            auto txplugin = m_modelScene->GetSceneRoot()->GetPlugin("texture");
+            //txplugin->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->blendEnabled = false;
         }
 
-        //FIXME: remove
+        //FIXME: remove END
+
         {
             FRAME_STATS_SECTION( "Update" );
             HPROFILER_SECTION( "update total" );
