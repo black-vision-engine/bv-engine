@@ -8,6 +8,7 @@ namespace bv {
 // ********************************
 //
 SceneNode::SceneNode           ( TransformableEntity * transformRep )
+    : m_overridenState( false )
 {
     RegisterTransformRep( transformRep );
 }
@@ -130,6 +131,20 @@ bool                    SceneNode::IsVisible           () const
 void                    SceneNode::SetVisible          ( bool visible )
 {
     m_visible = visible;
+}
+
+// ********************************
+//
+bool                    SceneNode::IsOverriden         () const
+{
+    return m_overridenState;
+}
+
+// ********************************
+//
+void                    SceneNode::SetOverriden        ( bool overriden )
+{
+    m_overridenState = overriden;
 }
 
 } //bv

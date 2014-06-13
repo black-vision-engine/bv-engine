@@ -1,0 +1,4 @@
+1. Dodać do pivotala konkretny opis całości
+2. Implementacja
+3. Scenka testowa
+4. Testowe AI

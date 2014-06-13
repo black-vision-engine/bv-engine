@@ -80,6 +80,10 @@ TestAI *        TestAIManager::PreparePreset    ( unsigned int idx ) const
     {
         return PreparePreset2();    
     }
+    else if( idx == 3 )
+    {
+        return PreparePreset3();
+    }
 
     return nullptr;
 }
@@ -179,6 +183,7 @@ TestAI *        TestAIManager::PreparePreset2   () const
 //
 TestAI *        TestAIManager::PreparePreset3   () const
 {
+    //FIXME: implement
     return nullptr;
 }
 

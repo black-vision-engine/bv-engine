@@ -29,7 +29,7 @@ namespace bv { namespace model {
 
 namespace {
 
-const IModelNode *  FindNode( const TNodeVec & vec, const std::string & name )
+IModelNode *  FindNode( const TNodeVec & vec, const std::string & name )
 {
     for( auto node : vec )
     {
@@ -76,7 +76,7 @@ IPlugin *                       BasicNode::GetPlugin               ( const std::
 
 // ********************************
 //
-const IModelNode *              BasicNode::GetNode                 ( const std::string & path, const std::string & separator ) const
+IModelNode *                    BasicNode::GetNode                 ( const std::string & path, const std::string & separator )
 {
     std::string suffix = path;
 
@@ -108,14 +108,14 @@ const IModelNode *              BasicNode::GetNode                 ( const std::
 
 // ********************************
 //
-const IModelNode *              BasicNode::GetChild                ( const std::string & name ) const
+IModelNode *                    BasicNode::GetChild                ( const std::string & name )
 {
     return FindNode( m_children, name );
 }
 
 // ********************************
 //
-const IModelNode *              BasicNode::GetLayer                ( const std::string & name ) const
+IModelNode *                    BasicNode::GetLayer                ( const std::string & name )
 {
     return FindNode( m_layers, name );
 }
@@ -151,6 +151,20 @@ void                            BasicNode::DisableOverrideState    ()
     {
         c->DisableOverrideState();
     }
+}
+
+// ********************************
+//
+bool                            BasicNode::OverrideStateChanged    () const
+{
+    return m_overrideState->Changed();
+}
+
+// ********************************
+//
+void                            BasicNode::SetOverrideStateChg     ( bool changed )
+{
+    return m_overrideState->SetChanged( changed );
 }
 
 // ********************************
@@ -340,6 +354,8 @@ bool           BasicNode::AddPlugins              ( const std::vector< std::stri
 //
 void BasicNode::Update( TimeType t )
 {
+    m_overrideState->Update( t );
+
     for( auto l : m_layers )
         l->Update( t );
 
@@ -499,14 +515,14 @@ bool                                BasicNode::CreateRenderableData     (/* Vert
 //
 RenderableEffect *                  BasicNode::CreateDefaultEffect     ( const IPlugin * finalizer ) const
 {
-    auto psChannel = finalizer->GetPixelShaderChannel();
-    auto vsChannel = finalizer->GetVertexShaderChannel();
-    auto gsChannel = finalizer->GetGeometryShaderChannel();
+    auto psChannel      = finalizer->GetPixelShaderChannel();
+    auto vsChannel      = finalizer->GetVertexShaderChannel();
+    auto gsChannel      = finalizer->GetGeometryShaderChannel();
 
     assert( psChannel != nullptr );
     assert( vsChannel != nullptr );
 
-    return new DefaultEffect( psChannel, vsChannel, gsChannel ); 
+    return new DefaultEffect( m_overrideState, psChannel, vsChannel, gsChannel ); 
 }
 
 

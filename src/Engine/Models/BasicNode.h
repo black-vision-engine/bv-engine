@@ -61,14 +61,17 @@ public:
     virtual ~BasicNode();
 
     virtual IPlugin *                       GetPlugin               ( const std::string & name ) const override;
-    virtual const IModelNode *              GetNode                 ( const std::string & path, const std::string & separator = "/" ) const override;
-    virtual const IModelNode *              GetChild                ( const std::string & name ) const override;
-    virtual const IModelNode *              GetLayer                ( const std::string & name ) const override;
+    virtual IModelNode *                    GetNode                 ( const std::string & path, const std::string & separator = "/" ) override;
+    virtual IModelNode *                    GetChild                ( const std::string & name ) override;
+    virtual IModelNode *                    GetLayer                ( const std::string & name ) override;
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
 
     virtual void                            EnableOverrideState     () override;
     virtual void                            DisableOverrideState    () override;
+
+    virtual bool                            OverrideStateChanged    () const override;
+    virtual void                            SetOverrideStateChg     ( bool changed ) override;
 
 private:
 

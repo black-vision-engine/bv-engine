@@ -26,6 +26,8 @@
 #include "Engine/Models/Plugins/PluginUtils.h"
 #include "Engine/Models/Timeline/TimeSegmentEvalImpl.h"
 #include "testai/TestAIManager.h"
+#include "Engine/Models/Interfaces/IOverrideState.h"
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -192,6 +194,31 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
         TimeType t = TimeType( millis ) * TimeType( 0.001 );
         GownoWFormieKebaba( t );
 
+        //FIXME: remove
+        static bool alphaFired = false;
+        if (t > 3.f && !alphaFired )
+        {
+            alphaFired = true;
+            auto node = m_modelScene->GetSceneRoot()->GetNode("node0");
+            
+            auto state = node->GetOverrideState();
+            auto alpha = state->GetAlphaParam();
+            SetParameter( alpha, 3.f, 1.f );
+            SetParameter( alpha, 4.5f, 0.f );
+            SetParameter( alpha, 6.f, 1.f );
+            node->EnableOverrideState();
+
+            //success &= SetParameter( wp, 0.f, w );
+
+        }
+
+        if (t > 6.f && alphaFired )
+        {
+            auto root = m_modelScene->GetSceneRoot();
+            root->GetNode("node0")->DisableOverrideState();
+        }
+
+        //FIXME: remove
         {
             FRAME_STATS_SECTION( "Update" );
             HPROFILER_SECTION( "update total" );
@@ -359,7 +386,6 @@ void BVAppLogic::RenderScene     ( Renderer * renderer )
     renderer->PreDraw();
     RenderNode( renderer, m_mockSceneEng );
     renderer->PostDraw();
-
 }
 
 // *********************************
@@ -369,19 +395,39 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
     //FIXME: rendering order
     if ( node->IsVisible() )
     {
-        HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
-        renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
-
-        for( int i = 0; i < node->NumTransformables(); ++i )
+        if( node->IsOverriden() )
         {
-            HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
-            renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
+            for ( int i = 0; i < node->NumChildrenNodes(); i++ )
+            {
+                HPROFILER_SECTION( "RenderNode::RenderNode - overriden" );
+                RenderNode( renderer, node->GetChild( i ) ); 
+            }
+
+            for( int i = 0; i < node->NumTransformables(); ++i )
+            {
+                HPROFILER_SECTION( "RenderNode::renderer->Draw sibling - overriden" );
+                renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
+            }
+
+            HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor - overriden" );
+            renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
         }
-
-        for ( int i = 0; i < node->NumChildrenNodes(); i++ )
+        else
         {
-            HPROFILER_SECTION( "RenderNode::RenderNode" );
-            RenderNode( renderer, node->GetChild( i ) ); 
+            HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
+            renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
+
+            for( int i = 0; i < node->NumTransformables(); ++i )
+            {
+                HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
+                renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
+            }
+
+            for ( int i = 0; i < node->NumChildrenNodes(); i++ )
+            {
+                HPROFILER_SECTION( "RenderNode::RenderNode" );
+                RenderNode( renderer, node->GetChild( i ) ); 
+            }
         }
     }
 }

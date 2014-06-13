@@ -99,6 +99,25 @@ inline  void    NodeUpdater::UpdateRendererState ()
 
 // *****************************
 //
+inline  void    NodeUpdater::UpdateOverridenState()
+{
+    for( auto stateInstance : m_redererStateInstanceVec )
+    {
+        auto as = RenderStateAccessor::AccessAlphaState( stateInstance );
+        auto ds = RenderStateAccessor::AccessDepthState( stateInstance );
+
+        as->srcBlendMode = AlphaSrcBlendMode::ASBM_SRC_ALPHA;
+        as->dstBlendMode = AlphaDstBlendMode::ADBM_ONE_MINUS_SRC_ALPHA;
+        as->blendColor = glm::vec4( 0.f, 0.f, 0.f, 0.f );
+        
+        ds->enabled = true;
+        ds->writable = true;
+        ds->compareMode = DepthCompareMode::DCM_LEQUAL;
+    }
+}
+
+// *****************************
+//
 inline  void    NodeUpdater::UpdatePositions     ()
 {
     //FIXME: implement for other types of geometry as well
