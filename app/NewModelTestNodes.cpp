@@ -18,7 +18,8 @@ namespace {
     std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR" };
     std::string GSimplePlugins1[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_TEXTURE" };
     std::string GSimplePlugins2[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_ANIMATION" };
-    std::string GSimplePlugins3[] = { "DEFAULT_TRANSFORM", "DEFAULT_TEXT" };
+    std::string GSimplePlugins3[] = { "DEFAULT_TRANSFORM", "DEFAULT_COLOR", "DEFAULT_TEXT" };
+    std::string GSimplePlugins4[] = { "DEFAULT_TRANSFORM", "DEFAULT_TEXT" };
 
     // *****************************
     //
@@ -294,7 +295,8 @@ model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager *
     timeEvaluator->AddChild( someTimelineWithEvents );
 
     //Plugin stuff
-    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins3, GSimplePlugins3 + 2 );
+    //std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins4, GSimplePlugins4 + 2 );
+    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins3, GSimplePlugins3 + 3 );
 
     auto node = new model::BasicNode( "Root", timeEvaluator );
 
@@ -303,8 +305,8 @@ model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager *
 
     SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
 
+    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 60.f );
-    //node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( localTimeline );
 
     success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/ARIALUNI.TTF" );
     assert( success );
