@@ -355,9 +355,17 @@ model::BasicNode *  SimpleNodesFactory::CreateTextWithShadowNode(   model::Timel
     model::SetParameterTranslation ( param, 0, 0.0f, shadowTranslation );
 
     auto node =  SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0 );
-    node->AddChild( shadowNode );
 
-    return node;
+    transPlugin = node->GetPlugin( "transform" );
+
+    param = transPlugin->GetParameter( "simple_transform" );
+    assert( param );
+
+    model::SetParameterTranslation ( param, 0, 0.0f, -shadowTranslation );
+
+    shadowNode->AddChild( node );
+
+    return shadowNode;
 }
 
 } //bv
