@@ -28,7 +28,7 @@ DefaultPluginListFinalized::~DefaultPluginListFinalized     ()
 
 // *******************************
 //
-const IPlugin * DefaultPluginListFinalized::GetPlugin           ( const std::string & name ) const
+const IPlugin *         DefaultPluginListFinalized::GetPlugin           ( const std::string & name ) const
 {
     for( auto plugin : m_plugins )
     {
@@ -43,7 +43,7 @@ const IPlugin * DefaultPluginListFinalized::GetPlugin           ( const std::str
 
 // *******************************
 //
-const IPlugin * DefaultPluginListFinalized::GetPlugin           ( unsigned int idx ) const
+const IPlugin *         DefaultPluginListFinalized::GetPlugin           ( unsigned int idx ) const
 {
     assert( idx < m_plugins.size() );
 
@@ -52,7 +52,7 @@ const IPlugin * DefaultPluginListFinalized::GetPlugin           ( unsigned int i
 
 // *******************************
 //
-const IPlugin * DefaultPluginListFinalized::GetLastPlugin       () const
+const IPlugin *         DefaultPluginListFinalized::GetLastPlugin       () const
 {
     assert( m_plugins.size() > 0 );
 
@@ -61,21 +61,21 @@ const IPlugin * DefaultPluginListFinalized::GetLastPlugin       () const
 
 // *******************************
 //
-unsigned int    DefaultPluginListFinalized::NumPlugins          () const
+unsigned int            DefaultPluginListFinalized::NumPlugins          () const
 {
     return m_plugins.size();
 }
 
 // *******************************
 //
-const IPlugin * DefaultPluginListFinalized::GetFinalizePlugin   () const
+const IFinalizePlugin * DefaultPluginListFinalized::GetFinalizePlugin   () const
 {
     return m_finalizePlugin.get();
 }
 
 // *******************************
 //
-void            DefaultPluginListFinalized::Update              ( TimeType t )
+void                    DefaultPluginListFinalized::Update              ( TimeType t )
 {
     //UPDATE ORDER IS CRUCIAL HERE - following plugins must be able to read their predcessor's state
     for( auto plugin : m_plugins )
@@ -88,7 +88,7 @@ void            DefaultPluginListFinalized::Update              ( TimeType t )
 
 // *******************************
 //
-IPlugin *       DefaultPluginListFinalized::GetPlugin           ( const std::string & name )
+IPlugin *               DefaultPluginListFinalized::GetPlugin           ( const std::string & name )
 {
     for( auto plugin : m_plugins )
     {
@@ -103,7 +103,7 @@ IPlugin *       DefaultPluginListFinalized::GetPlugin           ( const std::str
 
 // *******************************
 //
-IPlugin *       DefaultPluginListFinalized::GetPlugin           ( unsigned int idx )
+IPlugin *               DefaultPluginListFinalized::GetPlugin           ( unsigned int idx )
 {
     assert( idx < m_plugins.size() );
 
@@ -112,7 +112,7 @@ IPlugin *       DefaultPluginListFinalized::GetPlugin           ( unsigned int i
 
 // *******************************
 //
-void            DefaultPluginListFinalized::AttachPlugin        ( IPlugin * plugin )
+void                    DefaultPluginListFinalized::AttachPlugin        ( IPlugin * plugin )
 {
     assert( plugin != nullptr );
 

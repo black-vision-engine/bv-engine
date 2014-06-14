@@ -57,6 +57,8 @@ public:
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const override;
 
+    virtual const RendererContext *             GetRendererContext          () const override;
+
     virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr );
 
 protected:
@@ -222,6 +224,21 @@ const IGeometryShaderChannel *      BasePlugin< Iface >::GetGeometryShaderChanne
     if( m_prevPlugin )
     {
         return m_prevPlugin->GetGeometryShaderChannel();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+template< class Iface >
+const RendererContext *             BasePlugin< Iface >::GetRendererContext             () const
+{
+    auto psc = GetPixelShaderChannel();
+
+    if( psc )
+    {
+        return psc->GetRendererContext();
     }
 
     return nullptr;

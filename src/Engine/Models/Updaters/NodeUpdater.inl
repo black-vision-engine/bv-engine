@@ -106,10 +106,11 @@ inline  void    NodeUpdater::UpdateOverridenState()
         auto as = RenderStateAccessor::AccessAlphaState( stateInstance );
         auto ds = RenderStateAccessor::AccessDepthState( stateInstance );
 
+        as->blendEnabled = true;
         as->srcBlendMode = AlphaSrcBlendMode::ASBM_SRC_ALPHA;
         as->dstBlendMode = AlphaDstBlendMode::ADBM_ONE_MINUS_SRC_ALPHA;
         as->blendColor = glm::vec4( 0.f, 0.f, 0.f, 0.f );
-        
+
         ds->enabled = true;
         ds->writable = true;
         ds->compareMode = DepthCompareMode::DCM_LEQUAL;

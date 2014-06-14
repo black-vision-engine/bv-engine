@@ -449,7 +449,8 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 //
 model::BasicNode *     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    TestQueryNode( timelineManager, timeEvaluator ); //FIXME: remove or uncomment after tests
+    return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );
+    //TestQueryNode( timelineManager, timeEvaluator ); //FIXME: remove or uncomment after tests
     //return SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node0" );
     //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager );
     //return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator );

@@ -6,6 +6,8 @@
 
 #include "System/Print.h"
 
+#include "Engine/Models/Plugins/Interfaces/IFinalizePlugin.h"
+
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/ConstantsMapper.h"
 
@@ -69,14 +71,21 @@ BasicNode::~BasicNode()
 
 // ********************************
 //
-IPlugin *                       BasicNode::GetPlugin               ( const std::string & name ) const
+IPlugin *                       BasicNode::GetPlugin                ( const std::string & name ) const
 {
     return m_pluginList->GetPlugin( name );
 }
 
 // ********************************
 //
-IModelNode *                    BasicNode::GetNode                 ( const std::string & path, const std::string & separator )
+const IFinalizePlugin *         BasicNode::GetFinalizePlugin        () const
+{
+    return m_pluginList->GetFinalizePlugin();
+}
+
+// ********************************
+//
+IModelNode *                    BasicNode::GetNode                  ( const std::string & path, const std::string & separator )
 {
     std::string suffix = path;
 
@@ -108,28 +117,28 @@ IModelNode *                    BasicNode::GetNode                 ( const std::
 
 // ********************************
 //
-IModelNode *                    BasicNode::GetChild                ( const std::string & name )
+IModelNode *                    BasicNode::GetChild                 ( const std::string & name )
 {
     return FindNode( m_children, name );
 }
 
 // ********************************
 //
-IModelNode *                    BasicNode::GetLayer                ( const std::string & name )
+IModelNode *                    BasicNode::GetLayer                 ( const std::string & name )
 {
     return FindNode( m_layers, name );
 }
 
 // ********************************
 //
-const IPluginListFinalized *    BasicNode::GetPluginList           () const
+const IPluginListFinalized *    BasicNode::GetPluginList            () const
 {
     return m_pluginList.get();
 }
 
 // ********************************
 //
-void                            BasicNode::EnableOverrideState     ()
+void                            BasicNode::EnableOverrideState      ()
 {
     m_overrideState->Enable();
 
@@ -138,7 +147,7 @@ void                            BasicNode::EnableOverrideState     ()
 
 // ********************************
 //
-void                            BasicNode::DisableOverrideState    ()
+void                            BasicNode::DisableOverrideState     ()
 {
     m_overrideState->Disable();
 
@@ -155,21 +164,21 @@ void                            BasicNode::DisableOverrideState    ()
 
 // ********************************
 //
-bool                            BasicNode::OverrideStateChanged    () const
+bool                            BasicNode::OverrideStateChanged     () const
 {
     return m_overrideState->Changed();
 }
 
 // ********************************
 //
-void                            BasicNode::SetOverrideStateChg     ( bool changed )
+void                            BasicNode::SetOverrideStateChg      ( bool changed )
 {
     return m_overrideState->SetChanged( changed );
 }
 
 // ********************************
 //
-void                            BasicNode::PropagateOverrideState ( IOverrideState * state )
+void                            BasicNode::PropagateOverrideState   ( IOverrideState * state )
 {
     m_overrideState->SetCurAlphaVal( state->GetCurAlphaVal() );
 
@@ -186,30 +195,37 @@ void                            BasicNode::PropagateOverrideState ( IOverrideSta
 
 // ********************************
 //
-bool                            BasicNode::IsStateOverriden        () const
+bool                            BasicNode::IsStateOverriden         () const
 {
     return m_overrideState->IsEnabled();
 }
 
 // ********************************
 //
-IOverrideState *                BasicNode::GetOverrideState        ()
+IOverrideState *                BasicNode::GetOverrideState         ()
 {
     return m_overrideState;
 }
 
 // ********************************
 //
-const std::string &             BasicNode::GetName                 () const
+const std::string &             BasicNode::GetName                  () const
 {
     return m_name;
 }
-                                                                 
+
+// ********************************
+//
+void                        BasicNode::SetName                      ( const std::string & name )
+{
+    m_name = name;
+}
+
 // ********************************
 //
 SceneNode *                 BasicNode::BuildScene()
 {
-    const IPlugin * finalizer = m_pluginList->GetFinalizePlugin();
+    const IPlugin * finalizer = GetFinalizePlugin();
 
     SceneNode * node = CreateSceneNode( finalizer );
 
@@ -237,7 +253,7 @@ void            BasicNode::AddLayer                 ( BasicNode * n )
 
 // ********************************
 //
-void            BasicNode::SetPlugins              ( DefaultPluginListFinalizedPtr plugins )
+void            BasicNode::SetPlugins               ( DefaultPluginListFinalizedPtr plugins )
 {
     m_pluginList = plugins;
 }
@@ -472,7 +488,7 @@ bool                                BasicNode::CreateRenderableData     (/* Vert
         return false;
     }
 
-    auto components = m_pluginList->GetFinalizePlugin()->GetVertexAttributesChannel()->GetComponents();
+    auto components = GetFinalizePlugin()->GetVertexAttributesChannel()->GetComponents();
 
     if( components.empty() )
     {
@@ -562,7 +578,7 @@ RenderableArrayDataSingleVertexBuffer * BasicNode::CreateRenderableArrayData( Pr
         return nullptr;
     }
 
-    auto vaChannel = m_pluginList->GetFinalizePlugin()->GetVertexAttributesChannel();
+    auto vaChannel = GetFinalizePlugin()->GetVertexAttributesChannel();
 
     auto components = vaChannel->GetComponents();
     auto geomDesc = vaChannel->GetDescriptor();
@@ -594,7 +610,7 @@ RenderableArrayDataArraysSingleVertexBuffer *   BasicNode::CreateRenderableArray
         return nullptr;
     }
 
-    auto vaChannel = m_pluginList->GetFinalizePlugin()->GetVertexAttributesChannel();
+    auto vaChannel = GetFinalizePlugin()->GetVertexAttributesChannel();
 
     if( vaChannel == nullptr )
     {

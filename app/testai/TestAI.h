@@ -5,6 +5,8 @@
 #include "System/BasicTypes.h"
 #include "Engine/Models/Timeline/Dynamic/DefaultTimeline.h"
 
+#include "Engine/Models/Interfaces/IModelNode.h"
+
 
 namespace bv {
 
@@ -16,10 +18,11 @@ private:
 
     std::vector< AICommandBase * >  m_commands;
     model::DefaultTimelinePtr       m_timeline;
+    model::IModelNode *             m_root;
 
 private:
 
-                TestAI      ( model::DefaultTimelinePtr timeline );
+                TestAI      ( model::DefaultTimelinePtr timeline, model::IModelNode * root );
                 ~TestAI     ();
 
 

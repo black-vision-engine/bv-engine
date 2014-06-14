@@ -80,6 +80,7 @@
     <ClCompile Include="BVConfig.cpp" />
     <ClCompile Include="DefaultPlugins.cpp" />
     <ClCompile Include="FrameStatsService.cpp" />
+    <ClCompile Include="Helpers\RectNodeBuilder.cpp" />
     <ClCompile Include="MainInitProcess.cpp" />
     <ClCompile Include="MainLoopProcess.cpp" />
     <ClCompile Include="ModelInteractionEvents.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="BVForwards.h" />
     <ClInclude Include="DefaultPlugins.h" />
     <ClInclude Include="FrameStatsService.h" />
+    <ClInclude Include="Helpers\RectNodeBuilder.h" />
     <ClInclude Include="MainInitProcess.h" />
     <ClInclude Include="MainLoopProcess.h" />
     <ClInclude Include="ModelInteractionEvents.h" />

@@ -32,7 +32,7 @@ NodeUpdater::NodeUpdater     ( RenderableEntity * renderable, SceneNode * sceneN
 
     m_timeInvariantVertexData = false;
 
-    const model::IPlugin * finalizer = modelNode->GetPluginList()->GetFinalizePlugin();
+    const model::IPlugin * finalizer = modelNode->GetFinalizePlugin();
     assert( finalizer );
 
     auto effect = renderable->GetRenderableEffect();

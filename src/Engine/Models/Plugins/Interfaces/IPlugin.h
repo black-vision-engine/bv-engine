@@ -7,6 +7,7 @@
 
 #include "Engine/Interfaces/IValue.h"
 #include "Engine/Interfaces/IUpdatable.h"
+#include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 
 
 namespace bv { namespace model {
@@ -43,6 +44,8 @@ public:
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const = 0;
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const = 0;
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const = 0;
+
+    virtual const RendererContext *             GetRendererContext          () const = 0;
 
     //FIXME: implement a more generic interface for resource loading
     virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr ) = 0;

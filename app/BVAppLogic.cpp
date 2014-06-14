@@ -26,8 +26,6 @@
 #include "Engine/Models/Plugins/PluginUtils.h"
 #include "Engine/Models/Timeline/TimeSegmentEvalImpl.h"
 #include "testai/TestAIManager.h"
-#include "Engine/Models/Interfaces/IOverrideState.h"
-#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -42,14 +40,14 @@ namespace
 
     TransformSetEventPtr  GTransformSetEvent;
 
-    void GownoWFormieKebaba( TimeType t )
+    void GownoWFormieKebaba( TimeType t, model::IModelNode * node )
     {
         //DETERMINSTIC TIME INTERVALS
         //static TimeType tt = TimeType( 0.0 );
         //tt += TimeType( 0.001 );
 
         //TEST AI
-        static auto ai = TestAIManager::Instance().GetAIPreset( 2 );
+        static auto ai = TestAIManager::Instance().GetAIPreset( 3, node );
         ai->EvalAt( t );
 
         //PRE GOWNO
@@ -192,33 +190,8 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
         //float t = float(frame) * 0.1f; ///10 fps
 
         TimeType t = TimeType( millis ) * TimeType( 0.001 );
-        GownoWFormieKebaba( t );
+        GownoWFormieKebaba( t, this->m_modelScene->GetSceneRoot() );
 
-        //FIXME: remove
-        //static bool alphaFired = false;
-        //if (t > 3.f && !alphaFired )
-        //{
-        //    alphaFired = true;
-        //    auto node = m_modelScene->GetSceneRoot()->GetNode("node0");
-        //    
-        //    auto state = node->GetOverrideState();
-        //    auto alpha = state->GetAlphaParam();
-        //    SetParameter( alpha, 3.f, 1.f );
-        //    SetParameter( alpha, 4.5f, 0.f );
-        //    SetParameter( alpha, 6.f, 1.f );
-        //    node->EnableOverrideState();
-
-        //    //success &= SetParameter( wp, 0.f, w );
-
-        //}
-
-        //if (t > 6.f && alphaFired )
-        //{
-        //    auto root = m_modelScene->GetSceneRoot();
-        //    root->GetNode("node0")->DisableOverrideState();
-        //}
-
-        //FIXME: remove
         {
             FRAME_STATS_SECTION( "Update" );
             HPROFILER_SECTION( "update total" );

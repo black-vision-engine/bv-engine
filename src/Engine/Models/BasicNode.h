@@ -43,7 +43,7 @@ class BasicNode : public IModelNode
 {
 private:
 
-    const std::string               m_name;
+    std::string                     m_name;
 
     const PluginsManager *          m_pluginsManager;
     bool                            m_visible;
@@ -61,6 +61,8 @@ public:
     virtual ~BasicNode();
 
     virtual IPlugin *                       GetPlugin               ( const std::string & name ) const override;
+    virtual const IFinalizePlugin *         GetFinalizePlugin       () const override;
+
     virtual IModelNode *                    GetNode                 ( const std::string & path, const std::string & separator = "/" ) override;
     virtual IModelNode *                    GetChild                ( const std::string & name ) override;
     virtual IModelNode *                    GetLayer                ( const std::string & name ) override;
@@ -83,6 +85,7 @@ public:
     virtual IOverrideState *                GetOverrideState        () override;
 
     virtual const std::string &             GetName                 () const override;
+    void                                    SetName                 ( const std::string & name );
 
     virtual SceneNode *                     BuildScene              () override;
 

@@ -504,6 +504,7 @@
     <ClInclude Include="Engine\Models\Plugins\GeometryPluginRing.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IConnectedComponent.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IFinalizePlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParameter.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamSet.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IParamValEvaluator.h" />
