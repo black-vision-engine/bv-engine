@@ -29,16 +29,16 @@ public:
 
     unsigned int    NumAIPresets        () const;
 
-    TestAI *        GetAIPreset         ( unsigned int idx );
+    TestAI *        GetAIPreset         ( unsigned int idx, model::IModelNode * node = nullptr );
 
 private:
 
-    TestAI *        PreparePreset       ( unsigned int idx ) const;
+    TestAI *        PreparePreset       ( unsigned int idx, model::IModelNode * node = nullptr ) const;
     
     TestAI *        PreparePreset0      () const;
     TestAI *        PreparePreset1      () const;
     TestAI *        PreparePreset2      () const;
-    TestAI *        PreparePreset3      () const;
+    TestAI *        PreparePreset3      ( model::IModelNode * node ) const;
     TestAI *        PreparePreset4      () const;
     TestAI *        PreparePreset5      () const;
 

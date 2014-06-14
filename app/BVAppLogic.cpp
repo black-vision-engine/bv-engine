@@ -26,10 +26,6 @@
 #include "Engine/Models/Plugins/PluginUtils.h"
 #include "Engine/Models/Timeline/TimeSegmentEvalImpl.h"
 #include "testai/TestAIManager.h"
-#include "Engine/Models/Interfaces/IOverrideState.h"
-#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
-#include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
-#include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -44,14 +40,14 @@ namespace
 
     TransformSetEventPtr  GTransformSetEvent;
 
-    void GownoWFormieKebaba( TimeType t )
+    void GownoWFormieKebaba( TimeType t, model::IModelNode * node )
     {
         //DETERMINSTIC TIME INTERVALS
         //static TimeType tt = TimeType( 0.0 );
         //tt += TimeType( 0.001 );
 
         //TEST AI
-        static auto ai = TestAIManager::Instance().GetAIPreset( 2 );
+        static auto ai = TestAIManager::Instance().GetAIPreset( 3, node );
         ai->EvalAt( t );
 
         //PRE GOWNO
@@ -194,37 +190,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
         //float t = float(frame) * 0.1f; ///10 fps
 
         TimeType t = TimeType( millis ) * TimeType( 0.001 );
-        GownoWFormieKebaba( t );
-
-        //FIXME: remove START
-        static bool alphaFired = false;
-        if (t > 3.f && !alphaFired )
-        {
-            alphaFired = true;
-            auto node = m_modelScene->GetSceneRoot()->GetNode("node0");
-            //SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), t, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-            auto state = node->GetOverrideState();
-            auto alpha = state->GetAlphaParam();
-            SetParameter( alpha, 3.f, 1.f );
-            SetParameter( alpha, 6.f, 0.f );
-            SetParameter( alpha, 9.f, 1.f );
-            node->EnableOverrideState();
-
-            //auto txplugin = m_modelScene->GetSceneRoot()->GetPlugin("texture");
-            //txplugin->GetRendererContext()->alphaCtx->blendEnabled = true;
-        }
-
-        if (t > 9.f && alphaFired )
-        {
-            auto root = m_modelScene->GetSceneRoot()->GetNode("node0");
-            root->DisableOverrideState();
-            //SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), t, glm::vec4( 0.f, 1.f, 1.f, 1.f ) );
-            //root->GetNode("node0")->DisableOverrideState();
-            //auto txplugin = m_modelScene->GetSceneRoot()->GetPlugin("texture");
-            //txplugin->GetRendererContext()->alphaCtx->blendEnabled = false;
-        }
-
-        //FIXME: remove END
+        GownoWFormieKebaba( t, this->m_modelScene->GetSceneRoot() );
 
         {
             FRAME_STATS_SECTION( "Update" );

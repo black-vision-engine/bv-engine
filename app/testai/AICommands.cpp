@@ -2,6 +2,11 @@
 
 #include "Engine/Models/Timeline/Dynamic/DefaultTimeline.h"
 
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+#include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
+#include "Engine/Models/Interfaces/IOverrideState.h"
+
 
 namespace bv {
 
@@ -265,6 +270,104 @@ bool        AICommandSetTimeAndPlay::TriggerImpl    ( TimeType t )
     m_timeline->SetTimeAndPlay( m_eventTime );
 
     return true;
+}
+
+
+// ************************************************************ AI COMMAND ENABLE OVERRIDEN ALPHA  ************************************************************
+
+// *********************************
+//
+AICommandEnableOverridenAlpha::AICommandEnableOverridenAlpha    ( model::IModelNode * root, const std::string & node, TimeType triggerTime )
+    : AICommandBase( triggerTime, "ENABLE_OV_ALPHA" )
+{
+    m_node = root->GetNode( node );
+
+    if ( m_node )
+    {
+        SetRepr( std::string( "ENABLE OVRD ALPHA [" ) + node + std::string( "]" ) );
+    }
+    else
+    {
+        SetRepr( std::string( "ENABLE OVRD ALPHA [ NULL ]" ) );
+    }
+}
+
+// *********************************
+//
+AICommandEnableOverridenAlpha::~AICommandEnableOverridenAlpha   ()
+{
+}
+
+// *********************************
+//
+void        AICommandEnableOverridenAlpha::SetTimeline          ( model::DefaultTimelinePtr timeline )
+{
+}
+
+// *********************************
+//
+bool        AICommandEnableOverridenAlpha::TriggerImpl          ( TimeType t )
+{
+    if ( m_node )
+    {
+        auto state = m_node->GetOverrideState();
+        auto alpha = state->GetAlphaParam();
+        SetParameter( alpha, t, 1.f );
+        SetParameter( alpha, t + 2.5f, 0.f );
+        SetParameter( alpha, t + 5.5f, 0.f );
+        SetParameter( alpha, t + 8.f, 1.f );
+        m_node->EnableOverrideState();
+
+        return true;
+    }
+
+    return false;
+}
+
+
+// ************************************************************ AI COMMAND DISABLE OVERRIDEN ALPHA  ************************************************************
+
+// *********************************
+//
+AICommandDisableAlpha::AICommandDisableAlpha    ( model::IModelNode * root, const std::string & node, TimeType triggerTime )
+    : AICommandBase( triggerTime, "DISABLE_OV_ALPHA" )
+{
+    m_node = root->GetNode( node );
+
+    if ( m_node )
+    {
+        SetRepr( std::string( "DISABLE OVRD ALPHA [" ) + node + std::string( "]" ) );
+    }
+    else
+    {
+        SetRepr( std::string( "DISABLE OVRD ALPHA [ NULL ]" ) );
+    }
+}
+
+// *********************************
+//
+AICommandDisableAlpha::~AICommandDisableAlpha   ()
+{
+}
+
+// *********************************
+//
+void        AICommandDisableAlpha::SetTimeline  ( model::DefaultTimelinePtr timeline )
+{
+}
+
+// *********************************
+//
+bool        AICommandDisableAlpha::TriggerImpl  ( TimeType t )
+{
+    if( m_node )
+    {
+        m_node->DisableOverrideState();
+
+        return true;
+    }
+
+    return false;
 }
 
 } //bv

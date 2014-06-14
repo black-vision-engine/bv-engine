@@ -24,8 +24,9 @@ bool aiCommandComparator( AICommandBase * c0, AICommandBase * c1 )
 
 // *********************************
 //
-TestAI::TestAI      ( model::DefaultTimelinePtr timeline )
+TestAI::TestAI      ( model::DefaultTimelinePtr timeline, model::IModelNode * root )
     : m_timeline( timeline )
+    , m_root( root )
 {
 }
 

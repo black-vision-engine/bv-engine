@@ -1,9 +1,11 @@
 #pragma once
 
 #include "Engine/Types/Enums.h"
+#include "System/BasicTypes.h"
 
 #include "Engine/Models/Timeline/Dynamic/DefaultTimeline.h"
 
+#include "Engine/Models/Interfaces/IModelNode.h"
 #include "testai/IAICommand.h"
 
 
@@ -103,7 +105,7 @@ class AICommandSetPlayDirection : public AICommandBase
 {
 private:
 
-    model::DefaultTimelinePtr m_timeline;
+    model::DefaultTimelinePtr   m_timeline;
     TimelinePlayDirection       m_direction;
 
 public:
@@ -124,7 +126,7 @@ class AICommandSetTimeAndStop : public AICommandBase
 {
 private:
 
-    model::DefaultTimelinePtr m_timeline;
+    model::DefaultTimelinePtr   m_timeline;
     TimeType                    m_eventTime;
 
 public:
@@ -145,7 +147,7 @@ class AICommandSetTimeAndPlay : public AICommandBase
 {
 private:
 
-    model::DefaultTimelinePtr m_timeline;
+    model::DefaultTimelinePtr   m_timeline;
     TimeType                    m_eventTime;
 
 public:
@@ -158,6 +160,48 @@ public:
 protected:
 
     virtual bool        TriggerImpl         ( TimeType t ) override;
+
+};
+
+// ************************************
+class AICommandEnableOverridenAlpha : public AICommandBase
+{
+private:
+
+    TimeType            m_eventTime;
+    model::IModelNode * m_node;
+
+public:
+
+                        AICommandEnableOverridenAlpha   ( model::IModelNode * root, const std::string & node, TimeType triggerTime );
+                        ~AICommandEnableOverridenAlpha  ();
+
+    virtual void        SetTimeline                     ( model::DefaultTimelinePtr timeline ) override;
+
+protected:
+
+    virtual bool        TriggerImpl                     ( TimeType t ) override;
+
+};
+
+// ************************************
+class AICommandDisableAlpha : public AICommandBase
+{
+private:
+
+    TimeType            m_eventTime;
+    model::IModelNode * m_node;
+
+public:
+
+                        AICommandDisableAlpha       ( model::IModelNode * root, const std::string & node, TimeType triggerTime );
+                        ~AICommandDisableAlpha      ();
+
+    virtual void        SetTimeline                 ( model::DefaultTimelinePtr timeline ) override;
+
+protected:
+
+    virtual bool        TriggerImpl                 ( TimeType t ) override;
 
 };
 

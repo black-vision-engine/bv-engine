@@ -167,6 +167,8 @@ model::BasicNode *  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::Timeli
     c0->AddChild( c01 );
     c01->AddChild( c010 );
 
+    auto ai = TestAIManager::Instance().GetAIPreset( 3, root );
+
     return root;
 }
 
