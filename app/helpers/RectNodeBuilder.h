@@ -37,7 +37,7 @@ public:
     void                        SetRotation         ( float x, float y, float z, float angle, TimeType t = TimeType( 0.0 ) );
     void                        SetScale            ( float sx, float sy, float sz, TimeType t = TimeType( 0.0 ) );
 
-    model::BasicNode *          CreateNode          ( const std::string & name, bool resetToBuilderDefaults = false );
+    virtual model::BasicNode *  CreateNode          ( const std::string & name, bool resetToBuilderDefaults = false );
     virtual void                SetDefaults         ();
 
     std::string                 TransformPluginName () const;
@@ -80,14 +80,20 @@ public:
 
 class TexturedRectNodeBuilder : public RectNodeBuilder
 {
+private:
+
+    std::string     m_textureFile;
+    bool            m_hasAlpha;
 public:
 
-    TexturedRectNodeBuilder     ( model::ITimeEvaluatorPtr timeEvaluator, const std::string & textureFile, float w = 1.0f, float h = 1.0f, TimeType t = TimeType( 0.0 ) );
+    TexturedRectNodeBuilder     ( model::ITimeEvaluatorPtr timeEvaluator, const std::string & textureFile, bool hasAlpha, float w = 1.0f, float h = 1.0f, TimeType t = TimeType( 0.0 ) );
     ~TexturedRectNodeBuilder    ();
 
-    void    SetTextureFile      ( const std::string & textureFile );
+    void    SetTextureFile      ( const std::string & textureFile, bool hasAlpha );
 
     virtual std::string         ShaderPluginName() const override;
+
+    virtual model::BasicNode *  CreateNode      ( const std::string & name, bool resetToBuilderDefaults = false ) override;
 
 };
 

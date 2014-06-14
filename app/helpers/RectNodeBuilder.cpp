@@ -4,6 +4,9 @@
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Engine/Models/Plugins/PluginUtils.cpp"
 
+#include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
+
 
 namespace bv {
 
@@ -203,6 +206,11 @@ void    SolidRectNodeBuilder::SetColor        ( float r, float g, float b, float
     assert( m_node );
     bool success = model::SetParameter( GetShaderPlugin()->GetParameter( ColorParamName() ), t, glm::vec4( r, g, b, a ) );
     assert( success );    
+
+    if( a < 1.0f )
+    {
+        GetShaderPlugin()->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->blendEnabled = true;
+    }
 }
 
 // ****************************
@@ -233,10 +241,12 @@ std::string         SolidRectNodeBuilder::ColorParamName  () const
 
 // ****************************
 //
-TexturedRectNodeBuilder::TexturedRectNodeBuilder     ( model::ITimeEvaluatorPtr timeEvaluator, const std::string & textureFile, float w, float h, TimeType t )
+TexturedRectNodeBuilder::TexturedRectNodeBuilder     ( model::ITimeEvaluatorPtr timeEvaluator, const std::string & textureFile, bool hasAlpha, float w, float h, TimeType t )
     : RectNodeBuilder( timeEvaluator,  "DEFAULT_TEXTURE", w, h, t )
+    , m_textureFile( textureFile )
+    , m_hasAlpha( hasAlpha )
 {
-    SetTextureFile( textureFile );
+    SetTextureFile( textureFile, hasAlpha );
 }
 
 // ****************************
@@ -247,11 +257,20 @@ TexturedRectNodeBuilder::~TexturedRectNodeBuilder    ()
 
 // ****************************
 //
-void    TexturedRectNodeBuilder::SetTextureFile      ( const std::string & textureFile )
+void    TexturedRectNodeBuilder::SetTextureFile      ( const std::string & textureFile, bool hasAlpha )
 {
     assert( m_node );
     bool success = model::LoadTexture( GetShaderPlugin(), textureFile );
     assert( success );
+
+    if( hasAlpha )
+    {
+        GetShaderPlugin()->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->blendEnabled = true;
+    }
+    else
+    {
+        GetShaderPlugin()->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->blendEnabled = false;
+    }
 }
 
 // ****************************
@@ -259,6 +278,17 @@ void    TexturedRectNodeBuilder::SetTextureFile      ( const std::string & textu
 std::string TexturedRectNodeBuilder::ShaderPluginName() const
 {
     return "texture";
+}
+
+// ****************************
+//
+model::BasicNode *  TexturedRectNodeBuilder::CreateNode      ( const std::string & name, bool resetToBuilderDefaults )
+{
+    auto n = RectNodeBuilder::CreateNode( name, resetToBuilderDefaults );
+
+    SetTextureFile( m_textureFile, m_hasAlpha );
+
+    return n;
 }
 
 } //bv

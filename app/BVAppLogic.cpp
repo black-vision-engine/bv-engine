@@ -28,8 +28,8 @@
 #include "testai/TestAIManager.h"
 #include "Engine/Models/Interfaces/IOverrideState.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
-#include "Engine\Models\Plugins\Interfaces\IPixelShaderChannel.h"
-#include "Engine\Models\Plugins\Channels\RendererContext\RendererContext.h"
+#include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -201,25 +201,26 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
         if (t > 3.f && !alphaFired )
         {
             alphaFired = true;
-            auto node = m_modelScene->GetSceneRoot();//->GetNode("node0");
-            
+            auto node = m_modelScene->GetSceneRoot()->GetNode("node0");
+            //SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), t, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
             auto state = node->GetOverrideState();
             auto alpha = state->GetAlphaParam();
             SetParameter( alpha, 3.f, 1.f );
-            SetParameter( alpha, 4.5f, 0.f );
-            SetParameter( alpha, 6.f, 1.f );
+            SetParameter( alpha, 6.f, 0.f );
+            SetParameter( alpha, 9.f, 1.f );
             node->EnableOverrideState();
 
-            auto txplugin = m_modelScene->GetSceneRoot()->GetPlugin("texture");
+            //auto txplugin = m_modelScene->GetSceneRoot()->GetPlugin("texture");
             //txplugin->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->blendEnabled = true;
         }
 
-        if (t > 6.f && alphaFired )
+        if (t > 9.f && alphaFired )
         {
-            auto root = m_modelScene->GetSceneRoot();
+            auto root = m_modelScene->GetSceneRoot()->GetNode("node0");
             root->DisableOverrideState();
+            //SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), t, glm::vec4( 0.f, 1.f, 1.f, 1.f ) );
             //root->GetNode("node0")->DisableOverrideState();
-            auto txplugin = m_modelScene->GetSceneRoot()->GetPlugin("texture");
+            //auto txplugin = m_modelScene->GetSceneRoot()->GetPlugin("texture");
             //txplugin->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->blendEnabled = false;
         }
 
