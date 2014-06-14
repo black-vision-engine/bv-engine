@@ -15,7 +15,7 @@ public:
     /////////////////////////////////////
     // This function loads font definition from file. Builds font atlases with the specified size.
     // Returns ResourceHandle of this font
-    static const ResourceHandle *       LoadFont            ( const std::string& fontFileName, size_t size, const std::wstring& atlasCharSetFile = SUPPROTED_CHARS_FILE );
+    static const ResourceHandle *       LoadFont            ( const std::string& fontFileName, size_t size, size_t blurSize, const std::wstring& atlasCharSetFile = SUPPROTED_CHARS_FILE );
 
     /////////////////////////////////////
     // This function creates TextAtlas from specified FontReasource.
@@ -33,7 +33,7 @@ public:
 
     /////////////////////////////////////
     // This function builds VertexAttributeChannel for text and fontResource.
-    static void                         BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, const std::wstring& textPatern = std::wstring(), bool bolded = false, bool italic = false );
+    static void                         BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, const std::wstring& textPatern = std::wstring(), bool bolded = false, bool italic = false );
 };
 
 

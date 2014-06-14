@@ -195,28 +195,28 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
         GownoWFormieKebaba( t );
 
         //FIXME: remove
-        static bool alphaFired = false;
-        if (t > 3.f && !alphaFired )
-        {
-            alphaFired = true;
-            auto node = m_modelScene->GetSceneRoot()->GetNode("node0");
-            
-            auto state = node->GetOverrideState();
-            auto alpha = state->GetAlphaParam();
-            SetParameter( alpha, 3.f, 1.f );
-            SetParameter( alpha, 4.5f, 0.f );
-            SetParameter( alpha, 6.f, 1.f );
-            node->EnableOverrideState();
+        //static bool alphaFired = false;
+        //if (t > 3.f && !alphaFired )
+        //{
+        //    alphaFired = true;
+        //    auto node = m_modelScene->GetSceneRoot()->GetNode("node0");
+        //    
+        //    auto state = node->GetOverrideState();
+        //    auto alpha = state->GetAlphaParam();
+        //    SetParameter( alpha, 3.f, 1.f );
+        //    SetParameter( alpha, 4.5f, 0.f );
+        //    SetParameter( alpha, 6.f, 1.f );
+        //    node->EnableOverrideState();
 
-            //success &= SetParameter( wp, 0.f, w );
+        //    //success &= SetParameter( wp, 0.f, w );
 
-        }
+        //}
 
-        if (t > 6.f && alphaFired )
-        {
-            auto root = m_modelScene->GetSceneRoot();
-            root->GetNode("node0")->DisableOverrideState();
-        }
+        //if (t > 6.f && alphaFired )
+        //{
+        //    auto root = m_modelScene->GetSceneRoot();
+        //    root->GetNode("node0")->DisableOverrideState();
+        //}
 
         //FIXME: remove
         {

@@ -282,7 +282,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     return node;    
 }
 
-model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize )
 {
     //Timeline stuff
     auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
@@ -307,6 +307,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager *
 
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 0.0f, 1.0f, 1.0f ) );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 60.f );
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
 
     success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/ARIALUNI.TTF" );
     assert( success );
@@ -317,6 +318,25 @@ model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager *
     ai->SetTimeline( someTimelineWithEvents );
 
     return node;    
+}
+
+model::BasicNode *  SimpleNodesFactory::CreateTextWithShadowNode(   model::TimelineManager * timelineManager,
+                                                                    model::ITimeEvaluatorPtr timeEvaluator,
+                                                                    unsigned int blurSize,
+                                                                    const glm::vec3 shadowTranslation )
+{
+    auto shadowNode =  SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, blurSize );
+    auto transPlugin = shadowNode->GetPlugin( "transform" );
+
+    auto param = transPlugin->GetParameter( "simple_transform" );
+    assert( param );
+
+    model::SetParameterTranslation ( param, 0, 0.0f, shadowTranslation );
+
+    auto node =  SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0 );
+    node->AddChild( shadowNode );
+
+    return node;
 }
 
 } //bv

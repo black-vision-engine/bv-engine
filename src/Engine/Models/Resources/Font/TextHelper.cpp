@@ -14,9 +14,9 @@ namespace bv { namespace model {
 
 ///////////////////////////////
 //
-const ResourceHandle *      TextHelper::LoadFont( const std::string& fontFileName, size_t size, const std::wstring& atlasCharSetFile )
+const ResourceHandle *      TextHelper::LoadFont( const std::string& fontFileName, size_t size, size_t blurSize, const std::wstring& atlasCharSetFile )
 {
-    auto fRes = FontResource( fontFileName, size, atlasCharSetFile );
+    auto fRes = FontResource( fontFileName, size, blurSize, atlasCharSetFile );
 
     FontLoader fLoader;
 
@@ -141,7 +141,7 @@ const ResourceHandle *      TextHelper::GetAtlasTextureInfo ( const TextAtlas * 
 
 // *********************************
 //
-void                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, const std::wstring& textPatern, bool bolded, bool italic )
+void                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, const std::wstring& textPatern, bool bolded, bool italic )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
@@ -149,6 +149,10 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
     glm::vec3 translate(0.f);
     glm::vec3 interspace( 0.07f, 0.f ,0.f );
     glm::vec3 newLineTranslation( 0.f );
+
+    float blurTexSize = float( blurSize );
+    float blurLenghtX = float( blurSize ) / viewWidth;
+    float blurLenghtY = float( blurSize ) / viewHeight;
 
     auto spaceGlyphWidth    = 0.3*(float)textAtlas->GetGlyphHeight( L'0' ) * 0.5/viewWidth;
     auto newLineShift       = -(float)textAtlas->GetGlyphWidth( L'0' ) / viewHeight;
@@ -198,17 +202,17 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
 
             if( usePatern && textPatern[i] == L'#' )
             {
-                quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f );
-                quadBottomRight    = glm::vec3( (float)glyphCoord->width / (float)viewWidth, 0.f, 0.f );
-                quadTopLeft        = glm::vec3( 0.f, (float)glyphCoord->height / (float)viewHeight, 0.f );
-                quadTopRight       = glm::vec3( (float)glyphCoord->width / (float)viewWidth, (float)glyphCoord->height / (float)viewHeight, 0.f );
+                quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f );
+                quadBottomRight    = glm::vec3( (float)glyphCoord->width / (float)viewWidth, 0.f, 0.f ) +  glm::vec3( blurLenghtX, -blurLenghtY, 0.f );
+                quadTopLeft        = glm::vec3( 0.f, (float)glyphCoord->height / (float)viewHeight, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f );
+                quadTopRight       = glm::vec3( (float)glyphCoord->width / (float)viewWidth, (float)glyphCoord->height / (float)viewHeight, 0.f ) + glm::vec3( blurLenghtX, blurLenghtY, 0.f );
             }
             else
             {
-                quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f );
-                quadBottomRight    = glm::vec3( (float)glyphCoord->glyphWidth / (float)viewWidth, 0.f, 0.f );
-                quadTopLeft        = glm::vec3( 0.f, (float)glyphCoord->glyphHeight / (float)viewHeight, 0.f );
-                quadTopRight       = glm::vec3( (float)glyphCoord->glyphWidth / (float)viewWidth, (float)glyphCoord->glyphHeight / (float)viewHeight, 0.f );
+                quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f );
+                quadBottomRight    = glm::vec3( (float)glyphCoord->glyphWidth / (float)viewWidth, 0.f, 0.f ) +  glm::vec3( blurLenghtX, -blurLenghtY, 0.f );
+                quadTopLeft        = glm::vec3( 0.f, (float)glyphCoord->glyphHeight / (float)viewHeight, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f );
+                quadTopRight       = glm::vec3( (float)glyphCoord->glyphWidth / (float)viewWidth, (float)glyphCoord->glyphHeight / (float)viewHeight, 0.f ) + glm::vec3( blurLenghtX, blurLenghtY, 0.f );
             }
 
             posAttribChannel->AddAttribute( quadBottomLeft    + translate - baring + newLineTranslation );
@@ -236,10 +240,10 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
             }
             else
             {
-                texLeft   = ((float)glyphCoord->textureX + (float)glyphCoord->glyphX)  / textAtlas->GetWidth();
-                texTop    = ((float)glyphCoord->textureY + (float)glyphCoord->glyphY)  / textAtlas->GetHeight();
-                texWidth  = ((float)glyphCoord->glyphWidth)     / textAtlas->GetWidth();
-                texHeight = ((float)glyphCoord->glyphHeight)    / textAtlas->GetHeight();
+                texLeft   = ((float)glyphCoord->textureX + (float)glyphCoord->glyphX - blurTexSize)  / textAtlas->GetWidth();
+                texTop    = ((float)glyphCoord->textureY + (float)glyphCoord->glyphY - blurTexSize)  / textAtlas->GetHeight();
+                texWidth  = ((float)glyphCoord->glyphWidth + 2 * blurTexSize)     / textAtlas->GetWidth();
+                texHeight = ((float)glyphCoord->glyphHeight + 2 * blurTexSize)    / textAtlas->GetHeight();
             }
 
 

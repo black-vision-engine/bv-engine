@@ -66,10 +66,11 @@ TextAtlas*      TextAtlas::Crate           ( unsigned int w, unsigned int h, uns
 
 // *********************************
 //
-Text::Text( const std::wstring& text, const std::string& fontFile, unsigned int fontSize )
+Text::Text( const std::wstring& text, const std::string& fontFile, unsigned int fontSize, unsigned int blurSize )
     : m_text( text )
     , m_fontFile( fontFile )
     , m_fontSize( fontSize )
+    , m_blurSize( blurSize )
 {
     BuildAtlas();
 }
@@ -205,7 +206,7 @@ TextAtlas*          Text::LoadFromCache()
 {
     auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
 
-    auto entry = fac->GetEntry( "ARIAL", m_fontSize, m_fontFile, false, false );
+    auto entry = fac->GetEntry( "ARIAL", m_fontSize, this->m_blurSize, m_fontFile, false, false );
 
     if( entry != nullptr )
         return entry->m_textAtlas;
@@ -297,7 +298,7 @@ void                Text::BuildAtlas()
 
     unsigned int atlasSize = ( unsigned int )std::ceil( sqrt( (float)glyphsNum ) );
 
-    int padding = 1;
+    int padding = this->m_blurSize + 1;
 
     maxWidth  = maxWidth + padding * 2;
     maxHeight = maxHeight + padding * 2;
@@ -384,12 +385,20 @@ void                Text::BuildAtlas()
     }
 
     auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
-    auto entry = new FontAtlasCacheEntry( m_atlas, "ARIAL", m_fontSize, m_fontFile, false, false );
+
+    if ( m_blurSize > 0 )
+    {
+        auto oldData = m_atlas->m_data;
+        m_atlas->m_data = TextureHelper::Blur( oldData, m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel(), m_blurSize );
+        delete [] oldData;
+    }
+
+    auto entry = new FontAtlasCacheEntry( m_atlas, "ARIAL", m_fontSize, m_blurSize, m_fontFile, false, false );
     fac->AddEntry( *entry );
 
 #ifdef GENERATE_TEST_BMP_FILE
 
-    TextureHelper::WriteBMP( "test.bmp", atlasData, m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() );
+    TextureHelper::WriteBMP( "test.bmp", m_atlas->GetData(), m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() );
 
 #endif // GENERATE_TEST_BMP_FILE
 }

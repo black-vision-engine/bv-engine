@@ -454,7 +454,8 @@ model::BasicNode *     TestScenesFactory::NewModelTestScene     ( const model::P
     //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager );
     //return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator );
-    return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator );
+    //return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 2 );
+    return SimpleNodesFactory::CreateTextWithShadowNode( timelineManager, timeEvaluator, 5, glm::vec3( -0.01f, 0.f, -0.05f ) );
 
 }
 

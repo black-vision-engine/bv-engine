@@ -113,6 +113,7 @@ private:
     TextAtlas*                          m_atlas;
     unsigned int                        m_fontSize;
     std::map< wchar_t, Glyph * >        m_glyphs;
+    unsigned int                        m_blurSize;
 
     void                                BuildAtlas      ();
     TextAtlas*                          LoadFromCache   ();
@@ -123,17 +124,7 @@ public:
     const std::wstring&                 GetText () const { return m_text; }
     const TextAtlas*                    GetAtlas() const { return m_atlas; }
 
-    explicit                            Text( const std::wstring& text, const std::string& fontFile, unsigned int fontSize );
-};
-
-class MockFontEngine
-{
-private:
-
-    std::map< Text*, Text* >                m_textMap;
-
-public:
-    const Text*                             AddText( const std::wstring& text, const std::string& fontFile );
+    explicit                            Text( const std::wstring& text, const std::string& fontFile, unsigned int fontSize, unsigned int blurSize );
 };
 
 } // model

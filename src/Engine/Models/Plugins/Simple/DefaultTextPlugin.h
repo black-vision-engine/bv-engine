@@ -61,6 +61,7 @@ private:
     bool                            m_textSet;
 
     ParamFloat*                     m_fontSizeParam;
+    ParamFloat*                     m_blurSizeParam;
 
 public:
 

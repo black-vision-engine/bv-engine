@@ -28,12 +28,14 @@ FontAtlasCacheEntry::FontAtlasCacheEntry()
 FontAtlasCacheEntry::FontAtlasCacheEntry(   TextAtlas* textAtlas
                                          ,  const std::string& fontName
                                          ,  unsigned int fontSize
+                                         ,  unsigned int blurSize
                                          ,  const std::string& fontFilePath
                                          ,  bool bold
                                          ,  bool italic )
     : m_textAtlas( textAtlas )
     , m_fontName( fontName )
     , m_fontSize( fontSize )
+    , m_blurSize( blurSize )
     , m_fontFilePath( fontFilePath )
     , m_bold( bold )
     , m_italic( italic )
@@ -112,8 +114,8 @@ void                    FontAtlasCache::InitFontCachedTable ()
 
     if ( m_dataBase != nullptr )
     {
-        static std::string sql = "CREATE TABLE IF NOT EXISTS cached_fonts(font_name TEXT, font_size INTEGER, font_file_name TEXT \
-                            , bold_flag BOOL, italic_flag BOOL, text_atlas BLOB, test_atlas_data_file TEXT, PRIMARY KEY( font_name , font_size, bold_flag, italic_flag ) )";
+        static std::string sql = "CREATE TABLE IF NOT EXISTS cached_fonts(font_name TEXT, font_size INTEGER, blur_size INTEGER, font_file_name TEXT \
+                            , bold_flag BOOL, italic_flag BOOL, text_atlas BLOB, test_atlas_data_file TEXT, PRIMARY KEY( font_name , font_size, blur_size, bold_flag, italic_flag ) )";
 
         char* err = nullptr;
 
@@ -136,21 +138,22 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
 {
     auto out = static_cast< FontAtlasCacheEntry* >( data );
 
-    assert( argsNum == 7 );
+    assert( argsNum == 8 );
 
     out->m_fontName     = args[ 0 ];
     out->m_fontSize     = std::atoi( args[ 1 ] );
-    out->m_fontFilePath = args[ 2 ];
-    out->m_bold         = std::atoi( args[ 3 ] ) == 0 ? false : true;
-    out->m_italic       = std::atoi( args[ 4 ] ) == 0 ? false : true;
+    out->m_blurSize     = std::atoi( args[ 2 ] );
+    out->m_fontFilePath = args[ 3 ];
+    out->m_bold         = std::atoi( args[ 4 ] ) == 0 ? false : true;
+    out->m_italic       = std::atoi( args[ 5 ] ) == 0 ? false : true;
     out->m_textAtlas    = new TextAtlas();
-    std::stringstream str(  args[5] );
+    std::stringstream str(  args[6] );
     out->m_textAtlas->Load( str );    
 
     int width   = 0;
     int height  = 0;
     int bpp     = 0;
-    auto texData = TextureHelper::LoadImg( args[ 6 ], &width, &height, &bpp );
+    auto texData = TextureHelper::LoadImg( args[ 7 ], &width, &height, &bpp );
 
     assert( texData != nullptr );
     assert( width == out->m_textAtlas->GetWidth() );
@@ -165,7 +168,7 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
 }
 // *********************************
 //
-FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fontName, unsigned int fontSize, const std::string& fontFileName, bool bold, bool italic )
+FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fontName, unsigned int fontSize, unsigned int blurSize, const std::string& fontFileName, bool bold, bool italic )
 {
     if( !m_dataBase )
     {
@@ -176,6 +179,7 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fo
 
     std::string sql = "SELECT * FROM cached_fonts WHERE font_name=\'" + fontName + "\'" +
                             " AND font_size = " + std::to_string( fontSize ) +
+                            " AND blur_Size = " + std::to_string( blurSize ) +
                             " AND bold_flag = " + std::to_string( bold ) +
                             " AND italic_flag = " + std::to_string( italic ) + ";";
 
@@ -231,6 +235,7 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
     std::string sqlAdd = std::string( "INSERT OR REPLACE INTO cached_fonts VALUES(" ) 
         + "\'" + data.m_fontName + "\'" + ", " 
         + std::to_string( data.m_fontSize ) + ", " 
+        + std::to_string( data.m_blurSize ) + ", " 
         + "\'" + data.m_fontFilePath + "\'" + ", " 
         + std::to_string( data.m_bold ) + ", " 
         + std::to_string( data.m_italic ) + ", " 

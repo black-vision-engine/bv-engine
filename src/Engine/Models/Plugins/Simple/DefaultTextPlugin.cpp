@@ -52,11 +52,13 @@ DefaultPluginParamValModel *    DefaultTextPluginDesc::CreateDefaultModel( ITime
     SimpleTransformEvaluator * trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
     SimpleFloatEvaluator *     fontSizeEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
 
+    SimpleFloatEvaluator *     blurSizeEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
+
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
     psModel->RegisterAll( borderColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
-
+    plModel->RegisterAll( blurSizeEvaluator );
     plModel->RegisterAll( fontSizeEvaluator );
 
     //Set models structure
@@ -66,6 +68,7 @@ DefaultPluginParamValModel *    DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     //Set default values of all parameters
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+    blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
     fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
@@ -165,6 +168,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
 
 
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTextPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
+    m_psc->GetRendererContext()->alphaCtx->blendEnabled = true;
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultTextPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
 
     auto ctx = m_psc->GetRendererContext();
@@ -175,6 +179,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
     m_fontSizeParam = QueryTypedParam< ParamFloat >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
+    m_blurSizeParam = QueryTypedParam< ParamFloat >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
 }
 
 // *************************************
@@ -195,7 +200,7 @@ bool                            DefaultTextPlugin::LoadResource  ( const IPlugin
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() <= 1 );
 
-        auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ) );
+        auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ) );
 
         m_textAtlas = TextHelper::GetAtlas( fontResource, false, false );
 
@@ -284,7 +289,7 @@ void DefaultTextPlugin::InitAttributesChannel( const IPlugin * prev )
 {
     m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text );
+    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ) );
 }
 
 // *************************************
@@ -318,7 +323,7 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
     m_vaChannel->ClearConnectedComponent();
 
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text );
+    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ) );
 }
 
 bool            SetTextPluginContent( IPlugin* textPlugin, const std::wstring& text )

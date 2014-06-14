@@ -124,7 +124,7 @@ TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
 {
     m_timePaternInfo = ParseTimePatern( m_timePatern );
 
-    m_fontResource = TextHelper::LoadFont( "../dep/Media/fonts/digital-7.ttf", fontSize, L"../dep/Media/fonts/TimerChars.txt" );
+    m_fontResource = TextHelper::LoadFont( "../dep/Media/fonts/digital-7.ttf", fontSize, 0, L"../dep/Media/fonts/TimerChars.txt" );
 
     m_currentAtlas = TextHelper::GetAtlas( m_fontResource );
 
@@ -134,7 +134,7 @@ TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
 
     m_vertexAttributeChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
-    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_currentAtlas, L"0000:00:00:000000", m_timePatern );
+    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_currentAtlas,L"0000:00:00:000000", 0, m_timePatern );
 }
 
 ////////////////////////////
