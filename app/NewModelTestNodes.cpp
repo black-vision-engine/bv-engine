@@ -12,7 +12,7 @@
 #include "Engine/Models/BasicNode.h"
 
 #include "testai/TestAIManager.h"
-
+#include "Helpers/RectNodeBuilder.h"
 
 namespace {
     std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR" };
@@ -112,16 +112,27 @@ model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode   ( const std::st
 //
 model::BasicNode *  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    auto root = CreateTexturedRectNode( ".", 3.4f, 0.7f, glm::vec3( 0.f, -.6f, 0.f ), "simless_01.jpg", timelineManager, timeEvaluator );
-    auto c0 = CreateSolidRectNode( "node0", .85f, 0.31f, glm::vec3( 0.f, -0.17f, 0.5f ), glm::vec4( 0.f, 1.f, 1.f, 1.f ), timelineManager, timeEvaluator );
-    auto c1 = CreateSolidRectNode( "node1", .85f, 0.31f, glm::vec3( 0.f, 0.17f, 0.5f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ), timelineManager, timeEvaluator );
+    TexturedRectNodeBuilder bTex( timeEvaluator, "simless_01.jpg", 3.4f, 0.7f );
+    SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 1.f ), .85f, 0.31f );
 
-    //auto c00 = CreateSolidRectNode( "node00", .3f, 0.2f, glm::vec3( -0.2f, 0.0f, 0.01f ), glm::vec4( 1.f, 0.f, 0.f, 1.f ), timelineManager, timeEvaluator );
-    //auto c01 = CreateTexturedRectNode( "node01", .3f, 0.23f, glm::vec3( 0.25f, 0.0f, 0.01f ), "simless_00.jpg", timelineManager, timeEvaluator );
-    //auto c10 = CreateTexturedRectNode( "node10", .15f, 0.2f, glm::vec3( -0.32f, .0f, 0.01f ), "simless_00.jpg", timelineManager, timeEvaluator );
-    //auto c11 = CreateSolidRectNode( "node11", .2f, 0.2f, glm::vec3( -0.1f, .0f, 0.01f ), glm::vec4( 0.f, 1.f, 0.f, 1.f ), timelineManager, timeEvaluator );
-    //auto c12 = CreateSolidRectNode( "node12", .15f, 0.15f, glm::vec3( 0.12f, .0f, 0.01f ), glm::vec4( 0.f, 0.f, 1.f, 1.f ), timelineManager, timeEvaluator );
-    //auto c13 = CreateTexturedRectNode( "node13", .15f, 0.15f, glm::vec3( 0.32f, .0f, 0.01f ), "simless_00.jpg", timelineManager, timeEvaluator );
+    bTex.SetPosition( 0.f, -.6f, 0.f );
+    auto root = bTex.CreateNode( "." );
+
+    bSolid.SetPosition( -1.f,  -0.17f, 0.01f, 0.0f );
+    bSolid.SetPosition( -1.1f, -0.17f, 0.01f, 2.0f );
+    bSolid.SetPosition( -0.2f, -0.17f, 0.01f, 4.0f );
+    bSolid.SetPosition( 0.5f,  -0.17f, 0.01f, 6.0f );
+    bSolid.SetPosition( 1.2f,  -0.17f, 0.01f, 9.0f );
+    auto c0 = bSolid.CreateNode( "node0", true );
+
+    bSolid.SetColor( 1.f, 0.f, 1.f, 1.f );
+    bSolid.SetPosition( 1.3f, 0.17f, 0.01f, 0.0f);
+    bSolid.SetPosition( 0.6f, 0.17f, 0.01f, 4.0f);
+    bSolid.SetPosition( -0.5f, 0.17f, 0.01f, 7.0f );
+    bSolid.SetPosition( -1.2f, 0.17f, 0.01f, 8.0f );
+    bSolid.SetPosition( -0.3f, 0.17f, 0.01f, 9.0f );
+    bSolid.SetPosition(  1.2f, 0.17f, 0.01f, 14.0f );
+    auto c1 = bSolid.CreateNode( "node1" );
 
     root->AddChild( c0 );
     root->AddChild( c1 );
@@ -131,22 +142,6 @@ model::BasicNode *  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::Timeli
     //c1->AddChild( c11 );
     //c1->AddChild( c12 );
     //c1->AddChild( c13 );
-
-    auto c0tr = c0->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-    auto c1tr = c1->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-
-    SetParameterTranslation( c0tr, 0, 0.0f, glm::vec3( -1.f, -0.17f, 0.f ) );
-    SetParameterTranslation( c0tr, 0, 2.0f, glm::vec3( -1.1f, -0.17f, 0.f ) );
-    SetParameterTranslation( c0tr, 0, 4.0f, glm::vec3( -0.2f, -0.17f, 0.f ) );
-    SetParameterTranslation( c0tr, 0, 6.0f, glm::vec3( 0.5f, -0.17f, 0.f ) );
-    SetParameterTranslation( c0tr, 0, 9.0f, glm::vec3( 1.2f, -0.17f, 0.f ) );
-
-    SetParameterTranslation( c1tr, 0, 0.0f, glm::vec3( 1.3f, 0.17f, 0.f ) );
-    SetParameterTranslation( c1tr, 0, 4.0f, glm::vec3( 0.6f, 0.17f, 0.f ) );
-    SetParameterTranslation( c1tr, 0, 7.0f, glm::vec3( -0.5f, 0.17f, 0.f ) );
-    SetParameterTranslation( c1tr, 0, 8.0f, glm::vec3( -1.2f, 0.17f, 0.f ) );
-    SetParameterTranslation( c1tr, 0, 9.0f, glm::vec3( -0.3f, 0.17f, 0.f ) );
-    SetParameterTranslation( c1tr, 0, 14.0f, glm::vec3( 1.2f, 0.17f, 0.f ) );
 
     return root;
 }

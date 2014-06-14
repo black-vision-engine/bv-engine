@@ -3,32 +3,58 @@
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "System/BasicTypes.h"
-
+#include "Engine/Models/Interfaces/ITimeEvaluator.h"
 
 namespace bv {
 
 class RectNodeBuilder
 {
-private:
+protected:
 
-    model::ParamFloat       m_w;
-    model::ParamFloat       m_h;
-    model::ParamTransform   m_transform;
+    model::BasicNode *          m_node;
+    model::ITimeEvaluatorPtr    m_timeEvaluator;
+    std::string                 m_shaderPluginUID;
+
+    std::string                 m_transformPluginName;
+    std::string                 m_rectPluginName;
+
+    float                       m_w;
+    float                       m_h;
+    float                       m_t;
 
 protected:
 
-    RectBuilder             ( float w = 1.0f, float h = 1.0f, TimeType t = TimeType( 0.0 ) );
+    RectNodeBuilder             ( model::ITimeEvaluatorPtr timeEvaluator, const std::string & shaderPluginUID, float w = 1.0f, float h = 1.0f, TimeType t = TimeType( 0.0 ) );
 
 public:
 
-    ~RectBuilder            ();
+    virtual ~RectNodeBuilder    ();
 
-    void        SetW        ( float w, TimeType t = TimeType( 0.0 ) );
-    void        SetH        ( float w, TimeType t = TimeType( 0.0 ) );
+    void                        SetW                ( float w, TimeType t = TimeType( 0.0 ) );
+    void                        SetH                ( float h, TimeType t = TimeType( 0.0 ) );
 
-    void        SetPosition ( const glm::vec3 & pos, TimeType t = TimeType( 0.0 ) );
-    void        SetRotation ( const glm::vec3 & axis, float angle, TimeType t = TimeType( 0.0 ) );
-    void        SetScale    ( const glm::vec3 & scl, TimeType t = TimeType( 0.0 ) );
+    void                        SetPosition         ( float x, float y, float z, TimeType t = TimeType( 0.0 ) );
+    void                        SetRotation         ( float x, float y, float z, float angle, TimeType t = TimeType( 0.0 ) );
+    void                        SetScale            ( float sx, float sy, float sz, TimeType t = TimeType( 0.0 ) );
+
+    model::BasicNode *          CreateNode          ( const std::string & name, bool resetToBuilderDefaults = false );
+    virtual void                SetDefaults         ();
+
+    std::string                 TransformPluginName () const;
+    std::string                 RectPluginName      () const;
+    virtual std::string         ShaderPluginName    () const = 0;
+
+    std::string                 WidthParamName      () const;
+    std::string                 HeightParamName     () const;
+    std::string                 TransformParamName  () const;
+
+protected:
+
+    model::IPlugin *            GetTRansformPlugin  ();
+    model::IPlugin *            GetRectPlugin       ();
+    model::IPlugin *            GetShaderPlugin     ();
+
+    model::BasicNode *          CreateNewNode       () const;
 
 };
 
@@ -36,13 +62,33 @@ class SolidRectNodeBuilder : public RectNodeBuilder
 {
 private:
 
-    model::ParamVec4        m_color;
+    glm::vec4 m_color;
 
 public:
 
-    SolidRectNodeBuilder ( const glm::vec4 & color = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ), float w = 1.0f, float h = 1.0f, TimeType t = TimeType( 0.0 ) );
-    SolidRectNodeBuilder ( const glm::vec4 & color = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ), float w = 1.0f, float h = 1.0f, TimeType t = TimeType( 0.0 ) );
+    SolidRectNodeBuilder    ( model::ITimeEvaluatorPtr timeEvaluator, const glm::vec4 & color = glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ), float w = 1.0f, float h = 1.0f, TimeType t = TimeType( 0.0 ) );
+    ~SolidRectNodeBuilder   ();
+
+    void                    SetColor        ( float r, float g, float b, float a, TimeType t = TimeType( 0.0 ) );
+    virtual void            SetDefaults     () override;
+
+    virtual std::string     ShaderPluginName() const override;
+
+    std::string             ColorParamName  () const;
+
 };
 
+class TexturedRectNodeBuilder : public RectNodeBuilder
+{
+public:
+
+    TexturedRectNodeBuilder     ( model::ITimeEvaluatorPtr timeEvaluator, const std::string & textureFile, float w = 1.0f, float h = 1.0f, TimeType t = TimeType( 0.0 ) );
+    ~TexturedRectNodeBuilder    ();
+
+    void    SetTextureFile      ( const std::string & textureFile );
+
+    virtual std::string         ShaderPluginName() const override;
+
+};
 
 } //bv
