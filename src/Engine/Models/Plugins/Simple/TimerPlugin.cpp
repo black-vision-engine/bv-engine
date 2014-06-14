@@ -139,7 +139,7 @@ TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
 
 ////////////////////////////
 //
-TimerPlugin*                        TimerPlugin::Create     ( const ParamFloat& timeParam, unsigned int fontSize )
+TimerPlugin *                       TimerPlugin::Create     ( const ParamFloat& timeParam, unsigned int fontSize )
 {
     return new TimerPlugin( timeParam, fontSize );
 }

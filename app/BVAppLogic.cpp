@@ -211,7 +211,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
             node->EnableOverrideState();
 
             //auto txplugin = m_modelScene->GetSceneRoot()->GetPlugin("texture");
-            //txplugin->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->blendEnabled = true;
+            //txplugin->GetRendererContext()->alphaCtx->blendEnabled = true;
         }
 
         if (t > 9.f && alphaFired )
@@ -221,7 +221,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
             //SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), t, glm::vec4( 0.f, 1.f, 1.f, 1.f ) );
             //root->GetNode("node0")->DisableOverrideState();
             //auto txplugin = m_modelScene->GetSceneRoot()->GetPlugin("texture");
-            //txplugin->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->blendEnabled = false;
+            //txplugin->GetRendererContext()->alphaCtx->blendEnabled = false;
         }
 
         //FIXME: remove END

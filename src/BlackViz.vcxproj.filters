@@ -458,6 +458,7 @@
     <ClInclude Include="Engine\Models\Resources\TextureHelpers.h" />
     <ClInclude Include="Engine\Models\Interfaces\IOverrideState.h" />
     <ClInclude Include="Engine\Models\BasicOverrideState.h" />
+    <ClInclude Include="Engine\Models\Plugins\Interfaces\IFinalizePlugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

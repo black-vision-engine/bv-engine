@@ -13,6 +13,7 @@ class SceneNode;
 namespace model {
 
 class IPlugin;
+class IFinalizePlugin;
 class IPluginListFinalized;
 class IOverrideState;
 
@@ -23,6 +24,7 @@ public:
     virtual const std::string &             GetName             () const                                                            = 0;
 
     virtual IPlugin *                       GetPlugin           ( const std::string & name ) const                                  = 0;
+    virtual const IFinalizePlugin *         GetFinalizePlugin   () const                                                            = 0;
 
     virtual IModelNode *                    GetNode             ( const std::string & path, const std::string & separator = "/" )   = 0;
     virtual IModelNode *                    GetChild            ( const std::string & name )                                        = 0;

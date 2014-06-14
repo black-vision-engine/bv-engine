@@ -61,6 +61,8 @@ public:
     virtual ~BasicNode();
 
     virtual IPlugin *                       GetPlugin               ( const std::string & name ) const override;
+    virtual const IFinalizePlugin *         GetFinalizePlugin       () const override;
+
     virtual IModelNode *                    GetNode                 ( const std::string & path, const std::string & separator = "/" ) override;
     virtual IModelNode *                    GetChild                ( const std::string & name ) override;
     virtual IModelNode *                    GetLayer                ( const std::string & name ) override;

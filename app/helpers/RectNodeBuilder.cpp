@@ -209,7 +209,7 @@ void    SolidRectNodeBuilder::SetColor        ( float r, float g, float b, float
 
     if( a < 1.0f )
     {
-        GetShaderPlugin()->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->blendEnabled = true;
+        GetShaderPlugin()->GetRendererContext()->alphaCtx->blendEnabled = true;
     }
 }
 
@@ -265,11 +265,11 @@ void    TexturedRectNodeBuilder::SetTextureFile      ( const std::string & textu
 
     if( hasAlpha )
     {
-        GetShaderPlugin()->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->blendEnabled = true;
+        GetShaderPlugin()->GetRendererContext()->alphaCtx->blendEnabled = true;
     }
     else
     {
-        GetShaderPlugin()->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->blendEnabled = false;
+        GetShaderPlugin()->GetRendererContext()->alphaCtx->blendEnabled = false;
     }
 }
 

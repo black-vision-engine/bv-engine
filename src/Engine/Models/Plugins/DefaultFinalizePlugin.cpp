@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
+
 
 namespace bv { namespace model {
 
@@ -109,6 +111,20 @@ const IGeometryShaderChannel *      DefaultFinalizePlugin::GetGeometryShaderChan
     assert( m_prevPlugin );
 
     return m_prevPlugin->GetGeometryShaderChannel();
+}
+
+// *******************************
+//
+const RendererContext *             DefaultFinalizePlugin::GetRendererContext          () const
+{
+    auto psc = GetPixelShaderChannel();
+
+    if( psc )
+    {
+        return psc->GetRendererContext();
+    }
+
+    return nullptr;
 }
 
 // *******************************

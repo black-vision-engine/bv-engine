@@ -6,6 +6,8 @@
 
 #include "System/Print.h"
 
+#include "Engine/Models/Plugins/Interfaces/IFinalizePlugin.h"
+
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/ConstantsMapper.h"
 
@@ -72,6 +74,13 @@ BasicNode::~BasicNode()
 IPlugin *                       BasicNode::GetPlugin                ( const std::string & name ) const
 {
     return m_pluginList->GetPlugin( name );
+}
+
+// ********************************
+//
+const IFinalizePlugin *         BasicNode::GetFinalizePlugin        () const
+{
+    return m_pluginList->GetFinalizePlugin();
 }
 
 // ********************************
@@ -216,7 +225,7 @@ void                        BasicNode::SetName                      ( const std:
 //
 SceneNode *                 BasicNode::BuildScene()
 {
-    const IPlugin * finalizer = m_pluginList->GetFinalizePlugin();
+    const IPlugin * finalizer = GetFinalizePlugin();
 
     SceneNode * node = CreateSceneNode( finalizer );
 
@@ -479,7 +488,7 @@ bool                                BasicNode::CreateRenderableData     (/* Vert
         return false;
     }
 
-    auto components = m_pluginList->GetFinalizePlugin()->GetVertexAttributesChannel()->GetComponents();
+    auto components = GetFinalizePlugin()->GetVertexAttributesChannel()->GetComponents();
 
     if( components.empty() )
     {
@@ -569,7 +578,7 @@ RenderableArrayDataSingleVertexBuffer * BasicNode::CreateRenderableArrayData( Pr
         return nullptr;
     }
 
-    auto vaChannel = m_pluginList->GetFinalizePlugin()->GetVertexAttributesChannel();
+    auto vaChannel = GetFinalizePlugin()->GetVertexAttributesChannel();
 
     auto components = vaChannel->GetComponents();
     auto geomDesc = vaChannel->GetDescriptor();
@@ -601,7 +610,7 @@ RenderableArrayDataArraysSingleVertexBuffer *   BasicNode::CreateRenderableArray
         return nullptr;
     }
 
-    auto vaChannel = m_pluginList->GetFinalizePlugin()->GetVertexAttributesChannel();
+    auto vaChannel = GetFinalizePlugin()->GetVertexAttributesChannel();
 
     if( vaChannel == nullptr )
     {

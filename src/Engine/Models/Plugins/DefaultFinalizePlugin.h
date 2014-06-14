@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Interfaces/IPlugin.h"
+#include "Engine/Models/Plugins/Interfaces/IFinalizePlugin.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
 
 
 namespace bv { namespace model {
 
-class DefaultFinalizePlugin : public IPlugin
+class DefaultFinalizePlugin : public IFinalizePlugin
 {
 private:
 
@@ -34,7 +34,9 @@ public:
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
     virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const override;
-                                         
+                 
+    virtual const RendererContext *             GetRendererContext          () const override;
+
     virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr ) override;
 
     virtual void                                Update                      ( TimeType t ) override;
