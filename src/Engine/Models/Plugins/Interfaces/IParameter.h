@@ -13,6 +13,9 @@ namespace bv { namespace model {
 class IParameter;
 typedef std::shared_ptr< IParameter > IParameterPtr;
 
+class IParameter;
+typedef std::shared_ptr< const IParameter > IParameterConstPtr;
+
 class IParameter
 {
 public:
@@ -32,7 +35,7 @@ public:
 // *********************************
 //
 template< typename ParamType >
-ParamType * QueryTypedParam( IParameter * param )
+ParamType * QueryTypedParam( IParameterPtr param )
 {
     if( param->GetType() != ParamType::Type() )
     {
@@ -45,14 +48,14 @@ ParamType * QueryTypedParam( IParameter * param )
 // *********************************
 //
 template< typename ParamType >
-const ParamType * QueryTypedParam( const IParameter * param )
+const ParamType * QueryTypedParam( IParameterConstPtr param )
 {
     if( param->GetType() != ParamType::Type() )
     {
         return nullptr;
     }
 
-    return static_cast< ParamType * >( const_cast< IParameter * >( param )->QueryParamTyped() );
+    return static_cast< const ParamType * >( std::const_pointer_cast< IParameterPtr >( param )->QueryParamTyped() );
 }
 
 void    SetParamTimeline( IParameter * param, ITimeEvaluatorPtr timeline );

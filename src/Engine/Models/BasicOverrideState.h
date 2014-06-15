@@ -13,10 +13,10 @@ class BasicOverrideState : public IOverrideState
 {
 private:
 
-    ParamFloat *        m_param;
-    ValueFloat *        m_value;
+    ParamFloatPtr       m_param;
+    ValueFloatPtr       m_value;
 
-    const ValueFloat *  m_curVal;
+    ValueFloatConstPtr  m_curVal;
 
     bool                m_enabled;
     bool                m_overriden;
@@ -44,11 +44,11 @@ public:
     virtual void                DisableAlpha        () override;
     virtual void                EnableAlpha         () override;
 
-    virtual IParameter *        GetAlphaParam       () override;
-    virtual const IValue *      GetAlphaValue       () const override;
+    virtual IParameterPtr       GetAlphaParam       () override;
+    virtual IValueConstPtr      GetAlphaValue       () const override;
 
-    virtual void                SetCurAlphaVal      ( const IValue * val ) override;
-    virtual const IValue *      GetCurAlphaVal      () const override;
+    virtual void                SetCurAlphaVal      ( IValueConstPtr val ) override;
+    virtual IValueConstPtr      GetCurAlphaVal      () const override;
 
 };
 

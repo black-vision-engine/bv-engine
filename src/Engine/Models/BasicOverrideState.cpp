@@ -1,6 +1,7 @@
 #include "BasicOverrideState.h"
 
 #include "Engine/Types/Values/ValuesFactory.h"
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
 
 namespace bv { namespace model {
@@ -15,7 +16,7 @@ BasicOverrideState::BasicOverrideState  ( ITimeEvaluatorPtr timeEvaluator )
     , m_overriden( false )
     , m_changed( false )
 {
-    m_param = new ParamFloat( "overrideAlpha", FloatInterpolator(), timeEvaluator );
+    m_param = ParametersFactory::CreateParameterFloat( "overrideAlpha", timeEvaluator );
     m_value = ValuesFactory::CreateValueFloat("overrideAlpha" );
 
     m_param->SetVal( 1.f, 0.f ); //Default model
@@ -26,10 +27,7 @@ BasicOverrideState::BasicOverrideState  ( ITimeEvaluatorPtr timeEvaluator )
 // ****************************
 //
 BasicOverrideState::~BasicOverrideState ()
-{
-    delete m_param;
-    delete m_value;
-}
+{}
 
 // ****************************
 //
@@ -136,21 +134,21 @@ void                BasicOverrideState::EnableAlpha         ()
 
 // ****************************
 //
-IParameter *        BasicOverrideState::GetAlphaParam       ()
+IParameterPtr        BasicOverrideState::GetAlphaParam       ()
 {
     return m_param;
 }
 
 // ****************************
 //
-const IValue *      BasicOverrideState::GetAlphaValue       () const
+IValueConstPtr      BasicOverrideState::GetAlphaValue       () const
 {
     return m_value;
 }
 
 // ****************************
 //
-void                BasicOverrideState::SetCurAlphaVal      ( const IValue * val )
+void                BasicOverrideState::SetCurAlphaVal      ( IValueConstPtr val )
 {    
     if( val == nullptr )
     {
@@ -158,7 +156,7 @@ void                BasicOverrideState::SetCurAlphaVal      ( const IValue * val
     }
     else
     {
-        auto tv = QueryTypedValue< ValueFloat >( val );
+        auto tv = QueryTypedValue< ValueFloatPtr >( val );
         assert( tv != nullptr );
 
         if( tv != m_value )
@@ -178,7 +176,7 @@ void                BasicOverrideState::SetCurAlphaVal      ( const IValue * val
 
 // ****************************
 //
-const IValue *      BasicOverrideState::GetCurAlphaVal      () const
+IValueConstPtr          BasicOverrideState::GetCurAlphaVal      () const
 {
     return m_curVal;
 }

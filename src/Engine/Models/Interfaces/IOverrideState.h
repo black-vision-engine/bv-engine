@@ -29,11 +29,11 @@ public:
     virtual void                DisableAlpha    ()                      = 0;
     virtual void                EnableAlpha     ()                      = 0;
 
-    virtual IParameter *        GetAlphaParam   ()                      = 0;
-    virtual const IValue *      GetAlphaValue   () const                = 0;
+    virtual IParameterPtr       GetAlphaParam   ()                      = 0;
+    virtual IValueConstPtr      GetAlphaValue   () const                = 0;
 
-    virtual void                SetCurAlphaVal  ( const IValue * val )  = 0;
-    virtual const IValue *      GetCurAlphaVal  () const                = 0;
+    virtual void                SetCurAlphaVal  ( IValueConstPtr val )  = 0;
+    virtual IValueConstPtr      GetCurAlphaVal  () const                = 0;
 
     virtual                     ~IOverrideState () {}
 

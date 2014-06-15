@@ -51,8 +51,8 @@ DefaultPluginParamValModel *    DefaultRectPluginDesc::CreateDefaultModel   ( IT
     DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
     DefaultParamValModel * vacModel     = new DefaultParamValModel();
 
-    ParamFloat * paramWidth             = ParametersFactory::CreateParameterFloat( "width", timeEvaluator );
-    ParamFloat * paramHeight            = ParametersFactory::CreateParameterFloat( "height", timeEvaluator );
+    ParamFloatPtr paramWidth             = ParametersFactory::CreateParameterFloat( "width", timeEvaluator );
+    ParamFloatPtr paramHeight            = ParametersFactory::CreateParameterFloat( "height", timeEvaluator );
 
     vacModel->AddParameter( paramWidth );
     vacModel->AddParameter( paramHeight );

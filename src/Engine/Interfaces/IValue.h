@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "Engine/Types/Enums.h"
+#include "System/BasicTypes.h"
 
 
 namespace bv {
@@ -21,7 +22,7 @@ public:
     virtual const char *        GetData         ()  const = 0;
     virtual const std::string & GetName         ()  const = 0;  
 
-    virtual void *              QueryValueTyped () = 0;
+    virtual VoidPtr             QueryValueTyped () = 0;
 
     virtual ~IValue(){}
 
@@ -29,8 +30,35 @@ public:
 
 // *********************************
 //
+template< typename ValueTypePtr >
+ValueTypePtr QueryTypedValue( IValuePtr val )
+{
+    if( val->GetType() != ValueTypePtr::element_type::Type() )
+    {
+        return nullptr;
+    }
+
+    return std::static_pointer_cast< ValueTypePtr::element_type >( val->QueryValueTyped() );
+}
+
+// *********************************
+//
+template< typename ValueTypeConstPtr >
+ValueTypeConstPtr QueryTypedValue( IValueConstPtr val )
+{
+    if( val->GetType() != ValueTypeConstPtr::element_type::Type() )
+    {
+        return nullptr;
+    }
+
+    return std::static_pointer_cast< ValueTypeConstPtr::element_type >( std::const_pointer_cast< IValue >( val )->QueryValueTyped() );
+}
+
+
+// *********************************
+//
 template< typename ValueType >
-ValueType * QueryTypedValue( IValuePtr val )
+ValueType * QueryTypedValue( IValue * val )
 {
     if( val->GetType() != ValueType::Type() )
     {
@@ -43,7 +71,7 @@ ValueType * QueryTypedValue( IValuePtr val )
 // *********************************
 //
 template< typename ValueType >
-const ValueType * QueryTypedValue( IValueConstPtr val )
+const ValueType * QueryTypedValue( const IValue * val )
 {
     if( val->GetType() != ValueType::Type() )
     {

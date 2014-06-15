@@ -39,15 +39,15 @@ DefaultPluginParamValModel *    DefaultAnimationPluginDesc::CreateDefaultModel( 
     DefaultParamValModel * vsModel      = new DefaultParamValModel();
 
     //Create all parameters and evaluators
-    SimpleVec4Evaluator *      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
-    SimpleFloatEvaluator *     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
-    SimpleTransformEvaluator * trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
+    SimpleVec4EvaluatorPtr      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
+    SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
+    SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
 
-    ParamFloat *  paramFrameNum      = ParametersFactory::CreateParameterFloat( "frameNum", timeEvaluator );
-    ParamFloat *  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX", timeEvaluator );
-    ParamFloat *  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY", timeEvaluator );
-    ParamFloat *  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode", timeEvaluator );
-    ParamFloat *  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachmentMode", timeEvaluator );
+    ParamFloatPtr  paramFrameNum      = ParametersFactory::CreateParameterFloat( "frameNum", timeEvaluator );
+    ParamFloatPtr  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX", timeEvaluator );
+    ParamFloatPtr  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY", timeEvaluator );
+    ParamFloatPtr  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode", timeEvaluator );
+    ParamFloatPtr  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachmentMode", timeEvaluator );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );

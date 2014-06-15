@@ -5,7 +5,7 @@ namespace {
 // *******************************
 //
 template< typename ParamType >
-inline bool SetSimpleTypedParameter( IParameter * param, TimeType t, typename const ParamType::ValType & val )
+inline bool SetSimpleTypedParameter( IParameterPtr param, TimeType t, typename const ParamType::ValType & val )
 {
     ParamType * typedParam = QueryTypedParam< ParamType >( param );
 
@@ -25,7 +25,7 @@ inline bool SetSimpleTypedParameter( IParameter * param, TimeType t, typename co
 // *******************************
 //
 template<>
-inline bool SetParameter< float >( IParameter * param, TimeType t, const float & val )
+inline bool SetParameter< float >( IParameterPtr param, TimeType t, const float & val )
 {
     return SetSimpleTypedParameter< ParamFloat >( param, t, val );
 }
@@ -33,7 +33,7 @@ inline bool SetParameter< float >( IParameter * param, TimeType t, const float &
 // *******************************
 //
 template<>
-inline bool SetParameter< glm::vec3 >( IParameter * param, TimeType t, const glm::vec3 & val )
+inline bool SetParameter< glm::vec3 >( IParameterPtr param, TimeType t, const glm::vec3 & val )
 {
     return SetSimpleTypedParameter< ParamVec3 >( param, t, val );
 }
@@ -41,7 +41,7 @@ inline bool SetParameter< glm::vec3 >( IParameter * param, TimeType t, const glm
 // *******************************
 //
 template<>
-inline bool SetParameter< glm::vec4 >( IParameter * param, TimeType t, const glm::vec4 & val )
+inline bool SetParameter< glm::vec4 >( IParameterPtr param, TimeType t, const glm::vec4 & val )
 {
     return SetSimpleTypedParameter< ParamVec4 >( param, t, val );
 }
@@ -49,7 +49,7 @@ inline bool SetParameter< glm::vec4 >( IParameter * param, TimeType t, const glm
 // *******************************
 //
 template<>
-inline bool SetParameter< glm::mat2 >( IParameter * param, TimeType t, const glm::mat2 & val )
+inline bool SetParameter< glm::mat2 >( IParameterPtr param, TimeType t, const glm::mat2 & val )
 {
     return SetSimpleTypedParameter< ParamMat2 >( param, t, val );
 }

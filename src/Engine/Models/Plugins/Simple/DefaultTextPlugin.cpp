@@ -47,12 +47,12 @@ DefaultPluginParamValModel *    DefaultTextPluginDesc::CreateDefaultModel( ITime
 
 
     //Create all parameters and evaluators
-    SimpleVec4Evaluator *      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
-    SimpleFloatEvaluator *     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
-    SimpleTransformEvaluator * trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-    SimpleFloatEvaluator *     fontSizeEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
+    SimpleVec4EvaluatorPtr      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
+    SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
+    SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
+    SimpleFloatEvaluatorPtr     fontSizeEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
 
-    SimpleFloatEvaluator *     blurSizeEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
+    SimpleFloatEvaluatorPtr     blurSizeEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
@@ -147,7 +147,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     if ( colorParam == nullptr )
     {
         auto bcParam = this->GetParameter( "borderColor" );
-        SimpleVec4Evaluator *      colorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", bcParam->GetTimeEvaluator() );
+        SimpleVec4EvaluatorPtr      colorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", bcParam->GetTimeEvaluator() );
         static_cast< DefaultParamValModel * >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( colorEvaluator );
         colorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
     }

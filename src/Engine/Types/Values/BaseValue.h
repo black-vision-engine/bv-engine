@@ -4,11 +4,10 @@
 
 #include "Engine/Interfaces/IValue.h"
 
-
 namespace bv {
 
 // *************************************
-class NamedValue : public IValue
+class NamedValue : public IValue, public std::enable_shared_from_this< NamedValue >
 {
 private:
 
@@ -37,7 +36,7 @@ private:
 
     ValType     m_value;
 
-private:
+public:
 
     explicit                ValueImpl       ( const std::string & name );
 
@@ -48,7 +47,7 @@ public:
     virtual ParamType       GetType         () const override;
     virtual const char *    GetData         () const override;
 
-    virtual void *          QueryValueTyped () override;
+    virtual VoidPtr         QueryValueTyped () override;
 
     // *******************************
     //
@@ -109,9 +108,9 @@ const char *    ValueImpl< ValType, paramType >::GetData  () const
 // *******************************
 //
 template< typename ValType, ParamType paramType >
-void *          ValueImpl< ValType, paramType >::QueryValueTyped ()
+VoidPtr          ValueImpl< ValType, paramType >::QueryValueTyped ()
 {
-    return static_cast< void * >( this );
+    return std::static_pointer_cast< void >( shared_from_this() );
 }
 
 } //bv

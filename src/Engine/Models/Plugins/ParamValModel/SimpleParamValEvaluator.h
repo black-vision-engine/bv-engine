@@ -22,7 +22,7 @@ private:
     std::vector< IParameterPtr >        m_paramWrapper;
     std::vector< bv::IValueConstPtr >   m_valueWrapper;
 
-private:
+public:
 
                     SimpleParamValEvaluator ( ParamTypePtr param, ValueTypePtr val );
 
@@ -122,11 +122,11 @@ ValueTypePtr                                 SimpleParamValEvaluator< ParamTypeP
     return m_value;
 }
 
-typedef SimpleParamValEvaluator< ParamFloat, ValueFloat >       SimpleFloatEvaluator;
-typedef SimpleParamValEvaluator< ParamVec4, ValueVec4 >         SimpleVec4Evaluator;
-typedef SimpleParamValEvaluator< ParamVec3, ValueVec3 >         SimpleVec3Evaluator;
-typedef SimpleParamValEvaluator< ParamMat2, ValueMat2 >         SimpleMat2Evaluator;
-typedef SimpleParamValEvaluator< ParamTransform, ValueMat4 >    SimpleTransformEvaluator;
+typedef SimpleParamValEvaluator< ParamFloatPtr, ValueFloatPtr >       SimpleFloatEvaluator;
+typedef SimpleParamValEvaluator< ParamVec4Ptr, ValueVec4Ptr >         SimpleVec4Evaluator;
+typedef SimpleParamValEvaluator< ParamVec3Ptr, ValueVec3Ptr >         SimpleVec3Evaluator;
+typedef SimpleParamValEvaluator< ParamMat2Ptr, ValueMat2Ptr >         SimpleMat2Evaluator;
+typedef SimpleParamValEvaluator< ParamTransformPtr, ValueMat4Ptr >    SimpleTransformEvaluator;
 
 typedef std::shared_ptr< SimpleFloatEvaluator >                 SimpleFloatEvaluatorPtr;
 typedef std::shared_ptr< SimpleVec4Evaluator >                  SimpleVec4EvaluatorPtr;

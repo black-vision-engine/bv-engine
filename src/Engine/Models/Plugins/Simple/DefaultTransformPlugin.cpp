@@ -64,10 +64,10 @@ DefaultTransformPlugin::DefaultTransformPlugin  ( const std::string & name, cons
 
     for( auto val : trModel->GetValuesNC() )
     {
-        typedVals.push_back( QueryTypedValue< ValueMat4 >( val ) );
+        typedVals.push_back( QueryTypedValue< ValueMat4Ptr >( val ) );
     }
 
-    m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( prev, typedVals, false ) );
+    m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( prev, typedVals, false ) ); //<3
 }
 
 // *************************************

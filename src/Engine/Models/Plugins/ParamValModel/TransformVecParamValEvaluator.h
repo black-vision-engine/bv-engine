@@ -17,15 +17,15 @@ class TransformVecParamValEvaluator : public IParamValEvaluator
 {
 private:
 
-    ParamTransformVec *     m_param;
+    ParamTransformVecPtr    m_param;
     ValueMat4PtrVec         m_mat4Values;
 
     std::vector< IParameterPtr >        m_paramWrapper;
     std::vector< bv::IValueConstPtr >   m_values;
 
-private:
+public:
 
-                    TransformVecParamValEvaluator ( ParamTransformVec * param, const ValueMat4PtrVec val );
+                    TransformVecParamValEvaluator ( ParamTransformVecPtr param, const ValueMat4PtrVec val );
 
 public:
 
@@ -37,7 +37,7 @@ public:
 
     virtual void                                        Evaluate        () override;
 
-    ParamTransformVec *                                 Parameter       ();
+    ParamTransformVecPtr                                Parameter       ();
     ValueMat4PtrVec &                                   Value           ();
 
     friend class ParamValEvaluatorFactory;

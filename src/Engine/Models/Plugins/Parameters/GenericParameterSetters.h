@@ -9,7 +9,7 @@ namespace bv { namespace model {
 // *******************************
 //
 template< typename ValueType >
-inline bool SetParameter( IParameter * parameter, TimeType t, const ValueType & val )
+inline bool SetParameter( IParameterPtr parameter, TimeType t, const ValueType & val )
 {
     return false;
 }

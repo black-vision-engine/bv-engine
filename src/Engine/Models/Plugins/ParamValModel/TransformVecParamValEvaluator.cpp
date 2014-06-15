@@ -5,7 +5,7 @@ namespace bv { namespace model {
 
 // ********************************
 //
-TransformVecParamValEvaluator::TransformVecParamValEvaluator ( ParamTransformVec * param, const ValueMat4PtrVec val )
+TransformVecParamValEvaluator::TransformVecParamValEvaluator ( ParamTransformVecPtr param, const ValueMat4PtrVec val )
     : m_param( param )
     , m_mat4Values( val )
     , m_paramWrapper( 1, param )
@@ -13,7 +13,7 @@ TransformVecParamValEvaluator::TransformVecParamValEvaluator ( ParamTransformVec
     assert( param );
     assert( param->NumTransforms() == val.size() );
 
-    for( ValueMat4 * m4v : val )
+    for( auto m4v : val )
     {
         m_values.push_back( m4v );
     }
@@ -72,7 +72,7 @@ void                                        TransformVecParamValEvaluator::Evalu
 
 // ********************************
 //
-ParamTransformVec *                         TransformVecParamValEvaluator::Parameter       ()
+ParamTransformVecPtr                        TransformVecParamValEvaluator::Parameter       ()
 {
     return m_param;
 }
