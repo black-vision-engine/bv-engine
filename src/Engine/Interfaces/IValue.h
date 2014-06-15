@@ -2,11 +2,16 @@
 
 #include <cassert>
 #include <string>
+#include <memory>
 
 #include "Engine/Types/Enums.h"
 
 
 namespace bv {
+
+class IValue;
+typedef std::shared_ptr< const IValue > IValueConstPtr;
+typedef std::shared_ptr< IValue >       IValuePtr;
 
 class IValue
 {
@@ -25,7 +30,7 @@ public:
 // *********************************
 //
 template< typename ValueType >
-ValueType * QueryTypedValue( IValue * val )
+ValueType * QueryTypedValue( IValuePtr val )
 {
     if( val->GetType() != ValueType::Type() )
     {
@@ -38,7 +43,7 @@ ValueType * QueryTypedValue( IValue * val )
 // *********************************
 //
 template< typename ValueType >
-const ValueType * QueryTypedValue( const IValue * val )
+const ValueType * QueryTypedValue( IValueConstPtr val )
 {
     if( val->GetType() != ValueType::Type() )
     {

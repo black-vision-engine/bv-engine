@@ -11,33 +11,33 @@
 
 namespace bv { namespace model {
 
-template< typename ParamType, typename ValueType >
+template< typename ParamTypePtr, typename ValueTypePtr >
 class SimpleParamValEvaluator : public IParamValEvaluator
 {
 private:
 
-    ParamType *     m_param;
-    ValueType *     m_value;
+    ParamTypePtr    m_param;
+    ValueTypePtr    m_value;
 
-    std::vector< IParameter * >         m_paramWrapper;
-    std::vector< const bv::IValue * >   m_valueWrapper;
+    std::vector< IParameterPtr >        m_paramWrapper;
+    std::vector< bv::IValueConstPtr >   m_valueWrapper;
 
 private:
 
-                    SimpleParamValEvaluator ( ParamType * param, ValueType * val );
+                    SimpleParamValEvaluator ( ParamTypePtr param, ValueTypePtr val );
 
 public:
 
-    virtual std::vector< IParameter * > &               GetParameters   () override;
-    virtual const std::vector< const bv::IValue * > &   GetValues       () const override;
+    virtual std::vector< IParameterPtr > &              GetParameters   () override;
+    virtual const std::vector< bv::IValueConstPtr > &   GetValues       () const override;
     
-    virtual IParameter *                                GetParameter    ( const std::string & name ) override;
-    virtual const bv::IValue *                          GetValue        ( const std::string & name ) const override;
+    virtual IParameterPtr                               GetParameter    ( const std::string & name ) override;
+    virtual bv::IValueConstPtr                          GetValue        ( const std::string & name ) const override;
 
     virtual void                                        Evaluate        () override;
 
-    ParamType *                                         Parameter       ();
-    ValueType *                                         Value           ();
+    ParamTypePtr                                        Parameter       ();
+    ValueTypePtr                                        Value           ();
 
     friend class ParamValEvaluatorFactory;
 
@@ -45,8 +45,8 @@ public:
 
 // *******************************
 //
-template< typename ParamType, typename ValueType >
-SimpleParamValEvaluator< ParamType, ValueType >::SimpleParamValEvaluator( ParamType * param, ValueType * val )
+template< typename ParamTypePtr, typename ValueTypePtr >
+SimpleParamValEvaluator< ParamTypePtr, ValueTypePtr >::SimpleParamValEvaluator( ParamTypePtr param, ValueTypePtr val )
     : m_paramWrapper( 1, param )
     , m_valueWrapper( 1, val )
     , m_param( param )
@@ -58,24 +58,24 @@ SimpleParamValEvaluator< ParamType, ValueType >::SimpleParamValEvaluator( ParamT
 
 // *******************************
 //
-template< typename ParamType, typename ValueType >
-std::vector< IParameter * > &               SimpleParamValEvaluator< ParamType, ValueType >::GetParameters   ()
+template< typename ParamTypePtr, typename ValueTypePtr >
+std::vector< IParameterPtr > &              SimpleParamValEvaluator< ParamTypePtr, ValueTypePtr >::GetParameters   ()
 {
     return m_paramWrapper;
 }
 
 // *******************************
 //
-template< typename ParamType, typename ValueType >
-const std::vector< const bv::IValue * > &   SimpleParamValEvaluator< ParamType, ValueType >::GetValues () const
+template< typename ParamTypePtr, typename ValueTypePtr >
+const std::vector< bv::IValueConstPtr > &   SimpleParamValEvaluator< ParamTypePtr, ValueTypePtr >::GetValues () const
 {
     return m_valueWrapper;
 }
 
 // *******************************
 //
-template< typename ParamType, typename ValueType >
-IParameter *                                SimpleParamValEvaluator< ParamType, ValueType >::GetParameter    ( const std::string & name )
+template< typename ParamTypePtr, typename ValueTypePtr >
+IParameterPtr                               SimpleParamValEvaluator< ParamTypePtr, ValueTypePtr >::GetParameter    ( const std::string & name )
 {
     if( m_param->GetName() == name )
     {
@@ -87,8 +87,8 @@ IParameter *                                SimpleParamValEvaluator< ParamType, 
 
 // *******************************
 //
-template< typename ParamType, typename ValueType >
-const bv::IValue *                          SimpleParamValEvaluator< ParamType, ValueType >::GetValue        ( const std::string & name ) const
+template< typename ParamTypePtr, typename ValueTypePtr >
+bv::IValueConstPtr                         SimpleParamValEvaluator< ParamTypePtr, ValueTypePtr >::GetValue        ( const std::string & name ) const
 {
     if( m_value->GetName() == name )
     {
@@ -100,24 +100,24 @@ const bv::IValue *                          SimpleParamValEvaluator< ParamType, 
 
 // *******************************
 //
-template< typename ParamType, typename ValueType >
-void                                        SimpleParamValEvaluator< ParamType, ValueType >::Evaluate       ()
+template< typename ParamTypePtr, typename ValueTypePtr >
+void                                        SimpleParamValEvaluator< ParamTypePtr, ValueTypePtr >::Evaluate       ()
 {
     m_value->SetValue( m_param->Evaluate() );
 }
 
 // *******************************
 //
-template< typename ParamType, typename ValueType >
-ParamType *                                 SimpleParamValEvaluator< ParamType, ValueType >::Parameter       ()
+template< typename ParamTypePtr, typename ValueTypePtr >
+ParamTypePtr                                 SimpleParamValEvaluator< ParamTypePtr, ValueTypePtr >::Parameter       ()
 {
     return m_param;
 }
 
 // *******************************
 //
-template< typename ParamType, typename ValueType >
-ValueType *                                 SimpleParamValEvaluator< ParamType, ValueType >::Value           ()
+template< typename ParamTypePtr, typename ValueTypePtr >
+ValueTypePtr                                 SimpleParamValEvaluator< ParamTypePtr, ValueTypePtr >::Value           ()
 {
     return m_value;
 }
@@ -127,6 +127,12 @@ typedef SimpleParamValEvaluator< ParamVec4, ValueVec4 >         SimpleVec4Evalua
 typedef SimpleParamValEvaluator< ParamVec3, ValueVec3 >         SimpleVec3Evaluator;
 typedef SimpleParamValEvaluator< ParamMat2, ValueMat2 >         SimpleMat2Evaluator;
 typedef SimpleParamValEvaluator< ParamTransform, ValueMat4 >    SimpleTransformEvaluator;
-    
+
+typedef std::shared_ptr< SimpleFloatEvaluator >                 SimpleFloatEvaluatorPtr;
+typedef std::shared_ptr< SimpleVec4Evaluator >                  SimpleVec4EvaluatorPtr;
+typedef std::shared_ptr< SimpleVec3Evaluator >                  SimpleVec3EvaluatorPtr;
+typedef std::shared_ptr< SimpleMat2Evaluator >                  SimpleMat2EvaluatorPtr;
+typedef std::shared_ptr< SimpleTransformEvaluator >             SimpleTransformEvaluatorPtr;
+
 } //model
 } //bv

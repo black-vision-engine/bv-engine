@@ -3,6 +3,8 @@
 #include <vector>
 
 #include "Engine/Models/Plugins/Interfaces/IParamValModel.h"
+#include "Engine/Models/Plugins/Interfaces/IParameter.h"
+#include "Engine/Models/Plugins/Interfaces/IParamValEvaluator.h"
 
 
 namespace bv { namespace model {
@@ -11,32 +13,32 @@ class DefaultParamValModel : public IParamValModel
 {
 private:
 
-    std::vector< IParameter * >             m_parameters;
-    std::vector< const bv::IValue * >       m_values;
-    std::vector< bv::IValue * >             m_valuesNC;
-    std::vector< IParamValEvaluator * >     m_evaluators;
+    std::vector< IParameterPtr >            m_parameters;
+    std::vector< bv::IValueConstPtr >       m_values;
+    std::vector< IParamValEvaluatorPtr >    m_evaluators;
+    std::vector< bv::IValuePtr >            m_valuesNC;
 
 public:
 
             DefaultParamValModel            ();
             ~DefaultParamValModel           ();
                                         
-    virtual std::vector< IParameter * > &               GetParameters   () override;
-    virtual const std::vector< const bv::IValue * > &   GetValues       () const override;
-    virtual std::vector< IParamValEvaluator * > &       GetEvaluators   () override;
+    virtual std::vector< IParameterPtr > &              GetParameters   () override;
+    virtual const std::vector< bv::IValueConstPtr > &   GetValues       () const override;
+    virtual std::vector< IParamValEvaluatorPtr > &      GetEvaluators   () override;
 
-    virtual IParameter *                                GetParameter    ( const std::string & name ) override;
-    virtual const bv::IValue *                          GetValue        ( const std::string & name ) const override;
+    virtual IParameterPtr                               GetParameter    ( const std::string & name ) override;
+    virtual bv::IValueConstPtr                          GetValue        ( const std::string & name ) const override;
 
     virtual void                                        Update          () override;
 
-    void                                                AddParameter    ( IParameter * param );
-    void                                                AddValue        ( bv::IValue * val );
-    void                                                AddValue        ( const bv::IValue * val );
-    void                                                AddEvaluator    ( IParamValEvaluator * evaluator );
-    void                                                RegisterAll     ( IParamValEvaluator * evaluator );
+    void                                                AddParameter    ( IParameterPtr param );
+    void                                                AddValue        ( bv::IValuePtr val );
+    void                                                AddValue        ( bv::IValueConstPtr val );
+    void                                                AddEvaluator    ( IParamValEvaluatorPtr evaluator );
+    void                                                RegisterAll     ( IParamValEvaluatorPtr evaluator );
 
-    const std::vector< bv::IValue * > &                 GetValuesNC     () const;
+    const std::vector< bv::IValuePtr > &                GetValuesNC     () const;
 
 };
 

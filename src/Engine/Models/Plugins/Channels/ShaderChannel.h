@@ -29,8 +29,8 @@ public:
     virtual bool                                        IsReadOnly                  () const override;  //Should also be in IChannel
     virtual void                                        PostUpdate                  () override;        //Should also be in IChannel
 
-    virtual const std::vector< const bv::IValue * > &   GetValues                   () const override;
-    virtual const bv::IValue *                          GetValue                    ( const std::string & name ) const override;
+    virtual const std::vector< bv::IValueConstPtr > &   GetValues                   () const override;
+    virtual bv::IValueConstPtr                          GetValue                    ( const std::string & name ) const override;
 
     virtual const ITexturesData *                       GetTexturesData             () const override;
 

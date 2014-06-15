@@ -17,46 +17,46 @@ DefaultParamValModel::DefaultParamValModel                                      
 //
 DefaultParamValModel::~DefaultParamValModel                                         ()
 {
-    for( auto param : m_parameters )
-    {
-        //delete param; FIXME: when parameter has to owners this line craches.
-    }
+    //for( auto param : m_parameters )
+    //{
+    //    //delete param; FIXME: when parameter has to owners this line craches.
+    //}
 
-    for( auto value : m_values )
-    {
-        // delete value; FIXME: when parameter has to owners this line craches.
-    }
+    //for( auto value : m_values )
+    //{
+    //    // delete value; FIXME: when parameter has to owners this line craches.
+    //}
 
-    for( auto evaluator : m_evaluators )
-    {
-        //delete evaluator; FIXME: when parameter has to owners this line craches.
-    }
+    //for( auto evaluator : m_evaluators )
+    //{
+    //    //delete evaluator; FIXME: when parameter has to owners this line craches.
+    //}
 }
 
 // *******************************
 //
-std::vector< IParameter * > &               DefaultParamValModel::GetParameters     ()
+std::vector< IParameterPtr > &              DefaultParamValModel::GetParameters     ()
 {
     return m_parameters;
 }
 
 // *******************************
 //
-const std::vector< const bv::IValue * > &   DefaultParamValModel::GetValues         () const
+const std::vector< bv::IValueConstPtr > &   DefaultParamValModel::GetValues         () const
 {
     return m_values;
 }
 
 // *******************************
 //
-std::vector< IParamValEvaluator * > &       DefaultParamValModel::GetEvaluators     ()
+std::vector< IParamValEvaluatorPtr > &      DefaultParamValModel::GetEvaluators     ()
 {
     return m_evaluators;
 }
 
 // *******************************
 //
-IParameter *                                DefaultParamValModel::GetParameter      ( const std::string & name )
+IParameterPtr                               DefaultParamValModel::GetParameter      ( const std::string & name )
 {
     for( auto param : m_parameters )
     {
@@ -71,7 +71,7 @@ IParameter *                                DefaultParamValModel::GetParameter  
 
 // *******************************
 //
-const bv::IValue *                          DefaultParamValModel::GetValue          ( const std::string & name ) const
+bv::IValueConstPtr                          DefaultParamValModel::GetValue          ( const std::string & name ) const
 {
     for( auto value : m_values )
     {
@@ -88,7 +88,7 @@ const bv::IValue *                          DefaultParamValModel::GetValue      
 //
 void                                        DefaultParamValModel::Update            ()
 {
-    for( IParamValEvaluator * evaluator : m_evaluators )
+    for( auto evaluator : m_evaluators )
     {
         evaluator->Evaluate();
     }
@@ -96,14 +96,14 @@ void                                        DefaultParamValModel::Update        
 
 // *******************************
 //
-void                                        DefaultParamValModel::AddParameter      ( IParameter * param )
+void                                        DefaultParamValModel::AddParameter      ( IParameterPtr param )
 {
-    m_parameters.push_back( param );
+    m_parameters.push_back( IParameterPtr( param ) );
 }
 
 // *******************************
 //
-void                                        DefaultParamValModel::AddValue          ( bv::IValue * val )
+void                                        DefaultParamValModel::AddValue          ( bv::IValuePtr val )
 {
     m_values.push_back( val );
     m_valuesNC.push_back( val );
@@ -111,22 +111,22 @@ void                                        DefaultParamValModel::AddValue      
 
 // *******************************
 //
-void                                        DefaultParamValModel::AddValue          ( const bv::IValue * val )
+void                                        DefaultParamValModel::AddValue          ( bv::IValueConstPtr val )
 {
     m_values.push_back( val );
-    m_valuesNC.push_back( const_cast< bv::IValue * >( val ) );
+    m_valuesNC.push_back( bv::IValuePtr( const_cast< bv::IValue * >( val.get() ) ) );
 }
 
 // *******************************
 //
-void                                        DefaultParamValModel::AddEvaluator      ( IParamValEvaluator * evaluator )
+void                                        DefaultParamValModel::AddEvaluator      ( IParamValEvaluatorPtr evaluator )
 {
     m_evaluators.push_back( evaluator );
 }
 
 // *******************************
 //
-void                                        DefaultParamValModel::RegisterAll       ( IParamValEvaluator * evaluator )
+void                                        DefaultParamValModel::RegisterAll       ( IParamValEvaluatorPtr evaluator )
 {
     AddEvaluator( evaluator );
 
@@ -143,7 +143,7 @@ void                                        DefaultParamValModel::RegisterAll   
 
 // *******************************
 //
-const std::vector< bv::IValue * > &         DefaultParamValModel::GetValuesNC       () const
+const std::vector< bv::IValuePtr > &         DefaultParamValModel::GetValuesNC       () const
 {
     return m_valuesNC;
 }

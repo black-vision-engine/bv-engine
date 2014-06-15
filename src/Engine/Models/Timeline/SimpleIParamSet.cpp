@@ -5,14 +5,14 @@ namespace bv { namespace model {
 
 // *********************************
 //
-std::vector< IParameter * > &       SimpleIParamSet::GetParameters       ()
+std::vector< IParameterPtr > &      SimpleIParamSet::GetParameters       ()
 {
     return m_parameters;
 }
 
 // *********************************
 //
-IParameter *                        SimpleIParamSet::GetParameter        ( const std::string & name )
+IParameterPtr                       SimpleIParamSet::GetParameter        ( const std::string & name )
 {
     for( auto param : m_parameters )
     {
@@ -27,7 +27,7 @@ IParameter *                        SimpleIParamSet::GetParameter        ( const
 
 // *********************************
 //Name duplicates are allowed, but stored pointers must me be unique
-bool                             SimpleIParamSet::AddParameter        ( IParameter * param )
+bool                             SimpleIParamSet::AddParameter        ( IParameterPtr param )
 {
     if( std::find( m_parameters.begin(), m_parameters.end(), param ) == m_parameters.end() )
     {
@@ -41,7 +41,7 @@ bool                             SimpleIParamSet::AddParameter        ( IParamet
 
 // *********************************
 //
-bool                                SimpleIParamSet::RemoveParameter     ( IParameter * param )
+bool                                SimpleIParamSet::RemoveParameter     ( IParameterPtr param )
 {
     auto it = std::find( m_parameters.begin(), m_parameters.end(), param );
 

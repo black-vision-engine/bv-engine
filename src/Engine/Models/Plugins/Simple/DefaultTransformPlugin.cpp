@@ -28,7 +28,7 @@ DefaultPluginParamValModel *    DefaultTransformPluginDesc::CreateDefaultModel  
 {
     DefaultPluginParamValModel * model          = new DefaultPluginParamValModel();
     DefaultParamValModel * trModel              = new DefaultParamValModel();
-    TransformVecParamValEvaluator * evaluator   = ParamValEvaluatorFactory::CreateTransformVecEvaluator( "simple_transform", timeEvaluator );
+    auto evaluator                              = ParamValEvaluatorFactory::CreateTransformVecEvaluator( "simple_transform", timeEvaluator );
 
     trModel->RegisterAll( evaluator );
     model->SetTransformChannelModel( trModel );

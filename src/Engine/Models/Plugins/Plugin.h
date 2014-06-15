@@ -37,8 +37,8 @@ public:
     virtual                                     ~BasePlugin                 ();
 
     virtual IPluginParamValModel *              GetPluginParamValModel      () const override;
-    virtual IParameter *                        GetParameter                ( const std::string & name ) const override;
-    virtual const bv::IValue *                  GetValue                    ( const std::string & name ) const override;
+    virtual IParameterPtr                       GetParameter                ( const std::string & name ) const override;
+    virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const override;
 
     virtual void                                Update                      ( TimeType t );
 
@@ -111,7 +111,7 @@ IPluginParamValModel *      BasePlugin< Iface >::GetPluginParamValModel () const
 // *******************************
 //
 template< class Iface >
-IParameter *                BasePlugin< Iface >::GetParameter           ( const std::string & name ) const
+IParameterPtr               BasePlugin< Iface >::GetParameter           ( const std::string & name ) const
 {
     IPluginParamValModel * pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
     
@@ -123,7 +123,7 @@ IParameter *                BasePlugin< Iface >::GetParameter           ( const 
                                     , pvm->GetGeometryShaderChannelModel() 
                                 };
 
-    IParameter * retParam = nullptr;
+    IParameterPtr retParam = nullptr;
 
     for( auto model : models )
     {
@@ -139,7 +139,7 @@ IParameter *                BasePlugin< Iface >::GetParameter           ( const 
 // *******************************
 //
 template< class Iface >
-const bv::IValue *          BasePlugin< Iface >::GetValue           ( const std::string & name ) const
+bv::IValueConstPtr         BasePlugin< Iface >::GetValue           ( const std::string & name ) const
 {
     IPluginParamValModel * pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
     
@@ -151,7 +151,7 @@ const bv::IValue *          BasePlugin< Iface >::GetValue           ( const std:
                                     , pvm->GetGeometryShaderChannelModel() 
                                 };
 
-    const bv::IValue * retVal = nullptr;
+    bv::IValueConstPtr retVal = nullptr;
 
     for( auto model : models )
     {

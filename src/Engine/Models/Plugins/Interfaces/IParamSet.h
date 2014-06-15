@@ -2,17 +2,16 @@
 
 #include <vector>
 
+#include "Engine/Models/Plugins/Interfaces/IParameter.h"
 
 namespace bv { namespace model {
-
-class IParameter;
 
 class IParamSet
 {
 public:
 
-    virtual std::vector< IParameter * > &       GetParameters       () = 0;
-    virtual IParameter *                        GetParameter        ( const std::string & name ) = 0;
+    virtual std::vector< IParameterPtr > &      GetParameters       () = 0;
+    virtual IParameterPtr                       GetParameter        ( const std::string & name ) = 0;
 
     virtual ~IParamSet(){}
 

@@ -456,7 +456,7 @@ model::BasicNode *     TestScenesFactory::NewModelTestScene     ( const model::P
     //return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 2 );
-    return SimpleNodesFactory::CreateTextWithShadowNode( timelineManager, timeEvaluator, 5, glm::vec3( 0.0f, -0.01f, -0.05f ) );
+    return SimpleNodesFactory::CreateTextWithShadowNode( timelineManager, timeEvaluator, 3, glm::vec3( 0.05f, -0.05f, -0.01f ) );
 
 }
 

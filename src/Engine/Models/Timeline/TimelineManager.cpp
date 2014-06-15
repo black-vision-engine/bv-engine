@@ -326,7 +326,7 @@ IParamSet *             TimelineManager::GetRegisteredParameters        ( const 
 
 // *********************************
 //
-bool                    TimelineManager::AddParamToTimeline             ( IParameter * param, const std::string & timelineName )
+bool                    TimelineManager::AddParamToTimeline             ( IParameterPtr param, const std::string & timelineName )
 {
     assert( param != nullptr );
 
@@ -337,7 +337,7 @@ bool                    TimelineManager::AddParamToTimeline             ( IParam
 
 // *********************************
 //
-bool                    TimelineManager::AddParamToTimeline             ( IParameter * param, ITimeEvaluatorPtr timeline )
+bool                    TimelineManager::AddParamToTimeline             ( IParameterPtr param, ITimeEvaluatorPtr timeline )
 {
     assert( param != nullptr );
 
@@ -377,7 +377,7 @@ unsigned int            TimelineManager::RemoveParamFromTimeline        ( const 
 
     if( params != nullptr )
     {
-        std::vector< IParameter * > paramBuf;
+        std::vector< IParameterPtr > paramBuf;
 
         for( auto param : params->GetParameters() )
         {
@@ -402,7 +402,7 @@ unsigned int            TimelineManager::RemoveParamFromTimeline        ( const 
 
 // *********************************
 //
-bool                    TimelineManager::RemoveParamFromTimeline        ( IParameter * param, const std::string & timelineName )
+bool                    TimelineManager::RemoveParamFromTimeline        ( IParameterPtr param, const std::string & timelineName )
 {
     auto timeline = GetTimeEvaluator( timelineName );
     
@@ -411,7 +411,7 @@ bool                    TimelineManager::RemoveParamFromTimeline        ( IParam
 
 // *********************************
 //
-bool                    TimelineManager::RemoveParamFromTimeline        ( IParameter * param, const ITimeEvaluatorPtr timeline )
+bool                    TimelineManager::RemoveParamFromTimeline        ( IParameterPtr param, const ITimeEvaluatorPtr timeline )
 {
     assert( param != nullptr );
 
@@ -466,7 +466,7 @@ SimpleIParamSet *       TimelineManager::GetParamSet                     ( ITime
 
 // *********************************
 //
-bool                    TimelineManager::DeregisterParam                 ( IParameter * param, ITimeEvaluatorPtr timeline )
+bool                    TimelineManager::DeregisterParam                 ( IParameterPtr param, ITimeEvaluatorPtr timeline )
 {
     if( param->GetTimeEvaluator() == timeline )
     {

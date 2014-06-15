@@ -74,18 +74,18 @@ public:
     IParamSet *             GetRegisteredParameters         ( ITimeEvaluatorPtr timeline );
     IParamSet *             GetRegisteredParameters         ( const std::string & name );
 
-    bool                    AddParamToTimeline              ( IParameter * param, const std::string & timelineName );
-    bool                    AddParamToTimeline              ( IParameter * param, ITimeEvaluatorPtr timeline );
+    bool                    AddParamToTimeline              ( IParameterPtr param, const std::string & timelineName );
+    bool                    AddParamToTimeline              ( IParameterPtr param, ITimeEvaluatorPtr timeline );
 
     unsigned int            RemoveParamFromTimeline         ( const std::string & paramName, const std::string & timelineName );
-    bool                    RemoveParamFromTimeline         ( IParameter * param, const std::string & timelineName );
-    bool                    RemoveParamFromTimeline         ( IParameter * param, const ITimeEvaluatorPtr timeline );
+    bool                    RemoveParamFromTimeline         ( IParameterPtr param, const std::string & timelineName );
+    bool                    RemoveParamFromTimeline         ( IParameterPtr param, const ITimeEvaluatorPtr timeline );
 
 private:
 
     ITimeEvaluatorPtr       FindTimelineByName              ( const std::string & name, ITimeEvaluatorPtr root );
     SimpleIParamSet *       GetParamSet                     ( ITimeEvaluatorPtr timeline );
-    bool                    DeregisterParam                 ( IParameter * param, ITimeEvaluatorPtr timeline );
+    bool                    DeregisterParam                 ( IParameterPtr param, ITimeEvaluatorPtr timeline );
 
 };
 

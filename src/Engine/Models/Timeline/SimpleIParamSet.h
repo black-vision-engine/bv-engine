@@ -10,15 +10,15 @@ class SimpleIParamSet : public IParamSet
 {
 private:
 
-    std::vector< IParameter * >     m_parameters;
+    std::vector< IParameterPtr >     m_parameters;
 
 public:
 
-    virtual std::vector< IParameter * > &       GetParameters       () override;
-    virtual IParameter *                        GetParameter        ( const std::string & name ) override;
+    virtual std::vector< IParameterPtr > &      GetParameters       () override;
+    virtual IParameterPtr                       GetParameter        ( const std::string & name ) override;
 
-    bool                                        AddParameter        ( IParameter * param );
-    bool                                        RemoveParameter     ( IParameter * param );
+    bool                                        AddParameter        ( IParameterPtr param );
+    bool                                        RemoveParameter     ( IParameterPtr param );
     unsigned int                                RemoveParameters    ( const std::string & name );
 
 };

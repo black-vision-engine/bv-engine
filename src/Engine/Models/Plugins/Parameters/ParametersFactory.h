@@ -17,12 +17,12 @@ public:
     static ParamTransform       CreateParameter                     ( const std::string & name, const TransformF & interpolator, ITimeEvaluatorPtr timeline );
     static ParamTransformVec    CreateParameter                     ( const std::string & name, const TransformF & interpolator, ITimeEvaluatorPtr timeline, int dummy );
 
-    static ParamMat2 *          CreateParameterMat2                 ( const std::string & name, ITimeEvaluatorPtr timeline );
-    static ParamVec3 *          CreateParameterVec3                 ( const std::string & name, ITimeEvaluatorPtr timeline );
-    static ParamVec4 *          CreateParameterVec4                 ( const std::string & name, ITimeEvaluatorPtr timeline );
-    static ParamFloat *         CreateParameterFloat                ( const std::string & name, ITimeEvaluatorPtr timeline );
-    static ParamTransform *     CreateParameterTransform            ( const std::string & name, ITimeEvaluatorPtr timeline );
-    static ParamTransformVec *  CreateParameterTransformVec         ( const std::string & name, ITimeEvaluatorPtr timeline, int numTransforms = 1 );
+    static ParamMat2Ptr         CreateParameterMat2                 ( const std::string & name, ITimeEvaluatorPtr timeline );
+    static ParamVec3Ptr         CreateParameterVec3                 ( const std::string & name, ITimeEvaluatorPtr timeline );
+    static ParamVec4Ptr         CreateParameterVec4                 ( const std::string & name, ITimeEvaluatorPtr timeline );
+    static ParamFloatPtr        CreateParameterFloat                ( const std::string & name, ITimeEvaluatorPtr timeline );
+    static ParamTransformPtr    CreateParameterTransform            ( const std::string & name, ITimeEvaluatorPtr timeline );
+    static ParamTransformVecPtr CreateParameterTransformVec         ( const std::string & name, ITimeEvaluatorPtr timeline, int numTransforms = 1 );
 
 };
 

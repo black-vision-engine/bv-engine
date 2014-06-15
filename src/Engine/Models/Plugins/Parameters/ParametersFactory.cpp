@@ -47,44 +47,44 @@ ParamTransformVec                   ParametersFactory::CreateParameter          
 
 // *******************************
 //
-ParamMat2 *                         ParametersFactory::CreateParameterMat2                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+ParamMat2Ptr                         ParametersFactory::CreateParameterMat2                 ( const std::string & name, ITimeEvaluatorPtr timeline )
 {
-    return new ParamMat2( name, Vec4Interpolator(), timeline );
+    return std::make_shared< ParamMat2 >( name, Vec4Interpolator(), timeline );
 }
 
 // *******************************
 //
-ParamVec3 *                         ParametersFactory::CreateParameterVec3                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+ParamVec3Ptr                         ParametersFactory::CreateParameterVec3                 ( const std::string & name, ITimeEvaluatorPtr timeline )
 {
-    return new ParamVec3( name, Vec3Interpolator(), timeline );
+    return std::make_shared< ParamVec3 >( name, Vec3Interpolator(), timeline );
 }
 
 // *******************************
 //
-ParamVec4 *                         ParametersFactory::CreateParameterVec4                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+ParamVec4Ptr                         ParametersFactory::CreateParameterVec4                 ( const std::string & name, ITimeEvaluatorPtr timeline )
 {
-    return new ParamVec4( name, Vec4Interpolator(), timeline );
+    return std::make_shared< ParamVec4 >( name, Vec4Interpolator(), timeline );
 }
 
 // *******************************
 //
-ParamFloat *                        ParametersFactory::CreateParameterFloat                ( const std::string & name, ITimeEvaluatorPtr timeline )
+ParamFloatPtr                        ParametersFactory::CreateParameterFloat                ( const std::string & name, ITimeEvaluatorPtr timeline )
 {
-    return new ParamFloat( name, FloatInterpolator(), timeline );
+    return std::make_shared< ParamFloat >( name, FloatInterpolator(), timeline );
 }
 
 // *******************************
 //
-ParamTransform *                    ParametersFactory::CreateParameterTransform            ( const std::string & name, ITimeEvaluatorPtr timeline )
+ParamTransformPtr                    ParametersFactory::CreateParameterTransform            ( const std::string & name, ITimeEvaluatorPtr timeline )
 {
-    return new ParamTransform( name, TransformF(), timeline );
+    return std::make_shared< ParamTransform >( name, TransformF(), timeline );
 }
 
 // *******************************
 //
-ParamTransformVec *                 ParametersFactory::CreateParameterTransformVec         ( const std::string & name, ITimeEvaluatorPtr timeline, int numTransforms )
+ParamTransformVecPtr                 ParametersFactory::CreateParameterTransformVec         ( const std::string & name, ITimeEvaluatorPtr timeline, int numTransforms )
 {
-    ParamTransformVec * ptv = new ParamTransformVec( name, timeline );
+    ParamTransformVecPtr ptv = std::make_shared< ParamTransformVec >( name, timeline );
 
     for( int i = 0; i < numTransforms; ++i )
     {

@@ -38,7 +38,7 @@ void                                        ShaderChannel< ShaderChannelIface >:
 // *********************************
 //
 template< typename ShaderChannelIface >
-const std::vector< const bv::IValue* > &    ShaderChannel< ShaderChannelIface >::GetValues          () const
+const std::vector< bv::IValueConstPtr > &   ShaderChannel< ShaderChannelIface >::GetValues          () const
 {
     return m_values->GetValues(); 
 }
@@ -46,7 +46,7 @@ const std::vector< const bv::IValue* > &    ShaderChannel< ShaderChannelIface >:
 // *********************************
 //
 template< typename ShaderChannelIface >
-const bv::IValue *                          ShaderChannel< ShaderChannelIface >::GetValue           ( const std::string & name ) const
+bv::IValueConstPtr                          ShaderChannel< ShaderChannelIface >::GetValue           ( const std::string & name ) const
 {
     for( auto value : m_values->GetValues() )
     {

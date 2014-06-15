@@ -21,21 +21,21 @@ TransformVecParamValEvaluator::TransformVecParamValEvaluator ( ParamTransformVec
 
 // ********************************
 //
-std::vector< IParameter * > &               TransformVecParamValEvaluator::GetParameters   ()
+std::vector< IParameterPtr > &              TransformVecParamValEvaluator::GetParameters   ()
 {
     return m_paramWrapper;
 }
 
 // ********************************
 //
-const std::vector< const bv::IValue * > &   TransformVecParamValEvaluator::GetValues       () const
+const std::vector< bv::IValueConstPtr > &   TransformVecParamValEvaluator::GetValues       () const
 {
     return m_values;
 }
 
 // ********************************
 //
-IParameter *                                TransformVecParamValEvaluator::GetParameter    ( const std::string & name )
+IParameterPtr                               TransformVecParamValEvaluator::GetParameter    ( const std::string & name )
 {
     if( m_param->GetName() == name )
     {
@@ -47,7 +47,7 @@ IParameter *                                TransformVecParamValEvaluator::GetPa
 
 // ********************************
 //
-const bv::IValue *                          TransformVecParamValEvaluator::GetValue        ( const std::string & name ) const
+bv::IValueConstPtr                         TransformVecParamValEvaluator::GetValue        ( const std::string & name ) const
 {
     for( auto value : m_values )
     {

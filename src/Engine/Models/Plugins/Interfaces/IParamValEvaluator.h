@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "System/BasicTypes.h"
 
 #include "Engine/Models/Plugins/Interfaces/IParamSet.h"
@@ -8,6 +10,9 @@
 namespace bv { namespace model {
 
 class IValue;
+
+class IParamValEvaluator;
+typedef std::shared_ptr< IParamValEvaluator > IParamValEvaluatorPtr;
 
 class IParamValEvaluator : public IParamSet, public IValueSet
 {

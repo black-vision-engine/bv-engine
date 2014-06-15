@@ -64,6 +64,12 @@ typedef SimpleParameterImpl< FloatInterpolator, float, ModelParamType::MPT_FLOAT
 typedef SimpleParameterImpl< Vec4Interpolator, glm::vec4, ModelParamType::MPT_VEC4 >    ParamVec4;
 typedef SimpleParameterImpl< Vec3Interpolator, glm::vec3, ModelParamType::MPT_VEC3 >    ParamVec3;
 
+typedef std::shared_ptr< ParamFloat >   ParamFloatPtr;
+typedef std::shared_ptr< ParamVec4 >    ParamVec4Ptr;
+typedef std::shared_ptr< ParamVec3 >    ParamVec3Ptr;
+typedef std::shared_ptr< ParamMat2 >    ParamMat2Ptr;
+
+
 } //model
 } //bv
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 #include "Engine/Types/Enums.h"
 
@@ -8,6 +9,9 @@
 
 
 namespace bv { namespace model {
+
+class IParameter;
+typedef std::shared_ptr< IParameter > IParameterPtr;
 
 class IParameter
 {
