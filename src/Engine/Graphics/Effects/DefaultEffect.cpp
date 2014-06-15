@@ -120,7 +120,7 @@ void              DefaultEffect::AddOverrideParamsPS ( ShaderParameters * params
 {
     if( paramsPS && state )
     {
-        GenericShaderParam * param = ShaderParamFactory::CreateGenericParameter( state->GetAlphaValue() );
+        GenericShaderParam * param = ShaderParamFactory::CreateGenericParameter( state->GetAlphaValue().get() );
         
         paramsPS->AddParameter( param );
     }
@@ -191,7 +191,7 @@ ShaderParameters *      DefaultEffect::CreateDefaultParamsImpl ( const IShaderDa
 
         for( auto value : ds->GetValues() )
         {
-            GenericShaderParam * param = ShaderParamFactory::CreateGenericParameter( value );
+            GenericShaderParam * param = ShaderParamFactory::CreateGenericParameter( value.get() );
             assert( param != nullptr );
 
             sp->AddParameter( param );

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Engine/Interfaces/IUpdatable.h"
-
+#include "Engine/Models/Plugins/Interfaces/IParameter.h"
+#include "Engine/Interfaces/IValue.h"
 
 namespace bv { 
     

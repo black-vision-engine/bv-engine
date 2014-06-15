@@ -116,7 +116,7 @@ void  QueryRegisteredPluginDescriptors  ( const model::PluginsManager * pluginsM
 
 // *****************************
 //
-void QueryParametersGeneric    ( const std::vector< model::IParameter * > & params )
+void QueryParametersGeneric    ( const std::vector< model::IParameterPtr > & params )
 {
     printf( "Parameters:\n");
 
@@ -128,7 +128,7 @@ void QueryParametersGeneric    ( const std::vector< model::IParameter * > & para
 
 // *****************************
 //
-void QueryValuesGeneric    ( const std::vector< const IValue * > & values )
+void QueryValuesGeneric    ( const std::vector< IValueConstPtr > & values )
 {
     printf( "Parameters:\n");
 
@@ -203,15 +203,15 @@ void  QueryPropertiesDefaultScene   ( const model::PluginsManager * pluginsManag
 {
     model::BasicNode *  node = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
 
-    const model::IParameter * transform_p   = node->GetPlugin( "transform" )->GetPluginParamValModel()->GetTransformChannelModel()->GetParameter( "simple_transform" );
-    const IValue * transform_v              = node->GetPlugin( "transform" )->GetPluginParamValModel()->GetTransformChannelModel()->GetValue( "simple_transform" );
+    model::IParameterConstPtr   transform_p  = node->GetPlugin( "transform" )->GetPluginParamValModel()->GetTransformChannelModel()->GetParameter( "simple_transform" );
+    IValueConstPtr              transform_v  = node->GetPlugin( "transform" )->GetPluginParamValModel()->GetTransformChannelModel()->GetValue( "simple_transform" );
 
     //Rectangle plugin nie ma valiusow, a tylko parametry
-    const model::IParameter * width_p       = node->GetPlugin( "rectangle" )->GetPluginParamValModel()->GetTransformChannelModel()->GetParameter( "width" );
-    const model::IParameter * height_p      = node->GetPlugin( "rectangle" )->GetPluginParamValModel()->GetTransformChannelModel()->GetParameter( "height" );
+    model::IParameterConstPtr width_p       = node->GetPlugin( "rectangle" )->GetPluginParamValModel()->GetTransformChannelModel()->GetParameter( "width" );
+    model::IParameterConstPtr height_p      = node->GetPlugin( "rectangle" )->GetPluginParamValModel()->GetTransformChannelModel()->GetParameter( "height" );
 
-    const model::IParameter * color_p       = node->GetPlugin( "solid color" )->GetPluginParamValModel()->GetTransformChannelModel()->GetParameter( "color" );
-    const IValue * color_v                  = node->GetPlugin( "solid color" )->GetPluginParamValModel()->GetTransformChannelModel()->GetValue( "color" );
+    model::IParameterConstPtr color_p       = node->GetPlugin( "solid color" )->GetPluginParamValModel()->GetTransformChannelModel()->GetParameter( "color" );
+    IValueConstPtr color_v                  = node->GetPlugin( "solid color" )->GetPluginParamValModel()->GetTransformChannelModel()->GetValue( "color" );
 
     //Oczywiscie mozna pobierac wszystkie parametry/valiusy dla danego pluginu jedna metoda, ale jest tez to API powyzsze do dobierania sie do nich pojedynczo
 }
@@ -222,15 +222,15 @@ void  QueryPropertiesDefaultSceneConvenienceAPI ( const model::PluginsManager * 
 {
     model::BasicNode *  node = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
 
-    model::IParameter * transform_p = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-    const IValue * transform_v      = node->GetPlugin( "transform" )->GetValue( "simple_transform" );
+    model::IParameterPtr transform_p    = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    IValueConstPtr transform_v          = node->GetPlugin( "transform" )->GetValue( "simple_transform" );
 
     //Rectangle plugin nie ma valiusow, a tylko parametry
-    model::IParameter * width_p     = node->GetPlugin( "rectangle" )->GetParameter( "width" );
-    model::IParameter * height_p    = node->GetPlugin( "rectangle" )->GetParameter( "height" );
+    model::IParameterPtr width_p        = node->GetPlugin( "rectangle" )->GetParameter( "width" );
+    model::IParameterPtr height_p       = node->GetPlugin( "rectangle" )->GetParameter( "height" );
 
-    model::IParameter * color_p     = node->GetPlugin( "solid color" )->GetParameter( "color" );
-    const IValue * color_v          = node->GetPlugin( "solid color" )->GetValue( "color" );
+    model::IParameterPtr color_p        = node->GetPlugin( "solid color" )->GetParameter( "color" );
+    IValueConstPtr color_v              = node->GetPlugin( "solid color" )->GetValue( "color" );
 }
 
 // *****************************
@@ -241,13 +241,13 @@ void  QueryPropertiesDefaultSceneConvenienceAPIParameterSetters ( const model::P
 
     BasicNode *  node = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
 
-    IParameter * transform_p = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    IParameterPtr transform_p = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
     //Rectangle plugin nie ma valiusow, a tylko parametry
-    IParameter * width_p     = node->GetPlugin( "rectangle" )->GetParameter( "width" );
-    IParameter * height_p    = node->GetPlugin( "rectangle" )->GetParameter( "height" );
+    IParameterPtr width_p     = node->GetPlugin( "rectangle" )->GetParameter( "width" );
+    IParameterPtr height_p    = node->GetPlugin( "rectangle" )->GetParameter( "height" );
 
-    IParameter * color_p     = node->GetPlugin( "solid color" )->GetParameter( "color" );
+    IParameterPtr color_p     = node->GetPlugin( "solid color" )->GetParameter( "color" );
 
     bool success = true;
 

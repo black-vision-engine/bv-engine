@@ -65,7 +65,7 @@ ValueType * QueryTypedValue( IValue * val )
         return nullptr;
     }
 
-    return static_cast< ValueType * >( val->QueryValueTyped() );
+    return static_cast< ValueType * >( val->QueryValueTyped().get() );
 }
 
 // *********************************
@@ -78,7 +78,7 @@ const ValueType * QueryTypedValue( const IValue * val )
         return nullptr;
     }
 
-    return static_cast< const ValueType * >( const_cast< IValue * >( val )->QueryValueTyped() );
+    return static_cast< const ValueType * >( const_cast< IValue * >( val )->QueryValueTyped().get() );
 }
 
 } // bv
