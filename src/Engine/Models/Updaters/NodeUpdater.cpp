@@ -24,6 +24,7 @@ NodeUpdater::NodeUpdater     ( RenderableEntity * renderable, SceneNode * sceneN
     : m_sceneNode( sceneNode )
     , m_modelNode( modelNode )
     , m_renderable( renderable )
+    , m_rendererContext( nullptr )
 {
     assert( sceneNode != nullptr );
     assert( modelNode != nullptr );
@@ -96,7 +97,6 @@ void    NodeUpdater::DoUpdate        ()
 
     m_sceneNode->SetVisible( isVisible );
     m_sceneNode->SetOverriden( isOverriden );
-    m_rendererContext->SetStateChanged( m_modelNode->OverrideStateChanged() );
 
     //FIXME: Globalne ustawienia stanu obejmuja na teraz
     //1. Visibility
@@ -108,6 +108,8 @@ void    NodeUpdater::DoUpdate        ()
         
         if( m_hasEffect )
         {
+            m_rendererContext->SetStateChanged( m_modelNode->OverrideStateChanged() );
+
             if( !m_timeInvariantVertexData )
             {
                 UpdateGeometry();

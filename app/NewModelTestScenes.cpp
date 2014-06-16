@@ -451,12 +451,26 @@ model::BasicNode *     TestScenesFactory::NewModelTestScene     ( const model::P
 {
     //return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );
     //TestQueryNode( timelineManager, timeEvaluator ); //FIXME: remove or uncomment after tests
-    //return SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node0" );
+    auto c0 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node0" );
+    auto c1 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node1" );
+
+    //Plugin list
+    std::vector< std::string > uids;
+    uids.push_back( "DEFAULT_TRANSFORM" );
+
+    auto rut = new model::BasicNode( ".", timeEvaluator );
+    auto success = rut->AddPlugins( uids, timeEvaluator );
+    assert( success );
+
+    rut->AddChild( c0 );
+    rut->AddChild( c1 );
+
+    return rut;
     //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager );
     //return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 2 );
-    return SimpleNodesFactory::CreateTextWithShadowNode( timelineManager, timeEvaluator, 5, glm::vec3( 0.03f, -0.03f, -0.001f ) );
+    //return SimpleNodesFactory::CreateTextWithShadowNode( timelineManager, timeEvaluator, 5, glm::vec3( 0.03f, -0.03f, -0.001f ) );
 
 }
 
