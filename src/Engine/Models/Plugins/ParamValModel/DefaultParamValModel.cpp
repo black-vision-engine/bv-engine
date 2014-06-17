@@ -114,7 +114,7 @@ void                                        DefaultParamValModel::AddValue      
 void                                        DefaultParamValModel::AddValue          ( bv::IValueConstPtr val )
 {
     m_values.push_back( val );
-    m_valuesNC.push_back( bv::IValuePtr( const_cast< bv::IValue * >( val.get() ) ) );
+    m_valuesNC.push_back( bv::IValuePtr( std::const_pointer_cast< bv::IValue >( val ) ) );
 }
 
 // *******************************
