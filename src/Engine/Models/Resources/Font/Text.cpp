@@ -16,6 +16,8 @@
 #include FT_FREETYPE_H
 #include <FreeType/ftglyph.h>
 
+#include <boost/filesystem/path.hpp>
+
 namespace bv { namespace model {
 
 // *********************************
@@ -206,7 +208,10 @@ TextAtlas*          Text::LoadFromCache()
 {
     auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
 
-    auto entry = fac->GetEntry( "ARIAL", m_fontSize, this->m_blurSize, m_fontFile, false, false );
+    boost::filesystem::path fontPath( m_fontFile );
+    auto fontName = fontPath.filename().string();
+
+    auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_fontFile, false, false );
 
     if( entry != nullptr )
         return entry->m_textAtlas;
@@ -393,7 +398,10 @@ void                Text::BuildAtlas()
         delete [] oldData;
     }
 
-    auto entry = new FontAtlasCacheEntry( m_atlas, "ARIAL", m_fontSize, m_blurSize, m_fontFile, false, false );
+    boost::filesystem::path fontPath( m_fontFile );
+    auto fontName = fontPath.filename().string();
+
+    auto entry = new FontAtlasCacheEntry( m_atlas, fontName, m_fontSize, m_blurSize, m_fontFile, false, false );
     fac->AddEntry( *entry );
 
 #ifdef GENERATE_TEST_BMP_FILE

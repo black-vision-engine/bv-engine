@@ -53,13 +53,10 @@ ResourceHandle *        FontLoader::LoadResource        ( IResource* res )  cons
     auto blurSize = fontRes->GetBlurSize();
 
     const Text*       font        = TryLoadFont             ( filePath, fontSize, blurSize, atlasCharSetFile );
-    const Text*       fontB       = TryLoadFontBold         ( filePath, fontSize, blurSize, atlasCharSetFile );
-    const Text*       fontBI      = TryLoadFontBoldItalic   ( filePath, fontSize, blurSize, atlasCharSetFile );
-    const Text*       fontI       = TryLoadFontItalic       ( filePath, fontSize, blurSize, atlasCharSetFile );
 
-    if( font || fontB || fontBI || fontI )
+    if( font )
     {
-        auto res = new ResourceHandle( nullptr, 0, new FontExtraData( font, fontB, fontI, fontBI, nullptr, fontRes->GetFontSize() ) );
+        auto res = new ResourceHandle( nullptr, 0, new FontExtraData( font, nullptr, nullptr, nullptr, nullptr, fontRes->GetFontSize() ) );
         return res;
     }
     else
