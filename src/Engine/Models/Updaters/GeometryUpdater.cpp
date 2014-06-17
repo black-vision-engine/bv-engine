@@ -20,7 +20,7 @@ namespace bv {
 
 // *********************************
 //
-GeometryUpdater::GeometryUpdater     ( RenderableEntity * out, const model::IVertexAttributesChannel * in )
+GeometryUpdater::GeometryUpdater     ( RenderableEntity * out, model::IVertexAttributesChannelConstPtr in )
     : m_in( in )
     , m_out( out )
 {

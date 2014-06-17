@@ -12,7 +12,7 @@ namespace bv { namespace model {
 
 // *******************************
 //
-VertexAttributesChannel *       ChannelsFactory::CreateVertexAttributesChannel               ( ConnectedComponent * connComp, bool isTimeInvariant )
+VertexAttributesChannelPtr       ChannelsFactory::CreateVertexAttributesChannel               ( ConnectedComponent * connComp, bool isTimeInvariant )
 {
 	VertexAttributesChannelDescriptor desc;
 
@@ -21,7 +21,7 @@ VertexAttributesChannel *       ChannelsFactory::CreateVertexAttributesChannel  
 		desc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
 	}
 
-    VertexAttributesChannel * ret = new model::VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, desc, false, isTimeInvariant );
+    VertexAttributesChannelPtr ret = std::make_shared< model::VertexAttributesChannel >( PrimitiveType::PT_TRIANGLE_STRIP, desc, false, isTimeInvariant );
 
 	ret->AddConnectedComponent( connComp );
 

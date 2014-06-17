@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Interfaces/IUpdater.h"
-
+#include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
 
 namespace bv {
 
@@ -18,11 +18,11 @@ class GeometryUpdater : public IUpdater
 private:
 
     RenderableEntity *                          m_out;
-    const model::IVertexAttributesChannel *     m_in;
+    model::IVertexAttributesChannelConstPtr     m_in;
 
 public:
 
-                    GeometryUpdater     ( RenderableEntity * out, const model::IVertexAttributesChannel * in ); 
+                    GeometryUpdater     ( RenderableEntity * out, model::IVertexAttributesChannelConstPtr in ); 
                     ~GeometryUpdater    ();
 
     virtual void    DoUpdate            ();

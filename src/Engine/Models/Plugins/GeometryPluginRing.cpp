@@ -23,12 +23,11 @@ GeometryRingPlugin::GeometryRingPlugin                    ( float startAngle, fl
 //
 GeometryRingPlugin::~GeometryRingPlugin   ()
 {
-    delete m_vaChannel;
 }
 
 // *************************************
 //
-const IVertexAttributesChannel *    GeometryRingPlugin::GetVertexAttributesChannel          () const
+IVertexAttributesChannelConstPtr    GeometryRingPlugin::GetVertexAttributesChannel          () const
 {
     return m_vaChannel;
 }

@@ -75,7 +75,7 @@ public:
 
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
+    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
 
@@ -152,7 +152,7 @@ bool            SetTextPluginContent( IPluginPtr textPlugin, const std::wstring&
 //
 //                                ~SimpleTextPlugin   ();
 //
-//    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
+//    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
 //    virtual TextureInfoVec                      GetTextures                 () const;
 //    void                                        SetText                     ( const std::wstring & newText );
 //

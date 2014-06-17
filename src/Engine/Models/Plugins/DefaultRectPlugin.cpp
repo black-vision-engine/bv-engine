@@ -105,12 +105,11 @@ DefaultRectPlugin::DefaultRectPlugin    ( const std::string & name, const std::s
 //
 DefaultRectPlugin::~DefaultRectPlugin   ()
 {
-    delete m_vaChannel;
 }
 
 // *************************************
 //
-const IVertexAttributesChannel *    DefaultRectPlugin::GetVertexAttributesChannel  () const
+IVertexAttributesChannelConstPtr    DefaultRectPlugin::GetVertexAttributesChannel  () const
 {
     return m_vaChannel;
 }

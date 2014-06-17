@@ -11,10 +11,10 @@
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 #include "Engine/Models/Plugins/Interfaces/IPluginParamValModel.h"
 #include "Engine/Models/Resources/IPluginResourceDescr.h"
+#include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
 
 namespace bv { namespace model {
 
-class IVertexAttributesChannel;
 class IDefaultTransformChannel;
 class ITransformChannel;
 class IPixelShaderChannel;
@@ -37,7 +37,7 @@ public:
     virtual IParameterPtr                       GetParameter                ( const std::string & name ) const = 0;
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const = 0;
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const = 0;
+    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const = 0;
     virtual const ITransformChannel *           GetTransformChannel         () const = 0;
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const = 0;
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const = 0;

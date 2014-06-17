@@ -62,7 +62,7 @@ bv::IValueConstPtr                  DefaultFinalizePlugin::GetValue             
 
 // *******************************
 //
-const IVertexAttributesChannel *    DefaultFinalizePlugin::GetVertexAttributesChannel   () const
+IVertexAttributesChannelConstPtr    DefaultFinalizePlugin::GetVertexAttributesChannel   () const
 {
     assert( m_prevPlugin );
 

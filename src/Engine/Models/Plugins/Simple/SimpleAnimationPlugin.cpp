@@ -64,7 +64,6 @@ SimpleAnimationPlugin::SimpleAnimationPlugin                    ( IPluginConstPt
 //
 SimpleAnimationPlugin::~SimpleAnimationPlugin        ()
 {
-    delete m_vaChannel;
     delete m_pixelShaderChannel;
     delete m_vertexShaderChannel;
 }
@@ -241,7 +240,7 @@ void                SimpleAnimationPlugin::Print               ( std::ostream & 
     }
 }
 
-const IVertexAttributesChannel *            SimpleAnimationPlugin::GetVertexAttributesChannel          () const
+IVertexAttributesChannelConstPtr            SimpleAnimationPlugin::GetVertexAttributesChannel          () const
 {
     return m_vaChannel;
 }

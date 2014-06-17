@@ -23,12 +23,11 @@ GeometryRectPlugin::GeometryRectPlugin                    ( const ParamFloat & w
 //
 GeometryRectPlugin::~GeometryRectPlugin   ()
 {
-    delete m_vaChannel;
 }
 
 // *************************************
 //
-const IVertexAttributesChannel *    GeometryRectPlugin::GetVertexAttributesChannel          () const
+IVertexAttributesChannelConstPtr    GeometryRectPlugin::GetVertexAttributesChannel          () const
 {
     return m_vaChannel;
 }

@@ -81,9 +81,9 @@ SimpleTextPlugin::~SimpleTextPlugin   ()
 
 // *********************************
 //
-const IVertexAttributesChannel *    SimpleTextPlugin::GetVertexAttributesChannel          () const
+IVertexAttributesChannelConstPtr    SimpleTextPlugin::GetVertexAttributesChannel          () const
 {
-    return m_vertexAttributeChannel.get();
+    return m_vertexAttributeChannel;
 }
 
 // *********************************

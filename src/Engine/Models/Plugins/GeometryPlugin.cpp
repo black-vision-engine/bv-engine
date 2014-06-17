@@ -16,12 +16,11 @@ GeometryPlugin::GeometryPlugin  ( model::VertexAttributesChannel * vaChannel )
 //
 GeometryPlugin::~GeometryPlugin ()
 {
-    delete m_vaChannel;
 }
 
 // *******************************
 //
-const IVertexAttributesChannel *   GeometryPlugin::GetVertexAttributesChannel          () const
+IVertexAttributesChannelConstPtr   GeometryPlugin::GetVertexAttributesChannel          () const
 {
     return m_vaChannel;
 }

@@ -241,9 +241,9 @@ bool                            DefaultTextPlugin::LoadResource  ( IPluginResour
 
 // *************************************
 // 
-const IVertexAttributesChannel *    DefaultTextPlugin::GetVertexAttributesChannel  () const
+IVertexAttributesChannelConstPtr    DefaultTextPlugin::GetVertexAttributesChannel  () const
 {
-    return m_vaChannel.get();
+    return m_vaChannel;
 }
 
 // *************************************
@@ -423,7 +423,7 @@ bool            SetTextPluginContent( IPluginPtr textPlugin, const std::wstring&
 //
 //// *********************************
 ////
-//const IVertexAttributesChannel *    SimpleTextPlugin::GetVertexAttributesChannel          () const
+//IVertexAttributesChannelConstPtr    SimpleTextPlugin::GetVertexAttributesChannel          () const
 //{
 //    return m_vertexAttributeChannel.get();
 //}

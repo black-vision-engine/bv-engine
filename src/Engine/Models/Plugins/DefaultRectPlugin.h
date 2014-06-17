@@ -33,7 +33,7 @@ private:
 
     //FIXME: move to base class
     DefaultPluginParamValModelPtr       m_paramValModel;
-    VertexAttributesChannel *           m_vaChannel;
+    VertexAttributesChannelPtr          m_vaChannel;
 
     ParamFloatPtr                       m_widthParam;
     ParamFloatPtr                       m_heightParam;
@@ -48,7 +48,7 @@ public:
     explicit            DefaultRectPlugin    ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model );
                         ~DefaultRectPlugin   ();
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
+    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual void                                Update                      ( TimeType t ) override;
 
 };

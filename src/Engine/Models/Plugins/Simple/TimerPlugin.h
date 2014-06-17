@@ -85,7 +85,7 @@ public:
     void                                        SetMinute                   ( int min );
     void                                        SetHour                     ( int h );
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
+    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual TextureInfoVec                      GetTextures                 () const; //FIXME: remove
 
     virtual void                                Update                      ( TimeType t ) override;

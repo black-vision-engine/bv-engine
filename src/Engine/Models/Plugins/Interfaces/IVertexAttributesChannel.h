@@ -14,6 +14,10 @@ class IPlugin;
 class IConnectedComponent;
 class IVertexAttributesChannelDescriptor;
 
+class IVertexAttributesChannel;
+DEFINE_PTR_TYPE(IVertexAttributesChannel)
+DEFINE_CONST_PTR_TYPE(IVertexAttributesChannel)
+
 class IVertexAttributesChannel : public IChannel
 {
 public:
@@ -35,10 +39,11 @@ public:
 
     //FIXME: implement via plugin when its interface is known
     //virtual bool                                      CanBeConnectedTo            ( IPlugin * plugin )            const = 0;
-    virtual bool                                        CanBeConnectedTo            ( IVertexAttributesChannel * channel )  const = 0;
+    virtual bool                                        CanBeConnectedTo            ( IVertexAttributesChannelPtr channel )  const = 0;
 
     virtual                                             ~IVertexAttributesChannel   (){};
 };
+
 
 } // model
 } // bv

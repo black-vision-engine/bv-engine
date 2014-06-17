@@ -213,9 +213,9 @@ bool                            DefaultTexturePlugin::LoadResource  ( IPluginRes
 
 // *************************************
 // 
-const IVertexAttributesChannel *    DefaultTexturePlugin::GetVertexAttributesChannel  () const
+IVertexAttributesChannelConstPtr    DefaultTexturePlugin::GetVertexAttributesChannel  () const
 {
-    return m_vaChannel.get();
+    return m_vaChannel;
 }
 
 // *************************************

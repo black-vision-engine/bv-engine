@@ -66,7 +66,7 @@ private:
 
     RenderableEntity *                          m_renderable;
     const model::ITransformChannel *            m_transformChannel;
-    const model::IVertexAttributesChannel *     m_vertexAttributesChannel;
+    model::IVertexAttributesChannelConstPtr     m_vertexAttributesChannel;
     
     bool                                        m_timeInvariantVertexData;
     bool                                        m_hasEffect;

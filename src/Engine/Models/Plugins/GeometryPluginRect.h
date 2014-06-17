@@ -20,7 +20,7 @@ class GeometryRectPlugin : public BasePlugin< IPlugin >
 {
 private:
 
-    model::VertexAttributesChannel *    m_vaChannel;
+    model::VertexAttributesChannelPtr   m_vaChannel;
 
     ParamFloat                          m_width;
     ParamFloat                          m_height;
@@ -30,7 +30,7 @@ public:
     explicit            GeometryRectPlugin    ( const ParamFloat & w, const ParamFloat & h );
                         ~GeometryRectPlugin   ();
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
+    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
 
     virtual void                                Update              ( TimeType t ) override;
     virtual void                                Print               ( std::ostream & out, int tabs = 0 ) const;

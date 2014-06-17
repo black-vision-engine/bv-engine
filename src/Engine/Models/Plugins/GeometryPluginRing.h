@@ -21,14 +21,14 @@ class GeometryRingPlugin : public BasePlugin< IPlugin >
 {
 private:
 
-    model::VertexAttributesChannel* m_vaChannel;
+    model::VertexAttributesChannelPtr m_vaChannel;
 
 public:
 
     explicit            GeometryRingPlugin    ( float startAngle, float endAngle, float innerRadius, float outerRadius, int segmentsNum );
                         ~GeometryRingPlugin   ();
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel          () const override;
+    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel          () const override;
 
     virtual void                        Update                      ( TimeType t ) override;
     virtual void                        Print                       ( std::ostream & out, int tabs = 0 ) const;

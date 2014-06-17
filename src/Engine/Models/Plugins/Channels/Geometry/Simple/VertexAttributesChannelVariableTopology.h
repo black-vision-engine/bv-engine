@@ -38,7 +38,7 @@ public:
     virtual bool            NeedsAttributesUpdate               ()  const  override;
     virtual bool            NeedsTopologyUpdate                 ()  const  override;
 
-    virtual bool            CanBeConnectedTo                    ( IVertexAttributesChannel * channel ) const  override;
+    virtual bool            CanBeConnectedTo                    ( IVertexAttributesChannelPtr channel ) const  override;
 
     void                    AddVTConnectedComponent             ( VariableTopologyStripComponent * cc );
     virtual unsigned int    TotalNumVertices                    ()  const  override;

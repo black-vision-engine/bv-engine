@@ -24,14 +24,14 @@ class GeometryPlugin : public BasePlugin< IPlugin >
 {
 private:
 
-    VertexAttributesChannel *   m_vaChannel;
+    VertexAttributesChannelPtr  m_vaChannel;
 
 public:
 
     explicit            GeometryPlugin  ( model::VertexAttributesChannel * vaChannel );
                         ~GeometryPlugin ();
 
-    const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
+    IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
 
     virtual void                Update              ( TimeType t ) override;
     virtual void                Print               ( std::ostream & out, int tabs = 0 ) const;

@@ -218,9 +218,9 @@ bool                            DefaultAnimationPlugin::LoadResource  ( IPluginR
 
 // *************************************
 // 
-const IVertexAttributesChannel *    DefaultAnimationPlugin::GetVertexAttributesChannel  () const
+IVertexAttributesChannelConstPtr    DefaultAnimationPlugin::GetVertexAttributesChannel  () const
 {
-    return m_vaChannel.get();
+    return m_vaChannel;
 }
 
 // *************************************

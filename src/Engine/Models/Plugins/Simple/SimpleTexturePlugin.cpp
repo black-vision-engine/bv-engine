@@ -276,9 +276,9 @@ void                                    SimpleTexturePlugin::Print              
 
 // *************************************
 //
-const IVertexAttributesChannel *        SimpleTexturePlugin::GetVertexAttributesChannel () const
+IVertexAttributesChannelConstPtr        SimpleTexturePlugin::GetVertexAttributesChannel () const
 {
-    return m_vaChannel.get();
+    return m_vaChannel;
 }
 
 // *************************************

@@ -20,12 +20,11 @@ GeometryMultiRectPlugin::GeometryMultiRectPlugin                    ()
 //
 GeometryMultiRectPlugin::~GeometryMultiRectPlugin   ()
 {
-    delete m_vaChannel;
 }
 
 // *************************************
 //
-const IVertexAttributesChannel *    GeometryMultiRectPlugin::GetVertexAttributesChannel          () const
+IVertexAttributesChannelConstPtr    GeometryMultiRectPlugin::GetVertexAttributesChannel          () const
 {
     return m_vaChannel;
 }

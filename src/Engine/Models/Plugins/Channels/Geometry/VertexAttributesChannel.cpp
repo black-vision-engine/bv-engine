@@ -214,7 +214,7 @@ std::vector< IConnectedComponent* >     VertexAttributesChannel::GetComponents  
 
 // *********************************
 //
-bool                                    VertexAttributesChannel::CanBeConnectedTo    ( IVertexAttributesChannel * channel ) const
+bool                                    VertexAttributesChannel::CanBeConnectedTo    ( IVertexAttributesChannelPtr channel ) const
 {
     return CanBeConnectedTo( *static_cast< const VertexAttributesChannelDescriptor * >( channel->GetDescriptor() ) );
 }

@@ -85,7 +85,7 @@ public:
     explicit                                    SimpleTexturePlugin         ( IPluginConstPtr prev, const std::vector< const TextureDescriptor > & textureDescs, model::RendererContext * ctx = nullptr, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
                                                 ~SimpleTexturePlugin        ();
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;                                                                           
+    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;                                                                           
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;                                       
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;     
 

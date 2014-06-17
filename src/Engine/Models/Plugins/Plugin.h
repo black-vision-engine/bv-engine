@@ -51,7 +51,7 @@ public:
     virtual void                                SetVertexShaderChannel      ( IVertexShaderChannel * vShCh )        { assert(!"Implement in derived class"); }
     virtual void                                SetGeometryShaderChannel    ( IGeometryShaderChannel * gShCh )      { assert(!"Implement in derived class"); }
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
+    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual const ITransformChannel *           GetTransformChannel         () const override;
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
@@ -167,7 +167,7 @@ bv::IValueConstPtr         BasePlugin< Iface >::GetValue           ( const std::
 // *******************************
 //
 template< class Iface >
-const IVertexAttributesChannel *            BasePlugin< Iface >::GetVertexAttributesChannel   () const
+IVertexAttributesChannelConstPtr            BasePlugin< Iface >::GetVertexAttributesChannel   () const
 {
     if( m_prevPlugin )
     {

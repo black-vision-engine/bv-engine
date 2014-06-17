@@ -70,7 +70,7 @@ public:
 
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
+    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
 

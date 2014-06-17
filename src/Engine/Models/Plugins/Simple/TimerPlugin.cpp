@@ -357,9 +357,9 @@ void                                TimerPlugin::SetTime        ( double time )
 
 ////////////////////////////
 //
-const IVertexAttributesChannel *    TimerPlugin::GetVertexAttributesChannel          () const
+IVertexAttributesChannelConstPtr    TimerPlugin::GetVertexAttributesChannel          () const
 {
-    return m_vertexAttributeChannel.get();
+    return m_vertexAttributeChannel;
 }
 
 ////////////////////////////

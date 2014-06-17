@@ -109,7 +109,7 @@ bool    VertexAttributesChannelVariableTopology::IsTimeInvariant            () c
 
 // ******************************
 //
-bool    VertexAttributesChannelVariableTopology::CanBeConnectedTo           ( IVertexAttributesChannel * channel ) const
+bool    VertexAttributesChannelVariableTopology::CanBeConnectedTo           ( IVertexAttributesChannelPtr channel ) const
 {
     return false;
 }

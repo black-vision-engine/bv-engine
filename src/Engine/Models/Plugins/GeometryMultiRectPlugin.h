@@ -22,14 +22,14 @@ class GeometryMultiRectPlugin : public BasePlugin< IPlugin >
 {
 private:
 
-    model::VertexAttributesChannel *    m_vaChannel;
+    model::VertexAttributesChannelPtr    m_vaChannel;
 
 public:
 
     explicit            GeometryMultiRectPlugin    ();
                         ~GeometryMultiRectPlugin   ();
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel          () const override;
+    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel          () const override;
     void                                Update                      ( TimeType t ) override;
     void                                Print                       ( std::ostream & out, int tabs = 0 ) const;
 

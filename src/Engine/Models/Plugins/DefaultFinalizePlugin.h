@@ -29,7 +29,7 @@ public:
     virtual IParameterPtr                       GetParameter                ( const std::string & name ) const override;
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const override;
 
-    virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
+    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual const ITransformChannel *           GetTransformChannel         () const override;
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;
     virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;

@@ -60,7 +60,7 @@ public:
     virtual std::vector< IConnectedComponent * >        GetComponents           () const override;
 
     //virtual bool                                      CanBeConnectedTo        ( IPlugin * plugin ) const;
-    virtual bool                                        CanBeConnectedTo        ( IVertexAttributesChannel * channel ) const override;
+    virtual bool                                        CanBeConnectedTo        ( IVertexAttributesChannelPtr channel ) const override;
 
     ConnectedComponent *                                GetConnectedComponent   ( unsigned int idx );
 
