@@ -37,7 +37,7 @@ public:
 
 };
 
-typedef std::shared_ptr< DefaultPluginListFinalized > DefaultPluginListFinalizedPtr;
+DEFINE_PTR_TYPE(DefaultPluginListFinalized)
 
 } // model
 } // bv

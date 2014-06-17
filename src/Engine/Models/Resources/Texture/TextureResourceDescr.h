@@ -22,7 +22,7 @@ public:
 
 };
 
-typedef std::shared_ptr< TextureResourceDescr > TextureResourceDescrPtr;
+DEFINE_PTR_TYPE(TextureResourceDescr)
 
 } //model
 } //bv

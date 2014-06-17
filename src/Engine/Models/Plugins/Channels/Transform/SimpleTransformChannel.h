@@ -28,7 +28,7 @@ public:
 
 };
 
-typedef std::shared_ptr< SimpleTransformChannel >   SimpleTransformChannelPtr;
+DEFINE_PTR_TYPE(SimpleTransformChannel)
 
 } // model
 } // bv

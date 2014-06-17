@@ -16,7 +16,7 @@ public:
 
 };
 
-typedef std::shared_ptr< TextureVertexShaderChannel >    TextureVertexShaderChannelPtr;
+DEFINE_PTR_TYPE(TextureVertexShaderChannel)
 
 } // model
 } // bv

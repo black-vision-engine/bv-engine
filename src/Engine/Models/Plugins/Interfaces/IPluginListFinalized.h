@@ -18,7 +18,7 @@ public:
 
 };
 
-typedef std::shared_ptr< IPluginListFinalized > IPluginListFinalizedPtr;
+DEFINE_PTR_TYPE(IPluginListFinalized)
 
 } //model
 } //bv

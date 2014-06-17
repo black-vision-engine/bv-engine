@@ -5,7 +5,7 @@
 #include <string>
 
 #include "Engine/Types/Enums.h"
-
+#include "System/BasicTypes.h"
 
 namespace bv { namespace model {
 
@@ -19,7 +19,7 @@ public:
 
 };
 
-typedef std::shared_ptr< IPluginResourceDescr > IPluginResourceDescrPtr;
+DEFINE_PTR_TYPE(IPluginResourceDescr)
 
 
 //FIXME: move to a separate file
@@ -33,7 +33,7 @@ public:
 
 };
 
-typedef std::shared_ptr< ITextureResourceDescr > ITextureResourceDescrPtr;
+DEFINE_PTR_TYPE(ITextureResourceDescr)
 
 const ITextureResourceDescr * QueryTextureResourceDescr( const IPluginResourceDescr * resDescr );
 
@@ -49,7 +49,7 @@ public:
 
 };
 
-typedef std::shared_ptr< IAnimationResourceDescr > IAnimationResourceDescrPtr;
+DEFINE_PTR_TYPE(IAnimationResourceDescr)
 
 const IAnimationResourceDescr * QueryAnimationResourceDescr( const IPluginResourceDescr * resDescr );
 
@@ -64,7 +64,7 @@ public:
 
 };
 
-typedef std::shared_ptr< IFontResourceDescr > IFontResourceDescrPtr;
+DEFINE_PTR_TYPE(IFontResourceDescr)
 
 const IFontResourceDescr * QueryFontResourceDescr( const IPluginResourceDescr * resDescr );
 

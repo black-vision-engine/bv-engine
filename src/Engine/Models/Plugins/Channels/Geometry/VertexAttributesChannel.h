@@ -72,7 +72,7 @@ protected:
     }
 };
 
-typedef std::shared_ptr< VertexAttributesChannel >      VertexAttributesChannelPtr;
+DEFINE_PTR_TYPE(VertexAttributesChannel)
 
 } // model
 } // bv

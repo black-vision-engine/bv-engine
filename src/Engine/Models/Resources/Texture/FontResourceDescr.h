@@ -22,7 +22,7 @@ public:
 
 };
 
-typedef std::shared_ptr< FontResourceDescr > FontResourceDescrPtr;
+DEFINE_PTR_TYPE(FontResourceDescr)
 
 } //model
 } //bv

@@ -37,7 +37,7 @@ public:
 
 };
 
-typedef std::shared_ptr< DefaultTransformChannel > DefaultTransformChannelPtr;
+DEFINE_PTR_TYPE(DefaultTransformChannel)
 
 } // model
 } // bv

@@ -12,7 +12,7 @@ namespace bv {
 
 class IValue;
 typedef std::shared_ptr< const IValue > IValueConstPtr;
-typedef std::shared_ptr< IValue >       IValuePtr;
+DEFINE_PTR_TYPE(IValue)
 
 class IValue
 {

@@ -24,7 +24,7 @@ public:
 
 };
 
-typedef std::shared_ptr< AnimationResourceDescr > AnimationResourceDescrPtr;
+DEFINE_PTR_TYPE(AnimationResourceDescr)
 
 } //model
 } //bv

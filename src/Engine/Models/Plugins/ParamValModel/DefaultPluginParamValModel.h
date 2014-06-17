@@ -57,7 +57,7 @@ public:
 
 };
 
-typedef std::shared_ptr< DefaultPluginParamValModel > DefaultPluginParamValModelPtr;
+DEFINE_PTR_TYPE(DefaultPluginParamValModel)
 
 } //model
 } //bv

@@ -48,8 +48,7 @@ public:
 
 };
 
-typedef std::shared_ptr<PluginAddedEvent> PluginAddEventPtr;
-
+DEFINE_PTR_TYPE(PluginAddedEvent)
 
 // ************************************* NodeAddedEvent *************************************
 class NodeAddedEvent : public BaseEvent
@@ -83,7 +82,7 @@ public:
 
 };
 
-typedef std::shared_ptr<NodeAddedEvent> NodeAddedEventPtr;
+DEFINE_PTR_TYPE(NodeAddedEvent)
 
 
 // ************************************* FrameRenderedEvent *************************************
@@ -125,7 +124,7 @@ public:
 
 };
 
-typedef std::shared_ptr<FrameRenderedEvent> FrameRenderedEventPtr;
+DEFINE_PTR_TYPE(FrameRenderedEvent)
 
 // ************************************* TransformSetEvent *************************************
 class TransformSetEvent : public BaseEvent
@@ -163,7 +162,7 @@ public:
 
 };
 
-typedef std::shared_ptr<TransformSetEvent> TransformSetEventPtr;
+DEFINE_PTR_TYPE(TransformSetEvent)
 
 // ***************************** SET TEXT EVENT *************************
 class KeyPressedEvent : public BaseEvent
@@ -189,6 +188,6 @@ public:
     static std::string              m_sEventName;
 };
 
-typedef std::shared_ptr<KeyPressedEvent> KeyPressedEventPtr;
+DEFINE_PTR_TYPE(KeyPressedEvent)
 
 } //bv

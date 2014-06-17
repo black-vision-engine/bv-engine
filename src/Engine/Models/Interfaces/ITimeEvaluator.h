@@ -10,7 +10,7 @@
 namespace bv { namespace model {
 
 class ITimeEvaluator;
-typedef std::shared_ptr< ITimeEvaluator > ITimeEvaluatorPtr;
+DEFINE_PTR_TYPE(ITimeEvaluator)
 
 class ITimeEvaluator
 {

@@ -23,7 +23,7 @@ public:
 
 };
 
-typedef std::shared_ptr< IPluginList > IPluginListPtr;
+DEFINE_PTR_TYPE(IPluginList)
  
 } //model
 } //bv

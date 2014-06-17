@@ -11,7 +11,7 @@
 namespace bv { namespace model {
 
 class TransformVecParamValEvaluator;
-typedef std::shared_ptr< TransformVecParamValEvaluator > TransformVecParamValEvaluatorPtr;
+DEFINE_PTR_TYPE(TransformVecParamValEvaluator)
 
 class TransformVecParamValEvaluator : public IParamValEvaluator
 {

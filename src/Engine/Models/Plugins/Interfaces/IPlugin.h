@@ -53,7 +53,7 @@ public:
 
 };
 
-typedef std::shared_ptr<IPlugin>        IPluginPtr;
+DEFINE_PTR_TYPE(IPlugin)
 
 } // model
 } // bv

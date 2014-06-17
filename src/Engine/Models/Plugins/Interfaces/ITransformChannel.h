@@ -25,7 +25,7 @@ public:
 
 class Transform;
 
-typedef std::shared_ptr< Transform >    TransformPtr;
+DEFINE_PTR_TYPE(Transform)
 
 //FIXME: remove this in favor of the previous one
 //class ITransformChannel : public IChannel

@@ -28,7 +28,7 @@ public:
 
 };
 
-typedef std::shared_ptr< DefaultVertexShaderChannel > DefaultVertexShaderChannelPtr;
+DEFINE_PTR_TYPE(DefaultVertexShaderChannel)
 
 } //model
 } //bv

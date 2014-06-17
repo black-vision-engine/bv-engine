@@ -16,4 +16,6 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(IValueSet)
+
 } //bv

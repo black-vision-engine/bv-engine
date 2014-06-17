@@ -79,7 +79,7 @@ private:
 
 };
 
-typedef std::shared_ptr< DefaultTimeline > DefaultTimelinePtr;
+DEFINE_PTR_TYPE(DefaultTimeline)
 
 } //model
 } //bv

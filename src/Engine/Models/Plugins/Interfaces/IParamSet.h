@@ -6,6 +6,9 @@
 
 namespace bv { namespace model {
 
+class IParamSet;
+DEFINE_PTR_TYPE(IParamSet)
+
 class IParamSet
 {
 public:

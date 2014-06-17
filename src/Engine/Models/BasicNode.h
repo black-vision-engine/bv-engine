@@ -35,7 +35,7 @@ class IOverrideState;
 class BasicOverrideState;
 
 class BasicNode;
-typedef std::shared_ptr< BasicNode > BasicNodePtr;
+DEFINE_PTR_TYPE(BasicNode)
 
 typedef std::vector< BasicNodePtr > TNodeVec;
 

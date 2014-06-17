@@ -17,17 +17,17 @@ typedef ValueImpl< glm::mat2, ParamType::PT_MAT2 >      ValueMat2;
 typedef ValueImpl< glm::mat2, ParamType::PT_MAT3 >      ValueMat3;
 typedef ValueImpl< glm::mat4, ParamType::PT_MAT4 >      ValueMat4;
 
-typedef std::shared_ptr< ValueFloat >   ValueFloatPtr;
+DEFINE_PTR_TYPE(ValueFloat)
 typedef std::shared_ptr< const ValueFloat >   ValueFloatConstPtr;
-typedef std::shared_ptr< ValueVec2 >    ValueVec2Ptr;
-typedef std::shared_ptr< ValueVec3 >    ValueVec3Ptr;
-typedef std::shared_ptr< ValueVec4 >    ValueVec4Ptr;
-typedef std::shared_ptr< ValueMat2 >    ValueMat2Ptr;
-typedef std::shared_ptr< ValueMat3 >    ValueMat3Ptr;
-typedef std::shared_ptr< ValueMat4 >    ValueMat4Ptr;
+DEFINE_PTR_TYPE(ValueVec2)
+DEFINE_PTR_TYPE(ValueVec3)
+DEFINE_PTR_TYPE(ValueVec4)
+DEFINE_PTR_TYPE(ValueMat2)
+DEFINE_PTR_TYPE(ValueMat3)
+DEFINE_PTR_TYPE(ValueMat4)
 
 typedef std::vector< ValueMat4Ptr >                 ValueMat4PtrVec;
 typedef std::shared_ptr< const ValueMat4PtrVec >    ValueMat4PtrVecConstPtr;
-typedef std::shared_ptr< ValueMat4PtrVec >          ValueMat4PtrVecPtr;
+DEFINE_PTR_TYPE(ValueMat4PtrVec)
 
 } //bv

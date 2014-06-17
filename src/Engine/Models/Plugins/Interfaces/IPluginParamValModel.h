@@ -7,6 +7,9 @@
 
 namespace bv { namespace model {
 
+class IPluginParamValModel;
+DEFINE_PTR_TYPE(IPluginParamValModel)
+
 class IPluginParamValModel
 {
 public:
@@ -24,8 +27,6 @@ public:
     virtual     ~IPluginParamValModel   () {} 
 
 };
-
-typedef std::shared_ptr< IPluginParamValModel > IPluginParamValModelPtr;
 
 } //model
 } //bv

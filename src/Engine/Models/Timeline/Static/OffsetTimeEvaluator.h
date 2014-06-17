@@ -30,7 +30,7 @@ public:
 
 };
 
-typedef std::shared_ptr< OffsetTimeEvaluator > OffsetTimeEvaluatorPtr;
+DEFINE_PTR_TYPE(OffsetTimeEvaluator)
 
 } //model
 } //bv

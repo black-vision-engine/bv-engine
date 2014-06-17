@@ -12,7 +12,7 @@ namespace bv { namespace model {
 //
 char* TextureHelper::LoadImg( const std::string& filePath, int* width, int* heigth, int* bpp, bool loadFromMemory )
 {
-    std::shared_ptr< fipImage > fipImg = std::make_shared< fipImage >();
+    auto fipImg = std::make_shared< fipImage >();
 
     if( loadFromMemory )
     {

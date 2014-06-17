@@ -12,10 +12,10 @@
 namespace bv 
 {
 
-class IEvent;
-typedef std::shared_ptr<IEvent>                 IEventPtr;
-
 typedef unsigned long EventType;
+
+class IEvent;
+DEFINE_PTR_TYPE(IEvent)
 
 class IEvent
 {

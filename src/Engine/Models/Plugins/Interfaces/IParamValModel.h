@@ -7,6 +7,9 @@
 
 namespace bv { namespace model {
 
+class IParamValModel;
+DEFINE_PTR_TYPE(IParamValModel)
+
 class IParamValModel : public IParamSet, public IValueSet
 {
 public:

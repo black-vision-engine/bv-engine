@@ -1,14 +1,14 @@
 #pragma once
 
 #include <memory>
-
+#include "System/BasicTypes.h"
 
 namespace bv
 {
 
 class Process;
 
-typedef std::shared_ptr<Process>    ProcessPtr;
+DEFINE_PTR_TYPE(Process)
 typedef std::weak_ptr<Process>      ProcessWeakPtr;
 
 enum ProcessState : int

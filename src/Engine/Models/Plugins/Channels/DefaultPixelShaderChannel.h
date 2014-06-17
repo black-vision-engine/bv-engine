@@ -33,7 +33,7 @@ public:
 
 };
 
-typedef std::shared_ptr< DefaultPixelShaderChannel > DefaultPixelShaderChannelPtr;
+DEFINE_PTR_TYPE(DefaultPixelShaderChannel)
 
 } //model
 } //bv

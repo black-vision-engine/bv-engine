@@ -46,7 +46,7 @@ public:
 
 };
 
-typedef std::shared_ptr< DefaultFinalizePlugin > DefaultFinalizePluginPtr;
+DEFINE_PTR_TYPE(DefaultFinalizePlugin)
 
 } //model
 }  //bv

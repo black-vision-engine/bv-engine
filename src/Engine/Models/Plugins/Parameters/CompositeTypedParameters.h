@@ -9,7 +9,7 @@
 namespace bv { namespace model {
 
 class ParamTransform;
-typedef std::shared_ptr< ParamTransform > ParamTransformPtr;
+DEFINE_PTR_TYPE(ParamTransform)
 
 // *******************************************
 class ParamTransform : public AbstractModelParameter
@@ -45,7 +45,7 @@ public:
 };
 
 class ParamTransformVec;
-typedef std::shared_ptr< ParamTransformVec > ParamTransformVecPtr;
+DEFINE_PTR_TYPE(ParamTransformVec)
 
 
 // *******************************************

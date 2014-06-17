@@ -379,7 +379,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTextWithShadowNode(   model::Timel
     SetParameter( sp, TimeType( 0.0 ), glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) );
 
     auto st = -shadowTranslation;
-    st.z += 0.001;
+    st.z += 0.001f;
     SetParameterTranslation( param, 0, 0.0f, st );
 
     shadowNode->AddChild( node );

@@ -128,11 +128,11 @@ typedef SimpleParamValEvaluator< ParamVec3Ptr, ValueVec3Ptr >         SimpleVec3
 typedef SimpleParamValEvaluator< ParamMat2Ptr, ValueMat2Ptr >         SimpleMat2Evaluator;
 typedef SimpleParamValEvaluator< ParamTransformPtr, ValueMat4Ptr >    SimpleTransformEvaluator;
 
-typedef std::shared_ptr< SimpleFloatEvaluator >                 SimpleFloatEvaluatorPtr;
-typedef std::shared_ptr< SimpleVec4Evaluator >                  SimpleVec4EvaluatorPtr;
-typedef std::shared_ptr< SimpleVec3Evaluator >                  SimpleVec3EvaluatorPtr;
-typedef std::shared_ptr< SimpleMat2Evaluator >                  SimpleMat2EvaluatorPtr;
-typedef std::shared_ptr< SimpleTransformEvaluator >             SimpleTransformEvaluatorPtr;
+DEFINE_PTR_TYPE(SimpleFloatEvaluator)
+DEFINE_PTR_TYPE(SimpleVec4Evaluator)
+DEFINE_PTR_TYPE(SimpleVec3Evaluator)
+DEFINE_PTR_TYPE(SimpleMat2Evaluator)
+DEFINE_PTR_TYPE(SimpleTransformEvaluator)
 
 } //model
 } //bv

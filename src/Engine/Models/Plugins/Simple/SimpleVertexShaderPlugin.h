@@ -9,8 +9,8 @@ namespace bv { namespace model {
 
 class SimpleVertexShaderChannel;
 
-typedef std::shared_ptr< SimpleVertexShaderChannel >    SimpleVertexShaderChannelPtr;
-
+DEFINE_PTR_TYPE(SimpleVertexShaderChannel)
+    
 // ***************************** UID **********************************
 class SimpleVertexShaderPluginUID
 {

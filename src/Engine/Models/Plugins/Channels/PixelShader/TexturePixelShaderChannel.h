@@ -40,7 +40,7 @@ public:
 
 };
 
-typedef std::shared_ptr< TexturePixelShaderChannel >    TexturePixelShaderChannelPtr;
+DEFINE_PTR_TYPE(TexturePixelShaderChannel)
 
 } // model
 } // bv

@@ -50,7 +50,7 @@ public:
 
 };
 
-typedef std::shared_ptr< IModelNode >       IModelNodePtr;
+DEFINE_PTR_TYPE(IModelNode)
 
 } //model
 } //bv

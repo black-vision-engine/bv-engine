@@ -12,7 +12,7 @@ namespace bv { namespace model {
 class IValue;
 
 class IParamValEvaluator;
-typedef std::shared_ptr< IParamValEvaluator > IParamValEvaluatorPtr;
+DEFINE_PTR_TYPE(IParamValEvaluator)
 
 class IParamValEvaluator : public IParamSet, public IValueSet
 {

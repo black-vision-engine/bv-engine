@@ -58,7 +58,7 @@ public:
 
 };
 
-typedef std::shared_ptr<SetTransformParamsEvent> SetTransformParamsEventPtr;
+DEFINE_PTR_TYPE(SetTransformParamsEvent)
 
 
 class SetColorParamEvent : public BaseEvent
@@ -96,6 +96,6 @@ public:
 
 };
 
-typedef std::shared_ptr<SetColorParamEvent> SetColorParamEventPtr;
+DEFINE_PTR_TYPE(SetColorParamEvent)
 
 } //bv

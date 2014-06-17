@@ -11,7 +11,7 @@
 namespace bv { namespace model {
 
 class AbstractModelParameter;
-typedef std::shared_ptr< AbstractModelParameter > AbstractModelParameterPtr;
+DEFINE_PTR_TYPE(AbstractModelParameter)
 
 class AbstractModelParameter : public IParameter
 {

@@ -12,7 +12,7 @@ namespace bv { namespace model
 class IAttributeChannel;
 class AttributeChannel;
 
-typedef std::shared_ptr< AttributeChannel >    AttributeChannelPtr;
+DEFINE_PTR_TYPE(AttributeChannel)
 
 class ConnectedComponent : public IConnectedComponent, public IUpdatable
 {

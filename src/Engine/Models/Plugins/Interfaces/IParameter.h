@@ -11,7 +11,7 @@
 namespace bv { namespace model {
 
 class IParameter;
-typedef std::shared_ptr< IParameter > IParameterPtr;
+DEFINE_PTR_TYPE(IParameter)
 
 class IParameter;
 typedef std::shared_ptr< const IParameter > IParameterConstPtr;
