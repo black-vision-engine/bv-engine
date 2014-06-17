@@ -11,7 +11,7 @@ namespace bv { namespace model {
 
 // *************************************
 //
-SimpleTransformPlugin * SimpleTransformPlugin::Create( const IPlugin * prev, const ParamTransformVec & transformVec )
+SimpleTransformPlugin * SimpleTransformPlugin::Create( IPluginConstPtr prev, const ParamTransformVec & transformVec )
 {
     auto p = new SimpleTransformPlugin( prev, transformVec );
     return p;
@@ -19,7 +19,7 @@ SimpleTransformPlugin * SimpleTransformPlugin::Create( const IPlugin * prev, con
 
 // *************************************
 //
-SimpleTransformPlugin::SimpleTransformPlugin                    ( const IPlugin * prev, const ParamTransformVec & transformVec )
+SimpleTransformPlugin::SimpleTransformPlugin                    ( IPluginConstPtr prev, const ParamTransformVec & transformVec )
     : BasePlugin( "dupa", "dupa", prev, nullptr )
 {
 //    m_transformChannel = SimpleTransformChannelPtr( new SimpleTransformChannel( transformVec ) );

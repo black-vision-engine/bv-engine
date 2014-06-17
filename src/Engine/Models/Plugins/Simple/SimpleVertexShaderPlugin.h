@@ -29,7 +29,7 @@ private:
 
 public:
 
-    explicit                                SimpleVertexShaderPlugin    ( const IPlugin * prev, const std::string& shaderPath );
+    explicit                                SimpleVertexShaderPlugin    ( IPluginConstPtr prev, const std::string& shaderPath );
                                             ~SimpleVertexShaderPlugin   ();
 
     virtual const IVertexShaderChannel *    GetVertexShaderChannel      () const;

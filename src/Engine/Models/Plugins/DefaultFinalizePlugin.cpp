@@ -143,7 +143,7 @@ void                                DefaultFinalizePlugin::Update               
 
 // *******************************
 //
-void                                DefaultFinalizePlugin::SetPrevPlugin                ( const IPlugin * plugin )
+void                                DefaultFinalizePlugin::SetPrevPlugin                ( IPluginConstPtr plugin )
 {
     assert( plugin != nullptr );
 

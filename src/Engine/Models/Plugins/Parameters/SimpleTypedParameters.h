@@ -28,7 +28,7 @@ public:
     inline  ValueType       Evaluate            () const;
     inline  void            SetVal              ( const ValueType & val, TimeType t );
 
-    virtual void *          QueryParamTyped     () override;
+    virtual VoidPtr         QueryParamTyped     () override;
 
     inline static  ModelParamType  Type         ();
 
@@ -53,7 +53,7 @@ public:
     inline  glm::mat2       Evaluate        () const;
     inline  void            SetVal          ( const glm::mat2 & val, TimeType t );
 
-    virtual void *          QueryParamTyped () override;
+    virtual VoidPtr         QueryParamTyped () override;
 
     inline static  ModelParamType  Type     ();
 

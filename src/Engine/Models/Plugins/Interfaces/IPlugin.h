@@ -54,6 +54,7 @@ public:
 };
 
 DEFINE_PTR_TYPE(IPlugin)
+DEFINE_CONST_PTR_TYPE(IPlugin)
 
 } // model
 } // bv

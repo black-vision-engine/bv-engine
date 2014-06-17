@@ -25,7 +25,7 @@ private:
 
 public:
 
-    explicit                                SimpleGeometryShaderPlugin  ( const IPlugin * prev, const std::string& shaderPath );
+    explicit                                SimpleGeometryShaderPlugin  ( IPluginConstPtr prev, const std::string& shaderPath );
                                             ~SimpleGeometryShaderPlugin ();
 
     virtual const IGeometryShaderChannel*   GetGeometryShaderChannel    () const;

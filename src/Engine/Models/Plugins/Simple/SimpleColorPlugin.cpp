@@ -35,7 +35,7 @@ public:
 
 // *********************************
 //
-SimpleColorPlugin::SimpleColorPlugin          ( const IPlugin * prev, const ParamVec4 & color )
+SimpleColorPlugin::SimpleColorPlugin          ( IPluginConstPtr prev, const ParamVec4 & color )
     : BasePlugin( "dupa", "dupa", prev, nullptr )
 {
     m_pshaderChannel = new SimpleColorPixelShaderChannel( color );

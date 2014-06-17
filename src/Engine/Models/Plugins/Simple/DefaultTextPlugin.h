@@ -25,10 +25,10 @@ public:
 
     DefaultTextPluginDesc                                       ();
 
-    virtual IPlugin *                       CreatePlugin        ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
-    virtual bool                            CanBeAttachedTo     ( const IPlugin * plugin )  const override;
+    virtual bool                            CanBeAttachedTo     ( IPluginConstPtr plugin )  const override;
 
     static  std::string                     UID                 ();
 
@@ -60,8 +60,8 @@ private:
     const TextAtlas*                m_textAtlas;
     bool                            m_textSet;
 
-    ParamFloat*                     m_fontSizeParam;
-    ParamFloat*                     m_blurSizeParam;
+    ParamFloatPtr                   m_fontSizeParam;
+    ParamFloatPtr                   m_blurSizeParam;
 
 public:
 
@@ -70,7 +70,7 @@ public:
 
     void                                        SetText                     ( const std::wstring & newText );
 
-    explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model );
+    explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model );
                                                 ~DefaultTextPlugin          ();
 
     virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr ) override;
@@ -83,7 +83,7 @@ public:
 
 private:
 
-    void                                        InitAttributesChannel       ( const IPlugin * prev );
+    void                                        InitAttributesChannel       ( IPluginConstPtr prev );
 };
 
 bool            SetTextPluginContent( IPlugin* textPlugin, const std::wstring& text );

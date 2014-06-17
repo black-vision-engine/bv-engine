@@ -77,12 +77,12 @@ private:
 private:
 
     TextureInfo *                               LoadTexture( const TextureDescriptor & texDesc, const std::string & name )   const;
-    void                                        EvalGeometryChannel( const IPlugin * prev );
+    void                                        EvalGeometryChannel( IPluginConstPtr prev );
 
 public:
 
-    explicit                                    SimpleTexturePlugin         ( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, TextureAttachmentMode amode = TextureAttachmentMode::MM_ATTACHED );
-    explicit                                    SimpleTexturePlugin         ( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, model::RendererContext * ctx = nullptr, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
+    explicit                                    SimpleTexturePlugin         ( IPluginConstPtr prev, const std::vector< const TextureDescriptor > & textureDescs, TextureAttachmentMode amode = TextureAttachmentMode::MM_ATTACHED );
+    explicit                                    SimpleTexturePlugin         ( IPluginConstPtr prev, const std::vector< const TextureDescriptor > & textureDescs, model::RendererContext * ctx = nullptr, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
                                                 ~SimpleTexturePlugin        ();
 
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;                                                                           

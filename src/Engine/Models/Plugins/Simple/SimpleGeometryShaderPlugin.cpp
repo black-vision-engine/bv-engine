@@ -24,7 +24,7 @@ public:
 
 // *********************************
 //
-SimpleGeometryShaderPlugin::SimpleGeometryShaderPlugin          ( const IPlugin * prev, const std::string & shaderPath )
+SimpleGeometryShaderPlugin::SimpleGeometryShaderPlugin          ( IPluginConstPtr prev, const std::string & shaderPath )
     : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_shaderPath( shaderPath )
 {

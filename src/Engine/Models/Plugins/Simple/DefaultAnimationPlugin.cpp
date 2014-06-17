@@ -24,7 +24,7 @@ DefaultAnimationPluginDesc::DefaultAnimationPluginDesc                          
 
 // *******************************
 //
-IPlugin *               DefaultAnimationPluginDesc::CreatePlugin              ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr              DefaultAnimationPluginDesc::CreatePlugin              ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreatePluginTyped< DefaultAnimationPlugin >( name, prev, timeEvaluator );
 }
@@ -80,7 +80,7 @@ DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( 
 
 // *******************************
 //
-bool                   DefaultAnimationPluginDesc::CanBeAttachedTo     ( const IPlugin * plugin ) const
+bool                   DefaultAnimationPluginDesc::CanBeAttachedTo     ( IPluginConstPtr plugin ) const
 {
     if ( plugin == nullptr )
     {
@@ -137,7 +137,7 @@ std::string             DefaultAnimationPluginDesc::TextureName               ()
 
 // *************************************
 // 
-DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model )
+DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_psc( nullptr )
     , m_vsc( nullptr )
@@ -157,11 +157,11 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
     //Direct param state access (to bypass model querying)
     auto psModel = PixelShaderChannelModel();
     
-    m_paramFrameNum         = QueryTypedParam< ParamFloat >( psModel->GetParameter( "frameNum" ) );
-    m_paramWrapModeX        = QueryTypedParam< ParamFloat >( psModel->GetParameter( "wrapModeX" ) );
-    m_paramWrapModeY        = QueryTypedParam< ParamFloat >( psModel->GetParameter( "wrapModeY" ) );
-    m_paramFilteringMode    = QueryTypedParam< ParamFloat >( psModel->GetParameter( "filteringMode" ) );
-    m_paramAttachMode       = QueryTypedParam< ParamFloat >( psModel->GetParameter( "attachmentMode" ) );
+    m_paramFrameNum         = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "frameNum" ) );
+    m_paramWrapModeX        = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "wrapModeX" ) );
+    m_paramWrapModeY        = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "wrapModeY" ) );
+    m_paramFilteringMode    = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "filteringMode" ) );
+    m_paramAttachMode       = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "attachmentMode" ) );
 
     assert( m_paramFrameNum );
     assert( m_paramWrapModeX );
@@ -294,7 +294,7 @@ void                                DefaultAnimationPlugin::Update              
 
 // *************************************
 //
-void DefaultAnimationPlugin::InitAttributesChannel( const IPlugin * prev )
+void DefaultAnimationPlugin::InitAttributesChannel( IPluginConstPtr prev )
 {
     auto prevGeomChannel = prev->GetVertexAttributesChannel();
     AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
@@ -364,6 +364,16 @@ namespace {
 // FIXME: implement int parameters and bool parameters
 template< typename EnumClassType >
 inline EnumClassType EvaluateAsInt( ParamFloat * param )
+{
+    int val = int( param->Evaluate() );
+
+    return EnumClassType( val );
+}
+
+// *************************************
+// FIXME: implement int parameters and bool parameters
+template< typename EnumClassType >
+inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
 {
     int val = int( param->Evaluate() );
 

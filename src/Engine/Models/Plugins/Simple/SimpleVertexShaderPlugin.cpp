@@ -22,7 +22,7 @@ public:
 
 // *********************************
 //
-SimpleVertexShaderPlugin::SimpleVertexShaderPlugin          ( const IPlugin * prev, const std::string& shaderPath )
+SimpleVertexShaderPlugin::SimpleVertexShaderPlugin          ( IPluginConstPtr prev, const std::string& shaderPath )
     : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_shaderPath( shaderPath )
 {

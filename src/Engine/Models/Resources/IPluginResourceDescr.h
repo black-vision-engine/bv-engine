@@ -20,6 +20,7 @@ public:
 };
 
 DEFINE_PTR_TYPE(IPluginResourceDescr)
+DEFINE_CONST_PTR_TYPE(IPluginResourceDescr)
 
 
 //FIXME: move to a separate file

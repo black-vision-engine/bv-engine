@@ -17,7 +17,7 @@ DefaultPluginListFinalized::DefaultPluginListFinalized      ( const std::vector<
 {
     assert( plugins.size() > 0 );
    
-    m_finalizePlugin->SetPrevPlugin( plugins.back().get() );
+    m_finalizePlugin->SetPrevPlugin( plugins.back() );
 }
 
 // *******************************
@@ -28,13 +28,13 @@ DefaultPluginListFinalized::~DefaultPluginListFinalized     ()
 
 // *******************************
 //
-const IPlugin *         DefaultPluginListFinalized::GetPlugin           ( const std::string & name ) const
+IPluginConstPtr         DefaultPluginListFinalized::GetPlugin           ( const std::string & name ) const
 {
     for( auto plugin : m_plugins )
     {
         if( plugin->GetName() == name )
         {
-            return plugin.get();
+            return plugin;
         }
     }
 
@@ -43,20 +43,20 @@ const IPlugin *         DefaultPluginListFinalized::GetPlugin           ( const 
 
 // *******************************
 //
-const IPlugin *         DefaultPluginListFinalized::GetPlugin           ( unsigned int idx ) const
+IPluginConstPtr         DefaultPluginListFinalized::GetPlugin           ( unsigned int idx ) const
 {
     assert( idx < m_plugins.size() );
 
-    return m_plugins[ idx ].get();
+    return m_plugins[ idx ];
 }
 
 // *******************************
 //
-const IPlugin *         DefaultPluginListFinalized::GetLastPlugin       () const
+IPluginConstPtr         DefaultPluginListFinalized::GetLastPlugin       () const
 {
     assert( m_plugins.size() > 0 );
 
-    return m_plugins.back().get();
+    return m_plugins.back();
 }
 
 // *******************************
@@ -88,13 +88,13 @@ void                    DefaultPluginListFinalized::Update              ( TimeTy
 
 // *******************************
 //
-IPlugin *               DefaultPluginListFinalized::GetPlugin           ( const std::string & name )
+IPluginPtr               DefaultPluginListFinalized::GetPlugin           ( const std::string & name )
 {
     for( auto plugin : m_plugins )
     {
         if( plugin->GetName() == name )
         {
-            return plugin.get();
+            return plugin;
         }
     }
 
@@ -103,16 +103,16 @@ IPlugin *               DefaultPluginListFinalized::GetPlugin           ( const 
 
 // *******************************
 //
-IPlugin *               DefaultPluginListFinalized::GetPlugin           ( unsigned int idx )
+IPluginPtr                DefaultPluginListFinalized::GetPlugin           ( unsigned int idx )
 {
     assert( idx < m_plugins.size() );
 
-    return m_plugins[ idx ].get();
+    return m_plugins[ idx ];
 }
 
 // *******************************
 //
-void                    DefaultPluginListFinalized::AttachPlugin        ( IPlugin * plugin )
+void                    DefaultPluginListFinalized::AttachPlugin        ( IPluginPtr plugin )
 {
     assert( plugin != nullptr );
 

@@ -30,7 +30,7 @@ DefaultTextPluginDesc::DefaultTextPluginDesc                            ()
 
 // *******************************
 //
-IPlugin *               DefaultTextPluginDesc::CreatePlugin             ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr              DefaultTextPluginDesc::CreatePlugin             ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreatePluginTyped< DefaultTextPlugin >( name, prev, timeEvaluator );
 }
@@ -78,7 +78,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
 // *******************************
 //
-bool                   DefaultTextPluginDesc::CanBeAttachedTo   ( const IPlugin * plugin ) const
+bool                   DefaultTextPluginDesc::CanBeAttachedTo   ( IPluginConstPtr plugin ) const
 {
     if ( plugin == nullptr )
     {
@@ -131,7 +131,7 @@ std::string             DefaultTextPluginDesc::FontFileName             ()
 
 // *************************************
 // 
-DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model )
+DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_psc( nullptr )
     , m_vsc( nullptr )
@@ -178,8 +178,8 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
-    m_fontSizeParam = QueryTypedParam< ParamFloat >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
-    m_blurSizeParam = QueryTypedParam< ParamFloat >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
+    m_fontSizeParam = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
+    m_blurSizeParam = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
 }
 
 // *************************************
@@ -285,7 +285,7 @@ void                                DefaultTextPlugin::Update                   
 
 // *************************************
 //
-void DefaultTextPlugin::InitAttributesChannel( const IPlugin * prev )
+void DefaultTextPlugin::InitAttributesChannel( IPluginConstPtr prev )
 {
     m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 

@@ -25,7 +25,7 @@ private:
 
 public:
 
-    explicit                                SimpleColorPlugin           ( const IPlugin * prev, const ParamVec4 & color );
+    explicit                                SimpleColorPlugin           ( IPluginConstPtr prev, const ParamVec4 & color );
                                             ~SimpleColorPlugin          ();
 
     virtual const IPixelShaderChannel *     GetPixelShaderChannel       () const;

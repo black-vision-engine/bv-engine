@@ -16,7 +16,7 @@ namespace bv { namespace model {
 
 // *************************************
 //
-SimpleAnimationPlugin::SimpleAnimationPlugin                    ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, const ParamFloat & frameCounter, model::RendererContext * ctx, TextureAttachmentMode mode )
+SimpleAnimationPlugin::SimpleAnimationPlugin                    ( IPluginConstPtr prev, const std::vector< std::string > & texturesFilesNames, const ParamFloat & frameCounter, model::RendererContext * ctx, TextureAttachmentMode mode )
     : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_attachmentMode( mode )
     , m_frameCounter( frameCounter )

@@ -78,7 +78,7 @@ const IPluginDescriptor *                           PluginsManager::GetDescripto
 
 // *********************************
 //
-bool                                                PluginsManager::CanBeAttachedTo         ( const std::string & uid, const IPlugin * prev ) const
+bool                                                PluginsManager::CanBeAttachedTo         ( const std::string & uid, IPluginConstPtr prev ) const
 {
     if( !IsRegistered( uid ) )
     {
@@ -90,7 +90,7 @@ bool                                                PluginsManager::CanBeAttache
 
 // *********************************
 //
-IPlugin *                                           PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPlugin *                                           PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     if( !CanBeAttachedTo( uid, prev ) )
     {
@@ -102,7 +102,7 @@ IPlugin *                                           PluginsManager::CreatePlugin
 
 // *********************************
 //
-IPlugin *                                           PluginsManager::CreatePlugin            ( const std::string & uid, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPlugin *                                           PluginsManager::CreatePlugin            ( const std::string & uid, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     if( !CanBeAttachedTo( uid, prev ) )
     {

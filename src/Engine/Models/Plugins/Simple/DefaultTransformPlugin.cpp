@@ -17,7 +17,7 @@ DefaultTransformPluginDesc::DefaultTransformPluginDesc                          
 
 // *******************************
 //
-IPlugin *               DefaultTransformPluginDesc::CreatePlugin                ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr              DefaultTransformPluginDesc::CreatePlugin                ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreatePluginTyped< DefaultTransformPlugin >( name, prev, timeEvaluator );
 }
@@ -51,7 +51,7 @@ std::string             DefaultTransformPluginDesc::UID                         
 
 // *******************************
 //
-DefaultTransformPlugin::DefaultTransformPlugin  ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model )
+DefaultTransformPlugin::DefaultTransformPlugin  ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_transformChannel( nullptr )
     , m_paramValModel( model )

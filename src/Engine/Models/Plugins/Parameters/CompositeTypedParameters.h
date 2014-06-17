@@ -30,7 +30,7 @@ public:
 
     inline  glm::mat4   Evaluate        () const;
 
-    virtual void *      QueryParamTyped () override;
+    virtual VoidPtr     QueryParamTyped () override;
 
     const TransformF &  GetTransformF   () const
     {
@@ -72,7 +72,7 @@ public:
 
     inline  glm::mat4   Evaluate            ( unsigned int transformNum ) const;
 
-    virtual void *      QueryParamTyped     () override;
+    virtual VoidPtr     QueryParamTyped     () override;
 
     static  ModelParamType  Type        ()
     {

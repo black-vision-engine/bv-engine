@@ -54,7 +54,7 @@ private:
 
 public:
 
-    explicit                            SimpleAnimationPlugin       ( const IPlugin * prev, const std::vector< std::string > & texturesFilesNames, const ParamFloat & frameCounter, model::RendererContext * ctx = nullptr, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
+    explicit                            SimpleAnimationPlugin       ( IPluginConstPtr prev, const std::vector< std::string > & texturesFilesNames, const ParamFloat & frameCounter, model::RendererContext * ctx = nullptr, TextureAttachmentMode mode = TextureAttachmentMode::MM_ATTACHED );
                                         ~SimpleAnimationPlugin      ();
 
     void                                SetAttachmentMode           ( TextureAttachmentMode mode );

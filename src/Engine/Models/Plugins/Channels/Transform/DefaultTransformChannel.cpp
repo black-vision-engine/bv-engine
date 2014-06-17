@@ -23,7 +23,7 @@ DefaultTransformChannel::DefaultTransformChannel( const IPlugin * prev, const Va
 
 // *********************************
 //
-DefaultTransformChannel *   DefaultTransformChannel::Create              ( const IPlugin * prev, const ValueMat4PtrVec & values, bool isReadOnly )
+DefaultTransformChannel *   DefaultTransformChannel::Create              ( IPluginConstPtr prev, const ValueMat4PtrVec & values, bool isReadOnly )
 {
     return new DefaultTransformChannel( prev, values, isReadOnly );
 }

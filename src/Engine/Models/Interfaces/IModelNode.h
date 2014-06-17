@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "Engine/Interfaces/IUpdatable.h"
-
+#include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 
 namespace bv {
 
@@ -23,7 +23,7 @@ public:
 
     virtual const std::string &             GetName             () const                                                            = 0;
 
-    virtual IPlugin *                       GetPlugin           ( const std::string & name ) const                                  = 0;
+    virtual IPluginPtr                      GetPlugin           ( const std::string & name ) const                                  = 0;
     virtual const IFinalizePlugin *         GetFinalizePlugin   () const                                                            = 0;
 
     virtual IModelNode *                    GetNode             ( const std::string & path, const std::string & separator = "/" )   = 0;

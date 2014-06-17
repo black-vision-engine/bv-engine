@@ -26,7 +26,7 @@ public:
     virtual ITimeEvaluatorPtr       GetTimeEvaluator() = 0;
     virtual void                    SetTimeEvaluator( ITimeEvaluatorPtr timeEvaluator ) = 0;
 
-    virtual void *                  QueryParamTyped () = 0;
+    virtual VoidPtr                 QueryParamTyped () = 0;
 
     virtual ~IParameter() {}
 
@@ -34,28 +34,54 @@ public:
 
 // *********************************
 //
-template< typename ParamType >
-ParamType * QueryTypedParam( IParameterPtr param )
+template< typename ParamTypePtr >
+ParamTypePtr  QueryTypedParam( IParameterPtr param )
 {
-    if( param->GetType() != ParamType::Type() )
+    if( param->GetType() != ParamTypePtr::element_type::Type() )
     {
         return nullptr;
     }
 
-    return static_cast< ParamType * >( param->QueryParamTyped() );
+    return std::static_pointer_cast< ParamTypePtr::element_type >( param->QueryParamTyped() );
+}
+
+// *********************************
+//
+template< typename ParamTypeConstPtr >
+ParamTypeConstPtr QueryTypedParam( IParameterConstPtr param )
+{
+    if( param->GetType() != ParamTypeConstPtr::element_type::Type() )
+    {
+        return nullptr;
+    }
+
+    return std::static_pointer_cast< ParamTypeConstPtr::element_type >( std::const_pointer_cast< IParameter >( param )->QueryParamTyped() );
 }
 
 // *********************************
 //
 template< typename ParamType >
-const ParamType * QueryTypedParam( IParameterConstPtr param )
+ParamType * QueryTypedParam( IParameter * param )
 {
     if( param->GetType() != ParamType::Type() )
     {
         return nullptr;
     }
 
-    return static_cast< const ParamType * >( std::const_pointer_cast< IParameterPtr >( param )->QueryParamTyped() );
+    return static_cast< ParamType * >( param->QueryParamTyped().get() );
+}
+
+// *********************************
+//
+template< typename ParamType >
+const ParamType * QueryTypedParam( const IParameter * param )
+{
+    if( param->GetType() != ParamType::Type() )
+    {
+        return nullptr;
+    }
+
+    return static_cast< const ParamType * >( std::const_pointer_cast< IParameter * >( param )->QueryParamTyped().get() );
 }
 
 void    SetParamTimeline( IParameterPtr param, ITimeEvaluatorPtr timeline );

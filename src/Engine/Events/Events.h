@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Events/BaseEvent.h"
+#include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 
 #include  "glm/glm.hpp"
 
@@ -10,7 +11,6 @@ namespace bv
 
 namespace model
 {
-    class IPlugin;
     class IModelNode;
 }
 
@@ -21,7 +21,7 @@ class PluginAddedEvent : public BaseEvent
 {
 private:
 
-    const model::IPlugin *      m_addedPlugin;
+    model::IPluginConstPtr      m_addedPlugin;
 
 public:
 
@@ -31,7 +31,7 @@ public:
 public:
 
     explicit                        PluginAddedEvent();
-    explicit                        PluginAddedEvent( const model::IPlugin * plugin );
+    explicit                        PluginAddedEvent( model::IPluginConstPtr plugin );
 
     virtual EventType               GetEventType    () const;
 
@@ -42,7 +42,7 @@ public:
 
     virtual const std::string &     GetName         () const;
 
-    const model::IPlugin *          GetPlugin       () const;
+    model::IPluginConstPtr          GetPlugin       () const;
 
     static EventType                Type            ();
 

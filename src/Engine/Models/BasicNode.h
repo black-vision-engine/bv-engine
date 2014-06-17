@@ -60,7 +60,7 @@ public:
     explicit BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager = nullptr );
     virtual ~BasicNode();
 
-    virtual IPlugin *                       GetPlugin               ( const std::string & name ) const override;
+    virtual IPluginPtr                      GetPlugin               ( const std::string & name ) const override;
     virtual const IFinalizePlugin *         GetFinalizePlugin       () const override;
 
     virtual IModelNode *                    GetNode                 ( const std::string & path, const std::string & separator = "/" ) override;

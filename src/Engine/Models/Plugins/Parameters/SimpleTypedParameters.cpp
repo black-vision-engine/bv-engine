@@ -5,9 +5,9 @@ namespace bv { namespace model {
 
 // *******************************
 //
-void *  ParamMat2::QueryParamTyped ()
+VoidPtr ParamMat2::QueryParamTyped ()
 {
-    return static_cast< void * >( this );
+    return std::static_pointer_cast< void >( shared_from_this() );
 }
 
 

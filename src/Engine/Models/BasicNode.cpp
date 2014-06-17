@@ -71,7 +71,7 @@ BasicNode::~BasicNode()
 
 // ********************************
 //
-IPlugin *                       BasicNode::GetPlugin                ( const std::string & name ) const
+IPluginPtr                      BasicNode::GetPlugin                ( const std::string & name ) const
 {
     return m_pluginList->GetPlugin( name );
 }
@@ -274,7 +274,7 @@ bool            BasicNode::AddPlugin                ( IPlugin * plugin )
 {
     NonNullPluginsListGuard();
 
-    const IPlugin * prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
+    IPluginConstPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
 
     assert( m_pluginsManager->CanBeAttachedTo( plugin->GetTypeUid(), prev ) );
 

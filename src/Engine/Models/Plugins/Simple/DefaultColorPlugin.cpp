@@ -17,7 +17,7 @@ DefaultColorPluginDesc::DefaultColorPluginDesc                          ()
 
 // *******************************
 //
-IPlugin *               DefaultColorPluginDesc::CreatePlugin                ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr              DefaultColorPluginDesc::CreatePlugin                ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreatePluginTyped< DefaultColorPlugin >( name, prev, timeEvaluator );
 }
@@ -58,7 +58,7 @@ std::string             DefaultColorPluginDesc::PixelShaderSource           ()
 
 // *******************************
 //
-DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model )
+DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_pixelShaderChannel( nullptr )
     , m_paramValModel( model )

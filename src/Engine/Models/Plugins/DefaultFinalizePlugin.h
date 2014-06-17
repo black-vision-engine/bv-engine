@@ -10,7 +10,7 @@ class DefaultFinalizePlugin : public IFinalizePlugin
 {
 private:
 
-    const IPlugin *                 m_prevPlugin;
+    IPluginConstPtr                 m_prevPlugin;
     
     std::string                     m_name;
     static std::string              m_uid;
@@ -41,7 +41,7 @@ public:
 
     virtual void                                Update                      ( TimeType t ) override;
 
-    void                                        SetPrevPlugin               ( const IPlugin * plugin );
+    void                                        SetPrevPlugin               ( IPluginConstPtr plugin );
     void                                        SetName                     ( const std::string & name );
 
 };

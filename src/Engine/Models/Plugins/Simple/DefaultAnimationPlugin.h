@@ -22,10 +22,10 @@ public:
 
     DefaultAnimationPluginDesc                                    ();
 
-    virtual IPlugin *                       CreatePlugin        ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
-    virtual bool                            CanBeAttachedTo     ( const IPlugin * plugin )  const override;
+    virtual bool                            CanBeAttachedTo     ( IPluginConstPtr plugin )  const override;
 
     static  std::string                     UID                 ();
 
@@ -52,11 +52,11 @@ private:
 
     unsigned int                    m_texCoordChannelIndex;
 
-    ParamFloat *                    m_paramFrameNum;
-    ParamFloat *                    m_paramWrapModeX;
-    ParamFloat *                    m_paramWrapModeY;
-    ParamFloat *                    m_paramFilteringMode;
-    ParamFloat *                    m_paramAttachMode;
+    ParamFloatPtr                   m_paramFrameNum;
+    ParamFloatPtr                   m_paramWrapModeX;
+    ParamFloatPtr                   m_paramWrapModeY;
+    ParamFloatPtr                   m_paramFilteringMode;
+    ParamFloatPtr                   m_paramAttachMode;
 
     TextureWrappingMode             m_lastTextureWrapModeX;
     TextureWrappingMode             m_lastTextureWrapModeY;
@@ -65,7 +65,7 @@ private:
 
 public:
 
-    explicit                                    DefaultAnimationPlugin      ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model );
+    explicit                                    DefaultAnimationPlugin      ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model );
                                                 ~DefaultAnimationPlugin     ();
 
     virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr ) override;
@@ -78,7 +78,7 @@ public:
 
 private:
 
-    void                                        InitAttributesChannel       ( const IPlugin * prev );
+    void                                        InitAttributesChannel       ( IPluginConstPtr prev );
 
     TextureWrappingMode                         GetWrapModeX                () const;
     TextureWrappingMode                         GetWrapModeY                () const;

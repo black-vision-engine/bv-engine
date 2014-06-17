@@ -25,7 +25,7 @@ private:
 
 public:
 
-    explicit                                SimplePixelShaderPlugin     ( const IPlugin * prev, const std::string & shaderPath, RendererContext * ctx = nullptr );
+    explicit                                SimplePixelShaderPlugin     ( IPluginConstPtr prev, const std::string & shaderPath, RendererContext * ctx = nullptr );
                                             ~SimplePixelShaderPlugin    ();
 
     virtual const IPixelShaderChannel *     GetPixelShaderChannel       () const;

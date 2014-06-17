@@ -16,7 +16,7 @@ namespace bv { namespace model {
 
 // *************************************
 //
-SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, TextureAttachmentMode amode )
+SimpleTexturePlugin::SimpleTexturePlugin                    ( IPluginConstPtr prev, const std::vector< const TextureDescriptor > & textureDescs, TextureAttachmentMode amode )
     : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_attachmentMode( amode )
 {
@@ -60,7 +60,7 @@ SimpleTexturePlugin::SimpleTexturePlugin                    ( const IPlugin * pr
 
 // *************************************
 //
-SimpleTexturePlugin::SimpleTexturePlugin( const IPlugin * prev, const std::vector< const TextureDescriptor > & textureDescs, model::RendererContext * ctx, TextureAttachmentMode mode )
+SimpleTexturePlugin::SimpleTexturePlugin( IPluginConstPtr prev, const std::vector< const TextureDescriptor > & textureDescs, model::RendererContext * ctx, TextureAttachmentMode mode )
     : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_attachmentMode( mode )
 {
@@ -124,7 +124,7 @@ void                        SimpleTexturePlugin::SetAttachmentMode           ( T
 
 // *************************************
 //
-void SimpleTexturePlugin::EvalGeometryChannel( const IPlugin * prev )
+void SimpleTexturePlugin::EvalGeometryChannel( IPluginConstPtr prev )
 {
     auto prevGeomChannel = prev->GetVertexAttributesChannel();
     AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );

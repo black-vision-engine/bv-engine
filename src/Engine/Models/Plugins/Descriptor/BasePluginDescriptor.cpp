@@ -27,7 +27,7 @@ const std::string &     BasePluginDescriptor::DefaultPluginName () const
 
 // *********************************
 //
-bool                    BasePluginDescriptor::CanBeAttachedTo   ( const IPlugin * plugin )  const
+bool                    BasePluginDescriptor::CanBeAttachedTo   ( IPluginConstPtr plugin )  const
 {
     //By default assume that plugin can be connected just to any other plugin
     return true;

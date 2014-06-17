@@ -21,7 +21,7 @@ class BasePlugin : public Iface
 protected:
 
     ///////////////// Previous plugin ///////////
-    const IPlugin *                             m_prevPlugin;
+    IPluginConstPtr                             m_prevPlugin;
 
     std::string                                 m_name;
     std::string                                 m_uid;
@@ -30,7 +30,7 @@ protected:
 
 protected:
 
-    explicit                                    BasePlugin                  ( const std::string & name, const std::string & uid, const IPlugin * prevPlugin, IPluginParamValModelPtr model );
+    explicit                                    BasePlugin                  ( const std::string & name, const std::string & uid, IPluginConstPtr prevPlugin, IPluginParamValModelPtr model );
 
 public:
 
@@ -85,7 +85,7 @@ void BasePlugin< Iface >::Update  ( TimeType t )
 // *******************************
 //
 template< class Iface >
-BasePlugin< Iface >::BasePlugin   ( const std::string & name, const std::string & uid, const IPlugin * prevPlugin, IPluginParamValModelPtr model )
+BasePlugin< Iface >::BasePlugin   ( const std::string & name, const std::string & uid, IPluginConstPtr prevPlugin, IPluginParamValModelPtr model )
     : m_prevPlugin( prevPlugin )
     , m_pluginParamValModel( model )
     , m_name( name )

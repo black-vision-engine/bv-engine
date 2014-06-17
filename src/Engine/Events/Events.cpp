@@ -34,7 +34,7 @@ PluginAddedEvent::PluginAddedEvent                          ()
 
 // *************************************
 //
-PluginAddedEvent::PluginAddedEvent                          ( const model::IPlugin * plugin )
+PluginAddedEvent::PluginAddedEvent                          ( model::IPluginConstPtr plugin )
     : m_addedPlugin( plugin )
 {
 }
@@ -78,7 +78,7 @@ const std::string &     PluginAddedEvent::GetName           () const
 
 // *************************************
 //
-const model::IPlugin *  PluginAddedEvent::GetPlugin         () const
+model::IPluginConstPtr  PluginAddedEvent::GetPlugin         () const
 {
     return m_addedPlugin;
 }
