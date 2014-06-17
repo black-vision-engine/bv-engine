@@ -5,6 +5,7 @@
 
 #include "Engine/Interfaces/IUpdatable.h"
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
+#include "Engine/Models/Plugins/Interfaces/IFinalizePlugin.h"
 
 namespace bv {
 
@@ -12,10 +13,13 @@ class SceneNode;
 
 namespace model {
 
-class IPlugin;
 class IFinalizePlugin;
 class IPluginListFinalized;
 class IOverrideState;
+
+class IModelNode;
+DEFINE_PTR_TYPE(IModelNode)
+DEFINE_CONST_PTR_TYPE(IModelNode)
 
 class IModelNode : public bv::IUpdatable
 {
@@ -24,11 +28,11 @@ public:
     virtual const std::string &             GetName             () const                                                            = 0;
 
     virtual IPluginPtr                      GetPlugin           ( const std::string & name ) const                                  = 0;
-    virtual const IFinalizePlugin *         GetFinalizePlugin   () const                                                            = 0;
+    virtual IFinalizePluginConstPtr         GetFinalizePlugin   () const                                                            = 0;
 
-    virtual IModelNode *                    GetNode             ( const std::string & path, const std::string & separator = "/" )   = 0;
-    virtual IModelNode *                    GetChild            ( const std::string & name )                                        = 0;
-    virtual IModelNode *                    GetLayer            ( const std::string & name )                                        = 0;
+    virtual IModelNodePtr                   GetNode             ( const std::string & path, const std::string & separator = "/" )   = 0;
+    virtual IModelNodePtr                   GetChild            ( const std::string & name )                                        = 0;
+    virtual IModelNodePtr                   GetLayer            ( const std::string & name )                                        = 0;
 
     virtual const IPluginListFinalized *    GetPluginList       () const                                                            = 0;
 
@@ -49,8 +53,6 @@ public:
     virtual                                 ~IModelNode         () {};
 
 };
-
-DEFINE_PTR_TYPE(IModelNode)
 
 } //model
 } //bv

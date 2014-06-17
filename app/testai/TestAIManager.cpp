@@ -52,7 +52,7 @@ unsigned int    TestAIManager::NumAIPresets () const
 
 // *********************************
 //
-TestAI *        TestAIManager::GetAIPreset  ( unsigned int idx, model::IModelNode * node )
+TestAI *        TestAIManager::GetAIPreset  ( unsigned int idx, model::IModelNodePtr node )
 {
     assert( idx < NumAIPresets() );
 
@@ -69,7 +69,7 @@ TestAI *        TestAIManager::GetAIPreset  ( unsigned int idx, model::IModelNod
 
 // *********************************
 //
-TestAI *        TestAIManager::PreparePreset    ( unsigned int idx, model::IModelNode * node ) const
+TestAI *        TestAIManager::PreparePreset    ( unsigned int idx, model::IModelNodePtr node ) const
 {
     if( idx == 0 )
     {
@@ -184,7 +184,7 @@ TestAI *        TestAIManager::PreparePreset2   () const
 
 // *********************************
 //
-TestAI *        TestAIManager::PreparePreset3   ( model::IModelNode * node ) const
+TestAI *        TestAIManager::PreparePreset3   ( model::IModelNodePtr node ) const
 {
     auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ) );
 

@@ -26,7 +26,7 @@ public:
 
     virtual unsigned int            NumPlugins          () const override;
 
-    virtual const IFinalizePlugin * GetFinalizePlugin   () const override;
+    virtual IFinalizePluginConstPtr GetFinalizePlugin   () const override;
 
     virtual void                    Update              ( TimeType t ) override;
 

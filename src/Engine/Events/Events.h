@@ -2,6 +2,7 @@
 
 #include "Engine/Events/BaseEvent.h"
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
+#include "Engine/Models/Interfaces/IModelNode.h"
 
 #include  "glm/glm.hpp"
 
@@ -51,11 +52,15 @@ public:
 DEFINE_PTR_TYPE(PluginAddedEvent)
 
 // ************************************* NodeAddedEvent *************************************
+class NodeAddedEvent;
+DEFINE_PTR_TYPE(NodeAddedEvent)
+DEFINE_CONST_PTR_TYPE(NodeAddedEvent)
+
 class NodeAddedEvent : public BaseEvent
 {
 private:
 
-    const model::IModelNode *   m_addedNode;
+    model::IModelNodeConstPtr   m_addedNode;
 
 public:
 
@@ -65,7 +70,7 @@ public:
 public:
 
     explicit                        NodeAddedEvent  ();
-    explicit                        NodeAddedEvent  ( const model::IModelNode * node );
+    explicit                        NodeAddedEvent  ( model::IModelNodeConstPtr node );
 
     virtual EventType               GetEventType    () const;
 
@@ -76,13 +81,11 @@ public:
 
     virtual const std::string &     GetName         () const;
 
-    const model::IModelNode *       GetNode         () const;
+    model::IModelNodeConstPtr       GetNode         () const;
 
     static EventType                Type            ();
 
 };
-
-DEFINE_PTR_TYPE(NodeAddedEvent)
 
 
 // ************************************* FrameRenderedEvent *************************************

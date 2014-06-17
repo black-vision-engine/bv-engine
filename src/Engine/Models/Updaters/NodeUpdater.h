@@ -25,11 +25,13 @@
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannelDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
+#include "Engine/Models/Interfaces/IModelNode.h"
 
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 #include "Engine/Graphics/Resources/VertexBuffer.h"
 
 #include "Engine/Graphics/Resources/VertexArray.h"
+
 
 
 namespace bv {
@@ -60,7 +62,7 @@ class NodeUpdater : public IUpdater
 private:
 
     SceneNode *                                 m_sceneNode;
-    const model::IModelNode *                   m_modelNode;
+    model::IModelNodeConstPtr                   m_modelNode;
 
     RenderableEntity *                          m_renderable;
     const model::ITransformChannel *            m_transformChannel;
@@ -79,7 +81,7 @@ private:
 
 public:
 
-                    NodeUpdater         ( RenderableEntity * renderable, SceneNode * sceneNode, const model::IModelNode * modelNode ); 
+                    NodeUpdater         ( RenderableEntity * renderable, SceneNode * sceneNode, model::IModelNodeConstPtr modelNode ); 
                     ~NodeUpdater        ();
 
     virtual void    DoUpdate            () override;

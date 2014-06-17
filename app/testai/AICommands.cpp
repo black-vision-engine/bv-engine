@@ -277,7 +277,7 @@ bool        AICommandSetTimeAndPlay::TriggerImpl    ( TimeType t )
 
 // *********************************
 //
-AICommandEnableOverridenAlpha::AICommandEnableOverridenAlpha    ( model::IModelNode * root, const std::string & node, TimeType triggerTime )
+AICommandEnableOverridenAlpha::AICommandEnableOverridenAlpha    ( model::IModelNodePtr root, const std::string & node, TimeType triggerTime )
     : AICommandBase( triggerTime, "ENABLE_OV_ALPHA" )
 {
     m_node = root->GetNode( node );
@@ -329,7 +329,7 @@ bool        AICommandEnableOverridenAlpha::TriggerImpl          ( TimeType t )
 
 // *********************************
 //
-AICommandDisableAlpha::AICommandDisableAlpha    ( model::IModelNode * root, const std::string & node, TimeType triggerTime )
+AICommandDisableAlpha::AICommandDisableAlpha    ( model::IModelNodePtr root, const std::string & node, TimeType triggerTime )
     : AICommandBase( triggerTime, "DISABLE_OV_ALPHA" )
 {
     m_node = root->GetNode( node );

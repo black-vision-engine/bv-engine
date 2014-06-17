@@ -13,5 +13,8 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(IFinalizePlugin)
+DEFINE_CONST_PTR_TYPE(IFinalizePlugin)
+
 } //model
 } //bv

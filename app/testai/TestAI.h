@@ -18,11 +18,11 @@ private:
 
     std::vector< AICommandBase * >  m_commands;
     model::DefaultTimelinePtr       m_timeline;
-    model::IModelNode *             m_root;
+    model::IModelNodePtr            m_root;
 
 private:
 
-                TestAI      ( model::DefaultTimelinePtr timeline, model::IModelNode * root );
+                TestAI      ( model::DefaultTimelinePtr timeline, model::IModelNodePtr root );
                 ~TestAI     ();
 
 

@@ -68,9 +68,9 @@ unsigned int            DefaultPluginListFinalized::NumPlugins          () const
 
 // *******************************
 //
-const IFinalizePlugin * DefaultPluginListFinalized::GetFinalizePlugin   () const
+IFinalizePluginConstPtr DefaultPluginListFinalized::GetFinalizePlugin   () const
 {
-    return m_finalizePlugin.get();
+    return m_finalizePlugin;
 }
 
 // *******************************

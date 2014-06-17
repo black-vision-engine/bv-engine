@@ -174,7 +174,7 @@ model::BasicNode *  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::Timeli
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateGreenRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & nodeName )
+model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & nodeName )
 {
     //Plugin list
     std::vector< std::string > uids;

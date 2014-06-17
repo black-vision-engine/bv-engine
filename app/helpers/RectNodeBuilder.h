@@ -11,7 +11,7 @@ class RectNodeBuilder
 {
 protected:
 
-    model::BasicNode *          m_node;
+    model::BasicNodePtr         m_node;
     model::ITimeEvaluatorPtr    m_timeEvaluator;
     std::string                 m_shaderPluginUID;
 
@@ -37,7 +37,7 @@ public:
     void                        SetRotation         ( float x, float y, float z, float angle, TimeType t = TimeType( 0.0 ) );
     void                        SetScale            ( float sx, float sy, float sz, TimeType t = TimeType( 0.0 ) );
 
-    virtual model::BasicNode *  CreateNode          ( const std::string & name, bool resetToBuilderDefaults = false );
+    virtual model::BasicNodePtr CreateNode          ( const std::string & name, bool resetToBuilderDefaults = false );
     virtual void                SetDefaults         ();
 
     std::string                 TransformPluginName () const;
@@ -54,7 +54,7 @@ protected:
     model::IPluginPtr           GetRectPlugin       ();
     model::IPluginPtr           GetShaderPlugin     ();
 
-    model::BasicNode *          CreateNewNode       () const;
+    model::BasicNodePtr         CreateNewNode       () const;
 
 };
 
@@ -93,7 +93,7 @@ public:
 
     virtual std::string         ShaderPluginName() const override;
 
-    virtual model::BasicNode *  CreateNode      ( const std::string & name, bool resetToBuilderDefaults = false ) override;
+    virtual model::BasicNodePtr CreateNode      ( const std::string & name, bool resetToBuilderDefaults = false ) override;
 
 };
 

@@ -168,12 +168,12 @@ class AICommandEnableOverridenAlpha : public AICommandBase
 {
 private:
 
-    TimeType            m_eventTime;
-    model::IModelNode * m_node;
+    TimeType                m_eventTime;
+    model::IModelNodePtr    m_node;
 
 public:
 
-                        AICommandEnableOverridenAlpha   ( model::IModelNode * root, const std::string & node, TimeType triggerTime );
+                        AICommandEnableOverridenAlpha   ( model::IModelNodePtr root, const std::string & node, TimeType triggerTime );
                         ~AICommandEnableOverridenAlpha  ();
 
     virtual void        SetTimeline                     ( model::DefaultTimelinePtr timeline ) override;
@@ -189,12 +189,12 @@ class AICommandDisableAlpha : public AICommandBase
 {
 private:
 
-    TimeType            m_eventTime;
-    model::IModelNode * m_node;
+    TimeType                m_eventTime;
+    model::IModelNodePtr    m_node;
 
 public:
 
-                        AICommandDisableAlpha       ( model::IModelNode * root, const std::string & node, TimeType triggerTime );
+                        AICommandDisableAlpha       ( model::IModelNodePtr root, const std::string & node, TimeType triggerTime );
                         ~AICommandDisableAlpha      ();
 
     virtual void        SetTimeline                 ( model::DefaultTimelinePtr timeline ) override;

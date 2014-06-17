@@ -40,7 +40,7 @@ namespace
 
     TransformSetEventPtr  GTransformSetEvent;
 
-    void GownoWFormieKebaba( TimeType t, model::IModelNode * node )
+    void GownoWFormieKebaba( TimeType t, model::IModelNodePtr node )
     {
         //DETERMINSTIC TIME INTERVALS
         //static TimeType tt = TimeType( 0.0 );

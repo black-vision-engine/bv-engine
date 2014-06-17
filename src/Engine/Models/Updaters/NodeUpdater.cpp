@@ -20,7 +20,7 @@ namespace bv
 
 // *****************************
 //
-NodeUpdater::NodeUpdater     ( RenderableEntity * renderable, SceneNode * sceneNode, const model::IModelNode * modelNode )
+NodeUpdater::NodeUpdater     ( RenderableEntity * renderable, SceneNode * sceneNode, model::IModelNodeConstPtr modelNode )
     : m_sceneNode( sceneNode )
     , m_modelNode( modelNode )
     , m_renderable( renderable )
@@ -33,7 +33,7 @@ NodeUpdater::NodeUpdater     ( RenderableEntity * renderable, SceneNode * sceneN
 
     m_timeInvariantVertexData = false;
 
-    const model::IPlugin * finalizer = modelNode->GetFinalizePlugin();
+    model::IPluginConstPtr finalizer = modelNode->GetFinalizePlugin();
     assert( finalizer );
 
     auto effect = renderable->GetRenderableEffect();

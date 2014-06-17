@@ -36,10 +36,11 @@ class BasicOverrideState;
 
 class BasicNode;
 DEFINE_PTR_TYPE(BasicNode)
+DEFINE_CONST_PTR_TYPE(BasicNode)
 
 typedef std::vector< BasicNodePtr > TNodeVec;
 
-class BasicNode : public IModelNode
+class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicNode >
 {
 private:
 
@@ -61,11 +62,11 @@ public:
     virtual ~BasicNode();
 
     virtual IPluginPtr                      GetPlugin               ( const std::string & name ) const override;
-    virtual const IFinalizePlugin *         GetFinalizePlugin       () const override;
+    virtual IFinalizePluginConstPtr         GetFinalizePlugin       () const override;
 
-    virtual IModelNode *                    GetNode                 ( const std::string & path, const std::string & separator = "/" ) override;
-    virtual IModelNode *                    GetChild                ( const std::string & name ) override;
-    virtual IModelNode *                    GetLayer                ( const std::string & name ) override;
+    virtual IModelNodePtr                   GetNode                 ( const std::string & path, const std::string & separator = "/" ) override;
+    virtual IModelNodePtr                   GetChild                ( const std::string & name ) override;
+    virtual IModelNodePtr                   GetLayer                ( const std::string & name ) override;
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
 
@@ -89,8 +90,8 @@ public:
 
     virtual SceneNode *                     BuildScene              () override;
 
-    void                                    AddChild                ( BasicNode * n );
-    void                                    AddLayer                ( BasicNode * n );
+    void                                    AddChild                ( BasicNodePtr n );
+    void                                    AddLayer                ( BasicNodePtr n );
 
     //Convenience API (so that list can be created from external source and simply attached to this node)
     void                                    SetPlugins              ( DefaultPluginListFinalizedPtr plugins );
@@ -116,9 +117,9 @@ public:
 
 private:
 
-    SceneNode *                             CreateSceneNode         ( const IPlugin * finalizer ) const;
-    RenderableEntity *                      CreateRenderable        ( const IPlugin * finalizer ) const;
-    std::vector< bv::Transform >            CreateTransformVec      ( const IPlugin * finalizer ) const;
+    SceneNode *                             CreateSceneNode         ( IPluginConstPtr finalizer ) const;
+    RenderableEntity *                      CreateRenderable        ( IPluginConstPtr finalizer ) const;
+    std::vector< bv::Transform >            CreateTransformVec      ( IPluginConstPtr finalizer ) const;
 
     bool                                    CreateRenderableData    ( /*VertexArray ** vao*/ ) const;
 
@@ -133,7 +134,7 @@ private:
     unsigned int                        TotalNumVertices                ( const std::vector< IConnectedComponent * > & ccVec) const;
     unsigned int                        TotalSize                       ( const std::vector< IConnectedComponent * > & ccVec, const IVertexAttributesChannelDescriptor * desc ) const;
 
-    RenderableEffect *                  CreateDefaultEffect             ( const IPlugin * finalizer ) const;
+    RenderableEffect *                  CreateDefaultEffect             ( IPluginConstPtr finalizer ) const;
 
     std::string                         SplitPrefix                     ( std::string & str, const std::string & separator = "/" ) const;
 

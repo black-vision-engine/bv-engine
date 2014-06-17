@@ -331,7 +331,7 @@ public:
 
 } // anonymous
 
-void test_get_node( model::IModelNode * n, const std::string & path, bool res )
+void test_get_node( model::IModelNodePtr n, const std::string & path, bool res )
 {
     printf( "Querying [%s] for [%s] - ", n->GetName().c_str(), path.c_str() );
 
@@ -441,13 +441,11 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
     test_get_node( n2, "node02/node013", false );
     test_get_node( n2, "node024", true );
     test_get_node( n1, "node024", false );
-
-    delete n0;
 }
 
 // *****************************
 //
-model::BasicNode *     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     //return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );
     //TestQueryNode( timelineManager, timeEvaluator ); //FIXME: remove or uncomment after tests

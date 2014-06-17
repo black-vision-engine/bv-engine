@@ -1,9 +1,11 @@
 #pragma once
 
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
+#include "Engine/Models/BasicNode.h"
+#include "Mathematics/Interpolators/Interpolators.h"
 
 #include "xml/TreeBuilder.h"
-#include "Mathematics/Interpolators/Interpolators.h"
+
 
 
 namespace bv
@@ -33,26 +35,26 @@ class TestScenesFactory
 {
 public:
 
-    static  model::BasicNode *      NewModelTestScene           ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-
-    static  model::BasicNode *      SimpeTextureTestScene       ();
-    static  model::BasicNode *      SimpleMultiCCScene          ();
-
-
-    static  model::BasicNode *      AnotherTestScene            ();
-    
-    static  model::BasicNode *      AnimatedTestScene           ();
-    static  model::BasicNode *      GreenRectTestScene          ();
-    static  model::BasicNode *      TexturedRectTestScene       ();
-    static  model::BasicNode *      NaiveTimerTestScene         ();
-
-    static  model::BasicNode *      TestSceneVariableTopology   ();
-    static  model::BasicNode *      SequenceAnimationTestScene  ();
-    static  model::BasicNode *      NonGeometryParent           ();
-
-	static  model::BasicNode *      XMLTestScene                ();
-
-    static  model::BasicNode *      StackThemNow                ( model::BasicNode * n0, model::BasicNode * n1 );
+    static  model::BasicNodePtr     NewModelTestScene           ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+                            
+    static  model::BasicNodePtr     SimpeTextureTestScene       ();
+    static  model::BasicNodePtr     SimpleMultiCCScene          ();
+                            
+                            
+    static  model::BasicNodePtr     AnotherTestScene            ();
+                            
+    static  model::BasicNodePtr     AnimatedTestScene           ();
+    static  model::BasicNodePtr     GreenRectTestScene          ();
+    static  model::BasicNodePtr     TexturedRectTestScene       ();
+    static  model::BasicNodePtr     NaiveTimerTestScene         ();
+                            
+    static  model::BasicNodePtr     TestSceneVariableTopology   ();
+    static  model::BasicNodePtr     SequenceAnimationTestScene  ();
+    static  model::BasicNodePtr     NonGeometryParent           ();
+                            
+	static  model::BasicNodePtr     XMLTestScene                ();
+                            
+    static  model::BasicNodePtr     StackThemNow                ( model::BasicNodePtr n0, model::BasicNodePtr n1 );
 
 };
 
@@ -69,9 +71,9 @@ public:
 struct SceneExamples
 {
 
-    static model::BasicNode* BuildMockScene    ( model::BasicNode * parent = nullptr );
-    static model::BasicNode* BuildMockScene2   ( model::BasicNode * parent = nullptr );
-	static model::BasicNode* CreateSceneMock3  ( model::BasicNode * parent );
+    static model::BasicNodePtr BuildMockScene    ( model::BasicNodePtr parent = nullptr );
+    static model::BasicNodePtr BuildMockScene2   ( model::BasicNodePtr parent = nullptr );
+	static model::BasicNodePtr CreateSceneMock3  ( model::BasicNodePtr parent );
 
 };
 }

@@ -102,7 +102,7 @@ NodeAddedEvent::NodeAddedEvent                              ()
 
 // *************************************
 //
-NodeAddedEvent::NodeAddedEvent                              ( const model::IModelNode * node )
+NodeAddedEvent::NodeAddedEvent                              ( model::IModelNodeConstPtr node )
     : m_addedNode( node )
 {
 }
@@ -146,7 +146,7 @@ const std::string &     NodeAddedEvent::GetName             () const
 
 // *************************************
 //
-const model::IModelNode *   NodeAddedEvent::GetNode         () const
+model::IModelNodeConstPtr  NodeAddedEvent::GetNode         () const
 {
     return m_addedNode;
 }

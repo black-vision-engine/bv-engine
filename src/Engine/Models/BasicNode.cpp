@@ -31,13 +31,13 @@ namespace bv { namespace model {
 
 namespace {
 
-IModelNode *  FindNode( const TNodeVec & vec, const std::string & name )
+IModelNodePtr  FindNode( const TNodeVec & vec, const std::string & name )
 {
     for( auto node : vec )
     {
         if( node->GetName() == name )
         {
-            return node.get();
+            return node;
         }
     }
 
@@ -78,14 +78,14 @@ IPluginPtr                      BasicNode::GetPlugin                ( const std:
 
 // ********************************
 //
-const IFinalizePlugin *         BasicNode::GetFinalizePlugin        () const
+IFinalizePluginConstPtr         BasicNode::GetFinalizePlugin        () const
 {
     return m_pluginList->GetFinalizePlugin();
 }
 
 // ********************************
 //
-IModelNode *                    BasicNode::GetNode                  ( const std::string & path, const std::string & separator )
+IModelNodePtr                    BasicNode::GetNode                  ( const std::string & path, const std::string & separator )
 {
     std::string suffix = path;
 
@@ -99,7 +99,7 @@ IModelNode *                    BasicNode::GetNode                  ( const std:
         }
         else
         {
-            return this;
+            return shared_from_this();
         }
     }
     else
@@ -117,14 +117,14 @@ IModelNode *                    BasicNode::GetNode                  ( const std:
 
 // ********************************
 //
-IModelNode *                    BasicNode::GetChild                 ( const std::string & name )
+IModelNodePtr                   BasicNode::GetChild                 ( const std::string & name )
 {
     return FindNode( m_children, name );
 }
 
 // ********************************
 //
-IModelNode *                    BasicNode::GetLayer                 ( const std::string & name )
+IModelNodePtr                   BasicNode::GetLayer                 ( const std::string & name )
 {
     return FindNode( m_layers, name );
 }
@@ -225,7 +225,7 @@ void                        BasicNode::SetName                      ( const std:
 //
 SceneNode *                 BasicNode::BuildScene()
 {
-    const IPlugin * finalizer = GetFinalizePlugin();
+    IPluginConstPtr finalizer = GetFinalizePlugin();
 
     SceneNode * node = CreateSceneNode( finalizer );
 
@@ -239,14 +239,14 @@ SceneNode *                 BasicNode::BuildScene()
 
 // ********************************
 //
-void            BasicNode::AddChild                 ( BasicNode * n )
+void            BasicNode::AddChild                 ( BasicNodePtr n )
 {
     m_children.push_back( BasicNodePtr( n ) );
 }
 
 // ********************************
 //
-void            BasicNode::AddLayer                 ( BasicNode * n )
+void            BasicNode::AddLayer                 ( BasicNodePtr n )
 {
     m_layers.push_back( BasicNodePtr( n ) );
 }
@@ -264,7 +264,7 @@ void             BasicNode::NonNullPluginsListGuard ()
 {
     if( !m_pluginList )
     {
-        m_pluginList = DefaultPluginListFinalizedPtr( new DefaultPluginListFinalized() );
+        m_pluginList = std::make_shared< DefaultPluginListFinalized >();
     }
 }
 
@@ -390,12 +390,12 @@ void  BasicNode::SetVisible              ( bool visible )
 
 // ********************************
 //
-SceneNode *                         BasicNode::CreateSceneNode          ( const IPlugin * finalizer ) const
+SceneNode *                         BasicNode::CreateSceneNode          ( IPluginConstPtr finalizer ) const
 {
     RenderableEntity * renderable = CreateRenderable( finalizer );
 
     SceneNode * node        = new SceneNode( renderable );
-    NodeUpdater * updater   = new NodeUpdater( renderable, node, this );
+    NodeUpdater * updater   = new NodeUpdater( renderable, node, shared_from_this() );
     UpdatersManager::Get().RegisterUpdater( updater );
 
     return node;
@@ -403,7 +403,7 @@ SceneNode *                         BasicNode::CreateSceneNode          ( const 
 
 // ********************************
 //
-RenderableEntity *                  BasicNode::CreateRenderable         ( const IPlugin * finalizer ) const
+RenderableEntity *                  BasicNode::CreateRenderable         ( IPluginConstPtr finalizer ) const
 {
     RenderableEntity * renderable = nullptr;
 
@@ -453,7 +453,7 @@ RenderableEntity *                  BasicNode::CreateRenderable         ( const 
 
 // ********************************
 //
-std::vector< bv::Transform >        BasicNode::CreateTransformVec      ( const IPlugin * finalizer ) const
+std::vector< bv::Transform >        BasicNode::CreateTransformVec      ( IPluginConstPtr finalizer ) const
 {
     auto tc = finalizer->GetTransformChannel();
     assert( tc );
@@ -522,7 +522,7 @@ bool                                BasicNode::CreateRenderableData     (/* Vert
 
 // ********************************
 //
-RenderableEffect *                  BasicNode::CreateDefaultEffect     ( const IPlugin * finalizer ) const
+RenderableEffect *                  BasicNode::CreateDefaultEffect     ( IPluginConstPtr finalizer ) const
 {
     auto psChannel      = finalizer->GetPixelShaderChannel();
     auto vsChannel      = finalizer->GetVertexShaderChannel();

@@ -33,7 +33,6 @@ RectNodeBuilder::RectNodeBuilder     ( model::ITimeEvaluatorPtr timeEvaluator, c
 //
 RectNodeBuilder::~RectNodeBuilder    ()
 {
-    delete m_node;
 }
 
 // ****************************
@@ -83,7 +82,7 @@ void    RectNodeBuilder::SetScale    ( float sx, float sy, float sz, TimeType t 
 
 // ****************************
 //
-model::BasicNode * RectNodeBuilder::CreateNode  ( const std::string & name, bool resetToBuilderDefaults )
+model::BasicNodePtr RectNodeBuilder::CreateNode  ( const std::string & name, bool resetToBuilderDefaults )
 {
     auto node = m_node;
     m_node = CreateNewNode();
@@ -164,7 +163,7 @@ model::IPluginPtr  RectNodeBuilder::GetShaderPlugin     ()
 
 // ****************************
 //
-model::BasicNode * RectNodeBuilder::CreateNewNode   () const
+model::BasicNodePtr RectNodeBuilder::CreateNewNode   () const
 {
     std::vector< std::string > uids;
 
@@ -172,7 +171,7 @@ model::BasicNode * RectNodeBuilder::CreateNewNode   () const
     uids.push_back( "DEFAULT_RECTANGLE" );
     uids.push_back( m_shaderPluginUID );
 
-    auto node = new model::BasicNode( "", m_timeEvaluator );
+    auto node = std::make_shared< model::BasicNode >( "", m_timeEvaluator );
     assert( node );
     
     auto success = node->AddPlugins( uids, m_timeEvaluator );
@@ -282,7 +281,7 @@ std::string TexturedRectNodeBuilder::ShaderPluginName() const
 
 // ****************************
 //
-model::BasicNode *  TexturedRectNodeBuilder::CreateNode      ( const std::string & name, bool resetToBuilderDefaults )
+model::BasicNodePtr  TexturedRectNodeBuilder::CreateNode      ( const std::string & name, bool resetToBuilderDefaults )
 {
     auto n = RectNodeBuilder::CreateNode( name, resetToBuilderDefaults );
 
