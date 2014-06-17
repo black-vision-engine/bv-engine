@@ -19,11 +19,11 @@ class ShaderChannel : public ShaderChannelIface
 protected:
 
     std::string         m_shaderSource;
-    const IValueSet  *  m_values; 
+    IValueSetConstPtr   m_values; 
 
 public:
 
-    explicit                                            ShaderChannel               ( const std::string & shaderFile, const IValueSet * valueSet );
+    explicit                                            ShaderChannel               ( const std::string & shaderFile, IValueSetConstPtr valueSet );
 
     virtual const std::string &                         GetShaderSource             () const override;
     virtual bool                                        IsReadOnly                  () const override;  //Should also be in IChannel

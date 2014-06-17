@@ -16,13 +16,13 @@ public:
 
     virtual     void                Update                          () = 0;
 
-    virtual     IParamValModel *    GetPluginModel                  () = 0;
+    virtual     IParamValModelPtr   GetPluginModel                  () = 0;
 
-    virtual     IParamValModel *    GetTransformChannelModel        () = 0;
-    virtual     IParamValModel *    GetVertexAttributesChannelModel () = 0;
-    virtual     IParamValModel *    GetPixelShaderChannelModel      () = 0;
-    virtual     IParamValModel *    GetVertexShaderChannelModel     () = 0;
-    virtual     IParamValModel *    GetGeometryShaderChannelModel   () = 0;
+    virtual     IParamValModelPtr   GetTransformChannelModel        () = 0;
+    virtual     IParamValModelPtr   GetVertexAttributesChannelModel () = 0;
+    virtual     IParamValModelPtr   GetPixelShaderChannelModel      () = 0;
+    virtual     IParamValModelPtr   GetVertexShaderChannelModel     () = 0;
+    virtual     IParamValModelPtr   GetGeometryShaderChannelModel   () = 0;
 
     virtual     ~IPluginParamValModel   () {} 
 

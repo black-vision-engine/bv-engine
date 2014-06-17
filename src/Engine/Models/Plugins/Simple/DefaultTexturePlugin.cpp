@@ -31,12 +31,12 @@ IPlugin *               DefaultTexturePluginDesc::CreatePlugin              ( co
 
 // *******************************
 //
-DefaultPluginParamValModel *    DefaultTexturePluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
+DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     //Create all models
-    DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
-    DefaultParamValModel * psModel      = new DefaultParamValModel();
-    DefaultParamValModel * vsModel      = new DefaultParamValModel();
+    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
+    DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
+    DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
     //Create all parameters and evaluators
     SimpleVec4EvaluatorPtr      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );

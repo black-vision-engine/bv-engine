@@ -37,13 +37,13 @@ IPlugin *               DefaultTextPluginDesc::CreatePlugin             ( const 
 
 // *******************************
 //
-DefaultPluginParamValModel *    DefaultTextPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
+DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     //Create all models
-    DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
-    DefaultParamValModel * psModel      = new DefaultParamValModel();
-    DefaultParamValModel * vsModel      = new DefaultParamValModel();
-    DefaultParamValModel * plModel      = new DefaultParamValModel();
+    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
+    DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
+    DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
+    DefaultParamValModelPtr plModel      = std::make_shared< DefaultParamValModel >();
 
 
     //Create all parameters and evaluators
@@ -148,7 +148,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     {
         auto bcParam = this->GetParameter( "borderColor" );
         SimpleVec4EvaluatorPtr      colorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", bcParam->GetTimeEvaluator() );
-        static_cast< DefaultParamValModel * >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( colorEvaluator );
+        std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( colorEvaluator );
         colorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
     }
     else
@@ -159,7 +159,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
             auto colorParam = evaluators[ i ]->GetParameter( "color" );
             if( colorParam != nullptr )
             {
-                static_cast< DefaultParamValModel * >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluators[ i ] );
+                std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluators[ i ] );
                 break;
             }
         }

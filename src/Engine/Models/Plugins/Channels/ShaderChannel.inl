@@ -3,7 +3,7 @@ namespace bv { namespace model {
 // *********************************
 //
 template< typename ShaderChannelIface >
-ShaderChannel< ShaderChannelIface >::ShaderChannel  ( const std::string & shaderSource, const bv::IValueSet * valueSet )
+ShaderChannel< ShaderChannelIface >::ShaderChannel  ( const std::string & shaderSource, bv::IValueSetConstPtr valueSet )
     : m_values( valueSet )
     , m_shaderSource( shaderSource )
 {

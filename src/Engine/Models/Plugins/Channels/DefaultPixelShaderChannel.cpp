@@ -5,7 +5,7 @@ namespace bv { namespace model {
 
 // ******************************
 //
-DefaultPixelShaderChannel::DefaultPixelShaderChannel  ( const std::string & shaderSource, const IValueSet * values, RendererContext * ctx )
+DefaultPixelShaderChannel::DefaultPixelShaderChannel  ( const std::string & shaderSource, IValueSetConstPtr values, RendererContext * ctx )
     : ShaderChannel( shaderSource, values )
     , m_rendererContext( ctx ) 
 {
@@ -64,7 +64,7 @@ DefaultTexturesData *       DefaultPixelShaderChannel::GetTexturesDataImpl ()
 
 // ******************************
 //
-DefaultPixelShaderChannel * DefaultPixelShaderChannel::Create              ( const std::string & shaderFile, const IValueSet * values, RendererContext * ctx )
+DefaultPixelShaderChannel * DefaultPixelShaderChannel::Create              ( const std::string & shaderFile, IValueSetConstPtr values, RendererContext * ctx )
 {
     auto shaderSource = ReadShaderFromFile( shaderFile );
 

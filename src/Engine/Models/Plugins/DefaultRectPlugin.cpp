@@ -46,10 +46,10 @@ IPlugin *                       DefaultRectPluginDesc::CreatePlugin         ( co
 
 // *******************************
 //
-DefaultPluginParamValModel *    DefaultRectPluginDesc::CreateDefaultModel   ( ITimeEvaluatorPtr timeEvaluator ) const
+DefaultPluginParamValModelPtr   DefaultRectPluginDesc::CreateDefaultModel   ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
-    DefaultParamValModel * vacModel     = new DefaultParamValModel();
+    DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
+    DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
 
     ParamFloatPtr paramWidth             = ParametersFactory::CreateParameterFloat( "width", timeEvaluator );
     ParamFloatPtr paramHeight            = ParametersFactory::CreateParameterFloat( "height", timeEvaluator );

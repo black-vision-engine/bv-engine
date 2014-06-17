@@ -9,7 +9,7 @@
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
 #include "Engine/Interfaces/IUpdatable.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
-
+#include "Engine/Models/Plugins/Interfaces/IPluginParamValModel.h"
 
 namespace bv { namespace model {
 
@@ -20,7 +20,7 @@ class IPixelShaderChannel;
 class IVertexShaderChannel;
 class IGeometryShaderChannel;
 class ResourceHandle;
-class IPluginParamValModel;
+
 class IPluginResourceDescr;
 
 struct TextureInfo;
@@ -34,7 +34,7 @@ public:
     virtual const std::string &                 GetTypeUid                  () const = 0;
 
     //TODO: rething the whole query API - and const correctness as well for that matter
-    virtual IPluginParamValModel *              GetPluginParamValModel      () const = 0; //FIXME: czy tu nie powinno byc tez od razu const przy zwracanym wskazniku?
+    virtual IPluginParamValModelPtr             GetPluginParamValModel      () const = 0; //FIXME: czy tu nie powinno byc tez od razu const przy zwracanym wskazniku?
     virtual IParameterPtr                       GetParameter                ( const std::string & name ) const = 0;
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const = 0;
 

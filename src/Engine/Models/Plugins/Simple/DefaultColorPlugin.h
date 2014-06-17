@@ -18,7 +18,7 @@ public:
     DefaultColorPluginDesc                                      ();
 
     virtual IPlugin *                       CreatePlugin        ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const override;
-    virtual DefaultPluginParamValModel *    CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
     static  std::string                     UID                 ();
 

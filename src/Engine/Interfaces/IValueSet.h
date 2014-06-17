@@ -17,5 +17,6 @@ public:
 };
 
 DEFINE_PTR_TYPE(IValueSet)
+typedef std::shared_ptr< const IValueSet > IValueSetConstPtr;
 
 } //bv

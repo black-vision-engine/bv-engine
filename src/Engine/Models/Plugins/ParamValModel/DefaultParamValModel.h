@@ -42,5 +42,7 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(DefaultParamValModel)
+
 } //model
 } //bv

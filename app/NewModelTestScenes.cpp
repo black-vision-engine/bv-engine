@@ -140,7 +140,7 @@ void QueryValuesGeneric    ( const std::vector< IValueConstPtr > & values )
 
 // *****************************
 //
-void QueryModelPropertiesGeneric    ( model::IParamValModel * model, const std::string msg )
+void QueryModelPropertiesGeneric    ( model::IParamValModelPtr model, const std::string msg )
 {
     printf( "%s\n", msg.c_str() );
 

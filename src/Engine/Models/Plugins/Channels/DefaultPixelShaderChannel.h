@@ -19,7 +19,7 @@ protected:
 
 public:
 
-            DefaultPixelShaderChannel                       ( const std::string & shaderSource, const IValueSet * valueSet, RendererContext * ctx = nullptr );
+            DefaultPixelShaderChannel                       ( const std::string & shaderSource, IValueSetConstPtr valueSet, RendererContext * ctx = nullptr );
     virtual ~DefaultPixelShaderChannel                      ();
 
     virtual const RendererContext *     GetRendererContext  () const override;
@@ -29,7 +29,7 @@ public:
     virtual const ITexturesData *       GetTexturesData     () const override;
     DefaultTexturesData *               GetTexturesDataImpl ();
 
-    static  DefaultPixelShaderChannel * Create              ( const std::string & shaderFile, const IValueSet * values, RendererContext * ctx = nullptr );
+    static  DefaultPixelShaderChannel * Create              ( const std::string & shaderFile, IValueSetConstPtr values, RendererContext * ctx = nullptr );
 
 };
 

@@ -24,12 +24,6 @@ DefaultPluginParamValModel::DefaultPluginParamValModel      ()
 //
 DefaultPluginParamValModel::~DefaultPluginParamValModel     ()
 {
-    delete m_pluginModel;
-    delete m_transformChannelModel;
-    delete m_vertexAttributesChannelModel;
-    delete m_pixelShaderChannelModel;
-    delete m_vertexShaderChannelModel;
-    delete m_geometryShaderChannelModel;
 }
 
 // *******************************
@@ -57,91 +51,91 @@ void                DefaultPluginParamValModel::Update      ()
 
 // *******************************
 //
-IParamValModel *    DefaultPluginParamValModel::GetPluginModel                  ()
+IParamValModelPtr   DefaultPluginParamValModel::GetPluginModel                  ()
 {
     return PluginModelImpl();
 }
 
 // *******************************
 //
-IParamValModel *    DefaultPluginParamValModel::GetTransformChannelModel        ()
+IParamValModelPtr   DefaultPluginParamValModel::GetTransformChannelModel        ()
 {
     return TransformChannelModelImpl();
 }
 
 // *******************************
 //
-IParamValModel *    DefaultPluginParamValModel::GetVertexAttributesChannelModel ()
+IParamValModelPtr   DefaultPluginParamValModel::GetVertexAttributesChannelModel ()
 {
     return VertexAttributesChannelModelImpl();
 }
 
 // *******************************
 //
-IParamValModel *    DefaultPluginParamValModel::GetPixelShaderChannelModel      ()
+IParamValModelPtr   DefaultPluginParamValModel::GetPixelShaderChannelModel      ()
 {
     return PixelShaderChannelModelImpl();
 }
 
 // *******************************
 //
-IParamValModel *    DefaultPluginParamValModel::GetVertexShaderChannelModel     ()
+IParamValModelPtr   DefaultPluginParamValModel::GetVertexShaderChannelModel     ()
 {
     return VertexShaderChannelModelImpl();
 }
 
 // *******************************
 //
-IParamValModel *    DefaultPluginParamValModel::GetGeometryShaderChannelModel   ()
+IParamValModelPtr   DefaultPluginParamValModel::GetGeometryShaderChannelModel   ()
 {
     return GeometryShaderChannelModelImpl();
 }
 
 // *******************************
 //
-DefaultParamValModel *    DefaultPluginParamValModel::PluginModelImpl           ()
+DefaultParamValModelPtr   DefaultPluginParamValModel::PluginModelImpl           ()
 {
     return m_pluginModel;
 }
 
 // *******************************
 //
-DefaultParamValModel *    DefaultPluginParamValModel::TransformChannelModelImpl ()
+DefaultParamValModelPtr   DefaultPluginParamValModel::TransformChannelModelImpl ()
 {
     return m_transformChannelModel;
 }
 
 // *******************************
 //
-DefaultParamValModel *    DefaultPluginParamValModel::VertexAttributesChannelModelImpl()
+DefaultParamValModelPtr   DefaultPluginParamValModel::VertexAttributesChannelModelImpl()
 {
     return m_vertexAttributesChannelModel;
 }
 
 // *******************************
 //
-DefaultParamValModel *    DefaultPluginParamValModel::PixelShaderChannelModelImpl   ()
+DefaultParamValModelPtr   DefaultPluginParamValModel::PixelShaderChannelModelImpl   ()
 {
     return m_pixelShaderChannelModel;
 }
 
 // *******************************
 //
-DefaultParamValModel *    DefaultPluginParamValModel::VertexShaderChannelModelImpl  ()
+DefaultParamValModelPtr   DefaultPluginParamValModel::VertexShaderChannelModelImpl  ()
 {
     return m_vertexShaderChannelModel;
 }
 
 // *******************************
 //
-DefaultParamValModel *    DefaultPluginParamValModel::GeometryShaderChannelModelImpl()
+DefaultParamValModelPtr   DefaultPluginParamValModel::GeometryShaderChannelModelImpl()
 {
     return m_geometryShaderChannelModel;
 }
 
 // *******************************
 //
-void                DefaultPluginParamValModel::SetPluginModel                  ( DefaultParamValModel * model )
+void                DefaultPluginParamValModel::SetPluginModel                  ( DefaultParamValModelPtr model )
 {
     assert( m_pluginModel == nullptr );
 
@@ -150,7 +144,7 @@ void                DefaultPluginParamValModel::SetPluginModel                  
 
 // *******************************
 //
-void                DefaultPluginParamValModel::SetTransformChannelModel        ( DefaultParamValModel * model )
+void                DefaultPluginParamValModel::SetTransformChannelModel        ( DefaultParamValModelPtr model )
 {
     assert( m_transformChannelModel == nullptr );
 
@@ -159,7 +153,7 @@ void                DefaultPluginParamValModel::SetTransformChannelModel        
 
 // *******************************
 //
-void                DefaultPluginParamValModel::SetVertexAttributesChannelModel ( DefaultParamValModel * model )
+void                DefaultPluginParamValModel::SetVertexAttributesChannelModel ( DefaultParamValModelPtr model )
 {
     assert( m_vertexAttributesChannelModel == nullptr );
 
@@ -168,7 +162,7 @@ void                DefaultPluginParamValModel::SetVertexAttributesChannelModel 
 
 // *******************************
 //
-void                DefaultPluginParamValModel::SetPixelShaderChannelModel      ( DefaultParamValModel * model )
+void                DefaultPluginParamValModel::SetPixelShaderChannelModel      ( DefaultParamValModelPtr model )
 {
     assert( m_pixelShaderChannelModel == nullptr );
 
@@ -177,7 +171,7 @@ void                DefaultPluginParamValModel::SetPixelShaderChannelModel      
 
 // *******************************
 //
-void                DefaultPluginParamValModel::SetVertexShaderChannelModel     ( DefaultParamValModel * model )
+void                DefaultPluginParamValModel::SetVertexShaderChannelModel     ( DefaultParamValModelPtr model )
 {
     assert( m_vertexShaderChannelModel == nullptr );
 
@@ -186,7 +180,7 @@ void                DefaultPluginParamValModel::SetVertexShaderChannelModel     
 
 // *******************************
 //
-void                DefaultPluginParamValModel::SetGeometryShaderChannelModel   ( DefaultParamValModel * model )
+void                DefaultPluginParamValModel::SetGeometryShaderChannelModel   ( DefaultParamValModelPtr model )
 {
     assert( m_geometryShaderChannelModel == nullptr );
 

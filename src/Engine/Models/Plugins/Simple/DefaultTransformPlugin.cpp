@@ -24,10 +24,10 @@ IPlugin *               DefaultTransformPluginDesc::CreatePlugin                
 
 // *******************************
 //
-DefaultPluginParamValModel *    DefaultTransformPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
+DefaultPluginParamValModelPtr   DefaultTransformPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    DefaultPluginParamValModel * model          = new DefaultPluginParamValModel();
-    DefaultParamValModel * trModel              = new DefaultParamValModel();
+    DefaultPluginParamValModelPtr model         = std::make_shared< DefaultPluginParamValModel >();
+    DefaultParamValModelPtr trModel             = std::make_shared< DefaultParamValModel >();
     auto evaluator                              = ParamValEvaluatorFactory::CreateTransformVecEvaluator( "simple_transform", timeEvaluator );
 
     trModel->RegisterAll( evaluator );

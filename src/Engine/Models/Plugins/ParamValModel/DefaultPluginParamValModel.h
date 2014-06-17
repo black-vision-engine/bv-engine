@@ -3,24 +3,23 @@
 #include <memory>
 
 #include "Engine/Models/Plugins/Interfaces/IPluginParamValModel.h"
-
+#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 
 namespace bv { namespace model {
 
-class DefaultParamValModel;
 class IParamValModel;
 
 class DefaultPluginParamValModel : public IPluginParamValModel
 {
 private:
 
-    DefaultParamValModel *  m_pluginModel;
+    DefaultParamValModelPtr m_pluginModel;
 
-    DefaultParamValModel *  m_transformChannelModel;
-    DefaultParamValModel *  m_vertexAttributesChannelModel;
-    DefaultParamValModel *  m_pixelShaderChannelModel;
-    DefaultParamValModel *  m_vertexShaderChannelModel;
-    DefaultParamValModel *  m_geometryShaderChannelModel;
+    DefaultParamValModelPtr m_transformChannelModel;
+    DefaultParamValModelPtr m_vertexAttributesChannelModel;
+    DefaultParamValModelPtr m_pixelShaderChannelModel;
+    DefaultParamValModelPtr m_vertexShaderChannelModel;
+    DefaultParamValModelPtr m_geometryShaderChannelModel;
 
 public:
 
@@ -29,31 +28,31 @@ public:
     
     virtual void                    Update                          () override;
 
-    virtual     IParamValModel *    GetPluginModel                  () override;
+    virtual     IParamValModelPtr   GetPluginModel                  () override;
 
-    virtual     IParamValModel *    GetTransformChannelModel        () override;
-    virtual     IParamValModel *    GetVertexAttributesChannelModel () override;
-    virtual     IParamValModel *    GetPixelShaderChannelModel      () override;
-    virtual     IParamValModel *    GetVertexShaderChannelModel     () override;
-    virtual     IParamValModel *    GetGeometryShaderChannelModel   () override;
+    virtual     IParamValModelPtr   GetTransformChannelModel        () override;
+    virtual     IParamValModelPtr   GetVertexAttributesChannelModel () override;
+    virtual     IParamValModelPtr   GetPixelShaderChannelModel      () override;
+    virtual     IParamValModelPtr   GetVertexShaderChannelModel     () override;
+    virtual     IParamValModelPtr   GetGeometryShaderChannelModel   () override;
 
 
-    DefaultParamValModel *         PluginModelImpl                 ();
+    DefaultParamValModelPtr        PluginModelImpl                 ();
 
-    DefaultParamValModel *         TransformChannelModelImpl       ();
-    DefaultParamValModel *         VertexAttributesChannelModelImpl();
-    DefaultParamValModel *         PixelShaderChannelModelImpl     ();
-    DefaultParamValModel *         VertexShaderChannelModelImpl    ();
-    DefaultParamValModel *         GeometryShaderChannelModelImpl  ();
+    DefaultParamValModelPtr        TransformChannelModelImpl       ();
+    DefaultParamValModelPtr        VertexAttributesChannelModelImpl();
+    DefaultParamValModelPtr        PixelShaderChannelModelImpl     ();
+    DefaultParamValModelPtr        VertexShaderChannelModelImpl    ();
+    DefaultParamValModelPtr        GeometryShaderChannelModelImpl  ();
 
     
-    void                            SetPluginModel                  ( DefaultParamValModel * model );
+    void                            SetPluginModel                  ( DefaultParamValModelPtr model );
 
-    void                            SetTransformChannelModel        ( DefaultParamValModel * model );
-    void                            SetVertexAttributesChannelModel ( DefaultParamValModel * model );
-    void                            SetPixelShaderChannelModel      ( DefaultParamValModel * model );
-    void                            SetVertexShaderChannelModel     ( DefaultParamValModel * model );
-    void                            SetGeometryShaderChannelModel   ( DefaultParamValModel * model );
+    void                            SetTransformChannelModel        ( DefaultParamValModelPtr model );
+    void                            SetVertexAttributesChannelModel ( DefaultParamValModelPtr model );
+    void                            SetPixelShaderChannelModel      ( DefaultParamValModelPtr model );
+    void                            SetVertexShaderChannelModel     ( DefaultParamValModelPtr model );
+    void                            SetGeometryShaderChannelModel   ( DefaultParamValModelPtr model );
 
 };
 

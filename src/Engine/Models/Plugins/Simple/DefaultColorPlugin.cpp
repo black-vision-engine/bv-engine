@@ -24,10 +24,10 @@ IPlugin *               DefaultColorPluginDesc::CreatePlugin                ( co
 
 // *******************************
 //
-DefaultPluginParamValModel *    DefaultColorPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
+DefaultPluginParamValModelPtr   DefaultColorPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    DefaultPluginParamValModel * model  = new DefaultPluginParamValModel();
-    DefaultParamValModel * psModel      = new DefaultParamValModel();
+    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
+    DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
     SimpleVec4EvaluatorPtr evaluator     = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
 
     psModel->RegisterAll( evaluator );

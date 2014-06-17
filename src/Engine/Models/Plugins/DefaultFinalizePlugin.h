@@ -25,7 +25,7 @@ public:
     virtual const std::string &                 GetName                     () const override;
     virtual const std::string &                 GetTypeUid                  () const override;
                                                                                      
-    virtual IPluginParamValModel *              GetPluginParamValModel      () const override;
+    virtual IPluginParamValModelPtr             GetPluginParamValModel      () const override;
     virtual IParameterPtr                       GetParameter                ( const std::string & name ) const override;
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const override;
 

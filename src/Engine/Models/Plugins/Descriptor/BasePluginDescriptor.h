@@ -23,9 +23,9 @@ public:
     virtual const std::string &             DefaultPluginName   () const override;
 
     virtual bool                            CanBeAttachedTo     ( const IPlugin * plugin )  const override;
-    virtual IPluginParamValModel *          CreateModel         ( ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual IPluginParamValModelPtr         CreateModel         ( ITimeEvaluatorPtr timeEvaluator ) const override;
 
-    virtual DefaultPluginParamValModel *    CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const = 0;
+    virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const = 0;
 
     template< typename PluginType >
     PluginType *                           CreatePluginTyped    ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator  ) const
