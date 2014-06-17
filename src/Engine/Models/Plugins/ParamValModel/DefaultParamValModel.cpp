@@ -17,20 +17,6 @@ DefaultParamValModel::DefaultParamValModel                                      
 //
 DefaultParamValModel::~DefaultParamValModel                                         ()
 {
-    //for( auto param : m_parameters )
-    //{
-    //    //delete param; FIXME: when parameter has to owners this line craches.
-    //}
-
-    //for( auto value : m_values )
-    //{
-    //    // delete value; FIXME: when parameter has to owners this line craches.
-    //}
-
-    //for( auto evaluator : m_evaluators )
-    //{
-    //    //delete evaluator; FIXME: when parameter has to owners this line craches.
-    //}
 }
 
 // *******************************

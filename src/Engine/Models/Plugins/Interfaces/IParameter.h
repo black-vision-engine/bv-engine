@@ -58,7 +58,7 @@ const ParamType * QueryTypedParam( IParameterConstPtr param )
     return static_cast< const ParamType * >( std::const_pointer_cast< IParameterPtr >( param )->QueryParamTyped() );
 }
 
-void    SetParamTimeline( IParameter * param, ITimeEvaluatorPtr timeline );
+void    SetParamTimeline( IParameterPtr param, ITimeEvaluatorPtr timeline );
 
 } //model
 } //bv

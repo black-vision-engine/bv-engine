@@ -10,6 +10,9 @@
 
 namespace bv { namespace model {
 
+class AbstractModelParameter;
+typedef std::shared_ptr< AbstractModelParameter > AbstractModelParameterPtr;
+
 class AbstractModelParameter : public IParameter
 {
 protected:
