@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-
+#include "System/BasicTypes.h"
 
 namespace bv {
 
@@ -18,5 +18,8 @@ public:
     virtual ~ITexturesData ()   {}
 
 };
+
+DEFINE_PTR_TYPE(ITexturesData)
+DEFINE_CONST_PTR_TYPE(ITexturesData)
 
 } //bv

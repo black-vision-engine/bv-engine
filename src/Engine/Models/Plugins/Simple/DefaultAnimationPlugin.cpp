@@ -185,7 +185,7 @@ DefaultAnimationPlugin::~DefaultAnimationPlugin         ()
 
 // *************************************
 // 
-bool                            DefaultAnimationPlugin::LoadResource  ( const IPluginResourceDescr * resDescr )
+bool                            DefaultAnimationPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
 {
     auto animResDescr = QueryAnimationResourceDescr( resDescr );
 

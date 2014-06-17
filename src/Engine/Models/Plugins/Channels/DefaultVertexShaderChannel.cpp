@@ -12,26 +12,25 @@ DefaultVertexShaderChannel::DefaultVertexShaderChannel  ( const std::string & sh
     : ShaderChannel( shaderSource, values )
     , m_texturesData( nullptr )
 {
-    m_texturesData = new DefaultTexturesData();
+    m_texturesData = std::make_shared< DefaultTexturesData >();
 }
 
 // ******************************
 //
 DefaultVertexShaderChannel::~DefaultVertexShaderChannel                     ()
 {
-    delete m_texturesData;
 }
 
 // ******************************
 //
-const ITexturesData *       DefaultVertexShaderChannel::GetTexturesData     () const
+ITexturesDataConstPtr       DefaultVertexShaderChannel::GetTexturesData     () const
 {
     return m_texturesData;
 }
 
 // ******************************
 //
-DefaultTexturesData *       DefaultVertexShaderChannel::GetTexturesDataImpl ()
+DefaultTexturesDataPtr       DefaultVertexShaderChannel::GetTexturesDataImpl ()
 {
     return m_texturesData;
 }

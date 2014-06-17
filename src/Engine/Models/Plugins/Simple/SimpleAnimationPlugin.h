@@ -50,7 +50,7 @@ private:
 private:
 
     TextureInfo *       LoadTexture         ( const std::string & name, const std::string & path )   const;
-    void                EvalGeometryChannel ( const IPlugin * prev );
+    void                EvalGeometryChannel ( IPluginConstPtr prev );
 
 public:
 

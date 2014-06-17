@@ -180,7 +180,7 @@ DefaultTexturePlugin::~DefaultTexturePlugin         ()
 
 // *************************************
 // 
-bool                            DefaultTexturePlugin::LoadResource  ( const IPluginResourceDescr * resDescr )
+bool                            DefaultTexturePlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
 {
     auto txResDescr = QueryTextureResourceDescr( resDescr );
 

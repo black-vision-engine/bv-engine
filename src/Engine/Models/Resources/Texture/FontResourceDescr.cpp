@@ -32,11 +32,11 @@ const std::string & FontResourceDescr::GetFontFile    () const
 
 // *******************************
 //
-const IFontResourceDescr *          QueryFontResourceDescr      ( const IPluginResourceDescr * resDescr )
+IFontResourceDescrConstPtr          QueryFontResourceDescr      ( IPluginResourceDescrConstPtr resDescr )
 {
     if ( resDescr->GetResourceType() == PluginResourceType::PRT_FONT )
     {
-        return static_cast< const IFontResourceDescr * >( resDescr );
+        return std::static_pointer_cast< const IFontResourceDescr >( resDescr );
     }
 
     return nullptr;

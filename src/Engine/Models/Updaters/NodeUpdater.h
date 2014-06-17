@@ -53,7 +53,7 @@ namespace model
     class IVertexAttributesChannel;
 }
 
-typedef std::pair< const ITexturesData *, ShaderParameters * > TexData2ShaderParams;
+typedef std::pair< ITexturesDataConstPtr, ShaderParameters * > TexData2ShaderParams;
 typedef std::pair< const ITextureDescriptor *, Texture2DImpl * > Tex2Tex2DPair;
 typedef std::pair< const IAnimationDescriptor *, Texture2DSequenceImpl * > Anim2Tex2DPair;
 
@@ -100,7 +100,7 @@ private:
         }
     }
 
-    void            RegisterTex2Params  ( const ITexturesData * texturesData, ShaderParameters * shaderParams );
+    void            RegisterTex2Params  ( ITexturesDataConstPtr texturesData, ShaderParameters * shaderParams );
 
     inline  void    UpdateTransform     ();
     inline  void    UpdateGeometry      ();

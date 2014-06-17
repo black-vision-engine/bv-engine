@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 
 #include "Engine/Types/Enums.h"
+#include "System/BasicTypes.h"
 
 
 namespace bv {
@@ -25,6 +26,9 @@ public:
     virtual ~ITextureParams () {}
 
 };
+
+DEFINE_PTR_TYPE(ITextureParams)
+DEFINE_CONST_PTR_TYPE(ITextureParams)
 
 //    std::string             fileName;
 //    ParamTransform          transform;

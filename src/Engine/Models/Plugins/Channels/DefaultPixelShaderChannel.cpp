@@ -14,7 +14,7 @@ DefaultPixelShaderChannel::DefaultPixelShaderChannel  ( const std::string & shad
         m_rendererContext = RendererContext::CreateDefault();
     }
 
-    m_texturesData = new DefaultTexturesData();
+    m_texturesData = std::make_shared< DefaultTexturesData >();
 }
 
 // ******************************
@@ -22,7 +22,6 @@ DefaultPixelShaderChannel::DefaultPixelShaderChannel  ( const std::string & shad
 DefaultPixelShaderChannel::~DefaultPixelShaderChannel ()
 {
     delete m_rendererContext;
-    delete m_texturesData;
 }
 
 // ******************************
@@ -50,14 +49,14 @@ void                        DefaultPixelShaderChannel::SetRendererContext  ( Ren
 
 // ******************************
 //
-const ITexturesData *       DefaultPixelShaderChannel::GetTexturesData     () const
+ITexturesDataConstPtr       DefaultPixelShaderChannel::GetTexturesData     () const
 {
     return m_texturesData;
 }
 
 // ******************************
 //
-DefaultTexturesData *       DefaultPixelShaderChannel::GetTexturesDataImpl ()
+DefaultTexturesDataPtr       DefaultPixelShaderChannel::GetTexturesDataImpl ()
 {
     return m_texturesData;
 }

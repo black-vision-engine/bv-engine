@@ -142,7 +142,7 @@ void              DefaultEffect::AddOverrideParamsGS ( ShaderParameters * params
 
 // *********************************
 // FIXME: only 2D textures right now
-void               DefaultEffect::AddTextures       ( Shader * shader, const ITexturesData * txData )
+void               DefaultEffect::AddTextures       ( Shader * shader, ITexturesDataConstPtr txData )
 {
     unsigned int samplerNum = 0;
 

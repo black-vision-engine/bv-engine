@@ -179,7 +179,7 @@ bool   NodeUpdater::MustBeRegistered        ( const IShaderDataSource * shaderDa
 
 // *****************************
 //
-void            NodeUpdater::RegisterTex2Params  ( const ITexturesData * texturesData, ShaderParameters * shaderParams )
+void            NodeUpdater::RegisterTex2Params  ( ITexturesDataConstPtr texturesData, ShaderParameters * shaderParams )
 {
     auto textures = texturesData->GetTextures();
     auto animations = texturesData->GetAnimations();

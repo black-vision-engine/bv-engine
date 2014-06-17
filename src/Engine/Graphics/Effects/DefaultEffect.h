@@ -2,12 +2,12 @@
 
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 #include "Engine/Models/Interfaces/IOverrideState.h"
+#include "Engine/Models/Interfaces/ITexturesData.h"
 
 
 namespace bv {
 
 class IShaderDataSource;
-class ITexturesData;
 class ITextureParams;
 class ITextureDescriptor;
 class IAnimationDescriptor;
@@ -29,7 +29,7 @@ protected:
     ShaderParameters *  CreateDefaultParamsVS   ( const model::IOverrideState * state, const IShaderDataSource * ds ) const;
     ShaderParameters *  CreateDefaultParamsGS   ( const model::IOverrideState * state, const IShaderDataSource * ds ) const;
 
-    void                AddTextures             ( Shader * shader, const ITexturesData * txData );
+    void                AddTextures             ( Shader * shader, ITexturesDataConstPtr txData );
 
 private:
 

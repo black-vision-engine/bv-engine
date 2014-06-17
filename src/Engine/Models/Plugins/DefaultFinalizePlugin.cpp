@@ -129,7 +129,7 @@ const RendererContext *             DefaultFinalizePlugin::GetRendererContext   
 
 // *******************************
 //
-bool                                DefaultFinalizePlugin::LoadResource                ( const IPluginResourceDescr * resDescr )
+bool                                DefaultFinalizePlugin::LoadResource                ( IPluginResourceDescrConstPtr resDescr )
 {
     return false;
 }

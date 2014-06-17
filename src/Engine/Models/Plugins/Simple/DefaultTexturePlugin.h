@@ -48,7 +48,7 @@ private:
 
     VertexAttributesChannelPtr      m_vaChannel;
 
-    DefaultTexturesData *           m_texturesData;
+    DefaultTexturesDataPtr          m_texturesData;
 
     unsigned int                    m_texCoordChannelIndex;
 
@@ -67,7 +67,7 @@ public:
     explicit                                    DefaultTexturePlugin        ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model );
                                                 ~DefaultTexturePlugin       ();
 
-    virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr ) override;
+    virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
 
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;
     virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;

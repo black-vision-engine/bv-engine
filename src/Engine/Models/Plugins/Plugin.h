@@ -59,7 +59,7 @@ public:
 
     virtual const RendererContext *             GetRendererContext          () const override;
 
-    virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr );
+    virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr );
 
 protected:
 
@@ -247,7 +247,7 @@ const RendererContext *             BasePlugin< Iface >::GetRendererContext     
 // *******************************
 //
 template< class Iface >
-bool                                BasePlugin< Iface >::LoadResource                   ( const IPluginResourceDescr * resDescr )
+bool                                BasePlugin< Iface >::LoadResource                   ( IPluginResourceDescrConstPtr resDescr )
 {
     return false;
 }

@@ -14,7 +14,7 @@ public:
     {
     }
 
-    virtual ITexturesData * GetTexturesData() const override
+    virtual ITexturesDataConstPtr   GetTexturesData() const override
     {
         return nullptr;
     }

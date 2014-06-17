@@ -34,13 +34,13 @@ const std::vector< std::string > & AnimationResourceDescr::GetFrames   () const
 
 // *******************************
 //
-AnimationResourceDescr *     AnimationResourceDescr::CreateFromDirFrames( const std::string & path, const std::string & filter )
+AnimationResourceDescrPtr     AnimationResourceDescr::CreateFromDirFrames( const std::string & path, const std::string & filter )
 {
     auto files = Dir::ListFiles( path, filter );
 
     if ( files.size() > 0 )
     {
-        return new AnimationResourceDescr( files );
+        return std::make_shared< AnimationResourceDescr >( files );
     }
 
     return nullptr;
@@ -48,11 +48,11 @@ AnimationResourceDescr *     AnimationResourceDescr::CreateFromDirFrames( const 
 
 // *******************************
 //
-const ITextureResourceDescr *   QueryTextureResourceDescr   ( const IPluginResourceDescr * resDescr )
+ITextureResourceDescrConstPtr   QueryTextureResourceDescr   ( IPluginResourceDescrConstPtr resDescr )
 {
     if ( resDescr->GetResourceType() == PluginResourceType::PRT_TEXTURE )
     {
-        return static_cast< const ITextureResourceDescr * >( resDescr );
+        return std::static_pointer_cast< const ITextureResourceDescr >( resDescr );
     }
 
     return nullptr;

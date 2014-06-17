@@ -78,7 +78,7 @@ void                        SimpleAnimationPlugin::SetAttachmentMode           (
 
 // *************************************
 //
-void SimpleAnimationPlugin::EvalGeometryChannel( const IPlugin * prev )
+void SimpleAnimationPlugin::EvalGeometryChannel( IPluginConstPtr prev )
 {
     //auto prevGeomChannel = prev->GetVertexAttributesChannel();
     //AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );

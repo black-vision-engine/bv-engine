@@ -190,7 +190,7 @@ DefaultTextPlugin::~DefaultTextPlugin         ()
 
 // *************************************
 // 
-bool                            DefaultTextPlugin::LoadResource  ( const IPluginResourceDescr * resDescr )
+bool                            DefaultTextPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
 {
     auto txResDescr = QueryFontResourceDescr( resDescr );
 

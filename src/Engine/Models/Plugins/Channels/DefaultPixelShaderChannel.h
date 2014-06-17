@@ -15,7 +15,7 @@ class DefaultPixelShaderChannel : public ShaderChannel< IPixelShaderChannel >
 protected:
 
     RendererContext *       m_rendererContext;
-    DefaultTexturesData *   m_texturesData;
+    DefaultTexturesDataPtr  m_texturesData;
 
 public:
 
@@ -24,10 +24,11 @@ public:
 
     virtual const RendererContext *     GetRendererContext  () const override;
     RendererContext *                   GetRendererContext  ();
+
     void                                SetRendererContext  ( RendererContext * ctx );
 
-    virtual const ITexturesData *       GetTexturesData     () const override;
-    DefaultTexturesData *               GetTexturesDataImpl ();
+    virtual ITexturesDataConstPtr       GetTexturesData     () const override;
+    DefaultTexturesDataPtr              GetTexturesDataImpl ();
 
     static  DefaultPixelShaderChannel * Create              ( const std::string & shaderFile, IValueSetConstPtr values, RendererContext * ctx = nullptr );
 

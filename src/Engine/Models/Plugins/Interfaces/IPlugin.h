@@ -10,6 +10,7 @@
 #include "Engine/Interfaces/IUpdatable.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 #include "Engine/Models/Plugins/Interfaces/IPluginParamValModel.h"
+#include "Engine/Models/Resources/IPluginResourceDescr.h"
 
 namespace bv { namespace model {
 
@@ -20,8 +21,6 @@ class IPixelShaderChannel;
 class IVertexShaderChannel;
 class IGeometryShaderChannel;
 class ResourceHandle;
-
-class IPluginResourceDescr;
 
 struct TextureInfo;
 typedef std::vector< TextureInfo * > TextureInfoVec;
@@ -47,7 +46,7 @@ public:
     virtual const RendererContext *             GetRendererContext          () const = 0;
 
     //FIXME: implement a more generic interface for resource loading
-    virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr ) = 0;
+    virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) = 0;
 
     virtual                                     ~IPlugin                    (){}
 

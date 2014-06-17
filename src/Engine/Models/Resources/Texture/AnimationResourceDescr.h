@@ -5,7 +5,11 @@
 
 namespace bv { namespace model {
 
-    class AnimationResourceDescr : public IAnimationResourceDescr
+class AnimationResourceDescr;
+DEFINE_PTR_TYPE(AnimationResourceDescr)
+DEFINE_CONST_PTR_TYPE(AnimationResourceDescr)
+
+class AnimationResourceDescr : public IAnimationResourceDescr
 {
 private:
 
@@ -20,11 +24,11 @@ public:
 
     virtual const std::vector< std::string > &  GetFrames               () const override;
 
-    static AnimationResourceDescr *             CreateFromDirFrames     ( const std::string & path, const std::string & filter );
+    static AnimationResourceDescrPtr            CreateFromDirFrames     ( const std::string & path, const std::string & filter );
 
 };
 
-DEFINE_PTR_TYPE(AnimationResourceDescr)
+
 
 } //model
 } //bv

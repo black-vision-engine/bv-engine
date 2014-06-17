@@ -32,11 +32,11 @@ const std::string & TextureResourceDescr::GetTextureFile    () const
 
 // *******************************
 //
-const IAnimationResourceDescr *   QueryAnimationResourceDescr   ( const IPluginResourceDescr * resDescr )
+IAnimationResourceDescrConstPtr   QueryAnimationResourceDescr   ( IPluginResourceDescrConstPtr resDescr )
 {
     if ( resDescr->GetResourceType() == PluginResourceType::PRT_ANIMATION )
     {
-        return static_cast< const IAnimationResourceDescr * >( resDescr );
+        return std::static_pointer_cast< const IAnimationResourceDescr >( resDescr );
     }
 
     return nullptr;

@@ -32,7 +32,7 @@ public:
     virtual const std::vector< bv::IValueConstPtr > &   GetValues                   () const override;
     virtual bv::IValueConstPtr                          GetValue                    ( const std::string & name ) const override;
 
-    virtual const ITexturesData *                       GetTexturesData             () const override;
+    virtual ITexturesDataConstPtr                       GetTexturesData             () const override;
 
 protected:
 

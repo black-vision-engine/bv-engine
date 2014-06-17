@@ -13,15 +13,15 @@ class DefaultVertexShaderChannel : public ShaderChannel< IVertexShaderChannel >
 {
 protected:
 
-    DefaultTexturesData *   m_texturesData;
+    DefaultTexturesDataPtr      m_texturesData;
 
 public:
 
             DefaultVertexShaderChannel                      ( const std::string & shaderSource, IValueSetConstPtr valueSet );
     virtual ~DefaultVertexShaderChannel                     ();
 
-    virtual const ITexturesData *       GetTexturesData     () const override;
-    DefaultTexturesData *               GetTexturesDataImpl ();
+    virtual ITexturesDataConstPtr       GetTexturesData     () const override;
+    DefaultTexturesDataPtr              GetTexturesDataImpl ();
 
     static  DefaultVertexShaderChannel * Create             ();
     static  DefaultVertexShaderChannel * Create             ( const std::string & shaderFile, IValueSetConstPtr values );

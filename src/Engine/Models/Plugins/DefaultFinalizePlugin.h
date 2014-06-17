@@ -37,7 +37,7 @@ public:
                  
     virtual const RendererContext *             GetRendererContext          () const override;
 
-    virtual bool                                LoadResource                ( const IPluginResourceDescr * resDescr ) override;
+    virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
 
     virtual void                                Update                      ( TimeType t ) override;
 

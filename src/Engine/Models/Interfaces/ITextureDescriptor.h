@@ -17,4 +17,7 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(ITextureDescriptor)
+DEFINE_CONST_PTR_TYPE(ITextureDescriptor)
+
 } //bv

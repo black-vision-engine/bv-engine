@@ -6,6 +6,7 @@
 
 #include "Engine/Types/Enums.h"
 #include "System/BasicTypes.h"
+#include "Engine/Models/Resources/IPluginResourceDescr.h"
 
 namespace bv { namespace model {
 
@@ -35,8 +36,9 @@ public:
 };
 
 DEFINE_PTR_TYPE(ITextureResourceDescr)
+DEFINE_CONST_PTR_TYPE(ITextureResourceDescr)
 
-const ITextureResourceDescr * QueryTextureResourceDescr( const IPluginResourceDescr * resDescr );
+ITextureResourceDescrConstPtr QueryTextureResourceDescr( IPluginResourceDescrConstPtr resDescr );
 
 
 //FIXME: move to a separate file
@@ -51,8 +53,9 @@ public:
 };
 
 DEFINE_PTR_TYPE(IAnimationResourceDescr)
+DEFINE_CONST_PTR_TYPE(IAnimationResourceDescr)
 
-const IAnimationResourceDescr * QueryAnimationResourceDescr( const IPluginResourceDescr * resDescr );
+IAnimationResourceDescrConstPtr QueryAnimationResourceDescr( IPluginResourceDescrConstPtr resDescr );
 
 //FIXME: move to a separate file
 class IFontResourceDescr : public IPluginResourceDescr
@@ -66,8 +69,9 @@ public:
 };
 
 DEFINE_PTR_TYPE(IFontResourceDescr)
+DEFINE_CONST_PTR_TYPE(IFontResourceDescr)
 
-const IFontResourceDescr * QueryFontResourceDescr( const IPluginResourceDescr * resDescr );
+IFontResourceDescrConstPtr QueryFontResourceDescr( IPluginResourceDescrConstPtr resDescr );
 
 
 

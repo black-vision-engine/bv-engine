@@ -38,5 +38,8 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(DefaultTexturesData)
+DEFINE_CONST_PTR_TYPE(DefaultTexturesData)
+
 } //model
 } //bv

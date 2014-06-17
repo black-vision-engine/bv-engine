@@ -11,7 +11,7 @@ class IShaderDataSource : public IValueSet
 public:
 
     virtual const std::string &     GetShaderSource     ()  const = 0;
-    virtual const ITexturesData *   GetTexturesData     ()  const = 0;
+    virtual ITexturesDataConstPtr   GetTexturesData     ()  const = 0;
 
     virtual                         ~IShaderDataSource  () {}
 };
