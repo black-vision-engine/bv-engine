@@ -326,11 +326,11 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
     TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ) );
 }
 
-bool            SetTextPluginContent( IPlugin* textPlugin, const std::wstring& text )
+bool            SetTextPluginContent( IPluginPtr textPlugin, const std::wstring& text )
 {
     if( textPlugin->GetTypeUid() == DefaultTextPluginDesc::UID() )
     {
-        static_cast< DefaultTextPlugin* >( textPlugin )->SetText( text );
+        std::static_pointer_cast< DefaultTextPlugin >( textPlugin )->SetText( text );
         return true;
     }
     else

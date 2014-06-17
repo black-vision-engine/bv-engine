@@ -23,7 +23,7 @@ namespace {
 
     // *****************************
     //
-    void SetDefaultColorChangeAnim( bv::model::IPlugin * plugin )
+    void SetDefaultColorChangeAnim( bv::model::IPluginPtr plugin )
     {
         auto param = plugin->GetParameter( "color" );
         assert( param );
@@ -39,7 +39,7 @@ namespace {
 
     // *****************************
     //
-    void SetDefaultTransformAnim( bv::model::IPlugin * plugin )
+    void SetDefaultTransformAnim( bv::model::IPluginPtr plugin )
     {
         auto param = plugin->GetParameter( "simple_transform" );
         assert( param );

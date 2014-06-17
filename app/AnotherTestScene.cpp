@@ -1024,7 +1024,7 @@ model::BasicNode *      TestScenesFactory::StackThemNow                ( model::
 {
     assert( false );
     model::BasicNode * root = new model::BasicNode( "StackNodeRoot", nullptr );
-    model::SimpleTransformPlugin * plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", TransformF(), nullptr, 0 ) );
+    model::SimpleTransformPluginPtr plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", TransformF(), nullptr, 0 ) );
     root->AddPlugin( plugin00 );
 
     root->AddChild( n0 );

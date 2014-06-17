@@ -7,7 +7,7 @@ namespace {
 template< typename ParamType >
 inline bool SetSimpleTypedParameter( IParameterPtr param, TimeType t, typename const ParamType::ValType & val )
 {
-    ParamType * typedParam = QueryTypedParam< ParamType >( param );
+    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
 
     if( typedParam == nullptr )
     {

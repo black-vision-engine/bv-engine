@@ -50,9 +50,9 @@ public:
 
 protected:
 
-    model::IPlugin *            GetTRansformPlugin  ();
-    model::IPlugin *            GetRectPlugin       ();
-    model::IPlugin *            GetShaderPlugin     ();
+    model::IPluginPtr           GetTRansformPlugin  ();
+    model::IPluginPtr           GetRectPlugin       ();
+    model::IPluginPtr           GetShaderPlugin     ();
 
     model::BasicNode *          CreateNewNode       () const;
 

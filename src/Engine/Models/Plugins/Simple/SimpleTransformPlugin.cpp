@@ -11,9 +11,9 @@ namespace bv { namespace model {
 
 // *************************************
 //
-SimpleTransformPlugin * SimpleTransformPlugin::Create( IPluginConstPtr prev, const ParamTransformVec & transformVec )
+SimpleTransformPluginPtr SimpleTransformPlugin::Create( IPluginConstPtr prev, const ParamTransformVec & transformVec )
 {
-    auto p = new SimpleTransformPlugin( prev, transformVec );
+    auto p = std::make_shared< SimpleTransformPlugin >( prev, transformVec );
     return p;
 }
 

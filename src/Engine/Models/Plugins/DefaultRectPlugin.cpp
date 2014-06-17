@@ -21,7 +21,7 @@ DefaultRectPluginDesc::DefaultRectPluginDesc                                ()
 
 // *******************************
 //
-bool                            DefaultRectPluginDesc::CanBeAttachedTo      ( const IPlugin * plugin )  const
+bool                            DefaultRectPluginDesc::CanBeAttachedTo      ( IPluginConstPtr plugin )  const
 {
     if( !BasePluginDescriptor::CanBeAttachedTo( plugin ) )
     {
@@ -39,7 +39,7 @@ bool                            DefaultRectPluginDesc::CanBeAttachedTo      ( co
 
 // *******************************
 //
-IPlugin *                       DefaultRectPluginDesc::CreatePlugin         ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr                      DefaultRectPluginDesc::CreatePlugin         ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreatePluginTyped< DefaultRectPlugin >( name, prev, timeEvaluator );
 }
@@ -78,7 +78,7 @@ std::string                     DefaultRectPluginDesc::UID                  ()
 
 // *************************************
 //
-DefaultRectPlugin::DefaultRectPlugin    ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model )
+DefaultRectPlugin::DefaultRectPlugin    ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
@@ -89,8 +89,8 @@ DefaultRectPlugin::DefaultRectPlugin    ( const std::string & name, const std::s
 
     assert( params.size() == 2 );
 
-    m_widthParam    = QueryTypedParam< ParamFloat >( params[ 0 ] );
-    m_heightParam   = QueryTypedParam< ParamFloat >( params[ 1 ] );
+    m_widthParam    = QueryTypedParam< ParamFloatPtr >( params[ 0 ] );
+    m_heightParam   = QueryTypedParam< ParamFloatPtr >( params[ 1 ] );
 
     m_lastW = m_widthParam->Evaluate();
     m_lastH = m_heightParam->Evaluate();

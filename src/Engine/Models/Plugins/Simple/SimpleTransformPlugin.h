@@ -22,6 +22,9 @@ public:
 };
 
 
+class SimpleTransformPlugin;
+DEFINE_PTR_TYPE(SimpleTransformPlugin)
+
 // ***************************** PLUGIN ********************************** 
 class SimpleTransformPlugin : public BasePlugin< IPlugin >
 {
@@ -41,7 +44,7 @@ public:
 
     //void                                    OnSetTransform              ( IEventPtr evt );
 
-    static  SimpleTransformPlugin *         Create                      ( IPluginConstPtr prev, const ParamTransformVec & transformVec );
+    static  SimpleTransformPluginPtr        Create                      ( IPluginConstPtr prev, const ParamTransformVec & transformVec );
 
 };
 

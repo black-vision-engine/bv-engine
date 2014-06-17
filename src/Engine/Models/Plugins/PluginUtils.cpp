@@ -9,7 +9,7 @@ namespace bv { namespace model {
 
 // *******************************
 //
-bool    LoadTexture     ( IPlugin * plugin, const std::string & textureFile )
+bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile )
 {
     TextureResourceDescrPtr desc( new TextureResourceDescr( textureFile ) );
 
@@ -18,7 +18,7 @@ bool    LoadTexture     ( IPlugin * plugin, const std::string & textureFile )
 
 // *******************************
 //
-bool    LoadAnimation   ( IPlugin * plugin, const std::string & animationPath, const std::string & filter )
+bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, const std::string & filter )
 {
     AnimationResourceDescrPtr desc( AnimationResourceDescr::CreateFromDirFrames( animationPath, filter ) );
 
@@ -32,7 +32,7 @@ bool    LoadAnimation   ( IPlugin * plugin, const std::string & animationPath, c
 
 // *******************************
 //
-bool    LoadFont        ( IPlugin * plugin, const std::string & fontFile )
+bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile )
 {
     FontResourceDescrPtr desc( new FontResourceDescr( fontFile ) );
 

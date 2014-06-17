@@ -270,7 +270,7 @@ void             BasicNode::NonNullPluginsListGuard ()
 
 // ********************************
 //
-bool            BasicNode::AddPlugin                ( IPlugin * plugin )
+bool            BasicNode::AddPlugin                ( IPluginPtr plugin )
 {
     NonNullPluginsListGuard();
 
@@ -290,18 +290,11 @@ bool            BasicNode::AddPlugin                ( IPlugin * plugin )
 
 // ********************************
 //
-bool            BasicNode::AddPlugin               ( IPluginPtr plugin )
-{
-    return AddPlugin( plugin.get() );
-}
-
-// ********************************
-//
 bool            BasicNode::AddPlugin               ( const std::string & uid, ITimeEvaluatorPtr timeEvaluator )
 {
     NonNullPluginsListGuard ();
 
-    const IPlugin * prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
+    IPluginConstPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
 
     if( !m_pluginsManager->CanBeAttachedTo( uid, prev ) )
     {
@@ -319,7 +312,7 @@ bool            BasicNode::AddPlugin               ( const std::string & uid, co
 {
     NonNullPluginsListGuard ();
 
-    const IPlugin * prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
+    IPluginConstPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
 
     if( !m_pluginsManager->CanBeAttachedTo( uid, prev ) )
     {

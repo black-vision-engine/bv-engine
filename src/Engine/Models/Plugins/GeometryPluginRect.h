@@ -37,5 +37,7 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(GeometryRectPlugin)
+
 } // model
 } // bv

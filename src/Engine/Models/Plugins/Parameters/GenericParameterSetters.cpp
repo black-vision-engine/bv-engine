@@ -7,7 +7,7 @@ namespace {
 
 // *******************************
 //
-bool SetRotation                ( ParamTransform * pt, TimeType t, const glm::vec3 & rotAxis, float angle )
+bool SetRotation                ( ParamTransformPtr pt, TimeType t, const glm::vec3 & rotAxis, float angle )
 {
     if( pt == nullptr )
     {
@@ -21,7 +21,7 @@ bool SetRotation                ( ParamTransform * pt, TimeType t, const glm::ve
 
 // *******************************
 //
-bool SetScale                   ( ParamTransform * pt, TimeType t, const glm::vec3 & scale )
+bool SetScale                   ( ParamTransformPtr pt, TimeType t, const glm::vec3 & scale )
 {
     if( pt == nullptr )
     {
@@ -35,7 +35,7 @@ bool SetScale                   ( ParamTransform * pt, TimeType t, const glm::ve
 
 // *******************************
 //
-bool SetTranslation             ( ParamTransform * pt, TimeType t, const glm::vec3 & translation )
+bool SetTranslation             ( ParamTransformPtr pt, TimeType t, const glm::vec3 & translation )
 {
     if( pt == nullptr )
     {
@@ -49,7 +49,7 @@ bool SetTranslation             ( ParamTransform * pt, TimeType t, const glm::ve
 
 // *******************************
 //
-bool SetRotation                ( ParamTransformVec * pt, unsigned int idx, TimeType t, const glm::vec3 & rotAxis, float angle )
+bool SetRotation                ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & rotAxis, float angle )
 {
     if( pt == nullptr || pt->NumTransforms() <= idx )
     {
@@ -63,7 +63,7 @@ bool SetRotation                ( ParamTransformVec * pt, unsigned int idx, Time
 
 // *******************************
 //
-bool SetScale                   ( ParamTransformVec * pt, unsigned int idx, TimeType t, const glm::vec3 & scale )
+bool SetScale                   ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & scale )
 {
     if( pt == nullptr || pt->NumTransforms() <= idx )
     {
@@ -77,7 +77,7 @@ bool SetScale                   ( ParamTransformVec * pt, unsigned int idx, Time
 
 // *******************************
 //
-bool SetTranslation             ( ParamTransformVec * pt, unsigned int idx, TimeType t, const glm::vec3 & translation )
+bool SetTranslation             ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & translation )
 {
     if( pt == nullptr || pt->NumTransforms() <= idx )
     {
@@ -96,21 +96,21 @@ bool SetTranslation             ( ParamTransformVec * pt, unsigned int idx, Time
 //
 bool    SetParameterRotation    ( IParameterPtr parameter, TimeType t, const glm::vec3 & rotAxis, float angle )
 {
-    return SetRotation( QueryTypedParam< ParamTransform >( parameter ), t, rotAxis, angle );
+    return SetRotation( QueryTypedParam< ParamTransformPtr >( parameter ), t, rotAxis, angle );
 }
 
 // *******************************
 //
 bool    SetParameterScale       ( IParameterPtr parameter, TimeType t, const glm::vec3 & scale )
 {
-    return SetScale( QueryTypedParam< ParamTransform >( parameter ), t, scale );
+    return SetScale( QueryTypedParam< ParamTransformPtr >( parameter ), t, scale );
 }
 
 // *******************************
 //
 bool    SetParameterTranslation ( IParameterPtr parameter, TimeType t, const glm::vec3 & translation )
 {
-    return SetTranslation( QueryTypedParam< ParamTransform >( parameter ), t, translation );
+    return SetTranslation( QueryTypedParam< ParamTransformPtr >( parameter ), t, translation );
 }
 
 
@@ -118,21 +118,21 @@ bool    SetParameterTranslation ( IParameterPtr parameter, TimeType t, const glm
 //
 bool    SetParameterRotation    ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & rotAxis, float angle )
 {
-    return SetRotation( QueryTypedParam< ParamTransformVec >( parameter ), idx, t, rotAxis, angle );
+    return SetRotation( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, rotAxis, angle );
 }
 
 // *******************************
 //
 bool    SetParameterScale       ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & scale )
 {
-    return SetScale( QueryTypedParam< ParamTransformVec >( parameter ), idx, t, scale );
+    return SetScale( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, scale );
 }
 
 // *******************************
 //
 bool    SetParameterTranslation ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & translation )
 {
-    return SetTranslation( QueryTypedParam< ParamTransformVec >( parameter ), idx, t, translation );
+    return SetTranslation( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, translation );
 }
 
 } //model

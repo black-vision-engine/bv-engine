@@ -17,8 +17,8 @@ public:
 
     DefaultRectPluginDesc                                       ();
 
-    virtual bool                            CanBeAttachedTo     ( const IPlugin * plugin )  const override;
-    virtual IPlugin *                       CreatePlugin        ( const std::string & name, const IPlugin * prev, ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual bool                            CanBeAttachedTo     ( IPluginConstPtr plugin )  const override;
+    virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
     static  std::string                     UID                 ();
@@ -35,8 +35,8 @@ private:
     DefaultPluginParamValModelPtr       m_paramValModel;
     VertexAttributesChannel *           m_vaChannel;
 
-    ParamFloat *                        m_widthParam;
-    ParamFloat *                        m_heightParam;
+    ParamFloatPtr                       m_widthParam;
+    ParamFloatPtr                       m_heightParam;
 
     float                               m_lastW;
     float                               m_lastH;
@@ -45,7 +45,7 @@ private:
 
 public:
 
-    explicit            DefaultRectPlugin    ( const std::string & name, const std::string & uid, const IPlugin * prev, DefaultPluginParamValModelPtr model );
+    explicit            DefaultRectPlugin    ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model );
                         ~DefaultRectPlugin   ();
 
     virtual const IVertexAttributesChannel *    GetVertexAttributesChannel  () const override;

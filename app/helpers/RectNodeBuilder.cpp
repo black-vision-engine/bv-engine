@@ -143,21 +143,21 @@ std::string RectNodeBuilder::TransformParamName  () const
 
 // ****************************
 //
-model::IPlugin *  RectNodeBuilder::GetTRansformPlugin  ()
+model::IPluginPtr   RectNodeBuilder::GetTRansformPlugin  ()
 {
     return m_node->GetPlugin( TransformPluginName() );
 }
 
 // ****************************
 //
-model::IPlugin *   RectNodeBuilder::GetRectPlugin       ()
+model::IPluginPtr  RectNodeBuilder::GetRectPlugin       ()
 {
     return m_node->GetPlugin( RectPluginName() );
 }
 
 // ****************************
 //
-model::IPlugin *   RectNodeBuilder::GetShaderPlugin     ()
+model::IPluginPtr  RectNodeBuilder::GetShaderPlugin     ()
 {
     return m_node->GetPlugin( ShaderPluginName() );
 }

@@ -229,11 +229,11 @@ model::BasicNode *     TestScenesFactory::SimpeTextureTestScene()
     auto w = model::ParametersFactory::CreateParameter( "width", InterpolatorsHelper::CreateConstValue( 1.f ), nullptr );
     auto h = model::ParametersFactory::CreateParameter( "height", InterpolatorsHelper::CreateConstValue( 1.f ), nullptr  );
 
-    model::GeometryRectPlugin    * rectPlugin  = new model::GeometryRectPlugin( w, h );
+    model::GeometryRectPluginPtr   rectPlugin  = std::make_shared< model::GeometryRectPlugin >( w, h );
     
     root->AddPlugin( rectPlugin );
 
-    model::SimpleTransformPlugin      * stpl  = nullptr; //model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
+    model::SimpleTransformPluginPtr      stpl  = nullptr; //model::PluginsFactory::CreateSimpleTransformPlugin( rectPlugin, model::ParametersFactory::CreateParameter( "transformation", trns, nullptr, 0 ) );
 
     root->AddPlugin( stpl );
 

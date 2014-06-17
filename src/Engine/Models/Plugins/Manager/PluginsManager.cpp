@@ -90,7 +90,7 @@ bool                                                PluginsManager::CanBeAttache
 
 // *********************************
 //
-IPlugin *                                           PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     if( !CanBeAttachedTo( uid, prev ) )
     {
@@ -102,7 +102,7 @@ IPlugin *                                           PluginsManager::CreatePlugin
 
 // *********************************
 //
-IPlugin *                                           PluginsManager::CreatePlugin            ( const std::string & uid, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     if( !CanBeAttachedTo( uid, prev ) )
     {
@@ -189,7 +189,7 @@ DefaultPluginListFinalized *                        PluginsManager::CreatePlugin
 DefaultPluginListFinalized *                        PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::pair< std::string, std::string > > & plugins, ITimeEvaluatorPtr timeEvaluator ) const
 {
     std::vector< IPluginPtr > tmpList;
-    const IPlugin * prev = nullptr;
+    IPluginConstPtr prev = nullptr;
 
     for( auto pair : plugins )
     {
@@ -215,7 +215,7 @@ DefaultPluginListFinalized *                        PluginsManager::CreatePlugin
 
         tmpList.push_back( plugin );
 
-        prev = plugin.get();
+        prev = plugin;
     }
 
     return new DefaultPluginListFinalized( tmpList );

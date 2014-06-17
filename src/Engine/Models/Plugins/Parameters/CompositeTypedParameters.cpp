@@ -14,9 +14,9 @@ ParamTransform::ParamTransform  ( const std::string & name, const TransformF & t
 
 // *******************************
 //
-void *     ParamTransform::QueryParamTyped  ()
+VoidPtr    ParamTransform::QueryParamTyped  ()
 {
-    return static_cast< void * >( this );
+    return std::static_pointer_cast< void >( shared_from_this() );
 }
 
 
@@ -46,9 +46,9 @@ void    ParamTransformVec::AppendTransform          ( const TransformF & transfo
 
 // *******************************
 //
-void *          ParamTransformVec::QueryParamTyped  ()
+VoidPtr         ParamTransformVec::QueryParamTyped  ()
 {
-    return static_cast< void * >( this );
+    return std::static_pointer_cast< void >( shared_from_this() );
 }
 
 } //model
