@@ -324,7 +324,12 @@ model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager *
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
 
-    SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
+    //SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
+
+    auto plugin = node->GetPlugin( "transform" );
+    auto param = plugin->GetParameter( "simple_transform" );
+
+    SetParameterTranslation( param, 0, 0.0f, glm::vec3( -12.f, 0.f, 0.f ) );
 
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 60.f );
@@ -363,7 +368,22 @@ model::BasicNode *  SimpleNodesFactory::CreateTextWithShadowNode(   model::Timel
 
     model::SetParameterTranslation ( param, 0, 0.0f, -shadowTranslation );
 
+    auto tx =  SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0 );
+
+    auto plugin = tx->GetPlugin( "transform" );
+    param = plugin->GetParameter( "simple_transform" );
+    auto plo = tx->GetPlugin( "solid color" );
+    auto sp = plo->GetParameter( "color" );
+    assert( sp );
+
+    SetParameter( sp, TimeType( 0.0 ), glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) );
+
+    auto st = -shadowTranslation;
+    st.z += 0.001;
+    SetParameterTranslation( param, 0, 0.0f, st );
+
     shadowNode->AddChild( node );
+    shadowNode->AddChild( tx );
 
     return shadowNode;
 }
