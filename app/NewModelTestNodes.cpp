@@ -54,7 +54,7 @@ namespace bv {
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateSolidRectNode      ( const std::string & name, float w, float h, const glm::vec3 & pos, const glm::vec4 col, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateSolidRectNode      ( const std::string & name, float w, float h, const glm::vec3 & pos, const glm::vec4 col, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     //Plugin list
     std::vector< std::string > uids;
@@ -64,7 +64,7 @@ model::BasicNode *  SimpleNodesFactory::CreateSolidRectNode      ( const std::st
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNode * root = new model::BasicNode( name, timeEvaluator );
+    model::BasicNodePtr root = std::make_shared< model::BasicNode >( name, timeEvaluator );
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
 
@@ -85,12 +85,12 @@ model::BasicNode *  SimpleNodesFactory::CreateSolidRectNode      ( const std::st
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode   ( const std::string & name, float w, float h, const glm::vec3 & pos, const std::string & txFileName, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::string & name, float w, float h, const glm::vec3 & pos, const std::string & txFileName, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 3 );
 
-    auto root = new model::BasicNode( name, timeEvaluator );
+    auto root = std::make_shared< model::BasicNode >( name, timeEvaluator );
     auto success = root->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
     assert( success );
 
@@ -110,7 +110,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode   ( const std::st
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     TexturedRectNodeBuilder bTex( timeEvaluator, "simless_01.jpg", false, 3.4f, 0.7f );
     SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 1.f ), .85f, 0.31f );
@@ -184,7 +184,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMan
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNode * root = new model::BasicNode( nodeName, timeEvaluator );
+    model::BasicNodePtr root = std::make_shared< model::BasicNode >( nodeName, timeEvaluator );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -213,11 +213,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMan
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins0, GSimplePlugins0 + 3 );
 
-    auto node = new model::BasicNode( "Root", timeEvaluator );
+    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
     node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
 
     SetDefaultColorChangeAnim( node->GetPlugin( "solid color" ) );
@@ -232,7 +232,7 @@ model::BasicNode *  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Time
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     //Timeline stuff
     auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
@@ -247,7 +247,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineM
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 3 );
 
-    auto node = new model::BasicNode( "Root", timeEvaluator );
+    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -267,7 +267,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineM
 
 // *****************************
 //
-model::BasicNode *  SimpleNodesFactory::CreateTextureAnimationRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     //Timeline stuff
     auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
@@ -282,7 +282,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     //Plugin stuf
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins2, GSimplePlugins2 + 3 );
 
-    auto node = new model::BasicNode( "Root", timeEvaluator );
+    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
     assert( success );
@@ -303,7 +303,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     return node;    
 }
 
-model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize )
+model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize )
 {
     //Timeline stuff
     auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
@@ -319,7 +319,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager *
     //std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins4, GSimplePlugins4 + 2 );
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins3, GSimplePlugins3 + 3 );
 
-    auto node = new model::BasicNode( "Root", timeEvaluator );
+    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -346,7 +346,7 @@ model::BasicNode *  SimpleNodesFactory::CreateTextNode( model::TimelineManager *
     return node;    
 }
 
-model::BasicNode *  SimpleNodesFactory::CreateTextWithShadowNode(   model::TimelineManager * timelineManager,
+model::BasicNodePtr  SimpleNodesFactory::CreateTextWithShadowNode(   model::TimelineManager * timelineManager,
                                                                     model::ITimeEvaluatorPtr timeEvaluator,
                                                                     unsigned int blurSize,
                                                                     const glm::vec3 shadowTranslation )

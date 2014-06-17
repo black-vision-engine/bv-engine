@@ -825,7 +825,7 @@ using namespace model;
 
 // ******************************
 //
-model::BasicNode *          TestScenesFactory::AnotherTestScene()
+model::BasicNodePtr          TestScenesFactory::AnotherTestScene()
 {
     auto root = nullptr;
     //auto root = GreenRect();
@@ -844,7 +844,7 @@ model::BasicNode *          TestScenesFactory::AnotherTestScene()
 
 // ******************************
 //
-model::BasicNode *          TestScenesFactory::XMLTestScene()
+model::BasicNodePtr          TestScenesFactory::XMLTestScene()
 {
     /*auto root =  Text1();
     root->AddChild( GreenRect() );
@@ -866,7 +866,7 @@ model::BasicNode *          TestScenesFactory::XMLTestScene()
 
 // ******************************
 //
-model::BasicNode *      TestScenesFactory::AnimatedTestScene ()
+model::BasicNodePtr      TestScenesFactory::AnimatedTestScene ()
 {
     float w = 5.f;
     float h = 1.f;
@@ -888,7 +888,7 @@ model::BasicNode *      TestScenesFactory::AnimatedTestScene ()
 
 // ******************************
 //
-model::BasicNode *      TestScenesFactory::GreenRectTestScene          ()
+model::BasicNodePtr      TestScenesFactory::GreenRectTestScene          ()
 {
     //return GreenRect();
     return nullptr;
@@ -896,7 +896,7 @@ model::BasicNode *      TestScenesFactory::GreenRectTestScene          ()
 
 // ******************************
 //
-model::BasicNode *      TestScenesFactory::TexturedRectTestScene       ()
+model::BasicNodePtr      TestScenesFactory::TexturedRectTestScene       ()
 {
     //return TexturedRect();
     return nullptr;
@@ -904,7 +904,7 @@ model::BasicNode *      TestScenesFactory::TexturedRectTestScene       ()
 
 // ******************************
 //
-model::BasicNode *      TestScenesFactory::NaiveTimerTestScene         ()
+model::BasicNodePtr      TestScenesFactory::NaiveTimerTestScene         ()
 {
     //return NaiveTimer();
     return nullptr;
@@ -912,7 +912,7 @@ model::BasicNode *      TestScenesFactory::NaiveTimerTestScene         ()
 
 // ******************************
 //
-model::BasicNode *      TestScenesFactory::TestSceneVariableTopology   ()
+model::BasicNodePtr      TestScenesFactory::TestSceneVariableTopology   ()
 {
     float size              = 1.0f;
     float speed             = 1.5f;
@@ -926,7 +926,7 @@ model::BasicNode *      TestScenesFactory::TestSceneVariableTopology   ()
 
 // ******************************
 //
-model::BasicNode *      TestScenesFactory::SequenceAnimationTestScene  ()
+model::BasicNodePtr      TestScenesFactory::SequenceAnimationTestScene  ()
 {
     std::vector< AnimationSequenceDesc >    animations;
 
@@ -965,7 +965,7 @@ model::BasicNode *      TestScenesFactory::SequenceAnimationTestScene  ()
 
 // ******************************
 //
-model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
+model::BasicNodePtr     TestScenesFactory::NonGeometryParent           ()
 {
     //TimeType start0 = TimeType( 3.0 );
     //TimeType start1 = TimeType( 5.0 );
@@ -1020,10 +1020,10 @@ model::BasicNode *      TestScenesFactory::NonGeometryParent           ()
 
 // ******************************
 //
-model::BasicNode *      TestScenesFactory::StackThemNow                ( model::BasicNode * n0, model::BasicNode * n1 )
+model::BasicNodePtr     TestScenesFactory::StackThemNow                ( model::BasicNodePtr n0, model::BasicNodePtr n1 )
 {
     assert( false );
-    model::BasicNode * root = new model::BasicNode( "StackNodeRoot", nullptr );
+    auto root = std::make_shared< model::BasicNode >( "StackNodeRoot", nullptr );
     model::SimpleTransformPluginPtr plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", TransformF(), nullptr, 0 ) );
     root->AddPlugin( plugin00 );
 

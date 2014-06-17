@@ -7,6 +7,7 @@
 #include "Engine/Interfaces/IUpdatable.h"
 
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
+#include "Engine/Models/BasicNode.h"
 
 namespace bv {
 
@@ -24,20 +25,20 @@ class ModelScene : public IUpdatable
     ParamVec3           m_cameraDirection;
     ParamVec3           m_cameraUp;
  
-    BasicNode *         m_pSceneRoot;
+    BasicNodePtr        m_pSceneRoot;
 
     std::string         m_name;
 
 public:
 
-    static ModelScene * Create                  ( BasicNode * node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
+    static ModelScene * Create                  ( BasicNodePtr node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
 
     virtual void        Update                  ( TimeType t );
 
     void                SetCamereParameters     ( const ParamVec3 & pos, const ParamVec3 & dir, const ParamVec3 & up );
 
     Camera *            GetCamera               ()  const;
-    BasicNode *         GetSceneRoot            ()  const;
+    BasicNodePtr        GetSceneRoot            ()  const;
 
     const std::string & GetName                 () const;
 
@@ -45,7 +46,7 @@ public:
 
 private:
 
-    explicit ModelScene( BasicNode * node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
+    explicit ModelScene( BasicNodePtr node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
 
     friend class ModelAccessors;
 

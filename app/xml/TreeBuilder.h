@@ -1,5 +1,6 @@
 #pragma once
 #include "BlackTree.h"
+#include "Engine/Models/BasicNode.h"
 
 namespace bv
 {
@@ -13,7 +14,7 @@ namespace bv
 	public:
 		TreeBuilder(void);
 		~TreeBuilder(void);
-		model::BasicNode* BuildTree(string path);
+		model::BasicNodePtr BuildTree(string path);
 		void SendTree(BlackNode &CurrentNode,int depth=0);
 		
 

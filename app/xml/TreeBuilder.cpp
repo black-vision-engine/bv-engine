@@ -81,7 +81,7 @@ namespace bv{
 	}
 
 	
-	model::BasicNode*  deleteMe()
+	model::BasicNodePtr  deleteMe()
 	{
 
 		//model::BasicNode * root = new model::BasicNode( "deleteMeNode" );
@@ -307,7 +307,7 @@ namespace bv{
 	}	
 
 
-	model::BasicNode* TreeBuilder::BuildTree(string path){
+	model::BasicNodePtr TreeBuilder::BuildTree(string path){
 		
         assert(false);
 		model::BasicNode * root = new model::BasicNode( "Nie ma nazwy na pustyni FIXME:", nullptr );

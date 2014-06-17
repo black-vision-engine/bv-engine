@@ -9,14 +9,14 @@ namespace bv { namespace model {
 
 // *******************************
 //
-ModelScene *    ModelScene::Create( BasicNode * node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+ModelScene *    ModelScene::Create( BasicNodePtr node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
 {
     return new ModelScene( node, cam, name, timeEvaluator );
 }
 
 // *******************************
 //
-ModelScene::ModelScene( BasicNode * node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+ModelScene::ModelScene( BasicNodePtr node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
     : m_pCamera( cam )
     , m_pSceneRoot( node )
     , m_cameraPosition( "camera_position", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 1.0f ) ), timeEvaluator )
@@ -51,7 +51,7 @@ Camera *        ModelScene::GetCamera               ()  const
 
 // *******************************
 //
-BasicNode *     ModelScene::GetSceneRoot            ()  const
+BasicNodePtr    ModelScene::GetSceneRoot            ()  const
 {
     return m_pSceneRoot;
 }
@@ -67,7 +67,6 @@ const std::string & ModelScene::GetName             () const
 //
 ModelScene::~ModelScene()
 {
-    delete m_pSceneRoot;
 }
 
 } // model

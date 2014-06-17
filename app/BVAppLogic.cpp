@@ -117,7 +117,7 @@ void BVAppLogic::Initialize         ()
 //
 void BVAppLogic::LoadScene          ( void )
 {
-    model::BasicNode * root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
+    model::BasicNodePtr root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
     assert( root );
 
     m_mockSceneEng  = root->BuildScene();

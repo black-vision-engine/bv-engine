@@ -7,20 +7,20 @@ namespace bv { namespace model {
 
 // ********************************
 //
-BasicNode *     ModelAccessors::GetRootNode    ( ModelScene * scene )
+BasicNodePtr     ModelAccessors::GetRootNode    ( ModelScene * scene )
 {
     return scene->m_pSceneRoot;
 }
 
 // ********************************
 //
-BasicNode *     ModelAccessors::FindChild   ( BasicNode * node, const std::string & name )
+BasicNodePtr     ModelAccessors::FindChild   ( BasicNodePtr node, const std::string & name )
 {
     for( auto n : node->m_children )
     {
         if( n->GetName() == name )
         {
-            return static_cast< BasicNode * >( n.get() );
+            return std::static_pointer_cast< BasicNode >( n );
         }
     }
 
@@ -29,13 +29,13 @@ BasicNode *     ModelAccessors::FindChild   ( BasicNode * node, const std::strin
 
 // ********************************
 //
-BasicNode *     ModelAccessors::FindLayer   ( BasicNode * node, const std::string & name )
+BasicNodePtr     ModelAccessors::FindLayer   ( BasicNodePtr node, const std::string & name )
 {
     for( auto n : node->m_layers )
     {
         if( n->GetName() == name )
         {
-            return static_cast< BasicNode * >( n.get() );
+            return std::static_pointer_cast< BasicNode >( n );
         }
     }
 

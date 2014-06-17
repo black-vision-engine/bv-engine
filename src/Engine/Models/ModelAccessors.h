@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "Engine/Models/BasicNode.h"
+
 namespace bv { namespace model {
 
 class BasicNode;
@@ -13,9 +15,9 @@ private:
 
 public:
 
-    static BasicNode *     GetRootNode  ( ModelScene * scene );
-    static BasicNode *     FindChild    ( BasicNode * node, const std::string & name );
-    static BasicNode *     FindLayer    ( BasicNode * node, const std::string & name );
+    static BasicNodePtr    GetRootNode  ( ModelScene * scene );
+    static BasicNodePtr    FindChild    ( BasicNodePtr node, const std::string & name );
+    static BasicNodePtr    FindLayer    ( BasicNodePtr node, const std::string & name );
 
 };
 
