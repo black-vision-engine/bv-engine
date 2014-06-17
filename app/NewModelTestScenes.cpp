@@ -17,7 +17,7 @@ namespace {
 
 // *****************************
 //
-model::BasicNode *  DefaultTestNewAPI   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  DefaultTestNewAPI   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     std::vector< std::string > uids;
 
@@ -27,7 +27,7 @@ model::BasicNode *  DefaultTestNewAPI   ( const model::PluginsManager * pluginsM
 
     model::IPluginListFinalizedPtr pluginsList( pluginsManager->CreatePlugins( uids, timeEvaluator ) );
 
-    model::BasicNode * root = new model::BasicNode( "Root", timeEvaluator );
+    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
 
     //FIXME: add list to the node
     return root;
@@ -35,9 +35,9 @@ model::BasicNode *  DefaultTestNewAPI   ( const model::PluginsManager * pluginsM
 
 // *****************************
 //
-model::BasicNode *  DefaultTestNodeNewNodeImpl  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  DefaultTestNodeNewNodeImpl  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNode * root = new model::BasicNode( "Root", timeEvaluator, pluginsManager );
+    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator, pluginsManager );
 
     bool success = true;
 
@@ -52,7 +52,7 @@ model::BasicNode *  DefaultTestNodeNewNodeImpl  ( const model::PluginsManager * 
 
 // *****************************
 //
-model::BasicNode *  DefaultTestWithValidation   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  DefaultTestWithValidation   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     using namespace model;
 
@@ -73,7 +73,7 @@ model::BasicNode *  DefaultTestWithValidation   ( const model::PluginsManager * 
 
     IPluginPtr thirdPlugin  = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin, timeEvaluator ) );
 
-    BasicNode * root = new BasicNode( "Root", timeEvaluator );
+    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
 
     root->AddPlugin( firstPlugin );
     root->AddPlugin( secondPlugin );
@@ -84,7 +84,7 @@ model::BasicNode *  DefaultTestWithValidation   ( const model::PluginsManager * 
 
 // *****************************
 //
-model::BasicNode *  DefaultTestNoValidation     ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  DefaultTestNoValidation     ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     using namespace model;
 
@@ -93,7 +93,7 @@ model::BasicNode *  DefaultTestNoValidation     ( const model::PluginsManager * 
     auto secondPlugin = pluginsManager->CreatePlugin( "DEFAULT_RECTANGLE", "rect0", firstPlugin, timeEvaluator );
     auto thirdPlugin  = pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin, timeEvaluator );
 
-    BasicNode * root = new BasicNode( "Root", timeEvaluator );
+    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
 
     root->AddPlugin( firstPlugin );
     root->AddPlugin( secondPlugin );
@@ -173,7 +173,7 @@ void QueryPluginPropertiesGeneric   ( model::IPluginConstPtr plugin )
 
 // *****************************
 //
-void  QueryPluginsNodesGeneric      ( model::BasicNode * node )
+void  QueryPluginsNodesGeneric      ( model::BasicNodePtr node )
 {
     printf( "Inspecting node: %s\n", node->GetName() );
 
@@ -201,7 +201,7 @@ void  QueryPluginsNodesGeneric      ( model::BasicNode * node )
 //
 void  QueryPropertiesDefaultScene   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNode *  node = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
+    auto  node = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
 
     model::IParameterConstPtr   transform_p  = node->GetPlugin( "transform" )->GetPluginParamValModel()->GetTransformChannelModel()->GetParameter( "simple_transform" );
     IValueConstPtr              transform_v  = node->GetPlugin( "transform" )->GetPluginParamValModel()->GetTransformChannelModel()->GetValue( "simple_transform" );
@@ -220,7 +220,7 @@ void  QueryPropertiesDefaultScene   ( const model::PluginsManager * pluginsManag
 //
 void  QueryPropertiesDefaultSceneConvenienceAPI ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNode *  node = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
+    auto  node = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
 
     model::IParameterPtr transform_p    = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
     IValueConstPtr transform_v          = node->GetPlugin( "transform" )->GetValue( "simple_transform" );
@@ -239,7 +239,7 @@ void  QueryPropertiesDefaultSceneConvenienceAPIParameterSetters ( const model::P
 {
     using namespace model;
 
-    BasicNode *  node = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
+    auto  node = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
 
     IParameterPtr transform_p = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
@@ -267,7 +267,7 @@ void  QueryPropertiesDefaultSceneConvenienceAPIParameterSetters ( const model::P
 //
 void  QueryPropertiesDefaultSceneConvenienceAPIParameterSettersNoErrorChecking ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNode *  n = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
+    auto  n = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
 
     SetParameterRotation    ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 90.f );
     SetParameterScale       ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, 2.f, 1.f ) );

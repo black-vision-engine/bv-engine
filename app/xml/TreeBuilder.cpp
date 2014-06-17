@@ -123,7 +123,7 @@ namespace bv{
         return nullptr;
     }
 
-	void AttachSolidPlugin(model::BasicNode *EngineNode, string pluginName, vector<Property> properties, vector<NonLinearProperty> non_linear_properties)
+	void AttachSolidPlugin(model::BasicNodePtr EngineNode, string pluginName, vector<Property> properties, vector<NonLinearProperty> non_linear_properties)
 	{
 		Vec4Interpolator color; color.SetWrapPostMethod( bv::WrapMethod::pingPong );
 		for(unsigned int i=0;i<properties.size();i++)
@@ -149,7 +149,7 @@ namespace bv{
 		}
 	}
 
-	void AttachGeometryPlugin(model::BasicNode *EngineNode, string pluginName, vector<Property> properties, vector<NonLinearProperty> non_linear_properties)
+	void AttachGeometryPlugin(model::BasicNodePtr EngineNode, string pluginName, vector<Property> properties, vector<NonLinearProperty> non_linear_properties)
 	{
 		TransformF     trns;
 		
@@ -206,7 +206,7 @@ namespace bv{
 	}
 	
 
-	void AttachTextPlugin(model::BasicNode *EngineNode, string pluginName, vector<Property> properties, vector<NonLinearProperty> non_linear_properties)
+	void AttachTextPlugin(model::BasicNodePtr EngineNode, string pluginName, vector<Property> properties, vector<NonLinearProperty> non_linear_properties)
 	{
 		string text;
 		string font_name;
@@ -226,7 +226,7 @@ namespace bv{
 
 	}
 
-	void AttachPlugin(model::BasicNode *EngineNode, string pluginName, vector<Property> properties, vector<NonLinearProperty> non_linear_properties)
+	void AttachPlugin(model::BasicNodePtr EngineNode, string pluginName, vector<Property> properties, vector<NonLinearProperty> non_linear_properties)
 	{
 
 	}
@@ -241,7 +241,7 @@ namespace bv{
 		
 		//onNodeBegin(CurrentNode.name,depth);
         assert( false ); //FIXME: timeline cannot be null
-        model::BasicNode * newNode = new model::BasicNode( CurrentNode.name, nullptr );
+        auto newNode = std::make_shared< model::BasicNode >( CurrentNode.name, nullptr );
 
 		for(unsigned int i=0;i<CurrentNode.plugins.size();i++)
 		{
@@ -310,7 +310,7 @@ namespace bv{
 	model::BasicNodePtr TreeBuilder::BuildTree(string path){
 		
         assert(false);
-		model::BasicNode * root = new model::BasicNode( "Nie ma nazwy na pustyni FIXME:", nullptr );
+		auto root = std::make_shared< model::BasicNode >( "Nie ma nazwy na pustyni FIXME:", nullptr );
 
 
 		BlackTree Tree;
