@@ -37,7 +37,7 @@ public:
     explicit                                    DefaultTransformPlugin      ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model );
                                                 ~DefaultTransformPlugin     ();
 
-    virtual const ITransformChannel *           GetTransformChannel         () const override;
+    virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
     virtual void                                Update                      ( TimeType t ) override;
 
 };

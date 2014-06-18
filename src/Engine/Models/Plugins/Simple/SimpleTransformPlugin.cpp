@@ -36,7 +36,7 @@ SimpleTransformPlugin::~SimpleTransformPlugin   ()
 
 // *************************************
 //
-const ITransformChannel *       SimpleTransformPlugin::GetTransformChannel         () const
+ITransformChannelConstPtr       SimpleTransformPlugin::GetTransformChannel         () const
 {
     if( m_prevPlugin && m_prevPlugin->GetTransformChannel() )
     {
@@ -45,7 +45,7 @@ const ITransformChannel *       SimpleTransformPlugin::GetTransformChannel      
         assert(!"prev plugin transform channel is not empty");
     }
 
-    return m_transformChannel.get();
+    return m_transformChannel;
 }
 
 // *************************************

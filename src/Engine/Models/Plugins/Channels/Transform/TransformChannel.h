@@ -29,5 +29,8 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(TransformChannel)
+DEFINE_CONST_PTR_TYPE(TransformChannel)
+
 } // model
 } // bv

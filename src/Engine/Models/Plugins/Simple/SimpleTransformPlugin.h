@@ -37,7 +37,7 @@ public:
     explicit                                SimpleTransformPlugin       ( IPluginConstPtr prev, const ParamTransformVec & transformVec );
                                             ~SimpleTransformPlugin      ();
 
-    virtual const ITransformChannel *       GetTransformChannel         () const;
+    virtual ITransformChannelConstPtr       GetTransformChannel         () const;
 
     virtual void                            Update                      ( TimeType t ) override;
     virtual void                            Print                       ( std::ostream & out, int tabs = 0 ) const;

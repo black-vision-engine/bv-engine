@@ -70,7 +70,7 @@ IVertexAttributesChannelConstPtr    DefaultFinalizePlugin::GetVertexAttributesCh
 
 // *******************************
 //
-const ITransformChannel *           DefaultFinalizePlugin::GetTransformChannel          () const
+ITransformChannelConstPtr           DefaultFinalizePlugin::GetTransformChannel          () const
 {
     assert( m_prevPlugin );
 

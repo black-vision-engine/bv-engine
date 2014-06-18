@@ -30,11 +30,11 @@ VertexAttributesChannelPtr       ChannelsFactory::CreateVertexAttributesChannel 
 
 // *******************************
 //
-TransformChannel *              ChannelsFactory::CreateTransformChannel              ( const ParamTransformVec & transformVec )
+TransformChannelPtr              ChannelsFactory::CreateTransformChannel              ( const ParamTransformVec & transformVec )
 {
 
 	//SimpleTransformChannel*      trasformChannel  = new SimpleTransformChannel( transformVec );
-    SimpleTransformChannel*      trasformChannel  = nullptr; //FIXME: NM_CONFORMANCE
+    SimpleTransformChannelPtr      trasformChannel  = nullptr; //FIXME: NM_CONFORMANCE
     return trasformChannel;
 }
 

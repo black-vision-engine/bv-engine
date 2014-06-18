@@ -15,6 +15,7 @@
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
+#include "Engine/Models/Plugins/Interfaces/ITransformChannel.h"
 
 namespace bv { namespace model {
 
@@ -40,7 +41,7 @@ public:
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const = 0;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const = 0;
-    virtual const ITransformChannel *           GetTransformChannel         () const = 0;
+    virtual ITransformChannelConstPtr           GetTransformChannel         () const = 0;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const = 0;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const = 0;
     virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const = 0;

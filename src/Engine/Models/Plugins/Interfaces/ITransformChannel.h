@@ -23,6 +23,9 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(ITransformChannel)
+DEFINE_CONST_PTR_TYPE(ITransformChannel)
+
 class Transform;
 
 DEFINE_PTR_TYPE(Transform)

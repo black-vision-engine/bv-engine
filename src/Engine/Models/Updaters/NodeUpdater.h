@@ -65,7 +65,7 @@ private:
     model::IModelNodeConstPtr                   m_modelNode;
 
     RenderableEntity *                          m_renderable;
-    const model::ITransformChannel *            m_transformChannel;
+    model::ITransformChannelConstPtr            m_transformChannel;
     model::IVertexAttributesChannelConstPtr     m_vertexAttributesChannel;
     
     bool                                        m_timeInvariantVertexData;

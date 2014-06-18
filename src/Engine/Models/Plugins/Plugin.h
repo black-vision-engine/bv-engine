@@ -45,14 +45,14 @@ public:
     const std::string &                         GetName                     () const override   { return m_name; } 
     const std::string &                         GetTypeUid                  () const override   { return m_uid; } 
 
-    virtual void                                SetGeometryChannel          ( VertexAttributesChannel * vaChannel ) { assert(!"Implement in derived class"); }
-    virtual void                                SetTransformChannel         ( TransformChannel * transformChannel ) { assert(!"Implement in derived class"); }
+    virtual void                                SetGeometryChannel          ( VertexAttributesChannelPtr vaChannel ) { assert(!"Implement in derived class"); }
+    virtual void                                SetTransformChannel         ( TransformChannelPtr transformChannel ) { assert(!"Implement in derived class"); }
     virtual void                                SetPixelShaderChannel       ( IPixelShaderChannelPtr pShCh )         { assert(!"Implement in derived class"); }
     virtual void                                SetVertexShaderChannel      ( IVertexShaderChannelPtr vShCh )        { assert(!"Implement in derived class"); }
     virtual void                                SetGeometryShaderChannel    ( IGeometryShaderChannelPtr gShCh )      { assert(!"Implement in derived class"); }
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-    virtual const ITransformChannel *           GetTransformChannel         () const override;
+    virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
     virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const override;
@@ -180,7 +180,7 @@ IVertexAttributesChannelConstPtr            BasePlugin< Iface >::GetVertexAttrib
 // *******************************
 //
 template< class Iface >
-const ITransformChannel *           BasePlugin< Iface >::GetTransformChannel          () const
+ITransformChannelConstPtr           BasePlugin< Iface >::GetTransformChannel          () const
 {
     if( m_prevPlugin )
     {

@@ -78,9 +78,9 @@ DefaultTransformPlugin::~DefaultTransformPlugin ()
 
 // *************************************
 //
-const ITransformChannel *           DefaultTransformPlugin::GetTransformChannel         () const
+ITransformChannelConstPtr           DefaultTransformPlugin::GetTransformChannel         () const
 {
-    return m_transformChannel.get();
+    return m_transformChannel;
 }
 
 // *************************************

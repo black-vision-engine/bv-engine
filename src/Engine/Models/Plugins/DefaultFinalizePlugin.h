@@ -30,7 +30,7 @@ public:
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const override;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-    virtual const ITransformChannel *           GetTransformChannel         () const override;
+    virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
     virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const override;
