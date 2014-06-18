@@ -623,7 +623,7 @@ RenderableArrayDataArraysSingleVertexBuffer *   BasicNode::CreateRenderableArray
 
 // ********************************
 //
-RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDataArrays( const std::vector< IConnectedComponent * > & ccVec, const IVertexAttributesChannelDescriptor * desc, bool isTimeInvariant ) const
+RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDataArrays( const std::vector< IConnectedComponentPtr > & ccVec, const IVertexAttributesChannelDescriptor * desc, bool isTimeInvariant ) const
 {
     //FIXME: a bit of hackery because memory layout may be different than what this constructor suggests (this time it is not)
     //FIXME: this code should be moved to some utility classes from this poor BasicNode (not so basic right now)
@@ -662,7 +662,7 @@ RenderableArrayDataArraysSingleVertexBuffer * BasicNode::CreateRenderableArrayDa
 
 // ********************************
 //
-void                            BasicNode::AddVertexDataToVBO              ( char * data, IConnectedComponent * cc ) const
+void                            BasicNode::AddVertexDataToVBO              ( char * data, IConnectedComponentPtr cc ) const
 {
     unsigned int numVertices = cc->GetNumVertices();
     unsigned int offset = 0;
@@ -707,7 +707,7 @@ VertexDescriptor *                  BasicNode::CreateVertexDescriptor          (
 
 // ********************************
 //
-unsigned int                        BasicNode::TotalNumVertices       ( const std::vector< IConnectedComponent * > & ccVec ) const
+unsigned int                        BasicNode::TotalNumVertices       ( const std::vector< IConnectedComponentPtr > & ccVec ) const
 {
     unsigned int totalNumVertices = 0;
 
@@ -721,7 +721,7 @@ unsigned int                        BasicNode::TotalNumVertices       ( const st
 
 // ********************************
 //
-unsigned int                        BasicNode::TotalSize             ( const std::vector< IConnectedComponent * > & ccVec, const IVertexAttributesChannelDescriptor * desc ) const
+unsigned int                        BasicNode::TotalSize             ( const std::vector< IConnectedComponentPtr > & ccVec, const IVertexAttributesChannelDescriptor * desc ) const
 {
     return TotalNumVertices( ccVec ) * desc->SingleVertexEntrySize();
 }

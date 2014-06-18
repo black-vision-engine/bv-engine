@@ -78,9 +78,9 @@ const Text*             GetFont( const ResourceHandle * fontResource, bool bolde
     return nullptr;
 }
 
-ConnectedComponent*         CreateEmptyCC()
+ConnectedComponentPtr         CreateEmptyCC()
 {
-    ConnectedComponent* connComp = new ConnectedComponent();
+    ConnectedComponentPtr connComp = ConnectedComponent::Create();
 
     AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
 
@@ -185,7 +185,7 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
         auto glyphH = textAtlas->GetGlyphHeight( wch );
         auto glyphW = textAtlas->GetGlyphWidth( wch );
 
-        ConnectedComponent* connComp = new ConnectedComponent();
+        ConnectedComponentPtr connComp = ConnectedComponent::Create();
 
         AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
 

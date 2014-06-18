@@ -14,7 +14,7 @@ namespace bv { namespace model {
 
 // *********************************
 // FIXME: make sure that VertexAttributesChannelDescriptor's copy constructor works as expceted
-VertexAttributesChannelDescriptor   DescriptorFromConnectedComponent( const ConnectedComponent * cc )
+VertexAttributesChannelDescriptor   DescriptorFromConnectedComponent( ConnectedComponentConstPtr cc )
 {
     VertexAttributesChannelDescriptor desc;
 
@@ -28,7 +28,7 @@ VertexAttributesChannelDescriptor   DescriptorFromConnectedComponent( const Conn
 
 // *********************************
 // FIXME: basic tests that topology, descriptors and gemoetry fit together
-void           ChannelFromConnectedComponents  ( VertexAttributesChannel * channel, const std::vector< ConnectedComponent * > & connectedComponents )
+void           ChannelFromConnectedComponents  ( VertexAttributesChannelPtr channel, const std::vector< ConnectedComponentPtr > & connectedComponents )
 {
     assert( connectedComponents.size() > 0 );
 
@@ -42,7 +42,7 @@ void           ChannelFromConnectedComponents  ( VertexAttributesChannel * chann
 
 // *********************************
 // FIXME: basic tests that topology, descriptors and gemoetry fit together
-void        ChannelFromConnectedComponents  ( VertexAttributesChannel * channel, unsigned int numComponents, ... )
+void        ChannelFromConnectedComponents  ( VertexAttributesChannelPtr channel, unsigned int numComponents, ... )
 {
     va_list args;
     va_start( args, numComponents );
@@ -51,7 +51,7 @@ void        ChannelFromConnectedComponents  ( VertexAttributesChannel * channel,
 
     for ( unsigned int i = 0; i < numComponents; ++i )
     {
-        ConnectedComponent * cc = va_arg( args, ConnectedComponent* );
+        ConnectedComponentPtr cc = va_arg( args, ConnectedComponentPtr );
 
         if ( i == 0 )
         {

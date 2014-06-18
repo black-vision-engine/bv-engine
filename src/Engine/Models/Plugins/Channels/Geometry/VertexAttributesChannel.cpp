@@ -38,10 +38,6 @@ VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, const
 //
 VertexAttributesChannel::~VertexAttributesChannel   ()
 {
-    for( auto cc : m_connectedComponents )
-    {
-        delete cc;
-    }
 }
 
 // *********************************
@@ -137,7 +133,7 @@ PrimitiveType                           VertexAttributesChannel::GetPrimitiveTyp
 
 // *********************************
 //
-void                                    VertexAttributesChannel::AddConnectedComponent  ( ConnectedComponent * cc )
+void                                    VertexAttributesChannel::AddConnectedComponent  ( ConnectedComponentPtr cc )
 {
     auto attrChannel = cc->GetAttributeChannels();
 
@@ -163,7 +159,7 @@ void                                    VertexAttributesChannel::ClearConnectedC
 
 // *********************************
 //
-int                                     VertexAttributesChannel::GetNumPrimitives   ( IConnectedComponent* connComp ) const
+int                                     VertexAttributesChannel::GetNumPrimitives   ( IConnectedComponentPtr connComp ) const
 {
     int vertNum = connComp->GetNumVertices();
 
@@ -200,9 +196,9 @@ int                                     VertexAttributesChannel::GetNumPrimitive
 
 // *********************************
 //
-std::vector< IConnectedComponent* >     VertexAttributesChannel::GetComponents       () const
+std::vector< IConnectedComponentPtr >     VertexAttributesChannel::GetComponents       () const
 {
-    return std::vector< IConnectedComponent* >( m_connectedComponents.begin(), m_connectedComponents.end() );
+    return std::vector< IConnectedComponentPtr >( m_connectedComponents.begin(), m_connectedComponents.end() );
 }
 
 //// *********************************
@@ -221,7 +217,7 @@ bool                                    VertexAttributesChannel::CanBeConnectedT
 
 // *********************************
 //
-ConnectedComponent *                    VertexAttributesChannel::GetConnectedComponent   ( unsigned int idx )
+ConnectedComponentPtr                   VertexAttributesChannel::GetConnectedComponent   ( unsigned int idx )
 {
     assert( idx < m_connectedComponents.size() );
 

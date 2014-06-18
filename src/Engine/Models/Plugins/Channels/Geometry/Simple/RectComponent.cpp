@@ -47,9 +47,9 @@ void                    RectComponent::SetRectSize     ( float w, float h )
 
 // *********************************
 //
-RectComponent *              RectComponent::Create      ( float w, float h, float tx, float ty, float tz )
+RectComponentPtr        RectComponent::Create      ( float w, float h, float tx, float ty, float tz )
 {
-    return new RectComponent( w, h, tx, ty, tz );
+    return RectComponentPtr( new RectComponent( w, h, tx, ty, tz ) );
 }
 
 } // model

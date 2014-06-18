@@ -32,7 +32,7 @@ private:
     void    UpdatePositions     ();
     void    UpdateTopology      ();
 
-    void    WriteVertexDataToVBO( char * data, model::IConnectedComponent * cc );
+    void    WriteVertexDataToVBO( char * data, model::IConnectedComponentPtr cc );
 
 };
 

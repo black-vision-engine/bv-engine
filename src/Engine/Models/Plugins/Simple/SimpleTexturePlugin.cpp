@@ -131,10 +131,10 @@ void SimpleTexturePlugin::EvalGeometryChannel( IPluginConstPtr prev )
 
     for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
     {
-        ConnectedComponent* connComp = new ConnectedComponent();
+        auto connComp = ConnectedComponent::Create();
         VertexAttributesChannelDescriptor vaChannelDesc;
 
-        auto prevConnComp = static_cast< const model::ConnectedComponent* >( prevGeomChannel->GetComponents()[ i ] );
+        auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( prevGeomChannel->GetComponents()[ i ] );
         auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
 
         for( auto prevCompCh : prevCompChannels )

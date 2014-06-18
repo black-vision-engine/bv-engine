@@ -10,6 +10,13 @@ namespace bv { namespace model
 
 // ************************************
 //
+ConnectedComponentPtr ConnectedComponent::Create()
+{
+    return ConnectedComponentPtr( new ConnectedComponent() );
+}
+
+// ************************************
+//
 ConnectedComponent::ConnectedComponent()
 {
 }

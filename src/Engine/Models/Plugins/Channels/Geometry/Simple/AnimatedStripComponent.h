@@ -5,6 +5,10 @@
 
 namespace bv { namespace model {
 
+class AnimatedStripComponent;
+DEFINE_PTR_TYPE(AnimatedStripComponent)
+DEFINE_CONST_PTR_TYPE(AnimatedStripComponent)
+
 class AnimatedStripComponent: public ConnectedComponent
 {
 private:
@@ -23,13 +27,13 @@ private:
 private:
 
                                         AnimatedStripComponent  ( float w, float h, unsigned int numSegments, float z, float sclSine, float sclCosine, float speedX, float speedY, float sizeY, float sizeZ );
-                                        ~AnimatedStripComponent ();
 
 public:
+                                        ~AnimatedStripComponent ();
 
     virtual void                        Update                  ( TimeType t );
 
-    static  AnimatedStripComponent *    Create                  ( float w, float h, unsigned int numSegments, float z, float sclSine, float sclCosine, float speedX, float speedY, float sizeY, float sizeZ );
+    static  AnimatedStripComponentPtr   Create                  ( float w, float h, unsigned int numSegments, float z, float sclSine, float sclCosine, float speedX, float speedY, float sizeY, float sizeZ );
 
 };
 

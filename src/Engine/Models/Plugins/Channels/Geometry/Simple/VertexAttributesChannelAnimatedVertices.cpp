@@ -57,7 +57,7 @@ VertexAttributesChannelAnimatedVertices *   VertexAttributesChannelAnimatedVerti
     float sclCosine = (float) TWOPI * cyclesY / w;
 
     VertexAttributesChannelAnimatedVertices * channel = new VertexAttributesChannelAnimatedVertices( w, h, speedX, speedY, cyclesX, cyclesY );
-    AnimatedStripComponent * cc = AnimatedStripComponent::Create( w, h, numSegments, z, sclSine, sclCosine, speedX, speedY, sizeY, sizeZ );
+    AnimatedStripComponentPtr cc = AnimatedStripComponent::Create( w, h, numSegments, z, sclSine, sclCosine, speedX, speedY, sizeY, sizeZ );
 
     ChannelFromConnectedComponents( channel, 1, cc );
 

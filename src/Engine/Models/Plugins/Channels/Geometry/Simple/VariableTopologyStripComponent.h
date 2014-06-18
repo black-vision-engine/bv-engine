@@ -7,6 +7,10 @@
 
 namespace bv { namespace model {
 
+class VariableTopologyStripComponent;
+DEFINE_PTR_TYPE(VariableTopologyStripComponent)
+DEFINE_CONST_PTR_TYPE(VariableTopologyStripComponent)
+
 class VariableTopologyStripComponent: public ConnectedComponent
 {
 private:
@@ -31,9 +35,9 @@ private:
 private:
 
                         VariableTopologyStripComponent  ( float size, float speed, TimeType duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ );
-                        ~VariableTopologyStripComponent ();
 
 public:
+                        ~VariableTopologyStripComponent ();
 
     bool                IsActive                        ( TimeType t ) const;
     bool                TopologyChanged                 () const;
@@ -53,7 +57,7 @@ private:
 
 public:
 
-    static  VariableTopologyStripComponent *    Create  ( float size, float speed, TimeType duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ );
+    static  VariableTopologyStripComponentPtr    Create  ( float size, float speed, TimeType duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ );
 
 };
 

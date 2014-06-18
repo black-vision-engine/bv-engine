@@ -1,17 +1,19 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
-
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/VariableTopologyStripComponent.h"
 
 namespace bv { namespace model {
 
-class VariableTopologyStripComponent;
+class VertexAttributesChannelVariableTopology;
+DEFINE_PTR_TYPE(VertexAttributesChannelVariableTopology)
+DEFINE_CONST_PTR_TYPE(VertexAttributesChannelVariableTopology)
 
 class VertexAttributesChannelVariableTopology : public VertexAttributesChannel
 {
 private:
 
-    std::vector< VariableTopologyStripComponent  * >    m_vtConnectedComponents;
+    std::vector< VariableTopologyStripComponentPtr >    m_vtConnectedComponents;
 
     float       m_size;
     float       m_speed;
@@ -40,12 +42,12 @@ public:
 
     virtual bool            CanBeConnectedTo                    ( IVertexAttributesChannelPtr channel ) const  override;
 
-    void                    AddVTConnectedComponent             ( VariableTopologyStripComponent * cc );
+    void                    AddVTConnectedComponent             ( VariableTopologyStripComponentPtr cc );
     virtual unsigned int    TotalNumVertices                    ()  const  override;
 
-    virtual std::vector< IConnectedComponent * >  GetComponents ()  const  override;
+    virtual std::vector< IConnectedComponentPtr >       GetComponents ()  const  override;
 
-    static VertexAttributesChannelVariableTopology *    Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents );
+    static VertexAttributesChannelVariableTopologyPtr   Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents );
 
 };
 

@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannelDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
@@ -21,7 +22,7 @@ protected:
 
     VertexAttributesChannelDescriptor               m_desc;
 
-    std::vector< ConnectedComponent* >              m_connectedComponents;
+    std::vector< ConnectedComponentPtr >            m_connectedComponents;
     PrimitiveType                                   m_primitiveType;
 
     bool                                            m_isReadOnly;
@@ -53,16 +54,16 @@ public:
 
     virtual PrimitiveType                               GetPrimitiveType        () const override;
 
-    void                                                AddConnectedComponent   ( ConnectedComponent * cc );
+    void                                                AddConnectedComponent   ( ConnectedComponentPtr cc );
     void                                                ClearConnectedComponent ( );
 
-    virtual int                                         GetNumPrimitives        ( IConnectedComponent * cc ) const override;
-    virtual std::vector< IConnectedComponent * >        GetComponents           () const override;
+    virtual int                                         GetNumPrimitives        ( IConnectedComponentPtr cc ) const override;
+    virtual std::vector< IConnectedComponentPtr >       GetComponents           () const override;
 
     //virtual bool                                      CanBeConnectedTo        ( IPlugin * plugin ) const;
     virtual bool                                        CanBeConnectedTo        ( IVertexAttributesChannelPtr channel ) const override;
 
-    ConnectedComponent *                                GetConnectedComponent   ( unsigned int idx );
+    ConnectedComponentPtr                               GetConnectedComponent   ( unsigned int idx );
 
 protected:
 

@@ -17,7 +17,7 @@ inline void UpdateState( const ContextType * ctxState, StateType * rendererState
 
 // *********************************
 //FIXME: this should be implemented via VBOAcessor in one place only (VBO utils or some more generic utils) - right now it is copied here and in BasicNode (as AddVertexDataToVBO)
-inline void    WriteVertexDataToVBO( char * data, model::IConnectedComponent * cc )
+inline void    WriteVertexDataToVBO( char * data, model::IConnectedComponentPtr cc )
 {
     unsigned int numVertices = cc->GetNumVertices();
     unsigned int offset = 0;

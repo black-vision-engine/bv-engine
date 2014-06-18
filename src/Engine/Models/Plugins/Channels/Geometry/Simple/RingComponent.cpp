@@ -42,9 +42,9 @@ RingComponent::RingComponent( float startAngle, float endAngle, float innerRadiu
     AddAttributeChannel( AttributeChannelPtr( vertArrtF3 ) );
 }
 
-RingComponent *              RingComponent::Create                      ( float startAngle, float endAngle, float innerRadius, float outerRadius, int fragmentsNum )
+RingComponentPtr             RingComponent::Create                      ( float startAngle, float endAngle, float innerRadius, float outerRadius, int fragmentsNum )
 {
-    return new RingComponent( startAngle, endAngle, innerRadius, outerRadius, fragmentsNum );
+    return RingComponentPtr( new RingComponent( startAngle, endAngle, innerRadius, outerRadius, fragmentsNum ) );
 }
 
 } // model

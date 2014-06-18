@@ -157,7 +157,7 @@ void    GeometryUpdater::UpdateTopology      ()
 
 // *********************************
 //FIXME: this should be implemented via VBOAcessor in one place only (VBO utils or some more generic utils) - right now it is copied here and in BasicNode (as AddVertexDataToVBO)
-void    GeometryUpdater::WriteVertexDataToVBO( char * data, model::IConnectedComponent * cc )
+void    GeometryUpdater::WriteVertexDataToVBO( char * data, model::IConnectedComponentPtr cc )
 {
     unsigned int numVertices = cc->GetNumVertices();
     unsigned int offset = 0;

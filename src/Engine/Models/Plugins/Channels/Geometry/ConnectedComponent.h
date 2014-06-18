@@ -9,15 +9,20 @@
 namespace bv { namespace model
 {
 
+class ConnectedComponent;
+DEFINE_PTR_TYPE(ConnectedComponent)
+DEFINE_CONST_PTR_TYPE(ConnectedComponent)
+
 class ConnectedComponent : public IConnectedComponent, public IUpdatable
 {
 private:
 
     std::vector< AttributeChannelPtr >          m_attributeChannels;
 
-public:
-
+protected:
     explicit                                    ConnectedComponent          ();
+
+public:
     virtual                                     ~ConnectedComponent         ();
 
     virtual void                                Update                      ( TimeType t );
@@ -30,10 +35,9 @@ public:
     const std::vector< AttributeChannelPtr > &  GetAttributeChannelsPtr     () const;
 
     void                                        AddAttributeChannel         ( const AttributeChannelPtr& attr );
-};
 
-DEFINE_PTR_TYPE(ConnectedComponent)
-DEFINE_CONST_PTR_TYPE(ConnectedComponent)
+    static ConnectedComponentPtr                Create                      ();
+};
 
 } // model
 } // bv

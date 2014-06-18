@@ -116,7 +116,7 @@ bool    VertexAttributesChannelVariableTopology::CanBeConnectedTo           ( IV
 
 // ******************************
 //
-void            VertexAttributesChannelVariableTopology::AddVTConnectedComponent             ( VariableTopologyStripComponent * cc )
+void            VertexAttributesChannelVariableTopology::AddVTConnectedComponent             ( VariableTopologyStripComponentPtr cc )
 {
     VertexAttributesChannelVariableTopology::AddConnectedComponent( cc );
 
@@ -139,9 +139,9 @@ unsigned int    VertexAttributesChannelVariableTopology::TotalNumVertices       
 
 // ******************************
 //
-std::vector< IConnectedComponent * >  VertexAttributesChannelVariableTopology::GetComponents () const
+std::vector< IConnectedComponentPtr >  VertexAttributesChannelVariableTopology::GetComponents () const
 {
-    std::vector< IConnectedComponent* > retv;
+    std::vector< IConnectedComponentPtr > retv;
     retv.reserve( m_curComponent + 1 );
 
     for( int i = 0; i <= m_curComponent; ++i )
@@ -154,9 +154,9 @@ std::vector< IConnectedComponent * >  VertexAttributesChannelVariableTopology::G
 
 // ******************************
 //
-VertexAttributesChannelVariableTopology *   VertexAttributesChannelVariableTopology::Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
+VertexAttributesChannelVariableTopologyPtr   VertexAttributesChannelVariableTopology::Create  ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
 {
-    VertexAttributesChannelVariableTopology * channel = new VertexAttributesChannelVariableTopology( size, speed, oscilationSpeed, numSegments, numComponents );
+    auto channel = VertexAttributesChannelVariableTopologyPtr( new VertexAttributesChannelVariableTopology( size, speed, oscilationSpeed, numSegments, numComponents ) );
     
     float defaultSpeed = speed;
     TimeType defaultDuration = TimeType( 4.0 );
@@ -177,7 +177,7 @@ VertexAttributesChannelVariableTopology *   VertexAttributesChannelVariableTopol
         float y = radius * sinf( alpha );
         float z = dz * (float) i;
 
-        VariableTopologyStripComponent * cc = VariableTopologyStripComponent::Create( size, speed, defaultDuration, numSegments, oscilation, scale, x, y, z );
+        VariableTopologyStripComponentPtr cc = VariableTopologyStripComponent::Create( size, speed, defaultDuration, numSegments, oscilation, scale, x, y, z );
 //        VariableTopologyStripComponent * cc = VariableTopologyStripComponent::Create( size, speed, duration, numSegments, oscilation, scale, 0.f, 0.f, 0.f );
 
         if ( i == 0 )

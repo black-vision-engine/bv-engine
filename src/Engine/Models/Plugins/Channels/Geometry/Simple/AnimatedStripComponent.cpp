@@ -90,11 +90,11 @@ AnimatedStripComponent::~AnimatedStripComponent                 ()
 
 // *******************************
 //
-AnimatedStripComponent *  AnimatedStripComponent::Create        ( float w, float h, unsigned int numSegments, float z, float sclSine, float sclCosine, float speedX, float speedY, float sizeY, float sizeZ )
+AnimatedStripComponentPtr  AnimatedStripComponent::Create        ( float w, float h, unsigned int numSegments, float z, float sclSine, float sclCosine, float speedX, float speedY, float sizeY, float sizeZ )
 {
     assert( numSegments >= 1 );
 
-    return new AnimatedStripComponent( w, h, numSegments, z, sclSine, sclCosine, speedX, speedY, sizeY, sizeZ );
+    return AnimatedStripComponentPtr( new AnimatedStripComponent( w, h, numSegments, z, sclSine, sclCosine, speedX, speedY, sizeY, sizeZ ) );
 }
 
 } //model

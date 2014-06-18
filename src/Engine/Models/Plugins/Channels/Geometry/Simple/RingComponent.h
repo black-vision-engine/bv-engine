@@ -6,6 +6,10 @@
 namespace bv { namespace model
 {
 
+class RingComponent;
+DEFINE_PTR_TYPE(RingComponent)
+DEFINE_CONST_PTR_TYPE(RingComponent)
+
 class RingComponent : public ConnectedComponent
 {
 private:
@@ -14,7 +18,7 @@ private:
 
 public:
 
-    static RingComponent *  Create          ( float startAngle, float endAngle, float innerRadius, float outerRadiusoat, int fragmentsNum );
+    static RingComponentPtr Create          ( float startAngle, float endAngle, float innerRadius, float outerRadiusoat, int fragmentsNum );
 
 };
 

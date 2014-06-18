@@ -126,13 +126,13 @@ private:
     //FIXME: scene building API should be moved to some more appropriate place
     RenderableArrayDataSingleVertexBuffer *         CreateRenderableArrayData           ( PrimitiveType type ) const; 
     RenderableArrayDataArraysSingleVertexBuffer *   CreateRenderableArrayDataTriStrip   () const;
-    RenderableArrayDataArraysSingleVertexBuffer *   CreateRenderableArrayDataArrays     ( const std::vector< IConnectedComponent * > & ccVec, const IVertexAttributesChannelDescriptor * desc, bool isTimeInvariant ) const;
-    void                                            AddVertexDataToVBO                  ( char * data, IConnectedComponent * cc ) const;
+    RenderableArrayDataArraysSingleVertexBuffer *   CreateRenderableArrayDataArrays     ( const std::vector< IConnectedComponentPtr > & ccVec, const IVertexAttributesChannelDescriptor * desc, bool isTimeInvariant ) const;
+    void                                            AddVertexDataToVBO                  ( char * data, IConnectedComponentPtr cc ) const;
 
     VertexDescriptor *                  CreateVertexDescriptor          ( const IVertexAttributesChannelDescriptor * desc ) const;
 
-    unsigned int                        TotalNumVertices                ( const std::vector< IConnectedComponent * > & ccVec) const;
-    unsigned int                        TotalSize                       ( const std::vector< IConnectedComponent * > & ccVec, const IVertexAttributesChannelDescriptor * desc ) const;
+    unsigned int                        TotalNumVertices                ( const std::vector< IConnectedComponentPtr > & ccVec) const;
+    unsigned int                        TotalSize                       ( const std::vector< IConnectedComponentPtr > & ccVec, const IVertexAttributesChannelDescriptor * desc ) const;
 
     RenderableEffect *                  CreateDefaultEffect             ( IPluginConstPtr finalizer ) const;
 

@@ -2,6 +2,7 @@
 
 #include "Engine/Models/Plugins/Channels/Transform/DefaultTransformChannel.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
 
@@ -41,7 +42,7 @@ private:
     float                               m_lastW;
     float                               m_lastH;
 
-    RectComponent *                     m_rct;
+    RectComponentPtr                    m_rct;
 
 public:
 

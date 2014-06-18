@@ -157,11 +157,11 @@ glm::vec3           VariableTopologyStripComponent::BottomPosition              
 
 // *******************************
 //
-VariableTopologyStripComponent *  VariableTopologyStripComponent::Create        ( float size, float speed, TimeType duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ )
+VariableTopologyStripComponentPtr  VariableTopologyStripComponent::Create        ( float size, float speed, TimeType duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ )
 {
     assert( numSegments >= 1 );
 
-    return new VariableTopologyStripComponent( size, speed, duration, numSegments, oscilationSpeed, mainScale, startX, startY, posZ );
+    return VariableTopologyStripComponentPtr( new VariableTopologyStripComponent( size, speed, duration, numSegments, oscilationSpeed, mainScale, startX, startY, posZ ) );
 }
 
 } //model

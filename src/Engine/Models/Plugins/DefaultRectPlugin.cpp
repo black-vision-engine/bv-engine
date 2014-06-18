@@ -95,7 +95,7 @@ DefaultRectPlugin::DefaultRectPlugin    ( const std::string & name, const std::s
     m_lastW = m_widthParam->Evaluate();
     m_lastH = m_heightParam->Evaluate();
 
-    RectComponent * rect = RectComponent::Create( m_lastW, m_lastH );
+    auto rect   = RectComponent::Create( m_lastW, m_lastH );
     m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( rect, false );
 
     m_rct = rect;

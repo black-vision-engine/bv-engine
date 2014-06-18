@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Engine/Models/Plugins/Interfaces/IChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
 
 #include "Engine/Types/Enums.h"
 
@@ -25,8 +26,8 @@ public:
     virtual const IVertexAttributesChannelDescriptor *  GetDescriptor               ()                              const = 0;
     virtual PrimitiveType                               GetPrimitiveType            ()                              const = 0;
 
-    virtual int                                         GetNumPrimitives            ( IConnectedComponent * cc )    const = 0;
-    virtual std::vector< IConnectedComponent * >        GetComponents               ()                              const = 0;
+    virtual int                                         GetNumPrimitives            ( IConnectedComponentPtr cc )   const = 0;
+    virtual std::vector< IConnectedComponentPtr >       GetComponents               ()                              const = 0;
 
     //virtual void                                        AddConnectedComponent       ( IConnectedComponent * cc )   = 0;
 

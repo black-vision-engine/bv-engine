@@ -6,6 +6,10 @@
 namespace bv { namespace model
 {
 
+class RectComponent;
+DEFINE_PTR_TYPE(RectComponent)
+DEFINE_CONST_PTR_TYPE(RectComponent)
+
 class RectComponent : public ConnectedComponent
 {
 private:
@@ -20,7 +24,7 @@ public:
 
     void                    SetRectSize     ( float w, float h );
 
-    static RectComponent *  Create          ( float w = 1.f, float h = 1.f, float tx = 0.0f, float ty = 0.0f, float tz = 0.0f );
+    static RectComponentPtr Create          ( float w = 1.f, float h = 1.f, float tx = 0.0f, float ty = 0.0f, float tz = 0.0f );
 
 };
 

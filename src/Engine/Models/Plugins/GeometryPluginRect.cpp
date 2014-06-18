@@ -15,7 +15,7 @@ GeometryRectPlugin::GeometryRectPlugin                    ( const ParamFloat & w
     , m_width( w )
     , m_height( h )
 {
-    RectComponent *   rect  = RectComponent::Create( w.Evaluate(), h.Evaluate() );
+    auto              rect  = RectComponent::Create( w.Evaluate(), h.Evaluate() );
     m_vaChannel             = ChannelsFactory::CreateVertexAttributesChannel( rect, true );
 }
 

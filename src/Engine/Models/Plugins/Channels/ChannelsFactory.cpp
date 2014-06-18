@@ -12,7 +12,7 @@ namespace bv { namespace model {
 
 // *******************************
 //
-VertexAttributesChannelPtr       ChannelsFactory::CreateVertexAttributesChannel               ( ConnectedComponent * connComp, bool isTimeInvariant )
+VertexAttributesChannelPtr       ChannelsFactory::CreateVertexAttributesChannel               ( ConnectedComponentPtr connComp, bool isTimeInvariant )
 {
 	VertexAttributesChannelDescriptor desc;
 

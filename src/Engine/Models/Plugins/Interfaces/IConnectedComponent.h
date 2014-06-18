@@ -22,5 +22,8 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(IConnectedComponent)
+DEFINE_CONST_PTR_TYPE(IConnectedComponent)
+
 } // model
 } // bv
