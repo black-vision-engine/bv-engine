@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Interfaces/IShaderChannel.h"
-
+#include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 
 namespace bv { namespace model
 {
@@ -12,7 +12,7 @@ class IPixelShaderChannel : public IShaderChannel
 {
 public:
 
-    virtual const RendererContext *     GetRendererContext  () const = 0;
+    virtual RendererContextConstPtr     GetRendererContext  () const = 0;
 
     virtual                             ~IPixelShaderChannel() {};
 

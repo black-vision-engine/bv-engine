@@ -5,7 +5,7 @@ namespace bv { namespace model {
 
 // ******************************
 //
-DefaultPixelShaderChannel::DefaultPixelShaderChannel  ( const std::string & shaderSource, IValueSetConstPtr values, RendererContext * ctx )
+DefaultPixelShaderChannel::DefaultPixelShaderChannel  ( const std::string & shaderSource, IValueSetConstPtr values, RendererContextPtr ctx )
     : ShaderChannel( shaderSource, values )
     , m_rendererContext( ctx ) 
 {
@@ -21,28 +21,26 @@ DefaultPixelShaderChannel::DefaultPixelShaderChannel  ( const std::string & shad
 //
 DefaultPixelShaderChannel::~DefaultPixelShaderChannel ()
 {
-    delete m_rendererContext;
 }
 
 // ******************************
 //
-const RendererContext *     DefaultPixelShaderChannel::GetRendererContext  () const
+RendererContextConstPtr     DefaultPixelShaderChannel::GetRendererContext  () const
 {
     return m_rendererContext;
 }
 
 // ******************************
 //
-RendererContext *           DefaultPixelShaderChannel::GetRendererContext  ()
+RendererContextPtr           DefaultPixelShaderChannel::GetRendererContext  ()
 {
     return m_rendererContext;
 }
 
 // ******************************
 //
-void                        DefaultPixelShaderChannel::SetRendererContext  ( RendererContext * ctx )
+void                        DefaultPixelShaderChannel::SetRendererContext  ( RendererContextPtr ctx )
 {
-    delete m_rendererContext;
     m_rendererContext = ctx;
 
 }
@@ -63,7 +61,7 @@ DefaultTexturesDataPtr       DefaultPixelShaderChannel::GetTexturesDataImpl ()
 
 // ******************************
 //
-DefaultPixelShaderChannel * DefaultPixelShaderChannel::Create              ( const std::string & shaderFile, IValueSetConstPtr values, RendererContext * ctx )
+DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( const std::string & shaderFile, IValueSetConstPtr values, RendererContextPtr ctx )
 {
     auto shaderSource = ReadShaderFromFile( shaderFile );
 
@@ -71,7 +69,7 @@ DefaultPixelShaderChannel * DefaultPixelShaderChannel::Create              ( con
     {
         assert( values );
         
-        return new DefaultPixelShaderChannel( shaderSource, values, ctx );
+        return DefaultPixelShaderChannelPtr( new DefaultPixelShaderChannel( shaderSource, values, ctx ) );
     }
 
     return nullptr;

@@ -35,7 +35,7 @@ public:
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
     virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const override;
                  
-    virtual const RendererContext *             GetRendererContext          () const override;
+    virtual RendererContextConstPtr             GetRendererContext          () const override;
 
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
 

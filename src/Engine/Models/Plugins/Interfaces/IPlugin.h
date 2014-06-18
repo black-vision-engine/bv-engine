@@ -46,7 +46,7 @@ public:
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const = 0;
     virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const = 0;
 
-    virtual const RendererContext *             GetRendererContext          () const = 0;
+    virtual RendererContextConstPtr             GetRendererContext          () const = 0;
 
     //FIXME: implement a more generic interface for resource loading
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) = 0;

@@ -72,7 +72,7 @@ private:
     bool                                        m_hasEffect;
 
     std::vector< RendererStateInstance * >      m_redererStateInstanceVec;
-    const model::RendererContext *              m_rendererContext;
+    model::RendererContextConstPtr              m_rendererContext;
 
     std::vector< Tex2Tex2DPair >                m_texMappingVec;
     std::vector< Anim2Tex2DPair >               m_animMappingVec;

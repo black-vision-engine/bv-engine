@@ -1,5 +1,6 @@
 #pragma once
 
+#include "System/BasicTypes.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/AlphaContext.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/CullContext.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/DepthContext.h"
@@ -7,6 +8,10 @@
 
 
 namespace bv { namespace model {
+
+class RendererContext;
+DEFINE_CONST_PTR_TYPE(RendererContext)
+DEFINE_PTR_TYPE(RendererContext)
 
 class RendererContext
 {
@@ -21,7 +26,7 @@ public:
     DepthContext *  depthCtx;
     FillContext  *  fillCtx;
 
-private:
+public:
 
             RendererContext     ();
 public:
@@ -30,8 +35,8 @@ public:
     bool                        StateChanged        () const;
     void                        SetStateChanged     ( bool stateChanged ) const;
 
-    static RendererContext *    Create              ();
-    static RendererContext *    CreateDefault       ();
+    static RendererContextPtr   Create              ();
+    static RendererContextPtr   CreateDefault       ();
 
 };
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 
 namespace bv {
 
@@ -36,7 +37,7 @@ private:
 
 public:
 
-    static void Create  ( RendererStateInstance * inst, const model::RendererContext * ctx ); 
+    static void Create  ( RendererStateInstance * inst, model::RendererContextConstPtr ctx ); 
 
     static void Assign  ( AlphaState * as, const model::AlphaContext * ac );
     static void Assign  ( CullState * cs, const model::CullContext * cc );

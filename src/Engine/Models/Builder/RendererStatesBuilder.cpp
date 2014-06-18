@@ -61,7 +61,7 @@ FillState *     RendererStatesBuilder::CreateStateFromCtx( const model::FillCont
 
 // *********************************
 //
-void RendererStatesBuilder::Create( RendererStateInstance * inst, const model::RendererContext * ctx )
+void RendererStatesBuilder::Create( RendererStateInstance * inst, model::RendererContextConstPtr ctx )
 {
     if ( ctx->alphaCtx )
         inst->SetState( CreateStateFromCtx( ctx->alphaCtx ) );

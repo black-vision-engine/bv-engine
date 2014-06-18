@@ -21,7 +21,7 @@ class SimplePixelShaderChannel : public DefaultPixelShaderChannel
 {
 public:
 
-    explicit                        SimplePixelShaderChannel( const std::string & shaderFile, RendererContext * ctx = nullptr )
+    explicit                        SimplePixelShaderChannel( const std::string & shaderFile, RendererContextPtr ctx = nullptr )
         : DefaultPixelShaderChannel( shaderFile, nullptr, ctx )
     {}
 
@@ -45,7 +45,7 @@ private:
 
 public:
 
-    explicit                                SimplePixelShaderPlugin     ( IPluginConstPtr prev, const std::string & shaderPath, RendererContext * ctx = nullptr );
+    explicit                                SimplePixelShaderPlugin     ( IPluginConstPtr prev, const std::string & shaderPath, RendererContextPtr ctx = nullptr );
                                             ~SimplePixelShaderPlugin    ();
 
     virtual IPixelShaderChannelConstPtr     GetPixelShaderChannel       () const;

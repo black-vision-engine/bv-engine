@@ -6,7 +6,7 @@ namespace bv { namespace model {
 
 // *********************************
 //
-SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( IPluginConstPtr prev, const std::string & shaderPath, RendererContext * ctx )
+SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( IPluginConstPtr prev, const std::string & shaderPath, RendererContextPtr ctx )
     : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_shaderPath( shaderPath )
 {
