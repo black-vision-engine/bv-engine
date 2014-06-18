@@ -40,6 +40,8 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(Float3AttributeChannel)
+DEFINE_CONST_PTR_TYPE(Float3AttributeChannel)
 
 //FIXME: typed instances should be created via factories
 class Float2AttributeChannel : public AttributeChannel
@@ -64,6 +66,9 @@ public:
     void                            AddAttribute                    ( const glm::vec2 & v );
 
 };
+
+DEFINE_PTR_TYPE(Float2AttributeChannel)
+DEFINE_CONST_PTR_TYPE(Float2AttributeChannel)
 
 // TODO: Czy kazdy typ moze miec kazda semantyke? 
 } // model

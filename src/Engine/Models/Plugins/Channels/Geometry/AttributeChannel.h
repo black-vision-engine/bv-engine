@@ -30,9 +30,12 @@ public:
     virtual std::string                             GetName             ()  const;
 
 
-    static IAttributeChannel *                      GetPositionChannel( const std::vector< IAttributeChannel* > & channels );
-    static IAttributeChannel*                       GetUVChannel( const std::vector< IAttributeChannel* >& channels, unsigned int index );
+    static IAttributeChannelPtr                     GetPositionChannel( const std::vector< IAttributeChannelPtr > & channels );
+    static IAttributeChannelPtr                     GetUVChannel( const std::vector< IAttributeChannelPtr >& channels, unsigned int index );
 };
+
+DEFINE_PTR_TYPE(AttributeChannel)
+DEFINE_CONST_PTR_TYPE(AttributeChannel)
 
 } // model
 } // bv

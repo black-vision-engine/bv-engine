@@ -1,18 +1,16 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
 namespace bv { namespace model
 {
-
-class Float3AttributeChannel;
 
 class RectComponent : public ConnectedComponent
 {
 private:
 
-    Float3AttributeChannel *    m_v3Attrs;
+    Float3AttributeChannelPtr    m_v3Attrs;
 
 private:
 

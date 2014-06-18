@@ -253,8 +253,8 @@ void                                DefaultTexturePlugin::Update                
                 {
                     if( auto uvChannel = AttributeChannel::GetUVChannel( compChannels, m_texCoordChannelIndex ) )
                     {
-                        auto & verts  = dynamic_cast< Float3AttributeChannel * >( posChannel )->GetVertices();
-                        auto & uvs    = dynamic_cast< Float2AttributeChannel * >( uvChannel )->GetVertices();
+                        auto & verts  = std::dynamic_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices();
+                        auto & uvs    = std::dynamic_pointer_cast< Float2AttributeChannel >( uvChannel )->GetVertices();
 
                         for( unsigned int i = 0; i < verts.size(); ++i )
                         {

@@ -285,7 +285,7 @@ void                                TimerPlugin::SetValue       ( unsigned int c
             {
                 auto channels = comps[ connComp ]->GetAttributeChannels();
 
-                auto uvChannel = static_cast< Float2AttributeChannel* >( AttributeChannel::GetUVChannel( channels, 1 ) );
+                auto uvChannel = std::static_pointer_cast< Float2AttributeChannel >( AttributeChannel::GetUVChannel( channels, 1 ) );
 
                 auto& verts = uvChannel->GetVertices();
 

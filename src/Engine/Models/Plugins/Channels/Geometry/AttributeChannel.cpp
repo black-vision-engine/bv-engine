@@ -55,7 +55,7 @@ std::string                                 AttributeChannel::GetName           
 
 // *************************************
 //
-IAttributeChannel *                         AttributeChannel::GetPositionChannel( const std::vector< IAttributeChannel * > & channels )
+IAttributeChannelPtr                         AttributeChannel::GetPositionChannel( const std::vector< IAttributeChannelPtr > & channels )
 {
     if( !channels.empty() )
     {
@@ -73,7 +73,7 @@ IAttributeChannel *                         AttributeChannel::GetPositionChannel
 
 // *************************************
 //
-IAttributeChannel*                          AttributeChannel::GetUVChannel( const std::vector< IAttributeChannel* >& channels, unsigned int index )
+IAttributeChannelPtr                         AttributeChannel::GetUVChannel( const std::vector< IAttributeChannelPtr >& channels, unsigned int index )
 {
     assert( !channels.empty() );
     assert( channels.size() > index );

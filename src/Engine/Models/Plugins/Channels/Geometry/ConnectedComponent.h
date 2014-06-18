@@ -4,15 +4,10 @@
 
 #include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
 #include "Engine/Interfaces/IUpdatable.h"
-
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 
 namespace bv { namespace model
 {
-
-class IAttributeChannel;
-class AttributeChannel;
-
-DEFINE_PTR_TYPE(AttributeChannel)
 
 class ConnectedComponent : public IConnectedComponent, public IUpdatable
 {
@@ -27,7 +22,7 @@ public:
 
     virtual void                                Update                      ( TimeType t );
 
-    virtual std::vector< IAttributeChannel* >   GetAttributeChannels        () const;
+    virtual std::vector< IAttributeChannelPtr > GetAttributeChannels        () const;
 
     virtual unsigned int                        GetNumVertices              () const;
     virtual unsigned int                        GetNumPrimitives            () const;
@@ -36,6 +31,9 @@ public:
 
     void                                        AddAttributeChannel         ( const AttributeChannelPtr& attr );
 };
+
+DEFINE_PTR_TYPE(ConnectedComponent)
+DEFINE_CONST_PTR_TYPE(ConnectedComponent)
 
 } // model
 } // bv

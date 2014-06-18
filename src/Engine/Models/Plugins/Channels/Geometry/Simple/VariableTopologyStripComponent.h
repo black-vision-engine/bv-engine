@@ -3,11 +3,9 @@
 #include <glm/glm.hpp>
 
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
 namespace bv { namespace model {
-
-class Float3AttributeChannel;
 
 class VariableTopologyStripComponent: public ConnectedComponent
 {
@@ -28,7 +26,7 @@ private:
     float           m_startY;
     float           m_posZ;
 
-    Float3AttributeChannel *    m_positions;
+    Float3AttributeChannelPtr    m_positions;
 
 private:
 

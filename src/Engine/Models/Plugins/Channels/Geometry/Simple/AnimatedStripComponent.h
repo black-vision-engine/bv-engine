@@ -1,11 +1,9 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
 namespace bv { namespace model {
-
-class Float3AttributeChannel;
 
 class AnimatedStripComponent: public ConnectedComponent
 {
@@ -20,7 +18,7 @@ private:
     float   m_sizeY;
     float   m_sizeZ;
 
-    Float3AttributeChannel *    m_positions;
+    Float3AttributeChannelPtr           m_positions;
 
 private:
 

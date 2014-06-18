@@ -27,5 +27,8 @@ public:
     virtual ~IAttributeChannel() {}
 };
 
+DEFINE_PTR_TYPE(IAttributeChannel)
+DEFINE_CONST_PTR_TYPE(IAttributeChannel)
+
 } // model
 } // bv

@@ -28,13 +28,13 @@ void                                        ConnectedComponent::Update( TimeType
 
 // ************************************
 //
-std::vector< IAttributeChannel* >     ConnectedComponent::GetAttributeChannels  () const
+std::vector< IAttributeChannelPtr >         ConnectedComponent::GetAttributeChannels  () const
 {
-    std::vector< IAttributeChannel* > ret;
+    std::vector< IAttributeChannelPtr > ret;
     ret.reserve( m_attributeChannels.size() );
 
     for( auto att : m_attributeChannels )
-        ret.push_back( att.get() );
+        ret.push_back( att );
 
     return ret;
 }
