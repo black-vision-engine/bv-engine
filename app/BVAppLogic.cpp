@@ -96,7 +96,6 @@ BVAppLogic::~BVAppLogic             ()
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
 
     delete m_timelineManager;
-    delete m_modelScene;
     delete m_mockSceneEng;
 
     delete[] GfbBuf;
@@ -421,7 +420,7 @@ model::TimelineManager *    BVAppLogic::GetTimelineManager  ()
 
 // *********************************
 //FIXME: unsafe - consider returning const variant of this class (IParameters * without const should be accessible anyway)
-model::ModelScene *         BVAppLogic::GetModelScene       ()
+model::ModelScenePtr        BVAppLogic::GetModelScene       ()
 {
     return m_modelScene;
 }

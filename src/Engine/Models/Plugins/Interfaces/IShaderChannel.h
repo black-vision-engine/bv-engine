@@ -19,5 +19,8 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(IShaderChannel)
+DEFINE_CONST_PTR_TYPE(IShaderChannel)
+
 } // model
 } // bv

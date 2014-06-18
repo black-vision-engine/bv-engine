@@ -8,6 +8,7 @@
 
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 #include "Engine/Models/BasicNode.h"
+#include "Engine/Graphics/SceneGraph/Camera.h"
 
 namespace bv {
 
@@ -17,6 +18,9 @@ namespace model
 {
 
 class BasicNode;
+class ModelScene;
+DEFINE_PTR_TYPE(ModelScene)
+DEFINE_CONST_PTR_TYPE(ModelScene)
 
 class ModelScene : public IUpdatable
 {
@@ -31,9 +35,9 @@ class ModelScene : public IUpdatable
 
 public:
 
-    static ModelScene * Create                  ( BasicNodePtr node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
+    static ModelScenePtr    Create                  ( BasicNodePtr node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
 
-    virtual void        Update                  ( TimeType t );
+    virtual void            Update                  ( TimeType t );
 
     void                SetCamereParameters     ( const ParamVec3 & pos, const ParamVec3 & dir, const ParamVec3 & up );
 

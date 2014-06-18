@@ -140,8 +140,6 @@ private:
 
 public:
 
-    static void                         RegisterShaderParameters( const IShaderChannel * shaderPlugin, ShaderParameters * shParams );
-
     friend class ModelAccessors;
 
 };

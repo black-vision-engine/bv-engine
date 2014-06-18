@@ -4,6 +4,7 @@
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/ModelScene.h"
 
 #include "Engine/Events/Events.h"
 
@@ -40,7 +41,7 @@ private:
     const model::PluginsManager *   m_pluginsManager;
     model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
-    model::ModelScene *             m_modelScene;
+    model::ModelScenePtr            m_modelScene;
     SceneNode *                     m_mockSceneEng;
 
     unsigned long                   m_startTime;
@@ -82,7 +83,7 @@ public:
 
     //Convenience API - generalized model accessors
     model::TimelineManager *        GetTimelineManager  ();
-    model::ModelScene *             GetModelScene       ();
+    model::ModelScenePtr            GetModelScene       ();
     const model::PluginsManager *   GetPluginsManager   () const;
 };
 

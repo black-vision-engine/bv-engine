@@ -9,9 +9,9 @@ namespace bv { namespace model {
 
 // *******************************
 //
-ModelScene *    ModelScene::Create( BasicNodePtr node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+ModelScenePtr    ModelScene::Create( BasicNodePtr node, Camera * cam, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
 {
-    return new ModelScene( node, cam, name, timeEvaluator );
+    return ModelScenePtr( new ModelScene( node, cam, name, timeEvaluator ) );
 }
 
 // *******************************
