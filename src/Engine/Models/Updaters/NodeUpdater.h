@@ -57,6 +57,10 @@ typedef std::pair< ITexturesDataConstPtr, ShaderParameters * > TexData2ShaderPar
 typedef std::pair< const ITextureDescriptor *, Texture2DImpl * > Tex2Tex2DPair;
 typedef std::pair< const IAnimationDescriptor *, Texture2DSequenceImpl * > Anim2Tex2DPair;
 
+class NodeUpdater;
+DEFINE_CONST_PTR_TYPE(NodeUpdater)
+DEFINE_PTR_TYPE(NodeUpdater)
+
 class NodeUpdater : public IUpdater
 {
 private:
@@ -79,12 +83,12 @@ private:
 
     std::vector< TexData2ShaderParams >         m_texDataMappingVec;
 
+                            NodeUpdater         ( RenderableEntity * renderable, SceneNode * sceneNode, model::IModelNodeConstPtr modelNode ); 
 public:
+                            ~NodeUpdater        ();
 
-                    NodeUpdater         ( RenderableEntity * renderable, SceneNode * sceneNode, model::IModelNodeConstPtr modelNode ); 
-                    ~NodeUpdater        ();
-
-    virtual void    DoUpdate            () override;
+    static NodeUpdaterPtr   Create              ( RenderableEntity * renderable, SceneNode * sceneNode, model::IModelNodeConstPtr modelNode );
+    virtual void            DoUpdate            () override;
 
 private:
 

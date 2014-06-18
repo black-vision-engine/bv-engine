@@ -395,7 +395,7 @@ SceneNode *                         BasicNode::CreateSceneNode          ( IPlugi
     RenderableEntity * renderable = CreateRenderable( finalizer );
 
     SceneNode * node        = new SceneNode( renderable );
-    NodeUpdater * updater   = new NodeUpdater( renderable, node, shared_from_this() );
+    NodeUpdaterPtr updater  = NodeUpdater::Create( renderable, node, shared_from_this() );
     UpdatersManager::Get().RegisterUpdater( updater );
 
     return node;

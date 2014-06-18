@@ -12,7 +12,7 @@ class UpdatersManager
 {
 private:
 
-    std::vector< IUpdater * >   m_updaters;
+    std::vector< IUpdaterPtr >   m_updaters;
 
 public:
 
@@ -21,7 +21,7 @@ public:
 
     void                        UpdateStep          ();
 
-    void                        RegisterUpdater     ( IUpdater * updater );
+    void                        RegisterUpdater     ( IUpdaterPtr updater );
 
     static UpdatersManager &    Get                 ();
 

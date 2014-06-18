@@ -13,10 +13,6 @@ UpdatersManager::UpdatersManager        ()
 //
 UpdatersManager::~UpdatersManager       ()
 {
-    for( auto u : m_updaters )
-    {
-        delete u;
-    }
 }
 
 // *******************************
@@ -31,7 +27,7 @@ void UpdatersManager::UpdateStep        ()
 
 // *******************************
 //
-void UpdatersManager::RegisterUpdater    ( IUpdater * updater )
+void UpdatersManager::RegisterUpdater    ( IUpdaterPtr updater )
 {
     m_updaters.push_back( updater );
 }

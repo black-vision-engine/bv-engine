@@ -7,7 +7,7 @@ namespace bv { namespace model {
 
 // ********************************
 //
-BasicNodePtr     ModelAccessors::GetRootNode    ( ModelScene * scene )
+BasicNodePtr     ModelAccessors::GetRootNode    ( ModelScenePtr scene )
 {
     return scene->m_pSceneRoot;
 }

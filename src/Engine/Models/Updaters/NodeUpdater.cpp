@@ -20,6 +20,13 @@ namespace bv
 
 // *****************************
 //
+NodeUpdaterPtr NodeUpdater::Create( RenderableEntity * renderable, SceneNode * sceneNode, model::IModelNodeConstPtr modelNode )
+{
+    return NodeUpdaterPtr( new NodeUpdater( renderable, sceneNode, modelNode ) );
+}
+
+// *****************************
+//
 NodeUpdater::NodeUpdater     ( RenderableEntity * renderable, SceneNode * sceneNode, model::IModelNodeConstPtr modelNode )
     : m_sceneNode( sceneNode )
     , m_modelNode( modelNode )

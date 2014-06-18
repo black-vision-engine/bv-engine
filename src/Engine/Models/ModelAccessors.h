@@ -3,11 +3,9 @@
 #include <string>
 
 #include "Engine/Models/BasicNode.h"
+#include "Engine/Models/ModelScene.h"
 
 namespace bv { namespace model {
-
-class BasicNode;
-class ModelScene;
 
 class ModelAccessors
 {
@@ -15,7 +13,7 @@ private:
 
 public:
 
-    static BasicNodePtr    GetRootNode  ( ModelScene * scene );
+    static BasicNodePtr    GetRootNode  ( ModelScenePtr scene );
     static BasicNodePtr    FindChild    ( BasicNodePtr node, const std::string & name );
     static BasicNodePtr    FindLayer    ( BasicNodePtr node, const std::string & name );
 

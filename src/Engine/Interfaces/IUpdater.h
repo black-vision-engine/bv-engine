@@ -16,4 +16,7 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(IUpdater)
+DEFINE_CONST_PTR_TYPE(IUpdater)
+
 } // bv
