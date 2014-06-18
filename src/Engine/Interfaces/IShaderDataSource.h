@@ -16,4 +16,7 @@ public:
     virtual                         ~IShaderDataSource  () {}
 };
 
+DEFINE_PTR_TYPE(IShaderDataSource)
+DEFINE_CONST_PTR_TYPE(IShaderDataSource)
+
 } //bv

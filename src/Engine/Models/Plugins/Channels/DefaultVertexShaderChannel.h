@@ -9,6 +9,9 @@
 
 namespace bv { namespace model {
 
+class DefaultVertexShaderChannel;
+DEFINE_PTR_TYPE(DefaultVertexShaderChannel)
+
 class DefaultVertexShaderChannel : public ShaderChannel< IVertexShaderChannel >
 {
 protected:
@@ -20,15 +23,13 @@ public:
             DefaultVertexShaderChannel                      ( const std::string & shaderSource, IValueSetConstPtr valueSet );
     virtual ~DefaultVertexShaderChannel                     ();
 
-    virtual ITexturesDataConstPtr       GetTexturesData     () const override;
-    DefaultTexturesDataPtr              GetTexturesDataImpl ();
+    virtual ITexturesDataConstPtr           GetTexturesData     () const override;
+    DefaultTexturesDataPtr                  GetTexturesDataImpl ();
 
-    static  DefaultVertexShaderChannel * Create             ();
-    static  DefaultVertexShaderChannel * Create             ( const std::string & shaderFile, IValueSetConstPtr values );
+    static  DefaultVertexShaderChannelPtr   Create             ();
+    static  DefaultVertexShaderChannelPtr   Create             ( const std::string & shaderFile, IValueSetConstPtr values );
 
 };
-
-DEFINE_PTR_TYPE(DefaultVertexShaderChannel)
 
 } //model
 } //bv

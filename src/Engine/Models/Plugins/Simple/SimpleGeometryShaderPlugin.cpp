@@ -1,26 +1,8 @@
 #include "SimpleGeometryShaderPlugin.h"
 
-#include "Engine/Models/Plugins/Channels/ShaderChannel.h"
-
 
 namespace bv { namespace model {
 
-
-class SimpleGeometryShaderChannel : public ShaderChannel< model::IGeometryShaderChannel >
-{
-public:
-
-    explicit                        SimpleGeometryShaderChannel( const std::string & shaderFile )
-        : ShaderChannel( shaderFile, nullptr )
-    {
-    }
-
-    virtual void                    Update( TimeType t )
-    {
-        //ShaderChannel::Update( t );
-    }
-
-};
 
 // *********************************
 //
@@ -28,7 +10,7 @@ SimpleGeometryShaderPlugin::SimpleGeometryShaderPlugin          ( IPluginConstPt
     : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_shaderPath( shaderPath )
 {
-    m_gshaderChannel = new SimpleGeometryShaderChannel( shaderPath );
+    m_gshaderChannel = std::make_shared< SimpleGeometryShaderChannel >( shaderPath );
 
     //for( auto v : prev->GetValuesList() )
     //{
@@ -40,12 +22,11 @@ SimpleGeometryShaderPlugin::SimpleGeometryShaderPlugin          ( IPluginConstPt
 //
 SimpleGeometryShaderPlugin::~SimpleGeometryShaderPlugin         ()
 {
-    delete m_gshaderChannel;
 }
 
 // *********************************
 //
-const IGeometryShaderChannel *   SimpleGeometryShaderPlugin::GetGeometryShaderChannel    () const
+IGeometryShaderChannelConstPtr   SimpleGeometryShaderPlugin::GetGeometryShaderChannel    () const
 {
     return m_gshaderChannel;
 }

@@ -51,9 +51,9 @@ NodeUpdater::NodeUpdater     ( RenderableEntity * renderable, SceneNode * sceneN
         m_rendererContext = finalizer->GetPixelShaderChannel()->GetRendererContext();
         assert( m_rendererContext );
 
-        const bv::IShaderDataSource * psc = finalizer->GetPixelShaderChannel();
-        const bv::IShaderDataSource * vsc = finalizer->GetVertexShaderChannel();
-        const bv::IShaderDataSource * gsc = finalizer->GetGeometryShaderChannel();
+        auto psc = finalizer->GetPixelShaderChannel();
+        auto vsc = finalizer->GetVertexShaderChannel();
+        auto gsc = finalizer->GetGeometryShaderChannel();
 
         //FIXME: tutaj jak widac jest petla po numpasses, ale m_rendererContext, psc, vsc i gsc sa tylko pobierane raz (czyli dziala tylko dla 1 passa) - jak bedzie wiecej passow, trzeba to poprawic
         for( unsigned int i = 0; i < effect->NumPasses(); ++i )
@@ -139,7 +139,7 @@ void    NodeUpdater::DoUpdate        ()
 
 // *****************************
 //
-void    NodeUpdater::RegisterTexturesData   ( const IShaderDataSource * psTxData, const IShaderDataSource * vsTxData, const IShaderDataSource * gsTxData, RenderablePass * pass )
+void    NodeUpdater::RegisterTexturesData   ( IShaderDataSourceConstPtr psTxData, IShaderDataSourceConstPtr vsTxData, IShaderDataSourceConstPtr gsTxData, RenderablePass * pass )
 {
     RegisterTypedTexturesData( psTxData, pass->GetPixelShader() );
     RegisterTypedTexturesData( vsTxData, pass->GetVertexShader() );
@@ -148,7 +148,7 @@ void    NodeUpdater::RegisterTexturesData   ( const IShaderDataSource * psTxData
 
 // *****************************
 //
-bool   NodeUpdater::MustBeRegistered        ( const IShaderDataSource * shaderDataSrc, ShaderParameters * shaderParams )
+bool   NodeUpdater::MustBeRegistered        ( IShaderDataSourceConstPtr shaderDataSrc, ShaderParameters * shaderParams )
 {
     if( shaderDataSrc == nullptr || shaderParams == nullptr )
     {

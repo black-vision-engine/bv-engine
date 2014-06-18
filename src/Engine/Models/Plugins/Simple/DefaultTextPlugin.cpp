@@ -248,16 +248,16 @@ IVertexAttributesChannelConstPtr    DefaultTextPlugin::GetVertexAttributesChanne
 
 // *************************************
 // 
-const IPixelShaderChannel *         DefaultTextPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelConstPtr         DefaultTextPlugin::GetPixelShaderChannel       () const
 {
-    return m_psc.get();
+    return m_psc;
 }
 
 // *************************************
 // 
-const IVertexShaderChannel *        DefaultTextPlugin::GetVertexShaderChannel      () const
+IVertexShaderChannelConstPtr        DefaultTextPlugin::GetVertexShaderChannel      () const
 {
-    return m_vsc.get();
+    return m_vsc;
 }
 
 // *************************************

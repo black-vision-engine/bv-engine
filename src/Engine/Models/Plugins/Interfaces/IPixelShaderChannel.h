@@ -18,5 +18,8 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(IPixelShaderChannel)
+DEFINE_CONST_PTR_TYPE(IPixelShaderChannel)
+
 } // model
 } // bv

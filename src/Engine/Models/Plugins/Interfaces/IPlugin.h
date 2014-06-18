@@ -12,12 +12,14 @@
 #include "Engine/Models/Plugins/Interfaces/IPluginParamValModel.h"
 #include "Engine/Models/Resources/IPluginResourceDescr.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 
 namespace bv { namespace model {
 
 class IDefaultTransformChannel;
 class ITransformChannel;
-class IPixelShaderChannel;
 class IVertexShaderChannel;
 class IGeometryShaderChannel;
 class ResourceHandle;
@@ -39,9 +41,9 @@ public:
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const = 0;
     virtual const ITransformChannel *           GetTransformChannel         () const = 0;
-    virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const = 0;
-    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const = 0;
-    virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const = 0;
+    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const = 0;
+    virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const = 0;
+    virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const = 0;
 
     virtual const RendererContext *             GetRendererContext          () const = 0;
 

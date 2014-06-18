@@ -34,8 +34,8 @@ class SimpleAnimationPlugin : public BasePlugin< ISequenceAnimationSourcePlugin 
 private:
 
     VertexAttributesChannelPtr      m_vaChannel;
-    TexturePixelShaderChannel *     m_pixelShaderChannel;
-    TextureVertexShaderChannel *    m_vertexShaderChannel;
+    TexturePixelShaderChannelPtr    m_pixelShaderChannel;
+    TextureVertexShaderChannelPtr   m_vertexShaderChannel;
     TextureInfoVec                  m_textures;
 
     TextureAttachmentMode           m_attachmentMode;
@@ -61,8 +61,8 @@ public:
 
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;                                                                           
-    virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;                                       
-    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
+    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;                                       
+    virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
     virtual TextureInfoVec                      GetTextures                 () const;
 
     // ISequenceAnimationSource

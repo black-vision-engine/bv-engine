@@ -22,7 +22,6 @@ DefaultFinalizePlugin::DefaultFinalizePlugin       ()
 //
 DefaultFinalizePlugin::~DefaultFinalizePlugin      ()
 {
-    delete m_defaultVSChannel;
 }
                                     
 // *******************************
@@ -80,7 +79,7 @@ const ITransformChannel *           DefaultFinalizePlugin::GetTransformChannel  
 
 // *******************************
 //
-const IPixelShaderChannel *         DefaultFinalizePlugin::GetPixelShaderChannel        () const
+IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel        () const
 {
     assert( m_prevPlugin );
     assert( m_prevPlugin->GetPixelShaderChannel() );
@@ -90,7 +89,7 @@ const IPixelShaderChannel *         DefaultFinalizePlugin::GetPixelShaderChannel
 
 // *******************************
 //
-const IVertexShaderChannel *        DefaultFinalizePlugin::GetVertexShaderChannel       () const
+IVertexShaderChannelConstPtr        DefaultFinalizePlugin::GetVertexShaderChannel       () const
 {
     assert( m_prevPlugin );
 
@@ -106,7 +105,7 @@ const IVertexShaderChannel *        DefaultFinalizePlugin::GetVertexShaderChanne
 
 // *******************************
 //
-const IGeometryShaderChannel *      DefaultFinalizePlugin::GetGeometryShaderChannel     () const
+IGeometryShaderChannelConstPtr      DefaultFinalizePlugin::GetGeometryShaderChannel     () const
 {
     assert( m_prevPlugin );
 

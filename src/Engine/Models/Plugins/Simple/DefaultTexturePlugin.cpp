@@ -220,16 +220,16 @@ IVertexAttributesChannelConstPtr    DefaultTexturePlugin::GetVertexAttributesCha
 
 // *************************************
 // 
-const IPixelShaderChannel *         DefaultTexturePlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelConstPtr         DefaultTexturePlugin::GetPixelShaderChannel       () const
 {
-    return m_psc.get();
+    return m_psc;
 }
 
 // *************************************
 // 
-const IVertexShaderChannel *        DefaultTexturePlugin::GetVertexShaderChannel      () const
+IVertexShaderChannelConstPtr        DefaultTexturePlugin::GetVertexShaderChannel      () const
 {
-    return m_vsc.get();
+    return m_vsc;
 }
 
 // *************************************

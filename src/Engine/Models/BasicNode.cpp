@@ -531,7 +531,7 @@ RenderableEffect *                  BasicNode::CreateDefaultEffect     ( IPlugin
     assert( psChannel != nullptr );
     assert( vsChannel != nullptr );
 
-    return new DefaultEffect( m_overrideState, psChannel, vsChannel, gsChannel ); 
+    return new DefaultEffect( m_overrideState, psChannel.get(), vsChannel.get(), gsChannel.get() ); 
 }
 
 

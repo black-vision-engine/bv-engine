@@ -15,7 +15,7 @@ private:
     std::string                     m_name;
     static std::string              m_uid;
 
-    DefaultVertexShaderChannel *    m_defaultVSChannel;
+    DefaultVertexShaderChannelPtr   m_defaultVSChannel;
 
 public:
 
@@ -31,9 +31,9 @@ public:
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual const ITransformChannel *           GetTransformChannel         () const override;
-    virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;
-    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
-    virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const override;
+    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
+    virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
+    virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const override;
                  
     virtual const RendererContext *             GetRendererContext          () const override;
 

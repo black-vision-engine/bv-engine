@@ -88,11 +88,11 @@ public:
 
 private:
 
-    void            RegisterTexturesData( const IShaderDataSource * psTxData, const IShaderDataSource * vsTxData, const IShaderDataSource * gsTxData, RenderablePass * pass );
-    bool            MustBeRegistered    ( const IShaderDataSource * shaderDataSrc, ShaderParameters * shaderParams );
+    void            RegisterTexturesData( IShaderDataSourceConstPtr psTxData, IShaderDataSourceConstPtr vsTxData, IShaderDataSourceConstPtr gsTxData, RenderablePass * pass );
+    bool            MustBeRegistered    ( IShaderDataSourceConstPtr shaderDataSrc, ShaderParameters * shaderParams );
 
     template< typename ShaderType >
-    void RegisterTypedTexturesData( const IShaderDataSource * txData, ShaderType * shader )
+    void RegisterTypedTexturesData( IShaderDataSourceConstPtr txData, ShaderType * shader )
     {
         if ( shader != nullptr && MustBeRegistered( txData, shader->GetParameters() ) )
         {

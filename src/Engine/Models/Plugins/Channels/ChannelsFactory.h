@@ -3,12 +3,12 @@
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 
 namespace bv { namespace model {
 
 class TransformChannel;
 class VertexAttributesChannel;
-class IGeometryShaderChannel;
 class ParamTransformVec;
 class ConnectedComponent;
 
@@ -18,7 +18,7 @@ public:
 
     static VertexAttributesChannelPtr           CreateVertexAttributesChannel       ( ConnectedComponent * connComp, bool isTimeInvariant );
     static TransformChannel *                   CreateTransformChannel              ( const ParamTransformVec & transformVec );
-    static IGeometryShaderChannel *             CreateGeometryShaderExtrude         ( float scale, ITimeEvaluatorPtr timeEvaluator );
+    static IGeometryShaderChannelPtr            CreateGeometryShaderExtrude         ( float scale, ITimeEvaluatorPtr timeEvaluator );
 
 };
 

@@ -40,7 +40,7 @@ public:
     explicit                                DefaultColorPlugin          ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model );
                                             ~DefaultColorPlugin         ();
 
-    virtual const IPixelShaderChannel *     GetPixelShaderChannel       () const override;
+    virtual IPixelShaderChannelConstPtr     GetPixelShaderChannel       () const override;
 
     virtual void                            Update                      ( TimeType t ) override;
 

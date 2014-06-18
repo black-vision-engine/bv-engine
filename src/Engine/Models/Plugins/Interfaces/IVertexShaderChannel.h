@@ -14,5 +14,8 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(IVertexShaderChannel)
+DEFINE_CONST_PTR_TYPE(IVertexShaderChannel)
+
 } // model
 } // bv

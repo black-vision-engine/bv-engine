@@ -1,29 +1,8 @@
 #include "SimplePixelShaderPlugin.h"
 
-#include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
-
 
 namespace bv { namespace model {
 
-class SimplePixelShaderChannelPD
-{
-};
-
-
-class SimplePixelShaderChannel : public DefaultPixelShaderChannel
-{
-public:
-
-    explicit                        SimplePixelShaderChannel( const std::string & shaderFile, RendererContext * ctx = nullptr )
-        : DefaultPixelShaderChannel( shaderFile, nullptr, ctx )
-    {}
-
-    virtual ITexturesDataConstPtr   GetTexturesData() const override
-    {
-        return nullptr;
-    }
-
-};
 
 // *********************************
 //
@@ -31,7 +10,7 @@ SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( IPluginConstPtr prev
     : BasePlugin( "dupa", "dupa", prev, nullptr )
     , m_shaderPath( shaderPath )
 {
-    m_pshaderChannel = new SimplePixelShaderChannel( shaderPath, ctx );
+    m_pshaderChannel = std::make_shared< SimplePixelShaderChannel >( shaderPath, ctx );
 
     //for( auto v : prev->GetPixelShaderChannel()->GetValuesList() )
     //{
@@ -43,12 +22,11 @@ SimplePixelShaderPlugin::SimplePixelShaderPlugin          ( IPluginConstPtr prev
 //
 SimplePixelShaderPlugin::~SimplePixelShaderPlugin         ()
 {
-    delete m_pshaderChannel;
 }
 
 // *********************************
 //
-const IPixelShaderChannel *     SimplePixelShaderPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelConstPtr     SimplePixelShaderPlugin::GetPixelShaderChannel       () const
 {
     return m_pshaderChannel;
 }

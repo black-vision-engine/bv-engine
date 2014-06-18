@@ -47,15 +47,15 @@ public:
 
     virtual void                                SetGeometryChannel          ( VertexAttributesChannel * vaChannel ) { assert(!"Implement in derived class"); }
     virtual void                                SetTransformChannel         ( TransformChannel * transformChannel ) { assert(!"Implement in derived class"); }
-    virtual void                                SetPixelShaderChannel       ( IPixelShaderChannel * pShCh )         { assert(!"Implement in derived class"); }
-    virtual void                                SetVertexShaderChannel      ( IVertexShaderChannel * vShCh )        { assert(!"Implement in derived class"); }
-    virtual void                                SetGeometryShaderChannel    ( IGeometryShaderChannel * gShCh )      { assert(!"Implement in derived class"); }
+    virtual void                                SetPixelShaderChannel       ( IPixelShaderChannelPtr pShCh )         { assert(!"Implement in derived class"); }
+    virtual void                                SetVertexShaderChannel      ( IVertexShaderChannelPtr vShCh )        { assert(!"Implement in derived class"); }
+    virtual void                                SetGeometryShaderChannel    ( IGeometryShaderChannelPtr gShCh )      { assert(!"Implement in derived class"); }
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual const ITransformChannel *           GetTransformChannel         () const override;
-    virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;
-    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
-    virtual const IGeometryShaderChannel *      GetGeometryShaderChannel    () const override;
+    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
+    virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
+    virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const override;
 
     virtual const RendererContext *             GetRendererContext          () const override;
 
@@ -193,7 +193,7 @@ const ITransformChannel *           BasePlugin< Iface >::GetTransformChannel    
 // *******************************
 //
 template< class Iface >
-const IPixelShaderChannel *         BasePlugin< Iface >::GetPixelShaderChannel        () const
+IPixelShaderChannelConstPtr         BasePlugin< Iface >::GetPixelShaderChannel        () const
 {
     if( m_prevPlugin )
     {
@@ -206,7 +206,7 @@ const IPixelShaderChannel *         BasePlugin< Iface >::GetPixelShaderChannel  
 // *******************************
 //
 template< class Iface >
-const IVertexShaderChannel *        BasePlugin< Iface >::GetVertexShaderChannel         () const
+IVertexShaderChannelConstPtr        BasePlugin< Iface >::GetVertexShaderChannel         () const
 {
     if( m_prevPlugin ) 
     {
@@ -219,7 +219,7 @@ const IVertexShaderChannel *        BasePlugin< Iface >::GetVertexShaderChannel 
 // *******************************
 //
 template< class Iface >
-const IGeometryShaderChannel *      BasePlugin< Iface >::GetGeometryShaderChannel       () const
+IGeometryShaderChannelConstPtr      BasePlugin< Iface >::GetGeometryShaderChannel       () const
 {
     if( m_prevPlugin )
     {

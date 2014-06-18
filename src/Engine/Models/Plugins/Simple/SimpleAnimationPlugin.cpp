@@ -64,8 +64,6 @@ SimpleAnimationPlugin::SimpleAnimationPlugin                    ( IPluginConstPt
 //
 SimpleAnimationPlugin::~SimpleAnimationPlugin        ()
 {
-    delete m_pixelShaderChannel;
-    delete m_vertexShaderChannel;
 }
 
 // *************************************
@@ -245,12 +243,12 @@ IVertexAttributesChannelConstPtr            SimpleAnimationPlugin::GetVertexAttr
     return m_vaChannel;
 }
 
-const IPixelShaderChannel *         SimpleAnimationPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelConstPtr         SimpleAnimationPlugin::GetPixelShaderChannel       () const
 {
     return m_pixelShaderChannel;
 }
 
-const IVertexShaderChannel *        SimpleAnimationPlugin::GetVertexShaderChannel      () const
+IVertexShaderChannelConstPtr        SimpleAnimationPlugin::GetVertexShaderChannel      () const
 {
     return m_vertexShaderChannel;
 }

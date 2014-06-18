@@ -76,8 +76,8 @@ public:
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-    virtual const IPixelShaderChannel *         GetPixelShaderChannel       () const override;
-    virtual const IVertexShaderChannel *        GetVertexShaderChannel      () const override;
+    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
+    virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
     virtual void                                Update                      ( TimeType t ) override;
 

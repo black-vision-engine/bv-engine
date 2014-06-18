@@ -38,9 +38,9 @@ SimpleVertexShaderPlugin::~SimpleVertexShaderPlugin         ()
 
 // *********************************
 //
-const IVertexShaderChannel *    SimpleVertexShaderPlugin::GetVertexShaderChannel      () const
+IVertexShaderChannelConstPtr    SimpleVertexShaderPlugin::GetVertexShaderChannel      () const
 {
-    return m_vshaderChannel.get();
+    return m_vshaderChannel;
 }
 
 // *********************************

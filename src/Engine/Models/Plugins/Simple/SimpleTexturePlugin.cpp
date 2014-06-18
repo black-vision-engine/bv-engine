@@ -283,16 +283,16 @@ IVertexAttributesChannelConstPtr        SimpleTexturePlugin::GetVertexAttributes
 
 // *************************************
 //
-const IPixelShaderChannel *             SimpleTexturePlugin::GetPixelShaderChannel      () const
+IPixelShaderChannelConstPtr             SimpleTexturePlugin::GetPixelShaderChannel      () const
 {
-    return m_pixelShaderChannel.get();
+    return m_pixelShaderChannel;
 }
 
 // *************************************
 //
-const IVertexShaderChannel *            SimpleTexturePlugin::GetVertexShaderChannel     () const
+IVertexShaderChannelConstPtr            SimpleTexturePlugin::GetVertexShaderChannel     () const
 {
-    return m_vertexShaderChannel.get();
+    return m_vertexShaderChannel;
 }
 
 // *************************************
