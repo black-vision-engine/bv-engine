@@ -5,6 +5,8 @@
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
+#include "Engine/Models/Plugins/DefaultRectPlugin.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
@@ -230,6 +232,15 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Tim
     return node;
 }
 
+namespace 
+{
+    template< class PluginType >
+    std::shared_ptr< PluginType > QuaryPluginTyped( model::IPluginPtr plugin )
+    {
+        return std::dynamic_pointer_cast< PluginType >( plugin );
+    }
+}
+
 // *****************************
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
@@ -254,10 +265,23 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
     SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
 
+
+
     //node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( localTimeline );
 
     success = model::LoadTexture( node->GetPlugin( "texture" ), "pliczek_z_kwiatkiem.jpg" );
     assert( success );
+
+    auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( node->GetPlugin( "texture" ) );
+    if( texturePlugin )
+    {
+        int width   = texturePlugin->GetTextureWidth();
+        int height  = texturePlugin->GetTextureHeight();
+
+        float hf = float( height ) / float( width );
+
+        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), hf );
+    }
 
     auto ai = TestAIManager::Instance().GetAIPreset( 2 );
     ai->SetTimeline( someTimelineWithEvents );

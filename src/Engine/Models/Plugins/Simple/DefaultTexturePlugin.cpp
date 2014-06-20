@@ -204,6 +204,9 @@ bool                            DefaultTexturePlugin::LoadResource  ( IPluginRes
                 txData->SetTexture( 0, txDesc );
             }
 
+            m_textureWidth = txDesc->GetWidth();
+            m_textureHeight = txDesc->GetHeight();
+
             return true;
         }
     }
@@ -419,6 +422,22 @@ void                                        DefaultTexturePlugin::UpdateState   
     m_lastTextureFilteringMode  = fm;
     m_lastTextureAttachMode     = am;
 }
+
+// *************************************
+// 
+int                                         DefaultTexturePlugin::GetTextureWidth             () const
+{
+    return m_textureWidth;
+}
+
+// *************************************
+//
+int                                         DefaultTexturePlugin::GetTextureHeight            () const
+{
+    return m_textureHeight;
+}
+
+
 
 } // model
 } // bv

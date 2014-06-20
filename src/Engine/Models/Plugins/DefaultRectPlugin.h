@@ -54,5 +54,8 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(DefaultRectPlugin)
+DEFINE_CONST_PTR_TYPE(DefaultRectPlugin)
+
 } // model
 } // bv
