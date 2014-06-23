@@ -18,7 +18,6 @@
 #include "Engine/Graphics/Effects/DefaultEffect.h"
 
 #include "Engine/Graphics/Resources/VertexDescriptor.h" //FIXME: ten kod, ktory potrzebuje tego deskryptora, tekstur i animacji powinien byc w default effect lub cos, a nie tutaj - to do przerobienia koniecznie
-#include "Engine/Graphics/Resources/Textures/TextureManager.h"
 #include "Engine/Graphics/Resources/Texture2DImpl.h"
 #include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-
+#include "System/BasicTypes.h"
 
 namespace bv { namespace model
 {
@@ -64,6 +64,9 @@ public:
         delete m_extra;
     }
 };
+
+DEFINE_PTR_TYPE(ResourceHandle)
+DEFINE_CONST_PTR_TYPE(ResourceHandle)
 
 } // model
 } // bv

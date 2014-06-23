@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Interfaces/ITextureDescriptor.h"
+#include "Engine/Models/Resources/IResource.h"
 
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureParams.h"
 
@@ -11,7 +12,7 @@ class DefaultTextureDescriptor : public ITextureDescriptor
 {
 private:
 
-    char *                  m_data;
+    ResourceHandleConstPtr  m_texHandle;
 
     DefaultTextureParams    m_params;
     mutable bool            m_bitsChanged;
@@ -19,7 +20,7 @@ private:
 public:
 
     DefaultTextureDescriptor        ();
-    DefaultTextureDescriptor        ( const char * data, const std::string & name, unsigned int w, unsigned int h, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc );
+    DefaultTextureDescriptor        ( ResourceHandleConstPtr handle, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc );
     ~DefaultTextureDescriptor       ();
 
     virtual const char *            GetBits         () const override;
@@ -36,7 +37,7 @@ public:
     virtual TextureFilteringMode    GetFilteringMode() const override;
     virtual glm::vec4               BorderColor     () const override;
 
-    void                            SetBits         ( const char * data, TextureFormat fmt, unsigned int w, unsigned int h );
+    void                            SetBits         ( ResourceHandleConstPtr handle );
 
     void                            SetBitsChanged  ( bool bitsChanged ) const;
 
