@@ -10,6 +10,7 @@ namespace bv
 
 class Texture2D;
 
+//FIXME: add stencil at some point
 class RenderTarget
 {
 private:
@@ -18,10 +19,10 @@ private:
 
 protected:
  
-    int         m_numTargets;
-    bool        m_hasMipmaps;
+    int             m_numTargets;
+    bool            m_hasMipmaps;
 
-    TexturesVec m_ColorTextures;
+    TexturesVec     m_ColorTextures;
 
 public:
 
@@ -29,7 +30,7 @@ public:
     virtual             ~RenderTarget   ();
 
     int                 NumTargets      () const;
-    TextureFormat    Format          () const;
+    TextureFormat       Format          () const;
 
     int                 Width           () const;
     int                 Height          () const;

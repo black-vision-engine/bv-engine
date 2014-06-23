@@ -25,6 +25,13 @@ public:
 
     bool                    WriteBits       ( const char * data, TextureFormat format, int width, int height );
 
+    bool                    AllocateMemory  ( TextureFormat format, int width, int height );
+    bool                    AllocateMemory  ();
+
+private:
+
+    unsigned int            SizeInBytes     ( TextureFormat format, int width, int height );
+
 };
 
 } //bv
