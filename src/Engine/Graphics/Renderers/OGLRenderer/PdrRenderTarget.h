@@ -35,7 +35,7 @@ private:
 
 public:
 
-                    PdrRenderTarget     ( Renderer * renderer, RenderTarget * rt );
+                    PdrRenderTarget     ( Renderer * renderer, const RenderTarget * rt );
                     ~PdrRenderTarget    ();
 public:
 
@@ -43,14 +43,14 @@ public:
     void            Enable              ( Renderer * renderer );
     void            Disable             ( Renderer * renderer );
 
-    void            ReadColorTexture    ( unsigned int i, Renderer * renderer, Texture2D*& outputTex );
+    void            ReadColorTexture    ( unsigned int i, Renderer * renderer, Texture2D *& outputTex );
 
 private:
 
     GLuint          GetPrevTexture      () const;
 
-    void            AddColorAttachments ( Renderer * renderer, RenderTarget * rt );
-    void            AddDepthBuffer      ( Renderer * renderer, RenderTarget * rt );
+    void            AddColorAttachments ( Renderer * renderer, const RenderTarget * rt );
+    void            AddDepthBuffer      ( Renderer * renderer, const RenderTarget * rt );
     bool            FramebuferStatusOK  () const;
 
 };

@@ -1,6 +1,7 @@
 #version 400
 
 layout (location = 0) out vec4 FragColor;
+//layout (location = 1) out float AlphaColor;
 
 in vec2 uvCoord;
 
@@ -12,4 +13,5 @@ void main()
 {
 	vec4 col = texture( Tex0, uvCoord );
 	FragColor = col.rgba * alpha * overrideAlpha;
+	//AlphaColor = col.a * alpha * overrideAlpha;
 }

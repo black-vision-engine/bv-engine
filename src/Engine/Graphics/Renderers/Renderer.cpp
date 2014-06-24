@@ -5,6 +5,7 @@
 #include <gl/glew.h>
 
 #include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/RenderTarget.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrShader.h"
@@ -14,6 +15,7 @@
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexArrayObjectSingleVB.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexDescriptor.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrTexture2D.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrRenderTarget.h"
 
 #include "Engine/Graphics/Shaders/RenderablePass.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
@@ -365,6 +367,30 @@ void    Renderer::Disable             ( const Texture2D * texture, int textureUn
 
 // *********************************
 //
+void    Renderer::Enable              ( const RenderTarget * rt )
+{
+    PdrRenderTarget * pdrRt = GetPdrRenderTarget( rt );
+    pdrRt->Enable( this );
+}
+
+// *********************************
+//
+void    Renderer::Disable             ( const RenderTarget * rt )
+{
+    PdrRenderTarget * pdrRt = GetPdrRenderTarget( rt );
+    pdrRt->Disable( this );
+}
+
+// *********************************
+//
+void    Renderer::ReadColorTexture    ( unsigned int i, const RenderTarget * rt, Texture2D *& outputTex )
+{
+    PdrRenderTarget * pdrRt = GetPdrRenderTarget( rt );
+    pdrRt->ReadColorTexture( i, this, outputTex );
+}
+
+// *********************************
+//
 PdrVertexBuffer *           Renderer::GetPdrVertexBuffer        ( const VertexBuffer * vb )
 {
     auto it = m_PdrVertexBufferMap.find( vb );
@@ -470,11 +496,11 @@ PdrVertexArrayObjectSingleVB *  Renderer::GetPdrVertexArraySingleVB   ( const Ve
 
 // *********************************
 //
-PdrTexture2D *                  Renderer::GetPdrTexture2D         ( const Texture2D * texture )
+PdrTexture2D *                  Renderer::GetPdrTexture2D       ( const Texture2D * texture )
 {
     auto it = m_PdrTextures2DMap.find( texture );
 
-    PdrTexture2D* pdrTex = nullptr;
+    PdrTexture2D * pdrTex = nullptr;
 
     if( it == m_PdrTextures2DMap.end() )
     {
@@ -491,12 +517,34 @@ PdrTexture2D *                  Renderer::GetPdrTexture2D         ( const Textur
 
 // *********************************
 //
+PdrRenderTarget *               Renderer::GetPdrRenderTarget    ( const RenderTarget * rt )
+{
+    auto it = m_PdrRenderTargetMap.find( rt );
+
+    PdrRenderTarget * pdrRt = nullptr;
+
+    if( it == m_PdrRenderTargetMap.end() )
+    {
+        pdrRt = new PdrRenderTarget( this, rt );
+        m_PdrRenderTargetMap[ rt ] = pdrRt;
+    }
+    else
+    {
+        pdrRt = it->second;
+    }
+
+    return pdrRt;
+}
+
+// *********************************
+//
 void  Renderer::NaiveReadback       ( char * buf, int w, int h )
 {
     assert( w == m_Width );
     assert( h == m_Height );
     assert( buf );
 
+    //FIXME: use renderer machinery and RT machinery to read back texture data
     glReadPixels( 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, buf );
 }
 

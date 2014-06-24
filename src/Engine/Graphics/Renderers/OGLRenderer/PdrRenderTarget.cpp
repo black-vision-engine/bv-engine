@@ -12,7 +12,7 @@ namespace bv {
 
 // ****************************
 //
-PdrRenderTarget::PdrRenderTarget     ( Renderer * renderer, RenderTarget * rt )
+PdrRenderTarget::PdrRenderTarget     ( Renderer * renderer, const RenderTarget * rt )
     : m_fboID( 0 )
     , m_depthBufID( 0 )
     , m_width( rt->Width() )
@@ -148,7 +148,7 @@ GLuint          PdrRenderTarget::GetPrevTexture     () const
 
 // ****************************
 //
-void            PdrRenderTarget::AddColorAttachments( Renderer * renderer, RenderTarget * rt )
+void            PdrRenderTarget::AddColorAttachments( Renderer * renderer, const RenderTarget * rt )
 {
     for( int i = 0; i < rt->NumTargets(); ++i )
     {
@@ -174,7 +174,7 @@ void            PdrRenderTarget::AddColorAttachments( Renderer * renderer, Rende
 
 // ****************************
 //
-void            PdrRenderTarget::AddDepthBuffer     ( Renderer * renderer, RenderTarget * rt )
+void            PdrRenderTarget::AddDepthBuffer     ( Renderer * renderer, const RenderTarget * rt )
 {
     glGenRenderbuffers( 1, &m_depthBufID );
     glBindRenderbuffer( GL_RENDERBUFFER, m_depthBufID );

@@ -70,7 +70,7 @@ int RenderTarget::Height () const
 
 // *********************************
 //
-Texture2D * RenderTarget::ColorTexture ( int i )
+Texture2D * RenderTarget::ColorTexture ( int i ) const
 {
     return m_ColorTextures[ i ];
 }

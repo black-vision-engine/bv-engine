@@ -22,6 +22,7 @@ class VertexShader;
 class GeometryShader;
 class RenderablePass;
 class Texture2D;
+class RenderTarget;
 
 class VertexBuffer;
 class IndexBuffer;
@@ -37,6 +38,7 @@ class PdrVertexArrayObject;
 class PdrVertexArrayObjectSingleVB;
 class PdrVertexDescriptor;
 class PdrVertexArrayObject;
+class PdrRenderTarget;
 
 class TransformableEntity;
 
@@ -69,6 +71,7 @@ private:
     typedef std::hash_map<const VertexArray*, PdrVertexArrayObject*>                            PdrVertexArrayObjectMapType;
     typedef std::hash_map<const VertexArraySingleVertexBuffer*, PdrVertexArrayObjectSingleVB*>  PdrVertexArrayObjectSingleVBMapType;
     typedef std::hash_map<const Texture2D *, PdrTexture2D * >                                   PdrTexture2DMap;
+    typedef std::hash_map<const RenderTarget *, PdrRenderTarget * >                             PdrRenderTargetMap;
 
     PdrShaderMapType                    m_PdrShaderMap;
     PdrVertexBufferMapType              m_PdrVertexBufferMap;
@@ -77,6 +80,7 @@ private:
     PdrVertexArrayObjectMapType         m_PdrVertexArrayObjectMap;
     PdrTexture2DMap                     m_PdrTextures2DMap;
     PdrVertexArrayObjectSingleVBMapType m_PdrVertexArrayObjectSingleVBMap;
+    PdrRenderTargetMap                  m_PdrRenderTargetMap;
 
 public:
 
@@ -130,6 +134,11 @@ public:
     //FIXME: add disable methods so that current state can be cleared after frame is rendered
     void    Disable             ( const Texture2D * texture, int textureUnit );
 
+    void    Enable              ( const RenderTarget * rt );
+    void    Disable             ( const RenderTarget * rt );
+
+    void    ReadColorTexture    ( unsigned int i, const RenderTarget * rt, Texture2D *& outputTex );
+
 public:
 
     PdrVertexBuffer *               GetPdrVertexBuffer          ( const VertexBuffer * vb );
@@ -138,6 +147,7 @@ public:
     PdrVertexArrayObject *          GetPdrVertexArray           ( const VertexArray * vao );
     PdrVertexArrayObjectSingleVB *  GetPdrVertexArraySingleVB   ( const VertexArraySingleVertexBuffer * vao );
     PdrTexture2D *                  GetPdrTexture2D             ( const Texture2D * texture );
+    PdrRenderTarget *               GetPdrRenderTarget          ( const RenderTarget * rt );
 
     bool                        DrawRenderable              ( RenderableEntity * ent );
     bool                        DrawTriangleStrips          ( TriangleStrip * strip );
