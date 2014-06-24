@@ -1,13 +1,15 @@
 #pragma once
 
-#include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 #include "gl/glew.h"
+
+#include "Engine/Graphics/Resources/Texture2D.h"
+
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 
 
 namespace bv
 {
 
-class Texture2D;
 class Renderer;
 
 class PdrTexture2D
@@ -24,6 +26,12 @@ private:
 
     unsigned int    m_width;
     unsigned int    m_height;
+
+    TextureFormat   m_txFormat;
+
+    GLuint          m_format;
+    GLuint          m_internalFormat;
+    GLuint          m_type;
 
 private:
 
@@ -49,6 +57,7 @@ public:
     GLuint          Bind            ();
     void            Unbind          ();
 
+    GLuint          GetTextureID    () const;
 
     static PdrTexture2D *   Create  ( const Texture2D * texture );
 

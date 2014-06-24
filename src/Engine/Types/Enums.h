@@ -3,9 +3,12 @@
 namespace bv
 {
 
+// NOTE: used by TextureBase::m_sPixelSize (TextureBase.cpp)
+// NOTE: used by GLConstantTextureFormat and GLConstantTextureType (PdrConstants.cpp)
 enum class TextureFormat : int
 {
     F_A8R8G8B8 = 0  ,
+    F_R8G8B8        ,
     F_A8            ,
     F_L8            ,
     F_R32F          ,

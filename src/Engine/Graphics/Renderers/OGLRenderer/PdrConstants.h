@@ -9,6 +9,7 @@
 
 #include "Engine/Graphics/Shaders/TextureSampler.h"
 #include "Engine/Graphics/State/RendererStateEnums.h"
+#include "Engine/Types/Enums.h"
 
 
 namespace bv {
@@ -35,6 +36,11 @@ public:
     static GLuint GLConstant( AlphaDstBlendMode mode );
     static GLuint GLConstant( DepthCompareMode mode );
     static GLuint GLConstant( FillStateMode mode );
+
+    static GLuint GLConstantTextureFormat           ( TextureFormat fmt );
+    static GLuint GLConstantTextureInternalFormat   ( TextureFormat fmt );
+    static GLuint GLConstantTextureType             ( TextureFormat fmt );
+
 };
 
 }

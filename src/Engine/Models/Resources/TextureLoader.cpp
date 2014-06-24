@@ -17,7 +17,7 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource * res )  
     int height  = 0;
     int bpp     = 0;
 
-    char* data = TextureHelper::LoadImg( res->GetFilePath(), &width, &height, &bpp );
+    char * data = TextureHelper::LoadImg( res->GetFilePath(), &width, &height, &bpp );
 
     if ( data != nullptr )
     {

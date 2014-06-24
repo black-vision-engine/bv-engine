@@ -326,6 +326,22 @@ void    Renderer::Recreate            ( const VertexBuffer * vb )
 
 // *********************************
 //
+bool    Renderer::IsRegistered        ( const Texture2D * texture )
+{
+    return m_PdrTextures2DMap.find( texture ) != m_PdrTextures2DMap.end();
+}
+
+// *********************************
+//
+void    Renderer::RegisterTexture2D   ( const Texture2D * texture, PdrTexture2D * pdrTexture )
+{
+    assert( !IsRegistered( texture ) );
+
+    m_PdrTextures2DMap[ texture ] = pdrTexture;
+}
+
+// *********************************
+//
 void    Renderer::Enable              ( const Texture2D * texture, int textureUnit )
 {
     PdrTexture2D * pdrTex2D = GetPdrTexture2D( texture );

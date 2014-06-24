@@ -8,6 +8,7 @@ namespace bv
 int TextureBase::m_sPixelSize[ TextureFormat::F_TOTAL ] =
 {
     4,   // F_A8R8G8B8
+    3,   // F_R8G8B8
     1,   // F_A8
     1,   // F_L8
     4,   //F_R32F

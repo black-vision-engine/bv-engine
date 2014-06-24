@@ -114,7 +114,7 @@ IGeometryShaderChannelConstPtr      DefaultFinalizePlugin::GetGeometryShaderChan
 
 // *******************************
 //
-RendererContextConstPtr             DefaultFinalizePlugin::GetRendererContext          () const
+RendererContextConstPtr             DefaultFinalizePlugin::GetRendererContext           () const
 {
     auto psc = GetPixelShaderChannel();
 
@@ -128,7 +128,7 @@ RendererContextConstPtr             DefaultFinalizePlugin::GetRendererContext   
 
 // *******************************
 //
-bool                                DefaultFinalizePlugin::LoadResource                ( IPluginResourceDescrConstPtr resDescr )
+bool                                DefaultFinalizePlugin::LoadResource                 ( IPluginResourceDescrConstPtr resDescr )
 {
     return false;
 }

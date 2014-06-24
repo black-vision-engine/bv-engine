@@ -120,6 +120,9 @@ public: //FIXME: private
     void    Update              ( const VertexBuffer * vb );
     void    Recreate            ( const VertexBuffer * vb );
 
+    bool    IsRegistered        ( const Texture2D * texture );
+    void    RegisterTexture2D   ( const Texture2D * texture, PdrTexture2D * pdrTexture );
+
 public:
 
     void    Enable              ( const Texture2D * texture, int textureUnit );

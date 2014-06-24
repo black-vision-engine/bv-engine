@@ -11,5 +11,5 @@ uniform float overrideAlpha;
 void main()
 {
 	vec4 col = texture( Tex0, uvCoord );
-	FragColor = col.bgra * alpha * overrideAlpha;
+	FragColor = col.rgba * alpha * overrideAlpha;
 }

@@ -26,6 +26,8 @@ public:
     virtual char *          GetData         () = 0;
     virtual const char *    GetData         () const = 0;
 
+    DataBuffer::Semantic    GetSemantic     () const;
+
     void                    SetChanged      ( bool changed ) const;
     bool                    Changed         () const;
 
