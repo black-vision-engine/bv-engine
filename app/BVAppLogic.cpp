@@ -365,20 +365,19 @@ void BVAppLogic::RenderScene     ( Renderer * renderer )
 
         renderer->PreDraw();
         renderer->Enable( rt );
-        
+
         RenderNode( renderer, m_mockSceneEng );
-        
+
         renderer->Disable( rt );
 
         renderer->ReadColorTexture( 0, rt, fill ); //odczyt calej ramki
 
         renderer->PostDraw();
         */
-
     //COMMENTED OUT - using render target example 2. separate key and fill (SLOW: 75 fps) - nie oplaca sie rozbijac, lepiej czytac od razu rgba i potem cos z tym robic
         /*
-        static std::vector< TextureFormat > fmts( 1 );
-        fmts[ 0 ] = TextureFormat::F_A8R8G8B8;
+        static std::vector< TextureFormat > fmts( 2 );
+        fmts[ 0 ] = TextureFormat::F_R8G8B8;
         fmts[ 1 ] = TextureFormat::F_A8;
         static RenderTarget * rt = new RenderTarget( fmts, 1920, 1080, false, false );
         static Texture2D * fill = nullptr;

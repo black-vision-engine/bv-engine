@@ -97,7 +97,7 @@ void            PdrRenderTarget::Disable            ( Renderer * renderer )
 }
 
 // ****************************
-//
+// FIXME: dodac streaming flag do bufora (dla multi PBO)
 void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer * renderer, Texture2D*& outputTex )
 {
     assert( i < m_numTargets );

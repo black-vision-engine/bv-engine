@@ -269,7 +269,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
     //node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( localTimeline );
 
-    success = model::LoadTexture( node->GetPlugin( "texture" ), "simless_00.jpg" );
+    success = model::LoadTexture( node->GetPlugin( "texture" ), "ascii_arial_atlas.png" );
     assert( success );
 
     auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( node->GetPlugin( "texture" ) );
