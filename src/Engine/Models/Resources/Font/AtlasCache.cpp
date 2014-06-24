@@ -160,7 +160,7 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
     assert( height == out->m_textAtlas->GetHeight() );
     assert( bpp == out->m_textAtlas->GetBitsPerPixel() );
 
-    out->m_textAtlas->m_data = texData;
+    out->m_textAtlas->m_textureHandle->SetData( texData );
 
     return 0;
 }

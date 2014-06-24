@@ -14,13 +14,13 @@ namespace bv { namespace model {
 
 ///////////////////////////////
 //
-const ResourceHandle *      TextHelper::LoadFont( const std::string& fontFileName, size_t size, size_t blurSize, const std::wstring& atlasCharSetFile )
+ResourceHandleConstPtr      TextHelper::LoadFont( const std::string& fontFileName, size_t size, size_t blurSize, const std::wstring& atlasCharSetFile )
 {
     auto fRes = FontResource( fontFileName, size, blurSize, atlasCharSetFile );
 
     FontLoader fLoader;
 
-    auto ret = fLoader.LoadResource( &fRes );
+    auto ret = ResourceHandleConstPtr( fLoader.LoadResource( &fRes ) );
 
     assert( ret->GetExtra() );
     assert( ret->GetExtra()->GetResourceExtraKind() == ResourceExtraKind::RE_FONT );
@@ -124,14 +124,14 @@ const TextAtlas *           TextHelper::GetAtlas            ( const ResourceHand
 
 ///////////////////////////////
 //
-const ResourceHandle *      TextHelper::GetAtlasTextureInfo ( const TextAtlas * textAtlas )
+ResourceHandleConstPtr      TextHelper::GetAtlasTextureInfo ( const TextAtlas * textAtlas )
 {
     assert( textAtlas );
 
     unsigned int texSize = textAtlas->GetWidth() * textAtlas->GetHeight() * 4; //FIXME: Add format to atlas
 
     TextureExtraData* atlasExtraData = new TextureExtraData( textAtlas->GetWidth(), textAtlas->GetHeight(), 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D );
-    ResourceHandle* altasHandle = new ResourceHandle( const_cast< char* >(textAtlas->GetData()), texSize, atlasExtraData );
+    auto altasHandle = ResourceHandleConstPtr( new ResourceHandle( const_cast< char* >(textAtlas->GetData()), texSize, atlasExtraData ) );
 
     return altasHandle;
 }

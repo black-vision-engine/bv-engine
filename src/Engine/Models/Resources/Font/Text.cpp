@@ -1,10 +1,13 @@
 #include "Text.h"
+#include "Engine/Models/Resources/Serialize.h"
 #include "Serialize.h"
+
 
 #include "Glyph.h"
 #include "AtlasCache.h"
 #include "System/FileIO.h"
 #include "Engine/Models/Resources/TextureHelpers.h"
+#include "Engine/Models/Resources/TextureLoader.h"
 
 #include <iostream>
 #include <fstream>
@@ -39,24 +42,16 @@ void GlyphCoords::Load( std::istream& in )
 // *********************************
 //
 TextAtlas::TextAtlas()
-    : m_width( 0 )
-    , m_height( 0 )
-    , m_glyphWidth( 0 )
+    : m_glyphWidth( 0 )
     , m_glyphHeight( 0 )
-    , m_bitsPerPixel( 0 )
-    , m_data( nullptr )
 {}
 
 // *********************************
 //
 TextAtlas::TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh )
-    : m_width( w )
-    , m_height( h )
-    , m_glyphWidth( gw )
+    : m_glyphWidth( gw )
     , m_glyphHeight( gh )
-    , m_bitsPerPixel( bitsPrePixel )
 {
-    m_data = new char[ GetSizeInBytes() ];
 }
 
 // *********************************
@@ -81,21 +76,21 @@ Text::Text( const std::wstring& text, const std::string& fontFile, unsigned int 
 //
 const char*             TextAtlas::GetData         () const
 {
-    return m_data;
+    return m_textureHandle->GetData();
 }
 
 // *********************************
 //
 char*                   TextAtlas::GetWritableData ()
 {
-    return m_data;
+    return m_textureHandle->GetWritableData();
 }
 
 // *********************************
 //
 unsigned int            TextAtlas::GetSizeInBytes  () const
 {
-    return ( m_bitsPerPixel / 8 ) * m_height * m_width;
+    return m_textureHandle->GetSize();
 }
 
 // *********************************
@@ -109,21 +104,27 @@ void                    TextAtlas::SetGlyphCoords  ( wchar_t wch, const GlyphCoo
 //
 unsigned int            TextAtlas::GetBitsPerPixel () const
 {
-    return m_bitsPerPixel;
+    assert( m_textureHandle->GetExtra()->GetResourceExtraKind() == ResourceExtraKind::RE_TEXTURE );
+    auto texExtraData = static_cast< const TextureExtraData * >( m_textureHandle->GetExtra() );
+    return texExtraData->GetBitsPerPixel();
 }
 
 // *********************************
 //
 unsigned int            TextAtlas::GetWidth        () const
 {
-    return m_width;
+    assert( m_textureHandle->GetExtra()->GetResourceExtraKind() == ResourceExtraKind::RE_TEXTURE );
+    auto texExtraData = static_cast< const TextureExtraData * >( m_textureHandle->GetExtra() );
+    return texExtraData->GetWidth();
 }
 
 // *********************************
 //
 unsigned int            TextAtlas::GetHeight       () const
 {
-    return m_height;
+    assert( m_textureHandle->GetExtra()->GetResourceExtraKind() == ResourceExtraKind::RE_TEXTURE );
+    auto texExtraData = static_cast< const TextureExtraData * >( m_textureHandle->GetExtra() );
+    return texExtraData->GetHeight();
 }
 
 // *********************************
@@ -393,9 +394,8 @@ void                Text::BuildAtlas()
 
     if ( m_blurSize > 0 )
     {
-        auto oldData = m_atlas->m_data;
-        m_atlas->m_data = TextureHelper::Blur( oldData, m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel(), m_blurSize );
-        delete [] oldData;
+        auto oldData = m_atlas->m_textureHandle;
+        m_atlas->m_textureHandle->SetData( TextureHelper::Blur( oldData->GetData(), m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel(), m_blurSize ) );
     }
 
     boost::filesystem::path fontPath( m_fontFile );

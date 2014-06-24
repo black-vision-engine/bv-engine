@@ -40,11 +40,11 @@ SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::str
 {
     m_fontResource = TextHelper::LoadFont( fontFileName, fontSize, 0 );
 
-    m_textAtlas = TextHelper::GetAtlas( m_fontResource, m_bolded, m_italic );
+    m_textAtlas = TextHelper::GetAtlas( m_fontResource.get(), m_bolded, m_italic );
 
     auto textureResource = TextHelper::GetAtlasTextureInfo( m_textAtlas );
 
-    m_textures.push_back( new TextureInfo( textureResource, "AtlasTex" ) );
+    m_textures.push_back( new TextureInfo( textureResource.get(), "AtlasTex" ) );
 
     m_vertexAttributeChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 

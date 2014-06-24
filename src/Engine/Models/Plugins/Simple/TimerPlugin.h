@@ -59,7 +59,7 @@ class TimerPlugin : public BasePlugin< IPlugin >
 
     TextureInfoVec              m_textures;
 
-    const ResourceHandle*       m_fontResource;
+    ResourceHandleConstPtr      m_fontResource;
     const TextAtlas*            m_currentAtlas;
 
     std::wstring                m_timePatern;

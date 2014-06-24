@@ -202,18 +202,15 @@ bool                            DefaultTextPlugin::LoadResource  ( IPluginResour
 
         auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ) );
 
-        m_textAtlas = TextHelper::GetAtlas( fontResource, false, false );
+        m_textAtlas = TextHelper::GetAtlas( fontResource.get(), false, false );
 
         auto textureResource = TextHelper::GetAtlasTextureInfo( m_textAtlas );
 
-        auto txInfo = new TextureInfo( textureResource, DefaultTextPluginDesc::TextureName() );
+        auto txInfo = new TextureInfo( textureResource.get(), DefaultTextPluginDesc::TextureName() );
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto txDesc = new DefaultTextureDescriptor(     m_textAtlas->GetData()
+        auto txDesc = new DefaultTextureDescriptor(     textureResource
                                                     ,   DefaultTextPluginDesc::TextureName()
-                                                    ,   m_textAtlas->GetWidth()
-                                                    ,   m_textAtlas->GetHeight()
-                                                    ,   TextureFormat::F_A8R8G8B8
                                                     ,   TextureWrappingMode::TWM_CLAMP_BORDER
                                                     ,   TextureWrappingMode::TWM_CLAMP_BORDER
                                                     ,   TextureFilteringMode::TFM_LINEAR

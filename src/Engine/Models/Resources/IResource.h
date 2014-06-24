@@ -36,7 +36,7 @@ public:
 
 class ResourceHandle
 {
-private:
+public: // Only for non intrusive serialization. Should be private
 
     unsigned int            m_size;
     char *                  m_data;
@@ -50,6 +50,12 @@ public:
     char *                      GetWritableData     () const { return m_data; }
     const IResourceExtraData *  GetExtra            () const { return m_extra; }
     void                        SetData             ( char * pData ) { m_data = pData; }
+
+    ResourceHandle()
+        : m_data( nullptr )
+        , m_size( 0 )
+        , m_extra( nullptr )
+    {}
 
     ResourceHandle( char * data, unsigned int size, IResourceExtraData * extra = nullptr )
         : m_data( data )

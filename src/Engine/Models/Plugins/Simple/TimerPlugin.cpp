@@ -126,11 +126,11 @@ TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
 
     m_fontResource = TextHelper::LoadFont( "../dep/Media/fonts/digital-7.ttf", fontSize, 0, L"../dep/Media/fonts/TimerChars.txt" );
 
-    m_currentAtlas = TextHelper::GetAtlas( m_fontResource );
+    m_currentAtlas = TextHelper::GetAtlas( m_fontResource.get() );
 
     auto textureResource = TextHelper::GetAtlasTextureInfo( m_currentAtlas );
 
-    m_textures.push_back( new TextureInfo( textureResource, "AtlasTex" ) );
+    m_textures.push_back( new TextureInfo( textureResource.get(), "AtlasTex" ) );
 
     m_vertexAttributeChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 

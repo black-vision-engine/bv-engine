@@ -24,9 +24,7 @@ void serialize( Archive & ar, bv::model::GlyphCoords& glyphCoords, const unsigne
 template< class Archive >
 void serialize( Archive & ar, bv::model::TextAtlas& textAtlas, const unsigned int version )
 {
-    ar & textAtlas.m_width;
-    ar & textAtlas.m_height;
-    ar & textAtlas.m_bitsPerPixel;
+    ar & textAtlas.m_textureHandle;
     ar & textAtlas.m_glyphsPositions;
     ar & textAtlas.m_glyphWidth;
     ar & textAtlas.m_glyphHeight;

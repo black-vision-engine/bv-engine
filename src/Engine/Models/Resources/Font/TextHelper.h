@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Resources/IResource.h"
+#include "Engine/Models/Resources/Resource.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 
 namespace bv { namespace model {
@@ -15,7 +16,7 @@ public:
     /////////////////////////////////////
     // This function loads font definition from file. Builds font atlases with the specified size.
     // Returns ResourceHandle of this font
-    static const ResourceHandle *       LoadFont            ( const std::string& fontFileName, size_t size, size_t blurSize, const std::wstring& atlasCharSetFile = SUPPROTED_CHARS_FILE );
+    static ResourceHandleConstPtr       LoadFont            ( const std::string& fontFileName, size_t size, size_t blurSize, const std::wstring& atlasCharSetFile = SUPPROTED_CHARS_FILE );
 
     /////////////////////////////////////
     // This function creates TextAtlas from specified FontReasource.
@@ -25,7 +26,7 @@ public:
     /////////////////////////////////////
     // This function creates TextureInfo from atlas specified atlas ind fontReasource.
     // Returns new TextureInfo with texture name specified in texName.
-    static const ResourceHandle *       GetAtlasTextureInfo ( const TextAtlas * textAtlas );
+    static ResourceHandleConstPtr       GetAtlasTextureInfo ( const TextAtlas * textAtlas );
 
     /////////////////////////////////////
     // This function creates empty VertexAttributeChannel for text with proper attribute descriptor. ( position, texture cord )
