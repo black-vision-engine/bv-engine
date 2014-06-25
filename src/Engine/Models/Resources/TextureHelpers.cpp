@@ -1,18 +1,19 @@
 #include "TextureHelpers.h"
 
-#include <sstream>
-#include "System/FileIO.h"
-
-#include "FreeImagePlus.h"
 #include <memory>
+#include <sstream>
 
-#include "ModelTextureManager"
+#include "System/FileIO.h"
+#include "FreeImagePlus.h"
+
+#include "Engine/Models/Resources/ModelTextureManager.h"
+
 
 namespace bv { namespace model {
 
 // *********************************
 //
-char* TextureHelper::LoadImg( const std::string& filePath, int* width, int* heigth, int* bpp, bool loadFromMemory )
+char * TextureHelper::LoadImg( const std::string & filePath, int * width, int * heigth, int * bpp, bool loadFromMemory )
 {
     auto fipImg = std::make_shared< fipImage >();
 

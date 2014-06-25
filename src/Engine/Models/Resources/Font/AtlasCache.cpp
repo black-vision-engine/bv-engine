@@ -12,7 +12,7 @@
 
 #include "Engine/Models/Resources/TextureHelpers.h"
 #include "Engine/Models/Resources/TextureLoader.h"
-#include "Engine/Models/Resources/ModelTextureManager"
+#include "Engine/Models/Resources/ModelTextureManager.h"
 
 #include "hashlibpp.h"
 
