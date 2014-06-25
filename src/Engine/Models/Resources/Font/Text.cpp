@@ -1,5 +1,9 @@
 #include "Text.h"
-#include "Engine/Models/Resources/Serialize.h"
+
+#include "boost/archive/text_oarchive.hpp"
+#include "boost/archive/text_iarchive.hpp"
+#include "boost/serialization/map.hpp"
+
 #include "Serialize.h"
 
 
@@ -52,6 +56,9 @@ TextAtlas::TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel,
     : m_glyphWidth( gw )
     , m_glyphHeight( gh )
 {
+    auto size   = w * h * bitsPrePixel;
+    char* data  = new char[ size ];
+    m_textureHandle = ResourceHandlePtr( new ResourceHandle( data, size, new TextureExtraData( w, h, bitsPrePixel, TextureFormat::F_A8R8G8B8, TextureType::T_2D ) ) );
 }
 
 // *********************************

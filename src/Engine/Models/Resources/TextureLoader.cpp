@@ -63,6 +63,12 @@ TextureType TextureExtraData::GetType     () const
     return m_type;
 }
 
+// ******************************
+//
+TextureExtraData::TextureExtraData()
+    : ResourceExtraData( ResourceExtraKind::RE_TEXTURE )
+{
+}
 
 // ******************************
 //

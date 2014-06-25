@@ -11,6 +11,8 @@
 #include "sqlite3.h"
 
 #include "Engine/Models/Resources/TextureHelpers.h"
+#include "Engine/Models/Resources/TextureLoader.h"
+#include "Engine/Models/Resources/TextureManager.h"
 
 #include "hashlibpp.h"
 
@@ -153,14 +155,10 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
     int width   = 0;
     int height  = 0;
     int bpp     = 0;
-    auto texData = TextureHelper::LoadImg( args[ 7 ], &width, &height, &bpp );
 
-    assert( texData != nullptr );
-    assert( width == out->m_textAtlas->GetWidth() );
-    assert( height == out->m_textAtlas->GetHeight() );
-    assert( bpp == out->m_textAtlas->GetBitsPerPixel() );
+    auto resHandle = TextureManager::Get().GetTexture( args[ 7 ] );
 
-    out->m_textAtlas->m_textureHandle->SetData( texData );
+    out->m_textAtlas->m_textureHandle = std::const_pointer_cast< ResourceHandle >( resHandle );
 
     return 0;
 }
