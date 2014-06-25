@@ -8,6 +8,7 @@ class DataBuffer
 {
 public:
 
+    // FIXME: consider raw depth buffers, data buffers and no DEPTHSTENCIL buffer
     enum class Semantic : int
     {
         S_STATIC,

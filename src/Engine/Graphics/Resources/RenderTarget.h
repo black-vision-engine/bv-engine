@@ -2,14 +2,12 @@
 
 #include <vector>
 
-#include "Engine/Graphics/Resources/Texture.h"
-
+#include "Engine/Graphics/Resources/Texture2D.h"
 
 namespace bv
 {
 
-class Texture2D;
-
+//FIXME: add stencil at some point
 class RenderTarget
 {
 private:
@@ -18,26 +16,29 @@ private:
 
 protected:
  
-    int         m_numTargets;
-    bool        m_hasMipmaps;
+    int             m_numTargets;
+    
+    bool            m_hasMipmaps;
+    bool            m_hasDepthBuffer;
 
-    TexturesVec m_ColorTextures;
+    TexturesVec     m_ColorTextures;
 
 public:
 
-                        RenderTarget    ( int numTargets, TextureFormat fomat, int w, int h, bool hasMipmaps );
+                        RenderTarget    ( const std::vector< TextureFormat > & formats, int w, int h, bool hasDepthBuffer, bool hasMipmaps = false );
     virtual             ~RenderTarget   ();
 
     int                 NumTargets      () const;
-    TextureFormat    Format          () const;
+    TextureFormat       Format          () const;
 
     int                 Width           () const;
     int                 Height          () const;
 
-    Texture2D *         ColorTexture    ( int i );
+    Texture2D *         ColorTexture    ( int i ) const;
 
     bool                HasMipmaps      () const;
+    bool                HasDepthBuffer  () const;
 
 };
 
-}
+} //bv

@@ -24,6 +24,13 @@ Texture::~Texture	                            ()
 
 // *********************************
 //
+DataBuffer::Semantic    Texture::GetSemantic    () const
+{
+    return m_semantic;
+}
+
+// *********************************
+//
 void                    Texture::SetChanged     ( bool changed ) const
 {
     m_changed = changed;

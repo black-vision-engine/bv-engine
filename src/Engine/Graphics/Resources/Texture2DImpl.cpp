@@ -46,24 +46,52 @@ const char *    Texture2DImpl::GetData         () const
 //
 bool            Texture2DImpl::WriteBits       ( const char * data, TextureFormat format, int width, int height )
 {
-    unsigned int newSize = GetPixelSize( format ) * width * height;
+    AllocateMemory( format, width, height );
 
     SetFormat( format );
     SetWidth( width );
     SetHeight( height );
 
-    if( GetDataSize() != newSize )
-    {
-        delete[] m_data;
-        m_data = new char[ newSize ];
-    }
-
-    memcpy( m_data, data, newSize );
-    m_dataSize = newSize;
+    memcpy( m_data, data, GetDataSize() );
 
     SetChanged( true );
 
     return true;
+}
+
+// *********************************
+//
+bool            Texture2DImpl::AllocateMemory  ( TextureFormat format, int width, int height )
+{
+    unsigned int newSize = SizeInBytes( format, width, height );
+
+    bool changed = false;
+
+    if( GetDataSize() != newSize )
+    {
+        delete[] m_data;
+        m_data = new char[ newSize ];
+    
+        changed = true;
+    }
+
+    m_dataSize = newSize;
+
+    return changed;
+}
+
+// *********************************
+//
+bool            Texture2DImpl::AllocateMemory  ()
+{
+    return AllocateMemory( m_format, GetWidth(), GetHeight() );
+}
+
+// *********************************
+//
+unsigned int    Texture2DImpl::SizeInBytes     ( TextureFormat format, int width, int height )
+{
+    return GetPixelSize( format ) * width * height;
 }
 
 } //bv

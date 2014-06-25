@@ -13,12 +13,12 @@ namespace
 
     GLuint BufferUsageGL[] =
     {
-        GL_STATIC_DRAW,     
-        GL_DYNAMIC_DRAW,    
-        GL_DYNAMIC_DRAW,    
-        GL_DYNAMIC_DRAW,    
-        GL_DYNAMIC_DRAW     
-    };
+        GL_STATIC_DRAW,     // S_STATIC,  
+        GL_DYNAMIC_DRAW,    // S_DYNAMIC
+        GL_DYNAMIC_DRAW,    // S_RENDERTARGET
+        GL_DYNAMIC_DRAW,    // S_DEPTHSTENCIL
+        GL_DYNAMIC_DRAW     // S_TEXTURE
+    };                    
 
     GLuint RenderableTypeGL[] =
     {
@@ -107,6 +107,33 @@ namespace
         GL_FILL //FSM_POLYGONS
     };
 
+    GLuint TextureFormatGL[] =
+    {
+        GL_BGRA,        // F_A8R8G8B8
+        GL_BGR,         // F_R8G8B8
+        GL_ALPHA,       // F_A8
+        GL_LUMINANCE,   // F_L8
+        GL_R32F         // F_R32F
+    };
+
+    GLuint TextureInternalFormatGL[] =
+    {
+        GL_RGBA8,       // F_A8R8G8B8
+        GL_RGB8,        // F_R8G8B8
+        GL_ALPHA8,      // F_A8
+        GL_LUMINANCE8,  // F_L8 
+        GL_R32F         // F_R32F
+    };
+
+    GLuint TextureTypeGL[] = 
+    {
+        GL_UNSIGNED_BYTE,   // F_A8R8G8B8
+        GL_UNSIGNED_BYTE,   // F_R8G8B8
+        GL_UNSIGNED_BYTE,   // F_A8
+        GL_UNSIGNED_BYTE,   // F_L8
+        GL_FLOAT            // F_R32F
+    };
+
 } //anonymous
 
 // ****************************
@@ -170,6 +197,27 @@ GLuint ConstantsMapper::GLConstant( DepthCompareMode mode )
 GLuint ConstantsMapper::GLConstant( FillStateMode mode )
 {
     return FillStateModeGL[ (int) mode ];
+}
+
+// ****************************
+//
+GLuint ConstantsMapper::GLConstantTextureFormat         ( TextureFormat fmt )
+{
+    return TextureFormatGL[ (int) fmt ];
+}
+
+// ****************************
+//
+GLuint ConstantsMapper::GLConstantTextureInternalFormat ( TextureFormat fmt )
+{
+    return TextureInternalFormatGL[ (int) fmt ];
+}
+
+// ****************************
+//
+GLuint ConstantsMapper::GLConstantTextureType           ( TextureFormat fmt )
+{
+    return TextureTypeGL[ (int) fmt ];
 }
 
 } //bv

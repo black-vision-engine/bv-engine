@@ -1,8 +1,7 @@
 #include "PdrTexture2D.h"
 
-#include "Engine/Graphics/Resources/Texture2D.h"
-
 #include <cassert>
+
 
 namespace bv
 {
@@ -26,29 +25,43 @@ PdrTexture2D::PdrTexture2D                      ( const Texture2D * texture )
 //
 void    PdrTexture2D::Initialize      ( const Texture2D * texture )
 {
+    assert( texture );
+
+    m_txFormat  = texture->GetFormat();
+
+    m_width     = texture->GetWidth();
+    m_height    = texture->GetHeight();
+
+    //FIXME: allow more texture types here
+    assert( m_txFormat == TextureFormat::F_A8R8G8B8 || m_txFormat == TextureFormat::F_R8G8B8 || m_txFormat == TextureFormat::F_A8 );
+
+    m_internalFormat    = ConstantsMapper::GLConstantTextureInternalFormat( m_txFormat );
+    m_format            = ConstantsMapper::GLConstantTextureFormat( m_txFormat );
+    m_type              = ConstantsMapper::GLConstantTextureType( m_txFormat );
+
+    auto semantic       = ConstantsMapper::GLConstant( texture->GetSemantic() );
+
     glGenBuffers( 1, &m_pboID );
     glBindBuffer( GL_PIXEL_UNPACK_BUFFER, m_pboID );
-    glBufferData( GL_PIXEL_UNPACK_BUFFER, texture->RawFrameSize(), 0, GL_DYNAMIC_DRAW );
+    glBufferData( GL_PIXEL_UNPACK_BUFFER, texture->RawFrameSize(), 0, semantic );
     glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
 
     glGenTextures   ( 1, &m_textureID );
     GLuint prevTex = Bind();
-  
-    m_width     = texture->GetWidth();
-    m_height    = texture->GetHeight();
 
-    //FIXME: allow more texture types here (not only RGBA - 8 bit per component)
-    assert( texture->GetFormat() == TextureFormat::F_A8R8G8B8 );
-    glTexImage2D    ( GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
-    glBindTexture   ( GL_TEXTURE_2D, prevTex );
+    glTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, 0 );
+    glBindTexture( GL_TEXTURE_2D, prevTex );
 }
 
 // *******************************
 //
 void    PdrTexture2D::Deinitialize    ()
 {
-    glDeleteTextures( 1, &m_textureID );
-    glDeleteBuffers( 1, &m_pboID );
+    if( m_textureID != 0 )
+        glDeleteTextures( 1, &m_textureID );
+
+    if( m_pboID != 0 )
+        glDeleteBuffers( 1, &m_pboID );
 }
 
 // *******************************
@@ -91,7 +104,7 @@ void *      PdrTexture2D::Lock              ( MemoryLockingType mlt )
     {
         glBindBuffer( GL_PIXEL_UNPACK_BUFFER, m_pboID );
         m_lockedMemoryPtr = glMapBuffer( GL_PIXEL_UNPACK_BUFFER, ConstantsMapper::GLConstant( mlt ) );
-        glBindBuffer( GL_PIXEL_UNPACK_BUFFER_ARB, 0 );
+        glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
 
         m_writeLock = mlt != MemoryLockingType::MLT_READ_ONLY;
     }
@@ -112,9 +125,7 @@ void        PdrTexture2D::Unlock            ()
         {
             GLuint prevTex = Bind();
 
-            //This call uploads data from bound currently bound PBO to currently bound texture
-            //FIXME: allow more texture types here (not only RGBA - 8 bit per component)
-            glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
+            glTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, 0 );
             glBindTexture( GL_TEXTURE_2D, prevTex );
 
             m_writeLock = false;
@@ -129,7 +140,7 @@ void        PdrTexture2D::Unlock            ()
 //
 void        PdrTexture2D::Update            ( const Texture2D * texture )
 {
-    if ( m_width != texture->GetWidth() || m_height != texture->GetHeight() )
+    if ( texture->GetFormat() != m_txFormat || m_width != texture->GetWidth() || m_height != texture->GetHeight() )
     {
         Deinitialize();
         Initialize( texture );
@@ -159,7 +170,14 @@ void        PdrTexture2D::Unbind            ()
 
 // *******************************
 //
-PdrTexture2D *   PdrTexture2D::Create            ( const Texture2D * texture )
+GLuint      PdrTexture2D::GetTextureID    () const
+{
+    return m_textureID;
+}
+
+// *******************************
+//
+PdrTexture2D *  PdrTexture2D::Create            ( const Texture2D * texture )
 {
     return new PdrTexture2D( texture );
 }

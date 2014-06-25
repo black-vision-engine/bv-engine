@@ -9,21 +9,22 @@ namespace bv {
 
 // *********************************
 //
-RenderTarget::RenderTarget ( int numTargets, TextureFormat format, int w, int h, bool hasMipmaps )
-    : m_numTargets( numTargets )
+RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, int w, int h, bool hasDepthBuffer, bool hasMipmaps )
+    : m_numTargets( formats.size() )
     , m_hasMipmaps( hasMipmaps )
+    , m_hasDepthBuffer( hasDepthBuffer )
 {
-    assert( numTargets > 0 );
+    assert( m_numTargets > 0 );
+    assert( hasMipmaps == false ); //FIXME: to be implemented
 
-    int numLevels = hasMipmaps ? 0 : 1;
-    int i = 0;
+    //int numLevels = hasMipmaps ? 0 : 1;
 
-
-    for( i = 0; i < numTargets; ++i )
+    for( int i = 0; i < m_numTargets; ++i )
     {
-        m_ColorTextures.push_back( new Texture2DImpl( format, w, h, DataBuffer::Semantic::S_RENDERTARGET ) );
+        auto tx = new Texture2DImpl( formats[ i ], w, h, DataBuffer::Semantic::S_RENDERTARGET );
+        tx->AllocateMemory();
+        m_ColorTextures.push_back( tx );    
     }
-
 }
 
 // *********************************
@@ -69,7 +70,7 @@ int RenderTarget::Height () const
 
 // *********************************
 //
-Texture2D * RenderTarget::ColorTexture ( int i )
+Texture2D * RenderTarget::ColorTexture ( int i ) const
 {
     return m_ColorTextures[ i ];
 }
@@ -81,4 +82,11 @@ bool RenderTarget::HasMipmaps () const
     return m_hasMipmaps;
 }
 
+// *********************************
+//
+bool RenderTarget::HasDepthBuffer () const
+{
+    return m_hasDepthBuffer;
 }
+
+} //bv
