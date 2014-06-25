@@ -1,4 +1,4 @@
-#include "TextureManager.h"
+#include "ModelTextureManager.h"
 
 #include "Engine/Models/Resources/TextureLoader.h"
 
@@ -33,7 +33,6 @@ ResourceHandleConstPtr          TextureManager::GetTexture      ( const std::str
         else
             return nullptr;
     }
-
 }
 
 // *******************************

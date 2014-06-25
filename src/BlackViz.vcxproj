@@ -315,7 +315,7 @@
     <ClCompile Include="Engine\Models\Resources\TextHelpers.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextureHelpers.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextureLoader.cpp" />
-    <ClCompile Include="Engine\Models\Resources\TextureManager.cpp" />
+    <ClCompile Include="Engine\Models\Resources\ModelTextureManager.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\AnimationResourceDescr.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\FontResourceDescr.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\TextureResourceDescr.cpp" />
@@ -567,7 +567,7 @@
     <ClInclude Include="Engine\Models\Resources\TextHelpers.h" />
     <ClInclude Include="Engine\Models\Resources\TextureHelpers.h" />
     <ClInclude Include="Engine\Models\Resources\TextureLoader.h" />
-    <ClInclude Include="Engine\Models\Resources\TextureManager.h" />
+    <ClInclude Include="Engine\Models\Resources\ModelTextureManager.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\AnimationResourceDescr.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\FontResourceDescr.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\TextureResourceDescr.h" />

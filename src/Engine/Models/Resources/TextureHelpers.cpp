@@ -6,7 +6,7 @@
 #include "FreeImagePlus.h"
 #include <memory>
 
-#include "TextureManager.h"
+#include "ModelTextureManager"
 
 namespace bv { namespace model {
 

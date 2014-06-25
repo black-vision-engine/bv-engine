@@ -201,7 +201,7 @@
     <ClCompile Include="Engine\Models\Timeline\SimpleIParamSet.cpp" />
     <ClCompile Include="Engine\Models\Resources\TextureHelpers.cpp" />
     <ClCompile Include="Engine\Models\BasicOverrideState.cpp" />
-    <ClCompile Include="Engine\Models\Resources\TextureManager.cpp" />
+    <ClCompile Include="Engine\Models\Resources\ModelTextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -460,8 +460,8 @@
     <ClInclude Include="Engine\Models\Interfaces\IOverrideState.h" />
     <ClInclude Include="Engine\Models\BasicOverrideState.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IFinalizePlugin.h" />
-    <ClInclude Include="Engine\Models\Resources\TextureManager.h" />
     <ClInclude Include="Engine\Models\Resources\Serialize.h" />
+    <ClInclude Include="Engine\Models\Resources\ModelTextureManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
