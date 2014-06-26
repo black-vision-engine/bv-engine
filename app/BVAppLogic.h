@@ -44,6 +44,9 @@ private:
     model::ModelScenePtr            m_modelScene;
     SceneNode *                     m_mockSceneEng;
 
+    RenderTarget *                  m_mainRenderTarget;
+    RenderTarget *                  m_tmpRenderTarget;
+
     unsigned long                   m_startTime;
 
 public:

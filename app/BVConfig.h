@@ -10,6 +10,9 @@ class BVConfig
 {
 private:
 
+    int             m_defaultWindowWidth;
+    int             m_defaultWindowHeight;
+
     int             m_defaultWidth;
     int             m_defaultHeight;
 
@@ -43,6 +46,9 @@ private:
     ~BVConfig   ();
 
 public:
+
+    inline int                  DefaultwindowWidth      () const;
+    inline int                  DefaultWindowHeight     () const;
 
     inline int                  DefaultWidth            () const;
     inline int                  DefaultHeight           () const;

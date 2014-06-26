@@ -4,6 +4,7 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
+#include "Engine/Graphics/Resources/RenderTarget.h"
 
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/BasicNode.h"
@@ -23,7 +24,6 @@
 #include "DefaultPlugins.h"
 
 //FIXME: remove
-#include "Engine\Graphics\Resources\RenderTarget.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
 #include "Engine/Models/Timeline/TimeSegmentEvalImpl.h"
 #include "testai/TestAIManager.h"
@@ -79,6 +79,8 @@ BVAppLogic::BVAppLogic              ()
     , m_modelScene( nullptr )
     , m_mockSceneEng( nullptr )
     , m_pluginsManager( nullptr )
+    , m_mainRenderTarget( nullptr )
+    , m_tmpRenderTarget( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
     , m_globalTimeline( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) )
@@ -87,6 +89,12 @@ BVAppLogic::BVAppLogic              ()
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
     GfbBuf = new char[ 2048 * 2048 * 4 ]; //FIXME: naive hack
     GTimer.StartTimer();
+
+    std::vector< TextureFormat > fmt( 1 );
+    fmt[ 0 ] = TextureFormat::F_A8R8G8B8;
+
+    m_mainRenderTarget = new RenderTarget( fmt, DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), false, false );
+    m_tmpRenderTarget = new RenderTarget( fmt, DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), true, false );
 }
 
 // *********************************
@@ -100,6 +108,9 @@ BVAppLogic::~BVAppLogic             ()
     delete m_mockSceneEng;
 
     delete[] GfbBuf;
+
+    delete m_mainRenderTarget;
+    delete m_tmpRenderTarget;
 }
 
 // *********************************

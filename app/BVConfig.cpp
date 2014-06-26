@@ -11,14 +11,17 @@ namespace bv
 //FIXME: read default values from a configuration file
 BVConfig::BVConfig                      ()
 {
-#ifdef FULLSCREEN_MODE
     m_defaultWidth      = 1920;
     m_defaultHeight     = 1080;
-    m_fullscreeMode     = true;
+
+#ifdef FULLSCREEN_MODE
+    m_fullscreeMode         = true;
+    m_defaultWindowWidth    = m_defaultWidth;
+    m_defaultWindowHeight   = m_defaultHeight;
 #else
-    m_defaultWidth      = 960;
-    m_defaultHeight     = 540;
-    m_fullscreeMode     = false;
+    m_fullscreeMode         = false;
+    m_defaultWindowWidth    = m_defaultWidth / 2;
+    m_defaultWindowHeight   = m_defaultHeight / 2;
 #endif
 
     m_fps               = 6000;

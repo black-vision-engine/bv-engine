@@ -39,7 +39,7 @@ namespace bv {
 // *********************************
 //
 BlackVisionApp::BlackVisionApp	()
-    : WindowedApplication( "BlackVision prealpha test app", 0, 0, DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.FullScreenMode() )
+    : WindowedApplication( "BlackVision prealpha test app", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.FullScreenMode() )
     , m_processManager( nullptr )
     , m_app( nullptr )
 {
