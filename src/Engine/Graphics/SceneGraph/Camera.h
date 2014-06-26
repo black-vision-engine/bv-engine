@@ -38,7 +38,7 @@ public:
     void                SetAxes                 ( const glm::vec3 & direction, const glm::vec3 & up );
     void                SetProjectionMatrix     ( const glm::mat4 & projectionMatrix );
 
-    void                SetFrustum              ( float distMin, float distMax, float vertMin, float vertMax, float horizMin, float horizMax );
+    void                SetFrustum              ( float left, float right, float bottom, float top, float near, float far );
 
     const glm::mat4 &   GetViewMatrix           () const;
     const glm::mat4 &   GetProjectionMatrix     () const;

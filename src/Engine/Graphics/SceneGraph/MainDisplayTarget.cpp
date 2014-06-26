@@ -5,6 +5,7 @@
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
 #include "Engine/Graphics/Resources/RenderTarget.h"
+#include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 
 
 namespace bv {
@@ -41,7 +42,17 @@ Camera *        MainDisplayTarget::CreateDisplayCamera          ()
 {
     auto camera = new Camera( false );
 
+    camera->SetFrustum( 0.0f, 0.1f, 0.0f, 0.1f, 0.0f, 0.1f );
+
     return camera;
+}
+
+// **************************
+//
+TriangleStrip * MainDisplayTarget::CreateDisplayRect            ()
+{
+    //FIXME: implement
+    return nullptr;
 }
 
 } //bv

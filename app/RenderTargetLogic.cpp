@@ -20,7 +20,6 @@ RenderTargetLogic::RenderTargetLogic   ( unsigned int width, unsigned int height
     m_auxRenderTarget       = MainDisplayTarget::CreateAuxRenderTarget( width, height, fmt );
 
     m_displayCamera         = MainDisplayTarget::CreateDisplayCamera();
-
 }
 
 // **************************
