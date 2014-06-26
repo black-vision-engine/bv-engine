@@ -59,8 +59,8 @@ VertexDescriptor::~VertexDescriptor ()
 
 // *********************************
 //    VertexDescriptor * vd = VertexDescriptor::Create(2,
-//        0, VertexFormat::AT_FLOAT3, VertexFormat::AS_POSITION,
-//        1, VertexFormat::AT_FLOAT2, VertexFormat::AS_TEXCOORD );
+//        0, AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION,
+//        1, AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD );
 VertexDescriptor * VertexDescriptor::Create ( unsigned int numAttrs, ... )
 {
     VertexDescriptor * vd = new VertexDescriptor( numAttrs );

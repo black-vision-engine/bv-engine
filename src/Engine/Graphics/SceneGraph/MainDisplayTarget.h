@@ -8,6 +8,8 @@ namespace bv {
 class RenderTarget;
 class TriangleStrip;
 class Camera;
+class RenderableArrayDataArraysSingleVertexBuffer;
+class RenderableEffect;
 
 // FIXME: implement additional sized rectangles (useful for rendering geometry that does not require the whole viewport - scissors like)
 class MainDisplayTarget
@@ -25,6 +27,15 @@ public:
     static  Camera *        CreateDisplayCamera         ();
 
     static  TriangleStrip * CreateDisplayRect           ();
+    static  TriangleStrip * CreateAuxRect               ();
+
+private:
+
+    static RenderableArrayDataArraysSingleVertexBuffer *    CreateTexDispRectArrayData  ();
+    static RenderableArrayDataArraysSingleVertexBuffer *    CreateTriStripArrayData     ( unsigned int numVertices, float * vbData );
+
+    static RenderableEffect *                               CreateEffectBlitTexture     ();
+    static RenderableEffect *                               CreateEffectOverrideAlpha   ();
 
 };
 

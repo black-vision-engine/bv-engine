@@ -4,8 +4,15 @@
 #include <vector>
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
-#include "Engine/Graphics/Resources/RenderTarget.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
+
+#include "Engine/Graphics/Resources/RenderTarget.h"
+#include "Engine/Graphics/Resources/VertexDescriptor.h"
+#include "Engine/Graphics/Resources/VertexBuffer.h"
+#include "Engine/Graphics/Resources/VertexArray.h"
+#include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
+
+#include "Engine/Graphics/Effects/DefaultEffect.h"
 
 
 namespace bv {
@@ -56,8 +63,67 @@ Camera *        MainDisplayTarget::CreateDisplayCamera          ()
 //
 TriangleStrip * MainDisplayTarget::CreateDisplayRect            ()
 {
+    auto rad = CreateTexDispRectArrayData();
+    auto effect = CreateEffectBlitTexture();
+
+    return new TriangleStrip( rad, effect );
+}
+
+// **************************
+//
+TriangleStrip * MainDisplayTarget::CreateAuxRect               ()
+{
+    auto rad = CreateTexDispRectArrayData();
+    auto effect = CreateEffectOverrideAlpha();
+
+    return new TriangleStrip( rad, effect );    
+}
+
+// **************************
+//
+RenderableArrayDataArraysSingleVertexBuffer * MainDisplayTarget::CreateTexDispRectArrayData  ()
+{
+    float vbData[] = { -1.f, -1.f, 0.f, 0.f, 0.f,   //V0, U0
+                        1.f, -1.f, 0.f, 1.f, 0.f,   //V1, U1
+                       -1.f,  1.f, 0.f, 0.f, 1.f,   //V2, U2
+                        1.f,  1.f, 0.f, 1.f, 1.f }; //V3, U3
+
+    return CreateTriStripArrayData( 4, vbData );
+}
+
+// **************************
+//
+RenderableArrayDataArraysSingleVertexBuffer * MainDisplayTarget::CreateTriStripArrayData( unsigned int numVertices, float * vbData )
+{
+    unsigned int vertexSize = 4 * sizeof( float ) + 2 * sizeof( float );
+
+    VertexBuffer * vb       = new VertexBuffer( 4, vertexSize, DataBuffer::Semantic::S_STATIC );
+    VertexDescriptor * vd   = VertexDescriptor::Create( 2,
+                                                        0, AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION,
+                                                        1, AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD );
+
+    memcpy( vb->Data(), vbData, numVertices * vertexSize );
+
+    VertexArraySingleVertexBuffer * vao = new VertexArraySingleVertexBuffer( vb, vd );
+    RenderableArrayDataArraysSingleVertexBuffer * rad = new RenderableArrayDataArraysSingleVertexBuffer( vao );
+
+    return rad;
+}
+
+// **************************
+//
+RenderableEffect *                            MainDisplayTarget::CreateEffectBlitTexture     ()
+{
     //FIXME: implement
-    return nullptr;
+    return new DefaultEffect( nullptr, nullptr, nullptr, nullptr );
+}
+
+// **************************
+//
+RenderableEffect *                            MainDisplayTarget::CreateEffectOverrideAlpha   ()
+{
+    //FIXME: implement
+    return new DefaultEffect( nullptr, nullptr, nullptr, nullptr );
 }
 
 } //bv
