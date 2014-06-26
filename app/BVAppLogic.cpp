@@ -77,9 +77,7 @@ BVAppLogic::BVAppLogic              ()
     , m_modelScene( nullptr )
     , m_mockSceneEng( nullptr )
     , m_pluginsManager( nullptr )
-    , m_mainRenderTarget( nullptr )
-    , m_tmpRenderTarget( nullptr )
-    , m_readbackFrameBuffer( nullptr )
+    , m_renderTargetLogic( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
     , m_globalTimeline( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) )
@@ -88,12 +86,7 @@ BVAppLogic::BVAppLogic              ()
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
     GTimer.StartTimer();
 
-    //Configure render targets
-    std::vector< TextureFormat > fmt( 1 );
-    fmt[ 0 ] = TextureFormat::F_A8R8G8B8;
-
-    m_mainRenderTarget = new RenderTarget( fmt, DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), false, false );
-    m_tmpRenderTarget = new RenderTarget( fmt, DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), true, false );
+    m_renderTargetLogic = new RenderTargetLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight() ); 
 }
 
 // *********************************
@@ -106,10 +99,7 @@ BVAppLogic::~BVAppLogic             ()
     delete m_timelineManager;
     delete m_mockSceneEng;
 
-    delete m_mainRenderTarget;
-    delete m_tmpRenderTarget;
-
-    delete m_readbackFrameBuffer;
+    delete m_renderTargetLogic;
 }
 
 // *********************************
@@ -298,7 +288,7 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
     static int nPasses = 0;
 
     double readbackStart = GTimer.CurElapsed();
-    renderer->ReadColorTexture( 0, m_mainRenderTarget, m_readbackFrameBuffer );
+    auto frame = m_renderTargetLogic->ReadDisplayTarget( renderer );
     double readbackTime = GTimer.CurElapsed() - readbackStart;
 
     totalElapsed += readbackTime;

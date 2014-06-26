@@ -28,6 +28,7 @@
     <ClCompile Include="testai\AICommands.cpp" />
     <ClCompile Include="testai\TestAIManager.cpp" />
     <ClCompile Include="Helpers\RectNodeBuilder.cpp" />
+    <ClCompile Include="RenderTargetLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
@@ -75,6 +76,7 @@
     <ClInclude Include="testai\AICommands.h" />
     <ClInclude Include="testai\TestAIManager.h" />
     <ClInclude Include="Helpers\RectNodeBuilder.h" />
+    <ClInclude Include="RenderTargetLogic.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MockFonts">

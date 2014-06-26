@@ -6,9 +6,12 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/ModelScene.h"
 
+#include "RenderTargetLogic.h"
+
 #include "Engine/Events/Events.h"
 
 #include "FrameStatsService.h"
+
 #include "BVForwards.h"
 
 #define HIDE_PROFILE_STATS
@@ -44,10 +47,7 @@ private:
     model::ModelScenePtr            m_modelScene;
     SceneNode *                     m_mockSceneEng;
 
-    RenderTarget *                  m_mainRenderTarget;
-    RenderTarget *                  m_tmpRenderTarget;
-
-    Texture2D *                     m_readbackFrameBuffer;
+    RenderTargetLogic *             m_renderTargetLogic;
 
     unsigned long                   m_startTime;
 

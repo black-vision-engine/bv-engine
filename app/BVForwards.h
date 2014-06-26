@@ -11,7 +11,5 @@ class ModelScene;
 class Renderer;
 class SceneNode;
 class Camera;
-class RenderTarget;
-class Texture2D;
 
 } //bv
