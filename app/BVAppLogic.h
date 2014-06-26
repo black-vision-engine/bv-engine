@@ -47,6 +47,8 @@ private:
     RenderTarget *                  m_mainRenderTarget;
     RenderTarget *                  m_tmpRenderTarget;
 
+    Texture2D *                     m_readbackFrameBuffer;
+
     unsigned long                   m_startTime;
 
 public:

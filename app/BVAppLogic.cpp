@@ -37,8 +37,6 @@ extern HighResolutionTimer GTimer;
 namespace
 {
     //FIXME: temporary
-    char * GfbBuf = nullptr;
-
     TransformSetEventPtr  GTransformSetEvent;
 
     void GownoWFormieKebaba( TimeType t, model::IModelNodePtr node )
@@ -81,15 +79,16 @@ BVAppLogic::BVAppLogic              ()
     , m_pluginsManager( nullptr )
     , m_mainRenderTarget( nullptr )
     , m_tmpRenderTarget( nullptr )
+    , m_readbackFrameBuffer( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
     , m_globalTimeline( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) )
 {
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
-    GfbBuf = new char[ 2048 * 2048 * 4 ]; //FIXME: naive hack
     GTimer.StartTimer();
 
+    //Configure render targets
     std::vector< TextureFormat > fmt( 1 );
     fmt[ 0 ] = TextureFormat::F_A8R8G8B8;
 
@@ -107,10 +106,10 @@ BVAppLogic::~BVAppLogic             ()
     delete m_timelineManager;
     delete m_mockSceneEng;
 
-    delete[] GfbBuf;
-
     delete m_mainRenderTarget;
     delete m_tmpRenderTarget;
+
+    delete m_readbackFrameBuffer;
 }
 
 // *********************************
@@ -299,7 +298,7 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
     static int nPasses = 0;
 
     double readbackStart = GTimer.CurElapsed();
-    renderer->NaiveReadback( GfbBuf, w, h );
+    renderer->ReadColorTexture( 0, m_mainRenderTarget, m_readbackFrameBuffer );
     double readbackTime = GTimer.CurElapsed() - readbackStart;
 
     totalElapsed += readbackTime;
