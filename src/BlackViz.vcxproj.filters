@@ -203,6 +203,7 @@
     <ClCompile Include="Engine\Models\BasicOverrideState.cpp" />
     <ClCompile Include="Engine\Models\Resources\ModelTextureManager.cpp" />
     <ClCompile Include="Engine\Graphics\SceneGraph\MainDisplayTarget.cpp" />
+    <ClCompile Include="Engine\Graphics\Effects\Texture2DEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -464,6 +465,7 @@
     <ClInclude Include="Engine\Models\Resources\Serialize.h" />
     <ClInclude Include="Engine\Models\Resources\ModelTextureManager.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\MainDisplayTarget.h" />
+    <ClInclude Include="Engine\Graphics\Effects\Texture2DEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

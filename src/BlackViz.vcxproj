@@ -199,6 +199,7 @@
     <ClCompile Include="Engine\Events\Queues\EventQueueConcurrent.cpp" />
     <ClCompile Include="Engine\Events\Queues\EventQueue.cpp" />
     <ClCompile Include="Engine\Graphics\Effects\DefaultEffect.cpp" />
+    <ClCompile Include="Engine\Graphics\Effects\Texture2DEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.cpp" />
@@ -408,6 +409,7 @@
     <ClInclude Include="Engine\Events\Queues\EventQueueConcurrent.h" />
     <ClInclude Include="Engine\Events\Queues\EventQueue.h" />
     <ClInclude Include="Engine\Graphics\Effects\DefaultEffect.h" />
+    <ClInclude Include="Engine\Graphics\Effects\Texture2DEffect.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrShader.h" />
