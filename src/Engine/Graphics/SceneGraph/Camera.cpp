@@ -9,8 +9,8 @@ namespace bv
 // *********************************
 //
 Camera::Camera( bool isPerspective )
-    : m_position( 0.f, 0.f, 1.f )
-    , m_direction( 0.f, 0.f, 0.f )
+    : m_position( 0.f, 0.f, 0.f )
+    , m_direction( 0.f, 0.f, -1.f )
     , m_up( 0.f, 1.f, 0.f )
     , m_FOV( 90.f )
     , m_nearClippingPlane( 0.1f )
@@ -33,7 +33,9 @@ void Camera::SetPerspective                         ( float fov, float aspectRat
     m_nearClippingPlane = near;
     m_farClippingPlane = far;
 
-    SetProjectionMatrix( glm::perspective( fov, aspectRatio, near, far ) );
+    auto m = glm::perspective( fov, aspectRatio, near, far );
+
+    SetProjectionMatrix( m );
 }
 
 // *********************************
@@ -93,7 +95,9 @@ void Camera::SetFrustum                             ( float left, float right, f
     }
     else
     {
-        SetProjectionMatrix( glm::ortho( left, right, bottom, top, near, far ) );
+        auto m = glm::ortho( left, right, bottom, top, near, far );
+
+        SetProjectionMatrix( m );
     }
 }
 
