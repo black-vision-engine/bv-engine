@@ -3,6 +3,7 @@
 #include <cassert>
 #include <vector>
 
+#include "Engine/Graphics/SceneGraph/Camera.h"
 #include "Engine/Graphics/Resources/RenderTarget.h"
 
 
@@ -32,6 +33,15 @@ RenderTarget *  MainDisplayTarget::CreateAuxRenderTarget        ( unsigned int w
     fmts[ 0 ] = fmt;
 
     return new RenderTarget( fmts, width, height, true, false );
+}
+
+// **************************
+//
+Camera *        MainDisplayTarget::CreateDisplayCamera          ()
+{
+    auto camera = new Camera( false );
+
+    return camera;
 }
 
 } //bv

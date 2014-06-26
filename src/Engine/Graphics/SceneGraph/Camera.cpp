@@ -8,14 +8,14 @@ namespace bv
 
 // *********************************
 //
-Camera::Camera()
+Camera::Camera( bool isPerspective )
     : m_position( 0.f, 0.f, 1.f )
     , m_direction( 0.f, 0.f, 0.f )
     , m_up( 0.f, 1.f, 0.f )
     , m_FOV( 90.f )
     , m_nearClippingPlane( 0.1f )
     , m_farClippingPlane( 100.f )
-
+    , m_isPrespactive( isPerspective )
 {
 }
 
@@ -84,6 +84,21 @@ void Camera::SetProjectionMatrix                    ( const glm::mat4 & projecti
 
 // *********************************
 //
+void Camera::SetFrustum                             ( float left, float right, float bottom, float top, float near, float far )
+{
+    if( m_isPrespactive )
+    {
+        //FIXME: implement
+        assert( false && "not implemented" );
+    }
+    else
+    {
+        SetProjectionMatrix( glm::ortho( left, right, bottom, top, near, far ) );
+    }
+}
+
+// *********************************
+//
 const glm::mat4 &   Camera::GetViewMatrix           () const
 {
     return m_view;
@@ -115,6 +130,13 @@ const glm::vec3 &   Camera::GetDirection            () const
 const glm::vec3 &   Camera::GetUp                   () const
 {
     return m_up;
+}
+
+// *********************************
+//
+bool                Camera::IsPerspective           () const
+{
+    return m_isPrespactive;
 }
 
 // *********************************

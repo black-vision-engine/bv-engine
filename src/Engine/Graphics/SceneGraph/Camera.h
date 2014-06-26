@@ -27,23 +27,29 @@ private:
 
 public:
 
-    explicit            Camera                  ();
+    explicit            Camera                  ( bool isPerspective = true );
     virtual             ~Camera                 ();
 
     void                SetPerspective          ( float fov, float aspectRatio,float near, float far );
     void                SetPerspective          ( float aspectRatio );
+
     void                SetFrame                ( const glm::vec3 & position, const glm::vec3 & direction, const glm::vec3 & up );
     void                SetPosition             ( const glm::vec3 & position );
     void                SetAxes                 ( const glm::vec3 & direction, const glm::vec3 & up );
     void                SetProjectionMatrix     ( const glm::mat4 & projectionMatrix );
 
+    void                SetFrustum              ( float distMin, float distMax, float vertMin, float vertMax, float horizMin, float horizMax );
+
     const glm::mat4 &   GetViewMatrix           () const;
     const glm::mat4 &   GetProjectionMatrix     () const;
     const glm::mat4 &   GetViewProjectionMatrix () const;
+
     const glm::vec3 &   GetPosition             () const;
     const glm::vec3 &   GetDirection            () const;
     const glm::vec3 &   GetUp                   () const;
     const glm::vec3 &   GetRight                () const;
+
+    bool                IsPerspective           () const;
 
 private:
 
