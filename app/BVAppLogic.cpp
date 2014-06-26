@@ -77,7 +77,7 @@ BVAppLogic::BVAppLogic              ()
     , m_modelScene( nullptr )
     , m_mockSceneEng( nullptr )
     , m_pluginsManager( nullptr )
-    , m_renderTargetLogic( nullptr )
+    , m_offscreenRenderLogic( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
     , m_globalTimeline( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) )
@@ -86,7 +86,7 @@ BVAppLogic::BVAppLogic              ()
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
     GTimer.StartTimer();
 
-    m_renderTargetLogic = new RenderTargetLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight() ); 
+    m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight() ); 
 }
 
 // *********************************
@@ -99,7 +99,7 @@ BVAppLogic::~BVAppLogic             ()
     delete m_timelineManager;
     delete m_mockSceneEng;
 
-    delete m_renderTargetLogic;
+    delete m_offscreenRenderLogic;
 }
 
 // *********************************
@@ -288,7 +288,7 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
     static int nPasses = 0;
 
     double readbackStart = GTimer.CurElapsed();
-    auto frame = m_renderTargetLogic->ReadDisplayTarget( renderer );
+    auto frame = m_offscreenRenderLogic->ReadDisplayTarget( renderer );
     double readbackTime = GTimer.CurElapsed() - readbackStart;
 
     totalElapsed += readbackTime;

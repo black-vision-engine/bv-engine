@@ -10,7 +10,7 @@ class Texture2D;
 class Renderer;
 class Camera;
 
-class RenderTargetLogic
+class OffscreenRenderLogic
 {
 private:
 
@@ -24,10 +24,10 @@ private:
 
 public:
 
-                        RenderTargetLogic   ( unsigned int width, unsigned int height, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
-                        ~RenderTargetLogic  ();
+                        OffscreenRenderLogic    ( unsigned int width, unsigned int height, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
+                        ~OffscreenRenderLogic   ();
 
-    const Texture2D *   ReadDisplayTarget   ( Renderer * renderer );
+    const Texture2D *   ReadDisplayTarget       ( Renderer * renderer );
 
 
 };

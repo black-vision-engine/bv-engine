@@ -6,7 +6,7 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/ModelScene.h"
 
-#include "RenderTargetLogic.h"
+#include "OffscreenRenderLogic.h"
 
 #include "Engine/Events/Events.h"
 
@@ -47,7 +47,7 @@ private:
     model::ModelScenePtr            m_modelScene;
     SceneNode *                     m_mockSceneEng;
 
-    RenderTargetLogic *             m_renderTargetLogic;
+    OffscreenRenderLogic *          m_offscreenRenderLogic;
 
     unsigned long                   m_startTime;
 

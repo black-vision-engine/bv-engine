@@ -1,4 +1,4 @@
-#include "RenderTargetLogic.h"
+#include "OffscreenRenderLogic.h"
 
 #include "Engine/Graphics/Resources/RenderTarget.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
@@ -11,7 +11,7 @@ namespace bv {
 
 // **************************
 //
-RenderTargetLogic::RenderTargetLogic   ( unsigned int width, unsigned int height, TextureFormat fmt )
+OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int height, TextureFormat fmt )
     : m_displayRenderTarget( nullptr )
     , m_auxRenderTarget( nullptr )
     , m_readbackTexture( nullptr )
@@ -24,7 +24,7 @@ RenderTargetLogic::RenderTargetLogic   ( unsigned int width, unsigned int height
 
 // **************************
 //
-RenderTargetLogic::~RenderTargetLogic  ()
+OffscreenRenderLogic::~OffscreenRenderLogic  ()
 {
     delete m_displayRenderTarget;
     delete m_auxRenderTarget;
@@ -36,7 +36,7 @@ RenderTargetLogic::~RenderTargetLogic  ()
 
 // **************************
 //
-const Texture2D *   RenderTargetLogic::ReadDisplayTarget   ( Renderer * renderer )
+const Texture2D *   OffscreenRenderLogic::ReadDisplayTarget   ( Renderer * renderer )
 {
     renderer->ReadColorTexture( 0, m_displayRenderTarget, m_readbackTexture );
 
