@@ -22,13 +22,14 @@ TextureManager::~TextureManager()
 //
 ResourceHandleConstPtr          TextureManager::GetTexture      ( const std::string& path )
 {
-    auto it = this->m_textures.find( path );
+    auto absPath = boost::filesystem::absolute( path ).string();
+    auto it = this->m_textures.find( absPath );
 
     if( it != this->m_textures.end() )
         return it->second;
     else
     {
-        if( auto newTexture = this->LoadTexture( path ) )
+        if( auto newTexture = this->LoadTexture( absPath ) )
             return newTexture;
         else
             return nullptr;
