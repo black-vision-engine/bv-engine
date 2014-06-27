@@ -28,4 +28,4 @@ void                RenderableEffect::AddPass   ( RenderablePass * pass )
     m_passes.push_back( pass );
 }
 
-}
+} //bv

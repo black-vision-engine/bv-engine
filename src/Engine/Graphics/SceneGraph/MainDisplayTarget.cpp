@@ -83,10 +83,12 @@ TriangleStrip * MainDisplayTarget::CreateAuxRect               ( Texture2D * tex
 //
 RenderableArrayDataArraysSingleVertexBuffer * MainDisplayTarget::CreateTexDispRectArrayData  ()
 {
-    float vbData[] = { -1.f, -1.f, 0.f, 0.f, 0.f,   //V0, U0
-                        1.f, -1.f, 0.f, 1.f, 0.f,   //V1, U1
-                       -1.f,  1.f, 0.f, 0.f, 1.f,   //V2, U2
-                        1.f,  1.f, 0.f, 1.f, 1.f }; //V3, U3
+    float z = 0.0f;
+
+    float vbData[] = { -1.f, -1.f, z, 0.f, 0.f,   //V0, U0
+                        1.f, -1.f, z, 1.f, 0.f,   //V1, U1
+                       -1.f,  1.f, z, 0.f, 1.f,   //V2, U2
+                        1.f,  1.f, z, 1.f, 1.f }; //V3, U3
 
     return CreateTriStripArrayData( 4, vbData );
 }
@@ -105,6 +107,8 @@ RenderableArrayDataArraysSingleVertexBuffer * MainDisplayTarget::CreateTriStripA
     memcpy( vb->Data(), vbData, numVertices * vertexSize );
 
     VertexArraySingleVertexBuffer * vao = new VertexArraySingleVertexBuffer( vb, vd );
+    vao->AddCCEntry( 4 );
+
     RenderableArrayDataArraysSingleVertexBuffer * rad = new RenderableArrayDataArraysSingleVertexBuffer( vao );
 
     return rad;

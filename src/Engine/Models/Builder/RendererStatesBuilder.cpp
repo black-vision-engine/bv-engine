@@ -58,6 +58,33 @@ FillState *     RendererStatesBuilder::CreateStateFromCtx( const model::FillCont
     return FromCtx< FillState >( fc );
 }
 
+// *********************************
+//
+AlphaState *    RendererStatesBuilder::CreateDefaultAlphaState  ()
+{
+    return new AlphaState();
+}
+
+// *********************************
+//
+CullState *     RendererStatesBuilder::CreateDefaultCullState   ()
+{
+    return new CullState();
+}
+
+// *********************************
+//
+DepthState *    RendererStatesBuilder::CreateDefaultDepthState  ()
+{
+    return new DepthState();
+}
+
+// *********************************
+//
+FillState *     RendererStatesBuilder::CreateDefaultFillState   ()
+{
+    return new FillState();
+}
 
 // *********************************
 //
@@ -74,6 +101,16 @@ void RendererStatesBuilder::Create( RendererStateInstance * inst, model::Rendere
 
     if ( ctx->fillCtx )
         inst->SetState( CreateStateFromCtx( ctx->fillCtx ) );
+
+    //FIXME: skipping offset and stencil states for now
+}
+
+void RendererStatesBuilder::Create  ( RendererStateInstance * inst )
+{
+    inst->SetState( CreateDefaultAlphaState() );
+    inst->SetState( CreateDefaultCullState() );
+    inst->SetState( CreateDefaultDepthState() );
+    inst->SetState( CreateDefaultFillState() );
 
     //FIXME: skipping offset and stencil states for now
 }

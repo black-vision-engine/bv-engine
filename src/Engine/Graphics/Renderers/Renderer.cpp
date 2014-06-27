@@ -65,7 +65,7 @@ void	Renderer::Initialize	    ( int w, int h, TextureFormat colorFormat )
 
 // *********************************
 //
-void	Renderer::SetCamera         (Camera* cam)
+void	Renderer::SetCamera         ( Camera * cam )
 {
     m_Camera = cam;
 }

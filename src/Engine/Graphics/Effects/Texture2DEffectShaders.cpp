@@ -7,7 +7,7 @@ namespace {
 
 // *********************************
 //
-std::string ps_alpha    = " #version 400 \n \
+std::string ps_no_alpha = " #version 400 \n \
                                 \n \
                                 layout (location = 0) out vec4 FragColor; \n \
                                 \n \
@@ -24,7 +24,7 @@ std::string ps_alpha    = " #version 400 \n \
 
 // *********************************
 //
-std::string ps_no_alpha = " #version 400 \n \
+std::string ps_alpha    = " #version 400 \n \
                                 \n \
                                 layout (location = 0) out vec4 FragColor; \n \
                                 \n \

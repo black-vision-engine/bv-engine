@@ -33,11 +33,18 @@ private:
     static DepthState *    CreateStateFromCtx( const model::DepthContext * dc );
     static FillState *     CreateStateFromCtx( const model::FillContext * fc );
 
+    static AlphaState *    CreateDefaultAlphaState  ();
+    static CullState *     CreateDefaultCullState   ();
+    static DepthState *    CreateDefaultDepthState  ();
+    static FillState *     CreateDefaultFillState   ();
+
     //FIXME: offset state and stencil state are skipped for now
 
 public:
 
+
     static void Create  ( RendererStateInstance * inst, model::RendererContextConstPtr ctx ); 
+    static void Create  ( RendererStateInstance * inst );
 
     static void Assign  ( AlphaState * as, const model::AlphaContext * ac );
     static void Assign  ( CullState * cs, const model::CullContext * cc );

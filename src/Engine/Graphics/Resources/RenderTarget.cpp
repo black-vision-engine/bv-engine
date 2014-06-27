@@ -23,6 +23,7 @@ RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, int w
     {
         auto tx = new Texture2DImpl( formats[ i ], w, h, DataBuffer::Semantic::S_RENDERTARGET );
         tx->AllocateMemory();
+        tx->SetChanged( false );
         m_ColorTextures.push_back( tx );    
     }
 }

@@ -8,6 +8,8 @@
 
 #include "Engine/Models/Plugins/EngineConstantsMapper.h"
 
+#include "Engine/Models/Builder/RendererStatesBuilder.h"
+
 
 namespace bv {
 
@@ -20,6 +22,17 @@ Texture2DEffect::Texture2DEffect    ( Texture2D * texture, bool hasAlpha, Textur
     auto vs = CreateVS();
 
     RenderablePass * pass = new RenderablePass( ps, vs, nullptr );
+    auto sinst = pass->GetStateInstance();
+
+    RendererStatesBuilder::Create( sinst );
+
+    auto as = RenderStateAccessor::AccessAlphaState( sinst );
+    auto ds = RenderStateAccessor::AccessDepthState( sinst );
+    auto cs = RenderStateAccessor::AccessCullState( sinst );
+
+    as->blendEnabled = true;
+    ds->enabled = false;
+    cs->enabled = false;
 
     AddPass( pass );
 }
