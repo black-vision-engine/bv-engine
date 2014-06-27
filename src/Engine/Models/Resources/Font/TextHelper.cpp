@@ -136,8 +136,8 @@ ResourceHandleConstPtr      TextHelper::GetAtlasTextureInfo ( const TextAtlas * 
     return altasHandle;
 }
 
-#define viewWidth   100
-#define viewHeight  100
+#define viewWidth   (1080 / 2)
+#define viewHeight  (1080 / 2)
 
 // *********************************
 //
