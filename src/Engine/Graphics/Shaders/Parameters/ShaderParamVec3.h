@@ -16,6 +16,8 @@ public:
                             ShaderParamVec3     ( const std::string & name, const ValueVec3 * value );
                             ~ShaderParamVec3    ();
 
+    void                    SetModelValue       ( const ValueVec3 * value );
+
     virtual const void *    GetValuePtr         () const override;
 
 };

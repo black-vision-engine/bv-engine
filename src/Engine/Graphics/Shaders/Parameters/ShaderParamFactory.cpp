@@ -55,6 +55,34 @@ GenericShaderParam *    ShaderParamFactory::CreateGenericParameter  ( const IVal
 
 // ********************************
 //
+GenericShaderParam *     CreateGenericParameter  ( const std::string & name, ParamType paramType )
+{
+    switch( paramType )
+    {
+        case ParamType::PT_FLOAT1:
+            return new ShaderParamFloat( name, nullptr );
+        case ParamType::PT_FLOAT2:
+            return new ShaderParamVec2( name, nullptr );
+        case ParamType::PT_FLOAT3:
+            return new ShaderParamVec3( name, nullptr );
+        case ParamType::PT_FLOAT4:
+            return new ShaderParamVec4( name, nullptr );
+        case ParamType::PT_MAT2:
+            return new ShaderParamMat2( name, nullptr );
+        case ParamType::PT_MAT3:
+            return new ShaderParamMat3( name, nullptr );
+        case ParamType::PT_MAT4:
+            return new ShaderParamMat4( name, nullptr );
+    
+        default:
+            assert( false );
+    }
+
+    return nullptr;
+}
+
+// ********************************
+//
 GenericShaderParam *     ShaderParamFactory::CreateMVPParameter      ()
 {
     return new ShaderParamMVP( "MVP" );

@@ -16,6 +16,8 @@ public:
                             ShaderParamMat3     ( const std::string & name, const ValueMat3 * value );
                             ~ShaderParamMat3    ();
 
+    void                    SetModelValue       ( const ValueMat3 * value );
+
     virtual const void *    GetValuePtr         () const override;
 
 };

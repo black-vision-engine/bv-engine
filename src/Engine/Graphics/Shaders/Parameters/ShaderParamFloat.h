@@ -16,6 +16,8 @@ public:
                             ShaderParamFloat    ( const std::string & name, const ValueFloat * value );
                             ~ShaderParamFloat   ();
 
+    void                    SetModelValue       ( const ValueFloat * value );
+
     virtual const void *    GetValuePtr         () const override;
 
 };

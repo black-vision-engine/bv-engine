@@ -11,13 +11,19 @@ ShaderParamFloat::ShaderParamFloat              ( const std::string & name, cons
     : GenericShaderParam( ShaderParamTypeTraits< ValueFloat::ValueType >::paramType, name )
     , m_valModel( value )
 {
-    assert( value != nullptr );
 }
 
 // ****************************
 //
 ShaderParamFloat::~ShaderParamFloat             ()
 {
+}
+
+// ****************************
+//
+void            ShaderParamFloat::SetModelValue ( const ValueFloat * value )
+{
+    m_valModel = value;
 }
 
 // ****************************

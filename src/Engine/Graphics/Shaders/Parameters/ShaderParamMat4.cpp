@@ -11,13 +11,19 @@ ShaderParamMat4::ShaderParamMat4                ( const std::string & name, cons
     : GenericShaderParam( ShaderParamTypeTraits< ValueMat4::ValueType >::paramType, name )
     , m_valModel( value )
 {
-    assert( value != nullptr );
 }
 
 // ****************************
 //
 ShaderParamMat4::~ShaderParamMat4               ()
 {
+}
+
+// ****************************
+//
+void            ShaderParamMat4::SetModelValue  ( const ValueMat4 * value )
+{
+    m_valModel = value;
 }
 
 // ****************************

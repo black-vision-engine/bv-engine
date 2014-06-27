@@ -11,13 +11,19 @@ ShaderParamVec3::ShaderParamVec3                ( const std::string & name, cons
     : GenericShaderParam( ShaderParamTypeTraits< ValueVec4::ValueType >::paramType, name )
     , m_valModel( value )
 {
-    assert( value != nullptr );
 }
 
 // ****************************
 //
 ShaderParamVec3::~ShaderParamVec3               ()
 {
+}
+
+// ****************************
+//
+void            ShaderParamVec3::SetModelValue  ( const ValueVec3 * value )
+{
+    m_valModel = value;
 }
 
 // ****************************
