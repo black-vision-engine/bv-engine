@@ -139,6 +139,7 @@ void BVAppLogic::InitCamera         ( Renderer * renderer, int w, int h )
     cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
     cam->SetPerspective(DefaultConfig.FOV(), float( w ) / float( h ), DefaultConfig.NearClippingPlane(), DefaultConfig.FarClippingPlane() );
 
+    m_offscreenRenderLogic->SetRendererCamera( cam );
     //FIXME: read from configuration file and change appropriately when resoultion changes
 }
 
@@ -418,6 +419,9 @@ void BVAppLogic::RenderScene     ( Renderer * renderer )
     m_offscreenRenderLogic->EnableDisplayRenderTarget( renderer );
     RenderNode( renderer, m_mockSceneEng );
     m_offscreenRenderLogic->DisableDisplayRenderTarget( renderer );
+
+    m_offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
+
     renderer->PostDraw();
 }
 

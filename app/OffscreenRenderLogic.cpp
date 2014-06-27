@@ -6,15 +6,19 @@
 #include "Engine/Graphics/SceneGraph/MainDisplayTarget.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
+#include "Engine/Graphics/SceneGraph/TriangleStrip.h"
+
 
 namespace bv {
 
 // **************************
 //
-OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int height, TextureFormat fmt )
+OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int height, Camera * camera, TextureFormat fmt )
     : m_displayRenderTarget( nullptr )
     , m_auxRenderTarget( nullptr )
     , m_readbackTexture( nullptr )
+    , m_displayCamera( nullptr )
+    , m_rendererCamera( camera )
     , m_displayQuad( nullptr )
     , m_auxQuad( nullptr )
     , m_displayRTEnabled( false )
@@ -25,6 +29,12 @@ OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int 
 
     m_displayQuad           = MainDisplayTarget::CreateDisplayRect( m_displayRenderTarget->ColorTexture( 0 ) );
     m_auxQuad               = MainDisplayTarget::CreateDisplayRect( m_auxRenderTarget->ColorTexture( 0 ) );
+
+    std::vector< bv::Transform > vec;
+    vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
+
+    m_displayQuad->SetWorldTransforms( vec );
+    m_auxQuad->SetWorldTransforms( vec );
 
     m_displayCamera         = MainDisplayTarget::CreateDisplayCamera();
 }
@@ -43,6 +53,13 @@ OffscreenRenderLogic::~OffscreenRenderLogic  ()
 
 // **************************
 //
+void                OffscreenRenderLogic::SetRendererCamera           ( Camera * camera )
+{
+    m_rendererCamera = camera;
+}
+
+// **************************
+//
 void                OffscreenRenderLogic::EnableDisplayRenderTarget   ( Renderer * renderer )
 {
     if( !m_displayRTEnabled )
@@ -53,6 +70,9 @@ void                OffscreenRenderLogic::EnableDisplayRenderTarget   ( Renderer
         }
 
         renderer->Enable( m_displayRenderTarget );
+        renderer->ClearBuffers(); //FIXME: set clear color if necessary
+
+        m_displayRTEnabled = true;
     }
 }
 
@@ -68,6 +88,9 @@ void                OffscreenRenderLogic::EnableAuxRenderTarget       ( Renderer
         }
 
         renderer->Enable( m_auxRenderTarget );
+        renderer->ClearBuffers(); //FIXME: set clear color if necessary
+
+        m_auxRTEnabled = true;
     }
 }
 
@@ -87,6 +110,18 @@ void                OffscreenRenderLogic::DisableAuxRenderTarget      ( Renderer
     m_auxRTEnabled = false;
 
     renderer->Disable( m_auxRenderTarget );
+}
+
+// **************************
+//
+void                OffscreenRenderLogic::DrawDisplayRenderTarget     ( Renderer * renderer )
+{
+    assert( m_auxRTEnabled == false );
+    assert( m_displayRTEnabled == false );
+
+    renderer->SetCamera( m_displayCamera );
+    renderer->Draw( m_displayQuad );
+    renderer->SetCamera( m_rendererCamera );
 }
 
 // **************************
