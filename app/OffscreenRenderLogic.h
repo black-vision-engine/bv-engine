@@ -9,6 +9,7 @@ class RenderTarget;
 class Texture2D;
 class Renderer;
 class Camera;
+class TriangleStrip;
 
 class OffscreenRenderLogic
 {
@@ -16,6 +17,9 @@ private:
 
     RenderTarget *  m_displayRenderTarget;
     RenderTarget *  m_auxRenderTarget;
+    
+    TriangleStrip * m_displayQuad;
+    TriangleStrip * m_auxQuad;
 
     Texture2D *     m_readbackTexture;
 

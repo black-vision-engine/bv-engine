@@ -12,7 +12,7 @@
 #include "Engine/Graphics/Resources/VertexArray.h"
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 
-#include "Engine/Graphics/Effects/DefaultEffect.h"
+#include "Engine/Graphics/Effects/Texture2DEffect.h"
 
 
 namespace bv {
@@ -61,20 +61,20 @@ Camera *        MainDisplayTarget::CreateDisplayCamera          ()
 
 // **************************
 //
-TriangleStrip * MainDisplayTarget::CreateDisplayRect            ()
+TriangleStrip * MainDisplayTarget::CreateDisplayRect            ( Texture2D * texture )
 {
     auto rad = CreateTexDispRectArrayData();
-    auto effect = CreateEffectBlitTexture();
+    auto effect = CreateEffectBlitTexture( texture );
 
     return new TriangleStrip( rad, effect );
 }
 
 // **************************
 //
-TriangleStrip * MainDisplayTarget::CreateAuxRect               ()
+TriangleStrip * MainDisplayTarget::CreateAuxRect               ( Texture2D * texture )
 {
     auto rad = CreateTexDispRectArrayData();
-    auto effect = CreateEffectOverrideAlpha();
+    auto effect = CreateEffectOverrideAlpha( texture );
 
     return new TriangleStrip( rad, effect );    
 }
@@ -112,18 +112,16 @@ RenderableArrayDataArraysSingleVertexBuffer * MainDisplayTarget::CreateTriStripA
 
 // **************************
 //
-RenderableEffect *                            MainDisplayTarget::CreateEffectBlitTexture     ()
+Texture2DEffect *   MainDisplayTarget::CreateEffectBlitTexture     ( Texture2D * texture )
 {
-    //FIXME: implement
-    return new DefaultEffect( nullptr, nullptr, nullptr, nullptr );
+    return new Texture2DEffect( texture );
 }
 
 // **************************
 //
-RenderableEffect *                            MainDisplayTarget::CreateEffectOverrideAlpha   ()
+Texture2DEffect *   MainDisplayTarget::CreateEffectOverrideAlpha   ( Texture2D * texture )
 {
-    //FIXME: implement
-    return new DefaultEffect( nullptr, nullptr, nullptr, nullptr );
+    return new Texture2DEffect( texture, true );
 }
 
 } //bv

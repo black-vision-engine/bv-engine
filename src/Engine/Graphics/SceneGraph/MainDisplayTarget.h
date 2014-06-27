@@ -9,7 +9,8 @@ class RenderTarget;
 class TriangleStrip;
 class Camera;
 class RenderableArrayDataArraysSingleVertexBuffer;
-class RenderableEffect;
+class Texture2DEffect;
+class Texture2D;
 
 // FIXME: implement additional sized rectangles (useful for rendering geometry that does not require the whole viewport - scissors like)
 class MainDisplayTarget
@@ -26,16 +27,16 @@ public:
 
     static  Camera *        CreateDisplayCamera         ();
 
-    static  TriangleStrip * CreateDisplayRect           ();
-    static  TriangleStrip * CreateAuxRect               ();
+    static  TriangleStrip * CreateDisplayRect           ( Texture2D * texture );
+    static  TriangleStrip * CreateAuxRect               ( Texture2D * texture );
 
 private:
 
     static RenderableArrayDataArraysSingleVertexBuffer *    CreateTexDispRectArrayData  ();
     static RenderableArrayDataArraysSingleVertexBuffer *    CreateTriStripArrayData     ( unsigned int numVertices, float * vbData );
 
-    static RenderableEffect *                               CreateEffectBlitTexture     ();
-    static RenderableEffect *                               CreateEffectOverrideAlpha   ();
+    static Texture2DEffect *                                CreateEffectBlitTexture     ( Texture2D * texture );
+    static Texture2DEffect *                                CreateEffectOverrideAlpha   ( Texture2D * texture );
 
 };
 

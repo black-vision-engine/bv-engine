@@ -7,7 +7,7 @@
 #include "Engine/Models/Interfaces/ITextureDescriptor.h"
 #include "Engine/Models/Interfaces/IAnimationDescriptor.h"
 
-#include "Engine/Models/Plugins/ConstantsMapper.h"
+#include "Engine/Models/Plugins/EngineConstantsMapper.h"
 
 #include "Engine/Graphics/Resources/Texture2DImpl.h"
 #include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
@@ -205,10 +205,10 @@ ShaderParameters *      DefaultEffect::CreateDefaultParamsImpl ( const IShaderDa
 //
 TextureSampler *        DefaultEffect::CreateSampler   ( const ITextureParams * txParams, unsigned int samplerNum ) const
 {
-    auto wrapX          = ConstantsMapper::EngineConstant( txParams->GetWrappingModeX() );
-    auto wrapY          = ConstantsMapper::EngineConstant( txParams->GetWrappingModeY() );            
+    auto wrapX          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeX() );
+    auto wrapY          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeY() );            
     auto samplingMode   = SamplerSamplingMode::SSM_MODE_2D; //FIXME: only 2D textures right now
-    auto filteringMode  = ConstantsMapper::EngineConstant( txParams->GetFilteringMode() );
+    auto filteringMode  = EngineConstantsMapper::EngineConstant( txParams->GetFilteringMode() );
     auto borderColor    = txParams->BorderColor();
 
     SamplerWrappingMode wrappingMode[] = { wrapX, wrapY, SamplerWrappingMode::SWM_REPEAT };

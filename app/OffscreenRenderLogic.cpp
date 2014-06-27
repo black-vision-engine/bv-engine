@@ -15,9 +15,14 @@ OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int 
     : m_displayRenderTarget( nullptr )
     , m_auxRenderTarget( nullptr )
     , m_readbackTexture( nullptr )
+    , m_displayQuad( nullptr )
+    , m_auxQuad( nullptr )
 {
     m_displayRenderTarget   = MainDisplayTarget::CreateDisplayRenderTarget( width, height, fmt );
     m_auxRenderTarget       = MainDisplayTarget::CreateAuxRenderTarget( width, height, fmt );
+
+    m_displayQuad           = MainDisplayTarget::CreateDisplayRect( m_displayRenderTarget->ColorTexture( 0 ) );
+    m_auxQuad               = MainDisplayTarget::CreateDisplayRect( m_auxRenderTarget->ColorTexture( 0 ) );
 
     m_displayCamera         = MainDisplayTarget::CreateDisplayCamera();
 }

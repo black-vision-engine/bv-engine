@@ -245,7 +245,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\ConstantsMapper.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\EngineConstantsMapper.cpp" />
     <ClCompile Include="Engine\Models\ModelScene.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\ChannelsFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.cpp" />
@@ -470,7 +470,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.h" />
-    <ClInclude Include="Engine\Models\Plugins\ConstantsMapper.h" />
+    <ClInclude Include="Engine\Models\Plugins\EngineConstantsMapper.h" />
     <ClInclude Include="Engine\Models\ModelScene.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\ChannelsFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\GeometryShader\ExtrudeGeometryShaderChannel.h" />

@@ -9,7 +9,6 @@
 #include "Engine/Models/Plugins/Interfaces/IFinalizePlugin.h"
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
-#include "Engine/Models/Plugins/ConstantsMapper.h"
 
 #include "Engine/Models/Updaters/SequenceAnimationUpdater.h"
 #include "Engine/Models/Updaters/NodeUpdater.h"

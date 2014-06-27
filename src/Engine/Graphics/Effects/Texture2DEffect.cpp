@@ -1,16 +1,22 @@
 #include "Texture2DEffect.h"
 
-#include "Engine/Graphics/Shaders/Parameters/ShaderParameters.h"
+#include "Engine/Interfaces/IValue.h"
+
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
+
+#include "Engine/Graphics/Effects/Texture2DEffectShaders.h"
+
+#include "Engine/Models/Plugins/EngineConstantsMapper.h"
 
 
 namespace bv {
 
 // ****************************
 //
-Texture2DEffect::Texture2DEffect     ( Texture2D * texture, bool hasAlpha )
+Texture2DEffect::Texture2DEffect    ( Texture2D * texture, bool hasAlpha, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor )
+    : m_alphaParam( nullptr )
 {
-    auto ps = CreatePS( texture, hasAlpha );
+    auto ps = CreatePS( texture, filteringMode, wrapModeX, wrapModeY, borderColor, hasAlpha );
     auto vs = CreateVS();
 
     RenderablePass * pass = new RenderablePass( ps, vs, nullptr );
@@ -30,26 +36,70 @@ Texture2DEffect::~Texture2DEffect    ()
 
 // ****************************
 //
-PixelShader *   Texture2DEffect::CreatePS    ( Texture2D * texture, bool hasAlpha ) const
+void    Texture2DEffect::SetAlphaValModel   ( const IValue * val )
 {
-    auto sp = new ShaderParameters();
-
-    if( hasAlpha )
+    if( m_alphaParam )
     {
-        GenericShaderParam * param = ShaderParamFactory::CreateGenericParameter( "alpha", ParamType::PT_FLOAT1 );
-        assert( param != nullptr );
+        auto value = QueryTypedValue< ValueFloat >( val );
+        assert( value != nullptr );
 
-        sp->AddParameter( param );
+        m_alphaParam->SetModelValue( value );
     }
-
-    return nullptr;
 }
 
 // ****************************
 //
-VertexShader *  Texture2DEffect::CreateVS    () const
+PixelShader *   Texture2DEffect::CreatePS   ( Texture2D * texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor, bool hasAlpha )
 {
-    return nullptr;
+    assert( texture != nullptr );
+
+    auto params = new ShaderParameters();
+    params->AddTexture( texture );
+
+    if( hasAlpha )
+    {
+        m_alphaParam = static_cast< ShaderParamFloat * >( ShaderParamFactory::CreateGenericParameter( GetTexture2DEffectAlphaParamName(), ParamType::PT_FLOAT1 ) );
+        assert( m_alphaParam != nullptr );
+
+        params->AddParameter( m_alphaParam );
+    }
+
+    auto shader = new PixelShader( GetTexture2DEffectPixelShaderSource( hasAlpha ), params );
+    auto sampler = CreateSampler( filteringMode, wrapModeX, wrapModeY, borderColor );
+
+    shader->AddTextureSampler( sampler );
+
+    return shader;
+}
+
+// ****************************
+//
+VertexShader *  Texture2DEffect::CreateVS   ()
+{
+    auto params     = new ShaderParameters();
+    auto mvpParam   = ShaderParamFactory::CreateMVPParameter();
+
+    params->AddParameter( mvpParam );
+
+    auto shader = new VertexShader( GetTexture2DEffectVertexShaderSource(), params );
+
+    return shader;
+}
+
+// ****************************
+//
+TextureSampler *    Texture2DEffect::CreateSampler   ( TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor )
+{
+    auto wrapX          = EngineConstantsMapper::EngineConstant( wrapModeX );
+    auto wrapY          = EngineConstantsMapper::EngineConstant( wrapModeY );            
+    auto samplingMode   = SamplerSamplingMode::SSM_MODE_2D;
+    auto sfm            = EngineConstantsMapper::EngineConstant( filteringMode );
+
+    SamplerWrappingMode wrappingMode[] = { wrapX, wrapY, SamplerWrappingMode::SWM_REPEAT };
+
+    auto sampler = new TextureSampler( 0, GetTexture2DEffectTextureSamplerName(), samplingMode, sfm, wrappingMode, borderColor ); 
+
+    return sampler;
 }
 
 } //bv

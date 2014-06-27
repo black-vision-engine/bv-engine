@@ -55,7 +55,7 @@ GenericShaderParam *    ShaderParamFactory::CreateGenericParameter  ( const IVal
 
 // ********************************
 //
-GenericShaderParam *     CreateGenericParameter  ( const std::string & name, ParamType paramType )
+GenericShaderParam *    ShaderParamFactory::CreateGenericParameter  ( const std::string & name, ParamType paramType )
 {
     switch( paramType )
     {

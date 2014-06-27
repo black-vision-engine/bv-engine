@@ -6,7 +6,7 @@
 
 namespace bv {
 
-struct ConstantsMapper
+struct EngineConstantsMapper
 {
     static SamplerWrappingMode              EngineConstant( TextureWrappingMode textureMappingMode );
     static SamplerFilteringMode             EngineConstant( TextureFilteringMode textureFilteringMode );

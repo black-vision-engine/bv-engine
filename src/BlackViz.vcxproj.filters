@@ -122,7 +122,6 @@
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleTransformPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\SimpleVertexShaderPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\TextureInfo.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\ConstantsMapper.cpp" />
     <ClCompile Include="Engine\Processes\Process.cpp" />
     <ClCompile Include="Engine\Processes\ProcessManager.cpp" />
     <ClCompile Include="Engine\Processes\ProcessThreaded.cpp" />
@@ -205,6 +204,7 @@
     <ClCompile Include="Engine\Graphics\SceneGraph\MainDisplayTarget.cpp" />
     <ClCompile Include="Engine\Graphics\Effects\Texture2DEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Effects\Texture2DEffectShaders.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\EngineConstantsMapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -354,7 +354,6 @@
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleTransformPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\SimpleVertexShaderPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\TextureInfo.h" />
-    <ClInclude Include="Engine\Models\Plugins\ConstantsMapper.h" />
     <ClInclude Include="Engine\Processes\Process.h" />
     <ClInclude Include="Engine\Processes\ProcessManager.h" />
     <ClInclude Include="Engine\Processes\ProcessThreaded.h" />
@@ -468,6 +467,7 @@
     <ClInclude Include="Engine\Graphics\SceneGraph\MainDisplayTarget.h" />
     <ClInclude Include="Engine\Graphics\Effects\Texture2DEffect.h" />
     <ClInclude Include="Engine\Graphics\Effects\Texture2DEffectShaders.h" />
+    <ClInclude Include="Engine\Models\Plugins\EngineConstantsMapper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
