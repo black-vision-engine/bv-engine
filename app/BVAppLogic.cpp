@@ -137,7 +137,7 @@ void BVAppLogic::InitCamera         ( Renderer * renderer, int w, int h )
     renderer->SetCamera( cam );
 
     cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
-    cam->SetPerspective( 90.f, float( w ) / float( h ), DefaultConfig.NearClippingPlane(), DefaultConfig.FarClippingPlane() );
+    cam->SetPerspective(DefaultConfig.FOV(), float( w ) / float( h ), DefaultConfig.NearClippingPlane(), DefaultConfig.FarClippingPlane() );
 
     //FIXME: read from configuration file and change appropriately when resoultion changes
 }
