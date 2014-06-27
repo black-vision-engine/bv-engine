@@ -10,6 +10,8 @@ class Texture2D;
 class Renderer;
 class Camera;
 class TriangleStrip;
+class Rednerer;
+
 
 class OffscreenRenderLogic
 {
@@ -25,13 +27,21 @@ private:
 
     Camera *        m_displayCamera;
 
+    bool            m_displayRTEnabled;
+    bool            m_auxRTEnabled;
 
 public:
 
-                        OffscreenRenderLogic    ( unsigned int width, unsigned int height, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
-                        ~OffscreenRenderLogic   ();
+                        OffscreenRenderLogic        ( unsigned int width, unsigned int height, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
+                        ~OffscreenRenderLogic       ();
 
-    const Texture2D *   ReadDisplayTarget       ( Renderer * renderer );
+    void                EnableDisplayRenderTarget   ( Renderer * renderer );
+    void                EnableAuxRenderTarget       ( Renderer * renderer );
+
+    void                DisableDisplayRenderTarget  ( Renderer * renderer );
+    void                DisableAuxRenderTarget      ( Renderer * renderer );
+
+    const Texture2D *   ReadDisplayTarget           ( Renderer * renderer );
 
 
 };
