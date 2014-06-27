@@ -7,6 +7,8 @@
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 #include "Engine/Models/Interfaces/IOverrideState.h"
 
+#include "BVAppLogic.h"
+
 
 namespace bv {
 
@@ -369,5 +371,34 @@ bool        AICommandDisableAlpha::TriggerImpl  ( TimeType t )
 
     return false;
 }
+
+// ************************************************************ AICommandReloadScene  ************************************************************
+
+// *********************************
+//
+AICommandReloadScene::AICommandReloadScene        ( BVAppLogic * logic, TimeType triggerTime )
+    : AICommandBase( triggerTime, "RELOAD SCENE" )
+    , m_logic( logic )
+{}
+
+// *********************************
+//
+AICommandReloadScene::~AICommandReloadScene       ()
+{}
+
+// *********************************
+//
+void        AICommandReloadScene::SetTimeline                 ( model::DefaultTimelinePtr timeline )
+{
+}
+
+// *********************************
+//
+bool        AICommandReloadScene::TriggerImpl                 ( TimeType t )
+{
+    m_logic->ReloadScene();
+    return true;
+}
+
 
 } //bv

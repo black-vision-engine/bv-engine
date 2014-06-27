@@ -5,6 +5,8 @@
 #include "testai/TestAI.h"
 #include "testai/AICommands.h"
 
+#include "BVAppLogic.h"
+
 #include "Engine/Models/Timeline/Dynamic/DefaultTimeline.h"
 
 #include "Engine/Models/Timeline/Dynamic/TimelineEventLoop.h"
@@ -50,6 +52,19 @@ unsigned int    TestAIManager::NumAIPresets () const
     return m_presets.size();
 }
 
+TestAI *        TestAIManager::GetAIPreset         ( unsigned int idx, BVAppLogic * logic )
+{
+    assert( idx == 4 );
+
+    if( m_presets[ idx ] == nullptr )
+    {
+        m_presets[ idx ] = PreparePreset( idx, logic );
+    }
+
+    return m_presets[ idx ];
+
+}
+
 // *********************************
 //
 TestAI *        TestAIManager::GetAIPreset  ( unsigned int idx, model::IModelNodePtr node )
@@ -86,6 +101,16 @@ TestAI *        TestAIManager::PreparePreset    ( unsigned int idx, model::IMode
     else if( idx == 3 )
     {
         return PreparePreset3( node );
+    }
+
+    return nullptr;
+}
+
+TestAI *        TestAIManager::PreparePreset    ( unsigned int idx, BVAppLogic * logic ) const
+{
+    if( idx == 4 )
+    {
+        return PreparePreset4( logic );
     }
 
     return nullptr;
@@ -205,9 +230,21 @@ TestAI *        TestAIManager::PreparePreset3   ( model::IModelNodePtr node ) co
 
 // *********************************
 //
-TestAI *        TestAIManager::PreparePreset4   () const
-{
-    return nullptr;
+TestAI *        TestAIManager::PreparePreset4   ( BVAppLogic * logic ) const
+{    
+    auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 1", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ) );
+
+    TestAI * ai = new TestAI( timeline, nullptr );
+
+    auto c0 = new AICommandReloadScene( logic, 7.f );
+    auto c1 = new AICommandReloadScene( logic, 16.65f );
+    auto c2 = new AICommandReloadScene( logic, 24.f );
+
+    ai->AddCommand( c0 );
+    ai->AddCommand( c1 );
+    ai->AddCommand( c2 );
+
+    return ai;
 }
 
 // *********************************

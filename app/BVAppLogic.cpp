@@ -39,14 +39,15 @@ namespace
     //FIXME: temporary
     TransformSetEventPtr  GTransformSetEvent;
 
-    void GownoWFormieKebaba( TimeType t, model::IModelNodePtr node )
+    void GownoWFormieKebaba( TimeType t, BVAppLogic * logic )
     {
         //DETERMINSTIC TIME INTERVALS
         //static TimeType tt = TimeType( 0.0 );
         //tt += TimeType( 0.001 );
 
         //TEST AI
-        static auto ai = TestAIManager::Instance().GetAIPreset( 3, node );
+        //static auto ai = TestAIManager::Instance().GetAIPreset( 3, logic->GetModelScene()->GetSceneRoot() );
+        static auto ai = TestAIManager::Instance().GetAIPreset( 4, logic );
         ai->EvalAt( t );
 
         //PRE GOWNO
@@ -190,7 +191,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
         //float t = float(frame) * 0.1f; ///10 fps
 
         TimeType t = TimeType( millis ) * TimeType( 0.001 );
-        GownoWFormieKebaba( t, this->m_modelScene->GetSceneRoot() );
+        GownoWFormieKebaba( t, this );
 
         {
             FRAME_STATS_SECTION( "Update" );
@@ -350,6 +351,22 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
 const FrameStatsCalculator &     BVAppLogic::FrameStats () const
 {
     return m_statsCalculator;
+}
+
+// *********************************
+//
+void                            BVAppLogic::ResetScene      ()
+{
+    m_modelScene = nullptr;
+    delete m_mockSceneEng;
+}
+
+// *********************************
+//
+void                            BVAppLogic::ReloadScene     ()
+{
+    ResetScene();
+    LoadScene();
 }
 
 // *********************************

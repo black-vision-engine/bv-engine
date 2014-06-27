@@ -11,6 +11,7 @@ ShaderParamVec4::ShaderParamVec4                ( const std::string & name, cons
     : GenericShaderParam( ShaderParamTypeTraits< ValueVec4::ValueType >::paramType, name )
     , m_valModel( value )
 {
+    assert( value != nullptr );
 }
 
 // ****************************
