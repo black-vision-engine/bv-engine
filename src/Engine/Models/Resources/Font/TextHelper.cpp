@@ -141,13 +141,13 @@ ResourceHandleConstPtr      TextHelper::GetAtlasTextureInfo ( const TextAtlas * 
 
 // *********************************
 //
-void                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, const std::wstring& textPatern, bool bolded, bool italic )
+void                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, const std::wstring& textPatern )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
 
     glm::vec3 translate(0.f);
-    glm::vec3 interspace( 0.07f, 0.f ,0.f );
+    glm::vec3 interspace( spacing, 0.f ,0.f );
     glm::vec3 newLineTranslation( 0.f );
 
     float blurTexSize = float( blurSize );

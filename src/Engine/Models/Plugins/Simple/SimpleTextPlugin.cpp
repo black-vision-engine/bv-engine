@@ -48,7 +48,7 @@ SimpleTextPlugin::SimpleTextPlugin    ( const std::wstring& text, const std::str
 
     m_vertexAttributeChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
-    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_textAtlas, m_text, 0 );
+    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_textAtlas, m_text, 0, 0.f );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &SimpleTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
@@ -132,7 +132,7 @@ void                SimpleTextPlugin::SetText                     ( const std::w
 
     m_vertexAttributeChannel->ClearConnectedComponent();
 
-    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_textAtlas, m_text, 0 );
+    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_textAtlas, m_text, 0, 0.f );
 }
 
 } // model

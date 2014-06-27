@@ -269,7 +269,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
     //node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( localTimeline );
 
-    success = model::LoadTexture( node->GetPlugin( "texture" ), "ascii_arial_atlas.png" );
+    //success = model::LoadTexture( node->GetPlugin( "texture" ), "ascii_arial_atlas.png" );
+    success = model::LoadTexture( node->GetPlugin( "texture" ), "test.bmp" );
     assert( success );
 
     auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( node->GetPlugin( "texture" ) );
@@ -353,11 +354,13 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     auto plugin = node->GetPlugin( "transform" );
     auto param = plugin->GetParameter( "simple_transform" );
 
-    SetParameterTranslation( param, 0, 0.0f, glm::vec3( -12.f, 0.f, 0.f ) );
+    SetParameterTranslation( param, 0, 0.0f, glm::vec3( -1.f, 0.f, 0.f ) );
 
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 60.f );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
+
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.05f );
 
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/courbi.ttf" );
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/cour.ttf" );
@@ -405,9 +408,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextWithShadowNode(   model::Time
 
     SetParameter( sp, TimeType( 0.0 ), glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ) );
 
-    auto st = -shadowTranslation;
-    st.z += 0.001f;
-    SetParameterTranslation( param, 0, 0.0f, st );
+    //auto st = -shadowTranslation;
+    //st.z += 0.001f;
+    //SetParameterTranslation( param, 0, 0.0f, st );
 
     shadowNode->AddChild( node );
     shadowNode->AddChild( tx );

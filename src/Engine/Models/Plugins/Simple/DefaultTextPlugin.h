@@ -62,6 +62,7 @@ private:
 
     ParamFloatPtr                   m_fontSizeParam;
     ParamFloatPtr                   m_blurSizeParam;
+    ParamFloatPtr                   m_spacingParam;
 
 public:
 

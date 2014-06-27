@@ -134,7 +134,7 @@ TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
 
     m_vertexAttributeChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
-    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_currentAtlas,L"0000:00:00:000000", 0, m_timePatern );
+    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_currentAtlas,L"0000:00:00:000000", 0, 0.f, m_timePatern );
 }
 
 ////////////////////////////

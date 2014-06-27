@@ -47,18 +47,21 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
 
     //Create all parameters and evaluators
-    SimpleVec4EvaluatorPtr      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
-    SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
-    SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-    SimpleFloatEvaluatorPtr     fontSizeEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
+    SimpleVec4EvaluatorPtr      borderColorEvaluator    = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
+    SimpleFloatEvaluatorPtr     alphaEvaluator          = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
+    SimpleTransformEvaluatorPtr trTxEvaluator           = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
+    SimpleFloatEvaluatorPtr     fontSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
 
-    SimpleFloatEvaluatorPtr     blurSizeEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
+    SimpleFloatEvaluatorPtr     blurSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
+
+    SimpleFloatEvaluatorPtr     spacingEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "spacing", timeEvaluator );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
     psModel->RegisterAll( borderColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
     plModel->RegisterAll( blurSizeEvaluator );
+    plModel->RegisterAll( spacingEvaluator );
     plModel->RegisterAll( fontSizeEvaluator );
 
     //Set models structure
@@ -68,6 +71,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     //Set default values of all parameters
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+    blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
@@ -180,6 +184,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
 
     m_fontSizeParam = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
     m_blurSizeParam = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
+    m_spacingParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
 }
 
 // *************************************
@@ -286,7 +291,9 @@ void DefaultTextPlugin::InitAttributesChannel( IPluginConstPtr prev )
 {
     m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ) );
+
+
+    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate() );
 }
 
 // *************************************
@@ -320,7 +327,7 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
     m_vaChannel->ClearConnectedComponent();
 
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ) );
+    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate() );
 }
 
 bool            SetTextPluginContent( IPluginPtr textPlugin, const std::wstring& text )
