@@ -11,6 +11,8 @@
 
 namespace bv {
 
+class BVAppLogic;
+
 // ************************************
 class AICommandBase : public IAICommand
 {
@@ -196,6 +198,27 @@ public:
 
                         AICommandDisableAlpha       ( model::IModelNodePtr root, const std::string & node, TimeType triggerTime );
                         ~AICommandDisableAlpha      ();
+
+    virtual void        SetTimeline                 ( model::DefaultTimelinePtr timeline ) override;
+
+protected:
+
+    virtual bool        TriggerImpl                 ( TimeType t ) override;
+
+};
+
+// ************************************
+class AICommandReloadScene : public AICommandBase
+{
+private:
+
+    TimeType                m_eventTime;
+    BVAppLogic *            m_logic;
+
+public:
+
+                        AICommandReloadScene        ( BVAppLogic *, TimeType triggerTime );
+                        ~AICommandReloadScene       ();
 
     virtual void        SetTimeline                 ( model::DefaultTimelinePtr timeline ) override;
 

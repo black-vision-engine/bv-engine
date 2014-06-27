@@ -77,6 +77,9 @@ public:
 
     const FrameStatsCalculator &     FrameStats () const;
 
+    void            ResetScene      ();
+    void            ReloadScene     ();
+
 private:
 
     void            RenderScene     ( Renderer * renderer );

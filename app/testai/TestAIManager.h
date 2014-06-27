@@ -8,6 +8,7 @@
 namespace bv {
 
 class TestAI;
+class BVAppLogic;
 
 namespace model {
 class DefaultTimeline;
@@ -31,17 +32,21 @@ public:
     unsigned int    NumAIPresets        () const;
 
     TestAI *        GetAIPreset         ( unsigned int idx, model::IModelNodePtr node = nullptr );
+    TestAI *        GetAIPreset         ( unsigned int idx, BVAppLogic * logic );
+
 
 private:
 
     TestAI *        PreparePreset       ( unsigned int idx, model::IModelNodePtr node = nullptr ) const;
+    TestAI *        PreparePreset       ( unsigned int idx, BVAppLogic * logic ) const;
     
     TestAI *        PreparePreset0      () const;
     TestAI *        PreparePreset1      () const;
     TestAI *        PreparePreset2      () const;
     TestAI *        PreparePreset3      ( model::IModelNodePtr node ) const;
-    TestAI *        PreparePreset4      () const;
+    TestAI *        PreparePreset4      ( BVAppLogic* logic ) const;
     TestAI *        PreparePreset5      () const;
+
 
 public:
 
