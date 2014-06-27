@@ -46,6 +46,9 @@ public:
     static int          Read        ( char* out, const std::string & fileName );
     static int          Write       ( std::istream & in, const std::string & fileName );
     static int          Size        ( const std::string & fileName );
+    static std::string  GetAbsolutPath( const std::string & fileName );
+    static std::string  GetDirName  ( const std::string& path );
+    static bool         CreateDir   ( const std::string& path );
 
     friend class FileImpl;
 };

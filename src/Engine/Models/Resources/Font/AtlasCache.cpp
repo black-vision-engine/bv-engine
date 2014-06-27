@@ -1,10 +1,10 @@
 #include "AtlasCache.h"
 
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/path.hpp>
+#include "System/FileIO.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <cassert>
 
 #include "Text.h"
 
@@ -64,7 +64,7 @@ FontAtlasCache::FontAtlasCache()
 //
 FontAtlasCache*     FontAtlasCache::Load            ( const std::string& filePath )
 {
-    if( boost::filesystem::exists( filePath ) )
+    if( File::Exists( filePath ) )
     {
         return new FontAtlasCache( filePath );
     }
@@ -73,11 +73,10 @@ FontAtlasCache*     FontAtlasCache::Load            ( const std::string& filePat
         std::cout << "File does not exist: " << filePath << std::endl;
         std::cout << "Creating new atlas cache file: " << filePath << std::endl;
 
-        boost::filesystem::path p(filePath);
-        auto dir = p.parent_path().string();
+        auto dir = File::GetDirName( filePath );
 
-        if( (! boost::filesystem::exists( dir ) ) && ( ! dir.empty() ) )
-            boost::filesystem::create_directory( dir );
+        if( (! File::Exists( dir ) ) && ( ! dir.empty() ) )
+            File::CreateDir( dir );
 
         std::ofstream file;
         file.open( filePath.c_str() );
@@ -241,8 +240,8 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
         + "\'" + fontAtlasTextureFileName + "\'" + ")";
 
 
-    if( ! boost::filesystem::exists( CACHE_DIRECTORY ) )
-        boost::filesystem::create_directory( CACHE_DIRECTORY );
+    if( ! File::Exists( CACHE_DIRECTORY ) )
+        File::CreateDir( CACHE_DIRECTORY );
 
     TextureHelper::WriteBMP( fontAtlasTextureFileName, data.m_textAtlas->GetData(), data.m_textAtlas->GetWidth(), data.m_textAtlas->GetHeight(), data.m_textAtlas->GetBitsPerPixel() );
 

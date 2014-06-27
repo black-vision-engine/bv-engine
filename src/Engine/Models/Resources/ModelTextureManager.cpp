@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Resources/TextureLoader.h"
 
-#include "boost/filesystem.hpp"
+#include "System/FileIO.h"
 
 namespace bv { namespace model {
 
@@ -22,7 +22,7 @@ TextureManager::~TextureManager()
 //
 ResourceHandleConstPtr          TextureManager::GetTexture      ( const std::string& path )
 {
-    auto absPath = boost::filesystem::absolute( path ).string();
+    auto absPath = File::GetAbsolutPath( path );
     auto it = this->m_textures.find( absPath );
 
     if( it != this->m_textures.end() )
@@ -67,7 +67,7 @@ TextureManager&                 TextureManager::Get             ()
 //
 ResourceHandleConstPtr          TextureManager::LoadTexture     (  const std::string& path )
 {
-    auto absPath = boost::filesystem::absolute( path ).string();
+    auto absPath = File::GetAbsolutPath( path );
 
     auto it = this->m_textures.find( absPath );
 

@@ -4,6 +4,9 @@
 
 #include <fstream>
 
+#include "boost/filesystem/path.hpp"
+#include "boost/filesystem.hpp"
+
 
 namespace bv
 {
@@ -306,5 +309,28 @@ int         File::Write       ( std::istream & in, const std::string & fileName 
 {
     return FileImpl::Write( in, fileName );
 }
+
+// *******************************
+//
+std::string  File::GetAbsolutPath( const std::string & fileName )
+{
+    return boost::filesystem::absolute( fileName ).string();
+}
+
+// *******************************
+//
+std::string  File::GetDirName  ( const std::string& path )
+{
+    boost::filesystem::path p( path );
+    return p.parent_path().string();
+}
+
+// *******************************
+//
+bool         File::CreateDir   ( const std::string& path )
+{
+    return boost::filesystem::create_directory( path );
+}
+
 
 } //bv

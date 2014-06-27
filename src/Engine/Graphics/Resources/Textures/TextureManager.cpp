@@ -1,8 +1,6 @@
 #include "TextureManager.h"
 
 #include <iostream>
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
 
 #include "Engine/Graphics/Resources/Texture2DImpl.h"
 #include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
@@ -10,8 +8,7 @@
 #include "Engine/Models/Resources/Resource.h"
 #include "Engine/Models/Resources/TextureLoader.h"
 
-
-using namespace boost::filesystem;
+#include <cassert>
 
 namespace bv
 {
