@@ -462,7 +462,6 @@
     <ClInclude Include="Engine\Models\Interfaces\IOverrideState.h" />
     <ClInclude Include="Engine\Models\BasicOverrideState.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IFinalizePlugin.h" />
-    <ClInclude Include="Engine\Models\Resources\Serialize.h" />
     <ClInclude Include="Engine\Models\Resources\ModelTextureManager.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\MainDisplayTarget.h" />
     <ClInclude Include="Engine\Graphics\Effects\Texture2DEffect.h" />

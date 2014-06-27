@@ -569,7 +569,6 @@
     <ClInclude Include="Engine\Models\Resources\IResourceLoader.h" />
     <ClInclude Include="Engine\Models\Resources\Resource.h" />
     <ClInclude Include="Engine\Models\Resources\ResourceLoader.h" />
-    <ClInclude Include="Engine\Models\Resources\Serialize.h" />
     <ClInclude Include="Engine\Models\Resources\TextHelpers.h" />
     <ClInclude Include="Engine\Models\Resources\TextureHelpers.h" />
     <ClInclude Include="Engine\Models\Resources\TextureLoader.h" />
