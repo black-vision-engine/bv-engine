@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Engine/Models/Interfaces/IAnimationDescriptor.h"
+#include "Engine/Models/Resources/IResource.h"
 
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureParams.h"
 
@@ -13,7 +14,7 @@ class DefaultAnimationDescriptor : public IAnimationDescriptor
 {
 private:
 
-    std::vector< char * >       m_frames;
+    std::vector< ResourceHandleConstPtr >       m_frames;
     mutable std::vector< bool > m_frameBiteChanged;
 
     DefaultTextureParams        m_params;
@@ -46,8 +47,8 @@ public:
     virtual TextureFilteringMode    GetFilteringMode    () const override;
     virtual glm::vec4               BorderColor         () const override;
 
-    void                            SetBits             ( unsigned int idx, const char * data, TextureFormat fmt, unsigned int w, unsigned int h );
-    void                            AddBits             ( const char * data, TextureFormat fmt, unsigned int w, unsigned int h );
+    void                            SetBits             ( unsigned int idx, ResourceHandleConstPtr handle );
+    void                            AddBits             ( ResourceHandleConstPtr handle );
 
     void                            SetBitsChanged      ( unsigned int frameNum, bool bitsChanged ) const;
     void                            SetCurrentFrame     ( unsigned int frameNum );
@@ -65,7 +66,7 @@ public:
 
 private:
 
-    static unsigned int                 LoadFrame       ( const std::string & frame, TextureFormat * fmt, unsigned int * w, unsigned int * h, const char ** ppData );
+    static ResourceHandleConstPtr   LoadFrame       ( const std::string & frame );
 
 };
 
