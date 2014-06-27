@@ -10,6 +10,13 @@ class TextAtlas;
 
 #define SUPPROTED_CHARS_FILE L"../dep/Media/fonts/SupportedChars.txt"
 
+enum class TextAlignmentType
+{
+    Left    = 0 ,
+    Center      ,
+    Right
+};
+
 class TextHelper
 {
 public:
@@ -34,7 +41,7 @@ public:
 
     /////////////////////////////////////
     // This function builds VertexAttributeChannel for text and fontResource.
-    static void                         BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, const std::wstring& textPatern = std::wstring() );
+    static void                         BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, const std::wstring& textPatern = std::wstring() );
 };
 
 

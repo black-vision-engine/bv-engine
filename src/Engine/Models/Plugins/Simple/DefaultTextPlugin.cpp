@@ -9,7 +9,6 @@
 
 #include "Engine/Models/Resources/IPluginResourceDescr.h"
 
-#include "Engine/Models/Resources/Font/TextHelper.h"
 #include "Engine/Models/Resources/Font/FontLoader.h"
 #include "Engine/Models/Resources/Font/Text.h"
 
@@ -55,6 +54,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     SimpleFloatEvaluatorPtr     blurSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
 
     SimpleFloatEvaluatorPtr     spacingEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "spacing", timeEvaluator );
+    SimpleFloatEvaluatorPtr     alignmentEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alignment", timeEvaluator );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
@@ -62,6 +62,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     psModel->RegisterAll( alphaEvaluator );
     plModel->RegisterAll( blurSizeEvaluator );
     plModel->RegisterAll( spacingEvaluator );
+    plModel->RegisterAll( alignmentEvaluator );
     plModel->RegisterAll( fontSizeEvaluator );
 
     //Set models structure
@@ -72,7 +73,8 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     //Set default values of all parameters
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+    spacingEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+    alignmentEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
     fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
@@ -185,6 +187,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     m_fontSizeParam = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
     m_blurSizeParam = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
     m_spacingParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
+    m_alignmentParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
 }
 
 // *************************************
@@ -285,15 +288,28 @@ void                                DefaultTextPlugin::Update                   
     m_psc->PostUpdate();    
 }
 
+namespace {
+// *************************************
+// FIXME: implement int parameters and bool parameters
+template< typename EnumClassType >
+inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
+{
+    int val = int( param->Evaluate() );
+
+    return EnumClassType( val );
+}
+
+} //anonymous
+
 // *************************************
 //
 void DefaultTextPlugin::InitAttributesChannel( IPluginConstPtr prev )
 {
     m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
+    auto alignType =  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
-
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate() );
+    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType );
 }
 
 // *************************************
@@ -327,7 +343,9 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
     m_vaChannel->ClearConnectedComponent();
 
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate() );
+    auto alignType =  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
+
+    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType );
 }
 
 bool            SetTextPluginContent( IPluginPtr textPlugin, const std::wstring& text )

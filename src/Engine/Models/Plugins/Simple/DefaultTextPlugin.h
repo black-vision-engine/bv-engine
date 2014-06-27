@@ -12,7 +12,7 @@
 #include "Engine/Models/Plugins/Plugin.h"
 
 #include "Engine/Events/BaseEvent.h"
-
+#include "Engine/Models/Resources/Font/TextHelper.h"
 
 namespace bv { namespace model {
 
@@ -63,6 +63,7 @@ private:
     ParamFloatPtr                   m_fontSizeParam;
     ParamFloatPtr                   m_blurSizeParam;
     ParamFloatPtr                   m_spacingParam;
+    ParamFloatPtr                   m_alignmentParam;
 
 public:
 

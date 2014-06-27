@@ -141,7 +141,7 @@ ResourceHandleConstPtr      TextHelper::GetAtlasTextureInfo ( const TextAtlas * 
 
 // *********************************
 //
-void                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, const std::wstring& textPatern )
+void                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, const std::wstring& textPatern )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
@@ -270,6 +270,34 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
             assert( !( "Cannot find glyph for char " + wch) );
         }
     }
+
+    auto alignmentTranslation = 0.f;
+    switch (tat)
+    {
+        case TextAlignmentType::Center:
+            alignmentTranslation = -translate.x / 2.f;
+            break;
+        case TextAlignmentType::Right:
+            alignmentTranslation = -translate.x;
+            break;
+
+    }
+    
+
+    if( tat != TextAlignmentType::Left )
+    {
+        for( auto cc : vertexAttributeChannel->GetComponents() )
+        {
+            auto& verts = std::static_pointer_cast< Float3AttributeChannel >( cc->GetAttributeChannels()[ 0 ] )->GetVertices();
+
+            for ( auto& v : verts )
+            {
+                v.x += alignmentTranslation;
+            }
+        }
+
+    }
+
 
     if( vertexAttributeChannel->GetComponents().empty() ) // FIXME: We add one empty CC because of bug #72174842
     {
