@@ -415,7 +415,9 @@ void BVAppLogic::RenderScene     ( Renderer * renderer )
 
     //REGULAR - NO RENDER TARGETS
     renderer->PreDraw();
+    m_offscreenRenderLogic->EnableDisplayRenderTarget( renderer );
     RenderNode( renderer, m_mockSceneEng );
+    m_offscreenRenderLogic->DisableDisplayRenderTarget( renderer );
     renderer->PostDraw();
 }
 
