@@ -250,7 +250,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 3.0 ) );
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );
@@ -265,12 +265,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
     SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
 
+    node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( localTimeline );
 
-
-    //node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( localTimeline );
-
-    //success = model::LoadTexture( node->GetPlugin( "texture" ), "ascii_arial_atlas.png" );
-    success = model::LoadTexture( node->GetPlugin( "texture" ), "test.bmp" );
+    success = model::LoadTexture( node->GetPlugin( "texture" ), "simless_00.jpg" );
+    //success = model::LoadTexture( node->GetPlugin( "texture" ), "test.bmp" );
     assert( success );
 
     auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( node->GetPlugin( "texture" ) );

@@ -46,9 +46,9 @@ namespace
         //tt += TimeType( 0.001 );
 
         //TEST AI
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 3, logic->GetModelScene()->GetSceneRoot() );
+        static auto ai = TestAIManager::Instance().GetAIPreset( 2, logic->GetModelScene()->GetSceneRoot() );
         //static auto ai = TestAIManager::Instance().GetAIPreset( 4, logic );
-        //ai->EvalAt( t );
+        ai->EvalAt( t );
 
         //PRE GOWNO
         float tx = float( sin( t ) );
@@ -374,48 +374,8 @@ void                            BVAppLogic::ReloadScene     ()
 //
 void BVAppLogic::RenderScene     ( Renderer * renderer )
 {
-    //COMMENTED OUT - using render target example 1. default (FASTER: 143 FPS) - czytanie z render bufora glownego daje 131 FPS u mnie, wiec gole czytanie z PBO (tekstura render targetu) jest nieco szybsze
-        /*
-        static std::vector< TextureFormat > fmts( 1 );
-        fmts[ 0 ] = TextureFormat::F_A8R8G8B8;
-        static RenderTarget * rt = new RenderTarget( fmts, 1920, 1080, false, false );
-        static Texture2D * fill = nullptr;
-
-        renderer->PreDraw();
-        renderer->Enable( rt );
-
-        RenderNode( renderer, m_mockSceneEng );
-
-        renderer->Disable( rt );
-
-        renderer->ReadColorTexture( 0, rt, fill ); //odczyt calej ramki
-
-        renderer->PostDraw();
-        */
-    //COMMENTED OUT - using render target example 2. separate key and fill (SLOW: 75 fps) - nie oplaca sie rozbijac, lepiej czytac od razu rgba i potem cos z tym robic
-        /*
-        static std::vector< TextureFormat > fmts( 2 );
-        fmts[ 0 ] = TextureFormat::F_R8G8B8;
-        fmts[ 1 ] = TextureFormat::F_A8;
-        static RenderTarget * rt = new RenderTarget( fmts, 1920, 1080, false, false );
-        static Texture2D * fill = nullptr;
-        static Texture2D * key = nullptr;
-
-        renderer->PreDraw();
-        renderer->Enable( rt );
-
-        RenderNode( renderer, m_mockSceneEng );
-        
-        renderer->Disable( rt );
-
-        renderer->ReadColorTexture( 0, rt, fill ); //odczyt fill
-        renderer->ReadColorTexture( 1, rt, key );  //odczyt key
-
-        renderer->PostDraw();
-        */
-
-    //REGULAR - NO RENDER TARGETS
     renderer->PreDraw();
+
     m_offscreenRenderLogic->EnableDisplayRenderTarget( renderer );
     RenderNode( renderer, m_mockSceneEng );
     m_offscreenRenderLogic->DisableDisplayRenderTarget( renderer );

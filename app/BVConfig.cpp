@@ -1,7 +1,7 @@
 #include "BVConfig.h"
 
-//#define USE_READBACK_API
-#define FULLSCREEN_MODE
+#define USE_READBACK_API
+//#define FULLSCREEN_MODE
 
 
 namespace bv
@@ -20,8 +20,8 @@ BVConfig::BVConfig                      ()
     m_defaultWindowHeight   = m_defaultHeight;
 #else
     m_fullscreeMode         = false;
-    m_defaultWindowWidth    = m_defaultWidth / 2;
-    m_defaultWindowHeight   = m_defaultHeight / 2;
+    m_defaultWindowWidth    = m_defaultWidth / 3;
+    m_defaultWindowHeight   = m_defaultHeight / 3;
 #endif
 
     m_fps               = 6000;

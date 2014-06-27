@@ -84,11 +84,12 @@ TriangleStrip * MainDisplayTarget::CreateAuxRect               ( Texture2D * tex
 RenderableArrayDataArraysSingleVertexBuffer * MainDisplayTarget::CreateTexDispRectArrayData  ()
 {
     float z = 0.0f;
+    float d = 1.0f;
 
-    float vbData[] = { -1.f, -1.f, z, 0.f, 0.f,   //V0, U0
-                        1.f, -1.f, z, 1.f, 0.f,   //V1, U1
-                       -1.f,  1.f, z, 0.f, 1.f,   //V2, U2
-                        1.f,  1.f, z, 1.f, 1.f }; //V3, U3
+    float vbData[] = { -d, -d, z, 0.f, 0.f,   //V0, U0
+                        d, -d, z, 1.f, 0.f,   //V1, U1
+                       -d,  d, z, 0.f, 1.f,   //V2, U2
+                        d,  d, z, 1.f, 1.f }; //V3, U3
 
     return CreateTriStripArrayData( 4, vbData );
 }
