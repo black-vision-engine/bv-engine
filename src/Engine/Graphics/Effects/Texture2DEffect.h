@@ -11,12 +11,12 @@ class Texture2DEffect : public RenderableEffect
 {
 public:
 
-    Texture2DEffect     ( Texture2D * texture );
+    Texture2DEffect     ( Texture2D * texture, bool hasAlpha = false );
     ~Texture2DEffect    ();
 
 private:
 
-    PixelShader *   CreatePS    () const;
+    PixelShader *   CreatePS    ( Texture2D * texture, bool hasAlpha ) const;
     VertexShader *  CreateVS    () const;
 
 };

@@ -204,6 +204,7 @@
     <ClCompile Include="Engine\Models\Resources\ModelTextureManager.cpp" />
     <ClCompile Include="Engine\Graphics\SceneGraph\MainDisplayTarget.cpp" />
     <ClCompile Include="Engine\Graphics\Effects\Texture2DEffect.cpp" />
+    <ClCompile Include="Engine\Graphics\Effects\Texture2DEffectShaders.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -466,6 +467,7 @@
     <ClInclude Include="Engine\Models\Resources\ModelTextureManager.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\MainDisplayTarget.h" />
     <ClInclude Include="Engine\Graphics\Effects\Texture2DEffect.h" />
+    <ClInclude Include="Engine\Graphics\Effects\Texture2DEffectShaders.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

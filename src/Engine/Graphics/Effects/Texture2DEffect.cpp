@@ -1,16 +1,19 @@
 #include "Texture2DEffect.h"
 
+#include "Engine/Graphics/Shaders/Parameters/ShaderParameters.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
+
+
 namespace bv {
 
 // ****************************
 //
-Texture2DEffect::Texture2DEffect     ( Texture2D * texture )
+Texture2DEffect::Texture2DEffect     ( Texture2D * texture, bool hasAlpha )
 {
-    auto ps = nullptr;
-    auto vs = nullptr;
-    auto gs = nullptr;
+    auto ps = CreatePS( texture, hasAlpha );
+    auto vs = CreateVS();
 
-    RenderablePass * pass = new RenderablePass( ps, vs, gs );
+    RenderablePass * pass = new RenderablePass( ps, vs, nullptr );
 
     AddPass( pass );
 }
@@ -23,13 +26,22 @@ Texture2DEffect::~Texture2DEffect    ()
 
     delete pass->GetPixelShader();
     delete pass->GetVertexShader();
-    delete pass->GetGeometryShader();
 }
 
 // ****************************
 //
-PixelShader *   Texture2DEffect::CreatePS    () const
+PixelShader *   Texture2DEffect::CreatePS    ( Texture2D * texture, bool hasAlpha ) const
 {
+    auto sp = new ShaderParameters();
+
+    if( hasAlpha )
+    {
+        GenericShaderParam * param = ShaderParamFactory::CreateGenericParameter( "alpha", ParamType::PT_FLOAT1 );
+        assert( param != nullptr );
+
+        sp->AddParameter( param );
+    }
+
     return nullptr;
 }
 
