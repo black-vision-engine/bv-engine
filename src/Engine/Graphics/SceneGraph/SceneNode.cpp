@@ -9,6 +9,7 @@ namespace bv {
 //
 SceneNode::SceneNode           ( TransformableEntity * transformRep )
     : m_overridenState( false )
+    , m_overrideAlphaVal( nullptr )
 {
     RegisterTransformRep( transformRep );
 }
@@ -97,6 +98,9 @@ void            SceneNode::RegisterTransformRep ( TransformableEntity * transfor
 //
 void            SceneNode::SetOverrideAlpha     ( const IValue * val )
 {
+    assert( val != nullptr );
+
+    m_overrideAlphaVal = val;
 }
 
 // ********************************

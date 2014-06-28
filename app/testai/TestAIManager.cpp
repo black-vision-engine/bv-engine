@@ -219,11 +219,15 @@ TestAI *        TestAIManager::PreparePreset3   ( model::IModelNodePtr node ) co
     auto c1 = new AICommandDisableAlpha( node, "./node0", 10.f );
     auto c2 = new AICommandEnableOverridenAlpha( node, "./node0/node02", 12.f );
     auto c3 = new AICommandDisableAlpha( node, "./node0/node02", 22.f );
+    auto c4 = new AICommandEnableOverridenAlpha( node, ".", 25.f );
+    auto c5 = new AICommandDisableAlpha( node, ".", 35.f );
 
     ai->AddCommand( c0 );
     ai->AddCommand( c1 );
     ai->AddCommand( c2 );
     ai->AddCommand( c3 );
+    ai->AddCommand( c4 );
+    ai->AddCommand( c5 );
 
     return ai;
 }

@@ -377,6 +377,8 @@ void BVAppLogic::RenderScene     ( Renderer * renderer )
     renderer->PreDraw();
 
     m_offscreenRenderLogic->EnableDisplayRenderTarget( renderer );
+    renderer->ClearBuffers();
+
     RenderNode( renderer, m_mockSceneEng );
     m_offscreenRenderLogic->DisableDisplayRenderTarget( renderer );
 
@@ -398,6 +400,9 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
         {
             assert( m_offscreenRenderLogic->AuxRenderTargetEnabled() == false );
             m_offscreenRenderLogic->EnableAuxRenderTarget( renderer );
+            renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+            renderer->ClearBuffers();
+            renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 1.f ) );
         }
 
         DrawNode( renderer, node );
@@ -408,7 +413,6 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
             m_offscreenRenderLogic->EnableDisplayRenderTarget( renderer );
             m_offscreenRenderLogic->SetAuxAlphaModelValue( node->GetOverrideAlpha() );
             m_offscreenRenderLogic->DrawAuxRenderTarget( renderer );
-            m_offscreenRenderLogic->DisableAuxRenderTarget( renderer );
         }
     }
 }

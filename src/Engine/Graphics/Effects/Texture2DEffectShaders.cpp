@@ -30,12 +30,14 @@ std::string ps_alpha    = " #version 400 \n \
                                 \n \
                                 in vec2 uvCoord; \n \
                                 \n \
-                                uniform sampler2D Texture; \n \
                                 uniform float alpha; \n \
+                                uniform sampler2D Texture; \n \
                                 \n \
                                 void main() \n \
                                 {\n \
 	                                vec4 col = texture( Texture, uvCoord );\n \
+                                    //if( col.a * alpha < 0.9 ) \n \
+                                    //    discard; \n \
 	                                FragColor = col.rgba * alpha;\n \
                                 }\n \
                             ";

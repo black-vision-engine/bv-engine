@@ -447,7 +447,7 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 //
 model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    //return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );
+    return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );
     //TestQueryNode( timelineManager, timeEvaluator ); //FIXME: remove or uncomment after tests
     //auto c0 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node0" );
     //auto c1 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node1" );
@@ -464,7 +464,7 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
     //rut->AddChild( c1 );
 
     //return rut;
-    return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator );
+    //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0 );

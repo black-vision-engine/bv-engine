@@ -77,7 +77,6 @@ void                OffscreenRenderLogic::EnableDisplayRenderTarget ( Renderer *
         }
 
         renderer->Enable( m_displayRenderTarget );
-        renderer->ClearBuffers(); //FIXME: set clear color if necessary
 
         m_displayRTEnabled = true;
     }
@@ -95,7 +94,6 @@ void                OffscreenRenderLogic::EnableAuxRenderTarget     ( Renderer *
         }
 
         renderer->Enable( m_auxRenderTarget );
-        renderer->ClearBuffers(); //FIXME: set clear color if necessary
 
         m_auxRTEnabled = true;
     }
@@ -157,7 +155,6 @@ void                OffscreenRenderLogic::DrawDisplayRenderTarget   ( Renderer *
 void                OffscreenRenderLogic::DrawAuxRenderTarget       ( Renderer * renderer )
 {
     assert( m_auxRTEnabled == false );
-    assert( m_displayRTEnabled == false );
 
     renderer->SetCamera( m_displayCamera );
     renderer->Draw( m_auxQuad );
