@@ -84,6 +84,7 @@ private:
 
     void            RenderScene     ( Renderer * renderer );
     void            RenderNode      ( Renderer * renderer, SceneNode * node );
+    void            DrawNode        ( Renderer * renderer, SceneNode * node );
 
     void            OnUpdateParam   ( IEventPtr evt );
 

@@ -16,10 +16,7 @@ private:
     ParamFloatPtr       m_param;
     ValueFloatPtr       m_value;
 
-    ValueFloatConstPtr  m_curVal;
-
     bool                m_enabled;
-    bool                m_overriden;
     bool                m_changed;
 
 public:
@@ -32,23 +29,13 @@ public:
     virtual bool                Changed             () const override;
     void                        SetChanged          ( bool changed );
 
-    virtual bool                IsOverriden         () const override;
-    virtual bool                IsEnabled           () const override;
-
-    virtual void                Disable             () override;
-    virtual void                Enable              () override;
-
     virtual bool                IsAlphaEnabled      () const override;
-    virtual bool                IsAlphaOverriden    () const override;
 
     virtual void                DisableAlpha        () override;
     virtual void                EnableAlpha         () override;
 
     virtual IParameterPtr       GetAlphaParam       () override;
     virtual IValueConstPtr      GetAlphaValue       () const override;
-
-    virtual void                SetCurAlphaVal      ( IValueConstPtr val ) override;
-    virtual IValueConstPtr      GetCurAlphaVal      () const override;
 
 };
 

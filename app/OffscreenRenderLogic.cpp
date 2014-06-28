@@ -5,8 +5,9 @@
 
 #include "Engine/Graphics/SceneGraph/MainDisplayTarget.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
-
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
+
+#include "Engine/Graphics/Effects/Texture2DEffect.h"
 
 
 namespace bv {
@@ -21,6 +22,7 @@ OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int 
     , m_rendererCamera( camera )
     , m_displayQuad( nullptr )
     , m_auxQuad( nullptr )
+    , m_auxTexture2DEffect( nullptr )
     , m_displayRTEnabled( false )
     , m_auxRTEnabled( false )
 {
@@ -28,14 +30,16 @@ OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int 
     m_auxRenderTarget       = MainDisplayTarget::CreateAuxRenderTarget( width, height, fmt );
 
     m_displayQuad           = MainDisplayTarget::CreateDisplayRect( m_displayRenderTarget->ColorTexture( 0 ) );
-    m_auxQuad               = MainDisplayTarget::CreateDisplayRect( m_auxRenderTarget->ColorTexture( 0 ) );
+    m_auxQuad               = MainDisplayTarget::CreateAuxRect( m_auxRenderTarget->ColorTexture( 0 ) );
+
+    m_auxTexture2DEffect    = static_cast< Texture2DEffect * >( m_auxQuad->GetRenderableEffect() );
 
     std::vector< bv::Transform > vec;
     vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
 
     m_displayQuad->SetWorldTransforms( vec );
     m_auxQuad->SetWorldTransforms( vec );
-
+  
     m_displayCamera         = MainDisplayTarget::CreateDisplayCamera();
 }
 
@@ -46,6 +50,9 @@ OffscreenRenderLogic::~OffscreenRenderLogic  ()
     delete m_displayRenderTarget;
     delete m_auxRenderTarget;
 
+    delete m_displayQuad;
+    delete m_auxQuad;
+
     delete m_displayCamera;
 
     delete m_readbackTexture;
@@ -53,14 +60,14 @@ OffscreenRenderLogic::~OffscreenRenderLogic  ()
 
 // **************************
 //
-void                OffscreenRenderLogic::SetRendererCamera           ( Camera * camera )
+void                OffscreenRenderLogic::SetRendererCamera         ( Camera * camera )
 {
     m_rendererCamera = camera;
 }
 
 // **************************
 //
-void                OffscreenRenderLogic::EnableDisplayRenderTarget   ( Renderer * renderer )
+void                OffscreenRenderLogic::EnableDisplayRenderTarget ( Renderer * renderer )
 {
     if( !m_displayRTEnabled )
     {
@@ -78,7 +85,7 @@ void                OffscreenRenderLogic::EnableDisplayRenderTarget   ( Renderer
 
 // **************************
 //
-void                OffscreenRenderLogic::EnableAuxRenderTarget       ( Renderer * renderer )
+void                OffscreenRenderLogic::EnableAuxRenderTarget     ( Renderer * renderer )
 {
     if( !m_auxRTEnabled )
     {
@@ -96,7 +103,7 @@ void                OffscreenRenderLogic::EnableAuxRenderTarget       ( Renderer
 
 // **************************
 //
-void                OffscreenRenderLogic::DisableDisplayRenderTarget  ( Renderer * renderer )
+void                OffscreenRenderLogic::DisableDisplayRenderTarget( Renderer * renderer )
 {
     m_displayRTEnabled = false;
 
@@ -105,7 +112,7 @@ void                OffscreenRenderLogic::DisableDisplayRenderTarget  ( Renderer
 
 // **************************
 //
-void                OffscreenRenderLogic::DisableAuxRenderTarget      ( Renderer * renderer )
+void                OffscreenRenderLogic::DisableAuxRenderTarget    ( Renderer * renderer )
 {
     m_auxRTEnabled = false;
 
@@ -114,7 +121,28 @@ void                OffscreenRenderLogic::DisableAuxRenderTarget      ( Renderer
 
 // **************************
 //
-void                OffscreenRenderLogic::DrawDisplayRenderTarget     ( Renderer * renderer )
+void                OffscreenRenderLogic::SetAuxAlphaModelValue     ( const IValue * val )
+{
+    m_auxTexture2DEffect->SetAlphaValModel( val );
+}
+
+// **************************
+//
+bool                OffscreenRenderLogic::DisplayRenderTargetEnabled() const
+{
+    return m_displayRTEnabled;
+}
+
+// **************************
+//
+bool                OffscreenRenderLogic::AuxRenderTargetEnabled    () const
+{
+    return m_auxRTEnabled;
+}
+
+// **************************
+//
+void                OffscreenRenderLogic::DrawDisplayRenderTarget   ( Renderer * renderer )
 {
     assert( m_auxRTEnabled == false );
     assert( m_displayRTEnabled == false );
@@ -126,7 +154,19 @@ void                OffscreenRenderLogic::DrawDisplayRenderTarget     ( Renderer
 
 // **************************
 //
-const Texture2D *   OffscreenRenderLogic::ReadDisplayTarget   ( Renderer * renderer )
+void                OffscreenRenderLogic::DrawAuxRenderTarget       ( Renderer * renderer )
+{
+    assert( m_auxRTEnabled == false );
+    assert( m_displayRTEnabled == false );
+
+    renderer->SetCamera( m_displayCamera );
+    renderer->Draw( m_auxQuad );
+    renderer->SetCamera( m_rendererCamera );
+}
+
+// **************************
+//
+const Texture2D *   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer * renderer )
 {
     renderer->ReadColorTexture( 0, m_displayRenderTarget, m_readbackTexture );
 

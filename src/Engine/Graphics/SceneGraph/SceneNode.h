@@ -7,6 +7,7 @@
 
 namespace bv {
 
+class IValue;
 class TransformableEntity;
 
 class SceneNode
@@ -18,6 +19,8 @@ private:
 
     bool                    m_visible;
     bool                    m_overridenState;
+
+    const IValue *          m_overrideAlphaVal;
 
     TransformableEntityVec  m_transformables;
     SceneNodeVec            m_sceneNodes;
@@ -40,6 +43,9 @@ public:
     TransformableEntity *   GetAnchor           ();
 
     void                    RegisterTransformRep( TransformableEntity * transformable );
+
+    void                    SetOverrideAlpha    ( const IValue * val );
+    const IValue *          GetOverrideAlpha    () const;
 
 //    void                    Update              ( double t, const Transform & parentTransform ); 
     void                    Update              ( const std::vector< Transform > & parentTransforms );

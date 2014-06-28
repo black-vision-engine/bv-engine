@@ -92,14 +92,14 @@ GenericShaderParam *     ShaderParamFactory::CreateMVPParameter      ()
 //
 GenericShaderParam *     ShaderParamFactory::CreateMVParameter       ()
 {
-    return new ShaderParamMVP( "MV" );
+    return new ShaderParamMV( "MV" );
 }
 
 // ********************************
 //
 GenericShaderParam *     ShaderParamFactory::CreatePParameter        ()
 {
-    return new ShaderParamMVP( "P" );
+    return new ShaderParamP( "P" );
 }
 
 } //bv

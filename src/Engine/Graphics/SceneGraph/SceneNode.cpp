@@ -80,7 +80,7 @@ TransformableEntity *   SceneNode::GetTransformable    ( int idx )
 
 // ********************************
 //
-TransformableEntity *   SceneNode::GetAnchor           ()
+TransformableEntity *   SceneNode::GetAnchor    ()
 {
     return m_transformRep;
 }
@@ -88,14 +88,27 @@ TransformableEntity *   SceneNode::GetAnchor           ()
 
 // ********************************
 //
-void            SceneNode::RegisterTransformRep( TransformableEntity * transformable )
+void            SceneNode::RegisterTransformRep ( TransformableEntity * transformable )
 {
     m_transformRep = transformable;
 }
 
 // ********************************
 //
-void            SceneNode::Update              ( const std::vector< Transform > & parentTransforms )
+void            SceneNode::SetOverrideAlpha     ( const IValue * val )
+{
+}
+
+// ********************************
+//
+const IValue * SceneNode::GetOverrideAlpha      () const
+{
+    return m_overrideAlphaVal;
+}
+
+// ********************************
+//
+void            SceneNode::Update               ( const std::vector< Transform > & parentTransforms )
 {
     const std::vector< Transform > * pWorldTransforms = &parentTransforms;
 
@@ -121,28 +134,28 @@ void            SceneNode::Update              ( const std::vector< Transform > 
 
 // ********************************
 //
-bool                    SceneNode::IsVisible           () const
+bool                    SceneNode::IsVisible    () const
 {
     return m_visible;
 }
 
 // ********************************
 //
-void                    SceneNode::SetVisible          ( bool visible )
+void                    SceneNode::SetVisible   ( bool visible )
 {
     m_visible = visible;
 }
 
 // ********************************
 //
-bool                    SceneNode::IsOverriden         () const
+bool                    SceneNode::IsOverriden  () const
 {
     return m_overridenState;
 }
 
 // ********************************
 //
-void                    SceneNode::SetOverriden        ( bool overriden )
+void                    SceneNode::SetOverriden ( bool overriden )
 {
     m_overridenState = overriden;
 }

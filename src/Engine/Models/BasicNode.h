@@ -76,10 +76,6 @@ public:
     virtual bool                            OverrideStateChanged    () const override;
     virtual void                            SetOverrideStateChg     ( bool changed ) override;
 
-private:
-
-    void                                    PropagateOverrideState ( IOverrideState * state );
-
 public:
 
     virtual bool                            IsStateOverriden        () const override;

@@ -78,7 +78,7 @@ std::string                     DefaultRectPluginDesc::UID                  ()
 
 // *************************************
 //
-DefaultRectPlugin::DefaultRectPlugin    ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model )
+DefaultRectPlugin::DefaultRectPlugin    ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model, bool timeInvariantDimensions )
     : BasePlugin( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
@@ -96,7 +96,7 @@ DefaultRectPlugin::DefaultRectPlugin    ( const std::string & name, const std::s
     m_lastH = m_heightParam->Evaluate();
 
     auto rect   = RectComponent::Create( m_lastW, m_lastH );
-    m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( rect, false );
+    m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( rect, timeInvariantDimensions );
 
     m_rct = rect;
 }

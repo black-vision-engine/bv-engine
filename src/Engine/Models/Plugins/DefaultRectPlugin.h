@@ -46,7 +46,7 @@ private:
 
 public:
 
-    explicit            DefaultRectPlugin    ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model );
+    explicit            DefaultRectPlugin    ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model, bool timeInvariantDimensions = false );
                         ~DefaultRectPlugin   ();
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;

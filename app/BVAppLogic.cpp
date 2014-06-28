@@ -46,7 +46,7 @@ namespace
         //tt += TimeType( 0.001 );
 
         //TEST AI
-        static auto ai = TestAIManager::Instance().GetAIPreset( 2, logic->GetModelScene()->GetSceneRoot() );
+        static auto ai = TestAIManager::Instance().GetAIPreset( 3, logic->GetModelScene()->GetSceneRoot() );
         //static auto ai = TestAIManager::Instance().GetAIPreset( 4, logic );
         ai->EvalAt( t );
 
@@ -389,43 +389,47 @@ void BVAppLogic::RenderScene     ( Renderer * renderer )
 //
 void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 {
-    //FIXME: rendering order
     if ( node->IsVisible() )
     {
-        if( node->IsOverriden() )
+        bool isOverriden = node->IsOverriden();
+       
+        //Render to auxiliary buffer
+        if( isOverriden )
         {
-            for ( int i = 0; i < node->NumChildrenNodes(); i++ )
-            {
-                HPROFILER_SECTION( "RenderNode::RenderNode - overriden" );
-                RenderNode( renderer, node->GetChild( i ) ); 
-            }
-
-            for( int i = 0; i < node->NumTransformables(); ++i )
-            {
-                HPROFILER_SECTION( "RenderNode::renderer->Draw sibling - overriden" );
-                renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
-            }
-
-            HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor - overriden" );
-            renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
+            assert( m_offscreenRenderLogic->AuxRenderTargetEnabled() == false );
+            m_offscreenRenderLogic->EnableAuxRenderTarget( renderer );
         }
-        else
+
+        DrawNode( renderer, node );
+
+        //Blend auxiliary buffer with current 
+        if( isOverriden )
         {
-            HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
-            renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
-
-            for( int i = 0; i < node->NumTransformables(); ++i )
-            {
-                HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
-                renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
-            }
-
-            for ( int i = 0; i < node->NumChildrenNodes(); i++ )
-            {
-                HPROFILER_SECTION( "RenderNode::RenderNode" );
-                RenderNode( renderer, node->GetChild( i ) ); 
-            }
+            m_offscreenRenderLogic->EnableDisplayRenderTarget( renderer );
+            m_offscreenRenderLogic->SetAuxAlphaModelValue( node->GetOverrideAlpha() );
+            m_offscreenRenderLogic->DrawAuxRenderTarget( renderer );
+            m_offscreenRenderLogic->DisableAuxRenderTarget( renderer );
         }
+    }
+}
+
+// *********************************
+//
+void            BVAppLogic::DrawNode        ( Renderer * renderer, SceneNode * node )
+{
+    HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
+    renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
+
+    for( int i = 0; i < node->NumTransformables(); ++i )
+    {
+        HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
+        renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
+    }
+
+    for ( int i = 0; i < node->NumChildrenNodes(); i++ )
+    {
+        HPROFILER_SECTION( "RenderNode::RenderNode" );
+        RenderNode( renderer, node->GetChild( i ) ); 
     }
 }
 

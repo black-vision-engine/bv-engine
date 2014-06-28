@@ -20,13 +20,13 @@ namespace bv {
 
 // *********************************
 //
-DefaultEffect::DefaultEffect    ( const model::IOverrideState * state, const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds )
+DefaultEffect::DefaultEffect    ( const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds )
 {
     assert( psds != nullptr );
     assert( vsds != nullptr );
 
-    ShaderParameters * psparams = CreateDefaultParamsPS( state, psds );
-    ShaderParameters * vsparams = CreateDefaultParamsVS( state, vsds );
+    ShaderParameters * psparams = CreateDefaultParamsPS( psds );
+    ShaderParameters * vsparams = CreateDefaultParamsVS( vsds );
 
     assert( psparams != nullptr );
     assert( vsparams != nullptr );
@@ -40,7 +40,7 @@ DefaultEffect::DefaultEffect    ( const model::IOverrideState * state, const ISh
     GeometryShader * gs = nullptr;
     if ( gsds != nullptr )
     {
-        ShaderParameters * gsparams = CreateDefaultParamsGS( state, gsds );
+        ShaderParameters * gsparams = CreateDefaultParamsGS( gsds );
 
         assert( gsparams != nullptr );
 
@@ -50,6 +50,7 @@ DefaultEffect::DefaultEffect    ( const model::IOverrideState * state, const ISh
     }
 
     RenderablePass * pass = new RenderablePass( ps, vs, gs );
+
     AddPass( pass );
 }
 
@@ -68,18 +69,16 @@ DefaultEffect::~DefaultEffect   ()
 
 // *********************************
 //
-ShaderParameters * DefaultEffect::CreateDefaultParamsPS  ( const model::IOverrideState * state, const IShaderDataSource * ds ) const
+ShaderParameters * DefaultEffect::CreateDefaultParamsPS  ( const IShaderDataSource * ds ) const
 {
     auto sp = CreateDefaultParamsImpl( ds );
-
-    AddOverrideParamsPS( sp, state );
 
     return sp;
 }
 
 // *********************************
 //
-ShaderParameters * DefaultEffect::CreateDefaultParamsVS  ( const model::IOverrideState * state, const IShaderDataSource * ds ) const
+ShaderParameters * DefaultEffect::CreateDefaultParamsVS  ( const IShaderDataSource * ds ) const
 {
     auto params = CreateDefaultParamsImpl( ds );
 
@@ -93,51 +92,21 @@ ShaderParameters * DefaultEffect::CreateDefaultParamsVS  ( const model::IOverrid
     params->AddParameter( mvParam );
     params->AddParameter( pParam );
 
-    AddOverrideParamsVS( params, state );
-
     return params;
 }
 
 // *********************************
 //
-ShaderParameters * DefaultEffect::CreateDefaultParamsGS  ( const model::IOverrideState * state, const IShaderDataSource * ds ) const
+ShaderParameters * DefaultEffect::CreateDefaultParamsGS  ( const IShaderDataSource * ds ) const
 {
     if( ds )
     {
-        auto gs = CreateDefaultParamsVS( state, ds );
-    
-        AddOverrideParamsGS( gs, state );
+        auto gs = CreateDefaultParamsVS( ds );
 
         return gs;
     }
 
     return nullptr;
-}
-
-// *********************************
-//
-void              DefaultEffect::AddOverrideParamsPS ( ShaderParameters * paramsPS, const model::IOverrideState * state ) const
-{
-    if( paramsPS && state )
-    {
-        GenericShaderParam * param = ShaderParamFactory::CreateGenericParameter( state->GetAlphaValue().get() );
-        
-        paramsPS->AddParameter( param );
-    }
-}
-
-// *********************************
-//
-void              DefaultEffect::AddOverrideParamsVS ( ShaderParameters * paramsVS, const model::IOverrideState * state ) const
-{
-    //FIXME: to be implemented later (when overriden state applies to GS)
-}
-
-// *********************************
-//
-void              DefaultEffect::AddOverrideParamsGS ( ShaderParameters * paramsGS, const model::IOverrideState * state ) const
-{
-    //FIXME: to be implemented later (when overriden state applies to GS)
 }
 
 // *********************************

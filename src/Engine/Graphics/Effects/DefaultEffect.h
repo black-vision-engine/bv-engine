@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
-#include "Engine/Models/Interfaces/IOverrideState.h"
 #include "Engine/Models/Interfaces/ITexturesData.h"
 
 
@@ -20,22 +19,18 @@ class DefaultEffect : public RenderableEffect
 {
 public:
 
-        DefaultEffect   ( const model::IOverrideState * state, const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds );
+        DefaultEffect   ( const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds );
         ~DefaultEffect  ();
 
 protected:
 
-    ShaderParameters *  CreateDefaultParamsPS   ( const model::IOverrideState * state, const IShaderDataSource * ds ) const;
-    ShaderParameters *  CreateDefaultParamsVS   ( const model::IOverrideState * state, const IShaderDataSource * ds ) const;
-    ShaderParameters *  CreateDefaultParamsGS   ( const model::IOverrideState * state, const IShaderDataSource * ds ) const;
+    ShaderParameters *  CreateDefaultParamsPS   ( const IShaderDataSource * ds ) const;
+    ShaderParameters *  CreateDefaultParamsVS   ( const IShaderDataSource * ds ) const;
+    ShaderParameters *  CreateDefaultParamsGS   ( const IShaderDataSource * ds ) const;
 
     void                AddTextures             ( Shader * shader, ITexturesDataConstPtr txData );
 
 private:
-
-    void                    AddOverrideParamsPS ( ShaderParameters * paramsPS, const model::IOverrideState * state ) const;
-    void                    AddOverrideParamsVS ( ShaderParameters * paramsVS, const model::IOverrideState * state ) const;
-    void                    AddOverrideParamsGS ( ShaderParameters * paramsGS, const model::IOverrideState * state ) const;
 
     ShaderParameters *      CreateDefaultParamsImpl ( const IShaderDataSource * ds ) const;
 

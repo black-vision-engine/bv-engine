@@ -11,25 +11,28 @@ class Renderer;
 class Camera;
 class TriangleStrip;
 class Rednerer;
-
+class Texture2DEffect;
+class IValue;
 
 class OffscreenRenderLogic
 {
 private:
 
-    RenderTarget *  m_displayRenderTarget;
-    RenderTarget *  m_auxRenderTarget;
+    RenderTarget *      m_displayRenderTarget;
+    RenderTarget *      m_auxRenderTarget;
     
-    TriangleStrip * m_displayQuad;
-    TriangleStrip * m_auxQuad;
+    TriangleStrip *     m_displayQuad;
+    TriangleStrip *     m_auxQuad;
 
-    Texture2D *     m_readbackTexture;
+    Texture2DEffect *   m_auxTexture2DEffect;
 
-    Camera *        m_displayCamera;
-    Camera *        m_rendererCamera;
+    Texture2D *         m_readbackTexture;
 
-    bool            m_displayRTEnabled;
-    bool            m_auxRTEnabled;
+    Camera *            m_displayCamera;
+    Camera *            m_rendererCamera;
+
+    bool                m_displayRTEnabled;
+    bool                m_auxRTEnabled;
 
 public:
 
@@ -44,7 +47,13 @@ public:
     void                DisableDisplayRenderTarget  ( Renderer * renderer );
     void                DisableAuxRenderTarget      ( Renderer * renderer );
 
+    void                SetAuxAlphaModelValue       ( const IValue * val );
+
+    bool                DisplayRenderTargetEnabled  () const;
+    bool                AuxRenderTargetEnabled      () const;
+
     void                DrawDisplayRenderTarget     ( Renderer * renderer );
+    void                DrawAuxRenderTarget         ( Renderer * renderer );
 
     const Texture2D *   ReadDisplayTarget           ( Renderer * renderer );
 

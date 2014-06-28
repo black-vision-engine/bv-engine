@@ -138,26 +138,14 @@ const IPluginListFinalized *    BasicNode::GetPluginList            () const
 //
 void                            BasicNode::EnableOverrideState      ()
 {
-    m_overrideState->Enable();
-
-    PropagateOverrideState( m_overrideState );
+    m_overrideState->EnableAlpha();
 }
 
 // ********************************
 //
 void                            BasicNode::DisableOverrideState     ()
 {
-    m_overrideState->Disable();
-
-    for( auto l : m_layers )
-    {
-        l->DisableOverrideState();
-    }
-
-    for( auto c : m_children )
-    {
-        c->DisableOverrideState();
-    }
+    m_overrideState->DisableAlpha();
 }
 
 // ********************************
@@ -176,26 +164,9 @@ void                            BasicNode::SetOverrideStateChg      ( bool chang
 
 // ********************************
 //
-void                            BasicNode::PropagateOverrideState   ( IOverrideState * state )
-{
-    m_overrideState->SetCurAlphaVal( state->GetCurAlphaVal() );
-
-    for( auto l : m_layers )
-    {
-        l->PropagateOverrideState( state );
-    }
-
-    for( auto c : m_children )
-    {
-        c->PropagateOverrideState( state );
-    }
-}
-
-// ********************************
-//
 bool                            BasicNode::IsStateOverriden         () const
 {
-    return m_overrideState->IsEnabled();
+    return m_overrideState->IsAlphaEnabled();
 }
 
 // ********************************
@@ -226,6 +197,8 @@ SceneNode *                 BasicNode::BuildScene()
     IPluginConstPtr finalizer = GetFinalizePlugin();
 
     SceneNode * node = CreateSceneNode( finalizer );
+
+    node->SetOverrideAlpha( GetOverrideState()->GetAlphaValue().get() );
 
     for( auto ch : m_children )
     {
@@ -529,7 +502,7 @@ RenderableEffect *                  BasicNode::CreateDefaultEffect     ( IPlugin
     assert( psChannel != nullptr );
     assert( vsChannel != nullptr );
 
-    return new DefaultEffect( m_overrideState, psChannel.get(), vsChannel.get(), gsChannel.get() ); 
+    return new DefaultEffect( psChannel.get(), vsChannel.get(), gsChannel.get() ); 
 }
 
 

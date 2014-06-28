@@ -11,12 +11,11 @@ in vec2 uvCoord;
 
 uniform sampler2D Tex0;
 uniform float alpha;
-uniform float overrideAlpha;
 
 void main()
 {
 	vec4 col = texture( Tex0, uvCoord );
-	FragColor = col.rgba * alpha * overrideAlpha;
+	FragColor = col.rgba * alpha;
 	
     //FragColor = col.rgb * alpha * overrideAlpha;
 	//AlphaColor = col.a * alpha * overrideAlpha;

@@ -99,24 +99,14 @@ void    NodeUpdater::DoUpdate        ()
 {
     //FIXME: czy jesli node nie jest widoczne to trzeba w ogole updatowac stan - zakladam, ze nie, ale trzeba sie upewnic
     //FIXME: it is just a single bool to set, so no there is no fancy machinery for testing whehter any update is necessary 
-    bool isVisible  = m_modelNode->IsVisible();
-    bool isOverriden = m_modelNode->IsStateOverriden();
-
-    m_sceneNode->SetVisible( isVisible );
-    m_sceneNode->SetOverriden( isOverriden );
-
-    //FIXME: Globalne ustawienia stanu obejmuja na teraz
-    //1. Visibility
-    //2. Overridden parameters
-    //3. Overridden renderer state (render ctx)
-    if( isVisible )
+    if( m_modelNode->IsVisible() )
     {
+        m_sceneNode->SetVisible( true );
+
         UpdateTransform();
-        
+
         if( m_hasEffect )
         {
-            m_rendererContext->SetStateChanged( m_modelNode->OverrideStateChanged() );
-
             if( !m_timeInvariantVertexData )
             {
                 UpdateGeometry();
@@ -124,23 +114,7 @@ void    NodeUpdater::DoUpdate        ()
 
             UpdateTexturesData();
             UpdateRendererState();
-
-            if( isOverriden )
-            {
-                //FIXME: not the best way (state is set even if nothing changed)
-                UpdateOverridenState();
-            }
         }
-
-        //if ( m_modelNode->OverridesParameters() )
-        //{
-        //    //Update overriden parameters (override values)
-        //}
-
-        //if( m_modelNode->OverridesRedererState() )
-        //{
-        //    //Override renderer state
-        //}
     }
 }
 
