@@ -27,7 +27,7 @@ RenderTarget *  MainDisplayTarget::CreateDisplayRenderTarget    ( unsigned int w
     std::vector< TextureFormat > fmts( 1 );
     fmts[ 0 ] = fmt;
 
-    return new RenderTarget( fmts, width, height, false, false );
+    return new RenderTarget( fmts, width, height, true, false );
 }
 
 // **************************
