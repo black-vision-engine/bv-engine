@@ -16,8 +16,11 @@ namespace
         GL_STATIC_DRAW,     // S_STATIC,  
         GL_DYNAMIC_DRAW,    // S_DYNAMIC
         GL_DYNAMIC_DRAW,    // S_RENDERTARGET
+        GL_DYNAMIC_COPY,    // S_RENDERTARGET_STREAMING_READ
         GL_DYNAMIC_DRAW,    // S_DEPTHSTENCIL
-        GL_DYNAMIC_DRAW     // S_TEXTURE
+        GL_DYNAMIC_DRAW,    // S_TEXTURE
+        GL_STREAM_READ,     // S_TEXTURE_STREAMING_READ
+        GL_STREAM_DRAW      // S_TEXTURE_STREAMING_WRITE
     };                    
 
     GLuint RenderableTypeGL[] =

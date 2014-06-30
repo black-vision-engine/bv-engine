@@ -25,7 +25,7 @@ protected:
 
 public:
 
-                        RenderTarget    ( const std::vector< TextureFormat > & formats, int w, int h, bool hasDepthBuffer, bool hasMipmaps = false );
+                        RenderTarget    ( const std::vector< TextureFormat > & formats, int w, int h, bool hasDepthBuffer, bool hasMipmaps = false, bool readbackTarget = false );
     virtual             ~RenderTarget   ();
 
     int                 NumTargets      () const;

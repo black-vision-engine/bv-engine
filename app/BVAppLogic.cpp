@@ -46,9 +46,9 @@ namespace
         //tt += TimeType( 0.001 );
 
         //TEST AI
-        static auto ai = TestAIManager::Instance().GetAIPreset( 3, logic->GetModelScene()->GetSceneRoot() );
+        //static auto ai = TestAIManager::Instance().GetAIPreset( 3, logic->GetModelScene()->GetSceneRoot() );
         //static auto ai = TestAIManager::Instance().GetAIPreset( 4, logic );
-        ai->EvalAt( t );
+        //ai->EvalAt( t );
 
         //PRE GOWNO
         float tx = float( sin( t ) );

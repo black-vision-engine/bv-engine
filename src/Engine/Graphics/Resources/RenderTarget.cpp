@@ -9,7 +9,7 @@ namespace bv {
 
 // *********************************
 //
-RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, int w, int h, bool hasDepthBuffer, bool hasMipmaps )
+RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, int w, int h, bool hasDepthBuffer, bool hasMipmaps, bool readbackTarget )
     : m_numTargets( formats.size() )
     , m_hasMipmaps( hasMipmaps )
     , m_hasDepthBuffer( hasDepthBuffer )
@@ -21,7 +21,14 @@ RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, int w
 
     for( int i = 0; i < m_numTargets; ++i )
     {
-        auto tx = new Texture2DImpl( formats[ i ], w, h, DataBuffer::Semantic::S_RENDERTARGET );
+        auto semantic = DataBuffer::Semantic::S_RENDERTARGET;
+
+        if ( readbackTarget )
+        {
+            semantic = DataBuffer::Semantic::S_RENDERTARGET_STREAMING_READ;
+        }
+
+        auto tx = new Texture2DImpl( formats[ i ], w, h, semantic );
         tx->AllocateMemory();
         tx->SetChanged( false );
         m_ColorTextures.push_back( tx );    

@@ -39,7 +39,8 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
     m_format            = ConstantsMapper::GLConstantTextureFormat( m_txFormat );
     m_type              = ConstantsMapper::GLConstantTextureType( m_txFormat );
 
-    auto semantic       = ConstantsMapper::GLConstant( texture->GetSemantic() );
+    auto txSemantic     = texture->GetSemantic();
+    auto semantic       = ConstantsMapper::GLConstant( txSemantic );
 
     glGenBuffers( 1, &m_pboID );
     glBindBuffer( GL_PIXEL_UNPACK_BUFFER, m_pboID );
@@ -125,7 +126,9 @@ void        PdrTexture2D::Unlock            ()
         {
             GLuint prevTex = Bind();
 
-            glTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, 0 );
+            //glTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, 0 );
+
+            glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, m_format, m_type, 0 );
             glBindTexture( GL_TEXTURE_2D, prevTex );
 
             m_writeLock = false;
