@@ -56,6 +56,15 @@ PdrRenderTarget::PdrRenderTarget     ( Renderer * renderer, const RenderTarget *
     assert( FramebuferStatusOK() );
 
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+
+    //FIXME: HACK
+    m_index = 0;
+    glGenBuffers( 2, m_pbo );
+    glBindBuffer( GL_PIXEL_PACK_BUFFER, m_pbo[ 0 ] );
+    glBufferData( GL_PIXEL_PACK_BUFFER, rt->ColorTexture( 0 )->RawFrameSize(), 0, GL_STREAM_READ );
+    glBindBuffer( GL_PIXEL_PACK_BUFFER, m_pbo[ 1 ] );
+    glBufferData( GL_PIXEL_PACK_BUFFER, rt->ColorTexture( 0 )->RawFrameSize(), 0, GL_STREAM_READ );
+    glBindBuffer( GL_PIXEL_PACK_BUFFER, 0 );
 }
 
 // ****************************
@@ -70,6 +79,10 @@ PdrRenderTarget::~PdrRenderTarget    ()
 
     if( m_depthBufID != 0 )
         glDeleteRenderbuffers( 1, &m_depthBufID );
+
+    //FIXME: HACK
+    glDeleteBuffers( 2, m_pbo );
+
 }
 
 // ****************************
@@ -131,8 +144,32 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
         outputTex = tx;
     }
 
-    glReadBuffer( m_drawBuffers[ i ] );
-    glReadPixels( 0, 0, m_width, m_height, ConstantsMapper::GLConstantTextureFormat( format ), ConstantsMapper::GLConstantTextureType( format ), outputTex->GetData() );
+    if( false ) //OLD METHOD
+    {
+        glReadBuffer( m_drawBuffers[ i ] );
+        glReadPixels( 0, 0, m_width, m_height, ConstantsMapper::GLConstantTextureFormat( format ), ConstantsMapper::GLConstantTextureType( format ), outputTex->GetData() );
+    }
+    else //FIXME: HACK
+    {
+        glReadBuffer( m_drawBuffers[ i ] );
+
+        //DMA transfer - no readback yet
+        glBindBuffer( GL_PIXEL_PACK_BUFFER, m_pbo[ m_index ] );
+        glReadPixels( 0, 0, m_width, m_height, ConstantsMapper::GLConstantTextureFormat( format ), ConstantsMapper::GLConstantTextureType( format ), 0 );
+
+        glBindBuffer( GL_PIXEL_PACK_BUFFER, m_pbo[ ( m_index + 1 ) % 2 ] );
+        GLubyte * data = (GLubyte*) glMapBuffer( GL_PIXEL_PACK_BUFFER, GL_READ_ONLY );
+
+        //Frame from previous read
+        if( data )
+        {
+            memcpy( outputTex->GetData(), data, outputTex->RawFrameSize() );
+
+            glUnmapBuffer( GL_PIXEL_PACK_BUFFER );
+        }
+
+        m_index = ( m_index + 1 ) % 2;
+    }
 
     Disable( renderer );
 }

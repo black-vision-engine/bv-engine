@@ -33,6 +33,10 @@ private:
     int                             m_prevViewportCoords[ 4 ];
     double                          m_prevDepthRange[ 2 ];
 
+    //FIXME: HACK
+    GLuint                          m_pbo[ 2 ];
+    GLuint                          m_index;
+
 public:
 
                     PdrRenderTarget     ( Renderer * renderer, const RenderTarget * rt );

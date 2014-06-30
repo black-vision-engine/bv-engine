@@ -46,9 +46,9 @@ namespace
         //tt += TimeType( 0.001 );
 
         //TEST AI
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 3, logic->GetModelScene()->GetSceneRoot() );
         //static auto ai = TestAIManager::Instance().GetAIPreset( 4, logic );
-        //ai->EvalAt( t );
+        static auto ai = TestAIManager::Instance().GetAIPreset( 3, logic->GetModelScene()->GetSceneRoot() );
+        ai->EvalAt( t );
 
         //PRE GOWNO
         float tx = float( sin( t ) );
@@ -282,7 +282,7 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
         w = renderer->GetWidth();
         h = renderer->GetHeight();
 
-        printf( "Framebuffer resulotion changed to %dx%d\n", w, h );
+        printf( "Framebuffer resolution changed to %dx%d\n", w, h );
     }
 
     static double totalElapsed = 0.0;
