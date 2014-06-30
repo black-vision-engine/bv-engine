@@ -13,10 +13,9 @@ public:
     {
         S_STATIC,
         S_DYNAMIC,
-        S_RENDERTARGET,
-        S_RENDERTARGET_STREAMING_READ,
         S_DEPTHSTENCIL,
-        S_TEXTURE,
+        S_TEXTURE_STATIC,
+        S_TEXTURE_DYNAMIC,
         S_TEXTURE_STREAMING_READ,
         S_TEXTURE_STREAMING_WRITE,
         S_TOTAL

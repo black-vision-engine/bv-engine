@@ -16,7 +16,7 @@ DefaultTextureDescriptor::DefaultTextureDescriptor        ()
 
 // **************************
 //
-DefaultTextureDescriptor::DefaultTextureDescriptor        ( ResourceHandleConstPtr handle, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc )
+DefaultTextureDescriptor::DefaultTextureDescriptor        ( ResourceHandleConstPtr handle, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc, DataBuffer::Semantic semantic )
     : m_bitsChanged( true )
 {
     SetBits( handle );
@@ -39,6 +39,7 @@ DefaultTextureDescriptor::DefaultTextureDescriptor        ( ResourceHandleConstP
     SetWrappingModeY( wmy );
     SetFilteringMode( fm );
     SetBorderColor( bc );
+    SetSemantic( semantic );
 }
 
 // **************************
@@ -122,6 +123,13 @@ TextureFilteringMode    DefaultTextureDescriptor::GetFilteringMode  () const
 glm::vec4               DefaultTextureDescriptor::BorderColor       () const
 {
     return m_params.BorderColor();
+}
+
+// **************************
+//
+DataBuffer::Semantic    DefaultTextureDescriptor::GetSemantic     () const
+{
+    return m_semantic;
 }
 
 // **************************
@@ -215,6 +223,13 @@ void                    DefaultTextureDescriptor::SetFilteringMode  ( TextureFil
 void                    DefaultTextureDescriptor::SetBorderColor    ( const glm::vec4 & bc )
 {
     m_params.SetBorderColor( bc );
+}
+
+// **************************
+//
+void                        DefaultTextureDescriptor::SetSemantic     ( DataBuffer::Semantic semantic )
+{
+    m_semantic = semantic;
 }
 
 // **************************

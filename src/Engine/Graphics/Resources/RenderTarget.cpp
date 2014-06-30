@@ -9,10 +9,11 @@ namespace bv {
 
 // *********************************
 //
-RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, int w, int h, bool hasDepthBuffer, bool hasMipmaps, bool readbackTarget )
+RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, int w, int h, bool hasDepthBuffer, bool hasMipmaps, RenderTarget::RTSemantic semantic )
     : m_numTargets( formats.size() )
     , m_hasMipmaps( hasMipmaps )
     , m_hasDepthBuffer( hasDepthBuffer )
+    , m_semantic( semantic )
 {
     assert( m_numTargets > 0 );
     assert( hasMipmaps == false ); //FIXME: to be implemented
@@ -21,14 +22,7 @@ RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, int w
 
     for( int i = 0; i < m_numTargets; ++i )
     {
-        auto semantic = DataBuffer::Semantic::S_RENDERTARGET;
-
-        if ( readbackTarget )
-        {
-            semantic = DataBuffer::Semantic::S_RENDERTARGET_STREAMING_READ;
-        }
-
-        auto tx = new Texture2DImpl( formats[ i ], w, h, semantic );
+        auto tx = new Texture2DImpl( formats[ i ], w, h, DataBuffer::Semantic::S_TEXTURE_STATIC );
         tx->AllocateMemory();
         tx->SetChanged( false );
         m_ColorTextures.push_back( tx );    
@@ -46,6 +40,13 @@ RenderTarget::~RenderTarget ()
     {
         delete ptrTx;
     }
+}
+
+// *********************************
+//
+RenderTarget::RTSemantic  RenderTarget::Semantic  () const
+{
+    return m_semantic;
 }
 
 // *********************************

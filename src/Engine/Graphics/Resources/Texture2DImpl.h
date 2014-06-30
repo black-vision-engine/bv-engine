@@ -15,7 +15,7 @@ private:
 
 public:
 
-                            Texture2DImpl   ( TextureFormat format, int width, int height, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE );
+                            Texture2DImpl   ( TextureFormat format, int width, int height, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE_STATIC );
     virtual                 ~Texture2DImpl  ();
 
     virtual size_t          GetDataSize     () const override;

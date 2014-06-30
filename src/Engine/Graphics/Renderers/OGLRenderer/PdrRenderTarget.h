@@ -34,8 +34,8 @@ private:
     double                          m_prevDepthRange[ 2 ];
 
     //FIXME: HACK
+    unsigned int                    m_index;
     GLuint                          m_pbo[ 2 ];
-    GLuint                          m_index;
 
 public:
 

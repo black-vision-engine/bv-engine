@@ -10,34 +10,47 @@ namespace bv
 //FIXME: add stencil at some point
 class RenderTarget
 {
+public:
+
+    enum class RTSemantic : int 
+    {
+        S_DRAW_ONLY,
+        S_DRAW_READ,
+        S_TOTAL
+    };
+
 private:
 
     typedef std::vector< Texture2D * > TexturesVec;
 
 protected:
  
-    int             m_numTargets;
+    int                         m_numTargets;
     
-    bool            m_hasMipmaps;
-    bool            m_hasDepthBuffer;
+    bool                        m_hasMipmaps;
+    bool                        m_hasDepthBuffer;
 
-    TexturesVec     m_ColorTextures;
+    RenderTarget::RTSemantic    m_semantic;
+
+    TexturesVec                 m_ColorTextures;
 
 public:
 
-                        RenderTarget    ( const std::vector< TextureFormat > & formats, int w, int h, bool hasDepthBuffer, bool hasMipmaps = false, bool readbackTarget = false );
+                        RenderTarget    ( const std::vector< TextureFormat > & formats, int w, int h, bool hasDepthBuffer, bool hasMipmaps = false, RenderTarget::RTSemantic semantic = RenderTarget::RTSemantic::S_DRAW_ONLY );
     virtual             ~RenderTarget   ();
 
-    int                 NumTargets      () const;
-    TextureFormat       Format          () const;
+    RenderTarget::RTSemantic  Semantic        () const;
 
-    int                 Width           () const;
-    int                 Height          () const;
+    int                     NumTargets      () const;
+    TextureFormat           Format          () const;
 
-    Texture2D *         ColorTexture    ( int i ) const;
+    int                     Width           () const;
+    int                     Height          () const;
 
-    bool                HasMipmaps      () const;
-    bool                HasDepthBuffer  () const;
+    Texture2D *             ColorTexture    ( int i ) const;
+
+    bool                    HasMipmaps      () const;
+    bool                    HasDepthBuffer  () const;
 
 };
 

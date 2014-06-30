@@ -16,11 +16,12 @@ private:
 
     DefaultTextureParams    m_params;
     mutable bool            m_bitsChanged;
+    DataBuffer::Semantic    m_semantic;
 
 public:
 
     DefaultTextureDescriptor        ();
-    DefaultTextureDescriptor        ( ResourceHandleConstPtr handle, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc );
+    DefaultTextureDescriptor        ( ResourceHandleConstPtr handle, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc, DataBuffer::Semantic semantic );
     ~DefaultTextureDescriptor       ();
 
     virtual const char *            GetBits         () const override;
@@ -36,6 +37,7 @@ public:
     virtual TextureWrappingMode     GetWrappingModeY() const override;
     virtual TextureFilteringMode    GetFilteringMode() const override;
     virtual glm::vec4               BorderColor     () const override;
+    virtual DataBuffer::Semantic    GetSemantic     () const override;
 
     void                            SetBits         ( ResourceHandleConstPtr handle );
 
@@ -49,7 +51,8 @@ public:
     void                            SetWrappingModeY( TextureWrappingMode wm );
     void                            SetFilteringMode( TextureFilteringMode fm );
     void                            SetBorderColor  ( const glm::vec4 & bc );
-    
+    void                            SetSemantic     ( DataBuffer::Semantic semantic );
+
     static void                     SetDefaults     ( DefaultTextureDescriptor * desc );
 
     static DefaultTextureDescriptor * LoadTexture   ( const std::string & textureFile, const std::string & name );

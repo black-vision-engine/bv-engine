@@ -288,9 +288,11 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
     static double totalElapsed = 0.0;
     static int nFrames = 1;
     static int nPasses = 0;
+    static int nReadbackFrame = 0;
 
     double readbackStart = GTimer.CurElapsed();
-    auto frame = m_offscreenRenderLogic->ReadDisplayTarget( renderer );
+    auto frame = m_offscreenRenderLogic->ReadDisplayTarget( renderer, nReadbackFrame );
+    nReadbackFrame = ( nReadbackFrame + 1 ) % m_offscreenRenderLogic->NumReadBuffers();
     double readbackTime = GTimer.CurElapsed() - readbackStart;
 
     totalElapsed += readbackTime;

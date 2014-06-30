@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Interfaces/ITextureParams.h"
+#include "Engine/Graphics/Resources/DataBuffer.h"
 
 
 namespace bv {
@@ -12,6 +13,7 @@ public:
     virtual const char *            GetBits             () const = 0;
     virtual bool                    BitsChanged         () const = 0;
     virtual void                    ResetBitsChanged    () const = 0;
+    virtual DataBuffer::Semantic    GetSemantic         () const = 0;
 
     virtual ~ITextureDescriptor() {}
 

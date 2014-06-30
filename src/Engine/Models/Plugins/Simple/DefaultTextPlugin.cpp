@@ -222,7 +222,8 @@ bool                            DefaultTextPlugin::LoadResource  ( IPluginResour
                                                     ,   TextureWrappingMode::TWM_CLAMP_BORDER
                                                     ,   TextureWrappingMode::TWM_CLAMP_BORDER
                                                     ,   TextureFilteringMode::TFM_LINEAR
-                                                    ,   glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+                                                    ,   glm::vec4( 0.f, 0.f, 0.f, 0.f )
+                                                    ,   DataBuffer::Semantic::S_TEXTURE_STATIC );
 
         if( txDesc != nullptr )
         {

@@ -18,7 +18,7 @@ protected:
 
 public:
 
-                            Texture         ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE );
+                            Texture         ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
     virtual			        ~Texture	    () = 0;
 
     virtual size_t          GetDataSize     () const = 0;

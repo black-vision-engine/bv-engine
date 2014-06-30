@@ -14,10 +14,10 @@ namespace bv {
 
 // **************************
 //
-OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int height, Camera * camera, TextureFormat fmt )
+OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int height, unsigned int numReadBuffers, Camera * camera, TextureFormat fmt )
     : m_displayRenderTarget( nullptr )
     , m_auxRenderTarget( nullptr )
-    , m_readbackTexture( nullptr )
+    , m_readbackTextures( numReadBuffers )
     , m_displayCamera( nullptr )
     , m_rendererCamera( camera )
     , m_displayQuad( nullptr )
@@ -41,6 +41,11 @@ OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int 
     m_auxQuad->SetWorldTransforms( vec );
   
     m_displayCamera         = MainDisplayTarget::CreateDisplayCamera();
+
+    for( unsigned int i = 0; i < numReadBuffers; ++i )
+    {
+        m_readbackTextures[ i ] = nullptr;
+    }
 }
 
 // **************************
@@ -55,7 +60,10 @@ OffscreenRenderLogic::~OffscreenRenderLogic  ()
 
     delete m_displayCamera;
 
-    delete m_readbackTexture;
+    for( auto tx : m_readbackTextures )
+    {
+        delete tx;
+    }
 }
 
 // **************************
@@ -163,11 +171,20 @@ void                OffscreenRenderLogic::DrawAuxRenderTarget       ( Renderer *
 
 // **************************
 //
-const Texture2D *   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer * renderer )
+unsigned int        OffscreenRenderLogic::NumReadBuffers            () const
 {
-    renderer->ReadColorTexture( 0, m_displayRenderTarget, m_readbackTexture );
+    return m_readbackTextures.size();
+}
 
-    return m_readbackTexture;
+// **************************
+//
+const Texture2D *   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer * renderer, unsigned int bufNum )
+{
+    assert( bufNum < m_readbackTextures.size() );
+
+    renderer->ReadColorTexture( 0, m_displayRenderTarget, m_readbackTextures[ bufNum ] );
+
+    return m_readbackTextures[ bufNum ];
 }
 
 } //bv

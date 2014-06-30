@@ -192,6 +192,7 @@ bool                            DefaultTexturePlugin::LoadResource  ( IPluginRes
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), DefaultTexturePluginDesc::TextureName() );
+        txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
 
         if( txDesc != nullptr )
         {

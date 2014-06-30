@@ -191,11 +191,12 @@ TextureSampler *        DefaultEffect::CreateSampler   ( const ITextureParams * 
 //
 Texture2DImpl *         DefaultEffect::CreateTexture       ( const ITextureDescriptor * txParams ) const
 {
-    auto format = txParams->GetFormat();
-    auto width  = txParams->GetWidth();
-    auto height = txParams->GetHeight();
+    auto format     = txParams->GetFormat();
+    auto width      = txParams->GetWidth();
+    auto height     = txParams->GetHeight();
+    auto semantic   = txParams->GetSemantic();
 
-    auto texture = new Texture2DImpl( format, width, height );
+    auto texture = new Texture2DImpl( format, width, height, semantic );
     texture->WriteBits( txParams->GetBits(), format, width, height );
 
     return texture;
@@ -205,9 +206,9 @@ Texture2DImpl *         DefaultEffect::CreateTexture       ( const ITextureDescr
 //
 Texture2DSequenceImpl * DefaultEffect::CreateSequence       ( const IAnimationDescriptor * animParams ) const
 {
-    auto format = animParams->GetFormat();
-    auto width  = animParams->GetWidth();
-    auto height = animParams->GetHeight();
+    auto format     = animParams->GetFormat();
+    auto width      = animParams->GetWidth();
+    auto height     = animParams->GetHeight();
 
     auto sequence   = new Texture2DSequenceImpl( format, width, height );
             

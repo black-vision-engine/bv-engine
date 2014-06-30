@@ -151,11 +151,16 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
     }
     else //FIXME: HACK
     {
+        GLuint prevTexture = GetPrevTexture();
+
+        //glBindTexture( GL_TEXTURE_2D, m_textures[ i ] );
+
         glReadBuffer( m_drawBuffers[ i ] );
 
         //DMA transfer - no readback yet
         glBindBuffer( GL_PIXEL_PACK_BUFFER, m_pbo[ m_index ] );
         glReadPixels( 0, 0, m_width, m_height, ConstantsMapper::GLConstantTextureFormat( format ), ConstantsMapper::GLConstantTextureType( format ), 0 );
+        //glGetTexImage( GL_TEXTURE_2D, 0, ConstantsMapper::GLConstantTextureFormat( format ), ConstantsMapper::GLConstantTextureType( format ), 0 );
 
         glBindBuffer( GL_PIXEL_PACK_BUFFER, m_pbo[ ( m_index + 1 ) % 2 ] );
         GLubyte * data = (GLubyte*) glMapBuffer( GL_PIXEL_PACK_BUFFER, GL_READ_ONLY );
@@ -169,6 +174,8 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
         }
 
         m_index = ( m_index + 1 ) % 2;
+    
+        glBindTexture( GL_TEXTURE_2D, prevTexture );
     }
 
     Disable( renderer );

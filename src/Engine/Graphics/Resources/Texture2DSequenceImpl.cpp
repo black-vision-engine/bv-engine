@@ -8,7 +8,7 @@ namespace bv {
 // *********************************
 //  
 Texture2DSequenceImpl::Texture2DSequenceImpl                    ( TextureFormat format, int width, int height )
-    : Texture2D( format, width, height, DataBuffer::Semantic::S_TEXTURE ) //FIXME: are there any chances that other semantics can be used for animations??
+    : Texture2D( format, width, height, DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE ) //FIXME: are there any chances that other semantics can be used for animations??
     , m_activeTexture( 0 )
 {
     assert( width > 0 );

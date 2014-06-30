@@ -205,6 +205,7 @@
     <ClCompile Include="Engine\Graphics\Effects\Texture2DEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Effects\Texture2DEffectShaders.cpp" />
     <ClCompile Include="Engine\Models\Plugins\EngineConstantsMapper.cpp" />
+    <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrPBOMemTransfer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -467,6 +468,7 @@
     <ClInclude Include="Engine\Graphics\Effects\Texture2DEffect.h" />
     <ClInclude Include="Engine\Graphics\Effects\Texture2DEffectShaders.h" />
     <ClInclude Include="Engine\Models\Plugins\EngineConstantsMapper.h" />
+    <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrPBOMemTransfer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

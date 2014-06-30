@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "Engine/Types/Enums.h"
 
 
@@ -26,7 +28,7 @@ private:
 
     Texture2DEffect *   m_auxTexture2DEffect;
 
-    Texture2D *         m_readbackTexture;
+    std::vector< Texture2D * >  m_readbackTextures;
 
     Camera *            m_displayCamera;
     Camera *            m_rendererCamera;
@@ -36,7 +38,7 @@ private:
 
 public:
 
-                        OffscreenRenderLogic        ( unsigned int width, unsigned int height, Camera * camera = nullptr, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
+                        OffscreenRenderLogic        ( unsigned int width, unsigned int height, unsigned int numReadBuffers = 2, Camera * camera = nullptr, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
                         ~OffscreenRenderLogic       ();
 
     void                SetRendererCamera           ( Camera * camera );
@@ -55,7 +57,9 @@ public:
     void                DrawDisplayRenderTarget     ( Renderer * renderer );
     void                DrawAuxRenderTarget         ( Renderer * renderer );
 
-    const Texture2D *   ReadDisplayTarget           ( Renderer * renderer );
+    unsigned int        NumReadBuffers              () const;
+
+    const Texture2D *   ReadDisplayTarget           ( Renderer * renderer, unsigned int bufNum );
 
 
 };
