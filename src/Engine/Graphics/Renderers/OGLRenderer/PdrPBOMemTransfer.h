@@ -38,6 +38,8 @@ public:
     void * LockTexture          ( MemoryLockingType mlt );
     void   UnlockTexture        ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
 
+    static bool PBORequired     ( DataBuffer::Semantic semantic );
+
 private:
 
     GLuint      NumPBOs         ( DataBuffer::Semantic semantic ) const;

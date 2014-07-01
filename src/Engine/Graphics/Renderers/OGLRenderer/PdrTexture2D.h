@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Resources/Texture2D.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
-
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrPBOMemTransfer.h"
 
 namespace bv
 {
@@ -16,13 +16,10 @@ class PdrTexture2D
 {
 private:
 
+    PdrPBOMemTransfer * m_pboMem;
+
     GLuint          m_textureID;
     GLuint          m_prevTextureID;
-
-    GLuint          m_pboID;
-
-    bool            m_writeLock;
-    void *          m_lockedMemoryPtr;
 
     unsigned int    m_width;
     unsigned int    m_height;

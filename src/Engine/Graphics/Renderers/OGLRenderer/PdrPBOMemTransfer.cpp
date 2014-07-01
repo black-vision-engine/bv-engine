@@ -12,7 +12,7 @@ PdrPBOMemTransfer::PdrPBOMemTransfer    ( DataBuffer::Semantic semantic, unsigne
     , m_lockedMemoryPtr( nullptr )
 {
     assert( (int) DataBuffer::Semantic::S_TOTAL == 7 );
-    assert( semantic != DataBuffer::Semantic::S_STATIC && semantic != DataBuffer::Semantic::S_TEXTURE_STATIC );
+    assert( PBORequired( semantic ) );
 
     m_pboTarget = PBOTarget( semantic );
     m_pboUsage  = PBOUsage( semantic );
@@ -85,6 +85,13 @@ void   PdrPBOMemTransfer::UnlockTexture ( GLuint textureID, GLuint width, GLuint
 
         m_lockedMemoryPtr = nullptr;
     }
+}
+
+// ****************************
+//
+bool PdrPBOMemTransfer::PBORequired     ( DataBuffer::Semantic semantic )
+{
+    return semantic != DataBuffer::Semantic::S_STATIC && semantic != DataBuffer::Semantic::S_TEXTURE_STATIC;
 }
 
 // ****************************

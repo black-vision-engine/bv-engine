@@ -12,9 +12,7 @@ namespace bv
 PdrTexture2D::PdrTexture2D                      ( const Texture2D * texture )
     : m_textureID( 0 )
     , m_prevTextureID( 0 )
-    , m_pboID( 0 )
-    , m_writeLock( false )
-    , m_lockedMemoryPtr( nullptr )
+    , m_pboMem( nullptr )
     , m_width( 0 )
     , m_height( 0 )
 {
@@ -40,17 +38,24 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
     m_type              = ConstantsMapper::GLConstantTextureType( m_txFormat );
 
     auto txSemantic     = texture->GetSemantic();
-    auto semantic       = ConstantsMapper::GLConstant( txSemantic );
 
-    glGenBuffers( 1, &m_pboID );
-    glBindBuffer( GL_PIXEL_UNPACK_BUFFER, m_pboID );
-    glBufferData( GL_PIXEL_UNPACK_BUFFER, texture->RawFrameSize(), 0, semantic );
-    glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
+    if( PdrPBOMemTransfer::PBORequired( txSemantic ) )
+    {
+        m_pboMem = new PdrPBOMemTransfer( txSemantic, texture->RawFrameSize() );
+    }
 
     glGenTextures   ( 1, &m_textureID );
     GLuint prevTex = Bind();
 
-    glTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, 0 );
+    if( m_pboMem )
+    {
+        glTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, 0 );
+    }
+    else
+    {
+        glTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, texture->GetData() );
+    }
+
     glBindTexture( GL_TEXTURE_2D, prevTex );
 }
 
@@ -60,18 +65,20 @@ void    PdrTexture2D::Deinitialize    ()
 {
     if( m_textureID != 0 )
         glDeleteTextures( 1, &m_textureID );
-
-    if( m_pboID != 0 )
-        glDeleteBuffers( 1, &m_pboID );
+    
+    delete m_pboMem;
+    m_pboMem = nullptr;
 }
 
 // *******************************
 //
 void    PdrTexture2D::UpdateTexData     ( const Texture2D * texture )
 {
-    void * data = Lock( MemoryLockingType::MLT_WRITE_ONLY );
+    assert( m_pboMem );
+
+    void * data = m_pboMem->LockTexture( MemoryLockingType::MLT_WRITE_ONLY );
     memcpy( data, texture->GetData(), texture->RawFrameSize() );
-    Unlock();
+    m_pboMem->UnlockTexture( m_textureID, m_width, m_height, m_format, m_type );
 }
 
 // *******************************
@@ -99,48 +106,6 @@ void            PdrTexture2D::Disable       ( Renderer * renderer, int textureUn
 
 // *******************************
 //
-void *      PdrTexture2D::Lock              ( MemoryLockingType mlt )
-{
-    if( !m_lockedMemoryPtr )
-    {
-        glBindBuffer( GL_PIXEL_UNPACK_BUFFER, m_pboID );
-        m_lockedMemoryPtr = glMapBuffer( GL_PIXEL_UNPACK_BUFFER, ConstantsMapper::GLConstant( mlt ) );
-        glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
-
-        m_writeLock = mlt != MemoryLockingType::MLT_READ_ONLY;
-    }
-
-    return m_lockedMemoryPtr;
-}
-
-// *******************************
-//
-void        PdrTexture2D::Unlock            ()
-{
-    if( m_lockedMemoryPtr )
-    {
-        glBindBuffer( GL_PIXEL_UNPACK_BUFFER, m_pboID );
-        glUnmapBuffer( GL_PIXEL_UNPACK_BUFFER );
-    
-        if( m_writeLock )
-        {
-            GLuint prevTex = Bind();
-
-            //glTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, 0 );
-
-            glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, m_format, m_type, 0 );
-            glBindTexture( GL_TEXTURE_2D, prevTex );
-
-            m_writeLock = false;
-        }
-
-        glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
-        m_lockedMemoryPtr = nullptr;
-    }
-}
-
-// *******************************
-//
 void        PdrTexture2D::Update            ( const Texture2D * texture )
 {
     if ( texture->GetFormat() != m_txFormat || m_width != texture->GetWidth() || m_height != texture->GetHeight() )
@@ -149,7 +114,10 @@ void        PdrTexture2D::Update            ( const Texture2D * texture )
         Initialize( texture );
     }
 
-    UpdateTexData( texture );
+    if( m_pboMem )
+    {
+        UpdateTexData( texture );
+    }
 }
 
 // *******************************
