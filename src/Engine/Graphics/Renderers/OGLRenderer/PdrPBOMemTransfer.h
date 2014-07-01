@@ -8,6 +8,8 @@
 
 #include "Engine/Graphics/Resources/DataBuffer.h"
 
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
+
 
 namespace bv {
 
@@ -21,20 +23,28 @@ private:
 
     GLenum          m_pboTarget;
     GLenum          m_pboUsage;
-    GLenum          m_pboAccess;
+
+    GLenum          m_dataSize;
+    GLuint          m_index;
+
+    bool            m_writeLock;
+    void *          m_lockedMemoryPtr;
 
 public:
 
-                PdrPBOMemTransfer   ( DataBuffer::Semantic semantic );
-                ~PdrPBOMemTransfer  ();
-
-    static bool IsStreaming         ( DataBuffer::Semantic semantic );
+            PdrPBOMemTransfer   ( DataBuffer::Semantic semantic, unsigned int dataSize );
+            ~PdrPBOMemTransfer  ();
+    
+    void * LockTexture          ( MemoryLockingType mlt );
+    void   UnlockTexture        ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
 
 private:
 
+    GLuint      NumPBOs         ( DataBuffer::Semantic semantic ) const;
+
     GLenum      PBOTarget       ( DataBuffer::Semantic semantic ) const;
     GLenum      PBOUsage        ( DataBuffer::Semantic semantic ) const;
-    GLenum      PBOAccess       ( DataBuffer::Semantic semantic ) const;
+    GLenum      PBOAccess       ( MemoryLockingType mlt ) const;
 
 };
 
