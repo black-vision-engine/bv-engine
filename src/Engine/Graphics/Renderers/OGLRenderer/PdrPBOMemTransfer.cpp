@@ -39,7 +39,7 @@ PdrPBOMemTransfer::~PdrPBOMemTransfer   ()
 
 // ****************************
 // FIXME: tutaj tylko zapis bedzie szybi, odczyt w przypadku GL_PIXEL_UNPACK_BUFFER bedzie koszmarnie wolny
-void * PdrPBOMemTransfer::LockTexture   ( MemoryLockingType mlt )
+void * PdrPBOMemTransfer::SyncLockTexture   ( MemoryLockingType mlt )
 {
     assert( m_numPBOs == 1 );
 
@@ -57,7 +57,7 @@ void * PdrPBOMemTransfer::LockTexture   ( MemoryLockingType mlt )
 
 // ****************************
 // FIXME: only 2D textures so far
-void   PdrPBOMemTransfer::UnlockTexture ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type )
+void   PdrPBOMemTransfer::SyncUnlockTexture ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type )
 {
     assert( m_numPBOs == 1 );
 
@@ -68,10 +68,7 @@ void   PdrPBOMemTransfer::UnlockTexture ( GLuint textureID, GLuint width, GLuint
 
         if( m_writeLock )
         {
-            GLint prevTex = 0;
-
-            glGetIntegerv( GL_TEXTURE_BINDING_2D, &prevTex );
-            glBindTexture( GL_TEXTURE_2D, textureID );
+            GLint prevTex = BindTexture( textureID );
 
             //READ FROM PBO
             glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, width, height, format, type, 0 );
@@ -88,6 +85,96 @@ void   PdrPBOMemTransfer::UnlockTexture ( GLuint textureID, GLuint width, GLuint
 }
 
 // ****************************
+// FIXME: only for writing now
+void *  PdrPBOMemTransfer::AsyncLockTexture     ( MemoryLockingType mlt, GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type )
+{
+    assert( m_numPBOs == 2 );
+    assert( mlt == MemoryLockingType::MLT_READ_WRITE || mlt == MemoryLockingType::MLT_WRITE_ONLY );
+    assert( m_pboTarget == GL_PIXEL_UNPACK_BUFFER );
+    assert( m_pboUsage == GL_STREAM_DRAW );
+
+    if( !m_lockedMemoryPtr )
+    {
+        m_writeLock = mlt != MemoryLockingType::MLT_READ_ONLY;
+
+        m_index = ( m_index + 1 ) % 2;
+        
+        if( m_writeLock )
+        {
+            glBindBuffer( m_pboTarget, m_pboID[ m_index ] );
+
+            GLint prevTex = BindTexture( textureID );
+
+            //READ FROM PBO and write to texture - async, via DMA
+            glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, width, height, format, type, 0 );
+            glBindTexture( GL_TEXTURE_2D, prevTex );
+
+            glBindBuffer( m_pboTarget, m_pboID[ ( m_index + 1 ) % 2 ] );
+
+            // Note that glMapBufferARB() causes sync issue.
+            // If GPU is working with this buffer, glMapBufferARB() will wait(stall)
+            // until GPU to finish its job. To avoid waiting (idle), you can call
+            // first glBufferDataARB() with NULL pointer before glMapBufferARB().
+            // If you do that, the previous data in PBO will be discarded and
+            // glMapBufferARB() returns a new allocated pointer immediately
+            // even if GPU is still working with the previous data.
+            //glBufferData( m_pboTarget, m_dataSize, 0, m_pboUsage );
+
+            m_lockedMemoryPtr = glMapBuffer( m_pboTarget, PBOAccess( mlt ) );
+
+            return m_lockedMemoryPtr;
+        }
+    }
+
+    return nullptr;
+}
+
+// ****************************
+//
+void    PdrPBOMemTransfer::AsyncUnlockTexture   ()
+{
+    if( m_lockedMemoryPtr )
+    {
+        m_writeLock = false;
+        glUnmapBuffer( m_pboTarget );
+        m_lockedMemoryPtr = nullptr;
+    }
+
+    glBindBuffer( m_pboTarget, 0 );
+}
+
+// ****************************
+//
+void *  PdrPBOMemTransfer::LockTexture         ( MemoryLockingType mlt, GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type )
+{
+    if( m_numPBOs == 1 )
+    {
+        return SyncLockTexture( mlt );
+    }
+
+    return AsyncLockTexture( mlt, textureID, width, height, format, type );
+}
+
+// ****************************
+//
+void    PdrPBOMemTransfer::UnlockTexture       ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type )
+{
+    if( m_numPBOs == 1 )
+    {
+        SyncUnlockTexture( textureID, width, height, format, type );
+    }
+
+    AsyncUnlockTexture();
+}
+
+// ****************************
+//
+GLuint PdrPBOMemTransfer::NumPBOs       () const
+{
+    return m_numPBOs;
+}
+
+// ****************************
 //
 bool PdrPBOMemTransfer::PBORequired     ( DataBuffer::Semantic semantic )
 {
@@ -96,11 +183,20 @@ bool PdrPBOMemTransfer::PBORequired     ( DataBuffer::Semantic semantic )
 
 // ****************************
 //
+GLint   PdrPBOMemTransfer::BindTexture  ( GLuint textureID )
+{
+    GLint prevTex = 0;
+
+    glGetIntegerv( GL_TEXTURE_BINDING_2D, &prevTex );
+    glBindTexture( GL_TEXTURE_2D, textureID );
+
+    return prevTex;
+}
+
+// ****************************
+//
 GLuint  PdrPBOMemTransfer::NumPBOs      ( DataBuffer::Semantic semantic ) const
 {
-    //FIXME: test case only
-    return 1;
-
     if( semantic == DataBuffer::Semantic::S_DYNAMIC || semantic == DataBuffer::Semantic::S_TEXTURE_DYNAMIC )
     {
         return 1;

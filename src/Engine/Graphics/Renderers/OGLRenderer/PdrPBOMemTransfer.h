@@ -35,12 +35,22 @@ public:
             PdrPBOMemTransfer   ( DataBuffer::Semantic semantic, unsigned int dataSize );
             ~PdrPBOMemTransfer  ();
     
-    void * LockTexture          ( MemoryLockingType mlt );
-    void   UnlockTexture        ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
+    void *  SyncLockTexture     ( MemoryLockingType mlt );
+    void    SyncUnlockTexture   ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
+
+    void *  AsyncLockTexture    ( MemoryLockingType mlt, GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
+    void    AsyncUnlockTexture  ();
+
+    void *  LockTexture         ( MemoryLockingType mlt, GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
+    void    UnlockTexture       ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
+
+    GLuint  NumPBOs             () const;
 
     static bool PBORequired     ( DataBuffer::Semantic semantic );
 
 private:
+
+    GLint       BindTexture     ( GLuint textureID );
 
     GLuint      NumPBOs         ( DataBuffer::Semantic semantic ) const;
 

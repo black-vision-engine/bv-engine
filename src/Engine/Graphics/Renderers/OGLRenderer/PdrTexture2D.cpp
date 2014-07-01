@@ -2,9 +2,15 @@
 
 #include <cassert>
 
+//FIXME: remove
+//#include "System/HRTimer.h"
+
 
 namespace bv
 {
+
+//FIXME: remove
+//extern HighResolutionTimer GTimer;
 
 // *******************************
 // FIXME: implement streaming via two PBOs to make prebuffering "blazingly" fast
@@ -49,6 +55,8 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
 
     if( m_pboMem )
     {
+        //NOTE: wystarczy tylko tak, bo update i tak pojdzie dwa razy (raz przy tworzeniu tekstury, a raz przy jej enablowaniu, co oznacza, ze oba PBO zosatana zaladowane poprawnie danymi tekstury i nie bedzie
+        //NOTE: jednej pustej ramki z pustym przebiegiem renderera (czyli dokladnie tak, jak byc powinno) - pesymistycznie nalezy tutaj zaladowac od razu jedno PBO, i z niego poprawnie odczytaja sie dane w pierwszym feczu
         glTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, 0 );
     }
     else
@@ -76,9 +84,15 @@ void    PdrTexture2D::UpdateTexData     ( const Texture2D * texture )
 {
     assert( m_pboMem );
 
-    void * data = m_pboMem->LockTexture( MemoryLockingType::MLT_WRITE_ONLY );
+    //double writeStart = GTimer.CurElapsed();
+
+    void * data = m_pboMem->LockTexture( MemoryLockingType::MLT_WRITE_ONLY, m_textureID, m_width, m_height, m_format, m_type );
     memcpy( data, texture->GetData(), texture->RawFrameSize() );
     m_pboMem->UnlockTexture( m_textureID, m_width, m_height, m_format, m_type );
+
+    //double writeTime = GTimer.CurElapsed() - writeStart;
+
+    //printf( "Frame streaming took %.4f ms\n", writeTime );
 }
 
 // *******************************
