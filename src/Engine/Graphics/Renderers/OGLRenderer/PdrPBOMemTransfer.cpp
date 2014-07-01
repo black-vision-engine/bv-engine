@@ -118,7 +118,7 @@ void *  PdrPBOMemTransfer::AsyncLockTexture     ( MemoryLockingType mlt, GLuint 
             // If you do that, the previous data in PBO will be discarded and
             // glMapBufferARB() returns a new allocated pointer immediately
             // even if GPU is still working with the previous data.
-            //glBufferData( m_pboTarget, m_dataSize, 0, m_pboUsage );
+            glBufferData( m_pboTarget, m_dataSize, 0, m_pboUsage );
 
             m_lockedMemoryPtr = glMapBuffer( m_pboTarget, PBOAccess( mlt ) );
 
