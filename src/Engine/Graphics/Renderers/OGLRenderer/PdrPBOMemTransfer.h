@@ -11,6 +11,7 @@
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 
 
+//FIXME: implicitly assumes that Lock/Unlock pairs are called in a sane way (lockRT/unlockRT without mixing Texture/RT)
 namespace bv {
 
 class PdrPBOMemTransfer
@@ -35,14 +36,23 @@ public:
             PdrPBOMemTransfer   ( DataBuffer::Semantic semantic, unsigned int dataSize );
             ~PdrPBOMemTransfer  ();
     
+    void *  LockTexture         ( MemoryLockingType mlt, GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
+    void    UnlockTexture       ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
+
+    void *  LockRenderTarget    ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type );
+    void    UnlockRenderTarget  ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type );
+
     void *  SyncLockTexture     ( MemoryLockingType mlt );
     void    SyncUnlockTexture   ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
 
     void *  AsyncLockTexture    ( MemoryLockingType mlt, GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
     void    AsyncUnlockTexture  ();
 
-    void *  LockTexture         ( MemoryLockingType mlt, GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
-    void    UnlockTexture       ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
+    void *  SyncLockRenderTarget    ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type );
+    void    SyncUnlockRenderTarget  ();
+
+    void *  AsyncLockRenderTarget   ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type );
+    void    AsyncUnlockRenderTarget ();
 
     GLuint  NumPBOs             () const;
 

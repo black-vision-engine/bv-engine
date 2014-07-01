@@ -3,6 +3,7 @@
 #include "gl/glew.h"
 
 #include "Engine/Graphics/Resources/RenderTarget.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrPBOMemTransfer.h"
 
 
 namespace bv {
@@ -28,7 +29,7 @@ private:
     GLuint                          m_depthBufID;
 
     std::vector< GLuint >           m_textures;
-    std::vector< GLuint >           m_drawBuffers;
+    std::vector< GLenum >           m_drawBuffers;
 
     int                             m_prevViewportCoords[ 4 ];
     double                          m_prevDepthRange[ 2 ];

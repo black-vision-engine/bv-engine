@@ -38,6 +38,54 @@ PdrPBOMemTransfer::~PdrPBOMemTransfer   ()
 }
 
 // ****************************
+//
+void *  PdrPBOMemTransfer::LockTexture         ( MemoryLockingType mlt, GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type )
+{
+    if( m_numPBOs == 1 )
+    {
+        return SyncLockTexture( mlt );
+    }
+
+    return AsyncLockTexture( mlt, textureID, width, height, format, type );
+}
+
+// ****************************
+//
+void    PdrPBOMemTransfer::UnlockTexture       ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type )
+{
+    if( m_numPBOs == 1 )
+    {
+        SyncUnlockTexture( textureID, width, height, format, type );
+    }
+
+    AsyncUnlockTexture();
+}
+
+// ****************************
+//
+void *  PdrPBOMemTransfer::LockRenderTarget    ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type )
+{
+    if( m_numPBOs == 1 )
+    {
+        return SyncLockRenderTarget( readBufferID, width, height, format, type );
+    }
+
+    return AsyncLockRenderTarget( readBufferID, width, height, format, type );
+}
+
+// ****************************
+//
+void    PdrPBOMemTransfer::UnlockRenderTarget  ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type )
+{
+    if( m_numPBOs == 1 )
+    {
+        SyncUnlockRenderTarget();
+    }
+
+    AsyncUnlockRenderTarget();
+}
+
+// ****************************
 // FIXME: tutaj tylko zapis bedzie szybi, odczyt w przypadku GL_PIXEL_UNPACK_BUFFER bedzie koszmarnie wolny
 void * PdrPBOMemTransfer::SyncLockTexture   ( MemoryLockingType mlt )
 {
@@ -122,49 +170,103 @@ void *  PdrPBOMemTransfer::AsyncLockTexture     ( MemoryLockingType mlt, GLuint 
 
             m_lockedMemoryPtr = glMapBuffer( m_pboTarget, PBOAccess( mlt ) );
 
-            return m_lockedMemoryPtr;
+            glBindBuffer( m_pboTarget, 0 );
         }
     }
 
-    return nullptr;
+    return m_lockedMemoryPtr;
 }
 
 // ****************************
 //
 void    PdrPBOMemTransfer::AsyncUnlockTexture   ()
 {
+    assert( m_numPBOs == 2 );
+
     if( m_lockedMemoryPtr )
     {
-        m_writeLock = false;
+        glBindBuffer( m_pboTarget, m_pboID[ ( m_index + 1 ) % 2 ] );
         glUnmapBuffer( m_pboTarget );
+        glBindBuffer( m_pboTarget, 0 );
+
+        m_writeLock = false;
         m_lockedMemoryPtr = nullptr;
     }
+}
 
+// ****************************
+//
+void *  PdrPBOMemTransfer::SyncLockRenderTarget    ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type )
+{
+    assert( m_numPBOs == 1 );
+    assert( m_pboTarget == GL_PIXEL_PACK_BUFFER );
+
+    if( !m_lockedMemoryPtr )
+    {
+        glReadBuffer( readBufferID );
+
+        glBindBuffer( m_pboTarget, m_pboID[ m_index ] );
+        glReadPixels( 0, 0, width, height, format, type, 0 );
+        m_lockedMemoryPtr = glMapBuffer( m_pboTarget, GL_READ_ONLY );
+
+        glBindBuffer( m_pboTarget, 0 );
+    }
+
+    return m_lockedMemoryPtr;
+}
+
+// ****************************
+//
+void    PdrPBOMemTransfer::SyncUnlockRenderTarget  ()
+{
+    assert( m_numPBOs == 1 );
+    assert( m_pboTarget == GL_PIXEL_PACK_BUFFER );
+
+    glBindBuffer( m_pboTarget, m_pboID[ m_index ] );
+    glUnmapBuffer( m_pboTarget );
     glBindBuffer( m_pboTarget, 0 );
+
+    m_lockedMemoryPtr = nullptr;
 }
 
 // ****************************
 //
-void *  PdrPBOMemTransfer::LockTexture         ( MemoryLockingType mlt, GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type )
+void *  PdrPBOMemTransfer::AsyncLockRenderTarget   ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type )
 {
-    if( m_numPBOs == 1 )
+    assert( m_numPBOs == 2 );
+    assert( m_pboTarget == GL_PIXEL_PACK_BUFFER );
+    assert( m_pboUsage == GL_STREAM_READ );
+
+    if( !m_lockedMemoryPtr )
     {
-        return SyncLockTexture( mlt );
+        m_index = ( m_index + 1 ) % 2;
+
+        glReadBuffer( readBufferID );
+
+        glBindBuffer( m_pboTarget, m_pboID[ m_index ] );
+        glReadPixels( 0, 0, width, height, format, type, 0 ); //Async DMA read
+
+        glBindBuffer( m_pboTarget, m_pboID[ ( m_index + 1 ) % 2 ] );
+        m_lockedMemoryPtr = glMapBuffer( m_pboTarget, GL_READ_ONLY );
+
+        glBindBuffer( m_pboTarget, 0 );
     }
 
-    return AsyncLockTexture( mlt, textureID, width, height, format, type );
+    return m_lockedMemoryPtr;
 }
 
 // ****************************
 //
-void    PdrPBOMemTransfer::UnlockTexture       ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type )
+void    PdrPBOMemTransfer::AsyncUnlockRenderTarget ()
 {
-    if( m_numPBOs == 1 )
-    {
-        SyncUnlockTexture( textureID, width, height, format, type );
-    }
+    assert( m_numPBOs == 2 );
+    assert( m_pboTarget == GL_PIXEL_PACK_BUFFER );
 
-    AsyncUnlockTexture();
+    glBindBuffer( m_pboTarget, m_pboID[ ( m_index + 1 ) % 2 ] );
+    glUnmapBuffer( m_pboTarget );
+    glBindBuffer( m_pboTarget, 0 );
+
+    m_lockedMemoryPtr = nullptr;
 }
 
 // ****************************
