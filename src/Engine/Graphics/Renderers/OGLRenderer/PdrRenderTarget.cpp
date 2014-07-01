@@ -7,8 +7,14 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrTexture2D.h"
 
+//FIXME: remove
+//#include "System/HRTimer.h"
 
 namespace bv {
+
+//FIXME: remove
+//extern HighResolutionTimer GTimer;
+
 
 // ****************************
 //
@@ -22,6 +28,7 @@ PdrRenderTarget::PdrRenderTarget     ( Renderer * renderer, const RenderTarget *
     , m_drawBuffers( rt->NumTargets() )
     , m_textures( rt->NumTargets() )
     , m_textureFormats( rt->NumTargets() )
+    , m_hackPBOReader( nullptr )
 {
     assert( m_numTargets > 0 );
 
@@ -57,14 +64,11 @@ PdrRenderTarget::PdrRenderTarget     ( Renderer * renderer, const RenderTarget *
 
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 
-    //FIXME: HACK
-    m_index = 0;
-    glGenBuffers( 2, m_pbo );
-    glBindBuffer( GL_PIXEL_PACK_BUFFER, m_pbo[ 0 ] );
-    glBufferData( GL_PIXEL_PACK_BUFFER, rt->ColorTexture( 0 )->RawFrameSize(), 0, GL_STREAM_READ );
-    glBindBuffer( GL_PIXEL_PACK_BUFFER, m_pbo[ 1 ] );
-    glBufferData( GL_PIXEL_PACK_BUFFER, rt->ColorTexture( 0 )->RawFrameSize(), 0, GL_STREAM_READ );
-    glBindBuffer( GL_PIXEL_PACK_BUFFER, 0 );
+    //FIXME: hack
+    if( rt->Semantic() == RenderTarget::RTSemantic::S_DRAW_READ )
+    {
+        m_hackPBOReader = new PdrPBOMemTransfer( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( 0 )->RawFrameSize() );
+    }
 }
 
 // ****************************
@@ -81,8 +85,7 @@ PdrRenderTarget::~PdrRenderTarget    ()
         glDeleteRenderbuffers( 1, &m_depthBufID );
 
     //FIXME: HACK
-    glDeleteBuffers( 2, m_pbo );
-
+    delete m_hackPBOReader;
 }
 
 // ****************************
@@ -115,8 +118,6 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
 {
     assert( i < m_numTargets );
 
-    Enable( renderer );
-
     auto format = m_textureFormats[ i ];
 
     if( outputTex == nullptr )
@@ -144,6 +145,9 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
         outputTex = tx;
     }
 
+    //double readStart = GTimer.CurElapsed();
+    Enable( renderer );
+
     if( false ) //OLD METHOD
     {
         glReadBuffer( m_drawBuffers[ i ] );
@@ -151,29 +155,17 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
     }
     else //FIXME: HACK
     {
-        glReadBuffer( m_drawBuffers[ i ] );
+        auto fmt    = ConstantsMapper::GLConstantTextureFormat( format );
+        auto type   = ConstantsMapper::GLConstantTextureType( format );
 
-        m_index = ( m_index + 1 ) % 2;
-
-        //DMA transfer - no readback yet
-        glBindBuffer( GL_PIXEL_PACK_BUFFER, m_pbo[ m_index ] );
-        glReadPixels( 0, 0, m_width, m_height, ConstantsMapper::GLConstantTextureFormat( format ), ConstantsMapper::GLConstantTextureType( format ), 0 );
-
-        glBindBuffer( GL_PIXEL_PACK_BUFFER, m_pbo[ ( m_index + 1 ) % 2 ] );
-        GLubyte * data = (GLubyte*) glMapBuffer( GL_PIXEL_PACK_BUFFER, GL_READ_ONLY );
-
-        //Frame from previous read
-        if( data )
-        {
-            memcpy( outputTex->GetData(), data, outputTex->RawFrameSize() );
-
-            glUnmapBuffer( GL_PIXEL_PACK_BUFFER );
-        }
-
-        glBindBuffer( GL_PIXEL_PACK_BUFFER, 0 );
+        void * data = m_hackPBOReader->LockRenderTarget( m_drawBuffers[ i ], m_width, m_height, fmt, type );
+        memcpy( outputTex->GetData(), data, outputTex->RawFrameSize() );
+        m_hackPBOReader->UnlockRenderTarget();
     }
 
     Disable( renderer );
+    //double readTime = GTimer.CurElapsed() - readStart;
+    //printf( "Frame readback took %.4f ms\n", readTime * 1000.f );
 }
 
 // ****************************

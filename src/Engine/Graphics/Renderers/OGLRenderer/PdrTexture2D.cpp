@@ -5,7 +5,6 @@
 //FIXME: remove
 //#include "System/HRTimer.h"
 
-
 namespace bv
 {
 
@@ -91,8 +90,7 @@ void    PdrTexture2D::UpdateTexData     ( const Texture2D * texture )
     m_pboMem->UnlockTexture( m_textureID, m_width, m_height, m_format, m_type );
 
     //double writeTime = GTimer.CurElapsed() - writeStart;
-
-    //printf( "Frame streaming took %.4f ms\n", writeTime );
+    //printf( "Frame streaming took %.4f ms\n", writeTime * 1000.f );
 }
 
 // *******************************

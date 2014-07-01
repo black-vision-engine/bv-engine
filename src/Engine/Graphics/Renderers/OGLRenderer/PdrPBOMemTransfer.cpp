@@ -57,8 +57,10 @@ void    PdrPBOMemTransfer::UnlockTexture       ( GLuint textureID, GLuint width,
     {
         SyncUnlockTexture( textureID, width, height, format, type );
     }
-
-    AsyncUnlockTexture();
+    else
+    {
+        AsyncUnlockTexture();
+    }
 }
 
 // ****************************
@@ -75,14 +77,16 @@ void *  PdrPBOMemTransfer::LockRenderTarget    ( GLenum readBufferID, GLuint wid
 
 // ****************************
 //
-void    PdrPBOMemTransfer::UnlockRenderTarget  ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type )
+void    PdrPBOMemTransfer::UnlockRenderTarget  ()
 {
     if( m_numPBOs == 1 )
     {
         SyncUnlockRenderTarget();
     }
-
-    AsyncUnlockRenderTarget();
+    else
+    {
+        AsyncUnlockRenderTarget();
+    }
 }
 
 // ****************************

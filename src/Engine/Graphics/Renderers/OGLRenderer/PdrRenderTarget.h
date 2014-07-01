@@ -34,9 +34,7 @@ private:
     int                             m_prevViewportCoords[ 4 ];
     double                          m_prevDepthRange[ 2 ];
 
-    //FIXME: HACK
-    unsigned int                    m_index;
-    GLuint                          m_pbo[ 2 ];
+    PdrPBOMemTransfer *             m_hackPBOReader; //FIXME: hack, podmienic na wersje z PBO w rendererze oraz front/back RT
 
 public:
 

@@ -40,7 +40,7 @@ public:
     void    UnlockTexture       ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
 
     void *  LockRenderTarget    ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type );
-    void    UnlockRenderTarget  ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type );
+    void    UnlockRenderTarget  ();
 
     void *  SyncLockTexture     ( MemoryLockingType mlt );
     void    SyncUnlockTexture   ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
