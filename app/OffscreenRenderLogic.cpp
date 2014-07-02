@@ -15,31 +15,33 @@ namespace bv {
 // **************************
 //
 OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int height, unsigned int numReadBuffers, Camera * camera, TextureFormat fmt )
-    : m_displayRenderTarget( nullptr )
-    , m_auxRenderTarget( nullptr )
+    : m_auxRenderTarget( nullptr )
     , m_readbackTextures( numReadBuffers )
     , m_displayCamera( nullptr )
     , m_rendererCamera( camera )
-    , m_displayQuad( nullptr )
     , m_auxQuad( nullptr )
+    , m_curDisplayTarget( 0 )
     , m_auxTexture2DEffect( nullptr )
     , m_displayRTEnabled( false )
     , m_auxRTEnabled( false )
 {
-    m_displayRenderTarget   = MainDisplayTarget::CreateDisplayRenderTarget( width, height, fmt );
-    m_auxRenderTarget       = MainDisplayTarget::CreateAuxRenderTarget( width, height, fmt );
+    m_displayRenderTargets[ 0 ] = MainDisplayTarget::CreateDisplayRenderTarget( width, height, fmt );
+    m_displayRenderTargets[ 1 ] = MainDisplayTarget::CreateDisplayRenderTarget( width, height, fmt );
+    m_auxRenderTarget           = MainDisplayTarget::CreateAuxRenderTarget( width, height, fmt );
 
-    m_displayQuad           = MainDisplayTarget::CreateDisplayRect( m_displayRenderTarget->ColorTexture( 0 ) );
-    m_auxQuad               = MainDisplayTarget::CreateAuxRect( m_auxRenderTarget->ColorTexture( 0 ) );
+    m_displayQuads[ 0 ]         = MainDisplayTarget::CreateDisplayRect( m_displayRenderTargets[ 0 ]->ColorTexture( 0 ) );
+    m_displayQuads[ 1 ]         = MainDisplayTarget::CreateDisplayRect( m_displayRenderTargets[ 1 ]->ColorTexture( 0 ) );
+    m_auxQuad                   = MainDisplayTarget::CreateAuxRect( m_auxRenderTarget->ColorTexture( 0 ) );
 
-    m_auxTexture2DEffect    = static_cast< Texture2DEffect * >( m_auxQuad->GetRenderableEffect() );
+    m_auxTexture2DEffect        = static_cast< Texture2DEffect * >( m_auxQuad->GetRenderableEffect() );
 
     std::vector< bv::Transform > vec;
     vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
 
-    m_displayQuad->SetWorldTransforms( vec );
+    m_displayQuads[ 0 ]->SetWorldTransforms( vec );
+    m_displayQuads[ 1 ]->SetWorldTransforms( vec );
     m_auxQuad->SetWorldTransforms( vec );
-  
+
     m_displayCamera         = MainDisplayTarget::CreateDisplayCamera();
 
     for( unsigned int i = 0; i < numReadBuffers; ++i )
@@ -52,10 +54,12 @@ OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int 
 //
 OffscreenRenderLogic::~OffscreenRenderLogic  ()
 {
-    delete m_displayRenderTarget;
+    delete m_displayRenderTargets[ 0 ];
+    delete m_displayRenderTargets[ 1 ];
     delete m_auxRenderTarget;
 
-    delete m_displayQuad;
+    delete m_displayQuads[ 0 ];
+    delete m_displayQuads[ 1 ];
     delete m_auxQuad;
 
     delete m_displayCamera;
@@ -84,7 +88,7 @@ void                OffscreenRenderLogic::EnableDisplayRenderTarget ( Renderer *
             DisableAuxRenderTarget( renderer );
         }
 
-        renderer->Enable( m_displayRenderTarget );
+        renderer->Enable(CurDisplayRenderTarget() );
 
         m_displayRTEnabled = true;
     }
@@ -113,7 +117,7 @@ void                OffscreenRenderLogic::DisableDisplayRenderTarget( Renderer *
 {
     m_displayRTEnabled = false;
 
-    renderer->Disable( m_displayRenderTarget );
+    renderer->Disable( CurDisplayRenderTarget() );
 }
 
 // **************************
@@ -130,6 +134,13 @@ void                OffscreenRenderLogic::DisableAuxRenderTarget    ( Renderer *
 void                OffscreenRenderLogic::SetAuxAlphaModelValue     ( const IValue * val )
 {
     m_auxTexture2DEffect->SetAlphaValModel( val );
+}
+
+// **************************
+//
+void                OffscreenRenderLogic::SwapDisplayRenderTargets  ()
+{
+    m_curDisplayTarget = ( m_curDisplayTarget + 1 ) % 2;
 }
 
 // **************************
@@ -154,7 +165,7 @@ void                OffscreenRenderLogic::DrawDisplayRenderTarget   ( Renderer *
     assert( m_displayRTEnabled == false );
 
     renderer->SetCamera( m_displayCamera );
-    renderer->Draw( m_displayQuad );
+    renderer->Draw( CurDisplayQuad() );
     renderer->SetCamera( m_rendererCamera );
 }
 
@@ -182,9 +193,23 @@ const Texture2D *   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer *
 {
     assert( bufNum < m_readbackTextures.size() );
 
-    renderer->ReadColorTexture( 0, m_displayRenderTarget, m_readbackTextures[ bufNum ] );
+    renderer->ReadColorTexture( 0, CurDisplayRenderTarget(), m_readbackTextures[ bufNum ] );
 
     return m_readbackTextures[ bufNum ];
+}
+
+// **************************
+//
+RenderTarget *    OffscreenRenderLogic::CurDisplayRenderTarget      () const
+{
+    return m_displayRenderTargets[ m_curDisplayTarget ];
+}
+
+// **************************
+//
+TriangleStrip *   OffscreenRenderLogic:: CurDisplayQuad              () const
+{
+    return m_displayQuads[ m_curDisplayTarget ];
 }
 
 } //bv

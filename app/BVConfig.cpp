@@ -24,7 +24,7 @@ BVConfig::BVConfig                      ()
     m_defaultWindowHeight   = m_defaultHeight / 3;
 #endif
 
-    m_fps               = 2000;
+    m_fps               = 5000;
     m_frameTimeMillis   = 1000 / m_fps;
 
 #ifdef USE_READBACK_API

@@ -20,11 +20,13 @@ class OffscreenRenderLogic
 {
 private:
 
-    RenderTarget *      m_displayRenderTarget;
+    RenderTarget *      m_displayRenderTargets[ 2 ];
     RenderTarget *      m_auxRenderTarget;
     
-    TriangleStrip *     m_displayQuad;
+    TriangleStrip *     m_displayQuads[ 2 ];
     TriangleStrip *     m_auxQuad;
+
+    unsigned int        m_curDisplayTarget;
 
     Texture2DEffect *   m_auxTexture2DEffect;
 
@@ -51,6 +53,8 @@ public:
 
     void                SetAuxAlphaModelValue       ( const IValue * val );
 
+    void                SwapDisplayRenderTargets    ();
+
     bool                DisplayRenderTargetEnabled  () const;
     bool                AuxRenderTargetEnabled      () const;
 
@@ -61,7 +65,10 @@ public:
 
     const Texture2D *   ReadDisplayTarget           ( Renderer * renderer, unsigned int bufNum );
 
+private:
 
+    RenderTarget *      CurDisplayRenderTarget      () const;
+    TriangleStrip *     CurDisplayQuad              () const;
 };
 
 } //bv

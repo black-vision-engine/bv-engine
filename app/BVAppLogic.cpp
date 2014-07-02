@@ -274,6 +274,8 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
 
     if( !DefaultConfig.ReadbackFlag() )
     {
+        //Not needed as it does not make sense without readback delay
+        //m_offscreenRenderLogic->SwapDisplayRenderTargets();
         return;
     }
 
@@ -290,10 +292,13 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
     static int nPasses = 0;
     static int nReadbackFrame = 0;
 
+
     double readbackStart = GTimer.CurElapsed();
     auto frame = m_offscreenRenderLogic->ReadDisplayTarget( renderer, nReadbackFrame );
     nReadbackFrame = ( nReadbackFrame + 1 ) % m_offscreenRenderLogic->NumReadBuffers();
     double readbackTime = GTimer.CurElapsed() - readbackStart;
+
+    m_offscreenRenderLogic->SwapDisplayRenderTargets();
 
     totalElapsed += readbackTime;
 
@@ -315,7 +320,7 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
     }
 
     nFrames++;
-
+    
     //TODO: code used to push data to playback cards
 }
 
