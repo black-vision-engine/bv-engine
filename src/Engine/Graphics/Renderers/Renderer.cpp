@@ -16,6 +16,7 @@
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrVertexDescriptor.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrTexture2D.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrRenderTarget.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrPBOMemTransfer.h"
 
 #include "Engine/Graphics/Shaders/RenderablePass.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
@@ -61,6 +62,8 @@ void	Renderer::Initialize	    ( int w, int h, TextureFormat colorFormat )
     m_defaultStateInstance.SetState( new StencilState() );
 
     m_currentStateInstance = m_defaultStateInstance;
+
+    m_PdrPBOMemTransferRT = nullptr;
 }
 
 // *********************************
@@ -386,7 +389,15 @@ void    Renderer::Disable             ( const RenderTarget * rt )
 void    Renderer::ReadColorTexture    ( unsigned int i, const RenderTarget * rt, Texture2D *& outputTex )
 {
     PdrRenderTarget * pdrRt = GetPdrRenderTarget( rt );
-    pdrRt->ReadColorTexture( i, this, outputTex );
+
+    if( !m_PdrPBOMemTransferRT )
+    {
+        m_PdrPBOMemTransferRT = new PdrPBOMemTransfer( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize() );
+    }
+
+    assert( m_PdrPBOMemTransferRT->DataSize() == rt->ColorTexture( i )->RawFrameSize() );
+
+    pdrRt->ReadColorTexture( i, this, m_PdrPBOMemTransferRT, outputTex );
 }
 
 // *********************************

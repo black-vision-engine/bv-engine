@@ -55,6 +55,7 @@ public:
     void    AsyncUnlockRenderTarget ();
 
     GLuint  NumPBOs             () const;
+    GLuint  DataSize            () const;
 
     static bool PBORequired     ( DataBuffer::Semantic semantic );
 

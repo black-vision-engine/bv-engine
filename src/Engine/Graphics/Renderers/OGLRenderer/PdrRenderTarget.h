@@ -3,12 +3,12 @@
 #include "gl/glew.h"
 
 #include "Engine/Graphics/Resources/RenderTarget.h"
-#include "Engine/Graphics/Renderers/OGLRenderer/PdrPBOMemTransfer.h"
 
 
 namespace bv {
 
 class Renderer;
+class PdrPBOMemTransfer;
 
 class PdrRenderTarget
 {
@@ -34,8 +34,6 @@ private:
     int                             m_prevViewportCoords[ 4 ];
     double                          m_prevDepthRange[ 2 ];
 
-    PdrPBOMemTransfer *             m_hackPBOReader; //FIXME: hack, podmienic na wersje z PBO w rendererze oraz front/back RT
-
 public:
 
                     PdrRenderTarget     ( Renderer * renderer, const RenderTarget * rt );
@@ -46,7 +44,7 @@ public:
     void            Enable              ( Renderer * renderer );
     void            Disable             ( Renderer * renderer );
 
-    void            ReadColorTexture    ( unsigned int i, Renderer * renderer, Texture2D *& outputTex );
+    void            ReadColorTexture    ( unsigned int i, Renderer * renderer, PdrPBOMemTransfer * pboMem, Texture2D *& outputTex );
 
 private:
 

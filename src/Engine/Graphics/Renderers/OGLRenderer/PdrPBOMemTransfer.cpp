@@ -1,5 +1,6 @@
 #include "PdrPBOMemTransfer.h"
 
+//#define DISALLOW_ASYNC_PBO
 
 namespace bv {
 
@@ -282,6 +283,13 @@ GLuint PdrPBOMemTransfer::NumPBOs       () const
 
 // ****************************
 //
+GLuint  PdrPBOMemTransfer::DataSize     () const
+{
+    return m_dataSize;
+}
+
+// ****************************
+//
 bool PdrPBOMemTransfer::PBORequired     ( DataBuffer::Semantic semantic )
 {
     return semantic != DataBuffer::Semantic::S_STATIC && semantic != DataBuffer::Semantic::S_TEXTURE_STATIC;
@@ -303,6 +311,10 @@ GLint   PdrPBOMemTransfer::BindTexture  ( GLuint textureID )
 //
 GLuint  PdrPBOMemTransfer::NumPBOs      ( DataBuffer::Semantic semantic ) const
 {
+#ifdef DISALLOW_ASYNC_PBO
+    return 1
+#endif
+
     if( semantic == DataBuffer::Semantic::S_DYNAMIC || semantic == DataBuffer::Semantic::S_TEXTURE_DYNAMIC )
     {
         return 1;

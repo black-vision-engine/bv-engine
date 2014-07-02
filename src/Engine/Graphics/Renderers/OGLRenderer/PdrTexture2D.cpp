@@ -2,14 +2,18 @@
 
 #include <cassert>
 
-//FIXME: remove
-//#include "System/HRTimer.h"
+//#define POOR_PROFILE_TEXTURE_STREAMING
+
+#ifdef POOR_PROFILE_TEXTURE_STREAMING
+#include "System/HRTimer.h"
+#endif
 
 namespace bv
 {
 
-//FIXME: remove
-//extern HighResolutionTimer GTimer;
+#ifdef POOR_PROFILE_TEXTURE_STREAMING
+extern HighResolutionTimer GTimer;
+#endif
 
 // *******************************
 // FIXME: implement streaming via two PBOs to make prebuffering "blazingly" fast
@@ -83,14 +87,18 @@ void    PdrTexture2D::UpdateTexData     ( const Texture2D * texture )
 {
     assert( m_pboMem );
 
-    //double writeStart = GTimer.CurElapsed();
+#ifdef POOR_PROFILE_TEXTURE_STREAMING
+    double writeStart = GTimer.CurElapsed();
+#endif
 
     void * data = m_pboMem->LockTexture( MemoryLockingType::MLT_WRITE_ONLY, m_textureID, m_width, m_height, m_format, m_type );
     memcpy( data, texture->GetData(), texture->RawFrameSize() );
     m_pboMem->UnlockTexture( m_textureID, m_width, m_height, m_format, m_type );
 
-    //double writeTime = GTimer.CurElapsed() - writeStart;
-    //printf( "Frame streaming took %.4f ms\n", writeTime * 1000.f );
+#ifdef POOR_PROFILE_TEXTURE_STREAMING
+    double writeTime = GTimer.CurElapsed() - writeStart;
+    printf( "Frame streaming took %.4f ms\n", writeTime * 1000.f );
+#endif
 }
 
 // *******************************
