@@ -104,11 +104,11 @@ void            CompositeTransform<ParamT>::InitializeDefaultSRT()
     tx.AddKey( t, v0 ); ty.AddKey( t, v0 ); tz.AddKey( t, v0 );
     ictx.AddKey( t, v0 ); icty.AddKey( t, v0 ); ictz.AddKey( t, v0 );
 
-    AddTranslation( ctx, cty, ctz );
-    AddScale( sx, sy, sz );
-    AddRotation( angle, rx, ry, rz );
+    AddTranslationCFwd( ctx, cty, ctz );
     AddTranslation( tx, ty, tz );
-    AddTranslation( ictx, icty, ictz );
+    AddRotation( angle, rx, ry, rz );
+    AddScale( sx, sy, sz );
+    AddTranslationCInv( ictx, icty, ictz );
 }
 
 // *************************************
@@ -260,6 +260,8 @@ glm::mat4x4 SimpleTransform<ParamT>::Evaluate( typename ParamT::TimeT t ) const
     switch( kind )
     {
     case TransformKind::translation:
+    case TransformKind::fwd_center:
+    case TransformKind::inv_center:
         return glm::translate( glm::mat4( 1.0f ), glm::vec3( p0.Evaluate( t ), p1.Evaluate( t ), p2.Evaluate( t ) ) );
     case TransformKind::scale:
         return glm::scale( glm::mat4( 1.0f ), glm::vec3( p0.Evaluate( t ), p1.Evaluate( t ), p2.Evaluate( t ) ) );

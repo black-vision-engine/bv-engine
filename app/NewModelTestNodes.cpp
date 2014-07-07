@@ -46,8 +46,33 @@ namespace {
         auto param = plugin->GetParameter( "simple_transform" );
         assert( param );
 
+        SetParameterScale ( param, 0, 0.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 0, 1.0f, glm::vec3( 0.5f, 0.5f, 1.f ) );
+        SetParameterScale ( param, 0, 2.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 0, 3.0f, glm::vec3( 0.2f, 0.2f, 1.f ) );
+        SetParameterScale ( param, 0, 4.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 0, 5.0f, glm::vec3( 0.3f, 0.3f, 1.f ) );
+        SetParameterScale ( param, 0, 6.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 0, 7.0f, glm::vec3( 0.6f, 0.6f, 1.f ) );
+        SetParameterScale ( param, 0, 8.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 0, 9.0f, glm::vec3( 0.4f, 0.4f, 1.f ) );
+        SetParameterScale ( param, 0, 10.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 0, 12.0f, glm::vec3( 0.2f, 3.f, 1.f ) );
+        SetParameterScale ( param, 0, 16.0f, glm::vec3( 3.f, 0.5f, 1.f ) );
+        SetParameterScale ( param, 0, 18.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 0, 21.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+
         SetParameterRotation ( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
         SetParameterRotation ( param, 0, 30.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+
+        SetParameterCenterMass( param, 0, 0.f, glm::vec3( 1.5f, 1.5f, 0.f ) );
+        SetParameterCenterMass( param, 0, 10.f, glm::vec3( -.5f, -1.0f, 0.f ) );
+        SetParameterCenterMass( param, 0, 15.f, glm::vec3( 0.f, 0.f, 0.f ) );
+
+        SetParameterTranslation( param, 0, 23.f, glm::vec3( 0.f, 0.f, 0.f ) );
+        SetParameterTranslation( param, 0, 25.f, glm::vec3( 2.f, 0.f, 0.f ) );
+        SetParameterTranslation( param, 0, 27.5f, glm::vec3( -2.f, 0.f, 0.f ) );
+        SetParameterTranslation( param, 0, 30.f, glm::vec3( 0.f, 0.f, 0.f ) );
     }
 
 } //anonymous

@@ -22,7 +22,7 @@ bool    SetParameterCenterMass  ( IParameterPtr parameter, TimeType t, const glm
 bool    SetParameterRotation    ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & rotAxis, float angle );
 bool    SetParameterScale       ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & scale );
 bool    SetParameterTranslation ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & translation );
-bool    SetParameterCenterMass  ( IParameterPtr parameter, TimeType t, const glm::vec3 & center );
+bool    SetParameterCenterMass  ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & center );
 
 } //model
 } //bv
