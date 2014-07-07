@@ -17,10 +17,12 @@ inline bool SetParameter( IParameterPtr parameter, TimeType t, const ValueType &
 bool    SetParameterRotation    ( IParameterPtr parameter, TimeType t, const glm::vec3 & rotAxis, float angle );
 bool    SetParameterScale       ( IParameterPtr parameter, TimeType t, const glm::vec3 & scale );
 bool    SetParameterTranslation ( IParameterPtr parameter, TimeType t, const glm::vec3 & translation );
+bool    SetParameterCenterMass  ( IParameterPtr parameter, TimeType t, const glm::vec3 & center );
 
 bool    SetParameterRotation    ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & rotAxis, float angle );
 bool    SetParameterScale       ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & scale );
 bool    SetParameterTranslation ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & translation );
+bool    SetParameterCenterMass  ( IParameterPtr parameter, TimeType t, const glm::vec3 & center );
 
 } //model
 } //bv

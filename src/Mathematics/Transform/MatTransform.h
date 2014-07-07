@@ -38,9 +38,11 @@ public:
 
 enum class TransformKind : int
 {
+    fwd_center,
     rotation,
     scale,
-    translation
+    translation,
+    inv_center
 };
 
 template<typename ParamT>
@@ -69,9 +71,9 @@ public:
         return new SimpleTransform( TransformKind::scale, p0, p1, p2 );
     }
 
-    static SimpleTransform *    CreateTranslation   ( ParamT p0, ParamT p1, ParamT p2 )
+    static SimpleTransform *    CreateTranslation   ( ParamT p0, ParamT p1, ParamT p2, TransformKind tk = TransformKind::translation )
     {
-        return new SimpleTransform( TransformKind::translation, p0, p1, p2 );
+        return new SimpleTransform( tk, p0, p1, p2 );
     }
 
     void  SetValues ( TimeType t, float v0, float v1, float v2 )
@@ -141,6 +143,8 @@ public:
     void            AddScale            ( ParamT s0, ParamT s1, ParamT s2 );
     void            AddRotation         ( ParamT angle, ParamT r0, ParamT r1, ParamT r2 );
     void            AddRotation         ( ParamT angle, const Vec3Interpolator & rotAxis );
+    void            AddTranslationCFwd  ( ParamT x0, ParamT x1, ParamT x2 );
+    void            AddTranslationCInv  ( ParamT x0, ParamT x1, ParamT x2 );
     void            AddTransform        ( SimpleTransform<ParamT> * trans );
 
     unsigned int    Size                () const;

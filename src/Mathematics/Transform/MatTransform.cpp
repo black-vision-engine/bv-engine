@@ -87,6 +87,8 @@ void            CompositeTransform<ParamT>::InitializeDefaultSRT()
         delete tr;
     }
 
+    ParamT ctx, cty, ctz;
+    ParamT ictx, icty, ictz;
     ParamT sx, sy, sz;
     ParamT angle;
     ParamT rx, ry, rz;
@@ -95,14 +97,18 @@ void            CompositeTransform<ParamT>::InitializeDefaultSRT()
     ParamT::ValueType   v0  = ParamT::ValueType( 0.0 );
     ParamT::ValueType   v1  = ParamT::ValueType( 1.0 );
 
+    ctx.AddKey( t, v0 ); cty.AddKey( t, v0 ); ctz.AddKey( t, v0 );
     sx.AddKey( t, v1 ); sy.AddKey( t, v1 ); sz.AddKey( t, v1 );
     angle.AddKey( t, v0 );
     rx.AddKey( t, v0 ); ry.AddKey( t, v0 ); rz.AddKey( t, v1 );
     tx.AddKey( t, v0 ); ty.AddKey( t, v0 ); tz.AddKey( t, v0 );
+    ictx.AddKey( t, v0 ); icty.AddKey( t, v0 ); ictz.AddKey( t, v0 );
 
+    AddTranslation( ctx, cty, ctz );
     AddScale( sx, sy, sz );
     AddRotation( angle, rx, ry, rz );
     AddTranslation( tx, ty, tz );
+    AddTranslation( ictx, icty, ictz );
 }
 
 // *************************************
@@ -158,6 +164,22 @@ template<typename ParamT>
 void            CompositeTransform<ParamT>::AddRotation         ( ParamT angle, const Vec3Interpolator & rotAxis )
 {
     m_transformations.push_back( new Rotation<ParamT>( angle, rotAxis ) );    
+}
+
+// *************************************
+//
+template<typename ParamT>
+void            CompositeTransform<ParamT>::AddTranslationCFwd  ( ParamT x0, ParamT x1, ParamT x2 )
+{
+    m_transformations.push_back( SimpleTransform<ParamT>::CreateTranslation( x0, x1, x2, TransformKind::fwd_center ) );
+}
+
+// *************************************
+//
+template<typename ParamT>
+void            CompositeTransform<ParamT>::AddTranslationCInv  ( ParamT x0, ParamT x1, ParamT x2 )
+{
+    m_transformations.push_back( SimpleTransform<ParamT>::CreateTranslation( x0, x1, x2, TransformKind::inv_center ) );
 }
 
 // *************************************

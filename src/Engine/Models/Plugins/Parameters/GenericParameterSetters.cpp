@@ -49,6 +49,20 @@ bool SetTranslation             ( ParamTransformPtr pt, TimeType t, const glm::v
 
 // *******************************
 //
+bool SetCenterMass              ( ParamTransformPtr pt, TimeType t, const glm::vec3 & center )
+{
+    if( pt == nullptr )
+    {
+        return false;
+    }
+
+    pt->SetCenter( center, t );
+
+    return true;
+}
+
+// *******************************
+//
 bool SetRotation                ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & rotAxis, float angle )
 {
     if( pt == nullptr || pt->NumTransforms() <= idx )
@@ -89,6 +103,20 @@ bool SetTranslation             ( ParamTransformVecPtr pt, unsigned int idx, Tim
     return true;
 }
 
+// *******************************
+//
+bool SetCenterMass              ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & center )
+{
+    if( pt == nullptr || pt->NumTransforms() <= idx )
+    {
+        return false;
+    }
+
+    pt->SetCenter( idx, center, t );
+
+    return true;
+}
+
 } //anonymous
 
 
@@ -113,6 +141,12 @@ bool    SetParameterTranslation ( IParameterPtr parameter, TimeType t, const glm
     return SetTranslation( QueryTypedParam< ParamTransformPtr >( parameter ), t, translation );
 }
 
+// *******************************
+//
+bool    SetParameterCenterMass  ( IParameterPtr parameter, TimeType t, const glm::vec3 & center )
+{
+    return SetCenterMass( QueryTypedParam< ParamTransformPtr >( parameter ), t, center );
+}
 
 // *******************************
 //
@@ -133,6 +167,13 @@ bool    SetParameterScale       ( IParameterPtr parameter, unsigned int idx, Tim
 bool    SetParameterTranslation ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & translation )
 {
     return SetTranslation( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, translation );
+}
+
+// *******************************
+//
+bool    SetParameterCenterMass  ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & center )
+{
+    return SetCenterMass( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, center );
 }
 
 } //model
