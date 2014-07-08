@@ -1,8 +1,8 @@
 #include "BVConfig.h"
 
 #define USE_READBACK_API
-//#define FULLSCREEN_MODE
-
+#define FULLSCREEN_MODE
+//#define PERSPECTIVE_CAMERA
 
 namespace bv
 {
@@ -20,8 +20,8 @@ BVConfig::BVConfig                      ()
     m_defaultWindowHeight   = m_defaultHeight;
 #else
     m_fullscreeMode         = false;
-    m_defaultWindowWidth    = m_defaultWidth / 3;
-    m_defaultWindowHeight   = m_defaultHeight / 3;
+    m_defaultWindowWidth    = m_defaultWidth / 2;
+    m_defaultWindowHeight   = m_defaultHeight / 2;
 #endif
 
     m_fps               = 5000;
@@ -31,6 +31,12 @@ BVConfig::BVConfig                      ()
     m_readbackOn        = true;
 #else
     m_readbackOn        = false;
+#endif
+
+#ifdef PERSPECTIVE_CAMERA
+    m_isCameraPerspective = true;
+#else
+    m_isCameraPerspective = false;
 #endif
 
     m_eventLoopUpdateMillis = 20;

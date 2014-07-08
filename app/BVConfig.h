@@ -22,6 +22,7 @@ private:
 
     bool            m_fullscreeMode;
     bool            m_readbackOn;
+    bool            m_isCameraPerspective;
 
     float           m_defaultFOV;
     float           m_defaultNearClippingPlane;
@@ -55,6 +56,7 @@ public:
 
     inline bool                 FullScreenMode          () const;
     inline bool                 ReadbackFlag            () const;
+    inline bool                 IsCameraPerspactive     () const;
 
     inline unsigned int         EventLoopUpdateMillis   () const;
     inline unsigned int         FPS                     () const;
