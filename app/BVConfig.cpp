@@ -1,8 +1,8 @@
 #include "BVConfig.h"
 
-//#define USE_READBACK_API
-//#define FULLSCREEN_MODE
-
+#define USE_READBACK_API
+#define FULLSCREEN_MODE
+//#define PERSPECTIVE_CAMERA
 
 namespace bv
 {
@@ -31,6 +31,12 @@ BVConfig::BVConfig                      ()
     m_readbackOn        = true;
 #else
     m_readbackOn        = false;
+#endif
+
+#ifdef PERSPECTIVE_CAMERA
+    m_isCameraPerspective = true;
+#else
+    m_isCameraPerspective = false;
 #endif
 
     m_eventLoopUpdateMillis = 20;

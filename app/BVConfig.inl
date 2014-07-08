@@ -46,6 +46,13 @@ inline bool    BVConfig::ReadbackFlag                   () const
 
 // *********************************
 //
+inline bool     BVConfig::IsCameraPerspactive           () const
+{
+    return m_isCameraPerspective;
+}
+
+// *********************************
+//
 inline unsigned int BVConfig::EventLoopUpdateMillis     () const
 {
     return m_eventLoopUpdateMillis;

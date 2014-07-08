@@ -288,11 +288,17 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
 
-    SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
+    //SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
 
-    node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( localTimeline );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 0.f, 0.5f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 2.f, glm::vec3( 0.f, 0.f, 0.0f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 5.f, glm::vec3( 0.f, 0.f, -2.f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 6.f, glm::vec3( 0.f, 0.f, -5.f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 12.f, glm::vec3( 0.f, 0.f, 0.f ) );
 
-    success = model::LoadTexture( node->GetPlugin( "texture" ), "simless_00.jpg" );
+    node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( timeEvaluator );
+
+    success = model::LoadTexture( node->GetPlugin( "texture" ), "test.bmp" );
     //success = model::LoadTexture( node->GetPlugin( "texture" ), "test.bmp" );
     assert( success );
 
@@ -304,11 +310,12 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
         float hf = float( height ) / float( width );
 
-        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), hf );
+        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 0.8222222222222f );
+        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),   0.8444444444444f );
     }
 
-    auto ai = TestAIManager::Instance().GetAIPreset( 2 );
-    ai->SetTimeline( someTimelineWithEvents );
+    //auto ai = TestAIManager::Instance().GetAIPreset( 2 );
+    //ai->SetTimeline( someTimelineWithEvents );
 
     return node;    
 }
