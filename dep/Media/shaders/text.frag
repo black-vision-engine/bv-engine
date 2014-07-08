@@ -7,11 +7,10 @@ in vec2 			VTexCord;
 uniform sampler2D 	AtlasTex;
 uniform vec4 		color;
 uniform float 		alpha;
-uniform float       overrideAlpha;
 
 void main()
 {
 	vec4 texColor0 = texture( AtlasTex, VTexCord );
 
-	FragColor = texColor0 * color * alpha * overrideAlpha;
+	FragColor = texColor0 * color * alpha;
 }
