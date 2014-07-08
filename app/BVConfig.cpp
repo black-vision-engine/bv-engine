@@ -35,7 +35,7 @@ BVConfig::BVConfig                      ()
 
     m_eventLoopUpdateMillis = 20;
 
-    m_defaultFOV                = 90.f;
+    m_defaultFOV                = 45.f;
     m_defaultNearClippingPlane  = 0.1f;
     m_defaultFarClippingPlane   = 100.f;
 
