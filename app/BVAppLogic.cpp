@@ -28,6 +28,8 @@
 #include "Engine/Models/Timeline/TimeSegmentEvalImpl.h"
 #include "testai/TestAIManager.h"
 
+#include "Engine/Models/Resources/TextureHelpers.h"
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 
@@ -124,7 +126,7 @@ void BVAppLogic::LoadScene          ( void )
     m_mockSceneEng  = root->BuildScene();
     assert( m_mockSceneEng );
 
-    m_modelScene    = model::ModelScene::Create( root, new Camera(), "BasicScene", m_globalTimeline );
+    m_modelScene    = model::ModelScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline );
     assert( m_modelScene );    
 }
 
@@ -134,10 +136,20 @@ void BVAppLogic::InitCamera         ( Renderer * renderer, int w, int h )
 {
     Camera * cam = m_modelScene->GetCamera();
 
-    renderer->SetCamera( cam );
+    if( cam->IsPerspective() )
+    {
+        cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
+        cam->SetPerspective( DefaultConfig.FOV(), float( w ) / float( h ), DefaultConfig.NearClippingPlane(), DefaultConfig.FarClippingPlane() );
+    }
+    else
+    {
+        cam->SetFrame( glm::vec3( 0.f, 0.f, 1.f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+        cam->SetFrustum( -1.f, 1.f, -1.f, 1.f, 1.f, -1.f );
 
-    cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
-    cam->SetPerspective(DefaultConfig.FOV(), float( w ) / float( h ), DefaultConfig.NearClippingPlane(), DefaultConfig.FarClippingPlane() );
+        cam->SetPerspective( float(w) / float(h) );
+    }
+
+    renderer->SetCamera( cam );
 
     m_offscreenRenderLogic->SetRendererCamera( cam );
     //FIXME: read from configuration file and change appropriately when resoultion changes

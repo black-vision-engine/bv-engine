@@ -33,9 +33,15 @@ void Camera::SetPerspective                         ( float fov, float aspectRat
     m_nearClippingPlane = near;
     m_farClippingPlane = far;
 
-    auto m = glm::perspective( fov, aspectRatio, near, far );
-
-    SetProjectionMatrix( m );
+    if ( IsPerspective() )
+    {
+        auto m = glm::perspective( fov, aspectRatio, near, far );
+        SetProjectionMatrix( m );
+    }
+    else
+        SetFrustum( -aspectRatio, aspectRatio, -1.f, 1.f, 1.f, -1.f );
+    
+    
 }
 
 // *********************************
