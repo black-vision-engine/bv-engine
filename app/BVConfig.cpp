@@ -1,6 +1,6 @@
 #include "BVConfig.h"
 
-#define USE_READBACK_API
+//#define USE_READBACK_API
 //#define FULLSCREEN_MODE
 
 
@@ -20,8 +20,8 @@ BVConfig::BVConfig                      ()
     m_defaultWindowHeight   = m_defaultHeight;
 #else
     m_fullscreeMode         = false;
-    m_defaultWindowWidth    = m_defaultWidth / 3;
-    m_defaultWindowHeight   = m_defaultHeight / 3;
+    m_defaultWindowWidth    = m_defaultWidth / 2;
+    m_defaultWindowHeight   = m_defaultHeight / 2;
 #endif
 
     m_fps               = 5000;
@@ -35,7 +35,7 @@ BVConfig::BVConfig                      ()
 
     m_eventLoopUpdateMillis = 20;
 
-    m_defaultFOV                = 45.f;
+    m_defaultFOV                = 90.f;
     m_defaultNearClippingPlane  = 0.1f;
     m_defaultFarClippingPlane   = 100.f;
 

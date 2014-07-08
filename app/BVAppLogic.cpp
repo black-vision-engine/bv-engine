@@ -132,14 +132,17 @@ void BVAppLogic::LoadScene          ( void )
 //
 void BVAppLogic::InitCamera         ( Renderer * renderer, int w, int h )
 {
-    Camera * cam = m_modelScene->GetCamera();
+    Camera * cam = new Camera( false );
+
+    cam->SetFrame( glm::vec3( 0.f, 0.f, 1.f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
+    cam->SetFrustum( -1.f, 1.f, -1.f, 1.f, 1.f, -1.f );
 
     renderer->SetCamera( cam );
 
-    cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
+    ///cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
     //cam->SetPerspective( DefaultConfig.FOV(), float( w ) / float( h ), DefaultConfig.NearClippingPlane(), DefaultConfig.FarClippingPlane() );
 
-    cam->SetProjectionMatrix( glm::mat4( 1.f ) ); // No perspective
+    //cam->SetProjectionMatrix( glm::mat4( 1.f ) ); // No perspective
     m_offscreenRenderLogic->SetRendererCamera( cam );
     //FIXME: read from configuration file and change appropriately when resoultion changes
 }
