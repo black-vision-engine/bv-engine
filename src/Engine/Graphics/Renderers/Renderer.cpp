@@ -117,10 +117,11 @@ void	Renderer::SetClearColor		( const glm::vec4 & col )
 
 // *********************************
 //
-void	Renderer::Resize			    ( int w, int h )
+void	Renderer::Resize	        ( unsigned int w, unsigned int h )
 {
     glViewport( 0 , 0, w, h );
-    m_Camera->SetPerspective( float( w ) / float( h ) );
+
+    m_Camera->SetViewportSize( w, h );
 
     m_Width = w;
     m_Height = h;
@@ -129,14 +130,14 @@ void	Renderer::Resize			    ( int w, int h )
 
 // *********************************
 //
-bool    Renderer::PreDraw               ()
+bool    Renderer::PreDraw           ()
 {
     return true;
 }
 
 // *********************************
 //
-bool    Renderer::DrawRenderable        ( RenderableEntity * ent )
+bool    Renderer::DrawRenderable    ( RenderableEntity * ent )
 {
     RenderableEntity::RenderableType type = ent->GetType();
 

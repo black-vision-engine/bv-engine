@@ -31,14 +31,17 @@ public:
     virtual             ~Camera                 ();
 
     void                SetPerspective          ( float fov, float aspectRatio,float near, float far );
+    void                SetPerspective          ( float fov, unsigned int w, unsigned int h,float near, float far );
     void                SetPerspective          ( float aspectRatio );
+
+    void                SetViewportSize         ( unsigned int w, unsigned int h );
+
+    void                SetFrustum              ( float left, float right, float bottom, float top, float near, float far );
 
     void                SetFrame                ( const glm::vec3 & position, const glm::vec3 & direction, const glm::vec3 & up );
     void                SetPosition             ( const glm::vec3 & position );
     void                SetAxes                 ( const glm::vec3 & direction, const glm::vec3 & up );
     void                SetProjectionMatrix     ( const glm::mat4 & projectionMatrix );
-
-    void                SetFrustum              ( float left, float right, float bottom, float top, float near, float far );
 
     const glm::mat4 &   GetViewMatrix           () const;
     const glm::mat4 &   GetProjectionMatrix     () const;

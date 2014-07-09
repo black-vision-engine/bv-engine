@@ -60,7 +60,7 @@ public:
 
     //FIXME: this initialization has to be refactored and started in separate process (threaded)
     void            LoadScene       ( void );
-    void            InitCamera      ( Renderer * renderer, int w, int h );
+    void            InitCamera      ( Renderer * renderer, unsigned int w, unsigned int h );
 
     void            SetStartTime    ( unsigned long millis );
 
