@@ -2,7 +2,7 @@
 
 #define USE_READBACK_API
 #define FULLSCREEN_MODE
-//#define PERSPECTIVE_CAMERA
+#define PERSPECTIVE_CAMERA
 
 namespace bv
 {
@@ -57,7 +57,6 @@ BVConfig::BVConfig                      ()
 
     m_defaultClearColor     = glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f );
     m_defaultClearDepth     = 1.0f;
-
 }
 
 // *********************************

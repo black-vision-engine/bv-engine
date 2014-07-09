@@ -95,7 +95,7 @@ public:
 
     void	ClearBuffers		();
     void	SetClearColor		( const glm::vec4 & col );
-    void	Resize				( int w, int h );
+    void	Resize				( unsigned int w, unsigned int h );
     bool    PreDraw             ();
     bool    Draw                ( RenderableEntity * ent );
     bool    PostDraw            ();

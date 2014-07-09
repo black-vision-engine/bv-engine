@@ -132,21 +132,19 @@ void BVAppLogic::LoadScene          ( void )
 
 // *********************************
 //
-void BVAppLogic::InitCamera         ( Renderer * renderer, int w, int h )
+void BVAppLogic::InitCamera         ( Renderer * renderer, unsigned int w, unsigned int h )
 {
     Camera * cam = m_modelScene->GetCamera();
 
+    cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
+    
     if( cam->IsPerspective() )
     {
-        cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
-        cam->SetPerspective( DefaultConfig.FOV(), float( w ) / float( h ), DefaultConfig.NearClippingPlane(), DefaultConfig.FarClippingPlane() );
+        cam->SetPerspective( DefaultConfig.FOV(), w, h, DefaultConfig.NearClippingPlane(), DefaultConfig.FarClippingPlane() );
     }
     else
     {
-        cam->SetFrame( glm::vec3( 0.f, 0.f, 1.f ), glm::vec3( 0.f, 0.f, 0.f ), glm::vec3( 0.f, 1.f, 0.f ) );
-        cam->SetFrustum( -1.f, 1.f, -1.f, 1.f, 1.f, -1.f );
-
-        cam->SetPerspective( float(w) / float(h) );
+        cam->SetViewportSize( w, h );
     }
 
     renderer->SetCamera( cam );
