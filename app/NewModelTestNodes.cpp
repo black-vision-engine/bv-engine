@@ -310,8 +310,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
         float hf = float( height ) / float( width );
 
-        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 0.8222222222222f );
-        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),   0.8444444444444f );
+        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 876.f * 2.f / 1080.f );
+        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),   876.f * 2.f / 1080.f );
     }
 
     //auto ai = TestAIManager::Instance().GetAIPreset( 2 );

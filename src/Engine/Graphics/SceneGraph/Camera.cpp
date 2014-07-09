@@ -17,6 +17,11 @@ Camera::Camera( bool isPerspective )
     , m_farClippingPlane( 100.f )
     , m_isPrespactive( isPerspective )
 {
+    if( isPerspective )
+    {
+        m_nearClippingPlane = 1.f;
+        m_farClippingPlane = -1.f;
+    }
 }
 
 // *********************************
@@ -27,21 +32,29 @@ Camera::~Camera()
 
 // *********************************
 //
-void Camera::SetPerspective                         ( float fov, float aspectRatio,float near, float far )
+void Camera::SetPerspective                         ( float fov, float aspectRatio, float near, float far )
 {
-    m_FOV = fov;
-    m_nearClippingPlane = near;
-    m_farClippingPlane = far;
+    assert( IsPerspective() );
 
-    if ( IsPerspective() )
+    if( IsPerspective() )
     {
+        m_FOV = fov;
+        m_nearClippingPlane = near;
+        m_farClippingPlane = far;
+
         auto m = glm::perspective( fov, aspectRatio, near, far );
         SetProjectionMatrix( m );
     }
-    else
-        SetFrustum( -aspectRatio, aspectRatio, -1.f, 1.f, 1.f, -1.f );
-    
-    
+}
+
+// *********************************
+//
+void Camera::SetPerspective                         ( float fov, unsigned int w, unsigned int h, float near, float far )
+{
+    assert( w > 0 );
+    assert( h > 0 );
+
+    SetPerspective( fov, float( w ) / float( h ), near, far );
 }
 
 // *********************************
@@ -49,6 +62,47 @@ void Camera::SetPerspective                         ( float fov, float aspectRat
 void  Camera::SetPerspective                        ( float aspectRatio )
 {
     SetPerspective( m_FOV, aspectRatio, m_nearClippingPlane, m_farClippingPlane );
+}
+
+// *********************************
+//
+void Camera::SetViewportSize                        ( unsigned int w, unsigned int h )
+{
+    assert( w > 0 );
+    assert( h > 0 );
+
+    float aspect = float( w ) / float( h );
+
+    if( IsPerspective() )
+    {
+        SetPerspective( aspect );
+    }
+    else
+    {
+        SetFrustum( -aspect, aspect, -1.f, 1.f, m_nearClippingPlane, m_farClippingPlane );
+    }
+}
+
+// *********************************
+//
+void Camera::SetFrustum                             ( float left, float right, float bottom, float top, float near, float far )
+{
+    if( IsPerspective() )
+    {
+        assert( left < right );
+        assert( bottom < top );
+        assert( near < far );
+
+        float aspect = float( right - left ) / float( bottom - top );
+
+        SetPerspective( m_FOV, aspect, near, far );
+    }
+    else
+    {
+        auto m = glm::ortho( left, right, bottom, top, near, far );
+
+        SetProjectionMatrix( m );
+    }
 }
 
 // *********************************
@@ -88,23 +142,6 @@ void Camera::SetProjectionMatrix                    ( const glm::mat4 & projecti
     m_projection = projectionMatrix;
 
     UpdatePVMatrix();
-}
-
-// *********************************
-//
-void Camera::SetFrustum                             ( float left, float right, float bottom, float top, float near, float far )
-{
-    if( m_isPrespactive )
-    {
-        //FIXME: implement
-        assert( false && "not implemented" );
-    }
-    else
-    {
-        auto m = glm::ortho( left, right, bottom, top, near, far );
-
-        SetProjectionMatrix( m );
-    }
 }
 
 // *********************************
