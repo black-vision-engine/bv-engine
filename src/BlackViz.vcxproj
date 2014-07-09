@@ -70,8 +70,8 @@
     <_ProjectFileVersion>11.0.60315.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <OutDir>$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(IncludePath)</IncludePath>
@@ -79,20 +79,20 @@
     <TargetName>$(ProjectName)D</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <OutDir>$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <ExecutablePath>D:\dev\tmp\bv\renderer\code\Common\glew\bin;D:\dev\tmp\bv\renderer\code\Common\FreeImage\Dist;$(ExecutablePath)</ExecutablePath>
     <IncludePath>D:\dev\tmp\bv\renderer\code\Common\glm;D:\dev\tmp\bv\renderer\code\Common\glew\include;D:\dev\ibs\sources\boost;D:\dev\tmp\bv\renderer\code\Common\FreeImage\Dist;$(IncludePath)</IncludePath>
     <LibraryPath>D:\dev\tmp\bv\renderer\code\Common\glew\lib;D:\dev\tmp\bv\renderer\code\Common\FreeImage\Dist;D:\dev\ibs\sources\builds\win32-msvs-x86-release\boost\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
@@ -128,7 +128,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Devel\glew-1.9.0.x64\include;C:\Devel\FreeImage64\Dist;C:\Devel\boost_1_52_0.x64;C:\Devel\glm-0.9.3.4;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BOOST_INC);../dep/Common/FreeImage/dist;../dep/Common/FreeType/include;../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../dep/Common/FastDelegate;./;../dep/Common/sqlite/src;../dep/Common/hashlib2plus/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -155,7 +155,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(BOOST_INC);../dep/Common/FreeImage/dist;../dep/Common/FreeType/include;../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../dep/Common/FastDelegate;./;../sqlite/src/;../hashlib2plus/src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BOOST_INC);../dep/Common/FreeImage/dist;../dep/Common/FreeType/include;../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../dep/Common/FastDelegate;./;../dep/Common/sqlite/src/;../dep/Common/hashlib2plus/src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

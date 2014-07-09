@@ -100,7 +100,7 @@ void testWrapper(hashwrapper *w)
 		delete w;
 		w=0;
 	}
-	catch(hlException &e)
+	catch(hlException&)
 	{
 		std::cout << "test failed.";
 		okay = false;
