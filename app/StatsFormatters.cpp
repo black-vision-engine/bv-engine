@@ -62,7 +62,7 @@ void    FrameStatsFormatter::PrintToConsole     ( const FrameStatsCalculator & f
     unsigned int maxLen = 0;
     for( auto name : fsc.RegisteredSections() )
     {
-        maxLen = std::max( maxLen, strlen( name ) );
+        maxLen = std::max( maxLen, (unsigned int)strlen( name ) );
     }
 
     PrintToConsole( fsc, DefaultConfig.FrameStatsSection(), maxLen );

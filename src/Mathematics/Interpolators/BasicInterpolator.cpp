@@ -171,7 +171,7 @@ ValueT BasicInterpolator<TimeValueT, ValueT>::Evaluate( TimeValueT t ) const
         if( t > tEnd )
             t = CalcPostT( t );
 
-    auto maxKeyIdx = keys.size() - 1;
+    unsigned int maxKeyIdx = keys.size() - 1;
 
     for ( unsigned int i = 0; i < keys.size(); ++i )
     {
@@ -208,7 +208,7 @@ ValueT BasicInterpolator<TimeValueT, ValueT>::EvaluatePoint( TimeValueT t ) cons
         if( t > tEnd )
             t = CalcPostT( t );
 
-    auto maxKeyIdx = keys.size() - 1;
+    unsigned int maxKeyIdx = keys.size() - 1;
 
     for ( unsigned int i = 0; i < keys.size(); ++i )
     {
