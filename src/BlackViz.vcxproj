@@ -335,6 +335,7 @@
     <ClCompile Include="Engine\Models\Timeline\SimpleIParamSet.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Static\ConstTimeEvaluator.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
+    <None Include="Engine\Models\Plugins\Channels\DefaultFinalizeShaderChannel.inl" />
     <None Include="Engine\Models\Timeline\TimeEvaluatorBase.inl">
       <FileType>Document</FileType>
     </None>
@@ -472,6 +473,7 @@
     <ClInclude Include="Engine\Models\ModelAccessors.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizeGeometryShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizePixelShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizeShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizeVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.h" />
