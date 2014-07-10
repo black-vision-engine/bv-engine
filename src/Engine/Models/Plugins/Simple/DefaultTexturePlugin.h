@@ -76,9 +76,6 @@ public:
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
-    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () override;
-    virtual IVertexShaderChannelPtr             GetVertexShaderChannel      () override;
-
     int                                         GetTextureWidth             () const;
     int                                         GetTextureHeight            () const;
 

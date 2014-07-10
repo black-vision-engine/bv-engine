@@ -42,8 +42,6 @@ public:
 
     virtual IPixelShaderChannelConstPtr     GetPixelShaderChannel       () const override;
 
-    virtual IPixelShaderChannelPtr          GetPixelShaderChannel       () override;
-
     virtual void                            Update                      ( TimeType t ) override;
 
 };

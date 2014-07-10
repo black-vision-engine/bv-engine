@@ -6,7 +6,7 @@
 
 namespace bv { namespace model {
 
-class DefaultFinalizeVertexShaderChannel : DefaultFinalizeShaderChannel< IVertexShaderChannel >
+class DefaultFinalizeVertexShaderChannel : public DefaultFinalizeShaderChannel< IVertexShaderChannel >
 {
 private:
 

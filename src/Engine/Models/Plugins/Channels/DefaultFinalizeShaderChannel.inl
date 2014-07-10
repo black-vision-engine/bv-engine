@@ -19,7 +19,7 @@ namespace {
 
     //@see: https://docs.google.com/spreadsheets/d/1K3dblNOAijnKdJXeha9_DWlSLhOc1Wcq5F1Mwlvk7x4
     char * baseShaderFileNames[8] = {
-                                        "col,"
+                                        "col",
                                         "tx",
                                         "col_txt",
                                         "tx",
@@ -46,7 +46,6 @@ DefaultFinalizeShaderChannel< ShaderChannelIface >::DefaultFinalizeShaderChannel
     : m_channel( channel )
     , m_shaderSource( "" )
 {
-    assert( channel != nullptr );
 }
 
 // *********************************
@@ -107,7 +106,7 @@ ITexturesDataConstPtr   DefaultFinalizeShaderChannel< ShaderChannelIface >::GetT
 // *********************************
 //
 template< typename ShaderChannelIface >
-void                    DefaultFinalizeShaderChannel< ShaderChannelIface >::ReGenerateSource( const std::vector< std::string > & uids )
+void                    DefaultFinalizeShaderChannel< ShaderChannelIface >::RegenerateShaderSource( const std::vector< std::string > & uids ) const
 {
     m_shaderSource = GetShaderSource( uids );
 }
@@ -162,7 +161,7 @@ const std::vector< std::string > &                  DefaultFinalizeShaderChannel
 template< typename ShaderChannelIface >
 std::string                                         DefaultFinalizeShaderChannel< ShaderChannelIface >::ShaderStorageDirectory  ()
 {
-    return "../dep/media/shaders/combinations/";
+    return "../dep/Media/shaders/combinations/";
 }
 
 } //model

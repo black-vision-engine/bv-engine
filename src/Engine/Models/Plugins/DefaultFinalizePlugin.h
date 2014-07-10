@@ -20,9 +20,9 @@ private:
 
     DefaultVertexShaderChannelPtr   m_defaultVSChannel;
 
-    DefaultFinalizePixelShaderChannelPtr    m_finalizePSC;
-    DefaultFinalizeVertexShaderChannelPtr   m_finalizeVSC;
-    DefaultFinalizeGeometryShaderChannelPtr m_finalizeGSC;
+    mutable DefaultFinalizePixelShaderChannelPtr    m_finalizePSC;
+    mutable DefaultFinalizeVertexShaderChannelPtr   m_finalizeVSC;
+    mutable DefaultFinalizeGeometryShaderChannelPtr m_finalizeGSC;
 
 public:
 
@@ -42,11 +42,9 @@ public:
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
     virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const override;
                  
-    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () override;
-    virtual IVertexShaderChannelPtr             GetVertexShaderChannel      () override;
-    virtual IGeometryShaderChannelPtr           GetGeometryShaderChannel    () override;
-
     virtual RendererContextConstPtr             GetRendererContext          () const override;
+
+    virtual IPluginConstPtr                     GetPrevPlugin               () const override;
 
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
 
@@ -54,6 +52,10 @@ public:
 
     void                                        SetPrevPlugin               ( IPluginPtr plugin );
     void                                        SetName                     ( const std::string & name );
+
+private:
+
+    std::vector< std::string >                  PrevUIDS                    ( unsigned int skipFirstEntries ) const;
 
 };
 

@@ -12,15 +12,18 @@ PluginUIDHashMap    DefaultFinalizeVertexShaderChannel::ms_vertexShaderMapping;
 //
 void     DefaultFinalizeVertexShaderChannel::InitializeVertexShaderMapping  ()
 {
-    auto uidLists   = GetAcceptedPluginLists();
-    auto baseNames  = GetBaseShaderFileNames();
-
-    assert( uidLists.size() == baseNames.size() );
-
-    for( size_t i = 0; i < uidLists.size(); ++i )
+    if( ms_vertexShaderMapping.size() == 0 )
     {
-        ms_vertexShaderMapping[ uidLists[ i ] ] = ShaderStorageDirectory() + baseNames[ i ] + ".vert";
-    }    
+        auto uidLists   = GetAcceptedPluginLists();
+        auto baseNames  = GetBaseShaderFileNames();
+
+        assert( uidLists.size() == baseNames.size() );
+
+        for( size_t i = 0; i < uidLists.size(); ++i )
+        {
+            ms_vertexShaderMapping[ uidLists[ i ] ] = ShaderStorageDirectory() + baseNames[ i ] + ".vert";
+        }    
+    }
 }
 
 // *********************************
@@ -28,6 +31,9 @@ void     DefaultFinalizeVertexShaderChannel::InitializeVertexShaderMapping  ()
 DefaultFinalizeVertexShaderChannel::DefaultFinalizeVertexShaderChannel      ( IVertexShaderChannelPtr channel )
     : Parent( channel )
 {
+    assert( channel != nullptr );
+
+    InitializeVertexShaderMapping();
 }
 
 // *********************************

@@ -57,11 +57,9 @@ public:
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
     virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const override;
 
-    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () override;
-    virtual IVertexShaderChannelPtr             GetVertexShaderChannel      () override;
-    virtual IGeometryShaderChannelPtr           GetGeometryShaderChannel    () override;
-
     virtual RendererContextConstPtr             GetRendererContext          () const override;
+
+    virtual IPluginConstPtr                     GetPrevPlugin               () const override;
 
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr );
 
@@ -184,7 +182,7 @@ IVertexAttributesChannelConstPtr            BasePlugin< Iface >::GetVertexAttrib
 // *******************************
 //
 template< class Iface >
-ITransformChannelConstPtr           BasePlugin< Iface >::GetTransformChannel          () const
+ITransformChannelConstPtr           BasePlugin< Iface >::GetTransformChannel            () const
 {
     if( m_prevPlugin )
     {
@@ -197,7 +195,7 @@ ITransformChannelConstPtr           BasePlugin< Iface >::GetTransformChannel    
 // *******************************
 //
 template< class Iface >
-IPixelShaderChannelConstPtr         BasePlugin< Iface >::GetPixelShaderChannel        () const
+IPixelShaderChannelConstPtr         BasePlugin< Iface >::GetPixelShaderChannel          () const
 {
     if( m_prevPlugin )
     {
@@ -236,45 +234,6 @@ IGeometryShaderChannelConstPtr      BasePlugin< Iface >::GetGeometryShaderChanne
 // *******************************
 //
 template< class Iface >
-IPixelShaderChannelPtr              BasePlugin< Iface >::GetPixelShaderChannel       ()
-{
-    if( m_prevPlugin )
-    {
-        return m_prevPlugin->GetPixelShaderChannel();
-    }
-
-    return nullptr;
-}
-
-// *******************************
-//
-template< class Iface >
-IVertexShaderChannelPtr             BasePlugin< Iface >::GetVertexShaderChannel      ()
-{
-    if( m_prevPlugin )
-    {
-        return m_prevPlugin->GetVertexShaderChannel();
-    }
-
-    return nullptr;
-}
-
-// *******************************
-//
-template< class Iface >
-IGeometryShaderChannelPtr           BasePlugin< Iface >::GetGeometryShaderChannel    ()
-{
-    if( m_prevPlugin )
-    {
-        return m_prevPlugin->GetGeometryShaderChannel();
-    }
-
-    return nullptr;
-}
-
-// *******************************
-//
-template< class Iface >
 RendererContextConstPtr             BasePlugin< Iface >::GetRendererContext             () const
 {
     auto psc = GetPixelShaderChannel();
@@ -285,6 +244,14 @@ RendererContextConstPtr             BasePlugin< Iface >::GetRendererContext     
     }
 
     return nullptr;
+}
+
+// *******************************
+//
+template< class Iface >
+IPluginConstPtr                     BasePlugin< Iface >::GetPrevPlugin                  () const
+{
+    return m_prevPlugin;
 }
 
 // *******************************

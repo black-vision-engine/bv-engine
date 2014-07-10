@@ -71,7 +71,7 @@ PdrGLSLProgram::PdrGLSLProgram( const PixelShader & ps, const VertexShader & vs,
     , m_Linked( false ) 
 {
     m_Compiled = compileAndLinkProgram( *this, vs.ProgramSource(), ps.ProgramSource(), gs ? gs->ProgramSource() : "" );
-    assert( m_Compiled ); //FIXME: this error should be handled in somehow different manner
+    assert( m_Compiled ); //FIXME: this error should be handled in a somehow different manner
 }
 
 // *******************************

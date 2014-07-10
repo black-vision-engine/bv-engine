@@ -192,7 +192,7 @@ void                        BasicNode::SetName                      ( const std:
 
 // ********************************
 //
-SceneNode *                 BasicNode::BuildScene()
+SceneNode *                 BasicNode::BuildScene   () 
 {
     IPluginConstPtr finalizer = GetFinalizePlugin();
 

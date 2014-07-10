@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <memory>
 #include <sstream>
 #include <cassert>
 
@@ -25,7 +26,7 @@ class DefaultFinalizeShaderChannel : public ShaderChannelIface
 protected:
 
     std::shared_ptr< ShaderChannelIface >   m_channel;
-    std::string                             m_shaderSource;
+    mutable std::string                     m_shaderSource;
 
     static std::vector< std::vector< std::string > >    ms_acceptedPluginLists;
     static std::vector< std::string >                   ms_baseShaderFileNames;
@@ -44,7 +45,7 @@ public:
     virtual const std::string &                         GetShaderSource                 () const override;
     virtual ITexturesDataConstPtr                       GetTexturesData                 () const override;
 
-    void                                                ReGenerateSource                ( const std::vector< std::string > & uids );
+    void                                                RegenerateShaderSource          ( const std::vector< std::string > & uids ) const;
 
 protected:
 

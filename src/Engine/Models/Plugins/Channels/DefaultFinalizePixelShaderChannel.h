@@ -6,7 +6,7 @@
 
 namespace bv { namespace model {
 
-class DefaultFinalizePixelShaderChannel : DefaultFinalizeShaderChannel< IPixelShaderChannel >
+class DefaultFinalizePixelShaderChannel : public DefaultFinalizeShaderChannel< IPixelShaderChannel >
 {
 private:
 
@@ -25,7 +25,7 @@ public:
         DefaultFinalizePixelShaderChannel       ( IPixelShaderChannelPtr channel );
         ~DefaultFinalizePixelShaderChannel      ();
 
-        virtual RendererContextConstPtr     GetRendererContext  () const override;
+        virtual RendererContextConstPtr  GetRendererContext  () const override;
 
 protected:
 

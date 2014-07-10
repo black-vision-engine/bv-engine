@@ -238,20 +238,6 @@ IVertexShaderChannelConstPtr        DefaultTexturePlugin::GetVertexShaderChannel
 
 // *************************************
 // 
-IPixelShaderChannelPtr              DefaultTexturePlugin::GetPixelShaderChannel       ()
-{
-    return m_psc;
-}
-
-// *************************************
-// 
-IVertexShaderChannelPtr             DefaultTexturePlugin::GetVertexShaderChannel      ()
-{
-    return m_vsc;
-}
-
-// *************************************
-// 
 void                                DefaultTexturePlugin::Update                      ( TimeType t )
 {
     m_paramValModel->Update();

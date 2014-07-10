@@ -5,14 +5,13 @@
 
 namespace bv { namespace model {
 
-class DefaultFinalizeGeometryShaderChannel : DefaultFinalizeShaderChannel< IGeometryShaderChannel >
+class DefaultFinalizeGeometryShaderChannel : public DefaultFinalizeShaderChannel< IGeometryShaderChannel >
 {
 private:
 
     typedef  DefaultFinalizeShaderChannel< IGeometryShaderChannel > Parent;
 
 public:
-
 
         DefaultFinalizeGeometryShaderChannel            ( IGeometryShaderChannelPtr channel );
         ~DefaultFinalizeGeometryShaderChannel           ();

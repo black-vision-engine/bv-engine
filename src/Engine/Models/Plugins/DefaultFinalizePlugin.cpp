@@ -90,10 +90,11 @@ IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel
 
     if( m_finalizePSC == nullptr )
     {
-//        m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( m_prevPlugin->GetPixelShaderChannel() );
+        m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( std::const_pointer_cast< IPixelShaderChannel >( m_prevPlugin->GetPixelShaderChannel() ) );
+        m_finalizePSC->RegenerateShaderSource( PrevUIDS( 2 ) );
     }
 
-    return m_prevPlugin->GetPixelShaderChannel();
+    return m_finalizePSC;
 }
 
 // *******************************
@@ -109,43 +110,33 @@ IVertexShaderChannelConstPtr        DefaultFinalizePlugin::GetVertexShaderChanne
         vsc = m_defaultVSChannel;
     }
 
-    return vsc;
+    if( m_finalizeVSC == nullptr )
+    {
+        m_finalizeVSC = std::make_shared< DefaultFinalizeVertexShaderChannel >( std::const_pointer_cast< IVertexShaderChannel >( vsc ) );
+        m_finalizeVSC->RegenerateShaderSource( PrevUIDS( 2 ) );
+    }
+
+    return m_finalizeVSC;
 }
 
 // *******************************
 //
-IGeometryShaderChannelConstPtr      DefaultFinalizePlugin::GetGeometryShaderChannel     () const
+IGeometryShaderChannelConstPtr           DefaultFinalizePlugin::GetGeometryShaderChannel    () const
 {
     assert( m_prevPlugin );
 
-    return m_prevPlugin->GetGeometryShaderChannel();
-}
+    if( m_finalizeGSC == nullptr )
+    {
+        auto prevChannel = m_prevPlugin->GetGeometryShaderChannel();
 
-// *******************************
-//
-IPixelShaderChannelPtr              DefaultFinalizePlugin::GetPixelShaderChannel        ()
-{
-    assert( m_prevPlugin );
+        if( prevChannel != nullptr )
+        {
+            m_finalizeGSC = std::make_shared< DefaultFinalizeGeometryShaderChannel >( std::const_pointer_cast< IGeometryShaderChannel >( m_prevPlugin->GetGeometryShaderChannel() ) );
+            m_finalizeGSC->RegenerateShaderSource( PrevUIDS( 2 ) );
+        }
+    }
 
-    return m_prevPlugin->GetPixelShaderChannel();
-}
-
-// *******************************
-//
-IVertexShaderChannelPtr             DefaultFinalizePlugin::GetVertexShaderChannel       ()
-{
-    assert( m_prevPlugin );
-
-    return m_prevPlugin->GetVertexShaderChannel();
-}
-
-// *******************************
-//
-IGeometryShaderChannelPtr           DefaultFinalizePlugin::GetGeometryShaderChannel     ()
-{
-    assert( m_prevPlugin );
-
-    return m_prevPlugin->GetGeometryShaderChannel();
+    return m_finalizeGSC;
 }
 
 // *******************************
@@ -160,6 +151,13 @@ RendererContextConstPtr             DefaultFinalizePlugin::GetRendererContext   
     }
 
     return nullptr;
+}
+
+// *******************************
+//
+IPluginConstPtr                     DefaultFinalizePlugin::GetPrevPlugin                () const
+{
+    return m_prevPlugin;
 }
 
 // *******************************
@@ -195,6 +193,30 @@ void                                DefaultFinalizePlugin::SetName              
 {
     m_name = name;
 }
+
+// *******************************
+//
+std::vector< std::string >          DefaultFinalizePlugin::PrevUIDS                     ( unsigned int skipFirstEntries ) const
+{
+    IPluginConstPtr prev = m_prevPlugin;
+
+    std::vector< std::string > uids;
+
+    while( prev != nullptr )
+    {
+        uids.insert( uids.begin(), prev->GetTypeUid() );
+    
+        prev = prev->GetPrevPlugin();
+    }
+
+    if ( skipFirstEntries < uids.size() )
+    {
+        return std::vector< std::string >( uids.begin() + skipFirstEntries, uids.end() );    
+    }
+
+    return std::vector< std::string >();
+}
+
 
 } //model
 }  //bv

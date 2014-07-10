@@ -239,20 +239,6 @@ IVertexShaderChannelConstPtr        DefaultAnimationPlugin::GetVertexShaderChann
 
 // *************************************
 // 
-IPixelShaderChannelPtr              DefaultAnimationPlugin::GetPixelShaderChannel       ()
-{
-    return m_psc;
-}
-
-// *************************************
-// 
-IVertexShaderChannelPtr             DefaultAnimationPlugin::GetVertexShaderChannel      ()
-{
-    return m_vsc;
-}
-
-// *************************************
-// 
 void                                DefaultAnimationPlugin::Update                      ( TimeType t )
 {
     m_paramValModel->Update();

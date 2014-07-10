@@ -252,7 +252,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Tim
     auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 15.0 ) );
     node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( localTimeline );
 
-    //SetDefaultTransformAnim( node->GetPlugin( "transform" ) );
+    SetDefaultTransformAnim( node->GetPlugin( "transform" ) );
 
     return node;
 }

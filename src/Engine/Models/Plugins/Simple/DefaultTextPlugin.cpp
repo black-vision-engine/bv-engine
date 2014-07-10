@@ -268,20 +268,6 @@ IVertexShaderChannelConstPtr        DefaultTextPlugin::GetVertexShaderChannel   
 
 // *************************************
 // 
-IPixelShaderChannelPtr              DefaultTextPlugin::GetPixelShaderChannel       ()
-{
-    return m_psc;
-}
-
-// *************************************
-// 
-IVertexShaderChannelPtr             DefaultTextPlugin::GetVertexShaderChannel      ()
-{
-    return m_vsc;
-}
-
-// *************************************
-// 
 void                                DefaultTextPlugin::Update                      ( TimeType t )
 {
     m_paramValModel->Update();
