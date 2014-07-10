@@ -90,8 +90,8 @@
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(SolutionDir)\dep\Common\FreeImage\Wrapper\FreeImagePlus\dist\Win32\FreeImagePlus.dll $(OutDir) /c /y
-xcopy $(SolutionDir)\dep\Common\FreeImage\Dist\Win32\FreeImage.dll $(OutDir) /c /y
+      <Command>xcopy $(SolutionDir)\dep\Common\FreeImage\Wrapper\FreeImagePlus\dist\Win32\FreeImagePlusd.dll $(OutDir) /c /y
+xcopy $(SolutionDir)\dep\Common\FreeImage\Dist\Win32\FreeImaged.dll $(OutDir) /c /y
 
 </Command>
       <Message>Copy deps</Message>
@@ -114,8 +114,8 @@ xcopy $(SolutionDir)\dep\Common\FreeImage\Dist\Win32\FreeImage.dll $(OutDir) /c 
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(SolutionDir)\dep\Common\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlus.dll $(OutDir) /c /y
-xcopy $(SolutionDir)\dep\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y</Command>
+      <Command>xcopy $(SolutionDir)\dep\Common\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
+xcopy $(SolutionDir)\dep\Common\FreeImage\Dist\x64\FreeImaged.dll $(OutDir) /c /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
