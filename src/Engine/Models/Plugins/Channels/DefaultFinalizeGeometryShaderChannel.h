@@ -23,5 +23,7 @@ protected:
 
 };
 
+DEFINE_PTR_TYPE(DefaultFinalizeGeometryShaderChannel)
+
 } //model
 } //bv

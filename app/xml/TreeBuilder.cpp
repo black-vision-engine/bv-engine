@@ -2,7 +2,6 @@
 #include "TreeBuilder.h"
 #include "Engine/Models/BasicNode.h"
 #include "Mathematics/Transform/MatTransform.h"
-#include "Engine/Models/Plugins/Simple/SimpleTransformPlugin.h"
 #include "Engine/Models/Resources/TextHelpers.h"
 #include <fstream>
 #include <boost/algorithm/string.hpp>

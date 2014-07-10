@@ -27,7 +27,7 @@ public:
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const = 0;
 
     template< typename PluginType >
-    std::shared_ptr< PluginType >           CreatePluginTyped    ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator  ) const
+    std::shared_ptr< PluginType >           CreatePluginTyped    ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator  ) const
     {
         return std::make_shared< PluginType >( name, GetPluginTypeUID(), prev, DefaultPluginParamValModelPtr( CreateDefaultModel( timeEvaluator ) ) );
     }

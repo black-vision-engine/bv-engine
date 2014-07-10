@@ -157,5 +157,13 @@ const std::vector< std::string > &                  DefaultFinalizeShaderChannel
     return ms_baseShaderFileNames;
 }
 
+// *********************************
+//
+template< typename ShaderChannelIface >
+std::string                                         DefaultFinalizeShaderChannel< ShaderChannelIface >::ShaderStorageDirectory  ()
+{
+    return "../dep/media/shaders/combinations/";
+}
+
 } //model
 } //bv

@@ -14,6 +14,10 @@ std::string DefaultFinalizePlugin::m_uid = "DEFAULT_FINALIZE";
 DefaultFinalizePlugin::DefaultFinalizePlugin       ()
     : m_prevPlugin( nullptr )
     , m_name( "finalizer" )
+    , m_finalizePSC( nullptr )
+    , m_finalizeVSC( nullptr )
+    , m_finalizeGSC( nullptr )
+
 {
     m_defaultVSChannel = DefaultVertexShaderChannel::Create();
 }
@@ -84,6 +88,11 @@ IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel
     assert( m_prevPlugin );
     assert( m_prevPlugin->GetPixelShaderChannel() );
 
+    if( m_finalizePSC == nullptr )
+    {
+//        m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( m_prevPlugin->GetPixelShaderChannel() );
+    }
+
     return m_prevPlugin->GetPixelShaderChannel();
 }
 
@@ -106,6 +115,33 @@ IVertexShaderChannelConstPtr        DefaultFinalizePlugin::GetVertexShaderChanne
 // *******************************
 //
 IGeometryShaderChannelConstPtr      DefaultFinalizePlugin::GetGeometryShaderChannel     () const
+{
+    assert( m_prevPlugin );
+
+    return m_prevPlugin->GetGeometryShaderChannel();
+}
+
+// *******************************
+//
+IPixelShaderChannelPtr              DefaultFinalizePlugin::GetPixelShaderChannel        ()
+{
+    assert( m_prevPlugin );
+
+    return m_prevPlugin->GetPixelShaderChannel();
+}
+
+// *******************************
+//
+IVertexShaderChannelPtr             DefaultFinalizePlugin::GetVertexShaderChannel       ()
+{
+    assert( m_prevPlugin );
+
+    return m_prevPlugin->GetVertexShaderChannel();
+}
+
+// *******************************
+//
+IGeometryShaderChannelPtr           DefaultFinalizePlugin::GetGeometryShaderChannel     ()
 {
     assert( m_prevPlugin );
 
@@ -142,9 +178,13 @@ void                                DefaultFinalizePlugin::Update               
 
 // *******************************
 //
-void                                DefaultFinalizePlugin::SetPrevPlugin                ( IPluginConstPtr plugin )
+void                                DefaultFinalizePlugin::SetPrevPlugin                ( IPluginPtr plugin )
 {
     assert( plugin != nullptr );
+
+    m_finalizePSC = nullptr;
+    m_finalizeVSC = nullptr;
+    m_finalizeGSC = nullptr;
 
     m_prevPlugin = plugin;
 }

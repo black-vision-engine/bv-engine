@@ -31,5 +31,7 @@ protected:
 
 };
 
+DEFINE_PTR_TYPE(DefaultFinalizeVertexShaderChannel)
+
 } //model
 } //bv

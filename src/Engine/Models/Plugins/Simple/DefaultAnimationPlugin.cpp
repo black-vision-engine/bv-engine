@@ -24,7 +24,7 @@ DefaultAnimationPluginDesc::DefaultAnimationPluginDesc                          
 
 // *******************************
 //
-IPluginPtr              DefaultAnimationPluginDesc::CreatePlugin              ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr              DefaultAnimationPluginDesc::CreatePlugin              ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreatePluginTyped< DefaultAnimationPlugin >( name, prev, timeEvaluator );
 }
@@ -137,7 +137,7 @@ std::string             DefaultAnimationPluginDesc::TextureName               ()
 
 // *************************************
 // 
-DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model )
+DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_psc( nullptr )
     , m_vsc( nullptr )
@@ -239,6 +239,20 @@ IVertexShaderChannelConstPtr        DefaultAnimationPlugin::GetVertexShaderChann
 
 // *************************************
 // 
+IPixelShaderChannelPtr              DefaultAnimationPlugin::GetPixelShaderChannel       ()
+{
+    return m_psc;
+}
+
+// *************************************
+// 
+IVertexShaderChannelPtr             DefaultAnimationPlugin::GetVertexShaderChannel      ()
+{
+    return m_vsc;
+}
+
+// *************************************
+// 
 void                                DefaultAnimationPlugin::Update                      ( TimeType t )
 {
     m_paramValModel->Update();
@@ -294,7 +308,7 @@ void                                DefaultAnimationPlugin::Update              
 
 // *************************************
 //
-void DefaultAnimationPlugin::InitAttributesChannel( IPluginConstPtr prev )
+void DefaultAnimationPlugin::InitAttributesChannel( IPluginPtr prev )
 {
     auto prevGeomChannel = prev->GetVertexAttributesChannel();
     AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );

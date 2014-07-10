@@ -17,7 +17,7 @@ public:
 
     DefaultColorPluginDesc                                      ();
 
-    virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
     static  std::string                     UID                 ();
@@ -37,10 +37,12 @@ private:
 
 public:
 
-    explicit                                DefaultColorPlugin          ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model );
+    explicit                                DefaultColorPlugin          ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
                                             ~DefaultColorPlugin         ();
 
     virtual IPixelShaderChannelConstPtr     GetPixelShaderChannel       () const override;
+
+    virtual IPixelShaderChannelPtr          GetPixelShaderChannel       () override;
 
     virtual void                            Update                      ( TimeType t ) override;
 

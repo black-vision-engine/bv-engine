@@ -32,5 +32,7 @@ protected:
         virtual std::string     GetShaderSource ( const std::vector< std::string > & uids ) const override;
 };
 
+DEFINE_PTR_TYPE(DefaultFinalizePixelShaderChannel)
+
 } //model
 } //bv

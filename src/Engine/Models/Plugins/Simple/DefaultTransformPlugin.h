@@ -15,7 +15,7 @@ public:
 
     DefaultTransformPluginDesc                                  ();
 
-    virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
     static  std::string                     UID                 ();
@@ -34,7 +34,7 @@ private:
 
 public:
 
-    explicit                                    DefaultTransformPlugin      ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model );
+    explicit                                    DefaultTransformPlugin      ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
                                                 ~DefaultTransformPlugin     ();
 
     virtual ITransformChannelConstPtr           GetTransformChannel         () const override;

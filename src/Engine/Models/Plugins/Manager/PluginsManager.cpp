@@ -78,7 +78,7 @@ const IPluginDescriptor *                           PluginsManager::GetDescripto
 
 // *********************************
 //
-bool                                                PluginsManager::CanBeAttachedTo         ( const std::string & uid, IPluginConstPtr prev ) const
+bool                                                PluginsManager::CanBeAttachedTo         ( const std::string & uid, IPluginPtr prev ) const
 {
     if( !IsRegistered( uid ) )
     {
@@ -90,7 +90,7 @@ bool                                                PluginsManager::CanBeAttache
 
 // *********************************
 //
-IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     if( !CanBeAttachedTo( uid, prev ) )
     {
@@ -102,7 +102,7 @@ IPluginPtr                                          PluginsManager::CreatePlugin
 
 // *********************************
 //
-IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     if( !CanBeAttachedTo( uid, prev ) )
     {
@@ -189,7 +189,7 @@ DefaultPluginListFinalized *                        PluginsManager::CreatePlugin
 DefaultPluginListFinalized *                        PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::pair< std::string, std::string > > & plugins, ITimeEvaluatorPtr timeEvaluator ) const
 {
     std::vector< IPluginPtr > tmpList;
-    IPluginConstPtr prev = nullptr;
+    IPluginPtr prev = nullptr;
 
     for( auto pair : plugins )
     {

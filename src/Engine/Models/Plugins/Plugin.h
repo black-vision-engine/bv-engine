@@ -21,7 +21,7 @@ class BasePlugin : public Iface
 protected:
 
     ///////////////// Previous plugin ///////////
-    IPluginConstPtr                             m_prevPlugin;
+    IPluginPtr                                  m_prevPlugin;
 
     std::string                                 m_name;
     std::string                                 m_uid;
@@ -30,7 +30,7 @@ protected:
 
 protected:
 
-    explicit                                    BasePlugin                  ( const std::string & name, const std::string & uid, IPluginConstPtr prevPlugin, IPluginParamValModelPtr model );
+    explicit                                    BasePlugin                  ( const std::string & name, const std::string & uid, IPluginPtr prevPlugin, IPluginParamValModelPtr model );
 
 public:
 
@@ -56,6 +56,10 @@ public:
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
     virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const override;
+
+    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () override;
+    virtual IVertexShaderChannelPtr             GetVertexShaderChannel      () override;
+    virtual IGeometryShaderChannelPtr           GetGeometryShaderChannel    () override;
 
     virtual RendererContextConstPtr             GetRendererContext          () const override;
 
@@ -85,7 +89,7 @@ void BasePlugin< Iface >::Update  ( TimeType t )
 // *******************************
 //
 template< class Iface >
-BasePlugin< Iface >::BasePlugin   ( const std::string & name, const std::string & uid, IPluginConstPtr prevPlugin, IPluginParamValModelPtr model )
+BasePlugin< Iface >::BasePlugin   ( const std::string & name, const std::string & uid, IPluginPtr prevPlugin, IPluginParamValModelPtr model )
     : m_prevPlugin( prevPlugin )
     , m_pluginParamValModel( model )
     , m_name( name )
@@ -208,7 +212,7 @@ IPixelShaderChannelConstPtr         BasePlugin< Iface >::GetPixelShaderChannel  
 template< class Iface >
 IVertexShaderChannelConstPtr        BasePlugin< Iface >::GetVertexShaderChannel         () const
 {
-    if( m_prevPlugin ) 
+    if( m_prevPlugin )
     {
         return m_prevPlugin->GetVertexShaderChannel();
     }
@@ -220,6 +224,45 @@ IVertexShaderChannelConstPtr        BasePlugin< Iface >::GetVertexShaderChannel 
 //
 template< class Iface >
 IGeometryShaderChannelConstPtr      BasePlugin< Iface >::GetGeometryShaderChannel       () const
+{
+    if( m_prevPlugin )
+    {
+        return m_prevPlugin->GetGeometryShaderChannel();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+template< class Iface >
+IPixelShaderChannelPtr              BasePlugin< Iface >::GetPixelShaderChannel       ()
+{
+    if( m_prevPlugin )
+    {
+        return m_prevPlugin->GetPixelShaderChannel();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+template< class Iface >
+IVertexShaderChannelPtr             BasePlugin< Iface >::GetVertexShaderChannel      ()
+{
+    if( m_prevPlugin )
+    {
+        return m_prevPlugin->GetVertexShaderChannel();
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+template< class Iface >
+IGeometryShaderChannelPtr           BasePlugin< Iface >::GetGeometryShaderChannel    ()
 {
     if( m_prevPlugin )
     {

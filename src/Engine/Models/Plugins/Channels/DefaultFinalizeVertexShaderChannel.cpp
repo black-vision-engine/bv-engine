@@ -19,7 +19,7 @@ void     DefaultFinalizeVertexShaderChannel::InitializeVertexShaderMapping  ()
 
     for( size_t i = 0; i < uidLists.size(); ++i )
     {
-        ms_vertexShaderMapping[ uidLists[ i ] ] = baseNames[ i ] + ".vert";
+        ms_vertexShaderMapping[ uidLists[ i ] ] = ShaderStorageDirectory() + baseNames[ i ] + ".vert";
     }    
 }
 

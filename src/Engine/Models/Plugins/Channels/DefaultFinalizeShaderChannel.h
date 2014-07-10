@@ -52,6 +52,7 @@ protected:
 
     static const std::vector< std::vector< std::string > > &    GetAcceptedPluginLists  ();
     static const std::vector< std::string > &                   GetBaseShaderFileNames  ();
+    static std::string                                          ShaderStorageDirectory  ();
 
 };
 

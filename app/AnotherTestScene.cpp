@@ -23,14 +23,10 @@
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/SolidColorShaderChannel.h"
-#include "Engine/Models/Plugins/Simple/SimpleTexturePlugin.h"
-#include "Engine/Models/Plugins/Simple/SimpleAnimationPlugin.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/VertexShader/TextureVertexShaderChannel.h"
-#include "Engine/Models/Plugins/Simple/SimpleTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/TimerPlugin.h"
 #include "Engine/Models/Plugins/Channels/GeometryShader/ExtrudeGeometryShaderChannel.h"
-#include "Engine/Models/Plugins/Simple/SimpleTransformPlugin.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/AnimatedStripComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/VertexAttributesChannelAnimatedVertices.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/VariableTopologyStripComponent.h"
@@ -961,76 +957,6 @@ model::BasicNodePtr      TestScenesFactory::SequenceAnimationTestScene  ()
 
     //return AnimatedSequenceRect( animations );
     return nullptr;
-}
-
-// ******************************
-//
-model::BasicNodePtr     TestScenesFactory::NonGeometryParent           ()
-{
-    //TimeType start0 = TimeType( 3.0 );
-    //TimeType start1 = TimeType( 5.0 );
-    //TimeType start2 = TimeType( 8.0 );
-    //TimeType start3 = TimeType( 9.0 );
-
-    //TimeType stop0 = TimeType( 23.0 );
-    //TimeType stop1 = TimeType( 14.0 );
-    //TimeType stop2 = TimeType( 10.0 );
-    //TimeType stop3 = TimeType( 15.0 );
-
-    //model::BasicNode * tlnode = NonGeometryParentRects( start0, stop0, start1, stop1, start2, stop2, start3, stop3 );
-    //
-    //start0 = TimeType( 4.0 );
-    //start1 = TimeType( 4.0 );
-    //start2 = TimeType( 4.0 );
-    //start3 = TimeType( 4.0 );
-
-    //stop0 = TimeType( 6.0 );
-    //stop1 = TimeType( 6.0 );
-    //stop2 = TimeType( 6.0 );
-    //stop3 = TimeType( 6.0 );
-
-    //model::BasicNode * ntlnode = NonGeometryParentRects( start0, stop0, start1, stop1, start2, stop2, start3, stop3 );
-
-    //model::BasicNode * root = new model::BasicNode( "NGRoot" );
-    //model::SimpleTransformPlugin * plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", TransformF(), nullptr, 0 ) );
-    //root->AddPlugin( plugin00 );
-
-    //model::BasicNode * left = new model::BasicNode( "LeftChild" );
-    //TransformF tl;
-    //tl.AddTranslation( InterpolatorsHelper::CreateConstValue( -1.3f ), InterpolatorsHelper::CreateConstValue( 0.0f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
-    ////tl->addScale( InterpolatorsHelper::CreateConstValue( 0.3f ), InterpolatorsHelper::CreateConstValue( 0.1f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
-    //model::SimpleTransformPlugin * ptl = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", tl, nullptr, 0 ) );
-    //left->AddPlugin( ptl );
-    //left->AddChild( tlnode );
-
-    //model::BasicNode * right = new model::BasicNode( "RightChild" );
-    //TransformF tr;
-    //tr.AddTranslation( InterpolatorsHelper::CreateConstValue( 1.3f ), InterpolatorsHelper::CreateConstValue( 0.0f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
-    ////tr->addScale( InterpolatorsHelper::CreateConstValue( 0.3f ), InterpolatorsHelper::CreateConstValue( 0.1f ), InterpolatorsHelper::CreateConstValue( 0.f ) );
-    //model::SimpleTransformPlugin * ptr = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", tr, nullptr, 0 ) );
-    //right->AddPlugin( ptr );
-    //right->AddChild( ntlnode );
-
-    //root->AddChild( left );
-    //root->AddChild( right );
-
-    //return root;
-    return nullptr;
-}
-
-// ******************************
-//
-model::BasicNodePtr     TestScenesFactory::StackThemNow                ( model::BasicNodePtr n0, model::BasicNodePtr n1 )
-{
-    assert( false );
-    auto root = std::make_shared< model::BasicNode >( "StackNodeRoot", nullptr );
-    model::SimpleTransformPluginPtr plugin00 = model::SimpleTransformPlugin::Create( nullptr, model::ParametersFactory::CreateParameter( "transformation", TransformF(), nullptr, 0 ) );
-    root->AddPlugin( plugin00 );
-
-    root->AddChild( n0 );
-    root->AddChild( n1 );
-
-    return root;
 }
 
 } // bv

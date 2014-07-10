@@ -245,7 +245,7 @@ bool            BasicNode::AddPlugin                ( IPluginPtr plugin )
 {
     NonNullPluginsListGuard();
 
-    IPluginConstPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
+    IPluginPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
 
     assert( m_pluginsManager->CanBeAttachedTo( plugin->GetTypeUid(), prev ) );
 
@@ -265,7 +265,7 @@ bool            BasicNode::AddPlugin               ( const std::string & uid, IT
 {
     NonNullPluginsListGuard ();
 
-    IPluginConstPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
+    IPluginPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
 
     if( !m_pluginsManager->CanBeAttachedTo( uid, prev ) )
     {
@@ -283,7 +283,7 @@ bool            BasicNode::AddPlugin               ( const std::string & uid, co
 {
     NonNullPluginsListGuard ();
 
-    IPluginConstPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
+    IPluginPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
 
     if( !m_pluginsManager->CanBeAttachedTo( uid, prev ) )
     {

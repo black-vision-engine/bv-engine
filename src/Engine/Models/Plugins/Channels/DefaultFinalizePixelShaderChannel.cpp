@@ -19,7 +19,7 @@ void     DefaultFinalizePixelShaderChannel::InitializePixelShaderMapping()
 
     for( size_t i = 0; i < uidLists.size(); ++i )
     {
-        ms_pixelShaderMapping[ uidLists[ i ] ] = baseNames[ i ] + ".frag";
+        ms_pixelShaderMapping[ uidLists[ i ] ] = ShaderStorageDirectory() + baseNames[ i ] + ".frag";
     }
 }
 

@@ -28,7 +28,7 @@ DefaultPluginListFinalized::~DefaultPluginListFinalized     ()
 
 // *******************************
 //
-IPluginConstPtr         DefaultPluginListFinalized::GetPlugin           ( const std::string & name ) const
+IPluginPtr              DefaultPluginListFinalized::GetPlugin           ( const std::string & name ) const
 {
     for( auto plugin : m_plugins )
     {
@@ -43,7 +43,7 @@ IPluginConstPtr         DefaultPluginListFinalized::GetPlugin           ( const 
 
 // *******************************
 //
-IPluginConstPtr         DefaultPluginListFinalized::GetPlugin           ( unsigned int idx ) const
+IPluginPtr              DefaultPluginListFinalized::GetPlugin           ( unsigned int idx ) const
 {
     assert( idx < m_plugins.size() );
 
@@ -52,7 +52,7 @@ IPluginConstPtr         DefaultPluginListFinalized::GetPlugin           ( unsign
 
 // *******************************
 //
-IPluginConstPtr         DefaultPluginListFinalized::GetLastPlugin       () const
+IPluginPtr              DefaultPluginListFinalized::GetLastPlugin       () const
 {
     assert( m_plugins.size() > 0 );
 
@@ -68,7 +68,7 @@ unsigned int            DefaultPluginListFinalized::NumPlugins          () const
 
 // *******************************
 //
-IFinalizePluginConstPtr DefaultPluginListFinalized::GetFinalizePlugin   () const
+IFinalizePluginPtr      DefaultPluginListFinalized::GetFinalizePlugin   () const
 {
     return m_finalizePlugin;
 }
@@ -116,7 +116,7 @@ void                    DefaultPluginListFinalized::AttachPlugin        ( IPlugi
 {
     assert( plugin != nullptr );
 
-    m_plugins.push_back( IPluginPtr( plugin ) );
+    m_plugins.push_back( plugin );
 
     m_finalizePlugin->SetPrevPlugin( plugin );
 }

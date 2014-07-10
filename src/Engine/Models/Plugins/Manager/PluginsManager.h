@@ -38,9 +38,9 @@ public:
     bool                                                IsRegistered            ( const std::string & uid ) const;
     const IPluginDescriptor *                           GetDescriptor           ( const std::string & uid ) const;
     
-    bool                                                CanBeAttachedTo         ( const std::string & uid, IPluginConstPtr prev ) const;
-    IPluginPtr                                          CreatePlugin            ( const std::string & uid, const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const;
-    IPluginPtr                                          CreatePlugin            ( const std::string & uid, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const;
+    bool                                                CanBeAttachedTo         ( const std::string & uid, IPluginPtr prev ) const;
+    IPluginPtr                                          CreatePlugin            ( const std::string & uid, const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const;
+    IPluginPtr                                          CreatePlugin            ( const std::string & uid, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const;
     const std::vector< const IPluginDescriptor * > &    GetRegisteredDescriptors() const;
 
     IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator ) const;
