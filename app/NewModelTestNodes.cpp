@@ -290,7 +290,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
     //SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
 
-    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 0.f, 0.5f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 0.f, 0.0f ) );
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 2.f, glm::vec3( 0.f, 0.f, 0.0f ) );
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 5.f, glm::vec3( 0.f, 0.f, -2.f ) );
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 6.f, glm::vec3( 0.f, 0.f, -5.f ) );
@@ -298,7 +298,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
     node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( timeEvaluator );
 
-    success = model::LoadTexture( node->GetPlugin( "texture" ), "test.bmp" );
+    success = model::LoadTexture( node->GetPlugin( "texture" ), "full.jpg" );
     //success = model::LoadTexture( node->GetPlugin( "texture" ), "test.bmp" );
     assert( success );
 
@@ -308,10 +308,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
         int width   = texturePlugin->GetTextureWidth();
         int height  = texturePlugin->GetTextureHeight();
 
-        float hf = float( height ) / float( width );
+        float wf = float( width ) / float( height );
 
-        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 876.f * 2.f / 1080.f );
-        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),   876.f * 2.f / 1080.f );
+        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),   2.f );
+        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), wf * 2.f );
     }
 
     //auto ai = TestAIManager::Instance().GetAIPreset( 2 );
