@@ -51,6 +51,7 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator,
     , m_pluginList( nullptr )
     , m_pluginsManager( pluginsManager )
     , m_overrideState( nullptr )
+    , m_visible( true )
 {
     if( pluginsManager == nullptr )
     {

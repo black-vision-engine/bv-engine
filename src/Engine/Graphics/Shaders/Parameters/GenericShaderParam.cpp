@@ -11,6 +11,7 @@ GenericShaderParam::GenericShaderParam      ( ParamType type, const std::string 
     : m_id( -1 )
     , m_paramType( type )
     , m_paramName( name )
+    , m_updatable( true )
 {
 }
 
