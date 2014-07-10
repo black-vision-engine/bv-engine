@@ -249,6 +249,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\ShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\EngineConstantsMapper.cpp" />
     <ClCompile Include="Engine\Models\ModelScene.cpp" />

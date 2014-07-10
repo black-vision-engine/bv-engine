@@ -209,6 +209,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultFinalizeGeometryShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultFinalizePixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultFinalizeVertexShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\ShaderChannel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />

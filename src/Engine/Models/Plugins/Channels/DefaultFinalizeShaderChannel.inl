@@ -17,6 +17,7 @@ namespace {
                                             { "",               "",                 "DEFAULT_ANIMATION",    "",             "DEFAULT_ALPHA_MASK" },
                                         };
 
+    //@see: https://docs.google.com/spreadsheets/d/1K3dblNOAijnKdJXeha9_DWlSLhOc1Wcq5F1Mwlvk7x4
     char * baseShaderFileNames[8] = {
                                         "col,"
                                         "tx",
@@ -31,7 +32,12 @@ namespace {
 
 // *********************************
 template< typename ShaderChannelIface >
-std::vector< std::vector< std::string > >    DefaultFinalizeShaderChannel< ShaderChannelIface >::ms_acceptedPluginLists;
+std::vector< std::vector< std::string > >   DefaultFinalizeShaderChannel< ShaderChannelIface >::ms_acceptedPluginLists;
+
+// *********************************
+template< typename ShaderChannelIface >
+std::vector< std::string >                  DefaultFinalizeShaderChannel< ShaderChannelIface >::ms_baseShaderFileNames;
+
 
 // *********************************
 //
@@ -142,7 +148,7 @@ const std::vector< std::string > &                  DefaultFinalizeShaderChannel
 {
     if( ms_baseShaderFileNames.size() == 0 )
     {
-        for( unsigned int i = 0; i < GNumLists )
+        for( unsigned int i = 0; i < GNumLists; ++i )
         {
             ms_baseShaderFileNames.push_back( std::string( baseShaderFileNames[ i ] ) );
         }

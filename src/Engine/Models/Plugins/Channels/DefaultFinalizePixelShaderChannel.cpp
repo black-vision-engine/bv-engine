@@ -1,5 +1,7 @@
 #include "DefaultFinalizePixelShaderChannel.h"
 
+#include "Engine/Models/Plugins/Channels/ShaderChannel.h"
+
 
 namespace bv { namespace model {
 
@@ -10,6 +12,15 @@ PluginUIDHashMap    DefaultFinalizePixelShaderChannel::ms_pixelShaderMapping;
 //
 void     DefaultFinalizePixelShaderChannel::InitializePixelShaderMapping()
 {
+    auto uidLists   = GetAcceptedPluginLists();
+    auto baseNames  = GetBaseShaderFileNames();
+
+    assert( uidLists.size() == baseNames.size() );
+
+    for( size_t i = 0; i < uidLists.size(); ++i )
+    {
+        ms_pixelShaderMapping[ uidLists[ i ] ] = baseNames[ i ] + ".frag";
+    }
 }
 
 // *********************************
@@ -17,7 +28,7 @@ void     DefaultFinalizePixelShaderChannel::InitializePixelShaderMapping()
 DefaultFinalizePixelShaderChannel::DefaultFinalizePixelShaderChannel    ( IPixelShaderChannelPtr channel )
     : Parent( channel )
 {
-}
+} 
 
 // *********************************
 //
@@ -40,7 +51,7 @@ std::string     DefaultFinalizePixelShaderChannel::GetShaderSource  ( const std:
 
     if( it != ms_pixelShaderMapping.end() )
     {
-        return it->second;
+        return ReadShaderContentsFromFile( it->second );
     }
 
     assert( false );

@@ -72,11 +72,7 @@ bv::ITexturesDataConstPtr                   ShaderChannel< ShaderChannelIface >:
 template< typename ShaderChannelIface >
 const std::string                           ShaderChannel< ShaderChannelIface >::ReadShaderFromFile ( const std::string & fileName )
 {
-    std::stringstream shaderSource;
-
-    File::Open( fileName ) >> shaderSource;
-
-    return shaderSource.str();
+    return ReadShaderContentsFromFile( fileName );
 }
 
 } // model
