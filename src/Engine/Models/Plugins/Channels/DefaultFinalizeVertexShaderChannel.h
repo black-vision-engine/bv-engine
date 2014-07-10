@@ -14,13 +14,20 @@ private:
 
 private:
 
-    std::string m_shaderSource;
+    static PluginUIDHashMap    ms_vertexShaderMapping;
+
+private:
+
+    static void     InitializeVertexShaderMapping       ();
 
 public:
 
+        DefaultFinalizeVertexShaderChannel              ( IVertexShaderChannelPtr channel );
+        ~DefaultFinalizeVertexShaderChannel             ();
 
-        DefaultFinalizeVertexShaderChannel      ( IVertexShaderChannelPtr channel );
-        ~DefaultFinalizeVertexShaderChannel     ();
+protected:
+
+        virtual std::string     GetShaderSource         ( const std::vector< std::string > & uids ) const override;
 
 };
 

@@ -6,18 +6,25 @@ namespace bv { namespace model {
 
 // *********************************
 //
-DefaultFinalizeGeometryShaderChannel::DefaultFinalizeGeometryShaderChannel  ( IGeometryShaderChannelPtr channel )
+DefaultFinalizeGeometryShaderChannel::DefaultFinalizeGeometryShaderChannel      ( IGeometryShaderChannelPtr channel )
     : Parent( channel )
-    , m_shaderSource( "" )
 {
 }
 
 // *********************************
 //
-DefaultFinalizeGeometryShaderChannel::~DefaultFinalizeGeometryShaderChannel ()
+DefaultFinalizeGeometryShaderChannel::~DefaultFinalizeGeometryShaderChannel     ()
 {
 }
 
+// *********************************
+//
+std::string DefaultFinalizeGeometryShaderChannel::GetShaderSource               ( const std::vector< std::string > & uids )  const
+{
+    assert( false );
+
+    return "";
+}
 
 } //model
 } //bv

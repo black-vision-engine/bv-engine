@@ -3,21 +3,44 @@
 
 namespace bv { namespace model {
 
+// *********************************
+PluginUIDHashMap    DefaultFinalizeVertexShaderChannel::ms_vertexShaderMapping;
 
 // *********************************
 //
-DefaultFinalizeVertexShaderChannel::DefaultFinalizeVertexShaderChannel  ( IVertexShaderChannelPtr channel )
+void     DefaultFinalizeVertexShaderChannel::InitializeVertexShaderMapping  ()
+{
+    
+}
+
+// *********************************
+//
+DefaultFinalizeVertexShaderChannel::DefaultFinalizeVertexShaderChannel      ( IVertexShaderChannelPtr channel )
     : Parent( channel )
-    , m_shaderSource( "" )
 {
 }
 
 // *********************************
 //
-DefaultFinalizeVertexShaderChannel::~DefaultFinalizeVertexShaderChannel ()
+DefaultFinalizeVertexShaderChannel::~DefaultFinalizeVertexShaderChannel     ()
 {
 }
 
+// *********************************
+//
+std::string     DefaultFinalizeVertexShaderChannel::GetShaderSource         ( const std::vector< std::string > & uids ) const
+{
+    auto it = ms_vertexShaderMapping.find( uids );
+
+    if( it != ms_vertexShaderMapping.end() )
+    {
+        return it->second;
+    }
+
+    assert( false );
+
+    return "";
+}
 
 } //model
 } //bv
