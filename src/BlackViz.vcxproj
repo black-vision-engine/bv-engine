@@ -240,6 +240,9 @@
     <ClCompile Include="Engine\Models\BasicOverrideState.cpp" />
     <ClCompile Include="Engine\Models\Builder\RendererStatesBuilder.cpp" />
     <ClCompile Include="Engine\Models\ModelAccessors.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\DefaultFinalizeGeometryShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\DefaultFinalizePixelShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\DefaultFinalizeVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultPixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultaAnimationDescriptor.cpp" />
@@ -467,6 +470,9 @@
     <ClInclude Include="Engine\Models\Interfaces\ITimeline.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITimelineEvent.h" />
     <ClInclude Include="Engine\Models\ModelAccessors.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizeGeometryShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizePixelShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizeVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.h" />

@@ -206,6 +206,9 @@
     <ClCompile Include="Engine\Graphics\Effects\Texture2DEffectShaders.cpp" />
     <ClCompile Include="Engine\Models\Plugins\EngineConstantsMapper.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrPBOMemTransfer.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\DefaultFinalizeGeometryShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\DefaultFinalizePixelShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\DefaultFinalizeVertexShaderChannel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -469,6 +472,9 @@
     <ClInclude Include="Engine\Graphics\Effects\Texture2DEffectShaders.h" />
     <ClInclude Include="Engine\Models\Plugins\EngineConstantsMapper.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrPBOMemTransfer.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizeGeometryShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizePixelShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizeVertexShaderChannel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
