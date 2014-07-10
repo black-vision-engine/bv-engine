@@ -20,14 +20,14 @@ protected:
 
 public:
 
-            DefaultVertexShaderChannel                      ( const std::string & shaderSource, IValueSetConstPtr valueSet );
-    virtual ~DefaultVertexShaderChannel                     ();
+            DefaultVertexShaderChannel                          ( const std::string & shaderSource, IValueSetConstPtr valueSet );
+    virtual ~DefaultVertexShaderChannel                         ();
 
     virtual ITexturesDataConstPtr           GetTexturesData     () const override;
     DefaultTexturesDataPtr                  GetTexturesDataImpl ();
 
-    static  DefaultVertexShaderChannelPtr   Create             ();
-    static  DefaultVertexShaderChannelPtr   Create             ( const std::string & shaderFile, IValueSetConstPtr values );
+    static  DefaultVertexShaderChannelPtr   Create              ();
+    static  DefaultVertexShaderChannelPtr   Create              ( const std::string & shaderFile, IValueSetConstPtr values );
 
 };
 
