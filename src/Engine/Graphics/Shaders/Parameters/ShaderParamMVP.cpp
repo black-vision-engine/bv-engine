@@ -28,7 +28,7 @@ const void *    ShaderParamMVP::GetValuePtr () const
 //
 void            ShaderParamMVP::Update      ( RenderableEntity * renderable, Camera * camera )
 {
-    if( IsUpdateble() )
+    if( IsUpdatable() )
     {
         assert( camera != nullptr );
         assert( renderable != nullptr );

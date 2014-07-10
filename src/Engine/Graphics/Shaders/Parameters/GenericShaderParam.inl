@@ -51,7 +51,7 @@ inline const std::string &  GenericShaderParam::Name            () const
 
 // ****************************
 //
-inline bool                 GenericShaderParam::IsUpdateble     () const
+inline bool                 GenericShaderParam::IsUpdatable     () const
 {
     return m_updatable;
 }

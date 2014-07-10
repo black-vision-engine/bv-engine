@@ -35,7 +35,7 @@ public:
     inline  int                 IntID               () const;
     inline ParamType            Type                () const;
     inline const std::string &  Name                () const;
-    inline bool                 IsUpdateble         () const;
+    inline bool                 IsUpdatable         () const;
 
     virtual void                Update              ( RenderableEntity * renderable, Camera * camera );
 
