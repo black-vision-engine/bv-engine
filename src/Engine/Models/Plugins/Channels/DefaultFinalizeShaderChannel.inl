@@ -16,6 +16,17 @@ namespace {
                                             { "DEFAULT_COLOR",  "",                 "",                     "DEFAULT_TEXT", "DEFAULT_ALPHA_MASK" },
                                             { "",               "",                 "DEFAULT_ANIMATION",    "",             "DEFAULT_ALPHA_MASK" },
                                         };
+
+    char * baseShaderFileNames[8] = {
+                                        "col,"
+                                        "tx",
+                                        "col_txt",
+                                        "tx",
+                                        "col_am",
+                                        "tx_am",
+                                        "col_txt_am",
+                                        "tx_am"
+                                    };
 }
 
 // *********************************
@@ -122,6 +133,22 @@ const std::vector< std::vector< std::string > > &   DefaultFinalizeShaderChannel
     }
 
     return ms_acceptedPluginLists;
+}
+
+// *********************************
+//
+template< typename ShaderChannelIface >
+const std::vector< std::string > &                  DefaultFinalizeShaderChannel< ShaderChannelIface >::GetBaseShaderFileNames  ()
+{
+    if( ms_baseShaderFileNames.size() == 0 )
+    {
+        for( unsigned int i = 0; i < GNumLists )
+        {
+            ms_baseShaderFileNames.push_back( std::string( baseShaderFileNames[ i ] ) );
+        }
+    }
+
+    return ms_baseShaderFileNames;
 }
 
 } //model

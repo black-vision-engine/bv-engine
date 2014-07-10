@@ -28,6 +28,7 @@ protected:
     std::string                             m_shaderSource;
 
     static std::vector< std::vector< std::string > >    ms_acceptedPluginLists;
+    static std::vector< std::string >                   ms_baseShaderFileNames;
 
 public:
 
@@ -49,7 +50,9 @@ protected:
 
     virtual std::string                                 GetShaderSource                 ( const std::vector< std::string > & uids ) const = 0;
 
-    static const std::vector< std::vector< std::string > > & GetAcceptedPluginLists     ();
+    static const std::vector< std::vector< std::string > > &    GetAcceptedPluginLists  ();
+    static const std::vector< std::string > &                   GetBaseShaderFileNames  ();
+
 };
 
 } // model
