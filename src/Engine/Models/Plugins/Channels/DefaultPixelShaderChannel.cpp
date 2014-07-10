@@ -32,10 +32,11 @@ RendererContextConstPtr     DefaultPixelShaderChannel::GetRendererContext  () co
 
 // ******************************
 //
-RendererContextPtr           DefaultPixelShaderChannel::GetRendererContext  ()
+RendererContextPtr          DefaultPixelShaderChannel::GetRendererContext  ()
 {
     return m_rendererContext;
 }
+
 
 // ******************************
 //

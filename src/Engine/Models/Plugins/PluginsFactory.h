@@ -4,13 +4,6 @@
 
 #include "Mathematics/Interpolators/Interpolators.h"
 
-#include "Engine/Models/Plugins/Simple/SimpleTextPlugin.h"
-#include "Engine/Models/Plugins/Simple/SimpleTexturePlugin.h"
-#include "Engine/Models/Plugins/Simple/SimpleAnimationPlugin.h"
-#include "Engine/Models/Plugins/Simple/SimpleGeometryShaderPlugin.h"
-#include "Engine/Models/Plugins/Simple/SimplePixelShaderPlugin.h"
-#include "Engine/Models/Plugins/Simple/SimpleVertexShaderPlugin.h"
-#include "Engine/Models/Plugins/Simple/SimpleColorPlugin.h"
 #include "Engine/Models/Plugins/GeometryPlugin.h"
 #include "Engine/Models/Plugins/GeometryPluginRect.h"
 

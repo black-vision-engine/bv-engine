@@ -13,9 +13,9 @@ class IPluginList : public IUpdatable
 {
 public:
 
-    virtual IPluginConstPtr GetPlugin       ( const std::string & name ) const  = 0;
-    virtual IPluginConstPtr GetPlugin       ( unsigned int idx ) const          = 0;
-    virtual IPluginConstPtr GetLastPlugin   () const                            = 0;
+    virtual IPluginPtr      GetPlugin       ( const std::string & name ) const  = 0;
+    virtual IPluginPtr      GetPlugin       ( unsigned int idx ) const          = 0;
+    virtual IPluginPtr      GetLastPlugin   () const                            = 0;
 
     virtual unsigned int    NumPlugins      () const                            = 0;
 

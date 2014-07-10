@@ -21,7 +21,7 @@ class BasePlugin : public Iface
 protected:
 
     ///////////////// Previous plugin ///////////
-    IPluginConstPtr                             m_prevPlugin;
+    IPluginPtr                                  m_prevPlugin;
 
     std::string                                 m_name;
     std::string                                 m_uid;
@@ -30,7 +30,7 @@ protected:
 
 protected:
 
-    explicit                                    BasePlugin                  ( const std::string & name, const std::string & uid, IPluginConstPtr prevPlugin, IPluginParamValModelPtr model );
+    explicit                                    BasePlugin                  ( const std::string & name, const std::string & uid, IPluginPtr prevPlugin, IPluginParamValModelPtr model );
 
 public:
 
@@ -59,6 +59,8 @@ public:
 
     virtual RendererContextConstPtr             GetRendererContext          () const override;
 
+    virtual IPluginConstPtr                     GetPrevPlugin               () const override;
+
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr );
 
 protected:
@@ -85,7 +87,7 @@ void BasePlugin< Iface >::Update  ( TimeType t )
 // *******************************
 //
 template< class Iface >
-BasePlugin< Iface >::BasePlugin   ( const std::string & name, const std::string & uid, IPluginConstPtr prevPlugin, IPluginParamValModelPtr model )
+BasePlugin< Iface >::BasePlugin   ( const std::string & name, const std::string & uid, IPluginPtr prevPlugin, IPluginParamValModelPtr model )
     : m_prevPlugin( prevPlugin )
     , m_pluginParamValModel( model )
     , m_name( name )
@@ -180,7 +182,7 @@ IVertexAttributesChannelConstPtr            BasePlugin< Iface >::GetVertexAttrib
 // *******************************
 //
 template< class Iface >
-ITransformChannelConstPtr           BasePlugin< Iface >::GetTransformChannel          () const
+ITransformChannelConstPtr           BasePlugin< Iface >::GetTransformChannel            () const
 {
     if( m_prevPlugin )
     {
@@ -193,7 +195,7 @@ ITransformChannelConstPtr           BasePlugin< Iface >::GetTransformChannel    
 // *******************************
 //
 template< class Iface >
-IPixelShaderChannelConstPtr         BasePlugin< Iface >::GetPixelShaderChannel        () const
+IPixelShaderChannelConstPtr         BasePlugin< Iface >::GetPixelShaderChannel          () const
 {
     if( m_prevPlugin )
     {
@@ -208,7 +210,7 @@ IPixelShaderChannelConstPtr         BasePlugin< Iface >::GetPixelShaderChannel  
 template< class Iface >
 IVertexShaderChannelConstPtr        BasePlugin< Iface >::GetVertexShaderChannel         () const
 {
-    if( m_prevPlugin ) 
+    if( m_prevPlugin )
     {
         return m_prevPlugin->GetVertexShaderChannel();
     }
@@ -242,6 +244,14 @@ RendererContextConstPtr             BasePlugin< Iface >::GetRendererContext     
     }
 
     return nullptr;
+}
+
+// *******************************
+//
+template< class Iface >
+IPluginConstPtr                     BasePlugin< Iface >::GetPrevPlugin                  () const
+{
+    return m_prevPlugin;
 }
 
 // *******************************

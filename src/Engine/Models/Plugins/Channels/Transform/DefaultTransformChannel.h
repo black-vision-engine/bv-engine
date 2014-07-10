@@ -23,11 +23,11 @@ private:
 
 private:
 
-    explicit                            DefaultTransformChannel ( IPluginConstPtr prev, const ValueMat4PtrVec & values, bool isReadOnly );
+    explicit                            DefaultTransformChannel ( IPluginPtr prev, const ValueMat4PtrVec & values, bool isReadOnly );
 
 public:
 
-    static  DefaultTransformChannel *   Create                  ( IPluginConstPtr prev, const ValueMat4PtrVec & values, bool isReadOnly = false );
+    static  DefaultTransformChannel *   Create                  ( IPluginPtr prev, const ValueMat4PtrVec & values, bool isReadOnly = false );
 
     virtual const ValueMat4PtrVec &     GetTransformValues      ()  const override;
 

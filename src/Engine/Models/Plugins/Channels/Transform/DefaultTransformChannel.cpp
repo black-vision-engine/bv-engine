@@ -8,7 +8,7 @@ namespace bv { namespace model
 
 // *********************************
 //
-DefaultTransformChannel::DefaultTransformChannel( IPluginConstPtr prev, const ValueMat4PtrVec & values, bool isReadOnly )
+DefaultTransformChannel::DefaultTransformChannel( IPluginPtr prev, const ValueMat4PtrVec & values, bool isReadOnly )
     : m_values( values )
     , m_isReadOnly( isReadOnly )
     , m_prevValues( nullptr )
@@ -23,7 +23,7 @@ DefaultTransformChannel::DefaultTransformChannel( IPluginConstPtr prev, const Va
 
 // *********************************
 //
-DefaultTransformChannel *   DefaultTransformChannel::Create              ( IPluginConstPtr prev, const ValueMat4PtrVec & values, bool isReadOnly )
+DefaultTransformChannel *   DefaultTransformChannel::Create              ( IPluginPtr prev, const ValueMat4PtrVec & values, bool isReadOnly )
 {
     return new DefaultTransformChannel( prev, values, isReadOnly );
 }

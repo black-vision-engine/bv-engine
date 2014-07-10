@@ -39,7 +39,7 @@ bool                            DefaultRectPluginDesc::CanBeAttachedTo      ( IP
 
 // *******************************
 //
-IPluginPtr                      DefaultRectPluginDesc::CreatePlugin         ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr                      DefaultRectPluginDesc::CreatePlugin         ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreatePluginTyped< DefaultRectPlugin >( name, prev, timeEvaluator );
 }
@@ -78,7 +78,7 @@ std::string                     DefaultRectPluginDesc::UID                  ()
 
 // *************************************
 //
-DefaultRectPlugin::DefaultRectPlugin    ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model, bool timeInvariantDimensions )
+DefaultRectPlugin::DefaultRectPlugin    ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model, bool timeInvariantDimensions )
     : BasePlugin( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_vaChannel( nullptr )
     , m_paramValModel( model )

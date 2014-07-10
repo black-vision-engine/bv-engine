@@ -3,6 +3,9 @@
 #include "Engine/Models/Plugins/Interfaces/IFinalizePlugin.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
 
+#include "Engine/Models/Plugins/Channels/DefaultFinalizePixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/DefaultFinalizeVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/DefaultFinalizeGeometryShaderChannel.h"
 
 namespace bv { namespace model {
 
@@ -10,12 +13,16 @@ class DefaultFinalizePlugin : public IFinalizePlugin
 {
 private:
 
-    IPluginConstPtr                 m_prevPlugin;
+    IPluginPtr                      m_prevPlugin;
     
     std::string                     m_name;
     static std::string              m_uid;
 
     DefaultVertexShaderChannelPtr   m_defaultVSChannel;
+
+    mutable DefaultFinalizePixelShaderChannelPtr    m_finalizePSC;
+    mutable DefaultFinalizeVertexShaderChannelPtr   m_finalizeVSC;
+    mutable DefaultFinalizeGeometryShaderChannelPtr m_finalizeGSC;
 
 public:
 
@@ -37,12 +44,18 @@ public:
                  
     virtual RendererContextConstPtr             GetRendererContext          () const override;
 
+    virtual IPluginConstPtr                     GetPrevPlugin               () const override;
+
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
 
     virtual void                                Update                      ( TimeType t ) override;
 
-    void                                        SetPrevPlugin               ( IPluginConstPtr plugin );
+    void                                        SetPrevPlugin               ( IPluginPtr plugin );
     void                                        SetName                     ( const std::string & name );
+
+private:
+
+    std::vector< std::string >                  PrevUIDS                    ( unsigned int skipFirstEntries ) const;
 
 };
 

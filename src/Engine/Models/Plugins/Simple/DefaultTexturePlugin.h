@@ -22,7 +22,7 @@ public:
 
     DefaultTexturePluginDesc                                    ();
 
-    virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
     virtual bool                            CanBeAttachedTo     ( IPluginConstPtr plugin )  const override;
@@ -67,7 +67,7 @@ private:
 
 public:
 
-    explicit                                    DefaultTexturePlugin        ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model );
+    explicit                                    DefaultTexturePlugin        ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
                                                 ~DefaultTexturePlugin       ();
 
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
@@ -75,6 +75,7 @@ public:
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
+
     int                                         GetTextureWidth             () const;
     int                                         GetTextureHeight            () const;
 
@@ -82,7 +83,7 @@ public:
 
 private:
 
-    void                                        InitAttributesChannel       ( IPluginConstPtr prev );
+    void                                        InitAttributesChannel       ( IPluginPtr prev );
 
     TextureWrappingMode                         GetWrapModeX                () const;
     TextureWrappingMode                         GetWrapModeY                () const;

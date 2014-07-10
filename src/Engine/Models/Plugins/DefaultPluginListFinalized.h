@@ -20,13 +20,13 @@ public:
                                                                 
     virtual     ~DefaultPluginListFinalized     ();
 
-    virtual IPluginConstPtr         GetPlugin           ( const std::string & name ) const override;
-    virtual IPluginConstPtr         GetPlugin           ( unsigned int idx ) const override;
-    virtual IPluginConstPtr         GetLastPlugin       () const override;
+    virtual IPluginPtr              GetPlugin           ( const std::string & name ) const override;
+    virtual IPluginPtr              GetPlugin           ( unsigned int idx ) const override;
+    virtual IPluginPtr              GetLastPlugin       () const override;
 
     virtual unsigned int            NumPlugins          () const override;
 
-    virtual IFinalizePluginConstPtr GetFinalizePlugin   () const override;
+    virtual IFinalizePluginPtr      GetFinalizePlugin   () const override;
 
     virtual void                    Update              ( TimeType t ) override;
 

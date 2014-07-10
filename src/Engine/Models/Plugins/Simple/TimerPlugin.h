@@ -60,25 +60,25 @@ class TimerPlugin : public BasePlugin< IPlugin >
     TextureInfoVec              m_textures;
 
     ResourceHandleConstPtr      m_fontResource;
-    const TextAtlas*            m_currentAtlas;
+    const TextAtlas *           m_currentAtlas;
 
     std::wstring                m_timePatern;
     TimeInfo                    m_timePaternInfo;
 
     explicit                    TimerPlugin     ( const ParamFloat& timeParam, unsigned int fontSize );
 
-    bool                        CheckTimeConsistency ( const std::wstring& time ) const;
+    bool                        CheckTimeConsistency ( const std::wstring & time ) const;
 
     void                        SetValue        ( unsigned int connComp, wchar_t wch );
-    const GlyphCoords&          GetGlyphCoords  ( wchar_t wch ) const;
+    const GlyphCoords &         GetGlyphCoords  ( wchar_t wch ) const;
     void                        Refresh         ();
 
 public:
 
-    static TimerPlugin*                         Create                      ( const ParamFloat& timeParam, unsigned int fontSize );
+    static TimerPlugin *                        Create                      ( const ParamFloat & timeParam, unsigned int fontSize );
 
-    void                                        SetTimePatern               ( const std::wstring& patern );
-    void                                        SetTime                     ( const std::wstring& time );
+    void                                        SetTimePatern               ( const std::wstring & patern );
+    void                                        SetTime                     ( const std::wstring & time );
     void                                        SetTime                     ( double time );
     void                                        SetHOSecond                 ( int hoSec );
     void                                        SetSecond                   ( int sec );

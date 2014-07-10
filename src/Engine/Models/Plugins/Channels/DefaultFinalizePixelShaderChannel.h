@@ -6,7 +6,7 @@
 
 namespace bv { namespace model {
 
-class DefaultFinalizePixelShaderChannel : DefaultFinalizeShaderChannel< IPixelShaderChannel >
+class DefaultFinalizePixelShaderChannel : public DefaultFinalizeShaderChannel< IPixelShaderChannel >
 {
 private:
 
@@ -14,15 +14,25 @@ private:
 
 private:
 
-    std::string m_shaderSource;
+    static PluginUIDHashMap    ms_pixelShaderMapping;
+
+private:
+
+    static void     InitializePixelShaderMapping();
 
 public:
-
 
         DefaultFinalizePixelShaderChannel       ( IPixelShaderChannelPtr channel );
         ~DefaultFinalizePixelShaderChannel      ();
 
+        virtual RendererContextConstPtr  GetRendererContext  () const override;
+
+protected:
+
+        virtual std::string     GetShaderSource ( const std::vector< std::string > & uids ) const override;
 };
+
+DEFINE_PTR_TYPE(DefaultFinalizePixelShaderChannel)
 
 } //model
 } //bv

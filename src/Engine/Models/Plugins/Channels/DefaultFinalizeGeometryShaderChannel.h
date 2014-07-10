@@ -5,23 +5,24 @@
 
 namespace bv { namespace model {
 
-class DefaultFinalizeGeometryShaderChannel : DefaultFinalizeShaderChannel< IGeometryShaderChannel >
+class DefaultFinalizeGeometryShaderChannel : public DefaultFinalizeShaderChannel< IGeometryShaderChannel >
 {
 private:
 
     typedef  DefaultFinalizeShaderChannel< IGeometryShaderChannel > Parent;
 
-private:
-
-    std::string m_shaderSource;
-
 public:
 
+        DefaultFinalizeGeometryShaderChannel            ( IGeometryShaderChannelPtr channel );
+        ~DefaultFinalizeGeometryShaderChannel           ();
 
-        DefaultFinalizeGeometryShaderChannel      ( IGeometryShaderChannelPtr channel );
-        ~DefaultFinalizeGeometryShaderChannel     ();
+protected:
+
+        virtual std::string     GetShaderSource         ( const std::vector< std::string > & uids ) const override;
 
 };
+
+DEFINE_PTR_TYPE(DefaultFinalizeGeometryShaderChannel)
 
 } //model
 } //bv

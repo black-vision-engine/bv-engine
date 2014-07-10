@@ -25,6 +25,11 @@ class IVertexShaderChannel;
 class IGeometryShaderChannel;
 class ResourceHandle;
 
+class IPlugin;
+
+DEFINE_PTR_TYPE(IPlugin)
+DEFINE_CONST_PTR_TYPE(IPlugin)
+
 struct TextureInfo;
 typedef std::vector< TextureInfo * > TextureInfoVec;
 
@@ -48,15 +53,14 @@ public:
 
     virtual RendererContextConstPtr             GetRendererContext          () const = 0;
 
+    virtual IPluginConstPtr                     GetPrevPlugin               () const = 0;
+
     //FIXME: implement a more generic interface for resource loading
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) = 0;
 
     virtual                                     ~IPlugin                    (){}
 
 };
-
-DEFINE_PTR_TYPE(IPlugin)
-DEFINE_CONST_PTR_TYPE(IPlugin)
 
 } // model
 } // bv

@@ -12,7 +12,7 @@ class IPluginListFinalized : public IPluginList
 {
 public:
 
-    virtual IFinalizePluginConstPtr GetFinalizePlugin       () const  = 0;
+    virtual IFinalizePluginPtr      GetFinalizePlugin       () const  = 0;
 
     virtual                         ~IPluginListFinalized   () {}
 

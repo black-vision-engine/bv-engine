@@ -25,7 +25,7 @@ public:
 
     DefaultTextPluginDesc                                       ();
 
-    virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
     virtual bool                            CanBeAttachedTo     ( IPluginConstPtr plugin )  const override;
@@ -72,7 +72,7 @@ public:
 
     void                                        SetText                     ( const std::wstring & newText );
 
-    explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model );
+    explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
                                                 ~DefaultTextPlugin          ();
 
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
@@ -85,7 +85,7 @@ public:
 
 private:
 
-    void                                        InitAttributesChannel       ( IPluginConstPtr prev );
+    void                                        InitAttributesChannel       ( IPluginPtr prev );
 };
 
 bool            SetTextPluginContent( IPluginPtr textPlugin, const std::wstring& text );

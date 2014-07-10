@@ -29,7 +29,7 @@ DefaultTextPluginDesc::DefaultTextPluginDesc                            ()
 
 // *******************************
 //
-IPluginPtr              DefaultTextPluginDesc::CreatePlugin             ( const std::string & name, IPluginConstPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr              DefaultTextPluginDesc::CreatePlugin             ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreatePluginTyped< DefaultTextPlugin >( name, prev, timeEvaluator );
 }
@@ -137,7 +137,7 @@ std::string             DefaultTextPluginDesc::FontFileName             ()
 
 // *************************************
 // 
-DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const std::string & uid, IPluginConstPtr prev, DefaultPluginParamValModelPtr model )
+DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_psc( nullptr )
     , m_vsc( nullptr )
@@ -304,7 +304,7 @@ inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
 
 // *************************************
 //
-void DefaultTextPlugin::InitAttributesChannel( IPluginConstPtr prev )
+void DefaultTextPlugin::InitAttributesChannel( IPluginPtr prev )
 {
     m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
