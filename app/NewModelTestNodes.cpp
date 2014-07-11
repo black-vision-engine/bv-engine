@@ -89,10 +89,16 @@ namespace {
         SetParameterTranslation( param, 9.f, glm::vec3( 0.f, -1.f, 0.f ) );
         SetParameterTranslation( param, 12.f, glm::vec3( 0.f, 0.f, 0.f ) );
 
+        SetParameterCenterMass( param, 0.f, glm::vec3( 0.53f, 0.59f, 0.f ) );
+
+        SetParameterRotation( param, 15.f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
+        SetParameterRotation( param, 23.f, glm::vec3( 0.f, 0.f, 1.f ), 360.f);
+        SetParameterRotation( param, 30.f, glm::vec3( 0.f, 0.f, 1.f ), 0.f);
+
         SetParameterScale( param, 0.f, glm::vec3( 1.f, 1.f, 1.f ) );
         SetParameterScale( param, 12.f, glm::vec3( 1.f, 1.f, 1.f ) );
-        SetParameterScale( param, 15.f, glm::vec3( 1.f/6.f, 1./6.f, 1.f ) );
-        SetParameterScale( param, 20.f, glm::vec3( 1.f/2.f, 1.f/2.f, 1.f ) );
+        SetParameterScale( param, 15.f, glm::vec3( 1.f/48.f, 1./48.f, 1.f ) );
+        SetParameterScale( param, 25.f, glm::vec3( 1.f/4.f, 1.f/4.f, 1.f ) );
     }
 
 } //anonymous
@@ -363,6 +369,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     {
         success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "test.bmp" );
         assert( success );
+
+        node->GetPlugin( "alpha_mask" )->GetParameter( "txAlphaMat" )->SetTimeEvaluator( timeEvaluator );
 
         SetDefaultTransformAlphaMaskTex( node->GetPlugin( "alpha_mask" ) );
     }

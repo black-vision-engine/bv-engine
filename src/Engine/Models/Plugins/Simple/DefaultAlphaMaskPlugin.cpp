@@ -261,6 +261,8 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( IPluginResou
 
         if( txDesc != nullptr )
         {
+            assert( txData->GetTextures().size() == 1 ); //Texture must be already loaded - suxx as hell but hey, it is a hackish piece of code anyway
+
             if( txData->GetTextures().size() == 0 || txData->GetTextures().size() == 1 )
             {
                 txData->AddTexture( txDesc );
