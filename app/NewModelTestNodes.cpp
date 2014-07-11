@@ -442,7 +442,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     return node;    
 }
 
-model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize )
+model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask )
 {
     //Timeline stuff
     auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
@@ -457,6 +457,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     //Plugin stuff
     //std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins4, GSimplePlugins4 + 2 );
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins3, GSimplePlugins3 + 3 );
+
+    if( useAlphaMask )
+    {
+        GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
+    }
 
     auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
 
@@ -486,6 +491,16 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
 
     model::SetTextPluginContent( node->GetPlugin( "text" ), L"bla bla" );
 
+    if( useAlphaMask )
+    {
+        success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "test.bmp" );
+        assert( success );
+
+        node->GetPlugin( "alpha_mask" )->GetParameter( "txAlphaMat" )->SetTimeEvaluator( timeEvaluator );
+
+        SetDefaultTransformAlphaMaskTex( node->GetPlugin( "alpha_mask" ) );
+    }
+
     auto ai = TestAIManager::Instance().GetAIPreset( 2 );
     ai->SetTimeline( someTimelineWithEvents );
 
@@ -497,7 +512,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextWithShadowNode(   model::Time
                                                                     unsigned int blurSize,
                                                                     const glm::vec3 shadowTranslation )
 {
-    auto shadowNode =  SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, blurSize );
+    auto shadowNode =  SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, blurSize, false );
     auto transPlugin = shadowNode->GetPlugin( "transform" );
 
     auto param = transPlugin->GetParameter( "simple_transform" );
@@ -505,7 +520,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextWithShadowNode(   model::Time
 
     model::SetParameterTranslation ( param, 0, 0.0f, shadowTranslation );
 
-    auto node =  SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0 );
+    auto node =  SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
 
     transPlugin = node->GetPlugin( "transform" );
 

@@ -10,6 +10,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 
 #include "Engine/Models/Resources/IPluginResourceDescr.h"
 
@@ -81,18 +82,18 @@ bool                   DefaultAlphaMaskPluginDesc::CanBeAttachedTo     ( IPlugin
     {
         return false;
     }
-
+/*
     auto  vac = plugin->GetVertexAttributesChannel();
     if ( vac == nullptr )
     {
         return false;
     }
-
-    auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
-    if ( numChannels != 1 && numChannels != 2 ) //vertex attribute + optional texture
-    {
-        return false;
-    }
+    */
+//    auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
+//    if ( numChannels != 1 && numChannels != 2 ) //vertex attribute + optional texture
+//    {
+//        return false;
+//    }
 
     if ( plugin->GetTypeUid() != "DEFAULT_TEXTURE" && plugin->GetTypeUid() != "DEFAULT_COLOR" && plugin->GetTypeUid() != "DEFAULT_TEXT" && plugin->GetTypeUid() != "DEFAULT_ANIMATION" )
     {
@@ -191,13 +192,38 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
             }
         }
     }
+    else if( prev->GetTypeUid() == DefaultTextPluginDesc::UID() )
+    {
+        assert( prev->GetParameter( "alpha" ) != nullptr );
+        assert( prev->GetParameter( "color" ) != nullptr );
+        
+        auto evaluatorsp = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
+        for( unsigned int i = 0; i < evaluatorsp.size(); ++i )
+        {
+            auto colorParam = evaluatorsp[ i ]->GetParameter( "alpha" );
+            if( colorParam != nullptr )
+            {
+                //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
+                std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluatorsp[ i ] );
+                break;
+            }
+
+            colorParam = evaluatorsp[ i ]->GetParameter( "color" );
+            if( colorParam != nullptr )
+            {
+                //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
+                std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluatorsp[ i ] );
+                break;
+            }
+        }
+    }
 
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultAlphaMaskPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultAlphaMaskPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
 
     InitAttributesChannel( prev );
 
-    if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() )
+    if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() || prev->GetTypeUid() == DefaultTextPluginDesc::UID() )
     {
         //FIXME: set textures data from prev plugin to this plugin
         auto prev_psc = std::const_pointer_cast< ITexturesData >( prev->GetPixelShaderChannel()->GetTexturesData() );
