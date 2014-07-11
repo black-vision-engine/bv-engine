@@ -7,6 +7,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultAlphaMaskPlugin.h"
 
 
 namespace bv { namespace model {
@@ -23,6 +24,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultTexturePluginDesc() );
     descriptors.push_back( new DefaultAnimationPluginDesc() );
     descriptors.push_back( new DefaultTextPluginDesc() );
+    descriptors.push_back( new DefaultAlphaMaskPluginDesc() );
 
     for( auto descr : descriptors )
     {

@@ -147,7 +147,6 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     , m_textAtlas( nullptr )
     , m_text( L"" )
 {
-
     auto colorParam = prev->GetParameter( "color" );
 
     if ( colorParam == nullptr )
@@ -165,6 +164,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
             auto colorParam = evaluators[ i ]->GetParameter( "color" );
             if( colorParam != nullptr )
             {
+                //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak)
                 std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluators[ i ] );
                 break;
             }
@@ -174,11 +174,11 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
 
 
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTextPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
-    m_psc->GetRendererContext()->alphaCtx->blendEnabled = true;
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultTextPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
+    ctx->alphaCtx->blendEnabled = true;
 
     m_texturesData = m_psc->GetTexturesDataImpl();
 

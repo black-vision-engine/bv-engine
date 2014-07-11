@@ -75,6 +75,26 @@ namespace {
         SetParameterTranslation( param, 0, 30.f, glm::vec3( 0.f, 0.f, 0.f ) );
     }
 
+    // *****************************
+    //
+    void SetDefaultTransformAlphaMaskTex( bv::model::IPluginPtr plugin )
+    {
+        auto param = plugin->GetParameter( "txAlphaMat" );
+        assert( param );
+
+        SetParameterTranslation( param, 0.f, glm::vec3( 0.f, 0.f, 0.f ) );
+        SetParameterTranslation( param, 2.f, glm::vec3( 1.f, 0.f, 0.f ) );
+        SetParameterTranslation( param, 5.f, glm::vec3( -1.f, 0.f, 0.f ) );
+        SetParameterTranslation( param, 6.f, glm::vec3( 0.f, 1.f, 0.f ) );
+        SetParameterTranslation( param, 9.f, glm::vec3( 0.f, -1.f, 0.f ) );
+        SetParameterTranslation( param, 12.f, glm::vec3( 0.f, 0.f, 0.f ) );
+
+        SetParameterScale( param, 0.f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale( param, 12.f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale( param, 15.f, glm::vec3( 1.f/6.f, 1./6.f, 1.f ) );
+        SetParameterScale( param, 20.f, glm::vec3( 1.f/2.f, 1.f/2.f, 1.f ) );
+    }
+
 } //anonymous
 
 namespace bv {
@@ -240,9 +260,14 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMan
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
 {
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins0, GSimplePlugins0 + 3 );
+
+    if( useAlphaMask )
+    {
+        GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
+    }
 
     auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
     node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
@@ -253,6 +278,14 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Tim
     node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( localTimeline );
 
     SetDefaultTransformAnim( node->GetPlugin( "transform" ) );
+
+    if( useAlphaMask )
+    {
+        bool success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "test.bmp" );
+        assert( success );
+
+        SetDefaultTransformAlphaMaskTex( node->GetPlugin( "alpha_mask" ) );
+    }
 
     return node;
 }

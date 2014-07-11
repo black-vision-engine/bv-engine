@@ -4,7 +4,6 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
-#include "Engine/Models/Plugins/Channels/GeometryShader/ExtrudeGeometryShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 
@@ -43,7 +42,8 @@ TransformChannelPtr              ChannelsFactory::CreateTransformChannel        
 IGeometryShaderChannelPtr        ChannelsFactory::CreateGeometryShaderExtrude         ( float scale, ITimeEvaluatorPtr timeEvaluator )
 {
     auto extrudeScale = ParametersFactory::CreateParameter( "scale", InterpolatorsHelper::CreateConstValue( scale ), timeEvaluator );
-    return std::make_shared< ExtrudeGeometryShaderChannel >("../dep/media/shaders/extrude.geom", extrudeScale);
+    //return std::make_shared< ExtrudeGeometryShaderChannel >("../dep/media/shaders/extrude.geom", extrudeScale);
+    return nullptr; //FIXME: remove, dead code
 }
 
 } // model

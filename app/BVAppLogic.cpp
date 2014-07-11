@@ -313,6 +313,8 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
 
     totalElapsed += readbackTime;
 
+    //printf( "Time cur %.5f ms of total %.5f ms\n", 1000.f * readbackTime, 1000.f * totalElapsed );
+
     if( nFrames % 50 == 0 )
     {
         double avg = totalElapsed / (double) nFrames;

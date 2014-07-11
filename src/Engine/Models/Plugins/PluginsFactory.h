@@ -18,14 +18,6 @@
 
 #include "Engine/Models/Plugins/Channels/Transform/SimpleTransformChannel.h"
 
-#include "Engine/Models/Plugins/Channels/VertexShader/TextureVertexShaderChannel.h"
-
-#include "Engine/Models/Plugins/Channels/GeometryShader/ExtrudeGeometryShaderChannel.h"
-
-#include "Engine/Models/Plugins/Channels/PixelShader/SolidColorShaderChannel.h"
-#include "Engine/Models/Plugins/Channels/PixelShader/TexturePixelShaderChannel.h"
-#include "Engine/Models/Plugins/Channels/PixelShader/TextPixelShaderChannel.h"
-
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
 
