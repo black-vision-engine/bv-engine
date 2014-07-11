@@ -19,7 +19,7 @@ char * TextureHelper::LoadImg( const std::string & filePath, int * width, int * 
 
     if( loadFromMemory )
     {
-        char* bufToRead = new char[ File::Size( filePath ) ]; 
+        char * bufToRead = new char[ File::Size( filePath ) ]; 
 
         int bytes = File::Read( bufToRead, filePath );
 
