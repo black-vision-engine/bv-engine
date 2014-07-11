@@ -9,6 +9,7 @@
 
 #include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
 
 #include "Engine/Models/Resources/IPluginResourceDescr.h"
 
@@ -160,7 +161,7 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
             }
         }
     }
-    else if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() )
+    else if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() )
     {
         assert( prev->GetParameter( "alpha" ) != nullptr );
         
@@ -196,7 +197,7 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
 
     InitAttributesChannel( prev );
 
-    if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() )
+    if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() )
     {
         //FIXME: set textures data from prev plugin to this plugin
         auto prev_psc = std::const_pointer_cast< ITexturesData >( prev->GetPixelShaderChannel()->GetTexturesData() );
@@ -261,15 +262,16 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( IPluginResou
 
         if( txDesc != nullptr )
         {
-            assert( txData->GetTextures().size() == 1 ); //Texture must be already loaded - suxx as hell but hey, it is a hackish piece of code anyway
-
+            //FIXME: albo slid, wtedy podmien - to mozna tu jeszcze ogarnac
+            //FIXME: albo tekstura, wtedy podmien ostatnia lub dodaj - to mozna tu jeszcze ogarnac
+            //FIXME: albo animacja, wtedy podmien - to mozna tu jeszcze ogarnac
             if( txData->GetTextures().size() == 0 || txData->GetTextures().size() == 1 )
             {
                 txData->AddTexture( txDesc );
             }
             else
             {
-                txData->SetTexture( 0, txDesc );
+                txData->SetTexture( txData->GetTextures().size(), txDesc );
             }
 
             m_textureWidth = txDesc->GetWidth();

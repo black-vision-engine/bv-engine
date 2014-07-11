@@ -61,6 +61,7 @@ namespace {
         SetParameterScale ( param, 0, 16.0f, glm::vec3( 3.f, 0.5f, 1.f ) );
         SetParameterScale ( param, 0, 18.0f, glm::vec3( 1.f, 1.f, 1.f ) );
         SetParameterScale ( param, 0, 21.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 0, 25.0f, glm::vec3( 2.f, 2.f, 1.f ) );
 
         SetParameterRotation ( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
         SetParameterRotation ( param, 0, 30.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
@@ -383,7 +384,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
 // *****************************
 //
-model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
 {
     //Timeline stuff
     auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
@@ -398,6 +399,11 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     //Plugin stuf
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins2, GSimplePlugins2 + 3 );
 
+    if( useAlphaMask )
+    {
+        GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
+    }
+
     auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
@@ -405,6 +411,11 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
 
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 0.f ), 0.f );
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 10.f ), 99.f );
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 15.f ), 0.f );
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 20.f ), 99.f );
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 30.f ), 0.f );
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 35.f ), 99.f );
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 40.f ), 10.f );
     //SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 10.f ), 74.f );
 
     //node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( someTimelineWithEvents );
@@ -414,6 +425,16 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     success = model::LoadAnimation( node->GetPlugin( "animation" ), "../../media/sequences/FullHD/alfai", "*.tga" );
     //success = model::LoadAnimation( node->GetPlugin( "animation" ), "../../media/sequences/FullHD/IntroTGA", "*.tga" );
     assert( success );
+
+    if( useAlphaMask )
+    {
+        success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "test.bmp" );
+        assert( success );
+
+        node->GetPlugin( "alpha_mask" )->GetParameter( "txAlphaMat" )->SetTimeEvaluator( timeEvaluator );
+
+        SetDefaultTransformAlphaMaskTex( node->GetPlugin( "alpha_mask" ) );
+    }
 
     auto ai = TestAIManager::Instance().GetAIPreset( 2 );
     ai->SetTimeline( someTimelineWithEvents );
