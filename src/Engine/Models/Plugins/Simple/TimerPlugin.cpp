@@ -7,13 +7,16 @@
 #include "Engine/Models/Resources/Font/FontLoader.h"
 #include "Engine/Models/Resources/Font/Text.h"
 
+#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+
+
 namespace bv { namespace model {
 
-////////////////////////////
-//
 namespace
 {
 
+// *****************************
+//
 bool IsPlaceHolder(wchar_t wch)
 {
     return  wch == L'H'
@@ -22,11 +25,15 @@ bool IsPlaceHolder(wchar_t wch)
         ||  wch == L's';
 }
 
+// *****************************
+//
 void TimeFormatError()
 {
-    throw std::exception("wrong time format");
+    throw std::exception( "wrong time format" );
 }
 
+// *****************************
+//
 TimeInfo ParseTimePatern(const std::wstring& timePatern)
 {
     bool HPHPossible = true;
@@ -91,7 +98,7 @@ TimeInfo ParseTimePatern(const std::wstring& timePatern)
 } // anonymous
 
 
-////////////////////////////
+// *****************************
 //
 bool    TimeValue::operator!=(const TimeValue& other) const
 {
@@ -101,7 +108,7 @@ bool    TimeValue::operator!=(const TimeValue& other) const
         ||  other.hour == this->hour;
 }
 
-////////////////////////////
+// *****************************
 //
 TimeValue::TimeValue( double time, int accuracy )
 {
@@ -111,7 +118,7 @@ TimeValue::TimeValue( double time, int accuracy )
     this->hour      = int( time / (60 * 60 ) );
 }
 
-////////////////////////////
+// *****************************
 //
 TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
     : BasePlugin( "dupa", "dupa", nullptr, nullptr )
@@ -130,30 +137,30 @@ TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
 
     auto textureResource = TextHelper::GetAtlasTextureInfo( m_currentAtlas );
 
-    m_textures.push_back( new TextureInfo( textureResource.get(), "AtlasTex" ) );
+    m_textures.push_back( new TextureInfo( textureResource.get(), DefaultTextPluginDesc::TextureName() ) );
 
     m_vertexAttributeChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
     TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_currentAtlas,L"0000:00:00:000000", 0, 0.f, TextAlignmentType::Center, m_timePatern );
 }
 
-////////////////////////////
+// *****************************
 //
-TimerPlugin *                       TimerPlugin::Create     ( const ParamFloat& timeParam, unsigned int fontSize )
+TimerPlugin *                       TimerPlugin::Create     ( const ParamFloat & timeParam, unsigned int fontSize )
 {
     return new TimerPlugin( timeParam, fontSize );
 }
 
-////////////////////////////
+// *****************************
 //
-void                                TimerPlugin::SetTimePatern  ( const std::wstring& patern )
+void                                TimerPlugin::SetTimePatern  ( const std::wstring & patern )
 {
     m_timePatern = patern;
 }
 
-////////////////////////////
+// *****************************
 //
-const GlyphCoords&                  TimerPlugin::GetGlyphCoords  ( wchar_t wch ) const
+const GlyphCoords &                  TimerPlugin::GetGlyphCoords  ( wchar_t wch ) const
 {
     auto glyphCoords = m_currentAtlas->GetGlyphCoords( wch );
     if( glyphCoords )
@@ -165,7 +172,7 @@ const GlyphCoords&                  TimerPlugin::GetGlyphCoords  ( wchar_t wch )
     }
 }
 
-////////////////////////////
+// *****************************
 //
 int TimeInfo::GetSize() const
 {
@@ -175,7 +182,7 @@ int TimeInfo::GetSize() const
         +   fracOfSecondsPlaceholderSize;
 }
 
-////////////////////////////
+// *****************************
 //
 void                                TimerPlugin::Refresh         ()
 {
@@ -259,12 +266,12 @@ void                                TimerPlugin::Refresh         ()
 
         for(; i < fosPHSize; ++i )
         {
-            SetValue( shift + i, fosStr[i - zerosBefore] );
+            SetValue( shift + i, fosStr[ i - zerosBefore ] );
         }       
     }
 }
 
-////////////////////////////
+// *****************************
 //
 void                                TimerPlugin::SetValue       ( unsigned int connComp, wchar_t wch )
 {
@@ -297,7 +304,7 @@ void                                TimerPlugin::SetValue       ( unsigned int c
         }
 }
 
-////////////////////////////
+// *****************************
 //
 bool                                TimerPlugin::CheckTimeConsistency ( const std::wstring& time ) const
 {
@@ -325,7 +332,7 @@ bool                                TimerPlugin::CheckTimeConsistency ( const st
     return true;
 }
 
-////////////////////////////
+// *****************************
 //
 void                                TimerPlugin::SetTime        ( const std::wstring& time )
 {
@@ -341,7 +348,7 @@ void                                TimerPlugin::SetTime        ( const std::wst
     }
 }
 
-////////////////////////////
+// *****************************
 //
 void                                TimerPlugin::SetTime        ( double time )
 {
@@ -355,21 +362,21 @@ void                                TimerPlugin::SetTime        ( double time )
     }
 }
 
-////////////////////////////
+// *****************************
 //
 IVertexAttributesChannelConstPtr    TimerPlugin::GetVertexAttributesChannel          () const
 {
     return m_vertexAttributeChannel;
 }
 
-////////////////////////////
+// *****************************
 //
 TextureInfoVec                      TimerPlugin::GetTextures                 () const
 {
     return m_textures;
 }
 
-////////////////////////////
+// *****************************
 //
 void                                TimerPlugin::Update                      ( TimeType t )
 {
@@ -379,13 +386,11 @@ void                                TimerPlugin::Update                      ( T
     SetTime( time );
 }
 
-////////////////////////////
+// *****************************
 //
 void                                TimerPlugin::Print                       ( std::ostream & out, int tabs ) const
 {
 }
-
-
 
 } // model
 } // bv

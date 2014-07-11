@@ -50,6 +50,7 @@ namespace
         //TEST AI
         //static auto ai = TestAIManager::Instance().GetAIPreset( 4, logic );
         //static auto ai = TestAIManager::Instance().GetAIPreset( 2, logic->GetModelScene()->GetSceneRoot() );
+        //static auto ai = TestAIManager::Instance().GetAIPreset( 3, logic->GetModelScene()->GetSceneRoot() );
         //ai->EvalAt( t );
 
         //PRE GOWNO

@@ -2,15 +2,16 @@
 
 layout (location = 0) out vec4 FragColor;
 
-in vec2 			VTexCord;
+in vec2             uvCoord;
 
-uniform sampler2D 	AtlasTex;
-uniform vec4 		color;
-uniform float 		alpha;
+uniform sampler2D   AtlasTex0;
+
+uniform vec4        color;
+uniform float       alpha;
 
 void main()
 {
-	vec4 texColor0 = texture( AtlasTex, VTexCord );
+	vec4 col = texture( AtlasTex0, uvCoord );
 
-	FragColor = texColor0 * color * alpha;
+	FragColor = col * color * alpha;
 }

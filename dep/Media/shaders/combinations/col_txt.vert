@@ -7,10 +7,10 @@ uniform mat4 MVP;
 uniform mat4 MV;
 uniform mat4 P;
 
-out vec2 VTexCord;
+out vec2 uvCoord;
 
 void main()
 {
     gl_Position = MVP * vec4( vertexPosition, 1.0 );
-    VTexCord = ( vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;
+    uvCoord = ( vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;
 }

@@ -5,8 +5,8 @@ namespace bv { namespace model {
 TextureInfo::TextureInfo(   const ResourceHandle * resHandle
                          ,  const std::string & texName
                          ,  const ParamTransform & texTransform
-                         ,  const ParamFloat& alpha
-                         ,  const ParamVec4& borderColor
+                         ,  const ParamFloat & alpha
+                         ,  const ParamVec4 & borderColor
                          ,  TextureWrappingMode wrappingModeX
                          ,  TextureWrappingMode wrappingModeY 
                          ,  TextureFilteringMode filteringMode )

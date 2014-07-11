@@ -2,23 +2,25 @@ namespace bv { namespace model {
 
 namespace {
 
-    const unsigned int GNumLists = 8;
+    const unsigned int GNumLists = 10;
     const unsigned int GMaxNumEntries = 5;
 
     //@see: https://docs.google.com/spreadsheets/d/1K3dblNOAijnKdJXeha9_DWlSLhOc1Wcq5F1Mwlvk7x4
-    char * acceptedPluginLists[8][5] =  { 
-                                            { "DEFAULT_COLOR",  "",                 "",                     "",             "" },
-                                            { "",               "DEFAULT_TEXTURE",  "",                     "",             "" },
-                                            { "DEFAULT_COLOR",  "",                 "",                     "DEFAULT_TEXT", "" },
-                                            { "",               "",                 "DEFAULT_ANIMATION",    "",             "" },
-                                            { "DEFAULT_COLOR",  "",                 "",                     "",             "DEFAULT_ALPHA_MASK" },
-                                            { "",               "DEFAULT_TEXTURE",  "",                     "",             "DEFAULT_ALPHA_MASK" },
-                                            { "DEFAULT_COLOR",  "",                 "",                     "DEFAULT_TEXT", "DEFAULT_ALPHA_MASK" },
-                                            { "",               "",                 "DEFAULT_ANIMATION",    "",             "DEFAULT_ALPHA_MASK" },
-                                        };
+    char * acceptedPluginLists[ GNumLists ][ GMaxNumEntries ] = { 
+                                                                    { "DEFAULT_COLOR",  "",                 "",                     "",             "" },
+                                                                    { "",               "DEFAULT_TEXTURE",  "",                     "",             "" },
+                                                                    { "DEFAULT_COLOR",  "",                 "",                     "DEFAULT_TEXT", "" },
+                                                                    { "",               "",                 "DEFAULT_ANIMATION",    "",             "" },
+                                                                    { "DEFAULT_COLOR",  "",                 "",                     "",             "DEFAULT_ALPHA_MASK" },
+                                                                    { "",               "DEFAULT_TEXTURE",  "",                     "",             "DEFAULT_ALPHA_MASK" },
+                                                                    { "DEFAULT_COLOR",  "",                 "",                     "DEFAULT_TEXT", "DEFAULT_ALPHA_MASK" },
+                                                                    { "",               "",                 "DEFAULT_ANIMATION",    "",             "DEFAULT_ALPHA_MASK" },
+                                                                    { "",               "",                 "",                     "DEFAULT_TEXT", "" },
+                                                                    { "",               "",                 "",                     "DEFAULT_TEXT", "DEFAULT_ALPHA_MASK" }
+                                                                };
 
     //@see: https://docs.google.com/spreadsheets/d/1K3dblNOAijnKdJXeha9_DWlSLhOc1Wcq5F1Mwlvk7x4
-    char * baseShaderFileNames[8] = {
+    char * baseShaderFileNames[ GNumLists ] = {
                                         "col",
                                         "tx",
                                         "col_txt",
@@ -26,7 +28,9 @@ namespace {
                                         "col_am",
                                         "tx_am",
                                         "col_txt_am",
-                                        "tx_am"
+                                        "tx_am",
+                                        "col_txt",
+                                        "col_txt_am"
                                     };
 }
 
