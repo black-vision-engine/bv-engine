@@ -110,7 +110,7 @@ xcopy $(SolutionDir)\dep\Common\FreeImage\Dist\Win32\FreeImaged.dll $(OutDir) /c
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>freetype250_D.lib;FreeImagePlusd.lib;opengl32.lib;glu32.lib;glew32s.lib;FreeImaged.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype250_D.lib;FreeImagePlusd.lib;opengl32.lib;glu32.lib;glew32s.lib;FreeImage.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(BOOST_DEBUG_64_LIB);../dep/Common/FreeImage/Wrapper/FreeImagePlus/dist/x64;../dep/Common/FreeType/objs/x64/debug;../dep/Common/FreeImage/Dist/x64;../dep/Common/glew/lib/x64/;../dep/Common/glfw/lib/x64/;$(OutDir)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -118,7 +118,7 @@ xcopy $(SolutionDir)\dep\Common\FreeImage\Dist\Win32\FreeImaged.dll $(OutDir) /c
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(SolutionDir)\dep\Common\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
-xcopy $(SolutionDir)\dep\Common\FreeImage\Dist\x64\FreeImaged.dll $(OutDir) /c /y</Command>
+xcopy $(SolutionDir)\dep\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
