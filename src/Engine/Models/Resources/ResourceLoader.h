@@ -8,7 +8,10 @@ namespace bv { namespace model {
 class ResourceLoader : public IResourceLoader
 {
 public:
-    virtual ~ResourceLoader(){}
+
+            ResourceLoader();
+    virtual ~ResourceLoader();
+
 };
 
 } // model
