@@ -20,7 +20,7 @@ TextureManager::~TextureManager()
 
 // *******************************
 //
-ResourceHandleConstPtr          TextureManager::GetTexture      ( const std::string& path )
+ResourceHandleConstPtr          TextureManager::GetTexture      ( const std::string & path )
 {
     auto absPath = File::GetAbsolutPath( path );
     auto it = this->m_textures.find( absPath );
@@ -50,14 +50,14 @@ void                            TextureManager::ClearCache      ()
 
 // *******************************
 //
-void                            TextureManager::ReloadTexture   ( const std::string& path )
+void                            TextureManager::ReloadTexture   ( const std::string & path )
 {
     this->LoadTexture( path );
 }
 
 // *******************************
 //
-TextureManager&                 TextureManager::Get             ()
+TextureManager &                TextureManager::Get             ()
 {
     static auto instance = TextureManager();
     return instance;
@@ -65,7 +65,7 @@ TextureManager&                 TextureManager::Get             ()
 
 // *******************************
 //
-ResourceHandleConstPtr          TextureManager::LoadTexture     (  const std::string& path )
+ResourceHandleConstPtr          TextureManager::LoadTexture     (  const std::string & path )
 {
     auto absPath = File::GetAbsolutPath( path );
 
