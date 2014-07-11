@@ -62,6 +62,13 @@ DefaultTexturesDataPtr       DefaultPixelShaderChannel::GetTexturesDataImpl ()
 
 // ******************************
 //
+void                         DefaultPixelShaderChannel::OverrideTexturesData( DefaultTexturesDataPtr  texturesData )
+{
+    m_texturesData = texturesData;
+}
+
+// ******************************
+//
 DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( const std::string & shaderFile, IValueSetConstPtr values, RendererContextPtr ctx )
 {
     auto shaderSource = ReadShaderFromFile( shaderFile );

@@ -33,6 +33,9 @@ public:
     virtual ITexturesDataConstPtr           GetTexturesData     () const override;
     DefaultTexturesDataPtr                  GetTexturesDataImpl ();
 
+    //FIXME: shitty hack
+    void                                    OverrideTexturesData( DefaultTexturesDataPtr  texturesData );
+
     static  DefaultPixelShaderChannelPtr    Create              ( const std::string & shaderFile, IValueSetConstPtr values, RendererContextPtr ctx = nullptr );
 
 };

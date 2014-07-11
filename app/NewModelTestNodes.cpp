@@ -301,7 +301,7 @@ namespace
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
 {
     //Timeline stuff
     auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
@@ -315,6 +315,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 3 );
+
+    if( useAlphaMask )
+    {
+        GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
+    }
 
     auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
 
@@ -352,6 +357,14 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
         model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),   2.f );
         model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), wf * 2.f );
+    }
+
+    if( useAlphaMask )
+    {
+        success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "test.bmp" );
+        assert( success );
+
+        SetDefaultTransformAlphaMaskTex( node->GetPlugin( "alpha_mask" ) );
     }
 
     //auto ai = TestAIManager::Instance().GetAIPreset( 2 );

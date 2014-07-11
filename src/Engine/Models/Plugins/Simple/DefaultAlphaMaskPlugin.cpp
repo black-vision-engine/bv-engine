@@ -8,6 +8,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 
 #include "Engine/Models/Resources/IPluginResourceDescr.h"
 
@@ -142,10 +143,10 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
 {
+    //FIXME: The hackiest of it all - added registered parameters to pass on to the engine - ten kod jest przestraszny i wykurwiscie niefajny
     if( prev->GetTypeUid() == DefaultColorPluginDesc::UID() )
     {
-        auto colorParam = prev->GetParameter( "color" );
-        assert( colorParam != nullptr );
+        assert( prev->GetParameter( "color" ) != nullptr );
 
         auto evaluators = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
         for( unsigned int i = 0; i < evaluators.size(); ++i )
@@ -159,12 +160,49 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
             }
         }
     }
-
+    else if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() )
+    {
+        assert( prev->GetParameter( "alpha" ) != nullptr );
         
+        auto evaluatorsp = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
+        for( unsigned int i = 0; i < evaluatorsp.size(); ++i )
+        {
+            auto colorParam = evaluatorsp[ i ]->GetParameter( "alpha" );
+            if( colorParam != nullptr )
+            {
+                //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
+                std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluatorsp[ i ] );
+                break;
+            }
+        }
+
+        assert( prev->GetParameter( "txMat" ) != nullptr );
+        
+        auto evaluatorsv = prev->GetPluginParamValModel()->GetVertexShaderChannelModel()->GetEvaluators();
+        for( unsigned int i = 0; i < evaluatorsv.size(); ++i )
+        {
+            auto colorParam = evaluatorsv[ i ]->GetParameter( "txMat" );
+            if( colorParam != nullptr )
+            {
+                //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
+                std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetVertexShaderChannelModel() )->RegisterAll( evaluatorsv[ i ] );
+                break;
+            }
+        }
+    }
+
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultAlphaMaskPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultAlphaMaskPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
 
     InitAttributesChannel( prev );
+
+    if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() )
+    {
+        //FIXME: set textures data from prev plugin to this plugin
+        auto prev_psc = std::const_pointer_cast< ITexturesData >( prev->GetPixelShaderChannel()->GetTexturesData() );
+        //FIXME: this line causes changes to Texture Plugin data via current pointer - quite shitty
+        m_psc->OverrideTexturesData( std::static_pointer_cast< DefaultTexturesData >( prev_psc ) );
+    }
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
@@ -223,7 +261,7 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( IPluginResou
 
         if( txDesc != nullptr )
         {
-            if( txData->GetTextures().size() == 0 )
+            if( txData->GetTextures().size() == 0 || txData->GetTextures().size() == 1 )
             {
                 txData->AddTexture( txDesc );
             }
