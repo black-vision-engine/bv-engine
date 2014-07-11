@@ -9,6 +9,124 @@
 
 namespace bv { namespace model {
 
+// ************************************************************************* DESCRIPTOR *************************************************************************
+
+// *******************************
+//
+DefaultTimerPluginDesc::DefaultTimerPluginDesc                            ()
+    : BasePluginDescriptor( UID(), "timer" )
+{
+}
+
+// *******************************
+//
+IPluginPtr              DefaultTimerPluginDesc::CreatePlugin             ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
+{
+    return CreatePluginTyped< DefaultTimerPlugin >( name, prev, timeEvaluator );
+}
+
+// *******************************
+//
+DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
+{
+    //Create all models
+    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
+    DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
+    DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
+    DefaultParamValModelPtr plModel      = std::make_shared< DefaultParamValModel >();
+
+
+    //Create all parameters and evaluators
+    SimpleVec4EvaluatorPtr      borderColorEvaluator    = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
+    SimpleFloatEvaluatorPtr     alphaEvaluator          = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
+    SimpleTransformEvaluatorPtr trTxEvaluator           = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
+    SimpleFloatEvaluatorPtr     fontSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
+
+    SimpleFloatEvaluatorPtr     blurSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
+
+    SimpleFloatEvaluatorPtr     spacingEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "spacing", timeEvaluator );
+    SimpleFloatEvaluatorPtr     alignmentEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alignment", timeEvaluator );
+
+    //Register all parameters and evaloators in models
+    vsModel->RegisterAll( trTxEvaluator );
+    psModel->RegisterAll( borderColorEvaluator );
+    psModel->RegisterAll( alphaEvaluator );
+    plModel->RegisterAll( blurSizeEvaluator );
+    plModel->RegisterAll( spacingEvaluator );
+    plModel->RegisterAll( alignmentEvaluator );
+    plModel->RegisterAll( fontSizeEvaluator );
+
+    //Set models structure
+    model->SetVertexShaderChannelModel( vsModel );
+    model->SetPixelShaderChannelModel( psModel );
+    model->SetPluginModel( plModel );
+
+    //Set default values of all parameters
+    alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+    blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+    spacingEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+    alignmentEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+    borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
+    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
+    fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
+
+    return model;
+}
+
+// *******************************
+//
+bool                   DefaultTimerPluginDesc::CanBeAttachedTo   ( IPluginConstPtr plugin ) const
+{
+    if ( plugin == nullptr )
+    {
+        return true;
+    }
+
+    auto  vac = plugin->GetVertexAttributesChannel();
+    if ( vac != nullptr )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+// *******************************
+//
+std::string             DefaultTimerPluginDesc::UID                      ()
+{
+    return "DEFAULT_TIMER";
+}
+
+// *******************************
+//
+std::string             DefaultTextPluginDesc::VertexShaderSource       ()
+{
+    return "../dep/media/shaders/text.vert";
+}
+
+// *******************************
+//
+std::string             DefaultTextPluginDesc::PixelShaderSource        ()
+{
+    return "../dep/media/shaders/text.frag";
+}
+
+// *******************************
+//
+std::string             DefaultTextPluginDesc::TextureName              ()
+{
+    return "AtlasTex";
+}
+
+// *******************************
+//
+std::string             DefaultTextPluginDesc::FontFileName             ()
+{
+    return "../dep/Media/fonts/digital-7.ttf";
+}
+
+
 ////////////////////////////
 //
 namespace

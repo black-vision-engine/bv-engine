@@ -2,12 +2,34 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Plugin.h"
+#include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Resources/IResource.h"
 
 #include <map>
 
 
 namespace bv { namespace model {
+
+// ***************************** DESCRIPTOR **********************************
+class DefaultTimerPluginDesc : public BasePluginDescriptor
+{
+public:
+
+    DefaultTimerPluginDesc                                      ();
+
+    virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
+    virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
+   
+    virtual bool                            CanBeAttachedTo     ( IPluginConstPtr plugin )  const override;
+
+    static  std::string                     UID                 ();
+
+    static  std::string                     VertexShaderSource  ();
+    static  std::string                     PixelShaderSource   ();
+
+    static  std::string                     TextureName         ();
+    static  std::string                     FontFileName        ();
+};
 
 class Resource;
 class FontExtraData;
@@ -49,7 +71,7 @@ struct TimeInfo
 };
 
 // ***************************** PLUGIN ********************************** 
-class TimerPlugin : public BasePlugin< IPlugin >
+class DefaultTimerPlugin : public BasePlugin< IPlugin >
 {
     ParamFloat                  m_timeParam;
     TimeValue                   m_currentTime;
