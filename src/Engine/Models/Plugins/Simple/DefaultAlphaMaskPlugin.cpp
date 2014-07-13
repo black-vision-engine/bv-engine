@@ -347,6 +347,7 @@ void                                DefaultAlphaMaskPlugin::Update              
 
         InitAttributesChannel( m_prevPlugin );
 
+        //FIXME: very fucking hack - treats text connected components as FREE uv mapping
         for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
         {
             auto connComp = m_vaChannel->GetConnectedComponent( i );
