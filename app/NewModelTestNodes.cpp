@@ -98,8 +98,8 @@ namespace {
 
         SetParameterScale( param, 0.f, glm::vec3( 1.f, 1.f, 1.f ) );
         SetParameterScale( param, 12.f, glm::vec3( 1.f, 1.f, 1.f ) );
-        SetParameterScale( param, 15.f, glm::vec3( 1.f/48.f, 1./48.f, 1.f ) );
-        SetParameterScale( param, 25.f, glm::vec3( 1.f/4.f, 1.f/4.f, 1.f ) );
+        SetParameterScale( param, 15.f, glm::vec3( 1.f/68.f, 1./68.f, 1.f ) );
+        SetParameterScale( param, 25.f, glm::vec3( 1.f/40.f, 1.f/40.f, 1.f ) );
     }
 
 } //anonymous
@@ -490,7 +490,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     assert( success );
 
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"bla bla" );
-    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AA" );
+    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAA\nBBBB\nCCCC\nDDDD" );
 
     if( useAlphaMask )
     {
