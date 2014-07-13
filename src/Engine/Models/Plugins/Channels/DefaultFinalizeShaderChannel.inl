@@ -27,10 +27,10 @@ namespace {
                                         "tx",
                                         "col_am",
                                         "tx_am",
-                                        "col_txt_am",
+                                        "col_txt_am", //* "col_txt_am"
                                         "tx_am",
                                         "col_txt",
-                                        "col_txt_am"
+                                        "col_txt_am" //* "col_txt_am"
                                     };
 }
 

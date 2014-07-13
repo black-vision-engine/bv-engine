@@ -95,7 +95,9 @@ bool                   DefaultAlphaMaskPluginDesc::CanBeAttachedTo     ( IPlugin
 //        return false;
 //    }
 
-    if ( plugin->GetTypeUid() != "DEFAULT_TEXTURE" && plugin->GetTypeUid() != "DEFAULT_COLOR" && plugin->GetTypeUid() != "DEFAULT_TEXT" && plugin->GetTypeUid() != "DEFAULT_ANIMATION" )
+    auto uid = plugin->GetTypeUid();
+
+    if ( uid != DefaultColorPluginDesc::UID() && uid != DefaultTexturePluginDesc::UID() && uid != DefaultTextPluginDesc::UID() && uid != DefaultAnimationPluginDesc::UID() )
     {
         return false;
     }
@@ -205,15 +207,13 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
             {
                 //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
                 std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluatorsp[ i ] );
-                break;
             }
 
-            colorParam = evaluatorsp[ i ]->GetParameter( "color" );
-            if( colorParam != nullptr )
+            auto colorParami = evaluatorsp[ i ]->GetParameter( "color" );
+            if( colorParami != nullptr )
             {
                 //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
                 std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluatorsp[ i ] );
-                break;
             }
         }
     }
@@ -339,6 +339,35 @@ void                                DefaultAlphaMaskPlugin::Update              
 
     auto attachmentMode = GetAttachementMode();
 
+    if( m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
+    {
+        m_vaChannel = nullptr;
+
+        assert( m_prevPlugin->GetTypeUid() == DefaultTextPluginDesc::UID() );
+
+        InitAttributesChannel( m_prevPlugin );
+
+        for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
+        {
+            auto connComp = m_vaChannel->GetConnectedComponent( i );
+            auto compChannels = connComp->GetAttributeChannels();
+
+            if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
+            {
+                if( auto uvChannel = AttributeChannel::GetUVChannel( compChannels, m_texCoordChannelIndex ) )
+                {
+                    auto & verts  = std::dynamic_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices();
+                    auto & uvs    = std::dynamic_pointer_cast< Float2AttributeChannel >( uvChannel )->GetVertices();
+
+                    for( unsigned int i = 0; i < verts.size(); ++i )
+                    {
+                        uvs[ i ].x = verts[ i ].x;
+                        uvs[ i ].y = verts[ i ].y;
+                    }
+                }
+            }
+        }
+    }
     //FIXME: olewamy MM_FREE w tym pluginie (i tak na razie nie jest nigdzie uzywane)
 #if 0
     if( attachmentMode == TextureAttachmentMode::MM_FREE )
@@ -392,6 +421,14 @@ void                                DefaultAlphaMaskPlugin::Update              
 void DefaultAlphaMaskPlugin::InitAttributesChannel( IPluginPtr prev )
 {
     auto prevGeomChannel = prev->GetVertexAttributesChannel();
+
+    if( prevGeomChannel == nullptr ) //FIXME: hackierka
+    {
+        assert( prev->GetTypeUid() == DefaultTextPluginDesc::UID() );
+
+        return;
+    }
+
     AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
     for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )

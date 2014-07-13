@@ -111,14 +111,14 @@ std::string             DefaultTextPluginDesc::UID                      ()
 //
 std::string             DefaultTextPluginDesc::VertexShaderSource       ()
 {
-    return "../dep/media/shaders/text.vert";
+    return "../dep/media/shaders/dummy.vert";   //FIXME: deprecated
 }
 
 // *******************************
 //
 std::string             DefaultTextPluginDesc::PixelShaderSource        ()
 {
-    return "../dep/media/shaders/text.frag";
+    return "../dep/media/shaders/dummy.frag";   //FIXME: deprecated
 }
 
 // *******************************
@@ -347,8 +347,12 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
     auto alignType =  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
     TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType );
+
+    m_vaChannel->SetNeedsTopologyUpdate( true );
 }
 
+// *************************************
+//
 bool            SetTextPluginContent( IPluginPtr textPlugin, const std::wstring& text )
 {
     if( textPlugin->GetTypeUid() == DefaultTextPluginDesc::UID() )
