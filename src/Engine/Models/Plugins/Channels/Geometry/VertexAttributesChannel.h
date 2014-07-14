@@ -44,8 +44,8 @@ public:
     virtual bool                                        NeedsAttributesUpdate   () const override;
     virtual bool                                        NeedsTopologyUpdate     () const override;
 
-    void                                                SetNeedsAttributesUpdate( bool b );
-    void                                                SetNeedsTopologyUpdate  ( bool b );
+    virtual void                                        SetNeedsAttributesUpdate( bool b ) override;
+    virtual void                                        SetNeedsTopologyUpdate  ( bool b ) override;
 
     virtual unsigned int                                TotalNumVertices        () const override;
 

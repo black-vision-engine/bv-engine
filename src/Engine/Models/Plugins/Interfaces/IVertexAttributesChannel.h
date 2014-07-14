@@ -23,20 +23,23 @@ class IVertexAttributesChannel : public IChannel
 {
 public:
 
-    virtual const IVertexAttributesChannelDescriptor *  GetDescriptor               ()                              const = 0;
-    virtual PrimitiveType                               GetPrimitiveType            ()                              const = 0;
+    virtual const IVertexAttributesChannelDescriptor *  GetDescriptor               ()                              const   = 0;
+    virtual PrimitiveType                               GetPrimitiveType            ()                              const   = 0;
 
-    virtual int                                         GetNumPrimitives            ( IConnectedComponentPtr cc )   const = 0;
-    virtual std::vector< IConnectedComponentPtr >       GetComponents               ()                              const = 0;
+    virtual int                                         GetNumPrimitives            ( IConnectedComponentPtr cc )   const   = 0;
+    virtual std::vector< IConnectedComponentPtr >       GetComponents               ()                              const   = 0;
 
     //virtual void                                        AddConnectedComponent       ( IConnectedComponent * cc )   = 0;
 
-    virtual bool                                        IsTimeInvariant             ()                              const = 0;
+    virtual bool                                        IsTimeInvariant             ()                              const   = 0;
 
-    virtual bool                                        NeedsAttributesUpdate       ()                              const = 0;
-    virtual bool                                        NeedsTopologyUpdate         ()                              const = 0;
+    virtual bool                                        NeedsAttributesUpdate       ()                              const   = 0;
+    virtual bool                                        NeedsTopologyUpdate         ()                              const   = 0;
 
-    virtual unsigned int                                TotalNumVertices            ()                              const = 0;
+    virtual void                                        SetNeedsAttributesUpdate    ( bool b )                              = 0;
+    virtual void                                        SetNeedsTopologyUpdate      ( bool b )                              = 0;
+
+    virtual unsigned int                                TotalNumVertices            ()                              const   = 0;
 
     //FIXME: implement via plugin when its interface is known
     //virtual bool                                      CanBeConnectedTo            ( IPlugin * plugin )            const = 0;
