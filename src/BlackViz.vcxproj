@@ -596,6 +596,7 @@
     <ClInclude Include="System\BasicMacros.h" />
     <ClInclude Include="System\BasicTypes.h" />
     <ClInclude Include="System\DirIO.h" />
+    <ClInclude Include="System\Environment.h" />
     <ClInclude Include="System\FileIO.h" />
     <ClInclude Include="System\HerarchicalProfiler.h" />
     <ClInclude Include="System\HRTimer.h" />

@@ -457,6 +457,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizeShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.h" />
     <ClInclude Include="Core\MemoryChunk.h" />
+    <ClInclude Include="System\Environment.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
