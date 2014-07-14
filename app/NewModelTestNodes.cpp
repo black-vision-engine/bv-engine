@@ -343,6 +343,12 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 6.f, glm::vec3( 0.f, 0.f, -5.f ) );
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 12.f, glm::vec3( 0.f, 0.f, 0.f ) );
 
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 1.f, 1.f ), 0.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 4.f, glm::vec3( 1.f, 1.f, 0.f ), 90.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 8.f, glm::vec3( 1.f, 0.f, 1.f ), 180.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 12.f, glm::vec3( 1.f, 0.f, 0.f ), 270.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 16.f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+
     node->GetPlugin( "texture" )->GetParameter( "alpha" )->SetTimeEvaluator( timeEvaluator );
 
     model::SetParameter( node->GetPlugin( "texture" )->GetParameter( "alpha" ), TimeType( 0.f ),   0.5f );
