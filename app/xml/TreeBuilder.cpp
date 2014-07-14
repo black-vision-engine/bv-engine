@@ -6,6 +6,8 @@
 #include <fstream>
 #include <boost/algorithm/string.hpp>
 
+#include "BVConfig.h"
+
 
 namespace bv{
 	// for mantainging clear output
@@ -240,7 +242,7 @@ namespace bv{
 		
 		//onNodeBegin(CurrentNode.name,depth);
         assert( false ); //FIXME: timeline cannot be null
-        auto newNode = std::make_shared< model::BasicNode >( CurrentNode.name, nullptr );
+        auto newNode = std::make_shared< model::BasicNode >( CurrentNode.name, nullptr, DefaultConfig.GetShadersDir() );
 
 		for(unsigned int i=0;i<CurrentNode.plugins.size();i++)
 		{
@@ -309,7 +311,7 @@ namespace bv{
 	model::BasicNodePtr TreeBuilder::BuildTree(string path){
 		
         assert(false);
-		auto root = std::make_shared< model::BasicNode >( "Nie ma nazwy na pustyni FIXME:", nullptr );
+        auto root = std::make_shared< model::BasicNode >( "Nie ma nazwy na pustyni FIXME:", nullptr, DefaultConfig.GetShadersDir() );
 
 
 		BlackTree Tree;

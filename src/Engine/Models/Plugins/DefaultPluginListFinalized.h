@@ -15,8 +15,8 @@ private:
 
 public:
 
-                DefaultPluginListFinalized      ();
-                DefaultPluginListFinalized      ( const std::vector< IPluginPtr > & plugins );
+                DefaultPluginListFinalized      ( const std::string & shadersDir );
+                DefaultPluginListFinalized      ( const std::vector< IPluginPtr > & plugins, const std::string & shadersDir );
                                                                 
     virtual     ~DefaultPluginListFinalized     ();
 

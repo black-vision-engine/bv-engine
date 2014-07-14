@@ -18,11 +18,11 @@ private:
 
 private:
 
-    static void     InitializeVertexShaderMapping       ();
+    void     InitializeVertexShaderMapping              () const;
 
 public:
 
-        DefaultFinalizeVertexShaderChannel              ( IVertexShaderChannelPtr channel );
+        DefaultFinalizeVertexShaderChannel              ( IVertexShaderChannelPtr channel, const std::string & shadersDir );
         ~DefaultFinalizeVertexShaderChannel             ();
 
 protected:

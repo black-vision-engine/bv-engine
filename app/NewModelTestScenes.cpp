@@ -10,6 +10,7 @@
 
 #include "NewModelTestNodes.h"
 
+#include "BVConfig.h"
 
 namespace bv {
 
@@ -25,9 +26,9 @@ model::BasicNodePtr  DefaultTestNewAPI   ( const model::PluginsManager * plugins
     uids.push_back( "DEFAULT_RECTANGLE" );
     uids.push_back( "DEFAULT_COLOR" );
 
-    model::IPluginListFinalizedPtr pluginsList( pluginsManager->CreatePlugins( uids, timeEvaluator ) );
+    model::IPluginListFinalizedPtr pluginsList( pluginsManager->CreatePlugins( uids, timeEvaluator, DefaultConfig.GetShadersDir() ) );
 
-    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator, DefaultConfig.GetShadersDir() );
 
     //FIXME: add list to the node
     return root;
@@ -37,7 +38,7 @@ model::BasicNodePtr  DefaultTestNewAPI   ( const model::PluginsManager * plugins
 //
 model::BasicNodePtr  DefaultTestNodeNewNodeImpl  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator, pluginsManager );
+    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator, DefaultConfig.GetShadersDir(), pluginsManager );
 
     bool success = true;
 
@@ -73,7 +74,7 @@ model::BasicNodePtr  DefaultTestWithValidation   ( const model::PluginsManager *
 
     IPluginPtr thirdPlugin  = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin, timeEvaluator ) );
 
-    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator, DefaultConfig.GetShadersDir() );
 
     root->AddPlugin( firstPlugin );
     root->AddPlugin( secondPlugin );
@@ -93,7 +94,7 @@ model::BasicNodePtr  DefaultTestNoValidation     ( const model::PluginsManager *
     auto secondPlugin = pluginsManager->CreatePlugin( "DEFAULT_RECTANGLE", "rect0", firstPlugin, timeEvaluator );
     auto thirdPlugin  = pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin, timeEvaluator );
 
-    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator, DefaultConfig.GetShadersDir() );
 
     root->AddPlugin( firstPlugin );
     root->AddPlugin( secondPlugin );

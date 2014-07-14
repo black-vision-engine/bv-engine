@@ -121,28 +121,28 @@ const std::vector< const IPluginDescriptor * > &    PluginsManager::GetRegistere
 
 // *********************************
 //
-IPluginListFinalized *                              PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginListFinalized *                              PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator, const std::string & shadersDir ) const
 {
-    return CreatePluginsDefaultImpl( uids, timeEvaluator );
+    return CreatePluginsDefaultImpl( uids, timeEvaluator, shadersDir );
 }
 
 // *********************************
 //
-IPluginListFinalized *                              PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginListFinalized *                              PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator, const std::string & shadersDir ) const
 {
-    return CreatePluginsDefaultImpl( uids, names, timeEvaluator );
+    return CreatePluginsDefaultImpl( uids, names, timeEvaluator, shadersDir );
 }
 
 // *********************************
 //
-IPluginListFinalized *                              PluginsManager::CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginListFinalized *                              PluginsManager::CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins, ITimeEvaluatorPtr timeEvaluator, const std::string & shadersDir ) const
 {
-    return CreatePluginsDefaultImpl( plugins, timeEvaluator );
+    return CreatePluginsDefaultImpl( plugins, timeEvaluator, shadersDir );
 }
 
 // *********************************
 //
-DefaultPluginListFinalized *                        PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator ) const
+DefaultPluginListFinalized *                        PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator, const std::string & shadersDir ) const
 {
     std::vector< std::pair< std::string, std::string > > plugins;
 
@@ -158,12 +158,12 @@ DefaultPluginListFinalized *                        PluginsManager::CreatePlugin
         plugins.push_back( std::make_pair( uid, GetDescriptor( uid )->DefaultPluginName() ) );
     }
 
-    return CreatePluginsDefaultImpl( plugins, timeEvaluator );
+    return CreatePluginsDefaultImpl( plugins, timeEvaluator, shadersDir );
 }
 
 // *********************************
 //
-DefaultPluginListFinalized *                        PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator ) const
+DefaultPluginListFinalized *                        PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator, const std::string & shadersDir ) const
 {
     assert( uids.size() == names.size() );
 
@@ -181,12 +181,12 @@ DefaultPluginListFinalized *                        PluginsManager::CreatePlugin
         plugins.push_back( std::make_pair( uids[ i ], names[ i ] ) );
     }    
 
-    return CreatePluginsDefaultImpl( plugins, timeEvaluator );
+    return CreatePluginsDefaultImpl( plugins, timeEvaluator, shadersDir );
 }
 
 // *********************************
 //
-DefaultPluginListFinalized *                        PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::pair< std::string, std::string > > & plugins, ITimeEvaluatorPtr timeEvaluator ) const
+DefaultPluginListFinalized *                        PluginsManager::CreatePluginsDefaultImpl( const std::vector< std::pair< std::string, std::string > > & plugins, ITimeEvaluatorPtr timeEvaluator, const std::string & shadersDir ) const
 {
     std::vector< IPluginPtr > tmpList;
     IPluginPtr prev = nullptr;
@@ -218,7 +218,7 @@ DefaultPluginListFinalized *                        PluginsManager::CreatePlugin
         prev = plugin;
     }
 
-    return new DefaultPluginListFinalized( tmpList );
+    return new DefaultPluginListFinalized( tmpList, shadersDir );
 }
 
 // *********************************

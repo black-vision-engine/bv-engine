@@ -45,6 +45,8 @@ class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicN
 private:
 
     std::string                     m_name;
+    
+    std::string                     m_shadersDir;
 
     const PluginsManager *          m_pluginsManager;
     bool                            m_visible;
@@ -58,7 +60,7 @@ private:
 
 public:
 
-    explicit BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager = nullptr );
+    explicit BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const std::string & shadersDir, const PluginsManager * pluginsManager = nullptr );
     virtual ~BasicNode();
 
     virtual IPluginPtr                      GetPlugin               ( const std::string & name ) const override;

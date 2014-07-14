@@ -13,7 +13,7 @@ private:
 
 public:
 
-        DefaultFinalizeGeometryShaderChannel            ( IGeometryShaderChannelPtr channel );
+        DefaultFinalizeGeometryShaderChannel            ( IGeometryShaderChannelPtr channel, const std::string & shadersDir );
         ~DefaultFinalizeGeometryShaderChannel           ();
 
 protected:

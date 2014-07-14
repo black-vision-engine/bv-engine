@@ -6,8 +6,8 @@ namespace bv { namespace model {
 
 // *********************************
 //
-DefaultFinalizeGeometryShaderChannel::DefaultFinalizeGeometryShaderChannel      ( IGeometryShaderChannelPtr channel )
-    : Parent( channel )
+DefaultFinalizeGeometryShaderChannel::DefaultFinalizeGeometryShaderChannel      ( IGeometryShaderChannelPtr channel, const std::string & shadersDir )
+    : Parent( channel, shadersDir )
 {
 }
 

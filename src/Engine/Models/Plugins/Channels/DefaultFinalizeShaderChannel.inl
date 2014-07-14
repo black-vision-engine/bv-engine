@@ -46,9 +46,10 @@ std::vector< std::string >                  DefaultFinalizeShaderChannel< Shader
 // *********************************
 //
 template< typename ShaderChannelIface >
-DefaultFinalizeShaderChannel< ShaderChannelIface >::DefaultFinalizeShaderChannel    ( std::shared_ptr< ShaderChannelIface > channel )
+DefaultFinalizeShaderChannel< ShaderChannelIface >::DefaultFinalizeShaderChannel    ( std::shared_ptr< ShaderChannelIface > channel, const std::string & shadersDir )
     : m_channel( channel )
     , m_shaderSource( "" )
+    , m_shadersDir( shadersDir )
 {
 }
 
@@ -163,9 +164,9 @@ const std::vector< std::string > &                  DefaultFinalizeShaderChannel
 // *********************************
 //
 template< typename ShaderChannelIface >
-std::string                                         DefaultFinalizeShaderChannel< ShaderChannelIface >::ShaderStorageDirectory  ()
+const std::string &                                 DefaultFinalizeShaderChannel< ShaderChannelIface >::ShaderStorageDirectory  () const
 {
-    return "../dep/Media/shaders/combinations/";
+    return m_shadersDir;
 }
 
 } //model

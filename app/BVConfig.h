@@ -1,6 +1,10 @@
 #pragma once
 
-#include "glm/glm.hpp"
+#include <string>
+
+#include <glm/glm.hpp>
+
+#include "System/Environment.h"
 
 
 namespace bv
@@ -81,6 +85,8 @@ public:
     inline unsigned int         ProfilerDispWaitMillis  () const;
 
     inline const char *         FrameStatsSection       () const;
+
+    inline std::string          GetShadersDir           () const;
 
     static const BVConfig & Instance  ();
 
