@@ -1,7 +1,7 @@
 #include "Texture2DImpl.h"
 
 #include <cstring>
-
+#include <cassert>
 
 namespace bv {
 
@@ -18,7 +18,6 @@ Texture2DImpl::Texture2DImpl  ( TextureFormat format, int width, int height, Dat
 //
 Texture2DImpl::~Texture2DImpl  ()
 {
-    delete[] m_data;
 }
 
 // *********************************
@@ -30,29 +29,30 @@ size_t          Texture2DImpl::GetDataSize     () const
 
 // *********************************
 //
-char *          Texture2DImpl::GetData         ()
+MemoryChunkConstPtr  Texture2DImpl::GetData         ()
 {
     return m_data;
 }
 
 // *********************************
 //
-const char *    Texture2DImpl::GetData         () const
+MemoryChunkConstPtr Texture2DImpl::GetData         () const
 {
     return m_data;
 }
 
 // *********************************
 //
-bool            Texture2DImpl::WriteBits       ( const char * data, TextureFormat format, int width, int height )
+bool            Texture2DImpl::WriteBits       ( MemoryChunkConstPtr data, TextureFormat format, int width, int height )
 {
-    AllocateMemory( format, width, height );
+    //AllocateMemory( format, width, height );
 
     SetFormat( format );
     SetWidth( width );
     SetHeight( height );
 
-    memcpy( m_data, data, GetDataSize() );
+    m_data = data;
+    //memcpy( m_data, data, GetDataSize() );
 
     SetChanged( true );
 
@@ -63,14 +63,15 @@ bool            Texture2DImpl::WriteBits       ( const char * data, TextureForma
 //
 bool            Texture2DImpl::AllocateMemory  ( TextureFormat format, int width, int height )
 {
+    assert( false );
     unsigned int newSize = SizeInBytes( format, width, height );
 
     bool changed = false;
 
     if( GetDataSize() != newSize )
     {
-        delete[] m_data;
-        m_data = new char[ newSize ];
+        //delete[] m_data;
+        //m_data = new char[ newSize ];
     
         changed = true;
     }

@@ -108,6 +108,7 @@ void            PdrRenderTarget::Disable            ( Renderer * renderer )
 // FIXME: dodac streaming flag do bufora (dla multi PBO)
 void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer * renderer, PdrPBOMemTransfer * pboMem, Texture2D*& outputTex )
 {
+    assert( false );
     assert( i < m_numTargets );
 
     auto format = m_textureFormats[ i ];
@@ -144,7 +145,7 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
     auto type   = ConstantsMapper::GLConstantTextureType( format );
 
     void * data = pboMem->LockRenderTarget( m_drawBuffers[ i ], m_width, m_height, fmt, type );
-    memcpy( outputTex->GetData(), data, outputTex->RawFrameSize() );
+    memcpy( const_cast< char * >( outputTex->GetData()->Get() ), data, outputTex->RawFrameSize() ); // FIXME: remove const_cast
     pboMem->UnlockRenderTarget();
 
     Disable( renderer );

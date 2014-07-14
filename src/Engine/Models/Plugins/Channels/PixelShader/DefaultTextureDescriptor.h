@@ -24,7 +24,7 @@ public:
     DefaultTextureDescriptor        ( ResourceHandleConstPtr handle, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc, DataBuffer::Semantic semantic );
     ~DefaultTextureDescriptor       ();
 
-    virtual const char *            GetBits         () const override;
+    virtual MemoryChunkConstPtr     GetBits         () const override;
 
     virtual bool                    BitsChanged     () const override;
     virtual void                    ResetBitsChanged() const override;

@@ -19,26 +19,26 @@ Texture2DSequenceImpl::Texture2DSequenceImpl                    ( TextureFormat 
 //  
 Texture2DSequenceImpl::~Texture2DSequenceImpl                   ()
 {
-    for( auto rawMem : m_data )
-    {
-        delete[] rawMem;
-    }
+    //for( auto rawMem : m_data )
+    //{
+    //    delete[] rawMem;
+    //}
 }
 
 // *********************************
 //  
-bool                Texture2DSequenceImpl::AddTextureWritingBits( const char * data, TextureFormat format, int width, int height )
+bool                Texture2DSequenceImpl::AddTextureWritingBits( MemoryChunkConstPtr data, TextureFormat format, int width, int height )
 {
     if( format != GetFormat() || width != GetWidth() || height != GetHeight() )
     {
         return false;
     }
 
-    auto newSize = width * height * GetPixelSize();
-    auto dstData = new char[ width * height * GetPixelSize() ];
+    //auto newSize = width * height * GetPixelSize();
+    //auto dstData = new char[ width * height * GetPixelSize() ];
 
-    memcpy( dstData, data, newSize );
-    m_data.push_back( dstData );
+    //memcpy( dstData, data, newSize );
+    m_data.push_back( data );
 
     SetChanged( true );
 
@@ -80,7 +80,7 @@ size_t          Texture2DSequenceImpl::GetDataSize             () const
 
 // *********************************
 //  
-char *          Texture2DSequenceImpl::GetData                 ()
+MemoryChunkConstPtr Texture2DSequenceImpl::GetData                 ()
 {
     assert( NumTextures() > 0 );
 
@@ -89,7 +89,7 @@ char *          Texture2DSequenceImpl::GetData                 ()
 
 // *********************************
 //  
-const char *    Texture2DSequenceImpl::GetData                 () const
+MemoryChunkConstPtr Texture2DSequenceImpl::GetData                 () const
 {
     assert( NumTextures() > 0 );
 

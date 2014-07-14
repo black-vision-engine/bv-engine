@@ -11,15 +11,15 @@ class Texture2DSequenceImpl : public Texture2D
 {
 private:
 
-    std::vector< char * >   m_data;
-    unsigned int            m_activeTexture;
+    std::vector< MemoryChunkConstPtr >      m_data;
+    unsigned int                            m_activeTexture;
 
 public:
 
                             Texture2DSequenceImpl   ( TextureFormat format, int width, int height );
     virtual                 ~Texture2DSequenceImpl  ();
     
-    bool                    AddTextureWritingBits   ( const char * data, TextureFormat format, int width, int height );
+    bool                    AddTextureWritingBits   ( MemoryChunkConstPtr data, TextureFormat format, int width, int height );
 
     unsigned int            NumTextures             () const;
 
@@ -28,8 +28,8 @@ public:
 
     virtual size_t          GetDataSize             () const override;
 
-    virtual char *          GetData                 () override;
-    virtual const char *    GetData                 () const override;
+    virtual MemoryChunkConstPtr GetData                 () override;
+    virtual MemoryChunkConstPtr GetData                 () const override;
 
 };
 

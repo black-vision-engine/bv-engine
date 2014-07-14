@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Resources/TextureBase.h"
 #include "Engine/Graphics/Resources/DataBuffer.h"
 #include "Engine/Types/Enums.h"
-
+#include "Core/MemoryChunk.h"
 
 namespace bv
 {
@@ -23,8 +23,8 @@ public:
 
     virtual size_t          GetDataSize     () const = 0;
 
-    virtual char *          GetData         () = 0;
-    virtual const char *    GetData         () const = 0;
+    virtual MemoryChunkConstPtr GetData         () = 0;
+    virtual MemoryChunkConstPtr GetData         () const = 0;
 
     DataBuffer::Semantic    GetSemantic     () const;
 

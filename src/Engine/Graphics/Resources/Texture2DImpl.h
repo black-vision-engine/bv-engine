@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Graphics/Resources/Texture2D.h"
-
+#include "Core/MemoryChunk.h"
 
 namespace bv
 {
@@ -10,8 +10,8 @@ class Texture2DImpl : public Texture2D
 {
 private:
 
-    char *          m_data;
-    unsigned int    m_dataSize;
+    MemoryChunkConstPtr m_data;
+    unsigned int        m_dataSize;
 
 public:
 
@@ -20,10 +20,10 @@ public:
 
     virtual size_t          GetDataSize     () const override;
 
-    virtual char *          GetData         () override;
-    virtual const char *    GetData         () const override;
+    virtual MemoryChunkConstPtr GetData         () override;
+    virtual MemoryChunkConstPtr GetData         () const override;
 
-    bool                    WriteBits       ( const char * data, TextureFormat format, int width, int height );
+    bool                    WriteBits       ( MemoryChunkConstPtr, TextureFormat format, int width, int height );
 
     bool                    AllocateMemory  ( TextureFormat format, int width, int height );
     bool                    AllocateMemory  ();

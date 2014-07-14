@@ -52,13 +52,13 @@ TextAtlas::TextAtlas()
 
 // *********************************
 //
-TextAtlas::TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh )
+TextAtlas::TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPerPixel, unsigned int gw, unsigned int gh )
     : m_glyphWidth( gw )
     , m_glyphHeight( gh )
 {
-    auto size   = w * h * bitsPrePixel;
-    char* data  = new char[ size ];
-    m_textureHandle = ResourceHandlePtr( new ResourceHandle( data, size, new TextureExtraData( w, h, bitsPrePixel, TextureFormat::F_A8R8G8B8, TextureType::T_2D ) ) );
+    auto size   = w * h * bitsPerPixel;
+    auto data  = std::make_shared< MemoryChunk >( new char[ size ] );
+    m_textureHandle = ResourceHandlePtr( new ResourceHandle( data, size, new TextureExtraData( w, h, bitsPerPixel, TextureFormat::F_A8R8G8B8, TextureType::T_2D ) ) );
 }
 
 // *********************************
@@ -81,14 +81,14 @@ Text::Text( const std::wstring& text, const std::string& fontFile, unsigned int 
 
 // *********************************
 //
-const char*             TextAtlas::GetData         () const
+MemoryChunkConstPtr      TextAtlas::GetData         () const
 {
     return m_textureHandle->GetData();
 }
 
 // *********************************
 //
-char*                   TextAtlas::GetWritableData ()
+MemoryChunkConstPtr      TextAtlas::GetWritableData ()
 {
     return m_textureHandle->GetWritableData();
 }
@@ -321,7 +321,7 @@ void                Text::BuildAtlas()
 
     m_atlas = TextAtlas::Crate( altlasWidth, altlasHeight, 32, maxWidth, maxHeight );
 
-    char* atlasData = m_atlas->GetWritableData();
+    char* atlasData = const_cast< char * >( m_atlas->GetWritableData()->Get() );// FIXME: Remove const_cast
 
     auto atlasColumns  =  altlasWidth / maxWidth;
 

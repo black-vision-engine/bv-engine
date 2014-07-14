@@ -64,7 +64,7 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
     }
     else
     {
-        glTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, texture->GetData() );
+        glTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, texture->GetData()->Get() );
     }
 
     glBindTexture( GL_TEXTURE_2D, prevTex );
@@ -92,7 +92,7 @@ void    PdrTexture2D::UpdateTexData     ( const Texture2D * texture )
 #endif
 
     void * data = m_pboMem->LockTexture( MemoryLockingType::MLT_WRITE_ONLY, m_textureID, m_width, m_height, m_format, m_type );
-    memcpy( data, texture->GetData(), texture->RawFrameSize() );
+    memcpy( data, texture->GetData()->Get(), texture->RawFrameSize() );
     m_pboMem->UnlockTexture( m_textureID, m_width, m_height, m_format, m_type );
 
 #ifdef POOR_PROFILE_TEXTURE_STREAMING

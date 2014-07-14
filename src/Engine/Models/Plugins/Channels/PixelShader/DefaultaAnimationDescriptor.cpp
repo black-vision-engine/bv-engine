@@ -48,7 +48,7 @@ unsigned int            DefaultAnimationDescriptor::NumTextures         () const
 
 // *******************************
 //
-const char *            DefaultAnimationDescriptor::GetBits             ( unsigned int idx ) const
+MemoryChunkConstPtr      DefaultAnimationDescriptor::GetBits             ( unsigned int idx ) const
 {
     assert( idx < NumTextures() );
 

@@ -29,7 +29,7 @@ public:
     ~DefaultAnimationDescriptor     ();
 
     virtual unsigned int            NumTextures         () const override;
-    virtual const char *            GetBits             ( unsigned int idx ) const override;
+    virtual MemoryChunkConstPtr     GetBits             ( unsigned int idx ) const override;
 
     virtual bool                    BitsChanged         () const override;
     virtual bool                    BitsChanged         ( unsigned int frameNum ) const override;
