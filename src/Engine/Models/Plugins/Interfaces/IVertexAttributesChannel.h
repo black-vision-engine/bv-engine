@@ -36,9 +36,6 @@ public:
     virtual bool                                        NeedsAttributesUpdate       ()                              const   = 0;
     virtual bool                                        NeedsTopologyUpdate         ()                              const   = 0;
 
-    virtual void                                        SetNeedsAttributesUpdate    ( bool b )                              = 0;
-    virtual void                                        SetNeedsTopologyUpdate      ( bool b )                              = 0;
-
     virtual unsigned int                                TotalNumVertices            ()                              const   = 0;
 
     //FIXME: implement via plugin when its interface is known

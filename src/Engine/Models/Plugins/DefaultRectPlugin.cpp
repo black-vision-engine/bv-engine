@@ -125,14 +125,19 @@ void                                DefaultRectPlugin::Update                   
     float w = m_widthParam->Evaluate();
     float h = m_heightParam->Evaluate();
 
+    auto needssAttrsUpdate = false;
+
     if( ( fabs( m_lastW - w ) + fabs( m_lastH - h ) ) > 0.001f )
     {
         m_rct->SetRectSize( w, h );
-        m_vaChannel->SetNeedsAttributesUpdate( true );
+
+        needssAttrsUpdate = true;
 
         m_lastW = w;
         m_lastH = h;
     }
+
+    m_vaChannel->SetNeedsAttributesUpdate( needssAttrsUpdate );
 }
 
 } // model
