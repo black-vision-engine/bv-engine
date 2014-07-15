@@ -16,12 +16,12 @@ Miejsca, w których pamięć jest przekazywana do tekstur:
 
 
 Testy: 
-1. Przewalenie całośći (wywalić write bits, wywalić allocate memory)
-2. Przetestowanie w wersji z RenderTargetami i GreenRectem (wtedy sprawdzamy od razu mechanizm readbacków)
-3. Test na teksturze
-4. Test na animacji
-5. Test na tekście
-6. Commit do default
+1. Przewalenie całości (wywalić write bits, wywalić allocate memory)
+2. Przetestowanie w wersji z RenderTargetami i GreenRectem (wtedy sprawdzamy od razu mechanizm readbacków) - sprawdzone
+3. Test na teksturze - sprawdzone
+4. Test na animacji - sprawdzone
+5. Test na tekście - sprawdzone
+6. Commit do default - sprawdzone
 
 I kolejne kroki czyli keszowanie najpierw deskryptorów, a potem po przemyśleniu tekstur 2D. Tylko trzeba to dobrze przemyśleć.
 
@@ -39,3 +39,9 @@ Być może w silniku należy trzymać tekstury Pdr nie jako wartości, których 
 
 A tak naprawdę to cały mechanizm zasobów trzeba będzie bardzo dokładnie przemyślec. Kto i kiedy ładuje, kto jest właścicielem pamięci,
 kiedy najszybciej można bezpiecznie zwolnić daną pamięć z hosta i/lub GPU, resety device, resety silnika/modelu.
+
+W TextureManager.cpp w LoadTexture jest jawnie tworzona tekstura 2d impl, więc to tutaj teoretycznie jest pierwsze miejsce, gdzie
+można trzymać skeszowane tekstury 2D (a przynajmniej te, które są typu static). Sprawdzić, jak często tutaj wchodzi program podczas działania.
+ANO W OGÓLE NIE WCHDZI, więc to do dupy pomysł.
+
+To samo należy sprawdzić w przypadku TextureManager::AddFrame
