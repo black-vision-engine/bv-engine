@@ -78,7 +78,7 @@ bool    TextureManager::AddFrame    ( Texture2DSequenceImpl * anim, const model:
     auto texExtra = static_cast< const model::TextureExtraData * >( resHandle->GetExtra() );
     assert( texExtra->GetType() == TextureType::T_2D );
 
-    return anim->AddTextureWritingBits( resHandle->GetData(), texExtra->GetFormat(), texExtra->GetWidth(), texExtra->GetHeight() );    
+    return anim->AddTextureSettingRawData( resHandle->GetData(), texExtra->GetFormat(), texExtra->GetWidth(), texExtra->GetHeight() );    
 }
 
 // *********************************

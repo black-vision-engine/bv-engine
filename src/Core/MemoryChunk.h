@@ -10,16 +10,26 @@ namespace bv
 class MemoryChunk
 {
 private:
+
     char *          m_memory;
+    unsigned int    m_size;
 
 public:
+
+    explicit        MemoryChunk     ( char * mem, unsigned int size );
+                    ~MemoryChunk    ();
+
+    void            SetDataChunk    ( char * data, unsigned int size );
+    void            Allocate        ( unsigned int size );
+
+    unsigned int    Size            () const;
 
     const char *    Get             () const;
     char *          GetWritable     ();
 
+private:
 
-    explicit        MemoryChunk     ( char* mem );
-                    ~MemoryChunk    ();
+    void            DeleteMemory    ();
 
 };
 

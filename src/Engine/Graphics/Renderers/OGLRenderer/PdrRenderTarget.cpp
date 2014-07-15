@@ -30,6 +30,7 @@ PdrRenderTarget::PdrRenderTarget     ( Renderer * renderer, const RenderTarget *
     , m_drawBuffers( rt->NumTargets() )
     , m_textures( rt->NumTargets() )
     , m_textureFormats( rt->NumTargets() )
+    , m_readbackBuffers( rt->NumTargets() )
 {
     assert( m_numTargets > 0 );
 
@@ -37,6 +38,7 @@ PdrRenderTarget::PdrRenderTarget     ( Renderer * renderer, const RenderTarget *
     {
         auto tx = rt->ColorTexture( i );
         m_textureFormats.push_back( tx->GetFormat() );
+        m_readbackBuffers[ i ] = nullptr;
     }
 
     for( unsigned int i = 0 ; i < 4; ++i )
@@ -112,11 +114,15 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
     assert( i < m_numTargets );
 
     auto format = m_textureFormats[ i ];
+    MemoryChunkPtr & buffer = m_readbackBuffers[ i ];
 
     if( outputTex == nullptr )
     {
+        assert( buffer == nullptr );
+        buffer->Allocate( Texture2D::RawFrameSize( format, m_width, m_height ) );
+
         auto tx = new Texture2DImpl( format, m_width, m_height ); 
-        tx->AllocateMemory();
+        tx->SetRawData( buffer, format, m_width, m_height );
         outputTex = tx;
     }
 
@@ -133,6 +139,8 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
 
         delete outputTex;
     
+        buffer->Allocate( Texture2D::RawFrameSize( format, m_width, m_height ) );
+
         auto tx = new Texture2DImpl( format, m_width, m_height ); 
         tx->AllocateMemory();
         outputTex = tx;
