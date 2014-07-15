@@ -5,7 +5,7 @@ namespace bv {
 
 // *********************************
 //
-Texture2D::Texture2D                    ( TextureFormat format, int width, int height, DataBuffer::Semantic semantic )
+Texture2D::Texture2D                    ( TextureFormat format, unsigned int width, unsigned int height, DataBuffer::Semantic semantic )
     : Texture( format, TextureType::T_2D, semantic )
     , m_width( width )
     , m_height( height )
@@ -20,14 +20,14 @@ Texture2D::~Texture2D       ()
 
 // *********************************
 //
-int         Texture2D::GetWidth         () const
+unsigned int    Texture2D::GetWidth         () const
 {
     return m_width;
 }
 
 // *********************************
 //
-int         Texture2D::GetHeight        () const
+unsigned int    Texture2D::GetHeight        () const
 {
     return m_height;
 }
@@ -37,6 +37,13 @@ int         Texture2D::GetHeight        () const
 unsigned int    Texture2D::RawFrameSize () const
 {
     return GetPixelSize() * GetWidth() * GetHeight();
+}
+
+// *********************************
+//
+unsigned int    Texture2D::RawFrameSize ( TextureFormat format, unsigned int width, unsigned int height )
+{
+    return GetPixelSize( format ) * width * height;
 }
 
 // *********************************

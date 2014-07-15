@@ -8,12 +8,11 @@
 
 #include "Engine/Models/Resources/ModelTextureManager.h"
 
-
 namespace bv { namespace model {
 
 // *********************************
 //
-char * TextureHelper::LoadImg( const std::string & filePath, int * width, int * heigth, int * bpp, bool loadFromMemory )
+MemoryChunkConstPtr TextureHelper::LoadImg( const std::string & filePath, int * width, int * heigth, int * bpp, bool loadFromMemory )
 {
     auto fipImg = std::make_shared< fipImage >();
 
@@ -54,19 +53,19 @@ char * TextureHelper::LoadImg( const std::string & filePath, int * width, int * 
     char * pixels = new char[ numBytes ];
     memcpy( pixels, fipImg->accessPixels(), numBytes );
 
-    return pixels;
+    return std::make_shared< MemoryChunk >( pixels, numBytes );
 }
 
 
 // *********************************
 //
-void TextureHelper::WriteBMP( const std::string& filePath, const char* data, int width, int height, int bpp )
+void TextureHelper::WriteBMP( const std::string& filePath, MemoryChunkConstPtr data, int width, int height, int bpp )
 {
     fipImage*  fipImg = new fipImage( FREE_IMAGE_TYPE::FIT_BITMAP, width, height, bpp );
 
     auto pixels = fipImg->accessPixels();
 
-    memcpy( pixels, data, width * height * bpp / 8 );
+    memcpy( pixels, data->Get(), width * height * bpp / 8 );
 
     fipImg->save( filePath.c_str() );
 }
@@ -90,10 +89,12 @@ inline void SetPixelColor( int x, int y, char* data, int width, int height, char
 
 // *********************************
 //
-char* TextureHelper::Blur( const char* data, int width, int height, int bpp, int blurSize )
+MemoryChunkConstPtr TextureHelper::Blur( MemoryChunkConstPtr data, int width, int height, int bpp, int blurSize )
 {
-    char* tmp = new char[ width * height * bpp / 8 ];
-    char* out = new char[ width * height * bpp / 8 ];
+    unsigned int numBytes = width * height * bpp / 8;
+
+    char * tmp = new char[ numBytes ];
+    char * out = new char[ numBytes ];
 
     float kernelSize = float( blurSize * 2 + 1 );
 
@@ -103,7 +104,7 @@ char* TextureHelper::Blur( const char* data, int width, int height, int bpp, int
         {
             float currVal = 0.f;
             for( int i = -blurSize; i <= blurSize; ++i )
-                currVal += GetPixelColor( x + i, y, data, width, height );
+                currVal += GetPixelColor( x + i, y, data->Get(), width, height );
             currVal /= kernelSize;
             if (currVal > 0.f)
                 int t = 0;
@@ -125,7 +126,7 @@ char* TextureHelper::Blur( const char* data, int width, int height, int bpp, int
 
 
     delete [] tmp;
-    return out;   
+    return std::make_shared< MemoryChunk >( out, numBytes );
 }
 
 } // model

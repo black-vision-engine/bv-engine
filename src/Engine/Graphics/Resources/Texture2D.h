@@ -10,23 +10,24 @@ class Texture2D : public Texture
 {
 private:
 
-    int         m_width;
-    int         m_height;
+    unsigned int    m_width;
+    unsigned int    m_height;
 
 public:
 
-                    Texture2D       ( TextureFormat format, int width, int height, DataBuffer::Semantic semantic );
-    virtual         ~Texture2D      () = 0;
+                        Texture2D       ( TextureFormat format, unsigned int width, unsigned int height, DataBuffer::Semantic semantic );
+    virtual             ~Texture2D      () = 0;
 
-    int             GetWidth        () const;
-    int             GetHeight       () const;
+    unsigned int        GetWidth        () const;
+    unsigned int        GetHeight       () const;
 
-    unsigned int    RawFrameSize    () const;
+    unsigned int        RawFrameSize    () const;
+    static unsigned int RawFrameSize    ( TextureFormat format, unsigned int width, unsigned int height );
 
 protected:
 
-    void            SetWidth        ( unsigned int width );
-    void            SetHeight       ( unsigned int height );
+    void                SetWidth        ( unsigned int width );
+    void                SetHeight       ( unsigned int height );
 
 };
 

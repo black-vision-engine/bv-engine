@@ -23,8 +23,8 @@ public:
     TextureFormat           GetFormat	    () const;
     TextureType             GetType         () const;
 
-    int                     GetPixelSize    () const;
-    static int              GetPixelSize    ( TextureFormat format );
+    unsigned int            GetPixelSize    () const;
+    static unsigned int     GetPixelSize    ( TextureFormat format );
 
 protected:
 

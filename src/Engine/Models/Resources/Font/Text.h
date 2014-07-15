@@ -92,8 +92,8 @@ public:
 
     const GlyphCoords*      GetGlyphCoords  ( wchar_t c ) const;
 
-    const char*             GetData         () const;
-    char*                   GetWritableData ();
+    MemoryChunkConstPtr     GetData         () const;
+    MemoryChunkConstPtr     GetWritableData ();
     unsigned int            GetSizeInBytes  () const;
 
     TextAtlas();

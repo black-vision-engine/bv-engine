@@ -2,6 +2,7 @@
 
 #include <string>
 #include "System/BasicTypes.h"
+#include "Core/MemoryChunk.h"
 
 namespace bv { namespace model
 {
@@ -39,17 +40,17 @@ class ResourceHandle
 public: // Only for non intrusive serialization. Should be private
 
     unsigned int            m_size;
-    char *                  m_data;
+    MemoryChunkConstPtr     m_data;
 
     IResourceExtraData *    m_extra;
 
 public:
 
     unsigned int                GetSize             () const { return m_size; }
-    const char *                GetData             () const { return m_data; }
-    char *                      GetWritableData     () const { return m_data; }
+    MemoryChunkConstPtr         GetData             () const { return m_data; }
+    MemoryChunkConstPtr         GetWritableData     () const { return m_data; }
     const IResourceExtraData *  GetExtra            () const { return m_extra; }
-    void                        SetData             ( char * pData ) { m_data = pData; }
+    void                        SetData             ( MemoryChunkConstPtr pData ) { m_data = pData; }
 
     ResourceHandle()
         : m_data( nullptr )
@@ -57,7 +58,7 @@ public:
         , m_extra( nullptr )
     {}
 
-    ResourceHandle( char * data, unsigned int size, IResourceExtraData * extra = nullptr )
+    ResourceHandle( MemoryChunkConstPtr data, unsigned int size, IResourceExtraData * extra = nullptr )
         : m_data( data )
         , m_size( size )
         , m_extra( extra )
@@ -66,7 +67,6 @@ public:
 
     ~ResourceHandle()
     {
-        delete[] m_data;
         delete m_extra;
     }
 };

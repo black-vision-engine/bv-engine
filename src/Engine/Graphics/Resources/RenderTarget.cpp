@@ -3,13 +3,14 @@
 #include <cassert>
 
 #include "Engine/Graphics/Resources/Texture2DImpl.h"
+#include "Core/MemoryChunk.h"
 
 
 namespace bv {
 
 // *********************************
 //
-RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, int w, int h, bool hasDepthBuffer, bool hasMipmaps, RenderTarget::RTSemantic semantic )
+RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, unsigned int w, unsigned int h, bool hasDepthBuffer, bool hasMipmaps, RenderTarget::RTSemantic semantic )
     : m_numTargets( formats.size() )
     , m_hasMipmaps( hasMipmaps )
     , m_hasDepthBuffer( hasDepthBuffer )
@@ -22,8 +23,10 @@ RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, int w
 
     for( int i = 0; i < m_numTargets; ++i )
     {
+        MemoryChunkPtr emptyChunk = MemoryChunkPtr( new MemoryChunk( nullptr, 0 ) );
+
         auto tx = new Texture2DImpl( formats[ i ], w, h, DataBuffer::Semantic::S_TEXTURE_STATIC );
-        tx->AllocateMemory();
+        tx->SetRawData( emptyChunk, formats[ i ], w, h ); //FIXME: empty pointer (this memory was never used as it is supposed only to serve as a key for Renderer).
         tx->SetChanged( false );
         m_ColorTextures.push_back( tx );    
     }
@@ -51,7 +54,7 @@ RenderTarget::RTSemantic  RenderTarget::Semantic  () const
 
 // *********************************
 //
-int RenderTarget::NumTargets () const
+unsigned int RenderTarget::NumTargets () const
 {
     return m_numTargets;
 }
@@ -65,14 +68,14 @@ TextureFormat RenderTarget::Format () const
 
 // *********************************
 //
-int RenderTarget::Width () const
+unsigned int RenderTarget::Width () const
 {
     return m_ColorTextures[ 0 ]->GetWidth();
 }
 
 // *********************************
 //
-int RenderTarget::Height () const
+unsigned int RenderTarget::Height () const
 {
     return m_ColorTextures[ 0 ]->GetHeight();
 }

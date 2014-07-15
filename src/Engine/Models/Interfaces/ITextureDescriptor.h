@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Interfaces/ITextureParams.h"
 #include "Engine/Graphics/Resources/DataBuffer.h"
-
+#include "Core/MemoryChunk.h"
 
 namespace bv {
 
@@ -10,7 +10,7 @@ class ITextureDescriptor : public ITextureParams
 {
 public:
 
-    virtual const char *            GetBits             () const = 0;
+    virtual MemoryChunkConstPtr     GetBits             () const = 0;
     virtual bool                    BitsChanged         () const = 0;
     virtual void                    ResetBitsChanged    () const = 0;
     virtual DataBuffer::Semantic    GetSemantic         () const = 0;

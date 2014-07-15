@@ -199,6 +199,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultFinalizeVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\ShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.cpp" />
+    <ClCompile Include="Core\MemoryChunk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -455,6 +456,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizeVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizeShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.h" />
+    <ClInclude Include="Core\MemoryChunk.h" />
     <ClInclude Include="System\Environment.h" />
   </ItemGroup>
   <ItemGroup>

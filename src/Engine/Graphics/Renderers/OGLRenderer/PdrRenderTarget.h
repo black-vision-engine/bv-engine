@@ -3,6 +3,7 @@
 #include "gl/glew.h"
 
 #include "Engine/Graphics/Resources/RenderTarget.h"
+#include "Core/MemoryChunk.h"
 
 
 namespace bv {
@@ -33,6 +34,8 @@ private:
 
     int                             m_prevViewportCoords[ 4 ];
     double                          m_prevDepthRange[ 2 ];
+
+    std::vector< MemoryChunkPtr >   m_readbackBuffers;
 
 public:
 

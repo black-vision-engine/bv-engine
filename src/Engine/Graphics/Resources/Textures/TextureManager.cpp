@@ -49,7 +49,7 @@ Texture2D * TextureManager::LoadTexture( const model::ResourceHandle * resHandle
 
     //FIXME: add asserts for invalid dimensions (i.e. too large)
     auto newTex = new bv::Texture2DImpl( format, width, height );
-    newTex->WriteBits( resHandle->GetData(), format, width, height );
+    newTex->SetRawData( resHandle->GetData(), format, width, height );
     m_txMap[ newTex ] = newTex;
 
     return newTex;
@@ -78,7 +78,7 @@ bool    TextureManager::AddFrame    ( Texture2DSequenceImpl * anim, const model:
     auto texExtra = static_cast< const model::TextureExtraData * >( resHandle->GetExtra() );
     assert( texExtra->GetType() == TextureType::T_2D );
 
-    return anim->AddTextureWritingBits( resHandle->GetData(), texExtra->GetFormat(), texExtra->GetWidth(), texExtra->GetHeight() );    
+    return anim->AddTextureSettingRawData( resHandle->GetData(), texExtra->GetFormat(), texExtra->GetWidth(), texExtra->GetHeight() );    
 }
 
 // *********************************

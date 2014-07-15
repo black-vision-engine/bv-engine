@@ -131,7 +131,7 @@ ResourceHandleConstPtr      TextHelper::GetAtlasTextureInfo ( const TextAtlas * 
     unsigned int texSize = textAtlas->GetWidth() * textAtlas->GetHeight() * 4; //FIXME: Add format to atlas
 
     TextureExtraData* atlasExtraData = new TextureExtraData( textAtlas->GetWidth(), textAtlas->GetHeight(), 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D );
-    auto altasHandle = ResourceHandleConstPtr( new ResourceHandle( const_cast< char* >(textAtlas->GetData()), texSize, atlasExtraData ) );
+    auto altasHandle = ResourceHandleConstPtr( new ResourceHandle( textAtlas->GetData(), texSize, atlasExtraData ) );
 
     return altasHandle;
 }

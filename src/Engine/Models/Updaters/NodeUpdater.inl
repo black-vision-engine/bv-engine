@@ -214,7 +214,7 @@ inline void    NodeUpdater::UpdateTexturesData  ()
                 auto height = texDesc->GetHeight();
                 auto data   = texDesc->GetBits();
 
-                tex2D->WriteBits( data, format, width, height );
+                tex2D->SetRawData( data, format, width, height );
 
                 texDesc->ResetBitsChanged();
             }
@@ -232,38 +232,6 @@ inline void    NodeUpdater::UpdateTexturesData  ()
         }
 
     }
-
-/*
-    for( auto ptx : m_texMappingVec )
-    {
-        auto texDesc = ptx.first;
-        auto tex2D   = ptx.second; 
-    
-        if ( texDesc->BitsChanged() )
-        {
-            auto format = texDesc->GetFormat();
-            auto width  = texDesc->GetWidth();
-            auto height = texDesc->GetHeight();
-            auto data   = texDesc->GetBits();
-
-            tex2D->WriteBits( data, format, width, height );
-
-            texDesc->ResetBitsChanged();
-        }
-    }
-
-    //FIXME: implement or disallow  bits changed in an animation
-    for( auto ptx : m_animMappingVec )
-    {
-        auto animDesc   = ptx.first;
-        auto tex2D      = ptx.second; 
-
-        if ( animDesc->CurrentFrame() != animDesc->PreviousFrame() )
-        {
-            tex2D->SetActiveTexture( animDesc->CurrentFrame() );
-        }
-    }
-*/
 }
 
 } //bv

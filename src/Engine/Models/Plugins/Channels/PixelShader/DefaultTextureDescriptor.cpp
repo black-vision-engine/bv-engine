@@ -44,13 +44,13 @@ DefaultTextureDescriptor::DefaultTextureDescriptor        ( ResourceHandleConstP
 
 // **************************
 //
-DefaultTextureDescriptor::~DefaultTextureDescriptor       ()
+DefaultTextureDescriptor::~DefaultTextureDescriptor                 ()
 {
 }
 
 // **************************
 //
-const char *            DefaultTextureDescriptor::GetBits           () const
+MemoryChunkConstPtr     DefaultTextureDescriptor::GetBits           () const
 {
     return m_texHandle->GetData();
 }
