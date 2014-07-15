@@ -22,6 +22,7 @@ public:
     void                        UpdateStep          ();
 
     void                        RegisterUpdater     ( IUpdaterPtr updater );
+    void                        RemoveAllUpdaters   ();
 
     static UpdatersManager &    Get                 ();
 

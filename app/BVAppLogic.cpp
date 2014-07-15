@@ -48,10 +48,10 @@ namespace
         //tt += TimeType( 0.001 );
 
         //TEST AI
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 4, logic );
+        static auto ai = TestAIManager::Instance().GetAIPreset( 4, logic );
         //static auto ai = TestAIManager::Instance().GetAIPreset( 2, logic->GetModelScene()->GetSceneRoot() );
         //static auto ai = TestAIManager::Instance().GetAIPreset( 3, logic->GetModelScene()->GetSceneRoot() );
-        //ai->EvalAt( t );
+        ai->EvalAt( t );
 
         //PRE GOWNO
         float tx = float( sin( t ) );
@@ -378,6 +378,8 @@ const FrameStatsCalculator &     BVAppLogic::FrameStats () const
 //
 void                            BVAppLogic::ResetScene      ()
 {
+    UpdatersManager::Get().RemoveAllUpdaters();
+    m_globalTimeline = model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) );
     m_modelScene = nullptr;
     delete m_mockSceneEng;
 }

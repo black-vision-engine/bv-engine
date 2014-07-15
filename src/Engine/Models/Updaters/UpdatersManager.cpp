@@ -34,6 +34,13 @@ void UpdatersManager::RegisterUpdater    ( IUpdaterPtr updater )
 
 // *******************************
 //
+void UpdatersManager::RemoveAllUpdaters   ()
+{
+    m_updaters.clear();
+}
+
+// *******************************
+//
 UpdatersManager & UpdatersManager::Get  ()
 {
     static UpdatersManager instance = UpdatersManager();

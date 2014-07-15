@@ -465,7 +465,7 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
     //rut->AddChild( c1 );
 
     //return rut;
-    //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator, true );
+    //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator, false );
     return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
     //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, true );
     //return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
