@@ -13,3 +13,29 @@ Miejsca, w których pamięć jest przekazywana do tekstur:
   a dalej to trafia do TextureManagera::LoadTexture
 2. Podczas updatera, jeśli coś się zmieniło w pamięci (jakoś została podmieniona) - BitsChanged w deskryptorze - sprawdzić NodeUpdater::UpdateTexturesData  ()
 3. Podczas tworzenia textury w Effect2D
+
+
+Testy: 
+1. Przewalenie całośći (wywalić write bits, wywalić allocate memory)
+2. Przetestowanie w wersji z RenderTargetami i GreenRectem (wtedy sprawdzamy od razu mechanizm readbacków)
+3. Test na teksturze
+4. Test na animacji
+5. Test na tekście
+6. Commit do default
+
+I kolejne kroki czyli keszowanie najpierw deskryptorów, a potem po przemyśleniu tekstur 2D. Tylko trzeba to dobrze przemyśleć.
+
+Uwagi:
+
+LoadTexture powinno zwracać już wczytane dane, a nie tworzyć teksturę od nowa:
+
+DefaultTextureDescriptor::LoadTexture() pobiera handla, który ma w sobie dane. Te dane powinny być użyte po raz kolejny, jeśli
+taka teksturka już była wczytana. Czyli IPluginResourceDescriptorConstPtr powinno być trzymane w cache na bazie handle/name (to jest
+potencjalne marnotrawstwo, bo można mieć tego samego handla i różne nazwy, ale u nas to się generalnie nie zdarzy, a nie ma
+co teraz wymyślać pełnego mechanizmu).
+
+Docelowo należy tak to keszować, żeby jedna pamięć mogła występować pod kilkoma nazwami.
+Być może w silniku należy trzymać tekstury Pdr nie jako wartości, których kluczami są Texture2D, a raczej pamięć w tych teksturach lub jakieś ID.
+
+A tak naprawdę to cały mechanizm zasobów trzeba będzie bardzo dokładnie przemyślec. Kto i kiedy ładuje, kto jest właścicielem pamięci,
+kiedy najszybciej można bezpiecznie zwolnić daną pamięć z hosta i/lub GPU, resety device, resety silnika/modelu.
