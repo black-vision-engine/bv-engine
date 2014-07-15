@@ -46,9 +46,8 @@ IModelNodePtr  FindNode( const TNodeVec & vec, const std::string & name )
 
 // ********************************
 //
-BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const std::string & shadersDir, const PluginsManager * pluginsManager )
+BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager )
     : m_name( name )
-    , m_shadersDir( shadersDir )
     , m_pluginList( nullptr )
     , m_pluginsManager( pluginsManager )
     , m_overrideState( nullptr )
@@ -237,7 +236,7 @@ void             BasicNode::NonNullPluginsListGuard ()
 {
     if( !m_pluginList )
     {
-        m_pluginList = std::make_shared< DefaultPluginListFinalized >( m_shadersDir );
+        m_pluginList = std::make_shared< DefaultPluginListFinalized >();
     }
 }
 

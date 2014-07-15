@@ -5,15 +5,15 @@ namespace bv { namespace model {
 
 // *******************************
 //
-DefaultPluginListFinalized::DefaultPluginListFinalized      ( const std::string & shadersDir )
-    : m_finalizePlugin( new DefaultFinalizePlugin( shadersDir ) )
+DefaultPluginListFinalized::DefaultPluginListFinalized      ()
+    : m_finalizePlugin( new DefaultFinalizePlugin() )
 {
 }
 
 // *******************************
 //
-DefaultPluginListFinalized::DefaultPluginListFinalized      ( const std::vector< IPluginPtr > & plugins, const std::string & shadersDir )
-    : m_finalizePlugin( new DefaultFinalizePlugin( shadersDir ) )
+DefaultPluginListFinalized::DefaultPluginListFinalized      ( const std::vector< IPluginPtr > & plugins )
+    : m_finalizePlugin( new DefaultFinalizePlugin() )
 {
     assert( plugins.size() > 0 );
    

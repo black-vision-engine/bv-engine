@@ -170,17 +170,4 @@ inline const char *         BVConfig::FrameStatsSection         () const
     return "FRAME";
 }
 
-// *********************************
-//
-inline std::string          BVConfig::GetShadersDir             () const
-{
-#if defined(ENV32BIT)
-    return "";
-#elif defined(ENV64BIT)
-    return "";
-#else
-    return "";
-#endif
-}
-
 } //bv

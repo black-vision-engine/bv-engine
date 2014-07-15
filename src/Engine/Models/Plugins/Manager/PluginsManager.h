@@ -43,13 +43,13 @@ public:
     IPluginPtr                                          CreatePlugin            ( const std::string & uid, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const;
     const std::vector< const IPluginDescriptor * > &    GetRegisteredDescriptors() const;
 
-    IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator, const std::string & shadersDir ) const;
-    IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator, const std::string & shadersDir ) const;
-    IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins, ITimeEvaluatorPtr timeEvaluator, const std::string & shadersDir ) const;
+    IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator ) const;
+    IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator ) const;
+    IPluginListFinalized *                              CreatePlugins           ( const std::vector< std::pair< std::string, std::string > > & plugins, ITimeEvaluatorPtr timeEvaluator ) const;
 
-    DefaultPluginListFinalized *                        CreatePluginsDefaultImpl( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator, const std::string & shadersDir ) const;
-    DefaultPluginListFinalized *                        CreatePluginsDefaultImpl( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator, const std::string & shadersDir ) const;
-    DefaultPluginListFinalized *                        CreatePluginsDefaultImpl( const std::vector< std::pair< std::string, std::string > > & plugins, ITimeEvaluatorPtr timeEvaluator, const std::string & shadersDir ) const;
+    DefaultPluginListFinalized *                        CreatePluginsDefaultImpl( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator ) const;
+    DefaultPluginListFinalized *                        CreatePluginsDefaultImpl( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator ) const;
+    DefaultPluginListFinalized *                        CreatePluginsDefaultImpl( const std::vector< std::pair< std::string, std::string > > & plugins, ITimeEvaluatorPtr timeEvaluator ) const;
 
 public:
 

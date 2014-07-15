@@ -4,6 +4,8 @@
 
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 
+#include "System/Environment.h"
+
 
 namespace bv { namespace model {
 
@@ -11,9 +13,9 @@ std::string DefaultFinalizePlugin::m_uid = "DEFAULT_FINALIZE";
 
 // *******************************
 //
-DefaultFinalizePlugin::DefaultFinalizePlugin       ( const std::string & shadersDir )
+DefaultFinalizePlugin::DefaultFinalizePlugin       ()
     : m_prevPlugin( nullptr )
-    , m_shadersDir( shadersDir )
+    , m_shadersDir( ShadersDir() )
     , m_name( "finalizer" )
     , m_finalizePSC( nullptr )
     , m_finalizeVSC( nullptr )
@@ -193,6 +195,19 @@ void                                DefaultFinalizePlugin::SetPrevPlugin        
 void                                DefaultFinalizePlugin::SetName                      ( const std::string & name )
 {
     m_name = name;
+}
+
+// *******************************
+//
+std::string                         DefaultFinalizePlugin::ShadersDir                  ()
+{
+#if defined(ENV32BIT)
+    return "../dep/Media/shaders/combinations/";
+#elif defined(ENV64BIT)
+    return "../dep/Media/shaders/combinations/";
+#else
+    return "";
+#endif
 }
 
 // *******************************

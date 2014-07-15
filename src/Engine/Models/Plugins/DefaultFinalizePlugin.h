@@ -28,7 +28,7 @@ private:
 
 public:
 
-                                                DefaultFinalizePlugin       ( const std::string & shadersDir );
+                                                DefaultFinalizePlugin       ();
                                                 ~DefaultFinalizePlugin      ();
 
     virtual const std::string &                 GetName                     () const override;
@@ -54,6 +54,8 @@ public:
 
     void                                        SetPrevPlugin               ( IPluginPtr plugin );
     void                                        SetName                     ( const std::string & name );
+
+    static std::string                          ShadersDir                  ();
 
 private:
 

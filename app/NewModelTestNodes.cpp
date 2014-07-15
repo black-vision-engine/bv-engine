@@ -120,7 +120,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateSolidRectNode      ( const std::s
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( name, timeEvaluator, DefaultConfig.GetShadersDir() );
+    model::BasicNodePtr root = std::make_shared< model::BasicNode >( name, timeEvaluator );
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
 
@@ -146,7 +146,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::s
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 3 );
 
-    auto root = std::make_shared< model::BasicNode >( name, timeEvaluator, DefaultConfig.GetShadersDir() );
+    auto root = std::make_shared< model::BasicNode >( name, timeEvaluator );
     auto success = root->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
     assert( success );
 
@@ -240,7 +240,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMan
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( nodeName, timeEvaluator, DefaultConfig.GetShadersDir() );
+    model::BasicNodePtr root = std::make_shared< model::BasicNode >( nodeName, timeEvaluator );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -278,7 +278,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Tim
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator, DefaultConfig.GetShadersDir() );
+    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
     node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
 
     SetDefaultColorChangeAnim( node->GetPlugin( "solid color" ) );
@@ -330,7 +330,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator, DefaultConfig.GetShadersDir() );
+    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -412,7 +412,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator, DefaultConfig.GetShadersDir() );
+    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
     assert( success );
@@ -471,7 +471,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator, DefaultConfig.GetShadersDir() );
+    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
