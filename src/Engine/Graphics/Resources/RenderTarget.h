@@ -36,16 +36,16 @@ protected:
 
 public:
 
-            RenderTarget    ( const std::vector< TextureFormat > & formats, int w, int h, bool hasDepthBuffer, bool hasMipmaps = false, RenderTarget::RTSemantic semantic = RenderTarget::RTSemantic::S_DRAW_ONLY );
+            RenderTarget    ( const std::vector< TextureFormat > & formats, unsigned int w, unsigned int h, bool hasDepthBuffer, bool hasMipmaps = false, RenderTarget::RTSemantic semantic = RenderTarget::RTSemantic::S_DRAW_ONLY );
     virtual ~RenderTarget   ();
 
     RenderTarget::RTSemantic    Semantic        () const;
 
-    int                         NumTargets      () const;
+    unsigned int                NumTargets      () const;
     TextureFormat               Format          () const;
 
-    int                         Width           () const;
-    int                         Height          () const;
+    unsigned int                Width           () const;
+    unsigned int                Height          () const;
 
     Texture2D *                 ColorTexture    ( int i ) const;
 

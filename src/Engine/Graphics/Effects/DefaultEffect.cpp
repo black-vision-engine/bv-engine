@@ -197,7 +197,7 @@ Texture2DImpl *         DefaultEffect::CreateTexture       ( const ITextureDescr
     auto semantic   = txParams->GetSemantic();
 
     auto texture = new Texture2DImpl( format, width, height, semantic );
-    texture->WriteBits( txParams->GetBits(), format, width, height );
+    texture->SetRawData( txParams->GetBits(), format, width, height );
 
     return texture;
 }
@@ -214,7 +214,7 @@ Texture2DSequenceImpl * DefaultEffect::CreateSequence       ( const IAnimationDe
             
     for( unsigned int i = 0; i < animParams->NumTextures(); ++i )
     {
-        bool bAdded = sequence->AddTextureWritingBits( animParams->GetBits( i ), format, width, height );
+        bool bAdded = sequence->AddTextureSettingRawData( animParams->GetBits( i ), format, width, height );
         assert( bAdded );
     }
 

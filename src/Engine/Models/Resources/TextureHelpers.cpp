@@ -53,7 +53,7 @@ MemoryChunkConstPtr TextureHelper::LoadImg( const std::string & filePath, int * 
     char * pixels = new char[ numBytes ];
     memcpy( pixels, fipImg->accessPixels(), numBytes );
 
-    return std::make_shared< MemoryChunk >( pixels );
+    return std::make_shared< MemoryChunk >( pixels, numBytes );
 }
 
 
@@ -91,8 +91,10 @@ inline void SetPixelColor( int x, int y, char* data, int width, int height, char
 //
 MemoryChunkConstPtr TextureHelper::Blur( MemoryChunkConstPtr data, int width, int height, int bpp, int blurSize )
 {
-    char* tmp = new char[ width * height * bpp / 8 ];
-    char* out = new char[ width * height * bpp / 8 ];
+    unsigned int numBytes = width * height * bpp / 8;
+
+    char * tmp = new char[ numBytes ];
+    char * out = new char[ numBytes ];
 
     float kernelSize = float( blurSize * 2 + 1 );
 
@@ -124,7 +126,7 @@ MemoryChunkConstPtr TextureHelper::Blur( MemoryChunkConstPtr data, int width, in
 
 
     delete [] tmp;
-    return std::make_shared< MemoryChunk >( out );
+    return std::make_shared< MemoryChunk >( out, numBytes );
 }
 
 } // model
