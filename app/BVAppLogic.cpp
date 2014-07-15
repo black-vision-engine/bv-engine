@@ -378,6 +378,8 @@ const FrameStatsCalculator &     BVAppLogic::FrameStats () const
 //
 void                            BVAppLogic::ResetScene      ()
 {
+    UpdatersManager::Get().RemoveAllUpdaters();
+    m_globalTimeline = model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) );
     m_modelScene = nullptr;
     delete m_mockSceneEng;
 }

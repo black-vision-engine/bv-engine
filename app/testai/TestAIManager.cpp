@@ -240,7 +240,7 @@ TestAI *        TestAIManager::PreparePreset4   ( BVAppLogic * logic ) const
 
     TestAI * ai = new TestAI( timeline, nullptr );
 
-    auto c0 = new AICommandReloadScene( logic, 7.f );
+    auto c0 = new AICommandReloadScene( logic, 2.f );
     auto c1 = new AICommandReloadScene( logic, 16.65f );
     auto c2 = new AICommandReloadScene( logic, 24.f );
 
