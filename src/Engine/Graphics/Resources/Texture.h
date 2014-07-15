@@ -18,18 +18,17 @@ protected:
 
 public:
 
-                            Texture         ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
-    virtual			        ~Texture	    () = 0;
+                                Texture         ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
+    virtual			            ~Texture	    () = 0;
 
-    virtual size_t          GetDataSize     () const = 0;
+    virtual size_t              GetDataSize     () const = 0;
 
-    virtual MemoryChunkConstPtr GetData         () = 0;
     virtual MemoryChunkConstPtr GetData         () const = 0;
 
-    DataBuffer::Semantic    GetSemantic     () const;
+    DataBuffer::Semantic        GetSemantic     () const;
 
-    void                    SetChanged      ( bool changed ) const;
-    bool                    Changed         () const;
+    void                        SetChanged      ( bool changed ) const;
+    bool                        Changed         () const;
 
 };
 

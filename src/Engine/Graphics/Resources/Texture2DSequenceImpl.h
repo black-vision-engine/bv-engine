@@ -16,17 +16,17 @@ private:
 
 public:
 
-                            Texture2DSequenceImpl   ( TextureFormat format, int width, int height );
-    virtual                 ~Texture2DSequenceImpl  ();
+                                Texture2DSequenceImpl   ( TextureFormat format, int width, int height );
+    virtual                     ~Texture2DSequenceImpl  ();
     
-    bool                    AddTextureWritingBits   ( MemoryChunkConstPtr data, TextureFormat format, int width, int height );
+    bool                        AddTextureWritingBits   ( MemoryChunkConstPtr data, TextureFormat format, int width, int height );
 
-    unsigned int            NumTextures             () const;
+    unsigned int                NumTextures             () const;
 
-    void                    SetActiveTexture        ( unsigned int txNum );
-    unsigned int            GetActiveTextureNum     () const;
+    void                        SetActiveTexture        ( unsigned int txNum );
+    unsigned int                GetActiveTextureNum     () const;
 
-    virtual size_t          GetDataSize             () const override;
+    virtual size_t              GetDataSize             () const override;
 
     virtual MemoryChunkConstPtr GetData                 () override;
     virtual MemoryChunkConstPtr GetData                 () const override;
