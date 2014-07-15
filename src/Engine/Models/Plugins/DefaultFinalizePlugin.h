@@ -14,7 +14,9 @@ class DefaultFinalizePlugin : public IFinalizePlugin
 private:
 
     IPluginPtr                      m_prevPlugin;
-    
+
+    std::string                     m_shadersDir;
+
     std::string                     m_name;
     static std::string              m_uid;
 
@@ -52,6 +54,8 @@ public:
 
     void                                        SetPrevPlugin               ( IPluginPtr plugin );
     void                                        SetName                     ( const std::string & name );
+
+    static std::string                          ShadersDir                  ();
 
 private:
 

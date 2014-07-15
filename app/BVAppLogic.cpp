@@ -378,6 +378,8 @@ const FrameStatsCalculator &     BVAppLogic::FrameStats () const
 //
 void                            BVAppLogic::ResetScene      ()
 {
+    UpdatersManager::Get().RemoveAllUpdaters();
+    m_globalTimeline = model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) );
     m_modelScene = nullptr;
     delete m_mockSceneEng;
 }
@@ -422,7 +424,7 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
             m_offscreenRenderLogic->EnableAuxRenderTarget( renderer );
             renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
             renderer->ClearBuffers();
-            renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 1.f ) );
+            renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
         }
 
         DrawNode( renderer, node );

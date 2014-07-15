@@ -10,6 +10,7 @@
 
 #include "NewModelTestNodes.h"
 
+#include "BVConfig.h"
 
 namespace bv {
 
@@ -464,8 +465,7 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
     //rut->AddChild( c1 );
 
     //return rut;
-    //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator, true );
-    return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+    //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator, false );
     //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, true );
     //return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
     //return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, true );

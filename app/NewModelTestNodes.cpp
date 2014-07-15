@@ -16,6 +16,8 @@
 #include "testai/TestAIManager.h"
 #include "Helpers/RectNodeBuilder.h"
 
+#include "BVConfig.h"
+
 namespace {
     std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR" };
     std::string GSimplePlugins1[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_TEXTURE" };
@@ -269,6 +271,16 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMan
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
 {
+        //Timeline stuff
+    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+
+    someTimelineWithEvents->AddChild( localTimeline );
+    timeEvaluator->AddChild( someTimelineWithEvents );
+
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins0, GSimplePlugins0 + 3 );
 
     if( useAlphaMask )
@@ -276,15 +288,16 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Tim
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
+    
     auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
     node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
 
     SetDefaultColorChangeAnim( node->GetPlugin( "solid color" ) );
 
-    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 15.0 ) );
     node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( localTimeline );
 
     SetDefaultTransformAnim( node->GetPlugin( "transform" ) );
+
 
     if( useAlphaMask )
     {
@@ -311,14 +324,14 @@ namespace
 model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
 {
     //Timeline stuff
-    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    //auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    //timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    //timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
     auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
 
-    someTimelineWithEvents->AddChild( localTimeline );
-    timeEvaluator->AddChild( someTimelineWithEvents );
+    //someTimelineWithEvents->AddChild( localTimeline );
+    timeEvaluator->AddChild( localTimeline );
 
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 3 );
@@ -342,6 +355,12 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 5.f, glm::vec3( 0.f, 0.f, -2.f ) );
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 6.f, glm::vec3( 0.f, 0.f, -5.f ) );
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 12.f, glm::vec3( 0.f, 0.f, 0.f ) );
+
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 1.f, 1.f ), 0.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 4.f, glm::vec3( 1.f, 1.f, 0.f ), 90.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 8.f, glm::vec3( 1.f, 0.f, 1.f ), 180.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 12.f, glm::vec3( 1.f, 0.f, 0.f ), 270.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 16.f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
 
     node->GetPlugin( "texture" )->GetParameter( "alpha" )->SetTimeEvaluator( timeEvaluator );
 

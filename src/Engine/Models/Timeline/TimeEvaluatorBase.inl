@@ -101,9 +101,11 @@ void                                        TimeEvaluatorBase< ITimeEvaluatorIfa
     SetGlobalTimeImpl( t );
     t = GetLocalTime();
 
-    for( auto c : m_children )
+    //for( auto c : m_children )
+    for( unsigned int i = 0; i < m_children.size(); ++i )
     {
-        c->SetGlobalTime( t );
+        auto& chuld = m_children[ i ];
+        chuld->SetGlobalTime( t );
     }
 }
 

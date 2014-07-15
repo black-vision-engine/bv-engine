@@ -7,7 +7,6 @@
 #include <sstream>
 #include <cassert>
 
-
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTexturesData.h"
 #include "Engine/Models/Plugins/Interfaces/IShaderChannel.h"
 
@@ -27,13 +26,14 @@ protected:
 
     std::shared_ptr< ShaderChannelIface >   m_channel;
     mutable std::string                     m_shaderSource;
+    std::string                             m_shadersDir;
 
     static std::vector< std::vector< std::string > >    ms_acceptedPluginLists;
     static std::vector< std::string >                   ms_baseShaderFileNames;
 
 public:
 
-    explicit                                            DefaultFinalizeShaderChannel    ( std::shared_ptr< ShaderChannelIface > channel );
+    explicit                                            DefaultFinalizeShaderChannel    ( std::shared_ptr< ShaderChannelIface > channel, const std::string & shadersDir );
                                                         ~DefaultFinalizeShaderChannel   ();
 
     virtual bool                                        IsReadOnly                      () const override;  //Should also be in IChannel
@@ -53,7 +53,7 @@ protected:
 
     static const std::vector< std::vector< std::string > > &    GetAcceptedPluginLists  ();
     static const std::vector< std::string > &                   GetBaseShaderFileNames  ();
-    static std::string                                          ShaderStorageDirectory  ();
+    const std::string &                                         ShaderStorageDirectory  () const;
 
 };
 

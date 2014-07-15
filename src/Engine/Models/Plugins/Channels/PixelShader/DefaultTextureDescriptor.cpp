@@ -241,10 +241,10 @@ void                        DefaultTextureDescriptor::SetDefaults     ( DefaultT
     desc->SetWidth( 0 );
     desc->SetHeight( 0 );
     desc->SetFormat( TextureFormat::F_A8R8G8B8 );
-    desc->SetWrappingModeX( TextureWrappingMode::TWM_REPEAT );
-    desc->SetWrappingModeY( TextureWrappingMode::TWM_REPEAT );
+    desc->SetWrappingModeX( TextureWrappingMode::TWM_CLAMP_BORDER );
+    desc->SetWrappingModeY( TextureWrappingMode::TWM_CLAMP_BORDER );
     desc->SetFilteringMode( TextureFilteringMode::TFM_LINEAR );
-    desc->SetBorderColor( glm::vec4( 0.f, 0.f, 0.f, 1.f ) );
+    desc->SetBorderColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 }
 
 // **************************

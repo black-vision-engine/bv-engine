@@ -6,6 +6,8 @@
 #include <fstream>
 #include <boost/algorithm/string.hpp>
 
+#include "BVConfig.h"
+
 
 namespace bv{
 	// for mantainging clear output
@@ -309,7 +311,7 @@ namespace bv{
 	model::BasicNodePtr TreeBuilder::BuildTree(string path){
 		
         assert(false);
-		auto root = std::make_shared< model::BasicNode >( "Nie ma nazwy na pustyni FIXME:", nullptr );
+        auto root = std::make_shared< model::BasicNode >( "Nie ma nazwy na pustyni FIXME:", nullptr );
 
 
 		BlackTree Tree;

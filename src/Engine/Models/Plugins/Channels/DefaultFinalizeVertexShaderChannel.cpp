@@ -10,7 +10,7 @@ PluginUIDHashMap    DefaultFinalizeVertexShaderChannel::ms_vertexShaderMapping;
 
 // *********************************
 //
-void     DefaultFinalizeVertexShaderChannel::InitializeVertexShaderMapping  ()
+void     DefaultFinalizeVertexShaderChannel::InitializeVertexShaderMapping  () const
 {
     if( ms_vertexShaderMapping.size() == 0 )
     {
@@ -28,8 +28,8 @@ void     DefaultFinalizeVertexShaderChannel::InitializeVertexShaderMapping  ()
 
 // *********************************
 //
-DefaultFinalizeVertexShaderChannel::DefaultFinalizeVertexShaderChannel      ( IVertexShaderChannelPtr channel )
-    : Parent( channel )
+DefaultFinalizeVertexShaderChannel::DefaultFinalizeVertexShaderChannel      ( IVertexShaderChannelPtr channel, const std::string & shadersDir )
+    : Parent( channel, shadersDir )
 {
     assert( channel != nullptr );
 

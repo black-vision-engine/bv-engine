@@ -4,6 +4,8 @@
 
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 
+#include "System/Environment.h"
+
 
 namespace bv { namespace model {
 
@@ -13,6 +15,7 @@ std::string DefaultFinalizePlugin::m_uid = "DEFAULT_FINALIZE";
 //
 DefaultFinalizePlugin::DefaultFinalizePlugin       ()
     : m_prevPlugin( nullptr )
+    , m_shadersDir( ShadersDir() )
     , m_name( "finalizer" )
     , m_finalizePSC( nullptr )
     , m_finalizeVSC( nullptr )
@@ -90,7 +93,7 @@ IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel
 
     if( m_finalizePSC == nullptr )
     {
-        m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( std::const_pointer_cast< IPixelShaderChannel >( m_prevPlugin->GetPixelShaderChannel() ) );
+        m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( std::const_pointer_cast< IPixelShaderChannel >( m_prevPlugin->GetPixelShaderChannel() ), m_shadersDir );
         m_finalizePSC->RegenerateShaderSource( PrevUIDS( 2 ) );
     }
 
@@ -112,7 +115,7 @@ IVertexShaderChannelConstPtr        DefaultFinalizePlugin::GetVertexShaderChanne
 
     if( m_finalizeVSC == nullptr )
     {
-        m_finalizeVSC = std::make_shared< DefaultFinalizeVertexShaderChannel >( std::const_pointer_cast< IVertexShaderChannel >( vsc ) );
+        m_finalizeVSC = std::make_shared< DefaultFinalizeVertexShaderChannel >( std::const_pointer_cast< IVertexShaderChannel >( vsc ), m_shadersDir );
         m_finalizeVSC->RegenerateShaderSource( PrevUIDS( 2 ) );
     }
 
@@ -131,7 +134,7 @@ IGeometryShaderChannelConstPtr           DefaultFinalizePlugin::GetGeometryShade
 
         if( prevChannel != nullptr )
         {
-            m_finalizeGSC = std::make_shared< DefaultFinalizeGeometryShaderChannel >( std::const_pointer_cast< IGeometryShaderChannel >( m_prevPlugin->GetGeometryShaderChannel() ) );
+            m_finalizeGSC = std::make_shared< DefaultFinalizeGeometryShaderChannel >( std::const_pointer_cast< IGeometryShaderChannel >( m_prevPlugin->GetGeometryShaderChannel() ), m_shadersDir );
             m_finalizeGSC->RegenerateShaderSource( PrevUIDS( 2 ) );
         }
     }
@@ -192,6 +195,19 @@ void                                DefaultFinalizePlugin::SetPrevPlugin        
 void                                DefaultFinalizePlugin::SetName                      ( const std::string & name )
 {
     m_name = name;
+}
+
+// *******************************
+//
+std::string                         DefaultFinalizePlugin::ShadersDir                  ()
+{
+#if defined(ENV32BIT)
+    return "../dep/Media/shaders/combinations/";
+#elif defined(ENV64BIT)
+    return "../dep/Media/shaders/combinations/";
+#else
+    return "";
+#endif
 }
 
 // *******************************

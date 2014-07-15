@@ -18,11 +18,11 @@ private:
 
 private:
 
-    static void     InitializePixelShaderMapping();
+    void     InitializePixelShaderMapping       () const;
 
 public:
 
-        DefaultFinalizePixelShaderChannel       ( IPixelShaderChannelPtr channel );
+        DefaultFinalizePixelShaderChannel       ( IPixelShaderChannelPtr channel, const std::string & shadersDir );
         ~DefaultFinalizePixelShaderChannel      ();
 
         virtual RendererContextConstPtr  GetRendererContext  () const override;
