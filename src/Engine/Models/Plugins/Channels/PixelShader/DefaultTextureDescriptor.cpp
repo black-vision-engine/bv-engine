@@ -44,7 +44,7 @@ DefaultTextureDescriptor::DefaultTextureDescriptor        ( ResourceHandleConstP
 
 // **************************
 //
-DefaultTextureDescriptor::~DefaultTextureDescriptor       ()
+DefaultTextureDescriptor::~DefaultTextureDescriptor                 ()
 {
 }
 

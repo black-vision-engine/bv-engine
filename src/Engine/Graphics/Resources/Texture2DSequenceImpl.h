@@ -28,7 +28,6 @@ public:
 
     virtual size_t              GetDataSize             () const override;
 
-    virtual MemoryChunkConstPtr GetData                 () override;
     virtual MemoryChunkConstPtr GetData                 () const override;
 
 };
