@@ -31,4 +31,7 @@ protected:
 
 };
 
+DEFINE_PTR_TYPE(Texture2D)
+DEFINE_CONST_PTR_TYPE(Texture2D)
+
 } //bv

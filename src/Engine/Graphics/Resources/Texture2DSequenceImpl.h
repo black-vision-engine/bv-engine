@@ -33,4 +33,7 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(Texture2DSequenceImpl)
+DEFINE_CONST_PTR_TYPE(Texture2DSequenceImpl)
+
 } //bv

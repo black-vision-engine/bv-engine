@@ -20,7 +20,7 @@ private:
 
 public:
 
-                Texture2DEffect     ( Texture2D * texture,
+                Texture2DEffect     ( Texture2DPtr texture,
                                       bool hasAlpha = false,
                                       TextureFilteringMode filteringMode = TextureFilteringMode::TFM_POINT,
                                       TextureWrappingMode wrapModeX = TextureWrappingMode::TWM_CLAMP_BORDER,
@@ -32,7 +32,7 @@ public:
 
 private:
 
-    PixelShader *       CreatePS        ( Texture2D * texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor, bool hasAlpha );
+    PixelShader *       CreatePS        ( Texture2DPtr texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor, bool hasAlpha );
     VertexShader *      CreateVS        ();
 
     TextureSampler *    CreateSampler   ( TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor );

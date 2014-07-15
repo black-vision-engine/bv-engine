@@ -176,11 +176,11 @@ void            PdrRenderTarget::AddColorAttachments( Renderer * renderer, const
 {
     for( unsigned int i = 0; i < rt->NumTargets(); ++i )
     {
-        Texture2D * tx = rt->ColorTexture( i );
-        assert( !renderer->IsRegistered( tx ) );
+        Texture2DPtr tx = rt->ColorTexture( i );
+        assert( !renderer->IsRegistered( tx.get() ) );
 
-        PdrTexture2D * pdrTx = PdrTexture2D::Create( tx );
-        renderer->RegisterTexture2D( tx, pdrTx );
+        PdrTexture2D * pdrTx = PdrTexture2D::Create( tx.get() );
+        renderer->RegisterTexture2D( tx.get(), pdrTx );
 
         m_textures[ i ] = pdrTx->GetTextureID();
         m_drawBuffers[ i ] = GL_COLOR_ATTACHMENT0 + i;

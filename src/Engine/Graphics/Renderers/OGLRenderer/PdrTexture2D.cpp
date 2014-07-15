@@ -75,8 +75,10 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
 void    PdrTexture2D::Deinitialize    ()
 {
     if( m_textureID != 0 )
+    {
         glDeleteTextures( 1, &m_textureID );
-    
+    }
+
     delete m_pboMem;
     m_pboMem = nullptr;
 }

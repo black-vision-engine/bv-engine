@@ -21,7 +21,7 @@ public:
 
 private:
 
-    typedef std::vector< Texture2D * > TexturesVec;
+    typedef std::vector< Texture2DPtr > TexturesVec;
 
 protected:
  
@@ -36,8 +36,8 @@ protected:
 
 public:
 
-            RenderTarget    ( const std::vector< TextureFormat > & formats, unsigned int w, unsigned int h, bool hasDepthBuffer, bool hasMipmaps = false, RenderTarget::RTSemantic semantic = RenderTarget::RTSemantic::S_DRAW_ONLY );
-    virtual ~RenderTarget   ();
+                RenderTarget    ( const std::vector< TextureFormat > & formats, unsigned int w, unsigned int h, bool hasDepthBuffer, bool hasMipmaps = false, RenderTarget::RTSemantic semantic = RenderTarget::RTSemantic::S_DRAW_ONLY );
+    virtual     ~RenderTarget   ();
 
     RenderTarget::RTSemantic    Semantic        () const;
 
@@ -47,7 +47,7 @@ public:
     unsigned int                Width           () const;
     unsigned int                Height          () const;
 
-    Texture2D *                 ColorTexture    ( int i ) const;
+    Texture2DPtr                ColorTexture    ( int i ) const;
 
     bool                        HasMipmaps      () const;
     bool                        HasDepthBuffer  () const;

@@ -19,10 +19,6 @@ Texture2DSequenceImpl::Texture2DSequenceImpl                        ( TextureFor
 //  
 Texture2DSequenceImpl::~Texture2DSequenceImpl                   ()
 {
-    //for( auto rawMem : m_data )
-    //{
-    //    delete[] rawMem;
-    //}
 }
 
 // *********************************

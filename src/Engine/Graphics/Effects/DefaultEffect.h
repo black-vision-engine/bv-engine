@@ -3,6 +3,9 @@
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 #include "Engine/Models/Interfaces/ITexturesData.h"
 
+#include "Engine/Graphics/Resources/Texture2DImpl.h"
+#include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
+
 
 namespace bv {
 
@@ -10,9 +13,6 @@ class IShaderDataSource;
 class ITextureParams;
 class ITextureDescriptor;
 class IAnimationDescriptor;
-
-class Texture2DImpl;
-class Texture2DSequenceImpl;
 
 
 class DefaultEffect : public RenderableEffect
@@ -36,8 +36,8 @@ private:
 
     TextureSampler *        CreateSampler           ( const ITextureParams * txParams, unsigned int samplerNum ) const;
 
-    Texture2DImpl *         CreateTexture           ( const ITextureDescriptor * txParams ) const;
-    Texture2DSequenceImpl * CreateSequence          ( const IAnimationDescriptor * animParams ) const;
+    Texture2DImplPtr            CreateTexture       ( const ITextureDescriptor * txParams ) const;
+    Texture2DSequenceImplPtr    CreateSequence      ( const IAnimationDescriptor * animParams ) const;
 
 };
 

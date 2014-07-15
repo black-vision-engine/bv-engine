@@ -19,7 +19,7 @@ class ShaderParameters
 private:
 
     typedef std::vector< GenericShaderParam * > TShaderParamVec;
-    typedef std::vector< Texture2D * >          TTexture2DVec; //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
+    typedef std::vector< Texture2DPtr >         TTexture2DVec; //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
 
 private:
 
@@ -39,10 +39,10 @@ public:
     inline const GenericShaderParam *       GetParam                        ( unsigned int idx ) const;
     inline const GenericShaderParam *       GetParam                        ( const std::string & name ) const;
 
-    void                                    AddTexture                      ( Texture2D * texture );
+    void                                    AddTexture                      ( Texture2DPtr texture );
     inline unsigned int                     NumTextures                     () const;
 
-    inline Texture2D *                      GetTexture                      ( unsigned int idx ); //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
+    inline Texture2DPtr                     GetTexture                      ( unsigned int idx ); //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
 
 };
 

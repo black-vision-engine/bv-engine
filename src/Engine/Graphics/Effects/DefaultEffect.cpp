@@ -189,14 +189,14 @@ TextureSampler *        DefaultEffect::CreateSampler   ( const ITextureParams * 
 
 // *********************************
 //
-Texture2DImpl *         DefaultEffect::CreateTexture       ( const ITextureDescriptor * txParams ) const
+Texture2DImplPtr         DefaultEffect::CreateTexture       ( const ITextureDescriptor * txParams ) const
 {
     auto format     = txParams->GetFormat();
     auto width      = txParams->GetWidth();
     auto height     = txParams->GetHeight();
     auto semantic   = txParams->GetSemantic();
 
-    auto texture = new Texture2DImpl( format, width, height, semantic );
+    auto texture = std::make_shared< Texture2DImpl >( format, width, height, semantic );
     texture->SetRawData( txParams->GetBits(), format, width, height );
 
     return texture;
@@ -204,13 +204,13 @@ Texture2DImpl *         DefaultEffect::CreateTexture       ( const ITextureDescr
 
 // *********************************
 //
-Texture2DSequenceImpl * DefaultEffect::CreateSequence       ( const IAnimationDescriptor * animParams ) const
+Texture2DSequenceImplPtr DefaultEffect::CreateSequence       ( const IAnimationDescriptor * animParams ) const
 {
     auto format     = animParams->GetFormat();
     auto width      = animParams->GetWidth();
     auto height     = animParams->GetHeight();
 
-    auto sequence   = new Texture2DSequenceImpl( format, width, height );
+    auto sequence   = std::make_shared< Texture2DSequenceImpl >( format, width, height );
             
     for( unsigned int i = 0; i < animParams->NumTextures(); ++i )
     {

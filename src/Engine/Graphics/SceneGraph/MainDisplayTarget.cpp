@@ -61,7 +61,7 @@ Camera *        MainDisplayTarget::CreateDisplayCamera          ()
 
 // **************************
 //
-TriangleStrip * MainDisplayTarget::CreateDisplayRect            ( Texture2D * texture )
+TriangleStrip * MainDisplayTarget::CreateDisplayRect            ( Texture2DPtr texture )
 {
     auto rad = CreateTexDispRectArrayData();
     auto effect = CreateEffectBlitTexture( texture );
@@ -71,7 +71,7 @@ TriangleStrip * MainDisplayTarget::CreateDisplayRect            ( Texture2D * te
 
 // **************************
 //
-TriangleStrip * MainDisplayTarget::CreateAuxRect               ( Texture2D * texture )
+TriangleStrip * MainDisplayTarget::CreateAuxRect               ( Texture2DPtr texture )
 {
     auto rad = CreateTexDispRectArrayData();
     auto effect = CreateEffectOverrideAlpha( texture );
@@ -117,14 +117,14 @@ RenderableArrayDataArraysSingleVertexBuffer * MainDisplayTarget::CreateTriStripA
 
 // **************************
 //
-Texture2DEffect *   MainDisplayTarget::CreateEffectBlitTexture     ( Texture2D * texture )
+Texture2DEffect *   MainDisplayTarget::CreateEffectBlitTexture     ( Texture2DPtr texture )
 {
     return new Texture2DEffect( texture );
 }
 
 // **************************
 //
-Texture2DEffect *   MainDisplayTarget::CreateEffectOverrideAlpha   ( Texture2D * texture )
+Texture2DEffect *   MainDisplayTarget::CreateEffectOverrideAlpha   ( Texture2DPtr texture )
 {
     return new Texture2DEffect( texture, true );
 }

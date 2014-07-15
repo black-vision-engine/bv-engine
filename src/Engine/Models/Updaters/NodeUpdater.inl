@@ -204,7 +204,7 @@ inline void    NodeUpdater::UpdateTexturesData  ()
         unsigned int j = 0;
         for( unsigned int i = 0; i < textures.size(); ++i, ++j )
         {
-            auto tex2D      = static_cast< Texture2DImpl * >( shaderParams->GetTexture( j ) );
+            auto tex2D      = std::static_pointer_cast< Texture2DImpl >( shaderParams->GetTexture( j ) );
             auto texDesc    = textures[ i ];
 
             if ( texDesc->BitsChanged() )
@@ -222,7 +222,7 @@ inline void    NodeUpdater::UpdateTexturesData  ()
 
         for( unsigned int i = 0; i < animations.size(); ++i, ++j )
         {
-            auto tex2DSeq   = static_cast< Texture2DSequenceImpl * >( shaderParams->GetTexture( j ) );
+            auto tex2DSeq   = std::static_pointer_cast< Texture2DSequenceImpl >( shaderParams->GetTexture( j ) );
             auto animDesc   = animations[ i ];
 
             if ( animDesc->CurrentFrame() != animDesc->PreviousFrame() )

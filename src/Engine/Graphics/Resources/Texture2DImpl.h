@@ -31,4 +31,7 @@ private:
 
 };
 
+DEFINE_PTR_TYPE(Texture2DImpl)
+DEFINE_CONST_PTR_TYPE(Texture2DImpl)
+
 } //bv

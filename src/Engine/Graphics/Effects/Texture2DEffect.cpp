@@ -15,7 +15,7 @@ namespace bv {
 
 // ****************************
 //
-Texture2DEffect::Texture2DEffect    ( Texture2D * texture, bool hasAlpha, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor )
+Texture2DEffect::Texture2DEffect    ( Texture2DPtr texture, bool hasAlpha, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor )
     : m_alphaParam( nullptr )
 {
     auto ps = CreatePS( texture, filteringMode, wrapModeX, wrapModeY, borderColor, hasAlpha );
@@ -62,7 +62,7 @@ void    Texture2DEffect::SetAlphaValModel   ( const IValue * val )
 
 // ****************************
 //
-PixelShader *   Texture2DEffect::CreatePS   ( Texture2D * texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor, bool hasAlpha )
+PixelShader *   Texture2DEffect::CreatePS   ( Texture2DPtr texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor, bool hasAlpha )
 {
     assert( texture != nullptr );
 

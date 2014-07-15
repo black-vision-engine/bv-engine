@@ -25,7 +25,7 @@ RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, unsig
     {
         MemoryChunkPtr emptyChunk = MemoryChunkPtr( new MemoryChunk( nullptr, 0 ) );
 
-        auto tx = new Texture2DImpl( formats[ i ], w, h, DataBuffer::Semantic::S_TEXTURE_STATIC );
+        auto tx = std::make_shared< Texture2DImpl >( formats[ i ], w, h, DataBuffer::Semantic::S_TEXTURE_STATIC );
         tx->SetRawData( emptyChunk, formats[ i ], w, h ); //FIXME: empty pointer (this memory was never used as it is supposed only to serve as a key for Renderer).
         tx->SetChanged( false );
         m_ColorTextures.push_back( tx );    
@@ -38,11 +38,6 @@ RenderTarget::~RenderTarget ()
 {
     //FIXME: unbind all resources associated with this one
     //Renderer::UnbindAll(this);
-
-    for( auto ptrTx : m_ColorTextures )
-    {
-        delete ptrTx;
-    }
 }
 
 // *********************************
@@ -82,7 +77,7 @@ unsigned int RenderTarget::Height () const
 
 // *********************************
 //
-Texture2D * RenderTarget::ColorTexture ( int i ) const
+Texture2DPtr RenderTarget::ColorTexture ( int i ) const
 {
     return m_ColorTextures[ i ];
 }
