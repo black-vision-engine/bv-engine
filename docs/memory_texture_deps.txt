@@ -1,0 +1,15 @@
+Pamięć w teksturach jest jawnie przechowywana w dwóch klasach:
+
+Texture2DImpl
+Texture2DSequenceImpl
+
+Żadna z nich nie powinna być właścicielem pamięci, którą trzyma. Allocate Memory nie powinno istnieć w teksturze - tekstura
+to nie manager pamięci, więc jeśli nie jest właścicielem pamięci, którą przechowuje, to po co ma sztucznie udostępniać
+metody do tworzenia chunków, które potem przejmuje ktoś inny.
+
+Miejsca, w których pamięć jest przekazywana do tekstur:
+
+1. Podczas ładowania w pluginie (Texture, Animation, Text)
+  a dalej to trafia do TextureManagera::LoadTexture
+2. Podczas updatera, jeśli coś się zmieniło w pamięci (jakoś została podmieniona) - BitsChanged w deskryptorze - sprawdzić NodeUpdater::UpdateTexturesData  ()
+3. Podczas tworzenia textury w Effect2D
