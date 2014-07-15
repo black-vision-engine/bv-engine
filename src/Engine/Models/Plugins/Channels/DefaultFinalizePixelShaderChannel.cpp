@@ -10,7 +10,7 @@ PluginUIDHashMap    DefaultFinalizePixelShaderChannel::ms_pixelShaderMapping;
 
 // *********************************
 //
-void     DefaultFinalizePixelShaderChannel::InitializePixelShaderMapping()
+void     DefaultFinalizePixelShaderChannel::InitializePixelShaderMapping() const
 {
     if( ms_pixelShaderMapping.size() == 0 )
     {
@@ -28,8 +28,8 @@ void     DefaultFinalizePixelShaderChannel::InitializePixelShaderMapping()
 
 // *********************************
 //
-DefaultFinalizePixelShaderChannel::DefaultFinalizePixelShaderChannel    ( IPixelShaderChannelPtr channel )
-    : Parent( channel )
+DefaultFinalizePixelShaderChannel::DefaultFinalizePixelShaderChannel    ( IPixelShaderChannelPtr channel, const std::string & shadersDir )
+    : Parent( channel, shadersDir )
 {
     assert( channel != nullptr );
 

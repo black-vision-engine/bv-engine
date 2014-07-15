@@ -16,6 +16,8 @@
 #include "testai/TestAIManager.h"
 #include "Helpers/RectNodeBuilder.h"
 
+#include "BVConfig.h"
+
 namespace {
     std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR" };
     std::string GSimplePlugins1[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_TEXTURE" };

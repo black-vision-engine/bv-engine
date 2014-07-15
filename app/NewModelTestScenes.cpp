@@ -10,6 +10,7 @@
 
 #include "NewModelTestNodes.h"
 
+#include "BVConfig.h"
 
 namespace bv {
 

@@ -45,7 +45,7 @@ class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicN
 private:
 
     std::string                     m_name;
-
+    
     const PluginsManager *          m_pluginsManager;
     bool                            m_visible;
 
