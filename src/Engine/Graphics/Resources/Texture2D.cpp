@@ -43,7 +43,7 @@ unsigned int    Texture2D::RawFrameSize () const
 //
 unsigned int    Texture2D::RawFrameSize ( TextureFormat format, unsigned int width, unsigned int height )
 {
-    GetPixelSize( format ) * width * height;
+    return GetPixelSize( format ) * width * height;
 }
 
 // *********************************

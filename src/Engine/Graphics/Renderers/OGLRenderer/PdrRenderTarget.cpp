@@ -110,7 +110,6 @@ void            PdrRenderTarget::Disable            ( Renderer * renderer )
 // FIXME: dodac streaming flag do bufora (dla multi PBO)
 void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer * renderer, PdrPBOMemTransfer * pboMem, Texture2D*& outputTex )
 {
-    assert( false );
     assert( i < m_numTargets );
 
     auto format = m_textureFormats[ i ];
@@ -119,7 +118,7 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
     if( outputTex == nullptr )
     {
         assert( buffer == nullptr );
-        buffer->Allocate( Texture2D::RawFrameSize( format, m_width, m_height ) );
+        buffer = MemoryChunk::Create( Texture2D::RawFrameSize( format, m_width, m_height ) );
 
         auto tx = new Texture2DImpl( format, m_width, m_height ); 
         tx->SetRawData( buffer, format, m_width, m_height );
@@ -138,11 +137,12 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
                 , m_height );
 
         delete outputTex;
-    
+
+        assert( buffer->Size() != Texture2D::RawFrameSize( format, m_width, m_height ) ); //FIXME: not safe - chances are that multiple formats may have exactly the same size (in which case mem buffer should be simply reused)
         buffer->Allocate( Texture2D::RawFrameSize( format, m_width, m_height ) );
 
         auto tx = new Texture2DImpl( format, m_width, m_height ); 
-        tx->AllocateMemory();
+        tx->SetRawData( buffer, format, m_width, m_height );
         outputTex = tx;
     }
 
@@ -153,7 +153,7 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
     auto type   = ConstantsMapper::GLConstantTextureType( format );
 
     void * data = pboMem->LockRenderTarget( m_drawBuffers[ i ], m_width, m_height, fmt, type );
-    memcpy( const_cast< char * >( outputTex->GetData()->Get() ), data, outputTex->RawFrameSize() ); // FIXME: remove const_cast
+    memcpy( buffer->GetWritable(), data, outputTex->RawFrameSize() );
     pboMem->UnlockRenderTarget();
 
     Disable( renderer );
@@ -174,7 +174,7 @@ GLuint          PdrRenderTarget::GetPrevTexture     () const
 //
 void            PdrRenderTarget::AddColorAttachments( Renderer * renderer, const RenderTarget * rt )
 {
-    for( int i = 0; i < rt->NumTargets(); ++i )
+    for( unsigned int i = 0; i < rt->NumTargets(); ++i )
     {
         Texture2D * tx = rt->ColorTexture( i );
         assert( !renderer->IsRegistered( tx ) );

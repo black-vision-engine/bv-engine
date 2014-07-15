@@ -7,6 +7,11 @@
 namespace bv
 {
 
+class MemoryChunk;
+
+DEFINE_PTR_TYPE( MemoryChunk )
+DEFINE_CONST_PTR_TYPE( MemoryChunk )
+
 class MemoryChunk
 {
 private:
@@ -16,25 +21,23 @@ private:
 
 public:
 
-    explicit        MemoryChunk     ( char * mem, unsigned int size );
-                    ~MemoryChunk    ();
+    explicit                MemoryChunk     ( char * mem, unsigned int size );
+                            ~MemoryChunk    ();
 
-    void            SetDataChunk    ( char * data, unsigned int size );
-    void            Allocate        ( unsigned int size );
+    void                    SetDataChunk    ( char * data, unsigned int size );
+    void                    Allocate        ( unsigned int size );
 
-    unsigned int    Size            () const;
+    unsigned int            Size            () const;
 
-    const char *    Get             () const;
-    char *          GetWritable     ();
+    const char *            Get             () const;
+    char *                  GetWritable     ();
+
+    static  MemoryChunkPtr  Create          ( unsigned int size );
 
 private:
 
     void            DeleteMemory    ();
 
 };
-
-DEFINE_PTR_TYPE( MemoryChunk )
-DEFINE_CONST_PTR_TYPE( MemoryChunk )
-
 
 } // bv

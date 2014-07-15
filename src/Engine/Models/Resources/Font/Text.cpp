@@ -57,7 +57,7 @@ TextAtlas::TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPerPixel,
     , m_glyphHeight( gh )
 {
     auto size   = w * h * bitsPerPixel;
-    auto data  = std::make_shared< MemoryChunk >( new char[ size ] );
+    auto data  = std::make_shared< MemoryChunk >( new char[ size ], size );
     m_textureHandle = ResourceHandlePtr( new ResourceHandle( data, size, new TextureExtraData( w, h, bitsPerPixel, TextureFormat::F_A8R8G8B8, TextureType::T_2D ) ) );
 }
 

@@ -62,9 +62,19 @@ char *          MemoryChunk::GetWritable    ()
 
 // ****************************
 //
+MemoryChunkPtr  MemoryChunk::Create         ( unsigned int size )
+{
+    auto mc = std::make_shared< MemoryChunk >( nullptr, 0 );
+    mc->Allocate( size );
+
+    return mc;
+}
+
+// ****************************
+//
 void            MemoryChunk::DeleteMemory   ()
 {
-    delete m_memory;
+    delete [] m_memory;
     m_memory = nullptr;
 }
 
