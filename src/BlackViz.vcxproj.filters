@@ -165,7 +165,6 @@
     <ClCompile Include="Engine\Graphics\Resources\Texture2DImpl.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\Texture2DSequenceImpl.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultTexturePlugin.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultaAnimationDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.cpp" />
@@ -200,6 +199,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\ShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.cpp" />
     <ClCompile Include="Core\MemoryChunk.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />

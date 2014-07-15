@@ -246,7 +246,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultFinalizeVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultPixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultaAnimationDescriptor.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.cpp" />

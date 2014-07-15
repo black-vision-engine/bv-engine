@@ -33,10 +33,6 @@ DefaultAnimationDescriptor::DefaultAnimationDescriptor        ( const std::strin
 //
 DefaultAnimationDescriptor::~DefaultAnimationDescriptor       ()
 {
-    //for( auto data : m_frames )
-    //{
-    //    delete[] data;
-    //}
 }
 
 // *******************************
