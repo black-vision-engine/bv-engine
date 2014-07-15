@@ -49,7 +49,7 @@ Texture2D * TextureManager::LoadTexture( const model::ResourceHandle * resHandle
 
     //FIXME: add asserts for invalid dimensions (i.e. too large)
     auto newTex = new bv::Texture2DImpl( format, width, height );
-    newTex->WriteBits( resHandle->GetData(), format, width, height );
+    newTex->SetRawData( resHandle->GetData(), format, width, height );
     m_txMap[ newTex ] = newTex;
 
     return newTex;

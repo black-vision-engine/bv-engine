@@ -23,10 +23,7 @@ public:
 
     virtual MemoryChunkConstPtr GetData         () const override;
 
-    bool                        WriteBits       ( MemoryChunkConstPtr, TextureFormat format, unsigned int width, unsigned int height );
-
-    bool                        AllocateMemory  ( TextureFormat format, unsigned int width, unsigned int height );
-    bool                        AllocateMemory  ();
+    bool                        SetRawData      ( MemoryChunkConstPtr data, TextureFormat format, unsigned int width, unsigned int height );
 
 private:
 

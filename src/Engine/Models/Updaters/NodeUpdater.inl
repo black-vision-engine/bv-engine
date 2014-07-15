@@ -214,7 +214,7 @@ inline void    NodeUpdater::UpdateTexturesData  ()
                 auto height = texDesc->GetHeight();
                 auto data   = texDesc->GetBits();
 
-                tex2D->WriteBits( data, format, width, height );
+                tex2D->SetRawData( data, format, width, height );
 
                 texDesc->ResetBitsChanged();
             }

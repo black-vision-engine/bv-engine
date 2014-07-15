@@ -12,14 +12,15 @@ class Texture2DSequenceImpl : public Texture2D
 private:
 
     std::vector< MemoryChunkConstPtr >      m_data;
+
     unsigned int                            m_activeTexture;
 
 public:
 
-                                Texture2DSequenceImpl   ( TextureFormat format, int width, int height );
+                                Texture2DSequenceImpl   ( TextureFormat format, unsigned int width, unsigned int height );
     virtual                     ~Texture2DSequenceImpl  ();
     
-    bool                        AddTextureWritingBits   ( MemoryChunkConstPtr data, TextureFormat format, int width, int height );
+    bool                        AddTextureSettingRawData( MemoryChunkConstPtr data, TextureFormat format, unsigned int width, unsigned int height );
 
     unsigned int                NumTextures             () const;
 
