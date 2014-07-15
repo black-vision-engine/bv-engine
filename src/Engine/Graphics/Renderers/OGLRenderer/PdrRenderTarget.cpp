@@ -108,7 +108,7 @@ void            PdrRenderTarget::Disable            ( Renderer * renderer )
 
 // ****************************
 // FIXME: dodac streaming flag do bufora (dla multi PBO)
-void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer * renderer, PdrPBOMemTransfer * pboMem, Texture2D*& outputTex )
+void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer * renderer, PdrPBOMemTransfer * pboMem, Texture2DPtr & outputTex )
 {
     assert( i < m_numTargets );
 
@@ -120,7 +120,7 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
         assert( buffer == nullptr );
         buffer = MemoryChunk::Create( Texture2D::RawFrameSize( format, m_width, m_height ) );
 
-        auto tx = new Texture2DImpl( format, m_width, m_height ); 
+        auto tx = std::make_shared< Texture2DImpl >( format, m_width, m_height ); 
         tx->SetRawData( buffer, format, m_width, m_height );
         outputTex = tx;
     }
@@ -136,12 +136,10 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
                 , m_width
                 , m_height );
 
-        delete outputTex;
-
         assert( buffer->Size() != Texture2D::RawFrameSize( format, m_width, m_height ) ); //FIXME: not safe - chances are that multiple formats may have exactly the same size (in which case mem buffer should be simply reused)
         buffer->Allocate( Texture2D::RawFrameSize( format, m_width, m_height ) );
 
-        auto tx = new Texture2DImpl( format, m_width, m_height ); 
+        auto tx = std::make_shared< Texture2DImpl >( format, m_width, m_height ); 
         tx->SetRawData( buffer, format, m_width, m_height );
         outputTex = tx;
     }

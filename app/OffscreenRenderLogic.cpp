@@ -63,11 +63,6 @@ OffscreenRenderLogic::~OffscreenRenderLogic  ()
     delete m_auxQuad;
 
     delete m_displayCamera;
-
-    for( auto tx : m_readbackTextures )
-    {
-        delete tx;
-    }
 }
 
 // **************************
@@ -88,7 +83,7 @@ void                OffscreenRenderLogic::EnableDisplayRenderTarget ( Renderer *
             DisableAuxRenderTarget( renderer );
         }
 
-        renderer->Enable(CurDisplayRenderTarget() );
+        renderer->Enable( CurDisplayRenderTarget() );
 
         m_displayRTEnabled = true;
     }
@@ -189,7 +184,7 @@ unsigned int        OffscreenRenderLogic::NumReadBuffers            () const
 
 // **************************
 //
-const Texture2D *   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer * renderer, unsigned int bufNum )
+Texture2DConstPtr   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer * renderer, unsigned int bufNum )
 {
     assert( bufNum < m_readbackTextures.size() );
 

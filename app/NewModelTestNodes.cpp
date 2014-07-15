@@ -92,7 +92,7 @@ namespace {
         SetParameterTranslation( param, 9.f, glm::vec3( 0.f, -1.f, 0.f ) );
         SetParameterTranslation( param, 12.f, glm::vec3( 0.f, 0.f, 0.f ) );
 
-        SetParameterCenterMass( param, 0.f, glm::vec3( 0.53f, 0.59f, 0.f ) );
+        SetParameterCenterMass( param, 0.f, glm::vec3( 0.48f, 0.59f, 0.f ) );
 
         SetParameterRotation( param, 15.f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
         SetParameterRotation( param, 23.f, glm::vec3( 0.f, 0.f, 1.f ), 360.f);
@@ -101,7 +101,7 @@ namespace {
         SetParameterScale( param, 0.f, glm::vec3( 1.f, 1.f, 1.f ) );
         SetParameterScale( param, 12.f, glm::vec3( 1.f, 1.f, 1.f ) );
         SetParameterScale( param, 15.f, glm::vec3( 1.f/68.f, 1./68.f, 1.f ) );
-        SetParameterScale( param, 25.f, glm::vec3( 1.f/40.f, 1.f/40.f, 1.f ) );
+        SetParameterScale( param, 25.f, glm::vec3( 1.f/32.f, 1.f/32.f, 1.f ) );
     }
 
 } //anonymous

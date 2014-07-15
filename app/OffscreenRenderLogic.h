@@ -4,11 +4,12 @@
 
 #include "Engine/Types/Enums.h"
 
+#include "Engine/Graphics/Resources/Texture2D.h"
+
 
 namespace bv {
 
 class RenderTarget;
-class Texture2D;
 class Renderer;
 class Camera;
 class TriangleStrip;
@@ -30,7 +31,7 @@ private:
 
     Texture2DEffect *   m_auxTexture2DEffect;
 
-    std::vector< Texture2D * >  m_readbackTextures;
+    std::vector< Texture2DPtr > m_readbackTextures;
 
     Camera *            m_displayCamera;
     Camera *            m_rendererCamera;
@@ -63,7 +64,7 @@ public:
 
     unsigned int        NumReadBuffers              () const;
 
-    const Texture2D *   ReadDisplayTarget           ( Renderer * renderer, unsigned int bufNum );
+    Texture2DConstPtr   ReadDisplayTarget           ( Renderer * renderer, unsigned int bufNum );
 
 private:
 

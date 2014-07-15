@@ -387,7 +387,7 @@ void    Renderer::Disable             ( const RenderTarget * rt )
 
 // *********************************
 //
-void    Renderer::ReadColorTexture    ( unsigned int i, const RenderTarget * rt, Texture2D *& outputTex )
+void    Renderer::ReadColorTexture    ( unsigned int i, const RenderTarget * rt, Texture2DPtr & outputTex )
 {
     PdrRenderTarget * pdrRt = GetPdrRenderTarget( rt );
 

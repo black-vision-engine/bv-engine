@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <hash_map>
 
-#include "Engine/Graphics/Resources/Texture.h"
+#include "Engine/Graphics/Resources/Texture2D.h"
 
 #include "Engine/Graphics/Renderers/WGLRenderer/WGLRendererInput.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/GLRendererData.h"
@@ -21,7 +21,6 @@ class PixelShader;
 class VertexShader;
 class GeometryShader;
 class RenderablePass;
-class Texture2D;
 class RenderTarget;
 
 class VertexBuffer;
@@ -140,7 +139,7 @@ public:
     void    Enable              ( const RenderTarget * rt );
     void    Disable             ( const RenderTarget * rt );
 
-    void    ReadColorTexture    ( unsigned int i, const RenderTarget * rt, Texture2D *& outputTex );
+    void    ReadColorTexture    ( unsigned int i, const RenderTarget * rt, Texture2DPtr & outputTex );
 
 public:
 

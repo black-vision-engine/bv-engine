@@ -47,7 +47,7 @@ public:
     void            Enable              ( Renderer * renderer );
     void            Disable             ( Renderer * renderer );
 
-    void            ReadColorTexture    ( unsigned int i, Renderer * renderer, PdrPBOMemTransfer * pboMem, Texture2D *& outputTex );
+    void            ReadColorTexture    ( unsigned int i, Renderer * renderer, PdrPBOMemTransfer * pboMem, Texture2DPtr & outputTex );
 
 private:
 
