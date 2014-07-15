@@ -376,8 +376,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
         SetDefaultTransformAlphaMaskTex( node->GetPlugin( "alpha_mask" ) );
     }
 
-    //auto ai = TestAIManager::Instance().GetAIPreset( 2 );
-    //ai->SetTimeline( someTimelineWithEvents );
+    auto ai = TestAIManager::Instance().GetAIPreset( 2 );
+    ai->SetTimeline( someTimelineWithEvents );
 
     return node;    
 }
