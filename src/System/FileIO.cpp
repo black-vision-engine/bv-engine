@@ -159,7 +159,7 @@ bool        FileImpl::Exists      ( const std::string & fileName )
 //
 FileImpl *  FileImpl::Open        ( const std::string & fileName, File::OpenMode openMode )
 {
-    FileImpl* impl = new FileImpl( fileName );
+    FileImpl * impl = new FileImpl( fileName );
 
     if( openMode == File::FOMReadOnly )
         impl->m_fileHandle = new std::fstream( fileName, std::ios::in | std::ios::binary );
