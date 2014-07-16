@@ -38,7 +38,6 @@ PdrRenderTarget::PdrRenderTarget     ( Renderer * renderer, const RenderTarget *
     {
         auto tx = rt->ColorTexture( i );
         m_textureFormats.push_back( tx->GetFormat() );
-        m_readbackBuffers[ i ] = nullptr;
     }
 
     for( unsigned int i = 0 ; i < 4; ++i )
@@ -112,21 +111,27 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
 {
     assert( i < m_numTargets );
 
+    auto & txBufMap = m_readbackBuffers[ i ];
+
     auto format = m_textureFormats[ i ];
-    MemoryChunkPtr & buffer = m_readbackBuffers[ i ];
+    MemoryChunkPtr buffer = nullptr;
 
     if( outputTex == nullptr )
     {
-        assert( buffer == nullptr );
         buffer = MemoryChunk::Create( Texture2D::RawFrameSize( format, m_width, m_height ) );
 
-        auto tx = Texture2DCache::CreateTexture( format, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC, buffer );
-        outputTex = tx;
+        outputTex = Texture2DCache::CreateTexture( format, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC, buffer );
+
+        txBufMap[ outputTex.get() ] = buffer;
     }
+
+    assert( txBufMap.find( outputTex.get() ) != txBufMap.end() );
+
+    buffer = txBufMap[ outputTex.get() ];
 
     if( outputTex->GetFormat() != format || outputTex->GetWidth() != m_width || outputTex->GetHeight() != m_height )
     {
-        printf( "Reading %d texture from render target with incompatibile texture (%d, %d, %d) -> expected (%d, %d, %d)\n"
+        printf( "Reading %d texture from render target with incompatibile texture (%d, %d, %d) -> expected (%d, %d, %d) - ASSERT\n"
                 , i
                 , outputTex->GetFormat()
                 , outputTex->GetWidth()
@@ -135,11 +140,14 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
                 , m_width
                 , m_height );
 
+        assert( false ); //FIXME: disallowed in current implementation
+#if 0        
         assert( buffer->Size() != Texture2D::RawFrameSize( format, m_width, m_height ) ); //FIXME: not safe - chances are that multiple formats may have exactly the same size (in which case mem buffer should be simply reused)
         buffer->Allocate( Texture2D::RawFrameSize( format, m_width, m_height ) );
 
         auto tx = Texture2DCache::CreateTexture( format, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC, buffer );
         outputTex = tx;
+#endif
     }
 
     //double readStart = GTimer.CurElapsed();

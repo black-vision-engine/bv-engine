@@ -90,7 +90,7 @@ BVAppLogic::BVAppLogic              ()
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
     GTimer.StartTimer();
 
-    m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight() ); 
+    m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffers() ); 
 }
 
 // *********************************
@@ -302,7 +302,6 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
     static int nFrames = 1;
     static int nPasses = 0;
     static int nReadbackFrame = 0;
-
 
     double readbackStart = GTimer.CurElapsed();
     auto frame = m_offscreenRenderLogic->ReadDisplayTarget( renderer, nReadbackFrame );

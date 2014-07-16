@@ -41,7 +41,7 @@ private:
 
 public:
 
-                        OffscreenRenderLogic        ( unsigned int width, unsigned int height, unsigned int numReadBuffers = 2, Camera * camera = nullptr, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
+                        OffscreenRenderLogic        ( unsigned int width, unsigned int height, unsigned int numReadBuffers, Camera * camera = nullptr, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
                         ~OffscreenRenderLogic       ();
 
     void                SetRendererCamera           ( Camera * camera );

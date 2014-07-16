@@ -1,5 +1,8 @@
 #pragma once
 
+#include <hash_map>
+#include <vector>
+
 #include "gl/glew.h"
 
 #include "Engine/Graphics/Resources/RenderTarget.h"
@@ -9,10 +12,17 @@
 namespace bv {
 
 class Renderer;
+class Texture2D;
+
 class PdrPBOMemTransfer;
 
 class PdrRenderTarget
 {
+private:
+    
+    typedef std::hash_map< Texture2D * , MemoryChunkPtr >   TTex2DMCHashMap;
+    typedef std::vector< TTex2DMCHashMap >                  TReadbackVec;
+
 private:
 
     //bool          m_hasStencilBuffer; //FIXME: to be implemented
@@ -35,7 +45,7 @@ private:
     int                             m_prevViewportCoords[ 4 ];
     double                          m_prevDepthRange[ 2 ];
 
-    std::vector< MemoryChunkPtr >   m_readbackBuffers;
+    TReadbackVec                    m_readbackBuffers;
 
 public:
 

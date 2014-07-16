@@ -158,6 +158,13 @@ inline unsigned int         BVConfig::StatsRecalcFramesDelta    () const
 
 // *********************************
 //
+inline unsigned int         BVConfig::NumRedbackBuffers         () const
+{
+    return m_numRedbackBuffers;
+}
+
+// *********************************
+//
 inline unsigned int         BVConfig::ProfilerDispWaitMillis    () const
 {
     return m_defaultProfilerDisplayWaitMillis;
