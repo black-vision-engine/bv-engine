@@ -19,6 +19,28 @@ FillStateMode GetFillMode( model::FillContext::Mode mode )
 
 // *******************************
 //
+AlphaSrcBlendMode GetAlphaSrcBlendMode( model::AlphaContext::SrcBlendMode mode )
+{
+    static AlphaSrcBlendMode modes[] = { AlphaSrcBlendMode::ASBM_ZERO , AlphaSrcBlendMode::ASBM_ONE, AlphaSrcBlendMode::ASBM_DST_COLOR, AlphaSrcBlendMode::ASBM_ONE_MINUS_DST_COLOR, AlphaSrcBlendMode::ASBM_SRC_ALPHA, AlphaSrcBlendMode::ASBM_ONE_MINUS_SRC_ALPHA, AlphaSrcBlendMode::ASBM_DST_ALPHA,
+                                         AlphaSrcBlendMode::ASBM_ONE_MINUS_DST_ALPHA, AlphaSrcBlendMode::ASBM_SRC_ALPHA_SATURATE, AlphaSrcBlendMode::ASBM_CONSTANT_COLOR, AlphaSrcBlendMode::ASBM_ONE_MINUS_CONSTANT_COLOR, AlphaSrcBlendMode::ASBM_CONSTANT_ALPHA, 
+                                         AlphaSrcBlendMode::ASBM_ONE_MINUS_CONSTANT_ALPHA };
+
+    return modes[ (int) mode ];
+}
+
+// *******************************
+//
+AlphaDstBlendMode GetAlphaDstBlendMode( model::AlphaContext::DstBlendMode mode )
+{
+    static AlphaDstBlendMode modes[] = { AlphaDstBlendMode::ADBM_ZERO, AlphaDstBlendMode::ADBM_ONE, AlphaDstBlendMode::ADBM_SRC_COLOR, AlphaDstBlendMode::ADBM_ONE_MINUS_SRC_COLOR,  AlphaDstBlendMode::ADBM_SRC_ALPHA,
+                                         AlphaDstBlendMode::ADBM_ONE_MINUS_SRC_ALPHA, AlphaDstBlendMode::ADBM_DST_ALPHA, AlphaDstBlendMode::ADBM_ONE_MINUS_DST_ALPHA, AlphaDstBlendMode::ADBM_CONSTANT_COLOR,
+                                         AlphaDstBlendMode::ADBM_ONE_MINUS_CONSTANT_COLOR, AlphaDstBlendMode::ADBM_CONSTANT_ALPHA, AlphaDstBlendMode::ADBM_ONE_MINUS_CONSTANT_ALPHA };
+
+     return modes[ (int) mode ];
+}
+
+// *******************************
+//
 template< typename State, typename Ctx >
 State * FromCtx( const Ctx * ctx )
 {
@@ -121,6 +143,8 @@ void RendererStatesBuilder::Assign  ( AlphaState * as, const model::AlphaContext
 {
     as->blendEnabled = ac->blendEnabled;
     as->blendColor = ac->blendColor;
+    as->srcBlendMode = GetAlphaSrcBlendMode( ac->srcBlendMode );
+    as->dstBlendMode = GetAlphaDstBlendMode( ac->dstBlendMode );
 }
 
 // *********************************
