@@ -35,11 +35,13 @@ public:
     virtual                     ~Texture2DCache         ();
 
     Texture2DPtr                GetTexture              ( const ITextureDescriptor * txParams );
-    Texture2DPtr                GetAnimation            ( const IAnimationDescriptor * animParams );
+    Texture2DPtr                GetSequence             ( const IAnimationDescriptor * animParams );
 
     void                        ClearCache              ();
 
     static Texture2DImplPtr         CreateEmptyTexture  ( TextureFormat format, unsigned int width, unsigned int height, DataBuffer::Semantic semantic );
+    static Texture2DImplPtr         CreateTexture       ( TextureFormat format, unsigned int width, unsigned int height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data );
+
     static Texture2DSequenceImplPtr CreateEmptySequence ( TextureFormat format, unsigned int width, unsigned int height  );
 
 };

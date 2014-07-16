@@ -11,6 +11,7 @@
 
 #include "Engine/Graphics/Resources/Texture2DImpl.h"
 #include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
+#include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
 #include "Engine/Graphics/Shaders/Parameters/ShaderParameters.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
@@ -124,7 +125,7 @@ void               DefaultEffect::AddTextures       ( Shader * shader, ITextures
         for( auto tx : textures )
         {
             auto sampler = CreateSampler( tx, samplerNum );
-            auto texture = CreateTexture( tx );
+            auto texture = GetTexture( tx );
 
             shader->AddTextureSampler( sampler );
             params->AddTexture( texture );
@@ -137,7 +138,7 @@ void               DefaultEffect::AddTextures       ( Shader * shader, ITextures
             if( anim->NumTextures() > 0 )
             {
                 auto sampler    = CreateSampler( anim, samplerNum );
-                auto sequence   = CreateSequence( anim );
+                auto sequence   = GetSequence( anim );
 
                 shader->AddTextureSampler( sampler );
                 params->AddTexture( sequence );
@@ -189,36 +190,16 @@ TextureSampler *        DefaultEffect::CreateSampler   ( const ITextureParams * 
 
 // *********************************
 //
-Texture2DImplPtr         DefaultEffect::CreateTexture       ( const ITextureDescriptor * txParams ) const
+Texture2DPtr            DefaultEffect::GetTexture           ( const ITextureDescriptor * txParams ) const
 {
-    auto format     = txParams->GetFormat();
-    auto width      = txParams->GetWidth();
-    auto height     = txParams->GetHeight();
-    auto semantic   = txParams->GetSemantic();
-
-    auto texture = std::make_shared< Texture2DImpl >( format, width, height, semantic );
-    texture->SetRawData( txParams->GetBits(), format, width, height );
-
-    return texture;
+    return GTexture2DCache.GetTexture( txParams );
 }
 
 // *********************************
 //
-Texture2DSequenceImplPtr DefaultEffect::CreateSequence       ( const IAnimationDescriptor * animParams ) const
+Texture2DPtr            DefaultEffect::GetSequence          ( const IAnimationDescriptor * animParams ) const
 {
-    auto format     = animParams->GetFormat();
-    auto width      = animParams->GetWidth();
-    auto height     = animParams->GetHeight();
-
-    auto sequence   = std::make_shared< Texture2DSequenceImpl >( format, width, height );
-            
-    for( unsigned int i = 0; i < animParams->NumTextures(); ++i )
-    {
-        bool bAdded = sequence->AddTextureSettingRawData( animParams->GetBits( i ), format, width, height );
-        assert( bAdded );
-    }
-
-    return sequence;
+    return GTexture2DCache.GetSequence( animParams );
 }
 
 } //bv

@@ -87,6 +87,8 @@ MemoryChunkPtr  MemoryChunk::Create         ( unsigned int size )
 MemoryChunkConstPtr MemoryChunk::EMPTY      ()
 {
     static MemoryChunkPtr emptyInst = std::make_shared< MemoryChunk >( nullptr, 0 );
+
+    return emptyInst;
 }
 
 // ****************************
