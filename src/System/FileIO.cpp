@@ -180,7 +180,10 @@ FileImpl *  FileImpl::Open        ( const std::string & fileName, File::OpenMode
 int         FileImpl::Read        ( std::ostream & out, const std::string & fileName )
 {
     auto f = Open( fileName, File::FOMReadOnly );
-    return f->Read( out );
+    auto ret = f->Read( out );
+    f->Close();
+    delete f;
+    return ret;
 }
 
 // *******************************
@@ -188,7 +191,10 @@ int         FileImpl::Read        ( std::ostream & out, const std::string & file
 int         FileImpl::Read        ( char* out, const std::string & fileName )
 {
     auto f = Open( fileName, File::FOMReadOnly );
-    return f->Read( out, FileImpl::Size( fileName ) );
+    auto ret = f->Read( out, FileImpl::Size( fileName ) );
+    f->Close();
+    delete f;
+    return ret;
 }
 
 // *******************************
@@ -196,7 +202,10 @@ int         FileImpl::Read        ( char* out, const std::string & fileName )
 int         FileImpl::Write       ( std::istream & in, const std::string & fileName )
 {
     auto f = Open( fileName, File::FOMReadWrite );
-    return f->Write( in );
+    auto ret = f->Write( in );
+    f->Close();
+    delete f;
+    return ret;
 }
 
 // *******************************
