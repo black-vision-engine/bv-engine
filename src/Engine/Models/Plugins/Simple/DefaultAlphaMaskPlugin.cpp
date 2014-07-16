@@ -288,7 +288,7 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( IPluginResou
 
         if( txDesc != nullptr )
         {
-            //FIXME: albo slid, wtedy podmien - to mozna tu jeszcze ogarnac
+            //FIXME: albo solid, wtedy podmien - to mozna tu jeszcze ogarnac
             //FIXME: albo tekstura, wtedy podmien ostatnia lub dodaj - to mozna tu jeszcze ogarnac
             //FIXME: albo animacja, wtedy podmien - to mozna tu jeszcze ogarnac
             if( txData->GetTextures().size() == 0 || txData->GetTextures().size() == 1 )

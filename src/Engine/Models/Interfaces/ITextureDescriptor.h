@@ -10,6 +10,8 @@ class ITextureDescriptor : public ITextureParams
 {
 public:
 
+    virtual uintptr_t               GetUID              () const = 0;
+
     virtual MemoryChunkConstPtr     GetBits             () const = 0;
     virtual bool                    BitsChanged         () const = 0;
     virtual void                    ResetBitsChanged    () const = 0;

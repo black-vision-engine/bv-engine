@@ -50,6 +50,13 @@ DefaultTextureDescriptor::~DefaultTextureDescriptor                 ()
 
 // **************************
 //
+uintptr_t               DefaultTextureDescriptor::GetUID            () const
+{
+    return (uintptr_t) GetBits()->Get();
+}
+
+// **************************
+//
 MemoryChunkConstPtr     DefaultTextureDescriptor::GetBits           () const
 {
     return m_texHandle->GetData();
