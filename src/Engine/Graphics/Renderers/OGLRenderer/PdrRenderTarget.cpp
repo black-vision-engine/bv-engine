@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "Engine/Graphics/Resources/Texture2DImpl.h"
+#include "Engine/Graphics/Resources/Textures/Texture2DCache.h" //FIXME: some other class should be used to create new textures
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
@@ -120,7 +120,7 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
         assert( buffer == nullptr );
         buffer = MemoryChunk::Create( Texture2D::RawFrameSize( format, m_width, m_height ) );
 
-        auto tx = std::make_shared< Texture2DImpl >( format, m_width, m_height ); 
+        auto tx = Texture2DCache::CreateEmptyTexture( format, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC );
         tx->SetRawData( buffer, format, m_width, m_height );
         outputTex = tx;
     }
@@ -139,7 +139,7 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
         assert( buffer->Size() != Texture2D::RawFrameSize( format, m_width, m_height ) ); //FIXME: not safe - chances are that multiple formats may have exactly the same size (in which case mem buffer should be simply reused)
         buffer->Allocate( Texture2D::RawFrameSize( format, m_width, m_height ) );
 
-        auto tx = std::make_shared< Texture2DImpl >( format, m_width, m_height ); 
+        auto tx = Texture2DCache::CreateEmptyTexture( format, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC );
         tx->SetRawData( buffer, format, m_width, m_height );
         outputTex = tx;
     }

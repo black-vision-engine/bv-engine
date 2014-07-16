@@ -7,7 +7,6 @@
     <ClCompile Include="Application\WindowedApplication.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\glutils.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\gl_core_4_3.c" />
-    <ClCompile Include="Engine\Graphics\Resources\Textures\TextureManager.cpp" />
     <ClCompile Include="Engine\Graphics\SceneGraph\Camera.cpp" />
     <ClCompile Include="Engine\Graphics\SceneGraph\SceneNode.cpp" />
     <ClCompile Include="Engine\Graphics\Shaders\GeometryShader.cpp" />
@@ -200,6 +199,7 @@
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.cpp" />
     <ClCompile Include="Core\MemoryChunk.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.cpp" />
+    <ClCompile Include="Engine\Graphics\Resources\Textures\Texture2DCache.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -208,7 +208,6 @@
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\glutils.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\gl_core_4_3.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\oglcore.h" />
-    <ClInclude Include="Engine\Graphics\Resources\Textures\TextureManager.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\Camera.h" />
     <ClInclude Include="Engine\Graphics\SceneGraph\SceneNode.h" />
     <ClInclude Include="Engine\Graphics\Shaders\GeometryShader.h" />
@@ -458,6 +457,7 @@
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.h" />
     <ClInclude Include="Core\MemoryChunk.h" />
     <ClInclude Include="System\Environment.h" />
+    <ClInclude Include="Engine\Graphics\Resources\Textures\Texture2DCache.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
