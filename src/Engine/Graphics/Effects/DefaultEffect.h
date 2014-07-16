@@ -36,8 +36,8 @@ private:
 
     TextureSampler *        CreateSampler           ( const ITextureParams * txParams, unsigned int samplerNum ) const;
 
-    Texture2DImplPtr            CreateTexture       ( const ITextureDescriptor * txParams ) const;
-    Texture2DSequenceImplPtr    CreateSequence      ( const IAnimationDescriptor * animParams ) const;
+    Texture2DPtr            GetTexture              ( const ITextureDescriptor * txParams ) const;
+    Texture2DPtr            GetSequence             ( const IAnimationDescriptor * animParams ) const;
 
 };
 
