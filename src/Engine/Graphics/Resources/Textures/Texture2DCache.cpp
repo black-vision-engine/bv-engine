@@ -9,6 +9,7 @@
 #include "Engine/Models/Resources/Resource.h"
 #include "Engine/Models/Resources/TextureLoader.h"
 
+#define PRINT_TEXTURE_CACHE_STATS
 
 namespace bv
 {
@@ -38,12 +39,15 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
     
     Texture2DImplPtr tx = nullptr;
 
-    if( semantic == DataBuffer::Semantic::S_STATIC )
+    if( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC )
     {
         auto it = m_tex2DCache.find( txParams->GetUID() );
 
         if( it != m_tex2DCache.end() )
         {
+#ifdef PRINT_TEXTURE_CACHE_STATS
+            printf( "Reading texture %08X from cache\n", it->first );
+#endif 
             return it->second;
         }
     }
@@ -51,8 +55,11 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
     tx = CreateEmptyTexture( format, width, height, semantic );
     tx->SetRawData( txParams->GetBits(), format, width, height );
 
-    if( semantic == DataBuffer::Semantic::S_STATIC )
+    if( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC )
     {
+#ifdef PRINT_TEXTURE_CACHE_STATS
+        printf( "Registering texture %08X in cache\n", txParams->GetUID() );
+#endif 
         m_tex2DCache[ txParams->GetUID() ] = tx;
     }
 
@@ -61,7 +68,7 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
 
 // *********************************
 //
-Texture2DPtr    Texture2DCache::GetAnimation            ( const IAnimationDescriptor * animParams )
+Texture2DPtr    Texture2DCache::GetSequence             ( const IAnimationDescriptor * animParams )
 {
     auto format     = animParams->GetFormat();
     auto width      = animParams->GetWidth();
@@ -82,6 +89,9 @@ Texture2DPtr    Texture2DCache::GetAnimation            ( const IAnimationDescri
 //
 void            Texture2DCache::ClearCache              ()
 {
+#ifdef PRINT_TEXTURE_CACHE_STATS
+    printf( "Removing %d entries from texture cache\n", m_tex2DCache.size() );
+#endif 
     m_tex2DCache.clear();
 }
 
@@ -90,6 +100,16 @@ void            Texture2DCache::ClearCache              ()
 Texture2DImplPtr         Texture2DCache::CreateEmptyTexture    ( TextureFormat format, unsigned int width, unsigned int height, DataBuffer::Semantic semantic )
 {
     auto texture = std::make_shared< Texture2DImpl >( format, width, height, semantic );
+
+    return texture;
+}
+
+// *********************************
+//
+Texture2DImplPtr         Texture2DCache::CreateTexture          ( TextureFormat format, unsigned int width, unsigned int height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data )
+{
+    auto texture = CreateEmptyTexture( format, width, height, semantic );
+    texture->SetRawData( data, format, width, height );
 
     return texture;
 }

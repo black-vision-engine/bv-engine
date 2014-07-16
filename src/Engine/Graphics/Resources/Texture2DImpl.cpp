@@ -38,12 +38,13 @@ MemoryChunkConstPtr Texture2DImpl::GetData      () const
 //
 bool            Texture2DImpl::SetRawData       ( MemoryChunkConstPtr data, TextureFormat format, unsigned int width, unsigned int height )
 {
+    assert( data->Size() == SizeInBytes( format, width, height ) || data->Size() == 0 );
+
     SetFormat( format );
     SetWidth( width );
     SetHeight( height );
 
     m_data = data;
-
     SetChanged( true );
 
     return true;
