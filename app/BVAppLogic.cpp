@@ -152,12 +152,6 @@ void BVAppLogic::InitCamera         ( Renderer * renderer, unsigned int w, unsig
 
     m_offscreenRenderLogic->SetRendererCamera( cam );
     //FIXME: read from configuration file and change appropriately when resoultion changes
-
-    for( unsigned int i = 0; i < DefaultConfig.NumRedbackBuffersPerRT(); ++i )
-    {
-        auto tex = m_offscreenRenderLogic->ReadDisplayTarget( renderer, i );
-        printf( "%d\n", tex->GetFormat() );
-    }
 }
 
 // *********************************
