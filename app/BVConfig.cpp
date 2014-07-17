@@ -55,7 +55,7 @@ BVConfig::BVConfig                      ()
     m_defaultStatsRecalcFramesDelta         = m_defaultStatsMovingAverageWindowSize * m_defaultWarmupRoundsStatsMAV; //* 30
     m_defaultProfilerDisplayWaitMillis      = 10000; //1000
 
-    m_numRedbackBuffers                     = 2; //up to 200+, when 32 bit build is enabled
+    m_numRedbackBuffersPerRenderTarget      = 4; //up to 200+, when 32 bit build is enabled
 
     m_defaultClearColor     = glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f );
     m_defaultClearDepth     = 1.0f;
@@ -65,7 +65,7 @@ BVConfig::BVConfig                      ()
 //
 BVConfig::~BVConfig                     ()
 {
-} 
+}
 
 // *********************************
 //

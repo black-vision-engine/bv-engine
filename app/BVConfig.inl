@@ -158,9 +158,9 @@ inline unsigned int         BVConfig::StatsRecalcFramesDelta    () const
 
 // *********************************
 //
-inline unsigned int         BVConfig::NumRedbackBuffers         () const
+inline unsigned int         BVConfig::NumRedbackBuffersPerRT    () const
 {
-    return m_numRedbackBuffers;
+    return m_numRedbackBuffersPerRenderTarget;
 }
 
 // *********************************

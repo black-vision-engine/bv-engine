@@ -90,7 +90,7 @@ BVAppLogic::BVAppLogic              ()
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
     GTimer.StartTimer();
 
-    m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffers() ); 
+    m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() ); 
 }
 
 // *********************************
@@ -128,7 +128,7 @@ void BVAppLogic::LoadScene          ( void )
     assert( m_mockSceneEng );
 
     m_modelScene    = model::ModelScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline );
-    assert( m_modelScene );    
+    assert( m_modelScene );
 }
 
 // *********************************
@@ -152,6 +152,12 @@ void BVAppLogic::InitCamera         ( Renderer * renderer, unsigned int w, unsig
 
     m_offscreenRenderLogic->SetRendererCamera( cam );
     //FIXME: read from configuration file and change appropriately when resoultion changes
+
+    for( unsigned int i = 0; i < DefaultConfig.NumRedbackBuffersPerRT(); ++i )
+    {
+        auto tex = m_offscreenRenderLogic->ReadDisplayTarget( renderer, i );
+        printf( "%d\n", tex->GetFormat() );
+    }
 }
 
 // *********************************
@@ -305,7 +311,7 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
 
     double readbackStart = GTimer.CurElapsed();
     auto frame = m_offscreenRenderLogic->ReadDisplayTarget( renderer, nReadbackFrame );
-    nReadbackFrame = ( nReadbackFrame + 1 ) % m_offscreenRenderLogic->NumReadBuffers();
+    nReadbackFrame = ( nReadbackFrame + 1 ) % m_offscreenRenderLogic->NumReadBuffersPerRT();
     double readbackTime = GTimer.CurElapsed() - readbackStart;
 
     m_offscreenRenderLogic->SwapDisplayRenderTargets();
@@ -321,7 +327,7 @@ void BVAppLogic::FrameRendered      ( Renderer * renderer )
         nPasses++;
         totalElapsed = 0.0;
 
-        if (nPasses % 3 == 0 )
+        if ( nPasses % 3 == 0 )
         {
             nPasses = 0;
 

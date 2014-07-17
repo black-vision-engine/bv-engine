@@ -12,15 +12,22 @@
 
 namespace bv {
 
+namespace {
+
+const unsigned int GNumRednerTargets = 2;
+
+} //anonymous
+
 // **************************
 //
 OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int height, unsigned int numReadBuffers, Camera * camera, TextureFormat fmt )
     : m_auxRenderTarget( nullptr )
-    , m_readbackTextures( numReadBuffers )
+    , m_readbackTextures( numReadBuffers * GNumRednerTargets ) //two display targets that can be potentially used
     , m_displayCamera( nullptr )
     , m_rendererCamera( camera )
     , m_auxQuad( nullptr )
     , m_curDisplayTarget( 0 )
+    , m_buffersPerTarget( numReadBuffers )
     , m_auxTexture2DEffect( nullptr )
     , m_displayRTEnabled( false )
     , m_auxRTEnabled( false )
@@ -44,7 +51,7 @@ OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int 
 
     m_displayCamera         = MainDisplayTarget::CreateDisplayCamera();
 
-    for( unsigned int i = 0; i < numReadBuffers; ++i )
+    for( unsigned int i = 0; i < m_readbackTextures.size(); ++i )
     {
         m_readbackTextures[ i ] = nullptr;
     }
@@ -135,7 +142,7 @@ void                OffscreenRenderLogic::SetAuxAlphaModelValue     ( const IVal
 //
 void                OffscreenRenderLogic::SwapDisplayRenderTargets  ()
 {
-    m_curDisplayTarget = ( m_curDisplayTarget + 1 ) % 2;
+    m_curDisplayTarget = ( m_curDisplayTarget + 1 ) % GNumRednerTargets;
 }
 
 // **************************
@@ -177,20 +184,36 @@ void                OffscreenRenderLogic::DrawAuxRenderTarget       ( Renderer *
 
 // **************************
 //
-unsigned int        OffscreenRenderLogic::NumReadBuffers            () const
+unsigned int        OffscreenRenderLogic::TotalNumReadBuffers       () const
 {
     return m_readbackTextures.size();
 }
 
 // **************************
 //
+unsigned int        OffscreenRenderLogic::NumReadBuffersPerRT       () const
+{
+    return TotalNumReadBuffers() / GNumRednerTargets;
+}
+
+// **************************
+//
 Texture2DConstPtr   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer * renderer, unsigned int bufNum )
 {
-    assert( bufNum < m_readbackTextures.size() );
+    unsigned int bufferIdx = GNumRednerTargets * bufNum + CurDisplayRenderTargetNum();
 
-    renderer->ReadColorTexture( 0, CurDisplayRenderTarget(), m_readbackTextures[ bufNum ] );
+    assert( bufferIdx < m_readbackTextures.size() );
 
-    return m_readbackTextures[ bufNum ];
+    renderer->ReadColorTexture( 0, CurDisplayRenderTarget(), m_readbackTextures[ bufferIdx ] );
+
+    return m_readbackTextures[ bufferIdx ];
+}
+
+// **************************
+//
+unsigned int      OffscreenRenderLogic::CurDisplayRenderTargetNum   () const
+{
+    return m_curDisplayTarget;
 }
 
 // **************************

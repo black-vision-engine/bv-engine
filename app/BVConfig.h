@@ -40,7 +40,7 @@ private:
     unsigned int    m_defaultStatsRecalcFramesDelta;
     unsigned int    m_defaultProfilerDisplayWaitMillis;
 
-    unsigned int    m_numRedbackBuffers;
+    unsigned int    m_numRedbackBuffersPerRenderTarget;
 
     glm::vec4       m_defaultClearColor;
     float           m_defaultClearDepth;
@@ -82,7 +82,7 @@ public:
     inline unsigned int         StatsRefreshMillisDelta () const;
     inline unsigned int         StatsRecalcFramesDelta  () const;
 
-    inline unsigned int         NumRedbackBuffers       () const;
+    inline unsigned int         NumRedbackBuffersPerRT  () const;
 
     inline unsigned int         ProfilerDispWaitMillis  () const;
 

@@ -28,6 +28,7 @@ private:
     TriangleStrip *     m_auxQuad;
 
     unsigned int        m_curDisplayTarget;
+    unsigned int        m_buffersPerTarget;
 
     Texture2DEffect *   m_auxTexture2DEffect;
 
@@ -62,11 +63,14 @@ public:
     void                DrawDisplayRenderTarget     ( Renderer * renderer );
     void                DrawAuxRenderTarget         ( Renderer * renderer );
 
-    unsigned int        NumReadBuffers              () const;
+    unsigned int        TotalNumReadBuffers         () const;
+    unsigned int        NumReadBuffersPerRT         () const;
 
     Texture2DConstPtr   ReadDisplayTarget           ( Renderer * renderer, unsigned int bufNum );
 
 private:
+
+    unsigned int        CurDisplayRenderTargetNum   () const;
 
     RenderTarget *      CurDisplayRenderTarget      () const;
     TriangleStrip *     CurDisplayQuad              () const;
