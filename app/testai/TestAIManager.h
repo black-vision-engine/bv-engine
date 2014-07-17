@@ -44,8 +44,8 @@ private:
     TestAI *        PreparePreset1      () const;
     TestAI *        PreparePreset2      () const;
     TestAI *        PreparePreset3      ( model::IModelNodePtr node ) const;
-    TestAI *        PreparePreset4      ( BVAppLogic* logic ) const;
-    TestAI *        PreparePreset5      () const;
+    TestAI *        PreparePreset4      ( BVAppLogic * logic ) const;
+    TestAI *        PreparePreset5      ( BVAppLogic * logic ) const;
 
 
 public:

@@ -4,6 +4,7 @@
 #include "System/BasicTypes.h"
 
 #include "Engine/Models/Timeline/Dynamic/DefaultTimeline.h"
+#include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 
 #include "Engine/Models/Interfaces/IModelNode.h"
 #include "testai/IAICommand.h"
@@ -217,8 +218,32 @@ private:
 
 public:
 
-                        AICommandReloadScene        ( BVAppLogic *, TimeType triggerTime );
+                        AICommandReloadScene        ( BVAppLogic * logic, TimeType triggerTime );
                         ~AICommandReloadScene       ();
+
+    virtual void        SetTimeline                 ( model::DefaultTimelinePtr timeline ) override;
+
+protected:
+
+    virtual bool        TriggerImpl                 ( TimeType t ) override;
+
+};
+
+// ************************************
+class AICommandReloadTexture : public AICommandBase
+{
+private:
+
+    TimeType                m_eventTime;
+
+    std::string             m_textureName;
+
+    model::IPluginPtr       m_plugin;
+
+public:
+
+                        AICommandReloadTexture      ( BVAppLogic * logic, TimeType triggerTime, const std::string & nodeName, const std::string & pluginName, const std::string & textureName );
+                        ~AICommandReloadTexture     ();
 
     virtual void        SetTimeline                 ( model::DefaultTimelinePtr timeline ) override;
 

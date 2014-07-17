@@ -7,6 +7,8 @@
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 #include "Engine/Models/Interfaces/IOverrideState.h"
 
+#include "Engine/Models/Plugins/PluginUtils.h"
+
 #include "BVAppLogic.h"
 
 
@@ -400,5 +402,57 @@ bool        AICommandReloadScene::TriggerImpl                 ( TimeType t )
     return true;
 }
 
+// ************************************************************ AICommandReloadScene  ************************************************************
+
+// *********************************
+//
+AICommandReloadTexture::AICommandReloadTexture  ( BVAppLogic * logic, TimeType triggerTime, const std::string & nodeName, const std::string & pluginName, const std::string & textureName )
+    : AICommandBase( triggerTime, "RELOAD TEXTURE" )
+    , m_plugin( nullptr )
+    , m_textureName( textureName )
+{
+    auto node = logic->GetModelScene()->GetSceneRoot()->GetNode( nodeName );
+
+    if( node )
+    {
+        m_plugin = node->GetPlugin( pluginName );
+    }
+
+    if( m_plugin == nullptr )
+    {
+        printf( "Failed to fetch %s plugin from node %s\n", pluginName.c_str(), nodeName.c_str() );
+    }
+    else
+    {
+        SetRepr( std::string( "RELOAD TEXTURE " ) + textureName );
+    }
+}
+
+// *********************************
+//
+AICommandReloadTexture::~AICommandReloadTexture ()
+{
+}
+
+// *********************************
+//
+void        AICommandReloadTexture::SetTimeline ( model::DefaultTimelinePtr timeline )
+{
+}
+
+// *********************************
+//
+bool        AICommandReloadTexture::TriggerImpl ( TimeType t )
+{
+    if( m_plugin )
+    {
+        auto success = model::LoadTexture( m_plugin, m_textureName );
+        assert( success );        
+    
+        return success;
+    }
+
+    return false;
+}
 
 } //bv

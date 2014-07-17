@@ -370,7 +370,6 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     model::SetParameter( node->GetPlugin( "texture" )->GetParameter( "alpha" ), TimeType( 3.f ),   1.f );
 
     success = model::LoadTexture( node->GetPlugin( "texture" ), "full.jpg" );
-    //success = model::LoadTexture( node->GetPlugin( "texture" ), "test.bmp" );
     assert( success );
 
     auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( node->GetPlugin( "texture" ) );

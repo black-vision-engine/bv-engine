@@ -54,7 +54,7 @@ unsigned int    TestAIManager::NumAIPresets () const
 
 TestAI *        TestAIManager::GetAIPreset         ( unsigned int idx, BVAppLogic * logic )
 {
-    assert( idx == 4 );
+    assert( idx == 4 || idx == 5 );
 
     if( m_presets[ idx ] == nullptr )
     {
@@ -62,7 +62,6 @@ TestAI *        TestAIManager::GetAIPreset         ( unsigned int idx, BVAppLogi
     }
 
     return m_presets[ idx ];
-
 }
 
 // *********************************
@@ -111,6 +110,10 @@ TestAI *        TestAIManager::PreparePreset    ( unsigned int idx, BVAppLogic *
     if( idx == 4 )
     {
         return PreparePreset4( logic );
+    }
+    else if( idx == 5 )
+    {
+        return PreparePreset5( logic );
     }
 
     return nullptr;
@@ -253,9 +256,25 @@ TestAI *        TestAIManager::PreparePreset4   ( BVAppLogic * logic ) const
 
 // *********************************
 //
-TestAI *        TestAIManager::PreparePreset5   () const
+TestAI *        TestAIManager::PreparePreset5   ( BVAppLogic * logic ) const
 {
-    return nullptr;
+    auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 5", TimeType( 130.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ) );
+
+    auto c0 = new AICommandReloadTexture( logic, 3.f, "Root", "texture", "alfai00.tga" );
+    auto c1 = new AICommandReloadTexture( logic, 4.f, "Root", "texture", "simless_01.jpg" );
+    auto c2 = new AICommandReloadTexture( logic, 7.f, "Root", "texture", "chuj_nie_kwiatek.jpg" );
+    auto c3 = new AICommandReloadTexture( logic, 8.f, "Root", "texture", "simless_00.jpg" );
+    auto c4 = new AICommandReloadTexture( logic, 11.f, "Root", "texture", "full.jpg" );
+
+    TestAI * ai = new TestAI( timeline, nullptr );
+
+    ai->AddCommand( c0 );
+    ai->AddCommand( c1 );
+    ai->AddCommand( c2 );
+    ai->AddCommand( c3 );
+    ai->AddCommand( c4 );
+
+    return ai;
 }
 
 // *********************************
