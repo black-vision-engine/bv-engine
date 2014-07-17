@@ -65,7 +65,7 @@ BVConfig::BVConfig                      ()
 //
 BVConfig::~BVConfig                     ()
 {
-}
+} 
 
 // *********************************
 //
