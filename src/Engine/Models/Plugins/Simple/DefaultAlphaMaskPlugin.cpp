@@ -274,7 +274,7 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( IPluginResou
     if ( txResDescr != nullptr )
     {
         auto txData = m_psc->GetTexturesDataImpl();
-        assert( txData->GetTextures().size() <= 1 );
+        assert( txData->GetTextures().size() <= 2 );
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), DefaultAlphaMaskPluginDesc::TextureName() );
@@ -288,16 +288,67 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( IPluginResou
 
         if( txDesc != nullptr )
         {
-            //FIXME: albo solid, wtedy podmien - to mozna tu jeszcze ogarnac
-            //FIXME: albo tekstura, wtedy podmien ostatnia lub dodaj - to mozna tu jeszcze ogarnac
-            //FIXME: albo animacja, wtedy podmien - to mozna tu jeszcze ogarnac
-            if( txData->GetTextures().size() == 0 || txData->GetTextures().size() == 1 )
+            if( GetPrevPlugin()->GetTypeUid() == DefaultColorPluginDesc::UID() )
             {
-                txData->AddTexture( txDesc );
+                if( txData->GetTextures().size() == 0 )
+                {
+                    txData->AddTexture( txDesc );
+                }
+                else
+                {
+                    assert( txData->GetTextures().size() == 1 );
+
+                    txData->SetTexture( 0, txDesc );
+                }
+            }
+            else if( GetPrevPlugin()->GetTypeUid() == DefaultTexturePluginDesc::UID() )
+            {
+                assert( txData->GetTextures().size() >= 1 ); //FIXME: texture plugin is supposed to be added first
+
+                if( txData->GetTextures().size() == 1 )
+                {
+                    txData->AddTexture( txDesc );
+                }
+                else
+                {
+                    assert( txData->GetTextures().size() == 2 );
+
+                    txData->SetTexture( 1, txDesc );
+                }
+            }
+            else if( GetPrevPlugin()->GetTypeUid() == DefaultAnimationPluginDesc::UID() )
+            {
+                assert( txData->GetTextures().size() <= 1 ); //FIXME: texture plugin is supposed to be added first
+
+                if( txData->GetTextures().size() == 0 )
+                {
+                    txData->AddTexture( txDesc );
+                }
+                else
+                {
+                    assert( txData->GetTextures().size() == 1 );
+
+                    txData->SetTexture( 0, txDesc );
+                }
+            }
+            else if( GetPrevPlugin()->GetTypeUid() == DefaultTextPluginDesc::UID() )
+            {
+                assert( txData->GetTextures().size() >= 1 ); //FIXME: text plugin is supposed to be added first
+
+                if( txData->GetTextures().size() == 1 )
+                {
+                    txData->AddTexture( txDesc );
+                }
+                else
+                {
+                    assert( txData->GetTextures().size() == 2 );
+
+                    txData->SetTexture( 1, txDesc );
+                }
             }
             else
             {
-                txData->SetTexture( txData->GetTextures().size(), txDesc );
+                assert( false );
             }
 
             m_textureWidth = txDesc->GetWidth();

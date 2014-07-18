@@ -57,10 +57,13 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
 
     if( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC )
     {
+        assert( m_tex2DSet.find( tx.get() ) == m_tex2DSet.end() );
+
 #ifdef PRINT_TEXTURE_CACHE_STATS
         printf( "Registering texture %08X in cache\n", txParams->GetUID() );
 #endif 
         m_tex2DCache[ txParams->GetUID() ] = tx;
+        m_tex2DSet.insert( tx.get() );
     }
 
     return tx;
@@ -87,12 +90,27 @@ Texture2DPtr    Texture2DCache::GetSequence             ( const IAnimationDescri
 
 // *********************************
 //
+bool            Texture2DCache::IsRegistered            ( const ITextureDescriptor * txParams ) const
+{
+    return m_tex2DCache.find( txParams->GetUID() ) != m_tex2DCache.end();
+}
+
+// *********************************
+//
+bool            Texture2DCache::IsStored                ( Texture2DPtr tex ) const
+{
+    return m_tex2DSet.find( tex.get() ) != m_tex2DSet.end();
+}
+
+// *********************************
+//
 void            Texture2DCache::ClearCache              ()
 {
 #ifdef PRINT_TEXTURE_CACHE_STATS
     printf( "Removing %d entries from texture cache\n", m_tex2DCache.size() );
 #endif 
     m_tex2DCache.clear();
+    m_tex2DSet.clear();
 }
 
 // *********************************

@@ -386,8 +386,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
     if( useAlphaMask )
     {
-        //success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "test.bmp" );
-        success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "full.jpg" );
+        success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "test.bmp" );
         assert( success );
 
         node->GetPlugin( "alpha_mask" )->GetParameter( "txAlphaMat" )->SetTimeEvaluator( timeEvaluator );

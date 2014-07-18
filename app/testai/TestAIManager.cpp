@@ -262,9 +262,12 @@ TestAI *        TestAIManager::PreparePreset5   ( BVAppLogic * logic ) const
 
     auto c0 = new AICommandReloadTexture( logic, 3.f, "Root", "texture", "alfai00.tga" );
     auto c1 = new AICommandReloadTexture( logic, 4.f, "Root", "texture", "simless_01.jpg" );
-    auto c2 = new AICommandReloadTexture( logic, 7.f, "Root", "texture", "chuj_nie_kwiatek.jpg" );
-    auto c3 = new AICommandReloadTexture( logic, 8.f, "Root", "texture", "simless_00.jpg" );
-    auto c4 = new AICommandReloadTexture( logic, 11.f, "Root", "texture", "full.jpg" );
+    auto c2 = new AICommandReloadTexture( logic, 5.5f, "Root", "alpha_mask", "simless_01.jpg" );
+    auto c3 = new AICommandReloadTexture( logic, 7.f, "Root", "texture", "chuj_nie_kwiatek.jpg" );
+    auto c4 = new AICommandReloadTexture( logic, 7.5f, "Root", "alpha_mask", "simless_00.jpg" );
+    auto c5 = new AICommandReloadTexture( logic, 8.f, "Root", "texture", "simless_00.jpg" );
+    auto c6 = new AICommandReloadTexture( logic, 11.f, "Root", "texture", "full.jpg" );
+    auto c7 = new AICommandReloadTexture( logic, 12.f, "Root", "alpha_mask", "test.bmp" );
 
     TestAI * ai = new TestAI( timeline, nullptr );
 
@@ -273,6 +276,9 @@ TestAI *        TestAIManager::PreparePreset5   ( BVAppLogic * logic ) const
     ai->AddCommand( c2 );
     ai->AddCommand( c3 );
     ai->AddCommand( c4 );
+    ai->AddCommand( c5 );
+    ai->AddCommand( c6 );
+    ai->AddCommand( c7 );
 
     return ai;
 }

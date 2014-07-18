@@ -45,4 +45,13 @@ void               ShaderParameters::AddTexture             ( Texture2DPtr textu
     m_textures.push_back( texture );
 }
 
+// ***************************
+//
+void              ShaderParameters::SetTexture              ( unsigned int idx, Texture2DPtr tex )
+{
+    assert( idx < m_textures.size() );
+
+    m_textures[ idx ] = tex;
+}
+
 } //bv

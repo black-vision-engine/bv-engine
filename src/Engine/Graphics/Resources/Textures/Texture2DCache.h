@@ -1,5 +1,6 @@
 #pragma once
 
+#include <hash_set>
 #include <hash_map>
 #include <string>
 
@@ -26,8 +27,10 @@ namespace model
 class Texture2DCache
 {
     typedef std::hash_map< ITextureDescriptor::uid_t, Texture2DPtr >    Texture2DMap;
+    typedef std::hash_set< const Texture2D * >                          Texture2DSet;
 
-    Texture2DMap  m_tex2DCache;
+    Texture2DMap        m_tex2DCache;
+    Texture2DSet        m_tex2DSet;
 
 public:
   
@@ -36,6 +39,9 @@ public:
 
     Texture2DPtr                GetTexture              ( const ITextureDescriptor * txParams );
     Texture2DPtr                GetSequence             ( const IAnimationDescriptor * animParams );
+
+    bool                        IsRegistered            ( const ITextureDescriptor * txParams ) const;
+    bool                        IsStored                ( Texture2DPtr tex ) const;
 
     void                        ClearCache              ();
 

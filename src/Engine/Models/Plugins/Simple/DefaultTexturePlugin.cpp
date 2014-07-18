@@ -188,7 +188,7 @@ bool                            DefaultTexturePlugin::LoadResource  ( IPluginRes
     if ( txResDescr != nullptr )
     {
         auto txData = m_psc->GetTexturesDataImpl();
-        assert( txData->GetTextures().size() <= 1 );
+        assert( txData->GetTextures().size() <= 2 ); //FIXME: Second one may be added by a mask
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), DefaultTexturePluginDesc::TextureName() );

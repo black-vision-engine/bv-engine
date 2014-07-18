@@ -19,6 +19,7 @@
 
 #include "Engine/Graphics/Resources/Texture2DImpl.h"
 #include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
+#include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
 //FIXME: this part suxx as hell
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"

@@ -204,17 +204,28 @@ inline void    NodeUpdater::UpdateTexturesData  ()
         unsigned int j = 0;
         for( unsigned int i = 0; i < textures.size(); ++i, ++j )
         {
-            auto tex2D      = std::static_pointer_cast< Texture2DImpl >( shaderParams->GetTexture( j ) );
             auto texDesc    = textures[ i ];
 
             if ( texDesc->BitsChanged() )
             {
-                auto format = texDesc->GetFormat();
-                auto width  = texDesc->GetWidth();
-                auto height = texDesc->GetHeight();
-                auto data   = texDesc->GetBits();
+                auto tex2D  = std::static_pointer_cast< Texture2DImpl >( shaderParams->GetTexture( j ) );
 
-                tex2D->SetRawData( data, format, width, height );
+                 //Stored in cache which means that proper 2D texture has to be created for current texDesc (possibly alread stored in the cache)
+                if( GTexture2DCache.IsStored( tex2D ) && tex2D != GTexture2DCache.GetTexture( texDesc ) )
+                {
+                    auto newTex2D = GTexture2DCache.GetTexture( texDesc );
+
+                    shaderParams->SetTexture( j, newTex2D );
+                }
+                else //Some other texture type which just requires contents to be swapped
+                {
+                    auto format = texDesc->GetFormat();
+                    auto width  = texDesc->GetWidth();
+                    auto height = texDesc->GetHeight();
+                    auto data   = texDesc->GetBits();
+
+                    tex2D->SetRawData( data, format, width, height );
+                }
 
                 texDesc->ResetBitsChanged();
             }

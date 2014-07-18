@@ -40,6 +40,8 @@ public:
     inline const GenericShaderParam *       GetParam                        ( const std::string & name ) const;
 
     void                                    AddTexture                      ( Texture2DPtr texture );
+    void                                    SetTexture                      ( unsigned int idx, Texture2DPtr tex );
+
     inline unsigned int                     NumTextures                     () const;
 
     inline Texture2DPtr                     GetTexture                      ( unsigned int idx ); //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj

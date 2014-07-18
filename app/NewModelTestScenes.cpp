@@ -447,6 +447,13 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 //
 model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    //auto node0 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+    //auto node1 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+
+    //node0->AddChild( node1 );
+
+    //return node0;
+
     //return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );
     //TestQueryNode( timelineManager, timeEvaluator ); //FIXME: remove or uncomment after tests
     //auto c0 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node0" );
@@ -465,9 +472,9 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
 
     //return rut;
     //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator, true );
-    return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
-    //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, false );
-    //return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
+    return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, true );
+    //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, true );
+    //return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, true );
     //return SimpleNodesFactory::CreateTextWithShadowNode( timelineManager, timeEvaluator, 5, glm::vec3( 0.005f, -0.005f, -0.001f ) );
 }
 
