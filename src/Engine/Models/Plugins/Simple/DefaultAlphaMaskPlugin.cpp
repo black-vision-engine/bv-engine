@@ -146,6 +146,8 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
+    , m_textureWidth( 0 )
+    , m_textureHeight( 0 )
 {
     //FIXME: The hackiest of it all - added registered parameters to pass on to the engine - ten kod jest przestraszny i wykurwiscie niefajny
     if( prev->GetTypeUid() == DefaultColorPluginDesc::UID() )
@@ -354,6 +356,10 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( IPluginResou
             m_textureWidth = txDesc->GetWidth();
             m_textureHeight = txDesc->GetHeight();
 
+            auto prev = GetPrevPlugin();
+
+            RecalculateAttrChannel();
+
             return true;
         }
     }
@@ -470,7 +476,7 @@ void                                DefaultAlphaMaskPlugin::Update              
 
 // *************************************
 //
-void DefaultAlphaMaskPlugin::InitAttributesChannel( IPluginPtr prev )
+void DefaultAlphaMaskPlugin::InitAttributesChannel( IPluginConstPtr prev )
 {
     auto prevGeomChannel = prev->GetVertexAttributesChannel();
 
@@ -516,7 +522,12 @@ void DefaultAlphaMaskPlugin::InitAttributesChannel( IPluginPtr prev )
         //FIXME: only one texture - convex hull calculations
         float minX = 100000.0f, minY = 100000.0f;
         float maxX = 0.0f, maxY = 0.0f;
+        float pixelsPerUnitUVSpace = 1080.f;
+            
+        float txWidth = 1920.f;
+        float txHeight = 1080.f;
 
+        //FIXME: hackish as hell positioning (assuming implicit FullHD)
         //convex hull - make sure that prevCompChannels[ 0 ] is indeed a positional channel
         for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
         {
@@ -533,13 +544,74 @@ void DefaultAlphaMaskPlugin::InitAttributesChannel( IPluginPtr prev )
         for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
         {
             const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
-            verTexAttrChannel->AddAttribute( glm::vec2( ( pos[ j ].x - minX ) / ( maxX - minX ), ( pos[ j ].y - minY ) / ( maxY - minY ) ) );
+            verTexAttrChannel->AddAttribute( glm::vec2( pixelsPerUnitUVSpace * ( pos[ j ].x - minX ) / ( maxX - minX ) / txWidth, pixelsPerUnitUVSpace * ( pos[ j ].y - minY ) / ( maxY - minY ) / txHeight ) );
         }
 
         connComp->AddAttributeChannel( AttributeChannelPtr( verTexAttrChannel ) );
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
+}
+
+// *************************************
+//
+void     DefaultAlphaMaskPlugin::RecalculateAttrChannel         ()
+{
+    auto prevGeomChannel = GetPrevPlugin()->GetVertexAttributesChannel();
+
+    if( prevGeomChannel == nullptr ) //FIXME: hackierka
+    {
+        assert( GetPrevPlugin()->GetTypeUid() == DefaultTextPluginDesc::UID() );
+
+        return;
+    }
+
+    assert( m_vaChannel != nullptr );
+    assert( m_textureWidth > 0 );
+    assert( m_textureHeight > 0 );
+
+    for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
+    {
+        auto cc = m_vaChannel->GetConnectedComponent( i );
+        auto ccAttrChannels = cc->GetAttributeChannelsPtr();
+        auto posChannel = ccAttrChannels.front(); //FIXME: implicit assumption that first channel contains positional data !!!
+        auto uvChannel = ccAttrChannels.back();
+
+        assert( uvChannel == ccAttrChannels[ m_texCoordChannelIndex ] );
+
+        //FIXME: only one texture - convex hull calculations
+        float minX = 100000.0f, minY = 100000.0f;
+        float maxX = 0.0f, maxY = 0.0f;
+        float pixelsPerUnitUVSpace = 1080.f;
+            
+        float txWidth = (float) m_textureWidth;
+        float txHeight = (float) m_textureHeight;
+
+        //FIXME: hackish as hell positioning (assuming implicit FullHD)
+        //convex hull - make sure that prevCompChannels[ 0 ] is indeed a positional channel
+        for( unsigned int j = 0; j < posChannel->GetNumEntries(); ++j )
+        {
+            const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( posChannel->GetData() );
+
+            minX = std::min( minX, pos[ j ].x );
+            minY = std::min( minY, pos[ j ].y );
+            maxX = std::max( maxX, pos[ j ].x );
+            maxY = std::max( maxY, pos[ j ].y );
+        }
+
+        Float2AttributeChannelPtr uv = std::static_pointer_cast< Float2AttributeChannel >( uvChannel ); //FIXME: poor, poor, poor
+        auto & uvVec = uv->GetVertices();
+
+        for( unsigned int j = 0; j < uvVec.size(); ++j )
+        {
+            const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( posChannel->GetData() );
+
+            uvVec[ j ].x = pixelsPerUnitUVSpace * ( pos[ j ].x - minX ) / ( maxX - minX ) / txWidth;
+            uvVec[ j ].y = pixelsPerUnitUVSpace * ( pos[ j ].y - minY ) / ( maxY - minY ) / txHeight;
+        }
+    }
+
+    m_vaChannel->SetNeedsAttributesUpdate( true );
 }
 
 namespace {

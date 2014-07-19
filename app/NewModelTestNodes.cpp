@@ -301,7 +301,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Tim
 
     if( useAlphaMask )
     {
-        bool success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "test.bmp" );
+        bool success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "bar_mask_red.png" );
         assert( success );
 
         SetDefaultTransformAlphaMaskTex( node->GetPlugin( "alpha_mask" ) );
@@ -350,6 +350,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
     node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( timeEvaluator );
 
+    /*
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 0.f, 0.0f ) );
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 2.f, glm::vec3( 0.f, 0.f, 0.0f ) );
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 5.f, glm::vec3( 0.f, 0.f, -2.f ) );
@@ -361,13 +362,15 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 8.f, glm::vec3( 1.f, 0.f, 1.f ), 180.f );
     SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 12.f, glm::vec3( 1.f, 0.f, 0.f ), 270.f );
     SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 16.f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
-
+    */
     node->GetPlugin( "texture" )->GetParameter( "alpha" )->SetTimeEvaluator( timeEvaluator );
 
+    /*
     model::SetParameter( node->GetPlugin( "texture" )->GetParameter( "alpha" ), TimeType( 0.f ),   0.5f );
     model::SetParameter( node->GetPlugin( "texture" )->GetParameter( "alpha" ), TimeType( 1.f ),   1.f );
     model::SetParameter( node->GetPlugin( "texture" )->GetParameter( "alpha" ), TimeType( 2.f ),   .2f );
     model::SetParameter( node->GetPlugin( "texture" )->GetParameter( "alpha" ), TimeType( 3.f ),   1.f );
+    */
 
     success = model::LoadTexture( node->GetPlugin( "texture" ), "full.jpg" );
     assert( success );
@@ -379,14 +382,15 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
         int height  = texturePlugin->GetTextureHeight();
 
         float wf = float( width ) / float( height );
+        float scl = 1.f;
 
-        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),   2.f );
-        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), wf * 2.f );
+        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),   2.f * scl );
+        model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), wf * 2.f * scl );
     }
 
     if( useAlphaMask )
     {
-        success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "test.bmp" );
+        success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "bar_mask_red.png" );
         assert( success );
 
         node->GetPlugin( "alpha_mask" )->GetParameter( "txAlphaMat" )->SetTimeEvaluator( timeEvaluator );
@@ -446,7 +450,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
 
     if( useAlphaMask )
     {
-        success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "test.bmp" );
+        success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "bar_mask_red.png" );
         assert( success );
 
         node->GetPlugin( "alpha_mask" )->GetParameter( "txAlphaMat" )->SetTimeEvaluator( timeEvaluator );

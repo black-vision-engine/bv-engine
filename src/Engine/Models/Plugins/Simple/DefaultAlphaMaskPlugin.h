@@ -83,7 +83,8 @@ public:
 
 private:
 
-    void                                        InitAttributesChannel       ( IPluginPtr prev );
+    void                                        InitAttributesChannel       ( IPluginConstPtr prev );
+    void                                        RecalculateAttrChannel      ();
 
     TextureWrappingMode                         GetWrapModeX                () const;
     TextureWrappingMode                         GetWrapModeY                () const;

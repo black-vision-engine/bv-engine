@@ -37,7 +37,7 @@ unsigned int            Float3AttributeChannel::GetNumEntries()   const
 }
 
 // *********************************
-//
+//FIXME: this suxxxxx - of course vector is guaranteed to work this way (and reintepreted cast works) but this is a shitty practice and a sign of poorly designed code
 const char *            Float3AttributeChannel::GetData()         const
 {
     if( m_attributes.empty() )

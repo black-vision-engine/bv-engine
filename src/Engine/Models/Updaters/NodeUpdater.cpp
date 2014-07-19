@@ -117,6 +117,10 @@ void    NodeUpdater::DoUpdate        ()
             UpdateRendererState();
         }
     }
+    else
+    {
+        m_sceneNode->SetVisible( false );
+    }
 }
 
 // *****************************
