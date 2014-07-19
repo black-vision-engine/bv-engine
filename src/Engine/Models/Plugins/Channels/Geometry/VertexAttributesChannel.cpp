@@ -19,6 +19,7 @@ VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, bool 
     , m_isTimeInvariant( isTimeInvariant )
     , m_needsAttributesUpdate( false )
     , m_needsTopologyUpdate( false )
+    , m_needsInitialization( true )
 {
 }
 
@@ -31,6 +32,7 @@ VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, const
     , m_isTimeInvariant( isTimeInvariant )
     , m_needsAttributesUpdate( false )
     , m_needsTopologyUpdate( false )
+    , m_needsInitialization( true )
 {
 }
 
@@ -222,6 +224,35 @@ ConnectedComponentPtr                   VertexAttributesChannel::GetConnectedCom
     assert( idx < m_connectedComponents.size() );
 
     return m_connectedComponents[ idx ];
+}
+
+// *********************************
+//
+void                                    VertexAttributesChannel::ClearAll                ()
+{
+    m_connectedComponents.clear();
+    m_needsInitialization = true;
+}
+
+// *********************************
+//
+bool                                    VertexAttributesChannel::NeedsInitialization     () const
+{
+    return m_needsInitialization;
+}
+
+// *********************************
+//
+void                                    VertexAttributesChannel::Initialize              ( PrimitiveType type, const VertexAttributesChannelDescriptor& desc, bool isReadOnly, bool isTimeInvariant )
+{
+    m_primitiveType = type;
+    m_desc = desc;
+    m_isReadOnly = isReadOnly;
+    m_isTimeInvariant = isTimeInvariant;
+    m_needsAttributesUpdate = false;
+    m_needsTopologyUpdate = false;
+
+    m_needsInitialization = false;
 }
 
 } // model
