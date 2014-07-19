@@ -30,6 +30,8 @@ protected:
     bool                                            m_needsAttributesUpdate;
     bool                                            m_needsTopologyUpdate;
 
+    bool                                            m_needsInitialization;
+
 public:
                                                         VertexAttributesChannel         ( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false );
                                                         VertexAttributesChannel         ( PrimitiveType type, const VertexAttributesChannelDescriptor& desc, bool isReadOnly = false, bool isTimeInvariant = false );
@@ -64,6 +66,10 @@ public:
     virtual bool                                        CanBeConnectedTo        ( IVertexAttributesChannelPtr channel ) const override;
 
     ConnectedComponentPtr                               GetConnectedComponent   ( unsigned int idx );
+
+    void                                                ClearAll                ();
+    bool                                                NeedsInitialization     () const;
+    void                                                Initialize              ( PrimitiveType type, const VertexAttributesChannelDescriptor& desc, bool isReadOnly, bool isTimeInvariant );
 
 protected:
 

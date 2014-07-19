@@ -91,7 +91,7 @@ namespace {
         SetParameterTranslation( param, 6.f, glm::vec3( 0.f, 1.f, 0.f ) );
         SetParameterTranslation( param, 9.f, glm::vec3( 0.f, -1.f, 0.f ) );
         SetParameterTranslation( param, 12.f, glm::vec3( 0.f, 0.f, 0.f ) );
-
+        /*
         SetParameterCenterMass( param, 0.f, glm::vec3( 0.48f, 0.59f, 0.f ) );
 
         SetParameterRotation( param, 15.f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
@@ -102,6 +102,7 @@ namespace {
         SetParameterScale( param, 12.f, glm::vec3( 1.f, 1.f, 1.f ) );
         SetParameterScale( param, 15.f, glm::vec3( 1.f/68.f, 1./68.f, 1.f ) );
         SetParameterScale( param, 25.f, glm::vec3( 1.f/32.f, 1.f/32.f, 1.f ) );
+        */
     }
 
 } //anonymous
@@ -296,15 +297,17 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Tim
 
     node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( localTimeline );
 
-    SetDefaultTransformAnim( node->GetPlugin( "transform" ) );
+    //SetDefaultTransformAnim( node->GetPlugin( "transform" ) );
 
+    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 2.f );
+    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),  2.f );
 
     if( useAlphaMask )
     {
         bool success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "bar_mask_red.png" );
         assert( success );
 
-        SetDefaultTransformAlphaMaskTex( node->GetPlugin( "alpha_mask" ) );
+        //SetDefaultTransformAlphaMaskTex( node->GetPlugin( "alpha_mask" ) );
     }
 
     return node;
@@ -442,7 +445,10 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
 
     //node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( someTimelineWithEvents );
 
-    SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
+    //SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
+
+    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
+    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
 
     success = model::LoadAnimation( node->GetPlugin( "animation" ), "../../media/sequences/FullHD/alfai", "*.tga" );
     //success = model::LoadAnimation( node->GetPlugin( "animation" ), "../../media/sequences/FullHD/IntroTGA", "*.tga" );
@@ -498,7 +504,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
 
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
-    SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 30.0f );
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 40.0f );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
 
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.01f );
@@ -512,11 +518,12 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     assert( success );
 
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"bla bla" );
-    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAA\nBBBB\nCCCC\nDDDD" );
+    //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAAAA\nBBBBCCCC\nDDDDDDDDD" );
+    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAABBBBCCCCDDDD" );
 
     if( useAlphaMask )
     {
-        success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "test.bmp" );
+        success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "bar_mask_red.png" );
         assert( success );
 
         node->GetPlugin( "alpha_mask" )->GetParameter( "txAlphaMat" )->SetTimeEvaluator( timeEvaluator );
