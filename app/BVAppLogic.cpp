@@ -69,7 +69,6 @@ namespace
     void KeyPressedSendEvent( unsigned char c )
     {
         GKeyPressedEvent->SetChar( c );
-
         GetDefaultEventManager().QueueEvent( GKeyPressedEvent );
     }
 }
@@ -254,7 +253,8 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
 //
 void BVAppLogic::OnKey           ( unsigned char c )
 {
-    KeyPressedSendEvent( c );
+    //FIXME: keypressed event was used here to set text in all currently loaded Text plugins
+    //KeyPressedSendEvent( c );
     //TODO: implement whatever you want here
 }
 

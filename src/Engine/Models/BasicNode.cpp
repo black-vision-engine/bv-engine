@@ -335,15 +335,18 @@ bool           BasicNode::AddPlugins              ( const std::vector< std::stri
 //
 void BasicNode::Update( TimeType t )
 {
-    m_overrideState->Update( t );
+    if( IsVisible() )
+    {
+        m_overrideState->Update( t );
 
-    for( auto l : m_layers )
-        l->Update( t );
+        for( auto l : m_layers )
+            l->Update( t );
 
-    m_pluginList->Update( t );
+        m_pluginList->Update( t );
 
-    for( auto ch : m_children )
-        ch->Update( t );
+        for( auto ch : m_children )
+            ch->Update( t );
+    }
 }
 
 // ********************************
