@@ -1,8 +1,10 @@
 Publiczny interfejs tajmlajnu do sterowania składa się z następujących metod:
 
 1. Play
+  - assert na to, że ma nie być żadnego aktywnego eventu w danym momencie
   - w przypadku zatrzymania przez Stop odpala Play
   - w przypadku zatrzymania przez event Stop odpala Play i nie zatrzymuje się jeszcze raz na tym samym evencie
+
 2. Stop
   - zatrzymuje playback
 2. Reverse
@@ -13,7 +15,11 @@ Publiczny interfejs tajmlajnu do sterowania składa się z następujących metod
   - jeśli wypada w evencie reverse, to event jest ignorowany (czy nie jest)?
 4. SetTimeAndStop
   - Ustawia czas i odpala play, jeśli czas wypada w evencie stop, to ten event jest ignorowany
-  - jeśłi wypada w evencie reverse, to event jest ignorowany (czy nie jest)?
+  - jeśli wypada w evencie reverse, to event jest ignorowany (czy nie jest)?
+
+Triggerowane eventy:
+
+  trigger event ustawia local time
 
   
 Wewnętrznie aktualizacja odbywa się poprzez ustawienie czasu metodą SetGlobalTime( t ), co powoduje
@@ -21,3 +27,4 @@ Wewnętrznie aktualizacja odbywa się poprzez ustawienie czasu metodą SetGlobal
   nt = GetLocalTime();
   
   i aktualizacja dzieci, poprzez ustawienie im czasu za pomocą SetGlobalTime( nt );
+  

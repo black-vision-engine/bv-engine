@@ -22,8 +22,8 @@ public:
     virtual void                SetActive           ( bool active ) = 0;
 
     virtual TimeType            GetEventTime        () const = 0;
-    virtual TimeType            GetLastTriggerTime  () const = 0;
-    virtual void                SetLastTriggerTime  ( TimeType t ) = 0;
+    //virtual TimeType            GetLastTriggerTime  () const = 0;
+    //virtual void                SetLastTriggerTime  ( TimeType t ) = 0;
 
     virtual const ITimeline *   GetOwnerTimeline    () const = 0;
 

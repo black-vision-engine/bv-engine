@@ -124,17 +124,17 @@ TestAI *        TestAIManager::PreparePreset    ( unsigned int idx, BVAppLogic *
 TestAI *        TestAIManager::PreparePreset0   () const
 {
     auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop0", TimeType( 2.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop1", TimeType( 4.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop2", TimeType( 6.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop3", TimeType( 8.0 ), timeline.get() ) );
 
     auto c0 = new AICommandPlay( timeline, TimeType( 2.0 ) );
-    auto c1 = new AICommandStop( timeline, TimeType( 4.0 ) );
-    auto c2 = new AICommandPlay( timeline, TimeType( 7.0 ) );
-    auto c3 = new AICommandStop( timeline, TimeType( 10.0 ) );
-    auto c4 = new AICommandSetTimeAndPlay( timeline, TimeType( 12.0 ), TimeType( 2.0 ) );
-    auto c5 = new AICommandSetTimeAndStop( timeline, TimeType( 15.0 ), TimeType( 1.0 ) );
-    auto c6 = new AICommandPlay( timeline, TimeType( 18.0 ) );
-    auto c7 = new AICommandReverse( timeline, TimeType( 20.0 ) );
-    auto c8 = new AICommandReverse( timeline, TimeType( 24.0 ) );
-    auto c9 = new AICommandStop( timeline, TimeType( 29.0 ) );
+    auto c1 = new AICommandPlay( timeline, TimeType( 6.0 ) );
+    auto c2 = new AICommandPlay( timeline, TimeType( 10.0 ) );
+    auto c3 = new AICommandPlay( timeline, TimeType( 14.0 ) );
+    auto c4 = new AICommandPlay( timeline, TimeType( 18.0 ) );
+    auto c5 = new AICommandPlay( timeline, TimeType( 22.0 ) );
 
     TestAI * ai = new TestAI( timeline, nullptr );
 
@@ -144,10 +144,6 @@ TestAI *        TestAIManager::PreparePreset0   () const
     ai->AddCommand( c3 );
     ai->AddCommand( c4 );
     ai->AddCommand( c5 );
-    ai->AddCommand( c6 );
-    ai->AddCommand( c7 );
-    ai->AddCommand( c8 );
-    ai->AddCommand( c9 );
 
     return ai;
 }

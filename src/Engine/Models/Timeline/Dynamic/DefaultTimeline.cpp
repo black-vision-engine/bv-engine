@@ -15,13 +15,13 @@ namespace bv { namespace model {
 
 namespace {
 
-const TimeType GEvtTimeSeparation = TimeType( 0.1 );
+const TimeType GEvtTimeSeparation = TimeType( 0.1 ); //FIXME: some config (default) parameters should be used here - engine should expose it's connfiguration defaults for overriding
 
 // *********************************
 //
 bool timelineEventComparator    ( ITimelineEvent * e0, ITimelineEvent * e1 )
 {
-    return e0->GetLastTriggerTime() < e1->GetLastTriggerTime();
+    return e0->GetEventTime() < e1->GetEventTime();
 }
 
 } //anonymous
@@ -33,7 +33,7 @@ DefaultTimeline::DefaultTimeline     ( const std::string & name, TimeType durati
     : Parent( name )
     , m_timeEvalImpl( duration, TimelinePlayDirection::TPD_FORWAD, preMethod, postMethod )
     , m_prevTime( TimeType( 0.0 ) )
-    , m_lastTriggeredEvent( nullptr )
+    , m_activeEvent( nullptr )
 {
 }
 
@@ -62,14 +62,17 @@ void                                DefaultTimeline::SetGlobalTimeImpl  ( TimeTy
     m_timeEvalImpl.UpdateGlobalTime( t );
     auto tOld = m_timeEvalImpl.GetLocalTime();
 
-    auto evt = CurrentEventNC();
+    auto evt = CurrentEvent();
 
     if( evt != nullptr )
     {
+        assert( evt == m_activeEvent || m_activeEvent == nullptr );
         TriggerEvent( evt, t );
     }
 
     m_prevTime = tOld;
+
+    PostUpdateEventStep();
 }
 
 // *********************************
@@ -122,7 +125,17 @@ void                                DefaultTimeline::Reverse            ()
 void                                DefaultTimeline::Play               ()
 {
     m_timeEvalImpl.Start();
-    ActivateLastEvent();
+
+    auto t = GetLocalTime();
+    auto evt = CurrentEvent();
+
+    if( evt )
+    {
+        assert( m_activeEvent == nullptr || evt == m_activeEvent );
+
+        m_activeEvent = evt;
+        m_activeEvent->SetActive( false );
+    }
 }
 
 // *********************************
@@ -136,7 +149,8 @@ void                                DefaultTimeline::Stop               ()
 //
 void                                DefaultTimeline::SetTimeAndStop     ( TimeType t )
 {
-    m_timeEvalImpl.Stop();
+    Stop();
+
     m_timeEvalImpl.ResetLocalTimeTo( t );
 }
 
@@ -145,8 +159,8 @@ void                                DefaultTimeline::SetTimeAndStop     ( TimeTy
 void                                DefaultTimeline::SetTimeAndPlay     ( TimeType t )
 {
     m_timeEvalImpl.ResetLocalTimeTo( t );
-    m_timeEvalImpl.Start();
-    ActivateLastEvent();
+
+    Play();
 }
 
 // *********************************
@@ -248,28 +262,28 @@ bool                                DefaultTimeline::RemoveKeyFrameEvent( const 
     return false;
 }
 
-// *********************************
+//// *********************************
+////
+//const ITimelineEvent *              DefaultTimeline::CurrentEvent       () const
+//{
+//    return CurrentEventNC();
+//}
 //
-const ITimelineEvent *              DefaultTimeline::CurrentEvent       () const
-{
-    return CurrentEventNC();
-}
+//// *********************************
+////
+//const ITimelineEvent *              DefaultTimeline::LastTriggeredEvent () const
+//{
+//    if( CurrentEventNC() == m_lastTriggeredEvent )
+//    {
+//        return m_lastTriggeredEvent;
+//    }
+//
+//    return nullptr;
+//}
 
 // *********************************
 //
-const ITimelineEvent *              DefaultTimeline::LastTriggeredEvent () const
-{
-    if( CurrentEventNC() == m_lastTriggeredEvent )
-    {
-        return m_lastTriggeredEvent;
-    }
-
-    return nullptr;
-}
-
-// *********************************
-//
-ITimelineEvent *                    DefaultTimeline::CurrentEventNC     () const
+ITimelineEvent *                    DefaultTimeline::CurrentEvent   () const
 {
     if( m_timeEvalImpl.IsActive() )
     {
@@ -318,28 +332,27 @@ void                                DefaultTimeline::TriggerEvent       ( ITimel
 {
     if( evt->IsActive() )
     {
-        m_lastTriggeredEvent = evt;
+        m_activeEvent = evt;
 
         switch( evt->GetType() )
         {
             case TimelineEventType::TET_STOP:
             {
                 auto evtImpl = static_cast< TimelineEventStop * >( evt );
-                evtImpl->SetLastTriggerTime( globalTime );
                 evtImpl->SetActive( false );
+                SetLocalTime( evt->GetEventTime() );
                 m_timeEvalImpl.Stop();
                 printf( "Event STOP\n" );
-
                 break;
             }
             case TimelineEventType::TET_LOOP:
             {
                 auto evtImpl = static_cast< TimelineEventLoop * >( evt );
-                evtImpl->SetLastTriggerTime( globalTime );
 
                 switch( evtImpl->GetActionType() )
                 {
                     case LoopEventAction::LEA_GOTO:
+                        assert( std::abs( GetLocalTime() - evtImpl->GetTargetTime() ) > GEvtTimeSeparation );
                         m_timeEvalImpl.ResetLocalTimeTo( evtImpl->GetTargetTime() );
                         break;
                     case LoopEventAction::LEA_RESTART:
@@ -362,7 +375,7 @@ void                                DefaultTimeline::TriggerEvent       ( ITimel
             case TimelineEventType::TET_NULL:
             {
                 auto evtImpl = static_cast< TimelineEventNull * >( evt );
-                evtImpl->SetLastTriggerTime( globalTime );
+                //evtImpl->SetLastTriggerTime( globalTime );
                 evtImpl->SetActive( false );
 
                 printf( "Event NULL\n" );
@@ -377,11 +390,18 @@ void                                DefaultTimeline::TriggerEvent       ( ITimel
 
 // *********************************
 //
-void                                DefaultTimeline::ActivateLastEvent   ()
+void                                DefaultTimeline::PostUpdateEventStep    ()
 {
-    if( m_lastTriggeredEvent && !m_lastTriggeredEvent->IsActive() )
+    if( m_activeEvent && !m_activeEvent->IsActive() )
     {
-        m_lastTriggeredEvent->SetActive( true );
+        auto t = GetLocalTime();
+     
+        if( std::abs( t - m_activeEvent->GetEventTime() ) > GEvtTimeSeparation )
+        {
+            printf( "PostUpdateEvent activated: %s at %.4f evtt: %.4f\n", m_activeEvent->GetName().c_str(), t, m_activeEvent->GetEventTime() );
+            m_activeEvent->SetActive( true );
+            m_activeEvent = nullptr;
+        }
     }
 }
 

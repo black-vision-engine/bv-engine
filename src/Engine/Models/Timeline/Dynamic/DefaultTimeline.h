@@ -21,7 +21,7 @@ private:
     TimeSegmentEvalImpl             m_timeEvalImpl;
     TimeType                        m_prevTime;
 
-    ITimelineEvent *                m_lastTriggeredEvent;
+    ITimelineEvent *                m_activeEvent;
 
     std::vector< ITimelineEvent * > m_keyFrameEvents;
 
@@ -65,17 +65,17 @@ public:
     virtual bool                                RemoveKeyFrameEvent ( unsigned int idx ) override;
     virtual bool                                RemoveKeyFrameEvent ( const std::string & name ) override;
 
-    virtual const ITimelineEvent *              CurrentEvent        () const override;
-    virtual const ITimelineEvent *              LastTriggeredEvent  () const override;
+    //virtual const ITimelineEvent *              CurrentEvent        () const override;
+    //virtual const ITimelineEvent *              LastTriggeredEvent  () const override;
 
 private:
 
-    ITimelineEvent *                            CurrentEventNC      () const;
+    ITimelineEvent *                            CurrentEvent        () const;
 
     bool                                        CanBeInserted       ( const ITimelineEvent * evt ) const;
 
     void                                        TriggerEvent        ( ITimelineEvent * evt, TimeType globalTime );
-    void                                        ActivateLastEvent   ();
+    void                                        PostUpdateEventStep ();
 
 };
 

@@ -18,7 +18,7 @@ private:
     bool                m_active;
 
     TimeType            m_eventTime;
-    TimeType            m_lastTriggerTime;
+    //TimeType            m_lastTriggerTime;
 
 protected:
 
@@ -33,8 +33,8 @@ public:
     virtual void                SetActive           ( bool active ) override;
 
     virtual TimeType            GetEventTime        () const override;
-    virtual TimeType            GetLastTriggerTime  () const override;
-    virtual void                SetLastTriggerTime  ( TimeType triggerTime ) override;
+    //virtual TimeType            GetLastTriggerTime  () const override;
+    //virtual void                SetLastTriggerTime  ( TimeType triggerTime ) override;
     
     virtual const ITimeline *   GetOwnerTimeline    () const override;
 

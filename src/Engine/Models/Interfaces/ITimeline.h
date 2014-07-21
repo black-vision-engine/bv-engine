@@ -44,8 +44,8 @@ public:
     virtual bool                    RemoveKeyFrameEvent ( unsigned int idx ) = 0;
     virtual bool                    RemoveKeyFrameEvent ( const std::string & name ) = 0;
 
-    virtual const ITimelineEvent *  CurrentEvent        () const = 0;
-    virtual const ITimelineEvent *  LastTriggeredEvent  () const = 0;
+    //virtual const ITimelineEvent *  CurrentEvent        () const = 0;
+    //virtual const ITimelineEvent *  LastTriggeredEvent  () const = 0;
 
     virtual                         ~ITimeline      () {}
 

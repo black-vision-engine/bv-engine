@@ -20,8 +20,8 @@ BVConfig::BVConfig                      ()
     m_defaultWindowHeight   = m_defaultHeight;
 #else
     m_fullscreeMode         = false;
-    m_defaultWindowWidth    = m_defaultWidth / 2;
-    m_defaultWindowHeight   = m_defaultHeight / 2;
+    m_defaultWindowWidth    = m_defaultWidth / 20;
+    m_defaultWindowHeight   = m_defaultHeight / 20;
 #endif
 
     m_fps               = 5000;
