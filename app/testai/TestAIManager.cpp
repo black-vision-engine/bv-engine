@@ -170,17 +170,35 @@ TestAI *        TestAIManager::PreparePreset0   () const
 //FIXME: test and fix in runtime
 TestAI *        TestAIManager::PreparePreset1   () const
 {
-    auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 0", TimeType( 20.0 ), TimelineWrapMethod::TWM_REPEAT, TimelineWrapMethod::TWM_CLAMP ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop0", TimeType( 5.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop1", TimeType( 10.0 ), timeline.get() ) );
+    auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ) );
+    timeline->AddKeyFrame( new model::TimelineEventLoop( "reverse 2 at 0.0 ", TimeType( 0.0 ), LoopEventAction::LEA_REVERSE, 2, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop at 2.0      ", TimeType( 2.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventLoop( "reverse 1 at 4.0 ", TimeType( 4.0 ), LoopEventAction::LEA_REVERSE, 1, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop at 6.0      ", TimeType( 6.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventLoop( "restart 1 at 9.0 ", TimeType( 9.0 ), LoopEventAction::LEA_RESTART, 1, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventLoop( "reverse 1 at 12.0", TimeType( 12.0 ), LoopEventAction::LEA_REVERSE, 1, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop at 15.0     ", TimeType( 15.0 ), timeline.get() ) );
 
-    auto c0 = new AICommandPlay( timeline, TimeType( 2.0 ) );
-    auto c1 = new AICommandPlay( timeline, TimeType( 9.0 ) );
-    auto c2 = new AICommandPlay( timeline, TimeType( 16.0 ) );
-    auto c3 = new AICommandSetTimeAndStop( timeline, TimeType( 25.0 ), TimeType( 0.0 ) );
-    auto c4 = new AICommandPlay( timeline, TimeType( 27.0 ) );
-    auto c5 = new AICommandPlay( timeline, TimeType( 35.0 ) );
-    auto c6 = new AICommandPlay( timeline, TimeType( 40.0 ) );
+    //auto c0 = new AICommandSetTimeAndPlay( timeline, TimeType( 1.0 ), TimeType( 2.0 ) );
+    auto c0 = new AICommandPlay( timeline, TimeType( 1.0 ) );
+    auto c1 = new AICommandSetTimeAndStop( timeline, TimeType( 4.0 ), TimeType( 6.0 ) ); //start at stop, target stop STOP
+    auto c2 = new AICommandPlay( timeline, TimeType( 6.0 ) );
+    auto c3 = new AICommandSetTimeAndPlay( timeline, TimeType( 13.0 ), TimeType( 2.0 ) ); //start at stop, target self stop PLAY
+    auto c4 = new AICommandSetTimeAndPlay( timeline, TimeType( 18.0 ), TimeType( 15.0 ) ); //start at stop, target stop PLAY
+    auto c5 = new AICommandSetTimeAndStop( timeline, TimeType( 26.0 ), TimeType( 5.0 ) ); //start at stop, target casual STOP
+    auto c6 = new AICommandSetTimeAndPlay( timeline, TimeType( 28.0 ), TimeType( 8.0 ) ); //start at casual, target casual PLAY
+    auto c7 = new AICommandSetTimeAndPlay( timeline, TimeType( 37.0 ), TimeType( 2.0 ) ); //start at casual, target stop PLAY
+    auto c8 = new AICommandReverse( timeline, TimeType( 42.0 ) ); //reverse at STOP
+    auto c9 = new AICommandPlay( timeline, TimeType( 43.0 ) ); //reverse at STOP
+    auto c10 = new AICommandReverse( timeline, TimeType( 45.0 ) ); //reverse at PLAY
+    auto c11 = new AICommandStop( timeline, TimeType( 46.0 ) ); //STOP at PLAY
+    auto c12 = new AICommandPlay( timeline, TimeType( 48.0 ) ); //PLAY after stop
+    auto c13 = new AICommandStop( timeline, TimeType( 50.0 ) ); //STOP at STOP
+    auto c14 = new AICommandPlay( timeline, TimeType( 52.0 ) ); //PLAY at STOP
+    auto c15 = new AICommandStop( timeline, TimeType( 62.0 ) ); //STOP at STOP
+    auto c16 = new AICommandSetTimeAndStop( timeline, TimeType( 64.0 ), TimeType( 22.0 ) );
+    auto c17 = new AICommandSetTimeAndPlay( timeline, TimeType( 66.0 ), TimeType( 13.0 ) );
+    auto c18 = new AICommandPlay( timeline, TimeType( 71.0 ) );
 
     TestAI * ai = new TestAI( timeline, nullptr );
 
@@ -191,6 +209,18 @@ TestAI *        TestAIManager::PreparePreset1   () const
     ai->AddCommand( c4 );
     ai->AddCommand( c5 );
     ai->AddCommand( c6 );
+    ai->AddCommand( c7 );
+    ai->AddCommand( c8 );
+    ai->AddCommand( c9 );
+    ai->AddCommand( c10 );
+    ai->AddCommand( c11 );
+    ai->AddCommand( c12 );
+    ai->AddCommand( c13 );
+    ai->AddCommand( c14 );
+    ai->AddCommand( c15 );
+    ai->AddCommand( c16 );
+    ai->AddCommand( c17 );
+    ai->AddCommand( c18 );
 
     return ai;
 }

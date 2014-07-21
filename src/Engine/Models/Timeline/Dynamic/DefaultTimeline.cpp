@@ -143,6 +143,8 @@ void                                DefaultTimeline::SetTimeAndStop     ( TimeTy
     m_prevTime = t;
     m_timeEvalImpl.ResetLocalTimeTo( t );
 
+    PostUpdateEventStep();
+
     Stop();
 }
 
@@ -152,6 +154,8 @@ void                                DefaultTimeline::SetTimeAndPlay     ( TimeTy
 {
     m_prevTime = t;
     m_timeEvalImpl.ResetLocalTimeTo( t );
+
+    PostUpdateEventStep();
 
     Play();
 }
@@ -335,7 +339,8 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
             evt->SetActive( false );
             SetLocalTime( evt->GetEventTime() );
             m_timeEvalImpl.Stop();
-            printf( "Event STOP %s prev: %.4f, cur: %.4f\n", evt->GetName().c_str(), prevTime, curTime );
+            //printf( "Event STOP %s prev: %.4f, cur: %.4f\n", evt->GetName().c_str(), prevTime, curTime );
+            printf( "Event STOP %s \n", evt->GetName().c_str() );
             break;
         }
         case TimelineEventType::TET_LOOP:
