@@ -263,7 +263,7 @@ void                                DefaultTimeline::DeactivateEvent    ( ITimel
 
     if( m_activeEvent != evt )
     {
-        printf( "Deactivating %s \n", evt->GetName().c_str() );
+        //printf( "Deactivating %s \n", evt->GetName().c_str() );
 
         m_activeEvent = evt;
         m_activeEvent->SetActive( false ); //FIXME: not necessarily useful
@@ -326,6 +326,8 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
     assert( m_activeEvent == nullptr );
 
+    DeactivateEvent( evt );
+
     switch( evt->GetType() )
     {
         case TimelineEventType::TET_STOP:
@@ -333,7 +335,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
             evt->SetActive( false );
             SetLocalTime( evt->GetEventTime() );
             m_timeEvalImpl.Stop();
-            printf( "Event STOP\n" );
+            printf( "Event STOP %s prev: %.4f, cur: %.4f\n", evt->GetName().c_str(), prevTime, curTime );
             break;
         }
         case TimelineEventType::TET_LOOP:
@@ -348,20 +350,27 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
                     m_timeEvalImpl.ResetLocalTimeTo( evtImpl->GetTargetTime() );
 
                     m_prevTime = evtImpl->GetTargetTime();
-                    
-                    printf( "Event LOOP -> GOTO: %.4f\n", evtImpl->GetTargetTime() );
+
+                    m_activeEvent->SetActive( true ); //Reset current event (forthcomming play will trigger its set of event problems - e.g. first event at 0.0 to pass by).
+                    m_activeEvent = nullptr;
+
+                    printf( "Event LOOP -> GOTO: %.4f %s\n", evtImpl->GetTargetTime(), evt->GetName().c_str() );
                     break;
                 case LoopEventAction::LEA_RESTART:
                     m_timeEvalImpl.Reset();
-                    m_timeEvalImpl.Start(); //FIXME: really start or should we wait for the user to trigger this timeline?
-                    
-                    printf( "Event LOOP -> RESTART\n" );
-                    
+
+                    m_prevTime = TimeType( 0.0 );
+
+                    m_activeEvent->SetActive( true ); //Reset current event (forthcomming play will trigger its set of event problems - e.g. first event at 0.0 to pass by).
+                    m_activeEvent = nullptr;
+
+                    Play(); //FIXME: really start or should we wait for the user to trigger this timeline?
+                    printf( "Event LOOP -> RESTART %s\n", evt->GetName().c_str() );                    
                     break;
                 case LoopEventAction::LEA_REVERSE:
                     Reverse();
                     
-                    printf( "Event LOOP -> REVERSE\n" );
+                    printf( "Event LOOP -> REVERSE %s\n", evt->GetName().c_str() );
                     
                     break;
                 default:
@@ -386,8 +395,6 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
         default:
             assert( false );
     }
-
-    DeactivateEvent( evt );
 }
 
 // *********************************
@@ -400,7 +407,7 @@ void                                DefaultTimeline::PostUpdateEventStep    ()
      
         if( std::abs( t - m_activeEvent->GetEventTime() ) > GEvtTimeSeparation * 0.5f )
         {
-            printf( "Activating: %s at %.4f evtt: %.4f\n", m_activeEvent->GetName().c_str(), t, m_activeEvent->GetEventTime() );
+            //printf( "Activating: %s at %.4f evtt: %.4f\n", m_activeEvent->GetName().c_str(), t, m_activeEvent->GetEventTime() );
             m_activeEvent->SetActive( true );
             m_activeEvent = nullptr;
         }

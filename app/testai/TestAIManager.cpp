@@ -124,28 +124,33 @@ TestAI *        TestAIManager::PreparePreset    ( unsigned int idx, BVAppLogic *
 TestAI *        TestAIManager::PreparePreset0   () const
 {
     auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop0", TimeType( 0.5 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventLoop( "loop1", TimeType( 1.0 ), LoopEventAction::LEA_REVERSE, 2, TimeType( 1.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventLoop( "loop2", TimeType( 3.0 ), LoopEventAction::LEA_REVERSE, 2, TimeType( 1.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventLoop( "loop3", TimeType( 5.0 ), LoopEventAction::LEA_RESTART, 3, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventLoop( "reverse 2 at 0.0 ", TimeType( 0.0 ), LoopEventAction::LEA_REVERSE, 2, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop at 2.0      ", TimeType( 2.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventLoop( "reverse 1 at 4.0 ", TimeType( 4.0 ), LoopEventAction::LEA_REVERSE, 1, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop at 6.0      ", TimeType( 6.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventLoop( "restart 1 at 9.0 ", TimeType( 9.0 ), LoopEventAction::LEA_RESTART, 1, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventLoop( "reverse 1 at 12.0", TimeType( 12.0 ), LoopEventAction::LEA_REVERSE, 1, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop at 15.0     ", TimeType( 15.0 ), timeline.get() ) );
 
-    auto c0 = new AICommandSetTimeAndPlay( timeline, TimeType( 1.0 ), TimeType( 2.0 ) );
-/*    auto c1 = new AICommandPlay( timeline, TimeType( 4.0 ) );
-    auto c2 = new AICommandPlay( timeline, TimeType( 6.0 ) );
-    auto c3 = new AICommandPlay( timeline, TimeType( 8.0 ) );
-    auto c4 = new AICommandPlay( timeline, TimeType( 10.0 ) );
-    auto c5 = new AICommandPlay( timeline, TimeType( 12.0 ) );
-    auto c6 = new AICommandPlay( timeline, TimeType( 14.0 ) );
-    auto c7 = new AICommandPlay( timeline, TimeType( 16.0 ) );
-    auto c8 = new AICommandPlay( timeline, TimeType( 18.0 ) );
-    auto c9 = new AICommandPlay( timeline, TimeType( 20.0 ) );
-    auto c10 = new AICommandPlay( timeline, TimeType( 22.0 ) );
-    auto c11 = new AICommandPlay( timeline, TimeType( 24.0 ) );
-    */
+    //auto c0 = new AICommandSetTimeAndPlay( timeline, TimeType( 1.0 ), TimeType( 2.0 ) );
+    auto c0 = new AICommandPlay( timeline, TimeType( 1.0 ) );
+    auto c1 = new AICommandPlay( timeline, TimeType( 5.0 ) );
+    auto c2 = new AICommandPlay( timeline, TimeType( 11.0 ) );
+    auto c3 = new AICommandPlay( timeline, TimeType( 16.0 ) );
+    auto c4 = new AICommandPlay( timeline, TimeType( 20.5 ) );
+    auto c5 = new AICommandPlay( timeline, TimeType( 25.0 ) );
+    auto c6 = new AICommandPlay( timeline, TimeType( 30.0 ) );
+    auto c7 = new AICommandPlay( timeline, TimeType( 37.0 ) );
+    auto c8 = new AICommandPlay( timeline, TimeType( 51.0 ) );
+    auto c9 = new AICommandPlay( timeline, TimeType( 56.0 ) );
+    auto c10 = new AICommandPlay( timeline, TimeType( 61.0 ) );
+    auto c11 = new AICommandPlay( timeline, TimeType( 66.0 ) );
+    auto c12 = new AICommandPlay( timeline, TimeType( 76.0 ) );
+
     TestAI * ai = new TestAI( timeline, nullptr );
 
-    ai->AddCommand( c0 );    
-    /*ai->AddCommand( c1 );
+    ai->AddCommand( c0 );
+    ai->AddCommand( c1 );
     ai->AddCommand( c2 );
     ai->AddCommand( c3 );
     ai->AddCommand( c4 );
@@ -156,7 +161,8 @@ TestAI *        TestAIManager::PreparePreset0   () const
     ai->AddCommand( c9 );
     ai->AddCommand( c10 );
     ai->AddCommand( c11 );
-    */
+    ai->AddCommand( c12 );
+
     return ai;
 }
 
