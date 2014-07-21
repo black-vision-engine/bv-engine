@@ -50,6 +50,13 @@ TimeType        TimelineEventLoop::GetTargetTime       () const
 
 // *********************************
 //
+bool            TimelineEventLoop::IsActive            () const
+{
+    return Parent::IsActive() && ( GetLoopCount() < GetTotalLoopCount() );
+}
+
+// *********************************
+//
 void            TimelineEventLoop::SetTargetTime       ( TimeType t )
 {
     m_targetTime = m_targetTime;

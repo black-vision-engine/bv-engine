@@ -42,7 +42,8 @@ void        TimeSegmentEvalImpl::Start               ()
     }
     else
     {
-        ResetLocalTimeTo( TimeType( 0.0 ) );
+        //FIXME: WHAT THE HELL IS THIS?????
+        //ResetLocalTimeTo( TimeType( 0.0 ) );
     }
 }
 
@@ -117,6 +118,7 @@ void        TimeSegmentEvalImpl::UpdateGlobalTime   ( TimeType t )
 TimeType    TimeSegmentEvalImpl::GetLocalTime        () const
 {
     auto t = GetLocalTimeNoClamp( m_globalTime );
+
     return EvalClamp( t );
 }
 

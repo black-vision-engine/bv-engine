@@ -124,10 +124,12 @@ TestAI *        TestAIManager::PreparePreset    ( unsigned int idx, BVAppLogic *
 TestAI *        TestAIManager::PreparePreset0   () const
 {
     auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop0", TimeType( 2.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop1", TimeType( 4.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop2", TimeType( 6.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop3", TimeType( 8.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop0", TimeType( 0.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop1", TimeType( 2.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop2", TimeType( 4.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop3", TimeType( 6.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop4", TimeType( 8.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventLoop( "loop0", TimeType( 3.23 ), LoopEventAction::LEA_GOTO, 2, TimeType( 0.1 ), timeline.get() ) );
 
     auto c0 = new AICommandPlay( timeline, TimeType( 2.0 ) );
     auto c1 = new AICommandPlay( timeline, TimeType( 6.0 ) );
@@ -138,7 +140,7 @@ TestAI *        TestAIManager::PreparePreset0   () const
 
     TestAI * ai = new TestAI( timeline, nullptr );
 
-    ai->AddCommand( c0 );
+    ai->AddCommand( c0 );    
     ai->AddCommand( c1 );
     ai->AddCommand( c2 );
     ai->AddCommand( c3 );

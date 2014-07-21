@@ -30,6 +30,8 @@ public:
     virtual LoopEventAction GetActionType       () const override;
     virtual TimeType        GetTargetTime       () const override;
 
+    virtual bool            IsActive            () const override;
+
     void                    SetTargetTime       ( TimeType t );
     void                    SetAction           ( LoopEventAction action );
     void                    SetLoopCount        ( unsigned int loopCount );

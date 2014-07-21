@@ -65,16 +65,14 @@ public:
     virtual bool                                RemoveKeyFrameEvent ( unsigned int idx ) override;
     virtual bool                                RemoveKeyFrameEvent ( const std::string & name ) override;
 
-    //virtual const ITimelineEvent *              CurrentEvent        () const override;
-    //virtual const ITimelineEvent *              LastTriggeredEvent  () const override;
-
 private:
 
-    ITimelineEvent *                            CurrentEvent        () const;
+    void                                        DeactivateEvent     ( ITimelineEvent * evt );
+    ITimelineEvent *                            CurrentEvent        ( TimeType curTime, TimeType prevTime ) const;
 
     bool                                        CanBeInserted       ( const ITimelineEvent * evt ) const;
 
-    void                                        TriggerEvent        ( ITimelineEvent * evt, TimeType globalTime );
+    void                                        TriggerEventStep    ( TimeType curTime, TimeType prevTime );
     void                                        PostUpdateEventStep ();
 
 };

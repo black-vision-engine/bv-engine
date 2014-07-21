@@ -26,7 +26,9 @@ inline TimeType TimeSegmentEvalImpl::GetLocalTimeNoClamp ( TimeType globalTime )
 {
     if( m_playDirection == TimelinePlayDirection::TPD_FORWAD )
     {
-        return  globalTime - m_startTime - m_pauseDuration;
+        auto t = globalTime - m_startTime - m_pauseDuration;
+
+        return t;
     }
     else
     {

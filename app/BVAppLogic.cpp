@@ -215,7 +215,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
                 HPROFILER_SECTION( "m_modelScene->Update" );
 
                 //DupaTextureReloadTestUpdate( this, t );
-                m_globalTimeline->SetGlobalTime( t );
+                //m_globalTimeline->SetGlobalTime( t );
                 m_modelScene->Update( t );
             }
             {
