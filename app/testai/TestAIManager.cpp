@@ -124,29 +124,39 @@ TestAI *        TestAIManager::PreparePreset    ( unsigned int idx, BVAppLogic *
 TestAI *        TestAIManager::PreparePreset0   () const
 {
     auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop0", TimeType( 0.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop1", TimeType( 2.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop2", TimeType( 4.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop3", TimeType( 6.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop4", TimeType( 8.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventLoop( "loop0", TimeType( 3.23 ), LoopEventAction::LEA_GOTO, 2, TimeType( 0.1 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop0", TimeType( 0.5 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventLoop( "loop1", TimeType( 1.0 ), LoopEventAction::LEA_REVERSE, 2, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventLoop( "loop2", TimeType( 3.0 ), LoopEventAction::LEA_REVERSE, 2, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( new model::TimelineEventLoop( "loop3", TimeType( 5.0 ), LoopEventAction::LEA_RESTART, 3, TimeType( 1.0 ), timeline.get() ) );
 
-    auto c0 = new AICommandPlay( timeline, TimeType( 2.0 ) );
-    auto c1 = new AICommandPlay( timeline, TimeType( 6.0 ) );
-    auto c2 = new AICommandPlay( timeline, TimeType( 10.0 ) );
-    auto c3 = new AICommandPlay( timeline, TimeType( 14.0 ) );
-    auto c4 = new AICommandPlay( timeline, TimeType( 18.0 ) );
-    auto c5 = new AICommandPlay( timeline, TimeType( 22.0 ) );
-
+    auto c0 = new AICommandSetTimeAndPlay( timeline, TimeType( 1.0 ), TimeType( 2.0 ) );
+/*    auto c1 = new AICommandPlay( timeline, TimeType( 4.0 ) );
+    auto c2 = new AICommandPlay( timeline, TimeType( 6.0 ) );
+    auto c3 = new AICommandPlay( timeline, TimeType( 8.0 ) );
+    auto c4 = new AICommandPlay( timeline, TimeType( 10.0 ) );
+    auto c5 = new AICommandPlay( timeline, TimeType( 12.0 ) );
+    auto c6 = new AICommandPlay( timeline, TimeType( 14.0 ) );
+    auto c7 = new AICommandPlay( timeline, TimeType( 16.0 ) );
+    auto c8 = new AICommandPlay( timeline, TimeType( 18.0 ) );
+    auto c9 = new AICommandPlay( timeline, TimeType( 20.0 ) );
+    auto c10 = new AICommandPlay( timeline, TimeType( 22.0 ) );
+    auto c11 = new AICommandPlay( timeline, TimeType( 24.0 ) );
+    */
     TestAI * ai = new TestAI( timeline, nullptr );
 
     ai->AddCommand( c0 );    
-    ai->AddCommand( c1 );
+    /*ai->AddCommand( c1 );
     ai->AddCommand( c2 );
     ai->AddCommand( c3 );
     ai->AddCommand( c4 );
     ai->AddCommand( c5 );
-
+    ai->AddCommand( c6 );
+    ai->AddCommand( c7 );
+    ai->AddCommand( c8 );
+    ai->AddCommand( c9 );
+    ai->AddCommand( c10 );
+    ai->AddCommand( c11 );
+    */
     return ai;
 }
 

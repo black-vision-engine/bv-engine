@@ -140,15 +140,17 @@ void                                DefaultTimeline::Stop               ()
 //
 void                                DefaultTimeline::SetTimeAndStop     ( TimeType t )
 {
-    Stop();
-
+    m_prevTime = t;
     m_timeEvalImpl.ResetLocalTimeTo( t );
+
+    Stop();
 }
 
 // *********************************
 //
 void                                DefaultTimeline::SetTimeAndPlay     ( TimeType t )
 {
+    m_prevTime = t;
     m_timeEvalImpl.ResetLocalTimeTo( t );
 
     Play();
