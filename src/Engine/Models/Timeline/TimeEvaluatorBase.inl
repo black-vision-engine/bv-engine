@@ -104,8 +104,8 @@ void                                        TimeEvaluatorBase< ITimeEvaluatorIfa
     //for( auto c : m_children )
     for( unsigned int i = 0; i < m_children.size(); ++i )
     {
-        auto& chuld = m_children[ i ];
-        chuld->SetGlobalTime( t );
+        auto & child = m_children[ i ];
+        child->SetGlobalTime( t );
     }
 }
 
