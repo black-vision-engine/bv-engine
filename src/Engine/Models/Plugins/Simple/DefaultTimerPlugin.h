@@ -5,6 +5,9 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Resources/IResource.h"
 
+#include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
+
 #include <map>
 
 
@@ -28,7 +31,6 @@ public:
     static  std::string                     PixelShaderSource   ();
 
     static  std::string                     TextureName         ();
-    static  std::string                     FontFileName        ();
 };
 
 class Resource;
@@ -70,34 +72,43 @@ struct TimeInfo
     int GetSize() const;
 };
 
+
 // ***************************** PLUGIN ********************************** 
 class DefaultTimerPlugin : public BasePlugin< IPlugin >
 {
-    ParamFloat                  m_timeParam;
-    TimeValue                   m_currentTime;
-    const wchar_t               m_defaultSeparator;
+private:
 
-    VertexAttributesChannelPtr  m_vertexAttributeChannel;
+    ParamFloatPtr                   m_timeParam;
+    ParamFloatPtr                   m_fontSizeParam;
+    ParamFloatPtr                   m_blurSizeParam;
+    ParamFloatPtr                   m_spacingParam;
 
-    TextureInfoVec              m_textures;
+    TimeValue                       m_currentTime;
+    const wchar_t                   m_defaultSeparator;
 
-    ResourceHandleConstPtr      m_fontResource;
-    const TextAtlas *           m_currentAtlas;
+    DefaultPixelShaderChannelPtr    m_psc;
+    DefaultVertexShaderChannelPtr   m_vsc;
 
-    std::wstring                m_timePatern;
-    TimeInfo                    m_timePaternInfo;
+    VertexAttributesChannelPtr      m_vaChannel;
 
-    explicit                    TimerPlugin     ( const ParamFloat& timeParam, unsigned int fontSize );
+    TextureInfoVec                  m_textures;
 
-    bool                        CheckTimeConsistency ( const std::wstring & time ) const;
+    ResourceHandleConstPtr          m_fontResource;
+    const TextAtlas *               m_textAtlas;
 
-    void                        SetValue        ( unsigned int connComp, wchar_t wch );
-    const GlyphCoords &         GetGlyphCoords  ( wchar_t wch ) const;
-    void                        Refresh         ();
+    std::wstring                    m_timePatern;
+    TimeInfo                        m_timePaternInfo;
+    DefaultPluginParamValModelPtr   m_paramValModel;
+
+    explicit                        DefaultTimerPlugin     ( const ParamFloat& timeParam, unsigned int fontSize );
+
+    bool                            CheckTimeConsistency ( const std::wstring & time ) const;
+
+    void                            SetValue        ( unsigned int connComp, wchar_t wch );
+    const GlyphCoords &             GetGlyphCoords  ( wchar_t wch ) const;
+    void                            Refresh         ();
 
 public:
-
-    static TimerPlugin *                        Create                      ( const ParamFloat & timeParam, unsigned int fontSize );
 
     void                                        SetTimePatern               ( const std::wstring & patern );
     void                                        SetTime                     ( const std::wstring & time );
@@ -107,12 +118,22 @@ public:
     void                                        SetMinute                   ( int min );
     void                                        SetHour                     ( int h );
 
+    explicit                                    DefaultTimerPlugin          ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
+                                                ~DefaultTimerPlugin         ();
+
+    virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
+
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-    virtual TextureInfoVec                      GetTextures                 () const; //FIXME: remove
+    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
+    virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
     virtual void                                Update                      ( TimeType t ) override;
-    virtual void                                Print                       ( std::ostream & out, int tabs = 0 ) const;
+
+private:
+
+    void                                        InitAttributesChannel       ( IPluginPtr prev );
 };
 
 } // model
 } // bv
+

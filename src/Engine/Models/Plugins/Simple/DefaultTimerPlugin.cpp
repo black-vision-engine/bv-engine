@@ -1,11 +1,15 @@
-#include "TimerPlugin.h"
+#include "DefaultTimerPlugin.h"
 
 #include "Engine/Models/Resources/Font/TextHelper.h"
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
+#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Engine/Models/Resources/Font/FontLoader.h"
 #include "Engine/Models/Resources/Font/Text.h"
+
+#include <algorithm>
 
 namespace bv { namespace model {
 
@@ -39,21 +43,19 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
     //Create all parameters and evaluators
     SimpleVec4EvaluatorPtr      borderColorEvaluator    = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
     SimpleFloatEvaluatorPtr     alphaEvaluator          = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
-    SimpleTransformEvaluatorPtr trTxEvaluator           = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
     SimpleFloatEvaluatorPtr     fontSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
 
     SimpleFloatEvaluatorPtr     blurSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
 
+    SimpleFloatEvaluatorPtr     timerTimeEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "time", timeEvaluator );
     SimpleFloatEvaluatorPtr     spacingEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "spacing", timeEvaluator );
-    SimpleFloatEvaluatorPtr     alignmentEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alignment", timeEvaluator );
 
     //Register all parameters and evaloators in models
-    vsModel->RegisterAll( trTxEvaluator );
     psModel->RegisterAll( borderColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
     plModel->RegisterAll( blurSizeEvaluator );
     plModel->RegisterAll( spacingEvaluator );
-    plModel->RegisterAll( alignmentEvaluator );
+    plModel->RegisterAll( timerTimeEvaluator );
     plModel->RegisterAll( fontSizeEvaluator );
 
     //Set models structure
@@ -65,9 +67,8 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     spacingEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    alignmentEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+    timerTimeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
-    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
     fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
 
     return model;
@@ -100,32 +101,24 @@ std::string             DefaultTimerPluginDesc::UID                      ()
 
 // *******************************
 //
-std::string             DefaultTextPluginDesc::VertexShaderSource       ()
+std::string             DefaultTimerPluginDesc::VertexShaderSource       ()
 {
-    return "../dep/media/shaders/text.vert";
+    return "../dep/media/shaders/dummy.vert";   //FIXME: deprecated
 }
 
 // *******************************
 //
-std::string             DefaultTextPluginDesc::PixelShaderSource        ()
+std::string             DefaultTimerPluginDesc::PixelShaderSource        ()
 {
-    return "../dep/media/shaders/text.frag";
+    return "../dep/media/shaders/dummy.frag";   //FIXME: deprecated
 }
 
 // *******************************
 //
-std::string             DefaultTextPluginDesc::TextureName              ()
+std::string             DefaultTimerPluginDesc::TextureName              ()
 {
-    return "AtlasTex";
+    return "AtlasTex0";
 }
-
-// *******************************
-//
-std::string             DefaultTextPluginDesc::FontFileName             ()
-{
-    return "../dep/Media/fonts/digital-7.ttf";
-}
-
 
 ////////////////////////////
 //
@@ -229,51 +222,231 @@ TimeValue::TimeValue( double time, int accuracy )
     this->hour      = int( time / (60 * 60 ) );
 }
 
-////////////////////////////
+// *************************************
 //
-TimerPlugin::TimerPlugin( const ParamFloat& timeParam, unsigned int fontSize )
-    : BasePlugin( "dupa", "dupa", nullptr, nullptr )
-    , m_timeParam( timeParam )
+DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
+    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_fontResource()
-    , m_currentAtlas()
-    , m_timePatern( L"HHHH:MM:SS:ssssss" )
+    , m_paramValModel( model )
+    , m_textAtlas()
+    , m_timePatern( )
     , m_currentTime( 0.0 )
     , m_defaultSeparator(L':')
 {
-    m_timePaternInfo = ParseTimePatern( m_timePatern );
+    auto colorParam = prev->GetParameter( "color" );
 
-    m_fontResource = TextHelper::LoadFont( "../dep/Media/fonts/digital-7.ttf", fontSize, 0, L"../dep/Media/fonts/TimerChars.txt" );
+    if ( colorParam == nullptr )
+    {
+        auto bcParam = this->GetParameter( "borderColor" );
+        SimpleVec4EvaluatorPtr      colorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", bcParam->GetTimeEvaluator() );
+        std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( colorEvaluator );
+        colorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
+    }
+    else
+    {
+        auto evaluators = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
+        for( unsigned int i = 0; i < evaluators.size(); ++i )
+        {
+            auto colorParam = evaluators[ i ]->GetParameter( "color" );
+            if( colorParam != nullptr )
+            {
+                //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak)
+                std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluators[ i ] );
+                break;
+            }
+        }
+        
+    }
 
-    m_currentAtlas = TextHelper::GetAtlas( m_fontResource.get() );
 
-    auto textureResource = TextHelper::GetAtlasTextureInfo( m_currentAtlas );
+    m_timeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "time" ) );
+    m_spacingParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
 
-    m_textures.push_back( new TextureInfo( textureResource.get(), "AtlasTex" ) );
+    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTimerPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
+    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultTimerPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
 
-    m_vertexAttributeChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
+    auto ctx = m_psc->GetRendererContext();
+    ctx->cullCtx->enabled = false;
+    ctx->alphaCtx->blendEnabled = true;
 
-    TextHelper::BuildVACForText( m_vertexAttributeChannel.get(), m_currentAtlas,L"0000:00:00:000000", 0, 0.f, TextAlignmentType::Center, m_timePatern );
+    ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+    ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+
+    m_fontSizeParam = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
+    m_blurSizeParam = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
+    m_spacingParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
 }
 
-////////////////////////////
+// *************************************
 //
-TimerPlugin *                       TimerPlugin::Create     ( const ParamFloat& timeParam, unsigned int fontSize )
+DefaultTimerPlugin::~DefaultTimerPlugin  ( )
 {
-    return new TimerPlugin( timeParam, fontSize );
+
+}
+
+namespace {
+// *************************************
+// FIXME: implement int parameters and bool parameters
+template< typename EnumClassType >
+inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
+{
+    int val = int( param->Evaluate() );
+
+    return EnumClassType( val );
+}
+
+} //anonymous
+
+
+// *************************************
+//
+void DefaultTimerPlugin::InitAttributesChannel( IPluginPtr prev )
+{
+}
+
+// *************************************
+// 
+bool            DefaultTimerPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
+{
+    auto txResDescr = QueryFontResourceDescr( resDescr );
+
+    // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
+    if ( txResDescr != nullptr )
+    {
+        auto txData = m_psc->GetTexturesDataImpl();
+        assert( txData->GetTextures().size() <= 1 );
+
+        auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ) );
+
+        m_textAtlas = TextHelper::GetAtlas( fontResource.get(), false, false );
+
+        auto textureResource = TextHelper::GetAtlasTextureInfo( m_textAtlas );
+
+        auto txInfo = new TextureInfo( textureResource.get(), DefaultTimerPluginDesc::TextureName() );
+
+        //FIXME: use some better API to handle resources in general and textures in this specific case
+        auto txDesc = new DefaultTextureDescriptor(     textureResource
+                                                    ,   DefaultTimerPluginDesc::TextureName()
+                                                    ,   TextureWrappingMode::TWM_CLAMP_BORDER
+                                                    ,   TextureWrappingMode::TWM_CLAMP_BORDER
+                                                    ,   TextureFilteringMode::TFM_LINEAR
+                                                    ,   glm::vec4( 0.f, 0.f, 0.f, 0.f )
+                                                    ,   DataBuffer::Semantic::S_TEXTURE_STATIC );
+
+        if( txDesc != nullptr )
+        {
+            if( txData->GetTextures().size() == 0 )
+            {
+                txData->AddTexture( txDesc );
+            }
+            else
+            {
+                txData->SetTexture( 0, txDesc );
+            }
+
+            m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
+
+            SetTimePatern( L"M:SS:ss" );
+
+            return true;
+        }
+    }    
+
+    return false;
+}
+
+// *************************************
+// 
+IVertexAttributesChannelConstPtr    DefaultTimerPlugin::GetVertexAttributesChannel  () const
+{
+    return m_vaChannel;
+}
+
+// *************************************
+// 
+IPixelShaderChannelConstPtr         DefaultTimerPlugin::GetPixelShaderChannel       () const
+{
+    return m_psc;
+}
+
+// *************************************
+// 
+IVertexShaderChannelConstPtr        DefaultTimerPlugin::GetVertexShaderChannel      () const
+{
+    return m_vsc;
+}
+
+// *************************************
+// 
+void                                DefaultTimerPlugin::Update                      ( TimeType t )
+{
+    //FIXME: UPDATER TO FIX
+    float time = m_timeParam->Evaluate();
+
+    SetTime( time );
+
+    m_paramValModel->Update();
+
+    m_vsc->PostUpdate();
+    m_psc->PostUpdate();    
+}
+
+
+////////////////////////////
+//
+namespace
+{
+
+////////////////////////////
+//
+std::wstring        toTextPatern( const std::wstring& timePatern )
+{
+    auto timePaternCopy = timePatern;
+    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'H', L'#');
+    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'M', L'#');
+    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'S', L'#');
+    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L's', L'#');
+
+    return timePaternCopy;
 }
 
 ////////////////////////////
 //
-void                                TimerPlugin::SetTimePatern  ( const std::wstring& patern )
+std::wstring        toTimerInit( const std::wstring& timePatern )
+{
+    auto timePaternCopy = timePatern;
+    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'H', L'0');
+    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'M', L'0');
+    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'S', L'0');
+    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L's', L'0');
+
+    return timePaternCopy;
+}
+
+} // anonymous
+
+////////////////////////////
+//
+void                                DefaultTimerPlugin::SetTimePatern  ( const std::wstring& patern )
 {
     m_timePatern = patern;
+    m_timePaternInfo = ParseTimePatern( m_timePatern );
+
+    auto textPatern = toTextPatern( m_timePatern );
+    auto timerInit = toTimerInit( m_timePatern );
+
+    m_vaChannel->ClearConnectedComponent();
+
+    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), TextAlignmentType::Left );
+
+    //m_vaChannel->SetNeedsTopologyUpdate( true );
 }
 
 ////////////////////////////
 //
-const GlyphCoords&                  TimerPlugin::GetGlyphCoords  ( wchar_t wch ) const
+const GlyphCoords&                  DefaultTimerPlugin::GetGlyphCoords  ( wchar_t wch ) const
 {
-    auto glyphCoords = m_currentAtlas->GetGlyphCoords( wch );
+    auto glyphCoords = m_textAtlas->GetGlyphCoords( wch );
     if( glyphCoords )
         return *glyphCoords;
     else
@@ -295,7 +468,7 @@ int TimeInfo::GetSize() const
 
 ////////////////////////////
 //
-void                                TimerPlugin::Refresh         ()
+void                                DefaultTimerPlugin::Refresh         ()
 {
     int hPHSize = m_timePaternInfo.hoursPlaceholderSize;
     int shift = m_timePaternInfo.hoursPHStart;
@@ -384,17 +557,23 @@ void                                TimerPlugin::Refresh         ()
 
 ////////////////////////////
 //
-void                                TimerPlugin::SetValue       ( unsigned int connComp, wchar_t wch )
+void                                DefaultTimerPlugin::SetValue       ( unsigned int connComp, wchar_t wch )
 {
-    auto comps = m_vertexAttributeChannel->GetComponents();
+    auto comps = m_vaChannel->GetComponents();
 
     auto& coords = GetGlyphCoords( wch );
+    auto& zeroCoords = GetGlyphCoords( L'0' );
 
-    auto textureXNorm = ( float )coords.textureX / m_currentAtlas->GetWidth();
-    auto textureYNorm = ( float )coords.textureY / m_currentAtlas->GetHeight();
+    auto textureXNorm    = ((float)coords.textureX + (float)zeroCoords.glyphX )  / m_textAtlas->GetWidth();
+    auto textureYNorm    = ((float)coords.textureY + (float)zeroCoords.glyphY )  / m_textAtlas->GetHeight();
+    auto widthNorm       = ((float)zeroCoords.glyphWidth )     / m_textAtlas->GetWidth();
+    auto heightNorm      = ((float)zeroCoords.glyphHeight )    / m_textAtlas->GetHeight();
 
-    auto widthNorm  = ( float )coords.width / m_currentAtlas->GetWidth();
-    auto heightNorm = ( float )coords.height / m_currentAtlas->GetHeight();
+    //auto textureXNorm = ( float )coords.textureX / m_textAtlas->GetWidth();
+    //auto textureYNorm = ( float )coords.textureY / m_textAtlas->GetHeight();
+
+    //auto widthNorm  = ( float )coords.width / m_textAtlas->GetWidth();
+    //auto heightNorm = ( float )coords.height / m_textAtlas->GetHeight();
 
     if( IsPlaceHolder( m_timePatern[ connComp ] ) )
         if( connComp < comps.size() )
@@ -417,7 +596,7 @@ void                                TimerPlugin::SetValue       ( unsigned int c
 
 ////////////////////////////
 //
-bool                                TimerPlugin::CheckTimeConsistency ( const std::wstring& time ) const
+bool                                DefaultTimerPlugin::CheckTimeConsistency ( const std::wstring& time ) const
 {
     if( m_timePatern.size() != time.size() )
         return false;
@@ -445,7 +624,7 @@ bool                                TimerPlugin::CheckTimeConsistency ( const st
 
 ////////////////////////////
 //
-void                                TimerPlugin::SetTime        ( const std::wstring& time )
+void                                DefaultTimerPlugin::SetTime        ( const std::wstring& time )
 {
     if( !CheckTimeConsistency( time ) )
     {
@@ -461,7 +640,7 @@ void                                TimerPlugin::SetTime        ( const std::wst
 
 ////////////////////////////
 //
-void                                TimerPlugin::SetTime        ( double time )
+void                                DefaultTimerPlugin::SetTime        ( double time )
 {
     TimeValue   newTime( time, m_timePaternInfo.fracOfSecondsPlaceholderSize );
 
@@ -469,41 +648,9 @@ void                                TimerPlugin::SetTime        ( double time )
     {
         m_currentTime = newTime;
         Refresh();
-        m_vertexAttributeChannel->SetNeedsAttributesUpdate( true );
+        m_vaChannel->SetNeedsAttributesUpdate( true );
     }
 }
-
-////////////////////////////
-//
-IVertexAttributesChannelConstPtr    TimerPlugin::GetVertexAttributesChannel          () const
-{
-    return m_vertexAttributeChannel;
-}
-
-////////////////////////////
-//
-TextureInfoVec                      TimerPlugin::GetTextures                 () const
-{
-    return m_textures;
-}
-
-////////////////////////////
-//
-void                                TimerPlugin::Update                      ( TimeType t )
-{
-    //FIXME: UPDATER TO FIX
-    float time = m_timeParam.Evaluate();
-
-    SetTime( time );
-}
-
-////////////////////////////
-//
-void                                TimerPlugin::Print                       ( std::ostream & out, int tabs ) const
-{
-}
-
-
 
 } // model
 } // bv

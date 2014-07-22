@@ -71,7 +71,7 @@ namespace
 const Text*         LoadFontFile( const std::string& file, size_t size, size_t blurSize, const std::wstring& atlasCharSetFile )
 {
     auto t = TextHelper::LoadUtf8FileToString( atlasCharSetFile );
-    return new Text( t, file, int( size * (1.25f) ), blurSize ); /* points to pixel proportion */ // FIXME: Text constructor makes to much.
+    return new Text( t, file, size, blurSize ); /* points to pixel proportion */ // FIXME: Text constructor makes to much.
 }
 
 std::string         AddPostfixToFileName( const std::string& file, const std::string& postfix )
