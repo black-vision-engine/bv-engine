@@ -141,7 +141,7 @@ ResourceHandleConstPtr      TextHelper::GetAtlasTextureInfo ( const TextAtlas * 
 
 // *********************************
 //
-void                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, const std::wstring& textPatern )
+float                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, const std::wstring& textPatern )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
@@ -303,6 +303,8 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
     {
         vertexAttributeChannel->AddConnectedComponent( CreateEmptyCC() );
     }
+
+    return translate.x; // FIXME: This does not work for multiline text
 }
 
 
