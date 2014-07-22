@@ -4,7 +4,7 @@
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
 #include "Engine/Models/BasicNode.h"
-#include "Engine/Models/Plugins/Simple/TimerPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 
 
 namespace bv
