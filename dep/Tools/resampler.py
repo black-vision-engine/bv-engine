@@ -153,7 +153,7 @@ def compose_hm_with_points( hm, points, increment, total_meters ):
         if i > 0:
             sx = float( i - 1 ) * increment
             ex = sx + increment
-            if cur_point and cur_point[ 0 ] >= sx and cur_point <= ex:
+            if cur_point and cur_point[ 0 ] >= sx and cur_point[ 0 ] <= ex:
                 cur_pt_idx += 1
                 print ":ASDSAD"
                 res.append( ( e, cur_point[ 0 ], cur_point[ 1 ] ) )
@@ -189,35 +189,38 @@ def write_result( fn, data, dist ):
             else:
                 f.write( "{:.4f}::\n".format( e[ 0 ] ) )
 
-if __name__ == "__main__":
-
-    import sys
-
-    print "Reading height map file {}".format( "../Media/heightmaps/BukovinaWysokosci.txt" )
-    hm_raw = read_height_map( "../Media/heightmaps/BukovinaWysokosci.txt" )
+## ##########################
+##
+def process_hm( input_file_hm, input_file_pt, output_file, num_samples ):
+    print "Reading height map file {}".format( input_file )
+    hm_raw = read_height_map( input_file )
     
     total_meters = len( hm_raw )    
-    num_samples = 1920 * 4
     ratio = float( len( hm_raw ) ) / ( num_samples - 1 )
 
-    print "Meters {} samples {} ratio {}".format( total_meters, num_samples, ratio )
+    print "Distance {}, requested samples {}, resample ratio {}".format( total_meters, num_samples, ratio )
 
-    print "Reading points file {}".format( "../Media/heightmaps/BukovinaMiejsca.txt" )
-    hm_points = read_hm_points( "../Media/heightmaps/BukovinaMiejsca.txt" )
+    print "Reading points file {}".format( input_file_pt )
+    hm_points = read_hm_points( input_file_pt )
     
     print "Total points {}".format( len( hm_points ) )
     
     print "Resampling height map data using fuckin_simple_resample"
     hm_resampled = fuckin_simple_resample( hm_raw, num_samples )
 
-    print "Writing raw hm data to {}".format( "../Media/heightmaps/BukovinaWysokosciProcessed.txt" )
-    write_hm( "../Media/heightmaps/BukovinaWysokosciProcessed.txt", hm_raw )
-
-    print "Writing resampled hm data to {}".format( "../Media/heightmaps/BukovinaWysokosciProcessed.txt" )
-    write_hm( "../Media/heightmaps/BukovinaWysokosciResampled.txt", hm_resampled, ratio )
-
-    print "Composing output list with landmarks"
+    print "Generating output list with landmarks"
     result_list = compose_hm_with_points( hm_resampled, hm_points, float( len( hm_raw ) ) / float( len( hm_resampled ) - 1 ), total_meters )
     
-    print "Writing formatted data to {}".format( "../Media/heightmaps/BukovinaWysokosciRawFormatted.txt" )
-    write_result( "../Media/heightmaps/BukovinaWysokosciRawFormatted.txt", result_list, ratio * ( num_samples - 1 ) )
+    print "Writing formatted data to {}".format( output_file )
+    write_result( output_file, result_list, ratio * ( num_samples - 1 ) )
+    
+if __name__ == "__main__":
+
+    import sys
+
+    if len( sys.argv ) != 5:
+        print "Invalid number of arguments specified\n"
+        print "Usage:\npython resampler.py <input_file_hm> <input_file_landmarks> <output_file> <num_samples>"
+        sys.exit( 0 )
+
+    process( argv[ 1 ], argv[ 2 ], argv[ 3 ], argv[ 4 ] )
