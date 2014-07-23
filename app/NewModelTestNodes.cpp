@@ -19,6 +19,7 @@
 #include "BVConfig.h"
 
 namespace {
+
     std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR" };
     std::string GSimplePlugins1[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_TEXTURE" };
     std::string GSimplePlugins2[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_ANIMATION" };
@@ -377,7 +378,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     model::SetParameter( node->GetPlugin( "texture" )->GetParameter( "alpha" ), TimeType( 3.f ),   1.f );
     */
 
-    success = model::LoadTexture( node->GetPlugin( "texture" ), "full.jpg" );
+    success = model::LoadTexture( node->GetPlugin( "texture" ), "bukovina.png" );
     assert( success );
 
     auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( node->GetPlugin( "texture" ) );
@@ -472,6 +473,8 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     return node;    
 }
 
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask )
 {
     //Timeline stuff
@@ -544,6 +547,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     return node;    
 }
 
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateTextWithShadowNode(   model::TimelineManager * timelineManager,
                                                                     model::ITimeEvaluatorPtr timeEvaluator,
                                                                     unsigned int blurSize,
@@ -586,7 +591,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextWithShadowNode(   model::Time
     return shadowNode;
 }
 
-
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask )
 {
     //Timeline stuff
@@ -656,5 +662,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
     return node;    
 }
 
+// *****************************
+//
+model::BasicNodePtr  CreateHeightMapNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    return nullptr;    
+}
 
 } //bv

@@ -1,6 +1,7 @@
 #include "DefaultPlugins.h"
 
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
+
 #include "Engine/Models/Plugins/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
@@ -9,6 +10,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultAlphaMaskPlugin.h"
+#include "Engine/Models/Plugins/Custom/DefaultHeightMapPlugin.h"
 
 
 namespace bv { namespace model {
@@ -27,6 +29,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultTextPluginDesc() );
     descriptors.push_back( new DefaultAlphaMaskPluginDesc() );
     descriptors.push_back( new DefaultTimerPluginDesc() );
+    descriptors.push_back( new DefaultHeightMapPluginDesc() );
 
     for( auto descr : descriptors )
     {

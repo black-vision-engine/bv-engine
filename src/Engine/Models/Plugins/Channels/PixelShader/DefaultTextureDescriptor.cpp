@@ -267,7 +267,8 @@ DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const std
 
     DefaultTextureDescriptor * desc = new DefaultTextureDescriptor();
     SetDefaults( desc );
-
+    //desc->SetWrappingModeY( TextureWrappingMode::TWM_REPEAT ); 
+    //desc->SetFilteringMode( TextureFilteringMode::TFM_POINT ); 
     desc->SetBits( handle );
     desc->SetName( name );
 

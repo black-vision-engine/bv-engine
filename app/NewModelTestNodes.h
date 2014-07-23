@@ -33,6 +33,9 @@ public:
     static model::BasicNodePtr  CreateTextWithShadowNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, const glm::vec3 shadowTranslation );
 
     static model::BasicNodePtr  CreateTimerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask  );
+
+    static model::BasicNodePtr  CreateHeightMapNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+
 };
 
 } //bv
