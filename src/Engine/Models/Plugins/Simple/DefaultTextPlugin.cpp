@@ -344,32 +344,54 @@ void DefaultTextPlugin::OnSetText                   ( IEventPtr evt )
     }
 }
 
-//namespace 
-//{
-//// *************************************
-////
-//glm::vec2 GetLeftAndRightCorner( const VertexAttributesChannelPtr & vaChannel )
-//{
-//    auto components = vaChannel->GetComponents();
+namespace 
+{
+
+// *************************************
 //
-//    glm::vec2 ret;
+glm::mat4 BuildScaleMatrix( const glm::vec3 & center, const glm::vec3 & scale )
+{
+    return  glm::translate( glm::mat4( 1.f ), -center ) *
+            glm::scale( glm::mat4( 1.f ), scale ) *
+            glm::translate( glm::mat4( 1.f ), center );
+}
+
+// *************************************
 //
-//    if( components.size() > 0 )
-//    {
-//        auto attrChannels = ret.x = components[ 0 ]->GetAttributeChannels();
-//
-//        if( attrChannels.size() > 0 )
-//            ret.x = attrChannels[ 0 ].
-//
-//        [ 0 ].x;
-//        ret.y = components[ 0 ].y;
-//    }
-//
-//
-//    for components
-//}
-//
-//} // anonymous
+void TransformPosChannel( VertexAttributesChannelPtr vaChannel, const glm::mat4 & trans )
+{
+    auto components = vaChannel->GetComponents();
+
+    for( auto cc : components )
+    {
+        auto vertsNum = cc->GetNumVertices();
+
+        auto arttChannels = cc->GetAttributeChannels();
+
+        if( vertsNum > 0 && arttChannels.size() > 0 )
+        {
+            auto attrChannelDesc = arttChannels[ 0 ]->GetDescriptor();
+            assert( attrChannelDesc->GetType() == AttributeType::AT_FLOAT3 );
+            assert( attrChannelDesc->GetSemantic() == AttributeSemantic::AS_POSITION );
+
+            auto f3AttrChannel = std::static_pointer_cast< Float3AttributeChannel >( arttChannels[ 0 ] );
+            auto & verts = f3AttrChannel->GetVertices();
+
+            for( auto& v : verts )
+            {
+                glm::vec4 tmp( v.x, v.y, v.z, 1.f ); 
+                tmp = trans * tmp;
+                v.x = tmp.x;
+                v.y = tmp.y;
+                v.z = tmp.z;
+            }
+        }
+
+        
+    }
+}
+
+} // anonymous
 
 // *************************************
 //
@@ -388,38 +410,23 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
     if( maxTextLenght > 0.f && textLength > 0.f && textLength > maxTextLenght )
     {
-        auto plugin = GetPrevPlugin();
-        IParamValModelPtr transformChannel = nullptr;
+        auto center = glm::vec3( 0.f, 0.f, 0.f );
 
-        while ( transformChannel == nullptr && plugin != nullptr )
+        switch( EvaluateAsInt< TextAlignmentType >( m_alignmentParam ) )
         {
-            transformChannel = plugin->GetPluginParamValModel()->GetTransformChannelModel();
-            plugin = plugin->GetPrevPlugin();
+        case TextAlignmentType::Center:
+            center = glm::vec3( textLength / 2.f, 0.f, 0.f );
+            break;
+        case TextAlignmentType::Right:
+            center = glm::vec3( textLength, 0.f, 0.f );
+            break;
+        default:
+            break;
         }
 
-        if( transformChannel != nullptr )
-        {
-            assert( transformChannel->GetParameters().size() == 1 );
-            auto & param = transformChannel->GetParameters()[ 0 ];
+        auto scaleMat = BuildScaleMatrix( center, glm::vec3( maxTextLenght / textLength, 1.f, 1.f ) );
 
-            auto transformParam = QueryTypedParam< ParamTransformVecPtr >( param );
-
-            auto scaleTransform = SimpleTransformF::CreateScale(    InterpolatorsHelper::CreateConstValue( maxTextLenght / textLength )
-                                                                    ,   InterpolatorsHelper::CreateConstValue( 1.f )
-                                                                    ,   InterpolatorsHelper::CreateConstValue( 1.f )
-                                                                    );
-
-            if( transformParam->Transform( 0 ).Size() == 5 )
-            {       
-                transformParam->Transform( 0 ).InsertTransform( 4, scaleTransform );
-            }
-            else
-            {
-                assert( transformParam->Transform( 0 ).Size() == 6 );
-
-                *transformParam->Transform( 0 )[ 4 ] = *scaleTransform;
-            }
-        }
+        TransformPosChannel( m_vaChannel, scaleMat );
     }
 
     m_vaChannel->SetNeedsTopologyUpdate( true );
