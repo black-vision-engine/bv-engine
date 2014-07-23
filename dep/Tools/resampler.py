@@ -107,6 +107,8 @@ def prepare_kernel_weights( kernel_len ):
 
     return filter
     
+## ##########################
+##
 def apply_kernel( samples, kernel ):
     if( len( samples ) >= len( kernel ) ):
         s = 0.0
