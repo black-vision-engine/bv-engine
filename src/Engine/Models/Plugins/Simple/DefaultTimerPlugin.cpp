@@ -437,7 +437,7 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
     m_vaChannel->ClearConnectedComponent();
 
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), TextAlignmentType::Left );
+    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), TextAlignmentType::Left, false );
 
     //m_vaChannel->SetNeedsTopologyUpdate( true );
 }

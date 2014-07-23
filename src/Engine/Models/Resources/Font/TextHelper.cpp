@@ -141,7 +141,7 @@ ResourceHandleConstPtr      TextHelper::GetAtlasTextureInfo ( const TextAtlas * 
 
 // *********************************
 //
-float                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, const std::wstring& textPatern )
+float                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, bool useKerning )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
@@ -156,14 +156,6 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
 
     auto spaceGlyphWidth    = 0.3*(float)textAtlas->GetGlyphHeight( L'0' ) * 0.5/viewWidth;
     auto newLineShift       = -(float)textAtlas->GetGlyphWidth( L'0' ) / viewHeight;
-
-    bool usePatern = false;
-
-    if( !textPatern.empty() )
-    {
-        assert( textPatern.size() == text.size() );
-        usePatern = true;
-    }
 
     for( unsigned int i = 0; i < text.size(); ++i )
     {
@@ -202,7 +194,7 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
 
             auto kerningShift = glm::vec3( 0.f, 0.f, 0.f );
 
-            if( i > 0 )
+            if( useKerning && i > 0 )
             {
                 auto kerShift = textAtlas->GetKerning( text[ i - 1 ], text[ i ] );
                 kerningShift.x = kerShift / (float)viewWidth;
