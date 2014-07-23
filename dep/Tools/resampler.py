@@ -3,18 +3,24 @@ import scipy
 import numpy
 import math
 
+## ##########################
+##
 def parse_line_hm( l ):
     toks = l.split( " " )
     assert len( toks ) == 2
 
     return ( int( toks[ 0 ].strip() ), float( toks[ 1 ].strip() ) )
 
+## ##########################
+##
 def parse_line_points( l ):
     toks = l.split( ":" )
     assert len( toks ) == 2
 
     return ( int( toks[ 0 ].strip() ), toks[ 1 ].strip() )
 
+## ##########################
+##
 def read_height_map( fn ):
     data = []
     with open( fn ) as f:
@@ -33,9 +39,11 @@ def read_height_map( fn ):
                     data.append( val )
             prev = cur
         print ""
-
+        print len( data )
     return data
 
+## ##########################
+##
 def read_hm_points( fn ):
     data = []
     with open( fn ) as f:
@@ -45,6 +53,8 @@ def read_hm_points( fn ):
 
     return data
 
+## ##########################
+##
 def write_hm( fn, data, increment = 1.0 ):
     with open( fn, "w" ) as f:
         s = 0.0
@@ -52,43 +62,77 @@ def write_hm( fn, data, increment = 1.0 ):
             f.write( "{:.2f} {:.4f}\n".format( s, e ) )
             s += increment
 
+## ##########################
+##
 def resample_hm( points, num_samples ):
     s = numpy.array( points )
     return signal.resample( s, num_samples )
         
-# @see: http://stackoverflow.com/questions/20322079/downsample-a-1d-numpy-array        
+## ##########################
+## @see: http://stackoverflow.com/questions/20322079/downsample-a-1d-numpy-array        
 def resample_hm_nanmean( points, num_samples ):
-    print len( points )
-    print num_samples
     rem = len( points ) % num_samples
-    print rem
     
     if rem > 0 :
         v = points[ -1 ]
         for i in range( num_samples - rem ):
-            points.append( v )
-    
+            points.append( numpy.nan )
+
     R = float( len( points ) / num_samples )
-    print R
     a = numpy.array( points )
     
-    print a.shape
+    #print a.shape
+    b = a.reshape( -1, R )
+    #print b.shape
+    c = numpy.nanmean( b, axis = 1 )
+    #c = b.mean( axis = 1 )
+    #print c.shape
+    return c
 
-    b = a.reshape( -1, R ).mean( axis = 1 )
-    print b.shape
+## ##########################
+##
+def fuckin_simple_mean( samples, res_samples_num ):
+    assert len( samples ) > ( 2 * res_samples_num )
+    res = []
+    window_size = int( math.ceil( float( len( samples ) / float( res_samples_num ) ) ) )
+    for i in range( 0, len( samples ), window_size ):
+        #print "{}, {}, {}, {}".format( i, i + window_size, sum(samples[i:i+window_size]), len( samples[i:i+window_size] ) )
+        res.append(sum(samples[i:i+window_size]) / float(len(samples[i:i+window_size])))
+    return res
+
+## ##########################
+##
+def compose_hm_with_points( hm, points, increment, total_meters ):
+    for i, e in enumerate( hm ):
+        if i > 0:
+            pass
+
+
+if __name__ == "__main__":
+
+    import sys
+
+    print "Reading height map file {}".format( "../Media/heightmaps/BukovinaWysokosci.txt" )
+    hm_raw = read_height_map( "../Media/heightmaps/BukovinaWysokosci.txt" )
     
-    return b
+    total_meters = len( hm_raw )    
+    num_samples = 1920 * 4
+    ratio = float( len( hm_raw ) ) / num_samples
 
-print "Reading height map file {}".format( "../Media/heightmaps/BukovinaWysokosci.txt" )
-hm_raw = read_height_map( "../Media/heightmaps/BukovinaWysokosci.txt" )
+    print "Meters {} samples {} ratio {}".format( total_meters, num_samples, ratio )
 
-print "Reading points file {}".format( "../Media/heightmaps/BukovinaMiejsca.txt" )
-hm_points = read_hm_points( "../Media/heightmaps/BukovinaMiejsca.txt" )
+    print "Reading points file {}".format( "../Media/heightmaps/BukovinaMiejsca.txt" )
+    hm_points = read_hm_points( "../Media/heightmaps/BukovinaMiejsca.txt" )
+    
+    print "Total points {}".format( len( hm_points ) )
+    
+    print "Resampling height map data using fuckin_simple_mean"
+    hm_resampled = fuckin_simple_mean( hm_raw, num_samples )
 
-print "Resampling height map data"
-hm_resampled = resample_hm( hm_raw, 1920 * 4 )
-hm_resampled_nm = resample_hm_nanmean( hm_raw, 1920 * 4 )
+    print "Writing raw hm data to {}".format( "../Media/heightmaps/BukovinaWysokosciProcessed.txt" )
+    write_hm( "../Media/heightmaps/BukovinaWysokosciProcessed.txt", hm_raw )
 
-write_hm( "../Media/heightmaps/BukovinaWysokosciProcessed.txt", hm_raw )
-write_hm( "../Media/heightmaps/BukovinaWysokosciResampled.txt", hm_resampled, len( hm_raw ) / len( hm_resampled ) )
-write_hm( "../Media/heightmaps/BukovinaWysokosciResampled_nm.txt", hm_resampled_nm, len( hm_raw ) / len( hm_resampled ) )
+    print "Writing resampled hm data to {}".format( "../Media/heightmaps/BukovinaWysokosciProcessed.txt" )
+    write_hm( "../Media/heightmaps/BukovinaWysokosciResampled.txt", hm_resampled, ratio )
+
+    #compose_hm_with_points( hm_resampled, hm_points, len( hm_raw ) / len( hm_resampled ), total_meters )
