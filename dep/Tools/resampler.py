@@ -155,7 +155,6 @@ def compose_hm_with_points( hm, points, increment, total_meters ):
             ex = sx + increment
             if cur_point and cur_point[ 0 ] >= sx and cur_point[ 0 ] <= ex:
                 cur_pt_idx += 1
-                print ":ASDSAD"
                 res.append( ( e, cur_point[ 0 ], cur_point[ 1 ] ) )
                 if cur_pt_idx < len( points ):
                     cur_point = points[ cur_pt_idx ]
@@ -192,8 +191,9 @@ def write_result( fn, data, dist ):
 ## ##########################
 ##
 def process_hm( input_file_hm, input_file_pt, output_file, num_samples ):
-    print "Reading height map file {}".format( input_file )
-    hm_raw = read_height_map( input_file )
+    
+    print "Reading height map file {}".format( input_file_hm )
+    hm_raw = read_height_map( input_file_hm )
     
     total_meters = len( hm_raw )    
     ratio = float( len( hm_raw ) ) / ( num_samples - 1 )
@@ -223,4 +223,7 @@ if __name__ == "__main__":
         print "Usage:\npython resampler.py <input_file_hm> <input_file_landmarks> <output_file> <num_samples>"
         sys.exit( 0 )
 
-    process( argv[ 1 ], argv[ 2 ], argv[ 3 ], argv[ 4 ] )
+    print "Calling script with args: {} {} {} {}".format( sys.argv[ 1 ], sys.argv[ 2 ], sys.argv[ 3 ], sys.argv[ 4 ] )
+
+
+    process_hm( sys.argv[ 1 ], sys.argv[ 2 ], sys.argv[ 3 ], int( sys.argv[ 4 ] ) )

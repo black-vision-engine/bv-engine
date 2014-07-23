@@ -1,0 +1,1 @@
+python resampler.py ../Media/heightmaps/BukovinaWysokosci.txt ../Media/heightmaps/BukovinaMiejsca.txt bukovina_raw_data.txt 7680
