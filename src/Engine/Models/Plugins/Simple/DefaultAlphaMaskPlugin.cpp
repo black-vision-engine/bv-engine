@@ -671,7 +671,7 @@ void     DefaultAlphaMaskPlugin::RecalculateAttrChannel         ()
         //FIXME: only one texture - convex hull calculations
         float minX = 100000.0f, minY = 100000.0f;
         float maxX = 0.0f, maxY = 0.0f;
-            
+
         float txWidth = (float) m_textureWidth;
         float txHeight = (float) m_textureHeight;
 
