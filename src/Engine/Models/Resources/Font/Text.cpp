@@ -273,6 +273,10 @@ std::map< std::pair< wchar_t, wchar_t >, float >        BuildKerning    ( FT_Fac
     return ret;
 }
 
+//#define MAKE_FREETYPE_TESTING_TEXT
+
+#ifdef MAKE_FREETYPE_TESTING_TEXT
+
 unsigned char * output = nullptr;
 
 void my_draw_bitmap( FT_Bitmap* bitmap, int pen_x, int pen_y )
@@ -356,6 +360,8 @@ void GenrateTestFreeTypeText( const std::wstring& text, FT_Face face )
   TextureHelper::WriteBMP( "testFreeType.bmp", MemoryChunkConstPtr( new MemoryChunk( ( char* )output, 1920 * 1080 * 4 ) ), 1920, 1080, 32 );
 
 }
+
+#endif // MAKE_FREETYPE_TESTING_TEXT
 
 }
 
@@ -551,10 +557,11 @@ void                Text::BuildAtlas        ()
 #ifdef GENERATE_TEST_BMP_FILE
 
     TextureHelper::WriteBMP( "test.bmp", m_atlas->GetData(), m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() );
-
-    GenrateTestFreeTypeText( L"AV::AVAVA", face );
-
 #endif // GENERATE_TEST_BMP_FILE
+
+#ifdef MAKE_FREETYPE_TESTING_TEXT
+    GenrateTestFreeTypeText( L"AV::AVAVA", face );
+#endif // MAKE_FREETYPE_TESTING_TEXT
 }
 
 } // model
