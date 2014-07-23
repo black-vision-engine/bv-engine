@@ -1,7 +1,7 @@
 #include "BVConfig.h"
 
 //#define USE_READBACK_API
-#define FULLSCREEN_MODE
+//#define FULLSCREEN_MODE
 //#define PERSPECTIVE_CAMERA
 
 namespace bv
@@ -11,8 +11,8 @@ namespace bv
 //FIXME: read default values from a configuration file
 BVConfig::BVConfig                      ()
 {
-    m_defaultWidth      = 1920;
-    m_defaultHeight     = 1080;
+    m_defaultWidth      = 900;
+    m_defaultHeight     = 900;
 
 #ifdef FULLSCREEN_MODE
     m_fullscreeMode         = true;
@@ -20,8 +20,8 @@ BVConfig::BVConfig                      ()
     m_defaultWindowHeight   = m_defaultHeight;
 #else
     m_fullscreeMode         = false;
-    m_defaultWindowWidth    = m_defaultWidth / 2;
-    m_defaultWindowHeight   = m_defaultHeight / 2;
+    m_defaultWindowWidth    = m_defaultWidth ;
+    m_defaultWindowHeight   = m_defaultHeight ;
 #endif
 
     m_fps               = 5000;

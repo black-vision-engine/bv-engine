@@ -9,7 +9,8 @@ struct Glyph
 
   unsigned int      width;      // width of the glyph in pixels
   unsigned int      height;     // height of the glyph in pixels
-  unsigned int      advance;    // number of pixels to advance on x axis
+  signed long       advanceX;    // number of pixels to advance on x axis
+  signed long       advanceY;    // number of pixels to advance on y axis
 
   int               bearingX;   // x offset of top-left corner from x axis
   int               bearingY;   // y offset of top-left corner from y axis

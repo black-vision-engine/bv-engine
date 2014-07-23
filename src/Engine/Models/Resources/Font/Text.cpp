@@ -150,6 +150,18 @@ const GlyphCoords*      TextAtlas::GetGlyphCoords  ( wchar_t c ) const
 
 // *********************************
 //
+float                   TextAtlas::GetKerning      ( wchar_t c0, wchar_t c1 ) const
+{
+    auto it = m_kerningMap.find( std::make_pair( c0, c1 ) );
+
+    if( it != m_kerningMap.end() )
+        return it->second;
+    else
+        return 0.f;
+}
+
+// *********************************
+//
 unsigned int            TextAtlas::GetGlyphX       ( wchar_t c ) const
 {
     return GetGlyphCoords( c )->textureX;
@@ -227,9 +239,129 @@ TextAtlas*          Text::LoadFromCache()
         return nullptr;
 }
 
+namespace
+{
 // *********************************
 //
-void                Text::BuildAtlas()
+std::map< std::pair< wchar_t, wchar_t >, float >        BuildKerning    ( FT_Face face, const std::wstring & text )
+{
+    std::map< std::pair< wchar_t, wchar_t >, float > ret;
+
+    for( auto wch0 : text )
+    {
+        for( auto wch1 : text )
+        {
+            FT_Vector  kerning;
+
+            auto leftGlyphIndex = FT_Get_Char_Index( face, wch0 );
+            auto rightGlyphIndex = FT_Get_Char_Index( face, wch1 );
+
+            auto error = FT_Get_Kerning(    face,           /* handle to face object */
+                                            leftGlyphIndex,           /* left glyph index      */
+                                            rightGlyphIndex,           /* right glyph index     */
+                                            FT_KERNING_DEFAULT,   /* kerning mode          */
+                                            &kerning );     /* target vector         */
+
+
+            if( error == 0 )
+            {
+                ret[ std::make_pair( wch0, wch1 ) ] = float( kerning.x >> 6 );
+            }
+        }
+    }
+
+    return ret;
+}
+
+unsigned char * output = nullptr;
+
+void my_draw_bitmap( FT_Bitmap* bitmap, int pen_x, int pen_y )
+{
+    for( int y = 0; y < bitmap->rows; ++y )
+    {
+        for( int x = 0; x < bitmap->width; ++x )
+        {
+            float alpha = bitmap->buffer[ y * bitmap->pitch + x ] / 255.f;
+
+            float topCol = float( bitmap->buffer[ y * bitmap->pitch + x ] ) * alpha;
+            float backCol = float( output[ ( ( pen_y + y ) * 1920 + ( pen_x + x ) ) * 4 ] ) * ( 1.f - alpha );
+
+            output[ ( ( pen_y + y ) * 1920 + ( pen_x + x ) ) * 4 ] = unsigned char( topCol + backCol );
+            output[ ( ( pen_y + y ) * 1920 + ( pen_x + x ) ) * 4 + 1 ] = unsigned char( topCol + backCol );
+            output[ ( ( pen_y + y ) * 1920 + ( pen_x + x ) ) * 4 + 2 ] = unsigned char( topCol + backCol );
+            output[ ( ( pen_y + y ) * 1920 + ( pen_x + x ) ) * 4 + 3 ] = unsigned char( topCol + backCol );
+        }
+    }
+}
+
+void GenrateTestFreeTypeText( const std::wstring& text, FT_Face face )
+{
+    output = new unsigned char[ 1920 * 1080 * 4 ];
+    memset( output, 0, sizeof( output ) );
+
+
+  FT_GlyphSlot  slot = face->glyph;  /* a small shortcut */
+  FT_UInt       glyph_index;
+  FT_Bool       use_kerning;
+  FT_UInt       previous;
+  int           pen_x, pen_y, n;
+
+  pen_x = 200;
+  pen_y = 300;
+
+  use_kerning = FT_HAS_KERNING( face );
+  previous    = 0;
+
+  for ( n = 0; n < (int)text.size(); n++ )
+  {
+      std::cout << "char "  << text[n] << std::endl;
+    /* convert character code to glyph index */
+    glyph_index = FT_Get_Char_Index( face, text[n] );
+
+    /* retrieve kerning distance and move pen position */
+    if ( use_kerning && previous && glyph_index )
+    {
+      FT_Vector  delta;
+
+
+      FT_Get_Kerning( face, previous, glyph_index,
+                      FT_KERNING_DEFAULT, &delta );
+
+      pen_x += delta.x >> 6;
+
+      std::cout << "kerning " << ( delta.x >> 6 ) << std::endl;
+    }
+
+    /* load glyph image into the slot (erase previous one) */
+    auto error = FT_Load_Glyph( face, glyph_index, FT_LOAD_RENDER );
+    if ( error )
+      continue;  /* ignore errors */
+
+    /* now draw to our target surface */
+    my_draw_bitmap( &slot->bitmap,
+                    pen_x + slot->bitmap_left,
+                    pen_y - slot->bitmap_top );
+
+    std::cout << "pen_x "  << pen_x << " pen_y " << pen_y << std::endl;
+
+    /* increment pen position */
+    pen_x += slot->advance.x >> 6;
+
+    std::cout << "advance.x "  << ( slot->advance.x >> 6 ) << std::endl;
+
+    /* record current glyph index */
+    previous = glyph_index;
+  }
+
+  TextureHelper::WriteBMP( "testFreeType.bmp", MemoryChunkConstPtr( new MemoryChunk( ( char* )output, 1920 * 1080 * 4 ) ), 1920, 1080, 32 );
+
+}
+
+}
+
+// *********************************
+//
+void                Text::BuildAtlas        ()
 {
     m_atlas = LoadFromCache();
 
@@ -296,7 +428,8 @@ void                Text::BuildAtlas()
 
         newGlyph->bearingX = face->glyph->bitmap_left;
         newGlyph->bearingY = face->glyph->bitmap_top;
-        newGlyph->advance = face->glyph->advance.x;
+        newGlyph->advanceX = face->glyph->advance.x >> 6;
+        newGlyph->advanceY = face->glyph->advance.y >> 6;
         //newGlyph->padding = padding_px;
 
         char* glyphData = (char*)malloc( newGlyph->height * face->glyph->bitmap.pitch );
@@ -370,7 +503,9 @@ void                Text::BuildAtlas()
                                     ,   glyphsDataInfos[order].glyph->width
                                     ,   glyphsDataInfos[order].glyph->height
                                     ,   glyphsDataInfos[order].glyph->bearingX
-                                    ,   glyphsDataInfos[order].glyph->bearingY )
+                                    ,   glyphsDataInfos[order].glyph->bearingY
+                                    ,   glyphsDataInfos[order].glyph->advanceX
+                                    ,   glyphsDataInfos[order].glyph->advanceY )
                     );
             }
                 
@@ -408,12 +543,16 @@ void                Text::BuildAtlas()
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
 
+    m_atlas->m_kerningMap = BuildKerning( face, m_text );
+
     auto entry = new FontAtlasCacheEntry( m_atlas, fontName, m_fontSize, m_blurSize, m_fontFile, false, false );
     fac->AddEntry( *entry );
 
 #ifdef GENERATE_TEST_BMP_FILE
 
     TextureHelper::WriteBMP( "test.bmp", m_atlas->GetData(), m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() );
+
+    GenrateTestFreeTypeText( L"AV::AVAVA", face );
 
 #endif // GENERATE_TEST_BMP_FILE
 }

@@ -19,14 +19,17 @@ struct GlyphCoords
     unsigned int            width;
     unsigned int            height;
 
-    unsigned int            bearingX;
-    unsigned int            bearingY;
+    int                     bearingX;
+    int                     bearingY;
 
     unsigned int            glyphX;
     unsigned int            glyphY;
 
     unsigned int            glyphWidth;
     unsigned int            glyphHeight;
+
+    signed long             advanceX;
+    signed long             advanceY;
 
     GlyphCoords(){}
 
@@ -38,8 +41,10 @@ struct GlyphCoords
                 unsigned int gY,
                 unsigned int gw,
                 unsigned int gh,
-                unsigned int bX,
-                unsigned int bY)
+                int bX,
+                int bY,
+                signed long aX,
+                signed long aY)
                 : textureX( tX )
                 , textureY( tY )
                 , width( w )
@@ -50,6 +55,8 @@ struct GlyphCoords
                 , glyphHeight( gh )
                 , bearingX( bX )
                 , bearingY( bY )
+                , advanceX( aX )
+                , advanceY( aY )
 
     {}
 
@@ -69,7 +76,8 @@ public: // Only for non intrusive serialization. Should be private
     //unsigned int            m_bitsPerPixel;
 
 
-    std::map< wchar_t, GlyphCoords >   m_glyphsPositions;
+    std::map< wchar_t, GlyphCoords >                        m_glyphsPositions;
+    std::map< std::pair< wchar_t, wchar_t >, float >        m_kerningMap; 
 
     void                    SetGlyphCoords  ( wchar_t wch, const GlyphCoords& coords );
 
@@ -91,6 +99,8 @@ public:
     unsigned int            GetGlyphHeight  ( wchar_t c ) const;
 
     const GlyphCoords*      GetGlyphCoords  ( wchar_t c ) const;
+
+    float                   GetKerning      ( wchar_t c0, wchar_t c1 ) const;
 
     MemoryChunkConstPtr     GetData         () const;
     MemoryChunkConstPtr     GetWritableData ();

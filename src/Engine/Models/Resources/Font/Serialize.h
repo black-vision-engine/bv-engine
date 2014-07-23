@@ -16,6 +16,8 @@ void serialize( Archive & ar, bv::model::GlyphCoords& glyphCoords, const unsigne
     ar & glyphCoords.height;
     ar & glyphCoords.bearingX;
     ar & glyphCoords.bearingY;
+    ar & glyphCoords.advanceX;
+    ar & glyphCoords.advanceY;
     ar & glyphCoords.glyphX;
     ar & glyphCoords.glyphY;
     ar & glyphCoords.glyphWidth;
@@ -41,6 +43,7 @@ void serialize< boost::archive::text_iarchive >( boost::archive::text_iarchive &
     ar >> textAtlas.m_glyphsPositions;
     ar >> textAtlas.m_glyphWidth;
     ar >> textAtlas.m_glyphHeight;
+    ar >> textAtlas.m_kerningMap;
 }
 
 template< >
@@ -60,6 +63,7 @@ void serialize< boost::archive::text_oarchive >( boost::archive::text_oarchive &
     ar & textAtlas.m_glyphsPositions;
     ar << textAtlas.m_glyphWidth;
     ar << textAtlas.m_glyphHeight;
+    ar & textAtlas.m_kerningMap;
 }
 
 } // serialization
