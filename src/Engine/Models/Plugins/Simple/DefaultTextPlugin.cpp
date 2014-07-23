@@ -55,6 +55,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     SimpleFloatEvaluatorPtr     spacingEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "spacing", timeEvaluator );
     SimpleFloatEvaluatorPtr     alignmentEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alignment", timeEvaluator );
+    SimpleFloatEvaluatorPtr     maxTextLenghtEvaluator  = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "maxTextLenght", timeEvaluator );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
@@ -64,6 +65,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     plModel->RegisterAll( spacingEvaluator );
     plModel->RegisterAll( alignmentEvaluator );
     plModel->RegisterAll( fontSizeEvaluator );
+    plModel->RegisterAll( maxTextLenghtEvaluator );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
@@ -78,6 +80,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
     fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
+    maxTextLenghtEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
 
     return model;
 }
@@ -187,10 +190,11 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
-    m_fontSizeParam = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
-    m_blurSizeParam = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
-    m_spacingParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
-    m_alignmentParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
+    m_fontSizeParam         = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
+    m_blurSizeParam         = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
+    m_spacingParam          = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
+    m_alignmentParam        = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
+    m_maxTextLengthParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "maxTextLenght" ) );
 }
 
 // *************************************
@@ -338,6 +342,33 @@ void DefaultTextPlugin::OnSetText                   ( IEventPtr evt )
     }
 }
 
+//namespace 
+//{
+//// *************************************
+////
+//glm::vec2 GetLeftAndRightCorner( const VertexAttributesChannelPtr & vaChannel )
+//{
+//    auto components = vaChannel->GetComponents();
+//
+//    glm::vec2 ret;
+//
+//    if( components.size() > 0 )
+//    {
+//        auto attrChannels = ret.x = components[ 0 ]->GetAttributeChannels();
+//
+//        if( attrChannels.size() > 0 )
+//            ret.x = attrChannels[ 0 ].
+//
+//        [ 0 ].x;
+//        ret.y = components[ 0 ].y;
+//    }
+//
+//
+//    for components
+//}
+//
+//} // anonymous
+
 // *************************************
 //
 void DefaultTextPlugin::SetText                     ( const std::wstring & newText )
@@ -349,7 +380,24 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
     auto alignType =  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType );
+    auto textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType );
+
+    auto maxTextLenght = m_maxTextLengthParam->Evaluate();
+
+    if( maxTextLenght > 0.f && textLength > 0.f && textLength > maxTextLenght )
+    {
+        auto transformChannel = m_prevPlugin->GetTransformChannel();
+
+        if( transformChannel != nullptr )
+        {
+            auto& transformValues = transformChannel->GetTransformValues();
+
+            auto currTransform = transformValues[ 0 ]->GetValue(); // FIXME: Czujesz jak bardzo to ssie?
+
+            // FIXME: A to tak ssie, ze trzeba przescieradlo z dupy wyciagac.
+            const_cast< ValueMat4PtrVec & >( transformValues )[ 0 ]->SetValue( glm::scale( currTransform, glm::vec3( maxTextLenght / textLength, 1.f, 1.f ) ) );  
+        }
+    }
 
     m_vaChannel->SetNeedsTopologyUpdate( true );
 }

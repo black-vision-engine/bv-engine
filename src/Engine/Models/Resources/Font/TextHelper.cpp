@@ -141,7 +141,7 @@ ResourceHandleConstPtr      TextHelper::GetAtlasTextureInfo ( const TextAtlas * 
 
 // *********************************
 //
-void                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, const std::wstring& textPatern )
+float                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, const std::wstring& textPatern )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
@@ -193,21 +193,21 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
 
         if( auto glyphCoord = textAtlas->GetGlyphCoords( wch ) )
         {
-            glm::vec3 baring = glm::vec3( 0.f, (glyphCoord->glyphHeight - glyphCoord->bearingY) / (float)viewHeight, 0.f );
+            glm::vec3 baring = glm::vec3( 0.f, ( (float)glyphCoord->glyphHeight - (float)glyphCoord->bearingY ) / (float)viewHeight, 0.f );
 
             glm::vec3 quadBottomLeft;
             glm::vec3 quadBottomRight;
             glm::vec3 quadTopLeft;
             glm::vec3 quadTopRight;
 
-            if( usePatern && textPatern[i] == L'#' )
-            {
-                quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f );
-                quadBottomRight    = glm::vec3( (float)glyphCoord->width / (float)viewWidth, 0.f, 0.f ) +  glm::vec3( blurLenghtX, -blurLenghtY, 0.f );
-                quadTopLeft        = glm::vec3( 0.f, (float)glyphCoord->height / (float)viewHeight, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f );
-                quadTopRight       = glm::vec3( (float)glyphCoord->width / (float)viewWidth, (float)glyphCoord->height / (float)viewHeight, 0.f ) + glm::vec3( blurLenghtX, blurLenghtY, 0.f );
-            }
-            else
+            //if( usePatern && textPatern[i] == L'#' )
+            //{
+            //    quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f );
+            //    quadBottomRight    = glm::vec3( (float)glyphCoord->width / (float)viewWidth, 0.f, 0.f ) +  glm::vec3( blurLenghtX, -blurLenghtY, 0.f );
+            //    quadTopLeft        = glm::vec3( 0.f, (float)glyphCoord->height / (float)viewHeight, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f );
+            //    quadTopRight       = glm::vec3( (float)glyphCoord->width / (float)viewWidth, (float)glyphCoord->height / (float)viewHeight, 0.f ) + glm::vec3( blurLenghtX, blurLenghtY, 0.f );
+            //}
+            //else
             {
                 quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f );
                 quadBottomRight    = glm::vec3( (float)glyphCoord->glyphWidth / (float)viewWidth, 0.f, 0.f ) +  glm::vec3( blurLenghtX, -blurLenghtY, 0.f );
@@ -231,14 +231,14 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
             float texWidth;
             float texHeight;
 
-            if( usePatern && textPatern[i] == L'#' )
-            {
-                texLeft   = ((float)glyphCoord->textureX)  / textAtlas->GetWidth();
-                texTop    = ((float)glyphCoord->textureY)  / textAtlas->GetHeight();
-                texWidth  = ((float)glyphCoord->width)     / textAtlas->GetWidth();
-                texHeight = ((float)glyphCoord->height)    / textAtlas->GetHeight();
-            }
-            else
+            //if( usePatern && textPatern[i] == L'#' )
+            //{
+            //    texLeft   = ((float)glyphCoord->textureX)  / textAtlas->GetWidth();
+            //    texTop    = ((float)glyphCoord->textureY)  / textAtlas->GetHeight();
+            //    texWidth  = ((float)glyphCoord->width)     / textAtlas->GetWidth();
+            //    texHeight = ((float)glyphCoord->height)    / textAtlas->GetHeight();
+            //}
+            //else
             {
                 texLeft   = ((float)glyphCoord->textureX + (float)glyphCoord->glyphX - blurTexSize)  / textAtlas->GetWidth();
                 texTop    = ((float)glyphCoord->textureY + (float)glyphCoord->glyphY - blurTexSize)  / textAtlas->GetHeight();
@@ -256,11 +256,11 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
 
             vertexAttributeChannel->AddConnectedComponent( connComp );
 
-            if( usePatern && textPatern[i] == L'#' )
-            {
-                translate += glm::vec3( glyphCoord->width / (float)viewWidth, 0.f, 0.f ) + interspace;
-            }
-            else
+            //if( usePatern && textPatern[i] == L'#' )
+            //{
+            //    translate += glm::vec3( textAtlas->GetGlyphCoords( L'0' )->glyphWidth / (float)viewWidth, 0.f, 0.f ) + interspace;
+            //}
+            //else
             {
                 translate += glm::vec3( glyphCoord->glyphWidth / (float)viewWidth, 0.f, 0.f ) + interspace;
             }
@@ -303,6 +303,8 @@ void                    TextHelper::BuildVACForText     ( VertexAttributesChanne
     {
         vertexAttributeChannel->AddConnectedComponent( CreateEmptyCC() );
     }
+
+    return translate.x; // FIXME: This does not work for multiline text
 }
 
 

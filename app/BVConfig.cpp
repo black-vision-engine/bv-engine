@@ -1,8 +1,8 @@
 #include "BVConfig.h"
 
-#define USE_READBACK_API
-//#define FULLSCREEN_MODE
-#define PERSPECTIVE_CAMERA
+//#define USE_READBACK_API
+#define FULLSCREEN_MODE
+//#define PERSPECTIVE_CAMERA
 
 namespace bv
 {

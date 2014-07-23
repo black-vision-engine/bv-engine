@@ -119,7 +119,6 @@
     <ClCompile Include="System\SimpleTimer.cpp" />
     <ClCompile Include="System\HerarchicalProfiler.cpp" />
     <ClCompile Include="System\FileIO.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\Simple\TimerPlugin.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\TextHelper.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelAnimatedVertices.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelVariableTopology.cpp" />
@@ -200,6 +199,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.cpp" />
     <ClCompile Include="Engine\Graphics\Resources\Textures\Texture2DCache.cpp" />
     <ClCompile Include="Core\MemoryChunk.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\DefaultTimerPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -348,7 +348,6 @@
     <ClInclude Include="System\HerarchicalProfiler.h" />
     <ClInclude Include="System\BasicMacros.h" />
     <ClInclude Include="System\FileIO.h" />
-    <ClInclude Include="Engine\Models\Plugins\Simple\TimerPlugin.h" />
     <ClInclude Include="Engine\Models\Resources\Font\TextHelper.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelAnimatedVertices.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelVariableTopology.h" />
@@ -458,6 +457,7 @@
     <ClInclude Include="System\Environment.h" />
     <ClInclude Include="Engine\Graphics\Resources\Textures\Texture2DCache.h" />
     <ClInclude Include="Core\MemoryChunk.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\DefaultTimerPlugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

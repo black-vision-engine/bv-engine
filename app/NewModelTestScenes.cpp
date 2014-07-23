@@ -472,10 +472,11 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
 
     //return rut;
     //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator, true );
-    return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+    //return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
     //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, true );
-    //return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
+    return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
     //return SimpleNodesFactory::CreateTextWithShadowNode( timelineManager, timeEvaluator, 5, glm::vec3( 0.005f, -0.005f, -0.001f ) );
+    //return SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
 }
 
 } //bv
