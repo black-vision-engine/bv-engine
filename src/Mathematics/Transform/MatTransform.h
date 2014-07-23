@@ -146,6 +146,7 @@ public:
     void            AddTranslationCFwd  ( ParamT x0, ParamT x1, ParamT x2 );
     void            AddTranslationCInv  ( ParamT x0, ParamT x1, ParamT x2 );
     void            AddTransform        ( SimpleTransform<ParamT> * trans );
+    void            InsertTransform     ( int i, SimpleTransform<ParamT> * trans );
 
     unsigned int    Size                () const;
 

@@ -7,6 +7,8 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
+#include "Mathematics/Transform/MatTransform.h"
+
 #include "Engine/Models/Resources/IPluginResourceDescr.h"
 
 #include "Engine/Models/Resources/Font/FontLoader.h"
@@ -386,16 +388,37 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
     if( maxTextLenght > 0.f && textLength > 0.f && textLength > maxTextLenght )
     {
-        auto transformChannel = m_prevPlugin->GetTransformChannel();
+        auto plugin = GetPrevPlugin();
+        IParamValModelPtr transformChannel = nullptr;
+
+        while ( transformChannel == nullptr && plugin != nullptr )
+        {
+            transformChannel = plugin->GetPluginParamValModel()->GetTransformChannelModel();
+            plugin = plugin->GetPrevPlugin();
+        }
 
         if( transformChannel != nullptr )
         {
-            auto& transformValues = transformChannel->GetTransformValues();
+            assert( transformChannel->GetParameters().size() == 1 );
+            auto & param = transformChannel->GetParameters()[ 0 ];
 
-            auto currTransform = transformValues[ 0 ]->GetValue(); // FIXME: Czujesz jak bardzo to ssie?
+            auto transformParam = QueryTypedParam< ParamTransformVecPtr >( param );
 
-            // FIXME: A to tak ssie, ze trzeba przescieradlo z dupy wyciagac.
-            const_cast< ValueMat4PtrVec & >( transformValues )[ 0 ]->SetValue( glm::scale( currTransform, glm::vec3( maxTextLenght / textLength, 1.f, 1.f ) ) );  
+            auto scaleTransform = SimpleTransformF::CreateScale(    InterpolatorsHelper::CreateConstValue( maxTextLenght / textLength )
+                                                                    ,   InterpolatorsHelper::CreateConstValue( 1.f )
+                                                                    ,   InterpolatorsHelper::CreateConstValue( 1.f )
+                                                                    );
+
+            if( transformParam->Transform( 0 ).Size() == 5 )
+            {       
+                transformParam->Transform( 0 ).InsertTransform( 4, scaleTransform );
+            }
+            else
+            {
+                assert( transformParam->Transform( 0 ).Size() == 6 );
+
+                *transformParam->Transform( 0 )[ 4 ] = *scaleTransform;
+            }
         }
     }
 

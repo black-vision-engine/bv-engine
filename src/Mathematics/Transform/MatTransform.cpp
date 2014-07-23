@@ -193,6 +193,18 @@ void CompositeTransform<ParamT>::AddTransform( SimpleTransform<ParamT> * trans )
 // *************************************
 //
 template<typename ParamT>
+void CompositeTransform<ParamT>::InsertTransform     ( int i, SimpleTransform<ParamT> * trans )
+{
+    if( i < (int)m_transformations.size() )
+    {
+        auto it = m_transformations.begin();
+        m_transformations.insert( it + i - 1, trans );
+    }
+}
+
+// *************************************
+//
+template<typename ParamT>
 CompositeTransform<ParamT>::CompositeTransform()
 {
 }
