@@ -56,8 +56,9 @@ private:
     ParamFloatPtr                   m_paramWrapModeY;
     ParamFloatPtr                   m_paramFilteringMode;
     ParamFloatPtr                   m_paramAttachMode;
-    int                             m_textureWidth;
-    int                             m_textureHeight;
+    
+    unsigned int                    m_textureWidth;
+    unsigned int                    m_textureHeight;
 
     TextureWrappingMode             m_lastTextureWrapModeX;
     TextureWrappingMode             m_lastTextureWrapModeY;
@@ -76,8 +77,8 @@ public:
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
-    int                                         GetTextureWidth             () const;
-    int                                         GetTextureHeight            () const;
+    unsigned int                                GetTextureWidth             () const;
+    unsigned int                                GetTextureHeight            () const;
 
     virtual void                                Update                      ( TimeType t ) override;
 

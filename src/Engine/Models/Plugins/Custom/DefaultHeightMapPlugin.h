@@ -41,6 +41,18 @@ class DefaultHeightMapPlugin : public BasePlugin< IPlugin >
 {
 private:
 
+    enum class TextureSlot : int
+    {
+        TS_HEIGHT_MAP = 0,
+        TS_HILL,
+        TS_BACKGROUND,
+        TS_BACKGROUND_MASK,
+
+        TS_TOTAL
+    };
+
+private:
+
     DefaultPluginParamValModelPtr   m_paramValModel;
 
     DefaultPixelShaderChannelPtr    m_psc;
@@ -56,8 +68,9 @@ private:
     ParamFloatPtr                   m_paramWrapModeY;
     ParamFloatPtr                   m_paramFilteringMode;
     ParamFloatPtr                   m_paramAttachMode;
-    int                             m_textureWidth;
-    int                             m_textureHeight;
+
+    unsigned int                    m_textureWidth;
+    unsigned int                    m_textureHeight;
 
     TextureWrappingMode             m_lastTextureWrapModeX;
     TextureWrappingMode             m_lastTextureWrapModeY;
@@ -75,14 +88,15 @@ public:
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
-    int                                         GetTextureWidth             () const;
-    int                                         GetTextureHeight            () const;
+    unsigned int                                GetTextureWidth             () const;
+    unsigned int                                GetTextureHeight            () const;
 
     virtual void                                Update                      ( TimeType t ) override;
 
 private:
 
     void                                        InitAttributesChannel       ( IPluginPtr prev );
+    void                                        SetTextureParams            ( TextureSlot slot, DefaultTextureDescriptor * txDesc ) const;
 
 };
 

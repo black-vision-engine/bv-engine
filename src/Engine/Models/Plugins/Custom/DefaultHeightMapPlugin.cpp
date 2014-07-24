@@ -158,41 +158,46 @@ DefaultHeightMapPlugin::~DefaultHeightMapPlugin         ()
 // 
 bool                            DefaultHeightMapPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
 {
+    //Order of texture uploads
+    //1. heightmap
+    //2. HillTexture
+    //3. Background Texture
+    //4. Background map texture
+    auto txData = m_psc->GetTexturesDataImpl();
+
+    assert( txData->GetTextures().size() < 4 ); //FIXME: Second one may be added by a mask
+
     auto txResDescr = QueryTextureResourceDescr( resDescr );
 
-    // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
-    if ( txResDescr != nullptr )
+    if ( txResDescr == nullptr )
     {
-        auto txData = m_psc->GetTexturesDataImpl();
-        assert( txData->GetTextures().size() <= 2 ); //FIXME: Second one may be added by a mask
-
-        //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), DefaultHeightMapPluginDesc::HeightMapTextureName() );
-        txDesc->SetFilteringMode( TextureFilteringMode::TFM_POINT );
-        txDesc->SetWrappingModeX( TextureWrappingMode::TWM_CLAMP_BORDER );
-        txDesc->SetWrappingModeY( TextureWrappingMode::TWM_MIRROR );
-
-        txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
-
-        if( txDesc != nullptr )
-        {
-            if( txData->GetTextures().size() == 0 )
-            {
-                txData->AddTexture( txDesc );
-            }
-            else
-            {
-                txData->SetTexture( 0, txDesc );
-            }
-
-            m_textureWidth = txDesc->GetWidth();
-            m_textureHeight = txDesc->GetHeight();
-
-            return true;
-        }
+        return false;
     }
 
-    return false;
+    //FIXME: use some better API to handle resources in general and textures in this specific case
+    auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), DefaultHeightMapPluginDesc::HeightMapTextureName() );
+
+    if( txDesc == nullptr )
+    {
+        return false;
+    }
+
+    SetTextureParams( ( TextureSlot ) txData->GetTextures().size(), txDesc );
+
+
+    if( txData->GetTextures().size() == 0 )
+    {
+        txData->AddTexture( txDesc );
+    }
+    else
+    {
+        txData->SetTexture( 0, txDesc );
+    }
+
+    m_textureWidth = txDesc->GetWidth();
+    m_textureHeight = txDesc->GetHeight();
+
+    return true;
 }
 
 // *************************************
@@ -214,6 +219,20 @@ IPixelShaderChannelConstPtr         DefaultHeightMapPlugin::GetPixelShaderChanne
 IVertexShaderChannelConstPtr        DefaultHeightMapPlugin::GetVertexShaderChannel      () const
 {
     return m_vsc;
+}
+
+// *************************************
+// 
+unsigned int                        DefaultHeightMapPlugin::GetTextureWidth             () const
+{
+    return m_textureWidth;
+}
+
+// *************************************
+//
+unsigned int                        DefaultHeightMapPlugin::GetTextureHeight            () const
+{
+    return m_textureHeight;
 }
 
 // *************************************
@@ -295,17 +314,18 @@ void    DefaultHeightMapPlugin::InitAttributesChannel( IPluginPtr prev )
 }
 
 // *************************************
-// 
-int                                         DefaultHeightMapPlugin::GetTextureWidth             () const
-{
-    return m_textureWidth;
-}
-
-// *************************************
 //
-int                                         DefaultHeightMapPlugin::GetTextureHeight            () const
+void               DefaultHeightMapPlugin::SetTextureParams            ( TextureSlot slot, DefaultTextureDescriptor * txDesc ) const
 {
-    return m_textureHeight;
+    if( slot == TextureSlot::TS_HEIGHT_MAP )
+    {
+        assert( txDesc->GetHeight() == 1 );
+    }
+
+    txDesc->SetFilteringMode( TextureFilteringMode::TFM_LINEAR );
+    txDesc->SetWrappingModeX( TextureWrappingMode::TWM_MIRROR );
+    txDesc->SetWrappingModeY( TextureWrappingMode::TWM_MIRROR );
+    txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
 }
 
 } // model

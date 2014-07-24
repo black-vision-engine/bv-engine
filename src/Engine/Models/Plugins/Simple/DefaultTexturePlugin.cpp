@@ -426,14 +426,14 @@ void                                        DefaultTexturePlugin::UpdateState   
 
 // *************************************
 // 
-int                                         DefaultTexturePlugin::GetTextureWidth             () const
+unsigned int                                DefaultTexturePlugin::GetTextureWidth             () const
 {
     return m_textureWidth;
 }
 
 // *************************************
 //
-int                                         DefaultTexturePlugin::GetTextureHeight            () const
+unsigned int                                DefaultTexturePlugin::GetTextureHeight            () const
 {
     return m_textureHeight;
 }
