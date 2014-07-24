@@ -16,7 +16,7 @@ uniform float alpha;
 uniform float scaleX;
 uniform float coveredDist;
 
-uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0 ,16.0 ,17.0, 18.0, 19.0 };
+uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0 };
 
 // *****************************
 //
@@ -30,10 +30,11 @@ float decodeHeight( vec4 col )
 float getHeight( vec2 uv )
 {
     float dx = 1.0 / 1920.0;
+    float hklen = 12.0;
     
     float wl = 1.0;
-    int smpll = int( floor( 10.0 * windowWidth ) );
-    int smplu = int( ceil( 10.0 * windowWidth ) );
+    int smpll = int( floor( hklen * windowWidth ) );
+    int smplu = int( ceil( hklen * windowWidth ) );
 
     float suml = decodeHeight( texture( HeightMapTex, uv ) );
 
@@ -58,10 +59,10 @@ float getHeight( vec2 uv )
         suml /= ( wl * 1009.1532 );
         sumu /= ( wu * 1009.1532 );
         
-        return mix( sumu, suml, smoothstep( 1.0, 0.0, fract( 10.0 * windowWidth ) ) );
+        return mix( sumu, suml, smoothstep( 1.0, 0.0, fract( hklen * windowWidth ) ) );
     }
     
-    return suml / wl / 1009.1532;
+    return suml / ( wl * 1009.1532 );
 }
 
 // *****************************
