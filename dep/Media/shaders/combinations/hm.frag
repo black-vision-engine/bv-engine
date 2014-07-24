@@ -16,6 +16,8 @@ uniform float alpha;
 uniform float scaleX;
 uniform float coveredDist;
 
+uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0 ,16.0 ,17.0, 18.0, 19.0 };
+
 // *****************************
 //
 float decodeHeight( vec4 col )
@@ -25,10 +27,51 @@ float decodeHeight( vec4 col )
 
 // *****************************
 //
+float getHeight( vec2 uv )
+{
+    float dx = 1.0 / 1920.0;
+    
+    float wl = 1.0;
+    int smpll = int( floor( 10.0 * windowWidth ) );
+    int smplu = int( ceil( 10.0 * windowWidth ) );
+
+    float suml = decodeHeight( texture( HeightMapTex, uv ) );
+
+    int i = 1;
+    for(; i < smpll; ++i )
+    {
+        suml += decodeHeight( texture( HeightMapTex, uv + vec2( pixelOffset[ i ] * dx, 0.0 ) ) );
+        suml += decodeHeight( texture( HeightMapTex, uv - vec2( pixelOffset[ i ] * dx, 0.0 ) ) );
+        wl += 2.0;
+    }
+  
+    if( smpll < smplu )
+    {
+        float wu = wl;
+        float sumu = suml;
+        
+        sumu += decodeHeight( texture( HeightMapTex, uv + vec2( pixelOffset[ i ] * dx, 0.0 ) ) );
+        sumu += decodeHeight( texture( HeightMapTex, uv - vec2( pixelOffset[ i ] * dx, 0.0 ) ) );
+        
+        wu += 2.0;
+        
+        suml /= ( wl * 1009.1532 );
+        sumu /= ( wu * 1009.1532 );
+        
+        return mix( sumu, suml, smoothstep( 1.0, 0.0, fract( 10.0 * windowWidth ) ) );
+    }
+    
+    return suml / wl / 1009.1532;
+}
+
+// *****************************
+//
 bool insideHillTest( vec2 uv )
 {
-	vec4 col = texture( HeightMapTex, uv );
-    float h = decodeHeight( col ) / 1009.1532; //MAX_VAL
+	//vec4 col = texture( HeightMapTex, uv );
+    //float h = decodeHeight( col ) / 1009.1532; //MAX_VAL
+    
+    float h = getHeight( uv );
     
     float off_y = uv.y;// - 0.17;//OFFSET
     if( off_y < 0.0 )
