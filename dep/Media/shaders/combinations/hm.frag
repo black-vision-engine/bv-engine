@@ -10,6 +10,8 @@ uniform sampler2D HillTex;
 uniform sampler2D CoveredDistTex;
 uniform sampler2D BackgroundTex;
 
+uniform float windowWidth;
+
 uniform float alpha;
 uniform float scaleX;
 uniform float coveredDist;
@@ -28,7 +30,7 @@ bool insideHillTest( vec2 uv )
 	vec4 col = texture( HeightMapTex, uv );
     float h = decodeHeight( col ) / 1009.1532; //MAX_VAL
     
-    float off_y = uv.y - 0.17;//OFFSET
+    float off_y = uv.y;// - 0.17;//OFFSET
     if( off_y < 0.0 )
         return false;
 
@@ -60,7 +62,17 @@ vec4 calcHillColor( vec2 uv )
     if ( uv.x < coveredDist )
         return texture( CoveredDistTex, uv );
     else
-        return texture( HillTex, uv );
+    {
+        vec4 c0 = texture( HillTex, uvCoord_hm );
+        vec4 c1 = texture( HillTex, uvCoord_hm * 2.0 );
+        vec4 c2 = texture( HillTex, uvCoord_hm * 4.0 );
+
+        vec4 cm0 = mix( c1, c0, smoothstep( 0.45, 0.55, windowWidth ) );
+        vec4 cm1 = mix( c2, cm0, smoothstep( 0.2, 0.35, windowWidth ) );
+
+        return cm1;
+        //return mix( mix( c0, c1, smoothstep( 0.4, 0.6, windowWidth ) ), c2, smoothstep( 0.3, 0.2, windowWidth ) );
+    }
 }
 
 // *****************************
