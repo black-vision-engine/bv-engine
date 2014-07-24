@@ -7,7 +7,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
-#include "Engine/Models/Plugins/DefaultRectPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 
 #include "Engine/Models/Resources/IPluginResourceDescr.h"
 
@@ -226,7 +226,7 @@ void                                DefaultHeightMapPlugin::Update              
     m_vaChannel->SetNeedsAttributesUpdate( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() );
 
     m_vsc->PostUpdate();
-    m_psc->PostUpdate();    
+    m_psc->PostUpdate();
 }
 
 // *************************************

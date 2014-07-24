@@ -132,7 +132,6 @@
     <ClCompile Include="Engine\Models\Plugins\ParamValModel\DefaultPluginParamValModel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.cpp" />
     <ClCompile Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\DefaultRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultColorPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Manager\PluginsManager.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Descriptor\BasePluginDescriptor.cpp" />
@@ -201,6 +200,7 @@
     <ClCompile Include="Core\MemoryChunk.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultTimerPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Custom\DefaultHeightMapPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\DefaultRectPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -368,7 +368,6 @@
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.h" />
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.h" />
     <ClInclude Include="Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.h" />
-    <ClInclude Include="Engine\Models\Plugins\DefaultRectPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultColorPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Interfaces\IPluginDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Manager\PluginsManager.h" />
@@ -460,6 +459,7 @@
     <ClInclude Include="Core\MemoryChunk.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultTimerPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Custom\DefaultHeightMapPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\DefaultRectPlugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

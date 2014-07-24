@@ -6,7 +6,7 @@
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
-#include "Engine/Models/Plugins/DefaultRectPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
@@ -26,6 +26,7 @@ namespace {
     std::string GSimplePlugins3[] = { "DEFAULT_TRANSFORM", "DEFAULT_COLOR", "DEFAULT_TEXT" };
     std::string GSimplePlugins4[] = { "DEFAULT_TRANSFORM", "DEFAULT_TEXT" };
     std::string GSimplePlugins5[] = { "DEFAULT_TRANSFORM", "DEFAULT_COLOR", "DEFAULT_TIMER" };
+    std::string GSimplePlugins6[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_HEIGHT_MAP" };
 
 
     // *****************************
@@ -666,7 +667,21 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
 //
 model::BasicNodePtr  CreateHeightMapNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    return nullptr;    
+    //Plugin stuff
+    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins6, GSimplePlugins6 + 3 );
+
+    auto node = std::make_shared< model::BasicNode >( ".", timeEvaluator );
+
+    auto success = node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
+    assert( success );
+
+    success = model::LoadTexture( node->GetPlugin( "height map" ), "bukovina.png" );
+    assert( success );
+
+    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),   2.f );
+    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.f * 1920.f / 1080.f );
+
+    return node;    
 }
 
 } //bv

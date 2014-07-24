@@ -280,7 +280,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\DefaultFinalizePlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\DefaultPluginListFinalized.cpp" />
-    <ClCompile Include="Engine\Models\Plugins\DefaultRectPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\DefaultRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Descriptor\BasePluginDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryMultiRectPlugin.cpp" />
@@ -504,7 +504,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\DefaultFinalizePlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\DefaultPluginListFinalized.h" />
-    <ClInclude Include="Engine\Models\Plugins\DefaultRectPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\DefaultRectPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Descriptor\BasePluginDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryMultiRectPlugin.h" />

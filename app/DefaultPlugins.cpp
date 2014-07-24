@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
 
-#include "Engine/Models/Plugins/DefaultRectPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
