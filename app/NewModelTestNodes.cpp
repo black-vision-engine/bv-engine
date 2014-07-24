@@ -675,7 +675,20 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     auto success = node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
     assert( success );
 
+    //HeightMap
     success = model::LoadTexture( node->GetPlugin( "height map" ), "bukovina.png" );
+    assert( success );
+
+    //HillTexture
+    success = model::LoadTexture( node->GetPlugin( "height map" ), "hill_tex.jpg" );
+    assert( success );
+
+    //CoveredDistanceTexture
+    success = model::LoadTexture( node->GetPlugin( "height map" ), "covered_dist_tex.jpg" );
+    assert( success );
+
+    //BackgroundTexture
+    success = model::LoadTexture( node->GetPlugin( "height map" ), "hm_background.png" );
     assert( success );
 
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),   2.f );
@@ -686,6 +699,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scaleX" ), TimeType( 8.f ), 5.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "offsetX" ), TimeType( 9.f ), 0.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "offsetX" ), TimeType( 29.f ), 1.f - 0.2f );
+
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDist" ), TimeType( 0.f ), 0.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDist" ), TimeType( 3.f ), 0.1f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDist" ), TimeType( 23.f ), 0.5f );
 
     return node;    
 }

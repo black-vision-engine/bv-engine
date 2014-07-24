@@ -29,10 +29,10 @@ public:
 
     static  std::string                     UID                     ();
 
-    static  std::string                     HillTextureName         ();
-    static  std::string                     BackgroundTextureName   ();
-    static  std::string                     BgMaskTextureName       ();
     static  std::string                     HeightMapTextureName    ();
+    static  std::string                     HillTextureName         ();
+    static  std::string                     CoveredDistTextureName  ();
+    static  std::string                     BackgroundTextureName   ();
 
 };
 
@@ -45,8 +45,8 @@ private:
     {
         TS_HEIGHT_MAP = 0,
         TS_HILL,
+        TS_COVERED_DIST,
         TS_BACKGROUND,
-        TS_BACKGROUND_MASK,
 
         TS_TOTAL
     };
@@ -64,19 +64,6 @@ private:
 
     unsigned int                    m_texCoordChannelIndex;
 
-    ParamFloatPtr                   m_paramWrapModeX;
-    ParamFloatPtr                   m_paramWrapModeY;
-    ParamFloatPtr                   m_paramFilteringMode;
-    ParamFloatPtr                   m_paramAttachMode;
-
-    unsigned int                    m_textureWidth;
-    unsigned int                    m_textureHeight;
-
-    TextureWrappingMode             m_lastTextureWrapModeX;
-    TextureWrappingMode             m_lastTextureWrapModeY;
-    TextureFilteringMode            m_lastTextureFilteringMode;
-    TextureAttachmentMode           m_lastTextureAttachMode;
-
 public:
 
     explicit                                    DefaultHeightMapPlugin      ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
@@ -87,9 +74,6 @@ public:
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
-
-    unsigned int                                GetTextureWidth             () const;
-    unsigned int                                GetTextureHeight            () const;
 
     virtual void                                Update                      ( TimeType t ) override;
 

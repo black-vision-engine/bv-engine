@@ -438,7 +438,5 @@ unsigned int                                DefaultTexturePlugin::GetTextureHeig
     return m_textureHeight;
 }
 
-
-
 } // model
 } // bv

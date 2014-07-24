@@ -46,8 +46,9 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
 
-    SimpleFloatEvaluatorPtr     offsetXEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "offsetX", timeEvaluator );
-    SimpleFloatEvaluatorPtr     scaleXEvaluator     = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "scaleX", timeEvaluator );
+    SimpleFloatEvaluatorPtr     offsetXEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "offsetX", timeEvaluator );
+    SimpleFloatEvaluatorPtr     scaleXEvaluator         = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "scaleX", timeEvaluator );
+    SimpleFloatEvaluatorPtr     coveredDistEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "coveredDist", timeEvaluator );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
@@ -55,6 +56,7 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     vsModel->RegisterAll( scaleXEvaluator );
     psModel->RegisterAll( borderColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
+    psModel->RegisterAll( coveredDistEvaluator );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
@@ -68,6 +70,7 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     //FIXME: integer parmeters should be used here
     offsetXEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     scaleXEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+    coveredDistEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
 
     return model;
 }
@@ -86,9 +89,16 @@ bool                   DefaultHeightMapPluginDesc::CanBeAttachedTo     ( IPlugin
 
 // *******************************
 //
-std::string             DefaultHeightMapPluginDesc::UID                       ()
+std::string             DefaultHeightMapPluginDesc::UID                     ()
 {
     return "DEFAULT_HEIGHT_MAP";
+}
+
+// *******************************
+//
+std::string             DefaultHeightMapPluginDesc::HeightMapTextureName    ()
+{
+    return "HeightMapTex";
 }
 
 // *******************************
@@ -100,23 +110,16 @@ std::string             DefaultHeightMapPluginDesc::HillTextureName         ()
 
 // *******************************
 //
+std::string             DefaultHeightMapPluginDesc::CoveredDistTextureName  ()
+{
+    return "CoveredDistTex";
+}
+
+// *******************************
+//
 std::string             DefaultHeightMapPluginDesc::BackgroundTextureName   ()
 {
-    return "BgTex";
-}
-
-// *******************************
-//
-std::string             DefaultHeightMapPluginDesc::BgMaskTextureName       ()
-{
-    return "BgMaskTex";
-}
-
-// *******************************
-//
-std::string             DefaultHeightMapPluginDesc::HeightMapTextureName    ()
-{
-    return "HeightMapTex";
+    return "BackgroundTex";
 }
 
 //FIXME: dodawanie kanalow w ten sposob (przez przypisanie na m_<xxx>channel powoduje bledy, trzeba to jakos poprawic, zeby bylo wiadomo, o co chodzi
@@ -161,11 +164,19 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( IPluginR
     //Order of texture uploads
     //1. heightmap
     //2. HillTexture
-    //3. Background Texture
-    //4. Background map texture
-    auto txData = m_psc->GetTexturesDataImpl();
+    //3. Covered Distance Texture
+    //4. Background Texture
+    std::string textureNames [] = { DefaultHeightMapPluginDesc::HeightMapTextureName(), 
+                                    DefaultHeightMapPluginDesc::HillTextureName(),
+                                    DefaultHeightMapPluginDesc::CoveredDistTextureName(),
+                                    DefaultHeightMapPluginDesc::BackgroundTextureName() 
+                                  };
 
-    assert( txData->GetTextures().size() < 4 ); //FIXME: Second one may be added by a mask
+    auto txData = m_psc->GetTexturesDataImpl();
+    
+    unsigned int curNumTextures = txData->GetTextures().size();
+
+    assert( curNumTextures < 4 ); //FIXME: Second one may be added by a mask
 
     auto txResDescr = QueryTextureResourceDescr( resDescr );
 
@@ -175,29 +186,18 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( IPluginR
     }
 
     //FIXME: use some better API to handle resources in general and textures in this specific case
-    auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), DefaultHeightMapPluginDesc::HeightMapTextureName() );
+    auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), textureNames[ curNumTextures ] );
 
-    if( txDesc == nullptr )
+    if( txDesc != nullptr )
     {
-        return false;
-    }
+        SetTextureParams( ( TextureSlot ) curNumTextures, txDesc );
 
-    SetTextureParams( ( TextureSlot ) txData->GetTextures().size(), txDesc );
-
-
-    if( txData->GetTextures().size() == 0 )
-    {
         txData->AddTexture( txDesc );
-    }
-    else
-    {
-        txData->SetTexture( 0, txDesc );
+
+        return true;
     }
 
-    m_textureWidth = txDesc->GetWidth();
-    m_textureHeight = txDesc->GetHeight();
-
-    return true;
+    return false;
 }
 
 // *************************************
@@ -219,20 +219,6 @@ IPixelShaderChannelConstPtr         DefaultHeightMapPlugin::GetPixelShaderChanne
 IVertexShaderChannelConstPtr        DefaultHeightMapPlugin::GetVertexShaderChannel      () const
 {
     return m_vsc;
-}
-
-// *************************************
-// 
-unsigned int                        DefaultHeightMapPlugin::GetTextureWidth             () const
-{
-    return m_textureWidth;
-}
-
-// *************************************
-//
-unsigned int                        DefaultHeightMapPlugin::GetTextureHeight            () const
-{
-    return m_textureHeight;
 }
 
 // *************************************
