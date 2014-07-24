@@ -665,7 +665,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
 
 // *****************************
 //
-model::BasicNodePtr  CreateHeightMapNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins6, GSimplePlugins6 + 3 );
