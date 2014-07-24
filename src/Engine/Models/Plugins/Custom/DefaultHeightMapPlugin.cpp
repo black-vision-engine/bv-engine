@@ -46,19 +46,15 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
 
-    ParamFloatPtr  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX", timeEvaluator );
-    ParamFloatPtr  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY", timeEvaluator );
-    ParamFloatPtr  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode", timeEvaluator );
-    ParamFloatPtr  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachmentMode", timeEvaluator );
+    SimpleFloatEvaluatorPtr     offsetXEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "offsetX", timeEvaluator );
+    SimpleFloatEvaluatorPtr     scaleXEvaluator     = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "scaleX", timeEvaluator );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
+    vsModel->RegisterAll( offsetXEvaluator );
+    vsModel->RegisterAll( scaleXEvaluator );
     psModel->RegisterAll( borderColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
-    psModel->AddParameter( paramWrapModeX );
-    psModel->AddParameter( paramWrapModeY );
-    psModel->AddParameter( paramFilteringMode );
-    psModel->AddParameter( paramAttachMode );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
@@ -70,10 +66,8 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
 
     //FIXME: integer parmeters should be used here
-    paramWrapModeX->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
-    paramWrapModeY->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
-    paramFilteringMode->SetVal( (float) TextureFilteringMode::TFM_LINEAR, TimeType( 0.f ) );
-    paramAttachMode->SetVal( (float) TextureAttachmentMode::MM_ATTACHED, TimeType( 0.f ) );
+    offsetXEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+    scaleXEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
 
     return model;
 }

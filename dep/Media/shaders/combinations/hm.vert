@@ -7,11 +7,17 @@ uniform mat4 MVP;
 uniform mat4 MV;
 uniform mat4 P;
 
+uniform float offsetX;
+uniform float scaleX;
+
 out vec2 uvCoord;
 
 void main()
 {
     gl_Position = MVP * vec4( vertexPosition, 1.0 );
     //uvCoord = vec2( vertexTexCoord.x * 0.1, vertexTexCoord.y );
-    uvCoord = vertexTexCoord;
+    float u = vertexTexCoord.x / scaleX + offsetX;
+    float v = vertexTexCoord.y;
+
+    uvCoord = vec2( u, v );
 }
