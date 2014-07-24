@@ -8,6 +8,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 
 #include "Engine/Models/Resources/IPluginResourceDescr.h"
 
@@ -138,8 +139,8 @@ DefaultHeightMapPlugin::DefaultHeightMapPlugin         ( const std::string & nam
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
 {
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( "", model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( "", model->GetVertexShaderChannelModel() ) );
+    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTexturePluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
+    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultTexturePluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
 
     InitAttributesChannel( prev );
 
@@ -173,6 +174,10 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( IPluginR
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), DefaultHeightMapPluginDesc::HeightMapTextureName() );
+        txDesc->SetFilteringMode( TextureFilteringMode::TFM_POINT );
+        txDesc->SetWrappingModeX( TextureWrappingMode::TWM_CLAMP_BORDER );
+        txDesc->SetWrappingModeY( TextureWrappingMode::TWM_MIRROR );
+
         txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
 
         if( txDesc != nullptr )
