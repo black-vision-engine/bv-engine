@@ -30,11 +30,11 @@ float decodeHeight( vec4 col )
 float getHeight( vec2 uv )
 {
     float dx = 1.0 / 1920.0;
-    float hklen = 8.0;
+    float hklen = 7.0;
     
     float wl = 1.0;
-    int smpll = int( floor( hklen * windowWidth ) );
-    int smplu = int( ceil( hklen * windowWidth ) );
+    int smpll = int( floor( hklen * windowWidth / 0.8 ) );
+    int smplu = int( ceil( hklen * windowWidth / 0.8 ) );
 
     float suml = decodeHeight( texture( HeightMapTex, uv ) );
 
