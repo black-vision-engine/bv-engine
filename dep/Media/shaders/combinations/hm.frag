@@ -30,7 +30,7 @@ float decodeHeight( vec4 col )
 float getHeight( vec2 uv )
 {
     float dx = 1.0 / 1920.0;
-    float hklen = 12.0;
+    float hklen = 8.0;
     
     float wl = 1.0;
     int smpll = int( floor( hklen * windowWidth ) );
