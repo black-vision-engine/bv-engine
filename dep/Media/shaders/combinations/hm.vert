@@ -21,5 +21,5 @@ void main()
     float v = vertexTexCoord.y * windowHeight + offsetY;
 
     uvCoord_hm = vec2( u, v );
-    uvCoord_tx = vec2( u, v );
+    uvCoord_tx = vertexTexCoord;
 }
