@@ -47,7 +47,7 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
 
     SimpleFloatEvaluatorPtr     blurSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
 
-    SimpleFloatEvaluatorPtr     timerTimeEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "time", timeEvaluator );
+    SimpleFloatEvaluatorPtr     timerTimeEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "startTime", timeEvaluator );
     SimpleFloatEvaluatorPtr     spacingEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "spacing", timeEvaluator );
     SimpleFloatEvaluatorPtr     alignmentEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alignment", timeEvaluator );
 
@@ -263,7 +263,7 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
     }
 
 
-    m_timeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "time" ) );
+    m_timeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "startTime" ) );
     m_spacingParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
 
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTimerPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
@@ -391,7 +391,9 @@ void                                DefaultTimerPlugin::Update                  
 
     auto time = m_timeEvaluator.GetLocalTime();
 
-    SetTime( time );
+    auto startTime = m_timeParam->Evaluate();
+
+    SetTime( startTime + time );
 
     m_paramValModel->Update();
 

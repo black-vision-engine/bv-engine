@@ -15,6 +15,7 @@ TimeSegmentEvalImpl::TimeSegmentEvalImpl ( TimeType duration, TimelinePlayDirect
     , m_pauseDuration( TimeType( 0.0 ) )
     , m_playDirection( direction )
     , m_globalTime( TimeType( 0.0 ) )
+    , m_startTime( TimeType( 0.0 ) )
 {
     assert( duration > TimeType( 0.0 ) );
 

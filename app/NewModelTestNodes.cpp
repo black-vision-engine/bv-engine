@@ -630,9 +630,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
     success = model::LoadFont( node->GetPlugin( "timer" ), "../dep/Media/fonts/arial.ttf" );
     assert( success );
 
-    SetParameter( node->GetPlugin( "timer" )->GetParameter( "time" ), TimeType( 1000.0 ), 1000000.0f );
+    SetParameter( node->GetPlugin( "timer" )->GetParameter( "startTime" ), TimeType( 0.0 ), 10000.0f );
 
-    node->GetPlugin( "timer" )->GetParameter( "time" )->SetTimeEvaluator( timeEvaluator );
+    node->GetPlugin( "timer" )->GetParameter( "startTime" )->SetTimeEvaluator( timeEvaluator );
 
     StartTimerPlugin( node->GetPlugin( "timer" ) );
 
