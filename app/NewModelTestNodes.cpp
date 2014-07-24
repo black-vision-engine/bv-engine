@@ -6,6 +6,7 @@
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
@@ -629,15 +630,18 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 27.0f );
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
+    SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( model::TextAlignmentType::Right ) );
 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 4.f / 1080.f );
 
     success = model::LoadFont( node->GetPlugin( "timer" ), "../dep/Media/fonts/arial.ttf" );
     assert( success );
 
-    SetParameter( node->GetPlugin( "timer" )->GetParameter( "time" ), TimeType( 100.0 ), 10.0f );
+    SetParameter( node->GetPlugin( "timer" )->GetParameter( "startTime" ), TimeType( 0.0 ), 10000.0f );
 
-    node->GetPlugin( "timer" )->GetParameter( "time" )->SetTimeEvaluator( timeEvaluator );
+    node->GetPlugin( "timer" )->GetParameter( "startTime" )->SetTimeEvaluator( timeEvaluator );
+
+    StartTimerPlugin( node->GetPlugin( "timer" ) );
 
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"bla bla" );
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAAAA\nBBBBCCCC\nDDDDDDDDD" );

@@ -8,6 +8,8 @@
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
 
+#include "Engine/Models/Timeline/TimeSegmentEvalImpl.h"
+
 #include <map>
 
 
@@ -38,13 +40,6 @@ class FontExtraData;
 class TextAtlas;
 class Text;
 struct GlyphCoords;
-
-// ***************************** UID **********************************
-class TimerPluginUID
-{
-public:
-    static const char*       GetName()        { return "timer_plugin"; }
-};
 
 struct TimeValue
 {
@@ -82,6 +77,9 @@ private:
     ParamFloatPtr                   m_fontSizeParam;
     ParamFloatPtr                   m_blurSizeParam;
     ParamFloatPtr                   m_spacingParam;
+    ParamFloatPtr                   m_alignmentParam;
+
+    TimeSegmentEvalImpl             m_timeEvaluator;
 
     TimeValue                       m_currentTime;
     const wchar_t                   m_defaultSeparator;
@@ -108,15 +106,15 @@ private:
     const GlyphCoords &             GetGlyphCoords  ( wchar_t wch ) const;
     void                            Refresh         ();
 
+    void                            SetTimePatern   ( const std::wstring & patern );
+
+    std::wstring                    GenerateTimePatern( double time );
 public:
 
-    void                                        SetTimePatern               ( const std::wstring & patern );
-    void                                        SetTime                     ( const std::wstring & time );
+    
     void                                        SetTime                     ( double time );
-    void                                        SetHOSecond                 ( int hoSec );
-    void                                        SetSecond                   ( int sec );
-    void                                        SetMinute                   ( int min );
-    void                                        SetHour                     ( int h );
+
+    void                                        SetTime                     ( int h, int m, int s, int hoSec );
 
     explicit                                    DefaultTimerPlugin          ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
                                                 ~DefaultTimerPlugin         ();
@@ -129,10 +127,27 @@ public:
 
     virtual void                                Update                      ( TimeType t ) override;
 
+    void                                        Start                       ();
+    void                                        Stop                        ();
+    void                                        Reset                       ();
+
 private:
 
     void                                        InitAttributesChannel       ( IPluginPtr prev );
 };
+
+
+// *************************************
+//
+bool            StartTimerPlugin( IPluginPtr timerPlugin );
+
+// *************************************
+//
+bool            StopTimerPlugin( IPluginPtr timerPlugin );
+
+// *************************************
+//
+bool            ResetTimerPlugin( IPluginPtr timerPlugin );
 
 } // model
 } // bv
