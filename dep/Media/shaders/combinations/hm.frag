@@ -45,7 +45,7 @@ float getHeight( vec2 uv )
         suml += decodeHeight( texture( HeightMapTex, uv - vec2( pixelOffset[ i ] * dx, 0.0 ) ) );
         wl += 2.0;
     }
-  
+
     if( smpll < smplu )
     {
         float wu = wl;
@@ -67,13 +67,8 @@ float getHeight( vec2 uv )
 
 // *****************************
 //
-bool insideHillTest( vec2 uv )
-{
-	//vec4 col = texture( HeightMapTex, uv );
-    //float h = decodeHeight( col ) / 1009.1532; //MAX_VAL
-    
-    float h = getHeight( uv );
-    
+bool insideHillTest( float h, vec2 uv )
+{    
     float off_y = uv.y;// - 0.17;//OFFSET
     if( off_y < 0.0 )
         return false;
@@ -121,7 +116,7 @@ vec4 calcHillColor( vec2 uv )
 
 // *****************************
 //
-vec4 clacBackgroundColor( vec2 uv )
+vec4 calcBackgroundColor( vec2 uv )
 {
     return texture( BackgroundTex, vec2( uv.x, uv.y * 0.8 ) );
 }
@@ -130,14 +125,18 @@ vec4 clacBackgroundColor( vec2 uv )
 //
 void main()
 {
-    bool ih = insideHillTest( uvCoord_hm );
+    float h = getHeight( uvCoord_hm );
 
-    if( ih )
+    if( insideHillTest( h, uvCoord_hm ) )
     {
         FragColor = calcHillColor( uvCoord_tx );
     }
     else
     {
-        FragColor = clacBackgroundColor( uvCoord_tx );
+        vec4 c0 = calcHillColor( uvCoord_tx );
+        vec4 c1 = calcBackgroundColor( uvCoord_tx );
+        
+        FragColor = mix( c1, c0, smoothstep( h - 0.02, h + 0.02, uvCoord_hm.y ) );
+        //FragColor = clacBackgroundColor( uvCoord_tx );
     }
 }
