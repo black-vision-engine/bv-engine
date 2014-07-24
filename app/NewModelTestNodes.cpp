@@ -708,6 +708,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 6.f ), 0.2f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowHeight" ), TimeType( 0.1f ), 1.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowHeight" ), TimeType( 6.f ), 0.2f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 12.f ), 1.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 20.f ), 0.2f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowHeight" ), TimeType( 12.1f ), 1.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowHeight" ), TimeType( 22.f ), 0.2f );
 
     return node;    
 }
