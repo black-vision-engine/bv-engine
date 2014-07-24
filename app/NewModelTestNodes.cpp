@@ -7,7 +7,6 @@
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
-#include "Engine/Models/Plugins/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"

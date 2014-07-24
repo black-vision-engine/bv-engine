@@ -470,7 +470,7 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
     //rut->AddChild( c0 );
     //rut->AddChild( c1 );
 
-    return SimpleNodesFactory::CreateHeightMapNode( timelineManager, timeEvaluator );
+    //return SimpleNodesFactory::CreateHeightMapNode( timelineManager, timeEvaluator );
 
     //return rut;
     //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator, true );
