@@ -682,9 +682,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.f * 1920.f / 1080.f );
 
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scaleX" ), TimeType( 0.f ), 1.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scaleX" ), TimeType( 5.f ), 5.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "offsetX" ), TimeType( 6.f ), 0.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "offsetX" ), TimeType( 26.f ), 1.f - 0.2f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scaleX" ), TimeType( 3.f ), 1.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scaleX" ), TimeType( 8.f ), 5.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "offsetX" ), TimeType( 9.f ), 0.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "offsetX" ), TimeType( 29.f ), 1.f - 0.2f );
 
     return node;    
 }
