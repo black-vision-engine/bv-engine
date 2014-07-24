@@ -47,8 +47,9 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
 
     SimpleFloatEvaluatorPtr     blurSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
 
-    SimpleFloatEvaluatorPtr     timerTimeEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "time", timeEvaluator );
+    SimpleFloatEvaluatorPtr     timerTimeEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "startTime", timeEvaluator );
     SimpleFloatEvaluatorPtr     spacingEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "spacing", timeEvaluator );
+    SimpleFloatEvaluatorPtr     alignmentEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alignment", timeEvaluator );
 
     //Register all parameters and evaloators in models
     psModel->RegisterAll( borderColorEvaluator );
@@ -57,6 +58,7 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
     plModel->RegisterAll( spacingEvaluator );
     plModel->RegisterAll( timerTimeEvaluator );
     plModel->RegisterAll( fontSizeEvaluator );
+    plModel->RegisterAll( alignmentEvaluator );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
@@ -70,6 +72,7 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
     timerTimeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
+    alignmentEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
 
     return model;
 }
@@ -232,6 +235,7 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
     , m_timePatern( )
     , m_currentTime( 0.0 )
     , m_defaultSeparator(L':')
+    , m_timeEvaluator( 3600.f * 100.f )
 {
     auto colorParam = prev->GetParameter( "color" );
 
@@ -259,7 +263,7 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
     }
 
 
-    m_timeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "time" ) );
+    m_timeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "startTime" ) );
     m_spacingParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
 
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTimerPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
@@ -272,9 +276,10 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
     ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
     ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
 
-    m_fontSizeParam = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
-    m_blurSizeParam = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
-    m_spacingParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
+    m_fontSizeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
+    m_blurSizeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
+    m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
+    m_alignmentParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
 }
 
 // *************************************
@@ -346,7 +351,7 @@ bool            DefaultTimerPlugin::LoadResource  ( IPluginResourceDescrConstPtr
 
             m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
-            SetTimePatern( L"M:SS:ss" );
+            SetTime(0.);
 
             return true;
         }
@@ -381,9 +386,14 @@ IVertexShaderChannelConstPtr        DefaultTimerPlugin::GetVertexShaderChannel  
 void                                DefaultTimerPlugin::Update                      ( TimeType t )
 {
     //FIXME: UPDATER TO FIX
-    float time = m_timeParam->Evaluate();
 
-    SetTime( time );
+    m_timeEvaluator.UpdateGlobalTime( t );
+
+    auto time = m_timeEvaluator.GetLocalTime();
+
+    auto startTime = m_timeParam->Evaluate();
+
+    SetTime( startTime + time );
 
     m_paramValModel->Update();
 
@@ -391,6 +401,26 @@ void                                DefaultTimerPlugin::Update                  
     m_psc->PostUpdate();    
 }
 
+// *************************************
+// 
+void                                DefaultTimerPlugin::Start                       ()
+{
+    m_timeEvaluator.Start();
+}
+
+// *************************************
+// 
+void                                DefaultTimerPlugin::Stop                        ()
+{
+    m_timeEvaluator.Stop();
+}
+
+// *************************************
+// 
+void                                DefaultTimerPlugin::Reset                       ()
+{
+    m_timeEvaluator.Reset();
+}
 
 ////////////////////////////
 //
@@ -429,17 +459,21 @@ std::wstring        toTimerInit( const std::wstring& timePatern )
 //
 void                                DefaultTimerPlugin::SetTimePatern  ( const std::wstring& patern )
 {
+    if( m_timePatern == patern )
+        return;
+
     m_timePatern = patern;
     m_timePaternInfo = ParseTimePatern( m_timePatern );
 
-    auto textPatern = toTextPatern( m_timePatern );
     auto timerInit = toTimerInit( m_timePatern );
 
     m_vaChannel->ClearConnectedComponent();
 
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), TextAlignmentType::Left, false );
+    auto alignType =  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
-    //m_vaChannel->SetNeedsTopologyUpdate( true );
+    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, false );
+ 
+    m_vaChannel->SetNeedsTopologyUpdate( true );
 }
 
 ////////////////////////////
@@ -569,12 +603,6 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
     auto widthNorm       = ((float)zeroCoords.glyphWidth )     / m_textAtlas->GetWidth();
     auto heightNorm      = ((float)zeroCoords.glyphHeight )    / m_textAtlas->GetHeight();
 
-    //auto textureXNorm = ( float )coords.textureX / m_textAtlas->GetWidth();
-    //auto textureYNorm = ( float )coords.textureY / m_textAtlas->GetHeight();
-
-    //auto widthNorm  = ( float )coords.width / m_textAtlas->GetWidth();
-    //auto heightNorm = ( float )coords.height / m_textAtlas->GetHeight();
-
     if( IsPlaceHolder( m_timePatern[ connComp ] ) )
         if( connComp < comps.size() )
         {
@@ -622,21 +650,73 @@ bool                                DefaultTimerPlugin::CheckTimeConsistency ( c
     return true;
 }
 
+
 ////////////////////////////
 //
-void                                DefaultTimerPlugin::SetTime        ( const std::wstring& time )
+std::wstring                        DefaultTimerPlugin::GenerateTimePatern( double time )
 {
-    if( !CheckTimeConsistency( time ) )
+    double seconds  = std::floor( time );
+
+    double hour     = std::floor( seconds / 3600. );
+    double minute   = std::floor( ( time - hour ) / 60. );
+    double second   = std::floor( time - hour - minute );
+    double hos      = std::floor( time - seconds * 100. );
+
+    std::wstring ret;
+
+    int ihour       = int( hour );
+
+    if( ihour > 0 )
     {
-        //std::cerr << time << L" doesn't match patern " << m_timePatern. << std::endl;
-        return;
+        int places = int( std::floor( std::log10( ihour ) ) );
+        auto hp = std::wstring( places + 1, L'H' );
+        ret.append( hp );
+        ret.push_back( m_defaultSeparator );
+        ret.append( L"MM" );
+        ret.push_back( m_defaultSeparator );
+        ret.append( L"SS" );
+        ret.push_back( m_defaultSeparator );
+        ret.append( L"ss" );
+    }
+    else
+    {
+        auto iminute = int( minute );
+        if( iminute > 0 )
+        {
+            if( iminute >= 10 )
+                ret.append( L"MM" );
+            else
+                ret.push_back( L'M' );
+
+            ret.push_back( m_defaultSeparator );
+            ret.append( L"SS" );
+            ret.push_back( m_defaultSeparator );
+            ret.append( L"ss" );
+        }
+        else
+        {
+            auto isecond = int( second );
+            if( isecond > 0 )
+            {
+                if( isecond >= 10 )
+                    ret.append( L"SS" );
+                else
+                    ret.push_back( L'S' );
+
+                ret.push_back( m_defaultSeparator );
+                ret.append( L"ss" );
+            }
+            else
+            {
+                ret.push_back( m_defaultSeparator );
+                ret.append( L"ss" );
+            }
+        }
     }
 
-    for( unsigned int i = 0; i < time.size(); ++i )
-    {
-        SetValue( i, time[ i ] );
-    }
+    return ret;
 }
+
 
 ////////////////////////////
 //
@@ -646,10 +726,60 @@ void                                DefaultTimerPlugin::SetTime        ( double 
 
     if( m_currentTime  != newTime )
     {
+        SetTimePatern( GenerateTimePatern( time ) );
         m_currentTime = newTime;
         Refresh();
-        m_vaChannel->SetNeedsAttributesUpdate( true );
+        if( ! m_vaChannel->NeedsTopologyUpdate() )
+            m_vaChannel->SetNeedsAttributesUpdate( true );
     }
+}
+
+////////////////////////////
+//
+void                                DefaultTimerPlugin::SetTime         ( int h, int m, int s, int hoSec )
+{
+    assert( hoSec < 100 );
+    SetTime( h * 3600. + m * 60 + s + hoSec / 100.f );
+}
+
+
+// *************************************
+//
+bool            StartTimerPlugin( IPluginPtr timerPlugin )
+{
+    if( timerPlugin->GetTypeUid() == DefaultTimerPluginDesc::UID() )
+    {
+        std::static_pointer_cast< DefaultTimerPlugin >( timerPlugin )->Start();
+        return true;
+    }
+    else
+        return false;
+}
+
+// *************************************
+//
+bool            StopTimerPlugin( IPluginPtr timerPlugin )
+{
+    if( timerPlugin->GetTypeUid() == DefaultTimerPluginDesc::UID() )
+    {
+        std::static_pointer_cast< DefaultTimerPlugin >( timerPlugin )->Stop();
+        return true;
+    }
+    else
+        return false;
+}
+
+// *************************************
+//
+bool            ResetTimerPlugin( IPluginPtr timerPlugin )
+{
+    if( timerPlugin->GetTypeUid() == DefaultTimerPluginDesc::UID() )
+    {
+        std::static_pointer_cast< DefaultTimerPlugin >( timerPlugin )->Reset();
+        return true;
+    }
+    else
+        return false;
 }
 
 } // model
