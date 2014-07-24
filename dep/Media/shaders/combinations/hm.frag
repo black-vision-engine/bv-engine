@@ -2,7 +2,8 @@
 
 layout (location = 0) out vec4 FragColor;
 
-in vec2 uvCoord;
+in vec2 uvCoord_hm;
+in vec2 uvCoord_tx;
 
 uniform sampler2D HeightMapTex;
 uniform sampler2D HillTex;
@@ -22,12 +23,12 @@ float decodeHeight( vec4 col )
 
 // *****************************
 //
-bool insideHillTest( vec2 point )
+bool insideHillTest( vec2 uv )
 {
-	vec4 col = texture( HeightMapTex, point );
+	vec4 col = texture( HeightMapTex, uv );
     float h = decodeHeight( col ) / 1009.1532; //MAX_VAL
     
-    float off_y = point.y - 0.17;//OFFSET
+    float off_y = uv.y - 0.17;//OFFSET
     if( off_y < 0.0 )
         return false;
 
@@ -66,21 +67,21 @@ vec4 calcHillColor( vec2 uv )
 //
 vec4 clacBackgroundColor( vec2 uv )
 {
-    return texture( BackgroundTex, uv );
+    return texture( BackgroundTex, vec2( uv.x, uv.y * 0.8 ) );
 }
 
 // *****************************
 //
 void main()
 {
-    bool ih = insideHillTest( uvCoord );
+    bool ih = insideHillTest( uvCoord_hm );
 
     if( ih )
     {
-        FragColor = calcHillColor( uvCoord );
+        FragColor = calcHillColor( uvCoord_tx );
     }
     else
     {
-        FragColor = clacBackgroundColor( uvCoord );
+        FragColor = clacBackgroundColor( uvCoord_tx );
     }
 }

@@ -4,20 +4,22 @@ layout (location = 0) in vec3 vertexPosition;
 layout (location = 1) in vec2 vertexTexCoord;
 
 uniform mat4 MVP;
-uniform mat4 MV;
-uniform mat4 P;
 
 uniform float offsetX;
-uniform float scaleX;
+uniform float offsetY;
+uniform float windowWidth;
+uniform float windowHeight;
 
-out vec2 uvCoord;
+out vec2 uvCoord_hm;
+out vec2 uvCoord_tx;
 
 void main()
 {
     gl_Position = MVP * vec4( vertexPosition, 1.0 );
-    //uvCoord = vec2( vertexTexCoord.x * 0.1, vertexTexCoord.y );
-    float u = vertexTexCoord.x / scaleX + offsetX;
-    float v = vertexTexCoord.y;
 
-    uvCoord = vec2( u, v );
+    float u = vertexTexCoord.x * windowWidth + offsetX;
+    float v = vertexTexCoord.y * windowHeight + offsetY;
+
+    uvCoord_hm = vec2( u, v );
+    uvCoord_tx = vec2( u, v );
 }

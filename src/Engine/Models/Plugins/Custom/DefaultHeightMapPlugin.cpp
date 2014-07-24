@@ -42,34 +42,31 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
     //Create all parameters and evaluators
-    SimpleVec4EvaluatorPtr      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
-    SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
-    SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-
     SimpleFloatEvaluatorPtr     offsetXEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "offsetX", timeEvaluator );
-    SimpleFloatEvaluatorPtr     scaleXEvaluator         = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "scaleX", timeEvaluator );
+    SimpleFloatEvaluatorPtr     offsetYEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "offsetY", timeEvaluator );
+    SimpleFloatEvaluatorPtr     windowWidthEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "windowWidth", timeEvaluator );
+    SimpleFloatEvaluatorPtr     windowHeightEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "windowHeight", timeEvaluator );
+
     SimpleFloatEvaluatorPtr     coveredDistEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "coveredDist", timeEvaluator );
 
     //Register all parameters and evaloators in models
-    vsModel->RegisterAll( trTxEvaluator );
     vsModel->RegisterAll( offsetXEvaluator );
-    vsModel->RegisterAll( scaleXEvaluator );
-    psModel->RegisterAll( borderColorEvaluator );
-    psModel->RegisterAll( alphaEvaluator );
+    vsModel->RegisterAll( offsetYEvaluator );
+    vsModel->RegisterAll( windowWidthEvaluator );
+    vsModel->RegisterAll( windowHeightEvaluator );
+
     psModel->RegisterAll( coveredDistEvaluator );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
     model->SetPixelShaderChannelModel( psModel );
 
-    //Set default values of all parameters
-    alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-    borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
-    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-
-    //FIXME: integer parmeters should be used here
+    //FIXME: Set default values
     offsetXEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    scaleXEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+    offsetYEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+    windowWidthEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+    windowHeightEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+
     coveredDistEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
 
     return model;
