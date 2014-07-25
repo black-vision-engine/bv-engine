@@ -96,6 +96,13 @@ bool        TimeSegmentEvalImpl::IsActive           () const
 
 // *********************************
 //
+bool        TimeSegmentEvalImpl::IsPaused           () const
+{
+    return m_paused;
+}
+
+// *********************************
+//
 void        TimeSegmentEvalImpl::UpdateGlobalTime   ( TimeType t )
 {
     auto prevGlobalTime = m_globalTime;

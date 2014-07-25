@@ -637,11 +637,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
     success = model::LoadFont( node->GetPlugin( "timer" ), "../dep/Media/fonts/arial.ttf" );
     assert( success );
 
-    SetParameter( node->GetPlugin( "timer" )->GetParameter( "startTime" ), TimeType( 0.0 ), 10000.0f );
-
-    node->GetPlugin( "timer" )->GetParameter( "startTime" )->SetTimeEvaluator( timeEvaluator );
+    SetTimeTimerPlugin( node->GetPlugin( "timer" ), 0.0f );
 
     StartTimerPlugin( node->GetPlugin( "timer" ) );
+    //StopTimerPlugin( node->GetPlugin( "timer" ) );
 
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"bla bla" );
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAAAA\nBBBBCCCC\nDDDDDDDDD" );

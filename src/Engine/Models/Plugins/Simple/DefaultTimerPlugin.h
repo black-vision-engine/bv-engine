@@ -73,7 +73,6 @@ class DefaultTimerPlugin : public BasePlugin< IPlugin >
 {
 private:
 
-    ParamFloatPtr                   m_timeParam;
     ParamFloatPtr                   m_fontSizeParam;
     ParamFloatPtr                   m_blurSizeParam;
     ParamFloatPtr                   m_spacingParam;
@@ -82,7 +81,8 @@ private:
     TimeSegmentEvalImpl             m_timeEvaluator;
 
     TimeValue                       m_currentTime;
-    const wchar_t                   m_defaultSeparator;
+    wchar_t                         m_defaultSeparator;
+    wchar_t                         m_secSeparator;
 
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
@@ -104,7 +104,7 @@ private:
 
     void                            SetValue        ( unsigned int connComp, wchar_t wch );
     const GlyphCoords &             GetGlyphCoords  ( wchar_t wch ) const;
-    void                            Refresh         ();
+    void                            Refresh         ( bool isPaused );
 
     void                            SetTimePatern   ( const std::wstring & patern );
 
@@ -112,7 +112,7 @@ private:
 public:
 
     
-    void                                        SetTime                     ( double time );
+    void                                        SetTime                     ( TimeType time );
 
     void                                        SetTime                     ( int h, int m, int s, int hoSec );
 
@@ -136,6 +136,10 @@ private:
     void                                        InitAttributesChannel       ( IPluginPtr prev );
 };
 
+
+// *************************************
+//
+bool            SetTimeTimerPlugin( IPluginPtr timerPlugin, TimeType time );
 
 // *************************************
 //

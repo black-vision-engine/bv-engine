@@ -47,7 +47,6 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
 
     SimpleFloatEvaluatorPtr     blurSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
 
-    SimpleFloatEvaluatorPtr     timerTimeEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "startTime", timeEvaluator );
     SimpleFloatEvaluatorPtr     spacingEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "spacing", timeEvaluator );
     SimpleFloatEvaluatorPtr     alignmentEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alignment", timeEvaluator );
 
@@ -56,7 +55,6 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
     psModel->RegisterAll( alphaEvaluator );
     plModel->RegisterAll( blurSizeEvaluator );
     plModel->RegisterAll( spacingEvaluator );
-    plModel->RegisterAll( timerTimeEvaluator );
     plModel->RegisterAll( fontSizeEvaluator );
     plModel->RegisterAll( alignmentEvaluator );
 
@@ -69,7 +67,6 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     spacingEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    timerTimeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
     alignmentEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
@@ -235,6 +232,7 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
     , m_timePatern( )
     , m_currentTime( 0.0 )
     , m_defaultSeparator(L':')
+    , m_secSeparator(L'.')
     , m_timeEvaluator( 3600.f * 100.f )
 {
     auto colorParam = prev->GetParameter( "color" );
@@ -263,7 +261,6 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
     }
 
 
-    m_timeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "startTime" ) );
     m_spacingParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
 
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTimerPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
@@ -391,9 +388,7 @@ void                                DefaultTimerPlugin::Update                  
 
     auto time = m_timeEvaluator.GetLocalTime();
 
-    auto startTime = m_timeParam->Evaluate();
-
-    SetTime( startTime + time );
+    SetTime( time );
 
     m_paramValModel->Update();
 
@@ -502,7 +497,7 @@ int TimeInfo::GetSize() const
 
 ////////////////////////////
 //
-void                                DefaultTimerPlugin::Refresh         ()
+void                                DefaultTimerPlugin::Refresh         ( bool isPaused )
 {
     int hPHSize = m_timePaternInfo.hoursPlaceholderSize;
     int shift = m_timePaternInfo.hoursPHStart;
@@ -579,12 +574,18 @@ void                                DefaultTimerPlugin::Refresh         ()
         int i = 0;
         for(; i < zerosBefore ; ++i )
         {
-            SetValue( shift + i, L'0' );
+            if( i > 0 && ! isPaused )
+                SetValue( shift + i, L' ' );
+            else
+                SetValue( shift + i, L'0' );
         }
 
         for(; i < fosPHSize; ++i )
         {
-            SetValue( shift + i, fosStr[i - zerosBefore] );
+            if( i > 0 && ! isPaused )
+                SetValue( shift + i, L' ' );
+            else
+                SetValue( shift + i, fosStr[i - zerosBefore] );
         }       
     }
 }
@@ -595,13 +596,21 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
 {
     auto comps = m_vaChannel->GetComponents();
 
-    auto& coords = GetGlyphCoords( wch );
-    auto& zeroCoords = GetGlyphCoords( L'0' );
+    auto textureXNorm    = 0.f;
+    auto textureYNorm    = 0.f;
+    auto widthNorm       = 0.f;
+    auto heightNorm      = 0.f;
 
-    auto textureXNorm    = ((float)coords.textureX + (float)zeroCoords.glyphX )  / m_textAtlas->GetWidth();
-    auto textureYNorm    = ((float)coords.textureY + (float)zeroCoords.glyphY )  / m_textAtlas->GetHeight();
-    auto widthNorm       = ((float)zeroCoords.glyphWidth )     / m_textAtlas->GetWidth();
-    auto heightNorm      = ((float)zeroCoords.glyphHeight )    / m_textAtlas->GetHeight();
+    if( wch != L' ' )
+    {
+        auto& coords = GetGlyphCoords( wch );
+        auto& zeroCoords = GetGlyphCoords( L'0' );
+
+        textureXNorm    = ((float)coords.textureX + (float)zeroCoords.glyphX )  / m_textAtlas->GetWidth();
+        textureYNorm    = ((float)coords.textureY + (float)zeroCoords.glyphY )  / m_textAtlas->GetHeight();
+        widthNorm       = ((float)zeroCoords.glyphWidth )     / m_textAtlas->GetWidth();
+        heightNorm      = ((float)zeroCoords.glyphHeight )    / m_textAtlas->GetHeight();
+    }
 
     if( IsPlaceHolder( m_timePatern[ connComp ] ) )
         if( connComp < comps.size() )
@@ -675,7 +684,7 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
         ret.append( L"MM" );
         ret.push_back( m_defaultSeparator );
         ret.append( L"SS" );
-        ret.push_back( m_defaultSeparator );
+        ret.push_back( m_secSeparator );
         ret.append( L"ss" );
     }
     else
@@ -690,7 +699,7 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
 
             ret.push_back( m_defaultSeparator );
             ret.append( L"SS" );
-            ret.push_back( m_defaultSeparator );
+            ret.push_back( m_secSeparator );
             ret.append( L"ss" );
         }
         else
@@ -703,12 +712,12 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
                 else
                     ret.push_back( L'S' );
 
-                ret.push_back( m_defaultSeparator );
+                ret.push_back( m_secSeparator );
                 ret.append( L"ss" );
             }
             else
             {
-                ret.push_back( m_defaultSeparator );
+                ret.push_back( m_secSeparator );
                 ret.append( L"ss" );
             }
         }
@@ -720,15 +729,19 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
 
 ////////////////////////////
 //
-void                                DefaultTimerPlugin::SetTime        ( double time )
+void                                DefaultTimerPlugin::SetTime        ( TimeType time )
 {
-    TimeValue   newTime( time, m_timePaternInfo.fracOfSecondsPlaceholderSize );
+    m_timeEvaluator.ResetLocalTimeTo( TimeType( time ) );
+
+    auto localTime = m_timeEvaluator.GetLocalTime();
+
+    TimeValue   newTime( localTime, m_timePaternInfo.fracOfSecondsPlaceholderSize );
 
     if( m_currentTime  != newTime )
     {
-        SetTimePatern( GenerateTimePatern( time ) );
+        SetTimePatern( GenerateTimePatern( localTime ) );
         m_currentTime = newTime;
-        Refresh();
+        Refresh( m_timeEvaluator.IsPaused() );
         if( ! m_vaChannel->NeedsTopologyUpdate() )
             m_vaChannel->SetNeedsAttributesUpdate( true );
     }
@@ -739,9 +752,21 @@ void                                DefaultTimerPlugin::SetTime        ( double 
 void                                DefaultTimerPlugin::SetTime         ( int h, int m, int s, int hoSec )
 {
     assert( hoSec < 100 );
-    SetTime( h * 3600. + m * 60 + s + hoSec / 100.f );
+    SetTime( TimeType( h * 3600. + m * 60 + s + hoSec / 100.f ) );
 }
 
+// *************************************
+//
+bool            SetTimeTimerPlugin( IPluginPtr timerPlugin, TimeType time )
+{
+    if( timerPlugin->GetTypeUid() == DefaultTimerPluginDesc::UID() )
+    {
+        std::static_pointer_cast< DefaultTimerPlugin >( timerPlugin )->SetTime( time );
+        return true;
+    }
+    else
+        return false;
+}
 
 // *************************************
 //

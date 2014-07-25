@@ -54,6 +54,7 @@ public:
     void        Reset               ( TimelinePlayDirection direction = TimelinePlayDirection::TPD_FORWAD );
 
     bool        IsActive            () const;
+    bool        IsPaused            () const;
 
     void        UpdateGlobalTime    ( TimeType t );
     TimeType    GetLocalTime        () const;
