@@ -27,9 +27,10 @@ uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9
 //
 float decodeHeight( vec4 col )
 {
+	//float combined_scale = hmHeightScale / ( 4.0 * hmMaxHeightValue );
 	float combined_scale = hmHeightScale / ( 4.0 * hmMaxHeightValue );
 
-    return float( 256.0 * 255.0 * col.r + 255.0 * col.g ) * combined_scale;
+    return float( 256.0 * 255.0 * col.r + 255.0 * col.g ) / 16.0 / hmMaxHeightValue * hmHeightScale;
 }
 
 // *****************************
@@ -133,10 +134,64 @@ vec4 calcBackgroundColor( vec2 uv )
 
 // *****************************
 //
+bool isBelowOffsetY( vec2 uv )
+{
+	//FIXME: rescale offset appropriately
+	return uv.y < hmOffsetY;
+}
+
+// *****************************
+//
+bool isBelowMinHillY( vec2 uv )
+{
+	//FIXME: rescale hmOffset appropriately
+	return uv.y < hmMinHeightValue / hmMaxHeightValue * hmHeightScale + hmOffsetY;
+}
+
+// *****************************
+//
+bool isBelowMaxHillY( vec2 uv )
+{
+	//FIXME: rescale hmOffset appropriately
+	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
+	//return uvCoord_hm.y < hmMaxHeightValue / hmMaxHeightValue * hmHeightScale + hmOffsetY;
+	return uvCoord_hm.y < hmHeightScale + hmOffsetY;
+}
+
+// *****************************
+//
 void main()
 {
     float h = getHeight( uvCoord_hm );
 
+	if( isBelowOffsetY( uvCoord_hm ) )
+	{
+		FragColor = calcBackgroundColor( uvCoord_tx );
+	}
+	else if( isBelowMinHillY( uvCoord_hm ) )
+	{
+		FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );
+	}
+	else if( isBelowMaxHillY( uvCoord_hm ) )
+	{
+		FragColor = vec4( 0.0, 0.0, 1.0, 1.0 );		
+	}
+	else
+	{
+		FragColor = calcBackgroundColor( uvCoord_tx );
+	}
+
+	/*
+	if( hmOffsetY > uvCoord_hm.y || h + hmOffsetY < uvCoord_hm.y )
+	{
+		FragColor = calcBackgroundColor( uvCoord_tx );
+	}
+	else
+	{
+		FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );
+	}
+	*/
+	/*
     if( insideHillTest( h, uvCoord_hm ) )
     {
         FragColor = calcHillColor( uvCoord_tx );
@@ -150,4 +205,5 @@ void main()
         //FragColor = mix( c1, c0, smoothstep( h - 0.02, h + 0.02, uvCoord_hm.y ) );
         //FragColor = clacBackgroundColor( uvCoord_tx );
     }
+	*/
 }
