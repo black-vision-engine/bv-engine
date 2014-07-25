@@ -482,11 +482,11 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
 
 
     auto parent = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+    auto child = SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
+    parent->AddChild( child );
 
-    parent->AddChild( SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
-
+    //return child;
     return parent;
-
 }
 
 
