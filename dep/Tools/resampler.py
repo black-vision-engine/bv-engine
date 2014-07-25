@@ -131,13 +131,14 @@ def fuckin_simple_resample( samples, res_samples_num ):
 
     res = []
 
-    while s < len( samples ):
+    while s < len( samples ) and len( res ) < res_samples_num:
         sample = int( s )
         sample = apply_kernel( samples[sample:], kernel )
         
-        print "\rProgress {:.3f}%".format( 100.0 * s / len( samples ) ), 
         res.append( sample )
         s += kernel_len
+
+        print "\rProgress {:.3f}%".format( 100.0 * s / len( samples ) ), 
 
     print ""
 

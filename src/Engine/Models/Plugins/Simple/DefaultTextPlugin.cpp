@@ -183,8 +183,8 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
-    ctx->alphaCtx->blendEnabled = true;
 
+    ctx->alphaCtx->blendEnabled = true;
     ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
     ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
 
