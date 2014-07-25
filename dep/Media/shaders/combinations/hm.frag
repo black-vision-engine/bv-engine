@@ -27,10 +27,16 @@ uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9
 //
 float decodeHeight( vec4 col )
 {
-	//float combined_scale = hmHeightScale / ( 4.0 * hmMaxHeightValue );
-	float combined_scale = hmHeightScale / ( 4.0 * hmMaxHeightValue );
+	float scale = hmHeightScale / ( 16.0 * hmMaxHeightValue ); //12:4 fixed point stored in R,G channels is used to encode height values
 
-    return float( 256.0 * 255.0 * col.r + 255.0 * col.g ) / 16.0 / hmMaxHeightValue * hmHeightScale;
+    return float( 256.0 * 255.0 * col.r + 255.0 * col.g ) * scale;
+}
+
+// *****************************
+//
+float sampleHeight( vec2 uv )
+{
+	return decodeHeight( texture( HeightMapTex, uv ) );
 }
 
 // *****************************
@@ -44,7 +50,7 @@ float getHeight( vec2 uv )
     int smpll = int( floor( hklen * windowWidth / 0.8 ) );
     int smplu = int( ceil( hklen * windowWidth / 0.8 ) );
 
-    float suml = decodeHeight( texture( HeightMapTex, uv ) );
+    float suml = sampleHeight( uv );
 
     return suml;
     int i = 1;
@@ -142,15 +148,16 @@ bool isBelowOffsetY( vec2 uv )
 
 // *****************************
 //
-bool isBelowMinHillY( vec2 uv )
+bool isBelowMinSamplableHillY( vec2 uv )
 {
 	//FIXME: rescale hmOffset appropriately
+	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
 	return uv.y < hmMinHeightValue / hmMaxHeightValue * hmHeightScale + hmOffsetY;
 }
 
 // *****************************
 //
-bool isBelowMaxHillY( vec2 uv )
+bool isBelowMaxSamplableHillY( vec2 uv )
 {
 	//FIXME: rescale hmOffset appropriately
 	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
@@ -160,21 +167,37 @@ bool isBelowMaxHillY( vec2 uv )
 
 // *****************************
 //
+bool isInsidePreciseFilteringZone( vec2 uv, float h )
+{
+	//FIXME: rescale hmOffset appropriately
+	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
+	return abs( uv.y - h - hmOffsetY ) < 4.0 / 1080.0;
+}
+
+// *****************************
+//
 void main()
 {
-    float h = getHeight( uvCoord_hm );
+    float h = sampleHeight( uvCoord_hm );
 
 	if( isBelowOffsetY( uvCoord_hm ) )
 	{
 		FragColor = calcBackgroundColor( uvCoord_tx );
 	}
-	else if( isBelowMinHillY( uvCoord_hm ) )
+	else if( isBelowMinSamplableHillY( uvCoord_hm ) )
 	{
 		FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );
 	}
-	else if( isBelowMaxHillY( uvCoord_hm ) )
+	else if( isBelowMaxSamplableHillY( uvCoord_hm ) )
 	{
-		FragColor = vec4( 0.0, 0.0, 1.0, 1.0 );		
+		if( isInsidePreciseFilteringZone( uvCoord_hm, h ) )
+		{
+			FragColor = vec4( 0.0, 1.0, 0.0, 1.0 );
+		}
+		else
+		{
+			FragColor = vec4( 0.0, 0.0, 1.0, 1.0 );
+		}
 	}
 	else
 	{
