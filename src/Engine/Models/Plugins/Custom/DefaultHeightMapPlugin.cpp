@@ -42,28 +42,46 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
     //Create all parameters and evaluators
-    SimpleFloatEvaluatorPtr     offsetXEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "offsetX", timeEvaluator );
-    SimpleFloatEvaluatorPtr     offsetYEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "offsetY", timeEvaluator );
+    SimpleFloatEvaluatorPtr     centerXEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "centerX", timeEvaluator );
+    SimpleFloatEvaluatorPtr     centerYEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "centerY", timeEvaluator );
+    
+    SimpleFloatEvaluatorPtr     hmOffsetYEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmOffsetY", timeEvaluator );
+
+    SimpleFloatEvaluatorPtr     hmMaxHeightValEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmMaxHeightValue", timeEvaluator );
+    SimpleFloatEvaluatorPtr     hmMinHeightValEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmMinHeightValue", timeEvaluator );
+    SimpleFloatEvaluatorPtr     hmHeightScaleEvaluator  = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmHeightScale", timeEvaluator );
+
     SimpleFloatEvaluatorPtr     windowWidthEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "windowWidth", timeEvaluator );
     SimpleFloatEvaluatorPtr     windowHeightEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "windowHeight", timeEvaluator );
 
     SimpleFloatEvaluatorPtr     coveredDistEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "coveredDist", timeEvaluator );
 
     //Register all parameters and evaloators in models
-    vsModel->RegisterAll( offsetXEvaluator );
-    vsModel->RegisterAll( offsetYEvaluator );
+    vsModel->RegisterAll( centerXEvaluator );
+    vsModel->RegisterAll( centerYEvaluator );
     vsModel->RegisterAll( windowWidthEvaluator );
     vsModel->RegisterAll( windowHeightEvaluator );
 
+    psModel->RegisterAll( hmOffsetYEvaluator );
     psModel->RegisterAll( coveredDistEvaluator );
+    psModel->RegisterAll( hmMaxHeightValEvaluator );
+    psModel->RegisterAll( hmMinHeightValEvaluator );
+    psModel->RegisterAll( hmHeightScaleEvaluator );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
     model->SetPixelShaderChannelModel( psModel );
 
     //FIXME: Set default values
-    offsetXEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    offsetYEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+    centerXEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+    centerYEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+    
+    hmOffsetYEvaluator->Parameter()->SetVal( 124.0f / 1080.f, TimeType( 0.0 ) );
+
+    hmMaxHeightValEvaluator->Parameter()->SetVal( 1009.1532f, TimeType( 0.0 ) );
+    hmMinHeightValEvaluator->Parameter()->SetVal( 681.1941f, TimeType( 0.0 ) );
+    hmHeightScaleEvaluator->Parameter()->SetVal( 247.f / 1080.f, TimeType( 0.0 ) );
+
     windowWidthEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     windowHeightEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
 

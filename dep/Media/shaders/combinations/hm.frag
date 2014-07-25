@@ -12,8 +12,13 @@ uniform sampler2D BackgroundTex;
 
 uniform float windowWidth;
 
+uniform float hmOffsetY;
+
+uniform float hmMaxHeightValue;
+uniform float hmMinHeightValue;
+uniform float hmHeightScale;
+
 uniform float alpha;
-uniform float scaleX;
 uniform float coveredDist;
 
 uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0 };
@@ -22,7 +27,9 @@ uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9
 //
 float decodeHeight( vec4 col )
 {
-    return float( 256.0 * 255.0 * col.r + 255.0 * col.g ) / 16.0;
+	float combined_scale = hmHeightScale / ( 4.0 * hmMaxHeightValue );
+
+    return float( 256.0 * 255.0 * col.r + 255.0 * col.g ) * combined_scale;
 }
 
 // *****************************
@@ -38,6 +45,7 @@ float getHeight( vec2 uv )
 
     float suml = decodeHeight( texture( HeightMapTex, uv ) );
 
+    return suml;
     int i = 1;
     for(; i < smpll; ++i )
     {
@@ -56,8 +64,8 @@ float getHeight( vec2 uv )
         
         wu += 2.0;
         
-        suml /= ( wl * 1009.1532 );
-        sumu /= ( wu * 1009.1532 );
+        suml /= ( wl );
+        sumu /= ( wu );
         
         return mix( sumu, suml, smoothstep( 1.0, 0.0, fract( hklen * windowWidth ) ) );
     }
@@ -69,8 +77,9 @@ float getHeight( vec2 uv )
 //
 bool insideHillTest( float h, vec2 uv )
 {    
-    float off_y = uv.y;// - 0.17;//OFFSET
-    if( off_y < 0.0 )
+    float off_y = uv.y - hmOffsetY;//OFFSET
+
+    if( off_y < 0.0 || uv.x < 0.3 )
         return false;
 
     if( h > off_y * 3.5f ) //SCALE_VAL, OFFSET_VAL
@@ -83,7 +92,7 @@ bool insideHillTest( float h, vec2 uv )
 //
 vec4 yebaneSuoneczko( vec2 pos )
 {
-    float dx = ( pos.x - 0.8 ) * scaleX;
+    float dx = ( pos.x - 0.8 ) * 1.0;
     float dy = ( pos.y - 0.8 ) * 1080.0 / 1920.0;
     
     float dist = sqrt( dx * dx + dy * dy );
@@ -98,6 +107,7 @@ vec4 yebaneSuoneczko( vec2 pos )
 //
 vec4 calcHillColor( vec2 uv )
 {
+	return vec4( 1.0, 0.0, 0.0, 1.0 );
     if ( uv.x < coveredDist )
         return texture( CoveredDistTex, uv );
     else
@@ -136,7 +146,8 @@ void main()
         vec4 c0 = calcHillColor( uvCoord_tx );
         vec4 c1 = calcBackgroundColor( uvCoord_tx );
         
-        FragColor = mix( c1, c0, smoothstep( h - 0.02, h + 0.02, uvCoord_hm.y ) );
+		FragColor = c1;
+        //FragColor = mix( c1, c0, smoothstep( h - 0.02, h + 0.02, uvCoord_hm.y ) );
         //FragColor = clacBackgroundColor( uvCoord_tx );
     }
 }

@@ -691,7 +691,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     assert( success );
 
     //BackgroundTexture
-    success = model::LoadTexture( node->GetPlugin( "height map" ), "hm_background.png" );
+    success = model::LoadTexture( node->GetPlugin( "height map" ), "MAPA_WYSOKOSCI_LIVE__EDYTOWALNA.jpg" );//"hm_background.png" );
     assert( success );
 
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),   2.f );
@@ -720,7 +720,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     */
 
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 0.f ), 1.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 20.f ), 0.1f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 20.f ), 1.f );
 
     return node;    
 }
