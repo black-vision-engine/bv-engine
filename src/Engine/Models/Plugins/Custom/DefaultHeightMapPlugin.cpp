@@ -78,11 +78,11 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     centerXEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     centerYEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     
-    hmOffsetYEvaluator->Parameter()->SetVal( 124.0f / 1080.f, TimeType( 0.0 ) );
+    hmOffsetYEvaluator->Parameter()->SetVal( 98.0f / 1080.f, TimeType( 0.0 ) );
 
     hmMaxHeightValEvaluator->Parameter()->SetVal( 1009.1532f, TimeType( 0.0 ) );
     hmMinHeightValEvaluator->Parameter()->SetVal( 681.1941f, TimeType( 0.0 ) );
-    hmHeightScaleEvaluator->Parameter()->SetVal( 247.f / 1080.f, TimeType( 0.0 ) );
+    hmHeightScaleEvaluator->Parameter()->SetVal( 194.f / 1080.f, TimeType( 0.0 ) );
     hmPowFactorEvaluator->Parameter()->SetVal( 1.0f, TimeType( 0.0 ) );
 
     windowWidthEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
