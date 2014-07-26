@@ -386,8 +386,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     model::SetParameter( node->GetPlugin( "texture" )->GetParameter( "alpha" ), TimeType( 3.f ),   1.f );
     */
 
-    //success = model::LoadTexture( node->GetPlugin( "texture" ), "caption_white.png" );
-    success = model::LoadTexture( node->GetPlugin( "texture" ), "Untitled drawing.png" );
+    success = model::LoadTexture( node->GetPlugin( "texture" ), "caption_white.png" );
+    //success = model::LoadTexture( node->GetPlugin( "texture" ), "Untitled drawing.png" );
     assert( success );
 
     auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( node->GetPlugin( "texture" ) );
@@ -518,13 +518,16 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     auto plugin = node->GetPlugin( "transform" );
     auto param = plugin->GetParameter( "simple_transform" );
 
-    SetParameterTranslation( param, 0, 0.0f, glm::vec3( -0.58f, 0.122f, 0.0f ) );
-    //SetParameterTranslation( param, 0, 100.0f, glm::vec3( -0.58f, -0.14f, 0.0f ) );
-    SetParameterTranslation( param, 0, 20.0f, glm::vec3( 1.58f, 0.122f, 0.0f ) );
+    SetParameterTranslation( param, 0, 0.0f, glm::vec3( -0.58f, -0.022f, 0.0f ) );
+    SetParameterTranslation( param, 0, 30.0f, glm::vec3( -0.58f, -0.04f, 0.0f ) );
+
+//    SetParameterTranslation( param, 0, 0.0f, glm::vec3( -0.58f, 0.122f, 0.0f ) );
+ //   SetParameterTranslation( param, 0, 100.0f, glm::vec3( -0.58f, -0.14f, 0.0f ) );
+    //SetParameterTranslation( param, 0, 20.0f, glm::vec3( 1.58f, 0.122f, 0.0f ) );
 
     //SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
 
-    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ) );
+    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ) );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 33.f );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
 
