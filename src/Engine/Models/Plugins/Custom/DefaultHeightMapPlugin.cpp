@@ -47,11 +47,11 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     
     SimpleFloatEvaluatorPtr     hmOffsetYEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmOffsetY", timeEvaluator );
 
-    SimpleFloatEvaluatorPtr     hmMaxHeightValEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmMaxHeightValue", timeEvaluator );
-    SimpleFloatEvaluatorPtr     hmMinHeightValEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmMinHeightValue", timeEvaluator );
-    SimpleFloatEvaluatorPtr     hmGroundLevelHeightEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmGroundLevelHeight", timeEvaluator );
-    SimpleFloatEvaluatorPtr     hmHeightScaleEvaluator  = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmHeightScale", timeEvaluator );
-    SimpleFloatEvaluatorPtr     hmPowFactorEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmPowFactor", timeEvaluator );
+    SimpleFloatEvaluatorPtr     hmMaxHeightValEvaluator         = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmMaxHeightValue", timeEvaluator );
+    SimpleFloatEvaluatorPtr     hmMinHeightValEvaluator         = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmMinHeightValue", timeEvaluator );
+    SimpleFloatEvaluatorPtr     hmGroundLevelHeightEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmGroundLevelHeight", timeEvaluator );
+    SimpleFloatEvaluatorPtr     hmHeightScaleEvaluator          = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmHeightScale", timeEvaluator );
+    SimpleFloatEvaluatorPtr     hmPowFactorEvaluator            = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmPowFactor", timeEvaluator );
 
     SimpleFloatEvaluatorPtr     windowWidthEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "windowWidth", timeEvaluator );
     SimpleFloatEvaluatorPtr     windowHeightEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "windowHeight", timeEvaluator );
