@@ -26,11 +26,11 @@ uniform vec4  hmShadowColor;
 
 //constant params
 uniform float safeYMarginPixels = 2.0;
-uniform float aaRadius = 1.25;
+uniform float aaRadius = 2.5;
 uniform float kernelHLen = 12.0;
 
 uniform float debug_alpha = 1;
-uniform float debug_col_alpha = 0;
+uniform float debug_col_alpha = 1;
 uniform float coveredDist;
 
 uniform float preciseFilteringApronSize = 8.0 / 1080.0;
@@ -132,7 +132,7 @@ float safeYMargin()
 //
 float aaMarginSize()
 {
-    return 2.0 * aaRadius * windowHeight / 1080.0;
+    return aaRadius * windowHeight / 1080.0;
 }
 
 // *****************************
@@ -239,7 +239,7 @@ bool isAboveMaxSamplableHillY( vec2 uv )
 
 // *****************************
 // applyPow version: float minY = applyPow( h - preciseFilteringApronSize / visibleHeightFract(), hmHeightScale, hmPowFactor );
-bool isBelowPreciseFilteringZone( vec2 uv, float h )
+bool isBelowPreciseFilteringZoneBottom( vec2 uv, float h )
 {
 	//FIXME: rescale hmOffset appropriately
 	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
@@ -252,15 +252,14 @@ bool isBelowPreciseFilteringZone( vec2 uv, float h )
 // applyPow version
 // float minY = applyPow( h - preciseFilteringApronSize / visibleHeightFract(), hmHeightScale, hmPowFactor );
 // float maxY = applyPow( h + preciseFilteringApronSize / visibleHeightFract(), hmHeightScale, hmPowFactor );
-bool isInsidePreciseFilteringZone( vec2 uv, float h )
+bool isBelowPreciseFilteringZoneTop( vec2 uv, float h )
 {
 	//FIXME: rescale hmOffset appropriately
 	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
 
-    float minY = h - preciseFilteringApronSize / visibleHeightFract();
     float maxY = h + preciseFilteringApronSize / visibleHeightFract();
 
-    return  minY < y( uv ) && y( uv ) < maxY;
+    return  y( uv ) < maxY;
 }
 
 // *****************************
@@ -282,15 +281,9 @@ bool isBelowHillEdge( vec2 uv, float h )
     return y( uv ) < h;
 }
 
-// *****************************
-//
-vec4 calcBackgroundColor( vec2 uv )
-{
-    return vec4( 1.0 );
-    vec4 col = texture( BackgroundTex, vec2( uv.x, uv.y ) );
-    
-    return vec4( 1.0 - col.rgb, col.a );
-}
+
+// ************************************************************************************************ LOW LEVEL COLORS ************************************************************************************************
+
 
 // *****************************
 //
@@ -301,58 +294,55 @@ vec4 finalHillCol( vec4 col, vec4 debugCol )
 
 // *****************************
 //
-vec4 hillAlpha( vec2 uv )
+float hillAlpha( vec2 uv )
 {
 	//CASE 1 - outside hill
 	if( isBelowOffsetY( uv ) || isAboveMaxSamplableHillY( uv ) )
 	{
-		return vec4( 0.0, 0.0, 0.0, 0.0 );
+		return 0.0;
 	}
-
-	vec4 col = vec4( 0.0, 0.0, 0.0, 0.0 );
 
 	//CASE 2 - inside hill where no sampling is required (less than precalculated min height val)
 	if( isBelowMinSamplableHillY( uv ) )
 	{
-		return vec4( 1.0, 0.0, 0.0, debug_alpha ); //RED
+		return 1.0;
 	}
 
 	float h = sampleHeight( uv );
 
 	//CASE 3 - inside hill where only one small precission (not filtered) sample is required (less than expected height value - some thershold)
-	if( isBelowPreciseFilteringZone( uv, h ) )
+	if( isBelowPreciseFilteringZoneBottom( uv, h ) )
 	{
-		return vec4( 0.0, 1.0, 0.0, debug_alpha );
+		return 1.0;
 	}
 
 	//CASE 4 - filtering required, so let's do it
-	if( isInsidePreciseFilteringZone( uv, h ) )
+	if( isBelowPreciseFilteringZoneTop( uv, h ) )
 	{
 		float hf = filterHeight( uv, h ); //FIXME: magic constant - kennel half len
 
 		if( isBelowHillEdge( uv, hf ) )
 		{
-            float a = 1.0 - smoothstep( hf - aaMarginSize(), hf, y( uv ) );
-			return vec4( 1.0, 0.0, 1.0, a );
-		}
-		else
-		{
-			return vec4( 1.0, 1.0, 0.0, debug_col_alpha ); //YELLOW
+            return 1.0 - smoothstep( hf - aaMarginSize(), hf, y( uv ) );
 		}
 	}
 
-	return vec4( 0.0, 1.0, 1.0, debug_col_alpha ); //CYAN
+	return 0.0;
 }
+
+
+// ************************************************************************************************ HIGH LEVEL COLORS ************************************************************************************************
+
 
 // *****************************
 //
 vec4 hillColor( vec2 uv )
 {
-    vec4 alpha = hillAlpha( uv );
+    float alpha = hillAlpha( uv );
 
-    if( alpha.a > 0.0 )
+    if( alpha > 0.0 )
     {
-        return vec4( texture( HillTex, uv ).rgb, alpha.a );
+        return vec4( texture( HillTex, uvCoord_tx ).rgb, alpha );
     }
 
     return vec4( 0.0, 0.0, 0.0, 0.0 );
@@ -362,11 +352,11 @@ vec4 hillColor( vec2 uv )
 //
 vec4 shadowHillColor( vec2 uv )
 {
-    vec4 alpha = hillAlpha( uv + shadowOffset() );
+    float alpha = hillAlpha( uv + shadowOffset() );
 
-    if( alpha.a > 0.0 )
+    if( alpha > 0.0 )
     {
-        return vec4( hmShadowColor.rgb, alpha.a );
+        return vec4( hmShadowColor.rgb, alpha );
     }
 
     return vec4( 0.0, 0.0, 0.0, 0.0 );
@@ -374,12 +364,25 @@ vec4 shadowHillColor( vec2 uv )
 
 // *****************************
 //
+vec4 calcBackgroundColor( vec2 uv )
+{
+    vec4 col = texture( BackgroundTex, vec2( uv.x, uv.y ) );
+    
+    return vec4( 1.0 - col.rgb, col.a );
+}
+
+// *****************************
+//
 void main()
 {
-	vec4 hillCol = hillColor( uvCoord_hm );
-    vec4 shadowHillCol = shadowHillColor( uvCoord_hm );
-	vec4 bgCol = calcBackgroundColor( uvCoord_tx );
+    FragColor = blend( calcBackgroundColor( uvCoord_tx ), blend( shadowHillColor( uvCoord_hm ), hillColor( uvCoord_hm ) ) );
+	//vec4 c2 = hillColor( uvCoord_hm );
 
-	FragColor = blend( shadowHillCol, hillCol );
-	//FragColor = blend( shadowHillCol, blend( bgCol, hillCol ) );
+ //   vec4 c1 = shadowHillColor( uvCoord_hm );            
+ //   c2 = blend( c1, c2 );
+
+ //   vec4 c0 = calcBackgroundColor( uvCoord_tx );
+ //   c2 = blend( c0, c2 );
+
+ //   FragColor = c2;
 }

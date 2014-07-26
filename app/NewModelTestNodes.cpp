@@ -727,9 +727,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
 */
     
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 0.f ), 1.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 26.f ), 0.2f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 126.f ), 0.2f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowHeight" ), TimeType( 0.1f ), 1.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowHeight" ), TimeType( 26.f ), 0.2f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowHeight" ), TimeType( 126.f ), 0.2f );
 /*    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 12.f ), 1.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 20.f ), 0.2f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowHeight" ), TimeType( 12.1f ), 1.f );
