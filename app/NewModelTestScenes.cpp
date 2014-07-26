@@ -479,6 +479,15 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
     //return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
     //return SimpleNodesFactory::CreateTextWithShadowNode( timelineManager, timeEvaluator, 5, glm::vec3( 0.005f, -0.005f, -0.001f ) );
     //return SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
+
+
+    auto parent = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+    auto child = SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
+    parent->AddChild( child );
+
+    //return child;
+    return parent;
 }
+
 
 } //bv
