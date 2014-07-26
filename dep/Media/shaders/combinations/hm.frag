@@ -21,13 +21,13 @@ uniform float hmHeightScale;
 uniform float hmPowFactor;
 
 uniform float debug_alpha = 1;
-uniform float debug_col_alpha = 0.3;
+uniform float debug_col_alpha = 1;
 uniform float coveredDist;
 
-uniform float preciseFilteringApronSize = 8.0 / 1080.0;
+uniform float preciseFilteringApronSize = 7.0 / 1080.0;
 
-uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0 };
-
+uniform float pixelOffset[71] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70 };
+//uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0 };
 
 // *****************************
 //
@@ -88,14 +88,15 @@ float sampleHeight( vec2 uv )
 
 // *****************************
 //
-float getFilteredHeight( vec2 uv, float linearHeight )
+float getFilteredLinearHeight( vec2 uv, float linearHeight )
 {
     float dx = 1.0 / 1920.0;
-    float hklen = 7.0;
+    float hklen = 12.0;
     
+	//FIXME: valid len, when windows sizes are applied
     float wl = 1.0;
-    int smpll = int( floor( hklen * windowWidth / 0.8 ) );
-    int smplu = int( ceil( hklen * windowWidth / 0.8 ) );
+    int smpll = int( floor( hklen * windowWidth + 0.5 ) );
+    int smplu = int( ceil( hklen * windowWidth + 0.5 ) );
 
     float suml = linearHeight;
 
@@ -106,6 +107,8 @@ float getFilteredHeight( vec2 uv, float linearHeight )
         suml += sampleHeightLinear( uv - vec2( pixelOffset[ i ] * dx, 0.0 ) );
         wl += 2.0;
     }
+
+	return suml / wl;
 
     if( smpll < smplu )
     {
@@ -127,6 +130,7 @@ float getFilteredHeight( vec2 uv, float linearHeight )
 		suml /= wl;
 	}
 
+	//return suml;
 	return nonLinearRescaleHeight( suml );
 }
 
@@ -201,16 +205,16 @@ bool isInsidePreciseFilteringZone( vec2 uv, float h )
 {
 	//FIXME: rescale hmOffset appropriately
 	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
-	return abs( uv.y - h - hmOffsetY ) < preciseFilteringApronSize;
+	return abs( uv.y - h - hmOffsetY ) < nonLinearRescaleHeight( preciseFilteringApronSize );
 }
 
 // *****************************
 //
-bool isBelowPreciseFilteringZone( vec2 uv, float h )
+bool isBelowPreciseFilteringZone( vec2 uv, float hl )
 {
 	//FIXME: rescale hmOffset appropriately
 	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
-	return uv.y < h + hmOffsetY - preciseFilteringApronSize;
+	return uv.y < nonLinearRescaleHeight( hl - preciseFilteringApronSize ) + hmOffsetY;
 }
 
 // *****************************
@@ -254,7 +258,7 @@ vec4 hillColor( vec2 uv )
 	//CASE 2 - inside hill where no sampling is required (less than precalculated min height val)
 	if( isBelowMinSamplableHillY( uv ) )
 	{
-		debugCol = vec4( 1.0, 0.0, 0.0, debug_col_alpha );
+		debugCol = vec4( 1.0, 0.0, 0.0, debug_col_alpha ); //RED
 		col = vec4( texture( HillTex, uv ).rgb, debug_alpha );
 	
 		return finalHillCol( col, debugCol );
@@ -263,34 +267,45 @@ vec4 hillColor( vec2 uv )
 	float hl = sampleHeightLinear( uv );
 	float h = nonLinearRescaleHeight( hl );
 
+	float hfl = getFilteredLinearHeight( uv, hl );
+	float hff  = nonLinearRescaleHeight( hfl );
+
+	if( abs( uv.y - hff - hmOffsetY ) < 1.0 / 1080.0 )
+	{
+		debugCol = vec4( 1.0, 1.0, 1.0, debug_col_alpha ); //BLACK
+
+		return finalHillCol( col, debugCol );	
+	}
+
 	//CASE 3 - inside hill where only one small precission (not filtered) sample is required (less than expected height value - some thershold)
-	if( isBelowPreciseFilteringZone( uv, h ) )
+	if( isBelowPreciseFilteringZone( uv, hl ) )
 	{
 		col = vec4( texture( HillTex, uv ).rgb, debug_alpha );
-		debugCol = vec4( 0.0, 1.0, 0.0, debug_col_alpha );
+		debugCol = vec4( 0.0, 1.0, 0.0, debug_col_alpha ); //GREEN
 
 		return finalHillCol( col, debugCol );
 	}
-	
+
+	return vec4( 0.0, 0.0, 0.0, 1.0 );
 	//CASE 4 - filtering required, so let's do it
 	if( isInsidePreciseFilteringZone( uv, h ) )
 	{
-		float hf = getFilteredHeight( uv, hl );
+		float hf = nonLinearRescaleHeight( getFilteredLinearHeight( uv, hl ) );
 
 		if( isBelowHillEdge( uv, hf ) )
 		{
 			col = vec4( texture( HillTex, uv ).rgb, debug_alpha );
-			debugCol = vec4( 0.0, 0.0, 1.0, debug_col_alpha );
+			debugCol = vec4( 1.0, 0.0, 1.0, debug_col_alpha ); //MAGENTA
 		}
 		else
 		{
-			debugCol = vec4( 1.0, 1.0, 0.0, debug_col_alpha );
+			debugCol = vec4( 1.0, 1.0, 0.0, debug_col_alpha ); //YELLOW
 		}
 
 		return finalHillCol( col, debugCol );
 	}
 
-	debugCol = vec4( 0.0, 1.0, 1.0, debug_col_alpha );
+	debugCol = vec4( 0.0, 1.0, 1.0, debug_col_alpha ); //CYAN
 
 	return finalHillCol( col, debugCol );
 }
