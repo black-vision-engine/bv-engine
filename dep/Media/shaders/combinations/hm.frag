@@ -134,6 +134,13 @@ float aaMarginSize()
     return 2.0 * aaRadius * windowHeight / 1080.0;
 }
 
+// *****************************
+//
+vec2 shadowOffset()
+{
+	return vec2( -windowWidth * hmShadowOffsetInPixels.x / 1920.0, -windowHeight * hmShadowOffsetInPixels.y / 1080.0 );
+}
+
 // ************************************************************************************************ HM FILTERING ************************************************************************************************
 
 
@@ -287,7 +294,7 @@ vec4 finalHillCol( vec4 col, vec4 debugCol )
 
 // *****************************
 //
-vec4 hillColor( vec2 uv )
+vec4 hillAlpha( vec2 uv )
 {
 	//CASE 1 - outside hill
 	if( isBelowOffsetY( uv ) || isAboveMaxSamplableHillY( uv ) )
@@ -296,15 +303,11 @@ vec4 hillColor( vec2 uv )
 	}
 
 	vec4 col = vec4( 0.0, 0.0, 0.0, 0.0 );
-	vec4 debugCol = col;
 
 	//CASE 2 - inside hill where no sampling is required (less than precalculated min height val)
 	if( isBelowMinSamplableHillY( uv ) )
 	{
-		debugCol = vec4( 1.0, 0.0, 0.0, debug_col_alpha ); //RED
-		col = vec4( texture( HillTex, uv ).rgb, debug_alpha );
-	
-		return finalHillCol( col, debugCol );
+		return vec4( 1.0, 0.0, 0.0, debug_alpha ); //RED
 	}
 
 	float h = sampleHeight( uv );
@@ -312,10 +315,7 @@ vec4 hillColor( vec2 uv )
 	//CASE 3 - inside hill where only one small precission (not filtered) sample is required (less than expected height value - some thershold)
 	if( isBelowPreciseFilteringZone( uv, h ) )
 	{
-		col = vec4( texture( HillTex, uv ).rgb, debug_alpha );
-		debugCol = vec4( 0.0, 1.0, 0.0, debug_col_alpha ); //GREEN
-
-		return finalHillCol( col, debugCol );
+		return vec4( 0.0, 1.0, 0.0, debug_alpha );
 	}
 
 	//CASE 4 - filtering required, so let's do it
@@ -326,21 +326,43 @@ vec4 hillColor( vec2 uv )
 		if( isBelowHillEdge( uv, hf ) )
 		{
             float a = 1.0 - smoothstep( hf - aaMarginSize(), hf, y( uv ) );
-
-			col = vec4( texture( HillTex, uv ).rgb, a );
-			debugCol = vec4( 1.0, 0.0, 1.0, debug_col_alpha ); //MAGENTA
+			return vec4( 1.0, 0.0, 1.0, a );
 		}
 		else
 		{
-			debugCol = vec4( 1.0, 1.0, 0.0, debug_col_alpha ); //YELLOW
+			return vec4( 1.0, 1.0, 0.0, debug_col_alpha ); //YELLOW
 		}
-
-		return finalHillCol( col, debugCol );
 	}
 
-	debugCol = vec4( 0.0, 1.0, 1.0, debug_col_alpha ); //CYAN
+	return vec4( 0.0, 1.0, 1.0, debug_col_alpha ); //CYAN
+}
 
-	return finalHillCol( col, debugCol );
+// *****************************
+//
+vec4 hillColor( vec2 uv )
+{
+    vec4 alpha = hillAlpha( uv );
+
+    if( alpha.a > 0.0 )
+    {
+        return vec4( texture( HillTex, uv ).rgb, alpha.a );
+    }
+
+    return vec4( 0.0, 0.0, 0.0, 0.0 );
+}
+
+// *****************************
+//
+vec4 shadowHillColor( vec2 uv )
+{
+    vec4 alpha = hillAlpha( uv + shadowOffset() );
+
+    if( alpha.a > 0.0 )
+    {
+        return vec4( hmShadowColor.rgb, alpha.a );
+    }
+
+    return vec4( 0.0, 0.0, 0.0, 0.0 );
 }
 
 // *****************************
@@ -348,7 +370,9 @@ vec4 hillColor( vec2 uv )
 void main()
 {
 	vec4 hillCol = hillColor( uvCoord_hm );
+    vec4 shadowHillCol = shadowHillColor( uvCoord_hm );
 	vec4 bgCol = calcBackgroundColor( uvCoord_tx );
 
-	FragColor = blend( bgCol, hillCol );
+	FragColor = blend( shadowHillCol, hillCol );
+	//FragColor = blend( shadowHillCol, blend( bgCol, hillCol ) );
 }

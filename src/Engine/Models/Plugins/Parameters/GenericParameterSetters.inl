@@ -33,6 +33,14 @@ inline bool SetParameter< float >( IParameterPtr param, TimeType t, const float 
 // *******************************
 //
 template<>
+inline bool SetParameter< glm::vec2 >( IParameterPtr param, TimeType t, const glm::vec2 & val )
+{
+    return SetSimpleTypedParameter< ParamVec2 >( param, t, val );
+}
+
+// *******************************
+//
+template<>
 inline bool SetParameter< glm::vec3 >( IParameterPtr param, TimeType t, const glm::vec3 & val )
 {
     return SetSimpleTypedParameter< ParamVec3 >( param, t, val );
