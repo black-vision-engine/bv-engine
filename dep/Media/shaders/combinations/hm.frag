@@ -27,6 +27,7 @@ uniform vec4  hmShadowColor;
 //constant params
 uniform float safeYMarginPixels = 2.0;
 uniform float aaRadius = 1.25;
+uniform float kernelHLen = 12.0;
 
 uniform float debug_alpha = 1;
 uniform float debug_col_alpha = 0;
@@ -143,17 +144,23 @@ vec2 shadowOffset()
 
 // ************************************************************************************************ HM FILTERING ************************************************************************************************
 
+// *****************************
+//
+float kernelHalfLen()
+{
+    return kernelHLen * windowWidth;
+}
 
 // *****************************
 //
-float filterHeight( vec2 uv, float h, float hklen )
+float filterHeight( vec2 uv, float h )
 {
     float dx = 1.0 / 1920.0;
     
 	//FIXME: valid len, when windows sizes are applied
     float wl = 1.0;
-    int smpll = int( floor( hklen * windowWidth + 0.5 ) );
-    int smplu = int( ceil( hklen * windowWidth + 0.5 ) );
+    int smpll = int( floor( kernelHalfLen() ) );
+    int smplu = int( ceil( kernelHalfLen() ) );
 
     float suml = h;
 
@@ -172,13 +179,13 @@ float filterHeight( vec2 uv, float h, float hklen )
         
         sumu += sampleHeight( uv + vec2( pixelOffset[ i ] * dx, 0.0 ) );
         sumu += sampleHeight( uv - vec2( pixelOffset[ i ] * dx, 0.0 ) );
-        
+
         wu += 2.0;
-        
+
         suml /= wl;
         sumu /= wu;
         
-        suml = mix( sumu, suml, fract( hklen * windowWidth ) ); //FIMXE: or 1 - fract
+        suml = mix( sumu, suml, 1.0 - fract( kernelHalfLen() ) ); //FIMXE: or 1 - fract
     }
 	else
     {
@@ -190,9 +197,9 @@ float filterHeight( vec2 uv, float h, float hklen )
 
 // *****************************
 //
-float filterHeightApplyPow( vec2 uv, float h, float hklen )
+float filterHeightApplyPow( vec2 uv, float h )
 {
-	return applyPow( filterHeight( uv, h, hklen ), hmHeightScale, hmPowFactor );
+	return applyPow( filterHeight( uv, h ), hmHeightScale, hmPowFactor );
 }
 
 
@@ -321,7 +328,7 @@ vec4 hillAlpha( vec2 uv )
 	//CASE 4 - filtering required, so let's do it
 	if( isInsidePreciseFilteringZone( uv, h ) )
 	{
-		float hf = filterHeight( uv, h, 12.0 ); //FIXME: magic constant - kennel half len
+		float hf = filterHeight( uv, h ); //FIXME: magic constant - kennel half len
 
 		if( isBelowHillEdge( uv, hf ) )
 		{
