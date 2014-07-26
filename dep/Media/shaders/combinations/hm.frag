@@ -41,7 +41,7 @@ float sampleHeight( vec2 uv )
 
 // *****************************
 //
-float getHeight( vec2 uv )
+float getFilteredHeight( vec2 uv, float h )
 {
     float dx = 1.0 / 1920.0;
     float hklen = 7.0;
@@ -50,14 +50,13 @@ float getHeight( vec2 uv )
     int smpll = int( floor( hklen * windowWidth / 0.8 ) );
     int smplu = int( ceil( hklen * windowWidth / 0.8 ) );
 
-    float suml = sampleHeight( uv );
+    float suml = h;
 
-    return suml;
     int i = 1;
     for(; i < smpll; ++i )
     {
-        suml += decodeHeight( texture( HeightMapTex, uv + vec2( pixelOffset[ i ] * dx, 0.0 ) ) );
-        suml += decodeHeight( texture( HeightMapTex, uv - vec2( pixelOffset[ i ] * dx, 0.0 ) ) );
+        suml += sampleHeight( uv + vec2( pixelOffset[ i ] * dx, 0.0 ) );
+        suml += sampleHeight( uv - vec2( pixelOffset[ i ] * dx, 0.0 ) );
         wl += 2.0;
     }
 
@@ -66,18 +65,18 @@ float getHeight( vec2 uv )
         float wu = wl;
         float sumu = suml;
         
-        sumu += decodeHeight( texture( HeightMapTex, uv + vec2( pixelOffset[ i ] * dx, 0.0 ) ) );
-        sumu += decodeHeight( texture( HeightMapTex, uv - vec2( pixelOffset[ i ] * dx, 0.0 ) ) );
+        sumu += sampleHeight( uv + vec2( pixelOffset[ i ] * dx, 0.0 ) );
+        sumu += sampleHeight( uv - vec2( pixelOffset[ i ] * dx, 0.0 ) );
         
         wu += 2.0;
         
-        suml /= ( wl );
-        sumu /= ( wu );
+        suml /= wl;
+        sumu /= wu;
         
         return mix( sumu, suml, smoothstep( 1.0, 0.0, fract( hklen * windowWidth ) ) );
     }
     
-    return suml / ( wl * 1009.1532 );
+    return suml / wl;
 }
 
 // *****************************
@@ -152,7 +151,8 @@ bool isBelowMinSamplableHillY( vec2 uv )
 {
 	//FIXME: rescale hmOffset appropriately
 	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
-	return uv.y < hmMinHeightValue / hmMaxHeightValue * hmHeightScale + hmOffsetY;
+	float safeDy = 6.0 / 1080.0;
+	return uv.y < hmMinHeightValue / hmMaxHeightValue * hmHeightScale + hmOffsetY - safeDy;
 }
 
 // *****************************
@@ -162,7 +162,8 @@ bool isBelowMaxSamplableHillY( vec2 uv )
 	//FIXME: rescale hmOffset appropriately
 	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
 	//return uvCoord_hm.y < hmMaxHeightValue / hmMaxHeightValue * hmHeightScale + hmOffsetY;
-	return uvCoord_hm.y < hmHeightScale + hmOffsetY;
+	float safeDy = 6.0 / 1080.0;
+	return uvCoord_hm.y < hmHeightScale + hmOffsetY + safeDy;
 }
 
 // *****************************
@@ -172,6 +173,17 @@ bool isInsidePreciseFilteringZone( vec2 uv, float h )
 	//FIXME: rescale hmOffset appropriately
 	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
 	return abs( uv.y - h - hmOffsetY ) < 4.0 / 1080.0;
+}
+
+// *****************************
+//
+bool isInsideFilteredSignal( vec2 uv, float h )
+{
+	float hf = getFilteredHeight( uv, h );
+
+	//FIXME: rescale hmOffset appropriately
+	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
+	return abs( uv.y - hf - hmOffsetY ) < 2.0 / 1080.0;
 }
 
 // *****************************
@@ -192,7 +204,14 @@ void main()
 	{
 		if( isInsidePreciseFilteringZone( uvCoord_hm, h ) )
 		{
-			FragColor = vec4( 0.0, 1.0, 0.0, 1.0 );
+			if( isInsideFilteredSignal( uvCoord_hm, h ) )
+			{
+				FragColor = vec4( 1.0, 0.0, 1.0, 1.0 );
+			}
+			else
+			{
+				FragColor = vec4( 0.0, 1.0, 0.0, 1.0 );
+			}
 		}
 		else
 		{
