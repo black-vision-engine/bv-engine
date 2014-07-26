@@ -50,6 +50,7 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     SimpleFloatEvaluatorPtr     hmMaxHeightValEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmMaxHeightValue", timeEvaluator );
     SimpleFloatEvaluatorPtr     hmMinHeightValEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmMinHeightValue", timeEvaluator );
     SimpleFloatEvaluatorPtr     hmHeightScaleEvaluator  = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmHeightScale", timeEvaluator );
+    SimpleFloatEvaluatorPtr     hmPowFactorEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmPowFactor", timeEvaluator );
 
     SimpleFloatEvaluatorPtr     windowWidthEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "windowWidth", timeEvaluator );
     SimpleFloatEvaluatorPtr     windowHeightEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "windowHeight", timeEvaluator );
@@ -67,6 +68,7 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     psModel->RegisterAll( hmMaxHeightValEvaluator );
     psModel->RegisterAll( hmMinHeightValEvaluator );
     psModel->RegisterAll( hmHeightScaleEvaluator );
+    psModel->RegisterAll( hmPowFactorEvaluator );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
@@ -81,6 +83,7 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     hmMaxHeightValEvaluator->Parameter()->SetVal( 1009.1532f, TimeType( 0.0 ) );
     hmMinHeightValEvaluator->Parameter()->SetVal( 681.1941f, TimeType( 0.0 ) );
     hmHeightScaleEvaluator->Parameter()->SetVal( 247.f / 1080.f, TimeType( 0.0 ) );
+    hmPowFactorEvaluator->Parameter()->SetVal( 1.0f, TimeType( 0.0 ) );
 
     windowWidthEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     windowHeightEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
