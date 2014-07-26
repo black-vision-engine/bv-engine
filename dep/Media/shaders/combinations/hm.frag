@@ -10,6 +10,7 @@ uniform sampler2D HillTex;
 uniform sampler2D CoveredDistTex;
 uniform sampler2D BackgroundTex;
 
+uniform float windowHeight;
 uniform float windowWidth;
 
 uniform float hmOffsetY;
@@ -20,6 +21,8 @@ uniform float hmHeightScale;
 
 uniform float alpha;
 uniform float coveredDist;
+
+uniform float preciseFilteringApronSize = 6.0 / 1080.0;
 
 uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0 };
 
@@ -77,6 +80,13 @@ float getFilteredHeight( vec2 uv, float h )
     }
     
     return suml / wl;
+}
+
+// *****************************
+//
+float safeYMargin()
+{
+	return windowHeight * 2.0 / 1080.0;
 }
 
 // *****************************
@@ -151,8 +161,7 @@ bool isBelowMinSamplableHillY( vec2 uv )
 {
 	//FIXME: rescale hmOffset appropriately
 	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
-	float safeDy = 6.0 / 1080.0;
-	return uv.y < hmMinHeightValue / hmMaxHeightValue * hmHeightScale + hmOffsetY - safeDy;
+	return uv.y < hmMinHeightValue / hmMaxHeightValue * hmHeightScale + hmOffsetY - safeYMargin();
 }
 
 // *****************************
@@ -162,8 +171,7 @@ bool isBelowMaxSamplableHillY( vec2 uv )
 	//FIXME: rescale hmOffset appropriately
 	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
 	//return uvCoord_hm.y < hmMaxHeightValue / hmMaxHeightValue * hmHeightScale + hmOffsetY;
-	float safeDy = 6.0 / 1080.0;
-	return uvCoord_hm.y < hmHeightScale + hmOffsetY + safeDy;
+	return uvCoord_hm.y < hmHeightScale + hmOffsetY + safeYMargin();
 }
 
 // *****************************
@@ -172,7 +180,7 @@ bool isInsidePreciseFilteringZone( vec2 uv, float h )
 {
 	//FIXME: rescale hmOffset appropriately
 	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
-	return abs( uv.y - h - hmOffsetY ) < 4.0 / 1080.0;
+	return abs( uv.y - h - hmOffsetY ) < preciseFilteringApronSize;
 }
 
 // *****************************
