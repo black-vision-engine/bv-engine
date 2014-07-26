@@ -154,6 +154,11 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
     float blurLenghtX = float( blurSize ) / viewWidth;
     float blurLenghtY = float( blurSize ) / viewHeight;
 
+    float ccPaddingX = 1.f / viewWidth;
+    float ccPaddingY = 1.f / viewHeight;
+
+    float texPadding = 1.f;
+
     auto spaceGlyphWidth    = 0.3*(float)textAtlas->GetGlyphHeight( L'0' ) * 0.5/viewWidth;
     auto newLineShift       = -(float)textAtlas->GetGlyphWidth( L'0' ) / viewHeight;
 
@@ -202,10 +207,10 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
             }
 
             {
-                quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f );
-                quadBottomRight    = glm::vec3( (float)glyphCoord->glyphWidth / (float)viewWidth, 0.f, 0.f ) +  glm::vec3( blurLenghtX, -blurLenghtY, 0.f );
-                quadTopLeft        = glm::vec3( 0.f, (float)glyphCoord->glyphHeight / (float)viewHeight, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f );
-                quadTopRight       = glm::vec3( (float)glyphCoord->glyphWidth / (float)viewWidth, (float)glyphCoord->glyphHeight / (float)viewHeight, 0.f ) + glm::vec3( blurLenghtX, blurLenghtY, 0.f );
+                quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, -ccPaddingY, 0.f );
+                quadBottomRight    = glm::vec3( (float)glyphCoord->glyphWidth / (float)viewWidth, 0.f, 0.f ) +  glm::vec3( blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, -ccPaddingY, 0.f );
+                quadTopLeft        = glm::vec3( 0.f, (float)glyphCoord->glyphHeight / (float)viewHeight, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, ccPaddingY, 0.f );
+                quadTopRight       = glm::vec3( (float)glyphCoord->glyphWidth / (float)viewWidth, (float)glyphCoord->glyphHeight / (float)viewHeight, 0.f ) + glm::vec3( blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, ccPaddingY, 0.f );
             }
 
             posAttribChannel->AddAttribute( quadBottomLeft    + translate + bearing + newLineTranslation );
@@ -225,10 +230,10 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
             float texHeight;
 
             {
-                texLeft   = ((float)glyphCoord->textureX + (float)glyphCoord->glyphX - blurTexSize)  / textAtlas->GetWidth();
-                texTop    = ((float)glyphCoord->textureY + (float)glyphCoord->glyphY - blurTexSize)  / textAtlas->GetHeight();
-                texWidth  = ((float)glyphCoord->glyphWidth + 2 * blurTexSize)     / textAtlas->GetWidth();
-                texHeight = ((float)glyphCoord->glyphHeight + 2 * blurTexSize)    / textAtlas->GetHeight();
+                texLeft   = ( (float)glyphCoord->textureX + (float)glyphCoord->glyphX - blurTexSize - texPadding )  / textAtlas->GetWidth();
+                texTop    = ( (float)glyphCoord->textureY + (float)glyphCoord->glyphY - blurTexSize - texPadding )  / textAtlas->GetHeight();
+                texWidth  = ( (float)glyphCoord->glyphWidth + 2 * blurTexSize + 2 * texPadding )     / textAtlas->GetWidth();
+                texHeight = ( (float)glyphCoord->glyphHeight + 2 * blurTexSize  + 2 * texPadding )    / textAtlas->GetHeight();
             }
 
 
