@@ -12,6 +12,13 @@ ParamMat2                          ParametersFactory::CreateParameterMat2       
 
 // *******************************
 //
+ParamVec2                          ParametersFactory::CreateParameter                      ( const std::string & name, const Vec2Interpolator & interpolator, ITimeEvaluatorPtr timeline )
+{
+    return ParamVec2( name, interpolator, timeline );
+}
+
+// *******************************
+//
 ParamVec3                          ParametersFactory::CreateParameter                      ( const std::string & name, const Vec3Interpolator & interpolator, ITimeEvaluatorPtr timeline )
 {
     return ParamVec3( name, interpolator, timeline );
@@ -50,6 +57,13 @@ ParamTransformVec                   ParametersFactory::CreateParameter          
 ParamMat2Ptr                         ParametersFactory::CreateParameterMat2                 ( const std::string & name, ITimeEvaluatorPtr timeline )
 {
     return std::make_shared< ParamMat2 >( name, Vec4Interpolator(), timeline );
+}
+
+// *******************************
+//
+ParamVec2Ptr                         ParametersFactory::CreateParameterVec2                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return std::make_shared< ParamVec2 >( name, Vec2Interpolator(), timeline );
 }
 
 // *******************************

@@ -42,6 +42,7 @@ enum class ModelParamType : int
 {
     MPT_FLOAT = 0,
     MPT_MAT2,
+    MPT_VEC2,
     MPT_VEC3,
     MPT_VEC4,
     MPT_TRANSFORM,

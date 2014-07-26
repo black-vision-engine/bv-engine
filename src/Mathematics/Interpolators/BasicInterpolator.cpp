@@ -386,6 +386,7 @@ INSTANTIATE(bv::TimeType)
 
 template bv::BasicInterpolator<bv::TimeType, float>;
 template bv::BasicInterpolator<bv::TimeType, double>;
+template bv::BasicInterpolator<bv::TimeType, glm::vec2>;
 template bv::BasicInterpolator<bv::TimeType, glm::vec3>;
 template bv::BasicInterpolator<bv::TimeType, glm::vec4>;
 

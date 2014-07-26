@@ -30,6 +30,12 @@ public:
     static SimpleVec3EvaluatorPtr       CreateSimpleVec3Evaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator );
     static SimpleVec3EvaluatorPtr       CreateSimpleVec3Evaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName );
 
+    static SimpleVec2EvaluatorPtr       CreateSimpleVec2Evaluator       ( ParamVec2Ptr param, ValueVec2Ptr value );
+    static SimpleVec2EvaluatorPtr       CreateSimpleVec2Evaluator       ( ParamVec2Ptr param, const std::string & valueName );
+    static SimpleVec2EvaluatorPtr       CreateSimpleVec2Evaluator       ( ParamVec2Ptr param );
+    static SimpleVec2EvaluatorPtr       CreateSimpleVec2Evaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator );
+    static SimpleVec2EvaluatorPtr       CreateSimpleVec2Evaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName );
+
     static SimpleMat2EvaluatorPtr       CreateSimpleMat2Evaluator       ( ParamMat2Ptr param, ValueMat2Ptr value );
     static SimpleMat2EvaluatorPtr       CreateSimpleMat2Evaluator       ( ParamMat2Ptr param, const std::string & valueName );
     static SimpleMat2EvaluatorPtr       CreateSimpleMat2Evaluator       ( ParamMat2Ptr param );

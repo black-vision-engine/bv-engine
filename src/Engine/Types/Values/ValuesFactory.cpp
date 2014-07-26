@@ -12,6 +12,13 @@ ValueFloatPtr         ValuesFactory::CreateValueFloat    ( const std::string & n
 
 // *******************************
 //
+ValueVec2Ptr          ValuesFactory::CreateValueVec2     ( const std::string & name )
+{
+    return std::make_shared< ValueVec2 >( name );
+}
+
+// *******************************
+//
 ValueVec3Ptr          ValuesFactory::CreateValueVec3     ( const std::string & name )
 {
     return std::make_shared< ValueVec3 >( name );

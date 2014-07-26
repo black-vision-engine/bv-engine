@@ -120,6 +120,43 @@ SimpleVec3EvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleVec3Evaluato
 }
 
 
+// ************************************************************** VEC2 **************************************************************
+
+// *******************************
+//
+SimpleVec2EvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleVec2Evaluator       ( ParamVec2Ptr param, ValueVec2Ptr value )
+{
+    return std::make_shared< SimpleVec2Evaluator >( param, value );
+}
+
+// *******************************
+//
+SimpleVec2EvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleVec2Evaluator       ( ParamVec2Ptr param, const std::string & valueName )
+{
+    return CreateSimpleVec2Evaluator( param, ValuesFactory::CreateValueVec2( valueName ) );
+}
+
+// *******************************
+//
+SimpleVec2EvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleVec2Evaluator       ( ParamVec2Ptr param )
+{
+    return CreateSimpleVec2Evaluator( param, param->GetName() );
+}
+
+// *******************************
+//
+SimpleVec2EvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleVec2Evaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator )
+{
+    return CreateSimpleVec2Evaluator( ParametersFactory::CreateParameterVec2( paramName, timeEvaluator ), paramName );
+}
+
+// *******************************
+//
+SimpleVec2EvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleVec2Evaluator       ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName )
+{
+    return CreateSimpleVec2Evaluator( ParametersFactory::CreateParameterVec2( paramName, timeEvaluator ), valueName );
+}
+
 // ************************************************************** MAT2 **************************************************************
 
 // *******************************

@@ -21,8 +21,12 @@ uniform float hmHeightScale;
 uniform float hmPowFactor;
 uniform float hmGroundLevelHeight;
 
+uniform vec2  hmShadowOffsetInPixels;
+uniform vec4  hmShadowColor;
+
 //constant params
-//uniform float 
+uniform float safeYMarginPixels = 2.0;
+uniform float aaRadius = 1.25;
 
 uniform float debug_alpha = 1;
 uniform float debug_col_alpha = 0;
@@ -120,14 +124,14 @@ float y( vec2 uv )
 //
 float safeYMargin()
 {
-	return windowHeight * 2.0 / 1080.0;
+	return windowHeight * safeYMarginPixels / 1080.0;
 }
 
 // *****************************
 //
 float aaMarginSize()
 {
-    return 2.5 * windowHeight / 1080.0;
+    return 2.0 * aaRadius * windowHeight / 1080.0;
 }
 
 // ************************************************************************************************ HM FILTERING ************************************************************************************************

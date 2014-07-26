@@ -53,6 +53,9 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     SimpleFloatEvaluatorPtr     hmHeightScaleEvaluator          = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmHeightScale", timeEvaluator );
     SimpleFloatEvaluatorPtr     hmPowFactorEvaluator            = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmPowFactor", timeEvaluator );
 
+    SimpleVec2EvaluatorPtr      hmShadowOffsetInPixelsEvaluator = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "hmShadowOffsetInPixels", timeEvaluator );
+    SimpleVec4EvaluatorPtr      hmShadowColorEvaluator          = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "hmShadowColor", timeEvaluator );
+
     SimpleFloatEvaluatorPtr     windowWidthEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "windowWidth", timeEvaluator );
     SimpleFloatEvaluatorPtr     windowHeightEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "windowHeight", timeEvaluator );
 
@@ -71,6 +74,8 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     psModel->RegisterAll( hmHeightScaleEvaluator );
     psModel->RegisterAll( hmPowFactorEvaluator );
     psModel->RegisterAll( hmGroundLevelHeightEvaluator );
+    psModel->RegisterAll( hmShadowOffsetInPixelsEvaluator );
+    psModel->RegisterAll( hmShadowColorEvaluator );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
@@ -79,7 +84,7 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     //FIXME: Set default values
     centerXEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     centerYEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    
+
     hmOffsetYEvaluator->Parameter()->SetVal( 98.0f / 1080.f, TimeType( 0.0 ) );
 
     hmMaxHeightValEvaluator->Parameter()->SetVal( 1009.1532f, TimeType( 0.0 ) );
@@ -87,6 +92,9 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     hmHeightScaleEvaluator->Parameter()->SetVal( 194.f / 1080.f, TimeType( 0.0 ) );
     hmPowFactorEvaluator->Parameter()->SetVal( 1.0f, TimeType( 0.0 ) );
     hmGroundLevelHeightEvaluator->Parameter()->SetVal( 300.f, TimeType( 0.0 ) );
+
+    hmShadowOffsetInPixelsEvaluator->Parameter()->SetVal( glm::vec2( -6.f, 6.f ), TimeType( 0.0 ) );
+    hmShadowColorEvaluator->Parameter()->SetVal( glm::vec4( 1.0f, 1.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
 
     windowWidthEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     windowHeightEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
