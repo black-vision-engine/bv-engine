@@ -720,14 +720,16 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     */
 
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 0.f ), 1.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 10.f ), 4.f );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 10.f ), 8.f );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 20.f ), 1.f );
     //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 3.f ), 0.2f );
     //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 6.f ), 1.f );
     //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 26.f ), 5.5f );
     //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 39.f ), 1.0f );
 //    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 6.f ), 5.5f );
 
-
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmGroundLevelHeight" ), TimeType( 0.f ), 0.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmGroundLevelHeight" ), TimeType( 10.f ), 600.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 0.f ), 1.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 20.f ), 1.f );
 
