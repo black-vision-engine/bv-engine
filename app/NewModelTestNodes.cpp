@@ -700,7 +700,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     assert( success );
 
     //HillTexture
-    success = model::LoadTexture( node->GetPlugin( "height map" ), "hill_tex.jpg" );
+    success = model::LoadTexture( node->GetPlugin( "height map" ), "full.jpg" ); //"hill_tex.jpg" );
     assert( success );
 
     //CoveredDistanceTexture
@@ -708,7 +708,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     assert( success );
 
     //BackgroundTexture
-    success = model::LoadTexture( node->GetPlugin( "height map" ), "hm_background.png" );
+    success = model::LoadTexture( node->GetPlugin( "height map" ), "MAPA_WYSOKOSCI_LIVE__EDYTOWALNA.jpg" );//"hm_background.png" );
     assert( success );
 
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),   2.f );
@@ -736,8 +736,19 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowHeight" ), TimeType( 22.f ), 0.2f );
     */
 
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 0.f ), 1.f );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 10.f ), 8.f );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 20.f ), 1.f );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 3.f ), 0.2f );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 6.f ), 1.f );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 26.f ), 5.5f );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 39.f ), 1.0f );
+//    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmPowFactor" ), TimeType( 6.f ), 5.5f );
+
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmGroundLevelHeight" ), TimeType( 0.f ), 0.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmGroundLevelHeight" ), TimeType( 10.f ), 600.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 0.f ), 1.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 20.f ), 0.1f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 20.f ), 1.f );
 
     return node;    
 }
