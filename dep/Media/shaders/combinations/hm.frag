@@ -30,7 +30,7 @@ uniform vec4  hmShadowColor;
 //constant params
 uniform float safeYMarginPixels = 2.0;
 uniform float aaRadius = 2.5;
-uniform float kernelHLen = 12.0;
+uniform float kernelHLen; //FIXME: requires or does not require initialization
 
 uniform float debug_alpha = 1;
 uniform float debug_col_alpha = 1;
@@ -351,7 +351,7 @@ float hillAlpha( vec2 uv )
 	//CASE 4 - filtering required, so let's do it
 	if( isBelowPreciseFilteringZoneTop( uv, h ) )
 	{
-		float hf = filterHeight( uv, h ); //FIXME: magic constant - kennel half len
+		float hf = filterHeight( uv, h );
 
 		if( isBelowHillEdge( uv, hf ) )
 		{
@@ -407,7 +407,8 @@ vec4 calcBackgroundColor( vec2 uv )
 //
 void main()
 {
-    FragColor = blend( calcBackgroundColor( uvCoord_tx ), blend( shadowHillColor( uvCoord_hm ), hillColor( uvCoord_hm ) ) );
+    FragColor = calcBackgroundColor( uvCoord_hm );
+    //FragColor = blend( calcBackgroundColor( uvCoord_tx ), blend( shadowHillColor( uvCoord_hm ), hillColor( uvCoord_hm ) ) );
 	//vec4 c2 = hillColor( uvCoord_hm );
 
  //   vec4 c1 = shadowHillColor( uvCoord_hm );            

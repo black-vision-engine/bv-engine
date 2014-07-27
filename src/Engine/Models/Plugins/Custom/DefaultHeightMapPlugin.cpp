@@ -42,11 +42,12 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
     //Create all parameters and evaluators
-    SimpleFloatEvaluatorPtr     centerXEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "centerX", timeEvaluator );
-    SimpleFloatEvaluatorPtr     centerYEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "centerY", timeEvaluator );
+    //SimpleFloatEvaluatorPtr     centerXEvaluator                = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "centerX", timeEvaluator );
+    //SimpleFloatEvaluatorPtr     centerYEvaluator                = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "centerY", timeEvaluator );
     
-    SimpleFloatEvaluatorPtr     scaleXEvaluator                 = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "scaleX", timeEvaluator );
-    SimpleFloatEvaluatorPtr     scaleYEvaluator                 = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "scaleY", timeEvaluator );
+    SimpleVec2EvaluatorPtr      scaleEvaluator                  = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "scale", timeEvaluator );
+    SimpleVec2EvaluatorPtr      snapToPixelEvaluator            = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "snapToPixel", timeEvaluator );
+    //SimpleFloatEvaluatorPtr     snapToPixelWeightEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "snapToPixelWeight", timeEvaluator );
 
     SimpleFloatEvaluatorPtr     hmOffsetYInPixelsEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmOffsetYInPixels", timeEvaluator );
 
@@ -62,10 +63,11 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     SimpleFloatEvaluatorPtr     coveredDistEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "coveredDist", timeEvaluator );
 
     //Register all parameters and evaloators in models
-    vsModel->RegisterAll( centerXEvaluator );
-    vsModel->RegisterAll( centerYEvaluator );
-    vsModel->RegisterAll( scaleXEvaluator );
-    vsModel->RegisterAll( scaleYEvaluator );
+    //vsModel->RegisterAll( centerXEvaluator );
+    //vsModel->RegisterAll( centerYEvaluator );
+    vsModel->RegisterAll( scaleEvaluator );
+    vsModel->RegisterAll( snapToPixelEvaluator );
+    //vsModel->RegisterAll( snapToPixelWeightEvaluator );
 
     psModel->RegisterAll( hmOffsetYInPixelsEvaluator );
     psModel->RegisterAll( coveredDistEvaluator );
@@ -82,8 +84,8 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     model->SetPixelShaderChannelModel( psModel );
 
     //FIXME: Set default values
-    centerXEvaluator->Parameter()->SetVal( 0.5f, TimeType( 0.0 ) );
-    centerYEvaluator->Parameter()->SetVal( 0.5f, TimeType( 0.0 ) );
+    //centerXEvaluator->Parameter()->SetVal( 0.5f, TimeType( 0.0 ) );
+    //centerYEvaluator->Parameter()->SetVal( 0.5f, TimeType( 0.0 ) );
 
     hmOffsetYInPixelsEvaluator->Parameter()->SetVal( 98.0f, TimeType( 0.0 ) );
 
@@ -96,10 +98,12 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     hmShadowOffsetInPixelsEvaluator->Parameter()->SetVal( glm::vec2( -6.f, 6.f ), TimeType( 0.0 ) );
     hmShadowColorEvaluator->Parameter()->SetVal( glm::vec4( 1.0f, 1.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
 
-    scaleXEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-    scaleYEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+    scaleEvaluator->Parameter()->SetVal( glm::vec2( 1.f, 1.f ), TimeType( 0.0 ) );
 
-    coveredDistEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+    snapToPixelEvaluator->Parameter()->SetVal( glm::vec2( 960.f, 540.f ), TimeType( 0.0 ) );
+    //snapToPixelWeightEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+
+    coveredDistEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) ); //FIXME: ustawiane inne zmienne na bazie tych wartosci powinny byc ustawiane dla czasu zero (w innych pluginach)
 
     return model;
 }
