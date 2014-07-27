@@ -726,11 +726,22 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "offsetY" ), TimeType( 6.f ), 0.2f );
 */
     
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 0.f ), 1.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 126.f ), 0.2f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowHeight" ), TimeType( 0.1f ), 1.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowHeight" ), TimeType( 126.f ), 0.2f );
-/*    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 12.f ), 1.f );
+
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmOffsetYInPixels" ), TimeType( 0.f ), -195.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmOffsetYInPixels" ), TimeType( 0.5f ), -195.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmOffsetYInPixels" ), TimeType( 1.5f ), 98.f );
+
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scaleX" ), TimeType( 3.f ), 1.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scaleX" ), TimeType( 7.f ), 2.0f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scaleY" ), TimeType( 3.f ), 1.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scaleY" ), TimeType( 7.f ), 2.0f );
+
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "centerX" ), TimeType( 3.f ), .5f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "centerX" ), TimeType( 5.f ), .62f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "centerY" ), TimeType( 3.f ), .5f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "centerY" ), TimeType( 5.f ), .35f );
+
+    /*    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 12.f ), 1.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowWidth" ), TimeType( 20.f ), 0.2f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowHeight" ), TimeType( 12.1f ), 1.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "windowHeight" ), TimeType( 22.f ), 0.2f );

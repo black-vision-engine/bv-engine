@@ -45,7 +45,10 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     SimpleFloatEvaluatorPtr     centerXEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "centerX", timeEvaluator );
     SimpleFloatEvaluatorPtr     centerYEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "centerY", timeEvaluator );
     
-    SimpleFloatEvaluatorPtr     hmOffsetYEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmOffsetY", timeEvaluator );
+    SimpleFloatEvaluatorPtr     scaleXEvaluator                 = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "scaleX", timeEvaluator );
+    SimpleFloatEvaluatorPtr     scaleYEvaluator                 = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "scaleY", timeEvaluator );
+
+    SimpleFloatEvaluatorPtr     hmOffsetYInPixelsEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmOffsetYInPixels", timeEvaluator );
 
     SimpleFloatEvaluatorPtr     hmMaxHeightValEvaluator         = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmMaxHeightValue", timeEvaluator );
     SimpleFloatEvaluatorPtr     hmMinHeightValEvaluator         = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmMinHeightValue", timeEvaluator );
@@ -56,18 +59,15 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     SimpleVec2EvaluatorPtr      hmShadowOffsetInPixelsEvaluator = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "hmShadowOffsetInPixels", timeEvaluator );
     SimpleVec4EvaluatorPtr      hmShadowColorEvaluator          = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "hmShadowColor", timeEvaluator );
 
-    SimpleFloatEvaluatorPtr     windowWidthEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "windowWidth", timeEvaluator );
-    SimpleFloatEvaluatorPtr     windowHeightEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "windowHeight", timeEvaluator );
-
     SimpleFloatEvaluatorPtr     coveredDistEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "coveredDist", timeEvaluator );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( centerXEvaluator );
     vsModel->RegisterAll( centerYEvaluator );
-    vsModel->RegisterAll( windowWidthEvaluator );
-    vsModel->RegisterAll( windowHeightEvaluator );
+    vsModel->RegisterAll( scaleXEvaluator );
+    vsModel->RegisterAll( scaleYEvaluator );
 
-    psModel->RegisterAll( hmOffsetYEvaluator );
+    psModel->RegisterAll( hmOffsetYInPixelsEvaluator );
     psModel->RegisterAll( coveredDistEvaluator );
     psModel->RegisterAll( hmMaxHeightValEvaluator );
     psModel->RegisterAll( hmMinHeightValEvaluator );
@@ -82,10 +82,10 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     model->SetPixelShaderChannelModel( psModel );
 
     //FIXME: Set default values
-    centerXEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    centerYEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+    centerXEvaluator->Parameter()->SetVal( 0.5f, TimeType( 0.0 ) );
+    centerYEvaluator->Parameter()->SetVal( 0.5f, TimeType( 0.0 ) );
 
-    hmOffsetYEvaluator->Parameter()->SetVal( 98.0f / 1080.f, TimeType( 0.0 ) );
+    hmOffsetYInPixelsEvaluator->Parameter()->SetVal( 98.0f, TimeType( 0.0 ) );
 
     hmMaxHeightValEvaluator->Parameter()->SetVal( 1009.1532f, TimeType( 0.0 ) );
     hmMinHeightValEvaluator->Parameter()->SetVal( 681.1941f, TimeType( 0.0 ) );
@@ -96,8 +96,8 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     hmShadowOffsetInPixelsEvaluator->Parameter()->SetVal( glm::vec2( -6.f, 6.f ), TimeType( 0.0 ) );
     hmShadowColorEvaluator->Parameter()->SetVal( glm::vec4( 1.0f, 1.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
 
-    windowWidthEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-    windowHeightEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+    scaleXEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+    scaleYEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
 
     coveredDistEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
 

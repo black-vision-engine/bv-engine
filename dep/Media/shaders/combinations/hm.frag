@@ -10,10 +10,13 @@ uniform sampler2D HillTex;
 uniform sampler2D CoveredDistTex;
 uniform sampler2D BackgroundTex;
 
-uniform float windowHeight;
-uniform float windowWidth;
+uniform float centerX;
+uniform float centerY;
 
-uniform float hmOffsetY;
+uniform float scaleX;
+uniform float scaleY;
+
+uniform float hmOffsetYInPixels;
 
 uniform float hmMaxHeightValue;
 uniform float hmMinHeightValue;
@@ -106,6 +109,19 @@ float sampleHeightApplyPow( vec2 uv )
 
 // ************************************************************************************************ BASIC QUERIES ************************************************************************************************
 
+// *****************************
+//
+float pixelSizeX()
+{
+    return 1.0 / ( scaleX * 1920.0 );
+}
+
+// *****************************
+//
+float pixelSizeY()
+{
+    return 1.0 / ( scaleY * 1080.0 );
+}
 
 // *****************************
 //
@@ -118,28 +134,42 @@ float visibleHeightFract()
 //
 float y( vec2 uv )
 {
-    return uv.y - hmOffsetY;
+    return uv.y - hmOffsetYInPixels / 1080.0;
+}
+
+// *****************************
+//
+float yNormalized( vec2 uv )
+{
+    return ( uv.y - ( centerY - 0.5 / scaleY ) ) * scaleY;
 }
 
 // *****************************
 //
 float safeYMargin()
 {
-	return windowHeight * safeYMarginPixels / 1080.0;
+	return safeYMarginPixels * pixelSizeY();
 }
 
 // *****************************
 //
 float aaMarginSize()
 {
-    return aaRadius * windowHeight / 1080.0;
+    return aaRadius * pixelSizeY();
 }
 
 // *****************************
 //
 vec2 shadowOffset()
 {
-	return vec2( -windowWidth * hmShadowOffsetInPixels.x / 1920.0, -windowHeight * hmShadowOffsetInPixels.y / 1080.0 );
+	return vec2( -hmShadowOffsetInPixels.x * pixelSizeX(), -hmShadowOffsetInPixels.y * pixelSizeY() );
+}
+
+// *****************************
+//
+float bottomMarginSizeNormalized()
+{
+    return hmOffsetYInPixels / 1080.0;
 }
 
 // ************************************************************************************************ HM FILTERING ************************************************************************************************
@@ -148,7 +178,7 @@ vec2 shadowOffset()
 //
 float kernelHalfLen()
 {
-    return kernelHLen * windowWidth;
+    return kernelHLen / scaleX;
 }
 
 // *****************************
@@ -211,7 +241,9 @@ float filterHeightApplyPow( vec2 uv, float h )
 bool isBelowOffsetY( vec2 uv )
 {
 	//FIXME: rescale offset appropriately
-	return y( uv ) < 0.0;
+	//return y( uv ) < 0.0;
+
+    return yNormalized( uv ) < bottomMarginSizeNormalized();
 }
 
 // *****************************
@@ -269,7 +301,7 @@ bool isInsideFilteredSignal( vec2 uv, float h )
 	//FIXME: rescale hmOffset appropriately
 	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
 	//FIXME: explicit signal size
-    return abs( y( uv ) - h ) < 2.0 * windowHeight / 1080.0;
+    return abs( y( uv ) - h ) < 2.0 * pixelSizeY();
 }
 
 // *****************************
