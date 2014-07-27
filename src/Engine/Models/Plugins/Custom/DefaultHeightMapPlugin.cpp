@@ -46,8 +46,8 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     //SimpleFloatEvaluatorPtr     centerYEvaluator                = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "centerY", timeEvaluator );
     
     SimpleVec2EvaluatorPtr      scaleEvaluator                  = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "scale", timeEvaluator );
-    SimpleVec2EvaluatorPtr      snapToPixelEvaluator            = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "snapToPixel", timeEvaluator );
-    //SimpleFloatEvaluatorPtr     snapToPixelWeightEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "snapToPixelWeight", timeEvaluator );
+    SimpleFloatEvaluatorPtr     curDistanceInMetersEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "curDistanceInMeters", timeEvaluator );
+    SimpleFloatEvaluatorPtr     totalDistanceInMetersEvaluator  = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "totalDistanceInMeters", timeEvaluator );
 
     SimpleFloatEvaluatorPtr     hmOffsetYInPixelsEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmOffsetYInPixels", timeEvaluator );
 
@@ -66,7 +66,8 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     //vsModel->RegisterAll( centerXEvaluator );
     //vsModel->RegisterAll( centerYEvaluator );
     vsModel->RegisterAll( scaleEvaluator );
-    vsModel->RegisterAll( snapToPixelEvaluator );
+    vsModel->RegisterAll( totalDistanceInMetersEvaluator );
+    vsModel->RegisterAll( curDistanceInMetersEvaluator );
     //vsModel->RegisterAll( snapToPixelWeightEvaluator );
 
     psModel->RegisterAll( hmOffsetYInPixelsEvaluator );
@@ -100,7 +101,9 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
 
     scaleEvaluator->Parameter()->SetVal( glm::vec2( 1.f, 1.f ), TimeType( 0.0 ) );
 
-    snapToPixelEvaluator->Parameter()->SetVal( glm::vec2( 960.f, 540.f ), TimeType( 0.0 ) );
+    curDistanceInMetersEvaluator->Parameter()->SetVal( 0.0f, TimeType( 0.0 ) );
+    totalDistanceInMetersEvaluator->Parameter()->SetVal( 174227.f, TimeType( 0.0 ) );
+
     //snapToPixelWeightEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
 
     coveredDistEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) ); //FIXME: ustawiane inne zmienne na bazie tych wartosci powinny byc ustawiane dla czasu zero (w innych pluginach)
