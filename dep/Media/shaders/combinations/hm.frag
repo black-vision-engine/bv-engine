@@ -22,6 +22,11 @@ uniform float hmHeightScale;
 uniform float hmPowFactor;
 uniform float hmGroundLevelHeight;
 
+uniform float totalDistanceInMeters;
+uniform float curDistanceInMeters;
+
+uniform float coveredDistShowFactor;
+
 uniform vec2  hmShadowOffsetInPixels;
 uniform vec4  hmShadowColor;
 
@@ -32,16 +37,13 @@ uniform float kernelHLen = 12.0;
 
 uniform float debug_alpha = 1;
 uniform float debug_col_alpha = 1;
-uniform float coveredDist;
-
-//uniform float hmTexelSize = 1.0 / 3840.0;
-//uniform float hmTextureSize = 3840.0;
 
 uniform float preciseFilteringApronSize = 8.0 / 1080.0;
 
 //uniform float pixelOffset[71] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70 };
 uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0 };
 
+float varOffsetInPixels = hmOffsetYInPixels;
 
 // ************************************************************************************************ MATH and UTILS ************************************************************************************************
 
@@ -147,9 +149,16 @@ float visibleHeightFract()
 
 // *****************************
 //
+float calcHmOffsetYInPixels()
+{
+    return varOffsetInPixels;
+}
+
+// *****************************
+//
 float y( vec2 uv )
 {
-    return uv.y - hmOffsetYInPixels / 1080.0;
+    return uv.y - calcHmOffsetYInPixels() / 1080.0;
 }
 
 // *****************************
@@ -191,7 +200,7 @@ vec2 shadowOffset()
 //
 float bottomMarginSizeNormalized()
 {
-    return hmOffsetYInPixels / 1080.0;
+    return calcHmOffsetYInPixels() / 1080.0;
 }
 
 // ************************************************************************************************ HM FILTERING ************************************************************************************************
@@ -373,6 +382,44 @@ float hillAlpha( vec2 uv )
 	return 0.0;
 }
 
+// *****************************
+//
+float shadowHillAlpha( vec2 uv )
+{
+	//CASE 1 - outside hill
+	if( isBelowOffsetY( uv - shadowOffset() ) || isAboveMaxSamplableHillY( uv ) )
+	{
+		return 0.0;
+	}
+
+	//CASE 2 - inside hill where no sampling is required (less than precalculated min height val)
+	if( isBelowMinSamplableHillY( uv ) )
+	{
+		return 1.0;
+	}
+
+	float h = sampleHeight( uv );
+
+	//CASE 3 - inside hill where only one small precission (not filtered) sample is required (less than expected height value - some thershold)
+	if( isBelowPreciseFilteringZoneBottom( uv, h ) )
+	{
+		return 1.0;
+	}
+
+	//CASE 4 - filtering required, so let's do it
+	if( isBelowPreciseFilteringZoneTop( uv, h ) )
+	{
+		float hf = filterHeight( uv, h );
+
+		if( isBelowHillEdge( uv, hf ) )
+		{
+            return 1.0 - smoothstep( hf - aaMarginSize(), hf, y( uv ) );
+		}
+	}
+
+	return 0.0;
+}
+
 
 // ************************************************************************************************ HIGH LEVEL COLORS ************************************************************************************************
 
@@ -395,7 +442,7 @@ vec4 hillColor( vec2 uv )
 //
 vec4 shadowHillColor( vec2 uv )
 {
-    float alpha = hillAlpha( uv + shadowOffset() );
+    float alpha = shadowHillAlpha( uv + shadowOffset() );
 
     if( alpha > 0.0 )
     {
@@ -423,7 +470,11 @@ void main()
     //float a = hillColor( uvCoord_hm ).a;
     //FragColor = vec4( w, w, w, a );
 
-    FragColor = hillColor( uvCoord_hm );
+    vec4 c2 = hillColor( uvCoord_hm );    
+    vec4 c1 = shadowHillColor( uvCoord_hm );
+    vec4 c0 = calcBackgroundColor( uvCoord_tx );
+
+    FragColor = blend( c0, blend( c1, c2 ) );
     //FragColor = blend( calcBackgroundColor( uvCoord_tx ), blend( shadowHillColor( uvCoord_hm ), hillColor( uvCoord_hm ) ) );
 	//vec4 c2 = hillColor( uvCoord_hm );
 

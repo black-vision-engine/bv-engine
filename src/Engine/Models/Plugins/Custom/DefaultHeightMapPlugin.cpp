@@ -60,7 +60,7 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     SimpleVec2EvaluatorPtr      hmShadowOffsetInPixelsEvaluator = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "hmShadowOffsetInPixels", timeEvaluator );
     SimpleVec4EvaluatorPtr      hmShadowColorEvaluator          = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "hmShadowColor", timeEvaluator );
 
-    SimpleFloatEvaluatorPtr     coveredDistEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "coveredDist", timeEvaluator );
+    SimpleFloatEvaluatorPtr     coveredDistShowFactorEvaluator  = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "coveredDistShowFactor", timeEvaluator );
 
     //Register all parameters and evaloators in models
     //vsModel->RegisterAll( centerXEvaluator );
@@ -71,7 +71,7 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     //vsModel->RegisterAll( snapToPixelWeightEvaluator );
 
     psModel->RegisterAll( hmOffsetYInPixelsEvaluator );
-    psModel->RegisterAll( coveredDistEvaluator );
+    psModel->RegisterAll( coveredDistShowFactorEvaluator );
     psModel->RegisterAll( hmMaxHeightValEvaluator );
     psModel->RegisterAll( hmMinHeightValEvaluator );
     psModel->RegisterAll( hmHeightScaleEvaluator );
@@ -106,7 +106,7 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
 
     //snapToPixelWeightEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
 
-    coveredDistEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) ); //FIXME: ustawiane inne zmienne na bazie tych wartosci powinny byc ustawiane dla czasu zero (w innych pluginach)
+    coveredDistShowFactorEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) ); //FIXME: ustawiane inne zmienne na bazie tych wartosci powinny byc ustawiane dla czasu zero (w innych pluginach)
 
     return model;
 }
