@@ -344,7 +344,7 @@ void               DefaultHeightMapPlugin::SetTextureParams            ( Texture
         assert( txDesc->GetHeight() == 1 );
     }
 
-    txDesc->SetFilteringMode( TextureFilteringMode::TFM_LINEAR );
+    txDesc->SetFilteringMode( TextureFilteringMode::TFM_POINT );
     txDesc->SetWrappingModeX( TextureWrappingMode::TWM_MIRROR );
     txDesc->SetWrappingModeY( TextureWrappingMode::TWM_MIRROR );
     txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );

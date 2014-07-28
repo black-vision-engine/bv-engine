@@ -1,7 +1,7 @@
 from PIL import Image
 import sys
 
-FIXED_POINT_SPEC = (12,4) #12:4 fixed point arithmetic to be used
+FIXED_POINT_SPEC = (12,12) #12:12 fixed point arithmetic to be used
 
 ## ##########################
 ##
@@ -38,14 +38,15 @@ def generate_desc( fn, base_name, min_height, max_height, dist ):
 ##
 def fixed_point_RGB( val, factor ):
     v = int( val * factor + 0.5 )
-    assert v <= 65535
+    assert v <= ( 2 ** 24 - 1 )
 
     #FORWARD AND BACKWARD CONVERSION
-    #r = v >> 8
-    #g = v & 0xFF
+    #r = ( v >> 16 ) & 0xFF
+    #g = ( v >> 8 ) & 0xF;
+    #b = v & 0xFF
     #print val, v, r, g, 256 * r + g, float( 256 * r + g ) / factor
 
-    return v >> 8 & 0xFF, v & 0xFF, 0
+    return ( v >> 16 ) & 0xFF, ( v >> 8 ) & 0xFF, v & 0xFF
 
 ## ##########################
 ##

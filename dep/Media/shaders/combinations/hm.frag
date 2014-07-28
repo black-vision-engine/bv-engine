@@ -5,16 +5,14 @@ layout (location = 0) out vec4 FragColor;
 in vec2 uvCoord_hm;
 in vec2 uvCoord_tx;
 
+noperspective in vec2 snapPos;
+
 uniform sampler2D HeightMapTex;
 uniform sampler2D HillTex;
 uniform sampler2D CoveredDistTex;
 uniform sampler2D BackgroundTex;
 
-uniform float centerX;
-uniform float centerY;
-
-uniform float scaleX;
-uniform float scaleY;
+uniform vec2 scale;
 
 uniform float hmOffsetYInPixels;
 
@@ -30,7 +28,7 @@ uniform vec4  hmShadowColor;
 //constant params
 uniform float safeYMarginPixels = 2.0;
 uniform float aaRadius = 2.5;
-uniform float kernelHLen; //FIXME: requires or does not require initialization
+uniform float kernelHLen = 12.0;
 
 uniform float debug_alpha = 1;
 uniform float debug_col_alpha = 1;
@@ -61,9 +59,9 @@ vec4 blend( vec4 bg, vec4 fg )
 
 // *****************************
 //
-float decodeFixedPointValue( float msb, float lsb, float invScale )
+float decodeFixedPointValue( float msb, float isb, float lsb, float invScale )
 {
-    return ( 256.0 * 255.0 * msb + 255.0 * lsb ) * invScale; // / 16.0;
+    return ( 256.0 * 256.0 * 255.0 * msb + 256.0 * 255.0 * isb + 255.0 * lsb ) * invScale; // / 4096.0;
 }
 
 // *****************************
@@ -82,7 +80,7 @@ float applyPow( float val, float scale, float powFactor )
 //
 float decodeHeight( vec4 col )
 {
-	return hmHeightScale * ( decodeFixedPointValue( col.r, col.g, 1.0 / 16.0 ) - hmGroundLevelHeight ) / ( hmMaxHeightValue - hmGroundLevelHeight );
+	return hmHeightScale * ( decodeFixedPointValue( col.r, col.g, col.b, 1.0 / 4096.0 ) - hmGroundLevelHeight ) / ( hmMaxHeightValue - hmGroundLevelHeight );
 }
 
 // *****************************
@@ -113,14 +111,14 @@ float sampleHeightApplyPow( vec2 uv )
 //
 float pixelSizeX()
 {
-    return 1.0 / ( scaleX * 1920.0 );
+    return 1.0 / ( scale.x * 1920.0 );
 }
 
 // *****************************
 //
 float pixelSizeY()
 {
-    return 1.0 / ( scaleY * 1080.0 );
+    return 1.0 / ( scale.y * 1080.0 );
 }
 
 // *****************************
@@ -141,7 +139,14 @@ float y( vec2 uv )
 //
 float yNormalized( vec2 uv )
 {
-    return ( uv.y - ( centerY - 0.5 / scaleY ) ) * scaleY;
+    //vec2 scl = 1.0 / scale;
+
+    //vec2 start = loc * ( 1.0 - scl );
+    //vec2 end = loc + scl * ( 1.0 - loc );
+
+    return snapPos.y + ( uv.y - snapPos.y ) * scale.y;
+
+    //return ( uv.y - ( centerY - 0.5 / scale.y ) ) * scale.y;
 }
 
 // *****************************
@@ -178,15 +183,16 @@ float bottomMarginSizeNormalized()
 //
 float kernelHalfLen()
 {
-    return kernelHLen / scaleX;
+    return kernelHLen / scale.x;
 }
 
 // *****************************
 //
 float filterHeight( vec2 uv, float h )
 {
+    return h;
     float dx = 1.0 / 1920.0;
-    
+
 	//FIXME: valid len, when windows sizes are applied
     float wl = 1.0;
     int smpll = int( floor( kernelHalfLen() ) );
@@ -215,7 +221,7 @@ float filterHeight( vec2 uv, float h )
         suml /= wl;
         sumu /= wu;
         
-        suml = mix( sumu, suml, 1.0 - fract( kernelHalfLen() ) ); //FIMXE: or 1 - fract
+        suml = mix( sumu, suml, fract( kernelHalfLen() ) ); //FIMXE: or 1 - fract
     }
 	else
     {
@@ -407,7 +413,8 @@ vec4 calcBackgroundColor( vec2 uv )
 //
 void main()
 {
-    FragColor = calcBackgroundColor( uvCoord_hm );
+    FragColor = hillColor( uvCoord_hm );
+    //FragColor = hillColor( uvCoord_hm );
     //FragColor = blend( calcBackgroundColor( uvCoord_tx ), blend( shadowHillColor( uvCoord_hm ), hillColor( uvCoord_hm ) ) );
 	//vec4 c2 = hillColor( uvCoord_hm );
 
