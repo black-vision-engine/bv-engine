@@ -19,7 +19,7 @@ uniform float hmMinHeightValue;
 uniform float hmHeightScale;
 uniform float hmGroundLevelHeight;
 
-uniform float kernelHLenVS = 15.0;
+uniform float kernelHLenVS = 20.0;
 
 uniform float pixelOffsetVS[30] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0 };
 
@@ -37,74 +37,70 @@ vec2 normalizedPixelCoord( vec2 posInPixels )
 
 // *****************************
 //
-float decodeFixedPointValue( float msb, float isb, float lsb, float invScale )
+float decodeFixedPointValue( float msb, float lsb, float invScale )
 {
-    return ( 256.0 * 256.0 * 255.0 * msb + 256.0 * 255.0 * isb + 255.0 * lsb ) * invScale; // / 4096.0;
+    return ( 256.0 * 255.0 * msb + 255.0 * lsb ) * invScale; // / 4096.0;
 }
 
 // *****************************
 //
 float decodeHeight( vec4 col )
 {
-	return hmHeightScale * ( decodeFixedPointValue( col.r, col.g, col.b, 1.0 / 4096.0 ) - hmGroundLevelHeight ) / ( hmMaxHeightValue - hmGroundLevelHeight );
+	return hmHeightScale * ( decodeFixedPointValue( col.r, col.g, 1.0 / 16.0 ) - hmGroundLevelHeight ) / ( hmMaxHeightValue - hmGroundLevelHeight );
 }
 
 // *****************************
-//
+// FIXME: constant
 float sampleHeight( vec2 uv )
 {
-	return decodeHeight( texture( HeightMapTex, uv ) );
+    float x = ( uv.x * 3840.0 );
+    float w = fract( x );
+
+    //CASE w == 1 - epsilon but sampler samples next texel instead of the current one
+    float h0 = decodeHeight( texture( HeightMapTex, uv ) );
+    float h1 = decodeHeight( texture( HeightMapTex, uv + vec2( 0.995 / 3840.0, 0.0 ) ) );
+
+    return mix( h0, h1, w );
 }
 
 // *****************************
 //FIXME: to make it look smoother at the cost of not being snapped exactly to the hill's edge
 float kernelHalfLen()
 {
-    return kernelHLenVS; // / scale.x;
+    return mix( kernelHLenVS * 0.25, kernelHLenVS, 1.0 - smoothstep( 1.0, 15.0, scale.x ) );
 }
 
 // *****************************
 //
 float filterHeight( vec2 uv, float h )
 {
-    float dx = 1.0 / 1920.0;
-    
-	//FIXME: valid len, when windows sizes are applied
-    float wl = 1.0;
-    int smpll = int( floor( kernelHalfLen() ) );
-    int smplu = int( ceil( kernelHalfLen() ) );
+    float dx = 1.0 / 3840.0; //FIXME: magic number
 
-    float suml = h;
+    float hklen = kernelHalfLen();
+
+    float sum = h;
+    float w = 1.0;
 
     int i = 1;
-    for(; i < smpll; ++i )
+    while ( hklen > 0.001 )
     {
-        suml += sampleHeight( uv + vec2( pixelOffsetVS[ i ] * dx, 0.0 ) );
-        suml += sampleHeight( uv - vec2( pixelOffsetVS[ i ] * dx, 0.0 ) );
-        wl += 2.0;
+        hklen -= 1.0;
+
+        float tw = 1.0;
+
+        if( hklen < 0.0 )
+        {
+            tw = hklen + 1.0;
+        }
+
+        sum += sampleHeight( uv + vec2( pixelOffsetVS[ i ] * dx, 0.0 ) ) * tw;
+        sum += sampleHeight( uv - vec2( pixelOffsetVS[ i ] * dx, 0.0 ) ) * tw;
+
+        ++i;
+        w += 2.0 * tw;
     }
 
-    if( smpll < smplu )
-    {
-        float wu = wl;
-        float sumu = suml;
-        
-        sumu += sampleHeight( uv + vec2( pixelOffsetVS[ i ] * dx, 0.0 ) );
-        sumu += sampleHeight( uv - vec2( pixelOffsetVS[ i ] * dx, 0.0 ) );
-
-        wu += 2.0;
-
-        suml /= wl;
-        sumu /= wu;
-        
-        suml = mix( sumu, suml, 1.0 - fract( kernelHalfLen() ) ); //FIMXE: or 1 - fract
-    }
-	else
-    {
-		suml /= wl;
-	}
-
-	return suml;
+    return sum / w;
 }
 
 // *****************************

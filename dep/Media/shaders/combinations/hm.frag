@@ -34,6 +34,9 @@ uniform float debug_alpha = 1;
 uniform float debug_col_alpha = 1;
 uniform float coveredDist;
 
+//uniform float hmTexelSize = 1.0 / 3840.0;
+//uniform float hmTextureSize = 3840.0;
+
 uniform float preciseFilteringApronSize = 8.0 / 1080.0;
 
 //uniform float pixelOffset[71] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70 };
@@ -59,9 +62,9 @@ vec4 blend( vec4 bg, vec4 fg )
 
 // *****************************
 //
-float decodeFixedPointValue( float msb, float isb, float lsb, float invScale )
+float decodeFixedPointValue( float msb, float lsb, float invScale )
 {
-    return ( 256.0 * 256.0 * 255.0 * msb + 256.0 * 255.0 * isb + 255.0 * lsb ) * invScale; // / 4096.0;
+    return ( 256.0 * 255.0 * msb + 255.0 * lsb ) * invScale; // / 16.0; FIXME: constant
 }
 
 // *****************************
@@ -77,10 +80,10 @@ float applyPow( float val, float scale, float powFactor )
 }
 
 // *****************************
-//
+// FIXME: constant
 float decodeHeight( vec4 col )
 {
-	return hmHeightScale * ( decodeFixedPointValue( col.r, col.g, col.b, 1.0 / 4096.0 ) - hmGroundLevelHeight ) / ( hmMaxHeightValue - hmGroundLevelHeight );
+	return hmHeightScale * ( decodeFixedPointValue( col.r, col.g, 1.0 / 16.0 ) - hmGroundLevelHeight ) / ( hmMaxHeightValue - hmGroundLevelHeight );
 }
 
 // *****************************
@@ -91,17 +94,31 @@ float decodeHeightApplyPow( vec4 col )
 }
 
 // *****************************
-//
+// FIXME: constant
 float sampleHeight( vec2 uv )
 {
-	return decodeHeight( texture( HeightMapTex, uv ) );
+    float x = ( uv.x * 3840.0 );
+    float w = fract( x );
+
+    //CASE w == 1 - epsilon but sampler samples next texel instead of the current one, that's why we have to force sampler to stay in the left pixel (texelsize * 0.995) at the cost of interpolation errors at the end of texel
+    //but it can be noticed when the magnification ratio is more thann 2000:1 which is highly unlikely here
+    float h0 = decodeHeight( texture( HeightMapTex, uv ) );
+    float h1 = decodeHeight( texture( HeightMapTex, uv + vec2( 0.995 / 3840.0, 0.0 ) ) );
+
+    return mix( h0, h1, w );
 }
 
 // *****************************
 //
 float sampleHeightApplyPow( vec2 uv )
 {
-	return decodeHeightApplyPow( texture( HeightMapTex, uv ) );
+    float h0 = decodeHeightApplyPow( texture( HeightMapTex, uv ) );
+    float h1 = decodeHeightApplyPow( texture( HeightMapTex, uv + vec2( 0.995 / 3840.0, 0.0 ) ) );
+
+    float x = ( uv.x * 3840.0 );
+    float w = fract( x );
+
+    return mix( h0, h1, w );
 }
 
 
@@ -183,52 +200,40 @@ float bottomMarginSizeNormalized()
 //
 float kernelHalfLen()
 {
-    return kernelHLen / scale.x;
+    return mix( 0.01, kernelHLen, 1.0 - smoothstep( 1.0, 15.0, scale.x ) );
 }
 
 // *****************************
 //
 float filterHeight( vec2 uv, float h )
 {
-    return h;
-    float dx = 1.0 / 1920.0;
+    float dx = 1.0 / ( 1920.0 * scale.x ); //FIXME: magic number
 
-	//FIXME: valid len, when windows sizes are applied
-    float wl = 1.0;
-    int smpll = int( floor( kernelHalfLen() ) );
-    int smplu = int( ceil( kernelHalfLen() ) );
+    float hklen = kernelHalfLen();
 
-    float suml = h;
+    float sum = h;
+    float w = 1.0;
 
     int i = 1;
-    for(; i < smpll; ++i )
+    while ( hklen > 0.001 )
     {
-        suml += sampleHeight( uv + vec2( pixelOffset[ i ] * dx, 0.0 ) );
-        suml += sampleHeight( uv - vec2( pixelOffset[ i ] * dx, 0.0 ) );
-        wl += 2.0;
+        hklen -= 1.0;
+
+        float tw = 1.0;
+
+        if( hklen < 0.0 )
+        {
+            tw = hklen + 1.0;
+        }
+
+        sum += sampleHeight( uv + vec2( pixelOffset[ i ] * dx, 0.0 ) ) * tw;
+        sum += sampleHeight( uv - vec2( pixelOffset[ i ] * dx, 0.0 ) ) * tw;
+
+        ++i;
+        w += 2.0 * tw;
     }
 
-    if( smpll < smplu )
-    {
-        float wu = wl;
-        float sumu = suml;
-        
-        sumu += sampleHeight( uv + vec2( pixelOffset[ i ] * dx, 0.0 ) );
-        sumu += sampleHeight( uv - vec2( pixelOffset[ i ] * dx, 0.0 ) );
-
-        wu += 2.0;
-
-        suml /= wl;
-        sumu /= wu;
-        
-        suml = mix( sumu, suml, fract( kernelHalfLen() ) ); //FIMXE: or 1 - fract
-    }
-	else
-    {
-		suml /= wl;
-	}
-
-	return suml;
+    return sum / w;
 }
 
 // *****************************
@@ -413,8 +418,12 @@ vec4 calcBackgroundColor( vec2 uv )
 //
 void main()
 {
+    //float x = ( uvCoord_hm.x * 3840.0 );
+    //float w = fract( x );
+    //float a = hillColor( uvCoord_hm ).a;
+    //FragColor = vec4( w, w, w, a );
+
     FragColor = hillColor( uvCoord_hm );
-    //FragColor = hillColor( uvCoord_hm );
     //FragColor = blend( calcBackgroundColor( uvCoord_tx ), blend( shadowHillColor( uvCoord_hm ), hillColor( uvCoord_hm ) ) );
 	//vec4 c2 = hillColor( uvCoord_hm );
 

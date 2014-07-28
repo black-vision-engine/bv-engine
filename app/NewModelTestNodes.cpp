@@ -726,11 +726,12 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     */
 
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 0.f ), glm::vec2( 1.f, 1.f ) );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 3.f ), glm::vec2( 4 * 25.f, 4 * 10.f ) );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 5.f ), glm::vec2( 2 * 2 * 16 * 25.f, 2 * 2 * 8 * 10.f ) );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 5.f ), glm::vec2( 25.f, 10.f ) );
 
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "totalDistanceInMeters" ), TimeType( 0.f ), 174227.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "curDistanceInMeters" ), TimeType( 0.f ), 0.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "curDistanceInMeters" ), TimeType( 181.f ), 0.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "curDistanceInMeters" ), TimeType( 6.f ), 0.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "curDistanceInMeters" ), TimeType( 185.f ), 174227.f );
 
     //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "centerX" ), TimeType( 3.f ), .5f );
