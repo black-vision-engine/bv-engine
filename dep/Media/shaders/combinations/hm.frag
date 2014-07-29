@@ -3,7 +3,9 @@
 layout (location = 0) out vec4 FragColor;
 
 in vec2 uvCoord_hm;
-in vec2 uvCoord_tx;
+in vec2 uvCoord_background;
+in vec2 uvCoord_coveredDist;
+in vec2 uvCoord_hill;
 
 noperspective in vec2 snapPos;
 
@@ -30,11 +32,20 @@ uniform float coveredDistShowFactor;
 uniform vec2  hmShadowOffsetInPixels;
 uniform vec4  hmShadowColor;
 
+uniform vec4  hmOutlineInnedColor;
+uniform vec4  hmOutlineEdgeColor;
+
 //constant params
 uniform float safeYMarginPixels = 2.0;
 uniform float aaRadiusY = 2.5;
 uniform float aaRadiusX = 2.8;
 uniform float kernelHLen = 12.0;
+
+uniform float safeDistFieldYMarginPixels = 9.0;
+uniform int edgeDistHalfKernelSize = 4;
+uniform float outlineThickness = 2.6;
+uniform float innerThickness = 6.0;
+uniform float aaOutlineRadius = 2.0;
 
 //shitty debug params
 uniform float debug_alpha = 1;
@@ -46,6 +57,28 @@ uniform float preciseFilteringApronSize = 8.0 / 1080.0;
 uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0 };
 
 // ************************************************************************************************ MATH and UTILS ************************************************************************************************
+
+// *****************************
+//FIXME: requires fullhd textures
+vec4 tex2DBilinear( sampler2D txSampler, vec2 uv )
+{
+    float texelSizeX = 0.995 / 1920.0; //Should be 1.0 / 1920 @see sampleheight for the explanation of this scale factor
+    float texelSizeY = 0.995 / 1080.0; //Should be 1.0 / 1080 @see sampleheight for the explanation of used scale factor
+
+    vec2 textureSize = vec2( 1920.0, 1080.0 );
+
+    vec4 tl = texture2D( txSampler, uv );
+    vec4 tr = texture2D( txSampler, uv + vec2( texelSizeX, 0.0 ) );
+    vec4 bl = texture2D( txSampler, uv + vec2( 0.0, texelSizeY ) );
+    vec4 br = texture2D( txSampler, uv + vec2( texelSizeX, texelSizeY ) );
+
+    vec2 f = fract( uv * textureSize );
+
+    vec4 ta = mix( tl, tr, f.x );
+    vec4 tb = mix( bl, br, f.x );
+
+    return mix( ta, tb, f.y );
+}
 
 // *****************************
 //
@@ -184,6 +217,13 @@ float safeYMargin()
 
 // *****************************
 //
+float safeDistFieldYMargin()
+{
+    return safeDistFieldYMarginPixels * pixelSizeY();
+}
+
+// *****************************
+//
 float aaMarginSizeX()
 {
     return aaRadiusX * pixelSizeX();
@@ -274,15 +314,42 @@ bool isBelowOffsetY( vec2 uv )
 }
 
 // *****************************
+//applyPow version: minY = applyPow( minY, hmHeightScale, hmPowFactor )
+bool isBelowMinSamplableEdgeMargin( vec2 uv )
+{
+	//FIXME: rescale hmOffset appropriately
+	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
+    float minY = ( hmMinHeightValue - hmGroundLevelHeight ) / ( hmMaxHeightValue - hmGroundLevelHeight ) * hmHeightScale;
+	return y( uv ) < minY - safeDistFieldYMargin();
+}
+
+// *****************************
 //
+bool isAboveMaxSamplableEdgeMargin( vec2 uv )
+{
+	//FIXME: rescale hmOffset appropriately
+	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
+	//return uvCoord_hm.y > nonLinearRescaleHeight( ( hmMaxHeightValue - hmGroundLevelHeight ) / ( hmMaxHeightValue - hmGroundLevelHeight ) * hmHeightScale ) + hmOffsetY + safeYMargin();
+	return y( uv ) > hmHeightScale + safeDistFieldYMargin();
+}
+
+// *****************************
+//
+bool isInsideSignificantDistScalarField( vec2 uv, float h )
+{
+	//FIXME: rescale hmOffset appropriately
+	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
+	//FIXME: explicit signal size
+    return abs( y( uv ) - h ) < 2.0 * safeDistFieldYMargin();
+}
+
+// *****************************
+//applyPow version: minY = applyPow( minY, hmHeightScale, hmPowFactor )
 bool isBelowMinSamplableHillY( vec2 uv )
 {
 	//FIXME: rescale hmOffset appropriately
 	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
-    float linearMinY = ( hmMinHeightValue - hmGroundLevelHeight ) / ( hmMaxHeightValue - hmGroundLevelHeight ) * hmHeightScale;
-
-    float minY = applyPow( linearMinY, hmHeightScale, hmPowFactor );
-
+    float minY = ( hmMinHeightValue - hmGroundLevelHeight ) / ( hmMaxHeightValue - hmGroundLevelHeight ) * hmHeightScale;
 	return y( uv ) < minY - safeYMargin();
 }
 
@@ -323,16 +390,6 @@ bool isBelowPreciseFilteringZoneTop( vec2 uv, float h )
 
 // *****************************
 //
-bool isInsideFilteredSignal( vec2 uv, float h )
-{
-	//FIXME: rescale hmOffset appropriately
-	//FIXME: add offset for precise calculations (one pixel or so, so that at the top edge there are no artifacts)
-	//FIXME: explicit signal size
-    return abs( y( uv ) - h ) < 2.0 * pixelSizeY();
-}
-
-// *****************************
-//
 bool isBelowHillEdge( vec2 uv, float h )
 {
 	//FIXME: rescale hmOffset appropriately
@@ -349,6 +406,72 @@ bool isBelowHillEdge( vec2 uv, float h )
 vec4 finalHillCol( vec4 col, vec4 debugCol )
 {
 	return blend( col, debugCol );
+}
+
+// *****************************
+//
+float distFromHillScalarField( vec2 uv )
+{
+	//CASE 1 - outside hill
+	if( isBelowMinSamplableEdgeMargin( uv - shadowOffset() * 0.5 ) || isAboveMaxSamplableEdgeMargin( uv ) )
+	{
+		return innerThickness + outlineThickness + 1.0; //FIXME: some predefined MAX val
+	}
+
+	float h = sampleHeight( uv );
+
+    if( !isInsideSignificantDistScalarField( uv, h ) )
+    {
+        return innerThickness + outlineThickness + 1.0; //FIXME: some predefined MAX val
+    }
+
+    float y     = y( uv );
+    float yscl  = 1.0 / pixelSizeY();
+
+    float hf = filterHeight( uv, h );    
+    float dx = pixelSizeX();
+
+    vec2 pt     = vec2( 0.0, yscl * ( y - hf ) );
+
+    float minD  = dot( pt, pt );
+
+    int i = 1;
+    for (; i <= edgeDistHalfKernelSize; ++i )
+    {
+        h  = sampleHeight( uv + vec2( pixelOffset[ i ] * dx, 0.0 ) );
+        hf = filterHeight( uv + vec2( pixelOffset[ i ] * dx ), h );    
+        pt = vec2( -i, yscl * ( y - hf ) );
+        minD = min( minD, dot( pt, pt ) );
+
+        h  = sampleHeight( uv - vec2( pixelOffset[ i ] * dx, 0.0 ) );
+        hf = filterHeight( uv - vec2( pixelOffset[ i ] * dx ), h );    
+        pt = vec2( i, yscl * ( y - hf ) );
+        minD = min( minD, dot( pt, pt ) );
+    }
+
+
+    return sqrt( minD ) ;
+
+    //h  = sampleHeight( uv - vec2( pixelOffset[ i ] * dx, 0.0 ) );
+    //float hf1 = filterHeight( uv - vec2( pixelOffset[ i ] * dx ), h );    
+    //pt = vec2( i, yscl * ( y - hf1 ) );
+    //minD = min( minD, dot( pt, pt ) );
+
+    //h  = sampleHeight( uv + vec2( pixelOffset[ i ] * dx, 0.0 ) );
+    //hf = filterHeight( uv + vec2( pixelOffset[ i ] * dx ), h );    
+    //pt = vec2( -i, yscl * ( y - hf ) );
+    //minD = min( minD, dot( pt, pt ) );
+
+    //Back Edge
+    //Front Edge
+    //vec2 c = uv + vec2( pixelOffset[ i ] * dx, hf1 );
+    //float dist = curDistanceInMeters / totalDistanceInMeters * coveredDistShowFactor;
+    //float d = min( innerThickness + outlineThickness, abs( uv.x - dist ) / pixelSizeX() );
+    //d = d * d;
+
+    //minD = min( d, min( minD, d ) );
+
+    //VALID
 }
 
 // *****************************
@@ -433,6 +556,50 @@ float shadowHillAlpha( vec2 uv )
 
 // *****************************
 //
+vec4 coveredEdgeColor( vec2 uv )
+{
+    float dist = curDistanceInMeters / totalDistanceInMeters * coveredDistShowFactor;
+
+    if ( uv.x - outlineThickness * 0.5 * pixelSizeX() < dist && !isBelowOffsetY( uv ) )
+    {
+        float d = distFromHillScalarField( uv + shadowOffset() * 0.5 );
+        
+        /*
+        if( d <= innerThickness * 0.5 + outlineThickness )
+        {
+            float o = d / ( innerThickness * 0.5 + outlineThickness );
+            return vec4( o, o, o, 1 );
+        }
+        else
+        {
+            return vec4( 0 );
+        }
+        */
+        vec4 ci = hmOutlineInnedColor;
+        vec4 co = hmOutlineEdgeColor;
+
+        if( d <= innerThickness * 0.5 + outlineThickness * 0.5 )
+        {
+            float d0 = innerThickness * 0.5;
+            float d1 = d0 + outlineThickness * 0.5;
+
+            return mix( ci, co, smoothstep( d0, d1, d ) );
+        }
+    
+        if( d <= innerThickness * 0.5 + outlineThickness )
+        {
+            float d0 = innerThickness * 0.5 + outlineThickness * 0.5;
+            float d1 = d0 + outlineThickness * 0.9; //FIXME: some shitty param to make it look better when no zoom is present
+
+            return vec4( co.rgb, mix( 1.0, 0.0, smoothstep( d0, d1, d ) ) );
+        }
+    }
+
+    return vec4( 0 );
+}
+
+// *****************************
+//
 vec4 hillColor( vec2 uv )
 {
     float alpha = hillAlpha( uv );
@@ -446,16 +613,16 @@ vec4 hillColor( vec2 uv )
 
         if( uv.x < dmin )
         {
-            return vec4( texture( CoveredDistTex, uvCoord_tx ).rgb, alpha );
+            return vec4( tex2DBilinear( CoveredDistTex, uvCoord_coveredDist ).rgb, alpha );
         }
         else if( uv.x > dmax )
         {
-            return vec4( texture( HillTex, uvCoord_tx ).rgb, alpha );
+            return vec4( tex2DBilinear( HillTex, uvCoord_hill ).rgb, alpha );
         }
         else
         {
-            vec4 c0 = vec4( texture( CoveredDistTex, uvCoord_tx ).rgb, alpha );
-            vec4 c1 = vec4( texture( HillTex, uvCoord_tx ).rgb, alpha );
+            vec4 c0 = vec4( tex2DBilinear( CoveredDistTex, uvCoord_coveredDist ).rgb, alpha );
+            vec4 c1 = vec4( tex2DBilinear( HillTex, uvCoord_hill ).rgb, alpha );
             
             return mix( c0, c1, smoothstep( dmin, dmax, uv.x ) );
         }
@@ -482,7 +649,7 @@ vec4 shadowHillColor( vec2 uv )
 //
 vec4 calcBackgroundColor( vec2 uv )
 {
-    vec4 col = texture( BackgroundTex, vec2( uv.x, uv.y ) );
+    vec4 col = tex2DBilinear( BackgroundTex, uv );
     
     return vec4( 1.0 - col.rgb, col.a );
 }
@@ -496,11 +663,13 @@ void main()
     //float a = hillColor( uvCoord_hm ).a;
     //FragColor = vec4( w, w, w, a );
 
+    vec4 c3 = coveredEdgeColor( uvCoord_hm );
     vec4 c2 = hillColor( uvCoord_hm );    
     vec4 c1 = shadowHillColor( uvCoord_hm );
-    vec4 c0 = calcBackgroundColor( uvCoord_tx );
+    vec4 c0 = calcBackgroundColor( uvCoord_background );
 
-    FragColor = blend( c0, blend( c1, c2 ) );
+    FragColor = blend( c0, blend( blend( c1, c2 ), c3 ) );
+    //FragColor = blend( c0, blend( c1, c2 ) );
     //FragColor = blend( calcBackgroundColor( uvCoord_tx ), blend( shadowHillColor( uvCoord_hm ), hillColor( uvCoord_hm ) ) );
 	//vec4 c2 = hillColor( uvCoord_hm );
 

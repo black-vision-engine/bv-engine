@@ -24,7 +24,9 @@ uniform float kernelHLenVS = 20.0;
 uniform float pixelOffsetVS[30] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0 };
 
 out vec2 uvCoord_hm;
-out vec2 uvCoord_tx;
+out vec2 uvCoord_background;
+out vec2 uvCoord_coveredDist;
+out vec2 uvCoord_hill;
 
 noperspective out vec2 snapPos;
 
@@ -92,7 +94,7 @@ float filterHeight( vec2 uv, float h )
         {
             tw = hklen + 1.0;
         }
-
+        
         sum += sampleHeight( uv + vec2( pixelOffsetVS[ i ] * dx, 0.0 ) ) * tw;
         sum += sampleHeight( uv - vec2( pixelOffsetVS[ i ] * dx, 0.0 ) ) * tw;
 
@@ -117,12 +119,10 @@ vec2 calcNormalizedPos()
 vec2 calcHeightMapUV( vec2 uv )
 {
     //vec2 scl = 1.0 / scale;
-
     //vec2 start = loc * ( 1.0 - scl );
     //vec2 end = loc + scl * ( 1.0 - loc );
 
     vec2 pos = calcNormalizedPos();
-
     snapPos = pos;
 
     return pos + ( uv - pos ) / scale;
@@ -130,7 +130,21 @@ vec2 calcHeightMapUV( vec2 uv )
 
 // *****************************
 //
-vec2 calcTextureUV( vec2 uv )
+vec2 calcHillUV( vec2 uv )
+{
+    return uv / sqrt( sqrt( sqrt( sqrt( scale ) ) ) );
+}
+
+// *****************************
+//
+vec2 calcCoveredDistUV( vec2 uv )
+{
+    return uv / sqrt( sqrt( sqrt( scale ) ) ) - sqrt( sqrt( vec2( calcNormalizedPos().x, 0.0 ) ) );
+}
+
+// *****************************
+//
+vec2 calcBackgroundUV( vec2 uv )
 {
     return uv;
 }
@@ -143,7 +157,9 @@ void main()
     //float v = centerY + 1.0 / scale.y * ( vertexTexCoord.y - 0.5 );
 
     uvCoord_hm = calcHeightMapUV( vertexTexCoord );
-    uvCoord_tx = calcTextureUV( vertexTexCoord );
+    uvCoord_background = calcBackgroundUV( vertexTexCoord );
+    uvCoord_coveredDist = calcCoveredDistUV( vertexTexCoord );
+    uvCoord_hill = calcHillUV( vertexTexCoord );
 
     gl_Position = MVP * vec4( vertexPosition, 1.0 );
 }

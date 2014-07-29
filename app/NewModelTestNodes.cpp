@@ -700,11 +700,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     assert( success );
 
     //HillTexture
-    success = model::LoadTexture( node->GetPlugin( "height map" ), "full.jpg" ); //"hill_tex.jpg" );
+    success = model::LoadTexture( node->GetPlugin( "height map" ), "full_hm.png" ); //"hill_tex.jpg" );
     assert( success );
 
     //CoveredDistanceTexture
-    success = model::LoadTexture( node->GetPlugin( "height map" ), "covered_dist_tex.jpg" );
+    success = model::LoadTexture( node->GetPlugin( "height map" ), "covered_dist_tex_hm.png" );
     assert( success );
 
     //BackgroundTexture
@@ -720,13 +720,28 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmOffsetYInPixels" ), TimeType( 0.5f ), -195.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmOffsetYInPixels" ), TimeType( 1.2f ), 98.f );
 
+
     //Intro show covered dist
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 0.f ), 0.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 1.5f ), 0.0f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 3. ), 1.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 1.2f ), 0.0f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 3.5 ), 1.f );
+
+    //FIXME: REMOVE
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "totalDistanceInMeters" ), TimeType( 0.f ), 174227.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "curDistanceInMeters" ), TimeType( 0.f ), 35000.f );
+
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 1.2f ), 0.0f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 3.5 ), 1.2f );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 8.5 ), 1.f );
+
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 3.5f ), glm::vec2( 1.f, 1.f ) );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 6.f ), glm::vec2( 12.f, 12.f ) );
+    //FIXME: REMOVE
+
+    return node;
 
     //Zoom to interesting point
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 3.1f ), glm::vec2( 1.f, 1.f ) );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 3.5f ), glm::vec2( 1.f, 1.f ) );
     //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 5.f ), glm::vec2( 2 * 2 * 16 * 25.f, 2 * 2 * 8 * 10.f ) );
     //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 5.f ), glm::vec2( 25.f, 10.f ) );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 6.f ), glm::vec2( 120.f, 12.f ) );

@@ -60,6 +60,9 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     SimpleVec2EvaluatorPtr      hmShadowOffsetInPixelsEvaluator = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "hmShadowOffsetInPixels", timeEvaluator );
     SimpleVec4EvaluatorPtr      hmShadowColorEvaluator          = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "hmShadowColor", timeEvaluator );
 
+    SimpleVec4EvaluatorPtr      hmOutlineInnedColorEvaluator    = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "hmOutlineInnedColor", timeEvaluator );
+    SimpleVec4EvaluatorPtr      hmOutlineEdgeColorEvaluator     = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "hmOutlineEdgeColor", timeEvaluator );
+
     SimpleFloatEvaluatorPtr     coveredDistShowFactorEvaluator  = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "coveredDistShowFactor", timeEvaluator );
 
     //Register all parameters and evaloators in models
@@ -79,6 +82,8 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     psModel->RegisterAll( hmGroundLevelHeightEvaluator );
     psModel->RegisterAll( hmShadowOffsetInPixelsEvaluator );
     psModel->RegisterAll( hmShadowColorEvaluator );
+    psModel->RegisterAll( hmOutlineInnedColorEvaluator );
+    psModel->RegisterAll( hmOutlineEdgeColorEvaluator );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
@@ -98,6 +103,9 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
 
     hmShadowOffsetInPixelsEvaluator->Parameter()->SetVal( glm::vec2( -6.f, 6.f ), TimeType( 0.0 ) );
     hmShadowColorEvaluator->Parameter()->SetVal( glm::vec4( 1.0f, 1.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
+
+    hmOutlineInnedColorEvaluator->Parameter()->SetVal( glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
+    hmOutlineEdgeColorEvaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
 
     scaleEvaluator->Parameter()->SetVal( glm::vec2( 1.f, 1.f ), TimeType( 0.0 ) );
 
