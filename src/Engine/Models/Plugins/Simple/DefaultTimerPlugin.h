@@ -78,11 +78,14 @@ private:
     ParamFloatPtr                   m_spacingParam;
     ParamFloatPtr                   m_alignmentParam;
 
+    ParamFloatPtr                   m_precisionParam;
+
     TimeSegmentEvalImpl             m_timeEvaluator;
 
     TimeValue                       m_currentTime;
     wchar_t                         m_defaultSeparator;
     wchar_t                         m_secSeparator;
+    wchar_t                         m_widestGlyph;
 
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
@@ -98,8 +101,6 @@ private:
     TimeInfo                        m_timePaternInfo;
     DefaultPluginParamValModelPtr   m_paramValModel;
 
-    explicit                        DefaultTimerPlugin     ( const ParamFloat& timeParam, unsigned int fontSize );
-
     bool                            CheckTimeConsistency ( const std::wstring & time ) const;
 
     void                            SetValue        ( unsigned int connComp, wchar_t wch );
@@ -109,6 +110,7 @@ private:
     void                            SetTimePatern   ( const std::wstring & patern );
 
     std::wstring                    GenerateTimePatern( double time );
+    void                            InitBigestGlyph ();
 public:
 
     

@@ -8,6 +8,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
+#include "Engine/Models/Resources/ModelTextureManager.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
@@ -479,8 +480,13 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
         SetDefaultTransformAlphaMaskTex( node->GetPlugin( "alpha_mask" ) );
     }
 
-    auto ai = TestAIManager::Instance().GetAIPreset( 2 );
-    ai->SetTimeline( someTimelineWithEvents );
+    //auto ai = TestAIManager::Instance().GetAIPreset( 2 );
+    //ai->SetTimeline( someTimelineWithEvents );
+
+    success = model::LoadAnimation( node->GetPlugin( "animation" ), "../../media/sequences/FullHD/IntroTGA", "*.tga" );
+    assert( success );
+
+    model::TextureManager::Get().ClearCache();
 
     return node;    
 }
@@ -642,16 +648,18 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
     auto plugin = node->GetPlugin( "transform" );
     auto param = plugin->GetParameter( "simple_transform" );
 
-    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
+    SetParameterTranslation( param, 0, 0.0f, glm::vec3( -0.58f, -0.022f, 0.0f ) );
+    SetParameterTranslation( param, 0, 30.0f, glm::vec3( -0.58f, -0.04f, 0.0f ) );
 
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
-    SetParameter( node->GetPlugin( "timer" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 27.0f );
+    SetParameter( node->GetPlugin( "timer" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 31.0f );
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( model::TextAlignmentType::Right ) );
 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 4.f / 1080.f );
+    SetParameter( node->GetPlugin( "timer" )->GetParameter( "precision" ), TimeType( 0.0 ), 2.f );
 
-    success = model::LoadFont( node->GetPlugin( "timer" ), "../dep/Media/fonts/arial.ttf" );
+    success = model::LoadFont( node->GetPlugin( "timer" ), "../dep/Media/fonts/arialbd.ttf" );
     assert( success );
 
     SetTimeTimerPlugin( node->GetPlugin( "timer" ), 0.0f );

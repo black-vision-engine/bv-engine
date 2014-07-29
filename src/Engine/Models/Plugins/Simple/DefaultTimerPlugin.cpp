@@ -50,6 +50,8 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
     SimpleFloatEvaluatorPtr     spacingEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "spacing", timeEvaluator );
     SimpleFloatEvaluatorPtr     alignmentEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alignment", timeEvaluator );
 
+    SimpleFloatEvaluatorPtr     precisionEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "precision", timeEvaluator );
+
     //Register all parameters and evaloators in models
     psModel->RegisterAll( borderColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
@@ -57,6 +59,7 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
     plModel->RegisterAll( spacingEvaluator );
     plModel->RegisterAll( fontSizeEvaluator );
     plModel->RegisterAll( alignmentEvaluator );
+    plModel->RegisterAll( precisionEvaluator );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
@@ -70,6 +73,7 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
     alignmentEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+    precisionEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
 
     return model;
 }
@@ -234,6 +238,7 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
     , m_defaultSeparator(L':')
     , m_secSeparator(L'.')
     , m_timeEvaluator( 3600.f * 100.f )
+    , m_widestGlyph( L'0' ) 
 {
     auto colorParam = prev->GetParameter( "color" );
 
@@ -277,6 +282,7 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
     m_blurSizeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
     m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
     m_alignmentParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
+    m_precisionParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "precision" ) );
 }
 
 // *************************************
@@ -321,6 +327,8 @@ bool            DefaultTimerPlugin::LoadResource  ( IPluginResourceDescrConstPtr
         auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ) );
 
         m_textAtlas = TextHelper::GetAtlas( fontResource.get(), false, false );
+
+        InitBigestGlyph();
 
         auto textureResource = TextHelper::GetAtlasTextureInfo( m_textAtlas );
 
@@ -437,13 +445,13 @@ std::wstring        toTextPatern( const std::wstring& timePatern )
 
 ////////////////////////////
 //
-std::wstring        toTimerInit( const std::wstring& timePatern )
+std::wstring        toTimerInit( const std::wstring& timePatern, wchar_t wch )
 {
     auto timePaternCopy = timePatern;
-    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'H', L'0');
-    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'M', L'0');
-    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'S', L'0');
-    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L's', L'0');
+    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'H', wch);
+    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'M', wch);
+    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L'S', wch);
+    std::replace( timePaternCopy.begin(), timePaternCopy.end(), L's', wch);
 
     return timePaternCopy;
 }
@@ -460,7 +468,7 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
     m_timePatern = patern;
     m_timePaternInfo = ParseTimePatern( m_timePatern );
 
-    auto timerInit = toTimerInit( m_timePatern );
+    auto timerInit = toTimerInit( m_timePatern, m_widestGlyph );
 
     m_vaChannel->ClearConnectedComponent();
 
@@ -564,6 +572,9 @@ void                                DefaultTimerPlugin::Refresh         ( bool i
 
     shift = m_timePaternInfo.fosPHStart;
     int fosPHSize = m_timePaternInfo.fracOfSecondsPlaceholderSize;
+
+    int prec =  EvaluateAsInt< int >( m_precisionParam );
+
     if( fosPHSize > 0 )
     {
         int fos = m_currentTime.fracOfSecond;
@@ -574,7 +585,7 @@ void                                DefaultTimerPlugin::Refresh         ( bool i
         int i = 0;
         for(; i < zerosBefore ; ++i )
         {
-            if( i > 0 && ! isPaused )
+            if( i > prec - 1 && ! isPaused )
                 SetValue( shift + i, L' ' );
             else
                 SetValue( shift + i, L'0' );
@@ -582,7 +593,7 @@ void                                DefaultTimerPlugin::Refresh         ( bool i
 
         for(; i < fosPHSize; ++i )
         {
-            if( i > 0 && ! isPaused )
+            if( i > prec - 1 && ! isPaused )
                 SetValue( shift + i, L' ' );
             else
                 SetValue( shift + i, fosStr[i - zerosBefore] );
@@ -604,12 +615,12 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
     if( wch != L' ' )
     {
         auto& coords = GetGlyphCoords( wch );
-        auto& zeroCoords = GetGlyphCoords( L'0' );
+        auto& zeroCoords = GetGlyphCoords( m_widestGlyph );
 
-        textureXNorm    = ((float)coords.textureX + (float)zeroCoords.glyphX )  / m_textAtlas->GetWidth();
-        textureYNorm    = ((float)coords.textureY + (float)zeroCoords.glyphY )  / m_textAtlas->GetHeight();
-        widthNorm       = ((float)zeroCoords.glyphWidth )     / m_textAtlas->GetWidth();
-        heightNorm      = ((float)zeroCoords.glyphHeight )    / m_textAtlas->GetHeight();
+        textureXNorm    = ((float)coords.textureX + (float)zeroCoords.glyphX - 1.f )  / m_textAtlas->GetWidth();
+        textureYNorm    = ((float)coords.textureY + (float)zeroCoords.glyphY - 1.f )  / m_textAtlas->GetHeight();
+        widthNorm       = ((float)zeroCoords.glyphWidth + 2.f )     / m_textAtlas->GetWidth();
+        heightNorm      = ((float)zeroCoords.glyphHeight + 2.f )    / m_textAtlas->GetHeight();
     }
 
     if( IsPlaceHolder( m_timePatern[ connComp ] ) )
@@ -659,6 +670,27 @@ bool                                DefaultTimerPlugin::CheckTimeConsistency ( c
     return true;
 }
 
+////////////////////////////
+//
+void                              DefaultTimerPlugin::InitBigestGlyph ()
+{
+    unsigned int width   = 0;
+    wchar_t widest       = L'0';
+
+    static const std::wstring numbers = L"0123456789";
+
+    for( auto wch : numbers )
+    {
+        auto w = m_textAtlas->GetGlyphCoords( wch )->glyphWidth;
+        if( w > width )
+        {
+            width = w;
+            widest = wch;
+        }
+    }
+    
+    m_widestGlyph = widest;
+}
 
 ////////////////////////////
 //
@@ -705,21 +737,14 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
         else
         {
             auto isecond = int( second );
-            if( isecond > 0 )
-            {
-                if( isecond >= 10 )
-                    ret.append( L"SS" );
-                else
-                    ret.push_back( L'S' );
 
-                ret.push_back( m_secSeparator );
-                ret.append( L"ss" );
-            }
+            if( isecond >= 10 )
+                ret.append( L"SS" );
             else
-            {
-                ret.push_back( m_secSeparator );
-                ret.append( L"ss" );
-            }
+                ret.push_back( L'S' );
+
+            ret.push_back( m_secSeparator );
+            ret.append( L"ss" );
         }
     }
 
