@@ -727,18 +727,16 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 3.5 ), 1.f );
 
     //FIXME: REMOVE
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "totalDistanceInMeters" ), TimeType( 0.f ), 174227.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "curDistanceInMeters" ), TimeType( 0.f ), 35000.f );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "totalDistanceInMeters" ), TimeType( 0.f ), 174227.f );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "curDistanceInMeters" ), TimeType( 0.f ), 35000.f );
 
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 1.2f ), 0.0f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 3.5 ), 1.2f );
-    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 8.5 ), 1.f );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 1.2f ), 0.0f );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 3.5 ), 1.f );
+    ////model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 8.5 ), 1.f );
 
     //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 3.5f ), glm::vec2( 1.f, 1.f ) );
     //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 6.f ), glm::vec2( 12.f, 12.f ) );
     //FIXME: REMOVE
-
-    return node;
 
     //Zoom to interesting point
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 3.5f ), glm::vec2( 1.f, 1.f ) );

@@ -560,21 +560,12 @@ vec4 coveredEdgeColor( vec2 uv )
 {
     float dist = curDistanceInMeters / totalDistanceInMeters * coveredDistShowFactor;
 
-    if ( uv.x - outlineThickness * 0.5 * pixelSizeX() < dist && !isBelowOffsetY( uv ) )
+    vec4 o = vec4( 0 );
+    
+    if ( uv.x <= dist + outlineThickness * 0.5 * pixelSizeX() + 1 * pixelSizeX() && !isBelowOffsetY( uv ) )
     {
         float d = distFromHillScalarField( uv + shadowOffset() * 0.5 );
         
-        /*
-        if( d <= innerThickness * 0.5 + outlineThickness )
-        {
-            float o = d / ( innerThickness * 0.5 + outlineThickness );
-            return vec4( o, o, o, 1 );
-        }
-        else
-        {
-            return vec4( 0 );
-        }
-        */
         vec4 ci = hmOutlineInnedColor;
         vec4 co = hmOutlineEdgeColor;
 
@@ -583,19 +574,35 @@ vec4 coveredEdgeColor( vec2 uv )
             float d0 = innerThickness * 0.5;
             float d1 = d0 + outlineThickness * 0.5;
 
-            return mix( ci, co, smoothstep( d0, d1, d ) );
+            o = mix( ci, co, smoothstep( d0, d1, d ) );
         }
-    
-        if( d <= innerThickness * 0.5 + outlineThickness )
+        else if( d <= innerThickness * 0.5 + outlineThickness )
         {
             float d0 = innerThickness * 0.5 + outlineThickness * 0.5;
             float d1 = d0 + outlineThickness * 0.9; //FIXME: some shitty param to make it look better when no zoom is present
 
-            return vec4( co.rgb, mix( 1.0, 0.0, smoothstep( d0, d1, d ) ) );
+            o = vec4( co.rgb, mix( 1.0, 0.0, smoothstep( d0, d1, d ) ) );
+        }
+
+        d = ( uv.x - dist ) / pixelSizeX() - outlineThickness * 0.5 - 1;
+
+        if( o.a > 0 )
+        {
+            if( d >= -2 )
+            {
+                float a = 1 - smoothstep( -2, -0.5, d );
+                o = mix( o, co, a );
+                o.a = a;
+            }
+            if( d > -4.5 && d < -2 )
+            {
+                float a = 1 - smoothstep( -4, -2.5, d );
+                o = mix( co, o, a );
+            }
         }
     }
 
-    return vec4( 0 );
+    return o;
 }
 
 // *****************************
