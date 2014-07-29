@@ -200,7 +200,7 @@ bool                            DefaultAnimationPlugin::LoadResource  ( IPluginR
 
         if( animDesc != nullptr )
         {
-            if( txData->GetTextures().size() == 0 )
+            if( txData->GetAnimations().size() == 0 )
             {
                 txData->AddAnimation( animDesc );
             }
