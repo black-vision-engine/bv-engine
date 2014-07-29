@@ -575,6 +575,8 @@ void                                DefaultTimerPlugin::Refresh         ( bool i
 
     int prec =  EvaluateAsInt< int >( m_precisionParam );
 
+    prec = prec < 0 ? 0 : prec;
+
     if( fosPHSize > 0 )
     {
         int fos = m_currentTime.fracOfSecond;
