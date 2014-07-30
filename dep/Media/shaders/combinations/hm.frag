@@ -61,6 +61,8 @@ uniform float preciseFilteringApronSize = 8.0 / 1080.0;
 //uniform float pixelOffset[71] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70 };
 uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0 };
 
+uniform bool NVIDIA_PASS = false;
+
 
 // ************************************************************************************************ MATH and UTILS ************************************************************************************************
 
@@ -68,22 +70,49 @@ uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9
 //FIXME: requires fullhd textures
 vec4 tex2DBilinear( sampler2D txSampler, vec2 uv )
 {
-    float texelSizeX = 0.995 / 1920.0; //Should be 1.0 / 1920 @see sampleheight for the explanation of this scale factor
-    float texelSizeY = 0.995 / 1080.0; //Should be 1.0 / 1080 @see sampleheight for the explanation of used scale factor
+    if( NVIDIA_PASS )
+    {
+//NVIDIA PASS
+        float texelOffsetX = 0.05 / 1920.0;
+        float texelOffsetY = 0.05 / 1080.0;
 
-    vec2 textureSize = vec2( 1920.0, 1080.0 );
+        float texelSizeX = 1.0 / 1920.0; //Should be 1.0 / 1920 @see sampleheight for the explanation of this scale factor
+        float texelSizeY = 1.0 / 1080.0; //Should be 1.0 / 1080 @see sampleheight for the explanation of used scale factor
 
-    vec4 tl = texture2D( txSampler, uv );
-    vec4 tr = texture2D( txSampler, uv + vec2( texelSizeX, 0.0 ) );
-    vec4 bl = texture2D( txSampler, uv + vec2( 0.0, texelSizeY ) );
-    vec4 br = texture2D( txSampler, uv + vec2( texelSizeX, texelSizeY ) );
+        vec2 textureSize = vec2( 1920.0, 1080.0 );
 
-    vec2 f = fract( uv * textureSize );
+        vec4 tl = texture2D( txSampler, uv + vec2( texelOffsetX, texelOffsetY ) );
+        vec4 tr = texture2D( txSampler, uv + vec2( texelSizeX, texelOffsetX ) );
+        vec4 bl = texture2D( txSampler, uv + vec2( texelOffsetX, texelSizeY ) );
+        vec4 br = texture2D( txSampler, uv + vec2( texelSizeX, texelSizeY ) );
 
-    vec4 ta = mix( tl, tr, f.x );
-    vec4 tb = mix( bl, br, f.x );
+        vec2 f = fract( uv * textureSize );
 
-    return mix( ta, tb, f.y );
+        vec4 ta = mix( tl, tr, f.x );
+        vec4 tb = mix( bl, br, f.x );
+
+        return mix( ta, tb, f.y );
+    }
+    else
+    {
+//ATI PASS
+        float texelSizeX = 0.995 / 1920.0; //Should be 1.0 / 1920 @see sampleheight for the explanation of this scale factor
+        float texelSizeY = 0.995 / 1080.0; //Should be 1.0 / 1080 @see sampleheight for the explanation of used scale factor
+
+        vec2 textureSize = vec2( 1920.0, 1080.0 );
+
+        vec4 tl = texture2D( txSampler, uv );
+        vec4 tr = texture2D( txSampler, uv + vec2( texelSizeX, 0.0 ) );
+        vec4 bl = texture2D( txSampler, uv + vec2( 0.0, texelSizeY ) );
+        vec4 br = texture2D( txSampler, uv + vec2( texelSizeX, texelSizeY ) );
+
+        vec2 f = fract( uv * textureSize );
+
+        vec4 ta = mix( tl, tr, f.x );
+        vec4 tb = mix( bl, br, f.x );
+
+        return mix( ta, tb, f.y );
+    }
 }
 
 // *****************************
@@ -143,10 +172,23 @@ float sampleHeight( vec2 uv )
 
     //CASE w == 1 - epsilon but sampler samples next texel instead of the current one, that's why we have to force sampler to stay in the left pixel (texelsize * 0.995) at the cost of interpolation errors at the end of texel
     //but it can be noticed when the magnification ratio is more thann 2000:1 which is highly unlikely here
-    float h0 = decodeHeight( texture( HeightMapTex, uv ) );
-    float h1 = decodeHeight( texture( HeightMapTex, uv + vec2( 0.995 / 3840.0, 0.0 ) ) );
 
-    return mix( h0, h1, w );
+    if( NVIDIA_PASS )
+    {
+//NVIDIA PASS
+        float h0 = decodeHeight( texture( HeightMapTex, uv + vec2( 0.005 / 3840.0, 0.0 )) );
+        float h1 = decodeHeight( texture( HeightMapTex, uv + vec2( 1.0 / 3840.0, 0.0 ) ) );
+
+        return mix( h0, h1, w );
+    }
+    else
+    {
+//ATI PASS
+        float h0 = decodeHeight( texture( HeightMapTex, uv ) );
+        float h1 = decodeHeight( texture( HeightMapTex, uv + vec2( 0.995 / 3840.0, 0.0 ) ) );
+
+        return mix( h0, h1, w );
+    }
 }
 
 // *****************************
