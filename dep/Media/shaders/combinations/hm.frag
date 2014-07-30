@@ -558,10 +558,13 @@ float shadowHillAlpha( vec2 uv )
 vec4 coveredEdgeColor( vec2 uv )
 {
     float dist = curDistanceInMeters / totalDistanceInMeters * coveredDistShowFactor;
+    
+    float startDist = startDistInMeters / totalDistanceInMeters;
+    float endDist = endDistInMeters / totalDistanceInMeters;
 
     vec4 o = vec4( 0 );
     
-    if ( uv.x <= dist + outlineThickness * 0.5 * pixelSizeX() + 1 * pixelSizeX() && !isBelowOffsetY( uv ) )
+    if ( uv.x > startDist && uv.x < endDist && uv.x <= dist + outlineThickness * 0.5 * pixelSizeX() + 1 * pixelSizeX() && !isBelowOffsetY( uv ) )
     {
         float d = distFromHillScalarField( uv + shadowOffset() * 0.5 );
         
@@ -583,20 +586,39 @@ vec4 coveredEdgeColor( vec2 uv )
             o = vec4( co.rgb, mix( 1.0, 0.0, smoothstep( d0, d1, d ) ) );
         }
 
-        d = ( uv.x - dist ) / pixelSizeX() - outlineThickness * 0.5 - 1;
-
         if( o.a > 0 )
         {
+            d = ( uv.x - min( dist, endDist ) ) / pixelSizeX() - outlineThickness * 0.5 - 1;
+            float ds = ( uv.x - startDist ) / pixelSizeX();
+
             if( d >= -2 )
             {
-                float a = 1 - smoothstep( -2, -0.5, d );
+                float a = 1.0 - smoothstep( -2.0, -0.5, d );
                 o = mix( o, co, a );
                 o.a = a;
             }
             if( d > -4.5 && d < -2 )
             {
-                float a = 1 - smoothstep( -4, -2.5, d );
+                float a = 1.0 - smoothstep( -4.0, -2.5, d );
                 o = mix( co, o, a );
+            }
+
+            if( ds <= 3.0 )
+            {
+                if( ds <= 1.0 )
+                {
+                    float a = 0.95;
+                    o = mix( o, co, a );
+                    o.a = a;
+                }
+                else if ( ds <= 2.0 )
+                {
+                    o = mix( o, co, 0.5 );
+                }
+                else
+                {
+                    o = mix( o, co, 0.2 );
+                }
             }
         }
     }

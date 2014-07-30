@@ -723,18 +723,18 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
 
     //Intro show covered dist
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 0.f ), 0.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 1.2f ), 0.0f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 3.5 ), 1.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 1.2f ), 0.1f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "coveredDistShowFactor" ), TimeType( 1600.5 ), 1.f );
 
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "startDistInMeters" ), TimeType( 0.f ), 10000.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "endDistInMeters" ), TimeType( 0.f ), 154227.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "startDistInMeters" ), TimeType( 0.f ), 8000.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "endDistInMeters" ), TimeType( 0.f ), 166227.f );
 
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "totalDistanceInMeters" ), TimeType( 0.f ), 174227.f );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "curDistanceInMeters" ), TimeType( 0.f ), 0.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "curDistanceInMeters" ), TimeType( 0.f ), 174000.f );
 
     //FIXME: REMOVE
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 3.5f ), glm::vec2( 1.f, 1.f ) );
-    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 6.f ), glm::vec2( 12.f, 12.f ) );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 3.5f ), glm::vec2( 1.f, 1.f ) );
+    //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 6.f ), glm::vec2( 12.f, 12.f ) );
     //FIXME: REMOVE
 
     return node;
