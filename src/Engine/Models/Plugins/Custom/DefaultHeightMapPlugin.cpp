@@ -340,13 +340,11 @@ glm::vec2                           DefaultHeightMapPlugin::QueryPosition       
 
     glm::vec2 bl( pos.x - pos.x / scl.x, pos.y - pos.y / scl.y );
     glm::vec2 tr( pos.x + ( 1.f - pos.x ) / scl.x, pos.y + ( 1.f - pos.y ) / scl.y );
-    //return pos + ( uv - pos ) / scale;
 
-    //calc other stuff
-
+    //calc global h
     float h = FilterHeight( x, sclHeight, groundLevel, maxHeight, scl.x, false );
 
-    return glm::vec2( 1.0f, h + offsetYInPixels / 1080.0f );
+    return glm::vec2( ( x - bl.x ) * scl.x, ( h + offsetYInPixels / 1080.0f - bl.y ) * scl.y );
 }
 
 // *************************************
