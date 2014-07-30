@@ -46,7 +46,11 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     //SimpleFloatEvaluatorPtr     centerYEvaluator                = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "centerY", timeEvaluator );
     
     SimpleVec2EvaluatorPtr      scaleEvaluator                  = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "scale", timeEvaluator );
-    SimpleFloatEvaluatorPtr     curDistanceInMetersEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "curDistanceInMeters", timeEvaluator );
+
+    SimpleFloatEvaluatorPtr     startDistInMetersEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "startDistInMeters", timeEvaluator );
+    SimpleFloatEvaluatorPtr     endDistInMetersEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "endDistInMeters", timeEvaluator );
+
+    SimpleFloatEvaluatorPtr     curDistanceInMetersEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "curDistanceInMeters", timeEvaluator );
     SimpleFloatEvaluatorPtr     totalDistanceInMetersEvaluator  = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "totalDistanceInMeters", timeEvaluator );
 
     SimpleFloatEvaluatorPtr     hmOffsetYInPixelsEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "hmOffsetYInPixels", timeEvaluator );
@@ -66,12 +70,11 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     SimpleFloatEvaluatorPtr     coveredDistShowFactorEvaluator  = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "coveredDistShowFactor", timeEvaluator );
 
     //Register all parameters and evaloators in models
-    //vsModel->RegisterAll( centerXEvaluator );
-    //vsModel->RegisterAll( centerYEvaluator );
     vsModel->RegisterAll( scaleEvaluator );
     vsModel->RegisterAll( totalDistanceInMetersEvaluator );
     vsModel->RegisterAll( curDistanceInMetersEvaluator );
-    //vsModel->RegisterAll( snapToPixelWeightEvaluator );
+    vsModel->RegisterAll( startDistInMetersEvaluator );
+    vsModel->RegisterAll( endDistInMetersEvaluator );
 
     psModel->RegisterAll( hmOffsetYInPixelsEvaluator );
     psModel->RegisterAll( coveredDistShowFactorEvaluator );
@@ -110,6 +113,8 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
     scaleEvaluator->Parameter()->SetVal( glm::vec2( 1.f, 1.f ), TimeType( 0.0 ) );
 
     curDistanceInMetersEvaluator->Parameter()->SetVal( 0.0f, TimeType( 0.0 ) );
+    startDistInMetersEvaluator->Parameter()->SetVal( 0.0f, TimeType( 0.0 ) );
+    endDistInMetersEvaluator->Parameter()->SetVal( 174227.f, TimeType( 0.0 ) );
     totalDistanceInMetersEvaluator->Parameter()->SetVal( 174227.f, TimeType( 0.0 ) );
 
     //snapToPixelWeightEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );

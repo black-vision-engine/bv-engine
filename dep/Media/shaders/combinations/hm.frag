@@ -26,6 +26,8 @@ uniform float hmGroundLevelHeight;
 
 uniform float totalDistanceInMeters;
 uniform float curDistanceInMeters;
+uniform float startDistInMeters;
+uniform float endDistInMeters;
 
 uniform float coveredDistShowFactor;
 
@@ -59,9 +61,6 @@ uniform float preciseFilteringApronSize = 8.0 / 1080.0;
 //uniform float pixelOffset[71] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70 };
 uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0 };
 
-//Global state
-float GHF = 0.0;
-float GH = 0.0;
 
 // ************************************************************************************************ MATH and UTILS ************************************************************************************************
 
@@ -312,34 +311,6 @@ float filterHeightApplyPow( vec2 uv, float h )
 
 // *****************************
 //
-void memoizeH( float h )
-{
-    GH = h;
-}
-
-// *****************************
-//
-float h()
-{
-    return GH;
-}
-
-// *****************************
-//
-void memoizeHF( float hf )
-{
-    GHF = hf;
-}
-
-// *****************************
-//
-float getMemoizedHF()
-{
-    return GHF;
-}
-
-// *****************************
-//
 bool isBelowOffsetY( vec2 uv )
 {
 	//FIXME: rescale offset appropriately
@@ -520,8 +491,6 @@ float hillAlpha( vec2 uv )
 
 	float h = sampleHeight( uv );
 
-    memoizeH( h );
-
     //CASE 3 - inside hill where only one small precission (not filtered) sample is required (less than expected height value - some thershold)
 	if( isBelowPreciseFilteringZoneBottom( uv, h ) )
 	{
@@ -533,8 +502,6 @@ float hillAlpha( vec2 uv )
 	{
 		float hf = filterHeight( uv, h );
         
-        memoizeHF( hf );
-
 		if( isBelowHillEdge( uv, hf ) )
 		{
             return 1.0 - smoothstep( hf - aaMarginSizeY(), hf, y( uv ) );
@@ -697,26 +664,10 @@ vec4 calcBackgroundColor( vec2 uv )
 //
 void main()
 {
-    //float x = ( uvCoord_hm.x * 3840.0 );
-    //float w = fract( x );
-    //float a = hillColor( uvCoord_hm ).a;
-    //FragColor = vec4( w, w, w, a );
-
-    vec4 c2 = hillColor( uvCoord_hm ); //memoizes hf and h which is used by coveredEdgeColor
+    vec4 c2 = hillColor( uvCoord_hm );          //memoizes hf and h which is used by coveredEdgeColor
     vec4 c3 = coveredEdgeColor( uvCoord_hm );
     vec4 c1 = shadowHillColor( uvCoord_hm );
     vec4 c0 = calcBackgroundColor( uvCoord_background );
 
     FragColor = blend( c0, blend( blend( c1, c2 ), c3 ) );
-    //FragColor = blend( c0, blend( c1, c2 ) );
-    //FragColor = blend( calcBackgroundColor( uvCoord_tx ), blend( shadowHillColor( uvCoord_hm ), hillColor( uvCoord_hm ) ) );
-	//vec4 c2 = hillColor( uvCoord_hm );
-
- //   vec4 c1 = shadowHillColor( uvCoord_hm );            
- //   c2 = blend( c1, c2 );
-
- //   vec4 c0 = calcBackgroundColor( uvCoord_tx );
- //   c2 = blend( c0, c2 );
-
- //   FragColor = c2;
 }

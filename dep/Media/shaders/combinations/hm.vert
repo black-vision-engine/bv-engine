@@ -11,6 +11,8 @@ uniform vec2 scale;
 
 uniform float totalDistanceInMeters;
 uniform float curDistanceInMeters;
+uniform float startDistInMeters;
+uniform float endDistInMeters;
 
 uniform float hmOffsetYInPixels;
 
@@ -109,7 +111,7 @@ float filterHeight( vec2 uv, float h )
 //
 vec2 calcNormalizedPos()
 {
-    vec2 hpos = vec2( curDistanceInMeters / totalDistanceInMeters, 0 );
+    vec2 hpos = vec2( ( curDistanceInMeters + startDistInMeters ) / totalDistanceInMeters, 0 );
 
     return vec2( hpos.x, hmOffsetYInPixels / 1080.0 + filterHeight( hpos, sampleHeight( hpos ) ) );
 }
