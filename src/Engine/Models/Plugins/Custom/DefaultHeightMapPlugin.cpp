@@ -267,13 +267,31 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( IPluginR
 
     if( txDesc != nullptr )
     {
+/*
         if( ( TextureSlot ) curNumTextures == TextureSlot::TS_HEIGHT_MAP )
         {
             m_hmRawData = ( const unsigned char * ) txDesc->GetBits()->Get();
         
-            auto res = QueryPosition( 4537.1615f );
+            m_curDistInMeters->SetVal( 38000.f, 0.f );
+            m_hmOffsetYInPixels->SetVal( 98.f, 0.f );
+            auto res = QueryEdgePosition( 36000.f );
+            float x = res.x * 1920.f;
+            float y = res.y * 1080.f;
+            res = QueryEdgePosition( 38000.f );
+            x = res.x * 1920.f;
+            y = res.y * 1080.f;
+            res.x = res.y;
+
+            m_scale->SetVal( glm::vec2( 12.f, 12.f ), 0.f );
+            res = QueryEdgePosition( 36000.f );
+            x = res.x * 1920.f;
+            y = res.y * 1080.f;
+            res = QueryEdgePosition( 38000.f );
+            x = res.x * 1920.f;
+            y = res.y * 1080.f;
             res.x = res.y;
         }
+*/
 
         SetTextureParams( ( TextureSlot ) curNumTextures, txDesc );
 
@@ -320,7 +338,7 @@ void                                DefaultHeightMapPlugin::Update              
 
 // *************************************
 //
-glm::vec2                           DefaultHeightMapPlugin::QueryPosition               ( float distInMeters ) const
+glm::vec2                           DefaultHeightMapPlugin::QueryEdgePosition           ( float distInMeters ) const
 {
     float sclHeight             = m_hmHeightScale->Evaluate();
     float groundLevel           = m_GroundLevelHeight->Evaluate();

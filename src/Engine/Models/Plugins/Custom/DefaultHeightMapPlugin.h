@@ -87,7 +87,7 @@ public:
 
     virtual void                                Update                      ( TimeType t ) override;
 
-    glm::vec2                                   QueryPosition               ( float distInMeters ) const;
+    glm::vec2                                   QueryEdgePosition           ( float distInMeters ) const;
 
 private:
 
