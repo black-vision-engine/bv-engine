@@ -41,7 +41,7 @@ uniform float aaRadiusY = 2.5;
 uniform float aaRadiusX = 2.8;
 uniform float kernelHLen = 12.0;
 
-uniform float safeDistFieldYMarginPixels = 9.0;
+uniform float safeDistFieldYMarginPixels = 8.5;
 uniform int edgeDistHalfKernelSize = 4;
 uniform float outlineThickness = 2.6;
 uniform float innerThickness = 6.0;
@@ -53,8 +53,15 @@ uniform float debug_col_alpha = 1;
 
 uniform float preciseFilteringApronSize = 8.0 / 1080.0;
 
+//ASSERT( innerThicknes + 2 * outerThickness < 2 * safeDistFieldYMarginPixels )
+//ASSERT( safeDistFieldYMarginPixels < preciseFilteringApronSize * 1080 * 2 && innerThickness + 2 * outlineThickness < preciseFilteringApronSize * 1080 * 2 )
+
 //uniform float pixelOffset[71] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70 };
 uniform float pixelOffset[20] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0 };
+
+//Global state
+float GHF = 0.0;
+float GH = 0.0;
 
 // ************************************************************************************************ MATH and UTILS ************************************************************************************************
 
@@ -305,6 +312,34 @@ float filterHeightApplyPow( vec2 uv, float h )
 
 // *****************************
 //
+void memoizeH( float h )
+{
+    GH = h;
+}
+
+// *****************************
+//
+float h()
+{
+    return GH;
+}
+
+// *****************************
+//
+void memoizeHF( float hf )
+{
+    GHF = hf;
+}
+
+// *****************************
+//
+float getMemoizedHF()
+{
+    return GHF;
+}
+
+// *****************************
+//
 bool isBelowOffsetY( vec2 uv )
 {
 	//FIXME: rescale offset appropriately
@@ -418,20 +453,35 @@ float distFromHillScalarField( vec2 uv )
 		return innerThickness + outlineThickness + 1.0; //FIXME: some predefined MAX val
 	}
 
-	float h = sampleHeight( uv );
+    //should sample at all
+    float h = sampleHeight( uv );
 
     if( !isInsideSignificantDistScalarField( uv, h ) )
     {
         return innerThickness + outlineThickness + 1.0; //FIXME: some predefined MAX val
     }
 
+    float hf = filterHeight( uv, h );
+
+    if( !isInsideSignificantDistScalarField( uv, hf ) )
+    {
+        return innerThickness + outlineThickness + 1.0; //FIXME: some predefined MAX val
+    }
+
+    //if close enough - do not sample
     float y     = y( uv );
     float yscl  = 1.0 / pixelSizeY();
-
-    float hf = filterHeight( uv, h );    
     float dx = pixelSizeX();
-
     vec2 pt     = vec2( 0.0, yscl * ( y - hf ) );
+    
+    /*
+    if( abs( y - hf ) * yscl < innerThickness * 0.5 ) //FIXME: magic number (inner pixels that do not require the whole loop
+    {
+        return 6.0;
+    }
+    */
+    
+    //return 4.0;
 
     float minD  = dot( pt, pt );
 
@@ -449,29 +499,7 @@ float distFromHillScalarField( vec2 uv )
         minD = min( minD, dot( pt, pt ) );
     }
 
-
     return sqrt( minD ) ;
-
-    //h  = sampleHeight( uv - vec2( pixelOffset[ i ] * dx, 0.0 ) );
-    //float hf1 = filterHeight( uv - vec2( pixelOffset[ i ] * dx ), h );    
-    //pt = vec2( i, yscl * ( y - hf1 ) );
-    //minD = min( minD, dot( pt, pt ) );
-
-    //h  = sampleHeight( uv + vec2( pixelOffset[ i ] * dx, 0.0 ) );
-    //hf = filterHeight( uv + vec2( pixelOffset[ i ] * dx ), h );    
-    //pt = vec2( -i, yscl * ( y - hf ) );
-    //minD = min( minD, dot( pt, pt ) );
-
-    //Back Edge
-    //Front Edge
-    //vec2 c = uv + vec2( pixelOffset[ i ] * dx, hf1 );
-    //float dist = curDistanceInMeters / totalDistanceInMeters * coveredDistShowFactor;
-    //float d = min( innerThickness + outlineThickness, abs( uv.x - dist ) / pixelSizeX() );
-    //d = d * d;
-
-    //minD = min( d, min( minD, d ) );
-
-    //VALID
 }
 
 // *****************************
@@ -492,7 +520,9 @@ float hillAlpha( vec2 uv )
 
 	float h = sampleHeight( uv );
 
-	//CASE 3 - inside hill where only one small precission (not filtered) sample is required (less than expected height value - some thershold)
+    memoizeH( h );
+
+    //CASE 3 - inside hill where only one small precission (not filtered) sample is required (less than expected height value - some thershold)
 	if( isBelowPreciseFilteringZoneBottom( uv, h ) )
 	{
 		return 1.0;
@@ -502,6 +532,8 @@ float hillAlpha( vec2 uv )
 	if( isBelowPreciseFilteringZoneTop( uv, h ) )
 	{
 		float hf = filterHeight( uv, h );
+        
+        memoizeHF( hf );
 
 		if( isBelowHillEdge( uv, hf ) )
 		{
@@ -670,8 +702,8 @@ void main()
     //float a = hillColor( uvCoord_hm ).a;
     //FragColor = vec4( w, w, w, a );
 
+    vec4 c2 = hillColor( uvCoord_hm ); //memoizes hf and h which is used by coveredEdgeColor
     vec4 c3 = coveredEdgeColor( uvCoord_hm );
-    vec4 c2 = hillColor( uvCoord_hm );    
     vec4 c1 = shadowHillColor( uvCoord_hm );
     vec4 c0 = calcBackgroundColor( uvCoord_background );
 
