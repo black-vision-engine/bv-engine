@@ -159,8 +159,8 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
 
     float texPadding = 1.f;
 
-    auto spaceGlyphWidth    = 0.3*(float)textAtlas->GetGlyphHeight( L'0' ) * 0.5/viewWidth;
-    auto newLineShift       = -(float)textAtlas->GetGlyphWidth( L'0' ) / viewHeight;
+    auto spaceGlyphWidth    = (float)textAtlas->GetGlyphCoords( L'0' )->glyphWidth / viewWidth  + spacing;
+    auto newLineShift       = -(float)textAtlas->GetGlyphHeight( L'0' ) / viewHeight;
 
     for( unsigned int i = 0; i < text.size(); ++i )
     {
