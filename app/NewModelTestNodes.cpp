@@ -719,6 +719,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmOffsetYInPixels" ), TimeType( 0.f ), -195.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmOffsetYInPixels" ), TimeType( 0.5f ), -195.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmOffsetYInPixels" ), TimeType( 1.2f ), 98.f );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmOffsetYInPixels" ), TimeType( 1.2f ), 0.f );
 
 
     //Intro show covered dist

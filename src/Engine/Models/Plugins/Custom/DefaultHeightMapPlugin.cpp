@@ -184,6 +184,7 @@ DefaultHeightMapPlugin::DefaultHeightMapPlugin         ( const std::string & nam
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
+    , m_hmRawData( nullptr )
 {
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTexturePluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultTexturePluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
@@ -198,6 +199,11 @@ DefaultHeightMapPlugin::DefaultHeightMapPlugin         ( const std::string & nam
 
     //Direct param state access (to bypass model querying)
     auto psModel = PixelShaderChannelModel();
+
+    m_hmHeightScale     = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmHeightScale" ) );
+    m_GroundLevelHeight = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmGroundLevelHeight" ) );
+    m_MaxHeightValue    = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmMaxHeightValue" ) );
+
 }
 
 // *************************************
@@ -239,6 +245,11 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( IPluginR
 
     if( txDesc != nullptr )
     {
+        if( ( TextureSlot ) curNumTextures == TextureSlot::TS_HEIGHT_MAP )
+        {
+            m_hmRawData = ( const unsigned char * ) txDesc->GetBits()->Get();
+        }
+
         SetTextureParams( ( TextureSlot ) curNumTextures, txDesc );
 
         txData->AddTexture( txDesc );
@@ -280,6 +291,13 @@ void                                DefaultHeightMapPlugin::Update              
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();
+}
+
+// *************************************
+//
+glm::vec2                           DefaultHeightMapPlugin::QueryPosition               ( float distInMeter ) const
+{
+    return glm::vec2( 0.0 );
 }
 
 // *************************************
@@ -362,6 +380,27 @@ void               DefaultHeightMapPlugin::SetTextureParams            ( Texture
     txDesc->SetWrappingModeY( TextureWrappingMode::TWM_MIRROR );
     txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
 }
+
+// *****************************
+//
+float             DefaultHeightMapPlugin::DecodeFixedPoint              ( const unsigned char * data ) const
+{
+    return float( ( ( data[ 2 ] << 8 ) | data[ 1 ] ) ) * 0.0625f;
+}
+
+// *****************************
+//
+float               DefaultHeightMapPlugin::DecodeHeight                ( const unsigned char * data, float scl, float groundLevel, float maxHeight ) const
+{
+    return scl * ( DecodeFixedPoint( data ) - groundLevel ) / ( maxHeight - groundLevel );
+}
+
+//// *****************************
+//// FIXME: constant
+//float decodeHeight( vec4 col )
+//{
+//	return hmHeightScale * ( decodeFixedPointValue( col.r, col.g, 1.0 / 16.0 ) - hmGroundLevelHeight ) / ( hmMaxHeightValue - hmGroundLevelHeight );
+//}
 
 } // model
 } // bv

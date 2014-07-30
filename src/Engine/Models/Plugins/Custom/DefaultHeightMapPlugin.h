@@ -62,7 +62,13 @@ private:
 
     DefaultTexturesDataPtr          m_texturesData;
 
+    ParamFloatPtr                   m_hmHeightScale;
+    ParamFloatPtr                   m_GroundLevelHeight;
+    ParamFloatPtr                   m_MaxHeightValue;
+
     unsigned int                    m_texCoordChannelIndex;
+
+    const unsigned char *           m_hmRawData;
 
 public:
 
@@ -77,10 +83,82 @@ public:
 
     virtual void                                Update                      ( TimeType t ) override;
 
+    glm::vec2                                   QueryPosition               ( float distInMeter ) const;
+
 private:
 
     void                                        InitAttributesChannel       ( IPluginPtr prev );
     void                                        SetTextureParams            ( TextureSlot slot, DefaultTextureDescriptor * txDesc ) const;
+
+    float                                       DecodeFixedPoint            ( const unsigned char * data ) const;
+    float                                       DecodeHeight                ( const unsigned char * data, float scl, float groundLevel, float maxHeight ) const;
+    //// *****************************
+//// FIXME: constant
+//float decodeHeight( vec4 col )
+//{
+//	return hmHeightScale * ( decodeFixedPointValue( col.r, col.g, 1.0 / 16.0 ) - hmGroundLevelHeight ) / ( hmMaxHeightValue - hmGroundLevelHeight );
+//}
+//
+//// *****************************
+//// FIXME: constant
+//float sampleHeight( vec2 uv )
+//{
+//    float x = ( uv.x * 3840.0 );
+//    float w = fract( x );
+//
+//    //CASE w == 1 - epsilon but sampler samples next texel instead of the current one, that's why we have to force sampler to stay in the left pixel (texelsize * 0.995) at the cost of interpolation errors at the end of texel
+//    //but it can be noticed when the magnification ratio is more thann 2000:1 which is highly unlikely here
+//
+//    if( NVIDIA_PASS )
+//    {
+////NVIDIA PASS
+//        float h0 = decodeHeight( texture( HeightMapTex, uv + vec2( 0.005 / 3840.0, 0.0 )) );
+//        float h1 = decodeHeight( texture( HeightMapTex, uv + vec2( 1.0 / 3840.0, 0.0 ) ) );
+//
+//        return mix( h0, h1, w );
+//    }
+//    else
+//    {
+////ATI PASS
+//        float h0 = decodeHeight( texture( HeightMapTex, uv ) );
+//        float h1 = decodeHeight( texture( HeightMapTex, uv + vec2( 0.995 / 3840.0, 0.0 ) ) );
+//
+//        return mix( h0, h1, w );
+//    }
+//}
+//
+//// *****************************
+////
+//float filterHeight( vec2 uv, float h )
+//{
+//    float dx = 1.0 / ( 1920.0 * scale.x ); //FIXME: magic number
+//
+//    float hklen = kernelHalfLen();
+//
+//    float sum = h;
+//    float w = 1.0;
+//
+//    int i = 1;
+//    while ( hklen > 0.001 )
+//    {
+//        hklen -= 1.0;
+//
+//        float tw = 1.0;
+//
+//        if( hklen < 0.0 )
+//        {
+//            tw = hklen + 1.0;
+//        }
+//
+//        sum += sampleHeight( uv + vec2( pixelOffset[ i ] * dx, 0.0 ) ) * tw;
+//        sum += sampleHeight( uv - vec2( pixelOffset[ i ] * dx, 0.0 ) ) * tw;
+//
+//        ++i;
+//        w += 2.0 * tw;
+//    }
+//
+//    return sum / w;
+//}
 
 };
 

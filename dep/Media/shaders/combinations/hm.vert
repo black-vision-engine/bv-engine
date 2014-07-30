@@ -134,14 +134,14 @@ vec2 calcHeightMapUV( vec2 uv )
 //
 vec2 calcHillUV( vec2 uv )
 {
-    return uv / sqrt( sqrt( sqrt( sqrt( scale ) ) ) );
+    return uv / pow( scale, vec2( 0.05, 0.05 ) );
 }
 
 // *****************************
 //
 vec2 calcCoveredDistUV( vec2 uv )
 {
-    return uv / sqrt( sqrt( sqrt( scale ) ) ) - sqrt( sqrt( vec2( calcNormalizedPos().x, 0.0 ) ) );
+    return uv / pow( scale, vec2( 0.055, 0.055 ) );
 }
 
 // *****************************
