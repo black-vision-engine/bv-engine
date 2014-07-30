@@ -11,8 +11,6 @@ uniform vec2 scale;
 
 uniform float totalDistanceInMeters;
 uniform float curDistanceInMeters;
-uniform float startDistInMeters;
-uniform float endDistInMeters;
 
 uniform float hmOffsetYInPixels;
 

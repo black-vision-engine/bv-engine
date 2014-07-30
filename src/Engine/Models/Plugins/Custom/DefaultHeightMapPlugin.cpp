@@ -15,6 +15,25 @@
 
 namespace bv { namespace model {
 
+namespace {
+
+// *******************************
+//
+float saturate( float t )
+{
+    return std::max( 0.0f, std::min( 1.0f, t ) );
+}
+
+// *******************************
+//
+float smoothstep( float a, float b, float x )
+{
+    float t = saturate( ( x - a ) / ( b - a ) );
+
+    return t * t * ( 3.0f - ( 2.0f * t ) );
+}
+
+} //anonymous
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
@@ -203,7 +222,10 @@ DefaultHeightMapPlugin::DefaultHeightMapPlugin         ( const std::string & nam
     m_hmHeightScale     = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmHeightScale" ) );
     m_GroundLevelHeight = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmGroundLevelHeight" ) );
     m_MaxHeightValue    = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmMaxHeightValue" ) );
-
+    m_totalDistInMeters = QueryTypedParam< ParamFloatPtr >( GetParameter( "totalDistanceInMeters" ) );
+    m_curDistInMeters   = QueryTypedParam< ParamFloatPtr >( GetParameter( "curDistanceInMeters" ) );
+    m_scale             = QueryTypedParam< ParamVec2Ptr >( GetParameter( "scale" ) );
+    m_hmOffsetYInPixels = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmOffsetYInPixels" ) );
 }
 
 // *************************************
@@ -248,6 +270,9 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( IPluginR
         if( ( TextureSlot ) curNumTextures == TextureSlot::TS_HEIGHT_MAP )
         {
             m_hmRawData = ( const unsigned char * ) txDesc->GetBits()->Get();
+        
+            auto res = QueryPosition( 4537.1615f );
+            res.x = res.y;
         }
 
         SetTextureParams( ( TextureSlot ) curNumTextures, txDesc );
@@ -295,9 +320,21 @@ void                                DefaultHeightMapPlugin::Update              
 
 // *************************************
 //
-glm::vec2                           DefaultHeightMapPlugin::QueryPosition               ( float distInMeter ) const
+glm::vec2                           DefaultHeightMapPlugin::QueryPosition               ( float distInMeters ) const
 {
-    return glm::vec2( 0.0 );
+    float sclHeight             = m_hmHeightScale->Evaluate();
+    float groundLevel           = m_GroundLevelHeight->Evaluate();
+    float maxHeight             = m_MaxHeightValue->Evaluate();
+    float totalDistInMeters     = m_totalDistInMeters->Evaluate();
+    glm::vec2 scl               = m_scale->Evaluate();
+    float offsetYInPixels       = m_hmOffsetYInPixels->Evaluate();
+    float curDistInMeters       = m_curDistInMeters->Evaluate();
+
+    float x                     = distInMeters / totalDistInMeters;
+
+    float h = FilterHeight( x, sclHeight, groundLevel, maxHeight, scl.x, false );
+
+    return glm::vec2( 1.0f, h + offsetYInPixels / 1080.0f );
 }
 
 // *************************************
@@ -390,9 +427,75 @@ float             DefaultHeightMapPlugin::DecodeFixedPoint              ( const 
 
 // *****************************
 //
-float               DefaultHeightMapPlugin::DecodeHeight                ( const unsigned char * data, float scl, float groundLevel, float maxHeight ) const
+float               DefaultHeightMapPlugin::DecodeHeight                ( const unsigned char * data, float sclHeight, float groundLevel, float maxHeight ) const
 {
-    return scl * ( DecodeFixedPoint( data ) - groundLevel ) / ( maxHeight - groundLevel );
+    return sclHeight * ( DecodeFixedPoint( data ) - groundLevel ) / ( maxHeight - groundLevel );
+}
+
+// *****************************
+//
+float               DefaultHeightMapPlugin::SampleHeight                ( float x, float sclHeight, float groundLevel, float maxHeight ) const
+{
+    float d = x * 3839.f;
+    float w = d - floor( d );
+
+    int i = int( floor( d ) );
+
+    if( i == 3839 )
+    {
+        return DecodeHeight( &m_hmRawData[ 4 * i ], sclHeight, groundLevel, maxHeight );
+    }
+    else if( i < 0 )
+    {
+        return DecodeHeight( m_hmRawData, sclHeight, groundLevel, maxHeight );
+    }
+
+    const unsigned char * data = &m_hmRawData[ 4 * i ];
+
+    float h0 = DecodeHeight( data, sclHeight, groundLevel, maxHeight );
+    float h1 = DecodeHeight( &data[ 4 ], sclHeight, groundLevel, maxHeight );
+
+    return ( 1.0f - w ) * h0 + w * h1;
+}
+
+// *****************************
+//
+float               DefaultHeightMapPlugin::FilterHeight                ( float x, float sclHeight, float groundLevel, float maxHeight, float sclX, bool isVS ) const
+{
+    float dx = 1.0f / ( 1920.0f * sclX ); //FIXME: magic number
+    float w = 1.0f - smoothstep( 1.0f, 15.0f, sclX );
+
+    float hklen = 0.01f * ( 1.f - w ) + w * 12.0f;
+
+    if ( isVS )
+    {
+        hklen =  5.f * ( 1.f - w ) + w * 20.f;
+
+    }
+
+    float sum = SampleHeight( x, sclHeight, groundLevel, maxHeight );
+    w = 1.0f;
+
+    int i = 1;
+    while ( hklen > 0.001f )
+    {
+        hklen -= 1.0f;
+
+        float tw = 1.0f;
+
+        if( hklen < 0.0f )
+        {
+            tw = hklen + 1.0f;
+        }
+
+        sum += SampleHeight( x + float( i ) * dx, sclHeight, groundLevel, maxHeight ) * tw;
+        sum += SampleHeight( x - float( i ) * dx, sclHeight, groundLevel, maxHeight ) * tw;
+
+        ++i;
+        w += 2.0f * tw;
+    }
+
+    return sum / w;
 }
 
 //// *****************************

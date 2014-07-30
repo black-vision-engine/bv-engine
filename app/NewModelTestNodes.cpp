@@ -750,6 +750,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     //model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 5.f ), glm::vec2( 25.f, 10.f ) );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 8.f ), glm::vec2( 120.f, 12.f ) );
 
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "scale" ), TimeType( 8.f ), glm::vec2( 12.f, 12.f ) );
+    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "curDistanceInMeters" ), TimeType( 0.f ), 38000.f );
+
+    return node;
     //Current state (distance)
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "totalDistanceInMeters" ), TimeType( 0.f ), 174227.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "curDistanceInMeters" ), TimeType( 0.f ), 86000.f );
