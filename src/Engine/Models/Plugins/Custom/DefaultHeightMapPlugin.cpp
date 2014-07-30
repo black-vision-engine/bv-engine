@@ -331,6 +331,18 @@ glm::vec2                           DefaultHeightMapPlugin::QueryPosition       
     float curDistInMeters       = m_curDistInMeters->Evaluate();
 
     float x                     = distInMeters / totalDistInMeters;
+    float curDistX              = curDistInMeters / totalDistInMeters;
+
+
+    //calc normalized pos
+    float vsH = FilterHeight( curDistX, sclHeight, groundLevel, maxHeight, scl.x, true );
+    glm::vec2 pos( curDistX, offsetYInPixels / 1080.f + vsH );
+
+    glm::vec2 bl( pos.x - pos.x / scl.x, pos.y - pos.y / scl.y );
+    glm::vec2 tr( pos.x + ( 1.f - pos.x ) / scl.x, pos.y + ( 1.f - pos.y ) / scl.y );
+    //return pos + ( uv - pos ) / scale;
+
+    //calc other stuff
 
     float h = FilterHeight( x, sclHeight, groundLevel, maxHeight, scl.x, false );
 
