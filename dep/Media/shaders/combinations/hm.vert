@@ -58,11 +58,25 @@ float sampleHeight( vec2 uv )
     float x = ( uv.x * 3840.0 );
     float w = fract( x );
 
-    //CASE w == 1 - epsilon but sampler samples next texel instead of the current one
-    float h0 = decodeHeight( texture( HeightMapTex, uv ) );
-    float h1 = decodeHeight( texture( HeightMapTex, uv + vec2( 0.995 / 3840.0, 0.0 ) ) );
+    //CASE w == 1 - epsilon but sampler samples next texel instead of the current one, that's why we have to force sampler to stay in the left pixel (texelsize * 0.995) at the cost of interpolation errors at the end of texel
+    //but it can be noticed when the magnification ratio is more thann 2000:1 which is highly unlikely here
 
-    return mix( h0, h1, w );
+//    if( NVIDIA_PASS )
+//    {
+////NVIDIA PASS
+//        float h0 = decodeHeight( texture( HeightMapTex, uv + vec2( 0.005 / 3840.0, 0.0 )) );
+//        float h1 = decodeHeight( texture( HeightMapTex, uv + vec2( 1.0 / 3840.0, 0.0 ) ) );
+//
+//        return mix( h0, h1, w );
+//    }
+//    else
+    {
+//ATI PASS
+        float h0 = decodeHeight( texture( HeightMapTex, uv ) );
+        float h1 = decodeHeight( texture( HeightMapTex, uv + vec2( 0.995 / 3840.0, 0.0 ) ) );
+
+        return mix( h0, h1, w );
+    }
 }
 
 // *****************************
