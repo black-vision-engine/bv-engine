@@ -229,28 +229,28 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
 //
 void BVAppLogic::OnKey           ( unsigned char c )
 {
-    auto root = m_modelScene->GetSceneRoot();
-    auto timerPlugin = root->GetPlugin("timer");
-    if(c == 'q')
-    {
-        model::StartTimerPlugin( timerPlugin );
-    }
+    //auto root = m_modelScene->GetSceneRoot();
+    //auto timerPlugin = root->GetPlugin("timer");
+    //if(c == 'q')
+    //{
+    //    model::StartTimerPlugin( timerPlugin );
+    //}
 
-    if(c == 'w')
-    {
-        model::StopTimerPlugin( timerPlugin );
-    }
-       
+    //if(c == 'w')
+    //{
+    //    model::StopTimerPlugin( timerPlugin );
+    //}
+    //   
 
-    if(c == 'a')
-    {
-        model::SetTimeTimerPlugin( timerPlugin, 3600.f * 5 + 60.f * 4 + 23.f + 0.12f );
-    }
+    //if(c == 'a')
+    //{
+    //    model::SetTimeTimerPlugin( timerPlugin, 3600.f * 5 + 60.f * 4 + 23.f + 0.12f );
+    //}
 
-    if(c == 's')
-    {
-        model::SetTimeTimerPlugin( timerPlugin, 43.f + 0.88f );
-    }
+    //if(c == 's')
+    //{
+    //    model::SetTimeTimerPlugin( timerPlugin, 43.f + 0.88f );
+    //}
         
     //FIXME: keypressed event was used here to set text in all currently loaded Text plugins
     //KeyPressedSendEvent( c );
