@@ -11,7 +11,6 @@
 
 #include <algorithm>
 
-#include <iostream>
 #include <Windows.h>
 
 namespace bv { namespace model {
