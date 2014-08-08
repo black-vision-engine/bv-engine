@@ -80,9 +80,15 @@ private:
 
     ParamFloatPtr                   m_precisionParam;
 
-    TimeSegmentEvalImpl             m_timeEvaluator;
+    //TimeSegmentEvalImpl             m_timeEvaluator;
 
-    TimeValue                       m_currentTime;
+
+    bool                            m_started;
+    unsigned long                   m_globalStartTime;
+    unsigned long                   m_localStartTime;
+    unsigned long                   m_currentLocalTime;
+
+    TimeValue                       m_currentTimeValue;
     wchar_t                         m_defaultSeparator;
     wchar_t                         m_secSeparator;
     wchar_t                         m_widestGlyph;
@@ -131,7 +137,7 @@ public:
 
     void                                        Start                       ();
     void                                        Stop                        ();
-    void                                        Reset                       ();
+    void                                        Reset                       ( float localTime );
 
 private:
 

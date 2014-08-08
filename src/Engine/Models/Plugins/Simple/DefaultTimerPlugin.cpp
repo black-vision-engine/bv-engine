@@ -213,10 +213,10 @@ TimeInfo ParseTimePatern(const std::wstring& timePatern)
 //
 bool    TimeValue::operator!=(const TimeValue& other) const
 {
-    return  other.fracOfSecond == this->fracOfSecond
-        ||  other.second == this->second
-        ||  other.minute == this->minute
-        ||  other.hour == this->hour;
+    return  other.fracOfSecond != this->fracOfSecond
+        ||  other.second != this->second
+        ||  other.minute != this->minute
+        ||  other.hour != this->hour;
 }
 
 ////////////////////////////
@@ -237,11 +237,13 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
     , m_paramValModel( model )
     , m_textAtlas()
     , m_timePatern( )
-    , m_currentTime( 0.0 )
+    , m_globalStartTime( 0 )
+    , m_localStartTime( 0 )
+    , m_currentTimeValue( 0.0 )
     , m_defaultSeparator(L':')
     , m_secSeparator(L'.')
-    , m_timeEvaluator( 3600.f * 100.f )
     , m_widestGlyph( L'0' ) 
+    , m_started(false)
 {
     auto colorParam = prev->GetParameter( "color" );
 
@@ -359,6 +361,8 @@ bool            DefaultTimerPlugin::LoadResource  ( IPluginResourceDescrConstPtr
 
             m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
+            SetTimePatern( GenerateTimePatern( 0.f ) );
+
             SetTime(0.);
 
             return true;
@@ -391,15 +395,15 @@ IVertexShaderChannelConstPtr        DefaultTimerPlugin::GetVertexShaderChannel  
 
 // *************************************
 // 
-void                                DefaultTimerPlugin::Update                      ( TimeType t )
+void                                DefaultTimerPlugin::Update                      ( TimeType )
 {
     //FIXME: UPDATER TO FIX
+    if( m_started )
+    {
+        m_currentLocalTime = m_localStartTime + (GetTickCount() -  m_globalStartTime);
+    }
 
-    m_timeEvaluator.UpdateGlobalTime( t );
-
-    auto time = m_timeEvaluator.GetLocalTime();
-
-    SetTime( time );
+    SetTime( m_currentLocalTime / 1000.f );
 
     m_paramValModel->Update();
 
@@ -407,40 +411,50 @@ void                                DefaultTimerPlugin::Update                  
     m_psc->PostUpdate();    
 }
 
-static DWORD testSystemTimeStarted = 0;
-
 // *************************************
 // 
 void                                DefaultTimerPlugin::Start                       ()
 {
-    testSystemTimeStarted = GetTickCount();
-    m_timeEvaluator.Start();
+    if(!m_started)
+    {
+        m_started = true;
+        m_globalStartTime = GetTickCount();
+    }
 }
 
 // *************************************
 // 
 void                                DefaultTimerPlugin::Stop                        ()
 {
-    m_timeEvaluator.Stop();
+    if(m_started)
+    {
+        m_started = false;
+        m_localStartTime = m_currentLocalTime;
+        Refresh( true );
+    }
+//    m_timeEvaluator.Stop();
 
-    auto elapsedTime = GetTickCount() - testSystemTimeStarted;
-    auto evaluatorElapsedTime =  m_timeEvaluator.GetLocalTime();
+    //auto elapsedTime = GetTickCount() - testSystemTimeStarted;
+    //auto evaluatorElapsedTime =  m_timeEvaluator.GetLocalTime();
 
-    auto elapsedTimeFloat = float( elapsedTime ) / 1000.f;
+    //auto elapsedTimeFloat = float( elapsedTime ) / 1000.f;
 
-    std::cout << "System time elpsed: " << elapsedTime << std::endl;
-    std::cout << "System time elpsed float: " << elapsedTimeFloat << std::endl;
+    //std::cout << "System time elpsed: " << elapsedTime << std::endl;
+    //std::cout << "System time elpsed float: " << elapsedTimeFloat << std::endl;
 
-    std::cout << "Evaluator time elpsed: " << evaluatorElapsedTime << std::endl;
+    //std::cout << "Evaluator time elpsed: " << evaluatorElapsedTime << std::endl;
 
-    std::cout << "DIFF " << elapsedTimeFloat - evaluatorElapsedTime << std::endl;
+    //std::cout << "DIFF " << elapsedTimeFloat - evaluatorElapsedTime << std::endl;
 }
 
 // *************************************
 // 
-void                                DefaultTimerPlugin::Reset                       ()
+void                                DefaultTimerPlugin::Reset                       ( float localTime )
 {
-    m_timeEvaluator.Reset();
+    m_currentLocalTime = unsigned long ( localTime * 1000.f );
+    m_localStartTime = m_currentLocalTime;
+    m_globalStartTime = GetTickCount();
+    //SetTime( localTime );
 }
 
 ////////////////////////////
@@ -529,7 +543,7 @@ void                                DefaultTimerPlugin::Refresh         ( bool i
     int shift = m_timePaternInfo.hoursPHStart;
     if( hPHSize > 0 )
     {
-        int hour = m_currentTime.hour;
+        int hour = m_currentTimeValue.hour;
         auto hourStr = std::to_wstring( hour );
 
         int zerosBefore = hPHSize > (int)hourStr.size() ? ( hPHSize - (int)hourStr.size() ) : 0;
@@ -550,7 +564,7 @@ void                                DefaultTimerPlugin::Refresh         ( bool i
     int mPHSize = m_timePaternInfo.minutesPlaceHolderSize;
     if( mPHSize > 0 )
     {
-        int minute = m_currentTime.minute;
+        int minute = m_currentTimeValue.minute;
         auto minuteStr = std::to_wstring( minute );
 
         int zerosBefore = mPHSize > (int)minuteStr.size() ? ( mPHSize - (int)minuteStr.size() ) : 0;
@@ -571,7 +585,7 @@ void                                DefaultTimerPlugin::Refresh         ( bool i
     int sPHSize = m_timePaternInfo.secondsPlaceHolderSize;
     if( sPHSize > 0 )
     {
-        int second = m_currentTime.second;
+        int second = m_currentTimeValue.second;
         auto secondStr = std::to_wstring( second );
 
         int zerosBefore = sPHSize > (int)secondStr.size() ? ( sPHSize - (int)secondStr.size() ) : 0;
@@ -597,7 +611,7 @@ void                                DefaultTimerPlugin::Refresh         ( bool i
 
     if( fosPHSize > 0 )
     {
-        int fos = m_currentTime.fracOfSecond;
+        int fos = m_currentTimeValue.fracOfSecond;
         auto fosStr = std::to_wstring( fos );
 
         int zerosBefore = fosPHSize > (int)fosStr.size() ? ( fosPHSize - (int)fosStr.size() ) : 0;
@@ -776,19 +790,17 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
 //
 void                                DefaultTimerPlugin::SetTime        ( TimeType time )
 {
-    m_timeEvaluator.ResetLocalTimeTo( TimeType( time ) );
+    TimeValue   newTime( time, m_timePaternInfo.fracOfSecondsPlaceholderSize );
 
-    auto localTime = m_timeEvaluator.GetLocalTime();
-
-    TimeValue   newTime( localTime, m_timePaternInfo.fracOfSecondsPlaceholderSize );
-
-    if( m_currentTime  != newTime )
+    if( m_currentTimeValue  != newTime )
     {
-        SetTimePatern( GenerateTimePatern( localTime ) );
-        m_currentTime = newTime;
-        Refresh( m_timeEvaluator.IsPaused() );
+        SetTimePatern( GenerateTimePatern( time ) );
+        m_currentTimeValue = newTime;
+        Refresh( !m_started );
         if( ! m_vaChannel->NeedsTopologyUpdate() )
+        {
             m_vaChannel->SetNeedsAttributesUpdate( true );
+        }
     }
 }
 
@@ -806,7 +818,7 @@ bool            SetTimeTimerPlugin( IPluginPtr timerPlugin, TimeType time )
 {
     if( timerPlugin->GetTypeUid() == DefaultTimerPluginDesc::UID() )
     {
-        std::static_pointer_cast< DefaultTimerPlugin >( timerPlugin )->SetTime( time );
+        std::static_pointer_cast< DefaultTimerPlugin >( timerPlugin )->Reset( time );
         return true;
     }
     else
@@ -845,7 +857,7 @@ bool            ResetTimerPlugin( IPluginPtr timerPlugin )
 {
     if( timerPlugin->GetTypeUid() == DefaultTimerPluginDesc::UID() )
     {
-        std::static_pointer_cast< DefaultTimerPlugin >( timerPlugin )->Reset();
+        std::static_pointer_cast< DefaultTimerPlugin >( timerPlugin )->Reset( 0.f );
         return true;
     }
     else
