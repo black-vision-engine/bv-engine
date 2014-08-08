@@ -642,7 +642,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
     auto plugin = node->GetPlugin( "transform" );
     auto param = plugin->GetParameter( "simple_transform" );
 
-    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
+    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.1f, 0.f ) );
 
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 27.0f );
@@ -654,9 +654,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
     success = model::LoadFont( node->GetPlugin( "timer" ), "../dep/Media/fonts/arial.ttf" );
     assert( success );
 
-    SetTimeTimerPlugin( node->GetPlugin( "timer" ), 0.0f );
+    SetTimeTimerPlugin( node->GetPlugin( "timer" ), 12333.0f );
 
-    //StartTimerPlugin( node->GetPlugin( "timer" ) );
+    StartTimerPlugin( node->GetPlugin( "timer" ) );
     //StopTimerPlugin( node->GetPlugin( "timer" ) );
 
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"bla bla" );

@@ -478,8 +478,23 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
     //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, true );
     //return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
     //return SimpleNodesFactory::CreateTextWithShadowNode( timelineManager, timeEvaluator, 5, glm::vec3( 0.005f, -0.005f, -0.001f ) );
-    return SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
+    auto root = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
+    auto r0 = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
+    root->AddChild( r0 );
+    auto r1 = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
+    r0->AddChild( r1 );
+    auto r2 = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
+    r1->AddChild( r2 );
+    auto r3 = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
+    r2->AddChild( r3 );
+    auto r4 = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
+    r3->AddChild( r4 );
+    auto r5 = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
+    r4->AddChild( r5 );
+    
 
+
+    return root;
 
     //auto parent = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
     //auto child = SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
