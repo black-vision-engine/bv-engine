@@ -656,7 +656,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
 
     SetTimeTimerPlugin( node->GetPlugin( "timer" ), 0.0f );
 
-    StartTimerPlugin( node->GetPlugin( "timer" ) );
+    //StartTimerPlugin( node->GetPlugin( "timer" ) );
     //StopTimerPlugin( node->GetPlugin( "timer" ) );
 
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"bla bla" );
