@@ -11,6 +11,9 @@
 
 #include <algorithm>
 
+#include <iostream>
+#include <Windows.h>
+
 namespace bv { namespace model {
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -404,10 +407,13 @@ void                                DefaultTimerPlugin::Update                  
     m_psc->PostUpdate();    
 }
 
+static DWORD testSystemTimeStarted = 0;
+
 // *************************************
 // 
 void                                DefaultTimerPlugin::Start                       ()
 {
+    testSystemTimeStarted = GetTickCount();
     m_timeEvaluator.Start();
 }
 
@@ -416,6 +422,18 @@ void                                DefaultTimerPlugin::Start                   
 void                                DefaultTimerPlugin::Stop                        ()
 {
     m_timeEvaluator.Stop();
+
+    auto elapsedTime = GetTickCount() - testSystemTimeStarted;
+    auto evaluatorElapsedTime =  m_timeEvaluator.GetLocalTime();
+
+    auto elapsedTimeFloat = float( elapsedTime ) / 1000.f;
+
+    std::cout << "System time elpsed: " << elapsedTime << std::endl;
+    std::cout << "System time elpsed float: " << elapsedTimeFloat << std::endl;
+
+    std::cout << "Evaluator time elpsed: " << evaluatorElapsedTime << std::endl;
+
+    std::cout << "DIFF " << elapsedTimeFloat - evaluatorElapsedTime << std::endl;
 }
 
 // *************************************

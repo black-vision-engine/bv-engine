@@ -29,6 +29,7 @@
 #include "testai/TestAIManager.h"
 
 #include "Engine/Models/Resources/TextureHelpers.h"
+#include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -228,6 +229,19 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
 //
 void BVAppLogic::OnKey           ( unsigned char c )
 {
+    auto root = m_modelScene->GetSceneRoot();
+    auto timerPlugin = root->GetPlugin("timer");
+    if(c == 'q')
+    {
+        model::StartTimerPlugin( timerPlugin );
+    }
+
+    if(c == 'w')
+    {
+        model::StopTimerPlugin( timerPlugin );
+    }
+        
+        
     //FIXME: keypressed event was used here to set text in all currently loaded Text plugins
     //KeyPressedSendEvent( c );
     //TODO: implement whatever you want here
