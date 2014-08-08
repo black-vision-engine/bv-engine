@@ -431,19 +431,6 @@ void                                DefaultTimerPlugin::Stop                    
         m_localStartTime = m_currentLocalTime;
         Refresh( true );
     }
-//    m_timeEvaluator.Stop();
-
-    //auto elapsedTime = GetTickCount() - testSystemTimeStarted;
-    //auto evaluatorElapsedTime =  m_timeEvaluator.GetLocalTime();
-
-    //auto elapsedTimeFloat = float( elapsedTime ) / 1000.f;
-
-    //std::cout << "System time elpsed: " << elapsedTime << std::endl;
-    //std::cout << "System time elpsed float: " << elapsedTimeFloat << std::endl;
-
-    //std::cout << "Evaluator time elpsed: " << evaluatorElapsedTime << std::endl;
-
-    //std::cout << "DIFF " << elapsedTimeFloat - evaluatorElapsedTime << std::endl;
 }
 
 // *************************************
@@ -453,7 +440,6 @@ void                                DefaultTimerPlugin::Reset                   
     m_currentLocalTime = unsigned long ( localTime * 1000.f );
     m_localStartTime = m_currentLocalTime;
     m_globalStartTime = GetTickCount();
-    //SetTime( localTime );
 }
 
 ////////////////////////////
