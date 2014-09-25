@@ -67,6 +67,22 @@ struct TimeInfo
     int GetSize() const;
 };
 
+// *************************************
+//
+bool            SetTimeTimerPlugin( IPluginPtr timerPlugin, TimeType time );
+
+// *************************************
+//
+bool            StartTimerPlugin( IPluginPtr timerPlugin );
+
+// *************************************
+//
+bool            StopTimerPlugin( IPluginPtr timerPlugin );
+
+// *************************************
+//
+bool            ResetTimerPlugin( IPluginPtr timerPlugin );
+
 
 // ***************************** PLUGIN ********************************** 
 class DefaultTimerPlugin : public BasePlugin< IPlugin >
@@ -117,15 +133,12 @@ private:
 
     std::wstring                    GenerateTimePatern( double time );
     void                            InitBigestGlyph ();
-public:
+private:
 
     
     void                                        SetTime                     ( TimeType time );
 
     void                                        SetTime                     ( int h, int m, int s, int hoSec );
-
-    explicit                                    DefaultTimerPlugin          ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
-                                                ~DefaultTimerPlugin         ();
 
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
 
@@ -142,24 +155,20 @@ public:
 private:
 
     void                                        InitAttributesChannel       ( IPluginPtr prev );
+
+
+	friend bool            SetTimeTimerPlugin( IPluginPtr timerPlugin, TimeType time );
+	friend bool            StartTimerPlugin( IPluginPtr timerPlugin );
+	friend bool            StopTimerPlugin( IPluginPtr timerPlugin );
+	friend bool            ResetTimerPlugin( IPluginPtr timerPlugin );
+
+public:
+	explicit               DefaultTimerPlugin          ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
+							~DefaultTimerPlugin         ();
 };
 
 
-// *************************************
-//
-bool            SetTimeTimerPlugin( IPluginPtr timerPlugin, TimeType time );
 
-// *************************************
-//
-bool            StartTimerPlugin( IPluginPtr timerPlugin );
-
-// *************************************
-//
-bool            StopTimerPlugin( IPluginPtr timerPlugin );
-
-// *************************************
-//
-bool            ResetTimerPlugin( IPluginPtr timerPlugin );
 
 } // model
 } // bv
