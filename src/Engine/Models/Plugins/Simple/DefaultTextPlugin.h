@@ -39,7 +39,6 @@ public:
     static  std::string                     FontFileName        ();
 };
 
-
 // ***************************** PLUGIN ********************************** 
 class DefaultTextPlugin : public BasePlugin< IPlugin >
 {
@@ -66,15 +65,10 @@ private:
     ParamFloatPtr                   m_alignmentParam;
     ParamFloatPtr                   m_maxTextLengthParam;
 
-public:
-
     //delegates
     void                                        OnSetText                   ( IEventPtr evt );
 
     void                                        SetText                     ( const std::wstring & newText );
-
-    explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
-                                                ~DefaultTextPlugin          ();
 
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
 
@@ -84,12 +78,14 @@ public:
 
     virtual void                                Update                      ( TimeType t ) override;
 
-private:
-
     void                                        InitAttributesChannel       ( IPluginPtr prev );
-};
 
-bool            SetTextPluginContent( IPluginPtr textPlugin, const std::wstring& text );
+public:
+	explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
+												~DefaultTextPlugin          ();
+
+	static bool									SetText						( IPluginPtr, const std::wstring& );
+};
 
 } // model
 } // bv

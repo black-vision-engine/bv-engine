@@ -434,7 +434,7 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
 // *************************************
 //
-bool            SetTextPluginContent( IPluginPtr textPlugin, const std::wstring& text )
+bool DefaultTextPlugin::SetText( IPluginPtr textPlugin, const std::wstring& text )
 {
     if( textPlugin->GetTypeUid() == DefaultTextPluginDesc::UID() )
     {
