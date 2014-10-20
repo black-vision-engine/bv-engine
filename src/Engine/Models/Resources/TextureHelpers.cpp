@@ -18,6 +18,7 @@ MemoryChunkConstPtr TextureHelper::LoadImg( const std::string & filePath, int * 
 
     if( loadFromMemory )
     {
+        // FIXME: Crash when file doesn't exist
         char * bufToRead = new char[ File::Size( filePath ) ]; 
 
         int bytes = File::Read( bufToRead, filePath );

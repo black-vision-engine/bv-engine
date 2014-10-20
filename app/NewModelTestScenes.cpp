@@ -504,5 +504,15 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
     //return parent;
 }
 
+// *****************************
+//
+model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+	auto rect = SimpleNodesFactory::CreateOlafRectNode( timelineManager, timeEvaluator );
+	auto clock = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
+	rect->AddChild( clock );
+
+	return rect;
+}
 
 } //bv
