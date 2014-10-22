@@ -323,9 +323,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Tim
 model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
 {
 	auto offset5Timeline = timelineManager->CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
-	auto offset3Timline  = timelineManager->CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+	auto offset3Timeline  = timelineManager->CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
 	timeEvaluator->AddChild(offset5Timeline);
-	timeEvaluator->AddChild(offset3Timline);
+	timeEvaluator->AddChild(offset3Timeline);
 
 	//Plugin list
     std::vector< std::string > uids;
@@ -341,11 +341,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::TimelineMana
     assert( success );
 
 	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	simpleTransform->SetTimeEvaluator(offset3Timline);
+	simpleTransform->SetTimeEvaluator(offset3Timeline);
 
 	SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
 	SetParameterRotation ( simpleTransform, 0, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
-
 
     auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
     assert( color );
