@@ -515,4 +515,13 @@ model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::Plug
 	return rect;
 }
 
+model::BasicNodePtr     TestScenesFactory::CreedTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+	auto rect = SimpleNodesFactory::CreateCreedRectNode( timelineManager, timeEvaluator );
+	//auto clock = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
+	//rect->AddChild( clock );
+
+	return rect;
+}
+
 } //bv

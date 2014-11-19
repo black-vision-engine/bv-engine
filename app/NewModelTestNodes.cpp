@@ -21,7 +21,7 @@
 
 namespace {
 
-    std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR" };
+    std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR", "DEFAULT_GRADIENT" };
     std::string GSimplePlugins1[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_TEXTURE" };
     std::string GSimplePlugins2[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_ANIMATION" };
     std::string GSimplePlugins3[] = { "DEFAULT_TRANSFORM", "DEFAULT_COLOR", "DEFAULT_TEXT" };
@@ -365,6 +365,55 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::TimelineMana
 	success &= SetParameter( color, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
 
     assert( success );
+
+    return root;
+}
+
+model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
+{
+	auto offset5Timeline = timelineManager->CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
+	auto offset3Timeline  = timelineManager->CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+	timeEvaluator->AddChild(offset5Timeline);
+	timeEvaluator->AddChild(offset3Timeline);
+
+	//Plugin list
+    std::vector< std::string > uids;
+
+    uids.push_back( "DEFAULT_TRANSFORM" );
+    uids.push_back( "DEFAULT_RECTANGLE" );
+    uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
+
+    //Create a model
+    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rectNode", timeEvaluator );
+
+    bool success = root->AddPlugins( uids, timeEvaluator );
+    assert( success );
+
+	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+	simpleTransform->SetTimeEvaluator(offset3Timeline);
+
+	//SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
+	//SetParameterRotation ( simpleTransform, 0, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+
+    auto color = root->GetPlugin( "gradient" )->GetParameter( "color1" );
+    assert( color );
+
+    auto w = root->GetPlugin( "rectangle" )->GetParameter( "width" );
+    auto h = root->GetPlugin( "rectangle" )->GetParameter( "height" );
+
+	//h->SetTimeEvaluator(offset5Timeline);
+	//w->SetTimeEvaluator(offset5Timeline);
+
+    success &= SetParameter( w, 0.f, 2.f );
+    success &= SetParameter( h, 0.f, 1.f );
+
+ //   success &= SetParameter( w, 7.f, 1.f );
+ //   success &= SetParameter( h, 7.f, 2.f );
+
+    success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+	success &= SetParameter( color, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+
+ //   assert( success );
 
     return root;
 }

@@ -5,6 +5,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
@@ -24,6 +25,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultTransformPluginDesc() );
     descriptors.push_back( new DefaultRectPluginDesc() );
     descriptors.push_back( new DefaultColorPluginDesc() );
+	descriptors.push_back( new DefaultGradientPluginDesc() );
     descriptors.push_back( new DefaultTexturePluginDesc() );
     descriptors.push_back( new DefaultAnimationPluginDesc() );
     descriptors.push_back( new DefaultTextPluginDesc() );
