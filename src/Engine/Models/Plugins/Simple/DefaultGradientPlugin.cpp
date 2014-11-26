@@ -43,7 +43,8 @@ DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( I
     //SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
 
-	SimpleVec4EvaluatorPtr		colorEvaluator	 = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator("color1", timeEvaluator );
+	SimpleVec4EvaluatorPtr		color1Evaluator	 = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator("color1", timeEvaluator );
+	SimpleVec4EvaluatorPtr		color2Evaluator	 = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator("color2", timeEvaluator );
 
     //ParamFloatPtr  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX", timeEvaluator );
     //ParamFloatPtr  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY", timeEvaluator );
@@ -54,7 +55,8 @@ DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( I
     vsModel->RegisterAll( trTxEvaluator );
     //psModel->RegisterAll( borderColorEvaluator );
     //psModel->RegisterAll( alphaEvaluator );
-	psModel->RegisterAll( colorEvaluator );
+	psModel->RegisterAll( color1Evaluator );
+	psModel->RegisterAll( color2Evaluator );
     //psModel->AddParameter( paramWrapModeX );
     //psModel->AddParameter( paramWrapModeY );
     //psModel->AddParameter( paramFilteringMode );
@@ -68,7 +70,8 @@ DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( I
     //alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     //borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-	colorEvaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
+	color1Evaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
+	color2Evaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
 
     //FIXME: integer parmeters should be used here
     //paramWrapModeX->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );

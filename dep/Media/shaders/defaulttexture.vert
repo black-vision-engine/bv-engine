@@ -15,4 +15,5 @@ void main()
 {
     gl_Position = MVP * vec4( vertexPosition, 1.0 );
     uvCoord = ( txMat * vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;
+dasfdas
 }

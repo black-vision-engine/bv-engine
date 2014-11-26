@@ -74,7 +74,7 @@
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\creed\Downloads\trash\boost_1_57_0;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)D</TargetName>
   </PropertyGroup>
@@ -136,6 +136,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;glu32.lib;FreeImaged.lib;cudart.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -280,6 +281,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\DefaultFinalizePlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\DefaultPluginListFinalized.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\DefaultGradientPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Descriptor\BasePluginDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\GeometryPlugin.cpp" />
@@ -504,6 +506,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\DefaultFinalizePlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\DefaultPluginListFinalized.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\DefaultGradientPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultRectPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Descriptor\BasePluginDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\GeometryPlugin.h" />

@@ -68,6 +68,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>C:\Users\creed\Downloads\trash\boost_1_57_0;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
@@ -75,6 +76,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+    <OutDir>$(SolutionDir)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -83,6 +85,7 @@
       <AdditionalIncludeDirectories>$(BOOST_INC);../dep/Common/FreeType/include;../dep/Common/FreeImage/Dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../src;../dep/Common/FastDelegate;./;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;BOOST_ALL_NO_LIB=1;_UNICODE;UNICODE;GLEW_STATIC;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -107,6 +110,7 @@ xcopy $(SolutionDir)\dep\Common\FreeImage\Dist\Win32\FreeImage.dll $(OutDir) /c 
       <AdditionalIncludeDirectories>$(BOOST_INC);../dep/Common/FreeType/include;../dep/Common/FreeImage/Dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../src;../dep/Common/FastDelegate;./;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;BOOST_ALL_NO_LIB=1;GLEW_STATIC;_UNICODE;UNICODE;GLEW_STATIC;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -396,8 +396,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::TimelineMan
 	//SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
 	//SetParameterRotation ( simpleTransform, 0, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
 
-    auto color = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
-    assert( color );
+    auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
+    assert( color1 );
 
     auto w = root->GetPlugin( "rectangle" )->GetParameter( "width" );
     auto h = root->GetPlugin( "rectangle" )->GetParameter( "height" );
@@ -411,10 +411,19 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::TimelineMan
  //   success &= SetParameter( w, 7.f, 1.f );
  //   success &= SetParameter( h, 7.f, 2.f );
 
-    success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
-	success &= SetParameter( color, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+    success &= SetParameter( color1, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+	success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
 
- //   assert( success );
+    assert( success );
+
+    auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+    assert( color1 );
+
+    success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 0.5f, 0.f, 1.f ) );
+	success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 1.f) );
+
+    assert( success );
+
 
     return root;
 }

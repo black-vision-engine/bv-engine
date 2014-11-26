@@ -28,7 +28,7 @@ DefaultPluginParamValModelPtr   DefaultColorPluginDesc::CreateDefaultModel  ( IT
 {
     DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
     DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
-    SimpleVec4EvaluatorPtr evaluator     = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
+    SimpleVec4EvaluatorPtr evaluator     = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color1", timeEvaluator );
 
     psModel->RegisterAll( evaluator );
     model->SetPixelShaderChannelModel( psModel );
