@@ -39,45 +39,24 @@ DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( I
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
     //Create all parameters and evaluators
-    //SimpleVec4EvaluatorPtr      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
-    //SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
 
 	SimpleVec4EvaluatorPtr		color1Evaluator	 = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator("color1", timeEvaluator );
 	SimpleVec4EvaluatorPtr		color2Evaluator	 = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator("color2", timeEvaluator );
 
-    //ParamFloatPtr  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX", timeEvaluator );
-    //ParamFloatPtr  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY", timeEvaluator );
-    //ParamFloatPtr  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode", timeEvaluator );
-    //ParamFloatPtr  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachmentMode", timeEvaluator );
-
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
-    //psModel->RegisterAll( borderColorEvaluator );
-    //psModel->RegisterAll( alphaEvaluator );
 	psModel->RegisterAll( color1Evaluator );
 	psModel->RegisterAll( color2Evaluator );
-    //psModel->AddParameter( paramWrapModeX );
-    //psModel->AddParameter( paramWrapModeY );
-    //psModel->AddParameter( paramFilteringMode );
-    //psModel->AddParameter( paramAttachMode );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
     model->SetPixelShaderChannelModel( psModel );
 
     //Set default values of all parameters
-    //alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-    //borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
 	color1Evaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
 	color2Evaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
-
-    //FIXME: integer parmeters should be used here
-    //paramWrapModeX->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
-    //paramWrapModeY->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
-    //paramFilteringMode->SetVal( (float) TextureFilteringMode::TFM_LINEAR, TimeType( 0.f ) );
-    //paramAttachMode->SetVal( (float) TextureAttachmentMode::MM_ATTACHED, TimeType( 0.f ) );
 
     return model;
 }
@@ -165,22 +144,6 @@ DefaultGradientPlugin::DefaultGradientPlugin         ( const std::string & name,
     //Direct param state access (to bypass model querying)
     auto psModel = PixelShaderChannelModel();
     
-    //m_paramWrapModeX        = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "wrapModeX" ) );
-    //m_paramWrapModeY        = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "wrapModeY" ) );
-    //m_paramFilteringMode    = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "filteringMode" ) );
-    //m_paramAttachMode       = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "attachmentMode" ) );
-
-    //assert( m_paramWrapModeX );
-    //assert( m_paramWrapModeY );
-    //assert( m_paramFilteringMode );
-    //assert( m_paramAttachMode );
-
-    //auto wX = GetWrapModeX();
-    //auto wY = GetWrapModeY();
-    //auto fm = GetFilteringMode();
-    //auto am = GetAttachementMode();
-
-    //UpdateState( wX, wY, fm, am );
 }
 
 // *************************************
@@ -188,43 +151,6 @@ DefaultGradientPlugin::DefaultGradientPlugin         ( const std::string & name,
 DefaultGradientPlugin::~DefaultGradientPlugin         ()
 {
 }
-
-// *************************************
-// 
-//bool                            DefaultGradientPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
-//{
-//    //auto txResDescr = QueryTextureResourceDescr( resDescr );
-//
-//    //// FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
-//    //if ( txResDescr != nullptr )
-//    //{
-//    //    auto txData = m_psc->GetTexturesDataImpl();
-//    //    assert( txData->GetTextures().size() <= 2 ); //FIXME: Second one may be added by a mask
-//
-//    //    //FIXME: use some better API to handle resources in general and textures in this specific case
-//    //    auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), DefaultGradientPluginDesc::TextureName() );
-//    //    txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
-//
-//    //    if( txDesc != nullptr )
-//    //    {
-//    //        if( txData->GetTextures().size() == 0 )
-//    //        {
-//    //            txData->AddTexture( txDesc );
-//    //        }
-//    //        else
-//    //        {
-//    //            txData->SetTexture( 0, txDesc );
-//    //        }
-//
-//    //        m_textureWidth = txDesc->GetWidth();
-//    //        m_textureHeight = txDesc->GetHeight();
-//
-//    //        return true;
-//    //    }
-//    //}
-//
-//    //return false;
-//}
 
 // *************************************
 // 
@@ -392,62 +318,9 @@ inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
 
 // *************************************
 // 
-//TextureWrappingMode                         DefaultGradientPlugin::GetWrapModeX          () const
-//{
-//    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeX );
-//}
-//
-//// *************************************
-//// 
-//TextureWrappingMode                         DefaultGradientPlugin::GetWrapModeY          () const
-//{
-//    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeY );
-//}
-//
-//// *************************************
-//// 
-//TextureFilteringMode                        DefaultGradientPlugin::GetFilteringMode      () const
-//{
-//    return EvaluateAsInt< TextureFilteringMode >( m_paramFilteringMode );
-//}
-//
-//// *************************************
-//// 
-//TextureAttachmentMode                       DefaultGradientPlugin::GetAttachementMode    () const
-//{
-//    return EvaluateAsInt< TextureAttachmentMode >( m_paramAttachMode );
-//}
-
-// *************************************
-// 
-//bool                                        DefaultGradientPlugin::StateChanged                ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am ) const
-//{
-//    return wmX != m_lastTextureWrapModeX || wmY != m_lastTextureWrapModeY || fm != m_lastTextureFilteringMode || am != m_lastTextureAttachMode;
-//}
-
-// *************************************
-// 
 void                                        DefaultGradientPlugin::UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am )
 {
-    //m_lastTextureWrapModeX      = wmX;
-    //m_lastTextureWrapModeY      = wmY;
-    //m_lastTextureFilteringMode  = fm;
-    //m_lastTextureAttachMode     = am;
 }
-
-// *************************************
-// 
-//unsigned int                                DefaultGradientPlugin::GetTextureWidth             () const
-//{
-//    return m_textureWidth;
-//}
-//
-//// *************************************
-////
-//unsigned int                                DefaultGradientPlugin::GetTextureHeight            () const
-//{
-//    return m_textureHeight;
-//}
 
 } // model
 } // bv
