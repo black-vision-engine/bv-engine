@@ -8,5 +8,7 @@ in vec2 uvCoord;
 
 void main()
 {		
-	FragColor = color1 * uvCoord.x;
+	vec4 vec = vec4(1.0, 0.0, 0.0, 1.0);
+	FragColor = vec * uvCoord.x;
+//	FragColor = vec;
 }

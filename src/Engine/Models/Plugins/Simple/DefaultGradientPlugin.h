@@ -1,11 +1,16 @@
 #pragma once
 
+#include "Mathematics/Transform/MatTransform.h"
+
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
-#include "Engine/Models/Plugins/Channels/Transform/DefaultTransformChannel.h"
+
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
+
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
+
 
 
 namespace bv { namespace model {
@@ -15,36 +20,79 @@ class DefaultGradientPluginDesc : public BasePluginDescriptor
 {
 public:
 
-    DefaultGradientPluginDesc                                      ();
+    DefaultGradientPluginDesc                                    ();
 
     virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
+    virtual bool                            CanBeAttachedTo     ( IPluginConstPtr plugin )  const override;
+
     static  std::string                     UID                 ();
 
+    static  std::string                     VertexShaderSource  ();
     static  std::string                     PixelShaderSource   ();
 
-};
+    static  std::string                     TextureName         ();
 
+};
 
 // ***************************** PLUGIN ********************************** 
 class DefaultGradientPlugin : public BasePlugin< IPlugin >
 {
 private:
 
-    DefaultPixelShaderChannelPtr            m_psc;
-    DefaultPluginParamValModelPtr           m_paramValModel;
+    DefaultPluginParamValModelPtr   m_paramValModel;
+
+    DefaultPixelShaderChannelPtr    m_psc;
+    DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
 
+    DefaultTexturesDataPtr          m_texturesData;
+
+    unsigned int                    m_texCoordChannelIndex;
+
+    ParamFloatPtr                   m_paramWrapModeX;
+    ParamFloatPtr                   m_paramWrapModeY;
+    ParamFloatPtr                   m_paramFilteringMode;
+    ParamFloatPtr                   m_paramAttachMode;
+    
+    unsigned int                    m_textureWidth;
+    unsigned int                    m_textureHeight;
+
+    TextureWrappingMode             m_lastTextureWrapModeX;
+    TextureWrappingMode             m_lastTextureWrapModeY;
+    TextureFilteringMode            m_lastTextureFilteringMode;
+    TextureAttachmentMode           m_lastTextureAttachMode;
+    
+
 public:
 
-    explicit                                DefaultGradientPlugin          ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
-                                            ~DefaultGradientPlugin         ();
+    explicit                                    DefaultGradientPlugin        ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
+                                                ~DefaultGradientPlugin       ();
 
-    virtual IPixelShaderChannelConstPtr     GetPixelShaderChannel       () const override;
+    virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
 
-    virtual void                            Update                      ( TimeType t ) override;
+    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
+    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
+    virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
+
+    unsigned int                                GetTextureWidth             () const;
+    unsigned int                                GetTextureHeight            () const;
+
+    virtual void                                Update                      ( TimeType t ) override;
+
+private:
+
+    void                                        InitAttributesChannel       ( IPluginPtr prev );
+
+    TextureWrappingMode                         GetWrapModeX                () const;
+    TextureWrappingMode                         GetWrapModeY                () const;
+    TextureFilteringMode                        GetFilteringMode            () const;
+    TextureAttachmentMode                       GetAttachementMode          () const;
+
+    bool                                        StateChanged                ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am ) const;
+    void                                        UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am );
 
 };
 
