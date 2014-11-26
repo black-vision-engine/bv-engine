@@ -98,7 +98,7 @@ public:
 
 } //bv
 
-#define FRAME_STATS_FRAME()                         FrameStatsFrameScope COMBINE(stats_new_frame_,__LINE__)( &m_statsCalculator ) 
+#define FRAME_STATS_FRAME()                         FrameStatsFrameScope COMBINE(stats_new_rame_,__LINE__)( &m_statsCalculator ) 
 #define FRAME_STATS_SECTION( name )                 FrameStatsSectionScope COMBINE(stats_new_section_,__LINE__)( &m_statsCalculator, name ) 
 
 //// *********************************
