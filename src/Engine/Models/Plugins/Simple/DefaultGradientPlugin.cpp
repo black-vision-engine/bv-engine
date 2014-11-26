@@ -44,10 +44,15 @@ DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( I
 	SimpleVec4EvaluatorPtr		color1Evaluator	 = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator("color1", timeEvaluator );
 	SimpleVec4EvaluatorPtr		color2Evaluator	 = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator("color2", timeEvaluator );
 
+	SimpleVec2EvaluatorPtr		point1Evaluator	 = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator("point1", timeEvaluator );
+	SimpleVec2EvaluatorPtr		point2Evaluator	 = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator("point2", timeEvaluator );
+
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
 	psModel->RegisterAll( color1Evaluator );
 	psModel->RegisterAll( color2Evaluator );
+	psModel->RegisterAll( point1Evaluator );
+	psModel->RegisterAll( point2Evaluator );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
@@ -57,6 +62,8 @@ DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( I
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
 	color1Evaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
 	color2Evaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
+	point1Evaluator->Parameter()->SetVal( glm::vec2( 0.0f, 1.0f ), TimeType( 0.0 ) );
+	point2Evaluator->Parameter()->SetVal( glm::vec2( 1.0f, 0.0f ), TimeType( 0.0 ) );
 
     return model;
 }
