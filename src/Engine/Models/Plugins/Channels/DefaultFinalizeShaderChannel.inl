@@ -2,7 +2,7 @@ namespace bv { namespace model {
 
 namespace {
 
-    const unsigned int GNumLists = 15;
+    const unsigned int GNumLists = 16;
     const unsigned int GMaxNumEntries = 5;
 
     //@see: https://docs.google.com/spreadsheets/d/1K3dblNOAijnKdJXeha9_DWlSLhOc1Wcq5F1Mwlvk7x4
@@ -21,7 +21,8 @@ namespace {
                                                                     { "",               "",                 "",                     "DEFAULT_TIMER", "" },
                                                                     { "",               "",                 "",                     "DEFAULT_TIMER", "DEFAULT_ALPHA_MASK" },
                                                                     { "",               "",                 "",                     "",              "DEFAULT_HEIGHT_MAP" },
-                                                                    { "DEFAULT_LINEAR_GRADIENT",  "",                 "",                     "",             "" }
+                                                                    { "DEFAULT_LINEAR_GRADIENT",  "",                 "",                     "",             "" },
+                                                                    { "",  "",                 "",                     "DEFAULT_TEXT",             "DEFAULT_LINEAR_GRADIENT" }
                                                                 };
 
     //@see: https://docs.google.com/spreadsheets/d/1K3dblNOAijnKdJXeha9_DWlSLhOc1Wcq5F1Mwlvk7x4
@@ -40,7 +41,8 @@ namespace {
                                         "col_txt",
                                         "col_txt_am",
                                         "hm",
-										"lingrad"
+										"lg",
+										"tx_lg"
                                     };
 }
 

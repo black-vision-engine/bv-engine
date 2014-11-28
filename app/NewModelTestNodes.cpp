@@ -382,7 +382,6 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::TimelineMan
     uids.push_back( "DEFAULT_TRANSFORM" );
     uids.push_back( "DEFAULT_RECTANGLE" );
     uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
-    //uids.push_back( "DEFAULT_TEXTURE" );
 
     //Create a model
     model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rectNode", timeEvaluator );
@@ -393,36 +392,108 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::TimelineMan
 	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 	simpleTransform->SetTimeEvaluator(offset3Timeline);
 
-	//SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
-	//SetParameterRotation ( simpleTransform, 0, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
-
-    auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
-    assert( color1 );
+// RECT plugin
 
     auto w = root->GetPlugin( "rectangle" )->GetParameter( "width" );
     auto h = root->GetPlugin( "rectangle" )->GetParameter( "height" );
 
-	//h->SetTimeEvaluator(offset5Timeline);
-	//w->SetTimeEvaluator(offset5Timeline);
-
     success &= SetParameter( w, 0.f, 2.f );
     success &= SetParameter( h, 0.f, 1.f );
 
- //   success &= SetParameter( w, 7.f, 1.f );
- //   success &= SetParameter( h, 7.f, 2.f );
+// LINEAR GRADIENT plugin
 
+    auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
+    assert( color1 );
     success &= SetParameter( color1, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
 	success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
-
     assert( success );
-
-    auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
-    assert( color1 );
-
+	auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+    assert( color2 );
     success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 0.5f, 0.f, 1.f ) );
 	success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 1.f) );
-
     assert( success );
+
+    return root;
+}
+
+model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
+{
+	auto offset5Timeline = timelineManager->CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
+	auto offset3Timeline  = timelineManager->CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+	timeEvaluator->AddChild(offset5Timeline);
+	timeEvaluator->AddChild(offset3Timeline);
+
+	//Plugin list
+    std::vector< std::string > uids;
+
+    uids.push_back( "DEFAULT_TRANSFORM" );
+    //uids.push_back( "DEFAULT_RECTANGLE" );
+    //uids.push_back( "DEFAULT_COLOR" );
+	uids.push_back( "DEFAULT_TEXT" );
+    uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
+	//uids.push_back( "DEFAULT_ALPHA_MASK" );
+
+    //Create a model
+    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rectNode", timeEvaluator );
+
+    bool success = root->AddPlugins( uids, timeEvaluator );
+    assert( success );
+
+	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+	simpleTransform->SetTimeEvaluator(offset3Timeline);
+
+// TRANSFORM plugin
+
+	//SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
+	//SetParameterRotation ( simpleTransform, 0, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+
+// RECT plugin
+
+    //auto w = root->GetPlugin( "rectangle" )->GetParameter( "width" );
+    //auto h = root->GetPlugin( "rectangle" )->GetParameter( "height" );
+
+	//h->SetTimeEvaluator(offset5Timeline);
+	//w->SetTimeEvaluator(offset5Timeline);
+
+    //success &= SetParameter( w, 0.f, 2.f );
+    //success &= SetParameter( h, 0.f, 1.f );
+
+    //success &= SetParameter( w, 7.f, 1.f );
+    //success &= SetParameter( h, 7.f, 2.f );
+
+// COLOR plugin
+
+	//SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 0.f, 0.5f, 0.f, 1.f ) );
+
+// TEXT plugin
+
+	auto node = root;
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 123.0f );
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( 0 ) );
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.0f );
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( model::TextAlignmentType::Left ) );
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 0.0 ), 0.0f );
+    success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/arial.TTF" );
+    assert( success );
+
+	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"1238" );
+
+
+//return root;
+// LINEAR GRADIENT plugin
+
+    auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
+    assert( color1 );
+    success &= SetParameter( color1, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+	success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+    assert( success );
+	auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+    assert( color2 );
+    success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 0.5f, 0.f, 1.f ) );
+	success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 1.f) );
+    assert( success );
+    node->GetPlugin( "linear_gradient" )->Update( TimeType( 0.f ) ); //Regenerate all necessary geometry and channels
+
 
 
     return root;
@@ -638,7 +709,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     //SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
 
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ) );
-    SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 23.0f );
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 123.0f );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
 
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.0f );

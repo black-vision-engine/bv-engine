@@ -9,6 +9,8 @@
 
 #include "Engine/Models/Resources/IPluginResourceDescr.h"
 
+#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 
 namespace bv { namespace model {
 
@@ -77,14 +79,21 @@ bool                   DefaultGradientPluginDesc::CanBeAttachedTo     ( IPluginC
         return false;
     }
 
-    auto  vac = plugin->GetVertexAttributesChannel();
-    if ( vac == nullptr )
-    {
-        return false;
-    }
+    //auto  vac = plugin->GetVertexAttributesChannel();
+    //if ( vac == nullptr )
+    //{
+    //    return false;
+    //}
 
-    auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
-    if ( numChannels != 1 ) //only vertex attribute data allowed here
+    //auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
+    //if ( numChannels != 1 ) //only vertex attribute data allowed here
+    //{
+    //    return false;
+    //}
+
+    auto uid = plugin->GetTypeUid();
+
+	if ( uid != DefaultRectPluginDesc::UID() && uid != DefaultTextPluginDesc::UID() )
     {
         return false;
     }
@@ -103,14 +112,14 @@ std::string             DefaultGradientPluginDesc::UID                       ()
 //
 std::string             DefaultGradientPluginDesc::VertexShaderSource        ()
 {
-    return "../dep/media/shaders/defaulttexture.vert";
+    return "../dep/media/shaders/combinations/lg.vert";
 }
 
 // *******************************
 //
 std::string             DefaultGradientPluginDesc::PixelShaderSource         ()
 {
-    return "../dep/media/shaders/defaulttexture.frag";
+    return "../dep/media/shaders/combinations/lg.frag";
 }
 
 // *******************************
@@ -215,6 +224,11 @@ void                                DefaultGradientPlugin::Update               
         }
     }
 
+    if( m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
+    {
+		InitAttributesChannel( m_prevPlugin );	
+	}
+
     //auto wX = GetWrapModeX();
     //auto wY = GetWrapModeY();
     //auto fm = GetFilteringMode();
@@ -237,8 +251,15 @@ void                                DefaultGradientPlugin::Update               
 //
 void DefaultGradientPlugin::InitAttributesChannel( IPluginPtr prev )
 {
-    auto prevGeomChannel = prev->GetVertexAttributesChannel();
+	auto prevGeomChannel = prev->GetVertexAttributesChannel();
     AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+
+    if( prevGeomChannel == nullptr ) //FIXME: hackierka
+    {
+        assert( prev->GetTypeUid() == DefaultTextPluginDesc::UID() );
+
+        return;
+    }
 
     for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
     {
@@ -269,6 +290,8 @@ void DefaultGradientPlugin::InitAttributesChannel( IPluginPtr prev )
             auto vaChannel = VertexAttributesChannelPtr( new VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() ) );
             m_vaChannel = vaChannel;
         }
+
+		m_vaChannel->ClearConnectedComponent();
 
         //FIXME: only one texture - convex hull calculations
         float minX = 100000.0f, minY = 100000.0f;

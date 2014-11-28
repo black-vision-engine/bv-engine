@@ -11,6 +11,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
 
 #include "Engine/Models/Resources/IPluginResourceDescr.h"
 
@@ -100,7 +101,7 @@ bool                   DefaultAlphaMaskPluginDesc::CanBeAttachedTo     ( IPlugin
 
     auto uid = plugin->GetTypeUid();
 
-    if ( uid != DefaultColorPluginDesc::UID() && uid != DefaultTexturePluginDesc::UID() && uid != DefaultTextPluginDesc::UID() && uid != DefaultAnimationPluginDesc::UID() )
+	if ( uid != DefaultColorPluginDesc::UID() && uid != DefaultTexturePluginDesc::UID() && uid != DefaultTextPluginDesc::UID() && uid != DefaultAnimationPluginDesc::UID() && uid != DefaultGradientPluginDesc::UID() )
     {
         return false;
     }
