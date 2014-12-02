@@ -137,6 +137,8 @@ void    BlackVisionApp::InitializeConsole   ()
     
         freopen_s( &dummy, "CONOUT$", "wb", stdout );
         freopen_s( &dummy, "CONOUT$", "wb", stderr );
+
+        std::cout << sizeof(FILE*);
     }
 }
 
