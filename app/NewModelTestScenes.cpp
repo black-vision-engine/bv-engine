@@ -447,7 +447,9 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 //
 model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    //auto node0 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+    return SimpleNodesFactory::CreateHeightMapNode( timelineManager, timeEvaluator );
+
+    // auto node0 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
     //auto node1 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
 
     //node0->AddChild( node1 );
