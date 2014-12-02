@@ -42,7 +42,7 @@ namespace {
                                         "col_txt_am",
                                         "hm",
 										"lg",
-										"tx_lg"
+										"txt_lg"
                                     };
 }
 

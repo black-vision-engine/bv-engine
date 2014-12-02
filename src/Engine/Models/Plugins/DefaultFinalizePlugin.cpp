@@ -94,7 +94,7 @@ IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel
     if( m_finalizePSC == nullptr )
     {
         m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( std::const_pointer_cast< IPixelShaderChannel >( m_prevPlugin->GetPixelShaderChannel() ), m_shadersDir );
-        m_finalizePSC->RegenerateShaderSource( PrevUIDS( 2 ) );
+        m_finalizePSC->RegenerateShaderSource( PrevUIDS( 1 ) ); // FIXME HACK for tx_lg WTF?
     }
 
     return m_finalizePSC;
@@ -116,7 +116,7 @@ IVertexShaderChannelConstPtr        DefaultFinalizePlugin::GetVertexShaderChanne
     if( m_finalizeVSC == nullptr )
     {
         m_finalizeVSC = std::make_shared< DefaultFinalizeVertexShaderChannel >( std::const_pointer_cast< IVertexShaderChannel >( vsc ), m_shadersDir );
-        m_finalizeVSC->RegenerateShaderSource( PrevUIDS( 2 ) );
+        m_finalizeVSC->RegenerateShaderSource( PrevUIDS( 1 ) ); // FIXME HACK for tx_lg WTF?
     }
 
     return m_finalizeVSC;

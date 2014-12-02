@@ -126,7 +126,7 @@ std::string             DefaultGradientPluginDesc::PixelShaderSource         ()
 //
 std::string             DefaultGradientPluginDesc::TextureName               ()
 {
-    return "Tex0";
+    return "Grad0";
 }
 
 //FIXME: dodawanie kanalow w ten sposob (przez przypisanie na m_<xxx>channel powoduje bledy, trzeba to jakos poprawic, zeby bylo wiadomo, o co chodzi
@@ -142,24 +142,12 @@ DefaultGradientPlugin::DefaultGradientPlugin         ( const std::string & name,
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
+	, m_pscInitialized(false)
 {
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultGradientPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultGradientPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
 
     InitAttributesChannel( prev );
-
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
-    
-    ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-    ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-
-    m_texturesData = m_psc->GetTexturesDataImpl();
-
-    //Direct param state access (to bypass model querying)
-    auto psModel = PixelShaderChannelModel();
-    
 }
 
 // *************************************
@@ -179,6 +167,15 @@ IVertexAttributesChannelConstPtr    DefaultGradientPlugin::GetVertexAttributesCh
 // 
 IPixelShaderChannelConstPtr         DefaultGradientPlugin::GetPixelShaderChannel       () const
 {
+	if(!m_pscInitialized) // FIXME this sucks so very much I can't breathe!!!
+	{
+		auto prevTexturesData = m_prevPlugin->GetPixelShaderChannel()->GetTexturesData();
+
+		for(auto t : prevTexturesData->GetTextures())
+			m_psc->GetTexturesDataImpl()->AddTexture(static_cast<DefaultTextureDescriptor*>(t));
+
+		const_cast<DefaultGradientPlugin*>(this)->m_pscInitialized = true;
+	}
     return m_psc;
 }
 
@@ -226,6 +223,11 @@ void                                DefaultGradientPlugin::Update               
 
     if( m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
     {
+        if( m_vaChannel != nullptr )
+        {
+            m_vaChannel->ClearAll();
+        }
+
 		InitAttributesChannel( m_prevPlugin );	
 	}
 
@@ -261,6 +263,29 @@ void DefaultGradientPlugin::InitAttributesChannel( IPluginPtr prev )
         return;
     }
 
+
+    //FIXME: only one texture - convex hull calculations
+    float minX = 100000.0f, minY = 100000.0f;
+    float maxX = 0.0f, maxY = 0.0f;
+
+
+    for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
+    {
+        auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( prevGeomChannel->GetComponents()[ i ] );
+        auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
+
+        //convex hull - make sure that prevCompChannels[ 0 ] is indeed a positional channel
+        for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
+        {
+            const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
+
+            minX = std::min( minX, pos[ j ].x );
+            minY = std::min( minY, pos[ j ].y );
+            maxX = std::max( maxX, pos[ j ].x );
+            maxY = std::max( maxY, pos[ j ].y );
+        }
+	}
+	
     for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
     {
         auto connComp = ConnectedComponent::Create();
@@ -291,22 +316,7 @@ void DefaultGradientPlugin::InitAttributesChannel( IPluginPtr prev )
             m_vaChannel = vaChannel;
         }
 
-		m_vaChannel->ClearConnectedComponent();
-
-        //FIXME: only one texture - convex hull calculations
-        float minX = 100000.0f, minY = 100000.0f;
-        float maxX = 0.0f, maxY = 0.0f;
-
-        //convex hull - make sure that prevCompChannels[ 0 ] is indeed a positional channel
-        for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
-        {
-            const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
-
-            minX = std::min( minX, pos[ j ].x );
-            minY = std::min( minY, pos[ j ].y );
-            maxX = std::max( maxX, pos[ j ].x );
-            maxY = std::max( maxY, pos[ j ].y );
-        }
+		//m_vaChannel->ClearConnectedComponent();
 
         auto verTexAttrChannel = new model::Float2AttributeChannel( desc, DefaultGradientPluginDesc::TextureName(), true );
 
@@ -322,29 +332,29 @@ void DefaultGradientPlugin::InitAttributesChannel( IPluginPtr prev )
     }
 }
 
-namespace {
-
-// *************************************
-// FIXME: implement int parameters and bool parameters
-template< typename EnumClassType >
-inline EnumClassType EvaluateAsInt( ParamFloat * param )
-{
-    int val = int( param->Evaluate() );
-
-    return EnumClassType( val );
-}
-
-// *************************************
-// FIXME: implement int parameters and bool parameters
-template< typename EnumClassType >
-inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
-{
-    int val = int( param->Evaluate() );
-
-    return EnumClassType( val );
-}
-
-} //anonymous
+//namespace {
+//
+//// *************************************
+//// FIXME: implement int parameters and bool parameters
+//template< typename EnumClassType >
+//inline EnumClassType EvaluateAsInt( ParamFloat * param )
+//{
+//    int val = int( param->Evaluate() );
+//
+//    return EnumClassType( val );
+//}
+//
+//// *************************************
+//// FIXME: implement int parameters and bool parameters
+//template< typename EnumClassType >
+//inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
+//{
+//    int val = int( param->Evaluate() );
+//
+//    return EnumClassType( val );
+//}
+//
+//} //anonymous
 
 // *************************************
 // 

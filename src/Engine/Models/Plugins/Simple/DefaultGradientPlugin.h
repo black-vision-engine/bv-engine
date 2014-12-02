@@ -52,6 +52,8 @@ private:
 
     unsigned int                    m_texCoordChannelIndex;
 
+	bool							m_pscInitialized;
+
     //ParamFloatPtr                   m_paramWrapModeX;
     //ParamFloatPtr                   m_paramWrapModeY;
     //ParamFloatPtr                   m_paramFilteringMode;

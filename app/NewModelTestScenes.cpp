@@ -524,9 +524,10 @@ model::BasicNodePtr     TestScenesFactory::CreedTestScene     ( const model::Plu
 
 	//auto rect = SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, true );
 	//auto rect = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, true );
+	//auto rect = SimpleNodesFactory::CreateTexturedTextNode( timelineManager, timeEvaluator, false );
 	//auto rect = SimpleNodesFactory::CreateHeightMapNode( timelineManager, timeEvaluator );
 	//auto rect = SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator, true );
-	//auto rect = SimpleNodesFactory::CreateTextNode(timelineManager, timeEvaluator, 0, true );
+	//auto rect = SimpleNodesFactory::CreateTextNode(timelineManager, timeEvaluator, 0, false );
 
 
 	return rect;
