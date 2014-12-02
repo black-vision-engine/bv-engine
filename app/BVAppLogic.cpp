@@ -399,9 +399,10 @@ void BVAppLogic::RenderScene     ( Renderer * renderer )
     renderer->PreDraw();
 
     m_offscreenRenderLogic->EnableDisplayRenderTarget( renderer );
-    renderer->ClearBuffers();
 
+    renderer->ClearBuffers();
     RenderNode( renderer, m_mockSceneEng );
+
     m_offscreenRenderLogic->DisableDisplayRenderTarget( renderer );
 
     m_offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
@@ -420,6 +421,7 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
         //Render to auxiliary buffer
         if( isOverriden )
         {
+            //FIXME: generic approach requires that only current aux is disabled but some other aux target may still be enabled here
             assert( m_offscreenRenderLogic->AuxRenderTargetEnabled() == false );
             m_offscreenRenderLogic->EnableAuxRenderTarget( renderer );
             renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
@@ -432,9 +434,15 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
         //Blend auxiliary buffer with current 
         if( isOverriden )
         {
+            //FIXME: draw to the previous target and not to the explicitely stated display render target
             m_offscreenRenderLogic->EnableDisplayRenderTarget( renderer );
+
+            //FIXME: next two line force blending with specified alpha
             m_offscreenRenderLogic->SetAuxAlphaModelValue( node->GetOverrideAlpha() );
             m_offscreenRenderLogic->DrawAuxRenderTarget( renderer );
+
+            //FIXME: use prev node to mask current node
+            //m_offscreenRenderLogic->DrawAuxRenderTargetUsingPrevAlpha( renderer );
         }
     }
 }
