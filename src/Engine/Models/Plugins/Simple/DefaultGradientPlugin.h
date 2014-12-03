@@ -29,8 +29,8 @@ public:
 
     static  std::string                     UID                 ();
 
-    static  std::string                     VertexShaderSource  ();
-    static  std::string                     PixelShaderSource   ();
+    //static  std::string                     VertexShaderSource  ();
+    //static  std::string                     PixelShaderSource   ();
 
     static  std::string                     TextureName         ();
 
@@ -50,52 +50,20 @@ private:
 
     DefaultTexturesDataPtr          m_texturesData;
 
-    unsigned int                    m_texCoordChannelIndex;
-
-	bool							m_pscInitialized;
-
-    //ParamFloatPtr                   m_paramWrapModeX;
-    //ParamFloatPtr                   m_paramWrapModeY;
-    //ParamFloatPtr                   m_paramFilteringMode;
-    //ParamFloatPtr                   m_paramAttachMode;
-    
-    //unsigned int                    m_textureWidth;
-    //unsigned int                    m_textureHeight;
-
-    //TextureWrappingMode             m_lastTextureWrapModeX;
-    //TextureWrappingMode             m_lastTextureWrapModeY;
-    //TextureFilteringMode            m_lastTextureFilteringMode;
-    //TextureAttachmentMode           m_lastTextureAttachMode;
-    
-
 public:
 
     explicit                                    DefaultGradientPlugin        ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
                                                 ~DefaultGradientPlugin       ();
 
-    //virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
-
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
-
-    //unsigned int                                GetTextureWidth             () const;
-    //unsigned int                                GetTextureHeight            () const;
 
     virtual void                                Update                      ( TimeType t ) override;
 
 private:
 
     void                                        InitAttributesChannel       ( IPluginPtr prev );
-
-    //TextureWrappingMode                         GetWrapModeX                () const;
-    //TextureWrappingMode                         GetWrapModeY                () const;
-    //TextureFilteringMode                        GetFilteringMode            () const;
-    //TextureAttachmentMode                       GetAttachementMode          () const;
-
-    //bool                                        StateChanged                ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am ) const;
-    void                                        UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am );
-
 };
 
 } // model

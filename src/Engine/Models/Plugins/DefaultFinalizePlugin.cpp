@@ -84,6 +84,8 @@ ITransformChannelConstPtr           DefaultFinalizePlugin::GetTransformChannel  
     return m_prevPlugin->GetTransformChannel();
 }
 
+#define DEFAULT_PLUGINS_TO_SKIP 1
+
 // *******************************
 //
 IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel        () const
@@ -94,7 +96,7 @@ IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel
     if( m_finalizePSC == nullptr )
     {
         m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( std::const_pointer_cast< IPixelShaderChannel >( m_prevPlugin->GetPixelShaderChannel() ), m_shadersDir );
-        m_finalizePSC->RegenerateShaderSource( PrevUIDS( 1 ) ); // FIXME HACK for tx_lg WTF?
+        m_finalizePSC->RegenerateShaderSource( PrevUIDS( DEFAULT_PLUGINS_TO_SKIP ) ); // FIXME HACK for tx_lg WTF?
     }
 
     return m_finalizePSC;
@@ -116,7 +118,7 @@ IVertexShaderChannelConstPtr        DefaultFinalizePlugin::GetVertexShaderChanne
     if( m_finalizeVSC == nullptr )
     {
         m_finalizeVSC = std::make_shared< DefaultFinalizeVertexShaderChannel >( std::const_pointer_cast< IVertexShaderChannel >( vsc ), m_shadersDir );
-        m_finalizeVSC->RegenerateShaderSource( PrevUIDS( 1 ) ); // FIXME HACK for tx_lg WTF?
+        m_finalizeVSC->RegenerateShaderSource( PrevUIDS( DEFAULT_PLUGINS_TO_SKIP ) ); // FIXME HACK for tx_lg WTF?
     }
 
     return m_finalizeVSC;
@@ -135,7 +137,7 @@ IGeometryShaderChannelConstPtr           DefaultFinalizePlugin::GetGeometryShade
         if( prevChannel != nullptr )
         {
             m_finalizeGSC = std::make_shared< DefaultFinalizeGeometryShaderChannel >( std::const_pointer_cast< IGeometryShaderChannel >( m_prevPlugin->GetGeometryShaderChannel() ), m_shadersDir );
-            m_finalizeGSC->RegenerateShaderSource( PrevUIDS( 2 ) );
+            m_finalizeGSC->RegenerateShaderSource( PrevUIDS( DEFAULT_PLUGINS_TO_SKIP ) );
         }
     }
 

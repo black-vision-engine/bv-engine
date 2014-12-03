@@ -110,27 +110,24 @@ std::string             DefaultGradientPluginDesc::UID                       ()
 
 // *******************************
 //
-std::string             DefaultGradientPluginDesc::VertexShaderSource        ()
-{
-    return "../dep/media/shaders/combinations/lg.vert";
-}
-
-// *******************************
+//std::string             DefaultGradientPluginDesc::VertexShaderSource        ()
+//{
+//    return "../dep/media/shaders/combinations/lg.vert";
+//}
 //
-std::string             DefaultGradientPluginDesc::PixelShaderSource         ()
-{
-    return "../dep/media/shaders/combinations/lg.frag";
-}
-
+//// *******************************
+////
+//std::string             DefaultGradientPluginDesc::PixelShaderSource         ()
+//{
+//    return "../dep/media/shaders/combinations/lg.frag";
+//}
+//
 // *******************************
 //
 std::string             DefaultGradientPluginDesc::TextureName               ()
 {
     return "Grad0";
 }
-
-//FIXME: dodawanie kanalow w ten sposob (przez przypisanie na m_<xxx>channel powoduje bledy, trzeba to jakos poprawic, zeby bylo wiadomo, o co chodzi
-//FIXME: teraz zle dodanie wychodzi dopiero po odpaleniu silnika, a to jest oczywisty blad
 
 // ************************************************************************* PLUGIN *************************************************************************
 
@@ -142,12 +139,21 @@ DefaultGradientPlugin::DefaultGradientPlugin         ( const std::string & name,
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
-	, m_pscInitialized(false)
 {
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultGradientPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultGradientPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
+    //m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultGradientPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
+    //m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultGradientPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
+	m_psc = DefaultPixelShaderChannelPtr( new DefaultPixelShaderChannel( "", model->GetPixelShaderChannelModel() ) );
+	m_vsc = DefaultVertexShaderChannelPtr( new DefaultVertexShaderChannel( "", model->GetVertexShaderChannelModel() ) );
 
     InitAttributesChannel( prev );
+
+    if( /*prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() ||*/ prev->GetTypeUid() == DefaultTextPluginDesc::UID() )
+    {
+        //FIXME: set textures data from prev plugin to this plugin
+        auto prev_psc = std::const_pointer_cast< ITexturesData >( prev->GetPixelShaderChannel()->GetTexturesData() );
+        //FIXME: this line causes changes to Texture Plugin data via current pointer - quite shitty
+        m_psc->OverrideTexturesData( std::static_pointer_cast< DefaultTexturesData >( prev_psc ) );
+    }
 }
 
 // *************************************
@@ -167,15 +173,6 @@ IVertexAttributesChannelConstPtr    DefaultGradientPlugin::GetVertexAttributesCh
 // 
 IPixelShaderChannelConstPtr         DefaultGradientPlugin::GetPixelShaderChannel       () const
 {
-	if(!m_pscInitialized) // FIXME this sucks so very much I can't breathe!!!
-	{
-		auto prevTexturesData = m_prevPlugin->GetPixelShaderChannel()->GetTexturesData();
-
-		for(auto t : prevTexturesData->GetTextures())
-			m_psc->GetTexturesDataImpl()->AddTexture(static_cast<DefaultTextureDescriptor*>(t));
-
-		const_cast<DefaultGradientPlugin*>(this)->m_pscInitialized = true;
-	}
     return m_psc;
 }
 
@@ -192,35 +189,6 @@ void                                DefaultGradientPlugin::Update               
 {
     m_paramValModel->Update();
 
-    //auto attachmentMode = GetAttachementMode();
-
-    //if( attachmentMode == TextureAttachmentMode::MM_FREE )
-    {
-        if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-        {
-            for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
-            {
-                auto connComp = m_vaChannel->GetConnectedComponent( i );
-                auto compChannels = connComp->GetAttributeChannels();
-
-                if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
-                {
-                    if( auto uvChannel = AttributeChannel::GetUVChannel( compChannels, m_texCoordChannelIndex ) )
-                    {
-                        auto & verts  = std::dynamic_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices();
-                        auto & uvs    = std::dynamic_pointer_cast< Float2AttributeChannel >( uvChannel )->GetVertices();
-
-                        for( unsigned int i = 0; i < verts.size(); ++i )
-                        {
-                            uvs[ i ].x = verts[ i ].x;
-                            uvs[ i ].y = verts[ i ].y;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     if( m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
     {
         if( m_vaChannel != nullptr )
@@ -231,22 +199,10 @@ void                                DefaultGradientPlugin::Update               
 		InitAttributesChannel( m_prevPlugin );	
 	}
 
-    //auto wX = GetWrapModeX();
-    //auto wY = GetWrapModeY();
-    //auto fm = GetFilteringMode();
+        //m_vaChannel->SetNeedsAttributesUpdate( true );
 
-    //if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() || StateChanged( wX, wY, fm, attachmentMode ) )
-    //{
-    //    UpdateState( wX, wY, fm, attachmentMode );
-        m_vaChannel->SetNeedsAttributesUpdate( true );
-    //}
-    //else
-    //{
-        //m_vaChannel->SetNeedsAttributesUpdate( false );
-    //}
-
-    m_vsc->PostUpdate();
-    m_psc->PostUpdate();    
+    //m_vsc->PostUpdate();
+    //m_psc->PostUpdate();    
 }
 
 // *************************************
@@ -254,7 +210,7 @@ void                                DefaultGradientPlugin::Update               
 void DefaultGradientPlugin::InitAttributesChannel( IPluginPtr prev )
 {
 	auto prevGeomChannel = prev->GetVertexAttributesChannel();
-    AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR ); // TOCHECK is that right?
 
     if( prevGeomChannel == nullptr ) //FIXME: hackierka
     {
@@ -307,16 +263,12 @@ void DefaultGradientPlugin::InitAttributesChannel( IPluginPtr prev )
                 vaChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
             }
 
-            m_texCoordChannelIndex = vaChannelDesc.GetNumVertexChannels();
-
             //Only one texture
-            vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+            vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR ); // TOCHECK is it needed?
 
             auto vaChannel = VertexAttributesChannelPtr( new VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() ) );
             m_vaChannel = vaChannel;
         }
-
-		//m_vaChannel->ClearConnectedComponent();
 
         auto verTexAttrChannel = new model::Float2AttributeChannel( desc, DefaultGradientPluginDesc::TextureName(), true );
 
@@ -330,36 +282,6 @@ void DefaultGradientPlugin::InitAttributesChannel( IPluginPtr prev )
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
-}
-
-//namespace {
-//
-//// *************************************
-//// FIXME: implement int parameters and bool parameters
-//template< typename EnumClassType >
-//inline EnumClassType EvaluateAsInt( ParamFloat * param )
-//{
-//    int val = int( param->Evaluate() );
-//
-//    return EnumClassType( val );
-//}
-//
-//// *************************************
-//// FIXME: implement int parameters and bool parameters
-//template< typename EnumClassType >
-//inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
-//{
-//    int val = int( param->Evaluate() );
-//
-//    return EnumClassType( val );
-//}
-//
-//} //anonymous
-
-// *************************************
-// 
-void                                        DefaultGradientPlugin::UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am )
-{
 }
 
 } // model
