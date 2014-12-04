@@ -203,6 +203,7 @@
     <ClCompile Include="Engine\Graphics\Effects\DefaultEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Effects\Texture2DEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Effects\Texture2DEffectShaders.cpp" />
+    <ClCompile Include="Engine\Graphics\Effects\Texture2DEffectWithMask.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrPBOMemTransfer.cpp" />
@@ -411,6 +412,7 @@
     <ClInclude Include="Engine\Graphics\Effects\DefaultEffect.h" />
     <ClInclude Include="Engine\Graphics\Effects\Texture2DEffect.h" />
     <ClInclude Include="Engine\Graphics\Effects\Texture2DEffectShaders.h" />
+    <ClInclude Include="Engine\Graphics\Effects\Texture2DEffectWithMask.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrPBOMemTransfer.h" />

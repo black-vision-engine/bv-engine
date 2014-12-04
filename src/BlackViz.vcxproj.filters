@@ -201,6 +201,7 @@
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultTimerPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Custom\DefaultHeightMapPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultRectPlugin.cpp" />
+    <ClCompile Include="Engine\Graphics\Effects\Texture2DEffectWithMask.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -460,6 +461,7 @@
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultTimerPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Custom\DefaultHeightMapPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultRectPlugin.h" />
+    <ClInclude Include="Engine\Graphics\Effects\Texture2DEffectWithMask.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
