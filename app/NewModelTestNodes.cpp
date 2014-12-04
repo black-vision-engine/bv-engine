@@ -174,7 +174,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::s
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    TexturedRectNodeBuilder bTex( timeEvaluator, "simless_01.jpg", false, 3.4f, 0.7f );
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_01.jpg", false, 3.4f, 0.7f );
     SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 1.f ), .85f, 0.31f );
 
     bTex.SetPosition( 0.f, -.6f, 0.f );
@@ -183,7 +183,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::Timel
     bTex.SetW( .85f );
     bTex.SetH( 0.31f );
     bTex.SetPosition( 1.3f, -0.17f, 0.01f, 0.0f );
-    bTex.SetTextureFile( "simless_00.jpg", false );
+    bTex.SetTextureFile( "rsrcy/simless_00.jpg", false );
     bTex.SetPosition( -1.f,  -0.17f, 0.01f, 0.0f );
     bTex.SetPosition( -1.1f, -0.17f, 0.01f, 2.0f );
     bTex.SetPosition( -0.2f, -0.17f, 0.01f, 4.0f );
@@ -215,7 +215,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::Timel
     bSolid.SetPosition( 0.2f, 0.f, 0.01f );
     auto c01 = bSolid.CreateNode( "node02" );
 
-    bTex.SetTextureFile( "simless_01.jpg", false );
+    bTex.SetTextureFile( "rsrcy/simless_01.jpg", false );
     bTex.SetW( .15f );
     bTex.SetH( 0.15f );
     bTex.SetPosition( 0.f, 0.f, 0.01f );

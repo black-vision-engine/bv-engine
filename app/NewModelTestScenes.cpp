@@ -447,7 +447,7 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 //
 model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    return SimpleNodesFactory::CreateHeightMapNode( timelineManager, timeEvaluator );
+    //return SimpleNodesFactory::CreateHeightMapNode( timelineManager, timeEvaluator );
 
     // auto node0 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
     //auto node1 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
@@ -456,7 +456,7 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
 
     //return node0;
 
-    //return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );
+    return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );
     //TestQueryNode( timelineManager, timeEvaluator ); //FIXME: remove or uncomment after tests
     //auto c0 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node0" );
     //auto c1 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node1" );

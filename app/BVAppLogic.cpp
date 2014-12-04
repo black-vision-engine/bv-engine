@@ -53,8 +53,10 @@ namespace
         //static auto ai = TestAIManager::Instance().GetAIPreset( 5, logic );
         //static auto ai = TestAIManager::Instance().GetAIPreset( 4, logic );
         //static auto ai = TestAIManager::Instance().GetAIPreset( 2, logic->GetModelScene()->GetSceneRoot() );
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 3, logic->GetModelScene()->GetSceneRoot() );
-        //ai->EvalAt( t );
+        
+        //Override alpha test events
+        static auto ai = TestAIManager::Instance().GetAIPreset( 3, logic->GetModelScene()->GetSceneRoot() );
+        ai->EvalAt( t );
 
         //PRE GOWNO
         float tx = float( sin( t ) );
@@ -123,8 +125,7 @@ void BVAppLogic::Initialize         ()
 //
 void BVAppLogic::LoadScene          ( void )
 {
-    //model::BasicNodePtr root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
-    model::BasicNodePtr root = TestScenesFactory::OlafTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
+    model::BasicNodePtr root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
 	assert( root );
 
     m_mockSceneEng  = root->BuildScene();
