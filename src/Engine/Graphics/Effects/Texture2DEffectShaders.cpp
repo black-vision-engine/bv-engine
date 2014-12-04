@@ -46,6 +46,9 @@ std::string ps_alpha    = " #version 400 \n \
 //
 std::string ps_mask_no_alpha = " #version 400 \n \
                                 \n \
+                                subroutine float blendValueGetter( vec4 col ); \n \
+                                subroutine uniform blendValueGetter getBlendValue; \n \
+                                \n \
                                 layout (location = 0) out vec4 FragColor; \n \
                                 \n \
                                 in vec2 uvCoord; \n \
@@ -53,17 +56,44 @@ std::string ps_mask_no_alpha = " #version 400 \n \
                                 uniform sampler2D Texture; \n \
                                 uniform sampler2D Mask; \n \
                                 \n \
+                                subroutine( blendValueGetter ) \n \
+                                float getAlpha( vec4 col ) \n \
+                                {\n \
+                                    return col.a; \n \
+                                }\n \
+                                \n \
+                                subroutine( blendValueGetter ) \n \
+                                float getRed( vec4 col ) \n \
+                                {\n \
+                                    return col.r; \n \
+                                }\n \
+                                \n \
+                                subroutine( blendValueGetter ) \n \
+                                float getGreen( vec4 col ) \n \
+                                {\n \
+                                    return col.g; \n \
+                                }\n \
+                                \n \
+                                subroutine( blendValueGetter ) \n \
+                                float getBlue( vec4 col ) \n \
+                                {\n \
+                                    return col.b; \n \
+                                }\n \
+                                \n \
                                 void main() \n \
                                 {\n \
 	                                vec4 col = texture( Texture, uvCoord );\n \
 	                                vec4 mask = texture( Mask, uvCoord );\n \
-	                                FragColor = mask.a * col.rgba;\n \
+                                    FragColor = getBlendValue( mask ) * col.rgba;\n \
                                 }\n \
                             ";
 
 // *********************************
 //
 std::string ps_mask_alpha    = " #version 400 \n \
+                                \n \
+                                subroutine float blendValueGetter( vec4 col ); \n \
+                                subroutine uniform blendValueGetter getBlendValue; \n \
                                 \n \
                                 layout (location = 0) out vec4 FragColor; \n \
                                 \n \
@@ -73,13 +103,37 @@ std::string ps_mask_alpha    = " #version 400 \n \
                                 uniform sampler2D Texture; \n \
                                 uniform sampler2D Mask; \n \
                                 \n \
+                                subroutine( blendValueGetter ) \n \
+                                float getAlpha( vec4 col ) \n \
+                                {\n \
+                                    return col.a; \n \
+                                }\n \
+                                \n \
+                                subroutine( blendValueGetter ) \n \
+                                float getRed( vec4 col ) \n \
+                                {\n \
+                                    return col.r; \n \
+                                }\n \
+                                \n \
+                                subroutine( blendValueGetter ) \n \
+                                float getGreen( vec4 col ) \n \
+                                {\n \
+                                    return col.g; \n \
+                                }\n \
+                                \n \
+                                subroutine( blendValueGetter ) \n \
+                                float getBlue( vec4 col ) \n \
+                                {\n \
+                                    return col.b; \n \
+                                }\n \
+                                \n \
                                 void main() \n \
                                 {\n \
 	                                vec4 col = texture( Texture, uvCoord );\n \
 	                                vec4 mask = texture( Mask, uvCoord );\n \
                                     //if( col.a * alpha < 0.9 ) \n \
                                     //    discard; \n \
-	                                FragColor = mask.a * col.rgba * alpha;\n \
+                                    FragColor = getBlendValue( mask ) * col.rgba * alpha;\n \
                                 }\n \
                             ";
 
