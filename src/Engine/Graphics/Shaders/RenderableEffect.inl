@@ -4,7 +4,7 @@ namespace bv {
 //
 inline unsigned int     RenderableEffect::NumPasses () const
 {
-    return m_passes.size();
+    return (unsigned int) m_passes.size();
 }
 
 // *********************************

@@ -349,7 +349,7 @@ TransformVecParamValEvaluatorPtr   ParamValEvaluatorFactory::CreateTransformVecE
 {
     assert( valueNames.size() > 0 );
 
-    ParamTransformVecPtr ptv = ParametersFactory::CreateParameterTransformVec( paramName, timeEvaluator, valueNames.size() );
+    ParamTransformVecPtr ptv = ParametersFactory::CreateParameterTransformVec( paramName, timeEvaluator, (int) valueNames.size() );
 
     ValueMat4PtrVec values( valueNames.size() );
 

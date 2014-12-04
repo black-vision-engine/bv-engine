@@ -14,7 +14,7 @@ namespace bv {
 
 namespace {
 
-const unsigned int GNumRednerTargets = 2;
+const unsigned int GNumRenderTargets = 2;
 
 } //anonymous
 
@@ -22,7 +22,7 @@ const unsigned int GNumRednerTargets = 2;
 //
 OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int height, unsigned int numReadBuffers, Camera * camera, TextureFormat fmt )
     : m_auxRenderTarget( nullptr )
-    , m_readbackTextures( numReadBuffers * GNumRednerTargets ) //two display targets that can be potentially used
+    , m_readbackTextures( numReadBuffers * GNumRenderTargets ) //two display targets that can be potentially used
     , m_displayCamera( nullptr )
     , m_rendererCamera( camera )
     , m_auxQuad( nullptr )
@@ -142,7 +142,7 @@ void                OffscreenRenderLogic::SetAuxAlphaModelValue     ( const IVal
 //
 void                OffscreenRenderLogic::SwapDisplayRenderTargets  ()
 {
-    m_curDisplayTarget = ( m_curDisplayTarget + 1 ) % GNumRednerTargets;
+    m_curDisplayTarget = ( m_curDisplayTarget + 1 ) % GNumRenderTargets;
 }
 
 // **************************
@@ -186,21 +186,21 @@ void                OffscreenRenderLogic::DrawAuxRenderTarget       ( Renderer *
 //
 unsigned int        OffscreenRenderLogic::TotalNumReadBuffers       () const
 {
-    return m_readbackTextures.size();
+    return (unsigned int) m_readbackTextures.size();
 }
 
 // **************************
 //
 unsigned int        OffscreenRenderLogic::NumReadBuffersPerRT       () const
 {
-    return TotalNumReadBuffers() / GNumRednerTargets;
+    return TotalNumReadBuffers() / GNumRenderTargets;
 }
 
 // **************************
 //
 Texture2DConstPtr   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer * renderer, unsigned int bufNum )
 {
-    unsigned int bufferIdx = GNumRednerTargets * bufNum + CurDisplayRenderTargetNum();
+    unsigned int bufferIdx = GNumRenderTargets * bufNum + CurDisplayRenderTargetNum();
 
     assert( bufferIdx < m_readbackTextures.size() );
 

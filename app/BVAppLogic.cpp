@@ -427,7 +427,6 @@ void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
             m_offscreenRenderLogic->EnableAuxRenderTarget( renderer );
             renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
             renderer->ClearBuffers();
-            renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
         }
 
         DrawNode( renderer, node );

@@ -49,7 +49,7 @@ TestAIManager::~TestAIManager  ()
 //
 unsigned int    TestAIManager::NumAIPresets () const
 {
-    return m_presets.size();
+    return (unsigned int) m_presets.size();
 }
 
 TestAI *        TestAIManager::GetAIPreset         ( unsigned int idx, BVAppLogic * logic )

@@ -178,7 +178,7 @@ int     PdrShader::EnableTextureSamplers   ( Renderer * renderer, Shader * shade
             EnableTextureSampler( renderer, samplers[ i ], params->GetTexture( i ).get(), i + firstAvailableSamplerIndex );
         }
 
-        return samplers.size();
+        return (int) samplers.size();
     }
 
     return 0;
@@ -257,7 +257,7 @@ int    PdrShader::DisableTextureSamplers  ( Renderer * renderer, Shader * shader
             DisableTextureSampler( renderer, samplers[ i ], params->GetTexture( i ).get(), i + firstAvailableSamplerIndex );
         }
 
-        return samplers.size();
+        return (int) samplers.size();
     }
 
     return 0;
