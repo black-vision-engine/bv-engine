@@ -6,6 +6,10 @@
 
 #include "System/Environment.h"
 
+/* hacked by creed */
+#include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 
 namespace bv { namespace model {
 
@@ -84,7 +88,7 @@ ITransformChannelConstPtr           DefaultFinalizePlugin::GetTransformChannel  
     return m_prevPlugin->GetTransformChannel();
 }
 
-#define DEFAULT_PLUGINS_TO_SKIP 1
+#define DEFAULT_PLUGINS_TO_SKIP 2
 
 // *******************************
 //
@@ -93,10 +97,19 @@ IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel
     assert( m_prevPlugin );
     assert( m_prevPlugin->GetPixelShaderChannel() );
 
+// FIXME HACK for tx_lg WTF?
+	int pluginsToSkip = DEFAULT_PLUGINS_TO_SKIP;
+	if( m_prevPlugin->GetTypeUid() == DefaultGradientPluginDesc::UID() && m_prevPlugin->GetPrevPlugin()->GetTypeUid() == DefaultTextPluginDesc::UID() )
+		pluginsToSkip = 1;
+	if( m_prevPlugin->GetTypeUid() == DefaultTimerPluginDesc::UID() && m_prevPlugin->GetPrevPlugin()->GetTypeUid() == DefaultGradientPluginDesc::UID() )
+		pluginsToSkip = 1;
+	if( m_prevPlugin->GetTypeUid() == DefaultGradientPluginDesc::UID() && m_prevPlugin->GetPrevPlugin()->GetTypeUid() == DefaultTimerPluginDesc::UID() )
+		pluginsToSkip = 1;
+
     if( m_finalizePSC == nullptr )
     {
         m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( std::const_pointer_cast< IPixelShaderChannel >( m_prevPlugin->GetPixelShaderChannel() ), m_shadersDir );
-        m_finalizePSC->RegenerateShaderSource( PrevUIDS( DEFAULT_PLUGINS_TO_SKIP ) ); // FIXME HACK for tx_lg WTF?
+        m_finalizePSC->RegenerateShaderSource( PrevUIDS( pluginsToSkip ) );
     }
 
     return m_finalizePSC;
@@ -115,10 +128,19 @@ IVertexShaderChannelConstPtr        DefaultFinalizePlugin::GetVertexShaderChanne
         vsc = m_defaultVSChannel;
     }
 
+// FIXME HACK for tx_lg WTF?
+	int pluginsToSkip = DEFAULT_PLUGINS_TO_SKIP;
+	if( m_prevPlugin->GetTypeUid() == DefaultGradientPluginDesc::UID() && m_prevPlugin->GetPrevPlugin()->GetTypeUid() == DefaultTextPluginDesc::UID() )
+		pluginsToSkip = 1;
+	if( m_prevPlugin->GetTypeUid() == DefaultTimerPluginDesc::UID() && m_prevPlugin->GetPrevPlugin()->GetTypeUid() == DefaultGradientPluginDesc::UID() )
+		pluginsToSkip = 1;
+	if( m_prevPlugin->GetTypeUid() == DefaultGradientPluginDesc::UID() && m_prevPlugin->GetPrevPlugin()->GetTypeUid() == DefaultTimerPluginDesc::UID() )
+		pluginsToSkip = 1;
+
     if( m_finalizeVSC == nullptr )
     {
         m_finalizeVSC = std::make_shared< DefaultFinalizeVertexShaderChannel >( std::const_pointer_cast< IVertexShaderChannel >( vsc ), m_shadersDir );
-        m_finalizeVSC->RegenerateShaderSource( PrevUIDS( DEFAULT_PLUGINS_TO_SKIP ) ); // FIXME HACK for tx_lg WTF?
+        m_finalizeVSC->RegenerateShaderSource( PrevUIDS( pluginsToSkip ) );
     }
 
     return m_finalizeVSC;

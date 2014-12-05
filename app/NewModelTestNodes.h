@@ -29,6 +29,7 @@ public:
     static model::BasicNodePtr  CreateOlafRectNode(model::TimelineManager *timelineManager, model::ITimeEvaluatorPtr timeEvaulator);
     static model::BasicNodePtr  CreateCreedRectNode(model::TimelineManager *timelineManager, model::ITimeEvaluatorPtr timeEvaulator);
     static model::BasicNodePtr  CreateCreedTextNode(model::TimelineManager *timelineManager, model::ITimeEvaluatorPtr timeEvaulator);
+    static model::BasicNodePtr  CreateCreedTimerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask  );
                            
     static model::BasicNodePtr  CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask );
     static model::BasicNodePtr  CreateTexturedTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask );

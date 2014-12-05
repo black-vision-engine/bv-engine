@@ -57,6 +57,7 @@ std::string     DefaultFinalizePixelShaderChannel::GetShaderSource  ( const std:
 
     if( it != ms_pixelShaderMapping.end() )
     {
+		printf( "Loading pixel shader from: %s\n", it->second.c_str() );
         return ReadShaderContentsFromFile( it->second );
     }
 

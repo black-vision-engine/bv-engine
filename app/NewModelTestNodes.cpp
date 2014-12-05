@@ -410,8 +410,12 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::TimelineMan
 	auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
     assert( color2 );
     success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 0.5f, 0.f, 1.f ) );
-	success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 1.f) );
+	success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.9f) );
     assert( success );
+
+
+	root->GetPlugin( "linear_gradient" )->GetRendererContext()->alphaCtx->blendEnabled = true;
+	//root->GetPlugin( "linear_gradient" )->GetRendererContext()->->blendEnabled = true;
 
     return root;
 }
@@ -932,7 +936,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
     SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.1f, 0.f ) );
 
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
-    SetParameter( node->GetPlugin( "timer" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 27.0f );
+    SetParameter( node->GetPlugin( "timer" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 127.0f );
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( model::TextAlignmentType::Right ) );
 
@@ -969,6 +973,91 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
 
     return node;    
 }
+
+
+// *****************************
+//
+model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask )
+{
+    //Timeline stuff
+    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 3.0 ) );
+
+    someTimelineWithEvents->AddChild( localTimeline );
+    timeEvaluator->AddChild( someTimelineWithEvents );
+
+    //Plugin stuff
+    std::string plugins[] = { "DEFAULT_TRANSFORM", "DEFAULT_TIMER", "DEFAULT_LINEAR_GRADIENT" };
+    //std::string plugins[] = { "DEFAULT_TRANSFORM", "DEFAULT_LINEAR_GRADIENT", "DEFAULT_TIMER" };
+    std::vector< std::string > GSimplePluginsUIDS( plugins, plugins+3 );
+
+    if( useAlphaMask )
+    {
+        GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
+    }
+
+    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+
+    auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
+    assert( success );
+
+    //SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
+
+    auto plugin = node->GetPlugin( "transform" );
+    auto param = plugin->GetParameter( "simple_transform" );
+
+    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.1f, 0.f ) );
+
+    //SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
+    SetParameter( node->GetPlugin( "timer" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 127.0f );
+    SetParameter( node->GetPlugin( "timer" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
+    SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( model::TextAlignmentType::Right ) );
+
+    SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 4.f / 1080.f );
+
+    success = model::LoadFont( node->GetPlugin( "timer" ), "../dep/Media/fonts/arial.ttf" );
+    assert( success );
+
+    SetTimeTimerPlugin( node->GetPlugin( "timer" ), 12333.0f );
+
+    StartTimerPlugin( node->GetPlugin( "timer" ) );
+
+    if( useAlphaMask )
+    {
+        success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "bar_mask_red.png" );
+        assert( success );
+
+        node->GetPlugin( "alpha_mask" )->GetParameter( "txAlphaMat" )->SetTimeEvaluator( timeEvaluator );
+
+        SetDefaultTransformAlphaMaskTex( node->GetPlugin( "alpha_mask" ) );
+
+        node->GetPlugin( "alpha_mask" )->Update( TimeType( 0.f ) ); //Regenerate all necessary geometry and channels
+    }
+
+    auto ai = TestAIManager::Instance().GetAIPreset( 2 );
+    ai->SetTimeline( someTimelineWithEvents );
+
+// LINEAR GRADIENT plugin
+	auto root = node;
+    auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
+    assert( color1 );
+    success &= SetParameter( color1, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+	success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+    assert( success );
+	auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+    assert( color2 );
+    success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 0.5f, 0.f, 1.f ) );
+	success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 1.f) );
+    assert( success );
+	
+    node->GetPlugin( "linear_gradient" )->Update( TimeType( 0.f ) ); //Regenerate all necessary geometry and channels
+
+    return node;    
+}
+
 
 // *****************************
 //

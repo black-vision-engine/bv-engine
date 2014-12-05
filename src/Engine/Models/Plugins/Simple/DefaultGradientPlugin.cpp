@@ -11,6 +11,10 @@
 
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
 
 namespace bv { namespace model {
 
@@ -93,7 +97,7 @@ bool                   DefaultGradientPluginDesc::CanBeAttachedTo     ( IPluginC
 
     auto uid = plugin->GetTypeUid();
 
-	if ( uid != DefaultRectPluginDesc::UID() && uid != DefaultTextPluginDesc::UID() )
+	if ( uid != DefaultRectPluginDesc::UID() && uid != DefaultTextPluginDesc::UID() && uid != DefaultTransformPluginDesc::UID() && uid != DefaultTimerPluginDesc::UID() )
     {
         return false;
     }
@@ -147,7 +151,7 @@ DefaultGradientPlugin::DefaultGradientPlugin         ( const std::string & name,
 
     InitAttributesChannel( prev );
 
-    if( /*prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() ||*/ prev->GetTypeUid() == DefaultTextPluginDesc::UID() )
+    if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() || prev->GetTypeUid() == DefaultTextPluginDesc::UID() || prev->GetTypeUid() == DefaultTimerPluginDesc::UID() )
     {
         //FIXME: set textures data from prev plugin to this plugin
         auto prev_psc = std::const_pointer_cast< ITexturesData >( prev->GetPixelShaderChannel()->GetTexturesData() );
@@ -189,7 +193,7 @@ void                                DefaultGradientPlugin::Update               
 {
     m_paramValModel->Update();
 
-    if( m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
+    if( m_prevPlugin->GetVertexAttributesChannel() && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
     {
         if( m_vaChannel != nullptr )
         {
@@ -214,7 +218,7 @@ void DefaultGradientPlugin::InitAttributesChannel( IPluginPtr prev )
 
     if( prevGeomChannel == nullptr ) //FIXME: hackierka
     {
-        assert( prev->GetTypeUid() == DefaultTextPluginDesc::UID() );
+		assert( prev->GetTypeUid() == DefaultTextPluginDesc::UID() || prev->GetTypeUid() == DefaultTransformPluginDesc::UID() || prev->GetTypeUid() == DefaultTimerPluginDesc::UID() );
 
         return;
     }

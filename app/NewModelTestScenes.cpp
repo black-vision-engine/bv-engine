@@ -517,11 +517,12 @@ model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::Plug
 
 model::BasicNodePtr     TestScenesFactory::CreedTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-	auto rect = SimpleNodesFactory::CreateCreedTextNode( timelineManager, timeEvaluator );
+	//auto rect = SimpleNodesFactory::CreateCreedTextNode( timelineManager, timeEvaluator );
 
-	//auto rect = SimpleNodesFactory::CreateCreedRectNode( timelineManager, timeEvaluator );
-	//auto clock = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
-	//rect->AddChild( clock );
+	//auto rect2 = SimpleNodesFactory::CreateCreedRectNode( timelineManager, timeEvaluator );
+	//auto rect = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
+	auto rect = SimpleNodesFactory::CreateCreedTimerNode( timelineManager, timeEvaluator, 0, false );
+	//rect->AddChild( rect2 );
 
 	//auto rect = SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, true );
 	//auto rect = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, true );

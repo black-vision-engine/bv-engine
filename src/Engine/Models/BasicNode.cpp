@@ -270,6 +270,7 @@ bool            BasicNode::AddPlugin               ( const std::string & uid, IT
 
     if( !m_pluginsManager->CanBeAttachedTo( uid, prev ) )
     {
+		throw ( uid + " cannot be attached to " + prev->GetTypeUid() );
         return false;
     }
 
