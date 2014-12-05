@@ -521,8 +521,10 @@ model::BasicNodePtr     TestScenesFactory::CreedTestScene     ( const model::Plu
 
 	//auto rect2 = SimpleNodesFactory::CreateCreedRectNode( timelineManager, timeEvaluator );
 	//auto rect = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
-	auto rect = SimpleNodesFactory::CreateCreedTimerNode( timelineManager, timeEvaluator, 0, false );
+	//auto rect = SimpleNodesFactory::CreateCreedTimerNode( timelineManager, timeEvaluator, 0, false );
 	//rect->AddChild( rect2 );
+
+	auto rect = SimpleNodesFactory::CreateCreedPrismNode( timelineManager, timeEvaluator );
 
 	//auto rect = SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, true );
 	//auto rect = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, true );

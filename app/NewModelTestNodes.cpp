@@ -369,6 +369,61 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::TimelineMana
     return root;
 }
 
+model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
+{
+	auto offset5Timeline = timelineManager->CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
+	auto offset3Timeline  = timelineManager->CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+	timeEvaluator->AddChild(offset5Timeline);
+	timeEvaluator->AddChild(offset3Timeline);
+
+	//Plugin list
+    std::vector< std::string > uids;
+
+    uids.push_back( "DEFAULT_TRANSFORM" );
+    uids.push_back( "DEFAULT_PRISM" );
+    uids.push_back( "DEFAULT_COLOR" );
+
+    //Create a model
+    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rectNode", timeEvaluator );
+
+    bool success = root->AddPlugins( uids, timeEvaluator );
+    assert( success );
+
+	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+	simpleTransform->SetTimeEvaluator(offset3Timeline);
+
+	auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
+    success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+	assert( success );
+
+//// RECT plugin
+//
+//    auto w = root->GetPlugin( "rectangle" )->GetParameter( "width" );
+//    auto h = root->GetPlugin( "rectangle" )->GetParameter( "height" );
+//
+//    success &= SetParameter( w, 0.f, 2.f );
+//    success &= SetParameter( h, 0.f, 1.f );
+
+//// LINEAR GRADIENT plugin
+//
+//    auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
+//    assert( color1 );
+//    success &= SetParameter( color1, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+//	success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+//    assert( success );
+//	auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+//    assert( color2 );
+//    success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 0.5f, 0.f, 1.f ) );
+//	success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.9f) );
+//    assert( success );
+//
+//
+//	root->GetPlugin( "linear_gradient" )->GetRendererContext()->alphaCtx->blendEnabled = true;
+//	//root->GetPlugin( "linear_gradient" )->GetRendererContext()->->blendEnabled = true;
+
+    return root;
+}
+
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
 {
 	auto offset5Timeline = timelineManager->CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
