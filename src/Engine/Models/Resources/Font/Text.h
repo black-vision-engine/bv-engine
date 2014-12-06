@@ -3,6 +3,7 @@
 #include "Glyph.h"
 
 #include "Engine/Models/Resources/IResource.h"
+#include "Engine/Models/Resources/Font/IFontEngine.h"
 
 #include <string>
 #include <map>
@@ -13,34 +14,34 @@ class Text;
 
 struct GlyphCoords
 {
-    unsigned int            textureX;
-    unsigned int            textureY;
+    SizeType				textureX;
+    SizeType				textureY;
 
-    unsigned int            width;
-    unsigned int            height;
+    SizeType	            width;
+    SizeType	            height;
 
     int                     bearingX;
     int                     bearingY;
 
-    unsigned int            glyphX;
-    unsigned int            glyphY;
+    SizeType	            glyphX;
+    SizeType	            glyphY;
 
-    unsigned int            glyphWidth;
-    unsigned int            glyphHeight;
+    SizeType	            glyphWidth;
+    SizeType	            glyphHeight;
 
     signed long             advanceX;
     signed long             advanceY;
 
     GlyphCoords(){}
 
-    GlyphCoords(unsigned int tX,
-                unsigned int tY,
-                unsigned int w,
-                unsigned int h,
-                unsigned int gX,
-                unsigned int gY,
-                unsigned int gw,
-                unsigned int gh,
+    GlyphCoords(SizeType tX,
+                SizeType tY,
+                SizeType w,
+                SizeType h,
+                SizeType gX,
+                SizeType gY,
+                SizeType gw,
+                SizeType gh,
                 int bX,
                 int bY,
                 signed long aX,
@@ -78,33 +79,33 @@ public: // Only for non intrusive serialization. Should be private
 
 public:
 
-    unsigned int            m_glyphWidth;
-    unsigned int            m_glyphHeight;
+    SizeType	            m_glyphWidth;
+    SizeType	            m_glyphHeight;
 
 
-    unsigned int            GetBitsPerPixel () const;
+    SizeType				GetBitsPerPixel () const;
 
-    unsigned int            GetWidth        () const;
-    unsigned int            GetHeight       () const;
+    SizeType				GetWidth        () const;
+    SizeType				GetHeight       () const;
     
-    unsigned int            GetGlyphX       ( wchar_t c ) const;
-    unsigned int            GetGlyphY       ( wchar_t c ) const;
+    SizeType				GetGlyphX       ( wchar_t c ) const;
+    SizeType				GetGlyphY       ( wchar_t c ) const;
 
-    unsigned int            GetGlyphWidth   ( wchar_t c ) const;
-    unsigned int            GetGlyphHeight  ( wchar_t c ) const;
+    SizeType				GetGlyphWidth   ( wchar_t c ) const;
+    SizeType				GetGlyphHeight  ( wchar_t c ) const;
 
     const GlyphCoords*      GetGlyphCoords  ( wchar_t c ) const;
 
-    float                   GetKerning      ( wchar_t c0, wchar_t c1 ) const;
+    Float32                  GetKerning      ( wchar_t c0, wchar_t c1 ) const;
 
     MemoryChunkConstPtr     GetData         () const;
     MemoryChunkConstPtr     GetWritableData ();
-    unsigned int            GetSizeInBytes  () const;
+    SizeType				GetSizeInBytes  () const;
 
     TextAtlas();
-    TextAtlas( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh );
+    TextAtlas( SizeType w, SizeType h, SizeType bitsPrePixel, SizeType gw, SizeType gh );
 
-    static TextAtlas*       Crate           ( unsigned int w, unsigned int h, unsigned int bitsPrePixel, unsigned int gw, unsigned int gh );
+    static TextAtlas*       Crate           ( SizeType w, SizeType h, SizeType bitsPrePixel, SizeType gw, SizeType gh );
 
     friend class Text;
 
@@ -118,23 +119,25 @@ class Text
 private:
     std::wstring                        m_supportedCharsSet;
     std::string                         m_fontFile;
-    TextAtlas*                          m_atlas;
-    unsigned int                        m_fontSize;
-    unsigned int                        m_blurSize;
-	unsigned int                        m_outlineSize; // if > 0 text is outlined
+    const TextAtlas *                   m_atlas;
+    SizeType							m_fontSize;
+    SizeType							m_blurSize;
+	SizeType							m_outlineSize; // if > 0 text is outlined
+	IFontEngineConstPtr					m_fontEngine;
 
-    void                                BuildAtlas      ();
-    TextAtlas*                          LoadFromCache   ();
+    void                                BuildAtlas			();
+	void                                BuildAtlasOutlined	();
+    const TextAtlas *                   LoadFromCache		();
 
 public:
 
-    const TextAtlas*                    GetAtlas() const { return m_atlas; }
+    const TextAtlas *                    GetAtlas() const { return m_atlas; }
 
     explicit                            Text( const std::wstring& supportedCharsSet
 											, const std::string& fontFile
-											, unsigned int fontSize
-											, unsigned int blurSize
-											, unsigned int m_outlineSize );
+											, SizeType fontSize
+											, SizeType blurSize
+											, SizeType m_outlineSize );
 };
 
 } // model

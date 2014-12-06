@@ -27,7 +27,7 @@ FontAtlasCacheEntry::FontAtlasCacheEntry()
 
 // *********************************
 //
-FontAtlasCacheEntry::FontAtlasCacheEntry(   TextAtlas* textAtlas
+FontAtlasCacheEntry::FontAtlasCacheEntry(   const TextAtlas* textAtlas
                                          ,  const std::string& fontName
                                          ,  unsigned int fontSize
                                          ,  unsigned int blurSize
@@ -149,7 +149,10 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
     out->m_italic       = std::atoi( args[ 5 ] ) == 0 ? false : true;
     out->m_textAtlas    = new TextAtlas();
     std::stringstream str(  args[6] );
-    out->m_textAtlas->Load( str );    
+
+	auto textAtlas		= const_cast< TextAtlas* >( out->m_textAtlas );
+
+	textAtlas->Load( str );    
 
     int width   = 0;
     int height  = 0;
@@ -157,7 +160,7 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
 
     auto resHandle = TextureManager::Get().GetTexture( args[ 7 ] );
 
-    out->m_textAtlas->m_textureHandle = std::const_pointer_cast< ResourceHandle >( resHandle );
+    textAtlas->m_textureHandle = std::const_pointer_cast< ResourceHandle >( resHandle );
 
     return 0;
 }

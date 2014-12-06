@@ -14,7 +14,7 @@ class TextAtlas;
 class FontAtlasCacheEntry
 {
 public:
-    TextAtlas*                  m_textAtlas;
+    const TextAtlas*            m_textAtlas;
     std::string                 m_fontName;
     unsigned int                m_fontSize;
     unsigned int                m_blurSize;
@@ -23,7 +23,7 @@ public:
     bool                        m_italic;
 
     FontAtlasCacheEntry ();
-    FontAtlasCacheEntry ( TextAtlas* textAtlas
+    FontAtlasCacheEntry ( const TextAtlas* textAtlas
                         , const std::string& fontName
                         , unsigned int fontSize
                         , unsigned int blurSize
