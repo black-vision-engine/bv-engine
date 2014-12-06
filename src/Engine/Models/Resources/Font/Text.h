@@ -96,7 +96,7 @@ public:
 
     const GlyphCoords*      GetGlyphCoords  ( wchar_t c ) const;
 
-    Float32                  GetKerning      ( wchar_t c0, wchar_t c1 ) const;
+    Float32                 GetKerning      ( wchar_t c0, wchar_t c1 ) const;
 
     MemoryChunkConstPtr     GetData         () const;
     MemoryChunkConstPtr     GetWritableData ();
@@ -131,7 +131,7 @@ private:
 
 public:
 
-    const TextAtlas *                    GetAtlas() const { return m_atlas; }
+    const TextAtlas *                   GetAtlas() const { return m_atlas; }
 
     explicit                            Text( const std::wstring& supportedCharsSet
 											, const std::string& fontFile

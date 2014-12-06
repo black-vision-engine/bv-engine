@@ -10,7 +10,8 @@ class TextAtlas;
 class IFontEngine
 {
 public:
-	virtual const TextAtlas *			CreateAtlas( const std::string& fontFilePath, size_t fontSize, size_t padding, const std::wstring & wcharsSet ) const = 0;
+	virtual const TextAtlas *	CreateAtlas( const std::string& fontFilePath, SizeType fontSize, SizeType padding, const std::wstring & wcharsSet )						const = 0;
+	virtual const TextAtlas *	CreateAtlas( const std::string& fontFilePath, SizeType fontSize, SizeType padding, SizeType outline, const std::wstring & wcharsSet )	const = 0;
 
 };
 

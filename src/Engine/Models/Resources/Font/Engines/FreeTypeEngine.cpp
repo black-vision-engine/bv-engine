@@ -3,10 +3,15 @@
 #include "Engine/Models/Resources/Font/Glyph.h"
 #include "Engine/Models/Resources/Font/Text.h"
 
+
+#include "Engine/Models/Resources/TextureHelpers.h"
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include FT_OUTLINE_H
 #include <FreeType/ftglyph.h>
 
+#include <fstream>
 #include <iostream>
 #include <vector>
 #include <map>
@@ -68,7 +73,7 @@ FreeTypeEngineConstPtr				FreeTypeEngine::Create()
 
 // *********************************
 //
-const TextAtlas *			FreeTypeEngine::CreateAtlas( const std::string& fontFilePath, SizeType fontSize, SizeType padding, const std::wstring & wcharsSet ) const
+const TextAtlas *	FreeTypeEngine::CreateAtlas( const std::string& fontFilePath, SizeType fontSize, SizeType padding, const std::wstring & wcharsSet ) const
 {
 	unsigned int					glyphsNum	= 0;
 	std::map< wchar_t, Glyph * >	glyphs;
@@ -115,6 +120,25 @@ const TextAtlas *			FreeTypeEngine::CreateAtlas( const std::string& fontFilePath
 
         // draw glyph image anti-aliased
         FT_Render_Glyph (face->glyph, FT_RENDER_MODE_NORMAL);
+		FT_Bitmap abitmap;
+
+		auto outW = face->glyph->bitmap.width + 5;
+		auto outH = face->glyph->bitmap.rows;
+
+		abitmap.buffer = new unsigned char[outW * outH];
+		memset( abitmap.buffer, 0, outW * outH );
+		abitmap.pitch = outW;
+		abitmap.rows = outH;
+		abitmap.width = outW;
+		abitmap.num_grays = FT_PIXEL_MODE_GRAY;
+		abitmap.pixel_mode = FT_PIXEL_MODE_GRAY;
+		if(true)
+		{
+			FT_Outline_Get_Bitmap( ft, &face->glyph->outline, &abitmap);
+			TextureHelper::WriteBMP( "testFreeType.bmp", MemoryChunkConstPtr( new MemoryChunk( ( char* )abitmap.buffer, outW * outH ) ), outW, outH, 8 );
+		}
+
+
         // get dimensions of bitmap
         auto newGlyph = new Glyph();
 
@@ -239,6 +263,12 @@ const TextAtlas *			FreeTypeEngine::CreateAtlas( const std::string& fontFilePath
 	return atlas;
 }
 
+// *********************************
+//
+const TextAtlas *	FreeTypeEngine::CreateAtlas( const std::string& fontFilePath, SizeType fontSize, SizeType padding, SizeType outline, const std::wstring & wcharsSet )	const
+{
+	return nullptr;
+}
 
 } // bv
 } // model
