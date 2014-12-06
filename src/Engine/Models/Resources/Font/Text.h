@@ -121,11 +121,10 @@ public:
 class Text
 {
 private:
-    std::wstring                        m_text;
+    std::wstring                        m_supportedCharsSet;
     std::string                         m_fontFile;
     TextAtlas*                          m_atlas;
     unsigned int                        m_fontSize;
-    std::map< wchar_t, Glyph * >        m_glyphs;
     unsigned int                        m_blurSize;
 
     void                                BuildAtlas      ();
@@ -133,11 +132,9 @@ private:
 
 public:
 
-    const Glyph *                       GetGlyph( wchar_t wch ) const { return m_glyphs.find( wch )->second; } 
-    const std::wstring&                 GetText () const { return m_text; }
     const TextAtlas*                    GetAtlas() const { return m_atlas; }
 
-    explicit                            Text( const std::wstring& text, const std::string& fontFile, unsigned int fontSize, unsigned int blurSize );
+    explicit                            Text( const std::wstring& supportedCharsSet, const std::string& fontFile, unsigned int fontSize, unsigned int blurSize );
 };
 
 } // model
