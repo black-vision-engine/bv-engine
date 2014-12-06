@@ -70,11 +70,6 @@ class TextAtlas
 public: // Only for non intrusive serialization. Should be private
 
     ResourceHandlePtr         m_textureHandle;
-    //char*                   m_data;
-    //unsigned int            m_width;
-    //unsigned int            m_height;
-    //unsigned int            m_bitsPerPixel;
-
 
     std::map< wchar_t, GlyphCoords >                        m_glyphsPositions;
     std::map< std::pair< wchar_t, wchar_t >, float >        m_kerningMap; 
