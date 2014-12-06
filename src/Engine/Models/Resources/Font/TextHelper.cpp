@@ -14,9 +14,9 @@ namespace bv { namespace model {
 
 ///////////////////////////////
 //
-ResourceHandleConstPtr      TextHelper::LoadFont( const std::string& fontFileName, size_t size, size_t blurSize, const std::wstring& atlasCharSetFile )
+ResourceHandleConstPtr      TextHelper::LoadFont( const std::string& fontFileName, size_t size, size_t blurSize, size_t outlineSize, const std::wstring& atlasCharSetFile )
 {
-    auto fRes = FontResource( fontFileName, size, blurSize, atlasCharSetFile );
+    auto fRes = FontResource( fontFileName, size, blurSize, outlineSize, atlasCharSetFile );
 
     FontLoader fLoader;
 

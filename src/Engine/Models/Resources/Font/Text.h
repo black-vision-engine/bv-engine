@@ -121,6 +121,7 @@ private:
     TextAtlas*                          m_atlas;
     unsigned int                        m_fontSize;
     unsigned int                        m_blurSize;
+	unsigned int                        m_outlineSize; // if > 0 text is outlined
 
     void                                BuildAtlas      ();
     TextAtlas*                          LoadFromCache   ();
@@ -129,7 +130,11 @@ public:
 
     const TextAtlas*                    GetAtlas() const { return m_atlas; }
 
-    explicit                            Text( const std::wstring& supportedCharsSet, const std::string& fontFile, unsigned int fontSize, unsigned int blurSize );
+    explicit                            Text( const std::wstring& supportedCharsSet
+											, const std::string& fontFile
+											, unsigned int fontSize
+											, unsigned int blurSize
+											, unsigned int m_outlineSize );
 };
 
 } // model

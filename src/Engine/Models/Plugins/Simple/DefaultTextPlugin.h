@@ -61,6 +61,7 @@ private:
 
     ParamFloatPtr                   m_fontSizeParam;
     ParamFloatPtr                   m_blurSizeParam;
+	ParamFloatPtr                   m_outlineSizeParam;
     ParamFloatPtr                   m_spacingParam;
     ParamFloatPtr                   m_alignmentParam;
     ParamFloatPtr                   m_maxTextLengthParam;

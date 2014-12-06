@@ -11,10 +11,11 @@ namespace bv { namespace model {
 
 ///////////////////////////////
 //
-FontResource::FontResource( const std::string& filePath, size_t fontSize, size_t blurSize, const std::wstring& atlasCharSetFile )
+FontResource::FontResource( const std::string& filePath, size_t fontSize, size_t blurSize, size_t outlineSize, const std::wstring& atlasCharSetFile )
     : Resource( filePath, filePath )
     , m_fontSize( fontSize )
     , m_blurSize( blurSize )
+	, m_outlineSize( outlineSize )
     , m_atlasCharSetFile( atlasCharSetFile )
 {}
 
@@ -30,6 +31,13 @@ size_t                  FontResource::GetFontSize     ()   const
 size_t                  FontResource::GetBlurSize     ()   const
 {
     return m_blurSize;
+}
+
+///////////////////////////////
+//
+size_t                  FontResource::GetOutlineSize     ()   const
+{
+    return m_outlineSize;
 }
 
 ///////////////////////////////
@@ -51,8 +59,9 @@ ResourceHandle *        FontLoader::LoadResource        ( IResource* res )  cons
     auto atlasCharSetFile = fontRes->GetAtlasCharSetFile();
     auto fontSize = fontRes->GetFontSize();
     auto blurSize = fontRes->GetBlurSize();
+	auto outlineSize = fontRes->GetOutlineSize();
 
-    const Text*       font        = TryLoadFont             ( filePath, fontSize, blurSize, atlasCharSetFile );
+    const Text*       font        = TryLoadFont             ( filePath, fontSize, blurSize, outlineSize, atlasCharSetFile );
 
     if( font )
     {
@@ -68,10 +77,10 @@ ResourceHandle *        FontLoader::LoadResource        ( IResource* res )  cons
 namespace
 {
 
-const Text*         LoadFontFile( const std::string& file, size_t size, size_t blurSize, const std::wstring& atlasCharSetFile )
+const Text*         LoadFontFile( const std::string& file, size_t size, size_t blurSize, size_t outlineSize, const std::wstring& atlasCharSetFile )
 {
     auto t = TextHelper::LoadUtf8FileToString( atlasCharSetFile );
-    return new Text( t, file, size, blurSize ); /* points to pixel proportion */ // FIXME: Text constructor makes to much.
+    return new Text( t, file, size, blurSize, outlineSize ); /* points to pixel proportion */ // FIXME: Text constructor makes to much.
 }
 
 std::string         AddPostfixToFileName( const std::string& file, const std::string& postfix )
@@ -88,11 +97,11 @@ std::string         AddPostfixToFileName( const std::string& file, const std::st
 
 ///////////////////////////////
 //
-const Text*             FontLoader::TryLoadFont             ( const std::string& file, size_t size, size_t blurSize, const std::wstring& atlasCharSetFile ) const
+const Text*             FontLoader::TryLoadFont             ( const std::string& file, size_t size, size_t blurSize, size_t oulineSize, const std::wstring& atlasCharSetFile ) const
 {
     if( File::Exists(file) )
     {
-        return LoadFontFile( file, size, blurSize, atlasCharSetFile );
+        return LoadFontFile( file, size, blurSize, oulineSize, atlasCharSetFile );
     }
     else
     {
@@ -102,12 +111,12 @@ const Text*             FontLoader::TryLoadFont             ( const std::string&
 
 ///////////////////////////////
 //
-const Text*             FontLoader::TryLoadFontBold         ( const std::string& file, size_t size, size_t blurSize, const std::wstring& atlasCharSetFile ) const
+const Text*             FontLoader::TryLoadFontBold         ( const std::string& file, size_t size, size_t blurSize, size_t oulineSize, const std::wstring& atlasCharSetFile ) const
 {
     auto filebd = AddPostfixToFileName( file, "bd" );
     if( File::Exists( filebd ) )
     {
-        return LoadFontFile( filebd, size, blurSize, atlasCharSetFile  );
+        return LoadFontFile( filebd, size, blurSize, oulineSize, atlasCharSetFile );
     }
     else
     {
@@ -117,12 +126,12 @@ const Text*             FontLoader::TryLoadFontBold         ( const std::string&
 
 ///////////////////////////////
 //
-const Text*             FontLoader::TryLoadFontBoldItalic   ( const std::string& file, size_t size, size_t blurSize, const std::wstring& atlasCharSetFile ) const
+const Text*             FontLoader::TryLoadFontBoldItalic   ( const std::string& file, size_t size, size_t blurSize, size_t oulineSize, const std::wstring& atlasCharSetFile ) const
 {
     auto filebd = AddPostfixToFileName( file, "bi" );
     if( File::Exists( filebd ) )
     {
-        return LoadFontFile( filebd, size, blurSize, atlasCharSetFile  );
+        return LoadFontFile( filebd, size, blurSize, oulineSize, atlasCharSetFile );
     }
     else
     {
@@ -132,12 +141,12 @@ const Text*             FontLoader::TryLoadFontBoldItalic   ( const std::string&
 
 ///////////////////////////////
 //
-const Text*             FontLoader::TryLoadFontItalic       ( const std::string& file, size_t size, size_t blurSize, const std::wstring& atlasCharSetFile ) const
+const Text*             FontLoader::TryLoadFontItalic       ( const std::string& file, size_t size, size_t blurSize, size_t oulineSize, const std::wstring& atlasCharSetFile ) const
 {
     auto filebd = AddPostfixToFileName( file, "i" );
     if( File::Exists( filebd ) )
     {
-        return LoadFontFile( filebd, size, blurSize, atlasCharSetFile  );
+        return LoadFontFile( filebd, size, blurSize, oulineSize, atlasCharSetFile );
     }
     else
     {

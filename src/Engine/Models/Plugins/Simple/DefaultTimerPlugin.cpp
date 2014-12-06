@@ -284,6 +284,7 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
 
     m_fontSizeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
     m_blurSizeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
+	m_outlineSizeParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "outlineSize" ) );
     m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
     m_alignmentParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
     m_precisionParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "precision" ) );
@@ -328,7 +329,7 @@ bool            DefaultTimerPlugin::LoadResource  ( IPluginResourceDescrConstPtr
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() <= 1 );
 
-        auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ) );
+        auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
 
         m_textAtlas = TextHelper::GetAtlas( fontResource.get(), false, false );
 

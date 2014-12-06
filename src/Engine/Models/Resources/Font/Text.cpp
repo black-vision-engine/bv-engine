@@ -70,11 +70,12 @@ TextAtlas*      TextAtlas::Crate           ( unsigned int w, unsigned int h, uns
 
 // *********************************
 //
-Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, unsigned int fontSize, unsigned int blurSize )
+Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, unsigned int fontSize, unsigned int blurSize, unsigned int outlineSize )
     : m_supportedCharsSet( supportedCharsSet )
     , m_fontFile( fontFile )
     , m_fontSize( fontSize )
     , m_blurSize( blurSize )
+	, m_outlineSize( outlineSize )
 {
     BuildAtlas();
 }
