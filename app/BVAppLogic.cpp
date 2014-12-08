@@ -71,7 +71,7 @@ BVAppLogic::BVAppLogic              ()
     : m_startTime( 0 )
     , m_timelineManager( new model::TimelineManager() )
     , m_modelScene( nullptr )
-    , m_mockSceneEng( nullptr )
+    , m_engineScene( nullptr )
     , m_pluginsManager( nullptr )
     , m_renderLogic( nullptr )
     , m_state( BVAppState::BVS_INVALID )
@@ -93,7 +93,7 @@ BVAppLogic::~BVAppLogic             ()
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
 
     delete m_timelineManager;
-    delete m_mockSceneEng;
+    delete m_engineScene;
 
     delete m_renderLogic;
 }
@@ -116,8 +116,8 @@ void BVAppLogic::LoadScene          ( void )
     model::BasicNodePtr root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
 	assert( root );
 
-    m_mockSceneEng  = root->BuildScene();
-    assert( m_mockSceneEng );
+    m_engineScene  = root->BuildScene();
+    assert( m_engineScene );
 
     m_modelScene    = model::ModelScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline );
     assert( m_modelScene );
@@ -190,21 +190,21 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
             }
             {
                 FRAME_STATS_SECTION( "EngScn-u" );
-                HPROFILER_SECTION( "m_mockSceneEng->Update" );
+                HPROFILER_SECTION( "m_engineScene->Update" );
 
                 auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
 
                 //FIXME: use transform vector consistenlty
                 std::vector< bv::Transform > vec;
                 vec.push_back( Transform( viewMat, glm::inverse( viewMat ) ) );
-                m_mockSceneEng->Update( vec );
+                m_engineScene->Update( vec );
             }
         }
         {
             FRAME_STATS_SECTION( "Render" );
             HPROFILER_SECTION( "Render" );
 
-            m_renderLogic->RenderFrame  ( renderer, m_mockSceneEng );
+            m_renderLogic->RenderFrame  ( renderer, m_engineScene );
             m_renderLogic->FrameRendered( renderer );
         }
     }
@@ -307,7 +307,7 @@ void                            BVAppLogic::ResetScene      ()
     UpdatersManager::Get().RemoveAllUpdaters();
     m_globalTimeline = model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) );
     m_modelScene = nullptr;
-    delete m_mockSceneEng;
+    delete m_engineScene;
 }
 
 // *********************************

@@ -43,10 +43,6 @@ void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
     renderer->ClearBuffers();
     renderer->PreDraw();
 
-    // AllocateNew()
-    // EnableTop()
-    //m_offscreenRenderLogic->EnableDisplayRenderTarget( renderer );
-
     m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
     m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
 
@@ -55,10 +51,6 @@ void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
 
     m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
     m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
-
-    // DisableTop()
-    // DiscardCur()
-    //m_offscreenRenderLogic->DisableDisplayRenderTarget( renderer );
 
     m_offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
 
@@ -76,14 +68,7 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
        
         //Render to auxiliary buffer
         if( isOverriden )
-        {
-            // AllocateNew()
-            // EnableTop()
-
-            //FIXME: generic approach requires that only current aux is disabled but some other aux target may still be enabled here
-            //assert( m_offscreenRenderLogic->AuxRenderTargetEnabled() == false );
-            //m_offscreenRenderLogic->EnableAuxRenderTarget( renderer );
-            
+        {            
             m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
             m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
 
@@ -96,25 +81,9 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
         //Blend top auxiliary buffer with the previous buffer
         if( isOverriden )
         {
-            m_offscreenRenderLogic->DrawTopAuxRenderTarget( renderer, node->GetOverrideAlpha() );
-            
+            m_offscreenRenderLogic->DrawTopAuxRenderTarget( renderer, node->GetOverrideAlpha() );            
             m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
-
             m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
-
-            // DisableTop()
-            // DiscardCur()
-
-            // EnableCur()
-            //FIXME: draw to the previous target and not to the explicitely stated display render target
-            //m_offscreenRenderLogic->EnableDisplayRenderTarget( renderer );
-
-            //FIXME: next two line force blending with specified alpha
-            //m_offscreenRenderLogic->SetAuxAlphaModelValue( node->GetOverrideAlpha() );
-            //m_offscreenRenderLogic->DrawAuxRenderTarget( renderer );
-
-            //FIXME: use prev node to mask current node
-            //m_offscreenRenderLogic->DrawAuxRenderTargetUsingPrevAlpha( renderer );
         }
     }
 }

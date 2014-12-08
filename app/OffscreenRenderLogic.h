@@ -31,17 +31,11 @@ private:
     std::vector<RenderTarget *>     m_auxRenderTargetVec;
     std::vector<TriangleStrip *>    m_auxQuadVec;
 
-    TriangleStrip *     m_auxQuad;
-
-    RenderTarget *      m_displayRenderTargets[ 2 ];
-    RenderTarget *      m_auxRenderTarget;
-    
+    RenderTarget *      m_displayRenderTargets[ 2 ];    
     TriangleStrip *     m_displayQuads[ 2 ];
 
     unsigned int        m_curDisplayTarget;
     unsigned int        m_buffersPerTarget;
-
-    Texture2DEffect *   m_auxTexture2DEffect;
 
     std::vector< Texture2DPtr > m_readbackTextures;
 
@@ -49,7 +43,6 @@ private:
     Camera *            m_rendererCamera;
 
     bool                m_displayRTEnabled;
-    bool                m_auxRTEnabled;
 
 public:
 
@@ -76,21 +69,9 @@ public:
 
     void                SetRendererCamera           ( Camera * camera );
 
-    void                EnableDisplayRenderTarget   ( Renderer * renderer );
-    void                EnableAuxRenderTarget       ( Renderer * renderer );
-
-    void                DisableDisplayRenderTarget  ( Renderer * renderer );
-    void                DisableAuxRenderTarget      ( Renderer * renderer );
-
-    void                SetAuxAlphaModelValue       ( const IValue * val );
-
     void                SwapDisplayRenderTargets    ();
 
-    bool                DisplayRenderTargetEnabled  () const;
-    bool                AuxRenderTargetEnabled      () const;
-
     void                DrawDisplayRenderTarget     ( Renderer * renderer );
-    void                DrawAuxRenderTarget         ( Renderer * renderer );
 
     unsigned int        TotalNumReadBuffers         () const;
     unsigned int        NumReadBuffersPerRT         () const;

@@ -40,7 +40,7 @@ private:
     model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
     model::ModelScenePtr            m_modelScene;
-    SceneNode *                     m_mockSceneEng;
+    SceneNode *                     m_engineScene;
 
     RenderLogic *                   m_renderLogic;
 
