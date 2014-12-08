@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "Engine/Types/Enums.h"
-
 #include "Engine/Graphics/Resources/Texture2D.h"
 
 
@@ -21,11 +20,23 @@ class OffscreenRenderLogic
 {
 private:
 
+    unsigned int        m_width;
+    unsigned int        m_height;
+
+    TextureFormat       m_fmt;
+
+    int                 m_usedStackedRenderTargets;
+    bool                m_topRenderTargetEnabled;
+
+    std::vector<RenderTarget *>     m_auxRenderTargetVec;
+    std::vector<TriangleStrip *>    m_auxQuadVec;
+
+    TriangleStrip *     m_auxQuad;
+
     RenderTarget *      m_displayRenderTargets[ 2 ];
     RenderTarget *      m_auxRenderTarget;
     
     TriangleStrip *     m_displayQuads[ 2 ];
-    TriangleStrip *     m_auxQuad;
 
     unsigned int        m_curDisplayTarget;
     unsigned int        m_buffersPerTarget;
@@ -44,6 +55,24 @@ public:
 
                         OffscreenRenderLogic        ( unsigned int width, unsigned int height, unsigned int numReadBuffers, Camera * camera = nullptr, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
                         ~OffscreenRenderLogic       ();
+
+    void                AllocateNewRenderTarget     ( Renderer * renderer );
+    void                EnableTopRenderTarget       ( Renderer * renderer );
+    void                DiscardCurrentRenderTarget  ( Renderer * renderer );
+    void                DisableTopRenderTarget      ( Renderer * renderer );
+
+    void                DrawTopAuxRenderTarget      ( Renderer * renderer, const IValue * alphaVal );
+
+private:
+
+    RenderTarget *      GetTopRenderTarget          () const;
+    RenderTarget *      GetPrevRenderTarget         () const;
+    TriangleStrip *     GetTopRenderQuad            () const;
+
+    RenderTarget *      CreateAuxRenderTarget       ( Renderer * renderer );
+    TriangleStrip *     CreateAuxQuad               ( RenderTarget * rt );
+
+public:
 
     void                SetRendererCamera           ( Camera * camera );
 

@@ -179,6 +179,7 @@ xcopy $(SolutionDir)\dep\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
     <ClCompile Include="NewModelTestNodes.cpp" />
     <ClCompile Include="NewModelTestScenes.cpp" />
     <ClCompile Include="OffscreenRenderLogic.cpp" />
+    <ClCompile Include="RenderLogic.cpp" />
     <ClCompile Include="StatsFormatters.cpp" />
     <ClCompile Include="testai\AICommands.cpp" />
     <ClCompile Include="testai\TestAI.cpp" />
@@ -215,6 +216,7 @@ xcopy $(SolutionDir)\dep\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
     <ClInclude Include="ModelInteractionLayer.h" />
     <ClInclude Include="NewModelTestNodes.h" />
     <ClInclude Include="OffscreenRenderLogic.h" />
+    <ClInclude Include="RenderLogic.h" />
     <ClInclude Include="StatsFormatters.h" />
     <ClInclude Include="testai\AICommands.h" />
     <ClInclude Include="testai\IAICommand.h" />

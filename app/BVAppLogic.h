@@ -1,18 +1,12 @@
 #pragma once
 
-#include <windows.h> //FIXME: remove when this code is refactored
-
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/ModelScene.h"
 
-#include "OffscreenRenderLogic.h"
-
 #include "Engine/Events/Events.h"
 
 #include "FrameStatsService.h"
-
-#include "BVForwards.h"
 
 #define HIDE_PROFILE_STATS
 
@@ -21,6 +15,7 @@ namespace bv
 {
 
 class SimpleTimer;
+class RenderLogic;
 
 enum class BVAppState : int
 {
@@ -47,7 +42,7 @@ private:
     model::ModelScenePtr            m_modelScene;
     SceneNode *                     m_mockSceneEng;
 
-    OffscreenRenderLogic *          m_offscreenRenderLogic;
+    RenderLogic *                   m_renderLogic;
 
     unsigned long                   m_startTime;
 
@@ -71,8 +66,6 @@ public:
 
     virtual void    ShutDown        ();
 
-    void            FrameRendered   ( Renderer * renderer );
-
     void            PostFrameLogic  ( const SimpleTimer & timer, unsigned int millis );
 
     const FrameStatsCalculator &     FrameStats () const;
@@ -81,10 +74,6 @@ public:
     void            ReloadScene     ();
 
 private:
-
-    void            RenderScene     ( Renderer * renderer );
-    void            RenderNode      ( Renderer * renderer, SceneNode * node );
-    void            DrawNode        ( Renderer * renderer, SceneNode * node );
 
     void            OnUpdateParam   ( IEventPtr evt );
 
