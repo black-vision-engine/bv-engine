@@ -70,11 +70,6 @@ class TextAtlas
 public: // Only for non intrusive serialization. Should be private
 
     ResourceHandlePtr         m_textureHandle;
-    //char*                   m_data;
-    //unsigned int            m_width;
-    //unsigned int            m_height;
-    //unsigned int            m_bitsPerPixel;
-
 
     std::map< wchar_t, GlyphCoords >                        m_glyphsPositions;
     std::map< std::pair< wchar_t, wchar_t >, float >        m_kerningMap; 
@@ -121,11 +116,10 @@ public:
 class Text
 {
 private:
-    std::wstring                        m_text;
+    std::wstring                        m_supportedCharsSet;
     std::string                         m_fontFile;
     TextAtlas*                          m_atlas;
     unsigned int                        m_fontSize;
-    std::map< wchar_t, Glyph * >        m_glyphs;
     unsigned int                        m_blurSize;
 
     void                                BuildAtlas      ();
@@ -133,11 +127,9 @@ private:
 
 public:
 
-    const Glyph *                       GetGlyph( wchar_t wch ) const { return m_glyphs.find( wch )->second; } 
-    const std::wstring&                 GetText () const { return m_text; }
     const TextAtlas*                    GetAtlas() const { return m_atlas; }
 
-    explicit                            Text( const std::wstring& text, const std::string& fontFile, unsigned int fontSize, unsigned int blurSize );
+    explicit                            Text( const std::wstring& supportedCharsSet, const std::string& fontFile, unsigned int fontSize, unsigned int blurSize );
 };
 
 } // model

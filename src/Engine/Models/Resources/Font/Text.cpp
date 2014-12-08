@@ -70,8 +70,8 @@ TextAtlas*      TextAtlas::Crate           ( unsigned int w, unsigned int h, uns
 
 // *********************************
 //
-Text::Text( const std::wstring& text, const std::string& fontFile, unsigned int fontSize, unsigned int blurSize )
-    : m_text( text )
+Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, unsigned int fontSize, unsigned int blurSize )
+    : m_supportedCharsSet( supportedCharsSet )
     , m_fontFile( fontFile )
     , m_fontSize( fontSize )
     , m_blurSize( blurSize )
@@ -374,7 +374,8 @@ void                Text::BuildAtlas        ()
     if( m_atlas != nullptr )
         return;
 
-    unsigned int glyphsNum = 0;
+    unsigned int					glyphsNum	= 0;
+	std::map< wchar_t, Glyph * >	glyphs;
 
     FT_Library ft;
     if (FT_Init_FreeType (&ft))
@@ -400,11 +401,11 @@ void                Text::BuildAtlas        ()
     int maxWidth = 0;
     int maxHeight = 0;
 
-    for ( auto ch : m_text )
+    for ( auto ch : m_supportedCharsSet )
     {
-        auto it = m_glyphs.find( ch );
+        auto it = glyphs.find( ch );
 
-        if( it != m_glyphs.end() )
+        if( it != glyphs.end() )
         {
             continue;
         }
@@ -443,7 +444,7 @@ void                Text::BuildAtlas        ()
         // copy buffer because it seems to be overwritten
         memcpy ( glyphData, face->glyph->bitmap.buffer, newGlyph->height * face->glyph->bitmap.pitch );
         glyphsDataInfos.push_back( GlyphDataInfo( newGlyph, face->glyph->bitmap.pitch, glyphData ) );
-        m_glyphs[ ch ] = newGlyph;
+        glyphs[ ch ] = newGlyph;
 
         glyphsNum++;
     }
@@ -549,7 +550,7 @@ void                Text::BuildAtlas        ()
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
 
-    m_atlas->m_kerningMap = BuildKerning( face, m_text );
+    m_atlas->m_kerningMap = BuildKerning( face, m_supportedCharsSet );
 
     auto entry = new FontAtlasCacheEntry( m_atlas, fontName, m_fontSize, m_blurSize, m_fontFile, false, false );
     fac->AddEntry( *entry );
