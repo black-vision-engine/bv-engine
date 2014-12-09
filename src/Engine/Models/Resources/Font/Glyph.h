@@ -2,7 +2,7 @@
 
 #include "System/BasicTypes.h"
 
-namespace bv {
+namespace bv { namespace model {
 
 struct Glyph
 {
@@ -26,4 +26,5 @@ struct Glyph
 
 };
 
-}
+} // model
+} // bv

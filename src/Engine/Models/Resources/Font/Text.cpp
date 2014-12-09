@@ -74,7 +74,7 @@ Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, 
     , m_blurSize( blurSize )
 	, m_outlineSize( outlineSize )
 {
-	m_fontEngine = std::static_pointer_cast< const IFontEngine >( FreeTypeEngine::Create() );
+	m_fontEngine = FreeTypeEngine::Create( fontFile, fontSize );
     BuildAtlas();
 }
 
@@ -234,7 +234,7 @@ void                Text::BuildAtlas        ()
     if( m_atlas != nullptr )
         return;
 
-	m_atlas = m_fontEngine->CreateAtlas( m_fontFile, m_fontSize, this->m_blurSize + 1, m_supportedCharsSet );
+	m_atlas = m_fontEngine->CreateAtlas(this->m_blurSize + 1, m_supportedCharsSet );
 
     if ( m_blurSize > 0 )
     {

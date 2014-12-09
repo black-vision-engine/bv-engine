@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Glyph.h"
-
 #include "Engine/Models/Resources/IResource.h"
 #include "Engine/Models/Resources/Font/IFontEngine.h"
 
@@ -123,7 +121,7 @@ private:
     SizeType							m_fontSize;
     SizeType							m_blurSize;
 	SizeType							m_outlineSize; // if > 0 text is outlined
-	IFontEngineConstPtr					m_fontEngine;
+	IFontEnginePtr						m_fontEngine;
 
     void                                BuildAtlas			();
 	void                                BuildAtlasOutlined	();
