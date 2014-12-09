@@ -17,6 +17,8 @@
 #include "testai/TestAIManager.h"
 #include "Helpers/RectNodeBuilder.h"
 
+#include "Engine/Models/Plugins/Channels/RendererContext/FillContext.h"
+
 #include "BVConfig.h"
 
 namespace {
@@ -381,7 +383,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineMa
 
     uids.push_back( "DEFAULT_TRANSFORM" );
     uids.push_back( "DEFAULT_PRISM" );
-    uids.push_back( "DEFAULT_COLOR" );
+    //uids.push_back( "DEFAULT_COLOR" );
+	uids.push_back( "DEFAULT_TEXTURE" );
 
     //Create a model
     model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rectNode", timeEvaluator );
@@ -390,11 +393,25 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineMa
     assert( success );
 
 	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	simpleTransform->SetTimeEvaluator(offset3Timeline);
+	//simpleTransform->SetTimeEvaluator(offset3Timeline);
 
-	auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
-    success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
-	assert( success );
+
+// TEXTURE plugin
+    success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
+    //success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+    assert( success );
+
+// COLOR plugin
+	//auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
+ //   success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+	//assert( success );
+
+// TRANSFORM plugin
+
+	SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+	SetParameterRotation ( simpleTransform, 0, 10.0f, glm::vec3( 1.f, 0.f, 0.f ), 360.f );
+	//SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.0f, -10.f) );
+	//SetParameterRotation ( simpleTransform, 0, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
 
 //// RECT plugin
 //
@@ -420,6 +437,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineMa
 //
 //	root->GetPlugin( "linear_gradient" )->GetRendererContext()->alphaCtx->blendEnabled = true;
 //	//root->GetPlugin( "linear_gradient" )->GetRendererContext()->->blendEnabled = true;
+
+	//root->GetPlugin( "solid color" )->GetRendererContext()->fillCtx->fillMode = bv::model::FillContext::Mode::M_LINES;
+	//root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+	//root->GetPlugin( "texture" )->GetRendererContext()->fillCtx->fillMode = model::FillContext::Mode::M_LINES;
 
     return root;
 }

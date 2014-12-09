@@ -203,6 +203,7 @@
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultGradientPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultPrismPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\PrismComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -464,6 +465,7 @@
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultRectPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultGradientPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultPrismPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\PrismComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

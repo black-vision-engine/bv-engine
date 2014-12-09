@@ -1,6 +1,7 @@
 #include "DefaultPrismPlugin.h"
 
-#include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
+
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
 
 namespace bv { namespace model {
@@ -76,8 +77,11 @@ std::string                     DefaultPrismPluginDesc::UID                  ()
 DefaultPrismPlugin::DefaultPrismPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
 	: BasePlugin< IPlugin >( name, DefaultPrismPluginDesc::UID(), prev, model )
 {
-    auto rect   = RectComponent::Create( 1, 1 );
-    m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( rect, true );
+    //auto rect   = RectComponent::Create( 1, 1 );
+    //m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( rect, true );
+
+	auto prism = PrismComponent::Create( 40 );
+	m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( prism, false );
 }
 
 

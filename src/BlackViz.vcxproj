@@ -246,6 +246,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultFinalizeVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultPixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\PrismComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.cpp" />
@@ -471,6 +472,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizeShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizeVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\PrismComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.h" />
