@@ -90,11 +90,11 @@ bool                   DefaultTexturePluginDesc::CanBeAttachedTo     ( IPluginCo
         return false;
     }
 
-    auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
-    if ( numChannels != 1 ) //only vertex attribute data allowed here
-    {
-        return false;
-    }
+    //auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
+    //if ( numChannels != 1 ) //only vertex attribute data allowed here
+    //{
+    //    return false;
+    //}
 
     return true;
 }
