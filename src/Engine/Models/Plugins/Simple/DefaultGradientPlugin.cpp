@@ -11,6 +11,7 @@
 
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultPrismPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
@@ -97,7 +98,7 @@ bool                   DefaultGradientPluginDesc::CanBeAttachedTo     ( IPluginC
 
     auto uid = plugin->GetTypeUid();
 
-	if ( uid != DefaultRectPluginDesc::UID() && uid != DefaultTextPluginDesc::UID() && uid != DefaultTransformPluginDesc::UID() && uid != DefaultTimerPluginDesc::UID() )
+	if ( uid != DefaultRectPluginDesc::UID() && uid != DefaultTextPluginDesc::UID() && uid != DefaultTransformPluginDesc::UID() && uid != DefaultTimerPluginDesc::UID() && uid != DefaultPrismPluginDesc::UID() )
     {
         return false;
     }

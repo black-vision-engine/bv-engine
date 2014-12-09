@@ -384,7 +384,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineMa
     uids.push_back( "DEFAULT_TRANSFORM" );
     uids.push_back( "DEFAULT_PRISM" );
     //uids.push_back( "DEFAULT_COLOR" );
-	uids.push_back( "DEFAULT_TEXTURE" );
+	//uids.push_back( "DEFAULT_TEXTURE" );
+	uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
 
     //Create a model
     model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rectNode", timeEvaluator );
@@ -397,20 +398,26 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineMa
 
 
 // TEXTURE plugin
-    success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
-    //success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
-    assert( success );
+	if( root->GetPlugin( "texture" ) )
+	{
+		success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
+		success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+		assert( success );
+	}
 
 // COLOR plugin
-	//auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
- //   success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
-	//assert( success );
+	if( root->GetPlugin( "solid color" ) )
+	{
+		auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
+		success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+		assert( success );
+	}
 
 // TRANSFORM plugin
 
 	SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
-	SetParameterRotation ( simpleTransform, 0, 10.0f, glm::vec3( 1.f, 0.f, 0.f ), 360.f );
-	//SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.0f, -10.f) );
+	//SetParameterRotation ( simpleTransform, 0, 10.0f, glm::vec3( 1.f, 0.f, 0.f ), 360.f );
+	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.0f, -10.f) );
 	//SetParameterRotation ( simpleTransform, 0, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
 
 //// RECT plugin
@@ -421,18 +428,20 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineMa
 //    success &= SetParameter( w, 0.f, 2.f );
 //    success &= SetParameter( h, 0.f, 1.f );
 
-//// LINEAR GRADIENT plugin
-//
-//    auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
-//    assert( color1 );
-//    success &= SetParameter( color1, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
-//	success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
-//    assert( success );
-//	auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
-//    assert( color2 );
-//    success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 0.5f, 0.f, 1.f ) );
-//	success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.9f) );
-//    assert( success );
+// LINEAR GRADIENT plugin
+	if( root->GetPlugin( "linear_gradient" ) )
+	{
+		auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
+		assert( color1 );
+		success &= SetParameter( color1, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+		success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+		assert( success );
+		auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+		assert( color2 );
+		success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 0.5f, 0.f, 1.f ) );
+		success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
+		assert( success );
+	}
 //
 //
 //	root->GetPlugin( "linear_gradient" )->GetRendererContext()->alphaCtx->blendEnabled = true;
