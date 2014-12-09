@@ -78,7 +78,7 @@ PixelShader *   Texture2DEffectWithMask::CreatePS   ( Texture2DPtr texture, Text
         params->AddParameter( m_alphaParam );
     }
 
-    auto shader = new PixelShader( GetTexture2DEffectPixelShaderSource( hasAlpha ), params );
+    auto shader = new PixelShader( GetTexture2DWithMaskEffectPixelShaderSource( hasAlpha ), params );
 
     auto samplerTexture = CreateSampler( filteringMode, wrapModeX, wrapModeY, borderColor );
     shader->AddTextureSampler( samplerTexture );

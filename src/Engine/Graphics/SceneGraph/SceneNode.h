@@ -20,6 +20,7 @@ private:
     bool                    m_visible;
     bool                    m_overridenState;
 
+    //FIXME: add some king of global effect here
     const IValue *          m_overrideAlphaVal;
 
     TransformableEntityVec  m_transformables;
@@ -44,6 +45,7 @@ public:
 
     void                    RegisterTransformRep( TransformableEntity * transformable );
 
+    //FIXME:                instead of IsOverriden, SetOverriden and so on simplu use Get/Set GlobalEffect which is applied to the result
     void                    SetOverrideAlpha    ( const IValue * val );
     const IValue *          GetOverrideAlpha    () const;
 
