@@ -77,11 +77,13 @@ std::string                     DefaultPrismPluginDesc::UID                  ()
 DefaultPrismPlugin::DefaultPrismPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
 	: BasePlugin< IPlugin >( name, DefaultPrismPluginDesc::UID(), prev, model )
 {
-    //auto rect   = RectComponent::Create( 1, 1 );
-    //m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( rect, true );
-
-	auto prism = PrismComponent::Create( 40 );
-	m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( prism, false );
+	auto prism = PrismComponent::Create( 4 );
+	auto prism_main = prism.first;
+	auto prism_up = prism.second;
+	auto channel = ChannelsFactory::CreateVertexAttributesChannel( prism_main, false );
+	channel->AddConnectedComponent( prism_up );
+	channel = ChannelsFactory::CreateVertexAttributesChannel( prism_up, false );
+	m_vaChannel = channel;
 }
 
 
