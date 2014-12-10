@@ -383,9 +383,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineMa
 
     uids.push_back( "DEFAULT_TRANSFORM" );
     uids.push_back( "DEFAULT_PRISM" );
-    uids.push_back( "DEFAULT_COLOR" );
+    //uids.push_back( "DEFAULT_COLOR" );
 	//uids.push_back( "DEFAULT_TEXTURE" );
-	//uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
+	uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
 
     //Create a model
     model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rectNode", timeEvaluator );
@@ -433,13 +433,13 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineMa
 	{
 		auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
 		assert( color1 );
-		success &= SetParameter( color1, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
-		success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+		success &= SetParameter( color1, 0.f, glm::vec4( 1.0f, 0.f, 0.f, 1.f ) );
+		//success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
 		assert( success );
 		auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
 		assert( color2 );
-		success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 0.5f, 0.f, 1.f ) );
-		success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
+		success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 1.0f, 1.f, 1.f ) );
+		//success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
 		assert( success );
 
 		root->GetPlugin( "linear_gradient" )->GetRendererContext()->cullCtx->enabled = false;

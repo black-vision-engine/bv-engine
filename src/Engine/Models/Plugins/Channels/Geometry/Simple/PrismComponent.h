@@ -20,7 +20,7 @@ private:
 
 public:
 
-    static std::pair< ConnectedComponentPtr, ConnectedComponentPtr > Create          ( /*float startAngle, float endAngle, float innerRadius, float outerRadiusoat,*/ int fragmentsNum );
+    static std::tuple< ConnectedComponentPtr, ConnectedComponentPtr, ConnectedComponentPtr > Create          ( /*float startAngle, float endAngle, float innerRadius, float outerRadiusoat,*/ int fragmentsNum );
 
 };
 

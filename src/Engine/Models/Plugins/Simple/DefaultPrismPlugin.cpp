@@ -4,6 +4,8 @@
 
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
 
+#include <tuple>
+
 namespace bv { namespace model {
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -78,11 +80,12 @@ DefaultPrismPlugin::DefaultPrismPlugin( const std::string & name, const std::str
 	: BasePlugin< IPlugin >( name, DefaultPrismPluginDesc::UID(), prev, model )
 {
 	auto prism = PrismComponent::Create( 40 );
-	auto prism_main = prism.first;
-	auto prism_up = prism.second;
+	auto prism_main = std::get<0>(prism);
+	auto prism_up = std::get<1>(prism);
+	auto prism_down = std::get<2>(prism);
 	auto channel = ChannelsFactory::CreateVertexAttributesChannel( prism_main, false );
 	channel->AddConnectedComponent( prism_up );
-	channel = ChannelsFactory::CreateVertexAttributesChannel( prism_up, false );
+	channel->AddConnectedComponent( prism_down );
 	m_vaChannel = channel;
 }
 
