@@ -44,7 +44,67 @@ struct Span
   int x, y, width, coverage;
 };
 
-typedef std::vector< Span * > Spans;
+struct Vec2
+{
+  Vec2() { }
+  Vec2(float a, float b)
+  : x(a), y(b) { }
+
+  float x, y;
+};
+
+struct Rect
+{
+  Rect() { }
+  Rect(float left, float top, float right, float bottom)
+  : xmin(left), xmax(right), ymin(top), ymax(bottom) { }
+
+  void Include(const Vec2 &r)
+  {
+    xmin = std::min(xmin, r.x);
+    ymin = std::min(ymin, r.y);
+    xmax = std::max(xmax, r.x);
+    ymax = std::max(ymax, r.y);
+  }
+
+  float Width() const { return xmax - xmin + 1; }
+  float Height() const { return ymax - ymin + 1; }
+
+  float xmin, xmax, ymin, ymax;
+};
+
+class Spans
+{
+public:
+	Rect			m_boundingRect;
+
+	std::vector< Span * > m_spans;
+
+	Span * operator [] ( SizeType i )
+	{
+		return m_spans[ i ];
+	}
+
+	const Span * operator [] ( SizeType i ) const
+	{
+		return m_spans[ i ];
+	}
+
+	SizeType	size() const
+	{
+		return m_spans.size();
+	}
+
+	void push_back( Span * s )
+	{
+		m_spans.push_back( s );
+	}
+
+	bool empty() const
+	{
+		return m_spans.empty();
+	}
+};
 
 
 // *********************************
@@ -88,45 +148,17 @@ FreeTypeEnginePtr					FreeTypeEngine::Create( const std::string & fontFilePath, 
 
 namespace {
 
-struct Vec2
-{
-  Vec2() { }
-  Vec2(float a, float b)
-  : x(a), y(b) { }
-
-  float x, y;
-};
-
-
-struct Rect
-{
-  Rect() { }
-  Rect(float left, float top, float right, float bottom)
-  : xmin(left), xmax(right), ymin(top), ymax(bottom) { }
-
-  void Include(const Vec2 &r)
-  {
-    xmin = std::min(xmin, r.x);
-    ymin = std::min(ymin, r.y);
-    xmax = std::max(xmax, r.x);
-    ymax = std::max(ymax, r.y);
-  }
-
-  float Width() const { return xmax - xmin + 1; }
-  float Height() const { return ymax - ymin + 1; }
-
-  float xmin, xmax, ymin, ymax;
-};
-
 void	RasterizeSpans( const Spans & spans, Int32 pitch, char * buffer )
 {
-	Int32 y = 0;
-	for( auto s : spans )
-	{
-		for (int w = 0; w < s->width; ++w)
-			buffer[ pitch * y + s->x + w ] = (char)s->coverage;
+	Int32 ymax = spans.m_boundingRect.ymax;
+	Int32 xmin = spans.m_boundingRect.xmin;
 
-		y--;
+	for( auto i = spans.size(); i-- > 0;)
+	{
+		auto s = spans[ i ];
+		for (int w = 0; w < s->width; ++w)
+			for(int t = 0; t < 10; ++t)
+				buffer[ pitch * (ymax - s->y) + s->x - xmin + w ] = (char)s->coverage;
 	}
 }
 
@@ -182,7 +214,7 @@ FreeTypeEngine::FreeTypeEngine( const std::string & fontFilePath, size_t fontSiz
 
 // *********************************
 //
-const Glyph*						FreeTypeEngine::RenderGlyph( wchar_t ch, std::vector< Span * > & spans )
+Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans )
 {
     // Load the glyph we are looking for.
     FT_UInt gindex = FT_Get_Char_Index(m_face, ch);
@@ -202,16 +234,18 @@ const Glyph*						FreeTypeEngine::RenderGlyph( wchar_t ch, std::vector< Span * >
 				if (!spans.empty())
 				{
 					// Figure out what the bounding rect is for both the span lists.
-					Rect rect(	(float)spans.front()->x,
-								(float)spans.front()->y,
-								(float)spans.front()->x,
-								(float)spans.front()->y);
-					for (Spans::iterator s = spans.begin();
-							s != spans.end(); ++s)
+					Rect rect(	(float)spans[ 0 ]->x,
+								(float)spans[ 0 ]->y,
+								(float)spans[ 0 ]->x,
+								(float)spans[ 0 ]->y);
+					for ( SizeType i = 0; i < spans.size(); ++i )
 					{
-						rect.Include(Vec2((float)(*s)->x, (float)(*s)->y));
-						rect.Include(Vec2((float)((*s)->x + (*s)->width - 1), (float)(*s)->y));
+						auto s = spans[ i ];
+						rect.Include(Vec2((float)s->x, (float)s->y));
+						rect.Include(Vec2((float)s->x + s->width - 1, (float)s->y));
 					}
+
+					spans.m_boundingRect = rect;
 
 					// This is unused in this test but you would need this to draw
 					// more than one glyph.
@@ -260,7 +294,7 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, const std::wstr
 	SizeType							glyphsNum	= wcharsSet.size();
 	Int32								spadding	= (Int32)padding;
 
-	std::map< wchar_t, const Glyph * >	glyphs;
+	std::map< wchar_t, Glyph * >		glyphs;
 	std::map< wchar_t, Spans >			spans;
 
     for ( auto ch : wcharsSet )
@@ -281,106 +315,52 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, const std::wstr
 
     char* atlasData = const_cast< char * >( atlas->GetWritableData()->Get() );// FIXME: Remove const_cast
 
+	memset( atlasData, 0, altlasWidth * altlasHeight );
+
     auto atlasColumns  =  altlasWidth / maxWidth;
 
 	Int32 x = 0;
 	Int32 y = 0;
 
+	char * currAddress = atlasData;
+
 	for( SizeType y = 0; y < atlasSize; ++y )
+	{
+		currAddress += altlasWidth * padding;
+
 		for( SizeType x = 0; x < atlasSize; ++x )
 		{
-			if( y * x < wcharsSet.size() )
+			if( y * atlasSize + x < wcharsSet.size() )
 			{
-				auto ch = wcharsSet[ y * x ];
+				currAddress += padding;
+
+				auto ch = wcharsSet[ y * atlasSize + x ];
 				auto & sps = spans[ ch ];
 				auto glyph = glyphs[ ch ];
 
-				auto xyDataShift = y * altlasWidth + x * maxWidth;
+				char * startRasterizeHere = currAddress;
 
-				RasterizeSpans( sps, altlasWidth, &atlasData[ xyDataShift + maxHeight * altlasWidth + (maxWidth - glyph->width) ] );
+				startRasterizeHere += ( m_maxHeight - glyph->height ) * altlasWidth;
+				startRasterizeHere += ( m_maxWidth - glyph->width );
+
+				RasterizeSpans( sps, altlasWidth, startRasterizeHere );
+
+				currAddress += ( m_maxWidth + padding );
+
+				glyph->textureY = ( m_maxHeight + padding ) * y + padding + ( m_maxHeight	- glyph->height );
+				glyph->textureX = ( m_maxWidth	+ padding ) * x + padding + ( m_maxWidth	- glyph->width );
+				glyph->padding = padding;
 			}
 		}
 
-	TextureHelper::WriteBMP( "testFreeType.bmp", atlas->GetWritableData(), altlasWidth, altlasHeight, 8 );
+		currAddress += ( m_maxHeight - 1  + padding ) *  altlasWidth;
+	}
 
- //   std::vector<bool>   textureCoordsSet( glyphsDataInfos.size(), false );
+	TextureHelper::WriteRAW( "testFreeType.raw", atlas->GetWritableData() );
 
+	atlas->m_kerningMap = BuildKerning( m_face, wcharsSet );
 
- //   for (SizeType y = 0; y < atlas->GetHeight(); y++) 
- //   {
- //       for (SizeType x = 0; x < atlas->GetWidth(); x++)
- //       {
- //   
- //           // work out which grid slot[col][row] we are in e.g out of 16x16
- //           SizeType col = x / maxWidth;
- //           SizeType row = y / maxHeight;
- //           SizeType order = row * atlasColumns + col;
-
- //           SizeType dataElem = y * atlas->GetWidth() * atlas->GetBitsPerPixel() / 8 + ( x * atlas->GetBitsPerPixel() / 8 );
-
- //           if( order < 0 || order >= glyphsDataInfos.size() )
- //           {
- //               atlasData[ dataElem ] = 0;
- //               atlasData[ dataElem + 1 ] = 0;
- //               atlasData[ dataElem + 2 ] = 0;
- //               atlasData[ dataElem + 3 ] = 0;
- //               continue;
- //           }
-
- //           // pixel indices within padded glyph slot area
- //           Int32 x_loc = (x % maxWidth)	- ( maxWidth	- ((Int32)glyphsDataInfos[order].glyph->width ) ) + spadding;
- //           Int32 y_loc = (y % maxHeight)	- ( maxHeight	- ((Int32)glyphsDataInfos[order].glyph->height) ) + spadding;
-
-
- //           if( !textureCoordsSet[ order ] )
- //           {
- //               glyphsDataInfos[order].glyph->textureX = x + padding;
- //               glyphsDataInfos[order].glyph->textureY = y + padding;
- //               textureCoordsSet[ order ] = true;
- //               atlas->SetGlyphCoords(
- //                       glyphsDataInfos[order].glyph->code
- //                   ,   GlyphCoords(    glyphsDataInfos[order].glyph->textureX
- //                                   ,   glyphsDataInfos[order].glyph->textureY
- //                                   ,   maxWidth - 2 * spadding
- //                                   ,   maxHeight - 2 * spadding
- //                                   ,   (maxWidth - 2 * spadding ) - (int)glyphsDataInfos[order].glyph->width
- //                                   ,   (maxHeight - 2 * spadding ) - (int)glyphsDataInfos[order].glyph->height
- //                                   ,   glyphsDataInfos[order].glyph->width
- //                                   ,   glyphsDataInfos[order].glyph->height
- //                                   ,   glyphsDataInfos[order].glyph->bearingX
- //                                   ,   glyphsDataInfos[order].glyph->bearingY
- //                                   ,   glyphsDataInfos[order].glyph->advanceX
- //                                   ,   glyphsDataInfos[order].glyph->advanceY )
- //                   );
- //           }
- //               
- //           if (x_loc < 0 || y_loc < 0 || x_loc >= (int)glyphsDataInfos[order].glyph->width || y_loc >= (int)glyphsDataInfos[order].glyph->height )
- //           {
- //               atlasData[ dataElem ] = 0;
- //               atlasData[ dataElem + 1 ] = 0;
- //               atlasData[ dataElem + 2 ] = 0;
- //               atlasData[ dataElem + 3 ] = 0;
- //           } 
- //           else 
- //           {
- //               // this is 1, but it's safer to put it in anyway
- //               auto bytes_per_pixel = glyphsDataInfos[order].glyph->width / glyphsDataInfos[order].pitch;
- //               auto bytes_in_glyph  = glyphsDataInfos[order].glyph->height * glyphsDataInfos[order].pitch;
- //               auto byte_order_in_glyph = y_loc * glyphsDataInfos[order].glyph->width + x_loc;
- //               // print byte from glyph
- //               auto p = glyphsDataInfos[order].data[byte_order_in_glyph];
- //               atlasData[ dataElem ] = p;
- //               atlasData[ dataElem + 1 ] = p;
- //               atlasData[ dataElem + 2 ] = p;
- //               atlasData[ dataElem + 3 ] = p;
- //           }
- //       }
- //   }
-
-	//atlas->m_kerningMap = BuildKerning( face, wcharsSet );
-
-	//return atlas;
-	return nullptr;
+	return atlas;
 }
 
 // *********************************

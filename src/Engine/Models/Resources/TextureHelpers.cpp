@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <sstream>
+#include <fstream>
 
 #include "System/FileIO.h"
 #include "FreeImagePlus.h"
@@ -57,6 +58,31 @@ MemoryChunkConstPtr TextureHelper::LoadImg( const std::string & filePath, int * 
     return std::make_shared< MemoryChunk >( pixels, numBytes );
 }
 
+// *********************************
+//
+MemoryChunkConstPtr TextureHelper::LoadRAW ( const std::string& filePath )
+{
+	std::fstream f;
+	f.open( filePath, std::ios_base::binary | std::ios_base::in );
+	auto size = f.tellg();
+
+	auto buffer = new char[ size ];
+
+	f.read( buffer, size );
+	f.close();
+
+	return std::make_shared< MemoryChunk >( buffer, (SizeType)size );
+}
+
+// *********************************
+//
+void TextureHelper::WriteRAW( const std::string& filePath, MemoryChunkConstPtr data )
+{
+	std::fstream f;
+	f.open( filePath, std::ios_base::binary | std::ios_base::out );
+	f.write( data->Get(), data->Size() );
+	f.close();
+}
 
 // *********************************
 //
@@ -68,7 +94,8 @@ void TextureHelper::WriteBMP( const std::string& filePath, MemoryChunkConstPtr d
 
     memcpy( pixels, data->Get(), width * height * bpp / 8 );
 
-    fipImg->save( filePath.c_str() );
+
+    fipImg->save( filePath.c_str());
 }
 
 

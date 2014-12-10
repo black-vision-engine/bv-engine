@@ -17,22 +17,22 @@ class MemoryChunk
 private:
 
     char *          m_memory;
-    unsigned int    m_size;
+    SizeType		m_size;
 
 public:
 
-    explicit                    MemoryChunk     ( char * mem, unsigned int size );
+    explicit                    MemoryChunk     ( char * mem, SizeType size );
                                 ~MemoryChunk    ();
 
-    void                        SetDataChunk    ( char * data, unsigned int size );
-    void                        Allocate        ( unsigned int size );
+    void                        SetDataChunk    ( char * data, SizeType size );
+    void                        Allocate        ( SizeType size );
 
-    unsigned int                Size            () const;
+    SizeType					Size            () const;
 
     const char *                Get             () const;
     char *                      GetWritable     ();
 
-    static  MemoryChunkPtr      Create          ( unsigned int size );
+    static  MemoryChunkPtr      Create          ( SizeType size );
 
     static  MemoryChunkConstPtr EMPTY           ();
 

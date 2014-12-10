@@ -16,7 +16,7 @@ namespace bv { namespace model {
 class TextAtlas;
 class FreeTypeEngine;
 struct Glyph;
-struct Span;
+class Spans;
 
 DEFINE_CONST_PTR_TYPE(FreeTypeEngine)
 DEFINE_PTR_TYPE(FreeTypeEngine)
@@ -31,7 +31,7 @@ private:
 	FT_Library					m_library;
 	FT_Face 					m_face;
 
-	const Glyph *				RenderGlyph( wchar_t ch, std::vector< Span * > & );
+	Glyph *						RenderGlyph( wchar_t ch, Spans & );
 
 
 public:
