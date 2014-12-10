@@ -77,7 +77,7 @@ std::string                     DefaultPrismPluginDesc::UID                  ()
 DefaultPrismPlugin::DefaultPrismPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
 	: BasePlugin< IPlugin >( name, DefaultPrismPluginDesc::UID(), prev, model )
 {
-	auto prism = PrismComponent::Create( 4 );
+	auto prism = PrismComponent::Create( 40 );
 	auto prism_main = prism.first;
 	auto prism_up = prism.second;
 	auto channel = ChannelsFactory::CreateVertexAttributesChannel( prism_main, false );

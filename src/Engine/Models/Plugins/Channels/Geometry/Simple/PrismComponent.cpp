@@ -44,8 +44,33 @@ std::pair< ConnectedComponentPtr, ConnectedComponentPtr >             PrismCompo
 		vertArrtUV->AddAttribute( glm::vec2( float( i ) / fragmentsNum, 0 ) );
 		vertArrtUV->AddAttribute( glm::vec2( float( i ) / fragmentsNum, 1 ) );
 
-		vertArrtF3_up->AddAttribute( glm::vec3( cos( angle ), 0.5, sin( angle ) ) );
-		vertArrtUV_up->AddAttribute( glm::vec2( float( i ) / fragmentsNum, 1 ) );
+		//vertArrtF3_up->AddAttribute( glm::vec3( cos( angle ), 0.5, sin( angle ) ) );
+		//vertArrtUV_up->AddAttribute( glm::vec2( float( i ) / fragmentsNum, 1 ) );
+
+		//if( i%2 == 1 )
+		//{
+		//	vertArrtF3_up->AddAttribute( glm::vec3( 0, 0.5, 0 ) );
+		//	vertArrtUV_up->AddAttribute( glm::vec2( 0, 0 ) );
+		//}
+	}
+
+
+	auto vertices = vertArrtF3->GetVertices();
+	int n = vertices.size();
+	auto uvs = vertArrtUV->GetVertices();
+	vertArrtF3_up->AddAttribute( vertices[ 0 ] );
+	vertArrtF3_up->AddAttribute( vertices[ 1 ] );
+	vertArrtF3_up->AddAttribute( vertices[ 2 ] );
+	vertArrtUV_up->AddAttribute( uvs[ 0 ] );
+	vertArrtUV_up->AddAttribute( uvs[ 1 ] );
+	vertArrtUV_up->AddAttribute( uvs[ 2 ] );
+	for( int i = 0; i <= fragmentsNum/2; i++ )
+	{
+		vertArrtF3_up->AddAttribute( vertices[ n-1 - i ] );
+		vertArrtF3_up->AddAttribute( vertices[ 3 + i ] );
+
+		vertArrtUV_up->AddAttribute( uvs[ n-1 - i ] );
+		vertArrtUV_up->AddAttribute( uvs[ 3 + i ] );
 	}
 
     comp->AddAttributeChannel( AttributeChannelPtr( vertArrtF3 ) );
