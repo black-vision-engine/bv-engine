@@ -8,6 +8,7 @@
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Engine/Models/Resources/Font/FontLoader.h"
 #include "Engine/Models/Resources/Font/Text.h"
+#include "Engine/Models/Resources/Font/Glyph.h"
 
 #include <algorithm>
 
@@ -502,11 +503,11 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
 ////////////////////////////
 //
-const GlyphCoords&                  DefaultTimerPlugin::GetGlyphCoords  ( wchar_t wch ) const
+const Glyph *						DefaultTimerPlugin::GetGlyph	( wchar_t wch ) const
 {
-    auto glyphCoords = m_textAtlas->GetGlyphCoords( wch );
-    if( glyphCoords )
-        return *glyphCoords;
+    auto glyph = m_textAtlas->GetGlyph( wch );
+    if( glyph )
+        return glyph;
     else
     {
         assert( !( "Cannot find glyph for char " + wch) );
@@ -637,13 +638,13 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
 
     if( wch != L' ' )
     {
-        auto& coords = GetGlyphCoords( wch );
-        auto& zeroCoords = GetGlyphCoords( m_widestGlyph );
+        auto glyph = GetGlyph( wch );
+        auto zeroGlyph = GetGlyph( m_widestGlyph );
 
-        textureXNorm    = ((float)coords.textureX + (float)zeroCoords.glyphX - 1.f )  / m_textAtlas->GetWidth();
-        textureYNorm    = ((float)coords.textureY + (float)zeroCoords.glyphY - 1.f )  / m_textAtlas->GetHeight();
-        widthNorm       = ((float)zeroCoords.glyphWidth + 2.f )     / m_textAtlas->GetWidth();
-        heightNorm      = ((float)zeroCoords.glyphHeight + 2.f )    / m_textAtlas->GetHeight();
+        textureXNorm    = ((float)glyph->textureX /*+ (float)zeroGlyph->glyphX - 1.f*/ )  / m_textAtlas->GetWidth();
+        textureYNorm    = ((float)glyph->textureY /*+ (float)zeroGlyph->glyphY - 1.f*/ )  / m_textAtlas->GetHeight();
+        widthNorm       = ((float)zeroGlyph->width + 2.f )     / m_textAtlas->GetWidth();
+        heightNorm      = ((float)zeroGlyph->height + 2.f )    / m_textAtlas->GetHeight();
     }
 
     if( IsPlaceHolder( m_timePatern[ connComp ] ) )
@@ -697,14 +698,14 @@ bool                                DefaultTimerPlugin::CheckTimeConsistency ( c
 //
 void                              DefaultTimerPlugin::InitBigestGlyph ()
 {
-    unsigned int width   = 0;
+    SizeType width   = 0;
     wchar_t widest       = L'0';
 
     static const std::wstring numbers = L"0123456789";
 
     for( auto wch : numbers )
     {
-        auto w = m_textAtlas->GetGlyphCoords( wch )->glyphWidth;
+        auto w = m_textAtlas->GetGlyph( wch )->width;
         if( w > width )
         {
             width = w;

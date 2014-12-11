@@ -86,9 +86,9 @@ void TextureHelper::WriteRAW( const std::string& filePath, MemoryChunkConstPtr d
 
 // *********************************
 //
-void TextureHelper::WriteBMP( const std::string& filePath, MemoryChunkConstPtr data, int width, int height, int bpp )
+void TextureHelper::WriteBMP( const std::string& filePath, MemoryChunkConstPtr data, SizeType width, SizeType height, SizeType bpp )
 {
-    fipImage*  fipImg = new fipImage( FREE_IMAGE_TYPE::FIT_BITMAP, width, height, bpp );
+    fipImage*  fipImg = new fipImage( FREE_IMAGE_TYPE::FIT_BITMAP, (unsigned int)width, (unsigned int)height, (unsigned int)bpp );
 
     auto pixels = fipImg->accessPixels();
 
@@ -101,7 +101,7 @@ void TextureHelper::WriteBMP( const std::string& filePath, MemoryChunkConstPtr d
 
 // *********************************
 //
-inline unsigned char GetPixelColor( int x, int y, const char* data, int width, int height )
+inline unsigned char GetPixelColor( int x, int y, const char* data, SizeType width, SizeType height )
 {
     if( x < 0 || x >= width || y < 0 || y >= height )
         return 0;
@@ -117,9 +117,9 @@ inline void SetPixelColor( int x, int y, char* data, int width, int height, char
 
 // *********************************
 //
-MemoryChunkConstPtr TextureHelper::Blur( MemoryChunkConstPtr data, int width, int height, int bpp, int blurSize )
+MemoryChunkConstPtr TextureHelper::Blur( MemoryChunkConstPtr data, SizeType width, SizeType height, SizeType bpp, SizeType blurSize )
 {
-    unsigned int numBytes = width * height * bpp / 8;
+    auto numBytes = width * height * bpp / 8;
 
     char * tmp = new char[ numBytes ];
     char * out = new char[ numBytes ];
@@ -128,14 +128,14 @@ MemoryChunkConstPtr TextureHelper::Blur( MemoryChunkConstPtr data, int width, in
 
     for ( int y = 0; y < height; ++y )
     {
-        for ( int x = 0; x < width; ++x )
+        for ( Int32 x = 0; x < width; ++x )
         {
             float currVal = 0.f;
-            for( int i = -blurSize; i <= blurSize; ++i )
+            for( Int32 i = - (Int32)blurSize; i <= (Int32)blurSize; ++i )
                 currVal += GetPixelColor( x + i, y, data->Get(), width, height );
             currVal /= kernelSize;
             if (currVal > 0.f)
-                int t = 0;
+                Int32 t = 0;
             SetPixelColor( x, y, tmp, width, height, (unsigned char)(currVal) );
         }
     }

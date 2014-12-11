@@ -39,7 +39,7 @@ class Resource;
 class FontExtraData;
 class TextAtlas;
 class Text;
-struct GlyphCoords;
+struct Glyph;
 
 struct TimeValue
 {
@@ -127,7 +127,7 @@ private:
     bool                            CheckTimeConsistency ( const std::wstring & time ) const;
 
     void                            SetValue        ( unsigned int connComp, wchar_t wch );
-    const GlyphCoords &             GetGlyphCoords  ( wchar_t wch ) const;
+    const Glyph *					GetGlyph		( wchar_t wch ) const;
     void                            Refresh         ( bool isPaused );
 
     void                            SetTimePatern   ( const std::wstring & patern );

@@ -29,8 +29,8 @@ FontAtlasCacheEntry::FontAtlasCacheEntry()
 //
 FontAtlasCacheEntry::FontAtlasCacheEntry(   const TextAtlas* textAtlas
                                          ,  const std::string& fontName
-                                         ,  unsigned int fontSize
-                                         ,  unsigned int blurSize
+                                         ,  SizeType fontSize
+                                         ,  SizeType blurSize
                                          ,  const std::string& fontFilePath
                                          ,  bool bold
                                          ,  bool italic )
@@ -168,7 +168,7 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
 }
 // *********************************
 //
-FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fontName, unsigned int fontSize, unsigned int blurSize, const std::string& fontFileName, bool bold, bool italic )
+FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fontName, SizeType fontSize, SizeType blurSize, const std::string& fontFileName, bool bold, bool italic )
 {
     if( !m_dataBase )
     {

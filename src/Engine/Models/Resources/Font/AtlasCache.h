@@ -1,5 +1,7 @@
 #pragma once
 
+#include "System/BasicTypes.h"
+
 #include <string>
 
 struct sqlite3;
@@ -25,8 +27,8 @@ public:
     FontAtlasCacheEntry ();
     FontAtlasCacheEntry ( const TextAtlas* textAtlas
                         , const std::string& fontName
-                        , unsigned int fontSize
-                        , unsigned int blurSize
+                        , SizeType fontSize
+                        , SizeType blurSize
                         , const std::string& fontFilePath
                         , bool bold = false
                         , bool italic = false );
@@ -47,7 +49,7 @@ private:
 
 public:
 
-    FontAtlasCacheEntry *               GetEntry            ( const std::string& fontName, unsigned int fontSize, unsigned int blurSize, const std::string& fontFileName, bool bold, bool italic );
+    FontAtlasCacheEntry *               GetEntry            ( const std::string& fontName, SizeType fontSize, SizeType blurSize, const std::string& fontFileName, bool bold, bool italic );
     void                                AddEntry            ( const FontAtlasCacheEntry& data, bool forceInvalidate = true );
 
     void                                Update              ();

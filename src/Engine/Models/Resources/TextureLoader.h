@@ -26,9 +26,9 @@ public:
 class TextureExtraData : public ResourceExtraData
 {
 public:
-    unsigned int            m_width;
-    unsigned int            m_height;
-    unsigned int            m_bitsPerPixel;
+    SizeType				m_width;
+    SizeType				m_height;
+    SizeType				m_bitsPerPixel;
     TextureFormat           m_format;
     TextureType             m_type;
 
@@ -41,7 +41,7 @@ public:
     TextureType             GetType             () const;
 
                             TextureExtraData    ();
-    explicit                TextureExtraData    ( unsigned int w, unsigned int h, unsigned int bitsPerPixel, TextureFormat format, TextureType type );
+    explicit                TextureExtraData    ( SizeType w, SizeType h, SizeType bitsPerPixel, TextureFormat format, TextureType type );
 
 };
 

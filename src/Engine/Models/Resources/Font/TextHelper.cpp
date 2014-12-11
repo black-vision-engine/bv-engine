@@ -2,6 +2,7 @@
 
 #include "Engine/Models/Resources/Font/FontLoader.h"
 #include "Engine/Models/Resources/TextureLoader.h"
+#include "Engine/Models/Resources/Font/Glyph.h"
 #include "Engine/Models/Resources/Font/Text.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
@@ -128,7 +129,7 @@ ResourceHandleConstPtr      TextHelper::GetAtlasTextureInfo ( const TextAtlas * 
 {
     assert( textAtlas );
 
-    unsigned int texSize = textAtlas->GetWidth() * textAtlas->GetHeight() * 4; //FIXME: Add format to atlas
+    auto texSize = textAtlas->GetWidth() * textAtlas->GetHeight() * 4; //FIXME: Add format to atlas
 
     TextureExtraData* atlasExtraData = new TextureExtraData( textAtlas->GetWidth(), textAtlas->GetHeight(), 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D );
     auto altasHandle = ResourceHandleConstPtr( new ResourceHandle( textAtlas->GetData(), texSize, atlasExtraData ) );
@@ -159,7 +160,7 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
 
     float texPadding = 1.f;
 
-    auto spaceGlyphWidth    = (float)textAtlas->GetGlyphCoords( L'0' )->glyphWidth / viewWidth  + spacing;
+    auto spaceGlyphWidth    = (float)textAtlas->GetGlyph( L'0' )->width / viewWidth  + spacing;
     auto newLineShift       = -(float)textAtlas->GetGlyphHeight( L'0' ) / viewHeight;
 
     for( unsigned int i = 0; i < text.size(); ++i )
@@ -188,9 +189,9 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
 
         auto posAttribChannel = new Float3AttributeChannel( desc, "vertexPosition", true );
 
-        if( auto glyphCoord = textAtlas->GetGlyphCoords( wch ) )
+        if( auto glyph = textAtlas->GetGlyph( wch ) )
         {
-            glm::vec3 bearing = glm::vec3( (float)glyphCoord->bearingX / (float)viewWidth, (float)( glyphCoord->bearingY - (int)glyphCoord->glyphHeight ) / (float)viewHeight, 0.f );
+            glm::vec3 bearing = glm::vec3( (float)glyph->bearingX / (float)viewWidth, (float)( glyph->bearingY - (int)glyph->height ) / (float)viewHeight, 0.f );
 
             glm::vec3 quadBottomLeft;
             glm::vec3 quadBottomRight;
@@ -208,9 +209,9 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
 
             {
                 quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, -ccPaddingY, 0.f );
-                quadBottomRight    = glm::vec3( (float)glyphCoord->glyphWidth / (float)viewWidth, 0.f, 0.f ) +  glm::vec3( blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, -ccPaddingY, 0.f );
-                quadTopLeft        = glm::vec3( 0.f, (float)glyphCoord->glyphHeight / (float)viewHeight, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, ccPaddingY, 0.f );
-                quadTopRight       = glm::vec3( (float)glyphCoord->glyphWidth / (float)viewWidth, (float)glyphCoord->glyphHeight / (float)viewHeight, 0.f ) + glm::vec3( blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, ccPaddingY, 0.f );
+                quadBottomRight    = glm::vec3( (float)glyph->width / (float)viewWidth, 0.f, 0.f ) +  glm::vec3( blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, -ccPaddingY, 0.f );
+                quadTopLeft        = glm::vec3( 0.f, (float)glyph->height / (float)viewHeight, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, ccPaddingY, 0.f );
+                quadTopRight       = glm::vec3( (float)glyph->width / (float)viewWidth, (float)glyph->height / (float)viewHeight, 0.f ) + glm::vec3( blurLenghtX, blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, ccPaddingY, 0.f );
             }
 
             posAttribChannel->AddAttribute( quadBottomLeft    + translate + bearing + newLineTranslation );
@@ -230,10 +231,10 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
             float texHeight;
 
             {
-                texLeft   = ( (float)glyphCoord->textureX + (float)glyphCoord->glyphX - blurTexSize - texPadding )  / textAtlas->GetWidth();
-                texTop    = ( (float)glyphCoord->textureY + (float)glyphCoord->glyphY - blurTexSize - texPadding )  / textAtlas->GetHeight();
-                texWidth  = ( (float)glyphCoord->glyphWidth + 2 * blurTexSize + 2 * texPadding )     / textAtlas->GetWidth();
-                texHeight = ( (float)glyphCoord->glyphHeight + 2 * blurTexSize  + 2 * texPadding )    / textAtlas->GetHeight();
+                texLeft   = ( (float)glyph->textureX/* + (float)glyph->glyphX - blurTexSize - texPadding*/ )  / textAtlas->GetWidth();
+                texTop    = ( (float)glyph->textureY/* + (float)glyph->glyphY - blurTexSize - texPadding*/ )  / textAtlas->GetHeight();
+                texWidth  = ( (float)glyph->width + 2 * blurTexSize + 2 * texPadding )     / textAtlas->GetWidth();
+                texHeight = ( (float)glyph->height + 2 * blurTexSize  + 2 * texPadding )    / textAtlas->GetHeight();
             }
 
 
@@ -247,7 +248,7 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
             vertexAttributeChannel->AddConnectedComponent( connComp );
 
             {
-                translate += glm::vec3( glyphCoord->advanceX / (float)viewWidth, 0.f, 0.f ) + interspace;
+                translate += glm::vec3( glyph->advanceX / (float)viewWidth, 0.f, 0.f ) + interspace;
             }
         }
         else

@@ -24,21 +24,21 @@
 
 namespace bv { namespace model {
 
-// *********************************
+//// *********************************
+////
+//void GlyphCoords::Save( std::ostream& out ) const
+//{
+//    boost::archive::text_oarchive oa( out );
+//    oa << *this;
+//}
 //
-void GlyphCoords::Save( std::ostream& out ) const
-{
-    boost::archive::text_oarchive oa( out );
-    oa << *this;
-}
-
-// *********************************
-//
-void GlyphCoords::Load( std::istream& in )
-{
-    boost::archive::text_iarchive ia( in );
-    ia >> *this;
-}
+//// *********************************
+////
+//void GlyphCoords::Load( std::istream& in )
+//{
+//    boost::archive::text_iarchive ia( in );
+//    ia >> *this;
+//}
 
 // *********************************
 //
@@ -101,9 +101,9 @@ SizeType				TextAtlas::GetSizeInBytes  () const
 
 // *********************************
 //
-void                    TextAtlas::SetGlyphCoords  ( wchar_t wch, const GlyphCoords& coords )
+void                    TextAtlas::SetGlyph			( wchar_t wch, const Glyph * glyph )
 {
-    m_glyphsPositions.insert(std::make_pair( wch, coords ) );
+    m_glyphs.insert(std::make_pair( wch, glyph ) );
 }
 
 // *********************************
@@ -135,13 +135,13 @@ SizeType				TextAtlas::GetHeight       () const
 
 // *********************************
 //
-const GlyphCoords*      TextAtlas::GetGlyphCoords  ( wchar_t c ) const
+const Glyph *			TextAtlas::GetGlyph			( wchar_t c ) const
 {
-    auto it = m_glyphsPositions.find(c);
+    auto it = m_glyphs.find(c);
 
-    if( it != m_glyphsPositions.end() )
+    if( it != m_glyphs.end() )
     {
-        return &( it->second );
+        return it->second;
     }
 
     return nullptr;
@@ -163,28 +163,28 @@ Float32                  TextAtlas::GetKerning      ( wchar_t c0, wchar_t c1 ) c
 //
 SizeType				TextAtlas::GetGlyphX       ( wchar_t c ) const
 {
-    return GetGlyphCoords( c )->textureX;
+    return GetGlyph( c )->textureX;
 }
 
 // *********************************
 //
 SizeType				TextAtlas::GetGlyphY       ( wchar_t c ) const
 {
-    return GetGlyphCoords( c )->textureY;
+    return GetGlyph( c )->textureY;
 }
 
 // *********************************
 //
 SizeType				TextAtlas::GetGlyphWidth   ( wchar_t c ) const
 {
-    return GetGlyphCoords( c )->width;
+    return GetGlyph( c )->width;
 }
 
 // *********************************
 //
 SizeType				TextAtlas::GetGlyphHeight  ( wchar_t c ) const
 {
-    return GetGlyphCoords( c )->height;
+    return GetGlyph( c )->height;
 }
 
 // *********************************

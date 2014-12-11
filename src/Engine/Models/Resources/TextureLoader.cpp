@@ -72,7 +72,7 @@ TextureExtraData::TextureExtraData()
 
 // ******************************
 //
-TextureExtraData::TextureExtraData( unsigned int w, unsigned int h, unsigned int bitsPerPixel, TextureFormat format, TextureType type )
+TextureExtraData::TextureExtraData( SizeType w, SizeType h, SizeType bitsPerPixel, TextureFormat format, TextureType type )
     : ResourceExtraData( ResourceExtraKind::RE_TEXTURE )
     , m_width( w )
     , m_height( h )

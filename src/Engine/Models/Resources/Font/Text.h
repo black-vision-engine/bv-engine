@@ -9,71 +9,72 @@
 namespace bv { namespace model {
 
 class Text;
+struct Glyph;
 
-struct GlyphCoords
-{
-    SizeType				textureX;
-    SizeType				textureY;
-
-    SizeType	            width;
-    SizeType	            height;
-
-    int                     bearingX;
-    int                     bearingY;
-
-    SizeType	            glyphX;
-    SizeType	            glyphY;
-
-    SizeType	            glyphWidth;
-    SizeType	            glyphHeight;
-
-    signed long             advanceX;
-    signed long             advanceY;
-
-    GlyphCoords(){}
-
-    GlyphCoords(SizeType tX,
-                SizeType tY,
-                SizeType w,
-                SizeType h,
-                SizeType gX,
-                SizeType gY,
-                SizeType gw,
-                SizeType gh,
-                int bX,
-                int bY,
-                signed long aX,
-                signed long aY)
-                : textureX( tX )
-                , textureY( tY )
-                , width( w )
-                , height( h )
-                , glyphX( gX )
-                , glyphY( gY )
-                , glyphWidth( gw )
-                , glyphHeight( gh )
-                , bearingX( bX )
-                , bearingY( bY )
-                , advanceX( aX )
-                , advanceY( aY )
-
-    {}
-
-    // serialization
-    void        Save( std::ostream& out ) const;
-    void        Load( std::istream& in );
-};
+//struct GlyphCoords
+//{
+//    SizeType				textureX;
+//    SizeType				textureY;
+//
+//    SizeType	            width;
+//    SizeType	            height;
+//
+//    int                     bearingX;
+//    int                     bearingY;
+//
+//    SizeType	            glyphX;
+//    SizeType	            glyphY;
+//
+//    SizeType	            glyphWidth;
+//    SizeType	            glyphHeight;
+//
+//    signed long             advanceX;
+//    signed long             advanceY;
+//
+//    GlyphCoords(){}
+//
+//    GlyphCoords(SizeType tX,
+//                SizeType tY,
+//                SizeType w,
+//                SizeType h,
+//                SizeType gX,
+//                SizeType gY,
+//                SizeType gw,
+//                SizeType gh,
+//                int bX,
+//                int bY,
+//                signed long aX,
+//                signed long aY)
+//                : textureX( tX )
+//                , textureY( tY )
+//                , width( w )
+//                , height( h )
+//                , glyphX( gX )
+//                , glyphY( gY )
+//                , glyphWidth( gw )
+//                , glyphHeight( gh )
+//                , bearingX( bX )
+//                , bearingY( bY )
+//                , advanceX( aX )
+//                , advanceY( aY )
+//
+//    {}
+//
+//    // serialization
+//    void        Save( std::ostream& out ) const;
+//    void        Load( std::istream& in );
+//};
 
 class TextAtlas
 {
 public: // Only for non intrusive serialization. Should be private
 
-    ResourceHandlePtr         m_textureHandle;
+    ResourceHandlePtr									m_textureHandle;
 
-    std::map< wchar_t, GlyphCoords >                        m_glyphsPositions;
-    std::map< std::pair< wchar_t, wchar_t >, float >        m_kerningMap; 
+    std::map< wchar_t, const Glyph * >                  m_glyphs;
+    std::map< std::pair< wchar_t, wchar_t >, float >	m_kerningMap; 
 
-    void                    SetGlyphCoords  ( wchar_t wch, const GlyphCoords& coords );
+    void                    SetGlyph		( wchar_t wch, const Glyph * glyph );
 
 public:
 
@@ -92,7 +93,7 @@ public:
     SizeType				GetGlyphWidth   ( wchar_t c ) const;
     SizeType				GetGlyphHeight  ( wchar_t c ) const;
 
-    const GlyphCoords*      GetGlyphCoords  ( wchar_t c ) const;
+    const Glyph *			GetGlyph		( wchar_t c ) const;
 
     Float32                 GetKerning      ( wchar_t c0, wchar_t c1 ) const;
 
