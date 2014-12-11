@@ -157,8 +157,13 @@ void	RasterizeSpans( const Spans & spans, SizeType pitch, char * buffer )
 	{
 		auto s = spans[ i ];
 		for ( Int32 w = 0; w < s->width; ++w )
-			for( Int32 t = 0; t < 10; ++t )
-				buffer[ pitch * (ymax - s->y) + s->x - xmin + w ] = (char)s->coverage;
+		{
+			auto c = 4 * (pitch * (ymax - s->y) + s->x -  xmin +  w);
+			buffer[ c ] = (char)s->coverage;
+			buffer[ c + 1 ] = (char)s->coverage;
+			buffer[ c + 2 ] = (char)s->coverage;
+			buffer[ c + 3 ] = (char)s->coverage;
+		}
 	}
 }
 
@@ -315,14 +320,14 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, const std::wstr
     auto altlasWidth	= maxWidth	* atlasSize;
     auto altlasHeight	= maxHeight * atlasSize;
 
-    auto atlas = TextAtlas::Crate( altlasWidth, altlasHeight, 8, maxWidth, maxHeight );
+    auto atlas = TextAtlas::Crate( altlasWidth, altlasHeight, 32, maxWidth, maxHeight );
 
     for ( auto ch : wcharsSet )
 		atlas->SetGlyph( ch, glyphs[ ch ] );
 
     char* atlasData = const_cast< char * >( atlas->GetWritableData()->Get() );// FIXME: Remove const_cast
 
-	memset( atlasData, 256, altlasWidth * altlasHeight );
+	memset( atlasData, 0, altlasWidth * altlasHeight * 4 );
 
     auto atlasColumns  =  altlasWidth / maxWidth;
 
@@ -333,13 +338,13 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, const std::wstr
 
 	for( SizeType y = 0; y < atlasSize; ++y )
 	{
-		currAddress += altlasWidth * padding;
+		currAddress += altlasWidth * padding * 4;
 
 		for( SizeType x = 0; x < atlasSize; ++x )
 		{
 			if( y * atlasSize + x < wcharsSet.size() )
 			{
-				currAddress += padding;
+				currAddress += padding * 4;
 
 				auto ch = wcharsSet[ y * atlasSize + x ];
 				auto & sps = spans[ ch ];
@@ -347,29 +352,35 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, const std::wstr
 
 				char * startRasterizeHere = currAddress;
 
-				startRasterizeHere += ( m_maxHeight - glyph->height ) * altlasWidth;
-				startRasterizeHere += ( m_maxWidth - glyph->width );
+				startRasterizeHere += ( m_maxHeight - glyph->height ) * altlasWidth * 4;
+				startRasterizeHere += ( m_maxWidth - glyph->width ) * 4;
 
 				RasterizeSpans( sps, altlasWidth, startRasterizeHere );
 
-				currAddress += ( m_maxWidth + padding );
+				currAddress += ( m_maxWidth + padding ) * 4;
 
-				glyph->textureY = ( m_maxHeight + padding ) * y + padding + ( m_maxHeight	- glyph->height );
-				glyph->textureX = ( m_maxWidth	+ padding ) * x + padding + ( m_maxWidth	- glyph->width );
+				glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  2 * padding + ( m_maxHeight	- glyph->height );
+				glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  2 * padding + ( m_maxWidth	- glyph->width );
 				glyph->padding = padding;
 			}
 		}
 
-		currAddress += ( m_maxHeight - 1  + padding ) *  altlasWidth;
+		currAddress += ( m_maxHeight - 1  + padding ) *  altlasWidth * 4;
 	}
 
 	TextureHelper::WriteRAW( "testFreeType.raw", atlas->GetWritableData() );
 
 	atlas->m_kerningMap = BuildKerning( m_face, wcharsSet );
 
-	for( SizeType y = 0; y < altlasHeight; ++y )
-		for( SizeType x = 0; x < altlasWidth; ++x )
-			atlasData[ y * altlasWidth + x ] = x ^ y;
+	//for( SizeType y = 0; y < altlasHeight; ++y )
+	//	for( SizeType x = 0; x < altlasWidth; ++x )
+	//	{
+	//		auto c = 4 * ( y * altlasWidth + x );
+	//		atlasData[ c ] = x ^ y;
+	//		atlasData[ c + 1 ] = x ^ y;
+	//		atlasData[ c + 2 ] = x ^ y;
+	//		atlasData[ c + 3 ] = x ^ y;
+	//	}
 
 	return atlas;
 }

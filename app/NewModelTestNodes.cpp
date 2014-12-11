@@ -597,7 +597,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAAAA\nBBBBCCCC\nDDDDDDDDD" );
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AV::11A-AAAA\nBBBBCCCC\nDDD333DD88\nAAAAAAAA\nB3BBCCCC\nDDDD888DDD" );
 //    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAABBBBCCCCDDDD" );
-	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"1238" );
+	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"1fgdfhkjhasdf238" );
 
     if( useAlphaMask )
     {

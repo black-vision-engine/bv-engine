@@ -55,7 +55,16 @@ TextAtlas::TextAtlas( SizeType w, SizeType h, SizeType bitsPerPixel, SizeType gw
 {
     auto size   = w * h * bitsPerPixel / 8;
     auto data  = std::make_shared< MemoryChunk >( new char[ size ], size );
-	m_textureHandle = ResourceHandlePtr( new ResourceHandle( data, size, new TextureExtraData( w, h, bitsPerPixel, TextureFormat::F_A8, TextureType::T_2D ) ) );
+
+	TextureFormat tf;
+	if( bitsPerPixel == 8 )
+		tf = TextureFormat::F_A8;
+	else if ( bitsPerPixel == 32 )
+		tf = TextureFormat::F_A8R8G8B8;
+	else
+		assert(false);
+
+	m_textureHandle = ResourceHandlePtr( new ResourceHandle( data, size, new TextureExtraData( w, h, bitsPerPixel, tf, TextureType::T_2D ) ) );
 }
 
 // *********************************
