@@ -59,7 +59,7 @@ std::tuple< ConnectedComponentPtr, ConnectedComponentPtr, ConnectedComponentPtr 
 // up
 
 	auto vertices = vertArrtF3->GetVertices();
-	int n = vertices.size()/2;
+	auto n = vertices.size()/2;
 	auto uvs = vertArrtUV->GetVertices();
 	up_vertArrtF3->AddAttribute( vertices[ 2*0 ] );
 	up_vertArrtF3->AddAttribute( vertices[ 2*1 ] );
@@ -67,13 +67,20 @@ std::tuple< ConnectedComponentPtr, ConnectedComponentPtr, ConnectedComponentPtr 
 	up_vertArrtUV->AddAttribute( uvs[ 2*0 ] );
 	up_vertArrtUV->AddAttribute( uvs[ 2*1 ] );
 	up_vertArrtUV->AddAttribute( uvs[ 2*2 ] );
-	for( int i = 0; i < (n-3)/2; i++ )
+	int i;
+	for( i = 0; i < (n-3)/2; i++ )
 	{
 		up_vertArrtF3->AddAttribute( vertices[ 2*( n-1 - i ) ] );
 		up_vertArrtF3->AddAttribute( vertices[ 2*( 3 + i ) ] );
 
 		up_vertArrtUV->AddAttribute( uvs[ 2*( n-1 - i ) ] );
 		up_vertArrtUV->AddAttribute( uvs[ 2*( 3 + i ) ] );
+	}
+	if( n%2 == 0 ) // we need additional point
+	{
+		up_vertArrtF3->AddAttribute( vertices[ 2*( n-1 - i ) ] );
+
+		up_vertArrtUV->AddAttribute( uvs[ 2*( n-1 - i ) ] );
 	}
 	
 // and down
@@ -87,13 +94,19 @@ std::tuple< ConnectedComponentPtr, ConnectedComponentPtr, ConnectedComponentPtr 
 	down_vertArrtUV->AddAttribute( uvs[ 2*0+1 ] );
 	down_vertArrtUV->AddAttribute( uvs[ 2*1+1 ] );
 	down_vertArrtUV->AddAttribute( uvs[ 2*2+1 ] );
-	for( int i = 0; i < (n-3)/2; i++ )
+	for( i = 0; i < (n-3)/2; i++ )
 	{
 		down_vertArrtF3->AddAttribute( vertices[ 2*( n-1 - i )+1 ] );
 		down_vertArrtF3->AddAttribute( vertices[ 2*( 3 + i )+1 ] );
 
 		down_vertArrtUV->AddAttribute( uvs[ 2*( n-1 - i )+1 ] );
 		down_vertArrtUV->AddAttribute( uvs[ 2*( 3 + i )+1 ] );
+	}
+	if( n%2 == 0 ) // we need additional point
+	{
+		down_vertArrtF3->AddAttribute( vertices[ 2*( n-1 - i )+1 ] );
+
+		down_vertArrtUV->AddAttribute( uvs[ 2*( n-1 - i )+1 ] );
 	}
 
 // and end

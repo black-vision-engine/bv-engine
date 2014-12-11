@@ -202,6 +202,7 @@ void                                DefaultGradientPlugin::Update               
         }
 
 		InitAttributesChannel( m_prevPlugin );	
+		m_vaChannel->SetNeedsTopologyUpdate( true );
 	}
 
         //m_vaChannel->SetNeedsAttributesUpdate( true );

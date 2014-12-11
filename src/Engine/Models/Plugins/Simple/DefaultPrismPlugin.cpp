@@ -101,7 +101,8 @@ void DefaultPrismPlugin::InitGeometry( int n )
 	auto prism_main = std::get<0>(prism);
 	auto prism_up = std::get<1>(prism);
 	auto prism_down = std::get<2>(prism);
-	
+
+// FIXME: it would be more pretty to create empty VertexAttributesChannel in ctor and add a proper descriptor there
 	if( m_vaChannel == NULL )
 		m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( prism_main, false );
 	else
