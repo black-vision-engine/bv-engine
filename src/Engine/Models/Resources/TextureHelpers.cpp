@@ -1,8 +1,6 @@
 #include "TextureHelpers.h"
 
 #include <memory>
-#include <sstream>
-#include <fstream>
 
 #include "System/FileIO.h"
 #include "FreeImagePlus.h"
@@ -62,14 +60,10 @@ MemoryChunkConstPtr TextureHelper::LoadImg( const std::string & filePath, int * 
 //
 MemoryChunkConstPtr TextureHelper::LoadRAW ( const std::string& filePath )
 {
-	std::fstream f;
-	f.open( filePath, std::ios_base::binary | std::ios_base::in );
-	auto size = f.tellg();
+	auto size = File::Size( filePath );
 
 	auto buffer = new char[ size ];
-
-	f.read( buffer, size );
-	f.close();
+	File::Read( buffer, filePath );
 
 	return std::make_shared< MemoryChunk >( buffer, (SizeType)size );
 }
@@ -78,10 +72,9 @@ MemoryChunkConstPtr TextureHelper::LoadRAW ( const std::string& filePath )
 //
 void TextureHelper::WriteRAW( const std::string& filePath, MemoryChunkConstPtr data )
 {
-	std::fstream f;
-	f.open( filePath, std::ios_base::binary | std::ios_base::out );
-	f.write( data->Get(), data->Size() );
-	f.close();
+	auto f = File::Open( filePath, File::FOMReadWrite );
+	f.Write( data->Get(), data->Size() );
+	f.Close();
 }
 
 // *********************************

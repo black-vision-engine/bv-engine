@@ -13,6 +13,7 @@
 #include "Engine/Models/Resources/TextureHelpers.h"
 #include "Engine/Models/Resources/TextureLoader.h"
 #include "Engine/Models/Resources/ModelTextureManager.h"
+#include "Engine/Models/Resources/IResource.h"
 
 #include "hashlibpp.h"
 
@@ -32,6 +33,7 @@ FontAtlasCacheEntry::FontAtlasCacheEntry(   const TextAtlas* textAtlas
                                          ,  SizeType fontSize
                                          ,  SizeType blurSize
                                          ,  const std::string& fontFilePath
+										 ,	const std::string & atlasFilePath
                                          ,  bool bold
                                          ,  bool italic )
     : m_textAtlas( textAtlas )
@@ -39,6 +41,7 @@ FontAtlasCacheEntry::FontAtlasCacheEntry(   const TextAtlas* textAtlas
     , m_fontSize( fontSize )
     , m_blurSize( blurSize )
     , m_fontFilePath( fontFilePath )
+	, m_atlasFilePath( atlasFilePath )
     , m_bold( bold )
     , m_italic( italic )
 {}
@@ -137,7 +140,7 @@ namespace
 
 int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
 {
-    auto out = static_cast< FontAtlasCacheEntry* >( data );
+    auto out = static_cast< FontAtlasCacheEntry * >( data );
 
     assert( argsNum == 8 );
 
@@ -149,18 +152,11 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
     out->m_italic       = std::atoi( args[ 5 ] ) == 0 ? false : true;
     out->m_textAtlas    = new TextAtlas();
     std::stringstream str(  args[6] );
+	out->m_atlasFilePath = args[ 7 ];
 
 	auto textAtlas		= const_cast< TextAtlas* >( out->m_textAtlas );
 
 	textAtlas->Load( str );    
-
-    int width   = 0;
-    int height  = 0;
-    int bpp     = 0;
-
-    auto resHandle = TextureManager::Get().GetTexture( args[ 7 ] );
-
-    textAtlas->m_textureHandle = std::const_pointer_cast< ResourceHandle >( resHandle );
 
     return 0;
 }
@@ -198,8 +194,28 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fo
             std::cerr << "SQL Error: " << res << std::endl;
     }
 
-    if( ret->m_textAtlas != nullptr )
-        return ret;
+	if( ret->m_textAtlas != nullptr )
+	{
+		auto width	= ret->m_textAtlas->GetWidth();
+		auto height = ret->m_textAtlas->GetHeight();
+		auto bbp	= ret->m_textAtlas->GetBitsPerPixel();
+
+		TextureFormat tf;
+
+		if( bbp == 8 )
+			tf = TextureFormat::F_A8;
+		else if ( bbp = 32 )
+			tf = TextureFormat::F_A8R8G8B8;
+		else
+			assert(false);
+
+		auto resExtra = new TextureExtraData( width, height, bbp, tf, TextureType::T_2D );
+		auto memChunk = TextureHelper::LoadRAW( ret->m_atlasFilePath );
+
+		const_cast< TextAtlas* >( ret->m_textAtlas )->m_textureHandle = std::make_shared< ResourceHandle >( memChunk, width * height * bbp / 8, resExtra );
+
+		return ret;
+	}
     else
         return nullptr;
     
@@ -230,7 +246,7 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
     auto textAtlasStr =  textAtlasStream.str();
 
     auto sha1 = sha1wrapper();
-    auto fontAtlasTextureFileName = CACHE_DIRECTORY + sha1.getHashFromString( textAtlasStr ) + ".bmp";
+    auto fontAtlasTextureFileName = CACHE_DIRECTORY + sha1.getHashFromString( textAtlasStr ) + ".raw";
 
     std::string sqlAdd = std::string( "INSERT OR REPLACE INTO cached_fonts VALUES(" ) 
         + "\'" + data.m_fontName + "\'" + ", " 
@@ -246,7 +262,7 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
     if( ! File::Exists( CACHE_DIRECTORY ) )
         File::CreateDir( CACHE_DIRECTORY );
 
-    TextureHelper::WriteBMP( fontAtlasTextureFileName, data.m_textAtlas->GetData(), data.m_textAtlas->GetWidth(), data.m_textAtlas->GetHeight(), data.m_textAtlas->GetBitsPerPixel() );
+    TextureHelper::WriteRAW( fontAtlasTextureFileName, data.m_textAtlas->GetData() );
 
     sqlite3_stmt* stmt;
     const char* parsed;

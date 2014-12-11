@@ -65,7 +65,7 @@ ResourceHandle *        FontLoader::LoadResource        ( IResource* res )  cons
 
     if( font )
     {
-        auto res = new ResourceHandle( nullptr, 0, new FontExtraData( font, nullptr, nullptr, nullptr, nullptr, fontRes->GetFontSize() ) );
+		auto res = new ResourceHandle( nullptr, 0, new FontExtraData( font, nullptr, nullptr, nullptr, nullptr, fontRes->GetFontSize() ) );
         return res;
     }
     else

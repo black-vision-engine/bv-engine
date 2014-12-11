@@ -16,20 +16,22 @@ class TextAtlas;
 class FontAtlasCacheEntry
 {
 public:
-    const TextAtlas*            m_textAtlas;
+    const TextAtlas *           m_textAtlas;
     std::string                 m_fontName;
     unsigned int                m_fontSize;
     unsigned int                m_blurSize;
     std::string                 m_fontFilePath;
+	std::string                 m_atlasFilePath;
     bool                        m_bold;
     bool                        m_italic;
 
     FontAtlasCacheEntry ();
     FontAtlasCacheEntry ( const TextAtlas* textAtlas
-                        , const std::string& fontName
+                        , const std::string & fontName
                         , SizeType fontSize
                         , SizeType blurSize
-                        , const std::string& fontFilePath
+                        , const std::string & fontFilePath
+						, const std::string & atlasFilePath
                         , bool bold = false
                         , bool italic = false );
 };

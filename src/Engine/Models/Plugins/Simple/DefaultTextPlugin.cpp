@@ -227,8 +227,6 @@ bool                            DefaultTextPlugin::LoadResource  ( IPluginResour
 
         auto textureResource = TextHelper::GetAtlasTextureInfo( m_textAtlas );
 
-        auto txInfo = new TextureInfo( textureResource.get(), DefaultTextPluginDesc::TextureName() );
-
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = new DefaultTextureDescriptor(     textureResource
                                                     ,   DefaultTextPluginDesc::TextureName()

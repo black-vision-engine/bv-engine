@@ -129,12 +129,12 @@ ResourceHandleConstPtr      TextHelper::GetAtlasTextureInfo ( const TextAtlas * 
 {
     assert( textAtlas );
 
-    auto texSize = textAtlas->GetWidth() * textAtlas->GetHeight() * 4; //FIXME: Add format to atlas
+    //auto texSize = textAtlas->GetWidth() * textAtlas->GetHeight() * 4; //FIXME: Add format to atlas
 
-    TextureExtraData* atlasExtraData = new TextureExtraData( textAtlas->GetWidth(), textAtlas->GetHeight(), 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D );
-    auto altasHandle = ResourceHandleConstPtr( new ResourceHandle( textAtlas->GetData(), texSize, atlasExtraData ) );
+    //TextureExtraData* atlasExtraData = new TextureExtraData( textAtlas->GetWidth(), textAtlas->GetHeight(), 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D );
+    //auto altasHandle = ResourceHandleConstPtr( new ResourceHandle( textAtlas->GetData(), texSize, atlasExtraData ) );
 
-    return altasHandle;
+	return textAtlas->GetResourceHandle();
 }
 
 #define viewWidth   (1080 / 2)
@@ -231,6 +231,7 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
             float texHeight;
 
             {
+				auto data = textAtlas->GetData().get()->Get();
                 texLeft   = ( (float)glyph->textureX/* + (float)glyph->glyphX - blurTexSize - texPadding*/ )  / textAtlas->GetWidth();
                 texTop    = ( (float)glyph->textureY/* + (float)glyph->glyphY - blurTexSize - texPadding*/ )  / textAtlas->GetHeight();
                 texWidth  = ( (float)glyph->width + 2 * blurTexSize + 2 * texPadding )     / textAtlas->GetWidth();

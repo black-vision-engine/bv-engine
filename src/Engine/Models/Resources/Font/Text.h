@@ -106,6 +106,8 @@ public:
 
     static TextAtlas*       Crate           ( SizeType w, SizeType h, SizeType bitsPrePixel, SizeType gw, SizeType gh );
 
+	ResourceHandlePtr		GetResourceHandle() const;
+
     friend class Text;
 
     // serialization
