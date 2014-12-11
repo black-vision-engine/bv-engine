@@ -25,9 +25,9 @@ class FreeTypeEngine : public IFontEngine
 {
 private:
 
-	int							m_maxHeight;
-	int							m_maxWidth;
-	int							m_fontSize;
+	SizeType					m_maxHeight;
+	SizeType					m_maxWidth;
+	SizeType					m_fontSize;
 	FT_Library					m_library;
 	FT_Face 					m_face;
 

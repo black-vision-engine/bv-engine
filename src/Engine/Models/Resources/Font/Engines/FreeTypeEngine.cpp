@@ -38,39 +38,39 @@ struct GlyphDataInfo
 struct Span
 {
   Span() { }
-  Span(int _x, int _y, int _width, int _coverage)
+  Span( Int32 _x, Int32 _y, Int32 _width, Int32 _coverage)
   : x(_x), y(_y), width(_width), coverage(_coverage) { }
 
-  int x, y, width, coverage;
+  Int32 x, y, width, coverage;
 };
 
 struct Vec2
 {
   Vec2() { }
-  Vec2(float a, float b)
+  Vec2( Float32 a, Float32 b )
   : x(a), y(b) { }
 
-  float x, y;
+  Float32 x, y;
 };
 
 struct Rect
 {
-  Rect() { }
-  Rect(float left, float top, float right, float bottom)
-  : xmin(left), xmax(right), ymin(top), ymax(bottom) { }
+	Rect() { }
+	Rect( Float32 left, Float32 top, Float32 right, Float32 bottom )
+	: xmin(left), xmax(right), ymin(top), ymax(bottom) { }
 
-  void Include(const Vec2 &r)
-  {
-    xmin = std::min(xmin, r.x);
-    ymin = std::min(ymin, r.y);
-    xmax = std::max(xmax, r.x);
-    ymax = std::max(ymax, r.y);
-  }
+	void Include(const Vec2 &r)
+	{
+		xmin = std::min(xmin, r.x);
+		ymin = std::min(ymin, r.y);
+		xmax = std::max(xmax, r.x);
+		ymax = std::max(ymax, r.y);
+	}
 
-  float Width() const { return xmax - xmin + 1; }
-  float Height() const { return ymax - ymin + 1; }
+	Float32	Width() const	{ return xmax - xmin + 1; }
+	Float32	Height() const	{ return ymax - ymin + 1; }
 
-  float xmin, xmax, ymin, ymax;
+	Float32	xmin, xmax, ymin, ymax;
 };
 
 class Spans
@@ -148,16 +148,16 @@ FreeTypeEnginePtr					FreeTypeEngine::Create( const std::string & fontFilePath, 
 
 namespace {
 
-void	RasterizeSpans( const Spans & spans, Int32 pitch, char * buffer )
+void	RasterizeSpans( const Spans & spans, SizeType pitch, char * buffer )
 {
-	Int32 ymax = spans.m_boundingRect.ymax;
-	Int32 xmin = spans.m_boundingRect.xmin;
+	auto ymax = (Int32)spans.m_boundingRect.ymax; // FIXME: remove explicit casting
+	auto xmin = (Int32)spans.m_boundingRect.xmin;
 
 	for( auto i = spans.size(); i-- > 0;)
 	{
 		auto s = spans[ i ];
-		for (int w = 0; w < s->width; ++w)
-			for(int t = 0; t < 10; ++t)
+		for ( Int32 w = 0; w < s->width; ++w )
+			for( Int32 t = 0; t < 10; ++t )
 				buffer[ pitch * (ymax - s->y) + s->x - xmin + w ] = (char)s->coverage;
 	}
 }
@@ -196,8 +196,12 @@ RenderSpans(FT_Library &library,
 }
 
 
-FreeTypeEngine::FreeTypeEngine( const std::string & fontFilePath, size_t fontSize )
+FreeTypeEngine::FreeTypeEngine( const std::string & fontFilePath, SizeType fontSize )
 	: m_fontSize( fontSize )
+	, m_face( nullptr )
+	, m_library( nullptr )
+	, m_maxHeight( 0 )
+	, m_maxWidth( 0 )
 {
 	if (FT_Init_FreeType (&m_library))
     {
@@ -249,9 +253,9 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans )
 
 					// This is unused in this test but you would need this to draw
 					// more than one glyph.
-					float bearingX = float(m_face->glyph->metrics.horiBearingX >> 6);
-					float bearingY = float(m_face->glyph->metrics.horiBearingY >> 6);
-					float advance = float(m_face->glyph->advance.x >> 6);
+					Int32 bearingX	= m_face->glyph->metrics.horiBearingX >> 6;
+					Int32 bearingY	= m_face->glyph->metrics.horiBearingY >> 6;
+					Int32 advance	= m_face->glyph->advance.x >> 6;
 
 					// Get some metrics of our image.
 					int imgWidth = (int)rect.Width(),
@@ -265,11 +269,11 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans )
 			        newGlyph->width = (int)rect.Width();
 			        newGlyph->height = (int)rect.Height();
 
-			        if( (int)newGlyph->height > m_maxHeight )
-			            m_maxHeight = (Int32)newGlyph->height;
+			        if( newGlyph->height > m_maxHeight )
+			            m_maxHeight = newGlyph->height;
 
-			        if( (int)newGlyph->width > m_maxWidth )
-			            m_maxWidth = (Int32)newGlyph->width;
+			        if( newGlyph->width > m_maxWidth )
+			            m_maxWidth = newGlyph->width;
 
 
 			        newGlyph->bearingX = bearingX;
@@ -313,9 +317,12 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, const std::wstr
 
     auto atlas = TextAtlas::Crate( altlasWidth, altlasHeight, 8, maxWidth, maxHeight );
 
+    for ( auto ch : wcharsSet )
+		atlas->SetGlyph( ch, glyphs[ ch ] );
+
     char* atlasData = const_cast< char * >( atlas->GetWritableData()->Get() );// FIXME: Remove const_cast
 
-	memset( atlasData, 0, altlasWidth * altlasHeight );
+	memset( atlasData, 256, altlasWidth * altlasHeight );
 
     auto atlasColumns  =  altlasWidth / maxWidth;
 
@@ -359,6 +366,10 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, const std::wstr
 	TextureHelper::WriteRAW( "testFreeType.raw", atlas->GetWritableData() );
 
 	atlas->m_kerningMap = BuildKerning( m_face, wcharsSet );
+
+	for( SizeType y = 0; y < altlasHeight; ++y )
+		for( SizeType x = 0; x < altlasWidth; ++x )
+			atlasData[ y * altlasWidth + x ] = x ^ y;
 
 	return atlas;
 }
