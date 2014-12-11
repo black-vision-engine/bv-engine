@@ -25,6 +25,8 @@ class DefaultPrismPlugin :
 {
     VertexAttributesChannelPtr          m_vaChannel;
 
+	int											m_lastN;
+	void										InitGeometry( int n );
 public:
 	DefaultPrismPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 	~DefaultPrismPlugin(void);

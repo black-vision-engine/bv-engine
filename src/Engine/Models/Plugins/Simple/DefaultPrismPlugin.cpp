@@ -49,17 +49,14 @@ DefaultPluginParamValModelPtr   DefaultPrismPluginDesc::CreateDefaultModel   ( I
     DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
     DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
 
-    ParamFloatPtr paramWidth             = ParametersFactory::CreateParameterFloat( "width", timeEvaluator );
-    ParamFloatPtr paramHeight            = ParametersFactory::CreateParameterFloat( "height", timeEvaluator );
+    ParamFloatPtr paramN             = ParametersFactory::CreateParameterFloat( "n", timeEvaluator );
 
-    vacModel->AddParameter( paramWidth );
-    vacModel->AddParameter( paramHeight );
+    vacModel->AddParameter( paramN );
 
     model->SetVertexAttributesChannelModel( vacModel );
 
     //Set default parameters
-    paramWidth->SetVal( 1.f, 0.f );
-    paramHeight->SetVal( 1.f, 0.f );
+    paramN->SetVal( 4.f, 0.f );
 
     return model;
 }
@@ -79,14 +76,13 @@ std::string                     DefaultPrismPluginDesc::UID                  ()
 DefaultPrismPlugin::DefaultPrismPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
 	: BasePlugin< IPlugin >( name, DefaultPrismPluginDesc::UID(), prev, model )
 {
-	auto prism = PrismComponent::Create( 40 );
-	auto prism_main = std::get<0>(prism);
-	auto prism_up = std::get<1>(prism);
-	auto prism_down = std::get<2>(prism);
-	auto channel = ChannelsFactory::CreateVertexAttributesChannel( prism_main, false );
-	channel->AddConnectedComponent( prism_up );
-	channel->AddConnectedComponent( prism_down );
-	m_vaChannel = channel;
+	auto nParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "n" );
+
+	assert( nParam );
+
+	float nVal = QueryTypedParam< ParamFloatPtr > ( nParam )->Evaluate();
+
+	InitGeometry( int( nVal ) );
 }
 
 
@@ -99,10 +95,46 @@ IVertexAttributesChannelConstPtr    DefaultPrismPlugin::GetVertexAttributesChann
     return m_vaChannel;
 }
 
+void DefaultPrismPlugin::InitGeometry( int n )
+{
+	auto prism = PrismComponent::Create( n );
+	auto prism_main = std::get<0>(prism);
+	auto prism_up = std::get<1>(prism);
+	auto prism_down = std::get<2>(prism);
+	
+	if( m_vaChannel == NULL )
+		m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( prism_main, false );
+	else
+	{
+		m_vaChannel->ClearAll();
+		m_vaChannel->AddConnectedComponent( prism_main );
+	}
+
+	m_vaChannel->AddConnectedComponent( prism_up );
+	m_vaChannel->AddConnectedComponent( prism_down );
+
+	m_lastN = n;
+}
+
 // *************************************
 //
 void                                DefaultPrismPlugin::Update                      ( TimeType t )
 {
+	m_pluginParamValModel->Update();
+
+	// just for fun
+	int n = int(t)+3;
+
+	if( n != m_lastN )
+	{
+		InitGeometry( n );
+		m_vaChannel->SetNeedsTopologyUpdate( true );
+		//m_vaChannel->SetNeedsAttributesUpdate( true );
+	}
+	else
+	{
+		m_vaChannel->SetNeedsAttributesUpdate( false );
+	}
 }
 
 } }

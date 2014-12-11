@@ -219,7 +219,7 @@ void DefaultGradientPlugin::InitAttributesChannel( IPluginPtr prev )
 
     if( prevGeomChannel == nullptr ) //FIXME: hackierka
     {
-		assert( prev->GetTypeUid() == DefaultTextPluginDesc::UID() || prev->GetTypeUid() == DefaultTransformPluginDesc::UID() || prev->GetTypeUid() == DefaultTimerPluginDesc::UID() );
+		assert( prev->GetTypeUid() == DefaultTextPluginDesc::UID() || prev->GetTypeUid() == DefaultTransformPluginDesc::UID() || prev->GetTypeUid() == DefaultTimerPluginDesc::UID() || prev->GetTypeUid() == DefaultPrismPluginDesc::UID() );
 
         return;
     }

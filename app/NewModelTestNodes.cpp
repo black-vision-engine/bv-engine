@@ -383,9 +383,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineMa
 
     uids.push_back( "DEFAULT_TRANSFORM" );
     uids.push_back( "DEFAULT_PRISM" );
-    //uids.push_back( "DEFAULT_COLOR" );
+    uids.push_back( "DEFAULT_COLOR" );
 	//uids.push_back( "DEFAULT_TEXTURE" );
-	uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
+	//uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
 
     //Create a model
     model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rectNode", timeEvaluator );
