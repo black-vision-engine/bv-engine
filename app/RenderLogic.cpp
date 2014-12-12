@@ -65,38 +65,60 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 {
     if ( node->IsVisible() )
     {
-        bool isOverridenAM = node->IsOverridenAM();
-        bool isOverridenNM = node->IsOverridenNM();
-
-        //Render to auxiliary buffer
-        if( isOverridenAM )
-        {            
-            m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
-            m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
-
-            renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-            renderer->ClearBuffers();
-        }
-        else if( isOverridenNM )
+        if( node->IsOverridenAM() )
         {
+            RenderAlphaMask( renderer, node );
         }
-
-        if( !isOverridenNM )
+        else if( node->IsOverridenNM() )
         {
-            DrawNode( renderer, node );
+            RenderNodeMask( renderer, node );
         }
-
-        //Blend top auxiliary buffer with the previous buffer
-        if( isOverridenAM )
+        else
         {
-            m_offscreenRenderLogic->DrawTopAuxRenderTarget( renderer, node->GetOverrideAlphaVal() );            
-            m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
-            m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
-        }
-        else if( isOverridenNM )
-        {
+            RenderVanilla( renderer, node );
         }
     }
+}
+
+// *********************************
+//
+void    RenderLogic::RenderVanilla   ( Renderer * renderer, SceneNode * node )
+{
+    DrawNode( renderer, node );
+}
+
+// *********************************
+//
+void    RenderLogic::RenderAlphaMask ( Renderer * renderer, SceneNode * node )
+{
+    m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
+    m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
+
+    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+    renderer->ClearBuffers();
+
+    DrawNode( renderer, node );
+
+    m_offscreenRenderLogic->DrawTopAuxRenderTarget( renderer, node->GetOverrideAlphaVal() );
+    m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
+    m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
+}
+
+// *********************************
+//
+void    RenderLogic::RenderNodeMask  ( Renderer * renderer, SceneNode * node )
+{
+    m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
+    m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
+
+    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+    renderer->ClearBuffers();
+        
+    DrawChildren( renderer, node );
+
+    m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
+    // m_offscreenRenderLogic->
+    // m_offscreenRenderLogic->
 }
 
 // *********************************
@@ -104,6 +126,15 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 void    RenderLogic::DrawNode        ( Renderer * renderer, SceneNode * node )
 {
     HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
+    DrawNodeOnly( renderer, node );
+
+    DrawChildren( renderer, node );
+}
+
+// *********************************
+//
+void    RenderLogic::DrawNodeOnly   ( Renderer * renderer, SceneNode * node )
+{
     renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
 
     for( int i = 0; i < node->NumTransformables(); ++i )
@@ -111,7 +142,11 @@ void    RenderLogic::DrawNode        ( Renderer * renderer, SceneNode * node )
         HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
         renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
     }
-
+}
+// *********************************
+//
+void    RenderLogic::DrawChildren   ( Renderer * renderer, SceneNode * node )
+{
     for ( int i = 0; i < node->NumChildrenNodes(); i++ )
     {
         HPROFILER_SECTION( "RenderNode::RenderNode" );

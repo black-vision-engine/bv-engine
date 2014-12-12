@@ -25,7 +25,14 @@ public:
 private:
 
     void    RenderNode      ( Renderer * renderer, SceneNode * node );
+    
+    void    RenderVanilla   ( Renderer * renderer, SceneNode * node );
+    void    RenderAlphaMask ( Renderer * renderer, SceneNode * node );
+    void    RenderNodeMask  ( Renderer * renderer, SceneNode * node );
+
     void    DrawNode        ( Renderer * renderer, SceneNode * node );
+
+    void    DrawNodeOnly    ( Renderer * renderer, SceneNode * node );
     void    DrawChildren    ( Renderer * renderer, SceneNode * ndoe );
 
 public:
