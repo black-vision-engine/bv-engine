@@ -40,8 +40,8 @@ std::tuple< ConnectedComponentPtr, ConnectedComponentPtr, ConnectedComponentPtr 
 	{
 		double angle = 2*PI * i / fragmentsNum;
 
-		vertArrtF3->AddAttribute( glm::vec3( cos( angle ), -0.5, sin( angle ) ) ); 
-		vertArrtF3->AddAttribute( glm::vec3( cos( angle ),  0.5, sin( angle ) ) ); 
+		vertArrtF3->AddAttribute( glm::vec3( cos( angle ), 0, sin( angle ) ) ); 
+		vertArrtF3->AddAttribute( glm::vec3( cos( angle ), 1, sin( angle ) ) ); 
 
 		vertArrtUV->AddAttribute( glm::vec2( float( i ) / fragmentsNum, 0 ) );
 		vertArrtUV->AddAttribute( glm::vec2( float( i ) / fragmentsNum, 1 ) );

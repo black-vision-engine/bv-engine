@@ -515,26 +515,69 @@ model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::Plug
 	return rect;
 }
 
-model::BasicNodePtr     TestScenesFactory::CreedTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    TestScenesFactory::CreedTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
 	//auto rect = SimpleNodesFactory::CreateCreedTextNode( timelineManager, timeEvaluator );
 
-	//auto rect2 = SimpleNodesFactory::CreateCreedRectNode( timelineManager, timeEvaluator );
 	//auto rect = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
 	//auto rect = SimpleNodesFactory::CreateCreedTimerNode( timelineManager, timeEvaluator, 0, false );
 	//rect->AddChild( rect2 );
-
-	auto rect = SimpleNodesFactory::CreateCreedPrismNode( timelineManager, timeEvaluator );
 
 	//auto rect = SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, true );
 	//auto rect = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, true );
 	//auto rect = SimpleNodesFactory::CreateTexturedTextNode( timelineManager, timeEvaluator, false );
 	//auto rect = SimpleNodesFactory::CreateHeightMapNode( timelineManager, timeEvaluator );
-	//auto rect = SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator, true );
+	//auto rect = SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator, false );
 	//auto rect = SimpleNodesFactory::CreateTextNode(timelineManager, timeEvaluator, 0, false );
 
+	//return rect;
 
-	return rect;
+    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
+	root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+
+	//auto root = SimpleNodesFactory::CreateCreedRectNode( timelineManager, timeEvaluator );
+
+	auto prism = SimpleNodesFactory::CreateCreedColoredPrismNode( timelineManager, timeEvaluator, -1.5f );
+	SetParameter( prism->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 4.f );
+
+	SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  5.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+	SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+	SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 15.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+	SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+
+	auto prism2 = SimpleNodesFactory::CreateCreedTexturedPrismNode( timelineManager, timeEvaluator,-0.5f );
+
+	SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  3.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+	SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  7.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+	SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 13.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+	SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 17.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+	SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+
+	auto prism3 = SimpleNodesFactory::CreateCreedGradedPrismNode( timelineManager, timeEvaluator, 0.5f );
+	SetParameter( prism3->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 12.f );
+	
+	SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  7.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+	SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 13.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+	SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 17.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+	SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+
+	auto prism4 = SimpleNodesFactory::CreateCreedGradedPrismNode( timelineManager, timeEvaluator, 1.5f );
+	SetParameter( prism4->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 36.f );
+	SetParameter( prism4->GetPlugin( "linear_gradient" )->GetParameter( "color1" ), 20.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+	SetParameter( prism4->GetPlugin( "linear_gradient" )->GetParameter( "color2" ), 20.f, glm::vec4( 0.f, 0.f, 0.f, 1.f ) );
+	
+	SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  4.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+	SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  8.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+	SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 11.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+	SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+
+	root->AddChild( prism );
+	root->AddChild( prism2 );
+	root->AddChild( prism3 );
+	root->AddChild( prism4 );
+
+	//return rect;
+	return root;
 }
 
 } //bv

@@ -30,7 +30,10 @@ public:
     static model::BasicNodePtr  CreateCreedRectNode(model::TimelineManager *timelineManager, model::ITimeEvaluatorPtr timeEvaulator);
     static model::BasicNodePtr  CreateCreedTextNode(model::TimelineManager *timelineManager, model::ITimeEvaluatorPtr timeEvaulator);
     static model::BasicNodePtr  CreateCreedTimerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask  );
-	static model::BasicNodePtr  CreateCreedPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator);
+	static model::BasicNodePtr  CreateCreedPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset);
+	static model::BasicNodePtr  CreateCreedColoredPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset);
+	static model::BasicNodePtr  CreateCreedTexturedPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset);
+	static model::BasicNodePtr  CreateCreedGradedPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset);
 
     static model::BasicNodePtr  CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask );
     static model::BasicNodePtr  CreateTexturedTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask );

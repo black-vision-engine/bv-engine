@@ -56,7 +56,7 @@ DefaultPluginParamValModelPtr   DefaultPrismPluginDesc::CreateDefaultModel   ( I
     model->SetVertexAttributesChannelModel( vacModel );
 
     //Set default parameters
-    paramN->SetVal( 4.f, 0.f );
+    paramN->SetVal( 5.f, 0.f ); // FIXME: this is f*)*(&ing ridiculous!
 
     return model;
 }
@@ -123,19 +123,21 @@ void                                DefaultPrismPlugin::Update                  
 {
 	m_pluginParamValModel->Update();
 
-	// just for fun
-	int n = int(t)+3;
+	auto nParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "n" );
+	assert( nParam );
+	float nVal = QueryTypedParam< ParamFloatPtr > ( nParam )->Evaluate();
+	int n = int( nVal );
 
 	if( n != m_lastN )
 	{
 		InitGeometry( n );
 		m_vaChannel->SetNeedsTopologyUpdate( true );
-		//m_vaChannel->SetNeedsAttributesUpdate( true );
+		m_lastN = n;
 	}
-	else
-	{
-		m_vaChannel->SetNeedsAttributesUpdate( false );
-	}
+	//else
+	//{
+	//	m_vaChannel->SetNeedsAttributesUpdate( false );
+	//}
 }
 
 } }
