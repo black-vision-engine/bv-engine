@@ -65,10 +65,11 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 {
     if ( node->IsVisible() )
     {
-        bool isOverriden = node->IsOverriden();
-       
+        bool isOverridenAM = node->IsOverridenAM();
+        bool isOverridenNM = node->IsOverridenNM();
+
         //Render to auxiliary buffer
-        if( isOverriden )
+        if( isOverridenAM )
         {            
             m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
             m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
@@ -76,15 +77,24 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
             renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
             renderer->ClearBuffers();
         }
+        else if( isOverridenNM )
+        {
+        }
 
-        DrawNode( renderer, node );
+        if( !isOverridenNM )
+        {
+            DrawNode( renderer, node );
+        }
 
         //Blend top auxiliary buffer with the previous buffer
-        if( isOverriden )
+        if( isOverridenAM )
         {
-            m_offscreenRenderLogic->DrawTopAuxRenderTarget( renderer, node->GetOverrideAlpha() );            
+            m_offscreenRenderLogic->DrawTopAuxRenderTarget( renderer, node->GetOverrideAlphaVal() );            
             m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
             m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
+        }
+        else if( isOverridenNM )
+        {
         }
     }
 }

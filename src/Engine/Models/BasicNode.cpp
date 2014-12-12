@@ -199,7 +199,7 @@ SceneNode *                 BasicNode::BuildScene   ()
 
     SceneNode * node = CreateSceneNode( finalizer );
 
-    node->SetOverrideAlpha( GetOverrideState()->GetAlphaValue().get() );
+    node->SetOverrideAlphaVal( GetOverrideState()->GetAlphaValue().get() );
 
     for( auto ch : m_children )
     {

@@ -26,6 +26,7 @@ private:
 
     void    RenderNode      ( Renderer * renderer, SceneNode * node );
     void    DrawNode        ( Renderer * renderer, SceneNode * node );
+    void    DrawChildren    ( Renderer * renderer, SceneNode * ndoe );
 
 public:
 
