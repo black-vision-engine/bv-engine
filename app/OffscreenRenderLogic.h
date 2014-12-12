@@ -55,6 +55,8 @@ public:
     void                DisableTopRenderTarget      ( Renderer * renderer );
 
     void                DrawTopAuxRenderTarget      ( Renderer * renderer, const IValue * alphaVal );
+    //FIXME: side effect - removes two topmost render targets
+    void                DrawAMTopTwoRenderTargets   ( Renderer * renderer, const IValue * alphaVal );
 
 private:
 

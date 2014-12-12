@@ -117,8 +117,14 @@ void    RenderLogic::RenderNodeMask  ( Renderer * renderer, SceneNode * node )
     DrawChildren( renderer, node );
 
     m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
-    // m_offscreenRenderLogic->
-    // m_offscreenRenderLogic->
+    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+    renderer->ClearBuffers();
+
+    DrawNodeOnly( renderer, node );
+
+    //FIXME: side effect - removes two topmost render targets
+    m_offscreenRenderLogic->DrawAMTopTwoRenderTargets( renderer, node->GetOverrideAlphaVal() );
+    m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
 }
 
 // *********************************

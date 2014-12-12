@@ -40,6 +40,7 @@ public:
     const RenderableArrayDataSingleVertexBuffer *   GetRenderableArrayData      () const;
     RenderableArrayDataSingleVertexBuffer *         GetRenderableArrayData      ();
     RenderableEffect *                              GetRenderableEffect         ();
+    void                                            SetRenderableEffect         ( RenderableEffect * effect );
 
     int                                             GetNumconnectedComponents   () const;
 

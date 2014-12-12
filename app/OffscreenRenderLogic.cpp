@@ -161,6 +161,33 @@ void                OffscreenRenderLogic::DrawTopAuxRenderTarget    ( Renderer *
 }
 
 // **************************
+//FIXME: side effect - removes two topmost render targets
+void                OffscreenRenderLogic::DrawAMTopTwoRenderTargets ( Renderer * renderer, const IValue * alphaVal )
+{
+    DisableTopRenderTarget( renderer );
+
+    auto rtAlpha    = GetTopRenderTarget();
+    auto quadData   = GetPrevRenderTarget();
+    
+    DiscardCurrentRenderTarget( renderer );
+    DiscardCurrentRenderTarget( renderer );
+
+    auto rtMain = GetTopRenderTarget();
+
+    //FIXME: either effects should be replacable within Renderable or a few different versions of quads should be accessible here
+    /*
+    auto ef = static_cast< Texture2DEffect * >( rq->GetRenderableEffect() );
+    ef->SetAlphaValModel( alphaVal );
+
+    renderer->Enable( rt );
+    renderer->SetCamera( m_displayCamera );
+    renderer->Draw( rq );
+    renderer->SetCamera( m_rendererCamera );
+    renderer->Disable( rt );
+    */
+}
+
+// **************************
 //
 RenderTarget *      OffscreenRenderLogic::GetTopRenderTarget        () const
 {

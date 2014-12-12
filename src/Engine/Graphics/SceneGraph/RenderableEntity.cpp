@@ -19,6 +19,7 @@ RenderableEntity::RenderableEntity          ( RenderableType type, RenderableArr
 //
 RenderableEntity::~RenderableEntity         ()
 {
+    delete m_effect;
 }
 
 // *********************************
@@ -47,6 +48,18 @@ RenderableArrayDataSingleVertexBuffer *        RenderableEntity::GetRenderableAr
 RenderableEffect *              RenderableEntity::GetRenderableEffect               ()
 {
     return m_effect;
+}
+
+// *********************************
+//
+void                            RenderableEntity::SetRenderableEffect               ( RenderableEffect * effect )
+{
+    if( m_effect != effect )
+    {
+        delete m_effect;
+
+        m_effect = effect;
+    }
 }
 
 // *********************************
