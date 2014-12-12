@@ -31,7 +31,7 @@ private:
 	FT_Library					m_library;
 	FT_Face 					m_face;
 
-	Glyph *						RenderGlyph( wchar_t ch, Spans & );
+	Glyph *						RenderGlyph( wchar_t ch, Spans &, SizeType );
 
 
 public:

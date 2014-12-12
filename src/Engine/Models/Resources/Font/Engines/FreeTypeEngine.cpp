@@ -223,7 +223,7 @@ FreeTypeEngine::FreeTypeEngine( const std::string & fontFilePath, SizeType fontS
 
 // *********************************
 //
-Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans )
+Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType outlineWidth )
 {
     // Load the glyph we are looking for.
     FT_UInt gindex = FT_Get_Char_Index(m_face, ch);
@@ -234,60 +234,87 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans )
 		if (m_face->glyph->format == FT_GLYPH_FORMAT_OUTLINE)
 		{
 			// Render the basic glyph to a span list.
-			RenderSpans(m_library, &m_face->glyph->outline, &spans);
 
-			FT_Glyph glyph;
-			if (FT_Get_Glyph(m_face->glyph, &glyph) == 0)
+			if( outlineWidth == 0 )
+				RenderSpans(m_library, &m_face->glyph->outline, &spans);
+			else
 			{
-				// Now we need to put it all together.
-				if (!spans.empty())
+				        // Set up a stroker.
+				FT_Stroker stroker;
+				FT_Stroker_New(m_library, &stroker);
+				FT_Stroker_Set(stroker,
+                       (int)(outlineWidth * 64),
+                       FT_STROKER_LINECAP_ROUND,
+                       FT_STROKER_LINEJOIN_ROUND,
+                       0);
+
+				FT_Glyph glyph;
+				if (FT_Get_Glyph(m_face->glyph, &glyph) == 0)
 				{
-					// Figure out what the bounding rect is for both the span lists.
-					Rect rect(	(float)spans[ 0 ]->x,
-								(float)spans[ 0 ]->y,
-								(float)spans[ 0 ]->x,
-								(float)spans[ 0 ]->y);
-					for ( SizeType i = 0; i < spans.size(); ++i )
-					{
-						auto s = spans[ i ];
-						rect.Include(Vec2((float)s->x, (float)s->y));
-						rect.Include(Vec2((float)s->x + s->width - 1, (float)s->y));
-					}
-
-					spans.m_boundingRect = rect;
-
-					// This is unused in this test but you would need this to draw
-					// more than one glyph.
-					Int32 bearingX	= m_face->glyph->metrics.horiBearingX >> 6;
-					Int32 bearingY	= m_face->glyph->metrics.horiBearingY >> 6;
-					Int32 advance	= m_face->glyph->advance.x >> 6;
-
-					// Get some metrics of our image.
-					int imgWidth = (int)rect.Width(),
-						imgHeight = (int)rect.Height(),
-						imgSize = imgWidth * imgHeight;
-
-			        auto newGlyph = new Glyph();
-
-			        newGlyph->code = ch;
-					newGlyph->size = m_fontSize;
-			        newGlyph->width = (int)rect.Width();
-			        newGlyph->height = (int)rect.Height();
-
-			        if( newGlyph->height > m_maxHeight )
-			            m_maxHeight = newGlyph->height;
-
-			        if( newGlyph->width > m_maxWidth )
-			            m_maxWidth = newGlyph->width;
-
-
-			        newGlyph->bearingX = bearingX;
-			        newGlyph->bearingY = bearingY;
-			        newGlyph->advanceX = m_face->glyph->advance.x >> 6;
-			        newGlyph->advanceY = m_face->glyph->advance.y >> 6;
-
-					return newGlyph;
+					FT_Glyph_StrokeBorder(&glyph, stroker, 0, 1);
 				}
+
+				if (glyph->format == FT_GLYPH_FORMAT_OUTLINE)
+				{
+				// Render the outline spans to the span list
+					FT_Outline *o =
+						&reinterpret_cast<FT_OutlineGlyph>(glyph)->outline;
+					RenderSpans( m_library, o, &spans);
+				}
+
+				// Clean up afterwards.
+				FT_Stroker_Done(stroker);
+				FT_Done_Glyph(glyph);
+			}
+
+			// Now we need to put it all together.
+			if (!spans.empty())
+			{
+				// Figure out what the bounding rect is for both the span lists.
+				Rect rect(	(float)spans[ 0 ]->x,
+							(float)spans[ 0 ]->y,
+							(float)spans[ 0 ]->x,
+							(float)spans[ 0 ]->y);
+				for ( SizeType i = 0; i < spans.size(); ++i )
+				{
+					auto s = spans[ i ];
+					rect.Include(Vec2((float)s->x, (float)s->y));
+					rect.Include(Vec2((float)s->x + s->width - 1, (float)s->y));
+				}
+
+				spans.m_boundingRect = rect;
+
+				// This is unused in this test but you would need this to draw
+				// more than one glyph.
+				Int32 bearingX	= m_face->glyph->metrics.horiBearingX >> 6;
+				Int32 bearingY	= m_face->glyph->metrics.horiBearingY >> 6;
+				Int32 advance	= m_face->glyph->advance.x >> 6;
+
+				// Get some metrics of our image.
+				int imgWidth = (int)rect.Width(),
+					imgHeight = (int)rect.Height(),
+					imgSize = imgWidth * imgHeight;
+
+				auto newGlyph = new Glyph();
+
+				newGlyph->code = ch;
+				newGlyph->size = m_fontSize;
+				newGlyph->width = (int)rect.Width();
+				newGlyph->height = (int)rect.Height();
+
+				if( newGlyph->height > m_maxHeight )
+					m_maxHeight = newGlyph->height;
+
+				if( newGlyph->width > m_maxWidth )
+					m_maxWidth = newGlyph->width;
+
+
+				newGlyph->bearingX = bearingX;
+				newGlyph->bearingY = bearingY;
+				newGlyph->advanceX = m_face->glyph->advance.x >> 6;
+				newGlyph->advanceY = m_face->glyph->advance.y >> 6;
+
+				return newGlyph;
 			}
 		}
 	}
@@ -297,9 +324,8 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans )
 
 // *********************************
 //
-const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, const std::wstring & wcharsSet )
+const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlineWidth, const std::wstring & wcharsSet )
 {
-
 	SizeType							glyphsNum	= wcharsSet.size();
 	Int32								spadding	= (Int32)padding;
 
@@ -309,7 +335,7 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, const std::wstr
     for ( auto ch : wcharsSet )
     {
 		spans[ ch ] = Spans();
-		glyphs[ ch ] = RenderGlyph( ch, spans[ ch ] );
+		glyphs[ ch ] = RenderGlyph( ch, spans[ ch ], outlineWidth );
 	}
 
 	auto atlasSize = (SizeType) std::ceil( sqrt( (float)glyphsNum ) );
@@ -372,24 +398,14 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, const std::wstr
 
 	atlas->m_kerningMap = BuildKerning( m_face, wcharsSet );
 
-	//for( SizeType y = 0; y < altlasHeight; ++y )
-	//	for( SizeType x = 0; x < altlasWidth; ++x )
-	//	{
-	//		auto c = 4 * ( y * altlasWidth + x );
-	//		atlasData[ c ] = x ^ y;
-	//		atlasData[ c + 1 ] = x ^ y;
-	//		atlasData[ c + 2 ] = x ^ y;
-	//		atlasData[ c + 3 ] = x ^ y;
-	//	}
-
 	return atlas;
 }
 
 // *********************************
 //
-const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outline, const std::wstring & wcharsSet )
+const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, const std::wstring & wcharsSet )
 {
-	return nullptr;
+	return CreateAtlas( padding, 0, wcharsSet );
 }
 
 } // bv

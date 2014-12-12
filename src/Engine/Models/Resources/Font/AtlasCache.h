@@ -18,8 +18,9 @@ class FontAtlasCacheEntry
 public:
     const TextAtlas *           m_textAtlas;
     std::string                 m_fontName;
-    unsigned int                m_fontSize;
-    unsigned int                m_blurSize;
+    SizeType					m_fontSize;
+    SizeType					m_blurSize;
+	SizeType					m_outlineWidth;
     std::string                 m_fontFilePath;
 	std::string                 m_atlasFilePath;
     bool                        m_bold;
@@ -51,7 +52,7 @@ private:
 
 public:
 
-    FontAtlasCacheEntry *               GetEntry            ( const std::string& fontName, SizeType fontSize, SizeType blurSize, const std::string& fontFileName, bool bold, bool italic );
+    FontAtlasCacheEntry *               GetEntry            ( const std::string& fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, const std::string& fontFileName, bool bold, bool italic );
     void                                AddEntry            ( const FontAtlasCacheEntry& data, bool forceInvalidate = true );
 
     void                                Update              ();

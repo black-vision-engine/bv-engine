@@ -81,7 +81,7 @@ Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, 
     , m_fontFile( fontFile )
     , m_fontSize( fontSize )
     , m_blurSize( blurSize )
-	, m_outlineSize( outlineSize )
+	, m_outlineWidth( outlineSize )
 {
 	m_fontEngine = FreeTypeEngine::Create( fontFile, fontSize );
     BuildAtlas();
@@ -233,7 +233,7 @@ const TextAtlas *	Text::LoadFromCache()
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
 
-    auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_fontFile, false, false );
+	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, m_fontFile, false, false );
 
     if( entry != nullptr )
         return entry->m_textAtlas;
@@ -250,7 +250,7 @@ void                Text::BuildAtlas        ()
     if( m_atlas != nullptr )
         return;
 
-	m_atlas = m_fontEngine->CreateAtlas(this->m_blurSize + 1, m_supportedCharsSet );
+	m_atlas = m_fontEngine->CreateAtlas(this->m_blurSize + 1, m_outlineWidth, m_supportedCharsSet );
 
     if ( m_blurSize > 0 )
     {

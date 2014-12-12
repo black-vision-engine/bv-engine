@@ -123,7 +123,7 @@ private:
     const TextAtlas *                   m_atlas;
     SizeType							m_fontSize;
     SizeType							m_blurSize;
-	SizeType							m_outlineSize; // if > 0 text is outlined
+	SizeType							m_outlineWidth; // if > 0 text is outlined
 	IFontEnginePtr						m_fontEngine;
 
     void                                BuildAtlas			();
@@ -138,7 +138,7 @@ public:
 											, const std::string& fontFile
 											, SizeType fontSize
 											, SizeType blurSize
-											, SizeType m_outlineSize );
+											, SizeType outlineSize );
 };
 
 } // model

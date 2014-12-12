@@ -118,7 +118,7 @@ void                    FontAtlasCache::InitFontCachedTable ()
 
     if ( m_dataBase != nullptr )
     {
-        static std::string sql = "CREATE TABLE IF NOT EXISTS cached_fonts(font_name TEXT, font_size INTEGER, blur_size INTEGER, font_file_name TEXT \
+        static std::string sql = "CREATE TABLE IF NOT EXISTS cached_fonts(font_name TEXT, font_size INTEGER, blur_size INTEGER, outline_width INTEGER, font_file_name TEXT \
                             , bold_flag BOOL, italic_flag BOOL, text_atlas BLOB, test_atlas_data_file TEXT, PRIMARY KEY( font_name , font_size, blur_size, bold_flag, italic_flag ) )";
 
         char* err = nullptr;
@@ -147,12 +147,13 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
     out->m_fontName     = args[ 0 ];
     out->m_fontSize     = std::atoi( args[ 1 ] );
     out->m_blurSize     = std::atoi( args[ 2 ] );
-    out->m_fontFilePath = args[ 3 ];
-    out->m_bold         = std::atoi( args[ 4 ] ) == 0 ? false : true;
-    out->m_italic       = std::atoi( args[ 5 ] ) == 0 ? false : true;
+	out->m_outlineWidth = std::atoi( args[ 3 ] );
+    out->m_fontFilePath = args[ 4 ];
+    out->m_bold         = std::atoi( args[ 5 ] ) == 0 ? false : true;
+    out->m_italic       = std::atoi( args[ 6 ] ) == 0 ? false : true;
     out->m_textAtlas    = new TextAtlas();
-    std::stringstream str(  args[6] );
-	out->m_atlasFilePath = args[ 7 ];
+    std::stringstream str(  args[ 7 ] );
+	out->m_atlasFilePath = args[ 8 ];
 
 	auto textAtlas		= const_cast< TextAtlas* >( out->m_textAtlas );
 
@@ -164,7 +165,7 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
 }
 // *********************************
 //
-FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fontName, SizeType fontSize, SizeType blurSize, const std::string& fontFileName, bool bold, bool italic )
+FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, const std::string& fontFileName, bool bold, bool italic )
 {
     if( !m_dataBase )
     {
@@ -176,6 +177,7 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fo
     std::string sql = "SELECT * FROM cached_fonts WHERE font_name=\'" + fontName + "\'" +
                             " AND font_size = " + std::to_string( fontSize ) +
                             " AND blur_Size = " + std::to_string( blurSize ) +
+							" AND outline_width = " + std::to_string( outlineWidth ) +
                             " AND bold_flag = " + std::to_string( bold ) +
                             " AND italic_flag = " + std::to_string( italic ) + ";";
 
