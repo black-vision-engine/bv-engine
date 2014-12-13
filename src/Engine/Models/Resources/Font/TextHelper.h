@@ -28,12 +28,7 @@ public:
     /////////////////////////////////////
     // This function creates TextAtlas from specified FontReasource.
     // Returns new TextAtlas.
-    static const TextAtlas *            GetAtlas            ( const ResourceHandle * fontResource, bool bolded = false, bool italic = false );
-
-    /////////////////////////////////////
-    // This function creates TextureInfo from atlas specified atlas ind fontReasource.
-    // Returns new TextureInfo with texture name specified in texName.
-    static ResourceHandleConstPtr       GetAtlasTextureInfo ( const TextAtlas * textAtlas );
+    static const TextAtlas *            GetAtlas            ( const ResourceHandle * fontResource );
 
     /////////////////////////////////////
     // This function creates empty VertexAttributeChannel for text with proper attribute descriptor. ( position, texture cord )

@@ -111,51 +111,6 @@ const Text*             FontLoader::TryLoadFont             ( const std::string&
 
 ///////////////////////////////
 //
-const Text*             FontLoader::TryLoadFontBold         ( const std::string& file, size_t size, size_t blurSize, size_t oulineSize, const std::wstring& atlasCharSetFile ) const
-{
-    auto filebd = AddPostfixToFileName( file, "bd" );
-    if( File::Exists( filebd ) )
-    {
-        return LoadFontFile( filebd, size, blurSize, oulineSize, atlasCharSetFile );
-    }
-    else
-    {
-        return nullptr;
-    }
-}
-
-///////////////////////////////
-//
-const Text*             FontLoader::TryLoadFontBoldItalic   ( const std::string& file, size_t size, size_t blurSize, size_t oulineSize, const std::wstring& atlasCharSetFile ) const
-{
-    auto filebd = AddPostfixToFileName( file, "bi" );
-    if( File::Exists( filebd ) )
-    {
-        return LoadFontFile( filebd, size, blurSize, oulineSize, atlasCharSetFile );
-    }
-    else
-    {
-        return nullptr;
-    }
-}
-
-///////////////////////////////
-//
-const Text*             FontLoader::TryLoadFontItalic       ( const std::string& file, size_t size, size_t blurSize, size_t oulineSize, const std::wstring& atlasCharSetFile ) const
-{
-    auto filebd = AddPostfixToFileName( file, "i" );
-    if( File::Exists( filebd ) )
-    {
-        return LoadFontFile( filebd, size, blurSize, oulineSize, atlasCharSetFile );
-    }
-    else
-    {
-        return nullptr;
-    }
-}
-
-///////////////////////////////
-//
 const Text*             FontExtraData::GetFont             () const
 {
     return m_font;
@@ -163,41 +118,9 @@ const Text*             FontExtraData::GetFont             () const
 
 ///////////////////////////////
 //
-const Text*             FontExtraData::GetFontBold         () const
-{
-    return m_fontBold;
-}
-
-///////////////////////////////
-//
-const Text*             FontExtraData::GetFontBoldItalic   () const
-{
-    return m_fontBoldItalic;
-}
-
-///////////////////////////////
-//
-const Text*             FontExtraData::GetFontItalic       () const
-{
-    return m_fontItalic;
-}
-
-///////////////////////////////
-//
-const Text*             FontExtraData::GetFontUnderlined   () const
-{
-    return m_fontBoldItalic;
-}
-
-///////////////////////////////
-//
 FontExtraData::FontExtraData       ( const Text* font, const Text* fontBold, const Text* fontItalic, const Text* fontBoldItalic, const Text* fontUnderlined, size_t fontSize )
     : ResourceExtraData( ResourceExtraKind::RE_FONT )
     , m_font( font )
-    , m_fontBold( fontBold )
-    , m_fontItalic( fontItalic )
-    , m_fontBoldItalic( fontBoldItalic )
-    , m_fontUnderlined( fontUnderlined )
     , m_fontSize( fontSize )
 {}
 

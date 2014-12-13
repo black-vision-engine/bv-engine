@@ -223,9 +223,9 @@ bool                            DefaultTextPlugin::LoadResource  ( IPluginResour
 
         auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
 
-        m_textAtlas = TextHelper::GetAtlas( fontResource.get(), false, false );
+        m_textAtlas = TextHelper::GetAtlas( fontResource.get() );
 
-        auto textureResource = TextHelper::GetAtlasTextureInfo( m_textAtlas );
+		auto textureResource = m_textAtlas->GetResourceHandle();
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = new DefaultTextureDescriptor(     textureResource

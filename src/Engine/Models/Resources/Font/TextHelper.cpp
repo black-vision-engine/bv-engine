@@ -44,39 +44,15 @@ VertexAttributesChannel*    TextHelper::CreateEmptyVACForText()
 namespace
 {
 ///////////////////////////////
-// Helper function for getting proper atlas from font resource. Plain, italic, bold or italic-bold.
-const Text*             GetFont( const ResourceHandle * fontResource, bool bolded, bool italic )
+// Helper function for getting proper atlas from font resource.
+const Text*             GetFont( const ResourceHandle * fontResource )
 {
     assert( fontResource->GetExtra()->GetResourceExtraKind() == ResourceExtraKind::RE_FONT );
     auto fontExtraData = static_cast< const FontExtraData* >( fontResource->GetExtra() );
 
-    if( !bolded && !italic )
-    { 
-        assert( fontExtraData->GetFont() );
-        return fontExtraData->GetFont();
-    }
+    assert( fontExtraData->GetFont() );
 
-    if( bolded && italic )
-    {
-        assert( fontExtraData->GetFontBoldItalic() );
-        return fontExtraData->GetFontBoldItalic();
-    }
-
-    if( italic )
-    {
-        assert( fontExtraData->GetFontItalic() );
-        return fontExtraData->GetFontItalic();
-    }
-
-    if( bolded )
-    {
-        assert( fontExtraData->GetFontBold() );
-        return fontExtraData->GetFontBold();
-    }
-
-    assert( !"Should never be here!" );
-
-    return nullptr;
+    return fontExtraData->GetFont();
 }
 
 ConnectedComponentPtr         CreateEmptyCC()
@@ -111,9 +87,9 @@ ConnectedComponentPtr         CreateEmptyCC()
 } // anonymous
 
 
-const TextAtlas *           TextHelper::GetAtlas            ( const ResourceHandle * fontResource, bool bolded , bool italic )
+const TextAtlas *           TextHelper::GetAtlas            ( const ResourceHandle * fontResource )
 {
-    auto f = GetFont( fontResource, bolded, italic );
+    auto f = GetFont( fontResource );
 
     const TextAtlas* textAtlas = nullptr;
 
@@ -121,20 +97,6 @@ const TextAtlas *           TextHelper::GetAtlas            ( const ResourceHand
         return f->GetAtlas();
     else
         return nullptr;
-}
-
-///////////////////////////////
-//
-ResourceHandleConstPtr      TextHelper::GetAtlasTextureInfo ( const TextAtlas * textAtlas )
-{
-    assert( textAtlas );
-
-    //auto texSize = textAtlas->GetWidth() * textAtlas->GetHeight() * 4; //FIXME: Add format to atlas
-
-    //TextureExtraData* atlasExtraData = new TextureExtraData( textAtlas->GetWidth(), textAtlas->GetHeight(), 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D );
-    //auto altasHandle = ResourceHandleConstPtr( new ResourceHandle( textAtlas->GetData(), texSize, atlasExtraData ) );
-
-	return textAtlas->GetResourceHandle();
 }
 
 #define viewWidth   (1080 / 2)
