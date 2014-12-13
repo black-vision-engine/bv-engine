@@ -39,4 +39,7 @@ private:
 
 };
 
+DEFINE_PTR_TYPE(Texture2DEffectWithMask)
+DEFINE_CONST_PTR_TYPE(Texture2DEffectWithMask)
+
 } //bv

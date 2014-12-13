@@ -8,8 +8,6 @@
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
 
-//#include "Engine/Models/Interfaces/ITimeEvaluator.h"
-
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
@@ -130,7 +128,7 @@ private:
     unsigned int                        TotalNumVertices                ( const std::vector< IConnectedComponentPtr > & ccVec) const;
     unsigned int                        TotalSize                       ( const std::vector< IConnectedComponentPtr > & ccVec, const IVertexAttributesChannelDescriptor * desc ) const;
 
-    RenderableEffect *                  CreateDefaultEffect             ( IPluginConstPtr finalizer ) const;
+    RenderableEffectPtr                 CreateDefaultEffect             ( IPluginConstPtr finalizer ) const;
 
     std::string                         SplitPrefix                     ( std::string & str, const std::string & separator = "/" ) const;
 

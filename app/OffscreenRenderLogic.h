@@ -5,6 +5,8 @@
 #include "Engine/Types/Enums.h"
 #include "Engine/Graphics/Resources/Texture2D.h"
 
+#include "Engine/Graphics/Effects/Texture2DEffect.h"
+#include "Engine/Graphics/Effects/Texture2DEffectWithMask.h"
 
 namespace bv {
 
@@ -14,7 +16,20 @@ class Camera;
 class TriangleStrip;
 class Rednerer;
 class Texture2DEffect;
+class Texture2DEffectWithMask;
 class IValue;
+
+struct AuxRenderTargetData
+{
+    RenderTarget *              renderTarget;
+    TriangleStrip *             quad;
+    Texture2DEffectPtr          effectTexture2D;
+    Texture2DEffectWithMaskPtr  effectTexture2DWithMask;
+
+    ~AuxRenderTargetData    ();
+};
+
+typedef std::vector< AuxRenderTargetData >  AuxRenderTargetDataVec;
 
 class OffscreenRenderLogic
 {
@@ -28,10 +43,12 @@ private:
     int                 m_usedStackedRenderTargets;
     bool                m_topRenderTargetEnabled;
 
+    AuxRenderTargetDataVec  m_auxRenderTargets;
+
     std::vector<RenderTarget *>     m_auxRenderTargetVec;
     std::vector<TriangleStrip *>    m_auxQuadVec;
 
-    RenderTarget *      m_displayRenderTargets[ 2 ];    
+    RenderTarget *      m_displayRenderTargets[ 2 ];
     TriangleStrip *     m_displayQuads[ 2 ];
 
     unsigned int        m_curDisplayTarget;

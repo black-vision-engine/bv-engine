@@ -386,7 +386,7 @@ RenderableEntity *                  BasicNode::CreateRenderable         ( IPlugi
     {
         auto renderableType = finalizer->GetVertexAttributesChannel()->GetPrimitiveType();
 
-        RenderableEffect * effect = CreateDefaultEffect( finalizer );
+        RenderableEffectPtr effect = CreateDefaultEffect( finalizer );
 
         //RenderableArrayDataSingleVertexBuffer * rad = CreateRenderableArrayData( renderableType );
         //CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
@@ -497,7 +497,7 @@ bool                                BasicNode::CreateRenderableData     (/* Vert
 
 // ********************************
 //
-RenderableEffect *                  BasicNode::CreateDefaultEffect     ( IPluginConstPtr finalizer ) const
+RenderableEffectPtr                  BasicNode::CreateDefaultEffect     ( IPluginConstPtr finalizer ) const
 {
     auto psChannel      = finalizer->GetPixelShaderChannel();
     auto vsChannel      = finalizer->GetVertexShaderChannel();
@@ -506,7 +506,7 @@ RenderableEffect *                  BasicNode::CreateDefaultEffect     ( IPlugin
     assert( psChannel != nullptr );
     assert( vsChannel != nullptr );
 
-    return new DefaultEffect( psChannel.get(), vsChannel.get(), gsChannel.get() ); 
+    return std::make_shared<DefaultEffect>( psChannel.get(), vsChannel.get(), gsChannel.get() ); 
 }
 
 

@@ -38,4 +38,7 @@ private:
     TextureSampler *    CreateSampler   ( TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor );
 };
 
+DEFINE_PTR_TYPE(Texture2DEffect)
+DEFINE_CONST_PTR_TYPE(Texture2DEffect)
+
 } //bv

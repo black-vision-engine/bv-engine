@@ -117,16 +117,16 @@ RenderableArrayDataArraysSingleVertexBuffer * MainDisplayTarget::CreateTriStripA
 
 // **************************
 //
-Texture2DEffect *   MainDisplayTarget::CreateEffectBlitTexture     ( Texture2DPtr texture )
+Texture2DEffectPtr   MainDisplayTarget::CreateEffectBlitTexture     ( Texture2DPtr texture )
 {
-    return new Texture2DEffect( texture );
+    return std::make_shared<Texture2DEffect>( texture );
 }
 
 // **************************
 //
-Texture2DEffect *   MainDisplayTarget::CreateEffectOverrideAlpha   ( Texture2DPtr texture )
+Texture2DEffectPtr   MainDisplayTarget::CreateEffectOverrideAlpha   ( Texture2DPtr texture )
 {
-    return new Texture2DEffect( texture, true );
+    return std::make_shared<Texture2DEffect>( texture, true );
 }
 
 } //bv

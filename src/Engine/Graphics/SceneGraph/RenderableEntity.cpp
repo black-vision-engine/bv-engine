@@ -8,7 +8,7 @@ namespace bv {
 
 // *********************************
 //
-RenderableEntity::RenderableEntity          ( RenderableType type, RenderableArrayDataSingleVertexBuffer * rad, RenderableEffect * effect )
+RenderableEntity::RenderableEntity          ( RenderableType type, RenderableArrayDataSingleVertexBuffer * rad, RenderableEffectPtr effect )
     : m_type( type )
     , m_renderableArrayData( rad )
     , m_effect( effect )
@@ -19,7 +19,6 @@ RenderableEntity::RenderableEntity          ( RenderableType type, RenderableArr
 //
 RenderableEntity::~RenderableEntity         ()
 {
-    delete m_effect;
 }
 
 // *********************************
@@ -45,21 +44,16 @@ RenderableArrayDataSingleVertexBuffer *        RenderableEntity::GetRenderableAr
     
 // *********************************
 //
-RenderableEffect *              RenderableEntity::GetRenderableEffect               ()
+RenderableEffectPtr             RenderableEntity::GetRenderableEffect               ()
 {
     return m_effect;
 }
 
 // *********************************
 //
-void                            RenderableEntity::SetRenderableEffect               ( RenderableEffect * effect )
+void                            RenderableEntity::SetRenderableEffect               ( RenderableEffectPtr effect )
 {
-    if( m_effect != effect )
-    {
-        delete m_effect;
-
-        m_effect = effect;
-    }
+    m_effect = effect;
 }
 
 // *********************************
@@ -76,4 +70,4 @@ const RenderableArrayDataSingleVertexBuffer *     RenderableEntity::RAD         
     return m_renderableArrayData;
 }
 
-}
+} //bv

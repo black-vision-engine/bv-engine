@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
+#include "Engine/Graphics/Shaders/RenderableEffect.h"
 
 
 namespace bv {
 
 class RenderableArrayDataSingleVertexBuffer;
-class RenderableEffect;
 
 class RenderableEntity : public TransformableEntity
 {
@@ -26,12 +26,12 @@ protected:
     RenderableType                          m_type;
 
     RenderableArrayDataSingleVertexBuffer * m_renderableArrayData;
-    RenderableEffect *                      m_effect;
+    RenderableEffectPtr                     m_effect;
 
 
 public:
                     //FIXME: effect should be registered via some method so that it can be changed during to some other effect during runtime (RenderableEffect or RenderableEffectInstance if needed)
-                    RenderableEntity        ( RenderableType type, RenderableArrayDataSingleVertexBuffer * rad, RenderableEffect * effect );
+                    RenderableEntity        ( RenderableType type, RenderableArrayDataSingleVertexBuffer * rad, RenderableEffectPtr effect );
     virtual         ~RenderableEntity       ();
 
 public:
@@ -39,8 +39,8 @@ public:
     RenderableType                                  GetType                     () const;
     const RenderableArrayDataSingleVertexBuffer *   GetRenderableArrayData      () const;
     RenderableArrayDataSingleVertexBuffer *         GetRenderableArrayData      ();
-    RenderableEffect *                              GetRenderableEffect         ();
-    void                                            SetRenderableEffect         ( RenderableEffect * effect );
+    RenderableEffectPtr                             GetRenderableEffect         ();
+    void                                            SetRenderableEffect         ( RenderableEffectPtr effect );
 
     int                                             GetNumconnectedComponents   () const;
 

@@ -20,6 +20,14 @@ const unsigned int GNumRenderTargets = 2;
 
 // **************************
 //
+AuxRenderTargetData::~AuxRenderTargetData    ()
+{
+    delete renderTarget;
+    delete quad;
+}
+
+// **************************
+//
 OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int height, unsigned int numReadBuffers, Camera * camera, TextureFormat fmt )
     : m_width( width )
     , m_height( height )
@@ -150,7 +158,7 @@ void                OffscreenRenderLogic::DrawTopAuxRenderTarget    ( Renderer *
     auto rt = GetPrevRenderTarget();
     auto rq = GetTopRenderQuad();
 
-    auto ef = static_cast< Texture2DEffect * >( rq->GetRenderableEffect() );
+    auto ef = std::static_pointer_cast< Texture2DEffect >( rq->GetRenderableEffect() );
     ef->SetAlphaValModel( alphaVal );
 
     renderer->Enable( rt );
