@@ -71,10 +71,11 @@ public: // Only for non intrusive serialization. Should be private
 
     ResourceHandlePtr									m_textureHandle;
 
+	std::map< wchar_t, const Glyph * >                  m_outlineGlyphs;
     std::map< wchar_t, const Glyph * >                  m_glyphs;
     std::map< std::pair< wchar_t, wchar_t >, float >	m_kerningMap; 
 
-    void                    SetGlyph		( wchar_t wch, const Glyph * glyph );
+    void                    SetGlyph		( wchar_t wch, const Glyph * glyph, bool outline = false );
 
 public:
 
@@ -93,7 +94,7 @@ public:
     SizeType				GetGlyphWidth   ( wchar_t c ) const;
     SizeType				GetGlyphHeight  ( wchar_t c ) const;
 
-    const Glyph *			GetGlyph		( wchar_t c ) const;
+    const Glyph *			GetGlyph		( wchar_t c, bool outline = false ) const;
 
     Float32                 GetKerning      ( wchar_t c0, wchar_t c1 ) const;
 

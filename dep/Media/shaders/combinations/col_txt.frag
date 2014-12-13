@@ -11,6 +11,7 @@ uniform float       alpha;
 
 void main()
 {
-    float col = texture( AtlasTex0, uvCoord ).a;
-	FragColor = color * col;
+    float col1 = texture( AtlasTex0, uvCoord ).b;
+    float col2 = texture( AtlasTex0, uvCoord ).g;
+	FragColor = vec4(1.0, 1.0, 1.0, 1.0) * ( col2 * ( 1.0 - col1 ) );
 }

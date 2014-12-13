@@ -36,7 +36,7 @@ public:
 
     /////////////////////////////////////
     // This function builds VertexAttributeChannel for text and fontResource.
-    static float                        BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, bool useKerning = true );
+    static float                        BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, bool useKerning = true );
 };
 
 

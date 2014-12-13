@@ -148,7 +148,7 @@ FreeTypeEnginePtr					FreeTypeEngine::Create( const std::string & fontFilePath, 
 
 namespace {
 
-void	RasterizeSpans( const Spans & spans, SizeType pitch, char * buffer )
+void	RasterizeSpans( const Spans & spans, SizeType pitch, char * buffer, UInt8 channel )
 {
 	auto ymax = (Int32)spans.m_boundingRect.ymax; // FIXME: remove explicit casting
 	auto xmin = (Int32)spans.m_boundingRect.xmin;
@@ -159,9 +159,7 @@ void	RasterizeSpans( const Spans & spans, SizeType pitch, char * buffer )
 		for ( Int32 w = 0; w < s->width; ++w )
 		{
 			auto c = 4 * (pitch * (ymax - s->y) + s->x -  xmin +  w);
-			buffer[ c ] = (char)s->coverage;
-			buffer[ c + 1 ] = (char)s->coverage;
-			buffer[ c + 2 ] = (char)s->coverage;
+			buffer[ c + channel ] = (char)s->coverage;
 			buffer[ c + 3 ] = (char)s->coverage;
 		}
 	}
@@ -330,13 +328,22 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlin
 	Int32								spadding	= (Int32)padding;
 
 	std::map< wchar_t, Glyph * >		glyphs;
+	std::map< wchar_t, Glyph * >		outlineGlyphs;
 	std::map< wchar_t, Spans >			spans;
+	std::map< wchar_t, Spans >			outlineSpans;
 
     for ( auto ch : wcharsSet )
     {
 		spans[ ch ] = Spans();
-		glyphs[ ch ] = RenderGlyph( ch, spans[ ch ], outlineWidth );
+		glyphs[ ch ] = RenderGlyph( ch, spans[ ch ], 0 );
 	}
+
+	if( outlineWidth != 0 )
+		for ( auto ch : wcharsSet )
+		{
+			outlineSpans[ ch ] = Spans();
+			outlineGlyphs[ ch ] = RenderGlyph( ch, outlineSpans[ ch ], outlineWidth );
+		}
 
 	auto atlasSize = (SizeType) std::ceil( sqrt( (float)glyphsNum ) );
 
@@ -350,6 +357,10 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlin
 
     for ( auto ch : wcharsSet )
 		atlas->SetGlyph( ch, glyphs[ ch ] );
+
+	if( outlineWidth != 0 )
+		for ( auto ch : wcharsSet )
+			atlas->SetGlyph( ch, outlineGlyphs[ ch ], true );
 
     char* atlasData = const_cast< char * >( atlas->GetWritableData()->Get() );// FIXME: Remove const_cast
 
@@ -378,16 +389,45 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlin
 
 				char * startRasterizeHere = currAddress;
 
-				startRasterizeHere += ( m_maxHeight - glyph->height ) * altlasWidth * 4;
-				startRasterizeHere += ( m_maxWidth - glyph->width ) * 4;
+				if( outlineWidth != 0 )
+				{
+					auto & osps = outlineSpans[ ch ];
+					auto oglyph = outlineGlyphs[ ch ];
 
-				RasterizeSpans( sps, altlasWidth, startRasterizeHere );
+					startRasterizeHere += ( m_maxHeight - oglyph->height ) * altlasWidth * 4;
+					startRasterizeHere += ( m_maxWidth - oglyph->width ) * 4;
 
-				currAddress += ( m_maxWidth + padding ) * 4;
+					RasterizeSpans( osps, altlasWidth, startRasterizeHere, 1 );
 
-				glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  2 * padding + ( m_maxHeight	- glyph->height );
-				glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  2 * padding + ( m_maxWidth	- glyph->width );
-				glyph->padding = padding;
+					startRasterizeHere += (SizeType)( osps.m_boundingRect.ymax -  sps.m_boundingRect.ymax ) * altlasWidth * 4;
+					startRasterizeHere += (SizeType)( osps.m_boundingRect.xmax -  sps.m_boundingRect.xmax ) * 4;
+
+					RasterizeSpans( sps, altlasWidth, startRasterizeHere, 0 );
+
+					currAddress += ( m_maxWidth + padding ) * 4;
+
+					oglyph->textureY = ( m_maxHeight + 2 * padding ) * y +  2 * padding + ( m_maxHeight	- oglyph->height );
+					oglyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  2 * padding + ( m_maxWidth	- oglyph->width );
+					oglyph->padding = padding;
+
+
+					glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  2 * padding + ( m_maxHeight	- glyph->height ) - (SizeType)( osps.m_boundingRect.ymax -  sps.m_boundingRect.ymax );
+					glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  2 * padding + ( m_maxWidth	- glyph->width )  - (SizeType)( osps.m_boundingRect.xmax -  sps.m_boundingRect.xmax );
+					glyph->padding = padding;
+				}
+				else
+				{
+					startRasterizeHere += ( m_maxHeight - glyph->height ) * altlasWidth * 4;
+					startRasterizeHere += ( m_maxWidth - glyph->width ) * 4;
+
+					RasterizeSpans( sps, altlasWidth, startRasterizeHere, 0 );
+
+					currAddress += ( m_maxWidth + padding ) * 4;
+
+					glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  2 * padding + ( m_maxHeight	- glyph->height );
+					glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  2 * padding + ( m_maxWidth	- glyph->width );
+					glyph->padding = padding;
+				}
 			}
 		}
 

@@ -104,7 +104,7 @@ const TextAtlas *           TextHelper::GetAtlas            ( const ResourceHand
 
 // *********************************
 //
-float                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, bool useKerning )
+float                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, bool useKerning )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
@@ -170,10 +170,15 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
             }
 
             {
+				const Glyph * cglyph = glyph;
+				if( outlineSize != 0 )
+					glyph = textAtlas->GetGlyph( wch, true );
+
                 quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f ) ;//+ glm::vec3( -ccPaddingX, -ccPaddingY, 0.f );
                 quadBottomRight    = glm::vec3( (float)glyph->width / (float)viewWidth, 0.f, 0.f ) +  glm::vec3( blurLenghtX, -blurLenghtY, 0.f ) ;//+ glm::vec3( ccPaddingX, -ccPaddingY, 0.f );
                 quadTopLeft        = glm::vec3( 0.f, (float)glyph->height / (float)viewHeight, 0.f ) + glm::vec3( -blurLenghtX, blurLenghtY, 0.f ) ;//+ glm::vec3( -ccPaddingX, ccPaddingY, 0.f );
                 quadTopRight       = glm::vec3( (float)glyph->width / (float)viewWidth, (float)glyph->height / (float)viewHeight, 0.f ) + glm::vec3( blurLenghtX, blurLenghtY, 0.f ) ;//+ glm::vec3( ccPaddingX, ccPaddingY, 0.f );
+				glyph = cglyph;
             }
 
             posAttribChannel->AddAttribute( quadBottomLeft    + translate + bearing + newLineTranslation );
@@ -193,10 +198,15 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
             float texHeight;
 
             {
+				const Glyph * cglyph = glyph;
+				if( outlineSize != 0 )
+					glyph = textAtlas->GetGlyph( wch, true );
+
                 texLeft   = ( (float)glyph->textureX/* + (float)glyph->glyphX - blurTexSize*/ - texPadding )  / textAtlas->GetWidth();
                 texTop    = ( (float)glyph->textureY/* + (float)glyph->glyphY - blurTexSize*/ - texPadding )  / textAtlas->GetHeight();
                 texWidth  = ( (float)glyph->width + 2 * blurTexSize + 2 * texPadding )     / textAtlas->GetWidth();
                 texHeight = ( (float)glyph->height + 2 * blurTexSize  + 2 * texPadding )    / textAtlas->GetHeight();
+				glyph = cglyph;
             }
 
 

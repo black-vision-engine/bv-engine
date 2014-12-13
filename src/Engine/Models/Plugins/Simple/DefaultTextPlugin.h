@@ -43,7 +43,6 @@ public:
 class DefaultTextPlugin : public BasePlugin< IPlugin >
 {
 private:
-
     DefaultPluginParamValModelPtr   m_paramValModel;
 
     DefaultPixelShaderChannelPtr    m_psc;
@@ -56,7 +55,7 @@ private:
     unsigned int                    m_texCoordChannelIndex;
 
     std::wstring                    m_text;
-    const TextAtlas*                m_textAtlas;
+    const TextAtlas *				m_atlas;
     bool                            m_textSet;
 
     ParamFloatPtr                   m_fontSizeParam;
@@ -70,6 +69,17 @@ private:
     void                                        OnSetText                   ( IEventPtr evt );
 
     void                                        SetText                     ( const std::wstring & newText );
+
+	void										LoadTexture					(	DefaultTexturesDataPtr,
+																				ResourceHandleConstPtr,
+																				const std::string &,
+																				TextureWrappingMode,
+																				TextureWrappingMode,
+																				TextureFilteringMode,
+																				const glm::vec4 &,
+																				DataBuffer::Semantic );
+
+	void										LoadAtlas					( const std::string &, SizeType, SizeType, SizeType );
 
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
 

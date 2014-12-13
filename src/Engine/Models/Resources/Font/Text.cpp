@@ -110,9 +110,12 @@ SizeType				TextAtlas::GetSizeInBytes  () const
 
 // *********************************
 //
-void                    TextAtlas::SetGlyph			( wchar_t wch, const Glyph * glyph )
+void                    TextAtlas::SetGlyph			( wchar_t wch, const Glyph * glyph, bool outline )
 {
-    m_glyphs.insert(std::make_pair( wch, glyph ) );
+	if( outline )
+		m_outlineGlyphs.insert(std::make_pair( wch, glyph ) );
+	else
+		m_glyphs.insert(std::make_pair( wch, glyph ) );
 }
 
 // *********************************
@@ -144,14 +147,22 @@ SizeType				TextAtlas::GetHeight       () const
 
 // *********************************
 //
-const Glyph *			TextAtlas::GetGlyph			( wchar_t c ) const
+const Glyph *			TextAtlas::GetGlyph			( wchar_t c, bool outline ) const
 {
-    auto it = m_glyphs.find(c);
+	if(! outline )
+	{
+		auto it = m_glyphs.find(c);
 
-    if( it != m_glyphs.end() )
-    {
-        return it->second;
-    }
+		if( it != m_glyphs.end() )
+			return it->second;
+	}
+	else
+	{
+		auto it = m_outlineGlyphs.find(c);
+
+		if( it != m_outlineGlyphs.end() )
+			return it->second;
+	}
 
     return nullptr;
 }
