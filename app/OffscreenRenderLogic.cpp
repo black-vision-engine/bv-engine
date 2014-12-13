@@ -20,10 +20,18 @@ const unsigned int GNumRenderTargets = 2;
 
 // **************************
 //
-AuxRenderTargetData::~AuxRenderTargetData    ()
+RenderTargetData::RenderTargetData      ()
+    : renderTarget( nullptr )
+    , quad( nullptr )
+    , effectTexture2D( nullptr )
+    , effectTexture2DWithMask( nullptr )
 {
-    delete renderTarget;
-    delete quad;
+}
+
+// **************************
+//
+RenderTargetData::~RenderTargetData     ()
+{
 }
 
 // **************************
@@ -42,6 +50,9 @@ OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int 
     , m_displayRTEnabled( false )
 {
     m_displayCamera         = MainDisplayTarget::CreateDisplayCamera();
+
+    m_displayRenderTargetData[ 0 ] = CreateDisplayRenderTarget();
+    m_displayRenderTargetData[ 1 ] = CreateDisplayRenderTarget();
 
     m_displayRenderTargets[ 0 ] = MainDisplayTarget::CreateDisplayRenderTarget( width, height, fmt );
     m_displayRenderTargets[ 1 ] = MainDisplayTarget::CreateDisplayRenderTarget( width, height, fmt );
@@ -76,6 +87,18 @@ OffscreenRenderLogic::~OffscreenRenderLogic  ()
     for( auto aq : m_auxQuadVec )
     {
         delete aq;
+    }
+
+    for( auto rtd : m_auxRenderTargetsData )
+    {
+        delete rtd.renderTarget;
+        delete rtd.quad;
+    }
+
+    for( unsigned int i = 0; i < 2; ++i )
+    {
+        delete m_displayRenderTargetData[ i ].renderTarget;
+        delete m_displayRenderTargetData[ i ].quad;
     }
 
     delete m_displayQuads[ 0 ];
@@ -245,6 +268,52 @@ TriangleStrip *      OffscreenRenderLogic::GetTopRenderQuad         () const
     }
 
     return nullptr;   
+}
+
+// **************************
+//
+RenderTargetData    OffscreenRenderLogic::CreateDisplayRenderTarget   () const
+{
+    auto rt   = MainDisplayTarget::CreateDisplayRenderTarget( m_width, m_height, m_fmt );
+    auto quad = MainDisplayTarget::CreateDisplayRect( rt->ColorTexture( 0 ) );
+
+    return CreateRenderTargetData( rt, quad, nullptr, nullptr );
+}
+
+// **************************
+//
+RenderTargetData    OffscreenRenderLogic::CreateAuxRenderTarget       () const
+{
+    auto rt     = MainDisplayTarget::CreateAuxRenderTarget( m_width, m_height, m_fmt );
+    auto quad   = MainDisplayTarget::CreateAuxRect( rt->ColorTexture( 0 ) );
+
+    return CreateRenderTargetData( rt, quad, nullptr, nullptr );
+}
+
+// **************************
+//
+RenderTargetData    OffscreenRenderLogic::CreateRenderTargetData    ( RenderTarget * rt, TriangleStrip * ts, Texture2DEffectPtr effTx, Texture2DEffectWithMaskPtr effTxMask ) const
+{
+    SetDefaultTransform( ts );
+
+    RenderTargetData ret;
+
+    ret.renderTarget            = rt;
+    ret.quad                    = ts;
+    ret.effectTexture2D         = effTx;
+    ret.effectTexture2DWithMask = effTxMask;
+
+    return ret;
+}
+
+// **************************
+//
+void                OffscreenRenderLogic::SetDefaultTransform       ( TriangleStrip * ts ) const
+{
+    std::vector< bv::Transform > vec;
+    vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
+
+    ts->SetWorldTransforms( vec );
 }
 
 // **************************

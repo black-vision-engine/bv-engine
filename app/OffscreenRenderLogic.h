@@ -19,17 +19,18 @@ class Texture2DEffect;
 class Texture2DEffectWithMask;
 class IValue;
 
-struct AuxRenderTargetData
+struct RenderTargetData
 {
     RenderTarget *              renderTarget;
     TriangleStrip *             quad;
     Texture2DEffectPtr          effectTexture2D;
     Texture2DEffectWithMaskPtr  effectTexture2DWithMask;
 
-    ~AuxRenderTargetData    ();
+    RenderTargetData    ();
+    ~RenderTargetData   ();
 };
 
-typedef std::vector< AuxRenderTargetData >  AuxRenderTargetDataVec;
+typedef std::vector< RenderTargetData >  RenderTargetDataVec;
 
 class OffscreenRenderLogic
 {
@@ -43,7 +44,8 @@ private:
     int                 m_usedStackedRenderTargets;
     bool                m_topRenderTargetEnabled;
 
-    AuxRenderTargetDataVec  m_auxRenderTargets;
+    RenderTargetDataVec m_auxRenderTargetsData;
+    RenderTargetData    m_displayRenderTargetData[ 2 ];
 
     std::vector<RenderTarget *>     m_auxRenderTargetVec;
     std::vector<TriangleStrip *>    m_auxQuadVec;
@@ -80,6 +82,13 @@ private:
     RenderTarget *      GetTopRenderTarget          () const;
     RenderTarget *      GetPrevRenderTarget         () const;
     TriangleStrip *     GetTopRenderQuad            () const;
+
+    RenderTargetData    CreateDisplayRenderTarget   () const;
+    RenderTargetData    CreateAuxRenderTarget       () const;
+
+    RenderTargetData    CreateRenderTargetData      ( RenderTarget * rt, TriangleStrip * ts, Texture2DEffectPtr effTx, Texture2DEffectWithMaskPtr effTxMask ) const;
+
+    void                SetDefaultTransform         ( TriangleStrip * ts ) const;
 
     RenderTarget *      CreateAuxRenderTarget       ( Renderer * renderer );
     TriangleStrip *     CreateAuxQuad               ( RenderTarget * rt );
