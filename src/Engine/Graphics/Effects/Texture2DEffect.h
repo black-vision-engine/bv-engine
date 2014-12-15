@@ -28,6 +28,7 @@ public:
                                       const glm::vec4 & borderColor = glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
                 ~Texture2DEffect    ();
 
+    void        SetTexture          ( Texture2DPtr texture );
     void        SetAlphaValModel    ( const IValue * val );
 
 private:

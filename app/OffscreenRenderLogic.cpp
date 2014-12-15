@@ -35,10 +35,18 @@ RenderTargetData::~RenderTargetData     ()
 
 // **************************
 //
+TextureData::TextureData( unsigned int width, unsigned int height, TextureFormat fmt )
+{
+    m_width     = width;
+    m_height    = height;
+    m_fmt       = fmt;
+
+}
+
+// **************************
+//
 OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int height, unsigned int numReadBuffers, Camera * camera, TextureFormat fmt )
-    : m_width( width )
-    , m_height( height )
-    , m_fmt( fmt )
+    : m_textureData( width, height, fmt )
     , m_usedStackedRenderTargets( 0 )
     , m_topRenderTargetEnabled( false )
     , m_readbackTextures( numReadBuffers * GNumRenderTargets ) //two display targets that can be potentially used
@@ -280,7 +288,7 @@ RenderTargetData    OffscreenRenderLogic::GetRenderTargetDataAt           ( unsi
 //
 RenderTargetData    OffscreenRenderLogic::CreateDisplayRenderTargetData () const
 {
-    auto rt   = MainDisplayTarget::CreateDisplayRenderTarget( m_width, m_height, m_fmt );
+    auto rt   = MainDisplayTarget::CreateDisplayRenderTarget( m_textureData.m_width, m_textureData.m_height, m_textureData.m_fmt );
     auto quad = MainDisplayTarget::CreateDisplayRect( rt->ColorTexture( 0 ) );
 
     return CreateRenderTargetData( rt, quad, nullptr, nullptr );
@@ -290,11 +298,12 @@ RenderTargetData    OffscreenRenderLogic::CreateDisplayRenderTargetData () const
 //
 RenderTargetData    OffscreenRenderLogic::CreateAuxRenderTargetData     () const
 {
-    auto rt     = MainDisplayTarget::CreateAuxRenderTarget( m_width, m_height, m_fmt );
+    auto rt     = MainDisplayTarget::CreateAuxRenderTarget( m_textureData.m_width, m_textureData.m_height, m_textureData.m_fmt );
     auto quad   = MainDisplayTarget::CreateAuxRect( rt->ColorTexture( 0 ) );
 
-    auto txEff = std::static_pointer_cast< Texture2DEffect >( quad->GetRenderableEffect() );
-
+    auto txEff      = std::static_pointer_cast< Texture2DEffect >( quad->GetRenderableEffect() );
+    // FIXME: these effects should be 
+    //auto txEffMask  = new Texture2DEffectWithMask(
     return CreateRenderTargetData( rt, quad, txEff, nullptr );
 }
 

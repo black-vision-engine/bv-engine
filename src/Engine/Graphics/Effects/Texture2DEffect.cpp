@@ -49,6 +49,16 @@ Texture2DEffect::~Texture2DEffect    ()
 
 // ****************************
 //
+void    Texture2DEffect::SetTexture         ( Texture2DPtr texture )
+{
+    auto ps = GetPass( 0 )->GetPixelShader();
+    auto params = ps->GetParameters();
+
+    params->SetTexture( 0, texture );
+}
+
+// ****************************
+//
 void    Texture2DEffect::SetAlphaValModel   ( const IValue * val )
 {
     if( m_alphaParam )

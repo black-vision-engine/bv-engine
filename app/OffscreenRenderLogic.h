@@ -19,6 +19,8 @@ class Texture2DEffect;
 class Texture2DEffectWithMask;
 class IValue;
 
+namespace {
+
 struct RenderTargetData
 {
     RenderTarget *              renderTarget;
@@ -30,16 +32,35 @@ struct RenderTargetData
     ~RenderTargetData   ();
 };
 
+struct TextureData
+{
+    unsigned int        m_width;
+    unsigned int        m_height;
+
+    TextureFormat       m_fmt;
+
+    TextureData         ( unsigned int width, unsigned int height, TextureFormat fmt );
+
+};
+
+struct OffscreenRenderData
+{
+    TriangleStrip *             quad;
+
+    Texture2DEffectPtr          effectTexture2D;
+    Texture2DEffectWithMaskPtr  effectTexture2DWithMask;
+};
+
 typedef std::vector< RenderTargetData >  RenderTargetDataVec;
+
+}
 
 class OffscreenRenderLogic
 {
 private:
 
-    unsigned int        m_width;
-    unsigned int        m_height;
-
-    TextureFormat       m_fmt;
+    TextureData         m_textureData;
+    OffscreenRenderData m_renderData;
 
     unsigned int        m_usedStackedRenderTargets;
     bool                m_topRenderTargetEnabled;
