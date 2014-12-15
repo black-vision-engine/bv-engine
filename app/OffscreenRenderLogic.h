@@ -47,9 +47,6 @@ private:
     RenderTargetDataVec m_auxRenderTargetsData;
     RenderTargetData    m_displayRenderTargetData[ 2 ];
 
-    std::vector<RenderTarget *>     m_auxRenderTargetVec;
-    std::vector<TriangleStrip *>    m_auxQuadVec;
-
     unsigned int        m_curDisplayTarget;
     unsigned int        m_buffersPerTarget;
 
@@ -65,43 +62,21 @@ public:
                         OffscreenRenderLogic        ( unsigned int width, unsigned int height, unsigned int numReadBuffers, Camera * camera = nullptr, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
                         ~OffscreenRenderLogic       ();
 
+    void                SetRendererCamera           ( Camera * camera );
+
     void                AllocateNewRenderTarget     ( Renderer * renderer );
     void                EnableTopRenderTarget       ( Renderer * renderer );
     void                DiscardCurrentRenderTarget  ( Renderer * renderer );
     void                DisableTopRenderTarget      ( Renderer * renderer );
 
+    unsigned int        GetNumAllocatedRenderTargets() const;
+
     void                DrawTopAuxRenderTarget      ( Renderer * renderer, const IValue * alphaVal );
-    //FIXME: side effect - removes two topmost render targets
     void                DrawAMTopTwoRenderTargets   ( Renderer * renderer, const IValue * alphaVal );
 
-private:
-
-    RenderTargetData    GetTopRenderTargetData          () const;
-    RenderTargetData    GetRenderTargetDataAt           ( unsigned int i ) const;
-
-    RenderTarget *      GetTopRenderTarget              () const;
-    RenderTarget *      GetPrevRenderTarget             () const;
-    TriangleStrip *     GetTopRenderQuad                () const;
-
-    RenderTargetData    CreateDisplayRenderTargetData   () const;
-    RenderTargetData    CreateAuxRenderTargetData       () const;
-
-    RenderTargetData    CreateRenderTargetData      ( RenderTarget * rt, TriangleStrip * ts, Texture2DEffectPtr effTx, Texture2DEffectWithMaskPtr effTxMask ) const;
-
-    void                SetDefaultTransform         ( TriangleStrip * ts ) const;
-
-    RenderTarget *      CreateAuxRenderTarget       () const;
-    TriangleStrip *     CreateAuxQuad               ( RenderTarget * rt ) const;
-
-public:
-
-    void                SetRendererCamera           ( Camera * camera );
-
+    void                DrawDisplayRenderTarget     ( Renderer * renderer );
     void                SwapDisplayRenderTargets    ();
 
-    void                DrawDisplayRenderTarget     ( Renderer * renderer );
-
-    unsigned int        GetNumAllocatedRenderTargets() const;
     unsigned int        TotalNumReadBuffers         () const;
     unsigned int        NumReadBuffersPerRT         () const;
 
@@ -109,11 +84,19 @@ public:
 
 private:
 
-    unsigned int        CurDisplayRenderTargetNum   () const;
+    RenderTargetData    GetTopRenderTargetData          () const;
+    RenderTargetData    GetRenderTargetDataAt           ( unsigned int i ) const;
 
-    RenderTargetData    CurDisplayRenderTargetData  () const;
-    RenderTarget *      CurDisplayRenderTarget      () const;
-    TriangleStrip *     CurDisplayQuad              () const;
+    RenderTargetData    CreateDisplayRenderTargetData   () const;
+    RenderTargetData    CreateAuxRenderTargetData       () const;
+
+    RenderTargetData    CreateRenderTargetData          ( RenderTarget * rt, TriangleStrip * ts, Texture2DEffectPtr effTx, Texture2DEffectWithMaskPtr effTxMask ) const;
+
+    void                SetDefaultTransform             ( TriangleStrip * ts ) const;
+
+    unsigned int        CurDisplayRenderTargetNum       () const;
+    RenderTargetData    CurDisplayRenderTargetData      () const;
+
 };
 
 } //bv

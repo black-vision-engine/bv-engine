@@ -122,8 +122,11 @@ void    RenderLogic::RenderNodeMask  ( Renderer * renderer, SceneNode * node )
 
     DrawNodeOnly( renderer, node );
 
-    //FIXME: side effect - removes two topmost render targets
     m_offscreenRenderLogic->DrawAMTopTwoRenderTargets( renderer, node->GetOverrideAlphaVal() );
+    
+    m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
+    m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
+
     m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
 }
 

@@ -9,7 +9,6 @@
 
 #include "Engine/Graphics/Effects/Texture2DEffect.h"
 
-
 namespace bv {
 
 namespace {
@@ -64,16 +63,6 @@ OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int 
 //
 OffscreenRenderLogic::~OffscreenRenderLogic  ()
 {
-    for( auto rt : m_auxRenderTargetVec )
-    {
-        delete rt;
-    }
-
-    for( auto aq : m_auxQuadVec )
-    {
-        delete aq;
-    }
-
     for( auto rtd : m_auxRenderTargetsData )
     {
         delete rtd.renderTarget;
@@ -91,6 +80,13 @@ OffscreenRenderLogic::~OffscreenRenderLogic  ()
 
 // **************************
 //
+void                OffscreenRenderLogic::SetRendererCamera         ( Camera * camera )
+{
+    m_rendererCamera = camera;
+}
+
+// **************************
+//
 void                OffscreenRenderLogic::AllocateNewRenderTarget     ( Renderer * renderer )
 {
     if( m_topRenderTargetEnabled )
@@ -104,14 +100,7 @@ void                OffscreenRenderLogic::AllocateNewRenderTarget     ( Renderer
 
     if( auxRenderTargets > m_auxRenderTargetsData.size() )
     {
-        auto rtd = CreateAuxRenderTargetData();
-        auto rt = CreateAuxRenderTarget();
-        auto aq = CreateAuxQuad( rt );
-
-        m_auxRenderTargetVec.push_back( rt );
-        m_auxQuadVec.push_back( aq );
-
-        m_auxRenderTargetsData.push_back( rtd );
+        m_auxRenderTargetsData.push_back( CreateAuxRenderTargetData() );
     }
 
     assert( auxRenderTargets <= m_auxRenderTargetsData.size() );
@@ -125,7 +114,6 @@ void                OffscreenRenderLogic::EnableTopRenderTarget       ( Renderer
 
     if( !m_topRenderTargetEnabled )
     {
-        //renderer->Enable( GetTopRenderTarget() );
         renderer->Enable( GetTopRenderTargetData().renderTarget );
 
         m_topRenderTargetEnabled = true;
@@ -152,11 +140,17 @@ void                OffscreenRenderLogic::DisableTopRenderTarget    ( Renderer *
 {
     if( m_topRenderTargetEnabled )
     {
-        // renderer->Disable( GetTopRenderTarget() );
         renderer->Disable( GetTopRenderTargetData().renderTarget );
 
         m_topRenderTargetEnabled = false;
     }
+}
+
+// **************************
+//
+unsigned int    OffscreenRenderLogic::GetNumAllocatedRenderTargets  () const
+{
+    return m_usedStackedRenderTargets;
 }
 
 // **************************
@@ -176,20 +170,6 @@ void                OffscreenRenderLogic::DrawTopAuxRenderTarget    ( Renderer *
     renderer->Draw( topRTD.quad );
     renderer->SetCamera( m_rendererCamera );
     renderer->Disable( prvRTD.renderTarget );
-
-    /*
-    auto rt = GetPrevRenderTarget();
-    auto rq = GetTopRenderQuad();
-
-    auto ef = std::static_pointer_cast< Texture2DEffect >( rq->GetRenderableEffect() );
-    ef->SetAlphaValModel( alphaVal );
-
-    renderer->Enable( rt );
-    renderer->SetCamera( m_displayCamera );
-    renderer->Draw( rq );
-    renderer->SetCamera( m_rendererCamera );
-    renderer->Disable( rt );
-    */
 }
 
 // **************************
@@ -198,13 +178,13 @@ void                OffscreenRenderLogic::DrawAMTopTwoRenderTargets ( Renderer *
 {
     DisableTopRenderTarget( renderer );
 
-    auto rtAlpha    = GetTopRenderTarget();
-    auto quadData   = GetPrevRenderTarget();
+//    auto rtAlpha    = GetTopRenderTarget();
+//    auto quadData   = GetPrevRenderTarget();
     
-    DiscardCurrentRenderTarget( renderer );
-    DiscardCurrentRenderTarget( renderer );
+//    DiscardCurrentRenderTarget( renderer );
+//    DiscardCurrentRenderTarget( renderer );
 
-    auto rtMain = GetTopRenderTarget();
+//    auto rtMain = GetTopRenderTarget();
 
     //FIXME: either effects should be replacable within Renderable or a few different versions of quads should be accessible here
     /*
@@ -221,20 +201,54 @@ void                OffscreenRenderLogic::DrawAMTopTwoRenderTargets ( Renderer *
 
 // **************************
 //
+void                OffscreenRenderLogic::DrawDisplayRenderTarget   ( Renderer * renderer )
+{
+    assert( m_displayRTEnabled == false );
+
+    renderer->SetCamera( m_displayCamera );
+    renderer->Draw( CurDisplayRenderTargetData().quad );
+    renderer->SetCamera( m_rendererCamera );
+}
+
+// **************************
+//
+void                OffscreenRenderLogic::SwapDisplayRenderTargets  ()
+{
+    m_curDisplayTarget = ( m_curDisplayTarget + 1 ) % GNumRenderTargets;
+}
+
+// **************************
+//
+unsigned int    OffscreenRenderLogic::TotalNumReadBuffers           () const
+{
+    return (unsigned int) m_readbackTextures.size();
+}
+
+// **************************
+//
+unsigned int    OffscreenRenderLogic::NumReadBuffersPerRT           () const
+{
+    return TotalNumReadBuffers() / GNumRenderTargets;
+}
+
+// **************************
+//
+Texture2DConstPtr   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer * renderer, unsigned int bufNum )
+{
+    unsigned int bufferIdx = GNumRenderTargets * bufNum + CurDisplayRenderTargetNum();
+
+    assert( bufferIdx < m_readbackTextures.size() );
+
+    renderer->ReadColorTexture( 0, CurDisplayRenderTargetData().renderTarget, m_readbackTextures[ bufferIdx ] );
+
+    return m_readbackTextures[ bufferIdx ];
+}
+
+// **************************
+//
 RenderTargetData    OffscreenRenderLogic::GetTopRenderTargetData          () const
 {
-    if( m_usedStackedRenderTargets == 1 )
-    {
-        return CurDisplayRenderTargetData();
-    }
-    else if( m_usedStackedRenderTargets > 1 )
-    {
-        return m_auxRenderTargetsData[ m_usedStackedRenderTargets - 2 ]; 
-    }
-
-    assert( false );
-
-    return RenderTargetData();
+    return GetRenderTargetDataAt( m_usedStackedRenderTargets - 1 );
 }
 
 // **************************
@@ -260,58 +274,6 @@ RenderTargetData    OffscreenRenderLogic::GetRenderTargetDataAt           ( unsi
     assert( false );
 
     return RenderTargetData();
-}
-
-// **************************
-//
-RenderTarget *      OffscreenRenderLogic::GetTopRenderTarget        () const
-{
-    if( m_usedStackedRenderTargets == 1 )
-    {
-        return CurDisplayRenderTarget();
-    }
-    else if( m_usedStackedRenderTargets > 1 )
-    {
-        return m_auxRenderTargetVec[ m_usedStackedRenderTargets - 2 ]; 
-    }
-
-    return nullptr;
-}
-
-// **************************
-//
-RenderTarget *      OffscreenRenderLogic::GetPrevRenderTarget       () const
-{
-    assert( m_usedStackedRenderTargets > 1 );
-
-    if( m_usedStackedRenderTargets == 2 )
-    {
-        return CurDisplayRenderTarget();
-    }
-    else if( m_usedStackedRenderTargets > 2 )
-    {
-        return m_auxRenderTargetVec[ m_usedStackedRenderTargets - 3 ]; 
-    }
-
-    return nullptr;   
-}
-
-// **************************
-//
-TriangleStrip *      OffscreenRenderLogic::GetTopRenderQuad         () const
-{
-    assert( m_usedStackedRenderTargets > 0 );
-
-    if( m_usedStackedRenderTargets == 1 )
-    {
-        return CurDisplayQuad();
-    }
-    else if( m_usedStackedRenderTargets > 1 )
-    {
-        return m_auxQuadVec[ m_usedStackedRenderTargets - 2 ]; 
-    }
-
-    return nullptr;   
 }
 
 // **************************
@@ -364,86 +326,6 @@ void                OffscreenRenderLogic::SetDefaultTransform       ( TriangleSt
 
 // **************************
 //
-RenderTarget *      OffscreenRenderLogic::CreateAuxRenderTarget     () const
-{
-    return MainDisplayTarget::CreateAuxRenderTarget( m_width, m_height, m_fmt );
-}
-
-// **************************
-//
-TriangleStrip *     OffscreenRenderLogic::CreateAuxQuad             ( RenderTarget * rt ) const
-{
-    auto retQuad = MainDisplayTarget::CreateAuxRect( rt->ColorTexture( 0 ) );
-
-    std::vector< bv::Transform > vec;
-    vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
-
-    retQuad->SetWorldTransforms( vec );
-
-    return retQuad;
-}
-
-// **************************
-//
-void                OffscreenRenderLogic::SetRendererCamera         ( Camera * camera )
-{
-    m_rendererCamera = camera;
-}
-
-// **************************
-//
-void                OffscreenRenderLogic::SwapDisplayRenderTargets  ()
-{
-    m_curDisplayTarget = ( m_curDisplayTarget + 1 ) % GNumRenderTargets;
-}
-
-// **************************
-//
-void                OffscreenRenderLogic::DrawDisplayRenderTarget   ( Renderer * renderer )
-{
-    assert( m_displayRTEnabled == false );
-
-    renderer->SetCamera( m_displayCamera );
-    renderer->Draw( CurDisplayQuad() );
-    renderer->SetCamera( m_rendererCamera );
-}
-
-// **************************
-//
-unsigned int    OffscreenRenderLogic::GetNumAllocatedRenderTargets  () const
-{
-    return m_usedStackedRenderTargets;
-}
-
-// **************************
-//
-unsigned int    OffscreenRenderLogic::TotalNumReadBuffers           () const
-{
-    return (unsigned int) m_readbackTextures.size();
-}
-
-// **************************
-//
-unsigned int    OffscreenRenderLogic::NumReadBuffersPerRT           () const
-{
-    return TotalNumReadBuffers() / GNumRenderTargets;
-}
-
-// **************************
-//
-Texture2DConstPtr   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer * renderer, unsigned int bufNum )
-{
-    unsigned int bufferIdx = GNumRenderTargets * bufNum + CurDisplayRenderTargetNum();
-
-    assert( bufferIdx < m_readbackTextures.size() );
-
-    renderer->ReadColorTexture( 0, CurDisplayRenderTarget(), m_readbackTextures[ bufferIdx ] );
-
-    return m_readbackTextures[ bufferIdx ];
-}
-
-// **************************
-//
 unsigned int      OffscreenRenderLogic::CurDisplayRenderTargetNum   () const
 {
     return m_curDisplayTarget;
@@ -454,20 +336,6 @@ unsigned int      OffscreenRenderLogic::CurDisplayRenderTargetNum   () const
 RenderTargetData  OffscreenRenderLogic::CurDisplayRenderTargetData  () const
 {
     return m_displayRenderTargetData[ m_curDisplayTarget ];
-}
-
-// **************************
-//
-RenderTarget *    OffscreenRenderLogic::CurDisplayRenderTarget      () const
-{
-    return m_displayRenderTargetData[ m_curDisplayTarget ].renderTarget;
-}
-
-// **************************
-//
-TriangleStrip *   OffscreenRenderLogic:: CurDisplayQuad             () const
-{
-    return m_displayRenderTargetData[ m_curDisplayTarget ].quad;
 }
 
 } //bv
