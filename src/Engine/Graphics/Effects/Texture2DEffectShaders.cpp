@@ -155,9 +155,9 @@ std::string vs_default  = " #version 400 \n \
                                 }\n \
                             ";
 
-std::string alpha_param_name = "alpha";
-std::string texture_sampler_name = "Texture";
-std::string mask_sampler_name = "Mask";
+std::string alpha_param_name        = "alpha";
+std::string texture_sampler_name    = "Texture";
+std::string mask_sampler_name       = "Mask";
 
 }
 

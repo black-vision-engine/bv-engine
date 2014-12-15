@@ -7,7 +7,7 @@
 #include "System/SimpleTimer.h"
 #include "System/HerarchicalProfiler.h"
 
-#include "RenderLogic.h"
+#include "Rendering/RenderLogic.h"
 #include "ModelInteractionEvents.h"
 
 #include "BVConfig.h"

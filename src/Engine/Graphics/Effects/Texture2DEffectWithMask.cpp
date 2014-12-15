@@ -64,7 +64,8 @@ void    Texture2DEffectWithMask::SetAlphaValModel   ( const IValue * val )
 //
 PixelShader *   Texture2DEffectWithMask::CreatePS   ( Texture2DPtr texture, Texture2DPtr mask, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor, bool hasAlpha )
 {
-    assert( texture != nullptr );
+    //FIXME: may not be the safest thing to do
+    //assert( texture != nullptr );
 
     auto params = new ShaderParameters();
     params->AddTexture( texture );
