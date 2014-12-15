@@ -114,7 +114,7 @@ void                OffscreenRenderLogic::AllocateNewRenderTarget     ( Renderer
         m_auxRenderTargetsData.push_back( rtd );
     }
 
-    assert( auxRenderTargets <= m_auxRenderTargetVec.size() );
+    assert( auxRenderTargets <= m_auxRenderTargetsData.size() );
 }
 
 // **************************
@@ -125,7 +125,8 @@ void                OffscreenRenderLogic::EnableTopRenderTarget       ( Renderer
 
     if( !m_topRenderTargetEnabled )
     {
-        renderer->Enable( GetTopRenderTarget() );
+        //renderer->Enable( GetTopRenderTarget() );
+        renderer->Enable( GetTopRenderTargetData().renderTarget );
 
         m_topRenderTargetEnabled = true;
     }
@@ -151,7 +152,8 @@ void                OffscreenRenderLogic::DisableTopRenderTarget    ( Renderer *
 {
     if( m_topRenderTargetEnabled )
     {
-        renderer->Disable( GetTopRenderTarget() );
+        // renderer->Disable( GetTopRenderTarget() );
+        renderer->Disable( GetTopRenderTargetData().renderTarget );
 
         m_topRenderTargetEnabled = false;
     }
@@ -163,7 +165,19 @@ void                OffscreenRenderLogic::DrawTopAuxRenderTarget    ( Renderer *
 {
     DisableTopRenderTarget( renderer );
 
-//    auto rtd = 
+    auto topRTD = GetTopRenderTargetData();
+    auto prvRTD = GetRenderTargetDataAt( GetNumAllocatedRenderTargets() - 2 );
+
+    auto eff = topRTD.effectTexture2D;
+    eff->SetAlphaValModel( alphaVal );
+
+    renderer->Enable( prvRTD.renderTarget );
+    renderer->SetCamera( m_displayCamera );
+    renderer->Draw( topRTD.quad );
+    renderer->SetCamera( m_rendererCamera );
+    renderer->Disable( prvRTD.renderTarget );
+
+    /*
     auto rt = GetPrevRenderTarget();
     auto rq = GetTopRenderQuad();
 
@@ -175,6 +189,7 @@ void                OffscreenRenderLogic::DrawTopAuxRenderTarget    ( Renderer *
     renderer->Draw( rq );
     renderer->SetCamera( m_rendererCamera );
     renderer->Disable( rt );
+    */
 }
 
 // **************************
@@ -239,7 +254,7 @@ RenderTargetData    OffscreenRenderLogic::GetRenderTargetDataAt           ( unsi
     }
     else
     {
-        return m_auxRenderTargetsData[ i - 2 ]; 
+        return m_auxRenderTargetsData[ i - 1 ]; 
     }
 
     assert( false );
@@ -316,7 +331,9 @@ RenderTargetData    OffscreenRenderLogic::CreateAuxRenderTargetData     () const
     auto rt     = MainDisplayTarget::CreateAuxRenderTarget( m_width, m_height, m_fmt );
     auto quad   = MainDisplayTarget::CreateAuxRect( rt->ColorTexture( 0 ) );
 
-    return CreateRenderTargetData( rt, quad, nullptr, nullptr );
+    auto txEff = std::static_pointer_cast< Texture2DEffect >( quad->GetRenderableEffect() );
+
+    return CreateRenderTargetData( rt, quad, txEff, nullptr );
 }
 
 // **************************
