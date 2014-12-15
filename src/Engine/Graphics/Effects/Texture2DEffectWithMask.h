@@ -29,6 +29,8 @@ public:
                 ~Texture2DEffectWithMask();
 
     void        SetAlphaValModel        ( const IValue * val );
+    void        SetTexture              ( Texture2DPtr texture );
+    void        SetMask                 ( Texture2DPtr texture );
 
 private:
 

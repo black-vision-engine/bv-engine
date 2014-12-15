@@ -62,6 +62,26 @@ void    Texture2DEffectWithMask::SetAlphaValModel   ( const IValue * val )
 
 // ****************************
 //
+void    Texture2DEffectWithMask::SetTexture         ( Texture2DPtr texture )
+{
+    auto ps = GetPass( 0 )->GetPixelShader();
+    auto params = ps->GetParameters();
+
+    params->SetTexture( 0, texture );
+}
+
+// ****************************
+//
+void    Texture2DEffectWithMask::SetMask            ( Texture2DPtr texture )
+{
+    auto ps = GetPass( 0 )->GetPixelShader();
+    auto params = ps->GetParameters();
+
+    params->SetTexture( 1, texture );
+}
+
+// ****************************
+//
 PixelShader *   Texture2DEffectWithMask::CreatePS   ( Texture2DPtr texture, Texture2DPtr mask, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor, bool hasAlpha )
 {
     //FIXME: may not be the safest thing to do
