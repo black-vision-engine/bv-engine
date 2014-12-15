@@ -316,14 +316,16 @@ bool        AICommandEnableOverridenAlpha::TriggerImpl          ( TimeType t )
     {
         auto state = m_node->GetOverrideState();
         auto alpha = state->GetAlphaParam();
-        
-        SetParameter( alpha, 0.f, 1.f );
+
         /*
+        SetParameter( alpha, 0.f, 1.f );
+        */
+
         SetParameter( alpha, t, 1.f );
         SetParameter( alpha, t + 2.5f, 0.f );
         SetParameter( alpha, t + 5.5f, 0.f );
         SetParameter( alpha, t + 8.f, 1.f );
-        */
+
         m_node->EnableOverrideState();
 
         return true;

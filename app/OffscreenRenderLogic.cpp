@@ -51,20 +51,8 @@ OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int 
 {
     m_displayCamera         = MainDisplayTarget::CreateDisplayCamera();
 
-    m_displayRenderTargetData[ 0 ] = CreateDisplayRenderTarget();
-    m_displayRenderTargetData[ 1 ] = CreateDisplayRenderTarget();
-
-    m_displayRenderTargets[ 0 ] = MainDisplayTarget::CreateDisplayRenderTarget( width, height, fmt );
-    m_displayRenderTargets[ 1 ] = MainDisplayTarget::CreateDisplayRenderTarget( width, height, fmt );
-
-    m_displayQuads[ 0 ]         = MainDisplayTarget::CreateDisplayRect( m_displayRenderTargets[ 0 ]->ColorTexture( 0 ) );
-    m_displayQuads[ 1 ]         = MainDisplayTarget::CreateDisplayRect( m_displayRenderTargets[ 1 ]->ColorTexture( 0 ) );
-
-    std::vector< bv::Transform > vec;
-    vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
-
-    m_displayQuads[ 0 ]->SetWorldTransforms( vec );
-    m_displayQuads[ 1 ]->SetWorldTransforms( vec );
+    m_displayRenderTargetData[ 0 ] = CreateDisplayRenderTargetData();
+    m_displayRenderTargetData[ 1 ] = CreateDisplayRenderTargetData();
 
     for( unsigned int i = 0; i < m_readbackTextures.size(); ++i )
     {
@@ -76,9 +64,6 @@ OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int 
 //
 OffscreenRenderLogic::~OffscreenRenderLogic  ()
 {
-    delete m_displayRenderTargets[ 0 ];
-    delete m_displayRenderTargets[ 1 ];
-
     for( auto rt : m_auxRenderTargetVec )
     {
         delete rt;
@@ -101,9 +86,6 @@ OffscreenRenderLogic::~OffscreenRenderLogic  ()
         delete m_displayRenderTargetData[ i ].quad;
     }
 
-    delete m_displayQuads[ 0 ];
-    delete m_displayQuads[ 1 ];
-
     delete m_displayCamera;
 }
 
@@ -120,13 +102,16 @@ void                OffscreenRenderLogic::AllocateNewRenderTarget     ( Renderer
 
     auto auxRenderTargets = m_usedStackedRenderTargets - 1;
 
-    if( auxRenderTargets > m_auxRenderTargetVec.size() )
+    if( auxRenderTargets > m_auxRenderTargetsData.size() )
     {
-        auto rt = CreateAuxRenderTarget( renderer );
+        auto rtd = CreateAuxRenderTargetData();
+        auto rt = CreateAuxRenderTarget();
         auto aq = CreateAuxQuad( rt );
 
         m_auxRenderTargetVec.push_back( rt );
         m_auxQuadVec.push_back( aq );
+
+        m_auxRenderTargetsData.push_back( rtd );
     }
 
     assert( auxRenderTargets <= m_auxRenderTargetVec.size() );
@@ -178,6 +163,7 @@ void                OffscreenRenderLogic::DrawTopAuxRenderTarget    ( Renderer *
 {
     DisableTopRenderTarget( renderer );
 
+//    auto rtd = 
     auto rt = GetPrevRenderTarget();
     auto rq = GetTopRenderQuad();
 
@@ -216,6 +202,49 @@ void                OffscreenRenderLogic::DrawAMTopTwoRenderTargets ( Renderer *
     renderer->SetCamera( m_rendererCamera );
     renderer->Disable( rt );
     */
+}
+
+// **************************
+//
+RenderTargetData    OffscreenRenderLogic::GetTopRenderTargetData          () const
+{
+    if( m_usedStackedRenderTargets == 1 )
+    {
+        return CurDisplayRenderTargetData();
+    }
+    else if( m_usedStackedRenderTargets > 1 )
+    {
+        return m_auxRenderTargetsData[ m_usedStackedRenderTargets - 2 ]; 
+    }
+
+    assert( false );
+
+    return RenderTargetData();
+}
+
+// **************************
+//
+RenderTargetData    OffscreenRenderLogic::GetRenderTargetDataAt           ( unsigned int i ) const
+{
+    if( i >= m_usedStackedRenderTargets )
+    {
+        assert( false );
+
+        return RenderTargetData();
+    }
+
+    if( i == 0 )
+    {
+        return CurDisplayRenderTargetData();
+    }
+    else
+    {
+        return m_auxRenderTargetsData[ i - 2 ]; 
+    }
+
+    assert( false );
+
+    return RenderTargetData();
 }
 
 // **************************
@@ -272,7 +301,7 @@ TriangleStrip *      OffscreenRenderLogic::GetTopRenderQuad         () const
 
 // **************************
 //
-RenderTargetData    OffscreenRenderLogic::CreateDisplayRenderTarget   () const
+RenderTargetData    OffscreenRenderLogic::CreateDisplayRenderTargetData () const
 {
     auto rt   = MainDisplayTarget::CreateDisplayRenderTarget( m_width, m_height, m_fmt );
     auto quad = MainDisplayTarget::CreateDisplayRect( rt->ColorTexture( 0 ) );
@@ -282,7 +311,7 @@ RenderTargetData    OffscreenRenderLogic::CreateDisplayRenderTarget   () const
 
 // **************************
 //
-RenderTargetData    OffscreenRenderLogic::CreateAuxRenderTarget       () const
+RenderTargetData    OffscreenRenderLogic::CreateAuxRenderTargetData     () const
 {
     auto rt     = MainDisplayTarget::CreateAuxRenderTarget( m_width, m_height, m_fmt );
     auto quad   = MainDisplayTarget::CreateAuxRect( rt->ColorTexture( 0 ) );
@@ -318,14 +347,14 @@ void                OffscreenRenderLogic::SetDefaultTransform       ( TriangleSt
 
 // **************************
 //
-RenderTarget *      OffscreenRenderLogic::CreateAuxRenderTarget     ( Renderer * renderer )
+RenderTarget *      OffscreenRenderLogic::CreateAuxRenderTarget     () const
 {
     return MainDisplayTarget::CreateAuxRenderTarget( m_width, m_height, m_fmt );
 }
 
 // **************************
 //
-TriangleStrip *     OffscreenRenderLogic::CreateAuxQuad             ( RenderTarget * rt )
+TriangleStrip *     OffscreenRenderLogic::CreateAuxQuad             ( RenderTarget * rt ) const
 {
     auto retQuad = MainDisplayTarget::CreateAuxRect( rt->ColorTexture( 0 ) );
 
@@ -364,14 +393,21 @@ void                OffscreenRenderLogic::DrawDisplayRenderTarget   ( Renderer *
 
 // **************************
 //
-unsigned int        OffscreenRenderLogic::TotalNumReadBuffers       () const
+unsigned int    OffscreenRenderLogic::GetNumAllocatedRenderTargets  () const
+{
+    return m_usedStackedRenderTargets;
+}
+
+// **************************
+//
+unsigned int    OffscreenRenderLogic::TotalNumReadBuffers           () const
 {
     return (unsigned int) m_readbackTextures.size();
 }
 
 // **************************
 //
-unsigned int        OffscreenRenderLogic::NumReadBuffersPerRT       () const
+unsigned int    OffscreenRenderLogic::NumReadBuffersPerRT           () const
 {
     return TotalNumReadBuffers() / GNumRenderTargets;
 }
@@ -398,16 +434,23 @@ unsigned int      OffscreenRenderLogic::CurDisplayRenderTargetNum   () const
 
 // **************************
 //
-RenderTarget *    OffscreenRenderLogic::CurDisplayRenderTarget      () const
+RenderTargetData  OffscreenRenderLogic::CurDisplayRenderTargetData  () const
 {
-    return m_displayRenderTargets[ m_curDisplayTarget ];
+    return m_displayRenderTargetData[ m_curDisplayTarget ];
 }
 
 // **************************
 //
-TriangleStrip *   OffscreenRenderLogic:: CurDisplayQuad              () const
+RenderTarget *    OffscreenRenderLogic::CurDisplayRenderTarget      () const
 {
-    return m_displayQuads[ m_curDisplayTarget ];
+    return m_displayRenderTargetData[ m_curDisplayTarget ].renderTarget;
+}
+
+// **************************
+//
+TriangleStrip *   OffscreenRenderLogic:: CurDisplayQuad             () const
+{
+    return m_displayRenderTargetData[ m_curDisplayTarget ].quad;
 }
 
 } //bv

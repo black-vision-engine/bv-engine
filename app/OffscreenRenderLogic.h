@@ -41,7 +41,7 @@ private:
 
     TextureFormat       m_fmt;
 
-    int                 m_usedStackedRenderTargets;
+    unsigned int        m_usedStackedRenderTargets;
     bool                m_topRenderTargetEnabled;
 
     RenderTargetDataVec m_auxRenderTargetsData;
@@ -49,9 +49,6 @@ private:
 
     std::vector<RenderTarget *>     m_auxRenderTargetVec;
     std::vector<TriangleStrip *>    m_auxQuadVec;
-
-    RenderTarget *      m_displayRenderTargets[ 2 ];
-    TriangleStrip *     m_displayQuads[ 2 ];
 
     unsigned int        m_curDisplayTarget;
     unsigned int        m_buffersPerTarget;
@@ -79,19 +76,22 @@ public:
 
 private:
 
-    RenderTarget *      GetTopRenderTarget          () const;
-    RenderTarget *      GetPrevRenderTarget         () const;
-    TriangleStrip *     GetTopRenderQuad            () const;
+    RenderTargetData    GetTopRenderTargetData          () const;
+    RenderTargetData    GetRenderTargetDataAt           ( unsigned int i ) const;
 
-    RenderTargetData    CreateDisplayRenderTarget   () const;
-    RenderTargetData    CreateAuxRenderTarget       () const;
+    RenderTarget *      GetTopRenderTarget              () const;
+    RenderTarget *      GetPrevRenderTarget             () const;
+    TriangleStrip *     GetTopRenderQuad                () const;
+
+    RenderTargetData    CreateDisplayRenderTargetData   () const;
+    RenderTargetData    CreateAuxRenderTargetData       () const;
 
     RenderTargetData    CreateRenderTargetData      ( RenderTarget * rt, TriangleStrip * ts, Texture2DEffectPtr effTx, Texture2DEffectWithMaskPtr effTxMask ) const;
 
     void                SetDefaultTransform         ( TriangleStrip * ts ) const;
 
-    RenderTarget *      CreateAuxRenderTarget       ( Renderer * renderer );
-    TriangleStrip *     CreateAuxQuad               ( RenderTarget * rt );
+    RenderTarget *      CreateAuxRenderTarget       () const;
+    TriangleStrip *     CreateAuxQuad               ( RenderTarget * rt ) const;
 
 public:
 
@@ -101,6 +101,7 @@ public:
 
     void                DrawDisplayRenderTarget     ( Renderer * renderer );
 
+    unsigned int        GetNumAllocatedRenderTargets() const;
     unsigned int        TotalNumReadBuffers         () const;
     unsigned int        NumReadBuffersPerRT         () const;
 
@@ -110,6 +111,7 @@ private:
 
     unsigned int        CurDisplayRenderTargetNum   () const;
 
+    RenderTargetData    CurDisplayRenderTargetData  () const;
     RenderTarget *      CurDisplayRenderTarget      () const;
     TriangleStrip *     CurDisplayQuad              () const;
 };
