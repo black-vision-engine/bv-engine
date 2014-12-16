@@ -20,10 +20,10 @@ namespace bv {
 //
 TestAIManager::TestAIManager   ()
 {
-    m_presets.reserve( 6 );
-    m_timelines.reserve( 6 );
+    m_presets.reserve( 7 );
+    m_timelines.reserve( 7 );
 
-    for( unsigned int i = 0; i < 6; ++i )
+    for( unsigned int i = 0; i < 7; ++i )
     {
         m_presets.push_back( nullptr );
         m_timelines.push_back( nullptr );
@@ -72,7 +72,7 @@ TestAI *        TestAIManager::GetAIPreset  ( unsigned int idx, model::IModelNod
 
     if( m_presets[ idx ] == nullptr )
     {
-        if( idx == 3 )
+        if( idx == 3 || idx == 6 )
             m_presets[ idx ] = PreparePreset( idx, node );
         else
             m_presets[ idx ] = PreparePreset( idx );
@@ -101,7 +101,10 @@ TestAI *        TestAIManager::PreparePreset    ( unsigned int idx, model::IMode
     {
         return PreparePreset3( node );
     }
-
+    else if( idx == 6 )
+    {
+        return PreparePreset6( node );
+    }
     return nullptr;
 }
 
