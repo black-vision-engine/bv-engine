@@ -57,6 +57,7 @@ DefaultPluginParamValModelPtr   DefaultPrismPluginDesc::CreateDefaultModel   ( I
 
     //Set default parameters
     paramN->SetVal( 5.f, 0.f ); // FIXME: this is f*)*(&ing ridiculous!
+								// BTW, this is due to DEFAULT_TEXTURE bug with topology updates ;)
 
     return model;
 }
