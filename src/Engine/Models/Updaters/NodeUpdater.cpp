@@ -102,7 +102,7 @@ void    NodeUpdater::DoUpdate        ()
     if( m_modelNode->IsVisible() )
     {
         m_sceneNode->SetVisible( true );
-        m_sceneNode->SetOverriden( m_modelNode->IsStateOverriden() );
+        m_sceneNode->SetOverridenAM( m_modelNode->IsStateOverriden() );
 
         UpdateTransform();
 

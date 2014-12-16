@@ -29,6 +29,8 @@ public:
                 ~Texture2DEffectWithMask();
 
     void        SetAlphaValModel        ( const IValue * val );
+    void        SetTexture              ( Texture2DPtr texture );
+    void        SetMask                 ( Texture2DPtr texture );
 
 private:
 
@@ -38,5 +40,8 @@ private:
     TextureSampler *    CreateSampler   ( TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor );
 
 };
+
+DEFINE_PTR_TYPE(Texture2DEffectWithMask)
+DEFINE_CONST_PTR_TYPE(Texture2DEffectWithMask)
 
 } //bv

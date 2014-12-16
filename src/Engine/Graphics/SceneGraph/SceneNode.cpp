@@ -8,7 +8,8 @@ namespace bv {
 // ********************************
 //
 SceneNode::SceneNode           ( TransformableEntity * transformRep )
-    : m_overridenState( false )
+    : m_overridenStateAlphaMask( false )
+    , m_overridenStateNodeMask( false )
     , m_overrideAlphaVal( nullptr )
 {
     RegisterTransformRep( transformRep );
@@ -96,22 +97,6 @@ void            SceneNode::RegisterTransformRep ( TransformableEntity * transfor
 
 // ********************************
 //
-void            SceneNode::SetOverrideAlpha     ( const IValue * val )
-{
-    assert( val != nullptr );
-
-    m_overrideAlphaVal = val;
-}
-
-// ********************************
-//
-const IValue * SceneNode::GetOverrideAlpha      () const
-{
-    return m_overrideAlphaVal;
-}
-
-// ********************************
-//
 void            SceneNode::Update               ( const std::vector< Transform > & parentTransforms )
 {
     const std::vector< Transform > * pWorldTransforms = &parentTransforms;
@@ -152,16 +137,46 @@ void                    SceneNode::SetVisible   ( bool visible )
 
 // ********************************
 //
-bool                    SceneNode::IsOverriden  () const
+void            SceneNode::SetOverrideAlphaVal  ( const IValue * val )
 {
-    return m_overridenState;
+    assert( val != nullptr );
+
+    m_overrideAlphaVal = val;
 }
 
 // ********************************
 //
-void                    SceneNode::SetOverriden ( bool overriden )
+const IValue * SceneNode::GetOverrideAlphaVal   () const
 {
-    m_overridenState = overriden;
+    return m_overrideAlphaVal;
+}
+
+// ********************************
+//
+bool                    SceneNode::IsOverridenAM() const
+{
+    return m_overridenStateAlphaMask;
+}
+
+// ********************************
+//
+bool                    SceneNode::IsOverridenNM() const
+{
+    return m_overridenStateNodeMask;
+}
+
+// ********************************
+//
+void                    SceneNode::SetOverridenAM( bool overriden )
+{
+    m_overridenStateAlphaMask = overriden;
+}
+
+// ********************************
+//
+void                    SceneNode::SetOverridenNM( bool overriden )
+{
+    m_overridenStateNodeMask = overriden;
 }
 
 } //bv

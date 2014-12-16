@@ -254,6 +254,8 @@ TestAI *        TestAIManager::PreparePreset2   () const
     return ai;
 }
 
+#define PRESET1
+
 // *********************************
 //
 TestAI *        TestAIManager::PreparePreset3   ( model::IModelNodePtr node ) const
@@ -261,13 +263,33 @@ TestAI *        TestAIManager::PreparePreset3   ( model::IModelNodePtr node ) co
     auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ) );
 
     TestAI * ai = new TestAI( timeline, node );
-
-    auto c0 = new AICommandEnableOverridenAlpha( node, "./node0", 2.f );
-    auto c1 = new AICommandDisableAlpha( node, "./node0", 10.f );
-    auto c2 = new AICommandEnableOverridenAlpha( node, "./node0/node02", 12.f );
+    
+#ifdef PRESET0
+    auto c0 = new AICommandEnableOverridenAlpha( node, ".", 2.f );
+    auto c1 = new AICommandEnableOverridenAlpha( node, "./node0/node02", 5.f );
+    auto c2 = new AICommandDisableAlpha( node, ".", 20.f );
     auto c3 = new AICommandDisableAlpha( node, "./node0/node02", 22.f );
-    auto c4 = new AICommandEnableOverridenAlpha( node, ".", 25.f );
-    auto c5 = new AICommandDisableAlpha( node, ".", 35.f );
+
+    ai->AddCommand( c0 );
+    ai->AddCommand( c1 );
+    ai->AddCommand( c2 );
+    ai->AddCommand( c3 );
+
+    return ai;
+#endif
+
+#ifdef PRESET1
+
+    auto c0 = new AICommandEnableOverridenAlpha( node, "./node0/node02", 0.f );
+    auto c1 = new AICommandEnableOverridenAlpha( node, "./node0", 1.f );
+    auto c2 = new AICommandEnableOverridenAlpha( node, ".", 2.f );
+    auto c3 = new AICommandDisableAlpha( node, "./node0/node02", 10.f );
+    auto c4 = new AICommandDisableAlpha( node, "./node0", 11.f );
+    auto c5 = new AICommandDisableAlpha( node, ".", 12.f );
+    auto c6 = new AICommandEnableOverridenAlpha( node, "./node0/node02", 13.f );
+    auto c7 = new AICommandDisableAlpha( node, "./node0/node02", 23.f );
+    auto c8 = new AICommandEnableOverridenAlpha( node, ".", 26.f );
+    auto c9 = new AICommandDisableAlpha( node, ".", 36.f );
 
     ai->AddCommand( c0 );
     ai->AddCommand( c1 );
@@ -275,8 +297,13 @@ TestAI *        TestAIManager::PreparePreset3   ( model::IModelNodePtr node ) co
     ai->AddCommand( c3 );
     ai->AddCommand( c4 );
     ai->AddCommand( c5 );
+    ai->AddCommand( c6 );
+    ai->AddCommand( c7 );
+    ai->AddCommand( c8 );
+    ai->AddCommand( c9 );
 
     return ai;
+#endif
 }
 
 // *********************************
