@@ -456,7 +456,7 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
 
     //return node0;
 
-    //return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );
+    return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );
     //TestQueryNode( timelineManager, timeEvaluator ); //FIXME: remove or uncomment after tests
     //auto c0 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node0" );
     //auto c1 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node1" );

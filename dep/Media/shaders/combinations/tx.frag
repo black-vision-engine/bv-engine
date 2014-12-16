@@ -10,7 +10,7 @@ uniform float alpha;
 
 void main()
 {
-	float col = texture( Tex0, uvCoord );
-	FragColor = vec4( 1.0, 1.0, 1.0, 1.0 ) * col * alpha; 
+	vec4 col = texture( Tex0, uvCoord );
+	FragColor = col * alpha; 
 	//FragColor = col * col.a * alpha;  //This one uses premultiplied RGB values
 }

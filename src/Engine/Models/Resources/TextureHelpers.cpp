@@ -11,7 +11,7 @@ namespace bv { namespace model {
 
 // *********************************
 //
-MemoryChunkConstPtr TextureHelper::LoadImg( const std::string & filePath, int * width, int * heigth, int * bpp, bool loadFromMemory )
+MemoryChunkConstPtr TextureHelper::LoadImg( const std::string & filePath, unsigned int * width, unsigned int * heigth, unsigned int * bpp, bool loadFromMemory )
 {
     auto fipImg = std::make_shared< fipImage >();
 
@@ -20,7 +20,7 @@ MemoryChunkConstPtr TextureHelper::LoadImg( const std::string & filePath, int * 
         // FIXME: Crash when file doesn't exist
         char * bufToRead = new char[ File::Size( filePath ) ]; 
 
-        int bytes = File::Read( bufToRead, filePath );
+        SizeType bytes = File::Read( bufToRead, filePath );
 
         fipMemoryIO fipIO( ( BYTE * ) bufToRead, ( DWORD ) bytes );
 
@@ -58,7 +58,7 @@ MemoryChunkConstPtr TextureHelper::LoadImg( const std::string & filePath, int * 
 
 // *********************************
 //
-MemoryChunkConstPtr TextureHelper::LoadRAW ( const std::string& filePath )
+MemoryChunkConstPtr TextureHelper::LoadRAW ( const std::string & filePath )
 {
 	auto size = File::Size( filePath );
 
@@ -70,7 +70,7 @@ MemoryChunkConstPtr TextureHelper::LoadRAW ( const std::string& filePath )
 
 // *********************************
 //
-void TextureHelper::WriteRAW( const std::string& filePath, MemoryChunkConstPtr data )
+void TextureHelper::WriteRAW( const std::string & filePath, MemoryChunkConstPtr data )
 {
 	auto f = File::Open( filePath, File::FOMReadWrite );
 	f.Write( data->Get(), data->Size() );
@@ -79,9 +79,9 @@ void TextureHelper::WriteRAW( const std::string& filePath, MemoryChunkConstPtr d
 
 // *********************************
 //
-void TextureHelper::WriteBMP( const std::string& filePath, MemoryChunkConstPtr data, SizeType width, SizeType height, SizeType bpp )
+void TextureHelper::WriteBMP( const std::string & filePath, MemoryChunkConstPtr data, unsigned int width, unsigned int height, unsigned int bpp )
 {
-    fipImage*  fipImg = new fipImage( FREE_IMAGE_TYPE::FIT_BITMAP, (unsigned int)width, (unsigned int)height, (unsigned int)bpp );
+    fipImage*  fipImg = new fipImage( FREE_IMAGE_TYPE::FIT_BITMAP, width, height, bpp );
 
     auto pixels = fipImg->accessPixels();
 
@@ -94,7 +94,7 @@ void TextureHelper::WriteBMP( const std::string& filePath, MemoryChunkConstPtr d
 
 // *********************************
 //
-inline unsigned char GetPixelColor( int x, int y, const char* data, SizeType width, SizeType height )
+inline unsigned char GetPixelColor( unsigned int x, unsigned int y, const char* data, unsigned int width, unsigned  int height )
 {
     if( x < 0 || x >= width || y < 0 || y >= height )
         return 0;
@@ -103,14 +103,14 @@ inline unsigned char GetPixelColor( int x, int y, const char* data, SizeType wid
 
 // *********************************
 //
-inline void SetPixelColor( int x, int y, char* data, int width, int height, char color )
+inline void SetPixelColor( unsigned int x, unsigned int y, char* data, unsigned int width, unsigned int height, char color )
 {
     memset( &( data[ 4 * ( x + y * width ) ] ), color, 4 );
 }
 
 // *********************************
 //
-MemoryChunkConstPtr TextureHelper::Blur( MemoryChunkConstPtr data, SizeType width, SizeType height, SizeType bpp, SizeType blurSize )
+MemoryChunkConstPtr TextureHelper::Blur( MemoryChunkConstPtr data, unsigned int width, unsigned int height, unsigned int bpp, unsigned int blurSize )
 {
     auto numBytes = width * height * bpp / 8;
 
@@ -119,12 +119,12 @@ MemoryChunkConstPtr TextureHelper::Blur( MemoryChunkConstPtr data, SizeType widt
 
     float kernelSize = float( blurSize * 2 + 1 );
 
-    for ( int y = 0; y < height; ++y )
+    for ( unsigned int y = 0; y < height; ++y )
     {
-        for ( Int32 x = 0; x < width; ++x )
+        for ( unsigned int x = 0; x < width; ++x )
         {
             float currVal = 0.f;
-            for( Int32 i = - (Int32)blurSize; i <= (Int32)blurSize; ++i )
+            for( int i = - (Int32)blurSize; i <= (Int32)blurSize; ++i )
                 currVal += GetPixelColor( x + i, y, data->Get(), width, height );
             currVal /= kernelSize;
             if (currVal > 0.f)
@@ -133,18 +133,17 @@ MemoryChunkConstPtr TextureHelper::Blur( MemoryChunkConstPtr data, SizeType widt
         }
     }
 
-    for ( int x = 0; x < width; ++x )
+    for ( unsigned int x = 0; x < width; ++x )
     {
-        for ( int y = 0; y < height; ++y )
+        for ( unsigned int y = 0; y < height; ++y )
         {
             float currVal = 0.f;
-            for( int i = -blurSize; i <= blurSize; ++i )
+            for( int i = -(int)blurSize; i <= (int)blurSize; ++i )
                 currVal += GetPixelColor( x, y + i , tmp, height, width );
             currVal /= kernelSize;
             SetPixelColor( x, y, out, width, height, (unsigned char)(currVal) );
         }
     }
-
 
     delete [] tmp;
     return std::make_shared< MemoryChunk >( out, numBytes );

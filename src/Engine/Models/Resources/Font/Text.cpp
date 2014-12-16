@@ -266,7 +266,7 @@ void                Text::BuildAtlas        ()
     if ( m_blurSize > 0 )
     {
         auto oldData = m_atlas->m_textureHandle;
-        m_atlas->m_textureHandle->SetData( TextureHelper::Blur( oldData->GetData(), m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel(), m_blurSize ) );
+        m_atlas->m_textureHandle->SetData( TextureHelper::Blur( oldData->GetData(), (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel(), (unsigned int) m_blurSize ) );
     }
 
 	auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
@@ -279,7 +279,7 @@ void                Text::BuildAtlas        ()
 
 #ifdef GENERATE_TEST_BMP_FILE
 
-    TextureHelper::WriteBMP( "test.bmp", m_atlas->GetData(), m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() );
+    TextureHelper::WriteBMP( "test.bmp", m_atlas->GetData(), (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel() );
 #endif // GENERATE_TEST_BMP_FILE
 
 #ifdef MAKE_FREETYPE_TESTING_TEXT

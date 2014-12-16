@@ -13,11 +13,11 @@ TextureLoader::TextureLoader( bool loadFormMemory )
 //
 ResourceHandle *        TextureLoader::LoadResource        ( IResource * res )  const
 {
-    int width   = 0;
-    int height  = 0;
-    int bpp     = 0;
+    unsigned int width   = 0;
+    unsigned int height  = 0;
+    unsigned int bpp     = 0;
 
-    auto data = TextureHelper::LoadRAW( res->GetFilePath() );
+    auto data = TextureHelper::LoadImg( res->GetFilePath(), &width, &height, &bpp );
 
     if ( data != nullptr )
     {
@@ -30,21 +30,21 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource * res )  
 
 // ******************************
 //
-unsigned int TextureExtraData::GetWidth            () const
+SizeType TextureExtraData::GetWidth            () const
 {
     return m_width;
 }
 
 // ******************************
 //
-unsigned int TextureExtraData::GetHeight           () const
+SizeType TextureExtraData::GetHeight           () const
 {
     return m_height;
 }
 
 // ******************************
 //
-unsigned int TextureExtraData::GetBitsPerPixel     () const
+SizeType TextureExtraData::GetBitsPerPixel     () const
 {
     return m_bitsPerPixel;
 }
