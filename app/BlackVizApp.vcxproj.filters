@@ -30,6 +30,7 @@
     <ClCompile Include="Helpers\RectNodeBuilder.cpp" />
     <ClCompile Include="Rendering\OffscreenRenderLogic.cpp" />
     <ClCompile Include="Rendering\RenderLogic.cpp" />
+    <ClCompile Include="Widgets\Crawler\Crawler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
@@ -79,6 +80,7 @@
     <ClInclude Include="Helpers\RectNodeBuilder.h" />
     <ClInclude Include="Rendering\OffscreenRenderLogic.h" />
     <ClInclude Include="Rendering\RenderLogic.h" />
+    <ClInclude Include="Widgets\Crawler\Crawler.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MockFonts">
