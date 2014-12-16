@@ -11,8 +11,8 @@ struct Glyph
 
   SizeType		    width;      // width of the glyph in pixels
   SizeType		    height;     // height of the glyph in pixels
-  signed long       advanceX;    // number of pixels to advance on x axis
-  signed long       advanceY;    // number of pixels to advance on y axis
+  Int32				advanceX;    // number of pixels to advance on x axis
+  Int32				advanceY;    // number of pixels to advance on y axis
 
   int               bearingX;   // x offset of top-left corner from x axis
   int               bearingY;   // y offset of top-left corner from y axis

@@ -159,6 +159,7 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
         if( auto glyph = textAtlas->GetGlyph( wch, outline ) )
         {
             glm::vec3 bearing = glm::vec3( (float)glyph->bearingX / (float)viewWidth, (float)( glyph->bearingY - (int)glyph->height ) / (float)viewHeight, 0.f );
+			//glm::vec3 bearing = glm::vec3( 0.f / (float)viewWidth, (float)( glyph->bearingY - (int)glyph->height ) / (float)viewHeight, 0.f );
 
             glm::vec3 quadBottomLeft;
             glm::vec3 quadBottomRight;
@@ -215,7 +216,7 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
             vertexAttributeChannel->AddConnectedComponent( connComp );
 
             {
-                translate += glm::vec3( glyph->advanceX / (float)viewWidth, 0.f, 0.f ) + interspace;
+				translate += glm::vec3( ( glyph->advanceX ) / (float)viewWidth, 0.f, 0.f ) + interspace;
             }
         }
         else

@@ -286,7 +286,6 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 				// more than one glyph.
 				Int32 bearingX	= m_face->glyph->metrics.horiBearingX >> 6;
 				Int32 bearingY	= m_face->glyph->metrics.horiBearingY >> 6;
-				Int32 advance	= m_face->glyph->advance.x >> 6;
 
 				// Get some metrics of our image.
 				int imgWidth = (int)rect.Width(),
@@ -311,6 +310,12 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 				newGlyph->bearingY = bearingY;
 				newGlyph->advanceX = m_face->glyph->advance.x >> 6;
 				newGlyph->advanceY = m_face->glyph->advance.y >> 6;
+
+				//if( outlineWidth != 0 )
+				//{
+				//	newGlyph->advanceX = std::max( newGlyph->advanceX, (Int32)newGlyph->width );
+				//	newGlyph->advanceY = std::max( newGlyph->advanceY, (Int32)newGlyph->height );
+				//}
 
 				return newGlyph;
 			}
