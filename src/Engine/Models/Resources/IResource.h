@@ -39,14 +39,14 @@ class ResourceHandle
 {
 public: // Only for non intrusive serialization. Should be private
 
-    unsigned int            m_size;
+    SizeType				m_size;
     MemoryChunkConstPtr     m_data;
 
     IResourceExtraData *    m_extra;
 
 public:
 
-    unsigned int                GetSize             () const { return m_size; }
+    SizeType					GetSize             () const { return m_size; }
     MemoryChunkConstPtr         GetData             () const { return m_data; }
     MemoryChunkConstPtr         GetWritableData     () const { return m_data; }
     const IResourceExtraData *  GetExtra            () const { return m_extra; }
@@ -58,7 +58,7 @@ public:
         , m_extra( nullptr )
     {}
 
-    ResourceHandle( MemoryChunkConstPtr data, unsigned int size, IResourceExtraData * extra = nullptr )
+    ResourceHandle( MemoryChunkConstPtr data, SizeType size, IResourceExtraData * extra = nullptr )
         : m_data( data )
         , m_size( size )
         , m_extra( extra )

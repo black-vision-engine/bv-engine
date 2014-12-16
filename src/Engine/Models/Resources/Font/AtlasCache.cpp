@@ -13,6 +13,7 @@
 #include "Engine/Models/Resources/TextureHelpers.h"
 #include "Engine/Models/Resources/TextureLoader.h"
 #include "Engine/Models/Resources/ModelTextureManager.h"
+#include "Engine/Models/Resources/IResource.h"
 
 #include "hashlibpp.h"
 
@@ -27,11 +28,12 @@ FontAtlasCacheEntry::FontAtlasCacheEntry()
 
 // *********************************
 //
-FontAtlasCacheEntry::FontAtlasCacheEntry(   TextAtlas* textAtlas
+FontAtlasCacheEntry::FontAtlasCacheEntry(   const TextAtlas* textAtlas
                                          ,  const std::string& fontName
-                                         ,  unsigned int fontSize
-                                         ,  unsigned int blurSize
+                                         ,  SizeType fontSize
+                                         ,  SizeType blurSize
                                          ,  const std::string& fontFilePath
+										 ,	const std::string & atlasFilePath
                                          ,  bool bold
                                          ,  bool italic )
     : m_textAtlas( textAtlas )
@@ -39,6 +41,7 @@ FontAtlasCacheEntry::FontAtlasCacheEntry(   TextAtlas* textAtlas
     , m_fontSize( fontSize )
     , m_blurSize( blurSize )
     , m_fontFilePath( fontFilePath )
+	, m_atlasFilePath( atlasFilePath )
     , m_bold( bold )
     , m_italic( italic )
 {}
@@ -115,7 +118,7 @@ void                    FontAtlasCache::InitFontCachedTable ()
 
     if ( m_dataBase != nullptr )
     {
-        static std::string sql = "CREATE TABLE IF NOT EXISTS cached_fonts(font_name TEXT, font_size INTEGER, blur_size INTEGER, font_file_name TEXT \
+        static std::string sql = "CREATE TABLE IF NOT EXISTS cached_fonts(font_name TEXT, font_size INTEGER, blur_size INTEGER, outline_width INTEGER, font_file_name TEXT \
                             , bold_flag BOOL, italic_flag BOOL, text_atlas BLOB, test_atlas_data_file TEXT, PRIMARY KEY( font_name , font_size, blur_size, bold_flag, italic_flag ) )";
 
         char* err = nullptr;
@@ -137,27 +140,24 @@ namespace
 
 int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
 {
-    auto out = static_cast< FontAtlasCacheEntry* >( data );
+    auto out = static_cast< FontAtlasCacheEntry * >( data );
 
     assert( argsNum == 8 );
 
     out->m_fontName     = args[ 0 ];
     out->m_fontSize     = std::atoi( args[ 1 ] );
     out->m_blurSize     = std::atoi( args[ 2 ] );
-    out->m_fontFilePath = args[ 3 ];
-    out->m_bold         = std::atoi( args[ 4 ] ) == 0 ? false : true;
-    out->m_italic       = std::atoi( args[ 5 ] ) == 0 ? false : true;
+	out->m_outlineWidth = std::atoi( args[ 3 ] );
+    out->m_fontFilePath = args[ 4 ];
+    out->m_bold         = std::atoi( args[ 5 ] ) == 0 ? false : true;
+    out->m_italic       = std::atoi( args[ 6 ] ) == 0 ? false : true;
     out->m_textAtlas    = new TextAtlas();
-    std::stringstream str(  args[6] );
-    out->m_textAtlas->Load( str );    
+    std::stringstream str(  args[ 7 ] );
+	out->m_atlasFilePath = args[ 8 ];
 
-    int width   = 0;
-    int height  = 0;
-    int bpp     = 0;
+	auto textAtlas		= const_cast< TextAtlas* >( out->m_textAtlas );
 
-    auto resHandle = TextureManager::Get().GetTexture( args[ 7 ] );
-
-    out->m_textAtlas->m_textureHandle = std::const_pointer_cast< ResourceHandle >( resHandle );
+	textAtlas->Load( str );    
 
     return 0;
 }
@@ -165,7 +165,7 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
 }
 // *********************************
 //
-FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fontName, unsigned int fontSize, unsigned int blurSize, const std::string& fontFileName, bool bold, bool italic )
+FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, const std::string& fontFileName, bool bold, bool italic )
 {
     if( !m_dataBase )
     {
@@ -177,6 +177,7 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fo
     std::string sql = "SELECT * FROM cached_fonts WHERE font_name=\'" + fontName + "\'" +
                             " AND font_size = " + std::to_string( fontSize ) +
                             " AND blur_Size = " + std::to_string( blurSize ) +
+							" AND outline_width = " + std::to_string( outlineWidth ) +
                             " AND bold_flag = " + std::to_string( bold ) +
                             " AND italic_flag = " + std::to_string( italic ) + ";";
 
@@ -195,8 +196,28 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fo
             std::cerr << "SQL Error: " << res << std::endl;
     }
 
-    if( ret->m_textAtlas != nullptr )
-        return ret;
+	if( ret->m_textAtlas != nullptr )
+	{
+		auto width	= ret->m_textAtlas->GetWidth();
+		auto height = ret->m_textAtlas->GetHeight();
+		auto bbp	= ret->m_textAtlas->GetBitsPerPixel();
+
+		TextureFormat tf;
+
+		if( bbp == 8 )
+			tf = TextureFormat::F_A8;
+		else if ( bbp = 32 )
+			tf = TextureFormat::F_A8R8G8B8;
+		else
+			assert(false);
+
+		auto resExtra = new TextureExtraData( width, height, bbp, tf, TextureType::T_2D );
+		auto memChunk = TextureHelper::LoadRAW( ret->m_atlasFilePath );
+
+		const_cast< TextAtlas* >( ret->m_textAtlas )->m_textureHandle = std::make_shared< ResourceHandle >( memChunk, width * height * bbp / 8, resExtra );
+
+		return ret;
+	}
     else
         return nullptr;
     
@@ -227,7 +248,7 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
     auto textAtlasStr =  textAtlasStream.str();
 
     auto sha1 = sha1wrapper();
-    auto fontAtlasTextureFileName = CACHE_DIRECTORY + sha1.getHashFromString( textAtlasStr ) + ".bmp";
+    auto fontAtlasTextureFileName = CACHE_DIRECTORY + sha1.getHashFromString( textAtlasStr ) + ".raw";
 
     std::string sqlAdd = std::string( "INSERT OR REPLACE INTO cached_fonts VALUES(" ) 
         + "\'" + data.m_fontName + "\'" + ", " 
@@ -243,7 +264,7 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
     if( ! File::Exists( CACHE_DIRECTORY ) )
         File::CreateDir( CACHE_DIRECTORY );
 
-    TextureHelper::WriteBMP( fontAtlasTextureFileName, data.m_textAtlas->GetData(), data.m_textAtlas->GetWidth(), data.m_textAtlas->GetHeight(), data.m_textAtlas->GetBitsPerPixel() );
+    TextureHelper::WriteRAW( fontAtlasTextureFileName, data.m_textAtlas->GetData() );
 
     sqlite3_stmt* stmt;
     const char* parsed;

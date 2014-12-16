@@ -7,7 +7,7 @@ namespace bv
 
 // ****************************
 //
-MemoryChunk::MemoryChunk     ( char * mem, unsigned int size )
+MemoryChunk::MemoryChunk     ( char * mem, SizeType size )
     : m_memory( nullptr )
     , m_size( 0 )
 {
@@ -23,7 +23,7 @@ MemoryChunk::~MemoryChunk    ()
 
 // ****************************
 //
-void            MemoryChunk::SetDataChunk   ( char * data, unsigned int size )
+void            MemoryChunk::SetDataChunk   ( char * data, SizeType size )
 {
     DeleteMemory();
 
@@ -38,7 +38,7 @@ void            MemoryChunk::SetDataChunk   ( char * data, unsigned int size )
 
 // ****************************
 //
-void            MemoryChunk::Allocate       ( unsigned int size )
+void            MemoryChunk::Allocate       ( SizeType size )
 {
     DeleteMemory();
 
@@ -53,7 +53,7 @@ void            MemoryChunk::Allocate       ( unsigned int size )
 
 // ****************************
 //
-unsigned int    MemoryChunk::Size           () const
+SizeType		MemoryChunk::Size           () const
 {
     return m_size;
 }
@@ -74,7 +74,7 @@ char *          MemoryChunk::GetWritable    ()
 
 // ****************************
 //
-MemoryChunkPtr  MemoryChunk::Create         ( unsigned int size )
+MemoryChunkPtr  MemoryChunk::Create         ( SizeType size )
 {
     auto mc = std::make_shared< MemoryChunk >( nullptr, 0 );
     mc->Allocate( size );

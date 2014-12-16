@@ -8,6 +8,7 @@
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Engine/Models/Resources/Font/FontLoader.h"
 #include "Engine/Models/Resources/Font/Text.h"
+#include "Engine/Models/Resources/Font/Glyph.h"
 
 #include <algorithm>
 
@@ -48,6 +49,7 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
     SimpleFloatEvaluatorPtr     fontSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
 
     SimpleFloatEvaluatorPtr     blurSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
+	SimpleFloatEvaluatorPtr     outlineSizeEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "outlineSize", timeEvaluator );
 
     SimpleFloatEvaluatorPtr     spacingEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "spacing", timeEvaluator );
     SimpleFloatEvaluatorPtr     alignmentEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alignment", timeEvaluator );
@@ -57,7 +59,8 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
     //Register all parameters and evaloators in models
     psModel->RegisterAll( borderColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
-    plModel->RegisterAll( blurSizeEvaluator );
+	plModel->RegisterAll( blurSizeEvaluator );
+    plModel->RegisterAll( outlineSizeEvaluator );
     plModel->RegisterAll( spacingEvaluator );
     plModel->RegisterAll( fontSizeEvaluator );
     plModel->RegisterAll( alignmentEvaluator );
@@ -71,6 +74,7 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
     //Set default values of all parameters
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+	outlineSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     spacingEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
@@ -284,6 +288,7 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
 
     m_fontSizeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
     m_blurSizeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
+	m_outlineSizeParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "outlineSize" ) );
     m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
     m_alignmentParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
     m_precisionParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "precision" ) );
@@ -328,15 +333,13 @@ bool            DefaultTimerPlugin::LoadResource  ( IPluginResourceDescrConstPtr
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() <= 1 );
 
-        auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ) );
+        auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
 
-        m_textAtlas = TextHelper::GetAtlas( fontResource.get(), false, false );
+        m_textAtlas = TextHelper::GetAtlas( fontResource.get() );
 
         InitBigestGlyph();
 
-        auto textureResource = TextHelper::GetAtlasTextureInfo( m_textAtlas );
-
-        auto txInfo = new TextureInfo( textureResource.get(), DefaultTimerPluginDesc::TextureName() );
+		auto textureResource = m_textAtlas->GetResourceHandle();
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = new DefaultTextureDescriptor(     textureResource
@@ -498,11 +501,11 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
 ////////////////////////////
 //
-const GlyphCoords&                  DefaultTimerPlugin::GetGlyphCoords  ( wchar_t wch ) const
+const Glyph *						DefaultTimerPlugin::GetGlyph	( wchar_t wch ) const
 {
-    auto glyphCoords = m_textAtlas->GetGlyphCoords( wch );
-    if( glyphCoords )
-        return *glyphCoords;
+    auto glyph = m_textAtlas->GetGlyph( wch );
+    if( glyph )
+        return glyph;
     else
     {
         assert( !( "Cannot find glyph for char " + wch) );
@@ -633,13 +636,13 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
 
     if( wch != L' ' )
     {
-        auto& coords = GetGlyphCoords( wch );
-        auto& zeroCoords = GetGlyphCoords( m_widestGlyph );
+        auto glyph = GetGlyph( wch );
+        auto zeroGlyph = GetGlyph( m_widestGlyph );
 
-        textureXNorm    = ((float)coords.textureX + (float)zeroCoords.glyphX - 1.f )  / m_textAtlas->GetWidth();
-        textureYNorm    = ((float)coords.textureY + (float)zeroCoords.glyphY - 1.f )  / m_textAtlas->GetHeight();
-        widthNorm       = ((float)zeroCoords.glyphWidth + 2.f )     / m_textAtlas->GetWidth();
-        heightNorm      = ((float)zeroCoords.glyphHeight + 2.f )    / m_textAtlas->GetHeight();
+        textureXNorm    = ((float)glyph->textureX /*+ (float)zeroGlyph->glyphX - 1.f*/ )  / m_textAtlas->GetWidth();
+        textureYNorm    = ((float)glyph->textureY /*+ (float)zeroGlyph->glyphY - 1.f*/ )  / m_textAtlas->GetHeight();
+        widthNorm       = ((float)zeroGlyph->width + 2.f )     / m_textAtlas->GetWidth();
+        heightNorm      = ((float)zeroGlyph->height + 2.f )    / m_textAtlas->GetHeight();
     }
 
     if( IsPlaceHolder( m_timePatern[ connComp ] ) )
@@ -693,14 +696,14 @@ bool                                DefaultTimerPlugin::CheckTimeConsistency ( c
 //
 void                              DefaultTimerPlugin::InitBigestGlyph ()
 {
-    unsigned int width   = 0;
+    SizeType width   = 0;
     wchar_t widest       = L'0';
 
     static const std::wstring numbers = L"0123456789";
 
     for( auto wch : numbers )
     {
-        auto w = m_textAtlas->GetGlyphCoords( wch )->glyphWidth;
+        auto w = m_textAtlas->GetGlyph( wch )->width;
         if( w > width )
         {
             width = w;

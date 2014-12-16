@@ -3,25 +3,27 @@
 #include "boost/serialization/map.hpp"
 
 #include "Text.h"
+#include "Glyph.h"
 #include "Engine/Models/Resources/TextureLoader.h"
 
 namespace boost { namespace serialization {
 
 template< class Archive >
-void serialize( Archive & ar, bv::model::GlyphCoords& glyphCoords, const unsigned int version )
+void serialize( Archive & ar, bv::model::Glyph & glyph, const unsigned int version )
 {
-    ar & glyphCoords.textureX;
-    ar & glyphCoords.textureY;
-    ar & glyphCoords.width;
-    ar & glyphCoords.height;
-    ar & glyphCoords.bearingX;
-    ar & glyphCoords.bearingY;
-    ar & glyphCoords.advanceX;
-    ar & glyphCoords.advanceY;
-    ar & glyphCoords.glyphX;
-    ar & glyphCoords.glyphY;
-    ar & glyphCoords.glyphWidth;
-    ar & glyphCoords.glyphHeight;
+    ar & glyph.textureX;
+    ar & glyph.textureY;
+    ar & glyph.width;
+    ar & glyph.height;
+    ar & glyph.bearingX;
+    ar & glyph.bearingY;
+    ar & glyph.advanceX;
+    ar & glyph.advanceY;
+	ar & glyph.padding;
+//    ar & glyphCoords.glyphX;
+//    ar & glyphCoords.glyphY;
+//    ar & glyphCoords.glyphWidth;
+//    ar & glyphCoords.glyphHeight;
 }
 
 template< >
@@ -40,7 +42,7 @@ void serialize< boost::archive::text_iarchive >( boost::archive::text_iarchive &
 
     textAtlas.m_textureHandle = bv::model::ResourceHandlePtr( new bv::model::ResourceHandle( nullptr, size, textureExtra ) );
 
-    ar >> textAtlas.m_glyphsPositions;
+    ar >> textAtlas.m_glyphs;
     ar >> textAtlas.m_glyphWidth;
     ar >> textAtlas.m_glyphHeight;
     ar >> textAtlas.m_kerningMap;
@@ -60,7 +62,7 @@ void serialize< boost::archive::text_oarchive >( boost::archive::text_oarchive &
     ar << textureExtra->m_width;
     ar << textureExtra->m_type;
 
-    ar & textAtlas.m_glyphsPositions;
+    ar & textAtlas.m_glyphs;
     ar << textAtlas.m_glyphWidth;
     ar << textAtlas.m_glyphHeight;
     ar & textAtlas.m_kerningMap;
