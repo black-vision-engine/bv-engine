@@ -28,6 +28,8 @@ private:
 	bv::model::BasicNode *					m_parentNode;
 	std::vector< bv::model::BasicNode * >	m_nodes;
 
+	void		LayoutNodes			();
+
 public:
 	void		AddNext				( bv::model::BasicNodePtr node );
 	bool		Finalize			();

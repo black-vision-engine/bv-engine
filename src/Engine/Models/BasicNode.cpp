@@ -193,6 +193,23 @@ void                        BasicNode::SetName                      ( const std:
 
 // ********************************
 //
+mathematics::Rect 			BasicNode::GetAABB						() const
+{
+	mathematics::Rect r;
+
+	auto plRect = m_pluginList->GetFinalizePlugin()->GetAABB();
+
+	if( plRect )
+		r.Include( *plRect );
+
+	for( auto ch : m_children )
+		r.Include( ch->GetAABB() );
+
+	return r;
+}
+
+// ********************************
+//
 SceneNode *                 BasicNode::BuildScene   () 
 {
     IPluginConstPtr finalizer = GetFinalizePlugin();

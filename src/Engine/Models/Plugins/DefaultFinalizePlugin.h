@@ -47,6 +47,7 @@ public:
     virtual RendererContextConstPtr             GetRendererContext          () const override;
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const override;
+	virtual mathematics::RectConstPtr			GetAABB						() const override;
 
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
 

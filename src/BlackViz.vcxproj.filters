@@ -203,6 +203,7 @@
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultRectPlugin.cpp" />
     <ClCompile Include="Engine\Graphics\Effects\Texture2DEffectWithMask.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\Engines\FreeTypeEngine.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\AABB.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -465,6 +466,8 @@
     <ClInclude Include="Engine\Models\Resources\Font\Engines\FreeTypeEngine.h" />
     <ClInclude Include="Engine\Models\Resources\Font\FontLoader.h" />
     <ClInclude Include="Engine\Models\Resources\Font\IFontEngine.h" />
+    <ClInclude Include="Mathematics\Rect.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\AABB.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

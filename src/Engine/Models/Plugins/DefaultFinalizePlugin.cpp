@@ -165,6 +165,27 @@ IPluginConstPtr                     DefaultFinalizePlugin::GetPrevPlugin        
 
 // *******************************
 //
+mathematics::RectConstPtr			DefaultFinalizePlugin::GetAABB						() const
+{
+	auto rect = mathematics::Rect::Create();
+
+	auto prevPlugin = GetPrevPlugin();
+
+	while( prevPlugin )
+	{
+		auto r = prevPlugin->GetAABB();
+
+		if( r )
+			rect->Include( *r );
+
+		prevPlugin = prevPlugin->GetPrevPlugin();
+	}
+	
+	return rect;
+}
+
+// *******************************
+//
 bool                                DefaultFinalizePlugin::LoadResource                 ( IPluginResourceDescrConstPtr resDescr )
 {
     return false;

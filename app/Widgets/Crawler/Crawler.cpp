@@ -42,5 +42,15 @@ bool		Crawler::Finalize			()
 	return m_isFinalized;
 }
 
+// *******************************
+//
+void		Crawler::LayoutNodes		()
+{
+	for( auto n : m_nodes )
+	{
+		// rozk³adamy odpowiedno nody po kolei // TODO:
+	}
+}
+
 } // widgets
 } // bv

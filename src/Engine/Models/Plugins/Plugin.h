@@ -60,6 +60,7 @@ public:
     virtual RendererContextConstPtr             GetRendererContext          () const override;
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const override;
+	virtual mathematics::RectConstPtr			GetAABB						() const override;
 
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr );
 
@@ -252,6 +253,14 @@ template< class Iface >
 IPluginConstPtr                     BasePlugin< Iface >::GetPrevPlugin                  () const
 {
     return m_prevPlugin;
+}
+
+// *******************************
+//
+template< class Iface >
+mathematics::RectConstPtr			BasePlugin< Iface >::GetAABB						() const
+{
+	return nullptr;
 }
 
 // *******************************

@@ -3,8 +3,9 @@
 #include "Engine/Models/Resources/Font/Glyph.h"
 #include "Engine/Models/Resources/Font/Text.h"
 
-
 #include "Engine/Models/Resources/TextureHelpers.h"
+
+#include "Mathematics/Rect.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -44,39 +45,10 @@ struct Span
   Int32 x, y, width, coverage;
 };
 
-struct Vec2
-{
-  Vec2() { }
-  Vec2( Float32 a, Float32 b )
-  : x(a), y(b) { }
-
-  Float32 x, y;
-};
-
-struct Rect
-{
-	Rect() { }
-	Rect( Float32 left, Float32 top, Float32 right, Float32 bottom )
-	: xmin(left), xmax(right), ymin(top), ymax(bottom) { }
-
-	void Include(const Vec2 &r)
-	{
-		xmin = std::min(xmin, r.x);
-		ymin = std::min(ymin, r.y);
-		xmax = std::max(xmax, r.x);
-		ymax = std::max(ymax, r.y);
-	}
-
-	Float32	Width() const	{ return xmax - xmin + 1; }
-	Float32	Height() const	{ return ymax - ymin + 1; }
-
-	Float32	xmin, xmax, ymin, ymax;
-};
-
 class Spans
 {
 public:
-	Rect			m_boundingRect;
+	mathematics::Rect		m_boundingRect;
 
 	std::vector< Span * > m_spans;
 
@@ -269,15 +241,15 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 			if (!spans.empty())
 			{
 				// Figure out what the bounding rect is for both the span lists.
-				Rect rect(	(float)spans[ 0 ]->x,
+				mathematics::Rect rect(	(float)spans[ 0 ]->x,
 							(float)spans[ 0 ]->y,
 							(float)spans[ 0 ]->x,
 							(float)spans[ 0 ]->y);
 				for ( SizeType i = 0; i < spans.size(); ++i )
 				{
 					auto s = spans[ i ];
-					rect.Include(Vec2((float)s->x, (float)s->y));
-					rect.Include(Vec2((float)s->x + s->width - 1, (float)s->y));
+					rect.Include(glm::vec2((float)s->x, (float)s->y));
+					rect.Include(glm::vec2((float)s->x + s->width - 1, (float)s->y));
 				}
 
 				spans.m_boundingRect = rect;

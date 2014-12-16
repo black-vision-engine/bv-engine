@@ -11,6 +11,8 @@
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
+#include "Mathematics/Rect.h"
+
 
 namespace bv {
     
@@ -81,6 +83,9 @@ public:
 
     virtual const std::string &             GetName                 () const override;
     void                                    SetName                 ( const std::string & name );
+
+	// axis-aligned bounding box
+	mathematics::Rect 						GetAABB					() const;
 
     virtual SceneNode *                     BuildScene              () override;
 

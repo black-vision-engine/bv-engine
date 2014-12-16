@@ -16,6 +16,7 @@
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/ITransformChannel.h"
+#include "Mathematics/Rect.h"
 
 namespace bv { namespace model {
 
@@ -54,6 +55,9 @@ public:
     virtual RendererContextConstPtr             GetRendererContext          () const = 0;
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const = 0;
+
+	// axis-aligned bounding box
+	virtual mathematics::RectConstPtr			GetAABB						() const = 0;
 
     //FIXME: implement a more generic interface for resource loading
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) = 0;

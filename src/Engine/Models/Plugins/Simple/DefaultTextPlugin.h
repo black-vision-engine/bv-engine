@@ -57,6 +57,7 @@ private:
     std::wstring                    m_text;
     const TextAtlas *				m_atlas;
     bool                            m_textSet;
+	Float32							m_textLength;
 
     ParamFloatPtr                   m_fontSizeParam;
     ParamFloatPtr                   m_blurSizeParam;
@@ -86,6 +87,8 @@ private:
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
+
+	virtual mathematics::RectConstPtr			GetAABB						() const override;
 
     virtual void                                Update                      ( TimeType t ) override;
 

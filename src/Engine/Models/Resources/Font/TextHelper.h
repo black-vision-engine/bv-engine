@@ -3,6 +3,7 @@
 #include "Engine/Models/Resources/IResource.h"
 #include "Engine/Models/Resources/Resource.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
+#include "Mathematics/Rect.h"
 
 namespace bv { namespace model {
 

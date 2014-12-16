@@ -247,6 +247,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultFinalizeVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultPixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\AABB.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.cpp" />
@@ -472,6 +473,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizeShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizeVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\AABB.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.h" />
@@ -600,6 +602,7 @@
     <ClInclude Include="Engine\Types\Values\TypedValues.h" />
     <ClInclude Include="Engine\Types\Values\ValuesFactory.h" />
     <ClInclude Include="Mathematics\Core\mathfuncs.h" />
+    <ClInclude Include="Mathematics\Rect.h" />
     <ClInclude Include="System\BasicMacros.h" />
     <ClInclude Include="System\BasicTypes.h" />
     <ClInclude Include="System\DirIO.h" />
