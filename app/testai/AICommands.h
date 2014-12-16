@@ -208,6 +208,49 @@ protected:
 
 };
 
+
+// ************************************
+class AICommandEnableOverridenAlphaNM : public AICommandBase
+{
+private:
+
+    TimeType                m_eventTime;
+    model::IModelNodePtr    m_node;
+
+public:
+
+                        AICommandEnableOverridenAlphaNM ( model::IModelNodePtr root, const std::string & node, TimeType triggerTime );
+                        ~AICommandEnableOverridenAlphaNM();
+
+    virtual void        SetTimeline                     ( model::DefaultTimelinePtr timeline ) override;
+
+protected:
+
+    virtual bool        TriggerImpl                     ( TimeType t ) override;
+
+};
+
+// ************************************
+class AICommandDisableAlphaNM : public AICommandBase
+{
+private:
+
+    TimeType                m_eventTime;
+    model::IModelNodePtr    m_node;
+
+public:
+
+                        AICommandDisableAlphaNM     ( model::IModelNodePtr root, const std::string & node, TimeType triggerTime );
+                        ~AICommandDisableAlphaNM    ();
+
+    virtual void        SetTimeline                 ( model::DefaultTimelinePtr timeline ) override;
+
+protected:
+
+    virtual bool        TriggerImpl                 ( TimeType t ) override;
+
+};
+
 // ************************************
 class AICommandReloadScene : public AICommandBase
 {

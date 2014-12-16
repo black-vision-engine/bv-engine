@@ -102,7 +102,12 @@ void    NodeUpdater::DoUpdate        ()
     if( m_modelNode->IsVisible() )
     {
         m_sceneNode->SetVisible( true );
-        m_sceneNode->SetOverridenAM( m_modelNode->IsStateOverriden() );
+
+        //FIXME: untill global effect is implemented, only one state can be used
+        assert( !(m_modelNode->IsStateOverridenAM() && m_modelNode->IsStateOverridenNM()) );
+
+        m_sceneNode->SetOverridenAM( m_modelNode->IsStateOverridenAM() );
+        m_sceneNode->SetOverridenNM( m_modelNode->IsStateOverridenNM() );
 
         UpdateTransform();
 

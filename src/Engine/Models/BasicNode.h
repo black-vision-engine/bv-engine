@@ -68,15 +68,22 @@ public:
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
 
-    virtual void                            EnableOverrideState     () override;
-    virtual void                            DisableOverrideState    () override;
+    virtual void                            EnableOverrideStateAM   () override;
+    virtual void                            EnableOverrideStateNM   () override;
+    virtual void                            DisableOverrideStateAM  () override;
+    virtual void                            DisableOverrideStateNM  () override;
 
-    virtual bool                            OverrideStateChanged    () const override;
-    virtual void                            SetOverrideStateChg     ( bool changed ) override;
+    virtual bool                            OverrideStateChangedAM  () const override;
+    virtual bool                            OverrideStateChangedNM  () const override;
+
+    virtual void                            SetOverrideStateChgAM   ( bool changed ) override;
+    virtual void                            SetOverrideStateChgNM   ( bool changed ) override;
 
 public:
 
-    virtual bool                            IsStateOverriden        () const override;
+    virtual bool                            IsStateOverridenAM      () const override;
+    virtual bool                            IsStateOverridenNM      () const override;
+
     virtual IOverrideState *                GetOverrideState        () override;
 
     virtual const std::string &             GetName                 () const override;

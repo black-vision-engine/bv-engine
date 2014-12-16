@@ -93,8 +93,6 @@ public:
     void                DiscardCurrentRenderTarget  ( Renderer * renderer );
     void                DisableTopRenderTarget      ( Renderer * renderer );
 
-    unsigned int        GetNumAllocatedRenderTargets() const;
-
     void                DrawTopAuxRenderTarget      ( Renderer * renderer, const IValue * alphaVal );
     void                DrawAMTopTwoRenderTargets   ( Renderer * renderer, const IValue * alphaVal );
 
@@ -108,8 +106,7 @@ public:
 
 private:
 
-    RenderTarget *      GetTopRenderTarget              () const;
-    RenderTarget *      GetRenderTargetAt               ( unsigned int i ) const;
+    RenderTarget *      GetRenderTargetAt               ( int i ) const;
 
     RenderTargetData    CreateDisplayRenderTargetData   () const;
 

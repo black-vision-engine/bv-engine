@@ -16,8 +16,10 @@ private:
     ParamFloatPtr       m_param;
     ValueFloatPtr       m_value;
 
-    bool                m_enabled;
-    bool                m_changed;
+    bool                m_enabledAM;
+    bool                m_enabledNM;
+    bool                m_changedAM;
+    bool                m_changedNM;
 
 public:
 
@@ -26,13 +28,20 @@ public:
 
     virtual void                Update              ( TimeType t ) override;
 
-    virtual bool                Changed             () const override;
-    void                        SetChanged          ( bool changed );
+    virtual bool                ChangedAM           () const override;
+    virtual bool                ChangedNM           () const override;
 
-    virtual bool                IsAlphaEnabled      () const override;
+    void                        SetChangedAM        ( bool changed );
+    void                        SetChangedNM        ( bool changed );
 
-    virtual void                DisableAlpha        () override;
-    virtual void                EnableAlpha         () override;
+    virtual bool                IsAlphaEnabledAM    () const override;
+    virtual bool                IsAlphaEnabledNM    () const override;
+
+    virtual void                EnableAlphaAM       () override;
+    virtual void                EnableAlphaNM       () override;
+
+    virtual void                DisableAlphaAM      () override;
+    virtual void                DisableAlphaNM      () override;
 
     virtual IParameterPtr       GetAlphaParam       () override;
     virtual IValueConstPtr      GetAlphaValue       () const override;

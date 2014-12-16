@@ -16,12 +16,16 @@ class IOverrideState : public bv::IUpdatable
 {
 public:
 
-    virtual bool                Changed         () const                = 0;
+    virtual bool                ChangedAM       () const                = 0;
+    virtual bool                ChangedNM       () const                = 0;
     
-    virtual bool                IsAlphaEnabled  () const                = 0;
+    virtual bool                IsAlphaEnabledAM() const                = 0;
+    virtual bool                IsAlphaEnabledNM() const                = 0;
 
-    virtual void                DisableAlpha    ()                      = 0;
-    virtual void                EnableAlpha     ()                      = 0;
+    virtual void                EnableAlphaAM   ()                      = 0;
+    virtual void                EnableAlphaNM   ()                      = 0;
+    virtual void                DisableAlphaAM  ()                      = 0;
+    virtual void                DisableAlphaNM  ()                      = 0;
 
     virtual IParameterPtr       GetAlphaParam   ()                      = 0;
     virtual IValueConstPtr      GetAlphaValue   () const                = 0;

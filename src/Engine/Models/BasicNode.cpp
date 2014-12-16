@@ -137,37 +137,72 @@ const IPluginListFinalized *    BasicNode::GetPluginList            () const
 
 // ********************************
 //
-void                            BasicNode::EnableOverrideState      ()
+void                            BasicNode::EnableOverrideStateAM    ()
 {
-    m_overrideState->EnableAlpha();
+    m_overrideState->EnableAlphaAM();
 }
 
 // ********************************
 //
-void                            BasicNode::DisableOverrideState     ()
+void                            BasicNode::EnableOverrideStateNM    ()
 {
-    m_overrideState->DisableAlpha();
+    m_overrideState->EnableAlphaNM();
 }
 
 // ********************************
 //
-bool                            BasicNode::OverrideStateChanged     () const
+void                            BasicNode::DisableOverrideStateAM   ()
 {
-    return m_overrideState->Changed();
+    m_overrideState->DisableAlphaAM();
 }
 
 // ********************************
 //
-void                            BasicNode::SetOverrideStateChg      ( bool changed )
+void                            BasicNode::DisableOverrideStateNM   ()
 {
-    return m_overrideState->SetChanged( changed );
+    m_overrideState->DisableAlphaNM();
 }
 
 // ********************************
 //
-bool                            BasicNode::IsStateOverriden         () const
+bool                            BasicNode::OverrideStateChangedAM   () const
 {
-    return m_overrideState->IsAlphaEnabled();
+    return m_overrideState->ChangedAM();
+}
+
+// ********************************
+//
+bool                            BasicNode::OverrideStateChangedNM   () const
+{
+    return m_overrideState->ChangedNM();
+}
+
+// ********************************
+//
+void                            BasicNode::SetOverrideStateChgAM    ( bool changed )
+{
+    return m_overrideState->SetChangedAM( changed );
+}
+
+// ********************************
+//
+void                            BasicNode::SetOverrideStateChgNM    ( bool changed )
+{
+    return m_overrideState->SetChangedNM( changed );
+}
+
+// ********************************
+//
+bool                            BasicNode::IsStateOverridenAM       () const
+{
+    return m_overrideState->IsAlphaEnabledAM();
+}
+
+// ********************************
+//
+bool                            BasicNode::IsStateOverridenNM       () const
+{
+    return m_overrideState->IsAlphaEnabledNM();
 }
 
 // ********************************

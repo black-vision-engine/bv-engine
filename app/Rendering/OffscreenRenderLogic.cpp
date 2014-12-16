@@ -166,7 +166,7 @@ void                OffscreenRenderLogic::EnableTopRenderTarget       ( Renderer
 
     if( !m_topRenderTargetEnabled )
     {
-        renderer->Enable( GetTopRenderTarget() );
+        renderer->Enable( GetRenderTargetAt( -1 ) );
 
         m_topRenderTargetEnabled = true;
     }
@@ -192,17 +192,10 @@ void                OffscreenRenderLogic::DisableTopRenderTarget    ( Renderer *
 {
     if( m_topRenderTargetEnabled )
     {
-        renderer->Disable( GetTopRenderTarget() );
+        renderer->Disable( GetRenderTargetAt( -1 ) );
 
         m_topRenderTargetEnabled = false;
     }
-}
-
-// **************************
-//
-unsigned int    OffscreenRenderLogic::GetNumAllocatedRenderTargets  () const
-{
-    return m_usedStackedRenderTargets;
 }
 
 // **************************
@@ -211,8 +204,8 @@ void                OffscreenRenderLogic::DrawTopAuxRenderTarget    ( Renderer *
 {
     DisableTopRenderTarget( renderer );
 
-    auto topRTD = GetTopRenderTarget();
-    auto prvRTD = GetRenderTargetAt ( GetNumAllocatedRenderTargets() - 2 );
+    auto topRTD = GetRenderTargetAt( -1 );
+    auto prvRTD = GetRenderTargetAt( -2 );
 
     m_renderData.UseTexture2DEffect ( alphaVal, topRTD->ColorTexture( 0 ) );
 
@@ -228,6 +221,18 @@ void                OffscreenRenderLogic::DrawTopAuxRenderTarget    ( Renderer *
 void                OffscreenRenderLogic::DrawAMTopTwoRenderTargets ( Renderer * renderer, const IValue * alphaVal )
 {
     DisableTopRenderTarget( renderer );
+
+    auto maskRT     = GetRenderTargetAt( -1 );
+    auto textureRT  = GetRenderTargetAt( -2 );
+    auto mainRT     = GetRenderTargetAt( -3 );
+
+    m_renderData.UseTexture2DEffect( alphaVal, textureRT->ColorTexture( 0 ), maskRT->ColorTexture( 0 ) );
+
+    renderer->Enable( mainRT );
+    renderer->SetCamera( m_displayCamera );
+    renderer->Draw( m_renderData.auxQuad );
+    renderer->SetCamera( m_rendererCamera );
+    renderer->Disable( mainRT );
 }
 
 // **************************
@@ -276,17 +281,17 @@ Texture2DConstPtr   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer *
 }
 
 // **************************
-//
-RenderTarget *      OffscreenRenderLogic::GetTopRenderTarget        () const
+// Python-like logic, where negative numbers are used to index the array backwards
+RenderTarget *      OffscreenRenderLogic::GetRenderTargetAt         ( int i ) const
 {
-    return GetRenderTargetAt( m_usedStackedRenderTargets - 1 );
-}
+    int numUsedRT = (int) m_usedStackedRenderTargets;
 
-// **************************
-//
-RenderTarget *      OffscreenRenderLogic::GetRenderTargetAt         ( unsigned int i ) const
-{
-    if( i >= m_usedStackedRenderTargets )
+    if( i < 0 )
+    {
+        i = numUsedRT + i;
+    }
+
+    if( i < 0 || i >= numUsedRT )
     {
         assert( false );
 
