@@ -2,14 +2,15 @@
 
 #include "Mathematics/Rect.h"
 
-namespace bv { namespace model {
+#include "glm/glm.hpp"
 
-class IVertexAttributesChannel;
+#include <vector>
+
+namespace bv { namespace mathematics {
 
 // ******************************
 // Calculates axis-aligned bounding box of connected components in VAC. If success returns true.
-bool				AABB( const IVertexAttributesChannel * vac, mathematics::Rect * rect );
+Rect					AABB( const std::vector< glm::vec2 > & points );
 
 } // model
 } // bv
-

@@ -1,4 +1,4 @@
-#include "AABB.h"
+#include "VacAABB.h"
 
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannelDescriptor.h"
@@ -8,7 +8,7 @@ namespace bv { namespace model {
 
 // ******************************
 //
-bool				AABB( const IVertexAttributesChannel * vac, mathematics::Rect * rect )
+bool				AABB( const IVertexAttributesChannel * vac, const glm::mat4 & trans, mathematics::Rect * rect )
 {
 	auto desc = vac->GetDescriptor();
 
@@ -27,7 +27,8 @@ bool				AABB( const IVertexAttributesChannel * vac, mathematics::Rect * rect )
 					for( unsigned int i = 0; i < numVerts; ++i )
 					{
 						const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( cc->GetAttributeChannels()[ 0 ]->GetData() );
-						rect->Include( glm::vec2( *pos ) );
+						auto transformed = trans * glm::vec4( pos->x, pos->y, pos->z, 1.f );
+						rect->Include( glm::vec2( transformed ) );
 					}
 				}
 

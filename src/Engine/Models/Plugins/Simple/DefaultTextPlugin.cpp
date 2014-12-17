@@ -6,7 +6,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AABB.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
 #include "Mathematics/Transform/MatTransform.h"
 
@@ -315,22 +315,18 @@ IVertexShaderChannelConstPtr        DefaultTextPlugin::GetVertexShaderChannel   
 // 
 mathematics::RectConstPtr			DefaultTextPlugin::GetAABB						() const
 {
-	auto rect = mathematics::Rect::Create();
+	auto trValues = GetTransformChannel()->GetTransformValues();
+		
+	assert( trValues.size() <= 1 );
 
-	if( AABB( m_vaChannel.get(), rect.get() ) )
+	if( trValues.size() == 1 )
 	{
-		auto trValues = GetTransformChannel()->GetTransformValues();
-		
-		assert( trValues.size() <= 1 );
-
-		if( trValues.size() == 1 ) 
-			rect->Transform( trValues[ 0 ]->GetValue() );
-
-		return rect;
-		
+		auto rect = mathematics::Rect::Create();
+		if( AABB( m_vaChannel.get(), trValues[ 0 ]->GetValue(), rect.get() ) )
+			return rect;
 	}
-	else
-		return nullptr;
+		
+	return nullptr;
 }
 
 // *************************************
