@@ -236,6 +236,43 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::Timel
 
 // *****************************
 //
+model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_00.jpg", false, 3.4f, 1.7f );
+    SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 0.75f ), .85f, 0.31f );
+
+    bTex.SetPosition( 0.f, -.6f, 0.f );
+    auto root = bTex.CreateNode( ".", true );
+
+    bTex.SetH( 0.7f );
+    bTex.SetW( 3.0f );
+    bTex.SetTextureFile( "rsrcy/simless_01.jpg", false );
+    auto cm1 = bTex.CreateNode( "nodem1", true );
+
+    bSolid.SetColor( 0.f, 1.f, 1.f, 0.75f, 0.f );
+    bSolid.SetColor( 0.f, 1.f, 1.f, 1.f, 5.f );
+    bSolid.SetColor( 0.f, 1.f, 1.f, 1.f, 9.f );
+    bSolid.SetColor( 0.f, 1.f, 1.f, 0.7f, 10.f );
+    bSolid.SetColor( 0.f, 1.f, 1.f, 0.95f, 12.f );
+    bSolid.SetPosition( 1.3f, 0.17f, 0.01f, 0.0f );
+    bSolid.SetPosition( 0.6f, 0.17f, 0.01f, 4.0f );
+    bSolid.SetPosition( -0.5f, 0.17f, 0.01f, 7.0f );
+    bSolid.SetPosition( -1.2f, 0.17f, 0.01f, 8.0f );
+    bSolid.SetPosition( -0.3f, 0.17f, 0.01f, 9.0f );
+    bSolid.SetPosition(  1.2f, 0.17f, 0.01f, 14.0f );
+    auto c0 = bSolid.CreateNode( "node0" );
+
+
+    root->AddChild( cm1 );
+    cm1->AddChild( c0 );
+
+    auto ai = TestAIManager::Instance().GetAIPreset( 6, root );
+
+    return root;
+}
+
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & nodeName )
 {
     //Plugin list

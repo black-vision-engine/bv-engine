@@ -368,8 +368,8 @@ TestAI *        TestAIManager::PreparePreset6   ( model::IModelNodePtr node ) co
     TestAI * ai = new TestAI( timeline, node );
     
 #ifdef NM_PRESET0
-    auto c0 = new AICommandEnableOverridenAlphaNM( node, "./node0", 2.f );
-    auto c1 = new AICommandDisableAlphaNM( node, "./node0", 10.f );
+    auto c0 = new AICommandEnableOverridenAlphaNM( node, "nodem1", 2.f );
+    auto c1 = new AICommandDisableAlphaNM( node, "nodem1", 12.f );
 
     ai->AddCommand( c0 );
     ai->AddCommand( c1 );

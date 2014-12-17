@@ -133,7 +133,8 @@ std::string ps_mask_alpha    = " #version 400 \n \
 	                                vec4 mask = texture( Mask, uvCoord );\n \
                                     //if( col.a * alpha < 0.9 ) \n \
                                     //    discard; \n \
-                                    FragColor = getBlendValue( mask ) * col.rgba * alpha;\n \
+                                    // FragColor = getBlendValue( mask ) * col.rgba * alpha;\n \
+                                    FragColor = mask.a * col.rgba * alpha;\n \
                                 }\n \
                             ";
 

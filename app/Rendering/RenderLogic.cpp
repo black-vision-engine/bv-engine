@@ -40,7 +40,7 @@ void    RenderLogic::SetCamera       ( Camera * cam )
 //
 void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
 {
-    renderer->SetClearColor( glm::vec4( 1.f, 1.f, 0.f, 1.0f ) );
+    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
     renderer->ClearBuffers();
     renderer->PreDraw();
 
@@ -117,6 +117,7 @@ void    RenderLogic::RenderNodeMask  ( Renderer * renderer, SceneNode * node )
     DrawChildren( renderer, node );
 
     m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
+    m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
     renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
     renderer->ClearBuffers();
 
