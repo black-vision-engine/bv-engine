@@ -2,6 +2,8 @@
 
 #include "Engine/Models/BasicNode.h"
 
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+
 namespace bv { namespace widgets { 
 
 // *******************************
@@ -36,6 +38,7 @@ bool		Crawler::Finalize			()
 		assert(!"Crawler: Already finalized!");
 	else
 	{
+		LayoutNodes();
 		m_isFinalized = true;
 	}
 
@@ -46,9 +49,21 @@ bool		Crawler::Finalize			()
 //
 void		Crawler::LayoutNodes		()
 {
-	for( auto n : m_nodes )
+	auto length = m_nodes.size();
+	if( length > 1 )
 	{
-		// rozk³adamy odpowiedno nody po kolei // TODO:
+		Float32 currShift = 0.f;
+		for( SizeType i = 1; i < length; ++i )
+		{
+			currShift += m_nodes[ i -1 ]->GetAABB().Width();
+
+			auto trPlugin = m_nodes[ i ]->GetPlugin( "transform" );
+			if( trPlugin )
+			{
+				auto trParam = trPlugin->GetParameter( "simple_transform" );
+				model::SetParameterTranslation( trParam, 0, 0.0f, glm::vec3( currShift, 0.0f, 0.0f ) );
+			}
+		}
 	}
 }
 

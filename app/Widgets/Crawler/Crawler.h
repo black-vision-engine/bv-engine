@@ -31,6 +31,7 @@ private:
 	void		LayoutNodes			();
 
 public:
+
 	void		AddNext				( bv::model::BasicNodePtr node );
 	bool		Finalize			();
 	explicit	Crawler				( bv::model::BasicNode * parent );
