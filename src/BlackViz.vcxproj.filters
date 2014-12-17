@@ -204,6 +204,7 @@
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultGradientPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultPrismPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\PrismComponent.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\DefaultPieChartPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -466,6 +467,7 @@
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultGradientPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultPrismPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\PrismComponent.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\DefaultPieChartPlugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

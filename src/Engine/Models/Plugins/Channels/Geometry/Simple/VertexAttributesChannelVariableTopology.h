@@ -13,8 +13,6 @@ class VertexAttributesChannelVariableTopology : public VertexAttributesChannel
 {
 private:
 
-    std::vector< VariableTopologyStripComponentPtr >    m_vtConnectedComponents;
-
     float       m_size;
     float       m_speed;
 
@@ -26,8 +24,10 @@ private:
     int         m_numActiveComponents;
     int         m_curComponent;
 
-private:
+protected:
 
+							std::vector< VariableTopologyStripComponentPtr >    m_vtConnectedComponents;
+	
                             VertexAttributesChannelVariableTopology     ( float size, float speed, float oscilationSpeed, int numSegments, int numComponents );
 
 public:

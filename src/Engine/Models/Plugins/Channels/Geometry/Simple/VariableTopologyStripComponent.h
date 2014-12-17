@@ -13,8 +13,7 @@ DEFINE_CONST_PTR_TYPE(VariableTopologyStripComponent)
 
 class VariableTopologyStripComponent: public ConnectedComponent
 {
-private:
-
+protected:
     float           m_size;
     float           m_speed;
     float           m_oscilationSpeed;
@@ -30,9 +29,8 @@ private:
     float           m_startY;
     float           m_posZ;
 
-    Float3AttributeChannelPtr    m_positions;
 
-private:
+    Float3AttributeChannelPtr    m_positions;
 
                         VariableTopologyStripComponent  ( float size, float speed, TimeType duration, int numSegments, float oscilationSpeed, float mainScale, float startX, float startY, float posZ );
 
@@ -46,7 +44,7 @@ public:
 
     TimeType            ComponentDuration               () const;
 
-private:
+protected:
 
     glm::vec3           EvaluateFunction                ( TimeType t ) const;
     glm::vec3           EvaluateVelocity                ( TimeType t ) const;

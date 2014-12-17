@@ -622,6 +622,67 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::Ti
 	return root;
 }
 
+model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPieChartNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
+{
+	//Plugin list
+    std::vector< std::string > uids;
+
+    uids.push_back( "DEFAULT_TRANSFORM" );
+    uids.push_back( "DEFAULT_PIECHART" );
+    uids.push_back( "DEFAULT_COLOR" );
+
+    //Create a model
+    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "pieNode", timeEvaluator );
+
+    bool success = root->AddPlugins( uids, timeEvaluator );
+    assert( success );
+
+	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+
+// TEXTURE plugin
+	if( root->GetPlugin( "texture" ) )
+	{
+		success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
+		success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+		assert( success );
+	}
+
+// COLOR plugin
+	if( root->GetPlugin( "solid color" ) )
+	{
+		auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
+		success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+		assert( success );
+		root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+	}
+
+// TRANSFORM plugin
+
+	SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( offset, -.3f, 0.f) );
+	SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+
+// LINEAR GRADIENT plugin
+	if( root->GetPlugin( "linear_gradient" ) )
+	{
+		auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
+		assert( color1 );
+		success &= SetParameter( color1, 0.f, glm::vec4( 1.0f, 0.f, 0.f, 1.f ) );
+		//success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+		assert( success );
+		auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+		assert( color2 );
+		success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 1.0f, 1.f, 1.f ) );
+		//success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
+		assert( success );
+
+		root->GetPlugin( "linear_gradient" )->GetRendererContext()->cullCtx->enabled = false;
+	}
+
+	return root;
+}
+
+
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
 {
 	auto offset5Timeline = timelineManager->CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 

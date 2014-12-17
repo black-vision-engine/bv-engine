@@ -38,6 +38,7 @@ public:
     static  model::BasicNodePtr     NewModelTestScene           ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     OlafTestScene               ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreedTestScene               ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     CreedPrismTestScene               ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
                             
     static  model::BasicNodePtr     SimpeTextureTestScene       ();
     static  model::BasicNodePtr     SimpleMultiCCScene          ();

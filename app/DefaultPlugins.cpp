@@ -13,6 +13,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultAlphaMaskPlugin.h"
 #include "Engine/Models/Plugins/Custom/DefaultHeightMapPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultPrismPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultPieChartPlugin.h"
 
 namespace bv { namespace model {
 
@@ -33,6 +34,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultTimerPluginDesc() );
     descriptors.push_back( new DefaultHeightMapPluginDesc() );
 	descriptors.push_back( new DefaultPrismPluginDesc() );
+	descriptors.push_back( new DefaultPieChartPluginDesc() );
 
     for( auto descr : descriptors )
     {

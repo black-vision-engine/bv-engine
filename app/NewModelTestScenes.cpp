@@ -517,6 +517,12 @@ model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::Plug
 
 model::BasicNodePtr    TestScenesFactory::CreedTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+	auto node = SimpleNodesFactory::CreateCreedColoredPieChartNode( timelineManager, timeEvaluator, 0 );
+	return node;
+}
+
+model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
 	//auto rect = SimpleNodesFactory::CreateCreedTextNode( timelineManager, timeEvaluator );
 
 	//auto rect = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );

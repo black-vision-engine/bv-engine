@@ -282,6 +282,7 @@
     <ClCompile Include="Engine\Models\Plugins\DefaultFinalizePlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\DefaultPluginListFinalized.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultGradientPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Simple\DefaultPieChartPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultPrismPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultRectPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Descriptor\BasePluginDescriptor.cpp" />
@@ -509,6 +510,7 @@
     <ClInclude Include="Engine\Models\Plugins\DefaultFinalizePlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\DefaultPluginListFinalized.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultGradientPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Simple\DefaultPieChartPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultPrismPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultRectPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Descriptor\BasePluginDescriptor.h" />
