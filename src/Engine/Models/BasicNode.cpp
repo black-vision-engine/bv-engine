@@ -361,6 +361,9 @@ void BasicNode::Update( TimeType t )
 
         m_pluginList->Update( t );
 
+		if( m_nodeLogic )
+			m_nodeLogic->Update( t );
+
         for( auto ch : m_children )
             ch->Update( t );
     }

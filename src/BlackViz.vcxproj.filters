@@ -470,6 +470,7 @@
     <ClInclude Include="Mathematics\Rect.h" />
     <ClInclude Include="Mathematics\AABB.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VacAABB.h" />
+    <ClInclude Include="Engine\Models\Interfaces\INodeLogic.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

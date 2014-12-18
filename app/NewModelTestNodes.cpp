@@ -15,6 +15,7 @@
 #include "Engine/Models/BasicNode.h"
 
 #include "testai/TestAIManager.h"
+#include "Widgets/Crawler/Crawler.h"
 #include "Helpers/RectNodeBuilder.h"
 
 #include "BVConfig.h"
@@ -625,9 +626,29 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     return node;    
 }
 
+model::BasicNodePtr	SimpleNodesFactory::CreateCrawlerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+	auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+
+	node->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEvaluator );
+
+	auto crawler = new widgets::Crawler( node.get() ); // widgets::Crawler::Create( node.get() );
+
+	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+
+	crawler->Finalize();
+
+	return node;
+}
+
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateTextWithShadowNode(   model::TimelineManager * timelineManager,
+model::BasicNodePtr SimpleNodesFactory::CreateTextWithShadowNode(   model::TimelineManager * timelineManager,
                                                                     model::ITimeEvaluatorPtr timeEvaluator,
                                                                     unsigned int blurSize,
                                                                     const glm::vec3 shadowTranslation )

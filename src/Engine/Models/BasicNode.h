@@ -4,9 +4,11 @@
 #include <string>
 
 #include "Engine/Models/Interfaces/IModelNode.h"
+#include "Engine/Models/Interfaces/INodeLogic.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
+
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
@@ -55,6 +57,8 @@ private:
     TNodeVec                        m_layers;
 
     DefaultPluginListFinalizedPtr   m_pluginList;
+
+	INodeLogicPtr					m_nodeLogic;
 
 public:
 

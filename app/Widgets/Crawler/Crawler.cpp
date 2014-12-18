@@ -17,6 +17,7 @@ CrawlerPtr	Crawler::Create				( bv::model::BasicNode * parent )
 //
 Crawler::Crawler						( bv::model::BasicNode * parent )
 	: m_parentNode( parent )
+	, m_isFinalized( false )
 {}
 
 
@@ -25,7 +26,10 @@ Crawler::Crawler						( bv::model::BasicNode * parent )
 void		Crawler::AddNext			( bv::model::BasicNodePtr node )
 {
 	if(! m_isFinalized )
+	{
 		m_parentNode->AddChild( node );
+		m_nodes.push_back( node.get() );
+	}
 	else
 		assert(!"Crawler: Cannot add node after finalization!");
 }

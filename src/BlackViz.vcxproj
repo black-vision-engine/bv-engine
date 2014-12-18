@@ -461,6 +461,7 @@
     <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
     <ClInclude Include="Engine\Models\Interfaces\IAnimationDescriptor.h" />
     <ClInclude Include="Engine\Models\Interfaces\IModelNode.h" />
+    <ClInclude Include="Engine\Models\Interfaces\INodeLogic.h" />
     <ClInclude Include="Engine\Models\Interfaces\IOverrideState.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITextureDescriptor.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITextureParams.h" />

@@ -38,6 +38,8 @@ public:
 
     static model::BasicNodePtr  CreateHeightMapNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 
+	static model::BasicNodePtr	CreateCrawlerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+
 };
 
 } //bv
