@@ -1,4 +1,4 @@
-#include "BVAppLogic.h"
+﻿#include "BVAppLogic.h"
 
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
