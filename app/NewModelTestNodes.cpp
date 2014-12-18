@@ -632,7 +632,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateCrawlerNode( model::TimelineManage
 
 	node->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEvaluator );
 
-	auto crawler = new widgets::Crawler( node.get() ); // widgets::Crawler::Create( node.get() );
+	auto crawler = new widgets::Crawler( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
 
 	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
 	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );

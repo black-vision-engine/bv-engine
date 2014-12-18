@@ -8,16 +8,17 @@ namespace bv { namespace widgets {
 
 // *******************************
 //
-CrawlerPtr	Crawler::Create				( bv::model::BasicNode * parent )
+CrawlerPtr	Crawler::Create				( bv::model::BasicNode * parent, const mathematics::RectConstPtr & view )
 {
-	return std::make_shared< Crawler >( parent );
+	return std::make_shared< Crawler >( parent, view );
 }
 
 // *******************************
 //
-Crawler::Crawler						( bv::model::BasicNode * parent )
+Crawler::Crawler						( bv::model::BasicNode * parent, const mathematics::RectConstPtr & view )
 	: m_parentNode( parent )
 	, m_isFinalized( false )
+	, m_view( view )
 {}
 
 

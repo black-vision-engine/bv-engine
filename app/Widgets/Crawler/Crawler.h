@@ -7,10 +7,18 @@
 #include <vector>
 
 // forward references
-namespace bv { namespace model {
+namespace bv {
+
+namespace mathematics {
+
+struct Rect;
+typedef std::shared_ptr< const Rect > RectConstPtr;
+
+}
+
+namespace model {
 
 class BasicNode;
-
 typedef std::shared_ptr< BasicNode > BasicNodePtr;
 
 } // model
@@ -29,6 +37,7 @@ private:
 	bool									m_isFinalized;
 	bv::model::BasicNode *					m_parentNode;
 	std::vector< bv::model::BasicNode * >	m_nodes;
+	mathematics::RectConstPtr				m_view;
 
 	void		LayoutNodes			();
 
@@ -36,14 +45,14 @@ public:
 
 	void		AddNext				( bv::model::BasicNodePtr node );
 	bool		Finalize			();
-	explicit	Crawler				( bv::model::BasicNode * parent );
+	explicit	Crawler				( bv::model::BasicNode * parent, const mathematics::RectConstPtr & view );
 
 
 	virtual void	Initialize		()				override {}
 	virtual void	Update			( TimeType t )	override {}
 	virtual void	Deinitialize	()				override {}
 
-	static		CrawlerPtr Create	( bv::model::BasicNode * parent );
+	static		CrawlerPtr Create	( bv::model::BasicNode * parent, const mathematics::RectConstPtr & view );
 };
 
 } 
