@@ -6,89 +6,36 @@
 
 namespace bv { namespace model {
 
-	class DefaultVariableTopologyStripComponent : public VariableTopologyStripComponent
+	class DefaultVertexAttributeChannel : public VertexAttributesChannel
 	{
+		AttributeChannelDescriptor * m_compDesc;
+
 	public:
-		DefaultVariableTopologyStripComponent( float angleStart, float angleEnd, float dangle )
-			: VariableTopologyStripComponent( 1, 1, 1, 1, 1, 1, 1, 1, 1 ) 
+		DefaultVertexAttributeChannel( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false ) 
+			: VertexAttributesChannel ( type, isReadOnly, isTimeInvariant )  
 		{
-			const AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-			Float3AttributeChannelPtr vertArrtF3 = std::make_shared< Float3AttributeChannel >( desc, desc->SuggestedDefaultName( 0 ), false );
+			AttributeChannelDescriptor * compDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
 
-			float angle = angleStart;
-			//double dangle = 2*PI / fragmentsNum;
+			VertexAttributesChannelDescriptor vaDesc;
 
-			//int size = sizeof( percents ) / sizeof( *percents );
+			vaDesc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compDesc ) );
 
-			//for( int p = 0; p < size; p++ )
-			//{
-				for( ; angle < angleEnd; angle += dangle )
-				{
-					vertArrtF3->AddAttribute( glm::vec3( cos( angle ), 0.5, sin( angle ) ) );
+			m_compDesc = compDesc;
 
-					if( vertArrtF3->GetNumEntries()%2 == 1 )
-					{
-						vertArrtF3->AddAttribute( glm::vec3( 0, 0.5, 0 ) );
-					}
-				}
-				angle = angleEnd;
-			//}
-
-			//for( int i = 0; i <= fragmentsNum; i++ )
-			//{
-			//	double angle = 2*PI * i / fragmentsNum;
-
-			//	vertArrtF3->AddAttribute( glm::vec3( cos( angle ), 0.5, sin( angle ) ) );
-
-			//	if( i%2 == 1 )
-			//	{
-			//		vertArrtF3->AddAttribute( glm::vec3( 0, 0.5, 0 ) );
-			//	}
-			//}
-
-
-			AddAttributeChannel( AttributeChannelPtr( vertArrtF3 ) );
+			m_desc = vaDesc;
 		}
-	};
 
-	class DefaultVertexAttributesChannelVariableTopology : public VertexAttributesChannelVariableTopology
-	{
-	public:
-		DefaultVertexAttributesChannelVariableTopology( std::vector< float > percents, int fragmentsNum ) : VertexAttributesChannelVariableTopology( 0, 1, 0, 1, 1 ) 
+		void GenerateAndAddConnectedComponent( void (*GenerateConnectedComponent) (Float3AttributeChannelPtr) )
 		{
-			std::vector< DefaultVariableTopologyStripComponent* > comps;
-			//auto connComp = std::make_shared<DefaultVariableTopologyStripComponent>( percents, 100 );
+			ConnectedComponentPtr comp = ConnectedComponent::Create();
 
-			float angle = 0;
-			double dangle = 2*PI / fragmentsNum;
+			Float3AttributeChannelPtr vertArrtF3 = std::make_shared< Float3AttributeChannel >( m_compDesc, m_compDesc->SuggestedDefaultName( 0 ), false );
 
-			for( float percent : percents )
-			{
-				float angleEnd = angle + 2*PI*percent/100;
+			GenerateConnectedComponent( vertArrtF3 );
 
-				//comps.push_back( std::make_shared< DefaultVariableTopologyStripComponent >( angle, angle+percent, dangle ) );
-				comps.push_back( new DefaultVariableTopologyStripComponent( angle, angleEnd, dangle ) );
+			comp->AddAttributeChannel( vertArrtF3 );
 
-				angle = angleEnd;
-			}
-
-			auto connComp = comps[0];
-
-			VertexAttributesChannelDescriptor desc;
-
-			for( auto compDesc : connComp->GetAttributeChannels() )
-			{
-				desc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compDesc->GetDescriptor() ) );
-			}
-
-			//VertexAttributesChannelPtr ret = std::make_shared< model::VertexAttributesChannel >( PrimitiveType::PT_TRIANGLE_STRIP, desc, false, false );
-			m_desc = desc;
-			m_primitiveType = PrimitiveType::PT_TRIANGLE_STRIP;
-			m_isReadOnly = false;
-			m_isTimeInvariant = false;
-
-			for( auto comp : comps )
-				AddVTConnectedComponent( VariableTopologyStripComponentPtr( (VariableTopologyStripComponent*) comp ) );
+			AddConnectedComponent( comp );
 		}
 	};
 
@@ -178,28 +125,34 @@ IVertexAttributesChannelConstPtr    DefaultPieChartPlugin::GetVertexAttributesCh
     return m_vaChannel;
 }
 
+double angleStart, angleEnd, dangle;
+
+void GenerateSomething( Float3AttributeChannelPtr verts )
+{
+				double angle = angleStart;
+
+				for( ; angle < angleEnd; angle += dangle )
+				{
+					verts->AddAttribute( glm::vec3( cos( angle ), 0.5, sin( angle ) ) );
+
+					if( verts->GetNumEntries()%2 == 1 )
+					{
+						verts->AddAttribute( glm::vec3( 0, 0.5, 0 ) );
+					}
+				}
+				angle = angleEnd;
+}
+
 void DefaultPieChartPlugin::InitGeometry( int n )
 {
 	float percents[] = { 10.f, 20.f, 50.f };
-	m_vaChannel = std::make_shared< DefaultVertexAttributesChannelVariableTopology > ( std::vector< float > ( percents, percents+3 ), 100 );
-//	auto prism = PieChartComponent::Create( n );
-//	auto prism_main = std::get<0>(prism);
-//	auto prism_up = std::get<1>(prism);
-//	auto prism_down = std::get<2>(prism);
-//
-//// FIXME: it would be more pretty to create empty VertexAttributesChannel in ctor and add a proper descriptor there
-//	if( m_vaChannel == NULL )
-//		m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( prism_main, false );
-//	else
-//	{
-//		m_vaChannel->ClearAll();
-//		m_vaChannel->AddConnectedComponent( prism_main );
-//	}
-//
-//	m_vaChannel->AddConnectedComponent( prism_up );
-//	m_vaChannel->AddConnectedComponent( prism_down );
-//
-//	m_lastN = n;
+
+	auto channel = std::make_shared< DefaultVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
+
+	angleStart = PI/4; angleEnd = 3*PI/4; dangle = PI/100;
+	channel->GenerateAndAddConnectedComponent( GenerateSomething );
+
+	m_vaChannel = channel;
 }
 
 // *************************************
@@ -219,11 +172,6 @@ void                                DefaultPieChartPlugin::Update               
 		m_vaChannel->SetNeedsTopologyUpdate( true );
 		m_lastN = n;
 	}
-	//else
-	//{
-	//	m_vaChannel->SetNeedsAttributesUpdate( false );
-	//}
 }
-
 
 } }
