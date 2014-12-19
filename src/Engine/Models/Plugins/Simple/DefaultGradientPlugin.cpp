@@ -16,6 +16,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultPieChartPlugin.h"
 
 namespace bv { namespace model {
 
@@ -70,7 +71,7 @@ DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( I
 	color1Evaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
 	color2Evaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
 	point1Evaluator->Parameter()->SetVal( glm::vec2( 0.0f, 1.0f ), TimeType( 0.0 ) );
-	point2Evaluator->Parameter()->SetVal( glm::vec2( 1.0f, 0.0f ), TimeType( 0.0 ) );
+	point2Evaluator->Parameter()->SetVal( glm::vec2( 0.0f, 0.0f ), TimeType( 0.0 ) );
 
     return model;
 }
@@ -98,8 +99,9 @@ bool                   DefaultGradientPluginDesc::CanBeAttachedTo     ( IPluginC
 
     auto uid = plugin->GetTypeUid();
 
-	if ( uid != DefaultRectPluginDesc::UID() && uid != DefaultTextPluginDesc::UID() && uid != DefaultTransformPluginDesc::UID() && uid != DefaultTimerPluginDesc::UID() && uid != DefaultPrismPluginDesc::UID() )
+	if ( uid != DefaultRectPluginDesc::UID() && uid != DefaultTextPluginDesc::UID() && uid != DefaultTransformPluginDesc::UID() && uid != DefaultTimerPluginDesc::UID() && uid != DefaultPrismPluginDesc::UID() && uid != DefaultPieChartPluginDesc::UID() )
     {
+		assert( false && "not one of my favourite plugins you are" );
         return false;
     }
 

@@ -6,12 +6,12 @@
 
 namespace bv { namespace model {
 
-	class DefaultVertexAttributeChannel : public VertexAttributesChannel
+	class DefaultGeometryVertexAttributeChannel : public VertexAttributesChannel
 	{
 		AttributeChannelDescriptor * m_compDesc;
 
 	public:
-		DefaultVertexAttributeChannel( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false ) 
+		DefaultGeometryVertexAttributeChannel( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false ) 
 			: VertexAttributesChannel ( type, isReadOnly, isTimeInvariant )  
 		{
 			AttributeChannelDescriptor * compDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
@@ -34,6 +34,45 @@ namespace bv { namespace model {
 			GenerateConnectedComponent( vertArrtF3 );
 
 			comp->AddAttributeChannel( vertArrtF3 );
+
+			AddConnectedComponent( comp );
+		}
+	};
+
+	class DefaultGeometryAndUVsVertexAttributeChannel : public VertexAttributesChannel
+	{
+		AttributeChannelDescriptor * m_compVertDesc;
+		AttributeChannelDescriptor * m_compUVDesc;
+
+	public:
+		DefaultGeometryAndUVsVertexAttributeChannel( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false ) 
+			: VertexAttributesChannel ( type, isReadOnly, isTimeInvariant )  
+		{
+			VertexAttributesChannelDescriptor vaDesc;
+
+			AttributeChannelDescriptor * compVertDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+			vaDesc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compVertDesc ) );
+
+			AttributeChannelDescriptor * compUVDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_GENERATOR );
+			vaDesc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compUVDesc ) );
+
+			m_compVertDesc = compVertDesc;
+			m_compUVDesc = compUVDesc;
+
+			m_desc = vaDesc;
+		}
+
+		void GenerateAndAddConnectedComponent( void (*GenerateConnectedComponent) (Float3AttributeChannelPtr, Float2AttributeChannelPtr) )
+		{
+			ConnectedComponentPtr comp = ConnectedComponent::Create();
+
+			Float3AttributeChannelPtr vertArrtF3 = std::make_shared< Float3AttributeChannel >( m_compVertDesc, m_compVertDesc->SuggestedDefaultName( 0 ), false );
+			Float2AttributeChannelPtr vertArrtUV = std::make_shared< Float2AttributeChannel >( m_compUVDesc, m_compUVDesc->SuggestedDefaultName( 0 ), false );
+
+			GenerateConnectedComponent( vertArrtF3, vertArrtUV );
+
+			comp->AddAttributeChannel( vertArrtF3 );
+			comp->AddAttributeChannel( vertArrtUV );
 
 			AddConnectedComponent( comp );
 		}
@@ -125,32 +164,105 @@ IVertexAttributesChannelConstPtr    DefaultPieChartPlugin::GetVertexAttributesCh
     return m_vaChannel;
 }
 
-double angleStart, angleEnd, dangle;
+// geometry generators
 
-void GenerateSomething( Float3AttributeChannelPtr verts )
+double angleStart, angleEnd, dangle, z;
+
+void GenerateBase( Float3AttributeChannelPtr verts )
 {
-				double angle = angleStart;
+	double angle = angleStart;
 
-				for( ; angle < angleEnd; angle += dangle )
-				{
-					verts->AddAttribute( glm::vec3( cos( angle ), 0.5, sin( angle ) ) );
+	for( ; angle < angleEnd; angle += dangle )
+	{
+		verts->AddAttribute( glm::vec3( cos( angle ), z, sin( angle ) ) );
 
-					if( verts->GetNumEntries()%2 == 1 )
-					{
-						verts->AddAttribute( glm::vec3( 0, 0.5, 0 ) );
-					}
-				}
-				angle = angleEnd;
+		if( verts->GetNumEntries()%2 == 1 )
+		{
+			verts->AddAttribute( glm::vec3( 0, z, 0 ) );
+		}
+	}
+	angle = angleEnd;
+}
+
+double angle, z1, z2;
+
+void GenerateSide( Float3AttributeChannelPtr verts )
+{
+	verts->AddAttribute( glm::vec3( cos( angle ), z1, sin( angle ) ) );
+	verts->AddAttribute( glm::vec3( cos( angle ), z2, sin( angle ) ) );
+	verts->AddAttribute( glm::vec3( 0, z1, 0 ) );
+	verts->AddAttribute( glm::vec3( 0, z2, 0 ) );
+}
+
+// geometry&uv generators
+
+void GenerateBaseUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+{
+	double angle = angleStart;
+
+	for( ; angle < angleEnd; angle += dangle )
+	{
+		verts->AddAttribute( glm::vec3( cos( angle ), z, sin( angle ) ) );
+		uvs->AddAttribute( glm::vec2( angle, z ) );
+
+		if( verts->GetNumEntries()%2 == 1 )
+		{
+			verts->AddAttribute( glm::vec3( 0, z, 0 ) );
+			uvs->AddAttribute( glm::vec2( 0, z ) );
+		}
+	}
+	angle = angleEnd;
+}
+
+void GenerateSideUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+{
+	verts->AddAttribute( glm::vec3( cos( angle ), z1, sin( angle ) ) );
+	verts->AddAttribute( glm::vec3( cos( angle ), z2, sin( angle ) ) );
+	verts->AddAttribute( glm::vec3( 0, z1, 0 ) );
+	verts->AddAttribute( glm::vec3( 0, z2, 0 ) );
+
+	uvs->AddAttribute( glm::vec2( angle, z1 ) );
+	uvs->AddAttribute( glm::vec2( angle, z2 ) );
+	uvs->AddAttribute( glm::vec2( 0, z1 ) );
+	uvs->AddAttribute( glm::vec2( 0, z2 ) );
+}
+
+void GenerateRoundSideUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+{
+	double angle = angleStart;
+
+	for( ; angle < angleEnd; angle += dangle )
+	{
+		verts->AddAttribute( glm::vec3( cos( angle ), z1, sin( angle ) ) );
+		uvs->AddAttribute( glm::vec2( angle, z1 ) );
+
+		verts->AddAttribute( glm::vec3( cos( angle ), z2, sin( angle ) ) );
+		uvs->AddAttribute( glm::vec2( angle, z2 ) );
+	}
+	angle = angleEnd;
 }
 
 void DefaultPieChartPlugin::InitGeometry( int n )
 {
 	float percents[] = { 10.f, 20.f, 50.f };
 
-	auto channel = std::make_shared< DefaultVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
+	auto channel = std::make_shared< DefaultGeometryAndUVsVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
 
-	angleStart = PI/4; angleEnd = 3*PI/4; dangle = PI/100;
-	channel->GenerateAndAddConnectedComponent( GenerateSomething );
+	z1 = 0; z2 = 1;
+
+	angleStart = PI/4; angleEnd = 3*PI/4; dangle = PI/100; z = z1;
+	channel->GenerateAndAddConnectedComponent( GenerateBaseUV );
+
+	z = z2;
+	channel->GenerateAndAddConnectedComponent( GenerateBaseUV );
+	
+	angle = PI/4;
+	channel->GenerateAndAddConnectedComponent( GenerateSideUV );
+
+	angle = 3*PI/4;
+	channel->GenerateAndAddConnectedComponent( GenerateSideUV );
+
+	channel->GenerateAndAddConnectedComponent( GenerateRoundSideUV );
 
 	m_vaChannel = channel;
 }
