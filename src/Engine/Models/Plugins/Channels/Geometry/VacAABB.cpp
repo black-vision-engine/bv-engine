@@ -24,10 +24,11 @@ bool				AABB( const IVertexAttributesChannel * vac, const glm::mat4 & trans, mat
 				{
 					auto numVerts = cc->GetNumVertices();
 
+					const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( cc->GetAttributeChannels()[ 0 ]->GetData() );
+
 					for( unsigned int i = 0; i < numVerts; ++i )
 					{
-						const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( cc->GetAttributeChannels()[ 0 ]->GetData() );
-						auto transformed = trans * glm::vec4( pos->x, pos->y, pos->z, 1.f );
+						auto transformed = trans * glm::vec4( pos[ i ].x, pos[ i ].y, pos[ i ].z, 1.f );
 						rect->Include( glm::vec2( transformed ) );
 					}
 				}

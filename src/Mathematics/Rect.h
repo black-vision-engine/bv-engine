@@ -51,10 +51,10 @@ struct Rect
 	void	Transform( const glm::mat4 & tr )	
 	{
 		Rect r;
-		r.Include( glm::vec2( glm::vec4( xmin, ymin, 1.f, 0.f ) * tr ) );
-		r.Include( glm::vec2( glm::vec4( xmin, ymax, 1.f, 0.f ) * tr ) );
-		r.Include( glm::vec2( glm::vec4( xmax, ymin, 1.f, 0.f ) * tr ) );
-		r.Include( glm::vec2( glm::vec4( xmax, ymax, 1.f, 0.f ) * tr ) );
+		r.Include( glm::vec2( glm::vec4( xmin, ymin, 0.f, 1.f ) * tr ) );
+		r.Include( glm::vec2( glm::vec4( xmin, ymax, 0.f, 1.f ) * tr ) );
+		r.Include( glm::vec2( glm::vec4( xmax, ymin, 0.f, 1.f ) * tr ) );
+		r.Include( glm::vec2( glm::vec4( xmax, ymax, 0.f, 1.f ) * tr ) );
 
 		this->xmin = r.xmin;
 		this->xmax = r.xmax;
@@ -62,8 +62,8 @@ struct Rect
 		this->ymax = r.ymax;
 	}
 
-	Float32		Width	() const	{ return xmax - xmin + 1; }
-	Float32		Height	() const	{ return ymax - ymin + 1; }
+	Float32		Width	() const	{ return xmax - xmin; }
+	Float32		Height	() const	{ return ymax - ymin; }
 };
 
 } // mathematics
