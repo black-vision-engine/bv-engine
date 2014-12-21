@@ -31,6 +31,7 @@
     <ClCompile Include="Rendering\OffscreenRenderLogic.cpp" />
     <ClCompile Include="Rendering\RenderLogic.cpp" />
     <ClCompile Include="Widgets\Crawler\Crawler.cpp" />
+    <ClCompile Include="Widgets\Crawler\CrawlerEvents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
@@ -81,6 +82,7 @@
     <ClInclude Include="Rendering\OffscreenRenderLogic.h" />
     <ClInclude Include="Rendering\RenderLogic.h" />
     <ClInclude Include="Widgets\Crawler\Crawler.h" />
+    <ClInclude Include="Widgets\Crawler\CrawlerEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MockFonts">
