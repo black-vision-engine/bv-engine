@@ -32,7 +32,7 @@ struct Rect
 		return std::make_shared< Rect >( left, top, right, bottom );
 	}
 
-	void	Include		( const glm::vec2 & point )
+	void	Include					( const glm::vec2 & point )
 	{
 		xmin = std::min( xmin, point.x );
 		ymin = std::min( ymin, point.y );
@@ -40,7 +40,7 @@ struct Rect
 		ymax = std::max( ymax, point.y );
 	}
 
-	void	Include		( const Rect & rect )
+	void	Include					( const Rect & rect )
 	{
 		Include( glm::vec2( rect.xmin, rect.ymin ) );
 		Include( glm::vec2( rect.xmin, rect.ymax ) );
@@ -48,7 +48,7 @@ struct Rect
 		Include( glm::vec2( rect.xmax, rect.ymax ) );
 	}
 
-	void	Transform( const glm::mat4 & tr )	
+	void	Transform				( const glm::mat4 & tr )	
 	{
 		Rect r;
 		r.Include( glm::vec2( glm::vec4( xmin, ymin, 0.f, 1.f ) * tr ) );
@@ -62,8 +62,21 @@ struct Rect
 		this->ymax = r.ymax;
 	}
 
-	Float32		Width	() const	{ return xmax - xmin; }
-	Float32		Height	() const	{ return ymax - ymin; }
+	bool	IsInside				( const glm::vec2 & point ) const
+	{
+		return point.x >= this->xmin && point.x <= this->xmax && point.y >= this->ymin && point.y <= this->ymax;
+	}
+
+	bool	HasNonEmptyIntersection	( const Rect & rect ) const
+	{
+		return		IsInside( glm::vec2( rect.xmin, rect.ymin ) )
+				||	IsInside( glm::vec2( rect.xmin, rect.ymax ) )
+				||	IsInside( glm::vec2( rect.xmax, rect.ymin ) )
+				||	IsInside( glm::vec2( rect.xmax, rect.ymax ) );
+	}
+
+	Float32		Width				() const	{ return xmax - xmin; }
+	Float32		Height				() const	{ return ymax - ymin; }
 };
 
 } // mathematics
