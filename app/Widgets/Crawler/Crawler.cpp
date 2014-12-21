@@ -50,6 +50,8 @@ bool		Crawler::Finalize			()
 	{
 		LayoutNodes();
 		m_isFinalized = true;
+		for( auto n : m_nodes )
+			SetActiveNode( n, true );
 	}
 
 	return m_isFinalized;
@@ -84,6 +86,7 @@ void		Crawler::LayoutNodes		()
 			{
 				auto trParam = trPlugin->GetParameter( "simple_transform" );
 				model::SetParameterTranslation( trParam, 0, 0.0f, glm::vec3( currShift, 0.0f, 0.0f ) );
+				UpdateVisibility( m_nodes[ i ] );
 			}
 		}
 	}
@@ -136,8 +139,37 @@ void		Crawler::UpdateTransforms	()
 		{
 			auto trParam = trPlugin->GetParameter( "simple_transform" );
 			model::SetParameterTranslation( trParam, 0, 0.0f, glm::vec3( elem.second, 0.0f, 0.0f ) );
+			UpdateVisibility( elem.first );
 		}
 	}
+}
+
+// *******************************
+//
+void		Crawler::UpdateVisibility	( bv::model::BasicNode * n )
+{
+	auto & currVisibility = m_visibilities[ n ];
+	bool newVisibility = n->GetAABB().HasNonEmptyIntersection( *m_view );
+
+	if( currVisibility != newVisibility )
+	{
+		currVisibility = newVisibility;
+		NotifyVisibilityChanged( n, newVisibility );
+	}
+}
+
+// *******************************
+//
+void		Crawler::NotifyVisibilityChanged( const bv::model::BasicNode * n, bool visibility ) const
+{
+	printf( "Visibility of %p changed on %i \n", n, visibility );
+}
+
+// *******************************
+//
+void		Crawler::SetActiveNode		( bv::model::BasicNode * n, bool isActive )
+{
+	m_activeNodes[ n ] = isActive;
 }
 
 } // widgets
