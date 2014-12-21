@@ -112,6 +112,8 @@ public:
     bool                                    AddPlugins              ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator );
     bool                                    AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator );
 
+	void									SetLogic				( INodeLogicPtr logic );
+
     virtual void                            Print                   ( std::ostream & out, int tabs = 0 ) const override;
     virtual void                            Update                  ( TimeType t ) override;
 

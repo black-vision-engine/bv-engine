@@ -4,6 +4,8 @@
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
+#include <Windows.h>
+
 namespace bv { namespace widgets { 
 
 // *******************************
@@ -19,6 +21,9 @@ Crawler::Crawler						( bv::model::BasicNode * parent, const mathematics::RectCo
 	: m_parentNode( parent )
 	, m_isFinalized( false )
 	, m_view( view )
+	, m_started( false )
+	, m_currTime( 0 )
+	, m_speed( 0.f )
 {}
 
 
@@ -52,15 +57,27 @@ bool		Crawler::Finalize			()
 
 // *******************************
 //
+void		Crawler::SetSpeed			( Float32 speed )
+{
+	m_speed = speed;
+}
+
+// *******************************
+//
 void		Crawler::LayoutNodes		()
 {
 	auto length = m_nodes.size();
 	if( length > 1 )
 	{
 		Float32 currShift = 0.f;
+
+		m_shifts[ m_nodes[ 0 ] ] = currShift;
+
 		for( SizeType i = 1; i < length; ++i )
 		{
-			currShift += m_nodes[ i -1 ]->GetAABB().Width();
+			currShift += m_nodes[ i - 1 ]->GetAABB().Width();
+
+			m_shifts[ m_nodes[ i ] ] = currShift;
 
 			auto trPlugin = m_nodes[ i ]->GetPlugin( "transform" );
 			if( trPlugin )
@@ -68,6 +85,57 @@ void		Crawler::LayoutNodes		()
 				auto trParam = trPlugin->GetParameter( "simple_transform" );
 				model::SetParameterTranslation( trParam, 0, 0.0f, glm::vec3( currShift, 0.0f, 0.0f ) );
 			}
+		}
+	}
+}
+
+// *******************************
+//
+void		Crawler::Start			()
+{
+	if(! m_started )
+	{
+		m_started = true;
+		m_currTime = GetTickCount();
+	}
+}
+
+// *******************************
+//
+void		Crawler::Stop			()
+{
+	m_started = false;
+}
+
+// *******************************
+//
+void		Crawler::Update				( TimeType )
+{
+	if( m_started )
+	{
+		auto t = GetTickCount();
+		auto shift = m_speed * ( ( t - m_currTime ) / 1000.f );
+
+		m_currTime = t;
+
+		for( auto elem : m_shifts )
+			m_shifts[ elem.first ] -= shift;
+
+		UpdateTransforms();
+	}
+}
+
+// *******************************
+//
+void		Crawler::UpdateTransforms	()
+{
+	for( auto elem : m_shifts )
+	{
+		auto trPlugin = elem.first->GetPlugin( "transform" );
+		if( trPlugin )
+		{
+			auto trParam = trPlugin->GetParameter( "simple_transform" );
+			model::SetParameterTranslation( trParam, 0, 0.0f, glm::vec3( elem.second, 0.0f, 0.0f ) );
 		}
 	}
 }

@@ -350,6 +350,13 @@ bool           BasicNode::AddPlugins              ( const std::vector< std::stri
 
 // ********************************
 //
+void			BasicNode::SetLogic					( INodeLogicPtr logic )
+{
+	m_nodeLogic = logic;
+}
+
+// ********************************
+//
 void BasicNode::Update( TimeType t )
 {
     if( IsVisible() )
