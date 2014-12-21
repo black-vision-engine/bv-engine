@@ -49,7 +49,10 @@ bool		Crawler::Finalize			()
 	else
 	{
 		for( auto n : m_nodes )
+		{
+			m_nodesStates.Add( n );
 			SetActiveNode( n, true );
+		}
 		LayoutNodes();
 		m_isFinalized = true;
 	}
@@ -142,6 +145,9 @@ void		Crawler::UpdateTransforms	()
 				auto trParam = trPlugin->GetParameter( "simple_transform" );
 				model::SetParameterTranslation( trParam, 0, 0.0f, glm::vec3( elem.second, 0.0f, 0.0f ) );
 				UpdateVisibility( elem.first );
+
+				if( m_nodesStates.ActiveSize() == m_nodesStates.VisibleSize() )
+					NotifyNoMoreNodes();
 			}
 		}
 	}
@@ -170,6 +176,13 @@ void		Crawler::UpdateVisibility	( bv::model::BasicNode * n )
 void		Crawler::NotifyVisibilityChanged( const bv::model::BasicNode * n, bool visibility ) const
 {
 	printf( "Visibility of %p changed on %i \n", n, visibility );
+}
+
+// *******************************
+//
+void		Crawler::NotifyNoMoreNodes( ) const
+{
+	printf( "No more nodes \n" );
 }
 
 // *******************************
@@ -281,6 +294,28 @@ bool CrawlerNodesStates::IsNonActive	( bv::model::BasicNode * n ) const
 
 	return false;
 }
+
+// *******************************
+//
+SizeType CrawlerNodesStates::ActiveSize		() const
+{
+	return m_actives.size();
+}
+
+// *******************************
+//
+SizeType CrawlerNodesStates::NonActiveSize	() const
+{
+	return m_nonActives.size();
+}
+
+// *******************************
+//
+SizeType CrawlerNodesStates::VisibleSize	() const
+{
+	return m_visibles.size();
+}
+
 
 } // widgets
 } // bv

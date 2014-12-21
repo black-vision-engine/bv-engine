@@ -47,6 +47,10 @@ struct CrawlerNodesStates
 	bool IsVisible		( bv::model::BasicNode * n ) const;
 	bool IsActive		( bv::model::BasicNode * n ) const;
 	bool IsNonActive	( bv::model::BasicNode * n ) const;
+
+	SizeType ActiveSize		() const;
+	SizeType NonActiveSize	() const;
+	SizeType VisibleSize	() const;
 };
 
 class Crawler : public model::INodeLogic, public std::enable_shared_from_this< Crawler >
@@ -73,6 +77,7 @@ private:
 	void		SetActiveNode		( bv::model::BasicNode *, bool );
 	bool		IsActive			( bv::model::BasicNode * );
 	void		NotifyVisibilityChanged( const bv::model::BasicNode *, bool ) const;
+	void		NotifyNoMoreNodes	() const;
 
 public:
 

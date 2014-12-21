@@ -641,7 +641,12 @@ model::BasicNodePtr	SimpleNodesFactory::CreateCrawlerNode( model::TimelineManage
 	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
 	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
 	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
-	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
 
 	crawler->SetSpeed( 0.1f );
 
