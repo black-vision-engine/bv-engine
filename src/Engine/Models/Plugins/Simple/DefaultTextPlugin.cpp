@@ -6,6 +6,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
 #include "Mathematics/Transform/MatTransform.h"
 
@@ -157,6 +158,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     , m_textSet( true )
     , m_atlas( nullptr )
     , m_text( L"" )
+	, m_textLength( 0.f )
 {
     auto colorParam = prev->GetParameter( "color" );
 
@@ -311,6 +313,31 @@ IVertexShaderChannelConstPtr        DefaultTextPlugin::GetVertexShaderChannel   
 
 // *************************************
 // 
+mathematics::RectConstPtr			DefaultTextPlugin::GetAABB						( const glm::mat4 & trans ) const
+{
+	//auto trParam = GetCurrentParamTransform( this );
+
+	//if( !trParam )
+	//	return nullptr;
+
+	//assert( trParam->NumTransforms() <= 1 );
+
+	//if( trParam->NumTransforms() == 1 )
+	//{
+	//	auto trValue = trParam->Evaluate( 0 );
+
+		auto rect = mathematics::Rect::Create();
+		if( AABB( m_vaChannel.get(), trans, rect.get() ) )
+			return rect;
+		else
+			return nullptr;
+	//}
+	//	
+	//return nullptr;
+}
+
+// *************************************
+// 
 void                                DefaultTextPlugin::Update                      ( TimeType t )
 {
     m_paramValModel->Update();
@@ -354,7 +381,7 @@ void DefaultTextPlugin::InitAttributesChannel( IPluginPtr prev )
     auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 	auto outlineSize	=  EvaluateAsInt< SizeType >( m_outlineSizeParam );
 
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, outlineSize, false );
+    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, outlineSize, false );
 }
 
 // *************************************
@@ -440,27 +467,27 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
     auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 	auto outlineSize	=  EvaluateAsInt< SizeType >( m_outlineSizeParam );
 
-    auto textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, outlineSize, false );
+    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, outlineSize, false );
 
     auto maxTextLenght = m_maxTextLengthParam->Evaluate();
 
-    if( maxTextLenght > 0.f && textLength > 0.f && textLength > maxTextLenght )
+    if( maxTextLenght > 0.f && m_textLength > 0.f && m_textLength > maxTextLenght )
     {
         auto center = glm::vec3( 0.f, 0.f, 0.f );
 
         switch( EvaluateAsInt< TextAlignmentType >( m_alignmentParam ) )
         {
         case TextAlignmentType::Center:
-            center = glm::vec3( textLength / 2.f, 0.f, 0.f );
+            center = glm::vec3( m_textLength / 2.f, 0.f, 0.f );
             break;
         case TextAlignmentType::Right:
-            center = glm::vec3( textLength, 0.f, 0.f );
+            center = glm::vec3( m_textLength, 0.f, 0.f );
             break;
         default:
             break;
         }
 
-        auto scaleMat = BuildScaleMatrix( center, glm::vec3( maxTextLenght / textLength, 1.f, 1.f ) );
+        auto scaleMat = BuildScaleMatrix( center, glm::vec3( maxTextLenght / m_textLength, 1.f, 1.f ) );
 
         TransformPosChannel( m_vaChannel, scaleMat );
     }

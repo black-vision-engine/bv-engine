@@ -11,59 +11,6 @@ namespace bv { namespace model {
 class Text;
 struct Glyph;
 
-//struct GlyphCoords
-//{
-//    SizeType				textureX;
-//    SizeType				textureY;
-//
-//    SizeType	            width;
-//    SizeType	            height;
-//
-//    int                     bearingX;
-//    int                     bearingY;
-//
-//    SizeType	            glyphX;
-//    SizeType	            glyphY;
-//
-//    SizeType	            glyphWidth;
-//    SizeType	            glyphHeight;
-//
-//    signed long             advanceX;
-//    signed long             advanceY;
-//
-//    GlyphCoords(){}
-//
-//    GlyphCoords(SizeType tX,
-//                SizeType tY,
-//                SizeType w,
-//                SizeType h,
-//                SizeType gX,
-//                SizeType gY,
-//                SizeType gw,
-//                SizeType gh,
-//                int bX,
-//                int bY,
-//                signed long aX,
-//                signed long aY)
-//                : textureX( tX )
-//                , textureY( tY )
-//                , width( w )
-//                , height( h )
-//                , glyphX( gX )
-//                , glyphY( gY )
-//                , glyphWidth( gw )
-//                , glyphHeight( gh )
-//                , bearingX( bX )
-//                , bearingY( bY )
-//                , advanceX( aX )
-//                , advanceY( aY )
-//
-//    {}
-//
-//    // serialization
-//    void        Save( std::ostream& out ) const;
-//    void        Load( std::istream& in );
-//};
 
 class TextAtlas
 {

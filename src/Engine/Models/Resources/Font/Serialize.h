@@ -43,6 +43,7 @@ void serialize< boost::archive::text_iarchive >( boost::archive::text_iarchive &
     textAtlas.m_textureHandle = bv::model::ResourceHandlePtr( new bv::model::ResourceHandle( nullptr, size, textureExtra ) );
 
     ar >> textAtlas.m_glyphs;
+	ar >> textAtlas.m_outlineGlyphs;
     ar >> textAtlas.m_glyphWidth;
     ar >> textAtlas.m_glyphHeight;
     ar >> textAtlas.m_kerningMap;
@@ -63,6 +64,7 @@ void serialize< boost::archive::text_oarchive >( boost::archive::text_oarchive &
     ar << textureExtra->m_type;
 
     ar & textAtlas.m_glyphs;
+	ar & textAtlas.m_outlineGlyphs;
     ar << textAtlas.m_glyphWidth;
     ar << textAtlas.m_glyphHeight;
     ar & textAtlas.m_kerningMap;

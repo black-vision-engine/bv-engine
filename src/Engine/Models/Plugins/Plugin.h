@@ -60,8 +60,11 @@ public:
     virtual RendererContextConstPtr             GetRendererContext          () const override;
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const override;
+	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
 
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr );
+
+	virtual ParamTransformVecPtr				GetParamTransform			() const override { return nullptr; }
 
 protected:
 
@@ -257,6 +260,14 @@ IPluginConstPtr                     BasePlugin< Iface >::GetPrevPlugin          
 // *******************************
 //
 template< class Iface >
+mathematics::RectConstPtr			BasePlugin< Iface >::GetAABB						( const glm::mat4 & ) const
+{
+	return nullptr;
+}
+
+// *******************************
+//
+template< class Iface >
 bool                                BasePlugin< Iface >::LoadResource                   ( IPluginResourceDescrConstPtr resDescr )
 {
     return false;
@@ -309,6 +320,8 @@ IParamValModelPtr                           BasePlugin< Iface >::GeometryShaderC
 {
     return m_pluginParamValModel->GetGeometryShaderChannelModel();
 }
+
+ParamTransformVecPtr						GetCurrentParamTransform( const IPlugin * pl );
 
 } // model
 } // bv

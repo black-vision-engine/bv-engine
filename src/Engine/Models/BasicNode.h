@@ -4,12 +4,16 @@
 #include <string>
 
 #include "Engine/Models/Interfaces/IModelNode.h"
+#include "Engine/Models/Interfaces/INodeLogic.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
 
+
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
+
+#include "Mathematics/Rect.h"
 
 
 namespace bv {
@@ -54,6 +58,8 @@ private:
 
     DefaultPluginListFinalizedPtr   m_pluginList;
 
+	INodeLogicPtr					m_nodeLogic;
+
 public:
 
     explicit BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager = nullptr );
@@ -89,6 +95,9 @@ public:
     virtual const std::string &             GetName                 () const override;
     void                                    SetName                 ( const std::string & name );
 
+	// axis-aligned bounding box
+	mathematics::Rect 						GetAABB					() const;
+
     virtual SceneNode *                     BuildScene              () override;
 
     void                                    AddChild                ( BasicNodePtr n );
@@ -101,6 +110,9 @@ private:
 
     void                                    NonNullPluginsListGuard ();
 
+	mathematics::Rect 						GetAABB					( const glm::mat4 & currentTransformation ) const;
+
+
 public:
 
     //Utility API - plugins can be added on-the-fly by user using an editor
@@ -109,6 +121,8 @@ public:
     bool                                    AddPlugin               ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
     bool                                    AddPlugins              ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator );
     bool                                    AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator );
+
+	void									SetLogic				( INodeLogicPtr logic );
 
     virtual void                            Print                   ( std::ostream & out, int tabs = 0 ) const override;
     virtual void                            Update                  ( TimeType t ) override;

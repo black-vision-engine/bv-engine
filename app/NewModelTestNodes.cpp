@@ -15,6 +15,7 @@
 #include "Engine/Models/BasicNode.h"
 
 #include "testai/TestAIManager.h"
+#include "Widgets/Crawler/Crawler.h"
 #include "Helpers/RectNodeBuilder.h"
 
 #include "BVConfig.h"
@@ -289,7 +290,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMan
     assert( success );
 
     //Set some values to make it look like a scene
-    SetDefaultTransformAnim( root->GetPlugin( "transform" ) );
+    //SetDefaultTransformAnim( root->GetPlugin( "transform" ) );
 
     auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
     assert( color );
@@ -298,10 +299,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMan
     auto h = root->GetPlugin( "rectangle" )->GetParameter( "height" );
 
     success &= SetParameter( w, 0.f, 2.f );
-    success &= SetParameter( h, 0.f, 1.f );
+    success &= SetParameter( h, 0.f, 2.f );
 
-    success &= SetParameter( w, 20.f, 1.f );
-    success &= SetParameter( h, 20.f, 2.f );
+    //success &= SetParameter( w, 20.f, 1.f );
+    //success &= SetParameter( h, 20.f, 2.f );
 
     success &= SetParameter( color, 0.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
 
@@ -448,9 +449,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
         node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( timeEvaluator );
     auto plugin = node->GetPlugin( "transform" );
-    auto param = plugin->GetParameter( "simple_transform" );
+    //auto param = plugin->GetParameter( "simple_transform" );
 
-    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.0f, 0.f, 0.f ) );
+    //SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.0f, 0.f, 0.f ) );
 
     /*
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 0.f, 0.0f ) );
@@ -474,7 +475,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     model::SetParameter( node->GetPlugin( "texture" )->GetParameter( "alpha" ), TimeType( 3.f ),   1.f );
     */
 
-    success = model::LoadTexture( node->GetPlugin( "texture" ), "caption_white.png" );
+    success = model::LoadTexture( node->GetPlugin( "texture" ), "ogl_sm.jpg" );
     //success = model::LoadTexture( node->GetPlugin( "texture" ), "Untitled drawing.png" );
     assert( success );
 
@@ -490,8 +491,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
         //model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),   2.f * scl );
         //model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), wf * 2.f * scl );
 
-        SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),  float(height)/540.f );
-        SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),   float(width)/540.f );
+		auto rectPlugin = node->GetPlugin( "rectangle" );
+        SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),  float(height)/1080.f );
+        SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),   float(width)/1080.f );
+
+		rectPlugin->Update( TimeType( 0.f ) );
     }
 
     if( useAlphaMask )
@@ -596,7 +600,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto node = std::make_shared< model::BasicNode >( "Text", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -606,8 +610,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     auto plugin = node->GetPlugin( "transform" );
     auto param = plugin->GetParameter( "simple_transform" );
 
-    SetParameterTranslation( param, 0, 0.0f, glm::vec3( -0.58f, -0.022f, 0.0f ) );
-    SetParameterTranslation( param, 0, 30.0f, glm::vec3( -0.58f, -0.04f, 0.0f ) );
+    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.03f, -0.04, 0.0f ) );
+    //SetParameterTranslation( param, 0, 30.0f, glm::vec3( -0.58f, -0.04f, 0.0f ) );
 
 //    SetParameterTranslation( param, 0, 0.0f, glm::vec3( -0.58f, 0.122f, 0.0f ) );
  //   SetParameterTranslation( param, 0, 100.0f, glm::vec3( -0.58f, -0.14f, 0.0f ) );
@@ -619,12 +623,12 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
 	node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( timeEvaluator );
 	node->GetPlugin( "text" )->GetParameter( "outlineColor" )->SetTimeEvaluator( timeEvaluator );
 
-    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ) );
+    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
 	SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) );
-	SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 10.0 ), glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) );
-	SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 10.0 ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ) );
+	//SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 10.0 ), glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) );
+	//SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 10.0 ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ) );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 60.0f );
-	SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineSize" ), TimeType( 0.0 ), float( 5 ) );
+	SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineSize" ), TimeType( 0.0 ), float( 0 ) );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
 
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
@@ -642,7 +646,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAAAA\nBBBBCCCC\nDDDDDDDDD" );
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AV::11A-AAAA\nBBBBCCCC\nDDD333DD88\nAAAAAAAA\nB3BBCCCC\nDDDD888DDD" );
 //    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAABBBBCCCCDDDD" );
-	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"1fgdfhkjhasdf238\ndsadsd" );
+	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"12345" );
 
     if( useAlphaMask )
     {
@@ -662,9 +666,47 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     return node;    
 }
 
+model::BasicNodePtr	SimpleNodesFactory::CreateCrawlerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+	//std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+	//node->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEvaluator );
+
+	auto node = CreateGreenRectNode( timelineManager, timeEvaluator, "green rect"); 
+
+	auto crawler = widgets::Crawler::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
+
+	node->SetLogic( crawler );
+
+	auto texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+	texture->AddChild( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( texture );
+	texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+	texture->AddChild( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( texture );
+	texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+	texture->AddChild( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( texture );
+	texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+	texture->AddChild( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( texture );
+	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+
+	crawler->SetSpeed( 0.4f );
+
+	crawler->Finalize();
+	crawler->Start();
+
+	return node;
+}
+
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateTextWithShadowNode(   model::TimelineManager * timelineManager,
+model::BasicNodePtr SimpleNodesFactory::CreateTextWithShadowNode(   model::TimelineManager * timelineManager,
                                                                     model::ITimeEvaluatorPtr timeEvaluator,
                                                                     unsigned int blurSize,
                                                                     const glm::vec3 shadowTranslation )
