@@ -610,7 +610,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     auto plugin = node->GetPlugin( "transform" );
     auto param = plugin->GetParameter( "simple_transform" );
 
-    //SetParameterTranslation( param, 0, 0.0f, glm::vec3( -0.58f, -0.022f, 0.0f ) );
+    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.03f, -0.04, 0.0f ) );
     //SetParameterTranslation( param, 0, 30.0f, glm::vec3( -0.58f, -0.04f, 0.0f ) );
 
 //    SetParameterTranslation( param, 0, 0.0f, glm::vec3( -0.58f, 0.122f, 0.0f ) );

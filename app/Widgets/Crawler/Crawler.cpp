@@ -27,6 +27,7 @@ Crawler::Crawler						( bv::model::BasicNode * parent, const mathematics::RectCo
 	, m_started( false )
 	, m_currTime( 0 )
 	, m_speed( 0.f )
+	, m_interspace( 0.1f )
 {}
 
 
@@ -64,6 +65,13 @@ bool		Crawler::Finalize			()
 
 // *******************************
 //
+void		Crawler::SetInterspace		( Float32 interspace )
+{
+	m_interspace = interspace;
+}
+
+// *******************************
+//
 void		Crawler::SetSpeed			( Float32 speed )
 {
 	m_speed = speed;
@@ -76,13 +84,13 @@ void		Crawler::LayoutNodes		()
 	auto length = m_nodesStates.ActiveSize();
 	if( length > 0 )
 	{
-		Float32 currShift = m_view->xmax;
+		Float32 currShift = m_view->xmax + m_interspace;
 
 		m_shifts[ m_nodesStates.m_actives[ 0 ] ] = currShift;
 
 		for( SizeType i = 1; i < length; ++i )
 		{
-			currShift += m_nodesStates.m_actives[ i - 1 ]->GetAABB().Width();
+			currShift += m_nodesStates.m_actives[ i - 1 ]->GetAABB().Width() + m_interspace;
 
 			m_shifts[ m_nodesStates.m_actives[ i ] ] = currShift;
 		}
@@ -265,7 +273,7 @@ void		Crawler::EnqueueNode			( model::BasicNode * n)
 		{
 			auto lastActiveNode = m_nodesStates.m_actives[ activeSize - 1 ];
 
-			auto nodeShift = m_shifts[ lastActiveNode ] + lastActiveNode->GetAABB().Width();
+			auto nodeShift = m_shifts[ lastActiveNode ] + lastActiveNode->GetAABB().Width() + m_interspace;
 
 			nodeShift = max( nodeShift, m_view->xmax );
 

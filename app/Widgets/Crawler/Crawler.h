@@ -46,6 +46,7 @@ private:
 	UInt64									m_currTime;
 	bool									m_started;
 	Float32									m_speed;
+	Float32									m_interspace;
 
 	void		LayoutNodes			();
 	void		UpdateTransforms	();
@@ -67,6 +68,7 @@ public:
 	void		EnqueueNode			( model::BasicNode * n);
 
 	void		SetSpeed			( Float32 speed );
+	void		SetInterspace		( Float32 interspace );
 
 	virtual void	Initialize		()				override {}
 	virtual void	Update			( TimeType t )	override;
