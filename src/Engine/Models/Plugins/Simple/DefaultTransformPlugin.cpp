@@ -91,5 +91,13 @@ void                                DefaultTransformPlugin::Update              
     m_transformChannel->PostUpdate();
 }
 
+// *************************************
+//
+ParamTransformVecPtr				DefaultTransformPlugin::GetParamTransform			() const
+{
+	return std::static_pointer_cast< ParamTransformVec >( m_paramValModel->GetTransformChannelModel()->GetParameters()[ 0 ] );
+}
+
+
 } // model
 } // bv

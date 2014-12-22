@@ -164,7 +164,13 @@ const Glyph *			TextAtlas::GetGlyph			( wchar_t c, bool outline ) const
 			return it->second;
 	}
 
-    return nullptr;
+
+	auto it = m_glyphs.find('_');
+
+	if( it != m_glyphs.end() )
+			return it->second;
+	else
+		return nullptr;
 }
 
 // *********************************
@@ -274,7 +280,7 @@ void                Text::BuildAtlas        ()
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
 
-    auto entry = new FontAtlasCacheEntry( m_atlas, fontName, m_fontSize, m_blurSize, m_fontFile, "", false, false );
+    auto entry = new FontAtlasCacheEntry( m_atlas, fontName, m_fontSize, m_blurSize, m_outlineWidth, m_fontFile, "", false, false );
     fac->AddEntry( *entry );
 
 #ifdef GENERATE_TEST_BMP_FILE

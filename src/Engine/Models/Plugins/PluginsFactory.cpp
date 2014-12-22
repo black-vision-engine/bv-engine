@@ -133,5 +133,21 @@ GeometryRectPlugin *         PluginsFactory::CreateGeometryRectPlugin           
 //    return new model::SimpleGeometryShaderPlugin( prevPlugin, shaderPath );
 //}
 
+ParamTransformVecPtr						GetCurrentParamTransform( const IPlugin * pl )
+{
+	if( pl )
+	{	
+		auto trParam = pl->GetParamTransform();
+
+		if( !trParam )
+			return GetCurrentParamTransform( pl->GetPrevPlugin().get() );
+
+		return trParam;
+	}
+	
+	return nullptr;
+
+}
+
 } // model
 } //bv

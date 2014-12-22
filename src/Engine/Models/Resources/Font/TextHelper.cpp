@@ -261,6 +261,5 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
     return translate.x; // FIXME: This does not work for multiline text
 }
 
-
 } // model
 } // bv

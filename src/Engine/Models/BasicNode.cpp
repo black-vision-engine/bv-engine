@@ -228,6 +228,50 @@ void                        BasicNode::SetName                      ( const std:
 
 // ********************************
 //
+mathematics::Rect 			BasicNode::GetAABB						() const
+{
+	mathematics::Rect r;
+
+	auto trans = m_pluginList->GetFinalizePlugin()->GetParamTransform()->Evaluate( 0 );
+
+	auto plRect = m_pluginList->GetFinalizePlugin()->GetAABB( trans );
+
+	if( plRect )
+		r.Include( *plRect );
+
+
+	for( auto ch : m_children )
+	{
+		r.Include( ch->GetAABB( trans ) );
+	}
+
+	return r;
+}
+
+// ********************************
+//
+mathematics::Rect 			BasicNode::GetAABB						( const glm::mat4 & parentTransformation ) const
+{
+	mathematics::Rect r;
+
+	auto trans = parentTransformation * m_pluginList->GetFinalizePlugin()->GetParamTransform()->Evaluate( 0 );
+
+	auto plRect = m_pluginList->GetFinalizePlugin()->GetAABB( trans );
+
+	if( plRect )
+		r.Include( *plRect );
+
+
+	for( auto ch : m_children )
+	{
+		r.Include( ch->GetAABB( trans ) );
+	}
+
+	return r;
+}
+
+// ********************************
+//
 SceneNode *                 BasicNode::BuildScene   () 
 {
     IPluginConstPtr finalizer = GetFinalizePlugin();
@@ -368,6 +412,13 @@ bool           BasicNode::AddPlugins              ( const std::vector< std::stri
 
 // ********************************
 //
+void			BasicNode::SetLogic					( INodeLogicPtr logic )
+{
+	m_nodeLogic = logic;
+}
+
+// ********************************
+//
 void BasicNode::Update( TimeType t )
 {
     if( IsVisible() )
@@ -378,6 +429,9 @@ void BasicNode::Update( TimeType t )
             l->Update( t );
 
         m_pluginList->Update( t );
+
+		if( m_nodeLogic )
+			m_nodeLogic->Update( t );
 
         for( auto ch : m_children )
             ch->Update( t );

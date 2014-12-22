@@ -32,6 +32,7 @@ FontAtlasCacheEntry::FontAtlasCacheEntry(   const TextAtlas* textAtlas
                                          ,  const std::string& fontName
                                          ,  SizeType fontSize
                                          ,  SizeType blurSize
+										 ,  SizeType outlineWidth
                                          ,  const std::string& fontFilePath
 										 ,	const std::string & atlasFilePath
                                          ,  bool bold
@@ -40,6 +41,7 @@ FontAtlasCacheEntry::FontAtlasCacheEntry(   const TextAtlas* textAtlas
     , m_fontName( fontName )
     , m_fontSize( fontSize )
     , m_blurSize( blurSize )
+	, m_outlineWidth( outlineWidth )
     , m_fontFilePath( fontFilePath )
 	, m_atlasFilePath( atlasFilePath )
     , m_bold( bold )
@@ -142,7 +144,7 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
 {
     auto out = static_cast< FontAtlasCacheEntry * >( data );
 
-    assert( argsNum == 8 );
+    assert( argsNum == 9 );
 
     out->m_fontName     = args[ 0 ];
     out->m_fontSize     = std::atoi( args[ 1 ] );
@@ -254,6 +256,7 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
         + "\'" + data.m_fontName + "\'" + ", " 
         + std::to_string( data.m_fontSize ) + ", " 
         + std::to_string( data.m_blurSize ) + ", " 
+		+ std::to_string( data.m_outlineWidth ) + ", " 
         + "\'" + data.m_fontFilePath + "\'" + ", " 
         + std::to_string( data.m_bold ) + ", " 
         + std::to_string( data.m_italic ) + ", " 

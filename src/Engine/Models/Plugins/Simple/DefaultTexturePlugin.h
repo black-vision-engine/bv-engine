@@ -77,6 +77,8 @@ public:
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
+	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
+
     unsigned int                                GetTextureWidth             () const;
     unsigned int                                GetTextureHeight            () const;
 
