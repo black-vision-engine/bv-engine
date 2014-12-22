@@ -98,7 +98,7 @@ void		Crawler::Start			()
 	if(! m_started )
 	{
 		m_started = true;
-		m_currTime = GetTickCount();
+		m_currTime = timeGetTime();
 	}
 }
 
@@ -115,15 +115,20 @@ void		Crawler::Update				( TimeType )
 {
 	if( m_started )
 	{
-		auto t = GetTickCount();
+		auto t = timeGetTime();
 		auto shift = m_speed * ( ( t - m_currTime ) / 1000.f );
 
 		m_currTime = t;
 
-		for( auto elem : m_shifts )
-			m_shifts[ elem.first ] -= shift;
+		if( shift > 0.f )
+		{
+			printf( "Current shift %f \n", shift );
 
-		UpdateTransforms();
+			for( auto elem : m_shifts )
+				m_shifts[ elem.first ] -= shift;
+
+			UpdateTransforms();
+		}
 	}
 }
 
