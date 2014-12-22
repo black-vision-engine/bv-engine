@@ -197,13 +197,40 @@ mathematics::Rect 			BasicNode::GetAABB						() const
 {
 	mathematics::Rect r;
 
-	auto plRect = m_pluginList->GetFinalizePlugin()->GetAABB();
+	auto trans = m_pluginList->GetFinalizePlugin()->GetParamTransform()->Evaluate( 0 );
+
+	auto plRect = m_pluginList->GetFinalizePlugin()->GetAABB( trans );
 
 	if( plRect )
 		r.Include( *plRect );
 
+
 	for( auto ch : m_children )
-		r.Include( ch->GetAABB() );
+	{
+		r.Include( ch->GetAABB( trans ) );
+	}
+
+	return r;
+}
+
+// ********************************
+//
+mathematics::Rect 			BasicNode::GetAABB						( const glm::mat4 & parentTransformation ) const
+{
+	mathematics::Rect r;
+
+	auto trans = parentTransformation * m_pluginList->GetFinalizePlugin()->GetParamTransform()->Evaluate( 0 );
+
+	auto plRect = m_pluginList->GetFinalizePlugin()->GetAABB( trans );
+
+	if( plRect )
+		r.Include( *plRect );
+
+
+	for( auto ch : m_children )
+	{
+		r.Include( ch->GetAABB( trans ) );
+	}
 
 	return r;
 }

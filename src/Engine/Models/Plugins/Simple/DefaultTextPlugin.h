@@ -88,7 +88,7 @@ private:
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
-	virtual mathematics::RectConstPtr			GetAABB						() const override;
+	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & trans ) const override;
 
     virtual void                                Update                      ( TimeType t ) override;
 

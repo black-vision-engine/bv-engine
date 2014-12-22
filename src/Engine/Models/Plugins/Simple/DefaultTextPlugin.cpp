@@ -313,25 +313,27 @@ IVertexShaderChannelConstPtr        DefaultTextPlugin::GetVertexShaderChannel   
 
 // *************************************
 // 
-mathematics::RectConstPtr			DefaultTextPlugin::GetAABB						() const
+mathematics::RectConstPtr			DefaultTextPlugin::GetAABB						( const glm::mat4 & trans ) const
 {
-	auto trParam = GetCurrentParamTransform( this );
+	//auto trParam = GetCurrentParamTransform( this );
 
-	if( !trParam )
-		return nullptr;
+	//if( !trParam )
+	//	return nullptr;
 
-	assert( trParam->NumTransforms() <= 1 );
+	//assert( trParam->NumTransforms() <= 1 );
 
-	if( trParam->NumTransforms() == 1 )
-	{
-		auto trValue = trParam->Evaluate( 0 );
+	//if( trParam->NumTransforms() == 1 )
+	//{
+	//	auto trValue = trParam->Evaluate( 0 );
 
 		auto rect = mathematics::Rect::Create();
-		if( AABB( m_vaChannel.get(), trValue, rect.get() ) )
+		if( AABB( m_vaChannel.get(), trans, rect.get() ) )
 			return rect;
-	}
-		
-	return nullptr;
+		else
+			return nullptr;
+	//}
+	//	
+	//return nullptr;
 }
 
 // *************************************

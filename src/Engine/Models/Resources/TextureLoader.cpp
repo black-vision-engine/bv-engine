@@ -17,7 +17,14 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource * res )  
     int height  = 0;
     int bpp     = 0;
 
-    auto data = TextureHelper::LoadRAW( res->GetFilePath() );
+	auto filePath = res->GetFilePath();
+
+	MemoryChunkConstPtr data = nullptr;
+
+	if( filePath.find(".raw") != std::string::npos)
+		data = TextureHelper::LoadRAW( filePath );
+	else
+		data = TextureHelper::LoadImg( filePath, &width, &height, &bpp );
 
     if ( data != nullptr )
     {

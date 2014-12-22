@@ -122,8 +122,6 @@ void		Crawler::Update				( TimeType )
 
 		if( shift > 0.f )
 		{
-			printf( "Current shift %f \n", shift );
-
 			for( auto elem : m_shifts )
 				m_shifts[ elem.first ] -= shift;
 
@@ -217,11 +215,18 @@ void		Crawler::NotifyNoMoreNodes( )
 	if( n )
 	{
 		auto i = rand() % exampleSize;
-		auto pl = n->GetPlugin( "text" );
+		auto textNode = n->GetChild( "Text" );
+		if( textNode )
+		{
+			auto pl = textNode->GetPlugin( "text" );
 
-		model::DefaultTextPlugin::SetText( pl, examples[ i ] );
+			if( pl )
+			{
+				model::DefaultTextPlugin::SetText( pl, examples[ i ] );
 
-		EnqueueNode( n );
+				EnqueueNode( n );
+			}
+		}
 	}
 }
 

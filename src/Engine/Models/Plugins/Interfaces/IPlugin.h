@@ -58,7 +58,7 @@ public:
     virtual IPluginConstPtr                     GetPrevPlugin               () const = 0;
 
 	// axis-aligned bounding box
-	virtual mathematics::RectConstPtr			GetAABB						() const = 0;
+	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const = 0;
 
     //FIXME: implement a more generic interface for resource loading
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) = 0;

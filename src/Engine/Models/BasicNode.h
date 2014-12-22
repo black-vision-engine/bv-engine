@@ -103,6 +103,9 @@ private:
 
     void                                    NonNullPluginsListGuard ();
 
+	mathematics::Rect 						GetAABB					( const glm::mat4 & currentTransformation ) const;
+
+
 public:
 
     //Utility API - plugins can be added on-the-fly by user using an editor
