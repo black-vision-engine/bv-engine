@@ -64,6 +64,8 @@ public:
 
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr );
 
+	virtual ParamTransformVecPtr				GetParamTransform			() const override { return nullptr; }
+
 protected:
 
     IParamValModelPtr                           PluginModel                 ();
@@ -318,6 +320,8 @@ IParamValModelPtr                           BasePlugin< Iface >::GeometryShaderC
 {
     return m_pluginParamValModel->GetGeometryShaderChannelModel();
 }
+
+ParamTransformVecPtr						GetCurrentParamTransform( const IPlugin * pl );
 
 } // model
 } // bv

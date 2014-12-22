@@ -58,6 +58,8 @@ public:
 
     static std::string                          ShadersDir                  ();
 
+	virtual ParamTransformVecPtr				GetParamTransform			() const override { return nullptr; }
+
 private:
 
     std::vector< std::string >                  PrevUIDS                    ( unsigned int skipFirstEntries ) const;

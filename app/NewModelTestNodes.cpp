@@ -628,11 +628,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
 
 model::BasicNodePtr	SimpleNodesFactory::CreateCrawlerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-	auto node = CreateGreenRectNode( timelineManager, timeEvaluator, "green rect");; //std::make_shared< model::BasicNode >( "Root", timeEvaluator );
-
-	//CreateGreenRectNode( timelineManager, timeEvaluator, "green rect");
-
+	//std::make_shared< model::BasicNode >( "Root", timeEvaluator );
 	//node->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEvaluator );
+
+	auto node = CreateGreenRectNode( timelineManager, timeEvaluator, "green rect"); 
 
 	auto crawler = widgets::Crawler::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
 
@@ -645,12 +644,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateCrawlerNode( model::TimelineManage
 	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
 	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
 	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
-	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
-	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
-	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
-	crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
 
-	crawler->SetSpeed( 0.1f );
+	crawler->SetSpeed( 0.5f );
 
 	crawler->Finalize();
 	crawler->Start();

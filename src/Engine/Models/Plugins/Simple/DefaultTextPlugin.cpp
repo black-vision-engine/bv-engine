@@ -315,14 +315,19 @@ IVertexShaderChannelConstPtr        DefaultTextPlugin::GetVertexShaderChannel   
 // 
 mathematics::RectConstPtr			DefaultTextPlugin::GetAABB						() const
 {
-	auto trValues = GetTransformChannel()->GetTransformValues();
-		
-	assert( trValues.size() <= 1 );
+	auto trParam = GetCurrentParamTransform( this );
 
-	if( trValues.size() == 1 )
+	if( !trParam )
+		return nullptr;
+
+	assert( trParam->NumTransforms() <= 1 );
+
+	if( trParam->NumTransforms() == 1 )
 	{
+		auto trValue = trParam->Evaluate( 0 );
+
 		auto rect = mathematics::Rect::Create();
-		if( AABB( m_vaChannel.get(), trValues[ 0 ]->GetValue(), rect.get() ) )
+		if( AABB( m_vaChannel.get(), trValue, rect.get() ) )
 			return rect;
 	}
 		

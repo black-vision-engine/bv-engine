@@ -164,7 +164,13 @@ const Glyph *			TextAtlas::GetGlyph			( wchar_t c, bool outline ) const
 			return it->second;
 	}
 
-    return nullptr;
+
+	auto it = m_glyphs.find('_');
+
+	if( it != m_glyphs.end() )
+			return it->second;
+	else
+		return nullptr;
 }
 
 // *********************************

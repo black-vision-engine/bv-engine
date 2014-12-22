@@ -16,6 +16,7 @@
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/ITransformChannel.h"
+#include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 #include "Mathematics/Rect.h"
 
 namespace bv { namespace model {
@@ -61,6 +62,9 @@ public:
 
     //FIXME: implement a more generic interface for resource loading
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) = 0;
+
+
+	virtual ParamTransformVecPtr				GetParamTransform			() const = 0; //FIXME: BArdzo brzydki hack zeby zadzialal crawler
 
     virtual                                     ~IPlugin                    (){}
 
