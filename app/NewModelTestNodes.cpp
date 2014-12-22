@@ -253,7 +253,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMan
     assert( success );
 
     //Set some values to make it look like a scene
-    SetDefaultTransformAnim( root->GetPlugin( "transform" ) );
+    //SetDefaultTransformAnim( root->GetPlugin( "transform" ) );
 
     auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
     assert( color );
@@ -262,10 +262,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMan
     auto h = root->GetPlugin( "rectangle" )->GetParameter( "height" );
 
     success &= SetParameter( w, 0.f, 2.f );
-    success &= SetParameter( h, 0.f, 1.f );
+    success &= SetParameter( h, 0.f, 2.f );
 
-    success &= SetParameter( w, 20.f, 1.f );
-    success &= SetParameter( h, 20.f, 2.f );
+    //success &= SetParameter( w, 20.f, 1.f );
+    //success &= SetParameter( h, 20.f, 2.f );
 
     success &= SetParameter( color, 0.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
 
@@ -628,9 +628,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
 
 model::BasicNodePtr	SimpleNodesFactory::CreateCrawlerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-	auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+	auto node = CreateGreenRectNode( timelineManager, timeEvaluator, "green rect");; //std::make_shared< model::BasicNode >( "Root", timeEvaluator );
 
-	node->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEvaluator );
+	//CreateGreenRectNode( timelineManager, timeEvaluator, "green rect");
+
+	//node->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEvaluator );
 
 	auto crawler = widgets::Crawler::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
 
