@@ -450,6 +450,7 @@
     <ClInclude Include="Engine\Graphics\State\RendererStateEnums.h" />
     <ClInclude Include="Engine\Graphics\State\RendererStateInstance.h" />
     <ClInclude Include="Engine\Graphics\State\StencilState.h" />
+    <ClInclude Include="Engine\Interfaces\IMultipassShaderDataSource.h" />
     <ClInclude Include="Engine\Interfaces\IShaderDataSource.h" />
     <ClInclude Include="Engine\Interfaces\IUpdatable.h" />
     <ClInclude Include="Engine\Interfaces\IUpdater.h" />

@@ -13,14 +13,21 @@ class IShaderDataSource;
 class ITextureParams;
 class ITextureDescriptor;
 class IAnimationDescriptor;
-
+class IMultipassShaderDataSource;
 
 class DefaultEffect : public RenderableEffect
 {
 public:
 
+        //FIXME: this is a HACK 
+        DefaultEffect   ( const IMultipassShaderDataSource * msds );
+
         DefaultEffect   ( const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds );
         ~DefaultEffect  ();
+
+private:
+
+    RenderablePass *    CreateRenderablePass    ( const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds ) const;
 
 protected:
 
@@ -28,7 +35,7 @@ protected:
     ShaderParameters *  CreateDefaultParamsVS   ( const IShaderDataSource * ds ) const;
     ShaderParameters *  CreateDefaultParamsGS   ( const IShaderDataSource * ds ) const;
 
-    void                AddTextures             ( Shader * shader, ITexturesDataConstPtr txData );
+    void                AddTextures             ( Shader * shader, ITexturesDataConstPtr txData ) const;
 
 private:
 
