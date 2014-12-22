@@ -1,8 +1,8 @@
 #pragma once
 
 #include "System/BasicTypes.h"
-
 #include "Engine/Models/Interfaces/INodeLogic.h"
+#include "CrawlerNodesStates.h"
 
 #include <vector>
 #include <map>
@@ -32,27 +32,6 @@ class Crawler;
 DEFINE_PTR_TYPE( Crawler )
 DEFINE_CONST_PTR_TYPE( Crawler )
 
-struct CrawlerNodesStates
-{
-	std::vector< bv::model::BasicNode * > m_nonActives;
-	std::vector< bv::model::BasicNode * > m_actives;
-	std::vector< bv::model::BasicNode * > m_visibles;
-
-	void Add			( bv::model::BasicNode * n );
-	void Acivate		( bv::model::BasicNode * n );
-	void Deacivate		( bv::model::BasicNode * n );
-	void Visible		( bv::model::BasicNode * n );
-	void NotVisible		( bv::model::BasicNode * n );
-
-	bool IsVisible		( bv::model::BasicNode * n ) const;
-	bool IsActive		( bv::model::BasicNode * n ) const;
-	bool IsNonActive	( bv::model::BasicNode * n ) const;
-
-	SizeType ActiveSize		() const;
-	SizeType NonActiveSize	() const;
-	SizeType VisibleSize	() const;
-};
-
 class Crawler : public model::INodeLogic, public std::enable_shared_from_this< Crawler >
 {
 	typedef std::map< bv::model::BasicNode *, Float32 > NodeFloatMap;
@@ -61,11 +40,8 @@ class Crawler : public model::INodeLogic, public std::enable_shared_from_this< C
 private:
 	bool									m_isFinalized;
 	bv::model::BasicNode *					m_parentNode;
-	std::vector< bv::model::BasicNode * >	m_nodes;
 	CrawlerNodesStates						m_nodesStates;
 	NodeFloatMap							m_shifts;
-	//NodeBoolMap								m_visibilities;
-	//NodeBoolMap								m_activeNodes;
 	mathematics::RectConstPtr				m_view;
 	UInt64									m_currTime;
 	bool									m_started;
@@ -74,10 +50,10 @@ private:
 	void		LayoutNodes			();
 	void		UpdateTransforms	();
 	void		UpdateVisibility	( bv::model::BasicNode * );
-	void		SetActiveNode		( bv::model::BasicNode *, bool );
+	void		SetActiveNode		( bv::model::BasicNode * );
 	bool		IsActive			( bv::model::BasicNode * );
 	void		NotifyVisibilityChanged( const bv::model::BasicNode *, bool ) const;
-	void		NotifyNoMoreNodes	() const;
+	void		NotifyNoMoreNodes	();
 
 public:
 
@@ -86,7 +62,10 @@ public:
 
 	void		AddNext				( bv::model::BasicNodePtr node );
 	bool		Finalize			();
-	
+
+	model::BasicNode *	GetNonActiveNode();
+	void		EnqueueNode			( model::BasicNode * n);
+
 	void		SetSpeed			( Float32 speed );
 
 	virtual void	Initialize		()				override {}

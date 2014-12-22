@@ -34,7 +34,7 @@ void		Crawler::AddNext			( bv::model::BasicNodePtr node )
 	if(! m_isFinalized )
 	{
 		m_parentNode->AddChild( node );
-		m_nodes.push_back( node.get() );
+		m_nodesStates.Add( node.get() );
 	}
 	else
 		assert(!"Crawler: Cannot add node after finalization!");
@@ -48,11 +48,10 @@ bool		Crawler::Finalize			()
 		assert(!"Crawler: Already finalized!");
 	else
 	{
-		for( auto n : m_nodes )
-		{
-			m_nodesStates.Add( n );
-			SetActiveNode( n, true );
-		}
+		auto copy = m_nodesStates.m_nonActives;
+		for( auto n : copy )	
+			SetActiveNode( n );
+
 		LayoutNodes();
 		m_isFinalized = true;
 	}
@@ -71,27 +70,21 @@ void		Crawler::SetSpeed			( Float32 speed )
 //
 void		Crawler::LayoutNodes		()
 {
-	auto length = m_nodes.size();
-	if( length > 1 )
+	auto length = m_nodesStates.ActiveSize();
+	if( length > 0 )
 	{
-		Float32 currShift = 0.f;
+		Float32 currShift = m_view->xmax;
 
-		m_shifts[ m_nodes[ 0 ] ] = currShift;
+		m_shifts[ m_nodesStates.m_actives[ 0 ] ] = currShift;
 
 		for( SizeType i = 1; i < length; ++i )
 		{
-			currShift += m_nodes[ i - 1 ]->GetAABB().Width();
+			currShift += m_nodesStates.m_actives[ i - 1 ]->GetAABB().Width();
 
-			m_shifts[ m_nodes[ i ] ] = currShift;
-
-			auto trPlugin = m_nodes[ i ]->GetPlugin( "transform" );
-			if( trPlugin )
-			{
-				auto trParam = trPlugin->GetParameter( "simple_transform" );
-				model::SetParameterTranslation( trParam, 0, 0.0f, glm::vec3( currShift, 0.0f, 0.0f ) );
-				UpdateVisibility( m_nodes[ i ] );
-			}
+			m_shifts[ m_nodesStates.m_actives[ i ] ] = currShift;
 		}
+
+		UpdateTransforms();
 	}
 }
 
@@ -144,13 +137,18 @@ void		Crawler::UpdateTransforms	()
 			{
 				auto trParam = trPlugin->GetParameter( "simple_transform" );
 				model::SetParameterTranslation( trParam, 0, 0.0f, glm::vec3( elem.second, 0.0f, 0.0f ) );
-				UpdateVisibility( elem.first );
-
-				if( m_nodesStates.ActiveSize() == m_nodesStates.VisibleSize() )
-					NotifyNoMoreNodes();
+				trPlugin->Update( 0 );
 			}
 		}
 	}
+
+	auto copy = m_nodesStates.m_actives;
+
+	for( auto n : copy )
+		UpdateVisibility( n );
+
+	if( m_nodesStates.ActiveSize() == m_nodesStates.VisibleSize() )
+		NotifyNoMoreNodes();
 }
 
 // *******************************
@@ -158,16 +156,21 @@ void		Crawler::UpdateTransforms	()
 void		Crawler::UpdateVisibility	( bv::model::BasicNode * n )
 {
 	auto currVisibility = m_nodesStates.IsVisible( n );
-	bool newVisibility = n->GetAABB().HasNonEmptyIntersection( *m_view );
+	auto nAABB = n->GetAABB();
+	bool newVisibility = nAABB.HasNonEmptyIntersection( *m_view );
 
 	if( currVisibility != newVisibility )
 	{
 		if( newVisibility )
+		{
 			m_nodesStates.Visible( n );
-		else
+			NotifyVisibilityChanged( n, newVisibility );
+		}
+		else if( IsActive( n ) )
+		{
 			m_nodesStates.NotVisible( n );
-
-		NotifyVisibilityChanged( n, newVisibility );
+			NotifyVisibilityChanged( n, newVisibility );
+		}
 	}
 }
 
@@ -176,23 +179,27 @@ void		Crawler::UpdateVisibility	( bv::model::BasicNode * n )
 void		Crawler::NotifyVisibilityChanged( const bv::model::BasicNode * n, bool visibility ) const
 {
 	printf( "Visibility of %p changed on %i \n", n, visibility );
+	printf( "Active : %i NonActive: %i Visible %i \n", m_nodesStates.ActiveSize(), m_nodesStates.NonActiveSize(), m_nodesStates.VisibleSize() );
 }
 
 // *******************************
 //
-void		Crawler::NotifyNoMoreNodes( ) const
+void		Crawler::NotifyNoMoreNodes( )
 {
-	printf( "No more nodes \n" );
+	//printf( "No more nodes \n" );
+
+	auto n = GetNonActiveNode();
+	if( n )
+	{
+		EnqueueNode( n );
+	}
 }
 
 // *******************************
 //
-void		Crawler::SetActiveNode		( bv::model::BasicNode * n, bool isActive )
+void		Crawler::SetActiveNode		( bv::model::BasicNode * n )
 {
-	if( isActive )
-		m_nodesStates.Acivate( n );
-	else
-		m_nodesStates.Deacivate( n );
+	m_nodesStates.Acivate( n );
 }
 
 // *******************************
@@ -204,116 +211,31 @@ bool		Crawler::IsActive			( bv::model::BasicNode * n )
 
 // *******************************
 //
-void CrawlerNodesStates::Add			( bv::model::BasicNode * n )
+model::BasicNode *	Crawler::GetNonActiveNode()
 {
-	m_nonActives.push_back( n );
+	if ( m_nodesStates.NonActiveSize() > 0 )
+		return m_nodesStates.m_nonActives[ 0 ];
+	else
+		return nullptr;
 }
 
 // *******************************
 //
-void CrawlerNodesStates::Acivate		( bv::model::BasicNode * n )
+void		Crawler::EnqueueNode			( model::BasicNode * n)
 {
-	for( SizeType i = 0; i < m_nonActives.size(); ++i )
-		if( m_nonActives[ i ] == n )
+	if( m_nodesStates.IsNonActive( n ) )
+	{
+		auto activeSize = m_nodesStates.ActiveSize();
+		if( activeSize > 0 )
 		{
-			m_actives.push_back( n );
-			m_nonActives.erase( m_nonActives.begin() + i );
+			auto lastActiveNode = m_nodesStates.m_actives[ activeSize - 1 ];
+
+			auto nodeShift = m_shifts[ lastActiveNode ] + lastActiveNode->GetAABB().Width();
+			m_shifts[ n ] = nodeShift;
+			m_nodesStates.Acivate( n );
+			UpdateVisibility( n );
 		}
-}
-
-// *******************************
-//
-void CrawlerNodesStates::Deacivate		( bv::model::BasicNode * n )
-{
-	for( SizeType i = 0; i < m_actives.size(); ++i )
-		if( m_actives[ i ] == n )
-		{
-			m_nonActives.push_back( n );
-			m_actives.erase( m_actives.begin() + i );
-		}
-
-	NotVisible( n );
-}
-
-// *******************************
-//
-void CrawlerNodesStates::Visible		( bv::model::BasicNode * n )
-{
-	for( SizeType i = 0; i < m_actives.size(); ++i )
-		if( m_actives[ i ] == n )
-			m_visibles.push_back( n );
-}
-
-// *******************************
-//
-void CrawlerNodesStates::NotVisible		( bv::model::BasicNode * n )
-{
-	for( SizeType i = 0; i < m_visibles.size(); ++i )
-		if( m_visibles[ i ] == n )
-		{
-			m_nonActives.push_back( n );
-			m_visibles.erase( m_visibles.begin() + i );
-		}
-}
-
-// *******************************
-//
-bool CrawlerNodesStates::IsVisible		( bv::model::BasicNode * n ) const
-{
-	for( SizeType i = 0; i < m_visibles.size(); ++i )
-		if( m_visibles[ i ] == n )
-		{
-			assert( IsActive( n ) );
-			return true;
-		}
-	return false;
-}
-
-// *******************************
-//
-bool CrawlerNodesStates::IsActive		( bv::model::BasicNode * n ) const
-{
-	for( SizeType i = 0; i < m_actives.size(); ++i )
-		if( m_actives[ i ] == n )
-			return true;
-	return false;
-}
-
-// *******************************
-//
-bool CrawlerNodesStates::IsNonActive	( bv::model::BasicNode * n ) const
-{
-	for( SizeType i = 0; i < m_nonActives.size(); ++i )
-		if( m_nonActives[ i ] == n )
-		{
-			assert(! IsVisible( n ) );
-			return true;
-		}
-
-	assert( IsActive( n ) );
-
-	return false;
-}
-
-// *******************************
-//
-SizeType CrawlerNodesStates::ActiveSize		() const
-{
-	return m_actives.size();
-}
-
-// *******************************
-//
-SizeType CrawlerNodesStates::NonActiveSize	() const
-{
-	return m_nonActives.size();
-}
-
-// *******************************
-//
-SizeType CrawlerNodesStates::VisibleSize	() const
-{
-	return m_visibles.size();
+	}
 }
 
 

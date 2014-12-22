@@ -31,6 +31,7 @@ public:
                         , const std::string & fontName
                         , SizeType fontSize
                         , SizeType blurSize
+						, SizeType outlineWidth
                         , const std::string & fontFilePath
 						, const std::string & atlasFilePath
                         , bool bold = false

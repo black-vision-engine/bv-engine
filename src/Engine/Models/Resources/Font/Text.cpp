@@ -274,7 +274,7 @@ void                Text::BuildAtlas        ()
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
 
-    auto entry = new FontAtlasCacheEntry( m_atlas, fontName, m_fontSize, m_blurSize, m_fontFile, "", false, false );
+    auto entry = new FontAtlasCacheEntry( m_atlas, fontName, m_fontSize, m_blurSize, m_outlineWidth, m_fontFile, "", false, false );
     fac->AddEntry( *entry );
 
 #ifdef GENERATE_TEST_BMP_FILE

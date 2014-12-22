@@ -32,6 +32,7 @@
     <ClCompile Include="Rendering\RenderLogic.cpp" />
     <ClCompile Include="Widgets\Crawler\Crawler.cpp" />
     <ClCompile Include="Widgets\Crawler\CrawlerEvents.cpp" />
+    <ClCompile Include="Widgets\Crawler\CrawlerNodesStates.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
@@ -83,6 +84,7 @@
     <ClInclude Include="Rendering\RenderLogic.h" />
     <ClInclude Include="Widgets\Crawler\Crawler.h" />
     <ClInclude Include="Widgets\Crawler\CrawlerEvents.h" />
+    <ClInclude Include="Widgets\Crawler\CrawlerNodesStates.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MockFonts">
