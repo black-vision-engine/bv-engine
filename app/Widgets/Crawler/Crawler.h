@@ -53,7 +53,7 @@ private:
 	void		UpdateVisibility	( bv::model::BasicNode * );
 	void		SetActiveNode		( bv::model::BasicNode * );
 	bool		IsActive			( bv::model::BasicNode * );
-	void		NotifyVisibilityChanged( const bv::model::BasicNode *, bool ) const;
+	void		NotifyVisibilityChanged( bv::model::BasicNode *, bool );
 	void		NotifyNoMoreNodes	();
 
 public:
