@@ -25,8 +25,11 @@ class DefaultPieChartPlugin :
 {
     VertexAttributesChannelPtr          m_vaChannel;
 
-	int											m_lastN;
-	void										InitGeometry( int n );
+	//int											m_lastN;
+	float										m_angleStart;
+	float										m_angleEnd;
+
+	void										InitGeometry( float angleStart, float angleEnd );
 public:
 	DefaultPieChartPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 	~DefaultPieChartPlugin(void);

@@ -658,9 +658,15 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPieChartNode( model::
 
 // TRANSFORM plugin
 
-	//SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( offset, -.3f, 0.f) );
-	SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+// TRANSFORM plugin
+
+	//SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
+	//SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( offset, 0, -1.f) );
+	//SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+
+	////SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+	//SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( offset, -.3f, 0.f) );
+	//SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
 
 // LINEAR GRADIENT plugin
 	if( root->GetPlugin( "linear_gradient" ) )
@@ -699,6 +705,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPieChartNode( model::T
 
 	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
+	auto aeParam = root->GetPlugin( "piechart" )->GetParameter( "angleEnd" );
+	SetParameter( aeParam, 1.f, 3.14f );
+
 // TEXTURE plugin
 	if( root->GetPlugin( "texture" ) )
 	{
@@ -718,9 +727,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPieChartNode( model::T
 
 // TRANSFORM plugin
 
-	SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
-	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( offset, 0, -1.f) );
-	SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+	//SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
+	//SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( offset, 0, -1.f) );
+	//SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
 
 // LINEAR GRADIENT plugin
 	if( root->GetPlugin( "linear_gradient" ) )

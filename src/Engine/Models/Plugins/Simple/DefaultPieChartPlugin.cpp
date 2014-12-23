@@ -83,7 +83,7 @@ namespace bv { namespace model {
 // *******************************
 //
 DefaultPieChartPluginDesc::DefaultPieChartPluginDesc                                ()
-    : BasePluginDescriptor( UID(), "piechart" )
+	: BasePluginDescriptor( UID(), "piechart" )
 {
 }
 
@@ -91,51 +91,57 @@ DefaultPieChartPluginDesc::DefaultPieChartPluginDesc                            
 //
 bool                            DefaultPieChartPluginDesc::CanBeAttachedTo      ( IPluginConstPtr plugin )  const
 {
-    if( !BasePluginDescriptor::CanBeAttachedTo( plugin ) )
-    {
-        return false;
-    }
+	if( !BasePluginDescriptor::CanBeAttachedTo( plugin ) )
+	{
+		return false;
+	}
 
-    //Geometry generator cannot be attached to a plugin which generates geometry itself
-    if( plugin && plugin->GetVertexAttributesChannel() )
-    {
-        return false;
-    }
+	//Geometry generator cannot be attached to a plugin which generates geometry itself
+	if( plugin && plugin->GetVertexAttributesChannel() )
+	{
+		return false;
+	}
 
-    return true;
+	return true;
 }
 
 // *******************************
 //
 IPluginPtr                      DefaultPieChartPluginDesc::CreatePlugin         ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePluginTyped< DefaultPieChartPlugin >( name, prev, timeEvaluator );
+	return CreatePluginTyped< DefaultPieChartPlugin >( name, prev, timeEvaluator );
 }
 
 // *******************************
 //
 DefaultPluginParamValModelPtr   DefaultPieChartPluginDesc::CreateDefaultModel   ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
-    DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
+	DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
+	DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
 
-    ParamFloatPtr paramN             = ParametersFactory::CreateParameterFloat( "n", timeEvaluator );
+	//ParamFloatPtr paramN             = ParametersFactory::CreateParameterFloat( "n", timeEvaluator );
+	ParamFloatPtr paramAngleStart	 = ParametersFactory::CreateParameterFloat( "angleStart", timeEvaluator );
+	ParamFloatPtr paramAngleEnd		 = ParametersFactory::CreateParameterFloat( "angleEnd", timeEvaluator );
 
-    vacModel->AddParameter( paramN );
+	//vacModel->AddParameter( paramN );
+	vacModel->AddParameter( paramAngleStart );
+	vacModel->AddParameter( paramAngleEnd );
 
-    model->SetVertexAttributesChannelModel( vacModel );
+	model->SetVertexAttributesChannelModel( vacModel );
 
-    //Set default parameters
-    paramN->SetVal( 5.f, 0.f ); // FIXME: this is f*)*(&ing ridiculous!
+	//Set default parameters
+	//paramN->SetVal( 5.f, 0.f ); // FIXME: this is f*)*(&ing ridiculous!
+	paramAngleStart->SetVal( float( PI/4 ), 0 );
+	paramAngleEnd->SetVal( float( 3*PI/4 ), 0 );
 
-    return model;
+	return model;
 }
 
 // *******************************
 //
 std::string                     DefaultPieChartPluginDesc::UID                  ()
 {
-    return "DEFAULT_PIECHART";
+	return "DEFAULT_PIECHART";
 }
 
 
@@ -146,13 +152,15 @@ std::string                     DefaultPieChartPluginDesc::UID                  
 DefaultPieChartPlugin::DefaultPieChartPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
 	: BasePlugin< IPlugin >( name, DefaultPieChartPluginDesc::UID(), prev, model )
 {
-	auto nParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "n" );
+	auto asParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "angleStart" );
+	assert( asParam );
+	float asVal = QueryTypedParam< ParamFloatPtr > ( asParam )->Evaluate();
 
-	assert( nParam );
+	auto aeParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "angleEnd" );
+	assert( aeParam );
+	float aeVal = QueryTypedParam< ParamFloatPtr > ( aeParam )->Evaluate();
 
-	float nVal = QueryTypedParam< ParamFloatPtr > ( nParam )->Evaluate();
-
-	InitGeometry( int( nVal ) );
+	InitGeometry( asVal, aeVal );
 }
 
 DefaultPieChartPlugin::~DefaultPieChartPlugin(void)
@@ -161,7 +169,7 @@ DefaultPieChartPlugin::~DefaultPieChartPlugin(void)
 
 IVertexAttributesChannelConstPtr    DefaultPieChartPlugin::GetVertexAttributesChannel  () const
 {
-    return m_vaChannel;
+	return m_vaChannel;
 }
 
 // geometry generators
@@ -242,24 +250,28 @@ void GenerateRoundSideUV( Float3AttributeChannelPtr verts, Float2AttributeChanne
 	angle = angleEnd;
 }
 
-void DefaultPieChartPlugin::InitGeometry( int n )
+void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
 {
 	float percents[] = { 10.f, 20.f, 50.f };
 
 	auto channel = std::make_shared< DefaultGeometryAndUVsVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
 
-	z1 = 0; z2 = 1;
+	z1 = 0; z2 = 1; // FIXME: variable?
 
-	angleStart = PI/4; angleEnd = 3*PI/4; dangle = PI/100; z = z1;
+	angleStart = angleStart_;
+	angleEnd = angleEnd_; 
+	dangle = PI/120; // FIXME: variable? 
+	
+	z = z1;
 	channel->GenerateAndAddConnectedComponent( GenerateBaseUV );
 
 	z = z2;
 	channel->GenerateAndAddConnectedComponent( GenerateBaseUV );
 	
-	angle = PI/4;
+	angle = angleStart;
 	channel->GenerateAndAddConnectedComponent( GenerateSideUV );
 
-	angle = 3*PI/4;
+	angle = angleEnd;
 	channel->GenerateAndAddConnectedComponent( GenerateSideUV );
 
 	channel->GenerateAndAddConnectedComponent( GenerateRoundSideUV );
@@ -273,16 +285,19 @@ void                                DefaultPieChartPlugin::Update               
 {
 	m_pluginParamValModel->Update();
 
-	auto nParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "n" );
-	assert( nParam );
-	float nVal = QueryTypedParam< ParamFloatPtr > ( nParam )->Evaluate();
-	int n = int( nVal );
+	auto asParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "angleStart" );
+	assert( asParam );
+	float asVal = QueryTypedParam< ParamFloatPtr > ( asParam )->Evaluate();
 
-	if( n != m_lastN )
+	auto aeParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "angleEnd" );
+	assert( aeParam );
+	float aeVal = QueryTypedParam< ParamFloatPtr > ( aeParam )->Evaluate();
+
+	if( asVal != m_angleStart || aeVal != m_angleEnd )
 	{
-		InitGeometry( n );
+		InitGeometry( asVal, aeVal );
 		m_vaChannel->SetNeedsTopologyUpdate( true );
-		m_lastN = n;
+		m_angleStart = asVal; m_angleEnd = aeVal;
 	}
 }
 
