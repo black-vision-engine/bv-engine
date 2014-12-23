@@ -12,6 +12,13 @@ std::string NodeLeavingCrawlerEvent::m_sEventName           = "Event_NodeLeaving
 const EventType NoMoreNodesCrawlerEvent::m_sEventType       = 0x00000008;
 std::string NoMoreNodesCrawlerEvent::m_sEventName           = "Event_NoMoreNodesCrawlerEvent";
 
+
+// *******************************
+//
+CrawlerEvent::CrawlerEvent( CrawlerPtr crawler )
+	: m_crawler( crawler )
+{}
+
 // *******************************
 //
 IEventPtr               NodeAppearingCrawlerEvent::Clone			() const

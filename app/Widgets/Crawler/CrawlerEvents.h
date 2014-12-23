@@ -19,24 +19,28 @@ public:
 
 class NodeAppearingCrawlerEvent : public CrawlerEvent
 {
+private:
+	model::BasicNode *				m_node;
+
 public:
 
 	static const EventType			m_sEventType;
     static std::string				m_sEventName;
 
-	model::BasicNodePtr				m_node;
-
 public:
-									NodeAppearingCrawlerEvent	( CrawlerPtr crawler, model::BasicNodePtr node )
+									NodeAppearingCrawlerEvent	( CrawlerPtr crawler, model::BasicNode * node )
 										: CrawlerEvent( crawler ), m_node( node )
 									{}
 
 									~NodeAppearingCrawlerEvent  () {}
 
-    virtual IEventPtr               Clone           () const                            override;
+    virtual IEventPtr               Clone           () const	override;
 
-    virtual EventType               GetEventType    () const                            override;
-	virtual const std::string &     GetName         () const                            override;
+    virtual EventType               GetEventType    () const    override;
+	virtual const std::string &     GetName         () const    override;
+	const model::BasicNode *		GetNode			() const	{ return m_node; }
+	model::BasicNode *				GetNode			()			{ return m_node; }
+
 
     //virtual void                    Serialize       ( std::ostringstream & out ) const  override;
     //virtual void                    Deserialize     ( std::istringstream & in )         override;
@@ -46,15 +50,16 @@ public:
 
 class NodeLeavingCrawlerEvent : public CrawlerEvent
 {
+private:
+	model::BasicNode *				m_node;
+
 public:
 
 	static const EventType			m_sEventType;
     static std::string				m_sEventName;
 
-	model::BasicNodePtr				m_node;
-
 public:
-									NodeLeavingCrawlerEvent		( CrawlerPtr crawler, model::BasicNodePtr node )
+									NodeLeavingCrawlerEvent		( CrawlerPtr crawler, model::BasicNode * node )
 										: CrawlerEvent( crawler ), m_node( node )
 									{}
 
@@ -64,6 +69,9 @@ public:
 
     virtual EventType               GetEventType    () const                            override;
 	virtual const std::string &     GetName         () const                            override;
+
+	const model::BasicNode *		GetNode			() const	{ return m_node; }
+	model::BasicNode *				GetNode			()			{ return m_node; }
 
     //virtual void                    Serialize       ( std::ostringstream & out ) const  override;
     //virtual void                    Deserialize     ( std::istringstream & in )         override;

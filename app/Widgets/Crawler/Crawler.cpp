@@ -5,6 +5,10 @@
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+#include "Engine/Events/Interfaces/IEventManager.h"
+
+#include "CrawlerEvents.h"
+
 
 #include <algorithm>
 #include <Windows.h>
@@ -189,8 +193,15 @@ void		Crawler::UpdateVisibility	( bv::model::BasicNode * n )
 
 // *******************************
 //
-void		Crawler::NotifyVisibilityChanged( const bv::model::BasicNode * n, bool visibility ) const
+void		Crawler::NotifyVisibilityChanged( bv::model::BasicNode * n, bool visibility )
 {
+	auto & eventManager = GetDefaultEventManager();
+
+	if( visibility )
+		eventManager.TriggerEvent( std::make_shared< NodeAppearingCrawlerEvent >( shared_from_this(), n ) );
+	else
+		eventManager.TriggerEvent( std::make_shared< NodeLeavingCrawlerEvent >( shared_from_this(), n ) );
+
 	printf( "Visibility of %p changed on %i \n", n, visibility );
 	printf( "Active : %i NonActive: %i Visible %i \n", m_nodesStates.ActiveSize(), m_nodesStates.NonActiveSize(), m_nodesStates.VisibleSize() );
 }
@@ -219,6 +230,9 @@ namespace
 //
 void		Crawler::NotifyNoMoreNodes( )
 {
+	auto & eventManager = GetDefaultEventManager();
+	eventManager.TriggerEvent( std::make_shared< NoMoreNodesCrawlerEvent >( shared_from_this() ) );
+
 	auto n = GetNonActiveNode();
 	if( n )
 	{
