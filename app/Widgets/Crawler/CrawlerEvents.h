@@ -41,6 +41,8 @@ public:
 	const model::BasicNode *		GetNode			() const	{ return m_node; }
 	model::BasicNode *				GetNode			()			{ return m_node; }
 
+	static EventType                Type            () { return m_sEventType; }
+
 
     //virtual void                    Serialize       ( std::ostringstream & out ) const  override;
     //virtual void                    Deserialize     ( std::istringstream & in )         override;
@@ -73,6 +75,8 @@ public:
 	const model::BasicNode *		GetNode			() const	{ return m_node; }
 	model::BasicNode *				GetNode			()			{ return m_node; }
 
+	static EventType                Type            () { return m_sEventType; }
+
     //virtual void                    Serialize       ( std::ostringstream & out ) const  override;
     //virtual void                    Deserialize     ( std::istringstream & in )         override;
 };
@@ -95,6 +99,9 @@ public:
 
     virtual EventType               GetEventType    () const                            override;
 	virtual const std::string &     GetName         () const                            override;
+
+	static EventType                Type            () { return m_sEventType; }
+
 
     //virtual void                    Serialize       ( std::ostringstream & out ) const  override;
     //virtual void                    Deserialize     ( std::istringstream & in )         override;

@@ -206,51 +206,12 @@ void		Crawler::NotifyVisibilityChanged( bv::model::BasicNode * n, bool visibilit
 	printf( "Active : %i NonActive: %i Visible %i \n", m_nodesStates.ActiveSize(), m_nodesStates.NonActiveSize(), m_nodesStates.VisibleSize() );
 }
 
-namespace 
-{
-	const static std::wstring examples[] = 
-	{
-		L"Jasiu kup kie³basê !!",
-		L"wielojêzyczny projekt internetortej treœci. Funkcjonuje wykorzystuj¹c",
-		L"Wikipedia powsta³a 15 stycznia ertów i nieistniej¹cej ju¿ Nupedii. ",
-		L"iostrzane. Wikipedia jest jedn¹], a wiele stron uruchomi³o jej mirrory lub forki.",
-		L"Wspó³za³o¿yciel Wikipedii Jimmyia wielojêzycznej",
-		L"wolnej encyklopedii o najwy¿szyw³asnym jêzyku”[8].",
-		L"Kontrowersje budzi wiarygodnoœæeœci artyku³ów ",
-		L"i brak weryfikacji kompetencji .",
-		L"Z drugiej",
-		L"strony mo¿liwoœæ swobodnej dyst Ÿród³em informacji",
-		L"Jasiu kup kie³basê !!",
-	};
-
-	auto exampleSize = sizeof( examples ) / sizeof( std::wstring );
-}
-
 // *******************************
 //
 void		Crawler::NotifyNoMoreNodes( )
 {
 	auto & eventManager = GetDefaultEventManager();
 	eventManager.TriggerEvent( std::make_shared< NoMoreNodesCrawlerEvent >( shared_from_this() ) );
-
-	// Remove code below. Only for testing.
-	auto n = GetNonActiveNode();
-	if( n )
-	{
-		auto i = rand() % exampleSize;
-		auto textNode = n->GetChild( "Text" );
-		if( textNode )
-		{
-			auto pl = textNode->GetPlugin( "text" );
-
-			if( pl )
-			{
-				model::DefaultTextPlugin::SetText( pl, examples[ i ] );
-
-				EnqueueNode( n );
-			}
-		}
-	}
 }
 
 // *******************************
@@ -291,6 +252,14 @@ void		Crawler::EnqueueNode			( model::BasicNode * n)
 			auto nodeShift = m_shifts[ lastActiveNode ] + lastActiveNode->GetAABB().Width() + m_interspace;
 
 			nodeShift = max( nodeShift, m_view->xmax );
+
+			m_shifts[ n ] = nodeShift;
+			m_nodesStates.Acivate( n );
+			UpdateTransforms();
+		}
+		else
+		{
+			auto nodeShift = m_view->xmax;
 
 			m_shifts[ n ] = nodeShift;
 			m_nodesStates.Acivate( n );

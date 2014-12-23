@@ -3,12 +3,15 @@
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
+#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 
 #include "System/SimpleTimer.h"
 #include "System/HerarchicalProfiler.h"
 
 #include "Rendering/RenderLogic.h"
 #include "ModelInteractionEvents.h"
+
+#include "Widgets/Crawler/CrawlerEvents.h"
 
 #include "BVConfig.h"
 
@@ -21,6 +24,26 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
+
+namespace 
+{
+	const static std::wstring examples[] = 
+	{
+		L"Jasiu kup kiełbasę !!",
+		L"wielojęzyczny projekt internetortej treści. Funkcjonuje wykorzystując",
+		L"Wikipedia powstała 15 stycznia ertów i nieistniejącej już Nupedii. ",
+		L"iostrzane. Wikipedia jest jedną], a wiele stron uruchomiło jej mirrory lub forki.",
+		L"Współzałożyciel Wikipedii Jimmyia wielojęzycznej",
+		L"wolnej encyklopedii o najwyższywłasnym języku”[8].",
+		L"Kontrowersje budzi wiarygodnośćeści artykułów ",
+		L"i brak weryfikacji kompetencji .",
+		L"Z drugiej",
+		L"strony możliwość swobodnej dyst źródłem informacji",
+		L"Jasiu kup kiełbasę !!",
+	};
+
+	auto exampleSize = sizeof( examples ) / sizeof( std::wstring );
+}
 
 namespace bv
 {
@@ -107,6 +130,10 @@ void BVAppLogic::Initialize         ()
 {
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
+
+	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );
+	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
+	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNoMoreNodes ), widgets::NoMoreNodesCrawlerEvent::Type() );
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
@@ -326,6 +353,45 @@ void                            BVAppLogic::ReloadScene     ()
 void            BVAppLogic::OnUpdateParam   ( IEventPtr evt )
 {
     
+}
+
+// *********************************
+//
+void            BVAppLogic::OnNodeAppearing   ( IEventPtr evt )
+{
+    
+}
+
+// *********************************
+//
+void            BVAppLogic::OnNodeLeaving   ( IEventPtr evt )
+{
+    
+}
+
+// *********************************
+//
+void            BVAppLogic::OnNoMoreNodes   ( IEventPtr evt )
+{
+	auto typedEvent = std::static_pointer_cast< widgets::NoMoreNodesCrawlerEvent >( evt );
+	// Remove code below. Only for testing.
+	auto n = typedEvent->GetCrawler()->GetNonActiveNode();
+	if( n )
+	{
+		auto i = rand() % exampleSize;
+		auto textNode = n->GetChild( "Text" );
+		if( textNode )
+		{
+			auto pl = textNode->GetPlugin( "text" );
+
+			if( pl )
+			{
+				model::DefaultTextPlugin::SetText( pl, examples[ i ] );
+
+				typedEvent->GetCrawler()->EnqueueNode( n );
+			}
+		}
+	}
 }
 
 // *********************************

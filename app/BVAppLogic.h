@@ -76,6 +76,9 @@ public:
 private:
 
     void            OnUpdateParam   ( IEventPtr evt );
+	void            OnNodeAppearing ( IEventPtr evt );
+	void            OnNodeLeaving   ( IEventPtr evt );
+	void            OnNoMoreNodes   ( IEventPtr evt );
 
 public:
 
