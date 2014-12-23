@@ -164,7 +164,7 @@ void		Crawler::UpdateTransforms	()
 	for( auto n : copy )
 		UpdateVisibility( n );
 
-	if( m_nodesStates.ActiveSize() == m_nodesStates.VisibleSize() )
+	if( m_nodesStates.NonActiveSize() > 0 && m_nodesStates.ActiveSize() == m_nodesStates.VisibleSize() )
 		NotifyNoMoreNodes();
 }
 
