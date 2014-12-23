@@ -31,7 +31,7 @@ Crawler::Crawler						( bv::model::BasicNode * parent, const mathematics::RectCo
 	, m_started( false )
 	, m_currTime( 0 )
 	, m_speed( 0.f )
-	, m_interspace( 0.1f )
+	, m_interspace( 0.0f )
 {}
 
 

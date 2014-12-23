@@ -628,7 +628,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
 	//SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 10.0 ), glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) );
 	//SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 10.0 ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ) );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 60.0f );
-	SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineSize" ), TimeType( 0.0 ), float( 0 ) );
+	SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineSize" ), TimeType( 0.0 ), float( 3 ) );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
 
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
@@ -697,6 +697,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateCrawlerNode( model::TimelineManage
 	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
 
 	crawler->SetSpeed( 0.4f );
+	crawler->SetInterspace( 0.4f );
 
 	crawler->Finalize();
 	crawler->Start();
