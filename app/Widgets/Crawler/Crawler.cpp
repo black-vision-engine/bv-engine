@@ -233,6 +233,7 @@ void		Crawler::NotifyNoMoreNodes( )
 	auto & eventManager = GetDefaultEventManager();
 	eventManager.TriggerEvent( std::make_shared< NoMoreNodesCrawlerEvent >( shared_from_this() ) );
 
+	// Remove code below. Only for testing.
 	auto n = GetNonActiveNode();
 	if( n )
 	{
@@ -293,7 +294,7 @@ void		Crawler::EnqueueNode			( model::BasicNode * n)
 
 			m_shifts[ n ] = nodeShift;
 			m_nodesStates.Acivate( n );
-			UpdateVisibility( n );
+			UpdateTransforms();
 		}
 	}
 }
