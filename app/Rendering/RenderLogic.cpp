@@ -11,6 +11,8 @@
 #include "BVConfig.h"
 
 
+#define USE_HACK_FRIEND_NODE_MASK_IMPL
+
 namespace bv {
 
 extern HighResolutionTimer GTimer;
@@ -71,7 +73,11 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
         }
         else if( node->IsOverridenNM() )
         {
+#ifndef USE_HACK_FRIEND_NODE_MASK_IMPL
             RenderNodeMask( renderer, node );
+ #else
+            RenderNodeMask1( renderer, node );
+#endif
         }
         else
         {
@@ -133,6 +139,46 @@ void    RenderLogic::RenderNodeMask  ( Renderer * renderer, SceneNode * node )
 
 // *********************************
 //
+void    RenderLogic::RenderNodeMask1 ( Renderer * renderer, SceneNode * node )
+{
+    if( node->NumChildrenNodes() < 2 )
+    {
+        RenderVanilla( renderer, node );
+    }
+    else
+    {
+        DrawNodeOnly( renderer, node );
+
+        m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
+        m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
+
+        renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+        renderer->ClearBuffers();
+        
+        // MASK
+        RenderNode( renderer, node->GetChild( 1 ) ); 
+
+        m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
+        m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
+        renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+        renderer->ClearBuffers();
+
+        // FOREGROUND
+        RenderNode( renderer, node->GetChild( 0 ) ); 
+
+        m_offscreenRenderLogic->DrawAMTopTwoRenderTargets( renderer, node->GetOverrideAlphaVal() );
+    
+        m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
+        m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
+
+        m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
+
+        DrawChildren( renderer, node, 2 );
+    }
+}
+
+// *********************************
+//
 void    RenderLogic::DrawNode        ( Renderer * renderer, SceneNode * node )
 {
     HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
@@ -153,11 +199,12 @@ void    RenderLogic::DrawNodeOnly   ( Renderer * renderer, SceneNode * node )
         renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
     }
 }
+
 // *********************************
 //
-void    RenderLogic::DrawChildren   ( Renderer * renderer, SceneNode * node )
+void    RenderLogic::DrawChildren   ( Renderer * renderer, SceneNode * node, int firstChildIdx )
 {
-    for ( int i = 0; i < node->NumChildrenNodes(); i++ )
+    for ( int i = firstChildIdx; i < node->NumChildrenNodes(); i++ )
     {
         HPROFILER_SECTION( "RenderNode::RenderNode" );
         RenderNode( renderer, node->GetChild( i ) ); 

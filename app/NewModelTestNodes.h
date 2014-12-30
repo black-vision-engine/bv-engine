@@ -23,6 +23,7 @@ public:
                            
     static model::BasicNodePtr  CreateOverrideAlphaTest     ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static model::BasicNodePtr  CreateOverrideNodeMaskTest  ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static model::BasicNodePtr  CreateOverrideNodeMaskTest1 ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
                            
     static model::BasicNodePtr  CreateGreenRectNode         ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & nodeName );
     static model::BasicNodePtr  CreateGreenRectNodeNoAssert ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask );

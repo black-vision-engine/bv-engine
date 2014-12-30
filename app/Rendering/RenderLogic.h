@@ -29,11 +29,12 @@ private:
     void    RenderVanilla   ( Renderer * renderer, SceneNode * node );
     void    RenderAlphaMask ( Renderer * renderer, SceneNode * node );
     void    RenderNodeMask  ( Renderer * renderer, SceneNode * node );
+    void    RenderNodeMask1 ( Renderer * renderer, SceneNode * node );
 
     void    DrawNode        ( Renderer * renderer, SceneNode * node );
 
     void    DrawNodeOnly    ( Renderer * renderer, SceneNode * node );
-    void    DrawChildren    ( Renderer * renderer, SceneNode * ndoe );
+    void    DrawChildren    ( Renderer * renderer, SceneNode * node, int firstChildIdx = 0 );
 
 public:
 
