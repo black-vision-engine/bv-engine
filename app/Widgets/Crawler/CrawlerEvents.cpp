@@ -3,14 +3,21 @@
 
 namespace bv { namespace widgets {
 
-const EventType NodeAppearingCrawlerEvent::m_sEventType     = 0x00000006;
+const EventType NodeAppearingCrawlerEvent::m_sEventType     = 0x01000006;
 std::string NodeAppearingCrawlerEvent::m_sEventName         = "Event_NodeAppearingCrawlerEvent";
 
-const EventType NodeLeavingCrawlerEvent::m_sEventType       = 0x00000007;
+const EventType NodeLeavingCrawlerEvent::m_sEventType       = 0x01000007;
 std::string NodeLeavingCrawlerEvent::m_sEventName           = "Event_NodeLeavingCrawlerEvent";
 
-const EventType NoMoreNodesCrawlerEvent::m_sEventType       = 0x00000008;
+const EventType NoMoreNodesCrawlerEvent::m_sEventType       = 0x01000008;
 std::string NoMoreNodesCrawlerEvent::m_sEventName           = "Event_NoMoreNodesCrawlerEvent";
+
+
+// *******************************
+//
+CrawlerEvent::CrawlerEvent( CrawlerPtr crawler )
+	: m_crawler( crawler )
+{}
 
 // *******************************
 //

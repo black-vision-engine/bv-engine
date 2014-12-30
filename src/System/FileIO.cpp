@@ -2,11 +2,13 @@
 
 #include <sys/stat.h>
 
-#include <fstream>
-
 #include "boost/filesystem/path.hpp"
 #include "boost/filesystem.hpp"
 
+#include <fstream>
+#include <istream>
+#include <iostream>
+#include <string>
 
 namespace bv
 {
@@ -96,7 +98,7 @@ SizeType    FileImpl::Read        ( char * out, SizeType numBytes ) const
 //
 bool        FileImpl::Write       ( std::istream & in )
 {
-    *m_fileHandle << in;
+    *m_fileHandle << in.rdbuf();
     return in.cur == in.end;
 }
 

@@ -5,6 +5,10 @@
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+#include "Engine/Events/Interfaces/IEventManager.h"
+
+#include "CrawlerEvents.h"
+
 
 #include <algorithm>
 #include <Windows.h>
@@ -27,7 +31,7 @@ Crawler::Crawler						( bv::model::BasicNode * parent, const mathematics::RectCo
 	, m_started( false )
 	, m_currTime( 0 )
 	, m_speed( 0.f )
-	, m_interspace( 0.1f )
+	, m_interspace( 0.0f )
 {}
 
 
@@ -160,7 +164,7 @@ void		Crawler::UpdateTransforms	()
 	for( auto n : copy )
 		UpdateVisibility( n );
 
-	if( m_nodesStates.ActiveSize() == m_nodesStates.VisibleSize() )
+	if( m_nodesStates.NonActiveSize() > 0 && m_nodesStates.ActiveSize() == m_nodesStates.VisibleSize() )
 		NotifyNoMoreNodes();
 }
 
@@ -189,53 +193,25 @@ void		Crawler::UpdateVisibility	( bv::model::BasicNode * n )
 
 // *******************************
 //
-void		Crawler::NotifyVisibilityChanged( const bv::model::BasicNode * n, bool visibility ) const
+void		Crawler::NotifyVisibilityChanged( bv::model::BasicNode * n, bool visibility )
 {
+	auto & eventManager = GetDefaultEventManager();
+
+	if( visibility )
+		eventManager.TriggerEvent( std::make_shared< NodeAppearingCrawlerEvent >( shared_from_this(), n ) );
+	else
+		eventManager.TriggerEvent( std::make_shared< NodeLeavingCrawlerEvent >( shared_from_this(), n ) );
+
 	printf( "Visibility of %p changed on %i \n", n, visibility );
 	printf( "Active : %i NonActive: %i Visible %i \n", m_nodesStates.ActiveSize(), m_nodesStates.NonActiveSize(), m_nodesStates.VisibleSize() );
-}
-
-namespace 
-{
-	const static std::wstring examples[] = 
-	{
-		L"Jasiu kup kie³basê !!",
-		L"wielojêzyczny projekt internetortej treœci. Funkcjonuje wykorzystuj¹c",
-		L"Wikipedia powsta³a 15 stycznia ertów i nieistniej¹cej ju¿ Nupedii. ",
-		L"iostrzane. Wikipedia jest jedn¹], a wiele stron uruchomi³o jej mirrory lub forki.",
-		L"Wspó³za³o¿yciel Wikipedii Jimmyia wielojêzycznej",
-		L"wolnej encyklopedii o najwy¿szyw³asnym jêzyku”[8].",
-		L"Kontrowersje budzi wiarygodnoœæeœci artyku³ów ",
-		L"i brak weryfikacji kompetencji .",
-		L"Z drugiej",
-		L"strony mo¿liwoœæ swobodnej dyst Ÿród³em informacji",
-		L"Jasiu kup kie³basê !!",
-	};
-
-	auto exampleSize = sizeof( examples ) / sizeof( std::wstring );
 }
 
 // *******************************
 //
 void		Crawler::NotifyNoMoreNodes( )
 {
-	auto n = GetNonActiveNode();
-	if( n )
-	{
-		auto i = rand() % exampleSize;
-		auto textNode = n->GetChild( "Text" );
-		if( textNode )
-		{
-			auto pl = textNode->GetPlugin( "text" );
-
-			if( pl )
-			{
-				model::DefaultTextPlugin::SetText( pl, examples[ i ] );
-
-				EnqueueNode( n );
-			}
-		}
-	}
+	auto & eventManager = GetDefaultEventManager();
+	eventManager.TriggerEvent( std::make_shared< NoMoreNodesCrawlerEvent >( shared_from_this() ) );
 }
 
 // *******************************
@@ -279,7 +255,15 @@ void		Crawler::EnqueueNode			( model::BasicNode * n)
 
 			m_shifts[ n ] = nodeShift;
 			m_nodesStates.Acivate( n );
-			UpdateVisibility( n );
+			UpdateTransforms();
+		}
+		else
+		{
+			auto nodeShift = m_view->xmax;
+
+			m_shifts[ n ] = nodeShift;
+			m_nodesStates.Acivate( n );
+			UpdateTransforms();
 		}
 	}
 }
