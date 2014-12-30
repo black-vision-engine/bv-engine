@@ -527,13 +527,13 @@ model::BasicNodePtr    TestScenesFactory::CreedTestScene     ( const model::Plug
 
 
 	auto node1 = SimpleNodesFactory::CreateCreedColoredPieChartNode( timelineManager, timeEvaluator, 0 );
-	//auto node2 = SimpleNodesFactory::CreateCreedGradedPieChartNode( timelineManager, timeEvaluator, 0 );
+	auto node2 = SimpleNodesFactory::CreateCreedGradedPieChartNode( timelineManager, timeEvaluator, 0 );
 
 	SetParameter( node1->GetPlugin( "piechart" )->GetParameter( "angleStart" ), 0, 0.f );
 	SetParameter( node1->GetPlugin( "piechart" )->GetParameter( "angleEnd" ), 0, 3.14f/4 );
 
 	root->AddChild( node1 );
-	//root->AddChild( node2 );
+	root->AddChild( node2 );
 
 	return root;
 }

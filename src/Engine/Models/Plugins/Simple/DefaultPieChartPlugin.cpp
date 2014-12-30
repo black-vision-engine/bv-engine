@@ -220,6 +220,8 @@ void GenerateBaseUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr 
 		}
 	}
 	angle = angleEnd;
+	verts->AddAttribute( glm::vec3( cos( angle ), z, sin( angle ) ) );
+	uvs->AddAttribute( glm::vec2( angle, z ) );
 }
 
 void GenerateSideUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
@@ -239,7 +241,7 @@ void GenerateRoundSideUV( Float3AttributeChannelPtr verts, Float2AttributeChanne
 {
 	double angle = angleStart;
 
-	for( ; angle < angleEnd; angle += dangle )
+	for( ; angle <= angleEnd; angle += dangle )
 	{
 		verts->AddAttribute( glm::vec3( cos( angle ), z1, sin( angle ) ) );
 		uvs->AddAttribute( glm::vec2( angle, z1 ) );
@@ -248,13 +250,28 @@ void GenerateRoundSideUV( Float3AttributeChannelPtr verts, Float2AttributeChanne
 		uvs->AddAttribute( glm::vec2( angle, z2 ) );
 	}
 	angle = angleEnd;
+
+	verts->AddAttribute( glm::vec3( cos( angle ), z1, sin( angle ) ) );
+	uvs->AddAttribute( glm::vec2( angle, z1 ) );
+
+	verts->AddAttribute( glm::vec3( cos( angle ), z2, sin( angle ) ) );
+	uvs->AddAttribute( glm::vec2( angle, z2 ) );
 }
 
 void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
 {
 	float percents[] = { 10.f, 20.f, 50.f };
 
-	auto channel = std::make_shared< DefaultGeometryAndUVsVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
+	DefaultGeometryAndUVsVertexAttributeChannel* channel;
+	if( m_vaChannel==NULL )
+	{
+		channel = new DefaultGeometryAndUVsVertexAttributeChannel( PrimitiveType::PT_TRIANGLE_STRIP );
+		m_vaChannel = VertexAttributesChannelPtr( (VertexAttributesChannel*) channel );
+	} else
+	{
+		channel = (DefaultGeometryAndUVsVertexAttributeChannel*) m_vaChannel.get();
+		channel->ClearAll();
+	}
 
 	z1 = 0; z2 = 1; // FIXME: variable?
 
@@ -275,8 +292,6 @@ void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
 	channel->GenerateAndAddConnectedComponent( GenerateSideUV );
 
 	channel->GenerateAndAddConnectedComponent( GenerateRoundSideUV );
-
-	m_vaChannel = channel;
 }
 
 // *************************************
