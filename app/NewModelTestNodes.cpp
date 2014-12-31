@@ -705,8 +705,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPieChartNode( model::T
 
 	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
-	auto aeParam = root->GetPlugin( "piechart" )->GetParameter( "angleEnd" );
-	SetParameter( aeParam, 1.f, 3.14f );
+	//auto aeParam = root->GetPlugin( "piechart" )->GetParameter( "angleEnd" );
+	//SetParameter( aeParam, 1.f, 3.14f );
 
 // TEXTURE plugin
 	if( root->GetPlugin( "texture" ) )
