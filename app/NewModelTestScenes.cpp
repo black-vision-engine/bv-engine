@@ -515,7 +515,42 @@ model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::Plug
 	return rect;
 }
 
+class PieChartNode : public model::BasicNode
+{
+public:
+    //PieChartNode( const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, const model::PluginsManager * pluginsManager = nullptr );
+    PieChartNode( /*const std::string & name, */model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const float percents[] )
+		: BasicNode( "PieChartNode", timeEvaluator ) 
+	{ 
+		AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+
+		auto simpleTransform = GetPlugin( "transform" )->GetParameter( "simple_transform" );
+		SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
+		SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( 0, 0, -1.f) );
+		SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+
+
+		auto node1 = SimpleNodesFactory::CreateCreedColoredPieChartNode( timelineManager, timeEvaluator, 0 );
+		auto node2 = SimpleNodesFactory::CreateCreedGradedPieChartNode( timelineManager, timeEvaluator, 0 );
+
+		SetParameter( node1->GetPlugin( "piechart" )->GetParameter( "angleStart" ), 0, 0.f );
+		SetParameter( node1->GetPlugin( "piechart" )->GetParameter( "angleEnd" ), 0, 3.14f/4 );
+
+		AddChild( node1 );
+		AddChild( node2 );
+	}
+};
+
 model::BasicNodePtr    TestScenesFactory::CreedTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+	float percents[] = { 10.f, 20.f, 50.f };
+
+	auto node = new PieChartNode( timelineManager, timeEvaluator, percents );
+
+	return model::BasicNodePtr( node );
+}
+
+model::BasicNodePtr    TestScenesFactory::CreedPrimitivePieChartTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
 	root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );

@@ -260,8 +260,6 @@ void GenerateRoundSideUV( Float3AttributeChannelPtr verts, Float2AttributeChanne
 
 void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
 {
-	float percents[] = { 10.f, 20.f, 50.f };
-
 	DefaultGeometryAndUVsVertexAttributeChannel* channel;
 	if( m_vaChannel==NULL )
 	{
