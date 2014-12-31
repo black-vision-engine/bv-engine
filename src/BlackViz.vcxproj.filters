@@ -205,6 +205,7 @@
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultPrismPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\PrismComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultPieChartPlugin.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\DefaultGeometryVertexAttributeChannel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -468,6 +469,7 @@
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultPrismPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\PrismComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultPieChartPlugin.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\DefaultGeometryVertexAttributeChannel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />
