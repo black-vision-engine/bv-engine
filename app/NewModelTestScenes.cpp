@@ -457,7 +457,7 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
 
     //return node0;
 
-    return SimpleNodesFactory::CreateOverrideNodeMaskTest1( timelineManager, timeEvaluator );
+    //return SimpleNodesFactory::CreateOverrideNodeMaskTest1( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );
 
     //TestQueryNode( timelineManager, timeEvaluator ); //FIXME: remove or uncomment after tests
