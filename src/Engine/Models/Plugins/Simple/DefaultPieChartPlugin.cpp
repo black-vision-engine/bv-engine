@@ -101,7 +101,8 @@ IVertexAttributesChannelConstPtr    DefaultPieChartPlugin::GetVertexAttributesCh
 	return m_vaChannel;
 }
 
-// geometry generators
+// geometry generators, no UVs, "old" approach
+// FIXME: definitely deprecated, should be done like UVed ones!!!
 
 double angleStart, angleEnd, dangle, z;
 
@@ -131,29 +132,43 @@ void GenerateSide( Float3AttributeChannelPtr verts )
 	verts->AddAttribute( glm::vec3( 0, z2, 0 ) );
 }
 
-// geometry&uv generators
+// geometry&uv generators - functors FTW!!!
 
-void GenerateBaseUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+class GenerateBaseUV : public IGeometryAndUVsGenerator 
 {
-	double angle = angleStart;
+	double z;
+public:
+	GenerateBaseUV( double z_ ) : z( z_ ) { }
 
-	for( ; angle < angleEnd; angle += dangle )
+	void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
 	{
+		double angle = angleStart;
+
+		for( ; angle < angleEnd; angle += dangle )
+		{
+			verts->AddAttribute( glm::vec3( cos( angle ), z, sin( angle ) ) );
+			uvs->AddAttribute( glm::vec2( angle, z ) );
+
+			if( verts->GetNumEntries()%2 == 1 )
+			{
+				verts->AddAttribute( glm::vec3( 0, z, 0 ) );
+				uvs->AddAttribute( glm::vec2( 0, z ) );
+			}
+		}
+		angle = angleEnd;
 		verts->AddAttribute( glm::vec3( cos( angle ), z, sin( angle ) ) );
 		uvs->AddAttribute( glm::vec2( angle, z ) );
-
-		if( verts->GetNumEntries()%2 == 1 )
-		{
-			verts->AddAttribute( glm::vec3( 0, z, 0 ) );
-			uvs->AddAttribute( glm::vec2( 0, z ) );
-		}
 	}
-	angle = angleEnd;
-	verts->AddAttribute( glm::vec3( cos( angle ), z, sin( angle ) ) );
-	uvs->AddAttribute( glm::vec2( angle, z ) );
-}
+};
 
-void GenerateSideUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+class GenerateSideUV : public IGeometryAndUVsGenerator {
+	double z1, z2;
+	double angle;
+
+public:
+	GenerateSideUV( double z1_, double z2_, double angle_ ) : z1( z1_ ), z2( z2_ ), angle( angle_ ) {}
+
+void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
 {
 	verts->AddAttribute( glm::vec3( cos( angle ), z1, sin( angle ) ) );
 	verts->AddAttribute( glm::vec3( cos( angle ), z2, sin( angle ) ) );
@@ -165,8 +180,16 @@ void GenerateSideUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr 
 	uvs->AddAttribute( glm::vec2( 0, z1 ) );
 	uvs->AddAttribute( glm::vec2( 0, z2 ) );
 }
+};
 
-void GenerateRoundSideUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+class GenerateRoundSideUV : public IGeometryAndUVsGenerator {
+	double angleStart, angleEnd;
+	double z1, z2;
+public:
+	GenerateRoundSideUV( double as, double ae, double z1_, double z2_ ) :
+		angleStart( as ), angleEnd( ae ), z1( z1_ ), z2( z2_ ) {}
+
+void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
 {
 	double angle = angleStart;
 
@@ -186,6 +209,7 @@ void GenerateRoundSideUV( Float3AttributeChannelPtr verts, Float2AttributeChanne
 	verts->AddAttribute( glm::vec3( cos( angle ), z2, sin( angle ) ) );
 	uvs->AddAttribute( glm::vec2( angle, z2 ) );
 }
+};
 
 void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
 {
@@ -206,19 +230,15 @@ void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
 	angleEnd = angleEnd_; 
 	dangle = PI/120; // FIXME: variable? 
 	
-	z = z1;
-	channel->GenerateAndAddConnectedComponent( GenerateBaseUV );
+	channel->GenerateAndAddConnectedComponent( GenerateBaseUV( z1 ) );
 
-	z = z2;
-	channel->GenerateAndAddConnectedComponent( GenerateBaseUV );
+	channel->GenerateAndAddConnectedComponent( GenerateBaseUV( z2 ) );
 	
-	angle = angleStart;
-	channel->GenerateAndAddConnectedComponent( GenerateSideUV );
+	channel->GenerateAndAddConnectedComponent( GenerateSideUV( z1, z2, angleStart) );
 
-	angle = angleEnd;
-	channel->GenerateAndAddConnectedComponent( GenerateSideUV );
+	channel->GenerateAndAddConnectedComponent( GenerateSideUV( z1, z2, angleEnd ) );
 
-	channel->GenerateAndAddConnectedComponent( GenerateRoundSideUV );
+	channel->GenerateAndAddConnectedComponent( GenerateRoundSideUV( angleStart, angleEnd, z1, z2 ) );
 }
 
 // *************************************

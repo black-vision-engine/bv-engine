@@ -37,6 +37,12 @@ class DefaultGeometryVertexAttributeChannel : public VertexAttributesChannel
 		}
 	};
 
+	class IGeometryAndUVsGenerator
+	{
+	public:
+		virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr, Float2AttributeChannelPtr ) = 0;
+	};
+
 	class DefaultGeometryAndUVsVertexAttributeChannel : public VertexAttributesChannel
 	{
 		AttributeChannelDescriptor * m_compVertDesc;
@@ -60,14 +66,14 @@ class DefaultGeometryVertexAttributeChannel : public VertexAttributesChannel
 			m_desc = vaDesc;
 		}
 
-		void GenerateAndAddConnectedComponent( void (*GenerateConnectedComponent) (Float3AttributeChannelPtr, Float2AttributeChannelPtr) )
+		void GenerateAndAddConnectedComponent( IGeometryAndUVsGenerator& generator )
 		{
 			ConnectedComponentPtr comp = ConnectedComponent::Create();
 
 			Float3AttributeChannelPtr vertArrtF3 = std::make_shared< Float3AttributeChannel >( m_compVertDesc, m_compVertDesc->SuggestedDefaultName( 0 ), false );
 			Float2AttributeChannelPtr vertArrtUV = std::make_shared< Float2AttributeChannel >( m_compUVDesc, m_compUVDesc->SuggestedDefaultName( 0 ), false );
 
-			GenerateConnectedComponent( vertArrtF3, vertArrtUV );
+			generator.GenerateGeometryAndUVs( vertArrtF3, vertArrtUV );
 
 			comp->AddAttributeChannel( vertArrtF3 );
 			comp->AddAttributeChannel( vertArrtUV );
