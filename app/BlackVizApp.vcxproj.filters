@@ -29,6 +29,7 @@
     <ClCompile Include="testai\TestAIManager.cpp" />
     <ClCompile Include="Helpers\RectNodeBuilder.cpp" />
     <ClCompile Include="OffscreenRenderLogic.cpp" />
+    <ClCompile Include="PieChartNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
@@ -77,6 +78,7 @@
     <ClInclude Include="testai\TestAIManager.h" />
     <ClInclude Include="Helpers\RectNodeBuilder.h" />
     <ClInclude Include="OffscreenRenderLogic.h" />
+    <ClInclude Include="PieChartNode.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MockFonts">
