@@ -518,6 +518,19 @@ model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::Plug
 
 model::BasicNodePtr    TestScenesFactory::CreedTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+	std::vector< PieChartSubnodeDesc > descs;
+
+	descs.push_back( PieChartSubnodeDesc( 10.f, 0.f ) );
+	descs.push_back( PieChartSubnodeDesc( 20.f, -.1f, PieChartSubnodeDesc::COLORED ) );
+	descs.push_back( PieChartSubnodeDesc( 50.f, .1f ) );
+
+	auto node = new PieChartNode( timelineManager, timeEvaluator, descs );
+
+	return model::BasicNodePtr( node );
+}
+
+model::BasicNodePtr    TestScenesFactory::CreedDeprecatedTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
 	float percents[] = { 10.f, 20.f, 50.f };
 	float offsets[] = { 0.f, -.1f, .1f };
 
