@@ -13,11 +13,18 @@ TextureLoader::TextureLoader( bool loadFormMemory )
 //
 ResourceHandle *        TextureLoader::LoadResource        ( IResource * res )  const
 {
-    int width   = 0;
-    int height  = 0;
-    int bpp     = 0;
+    unsigned int width   = 0;
+    unsigned int height  = 0;
+    unsigned int bpp     = 0;
 
-    auto data = TextureHelper::LoadImg( res->GetFilePath(), &width, &height, &bpp );
+	auto filePath = res->GetFilePath();
+
+	MemoryChunkConstPtr data = nullptr;
+
+	if( filePath.find(".raw") != std::string::npos)
+		data = TextureHelper::LoadRAW( filePath );
+	else
+		data = TextureHelper::LoadImg( filePath, &width, &height, &bpp );
 
     if ( data != nullptr )
     {
@@ -30,21 +37,21 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource * res )  
 
 // ******************************
 //
-unsigned int TextureExtraData::GetWidth            () const
+SizeType TextureExtraData::GetWidth            () const
 {
     return m_width;
 }
 
 // ******************************
 //
-unsigned int TextureExtraData::GetHeight           () const
+SizeType TextureExtraData::GetHeight           () const
 {
     return m_height;
 }
 
 // ******************************
 //
-unsigned int TextureExtraData::GetBitsPerPixel     () const
+SizeType TextureExtraData::GetBitsPerPixel     () const
 {
     return m_bitsPerPixel;
 }
@@ -72,7 +79,7 @@ TextureExtraData::TextureExtraData()
 
 // ******************************
 //
-TextureExtraData::TextureExtraData( unsigned int w, unsigned int h, unsigned int bitsPerPixel, TextureFormat format, TextureType type )
+TextureExtraData::TextureExtraData( SizeType w, SizeType h, SizeType bitsPerPixel, TextureFormat format, TextureType type )
     : ResourceExtraData( ResourceExtraKind::RE_TEXTURE )
     , m_width( w )
     , m_height( h )

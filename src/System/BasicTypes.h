@@ -9,6 +9,20 @@ typedef std::shared_ptr< void > VoidPtr;
 
 namespace bv {
 
-typedef float TimeType;
+typedef float				Float32;
+typedef double				Float64;
+
+typedef signed char			Int8;
+typedef signed short		Int16;
+typedef signed long long	Int64;
+typedef signed int			Int32;
+
+typedef unsigned char		UInt8;
+typedef unsigned short		UInt16;
+typedef unsigned long long	UInt64;
+typedef unsigned int		UInt32;
+typedef size_t				SizeType;
+
+typedef Float32				TimeType;
 
 } //bv

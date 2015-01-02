@@ -43,7 +43,6 @@ public:
 class DefaultTextPlugin : public BasePlugin< IPlugin >
 {
 private:
-
     DefaultPluginParamValModelPtr   m_paramValModel;
 
     DefaultPixelShaderChannelPtr    m_psc;
@@ -56,11 +55,13 @@ private:
     unsigned int                    m_texCoordChannelIndex;
 
     std::wstring                    m_text;
-    const TextAtlas*                m_textAtlas;
+    const TextAtlas *				m_atlas;
     bool                            m_textSet;
+	Float32							m_textLength;
 
     ParamFloatPtr                   m_fontSizeParam;
     ParamFloatPtr                   m_blurSizeParam;
+	ParamFloatPtr                   m_outlineSizeParam;
     ParamFloatPtr                   m_spacingParam;
     ParamFloatPtr                   m_alignmentParam;
     ParamFloatPtr                   m_maxTextLengthParam;
@@ -70,11 +71,24 @@ private:
 
     void                                        SetText                     ( const std::wstring & newText );
 
+	void										LoadTexture					(	DefaultTexturesDataPtr,
+																				ResourceHandleConstPtr,
+																				const std::string &,
+																				TextureWrappingMode,
+																				TextureWrappingMode,
+																				TextureFilteringMode,
+																				const glm::vec4 &,
+																				DataBuffer::Semantic );
+
+	void										LoadAtlas					( const std::string &, SizeType, SizeType, SizeType );
+
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
+
+	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & trans ) const override;
 
     virtual void                                Update                      ( TimeType t ) override;
 
@@ -89,79 +103,3 @@ public:
 
 } // model
 } // bv
-
-
-
-
-
-
-
-
-
-
-
-
-
-//#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
-//
-//#include "Engine/Models/Plugins/Plugin.h"
-//#include "Engine/Models/Resources/IResource.h"
-//#include "Engine/Events/BaseEvent.h"
-//
-//
-//namespace bv { namespace model {
-//
-//class Resource;
-//class FontExtraData;
-//class TextAtlas;
-//class Text;
-//
-//// ***************************** UID **********************************
-//class SimpleTextPluginUID
-//{
-//public:
-//    static const char*       GetName()        { return "simple_text_plugin"; }
-//};
-//
-//// ***************************** PLUGIN ********************************** 
-//class SimpleTextPlugin : public BasePlugin< IPlugin >
-//{
-//private:
-//
-//    VertexAttributesChannelPtr  m_vertexAttributeChannel;
-//
-//    TextureInfoVec              m_textures;
-//
-//    const ResourceHandle*       m_fontResource;
-//    const TextAtlas*            m_textAtlas;
-//    std::wstring                m_text;
-//
-//    bool                        m_bolded;
-//    bool                        m_italic;
-//
-//    bool                        m_textSet;
-//
-//private:
-//
-//    explicit                    SimpleTextPlugin    ( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bold, bool italic );
-//
-//public:
-//
-//    static SimpleTextPlugin*    Create( const std::wstring& text, const std::string & fontFileName, unsigned int fontSize, bool bolded = false, bool italic = false );
-//
-//                                ~SimpleTextPlugin   ();
-//
-//    virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-//    virtual TextureInfoVec                      GetTextures                 () const;
-//    void                                        SetText                     ( const std::wstring & newText );
-//
-//    //delegates
-//    void                                        OnSetText                   ( IEventPtr evt );
-//
-//    virtual void                        Update                      ( TimeType t ) override;
-//    virtual void                        Print                       ( std::ostream & out, int tabs = 0 ) const;
-//
-//};
-//
-//} // model
-//} // bv

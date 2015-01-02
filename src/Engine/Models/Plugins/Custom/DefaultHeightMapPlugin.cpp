@@ -251,7 +251,7 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( IPluginR
 
     auto txData = m_psc->GetTexturesDataImpl();
     
-    unsigned int curNumTextures = txData->GetTextures().size();
+    unsigned int curNumTextures = (unsigned int) txData->GetTextures().size();
 
     assert( curNumTextures < 4 ); //FIXME: Second one may be added by a mask
 

@@ -107,6 +107,7 @@ xcopy $(SolutionDir)\dep\Common\FreeImage\Dist\Win32\FreeImage.dll $(OutDir) /c 
       <AdditionalIncludeDirectories>$(BOOST_INC);../dep/Common/FreeType/include;../dep/Common/FreeImage/Dist;../dep/Common/glm;../dep/Common/glew/include;../dep/Common/glfw/include;../src;../dep/Common/FastDelegate;./;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;BOOST_ALL_NO_LIB=1;GLEW_STATIC;_UNICODE;UNICODE;GLEW_STATIC;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -177,12 +178,16 @@ xcopy $(SolutionDir)\dep\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
     <ClCompile Include="ModelInteractionLayer.cpp" />
     <ClCompile Include="NewModelTestNodes.cpp" />
     <ClCompile Include="NewModelTestScenes.cpp" />
-    <ClCompile Include="OffscreenRenderLogic.cpp" />
+    <ClCompile Include="Rendering\OffscreenRenderLogic.cpp" />
     <ClCompile Include="PieChartNode.cpp" />
+    <ClCompile Include="Rendering\RenderLogic.cpp" />
     <ClCompile Include="StatsFormatters.cpp" />
     <ClCompile Include="testai\AICommands.cpp" />
     <ClCompile Include="testai\TestAI.cpp" />
     <ClCompile Include="testai\TestAIManager.cpp" />
+    <ClCompile Include="Widgets\Crawler\Crawler.cpp" />
+    <ClCompile Include="Widgets\Crawler\CrawlerEvents.cpp" />
+    <ClCompile Include="Widgets\Crawler\CrawlerNodesStates.cpp" />
     <ClCompile Include="xml\BlackTree.cpp" />
     <ClCompile Include="xml\pomocnicze\auxilary.cpp" />
     <ClCompile Include="xml\Scena.cpp" />
@@ -214,13 +219,17 @@ xcopy $(SolutionDir)\dep\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
     <ClInclude Include="ModelInteractionEvents.h" />
     <ClInclude Include="ModelInteractionLayer.h" />
     <ClInclude Include="NewModelTestNodes.h" />
-    <ClInclude Include="OffscreenRenderLogic.h" />
+    <ClInclude Include="Rendering\OffscreenRenderLogic.h" />
+    <ClInclude Include="Rendering\RenderLogic.h" />
     <ClInclude Include="PieChartNode.h" />
     <ClInclude Include="StatsFormatters.h" />
     <ClInclude Include="testai\AICommands.h" />
     <ClInclude Include="testai\IAICommand.h" />
     <ClInclude Include="testai\TestAI.h" />
     <ClInclude Include="testai\TestAIManager.h" />
+    <ClInclude Include="Widgets\Crawler\Crawler.h" />
+    <ClInclude Include="Widgets\Crawler\CrawlerEvents.h" />
+    <ClInclude Include="Widgets\Crawler\CrawlerNodesStates.h" />
     <ClInclude Include="xml\BlackTree.h" />
     <ClInclude Include="xml\pomocnicze\auxilary.hpp" />
     <ClInclude Include="xml\rapidxml\rapidxml.hpp" />

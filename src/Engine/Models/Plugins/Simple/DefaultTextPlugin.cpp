@@ -6,6 +6,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
 #include "Mathematics/Transform/MatTransform.h"
 
@@ -54,6 +55,8 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     SimpleFloatEvaluatorPtr     fontSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
 
     SimpleFloatEvaluatorPtr     blurSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
+	SimpleFloatEvaluatorPtr     outlineSizeEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "outlineSize", timeEvaluator );
+	SimpleVec4EvaluatorPtr      outlineColorEvaluator   = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "outlineColor", timeEvaluator );
 
     SimpleFloatEvaluatorPtr     spacingEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "spacing", timeEvaluator );
     SimpleFloatEvaluatorPtr     alignmentEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alignment", timeEvaluator );
@@ -62,8 +65,10 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
     psModel->RegisterAll( borderColorEvaluator );
+	psModel->RegisterAll( outlineColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
     plModel->RegisterAll( blurSizeEvaluator );
+	plModel->RegisterAll( outlineSizeEvaluator );
     plModel->RegisterAll( spacingEvaluator );
     plModel->RegisterAll( alignmentEvaluator );
     plModel->RegisterAll( fontSizeEvaluator );
@@ -77,9 +82,11 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     //Set default values of all parameters
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+	outlineSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     spacingEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     alignmentEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
+	outlineColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
     fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
     maxTextLenghtEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
@@ -149,8 +156,9 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
     , m_textSet( true )
-    , m_textAtlas( nullptr )
+    , m_atlas( nullptr )
     , m_text( L"" )
+	, m_textLength( 0.f )
 {
     auto colorParam = prev->GetParameter( "color" );
 
@@ -194,6 +202,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
 
     m_fontSizeParam         = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
     m_blurSizeParam         = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
+	m_outlineSizeParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "outlineSize" ) );
     m_spacingParam          = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
     m_alignmentParam        = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
     m_maxTextLengthParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "maxTextLenght" ) );
@@ -207,32 +216,25 @@ DefaultTextPlugin::~DefaultTextPlugin         ()
 
 // *************************************
 // 
-bool                            DefaultTextPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
+void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
+																ResourceHandleConstPtr res,
+																const std::string & name,
+																TextureWrappingMode hWrappingMode,
+																TextureWrappingMode vWrappingMode,
+																TextureFilteringMode txFilteringMode,
+																const glm::vec4 & bColor,
+																DataBuffer::Semantic semantic )
 {
-    auto txResDescr = QueryFontResourceDescr( resDescr );
+	
+      //FIXME: use some better API to handle resources in general and textures in this specific case
+      auto txDesc = new DefaultTextureDescriptor(    res
+												,   name
+												,   hWrappingMode
+												,   vWrappingMode
+												,   txFilteringMode
+												,   bColor
+												,   semantic );
 
-    // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
-    if ( txResDescr != nullptr )
-    {
-        auto txData = m_psc->GetTexturesDataImpl();
-        assert( txData->GetTextures().size() <= 1 );
-
-        auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ) );
-
-        m_textAtlas = TextHelper::GetAtlas( fontResource.get(), false, false );
-
-        auto textureResource = TextHelper::GetAtlasTextureInfo( m_textAtlas );
-
-        auto txInfo = new TextureInfo( textureResource.get(), DefaultTextPluginDesc::TextureName() );
-
-        //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto txDesc = new DefaultTextureDescriptor(     textureResource
-                                                    ,   DefaultTextPluginDesc::TextureName()
-                                                    ,   TextureWrappingMode::TWM_CLAMP_BORDER
-                                                    ,   TextureWrappingMode::TWM_CLAMP_BORDER
-                                                    ,   TextureFilteringMode::TFM_LINEAR
-                                                    ,   glm::vec4( 0.f, 0.f, 0.f, 0.f )
-                                                    ,   DataBuffer::Semantic::S_TEXTURE_STATIC );
 
         if( txDesc != nullptr )
         {
@@ -244,11 +246,45 @@ bool                            DefaultTextPlugin::LoadResource  ( IPluginResour
             {
                 txData->SetTexture( 0, txDesc );
             }
-
-            InitAttributesChannel( m_prevPlugin );
-
-            return true;
         }
+}
+
+// *************************************
+// 
+void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, SizeType fontSize, SizeType blurSize, SizeType outlineSize )
+{
+	auto txData = m_psc->GetTexturesDataImpl();
+    assert( txData->GetTextures().size() <= 1 );
+
+	auto fontResource = TextHelper::LoadFont( fontFile, fontSize, blurSize, outlineSize ); // TODO:
+
+	m_atlas = TextHelper::GetAtlas( fontResource.get() );
+
+	auto textureResource = m_atlas->GetResourceHandle();
+
+    //FIXME: use some better API to handle resources in general and textures in this specific case
+    LoadTexture(	txData   
+				,	textureResource
+                ,   DefaultTextPluginDesc::TextureName()
+                ,   TextureWrappingMode::TWM_CLAMP_BORDER
+                ,   TextureWrappingMode::TWM_CLAMP_BORDER
+                ,   TextureFilteringMode::TFM_LINEAR
+                ,   glm::vec4( 0.f, 0.f, 0.f, 0.f )
+                ,   DataBuffer::Semantic::S_TEXTURE_STATIC );
+}
+
+// *************************************
+// 
+bool                            DefaultTextPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
+{
+    auto txResDescr = QueryFontResourceDescr( resDescr );
+
+    if ( txResDescr != nullptr )
+    {
+		LoadAtlas( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
+		InitAttributesChannel( m_prevPlugin );
+
+		return true;
     }    
 
     return false;
@@ -273,6 +309,31 @@ IPixelShaderChannelConstPtr         DefaultTextPlugin::GetPixelShaderChannel    
 IVertexShaderChannelConstPtr        DefaultTextPlugin::GetVertexShaderChannel      () const
 {
     return m_vsc;
+}
+
+// *************************************
+// 
+mathematics::RectConstPtr			DefaultTextPlugin::GetAABB						( const glm::mat4 & trans ) const
+{
+	//auto trParam = GetCurrentParamTransform( this );
+
+	//if( !trParam )
+	//	return nullptr;
+
+	//assert( trParam->NumTransforms() <= 1 );
+
+	//if( trParam->NumTransforms() == 1 )
+	//{
+	//	auto trValue = trParam->Evaluate( 0 );
+
+		auto rect = mathematics::Rect::Create();
+		if( AABB( m_vaChannel.get(), trans, rect.get() ) )
+			return rect;
+		else
+			return nullptr;
+	//}
+	//	
+	//return nullptr;
 }
 
 // *************************************
@@ -317,9 +378,10 @@ void DefaultTextPlugin::InitAttributesChannel( IPluginPtr prev )
 {
     m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
-    auto alignType =  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
+    auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
+	auto outlineSize	=  EvaluateAsInt< SizeType >( m_outlineSizeParam );
 
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType );
+    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, outlineSize, false );
 }
 
 // *************************************
@@ -402,29 +464,30 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
     m_vaChannel->ClearConnectedComponent();
 
-    auto alignType =  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
+    auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
+	auto outlineSize	=  EvaluateAsInt< SizeType >( m_outlineSizeParam );
 
-    auto textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType );
+    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, outlineSize, false );
 
     auto maxTextLenght = m_maxTextLengthParam->Evaluate();
 
-    if( maxTextLenght > 0.f && textLength > 0.f && textLength > maxTextLenght )
+    if( maxTextLenght > 0.f && m_textLength > 0.f && m_textLength > maxTextLenght )
     {
         auto center = glm::vec3( 0.f, 0.f, 0.f );
 
         switch( EvaluateAsInt< TextAlignmentType >( m_alignmentParam ) )
         {
         case TextAlignmentType::Center:
-            center = glm::vec3( textLength / 2.f, 0.f, 0.f );
+            center = glm::vec3( m_textLength / 2.f, 0.f, 0.f );
             break;
         case TextAlignmentType::Right:
-            center = glm::vec3( textLength, 0.f, 0.f );
+            center = glm::vec3( m_textLength, 0.f, 0.f );
             break;
         default:
             break;
         }
 
-        auto scaleMat = BuildScaleMatrix( center, glm::vec3( maxTextLenght / textLength, 1.f, 1.f ) );
+        auto scaleMat = BuildScaleMatrix( center, glm::vec3( maxTextLenght / m_textLength, 1.f, 1.f ) );
 
         TransformPosChannel( m_vaChannel, scaleMat );
     }

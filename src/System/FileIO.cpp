@@ -2,11 +2,13 @@
 
 #include <sys/stat.h>
 
-#include <fstream>
-
 #include "boost/filesystem/path.hpp"
 #include "boost/filesystem.hpp"
 
+#include <fstream>
+#include <istream>
+#include <iostream>
+#include <string>
 
 namespace bv
 {
@@ -22,13 +24,13 @@ private:
 
 public:
 
-    int                 Read        ( std::ostream & out) const;
-    int                 Read        ( std::ostream & out, long numBytes ) const;
-    int                 Read        ( char* out, long numBytes ) const;
+    SizeType            Read        ( std::ostream & out) const;
+    SizeType            Read        ( std::ostream & out, SizeType numBytes ) const;
+    SizeType            Read        ( char * out, SizeType numBytes ) const;
 
     bool                Write       ( std::istream & in );
-    bool                Write       ( std::istream & in , long numBytes );
-    void                Write       ( const char* in , long numBytes);
+    bool                Write       ( std::istream & in , SizeType numBytes );
+    void                Write       ( const char * in , SizeType numBytes );
 
     void                Close       ();
 
@@ -36,10 +38,10 @@ public:
 
     static bool         Exists      ( const std::string & fileName );
     static FileImpl *   Open        ( const std::string & fileName, File::OpenMode openMode );
-    static int          Read        ( std::ostream & out, const std::string & fileName );
-    static int          Read        ( char* out, const std::string & fileName );
-    static int          Write       ( std::istream & in, const std::string & fileName );
-    static int          Size        ( const std::string & fileName );
+    static SizeType     Read        ( std::ostream & out, const std::string & fileName );
+    static SizeType     Read        ( char* out, const std::string & fileName );
+    static SizeType     Write       ( std::istream & in, const std::string & fileName );
+    static SizeType     Size        ( const std::string & fileName );
 };
 
 // *******************************
@@ -58,16 +60,17 @@ FileImpl::~FileImpl   ()
 
 // *******************************
 //
-int         FileImpl::Read        ( std::ostream & out) const
+SizeType    FileImpl::Read        ( std::ostream & out ) const
 {
     return Read( out, Size( m_fileName ) );
 }
 
 // *******************************
 //
-int         FileImpl::Read        ( std::ostream & out, long numBytes ) const
+SizeType    FileImpl::Read        ( std::ostream & out, SizeType numBytes ) const
 {
-    int bytesRead = 0;
+    SizeType bytesRead = 0;
+
     while( m_fileHandle->good() && numBytes > 0 )
     {
         out << (char)m_fileHandle->get();
@@ -81,7 +84,7 @@ int         FileImpl::Read        ( std::ostream & out, long numBytes ) const
 
 // *******************************
 //
-int         FileImpl::Read        ( char* out, long numBytes ) const
+SizeType    FileImpl::Read        ( char * out, SizeType numBytes ) const
 {
     if( m_fileHandle->good() && numBytes > 0 )
     {
@@ -95,13 +98,13 @@ int         FileImpl::Read        ( char* out, long numBytes ) const
 //
 bool        FileImpl::Write       ( std::istream & in )
 {
-    *m_fileHandle << in;
+    *m_fileHandle << in.rdbuf();
     return in.cur == in.end;
 }
 
 // *******************************
 //
-bool        FileImpl::Write       ( std::istream & in , long numBytes)
+bool        FileImpl::Write       ( std::istream & in , SizeType numBytes)
 {
     int bytesWritten = 0;
     char c;
@@ -120,7 +123,7 @@ bool        FileImpl::Write       ( std::istream & in , long numBytes)
 
 // *******************************
 //
-void        FileImpl::Write       ( const char* in , long numBytes)
+void        FileImpl::Write       ( const char * in , SizeType numBytes)
 {
     m_fileHandle->write( in, numBytes );
 }
@@ -134,7 +137,7 @@ void        FileImpl::Close       ()
 
 // *******************************
 //
-int         FileImpl::Size      ( const std::string & fileName )
+SizeType         FileImpl::Size      ( const std::string & fileName )
 {
     struct stat info;
     int ret = -1;
@@ -177,40 +180,43 @@ FileImpl *  FileImpl::Open        ( const std::string & fileName, File::OpenMode
 
 // *******************************
 //
-int         FileImpl::Read        ( std::ostream & out, const std::string & fileName )
+SizeType    FileImpl::Read        ( std::ostream & out, const std::string & fileName )
 {
     auto f = Open( fileName, File::FOMReadOnly );
     auto ret = f->Read( out );
     f->Close();
     delete f;
+
     return ret;
 }
 
 // *******************************
 //
-int         FileImpl::Read        ( char* out, const std::string & fileName )
+SizeType    FileImpl::Read        ( char * out, const std::string & fileName )
 {
     auto f = Open( fileName, File::FOMReadOnly );
     auto ret = f->Read( out, FileImpl::Size( fileName ) );
     f->Close();
     delete f;
+
     return ret;
 }
 
 // *******************************
 //
-int         FileImpl::Write       ( std::istream & in, const std::string & fileName )
+SizeType    FileImpl::Write       ( std::istream & in, const std::string & fileName )
 {
     auto f = Open( fileName, File::FOMReadWrite );
     auto ret = f->Write( in );
     f->Close();
     delete f;
+
     return ret;
 }
 
 // *******************************
 //
-File::File( FileImpl* impl )
+File::File( FileImpl * impl )
     : m_impl( impl )
 {}
 
@@ -223,35 +229,35 @@ File::~File()
 
 // *******************************
 //
-int         File::Read        ( std::ostream & out) const
+SizeType    File::Read        ( std::ostream & out ) const
 {
     return m_impl->Read( out );
 }
 
 // *******************************
 //
-int         File::Read        ( std::ostream & out, int numBytes ) const
+SizeType    File::Read        ( std::ostream & out, SizeType numBytes ) const
 {
     return m_impl->Read( out, numBytes );
 }
 
 // *******************************
 //
-int         File::Write       ( std::istream & in )
+SizeType    File::Write       ( std::istream & in )
 {
     return m_impl->Write( in );
 }
 
 // *******************************
 //
-int         File::Write       ( std::istream & in , int numBytes )
+SizeType    File::Write       ( std::istream & in , SizeType numBytes )
 {
     return m_impl->Write( in, numBytes );
 }
 
 // *******************************
 //
-void         File::Write       ( const char* in , int numBytes )
+void         File::Write       ( const char* in , SizeType numBytes )
 {
     m_impl->Write( in, numBytes );
 }
@@ -265,21 +271,21 @@ void        File::Close       ()
 
 // *******************************
 //
-void        File::operator << ( std::istream& in )
+void        File::operator << ( std::istream & in )
 {
     m_impl->Write( in );
 }
 
 // *******************************
 //
-void        File::operator >> ( std::ostream& out )
+void        File::operator >> ( std::ostream & out )
 {
     m_impl->Read( out );
 }
 
 // *******************************
 //
-int         File::Size        ( const std::string & fileName )
+SizeType    File::Size        ( const std::string & fileName )
 {
     return FileImpl::Size( fileName );
 }
@@ -300,21 +306,21 @@ File        File::Open        ( const std::string & fileName, OpenMode openMode 
 
 // *******************************
 //
-int         File::Read        ( std::ostream & out, const std::string & fileName )
+SizeType    File::Read        ( std::ostream & out, const std::string & fileName )
 {
     return FileImpl::Read( out, fileName );
 }
 
 // *******************************
 //
-int         File::Read        ( char* out, const std::string & fileName )
+SizeType    File::Read        ( char* out, const std::string & fileName )
 {
     return FileImpl::Read( out, fileName );
 }
 
 // *******************************
 //
-int         File::Write       ( std::istream & in, const std::string & fileName )
+SizeType    File::Write       ( std::istream & in, const std::string & fileName )
 {
     return FileImpl::Write( in, fileName );
 }
@@ -328,7 +334,7 @@ std::string  File::GetAbsolutPath( const std::string & fileName )
 
 // *******************************
 //
-std::string  File::GetDirName  ( const std::string& path )
+std::string  File::GetDirName  ( const std::string & path )
 {
     boost::filesystem::path p( path );
     return p.parent_path().string();
@@ -336,7 +342,7 @@ std::string  File::GetDirName  ( const std::string& path )
 
 // *******************************
 //
-bool         File::CreateDir   ( const std::string& path )
+bool         File::CreateDir   ( const std::string & path )
 {
     return boost::filesystem::create_directory( path );
 }

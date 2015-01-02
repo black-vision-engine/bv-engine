@@ -13,7 +13,7 @@ class Triangles : public RenderableEntity
 
 public:
 
-            Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, RenderableEffect * effect, RenderableType type = RenderableType::RT_TRIANGLES );
+            Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, RenderableEffectPtr effect, RenderableType type = RenderableType::RT_TRIANGLES );
             ~Triangles              ();
 
     virtual int     NumTriangles    ( unsigned int ccNum ) const = 0;

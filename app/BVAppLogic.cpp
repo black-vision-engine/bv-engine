@@ -1,38 +1,49 @@
-#include "BVAppLogic.h"
+﻿#include "BVAppLogic.h"
 
 #include "Engine/Events/Interfaces/IEventManager.h"
-
 #include "Engine/Graphics/Renderers/Renderer.h"
-#include "Engine/Graphics/SceneGraph/Camera.h"
-#include "Engine/Graphics/Resources/RenderTarget.h"
-
 #include "Engine/Models/Updaters/UpdatersManager.h"
-#include "Engine/Models/BasicNode.h"
-#include "Engine/Models/ModelScene.h"
-
-#include "ModelInteractionEvents.h"
-
-#include "System/HerarchicalProfiler.h"
-
-#include "StatsFormatters.h"
-#include "MockScenes.h"
+#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 
 #include "System/SimpleTimer.h"
-#include "System/HRTimer.h"
+#include "System/HerarchicalProfiler.h"
+
+#include "Rendering/RenderLogic.h"
+#include "ModelInteractionEvents.h"
+
+#include "Widgets/Crawler/CrawlerEvents.h"
+
 #include "BVConfig.h"
 
+#include "MockScenes.h"
 #include "DefaultPlugins.h"
 
 //FIXME: remove
-#include "Engine/Models/Plugins/PluginUtils.h"
-#include "Engine/Models/Timeline/TimeSegmentEvalImpl.h"
 #include "testai/TestAIManager.h"
 
-#include "Engine/Models/Resources/TextureHelpers.h"
-#include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
+
+namespace 
+{
+	const static std::wstring examples[] = 
+	{
+		L"Jasiu kup kiełbasę !!",
+		L"wielojęzyczny projekt internetortej treści. Funkcjonuje wykorzystując",
+		L"Wikipedia powstała 15 stycznia ertów i nieistniejącej już Nupedii. ",
+		L"iostrzane. Wikipedia jest jedną], a wiele stron uruchomiło jej mirrory lub forki.",
+		L"Współzałożyciel Wikipedii Jimmyia wielojęzycznej",
+		L"wolnej encyklopedii o najwyższywłasnym języku”[8].",
+		L"Kontrowersje budzi wiarygodnośćeści artykułów ",
+		L"i brak weryfikacji kompetencji .",
+		L"Z drugiej",
+		L"strony możliwość swobodnej dyst źródłem informacji",
+		L"Jasiu kup kiełbasę !!",
+	};
+
+	auto exampleSize = sizeof( examples ) / sizeof( std::wstring );
+}
 
 namespace bv
 {
@@ -53,8 +64,13 @@ namespace
         //static auto ai = TestAIManager::Instance().GetAIPreset( 5, logic );
         //static auto ai = TestAIManager::Instance().GetAIPreset( 4, logic );
         //static auto ai = TestAIManager::Instance().GetAIPreset( 2, logic->GetModelScene()->GetSceneRoot() );
+        
+        //Override alpha test events
         //static auto ai = TestAIManager::Instance().GetAIPreset( 3, logic->GetModelScene()->GetSceneRoot() );
-        //ai->EvalAt( t );
+
+        //Override node mask test events
+        static auto ai = TestAIManager::Instance().GetAIPreset( 6, logic->GetModelScene()->GetSceneRoot() );
+        ai->EvalAt( t );
 
         //PRE GOWNO
         float tx = float( sin( t ) );
@@ -81,9 +97,9 @@ BVAppLogic::BVAppLogic              ()
     : m_startTime( 0 )
     , m_timelineManager( new model::TimelineManager() )
     , m_modelScene( nullptr )
-    , m_mockSceneEng( nullptr )
+    , m_engineScene( nullptr )
     , m_pluginsManager( nullptr )
-    , m_offscreenRenderLogic( nullptr )
+    , m_renderLogic( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
     , m_globalTimeline( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) )
@@ -92,7 +108,7 @@ BVAppLogic::BVAppLogic              ()
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
     GTimer.StartTimer();
 
-    m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() ); 
+    m_renderLogic = new RenderLogic();
 }
 
 // *********************************
@@ -103,9 +119,9 @@ BVAppLogic::~BVAppLogic             ()
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
 
     delete m_timelineManager;
-    delete m_mockSceneEng;
+    delete m_engineScene;
 
-    delete m_offscreenRenderLogic;
+    delete m_renderLogic;
 }
 
 // *********************************
@@ -114,6 +130,10 @@ void BVAppLogic::Initialize         ()
 {
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
+
+	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );
+	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
+	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNoMoreNodes ), widgets::NoMoreNodesCrawlerEvent::Type() );
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
@@ -128,8 +148,8 @@ void BVAppLogic::LoadScene          ( void )
     model::BasicNodePtr root = TestScenesFactory::CreedTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
 	assert( root );
 
-    m_mockSceneEng  = root->BuildScene();
-    assert( m_mockSceneEng );
+    m_engineScene  = root->BuildScene();
+    assert( m_engineScene );
 
     m_modelScene    = model::ModelScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline );
     assert( m_modelScene );
@@ -153,8 +173,8 @@ void BVAppLogic::InitCamera         ( Renderer * renderer, unsigned int w, unsig
     }
 
     renderer->SetCamera( cam );
+    m_renderLogic->SetCamera( cam );
 
-    m_offscreenRenderLogic->SetRendererCamera( cam );
     //FIXME: read from configuration file and change appropriately when resoultion changes
 }
 
@@ -202,25 +222,22 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
             }
             {
                 FRAME_STATS_SECTION( "EngScn-u" );
-                HPROFILER_SECTION( "m_mockSceneEng->Update" );
+                HPROFILER_SECTION( "m_engineScene->Update" );
 
                 auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
 
                 //FIXME: use transform vector consistenlty
                 std::vector< bv::Transform > vec;
                 vec.push_back( Transform( viewMat, glm::inverse( viewMat ) ) );
-                m_mockSceneEng->Update( vec );
+                m_engineScene->Update( vec );
             }
         }
         {
             FRAME_STATS_SECTION( "Render" );
             HPROFILER_SECTION( "Render" );
 
-            renderer->ClearBuffers();
-            RenderScene( renderer );
-            renderer->DisplayColorBuffer();
-
-            FrameRendered( renderer );
+            m_renderLogic->RenderFrame  ( renderer, m_engineScene );
+            m_renderLogic->FrameRendered( renderer );
         }
     }
 
@@ -280,66 +297,6 @@ void BVAppLogic::ShutDown           ()
 
 // *********************************
 //
-void BVAppLogic::FrameRendered      ( Renderer * renderer )
-{
-    static int w = 0;
-    static int h = 0;
-
-    if( !DefaultConfig.ReadbackFlag() )
-    {
-        //Not needed as it does not make sense without readback delay
-        //m_offscreenRenderLogic->SwapDisplayRenderTargets();
-        return;
-    }
-
-    if( w != renderer->GetWidth() || h != renderer->GetHeight() )
-    {
-        w = renderer->GetWidth();
-        h = renderer->GetHeight();
-
-        printf( "Framebuffer resolution changed to %dx%d\n", w, h );
-    }
-
-    static double totalElapsed = 0.0;
-    static int nFrames = 1;
-    static int nPasses = 0;
-    static int nReadbackFrame = 0;
-
-    double readbackStart = GTimer.CurElapsed();
-    auto frame = m_offscreenRenderLogic->ReadDisplayTarget( renderer, nReadbackFrame );
-    nReadbackFrame = ( nReadbackFrame + 1 ) % m_offscreenRenderLogic->NumReadBuffersPerRT();
-    double readbackTime = GTimer.CurElapsed() - readbackStart;
-
-    m_offscreenRenderLogic->SwapDisplayRenderTargets();
-
-    totalElapsed += readbackTime;
-
-    //printf( "Time cur %.5f ms of total %.5f ms\n", 1000.f * readbackTime, 1000.f * totalElapsed );
-
-    if( nFrames % 50 == 0 )
-    {
-        double avg = totalElapsed / (double) nFrames;
-
-        nPasses++;
-        totalElapsed = 0.0;
-
-        if ( nPasses % 3 == 0 )
-        {
-            nPasses = 0;
-
-            //printf( "Avg readback time from last %d frames took %.4f ms\n", nFrames, avg * 1000 );
-        }
-
-        nFrames = 0;
-    }
-
-    nFrames++;
-    
-    //TODO: code used to push data to playback cards
-}
-
-// *********************************
-//
 void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int millis )
 {
     if( m_statsCalculator.WasSampledMaxVal( DefaultConfig.FrameStatsSection() ) )
@@ -382,7 +339,7 @@ void                            BVAppLogic::ResetScene      ()
     UpdatersManager::Get().RemoveAllUpdaters();
     m_globalTimeline = model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) );
     m_modelScene = nullptr;
-    delete m_mockSceneEng;
+    delete m_engineScene;
 }
 
 // *********************************
@@ -395,76 +352,48 @@ void                            BVAppLogic::ReloadScene     ()
 
 // *********************************
 //
-void BVAppLogic::RenderScene     ( Renderer * renderer )
-{
-    renderer->PreDraw();
-
-    m_offscreenRenderLogic->EnableDisplayRenderTarget( renderer );
-    renderer->ClearBuffers();
-
-    RenderNode( renderer, m_mockSceneEng );
-    m_offscreenRenderLogic->DisableDisplayRenderTarget( renderer );
-
-    m_offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
-
-    renderer->PostDraw();
-}
-
-// *********************************
-//
-void BVAppLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
-{
-    if ( node->IsVisible() )
-    {
-        bool isOverriden = node->IsOverriden();
-       
-        //Render to auxiliary buffer
-        if( isOverriden )
-        {
-            assert( m_offscreenRenderLogic->AuxRenderTargetEnabled() == false );
-            m_offscreenRenderLogic->EnableAuxRenderTarget( renderer );
-            renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
-            renderer->ClearBuffers();
-            renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
-        }
-
-        DrawNode( renderer, node );
-
-        //Blend auxiliary buffer with current 
-        if( isOverriden )
-        {
-            m_offscreenRenderLogic->EnableDisplayRenderTarget( renderer );
-            m_offscreenRenderLogic->SetAuxAlphaModelValue( node->GetOverrideAlpha() );
-            m_offscreenRenderLogic->DrawAuxRenderTarget( renderer );
-        }
-    }
-}
-
-// *********************************
-//
-void            BVAppLogic::DrawNode        ( Renderer * renderer, SceneNode * node )
-{
-    HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
-    renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
-
-    for( int i = 0; i < node->NumTransformables(); ++i )
-    {
-        HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
-        renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
-    }
-
-    for ( int i = 0; i < node->NumChildrenNodes(); i++ )
-    {
-        HPROFILER_SECTION( "RenderNode::RenderNode" );
-        RenderNode( renderer, node->GetChild( i ) ); 
-    }
-}
-
-// *********************************
-//
 void            BVAppLogic::OnUpdateParam   ( IEventPtr evt )
 {
     
+}
+
+// *********************************
+//
+void            BVAppLogic::OnNodeAppearing   ( IEventPtr evt )
+{
+    
+}
+
+// *********************************
+//
+void            BVAppLogic::OnNodeLeaving   ( IEventPtr evt )
+{
+    
+}
+
+// *********************************
+//
+void            BVAppLogic::OnNoMoreNodes   ( IEventPtr evt )
+{
+	auto typedEvent = std::static_pointer_cast< widgets::NoMoreNodesCrawlerEvent >( evt );
+	// Remove code below. Only for testing.
+	auto n = typedEvent->GetCrawler()->GetNonActiveNode();
+	if( n )
+	{
+		auto i = rand() % exampleSize;
+		auto textNode = n->GetChild( "Text" );
+		if( textNode )
+		{
+			auto pl = textNode->GetPlugin( "text" );
+
+			if( pl )
+			{
+				model::DefaultTextPlugin::SetText( pl, examples[ i ] );
+
+				typedEvent->GetCrawler()->EnqueueNode( n );
+			}
+		}
+	}
 }
 
 // *********************************

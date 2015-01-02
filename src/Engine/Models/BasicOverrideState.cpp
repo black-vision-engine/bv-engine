@@ -11,15 +11,18 @@ namespace bv { namespace model {
 BasicOverrideState::BasicOverrideState  ( ITimeEvaluatorPtr timeEvaluator )
     : m_param( nullptr )
     , m_value( nullptr )
-    , m_enabled( false )
-    , m_changed( false )
+    , m_enabledAM( false )
+    , m_enabledNM( false )
+    , m_changedAM( false )
+    , m_changedNM( false )
 {
     m_param = ParametersFactory::CreateParameterFloat( "alpha", timeEvaluator );
     m_value = ValuesFactory::CreateValueFloat("alpha" );
 
     m_param->SetVal( 1.f, 0.f ); //Default model
 
-    DisableAlpha();
+    DisableAlphaAM();
+    DisableAlphaNM();
 }
 
 // ****************************
@@ -32,7 +35,7 @@ BasicOverrideState::~BasicOverrideState ()
 void                BasicOverrideState::Update              ( TimeType t )
 {
     //Update alpha
-    if( IsAlphaEnabled() )
+    if( IsAlphaEnabledAM() || IsAlphaEnabledNM() )
     {
         m_value->SetValue( m_param->Evaluate() );
     }
@@ -40,49 +43,96 @@ void                BasicOverrideState::Update              ( TimeType t )
 
 // ****************************
 //
-bool                BasicOverrideState::Changed             () const
+bool                BasicOverrideState::ChangedAM           () const
 {
-    return m_changed;
+    return m_changedAM;
 }
 
 // ****************************
 //
-void                BasicOverrideState::SetChanged          ( bool changed )
+bool                BasicOverrideState::ChangedNM           () const
 {
-    m_changed = changed;
+    return m_changedNM;
 }
 
 // ****************************
 //
-bool                BasicOverrideState::IsAlphaEnabled      () const
+void                BasicOverrideState::SetChangedAM        ( bool changed )
 {
-    return m_enabled;
+    m_changedAM = changed;
 }
 
 // ****************************
 //
-void                BasicOverrideState::DisableAlpha        ()
+void                BasicOverrideState::SetChangedNM        ( bool changed )
 {
-    if( m_enabled )
+    m_changedNM = changed;
+}
+
+// ****************************
+//
+bool                BasicOverrideState::IsAlphaEnabledAM    () const
+{
+    return m_enabledAM;
+}
+
+// ****************************
+//
+bool                BasicOverrideState::IsAlphaEnabledNM    () const
+{
+    return m_enabledNM;
+}
+
+// ****************************
+//
+void                BasicOverrideState::EnableAlphaAM       ()
+{
+    if( !m_enabledAM )
     {
-        SetChanged( true );
+        SetChangedAM( true );
+    }
+
+    m_enabledAM = true;
+}
+
+// ****************************
+//
+void                BasicOverrideState::EnableAlphaNM       ()
+{
+    if( !m_enabledNM )
+    {
+        SetChangedNM( true );
+    }
+
+    m_enabledNM = true;
+}
+
+// ****************************
+//
+void                BasicOverrideState::DisableAlphaAM      ()
+{
+    if( m_enabledAM )
+    {
+        SetChangedAM( true );
     }
 
     m_value->SetValue( 1.0f );
 
-    m_enabled = false;
+    m_enabledAM = false;
 }
 
 // ****************************
 //
-void                BasicOverrideState::EnableAlpha         ()
+void                BasicOverrideState::DisableAlphaNM      ()
 {
-    if( !m_enabled )
+    if( m_enabledNM )
     {
-        SetChanged( true );
+        SetChangedNM( true );
     }
 
-    m_enabled = true;
+    m_value->SetValue( 1.0f );
+
+    m_enabledNM = false;
 }
 
 // ****************************

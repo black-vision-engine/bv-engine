@@ -28,8 +28,12 @@
     <ClCompile Include="testai\AICommands.cpp" />
     <ClCompile Include="testai\TestAIManager.cpp" />
     <ClCompile Include="Helpers\RectNodeBuilder.cpp" />
-    <ClCompile Include="OffscreenRenderLogic.cpp" />
+    <ClCompile Include="Rendering\OffscreenRenderLogic.cpp" />
     <ClCompile Include="PieChartNode.cpp" />
+    <ClCompile Include="Rendering\RenderLogic.cpp" />
+    <ClCompile Include="Widgets\Crawler\Crawler.cpp" />
+    <ClCompile Include="Widgets\Crawler\CrawlerEvents.cpp" />
+    <ClCompile Include="Widgets\Crawler\CrawlerNodesStates.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bvApp.h" />
@@ -77,8 +81,12 @@
     <ClInclude Include="testai\AICommands.h" />
     <ClInclude Include="testai\TestAIManager.h" />
     <ClInclude Include="Helpers\RectNodeBuilder.h" />
-    <ClInclude Include="OffscreenRenderLogic.h" />
+    <ClInclude Include="Rendering\OffscreenRenderLogic.h" />
     <ClInclude Include="PieChartNode.h" />
+    <ClInclude Include="Rendering\RenderLogic.h" />
+    <ClInclude Include="Widgets\Crawler\Crawler.h" />
+    <ClInclude Include="Widgets\Crawler\CrawlerEvents.h" />
+    <ClInclude Include="Widgets\Crawler\CrawlerNodesStates.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="MockFonts">

@@ -46,6 +46,7 @@ private:
     TestAI *        PreparePreset3      ( model::IModelNodePtr node ) const;
     TestAI *        PreparePreset4      ( BVAppLogic * logic ) const;
     TestAI *        PreparePreset5      ( BVAppLogic * logic ) const;
+    TestAI *        PreparePreset6      ( model::IModelNodePtr node ) const;
 
 
 public:

@@ -36,6 +36,9 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(RenderableEffect)
+DEFINE_CONST_PTR_TYPE(RenderableEffect)
+
 } //bv
 
 #include "RenderableEffect.inl"

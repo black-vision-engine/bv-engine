@@ -8,7 +8,7 @@ namespace bv {
 
 // **************************
 //
-TriangleStrip::TriangleStrip   ( RenderableArrayDataArraysSingleVertexBuffer * rad, RenderableEffect * effect )
+TriangleStrip::TriangleStrip   ( RenderableArrayDataArraysSingleVertexBuffer * rad, RenderableEffectPtr effect )
     : Triangles( static_cast< RenderableArrayDataSingleVertexBuffer * >( rad ), effect, RenderableType::RT_TRIANGLE_STRIP )
 {
 }

@@ -15,6 +15,7 @@
 #include "Engine/Models/BasicNode.h"
 
 #include "testai/TestAIManager.h"
+#include "Widgets/Crawler/Crawler.h"
 #include "Helpers/RectNodeBuilder.h"
 
 #include "Engine/Models/Plugins/Channels/RendererContext/FillContext.h"
@@ -176,8 +177,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::s
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    TexturedRectNodeBuilder bTex( timeEvaluator, "simless_01.jpg", false, 3.4f, 0.7f );
-    SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 1.f ), .85f, 0.31f );
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_01.jpg", false, 3.4f, 0.7f );
+    SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 0.75f ), .85f, 0.31f );
 
     bTex.SetPosition( 0.f, -.6f, 0.f );
     auto root = bTex.CreateNode( ".", true );
@@ -185,7 +186,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::Timel
     bTex.SetW( .85f );
     bTex.SetH( 0.31f );
     bTex.SetPosition( 1.3f, -0.17f, 0.01f, 0.0f );
-    bTex.SetTextureFile( "simless_00.jpg", false );
+    bTex.SetTextureFile( "rsrcy/simless_00.jpg", false );
     bTex.SetPosition( -1.f,  -0.17f, 0.01f, 0.0f );
     bTex.SetPosition( -1.1f, -0.17f, 0.01f, 2.0f );
     bTex.SetPosition( -0.2f, -0.17f, 0.01f, 4.0f );
@@ -193,10 +194,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::Timel
     bTex.SetPosition( 1.2f,  -0.17f, 0.01f, 9.0f );
     auto c0 = bTex.CreateNode( "node0", true );
 
-    bSolid.SetColor( 1.f, 0.f, 1.f, 0.2f, 0.f );
-    bSolid.SetColor( 1.f, 0.f, 1.f, 1.0f, 5.f );
-    bSolid.SetColor( 1.f, 0.f, 1.f, 0.1f, 10.f );
-    bSolid.SetColor( 1.f, 0.f, 1.f, 0.8f, 15.f );
+    //bSolid.SetColor( 1.f, 0.f, 1.f, 0.2f, 0.f );
+    //bSolid.SetColor( 1.f, 0.f, 1.f, 1.0f, 5.f );
+    //bSolid.SetColor( 1.f, 0.f, 1.f, 0.1f, 10.f );
+    //bSolid.SetColor( 1.f, 1.f, 1.f, 0.8f, 15.f );
     bSolid.SetPosition( 1.3f, 0.17f, 0.01f, 0.0f );
     bSolid.SetPosition( 0.6f, 0.17f, 0.01f, 4.0f );
     bSolid.SetPosition( -0.5f, 0.17f, 0.01f, 7.0f );
@@ -205,7 +206,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::Timel
     bSolid.SetPosition(  1.2f, 0.17f, 0.01f, 14.0f );
     auto c1 = bSolid.CreateNode( "node1" );
 
-    bSolid.SetColor( 0.f, 1.f, 0.f, 1.0f, 0.f );
+    //bSolid.SetColor( 0.f, 1.f, 0.f, 1.0f, 0.f );
     bSolid.SetW( 0.25f );
     bSolid.SetH( 0.25f );
     bSolid.SetPosition( -0.2f, 0.f, 0.01f );
@@ -217,7 +218,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::Timel
     bSolid.SetPosition( 0.2f, 0.f, 0.01f );
     auto c01 = bSolid.CreateNode( "node02" );
 
-    bTex.SetTextureFile( "simless_01.jpg", false );
+    bTex.SetTextureFile( "rsrcy/simless_01.jpg", false );
     bTex.SetW( .15f );
     bTex.SetH( 0.15f );
     bTex.SetPosition( 0.f, 0.f, 0.01f );
@@ -232,6 +233,94 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::Timel
     c01->AddChild( c010 );
 
     auto ai = TestAIManager::Instance().GetAIPreset( 3, root );
+
+    return root;
+}
+
+// *****************************
+//
+model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_00.jpg", false, 3.4f, 1.7f );
+    SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 0.75f ), .85f, 0.31f );
+
+    bTex.SetPosition( 0.f, -.6f, 0.f );
+    auto root = bTex.CreateNode( ".", true );
+
+    bTex.SetH( 0.7f );
+    bTex.SetW( 3.0f );
+    bTex.SetTextureFile( "rsrcy/simless_01.jpg", false );
+    auto cm1 = bTex.CreateNode( "nodem1", true );
+
+    bSolid.SetColor( 0.f, 1.f, 1.f, 0.75f, 0.f );
+    bSolid.SetColor( 0.f, 1.f, 1.f, 1.f, 5.f );
+    bSolid.SetColor( 0.f, 1.f, 1.f, 1.f, 9.f );
+    bSolid.SetColor( 0.f, 1.f, 1.f, 0.7f, 10.f );
+    bSolid.SetColor( 0.f, 1.f, 1.f, 0.95f, 12.f );
+    bSolid.SetPosition( 1.3f, 0.17f, 0.01f, 0.0f );
+    bSolid.SetPosition( 0.6f, 0.17f, 0.01f, 4.0f );
+    bSolid.SetPosition( -0.5f, 0.17f, 0.01f, 7.0f );
+    bSolid.SetPosition( -1.2f, 0.17f, 0.01f, 8.0f );
+    bSolid.SetPosition( -0.3f, 0.17f, 0.01f, 9.0f );
+    bSolid.SetPosition(  1.2f, 0.17f, 0.01f, 14.0f );
+    auto c0 = bSolid.CreateNode( "node0" );
+
+    root->AddChild( cm1 );
+    cm1->AddChild( c0 );
+
+    auto ai = TestAIManager::Instance().GetAIPreset( 6, root );
+
+    return root;
+}
+
+// *****************************
+//
+model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest1 ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_00.jpg", false, 3.4f, 1.7f );
+    SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 0.75f ), .85f, 0.31f );
+
+    bTex.SetPosition( 0.f, -.6f, 0.f );
+    auto root = bTex.CreateNode( "nodem1", true );
+
+    bTex.SetH( 0.7f );
+    bTex.SetW( 3.0f );
+    bTex.SetTextureFile( "rsrcy/simless_01.jpg", false );
+    auto cm1 = bTex.CreateNode( "nodem2", true );
+
+    bSolid.SetColor( 1.f, 0.f, 1.f, 1.f, 0.f );
+    bSolid.SetColor( 1.f, 0.f, 1.f, 1.f, 5.f );
+    bSolid.SetColor( 1.f, 0.f, 0.f, 1.f, 9.f );
+    bSolid.SetColor( 1.f, 0.f, 1.f, 1.f, 10.f );
+    bSolid.SetColor( 1.f, 0.f, 1.f, 1.f, 12.f );
+    bSolid.SetPosition( 1.3f, 0.17f, 0.01f, 0.2f );
+    bSolid.SetPosition( 0.6f, 0.17f, 0.01f, 3.0f );
+    bSolid.SetPosition( -0.5f, 0.17f, 0.01f, 5.0f );
+    bSolid.SetPosition( -1.2f, 0.17f, 0.01f, 7.0f );
+    bSolid.SetPosition( -0.3f, 0.17f, 0.01f, 8.0f );
+    bSolid.SetPosition(  1.2f, 0.17f, 0.01f, 12.0f );
+    auto cm2 = bSolid.CreateNode( "nodem22" );
+
+    bSolid.SetW( 1.f );
+    bSolid.SetH( 0.2f );
+    bSolid.SetColor( 0.f, 1.f, 1.f, 0.75f, 0.f );
+    bSolid.SetColor( 0.f, 1.f, 1.f, 1.f, 5.f );
+    bSolid.SetColor( 0.f, 1.f, 1.f, 1.f, 9.f );
+    bSolid.SetColor( 0.f, 1.f, 1.f, 0.7f, 10.f );
+    bSolid.SetColor( 0.f, 1.f, 1.f, 0.95f, 12.f );
+    bSolid.SetPosition( 1.3f, 0.17f, 0.01f, 0.0f );
+    bSolid.SetPosition( 0.6f, 0.17f, 0.01f, 4.0f );
+    bSolid.SetPosition( -0.5f, 0.17f, 0.01f, 7.0f );
+    bSolid.SetPosition( -1.2f, 0.17f, 0.01f, 8.0f );
+    bSolid.SetPosition( -0.3f, 0.17f, 0.01f, 9.0f );
+    bSolid.SetPosition(  1.2f, 0.17f, 0.01f, 14.0f );
+    auto c0 = bSolid.CreateNode( "nodem3" );
+
+    root->AddChild( cm1 );
+    cm1->AddChild( cm2 );
+    root->AddChild( c0 );
+
+    auto ai = TestAIManager::Instance().GetAIPreset( 6, root );
 
     return root;
 }
@@ -254,7 +343,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMan
     assert( success );
 
     //Set some values to make it look like a scene
-    SetDefaultTransformAnim( root->GetPlugin( "transform" ) );
+    //SetDefaultTransformAnim( root->GetPlugin( "transform" ) );
 
     auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
     assert( color );
@@ -263,10 +352,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMan
     auto h = root->GetPlugin( "rectangle" )->GetParameter( "height" );
 
     success &= SetParameter( w, 0.f, 2.f );
-    success &= SetParameter( h, 0.f, 1.f );
+    success &= SetParameter( h, 0.f, 2.f );
 
-    success &= SetParameter( w, 20.f, 1.f );
-    success &= SetParameter( h, 20.f, 2.f );
+    //success &= SetParameter( w, 20.f, 1.f );
+    //success &= SetParameter( h, 20.f, 2.f );
 
     success &= SetParameter( color, 0.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
 
@@ -931,9 +1020,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
         node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( timeEvaluator );
     auto plugin = node->GetPlugin( "transform" );
-    auto param = plugin->GetParameter( "simple_transform" );
+    //auto param = plugin->GetParameter( "simple_transform" );
 
-    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.0f, 0.f, 0.f ) );
+    //SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.0f, 0.f, 0.f ) );
 
     /*
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 0.f, 0.0f ) );
@@ -957,7 +1046,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     model::SetParameter( node->GetPlugin( "texture" )->GetParameter( "alpha" ), TimeType( 3.f ),   1.f );
     */
 
-    success = model::LoadTexture( node->GetPlugin( "texture" ), "caption_white.png" );
+    success = model::LoadTexture( node->GetPlugin( "texture" ), "ogl_sm.jpg" );
     //success = model::LoadTexture( node->GetPlugin( "texture" ), "Untitled drawing.png" );
     assert( success );
 
@@ -973,8 +1062,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
         //model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),   2.f * scl );
         //model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), wf * 2.f * scl );
 
-        SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),  float(height)/540.f );
-        SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),   float(width)/540.f );
+		auto rectPlugin = node->GetPlugin( "rectangle" );
+        SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),  float(height)/1080.f );
+        SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),   float(width)/1080.f );
+
+		rectPlugin->Update( TimeType( 0.f ) );
     }
 
     if( useAlphaMask )
@@ -1184,7 +1276,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto node = std::make_shared< model::BasicNode >( "Text", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -1194,8 +1286,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     auto plugin = node->GetPlugin( "transform" );
     auto param = plugin->GetParameter( "simple_transform" );
 
-    SetParameterTranslation( param, 0, 0.0f, glm::vec3( -0.58f, -0.022f, 0.0f ) );
-    SetParameterTranslation( param, 0, 30.0f, glm::vec3( -0.58f, -0.04f, 0.0f ) );
+    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.03f, -0.04, 0.0f ) );
+    //SetParameterTranslation( param, 0, 30.0f, glm::vec3( -0.58f, -0.04f, 0.0f ) );
 
 //    SetParameterTranslation( param, 0, 0.0f, glm::vec3( -0.58f, 0.122f, 0.0f ) );
  //   SetParameterTranslation( param, 0, 100.0f, glm::vec3( -0.58f, -0.14f, 0.0f ) );
@@ -1203,11 +1295,19 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
 
     //SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
 
-    //SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ) );
-    SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 123.0f );
+
+	node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( timeEvaluator );
+	node->GetPlugin( "text" )->GetParameter( "outlineColor" )->SetTimeEvaluator( timeEvaluator );
+
+    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
+	SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) );
+	//SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 10.0 ), glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) );
+	//SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 10.0 ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ) );
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 60.0f );
+	SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineSize" ), TimeType( 0.0 ), float( 3 ) );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
 
-    SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.0f );
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
 
     SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( model::TextAlignmentType::Left ) );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 0.0 ), 0.0f );
@@ -1222,7 +1322,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAAAA\nBBBBCCCC\nDDDDDDDDD" );
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AV::11A-AAAA\nBBBBCCCC\nDDD333DD88\nAAAAAAAA\nB3BBCCCC\nDDDD888DDD" );
 //    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAABBBBCCCCDDDD" );
-	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"1238" );
+	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"12345" );
 
     if( useAlphaMask )
     {
@@ -1242,9 +1342,48 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     return node;    
 }
 
+model::BasicNodePtr	SimpleNodesFactory::CreateCrawlerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+	//std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+	//node->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEvaluator );
+
+	auto node = CreateGreenRectNode( timelineManager, timeEvaluator, "green rect"); 
+
+	auto crawler = widgets::Crawler::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
+
+	node->SetLogic( crawler );
+
+	auto texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+	texture->AddChild( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( texture );
+	texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+	texture->AddChild( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( texture );
+	texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+	texture->AddChild( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( texture );
+	texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+	texture->AddChild( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	crawler->AddNext( texture );
+	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+
+	crawler->SetSpeed( 0.4f );
+	crawler->SetInterspace( 0.4f );
+
+	crawler->Finalize();
+	crawler->Start();
+
+	return node;
+}
+
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateTextWithShadowNode(   model::TimelineManager * timelineManager,
+model::BasicNodePtr SimpleNodesFactory::CreateTextWithShadowNode(   model::TimelineManager * timelineManager,
                                                                     model::ITimeEvaluatorPtr timeEvaluator,
                                                                     unsigned int blurSize,
                                                                     const glm::vec3 shadowTranslation )

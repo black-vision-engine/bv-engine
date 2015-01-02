@@ -4,14 +4,16 @@
 #include <string>
 
 #include "Engine/Models/Interfaces/IModelNode.h"
+#include "Engine/Models/Interfaces/INodeLogic.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
 
-//#include "Engine/Models/Interfaces/ITimeEvaluator.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
+
+#include "Mathematics/Rect.h"
 
 
 namespace bv {
@@ -56,6 +58,8 @@ private:
 
     DefaultPluginListFinalizedPtr   m_pluginList;
 
+	INodeLogicPtr					m_nodeLogic;
+
 public:
 
     explicit BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager = nullptr );
@@ -70,19 +74,29 @@ public:
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
 
-    virtual void                            EnableOverrideState     () override;
-    virtual void                            DisableOverrideState    () override;
+    virtual void                            EnableOverrideStateAM   () override;
+    virtual void                            EnableOverrideStateNM   () override;
+    virtual void                            DisableOverrideStateAM  () override;
+    virtual void                            DisableOverrideStateNM  () override;
 
-    virtual bool                            OverrideStateChanged    () const override;
-    virtual void                            SetOverrideStateChg     ( bool changed ) override;
+    virtual bool                            OverrideStateChangedAM  () const override;
+    virtual bool                            OverrideStateChangedNM  () const override;
+
+    virtual void                            SetOverrideStateChgAM   ( bool changed ) override;
+    virtual void                            SetOverrideStateChgNM   ( bool changed ) override;
 
 public:
 
-    virtual bool                            IsStateOverriden        () const override;
+    virtual bool                            IsStateOverridenAM      () const override;
+    virtual bool                            IsStateOverridenNM      () const override;
+
     virtual IOverrideState *                GetOverrideState        () override;
 
     virtual const std::string &             GetName                 () const override;
     void                                    SetName                 ( const std::string & name );
+
+	// axis-aligned bounding box
+	mathematics::Rect 						GetAABB					() const;
 
     virtual SceneNode *                     BuildScene              () override;
 
@@ -96,6 +110,9 @@ private:
 
     void                                    NonNullPluginsListGuard ();
 
+	mathematics::Rect 						GetAABB					( const glm::mat4 & currentTransformation ) const;
+
+
 public:
 
     //Utility API - plugins can be added on-the-fly by user using an editor
@@ -104,6 +121,8 @@ public:
     bool                                    AddPlugin               ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
     bool                                    AddPlugins              ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator );
     bool                                    AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator );
+
+	void									SetLogic				( INodeLogicPtr logic );
 
     virtual void                            Print                   ( std::ostream & out, int tabs = 0 ) const override;
     virtual void                            Update                  ( TimeType t ) override;
@@ -130,7 +149,7 @@ private:
     unsigned int                        TotalNumVertices                ( const std::vector< IConnectedComponentPtr > & ccVec) const;
     unsigned int                        TotalSize                       ( const std::vector< IConnectedComponentPtr > & ccVec, const IVertexAttributesChannelDescriptor * desc ) const;
 
-    RenderableEffect *                  CreateDefaultEffect             ( IPluginConstPtr finalizer ) const;
+    RenderableEffectPtr                 CreateDefaultEffect             ( IPluginConstPtr finalizer ) const;
 
     std::string                         SplitPrefix                     ( std::string & str, const std::string & separator = "/" ) const;
 

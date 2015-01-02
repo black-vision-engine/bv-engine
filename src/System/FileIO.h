@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 
+#include "System/BasicTypes.h"
+
 
 namespace bv
 {
@@ -25,30 +27,30 @@ public:
         FOMReadWrite
     };
 
-    int                 Read        ( std::ostream & out) const;
-    int                 Read        ( std::ostream & out, int numBytes ) const;
+    SizeType            Read        ( std::ostream & out) const;
+    SizeType            Read        ( std::ostream & out, SizeType numBytes ) const;
 
-    int                 Write       ( std::istream & in );
-    int                 Write       ( std::istream & in , int numBytes );
-    void                Write       ( const char* in , int numBytes );
+    SizeType            Write       ( std::istream & in );
+    SizeType            Write       ( std::istream & in , SizeType numBytes );
+    void                Write       ( const char * in , SizeType numBytes );
 
     void                Close       ();
 
-    void                operator << ( std::istream& );
-    void                operator >> ( std::ostream& );
+    void                operator << ( std::istream & );
+    void                operator >> ( std::ostream & );
 
 
     virtual             ~File       ();
 
     static bool         Exists      ( const std::string & fileName );
     static File         Open        ( const std::string & fileName, OpenMode openMode = FOMReadOnly );
-    static int          Read        ( std::ostream & out, const std::string & fileName );
-    static int          Read        ( char* out, const std::string & fileName );
-    static int          Write       ( std::istream & in, const std::string & fileName );
-    static int          Size        ( const std::string & fileName );
+    static SizeType     Read        ( std::ostream & out, const std::string & fileName );
+    static SizeType     Read        ( char * out, const std::string & fileName );
+    static SizeType     Write       ( std::istream & in, const std::string & fileName );
+	static SizeType     Size        ( const std::string & fileName );
     static std::string  GetAbsolutPath( const std::string & fileName );
-    static std::string  GetDirName  ( const std::string& path );
-    static bool         CreateDir   ( const std::string& path );
+    static std::string  GetDirName  ( const std::string & path );
+    static bool         CreateDir   ( const std::string & path );
 
     friend class FileImpl;
 };

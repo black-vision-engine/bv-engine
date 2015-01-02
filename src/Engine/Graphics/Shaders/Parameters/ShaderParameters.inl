@@ -4,7 +4,7 @@ namespace bv {
 //
 inline unsigned int                 ShaderParameters::NumParameters     () const
 {
-    return m_shaderParams.size();   
+    return (unsigned int) m_shaderParams.size();   
 }
 
 // ***************************
@@ -35,7 +35,7 @@ inline const GenericShaderParam *   ShaderParameters::GetParam          ( const 
 //
 inline unsigned int                 ShaderParameters::NumTextures       () const
 {
-    return m_textures.size();
+    return (unsigned int) m_textures.size();
 }
 
 // ***************************

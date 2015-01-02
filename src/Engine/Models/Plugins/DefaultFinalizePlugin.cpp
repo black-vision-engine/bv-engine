@@ -8,6 +8,8 @@
 
 /* hacked by creed */
 #include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
+#include "Engine/Models/Plugins/Plugin.h"
+
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 
@@ -189,6 +191,27 @@ IPluginConstPtr                     DefaultFinalizePlugin::GetPrevPlugin        
 
 // *******************************
 //
+mathematics::RectConstPtr			DefaultFinalizePlugin::GetAABB						( const glm::mat4 & currentTransformation ) const
+{
+	auto rect = mathematics::Rect::Create();
+
+	auto prevPlugin = GetPrevPlugin();
+
+	while( prevPlugin )
+	{
+		auto r = prevPlugin->GetAABB( currentTransformation );
+
+		if( r )
+			rect->Include( *r );
+
+		prevPlugin = prevPlugin->GetPrevPlugin();
+	}
+	
+	return rect;
+}
+
+// *******************************
+//
 bool                                DefaultFinalizePlugin::LoadResource                 ( IPluginResourceDescrConstPtr resDescr )
 {
     return false;
@@ -257,6 +280,16 @@ std::vector< std::string >          DefaultFinalizePlugin::PrevUIDS             
     return std::vector< std::string >();
 }
 
+
+// *******************************
+//
+ParamTransformVecPtr				DefaultFinalizePlugin::GetParamTransform			() const
+{
+	auto paramTransform = GetCurrentParamTransform( m_prevPlugin.get() );
+	assert( paramTransform );
+
+	return paramTransform;
+}
 
 } //model
 }  //bv

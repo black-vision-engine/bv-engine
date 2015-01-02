@@ -1,6 +1,7 @@
 #include "StatsFormatters.h"
 
 #include <sstream>
+#include <algorithm>
 
 #include "System/HerarchicalProfiler.h"
 #include "FrameStatsService.h"

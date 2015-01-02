@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include "Engine/Interfaces/IShaderDataSource.h"
+#include "Engine/Interfaces/IMultipassShaderDataSource.h"
 
 #include "Engine/Models/Interfaces/ITextureDescriptor.h"
 #include "Engine/Models/Interfaces/IAnimationDescriptor.h"
@@ -21,7 +22,47 @@ namespace bv {
 
 // *********************************
 //
+DefaultEffect::DefaultEffect     ( const IMultipassShaderDataSource * msds )
+{
+    for( unsigned int i = 0; i < msds->GetNumPasses(); ++i )
+    {
+        auto psds = msds->GetPixelShaderDataSource( i );
+        auto vsds = msds->GetVertexShaderDataSource( i );
+        auto gsds = msds->GetGeometryShaderDataSource( i );
+
+        auto pass = CreateRenderablePass( psds, vsds, gsds );
+
+        AddPass( pass );
+    }
+}
+
+// *********************************
+//
 DefaultEffect::DefaultEffect    ( const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds )
+{
+    auto pass = CreateRenderablePass( psds, vsds, gsds );
+
+    AddPass( pass );
+}
+
+// *********************************
+//
+DefaultEffect::~DefaultEffect   ()
+{
+    //FIXME: this suxx as this class cleans up shaders from passes and passes itself are deleted in the base class (delete pass should delete shaders as well) - to be fixed
+    for( unsigned int i = 0; i < NumPasses(); ++i )
+    {
+        auto pass = GetPass( i );
+
+        delete pass->GetPixelShader();
+        delete pass->GetVertexShader();
+        delete pass->GetGeometryShader();
+    }
+}
+
+// *********************************
+//
+RenderablePass *    DefaultEffect::CreateRenderablePass    ( const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds ) const
 {
     assert( psds != nullptr );
     assert( vsds != nullptr );
@@ -52,25 +93,12 @@ DefaultEffect::DefaultEffect    ( const IShaderDataSource * psds, const IShaderD
 
     RenderablePass * pass = new RenderablePass( ps, vs, gs );
 
-    AddPass( pass );
+    return pass;
 }
 
 // *********************************
 //
-DefaultEffect::~DefaultEffect   ()
-{
-    assert( NumPasses() == 1 );
-
-    auto pass = GetPass( 0 );
-
-    delete pass->GetPixelShader();
-    delete pass->GetVertexShader();
-    delete pass->GetGeometryShader();
-}
-
-// *********************************
-//
-ShaderParameters * DefaultEffect::CreateDefaultParamsPS  ( const IShaderDataSource * ds ) const
+ShaderParameters *  DefaultEffect::CreateDefaultParamsPS  ( const IShaderDataSource * ds ) const
 {
     auto sp = CreateDefaultParamsImpl( ds );
 
@@ -112,7 +140,7 @@ ShaderParameters * DefaultEffect::CreateDefaultParamsGS  ( const IShaderDataSour
 
 // *********************************
 // FIXME: only 2D textures right now
-void               DefaultEffect::AddTextures       ( Shader * shader, ITexturesDataConstPtr txData )
+void               DefaultEffect::AddTextures       ( Shader * shader, ITexturesDataConstPtr txData ) const
 {
     unsigned int samplerNum = 0;
 

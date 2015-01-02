@@ -6,6 +6,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
 #include "Engine/Models/Resources/IPluginResourceDescr.h"
 
@@ -441,6 +442,32 @@ unsigned int                                DefaultTexturePlugin::GetTextureHeig
 {
     return m_textureHeight;
 }
+
+// *************************************
+// 
+mathematics::RectConstPtr					DefaultTexturePlugin::GetAABB						( const glm::mat4 & trans ) const
+{
+	//auto trParam = GetCurrentParamTransform( this );
+
+	//if( !trParam )
+	//	return nullptr;
+
+	//assert( trParam->NumTransforms() <= 1 );
+
+	//if( trParam->NumTransforms() == 1 )
+	//{
+	//	auto trValue = trParam->Evaluate( 0 );
+
+		auto rect = mathematics::Rect::Create();
+		if( AABB( m_vaChannel.get(), trans, rect.get() ) )
+			return rect;
+		else
+			return nullptr;
+	//}
+	//	
+	//return nullptr;
+}
+
 
 } // model
 } // bv

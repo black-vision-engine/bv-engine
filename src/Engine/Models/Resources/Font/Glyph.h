@@ -1,27 +1,30 @@
 #pragma once
 
-namespace bv {
+#include "System/BasicTypes.h"
+
+namespace bv { namespace model {
 
 struct Glyph
 {
   unsigned short    code;       // unicode value
   unsigned short    index;      // freetype glyph index
 
-  unsigned int      width;      // width of the glyph in pixels
-  unsigned int      height;     // height of the glyph in pixels
-  signed long       advanceX;    // number of pixels to advance on x axis
-  signed long       advanceY;    // number of pixels to advance on y axis
+  SizeType		    width;      // width of the glyph in pixels
+  SizeType		    height;     // height of the glyph in pixels
+  Int32				advanceX;    // number of pixels to advance on x axis
+  Int32				advanceY;    // number of pixels to advance on y axis
 
   int               bearingX;   // x offset of top-left corner from x axis
   int               bearingY;   // y offset of top-left corner from y axis
 
-  unsigned int      textureX;   // x pixel coord of the bitmap's bottom-left corner
-  unsigned int      textureY;   // y pixel coord of the bitmap's bottom-left corner
+  SizeType			textureX;   // x pixel coord of the bitmap's bottom-left corner
+  SizeType			textureY;   // y pixel coord of the bitmap's bottom-left corner
 
-  unsigned int      padding;
+  SizeType			padding;
 
-  unsigned int      size;   // 
+  SizeType			size;   // 
 
 };
 
-}
+} // model
+} // bv

@@ -17,11 +17,6 @@ class SceneNode
 
 private:
 
-    bool                    m_visible;
-    bool                    m_overridenState;
-
-    const IValue *          m_overrideAlphaVal;
-
     TransformableEntityVec  m_transformables;
     SceneNodeVec            m_sceneNodes;
 
@@ -44,112 +39,35 @@ public:
 
     void                    RegisterTransformRep( TransformableEntity * transformable );
 
-    void                    SetOverrideAlpha    ( const IValue * val );
-    const IValue *          GetOverrideAlpha    () const;
 
-//    void                    Update              ( double t, const Transform & parentTransform ); 
+//  void                    Update              ( double t, const Transform & parentTransform ); 
     void                    Update              ( const std::vector< Transform > & parentTransforms );
 
     bool                    IsVisible           () const;
     void                    SetVisible          ( bool visible );
 
-    bool                    IsOverriden         () const;
-    void                    SetOverriden        ( bool overriden );
+//FIXME: add some kind of global effect here
+//FIXME: instead of IsOverriden, SetOverriden and so on simplu use Get/Set GlobalEffect which is applied to the result
+private:
+
+    bool                    m_visible;
+
+    const IValue *          m_overrideAlphaVal;
+
+    bool                    m_overridenStateAlphaMask;
+    bool                    m_overridenStateNodeMask;
+
+public:
+
+    void                    SetOverrideAlphaVal ( const IValue * val );
+    const IValue *          GetOverrideAlphaVal () const;
+
+    bool                    IsOverridenAM       () const;
+    bool                    IsOverridenNM       () const;
+
+    void                    SetOverridenAM      ( bool overriden );
+    void                    SetOverridenNM      ( bool overriden );
 
 };
 
-}
-
-//#include "Engine/Models/IPlugin.h"
-//#include "Mathematics/Interpolators/Interpolators.h"
-//#include "Mathematics/Transform/Transform.h"
-//
-//
-//namespace bv
-//{
-//class Renderer;
-//class ShaderParameter;
-//class PixelShader;
-//class VertexShader;
-//class VBORect;
-//class Camera;
-//
-//class InterpolatorsList
-//{
-//    typedef std::pair<BaseInterpolator*, char*> InterpolatorMemPair;
-//
-//    std::vector<InterpolatorMemPair> interpolators;
-//
-//public:
-//    void update(float t);
-//
-//    void addInterpolator(BaseInterpolator* inter, char* mem = nullptr);
-//
-//    void setInterpolatorData(int i, char*);
-//
-//    int size() const { return interpolators.size(); }
-//
-//    explicit InterpolatorsList(){  }
-//};
-//
-//class SceneNode;
-//
-//class ShaderData
-//{
-//private:
-//    std::vector<ShaderParameter*>   shadersParameters;
-//    PixelShader*                    pshader;
-//    VertexShader*                   vshader;
-//
-//public:
-//    explicit ShaderData() {}
-//
-//    friend class SceneNode;
-//    friend class ShaderDataCmp;
-//};
-//
-//
-//class DataConnector
-//{
-//    char* m_data;
-//public:
-//    ParametersDescriptors           m_paramDesc;
-//    std::vector<ShaderParameter*>   m_shaderParams;
-//    InterpolatorsList*              m_interpolatorList;
-//
-//    void initDataPointers();
-//
-//    virtual ~DataConnector(){}
-//};
-//
-//
-//class SceneNode
-//{
-//private:
-//
-//    std::vector<SceneNode*>         m_children;
-//    ShaderData*                     m_shData;
-//    VBORect*                        m_geometry;
-//    Transform                       m_localTransform;
-//
-//    DataConnector                   m_dataConnector;
-//
-//public:
-//    explicit SceneNode(SceneNode* parent);
-//    void addChild(SceneNode* ch);
-//
-//    //void addShaderParameter(ShaderParameter*);
-//    void setShader(PixelShader*);
-//    void setShader(VertexShader*);
-//    void setGeometry(VBORect*);
-//    void setLocalTransform(const Transform& trans);
-//
-//    void addParamDesc(const ParametersDescriptors& desc);
-//    void setInterpolatorsList(InterpolatorsList* interList);
-//
-//    void init();
-//    void update(float t);
-//    void render( Renderer* renderer, const Camera& camera, const Transform& worldTransform);
-//};
-//
-//} // bv
+} // bv

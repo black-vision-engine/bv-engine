@@ -203,6 +203,7 @@
     <ClCompile Include="Engine\Graphics\Effects\DefaultEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Effects\Texture2DEffect.cpp" />
     <ClCompile Include="Engine\Graphics\Effects\Texture2DEffectShaders.cpp" />
+    <ClCompile Include="Engine\Graphics\Effects\Texture2DEffectWithMask.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.cpp" />
     <ClCompile Include="Engine\Graphics\Renderers\OGLRenderer\PdrPBOMemTransfer.cpp" />
@@ -247,6 +248,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultPixelShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\DefaultGeometryVertexAttributeChannel.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VacAABB.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\PrismComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.cpp" />
@@ -312,6 +314,7 @@
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultTimerPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\TextureInfo.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\AtlasCache.cpp" />
+    <ClCompile Include="Engine\Models\Resources\Font\Engines\FreeTypeEngine.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\TextHelper.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\FontLoader.cpp" />
     <ClCompile Include="Engine\Models\Resources\Font\Text.cpp" />
@@ -349,6 +352,7 @@
     <ClCompile Include="Engine\Processes\ProcessThreadedEvents.cpp" />
     <ClCompile Include="Engine\Types\Values\BaseValue.cpp" />
     <ClCompile Include="Engine\Types\Values\ValuesFactory.cpp" />
+    <ClCompile Include="Mathematics\AABB.cpp" />
     <ClCompile Include="Mathematics\Core\mathfuncs.cpp" />
     <ClCompile Include="Mathematics\Interpolators\Interpolators.cpp" />
     <ClCompile Include="System\DirIO.cpp" />
@@ -416,6 +420,7 @@
     <ClInclude Include="Engine\Graphics\Effects\DefaultEffect.h" />
     <ClInclude Include="Engine\Graphics\Effects\Texture2DEffect.h" />
     <ClInclude Include="Engine\Graphics\Effects\Texture2DEffectShaders.h" />
+    <ClInclude Include="Engine\Graphics\Effects\Texture2DEffectWithMask.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.h" />
     <ClInclude Include="Engine\Graphics\Renderers\OGLRenderer\PdrPBOMemTransfer.h" />
@@ -452,6 +457,7 @@
     <ClInclude Include="Engine\Graphics\State\RendererStateEnums.h" />
     <ClInclude Include="Engine\Graphics\State\RendererStateInstance.h" />
     <ClInclude Include="Engine\Graphics\State\StencilState.h" />
+    <ClInclude Include="Engine\Interfaces\IMultipassShaderDataSource.h" />
     <ClInclude Include="Engine\Interfaces\IShaderDataSource.h" />
     <ClInclude Include="Engine\Interfaces\IUpdatable.h" />
     <ClInclude Include="Engine\Interfaces\IUpdater.h" />
@@ -461,6 +467,7 @@
     <ClInclude Include="Engine\Models\Builder\RendererStatesBuilder.h" />
     <ClInclude Include="Engine\Models\Interfaces\IAnimationDescriptor.h" />
     <ClInclude Include="Engine\Models\Interfaces\IModelNode.h" />
+    <ClInclude Include="Engine\Models\Interfaces\INodeLogic.h" />
     <ClInclude Include="Engine\Models\Interfaces\IOverrideState.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITextureDescriptor.h" />
     <ClInclude Include="Engine\Models\Interfaces\ITextureParams.h" />
@@ -475,6 +482,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultFinalizeVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\DefaultVertexShaderChannel.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\DefaultGeometryVertexAttributeChannel.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VacAABB.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\PrismComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.h" />
@@ -563,6 +571,8 @@
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultTimerPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\TextureInfo.h" />
     <ClInclude Include="Engine\Models\Resources\Font\AtlasCache.h" />
+    <ClInclude Include="Engine\Models\Resources\Font\Engines\FreeTypeEngine.h" />
+    <ClInclude Include="Engine\Models\Resources\Font\IFontEngine.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Serialize.h" />
     <ClInclude Include="Engine\Models\Resources\Font\TextHelper.h" />
     <ClInclude Include="Engine\Models\Resources\Font\FontLoader.h" />
@@ -604,7 +614,9 @@
     <ClInclude Include="Engine\Types\Values\BaseValue.h" />
     <ClInclude Include="Engine\Types\Values\TypedValues.h" />
     <ClInclude Include="Engine\Types\Values\ValuesFactory.h" />
+    <ClInclude Include="Mathematics\AABB.h" />
     <ClInclude Include="Mathematics\Core\mathfuncs.h" />
+    <ClInclude Include="Mathematics\Rect.h" />
     <ClInclude Include="System\BasicMacros.h" />
     <ClInclude Include="System\BasicTypes.h" />
     <ClInclude Include="System\DirIO.h" />

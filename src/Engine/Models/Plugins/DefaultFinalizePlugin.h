@@ -47,6 +47,7 @@ public:
     virtual RendererContextConstPtr             GetRendererContext          () const override;
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const override;
+	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & currentTransformation ) const override;
 
     virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
 
@@ -56,6 +57,8 @@ public:
     void                                        SetName                     ( const std::string & name );
 
     static std::string                          ShadersDir                  ();
+
+	virtual ParamTransformVecPtr				GetParamTransform			() const override;
 
 private:
 

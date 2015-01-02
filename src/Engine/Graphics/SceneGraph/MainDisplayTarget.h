@@ -3,6 +3,7 @@
 #include "Engine/Types/Enums.h"
 
 #include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Effects/Texture2DEffect.h"
 
 
 namespace bv {
@@ -11,7 +12,6 @@ class RenderTarget;
 class TriangleStrip;
 class Camera;
 class RenderableArrayDataArraysSingleVertexBuffer;
-class Texture2DEffect;
 
 // FIXME: implement additional sized rectangles (useful for rendering geometry that does not require the whole viewport - scissors like)
 class MainDisplayTarget
@@ -36,8 +36,8 @@ private:
     static RenderableArrayDataArraysSingleVertexBuffer *    CreateTexDispRectArrayData  ();
     static RenderableArrayDataArraysSingleVertexBuffer *    CreateTriStripArrayData     ( unsigned int numVertices, float * vbData );
 
-    static Texture2DEffect *                                CreateEffectBlitTexture     ( Texture2DPtr texture );
-    static Texture2DEffect *                                CreateEffectOverrideAlpha   ( Texture2DPtr texture );
+    static Texture2DEffectPtr                               CreateEffectBlitTexture     ( Texture2DPtr texture );
+    static Texture2DEffectPtr                               CreateEffectOverrideAlpha   ( Texture2DPtr texture );
 
 };
 

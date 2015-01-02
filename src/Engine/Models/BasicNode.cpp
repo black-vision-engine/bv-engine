@@ -137,37 +137,72 @@ const IPluginListFinalized *    BasicNode::GetPluginList            () const
 
 // ********************************
 //
-void                            BasicNode::EnableOverrideState      ()
+void                            BasicNode::EnableOverrideStateAM    ()
 {
-    m_overrideState->EnableAlpha();
+    m_overrideState->EnableAlphaAM();
 }
 
 // ********************************
 //
-void                            BasicNode::DisableOverrideState     ()
+void                            BasicNode::EnableOverrideStateNM    ()
 {
-    m_overrideState->DisableAlpha();
+    m_overrideState->EnableAlphaNM();
 }
 
 // ********************************
 //
-bool                            BasicNode::OverrideStateChanged     () const
+void                            BasicNode::DisableOverrideStateAM   ()
 {
-    return m_overrideState->Changed();
+    m_overrideState->DisableAlphaAM();
 }
 
 // ********************************
 //
-void                            BasicNode::SetOverrideStateChg      ( bool changed )
+void                            BasicNode::DisableOverrideStateNM   ()
 {
-    return m_overrideState->SetChanged( changed );
+    m_overrideState->DisableAlphaNM();
 }
 
 // ********************************
 //
-bool                            BasicNode::IsStateOverriden         () const
+bool                            BasicNode::OverrideStateChangedAM   () const
 {
-    return m_overrideState->IsAlphaEnabled();
+    return m_overrideState->ChangedAM();
+}
+
+// ********************************
+//
+bool                            BasicNode::OverrideStateChangedNM   () const
+{
+    return m_overrideState->ChangedNM();
+}
+
+// ********************************
+//
+void                            BasicNode::SetOverrideStateChgAM    ( bool changed )
+{
+    return m_overrideState->SetChangedAM( changed );
+}
+
+// ********************************
+//
+void                            BasicNode::SetOverrideStateChgNM    ( bool changed )
+{
+    return m_overrideState->SetChangedNM( changed );
+}
+
+// ********************************
+//
+bool                            BasicNode::IsStateOverridenAM       () const
+{
+    return m_overrideState->IsAlphaEnabledAM();
+}
+
+// ********************************
+//
+bool                            BasicNode::IsStateOverridenNM       () const
+{
+    return m_overrideState->IsAlphaEnabledNM();
 }
 
 // ********************************
@@ -193,13 +228,57 @@ void                        BasicNode::SetName                      ( const std:
 
 // ********************************
 //
+mathematics::Rect 			BasicNode::GetAABB						() const
+{
+	mathematics::Rect r;
+
+	auto trans = m_pluginList->GetFinalizePlugin()->GetParamTransform()->Evaluate( 0 );
+
+	auto plRect = m_pluginList->GetFinalizePlugin()->GetAABB( trans );
+
+	if( plRect )
+		r.Include( *plRect );
+
+
+	for( auto ch : m_children )
+	{
+		r.Include( ch->GetAABB( trans ) );
+	}
+
+	return r;
+}
+
+// ********************************
+//
+mathematics::Rect 			BasicNode::GetAABB						( const glm::mat4 & parentTransformation ) const
+{
+	mathematics::Rect r;
+
+	auto trans = parentTransformation * m_pluginList->GetFinalizePlugin()->GetParamTransform()->Evaluate( 0 );
+
+	auto plRect = m_pluginList->GetFinalizePlugin()->GetAABB( trans );
+
+	if( plRect )
+		r.Include( *plRect );
+
+
+	for( auto ch : m_children )
+	{
+		r.Include( ch->GetAABB( trans ) );
+	}
+
+	return r;
+}
+
+// ********************************
+//
 SceneNode *                 BasicNode::BuildScene   () 
 {
     IPluginConstPtr finalizer = GetFinalizePlugin();
 
     SceneNode * node = CreateSceneNode( finalizer );
 
-    node->SetOverrideAlpha( GetOverrideState()->GetAlphaValue().get() );
+    node->SetOverrideAlphaVal( GetOverrideState()->GetAlphaValue().get() );
 
     for( auto ch : m_children )
     {
@@ -334,6 +413,13 @@ bool           BasicNode::AddPlugins              ( const std::vector< std::stri
 
 // ********************************
 //
+void			BasicNode::SetLogic					( INodeLogicPtr logic )
+{
+	m_nodeLogic = logic;
+}
+
+// ********************************
+//
 void BasicNode::Update( TimeType t )
 {
     if( IsVisible() )
@@ -344,6 +430,9 @@ void BasicNode::Update( TimeType t )
             l->Update( t );
 
         m_pluginList->Update( t );
+
+		if( m_nodeLogic )
+			m_nodeLogic->Update( t );
 
         for( auto ch : m_children )
             ch->Update( t );
@@ -387,7 +476,7 @@ RenderableEntity *                  BasicNode::CreateRenderable         ( IPlugi
     {
         auto renderableType = finalizer->GetVertexAttributesChannel()->GetPrimitiveType();
 
-        RenderableEffect * effect = CreateDefaultEffect( finalizer );
+        RenderableEffectPtr effect = CreateDefaultEffect( finalizer );
 
         //RenderableArrayDataSingleVertexBuffer * rad = CreateRenderableArrayData( renderableType );
         //CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
@@ -498,7 +587,7 @@ bool                                BasicNode::CreateRenderableData     (/* Vert
 
 // ********************************
 //
-RenderableEffect *                  BasicNode::CreateDefaultEffect     ( IPluginConstPtr finalizer ) const
+RenderableEffectPtr                  BasicNode::CreateDefaultEffect     ( IPluginConstPtr finalizer ) const
 {
     auto psChannel      = finalizer->GetPixelShaderChannel();
     auto vsChannel      = finalizer->GetVertexShaderChannel();
@@ -507,7 +596,7 @@ RenderableEffect *                  BasicNode::CreateDefaultEffect     ( IPlugin
     assert( psChannel != nullptr );
     assert( vsChannel != nullptr );
 
-    return new DefaultEffect( psChannel.get(), vsChannel.get(), gsChannel.get() ); 
+    return std::make_shared<DefaultEffect>( psChannel.get(), vsChannel.get(), gsChannel.get() ); 
 }
 
 

@@ -205,6 +205,10 @@
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultPrismPlugin.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\PrismComponent.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Simple\DefaultPieChartPlugin.cpp" />
+    <ClCompile Include="Engine\Graphics\Effects\Texture2DEffectWithMask.cpp" />
+    <ClCompile Include="Engine\Models\Resources\Font\Engines\FreeTypeEngine.cpp" />
+    <ClCompile Include="Mathematics\AABB.cpp" />
+    <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VacAABB.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\DefaultGeometryVertexAttributeChannel.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -309,7 +313,6 @@
     <ClInclude Include="Engine\Models\Plugins\Interfaces\ISequenceAnimationSource.h" />
     <ClInclude Include="Engine\Graphics\Resources\TextureBase.h" />
     <ClInclude Include="Engine\Models\Resources\TextHelpers.h" />
-    <ClInclude Include="Engine\Models\Resources\Font\FontLoader.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Glyph.h" />
     <ClInclude Include="Engine\Models\Resources\Font\Text.h" />
     <ClInclude Include="Engine\Models\Timeline\GlobalTimeline.h" />
@@ -470,6 +473,15 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\PrismComponent.h" />
     <ClInclude Include="Engine\Models\Plugins\Simple\DefaultPieChartPlugin.h" />
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\Simple\DefaultGeometryVertexAttributeChannel.h" />
+    <ClInclude Include="Engine\Graphics\Effects\Texture2DEffectWithMask.h" />
+    <ClInclude Include="Engine\Models\Resources\Font\Engines\FreeTypeEngine.h" />
+    <ClInclude Include="Engine\Models\Resources\Font\FontLoader.h" />
+    <ClInclude Include="Engine\Models\Resources\Font\IFontEngine.h" />
+    <ClInclude Include="Engine\Interfaces\IMultipassShaderDataSource.h" />
+    <ClInclude Include="Mathematics\Rect.h" />
+    <ClInclude Include="Mathematics\AABB.h" />
+    <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VacAABB.h" />
+    <ClInclude Include="Engine\Models\Interfaces\INodeLogic.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

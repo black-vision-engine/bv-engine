@@ -76,6 +76,7 @@ inline  TransformF& ParamTransform::Transform       ()
 inline  glm::mat4   ParamTransform::Evaluate        () const
 {
     auto t = AbstractModelParameter::GetLocalEvaluationTime();
+
     return m_transformModel.Evaluate( t );
 }
 
@@ -85,7 +86,7 @@ inline  glm::mat4   ParamTransform::Evaluate        () const
 //
 inline unsigned int  ParamTransformVec::NumTransforms   () const
 {
-    return m_transformModelVec.size();
+    return (unsigned int) m_transformModelVec.size();
 }
 
 // *******************************

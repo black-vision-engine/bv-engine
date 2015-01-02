@@ -23,6 +23,9 @@ std::string TransformSetEvent::m_sEventName         = "Event_TransformSet";
 const EventType KeyPressedEvent::m_sEventType       = 0x00000005;
 std::string KeyPressedEvent::m_sEventName           = "Event_KeyPressedEvent";
 
+// FIXME: MORE EVENTS IN CrawlerEvents.cpp. VERY VERY BAD IDEA. WE NEED EVENTS REGISTER SYSTEM ASAP.
+
+
 // ************************************* PluginAddedEvent *************************************
 
 // *************************************
