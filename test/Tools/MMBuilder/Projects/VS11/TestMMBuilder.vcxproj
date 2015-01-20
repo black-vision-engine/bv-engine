@@ -22,7 +22,7 @@
     <ClCompile Include="..\..\Sources\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\tools\MMBuilder\MMBuilder.vcxproj">
+    <ProjectReference Include="..\..\..\..\..\tools\MMBuilder\Projects\VS11\MMBuilder.vcxproj">
       <Project>{b911422a-f443-4b39-8590-3ec46c67fba8}</Project>
     </ProjectReference>
   </ItemGroup>

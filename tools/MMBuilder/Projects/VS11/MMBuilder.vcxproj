@@ -71,7 +71,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.;../../dep/Common/FreeImage/dist</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Include;../../../../dep/Common/FreeImage/dist;../../../../dep/Common/gtest/Include/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -84,7 +84,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.;../../dep/Common/FreeImage/dist;../../dep/Common/gtest/Include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Include;../../../../dep/Common/FreeImage/dist;../../../../dep/Common/gtest/Include/</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_VARIADIC_MAX=10;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -100,7 +100,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.;../../dep/Common/FreeImage/dist</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Include;../../../../dep/Common/FreeImage/dist;../../../../dep/Common/gtest/Include/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -117,7 +117,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.;../../dep/Common/FreeImage/dist;../../dep/Common/gtest/Include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../Include;../../../../dep/Common/FreeImage/dist;../../../../dep/Common/gtest/Include/</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_VARIADIC_MAX=10;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -132,7 +132,7 @@
     <ClInclude Include="Include\MMBuilder.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\MMBuilder.cpp" />
+    <ClCompile Include="..\..\Sources\MMBuilder.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

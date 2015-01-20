@@ -1,4 +1,4 @@
-#include "Include/MMBuilder.h"
+#include "MMBuilder.h"
 #include "FreeImage.h"
 
 #include <cassert>
@@ -13,7 +13,7 @@ namespace
 //
 FIBITMAP * LoadImage( const std::string & lpszPathName )
 {
-	FREE_IMAGE_FORMAT fif = FreeImage_GetFileType(lpszPathName.c_str(), 0);
+	FREE_IMAGE_FORMAT fif = FreeImage_GetFileType( lpszPathName.c_str(), 0 );
 
 	if( fif == FIF_UNKNOWN )
 		fif = FreeImage_GetFIFFromFilename( lpszPathName.c_str() );
