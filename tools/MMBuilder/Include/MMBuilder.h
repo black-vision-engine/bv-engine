@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
 namespace tools
 {
@@ -25,6 +26,6 @@ struct Image32
 typedef std::vector< Image32 >		Mipmaps;
 
 Mipmaps				GenerateMipmaps( const Image32 & data, int levelsNum, FilterType ft );
-Mipmaps				GenerateMipmaps( const std::string & imageFilePah, int levelsNum, FilterType ft );
+Mipmaps				GenerateMipmaps( const std::string & imageFilePath, int levelsNum, FilterType ft );
 
 } // tools

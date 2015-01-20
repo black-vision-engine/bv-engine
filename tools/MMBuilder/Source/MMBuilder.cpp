@@ -11,6 +11,25 @@ namespace
 
 // ******************************
 //
+FIBITMAP * LoadImage( const std::string & lpszPathName )
+{
+	FREE_IMAGE_FORMAT fif = FreeImage_GetFileType(lpszPathName.c_str(), 0);
+
+	if( fif == FIF_UNKNOWN )
+		fif = FreeImage_GetFIFFromFilename( lpszPathName.c_str() );
+
+	if( ( fif != FIF_UNKNOWN ) && FreeImage_FIFSupportsReading( fif ) )
+	{
+		FIBITMAP * dib = FreeImage_Load(fif, lpszPathName.c_str() );
+		dib = FreeImage_ConvertTo32Bits( dib );
+		return dib;
+	}
+
+	return nullptr;
+}
+
+// ******************************
+//
 bool		IsPowerOfTwo( unsigned int x )
 {
 	return (x & (x - 1)) == 0;
@@ -63,9 +82,11 @@ Image32		Resize( const Image32 & in, unsigned int newWidth, unsigned int newHeig
 
 	auto outBitmap = FreeImage_Rescale( inBitmap, newWidth, newHeight, ToFIFilter( ft ) );
 
+	outBitmap = FreeImage_ConvertTo32Bits( outBitmap );
+
 	Image32 ret;
 
-	ret.data = ( char * ) FreeImage_GetBits( inBitmap );
+	ret.data = ( char * ) FreeImage_GetBits( outBitmap );
 	ret.width = newWidth;
 	ret.height = newHeight;
 
@@ -112,25 +133,36 @@ Mipmaps				GenerateMipmaps( const Image32 & data, int levelsNum, FilterType ft )
 {
 	auto imgPowOfTwo = EnlargeImageToPowerOfTwo( data, ft );
 
-	Mipmaps res;
-	res.resize( levelsNum );
+	Mipmaps res( 1 );
 
 	res[ 0 ].data		= imgPowOfTwo.data;
 	res[ 0 ].height		= imgPowOfTwo.height;
 	res[ 0 ].width		= imgPowOfTwo.width;
 
 	if( levelsNum > 1 )
-		for( int i = 1; i < levelsNum; ++i )
-			res[ i ] = GenerateNextLevelMipmap( res[ 0 ], ft );
+		for( int i = 1; i < levelsNum; ++i ) 
+		{
+			if( res[ i - 1 ].width > 1 || res[ i - 1 ].height > 1 )
+				res.push_back( GenerateNextLevelMipmap( res[ i - 1 ], ft ) );
+			else
+				break;
+		}
 
 	return res;
 }
 
 // ******************************
 //
-Mipmaps				GeneratMipmaps( const std::string & imageFilePah, int levelsNum, FilterType ft )
+Mipmaps				GenerateMipmaps( const std::string & imageFilePath, int levelsNum, FilterType ft )
 {
-	return Mipmaps();
+	auto fiBitmap = LoadImage(  imageFilePath );
+
+	Image32 img;
+	img.data	= ( char * ) FreeImage_GetBits( fiBitmap );
+	img.width	= FreeImage_GetWidth( fiBitmap );
+	img.height	= FreeImage_GetHeight( fiBitmap );
+
+	return GenerateMipmaps( img, levelsNum, ft );
 }
 
 } // tools
