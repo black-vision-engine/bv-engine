@@ -157,6 +157,9 @@ Mipmaps				GenerateMipmaps( const std::string & imageFilePath, int levelsNum, Fi
 {
 	auto fiBitmap = LoadImage(  imageFilePath );
 
+	if( !fiBitmap )
+		return Mipmaps();
+
 	Image32 img;
 	img.data	= ( char * ) FreeImage_GetBits( fiBitmap );
 	img.width	= FreeImage_GetWidth( fiBitmap );

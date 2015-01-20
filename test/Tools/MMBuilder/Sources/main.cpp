@@ -3,9 +3,7 @@
 
 #include <sstream>
 
-#define PERFORM_UNIT_TESTS
-#ifdef PERFORM_UNIT_TESTS
-//TESTS
+#include "gtest/gtest.h"
 
 // ******************************
 //
@@ -15,9 +13,11 @@ bool SaveImageBMP( const std::string & lpszPathName, const tools::Image32 & img 
 	return FreeImage_Save( FREE_IMAGE_FORMAT::FIF_BMP, inBitmap, lpszPathName.c_str() ) != 0;
 }
 
-int main()
+TEST( RunMimmaping, RunMimmaping )
 {
-	auto m1 = tools::GenerateMipmaps( "Tests/Resources/checkerbord2.bmp", 50, tools::FilterType::CATMULL_ROM );
+	auto m1 = tools::GenerateMipmaps( "Resources/checkerbord2.bmp", 50, tools::FilterType::CATMULL_ROM );
+	ASSERT_TRUE( m1.size() == 11 );
+	ASSERT_TRUE( m1[ 10 ].width == 1 &&  m1[ 10 ].height == 1 );
 
 	bool success = false;
 
@@ -28,14 +28,15 @@ int main()
 		std::ostringstream ss;
 		ss << k;
 
-		success = SaveImageBMP( "Tests/Output/testFreeTypeMM" + ss.str() + ".bmp", i );
-		if( !success )
-			return -1;
+		success = SaveImageBMP( "_Output/testFreeTypeMM" + ss.str() + ".bmp", i );
+		ASSERT_TRUE(success);
 
 		k++;
 	}
-
-	return 0;
 }
 
-#endif // PERFORM_UNIT_TESTS
+int main( int argc, char **argv )
+{
+	::testing::InitGoogleTest( &argc, argv );
+	return RUN_ALL_TESTS();
+}
