@@ -9,7 +9,7 @@ namespace bv
 {
 
 // ******************************
-// Implementation of simple cache of MemoryChunk. Key can be every string. Mostly hash.
+// Implementation of simple cache of MemoryChunk. Key must be class of bv::Hash.
 class RawDataCache
 {
 public:

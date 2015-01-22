@@ -5,6 +5,8 @@
 namespace bv
 {
 
+// ******************************
+// Implementation of simple hash class with comparation function needed for std::map
 class Hash
 {
 public:
