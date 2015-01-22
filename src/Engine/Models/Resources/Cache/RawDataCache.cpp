@@ -5,14 +5,14 @@ namespace bv
 
 // ******************************
 //
-MemoryChunkConstPtr		RawDataCache::Get( const std::string & key ) const
+MemoryChunkConstPtr		RawDataCache::Get( const Hash & key ) const
 {
 	return Find( key );
 }
 
 // ******************************
 //
-bool					RawDataCache::Add( const std::string & key, MemoryChunkConstPtr data )
+bool					RawDataCache::Add( const Hash & key, MemoryChunkConstPtr data )
 {
 	if( Exists( key ) )
 		return false;
@@ -25,7 +25,7 @@ bool					RawDataCache::Add( const std::string & key, MemoryChunkConstPtr data )
 
 // ******************************
 //
-void 					RawDataCache::Update	( const std::string & key, MemoryChunkConstPtr data )
+void 					RawDataCache::Update	( const Hash & key, MemoryChunkConstPtr data )
 {
 	m_data[ key ] = data;
 }
@@ -40,7 +40,7 @@ RawDataCache *			RawDataCache::GetInstance()
 
 // ******************************
 //
-MemoryChunkConstPtr		RawDataCache::Find( const std::string & key ) const
+MemoryChunkConstPtr		RawDataCache::Find( const Hash & key ) const
 {
 	auto it = m_data.find( key );
 	if( it != m_data.end() )

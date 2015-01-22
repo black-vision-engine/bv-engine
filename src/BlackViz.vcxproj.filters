@@ -211,6 +211,7 @@
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\VacAABB.cpp" />
     <ClCompile Include="Engine\Models\Plugins\Channels\Geometry\Simple\DefaultGeometryVertexAttributeChannel.cpp" />
     <ClCompile Include="Engine\Models\Resources\Cache\RawDataCache.cpp" />
+    <ClCompile Include="Core\Hash.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -484,6 +485,7 @@
     <ClInclude Include="Engine\Models\Plugins\Channels\Geometry\VacAABB.h" />
     <ClInclude Include="Engine\Models\Interfaces\INodeLogic.h" />
     <ClInclude Include="Engine\Models\Resources\Cache\RawDataCache.h" />
+    <ClInclude Include="Core\Hash.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

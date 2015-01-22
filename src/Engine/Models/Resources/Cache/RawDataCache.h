@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Core/Hash.h"
 #include "Core/MemoryChunk.h"
 
-#include <string>
 #include <map>
 
 namespace bv
@@ -14,19 +14,19 @@ class RawDataCache
 {
 public:
 
-	MemoryChunkConstPtr		Get		( const std::string & key ) const;
+	MemoryChunkConstPtr		Get		( const Hash & key ) const;
 
 	// ******************************
 	// Adds entry to cache. If doesn't exist return false else returns true and adds entry
-	bool					Add		( const std::string & key, MemoryChunkConstPtr data );
+	bool					Add		( const Hash & key, MemoryChunkConstPtr data );
 
 	// ******************************
 	// Updates entry in cache. If doesn't exist adds it.
-	void					Update	( const std::string & key, MemoryChunkConstPtr data );
+	void					Update	( const Hash & key, MemoryChunkConstPtr data );
 
 	// ******************************
 	// 
-	bool					Exists	( const std::string & key );
+	bool					Exists	( const Hash & key );
 
 	// ******************************
 	// Returns instance of the class singleton. 
@@ -36,9 +36,9 @@ private:
 	RawDataCache();
 	~RawDataCache();
 
-	MemoryChunkConstPtr		Find( const std::string & key ) const;
+	MemoryChunkConstPtr		Find( const Hash & key ) const;
 
-	std::map< std::string, MemoryChunkConstPtr > m_data;
+	std::map< Hash, MemoryChunkConstPtr > m_data;
 };
 
 } // bv

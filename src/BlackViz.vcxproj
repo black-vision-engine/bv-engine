@@ -193,6 +193,7 @@
     <ClCompile Include="Application\ConsoleApplication.cpp" />
     <ClCompile Include="Application\win32\WinApplication.cpp" />
     <ClCompile Include="Application\WindowedApplication.cpp" />
+    <ClCompile Include="Core\Hash.cpp" />
     <ClCompile Include="Core\MemoryChunk.cpp" />
     <ClCompile Include="Core\StringHeplers.cpp" />
     <ClCompile Include="Engine\Events\BaseEvent.cpp" />
@@ -407,6 +408,7 @@
     <ClInclude Include="Application\ApplicationBase.h" />
     <ClInclude Include="Application\ConsoleApplication.h" />
     <ClInclude Include="Application\WindowedApplication.h" />
+    <ClInclude Include="Core\Hash.h" />
     <ClInclude Include="Core\MemoryChunk.h" />
     <ClInclude Include="Core\Queue.h" />
     <ClInclude Include="Core\QueueConcurrent.h" />
