@@ -20,7 +20,7 @@ public:
 	SingleTextureResourceConstPtr	GetOriginal		() const;
 
 	// *******************************
-	// Returns class representation of mimmaps built from original image.
+	// Returns class representation of mimmaps built from the original image.
 	MipMapResourceConstPtr			GetMipMaps		() const;
 
 	static TextureResourceConstPtr	Create			( const SingleTextureResourceConstPtr & originalTexture, const MipMapResourceConstPtr & mipMaps );

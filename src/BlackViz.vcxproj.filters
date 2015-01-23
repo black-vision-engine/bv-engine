@@ -215,6 +215,7 @@
     <ClCompile Include="Engine\Models\Resources\Texture\SingleTextureResource.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\MipMapResource.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\TextureResource.cpp" />
+    <ClCompile Include="Engine\Models\Resources\Texture\TextureCache.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\ApplicationBase.h" />
@@ -492,6 +493,7 @@
     <ClInclude Include="Engine\Models\Resources\Texture\SingleTextureResource.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\MipMapResource.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\TextureResource.h" />
+    <ClInclude Include="Engine\Models\Resources\Texture\TextureCache.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="System\HerarchicalProfiler.inl" />

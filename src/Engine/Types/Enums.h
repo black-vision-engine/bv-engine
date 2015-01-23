@@ -181,4 +181,14 @@ enum class LoopEventAction : int
     LEA_TOTAL
 };
 
+enum class MipMapFilterType : int
+{
+	BOX = 0,
+	BILINEAR,
+	B_SPLINE,
+	BICUBIC,
+	CATMULL_ROM,
+	LANCZOS
+};
+
 } // bv

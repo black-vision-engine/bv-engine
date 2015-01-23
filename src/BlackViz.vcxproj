@@ -330,6 +330,7 @@
     <ClCompile Include="Engine\Models\Resources\Texture\FontResourceDescr.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\MipMapResource.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\SingleTextureResource.cpp" />
+    <ClCompile Include="Engine\Models\Resources\Texture\TextureCache.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\TextureResource.cpp" />
     <ClCompile Include="Engine\Models\Resources\Texture\TextureResourceDescr.cpp" />
     <ClCompile Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
@@ -598,6 +599,7 @@
     <ClInclude Include="Engine\Models\Resources\Texture\FontResourceDescr.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\MipMapResource.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\SingleTextureResource.h" />
+    <ClInclude Include="Engine\Models\Resources\Texture\TextureCache.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\TextureResource.h" />
     <ClInclude Include="Engine\Models\Resources\Texture\TextureResourceDescr.h" />
     <ClInclude Include="Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
