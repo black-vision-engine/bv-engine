@@ -129,10 +129,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Include\MMBuilder.h" />
+    <ClCompile Include="..\..\Sources\MMBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Sources\MMBuilder.cpp" />
+    <ClInclude Include="..\..\Include\MMBuilder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
