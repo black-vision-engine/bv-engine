@@ -798,20 +798,20 @@
     <ClCompile Include="..\..\..\Source\Core\Hash.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\bv_remote\src\Engine\Models\BasicNode.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\bv_remote\src\Engine\Models\BasicOverrideState.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\bv_remote\src\Engine\Models\ModelAccessors.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\bv_remote\src\Engine\Models\ModelScene.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureCache.cpp">
       <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\BasicNode.cpp">
+      <Filter>Engine\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\BasicOverrideState.cpp">
+      <Filter>Engine\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\ModelAccessors.cpp">
+      <Filter>Engine\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\ModelScene.cpp">
+      <Filter>Engine\Models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1628,20 +1628,20 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\oglcore.h">
       <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\bv_remote\src\Engine\Models\BasicNode.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\bv_remote\src\Engine\Models\BasicOverrideState.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\bv_remote\src\Engine\Models\ModelAccessors.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\bv_remote\src\Engine\Models\ModelScene.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureCache.h">
       <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\BasicNode.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\BasicOverrideState.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\ModelAccessors.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\ModelScene.h">
+      <Filter>Engine\Models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
