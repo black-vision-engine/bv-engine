@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E92B5BDF-8BD5-4D22-B2CD-90D681DEDA85}</ProjectGuid>
+    <RootNamespace>BlackVision</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.Win32.debug.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.Win32.debug.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.x64.debug.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.x64.debug.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.Win32.release.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.Win32.release.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.x64.release.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.x64.release.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy $(DepDir)\Common\FreeImage\Wrapper\FreeImagePlus\dist\Win32\FreeImagePlusd.dll $(OutDir) /c /y
+xcopy $(DepDir)\Common\FreeImage\Dist\Win32\FreeImage.dll $(OutDir) /c /y
+mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
+xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy $(DepDir)\Common\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
+xcopy $(DepDir)\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
+mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
+xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy $(DepDir)\Common\FreeImage\Wrapper\FreeImagePlus\dist\Win32\FreeImagePlus.dll $(OutDir) /c /y
+xcopy $(DepDir)\Common\FreeImage\Dist\Win32\FreeImage.dll $(OutDir) /c /y
+mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
+xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy $(DepDir)\Common\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlus.dll $(OutDir) /c /y
+xcopy $(DepDir)\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
+mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
+xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj">
+      <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
+    <ClCompile Include="..\..\..\Source\bvApp.cpp" />
+    <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
+    <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp" />
+    <ClCompile Include="..\..\..\Source\FrameStatsService.cpp" />
+    <ClCompile Include="..\..\..\Source\Helpers\RectNodeBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\MainInitProcess.cpp" />
+    <ClCompile Include="..\..\..\Source\MainLoopProcess.cpp" />
+    <ClCompile Include="..\..\..\Source\MockFonts\FTTester.cpp" />
+    <ClCompile Include="..\..\..\Source\MockScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\ModelInteractionEvents.cpp" />
+    <ClCompile Include="..\..\..\Source\ModelInteractionLayer.cpp" />
+    <ClCompile Include="..\..\..\Source\NewModelTestNodes.cpp" />
+    <ClCompile Include="..\..\..\Source\NewModelTestScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\OffscreenRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\RenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\StatsFormatters.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestAI.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestAIManager.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\Crawler\Crawler.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.cpp" />
+    <ClCompile Include="..\..\..\Source\Xml\BlackTree.cpp" />
+    <ClCompile Include="..\..\..\Source\Xml\Pomocnicze\Auxilary.cpp" />
+    <ClCompile Include="..\..\..\Source\Xml\Scena.cpp" />
+    <ClCompile Include="..\..\..\Source\Xml\TreeBuilder.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\bvApp.h" />
+    <ClInclude Include="..\..\..\Source\BVAppLogic.h" />
+    <ClInclude Include="..\..\..\Source\BVConfig.h" />
+    <ClInclude Include="..\..\..\Source\BVForwards.h" />
+    <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
+    <ClInclude Include="..\..\..\Source\FrameStatsService.h" />
+    <ClInclude Include="..\..\..\Source\Helpers\RectNodeBuilder.h" />
+    <ClInclude Include="..\..\..\Source\MainInitProcess.h" />
+    <ClInclude Include="..\..\..\Source\MainLoopProcess.h" />
+    <ClInclude Include="..\..\..\Source\MockFonts\FTTester.h" />
+    <ClInclude Include="..\..\..\Source\MockScenes.h" />
+    <ClInclude Include="..\..\..\Source\ModelInteractionEvents.h" />
+    <ClInclude Include="..\..\..\Source\ModelInteractionLayer.h" />
+    <ClInclude Include="..\..\..\Source\NewModelTestNodes.h" />
+    <ClInclude Include="..\..\..\Source\PieChartNode.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\OffscreenRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\RenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\StatsFormatters.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\AICommands.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\IAICommand.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestAI.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestAIManager.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\Crawler\Crawler.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.h" />
+    <ClInclude Include="..\..\..\Source\Xml\BlackTree.h" />
+    <ClInclude Include="..\..\..\Source\Xml\Pomocnicze\Auxilary.hpp" />
+    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml.hpp" />
+    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Iterators.hpp" />
+    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Print.hpp" />
+    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Utils.hpp" />
+    <ClInclude Include="..\..\..\Source\Xml\Scena.h" />
+    <ClInclude Include="..\..\..\Source\Xml\TreeBuilder.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Source\BVConfig.inl" />
+    <None Include="..\..\..\Source\FrameStatsService.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

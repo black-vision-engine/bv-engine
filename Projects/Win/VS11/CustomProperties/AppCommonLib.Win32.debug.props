@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalLibraryDirectories>$(BOOST_DEBUG_32_LIB);$(DepDir)/Common/FreeImage/Wrapper/FreeImagePlus/dist/Win32;$(DepDir)/Common/FreeType/objs/win32/debug;$(DepDir)/Common/FreeImage/Dist/Win32;$(DepDir)/Common/glew/lib/Win32;$(DepDir)/Common/glfw/lib/win32;$(DepDir)/Common/hashlib2plus/Dist/Win32/Debug;$(DepDir)/Common/sqlite/Dist/Win32/Debug;$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sqliteD.lib;hashlib2plusD.lib;freetype250_D.lib;FreeImagePlusd.lib;opengl32.lib;glu32.lib;glew32s.lib;FreeImaged.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>
