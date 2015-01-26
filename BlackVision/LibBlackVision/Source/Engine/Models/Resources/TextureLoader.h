@@ -12,13 +12,16 @@ class TextureLoader : public ResourceLoader
 {
 private:
 
-    bool                    m_loadFromMemory;
+    bool                    m_loadFromMemory;  // DEPRECATED
 
 public:
 
-    ResourceHandle *        LoadResource        ( IResource * res )  const;
+	IResourceNEWConstPtr	LoadResource	( const ResourceDescConstPtr & desc ) const override;
+    
+	
+	ResourceHandle *        LoadResource    ( IResource * res )  const; // DEPRECATED
 
-    explicit                TextureLoader( bool loadFormMemory = true );
+    explicit                TextureLoader	( bool loadFormMemory = true );  // DEPRECATED
 
     virtual ~TextureLoader(){}
 };

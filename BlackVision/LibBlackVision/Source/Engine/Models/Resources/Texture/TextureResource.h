@@ -2,6 +2,7 @@
 
 #include "SingleTextureResource.h"
 #include "MipMapResource.h"
+#include "Engine/Models/Resources/IResource.h"
 
 namespace bv
 {
@@ -11,7 +12,7 @@ DEFINE_CONST_PTR_TYPE( TextureResource )
 
 // *******************************
 // Implements texture resource with original image and all its mimmaps.
-class TextureResource
+class TextureResource : public model::IResourceNEW
 {
 public:
 

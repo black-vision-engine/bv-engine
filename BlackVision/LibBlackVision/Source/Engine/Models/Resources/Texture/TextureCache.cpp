@@ -7,6 +7,7 @@ namespace bv
 
 namespace 
 {
+	// FIXME: Should be in some core module.
 	template< typename T > 
 	std::string toString( const T & t )
 	{

@@ -7,6 +7,19 @@
 namespace bv { namespace model
 {
 
+class IResourceNEW;
+DEFINE_CONST_PTR_TYPE( IResourceNEW )
+
+class IResourceNEW
+{
+public:
+
+	virtual const std::string &				UID() const { return "dupa"; }; //FIXME: MAKE THIS FUNCTION PURE VIRTUAL;
+
+    virtual ~IResourceNEW(){}
+
+};
+
 class IResource
 {
 public:

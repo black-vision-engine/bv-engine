@@ -4,6 +4,8 @@
 #include "Core/MemoryChunk.h"
 #include "System/BasicTypes.h"
 
+#include "Engine/Models/Resources/IResource.h"
+
 #include <string>
 
 namespace bv
@@ -16,7 +18,7 @@ DEFINE_CONST_PTR_TYPE(SingleTextureResource)
 
 // ********************************
 // Implements single texture resource. Texture without any mipmaps. Only one chunk of memory.
-class SingleTextureResource
+class SingleTextureResource : public model::IResourceNEW
 {
 public:
 	

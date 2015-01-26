@@ -1,6 +1,10 @@
 #include "TextureLoader.h"
 #include "TextureHelpers.h"
 
+#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
+
+#include <cassert>
+
 namespace bv { namespace model {
 
 // ******************************
@@ -8,6 +12,16 @@ namespace bv { namespace model {
 TextureLoader::TextureLoader( bool loadFormMemory )
     : m_loadFromMemory( loadFormMemory )
 {}
+
+
+// ******************************
+//
+IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & desc ) const
+{
+	assert( desc->Query( "TEXTURE_RESOURCE_DESC" ) );
+
+	return nullptr;
+}
 
 // ******************************
 //
