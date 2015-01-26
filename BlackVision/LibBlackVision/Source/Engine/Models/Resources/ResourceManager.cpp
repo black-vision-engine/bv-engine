@@ -7,8 +7,9 @@ namespace bv
 //
 model::IResourceNEWConstPtr ResourceManager::LoadResource( const ResourceDescConstPtr & desc ) const
 {
+	auto it = m_loaders.find( desc->GetUID() );
 	for( auto k : m_loaders )
-		if( desc->Query( k.first ) )
+		if( desc->GetUID() == k.first )
 			return k.second->LoadResource( desc );
 	
 	return nullptr;
@@ -39,7 +40,9 @@ bool ResourceManager::UnregisterLoader( const std::string & resDescUID )
 		return false;
 	else
 	{
-		m_loaders.erase( it ); // FIXME: mem leak. Should the manager take ownership? Probably it should.
+		auto ptr = it->second;
+		m_loaders.erase( it );
+		delete ptr;
 		return true;
 	}
 }
@@ -48,16 +51,21 @@ bool ResourceManager::UnregisterLoader( const std::string & resDescUID )
 //
 ResourceManager & ResourceManager::GetInstance()
 {
-	static auto instance = new ResourceManager();
-	return *instance;
+	static auto instance = ResourceManager();
+	return instance;
 }
 
 // ***********************
 //
 ResourceManager::ResourceManager()
-{
-	// FIXME: mem leak. Should the manager take ownership? Probably it should.
-}
+{}
 
+// ***********************
+//
+ResourceManager::~ResourceManager()
+{
+	for( auto it : m_loaders )
+		delete it.second;
+}
 
 } // bv

@@ -18,7 +18,11 @@ TextureLoader::TextureLoader( bool loadFormMemory )
 //
 IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & desc ) const
 {
-	assert( desc->Query( "TEXTURE_RESOURCE_DESC" ) );
+	auto typedDesc = QueryTypedDesc< TextureResourceDescConstPtr >( desc );
+
+	assert( typedDesc );
+
+	
 
 	return nullptr;
 }

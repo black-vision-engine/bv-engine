@@ -14,9 +14,10 @@ namespace bv
 class SingleTextureResourceDesc;
 DEFINE_CONST_PTR_TYPE( SingleTextureResourceDesc )
 
-class SingleTextureResourceDesc : public ResourceDesc
+class SingleTextureResourceDesc : public ResourceDesc, public std::enable_shared_from_this< SingleTextureResourceDesc >
 {
 private:
+
 	static const std::string	uid;
 
 	std::string					m_imagePath;
@@ -25,14 +26,25 @@ private:
 	TextureFormat				m_format;
 
 protected:
-	virtual const std::string &					UID							() const override;
+
+	virtual VoidConstPtr						QueryThis					() const override;
+
+	virtual const std::string &					GetUID						() const override;
+
+	const std::string &							GetImagePath				() const;
+	UInt32										GetWidth					() const;
+	UInt32										GetHeight					() const;
+	TextureFormat								GetFormat					() const;
 
 public:
+
 	virtual bool								IsCacheable					() const override;
 
 	static SingleTextureResourceDescConstPtr	Create						( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format );
 
 	explicit									SingleTextureResourceDesc	( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format );
+
+	static const std::string &					UID							();
 };
 
 } // bv

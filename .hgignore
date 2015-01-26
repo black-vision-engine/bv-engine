@@ -24,3 +24,5 @@ Release
 *.sdf
 *.a
 *.orig
+BlackVision/_Temp/*
+BlackVision/_Builds/*

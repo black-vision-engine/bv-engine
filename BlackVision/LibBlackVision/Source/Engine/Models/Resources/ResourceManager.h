@@ -22,6 +22,7 @@ public:
 private:
 
 	explicit						ResourceManager();
+									~ResourceManager();
 
 	std::map< std::string, model::IResourceLoader * > m_loaders;
 };

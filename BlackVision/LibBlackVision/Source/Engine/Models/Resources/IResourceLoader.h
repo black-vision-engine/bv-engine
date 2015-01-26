@@ -8,7 +8,7 @@ namespace bv { namespace model {
 class IResourceLoader
 {
 public:
-	virtual IResourceNEWConstPtr    LoadResource        ( const ResourceDescConstPtr & desc )  const   { return nullptr; } //FIXME: MAKE THIS FUNCTION PURE VIRTUAL;
+	virtual IResourceNEWConstPtr    LoadResource        ( const ResourceDescConstPtr & desc )  const = 0;
     virtual ResourceHandle *        LoadResource        ( IResource* res )  const    = 0; // DEPRICATED
 
     virtual ~IResourceLoader(){}
