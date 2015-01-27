@@ -11,6 +11,9 @@
 #include "NewModelTestNodes.h"
 
 #include "PieChartNode.h"
+#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultTexturesData.h"
+#include "DefaultVideoInput.h"
 
 namespace bv {
 
@@ -457,7 +460,7 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
 
     //return node0;
 
-    return SimpleNodesFactory::CreateOverrideNodeMaskTest1( timelineManager, timeEvaluator );
+    //return SimpleNodesFactory::CreateOverrideNodeMaskTest1( timelineManager, timeEvaluator );
     //return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );
 
     //TestQueryNode( timelineManager, timeEvaluator ); //FIXME: remove or uncomment after tests
@@ -523,11 +526,31 @@ model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::Plug
 
 model::BasicNodePtr    TestScenesFactory::CreedTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+	model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
+	root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+	root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
+
+	//auto texturePlugin =  std::dynamic_pointer_cast< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
+	//((model::DefaultTexturesData*)(texturePlugin->GetPixelShaderChannel()->GetTexturesData().get()))->AddTexture( new model::DefaultVideoInput() );
+
+	//root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
+
+	root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+	auto plugin = root->GetPlugin( "texture" );
+	auto vi = new model::DefaultVideoInput( 10, 10, 1.f );
+	auto success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture() ) ) );
+	assert(success);
+
+	return root;
+}
+
+model::BasicNodePtr    TestScenesFactory::CreedPieChartTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
 	std::vector< PieChartSubnodeDesc > descs;
 
-	descs.push_back( PieChartSubnodeDesc( 10.f, 0.f ) );
+	//descs.push_back( PieChartSubnodeDesc( 10.f, 0.f ) );
 	descs.push_back( PieChartSubnodeDesc( 20.f, -.1f, PieChartSubnodeDesc::COLORED ) );
-	descs.push_back( PieChartSubnodeDesc( 50.f, .1f ) );
+	//descs.push_back( PieChartSubnodeDesc( 50.f, .1f ) );
 
 	auto node = new PieChartNode( timelineManager, timeEvaluator, descs );
 

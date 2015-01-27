@@ -87,6 +87,7 @@
     <ClCompile Include="..\..\..\Source\Xml\Pomocnicze\Auxilary.cpp">
       <Filter>Xml\Pomocnicze</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\DefaultVideoInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="..\..\..\Source\Xml\Pomocnicze\Auxilary.hpp">
       <Filter>Xml\Pomocnicze</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\DefaultVideoInput.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />
