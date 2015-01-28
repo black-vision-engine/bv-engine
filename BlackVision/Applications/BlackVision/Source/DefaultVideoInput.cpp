@@ -87,6 +87,16 @@ public:
 	{ 
 		return input->GetBits(); 
 	}
+
+	virtual bool                    BitsChanged         () const override
+	{
+		return input->BitsChanged();
+	}
+
+	virtual void                    ResetBitsChanged    () const override
+	{
+		return input->ResetBitsChanged();
+	}
 };
 
 DefaultTextureDescriptor* DefaultVideoInput::GetTexture		() const
