@@ -68,14 +68,14 @@ TextureCache & TextureCache::GetInstance()
 
 // ******************************
 //
-std::string TextureCache::GenKeyForSingleTexture( const std::string & path, UInt32 width, UInt32 height, TextureFormat format )
+std::string TextureCache::GenKeyForSingleTexture( const std::string & path, SizeType width, SizeType height, TextureFormat format )
 {
 	return toString( path ) + toString( width ) + toString( height ) + toString( (int)format );
 }
 
 // ******************************
 //
-std::string	TextureCache::GenKeyForGeneratedMipMap( const std::string & origPath, UInt32 width, UInt32 height, TextureFormat format, UInt32 mmLevel, MipMapFilterType mmFiletType )
+std::string	TextureCache::GenKeyForGeneratedMipMap( const std::string & origPath, SizeType width, SizeType height, TextureFormat format, SizeType mmLevel, MipMapFilterType mmFiletType )
 {
 	return toString( origPath ) + toString( width ) + toString( height ) + toString( (int)format ) + toString( mmLevel ) + toString( (int)mmFiletType );
 }

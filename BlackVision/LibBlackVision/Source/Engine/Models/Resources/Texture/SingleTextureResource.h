@@ -32,19 +32,19 @@ public:
 	const std::string &							GetUID		() const override;
 
 	const std::string &							GetKey		() const;
-	UInt32										GetWidth	() const;
-	UInt32										GetHeight	() const;
+	SizeType									GetWidth	() const;
+	SizeType									GetHeight	() const;
 	TextureFormat								GetFormat	() const;
 	
-	static SingleTextureResourceConstPtr		Create		( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format );
+	static SingleTextureResourceConstPtr		Create		( const MemoryChunkConstPtr & memory, const std::string & key, SizeType width, SizeType height, TextureFormat format );
 
-	explicit									SingleTextureResource( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format );
+	explicit									SingleTextureResource( const MemoryChunkConstPtr & memory, const std::string & key, SizeType width, SizeType height, TextureFormat format );
 
 private:
 
 	std::string			m_key; // hash needed for texture cache is calculated from the key.
-	UInt32				m_width;
-	UInt32				m_height;
+	SizeType			m_width;
+	SizeType			m_height;
 	TextureFormat		m_format;
 	MemoryChunkConstPtr	m_memory;
 };

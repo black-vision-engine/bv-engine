@@ -58,50 +58,61 @@ IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & d
 
 	switch( typedDesc->GetLoadingType() )
 	{
-	case TextureResourceLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
-	{
-		auto origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc() );
-	
-		return TextureResource::Create( origRes, nullptr );
-	}
-
-	case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
-	{
-		auto origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc() );
-
-		auto mipMapsSize = typedDesc->GetMipMapsDesc()->GetLevelsNum();
-
-		std::vector< SingleTextureResourceConstPtr > mipMapsRes;
-
-		for( SizeType i = 0; i < mipMapsSize; ++i )
-			mipMapsRes.push_back( LoadSingleTexture( typedDesc->GetMipMapsDesc()->GetLevelDesc( i ) ) );
-
-		auto mipMapRes = MipMapResource::Create( mipMapsRes );
-
-		return TextureResource::Create( origRes, mipMapRes );
-	}
-
-	case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
-	{
-		//auto origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc() );
-
-		auto mm = tools::GenerateMipmaps(	typedDesc->GetOrigTextureDesc()->GetImagePath(),
-											(int)typedDesc->GetMipMapsDesc()->GetLevelsNum(),
-											ToMMBuilderFilterType( typedDesc->GetMipMapsDesc()->GetFilter() ) );
-
-
-		std::vector< SingleTextureResourceConstPtr > mipMapsRes;
-
-		for( SizeType i = 0; i < mm.size(); ++i )
+		case TextureResourceLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
 		{
-			SizeType w = mm[ i ].width;
-			SizeType h = mm[ i ].height;
-			SizeType s = w * h * 4; // FIXME: Supporting only 32-bit image
-			auto key = TextureCache::GenKeyForGeneratedMipMap( typedDesc->GetOrigTextureDesc()->GetImagePath(), w, h, TextureFormat::F_A8R8G8B8, i, typedDesc->GetMipMapsDesc()->GetFilter() );
-			mipMapsRes.push_back( SingleTextureResource::Create( MemoryChunk::Create( mm[ i ].data, s ), key, w, h, TextureFormat::F_A8R8G8B8 ) );
+			auto origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc() );
+	
+			return TextureResource::Create( origRes, nullptr );
 		}
-	}
 
+		case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
+		{
+			auto origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc() );
+
+			auto mipMapsSize = typedDesc->GetMipMapsDesc()->GetLevelsNum();
+
+			std::vector< SingleTextureResourceConstPtr > mipMapsRes;
+
+			for( SizeType i = 0; i < mipMapsSize; ++i )
+				mipMapsRes.push_back( LoadSingleTexture( typedDesc->GetMipMapsDesc()->GetLevelDesc( i ) ) );
+
+			auto mipMapRes = MipMapResource::Create( mipMapsRes );
+
+			return TextureResource::Create( origRes, mipMapRes );
+		}
+
+		case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
+		{
+			auto origW = typedDesc->GetOrigTextureDesc()->GetWidth();
+			auto origH = typedDesc->GetOrigTextureDesc()->GetHeight();
+
+			auto mm = tools::GenerateMipmaps(	typedDesc->GetOrigTextureDesc()->GetImagePath(),
+												(int)typedDesc->GetMipMapsDesc()->GetLevelsNum(),
+												ToMMBuilderFilterType( typedDesc->GetMipMapsDesc()->GetFilter() ) );
+
+
+			std::vector< SingleTextureResourceConstPtr > mipMapsRes;
+
+			SingleTextureResourceConstPtr origRes;
+
+			auto origKey = TextureCache::GenKeyForSingleTexture( typedDesc->GetOrigTextureDesc()->GetImagePath(), origW, origH, TextureFormat::F_A8R8G8B8 );
+			origRes = SingleTextureResource::Create( MemoryChunk::Create( mm[ 0 ].data, origW * origH * 4 ), origKey, origW, origH, TextureFormat::F_A8R8G8B8 );
+
+
+			if( mm[ 0 ].width == origW && mm[ 0 ].height == origH )
+				mipMapsRes.push_back( origRes );
+
+			for( SizeType i = 1; i < mm.size(); ++i )
+			{
+				SizeType w = mm[ i ].width;
+				SizeType h = mm[ i ].height;
+				SizeType s = w * h * 4; // FIXME: Supporting only 32-bit image
+				auto key = TextureCache::GenKeyForGeneratedMipMap( typedDesc->GetOrigTextureDesc()->GetImagePath(), w, h, TextureFormat::F_A8R8G8B8, i, typedDesc->GetMipMapsDesc()->GetFilter() );
+				mipMapsRes.push_back( SingleTextureResource::Create( MemoryChunk::Create( mm[ i ].data, s ), key, w, h, TextureFormat::F_A8R8G8B8 ) );
+			}
+
+			return TextureResource::Create( origRes, MipMapResource::Create( mipMapsRes ) );
+		}
 	}
 
 	return nullptr;

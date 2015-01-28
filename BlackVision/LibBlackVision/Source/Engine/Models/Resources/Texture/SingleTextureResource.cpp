@@ -16,14 +16,14 @@ const std::string &	SingleTextureResource::GetKey() const
 
 // ******************************
 //
-UInt32 SingleTextureResource::GetWidth() const
+SizeType SingleTextureResource::GetWidth() const
 {
 	return m_width;
 }
 
 // ******************************
 //
-UInt32 SingleTextureResource::GetHeight() const
+SizeType SingleTextureResource::GetHeight() const
 {
 	return m_height;
 }
@@ -37,14 +37,14 @@ TextureFormat SingleTextureResource::GetFormat() const
 
 // ******************************
 //
-SingleTextureResourceConstPtr SingleTextureResource::Create( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format )
+SingleTextureResourceConstPtr SingleTextureResource::Create( const MemoryChunkConstPtr & memory, const std::string & key, SizeType width, SizeType height, TextureFormat format )
 {
 	return std::make_shared< SingleTextureResource >( memory, key, width, height, format );
 }
 
 // ******************************
 //
-SingleTextureResource::SingleTextureResource( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format )
+SingleTextureResource::SingleTextureResource( const MemoryChunkConstPtr & memory, const std::string & key, SizeType width, SizeType height, TextureFormat format )
 	: m_memory( memory )
 	, m_key( key )
 	, m_width( width )

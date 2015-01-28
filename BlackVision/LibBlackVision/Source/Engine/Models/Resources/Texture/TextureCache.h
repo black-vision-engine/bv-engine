@@ -30,8 +30,8 @@ public:
 
 	// **************************
 	// Two finctions below generates texture cache keys for single textures.
-	static std::string				GenKeyForSingleTexture	( const std::string & path, UInt32 width, UInt32 height, TextureFormat format );
-	static std::string				GenKeyForGeneratedMipMap( const std::string & origPath, UInt32 width, UInt32 height, TextureFormat format, UInt32 mmLevel, MipMapFilterType mmFiletType );
+	static std::string				GenKeyForSingleTexture	( const std::string & path, SizeType width, SizeType height, TextureFormat format );
+	static std::string				GenKeyForGeneratedMipMap( const std::string & origPath, SizeType width, SizeType height, TextureFormat format, SizeType mmLevel, MipMapFilterType mmFiletType );
 
 private:
 
