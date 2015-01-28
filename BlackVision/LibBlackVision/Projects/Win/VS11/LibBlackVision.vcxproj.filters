@@ -825,6 +825,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResourceDescriptor.cpp">
       <Filter>Engine\Models\Resources\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.cpp">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Core\MemoryChunk.h">
@@ -1665,6 +1668,9 @@
       <Filter>Engine\Models\Resources\Texture</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResourceDescriptor.h">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.h">
       <Filter>Engine\Models\Resources\Texture</Filter>
     </ClInclude>
   </ItemGroup>

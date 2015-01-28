@@ -168,4 +168,24 @@ Mipmaps				GenerateMipmaps( const std::string & imageFilePath, int levelsNum, Fi
 	return GenerateMipmaps( img, levelsNum, ft );
 }
 
+// ******************************
+//
+MipmapsSizes		GenerateMipmapsSizes( const ImageSize & origSize )
+{
+	MipmapsSizes ret;
+	unsigned int newWidth	= RoundUpToPowerOfTwo( origSize.width );
+	unsigned int newHeight	= RoundUpToPowerOfTwo( origSize.height );
+
+	ret.push_back( ImageSize( newWidth, newHeight ) );
+
+	while( newWidth > 1 || newHeight > 1 )
+	{
+		newWidth	= newWidth > 1 ? newWidth / 2 : 1;
+		newHeight	= newHeight > 1 ? newHeight / 2 : 1;
+		ret.push_back( ImageSize( newWidth, newHeight ) );
+	}
+
+	return ret;
+}
+
 } // tools

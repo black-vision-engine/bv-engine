@@ -29,6 +29,8 @@ protected:
 
 	virtual VoidConstPtr						QueryThis					() const override;
 
+public:
+
 	virtual const std::string &					GetUID						() const override;
 
 	const std::string &							GetImagePath				() const;
@@ -36,7 +38,7 @@ protected:
 	UInt32										GetHeight					() const;
 	TextureFormat								GetFormat					() const;
 
-public:
+
 
 	virtual bool								IsCacheable					() const override;
 

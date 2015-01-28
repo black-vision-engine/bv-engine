@@ -106,6 +106,7 @@
     <ClCompile>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\..\..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -311,6 +312,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescr.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\FontResourceDescr.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResource.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\SingleTextureResource.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\SingleTextureResourceDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureCache.cpp" />
@@ -584,6 +586,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\FontResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResource.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\SingleTextureResource.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\SingleTextureResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureCache.h" />

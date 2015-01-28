@@ -35,7 +35,7 @@ VoidConstPtr TextureResourceDesc::QueryThis() const
 
 // ***********************
 //
-TextureResourceDescConstPtr	Create( const SingleTextureResourceDescConstPtr & origDesc, const std::vector< SingleTextureResourceDescConstPtr > & mipmapsDesc )
+TextureResourceDescConstPtr	Create( const SingleTextureResourceDescConstPtr & origDesc, const MipMapResourceDescConstPtr & mipmapsDesc )
 {
 	return std::make_shared< TextureResourceDesc >( origDesc, mipmapsDesc );
 }
@@ -49,7 +49,7 @@ TextureResourceDescConstPtr	Create( const SingleTextureResourceDescConstPtr & or
 
 // ***********************
 //
-TextureResourceDesc::TextureResourceDesc( const SingleTextureResourceDescConstPtr & origDesc, const std::vector< SingleTextureResourceDescConstPtr > & mipmapsDesc )
+TextureResourceDesc::TextureResourceDesc( const SingleTextureResourceDescConstPtr & origDesc, const MipMapResourceDescConstPtr & mipmapsDesc )
 	: m_originalTextureDesc( origDesc )
 	, m_mipMapsDescs( mipmapsDesc )
 	, m_loadingType( TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS )
@@ -83,20 +83,27 @@ SingleTextureResourceDescConstPtr TextureResourceDesc::GetOrigTextureDesc() cons
 
 // ***********************
 //
-SizeType TextureResourceDesc::GetMipMapsDescNum	() const
+MipMapResourceDescConstPtr TextureResourceDesc::GetMipMapsDesc() const
 {
-	return m_mipMapsDescs.size();
+	return m_mipMapsDescs;
 }
 
-// ***********************
+//// ***********************
+////
+//SizeType TextureResourceDesc::GetMipMapsDescNum	() const
+//{
+//	return m_mipMapsDescs.size();
+//}
 //
-SingleTextureResourceDescConstPtr TextureResourceDesc::GetMipMapDesc( SizeType i ) const
-{
-	if( i < m_mipMapsDescs.size() )
-		return m_mipMapsDescs[ i ];
-	else
-		return nullptr;
-}
+//// ***********************
+////
+//SingleTextureResourceDescConstPtr TextureResourceDesc::GetMipMapDesc( SizeType i ) const
+//{
+//	if( i < m_mipMapsDescs.size() )
+//		return m_mipMapsDescs[ i ];
+//	else
+//		return nullptr;
+//}
 
 
 } // bv

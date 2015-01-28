@@ -11,6 +11,8 @@ namespace bv
 // Implements high level cache for texture resources.
 class TextureCache
 {
+public:
+
 	// **************************
 	// Adds entry to cache if doesn't exist.
 	bool							Add		( const std::string & key, const TextureResourceConstPtr & textureRes );

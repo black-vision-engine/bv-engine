@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Resources/ResourceDescriptor.h"
-#include "SingleTextureResourceDescriptor.h"
+#include "MipMapResourceDescriptor.h"
 
 #include "System/BasicTypes.h"
 
@@ -29,7 +29,7 @@ private:
 	TextureResourceLoadingType							m_loadingType;
 
 	SingleTextureResourceDescConstPtr					m_originalTextureDesc;
-	std::vector< SingleTextureResourceDescConstPtr >	m_mipMapsDescs;
+	MipMapResourceDescConstPtr							m_mipMapsDescs;
 
 protected:
 	virtual const std::string &			GetUID				() const override;
@@ -41,13 +41,14 @@ public:
 
 	TextureResourceLoadingType			GetLoadingType		() const;
 	SingleTextureResourceDescConstPtr	GetOrigTextureDesc	() const;
-	SizeType							GetMipMapsDescNum	() const;
-	SingleTextureResourceDescConstPtr	GetMipMapDesc		( SizeType i ) const;
+	MipMapResourceDescConstPtr			GetMipMapsDesc		() const;
+	//SizeType							GetMipMapsDescNum	() const;
+	//SingleTextureResourceDescConstPtr	GetMipMapDesc		( SizeType i ) const;
 
-	static TextureResourceDescConstPtr	Create				( const SingleTextureResourceDescConstPtr & origDesc, const std::vector< SingleTextureResourceDescConstPtr > & mipmapsDesc );
+	static TextureResourceDescConstPtr	Create				( const SingleTextureResourceDescConstPtr & origDesc, const MipMapResourceDescConstPtr & mipmapsDesc );
 	static TextureResourceDescConstPtr	Create				( const SingleTextureResourceDescConstPtr & origDesc, bool generateMipMaps );
 
-	explicit							TextureResourceDesc	( const SingleTextureResourceDescConstPtr & origDesc, const std::vector< SingleTextureResourceDescConstPtr > & mipmapsDesc );
+	explicit							TextureResourceDesc	( const SingleTextureResourceDescConstPtr & origDesc, const MipMapResourceDescConstPtr & mipmapsDesc );
 	explicit							TextureResourceDesc ( const SingleTextureResourceDescConstPtr & origDesc, bool generateMipMaps );
 
 	static const std::string &			UID();
