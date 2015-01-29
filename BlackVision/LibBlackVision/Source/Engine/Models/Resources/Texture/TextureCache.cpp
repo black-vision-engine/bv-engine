@@ -1,13 +1,14 @@
 #include "TextureCache.h"
 
 #include <sstream>
+#include <cassert>
 
 namespace bv
 {
 
 namespace 
 {
-	// FIXME: Should be in some core module.
+	// FIXME: Should be moved to some core module.
 	template< typename T > 
 	std::string toString( const T & t )
 	{
@@ -39,6 +40,14 @@ bool TextureCache::Add( const std::string & key, const TextureResourceConstPtr &
 
 // ******************************
 //
+bool TextureCache::Add( const TextureResourceDescConstPtr & textureDesc, const TextureResourceConstPtr & textureRes )
+{
+	return Add( GenKeyForTextureResource( textureDesc ), textureRes );
+}
+
+
+// ******************************
+//
 void TextureCache::Update( const std::string & key, const TextureResourceConstPtr & textureRes )
 {
 	m_textures[ key ] = textureRes;
@@ -53,6 +62,13 @@ bool TextureCache::Exists	( const std::string & key ) const
 
 // ******************************
 //
+bool TextureCache::Exists( const TextureResourceDescConstPtr & textureDesc ) const
+{
+	return Exists( GenKeyForTextureResource( textureDesc ) );
+}
+
+// ******************************
+//
 TextureResourceConstPtr	TextureCache::Get( const std::string & key ) const
 {
 	return Find( key );
@@ -60,18 +76,53 @@ TextureResourceConstPtr	TextureCache::Get( const std::string & key ) const
 
 // ******************************
 //
-TextureCache & TextureCache::GetInstance()
+TextureResourceConstPtr	TextureCache::Get( const TextureResourceDescConstPtr & textureDesc ) const
 {
-	static auto * innstance = new TextureCache();
-	return *innstance;
+	return Find( GenKeyForTextureResource( textureDesc ) );
 }
 
 // ******************************
 //
-std::string TextureCache::GenKeyForSingleTexture( const std::string & path, SizeType width, SizeType height, TextureFormat format )
+TextureCache & TextureCache::GetInstance()
 {
-	return toString( path ) + toString( width ) + toString( height ) + toString( (int)format );
+	static auto innstance = TextureCache();
+	return innstance;
 }
+
+// ******************************
+//
+std::string TextureCache::GenKeyForSingleTexture( const SingleTextureResourceDescConstPtr & sTRDesc )
+{
+	return toString( sTRDesc->GetImagePath() ) + toString( sTRDesc->GetWidth() ) + toString( sTRDesc->GetHeight() ) + toString( (int)sTRDesc->GetFormat() );
+}
+
+// ******************************
+//
+std::string TextureCache::GenKeyForTextureResource( const TextureResourceDescConstPtr & tRDesc )
+{
+	switch( tRDesc->GetLoadingType() )
+	{
+		case TextureResourceLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
+			return GenKeyForSingleTexture( tRDesc->GetOrigTextureDesc() );
+		case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
+			return GenKeyForSingleTexture( tRDesc->GetOrigTextureDesc() ) + toString( tRDesc->GetMipMapsDesc()->GetLevelsNum() ) + toString( (int)tRDesc->GetMipMapsDesc()->GetFilter() );
+		case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
+		{
+			auto ret = GenKeyForSingleTexture( tRDesc->GetOrigTextureDesc() );
+
+			for( SizeType i = 0; tRDesc->GetMipMapsDesc()->GetLevelsNum(); ++i )
+				ret += GenKeyForSingleTexture( tRDesc->GetMipMapsDesc()->GetLevelDesc( i ) );
+
+			ret += toString( tRDesc->GetMipMapsDesc()->GetLevelsNum() ) + toString( (int)tRDesc->GetMipMapsDesc()->GetFilter() );
+
+			return ret;
+		}
+		default:
+			assert( !"Imposible enum value" );
+			return "";
+	}
+}
+
 
 // ******************************
 //

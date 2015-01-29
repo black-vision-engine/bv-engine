@@ -56,13 +56,19 @@ IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & d
 
 	assert( typedDesc );
 
+	TextureResourceConstPtr ret = TextureCache::GetInstance().Get( typedDesc );
+
+	if( ret )
+		return ret;
+	
+
 	switch( typedDesc->GetLoadingType() )
 	{
 		case TextureResourceLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
 		{
 			auto origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc() );
 	
-			return TextureResource::Create( origRes, nullptr );
+			ret = TextureResource::Create( origRes, nullptr );
 		}
 
 		case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
@@ -78,7 +84,7 @@ IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & d
 
 			auto mipMapRes = MipMapResource::Create( mipMapsRes );
 
-			return TextureResource::Create( origRes, mipMapRes );
+			ret = TextureResource::Create( origRes, mipMapRes );
 		}
 
 		case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
@@ -95,7 +101,7 @@ IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & d
 
 			SingleTextureResourceConstPtr origRes;
 
-			auto origKey = TextureCache::GenKeyForSingleTexture( typedDesc->GetOrigTextureDesc()->GetImagePath(), origW, origH, TextureFormat::F_A8R8G8B8 );
+			auto origKey = TextureCache::GenKeyForSingleTexture( typedDesc->GetOrigTextureDesc() );
 			origRes = SingleTextureResource::Create( MemoryChunk::Create( mm[ 0 ].data, origW * origH * 4 ), origKey, origW, origH, TextureFormat::F_A8R8G8B8 );
 
 
@@ -111,11 +117,13 @@ IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & d
 				mipMapsRes.push_back( SingleTextureResource::Create( MemoryChunk::Create( mm[ i ].data, s ), key, w, h, TextureFormat::F_A8R8G8B8 ) );
 			}
 
-			return TextureResource::Create( origRes, MipMapResource::Create( mipMapsRes ) );
+			ret = TextureResource::Create( origRes, MipMapResource::Create( mipMapsRes ) );
 		}
 	}
 
-	return nullptr;
+	TextureCache::GetInstance().Add( typedDesc, ret );
+
+	return ret;
 }
 
 // ******************************
@@ -132,7 +140,7 @@ SingleTextureResourceConstPtr TextureLoader::LoadSingleTexture( const SingleText
 	if( !mmChunk )
 		return nullptr;
 
-	auto key = TextureCache::GenKeyForSingleTexture( imgPath, w, h, format );
+	auto key = TextureCache::GenKeyForSingleTexture( sinlgeTextureResDesc );
 
 	return SingleTextureResource::Create( mmChunk, key, w, h, format );
 }
