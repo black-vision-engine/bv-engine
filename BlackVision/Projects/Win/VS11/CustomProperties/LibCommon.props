@@ -5,8 +5,10 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <Link>
-      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <SubSystem>Windows</SubSystem>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+      <SubSystem>
+      </SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
