@@ -230,7 +230,7 @@ CompositeTransform<ParamT>::CompositeTransform  ( const CompositeTransform & src
 // *************************************
 //
 template<typename ParamT>
-unsigned int CompositeTransform<ParamT>::Size() const
+SizeType    CompositeTransform<ParamT>::Size() const
 {
     return m_transformations.size();
 }

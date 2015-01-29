@@ -148,7 +148,7 @@ public:
     void            AddTransform        ( SimpleTransform<ParamT> * trans );
     void            InsertTransform     ( int i, SimpleTransform<ParamT> * trans );
 
-    unsigned int    Size                () const;
+    SizeType        Size                () const;
 
     SimpleTransform<ParamT> *        operator[](unsigned int i);
     const SimpleTransform<ParamT> *  operator[](unsigned int i) const;
