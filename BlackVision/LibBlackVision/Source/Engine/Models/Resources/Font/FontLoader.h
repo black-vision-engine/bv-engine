@@ -31,10 +31,11 @@ class FontLoader : public ResourceLoader
 {
 private:
 
-    const Text*             TryLoadFont             ( const std::string& file, size_t size, size_t blurSize, size_t oulineSize, const std::wstring& atlasCharSetFile ) const;
+    const Text*             TryLoadFont         ( const std::string& file, size_t size, size_t blurSize, size_t oulineSize, const std::wstring& atlasCharSetFile ) const;
 
 public:
-    ResourceHandle *        LoadResource        ( IResource* res )  const;
+	IResourceNEWConstPtr	LoadResource		( const bv::ResourceDescConstPtr & ) const override;
+    ResourceHandle *        LoadResource        ( IResource* res )  const; // DEPRECATED
 
     explicit                FontLoader( ){}
 

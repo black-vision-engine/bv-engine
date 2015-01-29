@@ -105,7 +105,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\..\..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -302,17 +303,22 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\TextHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ModelTextureManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Resource.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ResourceDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ResourceLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ResourceManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextHelpers.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextureHelpers.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextureLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescr.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\FontResourceDescr.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResource.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\SingleTextureResource.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\SingleTextureResourceDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureCache.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResource.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResourceDescr.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResourceDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventLoop.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventNull.cpp" />
@@ -571,17 +577,22 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\IResourceLoader.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ModelTextureManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Resource.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceLoader.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextHelpers.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextureHelpers.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextureLoader.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\FontResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResource.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\SingleTextureResource.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\SingleTextureResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureCache.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResource.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResourceDescr.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventLoop.h" />

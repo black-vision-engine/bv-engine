@@ -813,6 +813,21 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelScene.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ResourceDescriptor.cpp">
+      <Filter>Engine\Models\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ResourceManager.cpp">
+      <Filter>Engine\Models\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\SingleTextureResourceDescriptor.cpp">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResourceDescriptor.cpp">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.cpp">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Core\MemoryChunk.h">
@@ -1642,6 +1657,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelScene.h">
       <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceDescriptor.h">
+      <Filter>Engine\Models\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceManager.h">
+      <Filter>Engine\Models\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\SingleTextureResourceDescriptor.h">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResourceDescriptor.h">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.h">
+      <Filter>Engine\Models\Resources\Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

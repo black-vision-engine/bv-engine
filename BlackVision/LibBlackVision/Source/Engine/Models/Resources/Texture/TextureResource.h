@@ -2,6 +2,7 @@
 
 #include "SingleTextureResource.h"
 #include "MipMapResource.h"
+#include "Engine/Models/Resources/IResource.h"
 
 namespace bv
 {
@@ -11,8 +12,13 @@ DEFINE_CONST_PTR_TYPE( TextureResource )
 
 // *******************************
 // Implements texture resource with original image and all its mimmaps.
-class TextureResource
+class TextureResource : public model::IResourceNEW, public std::enable_shared_from_this< TextureResource >
 {
+	static const std::string		uid;
+
+protected:
+	virtual VoidConstPtr			QueryThis		() const override;
+
 public:
 
 	// *******************************
@@ -27,6 +33,9 @@ public:
 
 	explicit						TextureResource	( const SingleTextureResourceConstPtr & originalTexture, const MipMapResourceConstPtr & mipMaps );
 	
+	virtual const std::string &		GetUID			() const override;
+
+	static const std::string &		UID				();
 
 private:
 

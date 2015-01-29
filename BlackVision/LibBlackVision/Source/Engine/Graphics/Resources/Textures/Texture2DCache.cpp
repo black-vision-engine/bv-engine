@@ -6,9 +6,6 @@
 #include "Engine/Graphics/Resources/Texture2DImpl.h"
 #include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
 
-#include "Engine/Models/Resources/Resource.h"
-#include "Engine/Models/Resources/TextureLoader.h"
-
 #define PRINT_TEXTURE_CACHE_STATS
 
 namespace bv
