@@ -2,12 +2,11 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <BuildDir>..\..\..\..\..\..\_Builds</BuildDir>
-    <TempDir>..\..\..\..\..\..\_Temp</TempDir>
-    <DepDir>..\..\..\..\..\..\Dep</DepDir>
-    <LibBlackVisionDir>..\..\..\..\..\..\LibBlackVision\Source</LibBlackVisionDir>
-    <AssetsDir>..\..\..\..\..\..\Assets</AssetsDir>
-    <TestDir>..\..\..\..\..\..\Test</TestDir>
+    <BuildDir>..\..\..\..\..\_Builds</BuildDir>
+    <TempDir>..\..\..\..\..\_Temp</TempDir>
+    <DepDir>..\..\..\..\..\Dep</DepDir>
+    <LibBlackVisionDir>..\..\..\..\..\LibBlackVision\Source</LibBlackVisionDir>
+    <AssetsDir>..\..\..\..\..\Assets</AssetsDir>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
@@ -26,9 +25,6 @@
     </BuildMacro>
     <BuildMacro Include="AssetsDir">
       <Value>$(AssetsDir)</Value>
-    </BuildMacro>
-    <BuildMacro Include="TestDir">
-      <Value>$(TestDir)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

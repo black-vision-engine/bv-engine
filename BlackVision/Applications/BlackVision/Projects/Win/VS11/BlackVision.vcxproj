@@ -99,10 +99,12 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(DepDir)\Common\FreeImage\Wrapper\FreeImagePlus\dist\Win32\FreeImagePlusd.dll $(OutDir) /c /y
+xcopy $(DepDir)\Common\FreeImage\Dist\Win32\FreeImaged.dll $(OutDir) /c /y
 xcopy $(DepDir)\Common\FreeImage\Dist\Win32\FreeImage.dll $(OutDir) /c /y
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y
 </Command>
+      <Message>Copying assets and dll files to the working directory.</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -117,6 +119,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y
 xcopy $(DepDir)\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
+      <Message>Copying assets and dll files to the working directory.</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -135,6 +138,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
 xcopy $(DepDir)\Common\FreeImage\Dist\Win32\FreeImage.dll $(OutDir) /c /y
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
+      <Message>Copying assets and dll files to the working directory.</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -153,6 +157,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
 xcopy $(DepDir)\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
+      <Message>Copying assets and dll files to the working directory.</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
