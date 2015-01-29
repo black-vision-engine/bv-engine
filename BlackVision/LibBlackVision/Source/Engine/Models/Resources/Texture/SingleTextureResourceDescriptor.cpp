@@ -34,7 +34,7 @@ bool SingleTextureResourceDesc::IsCacheable	() const
 
 // ***********************
 //
-SingleTextureResourceDescConstPtr Create( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format )
+SingleTextureResourceDescConstPtr SingleTextureResourceDesc::Create( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format )
 {
 	return std::make_shared< SingleTextureResourceDesc >( imagePath, width, height, format );
 }
