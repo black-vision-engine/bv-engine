@@ -6,6 +6,7 @@
 #define DEFINE_CONST_PTR_TYPE(Type) typedef std::shared_ptr< const Type > Type##ConstPtr;
 
 typedef std::shared_ptr< void > VoidPtr;
+typedef std::shared_ptr< const void > VoidConstPtr;
 
 namespace bv {
 

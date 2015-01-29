@@ -3,6 +3,8 @@
 namespace bv
 {
 
+const std::string TextureResource::uid = "TEXTURE_RESOURCE";
+
 // *******************************
 // 
 SingleTextureResourceConstPtr TextureResource::GetOriginal() const
@@ -30,5 +32,26 @@ TextureResource::TextureResource( const SingleTextureResourceConstPtr & original
 	: m_originalTexture( originalTexture )
 	, m_mipMaps( mipMaps )
 {}
+
+// *******************************
+// 
+const std::string &	TextureResource::GetUID() const
+{
+	return TextureResource::uid;
+}
+
+// *******************************
+// 
+const std::string &	TextureResource::UID()
+{
+	return TextureResource::uid;
+}
+
+// *******************************
+// 
+VoidConstPtr TextureResource::QueryThis() const
+{
+	return shared_from_this();
+}
 
 } // bv

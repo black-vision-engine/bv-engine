@@ -33,6 +33,7 @@ public:
     char *                      GetWritable     ();
 
     static  MemoryChunkPtr      Create          ( SizeType size );
+	static  MemoryChunkPtr      Create          ( char * mem, SizeType size );
 
     static  MemoryChunkConstPtr EMPTY           ();
 

@@ -49,6 +49,14 @@ const std::wstring&     FontResource::GetAtlasCharSetFile     ()  const
 
 ///////////////////////////////
 //
+IResourceNEWConstPtr FontLoader::LoadResource( const bv::ResourceDescConstPtr & ) const
+{
+	assert( false ); // TODO: implement;
+	return nullptr;
+}
+
+///////////////////////////////
+//
 ResourceHandle *        FontLoader::LoadResource        ( IResource* res )  const
 {
     assert( dynamic_cast< FontResource* >(res) );

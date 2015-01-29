@@ -19,7 +19,7 @@ public:
 	SingleTextureResourceConstPtr	GetLevel		( SizeType level ) const;
 	SizeType						GetLevelsNum	() const;
 
-	MipMapResourceConstPtr			Create			( const std::vector< SingleTextureResourceConstPtr > & mipMaps );
+	static MipMapResourceConstPtr	Create			( const std::vector< SingleTextureResourceConstPtr > & mipMaps );
 
 	explicit						MipMapResource	( const std::vector< SingleTextureResourceConstPtr > & mipMaps );
 
