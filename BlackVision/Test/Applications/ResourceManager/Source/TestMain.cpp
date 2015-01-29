@@ -6,6 +6,8 @@
 
 #include "gtest/gtest.h"
 
+auto imagePath = "Assets/ResourceManager/checkerbord2.bmp";
+
 TEST(LoaderRigistration, ResourceManager)
 {
 	//bv::model::TextureLoader::
@@ -14,7 +16,6 @@ TEST(LoaderRigistration, ResourceManager)
 
 TEST(LoadingTextureAndGeneratingMipMaps, ResourceManager)
 {
-	auto imagePath = "";
 	auto props = GetImageProps( imagePath );
 
 	auto orig = bv::SingleTextureResourceDesc::Create( imagePath, props.width, props.height, props.format );
