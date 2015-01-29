@@ -35,14 +35,14 @@ VoidConstPtr TextureResourceDesc::QueryThis() const
 
 // ***********************
 //
-TextureResourceDescConstPtr	Create( const SingleTextureResourceDescConstPtr & origDesc, const MipMapResourceDescConstPtr & mipmapsDesc )
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const SingleTextureResourceDescConstPtr & origDesc, const MipMapResourceDescConstPtr & mipmapsDesc )
 {
 	return std::make_shared< TextureResourceDesc >( origDesc, mipmapsDesc );
 }
 
 // ***********************
 //
-TextureResourceDescConstPtr	Create( const SingleTextureResourceDescConstPtr & origDesc, bool generateMipMaps )
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const SingleTextureResourceDescConstPtr & origDesc, bool generateMipMaps )
 {
 	return std::make_shared< TextureResourceDesc >( origDesc, generateMipMaps );
 }
