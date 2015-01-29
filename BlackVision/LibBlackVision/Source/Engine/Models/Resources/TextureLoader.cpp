@@ -56,7 +56,10 @@ IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & d
 
 	assert( typedDesc );
 
-	TextureResourceConstPtr ret = TextureCache::GetInstance().Get( typedDesc );
+	TextureResourceConstPtr ret = nullptr;
+	
+	if ( typedDesc->IsCacheable() )
+		ret = TextureCache::GetInstance().Get( typedDesc );
 
 	if( ret )
 		return ret;
@@ -121,7 +124,8 @@ IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & d
 		}
 	}
 
-	TextureCache::GetInstance().Add( typedDesc, ret );
+	if ( typedDesc->IsCacheable() )
+		TextureCache::GetInstance().Add( typedDesc, ret );
 
 	return ret;
 }
