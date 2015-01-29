@@ -42,8 +42,6 @@ public:
 	TextureResourceLoadingType			GetLoadingType		() const;
 	SingleTextureResourceDescConstPtr	GetOrigTextureDesc	() const;
 	MipMapResourceDescConstPtr			GetMipMapsDesc		() const;
-	//SizeType							GetMipMapsDescNum	() const;
-	//SingleTextureResourceDescConstPtr	GetMipMapDesc		( SizeType i ) const;
 
 	static TextureResourceDescConstPtr	Create				( const SingleTextureResourceDescConstPtr & origDesc, const MipMapResourceDescConstPtr & mipmapsDesc );
 	static TextureResourceDescConstPtr	Create				( const SingleTextureResourceDescConstPtr & origDesc, bool generateMipMaps );
