@@ -14,6 +14,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTexturesData.h"
 #include "DefaultVideoInput.h"
+#include "VideoInput/DefaultVideoInputResourceDescr.h"
+#include "VideoInput/ExampleVideoInput.h"
 
 namespace bv {
 
@@ -537,7 +539,8 @@ model::BasicNodePtr    TestScenesFactory::CreedTestScene     ( const model::Plug
 
 	root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
 	auto plugin = root->GetPlugin( "texture" );
-	auto vi = new model::DefaultVideoInput( 10, 10, 1.f );
+	//auto vi = new model::DefaultVideoInput( 10, 10, 1.f );
+	auto vi = new ExampleVideoInput( 10, 10, 1.f );
 	auto success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture() ) ) );
 	assert(success);
 
