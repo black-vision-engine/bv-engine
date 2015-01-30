@@ -217,17 +217,17 @@ bool                            DefaultTexturePlugin::LoadResource  ( IPluginRes
         }
     }
 
-	auto viResDescr = QueryVideoInputResourceDescr( resDescr );
+	//auto viResDescr = QueryVideoInputResourceDescr( resDescr );
 
-	if( viResDescr != nullptr )
-	{
-		auto txData = m_psc->GetTexturesDataImpl();
-		assert( txData->GetTextures().size() <= 1 ); // to be safe for now
-		
-		txData->AddTexture( viResDescr->GetITextureDescriptor() );
+	//if( viResDescr != nullptr )
+	//{
+	//	auto txData = m_psc->GetTexturesDataImpl();
+	//	assert( txData->GetTextures().size() <= 1 ); // to be safe for now
+	//	
+	//	txData->AddTexture( viResDescr->GetITextureDescriptor() );
 
-		return true;
-	}
+	//	return true;
+	//}
 
     return false;
 }

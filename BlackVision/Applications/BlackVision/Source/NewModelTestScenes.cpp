@@ -534,13 +534,15 @@ model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const mod
 	//auto texturePlugin =  std::dynamic_pointer_cast< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
 	//((model::DefaultTexturesData*)(texturePlugin->GetPixelShaderChannel()->GetTexturesData().get()))->AddTexture( new model::DefaultVideoInput() );
 
-	//root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
+	root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
+	auto plugin = root->GetPlugin( "video input" );
 
-	root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
-	auto plugin = root->GetPlugin( "texture" );
+	//root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+	//auto plugin = root->GetPlugin( "texture" );
+
 	//auto vi = new model::DefaultVideoInput( 10, 10, 1.f );
 	auto vi = new ExampleVideoInput( 10, 10, 1.f );
-	auto success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture() ) ) );
+	auto success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture(), vi ) ) );
 	assert(success);
 
 	return root;

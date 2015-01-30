@@ -21,7 +21,7 @@ ExampleVideoInput::~ExampleVideoInput(void)
 void VeryHackishMethodToUpdateConstVideoInputBeacuseLifeSucksSoMuchAndIWantToDie             ( const ExampleVideoInput* input)
 { // FIXME: this is so wrong; we need some kind of Update() in interface
 	auto nonConstInput = (ExampleVideoInput*)input;
-	nonConstInput->Update(0);
+	nonConstInput->Update();
 }
 
 void		ExampleVideoInput::GenerateBits( int x, int y )
@@ -37,7 +37,7 @@ void		ExampleVideoInput::GenerateBits( int x, int y )
 
 MemoryChunkConstPtr     ExampleVideoInput::GetBits             () const
 {
-	VeryHackishMethodToUpdateConstVideoInputBeacuseLifeSucksSoMuchAndIWantToDie( this );
+	//VeryHackishMethodToUpdateConstVideoInputBeacuseLifeSucksSoMuchAndIWantToDie( this );
 	return bits;
 }
 
@@ -104,7 +104,7 @@ model::DefaultTextureDescriptor* ExampleVideoInput::GetTexture		() const
 	return new ExampleVideoInputWrapper( this );
 }
 
-void					ExampleVideoInput::Update				( TimeType t )
+void					ExampleVideoInput::Update				()
 {
 	GenerateBits( GetWidth(), GetHeight() ); //hahaha ;)
 }

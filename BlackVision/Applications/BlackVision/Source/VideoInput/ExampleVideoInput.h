@@ -3,7 +3,7 @@
 namespace bv {
 
 	class ExampleVideoInput :
-		IVideoInput
+		public IVideoInput
 	{
 		float m_fps;
 		MemoryChunkPtr bits;
@@ -23,7 +23,7 @@ namespace bv {
 		virtual TextureFormat           GetFormat			() const;
 
 		virtual model::DefaultTextureDescriptor* GetTexture		() const;
-		virtual void					Update				( TimeType t );
+		virtual void					Update				() override;
 
 		virtual model::DefaultTextureDescriptor* GetTextureDesc	() const; // THIS IS SO UGLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	};

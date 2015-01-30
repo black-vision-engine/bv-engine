@@ -14,7 +14,7 @@ namespace bv {
 		virtual unsigned int            GetHeight			() const = 0;
 		virtual TextureFormat           GetFormat			() const = 0;
 
-		virtual void					Update				( TimeType t ) = 0; // FIXME(?): Viggith says it's so wrong
+		virtual void					Update				() = 0; // FIXME(?): Viggith says it's so wrong
 	};
 
 	class IVideoInput : public IVideoInputCore
