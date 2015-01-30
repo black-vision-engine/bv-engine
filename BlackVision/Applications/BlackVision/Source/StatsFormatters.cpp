@@ -39,6 +39,7 @@ void    ProfilerDataFormatter::PrintToConsole  ( const char * msg )
 //
 void    ProfilerDataFormatter::PrintToDevNull   ( const char * msg )
 {
+    { msg; } // FIXME: suppress unused warning
 }
 
 // *********************************

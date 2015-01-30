@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include <glm/glm.hpp>
+#include "Mathematics/glm_inc.h"
 
 
 namespace bv {

@@ -85,6 +85,7 @@ PdrRenderTarget::~PdrRenderTarget    ()
 //
 void            PdrRenderTarget::Enable             ( Renderer * renderer )
 {
+    { renderer; } // FIXME: suppress unused
     glBindFramebuffer( GL_FRAMEBUFFER, m_fboID );
     glDrawBuffers( m_numTargets, &m_drawBuffers[ 0 ] );
 
@@ -99,6 +100,7 @@ void            PdrRenderTarget::Enable             ( Renderer * renderer )
 //
 void            PdrRenderTarget::Disable            ( Renderer * renderer )
 {
+    { renderer; } // FIXME: suppress unused
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 
     glViewport( m_prevViewportCoords[ 0 ], m_prevViewportCoords[ 1 ], m_prevViewportCoords[ 2 ], m_prevViewportCoords[ 3 ] );
@@ -204,6 +206,7 @@ void            PdrRenderTarget::AddColorAttachments( Renderer * renderer, const
 //
 void            PdrRenderTarget::AddDepthBuffer     ( Renderer * renderer, const RenderTarget * rt )
 {
+    { renderer; rt; } // FIXME: suppress unused
     glGenRenderbuffers( 1, &m_depthBufID );
     glBindRenderbuffer( GL_RENDERBUFFER, m_depthBufID );
     glRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_width, m_height );

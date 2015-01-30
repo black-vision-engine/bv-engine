@@ -34,14 +34,14 @@ SceneNode::~SceneNode          ()
 
 // ********************************
 //
-int                     SceneNode::NumChildrenNodes    () const
+SizeType                SceneNode::NumChildrenNodes    () const
 {
     return m_sceneNodes.size();
 }
 
 // ********************************
 //
-int                     SceneNode::NumTransformables   () const
+SizeType                SceneNode::NumTransformables   () const
 {
     return m_transformables.size();
 }

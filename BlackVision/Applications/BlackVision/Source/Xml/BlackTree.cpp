@@ -121,11 +121,8 @@ PluginRadialGradient* BlackTree::CreatePluginRadialGradient(xml_node<> *NewNode)
 	PluginRadialGradient *plugin = new PluginRadialGradient();
 	ParsePluginProperties(plugin,NewNode);
 
-	xml_node<> *CurrentNode = NewNode->first_node("plugin");
-
-
-
-
+	xml_node<> * CurrentNode = NewNode->first_node("plugin");
+    { CurrentNode; } // FIXME: suppress unused warning
 
 	return plugin;
 }
@@ -244,7 +241,7 @@ bool BlackTree::ParsePlugins(BlackNode &node, xml_node<> *NewNode)
 	xml_node<> *CurrentNode = NewNode->first_node("plugin");
 		while(CurrentNode!=NULL)
 		{
-			xml_attribute<> *attr = CurrentNode->first_attribute("name");
+			// xml_attribute<> *attr = CurrentNode->first_attribute("name");
 
 			//cout<< "adding plugin : "<<attr->value()<<endl;
 
@@ -285,7 +282,7 @@ bool BlackTree::CreateNode(BlackNode &parrent, xml_node<> *NewNode)
 		xml_node<> *CurrentNode = Root->first_node("node");
 		while(CurrentNode!=NULL)
 		{
-			xml_attribute<> *attr = CurrentNode->first_attribute("name");
+			// xml_attribute<> *attr = CurrentNode->first_attribute("name");
 
 			////cout<< " children name is : "<<attr->value()<<endl;
 
@@ -312,7 +309,7 @@ bool BlackTree::ParseXml(xml_document<> &doc)
 
 	while(CurrentNode!=NULL)
 	{
-		xml_attribute<> *attr = CurrentNode->first_attribute("name");
+		// xml_attribute<> *attr = CurrentNode->first_attribute("name");
 
 		////cout<< " name is : "<<attr->value()<<endl;
 

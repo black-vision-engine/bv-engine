@@ -54,6 +54,7 @@ int             IndexChannelDescriptor::IndexSize               ( IndexType type
 //
 std::string     IndexChannelDescriptor::DefaultName             ( IndexType type )
 {
+    { type; } // FIXME: suppress unused variable
     //FIXME: implement proeprly
     return "indices";
 }

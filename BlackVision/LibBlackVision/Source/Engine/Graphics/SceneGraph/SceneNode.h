@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
-
+#include "System/BasicTypes.h"
 
 namespace bv {
 
@@ -27,8 +27,8 @@ public:
                             SceneNode           ( TransformableEntity * transformRep = nullptr );
                             ~SceneNode          ();
 
-    int                     NumChildrenNodes    () const;
-    int                     NumTransformables   () const;
+    SizeType                NumChildrenNodes    () const;
+    SizeType                NumTransformables   () const;
 
     void                    AddChildNode        ( SceneNode * child );
     void                    AddTransformable    ( TransformableEntity * transformable );

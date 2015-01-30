@@ -8,7 +8,7 @@
 
 using std::string;
 
-#include <glm/glm.hpp>
+#include "Mathematics/glm_inc.h"
 
 using glm::vec2;
 using glm::vec3;

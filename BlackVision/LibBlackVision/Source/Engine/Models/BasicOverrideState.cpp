@@ -34,6 +34,7 @@ BasicOverrideState::~BasicOverrideState ()
 //
 void                BasicOverrideState::Update              ( TimeType t )
 {
+    { t; } // FIXME: suppress unused variable
     //Update alpha
     if( IsAlphaEnabledAM() || IsAlphaEnabledNM() )
     {

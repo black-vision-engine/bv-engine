@@ -75,7 +75,7 @@ std::string                     DefaultPrismPluginDesc::UID                  ()
 // *************************************
 //
 DefaultPrismPlugin::DefaultPrismPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
-	: BasePlugin< IPlugin >( name, DefaultPrismPluginDesc::UID(), prev, model )
+	: BasePlugin< IPlugin >( name, uid, prev, model )
 {
 	auto nParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "n" );
 
@@ -122,6 +122,7 @@ void DefaultPrismPlugin::InitGeometry( int n )
 //
 void                                DefaultPrismPlugin::Update                      ( TimeType t )
 {
+    { t; } // FIXME: suppress unused warning
 	m_pluginParamValModel->Update();
 
 	auto nParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "n" );

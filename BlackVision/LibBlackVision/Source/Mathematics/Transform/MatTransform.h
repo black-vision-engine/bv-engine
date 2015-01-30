@@ -3,7 +3,7 @@
 #include <vector>
 #include <iostream>
 
-#include <glm/glm.hpp>
+#include "Mathematics/glm_inc.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Mathematics/Interpolators/Interpolators.h"

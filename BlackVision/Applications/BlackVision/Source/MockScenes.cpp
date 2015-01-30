@@ -107,9 +107,11 @@ void TestParametersFactory::CameraAnimation_ver2( Vec3Interpolator * direction, 
 {
     position->SetWrapMethod(WrapMethod::repeat, WrapMethod::pingPong);
 
+    /*
     float t = 0.f;
     double endTime = 2. * M_PI;
     double dt = endTime / 10.f;
+    */
     position->AddKey(0.f, glm::vec3(-2.f, 0.1f, 3.f));
     position->AddKey(20.f, glm::vec3(2.f, 0.1f, 3.f));
     
@@ -132,8 +134,10 @@ void TestParametersFactory::CameraAnimation_ver2( Vec3Interpolator * direction, 
     //m_modelScene->AddCameraInterpolators(direction, position, up);
 }
 
-void RenderMockScene(bv::model::BasicNode* tree, std::ostream& out)
+void RenderMockScene( bv::model::BasicNode * tree, std::ostream & out )
 {
+    { tree; } // FIXME: suppress unused warning
+    { out; } // FIXME: suppress unused warning
     //static float t = 0.f;
 
     //tree->Update(t);

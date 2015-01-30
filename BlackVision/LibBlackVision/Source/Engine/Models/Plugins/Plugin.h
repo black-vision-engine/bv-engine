@@ -84,6 +84,7 @@ protected:
 template< class Iface >
 void BasePlugin< Iface >::Update  ( TimeType t )
 {
+    { t; } // FIXME: suppress unused warning
     assert( !"Implement in derived class" );
 }
 

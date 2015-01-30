@@ -78,6 +78,7 @@ VertexDescriptor * VertexDescriptor::Create ( unsigned int numAttrs, ... )
 
         unsigned int semanticIndex = va_arg( args, unsigned int );
     
+        { semanticIndex; } // FIXME: suppress unused warning
         vd->SetAttribute( i, channelLoc, offset, (AttributeType)type, (AttributeSemantic)semantic );
 
         offset += m_sTypeSize[ type ];

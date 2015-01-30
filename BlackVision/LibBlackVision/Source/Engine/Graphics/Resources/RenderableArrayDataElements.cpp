@@ -46,7 +46,7 @@ const IndexBuffer *     RenderableArrayDataElements::GetIndexBuffer( int ccNum )
 
 // *********************************
 //
-unsigned int                RenderableArrayDataElements::GetNumConnectedComponents   () const
+SizeType                    RenderableArrayDataElements::GetNumConnectedComponents   () const
 {
 //    assert( m_numVerticesInCC.size() == m_ccOffsets.size() );
 //    return m_numVerticesInCC.size();
@@ -58,6 +58,7 @@ unsigned int                RenderableArrayDataElements::GetNumConnectedComponen
 //
 unsigned int                RenderableArrayDataElements::GetNumVerticesInConnectedComponent  ( unsigned int ccNum ) const
 {
+    { ccNum; } // FIXME: suppress unused warning
     assert( false ); //FIXME: implement
 
     return 0;

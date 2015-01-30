@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "System/BasicTypes.h"
+
 
 namespace bv
 {
@@ -33,7 +35,7 @@ public:
                             VertexArray         ();
                             ~VertexArray        ();
 
-    int                     NumEntries          () const;
+    SizeType                NumEntries          () const;
     void                    AddEntry            ( VertexBuffer * vb, VertexDescriptor * vd, unsigned int numVertices, unsigned int vertexBufferOffset );
     VertexArrayEntry        Entry               ( int i ) const;
 
@@ -69,7 +71,7 @@ public:
 
     void                        AddCCEntry                      ( unsigned int numVertices );
 
-    unsigned int                GetNumConnectedComponents       () const;
+    SizeType                    GetNumConnectedComponents       () const;
 
     unsigned int                GetNumVertices                  ( unsigned int ccNum ) const;
     unsigned int                GetNumTotalVertices             () const;

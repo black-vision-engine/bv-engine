@@ -34,7 +34,7 @@ VertexAttributesChannelDescriptor::~VertexAttributesChannelDescriptor   ()
 //
 unsigned int VertexAttributesChannelDescriptor::GetNumVertexChannels	() const
 {
-    return m_attributeChannelDescriptors.size();
+    return (unsigned int) m_attributeChannelDescriptors.size();
 }
 
 // ************************************

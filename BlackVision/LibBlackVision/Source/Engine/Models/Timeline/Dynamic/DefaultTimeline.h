@@ -55,7 +55,7 @@ public:
     virtual TimelineWrapMethod                  GetWrapBehaviorPre  () const override;
     virtual TimelineWrapMethod                  GetWrapBehaviorPost () const override;
 
-    virtual unsigned int                        NumKeyFrames        () const override;
+    virtual SizeType                            NumKeyFrames        () const override;
 
     virtual bool                                AddKeyFrame         ( ITimelineEvent * evt ) override;
 

@@ -95,6 +95,7 @@ void        AICommandPlay::SetTimeline     ( model::DefaultTimelinePtr timeline 
 //
 bool        AICommandPlay::TriggerImpl     ( TimeType t )
 {
+    { t; } // FIXME: suppress unuse warning
     m_timeline->Play();
 
     return true;
@@ -128,6 +129,7 @@ void        AICommandStop::SetTimeline     ( model::DefaultTimelinePtr timeline 
 //
 bool        AICommandStop::TriggerImpl     ( TimeType t )
 {
+    { t; } // FIXME: suppress unuse warning
     m_timeline->Stop();
 
     return true;
@@ -160,6 +162,7 @@ void        AICommandReverse::SetTimeline     ( model::DefaultTimelinePtr timeli
 //
 bool        AICommandReverse::TriggerImpl         ( TimeType t )
 {
+    { t; } // FIXME: suppress unuse warning
     m_timeline->Reverse();
 
     return true;
@@ -202,6 +205,7 @@ void        AICommandSetPlayDirection::SetTimeline     ( model::DefaultTimelineP
 //
 bool        AICommandSetPlayDirection::TriggerImpl      ( TimeType t )
 {
+    { t; } // FIXME: suppress unuse warning
     m_timeline->SetPlayDirection( m_direction );
 
     return true;
@@ -236,6 +240,7 @@ void        AICommandSetTimeAndStop::SetTimeline     ( model::DefaultTimelinePtr
 //
 bool        AICommandSetTimeAndStop::TriggerImpl    ( TimeType t )
 {
+    { t; } // FIXME: suppress unuse warning
     m_timeline->SetTimeAndStop( m_eventTime );
 
     return true;
@@ -271,6 +276,7 @@ void        AICommandSetTimeAndPlay::SetTimeline     ( model::DefaultTimelinePtr
 //
 bool        AICommandSetTimeAndPlay::TriggerImpl    ( TimeType t )
 {
+    { t; } // FIXME: suppress unuse warning
     m_timeline->SetTimeAndPlay( m_eventTime );
 
     return true;
@@ -368,6 +374,7 @@ void        AICommandDisableAlpha::SetTimeline  ( model::DefaultTimelinePtr time
 //
 bool        AICommandDisableAlpha::TriggerImpl  ( TimeType t )
 {
+    { t; } // FIXME: suppress unuse warning
     if( m_node )
     {
         m_node->DisableOverrideStateAM();
@@ -414,6 +421,7 @@ void        AICommandEnableOverridenAlphaNM::SetTimeline            ( model::Def
 //
 bool        AICommandEnableOverridenAlphaNM::TriggerImpl            ( TimeType t )
 {
+    { t; } // FIXME: suppress unuse warning
     if ( m_node )
     {
         auto state = m_node->GetOverrideState();
@@ -471,6 +479,7 @@ void        AICommandDisableAlphaNM::SetTimeline    ( model::DefaultTimelinePtr 
 //
 bool        AICommandDisableAlphaNM::TriggerImpl    ( TimeType t )
 {
+    { t; } // FIXME: suppress unuse warning
     if( m_node )
     {
         m_node->DisableOverrideStateNM();
@@ -506,6 +515,7 @@ void        AICommandReloadScene::SetTimeline                 ( model::DefaultTi
 //
 bool        AICommandReloadScene::TriggerImpl                 ( TimeType t )
 {
+    { t; } // FIXME: suppress unuse warning
     m_logic->ReloadScene();
     return true;
 }
@@ -553,6 +563,7 @@ void        AICommandReloadTexture::SetTimeline ( model::DefaultTimelinePtr time
 //
 bool        AICommandReloadTexture::TriggerImpl ( TimeType t )
 {
+    { t; } // FIXME: suppress unuse warning
     if( m_plugin )
     {
         auto success = model::LoadTexture( m_plugin, m_textureName );

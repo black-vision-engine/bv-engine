@@ -152,8 +152,8 @@ void basic_write_atlas( const std::string & fontFile, const std::string & atlasF
                 else 
                 {
                   // this is 1, but it's safer to put it in anyway
-                  int bytes_per_pixel = gwidth[glyph_index] / gpitch[glyph_index];
-                  int bytes_in_glyph = grows[glyph_index] * gpitch[glyph_index];
+                  //int bytes_per_pixel = gwidth[glyph_index] / gpitch[glyph_index];
+                  //int bytes_in_glyph = grows[glyph_index] * gpitch[glyph_index];
                   int byte_order_in_glyph = y_loc * gwidth[glyph_index] + x_loc;
                   // print byte from glyph
                   file << glyph_buffer[glyph_index][byte_order_in_glyph] << glyph_buffer[glyph_index][byte_order_in_glyph] << glyph_buffer[glyph_index][byte_order_in_glyph] << glyph_buffer[glyph_index][byte_order_in_glyph];

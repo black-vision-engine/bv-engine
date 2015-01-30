@@ -32,6 +32,7 @@ VertexAttributesChannelPtr       ChannelsFactory::CreateVertexAttributesChannel 
 TransformChannelPtr              ChannelsFactory::CreateTransformChannel              ( const ParamTransformVec & transformVec )
 {
 
+    { transformVec; } // FIXME: suppress unused variable
 	//SimpleTransformChannel*      trasformChannel  = new SimpleTransformChannel( transformVec );
     SimpleTransformChannelPtr      trasformChannel  = nullptr; //FIXME: NM_CONFORMANCE
     return trasformChannel;

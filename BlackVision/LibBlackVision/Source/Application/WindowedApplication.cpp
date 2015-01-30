@@ -151,6 +151,7 @@ void	WindowedApplication::OnTerminate			()
 //
 void	WindowedApplication::OnKey					( unsigned char c )
 {
+    { c; } // FIXME: suppress unused warning
     //To be implemented in derived class
 }
 

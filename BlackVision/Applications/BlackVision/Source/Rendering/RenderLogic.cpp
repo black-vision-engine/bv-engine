@@ -251,7 +251,7 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 
     if( nFrames % 50 == 0 )
     {
-        double avg = totalElapsed / (double) nFrames;
+        //double avg = totalElapsed / (double) nFrames;
 
         nPasses++;
         totalElapsed = 0.0;

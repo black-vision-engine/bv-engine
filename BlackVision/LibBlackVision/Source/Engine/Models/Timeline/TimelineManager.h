@@ -77,7 +77,7 @@ public:
     bool                    AddParamToTimeline              ( IParameterPtr param, const std::string & timelineName );
     bool                    AddParamToTimeline              ( IParameterPtr param, ITimeEvaluatorPtr timeline );
 
-    unsigned int            RemoveParamFromTimeline         ( const std::string & paramName, const std::string & timelineName );
+    SizeType                RemoveParamFromTimeline         ( const std::string & paramName, const std::string & timelineName );
     bool                    RemoveParamFromTimeline         ( IParameterPtr param, const std::string & timelineName );
     bool                    RemoveParamFromTimeline         ( IParameterPtr param, const ITimeEvaluatorPtr timeline );
 

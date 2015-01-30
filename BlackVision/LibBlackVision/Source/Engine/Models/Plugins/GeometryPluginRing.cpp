@@ -43,6 +43,7 @@ void                GeometryRingPlugin::Update              ( TimeType t )
 //
 void                GeometryRingPlugin::Print               ( std::ostream & out, int tabs ) const
 {
+    { tabs; out; } // FIXME: suppress unused variable
 }
 
 

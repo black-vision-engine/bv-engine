@@ -39,7 +39,7 @@ DefaultAnimationDescriptor::~DefaultAnimationDescriptor       ()
 //
 unsigned int            DefaultAnimationDescriptor::NumTextures         () const
 {
-    return m_frames.size();    
+    return (unsigned int) m_frames.size();    
 }
 
 // *******************************
@@ -286,8 +286,8 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
     assert( texExtra->GetType() == TextureType::T_2D );
 
     auto fmt = texExtra->GetFormat();
-    auto w  = texExtra->GetWidth();
-    auto h = texExtra->GetHeight();
+    auto w  = (unsigned int) texExtra->GetWidth();
+    auto h = (unsigned int) texExtra->GetHeight();
 
     DefaultAnimationDescriptor * retDesc = new DefaultAnimationDescriptor( name, w, h, fmt, TextureWrappingMode::TWM_CLAMP_BORDER, TextureWrappingMode::TWM_CLAMP_BORDER, TextureFilteringMode::TFM_LINEAR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
@@ -303,8 +303,8 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
         auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
         assert( texExtra->GetType() == TextureType::T_2D );
 
-        unsigned int lw = texExtra->GetWidth();
-        unsigned int lh = texExtra->GetHeight();
+        unsigned int lw = (unsigned int) texExtra->GetWidth();
+        unsigned int lh = (unsigned int) texExtra->GetHeight();
         TextureFormat lfmt = texExtra->GetFormat();
 
         if( lfmt != fmt || lw != w || lh != h )

@@ -6,7 +6,12 @@
 
 #include "System/BasicTypes.h"
 
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+
 #include "FastDelegate.h"
+
+#pragma warning( pop )
 
 
 namespace bv 

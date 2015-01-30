@@ -58,7 +58,7 @@ void                            RenderableEntity::SetRenderableEffect           
 
 // *********************************
 //
-int                             RenderableEntity::GetNumconnectedComponents         () const
+SizeType                        RenderableEntity::GetNumconnectedComponents         () const
 {
     return m_renderableArrayData->GetNumConnectedComponents();
 }

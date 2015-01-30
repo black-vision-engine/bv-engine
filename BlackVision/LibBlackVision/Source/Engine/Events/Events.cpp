@@ -53,6 +53,7 @@ EventType               PluginAddedEvent::GetEventType      () const
 //
 void                    PluginAddedEvent::Serialize         ( std::ostringstream & out ) const
 {
+    { out; } // FIXME: suppress unused warning
     std::string err = GetName() + " should not be serialized";
     assert( !err.c_str()  );
 }
@@ -61,6 +62,7 @@ void                    PluginAddedEvent::Serialize         ( std::ostringstream
 //
 void                    PluginAddedEvent::Deserialize       ( std::istringstream & in )
 {
+    { in; } // FIXME: suppress unused warning
     std::string err = GetName() + " should not be deserialized";
     assert( !err.c_str()  );
 }
@@ -121,6 +123,7 @@ EventType               NodeAddedEvent::GetEventType        () const
 //
 void                    NodeAddedEvent::Serialize           ( std::ostringstream & out ) const
 {
+    { out; } // FIXME: suppress unused warning
     std::string err = GetName() + " should not be serialized";
     assert( !err.c_str()  );
 }
@@ -129,6 +132,7 @@ void                    NodeAddedEvent::Serialize           ( std::ostringstream
 //
 void                    NodeAddedEvent::Deserialize         ( std::istringstream & in )
 {
+    { in; } // FIXME: suppress unused warning
     std::string err = GetName() + " should not be deserialized";
     assert( !err.c_str()  );
 }
@@ -182,6 +186,7 @@ EventType               FrameRenderedEvent::GetEventType        () const
 //
 void                    FrameRenderedEvent::Serialize           ( std::ostringstream & out ) const
 {
+    { out; } // FIXME: suppress unused warning
     std::string err = GetName() + " should not be serialized";
     assert( !err.c_str()  );
 }
@@ -190,6 +195,7 @@ void                    FrameRenderedEvent::Serialize           ( std::ostringst
 //
 void                    FrameRenderedEvent::Deserialize         ( std::istringstream & in )
 {
+    { in; } // FIXME: suppress unused warning
     std::string err = GetName() + " should not be deserialized";
     assert( !err.c_str()  );
 }
@@ -266,6 +272,7 @@ EventType           TransformSetEvent::GetEventType         () const
 //
 void                TransformSetEvent::Serialize            ( std::ostringstream & out ) const
 {
+    { out; } // FIXME: suppress unused warning
     assert( false );
 }
 
@@ -273,6 +280,7 @@ void                TransformSetEvent::Serialize            ( std::ostringstream
 //
 void                TransformSetEvent::Deserialize          ( std::istringstream & in )
 {
+    { in; } // FIXME: suppress unused warning
     assert( false );
 }
 

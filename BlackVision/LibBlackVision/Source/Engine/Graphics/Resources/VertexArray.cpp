@@ -40,7 +40,7 @@ VertexArray::~VertexArray        ()
 
 // *******************************
 //
-int                     VertexArray::NumEntries          () const
+SizeType                VertexArray::NumEntries          () const
 {
     return m_vaoEntries.size();
 }
@@ -120,7 +120,7 @@ void                        VertexArraySingleVertexBuffer::AddCCEntry           
 
 // *******************************
 //
-unsigned int                VertexArraySingleVertexBuffer::GetNumConnectedComponents       () const
+SizeType                    VertexArraySingleVertexBuffer::GetNumConnectedComponents       () const
 {
     return m_ccVertexNum.size();
 }

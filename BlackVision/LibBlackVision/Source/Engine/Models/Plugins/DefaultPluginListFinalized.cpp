@@ -63,7 +63,7 @@ IPluginPtr              DefaultPluginListFinalized::GetLastPlugin       () const
 //
 unsigned int            DefaultPluginListFinalized::NumPlugins          () const
 {
-    return m_plugins.size();
+    return (unsigned int) m_plugins.size();
 }
 
 // *******************************

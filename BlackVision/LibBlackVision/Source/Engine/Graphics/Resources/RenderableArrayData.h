@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "System/BasicTypes.h"
 
 namespace bv
 {
@@ -40,7 +41,7 @@ public:
     virtual VertexDescriptor *          GetVertexDescriptor                     ();
     virtual VertexBuffer *              GetVertexBuffer                         ();
 
-    virtual unsigned int                GetNumConnectedComponents               () const = 0;
+    virtual SizeType                    GetNumConnectedComponents               () const = 0;
     virtual unsigned int                GetNumVerticesInConnectedComponent      ( unsigned int ccNum ) const = 0;
 
 };

@@ -51,7 +51,7 @@ void MovingAverageData::RecalculateStats        ()
 {
     ResetAccumStats();
 
-    double numEltsDouble = (double) samples.size();
+    // double numEltsDouble = (double) samples.size();
 
     for( const auto & sample : samples )
     {
@@ -183,7 +183,7 @@ void    FrameStatsCalculator::RecalculateStats  ()
 {
     for ( auto it : m_samplers )
     {
-        const char * name = it.first;
+        //const char * name = it.first;
         it.second->RecalculateStats();
     }
 }

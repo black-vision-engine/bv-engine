@@ -860,6 +860,7 @@ model::BasicNodePtr          TestScenesFactory::XMLTestScene()
 //
 model::BasicNodePtr      TestScenesFactory::AnimatedTestScene ()
 {
+    /*
     float w = 5.f;
     float h = 1.f;
     float z = 0.f;
@@ -872,7 +873,7 @@ model::BasicNodePtr      TestScenesFactory::AnimatedTestScene ()
     float cyclesY   = 0.7f; //3
     float sizeY     = 1.5f;
     float sizeZ     = 2.f; //0.7
-
+    */
     //float 
     //return AnimatedSolid( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
     return nullptr;
@@ -906,12 +907,13 @@ model::BasicNodePtr      TestScenesFactory::NaiveTimerTestScene         ()
 //
 model::BasicNodePtr      TestScenesFactory::TestSceneVariableTopology   ()
 {
+    /*
     float size              = 1.0f;
     float speed             = 1.5f;
     float oscilationSpeed   = 1.f;
     int numSegments         = 10;
     int numComponents       = 4;
-
+    */
     //return VariableTopologySolids( size, speed, oscilationSpeed, numSegments, numComponents );
     return nullptr;
 }

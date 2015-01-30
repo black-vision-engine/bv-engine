@@ -33,11 +33,15 @@ int w( A * a )
 {
     //&A::b;
     //int k = (char*) (&A::b);
-    int (A::*memberPtr0)(int) = a->get_pptr();
-    int (A::*memberPtr1)() = &A::b;
+    
+    { a; } // FIXME: suppress unused warning
+    //int (A::*memberPtr0)(int) = a->get_pptr();
+    //int (A::*memberPtr1)() = &A::b;
 
-    return (a->*memberPtr0)( 10 );
-    return (a->*memberPtr1)();
+    //return (a->*memberPtr0)( 10 );
+    //return (a->*memberPtr1)();
+
+    return 0;
 };
 
 }

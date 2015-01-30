@@ -130,6 +130,7 @@ void    RendererData::RenderState::InitializeOffsetState    ( const OffsetState 
 //
 void    RendererData::RenderState::InitializeStencilState   ( const StencilState * ss )
 {
+    { ss; } // FIXME: suppress unused warning
     //FIXME: implement
     EnableDisable( false, GL_STENCIL_TEST );
 }

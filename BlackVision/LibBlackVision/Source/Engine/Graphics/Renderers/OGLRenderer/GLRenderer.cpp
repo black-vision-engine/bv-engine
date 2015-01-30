@@ -194,6 +194,7 @@ void Renderer::SetOffsetState   ( const OffsetState * os )
 //
 void Renderer::SetStencilState  ( const StencilState * ss )
 {
+    { ss; } // FIXME: suppress unused warning
     //FIXME: implement
 }
 

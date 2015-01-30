@@ -47,7 +47,7 @@ void        ChannelFromConnectedComponents  ( VertexAttributesChannelPtr channel
     va_list args;
     va_start( args, numComponents );
 
-    unsigned int offset = 0;
+    //unsigned int offset = 0;
 
     for ( unsigned int i = 0; i < numComponents; ++i )
     {

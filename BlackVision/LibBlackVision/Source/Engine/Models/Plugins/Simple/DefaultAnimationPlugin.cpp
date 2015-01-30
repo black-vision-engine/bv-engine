@@ -241,6 +241,7 @@ IVertexShaderChannelConstPtr        DefaultAnimationPlugin::GetVertexShaderChann
 // 
 void                                DefaultAnimationPlugin::Update                      ( TimeType t )
 {
+    { t; } // FIXME: suppress unused variable
     m_paramValModel->Update();
 
     auto attachmentMode = GetAttachementMode();

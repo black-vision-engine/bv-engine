@@ -194,6 +194,7 @@ IVertexShaderChannelConstPtr        DefaultGradientPlugin::GetVertexShaderChanne
 // 
 void                                DefaultGradientPlugin::Update                      ( TimeType t )
 {
+    { t; } // FIXME: suppress unused warning
     m_paramValModel->Update();
 
     if( m_prevPlugin->GetVertexAttributesChannel() && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka

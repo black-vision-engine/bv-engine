@@ -42,6 +42,8 @@ EventType               SetTransformParamsEvent::GetEventType    () const
 //
 void                    SetTransformParamsEvent::Serialize       ( std::ostringstream & out ) const
 {   
+    { out; } // FIXME: suppress unused warning
+
     assert( false );
 }
 
@@ -49,6 +51,8 @@ void                    SetTransformParamsEvent::Serialize       ( std::ostrings
 //
 void                    SetTransformParamsEvent::Deserialize     ( std::istringstream & in )
 {
+    { in; } // FIXME: suppress unused warning
+
     assert( false );
 }
 
@@ -172,6 +176,7 @@ EventType               SetColorParamEvent::GetEventType    () const
 //
 void                    SetColorParamEvent::Serialize       ( std::ostringstream & out ) const
 {
+    { out; } // FIXME: suppress unused warning
     assert( false );
 }
 
@@ -179,6 +184,7 @@ void                    SetColorParamEvent::Serialize       ( std::ostringstream
 //
 void                    SetColorParamEvent::Deserialize     ( std::istringstream & in )
 {
+    { in; } // FIXME: suppress unused warning
     assert( false );
 }
 

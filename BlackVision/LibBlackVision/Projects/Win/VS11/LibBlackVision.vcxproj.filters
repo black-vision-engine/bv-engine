@@ -1673,6 +1673,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.h">
       <Filter>Engine\Models\Resources\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h">
+      <Filter>Mathematics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\System\HerarchicalProfiler.inl">

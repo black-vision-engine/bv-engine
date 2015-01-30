@@ -49,6 +49,7 @@ ParamTransform                      ParametersFactory::CreateParameter          
 //
 ParamTransformVec                   ParametersFactory::CreateParameter                     ( const std::string & name, const TransformF & interpolator, ITimeEvaluatorPtr timeline, int dummy )
 {
+    { dummy; } // FIXME: suppress unused variable
     return ParamTransformVec( name, interpolator, timeline );
 }
 

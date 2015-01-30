@@ -141,7 +141,7 @@ bool    Renderer::DrawRenderable    ( RenderableEntity * ent )
 {
     RenderableEntity::RenderableType type = ent->GetType();
 
-    switch ( ent->GetType() )
+    switch ( type )
     {
     case RenderableEntity::RenderableType::RT_TRIANGLE_STRIP:
         DrawTriangleStrips( static_cast< TriangleStrip * >( ent ) );
