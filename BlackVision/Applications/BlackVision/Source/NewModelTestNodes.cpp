@@ -672,7 +672,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::Ti
 // TEXTURE plugin
 	if( root->GetPlugin( "texture" ) )
 	{
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
+		//success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
 		success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
 		assert( success );
 	}

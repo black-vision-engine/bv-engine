@@ -525,7 +525,7 @@ model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::Plug
 	return rect;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
 	model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
 	root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
