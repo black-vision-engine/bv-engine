@@ -13,7 +13,6 @@
 #include "PieChartNode.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTexturesData.h"
-#include "DefaultVideoInput.h"
 #include "VideoInput/DefaultVideoInputResourceDescr.h"
 #include "VideoInput/ExampleVideoInput.h"
 
