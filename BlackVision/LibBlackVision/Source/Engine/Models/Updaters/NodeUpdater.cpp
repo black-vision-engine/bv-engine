@@ -161,9 +161,7 @@ bool   NodeUpdater::MustBeRegistered        ( IShaderDataSourceConstPtr shaderDa
         return false;
     }
 
-    auto totalNumEntries = animations.size() + textures.size();
-
-    assert( totalNumEntries == shaderParams->NumTextures() );
+    assert( ( animations.size() + textures.size() ) == shaderParams->NumTextures() );
 
     return true;
 }

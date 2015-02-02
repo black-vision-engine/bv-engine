@@ -33,8 +33,8 @@ public:
     void                    AddChildNode        ( SceneNode * child );
     void                    AddTransformable    ( TransformableEntity * transformable );
 
-    SceneNode *             GetChild            ( int idx );
-    TransformableEntity *   GetTransformable    ( int idx );
+    SceneNode *             GetChild            ( unsigned int idx );
+    TransformableEntity *   GetTransformable    ( unsigned int idx );
     TransformableEntity *   GetAnchor           ();
 
     void                    RegisterTransformRep( TransformableEntity * transformable );

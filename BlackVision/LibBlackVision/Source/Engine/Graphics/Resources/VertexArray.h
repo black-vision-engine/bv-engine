@@ -37,7 +37,7 @@ public:
 
     SizeType                NumEntries          () const;
     void                    AddEntry            ( VertexBuffer * vb, VertexDescriptor * vd, unsigned int numVertices, unsigned int vertexBufferOffset );
-    VertexArrayEntry        Entry               ( int i ) const;
+    VertexArrayEntry        Entry               ( unsigned int i ) const;
 
 };
 

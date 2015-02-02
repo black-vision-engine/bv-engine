@@ -54,10 +54,10 @@ void                    VertexArray::AddEntry            ( VertexBuffer * vb, Ve
 
 // *******************************
 //
-VertexArrayEntry        VertexArray::Entry               ( int i ) const
+VertexArrayEntry        VertexArray::Entry               ( unsigned int i ) const
 {
     assert( i >= 0 );
-    assert( i < NumEntries() );
+    assert( i < (unsigned int) NumEntries() );
 
     return m_vaoEntries[ i ];
 }

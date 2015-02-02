@@ -151,9 +151,11 @@ glm::vec4               DefaultAnimationDescriptor::BorderColor         () const
 void                    DefaultAnimationDescriptor::SetBits             ( unsigned int idx, ResourceHandleConstPtr handle )
 {
     auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+    { extraKind; } // FIXME: suppress unused warning
     assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
     auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
+    { texExtra; } // FIXME: suppress unused warning
     assert( texExtra->GetType() == TextureType::T_2D );
 
     assert( texExtra->GetWidth() == GetWidth() );
@@ -176,9 +178,11 @@ void                    DefaultAnimationDescriptor::SetBits             ( unsign
 void                     DefaultAnimationDescriptor::AddBits            ( ResourceHandleConstPtr handle )
 {
     auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+    { extraKind; } // FIXME: suppress unused warning
     assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
     auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
+    { texExtra; } // FIXME: suppress unused warning
     assert( texExtra->GetType() == TextureType::T_2D );
 
     assert( texExtra->GetWidth() == GetWidth() );
@@ -280,9 +284,11 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
     printf( "Loading animation\n" );
 
     auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+    { extraKind; } // FIXME: suppress unused warning
     assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
     auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
+    { texExtra; } // FIXME: suppress unused warning
     assert( texExtra->GetType() == TextureType::T_2D );
 
     auto fmt = texExtra->GetFormat();
@@ -298,6 +304,7 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
         auto handle = LoadFrame( frames[ i ] );
 
         auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+        { extraKind; } // FIXME: suppress unused warning
         assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
         auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );

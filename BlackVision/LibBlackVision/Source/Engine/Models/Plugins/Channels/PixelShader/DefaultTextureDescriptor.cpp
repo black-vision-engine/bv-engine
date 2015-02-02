@@ -23,9 +23,11 @@ DefaultTextureDescriptor::DefaultTextureDescriptor        ( ResourceHandleConstP
     SetName( name );
 
     auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+    { extraKind; } // FIXME: suppress unused warning
     assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
     auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
+    { texExtra; } // FIXME: suppress unused warning
     assert( texExtra->GetType() == TextureType::T_2D );
 
     auto format = texExtra->GetFormat();
@@ -151,9 +153,11 @@ void                    DefaultTextureDescriptor::SetBits           ( ResourceHa
     else
     {
         auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+        { extraKind; } // FIXME: suppress unused warning
         assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
         auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
+        { texExtra; } // FIXME: suppress unused warning
         assert( texExtra->GetType() == TextureType::T_2D );
 
         //auto fmt = texExtra->GetFormat();
