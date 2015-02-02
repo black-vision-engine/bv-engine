@@ -1,4 +1,4 @@
-#include "auxilary.hpp"
+#include "auxiliary.hpp"
 
 // *********************************
 //

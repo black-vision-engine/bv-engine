@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pomocnicze\auxilary.hpp"
+#include "Auxiliary\auxiliary.hpp"
 #include "rapidxml\rapidxml.hpp" //"rapidxml.hpp"
 #include "Scena.h"
 #include <iostream>
