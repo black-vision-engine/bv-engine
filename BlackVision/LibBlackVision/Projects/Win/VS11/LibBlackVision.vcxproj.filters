@@ -1643,9 +1643,6 @@
     <ClInclude Include="..\..\..\Source\Core\Hash.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\oglcore.h">
-      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureCache.h">
       <Filter>Engine\Models\Resources\Texture</Filter>
     </ClInclude>
