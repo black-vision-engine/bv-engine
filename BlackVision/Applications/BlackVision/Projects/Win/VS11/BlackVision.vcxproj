@@ -191,6 +191,8 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestAI.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestAIManager.cpp" />
+    <ClCompile Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.cpp" />
+    <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\Crawler.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.cpp" />
@@ -222,6 +224,9 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClInclude Include="..\..\..\Source\TestAI\IAICommand.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestAI.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestAIManager.h" />
+    <ClInclude Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.h" />
+    <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h" />
+    <ClInclude Include="..\..\..\Source\VideoInput\IVideoInput.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\Crawler.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.h" />

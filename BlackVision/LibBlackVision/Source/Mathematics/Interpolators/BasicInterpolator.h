@@ -6,6 +6,12 @@
 namespace bv
 {
 
+enum class InterpolationMethod : int
+{
+	LINEAR = 0,
+	COSINE
+};
+
 enum class WrapMethod : int
 {
     clamp = 0,
@@ -48,6 +54,7 @@ public:
     typedef ValueT      ValueType;
 
 private:
+	InterpolationMethod				method;
 
     std::vector<Key<TimeValueT, ValueT>>    keys;
     TimeValueT                              tolerance;

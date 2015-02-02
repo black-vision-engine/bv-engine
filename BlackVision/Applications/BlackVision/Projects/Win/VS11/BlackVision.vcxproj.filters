@@ -28,6 +28,12 @@
     <Filter Include="Xml\RapidXml">
       <UniqueIdentifier>{0f9021ce-7cb7-4117-979e-3ec7841526ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="VideoInput">
+      <UniqueIdentifier>{f67ab42f-30e0-4d7a-90ee-0cfaed68a769}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PieCharts">
+      <UniqueIdentifier>{fd129272-37d9-42a7-b86d-f8a467b2b2d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -43,7 +49,6 @@
     <ClCompile Include="..\..\..\Source\ModelInteractionLayer.cpp" />
     <ClCompile Include="..\..\..\Source\NewModelTestNodes.cpp" />
     <ClCompile Include="..\..\..\Source\NewModelTestScenes.cpp" />
-    <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
     <ClCompile Include="..\..\..\Source\StatsFormatters.cpp" />
     <ClCompile Include="..\..\..\Source\Helpers\RectNodeBuilder.cpp">
       <Filter>Helpers</Filter>
@@ -87,6 +92,15 @@
     <ClCompile Include="..\..\..\Source\Xml\Pomocnicze\Auxilary.cpp">
       <Filter>Xml\Pomocnicze</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\PieChartNode.cpp">
+      <Filter>PieCharts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp">
+      <Filter>VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.cpp">
+      <Filter>VideoInput</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -101,7 +115,6 @@
     <ClInclude Include="..\..\..\Source\ModelInteractionEvents.h" />
     <ClInclude Include="..\..\..\Source\ModelInteractionLayer.h" />
     <ClInclude Include="..\..\..\Source\NewModelTestNodes.h" />
-    <ClInclude Include="..\..\..\Source\PieChartNode.h" />
     <ClInclude Include="..\..\..\Source\StatsFormatters.h" />
     <ClInclude Include="..\..\..\Source\Helpers\RectNodeBuilder.h">
       <Filter>Helpers</Filter>
@@ -159,6 +172,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Xml\Pomocnicze\Auxilary.hpp">
       <Filter>Xml\Pomocnicze</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\PieChartNode.h">
+      <Filter>PieCharts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VideoInput\IVideoInput.h">
+      <Filter>VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.h">
+      <Filter>VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h">
+      <Filter>VideoInput</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
