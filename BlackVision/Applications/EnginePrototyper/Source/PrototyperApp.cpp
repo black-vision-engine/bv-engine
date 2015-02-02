@@ -45,6 +45,7 @@ PrototyperApp::~PrototyperApp ()
 //
 void PrototyperApp::OnKey( unsigned char c )
 {
+    { c; } // FIXME: suppress unused warning
 }
 
 // *********************************

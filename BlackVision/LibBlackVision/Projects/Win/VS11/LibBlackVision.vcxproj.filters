@@ -828,6 +828,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.cpp">
       <Filter>Engine\Models\Resources\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.cpp">
+      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Core\MemoryChunk.h">
@@ -1700,9 +1703,6 @@
       <Filter>Engine\Graphics\Shaders</Filter>
     </None>
     <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeShaderChannel.inl">
-      <Filter>Engine\Models\Plugins\Channels</Filter>
-    </None>
-    <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\ShaderChannel.inl">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </None>
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\AbstractModelParameter.inl">
