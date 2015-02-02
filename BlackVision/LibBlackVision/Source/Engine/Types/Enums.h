@@ -142,6 +142,7 @@ enum class PluginResourceType : int
     PRT_TEXTURE = 0,
     PRT_ANIMATION,
     PRT_FONT,
+	PRT_VIDEOINPUT,
 
     PRT_TOTAL
 };
@@ -179,16 +180,6 @@ enum class LoopEventAction : int
     LEA_GOTO,
 
     LEA_TOTAL
-};
-
-enum class MipMapFilterType : int
-{
-	BOX = 0,
-	BILINEAR,
-	B_SPLINE,
-	BICUBIC,
-	CATMULL_ROM,
-	LANCZOS
 };
 
 } // bv

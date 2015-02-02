@@ -111,14 +111,14 @@ std::string             DefaultTexturePluginDesc::UID                       ()
 //
 std::string             DefaultTexturePluginDesc::VertexShaderSource        ()
 {
-    return "Assets/Shaders/Deprecated/defaulttexture.vert";
+	return "Assets/Shaders/Deprecated/defaulttexture.vert";
 }
 
 // *******************************
 //
 std::string             DefaultTexturePluginDesc::PixelShaderSource         ()
 {
-    return "Assets/Shaders/Deprecated/defaulttexture.frag";
+	return "Assets/Shaders/Deprecated/defaulttexture.frag";
 }
 
 // *******************************
@@ -216,6 +216,18 @@ bool                            DefaultTexturePlugin::LoadResource  ( IPluginRes
             return true;
         }
     }
+
+	//auto viResDescr = QueryVideoInputResourceDescr( resDescr );
+
+	//if( viResDescr != nullptr )
+	//{
+	//	auto txData = m_psc->GetTexturesDataImpl();
+	//	assert( txData->GetTextures().size() <= 1 ); // to be safe for now
+	//	
+	//	txData->AddTexture( viResDescr->GetITextureDescriptor() );
+
+	//	return true;
+	//}
 
     return false;
 }
