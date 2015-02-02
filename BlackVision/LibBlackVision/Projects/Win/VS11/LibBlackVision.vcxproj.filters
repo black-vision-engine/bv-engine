@@ -828,6 +828,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.cpp">
       <Filter>Engine\Models\Resources\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Core\MemoryChunk.h">
@@ -1672,6 +1675,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.h">
       <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
