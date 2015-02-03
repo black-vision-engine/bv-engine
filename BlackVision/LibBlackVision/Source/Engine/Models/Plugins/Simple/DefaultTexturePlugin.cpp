@@ -293,6 +293,17 @@ void                                DefaultTexturePlugin::Update                
     auto wY = GetWrapModeY();
     auto fm = GetFilteringMode();
 
+    if( m_prevPlugin->GetVertexAttributesChannel() && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
+    {
+        if( m_vaChannel != nullptr )
+        {
+            m_vaChannel->ClearAll();
+        }
+
+		InitAttributesChannel( m_prevPlugin );	
+		m_vaChannel->SetNeedsTopologyUpdate( true );
+	}
+
     if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() || StateChanged( wX, wY, fm, attachmentMode ) )
     {
         UpdateState( wX, wY, fm, attachmentMode );
