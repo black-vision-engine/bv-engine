@@ -102,9 +102,9 @@ void DefaultPrismPlugin::InitGeometry( int n )
 	//auto prism_up = std::get<1>(prism);
 	//auto prism_down = std::get<2>(prism);
 
-	auto prism1 = std::get<2>(prism);
-	auto prism2 = std::get<0>(prism);
-	auto prism3 = std::get<1>(prism);
+	auto prism1 = std::get<0>(prism);
+	auto prism2 = std::get<1>(prism);
+	auto prism3 = std::get<2>(prism);
 
 // FIXME: it would be more pretty to create empty VertexAttributesChannel in ctor and add a proper descriptor there
 	if( m_vaChannel == NULL )
@@ -115,8 +115,8 @@ void DefaultPrismPlugin::InitGeometry( int n )
 		m_vaChannel->AddConnectedComponent( prism1 );
 	}
 
-	m_vaChannel->AddConnectedComponent( prism2 );
-	m_vaChannel->AddConnectedComponent( prism3 );
+	//m_vaChannel->AddConnectedComponent( prism2 );
+	//m_vaChannel->AddConnectedComponent( prism3 );
 
 	m_lastN = n;
 }

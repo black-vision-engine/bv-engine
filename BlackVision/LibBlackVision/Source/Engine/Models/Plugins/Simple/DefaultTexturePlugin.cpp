@@ -366,8 +366,8 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
         for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
         {
 			pos[ j ].x = pos_[j].x;
-			//pos[ j ].y = pos_[j].y + pos_[j].z;
-			pos[ j ].y = pos_[j].y;
+			pos[ j ].y = pos_[j].y + pos_[j].z;
+			//pos[ j ].y = pos_[j].y;
 			pos[ j ].z = pos_[j].z;
 
             minX = std::min( minX, pos[ j ].x );
