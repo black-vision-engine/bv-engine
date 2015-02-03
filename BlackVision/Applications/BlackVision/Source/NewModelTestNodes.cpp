@@ -684,8 +684,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::Ti
 // TEXTURE plugin
 	if( root->GetPlugin( "texture" ) )
 	{
-		//success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+		success = model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
+		root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
 		assert( success );
 	}
 

@@ -56,8 +56,7 @@ DefaultPluginParamValModelPtr   DefaultPrismPluginDesc::CreateDefaultModel   ( I
     model->SetVertexAttributesChannelModel( vacModel );
 
     //Set default parameters
-    paramN->SetVal( 5.f, 0.f ); // FIXME: this is f*)*(&ing ridiculous!
-								// BTW, this is due to DEFAULT_TEXTURE bug with topology updates ;)
+    paramN->SetVal( 3.f, 0.f );
 
     return model;
 }
@@ -99,21 +98,25 @@ IVertexAttributesChannelConstPtr    DefaultPrismPlugin::GetVertexAttributesChann
 void DefaultPrismPlugin::InitGeometry( int n )
 {
 	auto prism = PrismComponent::Create( n );
-	auto prism_main = std::get<0>(prism);
-	auto prism_up = std::get<1>(prism);
-	auto prism_down = std::get<2>(prism);
+	//auto prism_main = std::get<0>(prism);
+	//auto prism_up = std::get<1>(prism);
+	//auto prism_down = std::get<2>(prism);
+
+	auto prism1 = std::get<2>(prism);
+	auto prism2 = std::get<0>(prism);
+	auto prism3 = std::get<1>(prism);
 
 // FIXME: it would be more pretty to create empty VertexAttributesChannel in ctor and add a proper descriptor there
 	if( m_vaChannel == NULL )
-		m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( prism_main, false );
+		m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( prism1, false );
 	else
 	{
 		m_vaChannel->ClearAll();
-		m_vaChannel->AddConnectedComponent( prism_main );
+		m_vaChannel->AddConnectedComponent( prism1 );
 	}
 
-	m_vaChannel->AddConnectedComponent( prism_up );
-	m_vaChannel->AddConnectedComponent( prism_down );
+	m_vaChannel->AddConnectedComponent( prism2 );
+	m_vaChannel->AddConnectedComponent( prism3 );
 
 	m_lastN = n;
 }

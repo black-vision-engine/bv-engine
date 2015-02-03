@@ -43,17 +43,10 @@ std::tuple< ConnectedComponentPtr, ConnectedComponentPtr, ConnectedComponentPtr 
 		vertArrtF3->AddAttribute( glm::vec3( cos( angle ), 0, sin( angle ) ) ); 
 		vertArrtF3->AddAttribute( glm::vec3( cos( angle ), 1, sin( angle ) ) ); 
 
-		vertArrtUV->AddAttribute( glm::vec2( float( i ) / fragmentsNum, 0 ) );
-		vertArrtUV->AddAttribute( glm::vec2( float( i ) / fragmentsNum, 1 ) );
-
-		//up_vertArrtF3->AddAttribute( glm::vec3( cos( angle ), 0.5, sin( angle ) ) );
-		//up_vertArrtUV->AddAttribute( glm::vec2( float( i ) / fragmentsNum, 1 ) );
-
-		//if( i%2 == 1 )
-		//{
-		//	up_vertArrtF3->AddAttribute( glm::vec3( 0, 0.5, 0 ) );
-		//	up_vertArrtUV->AddAttribute( glm::vec2( 0, 0 ) );
-		//}
+		//vertArrtUV->AddAttribute( glm::vec2( float( i ) / fragmentsNum, 0 ) );
+		//vertArrtUV->AddAttribute( glm::vec2( float( i ) / fragmentsNum, 1 ) );
+		vertArrtUV->AddAttribute( glm::vec2( cos( angle ), sin( angle ) ) );
+		vertArrtUV->AddAttribute( glm::vec2( sin( angle ), cos( angle ) ) );
 	}
 
 // up
@@ -112,13 +105,13 @@ std::tuple< ConnectedComponentPtr, ConnectedComponentPtr, ConnectedComponentPtr 
 // and end
 
     comp->AddAttributeChannel( AttributeChannelPtr( vertArrtF3 ) );
-	comp->AddAttributeChannel( AttributeChannelPtr( vertArrtUV ) );
+	//comp->AddAttributeChannel( AttributeChannelPtr( vertArrtUV ) );
 
 	comp_up->AddAttributeChannel( AttributeChannelPtr( up_vertArrtF3 ) );
-	comp_up->AddAttributeChannel( AttributeChannelPtr( up_vertArrtUV ) );
+	//comp_up->AddAttributeChannel( AttributeChannelPtr( up_vertArrtUV ) );
 	
 	comp_down->AddAttributeChannel( AttributeChannelPtr( down_vertArrtF3 ) );
-	comp_down->AddAttributeChannel( AttributeChannelPtr( down_vertArrtUV ) );
+	//comp_down->AddAttributeChannel( AttributeChannelPtr( down_vertArrtUV ) );
 	
 	return std::make_tuple( comp, comp_up, comp_down );
 }

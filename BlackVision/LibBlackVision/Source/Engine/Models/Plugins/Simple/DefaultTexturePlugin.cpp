@@ -262,6 +262,17 @@ void                                DefaultTexturePlugin::Update                
 
     auto attachmentMode = GetAttachementMode();
 
+    if( m_prevPlugin->GetVertexAttributesChannel() && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
+    {
+        if( m_vaChannel != nullptr )
+        {
+            m_vaChannel->ClearAll();
+        }
+
+		InitAttributesChannel( m_prevPlugin );	
+		m_vaChannel->SetNeedsTopologyUpdate( true );
+	}
+
     if( attachmentMode == TextureAttachmentMode::MM_FREE )
     {
         if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
@@ -280,7 +291,7 @@ void                                DefaultTexturePlugin::Update                
 
                         for( unsigned int i = 0; i < verts.size(); ++i )
                         {
-                            uvs[ i ].x = verts[ i ].x;
+                            uvs[ i ].x = verts[ i ].x + verts[ i ].z;
                             uvs[ i ].y = verts[ i ].y;
                         }
                     }
@@ -292,17 +303,6 @@ void                                DefaultTexturePlugin::Update                
     auto wX = GetWrapModeX();
     auto wY = GetWrapModeY();
     auto fm = GetFilteringMode();
-
-    if( m_prevPlugin->GetVertexAttributesChannel() && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
-    {
-        if( m_vaChannel != nullptr )
-        {
-            m_vaChannel->ClearAll();
-        }
-
-		InitAttributesChannel( m_prevPlugin );	
-		m_vaChannel->SetNeedsTopologyUpdate( true );
-	}
 
     if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() || StateChanged( wX, wY, fm, attachmentMode ) )
     {
@@ -359,10 +359,16 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
         float minX = 100000.0f, minY = 100000.0f;
         float maxX = 0.0f, maxY = 0.0f;
 
+        const glm::vec3 * pos_ = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
+		glm::vec3 * pos = new glm::vec3[ prevCompChannels[ 0 ]->GetNumEntries() ];
+
         //convex hull - make sure that prevCompChannels[ 0 ] is indeed a positional channel
         for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
         {
-            const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
+			pos[ j ].x = pos_[j].x;
+			//pos[ j ].y = pos_[j].y + pos_[j].z;
+			pos[ j ].y = pos_[j].y;
+			pos[ j ].z = pos_[j].z;
 
             minX = std::min( minX, pos[ j ].x );
             minY = std::min( minY, pos[ j ].y );
@@ -374,7 +380,6 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
 
         for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
         {
-            const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
             verTexAttrChannel->AddAttribute( glm::vec2( ( pos[ j ].x - minX ) / ( maxX - minX ), ( pos[ j ].y - minY ) / ( maxY - minY ) ) );
         }
 
