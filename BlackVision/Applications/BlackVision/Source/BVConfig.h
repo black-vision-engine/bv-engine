@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include <glm/glm.hpp>
+#include "Mathematics/glm_inc.h"
 
 
 namespace bv

@@ -21,7 +21,7 @@ RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, unsig
 
     //int numLevels = hasMipmaps ? 0 : 1;
 
-    for( int i = 0; i < m_numTargets; ++i )
+    for( SizeType i = 0; i < m_numTargets; ++i )
     {
         auto tx = std::make_shared< Texture2DImpl >( formats[ i ], w, h, DataBuffer::Semantic::S_TEXTURE_STATIC );
         tx->SetRawData( MemoryChunk::EMPTY(), formats[ i ], w, h ); //FIXME: empty pointer (this memory was never used as it is supposed only to serve as a key for Renderer).
@@ -49,7 +49,7 @@ RenderTarget::RTSemantic  RenderTarget::Semantic  () const
 //
 unsigned int RenderTarget::NumTargets () const
 {
-    return m_numTargets;
+    return (unsigned int) m_numTargets;
 }
 
 // *********************************

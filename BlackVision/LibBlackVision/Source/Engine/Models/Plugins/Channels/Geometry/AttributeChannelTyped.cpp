@@ -33,7 +33,7 @@ bool                    Float3AttributeChannel::IsReadOnly   () const
 //
 unsigned int            Float3AttributeChannel::GetNumEntries()   const
 {
-    return m_attributes.size();
+    return (unsigned int) m_attributes.size();
 }
 
 // *********************************
@@ -87,7 +87,7 @@ bool                    Float2AttributeChannel::IsReadOnly   () const
 //
 unsigned int            Float2AttributeChannel::GetNumEntries()   const
 {
-    return m_attributes.size();
+    return (unsigned int) m_attributes.size();
 }
 
 // *********************************

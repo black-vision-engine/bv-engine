@@ -1,4 +1,5 @@
 syntax: glob
+*.favdoc
 *.sdf
 *.suo
 *.opensdf

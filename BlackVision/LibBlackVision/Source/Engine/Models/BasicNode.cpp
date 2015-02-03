@@ -349,8 +349,7 @@ bool            BasicNode::AddPlugin               ( const std::string & uid, IT
 
     if( !m_pluginsManager->CanBeAttachedTo( uid, prev ) )
     {
-		throw ( uid + " cannot be attached to " + prev->GetTypeUid() );
-        return false;
+		throw ( uid + " cannot be attached to " + prev->GetTypeUid() ); //FIXME: we do not use exceptions !!!!
     }
 
     m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, prev, timeEvaluator ) );
@@ -568,14 +567,15 @@ bool                                BasicNode::CreateRenderableData     (/* Vert
     assert( false );
     *vao = new VertexArray();
 
-    int channelLoc = 0;
+    // int channelLoc = 0;
 
     for( auto attrCh : attribChannels )
     {
         auto desc       = attrCh->GetDescriptor();
         
-        VertexDescriptor*   vd = VertexDescriptor::Create( 1, channelLoc++, desc->GetType(), desc->GetSemantic(), (int)desc->GetSemantic());
-        VertexBuffer*       vb = new VertexBuffer( vertNum, desc->GetEntrySize() );
+        // FIXME: WTF - why vd is created here
+        // VertexDescriptor *   vd = VertexDescriptor::Create( 1, channelLoc++, desc->GetType(), desc->GetSemantic(), (int)desc->GetSemantic());
+        VertexBuffer *       vb = new VertexBuffer( vertNum, desc->GetEntrySize() );
 
         vb->WriteToBuffer( attrCh->GetData(), attrCh->GetNumEntries() * desc->GetEntrySize() );
 

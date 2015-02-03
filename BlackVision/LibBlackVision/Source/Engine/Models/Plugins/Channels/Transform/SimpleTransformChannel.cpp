@@ -21,6 +21,7 @@ SimpleTransformChannel::SimpleTransformChannel  ( const ParamTransformVec & para
 //
 void                                    SimpleTransformChannel::Update( TimeType t )
 {
+    { t; } // FIXME: suppress unused variable
     assert( m_transformParams.NumTransforms() == m_transformations.size() );
 
     for( unsigned int i = 0; i < m_transformations.size(); ++i )

@@ -62,6 +62,7 @@ IPluginParamValModelPtr             DefaultFinalizePlugin::GetPluginParamValMode
 //
 IParameterPtr                       DefaultFinalizePlugin::GetParameter                 ( const std::string & name ) const
 {
+    { name; } // FIXME: suppress unuse warning
     return nullptr;
 }
 
@@ -69,6 +70,7 @@ IParameterPtr                       DefaultFinalizePlugin::GetParameter         
 //
 bv::IValueConstPtr                  DefaultFinalizePlugin::GetValue                    ( const std::string & name ) const
 {
+    { name; } // FIXME: suppress unuse warning
     return nullptr;
 }
 
@@ -221,6 +223,7 @@ bool                                DefaultFinalizePlugin::LoadResource         
 //
 void                                DefaultFinalizePlugin::Update                       ( TimeType t )
 {
+    { t; } // FIXME: suppress unuse warning
     //TODO: implement if there is logic that should be run
 }
 

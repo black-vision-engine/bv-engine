@@ -76,7 +76,7 @@ void PdrShader::Enable         ( Renderer * renderer )
 
     //FIXME: possibly use numSamplers somehow (debug and/or logging)
     int numSamplers = EnableTextureSamplers( renderer );
-
+    { numSamplers; } // FIXME: suppress unused warning
     //m_program->PrintActiveUniforms();
     //m_program->PrintActiveAttribs();
 }

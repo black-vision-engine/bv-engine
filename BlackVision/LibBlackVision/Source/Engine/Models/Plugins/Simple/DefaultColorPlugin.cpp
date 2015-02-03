@@ -84,6 +84,7 @@ IPixelShaderChannelConstPtr         DefaultColorPlugin::GetPixelShaderChannel   
 //
 void                                DefaultColorPlugin::Update                      ( TimeType t )
 {
+    { t; } // FIXME: suppress unused variable
     m_paramValModel->Update();
     m_pixelShaderChannel->PostUpdate();
 }

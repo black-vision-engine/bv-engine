@@ -111,7 +111,7 @@ inline  void    NodeUpdater::UpdatePositions     ()
 
     VertexArraySingleVertexBuffer * vao = rad->VAO                  (); 
     VertexBuffer * vb                   = vao->GetVertexBuffer      ();
-    const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
+    // const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
 
     auto vaChannel  = m_vertexAttributesChannel;
     auto components = vaChannel->GetComponents();
@@ -166,7 +166,7 @@ inline  void    NodeUpdater::UpdateTopology      ()
 
     VertexArraySingleVertexBuffer * vao = radasvb->VAO              ();
     VertexBuffer * vb                   = vao->GetVertexBuffer      ();
-    const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
+    // const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
 
     vb->Reinitialize( totalNumVertivces, geomDesc->SingleVertexEntrySize(), vbSemantic );
     vao->ResetState();

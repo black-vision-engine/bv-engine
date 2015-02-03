@@ -15,7 +15,13 @@
 #include "Engine/Models/Resources/ModelTextureManager.h"
 #include "Engine/Models/Resources/IResource.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4512)
+#pragma warning(disable : 4267)
+
 #include "hashlibpp.h"
+
+#pragma warning(pop)
 
 namespace bv { namespace model {
 
@@ -140,8 +146,11 @@ void                    FontAtlasCache::InitFontCachedTable ()
 namespace
 {
 
-int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
+int GetEntryCallback( void * data, int argsNum, char ** args, char ** columnName )
 {
+    { columnName; } // FIXME: suppress unused warning
+    { argsNum; } // FIXME: suppress unused warning
+
     auto out = static_cast< FontAtlasCacheEntry * >( data );
 
     assert( argsNum == 9 );
@@ -167,8 +176,9 @@ int GetEntryCallback( void* data, int argsNum, char** args, char** columnName )
 }
 // *********************************
 //
-FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, const std::string& fontFileName, bool bold, bool italic )
+FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, const std::string & fontFileName, bool bold, bool italic )
 {
+    { fontFileName; } // FIXME: suppress unused warning
     if( !m_dataBase )
     {
         m_dataBase = OpenDataBase( m_cacheFile );
@@ -204,14 +214,20 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fo
 		auto height = ret->m_textAtlas->GetHeight();
 		auto bbp	= ret->m_textAtlas->GetBitsPerPixel();
 
-		TextureFormat tf;
+        TextureFormat tf = TextureFormat::F_TOTAL;
 
 		if( bbp == 8 )
+        {
 			tf = TextureFormat::F_A8;
-		else if ( bbp = 32 )
-			tf = TextureFormat::F_A8R8G8B8;
+        }
+		else if ( bbp == 32 ) // FIXME: no brabo KURWA :P if ( bbp = 32 )
+        {
+            tf = TextureFormat::F_A8R8G8B8;
+        }
 		else
+        {
 			assert(false);
+        }
 
 		auto resExtra = new TextureExtraData( width, height, bbp, tf, TextureType::T_2D );
 		auto memChunk = TextureHelper::LoadRAW( ret->m_atlasFilePath );
@@ -221,15 +237,17 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string& fo
 		return ret;
 	}
     else
+    {
         return nullptr;
-    
+    }
 }
 
 namespace
 {
 
-int AddEntryCallback( void* data, int argsNum, char** args, char** columnName )
+int AddEntryCallback( void * data, int argsNum, char ** args, char ** columnName )
 {
+    { columnName; args; data; argsNum; } // FIXME: suppress unused warning
     return 0;
 }
 
@@ -239,6 +257,7 @@ int AddEntryCallback( void* data, int argsNum, char** args, char** columnName )
 //
 void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEntry& data, bool forceInvalidate )
 {
+    { forceInvalidate; } // FIXME: suppress unused warning
     if( !m_dataBase )
     {
         m_dataBase = OpenDataBase( m_cacheFile );
@@ -269,17 +288,17 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
 
     TextureHelper::WriteRAW( fontAtlasTextureFileName, data.m_textAtlas->GetData() );
 
-    sqlite3_stmt* stmt;
-    const char* parsed;
+    sqlite3_stmt * stmt = nullptr;
+    const char * parsed = nullptr;
 
-    auto res = sqlite3_prepare( m_dataBase, sqlAdd.c_str(), sqlAdd.size(), &stmt, &parsed);
+    auto res = sqlite3_prepare( m_dataBase, sqlAdd.c_str(), (int) sqlAdd.size(), &stmt, &parsed);
     if( res != SQLITE_OK )
     {
         std::cerr << "SQL Error: " << "prepare" << std::endl;
         return;
     }
 
-    res = sqlite3_bind_blob(stmt, 1, textAtlasStr.c_str(), textAtlasStr.size(), SQLITE_TRANSIENT);
+    res = sqlite3_bind_blob( stmt, 1, textAtlasStr.c_str(), (int) textAtlasStr.size(), SQLITE_TRANSIENT);
 
     if( res != SQLITE_OK )
     {

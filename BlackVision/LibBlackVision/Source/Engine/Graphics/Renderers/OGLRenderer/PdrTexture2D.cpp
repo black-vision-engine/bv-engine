@@ -114,6 +114,7 @@ PdrTexture2D::~PdrTexture2D   ()
 //
 void            PdrTexture2D::Enable        ( Renderer * renderer, int textureUnit )
 {
+    { renderer; } // FIXME: suppress unused
     glActiveTexture( GL_TEXTURE0 + textureUnit );
     m_prevTextureID = Bind();
 }
@@ -122,6 +123,7 @@ void            PdrTexture2D::Enable        ( Renderer * renderer, int textureUn
 //
 void            PdrTexture2D::Disable       ( Renderer * renderer, int textureUnit )
 {
+    { renderer; } // FIXME: suppress unused
     glActiveTexture ( GL_TEXTURE0 + textureUnit );
     Unbind();
 }

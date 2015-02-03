@@ -22,12 +22,12 @@ public:
     
     bool                        AddTextureSettingRawData( MemoryChunkConstPtr data, TextureFormat format, unsigned int width, unsigned int height );
 
-    unsigned int                NumTextures             () const;
+    SizeType                    NumTextures             () const;
 
     void                        SetActiveTexture        ( unsigned int txNum );
     unsigned int                GetActiveTextureNum     () const;
 
-    virtual size_t              GetDataSize             () const override;
+    virtual SizeType            GetDataSize             () const override;
 
     virtual MemoryChunkConstPtr GetData                 () const override;
 

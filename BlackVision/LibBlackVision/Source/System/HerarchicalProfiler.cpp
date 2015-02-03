@@ -147,6 +147,7 @@ const ProfilerSample *   AutoProfile::AveragedSamples ()
     for( unsigned int i = 0; i < numFrames; ++i )
     {
         auto dummy = OneFrameSamples( i );
+        { dummy; } //FIXME: suppress warning
     }
 
     unsigned int numSamples = NumSamples();

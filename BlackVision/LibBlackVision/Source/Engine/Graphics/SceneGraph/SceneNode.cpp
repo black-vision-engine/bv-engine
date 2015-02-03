@@ -34,55 +34,55 @@ SceneNode::~SceneNode          ()
 
 // ********************************
 //
-int                     SceneNode::NumChildrenNodes    () const
+SizeType                SceneNode::NumChildrenNodes    () const
 {
     return m_sceneNodes.size();
 }
 
 // ********************************
 //
-int                     SceneNode::NumTransformables   () const
+SizeType                SceneNode::NumTransformables   () const
 {
     return m_transformables.size();
 }
 
 // ********************************
 //
-void                    SceneNode::AddChildNode        ( SceneNode * child )
+void                    SceneNode::AddChildNode         ( SceneNode * child )
 {
     m_sceneNodes.push_back( child );
 }
 
 // ********************************
 //
-void                    SceneNode::AddTransformable    ( TransformableEntity * transformable )
+void                    SceneNode::AddTransformable     ( TransformableEntity * transformable )
 {
     m_transformables.push_back( transformable );
 }
 
 // ********************************
 //
-SceneNode *             SceneNode::GetChild            ( int idx )
+SceneNode *             SceneNode::GetChild             ( unsigned int idx )
 {
     assert( idx >= 0 );
-    assert( idx < NumChildrenNodes() );
+    assert( idx < (unsigned int) NumChildrenNodes() );
 
     return m_sceneNodes[ idx ];
 }
 
 // ********************************
 //
-TransformableEntity *   SceneNode::GetTransformable    ( int idx )
+TransformableEntity *   SceneNode::GetTransformable     ( unsigned int idx )
 {
     assert( idx >= 0 );
-    assert( idx < NumTransformables() );
+    assert( idx < (unsigned int) NumTransformables() );
 
     return m_transformables[ idx ];
 }
 
 // ********************************
 //
-TransformableEntity *   SceneNode::GetAnchor    ()
+TransformableEntity *   SceneNode::GetAnchor            ()
 {
     return m_transformRep;
 }

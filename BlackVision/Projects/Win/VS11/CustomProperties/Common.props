@@ -3,8 +3,8 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir>$(BuildDir)\$(Platform)-$(PlatformToolset)-$(Configuration)\$(ProjectName)\</OutDir>
-    <IntDir>$(TempDir)\$(Platform)-$(PlatformToolset)-$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>$(BuildDir)\$(Platform)-$(PlatformToolset)-$(Configuration)\$(ProjectCategory)\$(ProjectName)\</OutDir>
+    <IntDir>$(TempDir)\$(Platform)-$(PlatformToolset)-$(Configuration)\$(ProjectCategory)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -14,7 +14,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <SDLCheck>false</SDLCheck>
-      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />

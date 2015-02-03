@@ -4,7 +4,7 @@
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 #include "Engine/Models/Interfaces/IModelNode.h"
 
-#include  "glm/glm.hpp"
+#include  "Mathematics/glm_inc.h"
 
 
 namespace bv

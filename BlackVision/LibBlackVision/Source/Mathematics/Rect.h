@@ -1,7 +1,7 @@
 #pragma once
 
 #include "System/BasicTypes.h"
-#include "glm/glm.hpp"
+#include "Mathematics/glm_inc.h"
 
 #include <algorithm>
 

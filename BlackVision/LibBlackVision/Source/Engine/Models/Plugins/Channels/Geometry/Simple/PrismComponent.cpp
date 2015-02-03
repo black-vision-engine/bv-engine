@@ -67,7 +67,7 @@ std::tuple< ConnectedComponentPtr, ConnectedComponentPtr, ConnectedComponentPtr 
 	up_vertArrtUV->AddAttribute( uvs[ 2*0 ] );
 	up_vertArrtUV->AddAttribute( uvs[ 2*1 ] );
 	up_vertArrtUV->AddAttribute( uvs[ 2*2 ] );
-	int i;
+	SizeType i;
 	for( i = 0; i < (n-3)/2; i++ )
 	{
 		up_vertArrtF3->AddAttribute( vertices[ 2*( n-1 - i ) ] );

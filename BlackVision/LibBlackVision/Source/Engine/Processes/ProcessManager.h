@@ -25,7 +25,7 @@ public:
 
     void            AbortAll            ( bool immediateFlag );
 
-	unsigned int    GetProcessCount     () const;
+	SizeType        GetProcessCount     () const;
 
 private:
 

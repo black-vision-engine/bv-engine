@@ -87,6 +87,7 @@ ITransformChannelConstPtr           DefaultTransformPlugin::GetTransformChannel 
 //
 void                                DefaultTransformPlugin::Update                      ( TimeType t )
 {
+    { t; } // FIXME: suppress unused warning
     m_paramValModel->Update();
     m_transformChannel->PostUpdate();
 }

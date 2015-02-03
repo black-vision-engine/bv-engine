@@ -53,14 +53,14 @@ void                     RenderableArrayDataArraysSingleVertexBuffer::SetVAO    
 
 // *********************************
 //
-unsigned int             RenderableArrayDataArraysSingleVertexBuffer::GetNumConnectedComponents () const
+SizeType                RenderableArrayDataArraysSingleVertexBuffer::GetNumConnectedComponents () const
 {
     return m_vao->GetNumConnectedComponents();
 }
 
 // *********************************
 //
-unsigned int             RenderableArrayDataArraysSingleVertexBuffer::GetNumVerticesInConnectedComponent ( unsigned int ccNum ) const
+unsigned int            RenderableArrayDataArraysSingleVertexBuffer::GetNumVerticesInConnectedComponent ( unsigned int ccNum ) const
 {
     return m_vao->GetNumVertices( ccNum );
 }

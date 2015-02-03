@@ -23,14 +23,16 @@ DefaultTextureDescriptor::DefaultTextureDescriptor        ( ResourceHandleConstP
     SetName( name );
 
     auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+    { extraKind; } // FIXME: suppress unused warning
     assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
     auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
+    { texExtra; } // FIXME: suppress unused warning
     assert( texExtra->GetType() == TextureType::T_2D );
 
     auto format = texExtra->GetFormat();
-    auto width  = texExtra->GetWidth();
-    auto height = texExtra->GetHeight();
+    auto width  = (unsigned int) texExtra->GetWidth();
+    auto height = (unsigned int) texExtra->GetHeight();
 
     SetWidth( width );
     SetHeight( height );
@@ -151,14 +153,16 @@ void                    DefaultTextureDescriptor::SetBits           ( ResourceHa
     else
     {
         auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+        { extraKind; } // FIXME: suppress unused warning
         assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
         auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
+        { texExtra; } // FIXME: suppress unused warning
         assert( texExtra->GetType() == TextureType::T_2D );
 
-        auto fmt = texExtra->GetFormat();
-        auto w  = texExtra->GetWidth();
-        auto h = texExtra->GetHeight();
+        //auto fmt = texExtra->GetFormat();
+        auto w  = (unsigned int) texExtra->GetWidth();
+        auto h  = (unsigned int) texExtra->GetHeight();
 
         m_params.SetWidth( w );
         m_params.SetHeight( h );

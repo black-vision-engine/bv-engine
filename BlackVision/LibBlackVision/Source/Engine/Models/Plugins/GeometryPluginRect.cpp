@@ -43,6 +43,7 @@ void                        GeometryRectPlugin::Update              ( TimeType t
 //
 void                        GeometryRectPlugin::Print               ( std::ostream & out, int tabs ) const
 {
+    { tabs; out; } // FIXME: suppress unused variable
 }
 
 

@@ -24,7 +24,7 @@ public:
     VertexArraySingleVertexBuffer *         VAO                                             ();
     void                                    SetVAO                                          ( VertexArraySingleVertexBuffer * vao );
 
-    virtual unsigned int                    GetNumConnectedComponents                       () const;
+    virtual SizeType                        GetNumConnectedComponents                       () const;
     virtual unsigned int                    GetNumVerticesInConnectedComponent              ( unsigned int ccNum ) const;
 
 };

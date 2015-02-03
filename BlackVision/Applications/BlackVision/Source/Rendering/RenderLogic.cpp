@@ -193,7 +193,7 @@ void    RenderLogic::DrawNodeOnly   ( Renderer * renderer, SceneNode * node )
 {
     renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
 
-    for( int i = 0; i < node->NumTransformables(); ++i )
+    for( unsigned int i = 0; i < (unsigned int) node->NumTransformables(); ++i )
     {
         HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
         renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
@@ -204,7 +204,7 @@ void    RenderLogic::DrawNodeOnly   ( Renderer * renderer, SceneNode * node )
 //
 void    RenderLogic::DrawChildren   ( Renderer * renderer, SceneNode * node, int firstChildIdx )
 {
-    for ( int i = firstChildIdx; i < node->NumChildrenNodes(); i++ )
+    for ( unsigned int i = firstChildIdx; i < (unsigned int) node->NumChildrenNodes(); i++ )
     {
         HPROFILER_SECTION( "RenderNode::RenderNode" );
         RenderNode( renderer, node->GetChild( i ) ); 
@@ -251,7 +251,7 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 
     if( nFrames % 50 == 0 )
     {
-        double avg = totalElapsed / (double) nFrames;
+        //double avg = totalElapsed / (double) nFrames;
 
         nPasses++;
         totalElapsed = 0.0;

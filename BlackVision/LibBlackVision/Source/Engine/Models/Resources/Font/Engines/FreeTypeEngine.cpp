@@ -260,9 +260,9 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 				Int32 bearingY	= m_face->glyph->metrics.horiBearingY >> 6;
 
 				// Get some metrics of our image.
-				int imgWidth = (int)rect.Width(),
-					imgHeight = (int)rect.Height(),
-					imgSize = imgWidth * imgHeight;
+				//int imgWidth = (int)rect.Width(),
+				//	imgHeight = (int)rect.Height(),
+				//	imgSize = imgWidth * imgHeight;
 
 				auto newGlyph = new Glyph();
 
@@ -343,10 +343,10 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlin
 
 	memset( atlasData, 0, altlasWidth * altlasHeight * 4 );
 
-    auto atlasColumns  =  altlasWidth / maxWidth;
+    // auto atlasColumns  =  altlasWidth / maxWidth;
 
-	Int32 x = 0;
-	Int32 y = 0;
+	// Int32 x = 0;
+	// Int32 y = 0;
 
 	char * currAddress = atlasData;
 

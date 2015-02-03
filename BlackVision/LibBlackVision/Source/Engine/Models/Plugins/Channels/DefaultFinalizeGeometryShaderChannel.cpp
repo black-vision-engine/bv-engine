@@ -21,6 +21,8 @@ DefaultFinalizeGeometryShaderChannel::~DefaultFinalizeGeometryShaderChannel     
 //
 std::string DefaultFinalizeGeometryShaderChannel::GetShaderSource               ( const std::vector< std::string > & uids )  const
 {
+    { uids; } // FIXME: suppress unused variable
+
     assert( false );
 
     return "";

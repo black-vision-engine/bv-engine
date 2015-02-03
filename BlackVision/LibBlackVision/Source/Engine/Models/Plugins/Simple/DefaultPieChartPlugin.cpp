@@ -79,7 +79,7 @@ std::string                     DefaultPieChartPluginDesc::UID                  
 // *************************************
 //
 DefaultPieChartPlugin::DefaultPieChartPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
-	: BasePlugin< IPlugin >( name, DefaultPieChartPluginDesc::UID(), prev, model )
+	: BasePlugin< IPlugin >( name, uid, prev, model )
 {
 	auto asParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "angleStart" );
 	assert( asParam );
@@ -136,8 +136,13 @@ void GenerateSide( Float3AttributeChannelPtr verts )
 
 class GenerateBaseUV : public IGeometryAndUVsGenerator 
 {
+private:
+
+    // FIXME: use m_ prefix for instance variables !!!!
 	double z;
+
 public:
+
 	GenerateBaseUV( double z_ ) : z( z_ ) { }
 
 	void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
@@ -228,23 +233,26 @@ void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
 
 	angleStart = angleStart_;
 	angleEnd = angleEnd_; 
-	dangle = PI/120; // FIXME: variable? 
+	dangle = PI / 120.0; // FIXME: variable? 
 	
-	channel->GenerateAndAddConnectedComponent( GenerateBaseUV( z1 ) );
+    auto gen0 = GenerateBaseUV( z1 );
+    auto gen1 = GenerateBaseUV( z2 );
+    auto gen2 = GenerateSideUV( z1, z2, angleStart);
+    auto gen3 = GenerateSideUV( z1, z2, angleEnd );
+    auto gen4 = GenerateRoundSideUV( angleStart, angleEnd, z1, z2 );
 
-	channel->GenerateAndAddConnectedComponent( GenerateBaseUV( z2 ) );
-	
-	channel->GenerateAndAddConnectedComponent( GenerateSideUV( z1, z2, angleStart) );
-
-	channel->GenerateAndAddConnectedComponent( GenerateSideUV( z1, z2, angleEnd ) );
-
-	channel->GenerateAndAddConnectedComponent( GenerateRoundSideUV( angleStart, angleEnd, z1, z2 ) );
+	channel->GenerateAndAddConnectedComponent( gen0 );
+	channel->GenerateAndAddConnectedComponent( gen1 );
+	channel->GenerateAndAddConnectedComponent( gen2 );
+	channel->GenerateAndAddConnectedComponent( gen3 );
+	channel->GenerateAndAddConnectedComponent( gen4 );
 }
 
 // *************************************
 //
 void                                DefaultPieChartPlugin::Update                      ( TimeType t )
 {
+    { t; } // FIXME: suppress unused warning
 	m_pluginParamValModel->Update();
 
 	auto asParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "angleStart" );

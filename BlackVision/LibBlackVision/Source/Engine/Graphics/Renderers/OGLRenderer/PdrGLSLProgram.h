@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Engine/Graphics/Renderers/OGLRenderer/oglcore.h"
+#include <gl\glew.h>
 
 #include <string>
 #include <map>
 #include <hash_map>
 
-using std::string;
+#include "Mathematics/glm_inc.h"
 
-#include <glm/glm.hpp>
+using std::string;
 
 using glm::vec2;
 using glm::vec3;

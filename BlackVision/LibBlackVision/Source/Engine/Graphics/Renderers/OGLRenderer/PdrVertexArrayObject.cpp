@@ -35,7 +35,7 @@ PdrVertexArrayObject::PdrVertexArrayObject    ( Renderer * renderer, const Verte
 
     glGenVertexArrays( 1, &m_vaoHandle );
 
-    GLuint index = 0;
+    // GLuint index = 0;
 
     Bind();
 
@@ -68,6 +68,7 @@ PdrVertexArrayObject::~PdrVertexArrayObject   ()
 //
 void    PdrVertexArrayObject::Enable                  ( Renderer * renderer )
 {
+    { renderer; } // FIXME: suppress unused
     Bind();
 }
 
@@ -75,6 +76,7 @@ void    PdrVertexArrayObject::Enable                  ( Renderer * renderer )
 //
 void    PdrVertexArrayObject::Disable                 ( Renderer * renderer )
 {
+    { renderer; } // FIXME: suppress unused
     Unbind();
 }
 

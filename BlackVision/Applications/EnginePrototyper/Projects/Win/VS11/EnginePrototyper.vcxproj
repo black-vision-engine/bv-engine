@@ -55,8 +55,8 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.Win32.debug.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.Win32.debug.props" />
@@ -64,8 +64,8 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.x64.debug.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.x64.debug.props" />
@@ -73,8 +73,8 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.Win32.release.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.Win32.release.props" />
@@ -82,8 +82,8 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.x64.release.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.x64.release.props" />
@@ -134,6 +134,12 @@
     <ProjectReference Include="..\..\..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj">
       <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\PrototyperApp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

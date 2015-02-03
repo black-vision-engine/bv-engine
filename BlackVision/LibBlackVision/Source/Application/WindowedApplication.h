@@ -2,7 +2,7 @@
 
 #include "ApplicationBase.h"
 #include <string>
-#include <glm/glm.hpp>
+#include "Mathematics/glm_inc.h"
 #include <Windows.h>
 
 namespace bv

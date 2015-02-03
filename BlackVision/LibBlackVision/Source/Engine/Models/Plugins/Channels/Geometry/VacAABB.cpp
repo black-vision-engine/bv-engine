@@ -16,7 +16,7 @@ bool				AABB( const IVertexAttributesChannel * vac, const glm::mat4 & trans, mat
 		if( desc->GetAttrChannelDescriptor( 0 )->GetSemantic() == AttributeSemantic::AS_POSITION )
 			if( desc->GetAttrChannelDescriptor( 0 )->GetType() == AttributeType::AT_FLOAT3 )
 			{
-				auto numOfVerts = vac->TotalNumVertices();
+				//auto numOfVerts = vac->TotalNumVertices();
 
 				auto ccs = vac->GetComponents();
 

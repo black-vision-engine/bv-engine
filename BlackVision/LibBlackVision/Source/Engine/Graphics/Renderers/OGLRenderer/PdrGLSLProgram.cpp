@@ -1,21 +1,23 @@
 #include "PdrGLSLProgram.h"
 
-#include "Engine/Graphics/Renderers/OGLRenderer/glutils.h"
+#include <sys/stat.h>
 
 #include <fstream>
-using std::ifstream;
-using std::ios;
-
 #include <sstream>
-using std::ostringstream;
 
-#include <sys/stat.h>
+#include "Engine/Graphics/Renderers/OGLRenderer/glutils.h"
 
 #include "Engine/Graphics/Shaders/PixelShader.h"
 #include "Engine/Graphics/Shaders/VertexShader.h"
 #include "Engine/Graphics/Shaders/GeometryShader.h"
 
+
+using std::ifstream;
+using std::ios;
+using std::ostringstream;
+
 const bool GVerboseLogging = false;
+
 
 namespace bv {
 
@@ -424,7 +426,8 @@ PdrGLSLProgram *  PdrGLSLPrograms::getProgram( PixelShader * ps, VertexShader * 
 //
 PdrGLSLPrograms & PdrGLSLPrograms::get()
 {
-    static PdrGLSLPrograms & instance = PdrGLSLPrograms();
+    //static PdrGLSLPrograms & instance = PdrGLSLPrograms();
+    static PdrGLSLPrograms instance = PdrGLSLPrograms();
 
     return instance;
 }

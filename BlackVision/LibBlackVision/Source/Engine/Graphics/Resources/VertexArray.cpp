@@ -40,7 +40,7 @@ VertexArray::~VertexArray        ()
 
 // *******************************
 //
-int                     VertexArray::NumEntries          () const
+SizeType                VertexArray::NumEntries          () const
 {
     return m_vaoEntries.size();
 }
@@ -54,10 +54,10 @@ void                    VertexArray::AddEntry            ( VertexBuffer * vb, Ve
 
 // *******************************
 //
-VertexArrayEntry        VertexArray::Entry               ( int i ) const
+VertexArrayEntry        VertexArray::Entry               ( unsigned int i ) const
 {
     assert( i >= 0 );
-    assert( i < NumEntries() );
+    assert( i < (unsigned int) NumEntries() );
 
     return m_vaoEntries[ i ];
 }
@@ -120,7 +120,7 @@ void                        VertexArraySingleVertexBuffer::AddCCEntry           
 
 // *******************************
 //
-unsigned int                VertexArraySingleVertexBuffer::GetNumConnectedComponents       () const
+SizeType                    VertexArraySingleVertexBuffer::GetNumConnectedComponents       () const
 {
     return m_ccVertexNum.size();
 }

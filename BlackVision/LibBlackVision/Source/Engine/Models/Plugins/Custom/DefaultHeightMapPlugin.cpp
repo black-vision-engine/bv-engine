@@ -328,6 +328,7 @@ IVertexShaderChannelConstPtr        DefaultHeightMapPlugin::GetVertexShaderChann
 // 
 void                                DefaultHeightMapPlugin::Update                      ( TimeType t )
 {
+    { t; } // FIXME: suppress unused variable
     m_paramValModel->Update();
 
     m_vaChannel->SetNeedsAttributesUpdate( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() );

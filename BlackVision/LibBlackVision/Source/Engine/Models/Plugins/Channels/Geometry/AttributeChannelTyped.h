@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include <glm/glm.hpp>
+#include "Mathematics/glm_inc.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
@@ -25,7 +25,7 @@ public:
     explicit                        Float3AttributeChannel          ( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly );
     virtual                         ~Float3AttributeChannel         ();
 
-    virtual void                    Update                          ( TimeType t ){} // FIXME: implement
+    virtual void                    Update                          ( TimeType t ){ { t; } } // FIXME: suppress unused warning // FIXME: implement
     virtual bool                    IsReadOnly                      () const;
 
     virtual unsigned int            GetNumEntries                   ()                      const;
@@ -54,7 +54,7 @@ public:
 
     explicit                        Float2AttributeChannel          ( const AttributeChannelDescriptor * desc, const std::string & name, bool readOnly );
 
-    virtual void                    Update                          ( TimeType t ){} // FIXME: implement
+    virtual void                    Update                          ( TimeType t ){ { t; } } // FIXME: suppress unused warning // FIXME: implement
     virtual bool                    IsReadOnly                      () const;
 
     virtual unsigned int            GetNumEntries                   ()                      const;

@@ -20,6 +20,7 @@ namespace bv { namespace model {
 VertexAttributesChannelVariableTopology::VertexAttributesChannelVariableTopology     (  float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
     : VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP )
 {
+    { oscilationSpeed; } // FIXME: suppress unused variable
     assert( numSegments >= 1 );
     assert( numComponents >= 1 );
     assert( speed > 0.01f );
@@ -57,7 +58,7 @@ void    VertexAttributesChannelVariableTopology::Update                      ( T
         totalTime += pauseTime + m_vtConnectedComponents[ i ]->ComponentDuration();
     }
 
-    TimeType totalActiveTime = totalTime - pauseTime;
+    //TimeType totalActiveTime = totalTime - pauseTime;
     auto cc = m_vtConnectedComponents[ m_curComponent ];
 
     TimeType locTime = t - m_curComponentStartTime;
@@ -158,7 +159,7 @@ VertexAttributesChannelVariableTopologyPtr   VertexAttributesChannelVariableTopo
 {
     auto channel = VertexAttributesChannelVariableTopologyPtr( new VertexAttributesChannelVariableTopology( size, speed, oscilationSpeed, numSegments, numComponents ) );
     
-    float defaultSpeed = speed;
+    //float defaultSpeed = speed;
     TimeType defaultDuration = TimeType( 4.0 );
     float defaultOscilation = oscilationSpeed;
     float defaultScale = 1.f;
@@ -169,7 +170,7 @@ VertexAttributesChannelVariableTopologyPtr   VertexAttributesChannelVariableTopo
     {
         float alpha = (float) i * TWOPI_F / (float) numComponents;
 
-        TimeType duration = defaultDuration / (TimeType) (i + 1);
+        //TimeType duration = defaultDuration / (TimeType) (i + 1);
         float oscilation = defaultOscilation * (float) (i + 1) * 0.6f;
         float scale = defaultScale / (float) (i + 1);
 

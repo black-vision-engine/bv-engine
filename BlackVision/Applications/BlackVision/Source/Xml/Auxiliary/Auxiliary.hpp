@@ -2,5 +2,7 @@
 #include <fstream>
 
 using namespace std;
-//pomocnicze
+
+// FIXME: helper without a namespace
+// FIXME: using underscores !!!!
 std::string get_file_contents(const char *filename);

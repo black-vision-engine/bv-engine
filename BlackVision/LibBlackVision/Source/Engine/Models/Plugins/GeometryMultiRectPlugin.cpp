@@ -40,6 +40,7 @@ void                        GeometryMultiRectPlugin::Update              ( TimeT
 //
 void                        GeometryMultiRectPlugin::Print               ( std::ostream & out, int tabs ) const
 {
+    { tabs; out; } // FIXME: suppress unused variable
 }
 
 // *************************************

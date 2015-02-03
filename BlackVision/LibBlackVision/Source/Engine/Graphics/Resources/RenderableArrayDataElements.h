@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Graphics/Resources/RenderableArrayData.h"
+#include "System/BasicTypes.h"
 
 namespace bv
 {
@@ -30,7 +31,7 @@ public:
     //unsigned int                        GetCCOffset                         ( int ccNum ) const
     //unsigned int                        GetCCNumVertices                    ( int ccNum ) const
 
-    virtual unsigned int                GetNumConnectedComponents           () const;
+    virtual SizeType                    GetNumConnectedComponents           () const;
     virtual unsigned int                GetNumVerticesInConnectedComponent  ( unsigned int ccNum ) const;
 
 };

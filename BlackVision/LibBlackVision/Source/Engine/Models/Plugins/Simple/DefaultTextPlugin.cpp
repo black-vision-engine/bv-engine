@@ -340,6 +340,7 @@ mathematics::RectConstPtr			DefaultTextPlugin::GetAABB						( const glm::mat4 & 
 // 
 void                                DefaultTextPlugin::Update                      ( TimeType t )
 {
+    { t; } // FIXME: suppress unused warning
     m_paramValModel->Update();
 
     m_vaChannel->SetNeedsTopologyUpdate( m_textSet );
@@ -433,6 +434,7 @@ void TransformPosChannel( VertexAttributesChannelPtr vaChannel, const glm::mat4 
         if( vertsNum > 0 && arttChannels.size() > 0 )
         {
             auto attrChannelDesc = arttChannels[ 0 ]->GetDescriptor();
+            { attrChannelDesc; } // FIXME: suppress unused warning
             assert( attrChannelDesc->GetType() == AttributeType::AT_FLOAT3 );
             assert( attrChannelDesc->GetSemantic() == AttributeSemantic::AS_POSITION );
 
