@@ -354,6 +354,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
     <ClCompile Include="..\..\..\Source\System\DirIO.cpp" />
+    <ClCompile Include="..\..\..\Source\System\Env.cpp" />
     <ClCompile Include="..\..\..\Source\System\FileIO.cpp" />
     <ClCompile Include="..\..\..\Source\System\HerarchicalProfiler.cpp" />
     <ClCompile Include="..\..\..\Source\System\HRTimer.cpp" />
@@ -636,6 +637,7 @@
     <ClInclude Include="..\..\..\Source\System\BasicMacros.h" />
     <ClInclude Include="..\..\..\Source\System\BasicTypes.h" />
     <ClInclude Include="..\..\..\Source\System\DirIO.h" />
+    <ClInclude Include="..\..\..\Source\System\Env.h" />
     <ClInclude Include="..\..\..\Source\System\Environment.h" />
     <ClInclude Include="..\..\..\Source\System\FileIO.h" />
     <ClInclude Include="..\..\..\Source\System\HerarchicalProfiler.h" />
