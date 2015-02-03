@@ -685,11 +685,13 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismBugTestScene     ( const mod
 	//auto prism2 = SimpleNodesFactory::CreateCreedColoredPrismNode( timelineManager, timeEvaluator, 0 );
 	//auto prism2 = SimpleNodesFactory::CreateCreedGradedPrismNode( timelineManager, timeEvaluator, 0 );
 
-	SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  0.f, glm::vec3( 1.f, 1.0f, 1.f ) );
+	SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  0.f, glm::vec3( 1.f, 1.f, 1.f ) );
 	SetParameterTranslation( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  0.f, glm::vec3( 0.f, -.5f, -10.f ) );
-	SetParameterRotation ( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 100.0f, glm::vec3( 1.f, 0.f, 0.f ), 10100.f );
+	SetParameterRotation ( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 1000.0f, glm::vec3( 1.f, 0.f, 0.f ), 10100.f );
 
 	model::SetParameter( prism2->GetPlugin( "prism" )->GetParameter( "n" ), 10.f, 10.f );
+
+    model::SetParameter( prism2->GetPlugin( "texture" )->GetParameter( "borderColor") , 0.f, glm::vec4( 1, 0, 0, 1 ) );
 
 	//SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  3.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 	//SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  7.f, glm::vec3( 0.25f,  .0f, 0.25f ) );

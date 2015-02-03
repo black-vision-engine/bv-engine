@@ -115,8 +115,8 @@ void DefaultPrismPlugin::InitGeometry( int n )
 		m_vaChannel->AddConnectedComponent( prism1 );
 	}
 
-	//m_vaChannel->AddConnectedComponent( prism2 );
-	//m_vaChannel->AddConnectedComponent( prism3 );
+	m_vaChannel->AddConnectedComponent( prism2 );
+	m_vaChannel->AddConnectedComponent( prism3 );
 
 	m_lastN = n;
 }
