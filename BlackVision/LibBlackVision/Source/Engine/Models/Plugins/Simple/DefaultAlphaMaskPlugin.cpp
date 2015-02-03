@@ -396,6 +396,7 @@ IVertexShaderChannelConstPtr        DefaultAlphaMaskPlugin::GetVertexShaderChann
 // 
 void                                DefaultAlphaMaskPlugin::Update                      ( TimeType t )
 {
+    { t; } // FIXME: suppress unused variable
     m_paramValModel->Update();
 
     auto attachmentMode = GetAttachementMode();
@@ -481,7 +482,7 @@ void                                DefaultAlphaMaskPlugin::Update              
                         float u1 = pixelsPerUnitUVSpace * ( verts[ j ].x - minX ) / txWidth;
                         float v1 = pixelsPerUnitUVSpace * ( verts[ j ].y - minY ) / txHeight;
 
-                        float tmp[] = { u0, v0, u1, v1 };
+                        //float tmp[] = { u0, v0, u1, v1 };
 
                         uvs[ j ].x = u1;
                         uvs[ j ].y = v1;

@@ -27,6 +27,7 @@ void                ConstTimeEvaluator::SetConstTimeValue   ( TimeType t )
 //
 void                ConstTimeEvaluator::SetGlobalTimeImpl   ( TimeType t )
 {
+    { t; } // FIXME: suppress unused warning
 }
 
 // *******************************

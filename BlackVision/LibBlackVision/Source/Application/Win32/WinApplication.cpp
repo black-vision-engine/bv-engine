@@ -169,7 +169,8 @@ HWND CreateApplicationWindow ( WindowedApplication * app )
 
     HWND handle = NULL;
 
-    if ( !(handle = CreateWindowEx(	dwExStyle, 
+    
+    handle = CreateWindowEx     (	dwExStyle, 
                                     sWindowClass,
                                     wtitle.c_str(),
                                     dwStyle | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 
@@ -180,7 +181,8 @@ HWND CreateApplicationWindow ( WindowedApplication * app )
                                     0, 
                                     0, 
                                     GHInstance,
-                                    0 ) ) ) 
+                                    0 );
+    if( !handle )
     {
         MessageBox( NULL, L"Failed to create application window.", L"Black Vision Application Error", MB_OK | MB_ICONEXCLAMATION );
         return NULL;			
@@ -219,6 +221,7 @@ void DestroyApplicationWindow( WindowedApplication * app, HWND handle )
 //
 int WindowedApplication::MainFun	( int argc, char ** argv )
 {
+    { argc; argv; } // FIXME: suppress unused warning
     WindowedApplication * app = static_cast< WindowedApplication * >( ApplicationBase::ApplicationInstance );
 
     //FIXME: implement
@@ -230,8 +233,8 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
     }
 
     handle = NULL;
-    
-    if (!(handle = CreateApplicationWindow( app ) ) )
+    handle = CreateApplicationWindow( app );
+    if (!handle )
     {
         return -1;
     }

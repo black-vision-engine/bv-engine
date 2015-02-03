@@ -4,7 +4,7 @@
 #include <iostream>
 #include <algorithm>
 
-#include <glm/glm.hpp>
+#include "Mathematics/glm_inc.h"
 
 #include "System/BasicTypes.h"
 #include "Mathematics/Core/mathfuncs.h"
@@ -202,9 +202,9 @@ ValueT BasicInterpolator<TimeValueT, ValueT>::Evaluate( TimeValueT t ) const
         if( t > tEnd )
             t = CalcPostT( t );
 
-    unsigned int maxKeyIdx = keys.size() - 1;
+    SizeType maxKeyIdx = keys.size() - 1;
 
-    for ( unsigned int i = 0; i < keys.size(); ++i )
+    for ( SizeType i = 0; i < keys.size(); ++i )
     {
         if( t >= keys[ i ].t )
         {
@@ -249,9 +249,9 @@ ValueT BasicInterpolator<TimeValueT, ValueT>::EvaluatePoint( TimeValueT t ) cons
         if( t > tEnd )
             t = CalcPostT( t );
 
-    unsigned int maxKeyIdx = keys.size() - 1;
+    SizeType maxKeyIdx = keys.size() - 1;
 
-    for ( unsigned int i = 0; i < keys.size(); ++i )
+    for ( SizeType i = 0; i < keys.size(); ++i )
     {
         if( t >= keys[ i ].t )
         {

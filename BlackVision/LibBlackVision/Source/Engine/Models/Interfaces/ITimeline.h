@@ -34,7 +34,7 @@ public:
 
     virtual void                    SetLocalTime        ( TimeType t ) = 0;
 
-    virtual unsigned int            NumKeyFrames        () const = 0;
+    virtual SizeType                NumKeyFrames        () const = 0;
 
     virtual bool                    AddKeyFrame         ( ITimelineEvent * evt ) = 0;
 

@@ -29,7 +29,7 @@ std::vector< std::string > Dir::ListFiles( const std::string & path, const std::
         return foundFiles;
     }
  
-    while( true )
+    for(;;)
     {
         fs::path fullFilePath = rootDir / fs::path( WStringToString( fd.cFileName ) );
 

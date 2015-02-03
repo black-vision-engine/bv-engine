@@ -301,9 +301,9 @@ public:
 
     void * return_f()
     {
-        fvptr f0 = &A::f;
-        ffptr f1 = &A::f;
-        fiptr f2 = &A::f;
+        //fvptr f0 = &A::f;
+        //ffptr f1 = &A::f;
+        //fiptr f2 = &A::f;
 
         //Won't compile
         //auto i_chuj = &A::f;
@@ -452,6 +452,8 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 //
 model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+	{ timelineManager; }
+    { pluginsManager; } // FIXME: suppress unuse warning
     //return SimpleNodesFactory::CreateHeightMapNode( timelineManager, timeEvaluator );
 
     // auto node0 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
@@ -462,6 +464,7 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
     //return node0;
 
     //return SimpleNodesFactory::CreateOverrideNodeMaskTest1( timelineManager, timeEvaluator );
+#if 0
     //return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );
 
     //TestQueryNode( timelineManager, timeEvaluator ); //FIXME: remove or uncomment after tests
@@ -512,12 +515,15 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
 
     //return child;
     //return parent;
+#endif
+	return NULL;
 }
 
 // *****************************
 //
 model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    { pluginsManager; } // FIXME: suppress unuse warning
 	auto rect = SimpleNodesFactory::CreateOlafRectNode( timelineManager, timeEvaluator );
 	auto clock = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
 	rect->AddChild( clock );
@@ -527,6 +533,9 @@ model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::Plug
 
 model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+	{timelineManager;}
+	{pluginsManager;}
+
 	model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
 	root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 	root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
@@ -550,6 +559,7 @@ model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const mod
 
 model::BasicNodePtr    TestScenesFactory::CreedPieChartTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    { pluginsManager; } // FIXME: suppress unuse warning
 	std::vector< PieChartSubnodeDesc > descs;
 
 	//descs.push_back( PieChartSubnodeDesc( 10.f, 0.f ) );
@@ -563,6 +573,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPieChartTestScene     ( const mod
 
 model::BasicNodePtr    TestScenesFactory::CreedDeprecatedTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    { pluginsManager; } // FIXME: suppress unuse warning
 	float percents[] = { 10.f, 20.f, 50.f };
 	float offsets[] = { 0.f, -.1f, .1f };
 
@@ -575,6 +586,7 @@ model::BasicNodePtr    TestScenesFactory::CreedDeprecatedTestScene     ( const m
 
 model::BasicNodePtr    TestScenesFactory::CreedPrimitivePieChartTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    { pluginsManager; } // FIXME: suppress unuse warning
     model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
 	root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
@@ -598,6 +610,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrimitivePieChartTestScene     ( 
 
 model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    { pluginsManager; } // FIXME: suppress unuse warning
 	//auto rect = SimpleNodesFactory::CreateCreedTextNode( timelineManager, timeEvaluator );
 
 	//auto rect = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
@@ -663,7 +676,9 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
 
 model::BasicNodePtr    TestScenesFactory::CreedPrismBugTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
+	{pluginsManager;}
+
+	model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
 	root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
 	auto prism2 = SimpleNodesFactory::CreateCreedTexturedPrismNode( timelineManager, timeEvaluator, 0 );

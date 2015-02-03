@@ -1,6 +1,13 @@
 #include "Hash.h"
 
+
+#pragma warning(push)
+#pragma warning(disable : 4512)
+#pragma warning(disable : 4267)
+
 #include "hashlibpp.h"
+
+#pragma warning(pop)
 
 namespace bv
 {

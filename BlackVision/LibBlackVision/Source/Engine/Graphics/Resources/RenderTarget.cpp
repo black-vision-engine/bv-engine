@@ -49,7 +49,7 @@ RenderTarget::RTSemantic  RenderTarget::Semantic  () const
 //
 unsigned int RenderTarget::NumTargets () const
 {
-    return m_numTargets;
+    return (unsigned int) m_numTargets;
 }
 
 // *********************************

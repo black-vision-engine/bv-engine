@@ -3,7 +3,7 @@
 #include <vector>
 #include <iostream>
 
-#include <glm/glm.hpp>
+#include "Mathematics/glm_inc.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Mathematics/Interpolators/Interpolators.h"
@@ -148,7 +148,7 @@ public:
     void            AddTransform        ( SimpleTransform<ParamT> * trans );
     void            InsertTransform     ( int i, SimpleTransform<ParamT> * trans );
 
-    unsigned int    Size                () const;
+    SizeType        Size                () const;
 
     SimpleTransform<ParamT> *        operator[](unsigned int i);
     const SimpleTransform<ParamT> *  operator[](unsigned int i) const;

@@ -25,7 +25,7 @@ private:
 
 protected:
  
-    int                         m_numTargets;
+    SizeType                    m_numTargets;
     
     bool                        m_hasMipmaps;
     bool                        m_hasDepthBuffer;

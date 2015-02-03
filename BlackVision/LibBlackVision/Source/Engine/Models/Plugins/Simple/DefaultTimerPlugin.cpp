@@ -723,7 +723,7 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
     double hour     = std::floor( seconds / 3600. );
     double minute   = std::floor( ( time - hour ) / 60. );
     double second   = std::floor( time - hour - minute );
-    double hos      = std::floor( time - seconds * 100. );
+    // double hos      = std::floor( time - seconds * 100. );
 
     std::wstring ret;
 

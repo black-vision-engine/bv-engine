@@ -11,7 +11,7 @@ namespace bv { namespace model {
 
 ///////////////////////////////
 //
-FontResource::FontResource( const std::string& filePath, size_t fontSize, size_t blurSize, size_t outlineSize, const std::wstring& atlasCharSetFile )
+FontResource::FontResource( const std::string & filePath, size_t fontSize, size_t blurSize, size_t outlineSize, const std::wstring & atlasCharSetFile )
     : Resource( filePath, filePath )
     , m_fontSize( fontSize )
     , m_blurSize( blurSize )
@@ -42,7 +42,7 @@ size_t                  FontResource::GetOutlineSize     ()   const
 
 ///////////////////////////////
 //
-const std::wstring&     FontResource::GetAtlasCharSetFile     ()  const
+const std::wstring &     FontResource::GetAtlasCharSetFile     ()  const
 {
     return m_atlasCharSetFile;
 }
@@ -57,7 +57,7 @@ IResourceNEWConstPtr FontLoader::LoadResource( const bv::ResourceDescConstPtr & 
 
 ///////////////////////////////
 //
-ResourceHandle *        FontLoader::LoadResource        ( IResource* res )  const
+ResourceHandle *        FontLoader::LoadResource        ( IResource * res )  const
 {
     assert( dynamic_cast< FontResource* >(res) );
 
@@ -69,7 +69,7 @@ ResourceHandle *        FontLoader::LoadResource        ( IResource* res )  cons
     auto blurSize = fontRes->GetBlurSize();
 	auto outlineSize = fontRes->GetOutlineSize();
 
-    const Text*       font        = TryLoadFont             ( filePath, fontSize, blurSize, outlineSize, atlasCharSetFile );
+    const Text *       font        = TryLoadFont             ( filePath, fontSize, blurSize, outlineSize, atlasCharSetFile );
 
     if( font )
     {
@@ -85,13 +85,13 @@ ResourceHandle *        FontLoader::LoadResource        ( IResource* res )  cons
 namespace
 {
 
-const Text*         LoadFontFile( const std::string& file, size_t size, size_t blurSize, size_t outlineSize, const std::wstring& atlasCharSetFile )
+const Text *         LoadFontFile( const std::string & file, size_t size, size_t blurSize, size_t outlineSize, const std::wstring & atlasCharSetFile )
 {
     auto t = TextHelper::LoadUtf8FileToString( atlasCharSetFile );
     return new Text( t, file, size, blurSize, outlineSize ); /* points to pixel proportion */ // FIXME: Text constructor makes to much.
 }
 
-std::string         AddPostfixToFileName( const std::string& file, const std::string& postfix )
+std::string         AddPostfixToFileName( const std::string & file, const std::string & postfix )
 {
     std::string newFileName = boost::filesystem::basename( file ) + postfix;
 
@@ -105,7 +105,7 @@ std::string         AddPostfixToFileName( const std::string& file, const std::st
 
 ///////////////////////////////
 //
-const Text*             FontLoader::TryLoadFont             ( const std::string& file, size_t size, size_t blurSize, size_t oulineSize, const std::wstring& atlasCharSetFile ) const
+const Text *             FontLoader::TryLoadFont             ( const std::string & file, size_t size, size_t blurSize, size_t oulineSize, const std::wstring & atlasCharSetFile ) const
 {
     if( File::Exists(file) )
     {
@@ -119,18 +119,23 @@ const Text*             FontLoader::TryLoadFont             ( const std::string&
 
 ///////////////////////////////
 //
-const Text*             FontExtraData::GetFont             () const
+const Text *             FontExtraData::GetFont             () const
 {
     return m_font;
 }
 
 ///////////////////////////////
 //
-FontExtraData::FontExtraData       ( const Text* font, const Text* fontBold, const Text* fontItalic, const Text* fontBoldItalic, const Text* fontUnderlined, size_t fontSize )
+FontExtraData::FontExtraData       ( const Text * font, const Text * fontBold, const Text * fontItalic, const Text * fontBoldItalic, const Text * fontUnderlined, size_t fontSize )
     : ResourceExtraData( ResourceExtraKind::RE_FONT )
     , m_font( font )
     , m_fontSize( fontSize )
-{}
+{
+    { fontUnderlined; } // FIXME: suppress unused warning
+    { fontBoldItalic; } // FIXME: suppress unused warning
+    { fontItalic; } // FIXME: suppress unused warning
+    { fontBold; } // FIXME: suppress unused warning
+}
 
 
 } // model

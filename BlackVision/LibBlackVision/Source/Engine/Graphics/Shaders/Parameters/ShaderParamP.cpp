@@ -28,6 +28,8 @@ const void *    ShaderParamP::GetValuePtr   () const
 //
 void            ShaderParamP::Update        ( RenderableEntity * renderable, Camera * camera )
 {
+    { renderable; } // FIXME: suppress unused variable
+
     if( IsUpdatable() )
     {
         assert( camera != nullptr );

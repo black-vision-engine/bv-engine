@@ -39,6 +39,7 @@ void    GenericShaderParam::SetUpdatable    ( bool updatable ) const
 //
 void    GenericShaderParam::Update          ( RenderableEntity * renderable, Camera * camera )
 {
+    { camera; renderable; } // FIXME: suppress unused variable
     //Intentionally left empty
 }
 

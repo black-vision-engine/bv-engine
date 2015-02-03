@@ -828,6 +828,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.cpp">
       <Filter>Engine\Models\Resources\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.cpp">
+      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
@@ -1679,6 +1681,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h">
+      <Filter>Mathematics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\System\HerarchicalProfiler.inl">
@@ -1703,9 +1708,6 @@
       <Filter>Engine\Graphics\Shaders</Filter>
     </None>
     <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeShaderChannel.inl">
-      <Filter>Engine\Models\Plugins\Channels</Filter>
-    </None>
-    <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\ShaderChannel.inl">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </None>
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\AbstractModelParameter.inl">

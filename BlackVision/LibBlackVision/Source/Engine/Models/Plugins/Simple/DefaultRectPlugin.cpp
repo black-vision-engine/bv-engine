@@ -118,6 +118,7 @@ IVertexAttributesChannelConstPtr    DefaultRectPlugin::GetVertexAttributesChanne
 //
 void                                DefaultRectPlugin::Update                      ( TimeType t )
 {
+    { t; } // FIXME: suppress unused warning
     //FIXME: reimplement va channel (no time, no explicit update and so on)
     m_paramValModel->Update();
 

@@ -142,6 +142,8 @@ namespace bv { namespace model {
 
 	void                                DefaultVideoInputPlugin::Update                      ( TimeType t )
 	{
+		t=t; // just to reference t ;)
+
 		for( auto vi : vis )
 			vi->Update();
 	}

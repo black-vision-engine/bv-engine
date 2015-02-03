@@ -424,7 +424,8 @@ PdrGLSLProgram *  PdrGLSLPrograms::getProgram( PixelShader * ps, VertexShader * 
 //
 PdrGLSLPrograms & PdrGLSLPrograms::get()
 {
-    static PdrGLSLPrograms & instance = PdrGLSLPrograms();
+    //static PdrGLSLPrograms & instance = PdrGLSLPrograms();
+    static PdrGLSLPrograms instance = PdrGLSLPrograms();
 
     return instance;
 }

@@ -14,8 +14,11 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <SDLCheck>false</SDLCheck>
-      <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
+    <Link>
+      <ProgramDatabaseFile>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDatabaseFile>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

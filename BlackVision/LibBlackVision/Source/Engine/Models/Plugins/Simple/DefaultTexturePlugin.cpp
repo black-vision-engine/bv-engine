@@ -257,6 +257,7 @@ IVertexShaderChannelConstPtr        DefaultTexturePlugin::GetVertexShaderChannel
 // 
 void                                DefaultTexturePlugin::Update                      ( TimeType t )
 {
+    { t; } // FIXME: suppress unused warning
     m_paramValModel->Update();
 
     auto attachmentMode = GetAttachementMode();

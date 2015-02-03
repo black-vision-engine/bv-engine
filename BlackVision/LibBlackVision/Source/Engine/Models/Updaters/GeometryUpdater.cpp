@@ -78,7 +78,7 @@ void    GeometryUpdater::UpdatePositions     ()
 
     VertexArraySingleVertexBuffer * vao = rad->VAO                  (); 
     VertexBuffer * vb                   = vao->GetVertexBuffer      ();
-    const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
+    //const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
 
     auto vaChannel    = m_in;
     auto components     = vaChannel->GetComponents();
@@ -133,7 +133,7 @@ void    GeometryUpdater::UpdateTopology      ()
 
     VertexArraySingleVertexBuffer * vao = radasvb->VAO              ();
     VertexBuffer * vb                   = vao->GetVertexBuffer      ();
-    const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
+    //const VertexDescriptor * vd         = vao->GetVertexDescriptor  ();
 
     vb->Reinitialize( totalNumVertivces, geomDesc->SingleVertexEntrySize(), vbSemantic );
     vao->ResetState();

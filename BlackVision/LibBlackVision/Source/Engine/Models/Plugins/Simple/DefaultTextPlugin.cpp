@@ -340,6 +340,7 @@ mathematics::RectConstPtr			DefaultTextPlugin::GetAABB						( const glm::mat4 & 
 // 
 void                                DefaultTextPlugin::Update                      ( TimeType t )
 {
+    { t; } // FIXME: suppress unused warning
     m_paramValModel->Update();
 
     m_vaChannel->SetNeedsTopologyUpdate( m_textSet );

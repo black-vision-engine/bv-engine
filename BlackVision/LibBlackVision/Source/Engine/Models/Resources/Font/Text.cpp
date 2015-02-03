@@ -56,7 +56,7 @@ TextAtlas::TextAtlas( SizeType w, SizeType h, SizeType bitsPerPixel, SizeType gw
     auto size   = w * h * bitsPerPixel / 8;
     auto data  = std::make_shared< MemoryChunk >( new char[ size ], size );
 
-	TextureFormat tf;
+    TextureFormat tf = TextureFormat::F_TOTAL;
 	if( bitsPerPixel == 8 )
 		tf = TextureFormat::F_A8;
 	else if ( bitsPerPixel == 32 )

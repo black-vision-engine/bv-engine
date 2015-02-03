@@ -74,6 +74,7 @@ unsigned int    AttributeChannelDescriptor::GetAttrTypeSize                     
 // FIXME: possibly also add attribyte type to this process
 std::string     AttributeChannelDescriptor::DefaultName                               ( AttributeType type, AttributeSemantic semantic, int num )
 {
+    { type; } // FIXME: suppress unused variable
     assert( num >= 0 );
 
     std::ostringstream oss;

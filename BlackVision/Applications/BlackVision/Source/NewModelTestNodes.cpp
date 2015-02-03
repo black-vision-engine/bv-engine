@@ -121,6 +121,7 @@ namespace bv {
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateSolidRectNode      ( const std::string & name, float w, float h, const glm::vec3 & pos, const glm::vec4 col, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    { timelineManager; } // FIXME: suppress unuse warning
     //Plugin list
     std::vector< std::string > uids;
 
@@ -152,6 +153,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateSolidRectNode      ( const std::s
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::string & name, float w, float h, const glm::vec3 & pos, const std::string & txFileName, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    { timelineManager; } // FIXME: suppress unuse warning
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 3 );
 
@@ -177,6 +179,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::s
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    { timelineManager; } // FIXME: suppress unuse warning
     TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_01.jpg", false, 3.4f, 0.7f );
     SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 0.75f ), .85f, 0.31f );
 
@@ -233,6 +236,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::Timel
     c01->AddChild( c010 );
 
     auto ai = TestAIManager::Instance().GetAIPreset( 3, root );
+    { ai; } // FIXME: suppress unused warning
 
     return root;
 }
@@ -241,6 +245,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::Timel
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    { timelineManager; } // FIXME: suppress unuse warning
     TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_00.jpg", false, 3.4f, 1.7f );
     SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 0.75f ), .85f, 0.31f );
 
@@ -269,6 +274,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest ( model::Tim
     cm1->AddChild( c0 );
 
     auto ai = TestAIManager::Instance().GetAIPreset( 6, root );
+    { ai; } // FIXME: suppress unuse warning
 
     return root;
 }
@@ -277,6 +283,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest ( model::Tim
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest1 ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    { timelineManager; } // FIXME: suppress unuse warning
     TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_00.jpg", false, 3.4f, 1.7f );
     SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 0.75f ), .85f, 0.31f );
 
@@ -321,6 +328,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest1 ( model::Ti
     root->AddChild( c0 );
 
     auto ai = TestAIManager::Instance().GetAIPreset( 6, root );
+    { ai; } // FIXME: suppress unuse warning
 
     return root;
 }
@@ -329,6 +337,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest1 ( model::Ti
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & nodeName )
 {
+    { timelineManager; } // FIXME: suppress unuse warning
     //Plugin list
     std::vector< std::string > uids;
 
@@ -536,6 +545,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineMa
 
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
+    { timelineManager; } // FIXME: suppress unuse warning
 	//Plugin list
     std::vector< std::string > uids;
 
@@ -595,6 +605,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPrismNode( model::Tim
 
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
+    { timelineManager; } // FIXME: suppress unuse warning
 	//Plugin list
     std::vector< std::string > uids;
 
@@ -654,6 +665,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::Time
 
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
+    { timelineManager; } // FIXME: suppress unuse warning
 	//Plugin list
     std::vector< std::string > uids;
 
@@ -713,6 +725,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::Ti
 
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPieChartNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
+    { timelineManager; } // FIXME: suppress unuse warning
+    { offset; } // FIXME: suppress unuse warning
 	//Plugin list
     std::vector< std::string > uids;
 
@@ -779,6 +793,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPieChartNode( model::
 
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPieChartNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
+    { timelineManager; } // FIXME: suppress unuse warning
+    { offset; } // FIXME: suppress unuse warning
 	//Plugin list
     std::vector< std::string > uids;
 
@@ -1587,6 +1603,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::TimelineMa
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    { timelineManager; } // FIXME: suppress unuse warning
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins6, GSimplePlugins6 + 3 );
 
@@ -1653,6 +1670,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "curDistanceInMeters" ), TimeType( 0.f ), 38000.f );
 
     return node;
+#if 0
     //Current state (distance)
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "totalDistanceInMeters" ), TimeType( 0.f ), 174227.f );
     model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "curDistanceInMeters" ), TimeType( 0.f ), 86000.f );
@@ -1695,7 +1713,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
 //    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmGroundLevelHeight" ), TimeType( 0.f ), 0.f );
 //    model::SetParameter( node->GetPlugin( "height map" )->GetParameter( "hmGroundLevelHeight" ), TimeType( 10.f ), 300.f );
 
-    return node;    
+    return node;
+#endif
 }
 
 } //bv

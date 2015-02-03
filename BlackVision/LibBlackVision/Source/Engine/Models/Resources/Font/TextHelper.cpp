@@ -15,7 +15,7 @@ namespace bv { namespace model {
 
 ///////////////////////////////
 //
-ResourceHandleConstPtr      TextHelper::LoadFont( const std::string& fontFileName, size_t size, size_t blurSize, size_t outlineSize, const std::wstring& atlasCharSetFile )
+ResourceHandleConstPtr      TextHelper::LoadFont( const std::string & fontFileName, SizeType size, SizeType blurSize, SizeType outlineSize, const std::wstring & atlasCharSetFile )
 {
     auto fRes = FontResource( fontFileName, size, blurSize, outlineSize, atlasCharSetFile );
 
@@ -31,7 +31,7 @@ ResourceHandleConstPtr      TextHelper::LoadFont( const std::string& fontFileNam
 
 // *********************************
 //
-VertexAttributesChannel*    TextHelper::CreateEmptyVACForText()
+VertexAttributesChannel *   TextHelper::CreateEmptyVACForText()
 {
     VertexAttributesChannelDescriptor vacDesc;
 
@@ -91,12 +91,15 @@ const TextAtlas *           TextHelper::GetAtlas            ( const ResourceHand
 {
     auto f = GetFont( fontResource );
 
-    const TextAtlas* textAtlas = nullptr;
 
     if( f )
+    {
         return f->GetAtlas();
+    }
     else
+    {
         return nullptr;
+    }
 }
 
 #define viewWidth   (1080 / 2)
@@ -104,7 +107,7 @@ const TextAtlas *           TextHelper::GetAtlas            ( const ResourceHand
 
 // *********************************
 //
-float                    TextHelper::BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, bool useKerning )
+float                    TextHelper::BuildVACForText     ( VertexAttributesChannel * vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring & text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, bool useKerning )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
@@ -122,8 +125,8 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
     float blurLenghtX = float( blurSize ) / viewWidth;
     float blurLenghtY = float( blurSize ) / viewHeight;
 
-    float ccPaddingX = 1.f / viewWidth;
-    float ccPaddingY = 1.f / viewHeight;
+    // float ccPaddingX = 1.f / viewWidth;
+    // float ccPaddingY = 1.f / viewHeight;
 
     float texPadding = 1.f;
 
@@ -147,8 +150,8 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
             continue;
         }
 
-		auto glyphH = textAtlas->GetGlyph( wch, outline )->height;
-        auto glyphW = textAtlas->GetGlyph( wch, outline )->width;
+		// auto glyphH = textAtlas->GetGlyph( wch, outline )->height;
+        // auto glyphW = textAtlas->GetGlyph( wch, outline )->width;
 
         ConnectedComponentPtr connComp = ConnectedComponent::Create();
 

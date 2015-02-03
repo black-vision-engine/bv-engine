@@ -183,7 +183,7 @@ TimelineWrapMethod                  DefaultTimeline::GetWrapBehaviorPost() const
 
 // *********************************
 //
-unsigned int                        DefaultTimeline::NumKeyFrames       () const
+SizeType                            DefaultTimeline::NumKeyFrames       () const
 {
     return m_keyFrameEvents.size();
 }

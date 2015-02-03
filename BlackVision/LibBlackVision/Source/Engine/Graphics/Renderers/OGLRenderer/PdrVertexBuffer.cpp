@@ -15,6 +15,7 @@ extern HighResolutionTimer GTimer;
 //
 PdrVertexBuffer::PdrVertexBuffer     ( Renderer * renderer, const VertexBuffer * vb )
 {
+    { renderer; } // FIXME: suppress unused
     CreateBuffer( vb );
 }
 
@@ -29,6 +30,7 @@ PdrVertexBuffer::~PdrVertexBuffer    ()
 //
 void PdrVertexBuffer::Enable         ( Renderer * renderer )
 {
+    { renderer; } // FIXME: suppress unused
     Bind();
 }
 
@@ -36,6 +38,7 @@ void PdrVertexBuffer::Enable         ( Renderer * renderer )
 //
 void PdrVertexBuffer::Disable        ( Renderer * renderer )
 {
+    { renderer; } // FIXME: suppress unused
     Unbind();
 }
 

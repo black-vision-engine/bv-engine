@@ -25,6 +25,7 @@ MemoryChunkConstPtr TextureHelper::LoadImg( const std::string & filePath, unsign
         fipMemoryIO fipIO( ( BYTE * ) bufToRead, ( DWORD ) bytes );
 
         FREE_IMAGE_FORMAT type = fipIO.getFileType();
+        { type; } // FIXME: suppress unused warning
 
         if( !fipImg->loadFromMemory( fipIO ) )
         {
@@ -103,8 +104,10 @@ inline unsigned char GetPixelColor( unsigned int x, unsigned int y, const char* 
 
 // *********************************
 //
-inline void SetPixelColor( unsigned int x, unsigned int y, char* data, unsigned int width, unsigned int height, char color )
+inline void SetPixelColor( unsigned int x, unsigned int y, char * data, unsigned int width, unsigned int height, char color )
 {
+    { height; } // FIXME: suppress unused warning
+
     memset( &( data[ 4 * ( x + y * width ) ] ), color, 4 );
 }
 
@@ -128,7 +131,10 @@ MemoryChunkConstPtr TextureHelper::Blur( MemoryChunkConstPtr data, unsigned int 
                 currVal += GetPixelColor( x + i, y, data->Get(), width, height );
             currVal /= kernelSize;
             if (currVal > 0.f)
+            {
                 Int32 t = 0;
+                { t; } // FIXME: suppress unused warning
+            }
             SetPixelColor( x, y, tmp, width, height, (unsigned char)(currVal) );
         }
     }

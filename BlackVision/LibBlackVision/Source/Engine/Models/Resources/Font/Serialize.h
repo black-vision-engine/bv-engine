@@ -11,6 +11,7 @@ namespace boost { namespace serialization {
 template< class Archive >
 void serialize( Archive & ar, bv::model::Glyph & glyph, const unsigned int version )
 {
+    { version; } // FIXME: suppress unused warning
     ar & glyph.textureX;
     ar & glyph.textureY;
     ar & glyph.width;
@@ -29,6 +30,7 @@ void serialize( Archive & ar, bv::model::Glyph & glyph, const unsigned int versi
 template< >
 void serialize< boost::archive::text_iarchive >( boost::archive::text_iarchive & ar, bv::model::TextAtlas& textAtlas, const unsigned int version )
 {
+    { version; } // FIXME: suppress unused warning
     unsigned int size;
     ar >> size;
 
@@ -52,6 +54,7 @@ void serialize< boost::archive::text_iarchive >( boost::archive::text_iarchive &
 template< >
 void serialize< boost::archive::text_oarchive >( boost::archive::text_oarchive & ar, bv::model::TextAtlas& textAtlas, const unsigned int version )
 {
+    { version; } // FIXME: suppress unused warning
     ar << textAtlas.m_textureHandle->m_size;
     
     assert( textAtlas.m_textureHandle->GetExtra()->GetResourceExtraKind() == bv::model::ResourceExtraKind::RE_TEXTURE );

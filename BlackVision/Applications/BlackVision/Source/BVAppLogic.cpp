@@ -192,6 +192,8 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
 //
 void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & timer, Renderer * renderer, HWND handle )
 {
+    { timer; } // FIXME: suppress unuse warning
+    { handle; } // FIXME: suppress unuse warning
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate" );
 
     assert( m_state != BVAppState::BVS_INVALID );
@@ -250,6 +252,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
 //
 void BVAppLogic::OnKey           ( unsigned char c )
 {
+    { c; } // FIXME: suppress unuse warning
     //auto root = m_modelScene->GetSceneRoot();
     //auto timerPlugin = root->GetPlugin("timer");
     //if(c == 'q')
@@ -303,7 +306,7 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
 {
     if( m_statsCalculator.WasSampledMaxVal( DefaultConfig.FrameStatsSection() ) )
     {
-        unsigned int frame = m_statsCalculator.CurFrame() - 1;
+        //unsigned int frame = m_statsCalculator.CurFrame() - 1;
         
 #ifndef HIDE_PROFILE_STATS
         FrameStatsFormatter::PrintFrameStatsToConsole( frame, m_statsCalculator, "LONGEST FRAME SO FAR", 10 );

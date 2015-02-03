@@ -370,7 +370,7 @@ bool                    TimelineManager::AddParamToTimeline             ( IParam
 
 // *********************************
 //
-unsigned int            TimelineManager::RemoveParamFromTimeline        ( const std::string & paramName, const std::string & timelineName )
+SizeType            TimelineManager::RemoveParamFromTimeline        ( const std::string & paramName, const std::string & timelineName )
 {
     auto timeline = GetTimeEvaluator( timelineName );
     auto params = GetParamSet( timeline );
@@ -387,7 +387,7 @@ unsigned int            TimelineManager::RemoveParamFromTimeline        ( const 
             }
         }
 
-        unsigned int numParams = paramBuf.size();
+        SizeType numParams = paramBuf.size();
 
         for( auto param : paramBuf )
         {

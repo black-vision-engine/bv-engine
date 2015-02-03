@@ -92,10 +92,10 @@
     <TargetName>BlackVisionD</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>BlackVision</TargetName>
+    <TargetName>BlackVisionRelease</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>BlackVision</TargetName>
+    <TargetName>BlackVisionRelease</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -287,6 +287,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\DefaultParamValModel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\DefaultPluginParamValModel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\PluginUtils.cpp" />
@@ -630,6 +631,7 @@
     <ClInclude Include="..\..\..\Source\Mathematics\AABB.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Core\MathFuncs.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Rect.h" />
@@ -657,7 +659,6 @@
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParameters.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\RenderableEffect.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeShaderChannel.inl" />
-    <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\ShaderChannel.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\GenericParameterSetters.inl" />

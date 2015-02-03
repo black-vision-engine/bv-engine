@@ -168,7 +168,7 @@ namespace bv{
 		xt.SetWrapPostMethod( bv::WrapMethod::pingPong );
 		yt.SetWrapPostMethod( bv::WrapMethod::repeat );
 		
-		FloatInterpolator *Current;
+		FloatInterpolator * Current = nullptr;
 		for(unsigned int i=0;i<properties.size();i++)
 		{
 			vector<TimeProperty> *timevals = properties[i].timeproperty;
@@ -247,7 +247,7 @@ namespace bv{
 		for(unsigned int i=0;i<CurrentNode.plugins.size();i++)
 		{
 			//plugin name
-			Plugin *pl = CurrentNode.plugins[i];
+			//Plugin * pl = CurrentNode.plugins[i];
 			//pl->name;
 			//PluginGeometry *plugin = (PluginGeometry*)CurrentNode.plugins[i];
 			//cout<<plugin->name<<endl;

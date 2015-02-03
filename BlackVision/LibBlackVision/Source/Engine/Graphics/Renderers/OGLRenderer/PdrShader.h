@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "Mathematics/glm_inc.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrGLSLProgram.h"
 #include "Engine/Graphics/Shaders/Parameters/GenericShaderParam.h"

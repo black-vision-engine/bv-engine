@@ -14,6 +14,7 @@ namespace bv {
 PdrVertexDescriptor::PdrVertexDescriptor            ( Renderer * renderer, const VertexDescriptor * vd )
     : m_vertexDescriptor( vd )
 {
+    { renderer; } // FIXME: suppress unused
 }
 
 // **************************

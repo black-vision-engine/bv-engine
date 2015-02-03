@@ -75,6 +75,7 @@ protected:
 
     virtual bool                                        CanBeConnectedTo        ( const VertexAttributesChannelDescriptor & desc ) const
     { 
+        { desc; } // FIXME: suppress unused warning
         return true;
     }
 };

@@ -30,6 +30,7 @@ ConnectedComponent::~ConnectedComponent()
 //
 void                                        ConnectedComponent::Update( TimeType t )
 {
+    { t; } // FIXME: suppress unused variable
     //FIXME: Forward do channels
 }
 

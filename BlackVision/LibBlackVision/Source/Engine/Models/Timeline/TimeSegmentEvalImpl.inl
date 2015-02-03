@@ -58,6 +58,7 @@ inline TimeType TimeSegmentEvalImpl::EvalClamp          ( TimeType t ) const
 //
 inline TimeType TimeSegmentEvalImpl::EvalPreClamp        ( TimeType t ) const
 {
+    { t; } // FIXME: suppress unused warning
     return TimeType( 0.0 );
 }
 
@@ -65,6 +66,7 @@ inline TimeType TimeSegmentEvalImpl::EvalPreClamp        ( TimeType t ) const
 //
 inline TimeType TimeSegmentEvalImpl::EvalPostClamp       ( TimeType t ) const
 {
+    { t; } // FIXME: suppress unused warning
     return m_duration;
 }
 

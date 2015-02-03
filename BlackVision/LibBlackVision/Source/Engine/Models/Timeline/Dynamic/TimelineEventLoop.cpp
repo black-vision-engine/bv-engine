@@ -59,6 +59,7 @@ bool            TimelineEventLoop::IsActive            () const
 //
 void            TimelineEventLoop::SetTargetTime       ( TimeType t )
 {
+    { t; } // FIXME: suppress unused warning
     m_targetTime = m_targetTime;
 }
 

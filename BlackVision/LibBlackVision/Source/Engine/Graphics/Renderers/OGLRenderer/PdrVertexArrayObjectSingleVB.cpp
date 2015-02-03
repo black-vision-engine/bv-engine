@@ -96,7 +96,7 @@ void    PdrVertexArrayObjectSingleVB::Create                  ( Renderer * rende
 
     glGenVertexArrays( 1, &m_vaoHandle );
 
-    GLuint index = 0;
+    // GLuint index = 0;
 
     Bind( renderer );
 

@@ -39,7 +39,7 @@ bool                Texture2DSequenceImpl::AddTextureSettingRawData ( MemoryChun
 
 // *********************************
 //  
-unsigned int         Texture2DSequenceImpl::NumTextures             () const
+SizeType            Texture2DSequenceImpl::NumTextures             () const
 {
     return m_data.size();
 }
@@ -65,7 +65,7 @@ unsigned int    Texture2DSequenceImpl::GetActiveTextureNum          () const
 
 // *********************************
 //  
-size_t          Texture2DSequenceImpl::GetDataSize                  () const
+SizeType        Texture2DSequenceImpl::GetDataSize                  () const
 {
     return NumTextures() * RawFrameSize();
 }

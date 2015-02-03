@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
 #include "Engine/Models/BasicNode.h"
-#include <glm/glm.hpp>
+#include "Mathematics/glm_inc.h"
 
 namespace bv {
 

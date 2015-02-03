@@ -103,7 +103,7 @@ void            ProcessManager::AbortAll        ( bool immediateFlag )
 
 // ******************************
 //
-unsigned int    ProcessManager::GetProcessCount () const
+SizeType    ProcessManager::GetProcessCount () const
 {
     return m_processList.size();
 }

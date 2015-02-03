@@ -42,7 +42,7 @@ public:
     RenderableEffectPtr                             GetRenderableEffect         ();
     void                                            SetRenderableEffect         ( RenderableEffectPtr effect );
 
-    int                                             GetNumconnectedComponents   () const;
+    SizeType                                        GetNumconnectedComponents   () const;
 
 protected:
 
