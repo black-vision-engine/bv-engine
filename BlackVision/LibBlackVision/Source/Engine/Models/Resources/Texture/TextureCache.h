@@ -43,7 +43,10 @@ public:
 
 private:
 
-	TextureResourceConstPtr			Find	( const std::string & key ) const;
+	TextureResourceConstPtr			Find				( const std::string & key ) const;
+	void							AddToRawDataCache	( const TextureResourceConstPtr & textureRes ) const;
+	MemoryChunkConstPtr				GetFormRawDataCache	( const SingleTextureResourceDescConstPtr & desc ) const;
+
 
 	TextureCache();
 

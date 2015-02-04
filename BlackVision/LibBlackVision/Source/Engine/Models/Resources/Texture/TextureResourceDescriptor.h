@@ -44,10 +44,12 @@ public:
 	MipMapResourceDescConstPtr			GetMipMapsDesc		() const;
 
 	static TextureResourceDescConstPtr	Create				( const SingleTextureResourceDescConstPtr & origDesc, const MipMapResourceDescConstPtr & mipmapsDesc );
-	static TextureResourceDescConstPtr	Create				( const SingleTextureResourceDescConstPtr & origDesc, bool generateMipMaps );
+	static TextureResourceDescConstPtr	Create				( const SingleTextureResourceDescConstPtr & origDesc, MipMapFilterType mmFilter );
+	static TextureResourceDescConstPtr	Create				( const SingleTextureResourceDescConstPtr & origDesc );
 
 	explicit							TextureResourceDesc	( const SingleTextureResourceDescConstPtr & origDesc, const MipMapResourceDescConstPtr & mipmapsDesc );
-	explicit							TextureResourceDesc ( const SingleTextureResourceDescConstPtr & origDesc, bool generateMipMaps );
+	explicit							TextureResourceDesc ( const SingleTextureResourceDescConstPtr & origDesc, MipMapFilterType mmFilter );
+	explicit							TextureResourceDesc	( const SingleTextureResourceDescConstPtr & origDesc );
 
 	static const std::string &			UID();
 };

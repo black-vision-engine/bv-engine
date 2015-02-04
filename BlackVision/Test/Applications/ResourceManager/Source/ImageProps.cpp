@@ -6,7 +6,7 @@
 
 ImageProps		GetImageProps( const std::string & imagePath )
 {
-	FIBITMAP * bitmap = FreeImage_Load( FIF_BMP, imagePath.c_str(), BMP_DEFAULT );
+	FIBITMAP * bitmap = FreeImage_Load( FIF_PNG, imagePath.c_str(), BMP_DEFAULT );
 	
 	auto type	= FreeImage_GetImageType( bitmap );
 	auto bbp	= FreeImage_GetBPP( bitmap );

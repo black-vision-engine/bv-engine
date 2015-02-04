@@ -6,6 +6,7 @@
 #include "Engine/Models/Resources/Texture/TextureResource.h"
 #include "Engine/Models/Resources/Texture/TextureCache.h"
 #include "Tools/MipMapBuilder/Source/MipMapBuilder.h"
+#include "Engine/Models/Resources/Cache/RawDataCache.h"
 
 #include <cassert>
 
@@ -72,6 +73,8 @@ IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & d
 			auto origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc() );
 	
 			ret = TextureResource::Create( origRes, nullptr );
+
+			break;
 		}
 
 		case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
@@ -88,6 +91,7 @@ IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & d
 			auto mipMapRes = MipMapResource::Create( mipMapsRes );
 
 			ret = TextureResource::Create( origRes, mipMapRes );
+			break;
 		}
 
 		case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
@@ -121,6 +125,7 @@ IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & d
 			}
 
 			ret = TextureResource::Create( origRes, MipMapResource::Create( mipMapsRes ) );
+			break;
 		}
 	}
 
@@ -134,17 +139,20 @@ IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & d
 //
 SingleTextureResourceConstPtr TextureLoader::LoadSingleTexture( const SingleTextureResourceDescConstPtr & sinlgeTextureResDesc )
 {
+	auto key		= TextureCache::GenKeyForSingleTexture( sinlgeTextureResDesc );
 	auto imgPath	= sinlgeTextureResDesc->GetImagePath();
-	auto w			= sinlgeTextureResDesc->GetWidth();
-	auto h			= sinlgeTextureResDesc->GetHeight();
-	auto format		= sinlgeTextureResDesc->GetFormat();
 
-	auto mmChunk	= LoadImage( imgPath );
+	MemoryChunkConstPtr mmChunk = RawDataCache::GetInstance().Get( Hash::FromString( key ) );
+	
+	if( !mmChunk )
+		mmChunk = LoadImage( imgPath );
 
 	if( !mmChunk )
 		return nullptr;
 
-	auto key = TextureCache::GenKeyForSingleTexture( sinlgeTextureResDesc );
+	auto w			= sinlgeTextureResDesc->GetWidth();
+	auto h			= sinlgeTextureResDesc->GetHeight();
+	auto format		= sinlgeTextureResDesc->GetFormat();
 
 	return SingleTextureResource::Create( mmChunk, key, w, h, format );
 }

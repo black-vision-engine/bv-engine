@@ -42,9 +42,16 @@ TextureResourceDescConstPtr	TextureResourceDesc::Create( const SingleTextureReso
 
 // ***********************
 //
-TextureResourceDescConstPtr	TextureResourceDesc::Create( const SingleTextureResourceDescConstPtr & origDesc, bool generateMipMaps )
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const SingleTextureResourceDescConstPtr & origDesc, MipMapFilterType mmFilter )
 {
-	return std::make_shared< TextureResourceDesc >( origDesc, generateMipMaps );
+	return std::make_shared< TextureResourceDesc >( origDesc, mmFilter );
+}
+
+// ***********************
+//
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const SingleTextureResourceDescConstPtr & origDesc )
+{
+	return std::make_shared< TextureResourceDesc >( origDesc );
 }
 
 // ***********************
@@ -57,14 +64,21 @@ TextureResourceDesc::TextureResourceDesc( const SingleTextureResourceDescConstPt
 
 // ***********************
 //
-TextureResourceDesc::TextureResourceDesc( const SingleTextureResourceDescConstPtr & origDesc, bool generateMipMaps )
+TextureResourceDesc::TextureResourceDesc( const SingleTextureResourceDescConstPtr & origDesc, MipMapFilterType mmFilter )
 	: m_originalTextureDesc( origDesc )
 	, m_mipMapsDescs()
 {
-	if( generateMipMaps )
-		m_loadingType = TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS;
-	else
-		m_loadingType = TextureResourceLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE;
+	m_loadingType = TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS;
+	m_mipMapsDescs = MipMapResourceDesc::Create( mmFilter, origDesc );
+}
+
+// ***********************
+//
+TextureResourceDesc::TextureResourceDesc( const SingleTextureResourceDescConstPtr & origDesc )
+	: m_originalTextureDesc( origDesc )
+	, m_mipMapsDescs()
+{
+	m_loadingType = TextureResourceLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE;
 }
 
 // ***********************

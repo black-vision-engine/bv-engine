@@ -35,6 +35,8 @@ public:
 	SizeType									GetWidth	() const;
 	SizeType									GetHeight	() const;
 	TextureFormat								GetFormat	() const;
+
+	MemoryChunkConstPtr							GetData		() const;
 	
 	static SingleTextureResourceConstPtr		Create		( const MemoryChunkConstPtr & memory, const std::string & key, SizeType width, SizeType height, TextureFormat format );
 
