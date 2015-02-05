@@ -50,13 +50,16 @@ DefaultPluginParamValModelPtr   DefaultPrismPluginDesc::CreateDefaultModel   ( I
     DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
 
     ParamFloatPtr paramN             = ParametersFactory::CreateParameterFloat( "n", timeEvaluator );
+    ParamFloatPtr paramType          = ParametersFactory::CreateParameterFloat( "uv_type", timeEvaluator );
 
     vacModel->AddParameter( paramN );
+    vacModel->AddParameter( paramType );
 
     model->SetVertexAttributesChannelModel( vacModel );
 
     //Set default parameters
     paramN->SetVal( 3.f, 0.f );
+    paramType->SetVal( PrismComponent::PrismUVType::TEXTURED, 0.f );
 
     return model;
 }
@@ -73,16 +76,36 @@ std::string                     DefaultPrismPluginDesc::UID                  ()
 
 // *************************************
 //
+PrismComponent::PrismUVType DefaultPrismPlugin::GetUVType()
+{
+    assert( m_uvTypeParam );
+    auto t = m_uvTypeParam->Evaluate();
+
+    return PrismComponent::PrismUVType( int( t ) ); // ;)
+}
+
+// *************************************
+//
+int DefaultPrismPlugin::GetN()
+{
+    assert( m_nParam );
+    return int( m_nParam->Evaluate() );
+}
+
+// *************************************
+//
 DefaultPrismPlugin::DefaultPrismPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
 	: BasePlugin< IPlugin >( name, uid, prev, model )
 {
-	auto nParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "n" );
+    m_uvTypeParam = QueryTypedParam< ParamFloatPtr >( m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "uv_type" ) );
+    assert( m_uvTypeParam );
+    m_uvType = GetUVType();
 
-	assert( nParam );
+    m_nParam = QueryTypedParam< ParamFloatPtr >( m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "n" ) );
+	assert( m_nParam );
+	m_lastN = GetN();
 
-	float nVal = QueryTypedParam< ParamFloatPtr > ( nParam )->Evaluate();
-
-	InitGeometry( int( nVal ) );
+    InitGeometry( m_lastN, m_uvType );
 }
 
 
@@ -95,9 +118,9 @@ IVertexAttributesChannelConstPtr    DefaultPrismPlugin::GetVertexAttributesChann
     return m_vaChannel;
 }
 
-void DefaultPrismPlugin::InitGeometry( int n )
+void DefaultPrismPlugin::InitGeometry( int n, PrismComponent::PrismUVType t )
 {
-	auto prism = PrismComponent::Create( n );
+	auto prism = PrismComponent::Create( n, t );
 
 	auto prism1 = std::get<0>(prism);
 	auto prism2 = std::get<1>(prism);
@@ -130,11 +153,14 @@ void                                DefaultPrismPlugin::Update                  
 	float nVal = QueryTypedParam< ParamFloatPtr > ( nParam )->Evaluate();
 	int n = int( nVal );
 
-	if( n != m_lastN )
+    auto uvType = GetUVType();
+
+    if( n != m_lastN || uvType != m_uvType )
 	{
-		InitGeometry( n );
+		InitGeometry( n, uvType );
 		m_vaChannel->SetNeedsTopologyUpdate( true );
 		m_lastN = n;
+        m_uvType = uvType;
 	}
 	//else
 	//{

@@ -9,6 +9,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
+
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
 
@@ -646,6 +648,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::Time
 // LINEAR GRADIENT plugin
 	if( root->GetPlugin( "linear_gradient" ) )
 	{
+        auto param = root->GetPlugin( "prism" )->GetParameter( "uv_type" );
+        assert( param );
+        SetParameter( param, 0.f, float( model::PrismComponent::PrismUVType::LINGRADED ) );
+
 		auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
 		assert( color1 );
 		success &= SetParameter( color1, 0.f, glm::vec4( 0.0f, 0.f, 1.f, 1.f ) );
