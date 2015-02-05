@@ -105,10 +105,25 @@ BasicInterpolator<TimeValueT, ValueT>::BasicInterpolator(TimeValueT tolerance)
     : tolerance( tolerance )
     , wrapPost( WrapMethod::clamp )
     , wrapPre( WrapMethod::clamp )
-	//, method( InterpolationMethod::LINEAR )
-	, method( InterpolationMethod::COSINE )
+    , method( model::IParameter::InterpolationMethod::LINEAR )
 {
     assert( tolerance > static_cast<TimeValueT>(0.) );
+}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT>
+void                    BasicInterpolator<TimeValueT, ValueT>::SetInterpolationMethod ( model::IParameter::InterpolationMethod method )
+{
+    this->method = method;
+}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT>
+model::IParameter::InterpolationMethod     BasicInterpolator<TimeValueT, ValueT>::GetInterpolationMethod () const
+{
+    return method;
 }
 
 // *************************************
@@ -217,10 +232,11 @@ ValueT BasicInterpolator<TimeValueT, ValueT>::Evaluate( TimeValueT t ) const
             {
 				switch( method )
 				{
-				case InterpolationMethod::LINEAR:
+                case model::IParameter::InterpolationMethod::LINEAR:
+                //case InterpolationMethod::COSINE:
 					return EvaluateLinear( keys[ i0 ], keys[ i1 ], t );
 					break;
-				case InterpolationMethod::COSINE:
+				case model::IParameter::InterpolationMethod::COSINE:
 					return EvaluateCosine( keys[ i0 ], keys[ i1 ], t );
 					break;
 				default:
