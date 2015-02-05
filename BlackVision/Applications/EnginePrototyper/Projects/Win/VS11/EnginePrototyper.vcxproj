@@ -136,10 +136,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Common\GLSLProgram.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\VBORect.cpp" />
     <ClCompile Include="..\..\..\Source\PrototyperApp.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\SimpleVAOPrototype0.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Common\GLSLprogram.h" />
+    <ClInclude Include="..\..\..\Source\Common\PrototyperCore.h" />
+    <ClInclude Include="..\..\..\Source\Common\VBORect.h" />
+    <ClInclude Include="..\..\..\Source\Interfaces\IAppLogicPrototype.h" />
+    <ClInclude Include="..\..\..\Source\Interfaces\IRenderable.h" />
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\SimpleVAOPrototype0.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
