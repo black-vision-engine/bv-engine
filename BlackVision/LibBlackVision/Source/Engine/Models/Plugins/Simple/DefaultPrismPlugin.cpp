@@ -98,9 +98,6 @@ IVertexAttributesChannelConstPtr    DefaultPrismPlugin::GetVertexAttributesChann
 void DefaultPrismPlugin::InitGeometry( int n )
 {
 	auto prism = PrismComponent::Create( n );
-	//auto prism_main = std::get<0>(prism);
-	//auto prism_up = std::get<1>(prism);
-	//auto prism_down = std::get<2>(prism);
 
 	auto prism1 = std::get<0>(prism);
 	auto prism2 = std::get<1>(prism);

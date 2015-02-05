@@ -45,8 +45,6 @@ std::tuple< ConnectedComponentPtr, ConnectedComponentPtr, ConnectedComponentPtr 
 
 		vertArrtUV->AddAttribute( glm::vec2( float( i ) / fragmentsNum, 0 ) );
 		vertArrtUV->AddAttribute( glm::vec2( float( i ) / fragmentsNum, 1 ) );
-		//vertArrtUV->AddAttribute( glm::vec2( cos( angle ), sin( angle ) ) );
-		//vertArrtUV->AddAttribute( glm::vec2( sin( angle ), cos( angle ) ) );
 	}
 
 // up
@@ -66,14 +64,14 @@ std::tuple< ConnectedComponentPtr, ConnectedComponentPtr, ConnectedComponentPtr 
 		up_vertArrtF3->AddAttribute( vertices[ 2*( n-1 - i ) ] );
 		up_vertArrtF3->AddAttribute( vertices[ 2*( 3 + i ) ] );
 
-		up_vertArrtUV->AddAttribute( uvs[ 2*( n-1 - i ) ] );
-		up_vertArrtUV->AddAttribute( uvs[ 2*( 3 + i ) ] );
+		up_vertArrtUV->AddAttribute( glm::vec2( -1, -1 ) );
+		up_vertArrtUV->AddAttribute( glm::vec2( -1, -1 ) );
 	}
 	if( n%2 == 0 ) // we need additional point
 	{
 		up_vertArrtF3->AddAttribute( vertices[ 2*( n-1 - i ) ] );
 
-		up_vertArrtUV->AddAttribute( uvs[ 2*( n-1 - i ) ] );
+		up_vertArrtUV->AddAttribute( glm::vec2( -1, -1 ) );
 	}
 	
 // and down
@@ -84,22 +82,22 @@ std::tuple< ConnectedComponentPtr, ConnectedComponentPtr, ConnectedComponentPtr 
 	down_vertArrtF3->AddAttribute( vertices[ 2*0+1 ] );
 	down_vertArrtF3->AddAttribute( vertices[ 2*1+1 ] );
 	down_vertArrtF3->AddAttribute( vertices[ 2*2+1 ] );
-	down_vertArrtUV->AddAttribute( uvs[ 2*0+1 ] );
-	down_vertArrtUV->AddAttribute( uvs[ 2*1+1 ] );
-	down_vertArrtUV->AddAttribute( uvs[ 2*2+1 ] );
+	down_vertArrtUV->AddAttribute( glm::vec2( -1, -1 ) );
+	down_vertArrtUV->AddAttribute( glm::vec2( -1, -1 ) );
+	down_vertArrtUV->AddAttribute( glm::vec2( -1, -1 ) );
 	for( i = 0; i < (n-3)/2; i++ )
 	{
 		down_vertArrtF3->AddAttribute( vertices[ 2*( n-1 - i )+1 ] );
 		down_vertArrtF3->AddAttribute( vertices[ 2*( 3 + i )+1 ] );
 
-		down_vertArrtUV->AddAttribute( uvs[ 2*( n-1 - i )+1 ] );
-		down_vertArrtUV->AddAttribute( uvs[ 2*( 3 + i )+1 ] );
+		down_vertArrtUV->AddAttribute( glm::vec2( -1, -1 ) );
+		down_vertArrtUV->AddAttribute( glm::vec2( -1, -1 ) );
 	}
 	if( n%2 == 0 ) // we need additional point
 	{
 		down_vertArrtF3->AddAttribute( vertices[ 2*( n-1 - i )+1 ] );
 
-		down_vertArrtUV->AddAttribute( uvs[ 2*( n-1 - i )+1 ] );
+		down_vertArrtUV->AddAttribute( glm::vec2( -1, -1 ) );
 	}
 
 // and end
