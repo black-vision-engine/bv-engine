@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "Engine/Models/Plugins/Interfaces/IParameter.h"
 
 namespace bv
 {
@@ -48,6 +49,7 @@ public:
     typedef ValueT      ValueType;
 
 private:
+	model::IParameter::InterpolationMethod			method;
 
     std::vector<Key<TimeValueT, ValueT>>    keys;
     TimeValueT                              tolerance;
@@ -69,6 +71,9 @@ public:
 
     explicit BasicInterpolator  ( TimeValueT tolerance = 0.0001 );
     virtual ~BasicInterpolator  () {};
+
+	void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method );
+	model::IParameter::InterpolationMethod     GetInterpolationMethod () const;
 
     void AddKey             ( TimeValueT t, const ValueT & v );
     void AddKey             ( const Key<TimeValueT, ValueT> & key );

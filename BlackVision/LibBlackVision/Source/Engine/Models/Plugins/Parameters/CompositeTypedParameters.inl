@@ -2,6 +2,36 @@ namespace bv { namespace model {
 
 // ****************************************************************************************************************************
 
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+inline void                ParamTransform::SetInterpolationMethod ( IParameter::InterpolationMethod method )
+{
+    for( unsigned int i = 0; i < m_transformModel.Size(); ++i )
+    {
+        m_transformModel[ i ]->GetP0MotylaNoga().SetInterpolationMethod( method );
+        m_transformModel[ i ]->GetP1MotylaNoga().SetInterpolationMethod( method );
+        m_transformModel[ i ]->GetP2MotylaNoga().SetInterpolationMethod( method );
+    }
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+inline IParameter::InterpolationMethod ParamTransform::GetInterpolationMethod () const
+{
+    auto method = __super::GetInterpolationMethod();
+
+    // just to make sure
+    for( unsigned int i = 0; i < m_transformModel.Size(); ++i )
+    {
+        assert( m_transformModel[ i ]->GetP0MotylaNoga().GetInterpolationMethod() == method );
+        assert( m_transformModel[ i ]->GetP1MotylaNoga().GetInterpolationMethod() == method );
+        assert( m_transformModel[ i ]->GetP2MotylaNoga().GetInterpolationMethod() == method );
+    }
+
+    return method;
+}
+
 // *******************************
 // FIXME: reimplement with SQT paramter model
 inline   void       ParamTransform::SetRotation     ( const glm::vec3 & rotAxis, float angle, TimeType t )
@@ -81,6 +111,41 @@ inline  glm::mat4   ParamTransform::Evaluate        () const
 }
 
 // ****************************************************************************************************************************
+
+// *******************************
+//
+inline void                ParamTransformVec::SetInterpolationMethod ( IParameter::InterpolationMethod method )
+{
+    for( auto transform : m_transformModelVec )
+    {
+        for( unsigned int i = 0; i < transform.Size(); ++i )
+        {
+            transform[ i ]->GetP0MotylaNoga().SetInterpolationMethod( method );
+            transform[ i ]->GetP1MotylaNoga().SetInterpolationMethod( method );
+            transform[ i ]->GetP2MotylaNoga().SetInterpolationMethod( method );
+        }
+    }
+}
+
+// *******************************
+//
+inline IParameter::InterpolationMethod ParamTransformVec::GetInterpolationMethod () const
+{
+    auto method = __super::GetInterpolationMethod();
+
+    // just to make sure
+    for( auto transform : m_transformModelVec )
+    {
+        for( unsigned int i = 0; i < transform.Size(); ++i )
+        {
+            assert( transform[ i ]->GetP0MotylaNoga().GetInterpolationMethod() == method );
+            assert( transform[ i ]->GetP1MotylaNoga().GetInterpolationMethod() == method );
+            assert( transform[ i ]->GetP2MotylaNoga().GetInterpolationMethod() == method );
+        }
+    }
+
+    return method;
+}
 
 // *******************************
 //

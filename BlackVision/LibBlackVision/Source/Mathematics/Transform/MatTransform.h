@@ -92,6 +92,21 @@ public:
     {
         return kind;
     }
+
+    ParamT          GetP0MotylaNoga() const
+    {
+        return p0;
+    }
+
+    ParamT          GetP1MotylaNoga() const
+    {
+        return p1;
+    }
+
+    ParamT          GetP2MotylaNoga() const
+    {
+        return p2;
+    }
 };
 
 template<typename ParamT>
