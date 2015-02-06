@@ -16,7 +16,6 @@
       <SDLCheck>false</SDLCheck>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
-    <Link />
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

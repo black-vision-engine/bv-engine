@@ -2,7 +2,7 @@ namespace bv { namespace model {
 
 namespace {
 
-    const unsigned int GNumLists = 19;
+    const unsigned int GNumLists = 18;
     const unsigned int GMaxNumEntries = 5;
 
     //@see: https://docs.google.com/spreadsheets/d/1K3dblNOAijnKdJXeha9_DWlSLhOc1Wcq5F1Mwlvk7x4
@@ -10,8 +10,7 @@ namespace {
                                                                     { "DEFAULT_COLOR",  "",                 "",                     "",             "" },
                                                                     { "",               "DEFAULT_TEXTURE",  "",                     "",             "" },
                                                                     { "DEFAULT_COLOR",  "",                 "",                     "DEFAULT_TEXT", "" },
-																	{ "",               "",                 "DEFAULT_ANIMATION",    "",             "" },
-																	{ "",               "",                 "DEFAULT_VIDEOINPUT",    "",             "" },
+                                                                    { "",               "",                 "DEFAULT_ANIMATION",    "",             "" },
                                                                     { "DEFAULT_COLOR",  "",                 "",                     "",             "DEFAULT_ALPHA_MASK" },
                                                                     { "",               "DEFAULT_TEXTURE",  "",                     "",             "DEFAULT_ALPHA_MASK" },
                                                                     { "DEFAULT_COLOR",  "",                 "",                     "DEFAULT_TEXT", "DEFAULT_ALPHA_MASK" },
@@ -33,8 +32,7 @@ namespace {
                                         "col",
                                         "tx",
                                         "col_txt",
-										"tx",
-										"tx",
+                                        "tx",
                                         "col_am",
                                         "tx_am",
                                         "col_txt_am",

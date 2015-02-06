@@ -302,7 +302,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTexturePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTimerPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Cache\RawDataCache.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\AtlasCache.cpp" />
@@ -355,6 +354,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
     <ClCompile Include="..\..\..\Source\System\DirIO.cpp" />
+    <ClCompile Include="..\..\..\Source\System\Env.cpp" />
     <ClCompile Include="..\..\..\Source\System\FileIO.cpp" />
     <ClCompile Include="..\..\..\Source\System\HerarchicalProfiler.cpp" />
     <ClCompile Include="..\..\..\Source\System\HRTimer.cpp" />
@@ -388,7 +388,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectWithMask.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRendererData.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLUtils.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\oglcore.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrIndexBuffer.h" />
@@ -571,7 +570,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTexturePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTimerPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Cache\RawDataCache.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\AtlasCache.h" />
@@ -639,6 +637,7 @@
     <ClInclude Include="..\..\..\Source\System\BasicMacros.h" />
     <ClInclude Include="..\..\..\Source\System\BasicTypes.h" />
     <ClInclude Include="..\..\..\Source\System\DirIO.h" />
+    <ClInclude Include="..\..\..\Source\System\Env.h" />
     <ClInclude Include="..\..\..\Source\System\Environment.h" />
     <ClInclude Include="..\..\..\Source\System\FileIO.h" />
     <ClInclude Include="..\..\..\Source\System\HerarchicalProfiler.h" />

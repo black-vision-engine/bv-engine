@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\PrototyperApp.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\VBORect.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\SimpleVAOPrototype0.cpp">
+      <Filter>Prototypes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\GLSLProgram.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
+    <ClInclude Include="..\..\..\Source\Interfaces\IAppLogicPrototype.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\VBORect.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\PrototyperCore.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Interfaces\IRenderable.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\SimpleVAOPrototype0.h">
+      <Filter>Prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\GLSLprogram.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Common">
+      <UniqueIdentifier>{c39afbdd-a516-47b8-8e9a-2f2b9a7a5e93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interfaces">
+      <UniqueIdentifier>{7752395b-fa16-448d-a905-02f671e387a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prototypes">
+      <UniqueIdentifier>{3e2113f7-96c3-46f3-85bb-8669706fa273}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

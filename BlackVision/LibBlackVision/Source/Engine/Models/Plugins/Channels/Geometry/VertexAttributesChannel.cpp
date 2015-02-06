@@ -143,6 +143,7 @@ void                                    VertexAttributesChannel::AddConnectedCom
     assert( attrChannel.size() == m_desc.GetNumVertexChannels() );
 
     int i = 0;
+    { i; } // FIXME: suppress unused warning
 
     for( auto attr : attrChannel )
     {

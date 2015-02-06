@@ -410,6 +410,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Tim
     if( useAlphaMask )
     {
         bool success = model::LoadTexture( node->GetPlugin( "alpha_mask" ), "bar_mask_red.png" );
+        { success; } // FIXME: suppress unused warning
         assert( success );
 
         //SetDefaultTransformAlphaMaskTex( node->GetPlugin( "alpha_mask" ) );
@@ -684,7 +685,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::Ti
 // TEXTURE plugin
 	if( root->GetPlugin( "texture" ) )
 	{
-		//success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
+		success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
 		success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
 		assert( success );
 	}

@@ -41,6 +41,7 @@ void    RectNodeBuilder::SetW        ( float w, TimeType t )
 {
     assert( m_node );
     bool success = model::SetParameter( GetRectPlugin()->GetParameter( WidthParamName() ), t, w );
+    { success; } // FIXME: suppress unused warning
     assert( success );
 }
 
@@ -50,6 +51,7 @@ void    RectNodeBuilder::SetH        ( float h, TimeType t )
 {
     assert( m_node );
     bool success = model::SetParameter( GetRectPlugin()->GetParameter( HeightParamName() ), t, h );
+    { success; } // FIXME: suppress unused warning
     assert( success );
 }
 
@@ -59,6 +61,7 @@ void    RectNodeBuilder::SetPosition ( float x, float y, float z, TimeType t )
 {
     assert( m_node );
     bool success = model::SetParameterTranslation( GetTRansformPlugin()->GetParameter( TransformParamName() ), 0, t, glm::vec3( x, y, z ) );
+    { success; } // FIXME: suppress unused warning
     assert( success );
 }
 
@@ -68,6 +71,7 @@ void    RectNodeBuilder::SetRotation ( float x, float y, float z, float angle, T
 {
     assert( m_node );
     bool success = model::SetParameterRotation( GetTRansformPlugin()->GetParameter( TransformParamName() ), 0, t, glm::vec3( x, y, z ), angle );
+    { success; } // FIXME: suppress unused warning
     assert( success );
 }
 
@@ -77,6 +81,7 @@ void    RectNodeBuilder::SetScale    ( float sx, float sy, float sz, TimeType t 
 {
     assert( m_node );
     bool success = model::SetParameterScale( GetTRansformPlugin()->GetParameter( TransformParamName() ), 0, t, glm::vec3( sx, sy, sz ) );
+    { success; } // FIXME: suppress unused warning
     assert( success );
 }
 
@@ -175,6 +180,7 @@ model::BasicNodePtr RectNodeBuilder::CreateNewNode   () const
     assert( node );
     
     auto success = node->AddPlugins( uids, m_timeEvaluator );
+    { success; } // FIXME: suppress unused warning
     assert( success );
 
     return node;
@@ -204,6 +210,7 @@ void    SolidRectNodeBuilder::SetColor        ( float r, float g, float b, float
 {
     assert( m_node );
     bool success = model::SetParameter( GetShaderPlugin()->GetParameter( ColorParamName() ), t, glm::vec4( r, g, b, a ) );
+    { success; } // FIXME: suppress unused warning
     assert( success );    
 
     if( a < 1.0f )
@@ -260,6 +267,7 @@ void    TexturedRectNodeBuilder::SetTextureFile      ( const std::string & textu
 {
     assert( m_node );
     bool success = model::LoadTexture( GetShaderPlugin(), textureFile );
+    { success; } // FIXME: suppress unused warning
     assert( success );
 
     if( hasAlpha )

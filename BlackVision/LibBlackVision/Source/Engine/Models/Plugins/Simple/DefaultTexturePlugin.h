@@ -39,7 +39,7 @@ public:
 // ***************************** PLUGIN ********************************** 
 class DefaultTexturePlugin : public BasePlugin< IPlugin >
 {
-protected:
+private:
 
     DefaultPluginParamValModelPtr   m_paramValModel;
 

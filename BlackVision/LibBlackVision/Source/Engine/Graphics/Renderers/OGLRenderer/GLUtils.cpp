@@ -1,8 +1,9 @@
 #include "glutils.h"
 
-#include "Engine/Graphics/Renderers/OGLRenderer/oglcore.h"
-
 #include <cstdio>
+
+#include <gl\glew.h>
+
 
 // ******************************
 //

@@ -11,10 +11,6 @@
 #include "NewModelTestNodes.h"
 
 #include "PieChartNode.h"
-#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
-#include "Engine/Models/Plugins/Channels/PixelShader/DefaultTexturesData.h"
-#include "VideoInput/DefaultVideoInputResourceDescr.h"
-#include "VideoInput/ExampleVideoInput.h"
 
 namespace bv {
 
@@ -452,7 +448,6 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 //
 model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-	{ timelineManager; }
     { pluginsManager; } // FIXME: suppress unuse warning
     //return SimpleNodesFactory::CreateHeightMapNode( timelineManager, timeEvaluator );
 
@@ -463,7 +458,7 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
 
     //return node0;
 
-    //return SimpleNodesFactory::CreateOverrideNodeMaskTest1( timelineManager, timeEvaluator );
+    return SimpleNodesFactory::CreateOverrideNodeMaskTest1( timelineManager, timeEvaluator );
 #if 0
     //return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );
 
@@ -516,7 +511,6 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
     //return child;
     //return parent;
 #endif
-	return NULL;
 }
 
 // *****************************
@@ -531,40 +525,14 @@ model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::Plug
 	return rect;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
-{
-	{timelineManager;}
-	{pluginsManager;}
-
-	model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
-	root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
-	root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
-
-	//auto texturePlugin =  std::dynamic_pointer_cast< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
-	//((model::DefaultTexturesData*)(texturePlugin->GetPixelShaderChannel()->GetTexturesData().get()))->AddTexture( new model::DefaultVideoInput() );
-
-	root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
-	auto plugin = root->GetPlugin( "video input" );
-
-	//root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
-	//auto plugin = root->GetPlugin( "texture" );
-
-	//auto vi = new model::DefaultVideoInput( 10, 10, 1.f );
-	auto vi = new ExampleVideoInput( 10, 10, 1.f );
-	auto success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture(), vi ) ) );
-	assert(success);
-
-	return root;
-}
-
-model::BasicNodePtr    TestScenesFactory::CreedPieChartTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    TestScenesFactory::CreedTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; } // FIXME: suppress unuse warning
 	std::vector< PieChartSubnodeDesc > descs;
 
-	//descs.push_back( PieChartSubnodeDesc( 10.f, 0.f ) );
+	descs.push_back( PieChartSubnodeDesc( 10.f, 0.f ) );
 	descs.push_back( PieChartSubnodeDesc( 20.f, -.1f, PieChartSubnodeDesc::COLORED ) );
-	//descs.push_back( PieChartSubnodeDesc( 50.f, .1f ) );
+	descs.push_back( PieChartSubnodeDesc( 50.f, .1f ) );
 
 	auto node = new PieChartNode( timelineManager, timeEvaluator, descs );
 
@@ -671,29 +639,6 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
 	root->AddChild( prism4 );
 
 	//return rect;
-	return root;
-}
-
-model::BasicNodePtr    TestScenesFactory::CreedPrismBugTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
-{
-	{pluginsManager;}
-
-	model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
-	root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
-
-	auto prism2 = SimpleNodesFactory::CreateCreedTexturedPrismNode( timelineManager, timeEvaluator, 0 );
-
-	SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  0.f, glm::vec3( 1.f, 1.0f, 1.f ) );
-	SetParameterTranslation( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  0.f, glm::vec3( 1.f, 1.0f, 1.f ) );
-
-	//SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  3.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-	//SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  7.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
-	//SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 13.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
-	//SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 17.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-	//SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-
-	root->AddChild( prism2 );
-
 	return root;
 }
 

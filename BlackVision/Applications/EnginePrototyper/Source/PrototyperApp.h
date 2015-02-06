@@ -1,11 +1,15 @@
 #pragma once
 
+#include "Interfaces/IAppLogicPrototype.h"
 #include "Application/WindowedApplication.h"
 
+namespace bv {
 
-class PrototyperApp : public bv::WindowedApplication
+class PrototyperApp : public WindowedApplication
 {
 private:
+
+    IAppLogicPrototype *    m_appLogicPrototype;
 
 public:
 
@@ -29,3 +33,5 @@ public:
     virtual void    OnTerminate         ()  override;
 
 };
+
+} // bv

@@ -149,6 +149,7 @@ namespace
 int GetEntryCallback( void * data, int argsNum, char ** args, char ** columnName )
 {
     { columnName; } // FIXME: suppress unused warning
+    { argsNum; } // FIXME: suppress unused warning
 
     auto out = static_cast< FontAtlasCacheEntry * >( data );
 

@@ -191,13 +191,11 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestAI.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestAIManager.cpp" />
-    <ClCompile Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.cpp" />
-    <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\Crawler.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.cpp" />
+    <ClCompile Include="..\..\..\Source\Xml\Auxiliary\Auxiliary.cpp" />
     <ClCompile Include="..\..\..\Source\Xml\BlackTree.cpp" />
-    <ClCompile Include="..\..\..\Source\Xml\Pomocnicze\Auxilary.cpp" />
     <ClCompile Include="..\..\..\Source\Xml\Scena.cpp" />
     <ClCompile Include="..\..\..\Source\Xml\TreeBuilder.cpp" />
   </ItemGroup>
@@ -224,14 +222,11 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClInclude Include="..\..\..\Source\TestAI\IAICommand.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestAI.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestAIManager.h" />
-    <ClInclude Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.h" />
-    <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h" />
-    <ClInclude Include="..\..\..\Source\VideoInput\IVideoInput.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\Crawler.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.h" />
+    <ClInclude Include="..\..\..\Source\Xml\Auxiliary\Auxiliary.hpp" />
     <ClInclude Include="..\..\..\Source\Xml\BlackTree.h" />
-    <ClInclude Include="..\..\..\Source\Xml\Pomocnicze\Auxilary.hpp" />
     <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml.hpp" />
     <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Iterators.hpp" />
     <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Print.hpp" />

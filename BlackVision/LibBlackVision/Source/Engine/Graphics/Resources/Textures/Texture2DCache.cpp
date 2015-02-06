@@ -79,6 +79,7 @@ Texture2DPtr    Texture2DCache::GetSequence             ( const IAnimationDescri
     for( unsigned int i = 0; i < animParams->NumTextures(); ++i )
     {
         bool bAdded = sequence->AddTextureSettingRawData( animParams->GetBits( i ), format, width, height );
+        { bAdded; } // FIXME: suppress unused warning
         assert( bAdded );
     }
 

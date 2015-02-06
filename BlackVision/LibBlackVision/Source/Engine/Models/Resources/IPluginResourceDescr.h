@@ -7,8 +7,6 @@
 #include "Engine/Types/Enums.h"
 #include "System/BasicTypes.h"
 #include "Engine/Models/Resources/IPluginResourceDescr.h"
-#include "../Interfaces/ITextureDescriptor.h"
-#include "../Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
 
 namespace bv { namespace model {
 
@@ -41,24 +39,6 @@ DEFINE_PTR_TYPE(ITextureResourceDescr)
 DEFINE_CONST_PTR_TYPE(ITextureResourceDescr)
 
 ITextureResourceDescrConstPtr QueryTextureResourceDescr( IPluginResourceDescrConstPtr resDescr );
-
-
-//FIXME: move to a separate file
-class IVideoInputResourceDescr : public IPluginResourceDescr
-{
-public:
-
-	virtual DefaultTextureDescriptor*		GetITextureDescriptor  () const = 0;
-	virtual void							Update () const = 0; // const Update? WTF? ;)
-
-	virtual ~IVideoInputResourceDescr () {}
-
-};
-
-DEFINE_PTR_TYPE(IVideoInputResourceDescr)
-DEFINE_CONST_PTR_TYPE(IVideoInputResourceDescr)
-
-IVideoInputResourceDescrConstPtr QueryVideoInputResourceDescr( IPluginResourceDescrConstPtr resDescr );
 
 
 //FIXME: move to a separate file

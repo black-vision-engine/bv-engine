@@ -142,7 +142,6 @@ enum class PluginResourceType : int
     PRT_TEXTURE = 0,
     PRT_ANIMATION,
     PRT_FONT,
-	PRT_VIDEOINPUT,
 
     PRT_TOTAL
 };

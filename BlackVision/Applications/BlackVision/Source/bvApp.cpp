@@ -129,7 +129,7 @@ void    BlackVisionApp::UpdateSubsystems    ( unsigned long millis )
 //
 void    BlackVisionApp::InitializeConsole   ()
 {
-    if( AllocConsole())
+    if( AllocConsole() )
     {
         FILE * dummy;
 
