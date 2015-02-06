@@ -47,6 +47,11 @@ namespace bv { namespace model
             vertArrtUV->AddAttribute( glm::vec2( float( i ) / fragmentsNum, 1 ) );
         }
 
+        glm::vec2 borderUV = glm::vec2( -1, -1 );
+        glm::vec2 upUV = glm::vec2( 1, 0 ); // there is absolutely no rule for x coordinate here. seriously
+        glm::vec2 downUV = glm::vec2( 0, 1 ); // the same here
+                                                // BTW, why are you here, you unfortunate man...? Anyway I hope you are well!
+
         // up
 
         auto vertices = vertArrtF3->GetVertices();
@@ -64,10 +69,6 @@ namespace bv { namespace model
         if( n%2 == 0 ) // we need additional point
             up_vertArrtF3->AddAttribute( vertices[ 2*( n-1 - i ) ] );
         
-        glm::vec2 borderUV = glm::vec2( -1, -1 );
-        glm::vec2 upUV = glm::vec2( 1, 0 );
-        glm::vec2 downUV = upUV;
-
         switch( type )
         {
         case PrismComponent::PrismUVType::TEXTURED:
@@ -91,11 +92,11 @@ namespace bv { namespace model
 
             for( i = 0; i < (n-3)/2; i++ )
             {
-                up_vertArrtUV->AddAttribute( glm::vec2( 1.1, 1.1 ) );
-                up_vertArrtUV->AddAttribute( glm::vec2( 1.1, 1.1 ) );
+                up_vertArrtUV->AddAttribute( upUV );
+                up_vertArrtUV->AddAttribute( upUV );
             }
             if( n%2 == 0 ) // we need additional point
-                up_vertArrtUV->AddAttribute( glm::vec2( 1.1, 1.1 ) );
+                up_vertArrtUV->AddAttribute( upUV );
             break;
 
         default:
@@ -141,11 +142,11 @@ namespace bv { namespace model
 
             for( i = 0; i < (n-3)/2; i++ )
             {
-                down_vertArrtUV->AddAttribute( glm::vec2( 1.1, 1.1 ) );
-                down_vertArrtUV->AddAttribute( glm::vec2( 1.1, 1.1 ) );
+                down_vertArrtUV->AddAttribute( downUV );
+                down_vertArrtUV->AddAttribute( downUV );
             }
             if( n%2 == 0 ) // we need additional point
-                down_vertArrtUV->AddAttribute( glm::vec2( 1.1, 1.1 ) );
+                down_vertArrtUV->AddAttribute( downUV );
             break;
 
         default:

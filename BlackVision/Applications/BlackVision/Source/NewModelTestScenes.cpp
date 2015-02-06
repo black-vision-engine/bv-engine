@@ -629,6 +629,8 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
 	model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
 	root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
+    SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), 1000.f );
+
 	//auto root = SimpleNodesFactory::CreateCreedRectNode( timelineManager, timeEvaluator );
 
 	auto prism = SimpleNodesFactory::CreateCreedColoredPrismNode( timelineManager, timeEvaluator, -1.5f );
