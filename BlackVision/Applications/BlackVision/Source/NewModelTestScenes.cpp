@@ -652,7 +652,9 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     auto param = prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" );
     param->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 
-	auto prism3 = SimpleNodesFactory::CreateCreedGradedPrismNode( timelineManager, timeEvaluator, 0.5f );
+SetParameterRotation( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), -10000.f );
+
+    auto prism3 = SimpleNodesFactory::CreateCreedGradedPrismNode( timelineManager, timeEvaluator, 0.5f );
 	SetParameter( prism3->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 12.f );
 	
 	SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  7.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );

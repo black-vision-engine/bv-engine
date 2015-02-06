@@ -199,7 +199,7 @@ bool                            DefaultTexturePlugin::LoadResource  ( IPluginRes
 		//FIXME: use some better API to handle resources in general and textures in this specific case
 		auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), DefaultTexturePluginDesc::TextureName() );
 		txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
-        txDesc->SetBorderColor( glm::vec4( 1, 0, 0, 1 ) ); // FIXME: THIS IS JUST A TEMPORARY HACK I HAVE NO IDEA WHY THE PROPER IMPLEMENTATION DOES NOT WORK!!!!!!!!!!!!!!!!!!!!
+        txDesc->SetBorderColor( GetBorderColor() );
 		
 		if( txDesc != nullptr )
 		{
