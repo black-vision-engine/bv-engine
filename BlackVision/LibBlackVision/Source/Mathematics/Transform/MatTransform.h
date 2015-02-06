@@ -93,17 +93,32 @@ public:
         return kind;
     }
 
-    ParamT          GetP0MotylaNoga() const
+    ParamT&          GetP0MotylaNoga()// const
     {
         return p0;
     }
 
-    ParamT          GetP1MotylaNoga() const
+    ParamT&          GetP1MotylaNoga()// const
     {
         return p1;
     }
 
-    ParamT          GetP2MotylaNoga() const
+    ParamT&          GetP2MotylaNoga()// const
+    {
+        return p2;
+    }
+
+    const ParamT&          GetP0MotylaNoga() const
+    {
+        return p0;
+    }
+
+    const ParamT&          GetP1MotylaNoga() const
+    {
+        return p1;
+    }
+
+    const ParamT&          GetP2MotylaNoga() const
     {
         return p2;
     }
@@ -153,6 +168,9 @@ public:
     void            InitializeDefaultSRT();
 
     virtual         ~CompositeTransform ();
+
+	void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) override;
+	model::IParameter::InterpolationMethod     GetInterpolationMethod () const override;
 
     void            AddTranslation      ( ParamT x0, ParamT x1, ParamT x2 );
     void            AddScale            ( ParamT s0, ParamT s1, ParamT s2 );

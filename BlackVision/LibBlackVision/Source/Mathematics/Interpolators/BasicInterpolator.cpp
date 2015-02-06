@@ -105,26 +105,27 @@ BasicInterpolator<TimeValueT, ValueT>::BasicInterpolator(TimeValueT tolerance)
     : tolerance( tolerance )
     , wrapPost( WrapMethod::clamp )
     , wrapPre( WrapMethod::clamp )
-    , method( model::IParameter::InterpolationMethod::LINEAR )
 {
     assert( tolerance > static_cast<TimeValueT>(0.) );
+    SetInterpolationMethod( model::IParameter::InterpolationMethod::LINEAR );
+    //SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 }
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
-void                    BasicInterpolator<TimeValueT, ValueT>::SetInterpolationMethod ( model::IParameter::InterpolationMethod method )
-{
-    this->method = method;
-}
-
-// *************************************
+//template<class TimeValueT, class ValueT>
+//void                    BasicInterpolator<TimeValueT, ValueT>::SetInterpolationMethod ( model::IParameter::InterpolationMethod method )
+//{
+//    this->method = method;
+//}
 //
-template<class TimeValueT, class ValueT>
-model::IParameter::InterpolationMethod     BasicInterpolator<TimeValueT, ValueT>::GetInterpolationMethod () const
-{
-    return method;
-}
+//// *************************************
+////
+//template<class TimeValueT, class ValueT>
+//model::IParameter::InterpolationMethod     BasicInterpolator<TimeValueT, ValueT>::GetInterpolationMethod () const
+//{
+//    return method;
+//}
 
 // *************************************
 //
@@ -230,18 +231,17 @@ ValueT BasicInterpolator<TimeValueT, ValueT>::Evaluate( TimeValueT t ) const
 
             if( t <= k1.t )
             {
-				switch( method )
-				{
+                switch( GetInterpolationMethod() )
+                {
                 case model::IParameter::InterpolationMethod::LINEAR:
-                //case InterpolationMethod::COSINE:
-					return EvaluateLinear( keys[ i0 ], keys[ i1 ], t );
-					break;
-				case model::IParameter::InterpolationMethod::COSINE:
-					return EvaluateCosine( keys[ i0 ], keys[ i1 ], t );
-					break;
-				default:
-					assert( false );
-				}
+                    return EvaluateLinear( keys[ i0 ], keys[ i1 ], t );
+                    break;
+                case model::IParameter::InterpolationMethod::COSINE:
+                    return EvaluateCosine( keys[ i0 ], keys[ i1 ], t );
+                    break;
+                default:
+                    assert( false );
+                }
             }
         }
     }

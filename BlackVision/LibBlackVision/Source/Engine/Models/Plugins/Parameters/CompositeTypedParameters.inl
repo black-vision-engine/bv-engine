@@ -7,6 +7,7 @@ namespace bv { namespace model {
 // FIXME: reimplement with SQT paramter model
 inline void                ParamTransform::SetInterpolationMethod ( IParameter::InterpolationMethod method )
 {
+    __super::SetInterpolationMethod( method );
     for( unsigned int i = 0; i < m_transformModel.Size(); ++i )
     {
         m_transformModel[ i ]->GetP0MotylaNoga().SetInterpolationMethod( method );
@@ -116,7 +117,8 @@ inline  glm::mat4   ParamTransform::Evaluate        () const
 //
 inline void                ParamTransformVec::SetInterpolationMethod ( IParameter::InterpolationMethod method )
 {
-    for( auto transform : m_transformModelVec )
+    __super::SetInterpolationMethod( method );
+    for( auto& transform : m_transformModelVec )
     {
         for( unsigned int i = 0; i < transform.Size(); ++i )
         {
@@ -134,7 +136,7 @@ inline IParameter::InterpolationMethod ParamTransformVec::GetInterpolationMethod
     auto method = __super::GetInterpolationMethod();
 
     // just to make sure
-    for( auto transform : m_transformModelVec )
+    for( auto& transform : m_transformModelVec )
     {
         for( unsigned int i = 0; i < transform.Size(); ++i )
         {
