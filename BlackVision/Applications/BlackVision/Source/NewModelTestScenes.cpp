@@ -629,7 +629,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
 	model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
 	root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
-    SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), 1000.f );
+//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), 1000.f );
 
 	//auto root = SimpleNodesFactory::CreateCreedRectNode( timelineManager, timeEvaluator );
 
@@ -659,6 +659,8 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
 	SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 13.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
 	SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 17.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
 	SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+
+SetParameterRotation( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), 10000.f );
 
 	auto prism4 = SimpleNodesFactory::CreateCreedGradedPrismNode( timelineManager, timeEvaluator, 1.5f );
 	SetParameter( prism4->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 36.f );
