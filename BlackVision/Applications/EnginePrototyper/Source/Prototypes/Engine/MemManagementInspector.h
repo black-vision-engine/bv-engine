@@ -2,7 +2,9 @@
 
 #pragma once
 
+#include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Interfaces/IAppLogicPrototype.h"
+
 
 namespace bv {
 
@@ -13,6 +15,7 @@ class MemManagementInspector : public IAppLogicPrototype
 private:
 
     Renderer *  m_renderer;
+    SceneNode * m_sceneRoot;
 
 public:
 
@@ -28,6 +31,7 @@ public:
 private:
 
     void                Render              ( Renderer * renderer );
+    void                DrawNode            ( Renderer * renderer, SceneNode * node );
 
 };
 
