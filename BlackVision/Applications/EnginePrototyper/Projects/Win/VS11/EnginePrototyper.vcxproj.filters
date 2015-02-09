@@ -5,11 +5,14 @@
     <ClCompile Include="..\..\..\Source\Common\VBORect.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Prototypes\SimpleVAOPrototype0.cpp">
-      <Filter>Prototypes</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Common\GLSLProgram.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.cpp">
+      <Filter>Prototypes\VAO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagementInspector.cpp">
+      <Filter>Prototypes\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -26,11 +29,15 @@
     <ClInclude Include="..\..\..\Source\Interfaces\IRenderable.h">
       <Filter>Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Prototypes\SimpleVAOPrototype0.h">
-      <Filter>Prototypes</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Common\GLSLprogram.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\PrototypesForwardInc.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.h">
+      <Filter>Prototypes\VAO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagementInspector.h">
+      <Filter>Prototypes\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +49,12 @@
     </Filter>
     <Filter Include="Prototypes">
       <UniqueIdentifier>{3e2113f7-96c3-46f3-85bb-8669706fa273}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prototypes\VAO">
+      <UniqueIdentifier>{697f1ccb-9582-43d7-9e84-238420993066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prototypes\Engine">
+      <UniqueIdentifier>{a94527e0-0de4-450a-aee6-d3080fe72f42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -14,4 +14,7 @@
 
 #include "System/BasicTypes.h"
 
+namespace bv { namespace config {
 const std::string PROTOTYPES_SHADERS_ROOT = "Assets/Shaders/Prototypes/";
+} // config
+} // bv

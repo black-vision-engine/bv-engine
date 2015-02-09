@@ -10,7 +10,7 @@
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
-#include "Prototypes/SimpleVAOPrototype0.h"
+#include "PrototypesForwardInc.h"
 
 
 namespace bv {

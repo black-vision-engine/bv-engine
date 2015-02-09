@@ -58,7 +58,7 @@ void    SimpleVAOPrototype0::Resize         ( UInt32 w, UInt32 h )
 //
 bool    SimpleVAOPrototype0::PrepareShader  ()
 {
-    std::string shadersRoot = PROTOTYPES_SHADERS_ROOT + "VAOPrototype0/";
+    std::string shadersRoot = config::PROTOTYPES_SHADERS_ROOT + "VAOPrototype0/";
 
     std::string vsFile = shadersRoot + "basic_color.vert";
     std::string psFile = shadersRoot + "basic_color.frag";
