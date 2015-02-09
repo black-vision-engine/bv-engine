@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Common\GLSLProgram.cpp" />
     <ClCompile Include="..\..\..\Source\Common\VBORect.cpp" />
+    <ClCompile Include="..\..\..\Source\PrototypeCreator.cpp" />
     <ClCompile Include="..\..\..\Source\PrototyperApp.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagementInspector.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="..\..\..\Source\Common\VBORect.h" />
     <ClInclude Include="..\..\..\Source\Interfaces\IAppLogicPrototype.h" />
     <ClInclude Include="..\..\..\Source\Interfaces\IRenderable.h" />
+    <ClInclude Include="..\..\..\Source\PrototypeCreator.h" />
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
     <ClInclude Include="..\..\..\Source\PrototypesForwardInc.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagementInspector.h" />

@@ -55,7 +55,7 @@ PrototyperApp::~PrototyperApp ()
 //
 void PrototyperApp::OnKey( unsigned char c )
 {
-    { c; } // FIXME: suppress unused warning
+    m_appLogicPrototype->Key( c );
 }
 
 // *********************************
@@ -103,10 +103,19 @@ bool PrototyperApp::OnInitialize       ()
         std::cout << sizeof(FILE*);
     }
 
-    m_appLogicPrototype = new SimpleVAOPrototype0();
+    m_appLogicPrototype = CreateDefaultPrototype( m_Renderer );
     m_appLogicPrototype->Initialize();
 
     return true;
+}
+
+// *********************************
+//
+void PrototyperApp::OnResize            ( int w, int h )
+{
+    WindowedApplication::OnResize( w, h );
+
+    m_appLogicPrototype->Resize( (UInt32) w, (UInt32) h );
 }
 
 // *********************************

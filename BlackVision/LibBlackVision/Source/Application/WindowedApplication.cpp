@@ -222,4 +222,4 @@ int WindowedApplication::MainImpl					( int argc, char ** argv )
     return static_cast< WindowedApplication * >( ApplicationBase::ApplicationInstance )->MainFun( argc, argv );
 }
 
-}
+} // bv

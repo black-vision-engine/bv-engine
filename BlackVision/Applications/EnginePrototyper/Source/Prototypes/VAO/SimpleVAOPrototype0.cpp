@@ -6,6 +6,7 @@ namespace bv {
 //
 SimpleVAOPrototype0::SimpleVAOPrototype0    ()
     : m_rct( 1.f, 1.f )
+    , m_paused( false )
 {
     if( !PrepareShader() )
     {
@@ -30,6 +31,9 @@ void    SimpleVAOPrototype0::Initialize     ()
 //
 void    SimpleVAOPrototype0::Update         ( TimeType t )
 {
+    if( m_paused )
+        return;
+
     float r = ( cos( t ) + 1.f ) * 0.5f;
     float g = ( sin( t ) + 1.f ) * 0.5f;
     float b = ( cos( t / 3.f ) * sin( t / 2.f ) + 1.f ) * 0.5f;
@@ -45,6 +49,15 @@ void    SimpleVAOPrototype0::Render         ()
 
     m_prog.Use();
     m_rct.Render();
+}
+
+// **************************
+//
+void    SimpleVAOPrototype0::Key            ( unsigned char c )
+{
+    { c; }
+
+    m_paused = !m_paused;
 }
 
 // **************************

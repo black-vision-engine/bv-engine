@@ -18,6 +18,9 @@ public:
     // Method responsible for rendering
     virtual     void    Render              ()                      = 0;
 
+    // Method responsible for servicing keyboard events
+    virtual     void    Key                 ( unsigned char c )     = 0;
+
     // Usual resize
     virtual     void    Resize              ( UInt32 w, UInt32 h )  = 0;
 
