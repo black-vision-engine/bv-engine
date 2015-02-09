@@ -141,7 +141,7 @@ void    RenderLogic::RenderNodeMask  ( Renderer * renderer, SceneNode * node )
 //
 void    RenderLogic::RenderNodeMask1 ( Renderer * renderer, SceneNode * node )
 {
-    if( node->NumChildrenNodes() < 2 )
+    if( node->NumChildNodes() < 2 )
     {
         RenderVanilla( renderer, node );
     }
@@ -191,20 +191,14 @@ void    RenderLogic::DrawNode        ( Renderer * renderer, SceneNode * node )
 //
 void    RenderLogic::DrawNodeOnly   ( Renderer * renderer, SceneNode * node )
 {
-    renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetAnchor() ) );
-
-    for( unsigned int i = 0; i < (unsigned int) node->NumTransformables(); ++i )
-    {
-        HPROFILER_SECTION( "RenderNode::renderer->Draw sibling" );
-        renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable( i ) ) );
-    }
+    renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable() ) );
 }
 
 // *********************************
 //
 void    RenderLogic::DrawChildren   ( Renderer * renderer, SceneNode * node, int firstChildIdx )
 {
-    for ( unsigned int i = firstChildIdx; i < (unsigned int) node->NumChildrenNodes(); i++ )
+    for ( unsigned int i = firstChildIdx; i < (unsigned int) node->NumChildNodes(); i++ )
     {
         HPROFILER_SECTION( "RenderNode::RenderNode" );
         RenderNode( renderer, node->GetChild( i ) ); 

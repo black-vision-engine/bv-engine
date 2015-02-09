@@ -7,24 +7,19 @@ namespace bv {
 
 // ********************************
 //
-SceneNode::SceneNode           ( TransformableEntity * transformRep )
-    : m_overridenStateAlphaMask( false )
+SceneNode::SceneNode           ( TransformableEntity * transformable )
+    : m_transformable( transformable )
+    , m_overridenStateAlphaMask( false )
     , m_overridenStateNodeMask( false )
     , m_overrideAlphaVal( nullptr )
 {
-    RegisterTransformRep( transformRep );
 }
 
 // ********************************
 //
 SceneNode::~SceneNode          ()
 {
-    m_transformRep = nullptr; //this one is not owned here
-
-    for ( auto transformable : m_transformables )
-    {
-        delete transformable;
-    }
+    delete m_transformable;
 
     for ( auto node : m_sceneNodes )
     {
@@ -34,16 +29,9 @@ SceneNode::~SceneNode          ()
 
 // ********************************
 //
-SizeType                SceneNode::NumChildrenNodes    () const
+SizeType                SceneNode::NumChildNodes        () const
 {
     return m_sceneNodes.size();
-}
-
-// ********************************
-//
-SizeType                SceneNode::NumTransformables   () const
-{
-    return m_transformables.size();
 }
 
 // ********************************
@@ -55,65 +43,28 @@ void                    SceneNode::AddChildNode         ( SceneNode * child )
 
 // ********************************
 //
-void                    SceneNode::AddTransformable     ( TransformableEntity * transformable )
-{
-    m_transformables.push_back( transformable );
-}
-
-// ********************************
-//
 SceneNode *             SceneNode::GetChild             ( unsigned int idx )
 {
     assert( idx >= 0 );
-    assert( idx < (unsigned int) NumChildrenNodes() );
+    assert( idx < (unsigned int) NumChildNodes() );
 
     return m_sceneNodes[ idx ];
 }
 
 // ********************************
 //
-TransformableEntity *   SceneNode::GetTransformable     ( unsigned int idx )
+TransformableEntity *   SceneNode::GetTransformable     ()
 {
-    assert( idx >= 0 );
-    assert( idx < (unsigned int) NumTransformables() );
-
-    return m_transformables[ idx ];
-}
-
-// ********************************
-//
-TransformableEntity *   SceneNode::GetAnchor            ()
-{
-    return m_transformRep;
-}
-
-
-// ********************************
-//
-void            SceneNode::RegisterTransformRep ( TransformableEntity * transformable )
-{
-    m_transformRep = transformable;
+    return m_transformable;
 }
 
 // ********************************
 //
 void            SceneNode::Update               ( const std::vector< Transform > & parentTransforms )
 {
-    const std::vector< Transform > * pWorldTransforms = &parentTransforms;
+    m_transformable->UpdateTransforms( parentTransforms );
 
-    if( m_transformRep )
-    {
-        m_transformRep->UpdateTransforms( *pWorldTransforms );
-
-        pWorldTransforms = &m_transformRep->WorldTransforms();
-    }
-
-    const std::vector< Transform > & worldTransforms = *pWorldTransforms;
-
-    for ( auto transformable : m_transformables )
-    {
-        transformable->UpdateTransforms( worldTransforms );
-    }
+    const std::vector< Transform > & worldTransforms = m_transformable->WorldTransforms();
 
     for ( auto node : m_sceneNodes )
     {

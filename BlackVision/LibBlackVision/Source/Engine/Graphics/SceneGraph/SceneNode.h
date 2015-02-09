@@ -12,35 +12,26 @@ class TransformableEntity;
 
 class SceneNode
 {
-    typedef std::vector<TransformableEntity *>  TransformableEntityVec;
     typedef std::vector<SceneNode *>            SceneNodeVec;
 
 private:
 
-    TransformableEntityVec  m_transformables;
     SceneNodeVec            m_sceneNodes;
 
-    TransformableEntity *   m_transformRep;
+    TransformableEntity *   m_transformable;
 
 public:
 
-                            SceneNode           ( TransformableEntity * transformRep = nullptr );
+                            SceneNode           ( TransformableEntity * transformable = nullptr );
                             ~SceneNode          ();
 
-    SizeType                NumChildrenNodes    () const;
-    SizeType                NumTransformables   () const;
+    SizeType                NumChildNodes       () const;
 
     void                    AddChildNode        ( SceneNode * child );
-    void                    AddTransformable    ( TransformableEntity * transformable );
 
     SceneNode *             GetChild            ( unsigned int idx );
-    TransformableEntity *   GetTransformable    ( unsigned int idx );
-    TransformableEntity *   GetAnchor           ();
+    TransformableEntity *   GetTransformable    ();
 
-    void                    RegisterTransformRep( TransformableEntity * transformable );
-
-
-//  void                    Update              ( double t, const Transform & parentTransform ); 
     void                    Update              ( const std::vector< Transform > & parentTransforms );
 
     bool                    IsVisible           () const;
