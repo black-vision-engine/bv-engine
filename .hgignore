@@ -6,4 +6,3 @@ syntax: glob
 *.vcxproj.user
 BlackVision/_Builds/*
 BlackVision/_Temp/*
-*.favdoc
