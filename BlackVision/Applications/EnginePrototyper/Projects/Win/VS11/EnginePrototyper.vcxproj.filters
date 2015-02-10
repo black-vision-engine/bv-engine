@@ -11,12 +11,18 @@
     <ClCompile Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.cpp">
       <Filter>Prototypes\VAO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagementInspector.cpp">
-      <Filter>Prototypes\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\PrototypeCreator.cpp" />
-    <ClCompile Include="..\..\..\Source\Prototypes\Engine\SceneExampleBuilder.cpp">
-      <Filter>Prototypes\Engine</Filter>
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.cpp">
+      <Filter>Prototypes\Engine\MemManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\SceneExampleBuilder.cpp">
+      <Filter>Prototypes\Engine\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.cpp">
+      <Filter>Prototypes\Engine\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.cpp">
+      <Filter>Prototypes\Engine\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -40,12 +46,18 @@
     <ClInclude Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.h">
       <Filter>Prototypes\VAO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagementInspector.h">
-      <Filter>Prototypes\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\PrototypeCreator.h" />
-    <ClInclude Include="..\..\..\Source\Prototypes\Engine\SceneExampleBuilder.h">
-      <Filter>Prototypes\Engine</Filter>
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.h">
+      <Filter>Prototypes\Engine\MemManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\SceneExampleBuilder.h">
+      <Filter>Prototypes\Engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.h">
+      <Filter>Prototypes\Engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.h">
+      <Filter>Prototypes\Engine\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +75,12 @@
     </Filter>
     <Filter Include="Prototypes\Engine">
       <UniqueIdentifier>{a94527e0-0de4-450a-aee6-d3080fe72f42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prototypes\Engine\Common">
+      <UniqueIdentifier>{2365a9b5-c9e9-47c2-a796-bca83295d632}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prototypes\Engine\MemManagement">
+      <UniqueIdentifier>{8a04cdf7-0cef-4626-b31d-e9b1cee05e66}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -140,8 +140,10 @@
     <ClCompile Include="..\..\..\Source\Common\VBORect.cpp" />
     <ClCompile Include="..\..\..\Source\PrototypeCreator.cpp" />
     <ClCompile Include="..\..\..\Source\PrototyperApp.cpp" />
-    <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagementInspector.cpp" />
-    <ClCompile Include="..\..\..\Source\Prototypes\Engine\SceneExampleBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\SceneExampleBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -153,8 +155,10 @@
     <ClInclude Include="..\..\..\Source\PrototypeCreator.h" />
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
     <ClInclude Include="..\..\..\Source\PrototypesForwardInc.h" />
-    <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagementInspector.h" />
-    <ClInclude Include="..\..\..\Source\Prototypes\Engine\SceneExampleBuilder.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\SceneExampleBuilder.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

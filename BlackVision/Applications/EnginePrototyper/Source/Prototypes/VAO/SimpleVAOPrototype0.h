@@ -5,6 +5,7 @@
 #include "Common/VBORect.h"
 #include "Common/GLSLProgram.h"
 
+
 namespace bv {
 
 class SimpleVAOPrototype0 : public IAppLogicPrototype
