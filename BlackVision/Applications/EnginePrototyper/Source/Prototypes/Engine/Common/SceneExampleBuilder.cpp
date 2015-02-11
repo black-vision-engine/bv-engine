@@ -2,6 +2,11 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/Effects/DefaultEffect.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
+#include "Engine/Graphics/SceneGraph/TriangleStrip.cpp"
+
+#include "Prototypes/Engine/Common/GeometryBuilder.h"
+
 
 namespace bv {
 
@@ -23,29 +28,13 @@ SceneNode *  SceneExampleBuilder::BuildScene( unsigned int sceneNum )
 //
 SceneNode *  SceneExampleBuilder::Scene0    ()
 {
-    auto effect = CreateRenderableEffect( ShaderDataSourceType::SDST_SOLID_COLOR );
+    RenderableEffectPtr effect      = CreateRenderableEffect( ShaderDataSourceType::SDST_SOLID_COLOR );
+    RenderableEntity *  renderable  = CreateRenderable( effect );
+    SceneNode *         node        = new SceneNode( static_cast< TransformableEntity * >( renderable ) );
 
-    // CreateStrip
-    // CreateRenderable
-    // CreateTransform
+    // TODO: Add child nodes here if required
 
-    //IPluginConstPtr finalizer = GetFinalizePlugin();
-
-    //SceneNode * node = CreateSceneNode( finalizer );
-    //    RenderableEntity * renderable = CreateRenderable( finalizer );
-    //    SceneNode * node        = new SceneNode( renderable );
-
-
-    //node->SetOverrideAlphaVal( GetOverrideState()->GetAlphaValue().get() );
-
-    //for( auto ch : m_children )
-    //{
-    //    node->AddChildNode( ch->BuildScene() );
-    //}
-
-    //return node;}
-
-    return nullptr;
+    return node;
 }
 
 // *****************************
@@ -58,54 +47,28 @@ RenderableEffectPtr  SceneExampleBuilder::CreateRenderableEffect  ( ShaderDataSo
     return std::make_shared<DefaultEffect>( fsds.get(), vsds.get(), nullptr );
 }
 
-#if 0
-RenderableEntity *                  BasicNode::CreateRenderable         ( IPluginConstPtr finalizer ) const
+// *****************************
+//
+RenderableEntity *   SceneExampleBuilder::CreateRenderable        ( RenderableEffectPtr effect )
 {
-    RenderableEntity * renderable = nullptr;
+    RenderableArrayDataArraysSingleVertexBuffer * vaobuf = GeometryBuilder::CreatreRectangle( 1.f, 1.f );
 
-    if( finalizer->GetVertexAttributesChannel() )
-    {
-        auto renderableType = finalizer->GetVertexAttributesChannel()->GetPrimitiveType();
+    RenderableEntity * re = new TriangleStrip( vaobuf, effect );
 
-        RenderableEffectPtr effect = CreateDefaultEffect( finalizer );
+    re->SetWorldTransforms( CreateDefaultTransform() );
 
-        //RenderableArrayDataSingleVertexBuffer * rad = CreateRenderableArrayData( renderableType );
-        //CreateRenderableData( &vao ); // TODO: Powinno zwracac indeksy albo vao w zaleznosci od rodzaju geometrii
-        //effect = ;
-
-        //FIXME: to powinna ogarniac jakas faktoria-manufaktura
-        switch( renderableType )
-        {
-            case PrimitiveType::PT_TRIANGLE_STRIP:
-            {
-                //FIXME: it should be constructed as a proper type RenderableArrayDataArraysSingleVertexBuffer * in the first place
-                //FIXME: this long type name suggests that something wrong is happening here (easier to name design required)
-                RenderableArrayDataArraysSingleVertexBuffer * radasvb = CreateRenderableArrayDataTriStrip();
-
-                if( radasvb )
-                {
-                    renderable = new TriangleStrip( radasvb, effect );
-                }
-                break;
-            }
-            case PrimitiveType::PT_TRIANGLES:
-            case PrimitiveType::PT_TRIANGLE_MESH:
-                assert( false );
-            default:
-                return nullptr;
-        }
-    }
-    else
-    {
-        renderable = new TriangleStrip( nullptr, nullptr );
-    }
-
-    auto worldTransformVec = CreateTransformVec( finalizer );
-
-    renderable->SetWorldTransforms( worldTransformVec );
-
-    return renderable;
+    return re;
 }
-#endif
+
+// *****************************
+//
+TTransformVec        SceneExampleBuilder::CreateDefaultTransform  ()
+{
+    TTransformVec   transforms;
+
+    transforms.push_back( Transform() );
+
+    return transforms;
+}
 
 } // bv

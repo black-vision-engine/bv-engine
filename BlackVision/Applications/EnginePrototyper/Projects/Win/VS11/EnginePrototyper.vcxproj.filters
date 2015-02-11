@@ -24,6 +24,9 @@
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.cpp">
       <Filter>Prototypes\Engine\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.cpp">
+      <Filter>Prototypes\Engine\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
@@ -57,6 +60,9 @@
       <Filter>Prototypes\Engine\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.h">
+      <Filter>Prototypes\Engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.h">
       <Filter>Prototypes\Engine\Common</Filter>
     </ClInclude>
   </ItemGroup>

@@ -140,6 +140,7 @@
     <ClCompile Include="..\..\..\Source\Common\VBORect.cpp" />
     <ClCompile Include="..\..\..\Source\PrototypeCreator.cpp" />
     <ClCompile Include="..\..\..\Source\PrototyperApp.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\SceneExampleBuilder.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="..\..\..\Source\PrototypeCreator.h" />
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
     <ClInclude Include="..\..\..\Source\PrototypesForwardInc.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\SceneExampleBuilder.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.h" />
