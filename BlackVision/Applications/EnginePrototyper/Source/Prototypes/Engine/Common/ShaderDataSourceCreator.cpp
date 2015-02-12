@@ -25,6 +25,13 @@ IShaderDataSourceConstPtr   ShaderDataSourceCreator::VertexShader       ( Shader
     return nullptr;
 }
 
+#if 0
+------ Discover test started ------
+Test run will use DLL(s) built for framework Framework45 and platform X86. Following DLL(s) will not be part of run: 
+BlackVision.exe, EnginePrototyper.exe, TestMipMapBuilder.exe are built for Framework None and Platform X64.
+Go to http://go.microsoft.com/fwlink/?LinkID=236877&clcid=0x409 for more details on managing these settings.
+#endif
+
 // *****************************
 //
 IShaderDataSourceConstPtr   ShaderDataSourceCreator::FragmentShader     ( ShaderDataSourceType sdst )
@@ -33,7 +40,18 @@ IShaderDataSourceConstPtr   ShaderDataSourceCreator::FragmentShader     ( Shader
 
     if( source != "" )
     {
-        return std::make_shared<ShaderDataSourceImpl>( source );
+        auto shaderDataSource = std::make_shared<ShaderDataSourceImpl>( source );
+
+        if( sdst == ShaderDataSourceType::SDST_SOLID_COLOR )
+        {
+            shaderDataSource->AddValue( "color", glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+        }
+        else if( sdst == ShaderDataSourceType::SDST_ONE_TEXTURE )
+        {
+            // TODO: implement
+        }
+
+        return shaderDataSource;
     }
 
     return nullptr;    
@@ -85,7 +103,7 @@ std::string                 ShaderDataSourceCreator::VertexShaderFile    ( Shade
     { sdst; }
     assert( sdst == ShaderDataSourceType::SDST_SOLID_COLOR );
 
-    return ShadersRootDir() + "default.frag";
+    return ShadersRootDir() + "default.vert";
 }
 
 // *****************************

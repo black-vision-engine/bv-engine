@@ -34,7 +34,6 @@ public:
     ShaderParameters *  GetParameters       ();
 
     void                AddTextureSampler   ( const TextureSampler * sampler );
-    ShaderParameters *  Parameters          ();
 
     const std::string & ProgramSource       () const;
 

@@ -18,7 +18,7 @@ ShaderParamMVP::~ShaderParamMVP             ()
 }
 
 // ********************************
-//
+// FIXME: is there any use for this - this is not a value pointer used by some model but a simply an inner instance value
 const void *    ShaderParamMVP::GetValuePtr () const
 {
     return &m_mvp;

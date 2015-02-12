@@ -33,6 +33,30 @@ inline const GenericShaderParam *   ShaderParameters::GetParam          ( const 
 
 // ***************************
 //
+inline GenericShaderParam *         ShaderParameters::AccessParam       ( unsigned int idx )
+{
+    assert( idx < NumParameters() );
+
+    return m_shaderParams[ idx ];
+}
+
+// ***************************
+//
+inline GenericShaderParam *         ShaderParameters::AccessParam       ( const std::string & name )
+{
+    for( auto param : m_shaderParams )
+    {
+        if( param->Name() == name )
+        {
+            return param;
+        }
+    }
+
+    return nullptr;    
+}
+
+// ***************************
+//
 inline unsigned int                 ShaderParameters::NumTextures       () const
 {
     return (unsigned int) m_textures.size();

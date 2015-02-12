@@ -94,7 +94,7 @@ void    PdrShader::SetUniforms     ( Shader * shader )
 {
     if ( shader )
     {
-        ShaderParameters * params = shader->Parameters();
+        ShaderParameters * params = shader->GetParameters();
 
         for ( unsigned int i = 0; i < params->NumParameters(); ++i )
         {

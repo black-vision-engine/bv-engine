@@ -29,7 +29,7 @@ SceneNode *  SceneExampleBuilder::BuildScene( unsigned int sceneNum )
 //
 SceneNode * SceneExampleBuilder::Scene0     ()
 {
-    return SimpleNodeBuilder::CreateRectNodeSolidColor( 1.f, 1.f );
+    return SimpleNodeBuilder::CreateRectNodeSolidColor( 1.f, 1.f, -1.f );
 }
 
 // *****************************

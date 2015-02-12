@@ -9,10 +9,10 @@ namespace bv {
 
 // *****************************
 //
-SceneNode *         SimpleNodeBuilder::CreateRectNodeSolidColor( float w, float h )
+SceneNode *         SimpleNodeBuilder::CreateRectNodeSolidColor( float w, float h, float z )
 {
     RenderableEffectPtr effect      = CreateRenderableEffect( ShaderDataSourceType::SDST_SOLID_COLOR );
-    auto vaobuf                     = GeometryBuilder::CreatreRectangle( w, h, false );
+    auto vaobuf                     = GeometryBuilder::CreatreRectangle( w, h, z, false );
     RenderableEntity *  renderable  = CreateRenderableTriStrip( vaobuf, effect );
     SceneNode *         node        = new SceneNode( static_cast< TransformableEntity * >( renderable ) );
 
@@ -21,10 +21,10 @@ SceneNode *         SimpleNodeBuilder::CreateRectNodeSolidColor( float w, float 
 
 // *****************************
 //
-SceneNode *         SimpleNodeBuilder:: CreateRectNodeTexture   ( float w, float h )
+SceneNode *         SimpleNodeBuilder:: CreateRectNodeTexture   ( float w, float h, float z )
 {
     RenderableEffectPtr effect      = CreateRenderableEffect( ShaderDataSourceType::SDST_ONE_TEXTURE );
-    auto vaobuf                     = GeometryBuilder::CreatreRectangle( w, h, true );
+    auto vaobuf                     = GeometryBuilder::CreatreRectangle( w, h, z, true );
     RenderableEntity *  renderable  = CreateRenderableTriStrip( vaobuf, effect );
     SceneNode *         node        = new SceneNode( static_cast< TransformableEntity * >( renderable ) );
 
@@ -35,8 +35,14 @@ SceneNode *         SimpleNodeBuilder:: CreateRectNodeTexture   ( float w, float
 //
 RenderableEffectPtr  SimpleNodeBuilder::CreateRenderableEffect  ( ShaderDataSourceType sdst )
 {
+    static std::vector< IShaderDataSourceConstPtr > dummyFucker;
+
+    // FIXME: these pointers get deleted when function leaves this scope so this is bound to fail, these references must be kept somewhere
     auto vsds = ShaderDataSourceCreator::VertexShader( sdst );
     auto fsds = ShaderDataSourceCreator::FragmentShader( sdst );
+
+    dummyFucker.push_back( vsds );
+    dummyFucker.push_back( fsds );
 
     return std::make_shared<DefaultEffect>( fsds.get(), vsds.get(), nullptr );
 }

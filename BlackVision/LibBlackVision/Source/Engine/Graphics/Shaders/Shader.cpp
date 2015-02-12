@@ -41,13 +41,6 @@ void                Shader::AddTextureSampler( const TextureSampler * sampler )
 
 // *********************************
 //
-ShaderParameters *  Shader::Parameters          ()
-{
-    return m_parameters;
-}
-
-// *********************************
-//
 const std::string & Shader::ProgramSource       () const
 {
     return m_programSurce;

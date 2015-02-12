@@ -8,7 +8,7 @@ namespace bv {
 
 // **************************
 //
-RenderableArrayDataArraysSingleVertexBuffer *    GeometryBuilder::CreatreRectangle( float w, float h, bool withUV )
+RenderableArrayDataArraysSingleVertexBuffer *    GeometryBuilder::CreatreRectangle( float w, float h, float z, bool withUV )
 {
     VertexBuffer * vb     = nullptr;
     VertexDescriptor * vd = nullptr;
@@ -26,23 +26,25 @@ RenderableArrayDataArraysSingleVertexBuffer *    GeometryBuilder::CreatreRectang
     }
 
     VertexArraySingleVertexBuffer * vao = new VertexArraySingleVertexBuffer( vb, vd );
+    vao->AddCCEntry( 4 ); // Single connected component with four vertices
+
     RenderableArrayDataArraysSingleVertexBuffer * rad = new RenderableArrayDataArraysSingleVertexBuffer( vao );
 
-    SetUpRectTriStrip( vb->Data(), w, h, withUV );
+    SetUpRectTriStrip( vb->Data(), w, h, z, withUV );
 
     return rad;
 }
 
 // **************************
 //
-void                                             GeometryBuilder::SetUpRectTriStrip   ( char * bufChar, float w, float h, bool addUV )
+void                                             GeometryBuilder::SetUpRectTriStrip   ( char * bufChar, float w, float h, float z, bool addUV )
 {
     float * buf = (float *) bufChar;
 
-    float v[ 4 * 3 ] =  { -w / 2.f, -h / 2.f, 0.f,
-                           w / 2.f, -h / 2.f, 0.f,
-                          -w / 2.f,  h / 2.f, 0.f,
-                           w / 2.f,  h / 2.f, 0.f };
+    float v[ 4 * 3 ] =  { -w / 2.f, -h / 2.f, z,
+                           w / 2.f, -h / 2.f, z,
+                          -w / 2.f,  h / 2.f, z,
+                           w / 2.f,  h / 2.f, z };
 
     float tx[ 4 * 2 ] = { 0.f, 0.f,
                           1.f, 0.f,

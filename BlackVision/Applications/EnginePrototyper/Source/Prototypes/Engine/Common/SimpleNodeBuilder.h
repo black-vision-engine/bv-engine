@@ -18,8 +18,8 @@ class SimpleNodeBuilder
 {
 public:
 
-    static SceneNode *          CreateRectNodeSolidColor( float w, float h );
-    static SceneNode *          CreateRectNodeTexture   ( float w, float h );
+    static SceneNode *          CreateRectNodeSolidColor( float w, float h, float z );
+    static SceneNode *          CreateRectNodeTexture   ( float w, float h, float z );
 
 private:
 

@@ -2,6 +2,8 @@
 
 #include "Engine/Interfaces/IShaderDataSource.h"
 
+#include "Common/PrototyperCore.h"
+
 
 namespace bv {
 
@@ -11,10 +13,14 @@ private:
 
     std::string     m_source;
 
+    std::vector< IValueConstPtr >   m_values;
+
 public:
 
                                     ShaderDataSourceImpl    ( const std::string & source );
                                     ~ShaderDataSourceImpl   ();
+
+    void                            AddValue                ( const std::string & name, const glm::vec4 & val );
 
     virtual const std::string &     GetShaderSource         ()  const override;
     virtual ITexturesDataConstPtr   GetTexturesData         ()  const override;
@@ -23,5 +29,8 @@ public:
     virtual IValueConstPtr                          GetValue    ( const std::string & name ) const override;
 
 };
+
+DEFINE_PTR_TYPE(ShaderDataSourceImpl)
+DEFINE_CONST_PTR_TYPE(ShaderDataSourceImpl)
 
 } // bv

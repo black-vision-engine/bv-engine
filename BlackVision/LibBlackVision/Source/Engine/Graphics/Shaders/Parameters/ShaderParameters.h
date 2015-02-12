@@ -39,6 +39,10 @@ public:
     inline const GenericShaderParam *       GetParam                        ( unsigned int idx ) const;
     inline const GenericShaderParam *       GetParam                        ( const std::string & name ) const;
 
+    // FIXME: temporary and not safe
+    inline GenericShaderParam *             AccessParam                     ( unsigned int idx );
+    inline GenericShaderParam *             AccessParam                     ( const std::string & name );
+
     void                                    AddTexture                      ( Texture2DPtr texture );
     void                                    SetTexture                      ( unsigned int idx, Texture2DPtr tex );
 

@@ -46,6 +46,11 @@ protected:
 
     virtual const void *        GetValuePtr         () const = 0;
 
+public:
+
+    virtual void *              AccessValuePtr      (); //FIXME: temporary, REMOVE
+
+
 };
 
 
