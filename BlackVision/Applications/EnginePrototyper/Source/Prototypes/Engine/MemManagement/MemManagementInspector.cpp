@@ -1,7 +1,10 @@
 #include "MemManagementInspector.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
+
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
+
+#include "Prototypes/Engine/Common/SceneExampleBuilder.h"
 
 
 namespace bv {
@@ -18,6 +21,7 @@ MemManagementInspector::MemManagementInspector      ( Renderer * renderer )
 //
 MemManagementInspector::~MemManagementInspector     ()
 {
+    delete m_sceneRoot;
 }
 
 // *****************************
@@ -25,6 +29,8 @@ MemManagementInspector::~MemManagementInspector     ()
 void    MemManagementInspector::Initialize          ()
 {
     glClearColor( 0.f, 0.f, 0.f, 0.f );
+
+    m_sceneRoot = SceneExampleBuilder::BuildScene( 0 );
 }
 
 // *****************************

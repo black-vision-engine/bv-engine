@@ -1,11 +1,6 @@
 #include "SceneExampleBuilder.h"
 
-#include "Engine/Graphics/SceneGraph/SceneNode.h"
-#include "Engine/Graphics/Effects/DefaultEffect.h"
-#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
-#include "Engine/Graphics/SceneGraph/TriangleStrip.cpp"
-
-#include "Prototypes/Engine/Common/GeometryBuilder.h"
+#include "Prototypes/Engine/Common/SimpleNodeBuilder.h"
 
 
 namespace bv {
@@ -19,6 +14,12 @@ SceneNode *  SceneExampleBuilder::BuildScene( unsigned int sceneNum )
         case 0:
             return Scene0();
             break;
+        case 1:
+            return Scene1();
+            break;
+        case 2:
+            return Scene2();
+            break;
         default:
             return Scene0();
     }
@@ -26,49 +27,23 @@ SceneNode *  SceneExampleBuilder::BuildScene( unsigned int sceneNum )
 
 // *****************************
 //
-SceneNode *  SceneExampleBuilder::Scene0    ()
+SceneNode * SceneExampleBuilder::Scene0     ()
 {
-    RenderableEffectPtr effect      = CreateRenderableEffect( ShaderDataSourceType::SDST_SOLID_COLOR );
-    RenderableEntity *  renderable  = CreateRenderable( effect );
-    SceneNode *         node        = new SceneNode( static_cast< TransformableEntity * >( renderable ) );
-
-    // TODO: Add child nodes here if required
-
-    return node;
+    return SimpleNodeBuilder::CreateRectNodeSolidColor( 1.f, 1.f );
 }
 
 // *****************************
 //
-RenderableEffectPtr  SceneExampleBuilder::CreateRenderableEffect  ( ShaderDataSourceType sdst )
+SceneNode * SceneExampleBuilder::Scene1     ()
 {
-    auto vsds = ShaderDataSourceCreator::VertexShader( sdst );
-    auto fsds = ShaderDataSourceCreator::FragmentShader( sdst );
-
-    return std::make_shared<DefaultEffect>( fsds.get(), vsds.get(), nullptr );
+    return Scene0();
 }
 
 // *****************************
 //
-RenderableEntity *   SceneExampleBuilder::CreateRenderable        ( RenderableEffectPtr effect )
+SceneNode * SceneExampleBuilder::Scene2     ()
 {
-    RenderableArrayDataArraysSingleVertexBuffer * vaobuf = GeometryBuilder::CreatreRectangle( 1.f, 1.f );
-
-    RenderableEntity * re = new TriangleStrip( vaobuf, effect );
-
-    re->SetWorldTransforms( CreateDefaultTransform() );
-
-    return re;
-}
-
-// *****************************
-//
-TTransformVec        SceneExampleBuilder::CreateDefaultTransform  ()
-{
-    TTransformVec   transforms;
-
-    transforms.push_back( Transform() );
-
-    return transforms;
+    return Scene0();
 }
 
 } // bv

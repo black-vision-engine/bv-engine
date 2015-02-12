@@ -8,41 +8,76 @@ namespace bv {
 
 // **************************
 //
-RenderableArrayDataArraysSingleVertexBuffer *    GeometryBuilder::CreatreRectangle( float w, float h )
+RenderableArrayDataArraysSingleVertexBuffer *    GeometryBuilder::CreatreRectangle( float w, float h, bool withUV )
 {
-    VertexBuffer * vb       = new VertexBuffer( 4, 3 * sizeof( float ), DataBuffer::Semantic::S_STATIC );
-    
-    // Utility call
-    VertexDescriptor * vd = VertexDescriptor::Create( 1, 0, AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION );
+    VertexBuffer * vb     = nullptr;
+    VertexDescriptor * vd = nullptr;
 
-#if 0
-    // Equivalent to the call below
-    VertexDescriptor * vd   = new VertexDescriptor( 1 ); // FIXME: one attribute for now, later on uv mapping may be added
-    vd->SetAttribute( 0, 0, 0, AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION ); // FIXME: one attribut non-interleaved for now, later on additional channels may be added
-    vd->SetStride( 0 ); // exception here - zero stride means that data is tightly packed, but it should be set to the size of a single entry (vec3 in this case)
-#endif
+    if( withUV )
+    {
+        vb = new VertexBuffer( 4, ( 2 + 3 ) * sizeof( float ), DataBuffer::Semantic::S_STATIC );
+        vd = VertexDescriptor::Create( 2, 0, AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION,
+                                          1, AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD );
+    }
+    else
+    {
+        vb = new VertexBuffer( 4, 3 * sizeof( float ), DataBuffer::Semantic::S_STATIC );
+        vd = VertexDescriptor::Create( 1, 0, AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION );
+    }
+
     VertexArraySingleVertexBuffer * vao = new VertexArraySingleVertexBuffer( vb, vd );
     RenderableArrayDataArraysSingleVertexBuffer * rad = new RenderableArrayDataArraysSingleVertexBuffer( vao );
-    
-    //FIXME: THIS SHIT SHOULD BE SERVICED VIA VERTEX BUFFER DATA ACCESSOR !!!!!!!!!!!!!!! KURWA :P O KURWA TAK
-    float * vbData = (float*) vb->Data(); 
-    SetUpRectTriStrip( vbData, w, h );
 
-    // FIXME: fill this data with valid 
+    SetUpRectTriStrip( vb->Data(), w, h, withUV );
+
     return rad;
 }
 
 // **************************
 //
-void                                             GeometryBuilder::SetUpRectTriStrip   ( float * buf, float w, float h )
+void                                             GeometryBuilder::SetUpRectTriStrip   ( char * bufChar, float w, float h, bool addUV )
 {
+    float * buf = (float *) bufChar;
+
     float v[ 4 * 3 ] =  { -w / 2.f, -h / 2.f, 0.f,
                            w / 2.f, -h / 2.f, 0.f,
                           -w / 2.f,  h / 2.f, 0.f,
                            w / 2.f,  h / 2.f, 0.f };
 
-    memcpy( buf, v, 4 * 3 * sizeof( float ) );
+    float tx[ 4 * 2 ] = { 0.f, 0.f,
+                          1.f, 0.f,
+                          0.f, 1.f,
+                          1.f, 1.f };
+
+
+    if( addUV )
+    {
+        for( unsigned int i = 0; i < 4; ++i )
+        {
+            float * vertex = &buf[ 5 * i ];
+
+            // Position
+            vertex[ 0 ] = v[ i + 0 ];
+            vertex[ 1 ] = v[ i + 1 ];
+            vertex[ 2 ] = v[ i + 2 ];
+
+            vertex[ 3 ] = tx[ i + 0 ];
+            vertex[ 4 ] = tx[ i + 1 ];
+        }
+    }
+    else
+    {
+       memcpy( buf, v, 4 * 3 * sizeof( float ) );
+    }
 }
 
 }
 // bv
+
+
+#if 0
+    // Single attribute channel
+    VertexDescriptor * vd   = new VertexDescriptor( 1 ); // FIXME: one attribute for now, later on uv mapping may be added
+    vd->SetAttribute( 0, 0, 0, AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION ); // FIXME: one attribut non-interleaved for now, later on additional channels may be added
+    vd->SetStride( 0 ); // exception here - zero stride means that data is tightly packed, but it should be set to the size of a single entry (vec3 in this case)
+#endif

@@ -9,11 +9,11 @@ class GeometryBuilder
 {
 public:
 
-    static RenderableArrayDataArraysSingleVertexBuffer *    CreatreRectangle    ( float w, float h );
+    static RenderableArrayDataArraysSingleVertexBuffer *    CreatreRectangle    ( float w, float h, bool withUV );
 
 private:
 
-    static void                                             SetUpRectTriStrip   ( float * buf, float w, float h );                
+    static void                                             SetUpRectTriStrip   ( char * bufChar, float w, float h, bool addUV );                
 };
 
 } //bv

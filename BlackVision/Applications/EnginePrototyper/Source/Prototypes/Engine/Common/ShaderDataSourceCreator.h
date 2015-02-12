@@ -8,6 +8,7 @@ namespace bv {
 enum class ShaderDataSourceType : int
 {
     SDST_SOLID_COLOR = 0,
+    SDST_ONE_TEXTURE,
     SDST_TOTAL
 };
 
