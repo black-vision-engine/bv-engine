@@ -39,6 +39,8 @@ namespace bv { namespace model {
 		ParamFloatPtr  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode", timeEvaluator );
 		ParamFloatPtr  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachmentMode", timeEvaluator );
 
+        ParamFloatPtr  paramVideoInputSource = ParametersFactory::CreateParameterFloat( "source", timeEvaluator );
+
 		//Register all parameters and evaloators in models
 		vsModel->RegisterAll( trTxEvaluator );
 		psModel->RegisterAll( borderColorEvaluator );
@@ -47,6 +49,8 @@ namespace bv { namespace model {
 		psModel->AddParameter( paramWrapModeY );
 		psModel->AddParameter( paramFilteringMode );
 		psModel->AddParameter( paramAttachMode );
+
+        psModel->AddParameter( paramVideoInputSource );
 
 		//Set models structure
 		model->SetVertexShaderChannelModel( vsModel );
@@ -62,6 +66,7 @@ namespace bv { namespace model {
 		paramWrapModeY->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
 		paramFilteringMode->SetVal( (float) TextureFilteringMode::TFM_LINEAR, TimeType( 0.f ) );
 		paramAttachMode->SetVal( (float) TextureAttachmentMode::MM_ATTACHED, TimeType( 0.f ) );
+        paramVideoInputSource->SetVal( (float) 0.f, TimeType( 0.f ) );
 
 		return model;
 	}
@@ -140,12 +145,26 @@ namespace bv { namespace model {
 	}
 
 
+    int                                     DefaultVideoInputPlugin::GetSourceNumber()
+    {
+        auto param = GetParameter( "source" );
+        float fSource = QueryTypedParam< ParamFloatPtr > ( param )->Evaluate();
+        return (int) fSource;
+    }
+
+
 	void                                DefaultVideoInputPlugin::Update                      ( TimeType t )
 	{
 		t=t; // just to reference t ;)
 
 		for( auto vi : vis )
 			vi->Update();
+
+        auto txData = m_psc->GetTexturesDataImpl();
+        assert( txData->GetTextures().size() == 1 );
+        int source = GetSourceNumber();
+        assert( source < vis.size() );
+        //txData->SetTexture( 0,  vis[ source ]->GetITextureDescriptor() );
 	}
 
 // *************************************
@@ -189,7 +208,10 @@ bool                            DefaultVideoInputPlugin::LoadResource  ( IPlugin
 		auto txData = m_psc->GetTexturesDataImpl();
 		assert( txData->GetTextures().size() <= 1 ); // to be safe for now
 		
-		txData->AddTexture( viResDescr->GetITextureDescriptor() );
+        if( txData->GetTextures().size() == 0 )
+    		txData->AddTexture( viResDescr->GetITextureDescriptor() );
+        //else
+        //    txData->SetTexture( viResDescr->GetITextureDescriptor() );
 
 		vis.push_back( viResDescr );
 

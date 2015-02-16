@@ -30,6 +30,8 @@ class DefaultVideoInputPlugin :
 	public DefaultTexturePlugin
 {
 	std::vector< IVideoInputResourceDescrConstPtr > vis;
+
+    int                                     GetSourceNumber();
 public:
 	DefaultVideoInputPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
 	~DefaultVideoInputPlugin(void);
