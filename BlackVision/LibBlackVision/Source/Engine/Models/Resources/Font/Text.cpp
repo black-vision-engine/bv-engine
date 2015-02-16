@@ -1,11 +1,22 @@
 #include "Text.h"
 
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <cassert>
+
+#pragma warning(push)
+#pragma warning(disable : 4512) //warning C4512: 'boost::archive::detail::helper_collection::predicate' : assignment operator could not be generated
+
 #include "boost/archive/text_oarchive.hpp"
 #include "boost/archive/text_iarchive.hpp"
 #include "boost/serialization/map.hpp"
+#include "boost/filesystem/path.hpp"
+
+#pragma warning(pop)
 
 #include "Serialize.h"
-
 
 #include "Glyph.h"
 #include "AtlasCache.h"
@@ -14,13 +25,6 @@
 #include "Engine/Models/Resources/TextureLoader.h"
 #include "Engine/Models/Resources/Font/Engines/FreeTypeEngine.h"
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <cassert>
-
-#include <boost/filesystem/path.hpp>
 
 namespace bv { namespace model {
 
