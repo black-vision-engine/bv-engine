@@ -12,10 +12,12 @@ private:
 
 public:
 
+    ~TexturesDataImpl   ();
+
     virtual const std::vector< ITextureDescriptor * > &     GetTextures         () const override;
     virtual const std::vector< IAnimationDescriptor * > &   GetAnimations       () const override;
 
-    bool                                                    AddTextureFromFile  ( const std::string & textureFile );
+    bool                                                    AddTextureFromFile  ( const std::string & textureFile, const std::string & textureName );
 
 };
 

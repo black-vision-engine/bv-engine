@@ -27,7 +27,7 @@ public:
     void                            AddValue                ( const std::string & name, const glm::vec4 & val );
     void                            AddValue                ( const std::string & name, float val );
 
-    bool                            AddTextureFromFile      ( const std::string & textureFile );
+    bool                            AddTextureFromFile      ( const std::string & textureFile, const std::string & textureName );
 
     virtual const std::string &     GetShaderSource         ()  const override;
     virtual ITexturesDataConstPtr   GetTexturesData         ()  const override;

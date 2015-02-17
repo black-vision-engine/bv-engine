@@ -34,7 +34,7 @@ Go to http://go.microsoft.com/fwlink/?LinkID=236877&clcid=0x409 for more details
 
 // *****************************
 //
-IShaderDataSourceConstPtr   ShaderDataSourceCreator::FragmentShader     ( ShaderDataSourceType sdst, const std::string & textureFile )
+IShaderDataSourceConstPtr   ShaderDataSourceCreator::FragmentShader     ( ShaderDataSourceType sdst, const std::string & textureFile, const std::string & textureName )
 {
     auto source = FragmentShaderSource( sdst );
 
@@ -50,7 +50,7 @@ IShaderDataSourceConstPtr   ShaderDataSourceCreator::FragmentShader     ( Shader
         {
             { textureFile; }
             shaderDataSource->AddValue( "alpha", 1.0f );
-            shaderDataSource->AddTextureFromFile( textureFile );
+            shaderDataSource->AddTextureFromFile( textureFile, textureName );
         }
 
         return shaderDataSource;

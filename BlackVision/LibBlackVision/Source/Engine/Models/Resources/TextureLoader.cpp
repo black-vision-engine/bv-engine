@@ -155,10 +155,14 @@ MemoryChunkConstPtr TextureLoader::LoadImage( const std::string & path )
     unsigned int height  = 0;
     unsigned int bpp     = 0;
 
-	if( path.find(".raw") != std::string::npos)
+	if( path.find( ".raw" ) != std::string::npos )
+    {
 		data = TextureHelper::LoadRAW( path );
+    }
 	else
+    {
 		data = TextureHelper::LoadImg( path, &width, &height, &bpp );
+    }
 
 	return data;
 }
@@ -176,17 +180,21 @@ ResourceHandle *        TextureLoader::LoadResource        ( IResource * res )  
 	MemoryChunkConstPtr data = nullptr;
 
 	if( filePath.find(".raw") != std::string::npos)
+    {
 		data = TextureHelper::LoadRAW( filePath );
+    }
 	else
+    {
 		data = TextureHelper::LoadImg( filePath, &width, &height, &bpp );
+    }
 
     if ( data != nullptr )
     {
         auto texExtra = new TextureExtraData( width, height, bpp, TextureFormat::F_A8R8G8B8, TextureType::T_2D );
         return new ResourceHandle( data, width * height * bpp / 8, texExtra );
     }
-    else
-        return nullptr;
+
+    return nullptr;
 }
 
 // ******************************

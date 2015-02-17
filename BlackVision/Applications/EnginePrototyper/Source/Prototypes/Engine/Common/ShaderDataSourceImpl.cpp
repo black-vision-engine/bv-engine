@@ -45,9 +45,9 @@ void                    ShaderDataSourceImpl::AddValue              ( const std:
 
 // ***************************
 //
-bool                    ShaderDataSourceImpl::AddTextureFromFile    ( const std::string & textureFile )
+bool                    ShaderDataSourceImpl::AddTextureFromFile    ( const std::string & textureFile, const std::string & textureName )
 {
-    return m_texturesData->AddTextureFromFile( textureFile );
+    return m_texturesData->AddTextureFromFile( textureFile, textureName );
 }
 
 // ***************************

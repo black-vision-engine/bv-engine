@@ -1,6 +1,27 @@
 #include "TexturesDataImpl.h"
 
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
+
+#include "Engine/Models/Interfaces/ITextureDescriptor.h"
+#include "Engine/Models/Interfaces/IAnimationDescriptor.h"
+
+
 namespace bv {
+
+// **************************
+//
+TexturesDataImpl::~TexturesDataImpl   ()
+{
+    for( auto desc : m_textures )
+    {
+        delete desc;
+    }
+
+    for( auto anim : m_animations )
+    {
+        delete anim;
+    }
+}
 
 // **************************
 //
@@ -18,9 +39,16 @@ const std::vector< IAnimationDescriptor * > &   TexturesDataImpl::GetAnimations 
 
 // **************************
 //
-bool                                            TexturesDataImpl::AddTextureFromFile( const std::string & textureFile )
+bool                                            TexturesDataImpl::AddTextureFromFile( const std::string & textureFile, const std::string & textureName )
 {
-    { textureFile; }
+    auto desc = model::DefaultTextureDescriptor::LoadTexture( textureFile, textureName );
+    
+    if( desc )
+    {
+        m_textures.push_back( desc );
+        return true;
+    }
+
     return false;
 }
 
