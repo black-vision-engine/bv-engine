@@ -5,15 +5,15 @@ namespace bv {
 
 ExampleVideoInput::ExampleVideoInput( int x, int y, float fps, int maskAnd, int maskOr )
 {	
-	GenerateBits( x, y );
-
-	desc = new model::DefaultTextureDescriptor( model::ResourceHandleConstPtr( new model::ResourceHandle( bits, bits->Size(), new model::TextureExtraData( x, y, 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D )  )),
-		//"Tex0", TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_LINEAR, glm::vec4( 1, 1, 1, 1), DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
-        "Tex0", TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_POINT, glm::vec4( 1, 1, 1, 1), DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
-
 	m_fps = fps;
     m_maskAnd = maskAnd;
     m_maskOr = maskOr;
+
+	GenerateBits( x, y );
+
+    desc = new model::DefaultTextureDescriptor( model::ResourceHandleConstPtr( new model::ResourceHandle( bits, bits->Size(), new model::TextureExtraData( x, y, 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D )  )),
+		//"Tex0", TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_LINEAR, glm::vec4( 1, 1, 1, 1), DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
+        "Tex0", TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_POINT, glm::vec4( 1, 1, 1, 1), DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
 }
 
 

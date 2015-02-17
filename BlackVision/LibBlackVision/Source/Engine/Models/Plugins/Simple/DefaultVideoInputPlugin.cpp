@@ -157,6 +157,8 @@ namespace bv { namespace model {
     {
         t=t; // just to reference t ;)
 
+        m_paramValModel->Update();
+
         desc.Update();
 
         auto txData = m_psc->GetTexturesDataImpl();
