@@ -19,6 +19,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestMipMapBuilder", "..\..\
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EnginePrototyper", "..\..\..\Applications\EnginePrototyper\Projects\Win\VS11\EnginePrototyper.vcxproj", "{4F825938-1541-4001-B161-C6FDF38F8CA7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6A33F496-E3C1-4C91-A4E1-049C0C3B762E} = {6A33F496-E3C1-4C91-A4E1-049C0C3B762E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
