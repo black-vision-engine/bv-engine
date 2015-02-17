@@ -48,7 +48,7 @@ IShaderDataSourceConstPtr   ShaderDataSourceCreator::FragmentShader     ( Shader
         }
         else if( sdst == ShaderDataSourceType::SDST_ONE_TEXTURE )
         {
-            // TODO: implement
+            shaderDataSource->AddValue( "alpha", 1.0f );
         }
 
         return shaderDataSource;
@@ -71,7 +71,7 @@ IShaderDataSourceConstPtr   ShaderDataSourceCreator::GeometryShader     ( Shader
 //
 std::string                 ShaderDataSourceCreator::VertexShaderSource  ( ShaderDataSourceType sdst )
 {
-    assert( sdst == ShaderDataSourceType::SDST_SOLID_COLOR );
+    assert( sdst == ShaderDataSourceType::SDST_SOLID_COLOR || sdst == ShaderDataSourceType::SDST_ONE_TEXTURE );
 
     return ReadSourceFromFile( VertexShaderFile( sdst ) );
 }
@@ -80,8 +80,6 @@ std::string                 ShaderDataSourceCreator::VertexShaderSource  ( Shade
 //
 std::string                 ShaderDataSourceCreator::FragmentShaderSource( ShaderDataSourceType sdst )
 {
-    assert( sdst == ShaderDataSourceType::SDST_SOLID_COLOR );
-
     return ReadSourceFromFile( FragmentShaderFile( sdst ) );
 }
 
@@ -101,7 +99,7 @@ std::string                 ShaderDataSourceCreator::GeometryShaderSource( Shade
 std::string                 ShaderDataSourceCreator::VertexShaderFile    ( ShaderDataSourceType sdst )
 {
     { sdst; }
-    assert( sdst == ShaderDataSourceType::SDST_SOLID_COLOR );
+    assert( sdst == ShaderDataSourceType::SDST_SOLID_COLOR || sdst == ShaderDataSourceType::SDST_ONE_TEXTURE );
 
     return ShadersRootDir() + "default.vert";
 }
@@ -110,11 +108,18 @@ std::string                 ShaderDataSourceCreator::VertexShaderFile    ( Shade
 //
 std::string                 ShaderDataSourceCreator::FragmentShaderFile  ( ShaderDataSourceType sdst )
 {
-    { sdst; }
+    if( sdst == ShaderDataSourceType::SDST_SOLID_COLOR )
+    {
+        return ShadersRootDir() + "solidcolor.frag";
+    }
+    else if ( sdst == ShaderDataSourceType::SDST_ONE_TEXTURE )
+    {
+        return ShadersRootDir() + "onetexture.frag";
+    }
 
-    assert( sdst == ShaderDataSourceType::SDST_SOLID_COLOR );
+    assert( false );
 
-    return ShadersRootDir() + "solidcolor.frag";
+    return "";
 }
 
 // *****************************

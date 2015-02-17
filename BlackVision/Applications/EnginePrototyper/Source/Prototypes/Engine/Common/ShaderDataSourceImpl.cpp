@@ -32,6 +32,18 @@ void                    ShaderDataSourceImpl::AddValue              ( const std:
 
 // ***************************
 //
+void                    ShaderDataSourceImpl::AddValue              ( const std::string & name, float val )
+{
+    if( GetValue( name ) == nullptr )
+    {
+        auto value = ValuesFactory::CreateValueFloat( name );
+        value->SetValue( val );
+        m_values.push_back( value );
+    }
+}
+
+// ***************************
+//
 const std::string &     ShaderDataSourceImpl::GetShaderSource       ()  const
 {
     return m_source;

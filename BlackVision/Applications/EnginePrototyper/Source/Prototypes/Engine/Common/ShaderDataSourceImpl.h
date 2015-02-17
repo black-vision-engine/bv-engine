@@ -21,6 +21,7 @@ public:
                                     ~ShaderDataSourceImpl   ();
 
     void                            AddValue                ( const std::string & name, const glm::vec4 & val );
+    void                            AddValue                ( const std::string & name, float val );
 
     virtual const std::string &     GetShaderSource         ()  const override;
     virtual ITexturesDataConstPtr   GetTexturesData         ()  const override;
