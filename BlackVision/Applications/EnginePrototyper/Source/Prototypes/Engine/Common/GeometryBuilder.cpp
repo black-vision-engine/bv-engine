@@ -8,7 +8,7 @@ namespace bv {
 
 // **************************
 //
-RenderableArrayDataArraysSingleVertexBuffer *    GeometryBuilder::CreatreRectangle( float w, float h, float z, bool withUV )
+RenderableArrayDataArraysSingleVertexBuffer *    GeometryBuilder::CreateRectangle   ( float w, float h, float z, bool withUV )
 {
     VertexBuffer * vb     = nullptr;
     VertexDescriptor * vd = nullptr;
@@ -30,14 +30,14 @@ RenderableArrayDataArraysSingleVertexBuffer *    GeometryBuilder::CreatreRectang
 
     RenderableArrayDataArraysSingleVertexBuffer * rad = new RenderableArrayDataArraysSingleVertexBuffer( vao );
 
-    SetUpRectTriStrip( vb->Data(), w, h, z, withUV );
+    SetupRectTriStrip( vb->Data(), w, h, z, withUV );
 
     return rad;
 }
 
 // **************************
 //
-void                                             GeometryBuilder::SetUpRectTriStrip   ( char * bufChar, float w, float h, float z, bool addUV )
+void                                             GeometryBuilder::SetupRectTriStrip   ( char * bufChar, float w, float h, float z, bool addUV )
 {
     float * buf = (float *) bufChar;
 

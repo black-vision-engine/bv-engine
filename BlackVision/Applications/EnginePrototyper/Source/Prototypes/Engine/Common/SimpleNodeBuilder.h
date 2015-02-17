@@ -19,11 +19,11 @@ class SimpleNodeBuilder
 public:
 
     static SceneNode *          CreateRectNodeSolidColor( float w, float h, float z );
-    static SceneNode *          CreateRectNodeTexture   ( float w, float h, float z );
+    static SceneNode *          CreateRectNodeTexture   ( float w, float h, float z, const std::string & textureFile );
 
 private:
 
-    static RenderableEffectPtr  CreateRenderableEffect  ( ShaderDataSourceType sdst );
+    static RenderableEffectPtr  CreateRenderableEffect  ( ShaderDataSourceType sdst, const std::string & textureFile );
     static RenderableEntity *   CreateRenderableTriStrip( RenderableArrayDataArraysSingleVertexBuffer * vaobuf, RenderableEffectPtr effect );
     static TTransformVec        DefaultTransform        ();
 
