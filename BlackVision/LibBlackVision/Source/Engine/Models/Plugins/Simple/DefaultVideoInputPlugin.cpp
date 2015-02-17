@@ -162,9 +162,8 @@ namespace bv { namespace model {
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() == 1 );
 
-        //int source = GetSourceNumber();
-        //assert( source < vis.size() );
-        //txData->SetTexture( 0,  vis[ source ]->GetITextureDescriptor() );
+        int source = GetSourceNumber();
+        desc.SetCurrentInput( source );
     }
 
 // *************************************

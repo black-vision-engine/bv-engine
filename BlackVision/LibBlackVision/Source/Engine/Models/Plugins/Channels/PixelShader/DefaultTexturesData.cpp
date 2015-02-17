@@ -82,7 +82,7 @@ void                                            DefaultTexturesData::SetTexture 
 
 // ******************************
 //
-void                                            DefaultTexturesData::AddTexture         ( DefaultTextureDescriptor * textureDesc )
+void                                            DefaultTexturesData::AddTexture         ( ITextureDescriptor * textureDesc )
 {
     m_textureDescriptors.push_back( textureDesc );
 }
