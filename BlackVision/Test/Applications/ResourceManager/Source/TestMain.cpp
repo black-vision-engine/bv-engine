@@ -1,6 +1,7 @@
 #include "Engine/Models/Resources/ResourceManager.h"
 #include "Engine/Models/Resources/TextureLoader.h"
 #include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
+#include "Engine/Models/Resources/Texture/TextureResource.h"
 
 #include "ImageProps.h"
 
@@ -9,6 +10,7 @@
 #include <windows.h>
 
 auto imagePath = "Assets/ResourceManager/checkerbord2.png";
+auto imagePath_512x512 = "Assets/ResourceManager/checkerbord2_512x512.png";
 
 TEST(LoaderRigistration, ResourceManager)
 {
@@ -41,6 +43,23 @@ TEST(LoadingTexture, ResourceManager)
 
 	auto res = bv::ResourceManager::GetInstance().LoadResource( textureResDesc );
 	ASSERT_TRUE( res );
+}  
+
+TEST(LoadingTexturePowefOf2Texture, ResourceManager)
+{
+	auto props = GetImageProps( imagePath_512x512 );
+
+	auto orig = bv::SingleTextureResourceDesc::Create( imagePath_512x512, props.width, props.height, props.format );
+	ASSERT_TRUE( orig );
+
+	auto textureResDesc = bv::TextureResourceDesc::Create( orig, bv::MipMapFilterType::BILINEAR );
+	ASSERT_TRUE( textureResDesc );
+
+	auto res = bv::ResourceManager::GetInstance().LoadResource( textureResDesc );
+	ASSERT_TRUE( res );
+
+	auto typedRes = bv::model::QueryTypedRes< bv::TextureResourceConstPtr >( res );
+	ASSERT_TRUE( typedRes->GetOriginal() == typedRes->GetMipMaps()->GetLevel( 0 ) );
 }  
 
 int main( int argc, char **argv )

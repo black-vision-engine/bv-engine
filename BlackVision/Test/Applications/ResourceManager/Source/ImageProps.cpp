@@ -17,7 +17,7 @@ ImageProps		GetImageProps( const std::string & imagePath )
 	if( type == FIT_BITMAP && bbp == 32 )
 		iprops.format = bv::TextureFormat::F_A8R8G8B8;
 	else
-		assert("image format not supported");
+		assert( !"image format not supported" );
 
 	iprops.width = ( bv::SizeType )FreeImage_GetWidth( bitmap );
 	iprops.height = ( bv::SizeType )FreeImage_GetHeight( bitmap );
