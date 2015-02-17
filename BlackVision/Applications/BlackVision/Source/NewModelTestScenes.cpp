@@ -551,13 +551,15 @@ model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const mod
 
     root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
     auto plugin = root->GetPlugin( "video input" );
+    //auto success = model::LoadTexture( plugin, "time_zones_4.jpg" );
     auto vi = new ExampleVideoInput( 10, 10, 1.f );
     auto success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture(), vi ) ) );
-    //auto success = model::LoadTexture( plugin, "time_zones_4.jpg" );
+    assert(success);
+    auto vi2 = new ExampleVideoInput( 20, 20, 1.f );
+    success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi2->GetTexture(), vi2 ) ) );
     assert(success);
 
-    //auto texturePlugin =  std::dynamic_pointer_cast< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
-    //((model::DefaultTexturesData*)(texturePlugin->GetPixelShaderChannel()->GetTexturesData().get()))->AddTexture( new model::DefaultVideoInput() );
+    model::SetParameter( plugin->GetParameter( "source" ), 0.f, 1.f );
 
     return root;
 }
