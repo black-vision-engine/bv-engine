@@ -2,6 +2,8 @@
 
 #include "Engine/Interfaces/IShaderDataSource.h"
 
+#include "Prototypes/Engine/Common/TexturesDataImpl.h"
+
 #include "Common/PrototyperCore.h"
 
 
@@ -15,6 +17,8 @@ private:
 
     std::vector< IValueConstPtr >   m_values;
 
+    TexturesDataImplPtr             m_texturesData;
+
 public:
 
                                     ShaderDataSourceImpl    ( const std::string & source );
@@ -22,6 +26,8 @@ public:
 
     void                            AddValue                ( const std::string & name, const glm::vec4 & val );
     void                            AddValue                ( const std::string & name, float val );
+
+    bool                            AddTextureFromFile      ( const std::string & textureFile );
 
     virtual const std::string &     GetShaderSource         ()  const override;
     virtual ITexturesDataConstPtr   GetTexturesData         ()  const override;

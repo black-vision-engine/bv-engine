@@ -50,6 +50,7 @@ IShaderDataSourceConstPtr   ShaderDataSourceCreator::FragmentShader     ( Shader
         {
             { textureFile; }
             shaderDataSource->AddValue( "alpha", 1.0f );
+            shaderDataSource->AddTextureFromFile( textureFile );
         }
 
         return shaderDataSource;

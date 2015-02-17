@@ -10,6 +10,7 @@ namespace bv {
 ShaderDataSourceImpl::ShaderDataSourceImpl( const std::string & source )
     : m_source( source )
 {
+    m_texturesData = std::make_shared<TexturesDataImpl>();
 }
 
 // ***************************
@@ -44,6 +45,13 @@ void                    ShaderDataSourceImpl::AddValue              ( const std:
 
 // ***************************
 //
+bool                    ShaderDataSourceImpl::AddTextureFromFile    ( const std::string & textureFile )
+{
+    return m_texturesData->AddTextureFromFile( textureFile );
+}
+
+// ***************************
+//
 const std::string &     ShaderDataSourceImpl::GetShaderSource       ()  const
 {
     return m_source;
@@ -53,7 +61,7 @@ const std::string &     ShaderDataSourceImpl::GetShaderSource       ()  const
 //
 ITexturesDataConstPtr   ShaderDataSourceImpl::GetTexturesData       ()  const
 {
-    return nullptr;
+    return m_texturesData;
 }
 
 // ***************************

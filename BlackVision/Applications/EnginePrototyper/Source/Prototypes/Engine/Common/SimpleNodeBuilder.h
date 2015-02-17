@@ -23,7 +23,7 @@ public:
 
 private:
 
-    static RenderableEffectPtr  CreateRenderableEffect  ( ShaderDataSourceType sdst, const std::string & textureFile );
+    static RenderableEffectPtr  CreateRenderableEffect  ( ShaderDataSourceType sdst, const std::string & textureFile = "" );
     static RenderableEntity *   CreateRenderableTriStrip( RenderableArrayDataArraysSingleVertexBuffer * vaobuf, RenderableEffectPtr effect );
     static TTransformVec        DefaultTransform        ();
 

@@ -145,6 +145,7 @@
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\SimpleNodeBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\TexturesDataImpl.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.cpp" />
   </ItemGroup>
@@ -162,6 +163,7 @@
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\SimpleNodeBuilder.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\TexturesDataImpl.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.h" />
   </ItemGroup>
