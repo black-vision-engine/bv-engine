@@ -48,10 +48,10 @@ class IVideoInputResourceDescr : public IPluginResourceDescr
 {
 public:
 
-	virtual DefaultTextureDescriptor*		GetITextureDescriptor  () const = 0;
-	virtual void							Update () const = 0; // const Update? WTF? ;)
+    virtual DefaultTextureDescriptor*		GetITextureDescriptor  () const = 0;
+    virtual void							Update () const = 0; // const Update? WTF? ;)
 
-	virtual ~IVideoInputResourceDescr () {}
+    virtual ~IVideoInputResourceDescr () {}
 
 };
 

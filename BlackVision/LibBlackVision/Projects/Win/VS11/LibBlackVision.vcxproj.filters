@@ -834,7 +834,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
-	<ClCompile Include="..\..\..\Source\System\Env.cpp">
+    <ClCompile Include="..\..\..\Source\System\Env.cpp">
       <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1687,6 +1687,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\System\Env.h">
       <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

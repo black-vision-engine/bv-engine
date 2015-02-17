@@ -157,13 +157,13 @@ namespace bv { namespace model {
     {
         t=t; // just to reference t ;)
 
-        for( auto vi : vis )
-            vi->Update();
+        desc.Update();
 
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() == 1 );
-        int source = GetSourceNumber();
-        assert( source < vis.size() );
+
+        //int source = GetSourceNumber();
+        //assert( source < vis.size() );
         //txData->SetTexture( 0,  vis[ source ]->GetITextureDescriptor() );
     }
 
@@ -213,7 +213,7 @@ bool                            DefaultVideoInputPlugin::LoadResource  ( IPlugin
         //else
         //    txData->SetTexture( viResDescr->GetITextureDescriptor() );
 
-        vis.push_back( viResDescr );
+        desc.AddAndSetInputAsCurrent( viResDescr );
 
         return true;
     }
