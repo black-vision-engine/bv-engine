@@ -46,6 +46,12 @@ bool                                            TexturesDataImpl::AddTextureFrom
     if( desc )
     {
         m_textures.push_back( desc );
+
+        desc->SetFilteringMode( TextureFilteringMode::TFM_POINT );
+        desc->SetWrappingModeX( TextureWrappingMode::TWM_MIRROR );
+        desc->SetWrappingModeY( TextureWrappingMode::TWM_MIRROR );
+        desc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+
         return true;
     }
 
