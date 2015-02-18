@@ -59,12 +59,12 @@ void                                             GeometryBuilder::SetupRectTriSt
             float * vertex = &buf[ 5 * i ];
 
             // Position
-            vertex[ 0 ] = v[ i + 0 ];
-            vertex[ 1 ] = v[ i + 1 ];
-            vertex[ 2 ] = v[ i + 2 ];
+            vertex[ 0 ] = v[ 3 * i + 0 ];
+            vertex[ 1 ] = v[ 3 * i + 1 ];
+            vertex[ 2 ] = v[ 3 * i + 2 ];
 
-            vertex[ 3 ] = tx[ i + 0 ];
-            vertex[ 4 ] = tx[ i + 1 ];
+            vertex[ 3 ] = tx[ 2 * i + 0 ];
+            vertex[ 4 ] = tx[ 2 * i + 1 ];
         }
     }
     else
@@ -73,8 +73,7 @@ void                                             GeometryBuilder::SetupRectTriSt
     }
 }
 
-}
-// bv
+} // bv
 
 
 #if 0

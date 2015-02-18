@@ -100,10 +100,18 @@ std::string                 ShaderDataSourceCreator::GeometryShaderSource( Shade
 //
 std::string                 ShaderDataSourceCreator::VertexShaderFile    ( ShaderDataSourceType sdst )
 {
-    { sdst; }
-    assert( sdst == ShaderDataSourceType::SDST_SOLID_COLOR || sdst == ShaderDataSourceType::SDST_ONE_TEXTURE );
+    if( sdst == ShaderDataSourceType::SDST_SOLID_COLOR )
+    {
+        return ShadersRootDir() + "solidcolor.vert";
+    }
+    else if ( sdst == ShaderDataSourceType::SDST_ONE_TEXTURE )
+    {
+        return ShadersRootDir() + "onetexture.vert";
+    }
+    
+    assert( false );
 
-    return ShadersRootDir() + "default.vert";
+    return "";
 }
 
 // *****************************
