@@ -163,7 +163,10 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClCompile Include="..\..\..\Source\PrototypeCreator.cpp" />
     <ClCompile Include="..\..\..\Source\PrototyperApp.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.cpp" />
-    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\SceneExampleBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ScenePrototype.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype0.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype1.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype2.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\SimpleNodeBuilder.cpp" />
@@ -182,7 +185,10 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
     <ClInclude Include="..\..\..\Source\PrototypesForwardInc.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.h" />
-    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\SceneExampleBuilder.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ScenePrototype.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype0.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype1.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype2.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\SimpleNodeBuilder.h" />

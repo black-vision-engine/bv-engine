@@ -4,7 +4,7 @@
 
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
-#include "Prototypes/Engine/Common/SceneExampleBuilder.h"
+#include "Prototypes/Engine/Common/ScenePrototype.h"
 
 
 namespace bv {
@@ -13,7 +13,7 @@ namespace bv {
 //
 MemManagementInspector::MemManagementInspector      ( Renderer * renderer )
     : m_renderer( renderer )
-    , m_sceneRoot( nullptr )
+    , m_scene( nullptr )
 {
 }
 
@@ -21,7 +21,7 @@ MemManagementInspector::MemManagementInspector      ( Renderer * renderer )
 //
 MemManagementInspector::~MemManagementInspector     ()
 {
-    delete m_sceneRoot;
+    delete m_scene;
 }
 
 // *****************************
@@ -31,14 +31,14 @@ void    MemManagementInspector::Initialize          ()
     glClearColor( 0.f, 0.f, 0.f, 0.f );
     glDisable( GL_DEPTH_TEST );
 
-    m_sceneRoot = SceneExampleBuilder::BuildScene( 0 );
+    m_scene = ScenePrototype::CreateNewPrototype( 0 );
 }
 
 // *****************************
 //
 void    MemManagementInspector::Update              ( TimeType t )
 {
-    SceneExampleBuilder::UpdateScene( 0, m_sceneRoot, t );
+    m_scene->Update( t );
 }
 
 // *****************************
@@ -52,7 +52,7 @@ void    MemManagementInspector::Render              ()
 //
 void    MemManagementInspector::Key                 ( unsigned char c )
 {
-    SceneExampleBuilder::OnKeyScene( 0, m_sceneRoot, c );
+    m_scene->OnKey( c );
 }
 
 // *****************************
@@ -69,9 +69,9 @@ void    MemManagementInspector::Render              ( Renderer * renderer )
     glClear( GL_COLOR_BUFFER_BIT );
     //glClearDepth((GLclampd)m_ClearDepth);
 
-    if( m_sceneRoot )
+    if( m_scene->GetRootNode() )
     {
-        DrawNode( renderer, m_sceneRoot );
+        DrawNode( renderer, m_scene->GetRootNode() );
     }
 }
 

@@ -15,9 +15,6 @@
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.cpp">
       <Filter>Prototypes\Engine\MemManagement</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\SceneExampleBuilder.cpp">
-      <Filter>Prototypes\Engine\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.cpp">
       <Filter>Prototypes\Engine\Common</Filter>
     </ClCompile>
@@ -35,6 +32,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Transformations.cpp">
       <Filter>Prototypes\Engine\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ScenePrototype.cpp">
+      <Filter>Prototypes\Engine\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype0.cpp">
+      <Filter>Prototypes\Engine\Common\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype1.cpp">
+      <Filter>Prototypes\Engine\Common\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype2.cpp">
+      <Filter>Prototypes\Engine\Common\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -62,9 +71,6 @@
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.h">
       <Filter>Prototypes\Engine\MemManagement</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\SceneExampleBuilder.h">
-      <Filter>Prototypes\Engine\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.h">
       <Filter>Prototypes\Engine\Common</Filter>
     </ClInclude>
@@ -82,6 +88,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Transformations.h">
       <Filter>Prototypes\Engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ScenePrototype.h">
+      <Filter>Prototypes\Engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype0.h">
+      <Filter>Prototypes\Engine\Common\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype1.h">
+      <Filter>Prototypes\Engine\Common\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype2.h">
+      <Filter>Prototypes\Engine\Common\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +123,9 @@
     </Filter>
     <Filter Include="Prototypes\Engine\MemManagement">
       <UniqueIdentifier>{8a04cdf7-0cef-4626-b31d-e9b1cee05e66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prototypes\Engine\Common\Scenes">
+      <UniqueIdentifier>{218bfd80-5774-445f-a554-56bd05d8e90c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
