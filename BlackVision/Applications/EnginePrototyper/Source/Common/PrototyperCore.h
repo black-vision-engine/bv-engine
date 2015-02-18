@@ -7,7 +7,7 @@
 #pragma warning(disable : 4201)
 
 #include <glm/glm.hpp>
-
+#include <glm/gtx/rotate_vector.hpp>
 #pragma warning(pop)
 
 #include <gl/glew.h>

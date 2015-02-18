@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include "Engine/Graphics/Types/Transform.h"
+
 
 namespace bv {
 
@@ -13,6 +15,9 @@ class SceneExampleBuilder
 public:
 
     static SceneNode *          BuildScene              ( unsigned int sceneNum );
+
+    static void                 SetLocalTransform       ( SceneNode * node, const Transform & transform );
+    static void                 SetWorldTransform       ( SceneNode * node, const Transform & transform );
 
 private:
 
