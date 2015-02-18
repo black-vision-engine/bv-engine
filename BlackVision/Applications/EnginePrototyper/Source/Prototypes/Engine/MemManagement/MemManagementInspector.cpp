@@ -52,7 +52,7 @@ void    MemManagementInspector::Render              ()
 //
 void    MemManagementInspector::Key                 ( unsigned char c )
 {
-    { c; }
+    SceneExampleBuilder::OnKeyScene( 0, m_sceneRoot, c );
 }
 
 // *****************************
@@ -87,7 +87,7 @@ void    MemManagementInspector::DrawNode            ( Renderer * renderer, Scene
 
         for ( unsigned int i = 0; i < (unsigned int) node->NumChildNodes(); i++ )
         {
-            DrawNode( renderer, node->GetChild( i ) ); 
+            DrawNode( renderer, node->GetChild( i ) );
         }
     }
 }

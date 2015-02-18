@@ -19,6 +19,10 @@ public:
     void                    SetModelValue       ( const ValueFloat * value );
 
     virtual const void *    GetValuePtr         () const override;
+    virtual void *          AccessValuePtr      () override //FIXME: temporary, REMOVE
+    {
+        return const_cast<ValueFloat*>(m_valModel);
+    }
 
 };
 

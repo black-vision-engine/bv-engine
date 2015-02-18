@@ -19,6 +19,10 @@ public:
     void                    SetModelValue       ( const ValueVec3 * value );
 
     virtual const void *    GetValuePtr         () const override;
+    virtual void *          AccessValuePtr      () override //FIXME: temporary, REMOVE
+    {
+        return const_cast<ValueVec3*>(m_valModel);
+    }
 
 };
 
