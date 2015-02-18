@@ -8,7 +8,7 @@
 
 #include "System/BasicTypes.h"
 #include "Mathematics/Core/mathfuncs.h"
-
+#include "Mathematics/Defines.h"
 
 namespace bv {
 
@@ -31,6 +31,34 @@ ValueT EvaluateLinear( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT,
 
     ValueT scl =ValueT( ( TimeValueT )1.0 / ( k1.t - k0.t ) );
     ValueT w0 = ValueT( scl * ValueT( k1.t - t ) );
+    ValueT w1 = ValueT( ( ValueT )1.0 - w0 );
+
+    ValueT v0 = k0.val;
+    ValueT v1 = k1.val;
+
+    v0 *= w0;
+    v1 *= w1;
+
+    return ValueT( v0 + v1 );
+}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT>
+ValueT EvaluateCosine( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT, ValueT> & k1, TimeValueT t )
+{
+    if ( !( k0.t <= k1.t && k0.t <= t && t <= k1.t ) )
+    {
+        std::cerr << "Invalid interval ("<< k0.t <<", " << k1.t << ") or param " << t;
+    }
+
+    assert( k0.t <= k1.t && k0.t <= t && t <= k1.t );
+
+    if( k0.t == k1.t )
+        return k0.val;
+
+    double scaledT = double( t / ( k1.t - k0.t ) ) * PI;
+    ValueT w0 = ValueT( ( cos( scaledT ) + 1 ) / 2 );
     ValueT w1 = ValueT( ( ValueT )1.0 - w0 );
 
     ValueT v0 = k0.val;
@@ -79,7 +107,25 @@ BasicInterpolator<TimeValueT, ValueT>::BasicInterpolator(TimeValueT tolerance)
     , wrapPre( WrapMethod::clamp )
 {
     assert( tolerance > static_cast<TimeValueT>(0.) );
+    SetInterpolationMethod( model::IParameter::InterpolationMethod::LINEAR );
+    //SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 }
+
+// *************************************
+//
+//template<class TimeValueT, class ValueT>
+//void                    BasicInterpolator<TimeValueT, ValueT>::SetInterpolationMethod ( model::IParameter::InterpolationMethod method )
+//{
+//    this->method = method;
+//}
+//
+//// *************************************
+////
+//template<class TimeValueT, class ValueT>
+//model::IParameter::InterpolationMethod     BasicInterpolator<TimeValueT, ValueT>::GetInterpolationMethod () const
+//{
+//    return method;
+//}
 
 // *************************************
 //
@@ -185,7 +231,17 @@ ValueT BasicInterpolator<TimeValueT, ValueT>::Evaluate( TimeValueT t ) const
 
             if( t <= k1.t )
             {
-                return EvaluateLinear( keys[ i0 ], keys[ i1 ], t );
+                switch( GetInterpolationMethod() )
+                {
+                case model::IParameter::InterpolationMethod::LINEAR:
+                    return EvaluateLinear( keys[ i0 ], keys[ i1 ], t );
+                    break;
+                case model::IParameter::InterpolationMethod::COSINE:
+                    return EvaluateCosine( keys[ i0 ], keys[ i1 ], t );
+                    break;
+                default:
+                    assert( false );
+                }
             }
         }
     }
