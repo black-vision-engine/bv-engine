@@ -43,7 +43,7 @@ public:
 
 };
 
-template<class TimeValueT, class ValueT>
+template<class TimeValueT, class ValueT, class FloatT = float >
 class BasicInterpolator : public Interpolator<TimeValueT>
 {
 public:

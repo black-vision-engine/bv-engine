@@ -83,6 +83,13 @@ ParamVec4Ptr                         ParametersFactory::CreateParameterVec4     
 
 // *******************************
 //
+ParamIntPtr                        ParametersFactory::CreateParameterInt                  ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return std::make_shared< ParamInt >( name, IntInterpolator(), timeline );
+}
+
+// *******************************
+//
 ParamFloatPtr                        ParametersFactory::CreateParameterFloat                ( const std::string & name, ITimeEvaluatorPtr timeline )
 {
     return std::make_shared< ParamFloat >( name, FloatInterpolator(), timeline );

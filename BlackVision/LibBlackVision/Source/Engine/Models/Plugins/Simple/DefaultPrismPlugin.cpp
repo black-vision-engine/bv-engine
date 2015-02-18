@@ -49,7 +49,7 @@ DefaultPluginParamValModelPtr   DefaultPrismPluginDesc::CreateDefaultModel   ( I
     DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
     DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
 
-    ParamFloatPtr paramN             = ParametersFactory::CreateParameterFloat( "n", timeEvaluator );
+    ParamIntPtr paramN             = ParametersFactory::CreateParameterInt( "n", timeEvaluator );
     ParamFloatPtr paramType          = ParametersFactory::CreateParameterFloat( "uv_type", timeEvaluator );
 
     vacModel->AddParameter( paramN );
@@ -58,7 +58,7 @@ DefaultPluginParamValModelPtr   DefaultPrismPluginDesc::CreateDefaultModel   ( I
     model->SetVertexAttributesChannelModel( vacModel );
 
     //Set default parameters
-    paramN->SetVal( 3.f, 0.f );
+    paramN->SetVal( 3, 0.f );
     paramType->SetVal( PrismComponent::PrismUVType::TEXTURED, 0.f );
 
     return model;
@@ -95,15 +95,15 @@ int DefaultPrismPlugin::GetN()
 // *************************************
 //
 DefaultPrismPlugin::DefaultPrismPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
-	: BasePlugin< IPlugin >( name, uid, prev, model )
+    : BasePlugin< IPlugin >( name, uid, prev, model )
 {
     m_uvTypeParam = QueryTypedParam< ParamFloatPtr >( m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "uv_type" ) );
     assert( m_uvTypeParam );
     m_uvType = GetUVType();
 
-    m_nParam = QueryTypedParam< ParamFloatPtr >( m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "n" ) );
-	assert( m_nParam );
-	m_lastN = GetN();
+    m_nParam = QueryTypedParam< ParamIntPtr >( m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "n" ) );
+    assert( m_nParam );
+    m_lastN = GetN();
 
     InitGeometry( m_lastN, m_uvType );
 }
@@ -120,25 +120,25 @@ IVertexAttributesChannelConstPtr    DefaultPrismPlugin::GetVertexAttributesChann
 
 void DefaultPrismPlugin::InitGeometry( int n, PrismComponent::PrismUVType t )
 {
-	auto prism = PrismComponent::Create( n, t );
+    auto prism = PrismComponent::Create( n, t );
 
-	auto prism1 = std::get<0>(prism);
-	auto prism2 = std::get<1>(prism);
-	auto prism3 = std::get<2>(prism);
+    auto prism1 = std::get<0>(prism);
+    auto prism2 = std::get<1>(prism);
+    auto prism3 = std::get<2>(prism);
 
 // FIXME: it would be more pretty to create empty VertexAttributesChannel in ctor and add a proper descriptor there
-	if( m_vaChannel == NULL )
-		m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( prism1, false );
-	else
-	{
-		m_vaChannel->ClearAll();
-		m_vaChannel->AddConnectedComponent( prism1 );
-	}
+    if( m_vaChannel == NULL )
+        m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( prism1, false );
+    else
+    {
+        m_vaChannel->ClearAll();
+        m_vaChannel->AddConnectedComponent( prism1 );
+    }
 
-	m_vaChannel->AddConnectedComponent( prism2 );
-	m_vaChannel->AddConnectedComponent( prism3 );
+    m_vaChannel->AddConnectedComponent( prism2 );
+    m_vaChannel->AddConnectedComponent( prism3 );
 
-	m_lastN = n;
+    m_lastN = n;
 }
 
 // *************************************
@@ -146,26 +146,25 @@ void DefaultPrismPlugin::InitGeometry( int n, PrismComponent::PrismUVType t )
 void                                DefaultPrismPlugin::Update                      ( TimeType t )
 {
     { t; } // FIXME: suppress unused warning
-	m_pluginParamValModel->Update();
+    m_pluginParamValModel->Update();
 
-	auto nParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "n" );
-	assert( nParam );
-	float nVal = QueryTypedParam< ParamFloatPtr > ( nParam )->Evaluate();
-	int n = int( nVal );
+    auto nParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "n" );
+    assert( nParam );
+    int n = m_nParam->Evaluate();
 
     auto uvType = GetUVType();
 
     if( n != m_lastN || uvType != m_uvType )
-	{
-		InitGeometry( n, uvType );
-		m_vaChannel->SetNeedsTopologyUpdate( true );
-		m_lastN = n;
+    {
+        InitGeometry( n, uvType );
+        m_vaChannel->SetNeedsTopologyUpdate( true );
+        m_lastN = n;
         m_uvType = uvType;
-	}
-	//else
-	//{
-	//	m_vaChannel->SetNeedsAttributesUpdate( false );
-	//}
+    }
+    //else
+    //{
+    //	m_vaChannel->SetNeedsAttributesUpdate( false );
+    //}
 }
 
 } }

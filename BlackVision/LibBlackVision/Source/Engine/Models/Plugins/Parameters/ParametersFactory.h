@@ -22,6 +22,7 @@ public:
     static ParamVec2Ptr         CreateParameterVec2                 ( const std::string & name, ITimeEvaluatorPtr timeline );
     static ParamVec3Ptr         CreateParameterVec3                 ( const std::string & name, ITimeEvaluatorPtr timeline );
     static ParamVec4Ptr         CreateParameterVec4                 ( const std::string & name, ITimeEvaluatorPtr timeline );
+    static ParamIntPtr          CreateParameterInt                  ( const std::string & name, ITimeEvaluatorPtr timeline );
     static ParamFloatPtr        CreateParameterFloat                ( const std::string & name, ITimeEvaluatorPtr timeline );
     static ParamTransformPtr    CreateParameterTransform            ( const std::string & name, ITimeEvaluatorPtr timeline );
     static ParamTransformVecPtr CreateParameterTransformVec         ( const std::string & name, ITimeEvaluatorPtr timeline, int numTransforms = 1 );

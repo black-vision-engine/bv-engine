@@ -25,8 +25,8 @@ public:
     explicit                SimpleParameterImpl ( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator );
                             ~SimpleParameterImpl();
 
-	virtual void                SetInterpolationMethod ( InterpolationMethod method ) override;
-	virtual InterpolationMethod GetInterpolationMethod () const override;
+    virtual void                SetInterpolationMethod ( InterpolationMethod method ) override;
+    virtual InterpolationMethod GetInterpolationMethod () const override;
 
     inline  ValueType       Evaluate            () const;
     inline  void            SetVal              ( const ValueType & val, TimeType t );
@@ -64,10 +64,12 @@ public:
 
 
 typedef SimpleParameterImpl< FloatInterpolator, float, ModelParamType::MPT_FLOAT >      ParamFloat;
+typedef SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_INT >            ParamInt;
 typedef SimpleParameterImpl< Vec4Interpolator, glm::vec4, ModelParamType::MPT_VEC4 >    ParamVec4;
 typedef SimpleParameterImpl< Vec3Interpolator, glm::vec3, ModelParamType::MPT_VEC3 >    ParamVec3;
 typedef SimpleParameterImpl< Vec2Interpolator, glm::vec2, ModelParamType::MPT_VEC2 >    ParamVec2;
 
+DEFINE_PTR_TYPE(ParamInt)
 DEFINE_PTR_TYPE(ParamFloat)
 DEFINE_PTR_TYPE(ParamVec4)
 DEFINE_PTR_TYPE(ParamVec3)

@@ -25,6 +25,14 @@ inline bool SetSimpleTypedParameter( IParameterPtr param, TimeType t, typename c
 // *******************************
 //
 template<>
+inline bool SetParameter< int >( IParameterPtr param, TimeType t, const int & val )
+{
+    return SetSimpleTypedParameter< ParamInt >( param, t, val );
+}
+
+// *******************************
+//
+template<>
 inline bool SetParameter< float >( IParameterPtr param, TimeType t, const float & val )
 {
     return SetSimpleTypedParameter< ParamFloat >( param, t, val );

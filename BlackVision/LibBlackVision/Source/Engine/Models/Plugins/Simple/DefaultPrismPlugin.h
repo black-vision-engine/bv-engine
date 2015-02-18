@@ -30,7 +30,7 @@ class DefaultPrismPlugin :
     PrismComponent::PrismUVType                 GetUVType();
     PrismComponent::PrismUVType                 m_uvType;
 
-    ParamFloatPtr                               m_nParam;
+    ParamIntPtr                                 m_nParam;
     int                                         GetN();
 	int											m_lastN;
 
