@@ -29,6 +29,7 @@ MemManagementInspector::~MemManagementInspector     ()
 void    MemManagementInspector::Initialize          ()
 {
     glClearColor( 0.f, 0.f, 0.f, 0.f );
+    glDisable( GL_DEPTH_TEST );
 
     m_sceneRoot = SceneExampleBuilder::BuildScene( 0 );
 }
@@ -37,7 +38,7 @@ void    MemManagementInspector::Initialize          ()
 //
 void    MemManagementInspector::Update              ( TimeType t )
 {
-    { t; }
+    SceneExampleBuilder::UpdateScene( 0, m_sceneRoot, t );
 }
 
 // *****************************
@@ -65,7 +66,7 @@ void    MemManagementInspector::Resize              ( UInt32 w, UInt32 h )
 //
 void    MemManagementInspector::Render              ( Renderer * renderer )
 {
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glClear( GL_COLOR_BUFFER_BIT );
     //glClearDepth((GLclampd)m_ClearDepth);
 
     if( m_sceneRoot )

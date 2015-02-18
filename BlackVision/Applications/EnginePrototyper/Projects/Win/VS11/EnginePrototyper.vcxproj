@@ -168,6 +168,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\SimpleNodeBuilder.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\TexturesDataImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Transformations.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.cpp" />
   </ItemGroup>
@@ -186,6 +187,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\SimpleNodeBuilder.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\TexturesDataImpl.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Transformations.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.h" />
   </ItemGroup>
