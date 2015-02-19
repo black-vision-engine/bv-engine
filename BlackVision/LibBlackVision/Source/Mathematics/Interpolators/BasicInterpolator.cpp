@@ -54,17 +54,14 @@ ValueT EvaluateCosine( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT,
     if( k0.t == k1.t )
         return k0.val;
 
-    double scaledT = double( ( t - k0.t) / ( k1.t - k0.t ) ) * PI;
-    ValueT w0 = ValueT( ( cos( scaledT ) + 1 ) / 2 );
-    ValueT w1 = ValueT( ( ValueT )1.0 - w0 );
+    FloatT scaledT = FloatT( PI * ( t - k0.t) / ( k1.t - k0.t ) );
+    FloatT w0 = FloatT( ( cos( scaledT ) + 1 ) / 2 );
+    FloatT w1 = FloatT( ( FloatT )1.0 - w0 );
 
     ValueT v0 = k0.val;
     ValueT v1 = k1.val;
 
-    v0 *= w0;
-    v1 *= w1;
-
-    return ValueT( v0 + v1 );
+    return ValueT( v0*w0 + v1*w1 );
 }
 
 // *************************************
