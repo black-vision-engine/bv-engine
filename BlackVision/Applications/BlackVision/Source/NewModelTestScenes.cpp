@@ -718,4 +718,10 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismBugTestScene     ( const mod
     return prism2;
 }
 
+void BoolParamTest()
+{
+    auto param = model::ParametersFactory::CreateParameterBool( "toBeOrNotToBe", nullptr );
+    model::SetParameter( param, 0.f, true );
+}
+
 } //bv

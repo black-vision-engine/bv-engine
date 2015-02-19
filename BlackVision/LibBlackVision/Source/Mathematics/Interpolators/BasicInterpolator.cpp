@@ -41,6 +41,27 @@ ValueT EvaluateLinear( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT,
 
 // *************************************
 //
+
+bool Int2Bool( int intVal )
+{
+    if( intVal >= 1 ) 
+        return true;
+    else
+        return false;
+}
+
+// *************************************
+//
+//template<class TimeValueT, class ValueT, class FloatT >
+template<>
+bool EvaluateLinear< bv::TimeType, bool, float > ( const Key<bv::TimeType, bool> & k0, const Key<bv::TimeType, bool> & k1, bv::TimeType t )
+{
+    int intVal = EvaluateLinear< bv::TimeType, int, float > ( Key< bv::TimeType, int >( k0.t, int( k0.val ) ), Key< bv::TimeType, int >( k1.t, int( k1.val ) ), t );
+    return Int2Bool( intVal );
+}
+
+// *************************************
+//
 template<class TimeValueT, class ValueT, class FloatT>
 ValueT EvaluateCosine( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT, ValueT> & k1, TimeValueT t )
 {
@@ -62,6 +83,16 @@ ValueT EvaluateCosine( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT,
     ValueT v1 = k1.val;
 
     return ValueT( v0*w0 + v1*w1 );
+}
+
+// *************************************
+//
+//template<class TimeValueT, class ValueT, class FloatT >
+template<>
+bool EvaluateCosine< bv::TimeType, bool, float > ( const Key<bv::TimeType, bool> & k0, const Key<bv::TimeType, bool> & k1, bv::TimeType t )
+{
+    int intVal = EvaluateCosine< bv::TimeType, int, float > ( Key< bv::TimeType, int >( k0.t, int( k0.val ) ), Key< bv::TimeType, int >( k1.t, int( k1.val ) ), t );
+    return Int2Bool( intVal );
 }
 
 // *************************************
@@ -446,6 +477,7 @@ INSTANTIATE(float)
 INSTANTIATE(double)
 INSTANTIATE(bv::TimeType)
 
+template bv::BasicInterpolator<bv::TimeType, bool>;
 template bv::BasicInterpolator<bv::TimeType, int>;
 template bv::BasicInterpolator<bv::TimeType, float>;
 template bv::BasicInterpolator<bv::TimeType, double>;
