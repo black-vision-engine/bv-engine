@@ -65,6 +65,7 @@ public:
 
 typedef SimpleParameterImpl< FloatInterpolator, float, ModelParamType::MPT_FLOAT >      ParamFloat;
 typedef SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_INT >            ParamInt;
+typedef SimpleParameterImpl< BoolInterpolator, bool, ModelParamType::MPT_BOOL >         ParamBool;
 typedef SimpleParameterImpl< Vec4Interpolator, glm::vec4, ModelParamType::MPT_VEC4 >    ParamVec4;
 typedef SimpleParameterImpl< Vec3Interpolator, glm::vec3, ModelParamType::MPT_VEC3 >    ParamVec3;
 typedef SimpleParameterImpl< Vec2Interpolator, glm::vec2, ModelParamType::MPT_VEC2 >    ParamVec2;

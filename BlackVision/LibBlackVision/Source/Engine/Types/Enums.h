@@ -48,6 +48,7 @@ enum class ModelParamType : int
     MPT_TRANSFORM,
     MPT_TRANSFORM_VEC,
     MPT_INT,
+    MPT_BOOL,
     MPT_TOTAL
 };
 

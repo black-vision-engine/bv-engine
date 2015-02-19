@@ -10,6 +10,7 @@ namespace bv
 {
     typedef bv::BasicInterpolator<TimeType, TimeType>   TimeInterpolator;
 
+    typedef bv::BasicInterpolator<TimeType, bool>       BoolInterpolator;
     typedef bv::BasicInterpolator<TimeType, int>        IntInterpolator;
     typedef bv::BasicInterpolator<TimeType, float>      FloatInterpolator;
     typedef bv::BasicInterpolator<TimeType, glm::vec2>  Vec2Interpolator;
