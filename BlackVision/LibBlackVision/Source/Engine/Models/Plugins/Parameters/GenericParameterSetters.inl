@@ -11,7 +11,6 @@ inline bool SetSimpleTypedParameter( IParameterPtr param, TimeType t, typename c
 
     if( typedParam == nullptr )
     {
-        assert( false );
         return false;
     }
 
