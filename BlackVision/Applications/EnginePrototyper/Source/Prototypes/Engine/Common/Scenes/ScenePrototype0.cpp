@@ -4,6 +4,13 @@ namespace bv {
 
 // **************************
 //
+ScenePrototype0::ScenePrototype0     ()
+{
+    m_n0 = m_n1 = m_n2 = 0;
+}
+
+// **************************
+//
 void                ScenePrototype0::Update              ( TimeType t )
 {
     auto root = GetRootNode();
@@ -20,9 +27,76 @@ void                ScenePrototype0::Update              ( TimeType t )
 //
 void                ScenePrototype0::OnKey               ( unsigned char c )
 {
-    printf( "Pressed %c\n", c );
+    unsigned int pos[3] = {m_n0, m_n1, m_n2};
 
+    bool printStruct = false;
+    bool selected = false;
 
+    switch( c )
+    {
+        case '1':
+            m_n0 = 1;
+            break;
+        case '2':
+            m_n0 = 2;
+            break;
+        case '3':
+            m_n0 = 3;
+            break;
+        case '4':
+            m_n0 = 0;
+            break;
+        case 'q':
+            m_n1 = 1;
+            break;
+        case 'w':
+            m_n1 = 2;
+            break;
+        case 'e':
+            m_n1 = 3;
+            break;
+        case 'r':
+            m_n1 = 0;
+            break;
+        case 'a':
+            m_n2 = 1;
+            break;
+        case 's':
+            m_n2 = 2;
+            break;
+        case 'd':
+            m_n2 = 3;
+            break;
+        case 'f':
+            m_n2 = 0;
+            break;
+        case 13:
+            selected = true;
+            break;
+        default:
+            printStruct = true;
+    };
+
+    printf( "Pressed %d -> [%d, %d, %d]\n", c, m_n0, m_n1, m_n2 );
+
+    if( selected )
+    {
+        SceneNode * node = GetNode( pos, 3 );
+
+        if( node )
+        {
+            PrintStructure( node, 0, 0 );
+        }
+        else
+        {
+            printf( "NULLPTR\n" );
+        }
+    }
+
+    if ( printStruct )
+    {
+        PrintStructure();
+    }
 }
 
 // **************************
@@ -30,6 +104,38 @@ void                ScenePrototype0::OnKey               ( unsigned char c )
 SceneNode *         ScenePrototype0::BuildSceneImpl      ()
 {
     return RootNode();
+}
+
+// **************************
+//
+void                ScenePrototype0::PrintStructure      ()
+{
+    PrintStructure( GetRootNode(), 0, 0 );
+}
+
+// **************************
+//
+void                ScenePrototype0::PrintStructure      ( SceneNode * node, unsigned int idx, unsigned int indent )
+{
+    printf( "%*s", indent, "" );
+    printf( "Node_%d\n", idx );
+
+    for( unsigned int i = 0; i < node->NumChildNodes(); ++i )
+    {
+        SceneNode * child = node->GetChild( i );
+
+        PrintStructure( child, i + 1, indent + 4 );
+    }
+}
+
+// **************************
+//
+SceneNode *         ScenePrototype0::GetNode             ( unsigned int * pos, unsigned int numElts )
+{
+    { numElts; pos; }
+    printf( "%d\n", sizeof(pos) );
+
+    return nullptr;
 }
 
 // **************************

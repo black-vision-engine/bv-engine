@@ -28,6 +28,7 @@ public:
     SizeType                NumChildNodes       () const;
 
     void                    AddChildNode        ( SceneNode * child );
+    SceneNode *             DetachChildNode     ( unsigned int idx );
 
     SceneNode *             GetChild            ( unsigned int idx );
     TransformableEntity *   GetTransformable    ();
@@ -37,6 +38,10 @@ public:
     bool                    IsVisible           () const;
     void                    SetVisible          ( bool visible );
 
+
+// ***********************************************************************************************
+//                              HACKISH GLOBAL EFFECT INTERFACE
+// ***********************************************************************************************
 //FIXME: add some kind of global effect here
 //FIXME: instead of IsOverriden, SetOverriden and so on simplu use Get/Set GlobalEffect which is applied to the result
 private:
@@ -59,6 +64,9 @@ public:
     void                    SetOverridenAM      ( bool overriden );
     void                    SetOverridenNM      ( bool overriden );
 
+// ***********************************************************************************************
+//                          END OF HACKISH GLOBAL EFFECT INTERFACE
+// ***********************************************************************************************
 };
 
 } // bv

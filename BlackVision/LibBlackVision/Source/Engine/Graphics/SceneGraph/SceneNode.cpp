@@ -43,9 +43,23 @@ void                    SceneNode::AddChildNode         ( SceneNode * child )
 
 // ********************************
 //
+SceneNode *             SceneNode::DetachChildNode      ( unsigned int idx )
+{
+    SceneNode * node = nullptr;
+
+    if( idx < m_sceneNodes.size() )
+    {
+        node = m_sceneNodes[ idx ];
+        m_sceneNodes.erase( m_sceneNodes.begin() + idx );
+    }
+
+    return node;
+}
+
+// ********************************
+//
 SceneNode *             SceneNode::GetChild             ( unsigned int idx )
 {
-    assert( idx >= 0 );
     assert( idx < (unsigned int) NumChildNodes() );
 
     return m_sceneNodes[ idx ];
