@@ -45,6 +45,9 @@
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype2.cpp">
       <Filter>Prototypes\Engine\Common\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ExperimentalNodeDeleter.cpp">
+      <Filter>Prototypes\Engine\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
@@ -100,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype2.h">
       <Filter>Prototypes\Engine\Common\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ExperimentalNodeDeleter.h">
+      <Filter>Prototypes\Engine\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

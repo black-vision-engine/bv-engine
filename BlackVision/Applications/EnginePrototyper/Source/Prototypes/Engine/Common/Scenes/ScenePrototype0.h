@@ -16,7 +16,7 @@ private:
 
 public:
 
-                                ScenePrototype0     ();
+                                ScenePrototype0     ( Renderer * renderer );
 
     virtual void                Update              ( TimeType t );
     virtual void                OnKey               ( unsigned char c );
@@ -29,6 +29,8 @@ private:
 
     void                        PrintStructure      ();
     void                        PrintStructure      ( SceneNode * node, unsigned int idx, unsigned int indent );
+
+    void                        DeleteNodeExperimental( SceneNode * node );
 
     bool                        DetachNode          ( SceneNode * node, SceneNode * detachNode );
 

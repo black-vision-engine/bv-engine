@@ -13,6 +13,12 @@ namespace bv {
 
 // *****************************
 //
+ShaderDataSourceCreator::ShaderDataSourceCreator()
+{
+}
+
+// *****************************
+//
 IShaderDataSourceConstPtr   ShaderDataSourceCreator::VertexShader       ( ShaderDataSourceType sdst )
 {
     auto source = VertexShaderSource( sdst );

@@ -22,6 +22,8 @@ public:
 
 private:
 
+    ShaderDataSourceCreator();
+
     static std::string                  VertexShaderSource  ( ShaderDataSourceType sdst );
     static std::string                  FragmentShaderSource( ShaderDataSourceType sdst );
     static std::string                  GeometryShaderSource( ShaderDataSourceType sdst );

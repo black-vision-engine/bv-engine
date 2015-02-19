@@ -31,7 +31,7 @@ void    MemManagementInspector::Initialize          ()
     glClearColor( 0.f, 0.f, 0.f, 0.f );
     glDisable( GL_DEPTH_TEST );
 
-    m_scene = ScenePrototype::CreateNewPrototype( 0 );
+    m_scene = ScenePrototype::CreateNewPrototype( 0, m_renderer );
 }
 
 // *****************************

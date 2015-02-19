@@ -11,6 +11,8 @@ public:
 
     // TODO: implemnt if necessary
 
+    ScenePrototype1( Renderer * renderer );
+
 private:
 
     virtual SceneNode *         BuildSceneImpl      ();

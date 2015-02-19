@@ -1,11 +1,15 @@
 #include "ScenePrototype0.h"
 
+#include "Prototypes/Engine/Common/ExperimentalNodeDeleter.h"
+
+
 namespace bv {
 
 // **************************
 //
-ScenePrototype0::ScenePrototype0     ()
-    : m_detachedNode( nullptr )
+ScenePrototype0::ScenePrototype0     ( Renderer * renderer )
+    : ScenePrototype( renderer )
+    , m_detachedNode( nullptr )
 {
     m_n0 = m_n1 = m_n2 = 0;
 }
@@ -155,7 +159,7 @@ void                ScenePrototype0::OnKey               ( unsigned char c )
             if( m_detachedNode )
             {
                 printf( "Removing old detached node\n" );
-                delete m_detachedNode;
+                DeleteNodeExperimental( m_detachedNode );
             }
 
             m_detachedNode = node;
@@ -178,7 +182,7 @@ void                ScenePrototype0::OnKey               ( unsigned char c )
 
         if( m_detachedNode )
         {
-            delete m_detachedNode;
+            DeleteNodeExperimental( m_detachedNode );
             m_detachedNode = nullptr;
         }
         else
@@ -282,6 +286,13 @@ void                ScenePrototype0::PrintStructure      ( SceneNode * node, uns
 
         PrintStructure( child, i + 1, indent + 4 );
     }
+}
+
+// **************************
+//
+void                ScenePrototype0::DeleteNodeExperimental( SceneNode * node )
+{
+    ExperimentalDeleteAndCleanup( node, GetRenderer() );
 }
 
 // **************************

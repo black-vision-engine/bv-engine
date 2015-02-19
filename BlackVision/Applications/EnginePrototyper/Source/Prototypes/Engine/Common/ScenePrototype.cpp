@@ -11,20 +11,21 @@ namespace  bv {
 
 // **************************
 //
-ScenePrototype *    ScenePrototype::CreateNewPrototype  ( unsigned int i )
+ScenePrototype *    ScenePrototype::CreateNewPrototype  ( unsigned int i, Renderer * renderer )
 {
+    renderer = nullptr;
     ScenePrototype * res = nullptr;
 
     switch( i )
     {
         case 0:
-            res = new ScenePrototype0();
+            res = new ScenePrototype0( renderer );
             break;
         case 1:
-            res = new ScenePrototype1();
+            res = new ScenePrototype1( renderer );
             break;
         case 2:
-            res = new ScenePrototype2();
+            res = new ScenePrototype2( renderer );
             break;
         default:
             ;
@@ -74,8 +75,9 @@ void    ScenePrototype::SetPixelShaderParam ( SceneNode * node, const std::strin
 
 // **************************
 //
-ScenePrototype::ScenePrototype  ()
+ScenePrototype::ScenePrototype  ( Renderer * renderer )
     : m_root( nullptr )
+    , m_renderer( renderer )
 {
 }
 
@@ -114,6 +116,13 @@ void ScenePrototype::BuildScene ()
 SceneNode * ScenePrototype::GetRootNode ()
 {
     return m_root;
+}
+
+// **************************
+//
+Renderer *  ScenePrototype::GetRenderer ()
+{
+    return m_renderer;
 }
 
 // **************************

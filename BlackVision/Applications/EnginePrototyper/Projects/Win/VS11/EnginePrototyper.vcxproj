@@ -162,6 +162,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClCompile Include="..\..\..\Source\Common\VBORect.cpp" />
     <ClCompile Include="..\..\..\Source\PrototypeCreator.cpp" />
     <ClCompile Include="..\..\..\Source\PrototyperApp.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ExperimentalNodeDeleter.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ScenePrototype.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype0.cpp" />
@@ -184,6 +185,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClInclude Include="..\..\..\Source\PrototypeCreator.h" />
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
     <ClInclude Include="..\..\..\Source\PrototypesForwardInc.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ExperimentalNodeDeleter.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ScenePrototype.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype0.h" />
