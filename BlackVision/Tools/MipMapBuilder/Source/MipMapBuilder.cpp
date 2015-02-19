@@ -86,7 +86,12 @@ Image32		Resize( const Image32 & in, unsigned int newWidth, unsigned int newHeig
 
 	Image32 ret;
 
-	ret.data = ( char * ) FreeImage_GetBits( outBitmap );
+	auto numBytes = newWidth * newHeight * 4;
+
+    char * pixels = new char[ numBytes ]; // FIXME: Use normal allocation to free it with free not delete []
+    memcpy( pixels, FreeImage_GetBits( outBitmap ), numBytes );
+
+	ret.data = pixels;
 	ret.width = newWidth;
 	ret.height = newHeight;
 
@@ -160,8 +165,18 @@ Mipmaps				GenerateMipmaps( const std::string & imageFilePath, int levelsNum, Fi
 	if( !fiBitmap )
 		return Mipmaps();
 
+	assert( FreeImage_GetBPP( fiBitmap ) == 32 );
+
+	auto w = FreeImage_GetWidth( fiBitmap );
+	auto h = FreeImage_GetHeight( fiBitmap );
+
+	auto numBytes = w * h * 4;
+
+    char * pixels = new char[ numBytes ]; // FIXME: Use normal allocation to free it with free not delete []
+    memcpy( pixels, FreeImage_GetBits( fiBitmap ), numBytes );
+
 	Image32 img;
-	img.data	= ( char * ) FreeImage_GetBits( fiBitmap );
+	img.data	= pixels;
 	img.width	= FreeImage_GetWidth( fiBitmap );
 	img.height	= FreeImage_GetHeight( fiBitmap );
 

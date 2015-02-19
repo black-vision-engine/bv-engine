@@ -26,7 +26,7 @@ public:
 };
 
 template< typename ResourceTypeConstPtr >
-ResourceTypeConstPtr  QueryTypedRes( ResourceTypeConstPtr res )
+ResourceTypeConstPtr  QueryTypedRes( IResourceNEWConstPtr res )
 {
 	if( res->GetUID() != ResourceTypeConstPtr::element_type::UID() )
     {

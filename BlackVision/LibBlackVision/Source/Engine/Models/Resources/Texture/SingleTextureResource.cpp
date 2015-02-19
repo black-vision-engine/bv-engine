@@ -37,6 +37,13 @@ TextureFormat SingleTextureResource::GetFormat() const
 
 // ******************************
 //
+MemoryChunkConstPtr	SingleTextureResource::GetData() const
+{
+	return m_memory;
+}
+
+// ******************************
+//
 SingleTextureResourceConstPtr SingleTextureResource::Create( const MemoryChunkConstPtr & memory, const std::string & key, SizeType width, SizeType height, TextureFormat format )
 {
 	return std::make_shared< SingleTextureResource >( memory, key, width, height, format );
