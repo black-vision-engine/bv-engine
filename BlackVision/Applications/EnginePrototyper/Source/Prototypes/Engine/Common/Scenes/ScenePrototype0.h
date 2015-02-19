@@ -12,6 +12,8 @@ private:
     unsigned int m_n1;
     unsigned int m_n2;
 
+    SceneNode * m_detachedNode;
+
 public:
 
                                 ScenePrototype0     ();
@@ -28,7 +30,9 @@ private:
     void                        PrintStructure      ();
     void                        PrintStructure      ( SceneNode * node, unsigned int idx, unsigned int indent );
 
-    SceneNode *                 GetNode             ( unsigned int * pos, unsigned int numElts );
+    bool                        DetachNode          ( SceneNode * node, SceneNode * detachNode );
+
+    SceneNode *                 GetNode             ( SceneNode * node, unsigned int * pos, unsigned int numElts );
 
     void                        ToggleNode332       ();
 
