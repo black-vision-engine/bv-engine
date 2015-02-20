@@ -120,6 +120,13 @@ SceneNode * ScenePrototype::GetRootNode ()
 
 // **************************
 //
+void        ScenePrototype::SetRootNode ( SceneNode * node )
+{
+    m_root = node;
+}
+
+// **************************
+//
 Renderer *  ScenePrototype::GetRenderer ()
 {
     return m_renderer;

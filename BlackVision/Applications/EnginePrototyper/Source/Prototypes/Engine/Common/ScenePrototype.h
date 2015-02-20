@@ -32,7 +32,10 @@ public:
     virtual void                OnKey               ( unsigned char c );
 
             void                BuildScene          ();
+
             SceneNode *         GetRootNode         ();
+            void                SetRootNode         ( SceneNode * node );
+            
             Renderer *          GetRenderer         ();
 
             void                SetWorldTransform   ( const Transform & transform );
