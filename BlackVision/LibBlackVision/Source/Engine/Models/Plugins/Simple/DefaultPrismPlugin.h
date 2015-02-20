@@ -2,6 +2,7 @@
 
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
 namespace bv { namespace model {
 
@@ -23,10 +24,17 @@ public:
 class DefaultPrismPlugin :
 	public BasePlugin< IPlugin >
 {
-    VertexAttributesChannelPtr          m_vaChannel;
+    VertexAttributesChannelPtr                  m_vaChannel;
 
+    ParamFloatPtr                               m_uvTypeParam;
+    PrismComponent::PrismUVType                 GetUVType();
+    PrismComponent::PrismUVType                 m_uvType;
+
+    ParamIntPtr                                 m_nParam;
+    int                                         GetN();
 	int											m_lastN;
-	void										InitGeometry( int n );
+
+    void										InitGeometry( int n, PrismComponent::PrismUVType t );
 public:
 	DefaultPrismPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 	~DefaultPrismPlugin(void);
