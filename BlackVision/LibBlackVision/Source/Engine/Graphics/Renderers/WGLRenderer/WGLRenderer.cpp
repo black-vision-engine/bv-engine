@@ -137,7 +137,6 @@ Renderer::Renderer ( RendererInput & ri, int w, int h, TextureFormat colorFormat
 
     // Some default GL rendering mode
     data->m_CurrentRS.Initialize( m_defaultStateInstance );
-
 }
 
 // *********************************
