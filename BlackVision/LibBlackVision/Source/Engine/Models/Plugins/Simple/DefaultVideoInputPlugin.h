@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine\Models\Plugins\Simple\DefaultTexturePlugin.h"
-//#include "DefaultVideoInput.h"
+//#include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
+#include "CompositeVideoInputResourceDescr.h"
 
 namespace bv { namespace model {
 
@@ -29,7 +30,9 @@ public:
 class DefaultVideoInputPlugin :
 	public DefaultTexturePlugin
 {
-	std::vector< IVideoInputResourceDescrConstPtr > vis;
+    CompositeVideoInputResourceDescr        desc;
+
+    int                                     GetSourceNumber();
 public:
 	DefaultVideoInputPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
 	~DefaultVideoInputPlugin(void);

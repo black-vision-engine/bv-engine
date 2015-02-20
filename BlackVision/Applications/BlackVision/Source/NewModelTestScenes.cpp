@@ -16,6 +16,8 @@
 #include "VideoInput/DefaultVideoInputResourceDescr.h"
 #include "VideoInput/ExampleVideoInput.h"
 
+#include "Engine/Models/Plugins/PluginUtils.h"
+
 namespace bv {
 
 namespace {
@@ -540,19 +542,24 @@ model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const mod
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
 
-    //auto texturePlugin =  std::dynamic_pointer_cast< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
-    //((model::DefaultTexturesData*)(texturePlugin->GetPixelShaderChannel()->GetTexturesData().get()))->AddTexture( new model::DefaultVideoInput() );
-
-    root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
-    auto plugin = root->GetPlugin( "video input" );
+    //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+    //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
 
     //root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
     //auto plugin = root->GetPlugin( "texture" );
+    //model::LoadTexture( plugin, "time_zones_4.jpg" );
 
-    //auto vi = new model::DefaultVideoInput( 10, 10, 1.f );
+    root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
+    auto plugin = root->GetPlugin( "video input" );
+    //auto success = model::LoadTexture( plugin, "time_zones_4.jpg" );
     auto vi = new ExampleVideoInput( 10, 10, 1.f );
     auto success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture(), vi ) ) );
     assert(success);
+    auto vi2 = new ExampleVideoInput( 20, 20, 1.f );
+    success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi2->GetTexture(), vi2 ) ) );
+    assert(success);
+
+    //model::SetParameter( plugin->GetParameter( "source" ), 0.f, 1.f );
 
     return root;
 }

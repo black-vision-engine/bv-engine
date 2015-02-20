@@ -369,6 +369,7 @@
     <ClCompile Include="..\..\..\Source\System\Threading\Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h" />
     <ClInclude Include="..\..\..\Source\Application\ConsoleApplication.h" />
     <ClInclude Include="..\..\..\Source\Application\WindowedApplication.h" />

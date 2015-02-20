@@ -28,7 +28,7 @@
     <Filter Include="VideoInput">
       <UniqueIdentifier>{f67ab42f-30e0-4d7a-90ee-0cfaed68a769}</UniqueIdentifier>
     </Filter>
-	<Filter Include="Xml\Auxiliary">
+    <Filter Include="Xml\Auxiliary">
       <UniqueIdentifier>{c1c96312-47dd-4f87-8536-8babf39b47b5}</UniqueIdentifier>
     </Filter>
     <Filter Include="PieCharts">

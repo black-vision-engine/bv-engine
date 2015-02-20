@@ -3,14 +3,17 @@
 
 namespace bv {
 
-ExampleVideoInput::ExampleVideoInput( int x, int y, float fps )
+ExampleVideoInput::ExampleVideoInput( int x, int y, float fps, int maskAnd, int maskOr )
 {	
+	m_fps = fps;
+    m_maskAnd = maskAnd;
+    m_maskOr = maskOr;
+
 	GenerateBits( x, y );
 
-	desc = new model::DefaultTextureDescriptor( model::ResourceHandleConstPtr( new model::ResourceHandle( bits, bits->Size(), new model::TextureExtraData( x, y, 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D )  )),
-		"Tex0", TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_LINEAR, glm::vec4( 1, 1, 1, 1), DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
-
-	m_fps = fps;
+    desc = new model::DefaultTextureDescriptor( model::ResourceHandleConstPtr( new model::ResourceHandle( bits, bits->Size(), new model::TextureExtraData( x, y, 32, TextureFormat::F_A8R8G8B8, TextureType::T_2D )  )),
+		//"Tex0", TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_LINEAR, glm::vec4( 1, 1, 1, 1), DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
+        "Tex0", TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_POINT, glm::vec4( 1, 1, 1, 1), DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
 }
 
 
@@ -29,7 +32,16 @@ void		ExampleVideoInput::GenerateBits( int x, int y )
 	SizeType size = x * y * 4;
 	char * mem = new char[ size ];
 
-	for( int i = 0; i < size; i++ ) mem[i] = char( rand() );
+    unsigned int intMaskAnd = m_maskAnd;
+    unsigned int intMaskOr = m_maskOr;
+
+	for( int i = 0; i < size; i++ )
+    {
+        unsigned int rgbChan = i%4;
+        unsigned char maskAnd = ( intMaskAnd >> (rgbChan*8) ) & 0xff;
+        unsigned char maskOr = ( intMaskOr >> (rgbChan*8) ) & 0xff;
+        mem[i] = char( rand() & maskAnd | maskOr );
+    }
 
 	MemoryChunkPtr chunk = std::make_shared < MemoryChunk >( mem, size );
 	bits = chunk;

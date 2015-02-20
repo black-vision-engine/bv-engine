@@ -28,7 +28,7 @@ public:
 
     void                                                    SetTextureParams    ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor );
     void                                                    SetTexture          ( unsigned int idx, DefaultTextureDescriptor * textureDesc );
-    void                                                    AddTexture          ( DefaultTextureDescriptor * textureDesc );
+    void                                                    AddTexture          ( ITextureDescriptor * textureDesc );
 
     void                                                    SetAnimationParams  ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor );
     void                                                    SetAnimation        ( unsigned int idx, DefaultAnimationDescriptor * animationDesc );

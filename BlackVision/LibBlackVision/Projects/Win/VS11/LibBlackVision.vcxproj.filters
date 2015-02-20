@@ -1694,6 +1694,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.h">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\System\HerarchicalProfiler.inl">
