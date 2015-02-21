@@ -1,4 +1,5 @@
 #include "TextureResourceDescriptor.h"
+#include <cassert>
 
 namespace bv
 {
@@ -31,6 +32,34 @@ bool TextureResourceDesc::IsCacheable() const
 VoidConstPtr TextureResourceDesc::QueryThis() const
 {
 	return shared_from_this();
+}
+
+// ***********************
+//
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & imageFilePath )
+{
+	{ imageFilePath; }
+	assert(false);
+	return nullptr;
+	//return Create( SingleTextureResourceDesc::Create(  ) )
+}
+
+// ***********************
+//
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & imageFilePath, MipMapFilterType mmFilter )
+{
+	{ imageFilePath; mmFilter; }
+	assert(false);
+	return nullptr;
+}
+
+// ***********************
+//
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & imageFilePath, const StringVector & mipMapsPaths )
+{
+	{ imageFilePath; mipMapsPaths; }
+	assert(false);
+	return nullptr;
 }
 
 // ***********************

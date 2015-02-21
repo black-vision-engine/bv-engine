@@ -14,7 +14,6 @@ namespace bv
 class SingleTextureResource;
 
 DEFINE_CONST_PTR_TYPE(SingleTextureResource)
-//DEFINE_PTR_TYPE(SingleTextureResource)
 
 // ********************************
 // Implements single texture resource. Texture without any mipmaps. Only one chunk of memory.
