@@ -8,6 +8,7 @@
     <LibBlackVisionDir>..\..\..\..\..\..\LibBlackVision\Source</LibBlackVisionDir>
     <AssetsDir>..\..\..\..\..\..\Assets</AssetsDir>
     <TestDir>..\..\..\..\..\..\Test</TestDir>
+	<LibImageDir>..\..\..\..\..\..\LibImage\Sources</LibImageDir>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
@@ -29,6 +30,9 @@
     </BuildMacro>
     <BuildMacro Include="TestDir">
       <Value>$(TestDir)</Value>
+    </BuildMacro>
+	<BuildMacro Include="LibImageDir">
+      <Value>$(LibImageDir)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

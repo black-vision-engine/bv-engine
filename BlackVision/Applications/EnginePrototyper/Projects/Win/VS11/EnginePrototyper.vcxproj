@@ -153,6 +153,9 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ProjectReference Include="..\..\..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj">
       <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\LibImage\Projects\Win\VS11\LibImage.vcxproj">
+      <Project>{33e2cc63-2591-46b1-9b24-2a284566f1d6}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Tools\MipMapBuilder\Projects\Win\VS11\MipMapBuilder.vcxproj">
       <Project>{6a33f496-e3c1-4c91-a4e1-049c0c3b762e}</Project>
     </ProjectReference>
