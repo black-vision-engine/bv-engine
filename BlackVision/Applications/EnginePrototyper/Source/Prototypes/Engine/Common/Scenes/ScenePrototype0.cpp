@@ -20,12 +20,15 @@ void                ScenePrototype0::Update              ( TimeType t )
 {
     auto root = GetRootNode();
 
-    float s = 40.f * t;
+    if( root )
+    {
+        float s = 40.f * t;
 
-    //SetLocalTransform( root->GetChild( 0 ), Transformations::Rotation( glm::vec3( 0.f, 0.f, -1.f ), -s ) );
-    //SetLocalTransform( root->GetChild( 0 )->GetChild( 0 ), Transformations::Rotation( glm::vec3( 0.f, 0.f, -1.f ), s / 5.f ) );
+        //SetLocalTransform( root->GetChild( 0 ), Transformations::Rotation( glm::vec3( 0.f, 0.f, -1.f ), -s ) );
+        //SetLocalTransform( root->GetChild( 0 )->GetChild( 0 ), Transformations::Rotation( glm::vec3( 0.f, 0.f, -1.f ), s / 5.f ) );
 
-    SetWorldTransform( root, Transformations::Rotation( glm::vec3( 0.f, 0.f, -1.f ), s ) );
+        SetWorldTransform( root, Transformations::Rotation( glm::vec3( 0.f, 0.f, -1.f ), s ) );
+    }
 }
 
 // **************************
@@ -41,6 +44,7 @@ void                ScenePrototype0::OnKey               ( unsigned char c )
     bool detach = false;
     bool del = false;
     
+    bool c0 = false;
     bool c1 = false;
     bool c2 = false;
     bool c3 = false;
@@ -94,6 +98,9 @@ void                ScenePrototype0::OnKey               ( unsigned char c )
         case 'f':
             m_n2 = 0;
             showloc = true;
+            break;
+        case 'u':
+            c0 = true;
             break;
         case 'i':
             c1 = true;
@@ -216,13 +223,18 @@ void                ScenePrototype0::OnKey               ( unsigned char c )
                 printf( "No previously detached node available\n" );
             }
         }
+        else if( m_n0 == 0 )
+        {
+            SetRootNode( m_detachedNode );
+            m_detachedNode = nullptr;
+        }
         else
         {
             printf( "No node at specified location\n" );
         }
     }
 
-    if ( c1 || c2 || c3 )
+    if ( c0 || c1 || c2 || c3 )
     {
         printf( "Create (%d, %d, %d) at location -> [%d, %d, %d]\n", c1, c2, c3, m_n0, m_n1, m_n2 );
 
@@ -235,6 +247,11 @@ void                ScenePrototype0::OnKey               ( unsigned char c )
         
         if( node )
         {
+            if( c0 )
+            {
+                node->AddChildNode( BuildSceneImpl() );
+            }
+
             if( c1 )
             {
                 node->AddChildNode( Node1() );
@@ -248,6 +265,30 @@ void                ScenePrototype0::OnKey               ( unsigned char c )
             if( c3 )
             {
                 node->AddChildNode( Node3() );
+            }
+
+            PrintStructure();
+        }
+        else if( m_n0 == 0 )
+        {
+            if( c0 )
+            {
+                SetRootNode( BuildSceneImpl() );
+            }
+
+            if( c1 )
+            {
+                SetRootNode( Node1() );
+            }
+
+            if( c2 )
+            {
+                SetRootNode( Node2() );
+            }
+
+            if( c3 )
+            {
+                SetRootNode( Node3() );
             }
 
             PrintStructure();
@@ -277,14 +318,21 @@ void                ScenePrototype0::PrintStructure      ()
 //
 void                ScenePrototype0::PrintStructure      ( SceneNode * node, unsigned int idx, unsigned int indent )
 {
-    printf( "%*s", indent, "" );
-    printf( "Node_%d\n", idx );
-
-    for( unsigned int i = 0; i < node->NumChildNodes(); ++i )
+    if( node )
     {
-        SceneNode * child = node->GetChild( i );
+        printf( "%*s", indent, "" );
+        printf( "Node_%d\n", idx );
 
-        PrintStructure( child, i + 1, indent + 4 );
+        for( unsigned int i = 0; i < node->NumChildNodes(); ++i )
+        {
+            SceneNode * child = node->GetChild( i );
+
+            PrintStructure( child, i + 1, indent + 4 );
+        }
+    }
+    else
+    {
+        printf( "NO NODE\n" );
     }
 }
 
@@ -299,6 +347,13 @@ void                ScenePrototype0::DeleteNodeExperimental( SceneNode * node )
 //
 bool                ScenePrototype0::DetachNode          ( SceneNode * node, SceneNode * detachNode )
 {
+    if( detachNode == GetRootNode() )
+    {
+        SetRootNode( nullptr );
+
+        return true;
+    }
+
     for( unsigned int i = 0; i < node->NumChildNodes(); ++i )
     {
         if( node->GetChild( i ) == detachNode )
@@ -324,6 +379,11 @@ bool                ScenePrototype0::DetachNode          ( SceneNode * node, Sce
 //
 SceneNode *         ScenePrototype0::GetNode             ( SceneNode * node, unsigned int * pos, unsigned int numElts )
 {
+    if( *pos == 0 && numElts == 3 )
+    {
+        return node;
+    }
+
     if( numElts == 0 )
     {
         return nullptr;
