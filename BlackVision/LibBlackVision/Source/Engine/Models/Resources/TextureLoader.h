@@ -33,7 +33,7 @@ private:
 
 	static MemoryChunkConstPtr				LoadImage			( const std::string & path );
 	static SingleTextureResourceConstPtr	LoadSingleTexture	( const SingleTextureResourceDescConstPtr & sinlgeTextureResDesc, bool loadFromCache = true );
-	static TextureResourceConstPtr			LoadFromCache		( const TextureResourceDescConstPtr & textureResDesc );
+	//static TextureResourceConstPtr			LoadFromCache		( const TextureResourceDescConstPtr & textureResDesc );
 };
 
 class TextureExtraData : public ResourceExtraData

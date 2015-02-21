@@ -31,9 +31,9 @@ MipMapFilterType MipMapResourceDesc::GetFilter() const
 
 // *******************************
 //
-MipMapResourceDescConstPtr	MipMapResourceDesc::Create( MipMapFilterType ft, const std::vector< SingleTextureResourceDescConstPtr > & mipMaps )
+MipMapResourceDescConstPtr	MipMapResourceDesc::Create( const std::vector< SingleTextureResourceDescConstPtr > & mipMaps )
 {
-	return std::make_shared< MipMapResourceDesc >( ft, mipMaps );
+	return std::make_shared< MipMapResourceDesc >( mipMaps );
 }
 
 // *******************************
@@ -45,8 +45,8 @@ MipMapResourceDescConstPtr	MipMapResourceDesc::Create( MipMapFilterType ft, cons
 
 // *******************************
 //
-MipMapResourceDesc::MipMapResourceDesc	( MipMapFilterType ft, const std::vector< SingleTextureResourceDescConstPtr > & mipMaps )
-	: m_filterType( ft )
+MipMapResourceDesc::MipMapResourceDesc	( const std::vector< SingleTextureResourceDescConstPtr > & mipMaps )
+	: m_filterType()
 	, m_mipMapDescs( mipMaps	 )
 {}
 
