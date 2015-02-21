@@ -25,6 +25,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EnginePrototyper", "..\..\.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestResourceManager", "..\..\..\Test\Applications\ResourceManager\Projects\Win\VS11\TestTextureCache.vcxproj", "{C8FE17FB-A0B8-4069-B88A-855CC14D9810}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibImage", "..\..\..\LibImage\Projects\Win\VS11\LibImage.vcxproj", "{33E2CC63-2591-46B1-9B24-2A284566F1D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -107,6 +109,18 @@ Global
 		{C8FE17FB-A0B8-4069-B88A-855CC14D9810}.Release|Win32.Build.0 = Release|Win32
 		{C8FE17FB-A0B8-4069-B88A-855CC14D9810}.Release|x64.ActiveCfg = Release|x64
 		{C8FE17FB-A0B8-4069-B88A-855CC14D9810}.Release|x64.Build.0 = Release|x64
+		{33E2CC63-2591-46B1-9B24-2A284566F1D6}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{33E2CC63-2591-46B1-9B24-2A284566F1D6}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{33E2CC63-2591-46B1-9B24-2A284566F1D6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{33E2CC63-2591-46B1-9B24-2A284566F1D6}.Debug|Win32.Build.0 = Debug|Win32
+		{33E2CC63-2591-46B1-9B24-2A284566F1D6}.Debug|x64.ActiveCfg = Debug|x64
+		{33E2CC63-2591-46B1-9B24-2A284566F1D6}.Debug|x64.Build.0 = Debug|x64
+		{33E2CC63-2591-46B1-9B24-2A284566F1D6}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{33E2CC63-2591-46B1-9B24-2A284566F1D6}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{33E2CC63-2591-46B1-9B24-2A284566F1D6}.Release|Win32.ActiveCfg = Release|Win32
+		{33E2CC63-2591-46B1-9B24-2A284566F1D6}.Release|Win32.Build.0 = Release|Win32
+		{33E2CC63-2591-46B1-9B24-2A284566F1D6}.Release|x64.ActiveCfg = Release|x64
+		{33E2CC63-2591-46B1-9B24-2A284566F1D6}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

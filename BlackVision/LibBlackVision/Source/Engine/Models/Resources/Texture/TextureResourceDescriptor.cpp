@@ -1,4 +1,5 @@
 #include "TextureResourceDescriptor.h"
+#include "LibImage.h"
 #include <cassert>
 
 namespace bv
@@ -38,28 +39,58 @@ VoidConstPtr TextureResourceDesc::QueryThis() const
 //
 TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & imageFilePath )
 {
-	{ imageFilePath; }
-	assert(false);
-	return nullptr;
-	//return Create( SingleTextureResourceDesc::Create(  ) )
+	auto props = image::GetImageProps( imageFilePath );
+
+	if( !props.error.empty() )
+	{
+		return nullptr;
+	}
+
+	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, props.format ) );
 }
 
 // ***********************
 //
 TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & imageFilePath, MipMapFilterType mmFilter )
 {
-	{ imageFilePath; mmFilter; }
-	assert(false);
-	return nullptr;
+	auto props = image::GetImageProps( imageFilePath );
+
+	if( !props.error.empty() )
+	{
+		return nullptr;
+	}
+
+	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, props.format ), mmFilter );
 }
 
 // ***********************
 //
 TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & imageFilePath, const StringVector & mipMapsPaths )
 {
-	{ imageFilePath; mipMapsPaths; }
-	assert(false);
-	return nullptr;
+	auto props = image::GetImageProps( imageFilePath );
+
+	if( !props.error.empty() )
+	{
+		return nullptr;
+	}
+
+	std::vector< SingleTextureResourceDescConstPtr > mmDescs;
+
+	for( auto mmFilePath : mipMapsPaths )
+	{
+		auto mmProps = image::GetImageProps( mmFilePath );
+
+		if( !mmProps.error.empty() )
+		{
+			return nullptr;
+		}
+
+		mmDescs.push_back( SingleTextureResourceDesc::Create( mmFilePath, mmProps.width, mmProps.height, mmProps.format ) );
+	}
+
+	auto mmResDesc = MipMapResourceDesc::Create( mmDescs );
+
+	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, props.format ), mmResDesc );
 }
 
 // ***********************

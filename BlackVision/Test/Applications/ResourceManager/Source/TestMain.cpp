@@ -4,7 +4,7 @@
 #include "Engine/Models/Resources/Texture/TextureResource.h"
 #include "Core/Hash.h"
 
-#include "ImageProps.h"
+#include "LibImage.h"
 
 #include "gtest/gtest.h"
 
@@ -34,7 +34,8 @@ TEST(LoaderRigistration, ResourceManager)
 
 TEST(LoadingTextureAndGeneratingMipMaps, ResourceManager)
 {
-	auto props = GetImageProps( imagePath );
+	auto props = bv::image::GetImageProps( imagePath );
+	ASSERT_TRUE( props.error.empty() );
 
 	auto orig = bv::SingleTextureResourceDesc::Create( imagePath, props.width, props.height, props.format );
 	ASSERT_TRUE( orig );
@@ -48,7 +49,8 @@ TEST(LoadingTextureAndGeneratingMipMaps, ResourceManager)
 
 TEST(LoadingTexture, ResourceManager)
 {
-	auto props = GetImageProps( imagePath );
+	auto props = bv::image::GetImageProps( imagePath );
+	ASSERT_TRUE( props.error.empty() );
 
 	auto orig = bv::SingleTextureResourceDesc::Create( imagePath, props.width, props.height, props.format );
 	ASSERT_TRUE( orig );
@@ -62,7 +64,8 @@ TEST(LoadingTexture, ResourceManager)
 
 TEST(LoadingTexturePowefOf2Texture, ResourceManager)
 {
-	auto props = GetImageProps( imagePath_512x512 );
+	auto props = bv::image::GetImageProps( imagePath_512x512 );
+	ASSERT_TRUE( props.error.empty() );
 
 	auto orig = bv::SingleTextureResourceDesc::Create( imagePath_512x512, props.width, props.height, props.format );
 	ASSERT_TRUE( orig );
@@ -79,10 +82,14 @@ TEST(LoadingTexturePowefOf2Texture, ResourceManager)
 
 TEST(LoadingTextureWitmMipmaps, ResourceManager)
 {
-	auto propsOrig = GetImageProps( AssetsPath + std::string("checkerboard2_500X500.png") );
-	auto props0 = GetImageProps( AssetsPath + std::string("checkerboard2_512X512.png") );
-	auto props1 = GetImageProps( AssetsPath + std::string("checkerboard2_256X256.png") );
-	auto props2 = GetImageProps( AssetsPath + std::string("checkerboard2_128X128.png") );
+	auto propsOrig = bv::image::GetImageProps( AssetsPath + std::string("checkerboard2_500X500.png") );
+	ASSERT_TRUE( propsOrig.error.empty() );
+	auto props0 = bv::image::GetImageProps( AssetsPath + std::string("checkerboard2_512X512.png") );
+	ASSERT_TRUE( props0.error.empty() );
+	auto props1 = bv::image::GetImageProps( AssetsPath + std::string("checkerboard2_256X256.png") );
+	ASSERT_TRUE( props1.error.empty() );
+	auto props2 = bv::image::GetImageProps( AssetsPath + std::string("checkerboard2_128X128.png") );
+	ASSERT_TRUE( props2.error.empty() );
 
 	auto origDesc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_500X500.png"), propsOrig.width, propsOrig.height, propsOrig.format );
 	ASSERT_TRUE( origDesc );
@@ -115,10 +122,14 @@ TEST(LoadingTextureWitmMipmaps, ResourceManager)
 	ASSERT_TRUE( typedRes->GetMipMaps()->GetLevelsNum() == 3 );
 
 	{
-		auto propsOrig = GetImageProps( AssetsPath + std::string("checkerboard2_512X512.png") );
-		auto props1 = GetImageProps( AssetsPath + std::string("checkerboard2_256X256.png") );
-		auto props2 = GetImageProps( AssetsPath + std::string("checkerboard2_128X128.png") );
-		auto props3 = GetImageProps( AssetsPath + std::string("checkerboard2_64X64.png") );
+		auto propsOrig = bv::image::GetImageProps( AssetsPath + std::string("checkerboard2_512X512.png") );
+		ASSERT_TRUE( propsOrig.error.empty() );
+		auto props1 = bv::image::GetImageProps( AssetsPath + std::string("checkerboard2_256X256.png") );
+		ASSERT_TRUE( props1.error.empty() );
+		auto props2 = bv::image::GetImageProps( AssetsPath + std::string("checkerboard2_128X128.png") );
+		ASSERT_TRUE( props2.error.empty() );
+		auto props3 = bv::image::GetImageProps( AssetsPath + std::string("checkerboard2_64X64.png") );
+		ASSERT_TRUE( props3.error.empty() );
 
 		auto origDesc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_512X512.png"), propsOrig.width, propsOrig.height, propsOrig.format );
 		ASSERT_TRUE( origDesc );
