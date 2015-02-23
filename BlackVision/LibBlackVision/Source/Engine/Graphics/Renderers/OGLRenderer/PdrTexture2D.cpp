@@ -151,7 +151,6 @@ void        PdrTexture2D::Update            ( const Texture2D * texture )
     if( m_pboMem )
     {
         UpdateTexData( texture );
-        UpdateTexData( texture );
     }
 }
 
