@@ -94,6 +94,16 @@ void    PdrTexture2D::UpdateTexData     ( const Texture2D * texture )
 #endif
 
     void * data = m_pboMem->LockTexture( MemoryLockingType::MLT_WRITE_ONLY, m_textureID, m_width, m_height, m_format, m_type );
+
+    printf( "Copying texture data: " );
+    const unsigned int * pdata = (const unsigned int *) texture->GetData()->Get();
+    for( unsigned int i = 0; i < 4; ++i )
+    {
+        printf( "%08X ", pdata[ i ] );
+    }
+
+    printf( "\n" );
+
     memcpy( data, texture->GetData()->Get(), texture->RawFrameSize() );
     m_pboMem->UnlockTexture( m_textureID, m_width, m_height, m_format, m_type );
 

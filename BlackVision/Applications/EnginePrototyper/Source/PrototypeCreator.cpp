@@ -11,6 +11,8 @@ IAppLogicPrototype * CreateDefaultPrototype     ( Renderer * renderer )
 {
     { renderer; }
     // return new SimpleVAOPrototype0();
+    // return new PboUpdatesInspector( renderer );
+
     return new MemManagementInspector( renderer );
 }
 

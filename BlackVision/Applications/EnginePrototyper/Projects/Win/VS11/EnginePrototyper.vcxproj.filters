@@ -48,6 +48,9 @@
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ExperimentalNodeDeleter.cpp">
       <Filter>Prototypes\Engine\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagement\PboUpdatesInspector.cpp">
+      <Filter>Prototypes\Engine\MemManagement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
@@ -106,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ExperimentalNodeDeleter.h">
       <Filter>Prototypes\Engine\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagement\PboUpdatesInspector.h">
+      <Filter>Prototypes\Engine\MemManagement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

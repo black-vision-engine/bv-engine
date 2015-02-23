@@ -9,9 +9,10 @@ class ScenePrototype1 : public ScenePrototype
 {
 public:
 
-    // TODO: implemnt if necessary
-
     ScenePrototype1( Renderer * renderer );
+
+    virtual void                Update              ( TimeType t );
+    virtual void                OnKey               ( unsigned char c );
 
 private:
 

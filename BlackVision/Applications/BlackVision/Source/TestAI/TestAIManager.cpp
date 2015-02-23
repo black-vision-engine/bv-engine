@@ -233,6 +233,20 @@ TestAI *        TestAIManager::PreparePreset1   () const
 TestAI *        TestAIManager::PreparePreset2   () const
 {
     auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 0", TimeType( 20.0 ), TimelineWrapMethod::TWM_REPEAT, TimelineWrapMethod::TWM_CLAMP ) );
+    timeline->AddKeyFrame( new model::TimelineEventStop( "stop0", TimeType( 2.0 ), timeline.get() ) );
+    auto c1 = new AICommandPlay( timeline, TimeType( 0.2 ) );
+    auto c3 = new AICommandSetTimeAndStop( timeline, TimeType( 0.5 ), TimeType( 7.5 ) );
+    //auto c4 = new AICommandSetTimeAndStop( timeline, TimeType( 3.0 ), TimeType( 3.5 ) );
+
+    TestAI * ai = new TestAI( timeline, nullptr );
+
+    ai->AddCommand( c1 );
+    ai->AddCommand( c3 );
+    //ai->AddCommand( c4 );
+
+    return ai;
+#if OLD_FUCK_OFFFFFF
+    auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 0", TimeType( 20.0 ), TimelineWrapMethod::TWM_REPEAT, TimelineWrapMethod::TWM_CLAMP ) );
     timeline->AddKeyFrame( new model::TimelineEventStop( "stop0", TimeType( 5.0 ), timeline.get() ) );
     timeline->AddKeyFrame( new model::TimelineEventStop( "stop1", TimeType( 10.0 ), timeline.get() ) );
 
@@ -255,6 +269,7 @@ TestAI *        TestAIManager::PreparePreset2   () const
     ai->AddCommand( c6 );
 
     return ai;
+#endif
 }
 
 #define PRESET1
