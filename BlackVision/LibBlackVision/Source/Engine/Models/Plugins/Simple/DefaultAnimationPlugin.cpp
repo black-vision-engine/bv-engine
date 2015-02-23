@@ -277,14 +277,7 @@ void                                DefaultAnimationPlugin::Update              
     auto wY = GetWrapModeY();
     auto fm = GetFilteringMode();
 
-    static unsigned int oldFrame = 0;
-    unsigned int frameNum = (unsigned int )m_paramFrameNum->Evaluate();
-
-    if( oldFrame != frameNum )
-    {
-        printf( "Frame num changed from: %d to %d\n", oldFrame, frameNum );
-        oldFrame = frameNum;
-    }
+    unsigned int frameNum = (unsigned int )m_paramFrameNum->Evaluate(); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
     m_texturesData->SetAnimationFrame( 0, frameNum ); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
 
     if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() || StateChanged( wX, wY, fm, attachmentMode ) )

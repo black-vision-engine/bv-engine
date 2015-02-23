@@ -54,6 +54,8 @@ public:
     void *  AsyncLockRenderTarget   ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type );
     void    AsyncUnlockRenderTarget ();
 
+    void    Flush               ( GLuint textureUnit );
+
     GLuint  NumPBOs             () const;
     GLuint  DataSize            () const;
 
