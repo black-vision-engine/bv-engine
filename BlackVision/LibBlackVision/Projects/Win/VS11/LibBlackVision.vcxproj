@@ -663,6 +663,7 @@
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParameters.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\RenderableEffect.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeShaderChannel.inl" />
+    <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\GenericParameterSetters.inl" />
