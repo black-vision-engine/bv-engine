@@ -6,7 +6,6 @@
 namespace bv { namespace model {
 
 // *********************************
-PluginUIDHashMap    StaticShaderGenerator::ms_pixelShaderMapping;
 //StaticShaderGenerator DefaultFinalizePixelShaderChannel::ms_staticShaderGenerator;
 
 // *********************************
@@ -20,7 +19,7 @@ void     DefaultFinalizePixelShaderChannel::InitializePixelShaderMapping() const
 //
 DefaultFinalizePixelShaderChannel::DefaultFinalizePixelShaderChannel    ( IPixelShaderChannelPtr channel, const std::string & shadersDir )
     : Parent( channel, shadersDir )
-    , ms_staticShaderGenerator( channel, shadersDir )
+    , ms_staticShaderGenerator( /*channel,*/ shadersDir )
 {
     assert( channel != nullptr );
 

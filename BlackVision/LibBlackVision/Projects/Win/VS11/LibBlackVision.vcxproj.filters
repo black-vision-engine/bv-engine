@@ -1747,5 +1747,8 @@
     <None Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.inl">
       <Filter>Engine\Models\Updaters</Filter>
     </None>
+    <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.inl">
+      <Filter>Engine\Models\Plugins\Channels</Filter>
+    </None>
   </ItemGroup>
 </Project>

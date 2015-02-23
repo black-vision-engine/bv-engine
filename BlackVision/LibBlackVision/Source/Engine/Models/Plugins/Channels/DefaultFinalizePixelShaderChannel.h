@@ -3,7 +3,7 @@
 #include "Engine/Models/Plugins/Channels/DefaultFinalizeShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 
-#include "StaticShaderGenerator.h"
+//#include "StaticShaderGenerator.h"
 
 namespace bv { namespace model {
 
