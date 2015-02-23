@@ -265,6 +265,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\RendererContext\FillContext.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\RendererContext\RendererContext.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\ShaderChannel.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\TranformChannel.cpp" />
@@ -302,6 +303,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTexturePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTimerPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Cache\RawDataCache.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\AtlasCache.cpp" />
@@ -367,6 +369,7 @@
     <ClCompile Include="..\..\..\Source\System\Threading\Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h" />
     <ClInclude Include="..\..\..\Source\Application\ConsoleApplication.h" />
     <ClInclude Include="..\..\..\Source\Application\WindowedApplication.h" />
@@ -509,6 +512,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\RendererContext\FillContext.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\RendererContext\RendererContext.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\ShaderChannel.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\TransformChannel.h" />
@@ -570,6 +574,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTexturePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTimerPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Cache\RawDataCache.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\AtlasCache.h" />
