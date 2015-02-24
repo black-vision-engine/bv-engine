@@ -10,10 +10,10 @@ class DefaultGeometryPluginDescBase : public BasePluginDescriptor
 {
 public:
 
-    DefaultGeometryPluginDescBase                                    ();
+    DefaultGeometryPluginDescBase                                    ( const std::string & uid, const std::string & name );
 
     virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
-    virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
+    //virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
     virtual bool                            CanBeAttachedTo     ( IPluginConstPtr plugin )  const override;
 
