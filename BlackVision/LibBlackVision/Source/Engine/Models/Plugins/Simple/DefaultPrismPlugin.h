@@ -22,7 +22,7 @@ public:
 };
 
 class DefaultPrismPlugin :
-	public BasePlugin< IPlugin >
+    public BasePlugin< IPlugin >
 {
     VertexAttributesChannelPtr                  m_vaChannel;
 
@@ -32,16 +32,16 @@ class DefaultPrismPlugin :
 
     ParamIntPtr                                 m_nParam;
     int                                         GetN();
-	int											m_lastN;
+    int											m_lastN;
 
     void										InitGeometry( int n, PrismComponent::PrismUVType t );
 public:
-	DefaultPrismPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
-	~DefaultPrismPlugin(void);
+    DefaultPrismPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
+    ~DefaultPrismPlugin(void);
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
 
-	virtual void								Update                      ( TimeType t );
+    virtual void								Update                      ( TimeType t );
 };
 
 } }
