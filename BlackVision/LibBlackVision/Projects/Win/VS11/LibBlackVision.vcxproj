@@ -295,6 +295,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAnimationPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultColorPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGradientPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPieChartPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPrismPlugin.cpp" />
@@ -566,6 +567,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAnimationPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultColorPlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGradientPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPieChartPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPrismPlugin.h" />

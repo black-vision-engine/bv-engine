@@ -840,6 +840,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.cpp">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Core\MemoryChunk.h">
@@ -1695,6 +1698,9 @@
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
   </ItemGroup>
