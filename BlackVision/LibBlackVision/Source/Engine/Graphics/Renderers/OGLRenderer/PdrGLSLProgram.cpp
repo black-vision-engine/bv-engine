@@ -80,7 +80,7 @@ PdrGLSLProgram::PdrGLSLProgram( const PixelShader & ps, const VertexShader & vs,
 //
 PdrGLSLProgram::~PdrGLSLProgram					    ()
 {
-    glDeleteProgram( m_Handle );
+    BVGL::glDeleteProgram( m_Handle );
 }
 
 // *******************************
@@ -95,7 +95,7 @@ bool PdrGLSLProgram::CompileShaderFromFile( const string & fileName, GLSLShader:
 
     if( m_Handle <= 0 )
     {
-        m_Handle = glCreateProgram();
+        m_Handle = BVGL::glCreateProgram();
         if( m_Handle == 0)
         {
             m_LogString = "Unable to create shader program.";
@@ -127,7 +127,7 @@ bool PdrGLSLProgram::CompileShaderFromString( const string & source, GLSLShader:
 {
     if( m_Handle <= 0 )
     {
-        m_Handle = glCreateProgram();
+        m_Handle = BVGL::glCreateProgram();
         if( m_Handle == 0)
         {
             m_LogString = "Unable to create shader program.";
@@ -139,19 +139,19 @@ bool PdrGLSLProgram::CompileShaderFromString( const string & source, GLSLShader:
 
     switch( type ) {
     case GLSLShader::VERTEX:
-        shaderHandle = glCreateShader( GL_VERTEX_SHADER );
+        shaderHandle = BVGL::glCreateShader( GL_VERTEX_SHADER );
         break;
     case GLSLShader::FRAGMENT:
-        shaderHandle = glCreateShader( GL_FRAGMENT_SHADER );
+        shaderHandle = BVGL::glCreateShader( GL_FRAGMENT_SHADER );
         break;
     case GLSLShader::GEOMETRY:
-        shaderHandle = glCreateShader( GL_GEOMETRY_SHADER );
+        shaderHandle = BVGL::glCreateShader( GL_GEOMETRY_SHADER );
         break;
     case GLSLShader::TESS_CONTROL:
-        shaderHandle = glCreateShader( GL_TESS_CONTROL_SHADER );
+        shaderHandle = BVGL::glCreateShader( GL_TESS_CONTROL_SHADER );
         break;
     case GLSLShader::TESS_EVALUATION:
-        shaderHandle = glCreateShader( GL_TESS_EVALUATION_SHADER );
+        shaderHandle = BVGL::glCreateShader( GL_TESS_EVALUATION_SHADER );
         break;
     default:
         return false;
