@@ -356,6 +356,11 @@ void    Renderer::Enable              ( const Texture2D * texture, int textureUn
     {
         pdrTex2D->Update( texture );
         texture->SetChanged( false );
+        pdrTex2D->SetUpdated( true );
+    }
+    else
+    {
+        pdrTex2D->SetUpdated( false );        
     }
 
     pdrTex2D->Enable( this, textureUnit );

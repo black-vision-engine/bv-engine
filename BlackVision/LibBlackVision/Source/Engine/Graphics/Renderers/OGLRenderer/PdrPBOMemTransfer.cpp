@@ -19,6 +19,9 @@ PdrPBOMemTransfer::PdrPBOMemTransfer    ( DataBuffer::Semantic semantic, unsigne
     m_pboUsage  = PBOUsage( semantic );
     m_numPBOs   = NumPBOs( semantic );
 
+    // FIXME: for the time being
+    m_numPBOs = 1;
+
     assert( m_numPBOs > 0 );
 
     glGenBuffers( m_numPBOs, m_pboID );
@@ -276,7 +279,17 @@ void    PdrPBOMemTransfer::AsyncUnlockRenderTarget ()
 
 // ****************************
 //
-GLuint PdrPBOMemTransfer::NumPBOs       () const
+void    PdrPBOMemTransfer::Flush        ( GLuint textureUnit )
+{
+    { textureUnit; }
+    //if ( NumPBOs() == 2 )
+    //{
+    //}
+}
+
+// ****************************
+//
+GLuint  PdrPBOMemTransfer::NumPBOs      () const
 {
     return m_numPBOs;
 }

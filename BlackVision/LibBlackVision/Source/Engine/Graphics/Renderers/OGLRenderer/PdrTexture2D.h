@@ -17,6 +17,8 @@ class PdrTexture2D
 private:
 
     PdrPBOMemTransfer * m_pboMem;
+    bool                m_prevFrameUpdated;
+    bool                m_curFrameUpdated;
 
     GLuint          m_textureID;
     GLuint          m_prevTextureID;
@@ -50,6 +52,7 @@ public:
     void            Unlock          ();
 
     void            Update          ( const Texture2D * texture );
+    void            SetUpdated      ( bool updated );
 
     GLuint          Bind            ();
     void            Unbind          ();

@@ -22,6 +22,8 @@ PdrTexture2D::PdrTexture2D                      ( const Texture2D * texture )
     : m_textureID( 0 )
     , m_prevTextureID( 0 )
     , m_pboMem( nullptr )
+    , m_prevFrameUpdated( false )
+    , m_curFrameUpdated( false )
     , m_width( 0 )
     , m_height( 0 )
 {
@@ -94,17 +96,8 @@ void    PdrTexture2D::UpdateTexData     ( const Texture2D * texture )
 #endif
 
     void * data = m_pboMem->LockTexture( MemoryLockingType::MLT_WRITE_ONLY, m_textureID, m_width, m_height, m_format, m_type );
-
-    printf( "Copying texture data: " );
-    const unsigned int * pdata = (const unsigned int *) texture->GetData()->Get();
-    for( unsigned int i = 0; i < 4; ++i )
-    {
-        printf( "%08X ", pdata[ i ] );
-    }
-
-    printf( "\n" );
-
     memcpy( data, texture->GetData()->Get(), texture->RawFrameSize() );
+    printf( "TEXTURE ASYNC MEM TRAQNSFER TRIGGERED\n");
     m_pboMem->UnlockTexture( m_textureID, m_width, m_height, m_format, m_type );
 
 #ifdef POOR_PROFILE_TEXTURE_STREAMING
@@ -115,7 +108,7 @@ void    PdrTexture2D::UpdateTexData     ( const Texture2D * texture )
 
 // *******************************
 //
-PdrTexture2D::~PdrTexture2D   ()
+PdrTexture2D::~PdrTexture2D         ()
 {
     Deinitialize();
 }
@@ -124,9 +117,18 @@ PdrTexture2D::~PdrTexture2D   ()
 //
 void            PdrTexture2D::Enable        ( Renderer * renderer, int textureUnit )
 {
+    
     { renderer; } // FIXME: suppress unused
+
+    //if( m_prevFrameUpdated && !m_curFrameUpdated )
+    //{
+    //    m_pboMem->Flush( textureUnit );
+    //}
+
     glActiveTexture( GL_TEXTURE0 + textureUnit );
     m_prevTextureID = Bind();
+
+    m_prevFrameUpdated = m_curFrameUpdated;
 }
 
 // *******************************
@@ -152,6 +154,13 @@ void        PdrTexture2D::Update            ( const Texture2D * texture )
     {
         UpdateTexData( texture );
     }
+}
+
+// *******************************
+//
+void    PdrTexture2D::SetUpdated    ( bool updated )
+{
+    m_curFrameUpdated = updated;
 }
 
 // *******************************
