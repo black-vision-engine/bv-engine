@@ -44,6 +44,7 @@ public:
 	static  model::BasicNodePtr     CreedVideoInputTestScene               ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
  	static  model::BasicNodePtr     CreedPieChartTestScene               ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreedPrismBugTestScene               ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     CreedCosineDemoScene               ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 
     static  model::BasicNodePtr     SimpeTextureTestScene       ();
     static  model::BasicNodePtr     SimpleMultiCCScene          ();
