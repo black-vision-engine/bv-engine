@@ -16,7 +16,7 @@ public:
 
 class DefaultCirclePlugin : public DefaultGeometryPluginBase
 {
-    //virtual void										InitGeometry();
+    //virtual void										InitGeometry() { __super::InitGeometry(); }
 
     virtual IGeometryAndUVsGenerator*           GetGenerator() override;
 

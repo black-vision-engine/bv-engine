@@ -90,7 +90,7 @@ DefaultGeometryPluginBase::DefaultGeometryPluginBase( const std::string & name, 
     //assert( aeParam );
     //float aeVal = QueryTypedParam< ParamFloatPtr > ( aeParam )->Evaluate();
 
-    InitGeometry();
+    //InitGeometry();
 }
 
 //DefaultGeometryPluginBase::~DefaultGeometryPluginBase(void)
