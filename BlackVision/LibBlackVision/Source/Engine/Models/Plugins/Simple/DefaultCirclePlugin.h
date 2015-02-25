@@ -19,9 +19,13 @@ class DefaultCirclePlugin : public DefaultGeometryPluginBase
     virtual IGeometryGenerator*                 GetGenerator() override;
 
     virtual bool                                NeedsTopologyUpdate();
+
+    int                                         GetTesselation();
 public:
     DefaultCirclePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model ) 
         : DefaultGeometryPluginBase( name, uid, prev, model ) { }
+
+    //virtual void								Update                      ( TimeType t );
 };
 
 } }

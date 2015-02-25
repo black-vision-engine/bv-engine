@@ -772,6 +772,9 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
     root->AddPlugin( "DEFAULT_CIRCLE", timeEvaluator );
     root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
 
+    model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+
+    model::SetParameter( root->GetPlugin( "circle" )->GetParameter( "tesselation" ), 100.f, 100 );
     root->GetPlugin( "circle" )->Update(0); // FIXME: to generate geometry only
 
     return root;

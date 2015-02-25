@@ -2,6 +2,7 @@
 
 #include <string>
 #include <memory>
+#include <assert.h>
 
 #include "Engine/Types/Enums.h"
 
@@ -46,6 +47,7 @@ namespace bv { namespace model {
 	template< typename ParamTypePtr >
 	ParamTypePtr  QueryTypedParam( IParameterPtr param )
 	{
+        assert( param );
 		if( param->GetType() != ParamTypePtr::element_type::Type() )
 		{
 			return nullptr;

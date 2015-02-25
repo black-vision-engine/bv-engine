@@ -4,12 +4,19 @@
 
 namespace bv { namespace model {
 
+#define TESSELATION_PARAM_NAME "tesselation"
+
 DefaultPluginParamValModelPtr   DefaultCirclePluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
     DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
     DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
 
+    ParamIntPtr paramN             = ParametersFactory::CreateParameterInt( TESSELATION_PARAM_NAME, timeEvaluator );
+
     model->SetVertexAttributesChannelModel( vacModel );
+    vacModel->AddParameter( paramN );
+
+    paramN->SetVal( 3, 0.f );
 
     return model;
 }
@@ -36,8 +43,8 @@ class CircleGenerator : public IGeometryOnlyGenerator
     int tesselation;
 
 public:
-    CircleGenerator()
-        : tesselation( 3 )
+    CircleGenerator( int n )
+        : tesselation( n )
         {}
 
     IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_ONLY; }
@@ -54,12 +61,20 @@ public:
 
 IGeometryGenerator*           DefaultCirclePlugin::GetGenerator()
 {
-    return new CircleGenerator();    
+    int n = GetTesselation();
+    return new CircleGenerator( n );
 }
 
 bool                                DefaultCirclePlugin::NeedsTopologyUpdate()
 {
     return true;
+}
+
+int                                         DefaultCirclePlugin::GetTesselation()
+{
+    auto param = GetParameter( TESSELATION_PARAM_NAME );
+    auto intParam = QueryTypedParam< ParamIntPtr >( param );
+    return intParam->Evaluate();
 }
 
 } }
