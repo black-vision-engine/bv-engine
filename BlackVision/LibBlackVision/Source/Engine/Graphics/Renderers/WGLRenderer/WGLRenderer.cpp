@@ -1,8 +1,6 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 
 #include <gl/glew.h>
-#include <gl/wglew.h>
-#include <gl/gl.h>
 
 #include "Engine/Graphics/Renderers/WGLRenderer/WGLRendererData.h"
 

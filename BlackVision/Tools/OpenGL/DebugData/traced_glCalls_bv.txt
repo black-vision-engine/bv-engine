@@ -1,0 +1,15 @@
+Renderers\OGLRenderer\GLRenderer.cpp
+Renderers\OGLRenderer\GLRendererData.cpp 
+Renderers\OGLRenderer\GLUtils.cpp
+Renderers\OGLRenderer\PdrGLSLProgram.cpp
+Renderers\OGLRenderer\PdrGLSLProgram.inl
+Renderers\OGLRenderer\PdrPBOMemTransfer.cpp
+Renderers\OGLRenderer\PdrRenderTarget.cpp
+Renderers\OGLRenderer\PdrShader.cpp
+Renderers\OGLRenderer\PdrTexture2D.cpp
+Renderers\OGLRenderer\PdrVertexArrayObject.cpp
+Renderers\OGLRenderer\PdrVertexArrayObjectSingleVB.cpp
+Renderers\OGLRenderer\PdrVertexBuffer.cpp
+Renderers\OGLRenderer\PdrVertexDescriptor.cpp
+Renderers\WGLRenderer\WGLRenderer.cpp
+Renderers\Renderer.cpp

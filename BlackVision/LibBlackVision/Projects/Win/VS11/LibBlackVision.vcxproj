@@ -163,6 +163,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRenderer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRendererData.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGL.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrConstants.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrIndexBuffer.cpp" />
@@ -393,6 +394,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectWithMask.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRendererData.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLUtils.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGL.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrIndexBuffer.h" />

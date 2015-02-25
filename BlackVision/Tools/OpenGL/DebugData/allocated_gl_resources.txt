@@ -1,0 +1,34 @@
+PdrGLSLProgram.cpp
+    glCreateProgram()
+    glCreateShader()
+    glDeleteProgram()
+  
+PdrPBOMemTransfer.cpp
+    glGenBuffers()
+    glDeleteBuffers()
+    
+PdrRenderTarget.cpp
+    glGenFramebuffers()
+    glDeleteFramebuffers()
+    glGenRenderbuffers()
+    glDeleteRenderbuffers()
+
+PdrTexture2D.cpp
+    glGenTextures()
+    glDeleteTextures()
+    
+PdrVertexArrayObject.cpp
+    glGenVertexArrays()
+    glDeleteVertexArrays(()
+    
+PdrVertexArrayObjectSingleVB.cpp
+    glGenVertexArrays()
+    glDeleteVertexArrays()
+
+PdrVertexBuffer.cpp
+    glGenbuffers()
+    glDeleteBuffers()
+
+WGLRenderer.cpp
+    wglCreateContext()
+    wglDeleteContext()

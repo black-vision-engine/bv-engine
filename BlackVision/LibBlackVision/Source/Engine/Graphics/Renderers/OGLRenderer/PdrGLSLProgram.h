@@ -1,6 +1,6 @@
 #pragma once
 
-#include <gl\glew.h>
+#include "Engine/Graphics/Renderers/OGLRenderer/GL/BVGL.h"
 
 #include <string>
 #include <map>

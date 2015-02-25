@@ -20,6 +20,7 @@
 
 //FIXME: remove
 #include "testai/TestAIManager.h"
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 
 #define _USE_MATH_DEFINES
@@ -55,6 +56,7 @@ namespace
 
     void GownoWFormieKebaba( TimeType t, BVAppLogic * logic )
     {
+        { logic; }
         //DETERMINSTIC TIME INTERVALS
         //static TimeType tt = TimeType( 0.0 );
         //tt += TimeType( 0.001 );
@@ -63,14 +65,16 @@ namespace
         //static auto ai = TestAIManager::Instance().GetAIPreset( 1 );
         //static auto ai = TestAIManager::Instance().GetAIPreset( 5, logic );
         //static auto ai = TestAIManager::Instance().GetAIPreset( 4, logic );
-        //static auto ai = TestAIManager::Instance().GetAIPreset( 2, logic->GetModelScene()->GetSceneRoot() );
         
+        //static auto ai = TestAIManager::Instance().GetAIPreset( 2, logic->GetModelScene()->GetSceneRoot() );
+        //ai->EvalAt( t );
+
         //Override alpha test events
         //static auto ai = TestAIManager::Instance().GetAIPreset( 3, logic->GetModelScene()->GetSceneRoot() );
 
         //Override node mask test events
-        static auto ai = TestAIManager::Instance().GetAIPreset( 6, logic->GetModelScene()->GetSceneRoot() );
-        ai->EvalAt( t );
+        //static auto ai = TestAIManager::Instance().GetAIPreset( 6, logic->GetModelScene()->GetSceneRoot() );
+        //ai->EvalAt( t );
 
         //PRE GOWNO
         float tx = float( sin( t ) );
@@ -254,6 +258,15 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & t
 //
 void BVAppLogic::OnKey           ( unsigned char c )
 {
+    unsigned char d = c - '0';
+
+    if( d <= 10 )
+    {
+        auto root = m_modelScene->GetSceneRoot();
+
+        SetParameter( root->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 0.f ), float( d ) );
+    }
+
     { c; } // FIXME: suppress unuse warning
     //auto root = m_modelScene->GetSceneRoot();
     //auto timerPlugin = root->GetPlugin("timer");
