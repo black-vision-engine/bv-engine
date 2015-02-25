@@ -27,10 +27,11 @@ class DefaultGeometryPluginBase :
     VertexAttributesChannelPtr          m_vaChannel;
     //IGeometryAndUVsGenerator&           m_generator;
 
-    virtual IGeometryAndUVsGenerator*           GetGenerator() = 0;
+    virtual IGeometryGenerator*                 GetGenerator() = 0;
 
 protected:
-    void								InitGeometry();
+    void								        InitGeometry();
+    virtual bool                                NeedsTopologyUpdate() = 0;
 
 public:
     DefaultGeometryPluginBase( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );

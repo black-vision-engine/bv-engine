@@ -42,7 +42,22 @@ public:
     }
 };
 
-class IGeometryAndUVsGenerator
+class IGeometryGenerator
+{
+public:
+    enum Type { GEOMETRY_ONLY, GEOMETRY_AND_UVS };
+
+    virtual Type GetType() = 0;
+};
+
+class IGeometryOnlyGenerator : public IGeometryGenerator
+{
+public:
+    
+    virtual void GenerateGeometry( Float3AttributeChannelPtr ) = 0;
+};
+
+class IGeometryAndUVsGenerator : public IGeometryGenerator
 {
 public:
     
@@ -63,29 +78,70 @@ public:
     {
         VertexAttributesChannelDescriptor vaDesc;
 
-        AttributeChannelDescriptor * compVertDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-        vaDesc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compVertDesc ) );
+        m_desc = vaDesc; // FIXME?
+    }
 
-        AttributeChannelDescriptor * compUVDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_GENERATOR );
-        vaDesc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compUVDesc ) );
+    void AddAttributeChannelDescriptorsIfNeeded( IGeometryGenerator & generator_ )
+    {
+        if( m_desc.GetNumVertexChannels() > 0 )
+            return;
+
+        AttributeChannelDescriptor * compVertDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+        AttributeChannelDescriptor * compUVDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_GENERATOR ); // possibly unused
 
         m_compVertDesc = compVertDesc;
         m_compUVDesc = compUVDesc;
 
-        m_desc = vaDesc;
+        switch( generator_.GetType() )
+        {
+            case IGeometryGenerator::Type::GEOMETRY_ONLY:
+                m_desc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compVertDesc ) );
+                
+                break;
+
+            case IGeometryGenerator::Type::GEOMETRY_AND_UVS:
+                m_desc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compVertDesc ) );
+                m_desc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compUVDesc ) );
+
+                break;
+                
+            default:
+                assert( false );
+        }
     }
 
-    void GenerateAndAddConnectedComponent( IGeometryAndUVsGenerator & generator )
+    void GenerateAndAddConnectedComponent( IGeometryGenerator & generator_ )
     {
         ConnectedComponentPtr comp = ConnectedComponent::Create();
 
+        AddAttributeChannelDescriptorsIfNeeded( generator_ );
+
         Float3AttributeChannelPtr vertArrtF3 = std::make_shared< Float3AttributeChannel >( m_compVertDesc, m_compVertDesc->SuggestedDefaultName( 0 ), false );
-        Float2AttributeChannelPtr vertArrtUV = std::make_shared< Float2AttributeChannel >( m_compUVDesc, m_compUVDesc->SuggestedDefaultName( 0 ), false );
+        Float2AttributeChannelPtr vertArrtUV = std::make_shared< Float2AttributeChannel >( m_compUVDesc, m_compUVDesc->SuggestedDefaultName( 0 ), false ); // possibly unused
 
-        generator.GenerateGeometryAndUVs( vertArrtF3, vertArrtUV );
+        switch( generator_.GetType() )
+        {
+            case IGeometryGenerator::Type::GEOMETRY_ONLY:
+                {IGeometryOnlyGenerator& generator = reinterpret_cast< IGeometryOnlyGenerator& >( generator_ );
+                generator.GenerateGeometry( vertArrtF3 );}
+                
+                comp->AddAttributeChannel( vertArrtF3 );
+                
+                break;
 
-        comp->AddAttributeChannel( vertArrtF3 );
-        comp->AddAttributeChannel( vertArrtUV );
+            case IGeometryGenerator::Type::GEOMETRY_AND_UVS:
+                {IGeometryAndUVsGenerator& generator = reinterpret_cast< IGeometryAndUVsGenerator& >( generator_ );
+                generator.GenerateGeometryAndUVs( vertArrtF3, vertArrtUV );}
+
+                comp->AddAttributeChannel( vertArrtF3 );
+                comp->AddAttributeChannel( vertArrtUV );
+
+                break;
+                
+            default:
+                assert( false );
+        }
+
 
         AddConnectedComponent( comp );
     }

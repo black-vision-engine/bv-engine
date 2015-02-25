@@ -145,6 +145,8 @@ public:
 
     GenerateBaseUV( double z_ ) : z( z_ ) { }
 
+    IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_AND_UVS; }
+
     void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
     {
         double angle = angleStart;
@@ -173,18 +175,20 @@ class GenerateSideUV : public IGeometryAndUVsGenerator {
 public:
     GenerateSideUV( double z1_, double z2_, double angle_ ) : z1( z1_ ), z2( z2_ ), angle( angle_ ) {}
 
-void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
-{
-    verts->AddAttribute( glm::vec3( cos( angle ), z1, sin( angle ) ) );
-    verts->AddAttribute( glm::vec3( cos( angle ), z2, sin( angle ) ) );
-    verts->AddAttribute( glm::vec3( 0, z1, 0 ) );
-    verts->AddAttribute( glm::vec3( 0, z2, 0 ) );
+    IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_AND_UVS; }
 
-    uvs->AddAttribute( glm::vec2( angle, z1 ) );
-    uvs->AddAttribute( glm::vec2( angle, z2 ) );
-    uvs->AddAttribute( glm::vec2( 0, z1 ) );
-    uvs->AddAttribute( glm::vec2( 0, z2 ) );
-}
+    void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+    {
+        verts->AddAttribute( glm::vec3( cos( angle ), z1, sin( angle ) ) );
+        verts->AddAttribute( glm::vec3( cos( angle ), z2, sin( angle ) ) );
+        verts->AddAttribute( glm::vec3( 0, z1, 0 ) );
+        verts->AddAttribute( glm::vec3( 0, z2, 0 ) );
+
+        uvs->AddAttribute( glm::vec2( angle, z1 ) );
+        uvs->AddAttribute( glm::vec2( angle, z2 ) );
+        uvs->AddAttribute( glm::vec2( 0, z1 ) );
+        uvs->AddAttribute( glm::vec2( 0, z2 ) );
+    }
 };
 
 class GenerateRoundSideUV : public IGeometryAndUVsGenerator {
@@ -194,26 +198,28 @@ public:
     GenerateRoundSideUV( double as, double ae, double z1_, double z2_ ) :
         angleStart( as ), angleEnd( ae ), z1( z1_ ), z2( z2_ ) {}
 
-void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
-{
-    double angle = angleStart;
+    IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_AND_UVS; }
 
-    for( ; angle <= angleEnd; angle += dangle )
+    void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
     {
+        double angle = angleStart;
+
+        for( ; angle <= angleEnd; angle += dangle )
+        {
+            verts->AddAttribute( glm::vec3( cos( angle ), z1, sin( angle ) ) );
+            uvs->AddAttribute( glm::vec2( angle, z1 ) );
+
+            verts->AddAttribute( glm::vec3( cos( angle ), z2, sin( angle ) ) );
+            uvs->AddAttribute( glm::vec2( angle, z2 ) );
+        }
+        angle = angleEnd;
+
         verts->AddAttribute( glm::vec3( cos( angle ), z1, sin( angle ) ) );
         uvs->AddAttribute( glm::vec2( angle, z1 ) );
 
         verts->AddAttribute( glm::vec3( cos( angle ), z2, sin( angle ) ) );
         uvs->AddAttribute( glm::vec2( angle, z2 ) );
     }
-    angle = angleEnd;
-
-    verts->AddAttribute( glm::vec3( cos( angle ), z1, sin( angle ) ) );
-    uvs->AddAttribute( glm::vec2( angle, z1 ) );
-
-    verts->AddAttribute( glm::vec3( cos( angle ), z2, sin( angle ) ) );
-    uvs->AddAttribute( glm::vec2( angle, z2 ) );
-}
 };
 
 void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )

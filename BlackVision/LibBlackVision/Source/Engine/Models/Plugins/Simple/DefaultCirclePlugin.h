@@ -16,10 +16,9 @@ public:
 
 class DefaultCirclePlugin : public DefaultGeometryPluginBase
 {
-    //virtual void										InitGeometry() { __super::InitGeometry(); }
+    virtual IGeometryGenerator*                 GetGenerator() override;
 
-    virtual IGeometryAndUVsGenerator*           GetGenerator() override;
-
+    virtual bool                                NeedsTopologyUpdate();
 public:
     DefaultCirclePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model ) 
         : DefaultGeometryPluginBase( name, uid, prev, model ) { }

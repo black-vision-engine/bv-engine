@@ -241,20 +241,11 @@ void                                DefaultGeometryPluginBase::Update           
     { t; } // FIXME: suppress unused warning
     m_pluginParamValModel->Update();
 
-    //auto asParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "angleStart" );
-    //assert( asParam );
-    //float asVal = QueryTypedParam< ParamFloatPtr > ( asParam )->Evaluate();
-
-    //auto aeParam = m_pluginParamValModel->GetVertexAttributesChannelModel()->GetParameter( "angleEnd" );
-    //assert( aeParam );
-    //float aeVal = QueryTypedParam< ParamFloatPtr > ( aeParam )->Evaluate();
-
-    //if( asVal != m_angleStart || aeVal != m_angleEnd )
-    //{
-    //    InitGeometry( asVal, aeVal );
-    //    m_vaChannel->SetNeedsTopologyUpdate( true );
-    //    m_angleStart = asVal; m_angleEnd = aeVal;
-    //}
+    if( NeedsTopologyUpdate() )
+    {
+        InitGeometry();
+        m_vaChannel->SetNeedsTopologyUpdate( true );
+    }
 }
 
 } }
