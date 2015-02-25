@@ -764,4 +764,13 @@ model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model
     return root;
 }
 
+model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_CIRCLE", timeEvaluator );
+
+    return root;
+}
+
 } //bv

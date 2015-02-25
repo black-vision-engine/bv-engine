@@ -36,10 +36,10 @@ bool                            DefaultGeometryPluginDescBase::CanBeAttachedTo  
 
 // *******************************
 //
-IPluginPtr                      DefaultGeometryPluginDescBase::CreatePlugin         ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
-{
-    return CreatePluginTyped< DefaultGeometryPluginBase >( name, prev, timeEvaluator );
-}
+//IPluginPtr                      DefaultGeometryPluginDescBase::CreatePlugin         ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
+//{
+//    //return CreatePluginTyped< DefaultGeometryPluginBase >( name, prev, timeEvaluator );
+//}
 
 // *******************************
 //
@@ -90,12 +90,12 @@ DefaultGeometryPluginBase::DefaultGeometryPluginBase( const std::string & name, 
     //assert( aeParam );
     //float aeVal = QueryTypedParam< ParamFloatPtr > ( aeParam )->Evaluate();
 
-    //InitGeometry( asVal, aeVal );
+    InitGeometry();
 }
 
-DefaultGeometryPluginBase::~DefaultGeometryPluginBase(void)
-{
-}
+//DefaultGeometryPluginBase::~DefaultGeometryPluginBase(void)
+//{
+//}
 
 IVertexAttributesChannelConstPtr    DefaultGeometryPluginBase::GetVertexAttributesChannel  () const
 {
@@ -217,37 +217,22 @@ IVertexAttributesChannelConstPtr    DefaultGeometryPluginBase::GetVertexAttribut
 //}
 //};
 
-//void DefaultGeometryPluginBase::InitGeometry( float angleStart_, float angleEnd_ )
-//{
-//    DefaultGeometryAndUVsVertexAttributeChannel* channel;
-//    if( m_vaChannel==NULL ) // FIXME: this should be smarter and maybe moved to DefaultGeometryAndUVsVertexAttributeChannel
-//    {
-//        channel = new DefaultGeometryAndUVsVertexAttributeChannel( PrimitiveType::PT_TRIANGLE_STRIP );
-//        m_vaChannel = VertexAttributesChannelPtr( (VertexAttributesChannel*) channel );
-//    } else
-//    {
-//        channel = (DefaultGeometryAndUVsVertexAttributeChannel*) m_vaChannel.get();
-//        channel->ClearAll();
-//    }
-//
-//    z1 = 0; z2 = 1; // FIXME: variable?
-//
-//    angleStart = angleStart_;
-//    angleEnd = angleEnd_; 
-//    dangle = PI / 120.0; // FIXME: variable? 
-//    
-//    auto gen0 = GenerateBaseUV( z1 );
-//    auto gen1 = GenerateBaseUV( z2 );
-//    auto gen2 = GenerateSideUV( z1, z2, angleStart);
-//    auto gen3 = GenerateSideUV( z1, z2, angleEnd );
-//    auto gen4 = GenerateRoundSideUV( angleStart, angleEnd, z1, z2 );
-//
-//    channel->GenerateAndAddConnectedComponent( gen0 );
-//    channel->GenerateAndAddConnectedComponent( gen1 );
-//    channel->GenerateAndAddConnectedComponent( gen2 );
-//    channel->GenerateAndAddConnectedComponent( gen3 );
-//    channel->GenerateAndAddConnectedComponent( gen4 );
-//}
+void DefaultGeometryPluginBase::InitGeometry()
+{
+    DefaultGeometryAndUVsVertexAttributeChannel* channel;
+    if( m_vaChannel==NULL ) // FIXME: this should be smarter and maybe moved to DefaultGeometryAndUVsVertexAttributeChannel
+    {
+        channel = new DefaultGeometryAndUVsVertexAttributeChannel( PrimitiveType::PT_TRIANGLE_STRIP );
+        m_vaChannel = VertexAttributesChannelPtr( (VertexAttributesChannel*) channel );
+    } else
+    {
+        channel = (DefaultGeometryAndUVsVertexAttributeChannel*) m_vaChannel.get();
+        channel->ClearAll();
+    }
+
+    auto gen = GetGenerator();
+    channel->GenerateAndAddConnectedComponent( *gen );
+}
 
 // *************************************
 //
