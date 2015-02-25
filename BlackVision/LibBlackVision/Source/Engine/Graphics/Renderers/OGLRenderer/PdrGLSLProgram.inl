@@ -8,7 +8,7 @@ inline int  PdrGLSLProgram::GetUniformLocation( const string & name )
     
     if ( it == m_uniformLocations.end() )
     {
-        int loc = glGetUniformLocation( m_Handle, name.c_str() );
+        int loc = BVGL::glGetUniformLocation( m_Handle, name.c_str() );
         m_uniformLocations[ name ] = loc;
 
         return loc;
@@ -341,70 +341,70 @@ inline void PdrGLSLProgram::SetUniform( int loc, bool val )
 //
 inline void PdrGLSLProgram::SetUniformImpl( int loc, float x, float y, float z )
 {
-    glUniform3f( loc, x, y, z );
+    BVGL::glUniform3f( loc, x, y, z );
 }
 
 // *******************************
 //
 inline void PdrGLSLProgram::SetUniformImpl( int loc, const vec3 & v )
 {
-    glUniform3f( loc, v.x, v.y, v.z );
+    BVGL::glUniform3f( loc, v.x, v.y, v.z );
 }
 
 // *******************************
 //
 inline void PdrGLSLProgram::SetUniformImpl( int loc, const vec4 & v )
 {
-    glUniform4f( loc, v.x, v.y ,v.z, v.w );
+    BVGL::glUniform4f( loc, v.x, v.y ,v.z, v.w );
 }
 
 // *******************************
 //
 inline void PdrGLSLProgram::SetUniformImpl( int loc, const vec2 & v )
 {
-    glUniform2f( loc, v.x ,v.y );
+    BVGL::glUniform2f( loc, v.x ,v.y );
 }
 
 // *******************************
 //
 inline void PdrGLSLProgram::SetUniformImpl( int loc, const mat2 & m )
 {
-    glUniformMatrix2fv( loc, 1, GL_FALSE, &m[0][0] );
+    BVGL::glUniformMatrix2fv( loc, 1, GL_FALSE, &m[0][0] );
 }
 
 // *******************************
 //
 inline void PdrGLSLProgram::SetUniformImpl( int loc, const mat3 & m )
 {
-    glUniformMatrix3fv( loc, 1, GL_FALSE, &m[0][0] );
+    BVGL::glUniformMatrix3fv( loc, 1, GL_FALSE, &m[0][0] );
 }
 
 // *******************************
 //
 inline void PdrGLSLProgram::SetUniformImpl( int loc, const mat4 & m )
 {
-    glUniformMatrix4fv( loc, 1, GL_FALSE, &m[0][0] );
+    BVGL::glUniformMatrix4fv( loc, 1, GL_FALSE, &m[0][0] );
 }
 
 // *******************************
 //
 inline void PdrGLSLProgram::SetUniformImpl( int loc, float val )
 {
-    glUniform1f( loc, val );
+    BVGL::glUniform1f( loc, val );
 }
 
 // *******************************
 //
 inline void PdrGLSLProgram::SetUniformImpl( int loc, int val )
 {
-    glUniform1i( loc, val );
+    BVGL::glUniform1i( loc, val );
 }
 
 // *******************************
 //
 inline void PdrGLSLProgram::SetUniformImpl( int loc, bool val )
 {
-    glUniform1i( loc, val );
+    BVGL::glUniform1i( loc, val );
 }
 
 } //bv
