@@ -11,6 +11,8 @@ namespace bv { namespace model {
 class Text;
 struct Glyph;
 
+class TextAtlas;
+DEFINE_CONST_PTR_TYPE(TextAtlas)
 
 class TextAtlas
 {

@@ -308,6 +308,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\AtlasCache.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\Engines\FreeTypeEngine.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\FontLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\FontResource.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\FontResourceDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\Text.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\TextHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ModelTextureManager.cpp" />
@@ -577,6 +579,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\AtlasCache.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\Engines\FreeTypeEngine.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\FontLoader.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\FontResource.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\FontResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\Glyph.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\IFontEngine.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\Serialize.h" />
