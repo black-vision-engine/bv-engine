@@ -80,7 +80,7 @@ PdrGLSLProgram::PdrGLSLProgram( const PixelShader & ps, const VertexShader & vs,
 //
 PdrGLSLProgram::~PdrGLSLProgram					    ()
 {
-    BVGL::glDeleteProgram( m_Handle );
+    BVGL::bvglDeleteProgram( m_Handle );
 }
 
 // *******************************
@@ -95,7 +95,7 @@ bool PdrGLSLProgram::CompileShaderFromFile( const string & fileName, GLSLShader:
 
     if( m_Handle <= 0 )
     {
-        m_Handle = BVGL::glCreateProgram();
+        m_Handle = BVGL::bvglCreateProgram();
         if( m_Handle == 0)
         {
             m_LogString = "Unable to create shader program.";
@@ -127,7 +127,7 @@ bool PdrGLSLProgram::CompileShaderFromString( const string & source, GLSLShader:
 {
     if( m_Handle <= 0 )
     {
-        m_Handle = BVGL::glCreateProgram();
+        m_Handle = BVGL::bvglCreateProgram();
         if( m_Handle == 0)
         {
             m_LogString = "Unable to create shader program.";
@@ -139,43 +139,43 @@ bool PdrGLSLProgram::CompileShaderFromString( const string & source, GLSLShader:
 
     switch( type ) {
     case GLSLShader::VERTEX:
-        shaderHandle = BVGL::glCreateShader( GL_VERTEX_SHADER );
+        shaderHandle = BVGL::bvglCreateShader( GL_VERTEX_SHADER );
         break;
     case GLSLShader::FRAGMENT:
-        shaderHandle = BVGL::glCreateShader( GL_FRAGMENT_SHADER );
+        shaderHandle = BVGL::bvglCreateShader( GL_FRAGMENT_SHADER );
         break;
     case GLSLShader::GEOMETRY:
-        shaderHandle = BVGL::glCreateShader( GL_GEOMETRY_SHADER );
+        shaderHandle = BVGL::bvglCreateShader( GL_GEOMETRY_SHADER );
         break;
     case GLSLShader::TESS_CONTROL:
-        shaderHandle = BVGL::glCreateShader( GL_TESS_CONTROL_SHADER );
+        shaderHandle = BVGL::bvglCreateShader( GL_TESS_CONTROL_SHADER );
         break;
     case GLSLShader::TESS_EVALUATION:
-        shaderHandle = BVGL::glCreateShader( GL_TESS_EVALUATION_SHADER );
+        shaderHandle = BVGL::bvglCreateShader( GL_TESS_EVALUATION_SHADER );
         break;
     default:
         return false;
     }
 
     const char * c_code = source.c_str();
-    BVGL::glShaderSource( shaderHandle, 1, &c_code, NULL );
+    BVGL::bvglShaderSource( shaderHandle, 1, &c_code, NULL );
 
     // Compile the shader
-    BVGL::glCompileShader( shaderHandle );
+    BVGL::bvglCompileShader( shaderHandle );
 
     // Check for errors
     int result;
-    BVGL::glGetShaderiv( shaderHandle, GL_COMPILE_STATUS, &result );
+    BVGL::bvglGetShaderiv( shaderHandle, GL_COMPILE_STATUS, &result );
     if( GL_FALSE == result )
     {
         // Compile failed, store log and return false
         int length = 0;
         m_LogString = "";
-        BVGL::glGetShaderiv(shaderHandle, GL_INFO_LOG_LENGTH, &length );
+        BVGL::bvglGetShaderiv(shaderHandle, GL_INFO_LOG_LENGTH, &length );
         if( length > 0 ) {
             char * c_log = new char[length];
             int written = 0;
-            BVGL::glGetShaderInfoLog(shaderHandle, length, &written, c_log);
+            BVGL::bvglGetShaderInfoLog(shaderHandle, length, &written, c_log);
             m_LogString = c_log;
             delete [] c_log;
         }
@@ -185,7 +185,7 @@ bool PdrGLSLProgram::CompileShaderFromString( const string & source, GLSLShader:
     else
     {
         // Compile succeeded, attach shader and return true
-        BVGL::glAttachShader( m_Handle, shaderHandle );
+        BVGL::bvglAttachShader( m_Handle, shaderHandle );
         return true;
     }
 }
@@ -200,11 +200,11 @@ bool PdrGLSLProgram::Link()
     if( m_Handle <= 0 ) 
         return false;
 
-    BVGL::glLinkProgram( m_Handle );
+    BVGL::bvglLinkProgram( m_Handle );
 
     int status = 0;
 
-    BVGL::glGetProgramiv( m_Handle, GL_LINK_STATUS, &status );
+    BVGL::bvglGetProgramiv( m_Handle, GL_LINK_STATUS, &status );
     
     if( GL_FALSE == status )
     {
@@ -212,13 +212,13 @@ bool PdrGLSLProgram::Link()
         int length = 0;
         m_LogString = "";
 
-        BVGL::glGetProgramiv( m_Handle, GL_INFO_LOG_LENGTH, &length );
+        BVGL::bvglGetProgramiv( m_Handle, GL_INFO_LOG_LENGTH, &length );
 
         if( length > 0 )
         {
             char * c_log = new char[length];
             int written = 0;
-            BVGL::glGetProgramInfoLog( m_Handle, length, &written, c_log );
+            BVGL::bvglGetProgramInfoLog( m_Handle, length, &written, c_log );
             m_LogString = c_log;
             delete [] c_log;
         }
@@ -239,7 +239,7 @@ void PdrGLSLProgram::Use()
     if( m_Handle <= 0 || (!m_Linked) )
         return;
 
-    BVGL::glUseProgram( m_Handle );
+    BVGL::bvglUseProgram( m_Handle );
 }
 
 // *******************************
@@ -274,14 +274,14 @@ bool PdrGLSLProgram::IsCompiled() const
 //
 void PdrGLSLProgram::BindAttribLocation( GLuint location, const string & name )
 {
-    BVGL::glBindAttribLocation(m_Handle, location, name.c_str() );
+    BVGL::bvglBindAttribLocation(m_Handle, location, name.c_str() );
 }
 
 // *******************************
 //
 void PdrGLSLProgram::BindFragDataLocation( GLuint location, const string & name )
 {
-    BVGL::glBindFragDataLocation(m_Handle, location, name.c_str() );
+    BVGL::bvglBindFragDataLocation(m_Handle, location, name.c_str() );
 }
 
 // *******************************
@@ -314,8 +314,8 @@ void PdrGLSLProgram::PrintActiveUniforms()
     GLsizei written;
     GLenum type;
 
-    BVGL::glGetProgramiv( m_Handle, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLen);
-    BVGL::glGetProgramiv( m_Handle, GL_ACTIVE_UNIFORMS, &nUniforms);
+    BVGL::bvglGetProgramiv( m_Handle, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLen);
+    BVGL::bvglGetProgramiv( m_Handle, GL_ACTIVE_UNIFORMS, &nUniforms);
 
     name = (GLchar *) malloc( maxLen );
 
@@ -324,8 +324,8 @@ void PdrGLSLProgram::PrintActiveUniforms()
 
     for( int i = 0; i < nUniforms; ++i )
     {
-        BVGL::glGetActiveUniform( m_Handle, i, maxLen, &written, &size, &type, name );
-        location = BVGL::glGetUniformLocation( m_Handle, name );
+        BVGL::bvglGetActiveUniform( m_Handle, i, maxLen, &written, &size, &type, name );
+        location = BVGL::bvglGetUniformLocation( m_Handle, name );
 
         printf(" %-8d | %s\n",location, name);
     }
@@ -342,8 +342,8 @@ void PdrGLSLProgram::PrintActiveAttribs()
     GLenum type;
     GLchar * name;
 
-    BVGL::glGetProgramiv( m_Handle, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxLength);
-    BVGL::glGetProgramiv( m_Handle, GL_ACTIVE_ATTRIBUTES, &nAttribs);
+    BVGL::bvglGetProgramiv( m_Handle, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxLength);
+    BVGL::bvglGetProgramiv( m_Handle, GL_ACTIVE_ATTRIBUTES, &nAttribs);
 
     name = (GLchar *) malloc( maxLength );
 
@@ -352,8 +352,8 @@ void PdrGLSLProgram::PrintActiveAttribs()
 
     for( int i = 0; i < nAttribs; i++ )
     {
-        BVGL::glGetActiveAttrib( m_Handle, i, maxLength, &written, &size, &type, name );
-        location = BVGL::glGetAttribLocation( m_Handle, name);
+        BVGL::bvglGetActiveAttrib( m_Handle, i, maxLength, &written, &size, &type, name );
+        location = BVGL::bvglGetAttribLocation( m_Handle, name);
         printf(" %-5d | %s\n",location, name);
     }
 
@@ -368,21 +368,21 @@ bool PdrGLSLProgram::Validate()
         return false;
 
     GLint status;
-    BVGL::glValidateProgram( m_Handle );
-    BVGL::glGetProgramiv( m_Handle, GL_VALIDATE_STATUS, &status );
+    BVGL::bvglValidateProgram( m_Handle );
+    BVGL::bvglGetProgramiv( m_Handle, GL_VALIDATE_STATUS, &status );
 
     if( GL_FALSE == status ) {
         // Store log and return false
         int length = 0;
         m_LogString = "";
 
-        BVGL::glGetProgramiv( m_Handle, GL_INFO_LOG_LENGTH, &length );
+        BVGL::bvglGetProgramiv( m_Handle, GL_INFO_LOG_LENGTH, &length );
 
         if( length > 0 )
         {
             char * c_log = new char[length];
             int written = 0;
-            BVGL::glGetProgramInfoLog(m_Handle, length, &written, c_log);
+            BVGL::bvglGetProgramInfoLog(m_Handle, length, &written, c_log);
             m_LogString = c_log;
             delete [] c_log;
         }

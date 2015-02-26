@@ -1,5 +1,7 @@
 #include "PdrShader.h"
 
+#include <gl/glew.h>
+
 #include "Engine/Graphics/Renderers/Renderer.h"
 
 #include "Engine/Graphics/Shaders/PixelShader.h"

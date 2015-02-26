@@ -1,8 +1,6 @@
 #pragma once
 
-#include <gl/glew.h>
-#include <gl/wglew.h>
-#include <gl/gl.h>
+#include "Engine/Graphics/Renderers/OGLRenderer/GL/BVGL.h"
 
 #include "Engine/Graphics/Resources/DataBuffer.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"

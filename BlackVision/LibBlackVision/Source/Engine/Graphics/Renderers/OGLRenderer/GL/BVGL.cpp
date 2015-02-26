@@ -1,5 +1,7 @@
 #include "BVGL.h"
 
+#include <gl/glew.h>
+
 // #include <cstdio>
 
 
@@ -7,198 +9,275 @@ namespace bv {
 
 // *****************************
 //
-void    BVGL::glLinkProgram             ( GLuint program )
+void        BVGL::bvglLinkProgram           ( GLuint program )
 {
     ::glLinkProgram( program );
 }
 
 // *****************************
 //
-void    BVGL::glUseProgram              ( GLuint program )
+void        BVGL::bvglUseProgram            ( GLuint program )
 {
     ::glUseProgram( program );
 }
 
 // *****************************
 //
-void    BVGL::glValidateProgram         ( GLuint program )
+void        BVGL::bvglValidateProgram       ( GLuint program )
 {
     ::glValidateProgram( program );
 }
 
 // *****************************
 //
-void    BVGL::glUniform1i             ( GLint location, GLint v )
+void        BVGL::bvglUniform1i             ( GLint location, GLint v )
 {
     ::glUniform1i( location, v );
 }
 
 // *****************************
 //
-void    BVGL::glUniform1f             ( GLint location, GLfloat v )
+void        BVGL::bvglUniform1f             ( GLint location, GLfloat v )
 {
     ::glUniform1f( location, v );
 }
 
 // *****************************
 //
-void    BVGL::glUniform2f             ( GLint location, GLfloat v, GLfloat v1 )
+void        BVGL::bvglUniform2f             ( GLint location, GLfloat v, GLfloat v1 )
 {
     ::glUniform2f( location, v, v1 );
 }
 
 // *****************************
 //
-void    BVGL::glUniform3f             ( GLint location, GLfloat v, GLfloat v1, GLfloat v2 )
+void        BVGL::bvglUniform3f             ( GLint location, GLfloat v, GLfloat v1, GLfloat v2 )
 {
     ::glUniform3f( location, v, v1, v2 );
 }
 
 // *****************************
 //
-void    BVGL::glUniform4f             ( GLint location, GLfloat v, GLfloat v1, GLfloat v2, GLfloat v3 )
+void        BVGL::bvglUniform4f             ( GLint location, GLfloat v, GLfloat v1, GLfloat v2, GLfloat v3 )
 {
     ::glUniform4f( location, v, v1, v2, v3 );
 }
 
 // *****************************
 //
-void    BVGL::glUniformMatrix2fv      ( GLint location, GLsizei count, GLboolean transpose, const GLfloat * value )
+void        BVGL::bvglUniformMatrix2fv      ( GLint location, GLsizei count, GLboolean transpose, const GLfloat * value )
 {
     ::glUniformMatrix2fv( location, count, transpose, value );
 }
 
 // *****************************
 //
-void    BVGL::glUniformMatrix3fv      ( GLint location, GLsizei count, GLboolean transpose, const GLfloat * value )
+void        BVGL::bvglUniformMatrix3fv      ( GLint location, GLsizei count, GLboolean transpose, const GLfloat * value )
 {
     ::glUniformMatrix3fv( location, count, transpose, value );
 }
 
 // *****************************
 //
-void    BVGL::glUniformMatrix4fv      ( GLint location, GLsizei count, GLboolean transpose, const GLfloat * value )
+void        BVGL::bvglUniformMatrix4fv      ( GLint location, GLsizei count, GLboolean transpose, const GLfloat * value )
 {
     ::glUniformMatrix4fv( location, count, transpose, value );
 }
 
 // *****************************
 //
-void    BVGL::glShaderSource            ( GLuint shader, GLsizei count, const GLchar ** strings, const GLint * length )
+void        BVGL::bvglShaderSource          ( GLuint shader, GLsizei count, const GLchar ** strings, const GLint * length )
 {
     ::glShaderSource( shader, count, strings, length ); 
 }
 
 // *****************************
 //
-void    BVGL::glCompileShader           ( GLuint shader )
+void        BVGL::bvglCompileShader         ( GLuint shader )
 {
     ::glCompileShader( shader );
 }
 
 // *****************************
 //
-void    BVGL::glAttachShader            ( GLuint program, GLuint shader )
+void        BVGL::bvglAttachShader          ( GLuint program, GLuint shader )
 {
     ::glAttachShader( program, shader );
 }
 
 // *****************************
 //
-void    BVGL::glGetProgramiv            ( GLuint program, GLenum pname, GLint * param )
+void        BVGL::bvglGetProgramiv          ( GLuint program, GLenum pname, GLint * param )
 {
     ::glGetProgramiv( program, pname, param );
 }
 
 // *****************************
 //
-void    BVGL::glGetProgramInfoLog       ( GLuint program, GLsizei bufSize, GLsizei * length, GLchar * infoLog )
+void        BVGL::bvglGetProgramInfoLog     ( GLuint program, GLsizei bufSize, GLsizei * length, GLchar * infoLog )
 {
     ::glGetProgramInfoLog( program, bufSize, length, infoLog );
 }
 
 // *****************************
 //
-void    BVGL::glGetActiveUniform        ( GLuint program, GLuint index, GLsizei bufSize, GLsizei * length, GLint * size, GLenum * type, GLchar * name )
+void        BVGL::bvglGetActiveUniform      ( GLuint program, GLuint index, GLsizei bufSize, GLsizei * length, GLint * size, GLenum * type, GLchar * name )
 {
     ::glGetActiveUniform( program, index, bufSize, length, size, type, name );
 }
 
 // *****************************
 //
-GLint   BVGL::glGetUniformLocation      ( GLuint program, const GLchar * name )
+GLint       BVGL::bvglGetUniformLocation    ( GLuint program, const GLchar * name )
 {
     return ::glGetUniformLocation( program, name );
 }
 
 // *****************************
 //
-void    BVGL::glGetActiveAttrib       ( GLuint program, GLuint index, GLsizei bufSize, GLsizei * length, GLint * size, GLenum * type, GLchar * name )
+void        BVGL::bvglGetActiveAttrib       ( GLuint program, GLuint index, GLsizei bufSize, GLsizei * length, GLint * size, GLenum * type, GLchar * name )
 {
     ::glGetActiveAttrib( program, index, bufSize, length, size, type, name );
 }
 
 // *****************************
 //
-GLint   BVGL::glGetAttribLocation     ( GLuint program, const GLchar * name )
+GLint       BVGL::bvglGetAttribLocation     ( GLuint program, const GLchar * name )
 {
     return ::glGetAttribLocation( program, name );
 }
 
 // *****************************
 //
-void    BVGL::glGetShaderiv             ( GLuint shader, GLenum pname, GLint * param )
+void        BVGL::bvglGetShaderiv           ( GLuint shader, GLenum pname, GLint * param )
 {
     ::glGetShaderiv( shader, pname, param );
 }
 
 // *****************************
 //
-void    BVGL::glGetShaderInfoLog        ( GLuint shader, GLsizei bufSize, GLsizei * length, GLchar * infoLog )
+void        BVGL::bvglGetShaderInfoLog      ( GLuint shader, GLsizei bufSize, GLsizei * length, GLchar * infoLog )
 {
     ::glGetShaderInfoLog( shader, bufSize, length, infoLog );
 }
 
 // *****************************
 //
-void    BVGL::glBindAttribLocation      ( GLuint program, GLuint index, const GLchar * name )
+void        BVGL::bvglGetIntegerv           ( GLenum pname, GLint * params )
+{
+    ::glGetIntegerv( pname, params );
+}
+
+// *****************************
+//
+void        BVGL::bvglBindAttribLocation    ( GLuint program, GLuint index, const GLchar * name )
 {
     ::glBindAttribLocation( program, index, name );
 }
 
 // *****************************
 //
-void    BVGL::glBindFragDataLocation    ( GLuint program, GLuint colorNumber, const GLchar * name )
+void        BVGL::bvglBindFragDataLocation  ( GLuint program, GLuint colorNumber, const GLchar * name )
 {
     ::glBindFragDataLocation( program, colorNumber, name );
 }
 
 // *****************************
 //
-GLuint  BVGL::glCreateProgram ()
+GLuint      BVGL::bvglCreateProgram ()
 {
     return ::glCreateProgram();
 }
 
 // *****************************
 //
-void    BVGL::glDeleteProgram           ( GLuint program )
+void        BVGL::bvglDeleteProgram         ( GLuint program )
 {
     ::glDeleteProgram( program );
 }
 
 // *****************************
 //
-GLuint  BVGL::glCreateShader            ( GLenum type )
+GLuint      BVGL::bvglCreateShader          ( GLenum type )
 {
     return ::glCreateShader( type );
 }
 
 // *****************************
 //
-void    BVGL::glDeleteShader            ( GLuint shader )
+void        BVGL::bvglDeleteShader          ( GLuint shader )
 {
     ::glDeleteShader( shader );
+}
+
+// *****************************
+//
+void        BVGL::bvglGenBuffers            ( GLsizei n, GLuint * buffers )
+{
+    ::glGenBuffers( n, buffers );
+}
+
+// *****************************
+//
+void        BVGL::bvglDeleteBuffers         ( GLsizei n, const GLuint * buffers )
+{
+    ::glDeleteBuffers( n, buffers );
+}
+
+// *****************************
+//
+void        BVGL::bvglBindBuffer            ( GLenum target, GLuint buffer )
+{
+    ::glBindBuffer( target, buffer );
+}
+
+// *****************************
+//
+void        BVGL::bvglBufferData            ( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage )
+{
+    ::glBufferData( target, size, data, usage );
+}
+
+// *****************************
+//
+GLvoid *    BVGL::bvglMapBuffer             ( GLenum target, GLenum access )
+{
+    return ::glMapBuffer( target, access );
+}
+
+// *****************************
+//
+GLboolean    BVGL::bvglUnmapBuffer          ( GLenum target )
+{
+    return ::glUnmapBuffer( target );
+}
+
+// *****************************
+//
+void         BVGL::bvglTexSubImage2D       ( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid * pixels )
+{
+    ::glTexSubImage2D( target, level, xoffset, yoffset, width, height, format, type, pixels );
+}
+
+// *****************************
+//
+void         BVGL::bvglBindTexture         ( GLenum target, GLuint texture )
+{
+    ::glBindTexture( target, texture );
+}
+
+// *****************************
+//
+void         BVGL::bvglReadBuffer          ( GLenum mode )
+{
+    ::glReadBuffer( mode );
+}
+
+// *****************************
+//
+void         BVGL::bvglReadPixels          ( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid * pixels )
+{
+    ::glReadPixels( x, y, width, height, format, type, pixels );
 }
 
 } //bv
