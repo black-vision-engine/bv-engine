@@ -34,14 +34,14 @@ bool SingleTextureResourceDesc::IsCacheable	() const
 
 // ***********************
 //
-SingleTextureResourceDescConstPtr SingleTextureResourceDesc::Create( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format )
+SingleTextureResourceDescConstPtr SingleTextureResourceDesc::Create( const std::string & imagePath, SizeType width, SizeType height, TextureFormat format )
 {
 	return std::make_shared< SingleTextureResourceDesc >( imagePath, width, height, format );
 }
 
 // ***********************
 //
-SingleTextureResourceDesc::SingleTextureResourceDesc( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format )
+SingleTextureResourceDesc::SingleTextureResourceDesc( const std::string & imagePath, SizeType width, SizeType height, TextureFormat format )
 	: m_imagePath( imagePath )
 	, m_width( width )
 	, m_height( height )
@@ -57,14 +57,14 @@ const std::string & SingleTextureResourceDesc::GetImagePath() const
 
 // ***********************
 //
-UInt32 SingleTextureResourceDesc::GetWidth() const
+SizeType SingleTextureResourceDesc::GetWidth() const
 {
 	return m_width;
 }
 
 // ***********************
 //
-UInt32 SingleTextureResourceDesc::GetHeight() const
+SizeType SingleTextureResourceDesc::GetHeight() const
 {
 	return m_height;
 }

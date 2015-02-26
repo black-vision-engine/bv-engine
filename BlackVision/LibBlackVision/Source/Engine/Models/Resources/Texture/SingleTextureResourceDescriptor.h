@@ -21,8 +21,8 @@ private:
 	static const std::string	uid;
 
 	std::string					m_imagePath;
-	UInt32						m_width;
-	UInt32						m_height;
+	SizeType					m_width;
+	SizeType					m_height;
 	TextureFormat				m_format;
 
 protected:
@@ -34,17 +34,17 @@ public:
 	virtual const std::string &					GetUID						() const override;
 
 	const std::string &							GetImagePath				() const;
-	UInt32										GetWidth					() const;
-	UInt32										GetHeight					() const;
+	SizeType									GetWidth					() const;
+	SizeType									GetHeight					() const;
 	TextureFormat								GetFormat					() const;
 
 
 
 	virtual bool								IsCacheable					() const override;
 
-	static SingleTextureResourceDescConstPtr	Create						( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format );
+	static SingleTextureResourceDescConstPtr	Create						( const std::string & imagePath, SizeType width, SizeType height, TextureFormat format );
 
-	explicit									SingleTextureResourceDesc	( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format );
+	explicit									SingleTextureResourceDesc	( const std::string & imagePath, SizeType width, SizeType height, TextureFormat format );
 
 	static const std::string &					UID							();
 };

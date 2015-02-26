@@ -14,7 +14,6 @@ namespace bv
 class SingleTextureResource;
 
 DEFINE_CONST_PTR_TYPE(SingleTextureResource)
-//DEFINE_PTR_TYPE(SingleTextureResource)
 
 // ********************************
 // Implements single texture resource. Texture without any mipmaps. Only one chunk of memory.
@@ -35,6 +34,8 @@ public:
 	SizeType									GetWidth	() const;
 	SizeType									GetHeight	() const;
 	TextureFormat								GetFormat	() const;
+
+	MemoryChunkConstPtr							GetData		() const;
 	
 	static SingleTextureResourceConstPtr		Create		( const MemoryChunkConstPtr & memory, const std::string & key, SizeType width, SizeType height, TextureFormat format );
 

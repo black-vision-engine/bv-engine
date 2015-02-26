@@ -7,6 +7,9 @@
 
 #include "hashlibpp.h"
 
+#include <map>
+#include <cassert>
+
 #pragma warning(pop)
 
 namespace bv
@@ -23,8 +26,10 @@ const std::string &			Hash::Get() const
 //
 Hash						Hash::FromString( const std::string & str )
 {
-	static auto md5 = md5wrapper();
-	return Hash( md5.getHashFromString( str ) );
+	auto md5 = md5wrapper();
+	auto res = Hash( md5.getHashFromString( str ) );
+
+	return res;
 }
 
 // ******************************
@@ -39,5 +44,13 @@ bool						Hash::operator < ( const Hash & b ) const
 {
 	return m_value.compare( b.m_value ) < 0;
 }
+
+// ******************************
+//
+bool						Hash::operator == ( const Hash & b ) const
+{
+	return m_value == b.m_value;
+}
+
 
 } // bv

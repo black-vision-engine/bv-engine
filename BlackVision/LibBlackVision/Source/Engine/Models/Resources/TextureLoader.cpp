@@ -6,6 +6,7 @@
 #include "Engine/Models/Resources/Texture/TextureResource.h"
 #include "Engine/Models/Resources/Texture/TextureCache.h"
 #include "Tools/MipMapBuilder/Source/MipMapBuilder.h"
+#include "Engine/Models/Resources/Cache/RawDataCache.h"
 
 #include <cassert>
 
@@ -56,35 +57,38 @@ IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & d
 
 	assert( typedDesc );
 
-	TextureResourceConstPtr ret = TextureCache::GetInstance().Get( typedDesc );
-
-	if( ret )
-		return ret;
+	TextureResourceConstPtr ret = nullptr;
+	
+	//if ( typedDesc->IsCacheable() )
+	//	return LoadFromCache( typedDesc );
 	
 
 	switch( typedDesc->GetLoadingType() )
 	{
 		case TextureResourceLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
 		{
-			auto origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc() );
+			auto origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc(), true );
 	
 			ret = TextureResource::Create( origRes, nullptr );
+
+			break;
 		}
 
 		case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
 		{
-			auto origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc() );
+			auto origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc(), true );
 
 			auto mipMapsSize = typedDesc->GetMipMapsDesc()->GetLevelsNum();
 
 			std::vector< SingleTextureResourceConstPtr > mipMapsRes;
 
 			for( SizeType i = 0; i < mipMapsSize; ++i )
-				mipMapsRes.push_back( LoadSingleTexture( typedDesc->GetMipMapsDesc()->GetLevelDesc( i ) ) );
+				mipMapsRes.push_back( LoadSingleTexture( typedDesc->GetMipMapsDesc()->GetLevelDesc( i ), true ) );
 
 			auto mipMapRes = MipMapResource::Create( mipMapsRes );
 
 			ret = TextureResource::Create( origRes, mipMapRes );
+			break;
 		}
 
 		case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
@@ -99,11 +103,7 @@ IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & d
 
 			std::vector< SingleTextureResourceConstPtr > mipMapsRes;
 
-			SingleTextureResourceConstPtr origRes;
-
-			auto origKey = TextureCache::GenKeyForSingleTexture( typedDesc->GetOrigTextureDesc() );
-			origRes = SingleTextureResource::Create( MemoryChunk::Create( mm[ 0 ].data, origW * origH * 4 ), origKey, origW, origH, TextureFormat::F_A8R8G8B8 );
-
+			SingleTextureResourceConstPtr origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc(), true );
 
 			if( mm[ 0 ].width == origW && mm[ 0 ].height == origH )
 				mipMapsRes.push_back( origRes );
@@ -118,29 +118,40 @@ IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & d
 			}
 
 			ret = TextureResource::Create( origRes, MipMapResource::Create( mipMapsRes ) );
+			break;
 		}
 	}
 
-	TextureCache::GetInstance().Add( typedDesc, ret );
 
 	return ret;
 }
 
 // ******************************
 //
-SingleTextureResourceConstPtr TextureLoader::LoadSingleTexture( const SingleTextureResourceDescConstPtr & sinlgeTextureResDesc )
+SingleTextureResourceConstPtr TextureLoader::LoadSingleTexture( const SingleTextureResourceDescConstPtr & sinlgeTextureResDesc, bool loadFromCache )
 {
+	auto key		= TextureCache::GenKeyForSingleTexture( sinlgeTextureResDesc );
 	auto imgPath	= sinlgeTextureResDesc->GetImagePath();
+
+	MemoryChunkConstPtr mmChunk = loadFromCache ? RawDataCache::GetInstance().Get( Hash::FromString( key ) ) : nullptr;
+	
+	if( !mmChunk )
+	{
+		mmChunk = LoadImage( imgPath );
+		if( loadFromCache )
+		{
+			assert( RawDataCache::GetInstance().Add( Hash::FromString( key ), mmChunk ) );
+		}
+	}
+
+	if( !mmChunk )
+	{
+		return nullptr;
+	}
+
 	auto w			= sinlgeTextureResDesc->GetWidth();
 	auto h			= sinlgeTextureResDesc->GetHeight();
 	auto format		= sinlgeTextureResDesc->GetFormat();
-
-	auto mmChunk	= LoadImage( imgPath );
-
-	if( !mmChunk )
-		return nullptr;
-
-	auto key = TextureCache::GenKeyForSingleTexture( sinlgeTextureResDesc );
 
 	return SingleTextureResource::Create( mmChunk, key, w, h, format );
 }
@@ -166,6 +177,40 @@ MemoryChunkConstPtr TextureLoader::LoadImage( const std::string & path )
 
 	return data;
 }
+
+
+//// ******************************
+////
+//TextureResourceConstPtr TextureLoader::LoadFromCache( const TextureResourceDescConstPtr & textureResDesc )
+//{
+//	auto origDesc = textureResDesc->GetOrigTextureDesc();
+//
+//	auto origRes = LoadSingleTexture( origDesc );
+//
+//	auto mmDesc = textureResDesc->GetMipMapsDesc();
+//
+//	MipMapResourceConstPtr mmRes = nullptr;
+//
+//	if( mmDesc )
+//	{
+//		std::vector< SingleTextureResourceConstPtr > mmVecTmp;
+//
+//		for( SizeType i = 0; i < mmDesc->GetLevelsNum(); ++i )
+//		{
+//			auto desc = mmDesc->GetLevelDesc( i );
+//			mmVecTmp.push_back( LoadSingleTexture( desc ) );
+//		} 
+//
+//		mmRes = MipMapResource::Create( mmVecTmp );
+//	}
+//
+//	auto ret = TextureResource::Create( origRes, mmRes );
+//
+//	TextureCache::GetInstance().Add( textureResDesc, ret );
+//
+//	return ret;
+//}
+
 
 // ******************************
 //
