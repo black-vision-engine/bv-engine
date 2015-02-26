@@ -1691,6 +1691,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGL.h">
       <Filter>Engine\Graphics\Renderers\OGLRenderer\GL</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGLDefs.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer\GL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\System\HerarchicalProfiler.inl">

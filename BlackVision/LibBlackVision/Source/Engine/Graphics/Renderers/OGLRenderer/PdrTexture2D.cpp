@@ -4,6 +4,7 @@
 
 //#define POOR_PROFILE_TEXTURE_STREAMING
 
+
 #ifdef POOR_PROFILE_TEXTURE_STREAMING
 #include "System/HRTimer.h"
 #endif
@@ -55,21 +56,21 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
         m_pboMem = new PdrPBOMemTransfer( txSemantic, texture->RawFrameSize() );
     }
 
-    glGenTextures   ( 1, &m_textureID );
+    BVGL::bvglGenTextures   ( 1, &m_textureID );
     GLuint prevTex = Bind();
 
     if( m_pboMem )
     {
         //NOTE: wystarczy tylko tak, bo update i tak pojdzie dwa razy (raz przy tworzeniu tekstury, a raz przy jej enablowaniu, co oznacza, ze oba PBO zosatana zaladowane poprawnie danymi tekstury i nie bedzie
         //NOTE: jednej pustej ramki z pustym przebiegiem renderera (czyli dokladnie tak, jak byc powinno) - pesymistycznie nalezy tutaj zaladowac od razu jedno PBO, i z niego poprawnie odczytaja sie dane w pierwszym feczu
-        glTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, 0 );
+        BVGL::bvglTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, 0 );
     }
     else
     {
-        glTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, texture->GetData()->Get() );
+        BVGL::bvglTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, texture->GetData()->Get() );
     }
 
-    glBindTexture( GL_TEXTURE_2D, prevTex );
+    BVGL::bvglBindTexture( GL_TEXTURE_2D, prevTex );
 }
 
 // *******************************
@@ -78,7 +79,7 @@ void    PdrTexture2D::Deinitialize    ()
 {
     if( m_textureID != 0 )
     {
-        glDeleteTextures( 1, &m_textureID );
+        BVGL::bvglDeleteTextures( 1, &m_textureID );
     }
 
     delete m_pboMem;
@@ -125,7 +126,7 @@ void            PdrTexture2D::Enable        ( Renderer * renderer, int textureUn
     //    m_pboMem->Flush( textureUnit );
     //}
 
-    glActiveTexture( GL_TEXTURE0 + textureUnit );
+    BVGL::bvglActiveTexture( GL_TEXTURE0 + textureUnit );
     m_prevTextureID = Bind();
 
     m_prevFrameUpdated = m_curFrameUpdated;
@@ -136,7 +137,7 @@ void            PdrTexture2D::Enable        ( Renderer * renderer, int textureUn
 void            PdrTexture2D::Disable       ( Renderer * renderer, int textureUnit )
 {
     { renderer; } // FIXME: suppress unused
-    glActiveTexture ( GL_TEXTURE0 + textureUnit );
+    BVGL::bvglActiveTexture ( GL_TEXTURE0 + textureUnit );
     Unbind();
 }
 
@@ -169,8 +170,8 @@ GLuint      PdrTexture2D::Bind             ()
 {
     GLint current = 0;
 
-    glGetIntegerv( GL_TEXTURE_BINDING_2D, &current );
-    glBindTexture( GL_TEXTURE_2D, m_textureID );
+    BVGL::bvglGetIntegerv( GL_TEXTURE_BINDING_2D, &current );
+    BVGL::bvglBindTexture( GL_TEXTURE_2D, m_textureID );
 
     return (GLuint) current;
 }
@@ -179,7 +180,7 @@ GLuint      PdrTexture2D::Bind             ()
 //
 void        PdrTexture2D::Unbind            ()
 {
-    glBindTexture   ( GL_TEXTURE_2D, m_prevTextureID );     
+    BVGL::bvglBindTexture   ( GL_TEXTURE_2D, m_prevTextureID );     
 }
 
 // *******************************

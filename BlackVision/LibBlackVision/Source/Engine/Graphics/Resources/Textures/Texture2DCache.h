@@ -4,8 +4,6 @@
 #include <hash_map>
 #include <string>
 
-#include "gl/glew.h"
-
 #include "Engine/Models/Interfaces/ITextureDescriptor.h"
 #include "Engine/Models/Interfaces/IAnimationDescriptor.h"
 

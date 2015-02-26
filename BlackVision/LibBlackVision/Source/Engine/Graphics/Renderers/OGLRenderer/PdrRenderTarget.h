@@ -3,9 +3,9 @@
 #include <hash_map>
 #include <vector>
 
-#include "gl/glew.h"
-
+#include "Engine/Graphics/Renderers/OGLRenderer/GL/BVGL.h"
 #include "Engine/Graphics/Resources/RenderTarget.h"
+
 #include "Core/MemoryChunk.h"
 
 

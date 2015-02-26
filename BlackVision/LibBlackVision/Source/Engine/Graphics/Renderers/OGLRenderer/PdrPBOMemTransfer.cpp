@@ -1,6 +1,5 @@
 #include "PdrPBOMemTransfer.h"
 
-//#define DISALLOW_ASYNC_PBO
 
 namespace bv {
 

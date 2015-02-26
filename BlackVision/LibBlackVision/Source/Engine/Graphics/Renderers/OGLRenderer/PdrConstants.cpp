@@ -1,7 +1,5 @@
 #include "PdrConstants.h"
 
-#include <gl/glew.h>
-
 namespace bv {
 
 namespace
