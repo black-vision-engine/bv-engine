@@ -777,6 +777,8 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
     model::SetParameter( root->GetPlugin( "circle" )->GetParameter( "tesselation" ), 100.f, 100 );
     root->GetPlugin( "circle" )->Update(0); // FIXME: to generate geometry only
 
+    //root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+
     return root;
 }
 

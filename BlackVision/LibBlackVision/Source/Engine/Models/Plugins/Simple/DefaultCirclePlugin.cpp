@@ -51,7 +51,32 @@ public:
 
     void GenerateGeometry( Float3AttributeChannelPtr verts ) 
     { 
-        for( int i = 0; i < tesselation; i++ )
+        int i = 0, j = tesselation - 1;
+        for( ; j >= i ; i++, j-- )
+        {
+            double angle1 = j * 2 * PI / tesselation;
+            double angle2 = i * 2 * PI / tesselation;
+            verts->AddAttribute( glm::vec3( cos( angle1 ), sin( angle1 ), 0 ) );
+            if( i != j )
+                verts->AddAttribute( glm::vec3( cos( angle2 ), sin( angle2 ), 0 ) );
+        }
+    }
+};
+
+class AlternativeCircleGenerator : public IGeometryOnlyGenerator
+{
+    int tesselation;
+
+public:
+    AlternativeCircleGenerator( int n )
+        : tesselation( n )
+        {}
+
+    IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_ONLY; }
+
+    void GenerateGeometry( Float3AttributeChannelPtr verts ) 
+    { 
+        for( int i = 0; i <= tesselation; i++ )
         {
             double angle = i * 2 * PI / tesselation;
             verts->AddAttribute( glm::vec3( cos( angle ), sin( angle ), 0 ) );
