@@ -19,8 +19,9 @@ private:
                             PrismComponent   ( /*float startAngle, float endAngle, float innerRadius, float outerRadiusoat, int fragmentsNum*/ );
 
 public:
+    enum PrismUVType { TEXTURED, LINGRADED };
 
-    static std::tuple< ConnectedComponentPtr, ConnectedComponentPtr, ConnectedComponentPtr > Create          ( /*float startAngle, float endAngle, float innerRadius, float outerRadiusoat,*/ int fragmentsNum );
+    static std::tuple< ConnectedComponentPtr, ConnectedComponentPtr, ConnectedComponentPtr > Create          ( int fragmentsNum, PrismComponent::PrismUVType type );
 
 };
 

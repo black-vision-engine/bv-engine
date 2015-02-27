@@ -21,22 +21,22 @@ public:
 };
 
 class DefaultPieChartPlugin :
-	public BasePlugin< IPlugin >
+    public BasePlugin< IPlugin >
 {
     VertexAttributesChannelPtr          m_vaChannel;
 
-	//int											m_lastN;
-	float										m_angleStart;
-	float										m_angleEnd;
+    //int											m_lastN;
+    float										m_angleStart;
+    float										m_angleEnd;
 
-	void										InitGeometry( float angleStart, float angleEnd );
+    void										InitGeometry( float angleStart, float angleEnd );
 public:
-	DefaultPieChartPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
-	~DefaultPieChartPlugin(void);
+    DefaultPieChartPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
+    ~DefaultPieChartPlugin(void);
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
 
-	virtual void								Update                      ( TimeType t );
+    virtual void								Update                      ( TimeType t );
 };
 
 } }

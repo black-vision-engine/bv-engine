@@ -14,6 +14,8 @@
 #include "Engine/Models/Plugins/Custom/DefaultHeightMapPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultPrismPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultPieChartPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultVideoInputPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultCirclePlugin.h"
 
 namespace bv { namespace model {
 
@@ -35,6 +37,8 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultHeightMapPluginDesc() );
 	descriptors.push_back( new DefaultPrismPluginDesc() );
 	descriptors.push_back( new DefaultPieChartPluginDesc() );
+	descriptors.push_back( new DefaultVideoInputPluginDesc() );
+	descriptors.push_back( new DefaultCirclePluginDesc() );
 
     for( auto descr : descriptors )
     {

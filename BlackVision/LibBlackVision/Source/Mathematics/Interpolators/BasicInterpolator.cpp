@@ -8,7 +8,7 @@
 
 #include "System/BasicTypes.h"
 #include "Mathematics/Core/mathfuncs.h"
-
+#include "Mathematics/Defines.h"
 
 namespace bv {
 
@@ -16,7 +16,7 @@ namespace {
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
+template<class TimeValueT, class ValueT, class FloatT >
 ValueT EvaluateLinear( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT, ValueT> & k1, TimeValueT t )
 {
     if ( !( k0.t <= k1.t && k0.t <= t && t <= k1.t ) )
@@ -29,17 +29,70 @@ ValueT EvaluateLinear( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT,
     if( k0.t == k1.t )
         return k0.val;
 
-    ValueT scl =ValueT( ( TimeValueT )1.0 / ( k1.t - k0.t ) );
-    ValueT w0 = ValueT( scl * ValueT( k1.t - t ) );
-    ValueT w1 = ValueT( ( ValueT )1.0 - w0 );
+    FloatT scl =FloatT( ( FloatT )1.0 / ( k1.t - k0.t ) );
+    FloatT w0 = FloatT( scl * FloatT( k1.t - t ) );
+    FloatT w1 = FloatT( ( FloatT )1.0 - w0 );
 
     ValueT v0 = k0.val;
     ValueT v1 = k1.val;
 
-    v0 *= w0;
-    v1 *= w1;
+    return ValueT( v0*w0 + v1*w1 );
+}
 
-    return ValueT( v0 + v1 );
+// *************************************
+//
+
+bool Int2Bool( int intVal )
+{
+    if( intVal >= 1 ) 
+        return true;
+    else
+        return false;
+}
+
+// *************************************
+//
+//template<class TimeValueT, class ValueT, class FloatT >
+template<>
+bool EvaluateLinear< bv::TimeType, bool, float > ( const Key<bv::TimeType, bool> & k0, const Key<bv::TimeType, bool> & k1, bv::TimeType t )
+{
+    int intVal = EvaluateLinear< bv::TimeType, int, float > ( Key< bv::TimeType, int >( k0.t, int( k0.val ) ), Key< bv::TimeType, int >( k1.t, int( k1.val ) ), t );
+    return Int2Bool( intVal );
+}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT, class FloatT>
+ValueT EvaluateCosine( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT, ValueT> & k1, TimeValueT t )
+{
+    if ( !( k0.t <= k1.t && k0.t <= t && t <= k1.t ) )
+    {
+        std::cerr << "Invalid interval ("<< k0.t <<", " << k1.t << ") or param " << t;
+    }
+
+    assert( k0.t <= k1.t && k0.t <= t && t <= k1.t );
+
+    if( k0.t == k1.t )
+        return k0.val;
+
+    FloatT scaledT = FloatT( PI * ( t - k0.t) / ( k1.t - k0.t ) );
+    FloatT w0 = FloatT( ( cos( scaledT ) + 1 ) / 2 );
+    FloatT w1 = FloatT( ( FloatT )1.0 - w0 );
+
+    ValueT v0 = k0.val;
+    ValueT v1 = k1.val;
+
+    return ValueT( v0*w0 + v1*w1 );
+}
+
+// *************************************
+//
+//template<class TimeValueT, class ValueT, class FloatT >
+template<>
+bool EvaluateCosine< bv::TimeType, bool, float > ( const Key<bv::TimeType, bool> & k0, const Key<bv::TimeType, bool> & k1, bv::TimeType t )
+{
+    int intVal = EvaluateCosine< bv::TimeType, int, float > ( Key< bv::TimeType, int >( k0.t, int( k0.val ) ), Key< bv::TimeType, int >( k1.t, int( k1.val ) ), t );
+    return Int2Bool( intVal );
 }
 
 // *************************************
@@ -64,7 +117,7 @@ ValueT EvaluatePoint( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT, 
 // *************************************
 //
 
-template<class TimeValueT, class ValueT>
+template<class TimeValueT, class ValueT >
 Key<TimeValueT, ValueT>::Key(TimeValueT t, ValueT val)
     : t(t), val(val)
 {
@@ -72,27 +125,45 @@ Key<TimeValueT, ValueT>::Key(TimeValueT t, ValueT val)
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
-BasicInterpolator<TimeValueT, ValueT>::BasicInterpolator(TimeValueT tolerance)
+template<class TimeValueT, class ValueT, class FloatT >
+BasicInterpolator<TimeValueT, ValueT, FloatT>::BasicInterpolator(TimeValueT tolerance)
     : tolerance( tolerance )
     , wrapPost( WrapMethod::clamp )
     , wrapPre( WrapMethod::clamp )
 {
     assert( tolerance > static_cast<TimeValueT>(0.) );
+    SetInterpolationMethod( model::IParameter::InterpolationMethod::LINEAR );
+    //SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 }
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
-void BasicInterpolator<TimeValueT, ValueT>::AddKey( TimeValueT t, const ValueT & v )
+//template<class TimeValueT, class ValueT, class FloatT>
+//void                    BasicInterpolator<TimeValueT, ValueT, FloatT>::SetInterpolationMethod ( model::IParameter::InterpolationMethod method )
+//{
+//    this->method = method;
+//}
+//
+//// *************************************
+////
+//template<class TimeValueT, class ValueT, class FloatT>
+//model::IParameter::InterpolationMethod     BasicInterpolator<TimeValueT, ValueT, FloatT>::GetInterpolationMethod () const
+//{
+//    return method;
+//}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT, class FloatT >
+void BasicInterpolator<TimeValueT, ValueT, FloatT>::AddKey( TimeValueT t, const ValueT & v )
 {
     AddKey( Key<TimeValueT, ValueT>( t, v ) );
 }
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
-void BasicInterpolator<TimeValueT, ValueT>::AddKey( const Key<TimeValueT, ValueT> & key )
+template<class TimeValueT, class ValueT, class FloatT >
+void BasicInterpolator<TimeValueT, ValueT, FloatT>::AddKey( const Key<TimeValueT, ValueT> & key )
 {
     if( keys.size() == 0 )
     {
@@ -158,8 +229,8 @@ void BasicInterpolator<TimeValueT, ValueT>::AddKey( const Key<TimeValueT, ValueT
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
-ValueT BasicInterpolator<TimeValueT, ValueT>::Evaluate( TimeValueT t ) const
+template<class TimeValueT, class ValueT, class FloatT  >
+ValueT BasicInterpolator<TimeValueT, ValueT, FloatT>::Evaluate( TimeValueT t ) const
 {
     assert( keys.size() > 0 && "No keys added to the interpolator" );
 
@@ -185,18 +256,39 @@ ValueT BasicInterpolator<TimeValueT, ValueT>::Evaluate( TimeValueT t ) const
 
             if( t <= k1.t )
             {
-                return EvaluateLinear( keys[ i0 ], keys[ i1 ], t );
+                switch( GetInterpolationMethod() )
+                {
+                case model::IParameter::InterpolationMethod::LINEAR:
+                    return EvaluateLinear<TimeValueT, ValueT, FloatT>( keys[ i0 ], keys[ i1 ], t );
+                    break;
+                case model::IParameter::InterpolationMethod::COSINE:
+                    return EvaluateCosine<TimeValueT, ValueT, FloatT>( keys[ i0 ], keys[ i1 ], t );
+                    break;
+                default:
+                    assert( false );
+                }
             }
         }
     }
 
-    return EvaluateLinear( keys[ maxKeyIdx ], keys[ maxKeyIdx ], t );
+    switch( GetInterpolationMethod() )
+    {
+    case model::IParameter::InterpolationMethod::LINEAR:
+        return EvaluateLinear<TimeValueT, ValueT, FloatT>( keys[ maxKeyIdx ], keys[ maxKeyIdx ], t );
+        break;
+    case model::IParameter::InterpolationMethod::COSINE:
+        return EvaluateCosine<TimeValueT, ValueT, FloatT>( keys[ maxKeyIdx ], keys[ maxKeyIdx ], t );
+        break;
+    default: 
+        assert( false );
+        return EvaluatePoint( t );
+    }
 }
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
-ValueT BasicInterpolator<TimeValueT, ValueT>::EvaluatePoint( TimeValueT t ) const
+template<class TimeValueT, class ValueT, class FloatT >
+ValueT BasicInterpolator<TimeValueT, ValueT, FloatT>::EvaluatePoint( TimeValueT t ) const
 {
     assert( keys.size() > 0 && "No keys added to the interpolator" );
 
@@ -232,8 +324,8 @@ ValueT BasicInterpolator<TimeValueT, ValueT>::EvaluatePoint( TimeValueT t ) cons
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
-TimeValueT BasicInterpolator<TimeValueT, ValueT>::CalcPreT( TimeValueT t ) const
+template<class TimeValueT, class ValueT, class FloatT >
+TimeValueT BasicInterpolator<TimeValueT, ValueT, FloatT>::CalcPreT( TimeValueT t ) const
 {
     TimeValueT tStart = keys.front().t;
     TimeValueT tEnd = keys.back().t;
@@ -270,8 +362,8 @@ TimeValueT BasicInterpolator<TimeValueT, ValueT>::CalcPreT( TimeValueT t ) const
     return t;
 }
 
-template<class TimeValueT, class ValueT>
-TimeValueT BasicInterpolator<TimeValueT, ValueT>::CalcPostT( TimeValueT t ) const
+template<class TimeValueT, class ValueT, class FloatT >
+TimeValueT BasicInterpolator<TimeValueT, ValueT, FloatT>::CalcPostT( TimeValueT t ) const
 {
     TimeValueT tStart = keys.front().t;
     TimeValueT tEnd = keys.back().t;
@@ -310,40 +402,40 @@ TimeValueT BasicInterpolator<TimeValueT, ValueT>::CalcPostT( TimeValueT t ) cons
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
-void BasicInterpolator<TimeValueT, ValueT>::SetWrapPostMethod( WrapMethod wm )
+template<class TimeValueT, class ValueT, class FloatT >
+void BasicInterpolator<TimeValueT, ValueT, FloatT>::SetWrapPostMethod( WrapMethod wm )
 {
     wrapPost = wm;
 }
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
-void BasicInterpolator<TimeValueT, ValueT>::SetWrapPreMethod (WrapMethod wm )
+template<class TimeValueT, class ValueT, class FloatT >
+void BasicInterpolator<TimeValueT, ValueT, FloatT>::SetWrapPreMethod (WrapMethod wm )
 {
     wrapPre= wm;
 }
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
-WrapMethod BasicInterpolator<TimeValueT, ValueT>::GetWrapPostMethod() const
+template<class TimeValueT, class ValueT, class FloatT >
+WrapMethod BasicInterpolator<TimeValueT, ValueT, FloatT>::GetWrapPostMethod() const
 {
     return wrapPost;
 }
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
-WrapMethod BasicInterpolator<TimeValueT, ValueT>::GetWrapPreMethod() const
+template<class TimeValueT, class ValueT, class FloatT >
+WrapMethod BasicInterpolator<TimeValueT, ValueT, FloatT>::GetWrapPreMethod() const
 {
     return wrapPre;
 }
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
-void BasicInterpolator<TimeValueT, ValueT>::SetWrapMethod( WrapMethod pre, WrapMethod post )
+template<class TimeValueT, class ValueT, class FloatT >
+void BasicInterpolator<TimeValueT, ValueT, FloatT>::SetWrapMethod( WrapMethod pre, WrapMethod post )
 {
     SetWrapPostMethod( post );
     SetWrapPreMethod( pre );
@@ -351,8 +443,8 @@ void BasicInterpolator<TimeValueT, ValueT>::SetWrapMethod( WrapMethod pre, WrapM
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
-int BasicInterpolator<TimeValueT, ValueT>::EvalToCBuffer( TimeValueT time, char * buf ) const
+template<class TimeValueT, class ValueT, class FloatT >
+int BasicInterpolator<TimeValueT, ValueT, FloatT>::EvalToCBuffer( TimeValueT time, char * buf ) const
 {
     ValueT val = Evaluate( time );
     memcpy( buf, &val, value_size );
@@ -362,16 +454,16 @@ int BasicInterpolator<TimeValueT, ValueT>::EvalToCBuffer( TimeValueT time, char 
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
-const typename BasicInterpolator<TimeValueT, ValueT>::KeyType &     BasicInterpolator<TimeValueT, ValueT>::FirstKey    () const
+template<class TimeValueT, class ValueT, class FloatT>
+const typename BasicInterpolator<TimeValueT, ValueT, FloatT>::KeyType &     BasicInterpolator<TimeValueT, ValueT, FloatT>::FirstKey    () const
 {
     return keys[ 0 ];
 }
 
 // *************************************
 //
-template<class TimeValueT, class ValueT>
-const typename BasicInterpolator<TimeValueT, ValueT>::KeyType &     BasicInterpolator<TimeValueT, ValueT>::LastKey     () const
+template<class TimeValueT, class ValueT, class FloatT>
+const typename BasicInterpolator<TimeValueT, ValueT, FloatT>::KeyType &     BasicInterpolator<TimeValueT, ValueT, FloatT>::LastKey     () const
 {
     return keys.back();
 }
@@ -385,6 +477,8 @@ INSTANTIATE(float)
 INSTANTIATE(double)
 INSTANTIATE(bv::TimeType)
 
+template bv::BasicInterpolator<bv::TimeType, bool>;
+template bv::BasicInterpolator<bv::TimeType, int>;
 template bv::BasicInterpolator<bv::TimeType, float>;
 template bv::BasicInterpolator<bv::TimeType, double>;
 template bv::BasicInterpolator<bv::TimeType, glm::vec2>;

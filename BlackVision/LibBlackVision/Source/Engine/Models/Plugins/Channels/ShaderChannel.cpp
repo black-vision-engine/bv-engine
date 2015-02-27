@@ -8,17 +8,6 @@ namespace bv { namespace model {
 
 // *********************************
 //
-const std::string                            ReadShaderContentsFromFile             ( const std::string & fileName )
-{
-    std::stringstream shaderSource;
-
-    File::Open( fileName ) >> shaderSource;
-
-    return shaderSource.str();
-}
-
-// *********************************
-//
 template< typename ShaderChannelIface >
 ShaderChannel< ShaderChannelIface >::ShaderChannel  ( const std::string & shaderSource, bv::IValueSetConstPtr valueSet )
     : m_values( valueSet )
