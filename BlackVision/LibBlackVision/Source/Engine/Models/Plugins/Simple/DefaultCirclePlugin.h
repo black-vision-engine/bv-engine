@@ -21,11 +21,20 @@ class DefaultCirclePlugin : public DefaultGeometryPluginBase
     virtual bool                                NeedsTopologyUpdate();
 
     int                                         GetTesselation();
+    float                                       GetInnerRadius();
+    float                                       GetOuterRadius();
+    float                                       GetOpenAngle();
 public:
     DefaultCirclePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model ) 
         : DefaultGeometryPluginBase( name, uid, prev, model ) { }
 
     //virtual void								Update                      ( TimeType t );
+
+    static const std::string PN_TESSELATION;
+    static const std::string PN_INNER_RADIUS;
+    static const std::string PN_OUTER_RADIUS;
+    static const std::string PN_OPEN_ANGLE;
+    static const std::string PN_OPEN_ANGLE_MODE;
 };
 
 } }
