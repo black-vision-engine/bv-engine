@@ -10,6 +10,13 @@ const std::string DefaultCirclePlugin::PN_OUTER_RADIUS = "outer radius";
 const std::string DefaultCirclePlugin::PN_OPEN_ANGLE = "open angle";
 const std::string DefaultCirclePlugin::PN_OPEN_ANGLE_MODE = "open angle mode";
 
+// *******************************
+//
+VoidPtr    ParamEnum< DefaultCirclePlugin::OpenAngleMode >::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
+
 DefaultPluginParamValModelPtr   DefaultCirclePluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
     DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
@@ -19,17 +26,20 @@ DefaultPluginParamValModelPtr   DefaultCirclePluginDesc::CreateDefaultModel  ( I
     ParamFloatPtr paramOR   = ParametersFactory::CreateParameterFloat( DefaultCirclePlugin::PN_OUTER_RADIUS, timeEvaluator );
     ParamFloatPtr paramIR   = ParametersFactory::CreateParameterFloat( DefaultCirclePlugin::PN_INNER_RADIUS, timeEvaluator );
     ParamFloatPtr paramOA   = ParametersFactory::CreateParameterFloat( DefaultCirclePlugin::PN_OPEN_ANGLE, timeEvaluator );
+    auto paramOAM = ParametersFactory::CreateParameterEnum< DefaultCirclePlugin::OpenAngleMode >( DefaultCirclePlugin::PN_OPEN_ANGLE_MODE, timeEvaluator );
 
     model->SetVertexAttributesChannelModel( vacModel );
     vacModel->AddParameter( paramN );
     vacModel->AddParameter( paramOR );
     vacModel->AddParameter( paramIR );
     vacModel->AddParameter( paramOA );
+    vacModel->AddParameter( paramOAM );
 
     paramN->SetVal( 3, 0.f );
     paramOR->SetVal( 1.f, 0.f );
     paramIR->SetVal( 0.f, 0.f );
     paramOA->SetVal( 360.f, 0.f );
+    paramOAM->SetVal( DefaultCirclePlugin::OpenAngleMode::CW, 0.f );
 
     return model;
 }
@@ -82,22 +92,40 @@ class CircleGenerator : public IGeometryOnlyGenerator
     int tesselation;
     float inner_radius, outer_radius;
     double total_angle;
+    DefaultCirclePlugin::OpenAngleMode mode;
 
 public:
-    CircleGenerator( int n, float ir, float or, float oa )
+    CircleGenerator( int n, float ir, float or, float oa, DefaultCirclePlugin::OpenAngleMode m )
         : tesselation( n )
         , inner_radius( ir )
         , outer_radius( or )
         , total_angle ( oa / 360.f * 2 * PI )
+        , mode( m )
         {}
 
     IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_ONLY; }
 
     void GenerateGeometry( Float3AttributeChannelPtr verts ) 
-    { 
+    {
+        double angle_offset, angle_factor;
+        if( mode == DefaultCirclePlugin::OpenAngleMode::CW )
+            angle_offset = 0, angle_factor = 1;
+        else if( mode == DefaultCirclePlugin::OpenAngleMode::CCW )
+            angle_offset = 0, angle_factor = -1;
+        else
+            if( mode == DefaultCirclePlugin::OpenAngleMode::SYMMETRIC )
+            angle_offset = total_angle/2, angle_factor = 1;
+        else
+        {
+            assert( false );
+            return;
+        }
+
         for( int i = 0; i <= tesselation; i++ )
         {
             double angle = i * total_angle / tesselation;
+            angle -= angle_offset;
+            angle *= angle_factor;
 
             glm::vec3 unitVector = glm::vec3( cos( angle ), sin( angle ), 0 );
 
@@ -112,7 +140,8 @@ IGeometryGenerator*           DefaultCirclePlugin::GetGenerator()
     return new CircleGenerator( GetTesselation(),
                                 GetInnerRadius(),
                                 GetOuterRadius(),
-                                GetOpenAngle() );
+                                GetOpenAngle(),
+                                GetOpenAngleMode() );
 }
 
 bool DefaultCirclePlugin::NeedsTopologyUpdate()
@@ -145,6 +174,13 @@ float DefaultCirclePlugin::GetOpenAngle()
 {
     auto param = GetParameter( PN_OPEN_ANGLE );
     auto qParam = QueryTypedParam< ParamFloatPtr >( param );
+    return qParam->Evaluate();
+}
+
+DefaultCirclePlugin::OpenAngleMode DefaultCirclePlugin::GetOpenAngleMode()
+{
+    auto param = GetParameter( PN_OPEN_ANGLE_MODE );
+    auto qParam = QueryTypedParam< std::shared_ptr< ParamEnum< DefaultCirclePlugin::OpenAngleMode > > >( param );
     return qParam->Evaluate();
 }
 

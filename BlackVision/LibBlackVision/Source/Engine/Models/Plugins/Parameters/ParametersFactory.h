@@ -18,6 +18,11 @@ public:
     static ParamTransform       CreateParameter                     ( const std::string & name, const TransformF & interpolator, ITimeEvaluatorPtr timeline );
     static ParamTransformVec    CreateParameter                     ( const std::string & name, const TransformF & interpolator, ITimeEvaluatorPtr timeline, int dummy );
 
+    template<typename T>
+    static std::shared_ptr<ParamEnum<T>>      CreateParameterEnum                 ( const std::string & name, ITimeEvaluatorPtr timeline ) // FIXME, rather
+    {
+        return std::make_shared< ParamEnum<T> >( name, IntInterpolator(), timeline );
+    }
     static ParamMat2Ptr         CreateParameterMat2                 ( const std::string & name, ITimeEvaluatorPtr timeline );
     static ParamVec2Ptr         CreateParameterVec2                 ( const std::string & name, ITimeEvaluatorPtr timeline );
     static ParamVec3Ptr         CreateParameterVec3                 ( const std::string & name, ITimeEvaluatorPtr timeline );

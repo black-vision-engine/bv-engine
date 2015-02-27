@@ -78,5 +78,14 @@ inline bool SetParameter< glm::mat2 >( IParameterPtr param, TimeType t, const gl
     return SetSimpleTypedParameter< ParamMat2 >( param, t, val );
 }
 
+//// *******************************
+////
+//template<> template< typename T >
+//inline bool SetParameter< T >( IParameterPtr param, TimeType t, const T & val )
+//{
+//    return SetSimpleTypedParameter< ParamEnum<T> >( param, t, val );
+//}
+
+
 } //model
 } //bv

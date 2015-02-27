@@ -62,6 +62,20 @@ public:
 
 };
 
+template<class T>
+class ParamEnum : public SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM >
+{
+public:
+    ParamEnum( const std::string & name, const IntInterpolator & interpolator, ITimeEvaluatorPtr evaluator );
+
+    inline  T               Evaluate        () const;
+    inline  void            SetVal          ( const T & val, TimeType t );
+
+    virtual VoidPtr         QueryParamTyped () override;
+
+    inline static  ModelParamType  Type     ();
+};
+
 
 typedef SimpleParameterImpl< FloatInterpolator, float, ModelParamType::MPT_FLOAT >      ParamFloat;
 typedef SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_INT >            ParamInt;
@@ -69,6 +83,9 @@ typedef SimpleParameterImpl< BoolInterpolator, bool, ModelParamType::MPT_BOOL > 
 typedef SimpleParameterImpl< Vec4Interpolator, glm::vec4, ModelParamType::MPT_VEC4 >    ParamVec4;
 typedef SimpleParameterImpl< Vec3Interpolator, glm::vec3, ModelParamType::MPT_VEC3 >    ParamVec3;
 typedef SimpleParameterImpl< Vec2Interpolator, glm::vec2, ModelParamType::MPT_VEC2 >    ParamVec2;
+
+//template<typename T>
+//using ParamEnumPtr<T> = std::shared_ptr<T>;
 
 DEFINE_PTR_TYPE(ParamBool)
 DEFINE_PTR_TYPE(ParamInt)
