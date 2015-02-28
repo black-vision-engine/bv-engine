@@ -28,15 +28,22 @@ public:
 
 	virtual VoidConstPtr				QueryThis			() const override;
 
+	const std::string &					GetFontFileName		() const;
+	SizeType							GetFontSize			() const;
+	SizeType							GetBlurSize			() const;
+	SizeType							GetOutlineSize		() const;
+	bool								GetGenerateMipmaps	() const;
+	const std::wstring &				GetAtlasCharSetFile () const;
+
 	static FontResourceDescConstPtr		Create				(	const std::string & fontFileName,
-																SizeType size,
+																SizeType fontSize,
 																SizeType blurSize,
 																SizeType outlineSize,
 																bool generateMipmaps,
 																const std::wstring & atlasCharSetFile = SUPPROTED_CHARS_FILE );
 
 	explicit							FontResourceDesc	(	const std::string & fontFileName,
-																SizeType size,
+																SizeType fontSize,
 																SizeType blurSize,
 																SizeType outlineSize,
 																bool generateMipmaps,
@@ -46,7 +53,7 @@ public:
 
 private:
 	std::string		m_fontFileName;
-	SizeType		m_size;
+	SizeType		m_fontSize;
 	SizeType		m_blurSize;
 	SizeType		m_outlineSize;
 	bool			m_generateMipmaps;

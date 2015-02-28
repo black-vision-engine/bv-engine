@@ -2,6 +2,7 @@
 
 #include "Engine/Models/Resources/IResource.h"
 #include "Engine/Models/Resources/Resource.h"
+#include "Engine/Models/Resources/Font/Text.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Mathematics/Rect.h"
 
@@ -24,12 +25,12 @@ public:
     /////////////////////////////////////
     // This function loads font definition from file. Builds font atlases with the specified size.
     // Returns ResourceHandle of this font
-    static ResourceHandleConstPtr       LoadFont            ( const std::string & fontFileName, SizeType size, SizeType blurSize, SizeType outlineSize, const std::wstring & atlasCharSetFile = SUPPROTED_CHARS_FILE );
+    static IResourceNEWConstPtr			LoadFont            ( const std::string & fontFileName, SizeType size, SizeType blurSize, SizeType outlineSize, const std::wstring & atlasCharSetFile = SUPPROTED_CHARS_FILE );
 
     /////////////////////////////////////
     // This function creates TextAtlas from specified FontReasource.
     // Returns new TextAtlas.
-    static const TextAtlas *            GetAtlas            ( const ResourceHandle * fontResource );
+    static TextAtlasConstPtr            GetAtlas            ( const IResourceNEWConstPtr & res );
 
     /////////////////////////////////////
     // This function creates empty VertexAttributeChannel for text with proper attribute descriptor. ( position, texture cord )

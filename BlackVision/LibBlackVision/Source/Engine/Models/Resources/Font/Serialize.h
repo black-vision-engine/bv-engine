@@ -3,8 +3,10 @@
 #include "boost/serialization/map.hpp"
 
 #include "Text.h"
+#include "TextAtlas.h"
 #include "Glyph.h"
 #include "Engine/Models/Resources/TextureLoader.h"
+#include <cassert>
 
 namespace boost { namespace serialization {
 
@@ -31,6 +33,7 @@ template< >
 void serialize< boost::archive::text_iarchive >( boost::archive::text_iarchive & ar, bv::model::TextAtlas& textAtlas, const unsigned int version )
 {
     { version; } // FIXME: suppress unused warning
+	assert(false);
     unsigned int size;
     ar >> size;
 
@@ -42,7 +45,7 @@ void serialize< boost::archive::text_iarchive >( boost::archive::text_iarchive &
     ar >> textureExtra->m_width;
     ar >> textureExtra->m_type;
 
-    textAtlas.m_textureHandle = bv::model::ResourceHandlePtr( new bv::model::ResourceHandle( nullptr, size, textureExtra ) );
+	//textAtlas.m_textureResource = bv::TextureResource::Create();//( new bv::model::ResourceHandle( nullptr, size, textureExtra ) );
 
     ar >> textAtlas.m_glyphs;
 	ar >> textAtlas.m_outlineGlyphs;
@@ -55,16 +58,17 @@ template< >
 void serialize< boost::archive::text_oarchive >( boost::archive::text_oarchive & ar, bv::model::TextAtlas& textAtlas, const unsigned int version )
 {
     { version; } // FIXME: suppress unused warning
-    ar << textAtlas.m_textureHandle->m_size;
-    
-    assert( textAtlas.m_textureHandle->GetExtra()->GetResourceExtraKind() == bv::model::ResourceExtraKind::RE_TEXTURE );
-    auto textureExtra = static_cast< const bv::model::TextureExtraData * >( textAtlas.m_textureHandle->GetExtra() );
+	assert(false);
+    //ar << textAtlas.m_textureResource->m_size;
+    //
+    //assert( textAtlas.m_textureHandle->GetExtra()->GetResourceExtraKind() == bv::model::ResourceExtraKind::RE_TEXTURE );
+    //auto textureExtra = static_cast< const bv::model::TextureExtraData * >( textAtlas.m_textureHandle->GetExtra() );
 
-    ar << textureExtra->m_bitsPerPixel;
-    ar << textureExtra->m_format;
-    ar << textureExtra->m_height;
-    ar << textureExtra->m_width;
-    ar << textureExtra->m_type;
+    //ar << textureExtra->m_bitsPerPixel;
+    //ar << textureExtra->m_format;
+    //ar << textureExtra->m_height;
+    //ar << textureExtra->m_width;
+    //ar << textureExtra->m_type;
 
     ar & textAtlas.m_glyphs;
 	ar & textAtlas.m_outlineGlyphs;

@@ -22,11 +22,11 @@ public:
 
 	// *******************************
 	// Returns testure resource with atlas and mipmaps.
-	model::TextAtlasConstPtr		GetAtlas		() const;
+	model::TextConstPtr				GetText			() const;
 
-	static FontResourceConstPtr		Create			( const model::TextAtlasConstPtr & textAtlas );
+	static FontResourceConstPtr		Create			( const model::TextConstPtr & textAtlas );
 
-	explicit						FontResource	( const model::TextAtlasConstPtr & textAtlas );
+	explicit						FontResource	( const model::TextConstPtr & textAtlas );
 	
 	virtual const std::string &		GetUID			() const override;
 
@@ -34,7 +34,7 @@ public:
 
 private:
 
-	model::TextAtlasConstPtr		m_textAtlas;
+	model::TextConstPtr				m_text;
 };
 
 } // bv

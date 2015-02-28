@@ -43,14 +43,56 @@ FontResourceDescConstPtr FontResourceDesc::Create( const std::string & fontFileN
 
 // ***********************
 //
-FontResourceDesc::FontResourceDesc( const std::string & fontFileName, SizeType size, SizeType blurSize, SizeType outlineSize, bool generateMipmaps, const std::wstring & atlasCharSetFile )
+FontResourceDesc::FontResourceDesc( const std::string & fontFileName, SizeType fontSize, SizeType blurSize, SizeType outlineSize, bool generateMipmaps, const std::wstring & atlasCharSetFile )
 	: m_fontFileName( fontFileName )
-	, m_size( size )
+	, m_fontSize( fontSize )
 	, m_blurSize( blurSize )
 	, m_outlineSize( outlineSize )
 	, m_generateMipmaps( generateMipmaps )
 	, m_atlasCharSetFile( atlasCharSetFile )
 {}
+
+// ***********************
+//
+const std::string &	FontResourceDesc::GetFontFileName() const
+{
+	return m_fontFileName;
+}
+
+// ***********************
+//
+SizeType FontResourceDesc::GetFontSize() const
+{
+	return m_fontSize;
+}
+
+// ***********************
+//
+SizeType FontResourceDesc::GetBlurSize() const
+{
+	return m_blurSize;
+}
+
+// ***********************
+//
+SizeType FontResourceDesc::GetOutlineSize() const
+{
+	return m_outlineSize;
+}
+
+// ***********************
+//
+bool FontResourceDesc::GetGenerateMipmaps() const
+{
+	return m_generateMipmaps;
+}
+
+// ***********************
+//
+const std::wstring & FontResourceDesc::GetAtlasCharSetFile () const
+{
+	return m_atlasCharSetFile;
+}
 
 } // bv
 

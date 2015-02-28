@@ -7,22 +7,22 @@ const std::string FontResource::uid = "FONT_RESOURCE";
 
 // *******************************
 // 
-model::TextAtlasConstPtr FontResource::GetAtlas() const
+model::TextConstPtr FontResource::GetText() const
 {
-	return m_textAtlas;
+	return m_text;
 }
 
 // *******************************
 // 
-FontResourceConstPtr FontResource::Create( const model::TextAtlasConstPtr & testAtlas )
+FontResourceConstPtr FontResource::Create( const model::TextConstPtr & text )
 {
-	return std::make_shared< FontResource >( testAtlas );
+	return std::make_shared< FontResource >( text );
 }
 
 // *******************************
 // 
-FontResource::FontResource( const model::TextAtlasConstPtr & textAtlas )
-	: m_textAtlas( textAtlas )
+FontResource::FontResource( const model::TextConstPtr & text )
+	: m_text( text )
 {}
 
 // *******************************

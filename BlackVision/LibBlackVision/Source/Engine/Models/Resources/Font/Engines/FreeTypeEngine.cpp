@@ -2,6 +2,7 @@
 
 #include "Engine/Models/Resources/Font/Glyph.h"
 #include "Engine/Models/Resources/Font/Text.h"
+#include "Engine/Models/Resources/Font/TextAtlas.h"
 
 #include "Engine/Models/Resources/TextureHelpers.h"
 
@@ -299,7 +300,7 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 
 // *********************************
 //
-const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlineWidth, const std::wstring & wcharsSet )
+TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlineWidth, const std::wstring & wcharsSet )
 {
 	SizeType							glyphsNum	= wcharsSet.size();
 	Int32								spadding	= (Int32)padding;
@@ -330,7 +331,7 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlin
     auto altlasWidth	= maxWidth	* atlasSize;
     auto altlasHeight	= maxHeight * atlasSize;
 
-    auto atlas = TextAtlas::Crate( altlasWidth, altlasHeight, 32, maxWidth, maxHeight );
+	auto atlas = TextAtlas::Create( altlasWidth, altlasHeight, 32, maxWidth, maxHeight );
 
     for ( auto ch : wcharsSet )
 		atlas->SetGlyph( ch, glyphs[ ch ] );
@@ -420,7 +421,7 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlin
 
 // *********************************
 //
-const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, const std::wstring & wcharsSet )
+TextAtlasConstPtr FreeTypeEngine::CreateAtlas( SizeType padding, const std::wstring & wcharsSet )
 {
 	return CreateAtlas( padding, 0, wcharsSet );
 }

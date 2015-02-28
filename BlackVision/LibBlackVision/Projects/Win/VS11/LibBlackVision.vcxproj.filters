@@ -846,6 +846,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\FontResourceDescriptor.cpp">
       <Filter>Engine\Models\Resources\Font</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\TextAtlas.cpp">
+      <Filter>Engine\Models\Resources\Font</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Core\MemoryChunk.h">
@@ -1701,6 +1704,9 @@
       <Filter>Engine\Models\Resources\Font</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\FontResourceDescriptor.h">
+      <Filter>Engine\Models\Resources\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\TextAtlas.h">
       <Filter>Engine\Models\Resources\Font</Filter>
     </ClInclude>
   </ItemGroup>
