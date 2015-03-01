@@ -17,8 +17,6 @@
 
 #pragma warning(pop)
 
-#include "Serialize.h"
-
 #include "Glyph.h"
 #include "AtlasCache.h"
 #include "System/FileIO.h"
@@ -84,13 +82,16 @@ void Text::BuildAtlas        ()
 
 	m_atlas = m_fontEngine->CreateAtlas(this->m_blurSize + 1, m_outlineWidth, m_supportedCharsSet );
 
-    if ( m_blurSize > 0 )
-    {
-		auto oldData = std::const_pointer_cast< MemoryChunk >( m_atlas->m_textureResource->GetOriginal()->GetData() );
-		auto bluredData = TextureHelper::Blur( oldData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel(), (unsigned int) m_blurSize );
-		auto newSingleTextureRes = SingleTextureResource::
-		m_atlas->m_textureResource = TextureResource::Create( (TextureHelper::Blur( oldData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel(), (unsigned int) m_blurSize ) );
-    }
+	assert( m_blurSize == 0 ); //TODO: Implement
+
+  //  if ( m_blurSize > 0 )
+  //  {
+		//auto oldData = std::const_pointer_cast< MemoryChunk >( m_atlas->m_textureResource->GetOriginal()->GetData() );
+		//auto bluredData = TextureHelper::Blur( oldData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel(), (unsigned int) m_blurSize );
+		//auto atlasFilePath = FontAtlasCache::GenerateTextAtlasCacheFileName(  )
+		//auto newSingleTextureRes = SingleTextureResource::Create( bluredData,  );
+		//m_atlas->m_textureResource = TextureResource::Create( (TextureHelper::Blur( oldData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel(), (unsigned int) m_blurSize ) );
+  //  }
 
 	auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
 

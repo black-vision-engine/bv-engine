@@ -298,6 +298,7 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 	return nullptr;
 }
 
+
 // *********************************
 //
 TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlineWidth, const std::wstring & wcharsSet )
@@ -343,11 +344,6 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlin
     char* atlasData = const_cast< char * >( atlas->GetWritableData()->Get() );// FIXME: Remove const_cast
 
 	memset( atlasData, 0, altlasWidth * altlasHeight * 4 );
-
-    // auto atlasColumns  =  altlasWidth / maxWidth;
-
-	// Int32 x = 0;
-	// Int32 y = 0;
 
 	char * currAddress = atlasData;
 

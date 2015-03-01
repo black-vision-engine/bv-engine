@@ -50,15 +50,15 @@ private:
 
     DefaultTexturesDataPtr          m_texturesData;
 
-    unsigned int                    m_texCoordChannelIndex;
+    SizeType						m_texCoordChannelIndex;
 
     ParamFloatPtr                   m_paramWrapModeX;
     ParamFloatPtr                   m_paramWrapModeY;
     ParamFloatPtr                   m_paramFilteringMode;
     ParamFloatPtr                   m_paramAttachMode;
     
-    unsigned int                    m_textureWidth;
-    unsigned int                    m_textureHeight;
+    SizeType	                    m_textureWidth;
+    SizeType	                    m_textureHeight;
 
     TextureWrappingMode             m_lastTextureWrapModeX;
     TextureWrappingMode             m_lastTextureWrapModeY;
@@ -79,8 +79,8 @@ public:
 
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
 
-    unsigned int                                GetTextureWidth             () const;
-    unsigned int                                GetTextureHeight            () const;
+    SizeType									GetTextureWidth             () const;
+    SizeType									GetTextureHeight            () const;
 
     virtual void                                Update                      ( TimeType t ) override;
 

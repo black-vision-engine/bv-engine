@@ -87,12 +87,12 @@ void            PdrRenderTarget::Enable             ( Renderer * renderer )
 {
     { renderer; } // FIXME: suppress unused
     glBindFramebuffer( GL_FRAMEBUFFER, m_fboID );
-    glDrawBuffers( m_numTargets, &m_drawBuffers[ 0 ] );
+    glDrawBuffers( ( GLsizei )m_numTargets, &m_drawBuffers[ 0 ] );
 
     glGetIntegerv( GL_VIEWPORT, m_prevViewportCoords );
     glGetDoublev( GL_DEPTH_RANGE, m_prevDepthRange );
 
-    glViewport( 0, 0, m_width, m_height );
+    glViewport( 0, 0, ( GLsizei )m_width, ( GLsizei )m_height );
     glDepthRange( 0.0, 1.0 );
 }
 
@@ -158,7 +158,7 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
     auto fmt    = ConstantsMapper::GLConstantTextureFormat( format );
     auto type   = ConstantsMapper::GLConstantTextureType( format );
 
-    void * data = pboMem->LockRenderTarget( m_drawBuffers[ i ], m_width, m_height, fmt, type );
+    void * data = pboMem->LockRenderTarget( m_drawBuffers[ i ], ( GLuint )m_width, ( GLuint )m_height, fmt, type );
     memcpy( buffer->GetWritable(), data, outputTex->RawFrameSize() );
     pboMem->UnlockRenderTarget();
 
@@ -209,7 +209,7 @@ void            PdrRenderTarget::AddDepthBuffer     ( Renderer * renderer, const
     { renderer; rt; } // FIXME: suppress unused
     glGenRenderbuffers( 1, &m_depthBufID );
     glBindRenderbuffer( GL_RENDERBUFFER, m_depthBufID );
-    glRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_width, m_height );
+    glRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH_COMPONENT, ( GLuint )m_width, ( GLuint )m_height );
     glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthBufID );
 }
 

@@ -263,7 +263,8 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( IPluginR
     }
 
     //FIXME: use some better API to handle resources in general and textures in this specific case
-    auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), textureNames[ curNumTextures ] );
+	auto textureResDesc = TextureResourceDesc::Create( txResDescr->GetTextureFile() );
+    auto txDesc = DefaultTextureDescriptor::LoadTexture( textureResDesc, textureNames[ curNumTextures ] );
 
     if( txDesc != nullptr )
     {

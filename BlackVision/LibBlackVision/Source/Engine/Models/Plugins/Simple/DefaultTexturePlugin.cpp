@@ -196,7 +196,8 @@ bool                            DefaultTexturePlugin::LoadResource  ( IPluginRes
         assert( txData->GetTextures().size() <= 2 ); //FIXME: Second one may be added by a mask
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), DefaultTexturePluginDesc::TextureName() );
+		auto textureResDesc = TextureResourceDesc::Create( txResDescr->GetTextureFile() );
+        auto txDesc = DefaultTextureDescriptor::LoadTexture( textureResDesc, DefaultTexturePluginDesc::TextureName() );
         txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
 
         if( txDesc != nullptr )
@@ -432,14 +433,14 @@ void                                        DefaultTexturePlugin::UpdateState   
 
 // *************************************
 // 
-unsigned int                                DefaultTexturePlugin::GetTextureWidth             () const
+SizeType									DefaultTexturePlugin::GetTextureWidth             () const
 {
     return m_textureWidth;
 }
 
 // *************************************
 //
-unsigned int                                DefaultTexturePlugin::GetTextureHeight            () const
+SizeType									DefaultTexturePlugin::GetTextureHeight            () const
 {
     return m_textureHeight;
 }

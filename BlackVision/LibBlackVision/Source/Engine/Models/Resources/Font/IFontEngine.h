@@ -11,7 +11,6 @@ class IFontEngine
 public:
 	virtual TextAtlasConstPtr	CreateAtlas( SizeType padding, const std::wstring & wcharsSet )						 = 0;
 	virtual TextAtlasConstPtr	CreateAtlas( SizeType padding, SizeType outline, const std::wstring & wcharsSet )	 = 0;
-
 };
 
 DEFINE_CONST_PTR_TYPE(IFontEngine)

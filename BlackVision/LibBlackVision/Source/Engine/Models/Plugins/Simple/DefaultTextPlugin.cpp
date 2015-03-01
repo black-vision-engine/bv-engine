@@ -217,7 +217,7 @@ DefaultTextPlugin::~DefaultTextPlugin         ()
 // *************************************
 // 
 void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
-																ResourceHandleConstPtr res,
+															   TextureResourceConstPtr res,
 																const std::string & name,
 																TextureWrappingMode hWrappingMode,
 																TextureWrappingMode vWrappingMode,
@@ -258,7 +258,7 @@ void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, SizeType
 
 	auto fontResource = TextHelper::LoadFont( fontFile, fontSize, blurSize, outlineSize ); // TODO:
 
-	m_atlas = TextHelper::GetAtlas( fontResource.get() );
+	m_atlas = TextHelper::GetAtlas( fontResource );
 
 	auto textureResource = m_atlas->GetResourceHandle();
 

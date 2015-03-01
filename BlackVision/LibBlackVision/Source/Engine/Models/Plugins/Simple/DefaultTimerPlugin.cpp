@@ -335,7 +335,7 @@ bool            DefaultTimerPlugin::LoadResource  ( IPluginResourceDescrConstPtr
 
         auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
 
-        m_textAtlas = TextHelper::GetAtlas( fontResource.get() );
+        m_textAtlas = TextHelper::GetAtlas( fontResource );
 
         InitBigestGlyph();
 

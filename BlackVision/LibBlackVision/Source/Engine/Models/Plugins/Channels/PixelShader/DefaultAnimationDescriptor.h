@@ -39,8 +39,8 @@ public:
     virtual unsigned int            PreviousFrame       () const override;
 
     virtual const std::string       GetName             () const override;
-    virtual unsigned int            GetWidth            () const override;
-    virtual unsigned int            GetHeight           () const override;
+    virtual SizeType	            GetWidth            () const override;
+    virtual SizeType	            GetHeight           () const override;
     virtual TextureFormat           GetFormat           () const override;
     virtual TextureWrappingMode     GetWrappingModeX    () const override;
     virtual TextureWrappingMode     GetWrappingModeY    () const override;

@@ -23,8 +23,8 @@ private:
     GLuint          m_textureID;
     GLuint          m_prevTextureID;
 
-    unsigned int    m_width;
-    unsigned int    m_height;
+    SizeType		m_width;
+    SizeType		m_height;
 
     TextureFormat   m_txFormat;
 

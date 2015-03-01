@@ -24,6 +24,7 @@ public: // Only for non intrusive serialization. Should be private
 	std::map< wchar_t, const Glyph * >                  m_outlineGlyphs;
     std::map< wchar_t, const Glyph * >                  m_glyphs;
     std::map< std::pair< wchar_t, wchar_t >, float >	m_kerningMap; 
+	SizeType											m_blurSize;
 
     void                    SetGlyph		( wchar_t wch, const Glyph * glyph, bool outline = false );
 

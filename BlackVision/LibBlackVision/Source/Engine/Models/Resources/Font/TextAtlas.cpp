@@ -41,6 +41,7 @@ TextAtlas::TextAtlas( SizeType w, SizeType h, SizeType bitsPerPixel, SizeType gw
     : m_glyphWidth( gw )
     , m_glyphHeight( gh )
 	, m_textureResource( nullptr )
+	, m_blurSize( 0 )
 {
     auto size   = w * h * bitsPerPixel / 8;
     auto data  = std::make_shared< MemoryChunk >( new char[ size ], size );

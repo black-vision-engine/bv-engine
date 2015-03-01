@@ -37,14 +37,14 @@ const std::string       DefaultTextureParams::GetName           () const
 
 // **************************
 //
-unsigned int            DefaultTextureParams::GetWidth          () const
+SizeType				DefaultTextureParams::GetWidth          () const
 {
     return m_width;
 }
 
 // **************************
 //
-unsigned int            DefaultTextureParams::GetHeight         () const
+SizeType				DefaultTextureParams::GetHeight         () const
 {
     return m_height;
 }
@@ -92,14 +92,14 @@ void                    DefaultTextureParams::SetName           ( const std::str
 }
 // **************************
 //
-void                    DefaultTextureParams::SetWidth          ( unsigned int w )
+void                    DefaultTextureParams::SetWidth          ( SizeType w )
 {
     m_width = w;
 }
 
 // **************************
 //
-void                    DefaultTextureParams::SetHeight         ( unsigned int h )
+void                    DefaultTextureParams::SetHeight         ( SizeType h )
 {
     m_height = h;
 }

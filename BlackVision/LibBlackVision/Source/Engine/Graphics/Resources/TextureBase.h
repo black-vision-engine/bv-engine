@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Types/Enums.h"
-
+#include "System/BasicTypes.h"
 
 namespace bv
 {
@@ -23,8 +23,8 @@ public:
     TextureFormat           GetFormat	    () const;
     TextureType             GetType         () const;
 
-    unsigned int            GetPixelSize    () const;
-    static unsigned int     GetPixelSize    ( TextureFormat format );
+    SizeType				GetPixelSize    () const;
+    static SizeType			GetPixelSize    ( TextureFormat format );
 
 protected:
 

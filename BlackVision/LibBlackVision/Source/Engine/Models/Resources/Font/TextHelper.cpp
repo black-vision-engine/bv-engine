@@ -100,7 +100,7 @@ TextAtlasConstPtr				TextHelper::GetAtlas            ( const IResourceNEWConstPt
 
 // *********************************
 //
-float                    TextHelper::BuildVACForText     ( VertexAttributesChannel * vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring & text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, bool useKerning )
+float                    TextHelper::BuildVACForText     ( VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, bool useKerning )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
