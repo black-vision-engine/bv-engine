@@ -107,14 +107,13 @@ public:
 
     void GenerateGeometry( Float3AttributeChannelPtr verts ) 
     {
-        double angle_offset, angle_factor;
+        double angle_offset;
         if( mode == DefaultCirclePlugin::OpenAngleMode::CW )
-            angle_offset = 0, angle_factor = 1;
+            angle_offset = 0;
         else if( mode == DefaultCirclePlugin::OpenAngleMode::CCW )
-            angle_offset = 0, angle_factor = -1;
-        else
-            if( mode == DefaultCirclePlugin::OpenAngleMode::SYMMETRIC )
-            angle_offset = total_angle/2, angle_factor = 1;
+            angle_offset = total_angle;
+        else if( mode == DefaultCirclePlugin::OpenAngleMode::SYMMETRIC )
+            angle_offset = total_angle/2;
         else
         {
             assert( false );
@@ -125,7 +124,6 @@ public:
         {
             double angle = i * total_angle / tesselation;
             angle -= angle_offset;
-            angle *= angle_factor;
 
             glm::vec3 unitVector = glm::vec3( cos( angle ), sin( angle ), 0 );
 
