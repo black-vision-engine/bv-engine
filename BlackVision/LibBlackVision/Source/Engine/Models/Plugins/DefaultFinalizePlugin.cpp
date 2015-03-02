@@ -68,8 +68,7 @@ IParameterPtr                       DefaultFinalizePlugin::GetParameter         
     
 // *******************************
 //
-//ICachedParameterPtr                 DefaultFinalizePlugin::GetCachedParameter          ( const std::string & ) const
-ICachedParameter*                 DefaultFinalizePlugin::GetCachedParameter          ( const std::string & ) const
+ICachedParameterPtr                 DefaultFinalizePlugin::GetCachedParameter          ( const std::string & ) const
 {
     return nullptr;
 }

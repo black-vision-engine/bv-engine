@@ -39,8 +39,7 @@ public:
     virtual IPluginParamValModelPtr             GetPluginParamValModel      () const override;
     virtual IParameterPtr                       GetParameter                ( const std::string & name ) const override;
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const override;
-    //virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const override;
-    virtual ICachedParameter*                 GetCachedParameter          ( const std::string & name ) const override;
+    virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const override;
 
     virtual void                                Update                      ( TimeType t );
 
@@ -147,9 +146,10 @@ IParameterPtr               BasePlugin< Iface >::GetParameter           ( const 
 
 // *******************************
 //
+struct NullDeleter {template<typename T> void operator()(T*) {} };
+
 template< class Iface >
-//ICachedParameterPtr             BasePlugin< Iface >::GetCachedParameter          ( const std::string & name ) const
-ICachedParameter*             BasePlugin< Iface >::GetCachedParameter          ( const std::string & name ) const
+ICachedParameterPtr             BasePlugin< Iface >::GetCachedParameter          ( const std::string & name ) const
 {
     IParameterPtr param = GetParameter( name );
     IParameter* hParam = param.get();
@@ -157,8 +157,8 @@ ICachedParameter*             BasePlugin< Iface >::GetCachedParameter          (
     //ICachedParameter *hCParam = static_cast< ICachedParameter* >( hParam );
     ParamBool* hParamBool = static_cast< ParamBool* >( hParam );
     ICachedParameter* hCParam = static_cast< ICachedParameter* >( hParamBool );
-    //return ICachedParameterPtr( hCParam );
-    return hCParam;
+    auto ret = std::shared_ptr< ICachedParameter >( hCParam, NullDeleter() );
+    return ret;
 }
 
 // *******************************
