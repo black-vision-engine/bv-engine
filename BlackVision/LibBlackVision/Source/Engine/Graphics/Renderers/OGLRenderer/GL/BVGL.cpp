@@ -347,7 +347,7 @@ void         BVGL::bvglTexParameteri            ( GLenum target, GLenum pname, G
 //
 void            BVGL::bvglTexParameterfv        ( GLenum target, GLenum pname, const GLfloat * params )
 {
-    ::glTexParameterfv( target, name, params );
+    ::glTexParameterfv( target, pname, params );
 }
 
 // *****************************
