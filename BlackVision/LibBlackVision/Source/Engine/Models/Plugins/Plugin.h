@@ -39,6 +39,7 @@ public:
     virtual IPluginParamValModelPtr             GetPluginParamValModel      () const override;
     virtual IParameterPtr                       GetParameter                ( const std::string & name ) const override;
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const override;
+    virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const override;
 
     virtual void                                Update                      ( TimeType t );
 
@@ -140,6 +141,18 @@ IParameterPtr               BasePlugin< Iface >::GetParameter           ( const 
     }
 
     return nullptr;
+}
+
+
+// *******************************
+//
+template< class Iface >
+ICachedParameterPtr             BasePlugin< Iface >::GetCachedParameter          ( const std::string & name ) const
+{
+    IParameterPtr param = GetParameter( name );
+    IParameter* hParam = param.get();
+    ICachedParameter *hCParam = reinterpret_cast< ICachedParameter* >( hParam );
+    return ICachedParameterPtr( hCParam );
 }
 
 // *******************************

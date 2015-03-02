@@ -7,6 +7,7 @@
 
 #include "Engine/Interfaces/IValue.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
+#include "Engine/Models/Plugins/Interfaces/ICachedParameter.h"
 #include "Engine/Interfaces/IUpdatable.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 #include "Engine/Models/Plugins/Interfaces/IPluginParamValModel.h"
@@ -46,6 +47,7 @@ public:
     virtual IPluginParamValModelPtr             GetPluginParamValModel      () const = 0; //FIXME: czy tu nie powinno byc tez od razu const przy zwracanym wskazniku?
     virtual IParameterPtr                       GetParameter                ( const std::string & name ) const = 0;
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const = 0;
+    virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const = 0;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const = 0;
     virtual ITransformChannelConstPtr           GetTransformChannel         () const = 0;

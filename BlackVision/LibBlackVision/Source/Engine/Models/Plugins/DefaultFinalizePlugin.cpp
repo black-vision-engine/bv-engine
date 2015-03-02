@@ -65,6 +65,13 @@ IParameterPtr                       DefaultFinalizePlugin::GetParameter         
     { name; } // FIXME: suppress unuse warning
     return nullptr;
 }
+    
+// *******************************
+//
+ICachedParameterPtr                 DefaultFinalizePlugin::GetCachedParameter          ( const std::string & ) const
+{
+    return nullptr;
+}
 
 // *******************************
 //
