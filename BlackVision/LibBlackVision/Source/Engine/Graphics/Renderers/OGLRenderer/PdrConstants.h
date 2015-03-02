@@ -1,15 +1,8 @@
 #pragma once
 
-#include <gl/glew.h>
-#include <gl/wglew.h>
-#include <gl/gl.h>
+#include "Engine/Graphics/Renderers/OGLRenderer/GL/BVGL.h"
 
-#include "Engine/Graphics/Resources/DataBuffer.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
-
-#include "Engine/Graphics/Shaders/TextureSampler.h"
-#include "Engine/Graphics/State/RendererStateEnums.h"
-#include "Engine/Types/Enums.h"
 
 
 namespace bv {

@@ -1,13 +1,13 @@
-PdrGLSLProgram.cpp
+PdrGLSLProgram.cpp  - BVGL ready
     glCreateProgram()
     glCreateShader()
     glDeleteProgram()
   
-PdrPBOMemTransfer.cpp
+PdrPBOMemTransfer.cpp - BVGL ready
     glGenBuffers()
     glDeleteBuffers()
     
-PdrRenderTarget.cpp
+PdrRenderTarget.cpp - BVGL ready
     glGenFramebuffers()
     glDeleteFramebuffers()
     glGenRenderbuffers()

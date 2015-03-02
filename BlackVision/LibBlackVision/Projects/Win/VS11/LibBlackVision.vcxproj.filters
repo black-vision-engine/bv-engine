@@ -1708,6 +1708,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\TextAtlas.h">
       <Filter>Engine\Models\Resources\Font</Filter>
+	</ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGLDefs.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer\GL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
