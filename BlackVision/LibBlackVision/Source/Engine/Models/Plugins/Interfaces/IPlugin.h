@@ -47,7 +47,8 @@ public:
     virtual IPluginParamValModelPtr             GetPluginParamValModel      () const = 0; //FIXME: czy tu nie powinno byc tez od razu const przy zwracanym wskazniku?
     virtual IParameterPtr                       GetParameter                ( const std::string & name ) const = 0;
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const = 0;
-    virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const = 0;
+    //virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const = 0;
+    virtual ICachedParameter*                 GetCachedParameter          ( const std::string & name ) const = 0; // FIXME so very much!!!
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const = 0;
     virtual ITransformChannelConstPtr           GetTransformChannel         () const = 0;

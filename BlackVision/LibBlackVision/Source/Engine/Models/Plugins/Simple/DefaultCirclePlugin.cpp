@@ -145,11 +145,11 @@ IGeometryGenerator*           DefaultCirclePlugin::GetGenerator()
 bool DefaultCirclePlugin::NeedsTopologyUpdate()
 {
     return
-        GetCachedParameter( PN_TESSELATION )->Changed() ||
+        GetCachedParameter( PN_TESSELATION )->Changed();/* ||
         GetCachedParameter( PN_INNER_RADIUS )->Changed() ||
         GetCachedParameter( PN_OPEN_ANGLE )->Changed() ||
         GetCachedParameter( PN_OUTER_RADIUS )->Changed() ||
-        GetCachedParameter( PN_OPEN_ANGLE_MODE )->Changed();
+        GetCachedParameter( PN_OPEN_ANGLE_MODE )->Changed();*/
 }
 
 int DefaultCirclePlugin::GetTesselation()

@@ -37,7 +37,8 @@ public:
     virtual IPluginParamValModelPtr             GetPluginParamValModel      () const override;
     virtual IParameterPtr                       GetParameter                ( const std::string & name ) const override;
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const override;
-    virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const override;
+    //virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const override;
+    virtual ICachedParameter*                 GetCachedParameter          ( const std::string & name ) const override;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
