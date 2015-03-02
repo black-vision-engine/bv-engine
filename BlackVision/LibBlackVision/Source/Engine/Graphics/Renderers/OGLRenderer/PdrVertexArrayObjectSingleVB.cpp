@@ -30,7 +30,7 @@ PdrVertexArrayObjectSingleVB::PdrVertexArrayObjectSingleVB    ( Renderer * rende
 //
 PdrVertexArrayObjectSingleVB::~PdrVertexArrayObjectSingleVB   ()
 {
-    glDeleteVertexArrays( 1, &m_vaoHandle );
+    BVGL::bvglDeleteVertexArrays( 1, &m_vaoHandle );
 }
 
 // *******************************
@@ -46,7 +46,7 @@ void    PdrVertexArrayObjectSingleVB::Enable                  ( Renderer * rende
         //FIXME: Odpalany czesto powoduje przy F5 problemy ze zwiechami co 4096 ramek na moim kompie - Vig
         renderer->Recreate( m_vao->GetVertexBuffer() );
 
-        glDeleteVertexArrays( 1, &m_vaoHandle );
+        BVGL::bvglDeleteVertexArrays( 1, &m_vaoHandle );
         Create( renderer, m_vao );
     }
 
@@ -65,14 +65,14 @@ void    PdrVertexArrayObjectSingleVB::Disable                 ( Renderer * rende
 void    PdrVertexArrayObjectSingleVB::Bind                    ( Renderer * renderer )
 {
     renderer->Enable( m_vao->GetVertexBuffer() );
-    glBindVertexArray( m_vaoHandle );
+    BVGL::bvglBindVertexArray( m_vaoHandle );
 }
 
 // *******************************
 //
 void    PdrVertexArrayObjectSingleVB::Unbind                  ( Renderer * renderer )
 {
-    glBindVertexArray( 0 );
+    BVGL::bvglBindVertexArray( 0 );
     renderer->Disable( m_vao->GetVertexBuffer() );
 }
 
@@ -80,7 +80,7 @@ void    PdrVertexArrayObjectSingleVB::Unbind                  ( Renderer * rende
 //
 void    PdrVertexArrayObjectSingleVB::EnableVertexAttribArray ( GLuint index )
 {
-    glEnableVertexAttribArray( index );
+    BVGL::bvglEnableVertexAttribArray( index );
 }
 
 // *******************************
@@ -94,7 +94,7 @@ void    PdrVertexArrayObjectSingleVB::Create                  ( Renderer * rende
     //glBindBuffer              (GL_ARRAY_BUFFER, handle[0]);
     //glVertexAttribPointer     ( (GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, ((GLubyte *)NULL + (0)) );
 
-    glGenVertexArrays( 1, &m_vaoHandle );
+    BVGL::bvglGenVertexArrays( 1, &m_vaoHandle );
 
     // GLuint index = 0;
 
@@ -119,7 +119,7 @@ void    PdrVertexArrayObjectSingleVB::Create                  ( Renderer * rende
         GLubyte * ptrOffset         = (GLubyte*)(locOffset);
 
         //FIXME: not general enough: component type and normalized to be implemented
-        glVertexAttribPointer( (GLuint) channel, numComponents, GL_FLOAT, GL_FALSE, stride, ptrOffset );
+        BVGL::bvglVertexAttribPointer( (GLuint) channel, numComponents, GL_FLOAT, GL_FALSE, stride, ptrOffset );
 
         locOffset += desc->ComponentSize( index ) * numComponents;
     }

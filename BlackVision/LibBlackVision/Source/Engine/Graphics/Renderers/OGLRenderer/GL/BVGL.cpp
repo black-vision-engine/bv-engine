@@ -16,6 +16,27 @@ void        BVGL::bvglViewport                  ( GLint x, GLint y, GLsizei widt
 
 // *****************************
 //
+void        BVGL::bvglClearColor                ( GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha )
+{
+    ::glClearColor( red, green, blue, alpha );
+}
+
+// *****************************
+//
+void        BVGL::bvglClearDepth                ( GLclampd depth )
+{
+    ::glClearDepth( depth );
+}
+
+// *****************************
+//
+void        BVGL::bvglClear                     ( GLbitfield mask )
+{
+    ::glClear( mask );
+}
+
+// *****************************
+//
 void        BVGL::bvglDepthRange                ( GLclampd zNear, GLclampd zFar )
 {
     ::glDepthRange( zNear, zFar );
@@ -324,6 +345,13 @@ void         BVGL::bvglTexParameteri            ( GLenum target, GLenum pname, G
 
 // *****************************
 //
+void            BVGL::bvglTexParameterfv        ( GLenum target, GLenum pname, const GLfloat * params )
+{
+    ::glTexParameterfv( target, name, params );
+}
+
+// *****************************
+//
 void         BVGL::bvglReadBuffer               ( GLenum mode )
 {
     ::glReadBuffer( mode );
@@ -408,9 +436,149 @@ void         BVGL::bvglDrawBuffers              ( GLsizei n, const GLenum * bufs
 
 // *****************************
 //
-GLenum      BVGL::bvglCheckFramebufferStatus   ( GLenum target )
+void        BVGL::bvglDrawArrays                ( GLenum mode, GLint first, GLsizei count )
+{
+    ::glDrawArrays( mode, first, count );
+}
+
+// *****************************
+//
+GLenum      BVGL::bvglCheckFramebufferStatus    ( GLenum target )
 {
     return ::glCheckFramebufferStatus( target );
+}
+
+// *****************************
+//
+void        BVGL::bvglEnable                    ( GLenum cap )
+{
+    ::glEnable( cap );
+}
+
+// *****************************
+//
+void        BVGL::bvglDisable                   ( GLenum cap )
+{
+    ::glDisable( cap );
+}
+
+// *****************************
+//
+void        BVGL::bvglDepthFunc                 ( GLenum func )
+{
+    ::glDepthFunc( func );
+}
+
+// *****************************
+//
+void        BVGL::bvglDepthMask                 ( GLboolean flag )
+{
+    ::glDepthMask( flag );
+}
+
+// *****************************
+//
+void        BVGL::bvglBlendFunc                 ( GLenum sfactor, GLenum dfactor )
+{
+    ::glBlendFunc( sfactor, dfactor );
+}
+
+// *****************************
+//
+void        BVGL::bvglBlendColor                ( GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha )
+{
+    ::glBlendColor( red, green, blue, alpha );
+}
+
+// *****************************
+//
+void        BVGL::bvglFrontFace                 ( GLenum mode )
+{
+    ::glFrontFace( mode );
+}
+
+// *****************************
+//
+void        BVGL::bvglCullFace                  ( GLenum mode )
+{
+    ::glCullFace( mode );
+}
+
+// *****************************
+//
+void        BVGL::bvglPolygonMode               ( GLenum face, GLenum mode )
+{
+    ::glPolygonMode( face, mode );
+}
+
+// *****************************
+//
+void        BVGL::bvglPolygonOffset             ( GLfloat factor, GLfloat units )
+{
+    ::glPolygonOffset( factor, units );
+}
+
+// *****************************
+//
+GLenum      BVGL::bvglGetError                  ()
+{
+    return ::glGetError();
+}
+
+// *****************************
+//
+const GLubyte * BVGL::bvglGetString             ( GLenum name )
+{
+    return ::glGetString( name );
+}
+
+// *****************************
+//
+const GLubyte * BVGL::bvglGetStringi            ( GLenum name, GLuint index )
+{
+    return ::glGetStringi( name, index );
+}
+
+// *****************************
+//
+void            BVGL::bvglGenVertexArrays           ( GLsizei n, GLuint * arrays )
+{
+    ::glGenVertexArrays( n, arrays );
+}
+
+// *****************************
+//
+void            BVGL::bvglDeleteVertexArrays        ( GLsizei n, const GLuint * arrays )
+{
+    ::glDeleteVertexArrays( n, arrays );
+}
+
+// *****************************
+//
+void            BVGL::bvglEnableVertexAttribArray   ( GLuint index )
+{
+    ::glEnableVertexAttribArray( index );
+}
+
+// *****************************
+//
+void            BVGL::bvglDisableVertexAttribArray  ( GLuint index )
+{
+    ::glDisableVertexAttribArray( index );
+}
+
+// *****************************
+//
+void            BVGL::bvglBindVertexArray           ( GLuint array )
+{
+    ::glBindVertexArray( array );
+}
+
+// *****************************
+//
+void            BVGL::bvglVertexAttribPointer       ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
+{
+    ::glVertexAttribPointer( index, size, type, normalized, stride, pointer );
 }
 
 } //bv

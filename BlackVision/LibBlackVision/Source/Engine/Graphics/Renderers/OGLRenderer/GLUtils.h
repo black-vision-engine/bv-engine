@@ -1,6 +1,8 @@
 #pragma once
 
 
+namespace bv {
+
 class GLUtils
 {
 public:
@@ -12,3 +14,5 @@ public:
     static void DumpGLInfoCaps      ();
 
 };
+
+} // bv

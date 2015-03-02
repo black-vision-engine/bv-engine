@@ -1,7 +1,5 @@
 #include "PdrShader.h"
 
-#include <gl/glew.h>
-
 #include "Engine/Graphics/Renderers/Renderer.h"
 
 #include "Engine/Graphics/Shaders/PixelShader.h"
@@ -207,13 +205,13 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
             GLint min_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
             GLint mag_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
 
-            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s );
-            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t );
+            BVGL::bvglTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s );
+            BVGL::bvglTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t );
 
-            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter );
-            glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter );
+            BVGL::bvglTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter );
+            BVGL::bvglTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter );
 
-            glTexParameterfv( GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, &sampler->GetBorderColor()[ 0 ] );
+            BVGL::bvglTexParameterfv( GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, &sampler->GetBorderColor()[ 0 ] );
 
             //glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy ); //FIXME: when anisotropy is implemented in texture sampler
             //glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, lodBias);          //FIXME: when lodbias is implemented in texture sampler

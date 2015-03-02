@@ -2,9 +2,7 @@
 
 #include <vector>
 
-#include <gl/glew.h>
-#include <gl/wglew.h>
-#include <gl/gl.h>
+#include "GL/BVGL.h"
 
 
 namespace bv {

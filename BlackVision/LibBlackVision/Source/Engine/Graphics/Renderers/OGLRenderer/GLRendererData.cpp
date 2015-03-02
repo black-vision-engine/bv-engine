@@ -2,10 +2,6 @@
 
 #include <cassert>
 
-#include <gl/glew.h>
-#include <gl/GL.h>
-#include <gl/GLU.h>
-
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 
 
@@ -17,11 +13,11 @@ void EnableDisable( bool bEnabled, GLuint state )
 {
     if ( bEnabled )
     {
-        glEnable( state ); 
+        BVGL::bvglEnable( state ); 
     }
     else
     {
-        glDisable( state );
+        BVGL::bvglDisable( state );
     }
 }
 
@@ -73,9 +69,9 @@ void    RendererData::RenderState::InitializeAlphaState     ( const AlphaState *
     const glm::vec4 & blendColor = as->blendColor;
 
     EnableDisable( as->blendEnabled, GL_BLEND );
-    glBlendFunc( srcBlend, dstBlend );
+    BVGL::bvglBlendFunc( srcBlend, dstBlend );
     
-    glBlendColor( blendColor[ 0 ], blendColor[ 1 ], blendColor[ 2 ], blendColor[ 3 ] );
+    BVGL::bvglBlendColor( blendColor[ 0 ], blendColor[ 1 ], blendColor[ 2 ], blendColor[ 3 ] );
 }
 
 // *********************************
@@ -85,8 +81,8 @@ void    RendererData::RenderState::InitializeCullState      ( const CullState * 
     assert( cs );
 
     EnableDisable( cs->enabled, GL_CULL_FACE );
-    glFrontFace( GL_CCW );
-    glCullFace( cs->isCCWOrdered ? GL_BACK : GL_FRONT );
+    BVGL::bvglFrontFace( GL_CCW );
+    BVGL::bvglCullFace( cs->isCCWOrdered ? GL_BACK : GL_FRONT );
 }
 
 // *********************************
@@ -98,8 +94,8 @@ void    RendererData::RenderState::InitializeDepthState     ( const DepthState *
     GLuint cmpFunc = ConstantsMapper::GLConstant( ds->compareMode );
 
     EnableDisable( ds->enabled, GL_DEPTH_TEST );
-    glDepthMask( ds->writable ? GL_TRUE : GL_FALSE );
-    glDepthFunc( cmpFunc );
+    BVGL::bvglDepthMask( ds->writable ? GL_TRUE : GL_FALSE );
+    BVGL::bvglDepthFunc( cmpFunc );
 }
 
 // *********************************
@@ -110,7 +106,7 @@ void    RendererData::RenderState::InitializeFillState      ( const FillState * 
 
     GLuint mode = ConstantsMapper::GLConstant( fs->fillMode );
 
-    glPolygonMode( GL_FRONT_AND_BACK, mode );
+    BVGL::bvglPolygonMode( GL_FRONT_AND_BACK, mode );
 }
 
 // *********************************
@@ -123,7 +119,7 @@ void    RendererData::RenderState::InitializeOffsetState    ( const OffsetState 
     EnableDisable( os->linesEnabled, GL_POLYGON_OFFSET_LINE );
     EnableDisable( os->pointsEnabled, GL_POLYGON_OFFSET_POINT );
     
-    glPolygonOffset( os->scale, os->bias );
+    BVGL::bvglPolygonOffset( os->scale, os->bias );
 }
 
 // *********************************

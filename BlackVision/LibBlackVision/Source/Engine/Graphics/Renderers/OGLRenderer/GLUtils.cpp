@@ -2,8 +2,10 @@
 
 #include <cstdio>
 
-#include <gl\glew.h>
+#include "GL/BVGL.h"
 
+
+namespace bv {
 
 // ******************************
 //
@@ -21,7 +23,7 @@ int GLUtils::CheckForOpenGLError( const char * file, int line )
     GLenum glErr;
     int    retCode = 0;
 
-    glErr = glGetError();
+    glErr = BVGL::bvglGetError();
     while ( glErr != GL_NO_ERROR )
     {
 		const char * message = "";
@@ -48,7 +50,7 @@ int GLUtils::CheckForOpenGLError( const char * file, int line )
 
         printf("glError in file %s @ line %d: %s\n", file, line, message);
         retCode = 1;
-        glErr = glGetError();
+        glErr = BVGL::bvglGetError();
     }
     return retCode;
 
@@ -59,14 +61,14 @@ int GLUtils::CheckForOpenGLError( const char * file, int line )
 void GLUtils::DumpGLInfo( bool dumpExtensions ) 
 {
 
-    const GLubyte * renderer    = glGetString( GL_RENDERER );
-    const GLubyte * vendor      = glGetString( GL_VENDOR );
-    const GLubyte * version     = glGetString( GL_VERSION );
-    const GLubyte * glslVersion = glGetString( GL_SHADING_LANGUAGE_VERSION );
+    const GLubyte * renderer    = BVGL::bvglGetString( GL_RENDERER );
+    const GLubyte * vendor      = BVGL::bvglGetString( GL_VENDOR );
+    const GLubyte * version     = BVGL::bvglGetString( GL_VERSION );
+    const GLubyte * glslVersion = BVGL::bvglGetString( GL_SHADING_LANGUAGE_VERSION );
 
     GLint major, minor;
-    glGetIntegerv( GL_MAJOR_VERSION, &major );
-    glGetIntegerv( GL_MINOR_VERSION, &minor );
+    BVGL::bvglGetIntegerv( GL_MAJOR_VERSION, &major );
+    BVGL::bvglGetIntegerv( GL_MINOR_VERSION, &minor );
 
     printf( "GL Vendor    : %s\n", vendor );
     printf( "GL Renderer  : %s\n", renderer );
@@ -78,11 +80,11 @@ void GLUtils::DumpGLInfo( bool dumpExtensions )
     {
         GLint nExtensions;
 
-        glGetIntegerv( GL_NUM_EXTENSIONS, &nExtensions );
+        BVGL::bvglGetIntegerv( GL_NUM_EXTENSIONS, &nExtensions );
 
         for( int i = 0; i < nExtensions; i++ )
         {
-            printf( "%s\n", glGetStringi( GL_EXTENSIONS, i ) );
+            printf( "%s\n", BVGL::bvglGetStringi( GL_EXTENSIONS, i ) );
         }
     }
 }
@@ -93,17 +95,17 @@ void GLUtils::DumpGLInfoCaps      ()
 {
     GLint r0, r1, r2, r3, r4, r5, r6, r7, r8, r9;
 
-    glGetIntegerv( GL_MAX_VERTEX_ATTRIBS,  &r0 );
-    glGetIntegerv( GL_MAX_TEXTURE_UNITS,   &r1 );
-    glGetIntegerv( GL_MAX_TEXTURE_SIZE,    &r2 );
-    glGetIntegerv( GL_MAX_3D_TEXTURE_SIZE, &r3 );
-    glGetIntegerv( GL_MAX_DRAW_BUFFERS,    &r4 );
-    glGetIntegerv( GL_MAX_VARYING_FLOATS,  &r5 );
+    BVGL::bvglGetIntegerv( GL_MAX_VERTEX_ATTRIBS,  &r0 );
+    BVGL::bvglGetIntegerv( GL_MAX_TEXTURE_UNITS,   &r1 );
+    BVGL::bvglGetIntegerv( GL_MAX_TEXTURE_SIZE,    &r2 );
+    BVGL::bvglGetIntegerv( GL_MAX_3D_TEXTURE_SIZE, &r3 );
+    BVGL::bvglGetIntegerv( GL_MAX_DRAW_BUFFERS,    &r4 );
+    BVGL::bvglGetIntegerv( GL_MAX_VARYING_FLOATS,  &r5 );
 
-    glGetIntegerv( GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &r6 );
-    glGetIntegerv( GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS, &r7 );
-    glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS, &r8 );
-    glGetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &r9 );
+    BVGL::bvglGetIntegerv( GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &r6 );
+    BVGL::bvglGetIntegerv( GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS, &r7 );
+    BVGL::bvglGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS, &r8 );
+    BVGL::bvglGetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &r9 );
 
     printf( "Max vertex attribs:       %d\n", r0 );
     printf( "Max texture units fixed:  %d\n", r1 );
@@ -120,3 +122,5 @@ void GLUtils::DumpGLInfoCaps      ()
     printf( "Max combined texture image units:  %d\n", r9 );
 
 }
+
+} //bv

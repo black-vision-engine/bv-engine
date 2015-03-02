@@ -23,7 +23,7 @@ PdrVertexBuffer::PdrVertexBuffer     ( Renderer * renderer, const VertexBuffer *
 //
 PdrVertexBuffer::~PdrVertexBuffer    ()
 {
-    glDeleteBuffers( 1, &m_bufferHandle );
+    BVGL::bvglDeleteBuffers( 1, &m_bufferHandle );
 }
 
 // *******************************
@@ -48,7 +48,7 @@ void * PdrVertexBuffer::Lock         ( MemoryLockingType mlt )
 {
     Bind();
 
-    GLvoid * vidMem = glMapBuffer( GL_ARRAY_BUFFER, ConstantsMapper::GLConstant( mlt ) );
+    GLvoid * vidMem = BVGL::bvglMapBuffer( GL_ARRAY_BUFFER, ConstantsMapper::GLConstant( mlt ) );
     
     Unbind();
 
@@ -61,7 +61,7 @@ void PdrVertexBuffer::Unlock         ()
 {
     Bind();
 
-    glUnmapBuffer( GL_ARRAY_BUFFER );
+    BVGL::bvglUnmapBuffer( GL_ARRAY_BUFFER );
 
     Unbind();
 }
@@ -79,7 +79,7 @@ void    PdrVertexBuffer::Update              ( const VertexBuffer * vb )
 //FIXME: it is much better to simply create larger PdrBuffer and use part of it than recreate it all the time (to be implemented - it is not that difficult)
 void    PdrVertexBuffer::Recreate            ( const VertexBuffer * vb )
 {
-    glDeleteBuffers( 1, &m_bufferHandle );
+    BVGL::bvglDeleteBuffers( 1, &m_bufferHandle );
     CreateBuffer( vb );
 }
 
@@ -87,14 +87,14 @@ void    PdrVertexBuffer::Recreate            ( const VertexBuffer * vb )
 //
 void    PdrVertexBuffer::Bind                ()
 {
-    glBindBuffer( GL_ARRAY_BUFFER, m_bufferHandle );
+    BVGL::bvglBindBuffer( GL_ARRAY_BUFFER, m_bufferHandle );
 }
 
 // *******************************
 //
 void    PdrVertexBuffer::Unbind              ()
 {
-    glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    BVGL::bvglBindBuffer( GL_ARRAY_BUFFER, 0 );
 }
 
 // *******************************
@@ -104,7 +104,7 @@ void    PdrVertexBuffer::BufferData          ( const VertexBuffer * vb ) const
     //FIXME: tutaj w trybie DEBUG (odpalanie przez F5) jest zwiecha co 4096 ramkê, jeœli ta pamiêæ jest co ramkê reuploadowana - czyli co ramkê bufor jest od zera zapisywany na nowo (to jest drastyczny przypadek, ale 
     //testowo takie rzeczy warto sprawdzaæ). Semantic jest ustawione na DYNAMIC_DRAW wiec lepiej sie nie da od tej strony. Problem nie wystepuje, jesli appka jest odpalona przez Ctrl+F5 (czyli Run) i nie jest podpieta
     //do debuggera
-    glBufferData( GL_ARRAY_BUFFER, vb->Size(), 0, ConstantsMapper::GLConstant( vb->GetSemantic() ) );
+    BVGL::bvglBufferData( GL_ARRAY_BUFFER, vb->Size(), 0, ConstantsMapper::GLConstant( vb->GetSemantic() ) );
 
     //GTimer.StartRe();
     //glBufferData( GL_ARRAY_BUFFER, vb->Size(), 0, ConstantsMapper::GLConstant( vb->GetSemantic() ) );
@@ -116,7 +116,7 @@ void    PdrVertexBuffer::BufferData          ( const VertexBuffer * vb ) const
 void    PdrVertexBuffer::CreateBuffer        ( const VertexBuffer * vb )
 {
     //FIXME: Odpalany czesto powoduje przy F5 problemy ze zwiechami co 4096 ramek
-    glGenBuffers( 1, &m_bufferHandle );
+    BVGL::bvglGenBuffers( 1, &m_bufferHandle );
 
     Bind();
     BufferData( vb );

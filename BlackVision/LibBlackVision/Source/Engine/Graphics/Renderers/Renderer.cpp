@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include <gl/glew.h>
+#include "OGLRenderer/GL/BVGL.h"
 
 #include "Engine/Graphics/Resources/Texture2D.h"
 #include "Engine/Graphics/Resources/RenderTarget.h"
@@ -101,11 +101,11 @@ void	Renderer::Terminate         ()
 void	Renderer::ClearBuffers		()
 {
     //FIXME: it should be set once only, when clear color is changed
-    glClearColor( m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a );
+    BVGL::bvglClearColor( m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a );
     //FIXME: implement
-    glClearDepth((GLclampd)m_ClearDepth);
+    BVGL::bvglClearDepth((GLclampd)m_ClearDepth);
     //glClearStencil((GLint)mClearStencil);
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    BVGL::bvglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
 // *********************************
@@ -119,7 +119,7 @@ void	Renderer::SetClearColor		( const glm::vec4 & col )
 //
 void	Renderer::Resize	        ( unsigned int w, unsigned int h )
 {
-    glViewport( 0 , 0, w, h );
+    BVGL::bvglViewport( 0 , 0, w, h );
 
     m_Camera->SetViewportSize( w, h );
 
@@ -169,7 +169,7 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
     for( unsigned int i = 0; i < vao->GetNumConnectedComponents(); ++i )
     {
         unsigned int numVertices = vao->GetNumVertices( i );
-        glDrawArrays( mode, firstVertex, numVertices );
+        BVGL::bvglDrawArrays( mode, firstVertex, numVertices );
         firstVertex += numVertices;
     }
 
@@ -562,7 +562,7 @@ void  Renderer::NaiveReadback       ( char * buf, int w, int h )
     assert( buf );
 
     //FIXME: use renderer machinery and RT machinery to read back texture data
-    glReadPixels( 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, buf );
+    BVGL::bvglReadPixels( 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, buf );
 }
 
 } //bv

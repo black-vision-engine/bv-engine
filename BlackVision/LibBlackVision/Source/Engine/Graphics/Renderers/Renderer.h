@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Mathematics/glm_inc.h"
 #include <hash_map>
+
+#include "Mathematics/glm_inc.h"
 
 #include "Engine/Graphics/Resources/Texture2D.h"
 
@@ -9,6 +10,7 @@
 #include "Engine/Graphics/Renderers/OGLRenderer/GLRendererData.h"
 
 #include "Engine/Graphics/State/RendererStateInstance.h"
+
 
 namespace bv {
 

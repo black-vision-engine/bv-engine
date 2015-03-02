@@ -69,6 +69,7 @@ bool	InitializeGLContext( RendererInput & ri, WGLRendererData * data )
 //
 bool	InitializeGL	()
 {
+    //
     glewInit();
 
     if ( !GLEW_ARB_vertex_program || !glewGetExtension( "GL_ARB_fragment_program" ) ) 
