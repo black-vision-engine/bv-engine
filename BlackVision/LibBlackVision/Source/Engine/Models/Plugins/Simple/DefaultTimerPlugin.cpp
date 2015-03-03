@@ -236,7 +236,6 @@ TimeValue::TimeValue( double time, int accuracy )
 //
 DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
-    , m_fontResource()
     , m_paramValModel( model )
     , m_textAtlas()
     , m_timePatern( )
@@ -335,7 +334,7 @@ bool            DefaultTimerPlugin::LoadResource  ( IPluginResourceDescrConstPtr
 
         auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
 
-        m_textAtlas = TextHelper::GetAtlas( fontResource.get() );
+        m_textAtlas = TextHelper::GetAtlas( fontResource );
 
         InitBigestGlyph();
 

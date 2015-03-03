@@ -44,14 +44,14 @@ TextureType          TextureBase::GetType       () const
 
 // *********************************
 //
-unsigned int        TextureBase::GetPixelSize   () const
+SizeType			TextureBase::GetPixelSize   () const
 {
     return GetPixelSize( GetFormat() );
 }
 
 // *********************************
 //
-unsigned int        TextureBase::GetPixelSize   ( TextureFormat format )
+SizeType			TextureBase::GetPixelSize   ( TextureFormat format )
 {
     return m_sPixelSize[ static_cast< int >( format ) ];
 }

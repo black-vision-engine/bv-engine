@@ -840,6 +840,15 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGL.cpp">
       <Filter>Engine\Graphics\Renderers\OGLRenderer\GL</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\FontResource.cpp">
+      <Filter>Engine\Models\Resources\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\FontResourceDescriptor.cpp">
+      <Filter>Engine\Models\Resources\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\TextAtlas.cpp">
+      <Filter>Engine\Models\Resources\Font</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Core\MemoryChunk.h">
@@ -1691,6 +1700,15 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGL.h">
       <Filter>Engine\Graphics\Renderers\OGLRenderer\GL</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\FontResource.h">
+      <Filter>Engine\Models\Resources\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\FontResourceDescriptor.h">
+      <Filter>Engine\Models\Resources\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\TextAtlas.h">
+      <Filter>Engine\Models\Resources\Font</Filter>
+	</ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGLDefs.h">
       <Filter>Engine\Graphics\Renderers\OGLRenderer\GL</Filter>
     </ClInclude>

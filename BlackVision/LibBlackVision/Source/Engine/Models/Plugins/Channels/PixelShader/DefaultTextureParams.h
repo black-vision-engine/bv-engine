@@ -10,8 +10,8 @@ class DefaultTextureParams : public ITextureParams
 private:
 
     std::string             m_name;
-    unsigned int            m_width;
-    unsigned int            m_height;
+    SizeType				m_width;
+    SizeType				m_height;
     TextureFormat           m_format;
     TextureWrappingMode     m_wrappingModeY;
     TextureWrappingMode     m_wrappingModeX;
@@ -25,8 +25,8 @@ public:
             ~DefaultTextureParams();
 
     virtual const std::string       GetName         () const override;
-    virtual unsigned int            GetWidth        () const override;
-    virtual unsigned int            GetHeight       () const override;
+    virtual SizeType				GetWidth        () const override;
+    virtual SizeType				GetHeight       () const override;
     virtual TextureFormat           GetFormat       () const override;
     virtual TextureWrappingMode     GetWrappingModeX() const override;
     virtual TextureWrappingMode     GetWrappingModeY() const override;
@@ -34,8 +34,8 @@ public:
     virtual glm::vec4               BorderColor     () const override;
 
     void                            SetName         ( const std::string & name );
-    void                            SetWidth        ( unsigned int w );
-    void                            SetHeight       ( unsigned int h );
+    void                            SetWidth        ( SizeType w );
+    void                            SetHeight       ( SizeType h );
     void                            SetFormat       ( TextureFormat fmt );
     void                            SetWrappingModeX( TextureWrappingMode wm );
     void                            SetWrappingModeY( TextureWrappingMode wm );

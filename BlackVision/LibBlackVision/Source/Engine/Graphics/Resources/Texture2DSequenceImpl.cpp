@@ -7,7 +7,7 @@ namespace bv {
 
 // *********************************
 //  
-Texture2DSequenceImpl::Texture2DSequenceImpl                        ( TextureFormat format, unsigned int width, unsigned int height )
+Texture2DSequenceImpl::Texture2DSequenceImpl                        ( TextureFormat format, SizeType width, SizeType height )
     : Texture2D( format, width, height, DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE ) //FIXME: are there any chances that other semantics can be used for animations??
     , m_activeTexture( 0 )
 {
@@ -23,7 +23,7 @@ Texture2DSequenceImpl::~Texture2DSequenceImpl                   ()
 
 // *********************************
 //  
-bool                Texture2DSequenceImpl::AddTextureSettingRawData ( MemoryChunkConstPtr data, TextureFormat format, unsigned int width, unsigned int height )
+bool                Texture2DSequenceImpl::AddTextureSettingRawData ( MemoryChunkConstPtr data, TextureFormat format, SizeType width, SizeType height )
 {
     if( format != GetFormat() || width != GetWidth() || height != GetHeight() )
     {
@@ -46,7 +46,7 @@ SizeType            Texture2DSequenceImpl::NumTextures             () const
 
 // *********************************
 //  
-void                  Texture2DSequenceImpl::SetActiveTexture       ( unsigned int txNum )
+void			Texture2DSequenceImpl::SetActiveTexture       ( SizeType txNum )
 {
     assert( txNum < NumTextures() );
 
@@ -58,7 +58,7 @@ void                  Texture2DSequenceImpl::SetActiveTexture       ( unsigned i
 
 // *********************************
 //  
-unsigned int    Texture2DSequenceImpl::GetActiveTextureNum          () const
+SizeType		Texture2DSequenceImpl::GetActiveTextureNum          () const
 {
     return m_activeTexture;
 }

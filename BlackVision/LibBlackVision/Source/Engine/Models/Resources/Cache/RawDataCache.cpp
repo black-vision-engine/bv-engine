@@ -32,9 +32,9 @@ void 					RawDataCache::Update	( const Hash & key, MemoryChunkConstPtr data )
 
 // ******************************
 //
-RawDataCache *			RawDataCache::GetInstance()
+RawDataCache &			RawDataCache::GetInstance()
 {
-	static RawDataCache * instance = new RawDataCache();
+	static RawDataCache instance = RawDataCache();
 	return instance;
 }
 
@@ -47,6 +47,13 @@ MemoryChunkConstPtr		RawDataCache::Find( const Hash & key ) const
 		return it->second;
 	else
 		return nullptr;
+}
+
+// ******************************
+//
+bool					RawDataCache::Exists( const Hash & key )
+{
+	return m_data.find( key ) != m_data.end();
 }
 
 // ******************************

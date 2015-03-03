@@ -283,7 +283,8 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( IPluginResou
         assert( txData->GetTextures().size() <= 2 );
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), DefaultAlphaMaskPluginDesc::TextureName() );
+		auto textureResDesc = TextureResourceDesc::Create( txResDescr->GetTextureFile() );
+        auto txDesc = DefaultTextureDescriptor::LoadTexture( textureResDesc, DefaultAlphaMaskPluginDesc::TextureName() );
 
         //Alpha texture defaults
         txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
@@ -779,14 +780,14 @@ void                                        DefaultAlphaMaskPlugin::UpdateState 
 
 // *************************************
 // 
-int                                         DefaultAlphaMaskPlugin::GetAlphaTextureWidth    () const
+SizeType									DefaultAlphaMaskPlugin::GetAlphaTextureWidth    () const
 {
     return m_textureWidth;
 }
 
 // *************************************
 //
-int                                         DefaultAlphaMaskPlugin::GetAlphaTextureHeight   () const
+SizeType                                     DefaultAlphaMaskPlugin::GetAlphaTextureHeight   () const
 {
     return m_textureHeight;
 }

@@ -55,7 +55,7 @@ private:
     unsigned int                    m_texCoordChannelIndex;
 
     std::wstring                    m_text;
-    const TextAtlas *				m_atlas;
+    TextAtlasConstPtr				m_atlas;
     bool                            m_textSet;
 	Float32							m_textLength;
 
@@ -72,7 +72,7 @@ private:
     void                                        SetText                     ( const std::wstring & newText );
 
 	void										LoadTexture					(	DefaultTexturesDataPtr,
-																				ResourceHandleConstPtr,
+																				TextureResourceConstPtr,
 																				const std::string &,
 																				TextureWrappingMode,
 																				TextureWrappingMode,

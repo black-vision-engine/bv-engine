@@ -31,7 +31,7 @@ private:
 
 public:
 
-            PdrPBOMemTransfer   ( DataBuffer::Semantic semantic, unsigned int dataSize );
+            PdrPBOMemTransfer   ( DataBuffer::Semantic semantic, SizeType dataSize );
             ~PdrPBOMemTransfer  ();
     
     void *  LockTexture         ( MemoryLockingType mlt, GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );

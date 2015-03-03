@@ -1,5 +1,6 @@
 #pragma once
 
+#include "TextAtlas.h"
 #include "System/BasicTypes.h"
 
 #include <string>
@@ -16,7 +17,7 @@ class TextAtlas;
 class FontAtlasCacheEntry
 {
 public:
-    const TextAtlas *           m_textAtlas;
+    TextAtlasConstPtr           m_textAtlas;
     std::string                 m_fontName;
     SizeType					m_fontSize;
     SizeType					m_blurSize;
@@ -27,7 +28,7 @@ public:
     bool                        m_italic;
 
     FontAtlasCacheEntry ();
-    FontAtlasCacheEntry ( const TextAtlas* textAtlas
+    FontAtlasCacheEntry ( const TextAtlasConstPtr & textAtlas
                         , const std::string & fontName
                         , SizeType fontSize
                         , SizeType blurSize
@@ -59,6 +60,7 @@ public:
     void                                Update              ();
     void                                Clear               ();
 
+	static std::string					GenerateTextAtlasCacheFileName( const TextAtlasConstPtr & textAtlas );
 
     static FontAtlasCache*              Load                ( const std::string& dbFilePath );
 };

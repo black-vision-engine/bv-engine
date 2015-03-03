@@ -1070,8 +1070,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( node->GetPlugin( "texture" ) );
     if( texturePlugin )
     {
-        int width   = texturePlugin->GetTextureWidth();
-        int height  = texturePlugin->GetTextureHeight();
+        auto width   = texturePlugin->GetTextureWidth();
+        auto height  = texturePlugin->GetTextureHeight();
 
         //float wf = float( width ) / float( height );
         //float scl = 1.f;
@@ -1178,8 +1178,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedTextNode( model::Timeline
     auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( node->GetPlugin( "texture" ) );
     if( texturePlugin )
     {
-        int width   = texturePlugin->GetTextureWidth();
-        int height  = texturePlugin->GetTextureHeight();
+        auto width   = texturePlugin->GetTextureWidth();
+        auto height  = texturePlugin->GetTextureHeight();
 
         //float wf = float( width ) / float( height );
         //float scl = 1.f;

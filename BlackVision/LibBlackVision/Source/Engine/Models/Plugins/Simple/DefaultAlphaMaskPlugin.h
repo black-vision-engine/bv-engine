@@ -49,15 +49,15 @@ private:
 
     DefaultTexturesDataPtr          m_texturesData;
 
-    unsigned int                    m_texCoordChannelIndex;
+    SizeType						m_texCoordChannelIndex;
 
     ParamFloatPtr                   m_paramWrapModeX;
     ParamFloatPtr                   m_paramWrapModeY;
     ParamFloatPtr                   m_paramFilteringMode;
     ParamFloatPtr                   m_paramAttachMode;
 
-    int                             m_textureWidth;
-    int                             m_textureHeight;
+    SizeType                        m_textureWidth;
+    SizeType                        m_textureHeight;
 
     TextureWrappingMode             m_lastTextureWrapModeX;
     TextureWrappingMode             m_lastTextureWrapModeY;
@@ -76,8 +76,8 @@ public:
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
-    int                                         GetAlphaTextureWidth        () const;
-    int                                         GetAlphaTextureHeight       () const;
+    SizeType                                    GetAlphaTextureWidth        () const;
+    SizeType                                    GetAlphaTextureHeight       () const;
 
     virtual void                                Update                      ( TimeType t ) override;
 
