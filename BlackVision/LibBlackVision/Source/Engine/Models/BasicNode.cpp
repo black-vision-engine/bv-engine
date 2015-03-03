@@ -349,9 +349,8 @@ bool            BasicNode::AddPlugin               ( const std::string & uid, IT
 
     if( !m_pluginsManager->CanBeAttachedTo( uid, prev ) )
     {
-        auto message = uid + " cannot be attached to " + prev->GetTypeUid();
-        printf( message.c_str() );
-		assert( false );
+        std::cout << uid << " cannot be attached to " << prev->GetTypeUid() << std::endl;
+		assert( false ); // FIXME(?)
     }
 
     m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, prev, timeEvaluator ) );
