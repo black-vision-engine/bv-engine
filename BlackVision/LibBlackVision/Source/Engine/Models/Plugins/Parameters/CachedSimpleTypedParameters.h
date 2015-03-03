@@ -11,11 +11,17 @@ class CachedSimpleTypedParameters :
     public SimpleParameterImpl< InterpolatorType, ValueType, type >
     , public ICachedParameter
 {
-    ValueType                       lastValue;
+    typedef SimpleParameterImpl< InterpolatorType, ValueType, type > ParentImpl;
+
+    mutable bool                    changed;
+
+    mutable ValueType               curValue;
+    mutable ValueType               prevValue;
 public:
     CachedSimpleTypedParameters( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator );
 
-    virtual bool                    Changed() override;
+    inline  ValueType               Evaluate            () const;
+    virtual bool                    Changed             () const override;
 };
 
 typedef CachedSimpleTypedParameters< FloatInterpolator, float, ModelParamType::MPT_FLOAT >      ParamFloat;
@@ -38,3 +44,5 @@ DEFINE_PTR_TYPE(ParamMat2)
 
 } //model
 } //bv
+
+#include "CachedSimpleTypedParameters.inl"

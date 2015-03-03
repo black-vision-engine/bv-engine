@@ -4,19 +4,17 @@ namespace bv { namespace model {
 
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
 CachedSimpleTypedParameters< InterpolatorType, ValueType, type>::CachedSimpleTypedParameters( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator )
-        : SimpleParameterImpl( name, interpolator, evaluator ) 
+        : SimpleParameterImpl( name, interpolator, evaluator ),
+        changed( true )
 { 
 }
 
 
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
-bool                    CachedSimpleTypedParameters< InterpolatorType, ValueType, type >::Changed()
+bool                    CachedSimpleTypedParameters< InterpolatorType, ValueType, type >::Changed() const
 {
-    auto currentValue = Evaluate();
-    bool different = lastValue != currentValue;
-    lastValue = currentValue;
-
-    return different;
+    Evaluate(); // FIXME: is this the semantic we want?
+    return changed;
 }
 
 template class CachedSimpleTypedParameters< FloatInterpolator, float, ModelParamType::MPT_FLOAT >;
