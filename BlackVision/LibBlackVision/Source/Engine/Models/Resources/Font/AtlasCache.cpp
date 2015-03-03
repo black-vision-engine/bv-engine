@@ -10,7 +10,6 @@
 
 #include "Engine/Models/Resources/TextureHelpers.h"
 #include "Engine/Models/Resources/TextureLoader.h"
-#include "Engine/Models/Resources/ModelTextureManager.h"
 #include "Engine/Models/Resources/IResource.h"
 
 #pragma warning(push)

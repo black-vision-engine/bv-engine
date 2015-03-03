@@ -8,7 +8,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
-#include "Engine/Models/Resources/IPluginResourceDescr.h"
+#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
 
 
 namespace bv { namespace model {
@@ -185,9 +185,9 @@ DefaultTexturePlugin::~DefaultTexturePlugin         ()
 
 // *************************************
 // 
-bool                            DefaultTexturePlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
+bool                            DefaultTexturePlugin::LoadResource  ( ResourceDescConstPtr resDescr )
 {
-    auto txResDescr = QueryTextureResourceDescr( resDescr );
+	auto txResDescr = QueryTypedDesc< TextureResourceDescConstPtr >( resDescr );
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txResDescr != nullptr )
@@ -196,8 +196,7 @@ bool                            DefaultTexturePlugin::LoadResource  ( IPluginRes
         assert( txData->GetTextures().size() <= 2 ); //FIXME: Second one may be added by a mask
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
-		auto textureResDesc = TextureResourceDesc::Create( txResDescr->GetTextureFile() );
-        auto txDesc = DefaultTextureDescriptor::LoadTexture( textureResDesc, DefaultTexturePluginDesc::TextureName() );
+        auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr, DefaultTexturePluginDesc::TextureName() );
         txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
 
         if( txDesc != nullptr )

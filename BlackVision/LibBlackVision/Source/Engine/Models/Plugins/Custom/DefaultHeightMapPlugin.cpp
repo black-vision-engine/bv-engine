@@ -236,7 +236,7 @@ DefaultHeightMapPlugin::~DefaultHeightMapPlugin         ()
 
 // *************************************
 // 
-bool                            DefaultHeightMapPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
+bool                            DefaultHeightMapPlugin::LoadResource  ( ResourceDescConstPtr resDescr )
 {
     //Order of texture uploads
     //1. heightmap

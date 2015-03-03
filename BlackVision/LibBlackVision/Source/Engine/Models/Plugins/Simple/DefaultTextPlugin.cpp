@@ -10,8 +10,7 @@
 
 #include "Mathematics/Transform/MatTransform.h"
 
-#include "Engine/Models/Resources/IPluginResourceDescr.h"
-
+#include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
 #include "Engine/Models/Resources/Font/FontLoader.h"
 #include "Engine/Models/Resources/Font/Text.h"
 
@@ -275,13 +274,13 @@ void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, SizeType
 
 // *************************************
 // 
-bool                            DefaultTextPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
+bool                            DefaultTextPlugin::LoadResource  ( ResourceDescConstPtr resDescr )
 {
-    auto txResDescr = QueryFontResourceDescr( resDescr );
+	auto txResDescr = QueryTypedDesc< FontResourceDescConstPtr >( resDescr );
 
     if ( txResDescr != nullptr )
     {
-		LoadAtlas( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
+		LoadAtlas( txResDescr->GetFontFileName(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
 		InitAttributesChannel( m_prevPlugin );
 
 		return true;

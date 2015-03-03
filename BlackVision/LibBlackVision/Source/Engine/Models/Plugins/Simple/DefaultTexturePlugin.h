@@ -71,7 +71,7 @@ public:
     explicit                                    DefaultTexturePlugin        ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
                                                 ~DefaultTexturePlugin       ();
 
-    virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
+    virtual bool                                LoadResource                ( ResourceDescConstPtr resDescr ) override;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;

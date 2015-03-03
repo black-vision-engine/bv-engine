@@ -17,11 +17,11 @@ namespace bv { namespace model {
 
 ///////////////////////////////
 //
-IResourceNEWConstPtr      TextHelper::LoadFont( const std::string & fontFileName, SizeType size, SizeType blurSize, SizeType outlineSize, const std::wstring & atlasCharSetFile )
+FontResourceConstPtr      TextHelper::LoadFont( const std::string & fontFileName, SizeType size, SizeType blurSize, SizeType outlineSize, const std::wstring & atlasCharSetFile )
 {
 	auto desc = FontResourceDesc::Create( fontFileName, size, blurSize, outlineSize, false, atlasCharSetFile ); // TODO: pass generate mipmaps argument
 
-	return ResourceManager::GetInstance().LoadResource( desc );
+	return QueryTypedRes< FontResourceConstPtr >( ResourceManager::GetInstance().LoadResource( desc ) );
 }
 
 // *********************************

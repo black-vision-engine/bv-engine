@@ -9,6 +9,7 @@
 #include "Engine/Models/Resources/Font/FontLoader.h"
 #include "Engine/Models/Resources/Font/Text.h"
 #include "Engine/Models/Resources/Font/Glyph.h"
+#include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
 
 #include <algorithm>
 
@@ -322,9 +323,9 @@ void DefaultTimerPlugin::InitAttributesChannel( IPluginPtr prev )
 
 // *************************************
 // 
-bool            DefaultTimerPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
+bool            DefaultTimerPlugin::LoadResource  ( ResourceDescConstPtr resDescr )
 {
-    auto txResDescr = QueryFontResourceDescr( resDescr );
+	auto txResDescr = QueryTypedDesc< FontResourceDescConstPtr >( resDescr );
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txResDescr != nullptr )
@@ -332,7 +333,7 @@ bool            DefaultTimerPlugin::LoadResource  ( IPluginResourceDescrConstPtr
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() <= 1 );
 
-        auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
+		auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFileName(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
 
         m_textAtlas = TextHelper::GetAtlas( fontResource );
 

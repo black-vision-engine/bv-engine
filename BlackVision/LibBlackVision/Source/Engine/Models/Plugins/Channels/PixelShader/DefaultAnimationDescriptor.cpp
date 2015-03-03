@@ -1,6 +1,5 @@
 #include "DefaultAnimationDescriptor.h"
 
-#include "Engine/Models/Resources/ModelTextureManager.h"
 #include "Engine/Models/Resources/TextureLoader.h"
 #include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
 #include "Engine/Models/Resources/ResourceManager.h"
@@ -342,10 +341,6 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
 //
 TextureResourceConstPtr				DefaultAnimationDescriptor::LoadFrame       ( const std::string & frame )
 {
-//    Resource texture( "some name", frame );
-
-    //TextureLoader texLoader;
-    //ResourceHandle * handle = texLoader.LoadResource( &texture );	
     auto res = ResourceManager::GetInstance().LoadResource( TextureResourceDesc::Create( frame ) );
 
 	auto texRes = QueryTypedRes< TextureResourceConstPtr >( res );

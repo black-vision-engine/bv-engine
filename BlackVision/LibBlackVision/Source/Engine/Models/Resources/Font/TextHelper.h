@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Engine/Models/Resources/IResource.h"
-#include "Engine/Models/Resources/Resource.h"
+#include "Engine/Models/Resources/Font/FontResource.h"
 #include "Engine/Models/Resources/Font/Text.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Mathematics/Rect.h"
@@ -25,7 +24,7 @@ public:
     /////////////////////////////////////
     // This function loads font definition from file. Builds font atlases with the specified size.
     // Returns ResourceHandle of this font
-    static IResourceNEWConstPtr			LoadFont            ( const std::string & fontFileName, SizeType size, SizeType blurSize, SizeType outlineSize, const std::wstring & atlasCharSetFile = SUPPROTED_CHARS_FILE );
+    static FontResourceConstPtr			LoadFont            ( const std::string & fontFileName, SizeType size, SizeType blurSize, SizeType outlineSize, const std::wstring & atlasCharSetFile = SUPPROTED_CHARS_FILE );
 
     /////////////////////////////////////
     // This function creates TextAtlas from specified FontReasource.

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Engine/Models/Resources/ResourceLoader.h"
-#include "Engine/Models/Resources/Resource.h"
 #include "Engine/Models/Resources/Font/Text.h"
 #include "Engine/Types/Enums.h"
 
