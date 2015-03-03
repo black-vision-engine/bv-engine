@@ -10,9 +10,27 @@ inline ValueType CachedSimpleTypedParameters< InterpolatorType, ValueType, type 
     prevValue = curValue;
     curValue = val;
 
-    changed = curValue != prevValue; // FIXME: is this the semantic we want?
+    changed = CachedSimpleTypedParametersHelper::isDifferent( prevValue, curValue ); // FIXME: is this the semantic we want?
     
     return val;
+}
+
+//template< typename IntepolatorType, typename ValueType, ModelParamType type, typename T >
+//static inline bool CachedSimpleTypedParameters< IntepolatorType, ValueType, type >::isDifferent( T& a, T& b )
+//{
+//    return (curValue != prevValue);
+//}
+
+template< typename T >
+static inline bool CachedSimpleTypedParametersHelper::isDifferent( T& a, T& b )
+{
+    return ( a != b );
+}
+
+template<>
+static inline bool CachedSimpleTypedParametersHelper::isDifferent< float >( float& a, float& b )
+{
+    return ( fabs( a - b ) > feps );
 }
 
 // *******************************
