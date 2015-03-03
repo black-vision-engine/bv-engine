@@ -11,6 +11,7 @@ class CachedSimpleTypedParameters :
     public SimpleParameterImpl< InterpolatorType, ValueType, type >
     , public ICachedParameter
 {
+    ValueType                       lastValue;
 public:
     CachedSimpleTypedParameters( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator );
 

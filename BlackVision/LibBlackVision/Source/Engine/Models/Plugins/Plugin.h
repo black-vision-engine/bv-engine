@@ -149,7 +149,7 @@ IParameterPtr               BasePlugin< Iface >::GetParameter           ( const 
 struct NullDeleter {template<typename T> void operator()(T*) {} };
 
 template< class Iface >
-ICachedParameterPtr             BasePlugin< Iface >::GetCachedParameter          ( const std::string & name ) const
+ICachedParameterPtr             BasePlugin< Iface >::GetCachedParameter          ( const std::string & name ) const // FIXME mader fakier
 {
     IParameterPtr param = GetParameter( name );
     IParameter* hParam = param.get();

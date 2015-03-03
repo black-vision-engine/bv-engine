@@ -12,7 +12,11 @@ CachedSimpleTypedParameters< InterpolatorType, ValueType, type>::CachedSimpleTyp
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
 bool                    CachedSimpleTypedParameters< InterpolatorType, ValueType, type >::Changed()
 {
-    return true; // FIXME
+    auto currentValue = Evaluate();
+    bool different = lastValue != currentValue;
+    lastValue = currentValue;
+
+    return different;
 }
 
 template class CachedSimpleTypedParameters< FloatInterpolator, float, ModelParamType::MPT_FLOAT >;
