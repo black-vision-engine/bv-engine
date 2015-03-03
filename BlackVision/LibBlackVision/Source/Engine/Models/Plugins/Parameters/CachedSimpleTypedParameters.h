@@ -1,6 +1,4 @@
 #pragma once
-#pragma warning(disable: 4505) // WTF?
-
 #include "Engine/Models/Plugins/Interfaces/ICachedParameter.h"
 #include "SimpleTypedParameters.h"
 
@@ -49,7 +47,7 @@ public:
     virtual VoidPtr         QueryParamTyped () override;
 
     inline static  ModelParamType  Type     ();
-    virtual bool                    Changed             () const override { return ParentImpl::Changed(); }
+    //virtual bool                    Changed             () const override { return ParentImpl::Changed(); }
 };
 
 
