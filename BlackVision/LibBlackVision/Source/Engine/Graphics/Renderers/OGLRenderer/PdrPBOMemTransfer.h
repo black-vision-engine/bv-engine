@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Mathematics/glm_inc.h"
+#include "GL/BVGL.h"
 
-#include "Engine/Graphics/Renderers/OGLRenderer/GL/BVGL.h"
+#include "Mathematics/glm_inc.h"
 
 #include "Engine/Graphics/Resources/DataBuffer.h"
 

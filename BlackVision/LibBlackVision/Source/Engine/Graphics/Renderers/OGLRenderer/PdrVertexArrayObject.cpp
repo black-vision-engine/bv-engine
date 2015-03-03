@@ -33,7 +33,7 @@ PdrVertexArrayObject::PdrVertexArrayObject    ( Renderer * renderer, const Verte
     //glBindBuffer              (GL_ARRAY_BUFFER, handle[0]);
     //glVertexAttribPointer     ( (GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, ((GLubyte *)NULL + (0)) );
 
-    glGenVertexArrays( 1, &m_vaoHandle );
+    BVGL::bvglGenVertexArrays( 1, &m_vaoHandle );
 
     // GLuint index = 0;
 
@@ -61,7 +61,7 @@ PdrVertexArrayObject::PdrVertexArrayObject    ( Renderer * renderer, const Verte
 //
 PdrVertexArrayObject::~PdrVertexArrayObject   ()
 {
-    glDeleteVertexArrays( 1, &m_vaoHandle );
+    BVGL::bvglDeleteVertexArrays( 1, &m_vaoHandle );
 }
 
 // *******************************
@@ -84,21 +84,21 @@ void    PdrVertexArrayObject::Disable                 ( Renderer * renderer )
 //
 void    PdrVertexArrayObject::Bind                    ()
 {
-    glBindVertexArray( m_vaoHandle );
+    BVGL::bvglBindVertexArray( m_vaoHandle );
 }
 
 // *******************************
 //
 void    PdrVertexArrayObject::Unbind                  ()
 {
-    glBindVertexArray( 0 );
+    BVGL::bvglBindVertexArray( 0 );
 }
 
 // *******************************
 //
 void    PdrVertexArrayObject::EnableVertexAttribArray ( GLuint index )
 {
-    glEnableVertexAttribArray( index );
+    BVGL::bvglEnableVertexAttribArray( index );
 }
 
 } //bv

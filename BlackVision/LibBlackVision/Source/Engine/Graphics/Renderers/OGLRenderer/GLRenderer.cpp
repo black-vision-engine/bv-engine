@@ -1,8 +1,6 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 
-#include <gl/glew.h>
-#include <gl/wglew.h>
-#include <gl/GL.h>
+#include "GL/BVGL.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 
@@ -27,7 +25,7 @@ void Renderer::SetAlphaState ( const AlphaState * as )
     {
         if( !cur->blendEnabled )
         {
-            glEnable( GL_BLEND );
+            BVGL::bvglEnable( GL_BLEND );
         }
         
         if( as->srcBlendMode != cur->srcBlendMode || as->dstBlendMode != cur->dstBlendMode )
@@ -35,21 +33,21 @@ void Renderer::SetAlphaState ( const AlphaState * as )
             GLuint srcBlendMode = ConstantsMapper::GLConstant( as->srcBlendMode );
             GLuint dstBlendMode = ConstantsMapper::GLConstant( as->dstBlendMode );
             
-            glBlendFunc( srcBlendMode, dstBlendMode );
+            BVGL::bvglBlendFunc( srcBlendMode, dstBlendMode );
         }
 
         if( as->blendColor != cur->blendColor )
         {
             const glm::vec4 & col = as->blendColor;
 
-            glBlendColor( col[ 0 ], col[ 1 ], col[ 2 ], col[ 3 ] );
+            BVGL::bvglBlendColor( col[ 0 ], col[ 1 ], col[ 2 ], col[ 3 ] );
         }
     }
     else
     {
         if( cur->blendEnabled )
         {
-            glDisable( GL_BLEND );
+            BVGL::bvglDisable( GL_BLEND );
         }
     }
 
@@ -73,20 +71,20 @@ void Renderer::SetCullState     ( const CullState * cs )
     {
         if( !cur->enabled )
         {
-            glEnable( GL_CULL_FACE );
-            glFrontFace( GL_CCW );            
+            BVGL::bvglEnable( GL_CULL_FACE );
+            BVGL::bvglFrontFace( GL_CCW );            
         }
 
         if( cs->isCCWOrdered != cur->isCCWOrdered )
         {
-            glCullFace( cs->isCCWOrdered ? GL_BACK : GL_FRONT );
+            BVGL::bvglCullFace( cs->isCCWOrdered ? GL_BACK : GL_FRONT );
         }
     }
     else
     {
         if( cur->enabled )
         {
-            glDisable( GL_CULL_FACE );
+            BVGL::bvglDisable( GL_CULL_FACE );
         }
     }
 }
@@ -109,27 +107,27 @@ void Renderer::SetDepthState    ( const DepthState * ds )
     {
         if( !cur->enabled )
         {
-            glEnable( GL_DEPTH_TEST );
+            BVGL::bvglEnable( GL_DEPTH_TEST );
         }
 
         if( ds->compareMode != cur->compareMode )
         {
             GLuint compareMode = ConstantsMapper::GLConstant( ds->compareMode );
 
-            glDepthFunc( compareMode );
+            BVGL::bvglDepthFunc( compareMode );
         }
     }
     else
     {
         if( cur->enabled )
         {
-            glDisable( GL_DEPTH_TEST );
+            BVGL::bvglDisable( GL_DEPTH_TEST );
         }
     }
 
     if( ds->writable != cur->writable )
     {
-        glDepthMask( ds->writable ? GL_TRUE : GL_FALSE );
+        BVGL::bvglDepthMask( ds->writable ? GL_TRUE : GL_FALSE );
     }
 }
 
@@ -151,7 +149,7 @@ void Renderer::SetFillState     ( const FillState * fs )
     {
         GLuint fillMode = ConstantsMapper::GLConstant( fs->fillMode );
 
-        glPolygonMode( GL_FRONT_AND_BACK, fillMode );
+        BVGL::bvglPolygonMode( GL_FRONT_AND_BACK, fillMode );
     }
 }
 
@@ -171,22 +169,22 @@ void Renderer::SetOffsetState   ( const OffsetState * os )
 
     if( os->fillEnabled != cur->fillEnabled )
     {
-        os->fillEnabled ? glEnable( GL_POLYGON_OFFSET_FILL ) : glDisable( GL_POLYGON_OFFSET_FILL );
+        os->fillEnabled ? BVGL::bvglEnable( GL_POLYGON_OFFSET_FILL ) : BVGL::bvglDisable( GL_POLYGON_OFFSET_FILL );
     }
 
     if( os->linesEnabled != cur->linesEnabled )
     {
-        os->linesEnabled ? glEnable( GL_POLYGON_OFFSET_LINE ) : glDisable( GL_POLYGON_OFFSET_LINE );
+        os->linesEnabled ? BVGL::bvglEnable( GL_POLYGON_OFFSET_LINE ) : BVGL::bvglDisable( GL_POLYGON_OFFSET_LINE );
     }
 
     if( os->pointsEnabled != cur->pointsEnabled )
     {
-        os->pointsEnabled ? glEnable( GL_POLYGON_OFFSET_POINT ) : glDisable( GL_POLYGON_OFFSET_POINT );
+        os->pointsEnabled ? BVGL::bvglEnable( GL_POLYGON_OFFSET_POINT ) : BVGL::bvglDisable( GL_POLYGON_OFFSET_POINT );
     }
 
     if( os->scale != cur->scale || os->bias != cur->bias )
     {
-        glPolygonOffset( os->scale, os->bias );
+        BVGL::bvglPolygonOffset( os->scale, os->bias );
     }
 }
 

@@ -98,7 +98,7 @@ void    PdrTexture2D::UpdateTexData     ( const Texture2D * texture )
 
     void * data = m_pboMem->LockTexture( MemoryLockingType::MLT_WRITE_ONLY, m_textureID, m_width, m_height, m_format, m_type );
     memcpy( data, texture->GetData()->Get(), texture->RawFrameSize() );
-    printf( "TEXTURE ASYNC MEM TRAQNSFER TRIGGERED\n");
+    // printf( "TEXTURE ASYNC MEM TRAQNSFER TRIGGERED\n");
     m_pboMem->UnlockTexture( m_textureID, m_width, m_height, m_format, m_type );
 
 #ifdef POOR_PROFILE_TEXTURE_STREAMING

@@ -30,7 +30,7 @@ void    PdrVertexDescriptor::VertexAttribPointer     ( GLuint index, PdrVertexBu
     vb->Bind();
 
     //FIXME: FIX-0
-    glVertexAttribPointer( (GLuint)index, m_vertexDescriptor->NumComponents( 0 ), GL_FLOAT, GL_FALSE, 0, ((GLubyte *)NULL + (0)) );
+    BVGL::bvglVertexAttribPointer( (GLuint)index, m_vertexDescriptor->NumComponents( 0 ), GL_FLOAT, GL_FALSE, 0, ((GLubyte *)NULL + (0)) );
 
     //FIXME: implement the right way - with multiple channels and multiple vb objects and different Descriptor signatures
     

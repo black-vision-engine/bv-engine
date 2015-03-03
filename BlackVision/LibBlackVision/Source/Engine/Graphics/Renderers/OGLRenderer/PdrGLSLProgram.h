@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Engine/Graphics/Renderers/OGLRenderer/GL/BVGL.h"
-
 #include <string>
 #include <map>
 #include <hash_map>
+
+#include "GL/BVGL.h"
 
 #include "Mathematics/glm_inc.h"
 
