@@ -16,6 +16,7 @@
 #include "VideoInput/DefaultVideoInputResourceDescr.h"
 #include "VideoInput/ExampleVideoInput.h"
 #include "Engine/Models/Plugins/Simple/DefaultCirclePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultEllipsePlugin.h"
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 
@@ -766,7 +767,7 @@ model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model
     return root;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    /*TestScenesFactory::*/CreedCircleTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -792,6 +793,31 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
     auto param = plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE_MODE );
     auto qParam = model::QueryTypedParam< std::shared_ptr< model::ParamEnum< model::DefaultCirclePlugin::OpenAngleMode > > >( param );
     qParam->SetVal( model::DefaultCirclePlugin::OpenAngleMode::SYMMETRIC, 9.f );
+
+    return root;
+}
+
+model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_ELLIPSE", timeEvaluator );
+    root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+
+    model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+
+    auto plugin = root->GetPlugin( "ellipse" );
+    //SetParameter( plugin->GetParameter( model::DefaultEllipsePlugin::PN_OPEN_ANGLE ), 10.f, 0.8f );
+    SetParameter( plugin->GetParameter( model::DefaultEllipsePlugin::PN_OUTER_RADIUS1 ), 0.f, 1.5f );
+    SetParameter( plugin->GetParameter( model::DefaultEllipsePlugin::PN_OUTER_RADIUS2 ), 0.f, 0.5f );
+    SetParameter( plugin->GetParameter( model::DefaultEllipsePlugin::PN_QUALITY ), 1000.f, 100.f );
+
+    plugin->Update(0); // FIXME: to generate geometry only
+
+    ////SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE_MODE ), 10.f, model::DefaultCirclePlugin::OpenAngleMode::SYMMETRIC );
+    //auto param = plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE_MODE );
+    //auto qParam = model::QueryTypedParam< std::shared_ptr< model::ParamEnum< model::DefaultCirclePlugin::OpenAngleMode > > >( param );
+    //qParam->SetVal( model::DefaultCirclePlugin::OpenAngleMode::SYMMETRIC, 9.f );
 
     return root;
 }

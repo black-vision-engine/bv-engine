@@ -298,6 +298,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAnimationPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCirclePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultColorPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEllipsePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGradientPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPieChartPlugin.cpp" />
@@ -575,6 +576,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAnimationPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCirclePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultColorPlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEllipsePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGradientPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPieChartPlugin.h" />
