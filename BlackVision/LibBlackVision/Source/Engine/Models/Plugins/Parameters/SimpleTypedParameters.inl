@@ -99,39 +99,39 @@ inline ModelParamType  ParamMat2::Type     ()
     return ModelParamType::MPT_MAT2;
 }
 
-// *******************************
+//// *******************************
+////
+//template<class T>
+//inline  ParamEnum<T>::ParamEnum( const std::string & name, const IntInterpolator & transform, ITimeEvaluatorPtr evaluator )
+//    : SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM >( name, transform, evaluator )
+//{
+//}
 //
-template<class T>
-inline  ParamEnum<T>::ParamEnum( const std::string & name, const IntInterpolator & transform, ITimeEvaluatorPtr evaluator )
-    : SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM >( name, transform, evaluator )
-{
-}
-
-// *******************************
+//// *******************************
+////
+//template<class T>
+//inline  T   ParamEnum<T>::Evaluate    () const
+//{
+//    int v = SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM >::Evaluate();
 //
-template<class T>
-inline  T   ParamEnum<T>::Evaluate    () const
-{
-    int v = SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM >::Evaluate();
-
-    return T(v);
-}
-
-// *******************************
+//    return T(v);
+//}
 //
-template<class T>
-inline  void        ParamEnum<T>::SetVal    ( const T & val, TimeType t )
-{
-    m_interpolator.AddKey( t, int(val) );
-}
-
-// *******************************
+//// *******************************
+////
+//template<class T>
+//inline  void        ParamEnum<T>::SetVal    ( const T & val, TimeType t )
+//{
+//    m_interpolator.AddKey( t, int(val) );
+//}
 //
-template<class T>
-inline ModelParamType  ParamEnum<T>::Type     ()
-{
-    return ModelParamType::MPT_ENUM;
-}
+//// *******************************
+////
+//template<class T>
+//inline ModelParamType  ParamEnum<T>::Type     ()
+//{
+//    return ModelParamType::MPT_ENUM;
+//}
 
 } //model
 } //bv

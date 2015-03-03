@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning(disable: 4505) // WTF?
 
 #include "Engine/Models/Plugins/Interfaces/ICachedParameter.h"
 #include "SimpleTypedParameters.h"
@@ -24,8 +25,28 @@ public:
     virtual bool                    Changed             () const override;
 };
 
+
+template<class T>
+class ParamEnum : public CachedSimpleTypedParameters< IntInterpolator, int, ModelParamType::MPT_ENUM >/*, public ICachedParameter*/
+{
+    typedef CachedSimpleTypedParameters< IntInterpolator, int, ModelParamType::MPT_ENUM > ParentImpl;
+public:
+    ParamEnum( const std::string & name, const IntInterpolator & interpolator, ITimeEvaluatorPtr evaluator );
+
+    inline  T               Evaluate        () const;
+    inline  void            SetVal          ( const T & val, TimeType t );
+
+    virtual VoidPtr         QueryParamTyped () override;
+
+    inline static  ModelParamType  Type     ();
+    virtual bool                    Changed             () const override { return ParentImpl::Changed(); }
+};
+
+
+
 typedef CachedSimpleTypedParameters< FloatInterpolator, float, ModelParamType::MPT_FLOAT >      ParamFloat;
 typedef CachedSimpleTypedParameters< IntInterpolator, int, ModelParamType::MPT_INT >            ParamInt;
+typedef CachedSimpleTypedParameters< IntInterpolator, int, ModelParamType::MPT_ENUM >           ParamEnumParent;
 typedef CachedSimpleTypedParameters< BoolInterpolator, bool, ModelParamType::MPT_BOOL >         ParamBool;
 typedef CachedSimpleTypedParameters< Vec4Interpolator, glm::vec4, ModelParamType::MPT_VEC4 >    ParamVec4;
 typedef CachedSimpleTypedParameters< Vec3Interpolator, glm::vec3, ModelParamType::MPT_VEC3 >    ParamVec3;

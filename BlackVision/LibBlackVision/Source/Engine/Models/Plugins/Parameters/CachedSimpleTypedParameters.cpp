@@ -19,6 +19,7 @@ bool                    CachedSimpleTypedParameters< InterpolatorType, ValueType
 
 template class CachedSimpleTypedParameters< FloatInterpolator, float, ModelParamType::MPT_FLOAT >;
 template class CachedSimpleTypedParameters< IntInterpolator, int, ModelParamType::MPT_INT >;
+template class CachedSimpleTypedParameters< IntInterpolator, int, ModelParamType::MPT_ENUM >;
 template class CachedSimpleTypedParameters< BoolInterpolator, bool, ModelParamType::MPT_BOOL >;
 template class CachedSimpleTypedParameters< Vec4Interpolator, glm::vec4, ModelParamType::MPT_VEC4 >;
 template class CachedSimpleTypedParameters< Vec3Interpolator, glm::vec3, ModelParamType::MPT_VEC3 >;
