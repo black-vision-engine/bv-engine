@@ -51,7 +51,7 @@ tools::FilterType ToMMBuilderFilterType( MipMapFilterType ft )
 
 // ******************************
 //
-IResourceNEWConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & desc ) const
+IResourceConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & desc ) const
 {
 	auto typedDesc = QueryTypedDesc< TextureResourceDescConstPtr >( desc );
 

@@ -5,7 +5,7 @@ namespace bv
 
 // ***********************
 //
-model::IResourceNEWConstPtr ResourceManager::LoadResource( const ResourceDescConstPtr & desc ) const
+model::IResourceConstPtr ResourceManager::LoadResource( const ResourceDescConstPtr & desc ) const
 {
 	auto it = m_loaders.find( desc->GetUID() );
 	for( auto k : m_loaders )

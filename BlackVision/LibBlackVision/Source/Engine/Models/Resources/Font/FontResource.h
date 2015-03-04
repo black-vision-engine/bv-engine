@@ -11,7 +11,7 @@ DEFINE_CONST_PTR_TYPE( FontResource )
 
 // *******************************
 // Implements font resource with full size atlas and all its mimmaps.
-class FontResource : public model::IResourceNEW, public std::enable_shared_from_this< FontResource >
+class FontResource : public model::IResource, public std::enable_shared_from_this< FontResource >
 {
 	static const std::string		uid;
 

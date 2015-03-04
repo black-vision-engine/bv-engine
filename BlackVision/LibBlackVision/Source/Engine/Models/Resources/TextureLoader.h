@@ -19,7 +19,7 @@ private:
 
 public:
 
-	IResourceNEWConstPtr	LoadResource	( const ResourceDescConstPtr & desc ) const override;
+	IResourceConstPtr		LoadResource	( const ResourceDescConstPtr & desc ) const override;
 
     virtual ~TextureLoader(){}
 

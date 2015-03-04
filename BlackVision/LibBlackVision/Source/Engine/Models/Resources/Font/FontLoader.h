@@ -14,7 +14,7 @@ private:
     TextConstPtr            TryLoadFont         ( const std::string & file, size_t size, size_t blurSize, size_t oulineSize, const std::wstring & atlasCharSetFile ) const;
 
 public:
-	IResourceNEWConstPtr	LoadResource		( const bv::ResourceDescConstPtr & ) const override;
+	IResourceConstPtr		LoadResource		( const bv::ResourceDescConstPtr & ) const override;
 
     explicit                FontLoader( ){}
 

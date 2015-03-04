@@ -451,16 +451,16 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
     { pluginsManager; } // FIXME: suppress unused warning
     //return SimpleNodesFactory::CreateHeightMapNode( timelineManager, timeEvaluator );
 
-    // auto node0 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+    auto node0 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
     //auto node1 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
 
     //node0->AddChild( node1 );
 
-    //return node0;
+    return node0;
 
     //return SimpleNodesFactory::CreateOverrideNodeMaskTest1( timelineManager, timeEvaluator );
 
-    return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, false );
+    //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, false );
 
 #if 0
     //return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );

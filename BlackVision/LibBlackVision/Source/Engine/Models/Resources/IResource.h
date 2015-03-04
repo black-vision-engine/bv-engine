@@ -7,10 +7,10 @@
 namespace bv { namespace model
 {
 
-class IResourceNEW;
-DEFINE_CONST_PTR_TYPE( IResourceNEW )
+class IResource;
+DEFINE_CONST_PTR_TYPE( IResource )
 
-class IResourceNEW
+class IResource
 {
 protected:
 	virtual VoidConstPtr					QueryThis	() const = 0;
@@ -19,14 +19,14 @@ public:
 
 	virtual const std::string &				GetUID		() const = 0;
 
-    virtual ~IResourceNEW(){}
+    virtual ~IResource(){}
 
 	template< typename ResourceTypeConstPtr >
 	friend ResourceTypeConstPtr  QueryTypedRes( ResourceTypeConstPtr res );
 };
 
 template< typename ResourceTypeConstPtr >
-ResourceTypeConstPtr  QueryTypedRes( IResourceNEWConstPtr res )
+ResourceTypeConstPtr  QueryTypedRes( IResourceConstPtr res )
 {
 	if( res->GetUID() != ResourceTypeConstPtr::element_type::UID() )
     {
