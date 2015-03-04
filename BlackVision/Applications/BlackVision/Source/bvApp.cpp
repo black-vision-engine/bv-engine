@@ -5,6 +5,10 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Processes/ProcessManager.h"
+#include "Engine/Models/Resources/ResourceManager.h"
+#include "Engine/Models/Resources/TextureLoader.h"
+#include "Engine/Models/Resources/Font/FontLoader.h"
+#include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
 
 #include "System/HerarchicalProfiler.h"
 
@@ -166,6 +170,15 @@ void    BlackVisionApp::InitializeSelfState ()
 {
     WindowedApplication::SetClearColor( DefaultConfig.ClearColor() );
 }
+
+// *********************************
+//
+void    BlackVisionApp::InitializeResourceLoaders ()
+{
+    bv::ResourceManager::GetInstance().RegisterLoader( bv::TextureResourceDesc::UID(), new bv::model::TextureLoader() );
+	bv::ResourceManager::GetInstance().RegisterLoader( bv::FontResourceDesc::UID(), new bv::model::TextureLoader() );
+}
+
 
 // *********************************
 //

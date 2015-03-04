@@ -13,10 +13,6 @@ namespace bv { namespace model {
 
 class TextureLoader : public ResourceLoader
 {
-private:
-
-    bool                    m_loadFromMemory;  // DEPRECATED
-
 public:
 
 	IResourceConstPtr		LoadResource	( const ResourceDescConstPtr & desc ) const override;

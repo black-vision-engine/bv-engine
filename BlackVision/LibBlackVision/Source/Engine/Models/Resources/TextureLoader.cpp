@@ -41,14 +41,6 @@ tools::FilterType ToMMBuilderFilterType( MipMapFilterType ft )
 
 } // anounymous
 
-
-//// ******************************
-////
-//TextureLoader::TextureLoader( bool loadFormMemory )
-//    : m_loadFromMemory( loadFormMemory )
-//{}
-
-
 // ******************************
 //
 IResourceConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & desc ) const
@@ -58,10 +50,6 @@ IResourceConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & desc
 	assert( typedDesc );
 
 	TextureResourceConstPtr ret = nullptr;
-	
-	//if ( typedDesc->IsCacheable() )
-	//	return LoadFromCache( typedDesc );
-	
 
 	switch( typedDesc->GetLoadingType() )
 	{
