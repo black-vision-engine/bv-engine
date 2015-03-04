@@ -109,6 +109,7 @@ bool BlackVisionApp::OnInitialize       ()
     InitializeConsole       ();
     InitializeAppLogic      ();
     InitializeSelfState     ();
+	InitializeResourceLoaders();
 
     return WindowedApplication::OnInitialize();
 }
