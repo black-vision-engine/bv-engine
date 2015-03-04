@@ -333,7 +333,7 @@ bool            DefaultTimerPlugin::LoadResource  ( ResourceDescConstPtr resDesc
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() <= 1 );
 
-		auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFileName(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
+		auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFileName(), txResDescr->GetFontSize(), txResDescr->GetBlurSize(), txResDescr->GetOutlineSize() );
 
         m_textAtlas = TextHelper::GetAtlas( fontResource );
 

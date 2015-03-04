@@ -5,6 +5,8 @@
 
 namespace bv { namespace model {
 
+const std::string AnimationResourceDesc::uid = "ANIMATION_RESOURCE_DESC";
+
 // *******************************
 //
 AnimationResourceDesc::AnimationResourceDesc							( const std::vector< std::string > & frames )
