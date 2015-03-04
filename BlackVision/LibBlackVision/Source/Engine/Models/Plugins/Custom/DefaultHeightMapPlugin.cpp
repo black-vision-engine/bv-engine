@@ -255,7 +255,7 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( Resource
 
     assert( curNumTextures < 4 ); //FIXME: Second one may be added by a mask
 
-    auto txResDescr = QueryTextureResourceDescr( resDescr );
+	auto txResDescr = QueryTypedDesc< TextureResourceDescConstPtr >( resDescr );
 
     if ( txResDescr == nullptr )
     {
@@ -263,8 +263,7 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( Resource
     }
 
     //FIXME: use some better API to handle resources in general and textures in this specific case
-	auto textureResDesc = TextureResourceDesc::Create( txResDescr->GetTextureFile() );
-    auto txDesc = DefaultTextureDescriptor::LoadTexture( textureResDesc, textureNames[ curNumTextures ] );
+    auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr, textureNames[ curNumTextures ] );
 
     if( txDesc != nullptr )
     {
