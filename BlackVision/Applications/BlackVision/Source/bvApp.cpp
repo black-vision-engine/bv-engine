@@ -177,7 +177,7 @@ void    BlackVisionApp::InitializeSelfState ()
 void    BlackVisionApp::InitializeResourceLoaders ()
 {
     bv::ResourceManager::GetInstance().RegisterLoader( bv::TextureResourceDesc::UID(), new bv::model::TextureLoader() );
-	bv::ResourceManager::GetInstance().RegisterLoader( bv::FontResourceDesc::UID(), new bv::model::TextureLoader() );
+	bv::ResourceManager::GetInstance().RegisterLoader( bv::FontResourceDesc::UID(), new bv::model::FontLoader() );
 }
 
 
