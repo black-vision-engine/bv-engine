@@ -147,7 +147,7 @@ public:
     static double x1, preferredArea; // FIXME?
     inline double N( double x2 )
     {
-        auto val = E( x1, x2 ) - preferredArea;
+        auto val = preferredArea - E( x2, x1 );
         //printf( "%f\n", float( val ) );
         return val;
     }
@@ -158,9 +158,9 @@ public:
 
         double a = -radius1, b = x1;
 
-        preferredArea = 1000 / quality;
+        preferredArea = 0.01 / quality;
 
-        const double eps = 0.01;
+        const double eps = 0.01 * preferredArea;
 
         while( N(a) * N(b) > 0 && abs( N(a) ) > eps && b-a > eps )
         {
