@@ -8,11 +8,15 @@ namespace bv
 model::IResourceConstPtr ResourceManager::LoadResource( const ResourceDescConstPtr & desc ) const
 {
 	auto it = m_loaders.find( desc->GetUID() );
-	for( auto k : m_loaders )
-		if( desc->GetUID() == k.first )
-			return k.second->LoadResource( desc );
-	
-	return nullptr;
+
+	if( it != m_loaders.end() )
+	{
+		return it->second->LoadResource( desc );
+	}
+	else
+	{	
+		return nullptr;
+	}
 }
 
 // ***********************
