@@ -60,13 +60,13 @@ IPluginPtr                      DefaultEllipsePluginDesc::CreatePlugin         (
     return CreatePluginTyped< DefaultEllipsePlugin >( name, prev, timeEvaluator );
 }
 
-class EllipseGenerator : public IGeometryOnlyGenerator
+class OldEllipseGenerator : public IGeometryOnlyGenerator
 {
     float quality;
     float radius1, radius2;
 
 public:
-    EllipseGenerator( float q, float r1, float r2 )
+    OldEllipseGenerator( float q, float r1, float r2 )
         : quality( q )
         , radius1( r1 ), radius2( r2 )
         {}
@@ -96,6 +96,113 @@ public:
         AddPoint( PI, verts );
     }
 };
+
+class EllipseGenerator : public IGeometryOnlyGenerator
+{
+    float quality;
+    float radius1, radius2; // border is parametrized as [ x, y ] = [ radius1*cos(t), radius2*sin(t) ]
+
+public:
+    EllipseGenerator( float q, float r1, float r2 )
+        : quality( q )
+        , radius1( r1 ), radius2( r2 )
+        {}
+
+    IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_ONLY; }
+
+    inline void AddPoint( double t, Float3AttributeChannelPtr& verts )
+    {
+        verts->AddAttribute( glm::vec3( radius1 * cos( t ), radius2 * sin( t ), 0 ) );
+    }
+
+    inline double f( double x )
+    {
+        double a = radius1;
+        double b = radius2;
+
+        double t = acos( x / a );
+        return b*sin(t);
+    }
+
+    inline double I( double x )
+    {
+        double a = radius1;
+        double b = radius2;
+
+        double l = x * sqrt( 1 - pow( x / a , 2 ) );
+        double r = a * asin(x / a);
+        
+        return  b/2 * (l + r );
+    }
+
+    inline double E( double x1, double x2 )
+    {
+        double I_ = I(x2) - I(x1);
+
+        double T = (x2-x1)/2*(f(x1)+f(x2));
+
+        return I_ - T;
+    }
+
+    static double x1, preferredArea; // FIXME?
+    inline double N( double x2 )
+    {
+        auto val = E( x1, x2 ) - preferredArea;
+        //printf( "%f\n", float( val ) );
+        return val;
+    }
+
+    double Newton( double t )
+    {
+        x1 = radius1 * cos( t ); 
+
+        double a = -radius1, b = x1;
+
+        preferredArea = 1000 / quality;
+
+        const double eps = 0.01;
+
+        while( N(a) * N(b) > 0 && abs( N(a) ) > eps && b-a > eps )
+        {
+            double mid = ( a + b )/2;
+            if( x1 < mid )
+                b = mid;
+            else
+                a = mid;
+        }
+
+        while( abs( N( a ) ) > eps && b-a > eps )
+        {
+            assert( N(a) * N(b) < 0 );
+            double mid = ( a + b )/2;
+            if( N(a) * N(mid) < 0 )
+                b = mid;
+            else
+                a = mid;
+        }
+
+        return acos( a / radius1 );
+    }
+
+    void GenerateGeometry( Float3AttributeChannelPtr verts ) 
+    { 
+        double t1 = 0, t2 = 2 * PI;
+
+        while( t1 < PI )
+        {
+            AddPoint( t2, verts );
+            AddPoint( t1, verts );
+
+            t1 = Newton( t1 );
+            t2 = 2 * PI - t1;
+        }
+
+        AddPoint( PI, verts );
+    }
+};
+
+double EllipseGenerator::x1;
+double EllipseGenerator::preferredArea;
 
 IGeometryGenerator*           DefaultEllipsePlugin::GetGenerator()
 {
