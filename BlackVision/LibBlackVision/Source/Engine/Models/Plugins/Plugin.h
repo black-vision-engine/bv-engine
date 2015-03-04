@@ -152,12 +152,16 @@ template< class Iface >
 ICachedParameterPtr             BasePlugin< Iface >::GetCachedParameter          ( const std::string & name ) const // FIXME mader fakier
 {
     IParameterPtr param = GetParameter( name );
+
+    //ParamBoolPtr qParam = std::static_pointer_cast< IParameterPtr, ParamBoolPtr >( param );
+    //ICachedParameterPtr cParam = std::dynamic_pointer_cast< ParamBoolPtr, ICachedParameterPtr >( qParam );
+    //auto ret = cParam;
+
     IParameter* hParam = param.get();
-    //ICachedParameter *hCParam = reinterpret_cast< ICachedParameter* >( hParam );
-    //ICachedParameter *hCParam = static_cast< ICachedParameter* >( hParam );
-    ParamBool* hParamBool = static_cast< ParamBool* >( hParam );
-    ICachedParameter* hCParam = static_cast< ICachedParameter* >( hParamBool );
-    auto ret = std::shared_ptr< ICachedParameter >( hCParam, NullDeleter() );
+    ParamBool* hqParam = static_cast< ParamBool* >( hParam ); // FIXME: although we may assume implementation here, we really shouldn't
+    ICachedParameter* hcParam = dynamic_cast< ICachedParameter* >( hqParam );
+    auto ret = std::shared_ptr< ICachedParameter >( hcParam, NullDeleter() ); // FIXME: removing a need for NullDeleter would be very good idea
+
     return ret;
 }
 
