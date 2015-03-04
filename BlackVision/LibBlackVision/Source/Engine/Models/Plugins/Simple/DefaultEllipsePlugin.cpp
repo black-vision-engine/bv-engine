@@ -73,31 +73,27 @@ public:
 
     IGeometryGenerator::Type GetType() { return IGeometryGenerator::Type::GEOMETRY_ONLY; }
 
+    inline void AddPoint( double t, Float3AttributeChannelPtr& verts )
+    {
+        verts->AddAttribute( glm::vec3( radius1 * cos( t ), radius2 * sin( t ), 0 ) );
+    }
+
     void GenerateGeometry( Float3AttributeChannelPtr verts ) 
     { 
-        //int i = 0, j = tesselation - 1;
-
-        //for( ; j >= i ; i++, j-- )
-        //{
-        //    double angle1 = j * 2 * PI / tesselation;
-        //    double angle2 = i * 2 * PI / tesselation;
-        //    verts->AddAttribute( glm::vec3( cos( angle1 ), sin( angle1 ), 0 ) );
-        //    if( i != j )
-        //        verts->AddAttribute( glm::vec3( cos( angle2 ), sin( angle2 ), 0 ) );
-        //}
-
         double t1 = 0, t2 = 2 * PI;
         double r1sq = radius1 * radius1;
         double r2sq = radius2 * radius2;
 
         while( t1 < t2 )
         {
-            verts->AddAttribute( glm::vec3( radius1 * cos( t2 ), radius2 * sin( t2 ), 0 ) );
-            verts->AddAttribute( glm::vec3( radius1 * cos( t1 ), radius2 * sin( t1 ), 0 ) );
+            AddPoint( t2, verts );
+            AddPoint( t1, verts );
 
             t1 += 1.0 / ( sqrt( r1sq * sin(t1)*sin(t1) + r2sq * cos(t1) * cos(t1) ) ) / quality;
             t2 -= 1.0 / ( sqrt( r1sq * sin(t2)*sin(t2) + r2sq * cos(t2) * cos(t2) ) ) / quality;
         }
+
+        AddPoint( PI, verts );
     }
 };
 
