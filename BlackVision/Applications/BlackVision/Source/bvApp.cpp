@@ -107,9 +107,9 @@ bool BlackVisionApp::OnInitialize       ()
     m_processManager = new ProcessManager();
 
     InitializeConsole       ();
+	InitializeResourceLoaders();
     InitializeAppLogic      ();
     InitializeSelfState     ();
-	InitializeResourceLoaders();
 
     return WindowedApplication::OnInitialize();
 }
