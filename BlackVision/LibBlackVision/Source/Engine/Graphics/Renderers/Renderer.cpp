@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "OGLRenderer/GL/BVGL.h"
+#include "BVGL.h"
 
 #include "Engine/Graphics/Resources/Texture2D.h"
 #include "Engine/Graphics/Resources/RenderTarget.h"

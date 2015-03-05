@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GL/BVGL.h"
+#include "BVGL.h"
 
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 

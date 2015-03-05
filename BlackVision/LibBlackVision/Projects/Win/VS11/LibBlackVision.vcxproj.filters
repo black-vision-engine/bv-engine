@@ -169,9 +169,6 @@
     <Filter Include="Engine\Graphics\Shaders\Parameters">
       <UniqueIdentifier>{5465af29-db0d-4bdd-85fa-3f9c7a36281e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\Renderers\OGLRenderer\GL">
-      <UniqueIdentifier>{8daef4a4-9ef6-4313-b768-9cb76edf0f37}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Core\MemoryChunk.cpp">
@@ -836,9 +833,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\System\Env.cpp">
       <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGL.cpp">
-      <Filter>Engine\Graphics\Renderers\OGLRenderer\GL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1687,12 +1681,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\System\Env.h">
       <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGL.h">
-      <Filter>Engine\Graphics\Renderers\OGLRenderer\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGLDefs.h">
-      <Filter>Engine\Graphics\Renderers\OGLRenderer\GL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

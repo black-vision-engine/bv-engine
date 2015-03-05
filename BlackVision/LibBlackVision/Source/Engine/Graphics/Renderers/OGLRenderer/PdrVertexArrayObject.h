@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "GL/BVGL.h"
+#include "BVGL.h"
 
 
 namespace bv {

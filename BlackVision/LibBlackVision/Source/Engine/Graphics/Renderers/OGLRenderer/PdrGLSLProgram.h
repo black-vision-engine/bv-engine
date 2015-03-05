@@ -4,7 +4,7 @@
 #include <map>
 #include <hash_map>
 
-#include "GL/BVGL.h"
+#include "BVGL.h"
 
 #include "Mathematics/glm_inc.h"
 
