@@ -54,7 +54,7 @@ private:
 
 public:
 
-    FontAtlasCacheEntry *               GetEntry            ( const std::string& fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, const std::string& fontFileName, bool bold, bool italic );
+    FontAtlasCacheEntry *               GetEntry            ( const std::string& fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, bool bold, bool italic );
     void                                AddEntry            ( const FontAtlasCacheEntry& data, bool forceInvalidate = true );
 
     void                                Update              ();

@@ -173,10 +173,8 @@ int GetEntryCallback( void * data, int argsNum, char ** args, char ** columnName
 }
 // *********************************
 //
-FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, const std::string & fontFileName, bool bold, bool italic )
+FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, bool bold, bool italic )
 {
-    { fontFileName; fontName; fontSize; blurSize; outlineWidth; fontFileName; bold; italic;} // FIXME: suppress unused warning
-	assert(false);
     if( !m_dataBase )
     {
         m_dataBase = OpenDataBase( m_cacheFile );

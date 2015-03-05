@@ -341,7 +341,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 		for ( auto ch : wcharsSet )
 			atlas->SetGlyph( ch, outlineGlyphs[ ch ], true );
 
-    char* atlasData = const_cast< char * >( atlas->GetWritableData()->Get() );// FIXME: Remove const_cast
+    char* atlasData = new char[ altlasWidth * altlasHeight * 4 ]; //const_cast< char * >( atlas->GetWritableData()->Get() );// FIXME: Remove const_cast
 
 	memset( atlasData, 0, altlasWidth * altlasHeight * 4 );
 
@@ -407,6 +407,9 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 
 		currAddress += ( m_maxHeight - 1  + padding ) *  altlasWidth * 4;
 	}
+	
+	auto singleTex = SingleTextureResource::Create( MemoryChunk::Create( atlasData, altlasWidth * altlasHeight * 4 ), "", altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8 );
+	atlas->m_textureResource = TextureResource::Create( singleTex, nullptr );
 
 	TextureHelper::WriteRAW( "testFreeType.raw", atlas->GetWritableData() );
 

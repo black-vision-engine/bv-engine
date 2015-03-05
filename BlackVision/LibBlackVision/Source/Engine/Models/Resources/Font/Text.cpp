@@ -63,7 +63,7 @@ TextAtlasConstPtr Text::LoadFromCache()
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
 
-	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, m_fontFile, false, false );
+	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, false, false );
 
     if( entry != nullptr )
         return entry->m_textAtlas;

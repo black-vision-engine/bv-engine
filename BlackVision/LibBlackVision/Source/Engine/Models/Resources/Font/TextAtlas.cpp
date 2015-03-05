@@ -53,8 +53,6 @@ TextAtlas::TextAtlas( SizeType w, SizeType h, SizeType bitsPerPixel, SizeType gw
 		tf = TextureFormat::F_A8R8G8B8;
 	else
 		assert(false);
-
-	//m_textureResource = ResourceHandlePtr( new ResourceHandle( data, size, new TextureExtraData( w, h, bitsPerPixel, tf, TextureType::T_2D ) ) );
 }
 
 // *********************************
@@ -74,10 +72,10 @@ MemoryChunkConstPtr      TextAtlas::GetData         () const
 
 // *********************************
 //
-MemoryChunkConstPtr      TextAtlas::GetWritableData ()
+MemoryChunkPtr			TextAtlas::GetWritableData ()
 {
 	// FIXME: How about mimpmaps. This function should return TextureResourceConstPtr not MemoryChunkConstPtr
-	return m_textureResource->GetOriginal()->GetData();
+	return std::const_pointer_cast< MemoryChunk >( m_textureResource->GetOriginal()->GetData() );
 }
 
 // *********************************

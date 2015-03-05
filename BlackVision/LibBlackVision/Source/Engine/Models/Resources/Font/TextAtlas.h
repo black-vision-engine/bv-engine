@@ -50,7 +50,7 @@ public:
     Float32                 GetKerning      ( wchar_t c0, wchar_t c1 ) const;
 
     MemoryChunkConstPtr     GetData         () const;
-    MemoryChunkConstPtr     GetWritableData ();
+    MemoryChunkPtr			GetWritableData ();
     SizeType				GetSizeInBytes  () const;
 
     TextAtlas();
