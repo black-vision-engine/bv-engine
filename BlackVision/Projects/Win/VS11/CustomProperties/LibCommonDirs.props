@@ -5,6 +5,7 @@
     <BuildDir>..\..\..\..\_Builds</BuildDir>
     <TempDir>..\..\..\..\_Temp</TempDir>
     <DepDir>..\..\..\..\Dep</DepDir>
+    <LibsRootDir>..\..\..\..\</LibsRootDir>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
@@ -18,11 +19,8 @@
     <BuildMacro Include="DepDir">
       <Value>$(DepDir)</Value>
     </BuildMacro>
-    <BuildMacro Include="LibBlackVisionDir">
-      <Value>$(LibBlackVisionDir)</Value>
-    </BuildMacro>
-    <BuildMacro Include="AssetsDir">
-      <Value>$(AssetsDir)</Value>
+    <BuildMacro Include="LibsRootDir">
+      <Value>$(LibsRootDir)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

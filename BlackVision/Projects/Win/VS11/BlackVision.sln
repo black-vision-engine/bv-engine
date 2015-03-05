@@ -23,6 +23,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EnginePrototyper", "..\..\.
 		{6A33F496-E3C1-4C91-A4E1-049C0C3B762E} = {6A33F496-E3C1-4C91-A4E1-049C0C3B762E}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibBVGL", "..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj", "{B0E6C314-5B08-40F7-87EF-17141A389BA5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -93,6 +95,18 @@ Global
 		{4F825938-1541-4001-B161-C6FDF38F8CA7}.Release|Win32.Build.0 = Release|Win32
 		{4F825938-1541-4001-B161-C6FDF38F8CA7}.Release|x64.ActiveCfg = Release|x64
 		{4F825938-1541-4001-B161-C6FDF38F8CA7}.Release|x64.Build.0 = Release|x64
+		{B0E6C314-5B08-40F7-87EF-17141A389BA5}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{B0E6C314-5B08-40F7-87EF-17141A389BA5}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{B0E6C314-5B08-40F7-87EF-17141A389BA5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B0E6C314-5B08-40F7-87EF-17141A389BA5}.Debug|Win32.Build.0 = Debug|Win32
+		{B0E6C314-5B08-40F7-87EF-17141A389BA5}.Debug|x64.ActiveCfg = Debug|x64
+		{B0E6C314-5B08-40F7-87EF-17141A389BA5}.Debug|x64.Build.0 = Debug|x64
+		{B0E6C314-5B08-40F7-87EF-17141A389BA5}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{B0E6C314-5B08-40F7-87EF-17141A389BA5}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{B0E6C314-5B08-40F7-87EF-17141A389BA5}.Release|Win32.ActiveCfg = Release|Win32
+		{B0E6C314-5B08-40F7-87EF-17141A389BA5}.Release|Win32.Build.0 = Release|Win32
+		{B0E6C314-5B08-40F7-87EF-17141A389BA5}.Release|x64.ActiveCfg = Release|x64
+		{B0E6C314-5B08-40F7-87EF-17141A389BA5}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

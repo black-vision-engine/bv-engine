@@ -6,6 +6,7 @@
     <TempDir>..\..\..\..\..\_Temp</TempDir>
     <DepDir>..\..\..\..\..\Dep</DepDir>
     <LibBlackVisionDir>..\..\..\..\..\LibBlackVision\Source</LibBlackVisionDir>
+    <LibBVGLDir>..\..\..\..\..\LibBVGL\Source</LibBVGLDir>
     <AssetsDir>..\..\..\..\..\Assets</AssetsDir>
   </PropertyGroup>
   <PropertyGroup />
