@@ -47,12 +47,12 @@ public:
                     BlackVisionApp		();
                     ~BlackVisionApp	    ();
 
-    virtual void    OnKey               ( unsigned char c );
-    virtual void    OnPreidle	        ();
-    virtual void    OnIdle              ();
-    virtual void    OnPreMainLoop       ();
-    virtual bool    OnInitialize        ();
-    virtual void    OnTerminate         ();
+    virtual void    OnKey               ( unsigned char c ) override;
+    virtual void    OnPreidle	        () override;
+    virtual void    OnIdle              () override;
+    virtual void    OnPreMainLoop       () override;
+    virtual bool    OnInitialize        () override;
+    virtual void    OnTerminate         () override;
 
 private:
 
