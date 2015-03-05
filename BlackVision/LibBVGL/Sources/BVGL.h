@@ -12,6 +12,8 @@ class BVGL
 {
 public:
 
+    static bool                 InitializeBVGL              ();
+
     static void                 bvglViewport                ( GLint x, GLint y, GLsizei width, GLsizei height );
     
     static void                 bvglClearColor              ( GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha );
