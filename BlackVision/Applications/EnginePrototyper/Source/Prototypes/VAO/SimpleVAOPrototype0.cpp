@@ -24,7 +24,7 @@ SimpleVAOPrototype0::~SimpleVAOPrototype0   ()
 //
 void    SimpleVAOPrototype0::Initialize     ()
 {
-    glClearColor( 0.f, 0.f, 0.f, 0.f );
+    BVGL::bvglClearColor( 0.f, 0.f, 0.f, 0.f );
 }
 
 // **************************
@@ -45,7 +45,7 @@ void    SimpleVAOPrototype0::Update         ( TimeType t )
 //
 void    SimpleVAOPrototype0::Render         ()
 {
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    BVGL::bvglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     m_prog.Use();
     m_rct.Render();
@@ -64,7 +64,7 @@ void    SimpleVAOPrototype0::Key            ( unsigned char c )
 //
 void    SimpleVAOPrototype0::Resize         ( UInt32 w, UInt32 h )
 {
-    glViewport( 0, 0, w, h );
+    BVGL::bvglViewport( 0, 0, w, h );
 }
 
 // **************************

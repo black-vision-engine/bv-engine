@@ -1,6 +1,6 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 
-#include <gl/glew.h>
+#include "BVGL.h"
 
 #include "Engine/Graphics/Renderers/WGLRenderer/WGLRendererData.h"
 
@@ -69,13 +69,9 @@ bool	InitializeGLContext( RendererInput & ri, WGLRendererData * data )
 //
 bool	InitializeGL	()
 {
-    //
-    glewInit();
-
-    if ( !GLEW_ARB_vertex_program || !glewGetExtension( "GL_ARB_fragment_program" ) ) 
-    {		
+    if( !BVGL::InitializeBVGL() )
+    {
         MessageBox( NULL, L"No support for ARB vertex'n'fragment program!\n", L"Black Vision App - OpenGL", MB_OK | MB_ICONASTERISK );
-        return false;
     }
 
     return true;

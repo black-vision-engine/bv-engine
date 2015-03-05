@@ -8,10 +8,17 @@
 namespace bv {
 
 // *****************************
-//
+// FIXME: this initialization should check much more caps and return an error code instead of a simple bool
 bool        BVGL::InitializeBVGL                ()
 {
-    return false;    
+    glewInit();
+
+    if ( !GLEW_ARB_vertex_program || !glewGetExtension( "GL_ARB_fragment_program" ) ) 
+    {		
+        return false;
+    }
+
+    return true;
 }
 
 // *****************************

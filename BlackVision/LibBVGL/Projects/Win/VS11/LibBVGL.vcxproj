@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Sources\BVGL.cpp" />
+    <ClCompile Include="..\..\..\Source\BVGL.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Sources\BVGL.h" />
-    <ClInclude Include="..\..\..\Sources\BVGLDefs.h" />
+    <ClInclude Include="..\..\..\Source\BVGL.h" />
+    <ClInclude Include="..\..\..\Source\BVGLDefs.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B0E6C314-5B08-40F7-87EF-17141A389BA5}</ProjectGuid>
