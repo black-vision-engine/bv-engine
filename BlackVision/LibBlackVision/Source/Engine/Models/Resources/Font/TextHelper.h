@@ -24,7 +24,7 @@ public:
     /////////////////////////////////////
     // This function loads font definition from file. Builds font atlases with the specified size.
     // Returns ResourceHandle of this font
-    static FontResourceConstPtr			LoadFont            ( const std::string & fontFileName, SizeType size, SizeType blurSize, SizeType outlineSize, const std::wstring & atlasCharSetFile = SUPPROTED_CHARS_FILE );
+    static FontResourceConstPtr			LoadFont            ( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize, const std::wstring & atlasCharSetFile = SUPPROTED_CHARS_FILE );
 
     /////////////////////////////////////
     // This function creates TextAtlas from specified FontReasource.

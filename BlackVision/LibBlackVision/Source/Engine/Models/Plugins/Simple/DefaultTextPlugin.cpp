@@ -250,7 +250,7 @@ void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
 
 // *************************************
 // 
-void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, SizeType fontSize, SizeType blurSize, SizeType outlineSize )
+void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize )
 {
 	auto txData = m_psc->GetTexturesDataImpl();
     assert( txData->GetTextures().size() <= 1 );

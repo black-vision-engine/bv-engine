@@ -11,6 +11,8 @@
 #include "Engine/Models/Resources/TextureHelpers.h"
 #include "Engine/Models/Resources/TextureLoader.h"
 #include "Engine/Models/Resources/IResource.h"
+#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
+#include "Engine/Models/Resources/ResourceManager.h"
 
 #pragma warning(push)
 #pragma warning(disable : 4512)
@@ -175,64 +177,65 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & f
 {
     { fontFileName; fontName; fontSize; blurSize; outlineWidth; fontFileName; bold; italic;} // FIXME: suppress unused warning
 	assert(false);
- //   if( !m_dataBase )
- //   {
- //       m_dataBase = OpenDataBase( m_cacheFile );
- //   }
+    if( !m_dataBase )
+    {
+        m_dataBase = OpenDataBase( m_cacheFile );
+    }
 
- //   auto ret = new FontAtlasCacheEntry();
+	auto ret = new FontAtlasCacheEntry();
 
- //   std::string sql = "SELECT * FROM cached_fonts WHERE font_name=\'" + fontName + "\'" +
- //                           " AND font_size = " + std::to_string( fontSize ) +
- //                           " AND blur_Size = " + std::to_string( blurSize ) +
-	//						" AND outline_width = " + std::to_string( outlineWidth ) +
- //                           " AND bold_flag = " + std::to_string( bold ) +
- //                           " AND italic_flag = " + std::to_string( italic ) + ";";
+    std::string sql = "SELECT * FROM cached_fonts WHERE font_name=\'" + fontName + "\'" +
+                            " AND font_size = " + std::to_string( fontSize ) +
+                            " AND blur_Size = " + std::to_string( blurSize ) +
+							" AND outline_width = " + std::to_string( outlineWidth ) +
+                            " AND bold_flag = " + std::to_string( bold ) +
+                            " AND italic_flag = " + std::to_string( italic ) + ";";
 
- //   char* err = nullptr;
+    char* err = nullptr;
 
- //   auto res = sqlite3_exec( m_dataBase, sql.c_str(), GetEntryCallback, ret, &err );
+    auto res = sqlite3_exec( m_dataBase, sql.c_str(), GetEntryCallback, ret, &err );
 
- //   if( res != SQLITE_OK )
- //   {
- //       if( err != nullptr )
- //       {
- //           std::cerr << "SQL Error: " << std::string( err ) << std::endl;
- //           sqlite3_free(err);
- //       }
- //       else
- //           std::cerr << "SQL Error: " << res << std::endl;
- //   }
+    if( res != SQLITE_OK )
+    {
+        if( err != nullptr )
+        {
+            std::cerr << "SQL Error: " << std::string( err ) << std::endl;
+            sqlite3_free(err);
+        }
+        else
+            std::cerr << "SQL Error: " << res << std::endl;
+    }
 
-	//if( ret->m_textAtlas != nullptr )
-	//{
-	//	auto width	= ret->m_textAtlas->GetWidth();
-	//	auto height = ret->m_textAtlas->GetHeight();
-	//	auto bbp	= ret->m_textAtlas->GetBitsPerPixel();
+	if( ret->m_textAtlas != nullptr )
+	{
+		auto bbp	= ret->m_textAtlas->GetBitsPerPixel();
 
- //       TextureFormat tf = TextureFormat::F_TOTAL;
+        TextureFormat tf = TextureFormat::F_TOTAL;
 
-	//	if( bbp == 8 )
- //       {
-	//		tf = TextureFormat::F_A8;
- //       }
-	//	else if ( bbp == 32 ) // FIXME: no brabo KURWA :P if ( bbp = 32 )
- //       {
- //           tf = TextureFormat::F_A8R8G8B8;
- //       }
-	//	else
- //       {
-	//		assert(false);
- //       }
+		if( bbp == 8 )
+        {
+			tf = TextureFormat::F_A8;
+        }
+		else if ( bbp == 32 ) // FIXME: no brabo KURWA :P if ( bbp = 32 )
+        {
+            tf = TextureFormat::F_A8R8G8B8;
+        }
+		else
+        {
+			assert(false);
+        }
 
-	//	auto resExtra = new TextureExtraData( width, height, bbp, tf, TextureType::T_2D );
-	//	auto memChunk = TextureHelper::LoadRAW( ret->m_atlasFilePath );
+		auto texDesc = TextureResourceDesc::Create( ret->m_atlasFilePath );
 
-	//	std::const_pointer_cast< TextAtlas >( ret->m_textAtlas )->m_textureHandle = std::make_shared< ResourceHandle >( memChunk, width * height * bbp / 8, resExtra );
+		auto res = ResourceManager::GetInstance().LoadResource( texDesc );
+		if( res != nullptr )
+		{
+			std::const_pointer_cast< TextAtlas >( ret->m_textAtlas )->m_textureResource = QueryTypedRes< TextureResourceConstPtr >( res );
+		}
 
-	//	return ret;
-	//}
- //   else
+		return ret;
+	}
+    else
     {
         return nullptr;
     }

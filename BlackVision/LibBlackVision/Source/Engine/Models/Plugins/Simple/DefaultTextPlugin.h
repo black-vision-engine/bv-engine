@@ -80,7 +80,7 @@ private:
 																				const glm::vec4 &,
 																				DataBuffer::Semantic );
 
-	void										LoadAtlas					( const std::string &, SizeType, SizeType, SizeType );
+	void										LoadAtlas					( const std::string &, UInt32, UInt32, UInt32 );
 
     virtual bool                                LoadResource                ( ResourceDescConstPtr resDescr ) override;
 

@@ -301,7 +301,7 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 
 // *********************************
 //
-TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlineWidth, const std::wstring & wcharsSet )
+TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth, const std::wstring & wcharsSet )
 {
 	SizeType							glyphsNum	= wcharsSet.size();
 	Int32								spadding	= (Int32)padding;
@@ -324,7 +324,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlin
 			outlineGlyphs[ ch ] = RenderGlyph( ch, outlineSpans[ ch ], outlineWidth );
 		}
 
-	auto atlasSize = (SizeType) std::ceil( sqrt( (float)glyphsNum ) );
+	auto atlasSize = (UInt32) std::ceil( sqrt( (float)glyphsNum ) );
 
     auto maxWidth  = m_maxWidth		+ spadding * 2;
     auto maxHeight = m_maxHeight	+ spadding * 2;
@@ -347,11 +347,11 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlin
 
 	char * currAddress = atlasData;
 
-	for( SizeType y = 0; y < atlasSize; ++y )
+	for( UInt32 y = 0; y < atlasSize; ++y )
 	{
 		currAddress += altlasWidth * padding * 4;
 
-		for( SizeType x = 0; x < atlasSize; ++x )
+		for( UInt32 x = 0; x < atlasSize; ++x )
 		{
 			if( y * atlasSize + x < wcharsSet.size() )
 			{
@@ -417,7 +417,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlin
 
 // *********************************
 //
-TextAtlasConstPtr FreeTypeEngine::CreateAtlas( SizeType padding, const std::wstring & wcharsSet )
+TextAtlasConstPtr FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet )
 {
 	return CreateAtlas( padding, 0, wcharsSet );
 }

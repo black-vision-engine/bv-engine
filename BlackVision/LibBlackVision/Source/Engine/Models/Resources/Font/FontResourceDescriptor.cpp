@@ -36,14 +36,14 @@ VoidConstPtr FontResourceDesc::QueryThis() const
 
 // ***********************
 //
-FontResourceDescConstPtr FontResourceDesc::Create( const std::string & fontFileName, SizeType size, SizeType blurSize, SizeType outlineSize, bool generateMipmaps, const std::wstring & atlasCharSetFile )
+FontResourceDescConstPtr FontResourceDesc::Create( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps, const std::wstring & atlasCharSetFile )
 {
 	return std::make_shared< FontResourceDesc >( fontFileName, size, blurSize, outlineSize, generateMipmaps, atlasCharSetFile );
 }
 
 // ***********************
 //
-FontResourceDesc::FontResourceDesc( const std::string & fontFileName, SizeType fontSize, SizeType blurSize, SizeType outlineSize, bool generateMipmaps, const std::wstring & atlasCharSetFile )
+FontResourceDesc::FontResourceDesc( const std::string & fontFileName, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps, const std::wstring & atlasCharSetFile )
 	: m_fontFileName( fontFileName )
 	, m_fontSize( fontSize )
 	, m_blurSize( blurSize )
@@ -61,21 +61,21 @@ const std::string &	FontResourceDesc::GetFontFileName() const
 
 // ***********************
 //
-SizeType FontResourceDesc::GetFontSize() const
+UInt32 FontResourceDesc::GetFontSize() const
 {
 	return m_fontSize;
 }
 
 // ***********************
 //
-SizeType FontResourceDesc::GetBlurSize() const
+UInt32 FontResourceDesc::GetBlurSize() const
 {
 	return m_blurSize;
 }
 
 // ***********************
 //
-SizeType FontResourceDesc::GetOutlineSize() const
+UInt32 FontResourceDesc::GetOutlineSize() const
 {
 	return m_outlineSize;
 }

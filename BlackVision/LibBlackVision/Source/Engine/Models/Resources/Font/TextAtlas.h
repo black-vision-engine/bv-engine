@@ -36,14 +36,14 @@ public:
 
     SizeType				GetBitsPerPixel () const;
 
-    SizeType				GetWidth        () const;
-    SizeType				GetHeight       () const;
+    UInt32					GetWidth        () const;
+    UInt32					GetHeight       () const;
     
-    SizeType				GetGlyphX       ( wchar_t c ) const;
-    SizeType				GetGlyphY       ( wchar_t c ) const;
+    UInt32					GetGlyphX       ( wchar_t c ) const;
+    UInt32					GetGlyphY       ( wchar_t c ) const;
 
-    SizeType				GetGlyphWidth   ( wchar_t c ) const;
-    SizeType				GetGlyphHeight  ( wchar_t c ) const;
+    UInt32					GetGlyphWidth   ( wchar_t c ) const;
+    UInt32					GetGlyphHeight  ( wchar_t c ) const;
 
     const Glyph *			GetGlyph		( wchar_t c, bool outline = false ) const;
 
@@ -56,7 +56,7 @@ public:
     TextAtlas();
     TextAtlas( SizeType w, SizeType h, SizeType bitsPrePixel, SizeType gw, SizeType gh );
 
-    static TextAtlasPtr		Create          ( SizeType w, SizeType h, SizeType bitsPrePixel, SizeType gw, SizeType gh );
+    static TextAtlasPtr		Create          ( UInt32 w, UInt32 h, SizeType bitsPrePixel, UInt32 gw, UInt32 gh );
 
 	TextureResourceConstPtr	GetResourceHandle() const;
 

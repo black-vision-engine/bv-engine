@@ -40,7 +40,7 @@ IResourceConstPtr FontLoader::LoadResource( const bv::ResourceDescConstPtr & des
 namespace
 {
 
-TextConstPtr        LoadFontFile( const std::string & file, size_t size, size_t blurSize, size_t outlineSize, const std::wstring & atlasCharSetFile )
+TextConstPtr        LoadFontFile( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 outlineSize, const std::wstring & atlasCharSetFile )
 {
     auto t = TextHelper::LoadUtf8FileToString( atlasCharSetFile );
 	return Text::Create( t, file, size, blurSize, outlineSize ); // FIXME: Text constructor makes to much.
@@ -60,7 +60,7 @@ std::string         AddPostfixToFileName( const std::string & file, const std::s
 
 ///////////////////////////////
 //
-TextConstPtr		FontLoader::TryLoadFont( const std::string & file, size_t size, size_t blurSize, size_t oulineSize, const std::wstring & atlasCharSetFile ) const
+TextConstPtr		FontLoader::TryLoadFont( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 oulineSize, const std::wstring & atlasCharSetFile ) const
 {
     if( File::Exists(file) )
     {

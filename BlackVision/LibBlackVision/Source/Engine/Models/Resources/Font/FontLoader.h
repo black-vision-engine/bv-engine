@@ -11,7 +11,7 @@ class FontLoader : public ResourceLoader
 {
 private:
 
-    TextConstPtr            TryLoadFont         ( const std::string & file, size_t size, size_t blurSize, size_t oulineSize, const std::wstring & atlasCharSetFile ) const;
+    TextConstPtr            TryLoadFont         ( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 oulineSize, const std::wstring & atlasCharSetFile ) const;
 
 public:
 	IResourceConstPtr		LoadResource		( const bv::ResourceDescConstPtr & ) const override;

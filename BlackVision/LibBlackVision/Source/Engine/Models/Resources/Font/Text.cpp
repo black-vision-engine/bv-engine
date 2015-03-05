@@ -31,9 +31,9 @@ namespace bv { namespace model {
 //
 TextConstPtr Text::Create(const std::wstring& supportedCharsSet
 						, const std::string& fontFile
-						, SizeType fontSize
-						, SizeType blurSize
-						, SizeType outlineSize )
+						, UInt32 fontSize
+						, UInt32 blurSize
+						, UInt32 outlineSize )
 {
 	return std::make_shared< Text >( supportedCharsSet, fontFile, fontSize, blurSize, outlineSize );
 }
@@ -41,7 +41,7 @@ TextConstPtr Text::Create(const std::wstring& supportedCharsSet
 
 // *********************************
 //
-Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, SizeType fontSize, SizeType blurSize, SizeType outlineSize )
+Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize )
     : m_supportedCharsSet( supportedCharsSet )
     , m_fontFile( fontFile )
     , m_fontSize( fontSize )

@@ -59,7 +59,7 @@ TextAtlas::TextAtlas( SizeType w, SizeType h, SizeType bitsPerPixel, SizeType gw
 
 // *********************************
 //
-TextAtlasPtr TextAtlas::Create( SizeType w, SizeType h, SizeType bitsPrePixel, SizeType gw, SizeType gh )
+TextAtlasPtr TextAtlas::Create( UInt32 w, UInt32 h, SizeType bitsPrePixel, UInt32 gw, UInt32 gh )
 {
     return std::make_shared< TextAtlas >(w, h, bitsPrePixel, gw, gh);
 }
@@ -108,14 +108,14 @@ SizeType				TextAtlas::GetBitsPerPixel () const
 
 // *********************************
 //
-SizeType				TextAtlas::GetWidth        () const
+UInt32					TextAtlas::GetWidth        () const
 {
     return m_textureResource->GetOriginal()->GetWidth();
 }
 
 // *********************************
 //
-SizeType				TextAtlas::GetHeight       () const
+UInt32					TextAtlas::GetHeight       () const
 {
     return m_textureResource->GetOriginal()->GetHeight();
 }
@@ -162,28 +162,28 @@ Float32                  TextAtlas::GetKerning      ( wchar_t c0, wchar_t c1 ) c
 
 // *********************************
 //
-SizeType				TextAtlas::GetGlyphX       ( wchar_t c ) const
+UInt32					TextAtlas::GetGlyphX       ( wchar_t c ) const
 {
     return GetGlyph( c )->textureX;
 }
 
 // *********************************
 //
-SizeType				TextAtlas::GetGlyphY       ( wchar_t c ) const
+UInt32					TextAtlas::GetGlyphY       ( wchar_t c ) const
 {
     return GetGlyph( c )->textureY;
 }
 
 // *********************************
 //
-SizeType				TextAtlas::GetGlyphWidth   ( wchar_t c ) const
+UInt32					TextAtlas::GetGlyphWidth   ( wchar_t c ) const
 {
     return GetGlyph( c )->width;
 }
 
 // *********************************
 //
-SizeType				TextAtlas::GetGlyphHeight  ( wchar_t c ) const
+UInt32					TextAtlas::GetGlyphHeight  ( wchar_t c ) const
 {
     return GetGlyph( c )->height;
 }

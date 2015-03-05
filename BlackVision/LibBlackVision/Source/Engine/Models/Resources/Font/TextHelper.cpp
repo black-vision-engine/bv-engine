@@ -17,7 +17,7 @@ namespace bv { namespace model {
 
 ///////////////////////////////
 //
-FontResourceConstPtr      TextHelper::LoadFont( const std::string & fontFileName, SizeType size, SizeType blurSize, SizeType outlineSize, const std::wstring & atlasCharSetFile )
+FontResourceConstPtr      TextHelper::LoadFont( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize, const std::wstring & atlasCharSetFile )
 {
 	auto desc = FontResourceDesc::Create( fontFileName, size, blurSize, outlineSize, false, atlasCharSetFile ); // TODO: pass generate mipmaps argument
 
