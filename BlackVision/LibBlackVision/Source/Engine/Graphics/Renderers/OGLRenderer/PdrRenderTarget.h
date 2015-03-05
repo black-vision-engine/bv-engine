@@ -3,7 +3,7 @@
 #include <hash_map>
 #include <vector>
 
-#include "GL/BVGL.h"
+#include "BVGL.h"
 
 #include "Engine/Graphics/Resources/RenderTarget.h"
 

@@ -18,9 +18,16 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\BVGL.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\BVGL.h" />
+    <ClInclude Include="..\..\..\Source\BVGLDefs.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{E92B5BDF-8BD5-4D22-B2CD-90D681DEDA85}</ProjectGuid>
-    <RootNamespace>DefaultApplcation</RootNamespace>
+    <ProjectGuid>{B0E6C314-5B08-40F7-87EF-17141A389BA5}</ProjectGuid>
+    <RootNamespace>LibBVGL</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -53,70 +60,76 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonDirs.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommon.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.Win32.debug.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonDirs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommon.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonInclude.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.Win32.debug.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommon.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.x64.debug.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonDirs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommon.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonInclude.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.x64.debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommon.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.Win32.release.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonDirs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommon.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonInclude.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.Win32.release.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommon.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.x64.release.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonDirs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommon.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonInclude.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.x64.release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetExt>.lib</TargetExt>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetExt>.lib</TargetExt>
+    <TargetName>BVGL_D</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetExt>.lib</TargetExt>
+    <TargetName>BVGL_D</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName> BVGL</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetExt>.lib</TargetExt>
+    <TargetName> BVGL</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile />
-    <Link />
     <ClCompile>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(DepDir)/Common/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile />
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(DepDir)/Common/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
       <FunctionLevelLinking>false</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(DepDir)/Common/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -127,7 +140,9 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <FunctionLevelLinking>false</FunctionLevelLinking>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(DepDir)/Common/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -135,13 +150,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj">
-      <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj">
-      <Project>{b0e6c314-5b08-40f7-87ef-17141a389ba5}</Project>
-    </ProjectReference>  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

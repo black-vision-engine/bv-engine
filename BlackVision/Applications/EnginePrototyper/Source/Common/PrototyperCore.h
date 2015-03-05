@@ -10,7 +10,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 #pragma warning(pop)
 
-#include <gl/glew.h>
+#include "BVGL.h"
 
 #include "System/BasicTypes.h"
 

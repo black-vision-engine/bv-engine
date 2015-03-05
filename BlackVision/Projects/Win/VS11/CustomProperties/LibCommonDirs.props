@@ -6,6 +6,7 @@
     <TempDir>..\..\..\..\_Temp</TempDir>
     <DepDir>..\..\..\..\Dep</DepDir>
 	<LibImageDir>..\..\..\..\LibImage\Sources</LibImageDir>
+    <LibsRootDir>..\..\..\..\</LibsRootDir>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
@@ -27,6 +28,9 @@
     </BuildMacro>
     <BuildMacro Include="AssetsDir">
       <Value>$(AssetsDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibsRootDir">
+      <Value>$(LibsRootDir)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

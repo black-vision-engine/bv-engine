@@ -101,7 +101,7 @@
     <ClCompile>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\..\..\;$(LibImageDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBVGL/Source;$(LibImageDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -111,7 +111,7 @@
     <ClCompile>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\..\;$(LibImageDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBVGL/Source;$(LibImageDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -122,7 +122,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\..\..\;$(LibImageDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBVGL/Source;$(LibImageDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -135,7 +135,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\..\..\;$(LibImageDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBVGL/Source;$(LibImageDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -163,7 +163,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRenderer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRendererData.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLUtils.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGL.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrConstants.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrIndexBuffer.cpp" />
@@ -388,8 +387,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectWithMask.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRendererData.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLUtils.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGL.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGLDefs.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrIndexBuffer.h" />

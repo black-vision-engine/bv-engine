@@ -28,8 +28,8 @@ MemManagementInspector::~MemManagementInspector     ()
 //
 void    MemManagementInspector::Initialize          ()
 {
-    glClearColor( 0.f, 0.f, 0.f, 0.f );
-    glDisable( GL_DEPTH_TEST );
+    BVGL::bvglClearColor( 0.f, 0.f, 0.f, 0.f );
+    BVGL::bvglDisable( GL_DEPTH_TEST );
 
     m_scene = ScenePrototype::CreateNewPrototype( 0, m_renderer );
 }
@@ -66,7 +66,7 @@ void    MemManagementInspector::Resize              ( UInt32 w, UInt32 h )
 //
 void    MemManagementInspector::Render              ( Renderer * renderer )
 {
-    glClear( GL_COLOR_BUFFER_BIT );
+    BVGL::bvglClear( GL_COLOR_BUFFER_BIT );
     //glClearDepth((GLclampd)m_ClearDepth);
 
     if( m_scene->GetRootNode() )
