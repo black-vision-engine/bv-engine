@@ -55,10 +55,9 @@ void serialize< boost::archive::text_iarchive >( boost::archive::text_iarchive &
 }
 
 template< >
-void serialize< boost::archive::text_oarchive >( boost::archive::text_oarchive & ar, bv::model::TextAtlas& textAtlas, const unsigned int version )
+void serialize< boost::archive::text_oarchive >( boost::archive::text_oarchive & ar, bv::model::TextAtlas & textAtlas, const unsigned int version )
 {
     { version; } // FIXME: suppress unused warning
-	assert(false);
     //ar << textAtlas.m_textureResource->m_size;
     //
     //assert( textAtlas.m_textureHandle->GetExtra()->GetResourceExtraKind() == bv::model::ResourceExtraKind::RE_TEXTURE );

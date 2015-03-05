@@ -11,12 +11,14 @@ model::IResourceConstPtr ResourceManager::LoadResource( const ResourceDescConstP
 
 	if( it != m_loaders.end() )
 	{
-		return it->second->LoadResource( desc );
+		auto res = it->second->LoadResource( desc );
+		if( res != nullptr )
+		{
+			return res;
+		}
 	}
-	else
-	{	
-		return nullptr;
-	}
+
+	return nullptr;
 }
 
 // ***********************
