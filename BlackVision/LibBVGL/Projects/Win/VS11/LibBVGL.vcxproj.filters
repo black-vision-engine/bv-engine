@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="BVGLPlugins">
+      <UniqueIdentifier>{21502cf9-5613-4171-bc06-924923bd1b69}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGL.cpp">
+      <Filter>BVGLPlugins</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGL.h">
+      <Filter>BVGLPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLDefs.h">
+      <Filter>BVGLPlugins</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
