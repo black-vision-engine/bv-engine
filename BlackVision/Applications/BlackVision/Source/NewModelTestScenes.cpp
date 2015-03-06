@@ -17,6 +17,7 @@
 #include "VideoInput/ExampleVideoInput.h"
 #include "Engine/Models/Plugins/Simple/DefaultCirclePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultEllipsePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTrianglePlugin.h"
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 
@@ -797,7 +798,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedCircleTestScene     ( model::
     return root;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    /*TestScenesFactory::*/CreedEllipseTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -818,6 +819,30 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
     //auto param = plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE_MODE );
     //auto qParam = model::QueryTypedParam< std::shared_ptr< model::ParamEnum< model::DefaultCirclePlugin::OpenAngleMode > > >( param );
     //qParam->SetVal( model::DefaultCirclePlugin::OpenAngleMode::SYMMETRIC, 9.f );
+
+    return root;
+}
+
+model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRIANGLE", timeEvaluator );
+    root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+
+    model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+
+    auto plugin = root->GetPlugin( "triangle" );
+
+    model::SetParameter( plugin->GetParameter( model::DefaultTrianglePlugin::PN_POINTA ), 0.f, glm::vec3( 1, 0, 0 ) );
+    model::SetParameter( plugin->GetParameter( model::DefaultTrianglePlugin::PN_POINTB ), 0.f, glm::vec3( 0, 1, 0 ) );
+    model::SetParameter( plugin->GetParameter( model::DefaultTrianglePlugin::PN_POINTC ), 0.f, glm::vec3( 0, 0, 1 ) );
+
+    model::SetParameter( plugin->GetParameter( model::DefaultTrianglePlugin::PN_POINTA ), 10.f, glm::vec3( 0, 0, 1 ) );
+    model::SetParameter( plugin->GetParameter( model::DefaultTrianglePlugin::PN_POINTB ), 10.f, glm::vec3( 1, 0, 0 ) );
+    model::SetParameter( plugin->GetParameter( model::DefaultTrianglePlugin::PN_POINTC ), 10.f, glm::vec3( 0, 1, 0 ) );
+
+    plugin->Update(0); // FIXME: to generate geometry only
 
     return root;
 }

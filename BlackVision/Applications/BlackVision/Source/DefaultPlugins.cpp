@@ -17,6 +17,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultVideoInputPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCirclePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultEllipsePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTrianglePlugin.h"
 
 namespace bv { namespace model {
 
@@ -41,6 +42,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
 	descriptors.push_back( new DefaultVideoInputPluginDesc() );
 	descriptors.push_back( new DefaultCirclePluginDesc() );
 	descriptors.push_back( new DefaultEllipsePluginDesc() );
+    descriptors.push_back( new DefaultTrianglePluginDesc() );
 
     for( auto descr : descriptors )
     {

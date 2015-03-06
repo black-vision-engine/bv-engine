@@ -837,9 +837,6 @@
     <ClCompile Include="..\..\..\Source\System\Env.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGL.cpp">
-      <Filter>Engine\Graphics\Renderers\OGLRenderer\GL</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.cpp">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClCompile>
@@ -856,6 +853,9 @@
       <Filter>Engine\Models\Plugins\Parameters</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEllipsePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1709,12 +1709,6 @@
     <ClInclude Include="..\..\..\Source\System\Env.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGL.h">
-      <Filter>Engine\Graphics\Renderers\OGLRenderer\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGLDefs.h">
-      <Filter>Engine\Graphics\Renderers\OGLRenderer\GL</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.h">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClInclude>
@@ -1740,6 +1734,9 @@
       <Filter>Engine\Models\Plugins\Parameters</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEllipsePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
   </ItemGroup>
