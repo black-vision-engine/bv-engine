@@ -8,7 +8,7 @@
 
 namespace bv {
 
-class BVGL
+class BVGLDefaultPlugin
 {
 public:
 

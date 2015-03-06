@@ -6,16 +6,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGL.cpp">
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLDefaultPlugin.h">
       <Filter>BVGLPlugins</Filter>
-    </ClCompile>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\BVGL.h" />
+    <ClInclude Include="..\..\..\Source\BVGLDefs.h" />
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLResourceTrackingPlugin.h">
+      <Filter>BVGLPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\BVGLUtil.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGL.h">
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLDefaultPlugin.cpp">
       <Filter>BVGLPlugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLDefs.h">
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLResourceTrackingPlugin.cpp">
       <Filter>BVGLPlugins</Filter>
-    </ClInclude>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -19,11 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGL.cpp" />
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLDefaultPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLResourceTrackingPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGL.h" />
-    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLDefs.h" />
+    <ClInclude Include="..\..\..\Source\BVGL.h" />
+    <ClInclude Include="..\..\..\Source\BVGLDefs.h" />
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLDefaultPlugin.h" />
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLResourceTrackingPlugin.h" />
+    <ClInclude Include="..\..\..\Source\BVGLUtil.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B0E6C314-5B08-40F7-87EF-17141A389BA5}</ProjectGuid>
