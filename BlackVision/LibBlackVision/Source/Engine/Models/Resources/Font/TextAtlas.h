@@ -24,17 +24,17 @@ public: // Only for non intrusive serialization. Should be private
 	std::map< wchar_t, const Glyph * >                  m_outlineGlyphs;
     std::map< wchar_t, const Glyph * >                  m_glyphs;
     std::map< std::pair< wchar_t, wchar_t >, float >	m_kerningMap; 
-	SizeType											m_blurSize;
+	UInt32												m_blurSize;
 
     void                    SetGlyph		( wchar_t wch, const Glyph * glyph, bool outline = false );
 
 public:
 
-    SizeType	            m_glyphWidth;
-    SizeType	            m_glyphHeight;
+    UInt32					m_glyphWidth;
+    UInt32					m_glyphHeight;
 
 
-    SizeType				GetBitsPerPixel () const;
+    UInt32					GetBitsPerPixel () const;
 
     UInt32					GetWidth        () const;
     UInt32					GetHeight       () const;
@@ -54,9 +54,9 @@ public:
     SizeType				GetSizeInBytes  () const;
 
     TextAtlas();
-    TextAtlas( SizeType w, SizeType h, SizeType bitsPrePixel, SizeType gw, SizeType gh );
+    TextAtlas( UInt32 w, UInt32 h, UInt32 bitsPrePixel, UInt32 gw, UInt32 gh );
 
-    static TextAtlasPtr		Create          ( UInt32 w, UInt32 h, SizeType bitsPrePixel, UInt32 gw, UInt32 gh );
+    static TextAtlasPtr		Create          ( UInt32 w, UInt32 h, UInt32 bitsPrePixel, UInt32 gw, UInt32 gh );
 
 	TextureResourceConstPtr	GetResourceHandle() const;
 

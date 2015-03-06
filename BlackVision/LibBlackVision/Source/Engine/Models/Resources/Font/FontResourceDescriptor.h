@@ -10,7 +10,7 @@
 namespace bv
 {
 
-#define SUPPROTED_CHARS_FILE L"../dep/Media/fonts/SupportedChars.txt" // FIXME: Sucks as vacuum
+#define SUPPROTED_CHARS_FILE L"Assets/Fonts/SupportedChars.txt" // FIXME: Sucks as vacuum
 
 class FontResourceDesc;
 DEFINE_CONST_PTR_TYPE( FontResourceDesc )

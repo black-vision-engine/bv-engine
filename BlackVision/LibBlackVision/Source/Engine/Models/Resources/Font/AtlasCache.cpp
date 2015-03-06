@@ -206,23 +206,6 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & f
 
 	if( ret->m_textAtlas != nullptr )
 	{
-		auto bbp	= ret->m_textAtlas->GetBitsPerPixel();
-
-        TextureFormat tf = TextureFormat::F_TOTAL;
-
-		if( bbp == 8 )
-        {
-			tf = TextureFormat::F_A8;
-        }
-		else if ( bbp == 32 ) // FIXME: no brabo KURWA :P if ( bbp = 32 )
-        {
-            tf = TextureFormat::F_A8R8G8B8;
-        }
-		else
-        {
-			assert(false);
-        }
-
 		auto texDesc = TextureResourceDesc::Create( ret->m_atlasFilePath );
 
 		auto res = ResourceManager::GetInstance().LoadResource( texDesc );
@@ -260,7 +243,7 @@ std::string				FontAtlasCache::GenerateTextAtlasCacheFileName( const TextAtlasCo
     auto textAtlasStr =  textAtlasStream.str();
 
     auto sha1 = sha1wrapper();
-    auto fontAtlasTextureFileName = CACHE_DIRECTORY + sha1.getHashFromString( textAtlasStr ) + ".raw";
+    auto fontAtlasTextureFileName = CACHE_DIRECTORY + sha1.getHashFromString( textAtlasStr ) + ".bmp";
 	return fontAtlasTextureFileName;
 }
 
@@ -291,7 +274,7 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
     if( ! File::Exists( CACHE_DIRECTORY ) )
         File::CreateDir( CACHE_DIRECTORY );
 
-    TextureHelper::WriteRAW( fontAtlasTextureFileName, data.m_textAtlas->GetData() );
+	TextureHelper::WriteBMP( fontAtlasTextureFileName, data.m_textAtlas->GetData(), data.m_textAtlas->GetWidth(), data.m_textAtlas->GetHeight(), data.m_textAtlas->GetBitsPerPixel() );
 
     sqlite3_stmt * stmt = nullptr;
     const char * parsed = nullptr;

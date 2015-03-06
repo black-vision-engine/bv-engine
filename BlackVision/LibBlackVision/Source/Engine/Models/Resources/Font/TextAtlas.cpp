@@ -37,7 +37,7 @@ TextAtlas::TextAtlas()
 
 // *********************************
 //
-TextAtlas::TextAtlas( SizeType w, SizeType h, SizeType bitsPerPixel, SizeType gw, SizeType gh )
+TextAtlas::TextAtlas( UInt32 w, UInt32 h, UInt32 bitsPerPixel, UInt32 gw, UInt32 gh )
     : m_glyphWidth( gw )
     , m_glyphHeight( gh )
 	, m_textureResource( nullptr )
@@ -52,12 +52,12 @@ TextAtlas::TextAtlas( SizeType w, SizeType h, SizeType bitsPerPixel, SizeType gw
 	else if ( bitsPerPixel == 32 )
 		tf = TextureFormat::F_A8R8G8B8;
 	else
-		assert(false);
+		assert( bitsPerPixel == 0 ); // For deserializing of TextAtlas 
 }
 
 // *********************************
 //
-TextAtlasPtr TextAtlas::Create( UInt32 w, UInt32 h, SizeType bitsPrePixel, UInt32 gw, UInt32 gh )
+TextAtlasPtr TextAtlas::Create( UInt32 w, UInt32 h, UInt32 bitsPrePixel, UInt32 gw, UInt32 gh )
 {
     return std::make_shared< TextAtlas >(w, h, bitsPrePixel, gw, gh);
 }
@@ -98,7 +98,7 @@ void                    TextAtlas::SetGlyph			( wchar_t wch, const Glyph * glyph
 
 // *********************************
 //
-SizeType				TextAtlas::GetBitsPerPixel () const
+UInt32					TextAtlas::GetBitsPerPixel () const
 {
 	assert( m_textureResource->GetOriginal()->GetFormat() == TextureFormat::F_A8R8G8B8 );
 	return 32;

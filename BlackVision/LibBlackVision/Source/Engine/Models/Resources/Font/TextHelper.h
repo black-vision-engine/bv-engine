@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Resources/Font/FontResource.h"
+#include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
 #include "Engine/Models/Resources/Font/Text.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Mathematics/Rect.h"
@@ -8,8 +9,6 @@
 namespace bv { namespace model {
 
 class TextAtlas;
-
-#define SUPPROTED_CHARS_FILE L"../dep/Media/fonts/SupportedChars.txt"
 
 enum class TextAlignmentType
 {
