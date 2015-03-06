@@ -6,7 +6,7 @@
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Processes/ProcessManager.h"
 #include "Engine/Models/Resources/ResourceManager.h"
-#include "Engine/Models/Resources/TextureLoader.h"
+#include "Engine/Models/Resources/Texture/TextureLoader.h"
 #include "Engine/Models/Resources/Font/FontLoader.h"
 #include "Engine/Models/Resources/Texture/AnimationLoader.h"
 #include "Engine/Models/Resources/Font/FontResourceDescriptor.h"

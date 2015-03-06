@@ -684,15 +684,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ResourceLoader.cpp">
       <Filter>Engine\Models\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextHelpers.cpp">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextureHelpers.cpp">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextureLoader.cpp">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\AtlasCache.cpp">
       <Filter>Engine\Models\Resources\Font</Filter>
     </ClCompile>
@@ -836,6 +827,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResource.cpp">
       <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextureLoader.cpp">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextureHelpers.cpp">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextHelpers.cpp">
+      <Filter>Engine\Models\Resources\Font</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1514,15 +1514,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceLoader.h">
       <Filter>Engine\Models\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextHelpers.h">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextureHelpers.h">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextureLoader.h">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\AtlasCache.h">
       <Filter>Engine\Models\Resources\Font</Filter>
     </ClInclude>
@@ -1687,6 +1678,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResource.h">
       <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextureLoader.h">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextureHelpers.h">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextHelpers.h">
+      <Filter>Engine\Models\Resources\Font</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

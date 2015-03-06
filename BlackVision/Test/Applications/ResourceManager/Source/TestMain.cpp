@@ -1,5 +1,5 @@
 #include "Engine/Models/Resources/ResourceManager.h"
-#include "Engine/Models/Resources/TextureLoader.h"
+#include "Engine/Models/Resources/Texture/TextureLoader.h"
 #include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
 #include "Engine/Models/Resources/Texture/TextureResource.h"
 #include "Core/Hash.h"

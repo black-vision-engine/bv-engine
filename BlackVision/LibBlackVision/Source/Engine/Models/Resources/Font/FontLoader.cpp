@@ -2,7 +2,6 @@
 #include "Text.h"
 #include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
 #include "Engine/Models/Resources/Font/FontResource.h"
-#include "Engine/Models/Resources/TextHelpers.h"
 #include "System/FileIO.h"
 
 
@@ -40,12 +39,56 @@ IResourceConstPtr FontLoader::LoadResource( const bv::ResourceDescConstPtr & des
 namespace
 {
 
+// *******************************
+//
+size_t GetSizeOfFile( const std::wstring& path )
+{
+	struct _stat fileinfo;
+	_wstat(path.c_str(), &fileinfo);
+	return fileinfo.st_size;
+}
+
+// *******************************
+//
+std::wstring LoadUtf8FileToString(const std::wstring& filename)
+{
+	std::wstring buffer;            // stores file contents
+	FILE* f = nullptr;
+    _wfopen_s(&f, filename.c_str(), L"rtS, ccs=UTF-8");
+
+	// Failed to open file
+	if (f == NULL)
+	{
+		// ...handle some error...
+		return buffer;
+	}
+
+	size_t filesize = GetSizeOfFile(filename);
+
+	// Read entire file contents in to memory
+	if (filesize > 0)
+	{
+		buffer.resize(filesize);
+		size_t wchars_read = fread(&(buffer.front()), sizeof(wchar_t), filesize, f);
+		buffer.resize(wchars_read);
+		buffer.shrink_to_fit();
+	}
+
+	fclose(f);
+
+	return buffer;
+}
+
+// *******************************
+//
 TextConstPtr        LoadFontFile( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 outlineSize, const std::wstring & atlasCharSetFile )
 {
-    auto t = TextHelper::LoadUtf8FileToString( atlasCharSetFile );
+    auto t = LoadUtf8FileToString( atlasCharSetFile );
 	return Text::Create( t, file, size, blurSize, outlineSize ); // FIXME: Text constructor makes to much.
 }
 
+// *******************************
+//
 std::string         AddPostfixToFileName( const std::string & file, const std::string & postfix )
 {
     std::string newFileName = boost::filesystem::basename( file ) + postfix;
@@ -56,7 +99,7 @@ std::string         AddPostfixToFileName( const std::string & file, const std::s
     return newPath.replace_extension( boost::filesystem::extension( file ) ).string();
 }
 
-}
+} // anonymous
 
 ///////////////////////////////
 //

@@ -315,9 +315,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ResourceDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ResourceLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ResourceManager.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextHelpers.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextureHelpers.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextureLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureHelpers.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResource.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescriptor.cpp" />
@@ -590,9 +589,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceLoader.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceManager.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextHelpers.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextureHelpers.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextureLoader.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureHelpers.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureLoader.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationLoader.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResource.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescriptor.h" />

@@ -5,7 +5,7 @@
 #include "Text.h"
 #include "TextAtlas.h"
 #include "Glyph.h"
-#include "Engine/Models/Resources/TextureLoader.h"
+#include "Engine/Models/Resources/Texture/TextureLoader.h"
 #include <cassert>
 
 namespace boost { namespace serialization {

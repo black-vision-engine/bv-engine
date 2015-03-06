@@ -4,7 +4,7 @@
 #include "Engine/Models/Resources/Font/Text.h"
 #include "Engine/Models/Resources/Font/TextAtlas.h"
 
-#include "Engine/Models/Resources/TextureHelpers.h"
+#include "Engine/Models/Resources/Texture/TextureHelpers.h"
 
 #include "Mathematics/Rect.h"
 

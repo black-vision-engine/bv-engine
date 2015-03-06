@@ -8,8 +8,8 @@
 
 #include "sqlite3.h"
 
-#include "Engine/Models/Resources/TextureHelpers.h"
-#include "Engine/Models/Resources/TextureLoader.h"
+#include "Engine/Models/Resources/Texture/TextureHelpers.h"
+#include "Engine/Models/Resources/Texture/TextureLoader.h"
 #include "Engine/Models/Resources/IResource.h"
 #include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
 #include "Engine/Models/Resources/ResourceManager.h"

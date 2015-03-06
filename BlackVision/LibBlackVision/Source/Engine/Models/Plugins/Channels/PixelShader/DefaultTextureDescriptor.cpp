@@ -1,7 +1,7 @@
 #include "DefaultTextureDescriptor.h"
 
 #include "Engine/Models/Resources/ResourceManager.h"
-#include "Engine/Models/Resources/TextureLoader.h"
+#include "Engine/Models/Resources/Texture/TextureLoader.h"
 #include "Engine/Graphics/Resources/Texture.h"
 
 

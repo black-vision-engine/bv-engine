@@ -1,6 +1,6 @@
 #include "DefaultAnimationDescriptor.h"
 
-#include "Engine/Models/Resources/TextureLoader.h"
+#include "Engine/Models/Resources/Texture/TextureLoader.h"
 #include "Engine/Models/Resources/Texture/AnimationResource.h"
 #include "Engine/Models/Resources/ResourceManager.h"
 #include "Engine/Graphics/Resources/Texture.h"

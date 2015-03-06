@@ -20,8 +20,8 @@
 #include "Glyph.h"
 #include "AtlasCache.h"
 #include "System/FileIO.h"
-#include "Engine/Models/Resources/TextureHelpers.h"
-#include "Engine/Models/Resources/TextureLoader.h"
+#include "Engine/Models/Resources/Texture/TextureHelpers.h"
+#include "Engine/Models/Resources/Texture/TextureLoader.h"
 #include "Engine/Models/Resources/Font/Engines/FreeTypeEngine.h"
 
 
