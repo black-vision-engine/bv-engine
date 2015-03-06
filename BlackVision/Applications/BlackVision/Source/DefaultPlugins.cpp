@@ -18,6 +18,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultCirclePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultEllipsePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTrianglePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultRoundedRectPlugin.h"
 
 namespace bv { namespace model {
 
@@ -43,6 +44,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
 	descriptors.push_back( new DefaultCirclePluginDesc() );
 	descriptors.push_back( new DefaultEllipsePluginDesc() );
     descriptors.push_back( new DefaultTrianglePluginDesc() );
+    descriptors.push_back( new DefaultRoundedRectPluginDesc() );
 
     for( auto descr : descriptors )
     {
