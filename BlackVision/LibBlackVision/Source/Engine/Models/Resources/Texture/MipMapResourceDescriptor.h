@@ -44,9 +44,9 @@ public:
 	MipMapFilterType					GetFilter			() const;
 
 	static MipMapResourceDescConstPtr	Create				( MipMapFilterType ft, const SingleTextureResourceDescConstPtr & origTexture );
-	static MipMapResourceDescConstPtr	Create				( MipMapFilterType ft, const std::vector< SingleTextureResourceDescConstPtr > & mipMaps );
+	static MipMapResourceDescConstPtr	Create				( const std::vector< SingleTextureResourceDescConstPtr > & mipMaps );
 	explicit							MipMapResourceDesc	( MipMapFilterType ft, const SingleTextureResourceDescConstPtr & origTexture );
-	explicit							MipMapResourceDesc	( MipMapFilterType ft, const std::vector< SingleTextureResourceDescConstPtr > & mipMaps );
+	explicit							MipMapResourceDesc	( const std::vector< SingleTextureResourceDescConstPtr > & mipMaps );
 
 private:
 

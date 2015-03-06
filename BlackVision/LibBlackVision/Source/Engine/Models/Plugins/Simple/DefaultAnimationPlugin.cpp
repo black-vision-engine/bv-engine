@@ -7,7 +7,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
-#include "Engine/Models/Resources/IPluginResourceDescr.h"
+#include "Engine/Models/Resources/Texture/AnimationResourceDescriptor.h"
 
 
 namespace bv { namespace model {
@@ -185,9 +185,9 @@ DefaultAnimationPlugin::~DefaultAnimationPlugin         ()
 
 // *************************************
 // 
-bool                            DefaultAnimationPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
+bool                            DefaultAnimationPlugin::LoadResource  ( ResourceDescConstPtr resDescr )
 {
-    auto animResDescr = QueryAnimationResourceDescr( resDescr );
+	auto animResDescr = QueryTypedDesc< AnimationResourceDescConstPtr >( resDescr );
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( animResDescr != nullptr )

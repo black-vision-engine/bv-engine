@@ -1,6 +1,6 @@
 #include "DefaultTextureDescriptor.h"
 
-#include "Engine/Models/Resources/ModelTextureManager.h"
+#include "Engine/Models/Resources/ResourceManager.h"
 #include "Engine/Models/Resources/TextureLoader.h"
 #include "Engine/Graphics/Resources/Texture.h"
 
@@ -16,23 +16,23 @@ DefaultTextureDescriptor::DefaultTextureDescriptor        ()
 
 // **************************
 //
-DefaultTextureDescriptor::DefaultTextureDescriptor        ( ResourceHandleConstPtr handle, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc, DataBuffer::Semantic semantic )
+DefaultTextureDescriptor::DefaultTextureDescriptor        ( TextureResourceConstPtr texResource, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc, DataBuffer::Semantic semantic )
     : m_bitsChanged( true )
 {
-    SetBits( handle );
+    SetBits( texResource );
     SetName( name );
 
-    auto extraKind = handle->GetExtra()->GetResourceExtraKind();
-    { extraKind; } // FIXME: suppress unused warning
-    assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
+    //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+    //{ extraKind; } // FIXME: suppress unused warning
+    //assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
-    auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
-    { texExtra; } // FIXME: suppress unused warning
-    assert( texExtra->GetType() == TextureType::T_2D );
+    //auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
+    //{ texExtra; } // FIXME: suppress unused warning
+    //assert( texExtra->GetType() == TextureType::T_2D );
 
-    auto format = texExtra->GetFormat();
-    auto width  = (unsigned int) texExtra->GetWidth();
-    auto height = (unsigned int) texExtra->GetHeight();
+	auto format = texResource->GetOriginal()->GetFormat();
+    auto width  = texResource->GetOriginal()->GetWidth();
+    auto height = texResource->GetOriginal()->GetHeight();
 
     SetWidth( width );
     SetHeight( height );
@@ -61,7 +61,7 @@ uintptr_t               DefaultTextureDescriptor::GetUID            () const
 //
 MemoryChunkConstPtr     DefaultTextureDescriptor::GetBits           () const
 {
-    return m_texHandle->GetData();
+	return m_texResource->GetOriginal()->GetData();
 }
 
 // **************************
@@ -87,14 +87,14 @@ const std::string       DefaultTextureDescriptor::GetName           () const
 
 // **************************
 //
-unsigned int            DefaultTextureDescriptor::GetWidth          () const
+SizeType				DefaultTextureDescriptor::GetWidth          () const
 {
     return m_params.GetWidth();
 }
 
 // **************************
 //
-unsigned int            DefaultTextureDescriptor::GetHeight         () const
+SizeType				DefaultTextureDescriptor::GetHeight         () const
 {
     return m_params.GetHeight();
 }
@@ -143,32 +143,32 @@ DataBuffer::Semantic    DefaultTextureDescriptor::GetSemantic     () const
 
 // **************************
 //
-void                    DefaultTextureDescriptor::SetBits           ( ResourceHandleConstPtr handle )
+void                    DefaultTextureDescriptor::SetBits           ( TextureResourceConstPtr texResource )
 {
-    if( handle == nullptr )
+    if( texResource == nullptr )
     {
         m_params.SetWidth( 0 );
         m_params.SetHeight( 0 );
     }
     else
     {
-        auto extraKind = handle->GetExtra()->GetResourceExtraKind();
-        { extraKind; } // FIXME: suppress unused warning
-        assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
+        //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+        //{ extraKind; } // FIXME: suppress unused warning
+        //assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
-        auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
-        { texExtra; } // FIXME: suppress unused warning
-        assert( texExtra->GetType() == TextureType::T_2D );
+        //auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
+        //{ texExtra; } // FIXME: suppress unused warning
+        //assert( texExtra->GetType() == TextureType::T_2D );
 
         //auto fmt = texExtra->GetFormat();
-        auto w  = (unsigned int) texExtra->GetWidth();
-        auto h  = (unsigned int) texExtra->GetHeight();
+		auto w  = texResource->GetOriginal()->GetWidth();
+        auto h  = texResource->GetOriginal()->GetHeight();
 
         m_params.SetWidth( w );
         m_params.SetHeight( h );
     }
 
-    m_texHandle = handle;
+    m_texResource = texResource;
 
     SetBitsChanged( true );
 }
@@ -189,14 +189,14 @@ void                    DefaultTextureDescriptor::SetName           ( const std:
 
 // **************************
 //
-void                    DefaultTextureDescriptor::SetWidth          ( unsigned int w )
+void                    DefaultTextureDescriptor::SetWidth          ( SizeType w )
 {
     m_params.SetWidth( w );
 }
 
 // **************************
 //
-void                    DefaultTextureDescriptor::SetHeight         ( unsigned int h )
+void                    DefaultTextureDescriptor::SetHeight         ( SizeType h )
 {
     m_params.SetHeight( h );
 }
@@ -260,11 +260,11 @@ void                        DefaultTextureDescriptor::SetDefaults     ( DefaultT
 
 // **************************
 //
-DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const std::string & textureFile, const std::string & name )
+DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const TextureResourceDescConstPtr & textureResDesc, const std::string & name )
 {
-    auto handle = TextureManager::Get().GetTexture( textureFile );
+	auto res = ResourceManager::GetInstance().LoadResource( textureResDesc );
 
-    if ( handle == nullptr )
+    if ( res == nullptr )
     {
         return nullptr;
     }
@@ -273,7 +273,7 @@ DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const std
     SetDefaults( desc );
     //desc->SetWrappingModeY( TextureWrappingMode::TWM_REPEAT ); 
     //desc->SetFilteringMode( TextureFilteringMode::TFM_POINT ); 
-    desc->SetBits( handle );
+	desc->SetBits( QueryTypedRes< TextureResourceConstPtr >( res ) );
     desc->SetName( name );
 
     return desc;

@@ -1,5 +1,7 @@
 #include "FontLoader.h"
 #include "Text.h"
+#include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
+#include "Engine/Models/Resources/Font/FontResource.h"
 #include "Engine/Models/Resources/TextHelpers.h"
 #include "System/FileIO.h"
 
@@ -11,70 +13,23 @@ namespace bv { namespace model {
 
 ///////////////////////////////
 //
-FontResource::FontResource( const std::string & filePath, size_t fontSize, size_t blurSize, size_t outlineSize, const std::wstring & atlasCharSetFile )
-    : Resource( filePath, filePath )
-    , m_fontSize( fontSize )
-    , m_blurSize( blurSize )
-	, m_outlineSize( outlineSize )
-    , m_atlasCharSetFile( atlasCharSetFile )
-{}
-
-///////////////////////////////
-//
-size_t                  FontResource::GetFontSize     ()   const
+IResourceConstPtr FontLoader::LoadResource( const bv::ResourceDescConstPtr & desc ) const
 {
-    return m_fontSize;
-}
+	auto typedDesc = QueryTypedDesc< FontResourceDescConstPtr >( desc );
 
-///////////////////////////////
-//
-size_t                  FontResource::GetBlurSize     ()   const
-{
-    return m_blurSize;
-}
+	assert( typedDesc );
 
-///////////////////////////////
-//
-size_t                  FontResource::GetOutlineSize     ()   const
-{
-    return m_outlineSize;
-}
+	auto filePath			= typedDesc->GetFontFileName();
+    auto atlasCharSetFile	= typedDesc->GetAtlasCharSetFile();
+    auto fontSize			= typedDesc->GetFontSize();
+    auto blurSize			= typedDesc->GetBlurSize();
+	auto outlineSize		= typedDesc->GetOutlineSize();
 
-///////////////////////////////
-//
-const std::wstring &     FontResource::GetAtlasCharSetFile     ()  const
-{
-    return m_atlasCharSetFile;
-}
+    auto text				= TryLoadFont( filePath, fontSize, blurSize, outlineSize, atlasCharSetFile );
 
-///////////////////////////////
-//
-IResourceNEWConstPtr FontLoader::LoadResource( const bv::ResourceDescConstPtr & ) const
-{
-	assert( false ); // TODO: implement;
-	return nullptr;
-}
-
-///////////////////////////////
-//
-ResourceHandle *        FontLoader::LoadResource        ( IResource * res )  const
-{
-    assert( dynamic_cast< FontResource* >(res) );
-
-    auto fontRes = static_cast< FontResource* >(res);
-
-    auto filePath = res->GetFilePath();
-    auto atlasCharSetFile = fontRes->GetAtlasCharSetFile();
-    auto fontSize = fontRes->GetFontSize();
-    auto blurSize = fontRes->GetBlurSize();
-	auto outlineSize = fontRes->GetOutlineSize();
-
-    const Text *       font        = TryLoadFont             ( filePath, fontSize, blurSize, outlineSize, atlasCharSetFile );
-
-    if( font )
+    if( text )
     {
-		auto res = new ResourceHandle( nullptr, 0, new FontExtraData( font, nullptr, nullptr, nullptr, nullptr, fontRes->GetFontSize() ) );
-        return res;
+		return FontResource::Create( text );
     }
     else
     {
@@ -85,10 +40,10 @@ ResourceHandle *        FontLoader::LoadResource        ( IResource * res )  con
 namespace
 {
 
-const Text *         LoadFontFile( const std::string & file, size_t size, size_t blurSize, size_t outlineSize, const std::wstring & atlasCharSetFile )
+TextConstPtr        LoadFontFile( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 outlineSize, const std::wstring & atlasCharSetFile )
 {
     auto t = TextHelper::LoadUtf8FileToString( atlasCharSetFile );
-    return new Text( t, file, size, blurSize, outlineSize ); /* points to pixel proportion */ // FIXME: Text constructor makes to much.
+	return Text::Create( t, file, size, blurSize, outlineSize ); // FIXME: Text constructor makes to much.
 }
 
 std::string         AddPostfixToFileName( const std::string & file, const std::string & postfix )
@@ -105,7 +60,7 @@ std::string         AddPostfixToFileName( const std::string & file, const std::s
 
 ///////////////////////////////
 //
-const Text *             FontLoader::TryLoadFont             ( const std::string & file, size_t size, size_t blurSize, size_t oulineSize, const std::wstring & atlasCharSetFile ) const
+TextConstPtr		FontLoader::TryLoadFont( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 oulineSize, const std::wstring & atlasCharSetFile ) const
 {
     if( File::Exists(file) )
     {
@@ -116,27 +71,6 @@ const Text *             FontLoader::TryLoadFont             ( const std::string
         return nullptr;
     }
 }
-
-///////////////////////////////
-//
-const Text *             FontExtraData::GetFont             () const
-{
-    return m_font;
-}
-
-///////////////////////////////
-//
-FontExtraData::FontExtraData       ( const Text * font, const Text * fontBold, const Text * fontItalic, const Text * fontBoldItalic, const Text * fontUnderlined, size_t fontSize )
-    : ResourceExtraData( ResourceExtraKind::RE_FONT )
-    , m_font( font )
-    , m_fontSize( fontSize )
-{
-    { fontUnderlined; } // FIXME: suppress unused warning
-    { fontBoldItalic; } // FIXME: suppress unused warning
-    { fontItalic; } // FIXME: suppress unused warning
-    { fontBold; } // FIXME: suppress unused warning
-}
-
 
 } // model
 } // bv

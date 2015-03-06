@@ -5,8 +5,6 @@
 #include "System/FileIO.h"
 #include "FreeImagePlus.h"
 
-#include "Engine/Models/Resources/ModelTextureManager.h"
-
 namespace bv { namespace model {
 
 // *********************************

@@ -101,7 +101,7 @@
     <ClCompile>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBVGL/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBVGL/Source;$(LibImageDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -111,7 +111,7 @@
     <ClCompile>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBVGL/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBVGL/Source;$(LibImageDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -122,7 +122,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBVGL/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBVGL/Source;$(LibImageDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -135,7 +135,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBVGL/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBVGL/Source;$(LibImageDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -307,25 +307,24 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\AtlasCache.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\Engines\FreeTypeEngine.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\FontLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\FontResource.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\FontResourceDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\Text.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\TextAtlas.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\TextHelper.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ModelTextureManager.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Resource.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ResourceDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ResourceLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ResourceManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextHelpers.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextureHelpers.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextureLoader.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescr.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\FontResourceDescr.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResource.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\SingleTextureResource.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\SingleTextureResourceDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureCache.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResource.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResourceDescr.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResourceDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventLoop.cpp" />
@@ -575,31 +574,30 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\AtlasCache.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\Engines\FreeTypeEngine.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\FontLoader.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\FontResource.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\FontResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\Glyph.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\IFontEngine.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\Serialize.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\Text.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\TextAtlas.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\TextHelper.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\IPluginResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\IResource.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\IResourceLoader.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ModelTextureManager.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Resource.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceLoader.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextHelpers.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextureHelpers.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextureLoader.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescr.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\FontResourceDescr.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResource.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\SingleTextureResource.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\SingleTextureResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureCache.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResource.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />

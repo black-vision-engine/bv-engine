@@ -1,4 +1,5 @@
 #include "Text.h"
+#include "TextAtlas.h"
 
 #include <iostream>
 #include <fstream>
@@ -16,8 +17,6 @@
 
 #pragma warning(pop)
 
-#include "Serialize.h"
-
 #include "Glyph.h"
 #include "AtlasCache.h"
 #include "System/FileIO.h"
@@ -28,59 +27,21 @@
 
 namespace bv { namespace model {
 
-//// *********************************
-////
-//void GlyphCoords::Save( std::ostream& out ) const
-//{
-//    boost::archive::text_oarchive oa( out );
-//    oa << *this;
-//}
-//
-//// *********************************
-////
-//void GlyphCoords::Load( std::istream& in )
-//{
-//    boost::archive::text_iarchive ia( in );
-//    ia >> *this;
-//}
-
 // *********************************
 //
-TextAtlas::TextAtlas()
-    : m_glyphWidth( 0 )
-    , m_glyphHeight( 0 )
-{}
-
-// *********************************
-//
-TextAtlas::TextAtlas( SizeType w, SizeType h, SizeType bitsPerPixel, SizeType gw, SizeType gh )
-    : m_glyphWidth( gw )
-    , m_glyphHeight( gh )
+TextConstPtr Text::Create(const std::wstring& supportedCharsSet
+						, const std::string& fontFile
+						, UInt32 fontSize
+						, UInt32 blurSize
+						, UInt32 outlineSize )
 {
-    auto size   = w * h * bitsPerPixel / 8;
-    auto data  = std::make_shared< MemoryChunk >( new char[ size ], size );
-
-    TextureFormat tf = TextureFormat::F_TOTAL;
-	if( bitsPerPixel == 8 )
-		tf = TextureFormat::F_A8;
-	else if ( bitsPerPixel == 32 )
-		tf = TextureFormat::F_A8R8G8B8;
-	else
-		assert(false);
-
-	m_textureHandle = ResourceHandlePtr( new ResourceHandle( data, size, new TextureExtraData( w, h, bitsPerPixel, tf, TextureType::T_2D ) ) );
+	return std::make_shared< Text >( supportedCharsSet, fontFile, fontSize, blurSize, outlineSize );
 }
 
-// *********************************
-//
-TextAtlas*      TextAtlas::Crate           ( SizeType w, SizeType h, SizeType bitsPrePixel, SizeType gw, SizeType gh )
-{
-    return new TextAtlas(w, h, bitsPrePixel, gw, gh);
-}
 
 // *********************************
 //
-Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, SizeType fontSize, SizeType blurSize, SizeType outlineSize )
+Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize )
     : m_supportedCharsSet( supportedCharsSet )
     , m_fontFile( fontFile )
     , m_fontSize( fontSize )
@@ -91,170 +52,18 @@ Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, 
     BuildAtlas();
 }
 
-// *********************************
-//
-MemoryChunkConstPtr      TextAtlas::GetData         () const
-{
-    return m_textureHandle->GetData();
-}
-
-// *********************************
-//
-MemoryChunkConstPtr      TextAtlas::GetWritableData ()
-{
-    return m_textureHandle->GetWritableData();
-}
-
-// *********************************
-//
-SizeType				TextAtlas::GetSizeInBytes  () const
-{
-    return m_textureHandle->GetSize();
-}
-
-// *********************************
-//
-void                    TextAtlas::SetGlyph			( wchar_t wch, const Glyph * glyph, bool outline )
-{
-	if( outline )
-		m_outlineGlyphs.insert(std::make_pair( wch, glyph ) );
-	else
-		m_glyphs.insert(std::make_pair( wch, glyph ) );
-}
-
-// *********************************
-//
-SizeType				TextAtlas::GetBitsPerPixel () const
-{
-    assert( m_textureHandle->GetExtra()->GetResourceExtraKind() == ResourceExtraKind::RE_TEXTURE );
-    auto texExtraData = static_cast< const TextureExtraData * >( m_textureHandle->GetExtra() );
-    return texExtraData->GetBitsPerPixel();
-}
-
-// *********************************
-//
-SizeType				TextAtlas::GetWidth        () const
-{
-    assert( m_textureHandle->GetExtra()->GetResourceExtraKind() == ResourceExtraKind::RE_TEXTURE );
-    auto texExtraData = static_cast< const TextureExtraData * >( m_textureHandle->GetExtra() );
-    return texExtraData->GetWidth();
-}
-
-// *********************************
-//
-SizeType				TextAtlas::GetHeight       () const
-{
-    assert( m_textureHandle->GetExtra()->GetResourceExtraKind() == ResourceExtraKind::RE_TEXTURE );
-    auto texExtraData = static_cast< const TextureExtraData * >( m_textureHandle->GetExtra() );
-    return texExtraData->GetHeight();
-}
-
-// *********************************
-//
-const Glyph *			TextAtlas::GetGlyph			( wchar_t c, bool outline ) const
-{
-	if(! outline )
-	{
-		auto it = m_glyphs.find(c);
-
-		if( it != m_glyphs.end() )
-			return it->second;
-	}
-	else
-	{
-		auto it = m_outlineGlyphs.find(c);
-
-		if( it != m_outlineGlyphs.end() )
-			return it->second;
-	}
-
-
-	auto it = m_glyphs.find('_');
-
-	if( it != m_glyphs.end() )
-			return it->second;
-	else
-		return nullptr;
-}
-
-// *********************************
-//
-Float32                  TextAtlas::GetKerning      ( wchar_t c0, wchar_t c1 ) const
-{
-    auto it = m_kerningMap.find( std::make_pair( c0, c1 ) );
-
-    if( it != m_kerningMap.end() )
-        return it->second;
-    else
-        return 0.f;
-}
-
-// *********************************
-//
-SizeType				TextAtlas::GetGlyphX       ( wchar_t c ) const
-{
-    return GetGlyph( c )->textureX;
-}
-
-// *********************************
-//
-SizeType				TextAtlas::GetGlyphY       ( wchar_t c ) const
-{
-    return GetGlyph( c )->textureY;
-}
-
-// *********************************
-//
-SizeType				TextAtlas::GetGlyphWidth   ( wchar_t c ) const
-{
-    return GetGlyph( c )->width;
-}
-
-// *********************************
-//
-SizeType				TextAtlas::GetGlyphHeight  ( wchar_t c ) const
-{
-    return GetGlyph( c )->height;
-}
-
-// *********************************
-//
-void                    TextAtlas::Save( std::ostream& out ) const
-{
-    boost::archive::text_oarchive oa( out );
-    oa << *this;
-}
-
-// *********************************
-//
-void                    TextAtlas::Load( std::istream& in )
-{
-    boost::archive::text_iarchive ia( in );
-    ia >> *this;
-}
-
-// *********************************
-//
-ResourceHandlePtr		TextAtlas::GetResourceHandle() const
-{
-	return m_textureHandle;
-}
-
-// *********************************
-//
-
 #define GENERATE_TEST_BMP_FILE
 
 // *********************************
 //
-const TextAtlas *	Text::LoadFromCache()
+TextAtlasConstPtr Text::LoadFromCache()
 {
     auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
 
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
 
-	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, m_fontFile, false, false );
+	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, false, false );
 
     if( entry != nullptr )
         return entry->m_textAtlas;
@@ -264,7 +73,7 @@ const TextAtlas *	Text::LoadFromCache()
 
 // *********************************
 //
-void                Text::BuildAtlas        ()
+void Text::BuildAtlas        ()
 {
     m_atlas = LoadFromCache();
 
@@ -273,11 +82,16 @@ void                Text::BuildAtlas        ()
 
 	m_atlas = m_fontEngine->CreateAtlas(this->m_blurSize + 1, m_outlineWidth, m_supportedCharsSet );
 
-    if ( m_blurSize > 0 )
-    {
-        auto oldData = m_atlas->m_textureHandle;
-        m_atlas->m_textureHandle->SetData( TextureHelper::Blur( oldData->GetData(), (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel(), (unsigned int) m_blurSize ) );
-    }
+	assert( m_blurSize == 0 ); //TODO: Implement
+
+  //  if ( m_blurSize > 0 )
+  //  {
+		//auto oldData = std::const_pointer_cast< MemoryChunk >( m_atlas->m_textureResource->GetOriginal()->GetData() );
+		//auto bluredData = TextureHelper::Blur( oldData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel(), (unsigned int) m_blurSize );
+		//auto atlasFilePath = FontAtlasCache::GenerateTextAtlasCacheFileName(  )
+		//auto newSingleTextureRes = SingleTextureResource::Create( bluredData,  );
+		//m_atlas->m_textureResource = TextureResource::Create( (TextureHelper::Blur( oldData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel(), (unsigned int) m_blurSize ) );
+  //  }
 
 	auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
 

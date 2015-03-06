@@ -13,7 +13,7 @@ namespace bv
 class ResourceManager
 {
 public:
-	model::IResourceNEWConstPtr		LoadResource	( const ResourceDescConstPtr & desc ) const;
+	model::IResourceConstPtr		LoadResource	( const ResourceDescConstPtr & desc ) const;
 	bool							RegisterLoader	( const std::string & resDescUID, model::IResourceLoader * loader );
 	bool							UnregisterLoader( const std::string & resDescUID );
 

@@ -12,22 +12,22 @@ private:
 
     MemoryChunkConstPtr m_data;
 
-    unsigned int        m_dataSize;
+    SizeType			m_dataSize;
 
 public:
 
-                                Texture2DImpl   ( TextureFormat format, unsigned int width, unsigned int height, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE_STATIC );
+                                Texture2DImpl   ( TextureFormat format, SizeType width, SizeType height, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE_STATIC );
     virtual                     ~Texture2DImpl  ();
 
     virtual size_t              GetDataSize     () const override;
 
     virtual MemoryChunkConstPtr GetData         () const override;
 
-    bool                        SetRawData      ( MemoryChunkConstPtr data, TextureFormat format, unsigned int width, unsigned int height );
+    bool                        SetRawData      ( MemoryChunkConstPtr data, TextureFormat format, SizeType width, SizeType height );
 
 private:
 
-    unsigned int                SizeInBytes     ( TextureFormat format, unsigned int width, unsigned int height );
+    SizeType					SizeInBytes     ( TextureFormat format, SizeType width, SizeType height );
 
 };
 
