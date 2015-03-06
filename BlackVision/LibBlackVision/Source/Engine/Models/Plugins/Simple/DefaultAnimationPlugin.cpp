@@ -196,7 +196,7 @@ bool                            DefaultAnimationPlugin::LoadResource  ( Resource
         assert( txData->GetAnimations().size() <= 1 );
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto animDesc = DefaultAnimationDescriptor::LoadAnimation( animResDescr->GetFrames(), DefaultAnimationPluginDesc::TextureName() );
+        auto animDesc = DefaultAnimationDescriptor::LoadAnimation( animResDescr, DefaultAnimationPluginDesc::TextureName() );
 
         if( animDesc != nullptr )
         {

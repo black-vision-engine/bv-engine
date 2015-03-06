@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Resources/ResourceDescriptor.h"
+#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
 
 namespace bv { namespace model {
 
@@ -31,13 +32,13 @@ public:
                                                 AnimationResourceDesc	( const std::vector< std::string > & frames );
                                                 ~AnimationResourceDesc	();
 
-    virtual const std::vector< std::string > &  GetFrames               () const;
+	const std::vector< TextureResourceDescConstPtr > &  GetFrames               () const;
 
     static AnimationResourceDescConstPtr		CreateFromDirFrames     ( const std::string & path, const std::string & filter );
 
 private:
 
-    std::vector< std::string >  m_frames;
+    std::vector< TextureResourceDescConstPtr >  m_frames;
 
 };
 

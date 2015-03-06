@@ -1,7 +1,7 @@
 #include "DefaultAnimationDescriptor.h"
 
 #include "Engine/Models/Resources/TextureLoader.h"
-#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
+#include "Engine/Models/Resources/Texture/AnimationResource.h"
 #include "Engine/Models/Resources/ResourceManager.h"
 #include "Engine/Graphics/Resources/Texture.h"
 #include "Engine/Models/Resources/ResourceManager.h"
@@ -269,21 +269,23 @@ void                    DefaultAnimationDescriptor::SetBorderColor      ( const 
 
 // *******************************
 //
-DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const std::vector< std::string > & frames, const std::string & name )
+DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const AnimationResourceDescConstPtr & animResDesc, const std::string & name )
 {
-    if ( frames.size() == 0 )
+	auto res = ResourceManager::GetInstance().LoadResource( animResDesc );
+
+	if ( res == nullptr )
     {
         return nullptr;
     }
 
-    auto texResource = LoadFrame( frames[ 0 ] );
 
-    if ( texResource == nullptr )
+	auto animRes = QueryTypedRes< AnimationResourceConstPtr >( res );
+
+    if ( animRes == nullptr )
     {
+		assert(!"Should never be here");
         return nullptr;
     }
-
-    printf( "Loading animation\n" );
 
     //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
     //{ extraKind; } // FIXME: suppress unused warning
@@ -293,17 +295,20 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
     //{ texExtra; } // FIXME: suppress unused warning
     //assert( texExtra->GetType() == TextureType::T_2D );
 
-	auto fmt = texResource->GetOriginal()->GetFormat();
-    auto w  = texResource->GetOriginal()->GetWidth();
-    auto h = texResource->GetOriginal()->GetHeight();
+
+	auto texResource = animRes->GetFrame( 0 );
+
+	auto fmt	= texResource->GetOriginal()->GetFormat();
+    auto w		= texResource->GetOriginal()->GetWidth();
+    auto h		= texResource->GetOriginal()->GetHeight();
 
     DefaultAnimationDescriptor * retDesc = new DefaultAnimationDescriptor( name, w, h, fmt, TextureWrappingMode::TWM_CLAMP_BORDER, TextureWrappingMode::TWM_CLAMP_BORDER, TextureFilteringMode::TFM_LINEAR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
     retDesc->AddBits( texResource );
 
-    for ( unsigned int i = 1; i < frames.size(); ++i )
+	for ( SizeType i = 1; i < animRes->GetFramesNum(); ++i )
     {
-        auto texResource = LoadFrame( frames[ i ] );
+        auto texResource = animRes->GetFrame( i );
 
         //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
         //{ extraKind; } // FIXME: suppress unused warning
@@ -312,9 +317,9 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
         //auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
         //assert( texExtra->GetType() == TextureType::T_2D );
 
-        unsigned int lw = texResource->GetOriginal()->GetWidth();
-        unsigned int lh = texResource->GetOriginal()->GetHeight();
-        TextureFormat lfmt = texResource->GetOriginal()->GetFormat();
+        unsigned int lw		= texResource->GetOriginal()->GetWidth();
+        unsigned int lh		= texResource->GetOriginal()->GetHeight();
+        TextureFormat lfmt	= texResource->GetOriginal()->GetFormat();
 
         if( lfmt != fmt || lw != w || lh != h )
         {
@@ -328,29 +333,9 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
         {
             retDesc->AddBits( texResource );
         }
-
-        printf( "\rLoaded %d out of %d total frames                ", i + 1, frames.size() );
     }
-
-    printf( "\n" );
 
     return retDesc;
-}
-
-// *******************************
-//
-TextureResourceConstPtr				DefaultAnimationDescriptor::LoadFrame       ( const std::string & frame )
-{
-    auto res = ResourceManager::GetInstance().LoadResource( TextureResourceDesc::Create( frame ) );
-
-	auto texRes = QueryTypedRes< TextureResourceConstPtr >( res );
-
-    if ( texRes == nullptr )
-    {
-        return nullptr;
-    }
-
-    return texRes;
 }
 
 } //model

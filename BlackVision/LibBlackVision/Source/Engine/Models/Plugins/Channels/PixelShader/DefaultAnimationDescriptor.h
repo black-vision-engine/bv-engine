@@ -4,6 +4,7 @@
 
 #include "Engine/Models/Interfaces/IAnimationDescriptor.h"
 #include "Engine/Models/Resources/IResource.h"
+#include "Engine/Models/Resources/Texture/AnimationResourceDescriptor.h"
 #include "Engine/Models/Resources/Texture/TextureResource.h"
 
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureParams.h"
@@ -63,11 +64,7 @@ public:
     void                            SetFilteringMode    ( TextureFilteringMode fm );
     void                            SetBorderColor      ( const glm::vec4 & bc );
 
-    static DefaultAnimationDescriptor * LoadAnimation   ( const std::vector< std::string > & frames, const std::string & name );
-
-private:
-
-    static TextureResourceConstPtr  LoadFrame       ( const std::string & frame );
+    static DefaultAnimationDescriptor * LoadAnimation   ( const AnimationResourceDescConstPtr & frames, const std::string & name );
 
 };
 

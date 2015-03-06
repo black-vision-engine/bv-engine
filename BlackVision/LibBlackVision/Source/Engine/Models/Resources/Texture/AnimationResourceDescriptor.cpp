@@ -10,8 +10,11 @@ const std::string AnimationResourceDesc::uid = "ANIMATION_RESOURCE_DESC";
 // *******************************
 //
 AnimationResourceDesc::AnimationResourceDesc							( const std::vector< std::string > & frames )
-    : m_frames( frames )
 {
+	for( auto f : frames )
+	{
+		m_frames.push_back( TextureResourceDesc::Create( f ) );
+	}
 }
 
 // *******************************
@@ -22,7 +25,7 @@ AnimationResourceDesc::~AnimationResourceDesc							()
 
 // *******************************
 //
-const std::vector< std::string > & AnimationResourceDesc::GetFrames		() const
+const std::vector< TextureResourceDescConstPtr > & AnimationResourceDesc::GetFrames		() const
 {
     return m_frames;
 }
@@ -59,7 +62,7 @@ const std::string &	AnimationResourceDesc::GetUID() const
 //
 bool AnimationResourceDesc::IsCacheable() const
 {
-	return true;
+	return false;
 }
 
 // *******************************

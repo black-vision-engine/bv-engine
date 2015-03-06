@@ -831,6 +831,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescriptor.cpp">
       <Filter>Engine\Models\Resources\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationLoader.cpp">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResource.cpp">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Core\MemoryChunk.h">
@@ -1674,6 +1680,12 @@
       <Filter>Engine\Models\Resources\Font</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescriptor.h">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationLoader.h">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResource.h">
       <Filter>Engine\Models\Resources\Texture</Filter>
     </ClInclude>
   </ItemGroup>

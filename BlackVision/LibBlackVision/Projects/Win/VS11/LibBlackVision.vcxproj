@@ -318,6 +318,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextHelpers.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextureHelpers.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextureLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResource.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResource.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.cpp" />
@@ -591,6 +593,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextHelpers.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextureHelpers.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextureLoader.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationLoader.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResource.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResource.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\MipMapResourceDescriptor.h" />
