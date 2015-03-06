@@ -21,6 +21,7 @@ protected:
 
     std::string             m_name;
     ModelParamType          m_type;
+    InterpolationMethod     m_method;
 
 protected:
 
@@ -31,6 +32,9 @@ public:
 
     virtual const std::string & GetName                 () const override;
     virtual ModelParamType      GetType                 () const override;
+
+	virtual void                SetInterpolationMethod ( InterpolationMethod method ) override;
+	virtual InterpolationMethod GetInterpolationMethod () const override;
 
     virtual ITimeEvaluatorPtr   GetTimeEvaluator        () override;
     virtual void                SetTimeEvaluator        ( ITimeEvaluatorPtr timeEvaluator ) override;
