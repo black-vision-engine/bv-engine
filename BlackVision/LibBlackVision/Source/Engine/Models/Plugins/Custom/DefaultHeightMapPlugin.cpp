@@ -10,8 +10,6 @@
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 
-#include "Engine/Models/Resources/IPluginResourceDescr.h"
-
 
 namespace bv { namespace model {
 

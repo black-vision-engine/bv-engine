@@ -13,8 +13,6 @@
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
 
-#include "Engine/Models/Resources/IPluginResourceDescr.h"
-
 
 namespace bv { namespace model {
 
