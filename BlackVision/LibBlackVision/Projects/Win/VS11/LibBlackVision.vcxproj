@@ -585,7 +585,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\TextHelper.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\IPluginResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\IResource.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\IResourceLoader.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceLoader.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceManager.h" />

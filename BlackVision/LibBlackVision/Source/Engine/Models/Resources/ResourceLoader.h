@@ -1,16 +1,18 @@
 #pragma once
 
-#include "Engine/Models/Resources/IResourceLoader.h"
-
+#include "ResourceDescriptor.h"
+#include "IResource.h"
 
 namespace bv { namespace model {
 
-class ResourceLoader : public IResourceLoader
+class ResourceLoader
 {
 public:
 
-            ResourceLoader();
-    virtual ~ResourceLoader();
+	virtual IResourceConstPtr		LoadResource        ( const ResourceDescConstPtr & desc )  const = 0;
+
+            ResourceLoader		();
+    virtual ~ResourceLoader		();
 
 };
 

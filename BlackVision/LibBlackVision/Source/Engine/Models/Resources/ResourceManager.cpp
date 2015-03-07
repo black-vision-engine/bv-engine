@@ -23,12 +23,14 @@ model::IResourceConstPtr ResourceManager::LoadResource( const ResourceDescConstP
 
 // ***********************
 //
-bool ResourceManager::RegisterLoader( const std::string & resDescUID, model::IResourceLoader * loader )
+bool ResourceManager::RegisterLoader( const std::string & resDescUID, model::ResourceLoader * loader )
 {
 	auto it = m_loaders.find( resDescUID );
 
 	if( it != m_loaders.end() )
+	{
 		return false;
+	}
 	else
 	{
 		m_loaders[ resDescUID ] = loader;
