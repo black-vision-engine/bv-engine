@@ -12,7 +12,7 @@ DEFINE_CONST_PTR_TYPE( TextureResource )
 
 // *******************************
 // Implements texture resource with original image and all its mimmaps.
-class TextureResource : public model::IResourceNEW, public std::enable_shared_from_this< TextureResource >
+class TextureResource : public model::IResource, public std::enable_shared_from_this< TextureResource >
 {
 	static const std::string		uid;
 

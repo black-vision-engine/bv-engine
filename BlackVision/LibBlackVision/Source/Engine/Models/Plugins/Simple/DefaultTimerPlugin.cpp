@@ -9,6 +9,7 @@
 #include "Engine/Models/Resources/Font/FontLoader.h"
 #include "Engine/Models/Resources/Font/Text.h"
 #include "Engine/Models/Resources/Font/Glyph.h"
+#include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
 
 #include <algorithm>
 
@@ -236,7 +237,6 @@ TimeValue::TimeValue( double time, int accuracy )
 //
 DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
-    , m_fontResource()
     , m_paramValModel( model )
     , m_textAtlas()
     , m_timePatern( )
@@ -323,9 +323,9 @@ void DefaultTimerPlugin::InitAttributesChannel( IPluginPtr prev )
 
 // *************************************
 // 
-bool            DefaultTimerPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
+bool            DefaultTimerPlugin::LoadResource  ( ResourceDescConstPtr resDescr )
 {
-    auto txResDescr = QueryFontResourceDescr( resDescr );
+	auto txResDescr = QueryTypedDesc< FontResourceDescConstPtr >( resDescr );
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txResDescr != nullptr )
@@ -333,9 +333,9 @@ bool            DefaultTimerPlugin::LoadResource  ( IPluginResourceDescrConstPtr
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() <= 1 );
 
-        auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
+		auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFileName(), txResDescr->GetFontSize(), txResDescr->GetBlurSize(), txResDescr->GetOutlineSize() );
 
-        m_textAtlas = TextHelper::GetAtlas( fontResource.get() );
+        m_textAtlas = TextHelper::GetAtlas( fontResource );
 
         InitBigestGlyph();
 

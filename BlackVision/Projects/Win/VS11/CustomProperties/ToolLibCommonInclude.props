@@ -5,7 +5,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(BOOST_INC);$(DepDir)\Common\FreeType\include;$(DepDir)\Common\FreeImage\Dist;$(DepDir)\Common\glm;$(DepDir)\Common\FastDelegate;$(DepDir)\Common\hashlib2plus\src;$(DepDir)\Common\sqlite\src;$(LibBlackVisionDir);$(LibBVGLDir);..\..\..\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BOOST_INC);$(DepDir)\Common\FreeType\include;$(DepDir)\Common\FreeImage\Dist;$(DepDir)\Common\glm;$(DepDir)\Common\FastDelegate;$(DepDir)\Common\hashlib2plus\src;$(DepDir)\Common\sqlite\src;$(LibBlackVisionDir);$(LibBVGLDir);$(LibImageDir);..\..\..\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />

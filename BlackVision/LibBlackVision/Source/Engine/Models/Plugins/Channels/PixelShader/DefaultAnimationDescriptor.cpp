@@ -1,8 +1,10 @@
 #include "DefaultAnimationDescriptor.h"
 
-#include "Engine/Models/Resources/ModelTextureManager.h"
-#include "Engine/Models/Resources/TextureLoader.h"
+#include "Engine/Models/Resources/Texture/TextureLoader.h"
+#include "Engine/Models/Resources/Texture/AnimationResource.h"
+#include "Engine/Models/Resources/ResourceManager.h"
 #include "Engine/Graphics/Resources/Texture.h"
+#include "Engine/Models/Resources/ResourceManager.h"
 
 
 namespace bv { namespace model {
@@ -15,7 +17,7 @@ DefaultAnimationDescriptor::DefaultAnimationDescriptor        ()
 
 // *******************************
 //
-DefaultAnimationDescriptor::DefaultAnimationDescriptor        ( const std::string & name, unsigned int w, unsigned int h, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc )
+DefaultAnimationDescriptor::DefaultAnimationDescriptor        ( const std::string & name, UInt32 w, UInt32 h, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc )
 {
     SetName( name );
     SetWidth( w );
@@ -48,7 +50,7 @@ MemoryChunkConstPtr      DefaultAnimationDescriptor::GetBits             ( unsig
 {
     assert( idx < NumTextures() );
 
-    return m_frames[ idx ]->GetData();
+	return m_frames[ idx ]->GetOriginal()->GetData();
 }
 
 // *******************************
@@ -99,14 +101,14 @@ const std::string       DefaultAnimationDescriptor::GetName             () const
 
 // *******************************
 //
-unsigned int            DefaultAnimationDescriptor::GetWidth            () const
+SizeType				DefaultAnimationDescriptor::GetWidth            () const
 {
     return m_params.GetWidth();
 }
 
 // *******************************
 //
-unsigned int            DefaultAnimationDescriptor::GetHeight           () const
+SizeType				DefaultAnimationDescriptor::GetHeight           () const
 {
     return m_params.GetHeight();
 }
@@ -148,26 +150,26 @@ glm::vec4               DefaultAnimationDescriptor::BorderColor         () const
 
 // *******************************
 //
-void                    DefaultAnimationDescriptor::SetBits             ( unsigned int idx, ResourceHandleConstPtr handle )
+void                    DefaultAnimationDescriptor::SetBits             ( unsigned int idx, TextureResourceConstPtr texResource )
 {
-    auto extraKind = handle->GetExtra()->GetResourceExtraKind();
-    { extraKind; } // FIXME: suppress unused warning
-    assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
+    //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+    //{ extraKind; } // FIXME: suppress unused warning
+    //assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
-    auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
-    { texExtra; } // FIXME: suppress unused warning
-    assert( texExtra->GetType() == TextureType::T_2D );
+    //auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
+    //{ texExtra; } // FIXME: suppress unused warning
+    //assert( texExtra->GetType() == TextureType::T_2D );
 
-    assert( texExtra->GetWidth() == GetWidth() );
-    assert( texExtra->GetHeight() == GetHeight() );
-    assert( texExtra->GetFormat() == GetFormat() );
+	assert( texResource->GetOriginal()->GetWidth() == GetWidth() );
+    assert( texResource->GetOriginal()->GetHeight() == GetHeight() );
+    assert( texResource->GetOriginal()->GetFormat() == GetFormat() );
     assert( idx < NumTextures() );
 
 //    delete[] m_frames[ idx ];
     
   //  unsigned int dataSize = GetWidth() * GetHeight() * Texture::GetPixelSize( GetFormat() );
 
-    m_frames[ idx ] = handle;
+    m_frames[ idx ] = texResource;
 //    m_frames[ idx ] = new char[ dataSize ];
 
 //    memcpy( m_frames[ idx ], data, dataSize );
@@ -175,21 +177,21 @@ void                    DefaultAnimationDescriptor::SetBits             ( unsign
 
 // *******************************
 //
-void                     DefaultAnimationDescriptor::AddBits            ( ResourceHandleConstPtr handle )
+void                     DefaultAnimationDescriptor::AddBits            ( TextureResourceConstPtr texResource )
 {
-    auto extraKind = handle->GetExtra()->GetResourceExtraKind();
-    { extraKind; } // FIXME: suppress unused warning
-    assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
+    //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+    //{ extraKind; } // FIXME: suppress unused warning
+    //assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
-    auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
-    { texExtra; } // FIXME: suppress unused warning
-    assert( texExtra->GetType() == TextureType::T_2D );
+    //auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
+    //{ texExtra; } // FIXME: suppress unused warning
+    //assert( texExtra->GetType() == TextureType::T_2D );
 
-    assert( texExtra->GetWidth() == GetWidth() );
-    assert( texExtra->GetHeight() == GetHeight() );
-    assert( texExtra->GetFormat() == GetFormat() );
+	assert( texResource->GetOriginal()->GetWidth() == GetWidth() );
+    assert( texResource->GetOriginal()->GetHeight() == GetHeight() );
+    assert( texResource->GetOriginal()->GetFormat() == GetFormat() );
 
-    m_frames.push_back( handle );
+    m_frames.push_back( texResource );
 }
 
 // *******************************
@@ -267,52 +269,57 @@ void                    DefaultAnimationDescriptor::SetBorderColor      ( const 
 
 // *******************************
 //
-DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const std::vector< std::string > & frames, const std::string & name )
+DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const AnimationResourceDescConstPtr & animResDesc, const std::string & name )
 {
-    if ( frames.size() == 0 )
+	auto res = ResourceManager::GetInstance().LoadResource( animResDesc );
+
+	if ( res == nullptr )
     {
         return nullptr;
     }
 
-    auto handle = LoadFrame( frames[ 0 ] );
 
-    if ( handle == nullptr )
+	auto animRes = QueryTypedRes< AnimationResourceConstPtr >( res );
+
+    if ( animRes == nullptr )
     {
+		assert(!"Should never be here");
         return nullptr;
     }
 
-    printf( "Loading animation\n" );
+    //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+    //{ extraKind; } // FIXME: suppress unused warning
+    //assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
-    auto extraKind = handle->GetExtra()->GetResourceExtraKind();
-    { extraKind; } // FIXME: suppress unused warning
-    assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
+    //auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
+    //{ texExtra; } // FIXME: suppress unused warning
+    //assert( texExtra->GetType() == TextureType::T_2D );
 
-    auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
-    { texExtra; } // FIXME: suppress unused warning
-    assert( texExtra->GetType() == TextureType::T_2D );
 
-    auto fmt = texExtra->GetFormat();
-    auto w  = (unsigned int) texExtra->GetWidth();
-    auto h = (unsigned int) texExtra->GetHeight();
+	auto texResource = animRes->GetFrame( 0 );
+
+	auto fmt	= texResource->GetOriginal()->GetFormat();
+    auto w		= texResource->GetOriginal()->GetWidth();
+    auto h		= texResource->GetOriginal()->GetHeight();
 
     DefaultAnimationDescriptor * retDesc = new DefaultAnimationDescriptor( name, w, h, fmt, TextureWrappingMode::TWM_CLAMP_BORDER, TextureWrappingMode::TWM_CLAMP_BORDER, TextureFilteringMode::TFM_LINEAR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
-    retDesc->AddBits( handle );
+    retDesc->AddBits( texResource );
 
-    for ( unsigned int i = 1; i < frames.size(); ++i )
+	for ( SizeType i = 1; i < animRes->GetFramesNum(); ++i )
     {
-        auto handle = LoadFrame( frames[ i ] );
+        auto texResource = animRes->GetFrame( i );
 
-        auto extraKind = handle->GetExtra()->GetResourceExtraKind();
-        { extraKind; } // FIXME: suppress unused warning
-        assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
+        //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+        //{ extraKind; } // FIXME: suppress unused warning
+        //assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 
-        auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
-        assert( texExtra->GetType() == TextureType::T_2D );
+        //auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
+        //assert( texExtra->GetType() == TextureType::T_2D );
 
-        unsigned int lw = (unsigned int) texExtra->GetWidth();
-        unsigned int lh = (unsigned int) texExtra->GetHeight();
-        TextureFormat lfmt = texExtra->GetFormat();
+        unsigned int lw		= texResource->GetOriginal()->GetWidth();
+        unsigned int lh		= texResource->GetOriginal()->GetHeight();
+        TextureFormat lfmt	= texResource->GetOriginal()->GetFormat();
 
         if( lfmt != fmt || lw != w || lh != h )
         {
@@ -324,34 +331,11 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
         }
         else
         {
-            retDesc->AddBits( handle );
+            retDesc->AddBits( texResource );
         }
-
-        printf( "\rLoaded %d out of %d total frames                ", i + 1, frames.size() );
     }
-
-    printf( "\n" );
 
     return retDesc;
-}
-
-// *******************************
-//
-ResourceHandleConstPtr              DefaultAnimationDescriptor::LoadFrame       ( const std::string & frame )
-{
-//    Resource texture( "some name", frame );
-
-    //TextureLoader texLoader;
-    //ResourceHandle * handle = texLoader.LoadResource( &texture );
-
-    auto handle = TextureManager::Get().GetTexture( frame );
-
-    if ( handle == nullptr )
-    {
-        return nullptr;
-    }
-
-    return handle;
 }
 
 } //model

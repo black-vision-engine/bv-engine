@@ -7,7 +7,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
-#include "Engine/Models/Resources/IPluginResourceDescr.h"
+#include "Engine/Models/Resources/Texture/AnimationResourceDescriptor.h"
 
 
 namespace bv { namespace model {
@@ -185,9 +185,9 @@ DefaultAnimationPlugin::~DefaultAnimationPlugin         ()
 
 // *************************************
 // 
-bool                            DefaultAnimationPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
+bool                            DefaultAnimationPlugin::LoadResource  ( ResourceDescConstPtr resDescr )
 {
-    auto animResDescr = QueryAnimationResourceDescr( resDescr );
+	auto animResDescr = QueryTypedDesc< AnimationResourceDescConstPtr >( resDescr );
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( animResDescr != nullptr )
@@ -196,7 +196,7 @@ bool                            DefaultAnimationPlugin::LoadResource  ( IPluginR
         assert( txData->GetAnimations().size() <= 1 );
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto animDesc = DefaultAnimationDescriptor::LoadAnimation( animResDescr->GetFrames(), DefaultAnimationPluginDesc::TextureName() );
+        auto animDesc = DefaultAnimationDescriptor::LoadAnimation( animResDescr, DefaultAnimationPluginDesc::TextureName() );
 
         if( animDesc != nullptr )
         {

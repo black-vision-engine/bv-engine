@@ -6,14 +6,13 @@
 #include <sstream>
 #include <cassert>
 
-#include "Text.h"
-
 #include "sqlite3.h"
 
-#include "Engine/Models/Resources/TextureHelpers.h"
-#include "Engine/Models/Resources/TextureLoader.h"
-#include "Engine/Models/Resources/ModelTextureManager.h"
+#include "Engine/Models/Resources/Texture/TextureHelpers.h"
+#include "Engine/Models/Resources/Texture/TextureLoader.h"
 #include "Engine/Models/Resources/IResource.h"
+#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
+#include "Engine/Models/Resources/ResourceManager.h"
 
 #pragma warning(push)
 #pragma warning(disable : 4512)
@@ -34,7 +33,7 @@ FontAtlasCacheEntry::FontAtlasCacheEntry()
 
 // *********************************
 //
-FontAtlasCacheEntry::FontAtlasCacheEntry(   const TextAtlas* textAtlas
+FontAtlasCacheEntry::FontAtlasCacheEntry(   const TextAtlasConstPtr & textAtlas
                                          ,  const std::string& fontName
                                          ,  SizeType fontSize
                                          ,  SizeType blurSize
@@ -162,13 +161,11 @@ int GetEntryCallback( void * data, int argsNum, char ** args, char ** columnName
     out->m_fontFilePath = args[ 4 ];
     out->m_bold         = std::atoi( args[ 5 ] ) == 0 ? false : true;
     out->m_italic       = std::atoi( args[ 6 ] ) == 0 ? false : true;
-    out->m_textAtlas    = new TextAtlas();
+	out->m_textAtlas    = TextAtlas::Create(0,0,0,0,0);
     std::stringstream str(  args[ 7 ] );
 	out->m_atlasFilePath = args[ 8 ];
 
-	auto textAtlas		= const_cast< TextAtlas* >( out->m_textAtlas );
-
-	textAtlas->Load( str );    
+	std::const_pointer_cast< TextAtlas >( out->m_textAtlas )->Load( str );    
 
     return 0;
 }
@@ -176,15 +173,14 @@ int GetEntryCallback( void * data, int argsNum, char ** args, char ** columnName
 }
 // *********************************
 //
-FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, const std::string & fontFileName, bool bold, bool italic )
+FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, bool bold, bool italic )
 {
-    { fontFileName; } // FIXME: suppress unused warning
     if( !m_dataBase )
     {
         m_dataBase = OpenDataBase( m_cacheFile );
     }
 
-    auto ret = new FontAtlasCacheEntry();
+	auto ret = new FontAtlasCacheEntry();
 
     std::string sql = "SELECT * FROM cached_fonts WHERE font_name=\'" + fontName + "\'" +
                             " AND font_size = " + std::to_string( fontSize ) +
@@ -210,29 +206,13 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & f
 
 	if( ret->m_textAtlas != nullptr )
 	{
-		auto width	= ret->m_textAtlas->GetWidth();
-		auto height = ret->m_textAtlas->GetHeight();
-		auto bbp	= ret->m_textAtlas->GetBitsPerPixel();
+		auto texDesc = TextureResourceDesc::Create( ret->m_atlasFilePath );
 
-        TextureFormat tf = TextureFormat::F_TOTAL;
-
-		if( bbp == 8 )
-        {
-			tf = TextureFormat::F_A8;
-        }
-		else if ( bbp == 32 ) // FIXME: no brabo KURWA :P if ( bbp = 32 )
-        {
-            tf = TextureFormat::F_A8R8G8B8;
-        }
-		else
-        {
-			assert(false);
-        }
-
-		auto resExtra = new TextureExtraData( width, height, bbp, tf, TextureType::T_2D );
-		auto memChunk = TextureHelper::LoadRAW( ret->m_atlasFilePath );
-
-		const_cast< TextAtlas* >( ret->m_textAtlas )->m_textureHandle = std::make_shared< ResourceHandle >( memChunk, width * height * bbp / 8, resExtra );
+		auto res = ResourceManager::GetInstance().LoadResource( texDesc );
+		if( res != nullptr )
+		{
+			std::const_pointer_cast< TextAtlas >( ret->m_textAtlas )->m_textureResource = QueryTypedRes< TextureResourceConstPtr >( res );
+		}
 
 		return ret;
 	}
@@ -255,6 +235,20 @@ int AddEntryCallback( void * data, int argsNum, char ** args, char ** columnName
 
 // *********************************
 //
+std::string				FontAtlasCache::GenerateTextAtlasCacheFileName( const TextAtlasConstPtr & textAtlas )
+{
+	std::stringstream textAtlasStream;
+    textAtlas->Save( textAtlasStream );
+
+    auto textAtlasStr =  textAtlasStream.str();
+
+    auto sha1 = sha1wrapper();
+    auto fontAtlasTextureFileName = CACHE_DIRECTORY + sha1.getHashFromString( textAtlasStr ) + ".bmp";
+	return fontAtlasTextureFileName;
+}
+
+// *********************************
+//
 void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEntry& data, bool forceInvalidate )
 {
     { forceInvalidate; } // FIXME: suppress unused warning
@@ -263,13 +257,7 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
         m_dataBase = OpenDataBase( m_cacheFile );
     }
 
-    std::stringstream textAtlasStream;
-    data.m_textAtlas->Save( textAtlasStream );
-
-    auto textAtlasStr =  textAtlasStream.str();
-
-    auto sha1 = sha1wrapper();
-    auto fontAtlasTextureFileName = CACHE_DIRECTORY + sha1.getHashFromString( textAtlasStr ) + ".raw";
+	auto fontAtlasTextureFileName = GenerateTextAtlasCacheFileName( data.m_textAtlas );
 
     std::string sqlAdd = std::string( "INSERT OR REPLACE INTO cached_fonts VALUES(" ) 
         + "\'" + data.m_fontName + "\'" + ", " 
@@ -286,7 +274,7 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
     if( ! File::Exists( CACHE_DIRECTORY ) )
         File::CreateDir( CACHE_DIRECTORY );
 
-    TextureHelper::WriteRAW( fontAtlasTextureFileName, data.m_textAtlas->GetData() );
+	TextureHelper::WriteBMP( fontAtlasTextureFileName, data.m_textAtlas->GetData(), data.m_textAtlas->GetWidth(), data.m_textAtlas->GetHeight(), data.m_textAtlas->GetBitsPerPixel() );
 
     sqlite3_stmt * stmt = nullptr;
     const char * parsed = nullptr;
@@ -297,6 +285,11 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
         std::cerr << "SQL Error: " << "prepare" << std::endl;
         return;
     }
+
+	std::stringstream textAtlasStream;
+    data.m_textAtlas->Save( textAtlasStream );
+
+	auto textAtlasStr = textAtlasStream.str();
 
     res = sqlite3_bind_blob( stmt, 1, textAtlasStr.c_str(), (int) textAtlasStr.size(), SQLITE_TRANSIENT);
 

@@ -7,7 +7,7 @@ namespace bv {
 
 // *********************************
 //
-Texture2DImpl::Texture2DImpl  ( TextureFormat format, unsigned int width, unsigned int height, DataBuffer::Semantic semantic )
+Texture2DImpl::Texture2DImpl  ( TextureFormat format, SizeType width, SizeType height, DataBuffer::Semantic semantic )
     : Texture2D( format, width, height, semantic )
     , m_dataSize( 0 )
     , m_data( nullptr )
@@ -22,7 +22,7 @@ Texture2DImpl::~Texture2DImpl  ()
 
 // *********************************
 //
-size_t          Texture2DImpl::GetDataSize      () const
+SizeType	Texture2DImpl::GetDataSize      () const
 {
     return m_dataSize;
 }
@@ -36,7 +36,7 @@ MemoryChunkConstPtr Texture2DImpl::GetData      () const
 
 // *********************************
 //
-bool            Texture2DImpl::SetRawData       ( MemoryChunkConstPtr data, TextureFormat format, unsigned int width, unsigned int height )
+bool            Texture2DImpl::SetRawData       ( MemoryChunkConstPtr data, TextureFormat format, SizeType width, SizeType height )
 {
     assert( data->Size() == SizeInBytes( format, width, height ) || data->Size() == 0 );
 
@@ -52,7 +52,7 @@ bool            Texture2DImpl::SetRawData       ( MemoryChunkConstPtr data, Text
 
 // *********************************
 //
-unsigned int    Texture2DImpl::SizeInBytes     ( TextureFormat format, unsigned int width, unsigned int height )
+SizeType		Texture2DImpl::SizeInBytes     ( TextureFormat format, SizeType width, SizeType height )
 {
     return GetPixelSize( format ) * width * height;
 }

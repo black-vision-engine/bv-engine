@@ -88,12 +88,12 @@ void            PdrRenderTarget::Enable             ( Renderer * renderer )
 {
     { renderer; } // FIXME: suppress unused
     BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID );
-    BVGL::bvglDrawBuffers( m_numTargets, &m_drawBuffers[ 0 ] );
+    BVGL::bvglDrawBuffers( ( GLsizei )m_numTargets, &m_drawBuffers[ 0 ] );
 
     BVGL::bvglGetIntegerv( GL_VIEWPORT, m_prevViewportCoords );
     BVGL::bvglGetDoublev( GL_DEPTH_RANGE, m_prevDepthRange );
 
-    BVGL::bvglViewport( 0, 0, m_width, m_height );
+    BVGL::bvglViewport( 0, 0, ( GLsizei )m_width, ( GLsizei )m_height );
     BVGL::bvglDepthRange( 0.0, 1.0 );
 }
 
@@ -159,7 +159,7 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
     auto fmt    = ConstantsMapper::GLConstantTextureFormat( format );
     auto type   = ConstantsMapper::GLConstantTextureType( format );
 
-    void * data = pboMem->LockRenderTarget( m_drawBuffers[ i ], m_width, m_height, fmt, type );
+    void * data = pboMem->LockRenderTarget( m_drawBuffers[ i ], ( GLuint )m_width, ( GLuint )m_height, fmt, type );
     memcpy( buffer->GetWritable(), data, outputTex->RawFrameSize() );
     pboMem->UnlockRenderTarget();
 
@@ -210,7 +210,7 @@ void            PdrRenderTarget::AddDepthBuffer     ( Renderer * renderer, const
     { renderer; rt; } // FIXME: suppress unused
     BVGL::bvglGenRenderbuffers( 1, &m_depthBufID );
     BVGL::bvglBindRenderbuffer( GL_RENDERBUFFER, m_depthBufID );
-    BVGL::bvglRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_width, m_height );
+    BVGL::bvglRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH_COMPONENT, ( GLsizei )m_width, ( GLsizei )m_height );
     BVGL::bvglFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthBufID );
 }
 
