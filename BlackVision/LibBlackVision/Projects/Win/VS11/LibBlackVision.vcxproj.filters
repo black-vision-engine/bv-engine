@@ -1498,7 +1498,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\IPluginResourceDescr.h">
       <Filter>Engine\Models\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\IResource.h">
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Resource.h">
       <Filter>Engine\Models\Resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceLoader.h">
