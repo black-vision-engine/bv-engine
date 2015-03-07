@@ -27,7 +27,7 @@ TextureResourceConstPtr	AnimationLoader::LoadFrame( const TextureResourceDescCon
 
 // ******************************
 //
-IResourceConstPtr AnimationLoader::LoadResource( const ResourceDescConstPtr & desc ) const
+ResourceConstPtr AnimationLoader::LoadResource( const ResourceDescConstPtr & desc ) const
 {
 	auto typedDesc = QueryTypedDesc< AnimationResourceDescConstPtr >( desc );
 

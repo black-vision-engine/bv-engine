@@ -4,7 +4,7 @@
 #include "Core/MemoryChunk.h"
 #include "System/BasicTypes.h"
 
-#include "Engine/Models/Resources/IResource.h"
+#include "Engine/Models/Resources/Resource.h"
 
 #include <string>
 
@@ -17,7 +17,7 @@ DEFINE_CONST_PTR_TYPE(SingleTextureResource)
 
 // ********************************
 // Implements single texture resource. Texture without any mipmaps. Only one chunk of memory.
-class SingleTextureResource : public model::IResource, public std::enable_shared_from_this< SingleTextureResource >
+class SingleTextureResource : public model::Resource, public std::enable_shared_from_this< SingleTextureResource >
 {
 private:
 	static const std::string					uid;

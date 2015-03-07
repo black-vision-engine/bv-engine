@@ -28,7 +28,7 @@ public:
     /////////////////////////////////////
     // This function creates TextAtlas from specified FontReasource.
     // Returns new TextAtlas.
-    static TextAtlasConstPtr            GetAtlas            ( const IResourceConstPtr & res );
+    static TextAtlasConstPtr            GetAtlas            ( const ResourceConstPtr & res );
 
     /////////////////////////////////////
     // This function creates empty VertexAttributeChannel for text with proper attribute descriptor. ( position, texture cord )

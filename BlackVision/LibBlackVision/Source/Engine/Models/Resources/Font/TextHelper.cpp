@@ -40,7 +40,7 @@ namespace
 {
 ///////////////////////////////
 // Helper function for getting proper atlas from font resource.
-TextConstPtr				GetFont( const IResourceConstPtr & res )
+TextConstPtr				GetFont( const ResourceConstPtr & res )
 {
 	auto fontRes = QueryTypedRes< FontResourceConstPtr >( res );
     assert( fontRes != nullptr );
@@ -80,7 +80,7 @@ ConnectedComponentPtr         CreateEmptyCC()
 } // anonymous
 
 
-TextAtlasConstPtr				TextHelper::GetAtlas            ( const IResourceConstPtr & res )
+TextAtlasConstPtr				TextHelper::GetAtlas            ( const ResourceConstPtr & res )
 {
     auto f = GetFont( res );
 

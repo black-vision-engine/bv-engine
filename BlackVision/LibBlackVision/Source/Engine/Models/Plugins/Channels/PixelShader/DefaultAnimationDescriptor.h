@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Models/Interfaces/IAnimationDescriptor.h"
-#include "Engine/Models/Resources/IResource.h"
+#include "Engine/Models/Resources/Resource.h"
 #include "Engine/Models/Resources/Texture/AnimationResourceDescriptor.h"
 #include "Engine/Models/Resources/Texture/TextureResource.h"
 

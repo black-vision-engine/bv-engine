@@ -12,7 +12,7 @@ namespace bv { namespace model {
 
 ///////////////////////////////
 //
-IResourceConstPtr FontLoader::LoadResource( const bv::ResourceDescConstPtr & desc ) const
+ResourceConstPtr FontLoader::LoadResource( const bv::ResourceDescConstPtr & desc ) const
 {
 	auto typedDesc = QueryTypedDesc< FontResourceDescConstPtr >( desc );
 

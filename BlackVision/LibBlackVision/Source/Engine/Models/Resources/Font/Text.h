@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TextAtlas.h"
-#include "Engine/Models/Resources/IResource.h"
+#include "Engine/Models/Resources/Resource.h"
 #include "Engine/Models/Resources/Font/IFontEngine.h"
 
 #include <string>

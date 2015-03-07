@@ -15,7 +15,7 @@ class TextureLoader : public ResourceLoader
 {
 public:
 
-	IResourceConstPtr		LoadResource	( const ResourceDescConstPtr & desc ) const override;
+	ResourceConstPtr						LoadResource		( const ResourceDescConstPtr & desc ) const override;
 
     virtual ~TextureLoader(){}
 

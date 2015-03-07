@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TextureResource.h"
-#include "Engine/Models/Resources/IResource.h"
+#include "Engine/Models/Resources/Resource.h"
 
 namespace bv
 {
@@ -11,7 +11,7 @@ DEFINE_CONST_PTR_TYPE( AnimationResource )
 
 // *******************************
 // Implements animation resource.
-class AnimationResource : public model::IResource, public std::enable_shared_from_this< AnimationResource >
+class AnimationResource : public model::Resource, public std::enable_shared_from_this< AnimationResource >
 {
 	static const std::string		uid;
 

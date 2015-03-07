@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/Resources/IResource.h"
+#include "Engine/Models/Resources/Resource.h"
 #include "Engine/Models/Resources/Font/Text.h"
 
 namespace bv
@@ -11,7 +11,7 @@ DEFINE_CONST_PTR_TYPE( FontResource )
 
 // *******************************
 // Implements font resource with full size atlas and all its mimmaps.
-class FontResource : public model::IResource, public std::enable_shared_from_this< FontResource >
+class FontResource : public model::Resource, public std::enable_shared_from_this< FontResource >
 {
 	static const std::string		uid;
 
