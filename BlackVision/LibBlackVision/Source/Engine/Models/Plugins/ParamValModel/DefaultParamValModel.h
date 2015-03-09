@@ -9,13 +9,47 @@
 
 namespace bv { namespace model {
 
+//class IStateValue
+//{
+//public:
+//    virtual bool StateChanged() const = 0;
+//};
+//
+//DEFINE_PTR_TYPE(IStateValue)
+//
+//template< typename T >
+//class StateValue : public IStateValue {
+//    T prevVal, curVal;
+//public:
+//    Update( const T& val )
+//    {
+//        prevVal = curVal;
+//        curVal = val;
+//    }
+//    virtual bool StateChanged() const override
+//    {
+//        return prevVal != curVal;
+//    }
+//    const T& GetValue() const
+//    {
+//        return curVal;
+//    }
+//};
+
+
+
 class DefaultParamValModel : public IParamValModel
 {
 private:
 
     std::vector< IParameterPtr >            m_parameters;
-    std::vector< bv::IValueConstPtr >       m_values;
+
     std::vector< IParamValEvaluatorPtr >    m_evaluators;
+    std::vector< bv::IValueConstPtr >       m_values;
+
+    //std::vector< IStateValueEvaluatorPtr >  m_SVevaluators;
+    //std::vector< IStateValuePtr >           m_valuePairs;
+
     std::vector< bv::IValuePtr >            m_valuesNC;
 
 public:
@@ -29,6 +63,9 @@ public:
 
     virtual IParameterPtr                               GetParameter    ( const std::string & name ) override;
     virtual bv::IValueConstPtr                          GetValue        ( const std::string & name ) const override;
+    
+//  bool                                                HasStateValueChanged ( const std::string & name ) const;
+//                                                      GetStateValue () const;                            
 
     virtual void                                        Update          () override;
 
