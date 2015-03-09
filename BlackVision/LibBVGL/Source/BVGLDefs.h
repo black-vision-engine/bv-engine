@@ -1,5 +1,8 @@
 #pragma once
 
+#include <crtdefs.h>
+
+
 namespace bv {
 
 #define GL_FALSE 0

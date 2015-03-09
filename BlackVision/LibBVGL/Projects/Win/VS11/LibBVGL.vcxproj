@@ -21,12 +21,14 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLDefaultPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLResourceTrackingPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\BVGLTools\BVGLTranslator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\BVGL.h" />
     <ClInclude Include="..\..\..\Source\BVGLDefs.h" />
     <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLDefaultPlugin.h" />
     <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLResourceTrackingPlugin.h" />
+    <ClInclude Include="..\..\..\Source\BVGLTools\BVGLTranslator.h" />
     <ClInclude Include="..\..\..\Source\BVGLUtil.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

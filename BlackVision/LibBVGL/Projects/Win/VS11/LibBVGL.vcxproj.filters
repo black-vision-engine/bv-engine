@@ -4,6 +4,9 @@
     <Filter Include="BVGLPlugins">
       <UniqueIdentifier>{21502cf9-5613-4171-bc06-924923bd1b69}</UniqueIdentifier>
     </Filter>
+    <Filter Include="BVGLTools">
+      <UniqueIdentifier>{f38845c3-af1b-483e-a953-42cf17603626}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLDefaultPlugin.h">
@@ -15,6 +18,9 @@
       <Filter>BVGLPlugins</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\BVGLUtil.h" />
+    <ClInclude Include="..\..\..\Source\BVGLTools\BVGLTranslator.h">
+      <Filter>BVGLTools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLDefaultPlugin.cpp">
@@ -22,6 +28,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLResourceTrackingPlugin.cpp">
       <Filter>BVGLPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\BVGLTools\BVGLTranslator.cpp">
+      <Filter>BVGLTools</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
