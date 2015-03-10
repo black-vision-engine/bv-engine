@@ -75,10 +75,10 @@ public:
     {
         sx = size[0] / 2, sy = size[1] / 2;
         
-        centers[0] = glm::vec3(  sx - bevels[2],  sy - bevels[2], 0 );
-        centers[1] = glm::vec3( -sx + bevels[3],  sy - bevels[3], 0 );
-        centers[2] = glm::vec3( -sx + bevels[0], -sy + bevels[0], 0 );
-        centers[3] = glm::vec3(  sx - bevels[1], -sy + bevels[1], 0 );
+        centers[0] = glm::vec3(  sx - bevels[0],  sy - bevels[0], 0 );
+        centers[1] = glm::vec3( -sx + bevels[1],  sy - bevels[1], 0 );
+        centers[2] = glm::vec3( -sx + bevels[2], -sy + bevels[2], 0 );
+        centers[3] = glm::vec3(  sx - bevels[3], -sy + bevels[3], 0 );
 
         int nPoints = GetNPoints(), i, j;
         for( i = 0, j = nPoints-1 ; i < j; i++, j-- )

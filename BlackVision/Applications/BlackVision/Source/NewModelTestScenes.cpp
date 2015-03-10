@@ -18,6 +18,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultCirclePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultEllipsePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTrianglePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultRoundedRectPlugin.h"
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 
@@ -857,6 +858,9 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
     model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
 
     auto plugin = root->GetPlugin( "rounded rect" );
+
+    model::SetParameter( plugin->GetParameter( model::DefaultRoundedRectPlugin::PN_BEVELS ), 0.f, glm::vec4( 0, 0.1, 0.1, 0 ) );
+    model::SetParameter( plugin->GetParameter( model::DefaultRoundedRectPlugin::PN_BEVELS ), 5.f, glm::vec4( 0.1, 0.2, 0, 0.1 ) );
 
     plugin->Update(0); // FIXME: to generate geometry only
 
