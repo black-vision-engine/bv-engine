@@ -1,37 +1,41 @@
 #pragma once
 
-#include "Engine/Models/Resources/IResource.h"
+#include <string>
+#include "System/BasicTypes.h"
+#include "Core/MemoryChunk.h"
 
-
-namespace bv { namespace model {
-
-class Resource : public IResource
+namespace bv { namespace model
 {
-private:
 
-    std::string             m_name;
-    std::string             m_filePath;
+class Resource;
+DEFINE_CONST_PTR_TYPE( Resource )
+
+class Resource
+{
+protected:
+	virtual VoidConstPtr					QueryThis	() const = 0;
 
 public:
 
-    virtual const std::string &            GetName     () const;
-    virtual const std::string &            GetFilePath () const;
+	virtual const std::string &				GetUID		() const = 0;
 
-                Resource    ( const std::string & name, const std::string & filePath );
-    virtual     ~Resource   () {}
+    virtual ~Resource(){}
+
+	template< typename ResourceTypeConstPtr >
+	friend ResourceTypeConstPtr  QueryTypedRes( ResourceTypeConstPtr res );
 };
 
-class ResourceExtraData : public IResourceExtraData
+template< typename ResourceTypeConstPtr >
+ResourceTypeConstPtr  QueryTypedRes( ResourceConstPtr res )
 {
-    ResourceExtraKind               m_kind;
+	if( res->GetUID() != ResourceTypeConstPtr::element_type::UID() )
+    {
+        return nullptr;
+    }
 
-public:
+    return std::static_pointer_cast< ResourceTypeConstPtr::element_type >( res->QueryThis() );
+}
 
-    virtual ResourceExtraKind       GetResourceExtraKind        () const { return m_kind; }
-
-    explicit                        ResourceExtraData           ( ResourceExtraKind kind );
-    virtual                         ~ResourceExtraData          () {}
-};
 
 } // model
 } // bv

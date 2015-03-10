@@ -1,5 +1,7 @@
 #include "TextureCache.h"
 
+#include "Engine/Models/Resources/Cache/RawDataCache.h"
+
 #include <sstream>
 #include <cassert>
 
@@ -51,6 +53,21 @@ bool TextureCache::Add( const TextureResourceDescConstPtr & textureDesc, const T
 void TextureCache::Update( const std::string & key, const TextureResourceConstPtr & textureRes )
 {
 	m_textures[ key ] = textureRes;
+	AddToRawDataCache( textureRes );
+}
+
+// ******************************
+//
+void TextureCache::AddToRawDataCache( const TextureResourceConstPtr & textureRes ) const
+{
+	auto orig = textureRes->GetOriginal();
+	RawDataCache::GetInstance().Add( Hash::FromString( orig->GetKey()), orig->GetData() );
+
+	auto mm = textureRes->GetMipMaps();
+
+	if( mm )
+		for( SizeType i = 0; i < mm->GetLevelsNum(); ++i )
+			RawDataCache::GetInstance().Add( Hash::FromString( mm->GetLevel( i )->GetKey()), mm->GetLevel( i )->GetData() );
 }
 
 // ******************************

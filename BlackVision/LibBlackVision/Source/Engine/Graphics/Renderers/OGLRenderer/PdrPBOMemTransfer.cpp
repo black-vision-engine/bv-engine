@@ -5,9 +5,9 @@ namespace bv {
 
 // ****************************
 //
-PdrPBOMemTransfer::PdrPBOMemTransfer    ( DataBuffer::Semantic semantic, unsigned int dataSize )
+PdrPBOMemTransfer::PdrPBOMemTransfer    ( DataBuffer::Semantic semantic, SizeType dataSize )
     : m_index( 0 ) 
-    , m_dataSize( dataSize )
+    , m_dataSize( ( GLenum )dataSize )
     , m_writeLock( false )
     , m_lockedMemoryPtr( nullptr )
 {

@@ -2,8 +2,9 @@
 
 #include "Engine/Models/Resources/Font/Glyph.h"
 #include "Engine/Models/Resources/Font/Text.h"
+#include "Engine/Models/Resources/Font/TextAtlas.h"
 
-#include "Engine/Models/Resources/TextureHelpers.h"
+#include "Engine/Models/Resources/Texture/TextureHelpers.h"
 
 #include "Mathematics/Rect.h"
 
@@ -297,9 +298,10 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 	return nullptr;
 }
 
+
 // *********************************
 //
-const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlineWidth, const std::wstring & wcharsSet )
+TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth, const std::wstring & wcharsSet )
 {
 	SizeType							glyphsNum	= wcharsSet.size();
 	Int32								spadding	= (Int32)padding;
@@ -322,7 +324,7 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlin
 			outlineGlyphs[ ch ] = RenderGlyph( ch, outlineSpans[ ch ], outlineWidth );
 		}
 
-	auto atlasSize = (SizeType) std::ceil( sqrt( (float)glyphsNum ) );
+	auto atlasSize = (UInt32) std::ceil( sqrt( (float)glyphsNum ) );
 
     auto maxWidth  = m_maxWidth		+ spadding * 2;
     auto maxHeight = m_maxHeight	+ spadding * 2;
@@ -330,7 +332,7 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlin
     auto altlasWidth	= maxWidth	* atlasSize;
     auto altlasHeight	= maxHeight * atlasSize;
 
-    auto atlas = TextAtlas::Crate( altlasWidth, altlasHeight, 32, maxWidth, maxHeight );
+	auto atlas = TextAtlas::Create( altlasWidth, altlasHeight, 32, maxWidth, maxHeight );
 
     for ( auto ch : wcharsSet )
 		atlas->SetGlyph( ch, glyphs[ ch ] );
@@ -339,22 +341,17 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlin
 		for ( auto ch : wcharsSet )
 			atlas->SetGlyph( ch, outlineGlyphs[ ch ], true );
 
-    char* atlasData = const_cast< char * >( atlas->GetWritableData()->Get() );// FIXME: Remove const_cast
+    char* atlasData = new char[ altlasWidth * altlasHeight * 4 ]; //const_cast< char * >( atlas->GetWritableData()->Get() );// FIXME: Remove const_cast
 
 	memset( atlasData, 0, altlasWidth * altlasHeight * 4 );
 
-    // auto atlasColumns  =  altlasWidth / maxWidth;
-
-	// Int32 x = 0;
-	// Int32 y = 0;
-
 	char * currAddress = atlasData;
 
-	for( SizeType y = 0; y < atlasSize; ++y )
+	for( UInt32 y = 0; y < atlasSize; ++y )
 	{
 		currAddress += altlasWidth * padding * 4;
 
-		for( SizeType x = 0; x < atlasSize; ++x )
+		for( UInt32 x = 0; x < atlasSize; ++x )
 		{
 			if( y * atlasSize + x < wcharsSet.size() )
 			{
@@ -410,6 +407,9 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlin
 
 		currAddress += ( m_maxHeight - 1  + padding ) *  altlasWidth * 4;
 	}
+	
+	auto singleTex = SingleTextureResource::Create( MemoryChunk::Create( atlasData, altlasWidth * altlasHeight * 4 ), "", altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8 );
+	atlas->m_textureResource = TextureResource::Create( singleTex, nullptr );
 
 	TextureHelper::WriteRAW( "testFreeType.raw", atlas->GetWritableData() );
 
@@ -420,7 +420,7 @@ const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, SizeType outlin
 
 // *********************************
 //
-const TextAtlas *	FreeTypeEngine::CreateAtlas( SizeType padding, const std::wstring & wcharsSet )
+TextAtlasConstPtr FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet )
 {
 	return CreateAtlas( padding, 0, wcharsSet );
 }

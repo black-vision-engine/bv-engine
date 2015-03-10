@@ -5,24 +5,32 @@ namespace bv
 
 // ***********************
 //
-model::IResourceNEWConstPtr ResourceManager::LoadResource( const ResourceDescConstPtr & desc ) const
+model::ResourceConstPtr ResourceManager::LoadResource( const ResourceDescConstPtr & desc ) const
 {
 	auto it = m_loaders.find( desc->GetUID() );
-	for( auto k : m_loaders )
-		if( desc->GetUID() == k.first )
-			return k.second->LoadResource( desc );
-	
+
+	if( it != m_loaders.end() )
+	{
+		auto res = it->second->LoadResource( desc );
+		if( res != nullptr )
+		{
+			return res;
+		}
+	}
+
 	return nullptr;
 }
 
 // ***********************
 //
-bool ResourceManager::RegisterLoader( const std::string & resDescUID, model::IResourceLoader * loader )
+bool ResourceManager::RegisterLoader( const std::string & resDescUID, model::ResourceLoader * loader )
 {
 	auto it = m_loaders.find( resDescUID );
 
 	if( it != m_loaders.end() )
+	{
 		return false;
+	}
 	else
 	{
 		m_loaders[ resDescUID ] = loader;

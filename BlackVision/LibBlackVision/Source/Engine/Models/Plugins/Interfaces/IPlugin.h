@@ -10,7 +10,7 @@
 #include "Engine/Interfaces/IUpdatable.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 #include "Engine/Models/Plugins/Interfaces/IPluginParamValModel.h"
-#include "Engine/Models/Resources/IPluginResourceDescr.h"
+#include "Engine/Models/Resources/ResourceDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
@@ -61,7 +61,7 @@ public:
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const = 0;
 
     //FIXME: implement a more generic interface for resource loading
-    virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) = 0;
+    virtual bool                                LoadResource                ( ResourceDescConstPtr resDescr ) = 0;
 
 
 	virtual ParamTransformVecPtr				GetParamTransform			() const = 0; //FIXME: BArdzo brzydki hack zeby zadzialal crawler

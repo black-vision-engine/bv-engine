@@ -10,8 +10,7 @@
 
 #include "Mathematics/Transform/MatTransform.h"
 
-#include "Engine/Models/Resources/IPluginResourceDescr.h"
-
+#include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
 #include "Engine/Models/Resources/Font/FontLoader.h"
 #include "Engine/Models/Resources/Font/Text.h"
 
@@ -217,7 +216,7 @@ DefaultTextPlugin::~DefaultTextPlugin         ()
 // *************************************
 // 
 void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
-																ResourceHandleConstPtr res,
+															   TextureResourceConstPtr res,
 																const std::string & name,
 																TextureWrappingMode hWrappingMode,
 																TextureWrappingMode vWrappingMode,
@@ -251,14 +250,14 @@ void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
 
 // *************************************
 // 
-void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, SizeType fontSize, SizeType blurSize, SizeType outlineSize )
+void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize )
 {
 	auto txData = m_psc->GetTexturesDataImpl();
     assert( txData->GetTextures().size() <= 1 );
 
 	auto fontResource = TextHelper::LoadFont( fontFile, fontSize, blurSize, outlineSize ); // TODO:
 
-	m_atlas = TextHelper::GetAtlas( fontResource.get() );
+	m_atlas = TextHelper::GetAtlas( fontResource );
 
 	auto textureResource = m_atlas->GetResourceHandle();
 
@@ -275,13 +274,13 @@ void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, SizeType
 
 // *************************************
 // 
-bool                            DefaultTextPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
+bool                            DefaultTextPlugin::LoadResource  ( ResourceDescConstPtr resDescr )
 {
-    auto txResDescr = QueryFontResourceDescr( resDescr );
+	auto txResDescr = QueryTypedDesc< FontResourceDescConstPtr >( resDescr );
 
     if ( txResDescr != nullptr )
     {
-		LoadAtlas( txResDescr->GetFontFile(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
+		LoadAtlas( txResDescr->GetFontFileName(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
 		InitAttributesChannel( m_prevPlugin );
 
 		return true;

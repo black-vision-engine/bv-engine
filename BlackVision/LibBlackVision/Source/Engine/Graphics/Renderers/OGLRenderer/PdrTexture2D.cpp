@@ -63,11 +63,11 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
     {
         //NOTE: wystarczy tylko tak, bo update i tak pojdzie dwa razy (raz przy tworzeniu tekstury, a raz przy jej enablowaniu, co oznacza, ze oba PBO zosatana zaladowane poprawnie danymi tekstury i nie bedzie
         //NOTE: jednej pustej ramki z pustym przebiegiem renderera (czyli dokladnie tak, jak byc powinno) - pesymistycznie nalezy tutaj zaladowac od razu jedno PBO, i z niego poprawnie odczytaja sie dane w pierwszym feczu
-        BVGL::bvglTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, 0 );
+        BVGL::bvglTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height, 0, m_format, m_type, 0 );
     }
     else
     {
-        BVGL::bvglTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, m_width, m_height, 0, m_format, m_type, texture->GetData()->Get() );
+        BVGL::bvglTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height, 0, m_format, m_type, texture->GetData()->Get() );
     }
 
     BVGL::bvglBindTexture( GL_TEXTURE_2D, prevTex );
@@ -96,10 +96,10 @@ void    PdrTexture2D::UpdateTexData     ( const Texture2D * texture )
     double writeStart = GTimer.CurElapsed();
 #endif
 
-    void * data = m_pboMem->LockTexture( MemoryLockingType::MLT_WRITE_ONLY, m_textureID, m_width, m_height, m_format, m_type );
+    void * data = m_pboMem->LockTexture( MemoryLockingType::MLT_WRITE_ONLY, m_textureID, ( GLuint )m_width, ( GLuint )m_height, m_format, m_type );
     memcpy( data, texture->GetData()->Get(), texture->RawFrameSize() );
     // printf( "TEXTURE ASYNC MEM TRAQNSFER TRIGGERED\n");
-    m_pboMem->UnlockTexture( m_textureID, m_width, m_height, m_format, m_type );
+    m_pboMem->UnlockTexture( m_textureID, ( GLuint )m_width, ( GLuint )m_height, m_format, m_type );
 
 #ifdef POOR_PROFILE_TEXTURE_STREAMING
     double writeTime = GTimer.CurElapsed() - writeStart;

@@ -28,7 +28,6 @@
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/VariableTopologyStripComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/VertexAttributesChannelVariableTopology.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
-#include "Engine/Models/Resources/TextHelpers.h"
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"

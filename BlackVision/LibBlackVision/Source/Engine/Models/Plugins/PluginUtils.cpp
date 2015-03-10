@@ -1,9 +1,8 @@
 #include "PluginUtils.h"
 
-#include "Engine\Models\Resources\Texture\TextureResourceDescr.h"
-#include "Engine\Models\Resources\Texture\AnimationResourceDescr.h"
-#include "Engine\Models\Resources\Texture\FontResourceDescr.h"
-
+#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
+#include "Engine/Models/Resources/Texture/AnimationResourceDescriptor.h"
+#include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
 
 namespace bv { namespace model {
 
@@ -11,16 +10,16 @@ namespace bv { namespace model {
 //
 bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile )
 {
-    TextureResourceDescrPtr desc = std::make_shared< TextureResourceDescr >( textureFile );
+	auto texDesc = TextureResourceDesc::Create( textureFile );
 
-    return plugin->LoadResource( desc );
+    return plugin->LoadResource( texDesc );
 }
 
 // *******************************
 //
 bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, const std::string & filter )
 {
-    AnimationResourceDescrPtr desc = AnimationResourceDescr::CreateFromDirFrames( animationPath, filter );
+	auto desc = AnimationResourceDesc::CreateFromDirFrames( animationPath, filter );
 
     if( desc == nullptr )
     {
@@ -32,9 +31,9 @@ bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, 
 
 // *******************************
 //
-bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile )
+bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateBitmaps )
 {
-    FontResourceDescrPtr desc( new FontResourceDescr( fontFile ) );
+	auto desc = FontResourceDesc::Create( fontFile, fontSize, blurSize, outlineSize, generateBitmaps );
 
     return plugin->LoadResource( desc );
 }

@@ -13,8 +13,6 @@
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
 
-#include "Engine/Models/Resources/IPluginResourceDescr.h"
-
 
 namespace bv { namespace model {
 
@@ -272,9 +270,9 @@ DefaultAlphaMaskPlugin::~DefaultAlphaMaskPlugin         ()
 
 // *************************************
 // 
-bool                        DefaultAlphaMaskPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
+bool                        DefaultAlphaMaskPlugin::LoadResource  ( ResourceDescConstPtr resDescr )
 {
-    auto txResDescr = QueryTextureResourceDescr( resDescr );
+	auto txResDescr = QueryTypedDesc< TextureResourceDescConstPtr >( resDescr );
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txResDescr != nullptr )
@@ -283,7 +281,7 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( IPluginResou
         assert( txData->GetTextures().size() <= 2 );
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), DefaultAlphaMaskPluginDesc::TextureName() );
+        auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr, DefaultAlphaMaskPluginDesc::TextureName() );
 
         //Alpha texture defaults
         txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
@@ -779,14 +777,14 @@ void                                        DefaultAlphaMaskPlugin::UpdateState 
 
 // *************************************
 // 
-int                                         DefaultAlphaMaskPlugin::GetAlphaTextureWidth    () const
+SizeType									DefaultAlphaMaskPlugin::GetAlphaTextureWidth    () const
 {
     return m_textureWidth;
 }
 
 // *************************************
 //
-int                                         DefaultAlphaMaskPlugin::GetAlphaTextureHeight   () const
+SizeType                                     DefaultAlphaMaskPlugin::GetAlphaTextureHeight   () const
 {
     return m_textureHeight;
 }

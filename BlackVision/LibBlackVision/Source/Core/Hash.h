@@ -13,7 +13,8 @@ public:
 
 	static Hash					FromString( const std::string & str );
 
-	bool						operator < ( const Hash & b ) const;
+	bool						operator <	( const Hash & b ) const;
+	bool						operator == ( const Hash & b ) const;
 
 private:
 

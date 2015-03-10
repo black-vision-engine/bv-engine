@@ -5,6 +5,11 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Processes/ProcessManager.h"
+#include "Engine/Models/Resources/ResourceManager.h"
+#include "Engine/Models/Resources/Texture/TextureLoader.h"
+#include "Engine/Models/Resources/Font/FontLoader.h"
+#include "Engine/Models/Resources/Texture/AnimationLoader.h"
+#include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
 
 #include "System/HerarchicalProfiler.h"
 
@@ -103,6 +108,7 @@ bool BlackVisionApp::OnInitialize       ()
     m_processManager = new ProcessManager();
 
     InitializeConsole       ();
+	InitializeResourceLoaders();
     InitializeAppLogic      ();
     InitializeSelfState     ();
 
@@ -166,6 +172,16 @@ void    BlackVisionApp::InitializeSelfState ()
 {
     WindowedApplication::SetClearColor( DefaultConfig.ClearColor() );
 }
+
+// *********************************
+//
+void    BlackVisionApp::InitializeResourceLoaders ()
+{
+    bv::ResourceManager::GetInstance().RegisterLoader( bv::TextureResourceDesc::UID(), new bv::model::TextureLoader() );
+	bv::ResourceManager::GetInstance().RegisterLoader( bv::FontResourceDesc::UID(), new bv::model::FontLoader() );
+	bv::ResourceManager::GetInstance().RegisterLoader( bv::model::AnimationResourceDesc::UID(), new bv::model::AnimationLoader() );
+}
+
 
 // *********************************
 //
