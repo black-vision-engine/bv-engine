@@ -65,7 +65,7 @@ void MipMapResourceDesc::GenereateLevelsDescs( const SingleTextureResourceDescCo
 	auto mmSizes = tools::GenerateMipmapsSizes( tools::ImageSize( (unsigned int)origTexture->GetWidth(), (unsigned int)origTexture->GetHeight() ) );
 
 	for( auto mms : mmSizes )
-		m_mipMapDescs.push_back( SingleTextureResourceDesc::Create( origTexture->GetImagePath(), mms.width, mms.height, origTexture->GetFormat() ) );
+		m_mipMapDescs.push_back( SingleTextureResourceDesc::Create( origTexture->GetImagePath(), mms.width, mms.height, origTexture->GetFormat(), origTexture->IsCacheable() ) );
 }
 
 // *******************************

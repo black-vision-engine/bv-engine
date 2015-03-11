@@ -37,7 +37,7 @@ TEST(LoadingTextureAndGeneratingMipMaps, ResourceManager)
 	auto props = bv::image::GetImageProps( imagePath );
 	ASSERT_TRUE( props.error.empty() );
 
-	auto orig = bv::SingleTextureResourceDesc::Create( imagePath, props.width, props.height, props.format );
+	auto orig = bv::SingleTextureResourceDesc::Create( imagePath, props.width, props.height, props.format, true );
 	ASSERT_TRUE( orig );
 
 	auto textureResDesc = bv::TextureResourceDesc::Create( orig, bv::MipMapFilterType::BILINEAR );
@@ -52,7 +52,7 @@ TEST(LoadingTexture, ResourceManager)
 	auto props = bv::image::GetImageProps( imagePath );
 	ASSERT_TRUE( props.error.empty() );
 
-	auto orig = bv::SingleTextureResourceDesc::Create( imagePath, props.width, props.height, props.format );
+	auto orig = bv::SingleTextureResourceDesc::Create( imagePath, props.width, props.height, props.format, true );
 	ASSERT_TRUE( orig );
 
 	auto textureResDesc = bv::TextureResourceDesc::Create( orig );
@@ -67,7 +67,7 @@ TEST(LoadingTexturePowefOf2Texture, ResourceManager)
 	auto props = bv::image::GetImageProps( imagePath_512x512 );
 	ASSERT_TRUE( props.error.empty() );
 
-	auto orig = bv::SingleTextureResourceDesc::Create( imagePath_512x512, props.width, props.height, props.format );
+	auto orig = bv::SingleTextureResourceDesc::Create( imagePath_512x512, props.width, props.height, props.format, true );
 	ASSERT_TRUE( orig );
 
 	auto textureResDesc = bv::TextureResourceDesc::Create( orig, bv::MipMapFilterType::BILINEAR );
@@ -91,16 +91,16 @@ TEST(LoadingTextureWitmMipmaps, ResourceManager)
 	auto props2 = bv::image::GetImageProps( AssetsPath + std::string("checkerboard2_128X128.png") );
 	ASSERT_TRUE( props2.error.empty() );
 
-	auto origDesc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_500X500.png"), propsOrig.width, propsOrig.height, propsOrig.format );
+	auto origDesc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_500X500.png"), propsOrig.width, propsOrig.height, propsOrig.format, true );
 	ASSERT_TRUE( origDesc );
 
-	auto mm0Desc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_512X512.png"), props0.width, props0.height, props0.format );
+	auto mm0Desc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_512X512.png"), props0.width, props0.height, props0.format, true );
 	ASSERT_TRUE( mm0Desc );
 
-	auto mm1Desc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_256X256.png"), props1.width, props1.height, props1.format );
+	auto mm1Desc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_256X256.png"), props1.width, props1.height, props1.format, true );
 	ASSERT_TRUE( mm1Desc );
 
-	auto mm2Desc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_128X128.png"), props2.width, props2.height, props2.format );
+	auto mm2Desc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_128X128.png"), props2.width, props2.height, props2.format, true );
 	ASSERT_TRUE( mm2Desc );
 
 	std::vector< bv::SingleTextureResourceDescConstPtr > mmVec;
@@ -131,18 +131,18 @@ TEST(LoadingTextureWitmMipmaps, ResourceManager)
 		auto props3 = bv::image::GetImageProps( AssetsPath + std::string("checkerboard2_64X64.png") );
 		ASSERT_TRUE( props3.error.empty() );
 
-		auto origDesc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_512X512.png"), propsOrig.width, propsOrig.height, propsOrig.format );
+		auto origDesc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_512X512.png"), propsOrig.width, propsOrig.height, propsOrig.format, true );
 		ASSERT_TRUE( origDesc );
 
 		auto mm0Desc = origDesc;
 
-		auto mm1Desc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_256X256.png"), props1.width, props1.height, props1.format );
+		auto mm1Desc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_256X256.png"), props1.width, props1.height, props1.format, true );
 		ASSERT_TRUE( mm1Desc );
 
-		auto mm2Desc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_128X128.png"), props2.width, props2.height, props2.format );
+		auto mm2Desc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_128X128.png"), props2.width, props2.height, props2.format, true );
 		ASSERT_TRUE( mm2Desc );
 
-		auto mm3Desc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_64X64.png"), props3.width, props3.height, props3.format );
+		auto mm3Desc = bv::SingleTextureResourceDesc::Create( AssetsPath + std::string("checkerboard2_64X64.png"), props3.width, props3.height, props3.format, true );
 		ASSERT_TRUE( mm3Desc );
 
 		std::vector< bv::SingleTextureResourceDescConstPtr > mmVec;

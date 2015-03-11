@@ -29,23 +29,24 @@ VoidConstPtr SingleTextureResourceDesc::QueryThis() const
 //
 bool SingleTextureResourceDesc::IsCacheable	() const
 {
-	return true;
+	return m_isCacheable;
 }
 
 // ***********************
 //
-SingleTextureResourceDescConstPtr SingleTextureResourceDesc::Create( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format )
+SingleTextureResourceDescConstPtr SingleTextureResourceDesc::Create( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable )
 {
-	return std::make_shared< SingleTextureResourceDesc >( imagePath, width, height, format );
+	return std::make_shared< SingleTextureResourceDesc >( imagePath, width, height, format, isCacheable );
 }
 
 // ***********************
 //
-SingleTextureResourceDesc::SingleTextureResourceDesc( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format )
+SingleTextureResourceDesc::SingleTextureResourceDesc( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable )
 	: m_imagePath( imagePath )
 	, m_width( width )
 	, m_height( height )
 	, m_format( format )
+	, m_isCacheable( isCacheable )
 {}
 
 // ***********************

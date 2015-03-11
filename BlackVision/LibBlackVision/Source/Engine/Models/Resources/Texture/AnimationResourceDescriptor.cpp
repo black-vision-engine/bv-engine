@@ -13,7 +13,7 @@ AnimationResourceDesc::AnimationResourceDesc							( const std::vector< std::str
 {
 	for( auto f : frames )
 	{
-		m_frames.push_back( TextureResourceDesc::Create( f ) );
+		m_frames.push_back( TextureResourceDesc::Create( f, false ) );
 	}
 }
 

@@ -37,7 +37,7 @@ VoidConstPtr TextureResourceDesc::QueryThis() const
 
 // ***********************
 //
-TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & imageFilePath )
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & imageFilePath, bool isCacheable )
 {
 	auto props = image::GetImageProps( imageFilePath );
 
@@ -46,12 +46,12 @@ TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & ima
 		return nullptr;
 	}
 
-	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, props.format ) );
+	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, props.format, isCacheable ) );
 }
 
 // ***********************
 //
-TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & imageFilePath, MipMapFilterType mmFilter )
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & imageFilePath, MipMapFilterType mmFilter, bool isCacheable )
 {
 	auto props = image::GetImageProps( imageFilePath );
 
@@ -60,12 +60,12 @@ TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & ima
 		return nullptr;
 	}
 
-	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, props.format ), mmFilter );
+	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, props.format, isCacheable ), mmFilter );
 }
 
 // ***********************
 //
-TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & imageFilePath, const StringVector & mipMapsPaths )
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & imageFilePath, const StringVector & mipMapsPaths, bool isCacheable )
 {
 	auto props = image::GetImageProps( imageFilePath );
 
@@ -85,12 +85,12 @@ TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & ima
 			return nullptr;
 		}
 
-		mmDescs.push_back( SingleTextureResourceDesc::Create( mmFilePath, mmProps.width, mmProps.height, mmProps.format ) );
+		mmDescs.push_back( SingleTextureResourceDesc::Create( mmFilePath, mmProps.width, mmProps.height, mmProps.format, isCacheable ) );
 	}
 
 	auto mmResDesc = MipMapResourceDesc::Create( mmDescs );
 
-	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, props.format ), mmResDesc );
+	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, props.format, isCacheable ), mmResDesc );
 }
 
 // ***********************

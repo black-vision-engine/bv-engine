@@ -43,9 +43,9 @@ public:
 	SingleTextureResourceDescConstPtr	GetOrigTextureDesc	() const;
 	MipMapResourceDescConstPtr			GetMipMapsDesc		() const;
 
-	static TextureResourceDescConstPtr	Create				( const std::string & imageFilePath );
-	static TextureResourceDescConstPtr	Create				( const std::string & imageFilePath, MipMapFilterType mmFilter );
-	static TextureResourceDescConstPtr	Create				( const std::string & imageFilePath, const StringVector & mipMapsPaths );
+	static TextureResourceDescConstPtr	Create				( const std::string & imageFilePath, bool isCacheable );
+	static TextureResourceDescConstPtr	Create				( const std::string & imageFilePath, MipMapFilterType mmFilter, bool isCacheable );
+	static TextureResourceDescConstPtr	Create				( const std::string & imageFilePath, const StringVector & mipMapsPaths, bool isCacheable );
 
 	static TextureResourceDescConstPtr	Create				( const SingleTextureResourceDescConstPtr & origDesc, const MipMapResourceDescConstPtr & mipmapsDesc );
 	static TextureResourceDescConstPtr	Create				( const SingleTextureResourceDescConstPtr & origDesc, MipMapFilterType mmFilter );

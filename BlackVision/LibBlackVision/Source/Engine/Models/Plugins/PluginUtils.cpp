@@ -8,9 +8,9 @@ namespace bv { namespace model {
 
 // *******************************
 //
-bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile )
+bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile, bool isCacheable )
 {
-	auto texDesc = TextureResourceDesc::Create( textureFile );
+	auto texDesc = TextureResourceDesc::Create( textureFile, isCacheable );
 
     return plugin->LoadResource( texDesc );
 }

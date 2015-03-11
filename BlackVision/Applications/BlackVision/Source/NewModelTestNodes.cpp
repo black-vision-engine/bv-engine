@@ -1063,7 +1063,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     model::SetParameter( node->GetPlugin( "texture" )->GetParameter( "alpha" ), TimeType( 3.f ),   1.f );
     */
 
-    success = model::LoadTexture( node->GetPlugin( "texture" ), "ogl_sm.jpg" );
+    success = model::LoadTexture( node->GetPlugin( "texture" ), "test.bmp" );
     //success = model::LoadTexture( node->GetPlugin( "texture" ), "Untitled drawing.png" );
     assert( success );
 

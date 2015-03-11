@@ -41,7 +41,7 @@ const std::vector< IAnimationDescriptor * > &   TexturesDataImpl::GetAnimations 
 //
 bool                                            TexturesDataImpl::AddTextureFromFile( const std::string & textureFile, const std::string & textureName )
 {
-	auto textureResDesc = TextureResourceDesc::Create( textureFile );
+	auto textureResDesc = TextureResourceDesc::Create( textureFile, true );
     auto desc = model::DefaultTextureDescriptor::LoadTexture( textureResDesc, textureName );
     
     if( desc )
