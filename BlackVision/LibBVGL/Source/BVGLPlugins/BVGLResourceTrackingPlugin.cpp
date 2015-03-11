@@ -148,11 +148,11 @@ void    BVGLResourceTrackingPlugin::PrintBuffersStats           ()
             suffix = "MB";
         }
 
-        printf( "Buf: %2d, Size: %4d %2s, Usage: %d, DataPTR: %08X", bufId, siz, suffix.c_str(), BVGLTranslator::TranslateBufferUsage( bufDesc.usage ), bufDesc.data );
+        printf( "Buf: %2d, Size: %4d %2s, Usage: %15s", bufId, siz, suffix.c_str(), BVGLTranslator::TranslateBufferUsage( bufDesc.usage ).c_str() );
 
         if( target != 0 )
         {
-            printf( " BOUND to: %5d", target );
+            printf( " BND: %s", BVGLTranslator::TranslateBufferTarget( target ).c_str() );
         }
 
         printf( "\n" );

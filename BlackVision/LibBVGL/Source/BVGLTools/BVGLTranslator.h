@@ -12,6 +12,8 @@ class BVGLTranslator
 private:
 
     static std::hash_map< GLenum, std::string > ms_bufferUsage;
+    static std::hash_map< GLenum, std::string > ms_bufferTarget;
+
     static BVGLTranslator                       ms_instance;
 
 private:
@@ -20,7 +22,8 @@ private:
 
 public:
 
-    static std::string  TranslateBufferUsage( GLenum usage );
+    static std::string  TranslateBufferUsage    ( GLenum usage );
+    static std::string  TranslateBufferTarget   ( GLenum target );
 
 };
 
