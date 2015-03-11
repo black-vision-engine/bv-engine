@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 #include "Engine/Models/Timeline/Dynamic/DefaultTimeline.h"
 
 #include "Engine/Models/Interfaces/IModelNode.h"

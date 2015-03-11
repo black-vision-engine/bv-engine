@@ -11,7 +11,7 @@
 #include "Engine/Models/Resources/Texture/AnimationLoader.h"
 #include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
 
-#include "System/HerarchicalProfiler.h"
+#include "Tools/HerarchicalProfiler.h"
 
 #include "StatsFormatters.h"
 #include "BVAppLogic.h"

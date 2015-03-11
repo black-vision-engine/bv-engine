@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TextAtlas.h"
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 #include <string>
 
 namespace bv { namespace model {

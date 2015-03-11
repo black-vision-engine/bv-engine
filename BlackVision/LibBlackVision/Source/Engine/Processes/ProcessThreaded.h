@@ -1,6 +1,6 @@
 #pragma once
 
-#include "System/Threading/Thread.h"
+#include "Threading/Thread.h"
 #include "Engine/Processes/Process.h"
 
 

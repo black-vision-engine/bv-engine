@@ -7,7 +7,7 @@
 
 #include "Engine/Graphics/Resources/RenderTarget.h"
 
-#include "Core/MemoryChunk.h"
+#include "Memory/MemoryChunk.h"
 
 
 namespace bv {

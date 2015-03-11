@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "System/BasicTypes.h" //FIXME: store in PCH
+#include "CoreDEF.h" //FIXME: store in PCH
 #include "Engine/Types/Enums.h"
 
 

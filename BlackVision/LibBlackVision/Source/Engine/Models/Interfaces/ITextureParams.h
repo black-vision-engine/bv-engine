@@ -4,7 +4,7 @@
 #include "Mathematics/glm_inc.h"
 
 #include "Engine/Types/Enums.h"
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 
 
 namespace bv {

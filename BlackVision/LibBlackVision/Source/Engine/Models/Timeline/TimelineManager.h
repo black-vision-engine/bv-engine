@@ -6,7 +6,7 @@
 
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
 
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 
 #include "Engine/Models/Timeline/SimpleIParamSet.h"
 

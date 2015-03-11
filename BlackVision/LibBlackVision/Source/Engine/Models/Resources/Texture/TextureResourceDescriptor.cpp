@@ -1,5 +1,6 @@
 #include "TextureResourceDescriptor.h"
 #include "LibImage.h"
+#include "Engine/Types/EnumsUtils.h"
 #include <cassert>
 
 namespace bv
@@ -46,7 +47,7 @@ TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & ima
 		return nullptr;
 	}
 
-	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, props.format, isCacheable ) );
+	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, EnumsUtils::Convert( props.format ), isCacheable ) );
 }
 
 // ***********************
@@ -60,7 +61,7 @@ TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & ima
 		return nullptr;
 	}
 
-	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, props.format, isCacheable ), mmFilter );
+	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, EnumsUtils::Convert( props.format ), isCacheable ), mmFilter );
 }
 
 // ***********************
@@ -85,12 +86,12 @@ TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & ima
 			return nullptr;
 		}
 
-		mmDescs.push_back( SingleTextureResourceDesc::Create( mmFilePath, mmProps.width, mmProps.height, mmProps.format, isCacheable ) );
+		mmDescs.push_back( SingleTextureResourceDesc::Create( mmFilePath, mmProps.width, mmProps.height, EnumsUtils::Convert( mmProps.format ), isCacheable ) );
 	}
 
 	auto mmResDesc = MipMapResourceDesc::Create( mmDescs );
 
-	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, props.format, isCacheable ), mmResDesc );
+	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, EnumsUtils::Convert( props.format ), isCacheable ), mmResDesc );
 }
 
 // ***********************

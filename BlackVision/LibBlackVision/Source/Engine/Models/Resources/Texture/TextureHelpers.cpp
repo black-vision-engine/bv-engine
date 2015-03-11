@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "System/FileIO.h"
+#include "IO/FileIO.h"
 #include "FreeImagePlus.h"
 
 namespace bv { namespace model {

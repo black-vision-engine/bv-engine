@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "Core/MemoryChunk.h"
+#include "Memory/MemoryChunk.h"
 
 namespace bv { namespace model {
 

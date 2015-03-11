@@ -27,7 +27,7 @@
 #include "Engine/Graphics/Resources/VertexArray.h"
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 
-#include "System/HRTimer.h"
+#include "Tools/HRTimer.h"
 
 //FIXME: add disable methods so that current state can be cleared after a frame is rendered
 

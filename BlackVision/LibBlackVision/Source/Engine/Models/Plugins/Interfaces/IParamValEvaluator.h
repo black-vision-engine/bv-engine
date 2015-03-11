@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 
 #include "Engine/Models/Plugins/Interfaces/IParamSet.h"
 #include "Engine/Interfaces/IValueSet.h"

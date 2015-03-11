@@ -5,7 +5,7 @@
 #include "Engine/Models/Resources/Texture/SingleTextureResource.h"
 
 #include "Engine/Types/Enums.h"
-#include "Core/MemoryChunk.h"
+#include "Memory/MemoryChunk.h"
 
 #include <string>
 

@@ -12,7 +12,7 @@
 
 #include "Engine/Interfaces/IValue.h"
 
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 
 
 namespace bv { namespace model {

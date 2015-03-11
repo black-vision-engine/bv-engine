@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Resources/TextureBase.h"
 #include "Engine/Graphics/Resources/DataBuffer.h"
 #include "Engine/Types/Enums.h"
-#include "Core/MemoryChunk.h"
+#include "Memory/MemoryChunk.h"
 
 namespace bv
 {

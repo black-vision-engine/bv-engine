@@ -1,6 +1,6 @@
 #pragma once
 
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 #include "Engine/Models/Interfaces/INodeLogic.h"
 #include "CrawlerNodesStates.h"
 

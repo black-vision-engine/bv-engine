@@ -3,7 +3,7 @@
 #include "Engine/Models/Resources/ResourceDescriptor.h"
 #include "Engine/Types/Enums.h"
 
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 
 #include <string>
 #include <vector>

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Engine/Types/Enums.h"
-#include "Core/MemoryChunk.h"
-#include "System/BasicTypes.h"
+#include "Memory/MemoryChunk.h"
+#include "CoreDEF.h"
 
 #include "Engine/Models/Resources/Resource.h"
 

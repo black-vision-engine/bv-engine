@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 
 namespace bv
 {

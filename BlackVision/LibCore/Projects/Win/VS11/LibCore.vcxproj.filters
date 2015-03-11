@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="DataTypes">
+      <UniqueIdentifier>{154b5666-6116-46ba-b1a4-b2573c6628ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IO">
+      <UniqueIdentifier>{d8434119-e378-41d7-9858-55a53128efeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{b4acd7b5-653f-4a89-9f10-8c5edfe415cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{003cdea1-18ac-4c44-b42c-f285f12f5d8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Threading">
+      <UniqueIdentifier>{f4b1aaa9-24f3-4bfe-9541-de481c7430de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{acaec9cd-6541-4c9d-b24d-30491987af65}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\CoreDEF.h" />
+    <ClInclude Include="..\..\..\Source\DataTypes\Hash.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\DataTypes\Queue.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\DataTypes\QueueConcurrent.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\IO\DirIO.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\IO\FileIO.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Memory\MemoryChunk.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\HerarchicalProfiler.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\HRTimer.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\SimpleTimer.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\StringHeplers.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Threading\CriticalSection.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Threading\ScopedCriticalSection.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Threading\Thread.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\System\Env.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\System\InitSubsystem.h">
+      <Filter>System</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">
+      <Filter>DataTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\IO\DirIO.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\IO\FileIO.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Memory\MemoryChunk.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\HerarchicalProfiler.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\HRTimer.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\SimpleTimer.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\StringHeplers.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Threading\CriticalSection.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Threading\ScopedCriticalSection.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Threading\Thread.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\System\Env.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\System\InitSubsystem.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Source\Tools\HerarchicalProfiler.inl">
+      <Filter>Tools</Filter>
+    </None>
+  </ItemGroup>
+</Project>

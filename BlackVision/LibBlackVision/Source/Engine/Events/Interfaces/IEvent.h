@@ -4,7 +4,7 @@
 #include <string>
 #include <sstream>
 
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 
 #pragma warning( push )
 #pragma warning( disable : 4100 )

@@ -4,7 +4,7 @@
 #include "Engine/Models/Resources/Texture/SingleTextureResourceDescriptor.h"
 #include "Engine/Types/Enums.h"
 
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 
 #include <string>
 #include <vector>

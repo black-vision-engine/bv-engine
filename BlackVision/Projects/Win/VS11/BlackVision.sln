@@ -29,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibImage", "..\..\..\LibIma
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibBVGL", "..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj", "{B0E6C314-5B08-40F7-87EF-17141A389BA5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibCore", "..\..\..\LibCore\Projects\Win\VS11\LibCore.vcxproj", "{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -135,6 +137,18 @@ Global
 		{B0E6C314-5B08-40F7-87EF-17141A389BA5}.Release|Win32.Build.0 = Release|Win32
 		{B0E6C314-5B08-40F7-87EF-17141A389BA5}.Release|x64.ActiveCfg = Release|x64
 		{B0E6C314-5B08-40F7-87EF-17141A389BA5}.Release|x64.Build.0 = Release|x64
+		{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}.Debug|Win32.Build.0 = Debug|Win32
+		{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}.Debug|x64.ActiveCfg = Debug|x64
+		{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}.Debug|x64.Build.0 = Debug|x64
+		{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}.Release|Win32.ActiveCfg = Release|Win32
+		{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}.Release|Win32.Build.0 = Release|Win32
+		{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}.Release|x64.ActiveCfg = Release|x64
+		{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

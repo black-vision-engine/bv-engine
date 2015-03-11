@@ -3,7 +3,7 @@
 #include "Mathematics/glm_inc.h"
 
 #include "Mathematics/Interpolators/BasicInterpolator.h"
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 
 
 namespace bv

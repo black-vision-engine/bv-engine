@@ -4,8 +4,8 @@
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
-#include "System/HerarchicalProfiler.h"
-#include "System/HRTimer.h"
+#include "Tools/HerarchicalProfiler.h"
+#include "Tools/HRTimer.h"
 
 #include "OffscreenRenderLogic.h"
 #include "BVConfig.h"

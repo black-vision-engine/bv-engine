@@ -3,7 +3,7 @@
 #include <sstream>
 #include <algorithm>
 
-#include "System/HerarchicalProfiler.h"
+#include "Tools/HerarchicalProfiler.h"
 #include "FrameStatsService.h"
 
 #include "BVConfig.h"

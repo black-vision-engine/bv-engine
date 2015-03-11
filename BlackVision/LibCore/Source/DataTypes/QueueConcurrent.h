@@ -3,7 +3,7 @@
 #include <cassert>
 #include <queue>
 
-#include "System/Threading/ScopedCriticalSection.h"
+#include "Threading/ScopedCriticalSection.h"
 
 
 namespace bv

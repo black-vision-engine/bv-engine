@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/Hash.h"
-#include "Core/MemoryChunk.h"
+#include "DataTypes/Hash.h"
+#include "Memory/MemoryChunk.h"
 
 #include <map>
 

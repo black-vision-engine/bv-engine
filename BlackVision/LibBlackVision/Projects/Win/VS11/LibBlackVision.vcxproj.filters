@@ -4,20 +4,11 @@
     <Filter Include="Application">
       <UniqueIdentifier>{908d5ae9-993e-48cc-900e-b56e65944314}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core">
-      <UniqueIdentifier>{9bf023d6-1b2c-49c0-8729-6b4f1b157763}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine">
       <UniqueIdentifier>{e1f9c03c-c7f9-4abf-b5c3-97103011abfd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Mathematics">
       <UniqueIdentifier>{43730b8b-4507-49ec-982a-d0fc06701406}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="System">
-      <UniqueIdentifier>{22072363-4eda-4f2a-8dcc-d93538b34a15}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="System\Threading">
-      <UniqueIdentifier>{f2e45536-824a-4fc8-83f6-1f6d85c48ee4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Mathematics\Core">
       <UniqueIdentifier>{a608c8e3-e0e3-429d-8a07-461e53f91293}</UniqueIdentifier>
@@ -171,12 +162,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\Core\MemoryChunk.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Core\StringHeplers.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
       <Filter>Application</Filter>
     </ClCompile>
@@ -188,39 +173,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Application\Win32\WinApplication.cpp">
       <Filter>Application\Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\System\DirIO.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\System\FileIO.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\System\HerarchicalProfiler.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\System\HRTimer.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\System\InitSubsystem.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\System\Print.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\System\Profiler.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\System\SimpleTimer.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\System\Threading\CriticalSection.cpp">
-      <Filter>System\Threading</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\System\Threading\ScopedCriticalSection.cpp">
-      <Filter>System\Threading</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\System\Threading\Thread.cpp">
-      <Filter>System\Threading</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp">
       <Filter>Mathematics</Filter>
@@ -771,9 +723,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResource.cpp">
       <Filter>Engine\Models\Resources\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Core\Hash.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureCache.cpp">
       <Filter>Engine\Models\Resources\Texture</Filter>
     </ClCompile>
@@ -807,9 +756,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.cpp">
       <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\System\Env.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\FontResource.cpp">
       <Filter>Engine\Models\Resources\Font</Filter>
     </ClCompile>
@@ -830,20 +776,11 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureHelpers.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Types\EnumsUtils.cpp">
+      <Filter>Engine\Types</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Source\Core\MemoryChunk.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Core\Queue.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Core\QueueConcurrent.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Core\StringHeplers.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
       <Filter>Application</Filter>
     </ClInclude>
@@ -852,48 +789,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Application\WindowedApplication.h">
       <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\System\BasicMacros.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\System\BasicTypes.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\System\DirIO.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\System\Environment.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\System\FileIO.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\System\HerarchicalProfiler.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\System\HRTimer.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\System\InitSubsystem.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\System\Print.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\System\Profiler.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\System\SimpleTimer.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\System\Threading\CriticalSection.h">
-      <Filter>System\Threading</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\System\Threading\ScopedCriticalSection.h">
-      <Filter>System\Threading</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\System\Threading\Thread.h">
-      <Filter>System\Threading</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\AABB.h">
       <Filter>Mathematics</Filter>
@@ -1609,9 +1504,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResource.h">
       <Filter>Engine\Models\Resources\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Core\Hash.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureCache.h">
       <Filter>Engine\Models\Resources\Texture</Filter>
     </ClInclude>
@@ -1645,9 +1537,6 @@
     <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h">
       <Filter>Mathematics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\System\Env.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\FontResource.h">
       <Filter>Engine\Models\Resources\Font</Filter>
     </ClInclude>
@@ -1668,11 +1557,11 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureHelpers.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureLoader.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Types\EnumsUtils.h">
+      <Filter>Engine\Types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Source\System\HerarchicalProfiler.inl">
-      <Filter>System</Filter>
-    </None>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
       <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
     </None>

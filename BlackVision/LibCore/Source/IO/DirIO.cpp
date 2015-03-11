@@ -3,7 +3,7 @@
 #include <windows.h>
 #include <boost/filesystem.hpp>
 
-#include "Core/StringHeplers.h"
+#include "Tools/StringHeplers.h"
 
 namespace fs = boost::filesystem;
 

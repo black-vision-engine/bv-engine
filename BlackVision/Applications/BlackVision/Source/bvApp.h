@@ -5,7 +5,7 @@
 #include <sstream>
 
 #include "Application/WindowedApplication.h"
-#include "System/SimpleTimer.h"
+#include "Tools/SimpleTimer.h"
 
 
 namespace bv {

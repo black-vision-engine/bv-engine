@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 
 namespace bv {
 

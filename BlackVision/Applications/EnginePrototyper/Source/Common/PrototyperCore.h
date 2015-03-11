@@ -12,7 +12,7 @@
 
 #include "BVGL.h"
 
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 
 namespace bv { namespace config {
 const std::string PROTOTYPES_SHADERS_ROOT = "Assets/Shaders/Prototypes/";

@@ -4,7 +4,7 @@
 
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 
-#include "System/Environment.h"
+#include "CoreDEF.h"
 
 /* hacked by creed */
 #include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"

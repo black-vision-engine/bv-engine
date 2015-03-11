@@ -1,6 +1,6 @@
 #pragma once
 
-#include "System/Threading/CriticalSection.h"
+#include "Threading/CriticalSection.h"
 
 
 namespace bv

@@ -4,7 +4,7 @@
 #include <string>
 #include <memory>
 
-#include "System/BasicTypes.h" //FIXME: store in PCH
+#include "CoreDEF.h" //FIXME: store in PCH
 
 
 namespace bv { namespace model {

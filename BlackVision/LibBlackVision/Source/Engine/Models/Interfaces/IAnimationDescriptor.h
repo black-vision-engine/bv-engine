@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Interfaces/ITextureParams.h"
-#include "Core/MemoryChunk.h"
+#include "Memory/MemoryChunk.h"
 
 namespace bv {
 

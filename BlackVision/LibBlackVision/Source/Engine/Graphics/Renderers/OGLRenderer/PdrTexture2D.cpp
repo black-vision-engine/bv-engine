@@ -6,7 +6,7 @@
 
 
 #ifdef POOR_PROFILE_TEXTURE_STREAMING
-#include "System/HRTimer.h"
+#include "Tools/HRTimer.h"
 #endif
 
 namespace bv

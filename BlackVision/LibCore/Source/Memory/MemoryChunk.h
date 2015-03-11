@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 
 namespace bv
 {

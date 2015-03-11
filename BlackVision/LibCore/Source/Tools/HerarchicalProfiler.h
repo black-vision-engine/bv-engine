@@ -2,7 +2,7 @@
 
 #include <windows.h>
 
-#include "System/BasicMacros.h"
+#include "CoreDEF.h"
 
 
 #define MAX_PROFILER_SAMPLES 120

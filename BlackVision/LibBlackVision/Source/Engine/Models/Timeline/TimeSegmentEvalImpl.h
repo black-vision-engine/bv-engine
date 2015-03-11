@@ -3,7 +3,7 @@
 #include <vector>
 #include <functional>
 
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 #include "Mathematics/Core/mathfuncs.h"
 
 #include "Engine/Types/Enums.h"

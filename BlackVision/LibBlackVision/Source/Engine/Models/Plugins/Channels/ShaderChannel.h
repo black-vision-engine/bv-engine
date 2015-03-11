@@ -7,8 +7,8 @@
 
 #include "Engine/Models/Plugins/Interfaces/IShaderChannel.h"
 #include "Engine/Interfaces/IValue.h"
-#include "System/BasicTypes.h"
-#include "System/FileIO.h"
+#include "CoreDEF.h"
+#include "IO/FileIO.h"
 
 
 namespace bv { namespace model {

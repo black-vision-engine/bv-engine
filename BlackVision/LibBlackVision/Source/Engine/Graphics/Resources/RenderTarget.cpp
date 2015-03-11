@@ -3,7 +3,7 @@
 #include <cassert>
 
 #include "Engine/Graphics/Resources/Texture2DImpl.h"
-#include "Core/MemoryChunk.h"
+#include "Memory/MemoryChunk.h"
 
 
 namespace bv {

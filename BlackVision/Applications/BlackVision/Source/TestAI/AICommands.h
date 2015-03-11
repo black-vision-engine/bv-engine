@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Types/Enums.h"
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 
 #include "Engine/Models/Timeline/Dynamic/DefaultTimeline.h"
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"

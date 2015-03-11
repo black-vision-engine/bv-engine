@@ -5,8 +5,8 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 
-#include "System/SimpleTimer.h"
-#include "System/HerarchicalProfiler.h"
+#include "Tools/SimpleTimer.h"
+#include "Tools/HerarchicalProfiler.h"
 
 #include "Rendering/RenderLogic.h"
 #include "ModelInteractionEvents.h"

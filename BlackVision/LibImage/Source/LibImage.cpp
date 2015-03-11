@@ -4,7 +4,7 @@
 
 #include "FreeImage.h"
 
-#include "System/FileIO.h"
+#include "IO/FileIO.h"
 
 #include <cassert>
 
@@ -43,14 +43,14 @@ ImageProperties GetImageProps( const std::string & imageFilePath )
 	auto bbp		= FreeImage_GetBPP( bitmap );
 	auto colorType	= FreeImage_GetColorType( bitmap );
 
-	TextureFormat format;
+	ImageFormat format;
 
 	if( colorType == FIC_RGBALPHA && bbp == 32 )
-		format = bv::TextureFormat::F_A8R8G8B8;
+		format = bv::image::ImageFormat::IF_A8R8G8B8;
 	else if ( colorType == FIC_RGB && bbp == 24 )
-		format = bv::TextureFormat::F_R8G8B8;
+		format = bv::image::ImageFormat::IF_R8G8B8;
 	else if ( bbp == 8 )
-		format = bv::TextureFormat::F_A8;
+		format = bv::image::ImageFormat::IF_A8;
 	else
 	{
 		ImageProperties iprops;

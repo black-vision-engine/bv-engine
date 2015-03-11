@@ -4,7 +4,7 @@
 #include "Engine/Models/Resources/Font/IFontEngine.h"
 #include "Engine/Models/Resources/Font/Text.h"
 
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 #include <string>
 #include <vector>
 

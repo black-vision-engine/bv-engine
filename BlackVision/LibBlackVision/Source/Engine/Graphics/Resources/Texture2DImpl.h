@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Graphics/Resources/Texture2D.h"
-#include "Core/MemoryChunk.h"
+#include "Memory/MemoryChunk.h"
 
 namespace bv
 {

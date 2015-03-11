@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include "System/BasicTypes.h"
-#include "Core/MemoryChunk.h"
+#include "CoreDEF.h"
+#include "Memory/MemoryChunk.h"
 
 namespace bv { namespace model
 {

@@ -4,8 +4,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/join.hpp>
 
-#include "System/Print.h"
-
 #include "Engine/Models/Plugins/Interfaces/IFinalizePlugin.h"
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
@@ -793,32 +791,8 @@ unsigned int                        BasicNode::TotalSize             ( const std
 
 // ********************************
 //
-void            BasicNode::Print                    ( std::ostream& out, int tabs ) const
-{
-    out << "------------------NODE-------------------- : " << this << debug::EndLine(tabs);
-    //out << "Transform plugins: " << m_transformPlugins.size() << debug::EndLine(tabs + 1);
-    //for(auto tp : m_transformPlugins)
-    //    tp->Print(out, tabs + 1);
-    
-    //out << debug::EndLine(tabs) << "Pixel Shader plugin: " << m_pshaderPlugin << debug::EndLine(tabs + 1);
-    //if(m_pshaderPlugin != nullptr)
-    //    m_pshaderPlugin->Print(out, tabs + 1);
-
-    //out << debug::EndLine(tabs) << "Vertex Shader plugin: " << m_vshaderPlugin << debug::EndLine(tabs + 1);
-    //if(m_vshaderPlugin != nullptr)
-    //    m_vshaderPlugin->Print(out, tabs + 1);
-
-    //out << debug::EndLine(tabs) << "Geometry Shader plugin: " << m_gshaderPlugin << debug::EndLine(tabs + 1);
-    //if(m_gshaderPlugin != nullptr)
-    //    m_gshaderPlugin->Print(out, tabs + 1);
-
-    out << debug::EndLine(tabs) << "------------------PARENT OF---------------- : " << m_children.size() << debug::EndLine( tabs + 1 );
-    for( auto ch : m_children )
-    {
-        ch->Print( out, tabs + 1 );
-        out << debug::EndLine( tabs + 1 );
-    }
-}
+void            BasicNode::Print                    ( std::ostream& , int ) const
+{}
 
 } // model
 } // bv

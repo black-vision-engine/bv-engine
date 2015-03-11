@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Resources/Texture/TextureResource.h"
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 
 #include <string>
 #include <map>

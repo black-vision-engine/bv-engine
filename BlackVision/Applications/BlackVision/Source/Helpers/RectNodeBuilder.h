@@ -2,7 +2,7 @@
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
-#include "System/BasicTypes.h"
+#include "CoreDEF.h"
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
 
 namespace bv {
