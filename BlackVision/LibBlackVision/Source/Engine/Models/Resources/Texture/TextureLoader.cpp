@@ -142,7 +142,7 @@ SingleTextureResourceConstPtr TextureLoader::LoadSingleTexture( const SingleText
 
 	auto w			= sinlgeTextureResDesc->GetWidth();
 	auto h			= sinlgeTextureResDesc->GetHeight();
-	auto format		= sinlgeTextureResDesc->GetFormat();
+	auto format		= TextureFormat::F_A8R8G8B8;//sinlgeTextureResDesc->GetFormat();
 
 	return SingleTextureResource::Create( mmChunk, key, w, h, format );
 }
