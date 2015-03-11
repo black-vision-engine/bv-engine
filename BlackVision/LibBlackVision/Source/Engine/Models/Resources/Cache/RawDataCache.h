@@ -30,7 +30,7 @@ public:
 
 	// ******************************
 	// Returns instance of the class singleton. 
-	static RawDataCache *	GetInstance();
+	static RawDataCache &	GetInstance();
 
 private:
 	RawDataCache();

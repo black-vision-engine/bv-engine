@@ -31,9 +31,9 @@ MipMapFilterType MipMapResourceDesc::GetFilter() const
 
 // *******************************
 //
-MipMapResourceDescConstPtr	MipMapResourceDesc::Create( MipMapFilterType ft, const std::vector< SingleTextureResourceDescConstPtr > & mipMaps )
+MipMapResourceDescConstPtr	MipMapResourceDesc::Create( const std::vector< SingleTextureResourceDescConstPtr > & mipMaps )
 {
-	return std::make_shared< MipMapResourceDesc >( ft, mipMaps );
+	return std::make_shared< MipMapResourceDesc >( mipMaps );
 }
 
 // *******************************
@@ -45,8 +45,8 @@ MipMapResourceDescConstPtr	MipMapResourceDesc::Create( MipMapFilterType ft, cons
 
 // *******************************
 //
-MipMapResourceDesc::MipMapResourceDesc	( MipMapFilterType ft, const std::vector< SingleTextureResourceDescConstPtr > & mipMaps )
-	: m_filterType( ft )
+MipMapResourceDesc::MipMapResourceDesc	( const std::vector< SingleTextureResourceDescConstPtr > & mipMaps )
+	: m_filterType()
 	, m_mipMapDescs( mipMaps	 )
 {}
 
@@ -62,10 +62,10 @@ MipMapResourceDesc::MipMapResourceDesc	( MipMapFilterType ft, const SingleTextur
 //
 void MipMapResourceDesc::GenereateLevelsDescs( const SingleTextureResourceDescConstPtr & origTexture )
 {
-	auto mmSizes = tools::GenerateMipmapsSizes( tools::ImageSize( origTexture->GetWidth(), origTexture->GetHeight() ) );
+	auto mmSizes = tools::GenerateMipmapsSizes( tools::ImageSize( (unsigned int)origTexture->GetWidth(), (unsigned int)origTexture->GetHeight() ) );
 
 	for( auto mms : mmSizes )
-		m_mipMapDescs.push_back( SingleTextureResourceDesc::Create( origTexture->GetImagePath(), mms.width, mms.height, origTexture->GetFormat() ) );
+		m_mipMapDescs.push_back( SingleTextureResourceDesc::Create( origTexture->GetImagePath(), mms.width, mms.height, origTexture->GetFormat(), origTexture->IsCacheable() ) );
 }
 
 // *******************************

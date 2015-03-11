@@ -10,8 +10,6 @@
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 
-#include "Engine/Models/Resources/IPluginResourceDescr.h"
-
 
 namespace bv { namespace model {
 
@@ -236,7 +234,7 @@ DefaultHeightMapPlugin::~DefaultHeightMapPlugin         ()
 
 // *************************************
 // 
-bool                            DefaultHeightMapPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
+bool                            DefaultHeightMapPlugin::LoadResource  ( ResourceDescConstPtr resDescr )
 {
     //Order of texture uploads
     //1. heightmap
@@ -255,7 +253,7 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( IPluginR
 
     assert( curNumTextures < 4 ); //FIXME: Second one may be added by a mask
 
-    auto txResDescr = QueryTextureResourceDescr( resDescr );
+	auto txResDescr = QueryTypedDesc< TextureResourceDescConstPtr >( resDescr );
 
     if ( txResDescr == nullptr )
     {
@@ -263,7 +261,7 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( IPluginR
     }
 
     //FIXME: use some better API to handle resources in general and textures in this specific case
-    auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), textureNames[ curNumTextures ] );
+    auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr, textureNames[ curNumTextures ] );
 
     if( txDesc != nullptr )
     {

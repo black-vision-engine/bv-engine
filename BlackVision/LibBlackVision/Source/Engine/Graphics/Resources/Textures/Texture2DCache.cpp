@@ -113,7 +113,7 @@ void            Texture2DCache::ClearCache              ()
 
 // *********************************
 //
-Texture2DImplPtr         Texture2DCache::CreateEmptyTexture    ( TextureFormat format, unsigned int width, unsigned int height, DataBuffer::Semantic semantic )
+Texture2DImplPtr         Texture2DCache::CreateEmptyTexture    ( TextureFormat format, SizeType width, SizeType height, DataBuffer::Semantic semantic )
 {
     auto texture = std::make_shared< Texture2DImpl >( format, width, height, semantic );
 
@@ -122,7 +122,7 @@ Texture2DImplPtr         Texture2DCache::CreateEmptyTexture    ( TextureFormat f
 
 // *********************************
 //
-Texture2DImplPtr         Texture2DCache::CreateTexture          ( TextureFormat format, unsigned int width, unsigned int height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data )
+Texture2DImplPtr         Texture2DCache::CreateTexture          ( TextureFormat format, SizeType width, SizeType height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data )
 {
     auto texture = CreateEmptyTexture( format, width, height, semantic );
     texture->SetRawData( data, format, width, height );
@@ -132,7 +132,7 @@ Texture2DImplPtr         Texture2DCache::CreateTexture          ( TextureFormat 
 
 // *********************************
 //
-Texture2DSequenceImplPtr Texture2DCache::CreateEmptySequence   ( TextureFormat format, unsigned int width, unsigned int height )
+Texture2DSequenceImplPtr Texture2DCache::CreateEmptySequence   ( TextureFormat format, SizeType width, SizeType height )
 {
     auto sequence   = std::make_shared< Texture2DSequenceImpl >( format, width, height );
 

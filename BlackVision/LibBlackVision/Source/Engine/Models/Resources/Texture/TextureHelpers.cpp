@@ -5,8 +5,6 @@
 #include "System/FileIO.h"
 #include "FreeImagePlus.h"
 
-#include "Engine/Models/Resources/ModelTextureManager.h"
-
 namespace bv { namespace model {
 
 // *********************************
@@ -80,7 +78,7 @@ void TextureHelper::WriteRAW( const std::string & filePath, MemoryChunkConstPtr 
 
 // *********************************
 //
-void TextureHelper::WriteBMP( const std::string & filePath, MemoryChunkConstPtr data, unsigned int width, unsigned int height, unsigned int bpp )
+void TextureHelper::WriteBMP( const std::string & filePath, MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp )
 {
     fipImage*  fipImg = new fipImage( FREE_IMAGE_TYPE::FIT_BITMAP, width, height, bpp );
 
@@ -95,16 +93,16 @@ void TextureHelper::WriteBMP( const std::string & filePath, MemoryChunkConstPtr 
 
 // *********************************
 //
-inline unsigned char GetPixelColor( unsigned int x, unsigned int y, const char* data, unsigned int width, unsigned  int height )
+inline unsigned char GetPixelColor( Int32 x, Int32 y, const char* data, UInt32 width, UInt32 height )
 {
-    if( x < 0 || x >= width || y < 0 || y >= height )
+    if( x < 0 || x >= ( Int32 )width || y < 0 || y >= ( Int32 )height )
         return 0;
     return data[ 4 * ( x + y * width ) ];
 }
 
 // *********************************
 //
-inline void SetPixelColor( unsigned int x, unsigned int y, char * data, unsigned int width, unsigned int height, char color )
+inline void SetPixelColor( Int32 x, Int32 y, char * data, UInt32 width, UInt32 height, char color )
 {
     { height; } // FIXME: suppress unused warning
 
@@ -113,7 +111,7 @@ inline void SetPixelColor( unsigned int x, unsigned int y, char * data, unsigned
 
 // *********************************
 //
-MemoryChunkConstPtr TextureHelper::Blur( MemoryChunkConstPtr data, unsigned int width, unsigned int height, unsigned int bpp, unsigned int blurSize )
+MemoryChunkConstPtr TextureHelper::Blur( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp, unsigned int blurSize )
 {
     auto numBytes = width * height * bpp / 8;
 

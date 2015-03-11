@@ -1,9 +1,11 @@
 #include "TextHelper.h"
+#include "TextAtlas.h"
 
+#include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
+#include "Engine/Models/Resources/Font/FontResource.h"
 #include "Engine/Models/Resources/Font/FontLoader.h"
-#include "Engine/Models/Resources/TextureLoader.h"
 #include "Engine/Models/Resources/Font/Glyph.h"
-#include "Engine/Models/Resources/Font/Text.h"
+#include "Engine/Models/Resources/ResourceManager.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
@@ -15,18 +17,11 @@ namespace bv { namespace model {
 
 ///////////////////////////////
 //
-ResourceHandleConstPtr      TextHelper::LoadFont( const std::string & fontFileName, SizeType size, SizeType blurSize, SizeType outlineSize, const std::wstring & atlasCharSetFile )
+FontResourceConstPtr      TextHelper::LoadFont( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize, const std::wstring & atlasCharSetFile )
 {
-    auto fRes = FontResource( fontFileName, size, blurSize, outlineSize, atlasCharSetFile );
+	auto desc = FontResourceDesc::Create( fontFileName, size, blurSize, outlineSize, false, atlasCharSetFile ); // TODO: pass generate mipmaps argument
 
-    FontLoader fLoader;
-
-    auto ret = ResourceHandleConstPtr( fLoader.LoadResource( &fRes ) );
-
-    assert( ret->GetExtra() );
-    assert( ret->GetExtra()->GetResourceExtraKind() == ResourceExtraKind::RE_FONT );
-
-    return ret;
+	return QueryTypedRes< FontResourceConstPtr >( ResourceManager::GetInstance().LoadResource( desc ) );
 }
 
 // *********************************
@@ -45,14 +40,12 @@ namespace
 {
 ///////////////////////////////
 // Helper function for getting proper atlas from font resource.
-const Text*             GetFont( const ResourceHandle * fontResource )
+TextConstPtr				GetFont( const ResourceConstPtr & res )
 {
-    assert( fontResource->GetExtra()->GetResourceExtraKind() == ResourceExtraKind::RE_FONT );
-    auto fontExtraData = static_cast< const FontExtraData* >( fontResource->GetExtra() );
+	auto fontRes = QueryTypedRes< FontResourceConstPtr >( res );
+    assert( fontRes != nullptr );
 
-    assert( fontExtraData->GetFont() );
-
-    return fontExtraData->GetFont();
+	return fontRes->GetText();
 }
 
 ConnectedComponentPtr         CreateEmptyCC()
@@ -87,16 +80,16 @@ ConnectedComponentPtr         CreateEmptyCC()
 } // anonymous
 
 
-const TextAtlas *           TextHelper::GetAtlas            ( const ResourceHandle * fontResource )
+TextAtlasConstPtr				TextHelper::GetAtlas            ( const ResourceConstPtr & res )
 {
-    auto f = GetFont( fontResource );
+    auto f = GetFont( res );
 
 
     if( f )
     {
-        return f->GetAtlas();
-    }
-    else
+		return f->GetAtlas();
+	}
+	else
     {
         return nullptr;
     }
@@ -107,7 +100,7 @@ const TextAtlas *           TextHelper::GetAtlas            ( const ResourceHand
 
 // *********************************
 //
-float                    TextHelper::BuildVACForText     ( VertexAttributesChannel * vertexAttributeChannel, const TextAtlas * textAtlas, const std::wstring & text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, bool useKerning )
+float                    TextHelper::BuildVACForText     ( VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, bool useKerning )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );

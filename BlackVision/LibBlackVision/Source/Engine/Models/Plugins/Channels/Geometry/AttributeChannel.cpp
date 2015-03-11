@@ -73,7 +73,7 @@ IAttributeChannelPtr                         AttributeChannel::GetPositionChanne
 
 // *************************************
 //
-IAttributeChannelPtr                         AttributeChannel::GetUVChannel( const std::vector< IAttributeChannelPtr >& channels, unsigned int index )
+IAttributeChannelPtr                         AttributeChannel::GetUVChannel( const std::vector< IAttributeChannelPtr >& channels, SizeType index )
 {
     assert( !channels.empty() );
     assert( channels.size() > index );

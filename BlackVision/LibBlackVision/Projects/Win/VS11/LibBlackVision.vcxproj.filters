@@ -681,31 +681,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Cache\RawDataCache.cpp">
       <Filter>Engine\Models\Resources\Cache</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescr.cpp">
-      <Filter>Engine\Models\Resources\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\FontResourceDescr.cpp">
-      <Filter>Engine\Models\Resources\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResourceDescr.cpp">
-      <Filter>Engine\Models\Resources\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ModelTextureManager.cpp">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Resource.cpp">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\ResourceLoader.cpp">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextHelpers.cpp">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextureHelpers.cpp">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\TextureLoader.cpp">
       <Filter>Engine\Models\Resources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\AtlasCache.cpp">
@@ -834,6 +810,26 @@
     <ClCompile Include="..\..\..\Source\System\Env.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\FontResource.cpp">
+      <Filter>Engine\Models\Resources\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\FontResourceDescriptor.cpp">
+      <Filter>Engine\Models\Resources\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Font\TextAtlas.cpp">
+      <Filter>Engine\Models\Resources\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescriptor.cpp">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationLoader.cpp">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResource.cpp">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureHelpers.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Core\MemoryChunk.h">
@@ -1499,40 +1495,10 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Cache\RawDataCache.h">
       <Filter>Engine\Models\Resources\Cache</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescr.h">
-      <Filter>Engine\Models\Resources\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\FontResourceDescr.h">
-      <Filter>Engine\Models\Resources\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureResourceDescr.h">
-      <Filter>Engine\Models\Resources\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\IPluginResourceDescr.h">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\IResource.h">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\IResourceLoader.h">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ModelTextureManager.h">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Resource.h">
       <Filter>Engine\Models\Resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\ResourceLoader.h">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextHelpers.h">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextureHelpers.h">
-      <Filter>Engine\Models\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\TextureLoader.h">
       <Filter>Engine\Models\Resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\AtlasCache.h">
@@ -1682,6 +1648,26 @@
     <ClInclude Include="..\..\..\Source\System\Env.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\FontResource.h">
+      <Filter>Engine\Models\Resources\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\FontResourceDescriptor.h">
+      <Filter>Engine\Models\Resources\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Font\TextAtlas.h">
+      <Filter>Engine\Models\Resources\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResourceDescriptor.h">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationLoader.h">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\AnimationResource.h">
+      <Filter>Engine\Models\Resources\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureHelpers.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Resources\Texture\TextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\System\HerarchicalProfiler.inl">

@@ -6,9 +6,8 @@
 namespace bv {
 
 // Hack - force map initialization
-BVGLTranslator BVGLTranslator::ms_instance;
-
 std::hash_map< GLenum, std::string > BVGLTranslator::ms_bufferUsage;
+BVGLTranslator BVGLTranslator::ms_instance;
 
 // ****************************
 //

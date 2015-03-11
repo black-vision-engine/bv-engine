@@ -3,7 +3,8 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
-#include "Engine/Models/Resources/IResource.h"
+#include "Engine/Models/Resources/Resource.h"
+#include "Engine/Models/Resources/Font/TextAtlas.h"
 
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
@@ -117,8 +118,7 @@ private:
 
     TextureInfoVec                  m_textures;
 
-    ResourceHandleConstPtr          m_fontResource;
-    const TextAtlas *               m_textAtlas;
+    TextAtlasConstPtr               m_textAtlas;
 
     std::wstring                    m_timePatern;
     TimeInfo                        m_timePaternInfo;
@@ -141,7 +141,7 @@ private:
 
     void                                        SetTime                     ( int h, int m, int s, int hoSec );
 
-    virtual bool                                LoadResource                ( IPluginResourceDescrConstPtr resDescr ) override;
+    virtual bool                                LoadResource                ( ResourceDescConstPtr resDescr ) override;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;

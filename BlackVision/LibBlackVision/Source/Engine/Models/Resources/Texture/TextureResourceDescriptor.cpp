@@ -1,4 +1,6 @@
 #include "TextureResourceDescriptor.h"
+#include "LibImage.h"
+#include <cassert>
 
 namespace bv
 {
@@ -35,16 +37,81 @@ VoidConstPtr TextureResourceDesc::QueryThis() const
 
 // ***********************
 //
-TextureResourceDescConstPtr	Create( const SingleTextureResourceDescConstPtr & origDesc, const MipMapResourceDescConstPtr & mipmapsDesc )
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & imageFilePath, bool isCacheable )
+{
+	auto props = image::GetImageProps( imageFilePath );
+
+	if( !props.error.empty() )
+	{
+		return nullptr;
+	}
+
+	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, props.format, isCacheable ) );
+}
+
+// ***********************
+//
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & imageFilePath, MipMapFilterType mmFilter, bool isCacheable )
+{
+	auto props = image::GetImageProps( imageFilePath );
+
+	if( !props.error.empty() )
+	{
+		return nullptr;
+	}
+
+	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, props.format, isCacheable ), mmFilter );
+}
+
+// ***********************
+//
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const std::string & imageFilePath, const StringVector & mipMapsPaths, bool isCacheable )
+{
+	auto props = image::GetImageProps( imageFilePath );
+
+	if( !props.error.empty() )
+	{
+		return nullptr;
+	}
+
+	std::vector< SingleTextureResourceDescConstPtr > mmDescs;
+
+	for( auto mmFilePath : mipMapsPaths )
+	{
+		auto mmProps = image::GetImageProps( mmFilePath );
+
+		if( !mmProps.error.empty() )
+		{
+			return nullptr;
+		}
+
+		mmDescs.push_back( SingleTextureResourceDesc::Create( mmFilePath, mmProps.width, mmProps.height, mmProps.format, isCacheable ) );
+	}
+
+	auto mmResDesc = MipMapResourceDesc::Create( mmDescs );
+
+	return Create( SingleTextureResourceDesc::Create( imageFilePath, props.width, props.height, props.format, isCacheable ), mmResDesc );
+}
+
+// ***********************
+//
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const SingleTextureResourceDescConstPtr & origDesc, const MipMapResourceDescConstPtr & mipmapsDesc )
 {
 	return std::make_shared< TextureResourceDesc >( origDesc, mipmapsDesc );
 }
 
 // ***********************
 //
-TextureResourceDescConstPtr	Create( const SingleTextureResourceDescConstPtr & origDesc, bool generateMipMaps )
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const SingleTextureResourceDescConstPtr & origDesc, MipMapFilterType mmFilter )
 {
-	return std::make_shared< TextureResourceDesc >( origDesc, generateMipMaps );
+	return std::make_shared< TextureResourceDesc >( origDesc, mmFilter );
+}
+
+// ***********************
+//
+TextureResourceDescConstPtr	TextureResourceDesc::Create( const SingleTextureResourceDescConstPtr & origDesc )
+{
+	return std::make_shared< TextureResourceDesc >( origDesc );
 }
 
 // ***********************
@@ -57,14 +124,21 @@ TextureResourceDesc::TextureResourceDesc( const SingleTextureResourceDescConstPt
 
 // ***********************
 //
-TextureResourceDesc::TextureResourceDesc( const SingleTextureResourceDescConstPtr & origDesc, bool generateMipMaps )
+TextureResourceDesc::TextureResourceDesc( const SingleTextureResourceDescConstPtr & origDesc, MipMapFilterType mmFilter )
 	: m_originalTextureDesc( origDesc )
 	, m_mipMapsDescs()
 {
-	if( generateMipMaps )
-		m_loadingType = TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS;
-	else
-		m_loadingType = TextureResourceLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE;
+	m_loadingType = TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS;
+	m_mipMapsDescs = MipMapResourceDesc::Create( mmFilter, origDesc );
+}
+
+// ***********************
+//
+TextureResourceDesc::TextureResourceDesc( const SingleTextureResourceDescConstPtr & origDesc )
+	: m_originalTextureDesc( origDesc )
+	, m_mipMapsDescs()
+{
+	m_loadingType = TextureResourceLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE;
 }
 
 // ***********************

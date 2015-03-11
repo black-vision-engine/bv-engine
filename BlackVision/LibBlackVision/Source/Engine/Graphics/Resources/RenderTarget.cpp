@@ -10,7 +10,7 @@ namespace bv {
 
 // *********************************
 //
-RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, unsigned int w, unsigned int h, bool hasDepthBuffer, bool hasMipmaps, RenderTarget::RTSemantic semantic )
+RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, SizeType w, SizeType h, bool hasDepthBuffer, bool hasMipmaps, RenderTarget::RTSemantic semantic )
     : m_numTargets( formats.size() )
     , m_hasMipmaps( hasMipmaps )
     , m_hasDepthBuffer( hasDepthBuffer )
@@ -47,7 +47,7 @@ RenderTarget::RTSemantic  RenderTarget::Semantic  () const
 
 // *********************************
 //
-unsigned int RenderTarget::NumTargets () const
+SizeType RenderTarget::NumTargets () const
 {
     return (unsigned int) m_numTargets;
 }
@@ -61,14 +61,14 @@ TextureFormat RenderTarget::Format () const
 
 // *********************************
 //
-unsigned int RenderTarget::Width () const
+SizeType RenderTarget::Width () const
 {
     return m_ColorTextures[ 0 ]->GetWidth();
 }
 
 // *********************************
 //
-unsigned int RenderTarget::Height () const
+SizeType RenderTarget::Height () const
 {
     return m_ColorTextures[ 0 ]->GetHeight();
 }

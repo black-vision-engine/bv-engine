@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Engine/Models/Interfaces/ITextureDescriptor.h"
-#include "Engine/Models/Resources/IResource.h"
+#include "Engine/Models/Resources/Texture/TextureResource.h"
+#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
 
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureParams.h"
 
@@ -12,7 +13,7 @@ class DefaultTextureDescriptor : public ITextureDescriptor
 {
 private:
 
-    ResourceHandleConstPtr  m_texHandle;
+    TextureResourceConstPtr m_texResource;
 
     DefaultTextureParams    m_params;
     mutable bool            m_bitsChanged;
@@ -21,7 +22,7 @@ private:
 public:
 
     DefaultTextureDescriptor        ();
-    DefaultTextureDescriptor        ( ResourceHandleConstPtr handle, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc, DataBuffer::Semantic semantic );
+    DefaultTextureDescriptor        ( TextureResourceConstPtr texResource, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc, DataBuffer::Semantic semantic );
     ~DefaultTextureDescriptor       ();
 
     virtual uintptr_t               GetUID          () const override;
@@ -32,8 +33,8 @@ public:
     virtual void                    ResetBitsChanged() const override;
 
     virtual const std::string       GetName         () const override;
-    virtual unsigned int            GetWidth        () const override;
-    virtual unsigned int            GetHeight       () const override;
+    virtual SizeType				GetWidth        () const override;
+    virtual SizeType				GetHeight       () const override;
     virtual TextureFormat           GetFormat       () const override;
     virtual TextureWrappingMode     GetWrappingModeX() const override;
     virtual TextureWrappingMode     GetWrappingModeY() const override;
@@ -41,13 +42,13 @@ public:
     virtual glm::vec4               BorderColor     () const override;
     virtual DataBuffer::Semantic    GetSemantic     () const override;
 
-    void                            SetBits         ( ResourceHandleConstPtr handle );
+    void                            SetBits         ( TextureResourceConstPtr texResource );
 
     void                            SetBitsChanged  ( bool bitsChanged ) const;
 
     void                            SetName         ( const std::string & name );
-    void                            SetWidth        ( unsigned int w );
-    void                            SetHeight       ( unsigned int h );
+    void                            SetWidth        ( SizeType w );
+    void                            SetHeight       ( SizeType h );
     void                            SetFormat       ( TextureFormat fmt );
     void                            SetWrappingModeX( TextureWrappingMode wm );
     void                            SetWrappingModeY( TextureWrappingMode wm );
@@ -57,7 +58,7 @@ public:
 
     static void                     SetDefaults     ( DefaultTextureDescriptor * desc );
 
-    static DefaultTextureDescriptor * LoadTexture   ( const std::string & textureFile, const std::string & name );
+	static DefaultTextureDescriptor * LoadTexture   ( const TextureResourceDescConstPtr & textureResDesc, const std::string & name );
 
 };
 

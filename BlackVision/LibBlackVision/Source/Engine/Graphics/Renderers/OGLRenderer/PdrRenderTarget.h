@@ -28,10 +28,10 @@ private:
 
     //bool          m_hasStencilBuffer; //FIXME: to be implemented
 
-    unsigned int                    m_numTargets;
+    SizeType	                    m_numTargets;
 
-    unsigned int                    m_width;
-    unsigned int                    m_height;
+    SizeType						m_width;
+    SizeType						m_height;
 
     bool                            m_hasDepthBuffer;
 
