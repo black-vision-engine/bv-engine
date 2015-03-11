@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Sources\LibImage.h" />
+    <ClCompile Include="..\..\..\Source\LibImage.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Sources\LibImage.cpp" />
+    <ClInclude Include="..\..\..\Source\LibImage.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{33E2CC63-2591-46B1-9B24-2A284566F1D6}</ProjectGuid>
@@ -107,7 +107,7 @@
     <ClCompile>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>../../../../LibBlackVision/Source;$(BOOST_INC);..\..\..\Source;$(DepDir)/Common/FreeImage/dist;$(DepDir)/Common/FreeType/include;$(DepDir)/Common/FreeImage/Wrapper/FreeImagePlus/dist;$(DepDir)/Common/glm;$(DepDir)/Common/glew/include;$(DepDir)/Common/glfw/include;$(DepDir)/Common/FastDelegate;$(DepDir)/Common/sqlite/src;$(DepDir)/Common/hashlib2plus/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBlackVision/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -117,7 +117,7 @@
     <ClCompile>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../../../../LibBlackVision/Source;$(BOOST_INC);..\..\..\Source;$(DepDir)/Common/FreeImage/dist;$(DepDir)/Common/FreeType/include;$(DepDir)/Common/FreeImage/Wrapper/FreeImagePlus/dist;$(DepDir)/Common/glm;$(DepDir)/Common/glew/include;$(DepDir)/Common/glfw/include;$(DepDir)/Common/FastDelegate;$(DepDir)/Common/sqlite/src;$(DepDir)/Common/hashlib2plus/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBlackVision/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -128,7 +128,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>../../../../LibBlackVision/Source;$(BOOST_INC);..\..\..\Source;$(DepDir)/Common/FreeImage/dist;$(DepDir)/Common/FreeType/include;$(DepDir)/Common/FreeImage/Wrapper/FreeImagePlus/dist;$(DepDir)/Common/glm;$(DepDir)/Common/glew/include;$(DepDir)/Common/glfw/include;$(DepDir)/Common/FastDelegate;$(DepDir)/Common/sqlite/src;$(DepDir)/Common/hashlib2plus/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBlackVision/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -141,7 +141,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>../../../../LibBlackVision/Source;$(BOOST_INC);..\..\..\Source;$(DepDir)/Common/FreeImage/dist;$(DepDir)/Common/FreeType/include;$(DepDir)/Common/FreeImage/Wrapper/FreeImagePlus/dist;$(DepDir)/Common/glm;$(DepDir)/Common/glew/include;$(DepDir)/Common/glfw/include;$(DepDir)/Common/FastDelegate;$(DepDir)/Common/sqlite/src;$(DepDir)/Common/hashlib2plus/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LibsRootDir)/LibBlackVision/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

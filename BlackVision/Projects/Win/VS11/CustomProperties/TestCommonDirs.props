@@ -9,7 +9,7 @@
     <LibBVGLDir>..\..\..\..\..\LibBVGL\Source</LibBVGLDir>
     <AssetsDir>..\..\..\..\..\..\Assets</AssetsDir>
     <TestDir>..\..\..\..\..\..\Test</TestDir>
-	<LibImageDir>..\..\..\..\..\..\LibImage\Sources</LibImageDir>
+    <LibImageDir>..\..\..\..\..\..\LibImage\Source</LibImageDir>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
@@ -32,7 +32,7 @@
     <BuildMacro Include="TestDir">
       <Value>$(TestDir)</Value>
     </BuildMacro>
-	<BuildMacro Include="LibImageDir">
+    <BuildMacro Include="LibImageDir">
       <Value>$(LibImageDir)</Value>
     </BuildMacro>
   </ItemGroup>
