@@ -2,6 +2,7 @@
 
 #include "BVGLTools/BVGLTranslator.h"
 
+#include <sstream>
 #include <cassert>
 #include <cstdio>
 
@@ -71,7 +72,7 @@ void    BVGLResourceTrackingPlugin::BufferData                  ( GLenum target,
     m_allocatedBuffers[ buffer ].usage = usage;
     m_allocatedBuffers[ buffer ].data = data;
 
-    PrintStats();
+    PrintStats( "BufferData() called" );
 }
 
 // *****************************
@@ -79,6 +80,13 @@ void    BVGLResourceTrackingPlugin::BufferData                  ( GLenum target,
 void    BVGLResourceTrackingPlugin::GenTextures                 ( GLsizei n, GLuint * textures )
 {
     Parent::GenTextures( n, textures );
+
+    for( auto i = 0; i < n; ++i )
+    {
+        auto texture = textures[ i ];
+
+        m_allocatedTextures[ texture ] = TextureDesc();
+    }
 }
 
 // *****************************
@@ -86,6 +94,13 @@ void    BVGLResourceTrackingPlugin::GenTextures                 ( GLsizei n, GLu
 void    BVGLResourceTrackingPlugin::DeleteTextures              ( GLsizei n, const GLuint * textures )
 {
     Parent::DeleteTextures( n, textures );
+
+    for( auto i = 0; i < n; ++i )
+    {
+        auto texture = textures[ i ];
+
+        m_allocatedTextures.erase( texture );
+    }    
 }
 
 // *****************************
@@ -93,6 +108,18 @@ void    BVGLResourceTrackingPlugin::DeleteTextures              ( GLsizei n, con
 void    BVGLResourceTrackingPlugin::TexImage2D					( GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid * pixels )
 {
     Parent::TexImage2D( target, level, internalformat, width, height, border, format, type, pixels );
+
+    assert( m_boundTextures.find( target ) != m_boundTextures.end() );
+
+    auto texture = m_boundTextures[ target ];
+
+    m_allocatedTextures[ texture ].width = width;
+    m_allocatedTextures[ texture ].height = height;
+    m_allocatedTextures[ texture ].format = format;
+    m_allocatedTextures[ texture ].pixels = pixels;
+
+    PrintStats( "TexImage2D() called" );
+
 }
 
 // *****************************
@@ -114,6 +141,8 @@ void    BVGLResourceTrackingPlugin::TexSubImage2D				( GLenum target, GLint leve
 void    BVGLResourceTrackingPlugin::BindTexture					( GLenum target, GLuint texture )
 {
     Parent::BindTexture( target, texture );
+
+    m_boundTextures[ target ] = texture;
 }
 
 // *****************************
@@ -132,9 +161,12 @@ void    BVGLResourceTrackingPlugin::DeleteRenderbuffers         ( GLsizei n, con
 
 // *****************************
 //
-void    BVGLResourceTrackingPlugin::PrintStats                  ()
+void    BVGLResourceTrackingPlugin::PrintStats                  ( const std::string & message )
 {
-    PrintBuffersStats();    
+    printf( "%s\n", message.c_str() );
+
+    PrintBuffersStats();
+    PrintTextureStats();
 }
 
 // *****************************
@@ -159,22 +191,9 @@ void    BVGLResourceTrackingPlugin::PrintBuffersStats           ()
             }
         }
 
-        auto siz = bufDesc.size;
-        std::string suffix = "B";
+        auto siz = FormatSize( (GLuint) bufDesc.size );
 
-        if( siz > 1024 * 256 )
-        {
-            siz /= 1024;
-            suffix = "kB";
-        }
-
-        if( siz > 1024 * 256 )
-        {
-            siz /= 1024;
-            suffix = "MB";
-        }
-
-        printf( "Buf: %2d, Size: %4d %2s, Usage: %15s", bufId, siz, suffix.c_str(), BVGLTranslator::TranslateBufferUsage( bufDesc.usage ).c_str() );
+        printf( "Buf: %2d, Size: %7s, Usage: %15s", bufId, siz, BVGLTranslator::TranslateBufferUsage( bufDesc.usage ).c_str() );
 
         if( target != 0 )
         {
@@ -184,5 +203,72 @@ void    BVGLResourceTrackingPlugin::PrintBuffersStats           ()
         printf( "\n" );
     }
 }
+
+// *****************************
+//
+void        BVGLResourceTrackingPlugin::PrintTextureStats           ()
+{
+    printf( "TEXTURES:\n");
+
+    for( auto tex : m_allocatedTextures )
+    {
+        auto texId      = tex.first;
+        auto texDesc    = tex.second;
+
+        GLenum target   = 0;
+    
+        for( auto bt : m_boundTextures )
+        {
+            if( bt.second == (GLint) texId )
+            {
+                target = bt.first;
+                break;
+            }
+        }
+
+        auto siz = FormatSize( (GLuint) texDesc.DataSize() );
+        printf( "Tex: %2d (%4d, %4d), Size: %7s, Format: %15s", texId, siz.c_str(), BVGLTranslator::TranslateTextureFormat( texDesc.format ).c_str() );
+
+        if( target != 0 )
+        {
+            printf( " BND: %s", BVGLTranslator::TranslateBufferTarget( target ).c_str() );
+        }
+
+        printf( "\n" );
+    }
+}
+
+// *****************************
+//
+std::string         BVGLResourceTrackingPlugin::FormatSize          ( GLuint numBytes )
+{
+    auto siz = numBytes;
+    std::string suffix = "B";
+
+    if( siz > 1024 * 256 )
+    {
+        siz /= 1024;
+        suffix = "kB";
+    }
+
+    if( siz > 1024 * 256 )
+    {
+        siz /= 1024;
+        suffix = "MB";
+    }
+    
+    if( siz > 1024 * 256 )
+    {
+        siz /= 1024;
+        suffix = "GB";
+    }
+
+    std::stringstream ss;
+    
+    ss << siz << " " << suffix;
+
+    return ss.str();
+}
+
 
 } //bv

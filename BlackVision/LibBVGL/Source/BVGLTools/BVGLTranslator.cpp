@@ -24,6 +24,7 @@ BVGLTranslator::BVGLTranslator  ()
     ms_bufferTarget[ (GLenum) GL_PIXEL_PACK_BUFFER ]    = "GL_PIXEL_PACK_BUFFER";
     ms_bufferTarget[ (GLenum) GL_PIXEL_UNPACK_BUFFER  ] = "GL_PIXEL_UNPACK_BUFFER";
 
+    ms_textureTarget[ (GLenum) GL_TEXTURE_2D ]  = "GL_TEXTURE_2D";
 }
 
 // ****************************
@@ -42,6 +43,23 @@ std::string     BVGLTranslator::TranslateBufferTarget   ( GLenum target )
     assert( ms_bufferTarget.find( target ) != ms_bufferTarget.end() );
 
     return ms_bufferTarget[ target ];
+}
+
+// ****************************
+//
+std::string     BVGLTranslator::TranslateTextureTarget  ( GLenum target )
+{
+    assert( ms_textureTarget.find( target ) != ms_textureTarget.end() );
+
+    return ms_textureTarget[ target ];
+}
+
+// ****************************
+//
+std::string     BVGLTranslator::TranslateTextureFormat  ( GLenum format )
+{
+    { format; }
+    return "GL_BGRA";
 }
 
 } //bv
