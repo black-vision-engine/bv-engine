@@ -8,8 +8,6 @@
 
 namespace bv {
 
-BVGLResourceTrackingPlugin  BVGLResourceTrackingPlugin::bvgl;
-
 // *****************************
 //
 BVGLResourceTrackingPlugin::BVGLResourceTrackingPlugin  ()
@@ -21,40 +19,12 @@ BVGLResourceTrackingPlugin::BVGLResourceTrackingPlugin  ()
 BVGLResourceTrackingPlugin::~BVGLResourceTrackingPlugin ()
 {
 }
-
-// *****************************
-//
-void    BVGLResourceTrackingPlugin::bvglGenBuffers              ( GLsizei n, GLuint * buffers )
-{
-    bvgl.GenBuffers( n, buffers );
-}
-
-// *****************************
-//
-void    BVGLResourceTrackingPlugin::bvglDeleteBuffers           ( GLsizei n, const GLuint * buffers )
-{
-    bvgl.DeleteBuffers( n, buffers );
-}
-
-// *****************************
-//
-void    BVGLResourceTrackingPlugin::bvglBindBuffer              ( GLenum target, GLuint buffer )
-{
-    bvgl.BindBuffer( target, buffer );
-}
-
-// *****************************
-//
-void    BVGLResourceTrackingPlugin::bvglBufferData              ( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage )
-{
-    bvgl.BufferData( target, size, data, usage );
-}
  
 // *****************************
 //
 void    BVGLResourceTrackingPlugin::GenBuffers                  ( GLsizei n, GLuint * buffers )
 {
-    Parent::bvglGenBuffers( n, buffers );
+    Parent::GenBuffers( n, buffers );
 
     for( auto i = 0; i < n; ++i )
     {
@@ -68,7 +38,7 @@ void    BVGLResourceTrackingPlugin::GenBuffers                  ( GLsizei n, GLu
 //
 void    BVGLResourceTrackingPlugin::DeleteBuffers               ( GLsizei n, const GLuint * buffers )
 {
-    Parent::bvglDeleteBuffers( n, buffers );
+    Parent::DeleteBuffers( n, buffers );
 
     for( auto i = 0; i < n; ++i )
     {
@@ -82,7 +52,7 @@ void    BVGLResourceTrackingPlugin::DeleteBuffers               ( GLsizei n, con
 //
 void    BVGLResourceTrackingPlugin::BindBuffer                  ( GLenum target, GLuint buffer )
 {
-    Parent::bvglBindBuffer( target, buffer );
+    Parent::BindBuffer( target, buffer );
 
     m_boundBuffers[ target ] = buffer;
 }
@@ -91,7 +61,7 @@ void    BVGLResourceTrackingPlugin::BindBuffer                  ( GLenum target,
 //
 void    BVGLResourceTrackingPlugin::BufferData                  ( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage )
 {
-    Parent::bvglBufferData( target, size, data, usage );
+    Parent::BufferData( target, size, data, usage );
 
     assert( m_boundBuffers.find( target ) != m_boundBuffers.end() );
 
@@ -108,7 +78,7 @@ void    BVGLResourceTrackingPlugin::BufferData                  ( GLenum target,
 //
 void    BVGLResourceTrackingPlugin::PrintStats                  ()
 {
-    bvgl.PrintBuffersStats();    
+    PrintBuffersStats();    
 }
 
 // *****************************

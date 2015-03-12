@@ -39,31 +39,31 @@ public:
 
 public:
 
-    static void			StaticInitializer	();
-    static bool			RegisterInitializer ();
+    static void			StaticInitializer		();
+    static bool			RegisterInitializer		();
 
 public:
 
-                    BlackVisionApp		();
-                    ~BlackVisionApp	    ();
+                    BlackVisionApp				();
+                    ~BlackVisionApp				();
 
-    virtual void    OnKey               ( unsigned char c ) override;
-    virtual void    OnPreidle	        () override;
-    virtual void    OnIdle              () override;
-    virtual void    OnPreMainLoop       () override;
-    virtual bool    OnInitialize        () override;
-    virtual void    OnTerminate         () override;
+    virtual void    OnKey						( unsigned char c ) override;
+    virtual void    OnPreidle					() override;
+    virtual void    OnIdle						() override;
+    virtual void    OnPreMainLoop				() override;
+    virtual bool    OnInitialize				() override;
+    virtual void    OnTerminate					() override;
 
 private:
 
-    void            UpdateSubsystems    ( unsigned long millis );
+    void            UpdateSubsystems			( unsigned long millis );
 
-    void            InitializeConsole   ();
-    void            InitializeAppLogic  ();
-    void            InitializeSelfState ();
-	void			InitializeResourceLoaders ();
+    void            InitializeConsole			();
+    void            InitializeAppLogic			();
+    void            InitializeSelfState			();
+	void			InitializeResourceLoaders	();
 
-    void            PostFrame           ( unsigned int millis );
+    void            PostFrame					( unsigned int millis );
 };
 
 } //bv

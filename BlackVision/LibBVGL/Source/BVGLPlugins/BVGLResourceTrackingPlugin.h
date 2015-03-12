@@ -1,6 +1,7 @@
 #pragma once
 
-#include "BVGLDefaultPlugin.h"
+#include "BVGLPlugin.h"
+
 #include <hash_map>
 
 
@@ -20,43 +21,31 @@ struct BufferDesc
     }
 };
 
-class BVGLResourceTrackingPlugin : public BVGLDefaultPlugin
+class BVGLResourceTrackingPlugin : public BVGLPlugin
 {
+
+    typedef BVGLPlugin Parent;
+
 private:
-
-    typedef BVGLDefaultPlugin Parent;
-
-private:
-
-    static BVGLResourceTrackingPlugin   bvgl;
 
     std::hash_map< GLuint, BufferDesc > m_allocatedBuffers;
     std::hash_map< GLenum, GLuint >     m_boundBuffers;
 
 public:
 
-                                BVGLResourceTrackingPlugin  ();
-                                ~BVGLResourceTrackingPlugin ();
+                        BVGLResourceTrackingPlugin  ();
+                        ~BVGLResourceTrackingPlugin	();
 
-    static void                 bvglGenBuffers              ( GLsizei n, GLuint * buffers );
-    static void                 bvglDeleteBuffers           ( GLsizei n, const GLuint * buffers );
-    static void                 bvglBindBuffer              ( GLenum target, GLuint buffer );
-    static void                 bvglBufferData              ( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage );
+    virtual void		GenBuffers                  ( GLsizei n, GLuint * buffers ) override;
+    virtual void		DeleteBuffers               ( GLsizei n, const GLuint * buffers ) override;
+    virtual void		BindBuffer                  ( GLenum target, GLuint buffer ) override;
+    virtual void		BufferData                  ( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage ) override;
     
-private:
-
-    void                        GenBuffers                  ( GLsizei n, GLuint * buffers );
-    void                        DeleteBuffers               ( GLsizei n, const GLuint * buffers );
-    void                        BindBuffer                  ( GLenum target, GLuint buffer );
-    void                        BufferData                  ( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage );
-    
-public:
-
-    static void                 PrintStats                  ();
+	virtual void		PrintStats                  () override;
 
 private:
 
-    void                        PrintBuffersStats           ();
+    void                PrintBuffersStats           ();
 
 /*
     static void                 bvglGenTextures             ( GLsizei n, GLuint * textures );

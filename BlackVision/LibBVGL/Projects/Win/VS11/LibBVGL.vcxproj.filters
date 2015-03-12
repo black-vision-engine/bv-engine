@@ -9,28 +9,34 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLDefaultPlugin.h">
-      <Filter>BVGLPlugins</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\BVGL.h" />
     <ClInclude Include="..\..\..\Source\BVGLDefs.h" />
     <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLResourceTrackingPlugin.h">
       <Filter>BVGLPlugins</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\BVGLUtil.h" />
     <ClInclude Include="..\..\..\Source\BVGLTools\BVGLTranslator.h">
       <Filter>BVGLTools</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLPluginFactory.h">
+      <Filter>BVGLPlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLPlugin.h">
+      <Filter>BVGLPlugins</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLDefaultPlugin.cpp">
-      <Filter>BVGLPlugins</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLResourceTrackingPlugin.cpp">
       <Filter>BVGLPlugins</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\BVGLTools\BVGLTranslator.cpp">
       <Filter>BVGLTools</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLPluginFactory.cpp">
+      <Filter>BVGLPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLPlugin.cpp">
+      <Filter>BVGLPlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\BVGL.cpp" />
   </ItemGroup>
 </Project>
