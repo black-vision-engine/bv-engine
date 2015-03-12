@@ -7,12 +7,12 @@
 namespace bv
 {
 
-class TextureResource;
-DEFINE_CONST_PTR_TYPE( TextureResource )
+class TextureAsset;
+DEFINE_CONST_PTR_TYPE( TextureAsset )
 
 // *******************************
 // Implements texture resource with original image and all its mimmaps.
-class TextureResource : public model::Resource, public std::enable_shared_from_this< TextureResource >
+class TextureAsset : public model::Asset, public std::enable_shared_from_this< TextureAsset >
 {
 	static const std::string		uid;
 
@@ -23,15 +23,15 @@ public:
 
 	// *******************************
 	// Returns original image without any transformations.
-	SingleTextureResourceConstPtr	GetOriginal		() const;
+	SingleTextureAssetConstPtr	GetOriginal		() const;
 
 	// *******************************
 	// Returns class representation of mimmaps built from the original image.
-	MipMapResourceConstPtr			GetMipMaps		() const;
+	MipMapAssetConstPtr			GetMipMaps		() const;
 
-	static TextureResourceConstPtr	Create			( const SingleTextureResourceConstPtr & originalTexture, const MipMapResourceConstPtr & mipMaps );
+	static TextureAssetConstPtr	Create			( const SingleTextureAssetConstPtr & originalTexture, const MipMapAssetConstPtr & mipMaps );
 
-	explicit						TextureResource	( const SingleTextureResourceConstPtr & originalTexture, const MipMapResourceConstPtr & mipMaps );
+	explicit						TextureAsset	( const SingleTextureAssetConstPtr & originalTexture, const MipMapAssetConstPtr & mipMaps );
 	
 	virtual const std::string &		GetUID			() const override;
 
@@ -39,8 +39,8 @@ public:
 
 private:
 
-	SingleTextureResourceConstPtr	m_originalTexture;
-	MipMapResourceConstPtr			m_mipMaps;
+	SingleTextureAssetConstPtr	m_originalTexture;
+	MipMapAssetConstPtr			m_mipMaps;
 };
 
 } // bv

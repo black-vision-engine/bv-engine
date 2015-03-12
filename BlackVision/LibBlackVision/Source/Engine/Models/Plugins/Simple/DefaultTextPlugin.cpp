@@ -216,7 +216,7 @@ DefaultTextPlugin::~DefaultTextPlugin         ()
 // *************************************
 // 
 void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
-															   TextureResourceConstPtr res,
+															   TextureAssetConstPtr res,
 																const std::string & name,
 																TextureWrappingMode hWrappingMode,
 																TextureWrappingMode vWrappingMode,
@@ -259,7 +259,7 @@ void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, UInt32 f
 
 	m_atlas = TextHelper::GetAtlas( fontResource );
 
-	auto textureResource = m_atlas->GetResourceHandle();
+	auto textureResource = m_atlas->GetAsset();
 
     //FIXME: use some better API to handle resources in general and textures in this specific case
     LoadTexture(	txData   
@@ -274,9 +274,9 @@ void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, UInt32 f
 
 // *************************************
 // 
-bool                            DefaultTextPlugin::LoadResource  ( ResourceDescConstPtr resDescr )
+bool                            DefaultTextPlugin::LoadResource  ( AssetDescConstPtr resDescr )
 {
-	auto txResDescr = QueryTypedDesc< FontResourceDescConstPtr >( resDescr );
+	auto txResDescr = QueryTypedDesc< FontAssetDescConstPtr >( resDescr );
 
     if ( txResDescr != nullptr )
     {

@@ -12,10 +12,10 @@ namespace bv
 
 #define SUPPROTED_CHARS_FILE L"Assets/Fonts/SupportedChars.txt" // FIXME: Sucks as vacuum
 
-class FontResourceDesc;
-DEFINE_CONST_PTR_TYPE( FontResourceDesc )
+class FontAssetDesc;
+DEFINE_CONST_PTR_TYPE( FontAssetDesc )
 
-class FontResourceDesc : public ResourceDesc,  public std::enable_shared_from_this< ResourceDesc >
+class FontAssetDesc : public AssetDesc,  public std::enable_shared_from_this< AssetDesc >
 {
 private:
 	static const std::string							uid;
@@ -35,14 +35,14 @@ public:
 	bool								GetGenerateMipmaps	() const;
 	const std::wstring &				GetAtlasCharSetFile () const;
 
-	static FontResourceDescConstPtr		Create				(	const std::string & fontFileName,
+	static FontAssetDescConstPtr		Create				(	const std::string & fontFileName,
 																UInt32 fontSize,
 																UInt32 blurSize,
 																UInt32 outlineSize,
 																bool generateMipmaps,
 																const std::wstring & atlasCharSetFile = SUPPROTED_CHARS_FILE );
 
-	explicit							FontResourceDesc	(	const std::string & fontFileName,
+	explicit							FontAssetDesc	(	const std::string & fontFileName,
 																UInt32 fontSize,
 																UInt32 blurSize,
 																UInt32 outlineSize,

@@ -177,9 +177,9 @@ void    BlackVisionApp::InitializeSelfState ()
 //
 void    BlackVisionApp::InitializeResourceLoaders ()
 {
-    bv::ResourceManager::GetInstance().RegisterLoader( bv::TextureResourceDesc::UID(), new bv::model::TextureLoader() );
-	bv::ResourceManager::GetInstance().RegisterLoader( bv::FontResourceDesc::UID(), new bv::model::FontLoader() );
-	bv::ResourceManager::GetInstance().RegisterLoader( bv::model::AnimationResourceDesc::UID(), new bv::model::AnimationLoader() );
+    bv::AssetManager::GetInstance().RegisterLoader( bv::TextureAssetDesc::UID(), new bv::model::TextureLoader() );
+	bv::AssetManager::GetInstance().RegisterLoader( bv::FontAssetDesc::UID(), new bv::model::FontLoader() );
+	bv::AssetManager::GetInstance().RegisterLoader( bv::model::AnimationAssetDesc::UID(), new bv::model::AnimationLoader() );
 }
 
 

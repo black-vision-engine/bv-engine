@@ -11,10 +11,10 @@
 namespace bv
 {
 
-class SingleTextureResourceDesc;
-DEFINE_CONST_PTR_TYPE( SingleTextureResourceDesc )
+class SingleTextureAssetDesc;
+DEFINE_CONST_PTR_TYPE( SingleTextureAssetDesc )
 
-class SingleTextureResourceDesc : public ResourceDesc, public std::enable_shared_from_this< SingleTextureResourceDesc >
+class SingleTextureAssetDesc : public AssetDesc, public std::enable_shared_from_this< SingleTextureAssetDesc >
 {
 private:
 
@@ -43,9 +43,9 @@ public:
 
 	virtual bool								IsCacheable					() const override;
 
-	static SingleTextureResourceDescConstPtr	Create						( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
+	static SingleTextureAssetDescConstPtr	Create						( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
 
-	explicit									SingleTextureResourceDesc	( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
+	explicit									SingleTextureAssetDesc	( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
 
 	static const std::string &					UID							();
 };

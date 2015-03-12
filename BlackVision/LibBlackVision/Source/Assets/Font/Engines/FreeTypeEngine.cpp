@@ -408,8 +408,8 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 		currAddress += ( m_maxHeight - 1  + padding ) *  altlasWidth * 4;
 	}
 	
-	auto singleTex = SingleTextureResource::Create( MemoryChunk::Create( atlasData, altlasWidth * altlasHeight * 4 ), "", altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8 );
-	atlas->m_textureResource = TextureResource::Create( singleTex, nullptr );
+	auto singleTex = SingleTextureAsset::Create( MemoryChunk::Create( atlasData, altlasWidth * altlasHeight * 4 ), "", altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8 );
+	atlas->m_textureAsset = TextureAsset::Create( singleTex, nullptr );
 
 	TextureHelper::WriteRAW( "testFreeType.raw", atlas->GetWritableData() );
 

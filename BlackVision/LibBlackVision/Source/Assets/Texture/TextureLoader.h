@@ -11,18 +11,18 @@
 
 namespace bv { namespace model {
 
-class TextureLoader : public ResourceLoader
+class TextureLoader : public AssetLoader
 {
 public:
 
-	ResourceConstPtr						LoadResource		( const ResourceDescConstPtr & desc ) const override;
+	AssetConstPtr						LoadAsset		( const AssetDescConstPtr & desc ) const override;
 
     virtual ~TextureLoader(){}
 
 private:
 
 	static MemoryChunkConstPtr				LoadImage			( const std::string & path );
-	static SingleTextureResourceConstPtr	LoadSingleTexture	( const SingleTextureResourceDescConstPtr & sinlgeTextureResDesc, bool loadFromCache = true );
+	static SingleTextureAssetConstPtr	LoadSingleTexture	( const SingleTextureAssetDescConstPtr & sinlgeTextureResDesc, bool loadFromCache = true );
 };
 
 

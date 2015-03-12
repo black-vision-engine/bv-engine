@@ -12,10 +12,10 @@
 namespace bv
 {
 
-class MipMapResourceDesc;
-DEFINE_CONST_PTR_TYPE( MipMapResourceDesc )
+class MipMapAssetDesc;
+DEFINE_CONST_PTR_TYPE( MipMapAssetDesc )
 
-class MipMapResourceDesc : public ResourceDesc, public std::enable_shared_from_this< MipMapResourceDesc >
+class MipMapAssetDesc : public AssetDesc, public std::enable_shared_from_this< MipMapAssetDesc >
 {
 private:
 
@@ -34,23 +34,23 @@ public:
 	static const std::string &		UID			();
 
 	MipMapFilterType									m_filterType;
-	std::vector< SingleTextureResourceDescConstPtr >	m_mipMapDescs;
+	std::vector< SingleTextureAssetDescConstPtr >	m_mipMapDescs;
 
 public:
 
-	SingleTextureResourceDescConstPtr	GetLevelDesc		( SizeType level ) const;
+	SingleTextureAssetDescConstPtr	GetLevelDesc		( SizeType level ) const;
 	SizeType							GetLevelsNum		() const;
 
 	MipMapFilterType					GetFilter			() const;
 
-	static MipMapResourceDescConstPtr	Create				( MipMapFilterType ft, const SingleTextureResourceDescConstPtr & origTexture );
-	static MipMapResourceDescConstPtr	Create				( const std::vector< SingleTextureResourceDescConstPtr > & mipMaps );
-	explicit							MipMapResourceDesc	( MipMapFilterType ft, const SingleTextureResourceDescConstPtr & origTexture );
-	explicit							MipMapResourceDesc	( const std::vector< SingleTextureResourceDescConstPtr > & mipMaps );
+	static MipMapAssetDescConstPtr	Create				( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTexture );
+	static MipMapAssetDescConstPtr	Create				( const std::vector< SingleTextureAssetDescConstPtr > & mipMaps );
+	explicit							MipMapAssetDesc	( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTexture );
+	explicit							MipMapAssetDesc	( const std::vector< SingleTextureAssetDescConstPtr > & mipMaps );
 
 private:
 
-	void								GenereateLevelsDescs( const SingleTextureResourceDescConstPtr & origTexture );
+	void								GenereateLevelsDescs( const SingleTextureAssetDescConstPtr & origTexture );
 };
 
 } // bv

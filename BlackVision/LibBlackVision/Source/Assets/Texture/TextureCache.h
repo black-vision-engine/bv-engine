@@ -17,19 +17,19 @@ public:
 
 	// **************************
 	// Adds entry to cache if doesn't exist.
-	bool							Add		( const std::string & key, const TextureResourceConstPtr & textureRes );
-	bool							Add		( const TextureResourceDescConstPtr & textureDesc, const TextureResourceConstPtr & textureRes );
+	bool							Add		( const std::string & key, const TextureAssetConstPtr & textureRes );
+	bool							Add		( const TextureAssetDescConstPtr & textureDesc, const TextureAssetConstPtr & textureRes );
 
 
 	// **************************
 	// Adds entry to cache if doesn't exist or update if exists.
-	void							Update	( const std::string & key, const TextureResourceConstPtr & textureRes );
+	void							Update	( const std::string & key, const TextureAssetConstPtr & textureRes );
 
 	bool							Exists	( const std::string & key ) const;
-	bool							Exists	( const TextureResourceDescConstPtr & textureDesc ) const;
+	bool							Exists	( const TextureAssetDescConstPtr & textureDesc ) const;
 
-	TextureResourceConstPtr			Get		( const std::string & key ) const;
-	TextureResourceConstPtr			Get		( const TextureResourceDescConstPtr & textureDesc ) const;
+	TextureAssetConstPtr			Get		( const std::string & key ) const;
+	TextureAssetConstPtr			Get		( const TextureAssetDescConstPtr & textureDesc ) const;
 
 	// **************************
 	// Returns reference to singleton of TextureCache class instance.
@@ -37,20 +37,20 @@ public:
 
 	// **************************
 	// Two finctions below generates texture cache keys for single textures.
-	static std::string				GenKeyForSingleTexture	( const SingleTextureResourceDescConstPtr & singleTextureDesc );
+	static std::string				GenKeyForSingleTexture	( const SingleTextureAssetDescConstPtr & singleTextureDesc );
 	static std::string				GenKeyForGeneratedMipMap( const std::string & origPath, SizeType width, SizeType height, TextureFormat format, SizeType mmLevel, MipMapFilterType mmFiletType );
-	static std::string				GenKeyForTextureResource( const TextureResourceDescConstPtr & textureDesc );
+	static std::string				GenKeyForTextureAsset( const TextureAssetDescConstPtr & textureDesc );
 
 private:
 
-	TextureResourceConstPtr			Find				( const std::string & key ) const;
-	void							AddToRawDataCache	( const TextureResourceConstPtr & textureRes ) const;
-	MemoryChunkConstPtr				GetFormRawDataCache	( const SingleTextureResourceDescConstPtr & desc ) const;
+	TextureAssetConstPtr			Find				( const std::string & key ) const;
+	void							AddToRawDataCache	( const TextureAssetConstPtr & textureRes ) const;
+	MemoryChunkConstPtr				GetFormRawDataCache	( const SingleTextureAssetDescConstPtr & desc ) const;
 
 
 	TextureCache();
 
-	std::map< std::string, TextureResourceConstPtr > m_textures;
+	std::map< std::string, TextureAssetConstPtr > m_textures;
 
 };
 

@@ -11,25 +11,25 @@
 namespace bv
 {
 
-enum class TextureResourceLoadingType : int
+enum class TextureAssetLoadingType : int
 {
 	LOAD_ONLY_ORIGINAL_TEXTURE,
 	LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS,
 	LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS,
 };
 
-class TextureResourceDesc;
-DEFINE_CONST_PTR_TYPE( TextureResourceDesc )
+class TextureAssetDesc;
+DEFINE_CONST_PTR_TYPE( TextureAssetDesc )
 
-class TextureResourceDesc : public ResourceDesc,  public std::enable_shared_from_this< ResourceDesc >
+class TextureAssetDesc : public AssetDesc,  public std::enable_shared_from_this< AssetDesc >
 {
 private:
 	static const std::string							uid;
 	
-	TextureResourceLoadingType							m_loadingType;
+	TextureAssetLoadingType							m_loadingType;
 
-	SingleTextureResourceDescConstPtr					m_originalTextureDesc;
-	MipMapResourceDescConstPtr							m_mipMapsDescs;
+	SingleTextureAssetDescConstPtr					m_originalTextureDesc;
+	MipMapAssetDescConstPtr							m_mipMapsDescs;
 
 protected:
 	virtual const std::string &			GetUID				() const override;
@@ -39,21 +39,21 @@ public:
 
 	virtual VoidConstPtr				QueryThis			() const override;
 
-	TextureResourceLoadingType			GetLoadingType		() const;
-	SingleTextureResourceDescConstPtr	GetOrigTextureDesc	() const;
-	MipMapResourceDescConstPtr			GetMipMapsDesc		() const;
+	TextureAssetLoadingType			GetLoadingType		() const;
+	SingleTextureAssetDescConstPtr	GetOrigTextureDesc	() const;
+	MipMapAssetDescConstPtr			GetMipMapsDesc		() const;
 
-	static TextureResourceDescConstPtr	Create				( const std::string & imageFilePath, bool isCacheable );
-	static TextureResourceDescConstPtr	Create				( const std::string & imageFilePath, MipMapFilterType mmFilter, bool isCacheable );
-	static TextureResourceDescConstPtr	Create				( const std::string & imageFilePath, const StringVector & mipMapsPaths, bool isCacheable );
+	static TextureAssetDescConstPtr	Create				( const std::string & imageFilePath, bool isCacheable );
+	static TextureAssetDescConstPtr	Create				( const std::string & imageFilePath, MipMapFilterType mmFilter, bool isCacheable );
+	static TextureAssetDescConstPtr	Create				( const std::string & imageFilePath, const StringVector & mipMapsPaths, bool isCacheable );
 
-	static TextureResourceDescConstPtr	Create				( const SingleTextureResourceDescConstPtr & origDesc, const MipMapResourceDescConstPtr & mipmapsDesc );
-	static TextureResourceDescConstPtr	Create				( const SingleTextureResourceDescConstPtr & origDesc, MipMapFilterType mmFilter );
-	static TextureResourceDescConstPtr	Create				( const SingleTextureResourceDescConstPtr & origDesc );
+	static TextureAssetDescConstPtr	Create				( const SingleTextureAssetDescConstPtr & origDesc, const MipMapAssetDescConstPtr & mipmapsDesc );
+	static TextureAssetDescConstPtr	Create				( const SingleTextureAssetDescConstPtr & origDesc, MipMapFilterType mmFilter );
+	static TextureAssetDescConstPtr	Create				( const SingleTextureAssetDescConstPtr & origDesc );
 
-	explicit							TextureResourceDesc	( const SingleTextureResourceDescConstPtr & origDesc, const MipMapResourceDescConstPtr & mipmapsDesc );
-	explicit							TextureResourceDesc ( const SingleTextureResourceDescConstPtr & origDesc, MipMapFilterType mmFilter );
-	explicit							TextureResourceDesc	( const SingleTextureResourceDescConstPtr & origDesc );
+	explicit							TextureAssetDesc	( const SingleTextureAssetDescConstPtr & origDesc, const MipMapAssetDescConstPtr & mipmapsDesc );
+	explicit							TextureAssetDesc ( const SingleTextureAssetDescConstPtr & origDesc, MipMapFilterType mmFilter );
+	explicit							TextureAssetDesc	( const SingleTextureAssetDescConstPtr & origDesc );
 
 	static const std::string &			UID();
 };

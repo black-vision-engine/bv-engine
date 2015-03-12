@@ -40,7 +40,7 @@ TextAtlas::TextAtlas()
 TextAtlas::TextAtlas( UInt32 w, UInt32 h, UInt32 bitsPerPixel, UInt32 gw, UInt32 gh )
     : m_glyphWidth( gw )
     , m_glyphHeight( gh )
-	, m_textureResource( nullptr )
+	, m_textureAsset( nullptr )
 	, m_blurSize( 0 )
 {
     auto size   = w * h * bitsPerPixel / 8;
@@ -66,24 +66,24 @@ TextAtlasPtr TextAtlas::Create( UInt32 w, UInt32 h, UInt32 bitsPrePixel, UInt32 
 //
 MemoryChunkConstPtr      TextAtlas::GetData         () const
 {
-	// FIXME: How about mimpmaps. This function should return TextureResourceConstPtr not MemoryChunkConstPtr
-	return m_textureResource->GetOriginal()->GetData();
+	// FIXME: How about mimpmaps. This function should return TextureAssetConstPtr not MemoryChunkConstPtr
+	return m_textureAsset->GetOriginal()->GetData();
 }
 
 // *********************************
 //
 MemoryChunkPtr			TextAtlas::GetWritableData ()
 {
-	// FIXME: How about mimpmaps. This function should return TextureResourceConstPtr not MemoryChunkConstPtr
-	return std::const_pointer_cast< MemoryChunk >( m_textureResource->GetOriginal()->GetData() );
+	// FIXME: How about mimpmaps. This function should return TextureAssetConstPtr not MemoryChunkConstPtr
+	return std::const_pointer_cast< MemoryChunk >( m_textureAsset->GetOriginal()->GetData() );
 }
 
 // *********************************
 //
 SizeType				TextAtlas::GetSizeInBytes  () const
 {
-	// FIXME: How about mimpmaps. This function should return TextureResourceConstPtr not MemoryChunkConstPtr
-	return m_textureResource->GetOriginal()->GetData()->Size();
+	// FIXME: How about mimpmaps. This function should return TextureAssetConstPtr not MemoryChunkConstPtr
+	return m_textureAsset->GetOriginal()->GetData()->Size();
 }
 
 // *********************************
@@ -100,7 +100,7 @@ void                    TextAtlas::SetGlyph			( wchar_t wch, const Glyph * glyph
 //
 UInt32					TextAtlas::GetBitsPerPixel () const
 {
-	assert( m_textureResource->GetOriginal()->GetFormat() == TextureFormat::F_A8R8G8B8 );
+	assert( m_textureAsset->GetOriginal()->GetFormat() == TextureFormat::F_A8R8G8B8 );
 	return 32;
 }
 
@@ -108,14 +108,14 @@ UInt32					TextAtlas::GetBitsPerPixel () const
 //
 UInt32					TextAtlas::GetWidth        () const
 {
-    return m_textureResource->GetOriginal()->GetWidth();
+    return m_textureAsset->GetOriginal()->GetWidth();
 }
 
 // *********************************
 //
 UInt32					TextAtlas::GetHeight       () const
 {
-    return m_textureResource->GetOriginal()->GetHeight();
+    return m_textureAsset->GetOriginal()->GetHeight();
 }
 
 // *********************************
@@ -204,9 +204,9 @@ void                    TextAtlas::Load( std::istream& in )
 
 // *********************************
 //
-TextureResourceConstPtr	TextAtlas::GetResourceHandle() const
+TextureAssetConstPtr	TextAtlas::GetAsset() const
 {
-	return m_textureResource;
+	return m_textureAsset;
 }
 
 } // model

@@ -4,46 +4,46 @@
 namespace bv
 {
 
-const std::string FontResourceDesc::uid = "FONT_RESOURCE_DESC";
+const std::string FontAssetDesc::uid = "FONT_RESOURCE_DESC";
 
 // ***********************
 //
-const std::string &	FontResourceDesc::GetUID() const
+const std::string &	FontAssetDesc::GetUID() const
 {
-	return FontResourceDesc::UID();
+	return FontAssetDesc::UID();
 }
 
 // ***********************
 //
-const std::string & FontResourceDesc::UID()
+const std::string & FontAssetDesc::UID()
 {
-	return FontResourceDesc::uid;
+	return FontAssetDesc::uid;
 }
 
 // ***********************
 //
-bool FontResourceDesc::IsCacheable() const
+bool FontAssetDesc::IsCacheable() const
 {
 	return true;
 }
 
 // ***********************
 //
-VoidConstPtr FontResourceDesc::QueryThis() const
+VoidConstPtr FontAssetDesc::QueryThis() const
 {
 	return shared_from_this();
 }
 
 // ***********************
 //
-FontResourceDescConstPtr FontResourceDesc::Create( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps, const std::wstring & atlasCharSetFile )
+FontAssetDescConstPtr FontAssetDesc::Create( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps, const std::wstring & atlasCharSetFile )
 {
-	return std::make_shared< FontResourceDesc >( fontFileName, size, blurSize, outlineSize, generateMipmaps, atlasCharSetFile );
+	return std::make_shared< FontAssetDesc >( fontFileName, size, blurSize, outlineSize, generateMipmaps, atlasCharSetFile );
 }
 
 // ***********************
 //
-FontResourceDesc::FontResourceDesc( const std::string & fontFileName, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps, const std::wstring & atlasCharSetFile )
+FontAssetDesc::FontAssetDesc( const std::string & fontFileName, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps, const std::wstring & atlasCharSetFile )
 	: m_fontFileName( fontFileName )
 	, m_fontSize( fontSize )
 	, m_blurSize( blurSize )
@@ -54,42 +54,42 @@ FontResourceDesc::FontResourceDesc( const std::string & fontFileName, UInt32 fon
 
 // ***********************
 //
-const std::string &	FontResourceDesc::GetFontFileName() const
+const std::string &	FontAssetDesc::GetFontFileName() const
 {
 	return m_fontFileName;
 }
 
 // ***********************
 //
-UInt32 FontResourceDesc::GetFontSize() const
+UInt32 FontAssetDesc::GetFontSize() const
 {
 	return m_fontSize;
 }
 
 // ***********************
 //
-UInt32 FontResourceDesc::GetBlurSize() const
+UInt32 FontAssetDesc::GetBlurSize() const
 {
 	return m_blurSize;
 }
 
 // ***********************
 //
-UInt32 FontResourceDesc::GetOutlineSize() const
+UInt32 FontAssetDesc::GetOutlineSize() const
 {
 	return m_outlineSize;
 }
 
 // ***********************
 //
-bool FontResourceDesc::GetGenerateMipmaps() const
+bool FontAssetDesc::GetGenerateMipmaps() const
 {
 	return m_generateMipmaps;
 }
 
 // ***********************
 //
-const std::wstring & FontResourceDesc::GetAtlasCharSetFile () const
+const std::wstring & FontAssetDesc::GetAtlasCharSetFile () const
 {
 	return m_atlasCharSetFile;
 }

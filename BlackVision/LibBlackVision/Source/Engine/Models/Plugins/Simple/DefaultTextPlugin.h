@@ -72,7 +72,7 @@ private:
     void                                        SetText                     ( const std::wstring & newText );
 
 	void										LoadTexture					(	DefaultTexturesDataPtr,
-																				TextureResourceConstPtr,
+																				TextureAssetConstPtr,
 																				const std::string &,
 																				TextureWrappingMode,
 																				TextureWrappingMode,
@@ -82,7 +82,7 @@ private:
 
 	void										LoadAtlas					( const std::string &, UInt32, UInt32, UInt32 );
 
-    virtual bool                                LoadResource                ( ResourceDescConstPtr resDescr ) override;
+    virtual bool                                LoadResource                ( AssetDescConstPtr resDescr ) override;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;

@@ -16,7 +16,7 @@ class DefaultAnimationDescriptor : public IAnimationDescriptor
 {
 private:
 
-	std::vector< TextureResourceConstPtr >	m_frames;
+	std::vector< TextureAssetConstPtr >	m_frames;
     mutable std::vector< bool >				m_frameBiteChanged;
 
     DefaultTextureParams        m_params;
@@ -49,8 +49,8 @@ public:
     virtual TextureFilteringMode    GetFilteringMode    () const override;
     virtual glm::vec4               BorderColor         () const override;
 
-    void                            SetBits             ( UInt32 idx, TextureResourceConstPtr handle );
-    void                            AddBits             ( TextureResourceConstPtr handle );
+    void                            SetBits             ( UInt32 idx, TextureAssetConstPtr handle );
+    void                            AddBits             ( TextureAssetConstPtr handle );
 
     void                            SetBitsChanged      ( UInt32 frameNum, bool bitsChanged ) const;
     void                            SetCurrentFrame     ( UInt32 frameNum );
@@ -64,7 +64,7 @@ public:
     void                            SetFilteringMode    ( TextureFilteringMode fm );
     void                            SetBorderColor      ( const glm::vec4 & bc );
 
-    static DefaultAnimationDescriptor * LoadAnimation   ( const AnimationResourceDescConstPtr & frames, const std::string & name );
+    static DefaultAnimationDescriptor * LoadAnimation   ( const AnimationAssetDescConstPtr & frames, const std::string & name );
 
 };
 

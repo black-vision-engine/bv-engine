@@ -6,12 +6,12 @@
 namespace bv
 {
 
-class AnimationResource;
-DEFINE_CONST_PTR_TYPE( AnimationResource )
+class AnimationAsset;
+DEFINE_CONST_PTR_TYPE( AnimationAsset )
 
 // *******************************
 // Implements animation resource.
-class AnimationResource : public model::Resource, public std::enable_shared_from_this< AnimationResource >
+class AnimationAsset : public model::Asset, public std::enable_shared_from_this< AnimationAsset >
 {
 	static const std::string		uid;
 
@@ -22,15 +22,15 @@ public:
 
 	// *******************************
 	// Returns i'th frame
-	TextureResourceConstPtr			GetFrame		( SizeType i ) const;
+	TextureAssetConstPtr			GetFrame		( SizeType i ) const;
 
 	// *******************************
 	// Returns number of frames
 	SizeType						GetFramesNum	() const;
 
-	static AnimationResourceConstPtr Create			( const std::vector< TextureResourceConstPtr > & frames );
+	static AnimationAssetConstPtr Create			( const std::vector< TextureAssetConstPtr > & frames );
 
-	explicit						AnimationResource( const std::vector< TextureResourceConstPtr > & frames );
+	explicit						AnimationAsset( const std::vector< TextureAssetConstPtr > & frames );
 	
 	virtual const std::string &		GetUID			() const override;
 
@@ -38,7 +38,7 @@ public:
 
 private:
 
-	std::vector< TextureResourceConstPtr >	m_frames;
+	std::vector< TextureAssetConstPtr >	m_frames;
 };
 
 } // bv

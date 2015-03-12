@@ -4,11 +4,11 @@
 namespace bv
 {
 
-const std::string MipMapResourceDesc::uid = "MIP_MAP_RESOURCE_DESC";
+const std::string MipMapAssetDesc::uid = "MIP_MAP_RESOURCE_DESC";
 
 // *******************************
 //
-SingleTextureResourceDescConstPtr MipMapResourceDesc::GetLevelDesc( SizeType level ) const
+SingleTextureAssetDescConstPtr MipMapAssetDesc::GetLevelDesc( SizeType level ) const
 {
 	if( level < m_mipMapDescs.size() )
 		return m_mipMapDescs[ level ];
@@ -17,42 +17,42 @@ SingleTextureResourceDescConstPtr MipMapResourceDesc::GetLevelDesc( SizeType lev
 
 // *******************************
 //
-SizeType MipMapResourceDesc::GetLevelsNum() const
+SizeType MipMapAssetDesc::GetLevelsNum() const
 {
 	return m_mipMapDescs.size();
 }
 
 // *******************************
 //
-MipMapFilterType MipMapResourceDesc::GetFilter() const
+MipMapFilterType MipMapAssetDesc::GetFilter() const
 {
 	return m_filterType;
 }
 
 // *******************************
 //
-MipMapResourceDescConstPtr	MipMapResourceDesc::Create( const std::vector< SingleTextureResourceDescConstPtr > & mipMaps )
+MipMapAssetDescConstPtr	MipMapAssetDesc::Create( const std::vector< SingleTextureAssetDescConstPtr > & mipMaps )
 {
-	return std::make_shared< MipMapResourceDesc >( mipMaps );
+	return std::make_shared< MipMapAssetDesc >( mipMaps );
 }
 
 // *******************************
 //
-MipMapResourceDescConstPtr	MipMapResourceDesc::Create( MipMapFilterType ft, const SingleTextureResourceDescConstPtr & origTexture )
+MipMapAssetDescConstPtr	MipMapAssetDesc::Create( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTexture )
 {
-	return std::make_shared< MipMapResourceDesc >( ft, origTexture );
+	return std::make_shared< MipMapAssetDesc >( ft, origTexture );
 }
 
 // *******************************
 //
-MipMapResourceDesc::MipMapResourceDesc	( const std::vector< SingleTextureResourceDescConstPtr > & mipMaps )
+MipMapAssetDesc::MipMapAssetDesc	( const std::vector< SingleTextureAssetDescConstPtr > & mipMaps )
 	: m_filterType()
 	, m_mipMapDescs( mipMaps	 )
 {}
 
 // *******************************
 //
-MipMapResourceDesc::MipMapResourceDesc	( MipMapFilterType ft, const SingleTextureResourceDescConstPtr & origTextureDesc )
+MipMapAssetDesc::MipMapAssetDesc	( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTextureDesc )
 	: m_filterType( ft )
 {
 	GenereateLevelsDescs( origTextureDesc );
@@ -60,40 +60,40 @@ MipMapResourceDesc::MipMapResourceDesc	( MipMapFilterType ft, const SingleTextur
 
 // *******************************
 //
-void MipMapResourceDesc::GenereateLevelsDescs( const SingleTextureResourceDescConstPtr & origTexture )
+void MipMapAssetDesc::GenereateLevelsDescs( const SingleTextureAssetDescConstPtr & origTexture )
 {
 	auto mmSizes = tools::GenerateMipmapsSizes( tools::ImageSize( (unsigned int)origTexture->GetWidth(), (unsigned int)origTexture->GetHeight() ) );
 
 	for( auto mms : mmSizes )
-		m_mipMapDescs.push_back( SingleTextureResourceDesc::Create( origTexture->GetImagePath(), mms.width, mms.height, origTexture->GetFormat(), origTexture->IsCacheable() ) );
+		m_mipMapDescs.push_back( SingleTextureAssetDesc::Create( origTexture->GetImagePath(), mms.width, mms.height, origTexture->GetFormat(), origTexture->IsCacheable() ) );
 }
 
 // *******************************
 //
-VoidConstPtr MipMapResourceDesc::QueryThis() const
+VoidConstPtr MipMapAssetDesc::QueryThis() const
 {
 	return shared_from_this();
 }
 
 // *******************************
 //
-const std::string &	MipMapResourceDesc::GetUID() const
+const std::string &	MipMapAssetDesc::GetUID() const
 {
-	return MipMapResourceDesc::UID();
+	return MipMapAssetDesc::UID();
 }
 
 // *******************************
 //
-bool MipMapResourceDesc::IsCacheable() const
+bool MipMapAssetDesc::IsCacheable() const
 {
 	return true;
 }
 
 // *******************************
 //
-const std::string &	MipMapResourceDesc::UID()
+const std::string &	MipMapAssetDesc::UID()
 {
-	return MipMapResourceDesc::uid;
+	return MipMapAssetDesc::uid;
 }
 
 } // bv

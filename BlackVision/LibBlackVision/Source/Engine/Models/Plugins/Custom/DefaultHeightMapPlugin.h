@@ -79,7 +79,7 @@ public:
     explicit                                    DefaultHeightMapPlugin      ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
                                                 ~DefaultHeightMapPlugin     ();
 
-    virtual bool                                LoadResource                ( ResourceDescConstPtr resDescr ) override;
+    virtual bool                                LoadResource                ( AssetDescConstPtr resDescr ) override;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;

@@ -7,10 +7,10 @@
 namespace bv { namespace model
 {
 
-class Resource;
-DEFINE_CONST_PTR_TYPE( Resource )
+class Asset;
+DEFINE_CONST_PTR_TYPE( Asset )
 
-class Resource
+class Asset
 {
 protected:
 	virtual VoidConstPtr					QueryThis	() const = 0;
@@ -19,21 +19,21 @@ public:
 
 	virtual const std::string &				GetUID		() const = 0;
 
-    virtual ~Resource(){}
+    virtual ~Asset(){}
 
-	template< typename ResourceTypeConstPtr >
-	friend ResourceTypeConstPtr  QueryTypedRes( ResourceTypeConstPtr res );
+	template< typename AssetTypeConstPtr >
+	friend AssetTypeConstPtr  QueryTypedRes( AssetTypeConstPtr res );
 };
 
-template< typename ResourceTypeConstPtr >
-ResourceTypeConstPtr  QueryTypedRes( ResourceConstPtr res )
+template< typename AssetTypeConstPtr >
+AssetTypeConstPtr  QueryTypedRes( AssetConstPtr res )
 {
-	if( res->GetUID() != ResourceTypeConstPtr::element_type::UID() )
+	if( res->GetUID() != AssetTypeConstPtr::element_type::UID() )
     {
         return nullptr;
     }
 
-    return std::static_pointer_cast< ResourceTypeConstPtr::element_type >( res->QueryThis() );
+    return std::static_pointer_cast< AssetTypeConstPtr::element_type >( res->QueryThis() );
 }
 
 

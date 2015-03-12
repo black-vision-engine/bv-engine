@@ -3,45 +3,45 @@
 namespace bv
 {
 
-const std::string FontResource::uid = "FONT_RESOURCE";
+const std::string FontAsset::uid = "FONT_RESOURCE";
 
 // *******************************
 // 
-model::TextConstPtr FontResource::GetText() const
+model::TextConstPtr FontAsset::GetText() const
 {
 	return m_text;
 }
 
 // *******************************
 // 
-FontResourceConstPtr FontResource::Create( const model::TextConstPtr & text )
+FontAssetConstPtr FontAsset::Create( const model::TextConstPtr & text )
 {
-	return std::make_shared< FontResource >( text );
+	return std::make_shared< FontAsset >( text );
 }
 
 // *******************************
 // 
-FontResource::FontResource( const model::TextConstPtr & text )
+FontAsset::FontAsset( const model::TextConstPtr & text )
 	: m_text( text )
 {}
 
 // *******************************
 // 
-const std::string &	FontResource::GetUID() const
+const std::string &	FontAsset::GetUID() const
 {
-	return FontResource::uid;
+	return FontAsset::uid;
 }
 
 // *******************************
 // 
-const std::string &	FontResource::UID()
+const std::string &	FontAsset::UID()
 {
-	return FontResource::uid;
+	return FontAsset::uid;
 }
 
 // *******************************
 // 
-VoidConstPtr FontResource::QueryThis() const
+VoidConstPtr FontAsset::QueryThis() const
 {
 	return shared_from_this();
 }

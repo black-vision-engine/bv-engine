@@ -270,9 +270,9 @@ DefaultAlphaMaskPlugin::~DefaultAlphaMaskPlugin         ()
 
 // *************************************
 // 
-bool                        DefaultAlphaMaskPlugin::LoadResource  ( ResourceDescConstPtr resDescr )
+bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescConstPtr resDescr )
 {
-	auto txResDescr = QueryTypedDesc< TextureResourceDescConstPtr >( resDescr );
+	auto txResDescr = QueryTypedDesc< TextureAssetDescConstPtr >( resDescr );
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txResDescr != nullptr )

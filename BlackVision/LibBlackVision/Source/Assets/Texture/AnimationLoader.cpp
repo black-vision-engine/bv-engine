@@ -10,11 +10,11 @@ namespace bv { namespace model {
 
 // *******************************
 //
-TextureResourceConstPtr	AnimationLoader::LoadFrame( const TextureResourceDescConstPtr & frameDesc ) const
+TextureAssetConstPtr	AnimationLoader::LoadFrame( const TextureAssetDescConstPtr & frameDesc ) const
 {
-    auto res = ResourceManager::GetInstance().LoadResource( frameDesc );
+    auto res = AssetManager::GetInstance().LoadAsset( frameDesc );
 
-	auto texRes = QueryTypedRes< TextureResourceConstPtr >( res );
+	auto texRes = QueryTypedRes< TextureAssetConstPtr >( res );
 
     if ( texRes == nullptr )
     {
@@ -27,9 +27,9 @@ TextureResourceConstPtr	AnimationLoader::LoadFrame( const TextureResourceDescCon
 
 // ******************************
 //
-ResourceConstPtr AnimationLoader::LoadResource( const ResourceDescConstPtr & desc ) const
+AssetConstPtr AnimationLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 {
-	auto typedDesc = QueryTypedDesc< AnimationResourceDescConstPtr >( desc );
+	auto typedDesc = QueryTypedDesc< AnimationAssetDescConstPtr >( desc );
 
 	assert( typedDesc );
 
@@ -40,21 +40,21 @@ ResourceConstPtr AnimationLoader::LoadResource( const ResourceDescConstPtr & des
         return nullptr;
     }
 
-	std::vector< TextureResourceConstPtr > framesResources;
+	std::vector< TextureAssetConstPtr > framesAssets;
 	
     printf( "Loading animation\n" );
 
 	auto i = 0;
 	for( auto f : frames )
 	{
-		framesResources.push_back( LoadFrame( f ) );
+		framesAssets.push_back( LoadFrame( f ) );
 		printf( "\rLoaded %d out of %d total frames                ", i + 1, frames.size() );
 		++i;
 	}
 
 	printf( "\n" );
 
-	return AnimationResource::Create( framesResources );
+	return AnimationAsset::Create( framesAssets );
 }
 
 } // model

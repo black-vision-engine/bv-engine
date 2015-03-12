@@ -70,7 +70,7 @@ public:
     explicit                                    DefaultAlphaMaskPlugin      ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
                                                 ~DefaultAlphaMaskPlugin     ();
 
-    virtual bool                                LoadResource                ( ResourceDescConstPtr resDescr ) override;
+    virtual bool                                LoadResource                ( AssetDescConstPtr resDescr ) override;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;

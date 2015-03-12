@@ -16,7 +16,7 @@ DefaultTextureDescriptor::DefaultTextureDescriptor        ()
 
 // **************************
 //
-DefaultTextureDescriptor::DefaultTextureDescriptor        ( TextureResourceConstPtr texResource, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc, DataBuffer::Semantic semantic )
+DefaultTextureDescriptor::DefaultTextureDescriptor        ( TextureAssetConstPtr texResource, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc, DataBuffer::Semantic semantic )
     : m_bitsChanged( true )
 {
     SetBits( texResource );
@@ -143,7 +143,7 @@ DataBuffer::Semantic    DefaultTextureDescriptor::GetSemantic     () const
 
 // **************************
 //
-void                    DefaultTextureDescriptor::SetBits           ( TextureResourceConstPtr texResource )
+void                    DefaultTextureDescriptor::SetBits           ( TextureAssetConstPtr texResource )
 {
     if( texResource == nullptr )
     {
@@ -260,9 +260,9 @@ void                        DefaultTextureDescriptor::SetDefaults     ( DefaultT
 
 // **************************
 //
-DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const TextureResourceDescConstPtr & textureResDesc, const std::string & name )
+DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const TextureAssetDescConstPtr & textureResDesc, const std::string & name )
 {
-	auto res = ResourceManager::GetInstance().LoadResource( textureResDesc );
+	auto res = AssetManager::GetInstance().LoadAsset( textureResDesc );
 
     if ( res == nullptr )
     {
@@ -273,7 +273,7 @@ DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const Tex
     SetDefaults( desc );
     //desc->SetWrappingModeY( TextureWrappingMode::TWM_REPEAT ); 
     //desc->SetFilteringMode( TextureFilteringMode::TFM_POINT ); 
-	desc->SetBits( QueryTypedRes< TextureResourceConstPtr >( res ) );
+	desc->SetBits( QueryTypedRes< TextureAssetConstPtr >( res ) );
     desc->SetName( name );
 
     return desc;

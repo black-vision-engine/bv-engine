@@ -11,13 +11,13 @@
 namespace bv
 {
 
-class SingleTextureResource;
+class SingleTextureAsset;
 
-DEFINE_CONST_PTR_TYPE(SingleTextureResource)
+DEFINE_CONST_PTR_TYPE(SingleTextureAsset)
 
 // ********************************
 // Implements single texture resource. Texture without any mipmaps. Only one chunk of memory.
-class SingleTextureResource : public model::Resource, public std::enable_shared_from_this< SingleTextureResource >
+class SingleTextureAsset : public model::Asset, public std::enable_shared_from_this< SingleTextureAsset >
 {
 private:
 	static const std::string					uid;
@@ -37,9 +37,9 @@ public:
 
 	MemoryChunkConstPtr							GetData		() const;
 	
-	static SingleTextureResourceConstPtr		Create		( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format );
+	static SingleTextureAssetConstPtr		Create		( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format );
 
-	explicit									SingleTextureResource( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format );
+	explicit									SingleTextureAsset( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format );
 
 private:
 

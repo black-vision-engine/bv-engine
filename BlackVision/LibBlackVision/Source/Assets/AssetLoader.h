@@ -5,14 +5,14 @@
 
 namespace bv { namespace model {
 
-class ResourceLoader
+class AssetLoader
 {
 public:
 
-	virtual ResourceConstPtr		LoadResource        ( const ResourceDescConstPtr & desc )  const = 0;
+	virtual AssetConstPtr		LoadAsset        ( const AssetDescConstPtr & desc )  const = 0;
 
-            ResourceLoader		();
-    virtual ~ResourceLoader		();
+            AssetLoader		();
+    virtual ~AssetLoader		();
 
 };
 

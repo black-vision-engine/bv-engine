@@ -185,9 +185,9 @@ DefaultAnimationPlugin::~DefaultAnimationPlugin         ()
 
 // *************************************
 // 
-bool                            DefaultAnimationPlugin::LoadResource  ( ResourceDescConstPtr resDescr )
+bool                            DefaultAnimationPlugin::LoadResource  ( AssetDescConstPtr resDescr )
 {
-	auto animResDescr = QueryTypedDesc< AnimationResourceDescConstPtr >( resDescr );
+	auto animResDescr = QueryTypedDesc< AnimationAssetDescConstPtr >( resDescr );
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( animResDescr != nullptr )

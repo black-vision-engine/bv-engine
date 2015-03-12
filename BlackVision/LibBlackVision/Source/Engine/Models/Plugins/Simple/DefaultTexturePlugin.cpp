@@ -185,9 +185,9 @@ DefaultTexturePlugin::~DefaultTexturePlugin         ()
 
 // *************************************
 // 
-bool                            DefaultTexturePlugin::LoadResource  ( ResourceDescConstPtr resDescr )
+bool                            DefaultTexturePlugin::LoadResource  ( AssetDescConstPtr resDescr )
 {
-	auto txResDescr = QueryTypedDesc< TextureResourceDescConstPtr >( resDescr );
+	auto txResDescr = QueryTypedDesc< TextureAssetDescConstPtr >( resDescr );
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txResDescr != nullptr )

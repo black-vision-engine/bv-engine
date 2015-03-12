@@ -17,11 +17,11 @@ namespace bv { namespace model {
 
 ///////////////////////////////
 //
-FontResourceConstPtr      TextHelper::LoadFont( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize, const std::wstring & atlasCharSetFile )
+FontAssetConstPtr      TextHelper::LoadFont( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize, const std::wstring & atlasCharSetFile )
 {
-	auto desc = FontResourceDesc::Create( fontFileName, size, blurSize, outlineSize, false, atlasCharSetFile ); // TODO: pass generate mipmaps argument
+	auto desc = FontAssetDesc::Create( fontFileName, size, blurSize, outlineSize, false, atlasCharSetFile ); // TODO: pass generate mipmaps argument
 
-	return QueryTypedRes< FontResourceConstPtr >( ResourceManager::GetInstance().LoadResource( desc ) );
+	return QueryTypedRes< FontAssetConstPtr >( AssetManager::GetInstance().LoadAsset( desc ) );
 }
 
 // *********************************
@@ -40,9 +40,9 @@ namespace
 {
 ///////////////////////////////
 // Helper function for getting proper atlas from font resource.
-TextConstPtr				GetFont( const ResourceConstPtr & res )
+TextConstPtr				GetFont( const AssetConstPtr & res )
 {
-	auto fontRes = QueryTypedRes< FontResourceConstPtr >( res );
+	auto fontRes = QueryTypedRes< FontAssetConstPtr >( res );
     assert( fontRes != nullptr );
 
 	return fontRes->GetText();
@@ -80,7 +80,7 @@ ConnectedComponentPtr         CreateEmptyCC()
 } // anonymous
 
 
-TextAtlasConstPtr				TextHelper::GetAtlas            ( const ResourceConstPtr & res )
+TextAtlasConstPtr				TextHelper::GetAtlas            ( const AssetConstPtr & res )
 {
     auto f = GetFont( res );
 

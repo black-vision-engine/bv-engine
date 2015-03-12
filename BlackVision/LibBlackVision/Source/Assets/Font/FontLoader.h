@@ -7,14 +7,14 @@
 
 namespace bv { namespace model {
 
-class FontLoader : public ResourceLoader
+class FontLoader : public AssetLoader
 {
 private:
 
     TextConstPtr            TryLoadFont         ( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 oulineSize, const std::wstring & atlasCharSetFile ) const;
 
 public:
-	ResourceConstPtr		LoadResource		( const bv::ResourceDescConstPtr & ) const override;
+	AssetConstPtr		LoadAsset		( const bv::AssetDescConstPtr & ) const override;
 
     explicit                FontLoader( ){}
 

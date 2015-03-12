@@ -7,10 +7,10 @@
 namespace bv
 {
 
-class ResourceDesc;
-DEFINE_CONST_PTR_TYPE( ResourceDesc )
+class AssetDesc;
+DEFINE_CONST_PTR_TYPE( AssetDesc )
 
-class ResourceDesc
+class AssetDesc
 {
 protected:
 	virtual VoidConstPtr            QueryThis	() const = 0;
@@ -22,13 +22,13 @@ public:
 
 
 	template< typename DescTypeConstPtr >
-	friend DescTypeConstPtr  QueryTypedDesc( ResourceDescConstPtr desc );
+	friend DescTypeConstPtr  QueryTypedDesc( AssetDescConstPtr desc );
 };
 
 // *********************************
 //
 template< typename DescTypeConstPtr >
-DescTypeConstPtr  QueryTypedDesc( ResourceDescConstPtr desc )
+DescTypeConstPtr  QueryTypedDesc( AssetDescConstPtr desc )
 {
     if( desc->GetUID() != DescTypeConstPtr::element_type::UID() )
     {

@@ -206,12 +206,12 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & f
 
 	if( ret->m_textAtlas != nullptr )
 	{
-		auto texDesc = TextureResourceDesc::Create( ret->m_atlasFilePath, true );
+		auto texDesc = TextureAssetDesc::Create( ret->m_atlasFilePath, true );
 
-		auto res = ResourceManager::GetInstance().LoadResource( texDesc );
+		auto res = AssetManager::GetInstance().LoadAsset( texDesc );
 		if( res != nullptr )
 		{
-			std::const_pointer_cast< TextAtlas >( ret->m_textAtlas )->m_textureResource = QueryTypedRes< TextureResourceConstPtr >( res );
+			std::const_pointer_cast< TextAtlas >( ret->m_textAtlas )->m_textureAsset = QueryTypedRes< TextureAssetConstPtr >( res );
 		}
 
 		return ret;

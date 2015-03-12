@@ -29,7 +29,7 @@ namespace
 
 // ******************************
 //
-bool TextureCache::Add( const std::string & key, const TextureResourceConstPtr & textureRes )
+bool TextureCache::Add( const std::string & key, const TextureAssetConstPtr & textureRes )
 {
 	if( Find( key ) )
 		return false;
@@ -42,15 +42,15 @@ bool TextureCache::Add( const std::string & key, const TextureResourceConstPtr &
 
 // ******************************
 //
-bool TextureCache::Add( const TextureResourceDescConstPtr & textureDesc, const TextureResourceConstPtr & textureRes )
+bool TextureCache::Add( const TextureAssetDescConstPtr & textureDesc, const TextureAssetConstPtr & textureRes )
 {
-	return Add( GenKeyForTextureResource( textureDesc ), textureRes );
+	return Add( GenKeyForTextureAsset( textureDesc ), textureRes );
 }
 
 
 // ******************************
 //
-void TextureCache::Update( const std::string & key, const TextureResourceConstPtr & textureRes )
+void TextureCache::Update( const std::string & key, const TextureAssetConstPtr & textureRes )
 {
 	m_textures[ key ] = textureRes;
 	AddToRawDataCache( textureRes );
@@ -58,7 +58,7 @@ void TextureCache::Update( const std::string & key, const TextureResourceConstPt
 
 // ******************************
 //
-void TextureCache::AddToRawDataCache( const TextureResourceConstPtr & textureRes ) const
+void TextureCache::AddToRawDataCache( const TextureAssetConstPtr & textureRes ) const
 {
 	auto orig = textureRes->GetOriginal();
 	RawDataCache::GetInstance().Add( Hash::FromString( orig->GetKey()), orig->GetData() );
@@ -79,23 +79,23 @@ bool TextureCache::Exists	( const std::string & key ) const
 
 // ******************************
 //
-bool TextureCache::Exists( const TextureResourceDescConstPtr & textureDesc ) const
+bool TextureCache::Exists( const TextureAssetDescConstPtr & textureDesc ) const
 {
-	return Exists( GenKeyForTextureResource( textureDesc ) );
+	return Exists( GenKeyForTextureAsset( textureDesc ) );
 }
 
 // ******************************
 //
-TextureResourceConstPtr	TextureCache::Get( const std::string & key ) const
+TextureAssetConstPtr	TextureCache::Get( const std::string & key ) const
 {
 	return Find( key );
 }
 
 // ******************************
 //
-TextureResourceConstPtr	TextureCache::Get( const TextureResourceDescConstPtr & textureDesc ) const
+TextureAssetConstPtr	TextureCache::Get( const TextureAssetDescConstPtr & textureDesc ) const
 {
-	return Find( GenKeyForTextureResource( textureDesc ) );
+	return Find( GenKeyForTextureAsset( textureDesc ) );
 }
 
 // ******************************
@@ -108,22 +108,22 @@ TextureCache & TextureCache::GetInstance()
 
 // ******************************
 //
-std::string TextureCache::GenKeyForSingleTexture( const SingleTextureResourceDescConstPtr & sTRDesc )
+std::string TextureCache::GenKeyForSingleTexture( const SingleTextureAssetDescConstPtr & sTRDesc )
 {
 	return toString( sTRDesc->GetImagePath() ) + toString( sTRDesc->GetWidth() ) + toString( sTRDesc->GetHeight() ) + toString( (int)sTRDesc->GetFormat() );
 }
 
 // ******************************
 //
-std::string TextureCache::GenKeyForTextureResource( const TextureResourceDescConstPtr & tRDesc )
+std::string TextureCache::GenKeyForTextureAsset( const TextureAssetDescConstPtr & tRDesc )
 {
 	switch( tRDesc->GetLoadingType() )
 	{
-		case TextureResourceLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
+		case TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
 			return GenKeyForSingleTexture( tRDesc->GetOrigTextureDesc() );
-		case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
+		case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
 			return GenKeyForSingleTexture( tRDesc->GetOrigTextureDesc() ) + toString( tRDesc->GetMipMapsDesc()->GetLevelsNum() ) + toString( (int)tRDesc->GetMipMapsDesc()->GetFilter() );
-		case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
+		case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
 		{
 			auto ret = GenKeyForSingleTexture( tRDesc->GetOrigTextureDesc() );
 
@@ -150,7 +150,7 @@ std::string	TextureCache::GenKeyForGeneratedMipMap( const std::string & origPath
 
 // ******************************
 //
-TextureResourceConstPtr	TextureCache::Find( const std::string & key ) const
+TextureAssetConstPtr	TextureCache::Find( const std::string & key ) const
 {
 	auto it = m_textures.find( key );
 	if( it != m_textures.end() )

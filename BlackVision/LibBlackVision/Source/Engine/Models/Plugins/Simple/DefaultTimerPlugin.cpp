@@ -323,9 +323,9 @@ void DefaultTimerPlugin::InitAttributesChannel( IPluginPtr prev )
 
 // *************************************
 // 
-bool            DefaultTimerPlugin::LoadResource  ( ResourceDescConstPtr resDescr )
+bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr resDescr )
 {
-	auto txResDescr = QueryTypedDesc< FontResourceDescConstPtr >( resDescr );
+	auto txResDescr = QueryTypedDesc< FontAssetDescConstPtr >( resDescr );
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txResDescr != nullptr )
@@ -339,7 +339,7 @@ bool            DefaultTimerPlugin::LoadResource  ( ResourceDescConstPtr resDesc
 
         InitBigestGlyph();
 
-		auto textureResource = m_textAtlas->GetResourceHandle();
+		auto textureResource = m_textAtlas->GetAsset();
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = new DefaultTextureDescriptor(     textureResource

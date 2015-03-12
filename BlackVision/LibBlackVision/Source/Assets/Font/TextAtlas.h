@@ -19,7 +19,7 @@ class TextAtlas
 {
 public: // Only for non intrusive serialization. Should be private
 
-	TextureResourceConstPtr								m_textureResource;
+	TextureAssetConstPtr								m_textureAsset;
 
 	std::map< wchar_t, const Glyph * >                  m_outlineGlyphs;
     std::map< wchar_t, const Glyph * >                  m_glyphs;
@@ -58,7 +58,7 @@ public:
 
     static TextAtlasPtr		Create          ( UInt32 w, UInt32 h, UInt32 bitsPrePixel, UInt32 gw, UInt32 gh );
 
-	TextureResourceConstPtr	GetResourceHandle() const;
+	TextureAssetConstPtr	GetAsset		() const;
 
     friend class Text;
 

@@ -1,7 +1,7 @@
 #include "DefaultAnimationDescriptor.h"
 
 #include "Assets/Texture/TextureLoader.h"
-#include "Assets/Texture/AnimationResource.h"
+#include "Assets/Texture/AnimationAsset.h"
 #include "Assets/AssetManager.h"
 #include "Engine/Graphics/Resources/Texture.h"
 
@@ -148,7 +148,7 @@ glm::vec4               DefaultAnimationDescriptor::BorderColor         () const
 
 // *******************************
 //
-void                    DefaultAnimationDescriptor::SetBits             ( unsigned int idx, TextureResourceConstPtr texResource )
+void                    DefaultAnimationDescriptor::SetBits             ( unsigned int idx, TextureAssetConstPtr texResource )
 {
     //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
     //{ extraKind; } // FIXME: suppress unused warning
@@ -175,7 +175,7 @@ void                    DefaultAnimationDescriptor::SetBits             ( unsign
 
 // *******************************
 //
-void                     DefaultAnimationDescriptor::AddBits            ( TextureResourceConstPtr texResource )
+void                     DefaultAnimationDescriptor::AddBits            ( TextureAssetConstPtr texResource )
 {
     //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
     //{ extraKind; } // FIXME: suppress unused warning
@@ -267,9 +267,9 @@ void                    DefaultAnimationDescriptor::SetBorderColor      ( const 
 
 // *******************************
 //
-DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const AnimationResourceDescConstPtr & animResDesc, const std::string & name )
+DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const AnimationAssetDescConstPtr & animResDesc, const std::string & name )
 {
-	auto res = ResourceManager::GetInstance().LoadResource( animResDesc );
+	auto res = AssetManager::GetInstance().LoadAsset( animResDesc );
 
 	if ( res == nullptr )
     {
@@ -277,7 +277,7 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
     }
 
 
-	auto animRes = QueryTypedRes< AnimationResourceConstPtr >( res );
+	auto animRes = QueryTypedRes< AnimationAssetConstPtr >( res );
 
     if ( animRes == nullptr )
     {

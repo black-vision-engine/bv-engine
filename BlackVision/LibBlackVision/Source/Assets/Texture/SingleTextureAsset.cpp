@@ -5,53 +5,53 @@ namespace bv
 
 // ******************************
 //
-const std::string SingleTextureResource::uid = "SIMPLE_TEXTURE_RESOURCE";
+const std::string SingleTextureAsset::uid = "SIMPLE_TEXTURE_RESOURCE";
 
 // ******************************
 //
-const std::string &	SingleTextureResource::GetKey() const
+const std::string &	SingleTextureAsset::GetKey() const
 {
 	return m_key;
 }
 
 // ******************************
 //
-UInt32 SingleTextureResource::GetWidth() const
+UInt32 SingleTextureAsset::GetWidth() const
 {
 	return m_width;
 }
 
 // ******************************
 //
-UInt32 SingleTextureResource::GetHeight() const
+UInt32 SingleTextureAsset::GetHeight() const
 {
 	return m_height;
 }
 
 // ******************************
 //
-TextureFormat SingleTextureResource::GetFormat() const
+TextureFormat SingleTextureAsset::GetFormat() const
 {
 	return m_format;
 }
 
 // ******************************
 //
-MemoryChunkConstPtr	SingleTextureResource::GetData() const
+MemoryChunkConstPtr	SingleTextureAsset::GetData() const
 {
 	return m_memory;
 }
 
 // ******************************
 //
-SingleTextureResourceConstPtr SingleTextureResource::Create( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format )
+SingleTextureAssetConstPtr SingleTextureAsset::Create( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format )
 {
-	return std::make_shared< SingleTextureResource >( memory, key, width, height, format );
+	return std::make_shared< SingleTextureAsset >( memory, key, width, height, format );
 }
 
 // ******************************
 //
-SingleTextureResource::SingleTextureResource( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format )
+SingleTextureAsset::SingleTextureAsset( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format )
 	: m_memory( memory )
 	, m_key( key )
 	, m_width( width )
@@ -61,21 +61,21 @@ SingleTextureResource::SingleTextureResource( const MemoryChunkConstPtr & memory
 
 // *******************************
 // 
-const std::string &	SingleTextureResource::GetUID() const
+const std::string &	SingleTextureAsset::GetUID() const
 {
-	return SingleTextureResource::uid;
+	return SingleTextureAsset::uid;
 }
 
 // *******************************
 // 
-const std::string &	SingleTextureResource::UID()
+const std::string &	SingleTextureAsset::UID()
 {
-	return SingleTextureResource::uid;
+	return SingleTextureAsset::uid;
 }
 
 // *******************************
 // 
-VoidConstPtr SingleTextureResource::QueryThis() const
+VoidConstPtr SingleTextureAsset::QueryThis() const
 {
 	return shared_from_this();
 }

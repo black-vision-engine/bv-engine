@@ -7,25 +7,25 @@
 namespace bv
 {
 
-class MipMapResource;
-DEFINE_CONST_PTR_TYPE(MipMapResource)
+class MipMapAsset;
+DEFINE_CONST_PTR_TYPE(MipMapAsset)
 
 // *******************************
 // Implements resources of mipmaps levels.
-class MipMapResource
+class MipMapAsset
 {
 public:
 
-	SingleTextureResourceConstPtr	GetLevel		( SizeType level ) const;
+	SingleTextureAssetConstPtr	GetLevel		( SizeType level ) const;
 	SizeType						GetLevelsNum	() const;
 
-	static MipMapResourceConstPtr	Create			( const std::vector< SingleTextureResourceConstPtr > & mipMaps );
+	static MipMapAssetConstPtr	Create			( const std::vector< SingleTextureAssetConstPtr > & mipMaps );
 
-	explicit						MipMapResource	( const std::vector< SingleTextureResourceConstPtr > & mipMaps );
+	explicit						MipMapAsset	( const std::vector< SingleTextureAssetConstPtr > & mipMaps );
 
 private:
 
-	std::vector< SingleTextureResourceConstPtr > m_mipMaps;
+	std::vector< SingleTextureAssetConstPtr > m_mipMaps;
 };
 
 } // bv

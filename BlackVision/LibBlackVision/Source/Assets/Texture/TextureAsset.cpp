@@ -3,53 +3,53 @@
 namespace bv
 {
 
-const std::string TextureResource::uid = "TEXTURE_RESOURCE";
+const std::string TextureAsset::uid = "TEXTURE_RESOURCE";
 
 // *******************************
 // 
-SingleTextureResourceConstPtr TextureResource::GetOriginal() const
+SingleTextureAssetConstPtr TextureAsset::GetOriginal() const
 {
 	return m_originalTexture;
 }
 
 // *******************************
 // 
-MipMapResourceConstPtr TextureResource::GetMipMaps() const
+MipMapAssetConstPtr TextureAsset::GetMipMaps() const
 {
 	return m_mipMaps;
 }
 
 // *******************************
 // 
-TextureResourceConstPtr	TextureResource::Create( const SingleTextureResourceConstPtr & originalTexture, const MipMapResourceConstPtr & mipMaps )
+TextureAssetConstPtr	TextureAsset::Create( const SingleTextureAssetConstPtr & originalTexture, const MipMapAssetConstPtr & mipMaps )
 {
-	return std::make_shared< TextureResource >( originalTexture, mipMaps );
+	return std::make_shared< TextureAsset >( originalTexture, mipMaps );
 }
 
 // *******************************
 // 
-TextureResource::TextureResource( const SingleTextureResourceConstPtr & originalTexture, const MipMapResourceConstPtr & mipMaps )
+TextureAsset::TextureAsset( const SingleTextureAssetConstPtr & originalTexture, const MipMapAssetConstPtr & mipMaps )
 	: m_originalTexture( originalTexture )
 	, m_mipMaps( mipMaps )
 {}
 
 // *******************************
 // 
-const std::string &	TextureResource::GetUID() const
+const std::string &	TextureAsset::GetUID() const
 {
-	return TextureResource::uid;
+	return TextureAsset::uid;
 }
 
 // *******************************
 // 
-const std::string &	TextureResource::UID()
+const std::string &	TextureAsset::UID()
 {
-	return TextureResource::uid;
+	return TextureAsset::uid;
 }
 
 // *******************************
 // 
-VoidConstPtr TextureResource::QueryThis() const
+VoidConstPtr TextureAsset::QueryThis() const
 {
 	return shared_from_this();
 }

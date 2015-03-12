@@ -43,32 +43,32 @@ tools::FilterType ToMMBuilderFilterType( MipMapFilterType ft )
 
 // ******************************
 //
-ResourceConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & desc ) const
+AssetConstPtr TextureLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 {
-	auto typedDesc = QueryTypedDesc< TextureResourceDescConstPtr >( desc );
+	auto typedDesc = QueryTypedDesc< TextureAssetDescConstPtr >( desc );
 
 	assert( typedDesc );
 
-	TextureResourceConstPtr ret = nullptr;
+	TextureAssetConstPtr ret = nullptr;
 
 	switch( typedDesc->GetLoadingType() )
 	{
-		case TextureResourceLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
+		case TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
 		{
 			auto origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc(), typedDesc->GetOrigTextureDesc()->IsCacheable() );
 	
-			ret = TextureResource::Create( origRes, nullptr );
+			ret = TextureAsset::Create( origRes, nullptr );
 
 			break;
 		}
 
-		case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
+		case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
 		{
 			auto origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc(), typedDesc->GetOrigTextureDesc()->IsCacheable() );
 
 			auto mipMapsSize = typedDesc->GetMipMapsDesc()->GetLevelsNum();
 
-			std::vector< SingleTextureResourceConstPtr > mipMapsRes;
+			std::vector< SingleTextureAssetConstPtr > mipMapsRes;
 
 			for( SizeType i = 0; i < mipMapsSize; ++i )
 			{
@@ -76,13 +76,13 @@ ResourceConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & desc 
 				mipMapsRes.push_back( LoadSingleTexture( levelDesc, levelDesc->IsCacheable() ) );
 			}
 
-			auto mipMapRes = MipMapResource::Create( mipMapsRes );
+			auto mipMapRes = MipMapAsset::Create( mipMapsRes );
 
-			ret = TextureResource::Create( origRes, mipMapRes );
+			ret = TextureAsset::Create( origRes, mipMapRes );
 			break;
 		}
 
-		case TextureResourceLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
+		case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
 		{
 			auto origW = typedDesc->GetOrigTextureDesc()->GetWidth();
 			auto origH = typedDesc->GetOrigTextureDesc()->GetHeight();
@@ -92,9 +92,9 @@ ResourceConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & desc 
 												ToMMBuilderFilterType( typedDesc->GetMipMapsDesc()->GetFilter() ) );
 
 
-			std::vector< SingleTextureResourceConstPtr > mipMapsRes;
+			std::vector< SingleTextureAssetConstPtr > mipMapsRes;
 
-			SingleTextureResourceConstPtr origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc(), typedDesc->GetOrigTextureDesc()->IsCacheable() );
+			SingleTextureAssetConstPtr origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc(), typedDesc->GetOrigTextureDesc()->IsCacheable() );
 
 			if( mm[ 0 ].width == origW && mm[ 0 ].height == origH )
 				mipMapsRes.push_back( origRes );
@@ -105,10 +105,10 @@ ResourceConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & desc 
 				UInt32 h = mm[ i ].height;
 				UInt32 s = w * h * 4; // FIXME: Supporting only 32-bit image
 				auto key = TextureCache::GenKeyForGeneratedMipMap( typedDesc->GetOrigTextureDesc()->GetImagePath(), w, h, TextureFormat::F_A8R8G8B8, i, typedDesc->GetMipMapsDesc()->GetFilter() );
-				mipMapsRes.push_back( SingleTextureResource::Create( MemoryChunk::Create( mm[ i ].data, s ), key, w, h, TextureFormat::F_A8R8G8B8 ) );
+				mipMapsRes.push_back( SingleTextureAsset::Create( MemoryChunk::Create( mm[ i ].data, s ), key, w, h, TextureFormat::F_A8R8G8B8 ) );
 			}
 
-			ret = TextureResource::Create( origRes, MipMapResource::Create( mipMapsRes ) );
+			ret = TextureAsset::Create( origRes, MipMapAsset::Create( mipMapsRes ) );
 			break;
 		}
 	}
@@ -119,7 +119,7 @@ ResourceConstPtr TextureLoader::LoadResource( const ResourceDescConstPtr & desc 
 
 // ******************************
 //
-SingleTextureResourceConstPtr TextureLoader::LoadSingleTexture( const SingleTextureResourceDescConstPtr & sinlgeTextureResDesc, bool loadFromCache )
+SingleTextureAssetConstPtr TextureLoader::LoadSingleTexture( const SingleTextureAssetDescConstPtr & sinlgeTextureResDesc, bool loadFromCache )
 {
 	auto key		= TextureCache::GenKeyForSingleTexture( sinlgeTextureResDesc );
 	auto imgPath	= sinlgeTextureResDesc->GetImagePath();
@@ -144,7 +144,7 @@ SingleTextureResourceConstPtr TextureLoader::LoadSingleTexture( const SingleText
 	auto h			= sinlgeTextureResDesc->GetHeight();
 	auto format		= TextureFormat::F_A8R8G8B8;//sinlgeTextureResDesc->GetFormat();
 
-	return SingleTextureResource::Create( mmChunk, key, w, h, format );
+	return SingleTextureAsset::Create( mmChunk, key, w, h, format );
 }
 
 // ******************************

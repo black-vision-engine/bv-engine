@@ -3,45 +3,45 @@
 namespace bv
 {
 
-const std::string SingleTextureResourceDesc::uid = "SINGLE_TEXTURE_RESOURCE_DESC";
+const std::string SingleTextureAssetDesc::uid = "SINGLE_TEXTURE_RESOURCE_DESC";
 
 // ***********************
 //
-const std::string &	SingleTextureResourceDesc::GetUID() const
+const std::string &	SingleTextureAssetDesc::GetUID() const
 {
-	return SingleTextureResourceDesc::UID();
+	return SingleTextureAssetDesc::UID();
 }
 
 // ***********************
-const std::string &	SingleTextureResourceDesc::UID()
+const std::string &	SingleTextureAssetDesc::UID()
 {
-	return SingleTextureResourceDesc::uid;
+	return SingleTextureAssetDesc::uid;
 }
 
 // ***********************
 //
-VoidConstPtr SingleTextureResourceDesc::QueryThis() const
+VoidConstPtr SingleTextureAssetDesc::QueryThis() const
 {
 	return shared_from_this();
 }
 
 // ***********************
 //
-bool SingleTextureResourceDesc::IsCacheable	() const
+bool SingleTextureAssetDesc::IsCacheable	() const
 {
 	return m_isCacheable;
 }
 
 // ***********************
 //
-SingleTextureResourceDescConstPtr SingleTextureResourceDesc::Create( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable )
+SingleTextureAssetDescConstPtr SingleTextureAssetDesc::Create( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable )
 {
-	return std::make_shared< SingleTextureResourceDesc >( imagePath, width, height, format, isCacheable );
+	return std::make_shared< SingleTextureAssetDesc >( imagePath, width, height, format, isCacheable );
 }
 
 // ***********************
 //
-SingleTextureResourceDesc::SingleTextureResourceDesc( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable )
+SingleTextureAssetDesc::SingleTextureAssetDesc( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable )
 	: m_imagePath( imagePath )
 	, m_width( width )
 	, m_height( height )
@@ -51,28 +51,28 @@ SingleTextureResourceDesc::SingleTextureResourceDesc( const std::string & imageP
 
 // ***********************
 //
-const std::string & SingleTextureResourceDesc::GetImagePath() const
+const std::string & SingleTextureAssetDesc::GetImagePath() const
 {
 	return m_imagePath;
 }
 
 // ***********************
 //
-UInt32 SingleTextureResourceDesc::GetWidth() const
+UInt32 SingleTextureAssetDesc::GetWidth() const
 {
 	return m_width;
 }
 
 // ***********************
 //
-UInt32 SingleTextureResourceDesc::GetHeight() const
+UInt32 SingleTextureAssetDesc::GetHeight() const
 {
 	return m_height;
 }
 
 // ***********************
 //
-TextureFormat SingleTextureResourceDesc::GetFormat() const
+TextureFormat SingleTextureAssetDesc::GetFormat() const
 {
 	return m_format;
 }

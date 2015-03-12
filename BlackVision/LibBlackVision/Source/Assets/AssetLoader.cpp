@@ -4,13 +4,13 @@ namespace bv { namespace model {
 
 // *********************************
 //
-ResourceLoader::ResourceLoader()
+AssetLoader::AssetLoader()
 {
 }
 
 // *********************************
 //
-ResourceLoader::~ResourceLoader()
+AssetLoader::~AssetLoader()
 {
 }
 

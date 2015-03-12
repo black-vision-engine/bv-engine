@@ -13,7 +13,7 @@ class DefaultTextureDescriptor : public ITextureDescriptor
 {
 private:
 
-    TextureResourceConstPtr m_texResource;
+    TextureAssetConstPtr m_texResource;
 
     DefaultTextureParams    m_params;
     mutable bool            m_bitsChanged;
@@ -22,7 +22,7 @@ private:
 public:
 
     DefaultTextureDescriptor        ();
-    DefaultTextureDescriptor        ( TextureResourceConstPtr texResource, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc, DataBuffer::Semantic semantic );
+    DefaultTextureDescriptor        ( TextureAssetConstPtr texResource, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc, DataBuffer::Semantic semantic );
     ~DefaultTextureDescriptor       ();
 
     virtual uintptr_t               GetUID          () const override;
@@ -42,7 +42,7 @@ public:
     virtual glm::vec4               BorderColor     () const override;
     virtual DataBuffer::Semantic    GetSemantic     () const override;
 
-    void                            SetBits         ( TextureResourceConstPtr texResource );
+    void                            SetBits         ( TextureAssetConstPtr texResource );
 
     void                            SetBitsChanged  ( bool bitsChanged ) const;
 
@@ -58,7 +58,7 @@ public:
 
     static void                     SetDefaults     ( DefaultTextureDescriptor * desc );
 
-	static DefaultTextureDescriptor * LoadTexture   ( const TextureResourceDescConstPtr & textureResDesc, const std::string & name );
+	static DefaultTextureDescriptor * LoadTexture   ( const TextureAssetDescConstPtr & textureResDesc, const std::string & name );
 
 };
 

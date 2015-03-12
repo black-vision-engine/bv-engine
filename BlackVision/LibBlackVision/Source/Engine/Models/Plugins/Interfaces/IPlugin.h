@@ -61,7 +61,7 @@ public:
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const = 0;
 
     //FIXME: implement a more generic interface for resource loading
-    virtual bool                                LoadResource                ( ResourceDescConstPtr resDescr ) = 0;
+    virtual bool                                LoadResource                ( AssetDescConstPtr resDescr ) = 0;
 
 
 	virtual ParamTransformVecPtr				GetParamTransform			() const = 0; //FIXME: BArdzo brzydki hack zeby zadzialal crawler

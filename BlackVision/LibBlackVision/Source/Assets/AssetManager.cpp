@@ -5,13 +5,13 @@ namespace bv
 
 // ***********************
 //
-model::ResourceConstPtr ResourceManager::LoadResource( const ResourceDescConstPtr & desc ) const
+model::AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc ) const
 {
 	auto it = m_loaders.find( desc->GetUID() );
 
 	if( it != m_loaders.end() )
 	{
-		auto res = it->second->LoadResource( desc );
+		auto res = it->second->LoadAsset( desc );
 		if( res != nullptr )
 		{
 			return res;
@@ -23,7 +23,7 @@ model::ResourceConstPtr ResourceManager::LoadResource( const ResourceDescConstPt
 
 // ***********************
 //
-bool ResourceManager::RegisterLoader( const std::string & resDescUID, model::ResourceLoader * loader )
+bool AssetManager::RegisterLoader( const std::string & resDescUID, model::AssetLoader * loader )
 {
 	auto it = m_loaders.find( resDescUID );
 
@@ -40,7 +40,7 @@ bool ResourceManager::RegisterLoader( const std::string & resDescUID, model::Res
 
 // ***********************
 //
-bool ResourceManager::UnregisterLoader( const std::string & resDescUID )
+bool AssetManager::UnregisterLoader( const std::string & resDescUID )
 {
 	auto it = m_loaders.find( resDescUID );
 
@@ -57,20 +57,20 @@ bool ResourceManager::UnregisterLoader( const std::string & resDescUID )
 
 // ***********************
 //
-ResourceManager & ResourceManager::GetInstance()
+AssetManager & AssetManager::GetInstance()
 {
-	static auto instance = ResourceManager();
+	static auto instance = AssetManager();
 	return instance;
 }
 
 // ***********************
 //
-ResourceManager::ResourceManager()
+AssetManager::AssetManager()
 {}
 
 // ***********************
 //
-ResourceManager::~ResourceManager()
+AssetManager::~AssetManager()
 {
 	for( auto it : m_loaders )
 		delete it.second;

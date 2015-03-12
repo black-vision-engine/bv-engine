@@ -5,11 +5,11 @@
 
 namespace bv { namespace model {
 
-class AnimationResourceDesc;
-DEFINE_PTR_TYPE(AnimationResourceDesc)
-DEFINE_CONST_PTR_TYPE(AnimationResourceDesc)
+class AnimationAssetDesc;
+DEFINE_PTR_TYPE(AnimationAssetDesc)
+DEFINE_CONST_PTR_TYPE(AnimationAssetDesc)
 
-class AnimationResourceDesc : public ResourceDesc, public std::enable_shared_from_this< AnimationResourceDesc >
+class AnimationAssetDesc : public AssetDesc, public std::enable_shared_from_this< AnimationAssetDesc >
 {
 private:
 
@@ -29,16 +29,16 @@ public:
 
 public:
 
-                                                AnimationResourceDesc	( const std::vector< std::string > & frames );
-                                                ~AnimationResourceDesc	();
+                                                AnimationAssetDesc	( const std::vector< std::string > & frames );
+                                                ~AnimationAssetDesc	();
 
-	const std::vector< TextureResourceDescConstPtr > &  GetFrames               () const;
+	const std::vector< TextureAssetDescConstPtr > &  GetFrames               () const;
 
-    static AnimationResourceDescConstPtr		CreateFromDirFrames     ( const std::string & path, const std::string & filter );
+    static AnimationAssetDescConstPtr		CreateFromDirFrames     ( const std::string & path, const std::string & filter );
 
 private:
 
-    std::vector< TextureResourceDescConstPtr >  m_frames;
+    std::vector< TextureAssetDescConstPtr >  m_frames;
 
 };
 

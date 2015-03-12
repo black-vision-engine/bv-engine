@@ -5,40 +5,40 @@
 
 namespace bv { namespace model {
 
-const std::string AnimationResourceDesc::uid = "ANIMATION_RESOURCE_DESC";
+const std::string AnimationAssetDesc::uid = "ANIMATION_RESOURCE_DESC";
 
 // *******************************
 //
-AnimationResourceDesc::AnimationResourceDesc							( const std::vector< std::string > & frames )
+AnimationAssetDesc::AnimationAssetDesc							( const std::vector< std::string > & frames )
 {
 	for( auto f : frames )
 	{
-		m_frames.push_back( TextureResourceDesc::Create( f, false ) );
+		m_frames.push_back( TextureAssetDesc::Create( f, false ) );
 	}
 }
 
 // *******************************
 //
-AnimationResourceDesc::~AnimationResourceDesc							()
+AnimationAssetDesc::~AnimationAssetDesc							()
 {
 }
 
 // *******************************
 //
-const std::vector< TextureResourceDescConstPtr > & AnimationResourceDesc::GetFrames		() const
+const std::vector< TextureAssetDescConstPtr > & AnimationAssetDesc::GetFrames		() const
 {
     return m_frames;
 }
 
 // *******************************
 //
-AnimationResourceDescConstPtr		AnimationResourceDesc::CreateFromDirFrames( const std::string & path, const std::string & filter )
+AnimationAssetDescConstPtr		AnimationAssetDesc::CreateFromDirFrames( const std::string & path, const std::string & filter )
 {
     auto files = Dir::ListFiles( path, filter );
 
     if ( files.size() > 0 )
     {
-        return std::make_shared< AnimationResourceDesc >( files );
+        return std::make_shared< AnimationAssetDesc >( files );
     }
 
     return nullptr;
@@ -46,30 +46,30 @@ AnimationResourceDescConstPtr		AnimationResourceDesc::CreateFromDirFrames( const
 
 // *******************************
 //
-VoidConstPtr AnimationResourceDesc::QueryThis() const
+VoidConstPtr AnimationAssetDesc::QueryThis() const
 {
 	return shared_from_this();
 }
 
 // *******************************
 //
-const std::string &	AnimationResourceDesc::GetUID() const
+const std::string &	AnimationAssetDesc::GetUID() const
 {
-	return AnimationResourceDesc::UID();
+	return AnimationAssetDesc::UID();
 }
 
 // *******************************
 //
-bool AnimationResourceDesc::IsCacheable() const
+bool AnimationAssetDesc::IsCacheable() const
 {
 	return false;
 }
 
 // *******************************
 //
-const std::string &	AnimationResourceDesc::UID()
+const std::string &	AnimationAssetDesc::UID()
 {
-	return AnimationResourceDesc::uid;
+	return AnimationAssetDesc::uid;
 }
 
 } //model

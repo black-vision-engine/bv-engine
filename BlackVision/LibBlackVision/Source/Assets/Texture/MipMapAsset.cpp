@@ -5,7 +5,7 @@ namespace bv
 
 // *******************************
 //
-SingleTextureResourceConstPtr MipMapResource::GetLevel( SizeType level ) const
+SingleTextureAssetConstPtr MipMapAsset::GetLevel( SizeType level ) const
 {
 	if( level < GetLevelsNum() )
 		return m_mipMaps[ level ];
@@ -15,21 +15,21 @@ SingleTextureResourceConstPtr MipMapResource::GetLevel( SizeType level ) const
 
 // *******************************
 //
-SizeType MipMapResource::GetLevelsNum() const
+SizeType MipMapAsset::GetLevelsNum() const
 {
 	return m_mipMaps.size();
 }
 
 // *******************************
 //
-MipMapResourceConstPtr MipMapResource::Create( const std::vector< SingleTextureResourceConstPtr > & mipMaps )
+MipMapAssetConstPtr MipMapAsset::Create( const std::vector< SingleTextureAssetConstPtr > & mipMaps )
 {
-	return std::make_shared< MipMapResource >( mipMaps );
+	return std::make_shared< MipMapAsset >( mipMaps );
 }
 
 // *******************************
 //
-MipMapResource::MipMapResource( const std::vector< SingleTextureResourceConstPtr > & mipMaps )
+MipMapAsset::MipMapAsset( const std::vector< SingleTextureAssetConstPtr > & mipMaps )
 	: m_mipMaps( mipMaps )
 {}
 

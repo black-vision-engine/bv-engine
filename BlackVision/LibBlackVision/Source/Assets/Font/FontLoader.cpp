@@ -12,9 +12,9 @@ namespace bv { namespace model {
 
 ///////////////////////////////
 //
-ResourceConstPtr FontLoader::LoadResource( const bv::ResourceDescConstPtr & desc ) const
+AssetConstPtr FontLoader::LoadAsset( const bv::AssetDescConstPtr & desc ) const
 {
-	auto typedDesc = QueryTypedDesc< FontResourceDescConstPtr >( desc );
+	auto typedDesc = QueryTypedDesc< FontAssetDescConstPtr >( desc );
 
 	assert( typedDesc );
 
@@ -28,7 +28,7 @@ ResourceConstPtr FontLoader::LoadResource( const bv::ResourceDescConstPtr & desc
 
     if( text )
     {
-		return FontResource::Create( text );
+		return FontAsset::Create( text );
     }
     else
     {

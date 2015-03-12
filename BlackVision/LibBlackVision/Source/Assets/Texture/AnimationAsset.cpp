@@ -1,54 +1,54 @@
-#include "AnimationResource.h"
+#include "AnimationAsset.h"
 
 namespace bv
 {
 
-const std::string AnimationResource::uid = "ANIMATION_RESOURCE";
+const std::string AnimationAsset::uid = "ANIMATION_RESOURCE";
 
 // *******************************
 // 
-AnimationResourceConstPtr	AnimationResource::Create( const std::vector< TextureResourceConstPtr > & frames )
+AnimationAssetConstPtr	AnimationAsset::Create( const std::vector< TextureAssetConstPtr > & frames )
 {
-	return std::make_shared< AnimationResource >( frames );
+	return std::make_shared< AnimationAsset >( frames );
 }
 
 // *******************************
 // 
-AnimationResource::AnimationResource( const std::vector< TextureResourceConstPtr > & frames )
+AnimationAsset::AnimationAsset( const std::vector< TextureAssetConstPtr > & frames )
 	: m_frames( frames )
 {}
 
 // *******************************
 // 
-TextureResourceConstPtr	AnimationResource::GetFrame( SizeType i ) const
+TextureAssetConstPtr	AnimationAsset::GetFrame( SizeType i ) const
 {
 	return m_frames[ i ];
 }
 
 // *******************************
 // 
-SizeType AnimationResource::GetFramesNum() const
+SizeType AnimationAsset::GetFramesNum() const
 {
 	return m_frames.size();
 }
 
 // *******************************
 // 
-const std::string &	AnimationResource::GetUID() const
+const std::string &	AnimationAsset::GetUID() const
 {
-	return AnimationResource::uid;
+	return AnimationAsset::uid;
 }
 
 // *******************************
 // 
-const std::string &	AnimationResource::UID()
+const std::string &	AnimationAsset::UID()
 {
-	return AnimationResource::uid;
+	return AnimationAsset::uid;
 }
 
 // *******************************
 // 
-VoidConstPtr AnimationResource::QueryThis() const
+VoidConstPtr AnimationAsset::QueryThis() const
 {
 	return shared_from_this();
 }
