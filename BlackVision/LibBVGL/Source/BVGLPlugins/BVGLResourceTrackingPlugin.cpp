@@ -76,6 +76,62 @@ void    BVGLResourceTrackingPlugin::BufferData                  ( GLenum target,
 
 // *****************************
 //
+void    BVGLResourceTrackingPlugin::GenTextures                 ( GLsizei n, GLuint * textures )
+{
+    Parent::GenTextures( n, textures );
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::DeleteTextures              ( GLsizei n, const GLuint * textures )
+{
+    Parent::DeleteTextures( n, textures );
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::TexImage2D					( GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid * pixels )
+{
+    Parent::TexImage2D( target, level, internalformat, width, height, border, format, type, pixels );
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::ActiveTexture				( GLenum texture )
+{
+    Parent::ActiveTexture( texture );
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::TexSubImage2D				( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid * pixels )
+{
+    Parent::TexSubImage2D( target, level, xoffset, yoffset, width, height, format, type, pixels );
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::BindTexture					( GLenum target, GLuint texture )
+{
+    Parent::BindTexture( target, texture );
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::GenRenderbuffers            ( GLsizei n, GLuint * renderbuffers )
+{
+    Parent::GenRenderbuffers( n, renderbuffers );
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::DeleteRenderbuffers         ( GLsizei n, const GLuint * renderbuffers )
+{
+    Parent::DeleteRenderbuffers( n, renderbuffers );
+}
+
+// *****************************
+//
 void    BVGLResourceTrackingPlugin::PrintStats                  ()
 {
     PrintBuffersStats();    
