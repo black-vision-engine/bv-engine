@@ -68,7 +68,7 @@ public:
     explicit                                    DefaultAnimationPlugin      ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
                                                 ~DefaultAnimationPlugin     ();
 
-    virtual bool                                LoadResource                ( AssetDescConstPtr resDescr ) override;
+    virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;

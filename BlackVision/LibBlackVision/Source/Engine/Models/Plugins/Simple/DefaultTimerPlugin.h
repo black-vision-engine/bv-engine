@@ -141,7 +141,7 @@ private:
 
     void                                        SetTime                     ( int h, int m, int s, int hoSec );
 
-    virtual bool                                LoadResource                ( AssetDescConstPtr resDescr ) override;
+    virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;

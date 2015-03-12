@@ -214,7 +214,7 @@ mathematics::RectConstPtr			DefaultFinalizePlugin::GetAABB						( const glm::mat
 
 // *******************************
 //
-bool                                DefaultFinalizePlugin::LoadResource                 ( AssetDescConstPtr resDescr )
+bool                                DefaultFinalizePlugin::LoadResource                 ( AssetDescConstPtr assetDescr )
 {
     return false;
 }

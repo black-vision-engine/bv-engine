@@ -234,7 +234,7 @@ DefaultHeightMapPlugin::~DefaultHeightMapPlugin         ()
 
 // *************************************
 // 
-bool                            DefaultHeightMapPlugin::LoadResource  ( AssetDescConstPtr resDescr )
+bool                            DefaultHeightMapPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
     //Order of texture uploads
     //1. heightmap
@@ -253,15 +253,15 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( AssetDes
 
     assert( curNumTextures < 4 ); //FIXME: Second one may be added by a mask
 
-	auto txResDescr = QueryTypedDesc< TextureAssetDescConstPtr >( resDescr );
+	auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( assetDescr );
 
-    if ( txResDescr == nullptr )
+    if ( txAssetDescr == nullptr )
     {
         return false;
     }
 
     //FIXME: use some better API to handle resources in general and textures in this specific case
-    auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr, textureNames[ curNumTextures ] );
+    auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, textureNames[ curNumTextures ] );
 
     if( txDesc != nullptr )
     {

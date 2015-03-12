@@ -62,7 +62,7 @@ public:
     virtual IPluginConstPtr                     GetPrevPlugin               () const override;
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
 
-    virtual bool                                LoadResource                ( AssetDescConstPtr resDescr );
+    virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr );
 
 	virtual ParamTransformVecPtr				GetParamTransform			() const override { return nullptr; }
 
@@ -269,7 +269,7 @@ mathematics::RectConstPtr			BasePlugin< Iface >::GetAABB						( const glm::mat4 
 // *******************************
 //
 template< class Iface >
-bool                                BasePlugin< Iface >::LoadResource                   ( AssetDescConstPtr resDescr )
+bool                                BasePlugin< Iface >::LoadResource                   ( AssetDescConstPtr assetDescr )
 {
     return false;
 }

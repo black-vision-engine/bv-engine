@@ -185,18 +185,18 @@ DefaultTexturePlugin::~DefaultTexturePlugin         ()
 
 // *************************************
 // 
-bool                            DefaultTexturePlugin::LoadResource  ( AssetDescConstPtr resDescr )
+bool                            DefaultTexturePlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
-	auto txResDescr = QueryTypedDesc< TextureAssetDescConstPtr >( resDescr );
+	auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( assetDescr );
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
-    if ( txResDescr != nullptr )
+    if ( txAssetDescr != nullptr )
     {
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() <= 2 ); //FIXME: Second one may be added by a mask
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr, DefaultTexturePluginDesc::TextureName() );
+        auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultTexturePluginDesc::TextureName() );
         txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
 
         if( txDesc != nullptr )

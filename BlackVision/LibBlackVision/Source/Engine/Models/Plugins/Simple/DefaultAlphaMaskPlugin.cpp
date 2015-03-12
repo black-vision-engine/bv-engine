@@ -270,18 +270,18 @@ DefaultAlphaMaskPlugin::~DefaultAlphaMaskPlugin         ()
 
 // *************************************
 // 
-bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescConstPtr resDescr )
+bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
-	auto txResDescr = QueryTypedDesc< TextureAssetDescConstPtr >( resDescr );
+	auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( assetDescr );
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
-    if ( txResDescr != nullptr )
+    if ( txAssetDescr != nullptr )
     {
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() <= 2 );
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr, DefaultAlphaMaskPluginDesc::TextureName() );
+        auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultAlphaMaskPluginDesc::TextureName() );
 
         //Alpha texture defaults
         txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );

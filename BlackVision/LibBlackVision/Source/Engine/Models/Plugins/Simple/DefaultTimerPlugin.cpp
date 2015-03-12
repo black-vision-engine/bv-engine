@@ -323,17 +323,17 @@ void DefaultTimerPlugin::InitAttributesChannel( IPluginPtr prev )
 
 // *************************************
 // 
-bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr resDescr )
+bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
-	auto txResDescr = QueryTypedDesc< FontAssetDescConstPtr >( resDescr );
+	auto txAssetDescr = QueryTypedDesc< FontAssetDescConstPtr >( assetDescr );
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
-    if ( txResDescr != nullptr )
+    if ( txAssetDescr != nullptr )
     {
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() <= 1 );
 
-		auto fontResource = TextHelper::LoadFont( txResDescr->GetFontFileName(), txResDescr->GetFontSize(), txResDescr->GetBlurSize(), txResDescr->GetOutlineSize() );
+		auto fontResource = TextHelper::LoadFont( txAssetDescr->GetFontFileName(), txAssetDescr->GetFontSize(), txAssetDescr->GetBlurSize(), txAssetDescr->GetOutlineSize() );
 
         m_textAtlas = TextHelper::GetAtlas( fontResource );
 

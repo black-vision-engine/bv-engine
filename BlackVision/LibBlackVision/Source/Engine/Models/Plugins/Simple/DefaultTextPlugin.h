@@ -82,7 +82,7 @@ private:
 
 	void										LoadAtlas					( const std::string &, UInt32, UInt32, UInt32 );
 
-    virtual bool                                LoadResource                ( AssetDescConstPtr resDescr ) override;
+    virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;

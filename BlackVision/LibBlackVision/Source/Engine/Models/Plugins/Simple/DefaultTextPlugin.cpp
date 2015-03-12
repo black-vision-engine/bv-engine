@@ -274,13 +274,13 @@ void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, UInt32 f
 
 // *************************************
 // 
-bool                            DefaultTextPlugin::LoadResource  ( AssetDescConstPtr resDescr )
+bool                            DefaultTextPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
-	auto txResDescr = QueryTypedDesc< FontAssetDescConstPtr >( resDescr );
+	auto txAssetDescr = QueryTypedDesc< FontAssetDescConstPtr >( assetDescr );
 
-    if ( txResDescr != nullptr )
+    if ( txAssetDescr != nullptr )
     {
-		LoadAtlas( txResDescr->GetFontFileName(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
+		LoadAtlas( txAssetDescr->GetFontFileName(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
 		InitAttributesChannel( m_prevPlugin );
 
 		return true;

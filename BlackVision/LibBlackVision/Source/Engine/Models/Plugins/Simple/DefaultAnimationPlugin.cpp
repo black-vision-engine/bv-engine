@@ -185,18 +185,18 @@ DefaultAnimationPlugin::~DefaultAnimationPlugin         ()
 
 // *************************************
 // 
-bool                            DefaultAnimationPlugin::LoadResource  ( AssetDescConstPtr resDescr )
+bool                            DefaultAnimationPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
-	auto animResDescr = QueryTypedDesc< AnimationAssetDescConstPtr >( resDescr );
+	auto animAssetDescr = QueryTypedDesc< AnimationAssetDescConstPtr >( assetDescr );
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
-    if ( animResDescr != nullptr )
+    if ( animAssetDescr != nullptr )
     {
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetAnimations().size() <= 1 );
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto animDesc = DefaultAnimationDescriptor::LoadAnimation( animResDescr, DefaultAnimationPluginDesc::TextureName() );
+        auto animDesc = DefaultAnimationDescriptor::LoadAnimation( animAssetDescr, DefaultAnimationPluginDesc::TextureName() );
 
         if( animDesc != nullptr )
         {
