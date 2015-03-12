@@ -22,18 +22,18 @@ public:
     virtual ~Asset(){}
 
 	template< typename AssetTypeConstPtr >
-	friend AssetTypeConstPtr  QueryTypedRes( AssetTypeConstPtr res );
+	friend AssetTypeConstPtr  QueryTypedRes( AssetTypeConstPtr asset );
 };
 
 template< typename AssetTypeConstPtr >
-AssetTypeConstPtr  QueryTypedRes( AssetConstPtr res )
+AssetTypeConstPtr  QueryTypedRes( AssetConstPtr asset )
 {
-	if( res->GetUID() != AssetTypeConstPtr::element_type::UID() )
+	if( asset->GetUID() != AssetTypeConstPtr::element_type::UID() )
     {
         return nullptr;
     }
 
-    return std::static_pointer_cast< AssetTypeConstPtr::element_type >( res->QueryThis() );
+    return std::static_pointer_cast< AssetTypeConstPtr::element_type >( asset->QueryThis() );
 }
 
 

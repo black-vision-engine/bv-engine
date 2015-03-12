@@ -3,7 +3,7 @@
 namespace bv
 {
 
-const std::string TextureAsset::uid = "TEXTURE_RESOURCE";
+const std::string TextureAsset::uid = "TEXTURE_ASSET";
 
 // *******************************
 // 

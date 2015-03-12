@@ -5,7 +5,7 @@
 
 namespace bv { namespace model {
 
-const std::string AnimationAssetDesc::uid = "ANIMATION_RESOURCE_DESC";
+const std::string AnimationAssetDesc::uid = "ANIMATION_ASSET_DESC";
 
 // *******************************
 //

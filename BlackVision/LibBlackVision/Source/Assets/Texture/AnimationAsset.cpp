@@ -3,7 +3,7 @@
 namespace bv
 {
 
-const std::string AnimationAsset::uid = "ANIMATION_RESOURCE";
+const std::string AnimationAsset::uid = "ANIMATION_ASSET";
 
 // *******************************
 // 

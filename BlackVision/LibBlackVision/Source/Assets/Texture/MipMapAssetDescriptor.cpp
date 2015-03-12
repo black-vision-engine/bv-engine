@@ -4,7 +4,7 @@
 namespace bv
 {
 
-const std::string MipMapAssetDesc::uid = "MIP_MAP_RESOURCE_DESC";
+const std::string MipMapAssetDesc::uid = "MIP_MAP_ASSET_DESC";
 
 // *******************************
 //

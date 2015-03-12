@@ -3,7 +3,7 @@
 namespace bv
 {
 
-const std::string FontAsset::uid = "FONT_RESOURCE";
+const std::string FontAsset::uid = "FONT_ASSET";
 
 // *******************************
 // 

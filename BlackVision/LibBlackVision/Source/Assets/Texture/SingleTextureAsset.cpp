@@ -5,7 +5,7 @@ namespace bv
 
 // ******************************
 //
-const std::string SingleTextureAsset::uid = "SIMPLE_TEXTURE_RESOURCE";
+const std::string SingleTextureAsset::uid = "SIMPLE_TEXTURE_ASSET";
 
 // ******************************
 //

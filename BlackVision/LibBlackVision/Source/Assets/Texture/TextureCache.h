@@ -10,7 +10,7 @@ namespace bv
 {
 
 // *******************
-// Implements high level cache for texture resources.
+// Implements high level cache for texture assets.
 class TextureCache
 {
 public:

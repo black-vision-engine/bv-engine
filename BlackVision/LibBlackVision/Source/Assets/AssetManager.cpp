@@ -11,10 +11,10 @@ model::AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc ) c
 
 	if( it != m_loaders.end() )
 	{
-		auto res = it->second->LoadAsset( desc );
-		if( res != nullptr )
+		auto asset = it->second->LoadAsset( desc );
+		if( asset != nullptr )
 		{
-			return res;
+			return asset;
 		}
 	}
 
@@ -23,9 +23,9 @@ model::AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc ) c
 
 // ***********************
 //
-bool AssetManager::RegisterLoader( const std::string & resDescUID, model::AssetLoader * loader )
+bool AssetManager::RegisterLoader( const std::string & assetDescUID, model::AssetLoader * loader )
 {
-	auto it = m_loaders.find( resDescUID );
+	auto it = m_loaders.find( assetDescUID );
 
 	if( it != m_loaders.end() )
 	{
@@ -33,16 +33,16 @@ bool AssetManager::RegisterLoader( const std::string & resDescUID, model::AssetL
 	}
 	else
 	{
-		m_loaders[ resDescUID ] = loader;
+		m_loaders[ assetDescUID ] = loader;
 		return true;
 	}
 }
 
 // ***********************
 //
-bool AssetManager::UnregisterLoader( const std::string & resDescUID )
+bool AssetManager::UnregisterLoader( const std::string & assetDescUID )
 {
-	auto it = m_loaders.find( resDescUID );
+	auto it = m_loaders.find( assetDescUID );
 
 	if( it == m_loaders.end() )
 		return false;

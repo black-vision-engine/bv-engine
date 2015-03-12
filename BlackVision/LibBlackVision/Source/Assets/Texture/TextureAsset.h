@@ -11,7 +11,7 @@ class TextureAsset;
 DEFINE_CONST_PTR_TYPE( TextureAsset )
 
 // *******************************
-// Implements texture resource with original image and all its mimmaps.
+// Implements texture asset with original image and all its mimmaps.
 class TextureAsset : public model::Asset, public std::enable_shared_from_this< TextureAsset >
 {
 	static const std::string		uid;

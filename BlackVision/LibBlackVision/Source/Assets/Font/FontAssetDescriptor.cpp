@@ -4,7 +4,7 @@
 namespace bv
 {
 
-const std::string FontAssetDesc::uid = "FONT_RESOURCE_DESC";
+const std::string FontAssetDesc::uid = "FONT_ASSET_DESC";
 
 // ***********************
 //

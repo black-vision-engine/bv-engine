@@ -10,7 +10,7 @@ class AnimationAsset;
 DEFINE_CONST_PTR_TYPE( AnimationAsset )
 
 // *******************************
-// Implements animation resource.
+// Implements animation asset.
 class AnimationAsset : public model::Asset, public std::enable_shared_from_this< AnimationAsset >
 {
 	static const std::string		uid;

@@ -12,9 +12,9 @@ namespace bv { namespace model {
 //
 TextureAssetConstPtr	AnimationLoader::LoadFrame( const TextureAssetDescConstPtr & frameDesc ) const
 {
-    auto res = AssetManager::GetInstance().LoadAsset( frameDesc );
+    auto asset = AssetManager::GetInstance().LoadAsset( frameDesc );
 
-	auto texRes = QueryTypedRes< TextureAssetConstPtr >( res );
+	auto texRes = QueryTypedRes< TextureAssetConstPtr >( asset );
 
     if ( texRes == nullptr )
     {

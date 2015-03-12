@@ -11,7 +11,7 @@ class MipMapAsset;
 DEFINE_CONST_PTR_TYPE(MipMapAsset)
 
 // *******************************
-// Implements resources of mipmaps levels.
+// Implements assets of mipmaps levels.
 class MipMapAsset
 {
 public:

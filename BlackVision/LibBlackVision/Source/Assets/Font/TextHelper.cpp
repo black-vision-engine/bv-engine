@@ -39,10 +39,10 @@ VertexAttributesChannel *   TextHelper::CreateEmptyVACForText()
 namespace
 {
 ///////////////////////////////
-// Helper function for getting proper atlas from font resource.
-TextConstPtr				GetFont( const AssetConstPtr & res )
+// Helper function for getting proper atlas from font asset.
+TextConstPtr				GetFont( const AssetConstPtr & asset )
 {
-	auto fontRes = QueryTypedRes< FontAssetConstPtr >( res );
+	auto fontRes = QueryTypedRes< FontAssetConstPtr >( asset );
     assert( fontRes != nullptr );
 
 	return fontRes->GetText();
@@ -80,9 +80,9 @@ ConnectedComponentPtr         CreateEmptyCC()
 } // anonymous
 
 
-TextAtlasConstPtr				TextHelper::GetAtlas            ( const AssetConstPtr & res )
+TextAtlasConstPtr				TextHelper::GetAtlas            ( const AssetConstPtr & asset )
 {
-    auto f = GetFont( res );
+    auto f = GetFont( asset );
 
 
     if( f )
