@@ -1,4 +1,4 @@
-#include "FontResourceDescriptor.h"
+#include "FontAssetDescriptor.h"
 #include <cassert>
 
 namespace bv

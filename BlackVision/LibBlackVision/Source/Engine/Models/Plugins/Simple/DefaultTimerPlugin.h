@@ -3,8 +3,8 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
-#include "Engine/Models/Resources/Resource.h"
-#include "Engine/Models/Resources/Font/TextAtlas.h"
+#include "Assets/Asset.h"
+#include "Assets/Font/TextAtlas.h"
 
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"

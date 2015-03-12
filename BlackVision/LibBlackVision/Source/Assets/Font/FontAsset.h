@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Engine/Models/Resources/Resource.h"
-#include "Engine/Models/Resources/Font/Text.h"
+#include "Assets/Asset.h"
+#include "Assets/Font/Text.h"
 
 namespace bv
 {

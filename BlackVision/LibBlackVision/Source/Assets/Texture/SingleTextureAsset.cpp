@@ -1,4 +1,4 @@
-#include "SingleTextureResource.h"
+#include "SingleTextureAsset.h"
 
 namespace bv
 {

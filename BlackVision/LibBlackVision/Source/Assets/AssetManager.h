@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ResourceDescriptor.h"
-#include "Engine/Models/Resources/Resource.h"
-#include "Engine/Models/Resources/ResourceLoader.h"
+#include "AssetDescriptor.h"
+#include "Assets/Asset.h"
+#include "Assets/AssetLoader.h"
 
 #include <map>
 

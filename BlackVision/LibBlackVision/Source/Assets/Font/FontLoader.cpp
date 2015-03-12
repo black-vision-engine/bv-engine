@@ -1,7 +1,7 @@
 #include "FontLoader.h"
 #include "Text.h"
-#include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
-#include "Engine/Models/Resources/Font/FontResource.h"
+#include "Assets/Font/FontAssetDescriptor.h"
+#include "Assets/Font/FontAsset.h"
 #include "IO/FileIO.h"
 
 

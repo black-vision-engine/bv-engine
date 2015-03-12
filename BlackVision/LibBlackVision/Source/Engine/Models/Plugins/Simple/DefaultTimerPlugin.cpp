@@ -1,15 +1,15 @@
 #include "DefaultTimerPlugin.h"
 
-#include "Engine/Models/Resources/Font/TextHelper.h"
+#include "Assets/Font/TextHelper.h"
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
-#include "Engine/Models/Resources/Font/FontLoader.h"
-#include "Engine/Models/Resources/Font/Text.h"
-#include "Engine/Models/Resources/Font/Glyph.h"
-#include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
+#include "Assets/Font/FontLoader.h"
+#include "Assets/Font/Text.h"
+#include "Assets/Font/Glyph.h"
+#include "Assets/Font/FontAssetDescriptor.h"
 
 #include <algorithm>
 

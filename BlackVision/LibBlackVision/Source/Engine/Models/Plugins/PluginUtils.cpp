@@ -1,8 +1,8 @@
 #include "PluginUtils.h"
 
-#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
-#include "Engine/Models/Resources/Texture/AnimationResourceDescriptor.h"
-#include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
+#include "Assets/Texture/TextureAssetDescriptor.h"
+#include "Assets/Texture/AnimationAssetDescriptor.h"
+#include "Assets/Font/FontAssetDescriptor.h"
 
 namespace bv { namespace model {
 

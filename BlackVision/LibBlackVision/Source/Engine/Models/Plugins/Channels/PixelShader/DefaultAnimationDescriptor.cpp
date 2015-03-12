@@ -1,11 +1,9 @@
 #include "DefaultAnimationDescriptor.h"
 
-#include "Engine/Models/Resources/Texture/TextureLoader.h"
-#include "Engine/Models/Resources/Texture/AnimationResource.h"
-#include "Engine/Models/Resources/ResourceManager.h"
+#include "Assets/Texture/TextureLoader.h"
+#include "Assets/Texture/AnimationResource.h"
+#include "Assets/AssetManager.h"
 #include "Engine/Graphics/Resources/Texture.h"
-#include "Engine/Models/Resources/ResourceManager.h"
-
 
 namespace bv { namespace model {
 

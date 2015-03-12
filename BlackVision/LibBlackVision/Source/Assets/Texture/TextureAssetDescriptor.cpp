@@ -1,4 +1,4 @@
-#include "TextureResourceDescriptor.h"
+#include "TextureAssetDescriptor.h"
 #include "LibImage.h"
 #include "Engine/Types/EnumsUtils.h"
 #include <cassert>

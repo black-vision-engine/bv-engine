@@ -1,4 +1,4 @@
-#include "ResourceLoader.h"
+#include "AssetLoader.h"
 
 namespace bv { namespace model {
 

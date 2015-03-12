@@ -10,7 +10,7 @@
 #include "Engine/Interfaces/IUpdatable.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 #include "Engine/Models/Plugins/Interfaces/IPluginParamValModel.h"
-#include "Engine/Models/Resources/ResourceDescriptor.h"
+#include "Assets/AssetDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"

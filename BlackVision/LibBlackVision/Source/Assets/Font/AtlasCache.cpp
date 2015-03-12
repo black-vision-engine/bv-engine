@@ -8,11 +8,11 @@
 
 #include "sqlite3.h"
 
-#include "Engine/Models/Resources/Texture/TextureHelpers.h"
-#include "Engine/Models/Resources/Texture/TextureLoader.h"
-#include "Engine/Models/Resources/Resource.h"
-#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
-#include "Engine/Models/Resources/ResourceManager.h"
+#include "Assets/Texture/TextureHelpers.h"
+#include "Assets/Texture/TextureLoader.h"
+#include "Assets/Asset.h"
+#include "Assets/Texture/TextureAssetDescriptor.h"
+#include "Assets/AssetManager.h"
 
 #pragma warning(push)
 #pragma warning(disable : 4512)

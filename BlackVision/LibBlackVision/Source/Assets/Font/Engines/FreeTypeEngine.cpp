@@ -1,10 +1,10 @@
 #include "FreeTypeEngine.h"
 
-#include "Engine/Models/Resources/Font/Glyph.h"
-#include "Engine/Models/Resources/Font/Text.h"
-#include "Engine/Models/Resources/Font/TextAtlas.h"
+#include "Assets/Font/Glyph.h"
+#include "Assets/Font/Text.h"
+#include "Assets/Font/TextAtlas.h"
 
-#include "Engine/Models/Resources/Texture/TextureHelpers.h"
+#include "Assets/Texture/TextureHelpers.h"
 
 #include "Mathematics/Rect.h"
 

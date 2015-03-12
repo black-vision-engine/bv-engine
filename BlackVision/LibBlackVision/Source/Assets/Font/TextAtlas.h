@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/Resources/Texture/TextureResource.h"
+#include "Assets/Texture/TextureAsset.h"
 #include "CoreDEF.h"
 
 #include <string>

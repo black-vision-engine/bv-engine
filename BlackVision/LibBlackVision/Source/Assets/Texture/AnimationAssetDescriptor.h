@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Engine/Models/Resources/ResourceDescriptor.h"
-#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
+#include "Assets/AssetDescriptor.h"
+#include "Assets/Texture/TextureAssetDescriptor.h"
 
 namespace bv { namespace model {
 

@@ -1,4 +1,4 @@
-#include "AnimationResourceDescriptor.h"
+#include "AnimationAssetDescriptor.h"
 
 #include "IO/DirIO.h"
 

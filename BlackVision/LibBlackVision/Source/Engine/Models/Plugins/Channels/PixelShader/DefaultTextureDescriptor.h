@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Engine/Models/Interfaces/ITextureDescriptor.h"
-#include "Engine/Models/Resources/Texture/TextureResource.h"
-#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
+#include "Assets/Texture/TextureAsset.h"
+#include "Assets/Texture/TextureAssetDescriptor.h"
 
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureParams.h"
 

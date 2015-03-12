@@ -1,4 +1,4 @@
-#include "SingleTextureResourceDescriptor.h"
+#include "SingleTextureAssetDescriptor.h"
 
 namespace bv
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Engine/Models/Resources/ResourceDescriptor.h"
-#include "MipMapResourceDescriptor.h"
+#include "Assets/AssetDescriptor.h"
+#include "MipMapAssetDescriptor.h"
 
 #include "CoreDEF.h"
 

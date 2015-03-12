@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ResourceDescriptor.h"
-#include "Resource.h"
+#include "AssetDescriptor.h"
+#include "Asset.h"
 
 namespace bv { namespace model {
 

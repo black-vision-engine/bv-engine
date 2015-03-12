@@ -1,8 +1,8 @@
 #pragma once
 
-#include "SingleTextureResource.h"
-#include "MipMapResource.h"
-#include "Engine/Models/Resources/Resource.h"
+#include "SingleTextureAsset.h"
+#include "MipMapAsset.h"
+#include "Assets/Asset.h"
 
 namespace bv
 {

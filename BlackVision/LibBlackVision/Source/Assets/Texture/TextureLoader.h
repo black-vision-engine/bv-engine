@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Engine/Models/Resources/ResourceLoader.h"
-#include "Engine/Models/Resources/Texture/SingleTextureResourceDescriptor.h"
-#include "Engine/Models/Resources/Texture/SingleTextureResource.h"
+#include "Assets/AssetLoader.h"
+#include "Assets/Texture/SingleTextureAssetDescriptor.h"
+#include "Assets/Texture/SingleTextureAsset.h"
 
 #include "Engine/Types/Enums.h"
 #include "Memory/MemoryChunk.h"

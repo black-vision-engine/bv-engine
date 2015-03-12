@@ -1,4 +1,4 @@
-#include "MipMapResourceDescriptor.h"
+#include "MipMapAssetDescriptor.h"
 #include "Tools/MipMapBuilder/Source/MipMapBuilder.h"
 
 namespace bv

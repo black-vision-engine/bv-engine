@@ -1,4 +1,4 @@
-#include "ResourceDescriptor.h"
+#include "AssetDescriptor.h"
 
 #include <cassert>
 

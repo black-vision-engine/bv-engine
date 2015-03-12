@@ -1,6 +1,6 @@
 #include "TextureCache.h"
 
-#include "Engine/Models/Resources/Cache/RawDataCache.h"
+#include "Assets/Cache/RawDataCache.h"
 
 #include <sstream>
 #include <cassert>

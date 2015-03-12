@@ -7,7 +7,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
-#include "Engine/Models/Resources/Texture/AnimationResourceDescriptor.h"
+#include "Assets/Texture/AnimationAssetDescriptor.h"
 
 
 namespace bv { namespace model {

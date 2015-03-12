@@ -4,7 +4,7 @@
 #include "Memory/MemoryChunk.h"
 #include "CoreDEF.h"
 
-#include "Engine/Models/Resources/Resource.h"
+#include "Assets/Asset.h"
 
 #include <string>
 

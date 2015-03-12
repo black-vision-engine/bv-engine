@@ -1,8 +1,8 @@
 #include "AnimationLoader.h"
 
-#include "Engine/Models/Resources/Texture/AnimationResourceDescriptor.h"
-#include "Engine/Models/Resources/Texture/TextureResource.h"
-#include "Engine/Models/Resources/ResourceManager.h"
+#include "Assets/Texture/AnimationAssetDescriptor.h"
+#include "Assets/Texture/TextureAsset.h"
+#include "Assets/AssetManager.h"
 
 #include <cassert>
 

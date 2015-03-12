@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include "Engine/Models/Resources/Font/IFontEngine.h"
-#include "Engine/Models/Resources/Font/Text.h"
+#include "Assets/Font/IFontEngine.h"
+#include "Assets/Font/Text.h"
 
 #include "CoreDEF.h"
 #include <string>

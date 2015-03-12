@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SingleTextureResource.h"
+#include "SingleTextureAsset.h"
 
 #include <vector>
 

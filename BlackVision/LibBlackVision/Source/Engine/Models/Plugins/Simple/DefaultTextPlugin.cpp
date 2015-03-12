@@ -10,9 +10,9 @@
 
 #include "Mathematics/Transform/MatTransform.h"
 
-#include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
-#include "Engine/Models/Resources/Font/FontLoader.h"
-#include "Engine/Models/Resources/Font/Text.h"
+#include "Assets/Font/FontAssetDescriptor.h"
+#include "Assets/Font/FontLoader.h"
+#include "Assets/Font/Text.h"
 
 #include "Engine/Events/Events.h"
 #include "Engine/Events/Interfaces/IEventManager.h"

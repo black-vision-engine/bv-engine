@@ -1,12 +1,12 @@
 #include "TextureLoader.h"
 #include "TextureHelpers.h"
 
-#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
-#include "Engine/Models/Resources/Texture/SingleTextureResource.h"
-#include "Engine/Models/Resources/Texture/TextureResource.h"
-#include "Engine/Models/Resources/Texture/TextureCache.h"
+#include "Assets/Texture/TextureAssetDescriptor.h"
+#include "Assets/Texture/SingleTextureAsset.h"
+#include "Assets/Texture/TextureAsset.h"
+#include "Assets/Texture/TextureCache.h"
 #include "Tools/MipMapBuilder/Source/MipMapBuilder.h"
-#include "Engine/Models/Resources/Cache/RawDataCache.h"
+#include "Assets/Cache/RawDataCache.h"
 
 #include <cassert>
 

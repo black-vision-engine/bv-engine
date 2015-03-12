@@ -1,11 +1,11 @@
 #include "TextHelper.h"
 #include "TextAtlas.h"
 
-#include "Engine/Models/Resources/Font/FontResourceDescriptor.h"
-#include "Engine/Models/Resources/Font/FontResource.h"
-#include "Engine/Models/Resources/Font/FontLoader.h"
-#include "Engine/Models/Resources/Font/Glyph.h"
-#include "Engine/Models/Resources/ResourceManager.h"
+#include "Assets/Font/FontAssetDescriptor.h"
+#include "Assets/Font/FontAsset.h"
+#include "Assets/Font/FontLoader.h"
+#include "Assets/Font/Glyph.h"
+#include "Assets/AssetManager.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"

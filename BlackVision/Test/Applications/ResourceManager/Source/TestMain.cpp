@@ -1,7 +1,7 @@
-#include "Engine/Models/Resources/ResourceManager.h"
-#include "Engine/Models/Resources/Texture/TextureLoader.h"
-#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
-#include "Engine/Models/Resources/Texture/TextureResource.h"
+#include "Assets/AssetManager.h"
+#include "Assets/Texture/TextureLoader.h"
+#include "Assets/Texture/TextureAssetDescriptor.h"
+#include "Assets/Texture/TextureAsset.h"
 #include "Engine/Types/EnumsUtils.h"
 #include "DataTypes/Hash.h"
 

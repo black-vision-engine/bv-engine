@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Engine/Models/Resources/ResourceDescriptor.h"
-#include "Engine/Models/Resources/Texture/SingleTextureResourceDescriptor.h"
+#include "Assets/AssetDescriptor.h"
+#include "Assets/Texture/SingleTextureAssetDescriptor.h"
 #include "Engine/Types/Enums.h"
 
 #include "CoreDEF.h"

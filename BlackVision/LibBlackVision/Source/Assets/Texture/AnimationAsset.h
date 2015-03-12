@@ -1,7 +1,7 @@
 #pragma once
 
-#include "TextureResource.h"
-#include "Engine/Models/Resources/Resource.h"
+#include "TextureAsset.h"
+#include "Assets/Asset.h"
 
 namespace bv
 {

@@ -6,9 +6,9 @@
 
 #include "Prototypes/Engine/Common/ScenePrototype.h"
 
-#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
-#include "Engine/Models/Resources/Texture/TextureLoader.h"
-#include "Engine/Models/Resources/ResourceManager.h"
+#include "Assets/Texture/TextureAssetDescriptor.h"
+#include "Assets/Texture/TextureLoader.h"
+#include "Assets/AssetManager.h"
 
 
 namespace bv {

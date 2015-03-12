@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/Resources/ResourceDescriptor.h"
+#include "Assets/AssetDescriptor.h"
 #include "Engine/Types/Enums.h"
 
 #include "CoreDEF.h"

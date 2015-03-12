@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Engine/Models/Resources/ResourceLoader.h"
-#include "Engine/Models/Resources/Texture/AnimationResource.h"
-#include "Engine/Models/Resources/Texture/AnimationResourceDescriptor.h"
-#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
+#include "Assets/AssetLoader.h"
+#include "Assets/Texture/AnimationResource.h"
+#include "Assets/Texture/AnimationAssetDescriptor.h"
+#include "Assets/Texture/TextureAssetDescriptor.h"
 
 namespace bv { namespace model {
 

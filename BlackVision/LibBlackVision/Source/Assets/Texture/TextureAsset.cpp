@@ -1,4 +1,4 @@
-#include "TextureResource.h"
+#include "TextureAsset.h"
 
 namespace bv
 {

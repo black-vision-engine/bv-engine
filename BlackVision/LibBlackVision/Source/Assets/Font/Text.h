@@ -1,8 +1,8 @@
 #pragma once
 
 #include "TextAtlas.h"
-#include "Engine/Models/Resources/Resource.h"
-#include "Engine/Models/Resources/Font/IFontEngine.h"
+#include "Assets/Asset.h"
+#include "Assets/Font/IFontEngine.h"
 
 #include <string>
 #include <map>

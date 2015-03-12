@@ -8,7 +8,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
-#include "Engine/Models/Resources/Texture/TextureResourceDescriptor.h"
+#include "Assets/Texture/TextureAssetDescriptor.h"
 
 
 namespace bv { namespace model {

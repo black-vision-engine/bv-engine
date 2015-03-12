@@ -3,9 +3,9 @@
 #include <vector>
 
 #include "Engine/Models/Interfaces/IAnimationDescriptor.h"
-#include "Engine/Models/Resources/Resource.h"
-#include "Engine/Models/Resources/Texture/AnimationResourceDescriptor.h"
-#include "Engine/Models/Resources/Texture/TextureResource.h"
+#include "Assets/Asset.h"
+#include "Assets/Texture/AnimationAssetDescriptor.h"
+#include "Assets/Texture/TextureAsset.h"
 
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureParams.h"
 

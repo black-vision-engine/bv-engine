@@ -1,4 +1,4 @@
-#include "MipMapResource.h"
+#include "MipMapAsset.h"
 
 namespace bv
 {

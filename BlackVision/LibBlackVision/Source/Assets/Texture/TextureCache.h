@@ -1,8 +1,8 @@
 #pragma once
 
-#include "TextureResource.h"
-#include "SingleTextureResourceDescriptor.h"
-#include "TextureResourceDescriptor.h"
+#include "TextureAsset.h"
+#include "SingleTextureAssetDescriptor.h"
+#include "TextureAssetDescriptor.h"
 
 #include <map>
 

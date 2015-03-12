@@ -1,4 +1,4 @@
-#include "FontResource.h"
+#include "FontAsset.h"
 
 namespace bv
 {

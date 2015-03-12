@@ -21,9 +21,9 @@
 #include "Glyph.h"
 #include "AtlasCache.h"
 #include "IO/FileIO.h"
-#include "Engine/Models/Resources/Texture/TextureHelpers.h"
-#include "Engine/Models/Resources/Texture/TextureLoader.h"
-#include "Engine/Models/Resources/Font/Engines/FreeTypeEngine.h"
+#include "Assets/Texture/TextureHelpers.h"
+#include "Assets/Texture/TextureLoader.h"
+#include "Assets/Font/Engines/FreeTypeEngine.h"
 
 
 namespace bv { namespace model {
