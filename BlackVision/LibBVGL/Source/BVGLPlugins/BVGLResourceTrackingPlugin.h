@@ -3,7 +3,7 @@
 #include "BVGLPlugin.h"
 
 #include <hash_map>
-
+#include <cassert>
 
 namespace bv {
 
@@ -16,8 +16,36 @@ struct BufferDesc
     BufferDesc()
         : size( 0 )
         , usage( 0 )
-        , data( 0 )
+        , data( nullptr )
     {
+    }
+};
+
+struct TextureDesc
+{
+    GLsizei width;
+    GLsizei height;
+    GLenum format;
+    const GLvoid * pixels;
+
+    TextureDesc()
+        : width( 0 )
+        , height( 0 )
+        , format( 0 )
+        , pixels( nullptr )
+    {
+    }
+
+    GLuint DataSize()
+    {
+        return width * height * PixelSize( format );
+    }
+
+    GLuint PixelSize( GLenum format )
+    {
+        assert( format == GL_RGBA || format == GL_BGRA );
+
+        return 4;
     }
 };
 
@@ -28,8 +56,11 @@ class BVGLResourceTrackingPlugin : public BVGLPlugin
 
 private:
 
-    std::hash_map< GLuint, BufferDesc > m_allocatedBuffers;
-    std::hash_map< GLenum, GLuint >     m_boundBuffers;
+    std::hash_map< GLuint, BufferDesc >     m_allocatedBuffers;
+    std::hash_map< GLenum, GLuint >         m_boundBuffers;
+
+    std::hash_map< GLuint, TextureDesc >    m_allocatedTextures;
+    std::hash_map< GLuint, GLint >          m_boundTextures;
 
 public:
 
@@ -41,15 +72,26 @@ public:
     virtual void		BindBuffer                  ( GLenum target, GLuint buffer ) override;
     virtual void		BufferData                  ( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage ) override;
     
-	virtual void		PrintStats                  () override;
+    virtual void        GenTextures                 ( GLsizei n, GLuint * textures ) override;
+    virtual void        DeleteTextures              ( GLsizei n, const GLuint * textures );
+    virtual void        TexImage2D					( GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid * pixels ) override;
+    virtual void        ActiveTexture				( GLenum texture ) override;
+    virtual void        TexSubImage2D				( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid * pixels ) override;
+    virtual void        BindTexture					( GLenum target, GLuint texture ) override;
+
+    virtual void        GenRenderbuffers            ( GLsizei n, GLuint * renderbuffers );
+    virtual void        DeleteRenderbuffers         ( GLsizei n, const GLuint * renderbuffers );
+
+    virtual void		PrintStats                  ( const std::string & message ) override;
 
 private:
 
     void                PrintBuffersStats           ();
+    void                PrintTextureStats           ();
+
+    std::string         FormatSize                  ( GLuint numBytes );
 
 /*
-    static void                 bvglGenTextures             ( GLsizei n, GLuint * textures );
-    static void                 bvglDeleteTextures          ( GLsizei n, const GLuint * textures );
 
     static void                 bvglGenFramebuffers         ( GLsizei n, GLuint * framebuffers );
     static void                 bvglDeleteFramebuffers      ( GLsizei n, const GLuint * framebuffers );

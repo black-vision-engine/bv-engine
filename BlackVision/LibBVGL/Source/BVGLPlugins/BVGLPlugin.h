@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <cstddef>
 
 // FIXME: remove later. Some temporary defines for the time of transition - to make sure that there is no explicit glew.h dependency
@@ -136,7 +137,7 @@ public:
 
     virtual void                VertexAttribPointer			( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
 
-	virtual void				PrintStats					();
+	virtual void				PrintStats					( const std::string & message );
 
 };
 
