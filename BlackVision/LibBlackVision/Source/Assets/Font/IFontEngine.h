@@ -4,7 +4,7 @@
 #include "CoreDEF.h"
 #include <string>
 
-namespace bv { namespace model {
+namespace bv { 
 
 class IFontEngine
 {
@@ -17,4 +17,3 @@ DEFINE_CONST_PTR_TYPE(IFontEngine)
 DEFINE_PTR_TYPE(IFontEngine)
 
 } // bv
-} // model

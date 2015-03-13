@@ -7,7 +7,7 @@
 #include <string>
 #include <map>
 
-namespace bv { namespace model {
+namespace bv { 
 
 
 struct Glyph;
@@ -46,5 +46,4 @@ public:
 											, UInt32 outlineSize );
 };
 
-} // model
 } // bv

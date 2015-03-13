@@ -6,7 +6,7 @@
 
 #include <cassert>
 
-namespace bv { namespace model {
+namespace bv {
 
 // *******************************
 //
@@ -57,5 +57,4 @@ AssetConstPtr AnimationLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 	return AnimationAsset::Create( framesAssets );
 }
 
-} // model
 } // bv

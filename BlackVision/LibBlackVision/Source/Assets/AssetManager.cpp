@@ -5,7 +5,7 @@ namespace bv
 
 // ***********************
 //
-model::AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc ) const
+AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc ) const
 {
 	auto it = m_loaders.find( desc->GetUID() );
 
@@ -23,7 +23,7 @@ model::AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc ) c
 
 // ***********************
 //
-bool AssetManager::RegisterLoader( const std::string & assetDescUID, model::AssetLoader * loader )
+bool AssetManager::RegisterLoader( const std::string & assetDescUID, AssetLoader * loader )
 {
 	auto it = m_loaders.find( assetDescUID );
 

@@ -3,7 +3,7 @@
 #include <string>
 #include "Memory/MemoryChunk.h"
 
-namespace bv { namespace model {
+namespace bv { 
 
 class TextureHelper
 {
@@ -17,5 +17,4 @@ public:
     static MemoryChunkConstPtr  Blur    ( MemoryChunkConstPtr data, unsigned int width, unsigned int height, unsigned int bpp, unsigned int blurSize );
 };
 
-} // model
 } // bv

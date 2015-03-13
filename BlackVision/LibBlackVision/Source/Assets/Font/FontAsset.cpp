@@ -7,21 +7,21 @@ const std::string FontAsset::uid = "FONT_ASSET";
 
 // *******************************
 // 
-model::TextConstPtr FontAsset::GetText() const
+TextConstPtr FontAsset::GetText() const
 {
 	return m_text;
 }
 
 // *******************************
 // 
-FontAssetConstPtr FontAsset::Create( const model::TextConstPtr & text )
+FontAssetConstPtr FontAsset::Create( const TextConstPtr & text )
 {
 	return std::make_shared< FontAsset >( text );
 }
 
 // *******************************
 // 
-FontAsset::FontAsset( const model::TextConstPtr & text )
+FontAsset::FontAsset( const TextConstPtr & text )
 	: m_text( text )
 {}
 

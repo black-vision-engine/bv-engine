@@ -19,7 +19,7 @@
 #include <vector>
 #include <map>
 
-namespace bv { namespace model {
+namespace bv { 
 
 struct GlyphDataInfo
 {
@@ -426,7 +426,6 @@ TextAtlasConstPtr FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstrin
 }
 
 } // bv
-} // model
 
 namespace {
 //#define MAKE_FREETYPE_TESTING_TEXT

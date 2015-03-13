@@ -14,7 +14,11 @@
 #include <map>
 
 
-namespace bv { namespace model {
+namespace bv {
+
+struct Glyph;
+
+namespace model {
 
 // ***************************** DESCRIPTOR **********************************
 class DefaultTimerPluginDesc : public BasePluginDescriptor
@@ -40,7 +44,6 @@ class Resource;
 class FontExtraData;
 class TextAtlas;
 class Text;
-struct Glyph;
 
 struct TimeValue
 {

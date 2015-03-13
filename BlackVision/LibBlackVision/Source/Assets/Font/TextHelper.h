@@ -3,10 +3,10 @@
 #include "Assets/Font/FontAsset.h"
 #include "Assets/Font/FontAssetDescriptor.h"
 #include "Assets/Font/Text.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h" // FIXME: Asset shouldn't depend on model
 #include "Mathematics/Rect.h"
 
-namespace bv { namespace model {
+namespace bv { 
 
 class TextAtlas;
 
@@ -32,13 +32,12 @@ public:
 
     /////////////////////////////////////
     // This function creates empty VertexAttributeChannel for text with proper attribute descriptor. ( position, texture cord )
-    static VertexAttributesChannel*     CreateEmptyVACForText   ();
+    static model::VertexAttributesChannel * CreateEmptyVACForText   ();
 
     /////////////////////////////////////
     // This function builds VertexAttributeChannel for text and fontAsset.
-    static float                        BuildVACForText     ( VertexAttributesChannel* vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, bool useKerning = true );
+    static float                        BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, bool useKerning = true );
 };
 
 
-} // model
 } // bv

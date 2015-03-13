@@ -10,7 +10,7 @@
 
 #include <cassert>
 
-namespace bv { namespace model {
+namespace bv {
 
 // ******************************
 //
@@ -169,5 +169,4 @@ MemoryChunkConstPtr TextureLoader::LoadImage( const std::string & path )
 	return data;
 }
 
-} // model
 } // bv

@@ -11,7 +11,7 @@ DEFINE_CONST_PTR_TYPE( FontAsset )
 
 // *******************************
 // Implements font asset with full size atlas and all its mimmaps.
-class FontAsset : public model::Asset, public std::enable_shared_from_this< FontAsset >
+class FontAsset : public Asset, public std::enable_shared_from_this< FontAsset >
 {
 	static const std::string		uid;
 
@@ -22,11 +22,11 @@ public:
 
 	// *******************************
 	// Returns testure asset with atlas and mipmaps.
-	model::TextConstPtr				GetText			() const;
+	TextConstPtr					GetText			() const;
 
-	static FontAssetConstPtr		Create			( const model::TextConstPtr & textAtlas );
+	static FontAssetConstPtr		Create			( const TextConstPtr & textAtlas );
 
-	explicit						FontAsset	( const model::TextConstPtr & textAtlas );
+	explicit						FontAsset		( const TextConstPtr & textAtlas );
 	
 	virtual const std::string &		GetUID			() const override;
 
@@ -34,7 +34,7 @@ public:
 
 private:
 
-	model::TextConstPtr				m_text;
+	TextConstPtr					m_text;
 };
 
 } // bv

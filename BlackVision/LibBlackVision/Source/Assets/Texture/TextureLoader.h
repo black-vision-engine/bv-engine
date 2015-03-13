@@ -9,7 +9,7 @@
 
 #include <string>
 
-namespace bv { namespace model {
+namespace bv {
 
 class TextureLoader : public AssetLoader
 {
@@ -25,6 +25,4 @@ private:
 	static SingleTextureAssetConstPtr	LoadSingleTexture	( const SingleTextureAssetDescConstPtr & sinlgeTextureResDesc, bool loadFromCache = true );
 };
 
-
-} // model
 } // bv

@@ -26,7 +26,7 @@
 #include "Assets/Font/Engines/FreeTypeEngine.h"
 
 
-namespace bv { namespace model {
+namespace bv { 
 
 // *********************************
 //
@@ -209,5 +209,4 @@ TextureAssetConstPtr	TextAtlas::GetAsset() const
 	return m_textureAsset;
 }
 
-} // model
 } // bv

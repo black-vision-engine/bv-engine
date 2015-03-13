@@ -2,7 +2,7 @@
 
 #include "CoreDEF.h"
 
-namespace bv { namespace model {
+namespace bv {
 
 struct Glyph
 {
@@ -26,5 +26,4 @@ struct Glyph
 
 };
 
-} // model
 } // bv

@@ -3,7 +3,7 @@
 #include "IO/DirIO.h"
 
 
-namespace bv { namespace model {
+namespace bv {
 
 const std::string AnimationAssetDesc::uid = "ANIMATION_ASSET_DESC";
 
@@ -72,5 +72,4 @@ const std::string &	AnimationAssetDesc::UID()
 	return AnimationAssetDesc::uid;
 }
 
-} //model
 } //bv

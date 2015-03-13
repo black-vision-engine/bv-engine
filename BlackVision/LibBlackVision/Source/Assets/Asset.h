@@ -4,8 +4,7 @@
 #include "CoreDEF.h"
 #include "Memory/MemoryChunk.h"
 
-namespace bv { namespace model
-{
+namespace bv {
 
 class Asset;
 DEFINE_CONST_PTR_TYPE( Asset )
@@ -36,6 +35,4 @@ AssetTypeConstPtr  QueryTypedRes( AssetConstPtr asset )
     return std::static_pointer_cast< AssetTypeConstPtr::element_type >( asset->QueryThis() );
 }
 
-
-} // model
 } // bv

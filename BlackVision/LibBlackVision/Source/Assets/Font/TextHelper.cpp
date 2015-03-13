@@ -13,7 +13,7 @@
 
 #include <assert.h>
 
-namespace bv { namespace model {
+namespace bv {
 
 ///////////////////////////////
 //
@@ -26,14 +26,14 @@ FontAssetConstPtr      TextHelper::LoadFont( const std::string & fontFileName, U
 
 // *********************************
 //
-VertexAttributesChannel *   TextHelper::CreateEmptyVACForText()
+model::VertexAttributesChannel *   TextHelper::CreateEmptyVACForText()
 {
-    VertexAttributesChannelDescriptor vacDesc;
+    model::VertexAttributesChannelDescriptor vacDesc;
 
     vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
     vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-    return new VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, vacDesc);
+    return new model::VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, vacDesc);
 }
 
 namespace
@@ -48,22 +48,22 @@ TextConstPtr				GetFont( const AssetConstPtr & asset )
 	return fontRes->GetText();
 }
 
-ConnectedComponentPtr         CreateEmptyCC()
+model::ConnectedComponentPtr         CreateEmptyCC()
 {
-    ConnectedComponentPtr connComp = ConnectedComponent::Create();
+    model::ConnectedComponentPtr connComp = model::ConnectedComponent::Create();
 
-    AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+    model::AttributeChannelDescriptor * desc = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
 
-    auto posAttribChannel = new Float3AttributeChannel( desc, "vertexPosition", true );
+    auto posAttribChannel = new model::Float3AttributeChannel( desc, "vertexPosition", true );
 
     posAttribChannel->AddAttribute( glm::vec3() );
     posAttribChannel->AddAttribute( glm::vec3() );
     posAttribChannel->AddAttribute( glm::vec3() );
     posAttribChannel->AddAttribute( glm::vec3() );
 
-    connComp->AddAttributeChannel( AttributeChannelPtr( posAttribChannel ) );
+    connComp->AddAttributeChannel( model::AttributeChannelPtr( posAttribChannel ) );
 
-    AttributeChannelDescriptor * desc1 = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    model::AttributeChannelDescriptor * desc1 = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
     auto verTex0AttrChannel = new model::Float2AttributeChannel( desc1, "textAtlasPosition", true );
 
@@ -72,7 +72,7 @@ ConnectedComponentPtr         CreateEmptyCC()
     verTex0AttrChannel->AddAttribute( glm::vec2() );
     verTex0AttrChannel->AddAttribute( glm::vec2() );
 
-    connComp->AddAttributeChannel( AttributeChannelPtr( verTex0AttrChannel ) );
+    connComp->AddAttributeChannel( model::AttributeChannelPtr( verTex0AttrChannel ) );
 
     return connComp;
 }
@@ -100,7 +100,7 @@ TextAtlasConstPtr				TextHelper::GetAtlas            ( const AssetConstPtr & ass
 
 // *********************************
 //
-float                    TextHelper::BuildVACForText     ( VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, bool useKerning )
+float                    TextHelper::BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, bool useKerning )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
@@ -146,11 +146,11 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
 		// auto glyphH = textAtlas->GetGlyph( wch, outline )->height;
         // auto glyphW = textAtlas->GetGlyph( wch, outline )->width;
 
-        ConnectedComponentPtr connComp = ConnectedComponent::Create();
+        model::ConnectedComponentPtr connComp = model::ConnectedComponent::Create();
 
-        AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+        model::AttributeChannelDescriptor * desc = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
 
-        auto posAttribChannel = new Float3AttributeChannel( desc, "vertexPosition", true );
+        auto posAttribChannel = new model::Float3AttributeChannel( desc, "vertexPosition", true );
 
         if( auto glyph = textAtlas->GetGlyph( wch, outline ) )
         {
@@ -183,9 +183,9 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
             posAttribChannel->AddAttribute( quadTopLeft       + translate + bearing + newLineTranslation );
             posAttribChannel->AddAttribute( quadTopRight      + translate + bearing + newLineTranslation );
 
-            connComp->AddAttributeChannel( AttributeChannelPtr( posAttribChannel ) );
+            connComp->AddAttributeChannel( model::AttributeChannelPtr( posAttribChannel ) );
 
-            AttributeChannelDescriptor * desc1 = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+            model::AttributeChannelDescriptor * desc1 = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
             auto verTex0AttrChannel = new model::Float2AttributeChannel( desc1, "textAtlasPosition", true );
 
@@ -207,7 +207,7 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
             verTex0AttrChannel->AddAttribute( glm::vec2( texLeft, texTop) );
             verTex0AttrChannel->AddAttribute( glm::vec2( texLeft + texWidth, texTop ) );
 
-            connComp->AddAttributeChannel( AttributeChannelPtr( verTex0AttrChannel ) );
+            connComp->AddAttributeChannel( model::AttributeChannelPtr( verTex0AttrChannel ) );
 
             vertexAttributeChannel->AddConnectedComponent( connComp );
 
@@ -238,9 +238,9 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
     {
         for( auto cc : vertexAttributeChannel->GetComponents() )
         {
-            auto& verts = std::static_pointer_cast< Float3AttributeChannel >( cc->GetAttributeChannels()[ 0 ] )->GetVertices();
+            auto & verts = std::static_pointer_cast< model::Float3AttributeChannel >( cc->GetAttributeChannels()[ 0 ] )->GetVertices();
 
-            for ( auto& v : verts )
+            for ( auto & v : verts )
             {
                 v.x += alignmentTranslation;
             }
@@ -257,5 +257,4 @@ float                    TextHelper::BuildVACForText     ( VertexAttributesChann
     return translate.x; // FIXME: This does not work for multiline text
 }
 
-} // model
 } // bv

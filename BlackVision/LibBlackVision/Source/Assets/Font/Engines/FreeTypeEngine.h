@@ -12,7 +12,7 @@
 #include FT_FREETYPE_H
 #include FT_STROKER_H
 
-namespace bv { namespace model {
+namespace bv { 
 
 class TextAtlas;
 class FreeTypeEngine;
@@ -45,4 +45,3 @@ public:
 };
 
 } // bv
-} // model

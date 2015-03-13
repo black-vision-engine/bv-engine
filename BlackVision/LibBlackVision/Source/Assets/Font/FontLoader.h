@@ -5,7 +5,7 @@
 #include "Engine/Types/Enums.h"
 
 
-namespace bv { namespace model {
+namespace bv {
 
 class FontLoader : public AssetLoader
 {
@@ -21,5 +21,4 @@ public:
     virtual ~FontLoader(){}
 };
 
-} // model
 } // bv

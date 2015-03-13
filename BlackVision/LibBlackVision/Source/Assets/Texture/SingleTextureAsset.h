@@ -17,7 +17,7 @@ DEFINE_CONST_PTR_TYPE(SingleTextureAsset)
 
 // ********************************
 // Implements single texture asset. Texture without any mipmaps. Only one chunk of memory.
-class SingleTextureAsset : public model::Asset, public std::enable_shared_from_this< SingleTextureAsset >
+class SingleTextureAsset : public Asset, public std::enable_shared_from_this< SingleTextureAsset >
 {
 private:
 	static const std::string					uid;

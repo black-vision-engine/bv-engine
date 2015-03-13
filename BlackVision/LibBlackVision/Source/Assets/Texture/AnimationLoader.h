@@ -5,7 +5,7 @@
 #include "Assets/Texture/AnimationAssetDescriptor.h"
 #include "Assets/Texture/TextureAssetDescriptor.h"
 
-namespace bv { namespace model {
+namespace bv {
 
 class AnimationLoader : public AssetLoader
 {
@@ -21,6 +21,4 @@ private:
 
 };
 
-
-} // model
 } // bv

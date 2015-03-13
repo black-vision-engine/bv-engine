@@ -11,7 +11,7 @@
 namespace boost { namespace serialization {
 
 template< class Archive >
-void serialize( Archive & ar, bv::model::Glyph & glyph, const unsigned int version )
+void serialize( Archive & ar, bv::Glyph & glyph, const unsigned int version )
 {
     { version; } // FIXME: suppress unused warning
     ar & glyph.textureX;
@@ -30,7 +30,7 @@ void serialize( Archive & ar, bv::model::Glyph & glyph, const unsigned int versi
 }
 
 template< >
-void serialize< boost::archive::text_iarchive >( boost::archive::text_iarchive & ar, bv::model::TextAtlas & textAtlas, const unsigned int version )
+void serialize< boost::archive::text_iarchive >( boost::archive::text_iarchive & ar, bv::TextAtlas & textAtlas, const unsigned int version )
 {
     { version; textAtlas; } // FIXME: suppress unused warning
 
@@ -43,7 +43,7 @@ void serialize< boost::archive::text_iarchive >( boost::archive::text_iarchive &
 }
 
 template< >
-void serialize< boost::archive::text_oarchive >( boost::archive::text_oarchive & ar, bv::model::TextAtlas & textAtlas, const unsigned int version )
+void serialize< boost::archive::text_oarchive >( boost::archive::text_oarchive & ar, bv::TextAtlas & textAtlas, const unsigned int version )
 {
     { version; } // FIXME: suppress unused warning
 

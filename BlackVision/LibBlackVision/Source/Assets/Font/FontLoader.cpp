@@ -8,7 +8,7 @@
 #include <boost/filesystem/convenience.hpp>
 #include <assert.h>
 
-namespace bv { namespace model {
+namespace bv {
 
 ///////////////////////////////
 //
@@ -115,5 +115,4 @@ TextConstPtr		FontLoader::TryLoadFont( const std::string & file, UInt32 size, UI
     }
 }
 
-} // model
 } // bv

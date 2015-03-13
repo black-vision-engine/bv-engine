@@ -3,7 +3,7 @@
 #include "Assets/AssetDescriptor.h"
 #include "Assets/Texture/TextureAssetDescriptor.h"
 
-namespace bv { namespace model {
+namespace bv {
 
 class AnimationAssetDesc;
 DEFINE_PTR_TYPE(AnimationAssetDesc)
@@ -42,7 +42,4 @@ private:
 
 };
 
-
-
-} //model
 } //bv

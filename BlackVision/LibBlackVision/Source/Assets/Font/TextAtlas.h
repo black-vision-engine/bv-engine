@@ -6,7 +6,7 @@
 #include <string>
 #include <map>
 
-namespace bv { namespace model {
+namespace bv {
 
 class Text;
 struct Glyph;
@@ -67,5 +67,4 @@ public:
     void                    Load( std::istream& in );
 };
 
-} // model
 } // bv

@@ -22,7 +22,7 @@
 
 #pragma warning(pop)
 
-namespace bv { namespace model {
+namespace bv { 
 
 // *********************************
 //
@@ -311,5 +311,5 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
     m_dataBase = nullptr;
 }
 
-} // model
+
 } // bv

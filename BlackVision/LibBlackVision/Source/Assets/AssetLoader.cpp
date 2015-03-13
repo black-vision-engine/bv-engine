@@ -1,6 +1,6 @@
 #include "AssetLoader.h"
 
-namespace bv { namespace model {
+namespace bv {
 
 // *********************************
 //
@@ -14,5 +14,4 @@ AssetLoader::~AssetLoader()
 {
 }
 
-} //model
 } //bv

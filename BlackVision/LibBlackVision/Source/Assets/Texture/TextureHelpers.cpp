@@ -5,7 +5,7 @@
 #include "IO/FileIO.h"
 #include "FreeImagePlus.h"
 
-namespace bv { namespace model {
+namespace bv {
 
 // *********************************
 //
@@ -153,5 +153,4 @@ MemoryChunkConstPtr TextureHelper::Blur( MemoryChunkConstPtr data, UInt32 width,
     return std::make_shared< MemoryChunk >( out, numBytes );
 }
 
-} // model
 } // bv

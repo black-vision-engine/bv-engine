@@ -25,7 +25,7 @@
 #include "Assets/Font/Engines/FreeTypeEngine.h"
 
 
-namespace bv { namespace model {
+namespace bv { 
 
 // *********************************
 //
@@ -111,5 +111,4 @@ void Text::BuildAtlas        ()
 #endif // MAKE_FREETYPE_TESTING_TEXT
 }
 
-} // model
 } // bv
