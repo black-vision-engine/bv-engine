@@ -35,10 +35,6 @@ void    MemManagementInspector::Initialize          ()
     BVGL::bvglClearColor( 0.f, 0.f, 0.f, 0.f );
     BVGL::bvglDisable( GL_DEPTH_TEST );
 
-	AssetManager::GetInstance().RegisterLoader( TextureAssetDesc::UID(), new TextureLoader() );
-	// bv::AssetManager::GetInstance().RegisterLoader( bv::FontAssetDesc::UID(), new bv::model::FontLoader() );
-	// bv::AssetManager::GetInstance().RegisterLoader( bv::model::AnimationAssetDesc::UID(), new bv::model::AnimationLoader() );
-
     m_scene = ScenePrototype::CreateNewPrototype( 0, m_renderer );
 }
 

@@ -11,9 +11,11 @@ public:
 
 	virtual AssetConstPtr		LoadAsset        ( const AssetDescConstPtr & desc )  const = 0;
 
-            AssetLoader		();
+            AssetLoader			();
     virtual ~AssetLoader		();
 
 };
+
+DEFINE_CONST_PTR_TYPE( AssetLoader )
 
 } // bv

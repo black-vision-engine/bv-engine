@@ -1568,6 +1568,9 @@
     <ClInclude Include="..\..\..\Source\Assets\Cache\RawDataCache.h">
       <Filter>Assets\Cache</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Assets.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

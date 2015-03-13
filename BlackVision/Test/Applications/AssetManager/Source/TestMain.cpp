@@ -30,11 +30,6 @@ TEST(HashTest, Hash)
 	ASSERT_TRUE( !( h0 == h1 ) );
 }
 
-TEST(LoaderRigistration, AssetManager)
-{
-	ASSERT_TRUE( AssetManager::GetInstance().RegisterLoader( TextureAssetDesc::UID(), new TextureLoader() ) );
-}
-
 TEST(LoadingTextureAndGeneratingMipMaps, AssetManager)
 {
 	auto props = image::GetImageProps( imagePath );

@@ -13,17 +13,19 @@ class AssetManager
 {
 public:
 	AssetConstPtr					LoadAsset		( const AssetDescConstPtr & desc ) const;
-	bool							RegisterLoader	( const std::string & assetDescUID, AssetLoader * loader );
+	bool							RegisterLoader	( const std::string & assetDescUID, const AssetLoaderConstPtr & loader );
 	bool							UnregisterLoader( const std::string & assetDescUID );
 
-	static AssetManager &		GetInstance		();
+	static AssetManager &			GetInstance		();
 
 private:
 
 	explicit						AssetManager();
 									~AssetManager();
 
-	std::map< std::string, AssetLoader * > m_loaders;
+	std::map< std::string, AssetLoaderConstPtr > m_loaders;
+
+	void							RegisterBasicLoaders();
 };
 
 } // bv

@@ -360,6 +360,7 @@
     <ClInclude Include="..\..\..\Source\Assets\AssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\AssetLoader.h" />
     <ClInclude Include="..\..\..\Source\Assets\AssetManager.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Assets.h" />
     <ClInclude Include="..\..\..\Source\Assets\Cache\RawDataCache.h" />
     <ClInclude Include="..\..\..\Source\Assets\Font\AtlasCache.h" />
     <ClInclude Include="..\..\..\Source\Assets\Font\Engines\FreeTypeEngine.h" />

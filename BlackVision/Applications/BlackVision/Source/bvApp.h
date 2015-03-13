@@ -61,7 +61,6 @@ private:
     void            InitializeConsole			();
     void            InitializeAppLogic			();
     void            InitializeSelfState			();
-	void			InitializeResourceLoaders	();
 
     void            PostFrame					( unsigned int millis );
 };

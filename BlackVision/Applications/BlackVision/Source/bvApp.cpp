@@ -108,7 +108,6 @@ bool BlackVisionApp::OnInitialize       ()
     m_processManager = new ProcessManager();
 
     InitializeConsole       ();
-	InitializeResourceLoaders();
     InitializeAppLogic      ();
     InitializeSelfState     ();
 
@@ -172,16 +171,6 @@ void    BlackVisionApp::InitializeSelfState ()
 {
     WindowedApplication::SetClearColor( DefaultConfig.ClearColor() );
 }
-
-// *********************************
-//
-void    BlackVisionApp::InitializeResourceLoaders ()
-{
-    bv::AssetManager::GetInstance().RegisterLoader( bv::TextureAssetDesc::UID(), new bv::TextureLoader() );
-	bv::AssetManager::GetInstance().RegisterLoader( bv::FontAssetDesc::UID(), new bv::FontLoader() );
-	bv::AssetManager::GetInstance().RegisterLoader( bv::AnimationAssetDesc::UID(), new bv::AnimationLoader() );
-}
-
 
 // *********************************
 //

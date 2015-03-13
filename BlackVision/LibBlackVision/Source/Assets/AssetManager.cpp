@@ -1,4 +1,7 @@
 #include "AssetManager.h"
+#include "Assets.h"
+
+#include <memory>
 
 namespace bv
 {
@@ -23,7 +26,7 @@ AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc ) const
 
 // ***********************
 //
-bool AssetManager::RegisterLoader( const std::string & assetDescUID, AssetLoader * loader )
+bool AssetManager::RegisterLoader( const std::string & assetDescUID, const AssetLoaderConstPtr & loader )
 {
 	auto it = m_loaders.find( assetDescUID );
 
@@ -48,9 +51,7 @@ bool AssetManager::UnregisterLoader( const std::string & assetDescUID )
 		return false;
 	else
 	{
-		auto ptr = it->second;
 		m_loaders.erase( it );
-		delete ptr;
 		return true;
 	}
 }
@@ -66,14 +67,22 @@ AssetManager & AssetManager::GetInstance()
 // ***********************
 //
 AssetManager::AssetManager()
-{}
+{
+	RegisterBasicLoaders();
+}
 
 // ***********************
 //
 AssetManager::~AssetManager()
+{}
+
+// ***********************
+//
+void AssetManager::RegisterBasicLoaders()
 {
-	for( auto it : m_loaders )
-		delete it.second;
+	AssetManager::GetInstance().RegisterLoader( TextureAssetDesc::UID(),	std::make_shared< TextureLoader >() );
+	AssetManager::GetInstance().RegisterLoader( FontAssetDesc::UID(),		std::make_shared< FontLoader >() );
+	AssetManager::GetInstance().RegisterLoader( AnimationAssetDesc::UID(),	std::make_shared< AnimationLoader >() );
 }
 
 } // bv
