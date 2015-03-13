@@ -13,7 +13,8 @@ private:
 
     static std::hash_map< GLenum, std::string > ms_bufferUsage;
     static std::hash_map< GLenum, std::string > ms_bufferTarget;
-    static std::hash_map< GLenum, std::string > ms_textureTarget;
+	static std::hash_map< GLenum, std::string > ms_textureTarget;
+	static std::hash_map< GLenum, std::string > ms_textureFormat;
 
     static BVGLTranslator                       ms_instance;
 

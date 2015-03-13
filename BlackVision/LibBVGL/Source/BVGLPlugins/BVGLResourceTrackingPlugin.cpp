@@ -166,7 +166,8 @@ void    BVGLResourceTrackingPlugin::PrintStats                  ( const std::str
     printf( "%s\n", message.c_str() );
 
     PrintBuffersStats();
-    PrintTextureStats();
+    printf("\n");
+	PrintTextureStats();
 }
 
 // *****************************
@@ -193,7 +194,7 @@ void    BVGLResourceTrackingPlugin::PrintBuffersStats           ()
 
         auto siz = FormatSize( (GLuint) bufDesc.size );
 
-        printf( "Buf: %2d, Size: %7s, Usage: %15s", bufId, siz, BVGLTranslator::TranslateBufferUsage( bufDesc.usage ).c_str() );
+        printf( "Buf: %2d, Size: %7s, Usage: %15s", bufId, siz.c_str(), BVGLTranslator::TranslateBufferUsage( bufDesc.usage ).c_str() );
 
         if( target != 0 )
         {
@@ -227,11 +228,11 @@ void        BVGLResourceTrackingPlugin::PrintTextureStats           ()
         }
 
         auto siz = FormatSize( (GLuint) texDesc.DataSize() );
-        printf( "Tex: %2d (%4d, %4d), Size: %7s, Format: %15s", texId, siz.c_str(), BVGLTranslator::TranslateTextureFormat( texDesc.format ).c_str() );
+        printf( "Tex: %2d (%4d, %4d), Size: %7s, Format: %10s", texId, texDesc.width, texDesc.height, siz.c_str(), BVGLTranslator::TranslateTextureFormat( texDesc.format ).c_str() );
 
         if( target != 0 )
         {
-            printf( " BND: %s", BVGLTranslator::TranslateBufferTarget( target ).c_str() );
+            printf( " BND: %s", BVGLTranslator::TranslateTextureTarget( target ).c_str() );
         }
 
         printf( "\n" );
