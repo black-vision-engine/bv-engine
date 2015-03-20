@@ -1,42 +1,15 @@
 #pragma once
 
 #include <vector>
+#include <map>
 
 #include "Engine/Models/Plugins/Interfaces/IParamValModel.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
 #include "Engine/Models/Plugins/Interfaces/IParamValEvaluator.h"
-
+#include "Engine/Models/Plugins/Interfaces/IState.h"
+#include "Engine/Interfaces/IUpdater.h"
 
 namespace bv { namespace model {
-
-//class IStateValue
-//{
-//public:
-//    virtual bool StateChanged() const = 0;
-//};
-//
-//DEFINE_PTR_TYPE(IStateValue)
-//
-//template< typename T >
-//class StateValue : public IStateValue {
-//    T prevVal, curVal;
-//public:
-//    Update( const T& val )
-//    {
-//        prevVal = curVal;
-//        curVal = val;
-//    }
-//    virtual bool StateChanged() const override
-//    {
-//        return prevVal != curVal;
-//    }
-//    const T& GetValue() const
-//    {
-//        return curVal;
-//    }
-//};
-
-
 
 class DefaultParamValModel : public IParamValModel
 {
@@ -47,8 +20,8 @@ private:
     std::vector< IParamValEvaluatorPtr >    m_evaluators;
     std::vector< bv::IValueConstPtr >       m_values;
 
-    //std::vector< IStateValueEvaluatorPtr >  m_SVevaluators;
-    //std::vector< IStateValuePtr >           m_valuePairs;
+    std::vector< IUpdaterPtr >              m_stateUpdaters;
+    std::map< std::string, IStatePtr >      m_states;
 
     std::vector< bv::IValuePtr >            m_valuesNC;
 
@@ -63,9 +36,7 @@ public:
 
     virtual IParameterPtr                               GetParameter    ( const std::string & name ) override;
     virtual bv::IValueConstPtr                          GetValue        ( const std::string & name ) const override;
-    
-//  bool                                                HasStateValueChanged ( const std::string & name ) const;
-//                                                      GetStateValue () const;                            
+    virtual IStatePtr                                   GetState        ( const std::string & name ) override;
 
     virtual void                                        Update          () override;
 

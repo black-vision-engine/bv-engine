@@ -840,9 +840,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.cpp">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGL.cpp">
-      <Filter>Engine\Graphics\Renderers\OGLRenderer\GL</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
@@ -1715,14 +1712,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.h">
       <Filter>Engine\Models\Plugins\Channels</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGL.h">
-      <Filter>Engine\Graphics\Renderers\OGLRenderer\GL</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GL\BVGLDefs.h">
-      <Filter>Engine\Graphics\Renderers\OGLRenderer\GL</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
@@ -1744,6 +1735,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IState.h">
+      <Filter>Engine\Models\Plugins\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IStateSet.h">
+      <Filter>Engine\Models\Plugins\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

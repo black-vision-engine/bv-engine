@@ -72,6 +72,13 @@ bv::IValueConstPtr                          DefaultParamValModel::GetValue      
 
 // *******************************
 //
+IStatePtr                                   DefaultParamValModel::GetState        ( const std::string & name )
+{
+    return m_states[ name ];
+}
+
+// *******************************
+//
 void                                        DefaultParamValModel::Update            ()
 {
     for( auto evaluator : m_evaluators )
