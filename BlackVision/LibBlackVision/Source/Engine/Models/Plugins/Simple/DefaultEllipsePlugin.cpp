@@ -206,9 +206,12 @@ double EllipseGenerator::preferredArea;
 
 IGeometryGenerator*           DefaultEllipsePlugin::GetGenerator()
 {
-    return new EllipseGenerator( GetQuality(),
+    return new OldEllipseGenerator( GetQuality(),
                                 GetOuterRadius1(),
                                 GetOuterRadius2() );
+    //return new EllipseGenerator( GetQuality(),
+    //                            GetOuterRadius1(),
+    //                            GetOuterRadius2() );
 }
 
 bool DefaultEllipsePlugin::NeedsTopologyUpdate()
