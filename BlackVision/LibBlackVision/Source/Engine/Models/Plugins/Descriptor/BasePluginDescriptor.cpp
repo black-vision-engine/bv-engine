@@ -1,5 +1,6 @@
 #include "BasePluginDescriptor.h"
 
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
 namespace bv { namespace model {
 
@@ -38,6 +39,31 @@ bool                    BasePluginDescriptor::CanBeAttachedTo   ( IPluginConstPt
 IPluginParamValModelPtr BasePluginDescriptor::CreateModel       ( ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreateDefaultModel( timeEvaluator );
+}
+
+// *********************************
+//
+DefaultParamValModelPtr                  BasePluginDescriptor::CreateVacModel         ( DefaultPluginParamValModelPtr&, ITimeEvaluatorPtr ) const
+{
+    return std::make_shared< DefaultParamValModel >();
+}
+
+// *********************************
+//
+template< typename T >
+void                                     BasePluginDescriptor::AddParam            ( DefaultParamValModelPtr&, ITimeEvaluatorPtr timeEvaluator, std::string name, const T& defaultValue ) const
+{
+    assert( false );
+}
+
+// *********************************
+//
+template<>
+void                                     BasePluginDescriptor::AddParam< float >   ( DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const float& defaultValue ) const
+{
+    auto param = ParametersFactory::CreateParameterFloat( name, timeEvaluator );
+    model->AddParameter( param );
+    param->SetVal( defaultValue, 0.f );
 }
 
 } //model
