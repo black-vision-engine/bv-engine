@@ -2,6 +2,8 @@
 
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
+#include "Engine/Models/Plugins/ParamValModel/SimpleTypedStates.h"
+#include "Engine/Models/Plugins/ParamValModel/SimpleStateUpdater.h"
 
 namespace bv { namespace model {
 
@@ -52,7 +54,7 @@ DefaultParamValModelPtr                  BasePluginDescriptor::CreateVacModel   
 // *********************************
 //
 template< typename T >
-void                                     BasePluginDescriptor::AddParam            ( DefaultParamValModelPtr&, ITimeEvaluatorPtr timeEvaluator, std::string name, const T& defaultValue ) const
+void                                     BasePluginDescriptor::AddParam            ( DefaultParamValModelPtr&, ITimeEvaluatorPtr timeEvaluator, std::string name, const T& defaultValue, bool addValue, bool isState  ) const
 {
     assert( false );
 }
@@ -75,9 +77,9 @@ void                                     BasePluginDescriptor::AddParam< float >
     if( isState )
     {
         assert( addValue );
-        auto state = new FloatSimpleState();
-        auto updater = new FloatStateUpdater( state, model->GetValue( name ) );
-        model->AddState( state, updater );
+        auto state = std::make_shared< FloatSimpleState >();
+        auto updater = std::make_shared< SimpleFloatStateUpdater >( state, model->GetValue( name ) );
+        model->AddState( name, state, updater );
     }
 }
 

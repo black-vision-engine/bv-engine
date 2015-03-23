@@ -45,6 +45,7 @@ public:
     void                                                AddValue        ( bv::IValueConstPtr val );
     void                                                AddEvaluator    ( IParamValEvaluatorPtr evaluator );
     void                                                RegisterAll     ( IParamValEvaluatorPtr evaluator );
+    void                                                AddState        ( const std::string & name, IStatePtr state, IUpdaterPtr updater );
 
     const std::vector< bv::IValuePtr > &                GetValuesNC     () const;
 

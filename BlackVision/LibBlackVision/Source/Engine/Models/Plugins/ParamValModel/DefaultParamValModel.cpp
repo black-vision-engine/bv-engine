@@ -136,6 +136,14 @@ void                                        DefaultParamValModel::RegisterAll   
 
 // *******************************
 //
+void                                                DefaultParamValModel::AddState        ( const std::string & name, IStatePtr state, IUpdaterPtr updater )
+{
+    m_states[ name ] = state;
+    m_stateUpdaters.push_back( updater );
+}
+
+// *******************************
+//
 const std::vector< bv::IValuePtr > &         DefaultParamValModel::GetValuesNC       () const
 {
     return m_valuesNC;

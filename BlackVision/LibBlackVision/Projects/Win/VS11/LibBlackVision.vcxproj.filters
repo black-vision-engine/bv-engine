@@ -1742,6 +1742,12 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IStateSet.h">
       <Filter>Engine\Models\Plugins\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleTypedStates.h">
+      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.h">
+      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\System\HerarchicalProfiler.inl">
