@@ -37,7 +37,7 @@ public:
 protected:
     DefaultParamValModelPtr                  CreateVacModel      ( DefaultPluginParamValModelPtr&, ITimeEvaluatorPtr ) const;
     template< typename T >
-    void                                     AddParam            ( DefaultParamValModelPtr&, ITimeEvaluatorPtr timeEvaluator, std::string name, const T& defaultValue ) const;
+    void                                     AddParam            ( DefaultParamValModelPtr&, ITimeEvaluatorPtr timeEvaluator, std::string name, const T& defaultValue, bool addValue = false, bool isState = false ) const;
 };
 
 } //model

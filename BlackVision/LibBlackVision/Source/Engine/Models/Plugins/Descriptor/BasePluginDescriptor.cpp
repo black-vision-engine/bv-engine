@@ -1,6 +1,7 @@
 #include "BasePluginDescriptor.h"
 
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
+#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 
 namespace bv { namespace model {
 
@@ -59,11 +60,25 @@ void                                     BasePluginDescriptor::AddParam         
 // *********************************
 //
 template<>
-void                                     BasePluginDescriptor::AddParam< float >   ( DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const float& defaultValue ) const
+void                                     BasePluginDescriptor::AddParam< float >   ( DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const float& defaultValue, bool addValue, bool isState ) const
 {
     auto param = ParametersFactory::CreateParameterFloat( name, timeEvaluator );
     model->AddParameter( param );
     param->SetVal( defaultValue, 0.f );
+
+    if( addValue )
+    {
+        auto evaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( param );
+        model->RegisterAll( evaluator );
+    }
+
+    if( isState )
+    {
+        assert( addValue );
+        auto state = new FloatSimpleState();
+        auto updater = new FloatStateUpdater( state, model->GetValue( name ) );
+        model->AddState( state, updater );
+    }
 }
 
 } //model
