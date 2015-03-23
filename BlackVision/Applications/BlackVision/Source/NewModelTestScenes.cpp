@@ -769,7 +769,8 @@ model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model
     return root;
 }
 
-model::BasicNodePtr    /*TestScenesFactory::*/CreedCircleTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+//model::BasicNodePtr    /*TestScenesFactory::*/CreedCircleTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -848,7 +849,8 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedTriangleTestScene     ( model
     return root;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+//model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    /*TestScenesFactory::*/CreedRoundedRectTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );

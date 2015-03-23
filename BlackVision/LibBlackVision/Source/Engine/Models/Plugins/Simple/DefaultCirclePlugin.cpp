@@ -25,23 +25,27 @@ DefaultPluginParamValModelPtr   DefaultCirclePluginDesc::CreateDefaultModel  ( I
     DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
 
     ParamIntPtr paramN      = ParametersFactory::CreateParameterInt( DefaultCirclePlugin::PN_TESSELATION, timeEvaluator );
-    ParamFloatPtr paramOR   = ParametersFactory::CreateParameterFloat( DefaultCirclePlugin::PN_OUTER_RADIUS, timeEvaluator );
     ParamFloatPtr paramIR   = ParametersFactory::CreateParameterFloat( DefaultCirclePlugin::PN_INNER_RADIUS, timeEvaluator );
     ParamFloatPtr paramOA   = ParametersFactory::CreateParameterFloat( DefaultCirclePlugin::PN_OPEN_ANGLE, timeEvaluator );
     auto paramOAM = ParametersFactory::CreateParameterEnum< DefaultCirclePlugin::OpenAngleMode >( DefaultCirclePlugin::PN_OPEN_ANGLE_MODE, timeEvaluator );
 
     model->SetVertexAttributesChannelModel( vacModel );
     vacModel->AddParameter( paramN );
-    vacModel->AddParameter( paramOR );
     vacModel->AddParameter( paramIR );
     vacModel->AddParameter( paramOA );
     vacModel->AddParameter( paramOAM );
 
     paramN->SetVal( 3, 0.f );
-    paramOR->SetVal( 1.f, 0.f );
     paramIR->SetVal( 0.f, 0.f );
     paramOA->SetVal( 360.f, 0.f );
     paramOAM->SetVal( DefaultCirclePlugin::OpenAngleMode::CW, 0.f );
+
+
+    //ParamFloatPtr paramOR   = ParametersFactory::CreateParameterFloat( DefaultCirclePlugin::PN_OUTER_RADIUS, timeEvaluator );
+    //vacModel->AddParameter( paramOR );
+    //paramOR->SetVal( 1.f, 0.f );
+
+    AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_OUTER_RADIUS, 1.f, true, true );
 
     return model;
 }
@@ -147,10 +151,11 @@ IGeometryGenerator*           DefaultCirclePlugin::GetGenerator()
 bool DefaultCirclePlugin::NeedsTopologyUpdate()
 {
     return
+        //GetCachedParameter( PN_OUTER_RADIUS )->Changed() ||
+        m_pluginParamValModel->GetVertexAttributesChannelModel()->GetState( PN_OUTER_RADIUS )->StateChanged() ||
         GetCachedParameter( PN_TESSELATION )->Changed() ||
         GetCachedParameter( PN_INNER_RADIUS )->Changed() ||
         GetCachedParameter( PN_OPEN_ANGLE )->Changed() ||
-        GetCachedParameter( PN_OUTER_RADIUS )->Changed() ||
         GetCachedParameter( PN_OPEN_ANGLE_MODE )->Changed();
 }
 

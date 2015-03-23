@@ -858,6 +858,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.cpp">
+      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Core\MemoryChunk.h">
@@ -1803,6 +1806,9 @@
     </None>
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.inl">
       <Filter>Engine\Models\Plugins\Parameters</Filter>
+    </None>
+    <None Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.inl">
+      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </None>
   </ItemGroup>
 </Project>

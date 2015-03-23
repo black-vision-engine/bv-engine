@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Engine/Models/Plugins/Interfaces/IState.h"
 
 namespace bv { namespace model {
@@ -22,6 +24,8 @@ public:
 };
 
 typedef SimpleState<float> FloatSimpleState;
+
+DEFINE_PTR_TYPE( FloatSimpleState );
 
 } //model
 } //bv

@@ -78,7 +78,9 @@ void                                     BasePluginDescriptor::AddParam< float >
     {
         assert( addValue );
         auto state = std::make_shared< FloatSimpleState >();
-        auto updater = std::make_shared< SimpleFloatStateUpdater >( state, model->GetValue( name ) );
+        auto value = model->GetValue( name );
+        auto qValue = QueryTypedValue< ValueFloatPtr >( value );
+        auto updater = std::make_shared< SimpleFloatStateUpdater >( state, qValue );
         model->AddState( name, state, updater );
     }
 }

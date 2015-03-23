@@ -85,6 +85,11 @@ void                                        DefaultParamValModel::Update        
     {
         evaluator->Evaluate();
     }
+
+    for( auto updater : m_stateUpdaters )
+    {
+        updater->DoUpdate();
+    }
 }
 
 // *******************************
