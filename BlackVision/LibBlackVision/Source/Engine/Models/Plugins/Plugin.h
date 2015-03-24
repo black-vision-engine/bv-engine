@@ -76,6 +76,7 @@ protected:
     IParamValModelPtr                           VertexShaderChannelModel    ();
     IParamValModelPtr                           GeometryShaderChannelModel  ();
 
+    bool                                        ParameterChanged            ( const std::string & name );
 };
 
 // Implementation
@@ -343,6 +344,15 @@ template< class Iface >
 IParamValModelPtr                           BasePlugin< Iface >::GeometryShaderChannelModel   ()
 {
     return m_pluginParamValModel->GetGeometryShaderChannelModel();
+}
+
+
+// *******************************
+//
+template< class Iface >
+bool                                        BasePlugin< Iface >::ParameterChanged            ( const std::string & name )
+{
+    return m_pluginParamValModel->GetVertexAttributesChannelModel()->GetState( name )->StateChanged();
 }
 
 ParamTransformVecPtr						GetCurrentParamTransform( const IPlugin * pl );
