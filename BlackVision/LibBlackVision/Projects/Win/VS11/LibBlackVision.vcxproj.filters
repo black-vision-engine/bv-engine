@@ -783,6 +783,9 @@
     <ClCompile Include="..\..\..\Source\Assets\Cache\RawDataCache.cpp">
       <Filter>Assets\Cache</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Assets.cpp">
+      <Filter>Assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
