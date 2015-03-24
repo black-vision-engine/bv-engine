@@ -1,68 +1,12 @@
 #pragma once
 
-#include "BVGLPlugin.h"
+#include "BVGLPlugins/BVGLPlugin.h"
 
 #include <hash_map>
 #include <cassert>
 
 namespace bv {
 
-struct BufferDesc
-{
-    GLsizeiptr      size;
-    GLenum          usage;
-    const GLvoid *  data;
-
-    BufferDesc()
-        : size( 0 )
-        , usage( 0 )
-        , data( nullptr )
-    {
-    }
-};
-
-struct TextureDesc
-{
-    GLsizei width;
-    GLsizei height;
-    GLenum format;
-    const GLvoid * pixels;
-
-    TextureDesc()
-        : width( 0 )
-        , height( 0 )
-        , format( 0 )
-        , pixels( nullptr )
-    {
-    }
-
-    GLuint DataSize()
-    {
-        return width * height * PixelSize( format );
-    }
-
-    GLuint PixelSize( GLenum format )
-    {
-        assert( format == GL_RGBA || format == GL_BGRA );
-
-        return 4;
-    }
-};
-
-struct RenderbufferDesc
-{
-    GLenum  internalformat;
-    GLsizei width;
-    GLsizei height;
-
-    RenderbufferDesc()
-        : internalformat( 0 )
-        , width( 0 )
-        , height( 0 )
-    {
-    }
-
-};
 
 class BVGLResourceTrackingPlugin : public BVGLPlugin
 {
