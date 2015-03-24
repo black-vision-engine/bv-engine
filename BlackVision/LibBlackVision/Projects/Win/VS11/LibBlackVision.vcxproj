@@ -287,6 +287,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\RendererContext\FillContext.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\RendererContext\RendererContext.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\ShaderChannel.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\TranformChannel.cpp" />
@@ -302,6 +303,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\GeometryPluginRing.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Manager\PluginsManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\AbstractModelParameter.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CompositeTypedParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\GenericParameterSetters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParametersFactory.cpp" />
@@ -310,12 +312,16 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\DefaultPluginParamValModel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\PluginUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAnimationPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCirclePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultColorPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEllipsePlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGradientPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPieChartPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPrismPlugin.cpp" />
@@ -324,6 +330,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTexturePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTimerPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventLoop.cpp" />
@@ -354,6 +363,13 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\ICachedParameter.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IState.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IStateSet.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleTypedStates.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h" />
     <ClInclude Include="..\..\..\Source\Application\ConsoleApplication.h" />
     <ClInclude Include="..\..\..\Source\Application\WindowedApplication.h" />
@@ -520,6 +536,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\RendererContext\FillContext.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\RendererContext\RendererContext.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\ShaderChannel.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\TransformChannel.h" />
@@ -572,7 +589,10 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\PluginUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAnimationPlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCirclePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultColorPlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEllipsePlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGradientPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPieChartPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultPrismPlugin.h" />
@@ -581,6 +601,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTexturePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTimerPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />
@@ -625,10 +648,13 @@
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParameters.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\RenderableEffect.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeShaderChannel.inl" />
+    <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />
+    <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\GenericParameterSetters.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\SimpleTypedParameters.inl" />
+    <None Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.inl" />

@@ -1,6 +1,5 @@
 #include "BasePluginDescriptor.h"
 
-
 namespace bv { namespace model {
 
 // *********************************
@@ -39,6 +38,39 @@ IPluginParamValModelPtr BasePluginDescriptor::CreateModel       ( ITimeEvaluator
 {
     return CreateDefaultModel( timeEvaluator );
 }
+
+// *********************************
+//
+DefaultParamValModelPtr                  BasePluginDescriptor::CreateVacModel         ( DefaultPluginParamValModelPtr&, ITimeEvaluatorPtr ) const
+{
+    return std::make_shared< DefaultParamValModel >();
+}
+
+//// *********************************
+////
+//template<>
+//void                                     BasePluginDescriptor::AddParam< float >   ( DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const float& defaultValue, bool addValue, bool isState ) const
+//{
+//    auto param = ParametersFactory::CreateParameterFloat( name, timeEvaluator );
+//    model->AddParameter( param );
+//    param->SetVal( defaultValue, 0.f );
+//
+//    if( addValue )
+//    {
+//        auto evaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( param );
+//        model->RegisterAll( evaluator );
+//    }
+//
+//    if( isState )
+//    {
+//        assert( addValue );
+//        auto state = std::make_shared< FloatSimpleState >();
+//        auto value = model->GetValue( name );
+//        auto qValue = QueryTypedValue< ValueFloatPtr >( value );
+//        auto updater = std::make_shared< SimpleFloatStateUpdater >( state, qValue );
+//        model->AddState( name, state, updater );
+//    }
+//}
 
 } //model
 } //bv
