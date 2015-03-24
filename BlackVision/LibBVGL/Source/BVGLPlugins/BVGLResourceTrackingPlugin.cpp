@@ -150,6 +150,8 @@ void    BVGLResourceTrackingPlugin::BindTexture					( GLenum target, GLuint text
 void    BVGLResourceTrackingPlugin::GenRenderbuffers            ( GLsizei n, GLuint * renderbuffers )
 {
     Parent::GenRenderbuffers( n, renderbuffers );
+
+
 }
 
 // *****************************
@@ -168,6 +170,10 @@ void    BVGLResourceTrackingPlugin::PrintStats                  ( const std::str
     PrintBuffersStats();
     printf("\n");
 	PrintTextureStats();
+    printf("\n");
+    PrintRenderbuffersStats();
+    printf("\n");
+    PrintFramebufersStats();
 }
 
 // *****************************
@@ -237,6 +243,20 @@ void        BVGLResourceTrackingPlugin::PrintTextureStats           ()
 
         printf( "\n" );
     }
+}
+
+// *****************************
+//
+void                BVGLResourceTrackingPlugin::PrintRenderbuffersStats     ()
+{
+    printf( "RENDERBUFFERS:\n");
+}
+
+// *****************************
+//
+void                BVGLResourceTrackingPlugin::PrintFramebufersStats       ()
+{
+    printf( "FRAMEBUFFERS:\n");
 }
 
 // *****************************
