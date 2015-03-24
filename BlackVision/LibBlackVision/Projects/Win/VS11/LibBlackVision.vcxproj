@@ -151,6 +151,7 @@
     <ClCompile Include="..\..\..\Source\Assets\AssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\AssetLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\AssetManager.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Assets.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Cache\RawDataCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\AtlasCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\Engines\FreeTypeEngine.cpp" />
