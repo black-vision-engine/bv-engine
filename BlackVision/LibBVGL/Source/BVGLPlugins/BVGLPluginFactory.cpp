@@ -1,7 +1,7 @@
 #include "BVGLPluginFactory.h"
 
 #include "BVGLPlugins/BVGLPlugin.h"
-#include "BVGLPlugins/BVGLResourceTrackingPlugin.h"
+#include "BVGLPlugins/ResourceTracking/BVGLResourceTrackingPlugin.h"
 
 namespace bv {
 
