@@ -1,8 +1,6 @@
 #include "AnimationLoader.h"
 
-#include "Assets/Texture/AnimationAssetDescriptor.h"
-#include "Assets/Texture/TextureAsset.h"
-#include "Assets/AssetManager.h"
+#include "Assets/Assets.h"
 
 #include <cassert>
 
