@@ -19,25 +19,30 @@ VoidPtr    ParamEnum< DefaultCirclePlugin::OpenAngleMode >::QueryParamTyped  ()
 
 //template class CachedSimpleTypedParameters< IntInterpolator, int, ModelParamType::MPT_ENUM >;
 
+//void BasePluginDescriptor::AddParam<int>( DefaultParamValModelPtr&, ITimeEvaluatorPtr timeEvaluator, std::string name, const T& defaultValue, bool addValue, bool isState  ) const;
+
 DefaultPluginParamValModelPtr   DefaultCirclePluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
     DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
-    DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
+    DefaultParamValModelPtr         vacModel    = CreateVacModel( model, timeEvaluator );//std::make_shared< DefaultParamValModel >();
+
+    model->SetVertexAttributesChannelModel( vacModel ); // FIXME
+
+    AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_OUTER_RADIUS, 1.f, true, true );
+    AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_INNER_RADIUS, 0.f, true, true );
+    AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_OPEN_ANGLE, 360.f, true, true );
+    //AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_TESSELATION, 3, true, true );
+    //AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_OPEN_ANGLE_MODE, DefaultCirclePlugin::OpenAngleMode::CW, true, true );
 
     ParamIntPtr paramN      = ParametersFactory::CreateParameterInt( DefaultCirclePlugin::PN_TESSELATION, timeEvaluator );
     auto paramOAM = ParametersFactory::CreateParameterEnum< DefaultCirclePlugin::OpenAngleMode >( DefaultCirclePlugin::PN_OPEN_ANGLE_MODE, timeEvaluator );
 
-    model->SetVertexAttributesChannelModel( vacModel );
     vacModel->AddParameter( paramN );
     vacModel->AddParameter( paramOAM );
 
     paramN->SetVal( 3, 0.f );
     paramOAM->SetVal( DefaultCirclePlugin::OpenAngleMode::CW, 0.f );
 
-
-    AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_OUTER_RADIUS, 1.f, true, true );
-    AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_INNER_RADIUS, 0.f, true, true );
-    AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_OPEN_ANGLE, 360.f, true, true );
 
     return model;
 }
