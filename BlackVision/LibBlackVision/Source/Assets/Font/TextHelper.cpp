@@ -1,11 +1,7 @@
 #include "TextHelper.h"
 #include "TextAtlas.h"
 
-#include "Assets/Font/FontAssetDescriptor.h"
-#include "Assets/Font/FontAsset.h"
-#include "Assets/Font/FontLoader.h"
-#include "Assets/Font/Glyph.h"
-#include "Assets/AssetManager.h"
+#include "Assets/Assets.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
@@ -19,9 +15,7 @@ namespace bv {
 //
 FontAssetConstPtr      TextHelper::LoadFont( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize, const std::wstring & atlasCharSetFile )
 {
-	auto desc = FontAssetDesc::Create( fontFileName, size, blurSize, outlineSize, false, atlasCharSetFile ); // TODO: pass generate mipmaps argument
-
-	return QueryTypedRes< FontAssetConstPtr >( AssetManager::GetInstance().LoadAsset( desc ) );
+	return LoadFontAsset( fontFileName, size, blurSize, outlineSize, false ); // TODO: pass generate mipmaps argument
 }
 
 // *********************************
