@@ -151,7 +151,12 @@ void    BVGLResourceTrackingPlugin::GenRenderbuffers            ( GLsizei n, GLu
 {
     Parent::GenRenderbuffers( n, renderbuffers );
 
+    for( auto i = 0; i < n; ++i )
+    {
+        auto buf = renderbuffers[ i ];
 
+        m_allocatedRenderbuffers[ buf ] = RenderbufferDesc();
+    }
 }
 
 // *****************************
@@ -159,6 +164,29 @@ void    BVGLResourceTrackingPlugin::GenRenderbuffers            ( GLsizei n, GLu
 void    BVGLResourceTrackingPlugin::DeleteRenderbuffers         ( GLsizei n, const GLuint * renderbuffers )
 {
     Parent::DeleteRenderbuffers( n, renderbuffers );
+
+    for( auto i = 0; i < n; ++i )
+    {
+        auto buf = renderbuffers[ i ];
+
+        m_allocatedRenderbuffers.erase( buf );
+    }
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::BindRenderbuffer            ( GLenum target, GLuint renderbuffer )
+{
+    Parent::BindRenderbuffer( target, renderbuffer );
+
+    m_boundRenderbuffers[ target ] = renderbuffer;
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::RenderbufferStorage         ( GLenum target, GLenum internalformat, GLsizei width, GLsizei height )
+{
+    Parent::RenderbufferStorage( target, internalformat, width, height );
 }
 
 // *****************************
@@ -250,6 +278,34 @@ void        BVGLResourceTrackingPlugin::PrintTextureStats           ()
 void                BVGLResourceTrackingPlugin::PrintRenderbuffersStats     ()
 {
     printf( "RENDERBUFFERS:\n");
+    
+    //for( auto buf : m_allocatedFramebuffers )
+    //{
+    //    auto bufId      = buf.first;
+    //    auto bufDesc    = buf.second;
+
+    //    GLenum target   = 0;
+    //
+    //    for( auto bb : m_boundBuffers )
+    //    {
+    //        if( bb.second == bufId )
+    //        {
+    //            target = bb.first;
+    //            break;
+    //        }
+    //    }
+
+    //    auto siz = FormatSize( (GLuint) bufDesc.size );
+
+    //    printf( "Buf: %2d, Size: %7s, Usage: %15s", bufId, siz.c_str(), BVGLTranslator::TranslateBufferUsage( bufDesc.usage ).c_str() );
+
+    //    if( target != 0 )
+    //    {
+    //        printf( " BND: %s", BVGLTranslator::TranslateBufferTarget( target ).c_str() );
+    //    }
+
+    //    printf( "\n" );
+    //}
 }
 
 // *****************************

@@ -9,8 +9,6 @@
 
 namespace bv { namespace model {
 
-class IValue;
-
 class IParamValEvaluator;
 DEFINE_PTR_TYPE(IParamValEvaluator)
 
