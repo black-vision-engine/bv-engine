@@ -49,6 +49,13 @@ struct TextureDesc
     }
 };
 
+struct RenderbufferDesc
+{
+public:
+
+
+};
+
 class BVGLResourceTrackingPlugin : public BVGLPlugin
 {
 
@@ -61,6 +68,9 @@ private:
 
     std::hash_map< GLuint, TextureDesc >    m_allocatedTextures;
     std::hash_map< GLuint, GLint >          m_boundTextures;
+
+    std::hash_map< GLuint, GLuint >         m_allocatedFramebuffers;
+    std::hash_map< GLuint, GLuint >         m_allocatedRenderbuffers;
 
 public:
 
@@ -88,11 +98,12 @@ private:
 
     void                PrintBuffersStats           ();
     void                PrintTextureStats           ();
+    void                PrintRenderbuffersStats     ();
+    void                PrintFramebufersStats       ();
 
     std::string         FormatSize                  ( GLuint numBytes );
 
 /*
-
     static void                 bvglGenFramebuffers         ( GLsizei n, GLuint * framebuffers );
     static void                 bvglDeleteFramebuffers      ( GLsizei n, const GLuint * framebuffers );
     
