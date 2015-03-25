@@ -35,9 +35,11 @@ public:
     virtual const std::string       GetName         () const override;
     virtual SizeType				GetWidth        ( UInt32 level = 0 ) const override;
     virtual SizeType				GetHeight       ( UInt32 level = 0 ) const override;
+	virtual SizeType				GetDepth		( UInt32 level = 0 ) const override;
     virtual TextureFormat           GetFormat       () const override;
     virtual TextureWrappingMode     GetWrappingModeX() const override;
     virtual TextureWrappingMode     GetWrappingModeY() const override;
+	virtual TextureWrappingMode     GetWrappingModeZ() const override;
     virtual TextureFilteringMode    GetFilteringMode() const override;
     virtual glm::vec4               BorderColor     () const override;
     virtual DataBuffer::Semantic    GetSemantic     () const override;
@@ -49,9 +51,11 @@ public:
     void                            SetName         ( const std::string & name );
     void                            SetWidth        ( SizeType w );
     void                            SetHeight       ( SizeType h );
+	void                            SetDepth        ( SizeType z );
     void                            SetFormat       ( TextureFormat fmt );
     void                            SetWrappingModeX( TextureWrappingMode wm );
     void                            SetWrappingModeY( TextureWrappingMode wm );
+	void                            SetWrappingModeZ( TextureWrappingMode wm );
     void                            SetFilteringMode( TextureFilteringMode fm );
     void                            SetBorderColor  ( const glm::vec4 & bc );
     void                            SetSemantic     ( DataBuffer::Semantic semantic );

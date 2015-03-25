@@ -109,6 +109,13 @@ SizeType				DefaultTextureDescriptor::GetHeight         ( UInt32 level ) const
 
 // **************************
 //
+SizeType				DefaultTextureDescriptor::GetDepth          ( UInt32 level ) const
+{
+    return m_params.GetDepth() >> level;
+}
+
+// **************************
+//
 TextureFormat           DefaultTextureDescriptor::GetFormat         () const
 {
     return m_params.GetFormat();
@@ -124,6 +131,13 @@ TextureWrappingMode     DefaultTextureDescriptor::GetWrappingModeX  () const
 // **************************
 //
 TextureWrappingMode     DefaultTextureDescriptor::GetWrappingModeY  () const
+{
+    return m_params.GetWrappingModeY();
+}
+
+// **************************
+//
+TextureWrappingMode     DefaultTextureDescriptor::GetWrappingModeZ  () const
 {
     return m_params.GetWrappingModeY();
 }
@@ -207,6 +221,13 @@ void                    DefaultTextureDescriptor::SetWidth          ( SizeType w
 void                    DefaultTextureDescriptor::SetHeight         ( SizeType h )
 {
     m_params.SetHeight( h );
+}
+
+// **************************
+//
+void                    DefaultTextureDescriptor::SetDepth          ( SizeType d )
+{
+    m_params.SetDepth( d );
 }
 
 // **************************

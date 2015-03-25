@@ -101,14 +101,24 @@ const std::string       DefaultAnimationDescriptor::GetName             () const
 //
 SizeType				DefaultAnimationDescriptor::GetWidth            ( UInt32 level ) const
 {
-    return m_params.GetWidth() >> level;
+	assert( level == 0 ); // No mipmaps for animation
+    return m_params.GetWidth();
 }
 
 // *******************************
 //
 SizeType				DefaultAnimationDescriptor::GetHeight           ( UInt32 level ) const
 {
-    return m_params.GetHeight() >> level;
+	assert( level == 0 ); // No mipmaps for animation
+    return m_params.GetHeight();
+}
+
+// *******************************
+//
+SizeType	            DefaultAnimationDescriptor::GetDepth            ( UInt32 level ) const
+{
+	assert( level == 0 ); // No mipmaps for animation
+	return 1;
 }
 
 // *******************************
@@ -123,6 +133,13 @@ TextureFormat           DefaultAnimationDescriptor::GetFormat           () const
 TextureWrappingMode     DefaultAnimationDescriptor::GetWrappingModeX    () const
 {
     return m_params.GetWrappingModeX();
+}
+
+// *******************************
+//
+TextureWrappingMode     DefaultAnimationDescriptor::GetWrappingModeZ	() const
+{
+	return m_params.GetWrappingModeZ();
 }
 
 // *******************************

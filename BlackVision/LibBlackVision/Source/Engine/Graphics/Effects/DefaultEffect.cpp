@@ -204,12 +204,36 @@ ShaderParameters *      DefaultEffect::CreateDefaultParamsImpl ( const IShaderDa
 TextureSampler *        DefaultEffect::CreateSampler   ( const ITextureParams * txParams, unsigned int samplerNum ) const
 {
     auto wrapX          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeX() );
-    auto wrapY          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeY() );            
-    auto samplingMode   = SamplerSamplingMode::SSM_MODE_2D; //FIXME: only 2D textures right now
+    auto wrapY          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeY() );
+	auto wrapZ          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeZ() );
+
+	auto w = txParams->GetWidth();
+	auto h = txParams->GetHeight();
+	auto d = txParams->GetDepth();
+
+	assert( w > 0 && h > 0 && d > 0 );
+
+    SamplerSamplingMode samplingMode;
+
+	if( w >= 1 && h == 1 && d == 1 )
+	{
+		samplingMode = SamplerSamplingMode::SSM_MODE_1D;
+	}
+
+	if( w >= 1 && h > 1 && d == 1 )
+	{
+		samplingMode = SamplerSamplingMode::SSM_MODE_2D;
+	}
+
+	if( w >= 1 && h > 1 && d > 1 )
+	{
+		samplingMode = SamplerSamplingMode::SSM_MODE_3D;
+	}
+
     auto filteringMode  = EngineConstantsMapper::EngineConstant( txParams->GetFilteringMode() );
     auto borderColor    = txParams->BorderColor();
 
-    SamplerWrappingMode wrappingMode[] = { wrapX, wrapY, SamplerWrappingMode::SWM_REPEAT };
+    SamplerWrappingMode wrappingMode[] = { wrapX, wrapY, wrapZ };
 
     auto sampler = new TextureSampler( samplerNum, txParams->GetName(), samplingMode, filteringMode, wrappingMode, borderColor ); 
 
