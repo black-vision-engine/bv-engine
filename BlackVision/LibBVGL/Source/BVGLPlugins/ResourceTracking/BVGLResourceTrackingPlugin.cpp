@@ -179,6 +179,8 @@ void    BVGLResourceTrackingPlugin::BindFramebuffer             ( GLenum target,
 void    BVGLResourceTrackingPlugin::FramebufferTexture2D		( GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level )
 {
     Parent::FramebufferTexture2D( target, attachment, textarget, texture, level );
+
+    m_framebuffers.GetBoundResource( target ).AttachTexture2D( attachment, target, texture, level );
 }
 
 // *****************************
@@ -186,6 +188,8 @@ void    BVGLResourceTrackingPlugin::FramebufferTexture2D		( GLenum target, GLenu
 void    BVGLResourceTrackingPlugin::FramebufferRenderbuffer		( GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer )
 {
     Parent::FramebufferRenderbuffer( target, attachment, renderbuffertarget, renderbuffer );
+
+    m_framebuffers.GetBoundResource( target ).AttachRenderbuffer( attachment, renderbuffertarget, renderbuffer );
 }
 
 // *****************************

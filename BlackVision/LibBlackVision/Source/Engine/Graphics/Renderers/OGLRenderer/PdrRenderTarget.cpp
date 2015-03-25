@@ -210,7 +210,7 @@ void            PdrRenderTarget::AddDepthBuffer     ( Renderer * renderer, const
     { renderer; rt; } // FIXME: suppress unused
     BVGL::bvglGenRenderbuffers( 1, &m_depthBufID );
     BVGL::bvglBindRenderbuffer( GL_RENDERBUFFER, m_depthBufID );
-    BVGL::bvglRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH_COMPONENT, ( GLsizei )m_width, ( GLsizei )m_height );
+    BVGL::bvglRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH_COMPONENT, ( GLsizei ) m_width, ( GLsizei ) m_height );
     BVGL::bvglFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthBufID );
 }
 

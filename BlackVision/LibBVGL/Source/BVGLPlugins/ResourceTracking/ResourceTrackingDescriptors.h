@@ -58,16 +58,44 @@ struct RenderbufferDesc
 //
 struct FramebufferDesc
 {
-    FramebufferDesc ();
+    // FIXME: onlu rudimentary tracking with textures used as color attachments and 
+    GLuint textureAttachment0;
+    bool   attachment0IsTex;
 
-    void    Set     ();
-    //void    Set     ();
+    GLuint textureAttachment1;
+    bool   attachment1IsTex;
+
+    GLuint depthAttachment;
+    bool   depthAttachmentIsTex;
+
+    FramebufferDesc             ();
+
+    void    AttachTexture2D     ( GLenum attachment, GLenum target, GLuint texture, GLint level );
+    void    AttachRenderbuffer  ( GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer );
+};
+
+
+/////////////////////////////////////
+//
+struct VertexArrayAttribDesc
+{
+    GLuint          index;
+ 	GLint           size;
+ 	GLenum          type;
+ 	GLboolean       normalized;
+ 	GLsizei         stride;
+ 	const GLvoid *  pointer;
+
+    void    Set ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
+
 };
 
 /////////////////////////////////////
 //
 struct VertexArrayDesc
 {
+
+    //std::vector<
     VertexArrayDesc ();
 
     void    Set     ();

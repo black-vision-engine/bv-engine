@@ -104,13 +104,45 @@ GLuint  RenderbufferDesc::PixelSize   ( GLenum internalformat ) const
 // *****************************
 //
 FramebufferDesc::FramebufferDesc    ()
+    : textureAttachment0( 0 )
+    , attachment0IsTex( false )
+    , textureAttachment1( 0 )
+    , attachment1IsTex( false )
+    , depthAttachment( 0 )
+    , depthAttachmentIsTex( false )
 {
 }
 
 // *****************************
 //
-void    FramebufferDesc::Set        ()
+void    FramebufferDesc::AttachTexture2D    ( GLenum attachment, GLenum target, GLuint texture, GLint level )
 {
+    ( target );
+ 
+    assert( attachment == GL_COLOR_ATTACHMENT0 || attachment == ( GL_COLOR_ATTACHMENT0 + 1 ) );
+    assert( level == 0 );
+
+    if( attachment == GL_COLOR_ATTACHMENT0 )
+    {
+        textureAttachment0 = texture;
+        attachment0IsTex = true;
+    }
+    else if( attachment == ( GL_COLOR_ATTACHMENT0 + 1 ) )
+    {
+        textureAttachment1 = texture;
+        attachment1IsTex = true;
+    }
+}
+
+// *****************************
+//
+void    FramebufferDesc::AttachRenderbuffer ( GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer )
+{
+    assert( GL_DEPTH_ATTACHMENT == attachment );
+    assert( GL_RENDERBUFFER == renderbuffertarget );
+
+    depthAttachment = renderbuffer;
+    depthAttachmentIsTex = false;
 }
 
 // *************************************************************************************************************************************************
