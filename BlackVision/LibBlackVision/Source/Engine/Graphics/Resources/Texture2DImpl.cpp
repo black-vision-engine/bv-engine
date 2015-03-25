@@ -58,22 +58,19 @@ MemoryChunkConstPtr Texture2DImpl::GetData  ( UInt32 level ) const
 
 // *********************************
 //
-bool            Texture2DImpl::SetRawData    ( MemoryChunkConstPtr data, TextureFormat format, SizeType width, SizeType height, UInt32 level )
+bool            Texture2DImpl::SetRawData    ( const std::vector< MemoryChunkConstPtr > & data, TextureFormat format, SizeType width, SizeType height )
 {
-    assert( data->Size() == SizeInBytes( format, width, height ) || data->Size() == 0 );
-
     SetFormat( format );
     SetWidth( width );
     SetHeight( height );
 
-	if( level < m_data.size() )
+	m_data.clear();
+
+	for( UInt32 i = 0; i < data.size(); ++i )
 	{
-		m_data[ level ] = data;
-	}
-	else
-	{
-		m_data.resize( level + 1 );
-		m_data[ level ] = data;
+		assert( data[ i ]->Size() == SizeInBytes( format, width, height ) || data[ i ]->Size() == 0 );
+
+		m_data.push_back( data[ i ] );
 	}
 
     SetChanged( true );

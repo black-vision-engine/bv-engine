@@ -36,6 +36,7 @@ DefaultTextureDescriptor::DefaultTextureDescriptor        ( TextureAssetConstPtr
 
     SetWidth( width );
     SetHeight( height );
+	SetDepth( 1 );
     SetFormat( format );
     SetWrappingModeX( wmx );
     SetWrappingModeY( wmy );
@@ -55,6 +56,20 @@ DefaultTextureDescriptor::~DefaultTextureDescriptor                 ()
 uintptr_t               DefaultTextureDescriptor::GetUID            () const
 {
     return (uintptr_t) GetBits()->Get();
+}
+
+// **************************
+//
+UInt32					DefaultTextureDescriptor::GetNumLevels		() const
+{
+	if( m_texResource->GetMipMaps() != nullptr )
+	{
+		return ( UInt32 )m_texResource->GetMipMaps()->GetLevelsNum() + 1;
+	}
+	else
+	{
+		return 1;
+	}
 }
 
 // **************************

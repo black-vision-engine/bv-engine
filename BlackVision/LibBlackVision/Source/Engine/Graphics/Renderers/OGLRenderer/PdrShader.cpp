@@ -193,6 +193,25 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
     //FIXME: assert that texture type corresponds to sampler type
     switch( sampler->SamplingMode() )
     {
+        case SamplerSamplingMode::SSM_MODE_1D:
+		{
+			renderer->Enable( texture, textureUnit );
+
+            GLint wrap_s = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
+            
+            //FIXME: think a bit more about how filtering mag/min (and mipmaps) should be implemented
+            GLint min_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
+            GLint mag_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
+
+            BVGL::bvglTexParameteri ( GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, wrap_s );
+
+            BVGL::bvglTexParameteri ( GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, min_filter );
+            BVGL::bvglTexParameteri ( GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, mag_filter );
+
+            BVGL::bvglTexParameterfv( GL_TEXTURE_1D, GL_TEXTURE_BORDER_COLOR, &sampler->GetBorderColor()[ 0 ] );
+
+			break;
+		}
         case SamplerSamplingMode::SSM_MODE_2D:
         {
             renderer->Enable( texture, textureUnit );
@@ -218,33 +237,10 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
 
             break;
         }
-        case SamplerSamplingMode::SSM_MODE_1D:
-		{
-			renderer->Enable( texture, textureUnit );
-
-            //FIXME: this state may be cached in currentSamplerState in Renderer (for specified target (GL_TEXTURE_2D here and selected texturing unit)
-            GLint wrap_s = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
-            
-            //FIXME: think a bit more about how filtering mag/min (and mipmaps) should be implemented
-            GLint min_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
-            GLint mag_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
-
-            BVGL::bvglTexParameteri ( GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, wrap_s );
-
-            BVGL::bvglTexParameteri ( GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, min_filter );
-            BVGL::bvglTexParameteri ( GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, mag_filter );
-
-            BVGL::bvglTexParameterfv( GL_TEXTURE_1D, GL_TEXTURE_BORDER_COLOR, &sampler->GetBorderColor()[ 0 ] );
-
-            //glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy ); //FIXME: when anisotropy is implemented in texture sampler
-            //glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, lodBias);          //FIXME: when lodbias is implemented in texture sampler
-			break;
-		}
         case SamplerSamplingMode::SSM_MODE_3D:
         {
             renderer->Enable( texture, textureUnit );
 
-            //FIXME: this state may be cached in currentSamplerState in Renderer (for specified target (GL_TEXTURE_2D here and selected texturing unit)
             GLint wrap_s = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
             GLint wrap_t = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_T ) );
 			GLint wrap_r = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_R ) );
@@ -261,9 +257,6 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
             BVGL::bvglTexParameteri ( GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, mag_filter );
 
             BVGL::bvglTexParameterfv( GL_TEXTURE_3D, GL_TEXTURE_BORDER_COLOR, &sampler->GetBorderColor()[ 0 ] );
-
-            //glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy ); //FIXME: when anisotropy is implemented in texture sampler
-            //glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, lodBias);          //FIXME: when lodbias is implemented in texture sampler
 
             break;
         }

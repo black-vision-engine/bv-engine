@@ -220,11 +220,15 @@ inline void    NodeUpdater::UpdateTexturesData  ()
                 else //Some other texture type which just requires contents to be swapped
                 {
                     auto format = texDesc->GetFormat();
-                    auto width  = texDesc->GetWidth();
-                    auto height = texDesc->GetHeight();
-                    auto data   = texDesc->GetBits();
 
-                    tex2D->SetRawData( data, format, width, height );
+					std::vector< MemoryChunkConstPtr > textures;
+
+					for( UInt32 i = 0; i < texDesc->GetNumLevels(); ++i )
+					{
+						textures.push_back( texDesc->GetBits( i ) );
+					}
+
+					tex2D->SetRawData( textures, format, texDesc->GetWidth(), texDesc->GetHeight() );
                 }
 
                 texDesc->ResetBitsChanged();

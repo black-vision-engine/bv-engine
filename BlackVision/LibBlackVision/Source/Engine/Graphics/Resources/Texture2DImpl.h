@@ -23,7 +23,7 @@ public:
 
     virtual MemoryChunkConstPtr GetData         ( UInt32 level = 0 ) const override;
 
-    bool                        SetRawData      ( MemoryChunkConstPtr data, TextureFormat format, SizeType width, SizeType height, UInt32 level = 0 );
+    bool                        SetRawData      ( const std::vector< MemoryChunkConstPtr > & data, TextureFormat format, SizeType width, SizeType height );
 
 private:
 
