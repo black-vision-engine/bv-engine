@@ -10,14 +10,16 @@ DefaultTextureParams::DefaultTextureParams ()
 
 // **************************
 //
-DefaultTextureParams::DefaultTextureParams ( const std::string & name, unsigned int w, unsigned int h, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc )
+DefaultTextureParams::DefaultTextureParams ( const std::string & name, SizeType w, SizeType h, SizeType z, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureWrappingMode wmz, TextureFilteringMode fm, const glm::vec4 & bc )
 {
     SetName( name );
     SetWidth( w );
     SetHeight( h );
+	SetDepth( z );
     SetFormat( fmt );
     SetWrappingModeX( wmx );
     SetWrappingModeY( wmy );
+	SetWrappingModeZ( wmz );
     SetFilteringMode( fm );
     SetBorderColor( bc );
 }
@@ -37,16 +39,23 @@ const std::string       DefaultTextureParams::GetName           () const
 
 // **************************
 //
-SizeType				DefaultTextureParams::GetWidth          () const
+SizeType				DefaultTextureParams::GetWidth          ( UInt32 level ) const
 {
-    return m_width;
+    return m_width >> level;
 }
 
 // **************************
 //
-SizeType				DefaultTextureParams::GetHeight         () const
+SizeType				DefaultTextureParams::GetHeight         ( UInt32 level ) const
 {
-    return m_height;
+    return m_height >> level;
+}
+
+// **************************
+//
+SizeType				DefaultTextureParams::GetDepth          ( UInt32 level ) const
+{
+    return m_depth >> level;
 }
 
 // **************************
@@ -68,6 +77,13 @@ TextureWrappingMode     DefaultTextureParams::GetWrappingModeX  () const
 TextureWrappingMode     DefaultTextureParams::GetWrappingModeY  () const
 {
     return m_wrappingModeY;
+}
+
+// **************************
+//
+TextureWrappingMode     DefaultTextureParams::GetWrappingModeZ  () const
+{
+    return m_wrappingModeZ;
 }
 
 // **************************
@@ -106,6 +122,13 @@ void                    DefaultTextureParams::SetHeight         ( SizeType h )
 
 // **************************
 //
+void                    DefaultTextureParams::SetDepth          ( SizeType d )
+{
+    m_depth = d;
+}
+
+// **************************
+//
 void                    DefaultTextureParams::SetFormat         ( TextureFormat fmt )
 {
     m_format = fmt;
@@ -123,6 +146,13 @@ void                    DefaultTextureParams::SetWrappingModeX  ( TextureWrappin
 void                    DefaultTextureParams::SetWrappingModeY  ( TextureWrappingMode wm )
 {
     m_wrappingModeY = wm;
+}
+
+// **************************
+//
+void                    DefaultTextureParams::SetWrappingModeZ  ( TextureWrappingMode wm )
+{
+    m_wrappingModeZ = wm;
 }
 
 // **************************

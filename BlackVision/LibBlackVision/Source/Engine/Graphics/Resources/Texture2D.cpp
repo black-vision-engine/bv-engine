@@ -20,30 +20,30 @@ Texture2D::~Texture2D       ()
 
 // *********************************
 //
-SizeType    Texture2D::GetWidth         () const
+SizeType    Texture2D::GetWidth         ( UInt32 level ) const
 {
-    return m_width;
+	return m_width >> level;
 }
 
 // *********************************
 //
-SizeType    Texture2D::GetHeight        () const
+SizeType    Texture2D::GetHeight        ( UInt32 level ) const
 {
-    return m_height;
+	return m_height >> level;
 }
 
 // *********************************
 //
-SizeType    Texture2D::RawFrameSize () const
+SizeType    Texture2D::RawFrameSize		( UInt32 level ) const
 {
-    return GetPixelSize() * GetWidth() * GetHeight();
+    return GetPixelSize() * GetWidth( level ) * GetHeight( level );
 }
 
 // *********************************
 //
-SizeType    Texture2D::RawFrameSize ( TextureFormat format, SizeType width, SizeType height )
+SizeType    Texture2D::RawFrameSize		( TextureFormat format, SizeType width, SizeType height, UInt32 level )
 {
-    return GetPixelSize( format ) * width * height;
+    return GetPixelSize( format ) * ( width >> level ) * ( height >> level );
 }
 
 // *********************************

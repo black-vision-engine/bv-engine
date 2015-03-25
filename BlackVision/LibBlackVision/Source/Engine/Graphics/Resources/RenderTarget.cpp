@@ -24,7 +24,9 @@ RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, SizeT
     for( SizeType i = 0; i < m_numTargets; ++i )
     {
         auto tx = std::make_shared< Texture2DImpl >( formats[ i ], w, h, DataBuffer::Semantic::S_TEXTURE_STATIC );
-        tx->SetRawData( MemoryChunk::EMPTY(), formats[ i ], w, h ); //FIXME: empty pointer (this memory was never used as it is supposed only to serve as a key for Renderer).
+		std::vector< MemoryChunkConstPtr > txs;
+		txs.push_back( MemoryChunk::EMPTY() );
+        tx->SetRawData( txs, formats[ i ], w, h ); //FIXME: empty pointer (this memory was never used as it is supposed only to serve as a key for Renderer).
         tx->SetChanged( false );
         m_ColorTextures.push_back( tx );    
     }
