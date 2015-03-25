@@ -33,7 +33,7 @@ GLuint TextureDesc::DataSize() const
 
 ////////////////////////////////
 //
-GLuint TextureDesc::PixelSize( GLenum format )
+GLuint TextureDesc::PixelSize( GLenum format ) const
 {
     assert( format == GL_RGBA || format == GL_BGRA );
 

@@ -35,4 +35,15 @@ AssetTypeConstPtr  QueryTypedRes( AssetConstPtr asset )
     return std::static_pointer_cast< AssetTypeConstPtr::element_type >( asset->QueryThis() );
 }
 
+template< typename AssetTypeConstPtr >
+AssetTypeConstPtr  QueryTypedRes( AssetConstPtr asset )
+{
+	if( asset->GetUID() != AssetTypeConstPtr::element_type::UID() )
+    {
+        return nullptr;
+    }
+
+    return std::static_pointer_cast< AssetTypeConstPtr::element_type >( asset->QueryThis() );
+}
+
 } // bv
