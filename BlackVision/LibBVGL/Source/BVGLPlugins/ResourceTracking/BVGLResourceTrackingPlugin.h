@@ -54,6 +54,9 @@ public:
     virtual void        GenVertexArrays             ( GLsizei n, GLuint * arrays ) override;
     virtual void        DeleteVertexArrays          ( GLsizei n, const GLuint * arrays ) override;
     virtual void        VertexAttribPointer         ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer ) override;
+    virtual void        BindVertexArray				( GLuint array );
+    virtual void        EnableVertexAttribArray		( GLuint index );
+    virtual void        DisableVertexAttribArray	( GLuint index );
 
     virtual void		PrintShortSummary           ( const std::string & message ) override;
     virtual void		PrintCompleteSummary        ( const std::string & message ) override;

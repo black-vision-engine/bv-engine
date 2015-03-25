@@ -1,5 +1,9 @@
 #pragma once
 
+#include <vector>
+#include <hash_map>
+
+
 #include "BVGLDefs.h"
 
 
@@ -85,6 +89,7 @@ struct VertexArrayAttribDesc
  	GLboolean       normalized;
  	GLsizei         stride;
  	const GLvoid *  pointer;
+    bool            enabled;
 
     void    Set ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
 
@@ -95,11 +100,14 @@ struct VertexArrayAttribDesc
 struct VertexArrayDesc
 {
 
-    //std::vector<
+    std::hash_map< GLuint, GLuint >                 enabledAttributes;
+    std::hash_map< GLuint, VertexArrayAttribDesc >  attributePointers;
+
     VertexArrayDesc ();
 
-    void    Set     ();
-
+    void    AttrPointer ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
+    void    Enable      ( GLuint index );
+    void    Disable     ( GLuint index );
 };
 
 } // bv

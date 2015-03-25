@@ -215,7 +215,35 @@ void    BVGLResourceTrackingPlugin::DeleteVertexArrays          ( GLsizei n, con
 void    BVGLResourceTrackingPlugin::VertexAttribPointer         ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
 {
     Parent::VertexAttribPointer( index, size, type, normalized, stride, pointer );
-    //FIXME: implement tracking
+
+    m_vertexarrays.GetBoundResource( 1 ).AttrPointer( index, size, type, normalized, stride, pointer );
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::BindVertexArray				( GLuint array )
+{
+    Parent::BindVertexArray( array );
+
+    m_vertexarrays.BindResource( 1, array );
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::EnableVertexAttribArray		( GLuint index )
+{
+    Parent::EnableVertexAttribArray( index );
+    
+   // m_vertexarrays.GetBoundResource( 1 ).Enable( index );
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::DisableVertexAttribArray	( GLuint index )
+{
+    Parent::DisableVertexAttribArray( index );
+
+   // m_vertexarrays.GetBoundResource( 1 ).Disable( index );
 }
 
 // *****************************

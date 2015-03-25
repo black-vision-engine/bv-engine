@@ -149,14 +149,54 @@ void    FramebufferDesc::AttachRenderbuffer ( GLenum attachment, GLenum renderbu
 
 // *****************************
 //
-VertexArrayDesc::VertexArrayDesc    ()
+void    VertexArrayAttribDesc::Set ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
+{
+    this->index         = index;      
+    this->size          = size;
+    this->type          = type;
+    this->normalized    = normalized;
+    this->stride        = stride;
+    this->pointer       = pointer;     
+}
+
+// *************************************************************************************************************************************************
+
+// *****************************
+//
+VertexArrayDesc::VertexArrayDesc        ()
 {
 }
 
 // *****************************
 //
-void    VertexArrayDesc::Set        ()
+void    VertexArrayDesc::AttrPointer    ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
 {
+    auto d = VertexArrayAttribDesc();
+    
+    d.Set( index, size, type, normalized, stride, pointer );
+
+    attributePointers[ index ] = d;
+    d.enabled = false;
+}
+
+// *****************************
+//
+void    VertexArrayDesc::Enable         ( GLuint index )
+{
+    assert( attributePointers.find( index ) != attributePointers.end() );
+    
+    attributePointers[ index ].enabled = true;
+    enabledAttributes[ index ] = index;
+}
+
+// *****************************
+//
+void    VertexArrayDesc::Disable     ( GLuint index )
+{
+    assert( attributePointers.find( index ) != attributePointers.end() );
+
+    attributePointers[ index ].enabled = false;
+    enabledAttributes.erase( index );
 }
 
 } // bv
