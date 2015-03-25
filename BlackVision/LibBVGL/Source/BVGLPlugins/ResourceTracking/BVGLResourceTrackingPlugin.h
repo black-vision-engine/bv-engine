@@ -48,6 +48,8 @@ public:
     virtual void        GenFramebuffers             ( GLsizei n, GLuint * framebuffers ) override;
     virtual void        DeleteFramebuffers          ( GLsizei n, const GLuint * framebuffers ) override;
     virtual void        BindFramebuffer             ( GLenum target, GLuint framebuffer ) override;
+    virtual void        FramebufferTexture2D		( GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level ) override;
+    virtual void        FramebufferRenderbuffer		( GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer ) override;
 
     virtual void        GenVertexArrays             ( GLsizei n, GLuint * arrays ) override;
     virtual void        DeleteVertexArrays          ( GLsizei n, const GLuint * arrays ) override;

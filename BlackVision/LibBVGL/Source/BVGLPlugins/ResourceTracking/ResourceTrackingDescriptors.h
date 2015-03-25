@@ -61,7 +61,7 @@ struct FramebufferDesc
     FramebufferDesc ();
 
     void    Set     ();
-
+    //void    Set     ();
 };
 
 /////////////////////////////////////

@@ -99,7 +99,7 @@ public:
     virtual void                RenderbufferStorage			( GLenum target, GLenum internalformat, GLsizei width, GLsizei height );
 
     virtual void                BindFramebuffer				( GLenum target, GLuint framebuffer );
-    virtual void                FramebufferTexture2D		( GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level ) ;
+    virtual void                FramebufferTexture2D		( GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level );
     virtual void                FramebufferRenderbuffer		( GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer );
 
     virtual void                DrawBuffers					( GLsizei n, const GLenum * bufs );
