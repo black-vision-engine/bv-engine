@@ -59,9 +59,17 @@ uintptr_t               DefaultTextureDescriptor::GetUID            () const
 
 // **************************
 //
-MemoryChunkConstPtr     DefaultTextureDescriptor::GetBits           () const
+MemoryChunkConstPtr     DefaultTextureDescriptor::GetBits           ( UInt32 level ) const
 {
-	return m_texResource->GetOriginal()->GetData();
+	if( level == 0 )
+	{
+		return m_texResource->GetOriginal()->GetData();
+	}
+	else
+	{
+		assert( level < m_texResource->GetMipMaps()->GetLevelsNum() );
+		return m_texResource->GetMipMaps()->GetLevel( level )->GetData();
+	}
 }
 
 // **************************
@@ -87,16 +95,16 @@ const std::string       DefaultTextureDescriptor::GetName           () const
 
 // **************************
 //
-SizeType				DefaultTextureDescriptor::GetWidth          () const
+SizeType				DefaultTextureDescriptor::GetWidth          ( UInt32 level ) const
 {
-    return m_params.GetWidth();
+    return m_params.GetWidth() >> level;
 }
 
 // **************************
 //
-SizeType				DefaultTextureDescriptor::GetHeight         () const
+SizeType				DefaultTextureDescriptor::GetHeight         ( UInt32 level ) const
 {
-    return m_params.GetHeight();
+    return m_params.GetHeight() >> level;
 }
 
 // **************************

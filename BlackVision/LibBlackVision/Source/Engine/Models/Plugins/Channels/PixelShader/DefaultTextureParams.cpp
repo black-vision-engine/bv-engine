@@ -37,16 +37,16 @@ const std::string       DefaultTextureParams::GetName           () const
 
 // **************************
 //
-SizeType				DefaultTextureParams::GetWidth          () const
+SizeType				DefaultTextureParams::GetWidth          ( UInt32 level ) const
 {
-    return m_width;
+    return m_width >> level;
 }
 
 // **************************
 //
-SizeType				DefaultTextureParams::GetHeight         () const
+SizeType				DefaultTextureParams::GetHeight         ( UInt32 level ) const
 {
-    return m_height;
+    return m_height >> level;
 }
 
 // **************************

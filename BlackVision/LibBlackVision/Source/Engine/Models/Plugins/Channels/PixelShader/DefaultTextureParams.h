@@ -25,8 +25,8 @@ public:
             ~DefaultTextureParams();
 
     virtual const std::string       GetName         () const override;
-    virtual SizeType				GetWidth        () const override;
-    virtual SizeType				GetHeight       () const override;
+    virtual SizeType				GetWidth        ( UInt32 level = 0 ) const override;
+    virtual SizeType				GetHeight       ( UInt32 level = 0 ) const override;
     virtual TextureFormat           GetFormat       () const override;
     virtual TextureWrappingMode     GetWrappingModeX() const override;
     virtual TextureWrappingMode     GetWrappingModeY() const override;

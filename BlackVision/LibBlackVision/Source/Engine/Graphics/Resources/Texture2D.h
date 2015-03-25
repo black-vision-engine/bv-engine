@@ -18,11 +18,11 @@ public:
                         Texture2D       ( TextureFormat format, SizeType width, SizeType height, DataBuffer::Semantic semantic );
     virtual             ~Texture2D      () = 0;
 
-    SizeType			GetWidth        () const;
-    SizeType			GetHeight       () const;
+    SizeType			GetWidth        ( UInt32 level = 0 ) const;
+    SizeType			GetHeight       ( UInt32 level = 0 ) const;
 
-    SizeType			RawFrameSize    () const;
-    static SizeType		RawFrameSize    ( TextureFormat format, SizeType width, SizeType height );
+    SizeType			RawFrameSize    ( UInt32 level = 0 ) const;
+    static SizeType		RawFrameSize    ( TextureFormat format, SizeType width, SizeType height, UInt32 level = 0 );
 
 protected:
 

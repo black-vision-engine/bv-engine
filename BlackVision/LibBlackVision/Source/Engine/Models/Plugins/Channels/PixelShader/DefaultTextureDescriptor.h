@@ -13,7 +13,7 @@ class DefaultTextureDescriptor : public ITextureDescriptor
 {
 private:
 
-    TextureAssetConstPtr m_texResource;
+    TextureAssetConstPtr	m_texResource;
 
     DefaultTextureParams    m_params;
     mutable bool            m_bitsChanged;
@@ -27,14 +27,14 @@ public:
 
     virtual uintptr_t               GetUID          () const override;
 
-    virtual MemoryChunkConstPtr     GetBits         () const override;
+    virtual MemoryChunkConstPtr     GetBits         (  UInt32 level = 0 ) const override;
 
     virtual bool                    BitsChanged     () const override;
     virtual void                    ResetBitsChanged() const override;
 
     virtual const std::string       GetName         () const override;
-    virtual SizeType				GetWidth        () const override;
-    virtual SizeType				GetHeight       () const override;
+    virtual SizeType				GetWidth        ( UInt32 level = 0 ) const override;
+    virtual SizeType				GetHeight       ( UInt32 level = 0 ) const override;
     virtual TextureFormat           GetFormat       () const override;
     virtual TextureWrappingMode     GetWrappingModeX() const override;
     virtual TextureWrappingMode     GetWrappingModeY() const override;

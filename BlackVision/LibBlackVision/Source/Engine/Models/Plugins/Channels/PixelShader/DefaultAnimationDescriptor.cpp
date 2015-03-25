@@ -99,16 +99,16 @@ const std::string       DefaultAnimationDescriptor::GetName             () const
 
 // *******************************
 //
-SizeType				DefaultAnimationDescriptor::GetWidth            () const
+SizeType				DefaultAnimationDescriptor::GetWidth            ( UInt32 level ) const
 {
-    return m_params.GetWidth();
+    return m_params.GetWidth() >> level;
 }
 
 // *******************************
 //
-SizeType				DefaultAnimationDescriptor::GetHeight           () const
+SizeType				DefaultAnimationDescriptor::GetHeight           ( UInt32 level ) const
 {
-    return m_params.GetHeight();
+    return m_params.GetHeight() >> level;
 }
 
 // *******************************
