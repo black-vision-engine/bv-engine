@@ -2,10 +2,13 @@
 #include "TextAtlas.h"
 
 #include "Assets/Assets.h"
+#include "Assets/Font/Glyph.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+
+
 
 #include <assert.h>
 
@@ -13,7 +16,7 @@ namespace bv {
 
 ///////////////////////////////
 //
-FontAssetConstPtr      TextHelper::LoadFont( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize, const std::wstring & atlasCharSetFile )
+FontAssetConstPtr      TextHelper::LoadFont( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize )
 {
 	return LoadFontAsset( fontFileName, size, blurSize, outlineSize, false ); // TODO: pass generate mipmaps argument
 }
