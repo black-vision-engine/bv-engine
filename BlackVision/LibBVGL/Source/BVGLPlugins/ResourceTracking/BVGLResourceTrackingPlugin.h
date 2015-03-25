@@ -3,12 +3,12 @@
 #include "BVGLPlugins/BVGLPlugin.h"
 
 #include "BVGLPlugins/ResourceTracking/ResourceTrackingDescriptors.h"
+#include "BVGLPlugins/ResourceTracking/TrackableResources.h"
 
 #include <hash_map>
 #include <cassert>
 
 namespace bv {
-
 
 class BVGLResourceTrackingPlugin : public BVGLPlugin
 {
@@ -17,17 +17,11 @@ class BVGLResourceTrackingPlugin : public BVGLPlugin
 
 private:
 
-    std::hash_map< GLuint, BufferDesc >         m_allocatedBuffers;
-    std::hash_map< GLenum, GLuint >             m_boundBuffers;
-
-    std::hash_map< GLuint, TextureDesc >        m_allocatedTextures;
-    std::hash_map< GLuint, GLint >              m_boundTextures;
-
-    std::hash_map< GLuint, GLuint >             m_allocatedFramebuffers;
-    std::hash_map< GLenum, GLuint >             m_boundFramebuffers;
-
-    std::hash_map< GLuint, RenderbufferDesc >   m_allocatedRenderbuffers;
-    std::hash_map< GLenum, GLuint >             m_boundRenderbuffers;
+    TrackableResources< BufferDesc >            m_buffers;
+    TrackableResources< TextureDesc >           m_textures;
+    TrackableResources< FramebufferDesc >       m_framebuffers;
+    TrackableResources< RenderbufferDesc >      m_renderbuffers;
+    TrackableResources< VertexArrayDesc >       m_vertexarrays;
 
 public:
 
@@ -46,13 +40,21 @@ public:
     virtual void        TexSubImage2D				( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid * pixels ) override;
     virtual void        BindTexture					( GLenum target, GLuint texture ) override;
 
-    virtual void        GenRenderbuffers            ( GLsizei n, GLuint * renderbuffers );
-    virtual void        DeleteRenderbuffers         ( GLsizei n, const GLuint * renderbuffers );
+    virtual void        GenRenderbuffers            ( GLsizei n, GLuint * renderbuffers ) override;
+    virtual void        DeleteRenderbuffers         ( GLsizei n, const GLuint * renderbuffers ) override;
+    virtual void        BindRenderbuffer            ( GLenum target, GLuint renderbuffer ) override;
+    virtual void        RenderbufferStorage         ( GLenum target, GLenum internalformat, GLsizei width, GLsizei height ) override;
 
-    virtual void        BindRenderbuffer            ( GLenum target, GLuint renderbuffer );
-    virtual void        RenderbufferStorage         ( GLenum target, GLenum internalformat, GLsizei width, GLsizei height );
+    virtual void        GenFramebuffers             ( GLsizei n, GLuint * framebuffers ) override;
+    virtual void        DeleteFramebuffers          ( GLsizei n, const GLuint * framebuffers ) override;
+    virtual void        BindFramebuffer             ( GLenum target, GLuint framebuffer ) override;
 
-    virtual void		PrintStats                  ( const std::string & message ) override;
+    virtual void        GenVertexArrays             ( GLsizei n, GLuint * arrays ) override;
+    virtual void        DeleteVertexArrays          ( GLsizei n, const GLuint * arrays ) override;
+    virtual void        VertexAttribPointer         ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer ) override;
+
+    virtual void		PrintShortSummary           ( const std::string & message ) override;
+    virtual void		PrintCompleteSummary        ( const std::string & message ) override;
 
 private:
 
@@ -64,18 +66,6 @@ private:
     std::string         FormatSize                  ( GLuint numBytes );
 
 /*
-    static void                 bvglGenFramebuffers         ( GLsizei n, GLuint * framebuffers );
-    static void                 bvglDeleteFramebuffers      ( GLsizei n, const GLuint * framebuffers );
-    
-    static void                 bvglGenRenderbuffers        ( GLsizei n, GLuint * renderbuffers );
-    static void                 bvglDeleteRenderbuffers     ( GLsizei n, const GLuint * renderbuffers );
-
-    static void                 bvglBindRenderbuffer        ( GLenum target, GLuint renderbuffer );
-
-    static void                 bvglBindFramebuffer         ( GLenum target, GLuint framebuffer );
-    static void                 bvglGenVertexArrays         ( GLsizei n, GLuint * arrays );
-    static void                 bvglDeleteVertexArrays      ( GLsizei n, const GLuint * arrays );
-    static void                 bvglVertexAttribPointer     ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
 */
 };
 
