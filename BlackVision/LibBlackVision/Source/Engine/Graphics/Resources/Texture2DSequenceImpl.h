@@ -22,7 +22,7 @@ public:
     
     bool                        AddTextureSettingRawData( MemoryChunkConstPtr data, TextureFormat format, SizeType width, SizeType height );
 
-	virtual UInt32				GetNumLevels			() const override;
+	virtual SizeType			GetNumLevels			() const override;
 
     SizeType                    NumTextures             () const;
 

@@ -12,6 +12,8 @@ class MemoryChunk;
 DEFINE_PTR_TYPE( MemoryChunk )
 DEFINE_CONST_PTR_TYPE( MemoryChunk )
 
+typedef std::vector< MemoryChunkConstPtr > MemoryChunkVector;
+
 class MemoryChunk
 {
 private:

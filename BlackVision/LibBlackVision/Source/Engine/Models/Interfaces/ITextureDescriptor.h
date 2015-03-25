@@ -16,8 +16,9 @@ public:
 
     virtual uid_t                   GetUID              () const = 0;
 
-	virtual UInt32					GetNumLevels        () const = 0;
-    virtual MemoryChunkConstPtr     GetBits             ( UInt32 level = 0 ) const = 0;
+	virtual SizeType				GetNumLevels        () const = 0;
+    virtual MemoryChunkConstPtr     GetBits             ( UInt32 level ) const = 0;
+	virtual MemoryChunkVector		GetBits             () const = 0;
     virtual bool                    BitsChanged         () const = 0;
     virtual void                    ResetBitsChanged    () const = 0;
     virtual DataBuffer::Semantic    GetSemantic         () const = 0;

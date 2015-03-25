@@ -27,8 +27,9 @@ public:
 
     virtual uintptr_t               GetUID          () const override;
 
-	virtual UInt32					GetNumLevels    () const override;
-    virtual MemoryChunkConstPtr     GetBits         (  UInt32 level = 0 ) const override;
+	virtual SizeType				GetNumLevels    () const override;
+    virtual MemoryChunkConstPtr     GetBits         (  UInt32 level ) const override;
+	virtual MemoryChunkVector		GetBits         () const override;
 
     virtual bool                    BitsChanged     () const override;
     virtual void                    ResetBitsChanged() const override;

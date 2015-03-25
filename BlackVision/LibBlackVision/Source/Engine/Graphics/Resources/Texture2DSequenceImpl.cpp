@@ -46,7 +46,7 @@ SizeType            Texture2DSequenceImpl::NumTextures             () const
 
 // *********************************
 //  
-UInt32				Texture2DSequenceImpl::GetNumLevels				() const
+SizeType			Texture2DSequenceImpl::GetNumLevels				() const
 {
 	return 0;
 }

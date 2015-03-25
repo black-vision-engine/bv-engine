@@ -50,13 +50,7 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
     }
 
     tx = CreateEmptyTexture( format, width, height, semantic );
-	std::vector< MemoryChunkConstPtr > texs;
-	for( UInt32 i = 0; i < txParams->GetNumLevels(); ++i )
-	{
-		texs.push_back( txParams->GetBits( i ) );
-	}
-
-	tx->SetRawData( texs, format, txParams->GetWidth(), txParams->GetHeight() );
+	tx->SetRawData( txParams->GetBits(), format, txParams->GetWidth(), txParams->GetHeight() );
 
     if( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC )
     {

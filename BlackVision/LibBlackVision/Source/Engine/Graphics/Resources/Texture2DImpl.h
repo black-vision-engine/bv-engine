@@ -17,9 +17,9 @@ public:
                                 Texture2DImpl   ( TextureFormat format, SizeType width, SizeType height, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE_STATIC );
     virtual                     ~Texture2DImpl  ();
 
-	virtual UInt32				GetNumLevels    () const override;
+	virtual SizeType			GetNumLevels    () const override;
 
-    virtual size_t              GetDataSize     ( UInt32 level = 0 ) const override;
+    virtual SizeType            GetDataSize     ( UInt32 level = 0 ) const override;
 
     virtual MemoryChunkConstPtr GetData         ( UInt32 level = 0 ) const override;
 

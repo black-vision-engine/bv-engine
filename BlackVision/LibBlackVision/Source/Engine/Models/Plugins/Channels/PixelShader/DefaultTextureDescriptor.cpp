@@ -55,12 +55,12 @@ DefaultTextureDescriptor::~DefaultTextureDescriptor                 ()
 //
 uintptr_t               DefaultTextureDescriptor::GetUID            () const
 {
-    return (uintptr_t) GetBits()->Get();
+    return (uintptr_t) GetBits( 0 )->Get();
 }
 
 // **************************
 //
-UInt32					DefaultTextureDescriptor::GetNumLevels		() const
+SizeType				DefaultTextureDescriptor::GetNumLevels		() const
 {
 	if( m_texResource->GetMipMaps() != nullptr )
 	{
@@ -85,6 +85,31 @@ MemoryChunkConstPtr     DefaultTextureDescriptor::GetBits           ( UInt32 lev
 		assert( level < m_texResource->GetMipMaps()->GetLevelsNum() );
 		return m_texResource->GetMipMaps()->GetLevel( level )->GetData();
 	}
+}
+
+// **************************
+//
+MemoryChunkVector		DefaultTextureDescriptor::GetBits			() const
+{
+	MemoryChunkVector res;
+
+	SizeType numLevel = 1;
+
+	if( m_texResource->GetMipMaps() != nullptr )
+	{
+		numLevel += m_texResource->GetMipMaps()->GetLevelsNum();
+	}
+
+	res.reserve( numLevel );
+
+	res.push_back( m_texResource->GetOriginal()->GetData() );
+
+	for( UInt32 i = 1; i < numLevel; ++i )
+	{
+		res.push_back( m_texResource->GetMipMaps()->GetLevel( i - 1 )->GetData() );
+	}
+
+	return res;
 }
 
 // **************************

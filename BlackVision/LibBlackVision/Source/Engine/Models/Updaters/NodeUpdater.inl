@@ -221,14 +221,7 @@ inline void    NodeUpdater::UpdateTexturesData  ()
                 {
                     auto format = texDesc->GetFormat();
 
-					std::vector< MemoryChunkConstPtr > textures;
-
-					for( UInt32 i = 0; i < texDesc->GetNumLevels(); ++i )
-					{
-						textures.push_back( texDesc->GetBits( i ) );
-					}
-
-					tex2D->SetRawData( textures, format, texDesc->GetWidth(), texDesc->GetHeight() );
+					tex2D->SetRawData( texDesc->GetBits(), format, texDesc->GetWidth(), texDesc->GetHeight() );
                 }
 
                 texDesc->ResetBitsChanged();

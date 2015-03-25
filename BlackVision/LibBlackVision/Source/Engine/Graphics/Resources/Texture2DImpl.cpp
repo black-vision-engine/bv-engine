@@ -21,7 +21,7 @@ Texture2DImpl::~Texture2DImpl  ()
 
 // *********************************
 //
-UInt32 Texture2DImpl::GetNumLevels			() const
+SizeType Texture2DImpl::GetNumLevels			() const
 {
 	return ( UInt32 ) m_data.size();
 }
