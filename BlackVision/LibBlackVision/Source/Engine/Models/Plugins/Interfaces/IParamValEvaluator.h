@@ -7,11 +7,7 @@
 #include "Engine/Models/Plugins/Interfaces/IParamSet.h"
 #include "Engine/Interfaces/IValueSet.h"
 
-namespace bv { 
-    
-class IValue;
-
-namespace model {
+namespace bv { namespace model {
 
 class IParamValEvaluator;
 DEFINE_PTR_TYPE(IParamValEvaluator)

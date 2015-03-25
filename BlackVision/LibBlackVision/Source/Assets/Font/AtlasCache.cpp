@@ -10,9 +10,9 @@
 
 #include "Assets/Texture/TextureHelpers.h"
 #include "Assets/Texture/TextureLoader.h"
-#include "Assets/Asset.h"
+#include "Assets/Assets.h"
 #include "Assets/Texture/TextureAssetDescriptor.h"
-#include "Assets/AssetManager.h"
+#include "Assets/Assets.h"
 
 #pragma warning(push)
 #pragma warning(disable : 4512)
@@ -206,12 +206,10 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & f
 
 	if( ret->m_textAtlas != nullptr )
 	{
-		auto texDesc = TextureAssetDesc::Create( ret->m_atlasFilePath, true );
-
-		auto asset = AssetManager::GetInstance().LoadAsset( texDesc );
+		auto asset = LoadTextureAsset( ret->m_atlasFilePath );
 		if( asset != nullptr )
 		{
-			std::const_pointer_cast< TextAtlas >( ret->m_textAtlas )->m_textureAsset = QueryTypedRes< TextureAssetConstPtr >( asset );
+			std::const_pointer_cast< TextAtlas >( ret->m_textAtlas )->m_textureAsset = asset;
 		}
 
 		return ret;

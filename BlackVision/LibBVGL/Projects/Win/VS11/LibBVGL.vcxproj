@@ -22,7 +22,8 @@
     <ClCompile Include="..\..\..\Source\BVGL.cpp" />
     <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLPluginFactory.cpp" />
-    <ClCompile Include="..\..\..\Source\BVGLPlugins\BVGLResourceTrackingPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\ResourceTracking\BVGLResourceTrackingPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\ResourceTracking\ResourceTrackingDescriptors.cpp" />
     <ClCompile Include="..\..\..\Source\BVGLTools\BVGLTranslator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -30,7 +31,8 @@
     <ClInclude Include="..\..\..\Source\BVGLDefs.h" />
     <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLPlugin.h" />
     <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLPluginFactory.h" />
-    <ClInclude Include="..\..\..\Source\BVGLPlugins\BVGLResourceTrackingPlugin.h" />
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\ResourceTracking\BVGLResourceTrackingPlugin.h" />
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\ResourceTracking\ResourceTrackingDescriptors.h" />
     <ClInclude Include="..\..\..\Source\BVGLTools\BVGLTranslator.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

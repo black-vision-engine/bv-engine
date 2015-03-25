@@ -1,7 +1,4 @@
-#include "Assets/AssetManager.h"
-#include "Assets/Texture/TextureLoader.h"
-#include "Assets/Texture/TextureAssetDescriptor.h"
-#include "Assets/Texture/TextureAsset.h"
+#include "Assets/Assets.h"
 #include "Engine/Types/EnumsUtils.h"
 #include "DataTypes/Hash.h"
 
@@ -32,49 +29,19 @@ TEST(HashTest, Hash)
 
 TEST(LoadingTextureAndGeneratingMipMaps, AssetManager)
 {
-	auto props = image::GetImageProps( imagePath );
-	ASSERT_TRUE( props.error.empty() );
-
-	auto orig = SingleTextureAssetDesc::Create( imagePath, props.width, props.height, EnumsUtils::Convert( props.format ), true );
-	ASSERT_TRUE( orig );
-
-	auto textureResDesc = TextureAssetDesc::Create( orig, MipMapFilterType::BILINEAR );
-	ASSERT_TRUE( textureResDesc );
-
-	auto res = AssetManager::GetInstance().LoadAsset( textureResDesc );
+	auto res = LoadTextureAsset( imagePath, MipMapFilterType::BILINEAR );
 	ASSERT_TRUE( res );
 }
 
 TEST(LoadingTexture, AssetManager)
 {
-	auto props = image::GetImageProps( imagePath );
-	ASSERT_TRUE( props.error.empty() );
-
-	auto orig = SingleTextureAssetDesc::Create( imagePath, props.width, props.height, EnumsUtils::Convert( props.format ), true );
-	ASSERT_TRUE( orig );
-
-	auto textureResDesc = TextureAssetDesc::Create( orig );
-	ASSERT_TRUE( textureResDesc );
-
-	auto res = AssetManager::GetInstance().LoadAsset( textureResDesc );
+	auto res = LoadTextureAsset( imagePath );
 	ASSERT_TRUE( res );
 }  
 
 TEST(LoadingTexturePowefOf2Texture, AssetManager)
 {
-	auto props = image::GetImageProps( imagePath_512x512 );
-	ASSERT_TRUE( props.error.empty() );
-
-	auto orig = SingleTextureAssetDesc::Create( imagePath_512x512, props.width, props.height, EnumsUtils::Convert( props.format ), true );
-	ASSERT_TRUE( orig );
-
-	auto textureResDesc = TextureAssetDesc::Create( orig, MipMapFilterType::BILINEAR );
-	ASSERT_TRUE( textureResDesc );
-
-	auto res = AssetManager::GetInstance().LoadAsset( textureResDesc );
-	ASSERT_TRUE( res );
-
-	auto typedRes = QueryTypedRes< TextureAssetConstPtr >( res );
+	auto typedRes = LoadTextureAsset( imagePath_512x512, MipMapFilterType::BILINEAR );
 	ASSERT_TRUE( typedRes->GetOriginal()->GetData() == typedRes->GetMipMaps()->GetLevel( 0 )->GetData() );
 }  
 
