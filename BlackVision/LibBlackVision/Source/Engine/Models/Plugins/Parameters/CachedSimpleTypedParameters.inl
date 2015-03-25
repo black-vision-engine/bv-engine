@@ -37,8 +37,7 @@ static inline bool CachedSimpleTypedParametersHelper::isDifferent< float >( floa
 //
 template<class T>
 inline  ParamEnum<T>::ParamEnum( const std::string & name, const IntInterpolator & transform, ITimeEvaluatorPtr evaluator )
-    //: SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM >( name, transform, evaluator )
-    : ParentImpl( name, transform, evaluator )
+    : SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM >( name, transform, evaluator )
 {
 }
 

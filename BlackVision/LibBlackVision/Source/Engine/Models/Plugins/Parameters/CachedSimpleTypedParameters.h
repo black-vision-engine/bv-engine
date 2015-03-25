@@ -34,21 +34,21 @@ public:
     virtual bool                    Changed             () const override;
 };
 
-template<class T>
-class ParamEnum : public CachedSimpleTypedParameters< IntInterpolator, int, ModelParamType::MPT_ENUM >/*, public ICachedParameter*/
-{
-    typedef CachedSimpleTypedParameters< IntInterpolator, int, ModelParamType::MPT_ENUM > ParentImpl;
-public:
-    ParamEnum( const std::string & name, const IntInterpolator & interpolator, ITimeEvaluatorPtr evaluator );
-
-    inline  T               Evaluate        () const;
-    inline  void            SetVal          ( const T & val, TimeType t );
-
-    virtual VoidPtr         QueryParamTyped () override;
-
-    inline static  ModelParamType  Type     ();
-    //virtual bool                    Changed             () const override { return ParentImpl::Changed(); }
-};
+//template<class T>
+//class ParamEnum : public CachedSimpleTypedParameters< IntInterpolator, int, ModelParamType::MPT_ENUM >/*, public ICachedParameter*/
+//{
+//    typedef CachedSimpleTypedParameters< IntInterpolator, int, ModelParamType::MPT_ENUM > ParentImpl;
+//public:
+//    ParamEnum( const std::string & name, const IntInterpolator & interpolator, ITimeEvaluatorPtr evaluator );
+//
+//    inline  T               Evaluate        () const;
+//    inline  void            SetVal          ( const T & val, TimeType t );
+//
+//    virtual VoidPtr         QueryParamTyped () override;
+//
+//    inline static  ModelParamType  Type     ();
+//    //virtual bool                    Changed             () const override { return ParentImpl::Changed(); }
+//};
 
 
 

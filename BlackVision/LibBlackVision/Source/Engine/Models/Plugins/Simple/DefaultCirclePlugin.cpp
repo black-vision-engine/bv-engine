@@ -10,16 +10,39 @@ const std::string DefaultCirclePlugin::PN_OUTER_RADIUS = "outer radius";
 const std::string DefaultCirclePlugin::PN_OPEN_ANGLE = "open angle";
 const std::string DefaultCirclePlugin::PN_OPEN_ANGLE_MODE = "open angle mode";
 
+
+typedef ParamEnum< DefaultCirclePlugin::OpenAngleMode > ParamEnumOAM;
+
 // *******************************
 //
-VoidPtr    ParamEnum< DefaultCirclePlugin::OpenAngleMode >::QueryParamTyped  ()
+VoidPtr    ParamEnumOAM::QueryParamTyped  ()
 {
     return std::static_pointer_cast< void >( shared_from_this() );
 }
 
-//template class CachedSimpleTypedParameters< IntInterpolator, int, ModelParamType::MPT_ENUM >;
+template<>
+static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCirclePlugin::OpenAngleMode >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultCirclePlugin::OpenAngleMode >( name, timeline );
+}
 
-//void BasePluginDescriptor::AddParam<int>( DefaultParamValModelPtr&, ITimeEvaluatorPtr timeEvaluator, std::string name, const T& defaultValue, bool addValue, bool isState  ) const;
+template<>
+inline bool SetParameter< DefaultCirclePlugin::OpenAngleMode >( IParameterPtr param, TimeType t, const DefaultCirclePlugin::OpenAngleMode & val )
+{
+    //return SetSimpleTypedParameter< ParamEnum<DefaultCirclePlugin::OpenAngleMode> >( param, t, val );
+    typedef ParamEnum<DefaultCirclePlugin::OpenAngleMode> ParamType;
+
+    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
+
+    if( typedParam == nullptr )
+    {
+        return false;
+    }
+
+    typedParam->SetVal( val, t );
+
+    return true;
+}
 
 DefaultPluginParamValModelPtr   DefaultCirclePluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
@@ -32,15 +55,15 @@ DefaultPluginParamValModelPtr   DefaultCirclePluginDesc::CreateDefaultModel  ( I
     AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_INNER_RADIUS, 0.f, true, true );
     AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_OPEN_ANGLE, 360.f, true, true );
     AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_TESSELATION, 3, true, true );
-    //AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_OPEN_ANGLE_MODE, DefaultCirclePlugin::OpenAngleMode::CW, true, true );
+    AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_OPEN_ANGLE_MODE, DefaultCirclePlugin::OpenAngleMode::CW, true, true );
 
-    ParamIntPtr paramN      = ParametersFactory::CreateParameterInt( DefaultCirclePlugin::PN_TESSELATION, timeEvaluator );
+    //ParamIntPtr paramN      = ParametersFactory::CreateParameterInt( DefaultCirclePlugin::PN_TESSELATION, timeEvaluator );
     auto paramOAM = ParametersFactory::CreateParameterEnum< DefaultCirclePlugin::OpenAngleMode >( DefaultCirclePlugin::PN_OPEN_ANGLE_MODE, timeEvaluator );
 
-    vacModel->AddParameter( paramN );
+    //vacModel->AddParameter( paramN );
     vacModel->AddParameter( paramOAM );
 
-    paramN->SetVal( 3, 0.f );
+    //paramN->SetVal( 3, 0.f );
     paramOAM->SetVal( DefaultCirclePlugin::OpenAngleMode::CW, 0.f );
 
 

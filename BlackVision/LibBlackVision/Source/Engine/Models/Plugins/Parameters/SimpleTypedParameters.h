@@ -62,19 +62,19 @@ public:
 
 };
 
-//template<class T>
-//class ParamEnum : public SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM >
-//{
-//public:
-//    ParamEnum( const std::string & name, const IntInterpolator & interpolator, ITimeEvaluatorPtr evaluator );
-//
-//    inline  T               Evaluate        () const;
-//    inline  void            SetVal          ( const T & val, TimeType t );
-//
-//    virtual VoidPtr         QueryParamTyped () override;
-//
-//    inline static  ModelParamType  Type     ();
-//};
+template<class T>
+class ParamEnum : public SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM >
+{
+public:
+    ParamEnum( const std::string & name, const IntInterpolator & interpolator, ITimeEvaluatorPtr evaluator );
+
+    inline  T               Evaluate        () const;
+    inline  void            SetVal          ( const T & val, TimeType t );
+
+    virtual VoidPtr         QueryParamTyped () override;
+
+    inline static  ModelParamType  Type     ();
+};
 
 
 typedef SimpleParameterImpl< FloatInterpolator, float, ModelParamType::MPT_FLOAT >      ParamFloat;
