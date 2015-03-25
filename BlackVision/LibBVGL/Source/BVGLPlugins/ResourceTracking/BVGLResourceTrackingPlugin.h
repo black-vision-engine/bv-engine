@@ -2,6 +2,8 @@
 
 #include "BVGLPlugins/BVGLPlugin.h"
 
+#include "BVGLPlugins/ResourceTracking/ResourceTrackingDescriptors.h"
+
 #include <hash_map>
 #include <cassert>
 

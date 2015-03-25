@@ -26,6 +26,9 @@
     <ClInclude Include="..\..\..\Source\BVGLPlugins\ResourceTracking\BVGLResourceTrackingPlugin.h">
       <Filter>BVGLPlugins\ResourceTracking</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\BVGLPlugins\ResourceTracking\ResourceTrackingDescriptors.h">
+      <Filter>BVGLPlugins\ResourceTracking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\BVGLTools\BVGLTranslator.cpp">
@@ -39,6 +42,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\BVGL.cpp" />
     <ClCompile Include="..\..\..\Source\BVGLPlugins\ResourceTracking\BVGLResourceTrackingPlugin.cpp">
+      <Filter>BVGLPlugins\ResourceTracking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\BVGLPlugins\ResourceTracking\ResourceTrackingDescriptors.cpp">
       <Filter>BVGLPlugins\ResourceTracking</Filter>
     </ClCompile>
   </ItemGroup>
