@@ -3,6 +3,12 @@
 
 namespace bv { namespace model {
 
+    template<>
+    static IParameterPtr        ParametersFactory::CreateTypedParameter<int>                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+    {
+        return CreateParameterInt( name, timeline );
+    }
+
 // *******************************
 //
 ParamMat2                          ParametersFactory::CreateParameterMat2                 ( const std::string & name, const Vec4Interpolator & interpolator, ITimeEvaluatorPtr timeline )

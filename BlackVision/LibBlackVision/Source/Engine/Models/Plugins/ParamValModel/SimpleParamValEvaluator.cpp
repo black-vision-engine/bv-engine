@@ -86,6 +86,7 @@ ValueTypePtr                                 SimpleParamValEvaluator< ParamTypeP
 } // bv
 
 //Explicit instantiation - this way class' implementation can be stored in cpp file (like here)
+template class bv::model::SimpleParamValEvaluator<bv::model::ParamIntPtr, bv::ValueIntPtr>;
 template class bv::model::SimpleParamValEvaluator<bv::model::ParamFloatPtr, bv::ValueFloatPtr>;
 template class bv::model::SimpleParamValEvaluator<bv::model::ParamVec4Ptr, bv::ValueVec4Ptr>;
 template class bv::model::SimpleParamValEvaluator<bv::model::ParamVec3Ptr, bv::ValueVec3Ptr>;

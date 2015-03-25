@@ -11,6 +11,13 @@ namespace bv { namespace model {
 class ParamValEvaluatorFactory
 {
 public:
+    static IParamValEvaluatorPtr        CreateSimpleEvaluator           ( IParameterPtr param );
+
+    static SimpleIntEvaluatorPtr        CreateSimpleIntEvaluator        ( ParamIntPtr param, ValueIntPtr value );
+    static SimpleIntEvaluatorPtr        CreateSimpleIntEvaluator        ( ParamIntPtr param, const std::string & valueName );
+    static SimpleIntEvaluatorPtr        CreateSimpleIntEvaluator        ( ParamIntPtr param );
+    static SimpleIntEvaluatorPtr        CreateSimpleIntEvaluator        ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator );
+    static SimpleIntEvaluatorPtr        CreateSimpleIntEvaluator        ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName );
 
     static SimpleFloatEvaluatorPtr      CreateSimpleFloatEvaluator      ( ParamFloatPtr param, ValueFloatPtr value );
     static SimpleFloatEvaluatorPtr      CreateSimpleFloatEvaluator      ( ParamFloatPtr param, const std::string & valueName );

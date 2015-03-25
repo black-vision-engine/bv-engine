@@ -6,6 +6,58 @@
 
 namespace bv { namespace model {
 
+    IParamValEvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleEvaluator           ( IParameterPtr param )
+    {
+        if( param->GetType() == ModelParamType::MPT_INT )
+        {
+            auto iParam = QueryTypedParam< ParamIntPtr >( param );
+            return CreateSimpleIntEvaluator( iParam );
+        }
+        else
+        {
+            assert( false );
+            return nullptr;
+        }
+    }
+
+// ************************************************************** INT **************************************************************
+
+// *******************************
+//
+SimpleIntEvaluatorPtr      ParamValEvaluatorFactory::CreateSimpleIntEvaluator      ( ParamIntPtr param, ValueIntPtr value )
+{
+    return std::make_shared< SimpleIntEvaluator >( param, value );
+}
+
+// *******************************
+//
+SimpleIntEvaluatorPtr      ParamValEvaluatorFactory::CreateSimpleIntEvaluator      ( ParamIntPtr param, const std::string & valueName )
+{
+    return CreateSimpleIntEvaluator( param, ValuesFactory::CreateValueInt( valueName ) );
+}
+
+// *******************************
+//
+SimpleIntEvaluatorPtr      ParamValEvaluatorFactory::CreateSimpleIntEvaluator      ( ParamIntPtr param )
+{
+    return CreateSimpleIntEvaluator( param, param->GetName() );
+}
+
+// *******************************
+//
+SimpleIntEvaluatorPtr       ParamValEvaluatorFactory::CreateSimpleIntEvaluator      ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator )
+{
+    return CreateSimpleIntEvaluator( ParametersFactory::CreateParameterInt( paramName, timeEvaluator ), paramName );
+}
+
+// *******************************
+//
+SimpleIntEvaluatorPtr       ParamValEvaluatorFactory::CreateSimpleIntEvaluator      ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName )
+{
+    return CreateSimpleIntEvaluator( ParametersFactory::CreateParameterInt( paramName, timeEvaluator ), valueName );
+}
+
+
 // ************************************************************** FLOAT **************************************************************
 
 // *******************************
