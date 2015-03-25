@@ -27,12 +27,7 @@ void    BVGLResourceTrackingPlugin::GenBuffers                  ( GLsizei n, GLu
 {
     Parent::GenBuffers( n, buffers );
 
-    for( auto i = 0; i < n; ++i )
-    {
-        auto buffer = buffers[ i ];
-
-        m_allocatedBuffers[ buffer ] = BufferDesc();
-    }
+    m_buffers.GenResources( n, buffers );
 }
 
 // *****************************
@@ -41,12 +36,7 @@ void    BVGLResourceTrackingPlugin::DeleteBuffers               ( GLsizei n, con
 {
     Parent::DeleteBuffers( n, buffers );
 
-    for( auto i = 0; i < n; ++i )
-    {
-        auto buffer = buffers[ i ];
-
-        m_allocatedBuffers.erase( buffer );
-    }    
+    m_buffers.DeleteResources( n, buffers );
 }
 
 // *****************************
@@ -55,7 +45,7 @@ void    BVGLResourceTrackingPlugin::BindBuffer                  ( GLenum target,
 {
     Parent::BindBuffer( target, buffer );
 
-    m_boundBuffers[ target ] = buffer;
+    m_buffers.BindResource( target, buffer );
 }
 
 // *****************************
@@ -64,15 +54,9 @@ void    BVGLResourceTrackingPlugin::BufferData                  ( GLenum target,
 {
     Parent::BufferData( target, size, data, usage );
 
-    assert( m_boundBuffers.find( target ) != m_boundBuffers.end() );
+    m_buffers.GetBoundResource( target ).Set( size, usage, data );
 
-    auto buffer = m_boundBuffers[ target ];
-
-    m_allocatedBuffers[ buffer ].size = size;
-    m_allocatedBuffers[ buffer ].usage = usage;
-    m_allocatedBuffers[ buffer ].data = data;
-
-    PrintStats( "BufferData() called" );
+    PrintCompleteSummary( "BufferData() called" );
 }
 
 // *****************************
@@ -81,12 +65,7 @@ void    BVGLResourceTrackingPlugin::GenTextures                 ( GLsizei n, GLu
 {
     Parent::GenTextures( n, textures );
 
-    for( auto i = 0; i < n; ++i )
-    {
-        auto texture = textures[ i ];
-
-        m_allocatedTextures[ texture ] = TextureDesc();
-    }
+    m_textures.GenResources( n, textures );
 }
 
 // *****************************
@@ -95,12 +74,7 @@ void    BVGLResourceTrackingPlugin::DeleteTextures              ( GLsizei n, con
 {
     Parent::DeleteTextures( n, textures );
 
-    for( auto i = 0; i < n; ++i )
-    {
-        auto texture = textures[ i ];
-
-        m_allocatedTextures.erase( texture );
-    }    
+    m_textures.DeleteResources( n, textures );
 }
 
 // *****************************
@@ -109,17 +83,9 @@ void    BVGLResourceTrackingPlugin::TexImage2D					( GLenum target, GLint level,
 {
     Parent::TexImage2D( target, level, internalformat, width, height, border, format, type, pixels );
 
-    assert( m_boundTextures.find( target ) != m_boundTextures.end() );
+    m_textures.GetBoundResource( target ).Set( width, height, format, pixels );
 
-    auto texture = m_boundTextures[ target ];
-
-    m_allocatedTextures[ texture ].width = width;
-    m_allocatedTextures[ texture ].height = height;
-    m_allocatedTextures[ texture ].format = format;
-    m_allocatedTextures[ texture ].pixels = pixels;
-
-    PrintStats( "TexImage2D() called" );
-
+    PrintCompleteSummary( "TexImage2D() called" );
 }
 
 // *****************************
@@ -142,7 +108,7 @@ void    BVGLResourceTrackingPlugin::BindTexture					( GLenum target, GLuint text
 {
     Parent::BindTexture( target, texture );
 
-    m_boundTextures[ target ] = texture;
+    m_textures.BindResource( target, texture );
 }
 
 // *****************************
@@ -151,12 +117,7 @@ void    BVGLResourceTrackingPlugin::GenRenderbuffers            ( GLsizei n, GLu
 {
     Parent::GenRenderbuffers( n, renderbuffers );
 
-    for( auto i = 0; i < n; ++i )
-    {
-        auto buf = renderbuffers[ i ];
-
-        m_allocatedRenderbuffers[ buf ] = RenderbufferDesc();
-    }
+    m_renderbuffers.GenResources( n, renderbuffers );
 }
 
 // *****************************
@@ -165,12 +126,7 @@ void    BVGLResourceTrackingPlugin::DeleteRenderbuffers         ( GLsizei n, con
 {
     Parent::DeleteRenderbuffers( n, renderbuffers );
 
-    for( auto i = 0; i < n; ++i )
-    {
-        auto buf = renderbuffers[ i ];
-
-        m_allocatedRenderbuffers.erase( buf );
-    }
+    m_renderbuffers.DeleteResources( n, renderbuffers );
 }
 
 // *****************************
@@ -179,7 +135,7 @@ void    BVGLResourceTrackingPlugin::BindRenderbuffer            ( GLenum target,
 {
     Parent::BindRenderbuffer( target, renderbuffer );
 
-    m_boundRenderbuffers[ target ] = renderbuffer;
+    m_renderbuffers.BindResource( target, renderbuffer );
 }
 
 // *****************************
@@ -187,11 +143,71 @@ void    BVGLResourceTrackingPlugin::BindRenderbuffer            ( GLenum target,
 void    BVGLResourceTrackingPlugin::RenderbufferStorage         ( GLenum target, GLenum internalformat, GLsizei width, GLsizei height )
 {
     Parent::RenderbufferStorage( target, internalformat, width, height );
+
+    m_renderbuffers.GetBoundResource( target ).Set( internalformat, width, height );
 }
 
 // *****************************
 //
-void    BVGLResourceTrackingPlugin::PrintStats                  ( const std::string & message )
+void    BVGLResourceTrackingPlugin::GenFramebuffers             ( GLsizei n, GLuint * framebuffers )
+{
+    Parent::GenFramebuffers( n, framebuffers );
+
+    m_framebuffers.GenResources( n, framebuffers );
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::DeleteFramebuffers          ( GLsizei n, const GLuint * framebuffers )
+{
+    Parent::DeleteFramebuffers( n, framebuffers );
+
+    m_framebuffers.DeleteResources( n, framebuffers );
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::BindFramebuffer             ( GLenum target, GLuint framebuffer )
+{
+    Parent::BindFramebuffer( target, framebuffer );
+
+    m_framebuffers.BindResource( target, framebuffer );
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::GenVertexArrays             ( GLsizei n, GLuint * arrays )
+{
+    Parent::GenVertexArrays( n, arrays );
+
+    m_vertexarrays.GenResources( n, arrays );
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::DeleteVertexArrays          ( GLsizei n, const GLuint * arrays )
+{
+    Parent::DeleteVertexArrays( n, arrays );
+
+    m_vertexarrays.DeleteResources( n, arrays );
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::VertexAttribPointer         ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
+{
+    Parent::VertexAttribPointer( index, size, type, normalized, stride, pointer );
+    //FIXME: implement tracking
+}
+
+// *****************************
+//
+void    BVGLResourceTrackingPlugin::PrintShortSummary           ( const std::string & message )
+{
+    printf( "%s\n", message.c_str() );
+}
+
+void    BVGLResourceTrackingPlugin::PrintCompleteSummary        ( const std::string & message )
 {
     printf( "%s\n", message.c_str() );
 
@@ -210,33 +226,33 @@ void    BVGLResourceTrackingPlugin::PrintBuffersStats           ()
 {
     printf( "BUFFERS:\n");
 
-    for( auto buf : m_allocatedBuffers )
-    {
-        auto bufId      = buf.first;
-        auto bufDesc    = buf.second;
+    //for( auto buf : m_allocatedBuffers )
+    //{
+    //    auto bufId      = buf.first;
+    //    auto bufDesc    = buf.second;
 
-        GLenum target   = 0;
-    
-        for( auto bb : m_boundBuffers )
-        {
-            if( bb.second == bufId )
-            {
-                target = bb.first;
-                break;
-            }
-        }
+    //    GLenum target   = 0;
+    //
+    //    for( auto bb : m_boundBuffers )
+    //    {
+    //        if( bb.second == bufId )
+    //        {
+    //            target = bb.first;
+    //            break;
+    //        }
+    //    }
 
-        auto siz = FormatSize( (GLuint) bufDesc.size );
+    //    auto siz = FormatSize( (GLuint) bufDesc.size );
 
-        printf( "Buf: %2d, Size: %7s, Usage: %15s", bufId, siz.c_str(), BVGLTranslator::TranslateBufferUsage( bufDesc.usage ).c_str() );
+    //    printf( "Buf: %2d, Size: %7s, Usage: %15s", bufId, siz.c_str(), BVGLTranslator::TranslateBufferUsage( bufDesc.usage ).c_str() );
 
-        if( target != 0 )
-        {
-            printf( " BND: %s", BVGLTranslator::TranslateBufferTarget( target ).c_str() );
-        }
+    //    if( target != 0 )
+    //    {
+    //        printf( " BND: %s", BVGLTranslator::TranslateBufferTarget( target ).c_str() );
+    //    }
 
-        printf( "\n" );
-    }
+    //    printf( "\n" );
+    //}
 }
 
 // *****************************
@@ -245,32 +261,32 @@ void        BVGLResourceTrackingPlugin::PrintTextureStats           ()
 {
     printf( "TEXTURES:\n");
 
-    for( auto tex : m_allocatedTextures )
-    {
-        auto texId      = tex.first;
-        auto texDesc    = tex.second;
+    //for( auto tex : m_allocatedTextures )
+    //{
+    //    auto texId      = tex.first;
+    //    auto texDesc    = tex.second;
 
-        GLenum target   = 0;
-    
-        for( auto bt : m_boundTextures )
-        {
-            if( bt.second == (GLint) texId )
-            {
-                target = bt.first;
-                break;
-            }
-        }
+    //    GLenum target   = 0;
+    //
+    //    for( auto bt : m_boundTextures )
+    //    {
+    //        if( bt.second == (GLint) texId )
+    //        {
+    //            target = bt.first;
+    //            break;
+    //        }
+    //    }
 
-        auto siz = FormatSize( (GLuint) texDesc.DataSize() );
-        printf( "Tex: %2d (%4d, %4d), Size: %7s, Format: %10s", texId, texDesc.width, texDesc.height, siz.c_str(), BVGLTranslator::TranslateTextureFormat( texDesc.format ).c_str() );
+    //    auto siz = FormatSize( (GLuint) texDesc.DataSize() );
+    //    printf( "Tex: %2d (%4d, %4d), Size: %7s, Format: %10s", texId, texDesc.width, texDesc.height, siz.c_str(), BVGLTranslator::TranslateTextureFormat( texDesc.format ).c_str() );
 
-        if( target != 0 )
-        {
-            printf( " BND: %s", BVGLTranslator::TranslateTextureTarget( target ).c_str() );
-        }
+    //    if( target != 0 )
+    //    {
+    //        printf( " BND: %s", BVGLTranslator::TranslateTextureTarget( target ).c_str() );
+    //    }
 
-        printf( "\n" );
-    }
+    //    printf( "\n" );
+    //}
 }
 
 // *****************************

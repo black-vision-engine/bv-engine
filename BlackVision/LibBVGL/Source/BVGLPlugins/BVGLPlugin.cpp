@@ -595,7 +595,13 @@ void            BVGLPlugin::VertexAttribPointer			( GLuint index, GLint size, GL
 
 // *****************************
 //
-void			BVGLPlugin::PrintStats					( const std::string & )
+void			BVGLPlugin::PrintShortSummary           ( const std::string & )
+{
+}
+
+// *****************************
+//
+void			BVGLPlugin::PrintCompleteSummary        ( const std::string & )
 {
 }
 

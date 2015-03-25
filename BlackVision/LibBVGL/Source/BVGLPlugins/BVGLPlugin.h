@@ -137,7 +137,8 @@ public:
 
     virtual void                VertexAttribPointer			( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
 
-	virtual void				PrintStats					( const std::string & message );
+	virtual void				PrintShortSummary	        ( const std::string & message );
+	virtual void				PrintCompleteSummary	    ( const std::string & message );
 
 };
 

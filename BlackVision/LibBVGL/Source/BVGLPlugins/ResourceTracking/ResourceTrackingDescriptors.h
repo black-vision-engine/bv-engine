@@ -13,22 +13,28 @@ struct BufferDesc
     GLenum          usage;
     const GLvoid *  data;
 
-    BufferDesc  ();
+    BufferDesc      ();
+
+    void    Set     ( GLsizeiptr size, GLenum usage, const GLvoid * data );
+
 };
 
 /////////////////////////////////////
 //
 struct TextureDesc
 {
-    GLsizei width;
-    GLsizei height;
-    GLenum format;
-    const GLvoid * pixels;
+    GLsizei         width;
+    GLsizei         height;
+    GLenum          format;
+    const GLvoid *  pixels;
 
-    TextureDesc ();
+    TextureDesc         ();
 
-    GLuint DataSize () const;
-    GLuint PixelSize( GLenum format ) const;
+    void    Set         ( GLsizei width, GLsizei height, GLenum format, const GLvoid * pixels );
+
+    GLuint  DataSize    () const;
+    GLuint  PixelSize   ( GLenum format ) const;
+
 };
 
 /////////////////////////////////////
@@ -39,7 +45,32 @@ struct RenderbufferDesc
     GLsizei width;
     GLsizei height;
 
-    RenderbufferDesc ();
+    RenderbufferDesc    ();
+
+    void    Set         ( GLenum internalformat, GLsizei width, GLsizei height );
+
+    GLuint  BufferSize  () const;
+    GLuint  PixelSize   ( GLenum internalformat ) const;
+
+};
+
+/////////////////////////////////////
+//
+struct FramebufferDesc
+{
+    FramebufferDesc ();
+
+    void    Set     ();
+
+};
+
+/////////////////////////////////////
+//
+struct VertexArrayDesc
+{
+    VertexArrayDesc ();
+
+    void    Set     ();
 
 };
 
