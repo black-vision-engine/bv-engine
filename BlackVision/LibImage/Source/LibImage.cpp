@@ -73,15 +73,16 @@ MemoryChunkConstPtr LoadImage( const std::string & filePath, unsigned int * widt
 {	
 	FIBITMAP * bitmap = nullptr;
 
+	if( !File::Exists( filePath ) )
+		return nullptr;
+
 	auto size = File::Size( filePath );
 
 	FREE_IMAGE_FORMAT fiff = FreeImage_GetFileType( filePath.c_str(), (int) size );
 
     if( loadFromMemory )
     {
-        // FIXME: Crash when file doesn't exist
-        char * bufToRead = new char[ File::Size( filePath ) ]; 
-
+        char * bufToRead = new char[ size ]; 
 
         SizeType bytes = File::Read( bufToRead, filePath );
 
@@ -148,7 +149,7 @@ void SaveRAWImage( const std::string & filePath, MemoryChunkConstPtr data )
 
 // *********************************
 //
-void SaveBMPImage( const std::string & filePath, MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp )
+bool SaveBMPImage( const std::string & filePath, MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp )
 {
 	FIBITMAP * bitmap = FreeImage_Allocate( width, height, bpp );
 
@@ -156,7 +157,7 @@ void SaveBMPImage( const std::string & filePath, MemoryChunkConstPtr data, UInt3
 
     memcpy( bits, data->Get(), width * height * bpp / 8 );
 
-	FreeImage_Save( FREE_IMAGE_FORMAT::FIF_BMP, bitmap, filePath.c_str(), BMP_DEFAULT );
+	return FreeImage_Save( FREE_IMAGE_FORMAT::FIF_BMP, bitmap, filePath.c_str(), BMP_DEFAULT ) ? true : false;
 }
 
 

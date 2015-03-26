@@ -27,7 +27,7 @@ ImageProperties			GetImageProps	( const std::string & imageFilePath );
 
 MemoryChunkConstPtr		LoadImage		( const std::string & filePath, unsigned int * width, unsigned int * heigth, unsigned int * bpp, bool loadFromMemory = true );
 MemoryChunkConstPtr		LoadRAWImage	( const std::string & filePath );
-void					SaveBMPImage	( const std::string & filePath, MemoryChunkConstPtr data, unsigned int width, unsigned int height, unsigned int bpp );
+bool					SaveBMPImage	( const std::string & filePath, MemoryChunkConstPtr data, unsigned int width, unsigned int height, unsigned int bpp );
 void					SaveRAWImage	( const std::string & filePath, MemoryChunkConstPtr data );
 
 MemoryChunkConstPtr		BlurImage		( MemoryChunkConstPtr data, unsigned int width, unsigned int height, unsigned int bpp, unsigned int blurSize );
