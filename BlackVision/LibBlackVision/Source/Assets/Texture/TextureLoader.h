@@ -21,7 +21,7 @@ public:
 
 private:
 
-	static MemoryChunkConstPtr				LoadImage			( const std::string & path );
+	static MemoryChunkConstPtr		    LoadImage			( const std::string & path );
 	static SingleTextureAssetConstPtr	LoadSingleTexture	( const SingleTextureAssetDescConstPtr & sinlgeTextureResDesc, bool loadFromCache = true );
 };
 

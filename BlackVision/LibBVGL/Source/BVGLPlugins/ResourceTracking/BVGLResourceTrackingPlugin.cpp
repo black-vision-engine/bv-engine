@@ -216,7 +216,7 @@ void    BVGLResourceTrackingPlugin::VertexAttribPointer         ( GLuint index, 
 {
     Parent::VertexAttribPointer( index, size, type, normalized, stride, pointer );
 
-    m_vertexarrays.GetBoundResource( 1 ).AttrPointer( index, size, type, normalized, stride, pointer );
+    m_vertexarrays.GetBoundResource( 1 ).SetAttrPointer( index, size, type, normalized, stride, pointer );
 }
 
 // *****************************
@@ -234,7 +234,7 @@ void    BVGLResourceTrackingPlugin::EnableVertexAttribArray		( GLuint index )
 {
     Parent::EnableVertexAttribArray( index );
     
-   // m_vertexarrays.GetBoundResource( 1 ).Enable( index );
+    m_vertexarrays.GetBoundResource( 1 ).Enable( index );
 }
 
 // *****************************
@@ -243,7 +243,7 @@ void    BVGLResourceTrackingPlugin::DisableVertexAttribArray	( GLuint index )
 {
     Parent::DisableVertexAttribArray( index );
 
-   // m_vertexarrays.GetBoundResource( 1 ).Disable( index );
+    m_vertexarrays.GetBoundResource( 1 ).Disable( index );
 }
 
 // *****************************

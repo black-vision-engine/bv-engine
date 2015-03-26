@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <hash_map>
+#include <hash_set>
 
 
 #include "BVGLDefs.h"
@@ -91,7 +92,10 @@ struct VertexArrayAttribDesc
  	const GLvoid *  pointer;
     bool            enabled;
 
-    void    Set ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
+    VertexArrayAttribDesc   ();
+    VertexArrayAttribDesc   ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
+
+    void    Set             ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
 
 };
 
@@ -100,14 +104,15 @@ struct VertexArrayAttribDesc
 struct VertexArrayDesc
 {
 
-    std::hash_map< GLuint, GLuint >                 enabledAttributes;
+    std::hash_set< GLuint >                         enabledAttributes;
     std::hash_map< GLuint, VertexArrayAttribDesc >  attributePointers;
 
-    VertexArrayDesc ();
+    VertexArrayDesc         ();
 
-    void    AttrPointer ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
-    void    Enable      ( GLuint index );
-    void    Disable     ( GLuint index );
+    void    SetAttrPointer  ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
+
+    void    Enable          ( GLuint index );
+    void    Disable         ( GLuint index );
 };
 
 } // bv

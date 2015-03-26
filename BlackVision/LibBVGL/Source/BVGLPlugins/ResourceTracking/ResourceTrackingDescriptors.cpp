@@ -149,6 +149,20 @@ void    FramebufferDesc::AttachRenderbuffer ( GLenum attachment, GLenum renderbu
 
 // *****************************
 //
+VertexArrayAttribDesc::VertexArrayAttribDesc   ()
+{
+}
+
+// *****************************
+//
+VertexArrayAttribDesc::VertexArrayAttribDesc   ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
+    : enabled( false )
+{
+    Set( index, size, type, normalized, stride, pointer );
+}
+
+// *****************************
+//
 void    VertexArrayAttribDesc::Set ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
 {
     this->index         = index;      
@@ -156,7 +170,7 @@ void    VertexArrayAttribDesc::Set ( GLuint index, GLint size, GLenum type, GLbo
     this->type          = type;
     this->normalized    = normalized;
     this->stride        = stride;
-    this->pointer       = pointer;     
+    this->pointer       = pointer;
 }
 
 // *************************************************************************************************************************************************
@@ -169,31 +183,39 @@ VertexArrayDesc::VertexArrayDesc        ()
 
 // *****************************
 //
-void    VertexArrayDesc::AttrPointer    ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
+void    VertexArrayDesc::SetAttrPointer ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
 {
-    auto d = VertexArrayAttribDesc();
-    
-    d.Set( index, size, type, normalized, stride, pointer );
-
-    attributePointers[ index ] = d;
-    d.enabled = false;
+    if( attributePointers.find( index ) != attributePointers.end() )
+    {
+        attributePointers[ index ].Set( index, size, type, normalized, stride, pointer );
+    }
+    else
+    {
+        attributePointers[ index ] = VertexArrayAttribDesc( index, size, type, normalized, stride, pointer );
+    }
 }
 
 // *****************************
 //
 void    VertexArrayDesc::Enable         ( GLuint index )
 {
-    assert( attributePointers.find( index ) != attributePointers.end() );
+    if( attributePointers.find( index ) != attributePointers.end() )
+    {
+        attributePointers[ index ] = VertexArrayAttribDesc();
+    }
     
     attributePointers[ index ].enabled = true;
-    enabledAttributes[ index ] = index;
+    enabledAttributes.insert( index );
 }
 
 // *****************************
 //
 void    VertexArrayDesc::Disable     ( GLuint index )
 {
-    assert( attributePointers.find( index ) != attributePointers.end() );
+    if( attributePointers.find( index ) != attributePointers.end() )
+    {
+        attributePointers[ index ] = VertexArrayAttribDesc();
+    }
 
     attributePointers[ index ].enabled = false;
     enabledAttributes.erase( index );

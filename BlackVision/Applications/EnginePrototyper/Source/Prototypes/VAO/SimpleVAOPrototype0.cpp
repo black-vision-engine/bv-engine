@@ -1,5 +1,6 @@
 #include "SimpleVAOPrototype0.h"
 
+
 namespace bv {
 
 // **************************
