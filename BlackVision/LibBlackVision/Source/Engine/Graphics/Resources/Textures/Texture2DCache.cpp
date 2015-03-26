@@ -50,7 +50,7 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
     }
 
     tx = CreateEmptyTexture( format, width, height, semantic );
-    tx->SetRawData( txParams->GetBits(), format, width, height );
+	tx->SetRawData( txParams->GetBits(), format, txParams->GetWidth(), txParams->GetHeight() );
 
     if( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC )
     {
@@ -125,7 +125,9 @@ Texture2DImplPtr         Texture2DCache::CreateEmptyTexture    ( TextureFormat f
 Texture2DImplPtr         Texture2DCache::CreateTexture          ( TextureFormat format, SizeType width, SizeType height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data )
 {
     auto texture = CreateEmptyTexture( format, width, height, semantic );
-    texture->SetRawData( data, format, width, height );
+	std::vector< MemoryChunkConstPtr > tex;
+	tex.push_back( data );
+	texture->SetRawData( tex, format, width, height );
 
     return texture;
 }

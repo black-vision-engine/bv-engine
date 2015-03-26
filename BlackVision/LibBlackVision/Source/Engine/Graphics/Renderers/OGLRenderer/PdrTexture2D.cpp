@@ -67,7 +67,17 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
     }
     else
     {
-        BVGL::bvglTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height, 0, m_format, m_type, texture->GetData()->Get() );
+		if( texture->GetNumLevels() == 1 )
+		{
+			BVGL::bvglTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height, 0, m_format, m_type, texture->GetData()->Get() );
+		}
+		else
+		{
+			for( UInt32 i = 0; i < texture->GetNumLevels(); ++i )
+			{
+				BVGL::bvglTexImage2D( GL_TEXTURE_2D, i, m_internalFormat, ( GLsizei )texture->GetWidth( i ), ( GLsizei )texture->GetHeight( i ), 0, m_format, m_type, texture->GetData( i )->Get() );
+			}
+		}
     }
 
     BVGL::bvglBindTexture( GL_TEXTURE_2D, prevTex );

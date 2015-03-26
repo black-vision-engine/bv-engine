@@ -36,6 +36,7 @@ DefaultTextureDescriptor::DefaultTextureDescriptor        ( TextureAssetConstPtr
 
     SetWidth( width );
     SetHeight( height );
+	SetDepth( 1 );
     SetFormat( format );
     SetWrappingModeX( wmx );
     SetWrappingModeY( wmy );
@@ -54,14 +55,61 @@ DefaultTextureDescriptor::~DefaultTextureDescriptor                 ()
 //
 uintptr_t               DefaultTextureDescriptor::GetUID            () const
 {
-    return (uintptr_t) GetBits()->Get();
+    return (uintptr_t) GetBits( 0 )->Get();
 }
 
 // **************************
 //
-MemoryChunkConstPtr     DefaultTextureDescriptor::GetBits           () const
+SizeType				DefaultTextureDescriptor::GetNumLevels		() const
 {
-	return m_texResource->GetOriginal()->GetData();
+	if( m_texResource->GetMipMaps() != nullptr )
+	{
+		return ( UInt32 )m_texResource->GetMipMaps()->GetLevelsNum() + 1;
+	}
+	else
+	{
+		return 1;
+	}
+}
+
+// **************************
+//
+MemoryChunkConstPtr     DefaultTextureDescriptor::GetBits           ( UInt32 level ) const
+{
+	if( level == 0 )
+	{
+		return m_texResource->GetOriginal()->GetData();
+	}
+	else
+	{
+		assert( level < m_texResource->GetMipMaps()->GetLevelsNum() );
+		return m_texResource->GetMipMaps()->GetLevel( level )->GetData();
+	}
+}
+
+// **************************
+//
+MemoryChunkVector		DefaultTextureDescriptor::GetBits			() const
+{
+	MemoryChunkVector res;
+
+	SizeType numLevel = 1;
+
+	if( m_texResource->GetMipMaps() != nullptr )
+	{
+		numLevel += m_texResource->GetMipMaps()->GetLevelsNum();
+	}
+
+	res.reserve( numLevel );
+
+	res.push_back( m_texResource->GetOriginal()->GetData() );
+
+	for( UInt32 i = 1; i < numLevel; ++i )
+	{
+		res.push_back( m_texResource->GetMipMaps()->GetLevel( i - 1 )->GetData() );
+	}
+
+	return res;
 }
 
 // **************************
@@ -87,16 +135,23 @@ const std::string       DefaultTextureDescriptor::GetName           () const
 
 // **************************
 //
-SizeType				DefaultTextureDescriptor::GetWidth          () const
+SizeType				DefaultTextureDescriptor::GetWidth          ( UInt32 level ) const
 {
-    return m_params.GetWidth();
+    return m_params.GetWidth() >> level;
 }
 
 // **************************
 //
-SizeType				DefaultTextureDescriptor::GetHeight         () const
+SizeType				DefaultTextureDescriptor::GetHeight         ( UInt32 level ) const
 {
-    return m_params.GetHeight();
+    return m_params.GetHeight() >> level;
+}
+
+// **************************
+//
+SizeType				DefaultTextureDescriptor::GetDepth          ( UInt32 level ) const
+{
+    return m_params.GetDepth() >> level;
 }
 
 // **************************
@@ -116,6 +171,13 @@ TextureWrappingMode     DefaultTextureDescriptor::GetWrappingModeX  () const
 // **************************
 //
 TextureWrappingMode     DefaultTextureDescriptor::GetWrappingModeY  () const
+{
+    return m_params.GetWrappingModeY();
+}
+
+// **************************
+//
+TextureWrappingMode     DefaultTextureDescriptor::GetWrappingModeZ  () const
 {
     return m_params.GetWrappingModeY();
 }
@@ -199,6 +261,13 @@ void                    DefaultTextureDescriptor::SetWidth          ( SizeType w
 void                    DefaultTextureDescriptor::SetHeight         ( SizeType h )
 {
     m_params.SetHeight( h );
+}
+
+// **************************
+//
+void                    DefaultTextureDescriptor::SetDepth          ( SizeType d )
+{
+    m_params.SetDepth( d );
 }
 
 // **************************
