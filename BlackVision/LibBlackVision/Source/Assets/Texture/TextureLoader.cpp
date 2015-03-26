@@ -1,5 +1,5 @@
 #include "TextureLoader.h"
-#include "TextureHelpers.h"
+#include "LibImage.h"
 
 #include "Assets/Texture/TextureAssetDescriptor.h"
 #include "Assets/Texture/SingleTextureAsset.h"
@@ -17,25 +17,25 @@ namespace bv {
 namespace
 {
 
-tools::FilterType ToMMBuilderFilterType( MipMapFilterType ft )
+image::FilterType ToMMBuilderFilterType( MipMapFilterType ft )
 {
 	switch( ft )
 	{
 	case MipMapFilterType::BOX:
-		return tools::FilterType::BOX;
+		return image::FilterType::FT_BOX;
 	case MipMapFilterType::BILINEAR:
-		return tools::FilterType::BILINEAR;
+		return image::FilterType::FT_BILINEAR;
 	case MipMapFilterType::B_SPLINE:
-		return tools::FilterType::B_SPLINE;
+		return image::FilterType::FT_B_SPLINE;
 	case MipMapFilterType::BICUBIC:
-		return tools::FilterType::BICUBIC;
+		return image::FilterType::FT_BICUBIC;
 	case MipMapFilterType::CATMULL_ROM:
-		return tools::FilterType::CATMULL_ROM;
+		return image::FilterType::FT_CATMULL_ROM;
 	case MipMapFilterType::LANCZOS:
-		return tools::FilterType::LANCZOS;
+		return image::FilterType::FT_LANCZOS;
 	default:
 		assert( !"Impossible enum value" );
-		return tools::FilterType::BOX;
+		return image::FilterType::FT_BOX;
 	}
 }
 
@@ -101,11 +101,10 @@ AssetConstPtr TextureLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 
 			for( SizeType i = 1; i < mm.size(); ++i )
 			{
-				UInt32 w = mm[ i ].width;
-				UInt32 h = mm[ i ].height;
-				UInt32 s = w * h * 4; // FIXME: Supporting only 32-bit image
+				auto w = mm[ i ].width;
+				auto h = mm[ i ].height;
 				auto key = TextureCache::GenKeyForGeneratedMipMap( typedDesc->GetOrigTextureDesc()->GetImagePath(), w, h, TextureFormat::F_A8R8G8B8, i, typedDesc->GetMipMapsDesc()->GetFilter() );
-				mipMapsRes.push_back( SingleTextureAsset::Create( MemoryChunk::Create( mm[ i ].data, s ), key, w, h, TextureFormat::F_A8R8G8B8 ) );
+				mipMapsRes.push_back( SingleTextureAsset::Create( mm[ i ].data, key, w, h, TextureFormat::F_A8R8G8B8 ) );
 			}
 
 			ret = TextureAsset::Create( origRes, MipMapAsset::Create( mipMapsRes ) );
@@ -159,11 +158,11 @@ MemoryChunkConstPtr TextureLoader::LoadImage( const std::string & path )
 
 	if( path.find( ".raw" ) != std::string::npos )
     {
-		data = TextureHelper::LoadRAW( path );
+		data = image::LoadRAWImage( path );
     }
 	else
     {
-		data = TextureHelper::LoadImg( path, &width, &height, &bpp );
+		data = image::LoadImage( path, &width, &height, &bpp );
     }
 
 	return data;

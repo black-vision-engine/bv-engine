@@ -41,11 +41,14 @@ public:
     virtual UInt32					PreviousFrame       () const override;
 
     virtual const std::string       GetName             () const override;
-    virtual SizeType	            GetWidth            () const override;
-    virtual SizeType	            GetHeight           () const override;
+    virtual SizeType	            GetWidth            ( UInt32 level = 0 ) const override;
+    virtual SizeType	            GetHeight           ( UInt32 level = 0 ) const override;
+	virtual SizeType	            GetDepth            ( UInt32 level = 0 ) const override;
     virtual TextureFormat           GetFormat           () const override;
     virtual TextureWrappingMode     GetWrappingModeX    () const override;
     virtual TextureWrappingMode     GetWrappingModeY    () const override;
+	virtual TextureWrappingMode     GetWrappingModeZ	() const override;
+
     virtual TextureFilteringMode    GetFilteringMode    () const override;
     virtual glm::vec4               BorderColor         () const override;
 
