@@ -69,7 +69,7 @@ ImageProperties GetImageProps( const std::string & imageFilePath )
 
 // *********************************
 //
-MemoryChunkConstPtr LoadImage( const std::string & filePath, unsigned int * width, unsigned int * heigth, unsigned int * bpp, bool loadFromMemory )
+MemoryChunkConstPtr LoadImage( const std::string & filePath, UInt32 * width, UInt32 * heigth, UInt32 * bpp, bool loadFromMemory )
 {	
 	FIBITMAP * bitmap = nullptr;
 
@@ -221,6 +221,48 @@ MemoryChunkConstPtr BlurImage( MemoryChunkConstPtr data, UInt32 width, UInt32 he
 
     delete [] tmp;
     return std::make_shared< MemoryChunk >( out, numBytes );
+}
+
+// ******************************
+//
+FREE_IMAGE_FILTER ToFIFilter( FilterType ft )
+{
+	switch ( ft )
+	{
+	case FilterType::FT_BOX:
+		return FREE_IMAGE_FILTER::FILTER_BOX;
+	case FilterType::FT_BILINEAR:
+		return FREE_IMAGE_FILTER::FILTER_BILINEAR;
+	case FilterType::FT_B_SPLINE:
+		return FREE_IMAGE_FILTER::FILTER_BSPLINE;
+	case FilterType::FT_BICUBIC:
+		return FREE_IMAGE_FILTER::FILTER_BICUBIC;
+	case FilterType::FT_CATMULL_ROM:
+		return FREE_IMAGE_FILTER::FILTER_CATMULLROM;
+	case FilterType::FT_LANCZOS:
+		return FREE_IMAGE_FILTER::FILTER_LANCZOS3;
+	default:
+		assert( false && "Unreachable" );
+		return FREE_IMAGE_FILTER::FILTER_BOX;
+	}
+}
+
+// ******************************
+//
+MemoryChunkConstPtr		Resize( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 newWidth, UInt32 newHeight, FilterType ft )
+{
+	auto inBitmap = FreeImage_ConvertFromRawBits( (BYTE*)in->Get(), ( int )width, ( int )height, ( int )width * 4, 32, 255, 255, 255 );
+
+	auto outBitmap = FreeImage_Rescale( inBitmap, ( int )newWidth, ( int )newHeight, ToFIFilter( ft ) );
+
+	outBitmap = FreeImage_ConvertTo32Bits( outBitmap );
+
+	auto numBytes = newWidth * newHeight * 4;
+
+    char * pixels = new char[ numBytes ]; // FIXME: Use normal allocation to free it with free not delete []
+    memcpy( pixels, FreeImage_GetBits( outBitmap ), numBytes );
+
+	return MemoryChunk::Create( pixels, numBytes );
 }
 
 } // image

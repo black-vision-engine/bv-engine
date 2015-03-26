@@ -9,7 +9,7 @@
 //
 TEST( RunMimmaping, RunMimmaping )
 {
-	auto m1 = tools::GenerateMipmaps( "Resources/checkerbord2.bmp", 50, tools::FilterType::CATMULL_ROM );
+	auto m1 = tools::GenerateMipmaps( "Resources/checkerbord2.bmp", 50, bv::image::FilterType::FT_CATMULL_ROM );
 	ASSERT_TRUE( m1.size() == 11 );
 	ASSERT_TRUE( m1[ 10 ].width == 1 &&  m1[ 10 ].height == 1 );
 
@@ -22,7 +22,7 @@ TEST( RunMimmaping, RunMimmaping )
 		std::ostringstream ss;
 		ss << k;
 
-		success = bv::image::SaveBMPImage( "_Output/testFreeTypeMM" + ss.str() + ".bmp", bv::MemoryChunk::Create( i.data, i.height * i.width * 4 ), i.width, i.height, 32 );
+		success = bv::image::SaveBMPImage( "_Output/testFreeTypeMM" + ss.str() + ".bmp", i.data, i.width, i.height, 32 );
 		ASSERT_TRUE(success);
 
 		k++;
