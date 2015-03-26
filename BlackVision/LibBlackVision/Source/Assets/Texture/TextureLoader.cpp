@@ -1,5 +1,5 @@
 #include "TextureLoader.h"
-#include "TextureHelpers.h"
+#include "LibImage.h"
 
 #include "Assets/Texture/TextureAssetDescriptor.h"
 #include "Assets/Texture/SingleTextureAsset.h"
@@ -159,11 +159,11 @@ MemoryChunkConstPtr TextureLoader::LoadImage( const std::string & path )
 
 	if( path.find( ".raw" ) != std::string::npos )
     {
-		data = TextureHelper::LoadRAW( path );
+		data = image::LoadRAWImage( path );
     }
 	else
     {
-		data = TextureHelper::LoadImg( path, &width, &height, &bpp );
+		data = image::LoadImage( path, &width, &height, &bpp );
     }
 
 	return data;
