@@ -72,7 +72,7 @@ bv::IValueConstPtr                          DefaultParamValModel::GetValue      
 
 // *******************************
 //
-IStatePtr                                   DefaultParamValModel::GetState        ( const std::string & name )
+IStatedValuePtr                                   DefaultParamValModel::GetState        ( const std::string & name )
 {
     return m_states[ name ];
 }
@@ -141,7 +141,7 @@ void                                        DefaultParamValModel::RegisterAll   
 
 // *******************************
 //
-void                                                DefaultParamValModel::AddState        ( const std::string & name, IStatePtr state, IUpdaterPtr updater )
+void                                                DefaultParamValModel::AddState        ( const std::string & name, IStatedValuePtr state, IUpdaterPtr updater )
 {
     m_states[ name ] = state;
     m_stateUpdaters.push_back( updater );

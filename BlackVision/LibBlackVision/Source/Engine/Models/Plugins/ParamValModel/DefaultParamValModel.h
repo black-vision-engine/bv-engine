@@ -21,7 +21,7 @@ private:
     std::vector< bv::IValueConstPtr >       m_values;
 
     std::vector< IUpdaterPtr >              m_stateUpdaters;
-    std::map< std::string, IStatePtr >      m_states;
+    std::map< std::string, IStatedValuePtr > m_states;
 
     std::vector< bv::IValuePtr >            m_valuesNC;
 
@@ -36,7 +36,7 @@ public:
 
     virtual IParameterPtr                               GetParameter    ( const std::string & name ) override;
     virtual bv::IValueConstPtr                          GetValue        ( const std::string & name ) const override;
-    virtual IStatePtr                                   GetState        ( const std::string & name ) override;
+    virtual IStatedValuePtr                                   GetState        ( const std::string & name ) override;
 
     virtual void                                        Update          () override;
 
@@ -45,7 +45,7 @@ public:
     void                                                AddValue        ( bv::IValueConstPtr val );
     void                                                AddEvaluator    ( IParamValEvaluatorPtr evaluator );
     void                                                RegisterAll     ( IParamValEvaluatorPtr evaluator );
-    void                                                AddState        ( const std::string & name, IStatePtr state, IUpdaterPtr updater );
+    void                                                AddState        ( const std::string & name, IStatedValuePtr state, IUpdaterPtr updater );
 
     const std::vector< bv::IValuePtr > &                GetValuesNC     () const;
 

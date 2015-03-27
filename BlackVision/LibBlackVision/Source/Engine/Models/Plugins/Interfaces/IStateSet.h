@@ -13,8 +13,8 @@ class IStateSet
 {
 public:
 
-    //virtual std::vector< IStatePtr > &      GetStates           () = 0;
-    virtual IStatePtr                       GetState            ( const std::string & name ) = 0;
+    //virtual std::vector< IStatedValuePtr > &      GetStates           () = 0;
+    virtual IStatedValuePtr                       GetState            ( const std::string & name ) = 0;
 
     virtual ~IStateSet(){}
 

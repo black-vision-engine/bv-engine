@@ -5,7 +5,7 @@
 namespace bv { namespace model {
 
 template< typename T >
-class SimpleState : public IState {
+class SimpleState : public IStatedValue {
     T prevVal, curVal;
 public:
     void Update( const T& val )

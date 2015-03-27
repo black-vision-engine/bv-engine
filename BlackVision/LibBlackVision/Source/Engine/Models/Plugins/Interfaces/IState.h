@@ -4,13 +4,13 @@
 
 namespace bv { namespace model {
 
-class IState
+class IStatedValue
 {
 public:
     virtual bool StateChanged() const = 0;
 };
 
-DEFINE_PTR_TYPE(IState)
+DEFINE_PTR_TYPE(IStatedValue)
 
 } //model
 } //bv
