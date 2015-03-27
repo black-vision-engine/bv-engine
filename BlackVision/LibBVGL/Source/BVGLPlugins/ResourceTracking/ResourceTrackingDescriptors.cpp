@@ -33,6 +33,13 @@ void    BufferDesc::Visit   ( VisitorAggregate & visitor ) const
     visitor.IncNumVisits();
 }
 
+// *****************************
+//
+std::string  BufferDesc::Summary () const
+{
+    return "IMPLEMENT ME";
+}
+
 // *************************************************************************************************************************************************
 
 // *****************************
@@ -79,6 +86,13 @@ void    TextureDesc::Visit  ( VisitorAggregate & visitor ) const
     visitor.IncNumVisits();
 }
 
+// *****************************
+//
+std::string  TextureDesc::Summary () const
+{
+    return "IMPLEMENT ME";
+}
+
 // *************************************************************************************************************************************************
 
 // *****************************
@@ -121,6 +135,13 @@ void    RenderbufferDesc::Visit     ( VisitorAggregate & visitor ) const
 {
     visitor.AddToTotalSize( BufferSize() );
     visitor.IncNumVisits();
+}
+
+// *****************************
+//
+std::string  RenderbufferDesc::Summary () const
+{
+    return "IMPLEMENT ME";
 }
 
 // *************************************************************************************************************************************************
@@ -191,6 +212,13 @@ void    FramebufferDesc::Visit              ( VisitorAggregate & visitor ) const
     visitor.IncNumVisits();
 }
 
+// *****************************
+//
+std::string  FramebufferDesc::Summary () const
+{
+    return "IMPLEMENT ME";
+}
+
 // *************************************************************************************************************************************************
 
 // *****************************
@@ -218,6 +246,13 @@ void    VertexArrayAttribDesc::Set ( GLuint buffer, GLuint index, GLint size, GL
     this->normalized    = normalized;
     this->stride        = stride;
     this->pointer       = pointer;
+}
+
+// *****************************
+//
+std::string  VertexArrayAttribDesc::Summary () const
+{
+    return "IMPLEMENT ME";
 }
 
 // *************************************************************************************************************************************************
@@ -275,6 +310,13 @@ void    VertexArrayDesc::Visit      ( VisitorAggregate & visitor ) const
     visitor.AddToTotalRegisteredAttrs   ( attributePointers.size() );
     visitor.AddToTotalEnabledAttrs      ( enabledAttributes.size() );
     visitor.IncNumVisits                ();
+}
+
+// *****************************
+//
+std::string  VertexArrayDesc::Summary () const
+{
+    return "IMPLEMENT ME";
 }
 
 } // bv

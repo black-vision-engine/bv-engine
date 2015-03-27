@@ -3,10 +3,12 @@
 #include <vector>
 #include <hash_map>
 #include <hash_set>
+#include <string>
 
 #include "BVGLPlugins/ResourceTracking/ResourceTrackingAggregates.h"
 #include "BVGLDefs.h"
 
+using std::string;
 
 namespace bv {
 
@@ -25,7 +27,8 @@ struct BufferDesc
     void    Set     ( GLsizeiptr size, GLenum usage, const GLvoid * data );
 
     void    Visit   ( VisitorAggregate & visitor ) const;
-
+    
+    string  Summary () const;
 };
 
 /////////////////////////////////////
@@ -47,6 +50,8 @@ struct TextureDesc
     GLuint  PixelSize   ( GLenum format ) const;
 
     void    Visit       ( VisitorAggregate & visitor ) const;
+
+    string  Summary () const;
 };
 
 /////////////////////////////////////
@@ -67,6 +72,8 @@ struct RenderbufferDesc
     GLuint  PixelSize   ( GLenum internalformat ) const;
 
     void    Visit       ( VisitorAggregate & visitor ) const;
+
+    string  Summary () const;
 };
 
 /////////////////////////////////////
@@ -92,6 +99,7 @@ struct FramebufferDesc
 
     void    Visit               ( VisitorAggregate & visitor ) const;
 
+    string  Summary () const;
 };
 
 
@@ -113,6 +121,7 @@ struct VertexArrayAttribDesc
 
     void    Set             ( GLuint buffer, GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
 
+    string  Summary         () const;
 };
 
 /////////////////////////////////////
@@ -133,6 +142,7 @@ struct VertexArrayDesc
 
     void    Visit           ( VisitorAggregate & visitor ) const;
 
+    string  Summary () const;
 };
 
 } // bv
