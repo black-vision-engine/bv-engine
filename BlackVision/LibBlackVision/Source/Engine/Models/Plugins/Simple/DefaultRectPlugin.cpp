@@ -48,20 +48,41 @@ IPluginPtr                      DefaultRectPluginDesc::CreatePlugin         ( co
 //
 DefaultPluginParamValModelPtr   DefaultRectPluginDesc::CreateDefaultModel   ( ITimeEvaluatorPtr timeEvaluator ) const
 {
+   // START_MODEL( timeEvaluator )
+   //     ADD_VAC_PARAM( "width", 1.f );
+   //     ADD_VAC_PARAM( "height", 1.f );
+   //     ADD_VAC_PARAM_VAL( "param0", glm::vec2( .4f, 0.f ) );
+   //     START_COMPOSITE_PARAM( vec4(0,0,0,0) )
+   //         ADD_VAC_PARAM( "r", 1.f );
+   //         ADD_VAC_PARAM( "g", 1.f );
+   //         ADD_VAC_PARAM( "b", 1.f );
+   //         ADD_VAC_PARAM( "a", 1.f );
+   //     END_COMPOSITE_PARAM()
+   //END_MODEL()
+
+    //DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
+    //DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
+
+    //ParamFloatPtr paramWidth             = ParametersFactory::CreateParameterFloat( "width", timeEvaluator );
+    //ParamFloatPtr paramHeight            = ParametersFactory::CreateParameterFloat( "height", timeEvaluator );
+
+    //vacModel->AddParameter( paramWidth );
+    //vacModel->AddParameter( paramHeight );
+
+    //model->SetVertexAttributesChannelModel( vacModel );
+
+    ////Set default parameters
+    //paramWidth->SetVal( 1.f, 0.f );
+    //paramHeight->SetVal( 1.f, 0.f );
+
+    //return model;
+
     DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
-    DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
+    //DefaultParamValModelPtr         vacModel    = CreateVacModel( model, timeEvaluator );
 
-    ParamFloatPtr paramWidth             = ParametersFactory::CreateParameterFloat( "width", timeEvaluator );
-    ParamFloatPtr paramHeight            = ParametersFactory::CreateParameterFloat( "height", timeEvaluator );
-
-    vacModel->AddParameter( paramWidth );
-    vacModel->AddParameter( paramHeight );
-
-    model->SetVertexAttributesChannelModel( vacModel );
-
-    //Set default parameters
-    paramWidth->SetVal( 1.f, 0.f );
-    paramHeight->SetVal( 1.f, 0.f );
+    //AddParam( vacModel, timeEvaluator, "width", 1.f ); // FIXME(?): vacModel, timeEvaluator should be stored
+    //AddParam( vacModel, timeEvaluator, "height", 1.f );
+    assert( false );
 
     return model;
 }

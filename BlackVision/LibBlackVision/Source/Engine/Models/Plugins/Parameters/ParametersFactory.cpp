@@ -3,6 +3,12 @@
 
 namespace bv { namespace model {
 
+    template<>
+    static IParameterPtr        ParametersFactory::CreateTypedParameter<int>                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+    {
+        return CreateParameterInt( name, timeline );
+    }
+
 // *******************************
 //
 ParamMat2                          ParametersFactory::CreateParameterMat2                 ( const std::string & name, const Vec4Interpolator & interpolator, ITimeEvaluatorPtr timeline )
@@ -79,6 +85,20 @@ ParamVec3Ptr                         ParametersFactory::CreateParameterVec3     
 ParamVec4Ptr                         ParametersFactory::CreateParameterVec4                 ( const std::string & name, ITimeEvaluatorPtr timeline )
 {
     return std::make_shared< ParamVec4 >( name, Vec4Interpolator(), timeline );
+}
+
+// *******************************
+//
+ParamBoolPtr                        ParametersFactory::CreateParameterBool                  ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return std::make_shared< ParamBool >( name, BoolInterpolator(), timeline );
+}
+
+// *******************************
+//
+ParamIntPtr                        ParametersFactory::CreateParameterInt                  ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return std::make_shared< ParamInt >( name, IntInterpolator(), timeline );
 }
 
 // *******************************
