@@ -216,7 +216,9 @@ void    BVGLResourceTrackingPlugin::VertexAttribPointer         ( GLuint index, 
 {
     Parent::VertexAttribPointer( index, size, type, normalized, stride, pointer );
 
-    m_vertexarrays.GetBoundResource( 1 ).SetAttrPointer( index, size, type, normalized, stride, pointer );
+    auto bufferID = m_buffers.GetBoundResourceID( GL_ARRAY_BUFFER );
+
+    m_vertexarrays.GetBoundResource( 1 ).SetAttrPointer( bufferID, index, size, type, normalized, stride, pointer );
 }
 
 // *****************************
