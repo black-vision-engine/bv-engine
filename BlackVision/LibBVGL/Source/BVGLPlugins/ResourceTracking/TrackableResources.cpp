@@ -52,13 +52,19 @@ void            TrackableResources< ResourceDesc >::DeleteResources     ( GLsize
 // *****************************
 //
 template< typename ResourceDesc >
-ResourceDesc &  TrackableResources< ResourceDesc >::GetBoundResource    ( GLenum target )
+GLuint          TrackableResources< ResourceDesc >::GetBoundResourceID  ( GLenum target ) const
 {
     assert( m_boundResources.find( target ) != m_boundResources.end() );
+    
+    return m_boundResources.find( target )->second;
+}
 
-    auto resource = m_boundResources[ target ];
-
-    return m_allocatedResources[ resource ];
+// *****************************
+//
+template< typename ResourceDesc >
+ResourceDesc &  TrackableResources< ResourceDesc >::GetBoundResource    ( GLenum target )
+{
+    return m_allocatedResources[ GetBoundResourceID( target ) ];
 }
 
 // *****************************
