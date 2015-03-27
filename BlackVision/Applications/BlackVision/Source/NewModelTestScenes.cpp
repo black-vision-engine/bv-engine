@@ -782,16 +782,16 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
 
     model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
 
-    model::SetParameter( root->GetPlugin( "circle" )->GetParameter( "tesselation" ), 100.f, 100 );
+    //model::SetParameter( root->GetPlugin( "circle" )->GetParameter( "tesselation" ), 100.f, 100 );
     root->GetPlugin( "circle" )->Update(0); // FIXME: to generate geometry only
 
     auto plugin = root->GetPlugin( "circle" );
-    SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_INNER_RADIUS ), 10.f, 0.8f );
-    SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_OUTER_RADIUS ), 4.f, 1.f );
-    SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_OUTER_RADIUS ), 10.f, 2.f );
-    SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE ), 30.f, 90.f );
-    plugin->GetParameter( model::DefaultCirclePlugin::PN_INNER_RADIUS )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
-    plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
+    //SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_INNER_RADIUS ), 10.f, 0.8f );
+    //SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_OUTER_RADIUS ), 4.f, 1.f );
+    //SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_OUTER_RADIUS ), 10.f, 2.f );
+    //SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE ), 30.f, 90.f );
+    //plugin->GetParameter( model::DefaultCirclePlugin::PN_INNER_RADIUS )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
+    //plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 
     //SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE_MODE ), 10.f, model::DefaultCirclePlugin::OpenAngleMode::SYMMETRIC );
     auto param = plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE_MODE );

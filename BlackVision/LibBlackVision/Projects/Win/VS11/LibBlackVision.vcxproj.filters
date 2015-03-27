@@ -1699,5 +1699,8 @@
     <None Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.inl">
       <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </None>
+    <None Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.inl">
+      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
+    </None>
   </ItemGroup>
 </Project>

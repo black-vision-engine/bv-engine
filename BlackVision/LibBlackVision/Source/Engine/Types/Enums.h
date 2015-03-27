@@ -35,6 +35,7 @@ enum class ParamType : int
     PT_MAT4,
     PT_INT,
     PT_BOOL,
+    PT_ENUM,
     PT_TOTAL
 };
 

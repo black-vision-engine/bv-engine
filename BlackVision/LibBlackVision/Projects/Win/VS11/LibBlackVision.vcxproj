@@ -654,6 +654,7 @@
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\GenericParameterSetters.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\SimpleTypedParameters.inl" />
+    <None Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.inl" />

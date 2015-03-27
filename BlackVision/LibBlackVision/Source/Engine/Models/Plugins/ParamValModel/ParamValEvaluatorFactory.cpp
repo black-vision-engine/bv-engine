@@ -6,19 +6,22 @@
 
 namespace bv { namespace model {
 
-    IParamValEvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleEvaluator           ( IParameterPtr param )
-    {
-        if( param->GetType() == ModelParamType::MPT_INT )
-        {
-            auto iParam = QueryTypedParam< ParamIntPtr >( param );
-            return CreateSimpleIntEvaluator( iParam );
-        }
-        else
-        {
-            assert( false );
-            return nullptr;
-        }
-    }
+    //IParamValEvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleEvaluator           ( IParameterPtr param )
+    //{
+    //    //auto value = nullptr;
+    //    //return std::make_shared< SimpleParamValEvaluator< ParamIntPtr, ValueIntPtr > >( param, value );
+
+    //    if( param->GetType() == ModelParamType::MPT_INT )
+    //    {
+    //        auto iParam = QueryTypedParam< ParamIntPtr >( param );
+    //        return CreateSimpleIntEvaluator( iParam );
+    //    }
+    //    else
+    //    {
+    //        assert( false );
+    //        return nullptr;
+    //    }
+    //}
 
 // ************************************************************** INT **************************************************************
 
