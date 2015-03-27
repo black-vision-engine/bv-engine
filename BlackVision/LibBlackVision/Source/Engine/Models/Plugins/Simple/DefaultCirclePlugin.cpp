@@ -56,10 +56,14 @@ DefaultPluginParamValModelPtr   DefaultCirclePluginDesc::CreateDefaultModel  ( I
 
     model->SetVertexAttributesChannelModel( vacModel ); // FIXME
 
-    //AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_OUTER_RADIUS, 1.f, true, true );
-    //AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_INNER_RADIUS, 0.f, true, true );
-    //AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_OPEN_ANGLE, 360.f, true, true );
-    //AddParam( vacModel, timeEvaluator, DefaultCirclePlugin::PN_TESSELATION, 3, true, true );
+    AddParam< FloatInterpolator, float, ModelParamType::MPT_FLOAT, ParamType::PT_FLOAT1, ParamFloat >
+        ( vacModel, timeEvaluator, DefaultCirclePlugin::PN_OUTER_RADIUS, 1.f, true, true );
+    AddParam< FloatInterpolator, float, ModelParamType::MPT_FLOAT, ParamType::PT_FLOAT1, ParamFloat >
+        ( vacModel, timeEvaluator, DefaultCirclePlugin::PN_INNER_RADIUS, 0.f, true, true );
+    AddParam< FloatInterpolator, float, ModelParamType::MPT_FLOAT, ParamType::PT_FLOAT1, ParamFloat >
+        ( vacModel, timeEvaluator, DefaultCirclePlugin::PN_OPEN_ANGLE, 360.f, true, true );
+    AddParam< IntInterpolator, int, ModelParamType::MPT_INT, ParamType::PT_INT, ParamInt >
+        ( vacModel, timeEvaluator, DefaultCirclePlugin::PN_TESSELATION, 3, true, true );
     AddParam< IntInterpolator, DefaultCirclePlugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
         ( vacModel, timeEvaluator, DefaultCirclePlugin::PN_OPEN_ANGLE_MODE, DefaultCirclePlugin::OpenAngleMode::CW, true, true );
 
@@ -167,26 +171,21 @@ public:
 
 IGeometryGenerator*           DefaultCirclePlugin::GetGenerator()
 {
-    //return new CircleGenerator( GetTesselation(),
-    //                            GetInnerRadius(),
-    //                            GetOuterRadius(),
-    //                            GetOpenAngle(),
-    //                            GetOpenAngleMode() );
-    return new CircleGenerator( 3,
-                                0,
-                                1,
-                                90,
+    return new CircleGenerator( GetTesselation(),
+                                GetInnerRadius(),
+                                GetOuterRadius(),
+                                GetOpenAngle(),
                                 GetOpenAngleMode() );
 }
 
 bool DefaultCirclePlugin::NeedsTopologyUpdate()
 {
     return
-        ParameterChanged( PN_OPEN_ANGLE_MODE ) /*||
+        ParameterChanged( PN_OPEN_ANGLE_MODE ) ||
         ParameterChanged( PN_TESSELATION ) ||
         ParameterChanged( PN_OUTER_RADIUS ) ||
         ParameterChanged( PN_INNER_RADIUS ) ||
-        ParameterChanged( PN_OPEN_ANGLE )*/;
+        ParameterChanged( PN_OPEN_ANGLE );
 }
 
 int DefaultCirclePlugin::GetTesselation()
