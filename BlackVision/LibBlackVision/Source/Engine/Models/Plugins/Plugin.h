@@ -352,7 +352,7 @@ IParamValModelPtr                           BasePlugin< Iface >::GeometryShaderC
 template< class Iface >
 bool                                        BasePlugin< Iface >::ParameterChanged            ( const std::string & name )
 {
-    return m_pluginParamValModel->GetVertexAttributesChannelModel()->GetState( name )->StateChanged();
+    return m_pluginParamValModel->GetVertexAttributesChannelModel()->GetState( name )->StateChanged(); //FIXME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }
 
 ParamTransformVecPtr						GetCurrentParamTransform( const IPlugin * pl );

@@ -42,68 +42,77 @@ public:
     virtual ~BasePluginDescriptor () {}
 
 protected:
-    DefaultParamValModelPtr                  CreateVacModel      ( DefaultPluginParamValModelPtr&, ITimeEvaluatorPtr ) const;
-    
-    template< typename InterpolatorType, typename ValueType, ModelParamType MPT, ParamType PT, typename ParamImpl >
-    inline void                                     AddParam            ( DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const ValueType& defaultValue, bool addValue = false, bool isState = false ) const
+
+    class ModelHelper
     {
-        //auto param = std::make_shared< SimpleParameterImpl< InterpolatorType, ValueType, MPT > >( name, InterpolatorType(), timeEvaluator );
-        auto param = std::make_shared< ParamImpl >( name, InterpolatorType(), timeEvaluator );
-        param->SetVal( defaultValue, 0.f );
-        //auto param = ParametersFactory::CreateTypedParameter<ValueType>( name, timeEvaluator );
-        //SetParameter( param, 0.f, defaultValue );
+        DefaultPluginParamValModelPtr           m_model;
 
-        if( addValue )
+        DefaultParamValModelPtr                 m_lastParamValModel;
+        ITimeEvaluatorPtr                       m_lastTimeEvaluator;
+
+    public:
+        ModelHelper(  ITimeEvaluatorPtr te ) : m_lastTimeEvaluator( te ) { m_model = std::make_shared< DefaultPluginParamValModel >(); }
+        DefaultPluginParamValModelPtr           GetModel() { return m_model; }
+
+        void                                    CreateVacModel      ();
+
+
+        template< typename ValueType >
+        inline void                             AddSimpleParam      ( std::string, const ValueType&, bool = false, bool = false ) const
         {
-            auto evaluator = ParamValEvaluatorFactory::CreateSimpleEvaluator< InterpolatorType, ValueType, MPT, PT >( param );
-            model->RegisterAll( evaluator );
+            assert( false );
         }
 
-        if( isState )
+        template<>
+        inline void                             AddSimpleParam< float > ( std::string name, const float& defaultValue, bool addValue, bool isState ) const
         {
-            assert( addValue );
-            auto state = std::make_shared< SimpleState<ValueType> >();
-            auto value = model->GetValue( name );
-            auto qValue = QueryTypedValue< std::shared_ptr< ValueImpl< ValueType, PT > > >( value ); // FIXME
-            auto updater = std::make_shared< 
-                SimpleStateUpdater< 
-                    std::shared_ptr< SimpleState<ValueType> >, 
-                    std::shared_ptr< ValueImpl< ValueType, PT > >   // FIXME
-                > >( state, qValue );
-            model->AddState( name, state, updater );
+            AddParam< FloatInterpolator, float, ModelParamType::MPT_FLOAT, ParamType::PT_FLOAT1, ParamFloat >
+                ( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
         }
-    }
+
+        template<>
+        inline void                             AddSimpleParam< int > ( std::string name, const int& defaultValue, bool addValue, bool isState ) const
+        {
+            AddParam< IntInterpolator, int, ModelParamType::MPT_INT, ParamType::PT_INT, ParamInt >
+                ( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
+        }
+
+        template< typename InterpolatorType, typename ValueType, ModelParamType MPT, ParamType PT, typename ParamImpl >
+        void                                    AddParam            ( std::string name, const ValueType& defaultValue, bool addValue, bool isState ) const
+        {
+            AddParam< InterpolatorType, ValueType, MPT, PT, ParamImpl >( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
+        }
+
+        template< typename InterpolatorType, typename ValueType, ModelParamType MPT, ParamType PT, typename ParamImpl >
+        void                                    AddParam            ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const ValueType& defaultValue, bool addValue, bool isState ) const
+        {
+            auto param = std::make_shared< ParamImpl >( name, InterpolatorType(), timeEvaluator );
+            param->SetVal( defaultValue, 0.f );
+
+            if( addValue )
+            {
+                auto evaluator = ParamValEvaluatorFactory::CreateSimpleEvaluator< InterpolatorType, ValueType, MPT, PT >( param );
+                model->RegisterAll( evaluator );
+            }
+
+            if( isState )
+            {
+                assert( addValue );
+                auto state = std::make_shared< SimpleState<ValueType> >();
+                auto value = model->GetValue( name );
+                auto qValue = QueryTypedValue< std::shared_ptr< ValueImpl< ValueType, PT > > >( value );
+                auto updater = std::make_shared< 
+                    SimpleStateUpdater< 
+                        std::shared_ptr< SimpleState<ValueType> >, 
+                        std::shared_ptr< ValueImpl< ValueType, PT > >
+                    > >( state, qValue );
+                model->AddState( name, state, updater );
+            }
+        }
+    };
+
+    
 };
-
-//template< typename T >
-//inline void                                     BasePluginDescriptor::AddParam< T >            ( DefaultParamValModelPtr&, ITimeEvaluatorPtr, std::string, const T&, bool, bool ) const
-//{
-//    assert( false );
-//}
-
-//template<>
-//inline void                                     BasePluginDescriptor::AddParam< float >   ( DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const float& defaultValue, bool addValue, bool isState ) const
-//{
-//    auto param = ParametersFactory::CreateParameterFloat( name, timeEvaluator );
-//    //model->AddParameter( param );
-//    param->SetVal( defaultValue, 0.f );
-//
-//    if( addValue )
-//    {
-//        auto evaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( param );
-//        model->RegisterAll( evaluator );
-//    }
-//
-//    if( isState )
-//    {
-//        assert( addValue );
-//        auto state = std::make_shared< FloatSimpleState >();
-//        auto value = model->GetValue( name );
-//        auto qValue = QueryTypedValue< ValueFloatPtr >( value );
-//        auto updater = std::make_shared< SimpleFloatStateUpdater >( state, qValue );
-//        model->AddState( name, state, updater );
-//    }
-//}
 
 } //model
 } //bv

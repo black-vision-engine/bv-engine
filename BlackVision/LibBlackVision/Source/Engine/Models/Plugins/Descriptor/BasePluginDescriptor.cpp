@@ -41,36 +41,12 @@ IPluginParamValModelPtr BasePluginDescriptor::CreateModel       ( ITimeEvaluator
 
 // *********************************
 //
-DefaultParamValModelPtr                  BasePluginDescriptor::CreateVacModel         ( DefaultPluginParamValModelPtr&, ITimeEvaluatorPtr ) const
+void BasePluginDescriptor::ModelHelper::CreateVacModel         ()
 {
-    return std::make_shared< DefaultParamValModel >();
+    auto vacModel = std::make_shared< DefaultParamValModel >();
+    m_model->SetVertexAttributesChannelModel( vacModel );
+    m_lastParamValModel = vacModel;
 }
-
-//// *********************************
-////
-//template<>
-//void                                     BasePluginDescriptor::AddParam< float >   ( DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const float& defaultValue, bool addValue, bool isState ) const
-//{
-//    auto param = ParametersFactory::CreateParameterFloat( name, timeEvaluator );
-//    model->AddParameter( param );
-//    param->SetVal( defaultValue, 0.f );
-//
-//    if( addValue )
-//    {
-//        auto evaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( param );
-//        model->RegisterAll( evaluator );
-//    }
-//
-//    if( isState )
-//    {
-//        assert( addValue );
-//        auto state = std::make_shared< FloatSimpleState >();
-//        auto value = model->GetValue( name );
-//        auto qValue = QueryTypedValue< ValueFloatPtr >( value );
-//        auto updater = std::make_shared< SimpleFloatStateUpdater >( state, qValue );
-//        model->AddState( name, state, updater );
-//    }
-//}
 
 } //model
 } //bv

@@ -78,7 +78,7 @@ DefaultPluginParamValModelPtr   DefaultRectPluginDesc::CreateDefaultModel   ( IT
     //return model;
 
     DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
-    DefaultParamValModelPtr         vacModel    = CreateVacModel( model, timeEvaluator );
+    //DefaultParamValModelPtr         vacModel    = CreateVacModel( model, timeEvaluator );
 
     //AddParam( vacModel, timeEvaluator, "width", 1.f ); // FIXME(?): vacModel, timeEvaluator should be stored
     //AddParam( vacModel, timeEvaluator, "height", 1.f );
