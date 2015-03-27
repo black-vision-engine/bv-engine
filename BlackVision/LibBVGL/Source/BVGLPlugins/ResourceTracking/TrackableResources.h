@@ -25,6 +25,7 @@ public:
 
     void            DeleteResources     ( GLsizei n, const GLuint * resources );
 
+    GLuint          GetBoundResourceID  ( GLenum target ) const;
     ResourceDesc &  GetBoundResource    ( GLenum target );
 
     void            PrintShortSummary   () const;

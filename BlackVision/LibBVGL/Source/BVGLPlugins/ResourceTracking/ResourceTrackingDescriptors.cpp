@@ -25,6 +25,14 @@ void    BufferDesc::Set     ( GLsizeiptr size, GLenum usage, const GLvoid * data
     this->data  = data;
 }
 
+// *****************************
+//
+void    BufferDesc::Visit   ( VisitorAggregate & visitor ) const
+{
+    visitor.AddToTotalSize( size );
+    visitor.IncNumVisits();
+}
+
 // *************************************************************************************************************************************************
 
 // *****************************
@@ -63,6 +71,14 @@ GLuint TextureDesc::PixelSize( GLenum format ) const
     return 4;
 }
 
+// *****************************
+//
+void    TextureDesc::Visit  ( VisitorAggregate & visitor ) const
+{
+    visitor.AddToTotalSize( DataSize() );
+    visitor.IncNumVisits();
+}
+
 // *************************************************************************************************************************************************
 
 // *****************************
@@ -99,14 +115,22 @@ GLuint  RenderbufferDesc::PixelSize   ( GLenum internalformat ) const
     return 3; // FIXME: make sure that there is no 1-byte padding 
 }
 
+// *****************************
+//
+void    RenderbufferDesc::Visit     ( VisitorAggregate & visitor ) const
+{
+    visitor.AddToTotalSize( BufferSize() );
+    visitor.IncNumVisits();
+}
+
 // *************************************************************************************************************************************************
 
 // *****************************
 //
 FramebufferDesc::FramebufferDesc    ()
-    : textureAttachment0( 0 )
+    : colorAttachment0( 0 )
     , attachment0IsTex( false )
-    , textureAttachment1( 0 )
+    , colorAttachment1( 0 )
     , attachment1IsTex( false )
     , depthAttachment( 0 )
     , depthAttachmentIsTex( false )
@@ -124,12 +148,12 @@ void    FramebufferDesc::AttachTexture2D    ( GLenum attachment, GLenum target, 
 
     if( attachment == GL_COLOR_ATTACHMENT0 )
     {
-        textureAttachment0 = texture;
+        colorAttachment0 = texture;
         attachment0IsTex = true;
     }
     else if( attachment == ( GL_COLOR_ATTACHMENT0 + 1 ) )
     {
-        textureAttachment1 = texture;
+        colorAttachment1 = texture;
         attachment1IsTex = true;
     }
 }
@@ -145,6 +169,28 @@ void    FramebufferDesc::AttachRenderbuffer ( GLenum attachment, GLenum renderbu
     depthAttachmentIsTex = false;
 }
 
+// *****************************
+//
+void    FramebufferDesc::Visit              ( VisitorAggregate & visitor ) const
+{
+    if( colorAttachment0 > 0 )
+    {
+        attachment0IsTex ? visitor.IncNumAtch0Tex() : visitor.IncNumAtch0FB();
+    }
+
+    if( colorAttachment1 > 0 )
+    {
+        attachment1IsTex ? visitor.IncNumAtch1Tex() : visitor.IncNumAtch1FB();
+    }
+
+    if( depthAttachment > 0 )
+    {
+        depthAttachmentIsTex ? visitor.IncNumDBAtTex() : visitor.IncNumDBAtFB();
+    }
+
+    visitor.IncNumVisits();
+}
+
 // *************************************************************************************************************************************************
 
 // *****************************
@@ -155,16 +201,17 @@ VertexArrayAttribDesc::VertexArrayAttribDesc   ()
 
 // *****************************
 //
-VertexArrayAttribDesc::VertexArrayAttribDesc   ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
+VertexArrayAttribDesc::VertexArrayAttribDesc   ( GLuint buffer, GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
     : enabled( false )
 {
-    Set( index, size, type, normalized, stride, pointer );
+    Set( buffer, index, size, type, normalized, stride, pointer );
 }
 
 // *****************************
 //
-void    VertexArrayAttribDesc::Set ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
+void    VertexArrayAttribDesc::Set ( GLuint buffer, GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
 {
+    this->buffer        = buffer;
     this->index         = index;      
     this->size          = size;
     this->type          = type;
@@ -183,15 +230,15 @@ VertexArrayDesc::VertexArrayDesc        ()
 
 // *****************************
 //
-void    VertexArrayDesc::SetAttrPointer ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
+void    VertexArrayDesc::SetAttrPointer ( GLuint buffer, GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer )
 {
     if( attributePointers.find( index ) != attributePointers.end() )
     {
-        attributePointers[ index ].Set( index, size, type, normalized, stride, pointer );
+        attributePointers[ index ].Set( buffer, index, size, type, normalized, stride, pointer );
     }
     else
     {
-        attributePointers[ index ] = VertexArrayAttribDesc( index, size, type, normalized, stride, pointer );
+        attributePointers[ index ] = VertexArrayAttribDesc( buffer, index, size, type, normalized, stride, pointer );
     }
 }
 
@@ -219,6 +266,15 @@ void    VertexArrayDesc::Disable     ( GLuint index )
 
     attributePointers[ index ].enabled = false;
     enabledAttributes.erase( index );
+}
+
+// *****************************
+//
+void    VertexArrayDesc::Visit      ( VisitorAggregate & visitor ) const
+{
+    visitor.AddToTotalRegisteredAttrs   ( attributePointers.size() );
+    visitor.AddToTotalEnabledAttrs      ( enabledAttributes.size() );
+    visitor.IncNumVisits                ();
 }
 
 } // bv
