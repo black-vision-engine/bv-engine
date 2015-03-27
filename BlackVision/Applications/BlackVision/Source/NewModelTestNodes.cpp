@@ -1032,7 +1032,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     assert( success );
 
 	SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, 1.f, 1.f ) );
-	//SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.0f, glm::vec3( 1.f/5.f, 1.f/5.f, 1.f ) );
+	SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 1.f, 0.f ), 0.f );
+	SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 5.f, glm::vec3( 0.f, 1.f, 0.f ), 70.f );
+	SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, glm::vec3( 0.f, 1.f, 0.f ), -70.f );
+	//SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.0f, glm::vec3( 1.f/15.f, 1.f/15.f, 1.f ) );
+	//SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.0f, glm::vec3( 1.f, 1.f, 1.f ) );
 
     node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( timeEvaluator );
 
@@ -1064,8 +1068,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     model::SetParameter( node->GetPlugin( "texture" )->GetParameter( "alpha" ), TimeType( 3.f ),   1.f );
     */
 
-	//success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::LANCZOS );
-	success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg" );
+	success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
+	//success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg" );
     //success = model::LoadTexture( node->GetPlugin( "texture" ), "Untitled drawing.png" );
     assert( success );
 
