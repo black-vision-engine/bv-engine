@@ -8,7 +8,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
-#include "Assets/Texture/TextureAssetDescriptor.h"
+//#include "Engine/Models/Resources/IPluginResourceDescr.h"
 
 
 namespace bv { namespace model {
@@ -198,26 +198,39 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultTexturePluginDesc::TextureName() );
         txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+		txDesc->SetBorderColor( GetBorderColor() );
+		
+		if( txDesc != nullptr )
+		{
+			if( txData->GetTextures().size() == 0 )
+			{
+				txData->AddTexture( txDesc );
+			}
+			else
+			{
+				txData->SetTexture( 0, txDesc );
+			}
 
-        if( txDesc != nullptr )
-        {
-            if( txData->GetTextures().size() == 0 )
-            {
-                txData->AddTexture( txDesc );
-            }
-            else
-            {
-                txData->SetTexture( 0, txDesc );
-            }
+			m_textureWidth = txDesc->GetWidth();
+			m_textureHeight = txDesc->GetHeight();
 
-            m_textureWidth = txDesc->GetWidth();
-            m_textureHeight = txDesc->GetHeight();
+			return true;
+		}
+	}
 
-            return true;
-        }
-    }
+	//auto viResDescr = QueryVideoInputResourceDescr( resDescr );
 
-    return false;
+	//if( viResDescr != nullptr )
+	//{
+	//	auto txData = m_psc->GetTexturesDataImpl();
+	//	assert( txData->GetTextures().size() <= 1 ); // to be safe for now
+	//	
+	//	txData->AddTexture( viResDescr->GetITextureDescriptor() );
+
+	//	return true;
+	//}
+
+	return false;
 }
 
 // *************************************
@@ -442,6 +455,15 @@ SizeType									DefaultTexturePlugin::GetTextureWidth             () const
 SizeType									DefaultTexturePlugin::GetTextureHeight            () const
 {
     return m_textureHeight;
+}
+
+// *************************************
+// 
+glm::vec4                                   DefaultTexturePlugin::GetBorderColor        () const
+{
+	auto param = this->GetParameter( "borderColor" );
+	assert( param );
+	return QueryTypedParam< ParamVec4Ptr >( param )->Evaluate();
 }
 
 // *************************************

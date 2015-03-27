@@ -66,6 +66,22 @@ ModelParamType      AbstractModelParameter::GetType () const
 
 // *******************************
 //
+void                AbstractModelParameter::SetInterpolationMethod ( IParameter::InterpolationMethod method )
+{
+    m_method = method;
+}
+
+// *******************************
+//
+IParameter::InterpolationMethod AbstractModelParameter::GetInterpolationMethod () const
+{
+    return m_method;
+}
+
+
+
+// *******************************
+//
 void    SetParamTimeline( IParameterPtr param, ITimeEvaluatorPtr timeline )
 {
     AbstractModelParameterPtr typedParam = std::static_pointer_cast< AbstractModelParameter >( param );

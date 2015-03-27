@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
@@ -8,42 +10,57 @@ class DefaultGeometryVertexAttributeChannel : public VertexAttributesChannel
 {
 private:
 
-	AttributeChannelDescriptor * m_compDesc;
+    AttributeChannelDescriptor * m_compDesc;
 
 public:
 
-	DefaultGeometryVertexAttributeChannel( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false ) 
-		: VertexAttributesChannel ( type, isReadOnly, isTimeInvariant )  
-	{
-		AttributeChannelDescriptor * compDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+    DefaultGeometryVertexAttributeChannel( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false ) 
+        : VertexAttributesChannel ( type, isReadOnly, isTimeInvariant )  
+    {
+        AttributeChannelDescriptor * compDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
 
-		VertexAttributesChannelDescriptor vaDesc;
+        VertexAttributesChannelDescriptor vaDesc;
 
-		vaDesc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compDesc ) );
+        vaDesc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compDesc ) );
 
-		m_compDesc = compDesc;
+        m_compDesc = compDesc;
 
-		m_desc = vaDesc;
-	}
+        m_desc = vaDesc;
+    }
 
-	void GenerateAndAddConnectedComponent( void (*GenerateConnectedComponent) (Float3AttributeChannelPtr) )
-	{
-		ConnectedComponentPtr comp = ConnectedComponent::Create();
+    void GenerateAndAddConnectedComponent( void (*GenerateConnectedComponent) (Float3AttributeChannelPtr) )
+    {
+        ConnectedComponentPtr comp = ConnectedComponent::Create();
 
-		Float3AttributeChannelPtr vertArrtF3 = std::make_shared< Float3AttributeChannel >( m_compDesc, m_compDesc->SuggestedDefaultName( 0 ), false );
+        Float3AttributeChannelPtr vertArrtF3 = std::make_shared< Float3AttributeChannel >( m_compDesc, m_compDesc->SuggestedDefaultName( 0 ), false );
 
-		GenerateConnectedComponent( vertArrtF3 );
+        GenerateConnectedComponent( vertArrtF3 );
 
-		comp->AddAttributeChannel( vertArrtF3 );
+        comp->AddAttributeChannel( vertArrtF3 );
 
-		AddConnectedComponent( comp );
-	}
+        AddConnectedComponent( comp );
+    }
 };
 
-class IGeometryAndUVsGenerator
+class IGeometryGenerator
 {
 public:
-	
+    enum Type { GEOMETRY_ONLY, GEOMETRY_AND_UVS };
+
+    virtual Type GetType() = 0;
+};
+
+class IGeometryOnlyGenerator : public IGeometryGenerator
+{
+public:
+    
+    virtual void GenerateGeometry( Float3AttributeChannelPtr ) = 0;
+};
+
+class IGeometryAndUVsGenerator : public IGeometryGenerator
+{
+public:
+    
     virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr, Float2AttributeChannelPtr ) = 0;
 };
 
@@ -51,42 +68,83 @@ class DefaultGeometryAndUVsVertexAttributeChannel : public VertexAttributesChann
 {
 private:
 
-	AttributeChannelDescriptor * m_compVertDesc;
-	AttributeChannelDescriptor * m_compUVDesc;
+    AttributeChannelDescriptor * m_compVertDesc;
+    AttributeChannelDescriptor * m_compUVDesc;
 
 public:
 
-	DefaultGeometryAndUVsVertexAttributeChannel( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false ) 
-		: VertexAttributesChannel ( type, isReadOnly, isTimeInvariant )  
-	{
-		VertexAttributesChannelDescriptor vaDesc;
+    DefaultGeometryAndUVsVertexAttributeChannel( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false ) 
+        : VertexAttributesChannel ( type, isReadOnly, isTimeInvariant )  
+    {
+        VertexAttributesChannelDescriptor vaDesc;
 
-		AttributeChannelDescriptor * compVertDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
-		vaDesc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compVertDesc ) );
+        m_desc = vaDesc; // FIXME?
+    }
 
-		AttributeChannelDescriptor * compUVDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_GENERATOR );
-		vaDesc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compUVDesc ) );
+    void AddAttributeChannelDescriptorsIfNeeded( IGeometryGenerator & generator_ )
+    {
+        if( m_desc.GetNumVertexChannels() > 0 )
+            return;
 
-		m_compVertDesc = compVertDesc;
-		m_compUVDesc = compUVDesc;
+        AttributeChannelDescriptor * compVertDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
+        AttributeChannelDescriptor * compUVDesc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_GENERATOR ); // possibly unused
 
-		m_desc = vaDesc;
-	}
+        m_compVertDesc = compVertDesc;
+        m_compUVDesc = compUVDesc;
 
-	void GenerateAndAddConnectedComponent( IGeometryAndUVsGenerator & generator )
-	{
-		ConnectedComponentPtr comp = ConnectedComponent::Create();
+        switch( generator_.GetType() )
+        {
+            case IGeometryGenerator::Type::GEOMETRY_ONLY:
+                m_desc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compVertDesc ) );
+                
+                break;
 
-		Float3AttributeChannelPtr vertArrtF3 = std::make_shared< Float3AttributeChannel >( m_compVertDesc, m_compVertDesc->SuggestedDefaultName( 0 ), false );
-		Float2AttributeChannelPtr vertArrtUV = std::make_shared< Float2AttributeChannel >( m_compUVDesc, m_compUVDesc->SuggestedDefaultName( 0 ), false );
+            case IGeometryGenerator::Type::GEOMETRY_AND_UVS:
+                m_desc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compVertDesc ) );
+                m_desc.AddAttrChannelDesc( static_cast< const AttributeChannelDescriptor * >( compUVDesc ) );
 
-		generator.GenerateGeometryAndUVs( vertArrtF3, vertArrtUV );
+                break;
+                
+            default:
+                assert( false );
+        }
+    }
 
-		comp->AddAttributeChannel( vertArrtF3 );
-		comp->AddAttributeChannel( vertArrtUV );
+    void GenerateAndAddConnectedComponent( IGeometryGenerator & generator_ )
+    {
+        ConnectedComponentPtr comp = ConnectedComponent::Create();
 
-		AddConnectedComponent( comp );
-	}
+        AddAttributeChannelDescriptorsIfNeeded( generator_ );
+
+        Float3AttributeChannelPtr vertArrtF3 = std::make_shared< Float3AttributeChannel >( m_compVertDesc, m_compVertDesc->SuggestedDefaultName( 0 ), false );
+        Float2AttributeChannelPtr vertArrtUV = std::make_shared< Float2AttributeChannel >( m_compUVDesc, m_compUVDesc->SuggestedDefaultName( 0 ), false ); // possibly unused
+
+        switch( generator_.GetType() )
+        {
+            case IGeometryGenerator::Type::GEOMETRY_ONLY:
+                {IGeometryOnlyGenerator& generator = reinterpret_cast< IGeometryOnlyGenerator& >( generator_ );
+                generator.GenerateGeometry( vertArrtF3 );}
+                
+                comp->AddAttributeChannel( vertArrtF3 );
+                
+                break;
+
+            case IGeometryGenerator::Type::GEOMETRY_AND_UVS:
+                {IGeometryAndUVsGenerator& generator = reinterpret_cast< IGeometryAndUVsGenerator& >( generator_ );
+                generator.GenerateGeometryAndUVs( vertArrtF3, vertArrtUV );}
+
+                comp->AddAttributeChannel( vertArrtF3 );
+                comp->AddAttributeChannel( vertArrtUV );
+
+                break;
+                
+            default:
+                assert( false );
+        }
+
+
+        AddConnectedComponent( comp );
+    }
 };
 
 } //model
