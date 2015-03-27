@@ -1,5 +1,10 @@
 #include "ResourceTrackingAggregates.h"
 
+#include <sstream>
+#include <iomanip>
+
+#include "BVGLTools/BVGLStringFormatters.h"
+
 
 namespace bv {
 
@@ -44,6 +49,17 @@ size_t  AggregateSizeTracker::GetNumVisits    () const
 void    AggregateSizeTracker::IncNumVisits    ()
 {
     m_numVisits++;
+}
+
+// ***************************
+//
+string  AggregateSizeTracker::Summary         () const
+{
+    std::stringstream ss;
+
+    ss << "Num elts: " << std::setfill( ' ' ) << std::setw( 3 ) << m_numVisits << " Total Size: " << FormatSizeString( m_totalSize );
+
+    return ss.str();
 }
 
 // *************************************************************************************************************************************************
@@ -169,6 +185,26 @@ void    AggregateFrameBufferTracker::IncNumVisits        ()
     m_numVisits++;
 }
 
+// ***************************
+//
+string  AggregateFrameBufferTracker::Summary             () const
+{
+    std::stringstream ss;
+
+    ss << "Num elts: " << std::setfill( ' ' ) << std::setw( 2 ) << m_numVisits << " ";
+
+    ss << "CA0TX: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments0Tex << " ";
+    ss << "CA0FB: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments0FrameBuffer << " ";
+
+    ss << "CA1TX: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments1Tex << " ";
+    ss << "CA1FB: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments1FrameBuffer << " ";
+
+    ss << "DATX: " << std::setfill( ' ' ) << std::setw( 2 ) << totalDepthAttachmentsTex << " ";
+    ss << "DAFB: " << std::setfill( ' ' ) << std::setw( 2 ) << totalDepthAttachmentsFramebuffer << " ";
+
+    return ss.str();
+}
+
 // *************************************************************************************************************************************************
 
 // ***************************
@@ -227,6 +263,19 @@ size_t  AggregateVertexArrayTracker::GetNumVisits               () const
 void    AggregateVertexArrayTracker::IncNumVisits               ()
 {
     m_numVisits++;
+}
+
+// ***************************
+//
+string  AggregateVertexArrayTracker::Summary                    () const
+{
+    std::stringstream ss;
+
+    ss << "Num elts: " << std::setfill( ' ' ) << std::setw( 2 ) << m_numVisits << " ";
+    ss << "TotalRegAttrs: " << std::setfill( ' ' ) << std::setw( 2 ) << m_totalRegisteredAttributes << " ";
+    ss << "TotalEnabledAttrs: " << std::setfill( ' ' ) << std::setw( 2 ) << m_totalEnabledAttributes << " ";
+
+    return ss.str();
 }
 
 } //bv

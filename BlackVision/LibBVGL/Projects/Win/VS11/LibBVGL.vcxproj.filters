@@ -35,6 +35,9 @@
     <ClInclude Include="..\..\..\Source\BVGLPlugins\ResourceTracking\ResourceTrackingAggregates.h">
       <Filter>BVGLPlugins\ResourceTracking</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\BVGLTools\BVGLStringFormatters.h">
+      <Filter>BVGLTools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\BVGLTools\BVGLTranslator.cpp">
@@ -58,6 +61,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\BVGLPlugins\ResourceTracking\ResourceTrackingAggregates.cpp">
       <Filter>BVGLPlugins\ResourceTracking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\BVGLTools\BVGLStringFormatters.cpp">
+      <Filter>BVGLTools</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

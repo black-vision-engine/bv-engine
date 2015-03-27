@@ -18,12 +18,14 @@ struct BufferDesc
 {
     typedef AggregateSizeTracker VisitorAggregate;
 
+    GLuint          ID;
     GLsizeiptr      size;
     GLenum          usage;
     const GLvoid *  data;
 
     BufferDesc      ();
 
+    void    SetID   ( GLuint ID );
     void    Set     ( GLsizeiptr size, GLenum usage, const GLvoid * data );
 
     void    Visit   ( VisitorAggregate & visitor ) const;
@@ -38,6 +40,7 @@ struct TextureDesc
 {
     typedef AggregateSizeTracker VisitorAggregate;
 
+    GLuint          ID;
     GLsizei         width;
     GLsizei         height;
     GLenum          format;
@@ -45,6 +48,7 @@ struct TextureDesc
 
     TextureDesc         ();
 
+    void    SetID       ( GLuint ID );
     void    Set         ( GLsizei width, GLsizei height, GLenum format, const GLvoid * pixels );
 
     GLuint  DataSize    () const;
@@ -62,12 +66,14 @@ struct RenderbufferDesc
 {
     typedef AggregateSizeTracker VisitorAggregate;
 
+    GLuint  ID;
     GLenum  internalformat;
     GLsizei width;
     GLsizei height;
 
     RenderbufferDesc    ();
 
+    void    SetID       ( GLuint ID );
     void    Set         ( GLenum internalformat, GLsizei width, GLsizei height );
 
     GLuint  BufferSize  () const;
@@ -85,6 +91,8 @@ struct FramebufferDesc
 {
     typedef AggregateFrameBufferTracker VisitorAggregate;
 
+    GLuint  ID;
+
     // FIXME: only rudimentary tracking with textures used as color attachments and 
     GLuint colorAttachment0;
     bool   attachment0IsTex;
@@ -96,6 +104,8 @@ struct FramebufferDesc
     bool   depthAttachmentIsTex;
 
     FramebufferDesc             ();
+
+    void    SetID               ( GLuint ID );
 
     void    AttachTexture2D     ( GLenum attachment, GLenum target, GLuint texture, GLint level );
     void    AttachRenderbuffer  ( GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer );
@@ -134,11 +144,14 @@ struct VertexArrayDesc
 {
     typedef AggregateVertexArrayTracker VisitorAggregate;
 
+    GLuint ID;
+    
     std::hash_set< GLuint >                         enabledAttributes;
     std::hash_map< GLuint, VertexArrayAttribDesc >  attributePointers;
 
     VertexArrayDesc         ();
 
+    void    SetID           ( GLuint ID );
     void    SetAttrPointer  ( GLuint buffer, GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
 
     void    Enable          ( GLuint index );

@@ -1,7 +1,5 @@
 #include "BVGLResourceTrackingPlugin.h"
 
-#include "BVGLTools/BVGLTranslator.h"
-
 #include <sstream>
 #include <cassert>
 #include <cstdio>
@@ -252,20 +250,26 @@ void    BVGLResourceTrackingPlugin::DisableVertexAttribArray	( GLuint index )
 //
 void    BVGLResourceTrackingPlugin::PrintShortSummary           ( const std::string & message )
 {
-    printf( "%s\n", message.c_str() );
+    if( message != "" )
+        printf( "%s\n", message.c_str() );
+
+    printf( "%s\n", m_buffers.ShortSummary("\nBUFFERS:").c_str() );
+    printf( "%s\n", m_textures.ShortSummary("\nTEXTURES:").c_str() );
+    printf( "%s\n", m_framebuffers.ShortSummary("\nFRAME BUFERS:").c_str() );
+    printf( "%s\n", m_renderbuffers.ShortSummary("\nRENDER BUFFERS:").c_str() );
+    printf( "%s\n", m_vertexarrays.ShortSummary("\nVERTEX ARRAYS:").c_str() );
 }
 
 void    BVGLResourceTrackingPlugin::PrintCompleteSummary        ( const std::string & message )
 {
-    printf( "%s\n", message.c_str() );
+    if( message != "" )
+        printf( "%s\n", message.c_str() );
 
-    PrintBuffersStats();
-    printf("\n");
-	PrintTextureStats();
-    printf("\n");
-    PrintRenderbuffersStats();
-    printf("\n");
-    PrintFramebufersStats();
+    printf( "%s\n", m_buffers.CompleteSummary("\nBUFFERS:").c_str() );
+    printf( "%s\n", m_textures.CompleteSummary("\nTEXTURES:").c_str() );
+    printf( "%s\n", m_framebuffers.CompleteSummary("\nFRAME BUFERS:").c_str() );
+    printf( "%s\n", m_renderbuffers.CompleteSummary("\nRENDER BUFFERS:").c_str() );
+    printf( "%s\n", m_vertexarrays.CompleteSummary("\nVERTEX ARRAYS:").c_str() );
 }
 
 // *****************************
@@ -378,38 +382,5 @@ void                BVGLResourceTrackingPlugin::PrintFramebufersStats       ()
 {
     printf( "FRAMEBUFFERS:\n");
 }
-
-// *****************************
-//
-std::string         BVGLResourceTrackingPlugin::FormatSize          ( GLuint numBytes )
-{
-    auto siz = numBytes;
-    std::string suffix = "B";
-
-    if( siz > 1024 * 256 )
-    {
-        siz /= 1024;
-        suffix = "kB";
-    }
-
-    if( siz > 1024 * 256 )
-    {
-        siz /= 1024;
-        suffix = "MB";
-    }
-    
-    if( siz > 1024 * 256 )
-    {
-        siz /= 1024;
-        suffix = "GB";
-    }
-
-    std::stringstream ss;
-    
-    ss << siz << " " << suffix;
-
-    return ss.str();
-}
-
 
 } //bv

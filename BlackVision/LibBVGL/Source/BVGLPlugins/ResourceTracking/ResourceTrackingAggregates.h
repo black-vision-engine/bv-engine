@@ -1,5 +1,10 @@
 #pragma once
 
+#include <string>
+
+using std::string;
+
+
 namespace bv {
 
 /////////////////////////////
@@ -23,6 +28,7 @@ public:
     size_t  GetNumVisits    () const;
     void    IncNumVisits    ();
 
+    string  Summary         () const;
 };
 
 /////////////////////////////
@@ -66,6 +72,8 @@ public:
 
     size_t  GetNumVisits        () const;
     void    IncNumVisits        ();
+
+    string  Summary             () const;
 };
 
 class AggregateVertexArrayTracker
@@ -91,6 +99,7 @@ public:
     size_t  GetNumVisits                () const;
     void    IncNumVisits                ();
 
+    string  Summary                     () const;
 };
 
 } //bv

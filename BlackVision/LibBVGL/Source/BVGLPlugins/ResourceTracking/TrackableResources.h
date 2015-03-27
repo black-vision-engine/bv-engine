@@ -18,8 +18,8 @@ private:
 
 public:
 
-    void            GenResources        ( GLsizei n, GLuint * resources );
-    void            CreateResources     ( GLsizei n, GLuint * resources );
+    void            GenResources        ( GLsizei n, const GLuint * resources );
+    void            CreateResources     ( GLsizei n, const GLuint * resources );
 
     void            BindResource        ( GLenum target, GLuint resource );
 
@@ -29,7 +29,7 @@ public:
     ResourceDesc &  GetBoundResource    ( GLenum target );
 
     std::string     ShortSummary        ( const std::string & header ) const;
-    std::string     LongSummary         ( const std::string & header ) const;
+    std::string     CompleteSummary     ( const std::string & header ) const;
 
 private:
 

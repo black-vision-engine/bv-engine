@@ -32,7 +32,7 @@ public:
     virtual void		DeleteBuffers               ( GLsizei n, const GLuint * buffers ) override;
     virtual void		BindBuffer                  ( GLenum target, GLuint buffer ) override;
     virtual void		BufferData                  ( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage ) override;
-   
+
     virtual void        GenTextures                 ( GLsizei n, GLuint * textures ) override;
     virtual void        DeleteTextures              ( GLsizei n, const GLuint * textures );
     virtual void        TexImage2D					( GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid * pixels ) override;
@@ -68,10 +68,6 @@ private:
     void                PrintRenderbuffersStats     ();
     void                PrintFramebufersStats       ();
 
-    std::string         FormatSize                  ( GLuint numBytes );
-
-/*
-*/
 };
 
 } //bv

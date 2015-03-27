@@ -12,20 +12,23 @@ namespace bv {
 // *****************************
 //
 template< typename ResourceDesc >
-void            TrackableResources< ResourceDesc >::GenResources        ( GLsizei n, GLuint * resources )
+void            TrackableResources< ResourceDesc >::GenResources        ( GLsizei n, const GLuint * resources )
 {
     for( auto i = 0; i < n; ++i )
     {
         auto resource = resources[ i ];
 
-        m_allocatedResources[ resource ] = ResourceDesc();
+        auto res = ResourceDesc();
+        res.SetID( resource );
+
+        m_allocatedResources[ resource ] = res;
     }
 }
 
 // *****************************
 //
 template< typename ResourceDesc >
-void            TrackableResources< ResourceDesc >::CreateResources     ( GLsizei n, GLuint * resources )
+void            TrackableResources< ResourceDesc >::CreateResources     ( GLsizei n, const GLuint * resources )
 {
     GenResources( n, resources );
 }
@@ -83,7 +86,12 @@ std::string            TrackableResources< ResourceDesc >::ShortSummary ( const 
 
     auto visitor = ResourceDesc::VisitorAggregate();
 
-    for ( auto elt : 
+    for ( auto & elt : m_allocatedResources )
+    {
+        elt.second.Visit( visitor );
+    }
+
+    ss << visitor.Summary();
 
     return ss.str();
 }
@@ -91,7 +99,7 @@ std::string            TrackableResources< ResourceDesc >::ShortSummary ( const 
 // *****************************
 //
 template< typename ResourceDesc >
-std::string             TrackableResources< ResourceDesc >::LongSummary ( const std::string & header ) const
+std::string             TrackableResources< ResourceDesc >::CompleteSummary ( const std::string & header ) const
 {
     std::stringstream ss;
 
@@ -126,10 +134,10 @@ std::string             TrackableResources< ResourceDesc >::LongSummary ( const 
 template< typename ResourceDesc >
 GLenum                  TrackableResources< ResourceDesc >::BoundTo ( GLuint resID ) const
 {
-    for( auto & elt : m_boundResources )
+    for( auto it = m_boundResources.begin(); it != m_boundResources.end(); ++it )
     {
-        if( elt->second == resID )
-            return elt->first;
+        if( it->second == resID )
+            return it->first;
     }
 
     return 0;

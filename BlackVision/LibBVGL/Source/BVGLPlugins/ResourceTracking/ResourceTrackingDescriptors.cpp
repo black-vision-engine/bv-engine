@@ -1,6 +1,11 @@
 #include "ResourceTrackingDescriptors.h"
 
 #include <cassert>
+#include <sstream>
+#include <iomanip>
+
+#include "BVGLTools/BVGLTranslator.h"
+#include "BVGLTools/BVGLStringFormatters.h"
 
 
 namespace bv {
@@ -10,10 +15,18 @@ namespace bv {
 // *****************************
 //
 BufferDesc::BufferDesc              ()
-    : size( 0 )
+    : ID( 0 )
+    , size( 0 )
     , usage( 0 )
     , data( nullptr )
 {
+}
+
+// *****************************
+//
+void    BufferDesc::SetID           ( GLuint ID )
+{
+    this->ID = ID;
 }
 
 // *****************************
@@ -37,14 +50,21 @@ void    BufferDesc::Visit           ( VisitorAggregate & visitor ) const
 //
 std::string  BufferDesc::Summary    () const
 {
-    return "IMPLEMENT ME";
+    //printf( "Buf: %2d, Size: %7s, Usage: %15s", bufId, siz.c_str(), BVGLTranslator::TranslateBufferUsage( bufDesc.usage ).c_str() )
+    std::stringstream ss;
+
+    ss << "Buf: " << std::setw( 2 ) << std::setfill( ' ' ) << ID << " ";
+    ss << "Size: " << std::setw( 10 ) << FormatSizeString( size ) << " ";
+    ss << "Usage: " << std::setw( 15 ) << BVGLTranslator::TranslateBufferUsage( usage );
+
+    return ss.str();
 }
 
 // *****************************
 //
 std::string  BufferDesc::TargetStr  ( GLenum target ) const
 {
-    return "IMPLEMENT ME";
+    return BVGLTranslator::TranslateBufferTarget( target );
 }
 
 // *************************************************************************************************************************************************
@@ -52,11 +72,19 @@ std::string  BufferDesc::TargetStr  ( GLenum target ) const
 // *****************************
 //
 TextureDesc::TextureDesc()
-    : width( 0 )
+    : ID( 0 )
+    , width( 0 )
     , height( 0 )
     , format( 0 )
     , pixels( nullptr )
 {
+}
+
+// *****************************
+//
+void    TextureDesc::SetID  ( GLuint ID )
+{
+    this->ID = ID;
 }
 
 // *****************************
@@ -97,14 +125,21 @@ void    TextureDesc::Visit  ( VisitorAggregate & visitor ) const
 //
 std::string  TextureDesc::Summary   () const
 {
-    return "IMPLEMENT ME";
+    //printf( "Tex: %2d (%4d, %4d), Size: %7s, Format: %10s", texId, texDesc.width, texDesc.height, siz.c_str(), BVGLTranslator::TranslateTextureFormat( texDesc.format ).c_str() );
+    std::stringstream ss;
+
+    ss << "Tex: " << std::setw( 2 ) << std::setfill( ' ' ) << ID << " (" << std::setw( 4 ) << width << ", " << std::setw( 4 ) << height << "), ";
+    ss << "Size: " << std::setw( 7 ) << FormatSizeString( DataSize() ) << " ";
+    ss << "Format: " << std::setw( 10 ) << BVGLTranslator::TranslateTextureFormat( format );
+
+    return ss.str();
 }
 
 // *****************************
 //
 std::string  TextureDesc::TargetStr ( GLenum target ) const
 {
-    return "IMPLEMENT ME";
+    return BVGLTranslator::TranslateTextureTarget( target );
 }
 
 // *************************************************************************************************************************************************
@@ -112,10 +147,18 @@ std::string  TextureDesc::TargetStr ( GLenum target ) const
 // *****************************
 //
 RenderbufferDesc::RenderbufferDesc      ()
-    : internalformat( 0 )
+    : ID( 0 )
+    , internalformat( 0 )
     , width( 0 )
     , height( 0 )
 {
+}
+
+// *****************************
+//
+void    RenderbufferDesc::SetID         ( GLuint ID )
+{
+    this->ID = ID;
 }
 
 // *****************************
@@ -155,28 +198,43 @@ void    RenderbufferDesc::Visit         ( VisitorAggregate & visitor ) const
 //
 std::string  RenderbufferDesc::Summary  () const
 {
-    return "IMPLEMENT ME";
+    //printf( "RenderBuffer: %2d (%4d, %4d), Size: %7s, Internal Format: %10s", ID, width, height, siz.c_str(), BVGLTranslator::TranslateRenderbufferInternalFormat( internalformat ).c_str() );
+    std::stringstream ss;
+
+    ss << "RenderBuffer: " << std::setw( 2 ) << std::setfill( ' ' ) << ID << " (" << std::setw( 4 ) << width << ", " << std::setw( 4 ) << height << "), ";
+    ss << "Size: " << std::setw( 7 ) << FormatSizeString( BufferSize() ) << " ";
+    ss << "Internal format: " << std::setw( 10 ) << BVGLTranslator::TranslateRenderbufferInternalFormat( internalformat );
+
+    return ss.str();
 }
 
 // *****************************
 //
 std::string  RenderbufferDesc::TargetStr( GLenum target ) const
 {
-    return "IMPLEMENT ME";
+    return BVGLTranslator::TranslateRenderbufferTarget( target );
 }
 
 // *************************************************************************************************************************************************
 
 // *****************************
 //
-FramebufferDesc::FramebufferDesc    ()
-    : colorAttachment0( 0 )
+FramebufferDesc::FramebufferDesc            ()
+    : ID( 0 )
+    , colorAttachment0( 0 )
     , attachment0IsTex( false )
     , colorAttachment1( 0 )
     , attachment1IsTex( false )
     , depthAttachment( 0 )
     , depthAttachmentIsTex( false )
 {
+}
+
+// *****************************
+//
+void    FramebufferDesc::SetID              ( GLuint ID )
+{
+    this->ID = ID;
 }
 
 // *****************************
@@ -237,14 +295,33 @@ void    FramebufferDesc::Visit              ( VisitorAggregate & visitor ) const
 //
 std::string  FramebufferDesc::Summary   () const
 {
-    return "IMPLEMENT ME";
+    std::stringstream ss;
+
+    ss << "FrameBuffer: " << std::setw( 2 ) << std::setfill( ' ' ) << ID;
+    
+    if( colorAttachment0 > 0 )
+    {
+        ss << " Color 0 Attachment: " << ( attachment0IsTex ? "TEXTURE" : "RENDER BUFFER" );
+    }
+
+    if( colorAttachment1 > 0 )
+    {
+        ss << " Color 1 Attachment: " << ( attachment1IsTex ? "TEXTURE" : "RENDER BUFFER" );
+    }
+
+    if( depthAttachment > 0 )
+    {
+        ss << " Depth Attachment: " << ( attachment1IsTex ? "TEXTURE" : "RENDER BUFFER" );
+    }
+
+    return ss.str();
 }
 
 // *****************************
 //
 std::string  FramebufferDesc::TargetStr ( GLenum target ) const
 {
-    return "IMPLEMENT ME";
+    return BVGLTranslator::TranslateFramebufferTarget( target );
 }
 
 // *************************************************************************************************************************************************
@@ -280,7 +357,16 @@ void    VertexArrayAttribDesc::Set ( GLuint buffer, GLuint index, GLint size, GL
 //
 std::string  VertexArrayAttribDesc::Summary () const
 {
-    return "IMPLEMENT ME";
+    std::stringstream ss;
+
+    ss << "    Attrib: " << std::setw( 2 ) << std::setfill( ' ' ) << index << " ";
+    ss << "Buf: " << std::setw( 2 ) << std::setfill( ' ' ) << buffer << " ";
+    ss << "Size: " << std::setw( 1 ) <<size << " ";
+    ss << "Type: " << BVGLTranslator::TranslateAttribPointerType( type ) << " ";
+    ss << "Normalized: " << normalized << " ";
+    ss << "Stride: " << std::setw( 2 ) << stride;
+
+    return ss.str();
 }
 
 // *************************************************************************************************************************************************
@@ -288,7 +374,15 @@ std::string  VertexArrayAttribDesc::Summary () const
 // *****************************
 //
 VertexArrayDesc::VertexArrayDesc        ()
+    : ID( 0 )
 {
+}
+
+// *****************************
+//
+void    VertexArrayDesc::SetID          ( GLuint ID )
+{
+    this->ID = ID;
 }
 
 // *****************************
@@ -344,14 +438,30 @@ void    VertexArrayDesc::Visit          ( VisitorAggregate & visitor ) const
 //
 std::string  VertexArrayDesc::Summary   () const
 {
-    return "IMPLEMENT ME";
+    std::stringstream ss;
+
+    ss << "Vertex Array: " << std::setw( 2 ) << std::setfill( ' ' ) << ID;
+
+    if( attributePointers.size() > 0 )
+    {
+        ss << std::endl;
+
+        for( auto it = attributePointers.begin(); it != attributePointers.end(); ++it )
+        {
+            ss << it->second.Summary() << std::endl;
+        }
+    }
+
+    return ss.str();
 }
 
 // *****************************
 //
 std::string  VertexArrayDesc::TargetStr ( GLenum target ) const
 {
-    return "IMPLEMENT ME";
+    assert( target == 1 );
+
+    return "DEFAULT";
 }
 
 } // bv
