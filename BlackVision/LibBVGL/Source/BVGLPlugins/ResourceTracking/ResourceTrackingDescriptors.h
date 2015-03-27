@@ -28,7 +28,8 @@ struct BufferDesc
 
     void    Visit   ( VisitorAggregate & visitor ) const;
     
-    string  Summary () const;
+    string  Summary     () const;
+    string  TargetStr   ( GLenum target ) const;
 };
 
 /////////////////////////////////////
@@ -51,7 +52,8 @@ struct TextureDesc
 
     void    Visit       ( VisitorAggregate & visitor ) const;
 
-    string  Summary () const;
+    string  Summary     () const;
+    string  TargetStr   ( GLenum target ) const;
 };
 
 /////////////////////////////////////
@@ -73,7 +75,8 @@ struct RenderbufferDesc
 
     void    Visit       ( VisitorAggregate & visitor ) const;
 
-    string  Summary () const;
+    string  Summary     () const;
+    string  TargetStr   ( GLenum target ) const;
 };
 
 /////////////////////////////////////
@@ -99,7 +102,8 @@ struct FramebufferDesc
 
     void    Visit               ( VisitorAggregate & visitor ) const;
 
-    string  Summary () const;
+    string  Summary             () const;
+    string  TargetStr           ( GLenum target ) const;
 };
 
 
@@ -142,7 +146,8 @@ struct VertexArrayDesc
 
     void    Visit           ( VisitorAggregate & visitor ) const;
 
-    string  Summary () const;
+    string  Summary         () const;
+    string  TargetStr       ( GLenum target ) const;
 };
 
 } // bv

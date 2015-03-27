@@ -28,8 +28,13 @@ public:
     GLuint          GetBoundResourceID  ( GLenum target ) const;
     ResourceDesc &  GetBoundResource    ( GLenum target );
 
-    void            PrintShortSummary   () const;
-    void            PrintLongSummary    () const;
+    std::string     ShortSummary        ( const std::string & header ) const;
+    std::string     LongSummary         ( const std::string & header ) const;
+
+private:
+
+    GLenum          BoundTo             ( GLuint resID ) const;
+
 };
 
 } //bv

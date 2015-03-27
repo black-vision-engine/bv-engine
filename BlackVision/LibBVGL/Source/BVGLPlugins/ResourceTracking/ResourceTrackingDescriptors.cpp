@@ -9,7 +9,7 @@ namespace bv {
 
 // *****************************
 //
-BufferDesc::BufferDesc()
+BufferDesc::BufferDesc              ()
     : size( 0 )
     , usage( 0 )
     , data( nullptr )
@@ -18,7 +18,7 @@ BufferDesc::BufferDesc()
 
 // *****************************
 //
-void    BufferDesc::Set     ( GLsizeiptr size, GLenum usage, const GLvoid * data )
+void    BufferDesc::Set             ( GLsizeiptr size, GLenum usage, const GLvoid * data )
 {
     this->size  = size;
     this->usage = usage;
@@ -27,7 +27,7 @@ void    BufferDesc::Set     ( GLsizeiptr size, GLenum usage, const GLvoid * data
 
 // *****************************
 //
-void    BufferDesc::Visit   ( VisitorAggregate & visitor ) const
+void    BufferDesc::Visit           ( VisitorAggregate & visitor ) const
 {
     visitor.AddToTotalSize( size );
     visitor.IncNumVisits();
@@ -35,7 +35,14 @@ void    BufferDesc::Visit   ( VisitorAggregate & visitor ) const
 
 // *****************************
 //
-std::string  BufferDesc::Summary () const
+std::string  BufferDesc::Summary    () const
+{
+    return "IMPLEMENT ME";
+}
+
+// *****************************
+//
+std::string  BufferDesc::TargetStr  ( GLenum target ) const
 {
     return "IMPLEMENT ME";
 }
@@ -88,7 +95,14 @@ void    TextureDesc::Visit  ( VisitorAggregate & visitor ) const
 
 // *****************************
 //
-std::string  TextureDesc::Summary () const
+std::string  TextureDesc::Summary   () const
+{
+    return "IMPLEMENT ME";
+}
+
+// *****************************
+//
+std::string  TextureDesc::TargetStr ( GLenum target ) const
 {
     return "IMPLEMENT ME";
 }
@@ -97,7 +111,7 @@ std::string  TextureDesc::Summary () const
 
 // *****************************
 //
-RenderbufferDesc::RenderbufferDesc  ()
+RenderbufferDesc::RenderbufferDesc      ()
     : internalformat( 0 )
     , width( 0 )
     , height( 0 )
@@ -106,7 +120,7 @@ RenderbufferDesc::RenderbufferDesc  ()
 
 // *****************************
 //
-void    RenderbufferDesc::Set       ( GLenum internalformat, GLsizei width, GLsizei height )
+void    RenderbufferDesc::Set           ( GLenum internalformat, GLsizei width, GLsizei height )
 {
     this->internalformat    = internalformat;
     this->width             = width;
@@ -115,14 +129,14 @@ void    RenderbufferDesc::Set       ( GLenum internalformat, GLsizei width, GLsi
 
 // *****************************
 //
-GLuint  RenderbufferDesc::BufferSize  () const
+GLuint  RenderbufferDesc::BufferSize    () const
 {
     return width * height * PixelSize( internalformat );
 }
 
 // *****************************
 //
-GLuint  RenderbufferDesc::PixelSize   ( GLenum internalformat ) const
+GLuint  RenderbufferDesc::PixelSize     ( GLenum internalformat ) const
 {
     assert( internalformat == GL_DEPTH_COMPONENT );
 
@@ -131,7 +145,7 @@ GLuint  RenderbufferDesc::PixelSize   ( GLenum internalformat ) const
 
 // *****************************
 //
-void    RenderbufferDesc::Visit     ( VisitorAggregate & visitor ) const
+void    RenderbufferDesc::Visit         ( VisitorAggregate & visitor ) const
 {
     visitor.AddToTotalSize( BufferSize() );
     visitor.IncNumVisits();
@@ -139,7 +153,14 @@ void    RenderbufferDesc::Visit     ( VisitorAggregate & visitor ) const
 
 // *****************************
 //
-std::string  RenderbufferDesc::Summary () const
+std::string  RenderbufferDesc::Summary  () const
+{
+    return "IMPLEMENT ME";
+}
+
+// *****************************
+//
+std::string  RenderbufferDesc::TargetStr( GLenum target ) const
 {
     return "IMPLEMENT ME";
 }
@@ -214,7 +235,14 @@ void    FramebufferDesc::Visit              ( VisitorAggregate & visitor ) const
 
 // *****************************
 //
-std::string  FramebufferDesc::Summary () const
+std::string  FramebufferDesc::Summary   () const
+{
+    return "IMPLEMENT ME";
+}
+
+// *****************************
+//
+std::string  FramebufferDesc::TargetStr ( GLenum target ) const
 {
     return "IMPLEMENT ME";
 }
@@ -292,7 +320,7 @@ void    VertexArrayDesc::Enable         ( GLuint index )
 
 // *****************************
 //
-void    VertexArrayDesc::Disable     ( GLuint index )
+void    VertexArrayDesc::Disable        ( GLuint index )
 {
     if( attributePointers.find( index ) != attributePointers.end() )
     {
@@ -305,7 +333,7 @@ void    VertexArrayDesc::Disable     ( GLuint index )
 
 // *****************************
 //
-void    VertexArrayDesc::Visit      ( VisitorAggregate & visitor ) const
+void    VertexArrayDesc::Visit          ( VisitorAggregate & visitor ) const
 {
     visitor.AddToTotalRegisteredAttrs   ( attributePointers.size() );
     visitor.AddToTotalEnabledAttrs      ( enabledAttributes.size() );
@@ -314,7 +342,14 @@ void    VertexArrayDesc::Visit      ( VisitorAggregate & visitor ) const
 
 // *****************************
 //
-std::string  VertexArrayDesc::Summary () const
+std::string  VertexArrayDesc::Summary   () const
+{
+    return "IMPLEMENT ME";
+}
+
+// *****************************
+//
+std::string  VertexArrayDesc::TargetStr ( GLenum target ) const
 {
     return "IMPLEMENT ME";
 }
