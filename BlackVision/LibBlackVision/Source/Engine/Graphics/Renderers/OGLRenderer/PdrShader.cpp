@@ -193,6 +193,25 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
     //FIXME: assert that texture type corresponds to sampler type
     switch( sampler->SamplingMode() )
     {
+        case SamplerSamplingMode::SSM_MODE_1D:
+		{
+			renderer->Enable( texture, textureUnit );
+
+            GLint wrap_s = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
+            
+            //FIXME: think a bit more about how filtering mag/min (and mipmaps) should be implemented
+            GLint min_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
+            GLint mag_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
+
+            BVGL::bvglTexParameteri ( GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, wrap_s );
+
+            BVGL::bvglTexParameteri ( GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, min_filter );
+            BVGL::bvglTexParameteri ( GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, mag_filter );
+
+            BVGL::bvglTexParameterfv( GL_TEXTURE_1D, GL_TEXTURE_BORDER_COLOR, &sampler->GetBorderColor()[ 0 ] );
+
+			break;
+		}
         case SamplerSamplingMode::SSM_MODE_2D:
         {
             renderer->Enable( texture, textureUnit );
@@ -218,9 +237,29 @@ void    PdrShader::EnableTextureSampler    ( Renderer * renderer, const TextureS
 
             break;
         }
-        //FIXME: implement        
-        case SamplerSamplingMode::SSM_MODE_1D:
         case SamplerSamplingMode::SSM_MODE_3D:
+        {
+            renderer->Enable( texture, textureUnit );
+
+            GLint wrap_s = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_S ) );
+            GLint wrap_t = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_T ) );
+			GLint wrap_r = (GLint) ConstantsMapper::GLConstant( sampler->WrappingMode( SamplerWrapDirection::SWD_R ) );
+            
+            //FIXME: think a bit more about how filtering mag/min (and mipmaps) should be implemented
+            GLint min_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
+            GLint mag_filter = (GLint) ConstantsMapper::GLConstant( sampler->FilteringMode() );
+
+            BVGL::bvglTexParameteri ( GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, wrap_s );
+            BVGL::bvglTexParameteri ( GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, wrap_t );
+            BVGL::bvglTexParameteri ( GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, wrap_r );
+
+            BVGL::bvglTexParameteri ( GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, min_filter );
+            BVGL::bvglTexParameteri ( GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, mag_filter );
+
+            BVGL::bvglTexParameterfv( GL_TEXTURE_3D, GL_TEXTURE_BORDER_COLOR, &sampler->GetBorderColor()[ 0 ] );
+
+            break;
+        }
         case SamplerSamplingMode::SSM_MODE_CUBIC:
         default:
             assert( false );

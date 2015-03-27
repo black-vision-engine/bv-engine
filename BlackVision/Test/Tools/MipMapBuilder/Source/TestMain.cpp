@@ -1,21 +1,15 @@
 #include "MipMapBuilder.h"
-#include "FreeImage.h"
-
+#include "LibImage.h"
+#include "Memory/MemoryChunk.h"
 #include <sstream>
 
 #include "gtest/gtest.h"
 
 // ******************************
 //
-bool SaveImageBMP( const std::string & lpszPathName, const tools::Image32 & img )
-{
-	auto inBitmap = FreeImage_ConvertFromRawBits( (BYTE*)img.data, img.width, img.height, img.width* 4, 32, 255, 255, 255 );
-	return FreeImage_Save( FREE_IMAGE_FORMAT::FIF_BMP, inBitmap, lpszPathName.c_str() ) != 0;
-}
-
 TEST( RunMimmaping, RunMimmaping )
 {
-	auto m1 = tools::GenerateMipmaps( "Resources/checkerbord2.bmp", 50, tools::FilterType::CATMULL_ROM );
+	auto m1 = tools::GenerateMipmaps( "Resources/checkerbord2.bmp", 50, bv::image::FilterType::FT_CATMULL_ROM );
 	ASSERT_TRUE( m1.size() == 11 );
 	ASSERT_TRUE( m1[ 10 ].width == 1 &&  m1[ 10 ].height == 1 );
 
@@ -28,7 +22,7 @@ TEST( RunMimmaping, RunMimmaping )
 		std::ostringstream ss;
 		ss << k;
 
-		success = SaveImageBMP( "_Output/testFreeTypeMM" + ss.str() + ".bmp", i );
+		success = bv::image::SaveBMPImage( "_Output/testFreeTypeMM" + ss.str() + ".bmp", i.data, i.width, i.height, 32 );
 		ASSERT_TRUE(success);
 
 		k++;

@@ -220,11 +220,8 @@ inline void    NodeUpdater::UpdateTexturesData  ()
                 else //Some other texture type which just requires contents to be swapped
                 {
                     auto format = texDesc->GetFormat();
-                    auto width  = texDesc->GetWidth();
-                    auto height = texDesc->GetHeight();
-                    auto data   = texDesc->GetBits();
 
-                    tex2D->SetRawData( data, format, width, height );
+					tex2D->SetRawData( texDesc->GetBits(), format, texDesc->GetWidth(), texDesc->GetHeight() );
                 }
 
                 texDesc->ResetBitsChanged();

@@ -8,7 +8,7 @@
 
 #include "sqlite3.h"
 
-#include "Assets/Texture/TextureHelpers.h"
+#include "LibImage.h"
 #include "Assets/Texture/TextureLoader.h"
 #include "Assets/Assets.h"
 #include "Assets/Texture/TextureAssetDescriptor.h"
@@ -272,7 +272,7 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
     if( ! File::Exists( CACHE_DIRECTORY ) )
         File::CreateDir( CACHE_DIRECTORY );
 
-	TextureHelper::WriteBMP( fontAtlasTextureFileName, data.m_textAtlas->GetData(), data.m_textAtlas->GetWidth(), data.m_textAtlas->GetHeight(), data.m_textAtlas->GetBitsPerPixel() );
+	image::SaveBMPImage( fontAtlasTextureFileName, data.m_textAtlas->GetData(), data.m_textAtlas->GetWidth(), data.m_textAtlas->GetHeight(), data.m_textAtlas->GetBitsPerPixel() );
 
     sqlite3_stmt * stmt = nullptr;
     const char * parsed = nullptr;

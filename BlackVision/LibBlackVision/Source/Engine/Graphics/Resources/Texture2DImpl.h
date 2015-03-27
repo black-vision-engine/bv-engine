@@ -10,20 +10,20 @@ class Texture2DImpl : public Texture2D
 {
 private:
 
-    MemoryChunkConstPtr m_data;
-
-    SizeType			m_dataSize;
+    std::vector< MemoryChunkConstPtr > m_data;
 
 public:
 
                                 Texture2DImpl   ( TextureFormat format, SizeType width, SizeType height, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE_STATIC );
     virtual                     ~Texture2DImpl  ();
 
-    virtual size_t              GetDataSize     () const override;
+	virtual SizeType			GetNumLevels    () const override;
 
-    virtual MemoryChunkConstPtr GetData         () const override;
+    virtual SizeType            GetDataSize     ( UInt32 level = 0 ) const override;
 
-    bool                        SetRawData      ( MemoryChunkConstPtr data, TextureFormat format, SizeType width, SizeType height );
+    virtual MemoryChunkConstPtr GetData         ( UInt32 level = 0 ) const override;
+
+    bool                        SetRawData      ( const std::vector< MemoryChunkConstPtr > & data, TextureFormat format, SizeType width, SizeType height );
 
 private:
 

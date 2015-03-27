@@ -20,7 +20,7 @@
 #include "Glyph.h"
 #include "AtlasCache.h"
 #include "IO/FileIO.h"
-#include "Assets/Texture/TextureHelpers.h"
+#include "LibImage.h"
 #include "Assets/Texture/TextureLoader.h"
 #include "Assets/Font/Engines/FreeTypeEngine.h"
 
@@ -103,7 +103,7 @@ void Text::BuildAtlas        ()
 
 #ifdef GENERATE_TEST_BMP_FILE
 
-    TextureHelper::WriteBMP( "test.bmp", m_atlas->GetData(), (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel() );
+    image::SaveBMPImage( "test.bmp", m_atlas->GetData(), (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel() );
 #endif // GENERATE_TEST_BMP_FILE
 
 #ifdef MAKE_FREETYPE_TESTING_TEXT

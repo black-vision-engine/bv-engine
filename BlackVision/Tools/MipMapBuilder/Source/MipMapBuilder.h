@@ -1,34 +1,25 @@
 #pragma once
 
+#include "LibImage.h"
 #include <vector>
 #include <string>
 
 namespace tools
 {
 
-enum class FilterType
-{
-	BOX = 0,
-	BILINEAR,
-	B_SPLINE,
-	BICUBIC,
-	CATMULL_ROM,
-	LANCZOS
-};
-
 struct Image32
 {
-	char *				data;
-	unsigned int		width;
-	unsigned int		height;
+	bv::MemoryChunkConstPtr	data;
+	bv::UInt32				width;
+	bv::UInt32				height;
 };
 
 struct ImageSize
 {
-	unsigned int		width;
-	unsigned int		height;
+	bv::UInt32		width;
+	bv::UInt32		height;
 
-	ImageSize( unsigned int w, unsigned int h )
+	ImageSize( bv::UInt32 w, bv::UInt32 h )
 		: width( w )
 		, height( h )
 	{}
@@ -38,8 +29,8 @@ struct ImageSize
 typedef std::vector< Image32 >		Mipmaps;
 typedef std::vector< ImageSize >	MipmapsSizes;
 
-Mipmaps				GenerateMipmaps( const Image32 & data, int levelsNum, FilterType ft );
-Mipmaps				GenerateMipmaps( const std::string & imageFilePath, int levelsNum, FilterType ft );
+Mipmaps				GenerateMipmaps( const Image32 & data, int levelsNum, bv::image::FilterType ft );
+Mipmaps				GenerateMipmaps( const std::string & imageFilePath, int levelsNum, bv::image::FilterType ft );
 MipmapsSizes		GenerateMipmapsSizes( const ImageSize & origSize );
 
 } // tools

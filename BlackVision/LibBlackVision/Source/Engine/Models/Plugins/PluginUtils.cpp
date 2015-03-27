@@ -1,6 +1,6 @@
 #include "PluginUtils.h"
 
-#include "Assets/Texture/TextureAssetDescriptor.h"
+#include "Assets/Assets.h"
 #include "Assets/Texture/AnimationAssetDescriptor.h"
 #include "Assets/Font/FontAssetDescriptor.h"
 
@@ -11,6 +11,24 @@ namespace bv { namespace model {
 bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile, bool isCacheable )
 {
 	auto texDesc = TextureAssetDesc::Create( textureFile, isCacheable );
+
+    return plugin->LoadResource( texDesc );
+}
+
+// *******************************
+//
+bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile, MipMapFilterType mmFilter, bool isCacheable )
+{
+	auto texDesc = TextureAssetDesc::Create( textureFile, mmFilter, isCacheable );
+
+    return plugin->LoadResource( texDesc );
+}
+
+// *******************************
+//
+bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile, const StringVector & mipmapsFiles, bool isCacheable )
+{
+	auto texDesc = TextureAssetDesc::Create( textureFile, mipmapsFiles, isCacheable );
 
     return plugin->LoadResource( texDesc );
 }
@@ -31,9 +49,9 @@ bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, 
 
 // *******************************
 //
-bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateBitmaps )
+bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps )
 {
-	auto desc = FontAssetDesc::Create( fontFile, fontSize, blurSize, outlineSize, generateBitmaps );
+	auto desc = FontAssetDesc::Create( fontFile, fontSize, blurSize, outlineSize, generateMipmaps );
 
     return plugin->LoadResource( desc );
 }

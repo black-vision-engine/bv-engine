@@ -21,7 +21,7 @@
 #include "Glyph.h"
 #include "AtlasCache.h"
 #include "IO/FileIO.h"
-#include "Assets/Texture/TextureHelpers.h"
+#include "LibImage.h"
 #include "Assets/Texture/TextureLoader.h"
 #include "Assets/Font/Engines/FreeTypeEngine.h"
 

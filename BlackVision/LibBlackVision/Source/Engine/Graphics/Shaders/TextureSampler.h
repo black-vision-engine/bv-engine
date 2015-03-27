@@ -18,13 +18,15 @@ enum class SamplerSamplingMode : int
     ST_TOTAL
 };
 
-//FIXME: add more filtering opitions when 
 enum class SamplerFilteringMode : int 
 {
     SFM_POINT = 0,
     SFM_LINEAR,
+	SFM_POINT_MIPMAP_POINT,
+	SFM_LINEAR_MIPMAP_POINT,
+	SFM_POINT_MIPMAP_LINEAR,
+	SFM_LINEAR_MIPMAP_LINEAR,
 
-    //FIXME: point_point, point_linear, linear_point, linear_linear -> add when mipmapping is more or less implemented 
     SFM_TOTAL
 };
 

@@ -37,12 +37,14 @@ namespace
         GL_CLAMP_TO_EDGE    //SWM_CLAMP_EDGE, 
     };
 
-    //FIXME: point_point, point_linear, linear_point, linear_linear -> add when mipmapping is more or less implemented 
-    //GL_NEAREST_MIPMAP_NEAREST,GL_NEAREST_MIPMAP_LINEAR,GL_LINEAR_MIPMAP_NEAREST,GL_LINEAR_MIPMAP_LINEAR
     GLuint FilteringModeGL[] = 
     {
-        GL_NEAREST,   // SFM_POINT = 0,
-        GL_LINEAR     // SFM_LINEAR
+        GL_NEAREST,					// SFM_POINT = 0,
+        GL_LINEAR,					// SFM_LINEAR,
+		GL_NEAREST_MIPMAP_NEAREST,	// SFM_POINT_MIPMAP_POINT,
+		GL_LINEAR_MIPMAP_NEAREST,	// SFM_LINEAR_MIPMAP_LINEAR,
+		GL_NEAREST_MIPMAP_LINEAR,	// SFM_POINT_MIPMAP_LINEAR,
+		GL_LINEAR_MIPMAP_LINEAR		// SFM_LINEAR_MIPMAP_LINEAR
     };
 
     GLuint AlphaSrcBlendModeGL[] =

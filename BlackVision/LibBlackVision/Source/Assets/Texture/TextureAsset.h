@@ -29,6 +29,8 @@ public:
 	// Returns class representation of mimmaps built from the original image.
 	MipMapAssetConstPtr			GetMipMaps		() const;
 
+	bool						HasMipMaps		() const;
+
 	static TextureAssetConstPtr	Create			( const SingleTextureAssetConstPtr & originalTexture, const MipMapAssetConstPtr & mipMaps );
 
 	explicit						TextureAsset	( const SingleTextureAssetConstPtr & originalTexture, const MipMapAssetConstPtr & mipMaps );

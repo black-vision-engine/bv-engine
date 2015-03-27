@@ -4,7 +4,7 @@
 #include "Assets/Font/Text.h"
 #include "Assets/Font/TextAtlas.h"
 
-#include "Assets/Texture/TextureHelpers.h"
+#include "LibImage.h"
 
 #include "Mathematics/Rect.h"
 
@@ -411,7 +411,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 	auto singleTex = SingleTextureAsset::Create( MemoryChunk::Create( atlasData, altlasWidth * altlasHeight * 4 ), "", altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8 );
 	atlas->m_textureAsset = TextureAsset::Create( singleTex, nullptr );
 
-	TextureHelper::WriteRAW( "testFreeType.raw", atlas->GetWritableData() );
+	image::SaveRAWImage( "testFreeType.raw", atlas->GetWritableData() );
 
 	atlas->m_kerningMap = BuildKerning( m_face, wcharsSet );
 
