@@ -255,6 +255,8 @@ MemoryChunkConstPtr		Resize( const MemoryChunkConstPtr & in, UInt32 width, UInt3
 
 	auto outBitmap = FreeImage_Rescale( inBitmap, ( int )newWidth, ( int )newHeight, ToFIFilter( ft ) );
 
+	//FreeImage_AdjustColors( outBitmap, 1.0, 1.0, 1.0, 1 );
+
 	outBitmap = FreeImage_ConvertTo32Bits( outBitmap );
 
 	auto numBytes = newWidth * newHeight * 4;

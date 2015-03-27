@@ -210,8 +210,8 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
                 txData->SetTexture( 0, txDesc );
             }
 
-            m_textureWidth = txDesc->GetWidth();
-            m_textureHeight = txDesc->GetHeight();
+			m_textureWidth = txAssetDescr->GetOrigTextureDesc()->GetWidth();
+            m_textureHeight = txAssetDescr->GetOrigTextureDesc()->GetHeight();
 
             return true;
         }

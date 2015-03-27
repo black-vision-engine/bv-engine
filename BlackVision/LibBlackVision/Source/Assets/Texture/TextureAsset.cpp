@@ -21,6 +21,13 @@ MipMapAssetConstPtr TextureAsset::GetMipMaps() const
 
 // *******************************
 // 
+bool TextureAsset::HasMipMaps() const
+{
+	return GetMipMaps() && GetMipMaps()->GetLevelsNum() > 0;
+}
+
+// *******************************
+// 
 TextureAssetConstPtr	TextureAsset::Create( const SingleTextureAssetConstPtr & originalTexture, const MipMapAssetConstPtr & mipMaps )
 {
 	return std::make_shared< TextureAsset >( originalTexture, mipMaps );

@@ -96,10 +96,14 @@ AssetConstPtr TextureLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 
 			SingleTextureAssetConstPtr origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc(), typedDesc->GetOrigTextureDesc()->IsCacheable() );
 
+			SizeType i = 0;
 			if( mm[ 0 ].width == origW && mm[ 0 ].height == origH )
+			{
 				mipMapsRes.push_back( origRes );
+				i = 1;
+			}
 
-			for( SizeType i = 1; i < mm.size(); ++i )
+			for(; i < mm.size(); ++i )
 			{
 				auto w = mm[ i ].width;
 				auto h = mm[ i ].height;

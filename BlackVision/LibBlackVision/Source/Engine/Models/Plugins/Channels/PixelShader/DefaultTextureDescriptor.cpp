@@ -93,23 +93,22 @@ MemoryChunkVector		DefaultTextureDescriptor::GetBits			() const
 {
 	MemoryChunkVector res;
 
-	SizeType numLevel = 1;
-
-	if( m_texResource->GetMipMaps() != nullptr )
+	if( !m_texResource->HasMipMaps() )
 	{
-		numLevel += m_texResource->GetMipMaps()->GetLevelsNum();
+		res.push_back( m_texResource->GetOriginal()->GetData() );
+		return res;
 	}
-
-	res.reserve( numLevel );
-
-	res.push_back( m_texResource->GetOriginal()->GetData() );
-
-	for( UInt32 i = 1; i < numLevel; ++i )
+	else
 	{
-		res.push_back( m_texResource->GetMipMaps()->GetLevel( i - 1 )->GetData() );
-	}
+		SizeType numLevel = m_texResource->GetMipMaps()->GetLevelsNum();
 
-	return res;
+		for( UInt32 i = 0; i < numLevel; ++i )
+		{
+			res.push_back( m_texResource->GetMipMaps()->GetLevel( i )->GetData() );
+		}
+
+		return res;
+	}
 }
 
 // **************************
@@ -179,7 +178,7 @@ TextureWrappingMode     DefaultTextureDescriptor::GetWrappingModeY  () const
 //
 TextureWrappingMode     DefaultTextureDescriptor::GetWrappingModeZ  () const
 {
-    return m_params.GetWrappingModeY();
+    return m_params.GetWrappingModeZ();
 }
 
 // **************************
@@ -211,6 +210,7 @@ void                    DefaultTextureDescriptor::SetBits           ( TextureAss
     {
         m_params.SetWidth( 0 );
         m_params.SetHeight( 0 );
+		m_params.SetDepth( 0 );
     }
     else
     {
@@ -223,11 +223,25 @@ void                    DefaultTextureDescriptor::SetBits           ( TextureAss
         //assert( texExtra->GetType() == TextureType::T_2D );
 
         //auto fmt = texExtra->GetFormat();
-		auto w  = texResource->GetOriginal()->GetWidth();
-        auto h  = texResource->GetOriginal()->GetHeight();
+		auto w  = 0;
+        auto h  = 0;
+
+		auto mm = texResource->GetMipMaps();
+
+		if( texResource->HasMipMaps() )
+		{
+			w = mm->GetLevel( 0 )->GetWidth();
+			h = mm->GetLevel( 0 )->GetHeight();
+		}
+		else
+		{
+			w = texResource->GetOriginal()->GetWidth();
+			h = texResource->GetOriginal()->GetHeight();
+		}
 
         m_params.SetWidth( w );
         m_params.SetHeight( h );
+		m_params.SetDepth( 1 );
     }
 
     m_texResource = texResource;
@@ -293,6 +307,13 @@ void                    DefaultTextureDescriptor::SetWrappingModeY  ( TextureWra
 
 // **************************
 //
+void                    DefaultTextureDescriptor::SetWrappingModeZ  ( TextureWrappingMode wm )
+{
+    m_params.SetWrappingModeZ( wm );
+}
+
+// **************************
+//
 void                    DefaultTextureDescriptor::SetFilteringMode  ( TextureFilteringMode fm )
 {
     m_params.SetFilteringMode( fm );
@@ -320,9 +341,11 @@ void                        DefaultTextureDescriptor::SetDefaults     ( DefaultT
     desc->SetName( "" );
     desc->SetWidth( 0 );
     desc->SetHeight( 0 );
+	desc->SetDepth( 0 );
     desc->SetFormat( TextureFormat::F_A8R8G8B8 );
     desc->SetWrappingModeX( TextureWrappingMode::TWM_CLAMP_BORDER );
     desc->SetWrappingModeY( TextureWrappingMode::TWM_CLAMP_BORDER );
+	desc->SetWrappingModeZ( TextureWrappingMode::TWM_CLAMP_BORDER );
     desc->SetFilteringMode( TextureFilteringMode::TFM_LINEAR );
     desc->SetBorderColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 }
@@ -331,7 +354,7 @@ void                        DefaultTextureDescriptor::SetDefaults     ( DefaultT
 //
 DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const TextureAssetDescConstPtr & textureResDesc, const std::string & name )
 {
-	auto res = AssetManager::GetInstance().LoadAsset( textureResDesc );
+	auto res = QueryTypedRes< TextureAssetConstPtr >( AssetManager::GetInstance().LoadAsset( textureResDesc ) );
 
     if ( res == nullptr )
     {
@@ -340,9 +363,15 @@ DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const Tex
 
     DefaultTextureDescriptor * desc = new DefaultTextureDescriptor();
     SetDefaults( desc );
+
+	if( res->HasMipMaps() )
+	{
+		desc->SetFilteringMode( TextureFilteringMode::TFM_LINEAR_MIPMAP_LINEAR );
+	}
+
     //desc->SetWrappingModeY( TextureWrappingMode::TWM_REPEAT ); 
     //desc->SetFilteringMode( TextureFilteringMode::TFM_POINT ); 
-	desc->SetBits( QueryTypedRes< TextureAssetConstPtr >( res ) );
+	desc->SetBits( res );
     desc->SetName( name );
 
     return desc;

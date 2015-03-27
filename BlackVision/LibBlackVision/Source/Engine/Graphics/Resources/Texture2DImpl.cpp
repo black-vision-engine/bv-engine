@@ -68,7 +68,8 @@ bool            Texture2DImpl::SetRawData    ( const std::vector< MemoryChunkCon
 
 	for( UInt32 i = 0; i < data.size(); ++i )
 	{
-		assert( data[ i ]->Size() == SizeInBytes( format, width, height ) || data[ i ]->Size() == 0 );
+		if( i == 0 )
+			assert( data[ i ]->Size() == SizeInBytes( format, width >> i, height >> i ) || data[ i ]->Size() == 0 );
 
 		m_data.push_back( data[ i ] );
 	}

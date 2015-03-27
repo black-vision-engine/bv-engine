@@ -1,5 +1,6 @@
 #include "Texture2D.h"
 
+#include <algorithm>
 
 namespace bv {
 
@@ -22,14 +23,14 @@ Texture2D::~Texture2D       ()
 //
 SizeType    Texture2D::GetWidth         ( UInt32 level ) const
 {
-	return m_width >> level;
+	return std::max( m_width >> level, ( SizeType )1 );
 }
 
 // *********************************
 //
 SizeType    Texture2D::GetHeight        ( UInt32 level ) const
 {
-	return m_height >> level;
+	return std::max( m_height >> level, ( SizeType )1 );
 }
 
 // *********************************
