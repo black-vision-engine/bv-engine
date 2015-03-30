@@ -40,6 +40,8 @@ public:
     virtual IParameterPtr                       GetParameter                ( const std::string & name ) const override;
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const override;
     virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const override;
+    virtual IStatedValuePtr                     GetState                    ( const std::string & name ) const;
+
 
     virtual void                                Update                      ( TimeType t );
 
@@ -144,6 +146,34 @@ IParameterPtr               BasePlugin< Iface >::GetParameter           ( const 
     return nullptr;
 }
 
+
+// *******************************
+//
+template< class Iface >
+IStatedValuePtr             BasePlugin< Iface >::GetState               ( const std::string & name ) const
+{
+    IPluginParamValModelPtr pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
+    
+    IParamValModelPtr models[] = {    pvm->GetPluginModel()
+                                    , pvm->GetTransformChannelModel()
+                                    , pvm->GetVertexAttributesChannelModel()
+                                    , pvm->GetPixelShaderChannelModel()
+                                    , pvm->GetVertexShaderChannelModel()
+                                    , pvm->GetGeometryShaderChannelModel() 
+                                };
+
+    IStatedValuePtr retParam = nullptr;
+
+    for( auto model : models )
+    {
+        if( model && ( retParam = model->GetState( name ) ) )
+        {
+            return retParam;
+        }
+    }
+
+    return nullptr;
+}
 
 // *******************************
 //
@@ -352,7 +382,9 @@ IParamValModelPtr                           BasePlugin< Iface >::GeometryShaderC
 template< class Iface >
 bool                                        BasePlugin< Iface >::ParameterChanged            ( const std::string & name )
 {
-    return m_pluginParamValModel->GetVertexAttributesChannelModel()->GetState( name )->StateChanged(); //FIXME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    auto state = GetState( name );
+    assert( state );
+    return state->StateChanged();
 }
 
 ParamTransformVecPtr						GetCurrentParamTransform( const IPlugin * pl );

@@ -770,8 +770,8 @@ model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model
     return root;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
-//model::BasicNodePtr    /*TestScenesFactory::*/CreedCircleTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+//model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    /*TestScenesFactory::*/CreedCircleTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -866,6 +866,22 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedRoundedRectTestScene     ( mo
     model::SetParameter( plugin->GetParameter( model::DefaultRoundedRectPlugin::PN_BEVELS ), 5.f, glm::vec4( 0.1, 0.2, 0, 0.1 ) );
 
     plugin->Update(0); // FIXME: to generate geometry only
+
+    return root;
+}
+
+model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    auto root = std::make_shared< model::BasicNode >( "cone", timeEvaluator );
+
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_CONE", timeEvaluator );
+    root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+
+    model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+
+    auto plugin = root->GetPlugin( "cone" );
+    assert( plugin );
 
     return root;
 }

@@ -89,6 +89,8 @@ protected:
             auto param = std::make_shared< ParamImpl >( name, InterpolatorType(), timeEvaluator );
             param->SetVal( defaultValue, 0.f );
 
+            model->AddParameter( param );
+
             if( addValue )
             {
                 auto evaluator = ParamValEvaluatorFactory::CreateSimpleEvaluator< InterpolatorType, ValueType, MPT, PT >( param );
