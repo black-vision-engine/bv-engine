@@ -22,11 +22,11 @@ DefaultPluginParamValModelPtr   DefaultConePluginDesc::CreateDefaultModel  ( ITi
 
     h.CreateVacModel();
     h.AddSimpleParam( PN::TESSELATION, 3, true, true );
-    h.AddSimpleParam( PN::INNERHEIGHT, 0, true, true );
-    h.AddSimpleParam( PN::OUTERRADIUS, 1, true, true );
-    h.AddSimpleParam( PN::INNERHEIGHT, 0, true, true );
-    h.AddSimpleParam( PN::ROUNDEDTIPHEIGHT, 0, true, true );
-    h.AddSimpleParam( PN::OPENANGLE, 360, true, true );
+    h.AddSimpleParam( PN::INNERHEIGHT, 0.f, true, true );
+    h.AddSimpleParam( PN::OUTERRADIUS, 1.f, true, true );
+    h.AddSimpleParam( PN::INNERRADIUS, 0.f, true, true );
+    h.AddSimpleParam( PN::ROUNDEDTIPHEIGHT, 0.f, true, true );
+    h.AddSimpleParam( PN::OPENANGLE, 360.f, true, true );
     //h.AddSimpleParam( PN::OPENANGLEMODE
     
     return h.GetModel();
@@ -45,18 +45,39 @@ std::string                     DefaultConePluginDesc::UID                 ()
 
 class ConeGenerator : public IGeometryAndUVsGenerator
 {
+    int tesselation;
+    float inner_height, inner_radius, bevel, open_angle;
 public:
+    ConeGenerator( int t, float ih, float ir, float b, float oa )
+        : tesselation( t ), inner_height( ih ), inner_radius( ir ), bevel( b ), open_angle( oa ) { }
+
     virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
     virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr, Float2AttributeChannelPtr )
     {
+
     }
 };
 
 
+DefaultConePlugin::DefaultConePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
+    : DefaultGeometryPluginBase( name, uid, prev, model ) 
+{ 
+    m_tesselation = QueryTypedValue< ValueIntPtr >( GetValue( PN::TESSELATION ) );
+    m_innerHeight = QueryTypedValue< ValueFloatPtr >( GetValue( PN::INNERHEIGHT ) );
+    m_innerRadius = QueryTypedValue< ValueFloatPtr >( GetValue( PN::INNERRADIUS ) );
+    m_roundedTipHeight = QueryTypedValue< ValueFloatPtr >( GetValue( PN::ROUNDEDTIPHEIGHT ) );
+    m_openAngle = QueryTypedValue< ValueFloatPtr >( GetValue( PN::OPENANGLE ) );
+}
+
 IGeometryGenerator*                 DefaultConePlugin::GetGenerator()
 {
-    return new ConeGenerator();
+    return new ConeGenerator( m_tesselation->GetValue(),
+        m_innerHeight->GetValue(),
+        m_innerRadius->GetValue(),
+        m_roundedTipHeight->GetValue(),
+        m_openAngle->GetValue()
+        );
 }
 
 bool                                DefaultConePlugin::NeedsTopologyUpdate()
