@@ -57,7 +57,7 @@ string  AggregateSizeTracker::Summary         () const
 {
     std::stringstream ss;
 
-    ss << "Num elts: " << std::setfill( ' ' ) << std::setw( 3 ) << m_numVisits << " Total Size: " << FormatSizeString( m_totalSize );
+    ss << "Num elts: " << std::setfill( ' ' ) << std::setw( 2 ) << m_numVisits << " Total Size: " << FormatSizeString( m_totalSize );
 
     return ss.str();
 }
@@ -191,16 +191,39 @@ string  AggregateFrameBufferTracker::Summary             () const
 {
     std::stringstream ss;
 
-    ss << "Num elts: " << std::setfill( ' ' ) << std::setw( 2 ) << m_numVisits << " ";
+    ss << "Num elts: [" << std::setfill( ' ' ) << std::setw( 2 ) << m_numVisits << " ";
 
-    ss << "CA0TX: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments0Tex << " ";
-    ss << "CA0FB: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments0FrameBuffer << " ";
+    if( totalAttachments0Tex > 0 )
+    {
+        ss << "CA0TX: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments0Tex << " ";
+    }
 
-    ss << "CA1TX: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments1Tex << " ";
-    ss << "CA1FB: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments1FrameBuffer << " ";
+    if( totalAttachments0FrameBuffer )
+    {
+        ss << "CA0FB: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments0FrameBuffer << " ";
+    }
 
-    ss << "DATX: " << std::setfill( ' ' ) << std::setw( 2 ) << totalDepthAttachmentsTex << " ";
-    ss << "DAFB: " << std::setfill( ' ' ) << std::setw( 2 ) << totalDepthAttachmentsFramebuffer << " ";
+    if( totalAttachments1Tex )
+    {
+        ss << "CA1TX: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments1Tex << " ";
+    }
+
+    if( totalAttachments1FrameBuffer )
+    {
+        ss << "CA1FB: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments1FrameBuffer << " ";
+    }
+
+    if( totalDepthAttachmentsTex )
+    {
+        ss << "DATX: " << std::setfill( ' ' ) << std::setw( 2 ) << totalDepthAttachmentsTex << " ";
+    }
+
+    if( totalDepthAttachmentsFramebuffer )
+    {
+        ss << "DAFB: " << std::setfill( ' ' ) << std::setw( 2 ) << totalDepthAttachmentsFramebuffer << " ";
+    }
+
+    ss << "]";
 
     return ss.str();
 }

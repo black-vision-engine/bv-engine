@@ -265,10 +265,9 @@ void BVAppLogic::OnKey           ( unsigned char c )
 
     if( c == 'i' || c == 'I' )
     {
-        m_renderLogic->PrintGLStats();
+        m_renderLogic->PrintGLStats( c == 'I' );
     }
 
-    { c; } // FIXME: suppress unuse warning
     //auto root = m_modelScene->GetSceneRoot();
     //auto timerPlugin = root->GetPlugin("timer");
     //if(c == 'q')

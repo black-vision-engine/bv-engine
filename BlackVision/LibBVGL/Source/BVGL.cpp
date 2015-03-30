@@ -20,6 +20,20 @@ bool        BVGL::InitializeBVGL                ()
 
 // *****************************
 //
+void        BVGL::PrintShortSummary	            ( const char * message )
+{
+    bvgl.PrintShortSummary( message );
+}
+
+// *****************************
+//
+void        BVGL::PrintCompleteSummary	        ( const char * message )
+{
+    bvgl.PrintCompleteSummary( message );
+}
+
+// *****************************
+//
 void        BVGL::bvglViewport                  ( GLint x, GLint y, GLsizei width, GLsizei height )
 {
 	bvgl.Viewport( x, y, width, height );
