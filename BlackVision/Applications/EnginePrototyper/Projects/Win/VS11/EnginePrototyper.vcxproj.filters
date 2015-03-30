@@ -51,6 +51,9 @@
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagement\PboUpdatesInspector.cpp">
       <Filter>Prototypes\Engine\MemManagement</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype0.cpp">
+      <Filter>Prototypes\FBOProfiling</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
@@ -113,6 +116,9 @@
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagement\PboUpdatesInspector.h">
       <Filter>Prototypes\Engine\MemManagement</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype0.h">
+      <Filter>Prototypes\FBOProfiling</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -138,6 +144,9 @@
     </Filter>
     <Filter Include="Prototypes\Engine\Common\Scenes">
       <UniqueIdentifier>{218bfd80-5774-445f-a554-56bd05d8e90c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prototypes\FBOProfiling">
+      <UniqueIdentifier>{cbbe6f3a-e405-4e0b-8bf9-bb381a9b561c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
