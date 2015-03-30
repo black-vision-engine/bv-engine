@@ -167,7 +167,7 @@ private:
 
 public:
 
-    void                        PrintGLStats                ();
+    static void                 PrintGLStats                ();
 };
 
 }
