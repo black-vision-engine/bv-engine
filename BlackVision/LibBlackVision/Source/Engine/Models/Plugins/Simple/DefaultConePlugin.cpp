@@ -45,8 +45,8 @@ std::string                     DefaultConePluginDesc::UID                 ()
 
 
 #include "Mathematics/Defines.h"
-//class ConeGenerator : public IGeometryAndUVsGenerator
-class ConeGenerator : public IGeometryOnlyGenerator
+class ConeGenerator : public IGeometryAndUVsGenerator
+//class ConeGenerator : public IGeometryOnlyGenerator
 {
     int tesselation;
     float height, inner_height, inner_radius, bevel, open_angle;
@@ -54,11 +54,11 @@ public:
     ConeGenerator( int t, float ih, float ir, float b, float oa, float h )
         : tesselation( t ), inner_height( ih ), inner_radius( ir ), bevel( b ), open_angle( oa ), height( h ) { }
 
-    //virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
-    virtual Type GetType() { return Type::GEOMETRY_ONLY; }
+    virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
+    //virtual Type GetType() { return Type::GEOMETRY_ONLY; }
 
-    //virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
-    virtual void GenerateGeometry( Float3AttributeChannelPtr verts )
+    virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+    //virtual void GenerateGeometry( Float3AttributeChannelPtr verts )
     {
 // outer component
         for( int i = 0; i < tesselation ; i++ )
@@ -72,12 +72,12 @@ public:
             verts->AddAttribute( glm::vec3( 0, height, 0 ) );
         }
 
-        //for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
-        //{
-        //    glm::vec3 vert = verts->GetVertices()[ v ];
-        //    uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
-        //                                    vert.y*0.5 + 0.5 ) );
-        //}
+        for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
+        {
+            glm::vec3 vert = verts->GetVertices()[ v ];
+            uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
+                                            vert.y*0.5 + 0.5 ) );
+        }
     }
 };
 
