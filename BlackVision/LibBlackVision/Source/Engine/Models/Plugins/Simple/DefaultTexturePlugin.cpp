@@ -198,6 +198,7 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultTexturePluginDesc::TextureName() );
         txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+        txDesc->SetBorderColor( GetBorderColor() );
 
         if( txDesc != nullptr )
         {
@@ -467,6 +468,15 @@ mathematics::RectConstPtr					DefaultTexturePlugin::GetAABB						( const glm::ma
 	//}
 	//	
 	//return nullptr;
+}
+
+// *************************************
+// 
+glm::vec4                                   DefaultTexturePlugin::GetBorderColor        () const
+{
+	auto param = this->GetParameter( "borderColor" );
+	assert( param );
+	return QueryTypedParam< ParamVec4Ptr >( param )->Evaluate();
 }
 
 

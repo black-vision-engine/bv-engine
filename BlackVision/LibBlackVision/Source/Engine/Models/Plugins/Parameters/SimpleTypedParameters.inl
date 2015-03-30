@@ -50,6 +50,24 @@ inline ModelParamType  SimpleParameterImpl< InterpolatorType, ValueType, type >:
     return type;
 }
 
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+void                SimpleParameterImpl< InterpolatorType, ValueType, type >::SetInterpolationMethod ( IParameter::InterpolationMethod method )
+{
+    __super::SetInterpolationMethod( method );
+    m_interpolator.SetInterpolationMethod( method );
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+IParameter::InterpolationMethod SimpleParameterImpl< InterpolatorType, ValueType, type >::GetInterpolationMethod () const
+{
+    assert( __super::GetInterpolationMethod() == m_interpolator.GetInterpolationMethod() ); // just to make sure we're consistent
+    return __super::GetInterpolationMethod();
+}
+
 
 // *******************************
 //
@@ -80,6 +98,40 @@ inline ModelParamType  ParamMat2::Type     ()
 {
     return ModelParamType::MPT_MAT2;
 }
+
+//// *******************************
+////
+//template<class T>
+//inline  ParamEnum<T>::ParamEnum( const std::string & name, const IntInterpolator & transform, ITimeEvaluatorPtr evaluator )
+//    : SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM >( name, transform, evaluator )
+//{
+//}
+//
+//// *******************************
+////
+//template<class T>
+//inline  T   ParamEnum<T>::Evaluate    () const
+//{
+//    int v = SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM >::Evaluate();
+//
+//    return T(v);
+//}
+//
+//// *******************************
+////
+//template<class T>
+//inline  void        ParamEnum<T>::SetVal    ( const T & val, TimeType t )
+//{
+//    m_interpolator.AddKey( t, int(val) );
+//}
+//
+//// *******************************
+////
+//template<class T>
+//inline ModelParamType  ParamEnum<T>::Type     ()
+//{
+//    return ModelParamType::MPT_ENUM;
+//}
 
 } //model
 } //bv

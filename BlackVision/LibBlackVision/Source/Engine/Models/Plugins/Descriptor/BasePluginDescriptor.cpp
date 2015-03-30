@@ -1,6 +1,5 @@
 #include "BasePluginDescriptor.h"
 
-
 namespace bv { namespace model {
 
 // *********************************
@@ -38,6 +37,15 @@ bool                    BasePluginDescriptor::CanBeAttachedTo   ( IPluginConstPt
 IPluginParamValModelPtr BasePluginDescriptor::CreateModel       ( ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreateDefaultModel( timeEvaluator );
+}
+
+// *********************************
+//
+void BasePluginDescriptor::ModelHelper::CreateVacModel         ()
+{
+    auto vacModel = std::make_shared< DefaultParamValModel >();
+    m_model->SetVertexAttributesChannelModel( vacModel );
+    m_lastParamValModel = vacModel;
 }
 
 } //model

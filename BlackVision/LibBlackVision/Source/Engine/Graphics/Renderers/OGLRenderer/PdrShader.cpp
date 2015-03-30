@@ -175,6 +175,9 @@ int     PdrShader::EnableTextureSamplers   ( Renderer * renderer, Shader * shade
 
         for( unsigned int i = 0; i < samplers.size(); ++i )
         {
+            auto bc = params->GetParam( "borderColor" );
+            if( bc )
+                samplers[ i ]->SetBorderColor( bc->GenericGetValue<glm::vec4>() );
             EnableTextureSampler( renderer, samplers[ i ], params->GetTexture( i ).get(), i + firstAvailableSamplerIndex );
         }
 
