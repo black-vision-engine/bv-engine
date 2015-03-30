@@ -9,6 +9,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
+
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
 
@@ -647,6 +649,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::Time
 // LINEAR GRADIENT plugin
 	if( root->GetPlugin( "linear_gradient" ) )
 	{
+        auto param = root->GetPlugin( "prism" )->GetParameter( "uv_type" );
+        assert( param );
+        SetParameter( param, 0.f, float( model::PrismComponent::PrismUVType::LINGRADED ) );
+
 		auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
 		assert( color1 );
 		success &= SetParameter( color1, 0.f, glm::vec4( 0.0f, 0.f, 1.f, 1.f ) );
@@ -685,8 +691,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::Ti
 // TEXTURE plugin
 	if( root->GetPlugin( "texture" ) )
 	{
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+        SetParameter( root->GetPlugin( "texture" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 1, 0, 1 ) );
+		success = model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
+		root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
 		assert( success );
 	}
 

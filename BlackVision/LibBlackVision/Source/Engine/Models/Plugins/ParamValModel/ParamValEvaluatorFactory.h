@@ -11,6 +11,22 @@ namespace bv { namespace model {
 class ParamValEvaluatorFactory
 {
 public:
+    template< typename InterpolatorType, typename ValueType, ModelParamType MPT, ParamType PT, typename ParamImpl >
+    static IParamValEvaluatorPtr        CreateSimpleEvaluator           ( std::shared_ptr< ParamImpl > param )
+    {
+        auto value = std::make_shared< ValueImpl< ValueType, PT > >( param->GetName() );
+        return std::make_shared< SimpleParamValEvaluator< 
+            std::shared_ptr< ParamImpl >, 
+            std::shared_ptr< ValueImpl< ValueType, PT > >
+        > >( param, value );
+    }
+
+
+    static SimpleIntEvaluatorPtr        CreateSimpleIntEvaluator        ( ParamIntPtr param, ValueIntPtr value );
+    static SimpleIntEvaluatorPtr        CreateSimpleIntEvaluator        ( ParamIntPtr param, const std::string & valueName );
+    static SimpleIntEvaluatorPtr        CreateSimpleIntEvaluator        ( ParamIntPtr param );
+    static SimpleIntEvaluatorPtr        CreateSimpleIntEvaluator        ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator );
+    static SimpleIntEvaluatorPtr        CreateSimpleIntEvaluator        ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName );
 
     static SimpleFloatEvaluatorPtr      CreateSimpleFloatEvaluator      ( ParamFloatPtr param, ValueFloatPtr value );
     static SimpleFloatEvaluatorPtr      CreateSimpleFloatEvaluator      ( ParamFloatPtr param, const std::string & valueName );

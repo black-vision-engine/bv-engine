@@ -753,11 +753,38 @@
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationAsset.cpp">
       <Filter>Assets\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Font\Engines\FreeTypeEngine.cpp">
       <Filter>Assets\Font\Engines</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Font\AtlasCache.cpp">
       <Filter>Assets\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.cpp">
+      <Filter>Engine\Models\Plugins\Channels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCirclePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.cpp">
+      <Filter>Engine\Models\Plugins\Parameters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEllipsePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.cpp">
+      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Font\FontAsset.cpp">
       <Filter>Assets\Font</Filter>
@@ -782,6 +809,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Assets.cpp">
       <Filter>Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultConePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1520,6 +1550,9 @@
     <ClInclude Include="..\..\..\Source\Assets\Texture\MipMapAsset.h">
       <Filter>Assets\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Texture\AnimationLoader.h">
       <Filter>Assets\Texture</Filter>
     </ClInclude>
@@ -1528,6 +1561,45 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Texture\AnimationAsset.h">
       <Filter>Assets\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.h">
+      <Filter>Engine\Models\Plugins\Channels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCirclePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\ICachedParameter.h">
+      <Filter>Engine\Models\Plugins\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.h">
+      <Filter>Engine\Models\Plugins\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEllipsePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IState.h">
+      <Filter>Engine\Models\Plugins\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IStateSet.h">
+      <Filter>Engine\Models\Plugins\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleTypedStates.h">
+      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.h">
+      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Font\Engines\FreeTypeEngine.h">
       <Filter>Assets\Font\Engines</Filter>
@@ -1567,6 +1639,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Assets.h">
       <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultConePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1614,6 +1689,18 @@
     </None>
     <None Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.inl">
       <Filter>Engine\Models\Updaters</Filter>
+    </None>
+    <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.inl">
+      <Filter>Engine\Models\Plugins\Channels</Filter>
+    </None>
+    <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.inl">
+      <Filter>Engine\Models\Plugins\Parameters</Filter>
+    </None>
+    <None Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.inl">
+      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
+    </None>
+    <None Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.inl">
+      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </None>
   </ItemGroup>
 </Project>
