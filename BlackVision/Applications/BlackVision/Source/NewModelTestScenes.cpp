@@ -876,12 +876,21 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_CONE", timeEvaluator );
-    root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+    //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
 
-    model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, glm::vec3( 1, 0, 0 ), 180.f );
 
     auto plugin = root->GetPlugin( "cone" );
     assert( plugin );
+
+    //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+    //root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+    //root->GetPlugin( "solid color" )->GetRendererContext()->fillCtx->fillMode = model::FillContext::Mode::M_LINES;
+
+    model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+
+    plugin->Update(0); // FIXME: to generate geometry only
 
     return root;
 }

@@ -22,6 +22,7 @@ DefaultPluginParamValModelPtr   DefaultConePluginDesc::CreateDefaultModel  ( ITi
 
     h.CreateVacModel();
     h.AddSimpleParam( PN::TESSELATION, 3, true, true );
+    h.AddSimpleParam( PN::HEIGHT, 1.f, true, true );
     h.AddSimpleParam( PN::INNERHEIGHT, 0.f, true, true );
     h.AddSimpleParam( PN::OUTERRADIUS, 1.f, true, true );
     h.AddSimpleParam( PN::INNERRADIUS, 0.f, true, true );
@@ -43,19 +44,40 @@ std::string                     DefaultConePluginDesc::UID                 ()
 }
 
 
-class ConeGenerator : public IGeometryAndUVsGenerator
+#include "Mathematics/Defines.h"
+//class ConeGenerator : public IGeometryAndUVsGenerator
+class ConeGenerator : public IGeometryOnlyGenerator
 {
     int tesselation;
-    float inner_height, inner_radius, bevel, open_angle;
+    float height, inner_height, inner_radius, bevel, open_angle;
 public:
-    ConeGenerator( int t, float ih, float ir, float b, float oa )
-        : tesselation( t ), inner_height( ih ), inner_radius( ir ), bevel( b ), open_angle( oa ) { }
+    ConeGenerator( int t, float ih, float ir, float b, float oa, float h )
+        : tesselation( t ), inner_height( ih ), inner_radius( ir ), bevel( b ), open_angle( oa ), height( h ) { }
 
-    virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
+    //virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
+    virtual Type GetType() { return Type::GEOMETRY_ONLY; }
 
-    virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr, Float2AttributeChannelPtr )
+    //virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+    virtual void GenerateGeometry( Float3AttributeChannelPtr verts )
     {
+// outer component
+        for( int i = 0; i < tesselation ; i++ )
+        {
+            double angle1 = i     * 2 * PI / tesselation;
+            double angle2 = (i+1) * 2 * PI / tesselation;
 
+            verts->AddAttribute( glm::vec3( 0, height, 0 ) );
+            verts->AddAttribute( glm::vec3( cos( angle1 ), 0, sin( angle1 ) ) );
+            verts->AddAttribute( glm::vec3( cos( angle2 ), 0, sin( angle2 ) ) );
+            verts->AddAttribute( glm::vec3( 0, height, 0 ) );
+        }
+
+        //for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
+        //{
+        //    glm::vec3 vert = verts->GetVertices()[ v ];
+        //    uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
+        //                                    vert.y*0.5 + 0.5 ) );
+        //}
     }
 };
 
@@ -68,6 +90,10 @@ DefaultConePlugin::DefaultConePlugin( const std::string & name, const std::strin
     m_innerRadius = QueryTypedValue< ValueFloatPtr >( GetValue( PN::INNERRADIUS ) );
     m_roundedTipHeight = QueryTypedValue< ValueFloatPtr >( GetValue( PN::ROUNDEDTIPHEIGHT ) );
     m_openAngle = QueryTypedValue< ValueFloatPtr >( GetValue( PN::OPENANGLE ) );
+    m_height = QueryTypedValue< ValueFloatPtr >( GetValue( PN::HEIGHT ) );
+
+    m_pluginParamValModel->Update();
+    InitGeometry();
 }
 
 IGeometryGenerator*                 DefaultConePlugin::GetGenerator()
@@ -76,7 +102,8 @@ IGeometryGenerator*                 DefaultConePlugin::GetGenerator()
         m_innerHeight->GetValue(),
         m_innerRadius->GetValue(),
         m_roundedTipHeight->GetValue(),
-        m_openAngle->GetValue()
+        m_openAngle->GetValue(),
+        m_height->GetValue()
         );
 }
 

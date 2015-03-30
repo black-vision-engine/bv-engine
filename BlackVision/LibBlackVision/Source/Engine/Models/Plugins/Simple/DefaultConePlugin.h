@@ -38,7 +38,8 @@ public:
                                                 m_outerRadius,
                                                 m_innerHeight,
                                                 m_roundedTipHeight,
-                                                m_openAngle;
+                                                m_openAngle,
+                                                m_height;
 
 private:
     virtual IGeometryGenerator*                 GetGenerator() override;
