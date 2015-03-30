@@ -132,6 +132,8 @@ public:
 	static void                 bvglBindVertexArray         ( GLuint array );
 
 	static void                 bvglVertexAttribPointer     ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
+
+
 };
 
 } //bv

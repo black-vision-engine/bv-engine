@@ -8,7 +8,16 @@
 #include "BVGLTools/BVGLStringFormatters.h"
 
 
+
 namespace bv {
+
+namespace {
+
+const unsigned int SIZE_W = 6;
+const unsigned int ID_W = 2;
+const unsigned int FMT_W = 12;
+
+} // anonymous
 
 // *************************************************************************************************************************************************
 
@@ -53,9 +62,9 @@ std::string  BufferDesc::Summary    () const
     //printf( "Buf: %2d, Size: %7s, Usage: %15s", bufId, siz.c_str(), BVGLTranslator::TranslateBufferUsage( bufDesc.usage ).c_str() )
     std::stringstream ss;
 
-    ss << "Buf: " << std::setw( 2 ) << std::setfill( ' ' ) << ID << " ";
-    ss << "Size: " << std::setw( 10 ) << FormatSizeString( size ) << " ";
-    ss << "Usage: " << std::setw( 15 ) << BVGLTranslator::TranslateBufferUsage( usage );
+    ss << "ID: " << std::setw( ID_W ) << std::setfill( ' ' ) << ID << " ";
+    ss << "Size: " << std::setw( SIZE_W ) << FormatSizeString( size ) << " ";
+    ss << "Usage: " << std::setw( FMT_W ) << TranslateNoGLPrefix( BVGLTranslator::TranslateBufferUsage, usage );
 
     return ss.str();
 }
@@ -64,7 +73,7 @@ std::string  BufferDesc::Summary    () const
 //
 std::string  BufferDesc::TargetStr  ( GLenum target ) const
 {
-    return BVGLTranslator::TranslateBufferTarget( target );
+    return TranslateNoGLPrefix( BVGLTranslator::TranslateBufferTarget, target ) ;
 }
 
 // *************************************************************************************************************************************************
@@ -128,9 +137,9 @@ std::string  TextureDesc::Summary   () const
     //printf( "Tex: %2d (%4d, %4d), Size: %7s, Format: %10s", texId, texDesc.width, texDesc.height, siz.c_str(), BVGLTranslator::TranslateTextureFormat( texDesc.format ).c_str() );
     std::stringstream ss;
 
-    ss << "Tex: " << std::setw( 2 ) << std::setfill( ' ' ) << ID << " (" << std::setw( 4 ) << width << ", " << std::setw( 4 ) << height << "), ";
-    ss << "Size: " << std::setw( 7 ) << FormatSizeString( DataSize() ) << " ";
-    ss << "Format: " << std::setw( 10 ) << BVGLTranslator::TranslateTextureFormat( format );
+    ss << "ID: " << std::setw( ID_W ) << std::setfill( ' ' ) << ID << " (" << std::setw( 4 ) << width << ", " << std::setw( 4 ) << height << "), ";
+    ss << "Size: " << std::setw( SIZE_W ) << FormatSizeString( DataSize() ) << " ";
+    ss << "Format: " << std::setw( 4 ) << TranslateNoGLPrefix( BVGLTranslator::TranslateTextureFormat, format );
 
     return ss.str();
 }
@@ -139,7 +148,7 @@ std::string  TextureDesc::Summary   () const
 //
 std::string  TextureDesc::TargetStr ( GLenum target ) const
 {
-    return BVGLTranslator::TranslateTextureTarget( target );
+    return TranslateNoGLPrefix( BVGLTranslator::TranslateTextureTarget, target );
 }
 
 // *************************************************************************************************************************************************
@@ -201,9 +210,9 @@ std::string  RenderbufferDesc::Summary  () const
     //printf( "RenderBuffer: %2d (%4d, %4d), Size: %7s, Internal Format: %10s", ID, width, height, siz.c_str(), BVGLTranslator::TranslateRenderbufferInternalFormat( internalformat ).c_str() );
     std::stringstream ss;
 
-    ss << "RenderBuffer: " << std::setw( 2 ) << std::setfill( ' ' ) << ID << " (" << std::setw( 4 ) << width << ", " << std::setw( 4 ) << height << "), ";
-    ss << "Size: " << std::setw( 7 ) << FormatSizeString( BufferSize() ) << " ";
-    ss << "Internal format: " << std::setw( 10 ) << BVGLTranslator::TranslateRenderbufferInternalFormat( internalformat );
+    ss << "ID: " << std::setw( ID_W ) << std::setfill( ' ' ) << ID << " (" << std::setw( 4 ) << width << ", " << std::setw( 4 ) << height << "), ";
+    ss << "Size: " << std::setw( SIZE_W ) << FormatSizeString( BufferSize() ) << " ";
+    ss << "Ifmt: " << TranslateNoGLPrefix( BVGLTranslator::TranslateRenderbufferInternalFormat, internalformat );
 
     return ss.str();
 }
@@ -212,7 +221,7 @@ std::string  RenderbufferDesc::Summary  () const
 //
 std::string  RenderbufferDesc::TargetStr( GLenum target ) const
 {
-    return BVGLTranslator::TranslateRenderbufferTarget( target );
+    return TranslateNoGLPrefix( BVGLTranslator::TranslateRenderbufferTarget, target );
 }
 
 // *************************************************************************************************************************************************
@@ -297,21 +306,21 @@ std::string  FramebufferDesc::Summary   () const
 {
     std::stringstream ss;
 
-    ss << "FrameBuffer: " << std::setw( 2 ) << std::setfill( ' ' ) << ID;
+    ss << "ID: " << std::setw( ID_W ) << std::setfill( ' ' ) << ID;
     
     if( colorAttachment0 > 0 )
     {
-        ss << " Color 0 Attachment: " << ( attachment0IsTex ? "TEXTURE" : "RENDER BUFFER" );
+        ss << "\n    Color0 Attachment: " << ( attachment0IsTex ? "TEXTURE" : "RENDER BUFFER" );
     }
 
     if( colorAttachment1 > 0 )
     {
-        ss << " Color 1 Attachment: " << ( attachment1IsTex ? "TEXTURE" : "RENDER BUFFER" );
+        ss << "\n    Color1 Attachment: " << ( attachment1IsTex ? "TEXTURE" : "RENDER BUFFER" );
     }
 
     if( depthAttachment > 0 )
     {
-        ss << " Depth Attachment: " << ( attachment1IsTex ? "TEXTURE" : "RENDER BUFFER" );
+        ss << "\n    Depth  Attachment: " << ( attachment1IsTex ? "TEXTURE" : "RENDER BUFFER" );
     }
 
     return ss.str();
@@ -359,12 +368,21 @@ std::string  VertexArrayAttribDesc::Summary () const
 {
     std::stringstream ss;
 
-    ss << "    Attrib: " << std::setw( 2 ) << std::setfill( ' ' ) << index << " ";
+    ss << "    Attrib: " << std::setw( ID_W ) << std::setfill( ' ' ) << index << " ";
     ss << "Buf: " << std::setw( 2 ) << std::setfill( ' ' ) << buffer << " ";
     ss << "Size: " << std::setw( 1 ) <<size << " ";
-    ss << "Type: " << BVGLTranslator::TranslateAttribPointerType( type ) << " ";
-    ss << "Normalized: " << normalized << " ";
-    ss << "Stride: " << std::setw( 2 ) << stride;
+    ss << "Type: " << TranslateNoGLPrefix( BVGLTranslator::TranslateAttribPointerType, type ) << " ";
+    
+    if ( normalized )
+    {
+        ss << "(NORMALIZED)";
+    }
+    else
+    {
+        ss << "(NOT NORMALIZED)";
+    }
+
+    ss << " Stride: " << std::setw( 2 ) << stride;
 
     return ss.str();
 }
@@ -403,7 +421,7 @@ void    VertexArrayDesc::SetAttrPointer ( GLuint buffer, GLuint index, GLint siz
 //
 void    VertexArrayDesc::Enable         ( GLuint index )
 {
-    if( attributePointers.find( index ) != attributePointers.end() )
+    if( attributePointers.find( index ) == attributePointers.end() )
     {
         attributePointers[ index ] = VertexArrayAttribDesc();
     }
@@ -416,7 +434,7 @@ void    VertexArrayDesc::Enable         ( GLuint index )
 //
 void    VertexArrayDesc::Disable        ( GLuint index )
 {
-    if( attributePointers.find( index ) != attributePointers.end() )
+    if( attributePointers.find( index ) == attributePointers.end() )
     {
         attributePointers[ index ] = VertexArrayAttribDesc();
     }
@@ -440,7 +458,7 @@ std::string  VertexArrayDesc::Summary   () const
 {
     std::stringstream ss;
 
-    ss << "Vertex Array: " << std::setw( 2 ) << std::setfill( ' ' ) << ID;
+    ss << "ID: " << std::setw( 2 ) << std::setfill( ' ' ) << ID;
 
     if( attributePointers.size() > 0 )
     {

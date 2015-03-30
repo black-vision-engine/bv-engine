@@ -165,6 +165,9 @@ private:
     void                        SetOffsetState              ( const OffsetState * os );
     void                        SetStencilState             ( const StencilState * ss );
 
+public:
+
+    void                        PrintGLStats                ();
 };
 
 }

@@ -33,6 +33,17 @@ public:
     static std::string  TranslateRenderbufferTarget         ( GLenum target );
     static std::string  TranslateRenderbufferInternalFormat ( GLenum format );
     static std::string  TranslateAttribPointerType          ( GLenum type );
+
+    static std::string  RemoveGLPrefix                      ( const std::string & str );
+
 };
+
+// *****************************
+//
+template< typename Fun >
+std::string TranslateNoGLPrefix( Fun fun, GLenum val )
+{
+    return BVGLTranslator::RemoveGLPrefix( fun( val ) ); 
+}
 
 } //bv

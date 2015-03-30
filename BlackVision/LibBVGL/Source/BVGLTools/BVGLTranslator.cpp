@@ -113,4 +113,11 @@ std::string     BVGLTranslator::TranslateAttribPointerType          ( GLenum typ
     return ms_attribPointerType[ type ];
 }
 
+// ****************************
+//
+std::string     BVGLTranslator::RemoveGLPrefix                      ( const std::string & str )
+{
+    return str.substr( 3, std::string::npos );
+}
+
 } //bv

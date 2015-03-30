@@ -263,6 +263,11 @@ void BVAppLogic::OnKey           ( unsigned char c )
         SetParameter( root->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 0.f ), float( d ) );
     }
 
+    if( c == 'i' || c == 'I' )
+    {
+        m_renderLogic->PrintGLStats();
+    }
+
     { c; } // FIXME: suppress unuse warning
     //auto root = m_modelScene->GetSceneRoot();
     //auto timerPlugin = root->GetPlugin("timer");

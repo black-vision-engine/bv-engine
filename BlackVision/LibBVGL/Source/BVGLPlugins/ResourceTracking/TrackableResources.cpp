@@ -114,8 +114,7 @@ std::string             TrackableResources< ResourceDesc >::CompleteSummary ( co
         const auto & res    = it->second;
         auto target         = BoundTo( resID );
     
-        ss << std::setfill( ' ' ) << std::setw( 3 ) << resID << " ";
-        ss << res.Summary();
+        ss << "  " << res.Summary();
 
         if( target > 0 )
         {

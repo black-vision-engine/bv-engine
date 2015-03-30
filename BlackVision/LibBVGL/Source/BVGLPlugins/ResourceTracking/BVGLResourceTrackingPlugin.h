@@ -61,13 +61,6 @@ public:
     virtual void		PrintShortSummary           ( const std::string & message ) override;
     virtual void		PrintCompleteSummary        ( const std::string & message ) override;
 
-private:
-
-    void                PrintBuffersStats           ();
-    void                PrintTextureStats           ();
-    void                PrintRenderbuffersStats     ();
-    void                PrintFramebufersStats       ();
-
 };
 
 } //bv

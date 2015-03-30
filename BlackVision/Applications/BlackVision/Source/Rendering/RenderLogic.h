@@ -39,6 +39,7 @@ private:
 public:
 
     void    FrameRendered   ( Renderer * renderer );
+    void    PrintGLStats    ();
 
 };
 

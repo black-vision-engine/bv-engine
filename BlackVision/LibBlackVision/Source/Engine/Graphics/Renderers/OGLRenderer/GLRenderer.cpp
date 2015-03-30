@@ -196,4 +196,11 @@ void Renderer::SetStencilState  ( const StencilState * ss )
     //FIXME: implement
 }
 
+// *********************************
+//
+void    Renderer::PrintGLStats                ()
+{
+    //FIXME: implement
+}
+
 } //bv

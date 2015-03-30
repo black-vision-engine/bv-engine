@@ -263,4 +263,11 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
     nFrames++;
 }
 
+// *********************************
+//
+void    RenderLogic::PrintGLStats    ()
+{
+    Renderer::PrintGLStats();
+}
+
 } //bv
