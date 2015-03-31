@@ -148,7 +148,7 @@ std::vector<IGeometryGenerator*>    DefaultConePlugin::GetGenerators()
         );
 
     std::vector<IGeometryGenerator*> gens;
-    //gens.push_back( new ConeGenerator::LateralSurface() );
+    gens.push_back( new ConeGenerator::LateralSurface() );
     gens.push_back( new ConeGenerator::BaseSurface() );
     return gens;
 }
