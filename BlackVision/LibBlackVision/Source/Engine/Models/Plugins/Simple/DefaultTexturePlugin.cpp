@@ -291,6 +291,13 @@ void                                DefaultTexturePlugin::Update                
         m_vaChannel->SetNeedsAttributesUpdate( false );
     }
 
+    if( m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() )
+    {
+        m_vaChannel->ClearAll();
+        InitAttributesChannel( m_prevPlugin );
+        m_vaChannel->SetNeedsTopologyUpdate( true );
+    }
+
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
 }
