@@ -96,15 +96,18 @@ DefaultConePlugin::DefaultConePlugin( const std::string & name, const std::strin
     InitGeometry();
 }
 
-IGeometryGenerator*                 DefaultConePlugin::GetGenerator()
+std::vector<IGeometryGenerator*>    DefaultConePlugin::GetGenerators()
 {
-    return new ConeGenerator( m_tesselation->GetValue(),
+    std::vector<IGeometryGenerator*> gens;
+    gens.push_back( new ConeGenerator( 
+        m_tesselation->GetValue(),
         m_innerHeight->GetValue(),
         m_innerRadius->GetValue(),
         m_roundedTipHeight->GetValue(),
         m_openAngle->GetValue(),
         m_height->GetValue()
-        );
+        ) );
+    return gens;
 }
 
 bool                                DefaultConePlugin::NeedsTopologyUpdate()

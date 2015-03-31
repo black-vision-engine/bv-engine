@@ -24,10 +24,9 @@ public:
 class DefaultGeometryPluginBase :
     public BasePlugin< IPlugin >
 {
-    VertexAttributesChannelPtr          m_vaChannel;
-    //IGeometryAndUVsGenerator&           m_generator;
+    VertexAttributesChannelPtr                  m_vaChannel;
 
-    virtual IGeometryGenerator*                 GetGenerator() = 0;
+    virtual std::vector<IGeometryGenerator*>    GetGenerators() = 0;
 
 protected:
     void								        InitGeometry();

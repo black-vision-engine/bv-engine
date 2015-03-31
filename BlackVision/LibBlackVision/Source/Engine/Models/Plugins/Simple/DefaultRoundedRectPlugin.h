@@ -20,7 +20,7 @@ public:
     static const std::string PN_BEVELS;
 
 private:
-    virtual IGeometryGenerator*                 GetGenerator() override;
+    virtual std::vector<IGeometryGenerator*>    GetGenerators() override;
 
     virtual bool                                NeedsTopologyUpdate();
 
