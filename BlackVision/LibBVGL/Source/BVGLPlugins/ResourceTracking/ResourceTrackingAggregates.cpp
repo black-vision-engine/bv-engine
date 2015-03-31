@@ -57,7 +57,7 @@ string  AggregateSizeTracker::Summary         () const
 {
     std::stringstream ss;
 
-    ss << "Num elts: " << std::setfill( ' ' ) << std::setw( 3 ) << m_numVisits << " Total Size: " << FormatSizeString( m_totalSize );
+    ss << "Num elts: " << std::setfill( ' ' ) << std::setw( 2 ) << m_numVisits << " Total Size: " << FormatSizeString( m_totalSize );
 
     return ss.str();
 }
@@ -190,17 +190,65 @@ void    AggregateFrameBufferTracker::IncNumVisits        ()
 string  AggregateFrameBufferTracker::Summary             () const
 {
     std::stringstream ss;
+    bool comma = false;
 
-    ss << "Num elts: " << std::setfill( ' ' ) << std::setw( 2 ) << m_numVisits << " ";
+    ss << "Num elts: " << std::setfill( ' ' ) << std::setw( 2 ) << m_numVisits << " [";
 
-    ss << "CA0TX: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments0Tex << " ";
-    ss << "CA0FB: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments0FrameBuffer << " ";
+    if( totalAttachments0Tex > 0 )
+    {
+        ss << "CA0TX: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments0Tex << " ";
+        comma = true;
+    }
 
-    ss << "CA1TX: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments1Tex << " ";
-    ss << "CA1FB: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments1FrameBuffer << " ";
+    if( totalAttachments0FrameBuffer )
+    {
+        if ( comma ) 
+            ss << ", ";
 
-    ss << "DATX: " << std::setfill( ' ' ) << std::setw( 2 ) << totalDepthAttachmentsTex << " ";
-    ss << "DAFB: " << std::setfill( ' ' ) << std::setw( 2 ) << totalDepthAttachmentsFramebuffer << " ";
+        ss << "CA0FB: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments0FrameBuffer << " ";
+
+        comma = true;
+    }
+
+    if( totalAttachments1Tex )
+    {
+        if ( comma ) 
+            ss << ", ";
+
+        ss << "CA1TX: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments1Tex << " ";
+
+        comma = true;
+    }
+
+    if( totalAttachments1FrameBuffer )
+    {
+        if ( comma ) 
+            ss << ", ";
+
+        ss << "CA1FB: " << std::setfill( ' ' ) << std::setw( 2 ) << totalAttachments1FrameBuffer << " ";
+
+        comma = true;
+    }
+
+    if( totalDepthAttachmentsTex )
+    {
+        if ( comma ) 
+            ss << ", ";
+
+        ss << "DATX: " << std::setfill( ' ' ) << std::setw( 2 ) << totalDepthAttachmentsTex << " ";
+
+        comma = true;
+    }
+
+    if( totalDepthAttachmentsFramebuffer )
+    {
+        if ( comma ) 
+            ss << ", ";
+
+        ss << "DAFB: " << std::setfill( ' ' ) << std::setw( 2 ) << totalDepthAttachmentsFramebuffer << " ";
+    }
+
+    ss << "]";
 
     return ss.str();
 }

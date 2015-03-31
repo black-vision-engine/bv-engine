@@ -89,7 +89,10 @@ private:
 public:
 
     void	Initialize			( int w, int h, TextureFormat colorFormat );
+
     void	Terminate			();
+
+    void    FreePdrResources    ();
 
             Renderer			( RendererInput & ri, int w, int h, TextureFormat colorFormat = TextureFormat::F_A8R8G8B8 );
             ~Renderer			();
@@ -165,9 +168,6 @@ private:
     void                        SetOffsetState              ( const OffsetState * os );
     void                        SetStencilState             ( const StencilState * ss );
 
-public:
-
-    static void                 PrintGLStats                ();
 };
 
 }
