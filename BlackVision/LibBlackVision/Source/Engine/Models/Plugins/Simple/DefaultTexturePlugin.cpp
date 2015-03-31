@@ -298,6 +298,8 @@ void                                DefaultTexturePlugin::Update                
         InitAttributesChannel( m_prevPlugin );
         m_vaChannel->SetNeedsTopologyUpdate( true );
     }
+    else
+        m_vaChannel->SetNeedsTopologyUpdate( false );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
