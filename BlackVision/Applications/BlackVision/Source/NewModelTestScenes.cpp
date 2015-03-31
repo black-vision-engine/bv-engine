@@ -19,6 +19,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultEllipsePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTrianglePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultRoundedRectPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultConePlugin.h"
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 
@@ -871,28 +872,30 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedRoundedRectTestScene     ( mo
 }
 
 model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+//model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     auto root = std::make_shared< model::BasicNode >( "cone", timeEvaluator );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_CONE", timeEvaluator );
-    //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
     root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
 
-    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 1.f, glm::vec3( 1, 0, 0 ), -90.f );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 1.f, glm::vec3( 1, 0, 0 ), -90.f );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), -90.f );
 
     auto plugin = root->GetPlugin( "cone" );
     assert( plugin );
+    model::SetParameter( plugin->GetParameter( model::DefaultCone::PN::TESSELATION ), 10.f, 10 );
+    model::SetParameter( plugin->GetParameter( model::DefaultCone::PN::INNERRADIUS ), 0.f, 0.5f );
 
-    //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
-    root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = true;
-    //root->GetPlugin( "solid color" )->GetRendererContext()->fillCtx->fillMode = model::FillContext::Mode::M_LINES;
-
+    //root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = true;
     model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
 
-    plugin->Update(0); // FIXME: to generate geometry only
-
     return root;
+
+    //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+    //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+    //root->GetPlugin( "solid color" )->GetRendererContext()->fillCtx->fillMode = model::FillContext::Mode::M_LINES;
 }
 
 } //bv

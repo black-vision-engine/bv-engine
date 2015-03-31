@@ -78,9 +78,8 @@ void DefaultGeometryPluginBase::InitGeometry()
 
 // *************************************
 //
-void                                DefaultGeometryPluginBase::Update                      ( TimeType t )
+void                                DefaultGeometryPluginBase::Update                      ( TimeType )
 {
-    { t; } // FIXME: suppress unused warning
     m_pluginParamValModel->Update();
 
     if( NeedsTopologyUpdate() )
@@ -88,6 +87,8 @@ void                                DefaultGeometryPluginBase::Update           
         InitGeometry();
         m_vaChannel->SetNeedsTopologyUpdate( true );
     }
+    else
+        m_vaChannel->SetNeedsTopologyUpdate( false );
 }
 
 } }

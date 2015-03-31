@@ -45,40 +45,78 @@ std::string                     DefaultConePluginDesc::UID                 ()
 
 
 #include "Mathematics/Defines.h"
-class ConeGenerator : public IGeometryAndUVsGenerator
-//class ConeGenerator : public IGeometryOnlyGenerator
+namespace ConeGenerator
 {
     int tesselation;
-    float height, inner_height, inner_radius, bevel, open_angle;
-public:
-    ConeGenerator( int t, float ih, float ir, float b, float oa, float h )
-        : tesselation( t ), inner_height( ih ), inner_radius( ir ), bevel( b ), open_angle( oa ), height( h ) { }
+    float height, inner_height, inner_radius, bevel, open_angle, outer_radius;
 
-    virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
-    //virtual Type GetType() { return Type::GEOMETRY_ONLY; }
-
-    virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
-    //virtual void GenerateGeometry( Float3AttributeChannelPtr verts )
+    static void Init( int t, float ih, float ir, float b, float oa, float h, float or )
     {
-// outer component
-        for( int i = 0; i < tesselation ; i++ )
-        {
-            double angle1 = i     * 2 * PI / tesselation;
-            double angle2 = (i+1) * 2 * PI / tesselation;
-
-            verts->AddAttribute( glm::vec3( 0, height, 0 ) );
-            verts->AddAttribute( glm::vec3( cos( angle1 ), 0, sin( angle1 ) ) );
-            verts->AddAttribute( glm::vec3( cos( angle2 ), 0, sin( angle2 ) ) );
-            verts->AddAttribute( glm::vec3( 0, height, 0 ) );
-        }
-
-        for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
-        {
-            glm::vec3 vert = verts->GetVertices()[ v ];
-            uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
-                                            vert.y*0.5 + 0.5 ) );
-        }
+        tesselation = t;
+        inner_height = ih;
+        inner_radius = ir; 
+        bevel = b; 
+        open_angle = oa;
+        height = h;
+        outer_radius = or;
     }
+
+    class LateralSurface : public IGeometryAndUVsGenerator
+    {
+    public:
+        virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
+
+        virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+        {
+            for( int i = 0; i < tesselation ; i++ )
+            {
+                double angle1 = i     * 2 * PI / tesselation;
+                double angle2 = (i+1) * 2 * PI / tesselation;
+
+                verts->AddAttribute( glm::vec3( 0, height, 0 ) );
+                verts->AddAttribute( glm::vec3( cos( angle1 ), 0, sin( angle1 ) ) );
+                verts->AddAttribute( glm::vec3( cos( angle2 ), 0, sin( angle2 ) ) );
+                verts->AddAttribute( glm::vec3( 0, height, 0 ) );
+            }
+
+            for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
+            {
+                glm::vec3 vert = verts->GetVertices()[ v ];
+                uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
+                                                vert.y*0.5 + 0.5 ) ); // FIXME: scaling
+            }
+        }
+    };
+
+    class BaseSurface : public IGeometryAndUVsGenerator
+    {
+    public:
+        virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
+
+        virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+        {
+            for( int i = 0; i <= tesselation; i++ )
+            {
+                double angle1   = i     * 2 * PI / tesselation;
+                double angle2   = (i+1) * 2 * PI / tesselation;
+
+                auto vec1       = glm::vec3( cos( angle1 ), 0, sin( angle1 ) );
+                auto vec2       = glm::vec3( cos( angle2 ), 0, sin( angle2 ) );
+
+                verts->AddAttribute( vec1 * inner_radius );
+                verts->AddAttribute( vec1 * outer_radius );
+                //verts->AddAttribute( vec2 * inner_radius );
+                //verts->AddAttribute( vec2 * outer_radius );
+            }
+
+            for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
+            {
+                glm::vec3 vert = verts->GetVertices()[ v ];
+                uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
+                                                vert.z*0.5 + 0.5 ) ); // FIXME: scaling
+            }
+        }
+    };
 };
 
 
@@ -91,6 +129,7 @@ DefaultConePlugin::DefaultConePlugin( const std::string & name, const std::strin
     m_roundedTipHeight = QueryTypedValue< ValueFloatPtr >( GetValue( PN::ROUNDEDTIPHEIGHT ) );
     m_openAngle = QueryTypedValue< ValueFloatPtr >( GetValue( PN::OPENANGLE ) );
     m_height = QueryTypedValue< ValueFloatPtr >( GetValue( PN::HEIGHT ) );
+    m_outerRadius = QueryTypedValue< ValueFloatPtr >( GetValue( PN::OUTERRADIUS ) );
 
     m_pluginParamValModel->Update();
     InitGeometry();
@@ -98,15 +137,19 @@ DefaultConePlugin::DefaultConePlugin( const std::string & name, const std::strin
 
 std::vector<IGeometryGenerator*>    DefaultConePlugin::GetGenerators()
 {
-    std::vector<IGeometryGenerator*> gens;
-    gens.push_back( new ConeGenerator( 
+    ConeGenerator::Init( 
         m_tesselation->GetValue(),
         m_innerHeight->GetValue(),
         m_innerRadius->GetValue(),
         m_roundedTipHeight->GetValue(),
         m_openAngle->GetValue(),
-        m_height->GetValue()
-        ) );
+        m_height->GetValue(),
+        m_outerRadius->GetValue()
+        );
+
+    std::vector<IGeometryGenerator*> gens;
+    //gens.push_back( new ConeGenerator::LateralSurface() );
+    gens.push_back( new ConeGenerator::BaseSurface() );
     return gens;
 }
 
@@ -117,7 +160,8 @@ bool                                DefaultConePlugin::NeedsTopologyUpdate()
         ParameterChanged( PN::OUTERRADIUS ) ||
         ParameterChanged( PN::INNERHEIGHT ) ||
         ParameterChanged( PN::ROUNDEDTIPHEIGHT ) ||
-        ParameterChanged( PN::OPENANGLE );
+        ParameterChanged( PN::OPENANGLE ) ||
+        ParameterChanged( PN::INNERRADIUS );
 }
 
 } } }
