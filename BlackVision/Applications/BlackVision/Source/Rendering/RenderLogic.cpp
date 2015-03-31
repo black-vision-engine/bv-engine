@@ -10,6 +10,8 @@
 #include "OffscreenRenderLogic.h"
 #include "BVConfig.h"
 
+#include "BVGL.h"
+
 
 #define USE_HACK_FRIEND_NODE_MASK_IMPL
 
@@ -265,9 +267,16 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 
 // *********************************
 //
-void    RenderLogic::PrintGLStats    ()
+void    RenderLogic::PrintGLStats    (  bool detailed  )
 {
-    Renderer::PrintGLStats();
+    if ( detailed )
+    {
+        BVGL::PrintCompleteSummary( " ************************* DETAILED GL STATS ********************************** " );
+    }
+    else
+    {
+        BVGL::PrintShortSummary( " ************************* SHORT GL STATS ********************************** " );
+    }
 }
 
 } //bv

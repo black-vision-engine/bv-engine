@@ -91,9 +91,16 @@ void    Renderer::SetStateInstance    ( const RendererStateInstance & stateInsta
 
 // *********************************
 //
-void	Renderer::Terminate         ()
+void	Renderer::Terminate             ()
 {
     //FIXME: delete all states and additional resources used exclusively by the renderer (vertex format, bufffer, textures, shaders, render targets)
+}
+
+// *********************************
+//
+void    Renderer::FreePdrResources   ()
+{
+    // TODO: implement
 }
 
 // *********************************
