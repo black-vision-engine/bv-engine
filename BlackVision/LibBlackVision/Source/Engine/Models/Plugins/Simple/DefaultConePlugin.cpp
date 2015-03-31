@@ -63,7 +63,10 @@ namespace ConeGenerator
 
     class LateralSurface : public IGeometryAndUVsGenerator
     {
+        float height, radius;
     public:
+        LateralSurface( float h, float r ) : height( h ), radius( r ) { }
+
         virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
         virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
@@ -74,8 +77,8 @@ namespace ConeGenerator
                 double angle2 = (i+1) * 2 * PI / tesselation;
 
                 verts->AddAttribute( glm::vec3( 0, height, 0 ) );
-                verts->AddAttribute( glm::vec3( cos( angle1 ), 0, sin( angle1 ) ) );
-                verts->AddAttribute( glm::vec3( cos( angle2 ), 0, sin( angle2 ) ) );
+                verts->AddAttribute( glm::vec3( radius * cos( angle1 ), 0, radius * sin( angle1 ) ) );
+                verts->AddAttribute( glm::vec3( radius * cos( angle2 ), 0, radius * sin( angle2 ) ) );
                 verts->AddAttribute( glm::vec3( 0, height, 0 ) );
             }
 
@@ -97,16 +100,11 @@ namespace ConeGenerator
         {
             for( int i = 0; i <= tesselation; i++ )
             {
-                double angle1   = i     * 2 * PI / tesselation;
-                double angle2   = (i+1) * 2 * PI / tesselation;
+                double angle   = i     * 2 * PI / tesselation;
+                auto vec       = glm::vec3( cos( angle ), 0, sin( angle ) );
 
-                auto vec1       = glm::vec3( cos( angle1 ), 0, sin( angle1 ) );
-                auto vec2       = glm::vec3( cos( angle2 ), 0, sin( angle2 ) );
-
-                verts->AddAttribute( vec1 * inner_radius );
-                verts->AddAttribute( vec1 * outer_radius );
-                //verts->AddAttribute( vec2 * inner_radius );
-                //verts->AddAttribute( vec2 * outer_radius );
+                verts->AddAttribute( vec * inner_radius );
+                verts->AddAttribute( vec * outer_radius );
             }
 
             for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
@@ -148,8 +146,9 @@ std::vector<IGeometryGenerator*>    DefaultConePlugin::GetGenerators()
         );
 
     std::vector<IGeometryGenerator*> gens;
-    gens.push_back( new ConeGenerator::LateralSurface() );
+    gens.push_back( new ConeGenerator::LateralSurface( ConeGenerator::height, ConeGenerator::outer_radius ) );
     gens.push_back( new ConeGenerator::BaseSurface() );
+    gens.push_back( new ConeGenerator::LateralSurface( ConeGenerator::inner_height, ConeGenerator::inner_radius ) );
     return gens;
 }
 
