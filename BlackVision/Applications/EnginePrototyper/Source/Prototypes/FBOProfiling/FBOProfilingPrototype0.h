@@ -3,6 +3,7 @@
 #include "Interfaces/IAppLogicPrototype.h"
 
 #include "Common/GLSLProgram.h"
+#include "Common/VBORect.h"
 
 
 namespace bv {
@@ -14,6 +15,7 @@ class FBOProfilingPrototype0 : public IAppLogicPrototype
 private:
 
 	Renderer *		m_renderer;
+	VBORect         m_rct;
     GLSLProgram     m_prog;
     bool            m_paused;
 
@@ -31,6 +33,7 @@ public:
 private:
 
     bool    PrepareShader                   ();
+	bool    PrepareReadBackBuffers			();
 
 };
 

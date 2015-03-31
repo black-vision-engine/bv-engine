@@ -8,8 +8,10 @@ namespace bv {
 //
 FBOProfilingPrototype0::FBOProfilingPrototype0    ( Renderer * renderer )
 	: m_renderer( renderer )
+	, m_rct( 1.f, 1.f )	
 	, m_paused( false )
 {
+
     if( !PrepareShader() )
     {
         exit( 1 );
@@ -50,6 +52,7 @@ void    FBOProfilingPrototype0::Render         ()
     BVGL::bvglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     m_prog.Use();
+	m_rct.Render();
 }
 
 // **************************

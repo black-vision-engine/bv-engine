@@ -10,11 +10,11 @@ namespace bv {
 IAppLogicPrototype * CreateDefaultPrototype     ( Renderer * renderer )
 {
     { renderer; }
-    // return new SimpleVAOPrototype0();
+    return new SimpleVAOPrototype0();
     // return new PboUpdatesInspector( renderer );
 
     //return new MemManagementInspector( renderer );
-	return new FBOProfilingPrototype0( renderer );
+	//return new FBOProfilingPrototype0( renderer );
 }
 
 } // bv
