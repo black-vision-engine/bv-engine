@@ -18,6 +18,9 @@ private:
 	VBORect         m_rct;
     GLSLProgram     m_prog;
     bool            m_paused;
+	GLuint          m_fboID[ 2 ];
+	GLuint          m_texId;
+	GLuint          m_drawBuff;
 
 public:
 
@@ -34,6 +37,9 @@ private:
 
     bool    PrepareShader                   ();
 	bool    PrepareReadBackBuffers			();
+	void	AddColorAttachments				();
+	void	EnableFrameBuffer				();
+	void	DisableFrameBuffer				();
 
 };
 
