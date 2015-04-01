@@ -47,9 +47,51 @@ namespace Generator
 
         void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
         {
-            verts->AddAttribute( glm::vec3( 0, 0, 0 ) );
-
-            uvs->AddAttribute( glm::vec2( 0, 0 ) );
+            double w = dims.x/2, 
+                h = dims.y/2, 
+                d = dims.z/2;
+// top
+            for( int i = 0; i < tesselation; i++ )
+                ;
+            verts->AddAttribute( glm::vec3(  w,  h, -d ) );
+            verts->AddAttribute( glm::vec3(  w,  h,  d ) );
+            for( int i = 0; i < tesselation; i++ )
+                ;
+// left
+            for( int i = 0; i < tesselation; i++ )
+                ;
+            verts->AddAttribute( glm::vec3( -w,  h, -d ) );
+            verts->AddAttribute( glm::vec3( -w,  h,  d ) );
+            for( int i = 0; i < tesselation; i++ )
+                ;
+// bottom
+            for( int i = 0; i < tesselation; i++ )
+                ;
+            verts->AddAttribute( glm::vec3( -w, -h, -d ) );
+            verts->AddAttribute( glm::vec3( -w, -h,  d ) );
+            for( int i = 0; i < tesselation; i++ )
+                ;
+// right
+            for( int i = 0; i < tesselation; i++ )
+                ;
+            verts->AddAttribute( glm::vec3(  w, -h, -d ) );
+            verts->AddAttribute( glm::vec3(  w, -h,  d ) );
+            for( int i = 0; i < tesselation; i++ )
+                ;
+// and top once again to close
+            for( int i = 0; i < tesselation; i++ )
+                ;
+            verts->AddAttribute( glm::vec3(  w,  h, -d ) );
+            verts->AddAttribute( glm::vec3(  w,  h,  d ) );
+            for( int i = 0; i < tesselation; i++ )
+                ;
+            
+            for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
+            {
+                glm::vec3 vert = verts->GetVertices()[ v ];
+                uvs->AddAttribute( glm::vec2( 0.5*( vert.x + vert.y + 1.f ),
+                                                vert.z + 0.5 ) ); // FIXME: scaling
+            }
         }
     };
 }

@@ -907,11 +907,10 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_CUBE", timeEvaluator );
-    root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
 
-    ////model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), 0.f );
-    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, glm::vec3( 1, 0, 0 ), -90.f );
-    ////model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), -90.f );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), 0.f );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 1.f, glm::vec3( 1, 0, 0 ), -90.f );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), -90.f );
 
     auto plugin = root->GetPlugin( "cube" );
     assert( plugin );
@@ -919,14 +918,17 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
     //model::SetParameter( plugin->GetParameter( model::DefaultCone::PN::INNERRADIUS ), 0.f, 0.5f );
     //model::SetParameter( plugin->GetParameter( model::DefaultCone::PN::INNERHEIGHT ), 0.f, 0.5f );
 
-    //root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = true;
+    root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
+    model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 0, 0, 1 ) );
     model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
-
-    return root;
 
     //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
     //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
     //root->GetPlugin( "solid color" )->GetRendererContext()->fillCtx->fillMode = model::FillContext::Mode::M_LINES;
+    //root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+
+    return root;
 }
 
 } //bv
