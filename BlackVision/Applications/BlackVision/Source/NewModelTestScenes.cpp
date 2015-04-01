@@ -20,6 +20,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultTrianglePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultRoundedRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultConePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 
@@ -909,14 +910,14 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
     root->AddPlugin( "DEFAULT_CUBE", timeEvaluator );
 
     //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), 0.f );
-    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 1.f, glm::vec3( 1, 0, 0 ), -90.f );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 5.f, glm::vec3( 1, 0, 0 ), 90.f );
     //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), -90.f );
+    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1.5, 1.5, 1.5 ) );
 
     auto plugin = root->GetPlugin( "cube" );
     assert( plugin );
-    //model::SetParameter( plugin->GetParameter( model::DefaultCone::PN::TESSELATION ), 10.f, 10 );
-    //model::SetParameter( plugin->GetParameter( model::DefaultCone::PN::INNERRADIUS ), 0.f, 0.5f );
-    //model::SetParameter( plugin->GetParameter( model::DefaultCone::PN::INNERHEIGHT ), 0.f, 0.5f );
+    model::SetParameter( plugin->GetParameter( model::DefaultCube::PN::BEVEL ), 5.f, 0.4f );
+    model::SetParameter( plugin->GetParameter( model::DefaultCube::PN::TESSELATION ), 0.f, 10 );
 
     root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
     root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
