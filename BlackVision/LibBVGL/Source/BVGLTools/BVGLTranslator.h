@@ -43,6 +43,9 @@ public:
 template< typename Fun >
 std::string TranslateNoGLPrefix( Fun fun, GLenum val )
 {
+    if( val <= 0 )
+        return "UNINITIALIZED";
+
     return BVGLTranslator::RemoveGLPrefix( fun( val ) ); 
 }
 
