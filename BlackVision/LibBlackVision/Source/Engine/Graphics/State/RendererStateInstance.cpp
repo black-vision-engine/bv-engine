@@ -31,6 +31,12 @@ RendererStateInstance::RendererStateInstance   ( AlphaState * as, CullState * cs
 //
 RendererStateInstance::~RendererStateInstance  ()
 {
+    delete m_alphaState;
+    delete m_cullState;
+    delete m_depthState;
+    delete m_fillState;
+    delete m_offsetState;
+    delete m_stencilState;
 }
 
 // *********************************

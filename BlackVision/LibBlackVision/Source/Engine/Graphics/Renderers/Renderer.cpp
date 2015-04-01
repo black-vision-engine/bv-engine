@@ -93,6 +93,39 @@ void    Renderer::SetStateInstance    ( const RendererStateInstance & stateInsta
 //
 void	Renderer::Terminate             ()
 {
+    FreePdrResources();
+ 
+    delete m_RendererData;
+
+    /*
+    Initialize( w, h, colorFormat );
+
+    WGLRendererData * data = new WGLRendererData();
+    m_RendererData = static_cast< RendererData * >( data );
+
+    data->m_WindowHandle	= ri.m_WindowHandle;
+    data->m_WindowDC		= ::GetDC( ri.m_WindowHandle );
+    
+    ri.m_RendererDC			= data->m_WindowDC;
+
+    bool success = InitializeGLContext( ri, data );
+    assert( success );
+
+    success = InitializeGL();
+    assert( success );
+
+    success = InitializeVSync( ri );
+    assert( success );
+
+    if ( !success )
+    {
+        exit( 1 );
+    }
+
+    // Some default GL rendering mode
+    data->m_CurrentRS.Initialize( m_defaultStateInstance );
+
+    */
     //FIXME: delete all states and additional resources used exclusively by the renderer (vertex format, bufffer, textures, shaders, render targets)
 }
 
