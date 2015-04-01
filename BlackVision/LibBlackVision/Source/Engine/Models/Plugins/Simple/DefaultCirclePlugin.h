@@ -26,7 +26,7 @@ public:
     static const std::string PN_OPEN_ANGLE_MODE;
 
 private:
-    virtual std::vector<IGeometryGenerator*>    GetGenerators() override;
+    virtual std::vector<IGeometryGeneratorPtr>    GetGenerators() override;
 
     virtual bool                                NeedsTopologyUpdate();
 

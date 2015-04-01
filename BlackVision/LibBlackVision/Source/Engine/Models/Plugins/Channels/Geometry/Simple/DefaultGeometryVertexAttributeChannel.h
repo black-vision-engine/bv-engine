@@ -50,6 +50,8 @@ public:
     virtual Type GetType() = 0;
 };
 
+DEFINE_PTR_TYPE( IGeometryGenerator )
+
 class IGeometryOnlyGenerator : public IGeometryGenerator
 {
 public:

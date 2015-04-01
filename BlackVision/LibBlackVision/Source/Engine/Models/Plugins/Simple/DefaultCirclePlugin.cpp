@@ -150,13 +150,13 @@ public:
     }
 };
 
-std::vector<IGeometryGenerator*>           DefaultCirclePlugin::GetGenerators()
+std::vector<IGeometryGeneratorPtr>           DefaultCirclePlugin::GetGenerators()
 {
-    return std::vector<IGeometryGenerator*>( 1, new CircleGenerator( GetTesselation(),
+    return std::vector<IGeometryGeneratorPtr>( 1, IGeometryGeneratorPtr( new CircleGenerator( GetTesselation(),
                                 GetInnerRadius(),
                                 GetOuterRadius(),
                                 GetOpenAngle(),
-                                GetOpenAngleMode() ) );
+                                GetOpenAngleMode() ) ) );
 }
 
 bool DefaultCirclePlugin::NeedsTopologyUpdate()

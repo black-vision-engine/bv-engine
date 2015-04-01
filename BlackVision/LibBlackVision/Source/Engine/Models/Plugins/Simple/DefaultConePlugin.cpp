@@ -133,7 +133,7 @@ DefaultConePlugin::DefaultConePlugin( const std::string & name, const std::strin
     InitGeometry();
 }
 
-std::vector<IGeometryGenerator*>    DefaultConePlugin::GetGenerators()
+std::vector<IGeometryGeneratorPtr>    DefaultConePlugin::GetGenerators()
 {
     ConeGenerator::Init( 
         m_tesselation->GetValue(),
@@ -145,10 +145,10 @@ std::vector<IGeometryGenerator*>    DefaultConePlugin::GetGenerators()
         m_outerRadius->GetValue()
         );
 
-    std::vector<IGeometryGenerator*> gens;
-    gens.push_back( new ConeGenerator::LateralSurface( ConeGenerator::height, ConeGenerator::outer_radius ) );
-    gens.push_back( new ConeGenerator::BaseSurface() );
-    gens.push_back( new ConeGenerator::LateralSurface( ConeGenerator::inner_height, ConeGenerator::inner_radius ) );
+    std::vector<IGeometryGeneratorPtr> gens;
+    gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::LateralSurface( ConeGenerator::height, ConeGenerator::outer_radius ) ) );
+    gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::BaseSurface() ) );
+    gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::LateralSurface( ConeGenerator::inner_height, ConeGenerator::inner_radius ) ) );
     return gens;
 }
 

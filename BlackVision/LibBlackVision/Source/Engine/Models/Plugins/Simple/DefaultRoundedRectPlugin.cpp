@@ -91,9 +91,9 @@ public:
     }
 };
 
-std::vector<IGeometryGenerator*>                 DefaultRoundedRectPlugin::GetGenerators()
+std::vector<IGeometryGeneratorPtr>                 DefaultRoundedRectPlugin::GetGenerators()
 {
-    return std::vector<IGeometryGenerator*>( 1, new RoundedRectGenerator( GetSize(), GetBevels() ) );
+    return std::vector<IGeometryGeneratorPtr>( 1, IGeometryGeneratorPtr( new RoundedRectGenerator( GetSize(), GetBevels() ) ) );
 }
 
 bool                                DefaultRoundedRectPlugin::NeedsTopologyUpdate()

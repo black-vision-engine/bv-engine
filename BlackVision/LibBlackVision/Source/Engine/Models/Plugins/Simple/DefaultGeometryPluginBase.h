@@ -26,7 +26,7 @@ class DefaultGeometryPluginBase :
 {
     VertexAttributesChannelPtr                  m_vaChannel;
 
-    virtual std::vector<IGeometryGenerator*>    GetGenerators() = 0;
+    virtual std::vector<IGeometryGeneratorPtr>  GetGenerators() = 0;
 
 protected:
     void								        InitGeometry();

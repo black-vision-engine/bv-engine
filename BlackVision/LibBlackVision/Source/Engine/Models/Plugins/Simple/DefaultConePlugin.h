@@ -42,7 +42,7 @@ public:
                                                 m_height;
 
 private:
-    virtual std::vector<IGeometryGenerator*>    GetGenerators() override;
+    virtual std::vector<IGeometryGeneratorPtr>    GetGenerators() override;
 
     virtual bool                                NeedsTopologyUpdate() override;
 public:

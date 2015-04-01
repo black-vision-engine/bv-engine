@@ -52,9 +52,9 @@ public:
     }
 };
 
-std::vector<IGeometryGenerator*>    DefaultTrianglePlugin::GetGenerators()
+std::vector<IGeometryGeneratorPtr>    DefaultTrianglePlugin::GetGenerators()
 {
-    return std::vector<IGeometryGenerator*>( 1, new TriangleGenerator( GetPointA(), GetPointB(), GetPointC() ) );
+    return std::vector<IGeometryGeneratorPtr>( 1, IGeometryGeneratorPtr( new TriangleGenerator( GetPointA(), GetPointB(), GetPointC() ) ) );
 }
 
 bool                                DefaultTrianglePlugin::NeedsTopologyUpdate()

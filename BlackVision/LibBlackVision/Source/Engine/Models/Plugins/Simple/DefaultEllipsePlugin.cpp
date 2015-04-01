@@ -204,11 +204,11 @@ public:
 double EllipseGenerator::x1;
 double EllipseGenerator::preferredArea;
 
-std::vector<IGeometryGenerator*>           DefaultEllipsePlugin::GetGenerators()
+std::vector<IGeometryGeneratorPtr>           DefaultEllipsePlugin::GetGenerators()
 {
-    return std::vector<IGeometryGenerator*>( 1, new OldEllipseGenerator( GetQuality(),
+    return std::vector<IGeometryGeneratorPtr>( 1, IGeometryGeneratorPtr( new OldEllipseGenerator( GetQuality(),
                                 GetOuterRadius1(),
-                                GetOuterRadius2() ) );
+                                GetOuterRadius2() ) ) );
     //return new EllipseGenerator( GetQuality(),
     //                            GetOuterRadius1(),
     //                            GetOuterRadius2() );
