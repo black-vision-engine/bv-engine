@@ -77,6 +77,13 @@ protected:
                 ( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
         }
 
+        template<>
+        inline void                             AddSimpleParam< glm::vec3 > ( std::string name, const glm::vec3& defaultValue, bool addValue, bool isState ) const
+        {
+            AddParam< Vec3Interpolator, glm::vec3, ModelParamType::MPT_VEC3, ParamType::PT_FLOAT3, ParamVec3 >
+                ( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
+        }
+
         template< typename InterpolatorType, typename ValueType, ModelParamType MPT, ParamType PT, typename ParamImpl >
         void                                    AddParam            ( std::string name, const ValueType& defaultValue, bool addValue, bool isState ) const
         {
@@ -86,6 +93,8 @@ protected:
         template< typename InterpolatorType, typename ValueType, ModelParamType MPT, ParamType PT, typename ParamImpl >
         void                                    AddParam            ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const ValueType& defaultValue, bool addValue, bool isState ) const
         {
+            assert( model );
+            assert( timeEvaluator );
             auto param = std::make_shared< ParamImpl >( name, InterpolatorType(), timeEvaluator );
             param->SetVal( defaultValue, 0.f );
 

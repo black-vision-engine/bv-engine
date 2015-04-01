@@ -369,6 +369,8 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
+
+    assert( prevGeomChannel->GetComponents().size() > 0 );
 }
 
 namespace {
