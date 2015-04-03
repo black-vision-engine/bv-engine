@@ -12,6 +12,8 @@ class RendererData
 {
 public:
 
+    virtual ~RendererData() {}
+
     // Maintain current render states to avoid redundant state changes.
     class RenderState
     {
@@ -58,6 +60,7 @@ public:
     class SamplerState
     {
     public:
+
         SamplerState ();
 
         //// Get the state of the currently enabled texture.  This state appears
