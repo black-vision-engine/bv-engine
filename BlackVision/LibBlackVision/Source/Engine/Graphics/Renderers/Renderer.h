@@ -156,18 +156,30 @@ public:
     PdrTexture2D *                  GetPdrTexture2D             ( const Texture2D * texture );
     PdrRenderTarget *               GetPdrRenderTarget          ( const RenderTarget * rt );
 
-    bool                        DrawRenderable              ( RenderableEntity * ent );
-    bool                        DrawTriangleStrips          ( TriangleStrip * strip );
+    bool                        DrawRenderable                  ( RenderableEntity * ent );
+    bool                        DrawTriangleStrips              ( TriangleStrip * strip );
 
 private:
 
-    void                        SetAlphaState               ( AlphaStateConstPtr as );
-    void                        SetCullState                ( CullStateConstPtr cs );
-    void                        SetDepthState               ( DepthStateConstPtr ds );
-    void                        SetFillState                ( FillStateConstPtr fs );
-    void                        SetOffsetState              ( OffsetStateConstPtr os );
-    void                        SetStencilState             ( StencilStateConstPtr ss );
+    void                        SetAlphaState                   ( AlphaStateConstPtr as );
+    void                        SetCullState                    ( CullStateConstPtr cs );
+    void                        SetDepthState                   ( DepthStateConstPtr ds );
+    void                        SetFillState                    ( FillStateConstPtr fs );
+    void                        SetOffsetState                  ( OffsetStateConstPtr os );
+    void                        SetStencilState                 ( StencilStateConstPtr ss );
+
+    void                        DeleteShadersPDR                ();
+    void                        DeleteVertexBufersPDR           ();
+    void                        DeleteIndexBuffersPDR           ();
+    void                        DeleteVertexDescriptorsPDR      ();
+    void                        DeleteVertexArrayObjectsPDR     ();
+    void                        DeleteTextures2DPDR             ();
+    void                        DeleteVertexArrayObjectsSVBPDR  ();
+    void                        DeleteRenderTargetsPDR          ();
+
+    template< typename MapType >
+    void                        DeletePDRResource               ( MapType & resMap );
 
 };
 
-}
+} // bv

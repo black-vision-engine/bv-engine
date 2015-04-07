@@ -152,8 +152,6 @@ Renderer::~Renderer ()
         ::ReleaseDC( data->m_WindowHandle, data->m_WindowDC );
     }
 
-    delete m_RendererData;
-
     Terminate();
 }
 

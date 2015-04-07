@@ -93,45 +93,26 @@ void    Renderer::SetStateInstance    ( const RendererStateInstance & stateInsta
 //
 void	Renderer::Terminate             ()
 {
+    delete m_PdrPBOMemTransferRT;
+    delete m_RendererData;
+
     FreePdrResources();
- 
-    /*
-    Initialize( w, h, colorFormat );
 
-    WGLRendererData * data = new WGLRendererData();
-    m_RendererData = static_cast< RendererData * >( data );
-
-    data->m_WindowHandle	= ri.m_WindowHandle;
-    data->m_WindowDC		= ::GetDC( ri.m_WindowHandle );
-    
-    ri.m_RendererDC			= data->m_WindowDC;
-
-    bool success = InitializeGLContext( ri, data );
-    assert( success );
-
-    success = InitializeGL();
-    assert( success );
-
-    success = InitializeVSync( ri );
-    assert( success );
-
-    if ( !success )
-    {
-        exit( 1 );
-    }
-
-    // Some default GL rendering mode
-    data->m_CurrentRS.Initialize( m_defaultStateInstance );
-
-    */
-    //FIXME: delete all states and additional resources used exclusively by the renderer (vertex format, bufffer, textures, shaders, render targets)
+    BVGL::PrintCompleteSummary( "\n\n\nAFTER RENDERER CLEANUP" );
 }
 
 // *********************************
 //
 void    Renderer::FreePdrResources   ()
 {
-    // TODO: implement
+    DeleteShadersPDR();
+    DeleteVertexBufersPDR();
+    DeleteIndexBuffersPDR();
+    DeleteVertexDescriptorsPDR();
+    DeleteVertexArrayObjectsPDR();
+    DeleteTextures2DPDR();
+    DeleteVertexArrayObjectsSVBPDR();
+    DeleteRenderTargetsPDR();
 }
 
 // *********************************
@@ -601,6 +582,77 @@ void  Renderer::NaiveReadback       ( char * buf, int w, int h )
 
     //FIXME: use renderer machinery and RT machinery to read back texture data
     BVGL::bvglReadPixels( 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, buf );
+}
+
+// *********************************
+//
+void    Renderer::DeleteShadersPDR                ()
+{
+    DeletePDRResource( m_PdrShaderMap );
+}
+
+// *********************************
+//
+void    Renderer::DeleteVertexBufersPDR           ()
+{
+    DeletePDRResource( m_PdrVertexBufferMap );
+}
+
+// *********************************
+//
+void    Renderer::DeleteIndexBuffersPDR           ()
+{
+    DeletePDRResource( m_PdrIndexBufferMap );
+}
+
+// *********************************
+//
+void    Renderer::DeleteVertexDescriptorsPDR      ()
+{
+    DeletePDRResource( m_PdrVertexDescriptorMap );
+}
+
+// *********************************
+//
+void    Renderer::DeleteVertexArrayObjectsPDR     ()
+{
+    DeletePDRResource( m_PdrVertexArrayObjectMap );
+}
+
+// *********************************
+//
+void    Renderer::DeleteTextures2DPDR             ()
+{
+    DeletePDRResource( m_PdrTextures2DMap );
+}
+
+// *********************************
+//
+void    Renderer::DeleteVertexArrayObjectsSVBPDR  ()
+{
+    DeletePDRResource( m_PdrVertexArrayObjectSingleVBMap );
+}
+
+// *********************************
+//
+void    Renderer::DeleteRenderTargetsPDR          ()
+{
+    DeletePDRResource( m_PdrRenderTargetMap );
+}
+
+// *********************************
+//
+template < typename MapType >
+void    Renderer::DeletePDRResource( MapType & resMap )
+{
+    for( auto e : resMap )
+    {
+        auto res = e.second;
+
+        delete res;
+    }
+    
+    resMap.clear();
 }
 
 } //bv
