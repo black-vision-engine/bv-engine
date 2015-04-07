@@ -54,12 +54,12 @@ void	Renderer::Initialize	    ( int w, int h, TextureFormat colorFormat )
     m_ClearColor	= glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f );
     m_ClearDepth	= 1.0f;
 
-    m_defaultStateInstance.SetState( new AlphaState() );
-    m_defaultStateInstance.SetState( new CullState() );
-    m_defaultStateInstance.SetState( new DepthState() );
-    m_defaultStateInstance.SetState( new FillState() );
-    m_defaultStateInstance.SetState( new OffsetState() );
-    m_defaultStateInstance.SetState( new StencilState() );
+    m_defaultStateInstance.SetState( std::make_shared<AlphaState>() );
+    m_defaultStateInstance.SetState( std::make_shared<CullState>() );
+    m_defaultStateInstance.SetState( std::make_shared<DepthState>() );
+    m_defaultStateInstance.SetState( std::make_shared<FillState>() );
+    m_defaultStateInstance.SetState( std::make_shared<OffsetState>() );
+    m_defaultStateInstance.SetState( std::make_shared<StencilState>() );
 
     m_currentStateInstance = m_defaultStateInstance;
 
@@ -95,8 +95,6 @@ void	Renderer::Terminate             ()
 {
     FreePdrResources();
  
-    delete m_RendererData;
-
     /*
     Initialize( w, h, colorFormat );
 

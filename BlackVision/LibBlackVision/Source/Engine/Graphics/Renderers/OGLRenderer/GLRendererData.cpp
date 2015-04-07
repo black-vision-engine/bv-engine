@@ -59,7 +59,7 @@ void   RendererData::RenderState::UpdateState               ( const RendererStat
 
 // *********************************
 //
-void    RendererData::RenderState::InitializeAlphaState     ( const AlphaState * as )
+void    RendererData::RenderState::InitializeAlphaState     ( AlphaStateConstPtr as )
 {
     assert( as );
 
@@ -76,7 +76,7 @@ void    RendererData::RenderState::InitializeAlphaState     ( const AlphaState *
 
 // *********************************
 //
-void    RendererData::RenderState::InitializeCullState      ( const CullState * cs )
+void    RendererData::RenderState::InitializeCullState      ( CullStateConstPtr cs )
 {
     assert( cs );
 
@@ -87,7 +87,7 @@ void    RendererData::RenderState::InitializeCullState      ( const CullState * 
 
 // *********************************
 //
-void    RendererData::RenderState::InitializeDepthState     ( const DepthState * ds )
+void    RendererData::RenderState::InitializeDepthState     ( DepthStateConstPtr ds )
 {
     assert( ds );
 
@@ -100,7 +100,7 @@ void    RendererData::RenderState::InitializeDepthState     ( const DepthState *
 
 // *********************************
 //
-void    RendererData::RenderState::InitializeFillState      ( const FillState * fs )
+void    RendererData::RenderState::InitializeFillState      ( FillStateConstPtr fs )
 {
     assert( fs );
 
@@ -111,7 +111,7 @@ void    RendererData::RenderState::InitializeFillState      ( const FillState * 
 
 // *********************************
 //
-void    RendererData::RenderState::InitializeOffsetState    ( const OffsetState * os )
+void    RendererData::RenderState::InitializeOffsetState    ( OffsetStateConstPtr os )
 {
     assert( os );
 
@@ -124,7 +124,7 @@ void    RendererData::RenderState::InitializeOffsetState    ( const OffsetState 
 
 // *********************************
 //
-void    RendererData::RenderState::InitializeStencilState   ( const StencilState * ss )
+void    RendererData::RenderState::InitializeStencilState   ( StencilStateConstPtr ss )
 {
     { ss; } // FIXME: suppress unused warning
     //FIXME: implement
@@ -133,42 +133,42 @@ void    RendererData::RenderState::InitializeStencilState   ( const StencilState
 
 // *********************************
 //
-const AlphaState *      RendererData::RenderState::CurAlphaState   () const
+AlphaStateConstPtr      RendererData::RenderState::CurAlphaState   () const
 {
     return m_curState.GetAlphaState();
 }
 
 // *********************************
 //
-const CullState *       RendererData::RenderState::CurCullState    () const
+CullStateConstPtr       RendererData::RenderState::CurCullState    () const
 {
     return m_curState.GetCullState();
 }
 
 // *********************************
 //
-const DepthState *      RendererData::RenderState::CurDepthState   () const
+DepthStateConstPtr      RendererData::RenderState::CurDepthState   () const
 {
     return m_curState.GetDepthState();
 }
 
 // *********************************
 //
-const FillState *       RendererData::RenderState::CurFillState    () const
+FillStateConstPtr       RendererData::RenderState::CurFillState    () const
 {
     return m_curState.GetFillState();
 }
 
 // *********************************
 //
-const OffsetState *     RendererData::RenderState::CurOffsetState  () const
+OffsetStateConstPtr     RendererData::RenderState::CurOffsetState  () const
 {
     return m_curState.GetOffsetState();
 }
 
 // *********************************
 //
-const StencilState *    RendererData::RenderState::CurStencilState () const
+StencilStateConstPtr    RendererData::RenderState::CurStencilState () const
 {
     return m_curState.GetStencilState();
 }

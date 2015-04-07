@@ -64,7 +64,7 @@ private:
 
     Camera *			m_Camera;
 
-    RendererData *		m_RendererData;
+    RendererData *      m_RendererData;
 
     typedef std::hash_map<const RenderablePass*, PdrShader*>                                    PdrShaderMapType;
     typedef std::hash_map<const VertexBuffer*, PdrVertexBuffer*>                                PdrVertexBufferMapType;
@@ -161,12 +161,12 @@ public:
 
 private:
 
-    void                        SetAlphaState               ( const AlphaState * as );
-    void                        SetCullState                ( const CullState * cs );
-    void                        SetDepthState               ( const DepthState * ds );
-    void                        SetFillState                ( const FillState * fs );
-    void                        SetOffsetState              ( const OffsetState * os );
-    void                        SetStencilState             ( const StencilState * ss );
+    void                        SetAlphaState               ( AlphaStateConstPtr as );
+    void                        SetCullState                ( CullStateConstPtr cs );
+    void                        SetDepthState               ( DepthStateConstPtr ds );
+    void                        SetFillState                ( FillStateConstPtr fs );
+    void                        SetOffsetState              ( OffsetStateConstPtr os );
+    void                        SetStencilState             ( StencilStateConstPtr ss );
 
 };
 

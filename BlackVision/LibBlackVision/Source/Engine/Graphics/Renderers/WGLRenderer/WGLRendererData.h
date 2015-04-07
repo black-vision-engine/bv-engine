@@ -17,4 +17,4 @@ public:
     HGLRC	m_WindowRC;
 };
 
-}
+} // bv

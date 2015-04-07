@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CoreDEF.h"
+
 #include "Engine/Graphics/State/RendererStateEnums.h"
 
 
@@ -24,5 +26,8 @@ public:
     StencilState  ();
 
 };
+
+DEFINE_PTR_TYPE(StencilState)
+DEFINE_CONST_PTR_TYPE(StencilState)
 
 } //bv

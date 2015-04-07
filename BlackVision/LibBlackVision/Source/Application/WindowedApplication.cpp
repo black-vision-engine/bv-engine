@@ -25,7 +25,6 @@ WindowedApplication::WindowedApplication			( const char * title, int x, int y, i
 //
 WindowedApplication::~WindowedApplication			()
 {
-    delete m_Renderer;
 }
 
 // *********************************

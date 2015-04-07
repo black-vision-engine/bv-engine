@@ -9,11 +9,11 @@ namespace bv {
 
 // *********************************
 //
-void Renderer::SetAlphaState ( const AlphaState * as )
+void Renderer::SetAlphaState ( AlphaStateConstPtr as )
 {
     assert( as );
 
-    const AlphaState * cur = m_RendererData->m_CurrentRS.CurAlphaState();
+    const AlphaState * cur = m_RendererData->m_CurrentRS.CurAlphaState().get();
 
     //FIXME: updater could have changed this state
     //if( as == cur )
@@ -55,11 +55,11 @@ void Renderer::SetAlphaState ( const AlphaState * as )
 
 // *********************************
 //
-void Renderer::SetCullState     ( const CullState * cs )
+void Renderer::SetCullState     ( CullStateConstPtr cs )
 {
     assert( cs );
 
-    const CullState * cur = m_RendererData->m_CurrentRS.CurCullState();
+    const CullState * cur = m_RendererData->m_CurrentRS.CurCullState().get();
 
     //FIXME: updater could have changed this state
     //if( cs == cur )
@@ -91,11 +91,11 @@ void Renderer::SetCullState     ( const CullState * cs )
 
 // *********************************
 //
-void Renderer::SetDepthState    ( const DepthState * ds )
+void Renderer::SetDepthState    ( DepthStateConstPtr ds )
 {
     assert( ds );
 
-    const DepthState * cur = m_RendererData->m_CurrentRS.CurDepthState();
+    const DepthState * cur = m_RendererData->m_CurrentRS.CurDepthState().get();
 
     //FIXME: updater could have changed this state
     //if( ds == cur )
@@ -133,11 +133,11 @@ void Renderer::SetDepthState    ( const DepthState * ds )
 
 // *********************************
 //
-void Renderer::SetFillState     ( const FillState * fs )
+void Renderer::SetFillState     ( FillStateConstPtr fs )
 {
     assert( fs );
 
-    const FillState * cur = m_RendererData->m_CurrentRS.CurFillState();
+    const FillState * cur = m_RendererData->m_CurrentRS.CurFillState().get();
 
     //FIXME: updater could have changed this state
     //if( fs == cur )
@@ -155,11 +155,11 @@ void Renderer::SetFillState     ( const FillState * fs )
 
 // *********************************
 //
-void Renderer::SetOffsetState   ( const OffsetState * os )
+void Renderer::SetOffsetState   ( OffsetStateConstPtr os )
 {
     assert( os );
 
-    const OffsetState * cur = m_RendererData->m_CurrentRS.CurOffsetState();
+    const OffsetState * cur = m_RendererData->m_CurrentRS.CurOffsetState().get();
 
     //FIXME: updater could have changed this state
     //if( os == cur )
@@ -190,7 +190,7 @@ void Renderer::SetOffsetState   ( const OffsetState * os )
 
 // *********************************
 //
-void Renderer::SetStencilState  ( const StencilState * ss )
+void Renderer::SetStencilState  ( StencilStateConstPtr ss )
 {
     { ss; } // FIXME: suppress unused warning
     //FIXME: implement

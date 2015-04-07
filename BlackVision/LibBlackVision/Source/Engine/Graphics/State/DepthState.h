@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CoreDEF.h"
+
 #include "Engine/Graphics/State/RendererStateEnums.h"
 
 
@@ -18,5 +20,8 @@ public:
     DepthState  ();
 
 };
+
+DEFINE_PTR_TYPE(DepthState)
+DEFINE_CONST_PTR_TYPE(DepthState)
 
 } //bv
