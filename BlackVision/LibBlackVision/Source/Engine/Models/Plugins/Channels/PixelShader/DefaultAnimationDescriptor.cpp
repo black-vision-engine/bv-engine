@@ -101,6 +101,7 @@ const std::string       DefaultAnimationDescriptor::GetName             () const
 //
 SizeType				DefaultAnimationDescriptor::GetWidth            ( UInt32 level ) const
 {
+    { level; }
 	assert( level == 0 ); // No mipmaps for animation
     return m_params.GetWidth();
 }
@@ -109,6 +110,7 @@ SizeType				DefaultAnimationDescriptor::GetWidth            ( UInt32 level ) con
 //
 SizeType				DefaultAnimationDescriptor::GetHeight           ( UInt32 level ) const
 {
+    { level; }
 	assert( level == 0 ); // No mipmaps for animation
     return m_params.GetHeight();
 }
@@ -117,6 +119,7 @@ SizeType				DefaultAnimationDescriptor::GetHeight           ( UInt32 level ) con
 //
 SizeType	            DefaultAnimationDescriptor::GetDepth            ( UInt32 level ) const
 {
+    { level; }
 	assert( level == 0 ); // No mipmaps for animation
 	return 1;
 }

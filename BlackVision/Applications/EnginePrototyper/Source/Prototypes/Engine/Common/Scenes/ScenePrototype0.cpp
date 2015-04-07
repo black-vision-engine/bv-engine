@@ -173,6 +173,7 @@ void                ScenePrototype0::OnKey               ( unsigned char c )
 
             bool dsuccess = DetachNode( GetRootNode(), node );
 
+            { dsuccess; }
             assert( dsuccess );
 
             PrintStructure();

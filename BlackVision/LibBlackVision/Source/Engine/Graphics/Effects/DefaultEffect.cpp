@@ -213,7 +213,7 @@ TextureSampler *        DefaultEffect::CreateSampler   ( const ITextureParams * 
 
 	assert( w > 0 && h > 0 && d > 0 );
 
-    SamplerSamplingMode samplingMode;
+    SamplerSamplingMode samplingMode = SamplerSamplingMode::ST_TOTAL;
 
 	if( w >= 1 && h == 1 && d == 1 )
 	{
