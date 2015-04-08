@@ -7,104 +7,23 @@
 
 #include "LibImage.h"
 
-// FIXME: REMOVE
-#include "Tools/HRTimer.h"
-#include <random>
-#include <iostream>
-#include <iomanip>
+#include "Prototypes/FBOProfiling/CacheMissBenchmark.h"
+
 
 namespace bv {
-
-namespace {
-
-// **************************
-//- Mem transfer tester
-void singleTest( char * data, char * res, unsigned int numAccesses, unsigned int entrySize, unsigned int entryTries, std::uniform_int_distribution<> & dis, std::mt19937 & gen )
-{
-    for( unsigned int i = 0; i < numAccesses; ++i )
-    {
-        unsigned int offset = dis(gen);
-        // std::cout << "    Pass: " << i << ", offset: " << std::setw(2) << offset << std::endl;
-
-        for( unsigned int j = 0; j < entryTries; ++j )
-        {
-            memcpy(&res[ ( i * entryTries + j ) * entrySize ], &data[ ( offset * entryTries + j ) * entrySize ], entrySize );
-        }
-    }
-}
-
-// **************************
-//- Mem transfer tester
-void testMemTransferSpeed( unsigned int dataSize, unsigned int numAccesses, unsigned int entrySize, unsigned int entryTries, unsigned int iterations )
-{
-    std::cout << "Calling test DS: " << dataSize / 1024 / 1024 << "MB, numAcs: " << numAccesses << ", entrSz: " << entrySize << ", entrTr: " << entryTries << ", iteras: " << iterations << std::endl;
-
-    std::cout << "Allocating " << dataSize / 1024 / 1024 << "MB of memory" << std::endl;
-
-    char * data = new char[ dataSize ];
-    char * res = new char[ numAccesses * entrySize * entryTries ];
-
-    std::cout << "Initializing memory" << std::endl;
-
-    for( unsigned int i = 0; i < dataSize; ++i )
-    {
-        data[i] = i % 128;
-    }
-
-    unsigned int maxElts = dataSize / ( entrySize * entryTries );
-
-    std::cout << "Initializing rnd generator for interval [0, " << maxElts - 1 << "]" << std::endl;
-
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(0, maxElts - 1);
-
-    HighResolutionTimer timer;
-    auto start = timer.CurElapsed();
-    auto intermediate = start;
-
-    for( unsigned int i = 0; i < iterations; ++i )
-    {
-        // std::cout << "Single mem pass transfer: " << i << std::endl;
-
-        singleTest( data, res, numAccesses, entrySize, entryTries, dis, gen );
-    
-        double timestamp = timer.CurElapsed();
-        double intElapsed = timestamp - intermediate;
-        intermediate = timestamp;
-
-        double transferRate = double( entrySize * entryTries * numAccesses ) / ( intElapsed * 1024.f );
-        { transferRate; }
-
-        // std::cout << "\nCURRENT TRANSFER: Transferring " << float(entrySize * entryTries * numAccesses) / 1024.f << "KB took " << intElapsed << " secs" << std::endl;
-        // std::cout << "CURRENT TRANSFER: " << transferRate << " KB/s" << std::endl;
-    }
-
-    auto stop = timer.CurElapsed();
-
-    double transferRate = float( iterations * entrySize * entryTries * numAccesses ) / ( (stop - start) * 1024.f * 1024.f );
-
-    std::cout << "\nTOTAL TRANSFER: Transferring " << float(iterations * entrySize * entryTries * numAccesses) / 1024.f / 1024.f << " MB took " << (stop - start) << " secs" << std::endl;
-    std::cout << "TOTAL TRANSFER: " << transferRate << " MB/s" << std::endl;
-
-    delete[] data;
-}
-
-} // anonymous 
-
-// FIXME: end of remove
 
 // **************************
 //
 FBOProfilingPrototype0::FBOProfilingPrototype0    ( Renderer * renderer )
 	: m_renderer( renderer )
-	, m_rct( 1.f, 1.f )	
+	, m_rct( 1.f, 1.f )
 	, m_paused( false )
 	, m_width( 800 )
 	, m_height( 600 )
 	, m_enableOffscreenRender( false )
 {
-    // testMemTransferSpeed( 1073739904, 64, 64, 2, 100 );
+    CacheMissBenchmark b( 1073739904, 64, 64, 2 );
+    b.RunBenchmark( 100 );
 
 	if( !PrepareReadBackBuffers() )
     {

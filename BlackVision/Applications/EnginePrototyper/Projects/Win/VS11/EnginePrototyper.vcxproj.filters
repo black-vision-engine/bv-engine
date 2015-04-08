@@ -54,6 +54,9 @@
     <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype0.cpp">
       <Filter>Prototypes\FBOProfiling</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\CacheMissBenchmark.cpp">
+      <Filter>Prototypes\FBOProfiling</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
@@ -117,6 +120,9 @@
       <Filter>Prototypes\Engine\MemManagement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype0.h">
+      <Filter>Prototypes\FBOProfiling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\CacheMissBenchmark.h">
       <Filter>Prototypes\FBOProfiling</Filter>
     </ClInclude>
   </ItemGroup>

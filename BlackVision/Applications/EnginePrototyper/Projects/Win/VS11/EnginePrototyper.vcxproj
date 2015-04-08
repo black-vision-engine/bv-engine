@@ -148,6 +148,12 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy $(DepDir)\Common\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
+xcopy $(DepDir)\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
+mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
+xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj">
@@ -184,6 +190,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Transformations.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagement\PboUpdatesInspector.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\CacheMissBenchmark.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype0.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.cpp" />
   </ItemGroup>
@@ -209,6 +216,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Transformations.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagement\PboUpdatesInspector.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\CacheMissBenchmark.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype0.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.h" />
   </ItemGroup>
