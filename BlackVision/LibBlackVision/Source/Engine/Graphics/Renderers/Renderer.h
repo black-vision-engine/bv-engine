@@ -177,8 +177,20 @@ private:
     void                        DeleteVertexArrayObjectsSVBPDR  ();
     void                        DeleteRenderTargetsPDR          ();
 
+    void                        DeletePDR                       ( const RenderablePass * pass );
+    void                        DeletePDR                       ( const VertexBuffer * vb );
+    void                        DeletePDR                       ( const IndexBuffer * ib );
+    void                        DeletePDR                       ( const VertexDescriptor * vd );
+    void                        DeletePDR                       ( const VertexArray * vao );
+    void                        DeletePDR                       ( const VertexArraySingleVertexBuffer * vao );
+    void                        DeletePDR                       ( const Texture2D * texture );
+    void                        DeletePDR                       ( const RenderTarget * rt );
+
     template< typename MapType >
     void                        DeletePDRResource               ( MapType & resMap );
+
+    template< typename MapType >
+    void                        DeleteSinglePDR                 ( MapType & resMap, typename MapType::key_type & key );
 
 };
 

@@ -19,6 +19,7 @@ RenderableEntity::RenderableEntity          ( RenderableType type, RenderableArr
 //
 RenderableEntity::~RenderableEntity         ()
 {
+    delete m_renderableArrayData;
 }
 
 // *********************************
