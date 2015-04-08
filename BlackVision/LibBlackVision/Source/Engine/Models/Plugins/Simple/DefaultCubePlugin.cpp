@@ -43,7 +43,27 @@ namespace Generator
 
     class MainComp : public IGeometryAndUVsGenerator
     {
+        int **v;
     public:
+        //void Init() 
+        MainComp() 
+        { 
+            int n = 4*(tesselation+1)+1;
+            assert( n >= 0 );
+            v = new int*[ n ];
+            for( int i = 0; i < n; i++ )
+                v[ i ] = new int[ (tesselation+1) * 2 ];
+                //v[ i ] = new int[ 2 ];
+        }
+
+        void Deinit()
+        {
+            int n = 4*(tesselation+1)+1;
+            for( int i = 0; i < n; i++ )
+                delete[] v[i];
+            delete[] v;
+        }
+
         Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
         void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
@@ -129,6 +149,7 @@ Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr pr
     m_dimensions = QueryTypedValue< ValueVec3Ptr >( GetValue( PN::DIMENSIONS ) );
     m_tesselation = QueryTypedValue< ValueIntPtr >( GetValue( PN::TESSELATION ) );
 
+    m_pluginParamValModel->Update();
     InitGeometry();
 }
 

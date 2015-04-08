@@ -922,7 +922,7 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
     root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
     root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
     model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 0, 0, 1 ) );
-    model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+    model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
 
     //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
     //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
