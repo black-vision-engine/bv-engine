@@ -21,8 +21,6 @@ RenderableArrayDataSingleVertexBuffer::RenderableArrayDataSingleVertexBuffer    
 //
 RenderableArrayDataSingleVertexBuffer::~RenderableArrayDataSingleVertexBuffer                   ()
 {
-    delete m_vertexBuffer;
-    delete m_vertexDescriptor;
 }
 
 // *********************************

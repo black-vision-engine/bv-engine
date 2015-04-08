@@ -17,56 +17,56 @@ RenderableEntity::RenderableEntity          ( RenderableType type, RenderableArr
 
 // *********************************
 //
-RenderableEntity::~RenderableEntity         ()
+RenderableEntity::~RenderableEntity                                                         ()
 {
     delete m_renderableArrayData;
 }
 
 // *********************************
 //
-RenderableEntity::RenderableType RenderableEntity::GetType                          () const
+RenderableEntity::RenderableType RenderableEntity::GetType                                  () const
 {
     return m_type;
 }
 
 // *********************************
 //
-const RenderableArrayDataSingleVertexBuffer *  RenderableEntity::GetRenderableArrayData        () const
+const RenderableArrayDataSingleVertexBuffer *  RenderableEntity::GetRenderableArrayData     () const
 {
     return m_renderableArrayData;
 }
 
 // *********************************
 //
-RenderableArrayDataSingleVertexBuffer *        RenderableEntity::GetRenderableArrayData      ()
+RenderableArrayDataSingleVertexBuffer *        RenderableEntity::GetRenderableArrayData     ()
 {
     return m_renderableArrayData;
 }
-    
+
 // *********************************
 //
-RenderableEffectPtr             RenderableEntity::GetRenderableEffect               ()
+RenderableEffectPtr             RenderableEntity::GetRenderableEffect                       ()
 {
     return m_effect;
 }
 
 // *********************************
 //
-void                            RenderableEntity::SetRenderableEffect               ( RenderableEffectPtr effect )
+void                            RenderableEntity::SetRenderableEffect                       ( RenderableEffectPtr effect )
 {
     m_effect = effect;
 }
 
 // *********************************
 //
-SizeType                        RenderableEntity::GetNumconnectedComponents         () const
+SizeType                        RenderableEntity::GetNumconnectedComponents                 () const
 {
     return m_renderableArrayData->GetNumConnectedComponents();
 }
 
 // *********************************
 //
-const RenderableArrayDataSingleVertexBuffer *     RenderableEntity::RAD             () const
+const RenderableArrayDataSingleVertexBuffer *     RenderableEntity::RAD                     () const
 {
     return m_renderableArrayData;
 }

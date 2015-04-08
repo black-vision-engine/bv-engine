@@ -180,6 +180,7 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
 {
     static GLuint mode = ConstantsMapper::GLConstant( RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
 
+    // FIXME: this line suxx as hell - only RenderableArrayDataArraysSingleVertexBuffer is supported
     const VertexArraySingleVertexBuffer * vao = static_cast< const RenderableArrayDataArraysSingleVertexBuffer * >( strip->GetRenderableArrayData() )->VAO();
 
     Enable  ( vao );
@@ -723,9 +724,9 @@ void    Renderer::DeleteSinglePDR   ( MapType & resMap, typename MapType::key_ty
         auto res = it->second;
 
         delete res;
-    }
 
-    resMap.erase( it );
+        resMap.erase( it );
+    }
 }
 
 } //bv

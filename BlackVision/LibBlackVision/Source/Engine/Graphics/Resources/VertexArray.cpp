@@ -80,6 +80,8 @@ VertexArraySingleVertexBuffer::VertexArraySingleVertexBuffer   ( VertexBuffer * 
 //
 VertexArraySingleVertexBuffer::~VertexArraySingleVertexBuffer  ()
 {
+    delete m_vertexBuffer;
+    delete m_vertexDescriptor;
 }
 
 // *******************************
