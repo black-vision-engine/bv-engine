@@ -31,6 +31,10 @@ class VertexDescriptor;
 class VertexArray;
 class VertexArraySingleVertexBuffer;
 
+class RenderableArrayDataArraysSingleVertexBuffer;
+class RenderableEffect;
+class Shader;
+
 class PdrTexture2D;
 class PdrVertexBuffer;
 class PdrShader;
@@ -187,6 +191,12 @@ public:
     void                        DeletePDR                       ( const VertexArraySingleVertexBuffer * vao );
     void                        DeletePDR                       ( const Texture2D * texture );
     void                        DeletePDR                       ( const RenderTarget * rt );
+
+    void                        FreeAllPDResources              ( RenderableEntity * renderable );
+
+    void                        FreeRADASVBPDR                  ( RenderableArrayDataArraysSingleVertexBuffer * radasvb );
+    void                        FreeEffectPDR                   ( RenderableEffect * effect );
+    void                        FreeShaderPDR                   ( Shader * shader );
 
 private:
 

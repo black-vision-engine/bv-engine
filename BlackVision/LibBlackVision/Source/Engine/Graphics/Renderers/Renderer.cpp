@@ -699,6 +699,78 @@ void    Renderer::DeletePDR                                 ( const RenderTarget
 
 // *********************************
 //
+void    Renderer::FreeAllPDResources                        ( RenderableEntity * renderable )
+{
+    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+
+    // FIXME: this suxx as we implictly assume that RenderableArrayDataSingleVertexBuffer is in fact of type RenderableArrayDataArraysSingleVertexBuffer
+    auto radasvb = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( renderable->GetRenderableArrayData() );
+    
+    FreeRADASVBPDR  ( radasvb );
+    FreeEffectPDR   ( renderable->GetRenderableEffect().get() );
+}
+
+// *********************************
+//
+void    Renderer::FreeRADASVBPDR                  ( RenderableArrayDataArraysSingleVertexBuffer * radasvb )
+{
+    auto vao = radasvb->VAO();
+
+    auto vb = vao->GetVertexBuffer();
+    auto vd = vao->GetVertexDescriptor();
+
+    if( vb )
+        DeletePDR( vb );
+
+    if( vd )
+        DeletePDR( vd );
+
+    DeletePDR( vao );
+}
+
+// *********************************
+//
+void    Renderer::FreeEffectPDR                   ( RenderableEffect * effect )
+{
+    for( unsigned int i = 0; i < effect->NumPasses(); ++i )
+    {
+        auto pass = effect->GetPass( i );
+
+        auto ps = pass->GetPixelShader();
+        auto vs = pass->GetVertexShader();
+        auto gs = pass->GetGeometryShader();
+
+        if( ps )
+            FreeShaderPDR( ps );
+
+        if( vs )
+            FreeShaderPDR( vs );
+
+        if( gs )
+            FreeShaderPDR( gs );
+
+        DeletePDR( pass );
+    }
+}
+
+// *********************************
+//
+void    Renderer::FreeShaderPDR                   ( Shader * shader )
+{
+    auto params = shader->GetParameters();
+
+    for( unsigned int i = 0; i < params->NumTextures(); ++i )
+    {
+        auto tx = params->GetTexture( i );
+
+        // TODO: implement some smart machinery to track texture resources
+        // FIXME: right now it any other node uses the same texture it would have to be reloaded
+        DeletePDR( tx.get() );
+    }
+}
+
+// *********************************
+//
 template < typename MapType >
 void    Renderer::DeletePDRResource ( MapType & resMap )
 {
