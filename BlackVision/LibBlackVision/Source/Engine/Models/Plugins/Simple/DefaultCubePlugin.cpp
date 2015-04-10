@@ -44,21 +44,22 @@ namespace Generator
     class MainComp : public IGeometryAndUVsGenerator
     {
         int **v;
+        int n, m;
     public:
         //void Init() 
         MainComp() 
         { 
-            int n = 4*(tesselation+1)+1;
+            n = 4*(tesselation+1)+1;
+            m = (tesselation+1) * 2;
             assert( n >= 0 );
             v = new int*[ n ];
             for( int i = 0; i < n; i++ )
-                v[ i ] = new int[ (tesselation+1) * 2 ];
-                //v[ i ] = new int[ 2 ];
+                v[ i ] = new int[ m ];
         }
 
-        void Deinit()
+        //void Deinit()
+        ~MainComp()
         {
-            int n = 4*(tesselation+1)+1;
             for( int i = 0; i < n; i++ )
                 delete[] v[i];
             delete[] v;
