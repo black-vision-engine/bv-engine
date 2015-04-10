@@ -146,7 +146,7 @@ bool    FBOProfilingPrototype2::PrepareShader  ()
 //
 void    FBOProfilingPrototype2::Enable()
 {
-	BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID[ m_currIndex ] );
+	BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID );
 	BVGL::bvglDrawBuffers( ( GLsizei )1, &m_drawBuff );
 }
 
@@ -169,21 +169,16 @@ bool    FBOProfilingPrototype2::PrepareReadBackBuffers()
 
     BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, 0 );
 
-	BVGL::bvglGenFramebuffers( 2, m_fboID );
+	BVGL::bvglGenFramebuffers( 1, &m_fboID );
+	m_drawBuff = GL_COLOR_ATTACHMENT0;
 
-    BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID[ 0 ] );
-	AddColorAttachments();
-	if( !CheckFramebuffersStatus() )
-	{
-		return false;
-	}
+    BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID );
 
-    BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID[ 1 ] );
-	AddColorAttachments();
-	if( !CheckFramebuffersStatus() )
-	{
-		return false;
-	}
+	AddTextureForAttachment( 0 );
+
+	AddTextureForAttachment( 1 );
+
+	BVGL::bvglFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texIds[ 0 ], 0 );
 
 	BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, 0 );
 	if( !CheckFramebuffersStatus() )
@@ -214,15 +209,16 @@ bool    FBOProfilingPrototype2::CheckFramebuffersStatus()
 //
 void *   FBOProfilingPrototype2::LockFrameBuffer( SizeType i )
 {
-	BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID[ i ] );
+	BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID );
 
-	BVGL::bvglReadBuffer( m_fboID[ i ] );
+	BVGL::bvglReadBuffer( m_fboID );
 
 	BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID[ i ] );
+	BVGL::bvglFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texIds[ i ], 0 );
 	BVGL::bvglReadPixels( 0, 0, m_width, m_height, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
 
-	m_currIndex = ( i + 1 ) % 2;
-	BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID[ m_currIndex ] );
+	BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID[ ( i + 1 ) % 2 ] );
+	BVGL::bvglFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texIds[ ( i + 1 ) % 2 ], 0 );
 
 	void * memory = BVGL::bvglMapBuffer( GL_PIXEL_PACK_BUFFER, GL_READ_WRITE );
 
@@ -246,6 +242,7 @@ MemoryChunkConstPtr FBOProfilingPrototype2::ReadColor( )
 	{data;};
 	//memcpy( m_buffer->GetWritable(), data, m_rawFrameSize );
 
+	m_currIndex = ( m_currIndex + 1 ) % 2;
 	UnlockFrameBuffer( m_currIndex );
 
 	Disable();
@@ -257,7 +254,7 @@ MemoryChunkConstPtr FBOProfilingPrototype2::ReadColor( )
 
 // ****************************
 //
-void	FBOProfilingPrototype2::AddColorAttachments()
+void	FBOProfilingPrototype2::AddTextureForAttachment( SizeType i )
 {
 	auto tx = new Texture2DImpl( TextureFormat::F_A8R8G8B8, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC );
 	std::vector< MemoryChunkConstPtr > v;
@@ -268,7 +265,7 @@ void	FBOProfilingPrototype2::AddColorAttachments()
     PdrTexture2D * pdrTx = PdrTexture2D::Create( tx );
     m_renderer->RegisterTexture2D( tx, pdrTx );
 
-    m_drawBuff = GL_COLOR_ATTACHMENT0;
+    //m_drawBuff[ i ] = GL_COLOR_ATTACHMENT0 + i;
 
     BVGL::bvglBindTexture( GL_TEXTURE_2D, pdrTx->GetTextureID() );
         
@@ -277,7 +274,9 @@ void	FBOProfilingPrototype2::AddColorAttachments()
     BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 
-    BVGL::bvglFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pdrTx->GetTextureID(), 0 );
+    //BVGL::bvglFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pdrTx->GetTextureID(), 0 );
+
+	m_texIds[ i ] = pdrTx->GetTextureID();
 }
 
 
