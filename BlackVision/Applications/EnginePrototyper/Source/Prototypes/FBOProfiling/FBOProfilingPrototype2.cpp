@@ -1,4 +1,4 @@
-#include "FBOProfilingPrototype0.h"
+#include "FBOProfilingPrototype2.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/Resources/Texture2DImpl.h"
@@ -19,8 +19,9 @@ extern HighResolutionTimer GTimer;
 
 // **************************
 //
-FBOProfilingPrototype0::FBOProfilingPrototype0    ( Renderer * renderer )
+FBOProfilingPrototype2::FBOProfilingPrototype2    ( Renderer * renderer )
 	: FBOProfilingPrototypeBase( renderer )
+	, m_currIndex( 0 )
 {
 	if( !PrepareReadBackBuffers() )
     {
@@ -39,23 +40,21 @@ FBOProfilingPrototype0::FBOProfilingPrototype0    ( Renderer * renderer )
 
 // **************************
 //
-FBOProfilingPrototype0::~FBOProfilingPrototype0   ()
+FBOProfilingPrototype2::~FBOProfilingPrototype2   ()
 {
 }
 
 // **************************
 //
-void    FBOProfilingPrototype0::Initialize     ()
+void    FBOProfilingPrototype2::Initialize     ()
 {
     BVGL::bvglClearColor( 0.f, 0.f, 0.f, 0.f );
 }
 
 // **************************
 //
-void    FBOProfilingPrototype0::Update         ( TimeType t )
+void    FBOProfilingPrototype2::Update         ( TimeType t )
 {
-
-
     float r = ( cos( t ) + 1.f ) * 0.5f;
     float g = ( sin( t ) + 1.f ) * 0.5f;
     float b = ( cos( t / 3.f ) * sin( t / 2.f ) + 1.f ) * 0.5f;
@@ -65,7 +64,7 @@ void    FBOProfilingPrototype0::Update         ( TimeType t )
 
 // **************************
 //
-void    FBOProfilingPrototype0::Render         ()
+void    FBOProfilingPrototype2::Render         ()
 {
 	if( m_enableOffscreenRender )
 	{
@@ -84,7 +83,7 @@ void    FBOProfilingPrototype0::Render         ()
 		auto startTime = GTimer.CurElapsed();
 		auto col = ReadColor();
 		auto stopTime = GTimer.CurElapsed();
-		std::cout << "One frame time is: " << stopTime - startTime << std::endl;
+		std::cout << "One frame time (read back) is: " << stopTime - startTime << std::endl;
 	}
 
 	m_currFrame++;
@@ -92,7 +91,7 @@ void    FBOProfilingPrototype0::Render         ()
 
 // **************************
 //
-void    FBOProfilingPrototype0::Key            ( unsigned char c )
+void    FBOProfilingPrototype2::Key            ( unsigned char c )
 {
     { c; }
 
@@ -103,14 +102,14 @@ void    FBOProfilingPrototype0::Key            ( unsigned char c )
 
 // **************************
 //
-void    FBOProfilingPrototype0::Resize         ( UInt32 w, UInt32 h )
+void    FBOProfilingPrototype2::Resize         ( UInt32 w, UInt32 h )
 {
     BVGL::bvglViewport( 0, 0, w, h );
 }
 
 // **************************
 //
-bool    FBOProfilingPrototype0::PrepareShader  ()
+bool    FBOProfilingPrototype2::PrepareShader  ()
 {
     std::string shadersRoot = config::PROTOTYPES_SHADERS_ROOT + "FBOProfilingPrototype/";
 
@@ -145,44 +144,60 @@ bool    FBOProfilingPrototype0::PrepareShader  ()
 
 // **************************
 //
-void    FBOProfilingPrototype0::Enable()
+void    FBOProfilingPrototype2::Enable()
 {
-	BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID[ 0 ] );
+	BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID[ m_currIndex ] );
 	BVGL::bvglDrawBuffers( ( GLsizei )1, &m_drawBuff );
-
-	//BVGL::bvglGetIntegerv( GL_VIEWPORT, m_prevViewportCoords );
-	//BVGL::bvglGetDoublev( GL_DEPTH_RANGE, m_prevDepthRange );
-
-	//BVGL::bvglViewport( 0, 0, m_width, m_height );
-	//BVGL::bvglDepthRange( 0.0, 1.0 );
 }
 
 // **************************
 //
-void    FBOProfilingPrototype0::Disable()
+void    FBOProfilingPrototype2::Disable()
 {
     BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, 0 );
-
-    //BVGL::bvglViewport( m_prevViewportCoords[ 0 ], m_prevViewportCoords[ 1 ], m_prevViewportCoords[ 2 ], m_prevViewportCoords[ 3 ] );
-    //BVGL::bvglDepthRange( m_prevDepthRange[ 0 ], m_prevDepthRange[ 1 ] );
 }
 
 // **************************
 //
-bool    FBOProfilingPrototype0::PrepareReadBackBuffers()
+bool    FBOProfilingPrototype2::PrepareReadBackBuffers()
 {
-	BVGL::bvglGenBuffers( 1, &m_pboID );
-	BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID );
+	BVGL::bvglGenBuffers( 2, m_pboID );
+	BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID[ 0 ] );
     BVGL::bvglBufferData( GL_PIXEL_PACK_BUFFER, m_width * m_height * 4, 0, GL_STREAM_READ );
+	BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID[ 1 ] );
+    BVGL::bvglBufferData( GL_PIXEL_PACK_BUFFER, m_width * m_height * 4, 0, GL_STREAM_READ );
+
     BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, 0 );
 
-	BVGL::bvglGenFramebuffers( 1, m_fboID );
-    BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID[ 0 ] );
+	BVGL::bvglGenFramebuffers( 2, m_fboID );
 
+    BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID[ 0 ] );
 	AddColorAttachments();
+	if( !CheckFramebuffersStatus() )
+	{
+		return false;
+	}
+
+    BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID[ 1 ] );
+	AddColorAttachments();
+	if( !CheckFramebuffersStatus() )
+	{
+		return false;
+	}
 
 	BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, 0 );
+	if( !CheckFramebuffersStatus() )
+	{
+		return false;
+	}
 
+    return true;
+}
+
+// ****************************
+//
+bool    FBOProfilingPrototype2::CheckFramebuffersStatus()
+{
 	auto status = BVGL::bvglCheckFramebufferStatus( GL_FRAMEBUFFER );
 
     if( status != GL_FRAMEBUFFER_COMPLETE )
@@ -192,47 +207,46 @@ bool    FBOProfilingPrototype0::PrepareReadBackBuffers()
         return false;
     }
 
-    return true;
+	return true;
 }
 
 // ****************************
 //
-void *   FBOProfilingPrototype0::LockFrameBuffer( SizeType i )
+void *   FBOProfilingPrototype2::LockFrameBuffer( SizeType i )
 {
+	BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID[ i ] );
+
 	BVGL::bvglReadBuffer( m_fboID[ i ] );
 
-	BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID );
+	BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID[ i ] );
 	BVGL::bvglReadPixels( 0, 0, m_width, m_height, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
-	//BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID );
-	void * memory = BVGL::bvglMapBuffer( GL_PIXEL_PACK_BUFFER, GL_READ_WRITE );
 
-	//BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, 0 );
+	m_currIndex = ( i + 1 ) % 2;
+	BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID[ m_currIndex ] );
+
+	void * memory = BVGL::bvglMapBuffer( GL_PIXEL_PACK_BUFFER, GL_READ_WRITE );
 
 	return memory;
 }
 
 // ****************************
 //
-void    FBOProfilingPrototype0::UnlockFrameBuffer  ( SizeType i )
+void    FBOProfilingPrototype2::UnlockFrameBuffer  ( SizeType i )
 {
-	{ i; }
-	BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID );
+	BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID[ i ] );
     BVGL::bvglUnmapBuffer( GL_PIXEL_PACK_BUFFER );
     BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, 0 );
 }
 
 // ****************************
 //
-MemoryChunkConstPtr FBOProfilingPrototype0::ReadColor()
+MemoryChunkConstPtr FBOProfilingPrototype2::ReadColor( )
 {
-	
-	BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID[ 0 ] );
-
-	auto data = LockFrameBuffer( 0 );
-	{data;}
+	auto data = LockFrameBuffer( m_currIndex );
+	{data;};
 	//memcpy( m_buffer->GetWritable(), data, m_rawFrameSize );
 
-	UnlockFrameBuffer( 0 );
+	UnlockFrameBuffer( m_currIndex );
 
 	Disable();
 
@@ -243,18 +257,17 @@ MemoryChunkConstPtr FBOProfilingPrototype0::ReadColor()
 
 // ****************************
 //
-void	FBOProfilingPrototype0::AddColorAttachments()
+void	FBOProfilingPrototype2::AddColorAttachments()
 {
-	auto tx = std::make_shared< Texture2DImpl >( TextureFormat::F_A8R8G8B8, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC );
+	auto tx = new Texture2DImpl( TextureFormat::F_A8R8G8B8, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC );
 	std::vector< MemoryChunkConstPtr > v;
 	v.push_back( MemoryChunk::Create( m_width * m_height * 4 ) );
 	tx->SetRawData( v, TextureFormat::F_A8R8G8B8, m_width, m_height );
-    assert( !m_renderer->IsRegistered( tx.get() ) );
+    assert( !m_renderer->IsRegistered( tx ) );
 
-    PdrTexture2D * pdrTx = PdrTexture2D::Create( tx.get() );
-    m_renderer->RegisterTexture2D( tx.get(), pdrTx );
+    PdrTexture2D * pdrTx = PdrTexture2D::Create( tx );
+    m_renderer->RegisterTexture2D( tx, pdrTx );
 
-    m_texId = pdrTx->GetTextureID();
     m_drawBuff = GL_COLOR_ATTACHMENT0;
 
     BVGL::bvglBindTexture( GL_TEXTURE_2D, pdrTx->GetTextureID() );
@@ -264,32 +277,8 @@ void	FBOProfilingPrototype0::AddColorAttachments()
     BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 
-    BVGL::bvglFramebufferTexture2D( GL_FRAMEBUFFER, m_drawBuff, GL_TEXTURE_2D, m_texId, 0 );
+    BVGL::bvglFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pdrTx->GetTextureID(), 0 );
 }
 
-
-// ****************************
-//
-void	FBOProfilingPrototype0::EnableFrameBuffer	()
-{
-	BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID[ 0 ] );
-    BVGL::bvglDrawBuffers( ( GLsizei )1, &m_drawBuff );
-
-    BVGL::bvglGetIntegerv( GL_VIEWPORT, m_prevViewportCoords );
-    BVGL::bvglGetDoublev( GL_DEPTH_RANGE, m_prevDepthRange );
-
-    BVGL::bvglViewport( 0, 0, m_width, m_height );
-    BVGL::bvglDepthRange( 0.0, 1.0 );
-}
-
-// ****************************
-//
-void	FBOProfilingPrototype0::DisableFrameBuffer	()
-{
-    BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, 0 );
-
-    BVGL::bvglViewport( m_prevViewportCoords[ 0 ], m_prevViewportCoords[ 1 ], m_prevViewportCoords[ 2 ], m_prevViewportCoords[ 0 ] );
-    BVGL::bvglDepthRange( m_prevDepthRange[ 0 ], m_prevDepthRange[ 1 ] );
-}
 
 } // bv

@@ -57,6 +57,15 @@
     <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\CacheMissBenchmark.cpp">
       <Filter>Prototypes\FBOProfiling</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototypeBase.cpp">
+      <Filter>Prototypes\FBOProfiling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype1.cpp">
+      <Filter>Prototypes\FBOProfiling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype2.cpp">
+      <Filter>Prototypes\FBOProfiling</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
@@ -123,6 +132,15 @@
       <Filter>Prototypes\FBOProfiling</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\CacheMissBenchmark.h">
+      <Filter>Prototypes\FBOProfiling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototypeBase.h">
+      <Filter>Prototypes\FBOProfiling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype1.h">
+      <Filter>Prototypes\FBOProfiling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype2.h">
       <Filter>Prototypes\FBOProfiling</Filter>
     </ClInclude>
   </ItemGroup>
