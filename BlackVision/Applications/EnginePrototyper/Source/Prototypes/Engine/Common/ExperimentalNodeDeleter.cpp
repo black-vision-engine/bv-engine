@@ -51,10 +51,13 @@ void    ExperimentalDeleteSingleNode( SceneNode * node, Renderer * renderer )
 //
 void    ExperimentalFreePdrResources( RenderableEntity * renderable, Renderer * renderer )
 {
+    renderer->FreeAllPDResources( renderable );
+/*
     assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
 
     // FIXME: this suxx as we implictly assume that RenderableArrayDataSingleVertexBuffer is in fact of type RenderableArrayDataArraysSingleVertexBuffer
     auto radasvb = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( renderable->GetRenderableArrayData() );
+    
     auto vao = radasvb->VAO();
 
     auto vb = vao->GetVertexBuffer();
@@ -65,6 +68,7 @@ void    ExperimentalFreePdrResources( RenderableEntity * renderable, Renderer * 
     renderer->DeletePDR( vao );
 
     ExperimentalDelOursPdrEffect( renderable->GetRenderableEffect(), renderer );
+*/
 }
 
 // **************************

@@ -43,7 +43,7 @@ bool PrototyperApp::m_sWindowedApplicationInitialized = PrototyperApp::RegisterI
 // *********************************
 //
 PrototyperApp::PrototyperApp	()
-    : WindowedApplication( "BlackVision prototyper", 0, 0, 1920, 1080, true )
+    : WindowedApplication( "BlackVision prototyper", 0, 0, 800, 600, false )
     , m_appLogicPrototype( nullptr )
 {
 }

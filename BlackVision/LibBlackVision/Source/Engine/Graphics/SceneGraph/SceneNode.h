@@ -37,7 +37,7 @@ public:
 
     bool                    IsVisible           () const;
     void                    SetVisible          ( bool visible );
-
+    
 
 // ***********************************************************************************************
 //                              HACKISH GLOBAL EFFECT INTERFACE
