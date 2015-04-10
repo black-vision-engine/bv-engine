@@ -180,6 +180,7 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
 {
     static GLuint mode = ConstantsMapper::GLConstant( RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
 
+    // FIXME: this line suxx as hell - only RenderableArrayDataArraysSingleVertexBuffer is supported
     const VertexArraySingleVertexBuffer * vao = static_cast< const RenderableArrayDataArraysSingleVertexBuffer * >( strip->GetRenderableArrayData() )->VAO();
 
     Enable  ( vao );
@@ -642,8 +643,64 @@ void    Renderer::DeleteRenderTargetsPDR          ()
 
 // *********************************
 //
+void    Renderer::DeletePDR                                 ( const RenderablePass * pass )
+{
+    DeleteSinglePDR( m_PdrShaderMap, pass );
+}
+
+// *********************************
+//
+void    Renderer::DeletePDR                                 ( const VertexBuffer * vb )
+{
+    DeleteSinglePDR( m_PdrVertexBufferMap, vb );
+}
+
+// *********************************
+//
+void    Renderer::DeletePDR                                 ( const IndexBuffer * ib )
+{
+    DeleteSinglePDR( m_PdrIndexBufferMap, ib );
+}
+
+// *********************************
+//
+void    Renderer::DeletePDR                                 ( const VertexDescriptor * vd )
+{
+    DeleteSinglePDR( m_PdrVertexDescriptorMap, vd );
+}
+
+// *********************************
+//
+void    Renderer::DeletePDR                                 ( const VertexArray * vao )
+{
+    DeleteSinglePDR( m_PdrVertexArrayObjectMap, vao );
+}
+
+// *********************************
+//
+void    Renderer::DeletePDR                                 ( const VertexArraySingleVertexBuffer * vao )
+{
+    DeleteSinglePDR( m_PdrVertexArrayObjectSingleVBMap, vao );
+}
+
+// *********************************
+//
+void    Renderer::DeletePDR                                 ( const Texture2D * texture )
+{
+    DeleteSinglePDR( m_PdrTextures2DMap, texture );
+}
+
+// *********************************
+//
+void    Renderer::DeletePDR                                 ( const RenderTarget * rt )
+{
+    DeleteSinglePDR( m_PdrRenderTargetMap, rt );
+}
+
+// *********************************
+//
 template < typename MapType >
-void    Renderer::DeletePDRResource( MapType & resMap )
+void    Renderer::DeletePDRResource ( MapType & resMap )
 {
     for( auto e : resMap )
     {
@@ -653,6 +710,23 @@ void    Renderer::DeletePDRResource( MapType & resMap )
     }
     
     resMap.clear();
+}
+
+// *********************************
+//
+template< typename MapType >
+void    Renderer::DeleteSinglePDR   ( MapType & resMap, typename MapType::key_type & key )
+{
+    auto it = resMap.find( key );
+
+    if( it != resMap.end() )
+    {
+        auto res = it->second;
+
+        delete res;
+
+        resMap.erase( it );
+    }
 }
 
 } //bv

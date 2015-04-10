@@ -14,8 +14,7 @@ IAppLogicPrototype * CreateDefaultPrototype     ( Renderer * renderer )
     // return new PboUpdatesInspector( renderer );
 
     //return new MemManagementInspector( renderer );
-//	return new FBOProfilingPrototype0( renderer );
-	return new FBOProfilingPrototype1( renderer );
+	return new FBOProfilingPrototype0( renderer );
 }
 
 } // bv

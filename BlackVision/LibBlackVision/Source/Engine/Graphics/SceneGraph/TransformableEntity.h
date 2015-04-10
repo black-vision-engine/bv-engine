@@ -17,7 +17,7 @@ private:
 public:
 
                         TransformableEntity                     ();
-                        ~TransformableEntity                    ();
+    virtual             ~TransformableEntity                    ();
 
     inline const Transform &   LocalTransform                   () const;
     inline void         SetLocalTransform                       ( const Transform & t );

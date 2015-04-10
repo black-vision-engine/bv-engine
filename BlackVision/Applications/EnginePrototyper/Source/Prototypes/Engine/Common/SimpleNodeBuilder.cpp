@@ -35,7 +35,7 @@ SceneNode *         SimpleNodeBuilder:: CreateRectNodeTexture   ( float w, float
 //
 RenderableEffectPtr  SimpleNodeBuilder::CreateRenderableEffect  ( ShaderDataSourceType sdst, const std::string & textureFile, const std::string & textureName )
 {
-    static std::vector< IShaderDataSourceConstPtr > dummyFuckerReferenceKeeper; // FIXME:L keeps references to shader params - this suxx as hell - and must be fixed in the model and engine in necessary
+    static std::vector< IShaderDataSourceConstPtr > dummyFuckerReferenceKeeper; // FIXME:L keeps references to shader params - this suxx as hell - and must be fixed in the model and engine
 
     // FIXME: these pointers get deleted when function leaves this scope so this is bound to fail, these references must be kept somewhere
     auto vsds = ShaderDataSourceCreator::VertexShader( sdst );

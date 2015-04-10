@@ -67,7 +67,7 @@ void    PboUpdatesInspector::Resize              ( UInt32 w, UInt32 h )
 void    PboUpdatesInspector::Render              ( Renderer * renderer )
 {
     BVGL::bvglClear( GL_COLOR_BUFFER_BIT );
-    //glClearDepth((GLclampd)m_ClearDepth);
+    //BVGL::bvglClearDepth((GLclampd)m_ClearDepth);
 
     if( m_scene->GetRootNode() )
     {
