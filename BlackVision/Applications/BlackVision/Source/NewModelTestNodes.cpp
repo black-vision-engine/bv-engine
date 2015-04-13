@@ -1724,4 +1724,113 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
 #endif
 }
 
+#define VERSION_TEXTURE
+//#define VERSION_COLOR
+
+// Test
+model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+	  //Timeline stuff
+    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+
+    //someTimelineWithEvents->AddChild( localTimeline );
+    timeEvaluator->AddChild( localTimeline );
+
+    //Plugin stuff
+	std::vector< std::string > uids;
+
+    uids.push_back( "DEFAULT_TRANSFORM" );
+    uids.push_back( "DEFAULT_SIMPLE_CUBE" );
+#ifdef VERSION_COLOR
+	uids.push_back( "DEFAULT_COLOR" );
+#endif
+#ifdef VERSION_TEXTURE
+	uids.push_back( "DEFAULT_TEXTURE" );
+#endif
+
+    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+
+    auto success = root->AddPlugins( uids, localTimeline );
+    assert( success );
+
+	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1.f, 1.f, 0.f ), 40.f );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, glm::vec3( 1.f, 1.f, 0.f ), 360.f );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( -1.f, 1.f, 0.f ), 0.f );
+	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -5.0f ) );
+
+	auto dim = root->GetPlugin( "simple cube" )->GetParameter( "dimensions" );
+	model::SetParameter( dim, 1.0f, glm::vec3( 0.5, 0.1, 5.0) );
+	
+#ifdef VERSION_COLOR
+	auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
+	SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+#endif
+	
+#ifdef VERSION_TEXTURE
+	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
+	assert( success );
+	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
+#endif
+
+	//if( texturePlugin )
+	//{
+	//	auto width   = texturePlugin->GetTextureWidth();
+	//	auto height  = texturePlugin->GetTextureHeight();
+
+	//	//float wf = float( width ) / float( height );
+	//	//float scl = 1.f;
+
+	//	//model::SetParameter( root->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),   2.f * scl );
+	//	//model::SetParameter( root->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), wf * 2.f * scl );
+
+	//	auto rectPlugin = root->GetPlugin( "rectangle" );
+	//	SetParameter( root->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),  float(2 * height)/1080.f );
+	//	SetParameter( root->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),   float(2 * width)/1080.f );
+
+	//	rectPlugin->Update( TimeType( 0.f ) );
+
+	//	root->AddChild( childNode );
+	//}
+
+	//for( int i = 0; i < 2; ++i )
+	//{
+	//	auto childNode = std::make_shared< model::BasicNode > ( "child", timeEvaluator );
+	//	auto success = childNode->AddPlugins( GSimplePluginsUIDS, localTimeline );
+	//	assert( success );
+
+	//	success = model::LoadTexture( childNode->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
+	//	assert( success );
+
+	//	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( childNode->GetPlugin( "texture" ) );
+	//	if( texturePlugin )
+	//	{
+	//		auto width   = texturePlugin->GetTextureWidth();
+	//		auto height  = texturePlugin->GetTextureHeight();
+
+	//		//float wf = float( width ) / float( height );
+	//		//float scl = 1.f;
+
+	//		//model::SetParameter( root->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),   2.f * scl );
+	//		//model::SetParameter( root->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), wf * 2.f * scl );
+
+	//		auto rectPlugin = childNode->GetPlugin( "rectangle" );
+	//		SetParameter( childNode->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),  float(2 * height)/1080.f );
+	//		SetParameter( childNode->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),   float(2 * width)/1080.f );
+
+	//		SetParameterRotation( childNode->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 1.f, 0.f ), i*90.f );
+
+	//		rectPlugin->Update( TimeType( 0.f ) );
+
+	//		root->AddChild( childNode );
+	//	}
+	//}
+
+	return root;
+}
+
 } //bv

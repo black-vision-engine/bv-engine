@@ -35,7 +35,7 @@ void		ExampleVideoInput::GenerateBits( int x, int y )
     unsigned int intMaskAnd = m_maskAnd;
     unsigned int intMaskOr = m_maskOr;
 
-	for( int i = 0; i < size; i++ )
+	for( SizeType i = 0; i < size; i++ )
     {
         unsigned int rgbChan = i%4;
         unsigned char maskAnd = ( intMaskAnd >> (rgbChan*8) ) & 0xff;
