@@ -101,9 +101,15 @@ namespace Generator
             double b = bevel;
             
             for( int j = 0; j <= tesselation; j++ )
-                v[ i ][ j ] = glm::vec3( x - b*sin( a ), y + b*cos( a ), -d );
+            {
+                double angle2 = i * PI/2 / tesselation;
+                v[ i ][ j ] = glm::vec3( x - b*sin( a )*sin( angle2 ), y + b*cos( a )*sin( angle2 ), -d - b*cos( angle2 ) );
+            }
             for( int j = 0; j <= tesselation; j++ )
-                v[ i ][ tesselation+1 + j ] = glm::vec3( x - b*sin( a ), y + b*cos( a ),  d );
+            {
+                double angle2 = i * PI/2 / tesselation;
+                v[ i ][ tesselation+1 + j ] = glm::vec3( x - b*sin( a )*sin( angle2 ), y + b*cos( a )*sin( angle2 ),  d + b*cos( angle2 ) );
+            }
         }
 
         void GenerateV()
