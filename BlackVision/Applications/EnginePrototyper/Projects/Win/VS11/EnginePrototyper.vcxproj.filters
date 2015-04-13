@@ -66,6 +66,9 @@
     <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype2.cpp">
       <Filter>Prototypes\FBOProfiling</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype3.cpp">
+      <Filter>Prototypes\FBOProfiling</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
@@ -141,6 +144,9 @@
       <Filter>Prototypes\FBOProfiling</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype2.h">
+      <Filter>Prototypes\FBOProfiling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype3.h">
       <Filter>Prototypes\FBOProfiling</Filter>
     </ClInclude>
   </ItemGroup>

@@ -194,6 +194,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype0.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype1.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype2.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype3.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototypeBase.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.cpp" />
   </ItemGroup>
@@ -223,6 +224,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype0.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype1.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype2.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype3.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototypeBase.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.h" />
   </ItemGroup>

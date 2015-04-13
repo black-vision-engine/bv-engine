@@ -4,6 +4,7 @@
 #include "Prototypes/FBOProfiling/FBOProfilingPrototype0.h"
 #include "Prototypes/FBOProfiling/FBOProfilingPrototype1.h"
 #include "Prototypes/FBOProfiling/FBOProfilingPrototype2.h"
+#include "Prototypes/FBOProfiling/FBOProfilingPrototype3.h"
 #include "Prototypes/Engine/MemManagement/MemManagementInspector.h"
 #include "Prototypes/Engine/MemManagement/PboUpdatesInspector.h"
 
