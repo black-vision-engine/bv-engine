@@ -908,6 +908,7 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_CUBE", timeEvaluator );
+    //root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
 
     //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), 0.f );
     model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 5.f, glm::vec3( 1, 0, 0 ), 90.f );

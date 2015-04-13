@@ -43,83 +43,95 @@ namespace Generator
 
     class MainComp : public IGeometryAndUVsGenerator
     {
-        int **v;
+        glm::vec3 **v;
         int n, m;
     public:
-        //void Init() 
-        MainComp() 
-        { 
-            n = 4*(tesselation+1)+1;
-            m = (tesselation+1) * 2;
-            assert( n >= 0 );
-            v = new int*[ n ];
-            for( int i = 0; i < n; i++ )
-                v[ i ] = new int[ m ];
+        Type GetType() { return Type::GEOMETRY_AND_UVS; }
+
+        void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
+        {
+            Init();
+            GenerateV();
+            CopyV( verts, uvs );
+            Deinit();
         }
 
-        //void Deinit()
-        ~MainComp()
+        void Init() 
+        { 
+            n = 4*(tesselation+1);
+            m = 2; //(tesselation+1) * 2;
+            assert( n >= 0 );
+            v = new glm::vec3*[ n ];
+            for( int i = 0; i < n; i++ )
+                v[ i ] = new glm::vec3[ m ];
+        }
+
+        void Deinit()
         {
             for( int i = 0; i < n; i++ )
                 delete[] v[i];
             delete[] v;
         }
 
-        Type GetType() { return Type::GEOMETRY_AND_UVS; }
-
-        void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
+        void CopyV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
         {
-            double w = dims.x/2 - bevel, 
-                h = dims.y/2 - bevel, 
-                d = dims.z/2 - bevel,
-                b = bevel;
-// top
-            verts->AddAttribute( glm::vec3(  w,  h+b, -d ) );
-            verts->AddAttribute( glm::vec3(  w,  h+b,  d ) );
-            for( int i = 0; i < tesselation; i++ ) // (-w, h+b) for i = 0
-            {
-                double angle = i * PI / 2 / ( tesselation - 1 );
-                verts->AddAttribute( glm::vec3( -w - b*sin( angle ), h + b*cos(angle), -d ) );
-                verts->AddAttribute( glm::vec3( -w - b*sin( angle ), h + b*cos(angle), d ) );
-            }
-// left
-            verts->AddAttribute( glm::vec3( -w-b,  h, -d ) );
-            verts->AddAttribute( glm::vec3( -w-b,  h,  d ) );
-            for( int i = 0; i < tesselation; i++ ) // (-w-b, -h ) for i = 0
-            {
-                double angle = i * PI / 2 / ( tesselation - 1 );
-                verts->AddAttribute( glm::vec3( -w - b*cos( angle ), -h - b*sin(angle), -d ) );
-                verts->AddAttribute( glm::vec3( -w - b*cos( angle ), -h - b*sin(angle), d ) );
-            }
-// bottom
-            verts->AddAttribute( glm::vec3( -w, -h-b, -d ) );
-            verts->AddAttribute( glm::vec3( -w, -h-b,  d ) );
-            for( int i = 0; i < tesselation; i++ ) // ( w, -h-b ) for i = 0
-            {
-                double angle = i * PI / 2 / ( tesselation - 1 );
-                verts->AddAttribute( glm::vec3( w + b*sin( angle ), -h - b*cos(angle), -d ) );
-                verts->AddAttribute( glm::vec3( w + b*sin( angle ), -h - b*cos(angle), d ) );
-            }
-// right
-            verts->AddAttribute( glm::vec3(  w+b, -h, -d ) );
-            verts->AddAttribute( glm::vec3(  w+b, -h,  d ) );
-            for( int i = 0; i < tesselation; i++ ) // ( w+b, h ) for i = 0
-            {
-                double angle = i * PI / 2 / ( tesselation - 1 );
-                verts->AddAttribute( glm::vec3( w + b*cos( angle ), h + b*sin(angle), -d ) );
-                verts->AddAttribute( glm::vec3( w + b*cos( angle ), h + b*sin(angle), d ) );
-            }
-// and top once again to close
-            verts->AddAttribute( glm::vec3(  w,  h, -d ) );
-            verts->AddAttribute( glm::vec3(  w,  h,  d ) );
-            for( int i = 0; i < tesselation; i++ )
-                ;
-            
+            for( int i = 0; i < n; i++ )
+                for( int j = 0; j < m; j++ )
+                    verts->AddAttribute( v[ i ][ j ] );
+            for( int j = 0; j < m; j++ )
+                verts->AddAttribute( v[ 0 ][ j ] );
+
             for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
             {
                 glm::vec3 vert = verts->GetVertices()[ v ];
                 uvs->AddAttribute( glm::vec2( 0.5*( vert.x + vert.y + 1.f ),
                                                 vert.z + 0.5 ) ); // FIXME: scaling
+            }
+        }
+
+        void GenerateV()
+        {
+            double w = dims.x/2 - bevel, 
+                h = dims.y/2 - bevel, 
+                d = dims.z/2 - bevel,
+                b = bevel;
+            int t = tesselation;
+
+// top
+            v[ 0 ][ 0 ] = glm::vec3(  w,  h+b, -d );
+            v[ 0 ][ 1 ] = glm::vec3(  w,  h+b,  d );
+            for( int i = 0; i < tesselation; i++ ) // (-w, h+b) for i = 0
+            {
+                double angle = i * PI / 2 / ( tesselation - 1 );
+                v[ 1 + i ][ 0 ] = glm::vec3( -w - b*sin( angle ), h + b*cos(angle), -d );
+                v[ 1 + i ][ 1 ] = glm::vec3( -w - b*sin( angle ), h + b*cos(angle), d );
+            }
+// left
+            v[ t+1 ][ 0 ] = glm::vec3( -w-b,  h, -d );
+            v[ t+1 ][ 1 ] = glm::vec3( -w-b,  h,  d );
+            for( int i = 0; i < tesselation; i++ ) // (-w-b, -h ) for i = 0
+            {
+                double angle = i * PI / 2 / ( tesselation - 1 );
+                v[ t+2 + i ][ 0 ] = glm::vec3( -w - b*cos( angle ), -h - b*sin(angle), -d );
+                v[ t+2 + i ][ 1 ] = glm::vec3( -w - b*cos( angle ), -h - b*sin(angle), d );
+            }
+// bottom
+            v[ 2*( t + 1 ) ][ 0 ] = glm::vec3( -w, -h-b, -d );
+            v[ 2*( t + 1 ) ][ 1 ] = glm::vec3( -w, -h-b,  d );
+            for( int i = 0; i < tesselation; i++ ) // ( w, -h-b ) for i = 0
+            {
+                double angle = i * PI / 2 / ( tesselation - 1 );
+                v[ 2*( t + 1 )+1 + i ][ 0 ] = glm::vec3( w + b*sin( angle ), -h - b*cos(angle), -d );
+                v[ 2*( t + 1 )+1 + i ][ 1 ] = glm::vec3( w + b*sin( angle ), -h - b*cos(angle), d );
+            }
+// right
+            v[ 3*( t + 1 ) ][ 0 ] = glm::vec3(  w+b, -h, -d );
+            v[ 3*( t + 1 ) ][ 1 ] = glm::vec3(  w+b, -h,  d );
+            for( int i = 0; i < tesselation; i++ ) // ( w+b, h ) for i = 0
+            {
+                double angle = i * PI / 2 / ( tesselation - 1 );
+                v[ 3*( t + 1 )+1 + i ][ 0 ] = glm::vec3( w + b*cos( angle ), h + b*sin(angle), -d );
+                v[ 3*( t + 1 )+1 + i ][ 1 ] = glm::vec3( w + b*cos( angle ), h + b*sin(angle), d );
             }
         }
     };
