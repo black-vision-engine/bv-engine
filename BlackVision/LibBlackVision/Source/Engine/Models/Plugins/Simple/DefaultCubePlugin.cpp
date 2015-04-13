@@ -89,49 +89,48 @@ namespace Generator
             }
         }
 
+        void GenerateLine( int i, double x, double y )
+        {
+            double d = dims.z/2 - bevel;
+            v[ i ][ 0 ] = glm::vec3( x, y, -d );
+            v[ i ][ 1 ] = glm::vec3( x, y, d );
+        }
+
         void GenerateV()
         {
             double w = dims.x/2 - bevel, 
                 h = dims.y/2 - bevel, 
-                d = dims.z/2 - bevel,
+                //d = dims.z/2 - bevel,
                 b = bevel;
             int t = tesselation;
 
 // top
-            v[ 0 ][ 0 ] = glm::vec3(  w,  h+b, -d );
-            v[ 0 ][ 1 ] = glm::vec3(  w,  h+b,  d );
+            GenerateLine( 0, w, h+b );
             for( int i = 0; i < tesselation; i++ ) // (-w, h+b) for i = 0
             {
                 double angle = i * PI / 2 / ( tesselation - 1 );
-                v[ 1 + i ][ 0 ] = glm::vec3( -w - b*sin( angle ), h + b*cos(angle), -d );
-                v[ 1 + i ][ 1 ] = glm::vec3( -w - b*sin( angle ), h + b*cos(angle), d );
+                GenerateLine( 1 + i, -w - b*sin( angle ), h + b*cos(angle) );
             }
 // left
-            v[ t+1 ][ 0 ] = glm::vec3( -w-b,  h, -d );
-            v[ t+1 ][ 1 ] = glm::vec3( -w-b,  h,  d );
+            GenerateLine( t+1, -w-b,  h );
             for( int i = 0; i < tesselation; i++ ) // (-w-b, -h ) for i = 0
             {
                 double angle = i * PI / 2 / ( tesselation - 1 );
-                v[ t+2 + i ][ 0 ] = glm::vec3( -w - b*cos( angle ), -h - b*sin(angle), -d );
-                v[ t+2 + i ][ 1 ] = glm::vec3( -w - b*cos( angle ), -h - b*sin(angle), d );
+                GenerateLine( t+2 + i, -w - b*cos( angle ), -h - b*sin(angle) );
             }
 // bottom
-            v[ 2*( t + 1 ) ][ 0 ] = glm::vec3( -w, -h-b, -d );
-            v[ 2*( t + 1 ) ][ 1 ] = glm::vec3( -w, -h-b,  d );
+            GenerateLine( 2*( t + 1 ), -w, -h-b );
             for( int i = 0; i < tesselation; i++ ) // ( w, -h-b ) for i = 0
             {
                 double angle = i * PI / 2 / ( tesselation - 1 );
-                v[ 2*( t + 1 )+1 + i ][ 0 ] = glm::vec3( w + b*sin( angle ), -h - b*cos(angle), -d );
-                v[ 2*( t + 1 )+1 + i ][ 1 ] = glm::vec3( w + b*sin( angle ), -h - b*cos(angle), d );
+                GenerateLine( 2*( t + 1 )+1 + i, w + b*sin( angle ), -h - b*cos(angle) );
             }
 // right
-            v[ 3*( t + 1 ) ][ 0 ] = glm::vec3(  w+b, -h, -d );
-            v[ 3*( t + 1 ) ][ 1 ] = glm::vec3(  w+b, -h,  d );
+            GenerateLine( 3*( t + 1 ), w+b, -h );
             for( int i = 0; i < tesselation; i++ ) // ( w+b, h ) for i = 0
             {
                 double angle = i * PI / 2 / ( tesselation - 1 );
-                v[ 3*( t + 1 )+1 + i ][ 0 ] = glm::vec3( w + b*cos( angle ), h + b*sin(angle), -d );
-                v[ 3*( t + 1 )+1 + i ][ 1 ] = glm::vec3( w + b*cos( angle ), h + b*sin(angle), d );
+                GenerateLine( 3*( t + 1 )+1 + i, w + b*cos( angle ), h + b*sin(angle) );
             }
         }
     };
