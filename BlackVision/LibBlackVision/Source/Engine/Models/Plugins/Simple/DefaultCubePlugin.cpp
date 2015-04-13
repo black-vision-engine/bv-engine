@@ -89,48 +89,47 @@ namespace Generator
             }
         }
 
-        void GenerateLine( int i, double x, double y )
+        void GenerateLine( int i, double x, double y, double a )
         {
             double d = dims.z/2 - bevel;
-            v[ i ][ 0 ] = glm::vec3( x, y, -d );
-            v[ i ][ 1 ] = glm::vec3( x, y, d );
+            double b = bevel;
+            v[ i ][ 0 ] = glm::vec3( x - b*sin( a ), y + b*cos( a ), -d );
+            v[ i ][ 1 ] = glm::vec3( x - b*sin( a ), y + b*cos( a ),  d );
         }
 
         void GenerateV()
         {
             double w = dims.x/2 - bevel, 
-                h = dims.y/2 - bevel, 
-                //d = dims.z/2 - bevel,
-                b = bevel;
+                h = dims.y/2 - bevel;
             int t = tesselation;
 
 // top
-            GenerateLine( 0, w, h+b );
+            GenerateLine( 0, w, h, 0. );
             for( int i = 0; i < tesselation; i++ ) // (-w, h+b) for i = 0
             {
                 double angle = i * PI / 2 / ( tesselation - 1 );
-                GenerateLine( 1 + i,                        -w - b*sin( angle ),  h + b*cos(angle) );
+                GenerateLine( 1 + i,                        -w,  h, angle );
             }
 // left
-            GenerateLine( t+1, -w-b,  h );
+            GenerateLine( t+1, -w,  h, PI/2 );
             for( int i = 0; i < tesselation; i++ ) // (-w-b, -h ) for i = 0
             {
                 double angle = i * PI / 2 / ( tesselation - 1 ) + PI/2;
-                GenerateLine( t+2 + i,                      -w - b*sin( angle ), -h + b*cos(angle) );
+                GenerateLine( t+2 + i,                      -w, -h, angle );
             }
 // bottom
-            GenerateLine( 2*( t + 1 ), -w, -h-b );
+            GenerateLine( 2*( t + 1 ), -w, -h, PI );
             for( int i = 0; i < tesselation; i++ ) // ( w, -h-b ) for i = 0
             {
                 double angle = i * PI / 2 / ( tesselation - 1 ) + PI;
-                GenerateLine( 2*( t + 1 )+1 + i,            w - b*sin( angle ),  -h + b*cos(angle) );
+                GenerateLine( 2*( t + 1 )+1 + i,            w,  -h, angle );
             }
 // right
-            GenerateLine( 3*( t + 1 ), w+b, -h );
+            GenerateLine( 3*( t + 1 ), w, -h, 3*PI/2 );
             for( int i = 0; i < tesselation; i++ ) // ( w+b, h ) for i = 0
             {
                 double angle = i * PI / 2 / ( tesselation - 1 ) + 3*PI/2;
-                GenerateLine( 3*( t + 1 )+1 + i,            w - b*sin( angle ),   h + b*cos(angle) );
+                GenerateLine( 3*( t + 1 )+1 + i,            w,   h, angle );
             }
         }
     };
