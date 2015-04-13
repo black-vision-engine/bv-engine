@@ -59,7 +59,7 @@ namespace Generator
         void Init() 
         { 
             n = 4*(tesselation+1);
-            m = 2; //(tesselation+1) * 2;
+            m = (tesselation+1) * 2;
             assert( n >= 0 );
             v = new glm::vec3*[ n ];
             for( int i = 0; i < n; i++ )
@@ -75,11 +75,17 @@ namespace Generator
 
         void CopyV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
         {
-            for( int i = 0; i < n; i++ )
+            for( int i = 0; i < n-1; i++ )
                 for( int j = 0; j < m; j++ )
-                    verts->AddAttribute( v[ i ][ j ] );
+                {
+                    verts->AddAttribute( v[ i   ][ j ] );
+                    verts->AddAttribute( v[ i+1 ][ j ] );
+                }
             for( int j = 0; j < m; j++ )
-                verts->AddAttribute( v[ 0 ][ j ] );
+            {
+                verts->AddAttribute( v[ n-1 ][ j ] );
+                verts->AddAttribute( v[ 0   ][ j ] );
+            }
 
             for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
             {
@@ -93,8 +99,11 @@ namespace Generator
         {
             double d = dims.z/2 - bevel;
             double b = bevel;
-            v[ i ][ 0 ] = glm::vec3( x - b*sin( a ), y + b*cos( a ), -d );
-            v[ i ][ 1 ] = glm::vec3( x - b*sin( a ), y + b*cos( a ),  d );
+            
+            for( int j = 0; j <= tesselation; j++ )
+                v[ i ][ j ] = glm::vec3( x - b*sin( a ), y + b*cos( a ), -d );
+            for( int j = 0; j <= tesselation; j++ )
+                v[ i ][ tesselation+1 + j ] = glm::vec3( x - b*sin( a ), y + b*cos( a ),  d );
         }
 
         void GenerateV()
