@@ -60,31 +60,13 @@ DefaultPluginParamValModelPtr   DefaultRectPluginDesc::CreateDefaultModel   ( IT
    //     END_COMPOSITE_PARAM()
    //END_MODEL()
 
-    //DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
-    //DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
+    ModelHelper h( timeEvaluator );
+    
+    h.CreateVacModel();
+    h.AddSimpleParam( "width", 1.f );
+    h.AddSimpleParam( "height", 1.f );
 
-    //ParamFloatPtr paramWidth             = ParametersFactory::CreateParameterFloat( "width", timeEvaluator );
-    //ParamFloatPtr paramHeight            = ParametersFactory::CreateParameterFloat( "height", timeEvaluator );
-
-    //vacModel->AddParameter( paramWidth );
-    //vacModel->AddParameter( paramHeight );
-
-    //model->SetVertexAttributesChannelModel( vacModel );
-
-    ////Set default parameters
-    //paramWidth->SetVal( 1.f, 0.f );
-    //paramHeight->SetVal( 1.f, 0.f );
-
-    //return model;
-
-    DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
-    //DefaultParamValModelPtr         vacModel    = CreateVacModel( model, timeEvaluator );
-
-    //AddParam( vacModel, timeEvaluator, "width", 1.f ); // FIXME(?): vacModel, timeEvaluator should be stored
-    //AddParam( vacModel, timeEvaluator, "height", 1.f );
-    assert( false );
-
-    return model;
+    return h.GetModel();
 }
 
 // *******************************
