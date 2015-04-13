@@ -109,28 +109,28 @@ namespace Generator
             for( int i = 0; i < tesselation; i++ ) // (-w, h+b) for i = 0
             {
                 double angle = i * PI / 2 / ( tesselation - 1 );
-                GenerateLine( 1 + i, -w - b*sin( angle ), h + b*cos(angle) );
+                GenerateLine( 1 + i,                        -w - b*sin( angle ),  h + b*cos(angle) );
             }
 // left
             GenerateLine( t+1, -w-b,  h );
             for( int i = 0; i < tesselation; i++ ) // (-w-b, -h ) for i = 0
             {
-                double angle = i * PI / 2 / ( tesselation - 1 );
-                GenerateLine( t+2 + i, -w - b*cos( angle ), -h - b*sin(angle) );
+                double angle = i * PI / 2 / ( tesselation - 1 ) + PI/2;
+                GenerateLine( t+2 + i,                      -w - b*sin( angle ), -h + b*cos(angle) );
             }
 // bottom
             GenerateLine( 2*( t + 1 ), -w, -h-b );
             for( int i = 0; i < tesselation; i++ ) // ( w, -h-b ) for i = 0
             {
-                double angle = i * PI / 2 / ( tesselation - 1 );
-                GenerateLine( 2*( t + 1 )+1 + i, w + b*sin( angle ), -h - b*cos(angle) );
+                double angle = i * PI / 2 / ( tesselation - 1 ) + PI;
+                GenerateLine( 2*( t + 1 )+1 + i,            w - b*sin( angle ),  -h + b*cos(angle) );
             }
 // right
             GenerateLine( 3*( t + 1 ), w+b, -h );
             for( int i = 0; i < tesselation; i++ ) // ( w+b, h ) for i = 0
             {
-                double angle = i * PI / 2 / ( tesselation - 1 );
-                GenerateLine( 3*( t + 1 )+1 + i, w + b*cos( angle ), h + b*sin(angle) );
+                double angle = i * PI / 2 / ( tesselation - 1 ) + 3*PI/2;
+                GenerateLine( 3*( t + 1 )+1 + i,            w - b*sin( angle ),   h + b*cos(angle) );
             }
         }
     };
