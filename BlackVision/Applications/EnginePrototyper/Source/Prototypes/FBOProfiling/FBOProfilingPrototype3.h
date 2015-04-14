@@ -17,7 +17,7 @@ private:
 
 	GLuint          m_fboID;
 	GLuint          m_drawBuff;
-	GLuint          m_texIds[ 2 ];
+	GLuint          m_renderBuffersIds[ 2 ];
 	GLuint          m_pboID[ 2 ];
 	SizeType		m_currIndex;
 
@@ -39,7 +39,7 @@ private:
 	bool    CheckFramebuffersStatus			();
     bool    PrepareShader                   ();
 	bool    PrepareReadBackBuffers			();
-	void	AddTextureForAttachment			( SizeType i );
+	void	AddRenderBufferStorage			( SizeType i );
 	void *  LockFrameBuffer					( SizeType i );
 	void    UnlockFrameBuffer				( SizeType i );
 
