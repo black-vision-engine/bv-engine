@@ -822,6 +822,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultNoPerspectiveTexturePlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSpherePlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1659,6 +1662,9 @@
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultNoPerspectiveTexturePlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSpherePlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
   </ItemGroup>

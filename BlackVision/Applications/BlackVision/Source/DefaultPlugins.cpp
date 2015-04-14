@@ -23,6 +23,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultSimpleCubePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultNoPerspectiveTexturePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultSpherePlugin.h"
 
 namespace bv { namespace model {
 
@@ -53,6 +54,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultCone::DefaultConePluginDesc() );
     descriptors.push_back( new DefaultCube::PluginDesc() );
 	descriptors.push_back( new DefaultSimpleCube::PluginDesc() );
+	descriptors.push_back( new DefaultSphere::PluginDesc() );
 
     for( auto descr : descriptors )
     {
