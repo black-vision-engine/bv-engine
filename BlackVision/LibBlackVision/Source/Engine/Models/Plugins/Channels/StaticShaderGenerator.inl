@@ -25,7 +25,10 @@ namespace bv { namespace model {
                                                                     { "DEFAULT_LINEAR_GRADIENT",  "",                 "",                     "",             "" },
                                                                     { "",  "",                 "",                     "DEFAULT_TEXT",             "DEFAULT_LINEAR_GRADIENT" },
                                                                     { "DEFAULT_LINEAR_GRADIENT",  "",                 "",                     "DEFAULT_TIMER",             "" },
-                                                                    { "",  "",                 "",                     "DEFAULT_TIMER",             "DEFAULT_LINEAR_GRADIENT" }
+                                                                    { "",  "",                 "",                     "DEFAULT_TIMER",             "DEFAULT_LINEAR_GRADIENT" },
+
+                                                                    { "",               "DEFAULT_NO_PERSPECTIVE_TEXTURE",  "",		"",             "" },
+                                                                    { "",               "DEFAULT_NO_PERSPECTIVE_TEXTURE",  "",		"",             "DEFAULT_ALPHA_MASK" },
                                                                 };
 
     //@see: https://docs.google.com/spreadsheets/d/1K3dblNOAijnKdJXeha9_DWlSLhOc1Wcq5F1Mwlvk7x4
@@ -48,7 +51,10 @@ namespace bv { namespace model {
                                         "lg",
                                         "txt_lg",
                                         "txt_lg",
-                                        "txt_lg"
+                                        "txt_lg",
+
+										"nptx",
+										"nptx_am"
                                     };
 
 } //model

@@ -1725,6 +1725,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
 }
 
 #define VERSION_TEXTURE
+#define NO_PERSPECTIVE
 //#define VERSION_COLOR
 
 // Test
@@ -1749,7 +1750,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 	uids.push_back( "DEFAULT_COLOR" );
 #endif
 #ifdef VERSION_TEXTURE
-	uids.push_back( "DEFAULT_TEXTURE" );
+	#ifdef NO_PERSPECTIVE
+		uids.push_back( "DEFAULT_NO_PERSPECTIVE_TEXTURE" );
+	#else
+		uids.push_back( "DEFAULT_TEXTURE" );
+	#endif
 #endif
 
     auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
@@ -1761,10 +1766,10 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1.f, 1.f, 0.f ), 40.f );
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, glm::vec3( 1.f, 1.f, 0.f ), 360.f );
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( -1.f, 1.f, 0.f ), 0.f );
-	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -5.0f ) );
+	//SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -5.0f ) );
 
-	auto dim = root->GetPlugin( "simple cube" )->GetParameter( "dimensions" );
-	model::SetParameter( dim, 1.0f, glm::vec3( 0.5, 0.1, 5.0) );
+	//auto dim = root->GetPlugin( "simple cube" )->GetParameter( "dimensions" );
+	//model::SetParameter( dim, 1.0f, glm::vec3( 0.5, 0.1, 5.0) );
 	
 #ifdef VERSION_COLOR
 	auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );

@@ -22,6 +22,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultConePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultSimpleCubePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultNoPerspectiveTexturePlugin.h"
 
 namespace bv { namespace model {
 
@@ -36,6 +37,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultColorPluginDesc() );
 	descriptors.push_back( new DefaultGradientPluginDesc() );
     descriptors.push_back( new DefaultTexturePluginDesc() );
+	descriptors.push_back( new DefaultNoPerspectiveTexturePluginDesc() );
     descriptors.push_back( new DefaultAnimationPluginDesc() );
     descriptors.push_back( new DefaultTextPluginDesc() );
     descriptors.push_back( new DefaultAlphaMaskPluginDesc() );

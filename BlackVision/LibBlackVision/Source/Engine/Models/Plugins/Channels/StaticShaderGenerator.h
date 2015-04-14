@@ -6,7 +6,7 @@
 namespace bv { namespace model {
 
 // FIXME: temporary, toremove
-    const unsigned int GNumLists = 19;
+    const unsigned int GNumLists = 21;
     const unsigned int GMaxNumEntries = 5;
     extern char * acceptedPluginLists[ GNumLists ][ GMaxNumEntries ];
     extern char * baseShaderFileNames[ GNumLists ];

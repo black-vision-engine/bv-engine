@@ -122,7 +122,7 @@ std::string             DefaultTexturePluginDesc::PixelShaderSource         ()
 }
 
 // *******************************
-//
+// 
 std::string             DefaultTexturePluginDesc::TextureName               ()
 {
     return "Tex0";
