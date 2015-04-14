@@ -3,12 +3,16 @@
 #include <vector>
 
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
+
 #include "CoreDEF.h"
+
 
 namespace bv {
 
 class IValue;
 class TransformableEntity;
+class Renderer;
+
 
 class SceneNode
 {
@@ -37,7 +41,8 @@ public:
 
     bool                    IsVisible           () const;
     void                    SetVisible          ( bool visible );
-    
+
+    static void             DeleteNode          ( SceneNode * node, Renderer * renderer );
 
 // ***********************************************************************************************
 //                              HACKISH GLOBAL EFFECT INTERFACE

@@ -18,14 +18,9 @@ namespace bv
 void    ExperimentalDeleteAndCleanup( SceneNode * node, Renderer * renderer )
 {
     std::vector< SceneNode * > nodes;
-    for( unsigned int i = 0; i < node->NumChildNodes(); ++i )
-    {
-        nodes.push_back( node->GetChild( i ) );
-    }
-
     while( node->NumChildNodes() > 0 )
     {
-        node->DetachChildNode( 0 );
+        nodes.push_back( node->DetachChildNode( 0 ) );
     }
 
     for( auto node : nodes )
@@ -52,23 +47,6 @@ void    ExperimentalDeleteSingleNode( SceneNode * node, Renderer * renderer )
 void    ExperimentalFreePdrResources( RenderableEntity * renderable, Renderer * renderer )
 {
     renderer->FreeAllPDResources( renderable );
-/*
-    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
-
-    // FIXME: this suxx as we implictly assume that RenderableArrayDataSingleVertexBuffer is in fact of type RenderableArrayDataArraysSingleVertexBuffer
-    auto radasvb = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( renderable->GetRenderableArrayData() );
-    
-    auto vao = radasvb->VAO();
-
-    auto vb = vao->GetVertexBuffer();
-    auto vd = vao->GetVertexDescriptor();
-
-    renderer->DeletePDR( vb );
-    renderer->DeletePDR( vd );
-    renderer->DeletePDR( vao );
-
-    ExperimentalDelOursPdrEffect( renderable->GetRenderableEffect(), renderer );
-*/
 }
 
 // **************************

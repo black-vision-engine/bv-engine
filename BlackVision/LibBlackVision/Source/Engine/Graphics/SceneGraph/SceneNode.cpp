@@ -2,6 +2,9 @@
 
 #include <cassert>
 
+#include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
+
 
 namespace bv {
 
@@ -98,6 +101,20 @@ bool                    SceneNode::IsVisible    () const
 void                    SceneNode::SetVisible   ( bool visible )
 {
     m_visible = visible;
+}
+
+// ********************************
+//
+void                    SceneNode::DeleteNode   ( SceneNode * node, Renderer * renderer )
+{
+    while( node->NumChildNodes() > 0 )
+    {
+        DeleteNode( node->DetachChildNode( 0 ), renderer );
+    }
+
+    renderer->FreeAllPDResources( static_cast< RenderableEntity * >( node->GetTransformable() ) );
+
+    delete node;
 }
 
 // ********************************
