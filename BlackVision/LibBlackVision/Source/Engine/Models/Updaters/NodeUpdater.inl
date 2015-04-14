@@ -4,8 +4,8 @@ namespace {
 
 // *******************************
 //
-template< typename ContextType, typename StateType >
-inline void UpdateState( const ContextType * ctxState, StateType * rendererState )
+template< typename ContextType, typename StateTypePtr >
+inline void UpdateState( const ContextType * ctxState, StateTypePtr rendererState )
 {
     if( ctxState )
     {

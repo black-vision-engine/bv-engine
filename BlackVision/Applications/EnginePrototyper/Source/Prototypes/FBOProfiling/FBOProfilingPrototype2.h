@@ -11,18 +11,20 @@ namespace bv {
 
 class Renderer;
 
-class FBOProfilingPrototype0 : public FBOProfilingPrototypeBase
+class FBOProfilingPrototype2 : public FBOProfilingPrototypeBase
 {
 private:
-	GLuint          m_fboID[ 2 ];
-	GLuint          m_texId;
+
+	GLuint          m_fboID;
 	GLuint          m_drawBuff;
-	GLuint          m_pboID;
+	GLuint          m_texIds[ 2 ];
+	GLuint          m_pboID[ 2 ];
+	SizeType		m_currIndex;
 
 public:
 
-    FBOProfilingPrototype0                  ( Renderer * renderer );
-    ~FBOProfilingPrototype0                 ();
+    FBOProfilingPrototype2                  ( Renderer * renderer );
+    ~FBOProfilingPrototype2                 ();
 
     virtual     void    Initialize          () override;
     virtual     void    Update              ( TimeType t ) override;
@@ -34,11 +36,10 @@ public:
 
 private:
 
+	bool    CheckFramebuffersStatus			();
     bool    PrepareShader                   ();
 	bool    PrepareReadBackBuffers			();
-	void	AddColorAttachments				();
-	void	EnableFrameBuffer				();
-	void	DisableFrameBuffer				();
+	void	AddTextureForAttachment			( SizeType i );
 	void *  LockFrameBuffer					( SizeType i );
 	void    UnlockFrameBuffer				( SizeType i );
 

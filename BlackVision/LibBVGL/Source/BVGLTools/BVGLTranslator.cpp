@@ -80,6 +80,8 @@ std::string     BVGLTranslator::TranslateTextureFormat              ( GLenum for
 //
 std::string     BVGLTranslator::TranslateFramebufferTarget          ( GLenum target )
 {
+    { target; }
+
     assert( target == GL_FRAMEBUFFER );
 
     return "GL_FRAMEBUFER";
@@ -89,6 +91,8 @@ std::string     BVGLTranslator::TranslateFramebufferTarget          ( GLenum tar
 //
 std::string     BVGLTranslator::TranslateRenderbufferTarget         ( GLenum target )
 {
+    { target; }
+
     assert( target == GL_RENDERBUFFER );
 
     return "GL_RENDERBUFFER";
@@ -98,6 +102,7 @@ std::string     BVGLTranslator::TranslateRenderbufferTarget         ( GLenum tar
 //
 std::string     BVGLTranslator::TranslateRenderbufferInternalFormat ( GLenum format )
 {
+    { format; }
     //FIXME: add other formats
     assert( format == GL_DEPTH_COMPONENT );
 

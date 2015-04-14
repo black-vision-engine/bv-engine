@@ -193,7 +193,7 @@ void            PdrRenderTarget::AddColorAttachments( Renderer * renderer, const
         m_drawBuffers[ i ] = GL_COLOR_ATTACHMENT0 + i;
 
         BVGL::bvglBindTexture( GL_TEXTURE_2D, pdrTx->GetTextureID() );
-        
+
         //FIXME: no mipmaps here
         //FIXME: only NEAREST filters used here - should be just fine, but some implementations use linear filtering for some reasons here
         BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );

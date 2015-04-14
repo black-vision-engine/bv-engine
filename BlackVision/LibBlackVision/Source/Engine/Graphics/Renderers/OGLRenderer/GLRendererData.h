@@ -12,6 +12,8 @@ class RendererData
 {
 public:
 
+    virtual ~RendererData() {}
+
     // Maintain current render states to avoid redundant state changes.
     class RenderState
     {
@@ -29,21 +31,21 @@ public:
 
     private:
 
-        void    InitializeAlphaState    ( const AlphaState * as );
-        void    InitializeCullState     ( const CullState * cs );
-        void    InitializeDepthState    ( const DepthState * ds );
-        void    InitializeFillState     ( const FillState * fs );
-        void    InitializeOffsetState   ( const OffsetState * os );
-        void    InitializeStencilState  ( const StencilState * ss );
+        void    InitializeAlphaState    ( AlphaStateConstPtr as );
+        void    InitializeCullState     ( CullStateConstPtr cs );
+        void    InitializeDepthState    ( DepthStateConstPtr ds );
+        void    InitializeFillState     ( FillStateConstPtr fs );
+        void    InitializeOffsetState   ( OffsetStateConstPtr os );
+        void    InitializeStencilState  ( StencilStateConstPtr ss );
 
     public:
 
-        const AlphaState *      CurAlphaState   () const;
-        const CullState *       CurCullState    () const;
-        const DepthState *      CurDepthState   () const;
-        const FillState *       CurFillState    () const;
-        const OffsetState *     CurOffsetState  () const;
-        const StencilState *    CurStencilState () const;
+        AlphaStateConstPtr      CurAlphaState   () const;
+        CullStateConstPtr       CurCullState    () const;
+        DepthStateConstPtr      CurDepthState   () const;
+        FillStateConstPtr       CurFillState    () const;
+        OffsetStateConstPtr     CurOffsetState  () const;
+        StencilStateConstPtr    CurStencilState () const;
     };
 
     RenderState m_CurrentRS;
@@ -58,6 +60,7 @@ public:
     class SamplerState
     {
     public:
+
         SamplerState ();
 
         //// Get the state of the currently enabled texture.  This state appears
@@ -82,4 +85,4 @@ public:
     //int mMaxCombinedImages;
 };
 
-}
+} //bv

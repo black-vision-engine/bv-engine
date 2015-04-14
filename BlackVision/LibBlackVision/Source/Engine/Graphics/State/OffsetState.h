@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CoreDEF.h"
 
 namespace bv {
 
@@ -25,4 +26,8 @@ public:
     OffsetState  ();
 
 };
+
+DEFINE_PTR_TYPE(OffsetState)
+DEFINE_CONST_PTR_TYPE(OffsetState)
+
 } //bv

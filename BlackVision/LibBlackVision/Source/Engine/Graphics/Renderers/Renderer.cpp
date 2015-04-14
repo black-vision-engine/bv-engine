@@ -54,12 +54,12 @@ void	Renderer::Initialize	    ( int w, int h, TextureFormat colorFormat )
     m_ClearColor	= glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f );
     m_ClearDepth	= 1.0f;
 
-    m_defaultStateInstance.SetState( new AlphaState() );
-    m_defaultStateInstance.SetState( new CullState() );
-    m_defaultStateInstance.SetState( new DepthState() );
-    m_defaultStateInstance.SetState( new FillState() );
-    m_defaultStateInstance.SetState( new OffsetState() );
-    m_defaultStateInstance.SetState( new StencilState() );
+    m_defaultStateInstance.SetState( std::make_shared<AlphaState>() );
+    m_defaultStateInstance.SetState( std::make_shared<CullState>() );
+    m_defaultStateInstance.SetState( std::make_shared<DepthState>() );
+    m_defaultStateInstance.SetState( std::make_shared<FillState>() );
+    m_defaultStateInstance.SetState( std::make_shared<OffsetState>() );
+    m_defaultStateInstance.SetState( std::make_shared<StencilState>() );
 
     m_currentStateInstance = m_defaultStateInstance;
 
@@ -93,14 +93,26 @@ void    Renderer::SetStateInstance    ( const RendererStateInstance & stateInsta
 //
 void	Renderer::Terminate             ()
 {
-    //FIXME: delete all states and additional resources used exclusively by the renderer (vertex format, bufffer, textures, shaders, render targets)
+    delete m_PdrPBOMemTransferRT;
+    delete m_RendererData;
+
+    FreePdrResources();
+
+    BVGL::PrintCompleteSummary( "\n\n\nAFTER RENDERER CLEANUP" );
 }
 
 // *********************************
 //
 void    Renderer::FreePdrResources   ()
 {
-    // TODO: implement
+    DeleteShadersPDR();
+    DeleteVertexBufersPDR();
+    DeleteIndexBuffersPDR();
+    DeleteVertexDescriptorsPDR();
+    DeleteVertexArrayObjectsPDR();
+    DeleteTextures2DPDR();
+    DeleteVertexArrayObjectsSVBPDR();
+    DeleteRenderTargetsPDR();
 }
 
 // *********************************
@@ -168,6 +180,7 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
 {
     static GLuint mode = ConstantsMapper::GLConstant( RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
 
+    // FIXME: this line suxx as hell - only RenderableArrayDataArraysSingleVertexBuffer is supported
     const VertexArraySingleVertexBuffer * vao = static_cast< const RenderableArrayDataArraysSingleVertexBuffer * >( strip->GetRenderableArrayData() )->VAO();
 
     Enable  ( vao );
@@ -570,6 +583,222 @@ void  Renderer::NaiveReadback       ( char * buf, int w, int h )
 
     //FIXME: use renderer machinery and RT machinery to read back texture data
     BVGL::bvglReadPixels( 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, buf );
+}
+
+// *********************************
+//
+void    Renderer::DeleteShadersPDR                ()
+{
+    DeletePDRResource( m_PdrShaderMap );
+}
+
+// *********************************
+//
+void    Renderer::DeleteVertexBufersPDR           ()
+{
+    DeletePDRResource( m_PdrVertexBufferMap );
+}
+
+// *********************************
+//
+void    Renderer::DeleteIndexBuffersPDR           ()
+{
+    DeletePDRResource( m_PdrIndexBufferMap );
+}
+
+// *********************************
+//
+void    Renderer::DeleteVertexDescriptorsPDR      ()
+{
+    DeletePDRResource( m_PdrVertexDescriptorMap );
+}
+
+// *********************************
+//
+void    Renderer::DeleteVertexArrayObjectsPDR     ()
+{
+    DeletePDRResource( m_PdrVertexArrayObjectMap );
+}
+
+// *********************************
+//
+void    Renderer::DeleteTextures2DPDR             ()
+{
+    DeletePDRResource( m_PdrTextures2DMap );
+}
+
+// *********************************
+//
+void    Renderer::DeleteVertexArrayObjectsSVBPDR  ()
+{
+    DeletePDRResource( m_PdrVertexArrayObjectSingleVBMap );
+}
+
+// *********************************
+//
+void    Renderer::DeleteRenderTargetsPDR          ()
+{
+    DeletePDRResource( m_PdrRenderTargetMap );
+}
+
+// *********************************
+//
+void    Renderer::DeletePDR                                 ( const RenderablePass * pass )
+{
+    DeleteSinglePDR( m_PdrShaderMap, pass );
+}
+
+// *********************************
+//
+void    Renderer::DeletePDR                                 ( const VertexBuffer * vb )
+{
+    DeleteSinglePDR( m_PdrVertexBufferMap, vb );
+}
+
+// *********************************
+//
+void    Renderer::DeletePDR                                 ( const IndexBuffer * ib )
+{
+    DeleteSinglePDR( m_PdrIndexBufferMap, ib );
+}
+
+// *********************************
+//
+void    Renderer::DeletePDR                                 ( const VertexDescriptor * vd )
+{
+    DeleteSinglePDR( m_PdrVertexDescriptorMap, vd );
+}
+
+// *********************************
+//
+void    Renderer::DeletePDR                                 ( const VertexArray * vao )
+{
+    DeleteSinglePDR( m_PdrVertexArrayObjectMap, vao );
+}
+
+// *********************************
+//
+void    Renderer::DeletePDR                                 ( const VertexArraySingleVertexBuffer * vao )
+{
+    DeleteSinglePDR( m_PdrVertexArrayObjectSingleVBMap, vao );
+}
+
+// *********************************
+//
+void    Renderer::DeletePDR                                 ( const Texture2D * texture )
+{
+    DeleteSinglePDR( m_PdrTextures2DMap, texture );
+}
+
+// *********************************
+//
+void    Renderer::DeletePDR                                 ( const RenderTarget * rt )
+{
+    DeleteSinglePDR( m_PdrRenderTargetMap, rt );
+}
+
+// *********************************
+//
+void    Renderer::FreeAllPDResources                        ( RenderableEntity * renderable )
+{
+    assert( renderable->GetType() == RenderableEntity::RenderableType::RT_TRIANGLE_STRIP );
+
+    // FIXME: this suxx as we implictly assume that RenderableArrayDataSingleVertexBuffer is in fact of type RenderableArrayDataArraysSingleVertexBuffer
+    auto radasvb = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( renderable->GetRenderableArrayData() );
+    
+    FreeRADASVBPDR  ( radasvb );
+    FreeEffectPDR   ( renderable->GetRenderableEffect().get() );
+}
+
+// *********************************
+//
+void    Renderer::FreeRADASVBPDR                  ( RenderableArrayDataArraysSingleVertexBuffer * radasvb )
+{
+    auto vao = radasvb->VAO();
+
+    auto vb = vao->GetVertexBuffer();
+    auto vd = vao->GetVertexDescriptor();
+
+    if( vb )
+        DeletePDR( vb );
+
+    if( vd )
+        DeletePDR( vd );
+
+    DeletePDR( vao );
+}
+
+// *********************************
+//
+void    Renderer::FreeEffectPDR                   ( RenderableEffect * effect )
+{
+    for( unsigned int i = 0; i < effect->NumPasses(); ++i )
+    {
+        auto pass = effect->GetPass( i );
+
+        auto ps = pass->GetPixelShader();
+        auto vs = pass->GetVertexShader();
+        auto gs = pass->GetGeometryShader();
+
+        if( ps )
+            FreeShaderPDR( ps );
+
+        if( vs )
+            FreeShaderPDR( vs );
+
+        if( gs )
+            FreeShaderPDR( gs );
+
+        DeletePDR( pass );
+    }
+}
+
+// *********************************
+//
+void    Renderer::FreeShaderPDR                   ( Shader * shader )
+{
+    auto params = shader->GetParameters();
+
+    for( unsigned int i = 0; i < params->NumTextures(); ++i )
+    {
+        auto tx = params->GetTexture( i );
+
+        // TODO: implement some smart machinery to track texture resources
+        // FIXME: right now it any other node uses the same texture it would have to be reloaded
+        DeletePDR( tx.get() );
+    }
+}
+
+// *********************************
+//
+template < typename MapType >
+void    Renderer::DeletePDRResource ( MapType & resMap )
+{
+    for( auto e : resMap )
+    {
+        auto res = e.second;
+
+        delete res;
+    }
+    
+    resMap.clear();
+}
+
+// *********************************
+//
+template< typename MapType >
+void    Renderer::DeleteSinglePDR   ( MapType & resMap, typename MapType::key_type & key )
+{
+    auto it = resMap.find( key );
+
+    if( it != resMap.end() )
+    {
+        auto res = it->second;
+
+        delete res;
+
+        resMap.erase( it );
+    }
 }
 
 } //bv

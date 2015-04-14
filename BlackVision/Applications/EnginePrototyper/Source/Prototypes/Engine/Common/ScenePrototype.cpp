@@ -13,7 +13,6 @@ namespace  bv {
 //
 ScenePrototype *    ScenePrototype::CreateNewPrototype  ( unsigned int i, Renderer * renderer )
 {
-    renderer = nullptr;
     ScenePrototype * res = nullptr;
 
     switch( i )

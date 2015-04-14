@@ -2,6 +2,8 @@
 
 #include "Mathematics/glm_inc.h"
 
+#include "CoreDEF.h"
+
 #include "Engine/Graphics/State/RendererStateEnums.h"
 
 
@@ -22,5 +24,8 @@ public:
     AlphaState      ();
 
 };
+
+DEFINE_PTR_TYPE(AlphaState)
+DEFINE_CONST_PTR_TYPE(AlphaState)
 
 } //bv

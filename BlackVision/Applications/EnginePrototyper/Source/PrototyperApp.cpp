@@ -12,8 +12,12 @@
 
 #include "PrototypesForwardInc.h"
 
+#include "Tools/HRTimer.h"
+
 
 namespace bv {
+
+extern HighResolutionTimer GTimer;
 
 // *********************************
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
@@ -64,16 +68,23 @@ void PrototyperApp::OnPreidle  ()
 {
 }
 
+static auto time = GTimer.CurElapsed();
 // *********************************
 //
 void PrototyperApp::OnIdle		()
 {
+	auto t = GTimer.CurElapsed();
+	std::cout << "Render Time: " << t - time << std::endl;
+	time = t;
+
     static DWORD curMillis = timeGetTime();
 
     m_appLogicPrototype->Update( float( timeGetTime() - curMillis ) * 0.001f );
-    m_appLogicPrototype->Render();
+
+	m_appLogicPrototype->Render();
 
     m_Renderer->DisplayColorBuffer();
+	
 }
 
 // *********************************

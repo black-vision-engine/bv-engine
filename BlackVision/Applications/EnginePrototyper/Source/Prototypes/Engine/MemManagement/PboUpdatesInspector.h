@@ -18,8 +18,8 @@ private:
 
 public:
 
-    PboUpdatesInspector                  ( Renderer * renderer );
-    ~PboUpdatesInspector                 ();
+    PboUpdatesInspector                     ( Renderer * renderer );
+    ~PboUpdatesInspector                    ();
 
     virtual     void    Initialize          ()                      override;
     virtual     void    Update              ( TimeType t )          override;
@@ -34,4 +34,4 @@ private:
 
 };
 
-}
+} //bv

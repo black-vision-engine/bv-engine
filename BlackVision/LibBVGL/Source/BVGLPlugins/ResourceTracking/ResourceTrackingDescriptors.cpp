@@ -117,6 +117,7 @@ GLuint TextureDesc::DataSize() const
 //
 GLuint TextureDesc::PixelSize( GLenum format ) const
 {
+    { format; }
     assert( format == GL_RGBA || format == GL_BGRA );
 
     return 4;
@@ -190,6 +191,7 @@ GLuint  RenderbufferDesc::BufferSize    () const
 //
 GLuint  RenderbufferDesc::PixelSize     ( GLenum internalformat ) const
 {
+    { internalformat; }
     assert( internalformat == GL_DEPTH_COMPONENT );
 
     return 3; // FIXME: make sure that there is no 1-byte padding 
@@ -251,6 +253,7 @@ void    FramebufferDesc::SetID              ( GLuint ID )
 void    FramebufferDesc::AttachTexture2D    ( GLenum attachment, GLenum target, GLuint texture, GLint level )
 {
     ( target );
+    ( level );
  
     assert( attachment == GL_COLOR_ATTACHMENT0 || attachment == ( GL_COLOR_ATTACHMENT0 + 1 ) );
     assert( level == 0 );
@@ -271,6 +274,9 @@ void    FramebufferDesc::AttachTexture2D    ( GLenum attachment, GLenum target, 
 //
 void    FramebufferDesc::AttachRenderbuffer ( GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer )
 {
+    { renderbuffertarget; }
+    { attachment; }
+
     assert( GL_DEPTH_ATTACHMENT == attachment );
     assert( GL_RENDERBUFFER == renderbuffertarget );
 
@@ -477,6 +483,8 @@ std::string  VertexArrayDesc::Summary   () const
 //
 std::string  VertexArrayDesc::TargetStr ( GLenum target ) const
 {
+    { target; }
+
     assert( target == 1 );
 
     return "DEFAULT";
