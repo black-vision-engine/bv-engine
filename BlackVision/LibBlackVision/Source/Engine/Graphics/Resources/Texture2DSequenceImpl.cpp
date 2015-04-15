@@ -74,6 +74,8 @@ SizeType		Texture2DSequenceImpl::GetActiveTextureNum          () const
 //  
 SizeType        Texture2DSequenceImpl::GetDataSize                  ( UInt32 level ) const
 {
+    { level; }
+
 	assert( level == 0 ); // No mipmaps for animation
     return NumTextures() * RawFrameSize();
 }
@@ -82,6 +84,8 @@ SizeType        Texture2DSequenceImpl::GetDataSize                  ( UInt32 lev
 //  
 MemoryChunkConstPtr Texture2DSequenceImpl::GetData                  ( UInt32 level ) const
 {
+    { level; }
+
 	assert( level == 0 ); // No mipmaps for animation
     assert( NumTextures() > 0 );
 

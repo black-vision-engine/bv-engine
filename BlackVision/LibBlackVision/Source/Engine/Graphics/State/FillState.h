@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CoreDEF.h"
+
 #include "Engine/Graphics/State/RendererStateEnums.h"
 
 
@@ -16,6 +18,9 @@ public:
     FillState  ();
 
 };
+
+DEFINE_PTR_TYPE(FillState)
+DEFINE_CONST_PTR_TYPE(FillState)
 
 int loc_test();
 

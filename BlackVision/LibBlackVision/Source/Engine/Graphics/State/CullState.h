@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CoreDEF.h"
+
 #include "Engine/Graphics/State/RendererStateEnums.h"
 
 
@@ -17,5 +19,8 @@ public:
     CullState  ();
 
 };
+
+DEFINE_PTR_TYPE(CullState)
+DEFINE_CONST_PTR_TYPE(CullState)
 
 } //bv

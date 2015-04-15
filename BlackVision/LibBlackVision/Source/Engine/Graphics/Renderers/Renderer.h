@@ -31,6 +31,10 @@ class VertexDescriptor;
 class VertexArray;
 class VertexArraySingleVertexBuffer;
 
+class RenderableArrayDataArraysSingleVertexBuffer;
+class RenderableEffect;
+class Shader;
+
 class PdrTexture2D;
 class PdrVertexBuffer;
 class PdrShader;
@@ -64,7 +68,7 @@ private:
 
     Camera *			m_Camera;
 
-    RendererData *		m_RendererData;
+    RendererData *      m_RendererData;
 
     typedef std::hash_map<const RenderablePass*, PdrShader*>                                    PdrShaderMapType;
     typedef std::hash_map<const VertexBuffer*, PdrVertexBuffer*>                                PdrVertexBufferMapType;
@@ -156,18 +160,52 @@ public:
     PdrTexture2D *                  GetPdrTexture2D             ( const Texture2D * texture );
     PdrRenderTarget *               GetPdrRenderTarget          ( const RenderTarget * rt );
 
-    bool                        DrawRenderable              ( RenderableEntity * ent );
-    bool                        DrawTriangleStrips          ( TriangleStrip * strip );
+    bool                        DrawRenderable                  ( RenderableEntity * ent );
+    bool                        DrawTriangleStrips              ( TriangleStrip * strip );
 
 private:
 
-    void                        SetAlphaState               ( const AlphaState * as );
-    void                        SetCullState                ( const CullState * cs );
-    void                        SetDepthState               ( const DepthState * ds );
-    void                        SetFillState                ( const FillState * fs );
-    void                        SetOffsetState              ( const OffsetState * os );
-    void                        SetStencilState             ( const StencilState * ss );
+    void                        SetAlphaState                   ( AlphaStateConstPtr as );
+    void                        SetCullState                    ( CullStateConstPtr cs );
+    void                        SetDepthState                   ( DepthStateConstPtr ds );
+    void                        SetFillState                    ( FillStateConstPtr fs );
+    void                        SetOffsetState                  ( OffsetStateConstPtr os );
+    void                        SetStencilState                 ( StencilStateConstPtr ss );
+
+    void                        DeleteShadersPDR                ();
+    void                        DeleteVertexBufersPDR           ();
+    void                        DeleteIndexBuffersPDR           ();
+    void                        DeleteVertexDescriptorsPDR      ();
+    void                        DeleteVertexArrayObjectsPDR     ();
+    void                        DeleteTextures2DPDR             ();
+    void                        DeleteVertexArrayObjectsSVBPDR  ();
+    void                        DeleteRenderTargetsPDR          ();
+
+public:
+
+    void                        DeletePDR                       ( const RenderablePass * pass );
+    void                        DeletePDR                       ( const VertexBuffer * vb );
+    void                        DeletePDR                       ( const IndexBuffer * ib );
+    void                        DeletePDR                       ( const VertexDescriptor * vd );
+    void                        DeletePDR                       ( const VertexArray * vao );
+    void                        DeletePDR                       ( const VertexArraySingleVertexBuffer * vao );
+    void                        DeletePDR                       ( const Texture2D * texture );
+    void                        DeletePDR                       ( const RenderTarget * rt );
+
+    void                        FreeAllPDResources              ( RenderableEntity * renderable );
+
+    void                        FreeRADASVBPDR                  ( RenderableArrayDataArraysSingleVertexBuffer * radasvb );
+    void                        FreeEffectPDR                   ( RenderableEffect * effect );
+    void                        FreeShaderPDR                   ( Shader * shader );
+
+private:
+
+    template< typename MapType >
+    void                        DeletePDRResource               ( MapType & resMap );
+
+    template< typename MapType >
+    void                        DeleteSinglePDR                 ( MapType & resMap, typename MapType::key_type & key );
 
 };
 
-}
+} // bv

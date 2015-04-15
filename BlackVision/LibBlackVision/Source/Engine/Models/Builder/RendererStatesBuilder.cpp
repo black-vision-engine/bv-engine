@@ -42,9 +42,9 @@ AlphaDstBlendMode GetAlphaDstBlendMode( model::AlphaContext::DstBlendMode mode )
 // *******************************
 //
 template< typename State, typename Ctx >
-State * FromCtx( const Ctx * ctx )
+std::shared_ptr<State> FromCtx( const Ctx * ctx )
 {
-    State * s = new State();
+    std::shared_ptr<State> s = std::make_shared<State>();
     RendererStatesBuilder::Assign( s, ctx );
 
     return s;
@@ -54,58 +54,58 @@ State * FromCtx( const Ctx * ctx )
 
 // *********************************
 //
-AlphaState *    RendererStatesBuilder::CreateStateFromCtx( const model::AlphaContext * ac )
+AlphaStatePtr    RendererStatesBuilder::CreateStateFromCtx( const model::AlphaContext * ac )
 {
     return FromCtx< AlphaState >( ac );
 }
 
 // *********************************
 //
-CullState *     RendererStatesBuilder::CreateStateFromCtx( const model::CullContext * cc ) 
+CullStatePtr     RendererStatesBuilder::CreateStateFromCtx( const model::CullContext * cc ) 
 {
     return FromCtx< CullState >( cc );
 }
 
 // *********************************
 //
-DepthState *    RendererStatesBuilder::CreateStateFromCtx( const model::DepthContext * dc )
+DepthStatePtr    RendererStatesBuilder::CreateStateFromCtx( const model::DepthContext * dc )
 {
     return FromCtx< DepthState >( dc );
 }
 
 // *********************************
 //
-FillState *     RendererStatesBuilder::CreateStateFromCtx( const model::FillContext * fc )
+FillStatePtr     RendererStatesBuilder::CreateStateFromCtx( const model::FillContext * fc )
 {
     return FromCtx< FillState >( fc );
 }
 
 // *********************************
 //
-AlphaState *    RendererStatesBuilder::CreateDefaultAlphaState  ()
+AlphaStatePtr    RendererStatesBuilder::CreateDefaultAlphaState  ()
 {
-    return new AlphaState();
+    return std::make_shared<AlphaState>();
 }
 
 // *********************************
 //
-CullState *     RendererStatesBuilder::CreateDefaultCullState   ()
+CullStatePtr     RendererStatesBuilder::CreateDefaultCullState   ()
 {
-    return new CullState();
+    return std::make_shared<CullState>();
 }
 
 // *********************************
 //
-DepthState *    RendererStatesBuilder::CreateDefaultDepthState  ()
+DepthStatePtr    RendererStatesBuilder::CreateDefaultDepthState  ()
 {
-    return new DepthState();
+    return std::make_shared<DepthState>();
 }
 
 // *********************************
 //
-FillState *     RendererStatesBuilder::CreateDefaultFillState   ()
+FillStatePtr     RendererStatesBuilder::CreateDefaultFillState   ()
 {
-    return new FillState();
+    return std::make_shared<FillState>();
 }
 
 // *********************************
@@ -139,7 +139,7 @@ void RendererStatesBuilder::Create  ( RendererStateInstance * inst )
 
 // *********************************
 //
-void RendererStatesBuilder::Assign  ( AlphaState * as, const model::AlphaContext * ac )
+void RendererStatesBuilder::Assign  ( AlphaStatePtr as, const model::AlphaContext * ac )
 {
     as->blendEnabled = ac->blendEnabled;
     as->blendColor = ac->blendColor;
@@ -149,7 +149,7 @@ void RendererStatesBuilder::Assign  ( AlphaState * as, const model::AlphaContext
 
 // *********************************
 //
-void RendererStatesBuilder::Assign  ( CullState * cs, const model::CullContext * cc )
+void RendererStatesBuilder::Assign  ( CullStatePtr cs, const model::CullContext * cc )
 {
     cs->enabled = cc->enabled;
     cs->isCCWOrdered = cc->isCCWOrdered;
@@ -157,7 +157,7 @@ void RendererStatesBuilder::Assign  ( CullState * cs, const model::CullContext *
 
 // *********************************
 //
-void RendererStatesBuilder::Assign  ( DepthState * ds, const model::DepthContext * dc )
+void RendererStatesBuilder::Assign  ( DepthStatePtr ds, const model::DepthContext * dc )
 {
     ds->enabled = dc->enabled;
     ds->writable = dc->writable;
@@ -165,7 +165,7 @@ void RendererStatesBuilder::Assign  ( DepthState * ds, const model::DepthContext
 
 // *********************************
 //
-void RendererStatesBuilder::Assign  ( FillState * fs, const model::FillContext * fc )
+void RendererStatesBuilder::Assign  ( FillStatePtr fs, const model::FillContext * fc )
 {
     fs->fillMode = GetFillMode( fc->fillMode );
 }

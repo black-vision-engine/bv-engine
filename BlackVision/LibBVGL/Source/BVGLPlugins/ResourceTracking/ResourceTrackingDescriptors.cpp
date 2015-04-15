@@ -117,6 +117,7 @@ GLuint TextureDesc::DataSize() const
 //
 GLuint TextureDesc::PixelSize( GLenum format ) const
 {
+    { format; }
     assert( format == GL_RGBA || format == GL_BGRA );
 
     return 4;
@@ -190,9 +191,21 @@ GLuint  RenderbufferDesc::BufferSize    () const
 //
 GLuint  RenderbufferDesc::PixelSize     ( GLenum internalformat ) const
 {
-    assert( internalformat == GL_DEPTH_COMPONENT );
+    { internalformat; }
+	assert( internalformat == GL_DEPTH_COMPONENT || internalformat == GL_RGBA );
 
-    return 3; // FIXME: make sure that there is no 1-byte padding 
+	switch( internalformat )
+	{
+	case GL_DEPTH_COMPONENT:
+		return 3; // FIXME: make sure that there is no 1-byte padding 
+	case GL_RGBA:
+		return 4;
+	default:
+		assert( false ); // should never be here
+		return 0;
+	}
+
+    
 }
 
 // *****************************
@@ -251,6 +264,7 @@ void    FramebufferDesc::SetID              ( GLuint ID )
 void    FramebufferDesc::AttachTexture2D    ( GLenum attachment, GLenum target, GLuint texture, GLint level )
 {
     ( target );
+    ( level );
  
     assert( attachment == GL_COLOR_ATTACHMENT0 || attachment == ( GL_COLOR_ATTACHMENT0 + 1 ) );
     assert( level == 0 );
@@ -271,11 +285,30 @@ void    FramebufferDesc::AttachTexture2D    ( GLenum attachment, GLenum target, 
 //
 void    FramebufferDesc::AttachRenderbuffer ( GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer )
 {
-    assert( GL_DEPTH_ATTACHMENT == attachment );
+    { renderbuffertarget; }
+    { attachment; }
+
+	assert( GL_DEPTH_ATTACHMENT == attachment || GL_COLOR_ATTACHMENT0 == attachment || GL_COLOR_ATTACHMENT0 + 1 == attachment );
     assert( GL_RENDERBUFFER == renderbuffertarget );
 
-    depthAttachment = renderbuffer;
-    depthAttachmentIsTex = false;
+	switch( attachment )
+	{
+	case GL_DEPTH_ATTACHMENT:
+	    depthAttachment = renderbuffer;
+		depthAttachmentIsTex = false;
+		break;
+
+	case GL_COLOR_ATTACHMENT0:
+		colorAttachment0 = renderbuffer;
+		depthAttachmentIsTex = true;
+		break;
+
+	case GL_COLOR_ATTACHMENT0 + 1:
+	    colorAttachment1 = renderbuffer;
+		depthAttachmentIsTex = true;
+		break;
+	}
+
 }
 
 // *****************************
@@ -477,6 +510,8 @@ std::string  VertexArrayDesc::Summary   () const
 //
 std::string  VertexArrayDesc::TargetStr ( GLenum target ) const
 {
+    { target; }
+
     assert( target == 1 );
 
     return "DEFAULT";

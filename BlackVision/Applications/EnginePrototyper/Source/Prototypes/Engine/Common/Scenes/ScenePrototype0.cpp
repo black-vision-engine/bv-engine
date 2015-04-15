@@ -173,6 +173,7 @@ void                ScenePrototype0::OnKey               ( unsigned char c )
 
             bool dsuccess = DetachNode( GetRootNode(), node );
 
+            { dsuccess; }
             assert( dsuccess );
 
             PrintStructure();
@@ -190,6 +191,7 @@ void                ScenePrototype0::OnKey               ( unsigned char c )
         if( m_detachedNode )
         {
             DeleteNodeExperimental( m_detachedNode );
+            BVGL::PrintCompleteSummary( "\n\n\n" );
             m_detachedNode = nullptr;
         }
         else
@@ -312,6 +314,7 @@ SceneNode *         ScenePrototype0::BuildSceneImpl      ()
 void                ScenePrototype0::PrintStructure      ()
 {
     PrintStructure( GetRootNode(), 0, 0 );
+    BVGL::PrintCompleteSummary( "\n\n\nSUMMARY" );
 }
 
 // **************************

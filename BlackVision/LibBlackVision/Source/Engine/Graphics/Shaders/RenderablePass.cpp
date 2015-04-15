@@ -26,8 +26,6 @@ RenderablePass::RenderablePass( PixelShader * ps, VertexShader * vs, GeometrySha
 //
 RenderablePass::~RenderablePass         ()
 {
-    m_stateInstance->DeleteStates();
-
     delete m_stateInstance;
 }
 
