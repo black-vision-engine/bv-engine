@@ -174,11 +174,13 @@ bool    FBOProfilingPrototype3::PrepareReadBackBuffers()
 
     BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, m_fboID );
 
-	AddTextureForAttachment( 0 );
+	BVGL::bvglGenRenderbuffers( 2, m_renderBuffersIds );
 
-	AddTextureForAttachment( 1 );
+	AddRenderBufferStorage( 0 );
 
-	BVGL::bvglFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texIds[ 0 ], 0 );
+	AddRenderBufferStorage( 1 );
+
+	BVGL::bvglBindRenderbuffer( GL_RENDERBUFFER, m_renderBuffersIds[ 0 ] );
 
 	BVGL::bvglBindFramebuffer( GL_FRAMEBUFFER, 0 );
 	if( !CheckFramebuffersStatus() )
@@ -214,11 +216,22 @@ void *   FBOProfilingPrototype3::LockFrameBuffer( SizeType i )
 	BVGL::bvglReadBuffer( m_fboID );
 
 	BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID[ i ] );
-	BVGL::bvglFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texIds[ i ], 0 );
+	BVGL::bvglBindRenderbuffer( GL_RENDERBUFFER, m_renderBuffersIds[ i ] );
+
+	BVGL::bvglFramebufferRenderbuffer(	GL_FRAMEBUFFER,      
+										GL_COLOR_ATTACHMENT0, 
+										GL_RENDERBUFFER,
+										m_renderBuffersIds[ i ] );
+
 	BVGL::bvglReadPixels( 0, 0, m_width, m_height, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
 
 	BVGL::bvglBindBuffer( GL_PIXEL_PACK_BUFFER, m_pboID[ ( i + 1 ) % 2 ] );
-	BVGL::bvglFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texIds[ ( i + 1 ) % 2 ], 0 );
+	BVGL::bvglBindRenderbuffer( GL_RENDERBUFFER, m_renderBuffersIds[ ( i + 1 ) % 2 ] );
+
+	BVGL::bvglFramebufferRenderbuffer(	GL_FRAMEBUFFER,      
+										GL_COLOR_ATTACHMENT0, 
+										GL_RENDERBUFFER,
+										m_renderBuffersIds[ ( i + 1 ) % 2 ] );
 
 	void * memory = BVGL::bvglMapBuffer( GL_PIXEL_PACK_BUFFER, GL_READ_WRITE );
 
@@ -254,29 +267,33 @@ MemoryChunkConstPtr FBOProfilingPrototype3::ReadColor( )
 
 // ****************************
 //
-void	FBOProfilingPrototype3::AddTextureForAttachment( SizeType i )
+void	FBOProfilingPrototype3::AddRenderBufferStorage( SizeType i )
 {
-	auto tx = new Texture2DImpl( TextureFormat::F_A8R8G8B8, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC );
-	std::vector< MemoryChunkConstPtr > v;
-	v.push_back( MemoryChunk::Create( m_width * m_height * 4 ) );
-	tx->SetRawData( v, TextureFormat::F_A8R8G8B8, m_width, m_height );
-    assert( !m_renderer->IsRegistered( tx ) );
+	BVGL::bvglBindRenderbuffer( GL_RENDERBUFFER, m_renderBuffersIds[ i ] );
+	BVGL::bvglRenderbufferStorage(	GL_RENDERBUFFER,
+									GL_RGBA,
+									m_width,
+									m_height );
 
-    PdrTexture2D * pdrTx = PdrTexture2D::Create( tx );
-    m_renderer->RegisterTexture2D( tx, pdrTx );
+	//auto tx = new Texture2DImpl( TextureFormat::F_A8R8G8B8, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC );
+	//std::vector< MemoryChunkConstPtr > v;
+	//v.push_back( MemoryChunk::Create( m_width * m_height * 4 ) );
+	//tx->SetRawData( v, TextureFormat::F_A8R8G8B8, m_width, m_height );
+ //   assert( !m_renderer->IsRegistered( tx ) );
 
-    //m_drawBuff[ i ] = GL_COLOR_ATTACHMENT0 + i;
+ //   PdrTexture2D * pdrTx = PdrTexture2D::Create( tx );
+ //   m_renderer->RegisterTexture2D( tx, pdrTx );
 
-    BVGL::bvglBindTexture( GL_TEXTURE_2D, pdrTx->GetTextureID() );
-        
-    //FIXME: no mipmaps here
-    //FIXME: only NEAREST filters used here - should be just fine, but some implementations use linear filtering for some reasons here
-    BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-    BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+ //   //m_drawBuff[ i ] = GL_COLOR_ATTACHMENT0 + i;
 
-    //BVGL::bvglFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pdrTx->GetTextureID(), 0 );
+ //   BVGL::bvglBindTexture( GL_TEXTURE_2D, pdrTx->GetTextureID() );
+ //       
+ //   //FIXME: no mipmaps here
+ //   //FIXME: only NEAREST filters used here - should be just fine, but some implementations use linear filtering for some reasons here
+ //   BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+ //   BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 
-	m_texIds[ i ] = pdrTx->GetTextureID();
+ //   //BVGL::bvglFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pdrTx->GetTextureID(), 0 );
 }
 
 

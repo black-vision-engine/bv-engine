@@ -192,9 +192,20 @@ GLuint  RenderbufferDesc::BufferSize    () const
 GLuint  RenderbufferDesc::PixelSize     ( GLenum internalformat ) const
 {
     { internalformat; }
-    assert( internalformat == GL_DEPTH_COMPONENT );
+	assert( internalformat == GL_DEPTH_COMPONENT || internalformat == GL_RGBA );
 
-    return 3; // FIXME: make sure that there is no 1-byte padding 
+	switch( internalformat )
+	{
+	case GL_DEPTH_COMPONENT:
+		return 3; // FIXME: make sure that there is no 1-byte padding 
+	case GL_RGBA:
+		return 4;
+	default:
+		assert( false ); // should never be here
+		return 0;
+	}
+
+    
 }
 
 // *****************************
@@ -277,11 +288,27 @@ void    FramebufferDesc::AttachRenderbuffer ( GLenum attachment, GLenum renderbu
     { renderbuffertarget; }
     { attachment; }
 
-    assert( GL_DEPTH_ATTACHMENT == attachment );
+	assert( GL_DEPTH_ATTACHMENT == attachment || GL_COLOR_ATTACHMENT0 == attachment || GL_COLOR_ATTACHMENT0 + 1 == attachment );
     assert( GL_RENDERBUFFER == renderbuffertarget );
 
-    depthAttachment = renderbuffer;
-    depthAttachmentIsTex = false;
+	switch( attachment )
+	{
+	case GL_DEPTH_ATTACHMENT:
+	    depthAttachment = renderbuffer;
+		depthAttachmentIsTex = false;
+		break;
+
+	case GL_COLOR_ATTACHMENT0:
+		colorAttachment0 = renderbuffer;
+		depthAttachmentIsTex = true;
+		break;
+
+	case GL_COLOR_ATTACHMENT0 + 1:
+	    colorAttachment1 = renderbuffer;
+		depthAttachmentIsTex = true;
+		break;
+	}
+
 }
 
 // *****************************
