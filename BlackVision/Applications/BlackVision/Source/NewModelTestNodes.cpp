@@ -1724,9 +1724,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
 #endif
 }
 
-#define VERSION_TEXTURE
+//#define VERSION_TEXTURE
 //#define NO_PERSPECTIVE
-//#define VERSION_COLOR
+#define VERSION_COLOR
 
 // Test
 model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
@@ -1745,7 +1745,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 	std::vector< std::string > uids;
 
     uids.push_back( "DEFAULT_TRANSFORM" );
-    uids.push_back( "DEFAULT_SPHERE" );
+    uids.push_back( "DEFAULT_GEOSPHERE" );
 	//uids.push_back( "DEFAULT_SIMPLE_CUBE" );
 #ifdef VERSION_COLOR
 	uids.push_back( "DEFAULT_COLOR" );
@@ -1764,19 +1764,20 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
     assert( success );
 
 	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, 1.f, 1.f ) );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, glm::vec3( 1.f, 0.f, 0.f ), 270.f );
-	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( -1.f, 1.f, 0.f ), 0.f );
-	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -0.5f ) );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 1.f, 0.f ), 0.f );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.f, glm::vec3( 0.f, 1.f, 0.f ), 700.f );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 60.f, glm::vec3( -1.f, 1.f, 0.f ), 50.f );
+	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -5.0f ) );
 
-	auto dim = root->GetPlugin( "sphere" )->GetParameter( "horizontal stripes" );
-	model::SetParameter( dim, 0.0f, 50 );
-	dim = root->GetPlugin( "sphere" )->GetParameter( "vertical stripes" );
-	model::SetParameter( dim, 0.0f, 50 );
+	//auto dim = root->GetPlugin( "sphere" )->GetParameter( "horizontal stripes" );
+	//model::SetParameter( dim, 0.0f, 50 );
+	//dim = root->GetPlugin( "sphere" )->GetParameter( "vertical stripes" );
+	//model::SetParameter( dim, 0.0f, 50 );
 	
 #ifdef VERSION_COLOR
 	auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
 	SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+	root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = true;
 #endif
 	
 #ifdef VERSION_TEXTURE

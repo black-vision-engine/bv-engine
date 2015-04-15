@@ -27,8 +27,8 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     ModelHelper h( timeEvaluator );
 
     h.CreateVacModel();
-    h.AddSimpleParam<int>( PN::TESSELLATION, 10, true, true );
-	h.AddSimpleParam<float>( PN::RADIUS, 1.0f, true, true );
+    h.AddSimpleParam<int>( PN::TESSELLATION, 6, true, true );
+	h.AddSimpleParam<float>( PN::RADIUS, 2.0f, true, true );
 
     return h.GetModel();
 }
@@ -77,12 +77,12 @@ namespace Generator
 			faces_table[1].vertex[2] = glm:: vec3(-1, -1, -1);
 
 			faces_table[2].vertex[0] = glm::vec3(-1, 1, 1);
-			faces_table[2].vertex[1] = glm::vec3(1, -1, 1);
+			faces_table[2].vertex[1] = glm::vec3(-1, -1, -1);
 			faces_table[2].vertex[2] = glm:: vec3(1, 1, -1);
 
-			faces_table[3].vertex[0] = glm::vec3();
-			faces_table[3].vertex[1] = glm::vec3();
-			faces_table[3].vertex[2] = glm:: vec3();
+			faces_table[3].vertex[0] = glm::vec3(-1, -1, -1);
+			faces_table[3].vertex[1] = glm::vec3(1, 1, -1);
+			faces_table[3].vertex[2] = glm:: vec3(1, -1, 1);
 		}
 
 		int innerLoopMax( int face )
@@ -97,19 +97,25 @@ namespace Generator
 
 		glm::vec3 getTopDownVector( int face )
 		{
-			glm::vec3 edge = faces_table[face].vertex[0] - faces_table[face].vertex[1];
+			glm::vec3 edge = faces_table[face].vertex[1]  - faces_table[face].vertex[0];
 			edge *= 1/  float( pow( 2, tesselletion ) );
 			return edge;
 		}
 
 		glm::vec3 getRightLeftVector( int face )
 		{
-			glm::vec3 edge = faces_table[face].vertex[1] - faces_table[face].vertex[2];
+			glm::vec3 edge = faces_table[face].vertex[2] - faces_table[face].vertex[1];
 			edge *= 1/  float( pow( 2, tesselletion ) );
 			return edge;
 		}
 
+		glm::vec3 computeLength( glm::vec3 vector )
+		{
+			return glm::normalize( vector ) * radius;
+			//return vector;
+		}
 
+#define FACES 4
 		void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
         {
 			initFacesTable();	// Needed for functions get[...]Vector
@@ -118,11 +124,12 @@ namespace Generator
 			glm::vec3 right_left;
 
 			glm::vec3 current_vertex = faces_table[0].vertex[0];
-			verts->AddAttribute( glm::normalize( current_vertex ) * radius );
+			current_vertex += float( tile_num ) * top_down;
+			verts->AddAttribute( computeLength( current_vertex ) );
 			current_vertex += top_down;
-			verts->AddAttribute( glm::normalize( current_vertex ) * radius );
+			verts->AddAttribute( computeLength( current_vertex ) );
 
-			for( int i = 0; i < 4; ++i )
+			for( int i = 0; i < FACES; ++i )
 			{// We have 4 faces
 				top_down = getTopDownVector( i );
 				right_left = getRightLeftVector( i );
@@ -131,16 +138,28 @@ namespace Generator
 				for( int j = 0; j < max_loop; ++j )
 				{// We have already two first verticies.
 					current_vertex += right_left;
-					verts->AddAttribute( glm::normalize( current_vertex ) * radius );
+					verts->AddAttribute( computeLength( current_vertex ) );
 					current_vertex += top_down;
-					verts->AddAttribute( glm::normalize( current_vertex ) * radius );
+					verts->AddAttribute( computeLength( current_vertex ) );
 				}
 
 				current_vertex += right_left;
-				verts->AddAttribute( current_vertex );
+				verts->AddAttribute( computeLength( current_vertex ) );
 			}
 
 			// UVs coordinates
+			uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
+			uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
+			for( int i = 0; i < FACES; ++i )
+			{
+				int max_loop = innerLoopMax( i );
+				for( int j = 0; j < max_loop; ++j )
+				{
+					uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
+					uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
+				}
+				uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
+			}
 		}
 
 	};
@@ -169,7 +188,9 @@ std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
 	Generator::radius = radius->GetValue();
 
     std::vector<IGeometryGeneratorPtr> gens;
-	for( int i = 0; i < tesselletion->GetValue(); ++i )
+
+	int loop_max = static_cast<int>( pow( 2, tesselletion->GetValue() ) );
+	for( int i = 0; i < loop_max; ++i )
 	{
 		gens.push_back( IGeometryGeneratorPtr( new Generator::GeosphereGenerator( i ) ) );
 	}
