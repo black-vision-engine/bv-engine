@@ -125,6 +125,7 @@ namespace Generator
 			float horizontal_angle1 = ( hor_delta_angle * stripe_num ) / float( 2 * PI );				//transformed to interval [0.0 , 1.0]
 			float vertical_angle = float( PI ) - vert_delta_angle;
 
+
 			uvs->AddAttribute( glm::vec2( horizontal_angle1, 1.0 ) );
 			uvs->AddAttribute( glm::vec2( horizontal_angle2, 1.0 ) );
 			for( unsigned int i = 0; i < vertical_stripes + 1; ++i )
