@@ -52,6 +52,8 @@ PrototyperApp::PrototyperApp	()
 //
 PrototyperApp::~PrototyperApp ()
 {
+    FreeConsole();
+
     delete m_appLogicPrototype;
 }
 
@@ -110,8 +112,6 @@ bool PrototyperApp::OnInitialize       ()
     
         freopen_s( &dummy, "CONOUT$", "wb", stdout );
         freopen_s( &dummy, "CONOUT$", "wb", stderr );
-
-        std::cout << sizeof(FILE*);
     }
 
     m_appLogicPrototype = CreateDefaultPrototype( m_Renderer );

@@ -32,4 +32,4 @@ void InitSubsystem::CallInitializers	()
     }
 }
 
-}
+} // bv

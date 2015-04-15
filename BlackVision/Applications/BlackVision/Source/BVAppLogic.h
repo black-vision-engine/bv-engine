@@ -59,7 +59,7 @@ public:
 
     void            SetStartTime    ( unsigned long millis );
 
-    virtual void    OnUpdate        ( unsigned int millis, const SimpleTimer & timer, Renderer * renderer, HWND handle );
+    virtual void    OnUpdate        ( unsigned int millis, Renderer * renderer );
     virtual void    OnKey           ( unsigned char c );
 
     virtual void    ChangeState     ( BVAppState state );

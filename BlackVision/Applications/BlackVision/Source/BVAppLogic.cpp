@@ -192,10 +192,8 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
 
 // *********************************
 //
-void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & timer, Renderer * renderer, HWND handle )
+void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 {
-    { timer; } // FIXME: suppress unuse warning
-    { handle; } // FIXME: suppress unuse warning
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate" );
 
     assert( m_state != BVAppState::BVS_INVALID );
