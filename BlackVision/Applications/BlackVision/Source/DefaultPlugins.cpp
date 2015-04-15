@@ -25,6 +25,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultTorusPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultNoPerspectiveTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultSpherePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultSpringPlugin.h"
 
 namespace bv { namespace model {
 
@@ -57,6 +58,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
 	descriptors.push_back( new DefaultSimpleCube::PluginDesc() );
     descriptors.push_back( new DefaultTorus::PluginDesc() );
 	descriptors.push_back( new DefaultSphere::PluginDesc() );
+    descriptors.push_back( new DefaultSpring::PluginDesc() );
 
     for( auto descr : descriptors )
     {
