@@ -460,8 +460,8 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
 
     //return SimpleNodesFactory::CreateOverrideNodeMaskTest1( timelineManager, timeEvaluator );
 
-    //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, false );
-    return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
+    return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, false );
+    //return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
 
 #if 0
     //return SimpleNodesFactory::CreateOverrideAlphaTest( timelineManager, timeEvaluator );
