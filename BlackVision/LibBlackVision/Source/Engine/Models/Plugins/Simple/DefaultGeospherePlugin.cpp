@@ -1,4 +1,6 @@
 #include "DefaultGeospherePlugin.h"
+#include "..\..\Dep\Common\glm\glm\gtx\vector_angle.hpp"
+#include "Mathematics/Defines.h"
 
 namespace bv { namespace model { namespace DefaultGeosphere {
 
@@ -50,6 +52,7 @@ namespace Generator
 		struct face
 		{
 			glm::vec3 vertex[3];
+			glm::vec2 uv[3];
 		};
 
 	private:
@@ -68,21 +71,21 @@ namespace Generator
 			// ( +-1, 0, -1/sqrt(2) )
 			// ( 0, +-1, 1/sqrt(2) )
 
-			faces_table[0].vertex[0] = glm::vec3( 1, 1, -1 );
-			faces_table[0].vertex[1] = glm::vec3( 1, -1, 1 );
-			faces_table[0].vertex[2] = glm:: vec3( -1, 1, 1 );
+			faces_table[0].vertex[0] = glm::vec3( 1, 1, -1 );		faces_table[0].uv[0] = glm::vec2( 0.0, 0.0 );
+			faces_table[0].vertex[1] = glm::vec3( 1, -1, 1 );		faces_table[0].uv[1] = glm::vec2( 1.0 / 5.0, 1.0 );
+			faces_table[0].vertex[2] = glm:: vec3( -1, 1, 1 );		faces_table[0].uv[2] = glm::vec2( 2.0 / 5.0, 0.0 );
 
-			faces_table[1].vertex[0] = glm::vec3(1, -1, 1);
-			faces_table[1].vertex[1] = glm::vec3(-1, 1, 1);
-			faces_table[1].vertex[2] = glm:: vec3(-1, -1, -1);
+			faces_table[1].vertex[0] = glm::vec3(1, -1, 1);			faces_table[1].uv[0] = glm::vec2();
+			faces_table[1].vertex[1] = glm::vec3(-1, 1, 1);			faces_table[1].uv[1] = glm::vec2();
+			faces_table[1].vertex[2] = glm:: vec3(-1, -1, -1);		faces_table[1].uv[2] = glm::vec2();
 
-			faces_table[2].vertex[0] = glm::vec3(-1, 1, 1);
-			faces_table[2].vertex[1] = glm::vec3(-1, -1, -1);
-			faces_table[2].vertex[2] = glm:: vec3(1, 1, -1);
+			faces_table[2].vertex[0] = glm::vec3(-1, 1, 1);			faces_table[2].uv[0] = glm::vec2();
+			faces_table[2].vertex[1] = glm::vec3(-1, -1, -1);		faces_table[2].uv[1] = glm::vec2();
+			faces_table[2].vertex[2] = glm:: vec3(1, 1, -1);		faces_table[2].uv[2] = glm::vec2();
 
-			faces_table[3].vertex[0] = glm::vec3(-1, -1, -1);
-			faces_table[3].vertex[1] = glm::vec3(1, 1, -1);
-			faces_table[3].vertex[2] = glm:: vec3(1, -1, 1);
+			faces_table[3].vertex[0] = glm::vec3(-1, -1, -1);		faces_table[3].uv[0] = glm::vec2();
+			faces_table[3].vertex[1] = glm::vec3(1, 1, -1);			faces_table[3].uv[1] = glm::vec2();
+			faces_table[3].vertex[2] = glm:: vec3(1, -1, 1);		faces_table[3].uv[2] = glm::vec2();
 		}
 
 		int innerLoopMax( int face )
@@ -115,6 +118,21 @@ namespace Generator
 			//return vector;
 		}
 
+		//glm::vec2 interpolateBetweenUV( int row, int column, glm::vec2& uv[3] )
+		//{
+
+		//}
+
+		glm::vec2 computeUV( int face, int row, int column, glm::vec3 vertex )
+		{
+			{ vertex; }
+			{ row; }
+			{ column; }
+			{ face; }
+			return glm::vec2( 0.0, 0.0 );//interpolateBetweenUV();
+		}
+
+
 #define FACES 4
 		void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
         {
@@ -124,10 +142,14 @@ namespace Generator
 			glm::vec3 right_left;
 
 			glm::vec3 current_vertex = faces_table[0].vertex[0];
+
 			current_vertex += float( tile_num ) * top_down;
 			verts->AddAttribute( computeLength( current_vertex ) );
+			uvs->AddAttribute( computeUV( 0, 0, (int)tile_num, current_vertex ) );
+
 			current_vertex += top_down;
 			verts->AddAttribute( computeLength( current_vertex ) );
+			uvs->AddAttribute( computeUV( 0, 1, (int)tile_num + 1, current_vertex ) );
 
 			for( int i = 0; i < FACES; ++i )
 			{// We have 4 faces
@@ -137,29 +159,21 @@ namespace Generator
 				int max_loop = innerLoopMax( i );
 				for( int j = 0; j < max_loop; ++j )
 				{// We have already two first verticies.
+					// Step left
 					current_vertex += right_left;
 					verts->AddAttribute( computeLength( current_vertex ) );
+					uvs->AddAttribute( computeUV( i, j+1, (int)tile_num, current_vertex ) );
+
 					current_vertex += top_down;
 					verts->AddAttribute( computeLength( current_vertex ) );
+					uvs->AddAttribute( computeUV( i, j+2, (int)tile_num + 1, current_vertex ) );
 				}
 
 				current_vertex += right_left;
 				verts->AddAttribute( computeLength( current_vertex ) );
+				uvs->AddAttribute( computeUV( i, (int)pow( 2, tesselletion ) + 1, (int)tile_num, current_vertex ) );
 			}
 
-			// UVs coordinates
-			uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
-			uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
-			for( int i = 0; i < FACES; ++i )
-			{
-				int max_loop = innerLoopMax( i );
-				for( int j = 0; j < max_loop; ++j )
-				{
-					uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
-					uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
-				}
-				uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
-			}
 		}
 
 	};
