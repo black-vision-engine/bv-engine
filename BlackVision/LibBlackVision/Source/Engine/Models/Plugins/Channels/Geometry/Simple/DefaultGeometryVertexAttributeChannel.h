@@ -55,6 +55,7 @@ DEFINE_PTR_TYPE( IGeometryGenerator )
 class IGeometryOnlyGenerator : public IGeometryGenerator
 {
 public:
+    virtual Type GetType() { return GEOMETRY_ONLY; }
     
     virtual void GenerateGeometry( Float3AttributeChannelPtr ) = 0;
 };
@@ -62,7 +63,8 @@ public:
 class IGeometryAndUVsGenerator : public IGeometryGenerator
 {
 public:
-    
+    virtual Type GetType() { return GEOMETRY_AND_UVS; }
+
     virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr, Float2AttributeChannelPtr ) = 0;
 };
 

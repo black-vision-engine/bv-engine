@@ -24,13 +24,6 @@ public:
 class Plugin : public DefaultGeometryPluginBase
 {
 public:
-    ValueIntPtr                                 m_tesselation;
-    ValueFloatPtr                               m_radius;
-    ValueFloatPtr                               m_radiusCrossSection;
-    ValueFloatPtr                               m_delta;
-    ValueIntPtr                                 m_turns;
-
-public:
     Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 private:
     virtual bool                                NeedsTopologyUpdate() override;

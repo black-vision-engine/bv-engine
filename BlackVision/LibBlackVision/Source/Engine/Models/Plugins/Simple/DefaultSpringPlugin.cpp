@@ -33,7 +33,7 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     h.AddSimpleParam( PN::RADIUS, 1.f, true, true );
     h.AddSimpleParam( PN::RADIUSCROSSSECTION, 0.1f, true, true );
     h.AddSimpleParam( PN::DELTA, 0.5f, true, true );
-    h.AddSimpleParam( PN::TURNS, 10, true, true );
+    h.AddSimpleParam( PN::TURNS, 1, true, true );
 
     return h.GetModel();
 }
@@ -42,11 +42,6 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
 Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
     : DefaultGeometryPluginBase( name, uid, prev, model )
 {
-    m_tesselation = QueryTypedValue< ValueIntPtr >( GetValue( PN::TESSELATION ) );
-    m_turns = QueryTypedValue< ValueIntPtr >( GetValue( PN::TURNS ) );
-    m_radius = QueryTypedValue< ValueFloatPtr >( GetValue( PN::RADIUS ) );
-    m_radiusCrossSection = QueryTypedValue< ValueFloatPtr >( GetValue( PN::RADIUSCROSSSECTION ) );
-    m_delta = QueryTypedValue< ValueFloatPtr >( GetValue( PN::DELTA ) );
 
     m_pluginParamValModel->Update();
     InitGeometry();
@@ -62,12 +57,54 @@ bool                                Plugin::NeedsTopologyUpdate()
         ParameterChanged( PN::TURNS );
 }
 
+class Generator : public IGeometryAndUVsGenerator
+{
+    IParamValModelPtr model;
+public:
+    Generator( IParamValModelPtr m ) : model( m ) { }
+
+    void GenerateGeometryAndUVs( Float3AttributeChannelPtr, Float2AttributeChannelPtr );
+};
+
 std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
 {
     std::vector<IGeometryGeneratorPtr> gens;
 
+    gens.push_back( IGeometryGeneratorPtr( new Generator( m_pluginParamValModel->GetVertexAttributesChannelModel() ) ) );
+
     return gens;
 }
 
+#include "Mathematics/Defines.h"
+void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+{
+    ValueIntPtr                                 m_tesselation;
+    ValueFloatPtr                               m_radius;
+    ValueFloatPtr                               m_radiusCrossSection;
+    ValueFloatPtr                               m_delta;
+    ValueIntPtr                                 m_turns;
+
+    m_tesselation = QueryTypedValue< ValueIntPtr >( model->GetValue( PN::TESSELATION ) );
+    m_turns = QueryTypedValue< ValueIntPtr >( model->GetValue( PN::TURNS ) );
+    m_radius = QueryTypedValue< ValueFloatPtr >( model->GetValue( PN::RADIUS ) );
+    m_radiusCrossSection = QueryTypedValue< ValueFloatPtr >( model->GetValue( PN::RADIUSCROSSSECTION ) );
+    m_delta = QueryTypedValue< ValueFloatPtr >( model->GetValue( PN::DELTA ) );
+
+    int t = m_tesselation->GetValue();
+
+    for( int i = 0; i <= t; i++ )
+        for( int j = 0; j <= t; j++ )
+        {
+            double angle = j *2*PI / t;
+            
+            double h = double(i) / t;
+            verts->AddAttribute( glm::vec3( cos( angle ), sin( angle ), h ) );
+            uvs->AddAttribute( glm::vec2( double(j) / t, h ) );
+
+            h = double(i+1) / t;
+            verts->AddAttribute( glm::vec3( cos( angle ), sin( angle),  h ) );
+            uvs->AddAttribute( glm::vec2( double(j) / t, h ) );
+        }
+}
 
 } } }
