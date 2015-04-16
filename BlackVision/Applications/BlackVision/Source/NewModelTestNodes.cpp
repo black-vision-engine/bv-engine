@@ -179,7 +179,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::s
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    { timelineManager; } // FIXME: suppress unuse warning
+    { timelineManager; } // FIXME: suppress unused warning
     TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_01.jpg", false, 3.4f, 0.7f );
     SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 0.75f ), .85f, 0.31f );
 

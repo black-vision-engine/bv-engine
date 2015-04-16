@@ -8,9 +8,11 @@
 
 #include "Engine/Models/BasicNode.h"
 
+#include "ExampleTestScenes.h"
 #include "NewModelTestNodes.h"
 
 #include "PieChartNode.h"
+
 
 namespace bv {
 
@@ -442,6 +444,21 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
     test_get_node( n2, "node02/node013", false );
     test_get_node( n2, "node024", true );
     test_get_node( n1, "node024", false );
+}
+
+// *****************************
+//
+model::BasicNodePtr     TestScenesFactory::CreateTestScene      ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, TestScenesFactory::TestSceneSelector tss )
+{
+    switch( tss )
+    {
+        case TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES:
+            return TwoTexturedRectangles( pluginsManager, timelineManager, timeEvaluator );
+        default:
+            assert( false );
+
+            return nullptr;
+    };
 }
 
 // *****************************

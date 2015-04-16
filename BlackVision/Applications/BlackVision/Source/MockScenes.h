@@ -35,6 +35,17 @@ class TestScenesFactory
 {
 public:
 
+    enum class TestSceneSelector : int
+    {
+        TSS_TWO_TEXTURED_RECTANGLES,
+
+        TSS_TOTAL
+    };
+
+public:
+
+    static  model::BasicNodePtr     CreateTestScene             ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, TestSceneSelector tss );
+
     static  model::BasicNodePtr     NewModelTestScene           ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     OlafTestScene               ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 	static  model::BasicNodePtr     CreedTestScene               ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
