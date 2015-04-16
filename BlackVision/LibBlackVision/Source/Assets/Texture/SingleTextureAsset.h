@@ -37,7 +37,7 @@ public:
 
 	MemoryChunkConstPtr							GetData		() const;
 	
-	static SingleTextureAssetConstPtr		Create		( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format );
+	static SingleTextureAssetConstPtr			Create		( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format );
 
 	explicit									SingleTextureAsset( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format );
 

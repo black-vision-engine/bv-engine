@@ -16,9 +16,9 @@ public:
 	bool						operator <	( const Hash & b ) const;
 	bool						operator == ( const Hash & b ) const;
 
-private:
-
 	const std::string &			Get() const;
+
+private:
 
 	explicit					Hash( const std::string & value );
 

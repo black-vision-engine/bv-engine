@@ -783,6 +783,9 @@
     <ClCompile Include="..\..\..\Source\Assets\Assets.cpp">
       <Filter>Assets</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Cache\HardDriveRawDataCache.cpp">
+      <Filter>Assets\Cache</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1567,6 +1570,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Assets.h">
       <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Cache\HardDriveRawDataCache.h">
+      <Filter>Assets\Cache</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
