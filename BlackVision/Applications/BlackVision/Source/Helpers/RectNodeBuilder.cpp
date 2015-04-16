@@ -176,7 +176,7 @@ model::BasicNodePtr RectNodeBuilder::CreateNewNode   () const
     uids.push_back( "DEFAULT_RECTANGLE" );
     uids.push_back( m_shaderPluginUID );
 
-    auto node = std::make_shared< model::BasicNode >( "", m_timeEvaluator );
+    auto node = model::BasicNode::Create( "", m_timeEvaluator );
     assert( node );
     
     auto success = node->AddPlugins( uids, m_timeEvaluator );
