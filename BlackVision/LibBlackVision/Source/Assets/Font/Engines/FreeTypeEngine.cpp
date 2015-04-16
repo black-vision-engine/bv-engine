@@ -116,7 +116,7 @@ std::map< std::pair< wchar_t, wchar_t >, float >        BuildKerning    ( FT_Fac
 //
 FreeTypeEnginePtr					FreeTypeEngine::Create( const std::string & fontFilePath, size_t fontSize )
 {
-	return std::make_shared< FreeTypeEngine >( fontFilePath, fontSize );
+	return FreeTypeEnginePtr( new FreeTypeEngine( fontFilePath, fontSize ) );
 }
 
 namespace {
@@ -301,7 +301,7 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 
 // *********************************
 //
-TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth, const std::wstring & wcharsSet )
+TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth, const std::wstring & wcharsSet, bool generateMipMaps )
 {
 	SizeType							glyphsNum	= wcharsSet.size();
 	Int32								spadding	= (Int32)padding;
@@ -325,6 +325,11 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 		}
 
 	auto atlasSize = (UInt32) std::ceil( sqrt( (float)glyphsNum ) );
+
+	if( generateMipMaps )
+	{
+
+	}
 
     auto maxWidth  = m_maxWidth		+ spadding * 2;
     auto maxHeight = m_maxHeight	+ spadding * 2;

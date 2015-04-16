@@ -34,12 +34,12 @@ private:
 
 	Glyph *						RenderGlyph( wchar_t ch, Spans &, SizeType );
 
+								FreeTypeEngine( const std::string & fontFilePath, size_t fontSize );
 
 public:
-	virtual TextAtlasConstPtr	CreateAtlas( UInt32 padding, const std::wstring & wcharsSet )					override;
-	virtual TextAtlasConstPtr	CreateAtlas( UInt32 padding, UInt32 outline, const std::wstring & wcharsSet )	override;
+	virtual TextAtlasConstPtr	CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool generateMipMaps = false )					override;
+	virtual TextAtlasConstPtr	CreateAtlas( UInt32 padding, UInt32 outline, const std::wstring & wcharsSet, bool generateMipMaps = false )	override;
 
-								FreeTypeEngine( const std::string & fontFilePath, size_t fontSize );
 
 	static FreeTypeEnginePtr	Create( const std::string & fontFilePath, size_t fontSize );
 };
