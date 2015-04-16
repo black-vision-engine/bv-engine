@@ -23,7 +23,7 @@ ApplicationBase::~ApplicationBase	()
 {
 }
 
-}
+} //bv
 
 
 // *********************************
@@ -50,5 +50,4 @@ int main( int argc, char * argv[] )
     delete bv::ApplicationBase::ApplicationInstance;
 
     return exitCode;
-
 }

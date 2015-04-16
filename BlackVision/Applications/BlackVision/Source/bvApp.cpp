@@ -38,7 +38,6 @@ bool			bv::BlackVisionApp::RegisterInitializer	()
 
 bool bv::BlackVisionApp::m_sWindowedApplicationInitialized = bv::BlackVisionApp::RegisterInitializer();
 
-
 namespace bv {
 
 // *********************************
@@ -59,6 +58,8 @@ BlackVisionApp::~BlackVisionApp ()
 
     m_app->ShutDown();
     delete m_app;
+
+    FreeConsole();
 }
 
 // *********************************
@@ -88,7 +89,7 @@ void BlackVisionApp::OnIdle		()
 
     UpdateSubsystems( millis );
 
-    m_app->OnUpdate( millis, m_timer, m_Renderer, handle );
+    m_app->OnUpdate( millis, m_Renderer );
 
     PostFrame( millis );
 }
@@ -142,8 +143,6 @@ void    BlackVisionApp::InitializeConsole   ()
     
         freopen_s( &dummy, "CONOUT$", "wb", stdout );
         freopen_s( &dummy, "CONOUT$", "wb", stderr );
-
-        std::cout << sizeof(FILE*);
     }
 }
 
