@@ -24,7 +24,8 @@ public:
     enum OpenMode
     {
         FOMReadOnly,
-        FOMReadWrite
+        FOMReadWrite,
+		FOMWriteAppend,
     };
 
     SizeType            Read        ( std::ostream & out) const;
@@ -43,9 +44,12 @@ public:
     virtual             ~File       ();
 
     static bool         Exists      ( const std::string & fileName );
+	static StringVector ListFileInDir( const std::string & path );
+	static bool         DirExists   ( const std::string & path );
     static File         Open        ( const std::string & fileName, OpenMode openMode = FOMReadOnly );
     static SizeType     Read        ( std::ostream & out, const std::string & fileName );
     static SizeType     Read        ( char * out, const std::string & fileName );
+	static SizeType		Write       ( const char * in, SizeType size, const std::string & fileName, bool append );
     static SizeType     Write       ( std::istream & in, const std::string & fileName );
 	static SizeType     Size        ( const std::string & fileName );
     static std::string  GetAbsolutPath( const std::string & fileName );

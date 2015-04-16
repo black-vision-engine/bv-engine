@@ -41,6 +41,7 @@ public:
     static SizeType     Read        ( std::ostream & out, const std::string & fileName );
     static SizeType     Read        ( char* out, const std::string & fileName );
     static SizeType     Write       ( std::istream & in, const std::string & fileName );
+	static SizeType		Write       ( const char * in, SizeType size, const std::string & fileName, bool append );
     static SizeType     Size        ( const std::string & fileName );
 };
 
@@ -216,6 +217,28 @@ SizeType    FileImpl::Write       ( std::istream & in, const std::string & fileN
 
 // *******************************
 //
+SizeType    FileImpl::Write       ( const char * in, SizeType size, const std::string & fileName, bool append )
+{
+	FileImpl * f = nullptr;
+	
+	if( append )
+	{
+		f = FileImpl::Open( fileName, File::OpenMode::FOMWriteAppend );
+	}
+	else
+	{
+		f = FileImpl::Open( fileName, File::OpenMode::FOMReadWrite );
+	}
+
+	f->Write( in, size );
+
+	f->Close();
+
+	return size;
+}
+
+// *******************************
+//
 File::File( FileImpl * impl )
     : m_impl( impl )
 {}
@@ -257,7 +280,7 @@ SizeType    File::Write       ( std::istream & in , SizeType numBytes )
 
 // *******************************
 //
-void         File::Write       ( const char* in , SizeType numBytes )
+void         File::Write       ( const char * in , SizeType numBytes )
 {
     m_impl->Write( in, numBytes );
 }
@@ -323,6 +346,14 @@ SizeType    File::Read        ( char* out, const std::string & fileName )
 SizeType    File::Write       ( std::istream & in, const std::string & fileName )
 {
     return FileImpl::Write( in, fileName );
+}
+
+
+// *******************************
+//
+SizeType    File::Write       ( const char * in, SizeType size, const std::string & fileName, bool append )
+{
+	return FileImpl::Write( in, size, fileName, append );
 }
 
 // *******************************

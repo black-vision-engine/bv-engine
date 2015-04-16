@@ -36,10 +36,10 @@ public:
 	static TextureCache &			GetInstance				();
 
 	// **************************
-	// Two finctions below generates texture cache keys for single textures.
+	// Tree finctions below generates texture cache keys for single textures.
 	static std::string				GenKeyForSingleTexture	( const SingleTextureAssetDescConstPtr & singleTextureDesc );
 	static std::string				GenKeyForGeneratedMipMap( const std::string & origPath, SizeType width, SizeType height, TextureFormat format, SizeType mmLevel, MipMapFilterType mmFiletType );
-	static std::string				GenKeyForTextureAsset( const TextureAssetDescConstPtr & textureDesc );
+	static std::string				GenKeyForTextureAsset	( const TextureAssetDescConstPtr & textureDesc );
 
 private:
 
