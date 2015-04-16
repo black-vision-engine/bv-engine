@@ -8,7 +8,7 @@
 namespace bv 
 {
 
-class DHRawDataCache
+class HardDriveRawDataCache
 {
 public:
 
@@ -16,7 +16,9 @@ public:
 
 	bool							Add				( const Hash & key, const MemoryChunkConstPtr & memory, bool rewriteIfExists = false );
 
-	static DHRawDataCache &			GetInstance		();
+	bool							Exists			( const Hash & key ) const;
+
+	static HardDriveRawDataCache &			GetInstance		();
 
 private:
 
@@ -26,8 +28,8 @@ private:
 	MemoryChunkConstPtr				Load			( const Hash & key ) const;
 
 
-	DHRawDataCache		();
-	~DHRawDataCache		();
+	HardDriveRawDataCache		();
+	~HardDriveRawDataCache		();
 
 	std::set< Hash >				m_entries;
 

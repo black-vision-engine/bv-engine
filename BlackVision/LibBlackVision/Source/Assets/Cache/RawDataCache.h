@@ -18,11 +18,11 @@ public:
 
 	// ******************************
 	// Adds entry to cache. If doesn't exist return false else returns true and adds entry
-	bool					Add		( const Hash & key, MemoryChunkConstPtr data );
+	bool					Add		( const Hash & key, MemoryChunkConstPtr data, bool addToHardDriveCache = false );
 
 	// ******************************
 	// Updates entry in cache. If doesn't exist adds it.
-	void					Update	( const Hash & key, MemoryChunkConstPtr data );
+	void					Update	( const Hash & key, MemoryChunkConstPtr data, bool addToHardDriveCache = false );
 
 	// ******************************
 	// 

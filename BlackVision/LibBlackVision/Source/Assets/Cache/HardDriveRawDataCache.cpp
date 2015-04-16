@@ -1,6 +1,7 @@
-#include "HDRawDataCache.h"
+#include "HardDriveRawDataCache.h"
 
 #include "IO/FileIO.h"
+#include "IO/DirIO.h"
 
 static const std::string RAW_DATA_CACHE_DIR = "cache/raw_data_cache";
 
@@ -8,22 +9,22 @@ namespace bv {
 
 // ******************************
 // 
-void		DHRawDataCache::Initialize		()
+void		HardDriveRawDataCache::Initialize		()
 {
 	ScanCacheDir();
 }
 
 // ******************************
 // 
-void		DHRawDataCache::ScanCacheDir	()
+void		HardDriveRawDataCache::ScanCacheDir	()
 {
-	if( !File::DirExists( RAW_DATA_CACHE_DIR ) )
+	if( !Dir::Exists( RAW_DATA_CACHE_DIR ) )
 	{
 		File::CreateDir( RAW_DATA_CACHE_DIR );
 	}
 	else
 	{
-		auto files = File::ListFileInDir( RAW_DATA_CACHE_DIR );
+		auto files = Dir::ListFiles( RAW_DATA_CACHE_DIR, "*" );
 
 		for( auto f : files )
 		{
@@ -34,7 +35,7 @@ void		DHRawDataCache::ScanCacheDir	()
 
 // ******************************
 // 
-MemoryChunkConstPtr	DHRawDataCache::Load	( const Hash & key ) const
+MemoryChunkConstPtr	HardDriveRawDataCache::Load	( const Hash & key ) const
 {
 	auto fileName = RAW_DATA_CACHE_DIR + key.Get();
 
@@ -56,27 +57,27 @@ MemoryChunkConstPtr	DHRawDataCache::Load	( const Hash & key ) const
 
 // ******************************
 // 
-DHRawDataCache::DHRawDataCache				()
+HardDriveRawDataCache::HardDriveRawDataCache				()
 {
 	Initialize();
 }
 
 // ******************************
 // 
-DHRawDataCache::~DHRawDataCache				()
+HardDriveRawDataCache::~HardDriveRawDataCache				()
 {}
 
 // ******************************
 // 
-DHRawDataCache & DHRawDataCache::GetInstance()
+HardDriveRawDataCache & HardDriveRawDataCache::GetInstance()
 {
-	static DHRawDataCache instance = DHRawDataCache();
+	static HardDriveRawDataCache instance = HardDriveRawDataCache();
 	return instance;
 }
 
 // ******************************
 // 
-MemoryChunkConstPtr	DHRawDataCache::Get		( const Hash & key ) const
+MemoryChunkConstPtr	HardDriveRawDataCache::Get		( const Hash & key ) const
 {
 	auto it = m_entries.find( key );
 
@@ -92,7 +93,14 @@ MemoryChunkConstPtr	DHRawDataCache::Get		( const Hash & key ) const
 
 // ******************************
 // 
-bool DHRawDataCache::Add					( const Hash & key, const MemoryChunkConstPtr & memory, bool rewriteIfExists )
+bool HardDriveRawDataCache::Exists					( const Hash & key ) const
+{
+	return m_entries.find( key ) != m_entries.end();
+}
+
+// ******************************
+// 
+bool HardDriveRawDataCache::Add					( const Hash & key, const MemoryChunkConstPtr & memory, bool rewriteIfExists )
 {
 	auto fileName = RAW_DATA_CACHE_DIR + key.Get();
 
