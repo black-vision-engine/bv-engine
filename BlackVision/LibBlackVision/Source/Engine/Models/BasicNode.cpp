@@ -68,6 +68,21 @@ BasicNode::~BasicNode()
 
 // ********************************
 //
+BasicNodePtr                    BasicNode::Create                   ( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager )
+{
+    struct make_shared_enabler_BasicNode : public BasicNode
+    {
+        make_shared_enabler_BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager )
+            : BasicNode( name, timeEvaluator, pluginsManager )
+        {
+        }
+    };
+
+    return std::make_shared<make_shared_enabler_BasicNode>( name, timeEvaluator, pluginsManager );
+}    
+
+// ********************************
+//
 IPluginPtr                      BasicNode::GetPlugin                ( const std::string & name ) const
 {
     return m_pluginList->GetPlugin( name );
@@ -75,14 +90,14 @@ IPluginPtr                      BasicNode::GetPlugin                ( const std:
 
 // ********************************
 //
-IFinalizePluginConstPtr         BasicNode::GetFinalizePlugin        () const
+IFinalizePluginConstPtr BasicNode::GetFinalizePlugin        () const
 {
     return m_pluginList->GetFinalizePlugin();
 }
 
 // ********************************
 //
-IModelNodePtr                    BasicNode::GetNode                  ( const std::string & path, const std::string & separator )
+IModelNodePtr           BasicNode::GetNode                  ( const std::string & path, const std::string & separator )
 {
     std::string suffix = path;
 
@@ -117,13 +132,6 @@ IModelNodePtr                    BasicNode::GetNode                  ( const std
 IModelNodePtr                   BasicNode::GetChild                 ( const std::string & name )
 {
     return FindNode( m_children, name );
-}
-
-// ********************************
-//
-IModelNodePtr                   BasicNode::GetLayer                 ( const std::string & name )
-{
-    return FindNode( m_layers, name );
 }
 
 // ********************************
@@ -219,14 +227,14 @@ const std::string &             BasicNode::GetName                  () const
 
 // ********************************
 //
-void                        BasicNode::SetName                      ( const std::string & name )
+void                            BasicNode::SetName                  ( const std::string & name )
 {
     m_name = name;
 }
 
 // ********************************
 //
-mathematics::Rect 			BasicNode::GetAABB						() const
+mathematics::Rect 			    BasicNode::GetAABB			        () const
 {
 	mathematics::Rect r;
 
@@ -270,7 +278,7 @@ mathematics::Rect 			BasicNode::GetAABB						( const glm::mat4 & parentTransform
 
 // ********************************
 //
-SceneNode *                 BasicNode::BuildScene   () 
+SceneNode *                 BasicNode::BuildScene                   () 
 {
     IPluginConstPtr finalizer = GetFinalizePlugin();
 
@@ -288,21 +296,14 @@ SceneNode *                 BasicNode::BuildScene   ()
 
 // ********************************
 //
-void            BasicNode::AddChild                 ( BasicNodePtr n )
+void            BasicNode::AddChild                         ( BasicNodePtr n )
 {
     m_children.push_back( BasicNodePtr( n ) );
 }
 
 // ********************************
 //
-void            BasicNode::AddLayer                 ( BasicNodePtr n )
-{
-    m_layers.push_back( BasicNodePtr( n ) );
-}
-
-// ********************************
-//
-void            BasicNode::SetPlugins               ( DefaultPluginListFinalizedPtr plugins )
+void            BasicNode::SetPlugins                       ( DefaultPluginListFinalizedPtr plugins )
 {
     m_pluginList = plugins;
 }
@@ -319,7 +320,7 @@ void             BasicNode::NonNullPluginsListGuard ()
 
 // ********************************
 //
-bool            BasicNode::AddPlugin                ( IPluginPtr plugin )
+bool            BasicNode::AddPlugin                        ( IPluginPtr plugin )
 {
     NonNullPluginsListGuard();
 
@@ -339,7 +340,7 @@ bool            BasicNode::AddPlugin                ( IPluginPtr plugin )
 
 // ********************************
 //
-bool            BasicNode::AddPlugin               ( const std::string & uid, ITimeEvaluatorPtr timeEvaluator )
+bool            BasicNode::AddPlugin                        ( const std::string & uid, ITimeEvaluatorPtr timeEvaluator )
 {
     NonNullPluginsListGuard ();
 
@@ -357,7 +358,7 @@ bool            BasicNode::AddPlugin               ( const std::string & uid, IT
 
 // ********************************
 //
-bool            BasicNode::AddPlugin               ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+bool            BasicNode::AddPlugin                    ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
 {
     NonNullPluginsListGuard ();
 
@@ -422,9 +423,6 @@ void BasicNode::Update( TimeType t )
     if( IsVisible() )
     {
         m_overrideState->Update( t );
-
-        for( auto l : m_layers )
-            l->Update( t );
 
         m_pluginList->Update( t );
 

@@ -15,7 +15,6 @@ public:
 
     static BasicNodePtr    GetRootNode  ( ModelScenePtr scene );
     static BasicNodePtr    FindChild    ( BasicNodePtr node, const std::string & name );
-    static BasicNodePtr    FindLayer    ( BasicNodePtr node, const std::string & name );
 
 };
 

@@ -41,4 +41,3 @@ DEFINE_PTR_TYPE(DefaultPluginListFinalized)
 
 } // model
 } // bv
-

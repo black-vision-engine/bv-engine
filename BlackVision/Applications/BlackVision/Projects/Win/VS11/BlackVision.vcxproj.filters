@@ -87,6 +87,7 @@
     <ClCompile Include="..\..\..\Source\Xml\Auxiliary\Auxiliary.cpp">
       <Filter>Xml\Auxiliary</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="..\..\..\Source\Xml\Auxiliary\Auxiliary.hpp">
       <Filter>Xml\Auxiliary</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />

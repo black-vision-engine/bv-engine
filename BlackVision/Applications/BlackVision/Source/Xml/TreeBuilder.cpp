@@ -241,7 +241,7 @@ namespace bv{
 		
 		//onNodeBegin(CurrentNode.name,depth);
         assert( false ); //FIXME: timeline cannot be null
-        auto newNode = std::make_shared< model::BasicNode >( CurrentNode.name, nullptr );
+        auto newNode = model::BasicNode::Create( CurrentNode.name, nullptr );
 
 		for(unsigned int i=0;i<CurrentNode.plugins.size();i++)
 		{
@@ -310,15 +310,15 @@ namespace bv{
 	model::BasicNodePtr TreeBuilder::BuildTree(string path){
 		
         assert(false);
-        auto root = std::make_shared< model::BasicNode >( "Nie ma nazwy na pustyni FIXME:", nullptr );
+        auto root = model::BasicNode::Create( "Nie ma nazwy na pustyni FIXME:", nullptr );
 
 
 		BlackTree Tree;
 
 		Tree.LoadFromFile(path);
 
-		cout<<"printing tree..."<<endl;
-		PrintTree(Tree.Scene.MainNode);
+		cout<<"printing tree..." << endl;
+		PrintTree( Tree.Scene.MainNode );
 
 		//SendTree(Tree.Scene.MainNode);
 

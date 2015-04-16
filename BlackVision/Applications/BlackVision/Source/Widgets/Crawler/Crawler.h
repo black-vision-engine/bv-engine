@@ -38,6 +38,7 @@ class Crawler : public model::INodeLogic, public std::enable_shared_from_this< C
 	typedef std::map< bv::model::BasicNode *, bool >	NodeBoolMap;
 
 private:
+
 	bool									m_isFinalized;
 	bv::model::BasicNode *					m_parentNode;
 	CrawlerNodesStates						m_nodesStates;
