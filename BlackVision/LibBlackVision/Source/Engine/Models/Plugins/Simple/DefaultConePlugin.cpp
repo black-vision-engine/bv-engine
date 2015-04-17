@@ -47,7 +47,7 @@ std::string                     DefaultConePluginDesc::UID                 ()
 #include "Mathematics/Defines.h"
 namespace ConeGenerator
 {
-    int tesselation;
+    int tesselation, bevel_tesselation;
     float height, inner_height, inner_radius, bevel, open_angle, outer_radius;
 
     static void Init( int t, float ih, float ir, float b, float oa, float h, float or )
@@ -69,7 +69,7 @@ namespace ConeGenerator
 
         virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
-		void generatePart( float R1, float R2, float h1, float h2, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs  )
+		void generateCircuit( float R1, float R2, float h1, float h2, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs  )
 		{
 			for( int i = 0; i < tesselation ; i++ )
             {
@@ -81,6 +81,13 @@ namespace ConeGenerator
 				verts->AddAttribute( glm::vec3( R1 * cos( angle2 ), h1, R1 * sin( angle2 ) ) );
 				verts->AddAttribute( glm::vec3( R2 * cos( angle2 ), h2, R2 * sin( angle2 ) ) );
 			}
+		}
+
+		void computeCircleRadiusHeight( glm::vec3& returnValue, glm::vec2 circleCenter, float circleRadius, double angle )
+		{
+			returnValue.x = circleCenter.x - float( circleRadius * sin( angle ) );
+			returnValue.y = circleCenter.y - float( circleRadius * cos( angle ) );
+			returnValue.z = 0.0;
 		}
 
         virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
@@ -95,6 +102,37 @@ namespace ConeGenerator
                 verts->AddAttribute( glm::vec3( radius * cos( angle2 ), 0, radius * sin( angle2 ) ) );
                 verts->AddAttribute( glm::vec3( 0, height, 0 ) );
             }
+
+			///todo:
+			glm::vec2 circle_center;
+			float circle_radius = 0.0;
+			double angle1 = 0.0;
+			double angle2 = 0.0;
+
+
+			for( int tess = 0; tess < bevel_tesselation; ++tess)
+			{
+				glm::vec3 radius_height1;
+				glm::vec3 radius_height2;
+				computeCircleRadiusHeight( radius_height1, circle_center, circle_radius, angle1 );
+				computeCircleRadiusHeight( radius_height2, circle_center, circle_radius, angle2 );
+
+				for( int i = 0; i < tesselation ; i++ )
+				{
+					double angle1 = i     * 2 * PI / tesselation;
+					double angle2 = (i+1) * 2 * PI / tesselation;\
+					double cos_angle1 = cos( angle1 );
+					double sin_angle1 = sin( angle1 );
+					double cos_angle2 = cos( angle2 );
+					double sin_angle2 = sin( angle2 );
+
+					verts->AddAttribute( glm::vec3( radius_height1.x * cos_angle1, radius_height1.y, radius * sin_angle1 ) );
+					verts->AddAttribute( glm::vec3( radius_height2.x * cos_angle1, radius_height2.y, radius * sin_angle1 ) );
+					verts->AddAttribute( glm::vec3( radius_height1.x * cos_angle2, radius_height1.y, radius * sin_angle2 ) );
+					verts->AddAttribute( glm::vec3( radius_height2.x * cos_angle2, radius_height2.y, radius * sin_angle2 ) );
+				}
+			}
+
 
             for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
             {
