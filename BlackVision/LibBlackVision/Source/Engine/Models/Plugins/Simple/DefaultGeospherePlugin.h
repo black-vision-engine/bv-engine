@@ -20,11 +20,18 @@ public:
 
 struct PN
 {
-    static const std::string TESSELLATION;
+    static const std::string TESSELATION;
 	static const std::string RADIUS;
 };
 
+/**@brief Plugin generates geosphere built from tetrahedron.
 
+Tessellation parameter discribes number of divisions of face of the tetrahedron.
+Each face will be subdivided into 4 triangles in single tesselletion step.
+
+@note UV mapping isn't made as usual for simple sphere. It isn't easy to describe.
+Better add a texture to geosphere and check it for yourself.
+*/
 class Plugin : public DefaultGeometryPluginBase
 {
 private:

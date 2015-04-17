@@ -1770,11 +1770,14 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 60.f, glm::vec3( -1.f, 1.f, 0.f ), 50.f );
 	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -3.0f ) );
 
-	//auto dim = root->GetPlugin( "sphere" )->GetParameter( "horizontal stripes" );
+	//auto dim = root->GetPlugin( "cone" )->GetParameter( "tesselation" );
+	//model::SetParameter( dim, 0.0, 50 );
 	//model::SetParameter( dim, 0.0f, 50 );
-	//dim = root->GetPlugin( "sphere" )->GetParameter( "vertical stripes" );
-	//model::SetParameter( dim, 0.0f, 50 );
-	
+	auto dim = root->GetPlugin( "sphere" )->GetParameter( "vertical stripes" );
+	model::SetParameter( dim, 0.0f, 30 );
+	dim = root->GetPlugin( "sphere" )->GetParameter( "horizontal stripes" );
+	model::SetParameter( dim, 0.0f, 30 );
+
 #ifdef VERSION_COLOR
 	auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
 	SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
@@ -1782,65 +1785,13 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 #endif
 	
 #ifdef VERSION_TEXTURE
-	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
+	success = model::LoadTexture( root->GetPlugin( "texture" ), "world_map.jpg", MipMapFilterType::BILINEAR );
 	assert( success );
 	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
 	//model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
 	//root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
 #endif
 
-	//if( texturePlugin )
-	//{
-	//	auto width   = texturePlugin->GetTextureWidth();
-	//	auto height  = texturePlugin->GetTextureHeight();
-
-	//	//float wf = float( width ) / float( height );
-	//	//float scl = 1.f;
-
-	//	//model::SetParameter( root->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),   2.f * scl );
-	//	//model::SetParameter( root->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), wf * 2.f * scl );
-
-	//	auto rectPlugin = root->GetPlugin( "rectangle" );
-	//	SetParameter( root->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),  float(2 * height)/1080.f );
-	//	SetParameter( root->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),   float(2 * width)/1080.f );
-
-	//	rectPlugin->Update( TimeType( 0.f ) );
-
-	//	root->AddChild( childNode );
-	//}
-
-	//for( int i = 0; i < 2; ++i )
-	//{
-	//	auto childNode = std::make_shared< model::BasicNode > ( "child", timeEvaluator );
-	//	auto success = childNode->AddPlugins( GSimplePluginsUIDS, localTimeline );
-	//	assert( success );
-
-	//	success = model::LoadTexture( childNode->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
-	//	assert( success );
-
-	//	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( childNode->GetPlugin( "texture" ) );
-	//	if( texturePlugin )
-	//	{
-	//		auto width   = texturePlugin->GetTextureWidth();
-	//		auto height  = texturePlugin->GetTextureHeight();
-
-	//		//float wf = float( width ) / float( height );
-	//		//float scl = 1.f;
-
-	//		//model::SetParameter( root->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),   2.f * scl );
-	//		//model::SetParameter( root->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), wf * 2.f * scl );
-
-	//		auto rectPlugin = childNode->GetPlugin( "rectangle" );
-	//		SetParameter( childNode->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),  float(2 * height)/1080.f );
-	//		SetParameter( childNode->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),   float(2 * width)/1080.f );
-
-	//		SetParameterRotation( childNode->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 1.f, 0.f ), i*90.f );
-
-	//		rectPlugin->Update( TimeType( 0.f ) );
-
-	//		root->AddChild( childNode );
-	//	}
-	//}
 
 	return root;
 }

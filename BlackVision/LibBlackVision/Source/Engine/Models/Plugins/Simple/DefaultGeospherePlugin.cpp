@@ -4,7 +4,7 @@
 
 namespace bv { namespace model { namespace DefaultGeosphere {
 
-const std::string PN::TESSELLATION = "tessellation";
+const std::string PN::TESSELATION = "tesselation";
 const std::string PN::RADIUS = "radius";
 
 PluginDesc::PluginDesc()
@@ -29,7 +29,7 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     ModelHelper h( timeEvaluator );
 
     h.CreateVacModel();
-    h.AddSimpleParam<int>( PN::TESSELLATION, 6, true, true );
+    h.AddSimpleParam<int>( PN::TESSELATION, 6, true, true );
 	h.AddSimpleParam<float>( PN::RADIUS, 2.0f, true, true );
 
     return h.GetModel();
@@ -204,7 +204,7 @@ namespace Generator
 Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
 		: DefaultGeometryPluginBase( name, uid, prev, model )
 {
-	tesselletion = QueryTypedValue< ValueIntPtr >( GetValue( PN::TESSELLATION ) );
+	tesselletion = QueryTypedValue< ValueIntPtr >( GetValue( PN::TESSELATION ) );
 	radius = QueryTypedValue< ValueFloatPtr >( GetValue( PN::RADIUS ) );
 
     m_pluginParamValModel->Update();
@@ -234,7 +234,7 @@ std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
 
 bool                                Plugin::NeedsTopologyUpdate()
 {
-	return ParameterChanged( PN::TESSELLATION )
+	return ParameterChanged( PN::TESSELATION )
 		|| ParameterChanged( PN::RADIUS );
 }
 

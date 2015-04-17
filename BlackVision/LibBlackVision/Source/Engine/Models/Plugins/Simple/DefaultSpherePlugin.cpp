@@ -89,7 +89,7 @@ namespace Generator
 
 			float alfa = float( PI ) / float(2) - vert_delta_angle;		// Angle counting from north pole
 
-			for( unsigned int i = 0; i < vertical_stripes + 1; ++i )
+			for( unsigned int i = 0; i < vertical_stripes; ++i )
 			{
 				float cos_alfa = cos( alfa );
 				float sin_alfa = sin( alfa );
@@ -115,15 +115,18 @@ namespace Generator
 			float vertical_angle = float( PI ) - vert_delta_angle;
 
 
-			uvs->AddAttribute( glm::clamp( glm::vec2( horizontal_angle1, 1.0 ), glm::vec2( 0.005, 0.005 ), glm::vec2( 0.995, 0.995 ) ) );
-			uvs->AddAttribute( glm::clamp( glm::vec2( horizontal_angle2, 1.0 ), glm::vec2( 0.005, 0.005 ), glm::vec2( 0.995, 0.995 ) ) );
-			for( unsigned int i = 0; i < vertical_stripes + 1; ++i )
+			uvs->AddAttribute( glm::clamp( glm::vec2( horizontal_angle1, 1.0 ), glm::vec2( 0.01, 0.01 ), glm::vec2( 0.95, 0.95 ) ) );
+			uvs->AddAttribute( glm::clamp( glm::vec2( horizontal_angle2, 1.0 ), glm::vec2( 0.01, 0.01 ), glm::vec2( 0.95, 0.95 ) ) );
+			for( unsigned int i = 0; i < vertical_stripes - 1; ++i )
 			{
 				uvs->AddAttribute(  glm::clamp( glm::vec2( horizontal_angle1, vertical_angle / PI ),  glm::vec2( 0.005, 0.005 ), glm::vec2( 0.995, 0.995 ) ) );
 				uvs->AddAttribute(  glm::clamp( glm::vec2( horizontal_angle2, vertical_angle / PI ),  glm::vec2( 0.005, 0.005 ), glm::vec2( 0.995, 0.995 ) ) );
 
 				vertical_angle -= vert_delta_angle;
 			}
+			uvs->AddAttribute(  glm::clamp( glm::vec2( horizontal_angle1, vertical_angle / PI ),  glm::vec2( 0.01, 0.05 ), glm::vec2( 0.95, 0.95 ) ) );
+			vertical_angle -= vert_delta_angle;
+			uvs->AddAttribute(  glm::clamp( glm::vec2( horizontal_angle2, vertical_angle / PI ),  glm::vec2( 0.01, 0.05 ), glm::vec2( 0.95, 0.95 ) ) );
 		}
 
 	};

@@ -69,6 +69,20 @@ namespace ConeGenerator
 
         virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
+		void generatePart( float R1, float R2, float h1, float h2, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs  )
+		{
+			for( int i = 0; i < tesselation ; i++ )
+            {
+				double angle1 = i     * 2 * PI / tesselation;
+				double angle2 = (i+1) * 2 * PI / tesselation;
+
+				verts->AddAttribute( glm::vec3( R1 * cos( angle1 ), h1, R1 * sin( angle1 ) ) );
+				verts->AddAttribute( glm::vec3( R2 * cos( angle1 ), h2, R2 * sin( angle1 ) ) );
+				verts->AddAttribute( glm::vec3( R1 * cos( angle2 ), h1, R1 * sin( angle2 ) ) );
+				verts->AddAttribute( glm::vec3( R2 * cos( angle2 ), h2, R2 * sin( angle2 ) ) );
+			}
+		}
+
         virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
         {
             for( int i = 0; i < tesselation ; i++ )
