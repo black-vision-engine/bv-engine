@@ -21,12 +21,14 @@
 #include "Engine/Models/Plugins/Simple/DefaultRoundedRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultConePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
-<<<<<<< local
 #include "Engine/Models/Plugins/Simple/DefaultSimpleCubePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTorusPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultNoPerspectiveTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultSpherePlugin.h"
+<<<<<<< local
+#include "Engine/Models/Plugins/Simple/DefaultGeospherePlugin.h"
 =======
-#include "Engine/Models/Plugins/Simple/DefaultTorusPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultSpringPlugin.h"
 >>>>>>> other
 
 namespace bv { namespace model {
@@ -57,11 +59,13 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     descriptors.push_back( new DefaultRoundedRectPluginDesc() );
     descriptors.push_back( new DefaultCone::DefaultConePluginDesc() );
     descriptors.push_back( new DefaultCube::PluginDesc() );
-<<<<<<< local
 	descriptors.push_back( new DefaultSimpleCube::PluginDesc() );
-	descriptors.push_back( new DefaultSphere::PluginDesc() );
-=======
     descriptors.push_back( new DefaultTorus::PluginDesc() );
+	descriptors.push_back( new DefaultSphere::PluginDesc() );
+<<<<<<< local
+	descriptors.push_back( new DefaultGeosphere::PluginDesc() );
+=======
+    descriptors.push_back( new DefaultSpring::PluginDesc() );
 >>>>>>> other
 
     for( auto descr : descriptors )
