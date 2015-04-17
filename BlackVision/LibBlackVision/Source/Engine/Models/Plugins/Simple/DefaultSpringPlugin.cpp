@@ -29,11 +29,11 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     ModelHelper h( timeEvaluator );
 
     h.CreateVacModel();
-    h.AddSimpleParam( PN::TESSELATION, 10, true, true );
+    h.AddSimpleParam( PN::TESSELATION, 30, true, true );
     h.AddSimpleParam( PN::RADIUS, 1.f, true, true );
-    h.AddSimpleParam( PN::RADIUSCROSSSECTION, 0.1f, true, true );
+    h.AddSimpleParam( PN::RADIUSCROSSSECTION, 0.3f, true, true );
     h.AddSimpleParam( PN::DELTA, 0.5f, true, true );
-    h.AddSimpleParam( PN::TURNS, 1, true, true );
+    h.AddSimpleParam( PN::TURNS, 3, true, true );
 
     return h.GetModel();
 }
@@ -91,18 +91,23 @@ void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2A
     m_delta = QueryTypedValue< ValueFloatPtr >( model->GetValue( PN::DELTA ) );
 
     int t = m_tesselation->GetValue();
+    float r = m_radius->GetValue();
+    float r2 = m_radiusCrossSection->GetValue();
+    int turns = m_turns->GetValue();
 
-    for( int i = 0; i <= t; i++ )
+    for( int i = 0; i < t; i++ )
         for( int j = 0; j <= t; j++ )
         {
-            double angle = j *2*PI / t;
-            
+            double crossSectionAngle = j *2*PI / t;
+
             double h = double(i) / t;
-            verts->AddAttribute( glm::vec3( cos( angle ), sin( angle ), h ) );
+            double turnsAngle = h * turns * PI;
+            verts->AddAttribute( glm::vec3( cos( crossSectionAngle )*r2 + cos( turnsAngle )*r , h, sin( crossSectionAngle )*r2 + sin( turnsAngle )*r ) );
             uvs->AddAttribute( glm::vec2( double(j) / t, h ) );
 
             h = double(i+1) / t;
-            verts->AddAttribute( glm::vec3( cos( angle ), sin( angle),  h ) );
+            turnsAngle = h * turns * PI;
+            verts->AddAttribute( glm::vec3( cos( crossSectionAngle )*r2 + cos( turnsAngle )*r,  h, sin( crossSectionAngle )*r2 + sin( turnsAngle )*r ) );
             uvs->AddAttribute( glm::vec2( double(j) / t, h ) );
         }
 }
