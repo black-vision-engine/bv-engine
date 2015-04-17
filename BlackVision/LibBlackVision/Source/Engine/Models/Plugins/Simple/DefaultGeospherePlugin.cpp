@@ -148,6 +148,7 @@ namespace Generator
 
 			glm::mat3x2 UVs( faces_table[face].uv[0], faces_table[face].uv[1], faces_table[face].uv[2] );
 			glm::vec2 UV = UVs * barycentric_coords;
+			UV = glm::clamp( UV, glm::vec2( 0.005, 0.005 ), glm::vec2( 0.995, 0.995 ) );
 
 			return UV;
 		}

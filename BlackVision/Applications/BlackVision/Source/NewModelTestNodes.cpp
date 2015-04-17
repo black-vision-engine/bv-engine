@@ -1745,7 +1745,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 	std::vector< std::string > uids;
 
     uids.push_back( "DEFAULT_TRANSFORM" );
-    uids.push_back( "DEFAULT_GEOSPHERE" );
+    uids.push_back( "DEFAULT_SPHERE" );
 	//uids.push_back( "DEFAULT_SIMPLE_CUBE" );
 #ifdef VERSION_COLOR
 	uids.push_back( "DEFAULT_COLOR" );
@@ -1784,6 +1784,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
 	assert( success );
 	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
+	//model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
 	//root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
 #endif
 

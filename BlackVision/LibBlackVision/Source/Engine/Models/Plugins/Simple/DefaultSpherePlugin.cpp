@@ -62,6 +62,7 @@ namespace Generator
 
 		Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
+
 		void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
         {
 			assert( stripe_num < horizontal_stripes );
@@ -83,17 +84,8 @@ namespace Generator
 			float cos_hor_angle2;
 			float sin_hor_angle2;
 
-			// It's necessary if we don't want to see break between first and last stride. Floats inaccuracy.
-			//if( stripe_num < horizontal_stripes - 1)
-			//{
-				cos_hor_angle2 = radius * cos( hor_delta_angle * ( stripe_num + 1 ) );
-				sin_hor_angle2 = radius * sin( hor_delta_angle * ( stripe_num + 1 ) );
-			//}
-			//else
-			//{
-			//	cos_hor_angle2 = radius * cos( float(0.0) );
-			//	sin_hor_angle2 = radius * sin( float(0.0) );
-			//}
+			cos_hor_angle2 = radius * cos( hor_delta_angle * ( stripe_num + 1 ) );
+			sin_hor_angle2 = radius * sin( hor_delta_angle * ( stripe_num + 1 ) );
 
 			float alfa = float( PI ) / float(2) - vert_delta_angle;		// Angle counting from north pole
 
@@ -117,21 +109,18 @@ namespace Generator
 			
 
 			float horizontal_angle2;
-			//if( stripe_num < horizontal_stripes - 1 )
-				horizontal_angle2 = ( hor_delta_angle * ( stripe_num + 1 ) ) / float( 2 * PI );		//transformed to interval [0.0 , 1.0]
-			//else
-				//horizontal_angle2 = 1.0;
+			horizontal_angle2 = ( hor_delta_angle * ( stripe_num + 1 ) ) / float( 2 * PI );		//transformed to interval [0.0 , 1.0]
 
 			float horizontal_angle1 = ( hor_delta_angle * stripe_num ) / float( 2 * PI );				//transformed to interval [0.0 , 1.0]
 			float vertical_angle = float( PI ) - vert_delta_angle;
 
 
-			uvs->AddAttribute( glm::vec2( horizontal_angle1, 1.0 ) );
-			uvs->AddAttribute( glm::vec2( horizontal_angle2, 1.0 ) );
+			uvs->AddAttribute( glm::clamp( glm::vec2( horizontal_angle1, 1.0 ), glm::vec2( 0.005, 0.005 ), glm::vec2( 0.995, 0.995 ) ) );
+			uvs->AddAttribute( glm::clamp( glm::vec2( horizontal_angle2, 1.0 ), glm::vec2( 0.005, 0.005 ), glm::vec2( 0.995, 0.995 ) ) );
 			for( unsigned int i = 0; i < vertical_stripes + 1; ++i )
 			{
-				uvs->AddAttribute( glm::vec2( horizontal_angle1, vertical_angle / PI ) );
-				uvs->AddAttribute( glm::vec2( horizontal_angle2, vertical_angle / PI ) );
+				uvs->AddAttribute(  glm::clamp( glm::vec2( horizontal_angle1, vertical_angle / PI ),  glm::vec2( 0.005, 0.005 ), glm::vec2( 0.995, 0.995 ) ) );
+				uvs->AddAttribute(  glm::clamp( glm::vec2( horizontal_angle2, vertical_angle / PI ),  glm::vec2( 0.005, 0.005 ), glm::vec2( 0.995, 0.995 ) ) );
 
 				vertical_angle -= vert_delta_angle;
 			}
