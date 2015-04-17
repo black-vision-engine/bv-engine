@@ -71,21 +71,40 @@ namespace Generator
 			// ( +-1, 0, -1/sqrt(2) )
 			// ( 0, +-1, 1/sqrt(2) )
 
-			faces_table[0].vertex[0] = glm::vec3( 1, 1, -1 );		faces_table[0].uv[0] = glm::vec2( 0.0, 0.0 );
-			faces_table[0].vertex[1] = glm::vec3( 1, -1, 1 );		faces_table[0].uv[1] = glm::vec2( 1.0 / 5.0, 1.0 );
-			faces_table[0].vertex[2] = glm:: vec3( -1, 1, 1 );		faces_table[0].uv[2] = glm::vec2( 2.0 / 5.0, 0.0 );
+			glm::vec3 pointA( 1, 1, -1 );
+			glm::vec3 pointB( 1, -1, 1 );
+			glm::vec3 pointC( -1, 1, 1 );
+			glm::vec3 pointD(-1, -1, -1);
+			//glm::vec2 pointA1UV( 1.0, 1.0 );
+			//glm::vec2 pointA2UV( 1.0, 0.0 );
+			//glm::vec2 pointBUV( 1.0, 1.0 / 2.0 );
+			//glm::vec2 pointC1UV( 1.0, 0.0 );
+			//glm::vec2 pointC2UV( 0.0, 0.0 );
+			//glm::vec2 pointDUV( 0.0, 1.0 / 2.0 );
 
-			faces_table[1].vertex[0] = glm::vec3(1, -1, 1);			faces_table[1].uv[0] = glm::vec2();
-			faces_table[1].vertex[1] = glm::vec3(-1, 1, 1);			faces_table[1].uv[1] = glm::vec2();
-			faces_table[1].vertex[2] = glm:: vec3(-1, -1, -1);		faces_table[1].uv[2] = glm::vec2();
+			glm::vec2 pointA1UV( 0.0, 0.0 );
+			glm::vec2 pointA2UV( 1.0, 0.0 );
+			glm::vec2 pointBUV( 1.0 / 2.0, 0.0 );
+			glm::vec2 pointC1UV( 0.0, 1.0 );
+			glm::vec2 pointC2UV( 1.0, 1.0 );
+			glm::vec2 pointDUV( 1.0 / 2.0, 1.0 );
 
-			faces_table[2].vertex[0] = glm::vec3(-1, 1, 1);			faces_table[2].uv[0] = glm::vec2();
-			faces_table[2].vertex[1] = glm::vec3(-1, -1, -1);		faces_table[2].uv[1] = glm::vec2();
-			faces_table[2].vertex[2] = glm:: vec3(1, 1, -1);		faces_table[2].uv[2] = glm::vec2();
+			faces_table[0].vertex[0] = pointA;		faces_table[0].uv[0] = pointA1UV;
+			faces_table[0].vertex[1] = pointB;		faces_table[0].uv[1] = pointBUV;
+			faces_table[0].vertex[2] = pointC;		faces_table[0].uv[2] = pointC1UV;
 
-			faces_table[3].vertex[0] = glm::vec3(-1, -1, -1);		faces_table[3].uv[0] = glm::vec2();
-			faces_table[3].vertex[1] = glm::vec3(1, 1, -1);			faces_table[3].uv[1] = glm::vec2();
-			faces_table[3].vertex[2] = glm:: vec3(1, -1, 1);		faces_table[3].uv[2] = glm::vec2();
+			faces_table[1].vertex[0] = pointC;		faces_table[1].uv[0] = pointC1UV;
+			faces_table[1].vertex[1] = pointD;		faces_table[1].uv[1] = pointDUV;
+			faces_table[1].vertex[2] = pointB;		faces_table[1].uv[2] = pointBUV;
+			
+			faces_table[2].vertex[0] = pointB;		faces_table[2].uv[0] = pointBUV;
+			faces_table[2].vertex[1] = pointA;		faces_table[2].uv[1] = pointA2UV;
+			faces_table[2].vertex[2] = pointD;		faces_table[2].uv[2] = pointDUV;
+
+			faces_table[3].vertex[0] = pointD;		faces_table[3].uv[0] = pointDUV;
+			faces_table[3].vertex[1] = pointC;		faces_table[3].uv[1] = pointC2UV;
+			faces_table[3].vertex[2] = pointA;		faces_table[3].uv[2] = pointA2UV;
+
 		}
 
 		int innerLoopMax( int face )
@@ -100,14 +119,14 @@ namespace Generator
 
 		glm::vec3 getTopDownVector( int face )
 		{
-			glm::vec3 edge = faces_table[face].vertex[1]  - faces_table[face].vertex[0];
+			glm::vec3 edge = faces_table[face].vertex[2]  - faces_table[face].vertex[0];
 			edge *= 1/  float( pow( 2, tesselletion ) );
 			return edge;
 		}
 
 		glm::vec3 getRightLeftVector( int face )
 		{
-			glm::vec3 edge = faces_table[face].vertex[2] - faces_table[face].vertex[1];
+			glm::vec3 edge = faces_table[face].vertex[1] - faces_table[face].vertex[2];
 			edge *= 1/  float( pow( 2, tesselletion ) );
 			return edge;
 		}
@@ -118,18 +137,19 @@ namespace Generator
 			//return vector;
 		}
 
-		//glm::vec2 interpolateBetweenUV( int row, int column, glm::vec2& uv[3] )
-		//{
 
-		//}
-
-		glm::vec2 computeUV( int face, int row, int column, glm::vec3 vertex )
+		glm::vec2 computeUV( int face, glm::vec3 vertex )
 		{
-			{ vertex; }
-			{ row; }
-			{ column; }
-			{ face; }
-			return glm::vec2( 0.0, 0.0 );//interpolateBetweenUV();
+			glm::mat3 vert_matrix( faces_table[face].vertex[0], faces_table[face].vertex[1], faces_table[face].vertex[2] );
+			glm::vec3 barycentric_coords;
+
+			vert_matrix = glm::inverse( vert_matrix );
+			barycentric_coords = vert_matrix * vertex;
+
+			glm::mat3x2 UVs( faces_table[face].uv[0], faces_table[face].uv[1], faces_table[face].uv[2] );
+			glm::vec2 UV = UVs * barycentric_coords;
+
+			return UV;
 		}
 
 
@@ -145,33 +165,33 @@ namespace Generator
 
 			current_vertex += float( tile_num ) * top_down;
 			verts->AddAttribute( computeLength( current_vertex ) );
-			uvs->AddAttribute( computeUV( 0, 0, (int)tile_num, current_vertex ) );
+			uvs->AddAttribute( computeUV( 0, current_vertex ) );
 
 			current_vertex += top_down;
 			verts->AddAttribute( computeLength( current_vertex ) );
-			uvs->AddAttribute( computeUV( 0, 1, (int)tile_num + 1, current_vertex ) );
+			uvs->AddAttribute( computeUV( 0, current_vertex ) );
 
-			for( int i = 0; i < FACES; ++i )
+			for( int face = 0; face < FACES; ++face )
 			{// We have 4 faces
-				top_down = getTopDownVector( i );
-				right_left = getRightLeftVector( i );
+				top_down = getTopDownVector( face );
+				right_left = getRightLeftVector( face );
 				
-				int max_loop = innerLoopMax( i );
+				int max_loop = innerLoopMax( face );
 				for( int j = 0; j < max_loop; ++j )
 				{// We have already two first verticies.
 					// Step left
 					current_vertex += right_left;
 					verts->AddAttribute( computeLength( current_vertex ) );
-					uvs->AddAttribute( computeUV( i, j+1, (int)tile_num, current_vertex ) );
-
+					uvs->AddAttribute( computeUV( face, current_vertex ) );
+					// Step down
 					current_vertex += top_down;
 					verts->AddAttribute( computeLength( current_vertex ) );
-					uvs->AddAttribute( computeUV( i, j+2, (int)tile_num + 1, current_vertex ) );
+					uvs->AddAttribute( computeUV( face, current_vertex ) );
 				}
 
 				current_vertex += right_left;
 				verts->AddAttribute( computeLength( current_vertex ) );
-				uvs->AddAttribute( computeUV( i, (int)pow( 2, tesselletion ) + 1, (int)tile_num, current_vertex ) );
+				uvs->AddAttribute( computeUV( face, current_vertex ) );
 			}
 
 		}
