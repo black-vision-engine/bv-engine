@@ -107,7 +107,7 @@ namespace Generator
             }
             for( int j = 0; j <= tesselation; j++ )
             {
-                double angle2 = j * PI/2 / tesselation;
+                double angle2 = j * PI/2 / tesselation + PI/2;
                 v[ i ][ tesselation+1 + j ] = glm::vec3( x - b*sin( a )*sin( angle2 ), y + b*cos( a )*sin( angle2 ),  d - b*cos( angle2 ) );
             }
         }
