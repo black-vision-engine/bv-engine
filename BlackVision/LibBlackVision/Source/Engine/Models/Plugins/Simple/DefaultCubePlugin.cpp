@@ -102,13 +102,13 @@ namespace Generator
             
             for( int j = 0; j <= tesselation; j++ )
             {
-                double angle2 = i * PI/2 / tesselation;
+                double angle2 = j * PI/2 / tesselation;
                 v[ i ][ j ] = glm::vec3( x - b*sin( a )*sin( angle2 ), y + b*cos( a )*sin( angle2 ), -d - b*cos( angle2 ) );
             }
             for( int j = 0; j <= tesselation; j++ )
             {
-                double angle2 = i * PI/2 / tesselation;
-                v[ i ][ tesselation+1 + j ] = glm::vec3( x - b*sin( a )*sin( angle2 ), y + b*cos( a )*sin( angle2 ),  d + b*cos( angle2 ) );
+                double angle2 = j * PI/2 / tesselation;
+                v[ i ][ tesselation+1 + j ] = glm::vec3( x - b*sin( a )*sin( angle2 ), y + b*cos( a )*sin( angle2 ),  d - b*cos( angle2 ) );
             }
         }
 
