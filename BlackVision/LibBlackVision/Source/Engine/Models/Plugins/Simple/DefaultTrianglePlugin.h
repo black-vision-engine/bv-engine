@@ -29,8 +29,7 @@ private:
     glm::vec3                                   GetPointB();
     glm::vec3                                   GetPointC();
 public:
-    DefaultTrianglePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model ) 
-        : DefaultGeometryPluginBase( name, uid, prev, model ) { }
+    DefaultTrianglePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 };
 
 } }

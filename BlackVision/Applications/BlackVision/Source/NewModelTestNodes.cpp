@@ -1748,7 +1748,15 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
     //uids.push_back( "DEFAULT_SPHERE" );
     //uids.push_back( "DEFAULT_GEOSPHERE" );
 	//uids.push_back( "DEFAULT_SIMPLE_CUBE" );
+	//uids.push_back( "DEFAULT_CIRCLE" );
+	//uids.push_back( "DEFAULT_CUBE" );
 	uids.push_back( "DEFAULT_CONE" );
+	//uids.push_back( "DEFAULT_ELLIPSE" );
+	//uids.push_back( "DEFAULT_ROUNDEDRECT" );
+	//uids.push_back( "DEFAULT_TRIANGLE" );
+	//uids.push_back( "DEFAULT_TORUS" );
+	//uids.push_back( "DEFAULT_SPRING" );
+
 #ifdef VERSION_COLOR
 	uids.push_back( "DEFAULT_COLOR" );
 #endif
@@ -1771,15 +1779,15 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.f, glm::vec3( -1.f, 1.f, 0.f ), 50.f );
 	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -3.0f ) );
 
-	auto dim = root->GetPlugin( "cone" )->GetParameter( "tesselation" );
-	model::SetParameter( dim, 0.0f, 16 );
-	//model::SetParameter( dim, 10.0f, 50 );
-	dim = root->GetPlugin( "cone" )->GetParameter( "rounded tip height" );
-	model::SetParameter( dim, 0.0f, 0.4f );
-	dim = root->GetPlugin( "cone" )->GetParameter( "inner radius" );
-	model::SetParameter( dim, 0.0f, 0.4f );
-	dim = root->GetPlugin( "cone" )->GetParameter( "inner height" );
-	model::SetParameter( dim, 0.0f, 0.4f );
+	//auto dim = root->GetPlugin( "cone" )->GetParameter( "tesselation" );
+	//model::SetParameter( dim, 0.0f, 16 );
+	////model::SetParameter( dim, 10.0f, 50 );
+	//dim = root->GetPlugin( "cone" )->GetParameter( "rounded tip height" );
+	//model::SetParameter( dim, 0.0f, 0.4f );
+	//dim = root->GetPlugin( "cone" )->GetParameter( "inner radius" );
+	//model::SetParameter( dim, 0.0f, 0.4f );
+	//dim = root->GetPlugin( "cone" )->GetParameter( "inner height" );
+	//model::SetParameter( dim, 0.0f, 0.4f );
 	//auto dim = root->GetPlugin( "sphere" )->GetParameter( "vertical stripes" );
 	//model::SetParameter( dim, 0.0f, 30 );
 	//dim = root->GetPlugin( "sphere" )->GetParameter( "horizontal stripes" );
@@ -1787,8 +1795,9 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 
 #ifdef VERSION_COLOR
 	auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
-	SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+	SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 1.f, 1.f ) );
 	//root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
+	root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
 #endif
 	
 #ifdef VERSION_TEXTURE

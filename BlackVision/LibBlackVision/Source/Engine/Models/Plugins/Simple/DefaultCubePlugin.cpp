@@ -17,9 +17,9 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     ModelHelper h( timeEvaluator );
 
     h.CreateVacModel();
-    h.AddSimpleParam( PN::BEVEL, 0.f, true, true );
+    h.AddSimpleParam( PN::BEVEL, 0.1f, true, true );
     h.AddSimpleParam( PN::DIMENSIONS, glm::vec3( 1, 1, 1 ), true, true );
-    h.AddSimpleParam( PN::TESSELATION, 0, true, true );
+    h.AddSimpleParam( PN::TESSELATION, 2, true, true );
 
     return h.GetModel();
 }

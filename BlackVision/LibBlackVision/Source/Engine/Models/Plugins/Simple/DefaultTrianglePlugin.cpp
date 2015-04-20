@@ -13,20 +13,14 @@ IPluginPtr                      DefaultTrianglePluginDesc::CreatePlugin        (
 
 DefaultPluginParamValModelPtr   DefaultTrianglePluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
-    DefaultParamValModelPtr vacModel            = std::make_shared< DefaultParamValModel >();
+	ModelHelper h( timeEvaluator );
 
-    auto paramPA    = ParametersFactory::CreateParameterVec3( DefaultTrianglePlugin::PN_POINTA, timeEvaluator );
-    auto paramPB    = ParametersFactory::CreateParameterVec3( DefaultTrianglePlugin::PN_POINTB, timeEvaluator );
-    auto paramPC    = ParametersFactory::CreateParameterVec3( DefaultTrianglePlugin::PN_POINTC, timeEvaluator );
+	h.CreateVacModel();
+	h.AddSimpleParam( DefaultTrianglePlugin::PN_POINTA, glm::vec3( 0, 0, 0 ), true, true );
+	h.AddSimpleParam( DefaultTrianglePlugin::PN_POINTB, glm::vec3( 0, 0, 0 ), true, true );
+	h.AddSimpleParam( DefaultTrianglePlugin::PN_POINTC, glm::vec3( 0, 0, 0 ), true, true );
 
-    vacModel->AddParameter( paramPA );
-    vacModel->AddParameter( paramPB );
-    vacModel->AddParameter( paramPC );
-
-    model->SetVertexAttributesChannelModel( vacModel );
-
-    return model;
+	return h.GetModel();
 }
 
 std::string                     DefaultTrianglePluginDesc::UID                 ()
@@ -59,9 +53,9 @@ std::vector<IGeometryGeneratorPtr>    DefaultTrianglePlugin::GetGenerators()
 
 bool                                DefaultTrianglePlugin::NeedsTopologyUpdate()
 {
-    return GetCachedParameter( PN_POINTA )->Changed()
-        || GetCachedParameter( PN_POINTB )->Changed()
-        || GetCachedParameter( PN_POINTC )->Changed();
+	return ParameterChanged( PN_POINTA )
+        || ParameterChanged( PN_POINTB )
+        || ParameterChanged( PN_POINTC );
 }
 
 
@@ -85,6 +79,13 @@ glm::vec3                                   DefaultTrianglePlugin::GetPointC()
     auto qParam = QueryTypedParam< ParamVec3Ptr >( param );
     return qParam->Evaluate();
 }
+
+DefaultTrianglePlugin::DefaultTrianglePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model ) 
+    : DefaultGeometryPluginBase( name, uid, prev, model ) 
+{ 
+	InitGeometry();
+}
+
 
 const std::string DefaultTrianglePlugin::PN_POINTA = "point a";
 const std::string DefaultTrianglePlugin::PN_POINTB = "point b";
