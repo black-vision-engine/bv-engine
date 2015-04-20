@@ -25,6 +25,7 @@ struct PN {
     static const std::string OPENANGLE; // VecParam1 OpenAngle
     static const std::string WEIGHTCENTER; // enum WeightCenter (TOP, BOTTOM, CENTER)
     static const std::string OPENANGLEMODE; // enum OpenAngleMode(Clockwise, CCW, symetric)
+	static const std::string BEVELTESSELATION;
 };
 
 class DefaultConePlugin : public DefaultGeometryPluginBase
@@ -33,7 +34,7 @@ public:
     enum OpenAngleMode : int { CW, CCW, SYMMETRIC };
     enum WeightCenter : int { TOP, BOTTOM, CENTER };
 
-    ValueIntPtr                                 m_tesselation;
+    ValueIntPtr                                 m_tesselation, m_bevelTesselation;
     ValueFloatPtr                               m_innerRadius,
                                                 m_outerRadius,
                                                 m_innerHeight,
