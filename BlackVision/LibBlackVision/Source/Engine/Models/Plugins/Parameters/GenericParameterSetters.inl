@@ -25,6 +25,22 @@ inline bool SetSimpleTypedParameter( IParameterPtr param, TimeType t, typename c
 // *******************************
 //
 template<>
+inline bool SetParameter< bool >( IParameterPtr param, TimeType t, const bool & val )
+{
+    return SetSimpleTypedParameter< ParamBool >( param, t, val );
+}
+
+// *******************************
+//
+template<>
+inline bool SetParameter< int >( IParameterPtr param, TimeType t, const int & val )
+{
+    return SetSimpleTypedParameter< ParamInt >( param, t, val );
+}
+
+// *******************************
+//
+template<>
 inline bool SetParameter< float >( IParameterPtr param, TimeType t, const float & val )
 {
     return SetSimpleTypedParameter< ParamFloat >( param, t, val );
@@ -61,6 +77,15 @@ inline bool SetParameter< glm::mat2 >( IParameterPtr param, TimeType t, const gl
 {
     return SetSimpleTypedParameter< ParamMat2 >( param, t, val );
 }
+
+//// *******************************
+////
+//template<> template< typename T >
+//inline bool SetParameter< T >( IParameterPtr param, TimeType t, const T & val )
+//{
+//    return SetSimpleTypedParameter< ParamEnum<T> >( param, t, val );
+//}
+
 
 } //model
 } //bv

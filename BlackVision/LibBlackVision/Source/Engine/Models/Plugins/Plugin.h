@@ -39,6 +39,9 @@ public:
     virtual IPluginParamValModelPtr             GetPluginParamValModel      () const override;
     virtual IParameterPtr                       GetParameter                ( const std::string & name ) const override;
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const override;
+    virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const override;
+    virtual IStatedValuePtr                     GetState                    ( const std::string & name ) const;
+
 
     virtual void                                Update                      ( TimeType t );
 
@@ -75,6 +78,7 @@ protected:
     IParamValModelPtr                           VertexShaderChannelModel    ();
     IParamValModelPtr                           GeometryShaderChannelModel  ();
 
+    bool                                        ParameterChanged            ( const std::string & name );
 };
 
 // Implementation
@@ -140,6 +144,56 @@ IParameterPtr               BasePlugin< Iface >::GetParameter           ( const 
     }
 
     return nullptr;
+}
+
+
+// *******************************
+//
+template< class Iface >
+IStatedValuePtr             BasePlugin< Iface >::GetState               ( const std::string & name ) const
+{
+    IPluginParamValModelPtr pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
+    
+    IParamValModelPtr models[] = {    pvm->GetPluginModel()
+                                    , pvm->GetTransformChannelModel()
+                                    , pvm->GetVertexAttributesChannelModel()
+                                    , pvm->GetPixelShaderChannelModel()
+                                    , pvm->GetVertexShaderChannelModel()
+                                    , pvm->GetGeometryShaderChannelModel() 
+                                };
+
+    IStatedValuePtr retParam = nullptr;
+
+    for( auto model : models )
+    {
+        if( model && ( retParam = model->GetState( name ) ) )
+        {
+            return retParam;
+        }
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+struct NullDeleter {template<typename T> void operator()(T*) {} };
+
+template< class Iface >
+ICachedParameterPtr             BasePlugin< Iface >::GetCachedParameter          ( const std::string & name ) const // FIXME mader fakier
+{
+    IParameterPtr param = GetParameter( name );
+
+    //ParamBoolPtr qParam = std::static_pointer_cast< IParameterPtr, ParamBoolPtr >( param );
+    //ICachedParameterPtr cParam = std::dynamic_pointer_cast< ParamBoolPtr, ICachedParameterPtr >( qParam );
+    //auto ret = cParam;
+
+    IParameter* hParam = param.get();
+    ParamBool* hqParam = static_cast< ParamBool* >( hParam ); // FIXME: although we may assume implementation here, we really shouldn't
+    ICachedParameter* hcParam = dynamic_cast< ICachedParameter* >( hqParam );
+    auto ret = std::shared_ptr< ICachedParameter >( hcParam, NullDeleter() ); // FIXME: removing a need for NullDeleter would be very good idea
+
+    return ret;
 }
 
 // *******************************
@@ -320,6 +374,17 @@ template< class Iface >
 IParamValModelPtr                           BasePlugin< Iface >::GeometryShaderChannelModel   ()
 {
     return m_pluginParamValModel->GetGeometryShaderChannelModel();
+}
+
+
+// *******************************
+//
+template< class Iface >
+bool                                        BasePlugin< Iface >::ParameterChanged            ( const std::string & name )
+{
+    auto state = GetState( name );
+    assert( state );
+    return state->StateChanged();
 }
 
 ParamTransformVecPtr						GetCurrentParamTransform( const IPlugin * pl );

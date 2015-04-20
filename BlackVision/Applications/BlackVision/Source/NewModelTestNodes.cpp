@@ -9,6 +9,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 
+#include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
+
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
 
@@ -647,6 +649,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::Time
 // LINEAR GRADIENT plugin
 	if( root->GetPlugin( "linear_gradient" ) )
 	{
+        auto param = root->GetPlugin( "prism" )->GetParameter( "uv_type" );
+        assert( param );
+        SetParameter( param, 0.f, float( model::PrismComponent::PrismUVType::LINGRADED ) );
+
 		auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
 		assert( color1 );
 		success &= SetParameter( color1, 0.f, glm::vec4( 0.0f, 0.f, 1.f, 1.f ) );
@@ -685,8 +691,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::Ti
 // TEXTURE plugin
 	if( root->GetPlugin( "texture" ) )
 	{
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+        SetParameter( root->GetPlugin( "texture" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 1, 0, 1 ) );
+		success = model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
+		root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
 		assert( success );
 	}
 
@@ -1715,6 +1722,94 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
 
     return node;
 #endif
+}
+
+#define VERSION_TEXTURE
+//#define NO_PERSPECTIVE
+//#define VERSION_COLOR
+
+// Test
+model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+	  //Timeline stuff
+    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+
+    //someTimelineWithEvents->AddChild( localTimeline );
+    timeEvaluator->AddChild( localTimeline );
+
+    //Plugin stuff
+	std::vector< std::string > uids;
+
+    uids.push_back( "DEFAULT_TRANSFORM" );
+    //uids.push_back( "DEFAULT_SPHERE" );
+    //uids.push_back( "DEFAULT_GEOSPHERE" );
+	//uids.push_back( "DEFAULT_SIMPLE_CUBE" );
+	//uids.push_back( "DEFAULT_CIRCLE" );
+	//uids.push_back( "DEFAULT_CUBE" );
+	uids.push_back( "DEFAULT_CONE" );
+	//uids.push_back( "DEFAULT_ELLIPSE" );
+	//uids.push_back( "DEFAULT_ROUNDEDRECT" );
+	//uids.push_back( "DEFAULT_TRIANGLE" );
+	//uids.push_back( "DEFAULT_TORUS" );
+	//uids.push_back( "DEFAULT_SPRING" );
+
+#ifdef VERSION_COLOR
+	uids.push_back( "DEFAULT_COLOR" );
+#endif
+#ifdef VERSION_TEXTURE
+	#ifdef NO_PERSPECTIVE
+		uids.push_back( "DEFAULT_NO_PERSPECTIVE_TEXTURE" );
+	#else
+		uids.push_back( "DEFAULT_TEXTURE" );
+	#endif
+#endif
+
+    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+
+    auto success = root->AddPlugins( uids, localTimeline );
+    assert( success );
+
+	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 1.f, 0.f, 0.f ), 700.f );
+	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.f, glm::vec3( -1.f, 1.f, 0.f ), 50.f );
+	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -3.0f ) );
+
+	//auto dim = root->GetPlugin( "cone" )->GetParameter( "tesselation" );
+	//model::SetParameter( dim, 0.0f, 16 );
+	////model::SetParameter( dim, 10.0f, 50 );
+	//dim = root->GetPlugin( "cone" )->GetParameter( "rounded tip height" );
+	//model::SetParameter( dim, 0.0f, 0.4f );
+	//dim = root->GetPlugin( "cone" )->GetParameter( "inner radius" );
+	//model::SetParameter( dim, 0.0f, 0.4f );
+	//dim = root->GetPlugin( "cone" )->GetParameter( "inner height" );
+	//model::SetParameter( dim, 0.0f, 0.4f );
+	//auto dim = root->GetPlugin( "sphere" )->GetParameter( "vertical stripes" );
+	//model::SetParameter( dim, 0.0f, 30 );
+	//dim = root->GetPlugin( "sphere" )->GetParameter( "horizontal stripes" );
+	//model::SetParameter( dim, 0.0f, 30 );
+
+#ifdef VERSION_COLOR
+	auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
+	SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 1.f, 1.f ) );
+	//root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
+	root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+#endif
+	
+#ifdef VERSION_TEXTURE
+	success = model::LoadTexture( root->GetPlugin( "texture" ), "world_map.jpg", MipMapFilterType::BILINEAR );
+	assert( success );
+	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
+	//model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+	//root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
+#endif
+
+
+	return root;
 }
 
 } //bv

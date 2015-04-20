@@ -72,11 +72,23 @@ bv::IValueConstPtr                          DefaultParamValModel::GetValue      
 
 // *******************************
 //
+IStatedValuePtr                                   DefaultParamValModel::GetState        ( const std::string & name )
+{
+    return m_states[ name ];
+}
+
+// *******************************
+//
 void                                        DefaultParamValModel::Update            ()
 {
     for( auto evaluator : m_evaluators )
     {
         evaluator->Evaluate();
+    }
+
+    for( auto updater : m_stateUpdaters )
+    {
+        updater->DoUpdate();
     }
 }
 
@@ -125,6 +137,14 @@ void                                        DefaultParamValModel::RegisterAll   
     {
         AddValue( value );
     }
+}
+
+// *******************************
+//
+void                                                DefaultParamValModel::AddState        ( const std::string & name, IStatedValuePtr state, IUpdaterPtr updater )
+{
+    m_states[ name ] = state;
+    m_stateUpdaters.push_back( updater );
 }
 
 // *******************************

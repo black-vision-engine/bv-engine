@@ -122,7 +122,7 @@ std::string             DefaultTexturePluginDesc::PixelShaderSource         ()
 }
 
 // *******************************
-//
+// 
 std::string             DefaultTexturePluginDesc::TextureName               ()
 {
     return "Tex0";
@@ -198,6 +198,7 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultTexturePluginDesc::TextureName() );
         txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+        txDesc->SetBorderColor( GetBorderColor() );
 
         if( txDesc != nullptr )
         {
@@ -297,6 +298,8 @@ void                                DefaultTexturePlugin::Update                
         InitAttributesChannel( m_prevPlugin );
         m_vaChannel->SetNeedsTopologyUpdate( true );
     }
+    else
+        m_vaChannel->SetNeedsTopologyUpdate( false );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -366,6 +369,8 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
+
+    assert( prevGeomChannel->GetComponents().size() > 0 );
 }
 
 namespace {
@@ -474,6 +479,15 @@ mathematics::RectConstPtr					DefaultTexturePlugin::GetAABB						( const glm::ma
 	//}
 	//	
 	//return nullptr;
+}
+
+// *************************************
+// 
+glm::vec4                                   DefaultTexturePlugin::GetBorderColor        () const
+{
+	auto param = this->GetParameter( "borderColor" );
+	assert( param );
+	return QueryTypedParam< ParamVec4Ptr >( param )->Evaluate();
 }
 
 
