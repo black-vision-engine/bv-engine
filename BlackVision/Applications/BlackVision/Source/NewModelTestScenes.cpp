@@ -853,8 +853,8 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedTriangleTestScene     ( model
     return root;
 }
 
-//model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
-model::BasicNodePtr    /*TestScenesFactory::*/CreedRoundedRectTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+//model::BasicNodePtr    /*TestScenesFactory::*/CreedRoundedRectTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -885,6 +885,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedConeTestScene     ( model::IT
     //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), 0.f );
     model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, glm::vec3( 1, 0, 0 ), -90.f );
     //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), -90.f );
+    model::SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0, 0, -1 ) );
 
     auto plugin = root->GetPlugin( "cone" );
     assert( plugin );
@@ -893,7 +894,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedConeTestScene     ( model::IT
     model::SetParameter( plugin->GetParameter( model::DefaultCone::PN::INNERHEIGHT ), 0.f, 0.5f );
 
     //root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = true;
-    model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+    model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
 
     return root;
 
@@ -935,7 +936,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedCubeTestScene     ( model::IT
 }
 
 //model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
-model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    /*TestScenesFactory::*/CreedTorusBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     auto root = std::make_shared< model::BasicNode >( "cube", timeEvaluator );
 
@@ -966,8 +967,8 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( 
     return root;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
-//model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+//model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     auto root = std::make_shared< model::BasicNode >( "cube", timeEvaluator );
 

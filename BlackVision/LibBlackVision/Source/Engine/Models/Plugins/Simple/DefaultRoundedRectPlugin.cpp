@@ -9,21 +9,13 @@ DefaultRoundedRectPluginDesc::DefaultRoundedRectPluginDesc()
 
 DefaultPluginParamValModelPtr   DefaultRoundedRectPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    DefaultPluginParamValModelPtr model     = std::make_shared< DefaultPluginParamValModel >();
-    DefaultParamValModelPtr vacModel        = std::make_shared< DefaultParamValModel >();
+    ModelHelper h( timeEvaluator );
 
-    auto paramS                             = ParametersFactory::CreateParameterVec2( DefaultRoundedRectPlugin::PN_SIZE, timeEvaluator );
-    auto paramB                             = ParametersFactory::CreateParameterVec4( DefaultRoundedRectPlugin::PN_BEVELS, timeEvaluator );
+    h.CreateVacModel();
+    h.AddSimpleParam( DefaultRoundedRectPlugin::PN_SIZE, glm::vec2( 1, 1 ), true, true );
+    h.AddSimpleParam( DefaultRoundedRectPlugin::PN_BEVELS, glm::vec4( 0.1, 0.1, 0.1, 0.1 ), true, true );
 
-    vacModel->AddParameter( paramS );
-    vacModel->AddParameter( paramB );
-
-    model->SetVertexAttributesChannelModel( vacModel );
-
-    paramS->SetVal( glm::vec2( 1.f, 1.f ), 0.f );
-    paramB->SetVal( glm::vec4( 0.1, 0.1, 0.1, 0.1 ) ,0.f );
-
-    return model;
+    return h.GetModel();
 }
 
 IPluginPtr                      DefaultRoundedRectPluginDesc::CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
@@ -98,8 +90,8 @@ std::vector<IGeometryGeneratorPtr>                 DefaultRoundedRectPlugin::Get
 
 bool                                DefaultRoundedRectPlugin::NeedsTopologyUpdate()
 {
-    return GetCachedParameter( PN_SIZE )->Changed()
-        || GetCachedParameter( PN_BEVELS )->Changed();
+    return ParameterChanged( PN_SIZE )
+        || ParameterChanged( PN_BEVELS );
 }
 
 glm::vec2                                   DefaultRoundedRectPlugin::GetSize()

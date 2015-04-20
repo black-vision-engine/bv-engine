@@ -1745,8 +1745,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 	std::vector< std::string > uids;
 
     uids.push_back( "DEFAULT_TRANSFORM" );
-    uids.push_back( "DEFAULT_SPHERE" );
-    //uids.push_back( "DEFAULT_GEOSPHERE" );
+    //uids.push_back( "DEFAULT_SPHERE" );
+    uids.push_back( "DEFAULT_GEOSPHERE" );
 	//uids.push_back( "DEFAULT_SIMPLE_CUBE" );
 #ifdef VERSION_COLOR
 	uids.push_back( "DEFAULT_COLOR" );
@@ -1764,7 +1764,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
     auto success = root->AddPlugins( uids, localTimeline );
     assert( success );
 
-	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
+	//SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.f, glm::vec3( 1.f, 0.f, 0.f ), 700.f );
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 60.f, glm::vec3( -1.f, 1.f, 0.f ), 50.f );
@@ -1773,10 +1773,10 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 	//auto dim = root->GetPlugin( "cone" )->GetParameter( "tesselation" );
 	//model::SetParameter( dim, 0.0, 50 );
 	//model::SetParameter( dim, 0.0f, 50 );
-	auto dim = root->GetPlugin( "sphere" )->GetParameter( "vertical stripes" );
-	model::SetParameter( dim, 0.0f, 30 );
-	dim = root->GetPlugin( "sphere" )->GetParameter( "horizontal stripes" );
-	model::SetParameter( dim, 0.0f, 30 );
+	//auto dim = root->GetPlugin( "sphere" )->GetParameter( "vertical stripes" );
+	//model::SetParameter( dim, 0.0f, 30 );
+	//dim = root->GetPlugin( "sphere" )->GetParameter( "horizontal stripes" );
+	//model::SetParameter( dim, 0.0f, 30 );
 
 #ifdef VERSION_COLOR
 	auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
