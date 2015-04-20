@@ -41,6 +41,31 @@ namespace Generator
     float bevel;
     glm::vec3 dims;
 
+    class SideComp : public IGeometryAndUVsGenerator
+    {
+        double d;
+    public:
+        Type GetType() { return Type::GEOMETRY_AND_UVS; }
+
+        void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
+        {
+            double w = dims.x/2 - bevel, 
+                h = dims.y/2 - bevel;
+
+            verts->AddAttribute( glm::vec3(  w,  h, d ) );
+            verts->AddAttribute( glm::vec3(  w, -h, d ) );
+            verts->AddAttribute( glm::vec3( -w,  h, d ) );
+            verts->AddAttribute( glm::vec3( -w, -h, d ) );
+
+            uvs->AddAttribute( glm::vec2(  1,  1 ) );
+            uvs->AddAttribute( glm::vec2(  1, -1 ) );
+            uvs->AddAttribute( glm::vec2( -1,  1 ) );
+            uvs->AddAttribute( glm::vec2( -1, -1 ) );
+        }
+
+        SideComp( double d_ ) : d( d_ ) { }
+    };
+
     class MainComp : public IGeometryAndUVsGenerator
     {
         glm::vec3 **v;
@@ -155,9 +180,13 @@ std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
     Generator::bevel = m_bevel->GetValue();
     Generator::dims = m_dimensions->GetValue();
     Generator::tesselation = m_tesselation->GetValue();
-
+    
+    double depth = Generator::dims.z/2;
+    
     std::vector<IGeometryGeneratorPtr> gens;
     gens.push_back( IGeometryGeneratorPtr( new Generator::MainComp() ) );
+    gens.push_back( IGeometryGeneratorPtr( new Generator::SideComp( depth ) ) );
+    gens.push_back( IGeometryGeneratorPtr( new Generator::SideComp( -depth ) ) );
     return gens;
 }
 
