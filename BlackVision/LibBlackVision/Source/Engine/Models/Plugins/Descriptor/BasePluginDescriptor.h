@@ -84,6 +84,20 @@ protected:
                 ( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
         }
 
+        template<>
+        inline void                             AddSimpleParam< glm::vec2 > ( std::string name, const glm::vec2& defaultValue, bool addValue, bool isState ) const
+        {
+            AddParam< Vec2Interpolator, glm::vec2, ModelParamType::MPT_VEC2, ParamType::PT_FLOAT2, ParamVec2 >
+                ( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
+        }
+
+        template<>
+        inline void                             AddSimpleParam< glm::vec4 > ( std::string name, const glm::vec4& defaultValue, bool addValue, bool isState ) const
+        {
+            AddParam< Vec4Interpolator, glm::vec4, ModelParamType::MPT_VEC4, ParamType::PT_FLOAT4, ParamVec4 >
+                ( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
+        }
+
         template< typename InterpolatorType, typename ValueType, ModelParamType MPT, ParamType PT, typename ParamImpl >
         void                                    AddParam            ( std::string name, const ValueType& defaultValue, bool addValue, bool isState ) const
         {
