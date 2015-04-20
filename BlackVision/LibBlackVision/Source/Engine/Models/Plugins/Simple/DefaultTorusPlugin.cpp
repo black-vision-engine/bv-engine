@@ -21,7 +21,7 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     h.CreateVacModel();
     h.AddSimpleParam( PN::TESSELATION, 10, true, true );
     h.AddSimpleParam( PN::RADIUS, 1.f, true, true );
-    h.AddSimpleParam( PN::RADIUSCROSSSECTION, 0.5f, true, true );
+    h.AddSimpleParam( PN::RADIUSCROSSSECTION, 0.1f, true, true );
     h.AddSimpleParam( PN::OPENANGLE, 360.f, true, true );
     //h.AddParam( PN::OPENANGLEMODE, ... );
 
