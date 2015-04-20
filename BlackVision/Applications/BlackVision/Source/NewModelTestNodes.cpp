@@ -1773,12 +1773,13 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 
 	auto dim = root->GetPlugin( "cone" )->GetParameter( "tesselation" );
 	model::SetParameter( dim, 0.0f, 16 );
+	//model::SetParameter( dim, 10.0f, 50 );
 	dim = root->GetPlugin( "cone" )->GetParameter( "rounded tip height" );
-	model::SetParameter( dim, 0.0f, 0.2f );
+	model::SetParameter( dim, 0.0f, 0.4f );
 	dim = root->GetPlugin( "cone" )->GetParameter( "inner radius" );
-	model::SetParameter( dim, 0.0f, 0.2f );
+	model::SetParameter( dim, 0.0f, 0.4f );
 	dim = root->GetPlugin( "cone" )->GetParameter( "inner height" );
-	model::SetParameter( dim, 0.0f, 0.2f );
+	model::SetParameter( dim, 0.0f, 0.4f );
 	//auto dim = root->GetPlugin( "sphere" )->GetParameter( "vertical stripes" );
 	//model::SetParameter( dim, 0.0f, 30 );
 	//dim = root->GetPlugin( "sphere" )->GetParameter( "horizontal stripes" );

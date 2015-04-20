@@ -123,9 +123,8 @@ namespace ConeGenerator
 		@param[in] angle_between_edges Angle between edges, that will be beveled.
 		@param[out] verts Object, that will hold produced verticies.
 		@param[out] uvs Object, that will hold produced UV coordinates.
-		@param[in] inverse_angle Set true if you want to draw inner beveled edge.
-		@return We have to shorten the edge of a cone. Thats why we return height of a bevel and radius on top.*/
-		glm::vec2 generateBeveledEdge( glm::vec2 circle_center, double angle_between_edges, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, bool inverse_angle = false )
+		@param[in] inverse_angle Set true if you want to draw inner beveled edge.*/
+		void generateBeveledEdge( glm::vec2 circle_center, double angle_between_edges, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, bool inverse_angle = false )
 		{
 			float circle_radius = circle_center.y;						// Its true only for bottom edges of the cone.
 			double sum_of_angles = PI - angle_between_edges;			// Circle is tangent to edges, so we have to angles 90 degrees + alfa + sum_of_angles that we are looking for.
@@ -157,27 +156,36 @@ namespace ConeGenerator
 
 			}
 
+		}
 
+		glm::vec2 computeCorrection( glm::vec2 circle_center, double angle_between_edges, bool inverse = false )
+		{
+			double sum_of_angles = PI - angle_between_edges;			// Circle is tangent to edges, so we have to angles 90 degrees + alfa + sum_of_angles that we are looking for.
+			
 			glm::vec2 return_value;
-			computeCircleRadiusHeight( return_value, circle_center, circle_radius, sum_of_angles, inverse_angle );
+			computeCircleRadiusHeight( return_value, circle_center, circle_center.y, sum_of_angles, inverse );
 			return return_value;
 		}
 
         virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
         {
-			// Add bevel to cone (outer bevel)
+			// Prepare data for bevel. ( We need this to generate first latteral surface too, thats why it happens in this place.
 			double angle_between_edges = atan2( height, outer_radius );
 
 			glm::vec2 circleCenter;
 			circleCenter.x = outer_radius - bevel;
 			circleCenter.y = float( bevel * tan( angle_between_edges / 2 ) );
 
-			glm::vec2 correction = generateBeveledEdge( circleCenter, angle_between_edges, verts, uvs );
+			glm::vec2 correction = computeCorrection( circleCenter, angle_between_edges );	// Data needed for lateral surface
 			float correct_radius = correction.x;
 			float correct_y = correction.y;
 
 			// Add Lateral surface
 			generateCircuit( 0.0f, correct_radius, height, correct_y, verts, uvs );
+
+			// Add bevel to cone (outer bevel)
+			if( bevel != 0.0 )
+				generateBeveledEdge( circleCenter, angle_between_edges, verts, uvs );
 
 			// Base surface
 			generateCircuit( outer_radius - bevel, inner_radius + bevel, 0.0f, 0.0f, verts, uvs );
@@ -189,8 +197,10 @@ namespace ConeGenerator
 			circleCenter.x = inner_radius + bevel;
 			circleCenter.y = float( bevel * tan( angle_between_edges / 2 ) );
 
-			correction = generateBeveledEdge( circleCenter, angle_between_edges, verts, uvs, true );
+			if( bevel != 0.0 )
+				generateBeveledEdge( circleCenter, angle_between_edges, verts, uvs, true );
 
+			correction = computeCorrection( circleCenter, angle_between_edges, true );
 			correct_radius = correction.x;
 			correct_y = correction.y;
 
@@ -205,6 +215,7 @@ namespace ConeGenerator
         }
     };
 
+	// New model doesn't use it.
     class BaseSurface : public IGeometryAndUVsGenerator
     {
     public:
