@@ -31,6 +31,7 @@ private:
 	SizeType					m_fontSize;
 	FT_Library					m_library;
 	FT_Face 					m_face;
+	std::string					m_fontFilePath;
 
 	Glyph *						RenderGlyph( wchar_t ch, Spans &, SizeType );
 
