@@ -146,13 +146,22 @@ const IPluginListFinalized *    BasicNode::GetPluginList            () const
 
 // ********************************
 //
-IModelNodePtr                   BasicNode::DeleteNode               ( const std::string & name, Renderer * renderer )
+bool                            BasicNode::DeleteNode               ( const std::string & name, Renderer * renderer )
 {
-    { name; }
-    { renderer; }
+    auto node = GetChild( name );
 
-    // FIXME: implement
-    return nullptr;
+    if( node )
+    {
+        auto basicNode = std::static_pointer_cast< BasicNode >( node );
+
+        DetachChildNodeOnly( basicNode );
+    
+        basicNode->DeleteSelf( renderer );
+    
+        return true;
+    }
+
+    return false;
 }
 
 // ********************************
@@ -343,6 +352,44 @@ SceneNode *                 BasicNode::BuildScene                   ()
 void            BasicNode::AddChildToModelOnly              ( BasicNodePtr n )
 {
     m_children.push_back( n );
+}
+
+// ********************************
+//
+void            BasicNode::DetachChildNodeOnly              ( BasicNodePtr n )
+{
+    for( unsigned int i = 0; i < m_children.size(); ++i )
+    {
+        if( m_children[ i ] == n )
+        {
+            m_children.erase( m_children.begin() + i );
+
+            return;
+        }
+    }
+
+    assert( false );
+}
+
+// ********************************
+//
+void            BasicNode::DeleteSelf                       ( Renderer * renderer )
+{
+    // Unregister updater
+    UpdatersManager::Get().RemoveNodeUpdater( this );
+
+    // Remove engine node and clear all resources
+    auto engineNode = ms_nodesMapping[ this ];
+    ms_nodesMapping.erase( this );
+
+    // Clear all OpenGL resources
+    SceneNode::DeleteNode( engineNode, renderer );
+
+    // Remove all children
+    for( auto ch : m_children )
+    {
+        ch->DeleteSelf( renderer ); 
+    }
 }
 
 // ********************************

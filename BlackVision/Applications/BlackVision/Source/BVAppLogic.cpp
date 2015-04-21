@@ -99,6 +99,7 @@ namespace
 //
 BVAppLogic::BVAppLogic              ()
     : m_startTime( 0 )
+    , m_renderer( nullptr )
     , m_timelineManager( new model::TimelineManager() )
     , m_modelScene( nullptr )
     , m_engineScene( nullptr )
@@ -178,6 +179,7 @@ void BVAppLogic::InitCamera         ( Renderer * renderer, unsigned int w, unsig
         cam->SetViewportSize( w, h );
     }
 
+    m_renderer = renderer;
     renderer->SetCamera( cam );
     m_renderLogic->SetCamera( cam );
 
@@ -263,7 +265,14 @@ model::IModelNodePtr BVAppLogic::CreateTestModelNodeInSomeSpecificScope( const s
 //
 void BVAppLogic::OnKey           ( unsigned char c )
 {
-    if( c != 0 )
+    if( c == 8 )
+    {
+        auto root = m_modelScene->GetSceneRoot();
+        auto child = root->GetChild( "child0" );
+
+        child->DeleteNode( "child01", m_renderer );
+    }
+    else if( c != 0 )
     {
         auto root = m_modelScene->GetSceneRoot();
         auto child = root->GetChild( "child0" );

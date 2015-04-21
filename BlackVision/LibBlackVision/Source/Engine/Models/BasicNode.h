@@ -84,7 +84,7 @@ public:
 
     // FIXME: temporary "dynamic tree" meothods, to be replaced by some better interface
     // FIXME: these two should be called only after model scene is attached to an engine scene
-    virtual IModelNodePtr                   DeleteNode              ( const std::string & name, Renderer * renderer ) override;
+    virtual bool                            DeleteNode              ( const std::string & name, Renderer * renderer ) override;
     virtual void                            AddChildNode            ( IModelNodePtr modelNode ) override;
 
     virtual unsigned int                    GetNumchildren          () const override;
@@ -117,6 +117,11 @@ public:
     virtual SceneNode *                     BuildScene              () override;
 
     void                                    AddChildToModelOnly     ( BasicNodePtr n );
+    void                                    DetachChildNodeOnly     ( BasicNodePtr n );
+
+private:
+
+    void                                    DeleteSelf              ( Renderer * renderer );
 
     //Convenience API (so that list can be created from external source and simply attached to this node)
     void                                    SetPlugins              ( DefaultPluginListFinalizedPtr plugins );
@@ -126,7 +131,6 @@ private:
     void                                    NonNullPluginsListGuard ();
 
 	mathematics::Rect 						GetAABB					( const glm::mat4 & currentTransformation ) const;
-
 
 public:
 

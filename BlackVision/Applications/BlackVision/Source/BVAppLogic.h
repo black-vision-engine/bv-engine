@@ -16,6 +16,7 @@ namespace bv
 
 class SimpleTimer;
 class RenderLogic;
+class Renderer;
 
 enum class BVAppState : int
 {
@@ -30,6 +31,8 @@ enum class BVAppState : int
 class BVAppLogic
 {
 private:
+
+    Renderer *                      m_renderer;
 
     BVAppState                      m_state;
 
