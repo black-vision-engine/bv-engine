@@ -149,12 +149,11 @@ void BVAppLogic::LoadScene          ( void )
 {
     model::BasicNodePtr root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
     //model::BasicNodePtr root = TestScenesFactory::OlafTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
-    //model::BasicNodePtr root = TestScenesFactory::CreedVideoInputTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
-    //model::BasicNodePtr root = TestScenesFactory::CreedPrismTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
-    //model::BasicNodePtr root = TestScenesFactory::CreedPrismBugTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
-    //model::BasicNodePtr root = TestScenesFactory::CreedCosineDemoScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
+    //model::BasicNodePtr root = TestScenesFactory::CreedTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
+    model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
+
     //model::BasicNodePtr root = TestScenesFactory::CreedBasicGeometryTestScene(m_globalTimeline);
-    assert( root );
+assert( root );
 
     m_engineScene  = root->BuildScene();
     assert( m_engineScene );
@@ -196,10 +195,8 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
 
 // *********************************
 //
-void BVAppLogic::OnUpdate           ( unsigned int millis, const SimpleTimer & timer, Renderer * renderer, HWND handle )
+void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 {
-    { timer; } // FIXME: suppress unuse warning
-    { handle; } // FIXME: suppress unuse warning
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate" );
 
     assert( m_state != BVAppState::BVS_INVALID );

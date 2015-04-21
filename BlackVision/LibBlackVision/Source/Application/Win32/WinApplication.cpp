@@ -34,7 +34,7 @@ LRESULT CALLBACK DefaultWindowEventHandler ( HWND handle, UINT msg, WPARAM wPara
         case WM_PAINT:
         {
             PAINTSTRUCT ps;
-            BeginPaint(handle, &ps);
+            BeginPaint( handle, &ps );
             app->OnDisplay();
             EndPaint( handle, &ps );
             return 0;
@@ -139,7 +139,6 @@ HWND CreateApplicationWindow ( WindowedApplication * app )
         }
     }
 
-
     DWORD dwStyle;
     DWORD dwExStyle = WS_EX_APPWINDOW;
 
@@ -169,7 +168,6 @@ HWND CreateApplicationWindow ( WindowedApplication * app )
 
     HWND handle = NULL;
 
-    
     handle = CreateWindowEx     (	dwExStyle, 
                                     sWindowClass,
                                     wtitle.c_str(),
@@ -215,7 +213,7 @@ void DestroyApplicationWindow( WindowedApplication * app, HWND handle )
     }
 }
 
-}
+} // anonymous
 
 // *********************************
 //

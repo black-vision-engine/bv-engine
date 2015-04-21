@@ -132,7 +132,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateSolidRectNode      ( const std::s
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( name, timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( name, timeEvaluator );
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
 
@@ -159,7 +159,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::s
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 3 );
 
-    auto root = std::make_shared< model::BasicNode >( name, timeEvaluator );
+    auto root = model::BasicNode::Create( name, timeEvaluator );
     auto success = root->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
     assert( success );
 
@@ -181,7 +181,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::s
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    { timelineManager; } // FIXME: suppress unuse warning
+    { timelineManager; } // FIXME: suppress unused warning
     TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_01.jpg", false, 3.4f, 0.7f );
     SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 0.75f ), .85f, 0.31f );
 
@@ -348,7 +348,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMan
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( nodeName, timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( nodeName, timeEvaluator );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -397,7 +397,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Tim
     }
 
     
-    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto node = model::BasicNode::Create( "Root", timeEvaluator );
     node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
 
     SetDefaultColorChangeAnim( node->GetPlugin( "solid color" ) );
@@ -438,7 +438,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::TimelineMana
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rectNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rectNode", timeEvaluator );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -489,7 +489,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineMa
 	uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
 
     //Create a model
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rectNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rectNode", timeEvaluator );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -557,7 +557,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPrismNode( model::Tim
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "prismNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "prismNode", timeEvaluator );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -617,7 +617,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::Time
     uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
 
     //Create a model
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "prismNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "prismNode", timeEvaluator );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -681,7 +681,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::Ti
     uids.push_back( "DEFAULT_TEXTURE" );
 
     //Create a model
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "prismNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "prismNode", timeEvaluator );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -743,7 +743,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPieChartNode( model::
     uids.push_back( "DEFAULT_COLOR" );
 
     //Create a model
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "pieNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "pieNode", timeEvaluator );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -811,7 +811,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPieChartNode( model::T
     uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
 
     //Create a model
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "pieNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "pieNode", timeEvaluator );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -881,7 +881,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::TimelineMan
     //uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
 
     //Create a model
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rectNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rectNode", timeEvaluator );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -937,7 +937,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::TimelineMan
 	//uids.push_back( "DEFAULT_TEXTURE" );
 
     //Create a model
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rectNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rectNode", timeEvaluator );
 
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
@@ -1033,7 +1033,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto node = model::BasicNode::Create( "Root", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -1147,7 +1147,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedTextNode( model::Timeline
 	GSimplePluginsUIDS.push_back( "DEFAULT_TEXTURE" );
 
 
-    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto node = model::BasicNode::Create( "Root", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -1241,7 +1241,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto node = model::BasicNode::Create( "Root", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
     assert( success );
@@ -1299,7 +1299,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = std::make_shared< model::BasicNode >( "Text", timeEvaluator );
+    auto node = model::BasicNode::Create( "Text", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -1367,7 +1367,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
 
 model::BasicNodePtr	SimpleNodesFactory::CreateCrawlerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-	//std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+	//model::BasicNode::Create( "Root", timeEvaluator );
 	//node->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEvaluator );
 
 	auto node = CreateGreenRectNode( timelineManager, timeEvaluator, "green rect"); 
@@ -1470,7 +1470,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto node = model::BasicNode::Create( "Root", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -1546,7 +1546,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::TimelineMa
         GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     }
 
-    auto node = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto node = model::BasicNode::Create( "Root", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -1614,7 +1614,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins6, GSimplePlugins6 + 3 );
 
-    auto node = std::make_shared< model::BasicNode >( ".", timeEvaluator );
+    auto node = model::BasicNode::Create( ".", timeEvaluator );
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
     assert( success );
@@ -1768,7 +1768,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 	#endif
 #endif
 
-    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto root = model::BasicNode::Create( "Root", timeEvaluator );
 
     auto success = root->AddPlugins( uids, localTimeline );
     assert( success );

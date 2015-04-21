@@ -43,7 +43,7 @@ bool PrototyperApp::m_sWindowedApplicationInitialized = PrototyperApp::RegisterI
 // *********************************
 //
 PrototyperApp::PrototyperApp	()
-    : WindowedApplication( "BlackVision prototyper", 0, 0, 1920, 1080, true )
+    : WindowedApplication( "BlackVision prototyper", 0, 0, DefaultPrototypeWidth(), DefaultPrototypeHeight(), DefaultPrototypeFullscreenSetting() )
     , m_appLogicPrototype( nullptr )
 {
 }
@@ -52,6 +52,8 @@ PrototyperApp::PrototyperApp	()
 //
 PrototyperApp::~PrototyperApp ()
 {
+    FreeConsole();
+
     delete m_appLogicPrototype;
 }
 
@@ -110,8 +112,6 @@ bool PrototyperApp::OnInitialize       ()
     
         freopen_s( &dummy, "CONOUT$", "wb", stdout );
         freopen_s( &dummy, "CONOUT$", "wb", stderr );
-
-        std::cout << sizeof(FILE*);
     }
 
     m_appLogicPrototype = CreateDefaultPrototype( m_Renderer );

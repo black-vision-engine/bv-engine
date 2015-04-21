@@ -32,10 +32,11 @@ public:
 
     virtual IModelNodePtr                   GetNode             ( const std::string & path, const std::string & separator = "/" )   = 0;
     virtual IModelNodePtr                   GetChild            ( const std::string & name )                                        = 0;
-    virtual IModelNodePtr                   GetLayer            ( const std::string & name )                                        = 0;
 
     virtual const IPluginListFinalized *    GetPluginList       () const                                                            = 0;
 
+
+    // FIXME: remove when proper GlobalEfect is implemented
     virtual void                            EnableOverrideStateAM   ()                                                              = 0;
     virtual void                            EnableOverrideStateNM   ()                                                              = 0;
     virtual void                            DisableOverrideStateAM  ()                                                              = 0;
@@ -50,6 +51,8 @@ public:
     virtual bool                            IsStateOverridenAM  () const                                                            = 0;
 
     virtual IOverrideState *                GetOverrideState    ()                                                                  = 0;
+    // FIXME: end of remove
+    // FIXME: remove when proper GlobalEfect is implemented
 
     virtual SceneNode *                     BuildScene          ()                                                                  = 0;
     virtual void                            Print               ( std::ostream & out, int tabs = 0 ) const                          = 0;

@@ -5,9 +5,18 @@
 
 namespace bv {
 
+namespace  {
+
+    unsigned int    DefaultWidth                = 800;
+    unsigned int    DefaultHeight               = 600;
+    bool            DefaultFullscreenSetting    = false;
+
+} // anonymous
+
+
 // ****************************
 //
-IAppLogicPrototype * CreateDefaultPrototype     ( Renderer * renderer )
+IAppLogicPrototype * CreateDefaultPrototype             ( Renderer * renderer )
 {
     { renderer; }
     //return new SimpleVAOPrototype0();
@@ -20,5 +29,25 @@ IAppLogicPrototype * CreateDefaultPrototype     ( Renderer * renderer )
 	return new FBOProfilingPrototype3( renderer );
 }
 
+// ****************************
+// FIXME: fatalna imitacja nedznej namiastki configa
+unsigned int        DefaultPrototypeWidth               ()
+{
+    return DefaultWidth;
+}
+
+// ****************************
+// FIXME: fatalna imitacja nedznej namiastki configa
+unsigned int        DefaultPrototypeHeight              ()
+{
+    return DefaultHeight;
+}
+
+// ****************************
+// FIXME: fatalna imitacja nedznej namiastki configa
+bool                DefaultPrototypeFullscreenSetting   ()
+{
+    return DefaultFullscreenSetting;
+}
 
 } // bv

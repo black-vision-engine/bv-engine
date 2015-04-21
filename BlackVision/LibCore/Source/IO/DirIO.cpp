@@ -60,4 +60,23 @@ std::string                  Dir::WorkingDirectory  ()
     }
 }
 
+// *******************************
+//
+bool						Dir::Exists				( const std::string & path )
+{
+	auto ftyp = GetFileAttributesA( path.c_str() );
+	
+	if ( ftyp == INVALID_FILE_ATTRIBUTES )
+	{
+		return false;
+	}
+
+	if ( ftyp & FILE_ATTRIBUTE_DIRECTORY )
+	{
+		return true;
+	}
+
+	return false;
+}
+
 } //bv

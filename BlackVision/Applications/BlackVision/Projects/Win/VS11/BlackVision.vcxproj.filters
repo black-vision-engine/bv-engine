@@ -101,6 +101,7 @@
     <ClCompile Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.cpp">
       <Filter>VideoInput</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h">
       <Filter>VideoInput</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />

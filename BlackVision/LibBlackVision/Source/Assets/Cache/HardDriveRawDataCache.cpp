@@ -1,0 +1,121 @@
+#include "HardDriveRawDataCache.h"
+
+#include "IO/FileIO.h"
+#include "IO/DirIO.h"
+
+static const std::string RAW_DATA_CACHE_DIR = "cache/raw_data_cache";
+
+namespace bv {
+
+// ******************************
+// 
+void		HardDriveRawDataCache::Initialize		()
+{
+	ScanCacheDir();
+}
+
+// ******************************
+// 
+void		HardDriveRawDataCache::ScanCacheDir	()
+{
+	if( !Dir::Exists( RAW_DATA_CACHE_DIR ) )
+	{
+		File::CreateDir( RAW_DATA_CACHE_DIR );
+	}
+	else
+	{
+		auto files = Dir::ListFiles( RAW_DATA_CACHE_DIR, "*" );
+
+		for( auto f : files )
+		{
+			m_entries.insert( Hash::FromString( f ) );
+		}
+	}
+}
+
+// ******************************
+// 
+MemoryChunkConstPtr	HardDriveRawDataCache::Load	( const Hash & key ) const
+{
+	auto fileName = RAW_DATA_CACHE_DIR + key.Get();
+
+	if( File::Exists( fileName ) )
+	{
+		auto size	= File::Size( fileName );
+
+		auto memoryChunk = MemoryChunk::Create( size );
+
+		File::Read( memoryChunk->GetWritable(), fileName );
+
+		return memoryChunk;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+// ******************************
+// 
+HardDriveRawDataCache::HardDriveRawDataCache				()
+{
+	Initialize();
+}
+
+// ******************************
+// 
+HardDriveRawDataCache::~HardDriveRawDataCache				()
+{}
+
+// ******************************
+// 
+HardDriveRawDataCache & HardDriveRawDataCache::GetInstance()
+{
+	static HardDriveRawDataCache instance = HardDriveRawDataCache();
+	return instance;
+}
+
+// ******************************
+// 
+MemoryChunkConstPtr	HardDriveRawDataCache::Get		( const Hash & key ) const
+{
+	auto it = m_entries.find( key );
+
+	if( it != m_entries.end() )
+	{
+		return Load( key );
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+// ******************************
+// 
+bool HardDriveRawDataCache::Exists					( const Hash & key ) const
+{
+	return m_entries.find( key ) != m_entries.end();
+}
+
+// ******************************
+// 
+bool HardDriveRawDataCache::Add					( const Hash & key, const MemoryChunkConstPtr & memory, bool rewriteIfExists )
+{
+	auto fileName = RAW_DATA_CACHE_DIR + key.Get();
+
+	auto exists = File::Exists( fileName );
+
+	if( !exists || rewriteIfExists )
+	{
+		File::Write( memory->Get(), memory->Size(), fileName, false );
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+} // bv

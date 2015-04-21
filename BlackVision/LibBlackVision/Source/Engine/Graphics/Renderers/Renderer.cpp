@@ -94,7 +94,6 @@ void    Renderer::SetStateInstance    ( const RendererStateInstance & stateInsta
 void	Renderer::Terminate             ()
 {
     delete m_PdrPBOMemTransferRT;
-    delete m_RendererData;
 
     FreePdrResources();
 

@@ -29,7 +29,7 @@ Texture2DCache::~Texture2DCache()
 //
 Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescriptor * txParams )
 {
-    auto semantic = txParams->GetSemantic();
+    auto semantic   = txParams->GetSemantic();
     auto format     = txParams->GetFormat();
     auto width      = txParams->GetWidth();
     auto height     = txParams->GetHeight();

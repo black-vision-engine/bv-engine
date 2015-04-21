@@ -8,6 +8,7 @@
 
 #include "Engine/Models/BasicNode.h"
 
+#include "ExampleTestScenes.h"
 #include "NewModelTestNodes.h"
 
 #include "PieChartNode.h"
@@ -40,7 +41,7 @@ model::BasicNodePtr  DefaultTestNewAPI   ( const model::PluginsManager * plugins
 
     model::IPluginListFinalizedPtr pluginsList( pluginsManager->CreatePlugins( uids, timeEvaluator ) );
 
-    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto root = model::BasicNode::Create( "Root", timeEvaluator );
 
     //FIXME: add list to the node
     return root;
@@ -50,7 +51,7 @@ model::BasicNodePtr  DefaultTestNewAPI   ( const model::PluginsManager * plugins
 //
 model::BasicNodePtr  DefaultTestNodeNewNodeImpl  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator, pluginsManager );
+    auto root = model::BasicNode::Create( "Root", timeEvaluator, pluginsManager );
 
     bool success = true;
 
@@ -86,7 +87,7 @@ model::BasicNodePtr  DefaultTestWithValidation   ( const model::PluginsManager *
 
     IPluginPtr thirdPlugin  = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin, timeEvaluator ) );
 
-    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto root = model::BasicNode::Create( "Root", timeEvaluator );
 
     root->AddPlugin( firstPlugin );
     root->AddPlugin( secondPlugin );
@@ -106,7 +107,7 @@ model::BasicNodePtr  DefaultTestNoValidation     ( const model::PluginsManager *
     auto secondPlugin = pluginsManager->CreatePlugin( "DEFAULT_RECTANGLE", "rect0", firstPlugin, timeEvaluator );
     auto thirdPlugin  = pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin, timeEvaluator );
 
-    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto root = model::BasicNode::Create( "Root", timeEvaluator );
 
     root->AddPlugin( firstPlugin );
     root->AddPlugin( secondPlugin );
@@ -458,6 +459,21 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 
 // *****************************
 //
+model::BasicNodePtr     TestScenesFactory::CreateTestScene      ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, TestScenesFactory::TestSceneSelector tss )
+{
+    switch( tss )
+    {
+        case TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES:
+            return TwoTexturedRectangles( pluginsManager, timelineManager, timeEvaluator );
+        default:
+            assert( false );
+
+            return nullptr;
+    };
+}
+
+// *****************************
+//
 model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; } // FIXME: suppress unused warning
@@ -547,7 +563,7 @@ model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const mod
     {timelineManager;}
     {pluginsManager;}
 
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
 
@@ -603,7 +619,7 @@ model::BasicNodePtr    TestScenesFactory::CreedDeprecatedTestScene     ( const m
 model::BasicNodePtr    TestScenesFactory::CreedPrimitivePieChartTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; } // FIXME: suppress unuse warning
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
     auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
@@ -642,8 +658,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
 
     //return rect;
 
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
-    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
 
 //SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), 1000.f );
 
@@ -707,7 +722,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismBugTestScene     ( const mod
 {
     {pluginsManager;}
 
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
     auto prism2 = SimpleNodesFactory::CreateCreedTexturedPrismNode( timelineManager, timeEvaluator, 0 );
@@ -742,7 +757,7 @@ void BoolParamTest()
 
 model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    auto node = std::make_shared< model::BasicNode >( "rect1", timeEvaluator );
+    model::BasicNodePtr node = model::BasicNode::Create( "rect", timeEvaluator );
     node->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     node->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
     node->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
@@ -760,7 +775,7 @@ model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr t
 
 model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model::PluginsManager * , model::TimelineManager * , model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
     auto node1 = CosineDemoRect( glm::vec3( -1, 0.5, 0 ) , timeEvaluator );
@@ -776,7 +791,7 @@ model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model
 //model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 model::BasicNodePtr    /*TestScenesFactory::*/CreedCircleTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_CIRCLE", timeEvaluator );
     root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
@@ -806,7 +821,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedCircleTestScene     ( model::
 
 model::BasicNodePtr    /*TestScenesFactory::*/CreedEllipseTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_ELLIPSE", timeEvaluator );
     root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
@@ -831,7 +846,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedEllipseTestScene     ( model:
 
 model::BasicNodePtr    /*TestScenesFactory::*/CreedTriangleTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRIANGLE", timeEvaluator );
     root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
@@ -856,7 +871,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedTriangleTestScene     ( model
 //model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 model::BasicNodePtr    /*TestScenesFactory::*/CreedRoundedRectTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    model::BasicNodePtr root = std::make_shared< model::BasicNode >( "rootNode", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_ROUNDEDRECT", timeEvaluator );
     root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
@@ -876,7 +891,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedRoundedRectTestScene     ( mo
 //model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 model::BasicNodePtr    /*TestScenesFactory::*/CreedConeTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    auto root = std::make_shared< model::BasicNode >( "cone", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_CONE", timeEvaluator );
@@ -906,7 +921,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedConeTestScene     ( model::IT
 model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 //model::BasicNodePtr    /*TestScenesFactory::*/CreedCubeTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    auto root = std::make_shared< model::BasicNode >( "cube", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_CUBE", timeEvaluator );
@@ -939,7 +954,7 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
 //model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 model::BasicNodePtr    /*TestScenesFactory::*/CreedTorusBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    auto root = std::make_shared< model::BasicNode >( "cube", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_TORUS", timeEvaluator );
@@ -971,7 +986,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedTorusBasicGeometryTestScene  
 //model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    auto root = std::make_shared< model::BasicNode >( "cube", timeEvaluator );
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_SPRING", timeEvaluator );

@@ -41,6 +41,7 @@ public:
     static SizeType     Read        ( std::ostream & out, const std::string & fileName );
     static SizeType     Read        ( char* out, const std::string & fileName );
     static SizeType     Write       ( std::istream & in, const std::string & fileName );
+	static SizeType		Write       ( const char * in, SizeType size, const std::string & fileName, bool append );
     static SizeType     Size        ( const std::string & fileName );
 };
 
@@ -216,6 +217,28 @@ SizeType    FileImpl::Write       ( std::istream & in, const std::string & fileN
 
 // *******************************
 //
+SizeType    FileImpl::Write       ( const char * in, SizeType size, const std::string & fileName, bool append )
+{
+	FileImpl * f = nullptr;
+	
+	if( append )
+	{
+		f = FileImpl::Open( fileName, File::OpenMode::FOMWriteAppend );
+	}
+	else
+	{
+		f = FileImpl::Open( fileName, File::OpenMode::FOMReadWrite );
+	}
+
+	f->Write( in, size );
+
+	f->Close();
+
+	return size;
+}
+
+// *******************************
+//
 File::File( FileImpl * impl )
     : m_impl( impl )
 {}
@@ -257,7 +280,7 @@ SizeType    File::Write       ( std::istream & in , SizeType numBytes )
 
 // *******************************
 //
-void         File::Write       ( const char* in , SizeType numBytes )
+void         File::Write       ( const char * in , SizeType numBytes )
 {
     m_impl->Write( in, numBytes );
 }
@@ -325,6 +348,14 @@ SizeType    File::Write       ( std::istream & in, const std::string & fileName 
     return FileImpl::Write( in, fileName );
 }
 
+
+// *******************************
+//
+SizeType    File::Write       ( const char * in, SizeType size, const std::string & fileName, bool append )
+{
+	return FileImpl::Write( in, size, fileName, append );
+}
+
 // *******************************
 //
 std::string  File::GetAbsolutPath( const std::string & fileName )
@@ -344,7 +375,11 @@ std::string  File::GetDirName  ( const std::string & path )
 //
 bool         File::CreateDir   ( const std::string & path )
 {
-    return boost::filesystem::create_directory( path );
+    boost::system::error_code ec;
+    auto success = boost::filesystem::create_directory( path, ec );
+    if( ec )
+        std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+    return success;
 }
 
 

@@ -141,6 +141,8 @@ Renderer::~Renderer ()
     //FIXME: remove all PDR resources
     WGLRendererData * data = static_cast< WGLRendererData * >( m_RendererData );
 
+    Terminate();
+
     if ( data->m_WindowRC )
     {
         wglMakeCurrent( NULL, NULL );
@@ -152,7 +154,7 @@ Renderer::~Renderer ()
         ::ReleaseDC( data->m_WindowHandle, data->m_WindowDC );
     }
 
-    Terminate();
+    delete m_RendererData;
 }
 
 // *********************************

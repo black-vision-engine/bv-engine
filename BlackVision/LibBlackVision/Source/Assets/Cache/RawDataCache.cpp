@@ -1,4 +1,5 @@
 #include "RawDataCache.h"
+#include "HardDriveRawDataCache.h"
 
 namespace bv
 {
@@ -12,22 +13,29 @@ MemoryChunkConstPtr		RawDataCache::Get( const Hash & key ) const
 
 // ******************************
 //
-bool					RawDataCache::Add( const Hash & key, MemoryChunkConstPtr data )
+bool					RawDataCache::Add( const Hash & key, MemoryChunkConstPtr data, bool addToHardDriveCache )
 {
 	if( Exists( key ) )
+	{
 		return false;
+	}
 	else
 	{
-		Update( key, data );
+		Update( key, data, addToHardDriveCache );
 		return true;
 	}
 }
 
 // ******************************
 //
-void 					RawDataCache::Update	( const Hash & key, MemoryChunkConstPtr data )
+void 					RawDataCache::Update	( const Hash & key, MemoryChunkConstPtr data, bool addToHardDriveCache )
 {
 	m_data[ key ] = data;
+
+	if( addToHardDriveCache && !HardDriveRawDataCache::GetInstance().Exists( key ) )
+	{
+		HardDriveRawDataCache::GetInstance().Add( key, data, true );
+	}
 }
 
 // ******************************
@@ -44,16 +52,20 @@ MemoryChunkConstPtr		RawDataCache::Find( const Hash & key ) const
 {
 	auto it = m_data.find( key );
 	if( it != m_data.end() )
+	{
 		return it->second;
+	}
 	else
-		return nullptr;
+	{
+		return HardDriveRawDataCache::GetInstance().Get( key );
+	}
 }
 
 // ******************************
 //
 bool					RawDataCache::Exists( const Hash & key )
 {
-	return m_data.find( key ) != m_data.end();
+	return ( m_data.find( key ) != m_data.end() ) || HardDriveRawDataCache::GetInstance().Exists( key );
 }
 
 // ******************************

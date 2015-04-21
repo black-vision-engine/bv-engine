@@ -54,23 +54,26 @@ private:
     BasicOverrideState *            m_overrideState;
 
     TNodeVec                        m_children;
-    TNodeVec                        m_layers;
 
     DefaultPluginListFinalizedPtr   m_pluginList;
 
 	INodeLogicPtr					m_nodeLogic;
 
-public:
+protected:
 
     explicit BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager = nullptr );
+
+public:
+
     virtual ~BasicNode();
+
+    static BasicNodePtr                     Create                  ( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager = nullptr );
 
     virtual IPluginPtr                      GetPlugin               ( const std::string & name ) const override;
     virtual IFinalizePluginConstPtr         GetFinalizePlugin       () const override;
 
     virtual IModelNodePtr                   GetNode                 ( const std::string & path, const std::string & separator = "/" ) override;
     virtual IModelNodePtr                   GetChild                ( const std::string & name ) override;
-    virtual IModelNodePtr                   GetLayer                ( const std::string & name ) override;
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
 

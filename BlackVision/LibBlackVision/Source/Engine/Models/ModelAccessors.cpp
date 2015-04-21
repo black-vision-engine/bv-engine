@@ -27,21 +27,6 @@ BasicNodePtr     ModelAccessors::FindChild   ( BasicNodePtr node, const std::str
     return nullptr;
 }
 
-// ********************************
-//
-BasicNodePtr     ModelAccessors::FindLayer   ( BasicNodePtr node, const std::string & name )
-{
-    for( auto n : node->m_layers )
-    {
-        if( n->GetName() == name )
-        {
-            return std::static_pointer_cast< BasicNode >( n );
-        }
-    }
-
-    return nullptr;
-}
-
 } //model
 } //bv
 

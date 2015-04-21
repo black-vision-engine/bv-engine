@@ -104,7 +104,7 @@ std::string     BVGLTranslator::TranslateRenderbufferInternalFormat ( GLenum for
 {
     { format; }
     //FIXME: add other formats
-	assert( /*format == GL_RENDERBUFFER ||*/ format == GL_RGBA || format == GL_DEPTH_COMPONENT );
+	assert( format == GL_DEPTH_COMPONENT || format == GL_RGBA );
 
 	switch( format )
 	{
