@@ -502,7 +502,7 @@ SceneNode *                         BasicNode::CreateSceneNode          () const
 
     SceneNode * node        = new SceneNode( renderable );
     NodeUpdaterPtr updater  = NodeUpdater::Create( node, shared_from_this() );
-    UpdatersManager::Get().RegisterUpdater( updater );
+    UpdatersManager::Get().RegisterUpdater( this, updater );
 
     return node;
 }
