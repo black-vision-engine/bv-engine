@@ -147,6 +147,7 @@ namespace ConeGenerator
     {
         float height, radius;
 		glm::vec3 center_translate;
+		double angle_offset;			// OpenAngleMode needs this
     public:
         LateralSurface( float h, float r ) : height( h ), radius( r ) { }
 

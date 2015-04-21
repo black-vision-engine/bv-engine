@@ -43,7 +43,7 @@ DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( IT
     SimpleVec4EvaluatorPtr      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
     SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-	SimpleIntEvaluatorPtr		wrapModeXEvaluator = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "wrapModeX", timeEvaluator );
+	SimpleFloatEvaluatorPtr		wrapModeXEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "wrapModeX", timeEvaluator );
 	SimpleFloatEvaluatorPtr		wrapModeYEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "wrapModeY", timeEvaluator );
 
     //ParamFloatPtr  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX", timeEvaluator );
@@ -410,7 +410,7 @@ TextureWrappingMode                         DefaultTexturePlugin::GetWrapModeX  
     //return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeX );
 	auto param = this->GetParameter( "wrapModeX" );
 	assert( param );
-	return static_cast<TextureWrappingMode>( static_cast<int>( QueryTypedParam< ParamIntPtr >( param )->Evaluate() ) );
+	return static_cast<TextureWrappingMode>( static_cast<int>( QueryTypedParam< ParamFloatPtr >( param )->Evaluate() ) );
 }
 
 // *************************************
