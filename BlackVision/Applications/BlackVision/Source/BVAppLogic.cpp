@@ -147,13 +147,13 @@ void BVAppLogic::Initialize         ()
 //
 void BVAppLogic::LoadScene          ( void )
 {
-    //model::BasicNodePtr root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
+    model::BasicNodePtr root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
     //model::BasicNodePtr root = TestScenesFactory::OlafTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
     //model::BasicNodePtr root = TestScenesFactory::CreedVideoInputTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
     //model::BasicNodePtr root = TestScenesFactory::CreedPrismTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
     //model::BasicNodePtr root = TestScenesFactory::CreedPrismBugTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
     //model::BasicNodePtr root = TestScenesFactory::CreedCosineDemoScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
-    model::BasicNodePtr root = TestScenesFactory::CreedBasicGeometryTestScene(m_globalTimeline);
+    //model::BasicNodePtr root = TestScenesFactory::CreedBasicGeometryTestScene(m_globalTimeline);
     assert( root );
 
     m_engineScene  = root->BuildScene();

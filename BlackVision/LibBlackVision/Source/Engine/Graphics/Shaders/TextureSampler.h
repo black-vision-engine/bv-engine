@@ -79,6 +79,7 @@ public:
 
     const glm::vec4 &       GetBorderColor  () const;
     void                    SetBorderColor  ( const glm::vec4 & bc ) const; // FIXME: HACK
+	void					SetWrappingMode ( SamplerWrappingMode mode, SamplerWrapDirection wrap_direction ) const; // @FIXME: HACK
 
     //FIXME: anisotropy
     //FIXME: LOD bias when LOD mipmapping is implemented

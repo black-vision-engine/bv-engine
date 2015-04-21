@@ -41,6 +41,8 @@ public:
                                                 m_roundedTipHeight,
                                                 m_openAngle,
                                                 m_height;
+	std::shared_ptr< ParamEnum< OpenAngleMode > >		m_openAngleMode;
+	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenter;
 
 private:
     virtual std::vector<IGeometryGeneratorPtr>    GetGenerators() override;

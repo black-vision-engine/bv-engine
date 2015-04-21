@@ -1745,12 +1745,12 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 	std::vector< std::string > uids;
 
     uids.push_back( "DEFAULT_TRANSFORM" );
-    //uids.push_back( "DEFAULT_SPHERE" );
+    uids.push_back( "DEFAULT_SPHERE" );
     //uids.push_back( "DEFAULT_GEOSPHERE" );
 	//uids.push_back( "DEFAULT_SIMPLE_CUBE" );
 	//uids.push_back( "DEFAULT_CIRCLE" );
 	//uids.push_back( "DEFAULT_CUBE" );
-	uids.push_back( "DEFAULT_CONE" );
+	//uids.push_back( "DEFAULT_CONE" );
 	//uids.push_back( "DEFAULT_ELLIPSE" );
 	//uids.push_back( "DEFAULT_ROUNDEDRECT" );
 	//uids.push_back( "DEFAULT_TRIANGLE" );
@@ -1781,7 +1781,9 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 
 	//auto dim = root->GetPlugin( "cone" )->GetParameter( "tesselation" );
 	//model::SetParameter( dim, 0.0f, 16 );
-	////model::SetParameter( dim, 10.0f, 50 );
+	//dim = root->GetPlugin( "cone" )->GetParameter( "weight center" );
+	//model::SetParameter( dim, 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::TOP );
+	//model::SetParameter( dim, 10.0f, 50 );
 	//dim = root->GetPlugin( "cone" )->GetParameter( "rounded tip height" );
 	//model::SetParameter( dim, 0.0f, 0.4f );
 	//dim = root->GetPlugin( "cone" )->GetParameter( "inner radius" );
@@ -1801,10 +1803,14 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 #endif
 	
 #ifdef VERSION_TEXTURE
-	success = model::LoadTexture( root->GetPlugin( "texture" ), "world_map.jpg", MipMapFilterType::BILINEAR );
+
+	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+
+	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
 	assert( success );
 	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
-	//model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+	model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
 	//root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
 #endif
 

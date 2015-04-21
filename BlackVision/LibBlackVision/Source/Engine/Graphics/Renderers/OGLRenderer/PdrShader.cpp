@@ -178,7 +178,15 @@ int     PdrShader::EnableTextureSamplers   ( Renderer * renderer, Shader * shade
             auto bc = params->GetParam( "borderColor" );
             if( bc )
                 samplers[ i ]->SetBorderColor( bc->GenericGetValue<glm::vec4>() );
+			auto wrapX = params->GetParam( "wrapModeX" );
+			if( wrapX )
+				samplers[ i ]->SetWrappingMode( static_cast<bv::SamplerWrappingMode>( static_cast< int >( wrapX->GenericGetValue<float>() ) ), SamplerWrapDirection::SWD_S );
+			auto wrapY = params->GetParam( "wrapModeY" );
+			if( wrapY )
+				samplers[ i ]->SetWrappingMode(  static_cast<bv::SamplerWrappingMode>( static_cast< int >( wrapY->GenericGetValue<float>() ) ), SamplerWrapDirection::SWD_T );
+			
             EnableTextureSampler( renderer, samplers[ i ], params->GetTexture( i ).get(), i + firstAvailableSamplerIndex );
+
         }
 
         return (int) samplers.size();
