@@ -229,11 +229,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::Timel
     bTex.SetRotation( 0.f, 0.f, 1.f, 360.0f, 15.f );
     auto c010 = bTex.CreateNode( "node010", true );
 
-    root->AddChild( c0 );
-    root->AddChild( c1 );
-    c0->AddChild( c00 );
-    c0->AddChild( c01 );
-    c01->AddChild( c010 );
+    root->AddChildToModelOnly( c0 );
+    root->AddChildToModelOnly( c1 );
+    c0->AddChildToModelOnly( c00 );
+    c0->AddChildToModelOnly( c01 );
+    c01->AddChildToModelOnly( c010 );
 
     auto ai = TestAIManager::Instance().GetAIPreset( 3, root );
     { ai; } // FIXME: suppress unused warning
@@ -270,8 +270,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest ( model::Tim
     bSolid.SetPosition(  1.2f, 0.17f, 0.01f, 14.0f );
     auto c0 = bSolid.CreateNode( "node0" );
 
-    root->AddChild( cm1 );
-    cm1->AddChild( c0 );
+    root->AddChildToModelOnly( cm1 );
+    cm1->AddChildToModelOnly( c0 );
 
     auto ai = TestAIManager::Instance().GetAIPreset( 6, root );
     { ai; } // FIXME: suppress unuse warning
@@ -323,9 +323,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest1 ( model::Ti
     bSolid.SetPosition(  1.2f, 0.17f, 0.01f, 14.0f );
     auto c0 = bSolid.CreateNode( "nodem3" );
 
-    root->AddChild( cm1 );
-    cm1->AddChild( cm2 );
-    root->AddChild( c0 );
+    root->AddChildToModelOnly( cm1 );
+    cm1->AddChildToModelOnly( cm2 );
+    root->AddChildToModelOnly( c0 );
 
     auto ai = TestAIManager::Instance().GetAIPreset( 6, root );
     { ai; } // FIXME: suppress unuse warning
@@ -1370,16 +1370,16 @@ model::BasicNodePtr	SimpleNodesFactory::CreateCrawlerNode( model::TimelineManage
 	node->SetLogic( crawler );
 
 	auto texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
-	texture->AddChild( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	texture->AddChildToModelOnly( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
 	crawler->AddNext( texture );
 	texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
-	texture->AddChild( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	texture->AddChildToModelOnly( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
 	crawler->AddNext( texture );
 	texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
-	texture->AddChild( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	texture->AddChildToModelOnly( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
 	crawler->AddNext( texture );
 	texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
-	texture->AddChild( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	texture->AddChildToModelOnly( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
 	crawler->AddNext( texture );
 	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
 	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
@@ -1435,8 +1435,8 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextWithShadowNode(   model::Timel
     //st.z += 0.001f;
     //SetParameterTranslation( param, 0, 0.0f, st );
 
-    shadowNode->AddChild( node );
-    //shadowNode->AddChild( tx );
+    shadowNode->AddChildToModelOnly( node );
+    //shadowNode->AddChildToModelOnly( tx );
 
     return shadowNode;
 }

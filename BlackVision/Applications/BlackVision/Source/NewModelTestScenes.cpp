@@ -381,19 +381,19 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
     auto n8 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node023" );
     auto n9 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node024" );
 
-    rt->AddChild( n0 );
+    rt->AddChildToModelOnly( n0 );
 
-    n0->AddChild( n1 );
-    n0->AddChild( n2 );
+    n0->AddChildToModelOnly( n1 );
+    n0->AddChildToModelOnly( n2 );
 
-    n1->AddChild( n3 );
-    n1->AddChild( n4 );
-    n1->AddChild( n5 );
+    n1->AddChildToModelOnly( n3 );
+    n1->AddChildToModelOnly( n4 );
+    n1->AddChildToModelOnly( n5 );
 
-    n2->AddChild( n6 );
-    n2->AddChild( n7 );
-    n2->AddChild( n8 );
-    n2->AddChild( n9 );
+    n2->AddChildToModelOnly( n6 );
+    n2->AddChildToModelOnly( n7 );
+    n2->AddChildToModelOnly( n8 );
+    n2->AddChildToModelOnly( n9 );
 
     test_get_node( rt, "", true );
     test_get_node( rt, "/", true );
@@ -541,7 +541,7 @@ model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::Plug
     { pluginsManager; } // FIXME: suppress unuse warning
 	auto rect = SimpleNodesFactory::CreateOlafRectNode( timelineManager, timeEvaluator );
 	auto clock = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
-	rect->AddChild( clock );
+	rect->AddChildToModelOnly( clock );
 
 	return rect;
 }
@@ -591,8 +591,8 @@ model::BasicNodePtr    TestScenesFactory::CreedPrimitivePieChartTestScene     ( 
 	SetParameter( node1->GetPlugin( "piechart" )->GetParameter( "angleStart" ), 0, 0.f );
 	SetParameter( node1->GetPlugin( "piechart" )->GetParameter( "angleEnd" ), 0, 3.14f/4 );
 
-	root->AddChild( node1 );
-	root->AddChild( node2 );
+	root->AddChildToModelOnly( node1 );
+	root->AddChildToModelOnly( node2 );
 
 	return root;
 }
@@ -654,10 +654,10 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
 	SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 11.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 	SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 
-	root->AddChild( prism );
-	root->AddChild( prism2 );
-	root->AddChild( prism3 );
-	root->AddChild( prism4 );
+	root->AddChildToModelOnly( prism );
+	root->AddChildToModelOnly( prism2 );
+	root->AddChildToModelOnly( prism3 );
+	root->AddChildToModelOnly( prism4 );
 
 	//return rect;
 	return root;

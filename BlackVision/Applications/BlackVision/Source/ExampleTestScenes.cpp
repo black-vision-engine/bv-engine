@@ -97,7 +97,7 @@ model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * 
 
     assert( success );
 
-    rootNode->AddChild( childNode );
+    rootNode->AddChildToModelOnly( childNode );
 
     return rootNode;
 }

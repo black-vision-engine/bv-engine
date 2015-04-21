@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <hash_map>
 
 #include "Engine/Models/Interfaces/IModelNode.h"
 #include "Engine/Models/Interfaces/INodeLogic.h"
@@ -42,9 +43,13 @@ DEFINE_CONST_PTR_TYPE(BasicNode)
 
 typedef std::vector< BasicNodePtr > TNodeVec;
 
+
 class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicNode >
 {
 private:
+
+    //FIXME: hack
+    static std::hash_map< IModelNode *, SceneNode * >    ms_nodesMapping;
 
     std::string                     m_name;
     
@@ -77,6 +82,12 @@ public:
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
 
+    // FIXME: temporary "dynamic tree" meothods, to be replaced by some better interface
+    // FIXME: these two should be called only after model scene is attached to an engine scene
+    virtual IModelNodePtr                   DeleteNode              ( const std::string & name, Renderer * renderer ) override;
+    virtual void                            AddChildNode            ( IModelNodePtr modelNode ) override;
+
+    // FIXME: remove when proper GlobalEfect is implemented
     virtual void                            EnableOverrideStateAM   () override;
     virtual void                            EnableOverrideStateNM   () override;
     virtual void                            DisableOverrideStateAM  () override;
@@ -88,12 +99,12 @@ public:
     virtual void                            SetOverrideStateChgAM   ( bool changed ) override;
     virtual void                            SetOverrideStateChgNM   ( bool changed ) override;
 
-public:
-
     virtual bool                            IsStateOverridenAM      () const override;
     virtual bool                            IsStateOverridenNM      () const override;
 
     virtual IOverrideState *                GetOverrideState        () override;
+    // FIXME: end of remove
+    // FIXME: remove when proper GlobalEfect is implemented
 
     virtual const std::string &             GetName                 () const override;
     void                                    SetName                 ( const std::string & name );
@@ -103,8 +114,7 @@ public:
 
     virtual SceneNode *                     BuildScene              () override;
 
-    void                                    AddChild                ( BasicNodePtr n );
-    void                                    AddLayer                ( BasicNodePtr n );
+    void                                    AddChildToModelOnly     ( BasicNodePtr n );
 
     //Convenience API (so that list can be created from external source and simply attached to this node)
     void                                    SetPlugins              ( DefaultPluginListFinalizedPtr plugins );
@@ -135,7 +145,7 @@ public:
 
 private:
 
-    SceneNode *                             CreateSceneNode         ( IPluginConstPtr finalizer ) const;
+    SceneNode *                             CreateSceneNode         () const;
     RenderableEntity *                      CreateRenderable        ( IPluginConstPtr finalizer ) const;
     std::vector< bv::Transform >            CreateTransformVec      ( IPluginConstPtr finalizer ) const;
 

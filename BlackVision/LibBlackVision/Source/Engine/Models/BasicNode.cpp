@@ -25,6 +25,9 @@
 
 namespace bv { namespace model {
 
+// FIXME: hack
+std::hash_map< IModelNode *, SceneNode * >    BasicNode::ms_nodesMapping;
+
 namespace {
 
 IModelNodePtr  FindNode( const TNodeVec & vec, const std::string & name )
@@ -139,6 +142,38 @@ IModelNodePtr                   BasicNode::GetChild                 ( const std:
 const IPluginListFinalized *    BasicNode::GetPluginList            () const
 {
     return m_pluginList.get();
+}
+
+// ********************************
+//
+IModelNodePtr                   BasicNode::DeleteNode               ( const std::string & name, Renderer * renderer )
+{
+    { name; }
+    { renderer; }
+
+    // FIXME: implement
+    return nullptr;
+}
+
+// ********************************
+//
+void                            BasicNode::AddChildNode             ( IModelNodePtr modelNode )
+{
+    // Verify validity
+    assert( modelNode != nullptr );
+    assert( ms_nodesMapping.find( modelNode.get() ) == ms_nodesMapping.end() );
+    assert( ms_nodesMapping.find( this ) != ms_nodesMapping.end() );
+
+    // Create engine node corresponding to modelNode
+    BasicNode * basicModelNode = static_cast< BasicNode * >( modelNode.get() );
+    SceneNode * engineNode = basicModelNode->BuildScene();
+
+    // Register created node and its mapping
+    ms_nodesMapping[ basicModelNode ] = engineNode;
+
+    // Add model node to current tree along with corresponding engine node
+    AddChildToModelOnly( std::static_pointer_cast< BasicNode >( modelNode ) );
+    ms_nodesMapping[ this ]->AddChildNode( engineNode );
 }
 
 // ********************************
@@ -280,9 +315,11 @@ mathematics::Rect 			BasicNode::GetAABB						( const glm::mat4 & parentTransform
 //
 SceneNode *                 BasicNode::BuildScene                   () 
 {
-    IPluginConstPtr finalizer = GetFinalizePlugin();
+    assert( ms_nodesMapping.find( this ) == ms_nodesMapping.end() );
 
-    SceneNode * node = CreateSceneNode( finalizer );
+    SceneNode * node = CreateSceneNode();
+
+    ms_nodesMapping[ this ] = node;
 
     node->SetOverrideAlphaVal( GetOverrideState()->GetAlphaValue().get() );
 
@@ -296,9 +333,9 @@ SceneNode *                 BasicNode::BuildScene                   ()
 
 // ********************************
 //
-void            BasicNode::AddChild                         ( BasicNodePtr n )
+void            BasicNode::AddChildToModelOnly              ( BasicNodePtr n )
 {
-    m_children.push_back( BasicNodePtr( n ) );
+    m_children.push_back( n );
 }
 
 // ********************************
@@ -450,8 +487,10 @@ void  BasicNode::SetVisible              ( bool visible )
 
 // ********************************
 //
-SceneNode *                         BasicNode::CreateSceneNode          ( IPluginConstPtr finalizer ) const
+SceneNode *                         BasicNode::CreateSceneNode          () const
 {
+    IPluginConstPtr finalizer = GetFinalizePlugin();
+
     RenderableEntity * renderable = CreateRenderable( finalizer );
 
     SceneNode * node        = new SceneNode( renderable );
