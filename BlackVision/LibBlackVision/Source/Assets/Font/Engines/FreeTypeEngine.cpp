@@ -425,9 +425,9 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 
 // *********************************
 //
-TextAtlasConstPtr FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet )
+TextAtlasConstPtr FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool generateMipMaps )
 {
-	return CreateAtlas( padding, 0, wcharsSet );
+	return CreateAtlas( padding, 0, wcharsSet, generateMipMaps );
 }
 
 } // bv
