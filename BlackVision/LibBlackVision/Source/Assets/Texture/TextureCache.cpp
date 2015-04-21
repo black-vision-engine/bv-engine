@@ -108,9 +108,16 @@ TextureCache & TextureCache::GetInstance()
 
 // ******************************
 //
+std::string TextureCache::GenKeyForSingleTexture( const std::string & origPath, SizeType width, SizeType height, TextureFormat format )
+{
+	return toString( origPath ) + toString( width ) + toString( height ) + toString( (int)format );
+}
+
+// ******************************
+//
 std::string TextureCache::GenKeyForSingleTexture( const SingleTextureAssetDescConstPtr & sTRDesc )
 {
-	return toString( sTRDesc->GetImagePath() ) + toString( sTRDesc->GetWidth() ) + toString( sTRDesc->GetHeight() ) + toString( (int)sTRDesc->GetFormat() );
+	return GenKeyForSingleTexture( sTRDesc->GetImagePath(), sTRDesc->GetWidth(), sTRDesc->GetHeight(), sTRDesc->GetFormat() );
 }
 
 // ******************************

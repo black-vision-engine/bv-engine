@@ -84,7 +84,7 @@ std::wstring LoadUtf8FileToString(const std::wstring& filename)
 TextConstPtr        LoadFontFile( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 outlineSize, const std::wstring & atlasCharSetFile )
 {
     auto t = LoadUtf8FileToString( atlasCharSetFile );
-	return Text::Create( t, file, size, blurSize, outlineSize ); // FIXME: Text constructor makes to much.
+	return Text::Create( t, file, size, blurSize, outlineSize, true ); // FIXME: Text constructor makes to much.
 }
 
 // *******************************

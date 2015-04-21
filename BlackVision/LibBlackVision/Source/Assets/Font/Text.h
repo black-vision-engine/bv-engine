@@ -24,6 +24,7 @@ private:
     UInt32								m_blurSize;
 	UInt32								m_outlineWidth; // if > 0 text is outlined
 	IFontEnginePtr						m_fontEngine;
+	bool								m_withMipmaps;
 
     void                                BuildAtlas			();
 	void                                BuildAtlasOutlined	();
@@ -37,13 +38,15 @@ public:
 											, const std::string& fontFile
 											, UInt32 fontSize
 											, UInt32 blurSize
-											, UInt32 outlineSize );
+											, UInt32 outlineSize
+											, bool withMipmaps );
 
     explicit                            Text( const std::wstring& supportedCharsSet
 											, const std::string& fontFile
 											, UInt32 fontSize
 											, UInt32 blurSize
-											, UInt32 outlineSize );
+											, UInt32 outlineSize
+											, bool withMipmaps );
 };
 
 } // bv

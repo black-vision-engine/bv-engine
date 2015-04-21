@@ -33,20 +33,20 @@ public:
 
 	static const std::string &		UID			();
 
-	MipMapFilterType									m_filterType;
+	MipMapFilterType								m_filterType;
 	std::vector< SingleTextureAssetDescConstPtr >	m_mipMapDescs;
 
 public:
 
-	SingleTextureAssetDescConstPtr	GetLevelDesc		( SizeType level ) const;
+	SingleTextureAssetDescConstPtr		GetLevelDesc		( SizeType level ) const;
 	SizeType							GetLevelsNum		() const;
 
 	MipMapFilterType					GetFilter			() const;
 
 	static MipMapAssetDescConstPtr		Create				( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTexture );
 	static MipMapAssetDescConstPtr		Create				( const std::vector< SingleTextureAssetDescConstPtr > & mipMaps );
-	explicit							MipMapAssetDesc	( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTexture );
-	explicit							MipMapAssetDesc	( const std::vector< SingleTextureAssetDescConstPtr > & mipMaps );
+	explicit							MipMapAssetDesc		( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTexture );
+	explicit							MipMapAssetDesc		( const std::vector< SingleTextureAssetDescConstPtr > & mipMaps );
 
 private:
 
