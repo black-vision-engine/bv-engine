@@ -1768,7 +1768,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
 	#endif
 #endif
 
-    auto root = std::make_shared< model::BasicNode >( "Root", timeEvaluator );
+    auto root = model::BasicNode::Create( "Root", timeEvaluator );
 
     auto success = root->AddPlugins( uids, localTimeline );
     assert( success );
