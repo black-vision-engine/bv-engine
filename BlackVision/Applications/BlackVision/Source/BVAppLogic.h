@@ -61,6 +61,8 @@ public:
 
     virtual void    OnUpdate        ( unsigned int millis, Renderer * renderer );
     virtual void    OnKey           ( unsigned char c );
+    
+    model::IModelNodePtr   CreateTestModelNodeInSomeSpecificScope( const std::string & name );
 
     virtual void    ChangeState     ( BVAppState state );
 

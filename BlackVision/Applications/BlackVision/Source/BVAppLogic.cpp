@@ -252,8 +252,33 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 
 // *********************************
 //
+model::IModelNodePtr BVAppLogic::CreateTestModelNodeInSomeSpecificScope( const std::string & name )
+{
+    model::BasicNodePtr node = TestScenesFactory::CreateTestRandomNode( name, m_pluginsManager, m_timelineManager, m_globalTimeline );
+
+    return node;
+}
+
+// *********************************
+//
 void BVAppLogic::OnKey           ( unsigned char c )
 {
+    if( c != 0 )
+    {
+        auto root = m_modelScene->GetSceneRoot();
+        auto child = root->GetChild( "child0" );
+
+        auto n = child->GetNumchildren();
+        auto nodeName = "child0" + std::to_string(n);
+
+        auto newNode = CreateTestModelNodeInSomeSpecificScope( nodeName );
+
+        child->AddChildNode( newNode );
+
+    }
+    return;
+/*
+    // FIXME: the code below is must be used with an animation plugin
     unsigned char d = c - '0';
 
     if( d <= 10 )
@@ -267,7 +292,7 @@ void BVAppLogic::OnKey           ( unsigned char c )
     {
         m_renderLogic->PrintGLStats( c == 'I' );
     }
-
+*/
     //auto root = m_modelScene->GetSceneRoot();
     //auto timerPlugin = root->GetPlugin("timer");
     //if(c == 'q')

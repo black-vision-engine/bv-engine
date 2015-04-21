@@ -87,6 +87,8 @@ public:
     virtual IModelNodePtr                   DeleteNode              ( const std::string & name, Renderer * renderer ) override;
     virtual void                            AddChildNode            ( IModelNodePtr modelNode ) override;
 
+    virtual unsigned int                    GetNumchildren          () const override;
+
     // FIXME: remove when proper GlobalEfect is implemented
     virtual void                            EnableOverrideStateAM   () override;
     virtual void                            EnableOverrideStateNM   () override;

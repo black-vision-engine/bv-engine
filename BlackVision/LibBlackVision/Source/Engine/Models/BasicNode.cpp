@@ -178,6 +178,13 @@ void                            BasicNode::AddChildNode             ( IModelNode
 
 // ********************************
 //
+unsigned int                    BasicNode::GetNumchildren           () const
+{
+    return (unsigned int) m_children.size();
+}
+
+// ********************************
+//
 void                            BasicNode::EnableOverrideStateAM    ()
 {
     m_overrideState->EnableAlphaAM();
