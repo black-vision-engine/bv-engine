@@ -16,23 +16,6 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCone
     return CreateParameterEnum< DefaultCone::DefaultConePlugin::OpenAngleMode >( name, timeline );
 }
 
-template<>
-inline bool SetParameter< DefaultCone::DefaultConePlugin::OpenAngleMode >( IParameterPtr param, TimeType t, const DefaultCone::DefaultConePlugin::OpenAngleMode & val )
-{
-    //return SetSimpleTypedParameter< ParamEnum<DefaultCirclePlugin::OpenAngleMode> >( param, t, val );
-    typedef ParamEnum<DefaultCone::DefaultConePlugin::OpenAngleMode> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
 
 
 VoidPtr    ParamEnumWC::QueryParamTyped  ()
@@ -46,23 +29,6 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCone
     return CreateParameterEnum< DefaultCone::DefaultConePlugin::OpenAngleMode >( name, timeline );
 }
 
-template<>
-inline bool SetParameter< DefaultCone::DefaultConePlugin::WeightCenter >( IParameterPtr param, TimeType t, const DefaultCone::DefaultConePlugin::WeightCenter & val )
-{
-    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
-    typedef ParamEnum<DefaultCone::DefaultConePlugin::WeightCenter> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
 
 
 #include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
@@ -100,7 +66,7 @@ DefaultPluginParamValModelPtr   DefaultConePluginDesc::CreateDefaultModel  ( ITi
     h.AddSimpleParam( PN::OUTERRADIUS, 1.f, true, true );
     h.AddSimpleParam( PN::INNERRADIUS, 0.f, true, true );
     h.AddSimpleParam( PN::ROUNDEDTIPHEIGHT, 0.2f, true, true );
-    h.AddSimpleParam( PN::OPENANGLE, 360.f, true, true );
+    h.AddSimpleParam( PN::OPENANGLE, 0.f, true, true );
 	h.AddSimpleParam( PN::BEVELTESSELATION, 4, true, true );
     h.AddParam< IntInterpolator, DefaultConePlugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
         ( DefaultCone::PN::OPENANGLEMODE, DefaultConePlugin::OpenAngleMode::CW, true, true );
@@ -162,10 +128,13 @@ namespace ConeGenerator
 			if( test )
 				return;
 
-			for( int i = 0; i < tesselation ; i++ )
+			int i = 0;
+			for( ; i < tesselation ; i++ )
             {
 				double angle1 = i     * 2 * PI / tesselation;
 				double angle2 = (i+1) * 2 * PI / tesselation;
+				angle1 += open_angle;
+				angle2 += open_angle;
 
 				double cos_angle1 = cos( angle1 );
 				double sin_angle1 = sin( angle1 );
@@ -184,6 +153,8 @@ namespace ConeGenerator
 				verts->AddAttribute( glm::vec3( R2 * cos_angle2, h2, R2 * sin_angle2 ) + center_translate );
 				//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
 			}
+
+
 		}
 
 		/**Computes radius and height of circle, relative to center of the cone, which forms beveled area.
@@ -254,14 +225,29 @@ namespace ConeGenerator
 				center_translate = glm::vec3( 0.0f, 0.0f, 0.0f );
 			else if( weight_center == DefaultConePlugin::WeightCenter::CENTER )
 				center_translate = glm::vec3( 0.0f, -height / 2, 0.0f );
-			else
+			else if( weight_center == DefaultConePlugin::WeightCenter::TOP )
 				center_translate = glm::vec3( 0.0f, -height, 0.0f );
+			else
+				assert( false );
 			//center_translate = glm::vec3( 0.0f, 0.0f, 0.0f );
+		}
+
+		void computeAngleOffset()
+		{
+			if( open_angle_mode == DefaultConePlugin::OpenAngleMode::CCW )
+				open_angle = 0.0;			//@todo
+			else if( open_angle_mode == DefaultConePlugin::OpenAngleMode::CW )
+				open_angle = 0.0;			//@todo
+			else if( open_angle_mode == DefaultConePlugin::OpenAngleMode::SYMMETRIC )
+				open_angle = 0.0;			//@todo
+			else
+				assert( false );
 		}
 
         virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
         {
 			computeWeightCenter();
+			computeAngleOffset();
 
 			// Prepare data for bevel. ( We need this to generate first latteral surface too, thats why it happens in this place.
 			double angle_between_edges = atan2( height, outer_radius );
@@ -349,8 +335,8 @@ DefaultConePlugin::DefaultConePlugin( const std::string & name, const std::strin
     m_openAngle = QueryTypedValue< ValueFloatPtr >( GetValue( PN::OPENANGLE ) );
     m_height = QueryTypedValue< ValueFloatPtr >( GetValue( PN::HEIGHT ) );
     m_outerRadius = QueryTypedValue< ValueFloatPtr >( GetValue( PN::OUTERRADIUS ) );
-	//m_openAngleMode = QueryTypedValue< std::shared_ptr< ParamEnum< OpenAngleMode > > >( GetValue( PN::OPENANGLEMODE ) );
-	//m_weightCenter = QueryTypedValue< std::shared_ptr< ParamEnum< WeightCenter > > >( GetValue( PN::WEIGHTCENTER ) );
+	m_openAngleMode = QueryTypedParam< std::shared_ptr< ParamEnum< OpenAngleMode > > >( GetParameter( PN::OPENANGLEMODE ) );
+	m_weightCenter = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTER ) );
 
     m_pluginParamValModel->Update();
     InitGeometry();
@@ -381,13 +367,13 @@ std::vector<IGeometryGeneratorPtr>    DefaultConePlugin::GetGenerators()
 bool                                DefaultConePlugin::NeedsTopologyUpdate()
 {
     return ParameterChanged( PN::TESSELATION ) ||
+		ParameterChanged( PN::HEIGHT ) ||
         ParameterChanged( PN::INNERHEIGHT ) ||
         ParameterChanged( PN::OUTERRADIUS ) ||
-        ParameterChanged( PN::INNERHEIGHT ) ||
         ParameterChanged( PN::ROUNDEDTIPHEIGHT ) ||
         ParameterChanged( PN::OPENANGLE ) ||
         ParameterChanged( PN::INNERRADIUS ) ||
-		ParameterChanged( PN::BEVELTESSELATION ) ||
+		ParameterChanged( PN::BEVELTESSELATION )||
 		ParameterChanged( PN::OPENANGLEMODE ) ||
 		ParameterChanged( PN::WEIGHTCENTER );
 }
