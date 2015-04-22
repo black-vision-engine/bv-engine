@@ -187,7 +187,7 @@ void                            BasicNode::AddChildNode             ( IModelNode
 
 // ********************************
 //
-unsigned int                    BasicNode::GetNumchildren           () const
+unsigned int                    BasicNode::GetNumChildren           () const
 {
     return (unsigned int) m_children.size();
 }
@@ -345,6 +345,22 @@ SceneNode *                 BasicNode::BuildScene                   ()
     }
 
     return node;
+}
+
+// ********************************
+//
+BasicNodePtr    BasicNode::GetChild                         ( unsigned int i )
+{
+    assert( i < m_children.size() );
+
+    return m_children[ i ];
+}
+
+// ********************************
+//
+unsigned int    BasicNode::GetNumPlugins                    () const
+{
+    return m_pluginList->NumPlugins();
 }
 
 // ********************************

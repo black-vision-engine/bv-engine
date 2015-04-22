@@ -783,6 +783,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BVScene.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneTools.cpp">
+      <Filter>Engine\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1566,6 +1569,9 @@
       <Filter>Assets\Cache</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\BVScene.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\BVSceneTools.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
   </ItemGroup>

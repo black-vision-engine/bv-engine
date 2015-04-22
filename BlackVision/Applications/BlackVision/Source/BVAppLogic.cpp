@@ -232,7 +232,7 @@ void BVAppLogic::OnKey           ( unsigned char c )
         auto root = m_bvScene->GetModelSceneRoot();
         auto child = root->GetChild( "child0" );
 
-        auto n = child->GetNumchildren();
+        auto n = child->GetNumChildren();
         auto nodeName = "child0" + std::to_string(n);
 
         auto newNode = CreateTestModelNodeInSomeSpecificScope( nodeName );

@@ -87,7 +87,7 @@ public:
     virtual bool                            DeleteNode              ( const std::string & name, Renderer * renderer ) override;
     virtual void                            AddChildNode            ( IModelNodePtr modelNode ) override;
 
-    virtual unsigned int                    GetNumchildren          () const override;
+    virtual unsigned int                    GetNumChildren          () const override;
 
     // FIXME: remove when proper GlobalEfect is implemented
     virtual void                            EnableOverrideStateAM   () override;
@@ -115,6 +115,9 @@ public:
 	mathematics::Rect 						GetAABB					() const;
 
     virtual SceneNode *                     BuildScene              () override;
+
+    BasicNodePtr                            GetChild                ( unsigned int i );
+    unsigned int                            GetNumPlugins           () const;
 
     void                                    AddChildToModelOnly     ( BasicNodePtr n );
     void                                    DetachChildNodeOnly     ( BasicNodePtr n );

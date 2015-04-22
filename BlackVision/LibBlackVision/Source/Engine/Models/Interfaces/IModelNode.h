@@ -41,7 +41,7 @@ public:
     virtual bool                            DeleteNode          ( const std::string & name, Renderer * renderer )                   = 0;
     virtual void                            AddChildNode        ( IModelNodePtr modelNode )                                         = 0;
 
-    virtual unsigned int                    GetNumchildren      () const                                                            = 0;
+    virtual unsigned int                    GetNumChildren      () const                                                            = 0;
 
     // FIXME: remove when proper GlobalEfect is implemented
     virtual void                            EnableOverrideStateAM   ()                                                              = 0;
