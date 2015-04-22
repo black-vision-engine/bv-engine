@@ -42,20 +42,9 @@ namespace bv { namespace model {
             }
         }
 
-        std::string         GenerateShaderSource( const std::vector< std::string > & uids ) const
-        {
-            auto it = ms_pixelShaderMapping.find( uids );
-
-            if( it != ms_pixelShaderMapping.end() )
-            {
-                printf( "Loading pixel shader from: %s\n", it->second.c_str() );
-                return ReadShaderContentsFromFile( it->second );
-            }
-
-            assert( false );
-
-            return "";
-        }
+        std::string         GenerateShaderSource( const std::vector< std::string > & uids ) const;
+        std::string         GenerateFilename( const std::vector< std::string > & uids ) const;
+        std::string         UID2Abbrv( const std::string uid ) const;
 
         const std::vector< std::vector< std::string > > &   GetAcceptedPluginLists  () const
         {
