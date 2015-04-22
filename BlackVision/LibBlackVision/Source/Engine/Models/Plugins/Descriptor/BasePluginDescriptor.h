@@ -18,15 +18,18 @@ private:
 
     std::string     m_uid;
     std::string     m_defaultName;
+    std::string     m_abbrv;
 
 protected:
 
-    BasePluginDescriptor    ( const std::string & uid, const std::string & defaultName );
+    BasePluginDescriptor    ( const std::string & uid, const std::string & defaultName, const std::string & abbrv );
+    BasePluginDescriptor    ( const std::string & uid, const std::string & defaultName ); // FIXME remove this for God's sake
 
 public:
 
     virtual const std::string &             GetPluginTypeUID    () const override;
     virtual const std::string &             DefaultPluginName   () const override;
+    virtual const std::string &             GetPluginTypeAbbrv  () const override;
 
     virtual bool                            CanBeAttachedTo     ( IPluginConstPtr plugin )  const override;
     virtual IPluginParamValModelPtr         CreateModel         ( ITimeEvaluatorPtr timeEvaluator ) const override;

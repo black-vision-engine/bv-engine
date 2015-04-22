@@ -14,7 +14,6 @@ namespace bv { namespace model {
 class DefaultColorPluginDesc : public BasePluginDescriptor
 {
 public:
-
     DefaultColorPluginDesc                                      ();
 
     virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;

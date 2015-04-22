@@ -11,7 +11,7 @@ namespace bv { namespace model {
 // *******************************
 //
 DefaultColorPluginDesc::DefaultColorPluginDesc                          ()
-    : BasePluginDescriptor( UID(), "solid color" )
+    : BasePluginDescriptor( UID(), "solid color",  "col" )
 {
 }
 
