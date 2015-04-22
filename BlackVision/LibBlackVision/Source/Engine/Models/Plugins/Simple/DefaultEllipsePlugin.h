@@ -35,8 +35,7 @@ private:
     float                                       GetOpenAngle();
     //OpenAngleMode                               GetOpenAngleMode();
 public:
-    DefaultEllipsePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model ) 
-        : DefaultGeometryPluginBase( name, uid, prev, model ) { }
+    DefaultEllipsePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 };
 
 } }

@@ -486,7 +486,7 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
     { pluginsManager; } // FIXME: suppress unused warning
     //return SimpleNodesFactory::CreateHeightMapNode( timelineManager, timeEvaluator );
 	
-	auto node0 = SimpleNodesFactory::CreateTestNode( timelineManager, timeEvaluator );
+	auto node0 = SimpleNodesFactory::CreateBasicShapesTestNode( timelineManager, timeEvaluator );
     //auto node0 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
     //auto node1 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
 

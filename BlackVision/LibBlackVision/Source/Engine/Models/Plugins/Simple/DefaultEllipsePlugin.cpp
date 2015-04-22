@@ -204,6 +204,14 @@ public:
 double EllipseGenerator::x1;
 double EllipseGenerator::preferredArea;
 
+
+DefaultEllipsePlugin::DefaultEllipsePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model ) 
+    : DefaultGeometryPluginBase( name, uid, prev, model )
+{
+	InitGeometry();
+}
+
+
 std::vector<IGeometryGeneratorPtr>           DefaultEllipsePlugin::GetGenerators()
 {
     return std::vector<IGeometryGeneratorPtr>( 1, IGeometryGeneratorPtr( new OldEllipseGenerator( GetQuality(),

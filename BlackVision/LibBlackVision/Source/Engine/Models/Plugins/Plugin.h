@@ -182,6 +182,7 @@ struct NullDeleter {template<typename T> void operator()(T*) {} };
 template< class Iface >
 ICachedParameterPtr             BasePlugin< Iface >::GetCachedParameter          ( const std::string & name ) const // FIXME mader fakier
 {
+	assert( false ); // DEPRECATED
     IParameterPtr param = GetParameter( name );
 
     //ParamBoolPtr qParam = std::static_pointer_cast< IParameterPtr, ParamBoolPtr >( param );

@@ -53,7 +53,7 @@ public:
 
 	static model::BasicNodePtr	CreateCrawlerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 
-	static model::BasicNodePtr	CreateTestNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+	static model::BasicNodePtr	CreateBasicShapesTestNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 };
 
 } //bv

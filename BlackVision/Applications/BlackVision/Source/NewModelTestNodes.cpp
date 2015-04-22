@@ -8,6 +8,9 @@
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultConePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultCirclePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultSpherePlugin.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
@@ -1724,13 +1727,26 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
 #endif
 }
 
+
+
+model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+
 #define VERSION_TEXTURE
 //#define NO_PERSPECTIVE
 //#define VERSION_COLOR
 
-// Test
-model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
-{
+//#define SHOW_CUBE
+//#define SHOW_CONE
+#define SHOW_SPHERE
+//#define SHOW_CIRCLE
+//#define SHOW_ELLIPSE
+//#define SHOW_ROUNDEDRECT
+//#define SHOW_TRIANGLE
+//#define SHOW_TORUS
+//#define SHOW_SPRING
+//#define SHOW_GEOSPHERE
+
 	  //Timeline stuff
     auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
@@ -1741,22 +1757,49 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
     //someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( localTimeline );
 
-    //Plugin stuff
+// ============================================ //
+// Plugins stuff
 	std::vector< std::string > uids;
+	uids.push_back( "DEFAULT_TRANSFORM" );
 
-    uids.push_back( "DEFAULT_TRANSFORM" );
-    uids.push_back( "DEFAULT_SPHERE" );
-    //uids.push_back( "DEFAULT_GEOSPHERE" );
-	//uids.push_back( "DEFAULT_SIMPLE_CUBE" );
-	//uids.push_back( "DEFAULT_CIRCLE" );
-	//uids.push_back( "DEFAULT_CUBE" );
-	//uids.push_back( "DEFAULT_CONE" );
-	//uids.push_back( "DEFAULT_ELLIPSE" );
-	//uids.push_back( "DEFAULT_ROUNDEDRECT" );
-	//uids.push_back( "DEFAULT_TRIANGLE" );
-	//uids.push_back( "DEFAULT_TORUS" );
-	//uids.push_back( "DEFAULT_SPRING" );
+// ============================================ //
+// Geometry plugins
+#ifdef SHOW_SPHERE
+	uids.push_back( "DEFAULT_SPHERE" );
+#endif
+#ifdef SHOW_GEOSPHERE
+    uids.push_back( "DEFAULT_GEOSPHERE" );
+#endif
+#ifdef SHOW_SIMPLE_CUBE
+	uids.push_back( "DEFAULT_SIMPLE_CUBE" );
+#endif
+#ifdef SHOW_CIRCLE
+	uids.push_back( "DEFAULT_CIRCLE" );
+#endif
+#ifdef SHOW_CUBE
+	uids.push_back( "DEFAULT_CUBE" );
+#endif
+#ifdef SHOW_CONE
+	uids.push_back( "DEFAULT_CONE" );
+#endif
+#ifdef SHOW_ELLIPSE
+	uids.push_back( "DEFAULT_ELLIPSE" );
+#endif
+#ifdef SHOW_ROUNDEDRECT
+	uids.push_back( "DEFAULT_ROUNDEDRECT" );
+#endif
+#ifdef SHOW_TRIANGLE
+	uids.push_back( "DEFAULT_TRIANGLE" );
+#endif
+#ifdef SHOW_TORUS
+	uids.push_back( "DEFAULT_TORUS" );
+#endif
+#ifdef SHOW_SPRING
+	uids.push_back( "DEFAULT_SPRING" );
+#endif
 
+// ============================================ //
+// Color or texture plugin
 #ifdef VERSION_COLOR
 	uids.push_back( "DEFAULT_COLOR" );
 #endif
@@ -1773,28 +1816,100 @@ model::BasicNodePtr	SimpleNodesFactory::CreateTestNode( model::TimelineManager *
     auto success = root->AddPlugins( uids, localTimeline );
     assert( success );
 
+// ============================================ //
+// Tranformations
 	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 1.f, 0.f, 0.f ), 700.f );
 	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.f, glm::vec3( -1.f, 1.f, 0.f ), 50.f );
-	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -3.0f ) );
+	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -2.0f ) );
 
-	//auto dim = root->GetPlugin( "cone" )->GetParameter( "tesselation" );
-	//model::SetParameter( dim, 0.0f, 16 );
-	//dim = root->GetPlugin( "cone" )->GetParameter( "weight center" );
-	//model::SetParameter( dim, 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::TOP );
-	//model::SetParameter( dim, 10.0f, 50 );
-	//dim = root->GetPlugin( "cone" )->GetParameter( "rounded tip height" );
-	//model::SetParameter( dim, 0.0f, 0.4f );
-	//dim = root->GetPlugin( "cone" )->GetParameter( "inner radius" );
-	//model::SetParameter( dim, 0.0f, 0.4f );
-	//dim = root->GetPlugin( "cone" )->GetParameter( "inner height" );
-	//model::SetParameter( dim, 0.0f, 0.4f );
-	//auto dim = root->GetPlugin( "sphere" )->GetParameter( "vertical stripes" );
-	//model::SetParameter( dim, 0.0f, 30 );
-	//dim = root->GetPlugin( "sphere" )->GetParameter( "horizontal stripes" );
-	//model::SetParameter( dim, 0.0f, 30 );
 
+// ============================================ //
+// Geometry parameters
+#ifdef SHOW_CIRCLE
+	auto plugin = root->GetPlugin( "circle" );
+	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultCirclePlugin::CW );
+	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultCirclePlugin::CCW );
+	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultCirclePlugin::SYMMETRIC );
+	model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 4.0f );
+	model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 2.0f );
+	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 20 );
+	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 60.0f );
+#endif
+#ifdef SHOW_CONE
+	auto plugin = root->GetPlugin( "cone" );
+	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 16 );
+	model::SetParameter( plugin->GetParameter( "rounded tip height" ), 0.0f, 0.2f );
+	model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.4f );
+	model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 1.0f );
+	model::SetParameter( plugin->GetParameter( "inner height" ), 0.0f, 0.4f );
+	model::SetParameter( plugin->GetParameter( "height" ), 0.0f, 1.0f );
+	model::SetParameter( plugin->GetParameter( "bevel tesselation" ), 0.0f, 1 );
+
+	// Enums
+	//model::SetParameter( plugin->GetParameter( "weight center" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::TOP );
+	//model::SetParameter( plugin->GetParameter( "weight center" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::BOTTOM );
+	model::SetParameter( plugin->GetParameter( "weight center" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::CENTER );
+	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::SYMMETRIC );
+	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CCW );
+	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CW );
+#endif
+#ifdef SHOW_SPHERE
+	auto plugin = root->GetPlugin( "sphere" );
+	model::SetParameter( plugin->GetParameter( "vertical stripes" ), 0.0f, 30 );
+	model::SetParameter( plugin->GetParameter( "horizontal stripes" ), 0.0f, 30 );
+	model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 0.5f );
+	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 60.0f );
+
+	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::SYMMETRIC );
+	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CCW );
+	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CW );
+#endif
+#ifdef SHOW_ELLIPSE
+	auto plugin = root->GetPlugin( "ellipse" );
+	model::SetParameter( plugin->GetParameter( "outer radius 1" ), 0.0f, 4.0f );
+#endif
+#ifdef SHOW_CUBE
+	auto plugin = root->GetPlugin( "cube" );
+	model::SetParameter( plugin->GetParameter( "bevel" ), 0.0f, 0.2f );
+	model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 1.0, 1.0, 1.0 ) );
+	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 0 );
+#endif
+#ifdef SHOW_ROUNDEDRECT
+	auto plugin = root->GetPlugin( "rounded rect" );
+	model::SetParameter( plugin->GetParameter( "bevels" ), 0.0f, glm::vec4( 0.4f, 0.2f, 0.2f, 0.2f ) );
+	model::SetParameter( plugin->GetParameter( "size" ), 0.0f, glm::vec2( 2.0, 0.5 ) );
+#endif
+#ifdef SHOW_TRIANGLE
+	auto plugin = root->GetPlugin( "triangle" );
+	model::SetParameter( plugin->GetParameter( "point a" ), 0.0f, glm::vec3( 0.0, 1.0, 0.0 ) );
+	model::SetParameter( plugin->GetParameter( "point b" ), 0.0f, glm::vec3( -1.0, 0.0, 0.0 ) );
+	model::SetParameter( plugin->GetParameter( "point c" ), 0.0f, glm::vec3( 1.0, .0, 0.0 ) );
+#endif
+#ifdef SHOW_TORUS
+	auto plugin = root->GetPlugin( "torus" );
+	model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 1.5f );
+	model::SetParameter( plugin->GetParameter( "radius2" ), 0.0f, 0.5f );
+	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 0.0f );
+	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 15 );
+
+	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultTorus::Plugin::OpenAngleMode::SYMMETRIC );
+	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultTorus::Plugin::OpenAngleMode::CCW );
+	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultTorus::Plugin::OpenAngleMode::CW );
+#endif
+#ifdef SHOW_SPRING
+	auto plugin = root->GetPlugin( "spring" );
+	model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 1.5f );
+	model::SetParameter( plugin->GetParameter( "radius2" ), 0.0f, 0.5f );
+	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 15 );
+	model::SetParameter( plugin->GetParameter( "delta" ), 0.0f, 15 );
+	model::SetParameter( plugin->GetParameter( "turns" ), 0.0f, 4 );
+#endif
+
+
+// ============================================ //
+// Color, texture plugins parameters
 #ifdef VERSION_COLOR
 	auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
 	SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 1.f, 1.f ) );

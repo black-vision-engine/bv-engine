@@ -54,4 +54,42 @@ public:
 
 }
 
+// Nie patrzeæ w dó³!!! Brzydkie !!!!!!
+
+template<>
+inline bool SetParameter< DefaultCone::DefaultConePlugin::OpenAngleMode >( IParameterPtr param, TimeType t, const DefaultCone::DefaultConePlugin::OpenAngleMode & val )
+{
+    //return SetSimpleTypedParameter< ParamEnum<DefaultCirclePlugin::OpenAngleMode> >( param, t, val );
+    typedef ParamEnum<DefaultCone::DefaultConePlugin::OpenAngleMode> ParamType;
+
+    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
+
+    if( typedParam == nullptr )
+    {
+        return false;
+    }
+
+    typedParam->SetVal( val, t );
+
+    return true;
+}
+
+template<>
+inline bool SetParameter< DefaultCone::DefaultConePlugin::WeightCenter >( IParameterPtr param, TimeType t, const DefaultCone::DefaultConePlugin::WeightCenter & val )
+{
+    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
+    typedef ParamEnum<DefaultCone::DefaultConePlugin::WeightCenter> ParamType;
+
+    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
+
+    if( typedParam == nullptr )
+    {
+        return false;
+    }
+
+    typedParam->SetVal( val, t );
+
+    return true;
+}
+
 } }
