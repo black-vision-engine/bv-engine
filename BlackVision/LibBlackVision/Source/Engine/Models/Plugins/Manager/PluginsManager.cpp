@@ -5,6 +5,7 @@
 
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
 
+#include <iostream>
 
 namespace bv { namespace model {
 
@@ -82,6 +83,7 @@ bool                                                PluginsManager::CanBeAttache
 {
     if( !IsRegistered( uid ) )
     {
+        std::cout << uid + " is not a registered plugin" << std::endl;
         return false;
     }
 

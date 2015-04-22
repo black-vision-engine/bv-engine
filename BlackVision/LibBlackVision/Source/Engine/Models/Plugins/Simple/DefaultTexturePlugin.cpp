@@ -43,9 +43,11 @@ DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( IT
     SimpleVec4EvaluatorPtr      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
     SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
+	SimpleFloatEvaluatorPtr		wrapModeXEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "wrapModeX", timeEvaluator );
+	SimpleFloatEvaluatorPtr		wrapModeYEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "wrapModeY", timeEvaluator );
 
-    ParamFloatPtr  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX", timeEvaluator );
-    ParamFloatPtr  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY", timeEvaluator );
+    //ParamFloatPtr  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX", timeEvaluator );
+    //ParamFloatPtr  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY", timeEvaluator );
     ParamFloatPtr  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode", timeEvaluator );
     ParamFloatPtr  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachmentMode", timeEvaluator );
 
@@ -53,8 +55,10 @@ DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( IT
     vsModel->RegisterAll( trTxEvaluator );
     psModel->RegisterAll( borderColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
-    psModel->AddParameter( paramWrapModeX );
-    psModel->AddParameter( paramWrapModeY );
+	psModel->RegisterAll( wrapModeXEvaluator );
+	psModel->RegisterAll( wrapModeYEvaluator );
+    //psModel->AddParameter( paramWrapModeX );
+    //psModel->AddParameter( paramWrapModeY );
     psModel->AddParameter( paramFilteringMode );
     psModel->AddParameter( paramAttachMode );
 
@@ -66,10 +70,12 @@ DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( IT
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
+	wrapModeXEvaluator->Parameter()->SetVal( static_cast<int>( TextureWrappingMode::TWM_CLAMP_BORDER ), TimeType( 0.0 ) ); 
+	wrapModeYEvaluator->Parameter()->SetVal( static_cast<int>( TextureWrappingMode::TWM_CLAMP_BORDER ), TimeType( 0.0 ) ); 
 
     //FIXME: integer parmeters should be used here
-    paramWrapModeX->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
-    paramWrapModeY->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
+    //paramWrapModeX->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
+    //paramWrapModeY->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
     paramFilteringMode->SetVal( (float) TextureFilteringMode::TFM_LINEAR, TimeType( 0.f ) );
     paramAttachMode->SetVal( (float) TextureAttachmentMode::MM_ATTACHED, TimeType( 0.f ) );
 
@@ -122,7 +128,7 @@ std::string             DefaultTexturePluginDesc::PixelShaderSource         ()
 }
 
 // *******************************
-//
+// 
 std::string             DefaultTexturePluginDesc::TextureName               ()
 {
     return "Tex0";
@@ -159,13 +165,13 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
     //Direct param state access (to bypass model querying)
     auto psModel = PixelShaderChannelModel();
     
-    m_paramWrapModeX        = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "wrapModeX" ) );
-    m_paramWrapModeY        = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "wrapModeY" ) );
+    //m_paramWrapModeX        = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "wrapModeX" ) );
+    //m_paramWrapModeY        = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "wrapModeY" ) );
     m_paramFilteringMode    = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "filteringMode" ) );
     m_paramAttachMode       = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "attachmentMode" ) );
 
-    assert( m_paramWrapModeX );
-    assert( m_paramWrapModeY );
+    //assert( m_paramWrapModeX );
+    //assert( m_paramWrapModeY );
     assert( m_paramFilteringMode );
     assert( m_paramAttachMode );
 
@@ -198,6 +204,7 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultTexturePluginDesc::TextureName() );
         txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+        txDesc->SetBorderColor( GetBorderColor() );
 
         if( txDesc != nullptr )
         {
@@ -296,7 +303,10 @@ void                                DefaultTexturePlugin::Update                
         m_vaChannel->ClearAll();
         InitAttributesChannel( m_prevPlugin );
         m_vaChannel->SetNeedsTopologyUpdate( true );
+		m_vaChannel->SetNeedsAttributesUpdate( false ); // FIXME: very ugly hack this is
     }
+    else
+        m_vaChannel->SetNeedsTopologyUpdate( false );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -366,6 +376,8 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
+
+    assert( prevGeomChannel->GetComponents().size() > 0 );
 }
 
 namespace {
@@ -396,14 +408,20 @@ inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
 // 
 TextureWrappingMode                         DefaultTexturePlugin::GetWrapModeX          () const
 {
-    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeX );
+    //return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeX );
+	auto param = this->GetParameter( "wrapModeX" );
+	assert( param );
+	return static_cast<TextureWrappingMode>( static_cast<int>( QueryTypedParam< ParamFloatPtr >( param )->Evaluate() ) );
 }
 
 // *************************************
 // 
 TextureWrappingMode                         DefaultTexturePlugin::GetWrapModeY          () const
 {
-    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeY );
+    //return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeY );
+	auto param = this->GetParameter( "wrapModeY" );
+	assert( param );
+	return static_cast<TextureWrappingMode>( static_cast<int>( QueryTypedParam< ParamFloatPtr >( param )->Evaluate() ) );
 }
 
 // *************************************
@@ -474,6 +492,15 @@ mathematics::RectConstPtr					DefaultTexturePlugin::GetAABB						( const glm::ma
 	//}
 	//	
 	//return nullptr;
+}
+
+// *************************************
+// 
+glm::vec4                                   DefaultTexturePlugin::GetBorderColor        () const
+{
+	auto param = this->GetParameter( "borderColor" );
+	assert( param );
+	return QueryTypedParam< ParamVec4Ptr >( param )->Evaluate();
 }
 
 
