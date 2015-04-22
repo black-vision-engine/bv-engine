@@ -26,24 +26,6 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCirc
     return CreateParameterEnum< DefaultCirclePlugin::OpenAngleMode >( name, timeline );
 }
 
-template<>
-inline bool SetParameter< DefaultCirclePlugin::OpenAngleMode >( IParameterPtr param, TimeType t, const DefaultCirclePlugin::OpenAngleMode & val )
-{
-    //return SetSimpleTypedParameter< ParamEnum<DefaultCirclePlugin::OpenAngleMode> >( param, t, val );
-    typedef ParamEnum<DefaultCirclePlugin::OpenAngleMode> ParamType;
-
-    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
-
-    if( typedParam == nullptr )
-    {
-        return false;
-    }
-
-    typedParam->SetVal( val, t );
-
-    return true;
-}
-
 #include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 
 DefaultPluginParamValModelPtr   DefaultCirclePluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
@@ -149,6 +131,14 @@ public:
         }
     }
 };
+
+
+DefaultCirclePlugin::DefaultCirclePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model ) 
+    : DefaultGeometryPluginBase( name, uid, prev, model )
+{
+		InitGeometry();
+}
+
 
 std::vector<IGeometryGeneratorPtr>           DefaultCirclePlugin::GetGenerators()
 {

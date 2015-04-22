@@ -36,10 +36,27 @@ private:
     float                                       GetOpenAngle();
     OpenAngleMode                               GetOpenAngleMode();
 public:
-    DefaultCirclePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model ) 
-        : DefaultGeometryPluginBase( name, uid, prev, model ) { }
+    DefaultCirclePlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 
     //virtual void								Update                      ( TimeType t );
 };
+
+template<>
+inline bool SetParameter< DefaultCirclePlugin::OpenAngleMode >( IParameterPtr param, TimeType t, const DefaultCirclePlugin::OpenAngleMode & val )
+{
+    //return SetSimpleTypedParameter< ParamEnum<DefaultCirclePlugin::OpenAngleMode> >( param, t, val );
+    typedef ParamEnum<DefaultCirclePlugin::OpenAngleMode> ParamType;
+
+    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
+
+    if( typedParam == nullptr )
+    {
+        return false;
+    }
+
+    typedParam->SetVal( val, t );
+
+    return true;
+}
 
 } }
