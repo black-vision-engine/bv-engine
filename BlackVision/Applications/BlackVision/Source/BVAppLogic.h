@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
-#include "Engine/Models/ModelScene.h"
+#include "Engine/Models/BVScene.h"
 
 #include "Engine/Events/Events.h"
 
@@ -32,8 +32,6 @@ class BVAppLogic
 {
 private:
 
-    Renderer *                      m_renderer;
-
     BVAppState                      m_state;
 
     FrameStatsCalculator            m_statsCalculator;
@@ -42,9 +40,9 @@ private:
     const model::PluginsManager *   m_pluginsManager;
     model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
-    model::ModelScenePtr            m_modelScene;
-    SceneNode *                     m_engineScene;
+    BVScenePtr                      m_bvScene;
 
+    Renderer *                      m_renderer;
     RenderLogic *                   m_renderLogic;
 
     unsigned long                   m_startTime;
@@ -89,7 +87,9 @@ public:
 
     //Convenience API - generalized model accessors
     model::TimelineManager *        GetTimelineManager  ();
-    model::ModelScenePtr            GetModelScene       ();
+
+    BVScenePtr                      GetBVScene          ();
+
     const model::PluginsManager *   GetPluginsManager   () const;
 };
 

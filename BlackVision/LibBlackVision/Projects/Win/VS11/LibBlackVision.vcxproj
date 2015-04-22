@@ -252,8 +252,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BasicNode.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BasicOverrideState.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\RendererStatesBuilder.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\ModelAccessors.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\ModelScene.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\BVScene.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\ChannelsFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeGeometryShaderChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizePixelShaderChannel.cpp" />
@@ -484,8 +483,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITimeEvaluator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITimeline.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITimelineEvent.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelAccessors.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelScene.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\BVScene.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\ChannelsFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeGeometryShaderChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizePixelShaderChannel.h" />
