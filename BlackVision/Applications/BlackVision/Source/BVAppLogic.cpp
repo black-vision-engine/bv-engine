@@ -269,9 +269,10 @@ void BVAppLogic::OnKey           ( unsigned char c )
     if( c == 8 )
     {
         auto root = m_modelScene->GetSceneRoot();
-        auto child = root->GetChild( "child0" );
+        root->DeleteNode( "child0", m_renderer );
+        //auto child = root->GetChild( "child0" );
 
-        child->DeleteNode( "child01", m_renderer );
+        //child->DeleteNode( "child01", m_renderer );
     }
     else if( c != 0 )
     {
