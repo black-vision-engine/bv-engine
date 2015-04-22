@@ -125,11 +125,11 @@ TransformVec            BVSceneTools::CreateTransformVec                ( const 
     auto numTransforms = tc->GetTransformValues().size();
     assert( numTransforms > 0 );
 
-    std::vector< bv::Transform > worldTransformVec;
+    std::vector< Transform > worldTransformVec;
 
     for( unsigned int i = 0; i < numTransforms; ++i )
     {
-        bv::Transform worldTrans;
+        Transform worldTrans;
         worldTransformVec.push_back( worldTrans );
     }
 

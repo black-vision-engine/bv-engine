@@ -7,6 +7,7 @@
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannelDescriptor.h"
 #include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
 
+#include "Engine/Graphics/Types/Transform.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 
 

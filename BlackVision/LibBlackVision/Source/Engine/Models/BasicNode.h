@@ -7,34 +7,12 @@
 #include "Engine/Models/Interfaces/IModelNode.h"
 #include "Engine/Models/Interfaces/INodeLogic.h"
 
-#include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
 
 
-#include "Engine/Graphics/SceneGraph/SceneNode.h"
-#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
-
-#include "Mathematics/Rect.h"
-
-
-namespace bv {
-    
-class VertexDescriptor;
-class PixelShader;
-class VertexShader; 
-class GeometryShader;
-class ShaderParameters;
-class RenderableArrayDataSingleVertexBuffer;
-class RenderableArrayDataArraysSingleVertexBuffer;
-
-namespace model {
+namespace bv { namespace model {
 
 class PluginsManager;
-class IShaderChannel;
-class IConnectedComponent;
-class IVertexAttributesChannelDescriptor;
-
-class IOverrideState;
 class BasicOverrideState;
 
 class BasicNode;
@@ -116,8 +94,6 @@ public:
 	// axis-aligned bounding box
 	mathematics::Rect 						GetAABB					() const;
 
-    SceneNode *                             BuildScene              ();
-
     BasicNodePtr                            GetChild                ( unsigned int i );
     unsigned int                            GetNumPlugins           () const;
 
@@ -148,32 +124,12 @@ public:
 
 	void									SetLogic				( INodeLogicPtr logic );
 
-    virtual void                            Print                   ( std::ostream & out, int tabs = 0 ) const override;
     virtual void                            Update                  ( TimeType t ) override;
 
     virtual bool                            IsVisible               () const override;
     void                                    SetVisible              ( bool visible );
 
 private:
-
-    SceneNode *                             CreateSceneNode         () const;
-    RenderableEntity *                      CreateRenderable        ( IPluginConstPtr finalizer ) const;
-    std::vector< bv::Transform >            CreateTransformVec      ( IPluginConstPtr finalizer ) const;
-
-    bool                                    CreateRenderableData    ( /*VertexArray ** vao*/ ) const;
-
-    //FIXME: scene building API should be moved to some more appropriate place
-    RenderableArrayDataSingleVertexBuffer *         CreateRenderableArrayData           ( PrimitiveType type ) const; 
-    RenderableArrayDataArraysSingleVertexBuffer *   CreateRenderableArrayDataTriStrip   () const;
-    RenderableArrayDataArraysSingleVertexBuffer *   CreateRenderableArrayDataArrays     ( const std::vector< IConnectedComponentPtr > & ccVec, const IVertexAttributesChannelDescriptor * desc, bool isTimeInvariant ) const;
-    void                                            AddVertexDataToVBO                  ( char * data, IConnectedComponentPtr cc ) const;
-
-    VertexDescriptor *                  CreateVertexDescriptor          ( const IVertexAttributesChannelDescriptor * desc ) const;
-
-    unsigned int                        TotalNumVertices                ( const std::vector< IConnectedComponentPtr > & ccVec) const;
-    unsigned int                        TotalSize                       ( const std::vector< IConnectedComponentPtr > & ccVec, const IVertexAttributesChannelDescriptor * desc ) const;
-
-    RenderableEffectPtr                 CreateDefaultEffect             ( IPluginConstPtr finalizer ) const;
 
     std::string                         SplitPrefix                     ( std::string & str, const std::string & separator = "/" ) const;
 
