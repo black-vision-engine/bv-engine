@@ -10,6 +10,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultConePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCirclePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultSpherePlugin.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
@@ -1737,15 +1738,14 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 //#define SHOW_CUBE
 //#define SHOW_CONE
-//#define SHOW_SPHERE
+#define SHOW_SPHERE
 //#define SHOW_CIRCLE
 //#define SHOW_ELLIPSE
 //#define SHOW_ROUNDEDRECT
 //#define SHOW_TRIANGLE
-#define SHOW_TORUS
+//#define SHOW_TORUS
 //#define SHOW_SPRING
 //#define SHOW_GEOSPHERE
-//#define SHOW_SIMPLE_CUBE
 
 	  //Timeline stuff
     auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
@@ -1819,10 +1819,10 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 // ============================================ //
 // Tranformations
 	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 1.f, 0.f ), 0.f );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.f, 1.f, 0.f ), 700.f );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 1.f, 0.f, 0.f ), 700.f );
 	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.f, glm::vec3( -1.f, 1.f, 0.f ), 50.f );
-	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -6.0f ) );
+	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -2.0f ) );
 
 
 // ============================================ //
@@ -1835,9 +1835,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 4.0f );
 	model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 2.0f );
 	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 20 );
-	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 60 );
+	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 60.0f );
 #endif
-
 #ifdef SHOW_CONE
 	auto plugin = root->GetPlugin( "cone" );
 	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 16 );
@@ -1861,7 +1860,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( plugin->GetParameter( "vertical stripes" ), 0.0f, 30 );
 	model::SetParameter( plugin->GetParameter( "horizontal stripes" ), 0.0f, 30 );
 	model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 0.5f );
-	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 240 );
+	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 60.0f );
+
+	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::SYMMETRIC );
+	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CCW );
+	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CW );
 #endif
 #ifdef SHOW_ELLIPSE
 	auto plugin = root->GetPlugin( "ellipse" );
@@ -1901,7 +1904,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( plugin->GetParameter( "radius2" ), 0.0f, 0.5f );
 	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 15 );
 	model::SetParameter( plugin->GetParameter( "delta" ), 0.0f, 15 );
-	model::SetParameter( plugin->GetParameter( "turns" ), 0.0f, 15 );
+	model::SetParameter( plugin->GetParameter( "turns" ), 0.0f, 4 );
 #endif
 
 
