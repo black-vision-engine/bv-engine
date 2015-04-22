@@ -3,40 +3,40 @@
 
 namespace bv { namespace model {
 
-// *************************************
-//
-Transform::Transform()
-    : m_mat( glm::mat4x4( 1.f ) )
-{
-}
+    // *************************************
+    //
+    Transform::Transform()
+        : m_mat( glm::mat4x4( 1.f ) )
+    {
+    }
 
-// *************************************
-//
-Transform::Transform( const glm::mat4x4 & m )
-    :   m_mat( m )
-{
-}
+    // *************************************
+    //
+    Transform::Transform( const glm::mat4x4 & m )
+        :   m_mat( m )
+    {
+    }
 
-// *************************************
-//
-Transform               Transform::operator *    ( const Transform & m )    const
-{
-    return Transform( m_mat * m.m_mat );
-}
+    // *************************************
+    //
+    Transform               Transform::operator *    ( const Transform & m )    const
+    {
+        return Transform( m_mat * m.m_mat );
+    }
 
-// *************************************
-//
-void     Transform::SetMatrix   ( const glm::mat4x4 & m )
-{
-    m_mat = m;
-}
+    // *************************************
+    //
+    void     Transform::SetMatrix   ( const glm::mat4x4 & m )
+    {
+        m_mat = m;
+    }
 
-// *************************************
-//
-const glm::mat4x4 &      Transform::GetMatrix   ()                       const
-{
-    return m_mat;
-}
+    // *************************************
+    //
+    const glm::mat4x4 &      Transform::GetMatrix   ()                       const
+    {
+        return m_mat;
+    }
 
 } // model
 
@@ -120,6 +120,35 @@ CompositeTransform<ParamT>::~CompositeTransform()
     {
         delete t;
     }
+}
+
+// *************************************
+//
+template<typename ParamT>
+void                    CompositeTransform<ParamT>::SetInterpolationMethod ( model::IParameter::InterpolationMethod method )
+{
+    __super::SetInterpolationMethod( method );
+    for( auto& transformation : m_transformations )
+    {
+        transformation->GetP0MotylaNoga().SetInterpolationMethod( method );
+        transformation->GetP1MotylaNoga().SetInterpolationMethod( method );
+        transformation->GetP2MotylaNoga().SetInterpolationMethod( method );
+    }
+}
+
+// *************************************
+//
+template<typename ParamT>
+model::IParameter::InterpolationMethod     CompositeTransform<ParamT>::GetInterpolationMethod () const
+{
+    auto ret = __super::GetInterpolationMethod();
+    for( auto& transformation : m_transformations )
+    {
+        assert( ret == transformation->GetP0MotylaNoga().GetInterpolationMethod() );
+        assert( ret == transformation->GetP1MotylaNoga().GetInterpolationMethod() );
+        assert( ret == transformation->GetP2MotylaNoga().GetInterpolationMethod() );
+    }
+    return ret;
 }
 
 // *************************************

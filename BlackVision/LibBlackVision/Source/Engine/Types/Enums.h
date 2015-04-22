@@ -35,6 +35,7 @@ enum class ParamType : int
     PT_MAT4,
     PT_INT,
     PT_BOOL,
+    PT_ENUM,
     PT_TOTAL
 };
 
@@ -47,6 +48,9 @@ enum class ModelParamType : int
     MPT_VEC4,
     MPT_TRANSFORM,
     MPT_TRANSFORM_VEC,
+    MPT_INT,
+    MPT_BOOL,
+    MPT_ENUM,
     MPT_TOTAL
 };
 
@@ -145,6 +149,7 @@ enum class PluginResourceType : int
     PRT_TEXTURE = 0,
     PRT_ANIMATION,
     PRT_FONT,
+	PRT_VIDEOINPUT,
 
     PRT_TOTAL
 };

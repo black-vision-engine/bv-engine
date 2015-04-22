@@ -28,22 +28,22 @@
 
 namespace 
 {
-	const static std::wstring examples[] = 
-	{
-		L"Jasiu kup kiełbasę !!",
-		L"wielojęzyczny projekt internetortej treści. Funkcjonuje wykorzystując",
-		L"Wikipedia powstała 15 stycznia ertów i nieistniejącej już Nupedii. ",
-		L"iostrzane. Wikipedia jest jedną], a wiele stron uruchomiło jej mirrory lub forki.",
-		L"Współzałożyciel Wikipedii Jimmyia wielojęzycznej",
-		L"wolnej encyklopedii o najwyższywłasnym języku”[8].",
-		L"Kontrowersje budzi wiarygodnośćeści artykułów ",
-		L"i brak weryfikacji kompetencji .",
-		L"Z drugiej",
-		L"strony możliwość swobodnej dyst źródłem informacji",
-		L"Jasiu kup kiełbasę !!",
-	};
+    const static std::wstring examples[] = 
+    {
+        L"Jasiu kup kiełbasę !!",
+        L"wielojęzyczny projekt internetortej treści. Funkcjonuje wykorzystując",
+        L"Wikipedia powstała 15 stycznia ertów i nieistniejącej już Nupedii. ",
+        L"iostrzane. Wikipedia jest jedną], a wiele stron uruchomiło jej mirrory lub forki.",
+        L"Współzałożyciel Wikipedii Jimmyia wielojęzycznej",
+        L"wolnej encyklopedii o najwyższywłasnym języku”[8].",
+        L"Kontrowersje budzi wiarygodnośćeści artykułów ",
+        L"i brak weryfikacji kompetencji .",
+        L"Z drugiej",
+        L"strony możliwość swobodnej dyst źródłem informacji",
+        L"Jasiu kup kiełbasę !!",
+    };
 
-	auto exampleSize = sizeof( examples ) / sizeof( std::wstring );
+    auto exampleSize = sizeof( examples ) / sizeof( std::wstring );
 }
 
 namespace bv
@@ -136,9 +136,9 @@ void BVAppLogic::Initialize         ()
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
 
-	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );
-	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
-	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNoMoreNodes ), widgets::NoMoreNodesCrawlerEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNoMoreNodes ), widgets::NoMoreNodesCrawlerEvent::Type() );
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
@@ -148,11 +148,12 @@ void BVAppLogic::Initialize         ()
 //
 void BVAppLogic::LoadScene          ( void )
 {
-    //model::BasicNodePtr root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
+    model::BasicNodePtr root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
     //model::BasicNodePtr root = TestScenesFactory::OlafTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
     //model::BasicNodePtr root = TestScenesFactory::CreedTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
-    model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
+    //model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
 
+    //model::BasicNodePtr root = TestScenesFactory::CreedBasicGeometryTestScene(m_globalTimeline);
 	assert( root );
 
     m_engineScene  = root->BuildScene();
@@ -429,25 +430,25 @@ void            BVAppLogic::OnNodeLeaving   ( IEventPtr evt )
 //
 void            BVAppLogic::OnNoMoreNodes   ( IEventPtr evt )
 {
-	auto typedEvent = std::static_pointer_cast< widgets::NoMoreNodesCrawlerEvent >( evt );
-	// Remove code below. Only for testing.
-	auto n = typedEvent->GetCrawler()->GetNonActiveNode();
-	if( n )
-	{
-		auto i = rand() % exampleSize;
-		auto textNode = n->GetChild( "Text" );
-		if( textNode )
-		{
-			auto pl = textNode->GetPlugin( "text" );
+    auto typedEvent = std::static_pointer_cast< widgets::NoMoreNodesCrawlerEvent >( evt );
+    // Remove code below. Only for testing.
+    auto n = typedEvent->GetCrawler()->GetNonActiveNode();
+    if( n )
+    {
+        auto i = rand() % exampleSize;
+        auto textNode = n->GetChild( "Text" );
+        if( textNode )
+        {
+            auto pl = textNode->GetPlugin( "text" );
 
-			if( pl )
-			{
-				model::DefaultTextPlugin::SetText( pl, examples[ i ] );
+            if( pl )
+            {
+                model::DefaultTextPlugin::SetText( pl, examples[ i ] );
 
-				typedEvent->GetCrawler()->EnqueueNode( n );
-			}
-		}
-	}
+                typedEvent->GetCrawler()->EnqueueNode( n );
+            }
+        }
+    }
 }
 
 // *********************************

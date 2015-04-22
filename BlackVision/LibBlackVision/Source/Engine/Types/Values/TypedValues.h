@@ -9,6 +9,7 @@
 
 namespace bv {
 
+typedef ValueImpl< int, ParamType::PT_INT >             ValueInt;
 typedef ValueImpl< float, ParamType::PT_FLOAT1 >        ValueFloat;
 typedef ValueImpl< glm::vec2, ParamType::PT_FLOAT2 >    ValueVec2;
 typedef ValueImpl< glm::vec3, ParamType::PT_FLOAT3 >    ValueVec3;
@@ -17,6 +18,7 @@ typedef ValueImpl< glm::mat2, ParamType::PT_MAT2 >      ValueMat2;
 typedef ValueImpl< glm::mat2, ParamType::PT_MAT3 >      ValueMat3;
 typedef ValueImpl< glm::mat4, ParamType::PT_MAT4 >      ValueMat4;
 
+DEFINE_PTR_TYPE(ValueInt)
 DEFINE_PTR_TYPE(ValueFloat)
 typedef std::shared_ptr< const ValueFloat >   ValueFloatConstPtr;
 DEFINE_PTR_TYPE(ValueVec2)
