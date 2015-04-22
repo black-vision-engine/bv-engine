@@ -666,7 +666,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     //return rect;
 
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
-
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 //SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), 1000.f );
 
     //auto root = SimpleNodesFactory::CreateCreedRectNode( timelineManager, timeEvaluator );
