@@ -303,6 +303,7 @@ void                                DefaultTexturePlugin::Update                
         m_vaChannel->ClearAll();
         InitAttributesChannel( m_prevPlugin );
         m_vaChannel->SetNeedsTopologyUpdate( true );
+		m_vaChannel->SetNeedsAttributesUpdate( false ); // FIXME: very ugly hack this is
     }
     else
         m_vaChannel->SetNeedsTopologyUpdate( false );
