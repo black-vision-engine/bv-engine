@@ -27,8 +27,7 @@ private:
     glm::vec2                                   GetSize();
     glm::vec4                                   GetBevels();
 public:
-    DefaultRoundedRectPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model ) 
-        : DefaultGeometryPluginBase( name, uid, prev, model ) { }
+    DefaultRoundedRectPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 };
 
 } }

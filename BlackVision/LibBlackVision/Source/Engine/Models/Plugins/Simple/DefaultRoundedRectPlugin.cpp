@@ -83,6 +83,13 @@ public:
     }
 };
 
+DefaultRoundedRectPlugin::DefaultRoundedRectPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model ) 
+    : DefaultGeometryPluginBase( name, uid, prev, model )
+{
+	InitGeometry();
+}
+
+
 std::vector<IGeometryGeneratorPtr>                 DefaultRoundedRectPlugin::GetGenerators()
 {
     return std::vector<IGeometryGeneratorPtr>( 1, IGeometryGeneratorPtr( new RoundedRectGenerator( GetSize(), GetBevels() ) ) );
