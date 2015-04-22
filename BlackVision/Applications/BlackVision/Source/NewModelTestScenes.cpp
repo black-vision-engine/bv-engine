@@ -562,7 +562,7 @@ model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::Plug
 	auto clock = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
 	rect->AddChildToModelOnly( clock );
 
-    return root;
+    return rect;
 }
 
 model::BasicNodePtr    TestScenesFactory::CreedPieChartTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
@@ -661,6 +661,27 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
 
     auto param = prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" );
     param->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
+
+    auto prism3 = SimpleNodesFactory::CreateCreedGradedPrismNode( timelineManager, timeEvaluator, 0.5f );
+    SetParameter( prism3->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 12 );
+    
+    SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  7.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 13.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 17.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+
+//SetParameterRotation( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), 10000.f );
+
+    auto prism4 = SimpleNodesFactory::CreateCreedGradedPrismNode( timelineManager, timeEvaluator, 1.5f );
+    SetParameter( prism4->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 36 );
+    SetParameter( prism4->GetPlugin( "linear_gradient" )->GetParameter( "color1" ), 5.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
+    SetParameter( prism4->GetPlugin( "linear_gradient" )->GetParameter( "color2" ), 5.f, glm::vec4( 0.f, 0.f, 0.f, 1.f ) );
+    //prism4->GetPlugin( "linear_gradient" )->GetParameter( "color2" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
+    
+    SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  7.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  8.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 11.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 
 	root->AddChildToModelOnly( prism );
 	root->AddChildToModelOnly( prism2 );
