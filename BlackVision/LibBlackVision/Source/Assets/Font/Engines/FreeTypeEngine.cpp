@@ -432,6 +432,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 
 		for( UInt32 y = 0; y < atlasSize; ++y )
 		{
+			currAddress = ( atlasData + y * maxHeight *  altlasWidth * 4 );
 			currAddress += altlasWidth * padding * 4;
 
 			for( UInt32 x = 0; x < atlasSize; ++x )
@@ -487,8 +488,6 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 					}
 				}
 			}
-
-			currAddress += ( m_maxHeight - 1  + padding ) *  altlasWidth * 4;
 		}
 	
 		auto atlasMC = MemoryChunk::Create( atlasData, altlasWidth * altlasHeight * 4 );
