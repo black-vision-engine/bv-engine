@@ -14,29 +14,17 @@ namespace bv { namespace model {
 
     typedef std::map< std::vector< std::string >, std::string >  PluginUIDHashMap;
 
-    class StaticShaderGenerator //: public DefaultFinalizeShaderChannel< IPixelShaderChannel >  // FIXME for God's sake!
+    class StaticShaderGenerator
     {
         static PluginUIDHashMap    ms_pixelShaderMapping;
         static std::vector< std::vector< std::string > >    ms_acceptedPluginLists;
         static std::vector< std::string >                   ms_baseShaderFileNames;
         std::string                             m_shadersDir;
-
-        //std::string dummy;
-        //virtual const std::string &                         GetShaderSource                 () const override { return dummy; }
-        //virtual std::string                                 GetShaderSource                 ( const std::vector< std::string > & ) const { return dummy; }
-
     public:
-
-        StaticShaderGenerator( /*IPixelShaderChannelPtr channel,*/ const std::string & shadersDir ) 
-            : 
-            //m_channel( channel )
-            //, m_shaderSource( "" )
-            //, 
-            m_shadersDir( shadersDir )
+        StaticShaderGenerator( const std::string & shadersDir ) 
+            : m_shadersDir( shadersDir )
         {
         }
-
-        //virtual RendererContextConstPtr     GetRendererContext  () const { return nullptr; }
 
         void                InitializePixelShaderMapping       () const
         {
