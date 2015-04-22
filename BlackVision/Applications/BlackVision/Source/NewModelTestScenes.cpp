@@ -716,10 +716,10 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 11.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
     SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 
-    root->AddChild( prism );
-    root->AddChild( prism2 );
-    root->AddChild( prism3 );
-    root->AddChild( prism4 );
+    root->AddChildToModelOnly( prism );
+    root->AddChildToModelOnly( prism2 );
+    root->AddChildToModelOnly( prism3 );
+    root->AddChildToModelOnly( prism4 );
 
     //return rect;
     return root;
@@ -750,7 +750,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismBugTestScene     ( const mod
     //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 17.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
     //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 
-    root->AddChild( prism2 );
+    root->AddChildToModelOnly( prism2 );
 
     //return root;
     return prism2;
@@ -789,8 +789,8 @@ model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model
     auto node2 = CosineDemoRect( glm::vec3( -1, -0.5, 0 ) , timeEvaluator );
     node2->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 
-    root->AddChild( node1 );
-    root->AddChild( node2 );
+    root->AddChildToModelOnly( node1 );
+    root->AddChildToModelOnly( node2 );
 
     return root;
 }
