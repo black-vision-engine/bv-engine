@@ -46,10 +46,12 @@ typedef std::vector< BasicNodePtr > TNodeVec;
 
 class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicNode >
 {
-private:
+public:
 
     //FIXME: hack
     static std::hash_map< IModelNode *, SceneNode * >    ms_nodesMapping;
+
+private:
 
     std::string                     m_name;
     
@@ -114,7 +116,7 @@ public:
 	// axis-aligned bounding box
 	mathematics::Rect 						GetAABB					() const;
 
-    virtual SceneNode *                     BuildScene              () override;
+    SceneNode *                             BuildScene              ();
 
     BasicNodePtr                            GetChild                ( unsigned int i );
     unsigned int                            GetNumPlugins           () const;

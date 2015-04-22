@@ -61,7 +61,6 @@ public:
     // FIXME: end of remove
     // FIXME: remove when proper GlobalEfect is implemented
 
-    virtual SceneNode *                     BuildScene          ()                                                                  = 0;
     virtual void                            Print               ( std::ostream & out, int tabs = 0 ) const                          = 0;
 
     virtual bool                            IsVisible           () const                                                            = 0;

@@ -3,9 +3,9 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/BasicNode.h"
+#include "Engine/Models/BVSceneTools.h"
 
 #include "Mathematics/Transform/MatTransform.h"
-
 
 namespace bv {
 
@@ -21,7 +21,9 @@ BVScenePtr    BVScene::Create( model::BasicNodePtr modelRootNode, Camera * cam, 
         }
     };
 
-    auto engineRootNode  = modelRootNode->BuildScene();
+    // FIXME: move ms_nodesMapping to BVScebne and make add it as a variable to the class
+    auto engineRootNode  = BVSceneTools::BuildEngineSceneNode( modelRootNode, model::BasicNode::ms_nodesMapping );
+    // auto engineRootNode  = BVSceneTools::BuildEngineSceneNode( modelRootNode->BuildScene();
     assert( engineRootNode );
 
     return std::make_shared< make_shared_enabler_BVScene >( modelRootNode, engineRootNode, cam, name, timeEvaluator );
