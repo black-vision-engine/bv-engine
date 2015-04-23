@@ -33,20 +33,22 @@ TextConstPtr Text::Create(const std::wstring& supportedCharsSet
 						, const std::string& fontFile
 						, UInt32 fontSize
 						, UInt32 blurSize
-						, UInt32 outlineSize )
+						, UInt32 outlineSize
+						, bool withMipmaps )
 {
-	return std::make_shared< Text >( supportedCharsSet, fontFile, fontSize, blurSize, outlineSize );
+	return std::make_shared< Text >( supportedCharsSet, fontFile, fontSize, blurSize, outlineSize, withMipmaps );
 }
 
 
 // *********************************
 //
-Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize )
+Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool withMipmaps )
     : m_supportedCharsSet( supportedCharsSet )
     , m_fontFile( fontFile )
     , m_fontSize( fontSize )
     , m_blurSize( blurSize )
 	, m_outlineWidth( outlineSize )
+	, m_withMipmaps( withMipmaps )
 {
 	m_fontEngine = FreeTypeEngine::Create( fontFile, fontSize );
     BuildAtlas();
@@ -80,7 +82,9 @@ void Text::BuildAtlas        ()
     if( m_atlas != nullptr )
         return;
 
-	m_atlas = m_fontEngine->CreateAtlas(this->m_blurSize + 1, m_outlineWidth, m_supportedCharsSet );
+	auto  padding = this->m_blurSize + 1;
+
+	m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSet );
 
 	assert( m_blurSize == 0 ); //TODO: Implement
 

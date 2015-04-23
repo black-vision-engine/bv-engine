@@ -3,8 +3,10 @@
 #include "Assets/Font/Glyph.h"
 #include "Assets/Font/Text.h"
 #include "Assets/Font/TextAtlas.h"
+#include "Assets/Texture/TextureCache.h"
 
 #include "LibImage.h"
+#include "Tools/MipMapBuilder/Source/MipMapBuilder.h"
 
 #include "Mathematics/Rect.h"
 
@@ -18,6 +20,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <cmath>
 
 namespace bv { 
 
@@ -116,7 +119,7 @@ std::map< std::pair< wchar_t, wchar_t >, float >        BuildKerning    ( FT_Fac
 //
 FreeTypeEnginePtr					FreeTypeEngine::Create( const std::string & fontFilePath, size_t fontSize )
 {
-	return std::make_shared< FreeTypeEngine >( fontFilePath, fontSize );
+	return FreeTypeEnginePtr( new FreeTypeEngine( fontFilePath, fontSize ) );
 }
 
 namespace {
@@ -178,13 +181,14 @@ FreeTypeEngine::FreeTypeEngine( const std::string & fontFilePath, SizeType fontS
 	, m_library( nullptr )
 	, m_maxHeight( 0 )
 	, m_maxWidth( 0 )
+	, m_fontFilePath( fontFilePath )
 {
 	if (FT_Init_FreeType (&m_library))
     {
         std::cerr << "Could not init FreeType library\n" << std::endl;
     }
 
-    if (FT_New_Face (m_library, fontFilePath.c_str(), 0, &m_face))
+    if (FT_New_Face (m_library, m_fontFilePath.c_str(), 0, &m_face))
     {
         std::cerr << "Could not open font\n" << std::endl;
     }
@@ -298,10 +302,68 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 	return nullptr;
 }
 
+// *********************************
+//
+namespace
+{
+
+// ******************************
+//
+UInt32 RoundUpToPowerOfTwo( UInt32 v )
+{
+	v--;
+	v |= v >> 1;
+	v |= v >> 2;
+	v |= v >> 4;
+	v |= v >> 8;
+	v |= v >> 16;
+	v++;
+
+	return v;
+}
 
 // *********************************
 //
-TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth, const std::wstring & wcharsSet )
+UInt32 CalculateLevelsNum( UInt32 widht, UInt32 height )
+{
+	auto wLog2 = std::log( widht ) / std::log( 2 );
+	auto hLog2 = std::log( height ) / std::log( 2 );
+
+	return ( UInt32 )std::max( wLog2, hLog2 );
+}
+
+// *********************************
+//
+TextureAssetDescConstPtr GenerateTextAtlasAssetDescriptor( const std::string & fontFileName, UInt32 width, UInt32 height, SizeType fontSize, MipMapFilterType mmFilterType, UInt32 mmLevels )
+{
+	auto namePrefix = fontFileName + std::to_string( fontSize ) + std::to_string( (UInt32)mmFilterType );
+
+	auto zeroLevelDesc = SingleTextureAssetDesc::Create( namePrefix, width, height, TextureFormat::F_A8R8G8B8, true );
+
+	auto mmSizes = tools::GenerateMipmapsSizes( tools::ImageSize( width, height ) );
+
+	MipMapAssetDescConstPtr mmDesc = nullptr;
+
+	std::vector< SingleTextureAssetDescConstPtr > mipMapsDescs;
+	for( SizeType i = 0; i < std::min( mmSizes.size(), (SizeType)mmLevels); ++i )
+	{
+		mipMapsDescs.push_back( SingleTextureAssetDesc::Create( namePrefix, mmSizes[ i ].width, mmSizes[ i ].height, TextureFormat::F_A8R8G8B8, true ) );
+	}
+
+	if( mipMapsDescs.size() > 0 )
+	{
+		mmDesc = MipMapAssetDesc::Create( mipMapsDescs );
+	}
+
+	return TextureAssetDesc::Create( zeroLevelDesc, mmDesc );
+}
+
+
+} // anonymous
+
+// *********************************
+//
+TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth, const std::wstring & wcharsSet, bool generateMipMaps )
 {
 	SizeType							glyphsNum	= wcharsSet.size();
 	Int32								spadding	= (Int32)padding;
@@ -318,98 +380,143 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 	}
 
 	if( outlineWidth != 0 )
+	{
 		for ( auto ch : wcharsSet )
 		{
 			outlineSpans[ ch ] = Spans();
 			outlineGlyphs[ ch ] = RenderGlyph( ch, outlineSpans[ ch ], outlineWidth );
 		}
+	}
 
 	auto atlasSize = (UInt32) std::ceil( sqrt( (float)glyphsNum ) );
 
     auto maxWidth  = m_maxWidth		+ spadding * 2;
     auto maxHeight = m_maxHeight	+ spadding * 2;
 
-    auto altlasWidth	= maxWidth	* atlasSize;
-    auto altlasHeight	= maxHeight * atlasSize;
+	UInt32 levelsNum = 0;
+
+	if( generateMipMaps )
+	{
+		levelsNum = CalculateLevelsNum( maxWidth, maxHeight );
+		padding += 2 * levelsNum;
+		spadding = (Int32)padding;
+
+		maxWidth  = m_maxWidth	+ spadding * 2;
+		maxHeight = m_maxHeight	+ spadding * 2;
+	}
+
+
+    auto altlasWidth	= RoundUpToPowerOfTwo( maxWidth	* atlasSize );
+    auto altlasHeight	= RoundUpToPowerOfTwo( maxHeight * atlasSize );
 
 	auto atlas = TextAtlas::Create( altlasWidth, altlasHeight, 32, maxWidth, maxHeight );
 
-    for ( auto ch : wcharsSet )
-		atlas->SetGlyph( ch, glyphs[ ch ] );
+	auto atlasTextureDesc = GenerateTextAtlasAssetDescriptor( m_fontFilePath, altlasWidth, altlasHeight, m_fontSize, MipMapFilterType::BILINEAR, levelsNum );
 
-	if( outlineWidth != 0 )
-		for ( auto ch : wcharsSet )
-			atlas->SetGlyph( ch, outlineGlyphs[ ch ], true );
+	auto atlasTextureRes = TextureCache::GetInstance().Get( atlasTextureDesc );
 
-    char* atlasData = new char[ altlasWidth * altlasHeight * 4 ]; //const_cast< char * >( atlas->GetWritableData()->Get() );// FIXME: Remove const_cast
-
-	memset( atlasData, 0, altlasWidth * altlasHeight * 4 );
-
-	char * currAddress = atlasData;
-
-	for( UInt32 y = 0; y < atlasSize; ++y )
+	if( atlasTextureRes == nullptr )
 	{
-		currAddress += altlasWidth * padding * 4;
+		for ( auto ch : wcharsSet )
+			atlas->SetGlyph( ch, glyphs[ ch ] );
 
-		for( UInt32 x = 0; x < atlasSize; ++x )
+		if( outlineWidth != 0 )
+			for ( auto ch : wcharsSet )
+				atlas->SetGlyph( ch, outlineGlyphs[ ch ], true );
+
+		char* atlasData = new char[ altlasWidth * altlasHeight * 4 ]; //const_cast< char * >( atlas->GetWritableData()->Get() );// FIXME: Remove const_cast
+
+		memset( atlasData, 0, altlasWidth * altlasHeight * 4 );
+
+		char * currAddress = atlasData;
+
+		for( UInt32 y = 0; y < atlasSize; ++y )
 		{
-			if( y * atlasSize + x < wcharsSet.size() )
+			currAddress = ( atlasData + y * maxHeight *  altlasWidth * 4 );
+			currAddress += altlasWidth * padding * 4;
+
+			for( UInt32 x = 0; x < atlasSize; ++x )
 			{
-				currAddress += padding * 4;
-
-				auto ch = wcharsSet[ y * atlasSize + x ];
-				auto & sps = spans[ ch ];
-				auto glyph = glyphs[ ch ];
-
-				char * startRasterizeHere = currAddress;
-
-				if( outlineWidth != 0 )
+				if( y * atlasSize + x < wcharsSet.size() )
 				{
-					auto & osps = outlineSpans[ ch ];
-					auto oglyph = outlineGlyphs[ ch ];
+					currAddress += padding * 4;
 
-					startRasterizeHere += ( m_maxHeight - oglyph->height ) * altlasWidth * 4;
-					startRasterizeHere += ( m_maxWidth - oglyph->width ) * 4;
+					auto ch = wcharsSet[ y * atlasSize + x ];
+					auto & sps = spans[ ch ];
+					auto glyph = glyphs[ ch ];
 
-					RasterizeSpans( osps, altlasWidth, startRasterizeHere, 1 );
+					char * startRasterizeHere = currAddress;
 
-					startRasterizeHere += (SizeType)( osps.m_boundingRect.ymax -  sps.m_boundingRect.ymax ) * altlasWidth * 4;
-					startRasterizeHere += (SizeType)( osps.m_boundingRect.xmax -  sps.m_boundingRect.xmax ) * 4;
+					if( outlineWidth != 0 )
+					{
+						auto & osps = outlineSpans[ ch ];
+						auto oglyph = outlineGlyphs[ ch ];
 
-					RasterizeSpans( sps, altlasWidth, startRasterizeHere, 0 );
+						startRasterizeHere += ( m_maxHeight - oglyph->height ) * altlasWidth * 4;
+						startRasterizeHere += ( m_maxWidth - oglyph->width ) * 4;
 
-					currAddress += ( m_maxWidth + padding ) * 4;
+						RasterizeSpans( osps, altlasWidth, startRasterizeHere, 1 );
 
-					oglyph->textureY = ( m_maxHeight + 2 * padding ) * y +  2 * padding + ( m_maxHeight	- oglyph->height );
-					oglyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  2 * padding + ( m_maxWidth	- oglyph->width );
-					oglyph->padding = padding;
+						startRasterizeHere += (SizeType)( osps.m_boundingRect.ymax -  sps.m_boundingRect.ymax ) * altlasWidth * 4;
+						startRasterizeHere += (SizeType)( osps.m_boundingRect.xmax -  sps.m_boundingRect.xmax ) * 4;
+
+						RasterizeSpans( sps, altlasWidth, startRasterizeHere, 0 );
+
+						currAddress += ( m_maxWidth + padding ) * 4;
+
+						oglyph->textureY = ( m_maxHeight + 2 * padding ) * y +  2 * padding + ( m_maxHeight	- oglyph->height );
+						oglyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  2 * padding + ( m_maxWidth	- oglyph->width );
+						oglyph->padding = padding;
 
 
-					glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  2 * padding + ( m_maxHeight	- glyph->height ) - (SizeType)( osps.m_boundingRect.ymax -  sps.m_boundingRect.ymax );
-					glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  2 * padding + ( m_maxWidth	- glyph->width )  - (SizeType)( osps.m_boundingRect.xmax -  sps.m_boundingRect.xmax );
-					glyph->padding = padding;
-				}
-				else
-				{
-					startRasterizeHere += ( m_maxHeight - glyph->height ) * altlasWidth * 4;
-					startRasterizeHere += ( m_maxWidth - glyph->width ) * 4;
+						glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  2 * padding + ( m_maxHeight	- glyph->height ) - (SizeType)( osps.m_boundingRect.ymax -  sps.m_boundingRect.ymax );
+						glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  2 * padding + ( m_maxWidth	- glyph->width )  - (SizeType)( osps.m_boundingRect.xmax -  sps.m_boundingRect.xmax );
+						glyph->padding = padding;
+					}
+					else
+					{
+						startRasterizeHere += ( m_maxHeight - glyph->height ) * altlasWidth * 4;
+						startRasterizeHere += ( m_maxWidth - glyph->width ) * 4;
 
-					RasterizeSpans( sps, altlasWidth, startRasterizeHere, 0 );
+						RasterizeSpans( sps, altlasWidth, startRasterizeHere, 0 );
 
-					currAddress += ( m_maxWidth + padding ) * 4;
+						currAddress += ( m_maxWidth + padding ) * 4;
 
-					glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  2 * padding + ( m_maxHeight	- glyph->height );
-					glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  2 * padding + ( m_maxWidth	- glyph->width );
-					glyph->padding = padding;
+						glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  2 * padding + ( m_maxHeight	- glyph->height );
+						glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  2 * padding + ( m_maxWidth	- glyph->width );
+						glyph->padding = padding;
+					}
 				}
 			}
 		}
-
-		currAddress += ( m_maxHeight - 1  + padding ) *  altlasWidth * 4;
-	}
 	
-	auto singleTex = SingleTextureAsset::Create( MemoryChunk::Create( atlasData, altlasWidth * altlasHeight * 4 ), "", altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8 );
-	atlas->m_textureAsset = TextureAsset::Create( singleTex, nullptr );
+		auto atlasMC = MemoryChunk::Create( atlasData, altlasWidth * altlasHeight * 4 );
+		MipMapAssetConstPtr mipmaps = nullptr;
+
+		if( generateMipMaps )
+		{
+			tools::Image32 img32 = { atlasMC, altlasWidth, altlasHeight };
+			auto mipmap = tools::GenerateMipmaps( img32, levelsNum, image::FilterType::FT_BILINEAR ); // FIXME: filter type is hardcoded.
+
+			std::vector< SingleTextureAssetConstPtr > mipMapsRes;
+			for( SizeType i = 0; i < mipmap.size(); ++i )
+			{
+				auto key = TextureCache::GenKeyForGeneratedMipMap( m_fontFilePath + std::to_string( m_fontSize ), mipmap[ i ].width, mipmap[ i ].height, TextureFormat::F_A8R8G8B8, i, MipMapFilterType::BILINEAR );
+				mipMapsRes.push_back( SingleTextureAsset::Create( mipmap[ i ].data, key, mipmap[ i ].width, mipmap[ i ].height, TextureFormat::F_A8R8G8B8 ) );
+			}
+
+			mipmaps = MipMapAsset::Create( mipMapsRes );
+		}
+
+		auto key = TextureCache::GenKeyForSingleTexture( m_fontFilePath + std::to_string( m_fontSize ), altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8 );
+
+		auto singleTex = SingleTextureAsset::Create( atlasMC, key, altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8 );
+		atlasTextureRes = TextureAsset::Create( singleTex, mipmaps );
+
+		TextureCache::GetInstance().Add( atlasTextureDesc, atlasTextureRes );
+	}
+		
+	atlas->m_textureAsset = atlasTextureRes;
 
 	image::SaveRAWImage( "testFreeType.raw", atlas->GetWritableData() );
 
@@ -420,9 +527,9 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 
 // *********************************
 //
-TextAtlasConstPtr FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet )
+TextAtlasConstPtr FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool generateMipMaps )
 {
-	return CreateAtlas( padding, 0, wcharsSet );
+	return CreateAtlas( padding, 0, wcharsSet, generateMipMaps );
 }
 
 } // bv
