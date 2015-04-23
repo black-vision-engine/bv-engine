@@ -20,9 +20,15 @@ DEFINE_PTR_TYPE(BVScene)
 DEFINE_CONST_PTR_TYPE(BVScene)
 
 
+typedef std::hash_map< model::IModelNode *, SceneNode * >	TNodesMapping;
+
 class BVScene : public IUpdatable
 {
-    Camera *            m_pCamera;
+private:
+
+	TNodesMapping		m_nodesMapping;
+   
+	Camera *            m_pCamera;
 
     model::ParamVec3    m_cameraPosition;
     model::ParamVec3    m_cameraDirection;

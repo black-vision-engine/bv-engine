@@ -24,7 +24,7 @@ BVScenePtr    BVScene::Create( model::BasicNodePtr modelRootNode, Camera * cam, 
         }
     };
 
-    // FIXME: move ms_nodesMapping to BVScebne and make add it as a variable to the class
+    // FIXME: move ms_nodesMapping to BVScene and make add it as a variable to the class
     auto engineRootNode  = BVSceneTools::BuildEngineSceneNode( modelRootNode, model::BasicNode::ms_nodesMapping );
     assert( engineRootNode );
 
