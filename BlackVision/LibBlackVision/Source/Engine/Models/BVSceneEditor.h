@@ -51,6 +51,9 @@ private:
     void                    UnregisterUpdaters  ( model::BasicNodePtr node );
     void                    RemoveNodeMappings  ( model::BasicNodePtr node );
 
+    void                    DetachChildNode     ( model::BasicNodePtr parentNode, model::BasicNodePtr childNode );
+    void                    DeleteDetachedNodes ( model::BasicNodePtr modelNode, SceneNode * engineNode );
+
     BVScene *               S                   ();
 
     friend class BVScene;

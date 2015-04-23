@@ -130,6 +130,7 @@ model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * 
 
     success &= model::SetParameterTranslation( rootTransform, 0, 0.0f, glm::vec3( -1.f, 0.f, -1.f ) );
     success &= model::SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( 2.f, 0.f, -1.f ) );
+    success &= model::SetParameterRotation( childTransform, 0, 10.0f, glm::vec3( 0.f, 0.f, -1.f ), 191.f );
 
     assert( success );
 

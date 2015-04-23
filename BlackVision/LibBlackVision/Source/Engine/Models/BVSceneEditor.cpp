@@ -19,7 +19,7 @@ BVSceneEditor::BVSceneEditor                        ( BVScene * scene )
 
 // *******************************
 //
-void            BVSceneEditor::SetRootNode          ( model::IModelNodePtr rootNode )
+void    BVSceneEditor::SetRootNode          ( model::IModelNodePtr rootNode )
 {
     if( S()->m_pModelSceneRoot != rootNode )
     {
@@ -38,7 +38,7 @@ void            BVSceneEditor::SetRootNode          ( model::IModelNodePtr rootN
 
 // *******************************
 //
-bool            BVSceneEditor::DeleteRootNode       ()
+bool    BVSceneEditor::DeleteRootNode       ()
 {
     auto modelRoot  = std::static_pointer_cast< model::BasicNode >( S()->m_pModelSceneRoot );
     auto engineRoot = S()->m_pEngineSceneRoot;
@@ -47,22 +47,42 @@ bool            BVSceneEditor::DeleteRootNode       ()
     {
         assert( engineRoot );
 
-        UnregisterUpdaters( modelRoot );
-        RemoveNodeMappings( modelRoot );
-
         S()->m_pModelSceneRoot  = nullptr;
         S()->m_pEngineSceneRoot = nullptr;
 
-        SceneNode::DeleteNode( engineRoot, S()-> m_renderer );
+        DeleteDetachedNodes( modelRoot, engineRoot );
     }
 
     return modelRoot != nullptr;
 }
 
+// *******************************
+//
+bool    BVSceneEditor::DeleteChildNode     ( model::IModelNodePtr parentNode, const std::string & childNodeName )
+{
+    auto parentModelNode  = std::static_pointer_cast< model::BasicNode >( parentNode );
+    
+    if( parentModelNode )
+    {
+        auto modelChildNode = std::static_pointer_cast< model::BasicNode >( parentModelNode->GetChild( childNodeName ) );
+
+        if( modelChildNode )
+        {
+            auto engineChildNode = m_nodesMapping[ modelChildNode.get() ];
+            assert( engineChildNode != nullptr );
+
+            DetachChildNode( parentModelNode, modelChildNode );
+
+            DeleteDetachedNodes( modelChildNode, engineChildNode );
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
 /*
-    // Dynamic tree manipulation API
-    void                    SetRootNode         ( model::IModelNodePtr rootNode );
-    bool                    DeleteRootNode      ();
 
     void                    AddChildNode        ( model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
     bool                    DeleteChildNode     ( model::IModelNodePtr parentNode, const std::string & childNodeName );
@@ -104,7 +124,30 @@ void            BVSceneEditor::RemoveNodeMappings   ( model::BasicNodePtr node )
 
         RemoveNodeMappings( child );
     }
+}
 
+// *******************************
+//
+void            BVSceneEditor::DetachChildNode      ( model::BasicNodePtr parentNode, model::BasicNodePtr childNode )
+{
+    auto engineParent = m_nodesMapping[ parentNode.get() ];
+    auto engineChild  = m_nodesMapping[ childNode.get() ];
+
+    assert( engineParent );
+    assert( engineChild );
+
+    parentNode->DetachChildNodeOnly( childNode );
+    engineParent->DetachChildNode( engineChild );
+}
+
+// *******************************
+//
+void            BVSceneEditor::DeleteDetachedNodes  ( model::BasicNodePtr modelNode, SceneNode * engineNode )
+{
+    UnregisterUpdaters( modelNode );
+    RemoveNodeMappings( modelNode );
+
+    SceneNode::DeleteNode( engineNode, S()-> m_renderer );
 }
 
 } //bv

@@ -22,6 +22,7 @@
 //FIXME: remove
 #include "testai/TestAIManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+#include "BVGL.h"
 //FIXME: end of remove
 
 #define _USE_MATH_DEFINES
@@ -222,12 +223,17 @@ void BVAppLogic::OnKey           ( unsigned char c )
 {
     if( c == 8 )
     {
-        m_bvScene->GetSceneEditor()->DeleteRootNode();
-        //auto root = m_bvScene->GetModelSceneRoot();
+        BVGL::PrintCompleteSummary( "BEFORE REMOVING ROOT NODE" );
+
+        //m_bvScene->GetSceneEditor()->DeleteRootNode();
+
+        auto root = m_bvScene->GetModelSceneRoot();
+        m_bvScene->GetSceneEditor()->DeleteChildNode( root, "child0" );
         //root->DeleteNode( "child0", m_renderer );
         
         //auto child = root->GetChild( "child0" );
         //child->DeleteNode( "child01", m_renderer );
+        BVGL::PrintCompleteSummary( "AFTER REMOVING ROOT NODE" );
     }
     else if( c != 0 )
     {
@@ -240,7 +246,6 @@ void BVAppLogic::OnKey           ( unsigned char c )
         auto newNode = CreateTestModelNodeInSomeSpecificScope( nodeName );
 
         child->AddChildNode( newNode );
-
     }
     return;
 /*
