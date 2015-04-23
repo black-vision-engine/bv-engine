@@ -1,33 +1,35 @@
 #pragma once
 
 #include "Mathematics/glm_inc.h"
-
 #include "Mathematics/Interpolators/Interpolators.h"
 
 #include "Engine/Interfaces/IUpdatable.h"
 
-#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 #include "Engine/Models/BasicNode.h"
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
+
 #include "Engine/Graphics/SceneGraph/Camera.h"
+
 
 namespace bv {
 
+class Renderer;
 class Camera;
 class BasicNode;
+class BVSceneEditor;
 class BVScene;
 
 DEFINE_PTR_TYPE(BVScene)
 DEFINE_CONST_PTR_TYPE(BVScene)
 
 
-typedef std::hash_map< model::IModelNode *, SceneNode * >	TNodesMapping;
-
 class BVScene : public IUpdatable
 {
 private:
+    
+    BVSceneEditor *     m_pSceneEditor;
+    Renderer *          m_renderer;
 
-	TNodesMapping		m_nodesMapping;
-   
 	Camera *            m_pCamera;
 
     model::ParamVec3    m_cameraPosition;
@@ -41,14 +43,13 @@ private:
 
 private:
 
-    explicit                BVScene             ( model::BasicNodePtr modelRootNode, SceneNode * sceneRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator );
+    explicit                BVScene             ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
 
 public:
 
                             ~BVScene            ();
 
-
-    static BVScenePtr       Create              ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator );
+    static BVScenePtr       Create              ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
 
     virtual void            Update              ( TimeType t );
 
@@ -59,11 +60,13 @@ public:
     model::BasicNodePtr     GetModelSceneRoot   ()  const;
     SceneNode *             GetEngineSceneRoot  ()  const;
 
+    BVSceneEditor *         GetSceneEditor      ();
+
     const std::string &     GetName             ()  const;
 
 private:
 
-    friend class ModelAccessors;
+    friend class BVSceneEditor;
 
 };
 

@@ -157,11 +157,12 @@ void    BlackVisionApp::InitializeAppLogic  ()
     HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToDevNull );
 #endif
 
-    m_app = new BVAppLogic();
+    m_app = new BVAppLogic( m_Renderer );
 
+    // FIXME: InitCamera depends implicitly ond LoadScene - which suxx (as camera is created by LoadScene and passed to bvScene)
     m_app->Initialize();
     m_app->LoadScene();
-    m_app->InitCamera( m_Renderer, m_Width, m_Height );
+    m_app->InitCamera( m_Width, m_Height );
 }
 
 // *********************************

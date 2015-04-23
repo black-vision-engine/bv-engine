@@ -52,7 +52,9 @@ void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
     m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
 
     renderer->ClearBuffers();
-    RenderNode( renderer, node );
+
+    if( node )
+        RenderNode( renderer, node );
 
     m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
     m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );

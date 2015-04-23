@@ -786,6 +786,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneTools.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneEditor.cpp">
+      <Filter>Engine\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1574,6 +1577,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\BVSceneTools.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\BVSceneEditor.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
@@ -1620,6 +1626,9 @@
     </None>
     <None Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.inl">
       <Filter>Engine\Models\Updaters</Filter>
+    </None>
+    <None Include="..\..\..\Source\Engine\Models\BVSceneEditor.inl">
+      <Filter>Engine\Models</Filter>
     </None>
   </ItemGroup>
 </Project>
