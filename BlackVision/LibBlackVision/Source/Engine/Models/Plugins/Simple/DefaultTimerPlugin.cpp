@@ -22,7 +22,7 @@ namespace bv { namespace model {
 // *******************************
 //
 DefaultTimerPluginDesc::DefaultTimerPluginDesc                            ()
-    : BasePluginDescriptor( UID(), "timer" )
+    : BasePluginDescriptor( UID(), "timer", "tx" ) // FIXME: it does not really look right :/
 {
 }
 
