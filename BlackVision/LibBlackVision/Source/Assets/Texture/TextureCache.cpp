@@ -137,7 +137,7 @@ TextureAssetConstPtr	TextureCache::GetFromRawDataCache	( const TextureAssetDescC
 	if( mmDesc )
 	{
 		std::vector< SingleTextureAssetConstPtr > mms;
-		for( SizeType i = 0; mmDesc->GetLevelsNum(); ++i )
+		for( SizeType i = 0; i < mmDesc->GetLevelsNum(); ++i )
 		{
 			auto singleTextAssetDesc = mmDesc->GetLevelDesc( i );
 			auto key = GenKeyForSingleTexture( singleTextAssetDesc );

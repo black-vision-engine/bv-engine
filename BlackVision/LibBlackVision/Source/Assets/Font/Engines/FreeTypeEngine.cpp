@@ -417,13 +417,13 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 
 					currAddress += ( m_maxWidth + padding ) * 4;
 
-					oglyph->textureY = ( m_maxHeight + 2 * padding ) * y +  2 * padding + ( m_maxHeight	- oglyph->height );
-					oglyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  2 * padding + ( m_maxWidth	- oglyph->width );
+					oglyph->textureY = ( m_maxHeight + 2 * padding ) * y +  padding + ( m_maxHeight	- oglyph->height );
+					oglyph->textureX = ( m_maxWidth	 + 2 * padding ) * x +  padding + ( m_maxWidth	- oglyph->width );
 					oglyph->padding = padding;
 
 
-					glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  2 * padding + ( m_maxHeight	- glyph->height ) - (SizeType)( osps.m_boundingRect.ymax -  sps.m_boundingRect.ymax );
-					glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  2 * padding + ( m_maxWidth	- glyph->width )  - (SizeType)( osps.m_boundingRect.xmax -  sps.m_boundingRect.xmax );
+					glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  padding + ( m_maxHeight	- glyph->height ) - (SizeType)( osps.m_boundingRect.ymax -  sps.m_boundingRect.ymax );
+					glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  padding + ( m_maxWidth	- glyph->width )  - (SizeType)( osps.m_boundingRect.xmax -  sps.m_boundingRect.xmax );
 					glyph->padding = padding;
 				}
 				else
@@ -435,8 +435,8 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 
 					currAddress += ( m_maxWidth + padding ) * 4;
 
-					glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  2 * padding + ( m_maxHeight	- glyph->height );
-					glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  2 * padding + ( m_maxWidth	- glyph->width );
+					glyph->textureY = ( m_maxHeight + 2 * padding ) * y +  padding + ( m_maxHeight	- glyph->height );
+					glyph->textureX = ( m_maxWidth	+ 2 * padding ) * x +  padding + ( m_maxWidth	- glyph->width );
 					glyph->padding = padding;
 				}
 			}
@@ -471,7 +471,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 		
 	atlas->m_textureAsset = atlasTextureRes;
 
-	image::SaveRAWImage( "testFreeType.raw", atlas->GetWritableData() );
+	//image::SaveRAWImage( "testFreeType.raw", atlas->GetWritableData() );
 
 	atlas->m_kerningMap = BuildKerning( m_face, wcharsSet );
 

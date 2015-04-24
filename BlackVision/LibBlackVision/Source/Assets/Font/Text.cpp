@@ -54,7 +54,7 @@ Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, 
     BuildAtlas();
 }
 
-#define GENERATE_TEST_BMP_FILE
+//#define GENERATE_TEST_BMP_FILE
 
 // *********************************
 //
