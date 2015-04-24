@@ -84,11 +84,11 @@ private:
 
     std::vector< TexData2ShaderParams >         m_texDataMappingVec;
 
-                            NodeUpdater         ( RenderableEntity * renderable, SceneNode * sceneNode, model::IModelNodeConstPtr modelNode ); 
+                            NodeUpdater         ( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode ); 
 public:
                             ~NodeUpdater        ();
 
-    static NodeUpdaterPtr   Create              ( RenderableEntity * renderable, SceneNode * sceneNode, model::IModelNodeConstPtr modelNode );
+    static NodeUpdaterPtr   Create              ( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode );
     virtual void            DoUpdate            () override;
 
 private:

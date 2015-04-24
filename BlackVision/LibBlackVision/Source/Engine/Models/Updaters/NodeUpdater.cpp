@@ -20,29 +20,39 @@ namespace bv
 
 // *****************************
 //
-NodeUpdaterPtr NodeUpdater::Create( RenderableEntity * renderable, SceneNode * sceneNode, model::IModelNodeConstPtr modelNode )
+NodeUpdaterPtr NodeUpdater::Create( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode )
 {
-    return NodeUpdaterPtr( new NodeUpdater( renderable, sceneNode, modelNode ) );
+    struct make_shared_enabler_NodeUpdater : public NodeUpdater
+    {
+        make_shared_enabler_NodeUpdater( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode )
+            : NodeUpdater( sceneNode, modelNode )
+        {
+        }
+    };
+
+    return std::make_shared<make_shared_enabler_NodeUpdater>( sceneNode, modelNode );
 }
 
 // *****************************
 //
-NodeUpdater::NodeUpdater     ( RenderableEntity * renderable, SceneNode * sceneNode, model::IModelNodeConstPtr modelNode )
+NodeUpdater::NodeUpdater     ( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode )
     : m_sceneNode( sceneNode )
     , m_modelNode( modelNode )
-    , m_renderable( renderable )
+    , m_renderable( nullptr )
     , m_rendererContext( nullptr )
 {
     assert( sceneNode != nullptr );
     assert( modelNode != nullptr );
-    assert( renderable != nullptr );
+    
+    m_renderable = static_cast< RenderableEntity* >( sceneNode->GetTransformable() );
+    assert( m_renderable != nullptr );
 
     m_timeInvariantVertexData = false;
 
     model::IPluginConstPtr finalizer = modelNode->GetFinalizePlugin();
     assert( finalizer );
 
-    auto effect = renderable->GetRenderableEffect();
+    auto effect = m_renderable->GetRenderableEffect();
 
     m_transformChannel = finalizer->GetTransformChannel();
     assert( m_transformChannel != nullptr );

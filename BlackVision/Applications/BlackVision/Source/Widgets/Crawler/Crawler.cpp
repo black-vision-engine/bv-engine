@@ -41,7 +41,7 @@ void		Crawler::AddNext			( bv::model::BasicNodePtr node )
 {
 	if(! m_isFinalized )
 	{
-		m_parentNode->AddChild( node );
+		m_parentNode->AddChildToModelOnly( node );
 		m_nodesStates.Add( node.get() );
 	}
 	else

@@ -25,6 +25,9 @@
 
 namespace bv { namespace model {
 
+// FIXME: hack
+std::hash_map< IModelNode *, SceneNode * >    BasicNode::ms_nodesMapping;
+
 namespace {
 
 IModelNodePtr  FindNode( const TNodeVec & vec, const std::string & name )
@@ -139,6 +142,54 @@ IModelNodePtr                   BasicNode::GetChild                 ( const std:
 const IPluginListFinalized *    BasicNode::GetPluginList            () const
 {
     return m_pluginList.get();
+}
+
+// ********************************
+//
+bool                            BasicNode::DeleteNode               ( const std::string & name, Renderer * renderer )
+{
+    auto node = GetChild( name );
+
+    if( node )
+    {
+        auto basicNode = std::static_pointer_cast< BasicNode >( node );
+
+        DetachChildNodeOnly( basicNode );
+    
+        basicNode->DeleteSelf( renderer );
+    
+        return true;
+    }
+
+    return false;
+}
+
+// ********************************
+//
+void                            BasicNode::AddChildNode             ( IModelNodePtr modelNode )
+{
+    // Verify validity
+    assert( modelNode != nullptr );
+    assert( ms_nodesMapping.find( modelNode.get() ) == ms_nodesMapping.end() );
+    assert( ms_nodesMapping.find( this ) != ms_nodesMapping.end() );
+
+    // Create engine node corresponding to modelNode
+    BasicNode * basicModelNode = static_cast< BasicNode * >( modelNode.get() );
+    SceneNode * engineNode = basicModelNode->BuildScene();
+
+    // Register created node and its mapping
+    ms_nodesMapping[ basicModelNode ] = engineNode;
+
+    // Add model node to current tree along with corresponding engine node
+    AddChildToModelOnly( std::static_pointer_cast< BasicNode >( modelNode ) );
+    ms_nodesMapping[ this ]->AddChildNode( engineNode );
+}
+
+// ********************************
+//
+unsigned int                    BasicNode::GetNumchildren           () const
+{
+    return (unsigned int) m_children.size();
 }
 
 // ********************************
@@ -280,9 +331,11 @@ mathematics::Rect 			BasicNode::GetAABB						( const glm::mat4 & parentTransform
 //
 SceneNode *                 BasicNode::BuildScene                   () 
 {
-    IPluginConstPtr finalizer = GetFinalizePlugin();
+    assert( ms_nodesMapping.find( this ) == ms_nodesMapping.end() );
 
-    SceneNode * node = CreateSceneNode( finalizer );
+    SceneNode * node = CreateSceneNode();
+
+    ms_nodesMapping[ this ] = node;
 
     node->SetOverrideAlphaVal( GetOverrideState()->GetAlphaValue().get() );
 
@@ -296,9 +349,47 @@ SceneNode *                 BasicNode::BuildScene                   ()
 
 // ********************************
 //
-void            BasicNode::AddChild                         ( BasicNodePtr n )
+void            BasicNode::AddChildToModelOnly              ( BasicNodePtr n )
 {
-    m_children.push_back( BasicNodePtr( n ) );
+    m_children.push_back( n );
+}
+
+// ********************************
+//
+void            BasicNode::DetachChildNodeOnly              ( BasicNodePtr n )
+{
+    for( unsigned int i = 0; i < m_children.size(); ++i )
+    {
+        if( m_children[ i ] == n )
+        {
+            m_children.erase( m_children.begin() + i );
+
+            return;
+        }
+    }
+
+    assert( false );
+}
+
+// ********************************
+//
+void            BasicNode::DeleteSelf                       ( Renderer * renderer )
+{
+    // Unregister updater
+    UpdatersManager::Get().RemoveNodeUpdater( this );
+
+    // Remove engine node and clear all resources
+    auto engineNode = ms_nodesMapping[ this ];
+    ms_nodesMapping.erase( this );
+
+    // Clear all OpenGL resources
+    SceneNode::DeleteNode( engineNode, renderer );
+
+    // Remove all children
+    for( auto ch : m_children )
+    {
+        ch->DeleteSelf( renderer ); 
+    }
 }
 
 // ********************************
@@ -451,13 +542,15 @@ void  BasicNode::SetVisible              ( bool visible )
 
 // ********************************
 //
-SceneNode *                         BasicNode::CreateSceneNode          ( IPluginConstPtr finalizer ) const
+SceneNode *                         BasicNode::CreateSceneNode          () const
 {
+    IPluginConstPtr finalizer = GetFinalizePlugin();
+
     RenderableEntity * renderable = CreateRenderable( finalizer );
 
     SceneNode * node        = new SceneNode( renderable );
-    NodeUpdaterPtr updater  = NodeUpdater::Create( renderable, node, shared_from_this() );
-    UpdatersManager::Get().RegisterUpdater( updater );
+    NodeUpdaterPtr updater  = NodeUpdater::Create( node, shared_from_this() );
+    UpdatersManager::Get().RegisterUpdater( this, updater );
 
     return node;
 }

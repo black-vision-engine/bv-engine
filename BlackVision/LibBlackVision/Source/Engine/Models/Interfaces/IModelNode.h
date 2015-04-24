@@ -10,6 +10,7 @@
 namespace bv {
 
 class SceneNode;
+class Renderer;
 
 namespace model {
 
@@ -35,6 +36,12 @@ public:
 
     virtual const IPluginListFinalized *    GetPluginList       () const                                                            = 0;
 
+    // FIXME: temporary "dynamic tree" meothods, to be replaced by some better interface
+    // FIXME: these two should be called only after model scene is attached to an engine scene
+    virtual bool                            DeleteNode          ( const std::string & name, Renderer * renderer )                   = 0;
+    virtual void                            AddChildNode        ( IModelNodePtr modelNode )                                         = 0;
+
+    virtual unsigned int                    GetNumchildren      () const                                                            = 0;
 
     // FIXME: remove when proper GlobalEfect is implemented
     virtual void                            EnableOverrideStateAM   ()                                                              = 0;

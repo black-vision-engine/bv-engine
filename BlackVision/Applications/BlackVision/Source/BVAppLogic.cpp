@@ -26,26 +26,6 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-namespace 
-{
-    const static std::wstring examples[] = 
-    {
-        L"Jasiu kup kiełbasę !!",
-        L"wielojęzyczny projekt internetortej treści. Funkcjonuje wykorzystując",
-        L"Wikipedia powstała 15 stycznia ertów i nieistniejącej już Nupedii. ",
-        L"iostrzane. Wikipedia jest jedną], a wiele stron uruchomiło jej mirrory lub forki.",
-        L"Współzałożyciel Wikipedii Jimmyia wielojęzycznej",
-        L"wolnej encyklopedii o najwyższywłasnym języku”[8].",
-        L"Kontrowersje budzi wiarygodnośćeści artykułów ",
-        L"i brak weryfikacji kompetencji .",
-        L"Z drugiej",
-        L"strony możliwość swobodnej dyst źródłem informacji",
-        L"Jasiu kup kiełbasę !!",
-    };
-
-    auto exampleSize = sizeof( examples ) / sizeof( std::wstring );
-}
-
 namespace bv
 {
 extern HighResolutionTimer GTimer;
@@ -100,9 +80,9 @@ namespace
 BVAppLogic::BVAppLogic              ()
     : m_startTime( 0 )
     , m_timelineManager( new model::TimelineManager() )
-    , m_modelScene( nullptr )
-    , m_engineScene( nullptr )
+    , m_bvScene( nullptr )
     , m_pluginsManager( nullptr )
+    , m_renderer( nullptr )
     , m_renderLogic( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
@@ -123,7 +103,6 @@ BVAppLogic::~BVAppLogic             ()
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
 
     delete m_timelineManager;
-    delete m_engineScene;
 
     delete m_renderLogic;
 }
@@ -151,22 +130,17 @@ void BVAppLogic::LoadScene          ( void )
     //model::BasicNodePtr root = TestScenesFactory::OlafTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
     //model::BasicNodePtr root = TestScenesFactory::CreedTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
     //model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
-
-    //model::BasicNodePtr root = TestScenesFactory::CreedBasicGeometryTestScene(m_globalTimeline);
 	assert( root );
 
-    m_engineScene  = root->BuildScene();
-    assert( m_engineScene );
-
-    m_modelScene    = model::ModelScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline );
-    assert( m_modelScene );
+    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline );
+    assert( m_bvScene );
 }
 
 // *********************************
 //
 void BVAppLogic::InitCamera         ( Renderer * renderer, unsigned int w, unsigned int h )
 {
-    Camera * cam = m_modelScene->GetCamera();
+    Camera * cam = m_bvScene->GetCamera();
 
     cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
     
@@ -179,10 +153,11 @@ void BVAppLogic::InitCamera         ( Renderer * renderer, unsigned int w, unsig
         cam->SetViewportSize( w, h );
     }
 
+    m_renderer = renderer;
     renderer->SetCamera( cam );
     m_renderLogic->SetCamera( cam );
 
-    //FIXME: read from configuration file and change appropriately when resoultion changes
+    //FIXME: read from configuration file and change the camera appropriately when current resoultion changes
 }
 
 // *********************************
@@ -215,35 +190,14 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             FRAME_STATS_SECTION( "Update" );
             HPROFILER_SECTION( "update total" );
 
-            {
-                FRAME_STATS_SECTION( "Model-u" );
-                HPROFILER_SECTION( "m_modelScene->Update" );
-
-                m_globalTimeline->SetGlobalTime( t );
-                m_modelScene->Update( t );
-            }
-            {
-                FRAME_STATS_SECTION( "Manager-u" );
-                HPROFILER_SECTION( "UpdatersManager::Get().UpdateStep" );
-                UpdatersManager::Get().UpdateStep();
-            }
-            {
-                FRAME_STATS_SECTION( "EngScn-u" );
-                HPROFILER_SECTION( "m_engineScene->Update" );
-
-                auto viewMat = m_modelScene->GetCamera()->GetViewMatrix();
-
-                //FIXME: use transform vector consistenlty
-                std::vector< bv::Transform > vec;
-                vec.push_back( Transform( viewMat, glm::inverse( viewMat ) ) );
-                m_engineScene->Update( vec );
-            }
+            m_globalTimeline->SetGlobalTime( t );
+            m_bvScene->Update( t );
         }
         {
             FRAME_STATS_SECTION( "Render" );
             HPROFILER_SECTION( "Render" );
 
-            m_renderLogic->RenderFrame  ( renderer, m_engineScene );
+            m_renderLogic->RenderFrame  ( renderer, m_bvScene->GetEngineSceneRoot() );
             m_renderLogic->FrameRendered( renderer );
         }
     }
@@ -253,8 +207,41 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 
 // *********************************
 //
+model::IModelNodePtr BVAppLogic::CreateTestModelNodeInSomeSpecificScope( const std::string & name )
+{
+    model::BasicNodePtr node = TestScenesFactory::CreateTestRandomNode( name, m_pluginsManager, m_timelineManager, m_globalTimeline );
+
+    return node;
+}
+
+// *********************************
+//
 void BVAppLogic::OnKey           ( unsigned char c )
 {
+    if( c == 8 )
+    {
+        auto root = m_bvScene->GetModelSceneRoot();
+        root->DeleteNode( "child0", m_renderer );
+        //auto child = root->GetChild( "child0" );
+
+        //child->DeleteNode( "child01", m_renderer );
+    }
+    else if( c != 0 )
+    {
+        auto root = m_bvScene->GetModelSceneRoot();
+        auto child = root->GetChild( "child0" );
+
+        auto n = child->GetNumchildren();
+        auto nodeName = "child0" + std::to_string(n);
+
+        auto newNode = CreateTestModelNodeInSomeSpecificScope( nodeName );
+
+        child->AddChildNode( newNode );
+
+    }
+    return;
+/*
+    // FIXME: the code below is must be used with an animation plugin
     unsigned char d = c - '0';
 
     if( d <= 10 )
@@ -268,7 +255,7 @@ void BVAppLogic::OnKey           ( unsigned char c )
     {
         m_renderLogic->PrintGLStats( c == 'I' );
     }
-
+*/
     //auto root = m_modelScene->GetSceneRoot();
     //auto timerPlugin = root->GetPlugin("timer");
     //if(c == 'q')
@@ -359,8 +346,7 @@ void                            BVAppLogic::ResetScene      ()
 {
     UpdatersManager::Get().RemoveAllUpdaters();
     m_globalTimeline = model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) );
-    m_modelScene = nullptr;
-    delete m_engineScene;
+    m_bvScene = nullptr;
 }
 
 // *********************************
@@ -374,47 +360,25 @@ void                            BVAppLogic::ReloadScene     ()
 // *********************************
 //
 void            BVAppLogic::OnUpdateParam   ( IEventPtr evt )
-{
-    
+{ 
 }
 
 // *********************************
 //
 void            BVAppLogic::OnNodeAppearing   ( IEventPtr evt )
-{
-    
+{ 
 }
 
 // *********************************
 //
 void            BVAppLogic::OnNodeLeaving   ( IEventPtr evt )
 {
-    
 }
 
 // *********************************
 //
 void            BVAppLogic::OnNoMoreNodes   ( IEventPtr evt )
 {
-    auto typedEvent = std::static_pointer_cast< widgets::NoMoreNodesCrawlerEvent >( evt );
-    // Remove code below. Only for testing.
-    auto n = typedEvent->GetCrawler()->GetNonActiveNode();
-    if( n )
-    {
-        auto i = rand() % exampleSize;
-        auto textNode = n->GetChild( "Text" );
-        if( textNode )
-        {
-            auto pl = textNode->GetPlugin( "text" );
-
-            if( pl )
-            {
-                model::DefaultTextPlugin::SetText( pl, examples[ i ] );
-
-                typedEvent->GetCrawler()->EnqueueNode( n );
-            }
-        }
-    }
 }
 
 // *********************************
@@ -426,9 +390,9 @@ model::TimelineManager *    BVAppLogic::GetTimelineManager  ()
 
 // *********************************
 //FIXME: unsafe - consider returning const variant of this class (IParameters * without const should be accessible anyway)
-model::ModelScenePtr        BVAppLogic::GetModelScene       ()
+BVScenePtr                  BVAppLogic::GetBVScene          ()
 {
-    return m_modelScene;
+    return m_bvScene;
 }
 
 // *********************************
@@ -465,3 +429,23 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
         //    frame++;
 
 } //bv
+
+//namespace 
+//{
+//	const static std::wstring examples[] = 
+//	{
+//		L"Jasiu kup kiełbasę !!",
+//		L"wielojęzyczny projekt internetortej treści. Funkcjonuje wykorzystując",
+//		L"Wikipedia powstała 15 stycznia ertów i nieistniejącej już Nupedii. ",
+//		L"iostrzane. Wikipedia jest jedną], a wiele stron uruchomiło jej mirrory lub forki.",
+//		L"Współzałożyciel Wikipedii Jimmyia wielojęzycznej",
+//		L"wolnej encyklopedii o najwyższywłasnym języku”[8].",
+//		L"Kontrowersje budzi wiarygodnośćeści artykułów ",
+//		L"i brak weryfikacji kompetencji .",
+//		L"Z drugiej",
+//		L"strony możliwość swobodnej dyst źródłem informacji",
+//		L"Jasiu kup kiełbasę !!",
+//	};
+//
+//	auto exampleSize = sizeof( examples ) / sizeof( std::wstring );
+//}

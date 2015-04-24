@@ -699,12 +699,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BasicOverrideState.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\ModelAccessors.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\ModelScene.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.cpp">
       <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </ClCompile>
@@ -810,13 +804,16 @@
     <ClCompile Include="..\..\..\Source\Assets\Assets.cpp">
       <Filter>Assets</Filter>
     </ClCompile>
-<<<<<<< local
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultConePlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCubePlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Cache\HardDriveRawDataCache.cpp">
+      <Filter>Assets\Cache</Filter>
+    </ClCompile>
+<<<<<<< local
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTorusPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
@@ -836,8 +833,8 @@
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
 =======
-    <ClCompile Include="..\..\..\Source\Assets\Cache\HardDriveRawDataCache.cpp">
-      <Filter>Assets\Cache</Filter>
+    <ClCompile Include="..\..\..\Source\Engine\Models\BVScene.cpp">
+      <Filter>Engine\Models</Filter>
     </ClCompile>
 >>>>>>> other
   </ItemGroup>
@@ -1529,12 +1526,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\BasicOverrideState.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelAccessors.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\ModelScene.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h">
       <Filter>Mathematics</Filter>
     </ClInclude>
@@ -1667,10 +1658,13 @@
     <ClInclude Include="..\..\..\Source\Assets\Assets.h">
       <Filter>Assets</Filter>
     </ClInclude>
-<<<<<<< local
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultConePlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Cache\HardDriveRawDataCache.h">
+      <Filter>Assets\Cache</Filter>
+    </ClInclude>
+<<<<<<< local
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCubePlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
@@ -1693,8 +1687,8 @@
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
 =======
-    <ClInclude Include="..\..\..\Source\Assets\Cache\HardDriveRawDataCache.h">
-      <Filter>Assets\Cache</Filter>
+    <ClInclude Include="..\..\..\Source\Engine\Models\BVScene.h">
+      <Filter>Engine\Models</Filter>
     </ClInclude>
 >>>>>>> other
   </ItemGroup>

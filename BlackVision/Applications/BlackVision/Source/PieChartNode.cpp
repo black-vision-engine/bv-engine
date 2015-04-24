@@ -29,7 +29,7 @@ void PieChartNode::Init( model::TimelineManager * timelineManager, model::ITimeE
 		float angleMid = angle + float( percent * PI / 100 );
 		angle += float( percent * 2*PI / 100 );
 		SetParameter( node->GetPlugin( "piechart" )->GetParameter( "angleEnd" ), 0.f, angle );
-		AddChild( node );
+		AddChildToModelOnly( node );
 
 		glm::vec3 vecOffset = glm::vec3( cos( angleMid ), 0, sin( angleMid ) );
 		vecOffset *= offset;

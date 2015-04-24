@@ -3,11 +3,26 @@
 #include <vector>
 #include <string>
 #include <cstdarg>
+#include <cstdlib>
+#include <ctime>
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
 
 namespace bv {
+
+namespace {
+
+// *****************************
+//
+float simple_rnd( float a, float b )
+{
+    float t = float(double(std::rand()) / double(RAND_MAX));
+
+    return a + ( b - a ) * t;
+}
+
+} // anonymous
 
 // *****************************
 //
@@ -64,6 +79,34 @@ model::BasicNodePtr CreateSingleTestNodeUidsOnly( const std::string & nodeName, 
 
 // *****************************
 //
+model::BasicNodePtr TexturedTestRandomRect( const std::string & name, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { timelineManager; } // FIXME: suppress unused warning
+
+    auto node =     CreateSingleTestNodeUidsOnly( name, pluginsManager, timeEvaluator, 3, "DEFAULT_TRANSFORM",  "DEFAULT_RECTANGLE",  "DEFAULT_TEXTURE" );
+    assert( node );
+
+    auto transform  = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+
+    bool success = true;
+
+    float xt = simple_rnd( -1.f, 1.f );
+    float yt = simple_rnd( -1.f, 1.f );
+    float zt = simple_rnd( -1.f, -5.f );
+
+    success &= model::SetParameterTranslation( transform, 0, 0.0f, glm::vec3( xt, yt, zt ) );
+
+    std::string txFileName = "rsrcy/simless_01.jpg";
+
+    success &= model::LoadTexture( node->GetPlugin( "texture" ), txFileName );
+
+    assert( success );
+
+    return node;
+}
+
+// *****************************
+//
 model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { timelineManager; } // FIXME: suppress unused warning
@@ -73,7 +116,7 @@ model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * 
                                                       "DEFAULT_RECTANGLE", 
                                                       "DEFAULT_TEXTURE" );
     
-    auto childNode =    CreateSingleTestNodeUidsOnly( "root", pluginsManager, timeEvaluator, 3,
+    auto childNode =    CreateSingleTestNodeUidsOnly( "child0", pluginsManager, timeEvaluator, 3,
                                                       "DEFAULT_TRANSFORM", 
                                                       "DEFAULT_RECTANGLE", 
                                                       "DEFAULT_TEXTURE" );
@@ -97,7 +140,7 @@ model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * 
 
     assert( success );
 
-    rootNode->AddChild( childNode );
+    rootNode->AddChildToModelOnly( childNode );
 
     return rootNode;
 }

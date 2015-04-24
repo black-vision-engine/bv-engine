@@ -530,7 +530,7 @@ AICommandReloadTexture::AICommandReloadTexture  ( BVAppLogic * logic, TimeType t
     , m_plugin( nullptr )
     , m_textureName( textureName )
 {
-    auto node = logic->GetModelScene()->GetSceneRoot()->GetNode( nodeName );
+    auto node = logic->GetBVScene()->GetModelSceneRoot()->GetNode( nodeName );
 
     if( node )
     {
