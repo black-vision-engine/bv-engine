@@ -14,9 +14,7 @@ private:
     typedef  DefaultFinalizeShaderChannel< IPixelShaderChannel > Parent;
 
 private:
-
-    //static StaticShaderGenerator ms_staticShaderGenerator;
-    StaticShaderGenerator ms_staticShaderGenerator;
+    StaticShaderGenerator m_staticShaderGenerator;
 
 private:
 

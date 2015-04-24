@@ -88,58 +88,58 @@ void                    DefaultFinalizeShaderChannel< ShaderChannelIface >::Rege
     m_shaderSource = GetShaderSource( uids );
 }
 
-// *********************************
+//// *********************************
+////
+//template< typename ShaderChannelIface >
+//const std::vector< std::vector< std::string > > &   DefaultFinalizeShaderChannel< ShaderChannelIface >::GetAcceptedPluginLists  ()
+//{
+//    if( ms_acceptedPluginLists.size() == 0 )
+//    {
+//        for( unsigned int i = 0; i < GNumLists; ++i )
+//        {
+//            std::vector< std::string > entries;
+//            std::string empty( "" );
 //
-template< typename ShaderChannelIface >
-const std::vector< std::vector< std::string > > &   DefaultFinalizeShaderChannel< ShaderChannelIface >::GetAcceptedPluginLists  ()
-{
-    if( ms_acceptedPluginLists.size() == 0 )
-    {
-        for( unsigned int i = 0; i < GNumLists; ++i )
-        {
-            std::vector< std::string > entries;
-            std::string empty( "" );
-
-            for( unsigned int j = 0; j < GMaxNumEntries; ++j )
-            {
-                std::string entry( acceptedPluginLists[ i ][ j ] );
-                
-                if ( entry != empty )
-                {
-                    entries.push_back( entry );
-                }
-            }
-
-            ms_acceptedPluginLists.push_back( entries );
-        }
-    }
-
-    return ms_acceptedPluginLists;
-}
-
-// *********************************
+//            for( unsigned int j = 0; j < GMaxNumEntries; ++j )
+//            {
+//                std::string entry( acceptedPluginLists[ i ][ j ] );
+//                
+//                if ( entry != empty )
+//                {
+//                    entries.push_back( entry );
+//                }
+//            }
 //
-template< typename ShaderChannelIface >
-const std::vector< std::string > &                  DefaultFinalizeShaderChannel< ShaderChannelIface >::GetBaseShaderFileNames  ()
-{
-    if( ms_baseShaderFileNames.size() == 0 )
-    {
-        for( unsigned int i = 0; i < GNumLists; ++i )
-        {
-            ms_baseShaderFileNames.push_back( std::string( baseShaderFileNames[ i ] ) );
-        }
-    }
-
-    return ms_baseShaderFileNames;
-}
-
-// *********************************
+//            ms_acceptedPluginLists.push_back( entries );
+//        }
+//    }
 //
-template< typename ShaderChannelIface >
-const std::string &                                 DefaultFinalizeShaderChannel< ShaderChannelIface >::ShaderStorageDirectory  () const
-{
-    return m_shadersDir;
-}
+//    return ms_acceptedPluginLists;
+//}
+//
+//// *********************************
+////
+//template< typename ShaderChannelIface >
+//const std::vector< std::string > &                  DefaultFinalizeShaderChannel< ShaderChannelIface >::GetBaseShaderFileNames  ()
+//{
+//    if( ms_baseShaderFileNames.size() == 0 )
+//    {
+//        for( unsigned int i = 0; i < GNumLists; ++i )
+//        {
+//            ms_baseShaderFileNames.push_back( std::string( baseShaderFileNames[ i ] ) );
+//        }
+//    }
+//
+//    return ms_baseShaderFileNames;
+//}
+//
+//// *********************************
+////
+//template< typename ShaderChannelIface >
+//const std::string &                                 DefaultFinalizeShaderChannel< ShaderChannelIface >::ShaderStorageDirectory  () const
+//{
+//    return m_shadersDir;
+//}
 
 //}
 

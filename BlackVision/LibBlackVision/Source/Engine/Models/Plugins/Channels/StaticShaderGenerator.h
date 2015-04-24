@@ -6,10 +6,10 @@
 namespace bv { namespace model {
 
 // FIXME: temporary, toremove
-    const unsigned int GNumLists = 21;
-    const unsigned int GMaxNumEntries = 5;
-    extern char * acceptedPluginLists[ GNumLists ][ GMaxNumEntries ];
-    extern char * baseShaderFileNames[ GNumLists ];
+    //const unsigned int GNumLists = 21;
+    //const unsigned int GMaxNumEntries = 5;
+    //extern char * acceptedPluginLists[ GNumLists ][ GMaxNumEntries ];
+    //extern char * baseShaderFileNames[ GNumLists ];
 // end of toremove FIXME
 
     typedef std::map< std::vector< std::string >, std::string >  PluginUIDHashMap;
@@ -20,67 +20,69 @@ namespace bv { namespace model {
         static std::vector< std::vector< std::string > >    ms_acceptedPluginLists;
         static std::vector< std::string >                   ms_baseShaderFileNames;
         std::string                             m_shadersDir;
+        std::string                             m_shaderExtension;
     public:
-        StaticShaderGenerator( const std::string & shadersDir ) 
+        StaticShaderGenerator( const std::string & shadersDir, const std::string & shaderExtension ) 
             : m_shadersDir( shadersDir )
+            , m_shaderExtension( shaderExtension )
         {
         }
 
         void                InitializePixelShaderMapping       () const
         {
-            if( ms_pixelShaderMapping.size() == 0 )
-            {
-                auto uidLists   = GetAcceptedPluginLists();
-                auto baseNames  = GetBaseShaderFileNames();
+            //if( ms_pixelShaderMapping.size() == 0 )
+            //{
+            //    //auto uidLists   = GetAcceptedPluginLists();
+            //    auto baseNames  = GetBaseShaderFileNames();
 
-                assert( uidLists.size() == baseNames.size() );
+            //    //assert( uidLists.size() == baseNames.size() );
 
-                for( size_t i = 0; i < uidLists.size(); ++i )
-                {
-                    ms_pixelShaderMapping[ uidLists[ i ] ] = ShaderStorageDirectory() + baseNames[ i ] + ".frag";
-                }
-            }
+            //    for( size_t i = 0; i < uidLists.size(); ++i )
+            //    {
+            //        ms_pixelShaderMapping[ uidLists[ i ] ] = ShaderStorageDirectory() + baseNames[ i ] + ".frag";
+            //    }
+            //}
         }
 
         std::string         GenerateShaderSource( const std::vector< std::string > & uids ) const;
         std::string         GenerateFilename( const std::vector< std::string > & uids ) const;
         std::string         UID2Abbrv( const std::string uid ) const;
 
-        const std::vector< std::vector< std::string > > &   GetAcceptedPluginLists  () const
-        {
-            if( ms_acceptedPluginLists.size() == 0 )
-            {
-                for( unsigned int i = 0; i < GNumLists; ++i )
-                {
-                    std::vector< std::string > entries;
-                    std::string empty( "" );
+        //const std::vector< std::vector< std::string > > &   GetAcceptedPluginLists  () const
+        //{
+        //    if( ms_acceptedPluginLists.size() == 0 )
+        //    {
+        //        for( unsigned int i = 0; i < GNumLists; ++i )
+        //        {
+        //            std::vector< std::string > entries;
+        //            std::string empty( "" );
 
-                    for( unsigned int j = 0; j < GMaxNumEntries; ++j )
-                    {
-                        std::string entry( acceptedPluginLists[ i ][ j ] );
+        //            for( unsigned int j = 0; j < GMaxNumEntries; ++j )
+        //            {
+        //                std::string entry( acceptedPluginLists[ i ][ j ] );
 
-                        if ( entry != empty )
-                        {
-                            entries.push_back( entry );
-                        }
-                    }
+        //                if ( entry != empty )
+        //                {
+        //                    entries.push_back( entry );
+        //                }
+        //            }
 
-                    ms_acceptedPluginLists.push_back( entries );
-                }
-            }
+        //            ms_acceptedPluginLists.push_back( entries );
+        //        }
+        //    }
 
-            return ms_acceptedPluginLists;
-        }
+        //    return ms_acceptedPluginLists;
+        //}
 
         const std::vector< std::string > &                  GetBaseShaderFileNames  () const
         {
-            if( ms_baseShaderFileNames.size() == 0 )
-            {
-                for( unsigned int i = 0; i < GNumLists; ++i )
-                {
-                    ms_baseShaderFileNames.push_back( std::string( baseShaderFileNames[ i ] ) );
-                }
-            }
+            //if( ms_baseShaderFileNames.size() == 0 )
+            //{
+            //    for( unsigned int i = 0; i < GNumLists; ++i )
+            //    {
+            //        ms_baseShaderFileNames.push_back( std::string( baseShaderFileNames[ i ] ) );
+            //    }
+            //}
 
             return ms_baseShaderFileNames;
         }

@@ -2,8 +2,8 @@
 
 namespace bv { namespace model {
 
-    //const unsigned int GNumLists = 19;
-    //const unsigned int GMaxNumEntries = 5;
+    const unsigned int GNumLists = 21;
+    const unsigned int GMaxNumEntries = 5;
 
     //@see: https://docs.google.com/spreadsheets/d/1K3dblNOAijnKdJXeha9_DWlSLhOc1Wcq5F1Mwlvk7x4
     char * acceptedPluginLists[ GNumLists ][ GMaxNumEntries ] = { 

@@ -13,8 +13,7 @@ private:
     typedef  DefaultFinalizeShaderChannel< IVertexShaderChannel > Parent;
 
 private:
-
-    static PluginUIDHashMap    ms_vertexShaderMapping;
+    StaticShaderGenerator m_staticShaderGenerator;
 
 private:
 

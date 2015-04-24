@@ -36,8 +36,8 @@ std::string         StaticShaderGenerator::GenerateFilename( const std::vector< 
                 filename += "."+abbrv;
     }
     assert( filename.length() > 0 );
-    filename = "Assets/Shaders/Combinations/" + filename; // FIXME
-    filename += ".frag";
+    filename = m_shadersDir + filename;
+    filename += "."+m_shaderExtension;
 
     return filename;
 }
