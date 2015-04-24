@@ -18,10 +18,9 @@ public:
 
 	const std::string &			Get() const;
 
-private:
-
 	explicit					Hash( const std::string & value );
 
+private:
 	std::string m_value;
 };
 

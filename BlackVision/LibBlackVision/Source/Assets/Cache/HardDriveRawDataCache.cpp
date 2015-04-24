@@ -3,7 +3,8 @@
 #include "IO/FileIO.h"
 #include "IO/DirIO.h"
 
-static const std::string RAW_DATA_CACHE_DIR = "cache/raw_data_cache";
+static const std::string CACHE_DIR = "cache";
+static const std::string RAW_DATA_CACHE_DIR = "cache/raw_data_cache/";
 
 namespace bv {
 
@@ -18,6 +19,11 @@ void		HardDriveRawDataCache::Initialize		()
 // 
 void		HardDriveRawDataCache::ScanCacheDir	()
 {
+	if( !Dir::Exists( CACHE_DIR ) )
+	{
+		File::CreateDir( CACHE_DIR );
+	}
+
 	if( !Dir::Exists( RAW_DATA_CACHE_DIR ) )
 	{
 		File::CreateDir( RAW_DATA_CACHE_DIR );
@@ -26,9 +32,12 @@ void		HardDriveRawDataCache::ScanCacheDir	()
 	{
 		auto files = Dir::ListFiles( RAW_DATA_CACHE_DIR, "*" );
 
+		files.erase( files.begin() , files.begin() + 2 ); // Removing . and ..
+
 		for( auto f : files )
 		{
-			m_entries.insert( Hash::FromString( f ) );
+			auto s = File::GetFileName( f );
+			m_entries.insert( Hash( s ) );
 		}
 	}
 }

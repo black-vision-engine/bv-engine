@@ -46,7 +46,8 @@ private:
 
 	TextureAssetConstPtr			Find				( const std::string & key ) const;
 	void							AddToRawDataCache	( const TextureAssetConstPtr & textureRes ) const;
-	MemoryChunkConstPtr				GetFormRawDataCache	( const SingleTextureAssetDescConstPtr & desc ) const;
+	SingleTextureAssetConstPtr		GetFromRawDataCache	( const SingleTextureAssetDescConstPtr & desc ) const;
+	TextureAssetConstPtr			GetFromRawDataCache	( const TextureAssetDescConstPtr & desc ) const;
 
 
 	TextureCache();

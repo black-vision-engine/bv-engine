@@ -65,7 +65,7 @@ TextAtlasConstPtr Text::LoadFromCache()
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
 
-	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, false, false );
+	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, true );
 
 
     if( entry != nullptr )
@@ -87,7 +87,9 @@ void				Text::AddToCache()
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
 
-    auto entry = new FontAtlasCacheEntry( m_atlas, fontName, m_fontSize, m_blurSize, m_outlineWidth, m_fontFile, "", false, false );
+	auto mmLevelsNum = m_atlas->m_textureAsset->GetMipMaps() ? m_atlas->m_textureAsset->GetMipMaps()->GetLevelsNum() : 0;
+
+	auto entry = new FontAtlasCacheEntry( m_atlas, fontName, m_fontSize, m_blurSize, m_outlineWidth, m_fontFile, ( UInt32 )mmLevelsNum );
     fac->AddEntry( *entry );
 }
 
@@ -104,7 +106,7 @@ void Text::BuildAtlas        ()
 
 	auto  padding = this->m_blurSize + 1; // Update padding in case of bluring the atlas.
 
-	m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSet );
+	m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSet, true );
 
 	assert( m_blurSize == 0 ); //TODO: Implement
   //  if ( m_blurSize > 0 )

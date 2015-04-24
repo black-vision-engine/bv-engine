@@ -373,6 +373,14 @@ std::string  File::GetDirName  ( const std::string & path )
 
 // *******************************
 //
+std::string  File::GetFileName ( const std::string & path )
+{
+	boost::filesystem::path p( path );
+	return p.stem().string();
+}
+
+// *******************************
+//
 bool         File::CreateDir   ( const std::string & path )
 {
     return boost::filesystem::create_directory( path );

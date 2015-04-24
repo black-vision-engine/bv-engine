@@ -52,6 +52,7 @@ public:
 	static SizeType     Size        ( const std::string & fileName );
     static std::string  GetAbsolutPath( const std::string & fileName );
     static std::string  GetDirName  ( const std::string & path );
+	static std::string  GetFileName ( const std::string & path );
     static bool         CreateDir   ( const std::string & path );
 
     friend class FileImpl;

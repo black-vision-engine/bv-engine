@@ -444,6 +444,9 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 	}
 	
 	auto atlasMC = MemoryChunk::Create( atlasData, altlasWidth * altlasHeight * 4 );
+	
+	auto atlasAssetDesc = TextAtlas::GenerateTextAtlasAssetDescriptor( m_fontFilePath, altlasWidth, altlasHeight, m_fontSize, MipMapFilterType::BILINEAR, levelsNum );
+
 	MipMapAssetConstPtr mipmaps = nullptr;
 
 	if( generateMipMaps )
@@ -454,16 +457,16 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 		std::vector< SingleTextureAssetConstPtr > mipMapsRes;
 		for( SizeType i = 0; i < mipmap.size(); ++i )
 		{
-			auto key = TextureCache::GenKeyForGeneratedMipMap( m_fontFilePath + std::to_string( m_fontSize ), mipmap[ i ].width, mipmap[ i ].height, TextureFormat::F_A8R8G8B8, i, MipMapFilterType::BILINEAR );
-			mipMapsRes.push_back( SingleTextureAsset::Create( mipmap[ i ].data, key, mipmap[ i ].width, mipmap[ i ].height, TextureFormat::F_A8R8G8B8 ) );
+			auto key = TextureCache::GenKeyForSingleTexture( atlasAssetDesc->GetMipMapsDesc()->GetLevelDesc( i ) );
+			mipMapsRes.push_back( SingleTextureAsset::Create( mipmap[ i ].data, key, mipmap[ i ].width, mipmap[ i ].height, TextureFormat::F_A8R8G8B8, true ) );
 		}
 
 		mipmaps = MipMapAsset::Create( mipMapsRes );
 	}
 
-	auto key = TextureCache::GenKeyForSingleTexture( m_fontFilePath + std::to_string( m_fontSize ), altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8 );
+	auto key = TextureCache::GenKeyForSingleTexture( atlasAssetDesc->GetOrigTextureDesc() );
 
-	auto singleTex = SingleTextureAsset::Create( atlasMC, key, altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8 );
+	auto singleTex = SingleTextureAsset::Create( atlasMC, key, altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8, true );
 	auto atlasTextureRes = TextureAsset::Create( singleTex, mipmaps );
 		
 	atlas->m_textureAsset = atlasTextureRes;

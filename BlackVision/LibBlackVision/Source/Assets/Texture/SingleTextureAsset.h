@@ -35,15 +35,19 @@ public:
 	UInt32										GetHeight	() const;
 	TextureFormat								GetFormat	() const;
 
-	MemoryChunkConstPtr							GetData		() const;
-	
-	static SingleTextureAssetConstPtr			Create		( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format );
+	bool										GetCacheOnHardDrive () const;
 
-	explicit									SingleTextureAsset( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format );
+	MemoryChunkConstPtr							GetData		() const;
+
+	static SingleTextureAssetConstPtr			Create		( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format, bool cacheOnHardDrive = false );
 
 private:
 
+	explicit									SingleTextureAsset( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format, bool cacheOnHardDrive );
+
+
 	std::string			m_key; // hash needed for texture cache is calculated from the key.
+	bool				m_cacheOnHardDrive;
 	UInt32				m_width;
 	UInt32				m_height;
 	TextureFormat		m_format;
