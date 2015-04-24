@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Assets/Texture/TextureAsset.h"
+#include "Assets/Texture/TextureAssetDescriptor.h"
+
 #include "CoreDEF.h"
 
 #include <string>
@@ -59,6 +61,16 @@ public:
     static TextAtlasPtr		Create          ( UInt32 w, UInt32 h, UInt32 bitsPrePixel, UInt32 gw, UInt32 gh );
 
 	TextureAssetConstPtr	GetAsset		() const;
+
+
+	static TextureAssetDescConstPtr	GenerateTextAtlasAssetDescriptor( 
+												const std::string & fontFileName, 
+												UInt32 width, 
+												UInt32 height, 
+												SizeType fontSize, 
+												MipMapFilterType 
+												mmFilterType, 
+												SizeType mmLevels );
 
     friend class Text;
 
