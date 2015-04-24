@@ -9,7 +9,7 @@ namespace bv { namespace model {
     // *******************************
     //
     DefaultVideoInputPluginDesc::DefaultVideoInputPluginDesc                          ()
-        : BasePluginDescriptor( UID(), "video input" )
+        : BasePluginDescriptor( UID(), "video input", "tx" )
     {
     }
 

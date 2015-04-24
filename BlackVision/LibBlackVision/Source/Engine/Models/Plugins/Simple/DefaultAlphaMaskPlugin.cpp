@@ -25,7 +25,7 @@ namespace {
 // *******************************
 //
 DefaultAlphaMaskPluginDesc::DefaultAlphaMaskPluginDesc                      ()
-    : BasePluginDescriptor( UID(), "alpha_mask" )
+    : BasePluginDescriptor( UID(), "alpha_mask", "am" )
 {
 }
 

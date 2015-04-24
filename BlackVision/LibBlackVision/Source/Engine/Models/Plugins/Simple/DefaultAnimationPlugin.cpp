@@ -18,7 +18,7 @@ namespace bv { namespace model {
 // *******************************
 //
 DefaultAnimationPluginDesc::DefaultAnimationPluginDesc                          ()
-    : BasePluginDescriptor( UID(), "animation" )
+    : BasePluginDescriptor( UID(), "animation", "tx" )
 {
 }
 
