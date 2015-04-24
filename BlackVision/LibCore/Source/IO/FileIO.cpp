@@ -383,7 +383,11 @@ std::string  File::GetFileName ( const std::string & path )
 //
 bool         File::CreateDir   ( const std::string & path )
 {
-    return boost::filesystem::create_directory( path );
+    boost::system::error_code ec;
+    auto success = boost::filesystem::create_directory( path, ec );
+    if( ec )
+        std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+    return success;
 }
 
 
