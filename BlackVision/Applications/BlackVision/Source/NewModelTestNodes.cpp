@@ -1738,9 +1738,9 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 //#define SHOW_CUBE
 //#define SHOW_CONE
-//#define SHOW_SPHERE
+#define SHOW_SPHERE
 //#define SHOW_CIRCLE
-#define SHOW_ELLIPSE
+//#define SHOW_ELLIPSE
 //#define SHOW_ROUNDEDRECT
 //#define SHOW_TRIANGLE
 //#define SHOW_TORUS
