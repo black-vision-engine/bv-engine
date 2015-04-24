@@ -267,7 +267,7 @@ void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, UInt32 f
                 ,   DefaultTextPluginDesc::TextureName()
                 ,   TextureWrappingMode::TWM_CLAMP_BORDER
                 ,   TextureWrappingMode::TWM_CLAMP_BORDER
-                ,   TextureFilteringMode::TFM_LINEAR
+				,   TextureFilteringMode::TFM_POINT_MIPMAP_POINT
                 ,   glm::vec4( 0.f, 0.f, 0.f, 0.f )
                 ,   DataBuffer::Semantic::S_TEXTURE_STATIC );
 }

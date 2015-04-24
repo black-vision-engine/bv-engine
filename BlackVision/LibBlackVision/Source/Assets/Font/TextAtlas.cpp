@@ -230,7 +230,7 @@ TextureAssetDescConstPtr TextAtlas::GenerateTextAtlasAssetDescriptor( const std:
 
 	if( mipMapsDescs.size() > 0 )
 	{
-		mmDesc = MipMapAssetDesc::Create( mipMapsDescs );
+		mmDesc = MipMapAssetDesc::Create( mipMapsDescs, MipMapFilterType::BILINEAR );
 	}
 
 	return TextureAssetDesc::Create( zeroLevelDesc, mmDesc );

@@ -473,7 +473,8 @@ model::BasicNodePtr     TestScenesFactory::CreateTestScene      ( const model::P
         case TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES:
             return TwoTexturedRectangles( pluginsManager, timelineManager, timeEvaluator );
 		case TestSceneSelector::TSS_TEXT:
-			return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
+			return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+			//return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
         default:
             assert( false );
 

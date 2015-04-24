@@ -140,10 +140,11 @@ TextureAssetConstPtr	TextureCache::GetFromRawDataCache	( const TextureAssetDescC
 		for( SizeType i = 0; i < mmDesc->GetLevelsNum(); ++i )
 		{
 			auto singleTextAssetDesc = mmDesc->GetLevelDesc( i );
-			auto key = GenKeyForSingleTexture( singleTextAssetDesc );
-			auto mmAsset = GetFromRawDataCache( singleTextAssetDesc );
-			mms.push_back( mmAsset ); //
+			auto mmSibleTextureAssetAsset = GetFromRawDataCache( singleTextAssetDesc );
+			mms.push_back( mmSibleTextureAssetAsset ); //
 		}
+
+		mmAsset = MipMapAsset::Create( mms );
 	}
 
 	return TextureAsset::Create( origAsset, mmAsset );
