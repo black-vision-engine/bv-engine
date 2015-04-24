@@ -24,7 +24,7 @@ namespace bv { namespace model {
 // *******************************
 //
 DefaultGradientPluginDesc::DefaultGradientPluginDesc                          ()
-    : BasePluginDescriptor( UID(), "linear_gradient" )
+    : BasePluginDescriptor( UID(), "linear_gradient", "lg" )
 {
 }
 
