@@ -119,6 +119,23 @@ namespace ConeGenerator
 
         virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
+
+		//float computeAngleClamped( float angle, float stripe_num )
+		//{
+		//	double angle2 = ( stripe_num + 1 ) * 2 * PI / tesselation;
+
+
+		//	float ret_value = angle * ( stripe_num + 1 );
+		//	if( open_angle > 0.0 )
+		//	{
+		//		float max_angle = float( TWOPI - TO_RADIANS( open_angle ) );
+		//		if( ret_value > max_angle )
+		//			return max_angle;
+		//	}
+
+		//	return ret_value;
+		//}
+
 		/**Generates verticies of one circuit of the beveled edges.
 		R1 and h1 describe position of top verticies of the strip,
 		R2 and h2 describe position of bottom verticies of the strip.*/
@@ -128,8 +145,10 @@ namespace ConeGenerator
 			if( test )
 				return;
 
+
+
 			int i = 0;
-			for( ; i < tesselation ; i++ )
+			for( ; i < tesselation; i++ )
             {
 				double angle1 = i     * 2 * PI / tesselation;
 				double angle2 = (i+1) * 2 * PI / tesselation;
