@@ -8,14 +8,24 @@ const std::string DefaultEllipsePlugin::PN_QUALITY = "tesselation";
 const std::string DefaultEllipsePlugin::PN_OUTER_RADIUS1 = "outer radius 1";
 const std::string DefaultEllipsePlugin::PN_OUTER_RADIUS2 = "outer radius 2";
 const std::string DefaultEllipsePlugin::PN_OPEN_ANGLE = "open angle";
-//const std::string DefaultEllipsePlugin::PN_OPEN_ANGLE_MODE = "open angle mode";
+const std::string DefaultEllipsePlugin::PN_OPEN_ANGLE_MODE = "open angle mode";
 
-//// *******************************
-////
-//VoidPtr    ParamEnum< DefaultEllipsePlugin::OpenAngleMode >::QueryParamTyped  ()
-//{
-//    return std::static_pointer_cast< void >( shared_from_this() );
-//}
+typedef ParamEnum< DefaultEllipsePlugin::OpenAngleMode > ParamEnumOAM;
+
+VoidPtr    ParamEnumOAM::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
+
+template<>
+static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultEllipsePlugin::OpenAngleMode >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultEllipsePlugin::OpenAngleMode >( name, timeline );
+}
+
+
+	
+#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 
 DefaultEllipsePluginDesc::DefaultEllipsePluginDesc()
         : DefaultGeometryPluginDescBase( UID(), "ellipse" ) { }
@@ -23,29 +33,17 @@ DefaultEllipsePluginDesc::DefaultEllipsePluginDesc()
 
 DefaultPluginParamValModelPtr   DefaultEllipsePluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
-    DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
+	ModelHelper h( timeEvaluator );
 
-    ParamFloatPtr paramN    = ParametersFactory::CreateParameterFloat( DefaultEllipsePlugin::PN_QUALITY, timeEvaluator );
-    ParamFloatPtr paramOR1  = ParametersFactory::CreateParameterFloat( DefaultEllipsePlugin::PN_OUTER_RADIUS1, timeEvaluator );
-    ParamFloatPtr paramOR2  = ParametersFactory::CreateParameterFloat( DefaultEllipsePlugin::PN_OUTER_RADIUS2, timeEvaluator );
-    ParamFloatPtr paramOA   = ParametersFactory::CreateParameterFloat( DefaultEllipsePlugin::PN_OPEN_ANGLE, timeEvaluator );
-    //auto paramOAM = ParametersFactory::CreateParameterEnum< DefaultEllipsePlugin::OpenAngleMode >( DefaultEllipsePlugin::PN_OPEN_ANGLE_MODE, timeEvaluator );
+    h.CreateVacModel();
+	h.AddSimpleParam( DefaultEllipsePlugin::PN_QUALITY, 1.f, true, true );
+    h.AddSimpleParam( DefaultEllipsePlugin::PN_OUTER_RADIUS1, 1.f, true, true );
+    h.AddSimpleParam( DefaultEllipsePlugin::PN_OUTER_RADIUS2, 1.f, true, true );
+    h.AddSimpleParam( DefaultEllipsePlugin::PN_OPEN_ANGLE, 0.f, true, true );
+	h.AddParam< IntInterpolator, DefaultEllipsePlugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
+        ( DefaultEllipsePlugin::PN_OPEN_ANGLE_MODE, DefaultEllipsePlugin::OpenAngleMode::CW, true, true );
 
-    model->SetVertexAttributesChannelModel( vacModel );
-    vacModel->AddParameter( paramN );
-    vacModel->AddParameter( paramOR1 );
-    vacModel->AddParameter( paramOR2 );
-    vacModel->AddParameter( paramOA );
-    //vacModel->AddParameter( paramOAM );
-
-    paramN->SetVal( 1.f, 0.f );
-    paramOR1->SetVal( 1.f, 0.f );
-    paramOR2->SetVal( 1.f, 0.f );
-    paramOA->SetVal( 360.f, 0.f );
-    //paramOAM->SetVal( DefaultEllipsePlugin::OpenAngleMode::CW, 0.f );
-
-    return model;
+    return h.GetModel();
 }
 
 std::string                     DefaultEllipsePluginDesc::UID                 ()
@@ -228,8 +226,8 @@ bool DefaultEllipsePlugin::NeedsTopologyUpdate()
 		ParameterChanged( PN_QUALITY ) ||
         ParameterChanged( PN_OPEN_ANGLE )||
         ParameterChanged( PN_OUTER_RADIUS1 )||
-        ParameterChanged( PN_OUTER_RADIUS2 );
-        //|| ParameterChanged( PN_OPEN_ANGLE_MODE );
+        ParameterChanged( PN_OUTER_RADIUS2 )
+        || ParameterChanged( PN_OPEN_ANGLE_MODE );
 }
 
 float DefaultEllipsePlugin::GetQuality()
@@ -260,11 +258,11 @@ float DefaultEllipsePlugin::GetOpenAngle()
     return qParam->Evaluate();
 }
 
-//DefaultEllipsePlugin::OpenAngleMode DefaultEllipsePlugin::GetOpenAngleMode()
-//{
-//    auto param = GetParameter( PN_OPEN_ANGLE_MODE );
-//    auto qParam = QueryTypedParam< std::shared_ptr< ParamEnum< DefaultEllipsePlugin::OpenAngleMode > > >( param );
-//    return qParam->Evaluate();
-//}
+DefaultEllipsePlugin::OpenAngleMode DefaultEllipsePlugin::GetOpenAngleMode()
+{
+    auto param = GetParameter( PN_OPEN_ANGLE_MODE );
+    auto qParam = QueryTypedParam< std::shared_ptr< ParamEnum< DefaultEllipsePlugin::OpenAngleMode > > >( param );
+    return qParam->Evaluate();
+}
 
 } }
