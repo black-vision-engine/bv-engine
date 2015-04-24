@@ -4,6 +4,7 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+#include "Engine/Models/BVSceneEditor.h"
 
 #include "Tools/SimpleTimer.h"
 #include "Tools/HerarchicalProfiler.h"
@@ -21,6 +22,7 @@
 //FIXME: remove
 #include "testai/TestAIManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+#include "BVGL.h"
 //FIXME: end of remove
 
 #define _USE_MATH_DEFINES
@@ -77,7 +79,7 @@ namespace
 
 // *********************************
 //
-BVAppLogic::BVAppLogic              ()
+BVAppLogic::BVAppLogic              ( Renderer * renderer )
     : m_startTime( 0 )
     , m_timelineManager( new model::TimelineManager() )
     , m_bvScene( nullptr )
@@ -92,6 +94,7 @@ BVAppLogic::BVAppLogic              ()
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
     GTimer.StartTimer();
 
+    m_renderer = renderer;
     m_renderLogic = new RenderLogic();
 }
 
@@ -132,13 +135,13 @@ void BVAppLogic::LoadScene          ( void )
     //model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
 	assert( root );
 
-    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline );
+    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline, m_renderer );
     assert( m_bvScene );
 }
 
 // *********************************
 //
-void BVAppLogic::InitCamera         ( Renderer * renderer, unsigned int w, unsigned int h )
+void BVAppLogic::InitCamera         ( unsigned int w, unsigned int h )
 {
     Camera * cam = m_bvScene->GetCamera();
 
@@ -153,8 +156,7 @@ void BVAppLogic::InitCamera         ( Renderer * renderer, unsigned int w, unsig
         cam->SetViewportSize( w, h );
     }
 
-    m_renderer = renderer;
-    renderer->SetCamera( cam );
+    m_renderer->SetCamera( cam );
     m_renderLogic->SetCamera( cam );
 
     //FIXME: read from configuration file and change the camera appropriately when current resoultion changes
@@ -220,24 +222,29 @@ void BVAppLogic::OnKey           ( unsigned char c )
 {
     if( c == 8 )
     {
-        auto root = m_bvScene->GetModelSceneRoot();
-        root->DeleteNode( "child0", m_renderer );
-        //auto child = root->GetChild( "child0" );
+        BVGL::PrintCompleteSummary( "BEFORE REMOVING ROOT NODE" );
 
+        //m_bvScene->GetSceneEditor()->DeleteRootNode();
+
+        auto root = m_bvScene->GetModelSceneRoot();
+        m_bvScene->GetSceneEditor()->DeleteChildNode( root, "child0" );
+        //root->DeleteNode( "child0", m_renderer );
+        
+        //auto child = root->GetChild( "child0" );
         //child->DeleteNode( "child01", m_renderer );
+        BVGL::PrintCompleteSummary( "AFTER REMOVING ROOT NODE" );
     }
     else if( c != 0 )
     {
         auto root = m_bvScene->GetModelSceneRoot();
         auto child = root->GetChild( "child0" );
 
-        auto n = child->GetNumchildren();
+        auto n = child->GetNumChildren();
         auto nodeName = "child0" + std::to_string(n);
 
         auto newNode = CreateTestModelNodeInSomeSpecificScope( nodeName );
 
         child->AddChildNode( newNode );
-
     }
     return;
 /*

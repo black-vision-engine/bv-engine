@@ -46,6 +46,23 @@ void                    SceneNode::AddChildNode         ( SceneNode * child )
 
 // ********************************
 //
+void                    SceneNode::DetachChildNode      ( SceneNode * node )
+{
+    for( auto it = m_sceneNodes.begin(); it != m_sceneNodes.end(); ++it )
+    {
+        if( *it == node )
+        {
+            m_sceneNodes.erase( it );
+
+            return;
+        }
+    }
+
+    assert( false );
+}
+
+// ********************************
+//
 SceneNode *             SceneNode::DetachChildNode      ( unsigned int idx )
 {
     SceneNode * node = nullptr;
@@ -109,7 +126,7 @@ void                    SceneNode::DeleteNode   ( SceneNode * node, Renderer * r
 {
     while( node->NumChildNodes() > 0 )
     {
-        DeleteNode( node->DetachChildNode( 0 ), renderer );
+        DeleteNode( node->DetachChildNode( (unsigned int)0 ), renderer );
     }
 
     renderer->FreeAllPDResources( static_cast< RenderableEntity * >( node->GetTransformable() ) );

@@ -253,6 +253,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BasicOverrideState.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\RendererStatesBuilder.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BVScene.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneEditor.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneTools.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\ChannelsFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeGeometryShaderChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizePixelShaderChannel.cpp" />
@@ -497,6 +499,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\BasicNode.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\BasicOverrideState.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\RendererStatesBuilder.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\BVSceneEditor.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\BVSceneTools.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IAnimationDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNode.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\INodeLogic.h" />
@@ -661,6 +665,7 @@
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\GenericShaderParam.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParameters.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\RenderableEffect.inl" />
+    <None Include="..\..\..\Source\Engine\Models\BVSceneEditor.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeShaderChannel.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />

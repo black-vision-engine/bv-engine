@@ -20,7 +20,7 @@ void    ExperimentalDeleteAndCleanup( SceneNode * node, Renderer * renderer )
     std::vector< SceneNode * > nodes;
     while( node->NumChildNodes() > 0 )
     {
-        nodes.push_back( node->DetachChildNode( 0 ) );
+        nodes.push_back( node->DetachChildNode( (unsigned int) 0 ) );
     }
 
     for( auto node : nodes )

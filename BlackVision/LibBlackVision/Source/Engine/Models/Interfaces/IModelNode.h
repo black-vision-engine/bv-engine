@@ -41,7 +41,7 @@ public:
     virtual bool                            DeleteNode          ( const std::string & name, Renderer * renderer )                   = 0;
     virtual void                            AddChildNode        ( IModelNodePtr modelNode )                                         = 0;
 
-    virtual unsigned int                    GetNumchildren      () const                                                            = 0;
+    virtual unsigned int                    GetNumChildren      () const                                                            = 0;
 
     // FIXME: remove when proper GlobalEfect is implemented
     virtual void                            EnableOverrideStateAM   ()                                                              = 0;
@@ -60,9 +60,6 @@ public:
     virtual IOverrideState *                GetOverrideState    ()                                                                  = 0;
     // FIXME: end of remove
     // FIXME: remove when proper GlobalEfect is implemented
-
-    virtual SceneNode *                     BuildScene          ()                                                                  = 0;
-    virtual void                            Print               ( std::ostream & out, int tabs = 0 ) const                          = 0;
 
     virtual bool                            IsVisible           () const                                                            = 0;
 

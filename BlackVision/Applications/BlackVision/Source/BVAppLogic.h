@@ -49,14 +49,14 @@ private:
 
 public:
 
-                    BVAppLogic      ();
+                    BVAppLogic      ( Renderer * renderer );
                     ~BVAppLogic     ();
 
     void            Initialize      ();
 
     //FIXME: this initialization has to be refactored and started in separate process (threaded)
     void            LoadScene       ( void );
-    void            InitCamera      ( Renderer * renderer, unsigned int w, unsigned int h );
+    void            InitCamera      ( unsigned int w, unsigned int h );
 
     void            SetStartTime    ( unsigned long millis );
 

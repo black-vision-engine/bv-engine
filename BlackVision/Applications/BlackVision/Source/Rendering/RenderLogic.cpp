@@ -45,6 +45,7 @@ void    RenderLogic::SetCamera       ( Camera * cam )
 void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
 {
     renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+
     renderer->ClearBuffers();
     renderer->PreDraw();
 
@@ -52,7 +53,9 @@ void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
     m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
 
     renderer->ClearBuffers();
-    RenderNode( renderer, node );
+
+    if( node )
+        RenderNode( renderer, node );
 
     m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
     m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
