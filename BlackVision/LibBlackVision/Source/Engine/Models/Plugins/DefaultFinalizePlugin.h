@@ -63,7 +63,7 @@ public:
 
 private:
 
-    std::vector< std::string >                  PrevUIDS                    ( unsigned int skipFirstEntries ) const;
+    std::vector< std::string >                  GetUIDS                    () const;
 
 };
 
