@@ -6,24 +6,12 @@
 namespace bv { namespace model {
 
 // *********************************
-//StaticShaderGenerator DefaultFinalizePixelShaderChannel::ms_staticShaderGenerator;
-
-// *********************************
-//
-void     DefaultFinalizePixelShaderChannel::InitializePixelShaderMapping() const
-{
-    //m_staticShaderGenerator.InitializePixelShaderMapping();
-}
-
-// *********************************
 //
 DefaultFinalizePixelShaderChannel::DefaultFinalizePixelShaderChannel    ( IPixelShaderChannelPtr channel, const std::string & shadersDir )
     : Parent( channel, shadersDir )
     , m_staticShaderGenerator( shadersDir, "frag" )
 {
     assert( channel != nullptr );
-
-    InitializePixelShaderMapping();
 } 
 
 // *********************************
