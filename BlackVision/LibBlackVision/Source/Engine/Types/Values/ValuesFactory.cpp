@@ -5,6 +5,13 @@ namespace bv {
 
 // *******************************
 //
+ValueIntPtr         ValuesFactory::CreateValueInt    ( const std::string & name )
+{
+    return std::make_shared< ValueInt >( name );
+}
+
+// *******************************
+//
 ValueFloatPtr         ValuesFactory::CreateValueFloat    ( const std::string & name )
 {
     return std::make_shared< ValueFloat >( name );

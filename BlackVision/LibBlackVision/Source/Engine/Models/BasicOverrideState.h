@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Types/Values/TypedValues.h"
-#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
+#include "Engine/Models/Plugins/Parameters/CachedSimpleTypedParameters.h"
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
 
 #include "Engine/Models/Interfaces/IOverrideState.h"

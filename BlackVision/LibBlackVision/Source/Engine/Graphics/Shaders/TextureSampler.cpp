@@ -67,4 +67,16 @@ const glm::vec4 &       TextureSampler::GetBorderColor  () const
     return m_borderColor;
 }
 
+// ******************************
+//
+void                    TextureSampler::SetBorderColor  ( const glm::vec4 & bc ) const
+{
+    const_cast<TextureSampler*>(this)->m_borderColor = bc;
+}
+
+void					TextureSampler::SetWrappingMode ( SamplerWrappingMode mode, SamplerWrapDirection wrap_direction ) const
+{
+	const_cast<TextureSampler*>(this)->m_wrappingMode[ (int) wrap_direction ] = mode;
+}
+
 }

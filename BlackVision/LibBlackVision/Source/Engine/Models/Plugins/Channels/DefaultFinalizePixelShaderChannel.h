@@ -3,6 +3,7 @@
 #include "Engine/Models/Plugins/Channels/DefaultFinalizeShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 
+//#include "StaticShaderGenerator.h"
 
 namespace bv { namespace model {
 
@@ -14,7 +15,8 @@ private:
 
 private:
 
-    static PluginUIDHashMap    ms_pixelShaderMapping;
+    //static StaticShaderGenerator ms_staticShaderGenerator;
+    StaticShaderGenerator ms_staticShaderGenerator;
 
 private:
 
