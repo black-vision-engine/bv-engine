@@ -28,9 +28,9 @@ public:
 	// Returns number of frames
 	SizeType						GetFramesNum	() const;
 
-	static AnimationAssetConstPtr Create			( const std::vector< TextureAssetConstPtr > & frames );
+	static AnimationAssetConstPtr	Create			( const std::vector< TextureAssetConstPtr > & frames );
 
-	explicit						AnimationAsset( const std::vector< TextureAssetConstPtr > & frames );
+	explicit						AnimationAsset	( const std::vector< TextureAssetConstPtr > & frames );
 	
 	virtual const std::string &		GetUID			() const override;
 

@@ -16,10 +16,10 @@ class MipMapAsset
 {
 public:
 
-	SingleTextureAssetConstPtr	GetLevel		( SizeType level ) const;
+	SingleTextureAssetConstPtr		GetLevel		( SizeType level ) const;
 	SizeType						GetLevelsNum	() const;
 
-	static MipMapAssetConstPtr	Create			( const std::vector< SingleTextureAssetConstPtr > & mipMaps );
+	static MipMapAssetConstPtr		Create			( const std::vector< SingleTextureAssetConstPtr > & mipMaps );
 
 	explicit						MipMapAsset	( const std::vector< SingleTextureAssetConstPtr > & mipMaps );
 

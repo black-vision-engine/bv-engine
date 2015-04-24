@@ -33,11 +33,11 @@ public:
 
 	static TextureAssetConstPtr	Create			( const SingleTextureAssetConstPtr & originalTexture, const MipMapAssetConstPtr & mipMaps );
 
-	explicit						TextureAsset	( const SingleTextureAssetConstPtr & originalTexture, const MipMapAssetConstPtr & mipMaps );
+	explicit					TextureAsset	( const SingleTextureAssetConstPtr & originalTexture, const MipMapAssetConstPtr & mipMaps );
 	
-	virtual const std::string &		GetUID			() const override;
+	virtual const std::string &	GetUID			() const override;
 
-	static const std::string &		UID				();
+	static const std::string &	UID				();
 
 private:
 

@@ -3,10 +3,13 @@
 #include "Assets/Font/Glyph.h"
 #include "Assets/Font/Text.h"
 #include "Assets/Font/TextAtlas.h"
+#include "Assets/Texture/TextureCache.h"
 
 #include "LibImage.h"
+#include "Tools/MipMapBuilder/Source/MipMapBuilder.h"
 
 #include "Mathematics/Rect.h"
+#include "tools/Utils.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -18,6 +21,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <cmath>
 
 namespace bv { 
 
@@ -116,7 +120,7 @@ std::map< std::pair< wchar_t, wchar_t >, float >        BuildKerning    ( FT_Fac
 //
 FreeTypeEnginePtr					FreeTypeEngine::Create( const std::string & fontFilePath, size_t fontSize )
 {
-	return std::make_shared< FreeTypeEngine >( fontFilePath, fontSize );
+	return FreeTypeEnginePtr( new FreeTypeEngine( fontFilePath, fontSize ) );
 }
 
 namespace {
@@ -178,13 +182,14 @@ FreeTypeEngine::FreeTypeEngine( const std::string & fontFilePath, SizeType fontS
 	, m_library( nullptr )
 	, m_maxHeight( 0 )
 	, m_maxWidth( 0 )
+	, m_fontFilePath( fontFilePath )
 {
 	if (FT_Init_FreeType (&m_library))
     {
         std::cerr << "Could not init FreeType library\n" << std::endl;
     }
 
-    if (FT_New_Face (m_library, fontFilePath.c_str(), 0, &m_face))
+    if (FT_New_Face (m_library, m_fontFilePath.c_str(), 0, &m_face))
     {
         std::cerr << "Could not open font\n" << std::endl;
     }
@@ -298,10 +303,26 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 	return nullptr;
 }
 
+// *********************************
+//
+namespace
+{
 
 // *********************************
 //
-TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth, const std::wstring & wcharsSet )
+UInt32 CalculateLevelsNum( UInt32 widht, UInt32 height )
+{
+	auto wLog2 = std::log( widht ) / std::log( 2 );
+	auto hLog2 = std::log( height ) / std::log( 2 );
+
+	return ( UInt32 )std::max( wLog2, hLog2 );
+}
+
+} // anonymous
+
+// *********************************
+//
+TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth, const std::wstring & wcharsSet, bool generateMipMaps )
 {
 	SizeType							glyphsNum	= wcharsSet.size();
 	Int32								spadding	= (Int32)padding;
@@ -318,30 +339,45 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 	}
 
 	if( outlineWidth != 0 )
+	{
 		for ( auto ch : wcharsSet )
 		{
 			outlineSpans[ ch ] = Spans();
 			outlineGlyphs[ ch ] = RenderGlyph( ch, outlineSpans[ ch ], outlineWidth );
 		}
+	}
 
 	auto atlasSize = (UInt32) std::ceil( sqrt( (float)glyphsNum ) );
 
     auto maxWidth  = m_maxWidth		+ spadding * 2;
     auto maxHeight = m_maxHeight	+ spadding * 2;
 
-    auto altlasWidth	= maxWidth	* atlasSize;
-    auto altlasHeight	= maxHeight * atlasSize;
+	UInt32 levelsNum = 0;
+
+	if( generateMipMaps )
+	{
+		levelsNum = CalculateLevelsNum( maxWidth, maxHeight );
+		padding += 2 * levelsNum;
+		spadding = (Int32)padding;
+
+		maxWidth  = m_maxWidth	+ spadding * 2;
+		maxHeight = m_maxHeight	+ spadding * 2;
+	}
+
+
+    auto altlasWidth	= RoundUpToPowerOfTwo( maxWidth	* atlasSize );
+    auto altlasHeight	= RoundUpToPowerOfTwo( maxHeight * atlasSize );
 
 	auto atlas = TextAtlas::Create( altlasWidth, altlasHeight, 32, maxWidth, maxHeight );
 
-    for ( auto ch : wcharsSet )
+	for ( auto ch : wcharsSet )
 		atlas->SetGlyph( ch, glyphs[ ch ] );
 
 	if( outlineWidth != 0 )
 		for ( auto ch : wcharsSet )
 			atlas->SetGlyph( ch, outlineGlyphs[ ch ], true );
 
-    char* atlasData = new char[ altlasWidth * altlasHeight * 4 ]; //const_cast< char * >( atlas->GetWritableData()->Get() );// FIXME: Remove const_cast
+	char* atlasData = new char[ altlasWidth * altlasHeight * 4 ]; //const_cast< char * >( atlas->GetWritableData()->Get() );// FIXME: Remove const_cast
 
 	memset( atlasData, 0, altlasWidth * altlasHeight * 4 );
 
@@ -349,6 +385,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 
 	for( UInt32 y = 0; y < atlasSize; ++y )
 	{
+		currAddress = ( atlasData + y * maxHeight *  altlasWidth * 4 );
 		currAddress += altlasWidth * padding * 4;
 
 		for( UInt32 x = 0; x < atlasSize; ++x )
@@ -404,12 +441,32 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 				}
 			}
 		}
-
-		currAddress += ( m_maxHeight - 1  + padding ) *  altlasWidth * 4;
 	}
 	
-	auto singleTex = SingleTextureAsset::Create( MemoryChunk::Create( atlasData, altlasWidth * altlasHeight * 4 ), "", altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8 );
-	atlas->m_textureAsset = TextureAsset::Create( singleTex, nullptr );
+	auto atlasMC = MemoryChunk::Create( atlasData, altlasWidth * altlasHeight * 4 );
+	MipMapAssetConstPtr mipmaps = nullptr;
+
+	if( generateMipMaps )
+	{
+		tools::Image32 img32 = { atlasMC, altlasWidth, altlasHeight };
+		auto mipmap = tools::GenerateMipmaps( img32, levelsNum, image::FilterType::FT_BILINEAR ); // FIXME: filter type is hardcoded.
+
+		std::vector< SingleTextureAssetConstPtr > mipMapsRes;
+		for( SizeType i = 0; i < mipmap.size(); ++i )
+		{
+			auto key = TextureCache::GenKeyForGeneratedMipMap( m_fontFilePath + std::to_string( m_fontSize ), mipmap[ i ].width, mipmap[ i ].height, TextureFormat::F_A8R8G8B8, i, MipMapFilterType::BILINEAR );
+			mipMapsRes.push_back( SingleTextureAsset::Create( mipmap[ i ].data, key, mipmap[ i ].width, mipmap[ i ].height, TextureFormat::F_A8R8G8B8 ) );
+		}
+
+		mipmaps = MipMapAsset::Create( mipMapsRes );
+	}
+
+	auto key = TextureCache::GenKeyForSingleTexture( m_fontFilePath + std::to_string( m_fontSize ), altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8 );
+
+	auto singleTex = SingleTextureAsset::Create( atlasMC, key, altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8 );
+	auto atlasTextureRes = TextureAsset::Create( singleTex, mipmaps );
+		
+	atlas->m_textureAsset = atlasTextureRes;
 
 	image::SaveRAWImage( "testFreeType.raw", atlas->GetWritableData() );
 
@@ -420,9 +477,9 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 
 // *********************************
 //
-TextAtlasConstPtr FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet )
+TextAtlasConstPtr FreeTypeEngine::CreateAtlas( UInt32 padding, const std::wstring & wcharsSet, bool generateMipMaps )
 {
-	return CreateAtlas( padding, 0, wcharsSet );
+	return CreateAtlas( padding, 0, wcharsSet, generateMipMaps );
 }
 
 } // bv

@@ -24,6 +24,7 @@ public:
 	SizeType					m_outlineWidth;
     std::string                 m_fontFilePath;
 	std::string                 m_atlasFilePath;
+	UInt32						m_mmLevelsNum;
     bool                        m_bold;
     bool                        m_italic;
 
@@ -35,6 +36,7 @@ public:
 						, SizeType outlineWidth
                         , const std::string & fontFilePath
 						, const std::string & atlasFilePath
+						, UInt32 mmLevelsNum
                         , bool bold = false
                         , bool italic = false );
 };

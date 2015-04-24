@@ -35,6 +35,7 @@
     <ClInclude Include="..\..\..\Source\Tools\HRTimer.h" />
     <ClInclude Include="..\..\..\Source\Tools\SimpleTimer.h" />
     <ClInclude Include="..\..\..\Source\Tools\StringHeplers.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp" />
@@ -50,6 +51,7 @@
     <ClCompile Include="..\..\..\Source\Tools\HRTimer.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\SimpleTimer.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\StringHeplers.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Tools\HerarchicalProfiler.inl" />

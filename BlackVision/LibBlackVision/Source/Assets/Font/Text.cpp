@@ -21,7 +21,8 @@
 #include "AtlasCache.h"
 #include "IO/FileIO.h"
 #include "LibImage.h"
-#include "Assets/Texture/TextureLoader.h"
+#include "Assets/Assets.h"
+#include "Assets/Texture/TextureCache.h"
 #include "Assets/Font/Engines/FreeTypeEngine.h"
 
 
@@ -33,20 +34,22 @@ TextConstPtr Text::Create(const std::wstring& supportedCharsSet
 						, const std::string& fontFile
 						, UInt32 fontSize
 						, UInt32 blurSize
-						, UInt32 outlineSize )
+						, UInt32 outlineSize
+						, bool withMipmaps )
 {
-	return std::make_shared< Text >( supportedCharsSet, fontFile, fontSize, blurSize, outlineSize );
+	return std::make_shared< Text >( supportedCharsSet, fontFile, fontSize, blurSize, outlineSize, withMipmaps );
 }
 
 
 // *********************************
 //
-Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize )
+Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool withMipmaps )
     : m_supportedCharsSet( supportedCharsSet )
     , m_fontFile( fontFile )
     , m_fontSize( fontSize )
     , m_blurSize( blurSize )
 	, m_outlineWidth( outlineSize )
+	, m_withMipmaps( withMipmaps )
 {
 	m_fontEngine = FreeTypeEngine::Create( fontFile, fontSize );
     BuildAtlas();
@@ -65,10 +68,23 @@ TextAtlasConstPtr Text::LoadFromCache()
 
 	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, false, false );
 
+
     if( entry != nullptr )
-        return entry->m_textAtlas;
+	{
+		auto atlasTextureDesc = TextAtlas::GenerateTextAtlasAssetDescriptor(	m_fontFile,
+																				entry->m_textAtlas->GetWidth(),
+																				entry->m_textAtlas->GetHeight(),
+																				m_fontSize,
+																				MipMapFilterType::BILINEAR,
+																				entry->m_mmLevelsNum );
+
+		std::const_pointer_cast< TextAtlas >( entry->m_textAtlas )->m_textureAsset = TextureCache::GetInstance().Get( atlasTextureDesc ); //FIXME: Remove const_pointer_cast
+		return entry->m_textAtlas;
+	}
     else
-        return nullptr;
+	{
+		return nullptr;
+	}
 }
 
 // *********************************
@@ -80,7 +96,19 @@ void Text::BuildAtlas        ()
     if( m_atlas != nullptr )
         return;
 
-	m_atlas = m_fontEngine->CreateAtlas(this->m_blurSize + 1, m_outlineWidth, m_supportedCharsSet );
+	auto  padding = this->m_blurSize + 1;
+
+	m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSet );
+
+	auto atlasTextureDesc = TextAtlas::GenerateTextAtlasAssetDescriptor(	m_fontFile,
+																			m_atlas->GetWidth(),
+																			m_atlas->GetHeight(),
+																			m_fontSize,
+																			MipMapFilterType::BILINEAR,
+																			m_atlas->m_textureAsset->GetMipMaps()->GetLevelsNum() );
+
+	TextureCache::GetInstance().Add( atlasTextureDesc, m_atlas->m_textureAsset );
+
 
 	assert( m_blurSize == 0 ); //TODO: Implement
 

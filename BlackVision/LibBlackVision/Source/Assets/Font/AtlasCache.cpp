@@ -11,8 +11,6 @@
 #include "LibImage.h"
 #include "Assets/Texture/TextureLoader.h"
 #include "Assets/Assets.h"
-#include "Assets/Texture/TextureAssetDescriptor.h"
-#include "Assets/Assets.h"
 
 #pragma warning(push)
 #pragma warning(disable : 4512)
@@ -40,6 +38,7 @@ FontAtlasCacheEntry::FontAtlasCacheEntry(   const TextAtlasConstPtr & textAtlas
 										 ,  SizeType outlineWidth
                                          ,  const std::string& fontFilePath
 										 ,	const std::string & atlasFilePath
+										 ,  UInt32 mmLevelsNum
                                          ,  bool bold
                                          ,  bool italic )
     : m_textAtlas( textAtlas )
@@ -49,6 +48,7 @@ FontAtlasCacheEntry::FontAtlasCacheEntry(   const TextAtlasConstPtr & textAtlas
 	, m_outlineWidth( outlineWidth )
     , m_fontFilePath( fontFilePath )
 	, m_atlasFilePath( atlasFilePath )
+	, m_mmLevelsNum( mmLevelsNum )
     , m_bold( bold )
     , m_italic( italic )
 {}
@@ -126,7 +126,7 @@ void                    FontAtlasCache::InitFontCachedTable ()
     if ( m_dataBase != nullptr )
     {
         static std::string sql = "CREATE TABLE IF NOT EXISTS cached_fonts(font_name TEXT, font_size INTEGER, blur_size INTEGER, outline_width INTEGER, font_file_name TEXT \
-                            , bold_flag BOOL, italic_flag BOOL, text_atlas BLOB, test_atlas_data_file TEXT, PRIMARY KEY( font_name , font_size, blur_size, bold_flag, italic_flag ) )";
+                            , bold_flag BOOL, italic_flag BOOL, text_atlas BLOB, PRIMARY KEY( font_name , font_size, blur_size, bold_flag, italic_flag ) )";
 
         char* err = nullptr;
 
@@ -163,7 +163,7 @@ int GetEntryCallback( void * data, int argsNum, char ** args, char ** columnName
     out->m_italic       = std::atoi( args[ 6 ] ) == 0 ? false : true;
 	out->m_textAtlas    = TextAtlas::Create(0,0,0,0,0);
     std::stringstream str(  args[ 7 ] );
-	out->m_atlasFilePath = args[ 8 ];
+	//out->m_atlasFilePath = args[ 8 ];
 
 	std::const_pointer_cast< TextAtlas >( out->m_textAtlas )->Load( str );    
 
@@ -266,13 +266,13 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
         + std::to_string( data.m_bold ) + ", " 
         + std::to_string( data.m_italic ) + ", " 
         + "?, "
-        + "\'" + fontAtlasTextureFileName + "\'" + ")";
+        /*+ "\'" + fontAtlasTextureFileName + "\'" + ")"*/;
 
 
     if( ! File::Exists( CACHE_DIRECTORY ) )
         File::CreateDir( CACHE_DIRECTORY );
 
-	image::SaveBMPImage( fontAtlasTextureFileName, data.m_textAtlas->GetData(), data.m_textAtlas->GetWidth(), data.m_textAtlas->GetHeight(), data.m_textAtlas->GetBitsPerPixel() );
+	//image::SaveBMPImage( fontAtlasTextureFileName, data.m_textAtlas->GetData(), data.m_textAtlas->GetWidth(), data.m_textAtlas->GetHeight(), data.m_textAtlas->GetBitsPerPixel() );
 
     sqlite3_stmt * stmt = nullptr;
     const char * parsed = nullptr;
