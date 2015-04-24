@@ -80,14 +80,14 @@ namespace Generator
 		open_angle;
 		float angle_offset = 0.0f;
 
-		//if( mode == Plugin::OpenAngleMode::CW )
-		//	angle_offset = 0.0;
-		//else if( mode == Plugin::OpenAngleMode::CCW )
-		//	angle_offset = open_angle;
-		//else if( mode == Plugin::OpenAngleMode::SYMMETRIC )
-		//	angle_offset = open_angle / 2;
-		//else
-		//	assert( false );
+		if( mode == Plugin::OpenAngleMode::CW )
+			angle_offset = 0.0;
+		else if( mode == Plugin::OpenAngleMode::CCW )
+			angle_offset = (float)TO_RADIANS( open_angle );
+		else if( mode == Plugin::OpenAngleMode::SYMMETRIC )
+			angle_offset = (float)TO_RADIANS( open_angle / 2 );
+		else
+			assert( false );
 
 		return angle_offset;
 	}
@@ -134,18 +134,18 @@ namespace Generator
 			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
 			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
 
-			float vert_delta_angle = float( PI ) / float(vertical_stripes);
-			float hor_delta_angle = float( TWOPI ) / float(horizontal_stripes) + angle_offset;
+			float vert_delta_angle = float( PI ) / float(vertical_stripes);			// Added each loop
+			float hor_delta_angle = float( TWOPI ) / float(horizontal_stripes);		// Added each loop
 
 			// We compute cos and sin of angles we need (we are processing stripe, so we must
 			// take values of theese functions for left and right verticies.
-			float cos_hor_angle1 = radius * cos( hor_delta_angle * stripe_num );
-			float sin_hor_angle1 = radius * sin( hor_delta_angle * stripe_num );
+			float cos_hor_angle1 = radius * cos( hor_delta_angle * stripe_num + angle_offset );
+			float sin_hor_angle1 = radius * sin( hor_delta_angle * stripe_num + angle_offset );
 
 			float hor_angle2_clamped = computeAngle2Clamped( hor_delta_angle, stripe_num );
 
-			float cos_hor_angle2 = radius * cos( hor_angle2_clamped );
-			float sin_hor_angle2 = radius * sin( hor_angle2_clamped );
+			float cos_hor_angle2 = radius * cos( hor_angle2_clamped + angle_offset );
+			float sin_hor_angle2 = radius * sin( hor_angle2_clamped + angle_offset );
 
 			float alfa = float( PI ) / float(2) - vert_delta_angle;		// Angle counting from north pole
 
@@ -176,8 +176,8 @@ namespace Generator
 
 
 			///FIXME UVs
-			const glm::vec2 bottomUV( 0.0, 0.0 );
-			const glm::vec2 topUV( 1.0, 1.0 );
+			const glm::vec2 bottomUV( 0.0, 0.0 );		// UV clipping
+			const glm::vec2 topUV( 1.0, 1.0 );			// UV clipping
 
 			uvs->AddAttribute( glm::clamp( glm::vec2( horizontal_angle1, 1.0 ), bottomUV, topUV ) );
 			uvs->AddAttribute( glm::clamp( glm::vec2( horizontal_angle2, 1.0 ), bottomUV, topUV ) );
@@ -211,13 +211,14 @@ namespace Generator
 			float angle_offset = computeAngleOffset( open_angle_mode, open_angle );
 
 			float vert_delta_angle = float( PI ) / float(vertical_stripes);
-			float hor_delta_angle = float( TWOPI ) / float(horizontal_stripes) + angle_offset;
+			float hor_delta_angle = float( TWOPI ) / float(horizontal_stripes);
 			
 			float hor_angle_clamped = computeAngle2Clamped( hor_delta_angle, number_of_stripes );
 
 			float cos_hor_angle = radius * cos( angle_offset );
 			float sin_hor_angle = radius * sin( angle_offset );
 
+			// ===================================================== //
 			// The first face
 			float alfa = float( PI ) / float(2) - vert_delta_angle;		// Angle counting from north pole
 
@@ -253,8 +254,8 @@ namespace Generator
 			// ===================================================== //
 			// The second face
 			alfa = float( PI ) / float(2) - vert_delta_angle;		// Angle counting from north pole
-			cos_hor_angle = radius * cos( hor_angle_clamped );
-			sin_hor_angle = radius * sin( hor_angle_clamped );
+			cos_hor_angle = radius * cos( hor_angle_clamped + angle_offset );
+			sin_hor_angle = radius * sin( hor_angle_clamped + angle_offset );
 			for( unsigned int i = 0; i < vertical_stripes; ++i )
 			{
 				float cos_alfa = cos( alfa );

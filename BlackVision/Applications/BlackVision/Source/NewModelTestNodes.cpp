@@ -1738,9 +1738,9 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 //#define SHOW_CUBE
 //#define SHOW_CONE
-#define SHOW_SPHERE
+//#define SHOW_SPHERE
 //#define SHOW_CIRCLE
-//#define SHOW_ELLIPSE
+#define SHOW_ELLIPSE
 //#define SHOW_ROUNDEDRECT
 //#define SHOW_TRIANGLE
 //#define SHOW_TORUS
@@ -1818,10 +1818,13 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 // ============================================ //
 // Tranformations
+	glm::vec3 rotation_axis( 0.f, 1.f, 0.f );
+	glm::vec3 rotation_axis2( -1.f, 1.f, 0.f );
+
 	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 1.f, 0.f, 0.f ), 700.f );
-	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.f, glm::vec3( -1.f, 1.f, 0.f ), 50.f );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, rotation_axis, 0.f );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, rotation_axis, 700.f );
+	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.f, rotation_axis2, 50.f );
 	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -2.0f ) );
 
 

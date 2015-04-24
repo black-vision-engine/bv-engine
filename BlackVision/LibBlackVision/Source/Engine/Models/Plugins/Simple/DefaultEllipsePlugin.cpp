@@ -225,11 +225,11 @@ std::vector<IGeometryGeneratorPtr>           DefaultEllipsePlugin::GetGenerators
 bool DefaultEllipsePlugin::NeedsTopologyUpdate()
 {
     return
-        GetCachedParameter( PN_QUALITY )->Changed() ||
-        GetCachedParameter( PN_OPEN_ANGLE )->Changed() ||
-        GetCachedParameter( PN_OUTER_RADIUS1 )->Changed() ||
-        GetCachedParameter( PN_OUTER_RADIUS2 )->Changed();
-        //|| GetCachedParameter( PN_OPEN_ANGLE_MODE )->Changed();
+		ParameterChanged( PN_QUALITY ) ||
+        ParameterChanged( PN_OPEN_ANGLE )||
+        ParameterChanged( PN_OUTER_RADIUS1 )||
+        ParameterChanged( PN_OUTER_RADIUS2 );
+        //|| ParameterChanged( PN_OPEN_ANGLE_MODE );
 }
 
 float DefaultEllipsePlugin::GetQuality()
