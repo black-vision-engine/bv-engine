@@ -169,13 +169,13 @@ namespace Generator
 			
 
 			float horizontal_angle2;
-			horizontal_angle2 = ( hor_angle2_clamped ) / float( TWOPI );		//transformed to interval [0.0 , 1.0]
+			horizontal_angle2 = ( hor_angle2_clamped + angle_offset ) / float( TWOPI );		//transformed to interval [0.0 , 1.0]
 
-			float horizontal_angle1 = ( hor_delta_angle * stripe_num ) / float( TWOPI );				//transformed to interval [0.0 , 1.0]
+			float horizontal_angle1 = ( hor_delta_angle * stripe_num + angle_offset ) / float( TWOPI );				//transformed to interval [0.0 , 1.0]
 			float vertical_angle = float( PI ) - vert_delta_angle;
 
 
-			///FIXME UVs
+			///UVs are working good in texture mirror mode
 			const glm::vec2 bottomUV( 0.0, 0.0 );		// UV clipping
 			const glm::vec2 topUV( 1.0, 1.0 );			// UV clipping
 
@@ -220,12 +220,14 @@ namespace Generator
 
 			// ===================================================== //
 			// The first face
+			float U_coord = ( angle_offset ) / float( TWOPI );
 			float alfa = float( PI ) / float(2) - vert_delta_angle;		// Angle counting from north pole
 
 			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
 			uvs->AddAttribute( glm::vec2( 0.0, 1.0 ) );
 			for( unsigned int i = 0; i < vertical_stripes; ++i )
 			{
+				float V_coord = float( ( PI / 2 + alfa ) / PI );
 				float cos_alfa = cos( alfa );
 				float sin_alfa = sin( alfa );
 
@@ -233,17 +235,17 @@ namespace Generator
 				float y = radius * sin_alfa;
 				float z = 0.0;
 				verts->AddAttribute( glm::vec3( x, y, z ) );
-				uvs->AddAttribute( glm::vec2( 0.0, 1.0 ) );
+				uvs->AddAttribute( glm::vec2( 1.0, V_coord ) );
 
-				x = sin_hor_angle * cos_alfa;
-				z = cos_hor_angle * cos_alfa;
+				x = sin_hor_angle * cos_alfa;		// Radius already multiplied
+				z = cos_hor_angle * cos_alfa;		// Radius already multiplied
 				verts->AddAttribute( glm::vec3( x, y, z ) );
-				uvs->AddAttribute( glm::vec2( 0.0, 1.0 ) );
+				uvs->AddAttribute( glm::vec2( U_coord, V_coord ) );
 
 				alfa -= vert_delta_angle;
 			}
 			verts->AddAttribute( glm::vec3( 0.0, -1.0, 0.0 ) * radius );
-			uvs->AddAttribute( glm::vec2( 0.0, 1.0 ) );
+			uvs->AddAttribute( glm::vec2( 0.0, -1.0 ) );
 
 			// Degenerated traingles
 			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
@@ -253,24 +255,26 @@ namespace Generator
 
 			// ===================================================== //
 			// The second face
+			U_coord = ( hor_angle_clamped ) / float( TWOPI );
 			alfa = float( PI ) / float(2) - vert_delta_angle;		// Angle counting from north pole
 			cos_hor_angle = radius * cos( hor_angle_clamped + angle_offset );
 			sin_hor_angle = radius * sin( hor_angle_clamped + angle_offset );
 			for( unsigned int i = 0; i < vertical_stripes; ++i )
 			{
+				float V_coord = float( ( PI / 2 + alfa ) / PI );
 				float cos_alfa = cos( alfa );
 				float sin_alfa = sin( alfa );
 
-				float x = sin_hor_angle * cos_alfa;
+				float x = sin_hor_angle * cos_alfa;		// Radius already multiplied
 				float y = radius * sin_alfa;
-				float z = cos_hor_angle * cos_alfa;
+				float z = cos_hor_angle * cos_alfa;		// Radius already multiplied
 				verts->AddAttribute( glm::vec3( x, y, z ) );
-				uvs->AddAttribute( glm::vec2( 0.0, 1.0 ) );
+				uvs->AddAttribute( glm::vec2( U_coord, V_coord ) );
 
 				x = 0.0;
 				z = 0.0;
 				verts->AddAttribute( glm::vec3( x, y, z ) );
-				uvs->AddAttribute( glm::vec2( 0.0, 1.0 ) );
+				uvs->AddAttribute( glm::vec2( 0.0, V_coord ) );
 
 				alfa -= vert_delta_angle;
 			}
