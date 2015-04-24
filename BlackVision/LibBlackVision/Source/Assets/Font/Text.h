@@ -29,6 +29,7 @@ private:
     void                                BuildAtlas			();
 	void                                BuildAtlasOutlined	();
     TextAtlasConstPtr                   LoadFromCache		();
+	void								AddToCache			();
 
 public:
 

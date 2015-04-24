@@ -11,6 +11,7 @@
 #include "LibImage.h"
 #include "Assets/Texture/TextureLoader.h"
 #include "Assets/Assets.h"
+#include "Assets/Texture/TextureCache.h"
 
 #pragma warning(push)
 #pragma warning(disable : 4512)
@@ -206,6 +207,15 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & f
 
 	if( ret->m_textAtlas != nullptr )
 	{
+		auto atlasTextureDesc = TextAtlas::GenerateTextAtlasAssetDescriptor(	ret->m_fontFilePath,
+																				ret->m_textAtlas->GetWidth(),
+																				ret->m_textAtlas->GetHeight(),
+																				ret->m_fontSize,
+																				MipMapFilterType::BILINEAR,
+																				ret->m_mmLevelsNum );
+
+		std::const_pointer_cast< TextAtlas >( ret->m_textAtlas )->m_textureAsset = TextureCache::GetInstance().Get( atlasTextureDesc ); //FIXME: Remove const_pointer_cast
+
 		auto asset = LoadTextureAsset( ret->m_atlasFilePath );
 		if( asset != nullptr )
 		{
@@ -269,8 +279,17 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
         /*+ "\'" + fontAtlasTextureFileName + "\'" + ")"*/;
 
 
-    if( ! File::Exists( CACHE_DIRECTORY ) )
-        File::CreateDir( CACHE_DIRECTORY );
+	auto atlasTextureDesc = TextAtlas::GenerateTextAtlasAssetDescriptor(	data.m_fontFilePath,
+																			data.m_textAtlas->GetWidth(),
+																			data.m_textAtlas->GetHeight(),
+																			data.m_fontSize,
+																			MipMapFilterType::BILINEAR,
+																			data.m_textAtlas->m_textureAsset->GetMipMaps()->GetLevelsNum() );
+
+	TextureCache::GetInstance().Add( atlasTextureDesc, data.m_textAtlas->m_textureAsset );
+
+    //if( ! File::Exists( CACHE_DIRECTORY ) )
+    //    File::CreateDir( CACHE_DIRECTORY );
 
 	//image::SaveBMPImage( fontAtlasTextureFileName, data.m_textAtlas->GetData(), data.m_textAtlas->GetWidth(), data.m_textAtlas->GetHeight(), data.m_textAtlas->GetBitsPerPixel() );
 
