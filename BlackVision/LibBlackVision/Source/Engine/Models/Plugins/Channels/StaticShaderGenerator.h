@@ -14,29 +14,17 @@ namespace bv { namespace model {
 
     typedef std::map< std::vector< std::string >, std::string >  PluginUIDHashMap;
 
-    class StaticShaderGenerator //: public DefaultFinalizeShaderChannel< IPixelShaderChannel >  // FIXME for God's sake!
+    class StaticShaderGenerator
     {
         static PluginUIDHashMap    ms_pixelShaderMapping;
         static std::vector< std::vector< std::string > >    ms_acceptedPluginLists;
         static std::vector< std::string >                   ms_baseShaderFileNames;
         std::string                             m_shadersDir;
-
-        //std::string dummy;
-        //virtual const std::string &                         GetShaderSource                 () const override { return dummy; }
-        //virtual std::string                                 GetShaderSource                 ( const std::vector< std::string > & ) const { return dummy; }
-
     public:
-
-        StaticShaderGenerator( /*IPixelShaderChannelPtr channel,*/ const std::string & shadersDir ) 
-            : 
-            //m_channel( channel )
-            //, m_shaderSource( "" )
-            //, 
-            m_shadersDir( shadersDir )
+        StaticShaderGenerator( const std::string & shadersDir ) 
+            : m_shadersDir( shadersDir )
         {
         }
-
-        //virtual RendererContextConstPtr     GetRendererContext  () const { return nullptr; }
 
         void                InitializePixelShaderMapping       () const
         {
@@ -54,20 +42,9 @@ namespace bv { namespace model {
             }
         }
 
-        std::string         GenerateShaderSource( const std::vector< std::string > & uids ) const
-        {
-            auto it = ms_pixelShaderMapping.find( uids );
-
-            if( it != ms_pixelShaderMapping.end() )
-            {
-                printf( "Loading pixel shader from: %s\n", it->second.c_str() );
-                return ReadShaderContentsFromFile( it->second );
-            }
-
-            assert( false );
-
-            return "";
-        }
+        std::string         GenerateShaderSource( const std::vector< std::string > & uids ) const;
+        std::string         GenerateFilename( const std::vector< std::string > & uids ) const;
+        std::string         UID2Abbrv( const std::string uid ) const;
 
         const std::vector< std::vector< std::string > > &   GetAcceptedPluginLists  () const
         {

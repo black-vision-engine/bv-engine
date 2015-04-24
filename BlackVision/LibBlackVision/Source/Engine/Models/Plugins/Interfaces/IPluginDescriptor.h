@@ -14,6 +14,7 @@ public:
 
     virtual const std::string &     GetPluginTypeUID    () const                                                                                = 0;
     virtual const std::string &     DefaultPluginName   () const                                                                                = 0;
+    virtual const std::string &     GetPluginTypeAbbrv  () const                                                                                = 0;
 
     virtual bool                    CanBeAttachedTo     ( IPluginConstPtr plugin )  const                                                       = 0;
     virtual IPluginPtr              CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const    = 0;

@@ -19,7 +19,7 @@ namespace bv { namespace model {
 // *******************************
 //
 DefaultTexturePluginDesc::DefaultTexturePluginDesc                          ()
-    : BasePluginDescriptor( UID(), "texture" )
+    : BasePluginDescriptor( UID(), "texture", "tx" )
 {
 }
 
