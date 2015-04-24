@@ -1,7 +1,5 @@
 #include "StaticShaderGenerator.h"
 
-#include "StaticShaderGenerator.inl"
-
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
 

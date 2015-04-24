@@ -667,7 +667,6 @@
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\RenderableEffect.inl" />
     <None Include="..\..\..\Source\Engine\Models\BVSceneEditor.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeShaderChannel.inl" />
-    <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\StaticShaderGenerator.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CompositeTypedParameters.inl" />
