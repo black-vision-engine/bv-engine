@@ -58,7 +58,29 @@ bool    BVSceneEditor::DeleteRootNode       ()
 
 // *******************************
 //
-bool    BVSceneEditor::DeleteChildNode     ( model::IModelNodePtr parentNode, const std::string & childNodeName )
+void                    AttachRootNode      ( model::IModelNodePtr rootNode )
+{
+    { rootNode; }
+}
+
+// *******************************
+//
+model::IModelNodePtr    DetachRootNode      ()
+{
+    return nullptr;
+}
+
+// *******************************
+//
+void    BVSceneEditor::AddChildNode         ( model::IModelNodePtr parentNode, model::IModelNodePtr childNode )
+{
+    { parentNode;
+    childNode; }
+}
+
+// *******************************
+//
+bool    BVSceneEditor::DeleteChildNode      ( model::IModelNodePtr parentNode, const std::string & childNodeName )
 {
     auto parentModelNode  = std::static_pointer_cast< model::BasicNode >( parentNode );
     
@@ -82,19 +104,21 @@ bool    BVSceneEditor::DeleteChildNode     ( model::IModelNodePtr parentNode, co
     return false;
 }
 
-/*
+// *******************************
+//
+void                    BVSceneEditor::AttachChildNode     ( model::IModelNodePtr parent, model::IModelNodePtr nodeToAttach )
+{
+    { parent; nodeToAttach; }
+}
 
-    void                    AddChildNode        ( model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
-    bool                    DeleteChildNode     ( model::IModelNodePtr parentNode, const std::string & childNodeName );
+// *******************************
+//
+model::IModelNodePtr    BVSceneEditor::DetachChildNode     ( model::IModelNodePtr parent, const std::string & nodeToDetach )
+{
+    { parent; nodeToDetach; }
 
-    void                    AttachChildNode     ( model::IModelNodePtr parent, model::IModelNodePtr nodeToAttach );
-    model::IModelNodePtr    DetachNodeFrom      ( model::IModelNodePtr parent, const std::string & nodeToDetach );
-
-    void                    AttachRootNode      ( model::IModelNodePtr rootNode );
-    model::IModelNodePtr    DetachRootNode      ();
-
-    RenameNode                                  ( model::IModelNodePtr node, const std::string & newName );
-*/
+    return nullptr;
+}
 
 // *******************************
 //
