@@ -226,7 +226,7 @@ void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
 {
 	
       //FIXME: use some better API to handle resources in general and textures in this specific case
-      auto txDesc = new DefaultTextureDescriptor(    res
+	auto txDesc = new DefaultTextureDescriptor(		res
 												,   name
 												,   hWrappingMode
 												,   vWrappingMode
@@ -235,17 +235,21 @@ void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
 												,   semantic );
 
 
-        if( txDesc != nullptr )
-        {
-            if( txData->GetTextures().size() == 0 )
-            {
-                txData->AddTexture( txDesc );
-            }
-            else
-            {
-                txData->SetTexture( 0, txDesc );
-            }
-        }
+	if( txDesc != nullptr )
+	{
+		if( txData->GetTextures().size() == 0 )
+		{
+			txData->AddTexture( txDesc );
+		}
+		else
+		{
+			txData->SetTexture( 0, txDesc );
+		}
+	}
+
+	txDesc->SetBits( res );
+	txDesc->SetName( name );
+
 }
 
 // *************************************
@@ -262,12 +266,19 @@ void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, UInt32 f
 	auto textureResource = m_atlas->GetAsset();
 
     //FIXME: use some better API to handle resources in general and textures in this specific case
-    LoadTexture(	txData   
+	auto tfm = TextureFilteringMode::TFM_LINEAR;
+
+	if( textureResource->HasMipMaps() )
+	{
+		tfm = TextureFilteringMode::TFM_LINEAR_MIPMAP_LINEAR;
+	}
+
+	LoadTexture(	txData   
 				,	textureResource
                 ,   DefaultTextPluginDesc::TextureName()
                 ,   TextureWrappingMode::TWM_CLAMP_BORDER
                 ,   TextureWrappingMode::TWM_CLAMP_BORDER
-				,   TextureFilteringMode::TFM_POINT_MIPMAP_POINT
+				,   tfm
                 ,   glm::vec4( 0.f, 0.f, 0.f, 0.f )
                 ,   DataBuffer::Semantic::S_TEXTURE_STATIC );
 }

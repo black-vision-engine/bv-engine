@@ -37,6 +37,7 @@ public:
 
     enum class TestSceneSelector : int
     {
+		TSS_ONE_TEXTURED_RECTANGLE,
         TSS_TWO_TEXTURED_RECTANGLES,
 		TSS_TEXT,
 

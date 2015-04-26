@@ -366,7 +366,7 @@ DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const Tex
 
 	if( res->HasMipMaps() )
 	{
-		desc->SetFilteringMode( TextureFilteringMode::TFM_POINT );
+		desc->SetFilteringMode( TextureFilteringMode::TFM_LINEAR_MIPMAP_LINEAR );
 	}
 
     //desc->SetWrappingModeY( TextureWrappingMode::TWM_REPEAT ); 

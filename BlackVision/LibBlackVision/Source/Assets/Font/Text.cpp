@@ -106,7 +106,7 @@ void Text::BuildAtlas        ()
 
 	auto  padding = this->m_blurSize + 1; // Update padding in case of bluring the atlas.
 
-	m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSet, true );
+	m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSet, false );
 
 	assert( m_blurSize == 0 ); //TODO: Implement
   //  if ( m_blurSize > 0 )
