@@ -141,3 +141,5 @@ protected:
 
 } //model
 } //bv
+
+// wget --recursive --no-clobber --page-requisites --html-extension --convert-links --restrict-file-names=windows --domains blender-mirror.kino3d.org --no-parent http://blender-mirror.kino3d.org/peach/

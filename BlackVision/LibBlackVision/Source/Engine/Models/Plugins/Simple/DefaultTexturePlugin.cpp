@@ -356,7 +356,8 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
 
 			// !!!! Function accepts only position and UVs coordinates ( 2D textures ).
 			// It needs to be changed when normal vectors appear in engine.
-			assert( acceptAttributeChannel( prevCompCh, UVsGenerationNeeded ) );
+			auto success = acceptAttributeChannel( prevCompCh, UVsGenerationNeeded );
+			assert( success );
         }
 
         if( m_vaChannel == nullptr )
@@ -368,19 +369,19 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
             }
 
             //Only one texture
-			if( !UVsGenerationNeeded )
+			//if( !UVsGenerationNeeded )
 			{
 				m_texCoordChannelIndex = vaChannelDesc.GetNumVertexChannels() - 1;
 				vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 			}
-			else
-				m_texCoordChannelIndex = vaChannelDesc.GetNumVertexChannels();
+			//else
+			//	m_texCoordChannelIndex = vaChannelDesc.GetNumVertexChannels();
 
             auto vaChannel = VertexAttributesChannelPtr( new VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() ) );
             m_vaChannel = vaChannel;
         }
 
-		if( !UVsGenerationNeeded )
+		//if( true )
 		{
 			//FIXME: only one texture - convex hull calculations
 			float minX = 100000.0f, minY = 100000.0f;
