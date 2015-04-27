@@ -1759,5 +1759,8 @@
     <None Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.inl">
       <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </None>
+    <None Include="..\..\..\Source\Engine\Models\Plugins\Descriptor\ModelHelper.inl">
+      <Filter>Engine\Models\Plugins\Descriptor</Filter>
+    </None>
   </ItemGroup>
 </Project>
