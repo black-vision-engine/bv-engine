@@ -80,6 +80,8 @@ Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr pr
     InitGeometry();
 }
 
+
+
 #include "Mathematics/Defines.h"
 class Generator : public IGeometryAndUVsGenerator
 {
@@ -94,23 +96,43 @@ public:
 
     Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
+	float computeAngle2Clamped( float angle, float stripe_num )
+	{
+		float ret_value = angle * ( stripe_num + 1 );
+		if( openangle > 0.0 )
+		{
+			float max_angle = float( TWOPI - TO_RADIANS( openangle ) );
+			if( ret_value > max_angle )
+				return max_angle;
+		}
+
+		return ret_value;
+	}
+
     void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
     {
     //    Init();
     //    GenerateV();
     //    CopyV( verts, uvs );
     //    Deinit();
-        for( int j = 0; j <= tesselation; j++ )
+		int max_loop;
+		if( openangle != 0.0 && openangle != 360 )
+			max_loop = static_cast<int>( ceil( float( ( TWOPI - TO_RADIANS( openangle ) ) / ( TWOPI / tesselation ) ) ) );
+		else
+			max_loop = tesselation;
+
+        for( int j = 0; j <= max_loop; j++ )
             for( int i = 0; i <= tesselation; i++ )
             {
-                double phi = i * 2*PI / tesselation;
-                double theta = j * 2*PI / tesselation;
+                double phi = i * TWOPI / tesselation;
+                double theta = j * TWOPI / tesselation;
 
                 verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) );
                 uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j) / tesselation ) );
 
-                phi = i * 2*PI / tesselation;
-                theta = (j+1) * 2*PI / tesselation;
+                phi = i * TWOPI / tesselation;
+				theta = computeAngle2Clamped( float( TWOPI / tesselation ), float( j ) );
+                //theta = (j+1) * 2*PI / tesselation;
 
                 verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) );
                 uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j+1) / tesselation ) );
