@@ -11,6 +11,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultConePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCirclePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultSpherePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultEllipsePlugin.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
@@ -1738,12 +1739,12 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 //#define SHOW_CUBE
 //#define SHOW_CONE
-#define SHOW_SPHERE
+//#define SHOW_SPHERE
 //#define SHOW_CIRCLE
 //#define SHOW_ELLIPSE
 //#define SHOW_ROUNDEDRECT
 //#define SHOW_TRIANGLE
-//#define SHOW_TORUS
+#define SHOW_TORUS
 //#define SHOW_SPRING
 //#define SHOW_GEOSPHERE
 
@@ -1818,14 +1819,14 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 // ============================================ //
 // Tranformations
-	glm::vec3 rotation_axis( 0.f, 1.f, 0.f );
+	glm::vec3 rotation_axis( 1.f, 0.f, 0.f );
 	glm::vec3 rotation_axis2( -1.f, 1.f, 0.f );
 
 	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, rotation_axis, 0.f );
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, rotation_axis, 700.f );
 	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.f, rotation_axis2, 50.f );
-	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -2.0f ) );
+	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -50.0f ) );
 
 
 // ============================================ //
@@ -1835,10 +1836,10 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultCirclePlugin::CW );
 	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultCirclePlugin::CCW );
 	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultCirclePlugin::SYMMETRIC );
-	model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 4.0f );
-	model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 2.0f );
+	model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 1.0f );
+	model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.3f );
 	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 20 );
-	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 60.0f );
+	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 360.0f );
 #endif
 #ifdef SHOW_CONE
 	auto plugin = root->GetPlugin( "cone" );
@@ -1871,7 +1872,13 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #endif
 #ifdef SHOW_ELLIPSE
 	auto plugin = root->GetPlugin( "ellipse" );
-	model::SetParameter( plugin->GetParameter( "outer radius 1" ), 0.0f, 4.0f );
+	model::SetParameter( plugin->GetParameter( "outer radius 1" ), 0.0f, 1.0f );
+	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 1.0f );
+	model::SetParameter( plugin->GetParameter( "outer radius 2" ), 0.0f, 3.0f );
+	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 0.0f );
+	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultEllipsePlugin::OpenAngleMode::CCW );
+	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultEllipsePlugin::OpenAngleMode::CW );
+	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultEllipsePlugin::OpenAngleMode::SYMMETRIC );
 #endif
 #ifdef SHOW_CUBE
 	auto plugin = root->GetPlugin( "cube" );
@@ -1892,8 +1899,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #endif
 #ifdef SHOW_TORUS
 	auto plugin = root->GetPlugin( "torus" );
-	model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 1.5f );
-	model::SetParameter( plugin->GetParameter( "radius2" ), 0.0f, 0.5f );
+	model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 0.7f );
+	model::SetParameter( plugin->GetParameter( "radius2" ), 0.0f, 0.1f );
 	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 0.0f );
 	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 15 );
 
@@ -1925,7 +1932,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
 	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
 
-	success = model::LoadTexture( root->GetPlugin( "texture" ), "rsrcy/sand.jpg", MipMapFilterType::BILINEAR );
+	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
 	assert( success );
 	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
 	model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
