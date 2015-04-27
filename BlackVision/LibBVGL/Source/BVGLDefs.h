@@ -96,6 +96,7 @@ namespace bv {
 #define GL_TEXTURE_WRAP_S 0x2802
 #define GL_TEXTURE_WRAP_T 0x2803
 #define GL_TEXTURE_WRAP_R 0x8072
+#define GL_TEXTURE_MAX_LEVEL 0x813D
 
 #define GL_TEXTURE0 0x84C0
 
