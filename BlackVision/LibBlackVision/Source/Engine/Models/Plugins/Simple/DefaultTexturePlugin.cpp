@@ -7,6 +7,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
+#include "Engine/Models/Plugins/HelperUVGenerator.h"
 
 #include "Assets/Texture/TextureAssetDescriptor.h"
 
@@ -358,6 +359,7 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
 			// It needs to be changed when normal vectors appear in engine.
 			assert( acceptAttributeChannel( prevCompCh, UVsGenerationNeeded ) );
         }
+		//UVsGenerationNeeded = false;
 
         if( m_vaChannel == nullptr )
         {
@@ -368,7 +370,7 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
             }
 
             //Only one texture
-			if( !UVsGenerationNeeded )
+			if( UVsGenerationNeeded )
 			{
 				m_texCoordChannelIndex = vaChannelDesc.GetNumVertexChannels() - 1;
 				vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
@@ -380,32 +382,37 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
             m_vaChannel = vaChannel;
         }
 
-		if( !UVsGenerationNeeded )
+		if( UVsGenerationNeeded )
 		{
-			//FIXME: only one texture - convex hull calculations
-			float minX = 100000.0f, minY = 100000.0f;
-			float maxX = 0.0f, maxY = 0.0f;
+			////FIXME: only one texture - convex hull calculations
+			//float minX = 100000.0f, minY = 100000.0f;
+			//float maxX = 0.0f, maxY = 0.0f;
 
-			//convex hull - make sure that prevCompChannels[ 0 ] is indeed a positional channel
-			for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
-			{
-				const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
+			////convex hull - make sure that prevCompChannels[ 0 ] is indeed a positional channel
+			//for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
+			//{
+			//	const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
 
-				minX = std::min( minX, pos[ j ].x );
-				minY = std::min( minY, pos[ j ].y );
-				maxX = std::max( maxX, pos[ j ].x );
-				maxY = std::max( maxY, pos[ j ].y );
-			}
+			//	minX = std::min( minX, pos[ j ].x );
+			//	minY = std::min( minY, pos[ j ].y );
+			//	maxX = std::max( maxX, pos[ j ].x );
+			//	maxY = std::max( maxY, pos[ j ].y );
+			//}
+			
 
 			auto verTexAttrChannel = new model::Float2AttributeChannel( desc, DefaultTexturePluginDesc::TextureName(), true );
+			auto UVChannelPtr = Float2AttributeChannelPtr( verTexAttrChannel );
 
-			for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
-			{
-				const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
-				verTexAttrChannel->AddAttribute( glm::vec2( ( pos[ j ].x - minX ) / ( maxX - minX ), ( pos[ j ].y - minY ) / ( maxY - minY ) ) );
-			}
 
-			connComp->AddAttributeChannel( AttributeChannelPtr( verTexAttrChannel ) );
+			Helper::UVGenerator::generateUV( reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() ), prevCompChannels[ 0 ]->GetNumEntries(),
+											UVChannelPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
+			//for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
+			//{
+			//	const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
+			//	verTexAttrChannel->AddAttribute( glm::vec2( ( pos[ j ].x - minX ) / ( maxX - minX ), ( pos[ j ].y - minY ) / ( maxY - minY ) ) );
+			//}
+
+			connComp->AddAttributeChannel( UVChannelPtr );
 		}
 
         m_vaChannel->AddConnectedComponent( connComp );
