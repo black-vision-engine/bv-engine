@@ -375,8 +375,8 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
 				m_texCoordChannelIndex = vaChannelDesc.GetNumVertexChannels() - 1;
 				vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 			}
-			//else
-			//	m_texCoordChannelIndex = vaChannelDesc.GetNumVertexChannels();
+			else
+				m_texCoordChannelIndex = vaChannelDesc.GetNumVertexChannels();
 
             auto vaChannel = VertexAttributesChannelPtr( new VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() ) );
             m_vaChannel = vaChannel;
