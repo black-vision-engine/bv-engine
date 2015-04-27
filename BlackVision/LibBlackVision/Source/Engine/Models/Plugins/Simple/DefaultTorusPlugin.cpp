@@ -106,26 +106,55 @@ public:
 			if( ret_value > max_angle )
 				return max_angle;
 		}
+		//else if( openangle == 360 )
+		//{
+		//	return float( TWOPI );
+		//}
 
 		return ret_value;
 	}
 
 	float computeAngleOffset( Plugin::OpenAngleMode mode, float open_angle )
 	{
-		mode;
-		open_angle;
 		float angle_offset = 0.0f;
 
 		if( mode == Plugin::OpenAngleMode::CW )
 			angle_offset = -float( PI /2 );
 		else if( mode == Plugin::OpenAngleMode::CCW )
-			angle_offset = float( TO_RADIANS( open_angle ) -  PI /2  );
+			angle_offset = float( TO_RADIANS( open_angle ) - PI /2 );
 		else if( mode == Plugin::OpenAngleMode::SYMMETRIC )
-			angle_offset = float( TO_RADIANS( open_angle / 2 ) -  PI /2  );
+			angle_offset = float( TO_RADIANS( open_angle / 2 ) - PI /2 );
 		else
 			assert( false );
 
 		return angle_offset;
+	}
+
+	void generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int j, float angle_offset )
+	{
+		double theta = computeAngle2Clamped( float( TWOPI / tesselation), float( j - 1 ) ) + angle_offset;
+		//double theta = j * TWOPI / tesselation + angle_offset;
+		double cos_theta = cos( theta );
+		double sin_theta = sin( theta );
+
+		for( int i = 0; i <= tesselation; ++i )
+		{
+			double phi = i * TWOPI / tesselation + angle_offset;
+
+			verts->AddAttribute( glm::vec3( cos_theta*( radius + radius2*cos( phi ) ), sin_theta * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) );
+			uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j) / tesselation ) );
+
+			verts->AddAttribute( glm::vec3( cos_theta* radius , sin_theta * radius, radius2 * sin(phi) ) );
+			uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j) / tesselation ) );
+		}
+	}
+
+	glm::vec2 getUV( int i, int j, int maxLoop )
+	{
+		glm::vec2 uv( float(i) / tesselation, float(j) / tesselation );
+		if( j == maxLoop - 1 )
+			uv.y = float( j - 1.0 / 2.0 ) / tesselation;
+		return uv;
 	}
 
     void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
@@ -137,12 +166,16 @@ public:
 		float angle_offset = computeAngleOffset( open_angle_mode, openangle );
 
 		int max_loop;
-		if( openangle != 0.0 && openangle != 360 )
+		if( openangle != 0.0/* && openangle != 360 */)		// Uncomment if you want to see organ.
 			max_loop = static_cast<int>( ceil( float( ( TWOPI - TO_RADIANS( openangle ) ) / ( TWOPI / tesselation ) ) ) );
 		else
 			max_loop = tesselation;
 
-        for( int j = 0; j <= max_loop; j++ )
+		// We close beginning of the torus (only if there's an openangle set)
+		if( openangle != 0.0f )
+			generateClosure( verts, uvs, 0, angle_offset );
+
+        for( int j = 0; j < max_loop; j++ )
             for( int i = 0; i <= tesselation; i++ )
             {
                 double phi = i * TWOPI / tesselation + angle_offset;
@@ -152,13 +185,18 @@ public:
                 uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j) / tesselation ) );
 
                 phi = i * TWOPI / tesselation + angle_offset;
-				theta = computeAngle2Clamped( float( TWOPI / tesselation), float( j ) );
-				theta += angle_offset;
-                //theta = (j+1) * 2*PI / tesselation;
+				theta = computeAngle2Clamped( float( TWOPI / tesselation), float( j ) ) + angle_offset;		//zamiast theta = (j+1) * 2*PI / tesselation;
 
                 verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) );
-                uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j+1) / tesselation ) );
+				if( j < max_loop - 1 )
+					uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j+1) / tesselation ) );
+				else
+					uvs->AddAttribute( glm::vec2( float(i) / tesselation, ( theta - angle_offset ) / TWOPI ) );
             }
+
+		// We close ending of the torus (only if there's an openangle set)
+		if( openangle != 0.0f )
+			generateClosure( verts, uvs, max_loop, angle_offset );
     }
 
     //void Init() 
