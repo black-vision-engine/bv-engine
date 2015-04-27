@@ -840,6 +840,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneEditor.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.cpp">
+      <Filter>Engine\Models\Plugins</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1696,6 +1699,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeospherePlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h">
+      <Filter>Engine\Models\Plugins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
