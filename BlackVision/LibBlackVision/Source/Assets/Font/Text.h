@@ -28,7 +28,7 @@ private:
 
     void                                BuildAtlas			();
 	void                                BuildAtlasOutlined	();
-    TextAtlasConstPtr                   LoadFromCache		();
+    TextAtlasConstPtr                   LoadFromCache		( bool useMipMaps );
 	void								AddToCache			();
 
 public:

@@ -58,14 +58,14 @@ Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, 
 
 // *********************************
 //
-TextAtlasConstPtr Text::LoadFromCache()
+TextAtlasConstPtr Text::LoadFromCache( bool useMipMaps )
 {
     auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
 
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
 
-	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, true );
+	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, useMipMaps );
 
 
     if( entry != nullptr )
@@ -97,7 +97,8 @@ void				Text::AddToCache()
 //
 void Text::BuildAtlas        ()
 {
-    m_atlas = LoadFromCache();
+	bool useMipMaps = true;
+    m_atlas = LoadFromCache( useMipMaps );
 
     if( m_atlas != nullptr )
 	{
@@ -106,7 +107,7 @@ void Text::BuildAtlas        ()
 
 	auto  padding = this->m_blurSize + 1; // Update padding in case of bluring the atlas.
 
-	m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSet, true );
+	m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSet, useMipMaps );
 
 	assert( m_blurSize == 0 ); //TODO: Implement
   //  if ( m_blurSize > 0 )
