@@ -87,12 +87,13 @@ class Generator : public IGeometryAndUVsGenerator
 {
     int tesselation;
     float radius, radius2, openangle;
+	Plugin::OpenAngleMode open_angle_mode;
 
     glm::vec3 **v;
     int n, m;
 public:
-    Generator( int t, float r, float r2, float oa )
-        : tesselation( t ), radius( r ), radius2( r2), openangle( oa ) { }
+    Generator( int t, float r, float r2, float oa, Plugin::OpenAngleMode oam )
+		: tesselation( t ), radius( r ), radius2( r2), openangle( oa ), open_angle_mode( oam ) { }
 
     Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
@@ -109,12 +110,32 @@ public:
 		return ret_value;
 	}
 
+	float computeAngleOffset( Plugin::OpenAngleMode mode, float open_angle )
+	{
+		mode;
+		open_angle;
+		float angle_offset = 0.0f;
+
+		if( mode == Plugin::OpenAngleMode::CW )
+			angle_offset = -float( PI /2 );
+		else if( mode == Plugin::OpenAngleMode::CCW )
+			angle_offset = float( TO_RADIANS( open_angle ) -  PI /2  );
+		else if( mode == Plugin::OpenAngleMode::SYMMETRIC )
+			angle_offset = float( TO_RADIANS( open_angle / 2 ) -  PI /2  );
+		else
+			assert( false );
+
+		return angle_offset;
+	}
+
     void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
     {
     //    Init();
     //    GenerateV();
     //    CopyV( verts, uvs );
     //    Deinit();
+		float angle_offset = computeAngleOffset( open_angle_mode, openangle );
+
 		int max_loop;
 		if( openangle != 0.0 && openangle != 360 )
 			max_loop = static_cast<int>( ceil( float( ( TWOPI - TO_RADIANS( openangle ) ) / ( TWOPI / tesselation ) ) ) );
@@ -124,14 +145,15 @@ public:
         for( int j = 0; j <= max_loop; j++ )
             for( int i = 0; i <= tesselation; i++ )
             {
-                double phi = i * TWOPI / tesselation;
-                double theta = j * TWOPI / tesselation;
+                double phi = i * TWOPI / tesselation + angle_offset;
+                double theta = j * TWOPI / tesselation + angle_offset;
 
                 verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) );
                 uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j) / tesselation ) );
 
-                phi = i * TWOPI / tesselation;
-				theta = computeAngle2Clamped( float( TWOPI / tesselation ), float( j ) );
+                phi = i * TWOPI / tesselation + angle_offset;
+				theta = computeAngle2Clamped( float( TWOPI / tesselation), float( j ) );
+				theta += angle_offset;
                 //theta = (j+1) * 2*PI / tesselation;
 
                 verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) );
@@ -196,7 +218,8 @@ std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
         m_tesselation->GetValue(),
         m_radius->GetValue(),
         m_radiusCrossSection->GetValue(),
-        m_openAngle->GetValue() 
+        m_openAngle->GetValue(),
+		m_openAngleMode->Evaluate()
         ) ) );
 
     return gens;
