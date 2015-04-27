@@ -32,19 +32,18 @@ private:
 
 public:
 
-    SceneNode *             BuildEngineNode     ( model::IModelNodePtr node );
-
     void                    SetRootNode         ( model::IModelNodePtr rootNode );
     bool                    DeleteRootNode      ();
+
+    void                    AttachRootNode      ( model::IModelNodePtr rootNode );
+    model::IModelNodePtr    DetachRootNode      ();
 
     void                    AddChildNode        ( model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
     bool                    DeleteChildNode     ( model::IModelNodePtr parentNode, const std::string & childNodeName );
 
     void                    AttachChildNode     ( model::IModelNodePtr parent, model::IModelNodePtr nodeToAttach );
-    model::IModelNodePtr    DetachNodeFrom      ( model::IModelNodePtr parent, const std::string & nodeToDetach );
+    model::IModelNodePtr    DetachChildNode     ( model::IModelNodePtr parent, const std::string & nodeToDetach );
 
-    void                    AttachRootNode      ( model::IModelNodePtr rootNode );
-    model::IModelNodePtr    DetachRootNode      ();
 
 private:
 

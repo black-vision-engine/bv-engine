@@ -65,7 +65,7 @@ DefaultPluginParamValModelPtr   DefaultRectPluginDesc::CreateDefaultModel   ( IT
     h.CreateVacModel();
     h.AddSimpleParam( "width", 1.f );
     h.AddSimpleParam( "height", 1.f );
-
+    
     return h.GetModel();
 }
 
