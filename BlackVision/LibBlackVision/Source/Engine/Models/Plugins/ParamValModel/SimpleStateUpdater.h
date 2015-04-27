@@ -13,7 +13,9 @@ class SimpleStateUpdater : public IUpdater
 {
     StateTypePtr                            m_state;
     ValueTypePtr                            m_value;
+
 public:
+
     SimpleStateUpdater( StateTypePtr state, ValueTypePtr value );
 
     virtual void    DoUpdate    ();
