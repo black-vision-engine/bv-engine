@@ -1,6 +1,23 @@
 #include "DefaultTorusPlugin.h"
 
-namespace bv { namespace model { namespace DefaultTorus {
+namespace bv { namespace model {
+	
+typedef ParamEnum< DefaultTorus::Plugin::OpenAngleMode > ParamEnumOAM;
+
+VoidPtr    ParamEnumOAM::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
+
+template<>
+static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultTorus::Plugin::OpenAngleMode >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultTorus::Plugin::OpenAngleMode >( name, timeline );
+}
+
+#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
+	
+namespace DefaultTorus {
 
 const std::string PN::OPENANGLE = "open angle";
 const std::string PN::OPENANGLEMODE = "open angle mode";
@@ -23,7 +40,8 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     h.AddSimpleParam( PN::RADIUS, 1.f, true, true );
     h.AddSimpleParam( PN::RADIUSCROSSSECTION, 0.1f, true, true );
     h.AddSimpleParam( PN::OPENANGLE, 360.f, true, true );
-    //h.AddParam( PN::OPENANGLEMODE, ... );
+    h.AddParam< IntInterpolator, DefaultTorus::Plugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
+        ( DefaultTorus::PN::OPENANGLEMODE, DefaultTorus::Plugin::OpenAngleMode::CW, true, true );
 
     return h.GetModel();
 }
@@ -44,7 +62,8 @@ bool                                Plugin::NeedsTopologyUpdate()
     return ParameterChanged( PN::TESSELATION ) ||
         ParameterChanged( PN::RADIUS ) ||
         ParameterChanged( PN::RADIUSCROSSSECTION ) ||
-        ParameterChanged( PN::OPENANGLE ); // || ParameterChanged( PN::OPENANGLEMODE )
+        ParameterChanged( PN::OPENANGLE ) ||
+		ParameterChanged( PN::OPENANGLEMODE );
 }
 
 Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
@@ -54,8 +73,10 @@ Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr pr
     m_radius = QueryTypedValue< ValueFloatPtr >( GetValue( PN::RADIUS ) );
     m_radiusCrossSection = QueryTypedValue< ValueFloatPtr >( GetValue( PN::RADIUSCROSSSECTION ) );
     m_openAngle = QueryTypedValue< ValueFloatPtr >( GetValue( PN::OPENANGLE ) );
-
-    m_pluginParamValModel->Update();
+	m_openAngleMode = QueryTypedParam< std::shared_ptr< ParamEnum< OpenAngleMode > > >( GetParameter( PN::OPENANGLEMODE ) );
+    
+	
+	m_pluginParamValModel->Update();
     InitGeometry();
 }
 
@@ -79,20 +100,20 @@ public:
     //    GenerateV();
     //    CopyV( verts, uvs );
     //    Deinit();
-        for( int i = 0; i <= tesselation; i++ )
-            for( int j = 0; j <= tesselation; j++ )
+        for( int j = 0; j <= tesselation; j++ )
+            for( int i = 0; i <= tesselation; i++ )
             {
                 double phi = i * 2*PI / tesselation;
                 double theta = j * 2*PI / tesselation;
 
-                verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius * sin(phi) ) );
+                verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) );
                 uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j) / tesselation ) );
 
-                phi = (i+1) * 2*PI / tesselation;
-                theta = j * 2*PI / tesselation;
+                phi = i * 2*PI / tesselation;
+                theta = (j+1) * 2*PI / tesselation;
 
-                verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius * sin(phi) ) );
-                uvs->AddAttribute( glm::vec2( float(i+1) / tesselation, float(j) / tesselation ) );
+                verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) );
+                uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j+1) / tesselation ) );
             }
     }
 
