@@ -47,22 +47,22 @@ void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
     renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
     renderer->ClearBuffers();
-    renderer->PreDraw();
+    //renderer->PreDraw();
 
-    m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
-    m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
+    //m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
+    //m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
 
-    renderer->ClearBuffers();
+    //renderer->ClearBuffers();
 
     if( node )
         RenderNode( renderer, node );
 
-    m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
-    m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
+    //m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
+    //m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
 
-    m_offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
+    //m_offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
 
-    renderer->PostDraw();
+    //renderer->PostDraw();
     renderer->DisplayColorBuffer();
 }
 

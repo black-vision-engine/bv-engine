@@ -152,12 +152,11 @@ void               DefaultEffect::AddTextures       ( Shader * shader, ITextures
 
         for( auto tx : textures )
         {
-            auto sampler = CreateSampler( tx, samplerNum );
+            auto sampler = CreateSampler( tx, samplerNum ); 
             auto texture = GetTexture( tx );
 
             shader->AddTextureSampler( sampler );
-            params->AddTexture( texture );
-
+            params->AddTexture( texture ); 
             samplerNum++;
         }
 
