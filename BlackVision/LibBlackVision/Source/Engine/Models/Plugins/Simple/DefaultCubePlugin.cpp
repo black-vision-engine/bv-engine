@@ -82,7 +82,10 @@ namespace Generator
         }
 
         void Init() 
-        { 
+        {
+			if( tesselation < 2 )
+				tesselation = 2;		// It's a little hackisch.
+
             n = 4*(tesselation+1);
             m = (tesselation+1) * 2;
             assert( n >= 0 );
