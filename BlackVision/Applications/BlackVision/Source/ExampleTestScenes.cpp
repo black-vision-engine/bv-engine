@@ -115,7 +115,7 @@ model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * 
                                                       "DEFAULT_TRANSFORM", 
                                                       "DEFAULT_RECTANGLE", 
                                                       "DEFAULT_TEXTURE" );
-    
+
     auto childNode =    CreateSingleTestNodeUidsOnly( "child0", pluginsManager, timeEvaluator, 3,
                                                       "DEFAULT_TRANSFORM", 
                                                       "DEFAULT_RECTANGLE", 
