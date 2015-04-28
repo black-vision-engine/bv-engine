@@ -106,10 +106,6 @@ public:
 			if( ret_value > max_angle )
 				return max_angle;
 		}
-		//else if( openangle == 360 )
-		//{
-		//	return float( TWOPI );
-		//}
 
 		return ret_value;
 	}
