@@ -274,8 +274,8 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 
 				newGlyph->code = ch;
 				newGlyph->size = m_fontSize;
-				newGlyph->width = (int)rect.Width();
-				newGlyph->height = (int)rect.Height();
+				newGlyph->width = (int)rect.Width() + 1;
+				newGlyph->height = (int)rect.Height() + 1;
 
 				if( newGlyph->height > m_maxHeight )
 					m_maxHeight = newGlyph->height;
@@ -334,7 +334,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 
     for ( auto ch : wcharsSet )
     {
-		spans[ ch ] = Spans();
+		spans[ ch ] = Spans();	
 		glyphs[ ch ] = RenderGlyph( ch, spans[ ch ], 0 );
 	}
 
@@ -377,7 +377,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 		for ( auto ch : wcharsSet )
 			atlas->SetGlyph( ch, outlineGlyphs[ ch ], true );
 
-	char* atlasData = new char[ altlasWidth * altlasHeight * 4 ]; //const_cast< char * >( atlas->GetWritableData()->Get() );// FIXME: Remove const_cast
+	char* atlasData = new char[ altlasWidth * altlasHeight * 4 ];
 
 	memset( atlasData, 0, altlasWidth * altlasHeight * 4 );
 
@@ -471,7 +471,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 		
 	atlas->m_textureAsset = atlasTextureRes;
 
-	//image::SaveRAWImage( "testFreeType.raw", atlas->GetWritableData() );
+	image::SaveBMPImage( "0level.bmp", atlas->GetWritableData(), altlasWidth, altlasHeight, 32 );
 
 	atlas->m_kerningMap = BuildKerning( m_face, wcharsSet );
 
