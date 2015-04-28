@@ -223,11 +223,14 @@ model::IModelNodePtr BVAppLogic::CreateTestModelNodeInSomeSpecificScope( const s
 //
 void BVAppLogic::OnKey           ( unsigned char c )
 {
-    if( c == 8 )
+    if( c == '-' )
     {
         BVGL::PrintCompleteSummary( "BEFORE REMOVING ROOT NODE" );
-
-        //m_bvScene->GetSceneEditor()->DeleteRootNode();
+        m_bvScene->GetSceneEditor()->DeleteRootNode();
+    }
+    else if( c == 8 )
+    {
+        BVGL::PrintCompleteSummary( "BEFORE REMOVING ROOT NODE" );
 
         auto root = m_bvScene->GetModelSceneRoot();
         m_bvScene->GetSceneEditor()->DeleteChildNode( root, "child0" );
@@ -237,7 +240,7 @@ void BVAppLogic::OnKey           ( unsigned char c )
         //child->DeleteNode( "child01", m_renderer );
         BVGL::PrintCompleteSummary( "AFTER REMOVING ROOT NODE" );
     }
-    else if( c != 0 )
+    else if( c == '+' )
     {
         auto root = m_bvScene->GetModelSceneRoot();
         auto child = root->GetChild( "child0" );
