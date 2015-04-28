@@ -7,7 +7,8 @@ namespace bv{
 namespace model{
 namespace Helper{
 
-
+	/**It would be better if that function took Float3AttributeChannelPtr as a parameter than 2 first params instead, 
+	but in texture plugin I couldn't cast AttributeChannelPtr to it.*/
 	void UVGenerator::generateUV( const glm::vec3 * pos, unsigned int verts_num, Float2AttributeChannelPtr uvs, glm::vec3 versorU, glm::vec3 versorV, bool scale )
 	{
 		float min[2] = { 100000.0f, 100000.0f };

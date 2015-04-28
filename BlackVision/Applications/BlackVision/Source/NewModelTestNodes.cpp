@@ -12,6 +12,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultCirclePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultSpherePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultEllipsePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTorusPlugin.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
@@ -1744,8 +1745,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 //#define SHOW_ELLIPSE
 //#define SHOW_ROUNDEDRECT
 //#define SHOW_TRIANGLE
-#define SHOW_TORUS
-//#define SHOW_SPRING
+//#define SHOW_TORUS
+#define SHOW_SPRING
 //#define SHOW_GEOSPHERE
 
 	  //Timeline stuff
@@ -1824,7 +1825,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, rotation_axis, 0.f );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, rotation_axis, 700.f );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, rotation_axis, -500.f );
 	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.f, rotation_axis2, 50.f );
 	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -50.0f ) );
 
@@ -1899,22 +1900,23 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #endif
 #ifdef SHOW_TORUS
 	auto plugin = root->GetPlugin( "torus" );
-	model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 0.7f );
+	model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 0.4f );
 	model::SetParameter( plugin->GetParameter( "radius2" ), 0.0f, 0.1f );
 	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 0.0f );
+	model::SetParameter( plugin->GetParameter( "open angle" ), 10.0f, 360.0f );
 	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 15 );
 
-	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultTorus::Plugin::OpenAngleMode::SYMMETRIC );
+	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultTorus::Plugin::OpenAngleMode::SYMMETRIC );
 	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultTorus::Plugin::OpenAngleMode::CCW );
 	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultTorus::Plugin::OpenAngleMode::CW );
 #endif
 #ifdef SHOW_SPRING
 	auto plugin = root->GetPlugin( "spring" );
-	model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 1.5f );
-	model::SetParameter( plugin->GetParameter( "radius2" ), 0.0f, 0.5f );
+	model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 0.5f );
+	model::SetParameter( plugin->GetParameter( "radius2" ), 0.0f, 0.1f );
 	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 15 );
-	model::SetParameter( plugin->GetParameter( "delta" ), 0.0f, 15 );
-	model::SetParameter( plugin->GetParameter( "turns" ), 0.0f, 4 );
+	model::SetParameter( plugin->GetParameter( "delta" ), 0.0f, 1.0f );
+	model::SetParameter( plugin->GetParameter( "turns" ), 0.0f, 6 );
 #endif
 
 

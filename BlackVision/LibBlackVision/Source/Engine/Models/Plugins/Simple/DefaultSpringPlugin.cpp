@@ -94,6 +94,7 @@ void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2A
     float r = m_radius->GetValue();
     float r2 = m_radiusCrossSection->GetValue();
     int turns = m_turns->GetValue();
+	float delta = m_delta->GetValue();
 
     for( int i = 0; i < t; i++ )
         for( int j = 0; j <= t; j++ )
@@ -102,12 +103,12 @@ void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2A
 
             double h = double(i) / t;
             double turnsAngle = h * turns * PI;
-            verts->AddAttribute( glm::vec3( cos( crossSectionAngle )*r2 + cos( turnsAngle )*r , h, sin( crossSectionAngle )*r2 + sin( turnsAngle )*r ) );
+            verts->AddAttribute( glm::vec3( cos( turnsAngle )*( cos( crossSectionAngle )*r2 + r ), h * delta + r2 * sin( crossSectionAngle ), sin( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) ) );
             uvs->AddAttribute( glm::vec2( double(j) / t, h ) );
 
             h = double(i+1) / t;
             turnsAngle = h * turns * PI;
-            verts->AddAttribute( glm::vec3( cos( crossSectionAngle )*r2 + cos( turnsAngle )*r,  h, sin( crossSectionAngle )*r2 + sin( turnsAngle )*r ) );
+            verts->AddAttribute( glm::vec3( cos( turnsAngle )*( cos( crossSectionAngle )*r2 + r ),  h * delta + r2 * sin( crossSectionAngle ), sin( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) ) );
             uvs->AddAttribute( glm::vec2( double(j) / t, h ) );
         }
 }
