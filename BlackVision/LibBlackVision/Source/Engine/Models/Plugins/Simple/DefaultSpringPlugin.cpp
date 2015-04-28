@@ -60,10 +60,17 @@ bool                                Plugin::NeedsTopologyUpdate()
 class Generator : public IGeometryAndUVsGenerator
 {
     IParamValModelPtr model;
+
+	int tesselation;
+    float r;
+    float r2;
+    int turns;
+	float delta;
 public:
     Generator( IParamValModelPtr m ) : model( m ) { }
 
     void GenerateGeometryAndUVs( Float3AttributeChannelPtr, Float2AttributeChannelPtr );
+	void generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outer_loop  );
 };
 
 std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
@@ -90,27 +97,49 @@ void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2A
     m_radiusCrossSection = QueryTypedValue< ValueFloatPtr >( model->GetValue( PN::RADIUSCROSSSECTION ) );
     m_delta = QueryTypedValue< ValueFloatPtr >( model->GetValue( PN::DELTA ) );
 
-    int t = m_tesselation->GetValue();
-    float r = m_radius->GetValue();
-    float r2 = m_radiusCrossSection->GetValue();
-    int turns = m_turns->GetValue();
-	float delta = m_delta->GetValue();
+    tesselation = m_tesselation->GetValue();
+    r = m_radius->GetValue();
+    r2 = m_radiusCrossSection->GetValue();
+    turns = m_turns->GetValue();
+	delta = m_delta->GetValue();
 
-    for( int i = 0; i < t; i++ )
-        for( int j = 0; j <= t; j++ )
+	generateClosure( verts, uvs, 0 );
+
+    for( int i = 0; i < tesselation; i++ )
+        for( int j = 0; j <= tesselation; j++ )
         {
-            double crossSectionAngle = j *2*PI / t;
+            double crossSectionAngle = j *2*PI / tesselation;
 
-            double h = double(i) / t;
+            double h = double(i) / tesselation;
             double turnsAngle = h * turns * PI;
             verts->AddAttribute( glm::vec3( cos( turnsAngle )*( cos( crossSectionAngle )*r2 + r ), h * delta + r2 * sin( crossSectionAngle ), sin( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) ) );
-            uvs->AddAttribute( glm::vec2( double(j) / t, h ) );
+            uvs->AddAttribute( glm::vec2( double(j) / tesselation, h ) );
 
-            h = double(i+1) / t;
+            h = double(i+1) / tesselation;
             turnsAngle = h * turns * PI;
             verts->AddAttribute( glm::vec3( cos( turnsAngle )*( cos( crossSectionAngle )*r2 + r ),  h * delta + r2 * sin( crossSectionAngle ), sin( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) ) );
-            uvs->AddAttribute( glm::vec2( double(j) / t, h ) );
+            uvs->AddAttribute( glm::vec2( double(j) / tesselation, h ) );
         }
+
+	generateClosure( verts, uvs, tesselation );
+}
+
+void Generator::generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outer_loop )
+{
+	
+    double h = double( outer_loop ) / tesselation;
+    double turnsAngle = h * turns * PI;
+
+	for( int j = 0; j <= tesselation; j++ )
+    {
+        double crossSectionAngle = j *2*PI / tesselation;
+
+		verts->AddAttribute( glm::vec3( cos( turnsAngle )*( cos( crossSectionAngle )*r2 + r ), h * delta + r2 * sin( crossSectionAngle ), sin( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) ) );
+		uvs->AddAttribute( glm::vec2( double(j) / tesselation, h ) );
+
+		verts->AddAttribute( glm::vec3( cos( turnsAngle ) * r, h * delta, sin( turnsAngle ) * r ) );
+		uvs->AddAttribute( glm::vec2( double(j) / tesselation, h ) );
+	}
 }
 
 } } }
