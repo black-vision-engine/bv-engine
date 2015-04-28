@@ -471,7 +471,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 		
 	atlas->m_textureAsset = atlasTextureRes;
 
-	image::SaveBMPImage( "0level.bmp", atlas->GetWritableData(), altlasWidth, altlasHeight, 32 );
+	//image::SaveBMPImage( "0level.bmp", atlas->GetWritableData(), altlasWidth, altlasHeight, 32 );
 
 	atlas->m_kerningMap = BuildKerning( m_face, wcharsSet );
 

@@ -42,7 +42,7 @@ Image32		GenerateNextLevelMipmap( const Image32 & in, bv::image::FilterType ft )
 
 	auto data = Resize( in.data, in.width, in.height, newWidth, newHeight, ft );
 
-	bv::image::SaveBMPImage( std::to_string( newWidth ) + std::to_string( newHeight ) + ".bmp", data, newWidth, newHeight, 32 );
+	//bv::image::SaveBMPImage( std::to_string( newWidth ) + std::to_string( newHeight ) + ".bmp", data, newWidth, newHeight, 32 );
 
 	Image32 ret = { data, newWidth, newHeight };
 

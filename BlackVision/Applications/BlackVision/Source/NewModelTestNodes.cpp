@@ -1315,8 +1315,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
 	//SetParameterTranslation( param, 0, 10.0f, glm::vec3( 0.005f, 0.f, 0.f ) );
 
-	SetParameterScale ( param, 0, 0.0f, glm::vec3( 1.f, 1.f, 1.f ) );
-	SetParameterScale ( param, 0, 30.0f, glm::vec3( 0.02f, 0.02f, 1.f ) );
+	SetParameterScale ( param, 0, 30.0f, glm::vec3( 12.f, 12.f, 1.f ) );
+	SetParameterScale ( param, 0, 15.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+	//SetParameterScale ( param, 0, 30.0f, glm::vec3( 1.5f, 1.5f, 1.f ) );
+	SetParameterScale ( param, 0, 0.0f, glm::vec3( 0.02f, 0.02f, 1.f ) );
 
 	node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( timeEvaluator );
 	node->GetPlugin( "text" )->GetParameter( "outlineColor" )->SetTimeEvaluator( timeEvaluator );
@@ -1331,7 +1333,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
 
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
 
-    SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Left ) );
+	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 0.0 ), 0.0f );
 
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/courbi.ttf" );
@@ -1344,6 +1346,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAAAA\nBBBBCCCC\nDDDDDDDDD" );
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AV::11A-AAAA\nBBBBCCCC\nDDD333DD88\nAAAAAAAA\nB3BBCCCC\nDDDD888DDD" );
 //    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAABBBBCCCCDDDD" );
+	//model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"AV::11A-AAAABBBBCCCCDDD333DD88AAAAAAAAB3BBCCCCDDDD888DDD" );
 	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"12345" );
 
     if( useAlphaMask )
