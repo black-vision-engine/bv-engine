@@ -22,15 +22,20 @@ private:
 
 private:
 
-    TNodesMapping	m_nodesMapping;
+    TNodesMapping	        m_nodesMapping;
 
-    BVScene *       m_pScene;
+    BVScene *               m_pScene;
+
+    model::BasicNodePtr     m_detachedModelNode;
+    SceneNode *             m_detachedSceneNode;
 
 private:
 
                             BVSceneEditor       ( BVScene * scene );
 
 public:
+
+    void                    BuildScene          ();
 
     void                    SetRootNode         ( model::IModelNodePtr rootNode );
     bool                    DeleteRootNode      ();
@@ -44,8 +49,12 @@ public:
     void                    AttachChildNode     ( model::IModelNodePtr parent, model::IModelNodePtr nodeToAttach );
     model::IModelNodePtr    DetachChildNode     ( model::IModelNodePtr parent, const std::string & nodeToDetach );
 
+    model::IModelNodePtr    GetDetachedNode     ();
+    void                    DeleteDetachedNode  ();
 
 private:
+
+    SceneNode *             GetEngineNode       ( model::BasicNodePtr node );
 
     void                    UnregisterUpdaters  ( model::BasicNodePtr node );
     void                    RemoveNodeMappings  ( model::BasicNodePtr node );
