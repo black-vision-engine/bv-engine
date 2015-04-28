@@ -136,7 +136,7 @@ std::string             DefaultTextPluginDesc::PixelShaderSource        ()
 //
 std::string             DefaultTextPluginDesc::TextureName              ()
 {
-    return "Tex0";
+    return "AtlasTex0";
 }
 
 // *******************************
@@ -270,7 +270,7 @@ void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, UInt32 f
 
 	if( textureResource->HasMipMaps() )
 	{
-		tfm = TextureFilteringMode::TFM_POINT_MIPMAP_POINT;
+		tfm = TextureFilteringMode::TFM_LINEAR_MIPMAP_LINEAR;
 	}
 
 	LoadTexture(	txData   

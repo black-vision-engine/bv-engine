@@ -449,18 +449,6 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 
 	MipMapAssetConstPtr mipmaps = nullptr;
 
-
-	auto d = atlasMC->GetWritable();
-	for( SizeType i = 0; i < atlasMC->Size();  )
-	{
-		memset( &d[ i ], 0xff, 4 );
-		//d[ i ] = 0;
-		//d[ i + 1 ] = 0;
-		//memset( &d[ i + 2 ], 0xff, 2 );
-		//d[ i + 3 ] = 0;
-		i += 4;
-	}
-
 	if( generateMipMaps )
 	{
 		tools::Image32 img32 = { atlasMC, altlasWidth, altlasHeight };
