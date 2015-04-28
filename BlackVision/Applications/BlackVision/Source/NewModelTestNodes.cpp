@@ -1313,10 +1313,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     auto param = plugin->GetParameter( "simple_transform" );
 
     SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
-	SetParameterTranslation( param, 0, 10.0f, glm::vec3( 0.005f, 0.f, 0.f ) );
+	//SetParameterTranslation( param, 0, 10.0f, glm::vec3( 0.005f, 0.f, 0.f ) );
 
 	SetParameterScale ( param, 0, 0.0f, glm::vec3( 1.f, 1.f, 1.f ) );
-	//SetParameterScale ( param, 0, 30.0f, glm::vec3( 0.02f, 0.02f, 1.f ) );
+	SetParameterScale ( param, 0, 30.0f, glm::vec3( 0.02f, 0.02f, 1.f ) );
 
 	node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( timeEvaluator );
 	node->GetPlugin( "text" )->GetParameter( "outlineColor" )->SetTimeEvaluator( timeEvaluator );
