@@ -35,19 +35,17 @@ private:
 
 public:
 
-    void                    BuildScene          ();
-
     void                    SetRootNode         ( model::IModelNodePtr rootNode );
     bool                    DeleteRootNode      ();
 
-    void                    AttachRootNode      ( model::IModelNodePtr rootNode );
-    model::IModelNodePtr    DetachRootNode      ();
+    bool                    AttachRootNode      ();
+    bool                    DetachRootNode      ();
 
     void                    AddChildNode        ( model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
     bool                    DeleteChildNode     ( model::IModelNodePtr parentNode, const std::string & childNodeName );
 
-    void                    AttachChildNode     ( model::IModelNodePtr parent, model::IModelNodePtr nodeToAttach );
-    model::IModelNodePtr    DetachChildNode     ( model::IModelNodePtr parent, const std::string & nodeToDetach );
+    bool                    AttachChildNode     ( model::IModelNodePtr parent );
+    bool                    DetachChildNode     ( model::IModelNodePtr parent, const std::string & nodeToDetach );
 
     model::IModelNodePtr    GetDetachedNode     ();
     void                    DeleteDetachedNode  ();
