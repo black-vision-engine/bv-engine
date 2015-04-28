@@ -109,6 +109,8 @@ namespace ConeGenerator
 		weight_center = wc;
     }
 
+
+
     class LateralSurface : public IGeometryAndUVsGenerator
     {
         float height, radius;
@@ -120,45 +122,54 @@ namespace ConeGenerator
         virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
 
-		//float computeAngleClamped( float angle, float stripe_num )
-		//{
-		//	double angle2 = ( stripe_num + 1 ) * 2 * PI / tesselation;
+		double computeAngle2Clamped( double angle, float stripe_num )
+		{
+			double ret_value = angle * ( stripe_num + 1 );
+			if( open_angle > 0.0 )
+			{
+				double max_angle = TWOPI - TO_RADIANS( open_angle );
+				if( ret_value > max_angle )
+					return max_angle;
+			}
 
-
-		//	float ret_value = angle * ( stripe_num + 1 );
-		//	if( open_angle > 0.0 )
-		//	{
-		//		float max_angle = float( TWOPI - TO_RADIANS( open_angle ) );
-		//		if( ret_value > max_angle )
-		//			return max_angle;
-		//	}
-
-		//	return ret_value;
-		//}
+			return ret_value;
+		}
 
 		/**Generates verticies of one circuit of the beveled edges.
 		R1 and h1 describe position of top verticies of the strip,
-		R2 and h2 describe position of bottom verticies of the strip.*/
-		void generateCircuit( float R1, float R2, float h1, float h2, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs  )
+		R2 and h2 describe position of bottom verticies of the strip.
+		
+		@param[inout] direction Because of OpenAngle, we can't generate verticies in continous circles. Thats why we change direction every circle.
+		Function gets direction that will use to draw and in the same param returns direction for the next function.
+		*/
+		void generateCircuit( float R1, float R2, float h1, float h2, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, bool& direction )
 		{
 			bool test = false;
 			if( test )
 				return;
+			direction;
 
+			int max_loop;
+			if( open_angle != 0.0 )
+				max_loop = static_cast<int>( ceil( float( ( TWOPI - TO_RADIANS( open_angle ) ) / ( TWOPI / tesselation ) ) ) );
+			else
+				max_loop = tesselation;
 
+			int i = max_loop - 1;
+			if( direction )
+				i = 0;
 
-			int i = 0;
-			for( ; i < tesselation; i++ )
+			for( int j = 0; j < max_loop; j++ )
             {
-				double angle1 = i     * 2 * PI / tesselation;
-				double angle2 = (i+1) * 2 * PI / tesselation;
-				angle1 += open_angle;
-				angle2 += open_angle;
+				//double angle1 = i * TWOPI / tesselation;
+				double angle1 = computeAngle2Clamped( TWOPI / tesselation, (float)i );
+				angle1 += angle_offset;
+				//angle2 += angle_offset;
 
 				double cos_angle1 = cos( angle1 );
 				double sin_angle1 = sin( angle1 );
-				double cos_angle2 = cos( angle2 );
-				double sin_angle2 = sin( angle2 );
+				//double cos_angle2 = cos( angle2 );
+				//double sin_angle2 = sin( angle2 );
 
 				verts->AddAttribute( glm::vec3( R1 * cos_angle1, h1, R1 * sin_angle1 ) + center_translate );
 				//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
@@ -166,14 +177,19 @@ namespace ConeGenerator
 				verts->AddAttribute( glm::vec3( R2 * cos_angle1, h2, R2 * sin_angle1 ) + center_translate );
 				//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
 
-				verts->AddAttribute( glm::vec3( R1 * cos_angle2, h1, R1 * sin_angle2 ) + center_translate );
-				//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
+				//verts->AddAttribute( glm::vec3( R1 * cos_angle2, h1, R1 * sin_angle2 ) + center_translate );
+				////uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
 
-				verts->AddAttribute( glm::vec3( R2 * cos_angle2, h2, R2 * sin_angle2 ) + center_translate );
-				//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
+				//verts->AddAttribute( glm::vec3( R2 * cos_angle2, h2, R2 * sin_angle2 ) + center_translate );
+				////uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
+
+				if( direction )
+					i++;
+				else
+					i--;
 			}
 
-
+			direction = !direction;
 		}
 
 		/**Computes radius and height of circle, relative to center of the cone, which forms beveled area.
@@ -195,7 +211,7 @@ namespace ConeGenerator
 		@param[out] verts Object, that will hold produced verticies.
 		@param[out] uvs Object, that will hold produced UV coordinates.
 		@param[in] inverse_angle Set true if you want to draw inner beveled edge.*/
-		void generateBeveledEdge( glm::vec2 circle_center, double angle_between_edges, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, bool inverse_angle = false )
+		void generateBeveledEdge( glm::vec2 circle_center, double angle_between_edges, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, bool& direction, bool inverse_angle = false )
 		{
 			float circle_radius = circle_center.y;						// Its true only for bottom edges of the cone.
 			double sum_of_angles = PI - angle_between_edges;			// Circle is tangent to edges, so we have to angles 90 degrees + alfa + sum_of_angles that we are looking for.
@@ -223,7 +239,7 @@ namespace ConeGenerator
 				computeCircleRadiusHeight( radius_height1, circle_center, circle_radius, angle1, inverse_angle );
 				computeCircleRadiusHeight( radius_height2, circle_center, circle_radius, angle2, inverse_angle );
 
-				generateCircuit( radius_height1.x, radius_height2.x, radius_height1.y, radius_height2.y, verts, uvs );
+				generateCircuit( radius_height1.x, radius_height2.x, radius_height1.y, radius_height2.y, verts, uvs, direction );
 
 			}
 
@@ -254,11 +270,11 @@ namespace ConeGenerator
 		void computeAngleOffset()
 		{
 			if( open_angle_mode == DefaultConePlugin::OpenAngleMode::CCW )
-				open_angle = 0.0;			//@todo
+				angle_offset = 0.0;			//@todo
 			else if( open_angle_mode == DefaultConePlugin::OpenAngleMode::CW )
-				open_angle = 0.0;			//@todo
+				angle_offset = 0.0;			//@todo
 			else if( open_angle_mode == DefaultConePlugin::OpenAngleMode::SYMMETRIC )
-				open_angle = 0.0;			//@todo
+				angle_offset = 0.0;			//@todo
 			else
 				assert( false );
 		}
@@ -267,6 +283,7 @@ namespace ConeGenerator
         {
 			computeWeightCenter();
 			computeAngleOffset();
+			bool gen_direction = true;
 
 			// Prepare data for bevel. ( We need this to generate first latteral surface too, thats why it happens in this place.
 			double angle_between_edges = atan2( height, outer_radius );
@@ -280,14 +297,14 @@ namespace ConeGenerator
 			float correct_y = correction.y;
 
 			// Add Lateral surface
-			generateCircuit( 0.0f, correct_radius, height, correct_y, verts, uvs );
+			generateCircuit( 0.0f, correct_radius, height, correct_y, verts, uvs, gen_direction );
 
 			// Add bevel to cone (outer bevel)
 			if( bevel != 0.0 )
-				generateBeveledEdge( circleCenter, angle_between_edges, verts, uvs );
+				generateBeveledEdge( circleCenter, angle_between_edges, verts, uvs, gen_direction );
 
 			// Base surface
-			generateCircuit( outer_radius - bevel, inner_radius + bevel, 0.0f, 0.0f, verts, uvs );
+			generateCircuit( outer_radius - bevel, inner_radius + bevel, 0.0f, 0.0f, verts, uvs, gen_direction );
 
 			// Add bevel to cone (inner bevel)
 			angle_between_edges = atan2( inner_height, inner_radius );
@@ -297,13 +314,13 @@ namespace ConeGenerator
 			circleCenter.y = float( bevel * tan( angle_between_edges / 2 ) );
 
 			if( bevel != 0.0 )
-				generateBeveledEdge( circleCenter, angle_between_edges, verts, uvs, true );
+				generateBeveledEdge( circleCenter, angle_between_edges, verts, uvs, gen_direction, true );
 
 			correction = computeCorrection( circleCenter, angle_between_edges, true );
 			correct_radius = correction.x;
 			correct_y = correction.y;
 
-			generateCircuit( correct_radius, 0.0f, correct_y, inner_height, verts, uvs );
+			generateCircuit( correct_radius, 0.0f, correct_y, inner_height, verts, uvs, gen_direction );
 
             for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
             {
