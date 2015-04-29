@@ -154,6 +154,9 @@ bool                    BVSceneEditor::AttachChildNode     ( model::IModelNodePt
         return true;
     }
 
+    m_detachedModelNode = nullptr;
+    m_detachedSceneNode = nullptr;
+
     return false;
 }
 
@@ -170,19 +173,10 @@ bool                    BVSceneEditor::DetachChildNode     ( model::IModelNodePt
 
     if( modelParent )
     {
-        auto modelChild = std::static_pointer_cast< model::BasicNode >( modelParent->GetChild( nodeToDetach ) );
+        auto detachedPair = DetachNodes( modelParent, nodeToDetach );
 
-        // FIXME: implement
-        //auto engineParent = GetEngineNode( modelParent );
-        //assert( engineParent != nullptr );
-
-        //auto engineChild = GetEngineNode( modelChild );
-        //assert( engineChild != nullptr );
-
-        //auto parentPair = TNodesPair( modelParent, engineParent );
-        //auto childPair  = TNodesPair( m_detachedModelNode, m_detachedSceneNode );
-
-        //DetachNodes( parentPair, childPair );
+        m_detachedModelNode = detachedPair.first;
+        m_detachedSceneNode = detachedPair.second;
 
         return true;
     }

@@ -243,16 +243,58 @@ void BVAppLogic::OnKey           ( unsigned char c )
     else if( c == '+' )
     {
         auto root = m_bvScene->GetModelSceneRoot();
-        auto child = root->GetChild( "child0" );
+        
+        if( root )
+        {
+            auto child = root->GetChild( "child0" );
 
-        auto n = child->GetNumChildren();
-        auto nodeName = "child0" + std::to_string(n);
+            if( child )
+            {
+                auto n = child->GetNumChildren();
+                auto nodeName = "child0" + std::to_string(n);
 
-        auto newNode = CreateTestModelNodeInSomeSpecificScope( nodeName );
+                auto newNode = CreateTestModelNodeInSomeSpecificScope( nodeName );
 
-        child->AddChildNode( newNode );
+                m_bvScene->GetSceneEditor()->AddChildNode( child, newNode );            
+            }
+            else
+            {
+                auto newNode = CreateTestModelNodeInSomeSpecificScope( "child0" );
+                
+                m_bvScene->GetSceneEditor()->AddChildNode( root, newNode );            
+            }
+        }
+        else
+        {
+            auto newNode = CreateTestModelNodeInSomeSpecificScope( "root node" );
+        
+            m_bvScene->GetSceneEditor()->SetRootNode( newNode );
+        }
+
+        BVGL::PrintCompleteSummary( "AFTER ADD NODE" );
     }
-    return;
+    else if( c == '1' )
+    {
+        m_bvScene->GetSceneEditor()->DetachRootNode();
+        BVGL::PrintCompleteSummary( "AFTER DETACH ROOT NODE" );
+    }
+    else if( c == '2' )
+    {
+        m_bvScene->GetSceneEditor()->AttachRootNode();
+        BVGL::PrintCompleteSummary( "AFTER ATTACH ROOT NODE" );
+    }
+
+    else if( c == '3' )
+    {
+        auto root = m_bvScene->GetModelSceneRoot();
+        
+        if( root )
+        {
+            m_bvScene->GetSceneEditor()->AttachChildNode( root );
+
+            BVGL::PrintCompleteSummary( "AFTER ATTACH NODE TO ROOT" );
+        }
+    }
 /*
     // FIXME: the code below is must be used with an animation plugin
     unsigned char d = c - '0';

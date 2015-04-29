@@ -96,7 +96,7 @@ model::BasicNodePtr TexturedTestRandomRect( const std::string & name, const mode
 
     success &= model::SetParameterTranslation( transform, 0, 0.0f, glm::vec3( xt, yt, zt ) );
 
-    std::string txFileName = "rsrcy/simless_01.jpg";
+    std::string txFileName = simple_rnd( -1.f, 1.f ) > 0.f ? "rsrcy/simless_01.jpg" : "rsrcy/simless_00.jpg";
 
     success &= model::LoadTexture( node->GetPlugin( "texture" ), txFileName );
 
