@@ -140,6 +140,12 @@ protected:
         {
             AddSimpleParam< ValueType >( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
         }
+
+        template< typename ValueType >
+        inline void                             AddSimpleStatedParam      ( std::string name, const ValueType& defaultValue ) const
+        {
+            AddSimpleParam< ValueType >( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, true, true );
+        }
     };
     
 };
