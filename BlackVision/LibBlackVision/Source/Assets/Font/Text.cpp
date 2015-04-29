@@ -23,6 +23,8 @@
 #include "LibImage.h"
 #include "Assets/Assets.h"
 #include "Assets/Font/Engines/FreeTypeEngine.h"
+#include "Tools/MipMapBuilder/Source/MipMapBuilder.h"
+#include "Assets/Texture/TextureCache.h"
 
 
 namespace bv { 
@@ -93,6 +95,36 @@ void				Text::AddToCache()
     fac->AddEntry( *entry );
 }
 
+
+// *********************************
+//
+namespace
+{
+
+// *********************************
+//
+UInt32 GetMMLevelsNum( UInt32 fontSize )
+{
+	return ( UInt32 )std::floor( std::log( fontSize ) / std::log( 2 ) );
+}
+
+// *********************************
+//
+UInt32 CalculatePadding( UInt32 fontSize, UInt32 blurSize, bool withMipMaps )
+{
+	UInt32 padding = blurSize + 1;
+
+	if( withMipMaps )
+	{
+		auto mmLevelsNum = GetMMLevelsNum( fontSize );
+		padding += 2 * mmLevelsNum;
+	}
+
+	return padding;
+}
+
+} // anonymous
+
 // *********************************
 //
 void Text::BuildAtlas        ()
@@ -105,19 +137,15 @@ void Text::BuildAtlas        ()
 		return;
 	}
 
-	auto  padding = this->m_blurSize + 1; // Update padding in case of bluring the atlas.
+	auto  padding = CalculatePadding( m_fontSize, m_blurSize, useMipMaps ); // Update padding in case of bluring the atlas.
 
 	m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSet, useMipMaps );
 
-	assert( m_blurSize == 0 ); //TODO: Implement
-  //  if ( m_blurSize > 0 )
-  //  {
-		//auto oldData = std::const_pointer_cast< MemoryChunk >( m_atlas->m_textureAsset->GetOriginal()->GetData() );
-		//auto bluredData = TextureHelper::Blur( oldData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel(), (unsigned int) m_blurSize );
-		//auto atlasFilePath = FontAtlasCache::GenerateTextAtlasCacheFileName(  )
-		//auto newSingleTextureRes = SingleTextureAsset::Create( bluredData,  );
-		//m_atlas->m_textureAsset = TextureAsset::Create( (TextureHelper::Blur( oldData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel(), (unsigned int) m_blurSize ) );
-  //  }
+	BlurAtlas();
+
+	GenerateMipMaps();
+
+	AddTexturesKey();
 
 	AddToCache();
 
@@ -129,6 +157,79 @@ void Text::BuildAtlas        ()
 #ifdef MAKE_FREETYPE_TESTING_TEXT
     GenrateTestFreeTypeText( L"AV::AVAVA", face );
 #endif // MAKE_FREETYPE_TESTING_TEXT
+}
+
+
+// *********************************
+//
+void Text::GenerateMipMaps()
+{
+	UInt32 levelsNum = GetMMLevelsNum( m_fontSize );
+
+	if( levelsNum > 0 )
+	{
+		tools::Image32 img32 = { m_atlas->m_textureAsset->GetOriginal()->GetData(), m_atlas->GetWidth(), m_atlas->GetHeight() };
+		auto mipmap = tools::GenerateMipmaps( img32, levelsNum, image::FilterType::FT_BILINEAR ); // FIXME: filter type is hardcoded.
+
+		std::vector< SingleTextureAssetConstPtr > mipMapsRes;
+		for( SizeType i = 0; i < mipmap.size(); ++i )
+		{		
+			mipMapsRes.push_back( SingleTextureAsset::Create( mipmap[ i ].data, "", mipmap[ i ].width, mipmap[ i ].height, TextureFormat::F_A8R8G8B8, true ) );
+		}
+
+		auto mipmaps = MipMapAsset::Create( mipMapsRes );
+
+		std::const_pointer_cast< TextAtlas >( m_atlas )->m_textureAsset = TextureAsset::Create( m_atlas->m_textureAsset->GetOriginal(), mipmaps );
+	}
+}
+
+// *********************************
+//
+void Text::AddTexturesKey()
+{
+	auto oldTA = m_atlas->m_textureAsset;
+	auto atlasW = m_atlas->GetWidth();
+	auto atlasH = m_atlas->GetHeight();
+
+	UInt32 levelsNum = GetMMLevelsNum( m_fontSize );
+
+	auto atlasAssetDesc = TextAtlas::GenerateTextAtlasAssetDescriptor( m_fontFile, atlasW, atlasH, m_fontSize, m_blurSize, MipMapFilterType::BILINEAR, levelsNum );
+
+	auto origKey = TextureCache::GenKeyForSingleTexture( atlasAssetDesc->GetOrigTextureDesc() );
+
+	auto newOrigTexture = SingleTextureAsset::Create( oldTA->GetOriginal()->GetData(), origKey, atlasW, atlasH, TextureFormat::F_A8R8G8B8, true );
+
+	std::vector< SingleTextureAssetConstPtr > mmsSTAs;
+
+	for( SizeType i = 0; i < atlasAssetDesc->GetMipMapsDesc()->GetLevelsNum(); ++i )
+	{
+		auto key			= TextureCache::GenKeyForSingleTexture( atlasAssetDesc->GetMipMapsDesc()->GetLevelDesc( i ) );
+
+		auto mm = oldTA->GetMipMaps()->GetLevel( i );
+		auto w = mm->GetWidth();
+		auto h = mm->GetHeight();
+		auto f = mm->GetFormat();
+
+		mmsSTAs.push_back( SingleTextureAsset::Create( mm->GetData(), origKey, w, h, f, true ) );
+	}
+	
+	std::const_pointer_cast< TextAtlas >( m_atlas )->m_textureAsset = TextureAsset::Create( newOrigTexture, MipMapAsset::Create( mmsSTAs ) );
+}
+
+// *********************************
+//
+void Text::BlurAtlas()
+{
+	if( m_blurSize > 0 )
+	{
+		auto atlasW = m_atlas->GetWidth();
+		auto atlasH = m_atlas->GetHeight();
+		auto oldData = std::const_pointer_cast< MemoryChunk >( m_atlas->m_textureAsset->GetOriginal()->GetData() );
+		auto bluredData = image::BlurImage( oldData, m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel(), m_blurSize );
+
+		auto newSingleTextureRes = SingleTextureAsset::Create( bluredData, "", atlasW, atlasH, TextureFormat::F_A8R8G8B8, true );
+		std::const_pointer_cast< TextAtlas >( m_atlas )->m_textureAsset = TextureAsset::Create( newSingleTextureRes, nullptr );
+	}
 }
 
 } // bv

@@ -204,6 +204,7 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & f
 																				ret->m_atlasWidth,
 																				ret->m_atlasHeight,
 																				ret->m_fontSize,
+																				ret->m_blurSize,
 																				MipMapFilterType::BILINEAR,
 																				ret->m_mmLevelsNum );
 
@@ -275,6 +276,7 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
 																			data.m_textAtlas->GetWidth(),
 																			data.m_textAtlas->GetHeight(),
 																			data.m_fontSize,
+																			data.m_blurSize,
 																			MipMapFilterType::BILINEAR,
 																			mmLevelsNum );
 

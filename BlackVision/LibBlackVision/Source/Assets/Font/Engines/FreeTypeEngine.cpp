@@ -6,7 +6,6 @@
 #include "Assets/Texture/TextureCache.h"
 
 #include "LibImage.h"
-#include "Tools/MipMapBuilder/Source/MipMapBuilder.h"
 
 #include "Mathematics/Rect.h"
 #include "tools/Utils.h"
@@ -305,24 +304,7 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 
 // *********************************
 //
-namespace
-{
-
-// *********************************
-//
-UInt32 CalculateLevelsNum( UInt32 widht, UInt32 height )
-{
-	auto wLog2 = std::log( widht ) / std::log( 2 );
-	auto hLog2 = std::log( height ) / std::log( 2 );
-
-	return ( UInt32 )std::max( wLog2, hLog2 );
-}
-
-} // anonymous
-
-// *********************************
-//
-TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth, const std::wstring & wcharsSet, bool generateMipMaps )
+TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth, const std::wstring & wcharsSet, bool makeSizesPowerOf2 )
 {
 	SizeType							glyphsNum	= wcharsSet.size();
 	Int32								spadding	= (Int32)padding;
@@ -352,21 +334,14 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
     auto maxWidth  = m_maxWidth		+ spadding * 2;
     auto maxHeight = m_maxHeight	+ spadding * 2;
 
-	UInt32 levelsNum = 0;
+	auto altlasWidth	= maxWidth	* atlasSize;
+	auto altlasHeight	= maxHeight * atlasSize;
 
-	if( generateMipMaps )
+	if( makeSizesPowerOf2 ) 
 	{
-		levelsNum = CalculateLevelsNum( maxWidth, maxHeight );
-		padding += 2 * levelsNum;
-		spadding = (Int32)padding;
-
-		maxWidth  = m_maxWidth	+ spadding * 2;
-		maxHeight = m_maxHeight	+ spadding * 2;
+		altlasWidth	= RoundUpToPowerOfTwo( maxWidth	* atlasSize );
+		altlasHeight	= RoundUpToPowerOfTwo( maxHeight * atlasSize );
 	}
-
-
-    auto altlasWidth	= RoundUpToPowerOfTwo( maxWidth	* atlasSize );
-    auto altlasHeight	= RoundUpToPowerOfTwo( maxHeight * atlasSize );
 
 	auto atlas = TextAtlas::Create( altlasWidth, altlasHeight, 32, maxWidth, maxHeight );
 
@@ -444,30 +419,9 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 	}
 	
 	auto atlasMC = MemoryChunk::Create( atlasData, altlasWidth * altlasHeight * 4 );
-	
-	auto atlasAssetDesc = TextAtlas::GenerateTextAtlasAssetDescriptor( m_fontFilePath, altlasWidth, altlasHeight, m_fontSize, MipMapFilterType::BILINEAR, levelsNum );
 
-	MipMapAssetConstPtr mipmaps = nullptr;
-
-	if( generateMipMaps )
-	{
-		tools::Image32 img32 = { atlasMC, altlasWidth, altlasHeight };
-		auto mipmap = tools::GenerateMipmaps( img32, levelsNum, image::FilterType::FT_BILINEAR ); // FIXME: filter type is hardcoded.
-
-		std::vector< SingleTextureAssetConstPtr > mipMapsRes;
-		for( SizeType i = 0; i < mipmap.size(); ++i )
-		{
-			auto key = TextureCache::GenKeyForSingleTexture( atlasAssetDesc->GetMipMapsDesc()->GetLevelDesc( i ) );
-			mipMapsRes.push_back( SingleTextureAsset::Create( mipmap[ i ].data, key, mipmap[ i ].width, mipmap[ i ].height, TextureFormat::F_A8R8G8B8, true ) );
-		}
-
-		mipmaps = MipMapAsset::Create( mipMapsRes );
-	}
-
-	auto key = TextureCache::GenKeyForSingleTexture( atlasAssetDesc->GetOrigTextureDesc() );
-
-	auto singleTex = SingleTextureAsset::Create( atlasMC, key, altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8, true );
-	auto atlasTextureRes = TextureAsset::Create( singleTex, mipmaps );
+	auto singleTex = SingleTextureAsset::Create( atlasMC, "", altlasWidth, altlasHeight, TextureFormat::F_A8R8G8B8, true );
+	auto atlasTextureRes = TextureAsset::Create( singleTex, nullptr );
 		
 	atlas->m_textureAsset = atlasTextureRes;
 

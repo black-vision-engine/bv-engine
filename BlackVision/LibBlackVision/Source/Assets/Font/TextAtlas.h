@@ -68,8 +68,8 @@ public:
 												UInt32 width, 
 												UInt32 height, 
 												SizeType fontSize, 
-												MipMapFilterType 
-												mmFilterType, 
+												SizeType blurSize,
+												MipMapFilterType mmFilterType,
 												SizeType mmLevels );
 
     friend class Text;

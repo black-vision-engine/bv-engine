@@ -28,6 +28,9 @@ private:
 
     void                                BuildAtlas			();
 	void                                BuildAtlasOutlined	();
+	void								GenerateMipMaps		();
+	void								BlurAtlas			();
+	void								AddTexturesKey		();
     TextAtlasConstPtr                   LoadFromCache		( bool useMipMaps );
 	void								AddToCache			();
 
