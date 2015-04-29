@@ -3,6 +3,7 @@
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 namespace bv { namespace model {
 
@@ -26,17 +27,9 @@ IPluginPtr              DefaultColorPluginDesc::CreatePlugin                ( co
 //
 DefaultPluginParamValModelPtr   DefaultColorPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
-    DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
-    SimpleVec4EvaluatorPtr evaluator     = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
-
-    psModel->RegisterAll( evaluator );
-    model->SetPixelShaderChannelModel( psModel );
-
-    //Set default values
-    evaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
-
-    return model;
+    START_MODEL( timeEvaluator )
+        ADD_PS_EVAL_PARAM( "color", glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ) )
+    END_MODEL()
 }
 
 // *******************************

@@ -163,6 +163,20 @@ protected:
             AddSimpleParam< ValueType >( model, m_lastTimeEvaluator, name, defaultValue, true, true );
         }
 
+        template< typename ValueType >
+        inline void                             AddPsSimpleParam      ( std::string name, const ValueType& defaultValue, bool addValue = false, bool isState = false ) const
+        {
+            auto model = GetPsModel();
+            AddSimpleParam< ValueType >( model, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
+        }
+
+        template< typename ValueType >
+        inline void                             AddPsSimpleStatedParam      ( std::string name, const ValueType& defaultValue ) const
+        {
+            auto model = GetPsModel();
+            AddSimpleParam< ValueType >( model, m_lastTimeEvaluator, name, defaultValue, true, true );
+        }
+
 private:
         DefaultParamValModelPtr GetVacModel() const
         {
@@ -173,6 +187,17 @@ private:
             }
 
             return m_model->VertexAttributesChannelModelImpl();
+        }
+    
+        DefaultParamValModelPtr GetPsModel() const
+        {
+            if( !m_model->GetPixelShaderChannelModel() )
+            {
+                auto vacModel = std::make_shared< DefaultParamValModel >();
+                m_model->SetPixelShaderChannelModel( vacModel );
+            }
+
+            return m_model->PixelShaderChannelModelImpl();
         }
     };
     
