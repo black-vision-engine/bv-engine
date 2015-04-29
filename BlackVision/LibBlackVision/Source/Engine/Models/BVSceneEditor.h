@@ -19,6 +19,7 @@ class BVSceneEditor
 private:
 
     typedef std::hash_map< model::IModelNode *, SceneNode * >	TNodesMapping;
+    typedef std::pair< model::BasicNodePtr, SceneNode * >       TNodesPair;
 
 private:
 
@@ -38,11 +39,11 @@ public:
     void                    SetRootNode         ( model::IModelNodePtr rootNode );
     bool                    DeleteRootNode      ();
 
-    bool                    AttachRootNode      ();
-    bool                    DetachRootNode      ();
-
     void                    AddChildNode        ( model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
     bool                    DeleteChildNode     ( model::IModelNodePtr parentNode, const std::string & childNodeName );
+
+    void                    AttachRootNode      ();
+    bool                    DetachRootNode      ();
 
     bool                    AttachChildNode     ( model::IModelNodePtr parent );
     bool                    DetachChildNode     ( model::IModelNodePtr parent, const std::string & nodeToDetach );
@@ -50,7 +51,16 @@ public:
     model::IModelNodePtr    GetDetachedNode     ();
     void                    DeleteDetachedNode  ();
 
+    model::IModelNodePtr    GetRootNode         ();
+
 private:
+
+    void                    AttachRootNodes     ( TNodesPair & nodesPair );
+
+    TNodesPair              DetachRootNodes     ();
+    TNodesPair              DetachNodes         ( model::BasicNodePtr parentNode, const std::string & childNodeName );
+
+    void                    AttachNodes         ( TNodesPair & parentPair, TNodesPair & childPair );
 
     SceneNode *             GetEngineNode       ( model::BasicNodePtr node );
 
