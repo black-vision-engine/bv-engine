@@ -148,6 +148,32 @@ protected:
         {
             AddSimpleParam< ValueType >( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, true, true );
         }
+
+        template< typename ValueType >
+        inline void                             AddVacSimpleParam      ( std::string name, const ValueType& defaultValue, bool addValue = false, bool isState = false ) const
+        {
+            auto model = GetVacModel();
+            AddSimpleParam< ValueType >( model, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
+        }
+
+        template< typename ValueType >
+        inline void                             AddVacSimpleStatedParam      ( std::string name, const ValueType& defaultValue ) const
+        {
+            auto model = GetVacModel();
+            AddSimpleParam< ValueType >( model, m_lastTimeEvaluator, name, defaultValue, true, true );
+        }
+
+private:
+        DefaultParamValModelPtr GetVacModel() const
+        {
+            if( !m_model->GetVertexAttributesChannelModel() )
+            {
+                auto vacModel = std::make_shared< DefaultParamValModel >();
+                m_model->SetVertexAttributesChannelModel( vacModel );
+            }
+
+            return m_model->VertexAttributesChannelModelImpl();
+        }
     };
     
 };
