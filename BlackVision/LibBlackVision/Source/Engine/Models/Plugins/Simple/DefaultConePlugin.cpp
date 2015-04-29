@@ -124,7 +124,7 @@ namespace ConeGenerator
 
 		double computeAngle2Clamped( double angle, float stripe_num )
 		{
-			double ret_value = angle * ( stripe_num + 1 );
+			double ret_value = angle * stripe_num;
 			if( open_angle > 0.0 )
 			{
 				double max_angle = TWOPI - TO_RADIANS( open_angle );
@@ -135,6 +135,40 @@ namespace ConeGenerator
 			return ret_value;
 		}
 
+		//**This horible function adds two verticies on the end of the circuit, to avoid artefacts.*/
+		void genCircuitRepairEnding( float R1, float h1, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int i, bool direction )
+		{
+			// There's inversely, because in loop we have incremented it
+			if( direction )
+				i--;
+			else
+				i++;
+
+			double angle1 = computeAngle2Clamped( TWOPI / tesselation, (float)i );
+			angle1 += angle_offset;
+
+			double cos_angle1 = cos( angle1 );
+			double sin_angle1 = sin( angle1 );
+
+			verts->AddAttribute( glm::vec3( R1 * cos_angle1, h1, R1 * sin_angle1 ) + center_translate );
+			//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
+			verts->AddAttribute( glm::vec3( R1 * cos_angle1, h1, R1 * sin_angle1 ) + center_translate );
+			//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
+		}
+
+		/**This awfull function adds two additional points. This generates degenerated triangle to jump to the base surface. */
+		void repairBaseSurface( float R, float Y, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+		{
+			double angle1 = angle_offset;
+			double cos_angle1 = cos( angle1 );
+			double sin_angle1 = sin( angle1 );
+
+			verts->AddAttribute( glm::vec3( R * cos_angle1, Y, R * sin_angle1 ) + center_translate );
+			//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
+			verts->AddAttribute( glm::vec3( R * cos_angle1, Y, R * sin_angle1 ) + center_translate );
+			//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
+		}
+
 		/**Generates verticies of one circuit of the beveled edges.
 		R1 and h1 describe position of top verticies of the strip,
 		R2 and h2 describe position of bottom verticies of the strip.
@@ -142,13 +176,8 @@ namespace ConeGenerator
 		@param[inout] direction Because of OpenAngle, we can't generate verticies in continous circles. Thats why we change direction every circle.
 		Function gets direction that will use to draw and in the same param returns direction for the next function.
 		*/
-		void generateCircuit( float R1, float R2, float h1, float h2, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, bool& direction )
+		void generateCircuit( float R1, float R2, float h1, float h2, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, bool& direction)
 		{
-			bool test = false;
-			if( test )
-				return;
-			direction;
-
 			int max_loop;
 			if( open_angle != 0.0 )
 				max_loop = static_cast<int>( ceil( float( ( TWOPI - TO_RADIANS( open_angle ) ) / ( TWOPI / tesselation ) ) ) );
@@ -161,15 +190,11 @@ namespace ConeGenerator
 
 			for( int j = 0; j < max_loop; j++ )
             {
-				//double angle1 = i * TWOPI / tesselation;
 				double angle1 = computeAngle2Clamped( TWOPI / tesselation, (float)i );
 				angle1 += angle_offset;
-				//angle2 += angle_offset;
 
 				double cos_angle1 = cos( angle1 );
 				double sin_angle1 = sin( angle1 );
-				//double cos_angle2 = cos( angle2 );
-				//double sin_angle2 = sin( angle2 );
 
 				verts->AddAttribute( glm::vec3( R1 * cos_angle1, h1, R1 * sin_angle1 ) + center_translate );
 				//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
@@ -177,17 +202,14 @@ namespace ConeGenerator
 				verts->AddAttribute( glm::vec3( R2 * cos_angle1, h2, R2 * sin_angle1 ) + center_translate );
 				//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
 
-				//verts->AddAttribute( glm::vec3( R1 * cos_angle2, h1, R1 * sin_angle2 ) + center_translate );
-				////uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
-
-				//verts->AddAttribute( glm::vec3( R2 * cos_angle2, h2, R2 * sin_angle2 ) + center_translate );
-				////uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
 
 				if( direction )
 					i++;
 				else
 					i--;
 			}
+
+			genCircuitRepairEnding( R1, h1, verts, uvs, i, direction );		/// horrible, but there's no other way to do this
 
 			direction = !direction;
 		}
@@ -270,9 +292,9 @@ namespace ConeGenerator
 		void computeAngleOffset()
 		{
 			if( open_angle_mode == DefaultConePlugin::OpenAngleMode::CCW )
-				angle_offset = 0.0;			//@todo
+				angle_offset = 3*PI/4 - TO_RADIANS( open_angle );
 			else if( open_angle_mode == DefaultConePlugin::OpenAngleMode::CW )
-				angle_offset = 0.0;			//@todo
+				angle_offset = 0.0;
 			else if( open_angle_mode == DefaultConePlugin::OpenAngleMode::SYMMETRIC )
 				angle_offset = 0.0;			//@todo
 			else
@@ -296,15 +318,16 @@ namespace ConeGenerator
 			float correct_radius = correction.x;
 			float correct_y = correction.y;
 
-			// Add Lateral surface
-			generateCircuit( 0.0f, correct_radius, height, correct_y, verts, uvs, gen_direction );
+			// Add lateral surface
+			generateCircuit( correct_radius, 0.0f, correct_y, height, verts, uvs, gen_direction );
 
 			// Add bevel to cone (outer bevel)
 			if( bevel != 0.0 )
 				generateBeveledEdge( circleCenter, angle_between_edges, verts, uvs, gen_direction );
 
 			// Base surface
-			generateCircuit( outer_radius - bevel, inner_radius + bevel, 0.0f, 0.0f, verts, uvs, gen_direction );
+			repairBaseSurface( inner_radius + bevel, 0.0, verts, uvs );
+			generateCircuit( inner_radius + bevel, outer_radius - bevel, 0.0f, 0.0f, verts, uvs, gen_direction );
 
 			// Add bevel to cone (inner bevel)
 			angle_between_edges = atan2( inner_height, inner_radius );
