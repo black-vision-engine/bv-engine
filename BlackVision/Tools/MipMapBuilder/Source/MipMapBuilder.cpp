@@ -1,6 +1,6 @@
 #include "MipMapBuilder.h"
 #include "LibImage.h"
-
+#include "tools/Utils.h"
 #include <cassert>
 
 namespace tools
@@ -11,37 +11,15 @@ namespace
 
 // ******************************
 //
-bool		IsPowerOfTwo( bv::UInt32 x )
-{
-	return (x & (x - 1)) == 0;
-}
-
-// ******************************
-//
-bv::UInt32 RoundUpToPowerOfTwo( bv::UInt32 v )
-{
-	v--;
-	v |= v >> 1;
-	v |= v >> 2;
-	v |= v >> 4;
-	v |= v >> 8;
-	v |= v >> 16;
-	v++;
-
-	return v;
-}
-
-// ******************************
-//
 Image32		EnlargeImageToPowerOfTwo( const Image32 & in, bv::image::FilterType ft )
 {
-	if( IsPowerOfTwo( in.width ) && IsPowerOfTwo( in.height ) )
+	if( bv::IsPowerOfTwo( in.width ) && bv::IsPowerOfTwo( in.height ) )
 		return in;
 	
-	auto newWidth	= RoundUpToPowerOfTwo( in.width );
-	auto newHeight	= RoundUpToPowerOfTwo( in.height );
+	auto newWidth	= bv::RoundUpToPowerOfTwo( in.width );
+	auto newHeight	= bv::RoundUpToPowerOfTwo( in.height );
 
-	assert( IsPowerOfTwo( newWidth ) && IsPowerOfTwo( newHeight ) );
+	assert( bv::IsPowerOfTwo( newWidth ) && bv::IsPowerOfTwo( newHeight ) );
 
 	auto data = bv::image::Resize( in.data, in.width, in.height, newWidth, newHeight, ft );
 
@@ -54,7 +32,7 @@ Image32		EnlargeImageToPowerOfTwo( const Image32 & in, bv::image::FilterType ft 
 //
 Image32		GenerateNextLevelMipmap( const Image32 & in, bv::image::FilterType ft )
 {
-	assert( IsPowerOfTwo( in.width ) && IsPowerOfTwo( in.height ) );
+	assert( bv::IsPowerOfTwo( in.width ) && bv::IsPowerOfTwo( in.height ) );
 
 	auto newWidth	= in.width > 1 ? in.width / 2 : 1;
 	auto newHeight	= in.height > 1 ? in.height / 2 : 1;
@@ -128,8 +106,8 @@ Mipmaps				GenerateMipmaps( const std::string & imageFilePath, int levelsNum, bv
 MipmapsSizes		GenerateMipmapsSizes( const ImageSize & origSize )
 {
 	MipmapsSizes ret;
-	auto newWidth	= RoundUpToPowerOfTwo( origSize.width );
-	auto newHeight	= RoundUpToPowerOfTwo( origSize.height );
+	auto newWidth	= bv::RoundUpToPowerOfTwo( origSize.width );
+	auto newHeight	= bv::RoundUpToPowerOfTwo( origSize.height );
 
 	ret.push_back( ImageSize( newWidth, newHeight ) );
 

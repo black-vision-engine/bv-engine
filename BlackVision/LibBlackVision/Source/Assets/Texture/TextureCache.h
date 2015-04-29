@@ -38,6 +38,7 @@ public:
 	// **************************
 	// Tree finctions below generates texture cache keys for single textures.
 	static std::string				GenKeyForSingleTexture	( const SingleTextureAssetDescConstPtr & singleTextureDesc );
+	static std::string				GenKeyForSingleTexture	( const std::string & origPath, SizeType width, SizeType height, TextureFormat format );
 	static std::string				GenKeyForGeneratedMipMap( const std::string & origPath, SizeType width, SizeType height, TextureFormat format, SizeType mmLevel, MipMapFilterType mmFiletType );
 	static std::string				GenKeyForTextureAsset	( const TextureAssetDescConstPtr & textureDesc );
 
@@ -45,7 +46,8 @@ private:
 
 	TextureAssetConstPtr			Find				( const std::string & key ) const;
 	void							AddToRawDataCache	( const TextureAssetConstPtr & textureRes ) const;
-	MemoryChunkConstPtr				GetFormRawDataCache	( const SingleTextureAssetDescConstPtr & desc ) const;
+	SingleTextureAssetConstPtr		GetFromRawDataCache	( const SingleTextureAssetDescConstPtr & desc ) const;
+	TextureAssetConstPtr			GetFromRawDataCache	( const TextureAssetDescConstPtr & desc ) const;
 
 
 	TextureCache();

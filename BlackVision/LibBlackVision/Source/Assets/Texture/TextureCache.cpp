@@ -61,13 +61,13 @@ void TextureCache::Update( const std::string & key, const TextureAssetConstPtr &
 void TextureCache::AddToRawDataCache( const TextureAssetConstPtr & textureRes ) const
 {
 	auto orig = textureRes->GetOriginal();
-	RawDataCache::GetInstance().Add( Hash::FromString( orig->GetKey()), orig->GetData() );
+	RawDataCache::GetInstance().Add( Hash::FromString( orig->GetKey()), orig->GetData(), orig->GetCacheOnHardDrive() );
 
 	auto mm = textureRes->GetMipMaps();
 
 	if( mm )
 		for( SizeType i = 0; i < mm->GetLevelsNum(); ++i )
-			RawDataCache::GetInstance().Add( Hash::FromString( mm->GetLevel( i )->GetKey()), mm->GetLevel( i )->GetData() );
+			RawDataCache::GetInstance().Add( Hash::FromString( mm->GetLevel( i )->GetKey()), mm->GetLevel( i )->GetData(), orig->GetCacheOnHardDrive() );
 }
 
 // ******************************
@@ -95,7 +95,59 @@ TextureAssetConstPtr	TextureCache::Get( const std::string & key ) const
 //
 TextureAssetConstPtr	TextureCache::Get( const TextureAssetDescConstPtr & textureDesc ) const
 {
-	return Find( GenKeyForTextureAsset( textureDesc ) );
+	auto ta = Find( GenKeyForTextureAsset( textureDesc ) );
+
+	if( ta )
+	{
+		return ta;
+	}
+	else
+	{
+		return GetFromRawDataCache( textureDesc );
+	}
+}
+
+// ******************************
+//
+SingleTextureAssetConstPtr	TextureCache::GetFromRawDataCache	( const SingleTextureAssetDescConstPtr & desc ) const
+{
+	auto key = GenKeyForSingleTexture( desc );
+	auto mChunk = RawDataCache::GetInstance().Get( Hash::FromString( GenKeyForSingleTexture( desc ) ) );
+
+	if( mChunk )
+	{
+		return SingleTextureAsset::Create( mChunk, key, desc->GetWidth(), desc->GetHeight(), desc->GetFormat(), true );
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+// ******************************
+//
+TextureAssetConstPtr	TextureCache::GetFromRawDataCache	( const TextureAssetDescConstPtr & desc ) const
+{
+	auto origAsset = GetFromRawDataCache( desc->GetOrigTextureDesc() );
+
+	auto mmDesc = desc->GetMipMapsDesc();
+
+	MipMapAssetConstPtr mmAsset = nullptr;
+
+	if( mmDesc )
+	{
+		std::vector< SingleTextureAssetConstPtr > mms;
+		for( SizeType i = 0; i < mmDesc->GetLevelsNum(); ++i )
+		{
+			auto singleTextAssetDesc = mmDesc->GetLevelDesc( i );
+			auto mmSibleTextureAssetAsset = GetFromRawDataCache( singleTextAssetDesc );
+			mms.push_back( mmSibleTextureAssetAsset ); //
+		}
+
+		mmAsset = MipMapAsset::Create( mms );
+	}
+
+	return TextureAsset::Create( origAsset, mmAsset );
 }
 
 // ******************************
@@ -108,9 +160,16 @@ TextureCache & TextureCache::GetInstance()
 
 // ******************************
 //
+std::string TextureCache::GenKeyForSingleTexture( const std::string & origPath, SizeType width, SizeType height, TextureFormat format )
+{
+	return toString( origPath ) + toString( width ) + toString( height ) + toString( (int)format );
+}
+
+// ******************************
+//
 std::string TextureCache::GenKeyForSingleTexture( const SingleTextureAssetDescConstPtr & sTRDesc )
 {
-	return toString( sTRDesc->GetImagePath() ) + toString( sTRDesc->GetWidth() ) + toString( sTRDesc->GetHeight() ) + toString( (int)sTRDesc->GetFormat() );
+	return GenKeyForSingleTexture( sTRDesc->GetImagePath(), sTRDesc->GetWidth(), sTRDesc->GetHeight(), sTRDesc->GetFormat() );
 }
 
 // ******************************
@@ -127,7 +186,7 @@ std::string TextureCache::GenKeyForTextureAsset( const TextureAssetDescConstPtr 
 		{
 			auto ret = GenKeyForSingleTexture( tRDesc->GetOrigTextureDesc() );
 
-			for( SizeType i = 0; tRDesc->GetMipMapsDesc()->GetLevelsNum(); ++i )
+			for( SizeType i = 0; i < tRDesc->GetMipMapsDesc()->GetLevelsNum(); ++i )
 				ret += GenKeyForSingleTexture( tRDesc->GetMipMapsDesc()->GetLevelDesc( i ) );
 
 			ret += toString( tRDesc->GetMipMapsDesc()->GetLevelsNum() ) + toString( (int)tRDesc->GetMipMapsDesc()->GetFilter() );

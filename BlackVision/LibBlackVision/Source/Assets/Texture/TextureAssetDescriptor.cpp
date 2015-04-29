@@ -120,8 +120,16 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const SingleTextureAssetDescC
 TextureAssetDesc::TextureAssetDesc( const SingleTextureAssetDescConstPtr & origDesc, const MipMapAssetDescConstPtr & mipmapsDesc )
 	: m_originalTextureDesc( origDesc )
 	, m_mipMapsDescs( mipmapsDesc )
-	, m_loadingType( TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS )
-{}
+{
+	 if( !mipmapsDesc )
+	 {
+		 m_loadingType = TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE;
+	 }
+	 else
+	 {
+		 m_loadingType = TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS;
+	 }
+}
 
 // ***********************
 //

@@ -21,7 +21,7 @@
 #include "AtlasCache.h"
 #include "IO/FileIO.h"
 #include "LibImage.h"
-#include "Assets/Texture/TextureLoader.h"
+#include "Assets/Assets.h"
 #include "Assets/Font/Engines/FreeTypeEngine.h"
 
 
@@ -33,57 +33,83 @@ TextConstPtr Text::Create(const std::wstring& supportedCharsSet
 						, const std::string& fontFile
 						, UInt32 fontSize
 						, UInt32 blurSize
-						, UInt32 outlineSize )
+						, UInt32 outlineSize
+						, bool withMipmaps )
 {
-	return std::make_shared< Text >( supportedCharsSet, fontFile, fontSize, blurSize, outlineSize );
+	return std::make_shared< Text >( supportedCharsSet, fontFile, fontSize, blurSize, outlineSize, withMipmaps );
 }
 
 
 // *********************************
 //
-Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize )
+Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool withMipmaps )
     : m_supportedCharsSet( supportedCharsSet )
     , m_fontFile( fontFile )
     , m_fontSize( fontSize )
     , m_blurSize( blurSize )
 	, m_outlineWidth( outlineSize )
+	, m_withMipmaps( withMipmaps )
 {
 	m_fontEngine = FreeTypeEngine::Create( fontFile, fontSize );
     BuildAtlas();
 }
 
-#define GENERATE_TEST_BMP_FILE
+//#define GENERATE_TEST_BMP_FILE
 
 // *********************************
 //
-TextAtlasConstPtr Text::LoadFromCache()
+TextAtlasConstPtr Text::LoadFromCache( bool useMipMaps )
 {
     auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
 
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
 
-	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, false, false );
+	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, useMipMaps );
+
 
     if( entry != nullptr )
-        return entry->m_textAtlas;
+	{
+		return entry->m_textAtlas;
+	}
     else
-        return nullptr;
+	{
+		return nullptr;
+	}
+}
+
+// *********************************
+//
+void				Text::AddToCache()
+{
+	auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
+
+    boost::filesystem::path fontPath( m_fontFile );
+    auto fontName = fontPath.filename().string();
+
+	auto mmLevelsNum = m_atlas->m_textureAsset->GetMipMaps() ? m_atlas->m_textureAsset->GetMipMaps()->GetLevelsNum() : 0;
+
+	auto entry = new FontAtlasCacheEntry( m_atlas, fontName, m_fontSize, m_blurSize, m_outlineWidth, m_fontFile, ( UInt32 )mmLevelsNum );
+    fac->AddEntry( *entry );
 }
 
 // *********************************
 //
 void Text::BuildAtlas        ()
 {
-    m_atlas = LoadFromCache();
+	bool useMipMaps = true;
+    m_atlas = LoadFromCache( useMipMaps );
 
     if( m_atlas != nullptr )
-        return;
+	{
+		return;
+	}
 
-	m_atlas = m_fontEngine->CreateAtlas(this->m_blurSize + 1, m_outlineWidth, m_supportedCharsSet );
+	auto  padding = this->m_blurSize + 1; // Update padding in case of bluring the atlas.
+
+	m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSet, useMipMaps );
 
 	assert( m_blurSize == 0 ); //TODO: Implement
-
   //  if ( m_blurSize > 0 )
   //  {
 		//auto oldData = std::const_pointer_cast< MemoryChunk >( m_atlas->m_textureAsset->GetOriginal()->GetData() );
@@ -93,13 +119,7 @@ void Text::BuildAtlas        ()
 		//m_atlas->m_textureAsset = TextureAsset::Create( (TextureHelper::Blur( oldData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel(), (unsigned int) m_blurSize ) );
   //  }
 
-	auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
-
-    boost::filesystem::path fontPath( m_fontFile );
-    auto fontName = fontPath.filename().string();
-
-    auto entry = new FontAtlasCacheEntry( m_atlas, fontName, m_fontSize, m_blurSize, m_outlineWidth, m_fontFile, "", false, false );
-    fac->AddEntry( *entry );
+	AddToCache();
 
 #ifdef GENERATE_TEST_BMP_FILE
 

@@ -23,9 +23,9 @@ public:
     SizeType					m_blurSize;
 	SizeType					m_outlineWidth;
     std::string                 m_fontFilePath;
-	std::string                 m_atlasFilePath;
-    bool                        m_bold;
-    bool                        m_italic;
+	UInt32						m_mmLevelsNum;
+    UInt32						m_atlasWidth;
+    UInt32						m_atlasHeight;
 
     FontAtlasCacheEntry ();
     FontAtlasCacheEntry ( const TextAtlasConstPtr & textAtlas
@@ -34,9 +34,8 @@ public:
                         , SizeType blurSize
 						, SizeType outlineWidth
                         , const std::string & fontFilePath
-						, const std::string & atlasFilePath
-                        , bool bold = false
-                        , bool italic = false );
+						, UInt32 mmLevelsNum
+						);
 };
 
 class FontAtlasCache
@@ -54,7 +53,7 @@ private:
 
 public:
 
-    FontAtlasCacheEntry *               GetEntry            ( const std::string& fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, bool bold, bool italic );
+    FontAtlasCacheEntry *               GetEntry            ( const std::string& fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, bool withMipMaps );
     void                                AddEntry            ( const FontAtlasCacheEntry& data, bool forceInvalidate = true );
 
     void                                Update              ();

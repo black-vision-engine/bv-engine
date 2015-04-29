@@ -24,7 +24,7 @@
 #include "LibImage.h"
 #include "Assets/Texture/TextureLoader.h"
 #include "Assets/Font/Engines/FreeTypeEngine.h"
-
+#include "Tools/MipMapBuilder/Source/MipMapBuilder.h"
 
 namespace bv { 
 
@@ -207,6 +207,33 @@ void                    TextAtlas::Load( std::istream& in )
 TextureAssetConstPtr	TextAtlas::GetAsset() const
 {
 	return m_textureAsset;
+}
+
+
+// *********************************
+//
+TextureAssetDescConstPtr TextAtlas::GenerateTextAtlasAssetDescriptor( const std::string & fontFileName, UInt32 width, UInt32 height, SizeType fontSize, MipMapFilterType mmFilterType, SizeType mmLevels )
+{
+	auto namePrefix = fontFileName + std::to_string( fontSize ) + std::to_string( (UInt32)mmFilterType );
+
+	auto zeroLevelDesc = SingleTextureAssetDesc::Create( namePrefix, width, height, TextureFormat::F_A8R8G8B8, true );
+
+	auto mmSizes = tools::GenerateMipmapsSizes( tools::ImageSize( width, height ) );
+
+	MipMapAssetDescConstPtr mmDesc = nullptr;
+
+	std::vector< SingleTextureAssetDescConstPtr > mipMapsDescs;
+	for( SizeType i = 0; i < std::min( mmSizes.size(), (SizeType)mmLevels); ++i )
+	{
+		mipMapsDescs.push_back( SingleTextureAssetDesc::Create( namePrefix, mmSizes[ i ].width, mmSizes[ i ].height, TextureFormat::F_A8R8G8B8, true ) );
+	}
+
+	if( mipMapsDescs.size() > 0 )
+	{
+		mmDesc = MipMapAssetDesc::Create( mipMapsDescs, MipMapFilterType::BILINEAR );
+	}
+
+	return TextureAssetDesc::Create( zeroLevelDesc, mmDesc );
 }
 
 } // bv

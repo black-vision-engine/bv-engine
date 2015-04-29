@@ -44,20 +44,28 @@ MemoryChunkConstPtr	SingleTextureAsset::GetData() const
 
 // ******************************
 //
-SingleTextureAssetConstPtr SingleTextureAsset::Create( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format )
+SingleTextureAssetConstPtr SingleTextureAsset::Create( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format, bool cacheOnHardDrive )
 {
-	return std::make_shared< SingleTextureAsset >( memory, key, width, height, format );
+	return SingleTextureAssetConstPtr( new SingleTextureAsset( memory, key, width, height, format, cacheOnHardDrive ) );
 }
 
 // ******************************
 //
-SingleTextureAsset::SingleTextureAsset( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format )
+SingleTextureAsset::SingleTextureAsset( const MemoryChunkConstPtr & memory, const std::string & key, UInt32 width, UInt32 height, TextureFormat format, bool cacheOnHardDrive )
 	: m_memory( memory )
 	, m_key( key )
 	, m_width( width )
 	, m_height( height )
 	, m_format( format )
+	, m_cacheOnHardDrive( cacheOnHardDrive )
 {}
+
+// *******************************
+// 
+bool SingleTextureAsset::GetCacheOnHardDrive () const
+{
+	return m_cacheOnHardDrive;
+}
 
 // *******************************
 // 

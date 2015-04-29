@@ -19,9 +19,6 @@ DefaultTextureDescriptor::DefaultTextureDescriptor        ()
 DefaultTextureDescriptor::DefaultTextureDescriptor        ( TextureAssetConstPtr texResource, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc, DataBuffer::Semantic semantic )
     : m_bitsChanged( true )
 {
-    SetBits( texResource );
-    SetName( name );
-
     //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
     //{ extraKind; } // FIXME: suppress unused warning
     //assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
@@ -40,9 +37,13 @@ DefaultTextureDescriptor::DefaultTextureDescriptor        ( TextureAssetConstPtr
     SetFormat( format );
     SetWrappingModeX( wmx );
     SetWrappingModeY( wmy );
+	SetWrappingModeZ( TextureWrappingMode::TWM_CLAMP_BORDER );
     SetFilteringMode( fm );
     SetBorderColor( bc );
     SetSemantic( semantic );
+
+	SetBits( texResource );
+    SetName( name );
 }
 
 // **************************

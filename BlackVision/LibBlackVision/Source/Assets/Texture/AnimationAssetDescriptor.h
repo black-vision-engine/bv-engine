@@ -32,9 +32,9 @@ public:
                                                 AnimationAssetDesc	( const std::vector< std::string > & frames );
                                                 ~AnimationAssetDesc	();
 
-	const std::vector< TextureAssetDescConstPtr > &  GetFrames               () const;
+	const std::vector< TextureAssetDescConstPtr > &  GetFrames		() const;
 
-    static AnimationAssetDescConstPtr			CreateFromDirFrames     ( const std::string & path, const std::string & filter );
+    static AnimationAssetDescConstPtr			CreateFromDirFrames ( const std::string & path, const std::string & filter );
 
 private:
 

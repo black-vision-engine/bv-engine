@@ -15,9 +15,9 @@ class TextureLoader : public AssetLoader
 {
 public:
 
-	AssetConstPtr						LoadAsset		( const AssetDescConstPtr & desc ) const override;
+	AssetConstPtr						LoadAsset			( const AssetDescConstPtr & desc ) const override;
 
-    virtual ~TextureLoader(){}
+    virtual								~TextureLoader		(){}
 
 private:
 
