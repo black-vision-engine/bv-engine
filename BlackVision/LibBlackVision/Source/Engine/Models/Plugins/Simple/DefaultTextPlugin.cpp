@@ -199,9 +199,6 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
-    m_fontSizeParam         = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
-    m_blurSizeParam         = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
-	m_outlineSizeParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "outlineSize" ) );
     m_spacingParam          = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
     m_alignmentParam        = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
     m_maxTextLengthParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "maxTextLenght" ) );
@@ -291,7 +288,10 @@ bool                            DefaultTextPlugin::LoadResource  ( AssetDescCons
 
     if ( txAssetDescr != nullptr )
     {
-		LoadAtlas( txAssetDescr->GetFontFileName(), int( m_fontSizeParam->Evaluate() ), int( m_blurSizeParam->Evaluate() ), int( m_outlineSizeParam->Evaluate() ) );
+		m_fontSize = txAssetDescr->GetFontSize();
+		m_blurSize = txAssetDescr->GetBlurSize();
+		m_outlineSize = txAssetDescr->GetOutlineSize();
+		LoadAtlas( txAssetDescr->GetFontFileName(), m_fontSize, m_blurSize, m_outlineSize );
 		InitAttributesChannel( m_prevPlugin );
 
 		return true;
@@ -390,9 +390,8 @@ void DefaultTextPlugin::InitAttributesChannel( IPluginPtr prev )
     m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
     auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
-	auto outlineSize	=  EvaluateAsInt< SizeType >( m_outlineSizeParam );
 
-    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, outlineSize, false );
+    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_text, m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, false );
 }
 
 // *************************************
@@ -413,7 +412,9 @@ void DefaultTextPlugin::OnSetText                   ( IEventPtr evt )
             }
         }
         else
-            SetText( m_text + std::wstring( c ) );
+		{
+			SetText( m_text + std::wstring( c ) );
+		}
     }
 }
 
@@ -477,9 +478,8 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
     m_vaChannel->ClearConnectedComponent();
 
     auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
-	auto outlineSize	=  EvaluateAsInt< SizeType >( m_outlineSizeParam );
 
-    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_text, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, outlineSize, false );
+    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_text, m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, false );
 
     auto maxTextLenght = m_maxTextLengthParam->Evaluate();
 

@@ -69,7 +69,6 @@ TextAtlasConstPtr Text::LoadFromCache( bool useMipMaps )
 
 	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, useMipMaps );
 
-
     if( entry != nullptr )
 	{
 		return entry->m_textAtlas;

@@ -59,9 +59,10 @@ private:
     bool                            m_textSet;
 	Float32							m_textLength;
 
-    ParamFloatPtr                   m_fontSizeParam;
-    ParamFloatPtr                   m_blurSizeParam;
-	ParamFloatPtr                   m_outlineSizeParam;
+    UInt32		                    m_fontSize;
+    UInt32		                    m_blurSize;
+	UInt32		                    m_outlineSize;
+
     ParamFloatPtr                   m_spacingParam;
     ParamFloatPtr                   m_alignmentParam;
     ParamFloatPtr                   m_maxTextLengthParam;
