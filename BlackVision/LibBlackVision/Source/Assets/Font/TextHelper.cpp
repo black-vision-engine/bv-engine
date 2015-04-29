@@ -140,9 +140,6 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
             continue;
         }
 
-		// auto glyphH = textAtlas->GetGlyph( wch, outline )->height;
-        // auto glyphW = textAtlas->GetGlyph( wch, outline )->width;
-
         model::ConnectedComponentPtr connComp = model::ConnectedComponent::Create();
 
         model::AttributeChannelDescriptor * desc = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
@@ -152,7 +149,6 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
         if( auto glyph = textAtlas->GetGlyph( wch, outline ) )
         {
             glm::vec3 bearing = glm::vec3( (float)glyph->bearingX / (float)viewWidth, (float)( glyph->bearingY - (int)glyph->height ) / (float)viewHeight, 0.f );
-			//glm::vec3 bearing = glm::vec3( 0.f / (float)viewWidth, (float)( glyph->bearingY - (int)glyph->height ) / (float)viewHeight, 0.f );
 
             glm::vec3 quadBottomLeft;
             glm::vec3 quadBottomRight;
@@ -192,8 +188,8 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
             float texHeight;
 
             {
-                texLeft   = ( (float)glyph->textureX/* + (float)glyph->glyphX - blurTexSize*/ - texPadding )  / textAtlas->GetWidth();
-                texTop    = ( (float)glyph->textureY/* + (float)glyph->glyphY - blurTexSize*/ - texPadding )  / textAtlas->GetHeight();
+                texLeft   = ( (float)glyph->textureX - blurTexSize - texPadding )  / textAtlas->GetWidth();
+                texTop    = ( (float)glyph->textureY - blurTexSize - texPadding )  / textAtlas->GetHeight();
                 texWidth  = ( (float)glyph->width + 2 * blurTexSize + 2 * texPadding )     / textAtlas->GetWidth();
                 texHeight = ( (float)glyph->height + 2 * blurTexSize  + 2 * texPadding )    / textAtlas->GetHeight();
             }

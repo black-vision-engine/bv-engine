@@ -209,7 +209,7 @@ void Text::AddTexturesKey()
 		auto h = mm->GetHeight();
 		auto f = mm->GetFormat();
 
-		mmsSTAs.push_back( SingleTextureAsset::Create( mm->GetData(), origKey, w, h, f, true ) );
+		mmsSTAs.push_back( SingleTextureAsset::Create( mm->GetData(), key, w, h, f, true ) );
 	}
 	
 	std::const_pointer_cast< TextAtlas >( m_atlas )->m_textureAsset = TextureAsset::Create( newOrigTexture, MipMapAsset::Create( mmsSTAs ) );

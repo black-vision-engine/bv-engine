@@ -475,7 +475,7 @@ model::BasicNodePtr     TestScenesFactory::CreateTestScene      ( const model::P
 		case TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE:
 			return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
 		case TestSceneSelector::TSS_TEXT:
-			return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 2, false );
+			return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 5, false );
         default:
             assert( false );
 

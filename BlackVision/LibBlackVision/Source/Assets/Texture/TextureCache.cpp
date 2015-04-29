@@ -66,8 +66,12 @@ void TextureCache::AddToRawDataCache( const TextureAssetConstPtr & textureRes ) 
 	auto mm = textureRes->GetMipMaps();
 
 	if( mm )
+	{
 		for( SizeType i = 0; i < mm->GetLevelsNum(); ++i )
-			RawDataCache::GetInstance().Add( Hash::FromString( mm->GetLevel( i )->GetKey()), mm->GetLevel( i )->GetData(), orig->GetCacheOnHardDrive() );
+		{
+			RawDataCache::GetInstance().Add( Hash::FromString( mm->GetLevel( i )->GetKey()), mm->GetLevel( i )->GetData(),  mm->GetLevel( i )->GetCacheOnHardDrive() );
+		}
+	}
 }
 
 // ******************************
@@ -141,7 +145,7 @@ TextureAssetConstPtr	TextureCache::GetFromRawDataCache	( const TextureAssetDescC
 		{
 			auto singleTextAssetDesc = mmDesc->GetLevelDesc( i );
 			auto mmSibleTextureAssetAsset = GetFromRawDataCache( singleTextAssetDesc );
-			mms.push_back( mmSibleTextureAssetAsset ); //
+			mms.push_back( mmSibleTextureAssetAsset );
 		}
 
 		mmAsset = MipMapAsset::Create( mms );
