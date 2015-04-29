@@ -6,6 +6,7 @@
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 
+#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 namespace bv { namespace model {
 
@@ -48,9 +49,9 @@ IPluginPtr                      DefaultRectPluginDesc::CreatePlugin         ( co
 //
 DefaultPluginParamValModelPtr   DefaultRectPluginDesc::CreateDefaultModel   ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-   // START_MODEL( timeEvaluator )
-   //     ADD_VAC_PARAM( "width", 1.f );
-   //     ADD_VAC_PARAM( "height", 1.f );
+    START_MODEL( timeEvaluator )
+        ADD_VAC_PARAM( "width", 1.f );
+        ADD_VAC_STATED_PARAM( "height", 1.f );
    //     ADD_VAC_PARAM_VAL( "param0", glm::vec2( .4f, 0.f ) );
    //     START_COMPOSITE_PARAM( vec4(0,0,0,0) )
    //         ADD_VAC_PARAM( "r", 1.f );
@@ -58,15 +59,15 @@ DefaultPluginParamValModelPtr   DefaultRectPluginDesc::CreateDefaultModel   ( IT
    //         ADD_VAC_PARAM( "b", 1.f );
    //         ADD_VAC_PARAM( "a", 1.f );
    //     END_COMPOSITE_PARAM()
-   //END_MODEL()
+   END_MODEL()
 
-    ModelHelper h( timeEvaluator );
-    
-    h.CreateVacModel();
-    h.AddSimpleStatedParam( "width", 1.f );
-    h.AddSimpleStatedParam( "height", 1.f );
-    
-    return h.GetModel();
+    //ModelHelper h( timeEvaluator );
+    //
+    //h.CreateVacModel();
+    //h.AddSimpleStatedParam( "width", 1.f );
+    //h.AddSimpleStatedParam( "height", 1.f );
+    //
+    //return h.GetModel();
 }
 
 // *******************************
