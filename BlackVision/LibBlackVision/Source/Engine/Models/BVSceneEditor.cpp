@@ -42,54 +42,14 @@ void    BVSceneEditor::SetRootNode          ( model::IModelNodePtr rootNode )
 //
 bool    BVSceneEditor::DeleteRootNode       ()
 {
-    auto modelRoot  = std::static_pointer_cast< model::BasicNode >( S()->m_pModelSceneRoot );
-    auto engineRoot = S()->m_pEngineSceneRoot;
-
-    if( modelRoot )
+    auto nodesPair = DetachRootNodes();
+    
+    if( nodesPair.first )
     {
-        assert( engineRoot );
+        DeleteDetachedNodes( nodesPair.first, nodesPair.second );
 
-        S()->m_pModelSceneRoot  = nullptr;
-        S()->m_pEngineSceneRoot = nullptr;
-
-        DeleteDetachedNodes( modelRoot, engineRoot );
+        return true;
     }
-
-    return modelRoot != nullptr;
-}
-
-// *******************************
-//
-bool    BVSceneEditor::AttachRootNode      ()
-{
-    return false;
-
-    //FIXME: implement
-    //if( S()->m_pModelSceneRoot && S()->m_pModelSceneRoot != m_detachedModelNode )
-    //{
-    //    DeleteRootNode();
-    //}
-
-    //S()->m_pModelSceneRoot = std::static_pointer_cast< model::BasicNode >( rootNode );
-}
-
-// *******************************
-//
-bool    BVSceneEditor::DetachRootNode      ()
-{
-    //FIXME: implement
-    //if( m_detachedModelNode )
-    //{
-    //    DeleteDetachedNodes( m_detachedModelNode, m_detachedSceneNode );
-    //}
-
-    //m_detachedModelNode  = std::static_pointer_cast< model::BasicNode >( S()->m_pModelSceneRoot );
-    //m_detachedSceneNode = S()->m_pEngineSceneRoot;
-
-    //S()->m_pModelSceneRoot = nullptr;
-    //S()->m_pEngineSceneRoot = nullptr;
-
-    //return m_detachedModelNode;
 
     return false;
 }
@@ -98,20 +58,19 @@ bool    BVSceneEditor::DetachRootNode      ()
 //
 void    BVSceneEditor::AddChildNode         ( model::IModelNodePtr parentNode, model::IModelNodePtr childNode )
 {
-    { parentNode; childNode; }
-    //FIXME: implement
-    //auto parentNodeImpl = std::static_pointer_cast< model::BasicNode >( parentNode );
-    //auto childNodeImpl  = std::static_pointer_cast< model::BasicNode >( childNode );
-    //
-    //if( parentNodeImpl && childNodeImpl )
-    //{
-    //    AttachChildNode( parentNode, childNode );
+    auto modelParentNode    = std::static_pointer_cast< model::BasicNode >( parentNode );
+    auto modelChildNode     = std::static_pointer_cast< model::BasicNode >( childNode );
 
-    //    auto engineParent = GetEngineNode( parentNodeImpl );
-    //    auto engineChild = BVSceneTools::BuildEngineSceneNode( childNodeImpl, m_nodesMapping );
-    //
-    //    engineParent->AddChildNode( engineChild );
-    //}
+    if( modelParentNode && modelChildNode )
+    {
+        auto engineParent = GetEngineNode( modelParentNode );
+        auto engineChild = BVSceneTools::BuildEngineSceneNode( modelChildNode, m_nodesMapping );
+    
+        auto parentPair = TNodesPair( modelParentNode, engineParent );
+        auto childPair  = TNodesPair( modelChildNode, engineChild );
+        
+        AttachNodes( parentPair, childPair );
+    }
 }
 
 // *******************************
@@ -141,17 +100,59 @@ bool    BVSceneEditor::DeleteChildNode      ( model::IModelNodePtr parentNode, c
 
 // *******************************
 //
+void    BVSceneEditor::AttachRootNode      ()
+{
+    if( S()->m_pModelSceneRoot )
+    {
+        DeleteRootNode();
+    }
+
+    auto nodesPair = TNodesPair( m_detachedModelNode, m_detachedSceneNode );
+
+    AttachRootNodes( nodesPair );
+
+    m_detachedModelNode = nullptr;
+    m_detachedSceneNode = nullptr;
+}
+
+// *******************************
+//
+bool    BVSceneEditor::DetachRootNode      ()
+{
+    if( m_detachedModelNode )
+    {
+        DeleteDetachedNodes( m_detachedModelNode, m_detachedSceneNode );
+    }
+
+    m_detachedModelNode = std::static_pointer_cast< model::BasicNode >( S()->m_pModelSceneRoot );
+    m_detachedSceneNode = S()->m_pEngineSceneRoot;
+
+    S()->m_pModelSceneRoot  = nullptr;
+    S()->m_pEngineSceneRoot = nullptr;
+
+    return m_detachedModelNode != nullptr;
+}
+
+// *******************************
+//
 bool                    BVSceneEditor::AttachChildNode     ( model::IModelNodePtr parent )
 {
-    { parent; }
-    // FIXME: implement
-    //if( parent && nodeToAttach )
-    //{
-    //    auto parentImpl = std::static_pointer_cast< model::BasicNode >( parent );
-    //    auto childImpl = std::static_pointer_cast< model::BasicNode >( nodeToAttach );
+    if( m_detachedModelNode != nullptr && parent != nullptr )
+    {
+        auto modelParent    = std::static_pointer_cast< model::BasicNode >( parent );
+        auto engineParent   = GetEngineNode( modelParent );
+        assert( engineParent );
 
-    //    parentImpl->AddChildToModelOnly( childImpl ); 
-    //}
+        auto parentPair = TNodesPair( modelParent, engineParent );
+        auto childPair  = TNodesPair( m_detachedModelNode, m_detachedSceneNode );
+
+        AttachNodes( parentPair, childPair );
+
+        m_detachedModelNode = nullptr;
+        m_detachedSceneNode = nullptr;
+
+        return true;
+    }
 
     return false;
 }
@@ -160,17 +161,32 @@ bool                    BVSceneEditor::AttachChildNode     ( model::IModelNodePt
 //
 bool                    BVSceneEditor::DetachChildNode     ( model::IModelNodePtr parent, const std::string & nodeToDetach )
 {
-    { parent; }
-    { nodeToDetach; }
-
-    if( parent )
+    if( m_detachedModelNode )
     {
-        // FIXME: implement
-//        auto parentImpl = std::static_pointer_cast< model::BasicNode >( parent );
-//        auto childImpl = std::static_pointer_cast< model::BasicNode >( nodeToDetach );
-
-//        parentImpl->AddChildToModelOnly( childImpl ); 
+        DeleteDetachedNodes( m_detachedModelNode, m_detachedSceneNode );
     }
+
+    auto modelParent = std::static_pointer_cast< model::BasicNode >( parent );
+
+    if( modelParent )
+    {
+        auto modelChild = std::static_pointer_cast< model::BasicNode >( modelParent->GetChild( nodeToDetach ) );
+
+        // FIXME: implement
+        //auto engineParent = GetEngineNode( modelParent );
+        //assert( engineParent != nullptr );
+
+        //auto engineChild = GetEngineNode( modelChild );
+        //assert( engineChild != nullptr );
+
+        //auto parentPair = TNodesPair( modelParent, engineParent );
+        //auto childPair  = TNodesPair( m_detachedModelNode, m_detachedSceneNode );
+
+        //DetachNodes( parentPair, childPair );
+
+        return true;
+    }
+
     return false;
 }
 
@@ -183,7 +199,7 @@ model::IModelNodePtr    BVSceneEditor::GetDetachedNode      ()
 
 // *******************************
 //
-void            BVSceneEditor::DeleteDetachedNode   ()
+void            BVSceneEditor::DeleteDetachedNode           ()
 {
     if( m_detachedModelNode )
     {
@@ -191,6 +207,75 @@ void            BVSceneEditor::DeleteDetachedNode   ()
 
         DeleteDetachedNodes( m_detachedModelNode, m_detachedSceneNode );
     }
+}
+
+// *******************************
+//
+model::IModelNodePtr        BVSceneEditor::GetRootNode      ()
+{
+    return S()->m_pModelSceneRoot;
+}
+
+// *******************************
+//
+void                        BVSceneEditor::AttachRootNodes  ( TNodesPair & nodesPair )
+{
+    assert( S()->m_pModelSceneRoot == nullptr );
+    assert( S()->m_pEngineSceneRoot == nullptr );
+
+    S()->m_pModelSceneRoot = nodesPair.first;
+    S()->m_pEngineSceneRoot = nodesPair.second;
+}
+
+// *******************************
+//
+BVSceneEditor::TNodesPair   BVSceneEditor::DetachRootNodes  ()
+{
+    auto modelNode   = std::static_pointer_cast< model::BasicNode >( S()->m_pModelSceneRoot );
+    auto engineNode  = S()->m_pEngineSceneRoot;
+
+    S()->m_pModelSceneRoot  = nullptr;
+    S()->m_pEngineSceneRoot = nullptr;
+
+    return TNodesPair( modelNode, engineNode );
+}
+
+// *******************************
+//
+BVSceneEditor::TNodesPair   BVSceneEditor::DetachNodes      ( model::BasicNodePtr parentNode, const std::string & childNodeName )
+{
+    model::BasicNodePtr modelNode = nullptr;
+    SceneNode * engineNode = nullptr;
+
+    if( parentNode )
+    {
+        auto childNode = std::static_pointer_cast< model::BasicNode >( parentNode->GetChild( childNodeName ) );
+
+        if( childNode )
+        {
+            auto engineParent = GetEngineNode( parentNode );
+            assert( engineParent != nullptr );
+            
+            auto engineChild = GetEngineNode( childNode );
+            assert( engineChild != nullptr );
+
+            parentNode->DetachChildNodeOnly( childNode );
+            engineParent->DetachChildNode( engineChild );
+
+            modelNode   = childNode;
+            engineNode  = engineChild;
+        }
+    }
+
+    return TNodesPair( modelNode, engineNode );
+}
+
+// *******************************
+//
+void            BVSceneEditor::AttachNodes          ( TNodesPair & parentPair, TNodesPair & childPair )
+{
+    parentPair.first->AddChildToModelOnly( childPair.first );
+    parentPair.second->AddChildNode( childPair.second );
 }
 
 // *******************************
