@@ -12,8 +12,10 @@ namespace bv {
 
 // *******************************
 //
-BVSceneEditor::BVSceneEditor                        ( BVScene * scene )
+BVSceneEditor::BVSceneEditor                ( BVScene * scene )
     : m_pScene( scene )
+    , m_detachedModelNode( nullptr )
+    , m_detachedSceneNode( nullptr )
 {
 }
 
@@ -27,7 +29,7 @@ void    BVSceneEditor::SetRootNode          ( model::IModelNodePtr rootNode )
         {
             DeleteRootNode();
         }
-    
+
         auto rootNodeImpl   = std::static_pointer_cast< model::BasicNode >( rootNode );
         auto engineNode     = BVSceneTools::BuildEngineSceneNode( rootNodeImpl, m_nodesMapping );
 
@@ -58,24 +60,58 @@ bool    BVSceneEditor::DeleteRootNode       ()
 
 // *******************************
 //
-void                    AttachRootNode      ( model::IModelNodePtr rootNode )
+bool    BVSceneEditor::AttachRootNode      ()
 {
-    { rootNode; }
+    return false;
+
+    //FIXME: implement
+    //if( S()->m_pModelSceneRoot && S()->m_pModelSceneRoot != m_detachedModelNode )
+    //{
+    //    DeleteRootNode();
+    //}
+
+    //S()->m_pModelSceneRoot = std::static_pointer_cast< model::BasicNode >( rootNode );
 }
 
 // *******************************
 //
-model::IModelNodePtr    DetachRootNode      ()
+bool    BVSceneEditor::DetachRootNode      ()
 {
-    return nullptr;
+    //FIXME: implement
+    //if( m_detachedModelNode )
+    //{
+    //    DeleteDetachedNodes( m_detachedModelNode, m_detachedSceneNode );
+    //}
+
+    //m_detachedModelNode  = std::static_pointer_cast< model::BasicNode >( S()->m_pModelSceneRoot );
+    //m_detachedSceneNode = S()->m_pEngineSceneRoot;
+
+    //S()->m_pModelSceneRoot = nullptr;
+    //S()->m_pEngineSceneRoot = nullptr;
+
+    //return m_detachedModelNode;
+
+    return false;
 }
 
 // *******************************
 //
 void    BVSceneEditor::AddChildNode         ( model::IModelNodePtr parentNode, model::IModelNodePtr childNode )
 {
-    { parentNode;
-    childNode; }
+    { parentNode; childNode; }
+    //FIXME: implement
+    //auto parentNodeImpl = std::static_pointer_cast< model::BasicNode >( parentNode );
+    //auto childNodeImpl  = std::static_pointer_cast< model::BasicNode >( childNode );
+    //
+    //if( parentNodeImpl && childNodeImpl )
+    //{
+    //    AttachChildNode( parentNode, childNode );
+
+    //    auto engineParent = GetEngineNode( parentNodeImpl );
+    //    auto engineChild = BVSceneTools::BuildEngineSceneNode( childNodeImpl, m_nodesMapping );
+    //
+    //    engineParent->AddChildNode( engineChild );
+    //}
 }
 
 // *******************************
@@ -90,11 +126,10 @@ bool    BVSceneEditor::DeleteChildNode      ( model::IModelNodePtr parentNode, c
 
         if( modelChildNode )
         {
-            auto engineChildNode = m_nodesMapping[ modelChildNode.get() ];
+            auto engineChildNode = GetEngineNode( modelChildNode );
             assert( engineChildNode != nullptr );
 
             DetachChildNode( parentModelNode, modelChildNode );
-
             DeleteDetachedNodes( modelChildNode, engineChildNode );
 
             return true;
@@ -106,18 +141,63 @@ bool    BVSceneEditor::DeleteChildNode      ( model::IModelNodePtr parentNode, c
 
 // *******************************
 //
-void                    BVSceneEditor::AttachChildNode     ( model::IModelNodePtr parent, model::IModelNodePtr nodeToAttach )
+bool                    BVSceneEditor::AttachChildNode     ( model::IModelNodePtr parent )
 {
-    { parent; nodeToAttach; }
+    { parent; }
+    // FIXME: implement
+    //if( parent && nodeToAttach )
+    //{
+    //    auto parentImpl = std::static_pointer_cast< model::BasicNode >( parent );
+    //    auto childImpl = std::static_pointer_cast< model::BasicNode >( nodeToAttach );
+
+    //    parentImpl->AddChildToModelOnly( childImpl ); 
+    //}
+
+    return false;
 }
 
 // *******************************
 //
-model::IModelNodePtr    BVSceneEditor::DetachChildNode     ( model::IModelNodePtr parent, const std::string & nodeToDetach )
+bool                    BVSceneEditor::DetachChildNode     ( model::IModelNodePtr parent, const std::string & nodeToDetach )
 {
-    { parent; nodeToDetach; }
+    { parent; }
+    { nodeToDetach; }
 
-    return nullptr;
+    if( parent )
+    {
+        // FIXME: implement
+//        auto parentImpl = std::static_pointer_cast< model::BasicNode >( parent );
+//        auto childImpl = std::static_pointer_cast< model::BasicNode >( nodeToDetach );
+
+//        parentImpl->AddChildToModelOnly( childImpl ); 
+    }
+    return false;
+}
+
+// *******************************
+//
+model::IModelNodePtr    BVSceneEditor::GetDetachedNode      ()
+{
+    return m_detachedModelNode;
+}
+
+// *******************************
+//
+void            BVSceneEditor::DeleteDetachedNode   ()
+{
+    if( m_detachedModelNode )
+    {
+        assert( m_detachedSceneNode );
+
+        DeleteDetachedNodes( m_detachedModelNode, m_detachedSceneNode );
+    }
+}
+
+// *******************************
+//
+SceneNode *     BVSceneEditor::GetEngineNode        ( model::BasicNodePtr node )
+{
+    return m_nodesMapping[ node.get() ];
 }
 
 // *******************************
@@ -154,8 +234,8 @@ void            BVSceneEditor::RemoveNodeMappings   ( model::BasicNodePtr node )
 //
 void            BVSceneEditor::DetachChildNode      ( model::BasicNodePtr parentNode, model::BasicNodePtr childNode )
 {
-    auto engineParent = m_nodesMapping[ parentNode.get() ];
-    auto engineChild  = m_nodesMapping[ childNode.get() ];
+    auto engineParent = GetEngineNode( parentNode );
+    auto engineChild  = GetEngineNode( childNode );
 
     assert( engineParent );
     assert( engineChild );
