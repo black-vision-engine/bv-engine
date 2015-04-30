@@ -379,16 +379,4 @@ std::string  File::GetFileName ( const std::string & path )
 	return p.stem().string();
 }
 
-// *******************************
-//
-bool         File::CreateDir   ( const std::string & path )
-{
-    boost::system::error_code ec;
-    auto success = boost::filesystem::create_directory( path, ec );
-    if( ec )
-        std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
-    return success;
-}
-
-
 } //bv

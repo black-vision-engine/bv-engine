@@ -1,9 +1,12 @@
 #include "DirIO.h"
 
-#include <windows.h>
+#include "Tools/StringHeplers.h"
+
 #include <boost/filesystem.hpp>
 
-#include "Tools/StringHeplers.h"
+#include <iostream>
+#include <windows.h>
+
 
 namespace fs = boost::filesystem;
 
@@ -77,6 +80,51 @@ bool						Dir::Exists				( const std::string & path )
 	}
 
 	return false;
+}
+
+// *******************************
+//
+bool						Dir::CreateDir			( const std::string & path, bool createRecusive )
+{
+	if( Exists( path ) )
+	{
+		return true;
+	}
+
+    boost::system::error_code ec;
+	boost::filesystem::path p( path );
+
+
+	if( createRecusive )
+	{
+		boost::filesystem::path currPath("");
+		for( auto it : p )
+		{
+			currPath += it;
+			currPath += "/";
+			boost::filesystem::create_directory( currPath, ec );
+			if( ec )
+			{
+				std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+				return false;
+			}
+		}
+
+		return true;
+	}
+	else
+	{
+		boost::filesystem::create_directory( path, ec );
+		if( ec )
+		{
+			std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
 }
 
 } //bv
