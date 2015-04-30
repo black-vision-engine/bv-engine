@@ -216,6 +216,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\Camera.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\MainDisplayTarget.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntity.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNode.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\TransformableEntity.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\TriangleMesh.cpp" />
@@ -372,6 +373,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\ICachedParameter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IState.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IStateSet.h" />

@@ -840,6 +840,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneEditor.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.cpp">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1696,6 +1699,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeospherePlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h">
+      <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
