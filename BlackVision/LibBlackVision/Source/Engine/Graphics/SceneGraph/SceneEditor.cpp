@@ -1,13 +1,18 @@
 #include "SceneEditor.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
+
+#include "Engine/Graphics/Renderers/Renderer.h"
 
 
 namespace bv {
 
 // *******************************
 //
-SceneEditor::SceneEditor					()
+SceneEditor::SceneEditor					( Renderer * renderer, SceneNode ** rootNode )
+	: m_renderer( renderer )
+	, m_rootNode( rootNode )
 {
 }
 
@@ -15,16 +20,30 @@ SceneEditor::SceneEditor					()
 //
 void		SceneEditor::SetRootNode		( SceneNode * rootNode )
 {
-	// FIXME: implement
-	{ rootNode; }
+	if( *m_rootNode != rootNode )
+	{
+		if( *m_rootNode != nullptr )
+		{
+			DeleteRootNode();
+		}
+	}
+
+	*m_rootNode = rootNode;
 }
 
 // *******************************
 //
-bool		SceneEditor::DeleteRootNode     ( SceneNode * rootNode )
+bool		SceneEditor::DeleteRootNode     ()
 {
-	// FIXME: implement
-	{ rootNode; }
+	if( m_rootNode != nullptr )
+	{
+		DeleteNode( *m_rootNode, m_renderer );
+	
+		m_rootNode = nullptr;
+
+		return true;
+	}
+
 	return false;
 }
 
@@ -48,19 +67,15 @@ bool		SceneEditor::DeleteChildNode    ( SceneNode * parentNode, SceneNode * chil
 
 // *******************************
 //
-void		SceneEditor::AttachRootNode     ( SceneNode * rootNode )
+void		SceneEditor::AttachRootNode     ()
 {
 	// FIXME: implement
-	{ rootNode; }
 }
 
 // *******************************
 //
-bool		SceneEditor::DetachRootNode     ( SceneNode * rootNode )
+bool		SceneEditor::DetachRootNode     ()
 {
-	// FIXME: implement
-	{ rootNode; }
-
 	return false;
 }
 
@@ -97,6 +112,27 @@ SceneNode *	SceneEditor::GetDetachedNode	()
 void		SceneEditor::DeleteDetachedNode	()
 {
 	// FIXME: implement
+}
+
+// *******************************
+//
+SceneNode *	SceneEditor::GetRootNode		()
+{
+	return *m_rootNode;
+}
+
+// *******************************
+//
+void		SceneEditor::DeleteNode			( SceneNode * node, Renderer * renderer )
+{
+    while( node->NumChildNodes() > 0 )
+    {
+        DeleteNode( node->DetachChildNode( (unsigned int)0 ), renderer );
+    }
+
+    renderer->FreeAllPDResources( static_cast< RenderableEntity * >( node->GetTransformable() ) );
+
+    delete node;
 }
 
 } //bv
