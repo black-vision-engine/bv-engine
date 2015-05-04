@@ -1739,8 +1739,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 //#define VERSION_COLOR
 
 //#define SHOW_CUBE
-#define SHOW_CYLINDER
-//#define SHOW_CONE
+//#define SHOW_CYLINDER
+#define SHOW_CONE
 //#define SHOW_SPHERE
 //#define SHOW_CIRCLE
 //#define SHOW_ELLIPSE
@@ -1831,7 +1831,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, rotation_axis, 0.f );
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, rotation_axis, -720.f );
 	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.f, rotation_axis2, 50.f );
-	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -5.0f ) );
+	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -2.0f ) );
 
 
 // ============================================ //
@@ -1960,6 +1960,94 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 
 	return root;
+
+#undef VERSION_TEXTURE
+#undef NO_PERSPECTIVE
+#undef VERSION_COLOR
+}
+
+model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation )
+{
+
+#define VERSION_TEXTURE
+//#define NO_PERSPECTIVE
+//#define VERSION_COLOR
+
+	  //Timeline stuff
+    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+
+    //someTimelineWithEvents->AddChild( localTimeline );
+    timeEvaluator->AddChild( localTimeline );
+
+// ============================================ //
+// Plugins stuff
+	std::vector< std::string > uids;
+	uids.push_back( "DEFAULT_TRANSFORM" );
+
+// ============================================ //
+//  Geometry plugin
+	uids.push_back( uid );
+
+// ============================================ //
+// Color or texture plugin
+#ifdef VERSION_COLOR
+	uids.push_back( "DEFAULT_COLOR" );
+#endif
+#ifdef VERSION_TEXTURE
+	#ifdef NO_PERSPECTIVE
+		uids.push_back( "DEFAULT_NO_PERSPECTIVE_TEXTURE" );
+	#else
+		uids.push_back( "DEFAULT_TEXTURE" );
+	#endif
+#endif
+
+    auto root = model::BasicNode::Create( "Root", timeEvaluator );
+
+    auto success = root->AddPlugins( uids, localTimeline );
+    assert( success );
+
+// ============================================ //
+// Tranformations
+	glm::vec3 rotation_axis( 0.f, 1.f, 0.f );
+	glm::vec3 rotation_axis2( -1.f, 1.f, 0.f );
+
+	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, rotation_axis, 0.f );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 100.f, rotation_axis, -7200.f );
+	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.f, rotation_axis2, 50.f );
+	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, translation );
+
+// ============================================ //
+// Color, texture plugins parameters
+#ifdef VERSION_COLOR
+	auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
+	SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 1.f, 1.f ) );
+	//root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
+	root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+#endif
+	
+#ifdef VERSION_TEXTURE
+
+	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+
+	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
+	assert( success );
+	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
+	model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+	//root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
+#endif
+
+	return root;
+
+
+#undef VERSION_TEXTURE
+#undef NO_PERSPECTIVE
+#undef VERSION_COLOR
 }
 
 } //bv
