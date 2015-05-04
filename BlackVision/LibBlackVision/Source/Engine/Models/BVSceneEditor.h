@@ -4,7 +4,6 @@
 #include <string>
 
 #include "Engine/Models/BasicNode.h"
-#include "Engine/Models/Interfaces/IModelNode.h"
 
 
 namespace bv {

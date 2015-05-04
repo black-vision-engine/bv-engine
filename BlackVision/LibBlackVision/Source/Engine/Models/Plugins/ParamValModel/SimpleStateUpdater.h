@@ -6,6 +6,7 @@
 #include "SimpleTypedStates.h"
 #include "Engine/Types/Values/TypedValues.h"
 
+
 namespace bv { namespace model {
 
 template< typename StateTypePtr, typename ValueTypePtr >

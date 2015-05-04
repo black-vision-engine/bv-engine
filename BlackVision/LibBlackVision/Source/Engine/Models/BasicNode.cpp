@@ -130,50 +130,6 @@ const IPluginListFinalized *    BasicNode::GetPluginList            () const
 }
 
 // ********************************
-// FIXME: implement using API from BVScene
-bool                            BasicNode::DeleteNode               ( const std::string & name, Renderer * renderer )
-{
-    auto node = GetChild( name );
-
-    if( node )
-    {
-        auto basicNode = std::static_pointer_cast< BasicNode >( node );
-
-        DetachChildNodeOnly( basicNode );
-    
-        basicNode->DeleteSelf( renderer );
-    
-        return true;
-    }
-
-    return false;
-}
-
-// ********************************
-// FIXME: implement using API from BVScene
-void                            BasicNode::AddChildNode             ( IModelNodePtr modelNode )
-{
-    // Verify validity
-    assert( modelNode != nullptr );
-    assert( ms_nodesMapping.find( modelNode.get() ) == ms_nodesMapping.end() );
-    assert( ms_nodesMapping.find( this ) != ms_nodesMapping.end() );
-
-    // Create engine node corresponding to modelNode
-    BasicNode * basicModelNode = static_cast< BasicNode * >( modelNode.get() );
-	{ basicModelNode; }
-    /*
-	SceneNode * engineNode = basicModelNode->BuildScene();
-
-    // Register created node and its mapping
-    ms_nodesMapping[ basicModelNode ] = engineNode;
-
-    // Add model node to current tree along with corresponding engine node
-    AddChildToModelOnly( std::static_pointer_cast< BasicNode >( modelNode ) );
-    ms_nodesMapping[ this ]->AddChildNode( engineNode );
-	*/
-}
-
-// ********************************
 //
 unsigned int                    BasicNode::GetNumChildren           () const
 {
@@ -353,31 +309,6 @@ void            BasicNode::DetachChildNodeOnly              ( BasicNodePtr n )
     }
 
     assert( false );
-}
-
-// ********************************
-// FIXME: implement using API from BVScene
-void            BasicNode::DeleteSelf                       ( Renderer * renderer )
-{
-	{ renderer; }
-	/*
-    // Unregister updater
-    UpdatersManager::Get().RemoveNodeUpdater( this );
-
-
-    // Remove engine node and clear all resources
-    auto engineNode = ms_nodesMapping[ this ];
-    ms_nodesMapping.erase( this );
-
-    // Clear all OpenGL resources
-    SceneNode::DeleteNode( engineNode, renderer );
-
-    // Remove all children
-    for( auto ch : m_children )
-    {
-        ch->DeleteSelf( renderer ); 
-    }
-	*/
 }
 
 // ********************************

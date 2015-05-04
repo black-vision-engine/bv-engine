@@ -51,16 +51,17 @@ bool		SceneEditor::DeleteRootNode     ()
 //
 void		SceneEditor::AddChildNode       ( SceneNode * parentNode, SceneNode * childNode )
 {
-	// FIXME: implement
-	{ parentNode; childNode; }
+    if( parentNode != nullptr && childNode != nullptr )
+    {
+        parentNode->AddChildNode( childNode );
+    }
 }
 
 // *******************************
 //
 bool		SceneEditor::DeleteChildNode    ( SceneNode * parentNode, SceneNode * childNode )
 {
-	// FIXME: implement
-	{ parentNode; childNode; }
+    { parentNode; childNode; }
 
 	return false;
 }
