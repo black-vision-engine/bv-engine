@@ -42,6 +42,8 @@ void    BVSceneEditor::SetRootNode          ( model::IModelNodePtr rootNode )
 
     if( m_modelSceneEditor->GetRootNode() != root )
     {
+        MappingsCleanup( m_modelSceneEditor->GetRootNode() );
+
         m_modelSceneEditor->SetRootNode( root );
         m_engineSceneEditor->SetRootNode( BVSceneTools::BuildEngineSceneNode( root, m_nodesMapping ) );
     }
@@ -55,7 +57,7 @@ bool    BVSceneEditor::DeleteRootNode       ()
 
     if( root )
     {
-        RemoveNodeMapping( root );
+        MappingsCleanup( root );
 
         m_modelSceneEditor->DeleteRootNode();
         m_engineSceneEditor->DeleteRootNode();
@@ -91,10 +93,10 @@ bool    BVSceneEditor::DeleteChildNode      ( model::IModelNodePtr parentNode, c
 
         if( modelChildNode )
         {
-            RemoveNodeMapping( modelChildNode );
-
             m_modelSceneEditor->DeleteChildNode( modelParentNode, childNodeName );
             m_engineSceneEditor->DeleteChildNode( GetEngineNode( parentNode ), GetEngineNode( modelChildNode ) );
+
+            MappingsCleanup( modelChildNode );
 
             return true;
         }
@@ -107,6 +109,8 @@ bool    BVSceneEditor::DeleteChildNode      ( model::IModelNodePtr parentNode, c
 //
 void    BVSceneEditor::AttachRootNode      ()
 {
+    MappingsCleanup( m_modelSceneEditor->GetRootNode() );
+
     m_modelSceneEditor->AttachRootNode();
     m_engineSceneEditor->AttachRootNode();
 }
@@ -115,6 +119,8 @@ void    BVSceneEditor::AttachRootNode      ()
 //
 bool    BVSceneEditor::DetachRootNode      ()
 {
+    MappingsCleanup( m_modelSceneEditor->GetDetachedNode() );
+
     auto detachModel    = m_modelSceneEditor->DetachRootNode();
     auto detachEngine   = m_engineSceneEditor->DetachRootNode();
 
@@ -140,6 +146,8 @@ bool                    BVSceneEditor::AttachChildNode     ( model::IModelNodePt
 //
 bool                    BVSceneEditor::DetachChildNode     ( model::IModelNodePtr parent, const std::string & nodeToDetach )
 {
+    MappingsCleanup( m_modelSceneEditor->GetDetachedNode() );
+
     if( parent )
     {
         auto childNode = parent->GetChild( nodeToDetach );
@@ -160,6 +168,8 @@ bool                    BVSceneEditor::DetachChildNode     ( model::IModelNodePt
 //
 void            BVSceneEditor::DeleteDetachedNodes          ()
 {
+    MappingsCleanup( m_modelSceneEditor->GetDetachedNode() );
+
     m_modelSceneEditor->DeleteDetachedNode();
     m_engineSceneEditor->DeleteDetachedNode();
 }
@@ -173,10 +183,20 @@ model::IModelNodePtr    BVSceneEditor::GetRootNode          ()
 
 // *******************************
 //
+void                    BVSceneEditor::MappingsCleanup      ( model::IModelNodePtr node )
+{
+    if( node )
+    {
+        RemoveNodeMapping( node );
+        UnregisterUpdaters( node );
+    }
+}
+
+// *******************************
+//
 void                    BVSceneEditor::RemoveNodeMapping    ( model::IModelNodePtr node )
 {
     assert( m_nodesMapping.find( node.get() ) != m_nodesMapping.end() );
-
     m_nodesMapping.erase( node.get() );
     
     auto modelNode = QueryTyped( node );
@@ -186,6 +206,20 @@ void                    BVSceneEditor::RemoveNodeMapping    ( model::IModelNodeP
         auto child = modelNode->GetChild( i );
 
         RemoveNodeMapping( child );
+    }
+}
+
+// *******************************
+//
+void                    BVSceneEditor::UnregisterUpdaters   ( model::IModelNodePtr node )
+{
+    UpdatersManager::Get().RemoveNodeUpdater( node.get() );
+
+    for( unsigned int i = 0; i < node->GetNumChildren(); ++i )
+    {
+        auto child = QueryTyped( node )->GetChild( i );
+
+        UnregisterUpdaters( child );
     }
 }
 

@@ -55,7 +55,11 @@ public:
 
 private:
 
+    void                    MappingsCleanup     ( model::IModelNodePtr node );
+
     void                    RemoveNodeMapping   ( model::IModelNodePtr node );
+    void                    UnregisterUpdaters  ( model::IModelNodePtr node );
+
     SceneNode *             GetEngineNode       ( model::IModelNodePtr node );
 
     friend class BVScene;

@@ -7,6 +7,7 @@ namespace bv { namespace model {
 //
 ModelSceneEditor::ModelSceneEditor                          ( BasicNodePtr & rootNode )
     : m_rootNode( rootNode )
+    , m_detachedNode( nullptr )
 {
 }
 

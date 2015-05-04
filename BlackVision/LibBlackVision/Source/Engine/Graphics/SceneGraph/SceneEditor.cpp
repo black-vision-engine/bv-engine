@@ -12,7 +12,8 @@ namespace bv {
 //
 SceneEditor::SceneEditor					( Renderer * renderer, SceneNode * & rootNode )
 	: m_renderer( renderer )
-	, m_rootNode( rootNode )
+    , m_detachedNode( nullptr )
+    , m_rootNode( rootNode )
 {
 }
 
