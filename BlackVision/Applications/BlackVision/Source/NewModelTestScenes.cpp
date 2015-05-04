@@ -692,6 +692,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     return root;
 }
 
+/**All basic shapes in one scene*/
 model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
 	pluginsManager;

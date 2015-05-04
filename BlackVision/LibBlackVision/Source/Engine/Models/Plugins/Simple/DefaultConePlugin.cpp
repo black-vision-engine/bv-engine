@@ -62,9 +62,9 @@ DefaultPluginParamValModelPtr   DefaultConePluginDesc::CreateDefaultModel  ( ITi
     h.CreateVacModel();
     h.AddSimpleParam( PN::TESSELATION, 10, true, true );
     h.AddSimpleParam( PN::HEIGHT, 1.f, true, true );
-    h.AddSimpleParam( PN::INNERHEIGHT, 0.3f, true, true );
+    h.AddSimpleParam( PN::INNERHEIGHT, 0.0f, true, true );
     h.AddSimpleParam( PN::OUTERRADIUS, 1.f, true, true );
-    h.AddSimpleParam( PN::INNERRADIUS, 0.3f, true, true );
+    h.AddSimpleParam( PN::INNERRADIUS, 0.0f, true, true );
     h.AddSimpleParam( PN::ROUNDEDTIPHEIGHT, 0.2f, true, true );
     h.AddSimpleParam( PN::OPENANGLE, 90.f, true, true );
 	h.AddSimpleParam( PN::BEVELTESSELATION, 4, true, true );
