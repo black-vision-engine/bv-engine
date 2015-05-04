@@ -100,6 +100,8 @@ public:
     void                                    AddChildToModelOnly     ( BasicNodePtr n );
     void                                    DetachChildNodeOnly     ( BasicNodePtr n );
 
+	DefaultPluginListFinalizedPtr			GetPlugins				();
+
 private:
 
     void                                    DeleteSelf              ( Renderer * renderer );

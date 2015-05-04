@@ -256,6 +256,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BVScene.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneTools.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\ModelNodeEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\ChannelsFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeGeometryShaderChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizePixelShaderChannel.cpp" />
@@ -374,6 +375,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\ModelNodeEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\ICachedParameter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IState.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IStateSet.h" />

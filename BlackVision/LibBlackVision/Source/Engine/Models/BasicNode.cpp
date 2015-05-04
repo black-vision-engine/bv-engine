@@ -382,6 +382,15 @@ void            BasicNode::DeleteSelf                       ( Renderer * rendere
 
 // ********************************
 //
+DefaultPluginListFinalizedPtr		BasicNode::GetPlugins		()
+{
+    NonNullPluginsListGuard();
+
+    return m_pluginList;
+}
+
+// ********************************
+//
 void            BasicNode::SetPlugins                       ( DefaultPluginListFinalizedPtr plugins )
 {
     m_pluginList = plugins;
