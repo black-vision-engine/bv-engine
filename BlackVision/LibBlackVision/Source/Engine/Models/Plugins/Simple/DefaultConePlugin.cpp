@@ -60,13 +60,13 @@ DefaultPluginParamValModelPtr   DefaultConePluginDesc::CreateDefaultModel  ( ITi
     ModelHelper h( timeEvaluator );
 
     h.CreateVacModel();
-    h.AddSimpleParam( PN::TESSELATION, 3, true, true );
+    h.AddSimpleParam( PN::TESSELATION, 10, true, true );
     h.AddSimpleParam( PN::HEIGHT, 1.f, true, true );
     h.AddSimpleParam( PN::INNERHEIGHT, 0.f, true, true );
     h.AddSimpleParam( PN::OUTERRADIUS, 1.f, true, true );
     h.AddSimpleParam( PN::INNERRADIUS, 0.f, true, true );
     h.AddSimpleParam( PN::ROUNDEDTIPHEIGHT, 0.2f, true, true );
-    h.AddSimpleParam( PN::OPENANGLE, 0.f, true, true );
+    h.AddSimpleParam( PN::OPENANGLE, 90.f, true, true );
 	h.AddSimpleParam( PN::BEVELTESSELATION, 4, true, true );
     h.AddParam< IntInterpolator, DefaultConePlugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
         ( DefaultCone::PN::OPENANGLEMODE, DefaultConePlugin::OpenAngleMode::CW, true, true );
@@ -530,7 +530,8 @@ std::vector<IGeometryGeneratorPtr>    DefaultConePlugin::GetGenerators()
 
     std::vector<IGeometryGeneratorPtr> gens;
     gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::LateralSurface( ConeGenerator::height, ConeGenerator::outer_radius ) ) );
-	gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::ConeClosure( ConeGenerator::height, ConeGenerator::outer_radius ) ) );
+	if( m_openAngle->GetValue() > 0.0 )
+		gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::ConeClosure( ConeGenerator::height, ConeGenerator::outer_radius ) ) );
     //gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::LateralSurface( ConeGenerator::inner_height, ConeGenerator::inner_radius ) ) );
     return gens;
 }

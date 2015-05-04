@@ -39,7 +39,7 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     h.AddSimpleParam( PN::TESSELATION, 10, true, true );
     h.AddSimpleParam( PN::RADIUS, 1.f, true, true );
     h.AddSimpleParam( PN::RADIUSCROSSSECTION, 0.1f, true, true );
-    h.AddSimpleParam( PN::OPENANGLE, 360.f, true, true );
+    h.AddSimpleParam( PN::OPENANGLE, 0.f, true, true );
     h.AddParam< IntInterpolator, DefaultTorus::Plugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
         ( DefaultTorus::PN::OPENANGLEMODE, DefaultTorus::Plugin::OpenAngleMode::CW, true, true );
 
