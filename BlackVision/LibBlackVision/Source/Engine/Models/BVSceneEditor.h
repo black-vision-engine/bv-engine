@@ -26,12 +26,10 @@ private:
 
 private:
 
-    TNodesMapping	        m_nodesMapping;
+    TNodesMapping	            m_nodesMapping;
 
-    BVScene *               m_pScene;
-
-    model::IModelNodePtr    m_detachedModelNode;
-    SceneNode *             m_detachedSceneNode;
+    model::ModelSceneEditor *   m_modelSceneEditor;
+    SceneEditor *               m_engineSceneEditor;
 
 private:
 
@@ -51,34 +49,16 @@ public:
     bool                    AttachChildNode     ( model::IModelNodePtr parent );
     bool                    DetachChildNode     ( model::IModelNodePtr parent, const std::string & nodeToDetach );
 
-    model::IModelNodePtr    GetDetachedNode     ();
-    void                    DeleteDetachedNode  ();
+    void                    DeleteDetachedNodes ();
 
     model::IModelNodePtr    GetRootNode         ();
 
 private:
 
-    //void                    AttachRootNodes     ( TNodesPair & nodesPair );
-
-    //TNodesPair              DetachRootNodes     ();
-    //TNodesPair              DetachNodes         ( model::BasicNodePtr parentNode, const std::string & childNodeName );
-
-    //void                    AttachNodes         ( TNodesPair & parentPair, TNodesPair & childPair );
-
-    //SceneNode *             GetEngineNode       ( model::BasicNodePtr node );
-
-    //void                    UnregisterUpdaters  ( model::BasicNodePtr node );
-    //void                    RemoveNodeMappings  ( model::BasicNodePtr node );
-
-    //void                    DetachChildNode     ( model::BasicNodePtr parentNode, model::BasicNodePtr childNode );
-    //void                    DeleteDetachedNodes ( model::BasicNodePtr modelNode, SceneNode * engineNode );
-
-    BVScene *               S                   ();
+    void                    RemoveNodeMapping   ( model::IModelNodePtr node );
+    SceneNode *             GetEngineNode       ( model::IModelNodePtr node );
 
     friend class BVScene;
-
 };
 
 } //bv
-
-#include "BVSceneEditor.inl"

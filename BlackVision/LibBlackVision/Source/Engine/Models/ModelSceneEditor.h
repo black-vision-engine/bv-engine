@@ -17,13 +17,11 @@ private:
                             ModelSceneEditor    ( const ModelSceneEditor & other ); 
     ModelSceneEditor &      operator =          ( const ModelSceneEditor & other );
 
-private:
+public:
 
                             ModelSceneEditor    ( BasicNodePtr & rootNode );
 
-public:
-
-    void                    SetRootNode         ( BasicNodePtr rootNode );
+                            void                    SetRootNode         ( BasicNodePtr rootNode );
     bool                    DeleteRootNode      ();
 
     void                    AddChildNode        ( BasicNodePtr parentNode, BasicNodePtr childNode );
