@@ -61,31 +61,68 @@ void		SceneEditor::AddChildNode       ( SceneNode * parentNode, SceneNode * chil
 //
 bool		SceneEditor::DeleteChildNode    ( SceneNode * parentNode, SceneNode * childNode )
 {
-    { parentNode; childNode; }
+    if( parentNode != nullptr && childNode != nullptr )
+    {
+        for( unsigned int i = 0; i < parentNode->NumChildNodes(); ++i )
+        {
+            if( parentNode->GetChild( i ) == childNode )
+            {
+                parentNode->DetachChildNode( i );
 
-	return false;
+                DeleteNode( childNode, m_renderer );
+
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 // *******************************
 //
 void		SceneEditor::AttachRootNode     ()
 {
-	// FIXME: implement
+    if( *m_rootNode != nullptr )
+    {
+        DeleteNode( *m_rootNode, m_renderer );
+    }
+
+    *m_rootNode = m_detachedNode;
+
+    m_detachedNode = nullptr;
 }
 
 // *******************************
 //
 bool		SceneEditor::DetachRootNode     ()
 {
-	return false;
+    DeleteDetachedNode();
+    
+    if( *m_rootNode != nullptr )
+    {
+        m_detachedNode = *m_rootNode;
+
+        *m_rootNode = nullptr;
+
+        return true;
+    }
+
+    return false;
 }
 
 // *******************************
 //
 bool		SceneEditor::AttachChildNode    ( SceneNode * parentNode )
 {
-	// FIXME: implement
-	{ parentNode; }
+    if( parentNode && m_detachedNode )
+    {
+        parentNode->AddChildNode( m_detachedNode );
+
+        m_detachedNode = nullptr;
+    
+        return true;
+    }
 
 	return false;
 }
@@ -94,8 +131,19 @@ bool		SceneEditor::AttachChildNode    ( SceneNode * parentNode )
 //
 bool		SceneEditor::DetachChildNode    ( SceneNode * parentNode, SceneNode * childNode )
 {
-	// FIXME: implement
-	{ parentNode; childNode; }
+    DeleteDetachedNode();
+
+    if( parentNode && childNode )
+    {
+        if( parentNode->HasChild( childNode ) )
+        {
+            parentNode->DetachChildNode( childNode );
+
+            m_detachedNode = childNode;
+
+            return true;
+        }
+    }
 
 	return false;
 }
@@ -104,15 +152,19 @@ bool		SceneEditor::DetachChildNode    ( SceneNode * parentNode, SceneNode * chil
 //
 SceneNode *	SceneEditor::GetDetachedNode	()
 {
-	// FIXME: implement
-	return nullptr;
+    return m_detachedNode;
 }
 
 // *******************************
 //
 void		SceneEditor::DeleteDetachedNode	()
 {
-	// FIXME: implement
+    if( m_detachedNode )
+    {
+        DeleteNode( m_detachedNode, m_renderer );
+    
+        m_detachedNode = nullptr;
+    }
 }
 
 // *******************************

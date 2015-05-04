@@ -3,15 +3,14 @@
 #include "Engine/Models/BasicNode.h"
 
 
-namespace bv {
-
+namespace bv { namespace model {
 
 class ModelSceneEditor
 {
 private:
 
-    model::BasicNodePtr &   m_rootNode;
-    model::BasicNodePtr     m_detachedNode;
+    BasicNodePtr &          m_rootNode;
+    BasicNodePtr            m_detachedNode;
 
 private:
 
@@ -20,27 +19,28 @@ private:
 
 private:
 
-                            ModelSceneEditor    ( model::BasicNodePtr & rootNode );
+                            ModelSceneEditor    ( BasicNodePtr & rootNode );
 
 public:
 
-    void                    SetRootNode         ( model::BasicNodePtr rootNode );
+    void                    SetRootNode         ( BasicNodePtr rootNode );
     bool                    DeleteRootNode      ();
 
-    void                    AddChildNode        ( model::BasicNodePtr parentNode, model::BasicNodePtr childNode );
-    bool                    DeleteChildNode     ( model::BasicNodePtr parentNode, const std::string & childNodeName );
+    void                    AddChildNode        ( BasicNodePtr parentNode, BasicNodePtr childNode );
+    bool                    DeleteChildNode     ( BasicNodePtr parentNode, const std::string & childNodeName );
 
     void                    AttachRootNode      ();
     bool                    DetachRootNode      ();
 
-    bool                    AttachChildNode     ( model::BasicNodePtr parent );
-    bool                    DetachChildNode     ( model::BasicNodePtr parent, const std::string & nodeToDetach );
+    bool                    AttachChildNode     ( BasicNodePtr parent );
+    bool                    DetachChildNode     ( BasicNodePtr parent, const std::string & nodeToDetach );
 
-    model::BasicNodePtr     GetDetachedNode     ();
+    BasicNodePtr            GetDetachedNode     ();
     void                    DeleteDetachedNode  ();
 
-    model::BasicNodePtr     GetRootNode         ();
+    BasicNodePtr            GetRootNode         ();
 
 };
 
+} // model
 } //bv

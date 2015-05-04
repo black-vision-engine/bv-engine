@@ -36,14 +36,14 @@ public:
     SceneNode *             DetachChildNode     ( unsigned int idx );
 
     SceneNode *             GetChild            ( unsigned int idx );
+    bool                    HasChild            ( SceneNode * node ) const;
+
     TransformableEntity *   GetTransformable    ();
 
     void                    Update              ( const std::vector< Transform > & parentTransforms );
 
     bool                    IsVisible           () const;
     void                    SetVisible          ( bool visible );
-
-    static void             DeleteNode          ( SceneNode * node, Renderer * renderer );
 
 // ***********************************************************************************************
 //                              HACKISH GLOBAL EFFECT INTERFACE
