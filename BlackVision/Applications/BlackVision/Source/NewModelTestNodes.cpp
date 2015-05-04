@@ -1831,7 +1831,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, rotation_axis, 0.f );
 	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, rotation_axis, -720.f );
 	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.f, rotation_axis2, 50.f );
-	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.2, -5.0f ) );
+	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -5.0f ) );
 
 
 // ============================================ //
@@ -1865,7 +1865,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CCW );
 	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CW );
 #endif
-#ifdef SHOW_CYLIDNER
+#ifdef SHOW_CYLINDER
 	auto plugin = root->GetPlugin( "cylinder" );
 	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 16 );
 	model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.4f );

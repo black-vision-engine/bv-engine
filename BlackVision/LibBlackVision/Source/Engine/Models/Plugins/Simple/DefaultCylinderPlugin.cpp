@@ -37,11 +37,11 @@ DefaultPluginParamValModelPtr   DefaultCylinderPluginDesc::CreateDefaultModel  (
     ModelHelper h( timeEvaluator );
 
     h.CreateVacModel();
-	h.AddSimpleParam( PN::TESSELATION, 10, true, true );
+	h.AddSimpleParam( PN::TESSELATION, 20, true, true );
     h.AddSimpleParam( PN::HEIGHT, 1.f, true, true );
     h.AddSimpleParam( PN::OUTERRADIUS, 1.f, true, true );
-    h.AddSimpleParam( PN::INNERRADIUS, 0.f, true, true );
-    h.AddSimpleParam( PN::OPENANGLE, 0.f, true, true );
+    h.AddSimpleParam( PN::INNERRADIUS, 0.2f, true, true );
+    h.AddSimpleParam( PN::OPENANGLE, 80.f, true, true );
     h.AddParam< IntInterpolator, DefaultPlugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
         ( PN::OPENANGLEMODE, DefaultPlugin::OpenAngleMode::CW, true, true );
     
@@ -76,9 +76,9 @@ namespace CylinderGenerator
 		open_angle_mode = oam;
     }
 
-	class Generator : public IGeometryAndUVsGenerator
+	class MainGenerator : public IGeometryAndUVsGenerator
     {
-	private:
+	protected:
 		double angle_offset;			// OpenAngleMode needs this
 
 		void computeAngleOffset()
@@ -113,7 +113,7 @@ namespace CylinderGenerator
 		@param[inout] direction Because of OpenAngle, we can't generate verticies in continous circles. Thats why we change direction every circle.
 		Function gets direction that will use to draw and in the same param returns direction for the next function.
 		*/
-		void generateCircuit( float R1, float R2, float h1, float h2, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, bool& direction/*, bool inverse = false*/)
+		void generateCircuit( float R1, float R2, float h1, float h2, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, bool& direction )
 		{
 			int max_loop;
 			if( open_angle != 0.0 )
@@ -146,11 +146,6 @@ namespace CylinderGenerator
 					i--;
 			}
 
-			//if( !inverse )
-			//	genCircuitRepairEnding( R1, h1, verts, uvs, i, direction );		/// horrible, but there's no other way to do this
-			//else
-			//	genCircuitRepairEnding( R2, h2, verts, uvs, i, direction );		/// horrible, but there's no other way to do this
-
 			direction = !direction;
 		}
 	public:
@@ -172,7 +167,44 @@ namespace CylinderGenerator
 			generateCircuit( outer_radius, inner_radius, 0.0f, 0.0f, verts, uvs, gen_direction );
 
 			if( open_angle > 0.0 )
-				generateCircuit( inner_radius, inner_radius, 0.0f, 0.0f, verts, uvs, gen_direction );
+				generateCircuit( inner_radius, inner_radius, 0.0f, height, verts, uvs, gen_direction );
+
+            for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
+            {
+                glm::vec3 vert = verts->GetVertices()[ v ];
+				//vert -= center_translate;
+                uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
+                                                vert.y*0.5 + 0.5 ) ); // FIXME: scaling
+            }
+		}
+	};
+
+	class ClosureGenerator : public MainGenerator
+    {
+	private:
+		bool rotated;
+	public:
+		ClosureGenerator( bool isRotated ) : rotated( isRotated ){}
+
+		virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
+
+		virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+        {
+			computeAngleOffset();
+			double angle = 0.0;
+
+			if( rotated )	// If surface is rotated we must compute rotation angle
+				angle = computeAngle2Clamped( TWOPI, 1 );
+			angle += angle_offset;
+
+
+			double cos_angle = cos( angle );
+			double sin_angle = sin( angle );
+
+			verts->AddAttribute( glm::vec3( outer_radius * cos_angle, height, outer_radius * sin_angle ) );
+			verts->AddAttribute( glm::vec3( inner_radius * cos_angle, height, inner_radius * sin_angle ) );
+			verts->AddAttribute( glm::vec3( outer_radius * cos_angle, 0.0f, outer_radius * sin_angle ) );
+			verts->AddAttribute( glm::vec3( inner_radius * cos_angle, 0.0f, inner_radius * sin_angle ) );
 
             for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
             {
@@ -212,7 +244,12 @@ std::vector<IGeometryGeneratorPtr>    DefaultPlugin::GetGenerators()
 		m_openAngleMode->Evaluate() );
 
     std::vector<IGeometryGeneratorPtr> gens;
-    gens.push_back( IGeometryGeneratorPtr( new CylinderGenerator::Generator() ) );
+    gens.push_back( IGeometryGeneratorPtr( new CylinderGenerator::MainGenerator() ) );
+	if( m_openAngle->GetValue() > 0.0 )
+	{
+		gens.push_back( IGeometryGeneratorPtr( new CylinderGenerator::ClosureGenerator(true) ) );
+		gens.push_back( IGeometryGeneratorPtr( new CylinderGenerator::ClosureGenerator(false) ) );
+	}
 
     return gens;
 }
@@ -220,6 +257,7 @@ std::vector<IGeometryGeneratorPtr>    DefaultPlugin::GetGenerators()
 bool                                DefaultPlugin::NeedsTopologyUpdate()
 {
     return ParameterChanged( PN::HEIGHT ) ||
+		ParameterChanged( PN::TESSELATION ) ||
         ParameterChanged( PN::OUTERRADIUS ) ||
         ParameterChanged( PN::OPENANGLE ) ||
         ParameterChanged( PN::INNERRADIUS ) ||
