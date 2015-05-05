@@ -695,6 +695,37 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     return root;
 }
 
+model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    {timelineManager;}
+    {pluginsManager;}
+
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
+
+    //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+    //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+
+    //root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    //auto plugin = root->GetPlugin( "texture" );
+    //model::LoadTexture( plugin, "time_zones_4.jpg" );
+
+    root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
+    auto plugin = root->GetPlugin( "video input" );
+    //auto success = model::LoadTexture( plugin, "Assets/Textures/time_zones_4.jpg" );
+    auto vi = new ExampleVideoInput( 10, 10, 1.f );
+    auto success = plugin->LoadResource( AssetDescConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture(), vi ) ) );
+    assert(success);
+    //auto vi2 = new ExampleVideoInput( 20, 20, 1.f );
+    //success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi2->GetTexture(), vi2 ) ) );
+    //assert(success);
+
+    model::SetParameter( plugin->GetParameter( "source" ), 0.f, 1.f );
+
+    return root;
+}
+
 
 
 } //bv

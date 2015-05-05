@@ -747,9 +747,6 @@
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationAsset.cpp">
       <Filter>Assets\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Font\Engines\FreeTypeEngine.cpp">
       <Filter>Assets\Font\Engines</Filter>
     </ClCompile>
@@ -1570,9 +1567,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Texture\MipMapAsset.h">
       <Filter>Assets\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
-      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Texture\AnimationLoader.h">
       <Filter>Assets\Texture</Filter>
