@@ -1,12 +1,36 @@
 #include "DefaultSpringPlugin.h"
 
-namespace bv { namespace model { namespace DefaultSpring {
+namespace bv { namespace model {
+	
+typedef ParamEnum< DefaultSpring::Plugin::WeightCenter > ParamEnumWC;
+
+
+VoidPtr    ParamEnumWC::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
+
+template<>
+static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultSpring::Plugin::WeightCenter >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultSpring::Plugin::WeightCenter >( name, timeline );
+}
+
+
+#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
+	
+namespace DefaultSpring {
 
 const std::string PN::TESSELATION = "tesselation";
 const std::string PN::RADIUS = "radius";
 const std::string PN::RADIUSCROSSSECTION = "radius2";
 const std::string PN::DELTA = "delta";
 const std::string PN::TURNS = "turns";
+const std::string PN::WEIGHTCENTERX = "weight center x";
+const std::string PN::WEIGHTCENTERY = "weight center y";
+const std::string PN::WEIGHTCENTERZ = "weight center z";
+
+
 
 
 IPluginPtr                      PluginDesc::CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
@@ -34,6 +58,12 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     h.AddSimpleParam( PN::RADIUSCROSSSECTION, 0.2f, true, true );
     h.AddSimpleParam( PN::DELTA, 6.0f, true, true );
     h.AddSimpleParam( PN::TURNS, 10, true, true );
+	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( PN::WEIGHTCENTERX, Plugin::WeightCenter::BOTTOM, true, true );\
+	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( PN::WEIGHTCENTERY, Plugin::WeightCenter::BOTTOM, true, true );
+	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( PN::WEIGHTCENTERZ, Plugin::WeightCenter::BOTTOM, true, true );
 
     return h.GetModel();
 }
@@ -54,7 +84,10 @@ bool                                Plugin::NeedsTopologyUpdate()
         ParameterChanged( PN::RADIUS ) ||
         ParameterChanged( PN::RADIUSCROSSSECTION ) ||
         ParameterChanged( PN::TESSELATION ) ||
-        ParameterChanged( PN::TURNS );
+        ParameterChanged( PN::TURNS ) ||
+		ParameterChanged( PN::WEIGHTCENTERX ) ||
+		ParameterChanged( PN::WEIGHTCENTERY ) ||
+		ParameterChanged( PN::WEIGHTCENTERZ );
 }
 
 class Generator : public IGeometryAndUVsGenerator
@@ -66,6 +99,12 @@ class Generator : public IGeometryAndUVsGenerator
     float r2;
     int turns;
 	float delta;
+
+	Plugin::WeightCenter weight_centerX;
+	Plugin::WeightCenter weight_centerY;
+	Plugin::WeightCenter weight_centerZ;
+
+	glm::vec3 center_translate;
 public:
     Generator( IParamValModelPtr m ) : model( m ) { }
 

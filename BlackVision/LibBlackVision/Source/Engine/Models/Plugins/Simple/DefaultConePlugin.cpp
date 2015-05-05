@@ -26,7 +26,7 @@ VoidPtr    ParamEnumWC::QueryParamTyped  ()
 template<>
 static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
 {
-    return CreateParameterEnum< DefaultCone::DefaultConePlugin::OpenAngleMode >( name, timeline );
+    return CreateParameterEnum< DefaultCone::DefaultConePlugin::WeightCenter >( name, timeline );
 }
 
 
@@ -62,7 +62,7 @@ DefaultPluginParamValModelPtr   DefaultConePluginDesc::CreateDefaultModel  ( ITi
     h.CreateVacModel();
     h.AddSimpleParam( PN::TESSELATION, 10, true, true );
     h.AddSimpleParam( PN::HEIGHT, 1.f, true, true );
-    h.AddSimpleParam( PN::INNERHEIGHT, 0.3f, true, true );
+    h.AddSimpleParam( PN::INNERHEIGHT, 0.6f, true, true );
     h.AddSimpleParam( PN::OUTERRADIUS, 1.f, true, true );
     h.AddSimpleParam( PN::INNERRADIUS, 0.3f, true, true );
     h.AddSimpleParam( PN::ROUNDEDTIPHEIGHT, 0.2f, true, true );
