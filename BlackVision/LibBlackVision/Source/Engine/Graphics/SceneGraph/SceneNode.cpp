@@ -22,7 +22,7 @@ SceneNode::SceneNode           ( TransformableEntity * transformable )
 //
 SceneNode::~SceneNode          ()
 {
-    delete m_transformable;
+    DeleteTransformable();
 
     for ( auto node : m_sceneNodes )
     {
@@ -105,6 +105,24 @@ bool                    SceneNode::HasChild            ( SceneNode * node ) cons
 TransformableEntity *   SceneNode::GetTransformable     ()
 {
     return m_transformable;
+}
+
+// ********************************
+//
+void            SceneNode::SetTransformable     ( TransformableEntity * transformable )
+{
+    DeleteTransformable();
+
+    m_transformable = transformable;
+}
+
+// ********************************
+//
+void            SceneNode::DeleteTransformable  ()
+{
+    delete m_transformable;
+
+    m_transformable = nullptr;
 }
 
 // ********************************

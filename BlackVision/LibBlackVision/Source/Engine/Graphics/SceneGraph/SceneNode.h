@@ -39,6 +39,13 @@ public:
     bool                    HasChild            ( SceneNode * node ) const;
 
     TransformableEntity *   GetTransformable    ();
+   
+private:
+
+    void                    SetTransformable    ( TransformableEntity * transformable );
+    void                    DeleteTransformable ();
+
+public:
 
     void                    Update              ( const std::vector< Transform > & parentTransforms );
 
@@ -73,6 +80,9 @@ public:
 // ***********************************************************************************************
 //                          END OF HACKISH GLOBAL EFFECT INTERFACE
 // ***********************************************************************************************
+
+    // FIXME: think of some better approach to dynamic node state manipulation
+    friend class BVSceneTools;
 };
 
 } // bv
