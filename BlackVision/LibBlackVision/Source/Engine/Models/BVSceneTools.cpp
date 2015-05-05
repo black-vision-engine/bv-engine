@@ -2,16 +2,47 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
+
 #include "Engine/Graphics/Effects/DefaultEffect.h"
+
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"
 #include "Engine/Graphics/Resources/VertexDescriptor.h"
 
-#include "Engine/Models/Interfaces/IOverrideState.h"
+#include "Engine/Graphics/Renderers/Renderer.h"
+
 #include "Engine/Models/Updaters/NodeUpdater.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
 
+#include "Engine/Models/Interfaces/IOverrideState.h"
+
 
 namespace bv {
+
+// *******************************
+// 
+void                BVSceneTools::ClearSingleNode                       ( SceneNode * node, Renderer * renderer )
+{
+    renderer->FreeAllPDResources( static_cast< RenderableEntity * >( node->GetTransformable() ) );
+    node->DeleteTransformable();
+}
+
+// *******************************
+//
+void                BVSceneTools::SyncSingleNode                        ( model::BasicNodePtr modelNode, SceneNode * node )
+{
+    model::IPluginConstPtr finalizer = modelNode->GetFinalizePlugin();
+    RenderableEntity * renderable = CreateRenderableEntity( modelNode, finalizer );
+
+    node->SetTransformable( renderable );
+
+    if( UpdatersManager::Get().IsRegistered( modelNode.get() ) )
+    {
+        UpdatersManager::Get().RemoveNodeUpdater( modelNode.get() );
+    }
+
+    NodeUpdaterPtr updater  = NodeUpdater::Create( node, modelNode );
+    UpdatersManager::Get().RegisterUpdater( modelNode.get(), updater );
+}
 
 // *******************************
 //

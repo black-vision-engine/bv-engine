@@ -26,6 +26,8 @@ public:
 
     void                        UpdateStep          ();
 
+    bool                        IsRegistered        ( const model::IModelNode * node );
+
     void                        RegisterUpdater     ( const model::IModelNode * node,  IUpdaterPtr updater );
     void                        RemoveNodeUpdater   ( const model::IModelNode * node );
 

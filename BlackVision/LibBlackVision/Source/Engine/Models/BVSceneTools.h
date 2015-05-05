@@ -13,6 +13,7 @@
 
 namespace bv {
 
+class Renderer;
 class SceneNode;
 class RenderableEntity;
 class RenderableArrayDataArraysSingleVertexBuffer;
@@ -28,6 +29,9 @@ private:
     typedef     RenderableArrayDataArraysSingleVertexBuffer RADASVB;
 
 public:
+
+    static  void                ClearSingleNode                     ( SceneNode * node, Renderer * renderer );
+    static  void                SyncSingleNode                      ( model::BasicNodePtr modelNode, SceneNode * node );
 
     static  SceneNode *         BuildEngineSceneNode                ( model::BasicNodePtr modelNode, std::hash_map< model::IModelNode *, SceneNode * > & nodesMapping );
 

@@ -29,7 +29,14 @@ void UpdatersManager::UpdateStep        ()
 
 // *******************************
 //
-void UpdatersManager::RegisterUpdater    ( const model::IModelNode * node, IUpdaterPtr updater )
+bool    UpdatersManager::IsRegistered       ( const model::IModelNode * node )
+{
+    return m_updatersMapping.find( node ) != m_updatersMapping.end();
+}
+
+// *******************************
+//
+void    UpdatersManager::RegisterUpdater    ( const model::IModelNode * node, IUpdaterPtr updater )
 {
     assert( m_updatersMapping.find( node ) == m_updatersMapping.end() );
 

@@ -2,7 +2,9 @@
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Interfaces/IModelNode.h"
+
 #include "Engine/Models/Plugins/DefaultFinalizePlugin.h"
+
 
 namespace bv { namespace model {
 
@@ -13,17 +15,22 @@ private:
     IPluginPtr			m_detachedPlugin;
 
 public:
-                            ModelNodeEditor		( model::BasicNodePtr model ); 
+                            ModelNodeEditor		( BasicNodePtr model ); 
 
-    void                    AddPlugin			( model::IPluginPtr plugin );
-    void                    AddPlugin			( const std::string & uid, const std::string & name );
+    bool                    AddPlugin			( IPluginPtr plugin );
     bool                    DeletePlugin		( const std::string & name );
 
-    void                    AttachPlugin		();
+    bool                    AttachPlugin		();
     bool                    DetachPlugin		( const std::string & name );
 
 	IPluginPtr				GetDetachedPlugin     ();
     void                    DeleteDetachedPlugin  ();
+
+	void					RefreshNode ( SceneNode * sceneNode, Renderer * renderer );
+
+private:
+	bool					PluginCanBeAttached ( IPluginPtr plugin );
+
 };
 
 } //model

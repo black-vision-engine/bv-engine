@@ -1,30 +1,26 @@
 #include "ModelNodeEditor.h"
 
+#include "Engine/Models/Plugins/Manager/PluginsManager.h"
+#include "Engine/Models/BVSceneTools.h"
+
 namespace bv { namespace model {
 
 // *******************************
 //
-				ModelNodeEditor::ModelNodeEditor		( model::BasicNodePtr model )
+				ModelNodeEditor::ModelNodeEditor		( BasicNodePtr model )
     : m_model( model )
+	, m_detachedPlugin( nullptr )
 {
 }
 
 // ********************************
 //
-void			ModelNodeEditor::AddPlugin				( model::IPluginPtr plugin )
+bool			ModelNodeEditor::AddPlugin				( IPluginPtr plugin )
 {
-	if( plugin )
+	if( plugin && PluginCanBeAttached( plugin ) )
 	{
 		m_model->GetPlugins()->AttachPlugin( plugin );
-	}
-}
 
-// ********************************
-//
-bool			ModelNodeEditor::DeletePlugin			( const std::string & name )
-{
-	if( m_model->GetPlugins()->DetachPlugin( name ) )
-	{
 		return true;
 	}
 	return false;
@@ -32,22 +28,34 @@ bool			ModelNodeEditor::DeletePlugin			( const std::string & name )
 
 // ********************************
 //
-void			ModelNodeEditor::AttachPlugin			()
+bool			ModelNodeEditor::DeletePlugin			( const std::string & name )
 {
-	if( m_detachedPlugin )
+	return m_model->GetPlugins()->DetachPlugin( name );
+}
+
+// ********************************
+//
+bool				ModelNodeEditor::AttachPlugin			()
+{
+	if( m_detachedPlugin && PluginCanBeAttached( m_detachedPlugin ) )
     {
 		m_model->GetPlugins()->AttachPlugin( m_detachedPlugin );
         m_detachedPlugin = nullptr;
+
+		return true;
     }
+
+	return false;
 }
 
 // ********************************
 //
 bool				ModelNodeEditor::DetachPlugin		( const std::string & name )
 {
+	m_detachedPlugin = m_model->GetPlugins()->DetachPlugin( name );
+
 	if ( m_detachedPlugin )
 	{
-		m_detachedPlugin = m_model->GetPlugins()->DetachPlugin( name );
 		return true;
 	}
 
@@ -66,6 +74,25 @@ IPluginPtr			ModelNodeEditor::GetDetachedPlugin	()
 void				ModelNodeEditor::DeleteDetachedPlugin	()
 {
     m_detachedPlugin = nullptr;
+}
+
+
+bool				ModelNodeEditor::PluginCanBeAttached ( IPluginPtr plugin )
+{
+	auto pluginsManager = &PluginsManager::DefaultInstance();
+	auto plugins = m_model->GetPlugins();
+
+	auto prev = plugins->NumPlugins() > 0 ? plugins->GetLastPlugin() : nullptr;
+
+	assert( pluginsManager->CanBeAttachedTo( plugin->GetTypeUid(), prev ) );
+		
+	return pluginsManager->CanBeAttachedTo( plugin->GetTypeUid(), prev );
+}
+
+void				ModelNodeEditor::RefreshNode ( SceneNode * sceneNode, Renderer * renderer )
+{
+		BVSceneTools::ClearSingleNode( sceneNode, renderer );
+		BVSceneTools::SyncSingleNode( m_model, sceneNode );
 }
 
 

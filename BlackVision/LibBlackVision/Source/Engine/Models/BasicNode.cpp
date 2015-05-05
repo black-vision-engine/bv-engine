@@ -7,6 +7,8 @@
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/BasicOverrideState.h"
 
+#include "Engine/Models/ModelNodeEditor.h"
+
 
 namespace bv { namespace model {
 
@@ -38,6 +40,7 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator,
     , m_pluginsManager( pluginsManager )
     , m_overrideState( nullptr )
     , m_visible( true )
+	, m_modelNodeEditor ( nullptr )
 {
     if( pluginsManager == nullptr )
     {
@@ -66,7 +69,11 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
         }
     };
 
-    return std::make_shared<make_shared_enabler_BasicNode>( name, timeEvaluator, pluginsManager );
+	auto node = std::make_shared<make_shared_enabler_BasicNode>( name, timeEvaluator, pluginsManager );
+
+	node->SetModelNodeEditor( new ModelNodeEditor( node ) );
+
+    return node;
 }    
 
 // ********************************
@@ -127,50 +134,6 @@ IModelNodePtr                   BasicNode::GetChild                 ( const std:
 const IPluginListFinalized *    BasicNode::GetPluginList            () const
 {
     return m_pluginList.get();
-}
-
-// ********************************
-// FIXME: implement using API from BVScene
-bool                            BasicNode::DeleteNode               ( const std::string & name, Renderer * renderer )
-{
-    auto node = GetChild( name );
-
-    if( node )
-    {
-        auto basicNode = std::static_pointer_cast< BasicNode >( node );
-
-        DetachChildNodeOnly( basicNode );
-    
-        basicNode->DeleteSelf( renderer );
-    
-        return true;
-    }
-
-    return false;
-}
-
-// ********************************
-// FIXME: implement using API from BVScene
-void                            BasicNode::AddChildNode             ( IModelNodePtr modelNode )
-{
-    // Verify validity
-    assert( modelNode != nullptr );
-    assert( ms_nodesMapping.find( modelNode.get() ) == ms_nodesMapping.end() );
-    assert( ms_nodesMapping.find( this ) != ms_nodesMapping.end() );
-
-    // Create engine node corresponding to modelNode
-    BasicNode * basicModelNode = static_cast< BasicNode * >( modelNode.get() );
-	{ basicModelNode; }
-    /*
-	SceneNode * engineNode = basicModelNode->BuildScene();
-
-    // Register created node and its mapping
-    ms_nodesMapping[ basicModelNode ] = engineNode;
-
-    // Add model node to current tree along with corresponding engine node
-    AddChildToModelOnly( std::static_pointer_cast< BasicNode >( modelNode ) );
-    ms_nodesMapping[ this ]->AddChildNode( engineNode );
-	*/
 }
 
 // ********************************
@@ -356,28 +319,22 @@ void            BasicNode::DetachChildNodeOnly              ( BasicNodePtr n )
 }
 
 // ********************************
-// FIXME: implement using API from BVScene
-void            BasicNode::DeleteSelf                       ( Renderer * renderer )
+//
+ModelNodeEditor *					BasicNode::GetModelNodeEditor		()
 {
-	{ renderer; }
-	/*
-    // Unregister updater
-    UpdatersManager::Get().RemoveNodeUpdater( this );
+	if( !m_modelNodeEditor)
+	{
+		m_modelNodeEditor = new ModelNodeEditor( shared_from_this() );
+	}
+	return m_modelNodeEditor;
+}
 
-
-    // Remove engine node and clear all resources
-    auto engineNode = ms_nodesMapping[ this ];
-    ms_nodesMapping.erase( this );
-
-    // Clear all OpenGL resources
-    SceneNode::DeleteNode( engineNode, renderer );
-
-    // Remove all children
-    for( auto ch : m_children )
-    {
-        ch->DeleteSelf( renderer ); 
-    }
-	*/
+// ********************************
+//
+void								BasicNode::SetModelNodeEditor		( ModelNodeEditor * editor )
+{
+	delete m_modelNodeEditor; //?
+	m_modelNodeEditor = editor;
 }
 
 // ********************************

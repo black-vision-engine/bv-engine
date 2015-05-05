@@ -846,6 +846,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelNodeEditor.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\ModelSceneEditor.cpp">
+      <Filter>Engine\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1707,6 +1710,9 @@
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelNodeEditor.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
   </ItemGroup>

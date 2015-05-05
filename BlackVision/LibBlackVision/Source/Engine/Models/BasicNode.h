@@ -9,7 +9,6 @@
 
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
 
-
 namespace bv { namespace model {
 
 class PluginsManager;
@@ -20,6 +19,8 @@ DEFINE_PTR_TYPE(BasicNode)
 DEFINE_CONST_PTR_TYPE(BasicNode)
 
 typedef std::vector< BasicNodePtr > TNodeVec;
+
+class ModelNodeEditor;
 
 
 class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicNode >
@@ -44,6 +45,8 @@ private:
 
 	INodeLogicPtr					m_nodeLogic;
 
+	ModelNodeEditor *				m_modelNodeEditor;
+
 protected:
 
     explicit BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager = nullptr );
@@ -61,11 +64,6 @@ public:
     virtual IModelNodePtr                   GetChild                ( const std::string & name ) override;
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
-
-    // FIXME: temporary "dynamic tree" meothods, to be replaced by some better interface
-    // FIXME: these two should be called only after model scene is attached to an engine scene
-    virtual bool                            DeleteNode              ( const std::string & name, Renderer * renderer ) override;
-    virtual void                            AddChildNode            ( IModelNodePtr modelNode ) override;
 
     virtual unsigned int                    GetNumChildren          () const override;
 
@@ -100,11 +98,12 @@ public:
     void                                    AddChildToModelOnly     ( BasicNodePtr n );
     void                                    DetachChildNodeOnly     ( BasicNodePtr n );
 
+	ModelNodeEditor *						GetModelNodeEditor		();
+	void									SetModelNodeEditor		( ModelNodeEditor * editor );
+
 	DefaultPluginListFinalizedPtr			GetPlugins				();
 
 private:
-
-    void                                    DeleteSelf              ( Renderer * renderer );
 
     //Convenience API (so that list can be created from external source and simply attached to this node)
     void                                    SetPlugins              ( DefaultPluginListFinalizedPtr plugins );

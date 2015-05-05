@@ -36,14 +36,21 @@ public:
     SceneNode *             DetachChildNode     ( unsigned int idx );
 
     SceneNode *             GetChild            ( unsigned int idx );
+    bool                    HasChild            ( SceneNode * node ) const;
+
     TransformableEntity *   GetTransformable    ();
+   
+private:
+
+    void                    SetTransformable    ( TransformableEntity * transformable );
+    void                    DeleteTransformable ();
+
+public:
 
     void                    Update              ( const std::vector< Transform > & parentTransforms );
 
     bool                    IsVisible           () const;
     void                    SetVisible          ( bool visible );
-
-    static void             DeleteNode          ( SceneNode * node, Renderer * renderer );
 
 // ***********************************************************************************************
 //                              HACKISH GLOBAL EFFECT INTERFACE
@@ -73,6 +80,9 @@ public:
 // ***********************************************************************************************
 //                          END OF HACKISH GLOBAL EFFECT INTERFACE
 // ***********************************************************************************************
+
+    // FIXME: think of some better approach to dynamic node state manipulation
+    friend class BVSceneTools;
 };
 
 } // bv

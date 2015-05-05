@@ -5,6 +5,7 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/BVSceneEditor.h"
+#include "Engine/Models/ModelNodeEditor.h"
 
 #include "Tools/SimpleTimer.h"
 #include "Tools/HerarchicalProfiler.h"
@@ -132,8 +133,8 @@ void BVAppLogic::LoadScene          ( void )
     //model::BasicNodePtr root = TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
     //model::BasicNodePtr root = TestScenesFactory::OlafTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
     //model::BasicNodePtr root = TestScenesFactory::CreedTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
-    model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
-	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
+    //model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
+	model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
 	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
 
 	assert( root );
@@ -225,8 +226,17 @@ void BVAppLogic::OnKey           ( unsigned char c )
 {
     if( c == '-' )
     {
-        BVGL::PrintCompleteSummary( "BEFORE REMOVING ROOT NODE" );
-        m_bvScene->GetSceneEditor()->DeleteRootNode();
+        //BVGL::PrintCompleteSummary( "BEFORE REMOVING ROOT NODE" );
+        //m_bvScene->GetSceneEditor()->DeleteRootNode();
+
+		BVGL::PrintCompleteSummary( "BEFORE" );
+		
+        auto root = m_bvScene->GetModelSceneRoot();
+		m_bvScene->GetSceneEditor()->DeletePlugin( root, "text" );
+		
+
+        BVGL::PrintCompleteSummary( "AFTER" );
+
     }
     else if( c == 8 )
     {

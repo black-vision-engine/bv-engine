@@ -22,7 +22,7 @@ SceneNode::SceneNode           ( TransformableEntity * transformable )
 //
 SceneNode::~SceneNode          ()
 {
-    delete m_transformable;
+    DeleteTransformable();
 
     for ( auto node : m_sceneNodes )
     {
@@ -87,9 +87,42 @@ SceneNode *             SceneNode::GetChild             ( unsigned int idx )
 
 // ********************************
 //
+bool                    SceneNode::HasChild            ( SceneNode * node ) const
+{
+    for( auto child : m_sceneNodes )
+    {
+        if ( child == node )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// ********************************
+//
 TransformableEntity *   SceneNode::GetTransformable     ()
 {
     return m_transformable;
+}
+
+// ********************************
+//
+void            SceneNode::SetTransformable     ( TransformableEntity * transformable )
+{
+    DeleteTransformable();
+
+    m_transformable = transformable;
+}
+
+// ********************************
+//
+void            SceneNode::DeleteTransformable  ()
+{
+    delete m_transformable;
+
+    m_transformable = nullptr;
 }
 
 // ********************************
@@ -118,20 +151,6 @@ bool                    SceneNode::IsVisible    () const
 void                    SceneNode::SetVisible   ( bool visible )
 {
     m_visible = visible;
-}
-
-// ********************************
-//
-void                    SceneNode::DeleteNode   ( SceneNode * node, Renderer * renderer )
-{
-    while( node->NumChildNodes() > 0 )
-    {
-        DeleteNode( node->DetachChildNode( (unsigned int)0 ), renderer );
-    }
-
-    renderer->FreeAllPDResources( static_cast< RenderableEntity * >( node->GetTransformable() ) );
-
-    delete node;
 }
 
 // ********************************

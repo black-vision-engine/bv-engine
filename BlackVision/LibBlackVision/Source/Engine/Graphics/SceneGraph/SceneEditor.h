@@ -10,13 +10,18 @@ class SceneEditor
 {
 private:
 
-	SceneNode **	m_rootNode;
+	SceneNode * &	m_rootNode;
 	SceneNode *		m_detachedNode;
 	Renderer *		m_renderer;
 
+private:
+
+                            SceneEditor         ( const SceneEditor & other );
+    SceneEditor &           operator =          ( const SceneEditor & other );
+
 public:
 
-							SceneEditor			( Renderer * renderer, SceneNode ** rootNode );
+							SceneEditor			( Renderer * renderer, SceneNode * & rootNode );
 
     void                    SetRootNode         ( SceneNode * rootNode );
     bool                    DeleteRootNode      ();
