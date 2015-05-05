@@ -62,9 +62,9 @@ DefaultPluginParamValModelPtr   DefaultConePluginDesc::CreateDefaultModel  ( ITi
     h.CreateVacModel();
     h.AddSimpleParam( PN::TESSELATION, 10, true, true );
     h.AddSimpleParam( PN::HEIGHT, 1.f, true, true );
-    h.AddSimpleParam( PN::INNERHEIGHT, 0.0f, true, true );
+    h.AddSimpleParam( PN::INNERHEIGHT, 0.3f, true, true );
     h.AddSimpleParam( PN::OUTERRADIUS, 1.f, true, true );
-    h.AddSimpleParam( PN::INNERRADIUS, 0.0f, true, true );
+    h.AddSimpleParam( PN::INNERRADIUS, 0.3f, true, true );
     h.AddSimpleParam( PN::ROUNDEDTIPHEIGHT, 0.2f, true, true );
     h.AddSimpleParam( PN::OPENANGLE, 90.f, true, true );
 	h.AddSimpleParam( PN::BEVELTESSELATION, 4, true, true );
@@ -409,10 +409,13 @@ namespace ConeGenerator
 			float correct_radius2 = correction2.x;
 			float correct_y2 = correction2.y;
 
+			//// In some situations inner_height is lower then beveled part of cone
+			float in_height = glm::max( inner_height, correct_y1 );
+
 			// Triangle from top to inner height
 			verts->AddAttribute( glm::vec3( 0.0, height, 0.0 ) + center_translate );
-			verts->AddAttribute( glm::vec3( outer_radius * ( ( height - inner_height ) / height) * cos( rotation ), inner_height, outer_radius * ( ( height - inner_height ) / height) * sin( rotation ) ) + center_translate );
-			verts->AddAttribute( glm::vec3( 0.0, inner_height, 0.0 ) + center_translate );
+			verts->AddAttribute( glm::vec3( outer_radius * ( ( height - in_height ) / height) * cos( rotation ), in_height, outer_radius * ( ( height - in_height ) / height) * sin( rotation ) ) + center_translate );
+			verts->AddAttribute( glm::vec3( 0.0, in_height, 0.0 ) + center_translate );
 
 			// Quad from inner height to bevel
 			verts->AddAttribute( glm::vec3( correct_radius1 * cos( rotation ), correct_y1, correct_radius1 * sin( rotation ) ) + center_translate );
@@ -468,6 +471,11 @@ namespace ConeGenerator
 			glm::vec2 circleCenter2;
 			circleCenter2.x = inner_radius + bevel;
 			circleCenter2.y = float( bevel * tan( angle_between_edges / 2 ) );
+			if( inner_height == 0.0 )
+			{
+				circleCenter2.x = 0.0;
+				circleCenter2.y = 0.0;
+			}
 
 			generateHalfClosure( circleCenter1, circleCenter2, verts, uvs, angle_offset );
 
