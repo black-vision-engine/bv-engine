@@ -121,5 +121,24 @@ void                    DefaultPluginListFinalized::AttachPlugin        ( IPlugi
     m_finalizePlugin->SetPrevPlugin( plugin );
 }
 
+IPluginPtr				DefaultPluginListFinalized::DetachPlugin	   ( const std::string & name )
+{
+	for( unsigned int i = 0; i < m_plugins.size(); ++i )
+    {
+        if( m_plugins[ i ]->GetName() == name )
+        {
+			auto plugin =  m_plugins[ i ];
+            m_plugins.erase( m_plugins.begin() + i );
+
+			assert( !m_plugins.empty() );
+			m_finalizePlugin->SetPrevPlugin( m_plugins.back() );
+
+            return plugin;
+        }
+    }
+
+	return nullptr;
+}
+
 } // model
 } // bv

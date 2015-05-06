@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Interfaces/IFinalizePlugin.h"
+#include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
 
 #include "Engine/Models/Plugins/Channels/DefaultFinalizePixelShaderChannel.h"
@@ -20,6 +21,7 @@ private:
     std::string                     m_name;
     static std::string              m_uid;
 
+    DefaultPixelShaderChannelPtr	m_defaultPSChannel;
     DefaultVertexShaderChannelPtr   m_defaultVSChannel;
 
     mutable DefaultFinalizePixelShaderChannelPtr    m_finalizePSC;

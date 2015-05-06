@@ -843,6 +843,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\ModelNodeEditor.cpp">
+      <Filter>Engine\Models</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelSceneEditor.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
@@ -1706,6 +1709,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\ModelNodeEditor.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
@@ -1756,7 +1762,10 @@
     <None Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.inl">
       <Filter>Engine\Models\Updaters</Filter>
     </None>
-    <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.inl">
+    <None Include="..\..\..\Source\Engine\Models\BVSceneEditor.inl">
+      <Filter>Engine\Models</Filter>
+    </None>
+	  <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.inl">
       <Filter>Engine\Models\Plugins\Parameters</Filter>
     </None>
     <None Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.inl">

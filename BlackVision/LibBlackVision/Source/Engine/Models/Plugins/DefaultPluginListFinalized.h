@@ -34,6 +34,7 @@ public:
     IPluginPtr                      GetPlugin           ( unsigned int idx );
 
     void                            AttachPlugin        ( IPluginPtr plugin );
+    IPluginPtr                      DetachPlugin        ( const std::string & name );
 
 };
 
