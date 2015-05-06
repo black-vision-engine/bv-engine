@@ -2,7 +2,7 @@
 
 namespace bv { namespace model {
 	
-typedef ParamEnum< DefaultCube::Plugin::WeightCenter > ParamEnumWC;	
+typedef ParamEnum< DefaultCube::Plugin::WeightCenter > ParamEnumWC;
 	
 
 VoidPtr    ParamEnumWC::QueryParamTyped  ()
@@ -259,7 +259,10 @@ bool                                Plugin::NeedsTopologyUpdate()
 {
     return ParameterChanged( PN::BEVEL ) || 
         ParameterChanged( PN::DIMENSIONS ) ||
-        ParameterChanged( PN::TESSELATION );
+        ParameterChanged( PN::TESSELATION )	||
+		ParameterChanged( PN::WEIGHTCENTERX ) ||
+		ParameterChanged( PN::WEIGHTCENTERY ) ||
+		ParameterChanged( PN::WEIGHTCENTERZ );;
 }
 
 Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
