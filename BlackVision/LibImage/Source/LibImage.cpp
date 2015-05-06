@@ -9,6 +9,27 @@
 namespace bv { namespace image
 {
 
+struct Float4
+{
+	Float32 x;
+	Float32 y;
+	Float32 z;
+	Float32 w;
+
+	Float4( Float32 x_, Float32 y_, Float32 z_, Float32 w_ )
+		: x( x_ ), y( y_ ), z( z_ ), w( w_ ) {}
+
+	Float4 operator + ( const Float4 & rhs )
+	{
+		return Float4( x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w );
+	}
+
+	Float4 operator * ( Float32 f )
+	{
+		return Float4( x * f, y * f, z * f, w * f );
+	}
+};
+
 // *********************************
 //
 ImageProperties GetImageProps( const std::string & imageFilePath )
@@ -172,11 +193,38 @@ inline unsigned char GetPixelColor( Int32 x, Int32 y, const char* data, UInt32 w
 
 // *********************************
 //
+inline Float4 GetPixelColorFloat4( Int32 x, Int32 y, const char * data, UInt32 width, UInt32 height )
+{
+	if( x < 0 || x >= ( Int32 )width || y < 0 || y >= ( Int32 )height )
+	{
+	    return Float4( 0.f, 0.f, 0.f, 0.f );
+	}
+
+	const unsigned char * p = (unsigned char *)&data[ 4 * ( x + y * width ) ];
+	return Float4( p[ 0 ] / 255.f, p[ 1 ] / 255.f, p[ 2 ] / 255.f, p[ 3 ] / 255.f );
+}
+
+// *********************************
+//
 inline void SetPixelColor( Int32 x, Int32 y, char * data, UInt32 width, UInt32 height, char color )
 {
     { height; } // FIXME: suppress unused warning
 
     memset( &( data[ 4 * ( x + y * width ) ] ), color, 4 );
+}
+
+// *********************************
+//
+inline void SetPixelColorFloat4( Int32 x, Int32 y, char * data, UInt32 width, UInt32 height, const Float4 & color )
+{
+    { height; } // FIXME: suppress unused warning
+
+	char * p = &data[ 4 * ( x + y * width ) ];
+
+	p[ 0 ] = char( color.x * 255.f );
+	p[ 1 ] = char( color.y * 255.f );
+	p[ 2 ] = char( color.z * 255.f );
+	p[ 3 ] = char( color.w * 255.f );
 }
 
 // *********************************
@@ -194,16 +242,15 @@ MemoryChunkConstPtr BlurImage( MemoryChunkConstPtr data, UInt32 width, UInt32 he
     {
         for ( unsigned int x = 0; x < width; ++x )
         {
-            float currVal = 0.f;
+			Float4 currVal( 0.f, 0.f, 0.f, 0.f );
             for( int i = - (Int32)blurSize; i <= (Int32)blurSize; ++i )
-                currVal += GetPixelColor( x + i, y, data->Get(), width, height );
-            currVal /= kernelSize;
-            if (currVal > 0.f)
-            {
-                Int32 t = 0;
-                { t; } // FIXME: suppress unused warning
-            }
-            SetPixelColor( x, y, tmp, width, height, (unsigned char)(currVal) );
+			{
+				currVal = currVal + GetPixelColorFloat4( x + i, y, data->Get(), width, height );
+			}
+
+            currVal = currVal * ( 1.f / kernelSize );
+            
+            SetPixelColorFloat4( x, y, tmp, width, height, currVal );
         }
     }
 
@@ -211,11 +258,15 @@ MemoryChunkConstPtr BlurImage( MemoryChunkConstPtr data, UInt32 width, UInt32 he
     {
         for ( unsigned int y = 0; y < height; ++y )
         {
-            float currVal = 0.f;
+            Float4 currVal( 0.f, 0.f, 0.f, 0.f );
             for( int i = -(int)blurSize; i <= (int)blurSize; ++i )
-                currVal += GetPixelColor( x, y + i , tmp, height, width );
-            currVal /= kernelSize;
-            SetPixelColor( x, y, out, width, height, (unsigned char)(currVal) );
+			{
+				currVal = currVal + GetPixelColorFloat4( x, y + i , tmp, height, width );
+			}
+
+            currVal = currVal * ( 1.f / kernelSize );
+            
+			SetPixelColorFloat4( x, y, out, width, height, currVal );
         }
     }
 
