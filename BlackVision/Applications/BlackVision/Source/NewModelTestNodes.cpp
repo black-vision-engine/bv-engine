@@ -15,6 +15,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultTorusPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultSpringPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCylinderPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
@@ -1740,9 +1741,9 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 //#define NO_PERSPECTIVE
 //#define VERSION_COLOR
 
-//#define SHOW_CUBE
+#define SHOW_CUBE
 //#define SHOW_CYLINDER
-#define SHOW_CONE
+//#define SHOW_CONE
 //#define SHOW_SPHERE
 //#define SHOW_CIRCLE
 //#define SHOW_ELLIPSE
@@ -1911,6 +1912,10 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( plugin->GetParameter( "bevel" ), 0.0f, 0.2f );
 	model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 1.0, 1.0, 1.0 ) );
 	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 16 );
+
+	model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );
+	model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );
+	model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::MAX );
 #endif
 #ifdef SHOW_ROUNDEDRECT
 	auto plugin = root->GetPlugin( "rounded rect" );
