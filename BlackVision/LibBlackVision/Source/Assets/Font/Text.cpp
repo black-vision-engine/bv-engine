@@ -133,6 +133,7 @@ void Text::BuildAtlas        ()
 
     if( m_atlas != nullptr )
 	{
+		assert( m_atlas->GetAsset()->GetOriginal() ); // If atlas is in db it should be also in raw data cache.
 		return;
 	}
 
@@ -224,7 +225,13 @@ void Text::BlurAtlas()
 		auto atlasW = m_atlas->GetWidth();
 		auto atlasH = m_atlas->GetHeight();
 		auto oldData = std::const_pointer_cast< MemoryChunk >( m_atlas->m_textureAsset->GetOriginal()->GetData() );
+
+		image::SaveBMPImage( "test.bmp", oldData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel() );
+
+
 		auto bluredData = image::BlurImage( oldData, m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel(), m_blurSize );
+
+		image::SaveBMPImage( "testb.bmp", bluredData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel() );
 
 		auto newSingleTextureRes = SingleTextureAsset::Create( bluredData, "", atlasW, atlasH, TextureFormat::F_A8R8G8B8, true );
 		std::const_pointer_cast< TextAtlas >( m_atlas )->m_textureAsset = TextureAsset::Create( newSingleTextureRes, nullptr );

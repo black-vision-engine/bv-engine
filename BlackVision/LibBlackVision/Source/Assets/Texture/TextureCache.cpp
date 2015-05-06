@@ -116,7 +116,7 @@ TextureAssetConstPtr	TextureCache::Get( const TextureAssetDescConstPtr & texture
 SingleTextureAssetConstPtr	TextureCache::GetFromRawDataCache	( const SingleTextureAssetDescConstPtr & desc ) const
 {
 	auto key = GenKeyForSingleTexture( desc );
-	auto mChunk = RawDataCache::GetInstance().Get( Hash::FromString( GenKeyForSingleTexture( desc ) ) );
+	auto mChunk = RawDataCache::GetInstance().Get( Hash::FromString( key ) );
 
 	if( mChunk )
 	{
@@ -134,6 +134,11 @@ TextureAssetConstPtr	TextureCache::GetFromRawDataCache	( const TextureAssetDescC
 {
 	auto origAsset = GetFromRawDataCache( desc->GetOrigTextureDesc() );
 
+	if( !origAsset )
+	{
+		return nullptr;
+	}
+
 	auto mmDesc = desc->GetMipMapsDesc();
 
 	MipMapAssetConstPtr mmAsset = nullptr;
@@ -145,6 +150,12 @@ TextureAssetConstPtr	TextureCache::GetFromRawDataCache	( const TextureAssetDescC
 		{
 			auto singleTextAssetDesc = mmDesc->GetLevelDesc( i );
 			auto mmSibleTextureAssetAsset = GetFromRawDataCache( singleTextAssetDesc );
+
+			if( !mmSibleTextureAssetAsset )
+			{
+				return nullptr;
+			}
+
 			mms.push_back( mmSibleTextureAssetAsset );
 		}
 
