@@ -39,6 +39,7 @@ class DefaultPlugin : public DefaultGeometryPluginBase
 public:
 	enum OpenAngleMode : int { CW, CCW, SYMMETRIC };
 	enum WeightCenter : int { MIN, MAX, CENTER };
+	enum MappingType : int { OLDSTYLE, SPHERICAL, GOODMAPPING };
 
 	ValueIntPtr                                 m_tesselation;
     ValueFloatPtr                               m_innerRadius,

@@ -91,6 +91,7 @@ namespace CylinderGenerator
 	DefaultPlugin::WeightCenter weight_centerX;
 	DefaultPlugin::WeightCenter weight_centerY;
 	DefaultPlugin::WeightCenter weight_centerZ;
+	DefaultPlugin::MappingType mapping_type;
 
 	static void Init( int t, float ir, float oa, float h, float or, DefaultPlugin::OpenAngleMode oam, DefaultPlugin::WeightCenter wcx, DefaultPlugin::WeightCenter wcy, DefaultPlugin::WeightCenter wcz )
     {
@@ -103,6 +104,9 @@ namespace CylinderGenerator
 		weight_centerX = wcx;
 		weight_centerY = wcy;
 		weight_centerZ = wcz;
+
+		//mapping_type = DefaultPlugin::MappingType::GOODMAPPING;
+		mapping_type = DefaultPlugin::MappingType::OLDSTYLE;
     }
 
 	class MainGenerator : public IGeometryAndUVsGenerator
@@ -136,31 +140,43 @@ namespace CylinderGenerator
 			return ret_value;
 		}
 
-void computeWeightCenter( DefaultPlugin::WeightCenter centerX, DefaultPlugin::WeightCenter centerY, DefaultPlugin::WeightCenter centerZ )
-{
-	center_translate = glm::vec3( 0.0, 0.0, 0.0 );
+		void computeWeightCenter( DefaultPlugin::WeightCenter centerX, DefaultPlugin::WeightCenter centerY, DefaultPlugin::WeightCenter centerZ )
+		{
+			center_translate = glm::vec3( 0.0, 0.0, 0.0 );
 
-	if( centerX == DefaultPlugin::WeightCenter::MAX )
-		center_translate += glm::vec3( -outer_radius, 0.0, 0.0 );
-	else if( centerX == DefaultPlugin::WeightCenter::CENTER )
-		center_translate += glm::vec3( 0.0, 0.0, 0.0 );
-	else if( centerX == DefaultPlugin::WeightCenter::MIN )
-		center_translate += glm::vec3( outer_radius, 0.0, 0.0 );
+			if( centerX == DefaultPlugin::WeightCenter::MAX )
+				center_translate += glm::vec3( -outer_radius, 0.0, 0.0 );
+			else if( centerX == DefaultPlugin::WeightCenter::CENTER )
+				center_translate += glm::vec3( 0.0, 0.0, 0.0 );
+			else if( centerX == DefaultPlugin::WeightCenter::MIN )
+				center_translate += glm::vec3( outer_radius, 0.0, 0.0 );
 	
-	if( centerY == DefaultPlugin::WeightCenter::MAX )
-		center_translate += glm::vec3( 0.0, -height, 0.0 );
-	else if( centerY == DefaultPlugin::WeightCenter::CENTER )
-		center_translate += glm::vec3( 0.0, -height / 2, 0.0 );
-	else if( centerY == DefaultPlugin::WeightCenter::MIN )
-		center_translate += glm::vec3( 0.0, 0.0, 0.0 );
+			if( centerY == DefaultPlugin::WeightCenter::MAX )
+				center_translate += glm::vec3( 0.0, -height, 0.0 );
+			else if( centerY == DefaultPlugin::WeightCenter::CENTER )
+				center_translate += glm::vec3( 0.0, -height / 2, 0.0 );
+			else if( centerY == DefaultPlugin::WeightCenter::MIN )
+				center_translate += glm::vec3( 0.0, 0.0, 0.0 );
 
-	if( centerZ == DefaultPlugin::WeightCenter::MAX )
-		center_translate += glm::vec3( 0.0, 0.0, -outer_radius );
-	else if( centerZ == DefaultPlugin::WeightCenter::CENTER )
-		center_translate += glm::vec3( 0.0, 0.0, 0.0 );
-	else if( centerZ == DefaultPlugin::WeightCenter::MIN )
-		center_translate += glm::vec3( 0.0, 0.0, outer_radius );
-}
+			if( centerZ == DefaultPlugin::WeightCenter::MAX )
+				center_translate += glm::vec3( 0.0, 0.0, -outer_radius );
+			else if( centerZ == DefaultPlugin::WeightCenter::CENTER )
+				center_translate += glm::vec3( 0.0, 0.0, 0.0 );
+			else if( centerZ == DefaultPlugin::WeightCenter::MIN )
+				center_translate += glm::vec3( 0.0, 0.0, outer_radius );
+		}
+
+		void computeMaxLoopInitI( int& max_loop, int& i, bool direction )
+		{
+			if( open_angle != 0.0 )
+				max_loop = static_cast<int>( ceil( float( ( TWOPI - TO_RADIANS( open_angle ) ) / ( TWOPI / tesselation ) ) ) );
+			else
+				max_loop = tesselation;
+
+			i = max_loop;
+			if( direction )
+				i = 0;
+		}
 
 		/**Generates verticies of one circuit of the beveled edges.
 		R1 and h1 describe position of top verticies of the strip,
@@ -172,14 +188,8 @@ void computeWeightCenter( DefaultPlugin::WeightCenter centerX, DefaultPlugin::We
 		void generateCircuit( float R1, float R2, float h1, float h2, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, bool& direction )
 		{
 			int max_loop;
-			if( open_angle != 0.0 )
-				max_loop = static_cast<int>( ceil( float( ( TWOPI - TO_RADIANS( open_angle ) ) / ( TWOPI / tesselation ) ) ) );
-			else
-				max_loop = tesselation;
-
-			int i = max_loop;
-			if( direction )
-				i = 0;
+			int i;
+			computeMaxLoopInitI( max_loop, i, direction );
 
 			for( int j = 0; j <= max_loop; j++ )
             {
@@ -190,10 +200,7 @@ void computeWeightCenter( DefaultPlugin::WeightCenter centerX, DefaultPlugin::We
 				double sin_angle1 = sin( angle1 );
 
 				verts->AddAttribute( glm::vec3( R1 * cos_angle1, h1, R1 * sin_angle1 ) + center_translate );
-				//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
-
 				verts->AddAttribute( glm::vec3( R2 * cos_angle1, h2, R2 * sin_angle1 ) + center_translate );
-				//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
 
 
 				if( direction )
@@ -203,6 +210,97 @@ void computeWeightCenter( DefaultPlugin::WeightCenter centerX, DefaultPlugin::We
 			}
 
 			direction = !direction;
+		}
+
+		void generateUVCircuit( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, float topV, float bottomV, unsigned int& start_index )
+		{
+			int max_loop;
+			int i;
+			computeMaxLoopInitI( max_loop, i, true );
+
+			for( int j = 0; j <= max_loop; j++ )
+            {
+				glm::vec3 vert = verts->GetVertices()[ start_index ];
+				vert -= center_translate;
+
+				double angle = atan2( vert.x, vert.z );
+				double U_coord = angle / TWOPI;
+
+				uvs->AddAttribute( glm::vec2( U_coord, topV ) );
+				uvs->AddAttribute( glm::vec2( U_coord, bottomV ) );
+
+			//	double U_coord;
+
+			//	double angle1 = computeAngle2Clamped( TWOPI / tesselation, (float)i );
+			//	angle1 += angle_offset;
+			//	U_coord = angle1 / TWOPI;
+
+			//	uvs->AddAttribute( glm::vec2( U_coord, topV ) );
+			//	uvs->AddAttribute( glm::vec2( U_coord, bottomV ) );
+
+				//if( direction )
+				//	i++;
+				//else
+				//	i--;
+
+				++start_index;
+			}
+		}
+
+		void generateUVCircle( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, glm::vec2 centerUV, float radiusUV, unsigned int& start_index  )
+		{
+			int max_loop;
+			int i;
+			computeMaxLoopInitI( max_loop, i, true );
+
+			for( int j = 0; j <= max_loop; j++ )
+            {
+				glm::vec3 vert = verts->GetVertices()[ start_index ];
+				vert -= center_translate;
+
+				double angle = atan2( vert.x, vert.z );
+				//double U_coord = angle / TWOPI;
+
+				uvs->AddAttribute( glm::vec2( radiusUV * sin( angle ), radiusUV * cos( angle ) ) );	//Maybe we need to add phase to theese angles
+				uvs->AddAttribute( centerUV );
+
+			//	double angle1 = computeAngle2Clamped( TWOPI / tesselation, (float)i );
+
+			//	uvs->AddAttribute( glm::vec2( radiusUV * sin( angle1 ), radiusUV * cos( angle1 ) ) );	//Maybe we need to add phase to theese angles
+			//	uvs->AddAttribute( centerUV );
+
+				//if( direction )
+				//	i++;
+				//else
+				//	i--;
+
+				++start_index;
+			}
+		}
+
+		void generateUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+		{
+			//bool direction = true;		// It should have the same value at the beginning, as gen_direction in GenerateGeometryAndUVs function
+
+			if( mapping_type == DefaultPlugin::MappingType::GOODMAPPING )
+			{
+				unsigned int start_index = 0;
+
+				generateUVCircle( verts, uvs, glm::vec2( 1.0 / 6.0, 5.0 / 6.0 ), static_cast<float>( 1.0 / 6.0 ), start_index );
+				generateUVCircuit( verts, uvs, static_cast<float>( 1.0 / 3.0 ), static_cast<float>( 0.0 ), start_index );
+				generateUVCircle( verts, uvs, glm::vec2( 1.0 / 2.0, 5.0 / 6.0 ), float( 1.0 / 6.0 ), start_index );
+				generateUVCircuit( verts, uvs, static_cast<float>( 1.0 / 3.0 ), static_cast<float>( 1.0 / 3.0 ), start_index );
+			}
+			else
+			{
+				for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
+				{
+					glm::vec3 vert = verts->GetVertices()[ v ];
+					vert -= center_translate;
+					uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
+													vert.y*0.5 + 0.5 ) ); // FIXME: scaling
+				}
+			}
 		}
 	public:
 		virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
@@ -226,13 +324,7 @@ void computeWeightCenter( DefaultPlugin::WeightCenter centerX, DefaultPlugin::We
 			if( inner_radius > 0.0 )
 				generateCircuit( inner_radius, inner_radius, 0.0f, height, verts, uvs, gen_direction );
 
-            for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
-            {
-                glm::vec3 vert = verts->GetVertices()[ v ];
-				vert -= center_translate;
-                uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
-                                                vert.y*0.5 + 0.5 ) ); // FIXME: scaling
-            }
+			generateUVs( verts, uvs );
 		}
 	};
 
@@ -244,6 +336,28 @@ void computeWeightCenter( DefaultPlugin::WeightCenter centerX, DefaultPlugin::We
 		ClosureGenerator( bool isRotated ) : rotated( isRotated ){}
 
 		virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
+
+		void generateUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+		{
+			if( mapping_type == DefaultPlugin::MappingType::GOODMAPPING )
+			{
+				// @fixme Nothing done here.
+				uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
+				uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
+				uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
+				uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
+			}
+			else
+			{
+				for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
+				{
+					glm::vec3 vert = verts->GetVertices()[ v ];
+					vert -= center_translate;
+					uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
+													vert.y*0.5 + 0.5 ) ); // FIXME: scaling
+				}
+			}
+		}
 
 		virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
         {
@@ -264,13 +378,7 @@ void computeWeightCenter( DefaultPlugin::WeightCenter centerX, DefaultPlugin::We
 			verts->AddAttribute( glm::vec3( outer_radius * cos_angle, 0.0f, outer_radius * sin_angle ) + center_translate );
 			verts->AddAttribute( glm::vec3( inner_radius * cos_angle, 0.0f, inner_radius * sin_angle ) + center_translate );
 
-            for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
-            {
-                glm::vec3 vert = verts->GetVertices()[ v ];
-				vert -= center_translate;
-                uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
-                                                vert.y*0.5 + 0.5 ) ); // FIXME: scaling
-            }
+			generateUVs( verts, uvs );
 		}
 	};
 }
