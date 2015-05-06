@@ -13,6 +13,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultSpherePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultEllipsePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTorusPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultSpringPlugin.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
@@ -1936,6 +1937,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( plugin->GetParameter( "tesselation2" ), 0.0f, 15 );
 	model::SetParameter( plugin->GetParameter( "delta" ), 0.0f, 1.0f );
 	model::SetParameter( plugin->GetParameter( "turns" ), 0.0f, 6 );
+
+	model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultSpring::Plugin::WeightCenter::CENTER );
+	model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultSpring::Plugin::WeightCenter::CENTER );
+	model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultSpring::Plugin::WeightCenter::CENTER );
+
 #endif
 
 

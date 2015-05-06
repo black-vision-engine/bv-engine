@@ -61,11 +61,11 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     h.AddSimpleParam( PN::DELTA, 6.0f, true, true );
     h.AddSimpleParam( PN::TURNS, 10, true, true );
 	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
-        ( PN::WEIGHTCENTERX, Plugin::WeightCenter::MIN, true, true );\
+        ( PN::WEIGHTCENTERX, Plugin::WeightCenter::CENTER, true, true );\
 	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
         ( PN::WEIGHTCENTERY, Plugin::WeightCenter::MIN, true, true );
 	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
-        ( PN::WEIGHTCENTERZ, Plugin::WeightCenter::MIN, true, true );
+        ( PN::WEIGHTCENTERZ, Plugin::WeightCenter::CENTER, true, true );
 
     return h.GetModel();
 }
@@ -107,11 +107,11 @@ class Generator : public IGeometryAndUVsGenerator
 
 	glm::vec3 center_translate;
 public:
-    Generator( IParamValModelPtr m ) : model( m ) { }
+	Generator( IParamValModelPtr m ) : model( m ) { center_translate = glm::vec3( 0.0, 0.0, 0.0); }
 
     void GenerateGeometryAndUVs( Float3AttributeChannelPtr, Float2AttributeChannelPtr );
 	void generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outer_loop  );
-	glm::vec3 computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ );
+	glm::vec3 computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ ) const;
 };
 
 std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
@@ -126,22 +126,30 @@ std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
 #include "Mathematics/Defines.h"
 
 
-glm::vec3 Generator::computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ )
+glm::vec3 Generator::computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ ) const
 {
 	glm::vec3 centerTranslate( 0.0, 0.0, 0.0 );
 
 	if( centerX == Plugin::WeightCenter::MAX )
-		centerTranslate += glm::vec3( r + r2, 0.0, 0.0 );
+		centerTranslate += glm::vec3( -r - r2, 0.0, 0.0 );
 	else if( centerX == Plugin::WeightCenter::CENTER )
 		centerTranslate += glm::vec3( 0.0, 0.0, 0.0 );
 	else if( centerX == Plugin::WeightCenter::MIN )
-		centerTranslate += glm::vec3( -r - r2, 0.0, 0.0 );
+		centerTranslate += glm::vec3( r + r2, 0.0, 0.0 );
 	
 	if( centerY == Plugin::WeightCenter::MAX )
-		center_translate += glm::vec3( 0.0, 0.0, 0.0 ); //@todo
+		centerTranslate += glm::vec3( 0.0, -delta - r2, 0.0 );
+	else if( centerY == Plugin::WeightCenter::CENTER )
+		centerTranslate += glm::vec3( 0.0, -delta / 2, 0.0 );
+	else if( centerY == Plugin::WeightCenter::MIN )
+		centerTranslate += glm::vec3( 0.0, r2, 0.0 );
 
 	if( centerZ == Plugin::WeightCenter::MAX )
-		center_translate += glm::vec3( 0.0, 0.0, 0.0 ); //@todo
+		centerTranslate += glm::vec3( 0.0, 0.0, -r - r2 );
+	else if( centerZ == Plugin::WeightCenter::CENTER )
+		centerTranslate += glm::vec3( 0.0, 0.0, 0.0 );
+	else if( centerZ == Plugin::WeightCenter::MIN )
+		centerTranslate += glm::vec3( 0.0, 0.0, r + r2 );
 
 	return centerTranslate;
 }
@@ -170,12 +178,16 @@ void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2A
 	m_weightCenterY = QueryTypedParam< std::shared_ptr< ParamEnum< Plugin::WeightCenter > > >( model->GetParameter( PN::WEIGHTCENTERY ) );
 	m_weightCenterZ = QueryTypedParam< std::shared_ptr< ParamEnum< Plugin::WeightCenter > > >( model->GetParameter( PN::WEIGHTCENTERZ ) );
 
+	// Set fields of class generator
     tesselation = m_tesselation->GetValue();
 	tesselation2 = m_tesselation2->GetValue();
     r = m_radius->GetValue();
     r2 = m_radiusCrossSection->GetValue();
     turns = m_turns->GetValue();
 	delta = m_delta->GetValue();
+
+	// Must be called after assingments above. It uses generator's variables.
+	center_translate = computeWeightCenter( m_weightCenterX->Evaluate(), m_weightCenterY->Evaluate(), m_weightCenterZ->Evaluate() );
 
 	generateClosure( verts, uvs, 0 );
 
@@ -186,12 +198,22 @@ void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2A
 
             double h = double(i) / tesselation;
             double turnsAngle = h * turns * PI;
-            verts->AddAttribute( glm::vec3( cos( turnsAngle )*( cos( crossSectionAngle )*r2 + r ), h * delta + r2 * sin( crossSectionAngle ), sin( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) ) );
+
+			float x = static_cast<float>( cos( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) );
+			float y = static_cast<float>( h * delta + r2 * sin( crossSectionAngle ) );
+			float z = static_cast<float>( sin( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) );
+
+			verts->AddAttribute( glm::vec3( x, y, z ) + center_translate );
             uvs->AddAttribute( glm::vec2( double(j) / tesselation, h ) );
 
             h = double(i+1) / tesselation;
             turnsAngle = h * turns * PI;
-            verts->AddAttribute( glm::vec3( cos( turnsAngle )*( cos( crossSectionAngle )*r2 + r ),  h * delta + r2 * sin( crossSectionAngle ), sin( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) ) );
+
+			x = static_cast<float>( cos( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) );
+			y = static_cast<float>( h * delta + r2 * sin( crossSectionAngle ) );
+			z = static_cast<float>( sin( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) );
+
+			verts->AddAttribute( glm::vec3( x, y, z ) + center_translate );
             uvs->AddAttribute( glm::vec2( double(j) / tesselation, h ) );
         }
 
@@ -208,10 +230,18 @@ void Generator::generateClosure( Float3AttributeChannelPtr verts, Float2Attribut
     {
         double crossSectionAngle = j *2*PI / tesselation2;
 
-		verts->AddAttribute( glm::vec3( cos( turnsAngle )*( cos( crossSectionAngle )*r2 + r ), h * delta + r2 * sin( crossSectionAngle ), sin( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) ) );
+		float x = static_cast<float>( cos( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) );
+		float y = static_cast<float>( h * delta + r2 * sin( crossSectionAngle ) );
+		float z = static_cast<float>( sin( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) );
+
+		verts->AddAttribute( glm::vec3( x, y, z ) + center_translate );
 		uvs->AddAttribute( glm::vec2( double(j) / tesselation, h ) );
 
-		verts->AddAttribute( glm::vec3( cos( turnsAngle ) * r, h * delta, sin( turnsAngle ) * r ) );
+		x = static_cast<float>( cos( turnsAngle ) * r );
+		y = static_cast<float>( h * delta );
+		z = static_cast<float>( sin( turnsAngle ) * r );
+
+		verts->AddAttribute( glm::vec3( x, y, z ) + center_translate );
 		uvs->AddAttribute( glm::vec2( double(j) / tesselation, h ) );
 	}
 }
