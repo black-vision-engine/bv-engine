@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Windows.h>
+#include "win_sock.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/GLRendererData.h"
 

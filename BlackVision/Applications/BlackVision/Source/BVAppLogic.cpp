@@ -28,6 +28,11 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+//pablito
+#define XML
+#include "ConfigManager.h"
+#include "RemoteControlInterface.h"
+
 namespace bv
 {
 extern HighResolutionTimer GTimer;
@@ -89,6 +94,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
     , m_globalTimeline( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) )
+	, m_solution(m_timelineManager) //pablito
 {
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
@@ -96,6 +102,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
 
     m_renderer = renderer;
     m_renderLogic = new RenderLogic();
+	m_RemoteControl = new RemoteControlInterface(this);
 }
 
 // *********************************
@@ -129,12 +136,20 @@ void BVAppLogic::Initialize         ()
 //
 void BVAppLogic::LoadScene          ( void )
 {
+//pabllito
+#ifdef XML
+    m_solution.SetTimeline(m_timelineManager);
+    m_solution.LoadSolution(ConfigManager::GetString("solution"));
+    model::BasicNodePtr root = m_solution.GetRoot();
+    if(ConfigManager::GetBool("hm"))
+    root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
+#else
     model::BasicNodePtr root = TestScenesFactory::OlafTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
     //model::BasicNodePtr root = TestScenesFactory::CreedTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
     //model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
 	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
 	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
-
+#endif
 	assert( root );
 
     m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline, m_renderer );
@@ -197,6 +212,9 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             m_globalTimeline->SetGlobalTime( t );
             m_bvScene->Update( t );
         }
+
+		m_RemoteControl->UpdateHM();
+
         {
             FRAME_STATS_SECTION( "Render" );
             HPROFILER_SECTION( "Render" );
@@ -357,6 +375,13 @@ void BVAppLogic::ShutDown           ()
     //TODO: any required deinitialization
 }
 
+//pablito:
+void	BVAppLogic::SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager)
+{
+		m_videoCardManager = videoCardManager;
+		m_renderLogic->SetVideoCardManager(videoCardManager);
+}
+
 // *********************************
 //
 void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int millis )
@@ -411,6 +436,14 @@ void                            BVAppLogic::ReloadScene     ()
     LoadScene();
 }
 
+//pablito
+// *********************************
+//
+void            BVAppLogic::GrabCurrentFrame(  const std::string & path )
+{
+    m_grabFramePath = path;
+}
+
 // *********************************
 //
 void            BVAppLogic::OnUpdateParam   ( IEventPtr evt )
@@ -455,6 +488,8 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
 {
     return m_pluginsManager;
 }
+
+
 
 //// *********************************
 ////

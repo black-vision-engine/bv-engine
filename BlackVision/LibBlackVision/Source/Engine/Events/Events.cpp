@@ -1,7 +1,9 @@
-#include "Events.h"
+﻿#include "Events.h"
 
 #include <cassert>
 
+#pragma warning( push )
+#pragma warning(disable:4100)
 
 namespace bv 
 {
@@ -24,6 +26,30 @@ const EventType KeyPressedEvent::m_sEventType       = 0x00000005;
 std::string KeyPressedEvent::m_sEventName           = "Event_KeyPressedEvent";
 
 // FIXME: MORE EVENTS IN CrawlerEvents.cpp. VERY VERY BAD IDEA. WE NEED EVENTS REGISTER SYSTEM ASAP.
+
+// Pawełek event pevent
+
+const EventType VideoCardEvent::m_sEventType       = 0x10000005;
+std::string VideoCardEvent::m_sEventName           = "Event_VideoCard";
+
+const EventType SetParamEvent::m_sEventType       = 0x10000006;
+std::string SetParamEvent::m_sEventName           = "Event_SetParam";
+
+const EventType InfoEvent::m_sEventType       = 0x10000007;
+std::string InfoEvent::m_sEventName           = "Event_Info";
+
+const EventType ResponseEvent::m_sEventType       = 0x10000008;
+std::string ResponseEvent::m_sEventName           = "Event_Response";
+
+const EventType TimeLineCmd::m_sEventType       = 0x10000009;
+std::string TimeLineCmd::m_sEventName           = "Event_Timeline";
+
+const EventType TimerCmd::m_sEventType       = 0x10000010;
+std::string TimerCmd::m_sEventName           = "Event_Timer";
+
+const EventType WidgetCmd::m_sEventType       = 0x10000011;
+std::string WidgetCmd::m_sEventName           = "Event_Widget";
+
 
 
 // ************************************* PluginAddedEvent *************************************
@@ -380,5 +406,391 @@ EventType               KeyPressedEvent::Type                ()
     return m_sEventType;
 }
 
+
+// ------------ Pawe�ek event 
+
+VideoCardEvent::VideoCardEvent         () 
+{
+  
+}
+
+
+// *************************************
+//
+EventType           VideoCardEvent::GetEventType         () const
+{
+    return this->m_sEventType;
+}
+
+// *************************************
+//
+void                VideoCardEvent::Serialize            ( std::ostringstream & out ) const
+{
+    assert( false );
+}
+
+// *************************************
+//
+void                VideoCardEvent::Deserialize          ( std::istringstream & in )
+{
+    assert( false );
+}
+// *************************************
+//
+IEventPtr               VideoCardEvent::Clone             () const
+{
+    return IEventPtr( new VideoCardEvent( *this ) );
+}
+// *************************************
+//
+EventType               VideoCardEvent::Type              ()
+{
+    return m_sEventType;
+}
+
+// *************************************
+//
+const std::string &     VideoCardEvent::GetName           () const
+{
+    return m_sEventName;
+}
+
+
+
+
+
+InfoEvent::InfoEvent         () 
+{
+  
+}
+
+
+// *************************************
+//
+EventType           InfoEvent::GetEventType         () const
+{
+    return this->m_sEventType;
+}
+
+// *************************************
+//
+void                InfoEvent::Serialize            ( std::ostringstream & out ) const
+{
+    assert( false );
+}
+
+// *************************************
+//
+void                InfoEvent::Deserialize          ( std::istringstream & in )
+{
+    assert( false );
+}
+// *************************************
+//
+IEventPtr               InfoEvent::Clone             () const
+{
+    return IEventPtr( new InfoEvent( *this ) );
+}
+// *************************************
+//
+EventType               InfoEvent::Type              ()
+{
+    return m_sEventType;
+}
+
+// *************************************
+//
+bool                    InfoEvent::ForceSync        () const
+{
+    return request == L"grab_that_frame";
+}
+
+// *************************************
+//
+const std::string &     InfoEvent::GetName           () const
+{
+    return m_sEventName;
+}
+
+// *************************************
+//
+const std::wstring &         InfoEvent::GetAddStrData    () const
+{
+    return m_additionalStrData;
+}
+
+
+
+
+
+
+ResponseEvent::ResponseEvent         () 
+{
+  
+}
+
+
+// *************************************
+//
+EventType           ResponseEvent::GetEventType         () const
+{
+    return this->m_sEventType;
+}
+
+// *************************************
+//
+void                ResponseEvent::Serialize            ( std::ostringstream & out ) const
+{
+    assert( false );
+}
+
+// *************************************
+//
+void                ResponseEvent::Deserialize          ( std::istringstream & in )
+{
+    assert( false );
+}
+// *************************************
+//
+IEventPtr               ResponseEvent::Clone             () const
+{
+    return IEventPtr( new ResponseEvent( *this ) );
+}
+// *************************************
+//
+EventType               ResponseEvent::Type              ()
+{
+    return m_sEventType;
+}
+
+// *************************************
+//
+const std::string &     ResponseEvent::GetName           () const
+{
+    return m_sEventName;
+}
+
+
+
+
+
+
+//******************* SET PARAM *************
+
+
+
+SetParamEvent::SetParamEvent         () 
+{
+  
+}
+
+
+// *************************************
+//
+EventType           SetParamEvent::GetEventType         () const
+{
+    return this->m_sEventType;
+}
+
+// *************************************
+//
+void                SetParamEvent::Serialize            ( std::ostringstream & out ) const
+{
+    assert( false );
+}
+
+// *************************************
+//
+void                SetParamEvent::Deserialize          ( std::istringstream & in )
+{
+    assert( false );
+}
+// *************************************
+//
+IEventPtr               SetParamEvent::Clone             () const
+{
+    return IEventPtr( new SetParamEvent( *this ) );
+}
+// *************************************
+//
+EventType               SetParamEvent::Type              ()
+{
+    return m_sEventType;
+}
+
+// *************************************
+//
+const std::string &     SetParamEvent::GetName           () const
+{
+    return m_sEventName;
+}
+
+
+
+
+//******************* Timeline CMD *************
+
+
+
+TimeLineCmd::TimeLineCmd         () 
+{
+  
+}
+
+
+// *************************************
+//
+EventType           TimeLineCmd::GetEventType         () const
+{
+    return this->m_sEventType;
+}
+
+// *************************************
+//
+void                TimeLineCmd::Serialize            ( std::ostringstream & out ) const
+{
+    assert( false );
+}
+
+// *************************************
+//
+void                TimeLineCmd::Deserialize          ( std::istringstream & in )
+{
+    assert( false );
+}
+// *************************************
+//
+IEventPtr               TimeLineCmd::Clone             () const
+{
+    return IEventPtr( new TimeLineCmd( *this ) );
+}
+// *************************************
+//
+EventType               TimeLineCmd::Type              ()
+{
+    return m_sEventType;
+}
+
+// *************************************
+//
+const std::string &     TimeLineCmd::GetName           () const
+{
+    return m_sEventName;
+}
+
+
+
+
+
+
+
+
+//******************* Timer CMD *************
+
+
+
+TimerCmd::TimerCmd         () 
+{
+  
+}
+
+
+// *************************************
+//
+EventType           TimerCmd::GetEventType         () const
+{
+    return this->m_sEventType;
+}
+
+// *************************************
+//
+void                TimerCmd::Serialize            ( std::ostringstream & out ) const
+{
+    assert( false );
+}
+
+// *************************************
+//
+void                TimerCmd::Deserialize          ( std::istringstream & in )
+{
+    assert( false );
+}
+// *************************************
+//
+IEventPtr               TimerCmd::Clone             () const
+{
+    return IEventPtr( new TimerCmd( *this ) );
+}
+// *************************************
+//
+EventType               TimerCmd::Type              ()
+{
+    return m_sEventType;
+}
+
+// *************************************
+//
+const std::string &     TimerCmd::GetName           () const
+{
+    return m_sEventName;
+}
+
+
+
+
+
+
+
+//******************* Widget CMD *************
+
+
+
+WidgetCmd::WidgetCmd         () 
+{
+  
+}
+
+
+// *************************************
+//
+EventType           WidgetCmd::GetEventType         () const
+{
+    return this->m_sEventType;
+}
+
+// *************************************
+//
+void                WidgetCmd::Serialize            ( std::ostringstream & out ) const
+{
+    assert( false );
+}
+
+// *************************************
+//
+void                WidgetCmd::Deserialize          ( std::istringstream & in )
+{
+    assert( false );
+}
+// *************************************
+//
+IEventPtr               WidgetCmd::Clone             () const
+{
+    return IEventPtr( new WidgetCmd( *this ) );
+}
+// *************************************
+//
+EventType               WidgetCmd::Type              ()
+{
+    return m_sEventType;
+}
+
+// *************************************
+//
+const std::string &     WidgetCmd::GetName           () const
+{
+    return m_sEventName;
+}
+
+#pragma warning( pop )
 
 } //bv

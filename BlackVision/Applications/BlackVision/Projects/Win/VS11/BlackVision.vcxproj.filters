@@ -16,20 +16,11 @@
     <Filter Include="Widgets">
       <UniqueIdentifier>{a40b34a5-8104-4523-b976-a18c9886873d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Xml">
-      <UniqueIdentifier>{9972112a-a435-4bbe-878e-c42aa90be206}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Widgets\Crawler">
       <UniqueIdentifier>{a5c51410-4f01-4c1b-a9e6-c93795ac17ba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Xml\RapidXml">
-      <UniqueIdentifier>{0f9021ce-7cb7-4117-979e-3ec7841526ef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="VideoInput">
       <UniqueIdentifier>{f67ab42f-30e0-4d7a-90ee-0cfaed68a769}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Xml\Auxiliary">
-      <UniqueIdentifier>{c1c96312-47dd-4f87-8536-8babf39b47b5}</UniqueIdentifier>
     </Filter>
     <Filter Include="PieCharts">
       <UniqueIdentifier>{fd129272-37d9-42a7-b86d-f8a467b2b2d0}</UniqueIdentifier>
@@ -80,18 +71,6 @@
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.cpp">
       <Filter>Widgets\Crawler</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Xml\BlackTree.cpp">
-      <Filter>Xml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Xml\Scena.cpp">
-      <Filter>Xml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Xml\TreeBuilder.cpp">
-      <Filter>Xml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Xml\Auxiliary\Auxiliary.cpp">
-      <Filter>Xml\Auxiliary</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp">
       <Filter>PieCharts</Filter>
     </ClCompile>
@@ -102,6 +81,8 @@
       <Filter>VideoInput</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\RemoteControlInterface.cpp" />
+    <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -150,30 +131,6 @@
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.h">
       <Filter>Widgets\Crawler</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\BlackTree.h">
-      <Filter>Xml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\Scena.h">
-      <Filter>Xml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\TreeBuilder.h">
-      <Filter>Xml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml.hpp">
-      <Filter>Xml\RapidXml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Iterators.hpp">
-      <Filter>Xml\RapidXml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Print.hpp">
-      <Filter>Xml\RapidXml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Utils.hpp">
-      <Filter>Xml\RapidXml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\Auxiliary\Auxiliary.hpp">
-      <Filter>Xml\Auxiliary</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\PieChartNode.h">
       <Filter>PieCharts</Filter>
     </ClInclude>
@@ -187,6 +144,8 @@
       <Filter>VideoInput</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
+    <ClInclude Include="..\..\..\Source\RemoteControlInterface.h" />
+    <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />

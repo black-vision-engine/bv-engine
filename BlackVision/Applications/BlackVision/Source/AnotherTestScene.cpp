@@ -846,11 +846,11 @@ model::BasicNodePtr          TestScenesFactory::XMLTestScene()
     root->AddChild( Text2() );
 	*/
 
-	TreeBuilder *XMLTree = new TreeBuilder();
+	//TreeBuilder *XMLTree = new TreeBuilder();
 
-	auto root = XMLTree->BuildTree("e:\\temp\\test2.xml");
+//	auto root = XMLTree->BuildTree("e:\\temp\\test2.xml");
 
-    return root;
+    return nullptr;
 }
 
 

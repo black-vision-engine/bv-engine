@@ -40,6 +40,15 @@ void    RenderLogic::SetCamera       ( Camera * cam )
     m_offscreenRenderLogic->SetRendererCamera( cam );
 }
 
+//pablito:
+// *********************************
+//
+void	RenderLogic::SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager)
+{
+		m_VideoCardManager = videoCardManager;
+		
+}
+
 // *********************************
 //
 void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )

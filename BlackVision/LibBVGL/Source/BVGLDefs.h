@@ -146,6 +146,13 @@ namespace bv {
 #define GL_ALPHA8 0x803C
 #define GL_LUMINANCE8 0x8040
 
+//pablito
+#define GL_RGB10 0x8052
+
+#define GL_RGB16 0x8054
+#define GL_RGBA16 0x805B
+//#define GL_ALPHA16
+
 #define GL_FRAMEBUFFER 0x8D40
 #define GL_RENDERBUFFER 0x8D41
 
@@ -171,6 +178,13 @@ namespace bv {
 #define GL_VIEWPORT 0x0BA2
 #define GL_COLOR_BUFFER_BIT 0x00004000
 #define GL_DEPTH_BUFFER_BIT 0x00000100
+
+
+//pablito
+#define GL_FRAMEBUFFER_EXT 0x8D40
+#define GL_RENDERBUFFER_EXT 0x8D41
+#define GL_FRAMEBUFFER_EXT 0x8D40
+#define GL_FRAMEBUFFER_EXT 0x8D40
 
 
 typedef unsigned int GLenum;
