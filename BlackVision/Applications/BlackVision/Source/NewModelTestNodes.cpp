@@ -1741,8 +1741,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 //#define VERSION_COLOR
 
 //#define SHOW_CUBE
-#define SHOW_CYLINDER
-//#define SHOW_CONE
+//#define SHOW_CYLINDER
+#define SHOW_CONE
 //#define SHOW_SPHERE
 //#define SHOW_CIRCLE
 //#define SHOW_ELLIPSE
@@ -1860,9 +1860,10 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 100.0f );
 
 	// Enums
-	//model::SetParameter( plugin->GetParameter( "weight center" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::TOP );
-	//model::SetParameter( plugin->GetParameter( "weight center" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::BOTTOM );
-	model::SetParameter( plugin->GetParameter( "weight center" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::CENTER );
+	model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::CENTER );
+	model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::CENTER );
+	model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::CENTER );
+
 	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::SYMMETRIC );
 	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CCW );
 	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CW );

@@ -43,7 +43,9 @@ const std::string PN::OUTERRADIUS = "outer radius";
 const std::string PN::INNERHEIGHT = "inner height";
 const std::string PN::ROUNDEDTIPHEIGHT = "rounded tip height";
 const std::string PN::OPENANGLE = "open angle";
-const std::string PN::WEIGHTCENTER = "weight center";
+const std::string PN::WEIGHTCENTERX = "weight center x";
+const std::string PN::WEIGHTCENTERY = "weight center y";
+const std::string PN::WEIGHTCENTERZ = "weight center z";
 const std::string PN::OPENANGLEMODE = "open angle mode";
 const std::string PN::BEVELTESSELATION = "bevel tesselation";
 
@@ -71,7 +73,11 @@ DefaultPluginParamValModelPtr   DefaultConePluginDesc::CreateDefaultModel  ( ITi
     h.AddParam< IntInterpolator, DefaultConePlugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
         ( DefaultCone::PN::OPENANGLEMODE, DefaultConePlugin::OpenAngleMode::CW, true, true );
 	h.AddParam< IntInterpolator, DefaultConePlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
-        ( DefaultCone::PN::WEIGHTCENTER, DefaultConePlugin::WeightCenter::BOTTOM, true, true );
+        ( DefaultCone::PN::WEIGHTCENTERX, DefaultConePlugin::WeightCenter::CENTER, true, true );
+	h.AddParam< IntInterpolator, DefaultConePlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( DefaultCone::PN::WEIGHTCENTERY, DefaultConePlugin::WeightCenter::MIN, true, true );
+	h.AddParam< IntInterpolator, DefaultConePlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( DefaultCone::PN::WEIGHTCENTERZ, DefaultConePlugin::WeightCenter::CENTER, true, true );
     
     return h.GetModel();
 }
@@ -93,9 +99,11 @@ namespace ConeGenerator
     int tesselation, bevel_tesselation;
     float height, inner_height, inner_radius, bevel, open_angle, outer_radius;
 	DefaultConePlugin::OpenAngleMode open_angle_mode;
-	DefaultConePlugin::WeightCenter weight_center;
+	DefaultConePlugin::WeightCenter weight_centerX;
+	DefaultConePlugin::WeightCenter weight_centerY;
+	DefaultConePlugin::WeightCenter weight_centerZ;
 
-    static void Init( int t, float ih, float ir, float b, float oa, float h, float or, int bt, DefaultConePlugin::OpenAngleMode oam, DefaultConePlugin::WeightCenter wc )
+    static void Init( int t, float ih, float ir, float b, float oa, float h, float or, int bt, DefaultConePlugin::OpenAngleMode oam, DefaultConePlugin::WeightCenter wcx, DefaultConePlugin::WeightCenter wcy, DefaultConePlugin::WeightCenter wcz )
     {
         tesselation = t;
         inner_height = ih;
@@ -106,7 +114,9 @@ namespace ConeGenerator
         outer_radius = or;
 		bevel_tesselation = bt;
 		open_angle_mode = oam;
-		weight_center = wc;
+		weight_centerX = wcx;
+		weight_centerY = wcy;
+		weight_centerZ = wcz;
     }
 
 
@@ -280,17 +290,31 @@ namespace ConeGenerator
 			return return_value;
 		}
 
-		void computeWeightCenter()
+		void computeWeightCenter( DefaultConePlugin::WeightCenter centerX, DefaultConePlugin::WeightCenter centerY, DefaultConePlugin::WeightCenter centerZ )
 		{
-			if( weight_center == DefaultConePlugin::WeightCenter::BOTTOM )
-				center_translate = glm::vec3( 0.0f, 0.0f, 0.0f );
-			else if( weight_center == DefaultConePlugin::WeightCenter::CENTER )
-				center_translate = glm::vec3( 0.0f, -height / 2, 0.0f );
-			else if( weight_center == DefaultConePlugin::WeightCenter::TOP )
-				center_translate = glm::vec3( 0.0f, -height, 0.0f );
-			else
-				assert( false );
-			//center_translate = glm::vec3( 0.0f, 0.0f, 0.0f );
+			center_translate = glm::vec3( 0.0f, 0.0f, 0.0f );
+
+			if( centerX == DefaultConePlugin::WeightCenter::MAX )
+				center_translate += glm::vec3( -outer_radius, 0.0, 0.0 );
+			else if( centerX == DefaultConePlugin::WeightCenter::CENTER )
+				center_translate += glm::vec3( 0.0, 0.0, 0.0 );
+			else if( centerX == DefaultConePlugin::WeightCenter::MIN )
+				center_translate += glm::vec3( outer_radius, 0.0, 0.0 );
+	
+			if( centerY == DefaultConePlugin::WeightCenter::MAX )
+				center_translate += glm::vec3( 0.0f, -height, 0.0f );
+			else if( centerY == DefaultConePlugin::WeightCenter::CENTER )
+				center_translate += glm::vec3( 0.0f, -height / 2, 0.0f );
+			else if( centerY == DefaultConePlugin::WeightCenter::MIN )
+				center_translate += glm::vec3( 0.0f, 0.0f, 0.0f );
+
+			if( centerZ == DefaultConePlugin::WeightCenter::MAX )
+				center_translate += glm::vec3( 0.0, 0.0, -outer_radius );
+			else if( centerZ == DefaultConePlugin::WeightCenter::CENTER )
+				center_translate += glm::vec3( 0.0, 0.0, 0.0 );
+			else if( centerZ == DefaultConePlugin::WeightCenter::MIN )
+				center_translate += glm::vec3( 0.0, 0.0, outer_radius );
+			
 		}
 
 		void computeAngleOffset()
@@ -307,7 +331,7 @@ namespace ConeGenerator
 
         virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
         {
-			computeWeightCenter();
+			computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
 			computeAngleOffset();
 			bool gen_direction = true;
 
@@ -454,7 +478,7 @@ namespace ConeGenerator
 
 		virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
         {
-			computeWeightCenter();
+			computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
 			computeAngleOffset();
 
 			// Prepare data for bevel. ( We need this to generate first latteral surface too, thats why it happens in this place.
@@ -515,7 +539,9 @@ DefaultConePlugin::DefaultConePlugin( const std::string & name, const std::strin
     m_height = QueryTypedValue< ValueFloatPtr >( GetValue( PN::HEIGHT ) );
     m_outerRadius = QueryTypedValue< ValueFloatPtr >( GetValue( PN::OUTERRADIUS ) );
 	m_openAngleMode = QueryTypedParam< std::shared_ptr< ParamEnum< OpenAngleMode > > >( GetParameter( PN::OPENANGLEMODE ) );
-	m_weightCenter = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTER ) );
+	m_weightCenterX = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERX ) );
+	m_weightCenterY = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERY ) );
+	m_weightCenterZ = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERZ ) );
 
     m_pluginParamValModel->Update();
     InitGeometry();
@@ -533,7 +559,9 @@ std::vector<IGeometryGeneratorPtr>    DefaultConePlugin::GetGenerators()
         m_outerRadius->GetValue(),
 		m_bevelTesselation->GetValue(),
 		m_openAngleMode->Evaluate(),
-		m_weightCenter->Evaluate()
+		m_weightCenterX->Evaluate(),
+		m_weightCenterY->Evaluate(),
+		m_weightCenterZ->Evaluate()
         );
 
     std::vector<IGeometryGeneratorPtr> gens;
@@ -555,7 +583,9 @@ bool                                DefaultConePlugin::NeedsTopologyUpdate()
         ParameterChanged( PN::INNERRADIUS ) ||
 		ParameterChanged( PN::BEVELTESSELATION )||
 		ParameterChanged( PN::OPENANGLEMODE ) ||
-		ParameterChanged( PN::WEIGHTCENTER );
+		ParameterChanged( PN::WEIGHTCENTERX ) ||
+		ParameterChanged( PN::WEIGHTCENTERY ) ||
+		ParameterChanged( PN::WEIGHTCENTERZ );
 }
 
 } } }

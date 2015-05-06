@@ -23,7 +23,9 @@ struct PN {
     static const std::string INNERHEIGHT; // VecParam1 InnerHeight
     static const std::string ROUNDEDTIPHEIGHT; // VecParam1 RoundedTipHeight (Bevel)
     static const std::string OPENANGLE; // VecParam1 OpenAngle
-    static const std::string WEIGHTCENTER; // enum WeightCenter (TOP, BOTTOM, CENTER)
+    static const std::string WEIGHTCENTERX; // enum WeightCenter (MIN, MAX, CENTER)
+	static const std::string WEIGHTCENTERY;
+	static const std::string WEIGHTCENTERZ;
     static const std::string OPENANGLEMODE; // enum OpenAngleMode(Clockwise, CCW, symetric)
 	static const std::string BEVELTESSELATION;
 };
@@ -32,7 +34,7 @@ class DefaultConePlugin : public DefaultGeometryPluginBase
 {
 public:
     enum OpenAngleMode : int { CW, CCW, SYMMETRIC };
-    enum WeightCenter : int { TOP, BOTTOM, CENTER };
+    enum WeightCenter : int { MAX, MIN, CENTER };
 
     ValueIntPtr                                 m_tesselation, m_bevelTesselation;
     ValueFloatPtr                               m_innerRadius,
@@ -42,7 +44,9 @@ public:
                                                 m_openAngle,
                                                 m_height;
 	std::shared_ptr< ParamEnum< OpenAngleMode > >		m_openAngleMode;
-	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenter;
+	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterX;
+	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterY;
+	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterZ;
 
 private:
     virtual std::vector<IGeometryGeneratorPtr>    GetGenerators() override;
