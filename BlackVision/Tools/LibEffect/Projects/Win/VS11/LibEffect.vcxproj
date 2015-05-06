@@ -145,10 +145,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\EffectRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Effects\BlurEffect.cpp" />
     <ClCompile Include="..\..\..\Source\LibEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\EffectRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Effects\BlurEffect.h" />
     <ClInclude Include="..\..\..\Source\LibEffect.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

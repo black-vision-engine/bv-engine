@@ -37,7 +37,9 @@ MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, 
 
 	renderLogic->DrawDisplayRenderTarget( Renderer() );
 
-	return nullptr;
+	auto tex = renderLogic->ReadDisplayTarget( Renderer(), 0 );
+
+	return tex->GetData();
 }
 
 
