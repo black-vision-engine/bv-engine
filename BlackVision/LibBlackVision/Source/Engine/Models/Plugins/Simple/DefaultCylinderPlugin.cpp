@@ -223,7 +223,7 @@ void computeWeightCenter( DefaultPlugin::WeightCenter centerX, DefaultPlugin::We
 			// Bottom of cylinder
 			generateCircuit( outer_radius, inner_radius, 0.0f, 0.0f, verts, uvs, gen_direction );
 
-			if( open_angle > 0.0 )
+			if( inner_radius > 0.0 )
 				generateCircuit( inner_radius, inner_radius, 0.0f, height, verts, uvs, gen_direction );
 
             for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
