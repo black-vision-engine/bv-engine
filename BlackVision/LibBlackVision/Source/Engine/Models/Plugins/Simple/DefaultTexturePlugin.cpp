@@ -40,7 +40,7 @@ bool acceptAttributeChannel( AttributeChannelPtr attributeChannel, bool& UVsGene
 // *******************************
 //
 DefaultTexturePluginDesc::DefaultTexturePluginDesc                          ()
-    : BasePluginDescriptor( UID(), "texture" )
+    : BasePluginDescriptor( UID(), "texture", "tx" )
 {
 }
 

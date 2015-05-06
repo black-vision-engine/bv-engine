@@ -569,6 +569,37 @@ model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::Plug
     return rect;
 }
 
+model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    {timelineManager;}
+    {pluginsManager;}
+
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
+
+    //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+    //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+
+    //root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    //auto plugin = root->GetPlugin( "texture" );
+    //model::LoadTexture( plugin, "time_zones_4.jpg" );
+
+    root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
+    auto plugin = root->GetPlugin( "video input" );
+    //auto success = model::LoadTexture( plugin, "time_zones_4.jpg" );
+    //auto vi = new ExampleVideoInput( 10, 10, 1.f );
+    //auto success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture(), vi ) ) );
+    //assert(success);
+    //auto vi2 = new ExampleVideoInput( 20, 20, 1.f );
+    //success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi2->GetTexture(), vi2 ) ) );
+    //assert(success);
+
+    //model::SetParameter( plugin->GetParameter( "source" ), 0.f, 1.f );
+
+    return root;
+}
+
 model::BasicNodePtr    TestScenesFactory::CreedPieChartTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; } // FIXME: suppress unuse warning
@@ -639,7 +670,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     //return rect;
 
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
-
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 //SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), 1000.f );
 
     //auto root = SimpleNodesFactory::CreateCreedRectNode( timelineManager, timeEvaluator );
@@ -666,6 +697,8 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     auto param = prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" );
     param->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 
+//SetParameterRotation( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), -10000.f );
+
     auto prism3 = SimpleNodesFactory::CreateCreedGradedPrismNode( timelineManager, timeEvaluator, 0.5f );
     SetParameter( prism3->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 12 );
     
@@ -687,10 +720,308 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 11.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
     SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 
-	root->AddChildToModelOnly( prism );
-	root->AddChildToModelOnly( prism2 );
-	root->AddChildToModelOnly( prism3 );
-	root->AddChildToModelOnly( prism4 );
+    root->AddChildToModelOnly( prism );
+    root->AddChildToModelOnly( prism2 );
+    root->AddChildToModelOnly( prism3 );
+    root->AddChildToModelOnly( prism4 );
+
+    //return rect;
+    return root;
+}
+
+model::BasicNodePtr    TestScenesFactory::CreedPrismBugTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    {pluginsManager;}
+
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+
+    auto prism2 = SimpleNodesFactory::CreateCreedTexturedPrismNode( timelineManager, timeEvaluator, 0 );
+    //auto prism2 = SimpleNodesFactory::CreateCreedColoredPrismNode( timelineManager, timeEvaluator, 0 );
+    //auto prism2 = SimpleNodesFactory::CreateCreedGradedPrismNode( timelineManager, timeEvaluator, 0 );
+
+    SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  0.f, glm::vec3( 1.f, 1.f, 1.f ) );
+    SetParameterTranslation( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  0.f, glm::vec3( 0.f, -.5f, -10.f ) );
+    SetParameterRotation ( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 100.0f, glm::vec3( 1.f, 0.f, 0.f ), 10100.f );
+
+    model::SetParameter( prism2->GetPlugin( "prism" )->GetParameter( "n" ), 10.f, 10.f );
+
+    model::SetParameter( prism2->GetPlugin( "texture" )->GetParameter( "borderColor") , 0.f, glm::vec4( 1, 0, 0, 1 ) );
+
+    //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  3.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  7.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 13.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 17.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+
+    root->AddChildToModelOnly( prism2 );
+
+    //return root;
+    return prism2;
+}
+
+void BoolParamTest()
+{
+    auto param = model::ParametersFactory::CreateParameterBool( "toBeOrNotToBe", nullptr );
+    model::SetParameter( param, 0.f, true );
+}
+
+model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    model::BasicNodePtr node = model::BasicNode::Create( "rect", timeEvaluator );
+    node->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    node->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
+    node->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+
+    model::SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+
+    auto param = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    model::SetParameterTranslation( param, 0, 0.f, offset );
+    model::SetParameterTranslation( param, 0, 1.f, offset );
+    model::SetParameterTranslation( param, 0, 10.f, offset + glm::vec3( 2, 0, 0 ) );
+    model::SetParameterScale( param, 0, 0.f, glm::vec3( 0.5f, 0.5f, 1.f ) );
+
+    return node;
+}
+
+model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model::PluginsManager * , model::TimelineManager * , model::ITimeEvaluatorPtr timeEvaluator )
+{
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+
+    auto node1 = CosineDemoRect( glm::vec3( -1, 0.5, 0 ) , timeEvaluator );
+    auto node2 = CosineDemoRect( glm::vec3( -1, -0.5, 0 ) , timeEvaluator );
+    node2->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
+
+    root->AddChildToModelOnly( node1 );
+    root->AddChildToModelOnly( node2 );
+
+    return root;
+}
+
+//model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    /*TestScenesFactory::*/CreedCircleTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_CIRCLE", timeEvaluator );
+    root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+
+    //root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+
+    model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+
+    //model::SetParameter( root->GetPlugin( "circle" )->GetParameter( "tesselation" ), 100.f, 100 );
+    root->GetPlugin( "circle" )->Update(0); // FIXME: to generate geometry only
+
+    auto plugin = root->GetPlugin( "circle" );
+    SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_INNER_RADIUS ), 10.f, 0.8f );
+    SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_OUTER_RADIUS ), 4.f, 1.f );
+    SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_OUTER_RADIUS ), 10.f, 2.f );
+    SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE ), 30.f, 90.f );
+    //plugin->GetParameter( model::DefaultCirclePlugin::PN_INNER_RADIUS )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
+    //plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
+
+    //SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE_MODE ), 10.f, model::DefaultCirclePlugin::OpenAngleMode::SYMMETRIC );
+    auto param = plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE_MODE );
+    auto qParam = model::QueryTypedParam< std::shared_ptr< model::ParamEnum< model::DefaultCirclePlugin::OpenAngleMode > > >( param );
+    qParam->SetVal( model::DefaultCirclePlugin::OpenAngleMode::SYMMETRIC, 9.f );
+
+    return root;
+}
+
+model::BasicNodePtr    /*TestScenesFactory::*/CreedEllipseTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_ELLIPSE", timeEvaluator );
+    root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+
+    model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+
+    auto plugin = root->GetPlugin( "ellipse" );
+    //SetParameter( plugin->GetParameter( model::DefaultEllipsePlugin::PN_OPEN_ANGLE ), 10.f, 0.8f );
+    SetParameter( plugin->GetParameter( model::DefaultEllipsePlugin::PN_OUTER_RADIUS1 ), 0.f, 1.5f );
+    SetParameter( plugin->GetParameter( model::DefaultEllipsePlugin::PN_OUTER_RADIUS2 ), 0.f, 0.5f );
+    SetParameter( plugin->GetParameter( model::DefaultEllipsePlugin::PN_QUALITY ), 100.f, 100.f );
+
+    plugin->Update(0); // FIXME: to generate geometry only
+
+    ////SetParameter( plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE_MODE ), 10.f, model::DefaultCirclePlugin::OpenAngleMode::SYMMETRIC );
+    //auto param = plugin->GetParameter( model::DefaultCirclePlugin::PN_OPEN_ANGLE_MODE );
+    //auto qParam = model::QueryTypedParam< std::shared_ptr< model::ParamEnum< model::DefaultCirclePlugin::OpenAngleMode > > >( param );
+    //qParam->SetVal( model::DefaultCirclePlugin::OpenAngleMode::SYMMETRIC, 9.f );
+
+    return root;
+}
+
+model::BasicNodePtr    /*TestScenesFactory::*/CreedTriangleTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRIANGLE", timeEvaluator );
+    root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+
+    model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+
+    auto plugin = root->GetPlugin( "triangle" );
+
+    model::SetParameter( plugin->GetParameter( model::DefaultTrianglePlugin::PN_POINTA ), 0.f, glm::vec3( 1, 0, 0 ) );
+    model::SetParameter( plugin->GetParameter( model::DefaultTrianglePlugin::PN_POINTB ), 0.f, glm::vec3( 0, 1, 0 ) );
+    model::SetParameter( plugin->GetParameter( model::DefaultTrianglePlugin::PN_POINTC ), 0.f, glm::vec3( 0, 0, 1 ) );
+
+    model::SetParameter( plugin->GetParameter( model::DefaultTrianglePlugin::PN_POINTA ), 10.f, glm::vec3( 0, 0, 1 ) );
+    model::SetParameter( plugin->GetParameter( model::DefaultTrianglePlugin::PN_POINTB ), 10.f, glm::vec3( 1, 0, 0 ) );
+    model::SetParameter( plugin->GetParameter( model::DefaultTrianglePlugin::PN_POINTC ), 10.f, glm::vec3( 0, 1, 0 ) );
+
+    plugin->Update(0); // FIXME: to generate geometry only
+
+    return root;
+}
+
+//model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    /*TestScenesFactory::*/CreedRoundedRectTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_ROUNDEDRECT", timeEvaluator );
+    root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+
+    model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+
+    auto plugin = root->GetPlugin( "rounded rect" );
+
+    model::SetParameter( plugin->GetParameter( model::DefaultRoundedRectPlugin::PN_BEVELS ), 0.f, glm::vec4( 0, 0.1, 0.1, 0 ) );
+    model::SetParameter( plugin->GetParameter( model::DefaultRoundedRectPlugin::PN_BEVELS ), 5.f, glm::vec4( 0.1, 0.2, 0, 0.1 ) );
+
+    plugin->Update(0); // FIXME: to generate geometry only
+
+    return root;
+}
+
+//model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    /*TestScenesFactory::*/CreedConeTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_CONE", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), 0.f );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, glm::vec3( 1, 0, 0 ), -90.f );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), -90.f );
+    model::SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0, 0, -1 ) );
+
+    auto plugin = root->GetPlugin( "cone" );
+    assert( plugin );
+    model::SetParameter( plugin->GetParameter( model::DefaultCone::PN::TESSELATION ), 10.f, 10 );
+    model::SetParameter( plugin->GetParameter( model::DefaultCone::PN::INNERRADIUS ), 0.f, 0.5f );
+    model::SetParameter( plugin->GetParameter( model::DefaultCone::PN::INNERHEIGHT ), 0.f, 0.5f );
+
+    //root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = true;
+    model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
+
+    return root;
+
+    //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+    //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+    //root->GetPlugin( "solid color" )->GetRendererContext()->fillCtx->fillMode = model::FillContext::Mode::M_LINES;
+}
+
+model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+//model::BasicNodePtr    /*TestScenesFactory::*/CreedCubeTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_CUBE", timeEvaluator );
+    //root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
+
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), 0.f );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 1.f, glm::vec3( 0, 1, 0 ), 45.f );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0, 0, 0 ), -90.f );
+    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1.5, 1.5, 1.5 ) );
+    model::SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0, 0, -1 ) );
+
+    auto plugin = root->GetPlugin( "cube" );
+    assert( plugin );
+    model::SetParameter( plugin->GetParameter( model::DefaultCube::PN::BEVEL ), 20.f, 0.4f );
+    model::SetParameter( plugin->GetParameter( model::DefaultCube::PN::TESSELATION ), 0.f, 10 );
+
+    root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
+    model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 0, 0, 1 ) );
+    model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
+
+    //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+    //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+    //root->GetPlugin( "solid color" )->GetRendererContext()->fillCtx->fillMode = model::FillContext::Mode::M_LINES;
+    //root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+
+    return root;
+}
+
+//model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    /*TestScenesFactory::*/CreedTorusBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TORUS", timeEvaluator );
+
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), 0.f );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 5.f, glm::vec3( 1, 0, 0 ), 90.f );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), -90.f );
+    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1.5, 1.5, 1.5 ) );
+    SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0, 0, -4 ) );
+
+    auto plugin = root->GetPlugin( "torus" );
+    assert( plugin );
+    //model::SetParameter( plugin->GetParameter( model::DefaultCube::PN::BEVEL ), 5.f, 0.4f );
+    //model::SetParameter( plugin->GetParameter( model::DefaultCube::PN::TESSELATION ), 0.f, 10 );
+
+    root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
+    model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 0, 0, 1 ) );
+    model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
+
+    //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+    //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+    ////root->GetPlugin( "solid color" )->GetRendererContext()->fillCtx->fillMode = model::FillContext::Mode::M_LINES;
+    //root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+
+    return root;
+}
+
+//model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_SPRING", timeEvaluator );
+
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), 0.f );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 5.f, glm::vec3( 1, 0, 0 ), 90.f );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), -90.f );
+    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 2, 1 ) );
+    SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0, -1, -1 ) );
+
+    auto plugin = root->GetPlugin( "spring" );
+    assert( plugin );
+    //model::SetParameter( plugin->GetParameter( model::DefaultCube::PN::BEVEL ), 5.f, 0.4f );
+    //model::SetParameter( plugin->GetParameter( model::DefaultCube::PN::TESSELATION ), 0.f, 10 );
+
+    root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
+    root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
+    model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 0, 0, 1 ) );
+    model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
+
+    //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
+    //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
+    ////root->GetPlugin( "solid color" )->GetRendererContext()->fillCtx->fillMode = model::FillContext::Mode::M_LINES;
+    //root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
 
     return root;
 }

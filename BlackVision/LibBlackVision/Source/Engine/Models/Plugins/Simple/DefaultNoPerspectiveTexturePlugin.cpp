@@ -8,7 +8,7 @@ namespace bv { namespace model {
 // *******************************
 //
 DefaultNoPerspectiveTexturePluginDesc::DefaultNoPerspectiveTexturePluginDesc                          ()
-    : BasePluginDescriptor( UID(), "texture" )
+    : BasePluginDescriptor( UID(), "texture", "nptx" )
 {
 }
 

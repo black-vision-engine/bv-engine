@@ -99,8 +99,6 @@ ITransformChannelConstPtr           DefaultFinalizePlugin::GetTransformChannel  
     return m_prevPlugin->GetTransformChannel();
 }
 
-#define DEFAULT_PLUGINS_TO_SKIP 2
-
 // *******************************
 //
 IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel        () const
@@ -108,19 +106,10 @@ IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel
     assert( m_prevPlugin );
     assert( m_prevPlugin->GetPixelShaderChannel() );
 
-// FIXME HACK for tx_lg WTF?
-	int pluginsToSkip = DEFAULT_PLUGINS_TO_SKIP;
-	if( m_prevPlugin->GetTypeUid() == DefaultGradientPluginDesc::UID() && m_prevPlugin->GetPrevPlugin()->GetTypeUid() == DefaultTextPluginDesc::UID() )
-		pluginsToSkip = 1;
-	if( m_prevPlugin->GetTypeUid() == DefaultTimerPluginDesc::UID() && m_prevPlugin->GetPrevPlugin()->GetTypeUid() == DefaultGradientPluginDesc::UID() )
-		pluginsToSkip = 1;
-	if( m_prevPlugin->GetTypeUid() == DefaultGradientPluginDesc::UID() && m_prevPlugin->GetPrevPlugin()->GetTypeUid() == DefaultTimerPluginDesc::UID() )
-		pluginsToSkip = 1;
-
     if( m_finalizePSC == nullptr )
     {
         m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( std::const_pointer_cast< IPixelShaderChannel >( m_prevPlugin->GetPixelShaderChannel() ), m_shadersDir );
-        m_finalizePSC->RegenerateShaderSource( PrevUIDS( pluginsToSkip ) );
+        m_finalizePSC->RegenerateShaderSource( GetUIDS() );
     }
 
     return m_finalizePSC;
@@ -139,19 +128,10 @@ IVertexShaderChannelConstPtr        DefaultFinalizePlugin::GetVertexShaderChanne
         vsc = m_defaultVSChannel;
     }
 
-// FIXME HACK for tx_lg WTF?
-	int pluginsToSkip = DEFAULT_PLUGINS_TO_SKIP;
-	if( m_prevPlugin->GetTypeUid() == DefaultGradientPluginDesc::UID() && m_prevPlugin->GetPrevPlugin()->GetTypeUid() == DefaultTextPluginDesc::UID() )
-		pluginsToSkip = 1;
-	if( m_prevPlugin->GetTypeUid() == DefaultTimerPluginDesc::UID() && m_prevPlugin->GetPrevPlugin()->GetTypeUid() == DefaultGradientPluginDesc::UID() )
-		pluginsToSkip = 1;
-	if( m_prevPlugin->GetTypeUid() == DefaultGradientPluginDesc::UID() && m_prevPlugin->GetPrevPlugin()->GetTypeUid() == DefaultTimerPluginDesc::UID() )
-		pluginsToSkip = 1;
-
     if( m_finalizeVSC == nullptr )
     {
         m_finalizeVSC = std::make_shared< DefaultFinalizeVertexShaderChannel >( std::const_pointer_cast< IVertexShaderChannel >( vsc ), m_shadersDir );
-        m_finalizeVSC->RegenerateShaderSource( PrevUIDS( pluginsToSkip ) );
+        m_finalizeVSC->RegenerateShaderSource( GetUIDS() );
     }
 
     return m_finalizeVSC;
@@ -170,7 +150,7 @@ IGeometryShaderChannelConstPtr           DefaultFinalizePlugin::GetGeometryShade
         if( prevChannel != nullptr )
         {
             m_finalizeGSC = std::make_shared< DefaultFinalizeGeometryShaderChannel >( std::const_pointer_cast< IGeometryShaderChannel >( m_prevPlugin->GetGeometryShaderChannel() ), m_shadersDir );
-            m_finalizeGSC->RegenerateShaderSource( PrevUIDS( DEFAULT_PLUGINS_TO_SKIP ) );
+            m_finalizeGSC->RegenerateShaderSource( GetUIDS() );
         }
     }
 
@@ -269,7 +249,7 @@ std::string                         DefaultFinalizePlugin::ShadersDir           
 
 // *******************************
 //
-std::vector< std::string >          DefaultFinalizePlugin::PrevUIDS                     ( unsigned int skipFirstEntries ) const
+std::vector< std::string >          DefaultFinalizePlugin::GetUIDS                     () const
 {
     IPluginConstPtr prev = m_prevPlugin;
 
@@ -282,12 +262,7 @@ std::vector< std::string >          DefaultFinalizePlugin::PrevUIDS             
         prev = prev->GetPrevPlugin();
     }
 
-    if ( skipFirstEntries < uids.size() )
-    {
-        return std::vector< std::string >( uids.begin() + skipFirstEntries, uids.end() );    
-    }
-
-    return std::vector< std::string >();
+    return uids;
 }
 
 

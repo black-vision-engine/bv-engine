@@ -51,9 +51,9 @@ protected:
 
     virtual std::string                                 GetShaderSource                 ( const std::vector< std::string > & uids ) const = 0;
 
-    static const std::vector< std::vector< std::string > > &    GetAcceptedPluginLists  ();
-    static const std::vector< std::string > &                   GetBaseShaderFileNames  ();
-    const std::string &                                         ShaderStorageDirectory  () const;
+    //static const std::vector< std::vector< std::string > > &    GetAcceptedPluginLists  ();
+    //static const std::vector< std::string > &                   GetBaseShaderFileNames  ();
+    //const std::string &                                         ShaderStorageDirectory  () const;
 
 };
 

@@ -1489,7 +1489,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 4.f / 1080.f );
 
-	success = model::LoadFont( node->GetPlugin( "timer" ), "../dep/Media/fonts/arial.ttf", 127, blurSize, 0, false );
+	success = model::LoadFont( node->GetPlugin( "timer" ), "Assets/Fonts/arial.ttf", 127, blurSize, 0, false );
     assert( success );
 
     SetTimeTimerPlugin( node->GetPlugin( "timer" ), 12333.0f );

@@ -38,7 +38,7 @@ float smoothstep( float a, float b, float x )
 // *******************************
 //
 DefaultHeightMapPluginDesc::DefaultHeightMapPluginDesc                          ()
-    : BasePluginDescriptor( UID(), "height map" )
+    : BasePluginDescriptor( UID(), "height map", "hm" )
 {
 }
 

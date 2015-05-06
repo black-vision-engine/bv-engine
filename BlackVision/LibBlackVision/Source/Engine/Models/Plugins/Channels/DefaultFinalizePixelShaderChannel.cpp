@@ -6,24 +6,12 @@
 namespace bv { namespace model {
 
 // *********************************
-//StaticShaderGenerator DefaultFinalizePixelShaderChannel::ms_staticShaderGenerator;
-
-// *********************************
-//
-void     DefaultFinalizePixelShaderChannel::InitializePixelShaderMapping() const
-{
-    ms_staticShaderGenerator.InitializePixelShaderMapping();
-}
-
-// *********************************
 //
 DefaultFinalizePixelShaderChannel::DefaultFinalizePixelShaderChannel    ( IPixelShaderChannelPtr channel, const std::string & shadersDir )
     : Parent( channel, shadersDir )
-    , ms_staticShaderGenerator( /*channel,*/ shadersDir )
+    , m_staticShaderGenerator( shadersDir, "frag" )
 {
     assert( channel != nullptr );
-
-    InitializePixelShaderMapping();
 } 
 
 // *********************************
@@ -43,7 +31,7 @@ RendererContextConstPtr  DefaultFinalizePixelShaderChannel::GetRendererContext  
 //
 std::string     DefaultFinalizePixelShaderChannel::GetShaderSource  ( const std::vector< std::string > & uids ) const
 {
-    return ms_staticShaderGenerator.GenerateShaderSource( uids );
+    return m_staticShaderGenerator.GenerateShaderSource( uids );
 }
 
 } //model
