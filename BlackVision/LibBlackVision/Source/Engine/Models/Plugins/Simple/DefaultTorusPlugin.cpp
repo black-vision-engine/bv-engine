@@ -3,6 +3,7 @@
 namespace bv { namespace model {
 	
 typedef ParamEnum< DefaultTorus::Plugin::OpenAngleMode > ParamEnumOAM;
+typedef ParamEnum< DefaultTorus::Plugin::WeightCenter > ParamEnumWC;
 
 VoidPtr    ParamEnumOAM::QueryParamTyped  ()
 {
@@ -15,6 +16,17 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultToru
     return CreateParameterEnum< DefaultTorus::Plugin::OpenAngleMode >( name, timeline );
 }
 
+VoidPtr    ParamEnumWC::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
+
+template<>
+static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultTorus::Plugin::WeightCenter >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultTorus::Plugin::WeightCenter >( name, timeline );
+}
+
 #include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 	
 namespace DefaultTorus {
@@ -24,6 +36,9 @@ const std::string PN::OPENANGLEMODE = "open angle mode";
 const std::string PN::RADIUS = "radius";
 const std::string PN::RADIUSCROSSSECTION = "radius2";
 const std::string PN::TESSELATION = "tesselation";
+const std::string PN::WEIGHTCENTERX = "weight center x";
+const std::string PN::WEIGHTCENTERY = "weight center y";
+const std::string PN::WEIGHTCENTERZ = "weight center z";
 
 
 PluginDesc::PluginDesc()
@@ -42,6 +57,13 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     h.AddSimpleParam( PN::OPENANGLE, 0.f, true, true );
     h.AddParam< IntInterpolator, DefaultTorus::Plugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
         ( DefaultTorus::PN::OPENANGLEMODE, DefaultTorus::Plugin::OpenAngleMode::CW, true, true );
+	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( DefaultTorus::PN::WEIGHTCENTERX, Plugin::WeightCenter::CENTER, true, true );
+	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( DefaultTorus::PN::WEIGHTCENTERY, Plugin::WeightCenter::MIN, true, true );
+	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( DefaultTorus::PN::WEIGHTCENTERZ, Plugin::WeightCenter::CENTER, true, true );
+
 
     return h.GetModel();
 }
@@ -63,7 +85,10 @@ bool                                Plugin::NeedsTopologyUpdate()
         ParameterChanged( PN::RADIUS ) ||
         ParameterChanged( PN::RADIUSCROSSSECTION ) ||
         ParameterChanged( PN::OPENANGLE ) ||
-		ParameterChanged( PN::OPENANGLEMODE );
+		ParameterChanged( PN::OPENANGLEMODE ) ||
+		ParameterChanged( PN::WEIGHTCENTERX ) ||
+		ParameterChanged( PN::WEIGHTCENTERY ) ||
+		ParameterChanged( PN::WEIGHTCENTERZ );
 }
 
 Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
@@ -74,7 +99,10 @@ Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr pr
     m_radiusCrossSection = QueryTypedValue< ValueFloatPtr >( GetValue( PN::RADIUSCROSSSECTION ) );
     m_openAngle = QueryTypedValue< ValueFloatPtr >( GetValue( PN::OPENANGLE ) );
 	m_openAngleMode = QueryTypedParam< std::shared_ptr< ParamEnum< OpenAngleMode > > >( GetParameter( PN::OPENANGLEMODE ) );
-    
+
+	m_weightCenterX = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERX ) );
+	m_weightCenterY = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERY ) );
+	m_weightCenterZ = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERZ ) );
 	
 	m_pluginParamValModel->Update();
     InitGeometry();
@@ -88,14 +116,45 @@ class Generator : public IGeometryAndUVsGenerator
     int tesselation;
     float radius, radius2, openangle;
 	Plugin::OpenAngleMode open_angle_mode;
+	Plugin::WeightCenter weight_centerX;
+	Plugin::WeightCenter weight_centerY;
+	Plugin::WeightCenter weight_centerZ;
 
-    glm::vec3 **v;
-    int n, m;
+	glm::vec3 center_translate;
+
 public:
-    Generator( int t, float r, float r2, float oa, Plugin::OpenAngleMode oam )
-		: tesselation( t ), radius( r ), radius2( r2), openangle( oa ), open_angle_mode( oam ) { }
+    Generator( int t, float r, float r2, float oa, Plugin::OpenAngleMode oam, Plugin::WeightCenter wcx, Plugin::WeightCenter wcy, Plugin::WeightCenter wcz )
+		: tesselation( t ), radius( r ), radius2( r2), openangle( oa ), open_angle_mode( oam ), weight_centerX( wcx ), weight_centerY( wcy ), weight_centerZ( wcz ) { }
 
     Type GetType() { return Type::GEOMETRY_AND_UVS; }
+
+	glm::vec3 computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ )
+	{
+		glm::vec3 centerTranslate = glm::vec3( 0.0f, 0.0f, 0.0f );
+
+		if( centerX == Plugin::WeightCenter::MAX )
+			centerTranslate += glm::vec3( -radius - radius2, 0.0, 0.0 );
+		else if( centerX == Plugin::WeightCenter::CENTER )
+			centerTranslate += glm::vec3( 0.0, 0.0, 0.0 );
+		else if( centerX == Plugin::WeightCenter::MIN )
+			centerTranslate += glm::vec3( radius + radius2, 0.0, 0.0 );
+	
+		if( centerY == Plugin::WeightCenter::MAX )
+			centerTranslate += glm::vec3( 0.0f, -radius - radius2, 0.0f );
+		else if( centerY == Plugin::WeightCenter::CENTER )
+			centerTranslate += glm::vec3( 0.0f, 0.0, 0.0f );
+		else if( centerY == Plugin::WeightCenter::MIN )
+			centerTranslate += glm::vec3( 0.0f, radius + radius2, 0.0f );
+
+		if( centerZ == Plugin::WeightCenter::MAX )
+			centerTranslate += glm::vec3( 0.0, 0.0, -radius2 );
+		else if( centerZ == Plugin::WeightCenter::CENTER )
+			centerTranslate += glm::vec3( 0.0, 0.0, 0.0 );
+		else if( centerZ == Plugin::WeightCenter::MIN )
+			centerTranslate += glm::vec3( 0.0, 0.0, radius2 );
+		
+		return centerTranslate;
+	}
 
 	float computeAngle2Clamped( float angle, float stripe_num )
 	{
@@ -137,10 +196,10 @@ public:
 		{
 			double phi = i * TWOPI / tesselation + angle_offset;
 
-			verts->AddAttribute( glm::vec3( cos_theta*( radius + radius2*cos( phi ) ), sin_theta * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) );
+			verts->AddAttribute( glm::vec3( cos_theta*( radius + radius2*cos( phi ) ), sin_theta * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) + center_translate );
 			uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j) / tesselation ) );
 
-			verts->AddAttribute( glm::vec3( cos_theta* radius , sin_theta * radius, radius2 * sin(phi) ) );
+			verts->AddAttribute( glm::vec3( cos_theta* radius , sin_theta * radius, radius2 * sin(phi) ) + center_translate );
 			uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j) / tesselation ) );
 		}
 	}
@@ -155,10 +214,7 @@ public:
 
     void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
     {
-    //    Init();
-    //    GenerateV();
-    //    CopyV( verts, uvs );
-    //    Deinit();
+		center_translate = computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
 		float angle_offset = computeAngleOffset( open_angle_mode, openangle );
 
 		int max_loop;
@@ -177,13 +233,13 @@ public:
                 double phi = i * TWOPI / tesselation + angle_offset;
                 double theta = j * TWOPI / tesselation + angle_offset;
 
-                verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) );
+                verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) + center_translate );
                 uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j) / tesselation ) );
 
                 phi = i * TWOPI / tesselation + angle_offset;
 				theta = computeAngle2Clamped( float( TWOPI / tesselation), float( j ) ) + angle_offset;		//zamiast theta = (j+1) * 2*PI / tesselation;
 
-                verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) );
+                verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) + center_translate );
 				if( j < max_loop - 1 )
 					uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j+1) / tesselation ) );
 				else
@@ -195,53 +251,6 @@ public:
 			generateClosure( verts, uvs, max_loop, angle_offset );
     }
 
-    //void Init() 
-    //{ 
-    //    n = tesselation;
-    //    m = tesselation;
-    //    assert( n >= 0 );
-    //    v = new glm::vec3*[ n ];
-    //    for( int i = 0; i < n; i++ )
-    //        v[ i ] = new glm::vec3[ m ];
-    //}
-
-    //void Deinit()
-    //{
-    //    for( int i = 0; i < n; i++ )
-    //        delete[] v[i];
-    //    delete[] v;
-    //}
-
-    //void CopyV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
-    //{
-    //    for( int i = 0; i < n-1; i++ )
-    //        for( int j = 0; j < m; j++ )
-    //        {
-    //            verts->AddAttribute( v[ i   ][ j ] );
-    //            verts->AddAttribute( v[ i+1 ][ j ] );
-    //        }
-    //    for( int j = 0; j < m; j++ )
-    //    {
-    //        verts->AddAttribute( v[ n-1 ][ j ] );
-    //        verts->AddAttribute( v[ 0   ][ j ] );
-    //    }
-
-    //    for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
-    //    {
-    //        glm::vec3 vert = verts->GetVertices()[ v ];
-    //        uvs->AddAttribute( glm::vec2( 0.5*( vert.x + vert.y + 1.f ),
-    //                                        vert.z + 0.5 ) ); // FIXME: scaling
-    //    }
-    //}
-
-    //void GenerateV()
-    //{
-    //    for( int i = 0; i < n; i++ )
-    //        for( int j = 0; j < m; j++ )
-    //        {
-
-    //        }
-    //}
 };
 
 std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
@@ -253,7 +262,10 @@ std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
         m_radius->GetValue(),
         m_radiusCrossSection->GetValue(),
         m_openAngle->GetValue(),
-		m_openAngleMode->Evaluate()
+		m_openAngleMode->Evaluate(),
+		m_weightCenterX->Evaluate(),
+		m_weightCenterY->Evaluate(),
+		m_weightCenterZ->Evaluate()
         ) ) );
 
     return gens;

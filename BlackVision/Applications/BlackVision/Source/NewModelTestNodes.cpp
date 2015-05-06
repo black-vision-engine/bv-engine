@@ -1741,7 +1741,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 //#define NO_PERSPECTIVE
 //#define VERSION_COLOR
 
-#define SHOW_CUBE
+//#define SHOW_CUBE
 //#define SHOW_CYLINDER
 //#define SHOW_CONE
 //#define SHOW_SPHERE
@@ -1749,7 +1749,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 //#define SHOW_ELLIPSE
 //#define SHOW_ROUNDEDRECT
 //#define SHOW_TRIANGLE
-//#define SHOW_TORUS
+#define SHOW_TORUS
 //#define SHOW_SPRING
 //#define SHOW_GEOSPHERE
 
@@ -1933,8 +1933,12 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 0.4f );
 	model::SetParameter( plugin->GetParameter( "radius2" ), 0.0f, 0.1f );
 	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 0.0f );
-	model::SetParameter( plugin->GetParameter( "open angle" ), 10.0f, 360.0f );
+	//model::SetParameter( plugin->GetParameter( "open angle" ), 10.0f, 360.0f );
 	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 15 );
+
+	model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultTorus::Plugin::WeightCenter::CENTER );
+	model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultTorus::Plugin::WeightCenter::CENTER );
+	model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultTorus::Plugin::WeightCenter::CENTER );
 
 	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultTorus::Plugin::OpenAngleMode::SYMMETRIC );
 	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultTorus::Plugin::OpenAngleMode::CCW );
