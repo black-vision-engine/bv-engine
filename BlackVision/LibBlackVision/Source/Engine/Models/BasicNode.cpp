@@ -7,6 +7,8 @@
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/BasicOverrideState.h"
 
+#include "Engine/Models/ModelNodeEditor.h"
+
 
 namespace bv { namespace model {
 
@@ -38,6 +40,7 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator,
     , m_pluginsManager( pluginsManager )
     , m_overrideState( nullptr )
     , m_visible( true )
+	, m_modelNodeEditor ( nullptr )
 {
     if( pluginsManager == nullptr )
     {
@@ -66,7 +69,11 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
         }
     };
 
-    return std::make_shared<make_shared_enabler_BasicNode>( name, timeEvaluator, pluginsManager );
+	auto node = std::make_shared<make_shared_enabler_BasicNode>( name, timeEvaluator, pluginsManager );
+
+	node->SetModelNodeEditor( new ModelNodeEditor( node ) );
+
+    return node;
 }    
 
 // ********************************
@@ -309,6 +316,34 @@ void            BasicNode::DetachChildNodeOnly              ( BasicNodePtr n )
     }
 
     assert( false );
+}
+
+// ********************************
+//
+ModelNodeEditor *					BasicNode::GetModelNodeEditor		()
+{
+	if( !m_modelNodeEditor)
+	{
+		m_modelNodeEditor = new ModelNodeEditor( shared_from_this() );
+	}
+	return m_modelNodeEditor;
+}
+
+// ********************************
+//
+void								BasicNode::SetModelNodeEditor		( ModelNodeEditor * editor )
+{
+	delete m_modelNodeEditor; //?
+	m_modelNodeEditor = editor;
+}
+
+// ********************************
+//
+DefaultPluginListFinalizedPtr		BasicNode::GetPlugins		()
+{
+    NonNullPluginsListGuard();
+
+    return m_pluginList;
 }
 
 // ********************************

@@ -29,6 +29,7 @@ DefaultFinalizePlugin::DefaultFinalizePlugin       ()
 
 {
     m_defaultVSChannel = DefaultVertexShaderChannel::Create();
+    m_defaultPSChannel = DefaultPixelShaderChannel::Create();
 }
 
 // *******************************
@@ -104,11 +105,18 @@ ITransformChannelConstPtr           DefaultFinalizePlugin::GetTransformChannel  
 IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel        () const
 {
     assert( m_prevPlugin );
-    assert( m_prevPlugin->GetPixelShaderChannel() );
+    
+	//assert( m_prevPlugin->GetPixelShaderChannel() );
+	auto psc = m_prevPlugin->GetPixelShaderChannel();
+
+    if( psc == nullptr )
+    {
+        psc = m_defaultPSChannel;
+    }
 
     if( m_finalizePSC == nullptr )
     {
-        m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( std::const_pointer_cast< IPixelShaderChannel >( m_prevPlugin->GetPixelShaderChannel() ), m_shadersDir );
+        m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( std::const_pointer_cast< IPixelShaderChannel >( psc ), m_shadersDir );
         m_finalizePSC->RegenerateShaderSource( GetUIDS() );
     }
 
