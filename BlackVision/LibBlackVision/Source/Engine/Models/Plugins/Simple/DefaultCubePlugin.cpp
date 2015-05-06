@@ -71,30 +71,30 @@ namespace Generator
 
 	glm::vec3 computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ )
 	{
-		center_translate = glm::vec3( 0.0f, 0.0f, 0.0f );
+		glm::vec3 centerTranslate = glm::vec3( 0.0f, 0.0f, 0.0f );
 
 		if( centerX == Plugin::WeightCenter::MAX )
-			center_translate += glm::vec3( -dims.x / 2, 0.0, 0.0 );
+			centerTranslate += glm::vec3( -dims.x / 2, 0.0, 0.0 );
 		else if( centerX == Plugin::WeightCenter::CENTER )
-			center_translate += glm::vec3( 0.0, 0.0, 0.0 );
+			centerTranslate += glm::vec3( 0.0, 0.0, 0.0 );
 		else if( centerX == Plugin::WeightCenter::MIN )
-			center_translate += glm::vec3( dims.x / 2, 0.0, 0.0 );
+			centerTranslate += glm::vec3( dims.x / 2, 0.0, 0.0 );
 	
 		if( centerY == Plugin::WeightCenter::MAX )
-			center_translate += glm::vec3( 0.0f, -dims.y / 2, 0.0f );
+			centerTranslate += glm::vec3( 0.0f, -dims.y / 2, 0.0f );
 		else if( centerY == Plugin::WeightCenter::CENTER )
-			center_translate += glm::vec3( 0.0f, 0.0, 0.0f );
+			centerTranslate += glm::vec3( 0.0f, 0.0, 0.0f );
 		else if( centerY == Plugin::WeightCenter::MIN )
-			center_translate += glm::vec3( 0.0f, dims.y / 2, 0.0f );
+			centerTranslate += glm::vec3( 0.0f, dims.y / 2, 0.0f );
 
 		if( centerZ == Plugin::WeightCenter::MAX )
-			center_translate += glm::vec3( 0.0, 0.0, -dims.z / 2 );
+			centerTranslate += glm::vec3( 0.0, 0.0, -dims.z / 2 );
 		else if( centerZ == Plugin::WeightCenter::CENTER )
-			center_translate += glm::vec3( 0.0, 0.0, 0.0 );
+			centerTranslate += glm::vec3( 0.0, 0.0, 0.0 );
 		else if( centerZ == Plugin::WeightCenter::MIN )
-			center_translate += glm::vec3( 0.0, 0.0, dims.z / 2 );
+			centerTranslate += glm::vec3( 0.0, 0.0, dims.z / 2 );
 		
-		return center_translate;
+		return centerTranslate;
 	}
 
 
