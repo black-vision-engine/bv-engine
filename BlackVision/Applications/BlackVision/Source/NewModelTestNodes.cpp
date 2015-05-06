@@ -1932,7 +1932,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	auto plugin = root->GetPlugin( "spring" );
 	model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 0.5f );
 	model::SetParameter( plugin->GetParameter( "radius2" ), 0.0f, 0.1f );
-	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 15 );
+	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 100 );
+	model::SetParameter( plugin->GetParameter( "tesselation2" ), 0.0f, 15 );
 	model::SetParameter( plugin->GetParameter( "delta" ), 0.0f, 1.0f );
 	model::SetParameter( plugin->GetParameter( "turns" ), 0.0f, 6 );
 #endif

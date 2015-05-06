@@ -6,6 +6,7 @@ namespace DefaultSpring {
 
 struct PN {
     static const std::string TESSELATION;
+	static const std::string TESSELATION2;
     static const std::string RADIUS;
     static const std::string RADIUSCROSSSECTION;
     static const std::string DELTA;
@@ -28,7 +29,7 @@ class Plugin : public DefaultGeometryPluginBase
 {
 public:
     enum WeightCenter : int
-	{ TOP, BOTTOM, CENTER };
+	{ MAX, MIN, CENTER };
 
 
     Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
