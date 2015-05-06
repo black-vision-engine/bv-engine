@@ -25,7 +25,7 @@ namespace bv { namespace model {
 // *******************************
 //
 DefaultTextPluginDesc::DefaultTextPluginDesc                            ()
-    : BasePluginDescriptor( UID(), "text", "tx" )
+    : BasePluginDescriptor( UID(), "text", "txt" )
 {
 }
 

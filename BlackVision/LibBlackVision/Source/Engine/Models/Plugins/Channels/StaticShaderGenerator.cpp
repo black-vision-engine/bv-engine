@@ -28,14 +28,16 @@ std::string         StaticShaderGenerator::GenerateFilename( const std::vector< 
     {
         std::string abbrv = UID2Abbrv( uid );
         if( abbrv != "" )
+		{
             if( filename.length() == 0 )
                 filename = abbrv;
             else
-                filename += "."+abbrv;
-    }
+                filename += "_" + abbrv;
+		}
+	}
     assert( filename.length() > 0 );
     filename = m_shadersDir + filename;
-    filename += "."+m_shaderExtension;
+    filename += "." + m_shaderExtension;
 
     return filename;
 }
