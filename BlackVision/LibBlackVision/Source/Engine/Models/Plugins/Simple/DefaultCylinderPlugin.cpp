@@ -4,6 +4,7 @@
 namespace bv { namespace model {
 
 typedef ParamEnum< DefaultCylinder::DefaultPlugin::OpenAngleMode > ParamEnumOAM;
+typedef ParamEnum< DefaultCylinder::DefaultPlugin::WeightCenter > ParamEnumWC;
 
 VoidPtr    ParamEnumOAM::QueryParamTyped  ()
 {
@@ -16,6 +17,18 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCyli
     return CreateParameterEnum< DefaultCylinder::DefaultPlugin::OpenAngleMode >( name, timeline );
 }
 
+VoidPtr    ParamEnumWC::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
+
+template<>
+static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCylinder::DefaultPlugin::WeightCenter >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultCylinder::DefaultPlugin::WeightCenter >( name, timeline );
+}
+
+
 #include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 
 namespace DefaultCylinder {
@@ -27,6 +40,9 @@ const std::string PN::INNERRADIUS = "inner radius";
 const std::string PN::OUTERRADIUS = "outer radius";
 const std::string PN::OPENANGLE = "open angle";
 const std::string PN::OPENANGLEMODE = "open angle mode";
+const std::string PN::WEIGHTCENTERX = "weight center x";
+const std::string PN::WEIGHTCENTERY = "weight center y";
+const std::string PN::WEIGHTCENTERZ = "weight center z";
 
 
 DefaultCylinderPluginDesc::DefaultCylinderPluginDesc()
@@ -44,7 +60,14 @@ DefaultPluginParamValModelPtr   DefaultCylinderPluginDesc::CreateDefaultModel  (
     h.AddSimpleParam( PN::OPENANGLE, 80.f, true, true );
     h.AddParam< IntInterpolator, DefaultPlugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
         ( PN::OPENANGLEMODE, DefaultPlugin::OpenAngleMode::CW, true, true );
-    
+   	h.AddParam< IntInterpolator, DefaultPlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( PN::WEIGHTCENTERX, DefaultPlugin::WeightCenter::CENTER, true, true );\
+	h.AddParam< IntInterpolator, DefaultPlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( PN::WEIGHTCENTERY, DefaultPlugin::WeightCenter::MIN, true, true );
+	h.AddParam< IntInterpolator, DefaultPlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( PN::WEIGHTCENTERZ, DefaultPlugin::WeightCenter::CENTER, true, true );
+
+
     return h.GetModel();
 }
 
@@ -65,8 +88,11 @@ namespace CylinderGenerator
 	int tesselation;
     float height, inner_radius, open_angle, outer_radius;
 	DefaultPlugin::OpenAngleMode open_angle_mode;
+	DefaultPlugin::WeightCenter weight_centerX;
+	DefaultPlugin::WeightCenter weight_centerY;
+	DefaultPlugin::WeightCenter weight_centerZ;
 
-    static void Init( int t, float ir, float oa, float h, float or, DefaultPlugin::OpenAngleMode oam )
+	static void Init( int t, float ir, float oa, float h, float or, DefaultPlugin::OpenAngleMode oam, DefaultPlugin::WeightCenter wcx, DefaultPlugin::WeightCenter wcy, DefaultPlugin::WeightCenter wcz )
     {
 		tesselation = t;
         inner_radius = ir; 
@@ -74,12 +100,16 @@ namespace CylinderGenerator
         height = h;
         outer_radius = or;
 		open_angle_mode = oam;
+		weight_centerX = wcx;
+		weight_centerY = wcy;
+		weight_centerZ = wcz;
     }
 
 	class MainGenerator : public IGeometryAndUVsGenerator
     {
 	protected:
 		double angle_offset;			// OpenAngleMode needs this
+		glm::vec3 center_translate;
 
 		void computeAngleOffset()
 		{
@@ -105,6 +135,32 @@ namespace CylinderGenerator
 
 			return ret_value;
 		}
+
+void computeWeightCenter( DefaultPlugin::WeightCenter centerX, DefaultPlugin::WeightCenter centerY, DefaultPlugin::WeightCenter centerZ )
+{
+	center_translate = glm::vec3( 0.0, 0.0, 0.0 );
+
+	if( centerX == DefaultPlugin::WeightCenter::MAX )
+		center_translate += glm::vec3( -outer_radius, 0.0, 0.0 );
+	else if( centerX == DefaultPlugin::WeightCenter::CENTER )
+		center_translate += glm::vec3( 0.0, 0.0, 0.0 );
+	else if( centerX == DefaultPlugin::WeightCenter::MIN )
+		center_translate += glm::vec3( outer_radius, 0.0, 0.0 );
+	
+	if( centerY == DefaultPlugin::WeightCenter::MAX )
+		center_translate += glm::vec3( 0.0, -height, 0.0 );
+	else if( centerY == DefaultPlugin::WeightCenter::CENTER )
+		center_translate += glm::vec3( 0.0, -height / 2, 0.0 );
+	else if( centerY == DefaultPlugin::WeightCenter::MIN )
+		center_translate += glm::vec3( 0.0, 0.0, 0.0 );
+
+	if( centerZ == DefaultPlugin::WeightCenter::MAX )
+		center_translate += glm::vec3( 0.0, 0.0, -outer_radius );
+	else if( centerZ == DefaultPlugin::WeightCenter::CENTER )
+		center_translate += glm::vec3( 0.0, 0.0, 0.0 );
+	else if( centerZ == DefaultPlugin::WeightCenter::MIN )
+		center_translate += glm::vec3( 0.0, 0.0, outer_radius );
+}
 
 		/**Generates verticies of one circuit of the beveled edges.
 		R1 and h1 describe position of top verticies of the strip,
@@ -133,10 +189,10 @@ namespace CylinderGenerator
 				double cos_angle1 = cos( angle1 );
 				double sin_angle1 = sin( angle1 );
 
-				verts->AddAttribute( glm::vec3( R1 * cos_angle1, h1, R1 * sin_angle1 ) );
+				verts->AddAttribute( glm::vec3( R1 * cos_angle1, h1, R1 * sin_angle1 ) + center_translate );
 				//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
 
-				verts->AddAttribute( glm::vec3( R2 * cos_angle1, h2, R2 * sin_angle1 ) );
+				verts->AddAttribute( glm::vec3( R2 * cos_angle1, h2, R2 * sin_angle1 ) + center_translate );
 				//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
 
 
@@ -155,6 +211,7 @@ namespace CylinderGenerator
 		virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
         {
 			computeAngleOffset();
+			computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
 			bool gen_direction = true;		// Generation direction clockwise or counter clockwise
 
 			// Top of cylinder
@@ -172,7 +229,7 @@ namespace CylinderGenerator
             for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
             {
                 glm::vec3 vert = verts->GetVertices()[ v ];
-				//vert -= center_translate;
+				vert -= center_translate;
                 uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
                                                 vert.y*0.5 + 0.5 ) ); // FIXME: scaling
             }
@@ -191,6 +248,7 @@ namespace CylinderGenerator
 		virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
         {
 			computeAngleOffset();
+			computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
 			double angle = 0.0;
 
 			if( rotated )	// If surface is rotated we must compute rotation angle
@@ -201,15 +259,15 @@ namespace CylinderGenerator
 			double cos_angle = cos( angle );
 			double sin_angle = sin( angle );
 
-			verts->AddAttribute( glm::vec3( outer_radius * cos_angle, height, outer_radius * sin_angle ) );
-			verts->AddAttribute( glm::vec3( inner_radius * cos_angle, height, inner_radius * sin_angle ) );
-			verts->AddAttribute( glm::vec3( outer_radius * cos_angle, 0.0f, outer_radius * sin_angle ) );
-			verts->AddAttribute( glm::vec3( inner_radius * cos_angle, 0.0f, inner_radius * sin_angle ) );
+			verts->AddAttribute( glm::vec3( outer_radius * cos_angle, height, outer_radius * sin_angle ) + center_translate );
+			verts->AddAttribute( glm::vec3( inner_radius * cos_angle, height, inner_radius * sin_angle ) + center_translate );
+			verts->AddAttribute( glm::vec3( outer_radius * cos_angle, 0.0f, outer_radius * sin_angle ) + center_translate );
+			verts->AddAttribute( glm::vec3( inner_radius * cos_angle, 0.0f, inner_radius * sin_angle ) + center_translate );
 
             for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
             {
                 glm::vec3 vert = verts->GetVertices()[ v ];
-				//vert -= center_translate;
+				vert -= center_translate;
                 uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
                                                 vert.y*0.5 + 0.5 ) ); // FIXME: scaling
             }
@@ -229,6 +287,10 @@ DefaultPlugin::DefaultPlugin( const std::string & name, const std::string & uid,
     m_outerRadius = QueryTypedValue< ValueFloatPtr >( GetValue( PN::OUTERRADIUS ) );
 	m_openAngleMode = QueryTypedParam< std::shared_ptr< ParamEnum< OpenAngleMode > > >( GetParameter( PN::OPENANGLEMODE ) );
 
+	m_weightCenterX = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERX ) );
+	m_weightCenterY = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERY ) );
+	m_weightCenterZ = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERZ ) );
+
     m_pluginParamValModel->Update();
     InitGeometry();
 }
@@ -241,7 +303,10 @@ std::vector<IGeometryGeneratorPtr>    DefaultPlugin::GetGenerators()
 		m_openAngle->GetValue(),
 		m_height->GetValue(),
 		m_outerRadius->GetValue(),
-		m_openAngleMode->Evaluate() );
+		m_openAngleMode->Evaluate(),
+		m_weightCenterX->Evaluate(),
+		m_weightCenterY->Evaluate(),
+		m_weightCenterZ->Evaluate());
 
     std::vector<IGeometryGeneratorPtr> gens;
     gens.push_back( IGeometryGeneratorPtr( new CylinderGenerator::MainGenerator() ) );
@@ -261,7 +326,10 @@ bool                                DefaultPlugin::NeedsTopologyUpdate()
         ParameterChanged( PN::OUTERRADIUS ) ||
         ParameterChanged( PN::OPENANGLE ) ||
         ParameterChanged( PN::INNERRADIUS ) ||
-		ParameterChanged( PN::OPENANGLEMODE );
+		ParameterChanged( PN::OPENANGLEMODE ) ||
+		ParameterChanged( PN::WEIGHTCENTERX ) ||
+		ParameterChanged( PN::WEIGHTCENTERY ) ||
+		ParameterChanged( PN::WEIGHTCENTERZ );
 }
 
 

@@ -111,7 +111,7 @@ public:
 
     void GenerateGeometryAndUVs( Float3AttributeChannelPtr, Float2AttributeChannelPtr );
 	void generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outer_loop  );
-	glm::vec3 computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ ) const;
+	void computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ );
 };
 
 std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
@@ -126,32 +126,30 @@ std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
 #include "Mathematics/Defines.h"
 
 
-glm::vec3 Generator::computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ ) const
+void Generator::computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ )
 {
-	glm::vec3 centerTranslate( 0.0, 0.0, 0.0 );
+	center_translate = glm::vec3( 0.0, 0.0, 0.0 );
 
 	if( centerX == Plugin::WeightCenter::MAX )
-		centerTranslate += glm::vec3( -r - r2, 0.0, 0.0 );
+		center_translate += glm::vec3( -r - r2, 0.0, 0.0 );
 	else if( centerX == Plugin::WeightCenter::CENTER )
-		centerTranslate += glm::vec3( 0.0, 0.0, 0.0 );
+		center_translate += glm::vec3( 0.0, 0.0, 0.0 );
 	else if( centerX == Plugin::WeightCenter::MIN )
-		centerTranslate += glm::vec3( r + r2, 0.0, 0.0 );
+		center_translate += glm::vec3( r + r2, 0.0, 0.0 );
 	
 	if( centerY == Plugin::WeightCenter::MAX )
-		centerTranslate += glm::vec3( 0.0, -delta - r2, 0.0 );
+		center_translate += glm::vec3( 0.0, -delta - r2, 0.0 );
 	else if( centerY == Plugin::WeightCenter::CENTER )
-		centerTranslate += glm::vec3( 0.0, -delta / 2, 0.0 );
+		center_translate += glm::vec3( 0.0, -delta / 2, 0.0 );
 	else if( centerY == Plugin::WeightCenter::MIN )
-		centerTranslate += glm::vec3( 0.0, r2, 0.0 );
+		center_translate += glm::vec3( 0.0, r2, 0.0 );
 
 	if( centerZ == Plugin::WeightCenter::MAX )
-		centerTranslate += glm::vec3( 0.0, 0.0, -r - r2 );
+		center_translate += glm::vec3( 0.0, 0.0, -r - r2 );
 	else if( centerZ == Plugin::WeightCenter::CENTER )
-		centerTranslate += glm::vec3( 0.0, 0.0, 0.0 );
+		center_translate += glm::vec3( 0.0, 0.0, 0.0 );
 	else if( centerZ == Plugin::WeightCenter::MIN )
-		centerTranslate += glm::vec3( 0.0, 0.0, r + r2 );
-
-	return centerTranslate;
+		center_translate += glm::vec3( 0.0, 0.0, r + r2 );
 }
 
 void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
@@ -187,7 +185,7 @@ void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2A
 	delta = m_delta->GetValue();
 
 	// Must be called after assingments above. It uses generator's variables.
-	center_translate = computeWeightCenter( m_weightCenterX->Evaluate(), m_weightCenterY->Evaluate(), m_weightCenterZ->Evaluate() );
+	computeWeightCenter( m_weightCenterX->Evaluate(), m_weightCenterY->Evaluate(), m_weightCenterZ->Evaluate() );
 
 	generateClosure( verts, uvs, 0 );
 

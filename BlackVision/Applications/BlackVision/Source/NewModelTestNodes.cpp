@@ -14,6 +14,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultEllipsePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTorusPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultSpringPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultCylinderPlugin.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
@@ -1740,7 +1741,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 //#define VERSION_COLOR
 
 //#define SHOW_CUBE
-//#define SHOW_CYLINDER
+#define SHOW_CYLINDER
 //#define SHOW_CONE
 //#define SHOW_SPHERE
 //#define SHOW_CIRCLE
@@ -1748,7 +1749,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 //#define SHOW_ROUNDEDRECT
 //#define SHOW_TRIANGLE
 //#define SHOW_TORUS
-#define SHOW_SPRING
+//#define SHOW_SPRING
 //#define SHOW_GEOSPHERE
 
 	  //Timeline stuff
@@ -1825,7 +1826,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 // ============================================ //
 // Tranformations
-	glm::vec3 rotation_axis( 0.f, 1.f, 0.f );
+	glm::vec3 rotation_axis( 1.f, 0.f, 0.f );
 	glm::vec3 rotation_axis2( -1.f, 1.f, 0.f );
 
 	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
@@ -1877,6 +1878,10 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::SYMMETRIC );
 	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CCW );
 	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CW );
+
+	model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCylinder::DefaultPlugin::WeightCenter::CENTER );
+	model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCylinder::DefaultPlugin::WeightCenter::CENTER );
+	model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultCylinder::DefaultPlugin::WeightCenter::CENTER );
 #endif
 #ifdef SHOW_SPHERE
 	auto plugin = root->GetPlugin( "sphere" );

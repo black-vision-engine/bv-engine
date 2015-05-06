@@ -27,6 +27,9 @@ struct PN {
     static const std::string OUTERRADIUS; // VecParam1 OuterRadius
     static const std::string OPENANGLE; // VecParam1 OpenAngle
     static const std::string OPENANGLEMODE; // enum OpenAngleMode(Clockwise, CCW, symetric)
+	static const std::string WEIGHTCENTERX;
+	static const std::string WEIGHTCENTERY;
+	static const std::string WEIGHTCENTERZ;
 };
 
 
@@ -35,7 +38,7 @@ class DefaultPlugin : public DefaultGeometryPluginBase
 {
 public:
 	enum OpenAngleMode : int { CW, CCW, SYMMETRIC };
-	enum WeightCenter : int { TOP, BOTTOM, CENTER };
+	enum WeightCenter : int { MIN, MAX, CENTER };
 
 	ValueIntPtr                                 m_tesselation;
     ValueFloatPtr                               m_innerRadius,
@@ -43,6 +46,9 @@ public:
                                                 m_openAngle,
                                                 m_height;
 	std::shared_ptr< ParamEnum< OpenAngleMode > >		m_openAngleMode;
+	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterX;
+	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterY;
+	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterZ;
 
 private:
     virtual std::vector<IGeometryGeneratorPtr>    GetGenerators() override;
@@ -74,7 +80,23 @@ inline bool SetParameter< DefaultCylinder::DefaultPlugin::OpenAngleMode >( IPara
     return true;
 }
 
+template<>
+inline bool SetParameter< DefaultCylinder::DefaultPlugin::WeightCenter >( IParameterPtr param, TimeType t, const DefaultCylinder::DefaultPlugin::WeightCenter & val )
+{
+    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
+    typedef ParamEnum<DefaultCylinder::DefaultPlugin::WeightCenter> ParamType;
 
+    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
+
+    if( typedParam == nullptr )
+    {
+        return false;
+    }
+
+    typedParam->SetVal( val, t );
+
+    return true;
+}
 
 
 } // model
