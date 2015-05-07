@@ -132,6 +132,15 @@ std::string             DefaultTextPluginDesc::PixelShaderSource        ()
     return "Assets/Shaders/Deprecated/dummy.frag";   //FIXME: deprecated
 }
 
+//pablito
+// *************************************
+//
+std::wstring DefaultTextPlugin::GetText                     () const
+{
+    return m_text;
+}
+
+
 // *******************************
 //
 std::string             DefaultTextPluginDesc::TextureName              ()

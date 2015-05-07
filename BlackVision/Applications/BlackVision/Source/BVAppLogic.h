@@ -8,6 +8,11 @@
 
 #include "FrameStatsService.h"
 
+//pablito
+#include "Solution.h"
+#include "VideoCardManager.h"
+
+
 #define HIDE_PROFILE_STATS
 
 
@@ -17,6 +22,7 @@ namespace bv
 class SimpleTimer;
 class RenderLogic;
 class Renderer;
+class RemoteControlInterface;
 
 enum class BVAppState : int
 {
@@ -47,6 +53,13 @@ private:
 
     unsigned long                   m_startTime;
 
+	//pablito
+	RemoteControlInterface*			m_RemoteControl;
+	Solution						m_solution;
+	bv::videocards::VideoCardManager* m_videoCardManager;
+	std::string                     m_grabFramePath;
+
+
 public:
 
                     BVAppLogic      ( Renderer * renderer );
@@ -59,6 +72,12 @@ public:
     void            InitCamera      ( unsigned int w, unsigned int h );
 
     void            SetStartTime    ( unsigned long millis );
+
+	//pablito:
+	void			SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager);
+	FrameStatsCalculator* GetStatsCalculator(){return &m_statsCalculator;};
+	model::TimelineManager* GetTimeLineManager(){return m_timelineManager;};
+
 
     virtual void    OnUpdate        ( unsigned int millis, Renderer * renderer );
     virtual void    OnKey           ( unsigned char c );
@@ -75,6 +94,8 @@ public:
 
     void            ResetScene      ();
     void            ReloadScene     ();
+
+	void            GrabCurrentFrame(  const std::string & path );
 
 private:
 

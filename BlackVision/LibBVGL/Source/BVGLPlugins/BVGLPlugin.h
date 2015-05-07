@@ -140,6 +140,12 @@ public:
 	virtual void				PrintShortSummary	        ( const std::string & message );
 	virtual void				PrintCompleteSummary	    ( const std::string & message );
 
+	//pablito
+	virtual void				BindFramebufferEXT			(GLenum target, GLuint framebuffer);
+	virtual void				BindRenderbufferEXT			(GLenum target, GLuint renderbuffer);
+	virtual void				DeleteFramebufferEXT		(GLsizei n, const GLuint *framebuffers);
+	virtual void				DeleteRenderbufferEXT		(GLsizei n, const GLuint *renderbuffers);
+	//virtual GLuint				GetError					();
 };
 
 } //bv

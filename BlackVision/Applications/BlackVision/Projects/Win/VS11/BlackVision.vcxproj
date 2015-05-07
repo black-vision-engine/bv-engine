@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -109,7 +109,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(LibBlackVisionDir)/../../Tools/LibEffect/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LibBlackVisionDir)/../../Tools/LibEffect/Source;$(ToolsDir)/XMLSceneParser/Source;$(ToolsDir)/TCPServer/Source;$(ToolsDir)/ConfigReader/Source;$(ToolsDir)/RapidXML/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -175,11 +175,26 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ProjectReference Include="..\..\..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj">
       <Project>{b0e6c314-5b08-40f7-87ef-17141a389ba5}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\LibVideoCards\Projects\Win\VS11\LibVideoCards.vcxproj">
+      <Project>{c3a7884f-3133-4c87-ace7-b8bc935426cc}</Project>
+	</ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Tools\LibEffect\Projects\Win\VS11\LibEffect.vcxproj">
       <Project>{e3611a8a-25fc-4c0e-89ae-89611fc3427a}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Tools\ConfigReader\Projects\Win\VS11\ConfigReader.vcxproj">
+      <Project>{00218970-e820-4bcc-b1da-48348059f6fe}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Tools\MipMapBuilder\Projects\Win\VS11\MipMapBuilder.vcxproj">
       <Project>{6a33f496-e3c1-4c91-a4e1-049c0c3b762e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Tools\RapidXML\Projects\Win\VS11\RapidXML.vcxproj">
+      <Project>{09c5ee56-18d0-4625-b632-b4980a620f4e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Tools\TCPServer\Projects\Win\VS11\TCPServer.vcxproj">
+      <Project>{1457450d-cbf9-4073-a406-5dc5c89bd065}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Tools\XMLSceneParser\Projects\Win\VS11\XMLSceneParser.vcxproj">
+      <Project>{1bc9456b-ba4b-4218-9c0c-1596717bd3f3}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -199,7 +214,9 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClCompile Include="..\..\..\Source\ModelInteractionLayer.cpp" />
     <ClCompile Include="..\..\..\Source\NewModelTestNodes.cpp" />
     <ClCompile Include="..\..\..\Source\NewModelTestScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp" />
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
+    <ClCompile Include="..\..\..\Source\RemoteControlInterface.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\OffscreenRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\RenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\StatsFormatters.cpp" />
@@ -211,10 +228,6 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\Crawler.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.cpp" />
-    <ClCompile Include="..\..\..\Source\Xml\Auxiliary\Auxiliary.cpp" />
-    <ClCompile Include="..\..\..\Source\Xml\BlackTree.cpp" />
-    <ClCompile Include="..\..\..\Source\Xml\Scena.cpp" />
-    <ClCompile Include="..\..\..\Source\Xml\TreeBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -232,7 +245,9 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClInclude Include="..\..\..\Source\ModelInteractionEvents.h" />
     <ClInclude Include="..\..\..\Source\ModelInteractionLayer.h" />
     <ClInclude Include="..\..\..\Source\NewModelTestNodes.h" />
+    <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
     <ClInclude Include="..\..\..\Source\PieChartNode.h" />
+    <ClInclude Include="..\..\..\Source\RemoteControlInterface.h" />
     <ClInclude Include="..\..\..\Source\Rendering\OffscreenRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\RenderLogic.h" />
     <ClInclude Include="..\..\..\Source\StatsFormatters.h" />
@@ -246,14 +261,6 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\Crawler.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.h" />
-    <ClInclude Include="..\..\..\Source\Xml\Auxiliary\Auxiliary.hpp" />
-    <ClInclude Include="..\..\..\Source\Xml\BlackTree.h" />
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml.hpp" />
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Iterators.hpp" />
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Print.hpp" />
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Utils.hpp" />
-    <ClInclude Include="..\..\..\Source\Xml\Scena.h" />
-    <ClInclude Include="..\..\..\Source\Xml\TreeBuilder.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />

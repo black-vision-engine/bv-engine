@@ -3,7 +3,7 @@
 #include "ApplicationBase.h"
 #include <string>
 #include "Mathematics/glm_inc.h"
-#include <Windows.h>
+#include "win_sock.h"
 
 namespace bv
 {
