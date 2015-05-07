@@ -6,15 +6,52 @@
 namespace bv { namespace effect
 {
 
+const std::string fragShaderSource = "					\
+												\n		\
+#version 400									\n		\
+												\n		\
+layout (location = 0) out vec4 FragColor;		\n		\
+												\n		\
+in vec2 uvCoord;								\n		\
+												\n		\
+uniform sampler2D Tex0;							\n		\
+												\n		\
+void main()										\n		\
+{												\n		\
+	vec4 col = texture( Tex0, uvCoord );		\n		\
+	FragColor = col; 							\n		\
+}												\n		\
+";
+
+const std::string vertShaderSource = "											 \
+#version 400																\n	 \
+																			\n	 \
+layout (location = 0) in vec3 vertexPosition;								\n	 \
+layout (location = 1) in vec2 vertexTexCoord;								\n	 \
+																			\n	 \
+uniform mat4 MVP;															\n	 \
+uniform mat4 MV;															\n	 \
+uniform mat4 P;																\n	 \
+																			\n	 \
+uniform mat4 txMat;															\n	 \
+																			\n	 \
+out vec2 uvCoord;															\n	 \
+																			\n	 \
+void main()																	\n	 \
+{																			\n	 \
+    gl_Position = MVP * vec4( vertexPosition, 1.0 );						\n	 \
+    uvCoord = ( txMat * vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;				\n	 \
+}																				 \
+";
+
 // ****************************
 //
-BlurEffect::BlurEffect    ()
+BlurEffect::BlurEffect    ( Texture2DPtr texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor )
 {
-	// TODO: Implement
-    //auto ps = CreatePS( texture, filteringMode, wrapModeX, wrapModeY, borderColor, hasAlpha );
-    //auto vs = CreateVS();
+    auto ps = CreatePS( texture, filteringMode, wrapModeX, wrapModeY, borderColor );
+    auto vs = CreateVS();
 
-    //RenderablePass * pass = new RenderablePass( ps, vs, nullptr );
+    RenderablePass * pass = new RenderablePass( ps, vs, nullptr );
     //auto sinst = pass->GetStateInstance();
 
     //RendererStatesBuilder::Create( sinst );
@@ -27,7 +64,7 @@ BlurEffect::BlurEffect    ()
     //ds->enabled = false;
     //cs->enabled = false;
 
-    //AddPass( pass );
+    AddPass( pass );
 }
 
 // ****************************
@@ -44,14 +81,12 @@ BlurEffect::~BlurEffect    ()
 //
 PixelShader *   BlurEffect::CreatePS   ( Texture2DPtr texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor )
 {
-	// TODO: Implement
-    // FIXME: it may not be safe
-    //assert( texture != nullptr );
+    assert( texture != nullptr );
 
     auto params = new ShaderParameters();
     params->AddTexture( texture );
 
-    auto shader = new PixelShader( "", params );
+    auto shader = new PixelShader( fragShaderSource, params );
     auto sampler = CreateSampler( filteringMode, wrapModeX, wrapModeY, borderColor );
 
     shader->AddTextureSampler( sampler );
@@ -63,13 +98,12 @@ PixelShader *   BlurEffect::CreatePS   ( Texture2DPtr texture, TextureFilteringM
 //
 VertexShader *  BlurEffect::CreateVS   ()
 {
-	// TODO: Implement
     auto params     = new ShaderParameters();
     auto mvpParam   = ShaderParamFactory::CreateMVPParameter();
 
     params->AddParameter( mvpParam );
 
-    auto shader = new VertexShader( "", params );
+    auto shader = new VertexShader( vertShaderSource, params );
 
     return shader;
 }

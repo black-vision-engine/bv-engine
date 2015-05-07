@@ -131,14 +131,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj">
-      <Project>{b0e6c314-5b08-40f7-87ef-17141a389ba5}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\LibImage\Projects\Win\VS11\LibImage.vcxproj">
-      <Project>{33e2cc63-2591-46b1-9b24-2a284566f1d6}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\..\Source\MipMapBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>

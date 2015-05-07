@@ -10,7 +10,7 @@ class BlurEffect : public RenderableEffect
 
 public:
 
-						BlurEffect		();
+						BlurEffect		( Texture2DPtr texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor );
 						~BlurEffect		();
 
 private:

@@ -4,25 +4,40 @@
 
 #include "Application/WindowedApplication.h"
 
-//#include "Engine/Graphics/Renderers/Renderer.h"
+#include "Effects/BlurEffect.h"
+
+#include "Engine/Graphics/Resources/Texture2DImpl.h"
+
+#include "Engine/Graphics/SceneGraph/Camera.h"
+
+#include "Engine/Graphics/Renderers/Renderer.h"
 
 #include <cassert>
 
 namespace bv { namespace effect
 {
 
+bv::Renderer * g_renderer = nullptr;
+
+// *********************************
+// Initialize library
+void InitializeLibEffect( bv::Renderer * renderer )
+{
+	g_renderer = renderer; 
+}
+
 // *********************************
 // Returns current renderer
-bv::Renderer * Renderer()
+bv::Renderer * GetRenderer()
 {
-	return const_cast< bv::Renderer * >( reinterpret_cast< bv::WindowedApplication * >(ApplicationBase::ApplicationInstance)->Renderer() ); // FIXME: Very ugly. How about ConsoleApplication ?
+	return g_renderer;
 } 
 
 // *********************************
 // Returns RenderebleEffect implementing blur.
-RenderableEffectPtr BlurEffect(  )
+RenderableEffectPtr GetBlurEffect( Texture2DPtr texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor )
 {
-	return nullptr;
+	return std::make_shared< BlurEffect >( texture, filteringMode, wrapModeX, wrapModeY, borderColor );
 }
 
 // *********************************
@@ -31,15 +46,24 @@ MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, 
 {
 	assert( in->Size() == width * height * bbp / 8 );
 
-	auto effect = BlurEffect();
+	auto tex = std::make_shared< Texture2DImpl >( TextureFormat::F_A8R8G8B8, width, height );
 
-	auto renderLogic = new EffectRenderLogic( width, height, 1, effect );
+	std::vector< MemoryChunkConstPtr > d;
+	d.push_back( in );
 
-	renderLogic->DrawDisplayRenderTarget( Renderer() );
+	tex->SetRawData( d, TextureFormat::F_A8R8G8B8, width, height );
 
-	auto tex = renderLogic->ReadDisplayTarget( Renderer(), 0 );
+	auto effect = GetBlurEffect( tex, TextureFilteringMode::TFM_POINT, TextureWrappingMode::TWM_CLAMP_BORDER, TextureWrappingMode::TWM_CLAMP_BORDER, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
-	return tex->GetData();
+	auto renderLogic = new EffectRenderLogic( width, height, 4, effect );
+
+	renderLogic->SetRendererCamera( new Camera() );
+
+	renderLogic->DrawDisplayRenderTarget( GetRenderer() );
+
+	auto texOut = renderLogic->ReadDisplayTarget( GetRenderer(), 0 );
+
+	return texOut->GetData();
 }
 
 

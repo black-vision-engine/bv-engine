@@ -2,9 +2,19 @@
 
 #include "LibImage.h"
 
-namespace bv { namespace effect
+namespace bv
 {
 
+class Renderer;
+
+namespace effect
+{
+
+extern bv::Renderer * g_renderer;
+
+// *********************************
+// Initialize library
+void InitializeLibEffect( bv::Renderer * renderer );
 
 // *********************************
 // Bluring image using GPU

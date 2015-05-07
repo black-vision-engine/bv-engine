@@ -93,6 +93,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(LibsRootDir)/Tools/LibEffect/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -108,6 +109,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(LibBlackVisionDir)/../../Tools/LibEffect/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -125,6 +127,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(LibsRootDir)/Tools/LibEffect/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -144,6 +147,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(LibsRootDir)/Tools/LibEffect/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -170,6 +174,9 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj">
       <Project>{b0e6c314-5b08-40f7-87ef-17141a389ba5}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Tools\LibEffect\Projects\Win\VS11\LibEffect.vcxproj">
+      <Project>{e3611a8a-25fc-4c0e-89ae-89611fc3427a}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Tools\MipMapBuilder\Projects\Win\VS11\MipMapBuilder.vcxproj">
       <Project>{6a33f496-e3c1-4c91-a4e1-049c0c3b762e}</Project>

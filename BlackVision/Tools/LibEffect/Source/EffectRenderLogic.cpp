@@ -56,6 +56,7 @@ EffectRenderData::EffectRenderData(  const RenderableEffectPtr & e  )
 {
     auxQuad                 = MainDisplayTarget::CreateDisplayRect( nullptr );
 	effect					= e;
+	auxQuad->SetRenderableEffect( e );
     //effectTexture2D         = std::static_pointer_cast<Texture2DEffect>( auxQuad->GetRenderableEffect() );
     //effectTexture2DWithMask = std::make_shared<Texture2DEffectWithMask>( nullptr, nullptr, true );
 
@@ -244,7 +245,7 @@ void                EffectRenderLogic::DrawDisplayRenderTarget   ( Renderer * re
     assert( m_displayRTEnabled == false );
 
     renderer->SetCamera( m_displayCamera );
-    renderer->Draw( CurDisplayRenderTargetData().quad );
+	renderer->Draw( m_renderData.auxQuad );
     renderer->SetCamera( m_rendererCamera );
 }
 

@@ -18,6 +18,7 @@
 
 #include "MockScenes.h"
 #include "DefaultPlugins.h"
+#include "LibEffect.h"
 
 //FIXME: remove
 #include "testai/TestAIManager.h"
@@ -123,6 +124,8 @@ void BVAppLogic::Initialize         ()
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
+
+	bv::effect::InitializeLibEffect( m_renderer );
 }
 
 // *********************************
