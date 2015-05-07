@@ -21,6 +21,7 @@
 #include "AtlasCache.h"
 #include "IO/FileIO.h"
 #include "LibImage.h"
+#include "LibEffect.h"
 #include "Assets/Assets.h"
 #include "Assets/Font/Engines/FreeTypeEngine.h"
 #include "Tools/MipMapBuilder/Source/MipMapBuilder.h"
@@ -226,11 +227,12 @@ void Text::BlurAtlas()
 		auto atlasH = m_atlas->GetHeight();
 		auto oldData = std::const_pointer_cast< MemoryChunk >( m_atlas->m_textureAsset->GetOriginal()->GetData() );
 
-		//image::SaveBMPImage( "test.bmp", oldData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel() );
+		image::SaveBMPImage( "test.bmp", oldData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel() );
 
 		auto bluredData = image::BlurImage( oldData, m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel(), m_blurSize );
+		//auto bluredData = bv::effect::GLBlurImage( oldData, m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() );
 
-		//image::SaveBMPImage( "testb.bmp", bluredData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel() );
+		image::SaveBMPImage( "testb.bmp", bluredData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel() );
 
 		auto newSingleTextureRes = SingleTextureAsset::Create( bluredData, "", atlasW, atlasH, TextureFormat::F_A8R8G8B8, true );
 		std::const_pointer_cast< TextAtlas >( m_atlas )->m_textureAsset = TextureAsset::Create( newSingleTextureRes, nullptr );
