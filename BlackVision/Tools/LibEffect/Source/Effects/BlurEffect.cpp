@@ -2,6 +2,7 @@
 
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
 #include "Engine/Models/Plugins/EngineConstantsMapper.h"
+#include "Engine/Models/Builder/RendererStatesBuilder.h"
 
 namespace bv { namespace effect
 {
@@ -19,7 +20,7 @@ uniform sampler2D Tex0;							\n		\
 void main()										\n		\
 {												\n		\
 	vec4 col = texture( Tex0, uvCoord );		\n		\
-	FragColor = col; 							\n		\
+	FragColor = vec4(1.0, 1.0, 1.0, 1.0); 		\n		\
 }												\n		\
 ";
 
@@ -40,7 +41,7 @@ out vec2 uvCoord;															\n	 \
 void main()																	\n	 \
 {																			\n	 \
     gl_Position = MVP * vec4( vertexPosition, 1.0 );						\n	 \
-    uvCoord = ( txMat * vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;				\n	 \
+    uvCoord = vertexTexCoord;												\n	 \
 }																				 \
 ";
 
@@ -52,17 +53,17 @@ BlurEffect::BlurEffect    ( Texture2DPtr texture, TextureFilteringMode filtering
     auto vs = CreateVS();
 
     RenderablePass * pass = new RenderablePass( ps, vs, nullptr );
-    //auto sinst = pass->GetStateInstance();
+    auto sinst = pass->GetStateInstance();
 
-    //RendererStatesBuilder::Create( sinst );
+    RendererStatesBuilder::Create( sinst );
 
-    //auto as = RenderStateAccessor::AccessAlphaState( sinst );
-    //auto ds = RenderStateAccessor::AccessDepthState( sinst );
-    //auto cs = RenderStateAccessor::AccessCullState( sinst );
+    auto as = RenderStateAccessor::AccessAlphaState( sinst );
+    auto ds = RenderStateAccessor::AccessDepthState( sinst );
+    auto cs = RenderStateAccessor::AccessCullState( sinst );
 
-    //as->blendEnabled = true;
-    //ds->enabled = false;
-    //cs->enabled = false;
+    as->blendEnabled = true;
+    ds->enabled = false;
+    cs->enabled = false;
 
     AddPass( pass );
 }

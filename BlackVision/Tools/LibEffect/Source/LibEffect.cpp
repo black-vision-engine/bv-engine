@@ -55,13 +55,13 @@ MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, 
 
 	auto effect = GetBlurEffect( tex, TextureFilteringMode::TFM_POINT, TextureWrappingMode::TWM_CLAMP_BORDER, TextureWrappingMode::TWM_CLAMP_BORDER, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
-	auto renderLogic = new EffectRenderLogic( width, height, 4, effect );
+	auto renderLogic = new EffectRenderLogic( width, height, 1, effect );
 
 	renderLogic->SetRendererCamera( new Camera() );
-
 	renderLogic->DrawDisplayRenderTarget( GetRenderer() );
 
 	auto texOut = renderLogic->ReadDisplayTarget( GetRenderer(), 0 );
+	//texOut = renderLogic->ReadDisplayTarget( GetRenderer(), 1 );
 
 	return texOut->GetData();
 }

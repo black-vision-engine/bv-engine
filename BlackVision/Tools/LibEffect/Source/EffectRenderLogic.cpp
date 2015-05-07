@@ -13,7 +13,7 @@ namespace bv {
 
 namespace {
 
-const unsigned int GNumRenderTargets = 2;
+const unsigned int GNumRenderTargets = 1;
 
 } //anonymous
 
@@ -244,9 +244,11 @@ void                EffectRenderLogic::DrawDisplayRenderTarget   ( Renderer * re
 {
     assert( m_displayRTEnabled == false );
 
-    renderer->SetCamera( m_displayCamera );
+	renderer->Enable( CurDisplayRenderTargetData().renderTarget );
+	renderer->SetCamera( m_displayCamera );
 	renderer->Draw( m_renderData.auxQuad );
     renderer->SetCamera( m_rendererCamera );
+	renderer->Disable( CurDisplayRenderTargetData().renderTarget );
 }
 
 // **************************
