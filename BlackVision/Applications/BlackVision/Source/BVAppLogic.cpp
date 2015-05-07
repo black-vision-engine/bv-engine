@@ -143,7 +143,7 @@ void BVAppLogic::LoadScene          ( void )
 {
 
 //pabllito
-#ifdef XMLN
+#ifdef XML
     m_solution.SetTimeline(m_timelineManager);
     m_solution.LoadSolution(ConfigManager::GetString("solution"));
     model::BasicNodePtr root = m_solution.GetRoot();
