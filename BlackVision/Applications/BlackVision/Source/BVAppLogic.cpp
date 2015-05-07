@@ -141,9 +141,9 @@ void BVAppLogic::Initialize         ()
 //
 void BVAppLogic::LoadScene          ( void )
 {
-    model::BasicNodePtr root = TestScenesFactory::OlafTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
+
 //pabllito
-#ifdef XML
+#ifdef XMLN
     m_solution.SetTimeline(m_timelineManager);
     m_solution.LoadSolution(ConfigManager::GetString("solution"));
     model::BasicNodePtr root = m_solution.GetRoot();
