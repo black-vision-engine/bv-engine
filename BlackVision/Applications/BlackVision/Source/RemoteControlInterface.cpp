@@ -268,7 +268,7 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 
 					//param->QueryParamTyped();
 
-					//pablito: nie dzia³aj¹ paramy
+					//pablito: nie dzialaja paramy
 					//ParamFloat valueFloat = model::QueryTypedParam<ParamFloat>(param);
 
 					// value ?!?!?!
