@@ -242,7 +242,11 @@ namespace bv{
                     {
                         printf("Sock id %d zgadza siê!\n",*csock);
                         
-                        const wchar_t * tmpBuffer = Responses[i].msg.c_str();
+                        printf("Sock id %d zgadza siê!\n",*csock);
+						wchar_t CHAR_BEGIN = 0x02;
+						wchar_t CHAR_END = 0x03;
+                        wstring to_send = CHAR_BEGIN+Responses[i].msg+CHAR_END;
+                        const wchar_t* tmpBuffer = to_send.c_str();
 
                         size_t buffer_size;
                         wcstombs_s(&buffer_size, NULL, 0, tmpBuffer, _TRUNCATE);

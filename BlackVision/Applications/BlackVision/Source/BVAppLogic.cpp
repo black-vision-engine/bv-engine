@@ -386,7 +386,7 @@ void BVAppLogic::ShutDown           ()
 void	BVAppLogic::SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager)
 {
 		m_videoCardManager = videoCardManager;
-		m_renderLogic->SetVideoCardManager(videoCardManager);
+		m_renderLogic->SetVideoCardManager(videoCardManager,m_renderer);
 }
 
 // *********************************

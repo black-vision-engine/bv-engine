@@ -27,7 +27,8 @@ public:
     void    RenderFrame     ( Renderer * renderer, SceneNode * node );
 
 	//pablito
-	void	SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager);
+	void	SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager, Renderer * renderer);
+	void	InitVideoCards     ( Renderer * renderer );
 
 private:
 
