@@ -147,6 +147,7 @@ model::IParameter::InterpolationMethod     CompositeTransform<ParamT>::GetInterp
         assert( ret == transformation->GetP0MotylaNoga().GetInterpolationMethod() );
         assert( ret == transformation->GetP1MotylaNoga().GetInterpolationMethod() );
         assert( ret == transformation->GetP2MotylaNoga().GetInterpolationMethod() );
+		{transformation;}
     }
     return ret;
 }

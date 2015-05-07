@@ -135,6 +135,7 @@ SingleTextureAssetConstPtr TextureLoader::LoadSingleTexture( const SingleTexture
 		if( loadFromCache )
 		{
 			auto res = RawDataCache::GetInstance().Add( Hash::FromString( key ), mmChunk );
+			{res;}
 			assert( res );
 		}
 	}

@@ -44,6 +44,8 @@ RenderableEffectPtr GetBlurEffect( Texture2DPtr texture, TextureFilteringMode fi
 // Bluring image using GPU
 MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bbp )
 {
+
+	{bbp;}
 	assert( in->Size() == width * height * bbp / 8 );
 
 	auto tex = std::make_shared< Texture2DImpl >( TextureFormat::F_A8R8G8B8, width, height );
