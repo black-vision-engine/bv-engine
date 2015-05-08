@@ -4,6 +4,7 @@
 namespace bv { namespace model {
 	
 	
+typedef ParamEnum< DefaultSphere::Plugin::MappingType> ParamEnumMT;
 typedef ParamEnum< DefaultSphere::Plugin::OpenAngleMode > ParamEnumOAM;
 
 VoidPtr    ParamEnumOAM::QueryParamTyped  ()
@@ -17,7 +18,16 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultSphe
     return CreateParameterEnum< DefaultSphere::Plugin::OpenAngleMode >( name, timeline );
 }
 
+VoidPtr    ParamEnumMT::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
 
+template<>
+static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultSphere::Plugin::MappingType >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultSphere::Plugin::MappingType >( name, timeline );
+}
 	
 #include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 	
@@ -29,6 +39,7 @@ const std::string PN::HORIZONTAL_STRIPES = "horizontal stripes";
 const std::string PN::RADIUS = "radius";
 const std::string PN::OPEN_ANGLE = "open angle";
 const std::string PN::OPEN_ANGLE_MODE = "open angle mode";
+const std::string PN::MAPPING_TYPE = "mappig type";
 
 PluginDesc::PluginDesc()
     : DefaultGeometryPluginDescBase( UID(), "sphere" )
@@ -58,6 +69,8 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
 	h.AddSimpleParam<float>( PN::OPEN_ANGLE, 240.0f, true, true );
 	h.AddParam< IntInterpolator, Plugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
 		( DefaultSphere::PN::OPEN_ANGLE_MODE, Plugin::OpenAngleMode::CW, true, true );
+	h.AddParam< IntInterpolator, Plugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
+		( DefaultSphere::PN::MAPPING_TYPE, Plugin::MappingType::SINGLETEXTURE, true, true );
 
     return h.GetModel();
 }
@@ -72,7 +85,7 @@ namespace Generator
 	float				radius;
 	float				open_angle;
 	Plugin::OpenAngleMode		open_angle_mode;
-
+	Plugin::MappingType			mapping_type;
 
 	float computeAngleOffset( Plugin::OpenAngleMode mode, float open_angle )
 	{
@@ -296,6 +309,7 @@ Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr pr
 	radius = QueryTypedValue< ValueFloatPtr >( GetValue( PN::RADIUS ) );
 	open_angle = QueryTypedValue< ValueFloatPtr >( GetValue( PN::OPEN_ANGLE ) );
 	open_angle_mode = QueryTypedParam< std::shared_ptr< ParamEnum< OpenAngleMode > > >( GetParameter( PN::OPEN_ANGLE_MODE ) );
+	mapping_type = QueryTypedParam< std::shared_ptr< ParamEnum< MappingType > > >( GetParameter( PN::MAPPING_TYPE ) );
 
     m_pluginParamValModel->Update();
     InitGeometry();
@@ -313,6 +327,7 @@ std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
 	Generator::radius = radius->GetValue();
 	Generator::open_angle = open_angle->GetValue();
 	Generator::open_angle_mode = open_angle_mode->Evaluate();
+	Generator::mapping_type = mapping_type->Evaluate();
 
     std::vector<IGeometryGeneratorPtr> gens;
 	
@@ -341,7 +356,8 @@ bool                                Plugin::NeedsTopologyUpdate()
 		|| ParameterChanged( PN::VERTICAL_STRIPES )
 		|| ParameterChanged( PN::RADIUS )
 		|| ParameterChanged( PN::OPEN_ANGLE )
-		|| ParameterChanged( PN::OPEN_ANGLE_MODE );
+		|| ParameterChanged( PN::OPEN_ANGLE_MODE )
+		|| ParameterChanged( PN::MAPPING_TYPE );
 }
 
 
