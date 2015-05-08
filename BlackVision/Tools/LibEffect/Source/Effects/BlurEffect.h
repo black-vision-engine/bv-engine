@@ -26,6 +26,11 @@ private:
     VertexShader *      CreateVS        ();
 
     TextureSampler *    CreateSampler   ( TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor );
+
+	std::string			GetPSSource		() const;
+	std::string			GetVSSource		() const;
+
+	static std::string	ReadFile		( const std::string & filename );
 };
 
 DEFINE_PTR_TYPE(BlurEffect)
