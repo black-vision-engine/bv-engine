@@ -229,10 +229,20 @@ void Text::BlurAtlas()
 
 		image::SaveBMPImage( "test.bmp", oldData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel() );
 
-		//auto bluredData = image::BlurImage( oldData, m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel(), m_blurSize );
-		auto bluredData = bv::effect::GLBlurImage( oldData, m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() );
 
-		image::SaveBMPImage( "testb.bmp", bluredData, (unsigned int) m_atlas->GetWidth(), (unsigned int) m_atlas->GetHeight(), (unsigned int) m_atlas->GetBitsPerPixel() );
+		//UInt32 w;
+		//UInt32 h;
+		//UInt32 bbp;
+		//auto img = image::LoadImage( "100x100.png", &w, &h, &bbp );
+		//auto bluredData = image::BlurImage( img, w, h, bbp, 5 );
+
+		//image::SaveBMPImage( "testhost.bmp", bluredData, w, h, bbp );
+
+		//bluredData = bv::effect::GLBlurImage( img, w, h, bbp, 5 );
+
+		//image::SaveBMPImage( "testbgpu.bmp", bluredData, w, h, bbp );
+
+		auto bluredData = bv::effect::GLBlurImage( oldData, m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel(), m_blurSize );
 
 		auto newSingleTextureRes = SingleTextureAsset::Create( bluredData, "", atlasW, atlasH, TextureFormat::F_A8R8G8B8, true );
 		std::const_pointer_cast< TextAtlas >( m_atlas )->m_textureAsset = TextureAsset::Create( newSingleTextureRes, nullptr );

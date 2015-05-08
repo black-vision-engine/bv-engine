@@ -3,6 +3,7 @@
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
 #include "Engine/Models/Plugins/EngineConstantsMapper.h"
 #include "Engine/Models/Builder/RendererStatesBuilder.h"
+#include "Engine/Types/Values/ValuesFactory.h"
 
 namespace bv { namespace effect
 {
@@ -15,13 +16,19 @@ layout (location = 0) out vec4 FragColor;		\n		\
 												\n		\
 in vec2 uvCoord;								\n		\
 												\n		\
-uniform sampler2D Tex0;							\n		\
+uniform sampler2D	Tex0;						\n		\
+uniform int			blurLenght;					\n		\
+uniform float		pixelWidth;					\n		\
+uniform float		pixelHeight;				\n		\
 												\n		\
 void main()										\n		\
 {												\n		\
-	vec4 col = texture( Tex0, uvCoord );		\n		\
-	FragColor = vec4(1.0, 1.0, 1.0, 1.0); 		\n		\
-}												\n		\
+	vec4 sum = vec4( 0.0, 0.0, 0.0, 0.0 );					\n \
+	for( int i = -blurLenght; i <= blurLenght; ++i )		\n \
+		for( int j = -blurLenght; j <= blurLenght; ++j )		\n \
+			sum += texture( Tex0, uvCoord + vec2( i * pixelWidth, j * pixelHeight ) );	\n \
+	FragColor = sum / ( ( 2 * blurLenght + 1 ) * ( 2 * blurLenght + 1 ) );				\n \
+}															\n \
 ";
 
 const std::string vertShaderSource = "											 \
@@ -47,7 +54,10 @@ void main()																	\n	 \
 
 // ****************************
 //
-BlurEffect::BlurEffect    ( Texture2DPtr texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor )
+BlurEffect::BlurEffect    ( UInt32 blurLenght, Float32 pixelWidth, Float32 pixelHeight, Texture2DPtr texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor )
+	: m_blurLength( blurLenght )
+	, m_pixelWidth( pixelWidth )
+	, m_pixelHeight( pixelHeight )
 {
     auto ps = CreatePS( texture, filteringMode, wrapModeX, wrapModeY, borderColor );
     auto vs = CreateVS();
@@ -61,7 +71,7 @@ BlurEffect::BlurEffect    ( Texture2DPtr texture, TextureFilteringMode filtering
     auto ds = RenderStateAccessor::AccessDepthState( sinst );
     auto cs = RenderStateAccessor::AccessCullState( sinst );
 
-    as->blendEnabled = true;
+    as->blendEnabled = false;
     ds->enabled = false;
     cs->enabled = false;
 
@@ -87,8 +97,24 @@ PixelShader *   BlurEffect::CreatePS   ( Texture2DPtr texture, TextureFilteringM
     auto params = new ShaderParameters();
     params->AddTexture( texture );
 
+	m_blurLenghtVal = ValuesFactory::CreateValueInt( "blurLenght" );
+	m_blurLenghtVal->SetValue( m_blurLength );
+
+	params->AddParameter( ShaderParamFactory::CreateGenericParameter( m_blurLenghtVal.get() ) );
+
+	m_pixelWidthVal = ValuesFactory::CreateValueFloat( "pixelWidth" );
+	m_pixelWidthVal->SetValue( m_pixelWidth );
+
+	params->AddParameter( ShaderParamFactory::CreateGenericParameter( m_pixelWidthVal.get() ) );
+
+	m_pixelHeightVal = ValuesFactory::CreateValueFloat( "pixelHeight" );
+	m_pixelHeightVal->SetValue( m_pixelHeight );
+
+	params->AddParameter( ShaderParamFactory::CreateGenericParameter( m_pixelHeightVal.get() ) );
+
+
     auto shader = new PixelShader( fragShaderSource, params );
-    auto sampler = CreateSampler( filteringMode, wrapModeX, wrapModeY, borderColor );
+	auto sampler = CreateSampler( filteringMode, wrapModeX, wrapModeY, borderColor );
 
     shader->AddTextureSampler( sampler );
 

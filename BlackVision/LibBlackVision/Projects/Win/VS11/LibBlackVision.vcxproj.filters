@@ -846,6 +846,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelSceneEditor.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.cpp">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1708,6 +1711,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h">
       <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -18,7 +18,7 @@ void InitializeLibEffect( bv::Renderer * renderer );
 
 // *********************************
 // Bluring image using GPU
-MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bbp );
+MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bbp, UInt32 blurLength );
 
 
 } // effect

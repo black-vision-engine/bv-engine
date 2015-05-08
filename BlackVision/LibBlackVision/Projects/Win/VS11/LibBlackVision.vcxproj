@@ -227,6 +227,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamFloat.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamMat2.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamMat3.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamMat4.cpp" />
@@ -375,6 +376,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\ICachedParameter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IState.h" />

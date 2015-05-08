@@ -3,6 +3,7 @@
 
 #include "FreeImage.h"
 
+#include <algorithm>
 #include <memory>
 #include <cassert>
 
@@ -195,10 +196,8 @@ inline unsigned char GetPixelColor( Int32 x, Int32 y, const char* data, UInt32 w
 //
 inline Float4 GetPixelColorFloat4( Int32 x, Int32 y, const char * data, UInt32 width, UInt32 height )
 {
-	if( x < 0 || x >= ( Int32 )width || y < 0 || y >= ( Int32 )height )
-	{
-	    return Float4( 0.f, 0.f, 0.f, 0.f );
-	}
+	x = std::max( 0, std::min( x, ( Int32 )width - 1 ) );
+	y = std::max( 0, std::min( y, ( Int32 )height - 1 ) );
 
 	const unsigned char * p = (unsigned char *)&data[ 4 * ( x + y * width ) ];
 	return Float4( p[ 0 ] / 255.f, p[ 1 ] / 255.f, p[ 2 ] / 255.f, p[ 3 ] / 255.f );

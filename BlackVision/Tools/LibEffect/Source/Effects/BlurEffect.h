@@ -7,10 +7,17 @@ namespace bv { namespace effect
 
 class BlurEffect : public RenderableEffect
 {
+private:
+	UInt32				m_blurLength;
+	Float32				m_pixelWidth;
+	Float32				m_pixelHeight;
+	ValueIntPtr			m_blurLenghtVal;
+	ValueFloatPtr		m_pixelWidthVal;
+	ValueFloatPtr		m_pixelHeightVal;
 
 public:
 
-						BlurEffect		( Texture2DPtr texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor );
+						BlurEffect		( UInt32 blurLenght, Float32 pixelWidth, Float32 pixelHeight, Texture2DPtr texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor );
 						~BlurEffect		();
 
 private:
