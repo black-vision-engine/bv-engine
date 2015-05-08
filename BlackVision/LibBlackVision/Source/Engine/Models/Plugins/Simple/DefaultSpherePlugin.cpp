@@ -219,6 +219,28 @@ namespace Generator
 
 		Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
+		glm::vec2 computeClosureUV( glm::vec2 normalized_pos, bool invert )
+		{
+			if( invert )
+				normalized_pos.x = -normalized_pos.x;
+
+			glm::vec2 scale_factor;
+			glm::vec2 closureRegion;
+
+			if( mapping_type == Plugin::MappingType::SINGLETEXTURE )
+			{
+				scale_factor = glm::vec2( 1.0 / 3.0, 1.0 );
+				closureRegion = glm::vec2( 2.0 / 3.0, 0.0 );
+			}
+			else if( mapping_type == Plugin::MappingType::DOUBLETEXTURE )
+			{
+				scale_factor = glm::vec2( 1.0, 1.0 );
+				closureRegion = glm::vec2( 0.0, 0.0 );
+			}
+
+			return closureRegion + scale_factor * ( glm::vec2( 0.5, 0.5 ) + normalized_pos * glm::vec2( 0.5, 0.5 ) );
+		}
+
 		void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
         {
 			float angle_offset = computeAngleOffset( open_angle_mode, open_angle );
@@ -237,10 +259,10 @@ namespace Generator
 			float alfa = float( PI ) / float(2) - vert_delta_angle;		// Angle counting from north pole
 
 			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
-			uvs->AddAttribute( glm::vec2( 0.0, 1.0 ) );
+			uvs->AddAttribute( /*glm::vec2( 0.0, 1.0 )*/computeClosureUV( glm::vec2(0.0, 1.0), false ) );
 			for( unsigned int i = 0; i < vertical_stripes; ++i )
 			{
-				float V_coord = float( ( PI / 2 + alfa ) / PI );
+				//float V_coord = float( ( PI / 2 + alfa ) / PI );
 				float cos_alfa = cos( alfa );
 				float sin_alfa = sin( alfa );
 
@@ -248,23 +270,23 @@ namespace Generator
 				float y = radius * sin_alfa;
 				float z = 0.0;
 				verts->AddAttribute( glm::vec3( x, y, z ) );
-				uvs->AddAttribute( glm::vec2( 1.0, V_coord ) );
+				uvs->AddAttribute( /*glm::vec2( 1.0, V_coord ) */computeClosureUV( glm::vec2(0.0, sin_alfa), false ) );
 
 				x = sin_hor_angle * cos_alfa;		// Radius already multiplied
 				z = cos_hor_angle * cos_alfa;		// Radius already multiplied
 				verts->AddAttribute( glm::vec3( x, y, z ) );
-				uvs->AddAttribute( glm::vec2( U_coord, V_coord ) );
+				uvs->AddAttribute( /*glm::vec2( U_coord, V_coord )*/computeClosureUV( glm::vec2(cos_alfa, sin_alfa), false ) );
 
 				alfa -= vert_delta_angle;
 			}
 			verts->AddAttribute( glm::vec3( 0.0, -1.0, 0.0 ) * radius );
-			uvs->AddAttribute( glm::vec2( 0.0, -1.0 ) );
+			uvs->AddAttribute( /*glm::vec2( 0.0, 0.0 )*/computeClosureUV( glm::vec2(0.0, -1.0), false ) );
 
 			// Degenerated traingles
 			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
-			uvs->AddAttribute( glm::vec2( 0.0, 1.0 ) );
+			uvs->AddAttribute( glm::vec2( 0.0, 1.0 ) );			//It' doesn't matter
 			verts->AddAttribute( glm::vec3( 0.0, 1.0, 0.0 ) * radius );
-			uvs->AddAttribute( glm::vec2( 0.0, 1.0 ) );
+			uvs->AddAttribute( glm::vec2( 0.0, 1.0 ) );			//It' doesn't matter
 
 			// ===================================================== //
 			// The second face
@@ -274,7 +296,7 @@ namespace Generator
 			sin_hor_angle = radius * sin( hor_angle_clamped + angle_offset );
 			for( unsigned int i = 0; i < vertical_stripes; ++i )
 			{
-				float V_coord = float( ( PI / 2 + alfa ) / PI );
+				//float V_coord = float( ( PI / 2 + alfa ) / PI );
 				float cos_alfa = cos( alfa );
 				float sin_alfa = sin( alfa );
 
@@ -282,12 +304,12 @@ namespace Generator
 				float y = radius * sin_alfa;
 				float z = cos_hor_angle * cos_alfa;		// Radius already multiplied
 				verts->AddAttribute( glm::vec3( x, y, z ) );
-				uvs->AddAttribute( glm::vec2( U_coord, V_coord ) );
+				uvs->AddAttribute( /*glm::vec2( U_coord, V_coord )*/computeClosureUV( glm::vec2(cos_alfa, sin_alfa), true ) );
 
 				x = 0.0;
 				z = 0.0;
 				verts->AddAttribute( glm::vec3( x, y, z ) );
-				uvs->AddAttribute( glm::vec2( 0.0, V_coord ) );
+				uvs->AddAttribute( /*glm::vec2( 0.0, V_coord )*/computeClosureUV( glm::vec2(0.0, sin_alfa), true ) );
 
 				alfa -= vert_delta_angle;
 			}
