@@ -8,6 +8,7 @@
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/ISequenceAnimationSource.h"
 
+#include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
 #include "TextureInfo.h"
@@ -63,11 +64,15 @@ public:
     virtual RendererContextConstPtr             GetRendererContext          () const override;
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const override;
+    virtual IPluginPtr							GetPrevPlugin               () override;
+    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
+
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr );
 
 	virtual ParamTransformVecPtr				GetParamTransform			() const override { return nullptr; }
+
 
 protected:
 
@@ -312,6 +317,23 @@ IPluginConstPtr                     BasePlugin< Iface >::GetPrevPlugin          
 {
     return m_prevPlugin;
 }
+
+// *******************************
+//
+template< class Iface >
+IPluginPtr							BasePlugin< Iface >::GetPrevPlugin                  ()
+{
+    return m_prevPlugin;
+}
+
+// *******************************
+//
+template< class Iface >
+void								BasePlugin< Iface >::SetPrevPlugin                  ( IPluginPtr plugin )
+{
+    m_prevPlugin = plugin;
+}
+
 
 // *******************************
 //

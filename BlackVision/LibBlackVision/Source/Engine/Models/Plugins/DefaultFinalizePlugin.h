@@ -28,6 +28,8 @@ private:
     mutable DefaultFinalizeVertexShaderChannelPtr   m_finalizeVSC;
     mutable DefaultFinalizeGeometryShaderChannelPtr m_finalizeGSC;
 
+	ITransformChannelConstPtr		m_defaultTransformChannel;
+
 public:
 
                                                 DefaultFinalizePlugin       ();
@@ -50,18 +52,21 @@ public:
     virtual RendererContextConstPtr             GetRendererContext          () const override;
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const override;
+    virtual IPluginPtr							GetPrevPlugin               () override;
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & currentTransformation ) const override;
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
     virtual void                                Update                      ( TimeType t ) override;
 
-    void                                        SetPrevPlugin               ( IPluginPtr plugin );
+    virtual void                                SetPrevPlugin               ( IPluginPtr plugin ) override;
     void                                        SetName                     ( const std::string & name );
 
     static std::string                          ShadersDir                  ();
 
 	virtual ParamTransformVecPtr				GetParamTransform			() const override;
+
+    virtual bool								IsValid						() override;
 
 private:
 

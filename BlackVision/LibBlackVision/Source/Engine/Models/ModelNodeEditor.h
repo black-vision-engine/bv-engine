@@ -17,19 +17,18 @@ private:
 public:
                             ModelNodeEditor		( BasicNodePtr model ); 
 
-    bool                    AddPlugin			( IPluginPtr plugin );
+    bool                    AddPlugin			( IPluginPtr plugin, unsigned int idx );
+    bool                    DeletePlugin		( unsigned int idx );
     bool                    DeletePlugin		( const std::string & name );
 
-    bool                    AttachPlugin		();
+    bool                    AttachPlugin		( unsigned int idx );
+    bool                    DetachPlugin		( unsigned int idx );
     bool                    DetachPlugin		( const std::string & name );
 
-	IPluginPtr				GetDetachedPlugin     ();
-    void                    DeleteDetachedPlugin  ();
+	IPluginPtr				GetDetachedPlugin	();
+    void                    ResetDetachedPlugin	();
 
-	void					RefreshNode ( SceneNode * sceneNode, Renderer * renderer );
-
-private:
-	bool					PluginCanBeAttached ( IPluginPtr plugin );
+	void					RefreshNode			( SceneNode * sceneNode, Renderer * renderer );
 
 };
 

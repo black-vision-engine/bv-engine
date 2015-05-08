@@ -1,7 +1,7 @@
 #include "DefaultTransformChannel.h"
 
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
-
+#include "Engine/Types/Values/ValuesFactory.h"
 
 namespace bv { namespace model
 {
@@ -19,6 +19,15 @@ DefaultTransformChannel::DefaultTransformChannel( IPluginPtr prev, const ValueMa
 
         m_prevValues = static_cast< const ValueMat4PtrVec * >( &prev->GetTransformChannel()->GetTransformValues() );
     }
+}
+
+// *********************************
+//
+DefaultTransformChannel *   DefaultTransformChannel::Create              ()
+{
+	ValueMat4PtrVec values;
+    values.push_back( ValuesFactory::CreateValueMat4( "" ) );
+    return new DefaultTransformChannel( nullptr, values, true );
 }
 
 // *********************************

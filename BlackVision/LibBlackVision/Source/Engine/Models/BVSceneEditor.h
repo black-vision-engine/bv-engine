@@ -54,11 +54,15 @@ public:
     model::IModelNodePtr    GetRootNode         ();
 
 	
-	void                    AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin );
-    void                    DeletePlugin		( model::BasicNodePtr node, const std::string & name );
+	void                    AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, unsigned int idx );
+    bool                    DeletePlugin		( model::BasicNodePtr node, unsigned int idx );
+    bool                    DeletePlugin		( model::BasicNodePtr node, const std::string & name );
 
-    void                    AttachPlugin		( model::BasicNodePtr node );
-    void                    DetachPlugin		( model::BasicNodePtr node, const std::string & name );
+    bool                    AttachPlugin		( model::BasicNodePtr node, unsigned int idx );
+    bool                    AttachPlugin		( model::BasicNodePtr sourceNode, model::BasicNodePtr targetNode, unsigned int idx );
+    bool                    DetachPlugin		( model::BasicNodePtr node, unsigned int idx );
+    bool                    DetachPlugin		( model::BasicNodePtr node, const std::string & name );
+    
 
 private:
 
