@@ -13,6 +13,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 
+#include "Engine/Models/Plugins/Channels/Transform/DefaultTransformChannel.h"
+
 namespace bv { namespace model {
 
 std::string DefaultFinalizePlugin::m_uid = "DEFAULT_FINALIZE";
@@ -29,6 +31,9 @@ DefaultFinalizePlugin::DefaultFinalizePlugin       ()
 
 {
     m_defaultVSChannel = DefaultVertexShaderChannel::Create();
+    m_defaultPSChannel = DefaultPixelShaderChannel::Create();
+
+	m_defaultTransformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create() );
 }
 
 // *******************************
@@ -96,7 +101,12 @@ ITransformChannelConstPtr           DefaultFinalizePlugin::GetTransformChannel  
 {
     assert( m_prevPlugin );
 
-    return m_prevPlugin->GetTransformChannel();
+	auto transformChannel = m_prevPlugin->GetTransformChannel();
+
+	if( transformChannel )
+		return transformChannel;
+
+	return m_defaultTransformChannel;
 }
 
 // *******************************
@@ -104,11 +114,18 @@ ITransformChannelConstPtr           DefaultFinalizePlugin::GetTransformChannel  
 IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel        () const
 {
     assert( m_prevPlugin );
-    assert( m_prevPlugin->GetPixelShaderChannel() );
+    
+	//assert( m_prevPlugin->GetPixelShaderChannel() );
+	auto psc = m_prevPlugin->GetPixelShaderChannel();
+
+    if( psc == nullptr )
+    {
+        psc = m_defaultPSChannel;
+    }
 
     if( m_finalizePSC == nullptr )
     {
-        m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( std::const_pointer_cast< IPixelShaderChannel >( m_prevPlugin->GetPixelShaderChannel() ), m_shadersDir );
+        m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( std::const_pointer_cast< IPixelShaderChannel >( psc ), m_shadersDir );
         m_finalizePSC->RegenerateShaderSource( GetUIDS() );
     }
 
@@ -174,6 +191,13 @@ RendererContextConstPtr             DefaultFinalizePlugin::GetRendererContext   
 // *******************************
 //
 IPluginConstPtr                     DefaultFinalizePlugin::GetPrevPlugin                () const
+{
+    return m_prevPlugin;
+}
+
+// *******************************
+//
+IPluginPtr							DefaultFinalizePlugin::GetPrevPlugin                ()
 {
     return m_prevPlugin;
 }
@@ -275,6 +299,21 @@ ParamTransformVecPtr				DefaultFinalizePlugin::GetParamTransform			() const
 
 	return paramTransform;
 }
+
+// *******************************
+//
+bool								DefaultFinalizePlugin::IsValid						()
+{
+	auto plugin = m_prevPlugin;
+	while ( plugin )
+	{
+		if ( !PluginsManager::DefaultInstance().CanBeAttachedTo( plugin->GetTypeUid(), plugin->GetPrevPlugin() ) )
+			return false;
+		plugin = plugin->GetPrevPlugin();
+	}
+	return true;
+}
+
 
 } //model
 }  //bv

@@ -35,7 +35,11 @@ std::string         StaticShaderGenerator::GenerateFilename( const std::vector< 
                 filename += "_" + abbrv;
 		}
 	}
-    assert( filename.length() > 0 );
+    
+	//assert( filename.length() > 0 );
+	if( filename.length() == 0 )
+		filename = "default";
+
     filename = m_shadersDir + filename;
     filename += "." + m_shaderExtension;
 
