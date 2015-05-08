@@ -1,7 +1,10 @@
 #pragma once
 #include <string>
 #include <iostream>
+#pragma warning(disable: 4503)
+
 #include "../../json_spirit/json_spirit.h"
+
 enum CmdType{SET_PARAM,GET_PARAM,GET_INFO,GET_VERSION,VIDEOCARD_INFO,TIMELINE,TIMER,WIDGET,STRUCT};
 using namespace std;
 using namespace json_spirit;

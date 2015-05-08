@@ -10,9 +10,13 @@
 # pragma once
 #endif
 
+#pragma warning(disable: 4702)
+
 #include "json_spirit_value.h"
 #include "json_spirit_reader.h"
 #include "json_spirit_writer.h"
 #include "json_spirit_utils.h"
+
+#pragma warning(default: 4702)
 
 #endif
