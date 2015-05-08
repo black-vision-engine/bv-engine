@@ -1,4 +1,5 @@
 #include "DefaultCylinderPlugin.h"
+#include "..\..\Dep\Common\glm\glm\gtx\vector_angle.hpp"
 
 
 namespace bv { namespace model {
@@ -105,8 +106,8 @@ namespace CylinderGenerator
 		weight_centerY = wcy;
 		weight_centerZ = wcz;
 
-		//mapping_type = DefaultPlugin::MappingType::GOODMAPPING;
-		mapping_type = DefaultPlugin::MappingType::OLDSTYLE;
+		mapping_type = DefaultPlugin::MappingType::GOODMAPPING;
+		//mapping_type = DefaultPlugin::MappingType::OLDSTYLE;
     }
 
 	class MainGenerator : public IGeometryAndUVsGenerator
@@ -212,6 +213,29 @@ namespace CylinderGenerator
 			direction = !direction;
 		}
 
+		double computeAngleFromPos( Float3AttributeChannelPtr verts, unsigned int start_index )
+		{
+			glm::vec2 ref_vector( 0.0, -1.0 );
+
+			glm::vec3 vert = verts->GetVertices()[ start_index ];
+			vert -= center_translate;
+			glm::vec2 vertex( vert.x, vert.z );
+
+			if( vertex == glm::vec2( 0.0, 0.0 ) )	//It means that the vertex is in circle center. That's no problem. Next vertex will be correct.
+				return computeAngleFromPos( verts, start_index + 1 );
+
+			vertex = glm::normalize( vertex );
+
+			double angle = PI + glm::radians( glm::orientedAngle( vertex, ref_vector ) );
+			return angle;
+		}
+
+		double generateUFromPosition( Float3AttributeChannelPtr verts, unsigned int start_index )
+		{
+			double angle = computeAngleFromPos( verts, start_index );
+			return glm::clamp( angle / TWOPI, 0.0, 1.0 );
+		}
+
 		void generateUVCircuit( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, float topV, float bottomV, unsigned int& start_index )
 		{
 			int max_loop;
@@ -220,34 +244,22 @@ namespace CylinderGenerator
 
 			for( int j = 0; j <= max_loop; j++ )
             {
-				glm::vec3 vert = verts->GetVertices()[ start_index ];
-				vert -= center_translate;
+				double U_coord = generateUFromPosition( verts, start_index );
 
-				double angle = atan2( vert.x, vert.z );
-				double U_coord = angle / TWOPI;
+				if( U_coord == 1.0 )
+				//Maybe it should be 0.0 not 1.0 ?
+					if( i == j )
+						U_coord = 0.0;
 
 				uvs->AddAttribute( glm::vec2( U_coord, topV ) );
 				uvs->AddAttribute( glm::vec2( U_coord, bottomV ) );
 
-			//	double U_coord;
-
-			//	double angle1 = computeAngle2Clamped( TWOPI / tesselation, (float)i );
-			//	angle1 += angle_offset;
-			//	U_coord = angle1 / TWOPI;
-
-			//	uvs->AddAttribute( glm::vec2( U_coord, topV ) );
-			//	uvs->AddAttribute( glm::vec2( U_coord, bottomV ) );
-
-				//if( direction )
-				//	i++;
-				//else
-				//	i--;
-
+				++start_index;
 				++start_index;
 			}
 		}
 
-		void generateUVCircle( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, glm::vec2 centerUV, float radiusUV, unsigned int& start_index  )
+		void generateUVCircle( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, glm::vec2 centerUV, float radiusUV, unsigned int& start_index, bool outer_first )
 		{
 			int max_loop;
 			int i;
@@ -255,25 +267,23 @@ namespace CylinderGenerator
 
 			for( int j = 0; j <= max_loop; j++ )
             {
-				glm::vec3 vert = verts->GetVertices()[ start_index ];
-				vert -= center_translate;
+				double angle = computeAngleFromPos( verts, start_index );
 
-				double angle = atan2( vert.x, vert.z );
-				//double U_coord = angle / TWOPI;
+				float u = static_cast<float>( radiusUV * sin( angle ) );
+				float v = static_cast<float>( radiusUV * cos( angle ) );
 
-				uvs->AddAttribute( glm::vec2( radiusUV * sin( angle ), radiusUV * cos( angle ) ) );	//Maybe we need to add phase to theese angles
-				uvs->AddAttribute( centerUV );
+				if( outer_first )
+				{
+					uvs->AddAttribute( glm::vec2( u * inner_radius / outer_radius, v * inner_radius / outer_radius ) + centerUV );
+					uvs->AddAttribute( glm::vec2( u, v ) + centerUV );
+				}
+				else
+				{
+					uvs->AddAttribute( glm::vec2( u, v ) + centerUV );
+					uvs->AddAttribute( glm::vec2( u * inner_radius / outer_radius, v * inner_radius / outer_radius ) + centerUV );
+				}
 
-			//	double angle1 = computeAngle2Clamped( TWOPI / tesselation, (float)i );
-
-			//	uvs->AddAttribute( glm::vec2( radiusUV * sin( angle1 ), radiusUV * cos( angle1 ) ) );	//Maybe we need to add phase to theese angles
-			//	uvs->AddAttribute( centerUV );
-
-				//if( direction )
-				//	i++;
-				//else
-				//	i--;
-
+				++start_index;
 				++start_index;
 			}
 		}
@@ -286,10 +296,11 @@ namespace CylinderGenerator
 			{
 				unsigned int start_index = 0;
 
-				generateUVCircle( verts, uvs, glm::vec2( 1.0 / 6.0, 5.0 / 6.0 ), static_cast<float>( 1.0 / 6.0 ), start_index );
+				generateUVCircle( verts, uvs, glm::vec2( 1.0 / 6.0, 5.0 / 6.0 ), static_cast<float>( 1.0 / 6.0 ), start_index, true );
 				generateUVCircuit( verts, uvs, static_cast<float>( 1.0 / 3.0 ), static_cast<float>( 0.0 ), start_index );
-				generateUVCircle( verts, uvs, glm::vec2( 1.0 / 2.0, 5.0 / 6.0 ), float( 1.0 / 6.0 ), start_index );
-				generateUVCircuit( verts, uvs, static_cast<float>( 1.0 / 3.0 ), static_cast<float>( 1.0 / 3.0 ), start_index );
+				generateUVCircle( verts, uvs, glm::vec2( 1.0 / 2.0, 5.0 / 6.0 ), float( 1.0 / 6.0 ), start_index, false );
+				if( inner_radius > 0.0 )
+					generateUVCircuit( verts, uvs, static_cast<float>( 1.0 / 3.0 ), static_cast<float>( 2.0 / 3.0 ), start_index );
 			}
 			else
 			{
@@ -308,6 +319,9 @@ namespace CylinderGenerator
 
 		virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
         {
+			if( outer_radius == 0.0 )
+				return;		//Nothing to do.
+
 			computeAngleOffset();
 			computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
 			bool gen_direction = true;		// Generation direction clockwise or counter clockwise
@@ -342,10 +356,26 @@ namespace CylinderGenerator
 			if( mapping_type == DefaultPlugin::MappingType::GOODMAPPING )
 			{
 				// @fixme Nothing done here.
-				uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
-				uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
-				uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
-				uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
+				double minU;
+				double maxU;
+				double minV = 1.0 / 3.0;
+				double maxV = 1.0;
+
+				if( rotated )	//Rotated closure part
+				{
+					maxU = 1.0;
+					minU = 5.0 / 6.0 + ( 1.0 / 6.0 ) * ( inner_radius / outer_radius );
+				}
+				else
+				{
+					maxU = 5.0 / 6.0;
+					minU = 2.0 / 3.0 + ( 1.0 / 6.0 ) * ( inner_radius / outer_radius );
+				}
+
+				uvs->AddAttribute( glm::vec2( maxU, maxV ) );
+				uvs->AddAttribute( glm::vec2( minU, maxV ) );
+				uvs->AddAttribute( glm::vec2( maxU, minV ) );
+				uvs->AddAttribute( glm::vec2( minU, minV ) );
 			}
 			else
 			{
