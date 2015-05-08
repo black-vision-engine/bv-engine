@@ -11,13 +11,6 @@
 
 namespace bv {
 
-namespace {
-
-const unsigned int GNumRenderTargets = 1;
-
-} //anonymous
-
-
 // ************************************************* RENDER TARGET DATA ***********************************************************
 
 // **************************
@@ -48,7 +41,7 @@ TextureData::TextureData( unsigned int width, unsigned int height, TextureFormat
 }
 
 
-// *********************************************** OFFSCREEN RENDER DATA **********************************************************
+// *********************************************** EFFECT RENDER DATA **********************************************************
 
 // **************************
 //
@@ -89,67 +82,6 @@ EffectRenderLogic::~EffectRenderLogic  ()
     delete m_Camera;
 }
 
-//// **************************
-////
-//void                EffectRenderLogic::AllocateNewRenderTarget     ( Renderer * renderer )
-//{
-//    if( m_topRenderTargetEnabled )
-//    {
-//        DisableTopRenderTarget( renderer );
-//    }
-//    
-//    m_usedStackedRenderTargets++;
-//
-//    auto auxRenderTargets = m_usedStackedRenderTargets - 1;
-//
-//    if( auxRenderTargets > m_auxRenderTargets.size() )
-//    {
-//        m_auxRenderTargets.push_back( MainDisplayTarget::CreateAuxRenderTarget( m_textureData.m_width, m_textureData.m_height, m_textureData.m_fmt ) );
-//    }
-//
-//    assert( auxRenderTargets <= m_auxRenderTargets.size() );
-//}
-//
-//// **************************
-////
-//void                EffectRenderLogic::EnableTopRenderTarget       ( Renderer * renderer )
-//{
-//    assert( m_usedStackedRenderTargets > 0 );
-//
-//    if( !m_topRenderTargetEnabled )
-//    {
-//        renderer->Enable( GetRenderTargetAt( -1 ) );
-//
-//        m_topRenderTargetEnabled = true;
-//    }
-//}
-//
-//// **************************
-////
-//void                EffectRenderLogic::DiscardCurrentRenderTarget  ( Renderer * renderer )
-//{
-//    assert( m_usedStackedRenderTargets > 0 );
-//
-//    if( m_topRenderTargetEnabled )
-//    {
-//        DisableTopRenderTarget( renderer );
-//    }
-//
-//    m_usedStackedRenderTargets--;
-//}
-//
-//// **************************
-////
-//void                EffectRenderLogic::DisableTopRenderTarget    ( Renderer * renderer )
-//{
-//    if( m_topRenderTargetEnabled )
-//    {
-//        renderer->Disable( GetRenderTargetAt( -1 ) );
-//
-//        m_topRenderTargetEnabled = false;
-//    }
-//}
-
 // **************************
 //
 void                EffectRenderLogic::Draw   ( Renderer * renderer )
@@ -167,27 +99,6 @@ void                EffectRenderLogic::Draw   ( Renderer * renderer )
 	renderer->Disable( m_renderTarget );
 }
 
-//// **************************
-////
-//void                EffectRenderLogic::SwapDisplayRenderTargets  ()
-//{
-//    m_curDisplayTarget = ( m_curDisplayTarget + 1 ) % GNumRenderTargets;
-//}
-//
-//// **************************
-////
-//unsigned int    EffectRenderLogic::TotalNumReadBuffers           () const
-//{
-//    return (unsigned int) m_readbackTextures.size();
-//}
-//
-//// **************************
-////
-//unsigned int    EffectRenderLogic::NumReadBuffersPerRT           () const
-//{
-//    return TotalNumReadBuffers() / GNumRenderTargets;
-//}
-
 // **************************
 //
 Texture2DConstPtr   EffectRenderLogic::ReadTarget         ( Renderer * renderer )
@@ -196,34 +107,6 @@ Texture2DConstPtr   EffectRenderLogic::ReadTarget         ( Renderer * renderer 
 
     return m_readbackTexture;
 }
-
-//// **************************
-//// Python-like logic, where negative numbers are used to index the array backwards
-//RenderTarget *      EffectRenderLogic::GetRenderTargetAt         ( int i ) const
-//{
-//    int numUsedRT = (int) m_usedStackedRenderTargets;
-//
-//    if( i < 0 )
-//    {
-//        i = numUsedRT + i;
-//    }
-//
-//    if( i < 0 || i >= numUsedRT )
-//    {
-//        assert( false );
-//
-//        return nullptr;
-//    }
-//
-//    if( i == 0 )
-//    {
-//        return CurDisplayRenderTargetData().renderTarget;
-//    }
-//    else
-//    {
-//        return m_auxRenderTargets[ i - 1 ]; 
-//    }
-//}
 
 // **************************
 //
