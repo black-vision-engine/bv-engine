@@ -70,7 +70,7 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
 	h.AddParam< IntInterpolator, Plugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
 		( DefaultSphere::PN::OPEN_ANGLE_MODE, Plugin::OpenAngleMode::CW, true, true );
 	h.AddParam< IntInterpolator, Plugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
-		( DefaultSphere::PN::MAPPING_TYPE, Plugin::MappingType::SINGLETEXTURE, true, true );
+		( DefaultSphere::PN::MAPPING_TYPE, Plugin::MappingType::DOUBLETEXTURE, true, true );
 
     return h.GetModel();
 }
@@ -135,6 +135,25 @@ namespace Generator
 		Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
 
+		glm::vec2 generateUV( float horizontal_angle, float vertical_angle )
+		{
+			///UVs are working good in texture mirror mode
+			const glm::vec2 bottomUV( 0.0, 0.0 );		// UV clipping
+			const glm::vec2 topUV( 1.0, 1.0 );			// UV clipping
+
+			glm::vec2 returnUV = glm::vec2( horizontal_angle, vertical_angle / PI );
+
+			if( mapping_type == Plugin::MappingType::SINGLETEXTURE )
+			{
+				glm::vec2 scale_factor = glm::vec2( 2.0 / 3.0, 1.0 );
+				returnUV = returnUV * scale_factor;
+			}
+
+			returnUV = glm::clamp( returnUV, bottomUV, topUV );
+
+			return returnUV;
+		}
+
 		void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
         {
 			assert( stripe_num < horizontal_stripes );
@@ -188,22 +207,18 @@ namespace Generator
 			float vertical_angle = float( PI ) - vert_delta_angle;
 
 
-			///UVs are working good in texture mirror mode
-			const glm::vec2 bottomUV( 0.0, 0.0 );		// UV clipping
-			const glm::vec2 topUV( 1.0, 1.0 );			// UV clipping
-
-			uvs->AddAttribute( glm::clamp( glm::vec2( horizontal_angle1, 1.0 ), bottomUV, topUV ) );
-			uvs->AddAttribute( glm::clamp( glm::vec2( horizontal_angle2, 1.0 ), bottomUV, topUV ) );
+			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontal_angle1, 1.0 ), bottomUV, topUV )*/generateUV( horizontal_angle1, static_cast<float>(PI) ) );
+			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontal_angle2, 1.0 ), bottomUV, topUV )*/generateUV( horizontal_angle2, static_cast<float>(PI) ) );
 			for( unsigned int i = 0; i < vertical_stripes - 1; ++i )
 			{
-				uvs->AddAttribute(  glm::clamp( glm::vec2( horizontal_angle1, vertical_angle / PI ),  bottomUV, topUV ) );
-				uvs->AddAttribute(  glm::clamp( glm::vec2( horizontal_angle2, vertical_angle / PI ),  bottomUV, topUV ) );
+				uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontal_angle1, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontal_angle1, vertical_angle ) );
+				uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontal_angle2, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontal_angle2, vertical_angle ) );
 
 				vertical_angle -= vert_delta_angle;
 			}
-			uvs->AddAttribute(  glm::clamp( glm::vec2( horizontal_angle1, vertical_angle / PI ),  bottomUV, topUV ) );
+			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontal_angle1, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontal_angle1, vertical_angle ) );
 			vertical_angle -= vert_delta_angle;
-			uvs->AddAttribute(  glm::clamp( glm::vec2( horizontal_angle2, vertical_angle / PI ),  bottomUV, topUV ) );
+			uvs->AddAttribute( /*glm::clamp( glm::vec2( horizontal_angle2, vertical_angle / PI ),  bottomUV, topUV )*/generateUV( horizontal_angle2, vertical_angle ) );
 		}
 
 	};
