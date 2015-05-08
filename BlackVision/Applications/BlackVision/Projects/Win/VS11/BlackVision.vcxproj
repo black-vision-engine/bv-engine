@@ -181,7 +181,8 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>$(ToolsDir)/LibEffect/Source;$(ToolsDir)/XMLSceneParser/Source;$(ToolsDir)/TCPServer/Source;$(ToolsDir)/ConfigReader/Source;$(ToolsDir)/RapidXML/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4702</DisableSpecificWarnings>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
