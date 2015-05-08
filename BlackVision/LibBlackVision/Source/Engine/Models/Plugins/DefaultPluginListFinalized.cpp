@@ -54,9 +54,9 @@ IPluginPtr              DefaultPluginListFinalized::GetPlugin           ( unsign
 //
 IPluginPtr              DefaultPluginListFinalized::GetLastPlugin       () const
 {
-    assert( m_plugins.size() > 0 );
+    //assert( m_plugins.size() > 0 );
 
-    return m_plugins.back();
+    return m_plugins.empty() ? nullptr : m_plugins.back();
 }
 
 // *******************************

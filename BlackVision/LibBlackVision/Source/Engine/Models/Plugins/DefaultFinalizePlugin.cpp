@@ -90,22 +90,26 @@ bv::IValueConstPtr                  DefaultFinalizePlugin::GetValue             
 //
 IVertexAttributesChannelConstPtr    DefaultFinalizePlugin::GetVertexAttributesChannel   () const
 {
-    assert( m_prevPlugin );
+    //assert( m_prevPlugin );
 
-    return m_prevPlugin->GetVertexAttributesChannel();
+	if( m_prevPlugin )
+		return m_prevPlugin->GetVertexAttributesChannel();
+	return nullptr;
 }
 
 // *******************************
 //
 ITransformChannelConstPtr           DefaultFinalizePlugin::GetTransformChannel          () const
 {
-    assert( m_prevPlugin );
+    //assert( m_prevPlugin );
 
-	auto transformChannel = m_prevPlugin->GetTransformChannel();
+	if( m_prevPlugin )
+	{
+		auto transformChannel = m_prevPlugin->GetTransformChannel();
 
-	if( transformChannel )
-		return transformChannel;
-
+		if( transformChannel )
+			return transformChannel;
+	}
 	return m_defaultTransformChannel;
 }
 
@@ -113,15 +117,16 @@ ITransformChannelConstPtr           DefaultFinalizePlugin::GetTransformChannel  
 //
 IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel        () const
 {
-    assert( m_prevPlugin );
+    //assert( m_prevPlugin );
     
 	//assert( m_prevPlugin->GetPixelShaderChannel() );
-	auto psc = m_prevPlugin->GetPixelShaderChannel();
+	IPixelShaderChannelConstPtr psc = nullptr;
 
-    if( psc == nullptr )
-    {
+	if( m_prevPlugin )
+		psc = m_prevPlugin->GetPixelShaderChannel();
+
+    if( !psc )
         psc = m_defaultPSChannel;
-    }
 
     if( m_finalizePSC == nullptr )
     {
@@ -136,14 +141,14 @@ IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel
 //
 IVertexShaderChannelConstPtr        DefaultFinalizePlugin::GetVertexShaderChannel       () const
 {
-    assert( m_prevPlugin );
+    //assert( m_prevPlugin );
 
-    auto vsc = m_prevPlugin->GetVertexShaderChannel();
+	IVertexShaderChannelConstPtr vsc = nullptr;
+	if( m_prevPlugin )
+		vsc = m_prevPlugin->GetVertexShaderChannel();
 
-    if( vsc == nullptr )
-    {
+    if( !vsc )
         vsc = m_defaultVSChannel;
-    }
 
     if( m_finalizeVSC == nullptr )
     {
@@ -158,7 +163,7 @@ IVertexShaderChannelConstPtr        DefaultFinalizePlugin::GetVertexShaderChanne
 //
 IGeometryShaderChannelConstPtr           DefaultFinalizePlugin::GetGeometryShaderChannel    () const
 {
-    assert( m_prevPlugin );
+    //assert( m_prevPlugin );
 
     if( m_finalizeGSC == nullptr )
     {
@@ -242,7 +247,7 @@ void                                DefaultFinalizePlugin::Update               
 //
 void                                DefaultFinalizePlugin::SetPrevPlugin                ( IPluginPtr plugin )
 {
-    assert( plugin != nullptr );
+    //assert( plugin != nullptr );
 
     m_finalizePSC = nullptr;
     m_finalizeVSC = nullptr;

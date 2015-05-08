@@ -131,12 +131,12 @@ void BVAppLogic::LoadScene          ( void )
 {
     //model::BasicNodePtr root = TestScenesFactory::OlafTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
     //model::BasicNodePtr root = TestScenesFactory::CreedTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
-    model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
+    //model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
     
 	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_ANIMATION_RECTANGLE );
 	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
 	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
-	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_SOLID_RECTANGLE );
+	model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_SOLID_RECTANGLE );
 
 	assert( root );
 
@@ -252,6 +252,7 @@ void BVAppLogic::OnKey           ( unsigned char c )
 		auto plugin = model::PluginsManager::DefaultInstanceRef().CreatePlugin( "DEFAULT_COLOR", root->GetPluginList()->GetLastPlugin(), m_globalTimeline );
 		model::SetParameter( plugin->GetParameter( "color" ), 0.f, glm::vec4( 1, 0, 0, 1 ) );
 		m_bvScene->GetSceneEditor()->AddPlugin( root, plugin, 10 );
+		m_bvScene->GetSceneEditor()->AttachPlugin( root, 10 );
 		
         /*if( root )
         {
@@ -305,7 +306,10 @@ void BVAppLogic::OnKey           ( unsigned char c )
     else if( c == '3' )
     {
 		auto root = m_bvScene->GetModelSceneRoot();
+		m_bvScene->GetSceneEditor()->DetachPlugin( root, "transform" );
+		m_bvScene->GetSceneEditor()->DetachPlugin( root, "solid color" );
 		m_bvScene->GetSceneEditor()->DetachPlugin( root, "rectangle" );
+
 
         //auto root = m_bvScene->GetModelSceneRoot();
         //
