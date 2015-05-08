@@ -6,6 +6,8 @@ namespace bv { namespace model {
 
 typedef ParamEnum< DefaultCylinder::DefaultPlugin::OpenAngleMode > ParamEnumOAM;
 typedef ParamEnum< DefaultCylinder::DefaultPlugin::WeightCenter > ParamEnumWC;
+typedef ParamEnum< DefaultCylinder::DefaultPlugin::MappingType > ParamEnumMT;
+
 
 VoidPtr    ParamEnumOAM::QueryParamTyped  ()
 {
@@ -29,6 +31,16 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCyli
     return CreateParameterEnum< DefaultCylinder::DefaultPlugin::WeightCenter >( name, timeline );
 }
 
+VoidPtr    ParamEnumMT::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
+
+template<>
+static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCylinder::DefaultPlugin::MappingType >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultCylinder::DefaultPlugin::MappingType >( name, timeline );
+}
 
 #include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 
@@ -44,6 +56,7 @@ const std::string PN::OPENANGLEMODE = "open angle mode";
 const std::string PN::WEIGHTCENTERX = "weight center x";
 const std::string PN::WEIGHTCENTERY = "weight center y";
 const std::string PN::WEIGHTCENTERZ = "weight center z";
+const std::string PN::MAPPINGTYPE = "mapping type";
 
 
 DefaultCylinderPluginDesc::DefaultCylinderPluginDesc()
@@ -67,6 +80,8 @@ DefaultPluginParamValModelPtr   DefaultCylinderPluginDesc::CreateDefaultModel  (
         ( PN::WEIGHTCENTERY, DefaultPlugin::WeightCenter::MIN, true, true );
 	h.AddParam< IntInterpolator, DefaultPlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
         ( PN::WEIGHTCENTERZ, DefaultPlugin::WeightCenter::CENTER, true, true );
+	h.AddParam< IntInterpolator, DefaultPlugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
+		( PN::MAPPINGTYPE, DefaultPlugin::MappingType::GOODMAPPING, true, true );
 
 
     return h.GetModel();
@@ -94,7 +109,12 @@ namespace CylinderGenerator
 	DefaultPlugin::WeightCenter weight_centerZ;
 	DefaultPlugin::MappingType mapping_type;
 
-	static void Init( int t, float ir, float oa, float h, float or, DefaultPlugin::OpenAngleMode oam, DefaultPlugin::WeightCenter wcx, DefaultPlugin::WeightCenter wcy, DefaultPlugin::WeightCenter wcz )
+	static void Init( int t, float ir, float oa, float h, float or,
+		DefaultPlugin::OpenAngleMode oam,
+		DefaultPlugin::WeightCenter wcx,
+		DefaultPlugin::WeightCenter wcy,
+		DefaultPlugin::WeightCenter wcz,
+		DefaultPlugin::MappingType mt )
     {
 		tesselation = t;
         inner_radius = ir; 
@@ -106,8 +126,7 @@ namespace CylinderGenerator
 		weight_centerY = wcy;
 		weight_centerZ = wcz;
 
-		mapping_type = DefaultPlugin::MappingType::GOODMAPPING;
-		//mapping_type = DefaultPlugin::MappingType::OLDSTYLE;
+		mapping_type = mt;
     }
 
 	class MainGenerator : public IGeometryAndUVsGenerator
@@ -429,6 +448,8 @@ DefaultPlugin::DefaultPlugin( const std::string & name, const std::string & uid,
 	m_weightCenterY = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERY ) );
 	m_weightCenterZ = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERZ ) );
 
+	m_mappingType = QueryTypedParam< std::shared_ptr< ParamEnum< MappingType > > >( GetParameter( PN::MAPPINGTYPE ) );
+
     m_pluginParamValModel->Update();
     InitGeometry();
 }
@@ -444,7 +465,8 @@ std::vector<IGeometryGeneratorPtr>    DefaultPlugin::GetGenerators()
 		m_openAngleMode->Evaluate(),
 		m_weightCenterX->Evaluate(),
 		m_weightCenterY->Evaluate(),
-		m_weightCenterZ->Evaluate());
+		m_weightCenterZ->Evaluate(),
+		m_mappingType->Evaluate());
 
     std::vector<IGeometryGeneratorPtr> gens;
     gens.push_back( IGeometryGeneratorPtr( new CylinderGenerator::MainGenerator() ) );
@@ -467,7 +489,8 @@ bool                                DefaultPlugin::NeedsTopologyUpdate()
 		ParameterChanged( PN::OPENANGLEMODE ) ||
 		ParameterChanged( PN::WEIGHTCENTERX ) ||
 		ParameterChanged( PN::WEIGHTCENTERY ) ||
-		ParameterChanged( PN::WEIGHTCENTERZ );
+		ParameterChanged( PN::WEIGHTCENTERZ ) ||
+		ParameterChanged( PN::MAPPINGTYPE );
 }
 
 

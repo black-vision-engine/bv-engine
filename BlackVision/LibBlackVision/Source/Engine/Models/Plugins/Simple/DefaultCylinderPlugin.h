@@ -30,6 +30,7 @@ struct PN {
 	static const std::string WEIGHTCENTERX;
 	static const std::string WEIGHTCENTERY;
 	static const std::string WEIGHTCENTERZ;
+	static const std::string MAPPINGTYPE;
 };
 
 
@@ -39,7 +40,7 @@ class DefaultPlugin : public DefaultGeometryPluginBase
 public:
 	enum OpenAngleMode : int { CW, CCW, SYMMETRIC };
 	enum WeightCenter : int { MIN, MAX, CENTER };
-	enum MappingType : int { OLDSTYLE, SPHERICAL, GOODMAPPING };
+	enum MappingType : int { OLDSTYLE/*, SPHERICAL*/, GOODMAPPING };
 
 	ValueIntPtr                                 m_tesselation;
     ValueFloatPtr                               m_innerRadius,
@@ -50,6 +51,7 @@ public:
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterX;
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterY;
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterZ;
+	std::shared_ptr< ParamEnum< MappingType >	>		m_mappingType;
 
 private:
     virtual std::vector<IGeometryGeneratorPtr>    GetGenerators() override;
@@ -98,6 +100,25 @@ inline bool SetParameter< DefaultCylinder::DefaultPlugin::WeightCenter >( IParam
 
     return true;
 }
+
+template<>
+inline bool SetParameter< DefaultCylinder::DefaultPlugin::MappingType >( IParameterPtr param, TimeType t, const DefaultCylinder::DefaultPlugin::MappingType & val )
+{
+    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
+    typedef ParamEnum<DefaultCylinder::DefaultPlugin::MappingType> ParamType;
+
+    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
+
+    if( typedParam == nullptr )
+    {
+        return false;
+    }
+
+    typedParam->SetVal( val, t );
+
+    return true;
+}
+
 
 
 } // model
