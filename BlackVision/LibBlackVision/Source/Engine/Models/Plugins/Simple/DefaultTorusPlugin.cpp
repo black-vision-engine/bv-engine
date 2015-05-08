@@ -204,12 +204,16 @@ public:
 		}
 	}
 
-	glm::vec2 getUV( int i, int j, int maxLoop )
+	glm::vec2 getUV(/* int i, int j, int maxLoop */ float phi, float theta )
 	{
-		glm::vec2 uv( float(i) / tesselation, float(j) / tesselation );
-		if( j == maxLoop - 1 )
-			uv.y = float( j - 1.0 / 2.0 ) / tesselation;
+		float u = static_cast<float>( phi / TWOPI );
+		float v = static_cast<float>( theta / TWOPI );
+
+		glm::vec2 uv( u, v );
 		return uv;
+		//if( j == maxLoop - 1 )
+		//	uv.y = float( j - 1.0 / 2.0 ) / tesselation;
+		//return uv;
 	}
 
     void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
@@ -230,20 +234,20 @@ public:
         for( int j = 0; j < max_loop; j++ )
             for( int i = 0; i <= tesselation; i++ )
             {
-                double phi = i * TWOPI / tesselation + angle_offset;
+                double phi = i * TWOPI / tesselation;
                 double theta = j * TWOPI / tesselation + angle_offset;
 
                 verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) + center_translate );
-                uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j) / tesselation ) );
+                uvs->AddAttribute( /*glm::vec2( float(i) / tesselation, float(j) / tesselation )*/getUV( (float)phi, (float)theta ) );
 
-                phi = i * TWOPI / tesselation + angle_offset;
+                phi = i * TWOPI / tesselation;
 				theta = computeAngle2Clamped( float( TWOPI / tesselation), float( j ) ) + angle_offset;		//zamiast theta = (j+1) * 2*PI / tesselation;
 
                 verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) + center_translate );
-				if( j < max_loop - 1 )
-					uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j+1) / tesselation ) );
-				else
-					uvs->AddAttribute( glm::vec2( float(i) / tesselation, ( theta - angle_offset ) / TWOPI ) );
+				//if( j < max_loop - 1 )
+				//	uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j+1) / tesselation ) );
+				//else
+					uvs->AddAttribute(/* glm::vec2( float(i) / tesselation, ( theta - angle_offset ) / TWOPI )*/getUV( (float)phi, (float)theta ) );
             }
 
 		// We close ending of the torus (only if there's an openangle set)
