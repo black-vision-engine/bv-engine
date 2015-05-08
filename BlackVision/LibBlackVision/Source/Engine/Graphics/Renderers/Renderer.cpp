@@ -74,6 +74,13 @@ void	Renderer::SetCamera         ( Camera * cam )
 }
 
 // *********************************
+//
+Camera * Renderer::GetCamera         ()
+{
+	return m_Camera;
+}
+
+// *********************************
 //FIXME: most probably state can be stored in RenderData only (no currentStateInstance is required) - but let it be that way for the moment
 void    Renderer::SetStateInstance    ( const RendererStateInstance & stateInstance )
 {

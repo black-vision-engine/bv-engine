@@ -57,8 +57,6 @@ EffectRenderData::EffectRenderData(  const RenderableEffectPtr & e  )
     auxQuad                 = MainDisplayTarget::CreateDisplayRect( nullptr );
 	effect					= e;
 	auxQuad->SetRenderableEffect( e );
-    //effectTexture2D         = std::static_pointer_cast<Texture2DEffect>( auxQuad->GetRenderableEffect() );
-    //effectTexture2DWithMask = std::make_shared<Texture2DEffectWithMask>( nullptr, nullptr, true );
 
     std::vector< bv::Transform > vec;
     vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
@@ -66,256 +64,170 @@ EffectRenderData::EffectRenderData(  const RenderableEffectPtr & e  )
     auxQuad->SetWorldTransforms( vec );
 }
 
-//// **************************
-////
-//void    EffectRenderData::UseTexture2DEffect ( const IValue * val, Texture2DPtr tex )
-//{
-//    effect->SetAlphaValModel( val );
-//    effect->SetTexture( tex );
-//
-//    auxQuad->SetRenderableEffect( effectTexture2D );
-//}
-
-//// **************************
-////
-//void    EffectRenderData::UseTexture2DEffect ( const IValue * val, Texture2DPtr tex, Texture2DPtr mask )
-//{
-//    effectTexture2DWithMask->SetAlphaValModel( val );
-//    effectTexture2DWithMask->SetTexture( tex );
-//    effectTexture2DWithMask->SetMask( mask );
-//
-//    auxQuad->SetRenderableEffect( effectTexture2DWithMask );
-//}
-
-
-// *********************************************** OFFSCREEN RENDER LOGIC *********************************************************
+// *********************************************** EFFECT RENDER LOGIC *********************************************************
 
 // **************************
 //
-EffectRenderLogic::EffectRenderLogic   ( unsigned int width, unsigned int height, unsigned int numReadBuffers, const RenderableEffectPtr & effect, Camera * camera, TextureFormat fmt )
+EffectRenderLogic::EffectRenderLogic   ( unsigned int width, unsigned int height, const RenderableEffectPtr & effect, Camera * camera, TextureFormat fmt )
     : m_textureData( width, height, fmt )
-    , m_usedStackedRenderTargets( 0 )
-    , m_topRenderTargetEnabled( false )
-    , m_readbackTextures( numReadBuffers * GNumRenderTargets ) //two display targets that can be potentially used
-    , m_displayCamera( nullptr )
-    , m_rendererCamera( camera )
-    , m_curDisplayTarget( 0 )
-    , m_buffersPerTarget( numReadBuffers )
     , m_displayRTEnabled( false )
 	, m_renderData( effect )
+	, m_Camera( camera )
+	, m_readbackTexture( nullptr )
 {
-    m_displayCamera         = MainDisplayTarget::CreateDisplayCamera();
-
-    m_displayRenderTargetData[ 0 ] = CreateDisplayRenderTargetData();
-    m_displayRenderTargetData[ 1 ] = CreateDisplayRenderTargetData();
-
-    for( unsigned int i = 0; i < m_readbackTextures.size(); ++i )
-    {
-        m_readbackTextures[ i ] = nullptr;
-    }
+    m_renderTargetData = CreateRenderTargetData();
+	m_renderTarget = m_renderTargetData.renderTarget;
 }
 
 // **************************
 //
 EffectRenderLogic::~EffectRenderLogic  ()
 {
-    for( auto rtd : m_auxRenderTargets )
-    {
-        delete rtd;
-    }
+	delete m_renderTargetData.quad;
+	delete m_renderTargetData.renderTarget;
 
-    for( unsigned int i = 0; i < 2; ++i )
-    {
-        delete m_displayRenderTargetData[ i ].renderTarget;
-        delete m_displayRenderTargetData[ i ].quad;
-    }
-
-    delete m_displayCamera;
-}
-
-// **************************
-//
-void                EffectRenderLogic::SetRendererCamera         ( Camera * camera )
-{
-    m_rendererCamera = camera;
-}
-
-// **************************
-//
-void                EffectRenderLogic::AllocateNewRenderTarget     ( Renderer * renderer )
-{
-    if( m_topRenderTargetEnabled )
-    {
-        DisableTopRenderTarget( renderer );
-    }
-    
-    m_usedStackedRenderTargets++;
-
-    auto auxRenderTargets = m_usedStackedRenderTargets - 1;
-
-    if( auxRenderTargets > m_auxRenderTargets.size() )
-    {
-        m_auxRenderTargets.push_back( MainDisplayTarget::CreateAuxRenderTarget( m_textureData.m_width, m_textureData.m_height, m_textureData.m_fmt ) );
-    }
-
-    assert( auxRenderTargets <= m_auxRenderTargets.size() );
-}
-
-// **************************
-//
-void                EffectRenderLogic::EnableTopRenderTarget       ( Renderer * renderer )
-{
-    assert( m_usedStackedRenderTargets > 0 );
-
-    if( !m_topRenderTargetEnabled )
-    {
-        renderer->Enable( GetRenderTargetAt( -1 ) );
-
-        m_topRenderTargetEnabled = true;
-    }
-}
-
-// **************************
-//
-void                EffectRenderLogic::DiscardCurrentRenderTarget  ( Renderer * renderer )
-{
-    assert( m_usedStackedRenderTargets > 0 );
-
-    if( m_topRenderTargetEnabled )
-    {
-        DisableTopRenderTarget( renderer );
-    }
-
-    m_usedStackedRenderTargets--;
-}
-
-// **************************
-//
-void                EffectRenderLogic::DisableTopRenderTarget    ( Renderer * renderer )
-{
-    if( m_topRenderTargetEnabled )
-    {
-        renderer->Disable( GetRenderTargetAt( -1 ) );
-
-        m_topRenderTargetEnabled = false;
-    }
+    delete m_Camera;
 }
 
 //// **************************
 ////
-//void                EffectRenderLogic::DrawTopAuxRenderTarget    ( Renderer * renderer, const IValue * alphaVal )
+//void                EffectRenderLogic::AllocateNewRenderTarget     ( Renderer * renderer )
 //{
-//    DisableTopRenderTarget( renderer );
+//    if( m_topRenderTargetEnabled )
+//    {
+//        DisableTopRenderTarget( renderer );
+//    }
+//    
+//    m_usedStackedRenderTargets++;
 //
-//    auto topRTD = GetRenderTargetAt( -1 );
-//    auto prvRTD = GetRenderTargetAt( -2 );
+//    auto auxRenderTargets = m_usedStackedRenderTargets - 1;
 //
-//    //m_renderData.UseTexture2DEffect ( alphaVal, topRTD->ColorTexture( 0 ) );
+//    if( auxRenderTargets > m_auxRenderTargets.size() )
+//    {
+//        m_auxRenderTargets.push_back( MainDisplayTarget::CreateAuxRenderTarget( m_textureData.m_width, m_textureData.m_height, m_textureData.m_fmt ) );
+//    }
 //
-//    renderer->Enable( prvRTD );
-//    renderer->SetCamera( m_displayCamera );
-//    renderer->Draw( m_renderData.auxQuad );
-//    renderer->SetCamera( m_rendererCamera );
-//    renderer->Disable( prvRTD );
+//    assert( auxRenderTargets <= m_auxRenderTargets.size() );
 //}
 //
 //// **************************
 ////
-//void                EffectRenderLogic::DrawAMTopTwoRenderTargets ( Renderer * renderer, const IValue * alphaVal )
+//void                EffectRenderLogic::EnableTopRenderTarget       ( Renderer * renderer )
 //{
-//    DisableTopRenderTarget( renderer );
+//    assert( m_usedStackedRenderTargets > 0 );
 //
-//    auto maskRT     = GetRenderTargetAt( -1 );
-//    auto textureRT  = GetRenderTargetAt( -2 );
-//    auto mainRT     = GetRenderTargetAt( -3 );
+//    if( !m_topRenderTargetEnabled )
+//    {
+//        renderer->Enable( GetRenderTargetAt( -1 ) );
 //
-//    //m_renderData.UseTexture2DEffect( alphaVal, textureRT->ColorTexture( 0 ), maskRT->ColorTexture( 0 ) );
+//        m_topRenderTargetEnabled = true;
+//    }
+//}
 //
-//    renderer->Enable( mainRT );
-//    renderer->SetCamera( m_displayCamera );
-//    renderer->Draw( m_renderData.auxQuad );
-//    renderer->SetCamera( m_rendererCamera );
-//    renderer->Disable( mainRT );
+//// **************************
+////
+//void                EffectRenderLogic::DiscardCurrentRenderTarget  ( Renderer * renderer )
+//{
+//    assert( m_usedStackedRenderTargets > 0 );
+//
+//    if( m_topRenderTargetEnabled )
+//    {
+//        DisableTopRenderTarget( renderer );
+//    }
+//
+//    m_usedStackedRenderTargets--;
+//}
+//
+//// **************************
+////
+//void                EffectRenderLogic::DisableTopRenderTarget    ( Renderer * renderer )
+//{
+//    if( m_topRenderTargetEnabled )
+//    {
+//        renderer->Disable( GetRenderTargetAt( -1 ) );
+//
+//        m_topRenderTargetEnabled = false;
+//    }
 //}
 
 // **************************
 //
-void                EffectRenderLogic::DrawDisplayRenderTarget   ( Renderer * renderer )
+void                EffectRenderLogic::Draw   ( Renderer * renderer )
 {
     assert( m_displayRTEnabled == false );
 
-	renderer->Enable( CurDisplayRenderTargetData().renderTarget );
-	renderer->SetCamera( m_displayCamera );
+	auto oldCamera = renderer->GetCamera();
+
+	renderer->Enable( m_renderTarget );
+	renderer->SetCamera( m_Camera );
+
 	renderer->Draw( m_renderData.auxQuad );
-    renderer->SetCamera( m_rendererCamera );
-	renderer->Disable( CurDisplayRenderTargetData().renderTarget );
+
+    renderer->SetCamera( oldCamera );
+	renderer->Disable( m_renderTarget );
 }
+
+//// **************************
+////
+//void                EffectRenderLogic::SwapDisplayRenderTargets  ()
+//{
+//    m_curDisplayTarget = ( m_curDisplayTarget + 1 ) % GNumRenderTargets;
+//}
+//
+//// **************************
+////
+//unsigned int    EffectRenderLogic::TotalNumReadBuffers           () const
+//{
+//    return (unsigned int) m_readbackTextures.size();
+//}
+//
+//// **************************
+////
+//unsigned int    EffectRenderLogic::NumReadBuffersPerRT           () const
+//{
+//    return TotalNumReadBuffers() / GNumRenderTargets;
+//}
 
 // **************************
 //
-void                EffectRenderLogic::SwapDisplayRenderTargets  ()
+Texture2DConstPtr   EffectRenderLogic::ReadTarget         ( Renderer * renderer )
 {
-    m_curDisplayTarget = ( m_curDisplayTarget + 1 ) % GNumRenderTargets;
+    renderer->ReadColorTexture( 0, m_renderTarget, m_readbackTexture );
+
+    return m_readbackTexture;
 }
+
+//// **************************
+//// Python-like logic, where negative numbers are used to index the array backwards
+//RenderTarget *      EffectRenderLogic::GetRenderTargetAt         ( int i ) const
+//{
+//    int numUsedRT = (int) m_usedStackedRenderTargets;
+//
+//    if( i < 0 )
+//    {
+//        i = numUsedRT + i;
+//    }
+//
+//    if( i < 0 || i >= numUsedRT )
+//    {
+//        assert( false );
+//
+//        return nullptr;
+//    }
+//
+//    if( i == 0 )
+//    {
+//        return CurDisplayRenderTargetData().renderTarget;
+//    }
+//    else
+//    {
+//        return m_auxRenderTargets[ i - 1 ]; 
+//    }
+//}
 
 // **************************
 //
-unsigned int    EffectRenderLogic::TotalNumReadBuffers           () const
-{
-    return (unsigned int) m_readbackTextures.size();
-}
-
-// **************************
-//
-unsigned int    EffectRenderLogic::NumReadBuffersPerRT           () const
-{
-    return TotalNumReadBuffers() / GNumRenderTargets;
-}
-
-// **************************
-//
-Texture2DConstPtr   EffectRenderLogic::ReadDisplayTarget         ( Renderer * renderer, unsigned int bufNum )
-{
-    unsigned int bufferIdx = GNumRenderTargets * bufNum + CurDisplayRenderTargetNum();
-
-    assert( bufferIdx < m_readbackTextures.size() );
-
-    renderer->ReadColorTexture( 0, CurDisplayRenderTargetData().renderTarget, m_readbackTextures[ bufferIdx ] );
-
-    return m_readbackTextures[ bufferIdx ];
-}
-
-// **************************
-// Python-like logic, where negative numbers are used to index the array backwards
-RenderTarget *      EffectRenderLogic::GetRenderTargetAt         ( int i ) const
-{
-    int numUsedRT = (int) m_usedStackedRenderTargets;
-
-    if( i < 0 )
-    {
-        i = numUsedRT + i;
-    }
-
-    if( i < 0 || i >= numUsedRT )
-    {
-        assert( false );
-
-        return nullptr;
-    }
-
-    if( i == 0 )
-    {
-        return CurDisplayRenderTargetData().renderTarget;
-    }
-    else
-    {
-        return m_auxRenderTargets[ i - 1 ]; 
-    }
-}
-
-// **************************
-//
-RenderTargetData    EffectRenderLogic::CreateDisplayRenderTargetData () const
+RenderTargetData    EffectRenderLogic::CreateRenderTargetData () const
 {
     RenderTargetData ret;
 
@@ -331,20 +243,6 @@ RenderTargetData    EffectRenderLogic::CreateDisplayRenderTargetData () const
     ret.quad                    = quad;
 
     return ret;
-}
-
-// **************************
-//
-unsigned int      EffectRenderLogic::CurDisplayRenderTargetNum   () const
-{
-    return m_curDisplayTarget;
-}
-
-// **************************
-//
-RenderTargetData  EffectRenderLogic::CurDisplayRenderTargetData  () const
-{
-    return m_displayRenderTargetData[ m_curDisplayTarget ];
 }
 
 } //bv

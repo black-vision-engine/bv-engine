@@ -48,9 +48,6 @@ struct EffectRenderData
 	RenderableEffectPtr			effect;
 
             EffectRenderData( const RenderableEffectPtr & e );
-
-    //void    UseTexture2DEffect  ( const IValue * val, Texture2DPtr tex );
-    //void    UseTexture2DEffect  ( const IValue * val, Texture2DPtr tex, Texture2DPtr mask );
 };
 
 typedef std::vector< RenderTarget * >  RenderTargetVec;
@@ -64,54 +61,29 @@ private:
     TextureData         m_textureData;
     EffectRenderData	m_renderData;
 
-    unsigned int        m_usedStackedRenderTargets;
-    bool                m_topRenderTargetEnabled;
+    RenderTarget *		m_renderTarget;
+    RenderTargetData    m_renderTargetData;
 
-    RenderTargetVec     m_auxRenderTargets;
-    RenderTargetData    m_displayRenderTargetData[ 2 ];
+    Texture2DPtr		m_readbackTexture;
 
-    unsigned int        m_curDisplayTarget;
-    unsigned int        m_buffersPerTarget;
-
-    std::vector< Texture2DPtr > m_readbackTextures;
-
-    Camera *            m_displayCamera;
-    Camera *            m_rendererCamera;
+    Camera *            m_Camera;
 
     bool                m_displayRTEnabled;
 
 public:
 
-                        EffectRenderLogic        ( unsigned int width, unsigned int height, unsigned int numReadBuffers, const RenderableEffectPtr & effect, Camera * camera = nullptr, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
+                        EffectRenderLogic        ( unsigned int width, unsigned int height, const RenderableEffectPtr & effect, Camera * camera = nullptr, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
                         ~EffectRenderLogic       ();
 
-    void                SetRendererCamera           ( Camera * camera );
+    void                SetCamera					( Camera * camera );
 
-    void                AllocateNewRenderTarget     ( Renderer * renderer );
-    void                EnableTopRenderTarget       ( Renderer * renderer );
-    void                DiscardCurrentRenderTarget  ( Renderer * renderer );
-    void                DisableTopRenderTarget      ( Renderer * renderer );
+    void                Draw						( Renderer * renderer );
 
-    void                DrawTopAuxRenderTarget      ( Renderer * renderer, const IValue * alphaVal );
-    void                DrawAMTopTwoRenderTargets   ( Renderer * renderer, const IValue * alphaVal );
-
-    void                DrawDisplayRenderTarget     ( Renderer * renderer );
-    void                SwapDisplayRenderTargets    ();
-
-    unsigned int        TotalNumReadBuffers         () const;
-    unsigned int        NumReadBuffersPerRT         () const;
-
-    Texture2DConstPtr   ReadDisplayTarget           ( Renderer * renderer, unsigned int bufNum );
+    Texture2DConstPtr   ReadTarget					( Renderer * renderer );
 
 private:
 
-    RenderTarget *      GetRenderTargetAt               ( int i ) const;
-
-    RenderTargetData    CreateDisplayRenderTargetData   () const;
-
-    unsigned int        CurDisplayRenderTargetNum       () const;
-    RenderTargetData    CurDisplayRenderTargetData      () const;
-
+    RenderTargetData    CreateRenderTargetData			() const;
 };
 
 } //bv

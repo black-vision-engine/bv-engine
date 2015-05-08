@@ -41,7 +41,7 @@ RenderableEffectPtr GetBlurEffect( UInt32 blurLength, Float32 pixelWidth, Float3
 }
 
 // *********************************
-// Bluring image using GPU
+// Bluring image with GPU
 MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bbp, UInt32 blurLength )
 {
 	assert( in->Size() == width * height * bbp / 8 );
@@ -55,13 +55,11 @@ MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, 
 
 	auto effect = GetBlurEffect( blurLength, 1.f / width, 1.f / height, tex, TextureFilteringMode::TFM_POINT, TextureWrappingMode::TWM_CLAMP_EDGE, TextureWrappingMode::TWM_CLAMP_EDGE, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
-	auto renderLogic = new EffectRenderLogic( width, height, 1, effect );
+	auto renderLogic = new EffectRenderLogic( width, height, effect, new Camera() );
 
-	renderLogic->SetRendererCamera( new Camera() );
-	renderLogic->DrawDisplayRenderTarget( GetRenderer() );
+	renderLogic->Draw( GetRenderer() );
 
-	auto texOut = renderLogic->ReadDisplayTarget( GetRenderer(), 0 );
-	//texOut = renderLogic->ReadDisplayTarget( GetRenderer(), 1 );
+	auto texOut = renderLogic->ReadTarget( GetRenderer() );
 
 	return texOut->GetData();
 }
