@@ -1872,12 +1872,12 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #ifdef SHOW_CYLINDER
 	auto plugin = root->GetPlugin( "cylinder" );
 	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 16 );
-	model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.4f );
-	//model::SetParameter( plugin->GetParameter( "inner radius" ), 10.0f, 0.78f );
+	model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.0f );
+	model::SetParameter( plugin->GetParameter( "inner radius" ), 10.0f, 0.78f );
 	model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 0.8f );
 	model::SetParameter( plugin->GetParameter( "height" ), 0.0f, 0.8f );
 	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 0.0f );
-	model::SetParameter( plugin->GetParameter( "open angle" ), 10.0f, 360.0f );
+	//model::SetParameter( plugin->GetParameter( "open angle" ), 10.0f, 360.0f );
 
 	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::SYMMETRIC );
 	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CCW );

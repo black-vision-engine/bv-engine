@@ -246,7 +246,7 @@ namespace CylinderGenerator
             {
 				double U_coord = generateUFromPosition( verts, start_index );
 
-				if( U_coord == 1.0 )
+				if( U_coord > 0.97 )
 				//Maybe it should be 0.0 not 1.0 ?
 					if( i == j )
 						U_coord = 0.0;
