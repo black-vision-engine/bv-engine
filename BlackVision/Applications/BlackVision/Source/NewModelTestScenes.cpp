@@ -707,16 +707,8 @@ model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const mod
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
 
-    //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
-    //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
-
-    //root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
-    //auto plugin = root->GetPlugin( "texture" );
-    //model::LoadTexture( plugin, "time_zones_4.jpg" );
-
     root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
     auto plugin = root->GetPlugin( "video input" );
-    //auto success = model::LoadTexture( plugin, "Assets/Textures/time_zones_4.jpg" );
     auto vi = new ExampleVideoInput( 10, 10, 1.f );
     auto success = plugin->LoadResource( AssetDescConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture(), vi ) ) );
     assert(success);
