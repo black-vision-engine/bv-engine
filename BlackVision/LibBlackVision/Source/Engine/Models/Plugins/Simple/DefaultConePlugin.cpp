@@ -401,11 +401,12 @@ namespace ConeGenerator
 			unsigned int bevel_count2 = bevel_tesselation - bevel_count1;
 			double bevel_radiusUV1 = circle_radiusUV * ( bevel / (sqrt( height * height + outer_radius * outer_radius) ) );
 			double bevel_radiusUV2 = circle_radiusUV * ( bevel / outer_radius );
-			double surface_radius = circle_radiusUV - bevel_radiusUV1;		// UV radius for lateral surface
+			double surface_radius1 = circle_radiusUV - bevel_radiusUV1;		// UV radius for lateral surface
 			double surface_radius2 = circle_radiusUV - bevel_radiusUV2;		// UV radius for base surface
 
-			generateUVCircuit( circle_center, 0.0f, surface_radius, verts, uvs, verts_index );
+			generateUVCircuit( circle_center, 0.0f, surface_radius1, verts, uvs, verts_index );
 
+			// UVs of beveled region
 			if( bevel != 0.0 )
 			{
 				circle_center = glm::vec2( 0.25, 0.25 );
@@ -422,8 +423,8 @@ namespace ConeGenerator
 
 				for( unsigned int i = bevel_count1; i > 0; --i )
 					generateUVCircuit(	circle_center,
-										(i-1)*bevel_radius_step + surface_radius,
-										i*bevel_radius_step + surface_radius,
+										(i-1)*bevel_radius_step + surface_radius1,
+										i*bevel_radius_step + surface_radius1,
 										verts, uvs, verts_index );
 			}
 
@@ -437,6 +438,33 @@ namespace ConeGenerator
 			uvs->AddAttribute( glm::vec2( sin(angle_offset), cos( angle_offset) ) );	++verts_index;
 			// Generating UVs for surface
 			generateUVCircuit( circle_center, bevel_radiusUV2, bevel_radiusUV1, verts, uvs, verts_index );
+
+			// UVs of beveled region
+			if( bevel != 0.0 )
+			{
+				surface_radius1 = circle_radiusUV * inner_radius;
+				bevel_radiusUV1 = circle_radiusUV * ( bevel / outer_radius );
+				bevel_radiusUV2 = circle_radiusUV * ( bevel / (sqrt( inner_height * inner_height + inner_radius * inner_radius) ) );
+				surface_radius2 = circle_radiusUV - bevel_radiusUV2;
+
+				circle_center = glm::vec2( 0.25, 0.25 );
+				double bevel_radius_step = bevel_radiusUV1 / (double)bevel_count1;
+
+				for( unsigned int i = bevel_count1; i < 0; --i )
+					generateUVCircuit(	circle_center,
+										(i-1)*bevel_radius_step + surface_radius1,
+										i*bevel_radius_step + surface_radius1,
+										verts, uvs, verts_index );
+
+				circle_center = glm::vec2( 0.75, 0.75 );
+				bevel_radius_step = bevel_radiusUV2 / (double)bevel_count2;
+
+				for( unsigned int i = bevel_count2; i > 0; --i )
+					generateUVCircuit(	circle_center,
+										(i-1)*bevel_radius_step + surface_radius2,
+										i*bevel_radius_step + surface_radius2,
+										verts, uvs, verts_index );
+			}
 
 			for( SizeType v = verts_index; v < verts->GetNumEntries(); v++ )
 			{
