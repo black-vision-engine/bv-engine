@@ -51,7 +51,7 @@ void		ExampleVideoInput::GenerateBits( int x, int y )
 
 MemoryChunkConstPtr     ExampleVideoInput::GetBits             () const
 {
-	//VeryHackishMethodToUpdateConstVideoInputBeacuseLifeSucksSoMuchAndIWantToDie( this );
+	VeryHackishMethodToUpdateConstVideoInputBeacuseLifeSucksSoMuchAndIWantToDie( this );
 	return bits;
 }
 
