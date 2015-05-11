@@ -24,6 +24,7 @@ struct PN {
     static const std::string WEIGHTCENTERX; // enum WeightCenter (MIN, MAX, CENTER)
 	static const std::string WEIGHTCENTERY;
 	static const std::string WEIGHTCENTERZ;
+	static const std::string MAPPINGTYPE;
 };
 
 class Plugin : public DefaultGeometryPluginBase
@@ -31,6 +32,7 @@ class Plugin : public DefaultGeometryPluginBase
 public:
 	enum OpenAngleMode : int { CW, CCW, SYMMETRIC };
 	enum WeightCenter : int { MAX, MIN, CENTER };
+	enum MappingType : int { OLDSTYLE/*, SPHERICAL*/, DOUBLETEXTURE };
 
 
     ValueIntPtr                                 m_tesselation;
@@ -41,6 +43,7 @@ public:
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterX;
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterY;
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterZ;
+	std::shared_ptr< ParamEnum< MappingType >	>		m_mappingType;
 
 private:
     virtual std::vector<IGeometryGeneratorPtr>  GetGenerators() override;
@@ -78,6 +81,25 @@ inline bool SetParameter< DefaultTorus::Plugin::WeightCenter >( IParameterPtr pa
 {
     //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
     typedef ParamEnum<DefaultTorus::Plugin::WeightCenter> ParamType;
+
+    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
+
+    if( typedParam == nullptr )
+    {
+        return false;
+    }
+
+    typedParam->SetVal( val, t );
+
+    return true;
+}
+
+
+template<>
+inline bool SetParameter< DefaultTorus::Plugin::MappingType >( IParameterPtr param, TimeType t, const DefaultTorus::Plugin::MappingType & val )
+{
+    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
+    typedef ParamEnum<DefaultTorus::Plugin::MappingType> ParamType;
 
     ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
 

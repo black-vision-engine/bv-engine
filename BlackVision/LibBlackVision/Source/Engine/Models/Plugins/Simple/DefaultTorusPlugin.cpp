@@ -4,6 +4,7 @@ namespace bv { namespace model {
 	
 typedef ParamEnum< DefaultTorus::Plugin::OpenAngleMode > ParamEnumOAM;
 typedef ParamEnum< DefaultTorus::Plugin::WeightCenter > ParamEnumWC;
+typedef ParamEnum< DefaultTorus::Plugin::MappingType > ParamEnumMT;
 
 VoidPtr    ParamEnumOAM::QueryParamTyped  ()
 {
@@ -27,6 +28,17 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultToru
     return CreateParameterEnum< DefaultTorus::Plugin::WeightCenter >( name, timeline );
 }
 
+VoidPtr    ParamEnumMT::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
+
+template<>
+static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultTorus::Plugin::MappingType >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultTorus::Plugin::MappingType >( name, timeline );
+}
+
 #include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 	
 namespace DefaultTorus {
@@ -39,7 +51,7 @@ const std::string PN::TESSELATION = "tesselation";
 const std::string PN::WEIGHTCENTERX = "weight center x";
 const std::string PN::WEIGHTCENTERY = "weight center y";
 const std::string PN::WEIGHTCENTERZ = "weight center z";
-
+const std::string PN::MAPPINGTYPE = "mapping type";
 
 PluginDesc::PluginDesc()
     : DefaultGeometryPluginDescBase( UID(), "torus" )
@@ -63,7 +75,8 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
         ( DefaultTorus::PN::WEIGHTCENTERY, Plugin::WeightCenter::MIN, true, true );
 	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
         ( DefaultTorus::PN::WEIGHTCENTERZ, Plugin::WeightCenter::CENTER, true, true );
-
+	h.AddParam< IntInterpolator, Plugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
+		( PN::MAPPINGTYPE, Plugin::MappingType::DOUBLETEXTURE, true, true );
 
     return h.GetModel();
 }
@@ -88,7 +101,8 @@ bool                                Plugin::NeedsTopologyUpdate()
 		ParameterChanged( PN::OPENANGLEMODE ) ||
 		ParameterChanged( PN::WEIGHTCENTERX ) ||
 		ParameterChanged( PN::WEIGHTCENTERY ) ||
-		ParameterChanged( PN::WEIGHTCENTERZ );
+		ParameterChanged( PN::WEIGHTCENTERZ ) ||
+		ParameterChanged( PN::MAPPINGTYPE );
 }
 
 Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
@@ -104,6 +118,8 @@ Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr pr
 	m_weightCenterY = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERY ) );
 	m_weightCenterZ = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERZ ) );
 	
+	m_mappingType = QueryTypedParam< std::shared_ptr< ParamEnum< MappingType > > >( GetParameter( PN::MAPPINGTYPE ) );
+
 	m_pluginParamValModel->Update();
     InitGeometry();
 }
@@ -113,18 +129,20 @@ Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr pr
 #include "Mathematics/Defines.h"
 class Generator : public IGeometryAndUVsGenerator
 {
+protected:
     int tesselation;
     float radius, radius2, openangle;
 	Plugin::OpenAngleMode open_angle_mode;
 	Plugin::WeightCenter weight_centerX;
 	Plugin::WeightCenter weight_centerY;
 	Plugin::WeightCenter weight_centerZ;
+	Plugin::MappingType mapping_type;
 
 	glm::vec3 center_translate;
 
 public:
-    Generator( int t, float r, float r2, float oa, Plugin::OpenAngleMode oam, Plugin::WeightCenter wcx, Plugin::WeightCenter wcy, Plugin::WeightCenter wcz )
-		: tesselation( t ), radius( r ), radius2( r2), openangle( oa ), open_angle_mode( oam ), weight_centerX( wcx ), weight_centerY( wcy ), weight_centerZ( wcz ) { }
+	Generator( int t, float r, float r2, float oa, Plugin::OpenAngleMode oam, Plugin::WeightCenter wcx, Plugin::WeightCenter wcy, Plugin::WeightCenter wcz, Plugin::MappingType mt )
+		: tesselation( t ), radius( r ), radius2( r2), openangle( oa ), open_angle_mode( oam ), weight_centerX( wcx ), weight_centerY( wcy ), weight_centerZ( wcz ), mapping_type( mt ) { }
 
     Type GetType() { return Type::GEOMETRY_AND_UVS; }
 
@@ -185,25 +203,6 @@ public:
 		return angle_offset;
 	}
 
-	void generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int j, float angle_offset )
-	{
-		double theta = computeAngle2Clamped( float( TWOPI / tesselation), float( j - 1 ) ) + angle_offset;
-		//double theta = j * TWOPI / tesselation + angle_offset;
-		double cos_theta = cos( theta );
-		double sin_theta = sin( theta );
-
-		for( int i = 0; i <= tesselation; ++i )
-		{
-			double phi = i * TWOPI / tesselation + angle_offset;
-
-			verts->AddAttribute( glm::vec3( cos_theta*( radius + radius2*cos( phi ) ), sin_theta * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) + center_translate );
-			uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j) / tesselation ) );
-
-			verts->AddAttribute( glm::vec3( cos_theta* radius , sin_theta * radius, radius2 * sin(phi) ) + center_translate );
-			uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j) / tesselation ) );
-		}
-	}
-
 	glm::vec2 getUV( float phi, float theta )
 	{
 		float u = static_cast<float>( phi / TWOPI );
@@ -224,10 +223,6 @@ public:
 		else
 			max_loop = tesselation;
 
-		// We close beginning of the torus (only if there's an openangle set)
-		if( openangle != 0.0f )
-			generateClosure( verts, uvs, 0, angle_offset );
-
         for( int j = 0; j < max_loop; j++ )
             for( int i = 0; i <= tesselation; i++ )
             {
@@ -235,23 +230,87 @@ public:
                 double theta = j * TWOPI / tesselation + angle_offset;
 
                 verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) + center_translate );
-                uvs->AddAttribute( /*glm::vec2( float(i) / tesselation, float(j) / tesselation )*/getUV( (float)phi, (float)theta ) );
+                uvs->AddAttribute( getUV( (float)phi, (float)theta ) );
 
                 phi = i * TWOPI / tesselation;
 				theta = computeAngle2Clamped( float( TWOPI / tesselation), float( j ) ) + angle_offset;
 
                 verts->AddAttribute( glm::vec3( cos( theta )*( radius + radius2*cos( phi ) ), sin(theta) * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) + center_translate );
-				//if( j < max_loop - 1 )
-				//	uvs->AddAttribute( glm::vec2( float(i) / tesselation, float(j+1) / tesselation ) );
-				//else
-				uvs->AddAttribute(/* glm::vec2( float(i) / tesselation, ( theta - angle_offset ) / TWOPI )*/getUV( (float)phi, (float)theta ) );
+				uvs->AddAttribute( getUV( (float)phi, (float)theta ) );
             }
-
-		// We close ending of the torus (only if there's an openangle set)
-		if( openangle != 0.0f )
-			generateClosure( verts, uvs, max_loop, angle_offset );
     }
 
+};
+
+class ClosureGenerator : public Generator
+{
+protected:
+	bool rotated;		///< Indicates which closure should we generate.
+public:
+	ClosureGenerator( int t, float r, float r2, float oa, Plugin::OpenAngleMode oam, Plugin::WeightCenter wcx, Plugin::WeightCenter wcy, Plugin::WeightCenter wcz, Plugin::MappingType mt, bool rot )
+		: Generator( t, r, r2, oa, oam, wcx, wcy, wcz, mt ), rotated( rot ) {}
+
+	glm::vec2 computeUV( double phi, double theta, bool center )
+	{
+		if( mapping_type == Plugin::MappingType::OLDSTYLE )
+			return getUV( (float)phi, (float)theta );
+		else if( mapping_type == Plugin::MappingType::DOUBLETEXTURE )
+		{
+			glm::vec2 translate;
+			glm::vec2 scale( 0.25, 0.5 );
+
+			if( rotated )
+				translate = glm::vec2( 0.25, 0.5 );
+			else
+				translate = glm::vec2( 0.75, 0.5 );
+
+			if( center )
+				return translate;
+
+			glm::vec2 result( cos( phi ), sin( phi ) );
+			result = translate + scale * result;
+
+			return result;
+		}
+		else
+			assert( false );
+		return glm::vec2(0.0, 0.0);
+	}
+
+	void generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int j, float angle_offset )
+	{
+		double theta = computeAngle2Clamped( float( TWOPI / tesselation), float( j - 1 ) ) + angle_offset;
+		double cos_theta = cos( theta );
+		double sin_theta = sin( theta );
+
+		for( int i = 0; i <= tesselation; ++i )
+		{
+			double phi = i * TWOPI / tesselation + angle_offset;
+
+			verts->AddAttribute( glm::vec3( cos_theta*( radius + radius2*cos( phi ) ), sin_theta * ( radius + radius2 * cos(phi) ), radius2 * sin(phi) ) + center_translate );
+			uvs->AddAttribute( computeUV( phi, theta, false ) );
+
+			verts->AddAttribute( glm::vec3( cos_theta* radius , sin_theta * radius, 0.0 ) + center_translate );
+			uvs->AddAttribute( computeUV( phi, theta, true ) );
+		}
+	}
+
+	void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
+    {
+		center_translate = computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
+		float angle_offset = computeAngleOffset( open_angle_mode, openangle );
+
+		int max_loop;
+		if( openangle != 0.0/* && openangle != 360 */)		// Uncomment if you want to see organ.
+			max_loop = static_cast<int>( ceil( float( ( TWOPI - TO_RADIANS( openangle ) ) / ( TWOPI / tesselation ) ) ) );
+		else
+			max_loop = tesselation;
+
+		if( rotated )
+			generateClosure( verts, uvs, max_loop, angle_offset );
+		else
+			generateClosure( verts, uvs, 0, angle_offset );
+	}
 };
 
 std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
@@ -266,8 +325,37 @@ std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
 		m_openAngleMode->Evaluate(),
 		m_weightCenterX->Evaluate(),
 		m_weightCenterY->Evaluate(),
-		m_weightCenterZ->Evaluate()
+		m_weightCenterZ->Evaluate(),
+		m_mappingType->Evaluate()
         ) ) );
+
+	if( m_openAngle->GetValue() > 0.0 )
+	{
+		gens.push_back( IGeometryGeneratorPtr( new ClosureGenerator( 
+			m_tesselation->GetValue(),
+			m_radius->GetValue(),
+			m_radiusCrossSection->GetValue(),
+			m_openAngle->GetValue(),
+			m_openAngleMode->Evaluate(),
+			m_weightCenterX->Evaluate(),
+			m_weightCenterY->Evaluate(),
+			m_weightCenterZ->Evaluate(),
+			m_mappingType->Evaluate(),
+			false
+			) ) );
+		gens.push_back( IGeometryGeneratorPtr( new ClosureGenerator( 
+			m_tesselation->GetValue(),
+			m_radius->GetValue(),
+			m_radiusCrossSection->GetValue(),
+			m_openAngle->GetValue(),
+			m_openAngleMode->Evaluate(),
+			m_weightCenterX->Evaluate(),
+			m_weightCenterY->Evaluate(),
+			m_weightCenterZ->Evaluate(),
+			m_mappingType->Evaluate(),
+			true
+			) ) );
+	}
 
     return gens;
 }
