@@ -96,6 +96,7 @@ bool                                Plugin::NeedsTopologyUpdate()
 
 class Generator : public IGeometryAndUVsGenerator
 {
+protected:
     IParamValModelPtr model;
 
 	int tesselation;
@@ -109,9 +110,20 @@ class Generator : public IGeometryAndUVsGenerator
 public:
 	Generator( IParamValModelPtr m ) : model( m ) { center_translate = glm::vec3( 0.0, 0.0, 0.0); }
 
+	void setLocalParameters();
     void GenerateGeometryAndUVs( Float3AttributeChannelPtr, Float2AttributeChannelPtr );
 	void generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outer_loop  );
 	void computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ );
+};
+
+class ClosureGenerator : public Generator
+{
+private:
+	bool rotated;		///< Indicates which closure should we generate.
+public:
+	ClosureGenerator( IParamValModelPtr m, bool rot ) : Generator( m ), rotated( rot ) {}
+
+    void GenerateGeometryAndUVs( Float3AttributeChannelPtr, Float2AttributeChannelPtr );
 };
 
 std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
@@ -119,40 +131,15 @@ std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
     std::vector<IGeometryGeneratorPtr> gens;
 
     gens.push_back( IGeometryGeneratorPtr( new Generator( m_pluginParamValModel->GetVertexAttributesChannelModel() ) ) );
+	gens.push_back( IGeometryGeneratorPtr( new ClosureGenerator( m_pluginParamValModel->GetVertexAttributesChannelModel(), false ) ) );
+	gens.push_back( IGeometryGeneratorPtr( new ClosureGenerator( m_pluginParamValModel->GetVertexAttributesChannelModel(), true ) ) );
 
     return gens;
 }
 
 #include "Mathematics/Defines.h"
 
-
-void Generator::computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ )
-{
-	center_translate = glm::vec3( 0.0, 0.0, 0.0 );
-
-	if( centerX == Plugin::WeightCenter::MAX )
-		center_translate += glm::vec3( -r - r2, 0.0, 0.0 );
-	else if( centerX == Plugin::WeightCenter::CENTER )
-		center_translate += glm::vec3( 0.0, 0.0, 0.0 );
-	else if( centerX == Plugin::WeightCenter::MIN )
-		center_translate += glm::vec3( r + r2, 0.0, 0.0 );
-	
-	if( centerY == Plugin::WeightCenter::MAX )
-		center_translate += glm::vec3( 0.0, -delta - r2, 0.0 );
-	else if( centerY == Plugin::WeightCenter::CENTER )
-		center_translate += glm::vec3( 0.0, -delta / 2, 0.0 );
-	else if( centerY == Plugin::WeightCenter::MIN )
-		center_translate += glm::vec3( 0.0, r2, 0.0 );
-
-	if( centerZ == Plugin::WeightCenter::MAX )
-		center_translate += glm::vec3( 0.0, 0.0, -r - r2 );
-	else if( centerZ == Plugin::WeightCenter::CENTER )
-		center_translate += glm::vec3( 0.0, 0.0, 0.0 );
-	else if( centerZ == Plugin::WeightCenter::MIN )
-		center_translate += glm::vec3( 0.0, 0.0, r + r2 );
-}
-
-void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+void Generator::setLocalParameters()
 {
     ValueIntPtr                                 m_tesselation;
 	ValueIntPtr                                 m_tesselation2;
@@ -186,8 +173,37 @@ void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2A
 
 	// Must be called after assingments above. It uses generator's variables.
 	computeWeightCenter( m_weightCenterX->Evaluate(), m_weightCenterY->Evaluate(), m_weightCenterZ->Evaluate() );
+}
 
-	generateClosure( verts, uvs, 0 );
+void Generator::computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ )
+{
+	center_translate = glm::vec3( 0.0, 0.0, 0.0 );
+
+	if( centerX == Plugin::WeightCenter::MAX )
+		center_translate += glm::vec3( -r - r2, 0.0, 0.0 );
+	else if( centerX == Plugin::WeightCenter::CENTER )
+		center_translate += glm::vec3( 0.0, 0.0, 0.0 );
+	else if( centerX == Plugin::WeightCenter::MIN )
+		center_translate += glm::vec3( r + r2, 0.0, 0.0 );
+	
+	if( centerY == Plugin::WeightCenter::MAX )
+		center_translate += glm::vec3( 0.0, -delta - r2, 0.0 );
+	else if( centerY == Plugin::WeightCenter::CENTER )
+		center_translate += glm::vec3( 0.0, -delta / 2, 0.0 );
+	else if( centerY == Plugin::WeightCenter::MIN )
+		center_translate += glm::vec3( 0.0, r2, 0.0 );
+
+	if( centerZ == Plugin::WeightCenter::MAX )
+		center_translate += glm::vec3( 0.0, 0.0, -r - r2 );
+	else if( centerZ == Plugin::WeightCenter::CENTER )
+		center_translate += glm::vec3( 0.0, 0.0, 0.0 );
+	else if( centerZ == Plugin::WeightCenter::MIN )
+		center_translate += glm::vec3( 0.0, 0.0, r + r2 );
+}
+
+void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+{
+	setLocalParameters();
 
     for( int i = 0; i < tesselation; i++ )
         for( int j = 0; j <= tesselation2; j++ )
@@ -214,8 +230,6 @@ void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2A
 			verts->AddAttribute( glm::vec3( x, y, z ) + center_translate );
             uvs->AddAttribute( glm::vec2( double(j) / tesselation, h ) );
         }
-
-	generateClosure( verts, uvs, tesselation );
 }
 
 void Generator::generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outer_loop )
@@ -243,5 +257,16 @@ void Generator::generateClosure( Float3AttributeChannelPtr verts, Float2Attribut
 		uvs->AddAttribute( glm::vec2( double(j) / tesselation, h ) );
 	}
 }
+
+void ClosureGenerator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+{
+	setLocalParameters();
+
+	if( rotated )
+		generateClosure( verts, uvs, tesselation );
+	else
+		generateClosure( verts, uvs, 0 );
+}
+
 
 } } }
