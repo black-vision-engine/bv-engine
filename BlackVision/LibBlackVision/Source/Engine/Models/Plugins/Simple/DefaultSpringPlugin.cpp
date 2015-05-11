@@ -3,7 +3,7 @@
 namespace bv { namespace model {
 	
 typedef ParamEnum< DefaultSpring::Plugin::WeightCenter > ParamEnumWC;
-
+typedef ParamEnum< DefaultSpring::Plugin::MappingType > ParamEnumMT;
 
 VoidPtr    ParamEnumWC::QueryParamTyped  ()
 {
@@ -16,6 +16,17 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultSpri
     return CreateParameterEnum< DefaultSpring::Plugin::WeightCenter >( name, timeline );
 }
 
+
+VoidPtr    ParamEnumMT::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
+
+template<>
+static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultSpring::Plugin::MappingType >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultSpring::Plugin::MappingType >( name, timeline );
+}
 
 #include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 	
@@ -30,7 +41,7 @@ const std::string PN::TURNS = "turns";
 const std::string PN::WEIGHTCENTERX = "weight center x";
 const std::string PN::WEIGHTCENTERY = "weight center y";
 const std::string PN::WEIGHTCENTERZ = "weight center z";
-
+const std::string PN::MAPPINGTYPE = "mapping type";
 
 
 
@@ -66,6 +77,9 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
         ( PN::WEIGHTCENTERY, Plugin::WeightCenter::MIN, true, true );
 	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
         ( PN::WEIGHTCENTERZ, Plugin::WeightCenter::CENTER, true, true );
+	h.AddParam< IntInterpolator, Plugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
+		( PN::MAPPINGTYPE, Plugin::MappingType::DOUBLETEXTURE, true, true );
+
 
     return h.GetModel();
 }
@@ -90,7 +104,8 @@ bool                                Plugin::NeedsTopologyUpdate()
         ParameterChanged( PN::TURNS ) ||
 		ParameterChanged( PN::WEIGHTCENTERX ) ||
 		ParameterChanged( PN::WEIGHTCENTERY ) ||
-		ParameterChanged( PN::WEIGHTCENTERZ );
+		ParameterChanged( PN::WEIGHTCENTERZ ) ||
+		ParameterChanged( PN::MAPPINGTYPE );
 }
 
 
@@ -105,6 +120,7 @@ protected:
     float r2;
     int turns;
 	float delta;
+	Plugin::MappingType mapping_type;
 
 	glm::vec3 center_translate;
 public:
@@ -112,7 +128,6 @@ public:
 
 	void setLocalParameters();
     void GenerateGeometryAndUVs( Float3AttributeChannelPtr, Float2AttributeChannelPtr );
-	void generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outer_loop  );
 	void computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ );
 };
 
@@ -124,6 +139,8 @@ public:
 	ClosureGenerator( IParamValModelPtr m, bool rot ) : Generator( m ), rotated( rot ) {}
 
     void GenerateGeometryAndUVs( Float3AttributeChannelPtr, Float2AttributeChannelPtr );
+	void generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outer_loop  );
+	glm::vec2 computeUV( int loop_counter, double h, bool center  );
 };
 
 std::vector<IGeometryGeneratorPtr>  Plugin::GetGenerators()
@@ -151,6 +168,7 @@ void Generator::setLocalParameters()
 	std::shared_ptr< ParamEnum< Plugin::WeightCenter >	>		m_weightCenterX;
 	std::shared_ptr< ParamEnum< Plugin::WeightCenter >	>		m_weightCenterY;
 	std::shared_ptr< ParamEnum< Plugin::WeightCenter >	>		m_weightCenterZ;
+	std::shared_ptr< ParamEnum< Plugin::MappingType >	>		m_mappingType;;
 
     m_tesselation = QueryTypedValue< ValueIntPtr >( model->GetValue( PN::TESSELATION ) );
 	m_tesselation2 = QueryTypedValue< ValueIntPtr >( model->GetValue( PN::TESSELATION2 ) );
@@ -163,6 +181,8 @@ void Generator::setLocalParameters()
 	m_weightCenterY = QueryTypedParam< std::shared_ptr< ParamEnum< Plugin::WeightCenter > > >( model->GetParameter( PN::WEIGHTCENTERY ) );
 	m_weightCenterZ = QueryTypedParam< std::shared_ptr< ParamEnum< Plugin::WeightCenter > > >( model->GetParameter( PN::WEIGHTCENTERZ ) );
 
+	m_mappingType = QueryTypedParam< std::shared_ptr< ParamEnum< Plugin::MappingType > > >( model->GetParameter( PN::MAPPINGTYPE ) );
+
 	// Set fields of class generator
     tesselation = m_tesselation->GetValue();
 	tesselation2 = m_tesselation2->GetValue();
@@ -170,6 +190,7 @@ void Generator::setLocalParameters()
     r2 = m_radiusCrossSection->GetValue();
     turns = m_turns->GetValue();
 	delta = m_delta->GetValue();
+	mapping_type = m_mappingType->Evaluate();
 
 	// Must be called after assingments above. It uses generator's variables.
 	computeWeightCenter( m_weightCenterX->Evaluate(), m_weightCenterY->Evaluate(), m_weightCenterZ->Evaluate() );
@@ -232,7 +253,7 @@ void Generator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2A
         }
 }
 
-void Generator::generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outer_loop )
+void ClosureGenerator::generateClosure( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, int outer_loop )
 {
 	
     double h = double( outer_loop ) / tesselation;
@@ -247,14 +268,14 @@ void Generator::generateClosure( Float3AttributeChannelPtr verts, Float2Attribut
 		float z = static_cast<float>( sin( turnsAngle )*( cos( crossSectionAngle )*r2 + r ) );
 
 		verts->AddAttribute( glm::vec3( x, y, z ) + center_translate );
-		uvs->AddAttribute( glm::vec2( double(j) / tesselation, h ) );
+		uvs->AddAttribute( computeUV( j, h, false ) );
 
 		x = static_cast<float>( cos( turnsAngle ) * r );
 		y = static_cast<float>( h * delta );
 		z = static_cast<float>( sin( turnsAngle ) * r );
 
 		verts->AddAttribute( glm::vec3( x, y, z ) + center_translate );
-		uvs->AddAttribute( glm::vec2( double(j) / tesselation, h ) );
+		uvs->AddAttribute( computeUV( j, h, true ) );
 	}
 }
 
@@ -266,6 +287,41 @@ void ClosureGenerator::GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, 
 		generateClosure( verts, uvs, tesselation );
 	else
 		generateClosure( verts, uvs, 0 );
+}
+
+/**@brief Generates UV depending on mapping type.
+
+@param[in] loop_counter Number of loops made by generating loop.
+@param[in] h The same h as in generateClosure function.
+@param[in] center Center of the cirlce.
+*/
+glm::vec2 ClosureGenerator::computeUV( int loop_counter, double h, bool center )
+{
+	if( mapping_type == Plugin::MappingType::OLDSTYLE )
+		return glm::vec2( (double)loop_counter / tesselation2, h );
+	else if( mapping_type == Plugin::MappingType::DOUBLETEXTURE )
+	{
+		double angle = TWOPI * (double)loop_counter / tesselation2;
+		glm::vec2 translate;
+		glm::vec2 scale( 0.25, 0.5 );
+
+		if( rotated )
+			translate = glm::vec2( 0.25, 0.5 );
+		else
+			translate = glm::vec2( 0.75, 0.5 );
+
+		if( center )
+			return translate;
+
+		glm::vec2 result( cos( angle ), sin( angle ) );
+		result = translate + scale * result;
+
+		return result;
+	}
+	else
+		assert(false);
+
+	 return glm::vec2( 0.0, 0.0 );
 }
 
 

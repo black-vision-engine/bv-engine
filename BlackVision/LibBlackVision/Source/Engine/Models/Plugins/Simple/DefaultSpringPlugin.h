@@ -14,6 +14,7 @@ struct PN {
 	static const std::string WEIGHTCENTERX;
 	static const std::string WEIGHTCENTERY;
 	static const std::string WEIGHTCENTERZ;
+	static const std::string MAPPINGTYPE;
 };
 
 class PluginDesc : public DefaultGeometryPluginDescBase
@@ -28,8 +29,8 @@ public:
 class Plugin : public DefaultGeometryPluginBase
 {
 public:
-    enum WeightCenter : int
-	{ MAX, MIN, CENTER };
+    enum WeightCenter : int{ MAX, MIN, CENTER };
+	enum MappingType : int { OLDSTYLE/*, SPHERICAL*/, DOUBLETEXTURE };
 
 
     Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
@@ -46,6 +47,24 @@ inline bool SetParameter< DefaultSpring::Plugin::WeightCenter >( IParameterPtr p
 {
     //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
     typedef ParamEnum<DefaultSpring::Plugin::WeightCenter> ParamType;
+
+    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
+
+    if( typedParam == nullptr )
+    {
+        return false;
+    }
+
+    typedParam->SetVal( val, t );
+
+    return true;
+}
+
+template<>
+inline bool SetParameter< DefaultSpring::Plugin::MappingType >( IParameterPtr param, TimeType t, const DefaultSpring::Plugin::MappingType & val )
+{
+    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
+    typedef ParamEnum<DefaultSpring::Plugin::MappingType> ParamType;
 
     ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
 
