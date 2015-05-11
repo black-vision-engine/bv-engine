@@ -1,9 +1,11 @@
 #include "DefaultConePlugin.h"
+#include "..\..\Dep\Common\glm\glm\gtx\vector_angle.hpp"
 
 namespace bv { namespace model {
 	
 typedef ParamEnum< DefaultCone::DefaultConePlugin::OpenAngleMode > ParamEnumOAM;
 typedef ParamEnum< DefaultCone::DefaultConePlugin::WeightCenter > ParamEnumWC;
+typedef ParamEnum< DefaultCone::DefaultConePlugin::MappingType > ParamEnumMT;
 
 VoidPtr    ParamEnumOAM::QueryParamTyped  ()
 {
@@ -29,7 +31,16 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCone
     return CreateParameterEnum< DefaultCone::DefaultConePlugin::WeightCenter >( name, timeline );
 }
 
+VoidPtr    ParamEnumMT::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
 
+template<>
+static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCone::DefaultConePlugin::MappingType >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultCone::DefaultConePlugin::MappingType >( name, timeline );
+}
 
 #include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 
@@ -48,7 +59,7 @@ const std::string PN::WEIGHTCENTERY = "weight center y";
 const std::string PN::WEIGHTCENTERZ = "weight center z";
 const std::string PN::OPENANGLEMODE = "open angle mode";
 const std::string PN::BEVELTESSELATION = "bevel tesselation";
-
+const std::string PN::MAPPINGTYPE = "mapping type";
 
 
 
@@ -78,7 +89,9 @@ DefaultPluginParamValModelPtr   DefaultConePluginDesc::CreateDefaultModel  ( ITi
         ( DefaultCone::PN::WEIGHTCENTERY, DefaultConePlugin::WeightCenter::MIN, true, true );
 	h.AddParam< IntInterpolator, DefaultConePlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
         ( DefaultCone::PN::WEIGHTCENTERZ, DefaultConePlugin::WeightCenter::CENTER, true, true );
-    
+  	h.AddParam< IntInterpolator, DefaultConePlugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
+		( PN::MAPPINGTYPE, DefaultConePlugin::MappingType::GOODMAPPING, true, true );
+
     return h.GetModel();
 }
 
@@ -102,8 +115,9 @@ namespace ConeGenerator
 	DefaultConePlugin::WeightCenter weight_centerX;
 	DefaultConePlugin::WeightCenter weight_centerY;
 	DefaultConePlugin::WeightCenter weight_centerZ;
+	DefaultConePlugin::MappingType mapping_type;
 
-    static void Init( int t, float ih, float ir, float b, float oa, float h, float or, int bt, DefaultConePlugin::OpenAngleMode oam, DefaultConePlugin::WeightCenter wcx, DefaultConePlugin::WeightCenter wcy, DefaultConePlugin::WeightCenter wcz )
+    static void Init( int t, float ih, float ir, float b, float oa, float h, float or, int bt, DefaultConePlugin::OpenAngleMode oam, DefaultConePlugin::WeightCenter wcx, DefaultConePlugin::WeightCenter wcy, DefaultConePlugin::WeightCenter wcz, DefaultConePlugin::MappingType mt )
     {
         tesselation = t;
         inner_height = ih;
@@ -117,6 +131,7 @@ namespace ConeGenerator
 		weight_centerX = wcx;
 		weight_centerY = wcy;
 		weight_centerZ = wcz;
+		mapping_type = mt;
     }
 
 
@@ -329,6 +344,117 @@ namespace ConeGenerator
 				assert( false );
 		}
 
+
+		glm::vec2 compute_direction2D( Float3AttributeChannelPtr verts, unsigned int verts_index )
+		{
+			glm::vec3 vert = verts->GetVertices()[ verts_index ];
+			vert -= center_translate;		// We need position before weightCenter was applied.
+
+			glm::vec2 direction( vert.x, vert.z );
+			if( direction == glm::vec2( 0.0, 0.0 ) )	//If vector is null, we cane take next element. It should be correct.
+				return compute_direction2D( verts, verts_index + 1 );
+			return direction;
+		}
+
+		/**
+		@param[in] centerUV Circle center on texture.
+		@param[in] UVradius1 Radius of a cricle 1 on texture.
+		@param[in] UVradius2 Radius of a cricle 2 on texture.
+		@param[in] angle Angle between vertex (casted on plane XY) and direction [0.0,0.0,1.0).
+		@param[inout] verts_index Index of first vertex in verts table that we begin with. Function returns index
+		after last that was used.
+		*/
+		void generateUVCircuit( glm::vec2 centerUV, double UVradius1, double UVradius2, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, unsigned int& verts_index )
+		{
+			glm::vec2 reference_direction( 0.0, 1.0 );
+			float angle = 0.0f;
+			int max_loop;
+			if( open_angle != 0.0 )
+				max_loop = static_cast<int>( ceil( float( ( TWOPI - TO_RADIANS( open_angle ) ) / ( TWOPI / tesselation ) ) ) );
+			else
+				max_loop = tesselation;
+
+			for( int j = 0; j <= max_loop; j++ )
+            {
+				glm::vec2 direction = compute_direction2D( verts, verts_index );
+				angle = (float)TO_RADIANS( glm::angle( direction, reference_direction ) );
+
+				uvs->AddAttribute( centerUV - glm::vec2( UVradius1 * sin( angle ), UVradius1 * cos( angle ) ) );
+				uvs->AddAttribute( centerUV - glm::vec2( UVradius2 * sin( angle ), UVradius2 * cos( angle ) ) );
+
+				++verts_index;
+				++verts_index;
+			}
+
+			// We add two uvs (function generateCircuit adds always two verticies at the end)
+			uvs->AddAttribute( centerUV - glm::vec2( UVradius1 * sin( angle ), UVradius1 * cos( angle ) ) );
+			uvs->AddAttribute( centerUV - glm::vec2( UVradius2 * sin( angle ), UVradius2 * cos( angle ) ) );
+			++verts_index;
+			++verts_index;
+		}
+
+		void generateGOODMAPPING( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+		{
+			glm::vec2 circle_center( 0.25, 0.75 );
+			const double circle_radiusUV = 0.25;
+			unsigned int verts_index = 0;
+			unsigned int bevel_count1 = bevel_tesselation / 2;
+			unsigned int bevel_count2 = bevel_tesselation - bevel_count1;
+			double bevel_radiusUV1 = circle_radiusUV * bevel / (sqrt( height * height + outer_radius * outer_radius) );
+			double surface_radius = circle_radiusUV - bevel_radiusUV1;		// UV radius for lateral surface
+
+			generateUVCircuit( circle_center, 0.0f, surface_radius, verts, uvs, verts_index );
+
+			if( bevel != 0.0 )
+			{
+				circle_center = glm::vec2( 0.25, 0.25 );
+				double bevel_radius_step = bevel_radiusUV1 / (double)bevel_count2;
+				
+				for( unsigned int i = bevel_count2; i > 0; --i )
+					generateUVCircuit(	circle_center,
+										i*bevel_radius_step + surface_radius,
+										(i-1)*bevel_radius_step + surface_radius,
+										verts, uvs, verts_index );
+
+				circle_center = glm::vec2( 0.25, 0.75 );
+				bevel_radius_step = bevel_radiusUV1 / (double)bevel_count1;
+
+				for( unsigned int i = bevel_count1; i > 0; --i )
+					generateUVCircuit(	circle_center,
+										i*bevel_radius_step + surface_radius,
+										(i-1)*bevel_radius_step + surface_radius,
+										verts, uvs, verts_index );
+			}
+
+
+
+			for( SizeType v = verts_index; v < verts->GetNumEntries(); v++ )
+			{
+				glm::vec3 vert = verts->GetVertices()[ v ];
+				vert -= center_translate;
+				uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
+												vert.y*0.5 + 0.5 ) ); // FIXME: scaling
+			}
+		}
+
+		void generateUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+		{
+			if( mapping_type == DefaultConePlugin::MappingType::GOODMAPPING )
+				generateGOODMAPPING( verts, uvs );
+			else if( mapping_type == DefaultConePlugin::MappingType::OLDSTYLE )
+			{
+				for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
+				{
+					glm::vec3 vert = verts->GetVertices()[ v ];
+					vert -= center_translate;
+					uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
+													vert.y*0.5 + 0.5 ) ); // FIXME: scaling
+				}
+			}
+			else
+				assert( false );
+		}
+
         virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
         {
 			computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
@@ -374,41 +500,10 @@ namespace ConeGenerator
 
 			generateCircuit( correct_radius, 0.0f, correct_y, inner_height, verts, uvs, gen_direction );
 
-            for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
-            {
-                glm::vec3 vert = verts->GetVertices()[ v ];
-				vert -= center_translate;
-                uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
-                                                vert.y*0.5 + 0.5 ) ); // FIXME: scaling
-            }
+			generateUV( verts, uvs );
         }
     };
 
-	// New model doesn't use it.
-    class BaseSurface : public IGeometryAndUVsGenerator
-    {
-    public:
-        virtual Type GetType() { return Type::GEOMETRY_AND_UVS; }
-
-        virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
-        {
-            for( int i = 0; i <= tesselation; i++ )
-            {
-                double angle   = i     * 2 * PI / tesselation;
-                auto vec       = glm::vec3( cos( angle ), 0, sin( angle ) );
-
-                verts->AddAttribute( vec * inner_radius );
-                verts->AddAttribute( vec * outer_radius );
-            }
-
-            for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
-            {
-                glm::vec3 vert = verts->GetVertices()[ v ];
-                uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
-                                                vert.z*0.5 + 0.5 ) ); // FIXME: scaling
-            }
-        }
-    };
 
 	class ConeClosure : public LateralSurface
 	{
@@ -474,6 +569,33 @@ namespace ConeGenerator
 				verts->AddAttribute( glm::vec3( radius_height2.x * cos( rotation ), radius_height2.y, radius_height2.x * sin( rotation ) ) + center_translate );
 			}
 
+		}
+
+		void generateUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+		{
+			if( mapping_type == DefaultConePlugin::MappingType::GOODMAPPING )
+			{
+				// @todo: Write everything
+				for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
+				{
+					glm::vec3 vert = verts->GetVertices()[ v ];
+					vert -= center_translate;
+					uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
+													vert.y*0.5 + 0.5 ) ); // FIXME: scaling
+				}
+			}
+			else if( mapping_type == DefaultConePlugin::MappingType::OLDSTYLE )
+			{
+				for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
+				{
+					glm::vec3 vert = verts->GetVertices()[ v ];
+					vert -= center_translate;
+					uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
+													vert.y*0.5 + 0.5 ) ); // FIXME: scaling
+				}
+			}
+			else
+				assert( false );
 		}
 
 		virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
@@ -542,6 +664,7 @@ DefaultConePlugin::DefaultConePlugin( const std::string & name, const std::strin
 	m_weightCenterX = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERX ) );
 	m_weightCenterY = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERY ) );
 	m_weightCenterZ = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERZ ) );
+	m_mappingType = QueryTypedParam< std::shared_ptr< ParamEnum< MappingType > > >( GetParameter( PN::MAPPINGTYPE ) );
 
     m_pluginParamValModel->Update();
     InitGeometry();
@@ -561,8 +684,9 @@ std::vector<IGeometryGeneratorPtr>    DefaultConePlugin::GetGenerators()
 		m_openAngleMode->Evaluate(),
 		m_weightCenterX->Evaluate(),
 		m_weightCenterY->Evaluate(),
-		m_weightCenterZ->Evaluate()
-        );
+		m_weightCenterZ->Evaluate(),
+		m_mappingType->Evaluate()
+		);
 
     std::vector<IGeometryGeneratorPtr> gens;
     gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::LateralSurface( ConeGenerator::height, ConeGenerator::outer_radius ) ) );
