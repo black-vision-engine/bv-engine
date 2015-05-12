@@ -574,7 +574,9 @@ namespace ConeGenerator
 
 		void generateHalfClosure( glm::vec2 circleCenter1, glm::vec2 circleCenter2, Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs, double rotation )
 		{
-			uvs;
+			bool rotate = true;
+			if( rotation == angle_offset )
+				rotate = false;
 
 			double angle_between_edges1 = atan2( height, outer_radius );
 
@@ -596,10 +598,15 @@ namespace ConeGenerator
 			verts->AddAttribute( glm::vec3( 0.0, height, 0.0 ) + center_translate );
 			verts->AddAttribute( glm::vec3( outer_radius * ( ( height - in_height ) / height) * cos( rotation ), in_height, outer_radius * ( ( height - in_height ) / height) * sin( rotation ) ) + center_translate );
 			verts->AddAttribute( glm::vec3( 0.0, in_height, 0.0 ) + center_translate );
+			setUV( 0.0, height, rotate, uvs );
+			setUV( outer_radius * ( ( height - in_height ) / height), in_height, rotate, uvs );
+			setUV( 0.0, in_height, rotate, uvs );
 
 			// Quad from inner height to bevel
 			verts->AddAttribute( glm::vec3( correct_radius1 * cos( rotation ), correct_y1, correct_radius1 * sin( rotation ) ) + center_translate );
 			verts->AddAttribute( glm::vec3( correct_radius2 * cos( rotation ), correct_y2, correct_radius2 * sin( rotation ) ) + center_translate );
+			setUV( correct_radius1, correct_y1, rotate, uvs );
+			setUV( correct_radius2, correct_y2, rotate, uvs );
 
 			// From top of bevel to bottom of it
 
@@ -627,25 +634,33 @@ namespace ConeGenerator
 				computeCircleRadiusHeight( radius_height2, circleCenter2, circle_radius2, angle2, true );
 
 				verts->AddAttribute( glm::vec3( radius_height1.x * cos( rotation ), radius_height1.y, radius_height1.x * sin( rotation ) ) + center_translate );
+				setUV( radius_height1.x, radius_height1.y, rotate, uvs );
 				verts->AddAttribute( glm::vec3( radius_height2.x * cos( rotation ), radius_height2.y, radius_height2.x * sin( rotation ) ) + center_translate );
+				setUV( radius_height2.x, radius_height2.y, rotate, uvs );
 			}
 
 		}
 
-		void generateUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+		/**Sets uv coord for vertex. Function does something only if MappingType::GOODMAPPING is set.*/
+		void setUV( float R, float H, bool rotated, Float2AttributeChannelPtr uvs )
 		{
 			if( mapping_type == DefaultConePlugin::MappingType::GOODMAPPING )
 			{
-				// @todo: Write everything
-				for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
-				{
-					glm::vec3 vert = verts->GetVertices()[ v ];
-					vert -= center_translate;
-					uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
-													vert.y*0.5 + 0.5 ) ); // FIXME: scaling
-				}
+				glm::vec2 referenceUV( 3.0 / 4.0, 0.0 );
+				const double maxU = 1.0 / 4.0;
+				const double maxV = 1.0 / 2.0;
+				glm::vec2 uv( maxU * R / outer_radius, maxV * H / height );
+
+				if( !rotated )	// Left or right surface
+					uv.x = -uv.x;
+
+				uvs->AddAttribute( referenceUV + uv );
 			}
-			else if( mapping_type == DefaultConePlugin::MappingType::OLDSTYLE )
+		}
+
+		void computeOLDSTYLEmapping( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
+		{
+			if( mapping_type == DefaultConePlugin::MappingType::OLDSTYLE )
 			{
 				for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
 				{
@@ -655,8 +670,6 @@ namespace ConeGenerator
 													vert.y*0.5 + 0.5 ) ); // FIXME: scaling
 				}
 			}
-			else
-				assert( false );
 		}
 
 		virtual void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
@@ -691,20 +704,12 @@ namespace ConeGenerator
 
 			glm::vec3 degenerate( 0.0, height, 0.0 );
 			degenerate += center_translate;
-			verts->AddAttribute( degenerate );
-			verts->AddAttribute( degenerate );
+			verts->AddAttribute( degenerate );			setUV( 0.0, height, false, uvs );
+			verts->AddAttribute( degenerate );			setUV( 0.0, height, false, uvs );
 
 			generateHalfClosure( circleCenter1, circleCenter2, verts, uvs, angle );
 
-			// Add as many uvs as many verticies there are.
-            for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
-            {
-                glm::vec3 vert = verts->GetVertices()[ v ];
-				vert -= center_translate;
-				glm::vec2 UV( vert.x*0.5 + 0.5, vert.y*0.5 + 0.5 );
-				//glm::vec2 UV( 0.0, 0.0 );
-				uvs->AddAttribute( UV ); // FIXME: scaling
-            }
+			computeOLDSTYLEmapping( verts, uvs );	// Computed only if mapping_type::OLDSTYLE is set.
 		}
 	};
 };
@@ -751,8 +756,8 @@ std::vector<IGeometryGeneratorPtr>    DefaultConePlugin::GetGenerators()
 
     std::vector<IGeometryGeneratorPtr> gens;
     gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::LateralSurface( ConeGenerator::height, ConeGenerator::outer_radius ) ) );
-	//if( m_openAngle->GetValue() > 0.0 )
-	//	gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::ConeClosure( ConeGenerator::height, ConeGenerator::outer_radius ) ) );
+	if( m_openAngle->GetValue() > 0.0 )
+		gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::ConeClosure( ConeGenerator::height, ConeGenerator::outer_radius ) ) );
     return gens;
 }
 
