@@ -38,7 +38,7 @@ public:
 	~DefaultVideoInputPlugin(void);
 
 	virtual void                                Update                      ( TimeType t ) override;
-	//virtual bool                            LoadResource  ( IPluginResourceDescrConstPtr resDescr ) override;
+    virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 };
 
 } }

@@ -1,7 +1,9 @@
-//#include "Engine\Models\Resources\IPluginResourceDescr.h"
+#include "DefaultVideoInputResourceDescr.h"
 
 namespace bv { namespace model {
 
+std::string DefaultVideoInputResourceDescr::uid = "VIDEO_INPUT_DESC";
+    
 // *******************************
 //
 //model::IVideoInputResourceDescrConstPtr   QueryVideoInputResourceDescr   ( model::IPluginResourceDescrConstPtr resDescr )
