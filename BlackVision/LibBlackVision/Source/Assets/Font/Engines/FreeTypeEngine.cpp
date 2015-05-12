@@ -299,7 +299,8 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 		}
 	}
 
-	return nullptr;
+	// If char is not supported by font, render glyph for new line char.
+	return RenderGlyph( '\n', spans, outlineWidth );
 }
 
 // *********************************
@@ -370,6 +371,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 				currAddress += padding * 4;
 
 				auto ch = wcharsSet[ y * atlasSize + x ];
+
 				auto & sps = spans[ ch ];
 				auto glyph = glyphs[ ch ];
 
