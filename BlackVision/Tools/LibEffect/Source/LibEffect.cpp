@@ -42,10 +42,11 @@ RenderableEffectPtr GetBlurEffect( UInt32 blurLength, Float32 pixelWidth, Float3
 
 // *********************************
 // Bluring image with GPU
-MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bbp, UInt32 blurLength )
+MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 blurLength )
 {
-	assert( in->Size() == width * height * bbp / 8 );
+    { bpp; }
 
+    assert( in->Size() == width * height * bpp / 8 );
 	auto tex = std::make_shared< Texture2DImpl >( TextureFormat::F_A8R8G8B8, width, height );
 
 	std::vector< MemoryChunkConstPtr > d;

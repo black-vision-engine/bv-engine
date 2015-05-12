@@ -357,7 +357,8 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
 			// !!!! Function accepts only position and UVs coordinates ( 2D textures ).
 			// It needs to be changed when normal vectors appear in engine.
 			auto success = acceptAttributeChannel( prevCompCh, UVsGenerationNeeded );
-			assert( success );
+            { success; }
+            assert( success );
         }
 
         if( m_vaChannel == nullptr )
