@@ -59,6 +59,22 @@ bool				ModelNodeEditor::AttachPlugin			( unsigned int idx )
 
 // ********************************
 //
+bool				ModelNodeEditor::AttachPlugin			( BasicNodePtr sourceNode, unsigned int idx )
+{
+	auto plugin = sourceNode->GetModelNodeEditor()->GetDetachedPlugin();
+	if( plugin )
+	{
+		if( AddPlugin( plugin, idx ) )
+		{
+			sourceNode->GetModelNodeEditor()->ResetDetachedPlugin();
+			return true;
+		}
+	}
+	return false;
+}
+
+// ********************************
+//
 bool				ModelNodeEditor::DetachPlugin			( const std::string & name )
 {
 	auto plugin = m_model->GetPlugins()->DetachPlugin( name );
