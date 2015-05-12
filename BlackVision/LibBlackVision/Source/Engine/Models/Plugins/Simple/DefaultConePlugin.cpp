@@ -432,7 +432,7 @@ namespace ConeGenerator
 										verts, uvs, verts_index );
 			}
 
-		// Bottom surface of the cone.
+		// Base surface of the cone.
 			circle_center = glm::vec2( 0.25, 0.25 );
 			bevel_radiusUV1 = circle_radiusUV * ( outer_radius - bevel ) / outer_radius;
 			if( inner_radius > 0.0 && inner_height > 0.0 )
@@ -534,8 +534,12 @@ namespace ConeGenerator
 				generateBeveledEdge( circleCenter, angle_between_edges, verts, uvs, gen_direction );
 
 			// Base surface
-			repairBaseSurface( inner_radius + bevel, 0.0, verts, uvs, angle_offset );
-			if( inner_radius > 0.0 && inner_height > 0.0 )
+			if( gen_direction )	// We add verticies to base surface depending on from which side we generate it.
+				repairBaseSurface( inner_radius + bevel, 0.0, verts, uvs, angle_offset );
+			else
+				repairBaseSurface( inner_radius + bevel, 0.0, verts, uvs, computeAngle2Clamped(TWOPI, 1) + angle_offset );
+
+			if( inner_radius > 0.0 && inner_height > 0.0 )	// If there's no inner cone, Base surface must close the solid.
 				generateCircuit( inner_radius + bevel, outer_radius - bevel, 0.0f, 0.0f, verts, uvs, gen_direction );
 			else
 				generateCircuit( 0.0f, outer_radius - bevel, 0.0f, 0.0f, verts, uvs, gen_direction );
@@ -747,9 +751,8 @@ std::vector<IGeometryGeneratorPtr>    DefaultConePlugin::GetGenerators()
 
     std::vector<IGeometryGeneratorPtr> gens;
     gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::LateralSurface( ConeGenerator::height, ConeGenerator::outer_radius ) ) );
-	if( m_openAngle->GetValue() > 0.0 )
-		gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::ConeClosure( ConeGenerator::height, ConeGenerator::outer_radius ) ) );
-    //gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::LateralSurface( ConeGenerator::inner_height, ConeGenerator::inner_radius ) ) );
+	//if( m_openAngle->GetValue() > 0.0 )
+	//	gens.push_back( IGeometryGeneratorPtr( new ConeGenerator::ConeClosure( ConeGenerator::height, ConeGenerator::outer_radius ) ) );
     return gens;
 }
 
