@@ -90,7 +90,7 @@ DefaultPluginParamValModelPtr   DefaultConePluginDesc::CreateDefaultModel  ( ITi
 	h.AddParam< IntInterpolator, DefaultConePlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
         ( DefaultCone::PN::WEIGHTCENTERZ, DefaultConePlugin::WeightCenter::CENTER, true, true );
   	h.AddParam< IntInterpolator, DefaultConePlugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
-		( PN::MAPPINGTYPE, DefaultConePlugin::MappingType::GOODMAPPING, true, true );
+		( PN::MAPPINGTYPE, DefaultConePlugin::MappingType::OLDSTYLE, true, true );
 
     return h.GetModel();
 }
@@ -177,9 +177,7 @@ namespace ConeGenerator
 			double sin_angle1 = sin( angle1 );
 
 			verts->AddAttribute( glm::vec3( R * cos_angle1, h, R * sin_angle1 ) + center_translate );
-			//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
 			verts->AddAttribute( glm::vec3( R * cos_angle1, h, R * sin_angle1 ) + center_translate );
-			//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
 		}
 
 		/**This awfull function adds two additional points. This generates degenerated triangle to jump to the base surface. */
@@ -221,11 +219,7 @@ namespace ConeGenerator
 				double sin_angle1 = sin( angle1 );
 
 				verts->AddAttribute( glm::vec3( R1 * cos_angle1, h1, R1 * sin_angle1 ) + center_translate );
-				//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
-
 				verts->AddAttribute( glm::vec3( R2 * cos_angle1, h2, R2 * sin_angle1 ) + center_translate );
-				//uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );		// Temp
-
 
 				if( direction )
 					i++;
@@ -233,10 +227,10 @@ namespace ConeGenerator
 					i--;
 			}
 
-			if( !inverse )
-				genCircuitRepairEnding( R1, h1, verts, uvs, i, direction );		/// horrible, but there's no other way to do this
-			else
+			if( inverse )
 				genCircuitRepairEnding( R2, h2, verts, uvs, i, direction );		/// horrible, but there's no other way to do this
+			else
+				genCircuitRepairEnding( R1, h1, verts, uvs, i, direction );		/// horrible, but there's no other way to do this
 
 			direction = !direction;
 		}
@@ -518,7 +512,7 @@ namespace ConeGenerator
 
 			// Add lateral surface
 			generateCircuit( 0.0f, correct_radius, height, correct_y, verts, uvs, gen_direction );
-			repairBaseSurface( inner_radius + bevel, 0.0, verts, uvs, computeAngle2Clamped(TWOPI, 1) + angle_offset );
+			repairBaseSurface( outer_radius - bevel, 0.0, verts, uvs, computeAngle2Clamped(TWOPI, 1) + angle_offset );
 
 			// Add bevel to cone (outer bevel)
 			if( bevel != 0.0 )
