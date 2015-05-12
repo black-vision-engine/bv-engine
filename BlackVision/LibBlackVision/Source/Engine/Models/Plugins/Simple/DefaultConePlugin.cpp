@@ -447,7 +447,7 @@ namespace ConeGenerator
 			generateUVCircuit( circle_center, bevel_radiusUV2, bevel_radiusUV1, verts, uvs, verts_index );
 
 
-			surface_radius1 = circle_radiusUV * inner_radius;
+			surface_radius1 = circle_radiusUV * inner_radius / outer_radius;
 			bevel_radiusUV1 = circle_radiusUV * ( bevel / outer_radius );
 			bevel_radiusUV2 = circle_radiusUV * ( bevel / (sqrt( inner_height * inner_height + inner_radius * inner_radius) ) );
 			surface_radius2 = circle_radiusUV - bevel_radiusUV2;
@@ -479,15 +479,6 @@ namespace ConeGenerator
 
 			if( inner_radius > 0.0 && inner_height > 0.0 )
 				generateUVCircuit( circle_center, bevel_radiusUV1, bevel_radiusUV2, verts, uvs, verts_index );
-
-
-			//for( SizeType v = verts_index; v < verts->GetNumEntries(); v++ )
-			//{
-			//	glm::vec3 vert = verts->GetVertices()[ v ];
-			//	vert -= center_translate;
-			//	uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
-			//									vert.y*0.5 + 0.5 ) ); // FIXME: scaling
-			//}
 		}
 
 		void generateUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
