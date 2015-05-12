@@ -435,8 +435,11 @@ namespace ConeGenerator
 		// Bottom surface of the cone.
 			circle_center = glm::vec2( 0.25, 0.25 );
 			bevel_radiusUV1 = circle_radiusUV * ( outer_radius - bevel ) / outer_radius;
-			bevel_radiusUV2 = circle_radiusUV * ( inner_radius + bevel ) / outer_radius;
-			
+			if( inner_radius > 0.0 && inner_height > 0.0 )
+				bevel_radiusUV2 = circle_radiusUV * ( inner_radius + bevel ) / outer_radius;
+			else	// Since there will be no inner surface, we generate UVs to the circle center.
+				bevel_radiusUV2 = 0.0;
+
 			// Adding two repair surface verticies
 			uvs->AddAttribute( glm::vec2( sin(angle_offset), cos( angle_offset) ) );	++verts_index;
 			uvs->AddAttribute( glm::vec2( sin(angle_offset), cos( angle_offset) ) );	++verts_index;
@@ -449,7 +452,7 @@ namespace ConeGenerator
 			bevel_radiusUV2 = circle_radiusUV * ( bevel / (sqrt( inner_height * inner_height + inner_radius * inner_radius) ) );
 			surface_radius2 = circle_radiusUV - bevel_radiusUV2;
 			// UVs of beveled region
-			if( bevel != 0.0 )
+			if( bevel != 0.0 && inner_radius > 0.0 && inner_height > 0.0 )
 			{
 				circle_center = glm::vec2( 0.25, 0.25 );
 				double bevel_radius_step = bevel_radiusUV1 / (double)bevel_count1;
@@ -474,16 +477,17 @@ namespace ConeGenerator
 			bevel_radiusUV1 = surface_radius2;
 			bevel_radiusUV2 = 0.0;
 
-			generateUVCircuit( circle_center, bevel_radiusUV1, bevel_radiusUV2, verts, uvs, verts_index );
+			if( inner_radius > 0.0 && inner_height > 0.0 )
+				generateUVCircuit( circle_center, bevel_radiusUV1, bevel_radiusUV2, verts, uvs, verts_index );
 
 
-			for( SizeType v = verts_index; v < verts->GetNumEntries(); v++ )
-			{
-				glm::vec3 vert = verts->GetVertices()[ v ];
-				vert -= center_translate;
-				uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
-												vert.y*0.5 + 0.5 ) ); // FIXME: scaling
-			}
+			//for( SizeType v = verts_index; v < verts->GetNumEntries(); v++ )
+			//{
+			//	glm::vec3 vert = verts->GetVertices()[ v ];
+			//	vert -= center_translate;
+			//	uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
+			//									vert.y*0.5 + 0.5 ) ); // FIXME: scaling
+			//}
 		}
 
 		void generateUV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
@@ -531,7 +535,10 @@ namespace ConeGenerator
 
 			// Base surface
 			repairBaseSurface( inner_radius + bevel, 0.0, verts, uvs, angle_offset );
-			generateCircuit( inner_radius + bevel, outer_radius - bevel, 0.0f, 0.0f, verts, uvs, gen_direction );
+			if( inner_radius > 0.0 && inner_height > 0.0 )
+				generateCircuit( inner_radius + bevel, outer_radius - bevel, 0.0f, 0.0f, verts, uvs, gen_direction );
+			else
+				generateCircuit( 0.0f, outer_radius - bevel, 0.0f, 0.0f, verts, uvs, gen_direction );
 
 			// Add bevel to cone (inner bevel)
 			angle_between_edges = atan2( inner_height, inner_radius );
@@ -540,14 +547,15 @@ namespace ConeGenerator
 			circleCenter.x = inner_radius + bevel;
 			circleCenter.y = float( bevel * tan( angle_between_edges / 2 ) );
 
-			if( bevel != 0.0 )
+			if( bevel != 0.0 && inner_radius > 0.0 && inner_height > 0.0  )
 				generateBeveledEdge( circleCenter, angle_between_edges, verts, uvs, gen_direction, true );
 
 			correction = computeCorrection( circleCenter, angle_between_edges, true );
 			correct_radius = correction.x;
 			correct_y = correction.y;
 
-			generateCircuit( correct_radius, 0.0f, correct_y, inner_height, verts, uvs, gen_direction );
+			if( inner_radius > 0.0 && inner_height > 0.0 )
+				generateCircuit( correct_radius, 0.0f, correct_y, inner_height, verts, uvs, gen_direction );
 
 			generateUV( verts, uvs );
         }
