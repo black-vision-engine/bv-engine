@@ -22,12 +22,14 @@ struct PN {
     static const std::string WEIGHTCENTERX; // enum WeightCenter (MIN, MAX, CENTER)
 	static const std::string WEIGHTCENTERY;
 	static const std::string WEIGHTCENTERZ;
+	static const std::string MAPPINGTYPE;
 };
 
 class Plugin : public DefaultGeometryPluginBase
 {
 public:
     enum WeightCenter : int { MAX, MIN, CENTER };
+	enum MappingType : int { OLDSTYLE/*, SPHERICAL*/, GOODMAPPING };
 
     ValueIntPtr										    m_tesselation;
     ValueFloatPtr										m_bevel;
@@ -35,6 +37,7 @@ public:
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterX;
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterY;
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterZ;
+	std::shared_ptr< ParamEnum< MappingType >	>		m_mappingType;
 private:
     virtual std::vector<IGeometryGeneratorPtr>    GetGenerators() override;
 
@@ -51,6 +54,24 @@ inline bool SetParameter< DefaultCube::Plugin::WeightCenter >( IParameterPtr par
 {
     //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
     typedef ParamEnum<DefaultCube::Plugin::WeightCenter> ParamType;
+
+    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
+
+    if( typedParam == nullptr )
+    {
+        return false;
+    }
+
+    typedParam->SetVal( val, t );
+
+    return true;
+}
+
+template<>
+inline bool SetParameter< DefaultCube::Plugin::MappingType >( IParameterPtr param, TimeType t, const DefaultCube::Plugin::MappingType & val )
+{
+    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
+    typedef ParamEnum<DefaultCube::Plugin::MappingType> ParamType;
 
     ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
 

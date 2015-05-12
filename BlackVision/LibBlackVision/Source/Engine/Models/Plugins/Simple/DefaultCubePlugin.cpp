@@ -3,6 +3,7 @@
 namespace bv { namespace model {
 	
 typedef ParamEnum< DefaultCube::Plugin::WeightCenter > ParamEnumWC;
+typedef ParamEnum< DefaultCube::Plugin::MappingType > ParamEnumMT;
 	
 
 VoidPtr    ParamEnumWC::QueryParamTyped  ()
@@ -16,6 +17,17 @@ static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCube
     return CreateParameterEnum< DefaultCube::Plugin::WeightCenter >( name, timeline );
 }
 
+VoidPtr    ParamEnumMT::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
+
+template<>
+static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCube::Plugin::MappingType >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultCube::Plugin::MappingType >( name, timeline );
+}
+
 #include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 	
 namespace DefaultCube {
@@ -26,7 +38,7 @@ const std::string PN::BEVEL = "bevel";
 const std::string PN::WEIGHTCENTERX = "weight center x";
 const std::string PN::WEIGHTCENTERY = "weight center y";
 const std::string PN::WEIGHTCENTERZ = "weight center z";
-
+const std::string PN::MAPPINGTYPE = "mapping type";
 
 PluginDesc::PluginDesc()
     : DefaultGeometryPluginDescBase( UID(), "cube" )
@@ -47,6 +59,8 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
         ( DefaultCube::PN::WEIGHTCENTERY, Plugin::WeightCenter::MIN, true, true );
 	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
         ( DefaultCube::PN::WEIGHTCENTERZ, Plugin::WeightCenter::CENTER, true, true );
+  	h.AddParam< IntInterpolator, Plugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
+		( PN::MAPPINGTYPE, Plugin::MappingType::OLDSTYLE, true, true );
 
     return h.GetModel();
 }
@@ -68,6 +82,7 @@ namespace Generator
     float bevel;
     glm::vec3 dims;
 	glm::vec3 center_translate;
+	Plugin::MappingType mapping_type;
 
 	glm::vec3 computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ )
 	{
@@ -97,6 +112,88 @@ namespace Generator
 		return centerTranslate;
 	}
 
+	enum CubicMappingPlane
+	{
+		PLUS_X,
+		MINUS_X,
+		PLUS_Y,
+		MINUS_Y,
+		PLUS_Z,
+		MINUS_Z
+	};
+
+	float choosePlane( glm::vec3 direction, CubicMappingPlane& plane, glm::vec2& remaining_values )
+	{
+		float max = 0;
+		if( abs( direction.x ) > abs( direction.y ) )
+		{
+			if( abs( direction.x ) > abs( direction.z ) )
+			{
+				max = abs( direction.x );
+				plane = direction.x < 0 ? CubicMappingPlane::MINUS_X : CubicMappingPlane::PLUS_X;
+				remaining_values.x = direction.y;
+				remaining_values.y = direction.z;
+			}
+			else
+			{
+				max = abs( direction.z );
+				plane = direction.z < 0 ? CubicMappingPlane::MINUS_Z : CubicMappingPlane::PLUS_Z;
+				remaining_values.x = direction.x;
+				remaining_values.y = direction.y;
+			}
+		}
+		else
+		{
+			if( abs( direction.y ) > abs( direction.z ) )
+			{
+				max = abs( direction.y );
+				plane = direction.y < 0 ? CubicMappingPlane::MINUS_Y : CubicMappingPlane::PLUS_Y;
+				remaining_values.x = direction.x;
+				remaining_values.y = direction.z;
+			}
+			else
+			{
+				max = abs( direction.z );
+				plane = direction.z < 0 ? CubicMappingPlane::MINUS_Z : CubicMappingPlane::PLUS_Z;
+				remaining_values.x = direction.x;
+				remaining_values.y = direction.y;
+			}
+		}
+		return max;
+	}
+
+	glm::vec2 makeUV( glm::vec2 pre_uv_coords, CubicMappingPlane plane )
+	{
+		glm::vec2 uv_translate;
+		glm::vec2 uv_coords = pre_uv_coords / glm::vec2( 4.0, 3.0 );
+
+		if( plane == CubicMappingPlane::PLUS_X )
+			uv_translate = glm::vec2( 0.0, 1.0 / 3.0 );
+		else if( plane == CubicMappingPlane::MINUS_X )
+			uv_translate = glm::vec2( 1.0 / 2.0, 1.0 / 3.0 );
+		else if( plane == CubicMappingPlane::PLUS_Y )
+			uv_translate = glm::vec2( 3.0 / 4.0, 1.0 / 3.0 );
+		else if( plane == CubicMappingPlane::MINUS_Y )
+			uv_translate = glm::vec2( 1.0 / 2.0, 1.0 / 3.0 );
+		else if( plane == CubicMappingPlane::PLUS_Z )
+			uv_translate = glm::vec2( 1.0 / 2.0, 2.0 / 3.0 );
+		else if( plane == CubicMappingPlane::MINUS_Z )
+			uv_translate = glm::vec2( 1.0 / 2.0, 0.0 );
+		return uv_coords + uv_translate;
+	}
+
+	glm::vec2 computeUV( glm::vec3 position )
+	{
+		CubicMappingPlane plane;
+		glm::vec2 uv_coords;
+		float max_value = choosePlane( position, plane, uv_coords );
+
+		uv_coords = uv_coords / glm::vec2( 2*max_value, 2*max_value );
+		uv_coords += glm::vec2( 0.5, 0.5 );
+
+		return makeUV( uv_coords, plane );
+	}
+
 
     class SideComp : public IGeometryAndUVsGenerator
     {
@@ -114,10 +211,10 @@ namespace Generator
             verts->AddAttribute( glm::vec3( -w,  h, d ) + center_translate );
             verts->AddAttribute( glm::vec3( -w, -h, d ) + center_translate );
 
-            uvs->AddAttribute( glm::vec2(  1,  1 ) );
-            uvs->AddAttribute( glm::vec2(  1, -1 ) );
-            uvs->AddAttribute( glm::vec2( -1,  1 ) );
-            uvs->AddAttribute( glm::vec2( -1, -1 ) );
+            uvs->AddAttribute( computeUV( glm::vec3( w, h, d ) ) );
+            uvs->AddAttribute( computeUV( glm::vec3( w, -h, d ) ) );
+            uvs->AddAttribute( computeUV( glm::vec3( -w, h, d ) ) );
+            uvs->AddAttribute( computeUV( glm::vec3( -w, -h, d ) ) );
         }
 
         SideComp( double d_ ) : d( d_ ) { }
@@ -158,8 +255,21 @@ namespace Generator
             delete[] v;
         }
 
+
         void CopyV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
         {
+			for( int i = 0; i < n-1; i++ )
+                for( int j = 0; j < m; j++ )
+				{
+					uvs->AddAttribute( computeUV( v[ i   ][ j ] ) );
+					uvs->AddAttribute( computeUV( v[ i+1 ][ j ] ) );
+				}
+            for( int j = 0; j < m; j++ )
+            {
+				uvs->AddAttribute( computeUV( v[  n-1 ][ j ] ) );
+				uvs->AddAttribute( computeUV( v[ 0 ][ j ] ) );
+			}
+
             for( int i = 0; i < n-1; i++ )
                 for( int j = 0; j < m; j++ )
                 {
@@ -172,13 +282,13 @@ namespace Generator
                 verts->AddAttribute( v[ 0   ][ j ] + center_translate );
             }
 
-            for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
-            {
-                glm::vec3 vert = verts->GetVertices()[ v ];
-				vert -= center_translate;
-                uvs->AddAttribute( glm::vec2( 0.5*( vert.x + vert.y + 1.f ),
-                                                vert.z + 0.5 ) ); // FIXME: scaling
-            }
+    //        for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
+    //        {
+    //            glm::vec3 vert = verts->GetVertices()[ v ];
+				//vert -= center_translate;
+    //            uvs->AddAttribute( glm::vec2( 0.5*( vert.x + vert.y + 1.f ),
+    //                                            vert.z + 0.5 ) ); // FIXME: scaling
+    //        }
         }
 
         void GenerateLine( int i, double x, double y, double a )
@@ -245,6 +355,7 @@ std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
 																	m_weightCenterX->Evaluate(),
 																	m_weightCenterY->Evaluate(),
 																	m_weightCenterZ->Evaluate() );
+	Generator::mapping_type = m_mappingType->Evaluate();
     
     double depth = Generator::dims.z/2;
     
@@ -262,7 +373,8 @@ bool                                Plugin::NeedsTopologyUpdate()
         ParameterChanged( PN::TESSELATION )	||
 		ParameterChanged( PN::WEIGHTCENTERX ) ||
 		ParameterChanged( PN::WEIGHTCENTERY ) ||
-		ParameterChanged( PN::WEIGHTCENTERZ );;
+		ParameterChanged( PN::WEIGHTCENTERZ ) ||
+		ParameterChanged( PN::MAPPINGTYPE );
 }
 
 Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
@@ -275,6 +387,8 @@ Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr pr
 	m_weightCenterX = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERX ) );
 	m_weightCenterY = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERY ) );
 	m_weightCenterZ = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERZ ) );
+
+	m_mappingType = QueryTypedParam< std::shared_ptr< ParamEnum< MappingType > > >( GetParameter( PN::MAPPINGTYPE ) );
 
     m_pluginParamValModel->Update();
     InitGeometry();
