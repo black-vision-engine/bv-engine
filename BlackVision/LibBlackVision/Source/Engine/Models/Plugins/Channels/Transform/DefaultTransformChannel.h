@@ -15,7 +15,6 @@ class IPlugin;
 class DefaultTransformChannel : public ITransformChannel
 {
 private:
-
     ValueMat4PtrVec             m_values;
     const ValueMat4PtrVec *     m_prevValues;
 
@@ -27,6 +26,7 @@ private:
 
 public:
 
+    static  DefaultTransformChannel *   Create                  ();
     static  DefaultTransformChannel *   Create                  ( IPluginPtr prev, const ValueMat4PtrVec & values, bool isReadOnly = false );
 
     virtual const ValueMat4PtrVec &     GetTransformValues      ()  const override;

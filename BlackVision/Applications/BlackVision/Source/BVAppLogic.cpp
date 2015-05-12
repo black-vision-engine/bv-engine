@@ -18,12 +18,12 @@
 
 #include "MockScenes.h"
 #include "DefaultPlugins.h"
-#include "LibEffect.h"
 
 //FIXME: remove
 #include "testai/TestAIManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "BVGL.h"
+#include "Engine/Models/ModelNodeEditor.h"
 //FIXME: end of remove
 
 #define _USE_MATH_DEFINES
@@ -124,8 +124,6 @@ void BVAppLogic::Initialize         ()
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
-
-	bv::effect::InitializeLibEffect( m_renderer );
 }
 
 // *********************************
@@ -134,9 +132,12 @@ void BVAppLogic::LoadScene          ( void )
 {
     //model::BasicNodePtr root = TestScenesFactory::OlafTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
     //model::BasicNodePtr root = TestScenesFactory::CreedTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
-    //model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
-	model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
+    model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
+    
+	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_ANIMATION_RECTANGLE );
+	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
 	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
+	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_SOLID_RECTANGLE );
 
 	assert( root );
 
@@ -225,78 +226,100 @@ model::IModelNodePtr BVAppLogic::CreateTestModelNodeInSomeSpecificScope( const s
 //
 void BVAppLogic::OnKey           ( unsigned char c )
 {
-    if( c == '-' )
+	//test in this order: 1 2 3 4 5 6 7 8 (8 should throw exception)
+    if( c == '1' )
     {
-        BVGL::PrintCompleteSummary( "BEFORE REMOVING ROOT NODE" );
-        m_bvScene->GetSceneEditor()->DeleteRootNode();
-    }
-    else if( c == 8 )
-    {
-        BVGL::PrintCompleteSummary( "BEFORE REMOVING ROOT NODE" );
+        BVGL::PrintCompleteSummary( "DETACH TEXTURE PLUGIN FROM BOTH NODES" );
 
         auto root = m_bvScene->GetModelSceneRoot();
-        m_bvScene->GetSceneEditor()->DeleteChildNode( root, "child0" );
-        //root->DeleteNode( "child0", m_renderer );
-        
-        //auto child = root->GetChild( "child0" );
-        //child->DeleteNode( "child01", m_renderer );
-        BVGL::PrintCompleteSummary( "AFTER REMOVING ROOT NODE" );
-    }
-    else if( c == '+' )
-    {
-        auto root = m_bvScene->GetModelSceneRoot();
-        
-        if( root )
-        {
-            auto child = root->GetChild( "child0" );
+		auto child = root->GetChild(0);
 
-            if( child )
-            {
-                auto n = child->GetNumChildren();
-                auto nodeName = "child0" + std::to_string(n);
+		assert( root->GetPluginList()->NumPlugins() == 3 );
+		assert( child->GetPluginList()->NumPlugins() == 3 );
 
-                auto newNode = CreateTestModelNodeInSomeSpecificScope( nodeName );
+		m_bvScene->GetSceneEditor()->DetachPlugin( root, "texture" );
+		m_bvScene->GetSceneEditor()->DetachPlugin( child, "texture" );
+		
+		assert( root->GetPluginList()->NumPlugins() == 2 );
+		assert( child->GetPluginList()->NumPlugins() == 2 );
 
-                m_bvScene->GetSceneEditor()->AddChildNode( child, newNode );            
-            }
-            else
-            {
-                auto newNode = CreateTestModelNodeInSomeSpecificScope( "child0" );
-                
-                m_bvScene->GetSceneEditor()->AddChildNode( root, newNode );            
-            }
-        }
-        else
-        {
-            auto newNode = CreateTestModelNodeInSomeSpecificScope( "root node" );
-        
-            m_bvScene->GetSceneEditor()->SetRootNode( newNode );
-        }
-
-        BVGL::PrintCompleteSummary( "AFTER ADD NODE" );
-    }
-    else if( c == '1' )
-    {
-        m_bvScene->GetSceneEditor()->DetachRootNode();
-        BVGL::PrintCompleteSummary( "AFTER DETACH ROOT NODE" );
-    }
+		assert( root->GetModelNodeEditor()->GetDetachedPlugin() != nullptr );
+		assert( child->GetModelNodeEditor()->GetDetachedPlugin() != nullptr );
+	}
     else if( c == '2' )
     {
-        m_bvScene->GetSceneEditor()->AttachRootNode();
-        BVGL::PrintCompleteSummary( "AFTER ATTACH ROOT NODE" );
+        BVGL::PrintCompleteSummary( "ATTACH DETACHED TEXTURE PLUGIN FROM ROOT TO CHILD NODE" );
+		auto root = m_bvScene->GetModelSceneRoot();
+		auto child = root->GetChild(0);
+		m_bvScene->GetSceneEditor()->AttachPlugin( root, child, 2 );
+
+		assert( root->GetModelNodeEditor()->GetDetachedPlugin() == nullptr );
+
+		assert( child->GetPluginList()->NumPlugins() == 3 );
+		assert( root->GetPluginList()->NumPlugins() == 2 );
     }
 
     else if( c == '3' )
     {
-        auto root = m_bvScene->GetModelSceneRoot();
-        
-        if( root )
-        {
-            m_bvScene->GetSceneEditor()->AttachChildNode( root );
+        BVGL::PrintCompleteSummary( "ADD COLOR PLUGIN TO ROOT NODE" );
+		auto root = m_bvScene->GetModelSceneRoot();
+		auto plugin = model::PluginsManager::DefaultInstanceRef().CreatePlugin( "DEFAULT_COLOR", root->GetPluginList()->GetLastPlugin(), m_globalTimeline );
+		model::SetParameter( plugin->GetParameter( "color" ), 0.f, glm::vec4( 1, 0, 0, 1 ) );
 
-            BVGL::PrintCompleteSummary( "AFTER ATTACH NODE TO ROOT" );
-        }
+		m_bvScene->GetSceneEditor()->AddPlugin( root, plugin, 2 );
+
+		assert( root->GetPluginList()->NumPlugins() == 3 );
     }
+	
+    else if( c == '4' )
+    {
+        BVGL::PrintCompleteSummary( "DETACH TRANSFORM PLUGIN FROM ROOT NODE" );
+		auto root = m_bvScene->GetModelSceneRoot();
+		m_bvScene->GetSceneEditor()->DetachPlugin( root, "transform" );
+		
+		assert( root->GetModelNodeEditor()->GetDetachedPlugin() != nullptr );
+		assert( root->GetPluginList()->NumPlugins() == 2 );
+	}
+
+    else if( c == '5' )
+	{
+		BVGL::PrintCompleteSummary( "ATTACH DETACHED TRANSFORM PLUGIN TO ROOT NODE" );
+		auto root = m_bvScene->GetModelSceneRoot();
+		m_bvScene->GetSceneEditor()->AttachPlugin( root, 0 );
+
+		assert( root->GetModelNodeEditor()->GetDetachedPlugin() == nullptr );
+		assert( root->GetPluginList()->NumPlugins() == 3 );
+	}
+
+	else if( c == '6' )
+	{
+		BVGL::PrintCompleteSummary( "DELETE RECTANGLE PLUGIN FROM ROOT NODE" );
+		auto root = m_bvScene->GetModelSceneRoot();
+		m_bvScene->GetSceneEditor()->DeletePlugin( root, "rectangle" );
+
+		assert( root->GetModelNodeEditor()->GetDetachedPlugin() == nullptr );
+		assert( root->GetPluginList()->NumPlugins() == 2 );
+	}
+
+	else if( c == '7' )
+	{
+		BVGL::PrintCompleteSummary( "EMPTY PLUGIN LIST FOR ROOT NODE" );
+		auto root = m_bvScene->GetModelSceneRoot();
+		m_bvScene->GetSceneEditor()->DeletePlugin( root, "transform" );
+		m_bvScene->GetSceneEditor()->DeletePlugin( root, "solid color" );
+
+		assert( root->GetModelNodeEditor()->GetDetachedPlugin() == nullptr );
+		assert( root->GetPluginList()->NumPlugins() == 0 );
+	}
+
+	else if( c == '8' )
+	{
+		BVGL::PrintCompleteSummary( "ERROR - DELETE RECTANGLE NODE FROM CHILD NODE - INVALID PLUGINS ORDER [TRANSFORM, TEXTURE]" );
+		auto root = m_bvScene->GetModelSceneRoot();
+		auto child = root->GetChild(0);
+		m_bvScene->GetSceneEditor()->DeletePlugin( child, "rectangle" );
+	}
+
 /*
     // FIXME: the code below is must be used with an animation plugin
     unsigned char d = c - '0';

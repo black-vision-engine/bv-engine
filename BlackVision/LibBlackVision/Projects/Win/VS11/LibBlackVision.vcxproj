@@ -257,6 +257,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BVScene.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneTools.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\ModelNodeEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelSceneEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\ChannelsFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeGeometryShaderChannel.cpp" />
@@ -377,6 +378,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\ModelNodeEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\ICachedParameter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IState.h" />
@@ -671,6 +673,7 @@
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\GenericShaderParam.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParameters.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\RenderableEffect.inl" />
+    <None Include="..\..\..\Source\Engine\Models\BVSceneEditor.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeShaderChannel.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.inl" />

@@ -9,7 +9,7 @@
 
 #include "Engine/Models/ModelSceneEditor.h"
 #include "Engine/Graphics/SceneGraph/SceneEditor.h"
-
+#include "Engine/Models/ModelNodeEditor.h"
 
 namespace bv {
     
@@ -26,6 +26,7 @@ model::BasicNodePtr QueryTyped( model::IModelNodePtr node )
 // *******************************
 //
 BVSceneEditor::BVSceneEditor                ( BVScene * scene )
+	: m_scene( scene )
 {
     assert( scene != nullptr );
     assert( scene->m_renderer != nullptr );
@@ -179,6 +180,97 @@ void            BVSceneEditor::DeleteDetachedNodes          ()
 model::IModelNodePtr    BVSceneEditor::GetRootNode          ()
 {
     return m_modelSceneEditor->GetRootNode();
+}
+
+
+// *******************************
+//
+void					BVSceneEditor::AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, unsigned int idx )
+{
+	auto editor = node->GetModelNodeEditor();
+	editor->AddPlugin( plugin, idx );
+	editor->RefreshNode( GetEngineNode( node ), m_scene->m_renderer );
+}
+
+// *******************************
+//
+bool					BVSceneEditor::DeletePlugin          ( model::BasicNodePtr node, const std::string & name )
+{
+	auto editor = node->GetModelNodeEditor();
+	if ( editor->DeletePlugin( name ) )
+	{
+		editor->RefreshNode( GetEngineNode( node ), m_scene->m_renderer );
+		return true;
+	}
+	return false;
+}
+
+// *******************************
+//
+bool					BVSceneEditor::DeletePlugin          ( model::BasicNodePtr node, unsigned int idx )
+{
+	auto editor = node->GetModelNodeEditor();
+	if ( editor->DeletePlugin( idx ) )
+	{
+		editor->RefreshNode( GetEngineNode( node ), m_scene->m_renderer );
+		return true;
+	}
+	return false;
+}
+
+// *******************************
+//
+bool					BVSceneEditor::AttachPlugin          ( model::BasicNodePtr node, unsigned int idx )
+{
+	auto editor = node->GetModelNodeEditor();
+	if( editor->AttachPlugin(idx) )
+	{
+		editor->RefreshNode( GetEngineNode( node ), m_scene->m_renderer );
+		return true;
+	}
+	return false;
+}
+
+// *******************************
+//
+bool                    BVSceneEditor::AttachPlugin			( model::BasicNodePtr sourceNode, model::BasicNodePtr targetNode, unsigned int idx )
+{
+	auto sourceEditor = sourceNode->GetModelNodeEditor();
+	auto targetEditor = targetNode->GetModelNodeEditor();
+
+	if( targetEditor->AddPlugin(sourceEditor->GetDetachedPlugin(), idx) )
+	{
+		sourceEditor->ResetDetachedPlugin();
+		targetEditor->RefreshNode( GetEngineNode( targetNode ), m_scene->m_renderer );
+		return true;
+	}
+	return false;
+}
+
+// *******************************
+//
+bool					BVSceneEditor::DetachPlugin          ( model::BasicNodePtr node, const std::string & name )
+{
+	auto editor = node->GetModelNodeEditor();
+	if ( editor->DetachPlugin( name ) )
+	{
+		editor->RefreshNode( GetEngineNode( node ), m_scene->m_renderer );
+		return true;
+	}
+	return false;
+}
+
+// *******************************
+//
+bool					BVSceneEditor::DetachPlugin          ( model::BasicNodePtr node, unsigned int idx )
+{
+	auto editor = node->GetModelNodeEditor();
+	if ( editor->DetachPlugin( idx ) )
+	{
+		editor->RefreshNode( GetEngineNode( node ), m_scene->m_renderer );
+		return true;
+	}
+	return false;
 }
 
 // *******************************

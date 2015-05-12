@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Models/Plugins/Interfaces/IFinalizePlugin.h"
+#include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
 
 #include "Engine/Models/Plugins/Channels/DefaultFinalizePixelShaderChannel.h"
@@ -20,11 +21,14 @@ private:
     std::string                     m_name;
     static std::string              m_uid;
 
+    DefaultPixelShaderChannelPtr	m_defaultPSChannel;
     DefaultVertexShaderChannelPtr   m_defaultVSChannel;
 
     mutable DefaultFinalizePixelShaderChannelPtr    m_finalizePSC;
     mutable DefaultFinalizeVertexShaderChannelPtr   m_finalizeVSC;
     mutable DefaultFinalizeGeometryShaderChannelPtr m_finalizeGSC;
+
+	ITransformChannelConstPtr		m_defaultTransformChannel;
 
 public:
 
@@ -48,18 +52,21 @@ public:
     virtual RendererContextConstPtr             GetRendererContext          () const override;
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const override;
+    virtual IPluginPtr							GetPrevPlugin               () override;
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & currentTransformation ) const override;
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
     virtual void                                Update                      ( TimeType t ) override;
 
-    void                                        SetPrevPlugin               ( IPluginPtr plugin );
+    virtual void                                SetPrevPlugin               ( IPluginPtr plugin ) override;
     void                                        SetName                     ( const std::string & name );
 
     static std::string                          ShadersDir                  ();
 
 	virtual ParamTransformVecPtr				GetParamTransform			() const override;
+
+    virtual bool								IsValid						() override;
 
 private:
 
