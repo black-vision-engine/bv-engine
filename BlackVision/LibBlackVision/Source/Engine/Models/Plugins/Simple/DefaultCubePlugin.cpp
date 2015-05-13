@@ -114,10 +114,10 @@ namespace Generator
 
 	enum CubicMappingPlane
 	{
-		PLUS_X,
-		MINUS_X,
-		PLUS_Y,
-		MINUS_Y,
+		PLUS_X = 3,
+		MINUS_X = 1,
+		PLUS_Y = 0,
+		MINUS_Y = 2,
 		PLUS_Z,
 		MINUS_Z
 	};
@@ -255,31 +255,129 @@ namespace Generator
             delete[] v;
         }
 
+		glm::vec2 getUV( float bevel1, float bevel2, bool inverse1, bool inverse2 )
+		{
+			float u = bevel1;
+			float v = bevel2;
+			if( inverse1 )
+				u = 1 - u;
+			if( inverse2 )
+				v = 1 - v;
+			return glm::vec2(u, v);
+		}
+
+		void generateLineUV( int face, int k, bool inverse, Float2AttributeChannelPtr uvs )
+		{
+			int main_plane_tess = tesselation / 2;
+			int remain_plane_tess = tesselation - main_plane_tess;
+
+			float bevel_step1;
+			if( face == 0 || face == 2 )
+				bevel_step1 = ( dims.y - bevel ) / ( main_plane_tess * dims.y );
+			else
+				bevel_step1 = ( dims.x - bevel ) / ( main_plane_tess * dims.x );
+
+			float bevel_step2 = ( dims.z - bevel ) / ( remain_plane_tess * dims.z );
+
+
+
+			for( int j = 0; j <= main_plane_tess; ++j )
+			{
+				// @fixme
+				glm::vec2 pre_uv1 = getUV( bevel_step1 * k, bevel_step2 * j, inverse, false );
+				glm::vec2 pre_uv2 = getUV( bevel_step1 * (k+1), bevel_step2 * j, inverse, false );
+				uvs->AddAttribute( makeUV( pre_uv1, static_cast<CubicMappingPlane>(face) ) );
+				uvs->AddAttribute( makeUV( pre_uv2, static_cast<CubicMappingPlane>(face) ) );
+			}
+
+			for( int j = 0; j <= remain_plane_tess; ++j )
+			{
+				glm::vec2 pre_uv1 = getUV( bevel_step1 * k, bevel_step2 * j, inverse, false );
+				glm::vec2 pre_uv2 = getUV( bevel_step1 * (k+1), bevel_step2 * j, inverse, false );
+				uvs->AddAttribute( makeUV( pre_uv1, static_cast<CubicMappingPlane>(face) ) );
+				uvs->AddAttribute( makeUV( pre_uv2, static_cast<CubicMappingPlane>(face) ) );
+			}
+
+
+			for( int j = remain_plane_tess; j >= 0; --j )
+			{
+				glm::vec2 pre_uv1 = getUV( bevel_step1 * k, bevel_step2 * j, inverse, true );
+				glm::vec2 pre_uv2 = getUV( bevel_step1 * (k+1), bevel_step2 * j, inverse, true );
+				uvs->AddAttribute( makeUV( pre_uv1, static_cast<CubicMappingPlane>(face) ) );
+				uvs->AddAttribute( makeUV( pre_uv2, static_cast<CubicMappingPlane>(face) ) );
+			}
+			for( int j = main_plane_tess; j >= 0; --j )
+			{
+				// @fixme
+				glm::vec2 pre_uv1 = getUV( bevel_step1 * k, bevel_step2 * j, inverse, true );
+				glm::vec2 pre_uv2 = getUV( bevel_step1 * (k+1), bevel_step2 * j, inverse, true );
+				uvs->AddAttribute( makeUV( pre_uv1, static_cast<CubicMappingPlane>(face) ) );
+				uvs->AddAttribute( makeUV( pre_uv2, static_cast<CubicMappingPlane>(face) ) );
+			}
+		}
+
+		
+
+		void generatePartUV( int face, Float2AttributeChannelPtr uvs )
+		{
+			int main_plane_tess = tesselation / 2;
+			int remain_plane_tess = tesselation - main_plane_tess;
+
+			// Big plane and things around
+				// @fixme
+			generateLineUV( face, 0, false, uvs );
+
+			for( int k = 0; k < main_plane_tess; ++k )
+				generateLineUV( face, k, false, uvs );
+			for( int k = 0; k < remain_plane_tess; ++k )
+				generateLineUV( face, k, true, uvs );
+			
+		}
+
 
         void CopyV( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs )
         {
-			for( int i = 0; i < n-1; i++ )
-                for( int j = 0; j < m; j++ )
-				{
-					uvs->AddAttribute( computeUV( v[ i   ][ j ] ) );
-					uvs->AddAttribute( computeUV( v[ i+1 ][ j ] ) );
-				}
-            for( int j = 0; j < m; j++ )
-            {
-				uvs->AddAttribute( computeUV( v[  n-1 ][ j ] ) );
-				uvs->AddAttribute( computeUV( v[ 0 ][ j ] ) );
-			}
+			//for( int i = 0; i < n-1; i++ )
+   //             for( int j = 0; j < m; j++ )
+			//	{
+			//		uvs->AddAttribute( computeUV( v[ i   ][ j ] ) );
+			//		uvs->AddAttribute( computeUV( v[ i+1 ][ j ] ) );
+			//	}
+   //         for( int j = 0; j < m; j++ )
+   //         {
+			//	uvs->AddAttribute( computeUV( v[  n-1 ][ j ] ) );
+			//	uvs->AddAttribute( computeUV( v[ 0 ][ j ] ) );
+			//}
+
+			for( int face = 0; face < 4; ++face )
+				generatePartUV( face, uvs );
+
+			int main_plane_tess = tesselation / 2;
+			int remain_plane_tess = tesselation - main_plane_tess;
+
 
             for( int i = 0; i < n-1; i++ )
                 for( int j = 0; j < m; j++ )
                 {
 					verts->AddAttribute( v[ i   ][ j ] + center_translate );
                     verts->AddAttribute( v[ i+1 ][ j ] + center_translate );
+
+					if( j == main_plane_tess || j == tesselation + 1 + remain_plane_tess )
+					{
+						verts->AddAttribute( v[ i   ][ j ] + center_translate );
+						verts->AddAttribute( v[ i+1 ][ j ] + center_translate );
+					}
                 }
             for( int j = 0; j < m; j++ )
             {
                 verts->AddAttribute( v[ n-1 ][ j ] + center_translate );
                 verts->AddAttribute( v[ 0   ][ j ] + center_translate );
+
+				if( j == main_plane_tess || j == tesselation + 1 + remain_plane_tess )
+				{
+					verts->AddAttribute( v[ n-1   ][ j ] + center_translate );
+					verts->AddAttribute( v[ 0 ][ j ] + center_translate );
+				}
             }
 
     //        for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
