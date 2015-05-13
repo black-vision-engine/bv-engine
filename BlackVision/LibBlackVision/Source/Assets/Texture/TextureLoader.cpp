@@ -1,9 +1,6 @@
 #include "TextureLoader.h"
 #include "LibImage.h"
 
-#include "Assets/Texture/TextureAssetDescriptor.h"
-#include "Assets/Texture/SingleTextureAsset.h"
-#include "Assets/Texture/TextureAsset.h"
 #include "Assets/Texture/TextureCache.h"
 #include "Tools/MipMapBuilder/Source/MipMapBuilder.h"
 #include "Assets/Cache/RawDataCache.h"
@@ -49,75 +46,29 @@ AssetConstPtr TextureLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 
 	assert( typedDesc );
 
-	TextureAssetConstPtr ret = nullptr;
-
 	switch( typedDesc->GetLoadingType() )
 	{
 		case TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
 		{
-			auto origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc(), typedDesc->GetOrigTextureDesc()->IsCacheable() );
-	
-			ret = TextureAsset::Create( origRes, nullptr );
-
-			break;
+			return LoadOrginalTextureOnly( typedDesc );
 		}
 
 		case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
 		{
-			auto origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc(), typedDesc->GetOrigTextureDesc()->IsCacheable() );
-
-			auto mipMapsSize = typedDesc->GetMipMapsDesc()->GetLevelsNum();
-
-			std::vector< SingleTextureAssetConstPtr > mipMapsRes;
-
-			for( SizeType i = 0; i < mipMapsSize; ++i )
-			{
-				auto levelDesc = typedDesc->GetMipMapsDesc()->GetLevelDesc( i );
-				mipMapsRes.push_back( LoadSingleTexture( levelDesc, levelDesc->IsCacheable() ) );
-			}
-
-			auto mipMapRes = MipMapAsset::Create( mipMapsRes );
-
-			ret = TextureAsset::Create( origRes, mipMapRes );
-			break;
+			return LoadTextureAndMipMaps( typedDesc );
 		}
 
 		case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
 		{
-			auto origW = typedDesc->GetOrigTextureDesc()->GetWidth();
-			auto origH = typedDesc->GetOrigTextureDesc()->GetHeight();
+			return LoadTextureAndGenerateMipMaps( typedDesc );
+		}
 
-			auto mm = tools::GenerateMipmaps(	typedDesc->GetOrigTextureDesc()->GetImagePath(),
-												(int)typedDesc->GetMipMapsDesc()->GetLevelsNum(),
-												ToMMBuilderFilterType( typedDesc->GetMipMapsDesc()->GetFilter() ) );
-
-
-			std::vector< SingleTextureAssetConstPtr > mipMapsRes;
-
-			SingleTextureAssetConstPtr origRes = LoadSingleTexture( typedDesc->GetOrigTextureDesc(), typedDesc->GetOrigTextureDesc()->IsCacheable() );
-
-			SizeType i = 0;
-			if( mm[ 0 ].width == origW && mm[ 0 ].height == origH )
-			{
-				mipMapsRes.push_back( origRes );
-				i = 1;
-			}
-
-			for(; i < mm.size(); ++i )
-			{
-				auto w = mm[ i ].width;
-				auto h = mm[ i ].height;
-				auto key = TextureCache::GenKeyForGeneratedMipMap( typedDesc->GetOrigTextureDesc()->GetImagePath(), w, h, TextureFormat::F_A8R8G8B8, i, typedDesc->GetMipMapsDesc()->GetFilter() );
-				mipMapsRes.push_back( SingleTextureAsset::Create( mm[ i ].data, key, w, h, TextureFormat::F_A8R8G8B8 ) );
-			}
-
-			ret = TextureAsset::Create( origRes, MipMapAsset::Create( mipMapsRes ) );
-			break;
+		default:
+		{
+			assert( !"Should never be here" );
+			return nullptr;
 		}
 	}
-
-
-	return ret;
 }
 
 // ******************************
@@ -172,6 +123,78 @@ MemoryChunkConstPtr TextureLoader::LoadImage( const std::string & path )
     }
 
 	return data;
+}
+
+// ******************************
+//
+TextureAssetConstPtr TextureLoader::LoadOrginalTextureOnly			( const TextureAssetDescConstPtr & desc )
+{
+	assert( desc->GetLoadingType() == TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE );
+
+	auto origRes = LoadSingleTexture( desc->GetOrigTextureDesc(), desc->GetOrigTextureDesc()->IsCacheable() );
+	
+	return TextureAsset::Create( origRes, nullptr );
+}
+
+// ******************************
+//
+TextureAssetConstPtr TextureLoader::LoadTextureAndMipMaps			( const TextureAssetDescConstPtr & desc )
+{
+	assert( desc->GetLoadingType() == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS );
+
+	auto origRes = LoadSingleTexture( desc->GetOrigTextureDesc(), desc->GetOrigTextureDesc()->IsCacheable() );
+
+	auto mipMapsSize = desc->GetMipMapsDesc()->GetLevelsNum();
+
+	std::vector< SingleTextureAssetConstPtr > mipMapsRes;
+
+	for( SizeType i = 0; i < mipMapsSize; ++i )
+	{
+		auto levelDesc = desc->GetMipMapsDesc()->GetLevelDesc( i );
+		mipMapsRes.push_back( LoadSingleTexture( levelDesc, levelDesc->IsCacheable() ) );
+	}
+
+	auto mipMapRes = MipMapAsset::Create( mipMapsRes );
+
+	return TextureAsset::Create( origRes, mipMapRes );
+
+
+}
+
+// ******************************
+//
+TextureAssetConstPtr TextureLoader::LoadTextureAndGenerateMipMaps	( const TextureAssetDescConstPtr & desc )
+{
+	assert( desc->GetLoadingType() == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS );
+
+	auto origW = desc->GetOrigTextureDesc()->GetWidth();
+	auto origH = desc->GetOrigTextureDesc()->GetHeight();
+
+	auto mm = tools::GenerateMipmaps(	desc->GetOrigTextureDesc()->GetImagePath(),
+										(int)desc->GetMipMapsDesc()->GetLevelsNum(),
+										ToMMBuilderFilterType( desc->GetMipMapsDesc()->GetFilter() ) );
+
+
+	std::vector< SingleTextureAssetConstPtr > mipMapsRes;
+
+	SingleTextureAssetConstPtr origRes = LoadSingleTexture( desc->GetOrigTextureDesc(), desc->GetOrigTextureDesc()->IsCacheable() );
+
+	SizeType i = 0;
+	if( mm[ 0 ].width == origW && mm[ 0 ].height == origH )
+	{
+		mipMapsRes.push_back( origRes );
+		i = 1;
+	}
+
+	for(; i < mm.size(); ++i )
+	{
+		auto w = mm[ i ].width;
+		auto h = mm[ i ].height;
+		auto key = TextureCache::GenKeyForGeneratedMipMap( desc->GetOrigTextureDesc()->GetImagePath(), w, h, TextureFormat::F_A8R8G8B8, i, desc->GetMipMapsDesc()->GetFilter() );
+		mipMapsRes.push_back( SingleTextureAsset::Create( mm[ i ].data, key, w, h, TextureFormat::F_A8R8G8B8 ) );
+	}
+
+	return TextureAsset::Create( origRes, MipMapAsset::Create( mipMapsRes ) );
 }
 
 } // bv

@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Assets/Texture/SingleTextureAssetDescriptor.h"
+#include "Assets/Texture/SingleTextureAsset.h"
+
 #include "Assets/Texture/TextureAssetDescriptor.h"
 #include "Assets/Texture/TextureLoader.h"
 #include "Assets/Texture/TextureAsset.h"
