@@ -118,8 +118,8 @@ namespace Generator
 		MINUS_X = 1,
 		PLUS_Y = 0,
 		MINUS_Y = 2,
-		PLUS_Z,
-		MINUS_Z
+		PLUS_Z = 4,
+		MINUS_Z = 5
 	};
 
 	float choosePlane( glm::vec3 direction, CubicMappingPlane& plane, glm::vec2& remaining_values )
