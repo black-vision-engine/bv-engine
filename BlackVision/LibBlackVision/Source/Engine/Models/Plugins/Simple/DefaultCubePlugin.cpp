@@ -174,11 +174,11 @@ namespace Generator
 		else if( plane == CubicMappingPlane::PLUS_Y )
 			uv_translate = glm::vec2( 3.0 / 4.0, 1.0 / 3.0 );
 		else if( plane == CubicMappingPlane::MINUS_Y )
-			uv_translate = glm::vec2( 1.0 / 2.0, 1.0 / 3.0 );
+			uv_translate = glm::vec2( 1.0 / 4.0, 1.0 / 3.0 );
 		else if( plane == CubicMappingPlane::PLUS_Z )
-			uv_translate = glm::vec2( 1.0 / 2.0, 2.0 / 3.0 );
-		else if( plane == CubicMappingPlane::MINUS_Z )
 			uv_translate = glm::vec2( 1.0 / 2.0, 0.0 );
+		else if( plane == CubicMappingPlane::MINUS_Z )
+			uv_translate = glm::vec2( 1.0 / 2.0, 2.0 / 3.0 );
 		return uv_coords + uv_translate;
 	}
 
@@ -219,15 +219,25 @@ namespace Generator
 
 			float bevelUV1 = bevel / dims.x;
 			float bevelUV2 = bevel / dims.y;
-			glm::vec2 pre_uv1 = glm::vec2( bevelUV1, bevelUV2 );
-			glm::vec2 pre_uv2 = glm::vec2( bevelUV1, 1 - bevelUV2 );
-			glm::vec2 pre_uv3 = glm::vec2( 1 - bevelUV1, bevelUV2 );
-			glm::vec2 pre_uv4 = glm::vec2( 1 - bevelUV1, 1 - bevelUV2 );
+			glm::vec2 pre_uv1 = glm::vec2( 1 - bevelUV1, 1 - bevelUV2 );
+			glm::vec2 pre_uv2 = glm::vec2( 1 - bevelUV1, bevelUV2 );
+			glm::vec2 pre_uv3 = glm::vec2( bevelUV1, 1 - bevelUV2 );
+			glm::vec2 pre_uv4 = glm::vec2( bevelUV1, bevelUV2 );
 
-			uvs->AddAttribute( makeUV( pre_uv1, mapping_plane ) );
-			uvs->AddAttribute( makeUV( pre_uv2, mapping_plane ) );
-			uvs->AddAttribute( makeUV( pre_uv3, mapping_plane ) );
-			uvs->AddAttribute( makeUV( pre_uv4, mapping_plane ) );
+			if( d < 0 )
+			{
+				uvs->AddAttribute( makeUV( pre_uv2, mapping_plane ) );
+				uvs->AddAttribute( makeUV( pre_uv1, mapping_plane ) );
+				uvs->AddAttribute( makeUV( pre_uv4, mapping_plane ) );
+				uvs->AddAttribute( makeUV( pre_uv3, mapping_plane ) );
+			}
+			else
+			{
+				uvs->AddAttribute( makeUV( pre_uv1, mapping_plane ) );
+				uvs->AddAttribute( makeUV( pre_uv2, mapping_plane ) );
+				uvs->AddAttribute( makeUV( pre_uv3, mapping_plane ) );
+				uvs->AddAttribute( makeUV( pre_uv4, mapping_plane ) );
+			}
         }
 
         SideComp( double d_ ) : d( d_ ) { }
