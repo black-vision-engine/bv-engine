@@ -7,11 +7,13 @@ namespace bv
 // NOTE: used by GLConstantTextureFormat and GLConstantTextureType (PdrConstants.cpp)
 enum class TextureFormat : int
 {
-    F_A8R8G8B8 = 0  ,
-    F_R8G8B8        ,
-    F_A8            ,
-    F_L8            ,
-    F_R32F          ,
+    F_A8R8G8B8 = 0		,
+	F_A32FR32FG32FB32F	,
+    F_R8G8B8			,
+    F_A8				,
+	F_A32F				,
+    F_L8				,
+    F_R32F				,
     F_TOTAL
 };
 

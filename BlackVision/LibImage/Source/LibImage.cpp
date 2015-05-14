@@ -89,6 +89,46 @@ ImageProperties GetImageProps( const std::string & imageFilePath )
 	return iprops;
 }
 
+namespace {
+
+// *********************************
+//
+FIBITMAP * ConvertToNearestSupported( FIBITMAP * bitmap )
+{
+	auto bpp = FreeImage_GetBPP( bitmap );
+
+	auto imgType = FreeImage_GetImageType( bitmap );
+
+	if( imgType == FIT_BITMAP )
+	{
+		switch( bpp )
+		{
+		case 32:
+			return bitmap;
+		case 24:
+		case 16:
+			return FreeImage_ConvertTo32Bits( bitmap );
+		case 8:
+		case 4:
+		case 1:
+			return FreeImage_ConvertTo8Bits( bitmap );
+		}
+	}
+	else if( imgType < FIT_DOUBLE )
+	{
+		return FreeImage_ConvertToFloat( bitmap );
+	}
+	else if( imgType >= FIT_RGB16 && imgType <= FIT_RGBAF )
+	{
+		return FreeImage_ConvertToRGBF( bitmap );
+	}
+
+	assert( !"Not supported texture format" );
+	return nullptr;
+}
+
+} // anonymous
+
 // *********************************
 //
 MemoryChunkConstPtr LoadImage( const std::string & filePath, UInt32 * width, UInt32 * heigth, UInt32 * bpp, bool loadFromMemory )
@@ -128,7 +168,9 @@ MemoryChunkConstPtr LoadImage( const std::string & filePath, UInt32 * width, UIn
         }
     }
 
-	bitmap = FreeImage_ConvertTo32Bits( bitmap );
+	bitmap = ConvertToNearestSupported( bitmap );
+
+	//bitmap = FreeImage_ConvertTo32Bits( bitmap );
 
     if( bitmap == nullptr )
 	{
