@@ -108,6 +108,7 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(DepDir)/Common/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -180,6 +181,13 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClCompile Include="..\..\..\Source\Common\VBORect.cpp" />
     <ClCompile Include="..\..\..\Source\PrototypeCreator.cpp" />
     <ClCompile Include="..\..\..\Source\PrototyperApp.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLExt.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLPluginExt.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingMode.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingTestScene.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Scenes\DrawingTestScene0.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Scenes\DrawingTestScene1.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\DrawingPrototype.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ExperimentalNodeDeleter.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ScenePrototype.cpp" />
@@ -210,6 +218,15 @@ xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
     <ClInclude Include="..\..\..\Source\PrototypeCreator.h" />
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
     <ClInclude Include="..\..\..\Source\PrototypesForwardInc.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLDefsExt.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLExt.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLPluginExt.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingMode.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingTestScene.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Modes\DrawingModes.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Scenes\DrawingTestScene0.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Scenes\DrawingTestScene1.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\DrawingPrototype.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ExperimentalNodeDeleter.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ScenePrototype.h" />
