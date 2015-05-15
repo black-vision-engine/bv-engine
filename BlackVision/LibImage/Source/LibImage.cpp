@@ -104,8 +104,6 @@ namespace {
 //
 FIBITMAP * ConvertToNearestSupported( FIBITMAP * bitmap, UInt32 * bpp, UInt32 * channelNum )
 {
-	//{ bpp; channelNum; }
-	//return FreeImage_ConvertToRGBF( bitmap );
 	auto bitsPerPixel = FreeImage_GetBPP( bitmap );
 
 	auto imgType = FreeImage_GetImageType( bitmap );
@@ -193,10 +191,6 @@ MemoryChunkConstPtr LoadImage( const std::string & filePath, UInt32 * width, UIn
 		return nullptr;
 	}
 
-	FreeImage_Save( FIF_EXR, bitmap, "4float.exr" );
-
-	auto b = FreeImage_GetBPP( bitmap );
-	{ b; }
 	*width  = FreeImage_GetWidth( bitmap );
 	*heigth = FreeImage_GetHeight( bitmap );
 
