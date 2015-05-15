@@ -1916,9 +1916,9 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #endif
 #ifdef SHOW_CUBE
 	auto plugin = root->GetPlugin( "cube" );
-	model::SetParameter( plugin->GetParameter( "bevel" ), 0.0f, 0.0f );
-	model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 1.0, 1.0, 1.0 ) );
-	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 4 );
+	model::SetParameter( plugin->GetParameter( "bevel" ), 0.0f, 0.2f );
+	model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 1.0, 1.5, 0.5 ) );
+	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 6 );
 
 	model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );
 	model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );

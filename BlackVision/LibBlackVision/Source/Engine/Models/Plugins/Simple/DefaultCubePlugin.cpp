@@ -50,7 +50,7 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     ModelHelper h( timeEvaluator );
 
     h.CreateVacModel();
-    h.AddSimpleParam( PN::BEVEL, 0.0f, true, true );
+    h.AddSimpleParam( PN::BEVEL, 0.1f, true, true );
     h.AddSimpleParam( PN::DIMENSIONS, glm::vec3( 1, 1, 1 ), true, true );
     h.AddSimpleParam( PN::TESSELATION, 4, true, true );
 	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
@@ -219,10 +219,10 @@ namespace Generator
 
 			float bevelUV1 = bevel / dims.x;
 			float bevelUV2 = bevel / dims.y;
-			glm::vec2 pre_uv1 = glm::vec2( 1 - bevelUV1, 1 - bevelUV2 );
-			glm::vec2 pre_uv2 = glm::vec2( bevelUV1, 1 - bevelUV2 );
-			glm::vec2 pre_uv3 = glm::vec2( 1 - bevelUV1, bevelUV2 );
-			glm::vec2 pre_uv4 = glm::vec2( bevelUV1, bevelUV2 );
+			glm::vec2 pre_uv1 = glm::vec2( 1 - bevelUV2, 1 - bevelUV1 );
+			glm::vec2 pre_uv2 = glm::vec2( bevelUV2, 1 - bevelUV1 );
+			glm::vec2 pre_uv3 = glm::vec2( 1 - bevelUV2, bevelUV1 );
+			glm::vec2 pre_uv4 = glm::vec2( bevelUV2, bevelUV1 );
 
 			if( d > 0 )
 			{
@@ -326,24 +326,21 @@ namespace Generator
 			int main_plane_tess = tesselation / 2;
 			int remain_plane_tess = tesselation - main_plane_tess;
 
-			//float bevel_step1;
-			//if( face == 0 || face == 2 )
-			//	bevel_step1 = bevel / ( main_plane_tess * dims.y );
-			//else
-			//	bevel_step1 = bevel / ( main_plane_tess * dims.x );
-
-			float dim;
+			float dim1;
+			float dim3;
 			if( face == 0 || face == 2 )
-				dim = dims.y;
+				dim1 = dims.y, dim3 = dims.x;
 			else
-				dim = dims.x;
+				dim1 = dims.x, dim3 = dims.y;
 
-			float bevelUV1 = bevel / dim;
+			float bevelUV1 = bevel / dim1;
 			float bevel_step1 = bevelUV1 / main_plane_tess;
-
 
 			float bevelUV2 = bevel / dims.z;
 			float bevel_step2 = bevelUV2 / remain_plane_tess;
+
+			float bevelUV3 = bevel / dim3;
+			//float bevel_step3 = bevelUV1 / main_plane_tess;
 
 			glm::vec2 pre_uv1;
 			glm::vec2 pre_uv2;
@@ -417,25 +414,29 @@ namespace Generator
 			int main_plane_tess = tesselation / 2;
 			int remain_plane_tess = tesselation - main_plane_tess;
 
-			float dim;
+			float dim1;
+			float dim3;
 			if( face == 0 || face == 2 )
-				dim = dims.y;
+				dim1 = dims.y, dim3 = dims.x;
 			else
-				dim = dims.x;
+				dim1 = dims.x, dim3 = dims.y;
 
-			float bevelUV1 = bevel / dim;
+			float bevelUV1 = bevel / dim1;
 			float bevel_step1 = bevelUV1 / main_plane_tess;
 
 			float bevelUV2 = bevel / dims.z;
 			float bevel_step2 = bevelUV2 / remain_plane_tess;
+
+			float bevelUV3 = bevel / dim3;
+			//float bevel_step3 = bevelUV1 / main_plane_tess;
 
 			glm::vec2 pre_uv1;
 			glm::vec2 pre_uv2;
 
 			for( int j = main_plane_tess; j >= 0; --j )
 			{
-				pre_uv1 = getUV( bevelUV1, bevel_step1 * j, true, false );
-				pre_uv2 = getUV( bevelUV1, bevel_step1 * j, false, false );
+				pre_uv1 = getUV( bevelUV3, bevel_step1 * j, true, false );
+				pre_uv2 = getUV( bevelUV3, bevel_step1 * j, false, false );
 				pre_uv1 = uv_to_zplane_space( pre_uv1, face, CubicMappingPlane::MINUS_Z );
 				pre_uv2 = uv_to_zplane_space( pre_uv2, face, CubicMappingPlane::MINUS_Z );
 				uvs->AddAttribute( makeUV( pre_uv1, CubicMappingPlane::MINUS_Z ) );
@@ -460,8 +461,8 @@ namespace Generator
 			}
 			for( int j = 0; j <= main_plane_tess; ++j )
 			{
-				pre_uv1 = getUV( bevelUV1, bevel_step1 * j, true, false );
-				pre_uv2 = getUV( bevelUV1, bevel_step1 * j, false, false );
+				pre_uv1 = getUV( bevelUV3, bevel_step1 * j, true, false );
+				pre_uv2 = getUV( bevelUV3, bevel_step1 * j, false, false );
 				pre_uv1 = uv_to_zplane_space( pre_uv1, face, CubicMappingPlane::PLUS_Z );
 				pre_uv2 = uv_to_zplane_space( pre_uv2, face, CubicMappingPlane::PLUS_Z );
 				pre_uv1 = makeUV( pre_uv1, CubicMappingPlane::PLUS_Z );
