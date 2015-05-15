@@ -6,16 +6,15 @@
 namespace bv { namespace image
 {
 
-
-
 enum class ImageFormat : int
 {
-    IF_A8R8G8B8 = 0	,
-	IF_A32FR32FG32FB32F,
-    IF_R8G8B8       ,
-	IF_R32FG32FB32F ,
-    IF_A8           ,
-	IF_A32          ,
+	IF_A32FR32FG32FB32F = 0	,
+	IF_R32FG32FB32F			,
+	IF_A32F					,
+    IF_A8R8G8B8				,
+    IF_R8G8B8				,
+    IF_A8					,
+    IF_L8					,
     IF_TOTAL
 };
 

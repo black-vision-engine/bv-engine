@@ -63,16 +63,25 @@ ImageProperties GetImageProps( const std::string & imageFilePath )
 	}
 
 	auto bbp		= FreeImage_GetBPP( bitmap );
-	auto colorType	= FreeImage_GetColorType( bitmap );
+	auto imageType	= FreeImage_GetImageType( bitmap );
 
-	ImageFormat format;
+	ImageFormat format = bv::image::ImageFormat::IF_TOTAL;
 
-	if( colorType == FIC_RGBALPHA && bbp == 32 )
-		format = bv::image::ImageFormat::IF_A8R8G8B8;
-	else if ( colorType == FIC_RGB && bbp == 24 )
-		format = bv::image::ImageFormat::IF_R8G8B8;
-	else if ( bbp == 8 )
-		format = bv::image::ImageFormat::IF_A8;
+	if( imageType == FIT_BITMAP )
+	{
+		if( bbp == 32 )
+			format = bv::image::ImageFormat::IF_A8R8G8B8;
+		else if ( bbp == 24 )
+			format = bv::image::ImageFormat::IF_R8G8B8;
+		else if( bbp == 8 )
+			format = bv::image::ImageFormat::IF_A8;
+	}
+	else if ( imageType == FIT_FLOAT )
+		format = bv::image::ImageFormat::IF_A32F;
+	else if ( imageType == FIT_RGBF )
+		format = bv::image::ImageFormat::IF_R32FG32FB32F;
+	else if ( imageType == FIT_RGBAF )
+		format = bv::image::ImageFormat::IF_A32FR32FG32FB32F;
 	else
 	{
 		ImageProperties iprops;
@@ -95,46 +104,45 @@ namespace {
 //
 FIBITMAP * ConvertToNearestSupported( FIBITMAP * bitmap, UInt32 * bpp, UInt32 * channelNum )
 {
-	{ bpp; channelNum; }
-//	auto bitsPerPixel = FreeImage_GetBPP( bitmap );
+	//{ bpp; channelNum; }
+	//return FreeImage_ConvertToRGBF( bitmap );
+	auto bitsPerPixel = FreeImage_GetBPP( bitmap );
 
-	//auto imgType = FreeImage_GetImageType( bitmap );
+	auto imgType = FreeImage_GetImageType( bitmap );
 
-	return FreeImage_ConvertToRGBF( bitmap );
+	if( imgType == FIT_BITMAP )
+	{
+		switch( bitsPerPixel )
+		{
+		case 32:
+		case 24:
+		case 16:
+			*bpp = 32;
+			*channelNum = 4;
+			return FreeImage_ConvertTo32Bits( bitmap );
+		case 8:
+		case 4:
+		case 1:
+			*bpp = 8;
+			*channelNum = 1;
+			return FreeImage_ConvertTo8Bits( bitmap );
+		}
+	}
+	else if( imgType < FIT_DOUBLE )
+	{
+		*bpp = 32;
+		*channelNum = 1;
+		return FreeImage_ConvertToFloat( bitmap );
+	}
+	else if( imgType >= FIT_RGB16 && imgType <= FIT_RGBAF )
+	{
+		*bpp = 128;
+		*channelNum = 4;
+		return FreeImage_ConvertToRGBAF( bitmap );
+	}
 
-	//if( imgType == FIT_BITMAP )
-	//{
-	//	switch( bitsPerPixel )
-	//	{
-	//	case 32:
-	//	case 24:
-	//	case 16:
-	//		*bpp = 32;
-	//		*channelNum = 4;
-	//		return FreeImage_ConvertTo32Bits( bitmap );
-	//	case 8:
-	//	case 4:
-	//	case 1:
-	//		*bpp = 8;
-	//		*channelNum = 1;
-	//		return FreeImage_ConvertTo8Bits( bitmap );
-	//	}
-	//}
-	//else if( imgType < FIT_DOUBLE )
-	//{
-	//	*bpp = 32;
-	//	*channelNum = 1;
-	//	return FreeImage_ConvertToFloat( bitmap );
-	//}
-	//else if( imgType >= FIT_RGB16 && imgType <= FIT_RGBAF )
-	//{
-	//	*bpp = 128;
-	//	*channelNum = 4;
-	//	return FreeImage_ConvertToRGBF( bitmap );
-	//}
-
-	//assert( !"Not supported texture format" );
-	//return nullptr;
+	assert( !"Not supported texture format" );
+	return nullptr;
 }
 
 } // anonymous
@@ -187,6 +195,8 @@ MemoryChunkConstPtr LoadImage( const std::string & filePath, UInt32 * width, UIn
 
 	FreeImage_Save( FIF_EXR, bitmap, "4float.exr" );
 
+	auto b = FreeImage_GetBPP( bitmap );
+	{ b; }
 	*width  = FreeImage_GetWidth( bitmap );
 	*heigth = FreeImage_GetHeight( bitmap );
 
