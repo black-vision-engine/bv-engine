@@ -1827,7 +1827,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 // ============================================ //
 // Tranformations
-	glm::vec3 rotation_axis( -1.0f, 1.0f, 0.0f );
+	glm::vec3 rotation_axis( 1.0f, 1.0f, 0.0f );
 	glm::vec3 rotation_axis2( -1.f, 1.f, -1.f );
 
 	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
@@ -1917,8 +1917,9 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #ifdef SHOW_CUBE
 	auto plugin = root->GetPlugin( "cube" );
 	model::SetParameter( plugin->GetParameter( "bevel" ), 0.0f, 0.2f );
-	model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 1.0, 1.5, 0.5 ) );
-	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 15 );
+	model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 1.0, 1.0, 1.0 ) );
+	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 0 );
+	model::SetParameter( plugin->GetParameter( "tesselation" ), 100.0f, 100 );
 
 	model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );
 	model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );

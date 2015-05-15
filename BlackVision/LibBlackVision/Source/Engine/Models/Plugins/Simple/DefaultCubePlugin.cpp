@@ -260,8 +260,8 @@ namespace Generator
 
         void Init() 
         {
-			if( tesselation < 2 )
-				tesselation = 2;		// It's a little hackisch.
+			//if( tesselation < 2 )
+			//	tesselation = 2;		// It's a little hackisch.
 
             n = 4*(tesselation+1);
             m = (tesselation+1) * 2;
@@ -389,12 +389,12 @@ namespace Generator
 
 			for( int j = 0; j <= main_plane_tess; ++j )
 			{
-				float k_step1 = compute_scaled_k( bevelUV3, main_plane_tess, bevel_step3, k, /*main_plane_tess - */j );
+				float k_step1 = compute_scaled_k( bevelUV3, main_plane_tess, bevel_step3, k, j );
 				float k_step2;
 				if( inverse )
-					k_step2 = compute_scaled_k( bevelUV3, main_plane_tess, bevel_step3, k+1, /*main_plane_tess - */j );
+					k_step2 = compute_scaled_k( bevelUV3, main_plane_tess, bevel_step3, k+1, j );
 				else
-					k_step2 = compute_scaled_k( bevelUV3, main_plane_tess, bevel_step3, k-1, main_plane_tess - j );
+					k_step2 = compute_scaled_k( bevelUV3, main_plane_tess, bevel_step3, k-1, j );
 				pre_uv1 = getUV( k_step1, bevel_step1 * j, inverse, false );
 				pre_uv2 = getUV( k_step2, bevel_step1 * j, inverse, false );
 				pre_uv1 = uv_to_zplane_space( pre_uv1, face, CubicMappingPlane::PLUS_Z );
@@ -406,7 +406,7 @@ namespace Generator
 			}
 
 			// Degenerated triangle
-			uvs->AddAttribute( glm::vec2( 0.0, 0.0 ) );
+			uvs->AddAttribute( pre_uv2 );
 		}
 
 		void generateBigLine( int face, Float2AttributeChannelPtr uvs )
