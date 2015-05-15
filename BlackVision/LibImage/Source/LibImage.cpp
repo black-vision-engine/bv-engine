@@ -93,45 +93,55 @@ namespace {
 
 // *********************************
 //
-FIBITMAP * ConvertToNearestSupported( FIBITMAP * bitmap )
+FIBITMAP * ConvertToNearestSupported( FIBITMAP * bitmap, UInt32 * bpp, UInt32 * channelNum )
 {
-	auto bpp = FreeImage_GetBPP( bitmap );
+	{ bpp; channelNum; }
+//	auto bitsPerPixel = FreeImage_GetBPP( bitmap );
 
-	auto imgType = FreeImage_GetImageType( bitmap );
+	//auto imgType = FreeImage_GetImageType( bitmap );
 
-	if( imgType == FIT_BITMAP )
-	{
-		switch( bpp )
-		{
-		case 32:
-			return bitmap;
-		case 24:
-		case 16:
-			return FreeImage_ConvertTo32Bits( bitmap );
-		case 8:
-		case 4:
-		case 1:
-			return FreeImage_ConvertTo8Bits( bitmap );
-		}
-	}
-	else if( imgType < FIT_DOUBLE )
-	{
-		return FreeImage_ConvertToFloat( bitmap );
-	}
-	else if( imgType >= FIT_RGB16 && imgType <= FIT_RGBAF )
-	{
-		return FreeImage_ConvertToRGBF( bitmap );
-	}
+	return FreeImage_ConvertToRGBF( bitmap );
 
-	assert( !"Not supported texture format" );
-	return nullptr;
+	//if( imgType == FIT_BITMAP )
+	//{
+	//	switch( bitsPerPixel )
+	//	{
+	//	case 32:
+	//	case 24:
+	//	case 16:
+	//		*bpp = 32;
+	//		*channelNum = 4;
+	//		return FreeImage_ConvertTo32Bits( bitmap );
+	//	case 8:
+	//	case 4:
+	//	case 1:
+	//		*bpp = 8;
+	//		*channelNum = 1;
+	//		return FreeImage_ConvertTo8Bits( bitmap );
+	//	}
+	//}
+	//else if( imgType < FIT_DOUBLE )
+	//{
+	//	*bpp = 32;
+	//	*channelNum = 1;
+	//	return FreeImage_ConvertToFloat( bitmap );
+	//}
+	//else if( imgType >= FIT_RGB16 && imgType <= FIT_RGBAF )
+	//{
+	//	*bpp = 128;
+	//	*channelNum = 4;
+	//	return FreeImage_ConvertToRGBF( bitmap );
+	//}
+
+	//assert( !"Not supported texture format" );
+	//return nullptr;
 }
 
 } // anonymous
 
 // *********************************
 //
-MemoryChunkConstPtr LoadImage( const std::string & filePath, UInt32 * width, UInt32 * heigth, UInt32 * bpp, bool loadFromMemory )
+MemoryChunkConstPtr LoadImage( const std::string & filePath, UInt32 * width, UInt32 * heigth, UInt32 * bpp, UInt32 * channelNum, bool loadFromMemory )
 {	
 	FIBITMAP * bitmap = nullptr;
 
@@ -168,18 +178,17 @@ MemoryChunkConstPtr LoadImage( const std::string & filePath, UInt32 * width, UIn
         }
     }
 
-	bitmap = ConvertToNearestSupported( bitmap );
-
-	//bitmap = FreeImage_ConvertTo32Bits( bitmap );
+	bitmap = ConvertToNearestSupported( bitmap, bpp, channelNum );
 
     if( bitmap == nullptr )
 	{
 		return nullptr;
 	}
 
+	FreeImage_Save( FIF_EXR, bitmap, "4float.exr" );
+
 	*width  = FreeImage_GetWidth( bitmap );
 	*heigth = FreeImage_GetHeight( bitmap );
-	*bpp    = FreeImage_GetBPP( bitmap );
 
     auto numBytes = ( *width ) * ( *heigth ) * ( *bpp ) / 8;
 

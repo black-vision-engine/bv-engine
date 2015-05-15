@@ -11,8 +11,11 @@ namespace bv { namespace image
 enum class ImageFormat : int
 {
     IF_A8R8G8B8 = 0	,
+	IF_A32FR32FG32FB32F,
     IF_R8G8B8       ,
+	IF_R32FG32FB32F ,
     IF_A8           ,
+	IF_A32          ,
     IF_TOTAL
 };
 
@@ -36,7 +39,7 @@ enum class FilterType : int
 	
 ImageProperties			GetImageProps	( const std::string & imageFilePath );
 
-MemoryChunkConstPtr		LoadImage		( const std::string & filePath, UInt32 * width, UInt32 * heigth, UInt32 * bpp, bool loadFromMemory = true );
+MemoryChunkConstPtr		LoadImage		( const std::string & filePath, UInt32 * width, UInt32 * heigth, UInt32 * bpp, UInt32 * channelNum, bool loadFromMemory = true );
 MemoryChunkConstPtr		LoadRAWImage	( const std::string & filePath );
 bool					SaveBMPImage	( const std::string & filePath, MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp );
 void					SaveRAWImage	( const std::string & filePath, MemoryChunkConstPtr data );

@@ -73,16 +73,46 @@ AssetConstPtr TextureLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 
 // ******************************
 //
-SingleTextureAssetConstPtr TextureLoader::LoadSingleTexture( const SingleTextureAssetDescConstPtr & sinlgeTextureResDesc, bool loadFromCache )
+TextureFormat				TextureLoader::ToTextureFormat( UInt32 bpp, UInt32 channelNum )
+{
+	switch( bpp )
+	{
+	case 128:
+		if( channelNum == 4 )
+			return TextureFormat::F_A32FR32FG32FB32F;
+	case 32:
+		if( channelNum == 4 )
+			return TextureFormat::F_A8R8G8B8;
+		else if( channelNum == 1 )
+			return TextureFormat::F_A32F;
+
+	case 8:
+		if( channelNum == 1 )
+			return TextureFormat::F_A8;
+	}
+
+	assert( !"Should never be here" );
+	return TextureFormat::F_TOTAL;
+}
+
+
+// ******************************
+//
+SingleTextureAssetConstPtr	TextureLoader::LoadSingleTexture( const SingleTextureAssetDescConstPtr & sinlgeTextureResDesc, bool loadFromCache )
 {
 	auto key		= TextureCache::GenKeyForSingleTexture( sinlgeTextureResDesc );
 	auto imgPath	= sinlgeTextureResDesc->GetImagePath();
 
 	MemoryChunkConstPtr mmChunk = loadFromCache ? RawDataCache::GetInstance().Get( Hash::FromString( key ) ) : nullptr;
 	
+	UInt32 w			= 0;
+	UInt32 h			= 0;
+	UInt32 bpp			= 0;
+	UInt32 channelNum	= 0;
+
 	if( !mmChunk )
 	{
-		mmChunk = LoadImage( imgPath );
+		mmChunk = LoadImage( imgPath, &w, &h, &bpp, &channelNum );
 		if( loadFromCache )
 		{
 			auto res = RawDataCache::GetInstance().Add( Hash::FromString( key ), mmChunk );
@@ -96,22 +126,21 @@ SingleTextureAssetConstPtr TextureLoader::LoadSingleTexture( const SingleTexture
 		return nullptr;
 	}
 
-	auto w			= sinlgeTextureResDesc->GetWidth();
-	auto h			= sinlgeTextureResDesc->GetHeight();
-	auto format		= TextureFormat::F_A8R8G8B8;//sinlgeTextureResDesc->GetFormat();
+	assert( sinlgeTextureResDesc->GetWidth() == w );
+	assert( sinlgeTextureResDesc->GetHeight() == h );
+
+	auto format		= ToTextureFormat( bpp, channelNum );
+
+	//assert( sinlgeTextureResDesc->GetFormat() == format );
 
 	return SingleTextureAsset::Create( mmChunk, key, w, h, format );
 }
 
 // ******************************
 //
-MemoryChunkConstPtr TextureLoader::LoadImage( const std::string & path )
+MemoryChunkConstPtr TextureLoader::LoadImage( const std::string & path, UInt32 * width, UInt32 * height, UInt32 * bpp, UInt32 * channelNum )
 {
 	MemoryChunkConstPtr data = nullptr;
-
-	unsigned int width   = 0;
-    unsigned int height  = 0;
-    unsigned int bpp     = 0;
 
 	if( path.find( ".raw" ) != std::string::npos )
     {
@@ -119,7 +148,7 @@ MemoryChunkConstPtr TextureLoader::LoadImage( const std::string & path )
     }
 	else
     {
-		data = image::LoadImage( path, &width, &height, &bpp );
+		data = image::LoadImage( path, width, height, bpp, channelNum );
     }
 
 	return data;

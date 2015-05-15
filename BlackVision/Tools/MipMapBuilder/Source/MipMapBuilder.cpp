@@ -90,8 +90,9 @@ Mipmaps				GenerateMipmaps( const std::string & imageFilePath, int levelsNum, bv
 	bv::UInt32 w;
 	bv::UInt32 h;
 	bv::UInt32 bbp;
+	bv::UInt32 channelNum;
 
-	auto img = bv::image::LoadImage( imageFilePath, &w, &h, &bbp );
+	auto img = bv::image::LoadImage( imageFilePath, &w, &h, &bbp, &channelNum );
 	
 	if( !img )
 		return Mipmaps();
