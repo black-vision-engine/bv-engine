@@ -1083,6 +1083,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 	success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg" );
 
+	//success = model::LoadTexture( node->GetPlugin( "texture" ), "0level.bmp", MipMapFilterType::BILINEAR );
+	//success = model::LoadTexture( node->GetPlugin( "texture" ), "0level.bmp" );
+
     //success = model::LoadTexture( node->GetPlugin( "texture" ), "Untitled drawing.png" );
     assert( success );
 
