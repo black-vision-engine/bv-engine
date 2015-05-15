@@ -340,21 +340,21 @@ namespace Generator
 			float bevel_step2 = bevelUV2 / remain_plane_tess;
 
 			float bevelUV3 = bevel / dim3;
-			//float bevel_step3 = bevelUV1 / main_plane_tess;
+			float bevel_step3 = bevelUV3 / main_plane_tess;
 
 			glm::vec2 pre_uv1;
 			glm::vec2 pre_uv2;
 
 			for( int j = main_plane_tess; j >= 0; --j )
 			{
-				float k_step1 = compute_scaled_k( bevelUV1, main_plane_tess, bevel_step1, k, j );
+				float k_step1 = compute_scaled_k( bevelUV3, main_plane_tess, bevel_step3, k, j );
 				float k_step2;
 				if( inverse )
-					k_step2 = compute_scaled_k( bevelUV1, main_plane_tess, bevel_step1, k+1, j );
+					k_step2 = compute_scaled_k( bevelUV3, main_plane_tess, bevel_step3, k+1, j );
 				else
-					k_step2 = compute_scaled_k( bevelUV1, main_plane_tess, bevel_step1, k-1, j );
-				pre_uv1 = getUV( k_step1, bevel_step2 * j, inverse, false );
-				pre_uv2 = getUV( k_step2, bevel_step2 * j, inverse, false );
+					k_step2 = compute_scaled_k( bevelUV3, main_plane_tess, bevel_step3, k-1, j );
+				pre_uv1 = getUV( k_step1, bevel_step1 * j, inverse, false );
+				pre_uv2 = getUV( k_step2, bevel_step1 * j, inverse, false );
 				pre_uv1 = uv_to_zplane_space( pre_uv1, face, CubicMappingPlane::MINUS_Z );
 				pre_uv2 = uv_to_zplane_space( pre_uv2, face, CubicMappingPlane::MINUS_Z );
 
@@ -364,12 +364,12 @@ namespace Generator
 
 			for( int j = 0; j <= remain_plane_tess; ++j )
 			{
-				pre_uv1 = getUV( bevel_step1 * k, bevel_step2 * j, inverse, true );
+				pre_uv1 = getUV( bevel_step3 * k, bevel_step2 * j, inverse, true );
 				pre_uv2;
 				if( inverse )
-					pre_uv2 = getUV( bevel_step1 * (k+1), bevel_step2 * j, inverse, true );
+					pre_uv2 = getUV( bevel_step3 * (k+1), bevel_step2 * j, inverse, true );
 				else
-					pre_uv2 = getUV( bevel_step1 * (k-1), bevel_step2 * j, inverse, true );
+					pre_uv2 = getUV( bevel_step3 * (k-1), bevel_step2 * j, inverse, true );
 				uvs->AddAttribute( makeUV( pre_uv1, static_cast<CubicMappingPlane>(face) ) );
 				uvs->AddAttribute( makeUV( pre_uv2, static_cast<CubicMappingPlane>(face) ) );
 			}
@@ -377,26 +377,26 @@ namespace Generator
 
 			for( int j = remain_plane_tess; j >= 0; --j )
 			{
-				pre_uv1 = getUV( bevel_step1 * k, bevel_step2 * j, inverse, false );
+				pre_uv1 = getUV( bevel_step3 * k, bevel_step2 * j, inverse, false );
 				pre_uv2;
 				if( inverse )
-					pre_uv2 = getUV( bevel_step1 * (k+1), bevel_step2 * j, inverse, false );
+					pre_uv2 = getUV( bevel_step3 * (k+1), bevel_step2 * j, inverse, false );
 				else
-					pre_uv2 = getUV( bevel_step1 * (k-1), bevel_step2 * j, inverse, false );
+					pre_uv2 = getUV( bevel_step3 * (k-1), bevel_step2 * j, inverse, false );
 				uvs->AddAttribute( makeUV( pre_uv1, static_cast<CubicMappingPlane>(face) ) );
 				uvs->AddAttribute( makeUV( pre_uv2, static_cast<CubicMappingPlane>(face) ) );
 			}
 
 			for( int j = 0; j <= main_plane_tess; ++j )
 			{
-				float k_step1 = compute_scaled_k( bevelUV1, main_plane_tess, bevel_step1, k, /*main_plane_tess - */j );
+				float k_step1 = compute_scaled_k( bevelUV3, main_plane_tess, bevel_step3, k, /*main_plane_tess - */j );
 				float k_step2;
 				if( inverse )
-					k_step2 = compute_scaled_k( bevelUV1, main_plane_tess, bevel_step1, k+1, /*main_plane_tess - */j );
+					k_step2 = compute_scaled_k( bevelUV3, main_plane_tess, bevel_step3, k+1, /*main_plane_tess - */j );
 				else
-					k_step2 = compute_scaled_k( bevelUV1, main_plane_tess, bevel_step1, k-1, main_plane_tess - j );
-				pre_uv1 = getUV( k_step1, bevel_step2 * j, inverse, false );
-				pre_uv2 = getUV( k_step2, bevel_step2 * j, inverse, false );
+					k_step2 = compute_scaled_k( bevelUV3, main_plane_tess, bevel_step3, k-1, main_plane_tess - j );
+				pre_uv1 = getUV( k_step1, bevel_step1 * j, inverse, false );
+				pre_uv2 = getUV( k_step2, bevel_step1 * j, inverse, false );
 				pre_uv1 = uv_to_zplane_space( pre_uv1, face, CubicMappingPlane::PLUS_Z );
 				pre_uv2 = uv_to_zplane_space( pre_uv2, face, CubicMappingPlane::PLUS_Z );
 				pre_uv1 = makeUV( pre_uv1, CubicMappingPlane::PLUS_Z );
@@ -428,7 +428,7 @@ namespace Generator
 			float bevel_step2 = bevelUV2 / remain_plane_tess;
 
 			float bevelUV3 = bevel / dim3;
-			//float bevel_step3 = bevelUV1 / main_plane_tess;
+			//float bevel_step3 = bevelUV3 / main_plane_tess;
 
 			glm::vec2 pre_uv1;
 			glm::vec2 pre_uv2;
@@ -445,8 +445,8 @@ namespace Generator
 
 			for( int j = 0; j <= remain_plane_tess; ++j )
 			{
-				pre_uv1 = getUV( bevelUV1, bevel_step2 * j, true, true );
-				pre_uv2 = getUV( bevelUV1, bevel_step2 * j, false, true );
+				pre_uv1 = getUV( bevelUV3, bevel_step2 * j, true, true );
+				pre_uv2 = getUV( bevelUV3, bevel_step2 * j, false, true );
 				uvs->AddAttribute( makeUV( pre_uv1, static_cast<CubicMappingPlane>(face) ) );
 				uvs->AddAttribute( makeUV( pre_uv2, static_cast<CubicMappingPlane>(face) ) );
 			}
@@ -454,8 +454,8 @@ namespace Generator
 
 			for( int j = remain_plane_tess; j >= 0; --j )
 			{
-				pre_uv1 = getUV( bevelUV1, bevel_step2 * j, true, false );
-				pre_uv2 = getUV( bevelUV1, bevel_step2 * j, false, false );
+				pre_uv1 = getUV( bevelUV3, bevel_step2 * j, true, false );
+				pre_uv2 = getUV( bevelUV3, bevel_step2 * j, false, false );
 				uvs->AddAttribute( makeUV( pre_uv1, static_cast<CubicMappingPlane>(face) ) );
 				uvs->AddAttribute( makeUV( pre_uv2, static_cast<CubicMappingPlane>(face) ) );
 			}

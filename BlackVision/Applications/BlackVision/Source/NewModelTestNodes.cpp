@@ -1827,7 +1827,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 // ============================================ //
 // Tranformations
-	glm::vec3 rotation_axis( 1.0f, 1.0f, 0.0f );
+	glm::vec3 rotation_axis( -1.0f, 1.0f, 0.0f );
 	glm::vec3 rotation_axis2( -1.f, 1.f, -1.f );
 
 	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
@@ -1918,7 +1918,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	auto plugin = root->GetPlugin( "cube" );
 	model::SetParameter( plugin->GetParameter( "bevel" ), 0.0f, 0.2f );
 	model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 1.0, 1.5, 0.5 ) );
-	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 6 );
+	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 15 );
 
 	model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );
 	model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );
@@ -1982,7 +1982,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
 	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
 
-	success = model::LoadTexture( root->GetPlugin( "texture" ), "skybox.jpg", MipMapFilterType::BILINEAR );
+	success = model::LoadTexture( root->GetPlugin( "texture" ), "Skybox.jpg", MipMapFilterType::BILINEAR );
 	assert( success );
 	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
 	model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
