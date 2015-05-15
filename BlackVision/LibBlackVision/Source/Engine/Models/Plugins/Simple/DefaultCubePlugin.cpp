@@ -219,17 +219,17 @@ namespace Generator
 
 			float bevelUV1 = bevel / dims.x;
 			float bevelUV2 = bevel / dims.y;
-			glm::vec2 pre_uv1 = glm::vec2( 1 - bevelUV1, bevelUV2 );
-			glm::vec2 pre_uv2 = glm::vec2( bevelUV1, bevelUV2 );
-			glm::vec2 pre_uv3 = glm::vec2( 1 - bevelUV1, 1 - bevelUV2 );
-			glm::vec2 pre_uv4 = glm::vec2( bevelUV1, 1 - bevelUV2 );
+			glm::vec2 pre_uv1 = glm::vec2( 1 - bevelUV1, 1 - bevelUV2 );
+			glm::vec2 pre_uv2 = glm::vec2( bevelUV1, 1 - bevelUV2 );
+			glm::vec2 pre_uv3 = glm::vec2( 1 - bevelUV1, bevelUV2 );
+			glm::vec2 pre_uv4 = glm::vec2( bevelUV1, bevelUV2 );
 
 			if( d > 0 )
 			{
-				uvs->AddAttribute( makeUV( pre_uv2, mapping_plane ) );
-				uvs->AddAttribute( makeUV( pre_uv1, mapping_plane ) );
-				uvs->AddAttribute( makeUV( pre_uv4, mapping_plane ) );
 				uvs->AddAttribute( makeUV( pre_uv3, mapping_plane ) );
+				uvs->AddAttribute( makeUV( pre_uv4, mapping_plane ) );
+				uvs->AddAttribute( makeUV( pre_uv1, mapping_plane ) );
+				uvs->AddAttribute( makeUV( pre_uv2, mapping_plane ) );
 			}
 			else
 			{
@@ -289,17 +289,30 @@ namespace Generator
 			return glm::vec2(u, v);
 		}
 
-		glm::vec2 prepare_for_z_surface( glm::vec2 uv, int face )
+		/**@brief Gives UVs in parametergood orientation in texture space
+		depending on face, that we compute currently.
+		@param[in] z MINUS_Z lub PLUS_Z.*/
+		glm::vec2 uv_to_zplane_space( glm::vec2 uv, int face, CubicMappingPlane z )
 		{
+			float u;
+			float v;
+			z;
+
 			if( face == 0 )
-				return glm::vec2( uv.y, uv.x );
-			if( face == 1 )
-				return uv;
+				u = 1 - uv.y, v = uv.x;
+			else if( face == 1 )
+				u = uv.x, v = uv.y;
+			else if( face == 2 )
+				u = uv.y, v = 1 - uv.x;
 			else if( face == 3 )
-				return glm::vec2( -uv.y, uv.x );
-			else if( face == 4 )
-				return glm::vec2( -uv.y, -uv.x );
-			return uv;		// If face == 0, everythig is ok
+				u = 1 - uv.x, v = 1 - uv.y;
+			else
+				u = 0, v = 0;	// Error
+
+			if( z == CubicMappingPlane::PLUS_Z )
+				v = 1 - v;
+
+			return glm::vec2( u, v );
 		}
 
 		void generateLineUV( int face, int k, bool inverse, Float2AttributeChannelPtr uvs )
@@ -323,8 +336,8 @@ namespace Generator
 				// @fixme
 				glm::vec2 pre_uv1 = getUV( bevel_step1 * k, bevel_step2 * j, inverse, false );
 				glm::vec2 pre_uv2 = getUV( bevel_step1 * (k+1), bevel_step2 * j, inverse, false );
-				pre_uv1 = prepare_for_z_surface( pre_uv1, face );
-				pre_uv2 = prepare_for_z_surface( pre_uv2, face );
+				pre_uv1 = uv_to_zplane_space( pre_uv1, face, CubicMappingPlane::MINUS_Z );
+				pre_uv2 = uv_to_zplane_space( pre_uv2, face, CubicMappingPlane::MINUS_Z );
 				uvs->AddAttribute( makeUV( pre_uv1, CubicMappingPlane::MINUS_Z ) );
 				uvs->AddAttribute( makeUV( pre_uv2, CubicMappingPlane::MINUS_Z ) );
 			}
@@ -358,8 +371,8 @@ namespace Generator
 				// @fixme
 				glm::vec2 pre_uv1 = getUV( bevel_step1 * k, bevel_step2 * j, inverse, true );
 				glm::vec2 pre_uv2 = getUV( bevel_step1 * (k+1), bevel_step2 * j, inverse, true );
-				pre_uv1 = prepare_for_z_surface( pre_uv1, face );
-				pre_uv2 = prepare_for_z_surface( pre_uv2, face );
+				pre_uv1 = uv_to_zplane_space( pre_uv1, face, CubicMappingPlane::PLUS_Z );
+				pre_uv2 = uv_to_zplane_space( pre_uv2, face, CubicMappingPlane::PLUS_Z );
 				uvs->AddAttribute( makeUV( pre_uv1, CubicMappingPlane::PLUS_Z ) );
 				uvs->AddAttribute( makeUV( pre_uv2, CubicMappingPlane::PLUS_Z ) );
 			}
@@ -388,8 +401,8 @@ namespace Generator
 				// @fixme
 				glm::vec2 pre_uv1 = getUV( bevelUV1, bevel_step1 * j, true, false );
 				glm::vec2 pre_uv2 = getUV( bevelUV1, bevel_step1 * j, false, false );
-				pre_uv1 = prepare_for_z_surface( pre_uv1, face );
-				pre_uv2 = prepare_for_z_surface( pre_uv2, face );
+				pre_uv1 = uv_to_zplane_space( pre_uv1, face, CubicMappingPlane::MINUS_Z );
+				pre_uv2 = uv_to_zplane_space( pre_uv2, face, CubicMappingPlane::MINUS_Z );
 				uvs->AddAttribute( makeUV( pre_uv1, CubicMappingPlane::MINUS_Z ) );
 				uvs->AddAttribute( makeUV( pre_uv2, CubicMappingPlane::MINUS_Z ) );
 			}
@@ -413,10 +426,10 @@ namespace Generator
 			for( int j = 0; j <= main_plane_tess; ++j )
 			{
 				// @fixme
-				glm::vec2 pre_uv1 = getUV( bevelUV1, bevel_step1 * j, true, true );
-				glm::vec2 pre_uv2 = getUV( bevelUV1, bevel_step1 * j, false, true );
-				pre_uv1 = prepare_for_z_surface( pre_uv1, face );
-				pre_uv2 = prepare_for_z_surface( pre_uv2, face );
+				glm::vec2 pre_uv1 = getUV( bevelUV1, bevel_step1 * j, true, false );
+				glm::vec2 pre_uv2 = getUV( bevelUV1, bevel_step1 * j, false, false );
+				pre_uv1 = uv_to_zplane_space( pre_uv1, face, CubicMappingPlane::PLUS_Z );
+				pre_uv2 = uv_to_zplane_space( pre_uv2, face, CubicMappingPlane::PLUS_Z );
 				uvs->AddAttribute( makeUV( pre_uv1, CubicMappingPlane::PLUS_Z ) );
 				uvs->AddAttribute( makeUV( pre_uv2, CubicMappingPlane::PLUS_Z ) );
 			}
