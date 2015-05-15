@@ -128,6 +128,17 @@ void BVAppLogic::Initialize         ()
 	bv::effect::InitializeLibEffect( m_renderer );
 }
 
+
+model::BasicNodePtr ParseNode( xml_node<>* node, model::ITimeEvaluatorPtr teDAFAK )
+{
+    auto aName = node->first_attribute( "name" ); assert( aName );
+    model::BasicNodePtr root = model::BasicNode::Create( aName->value(), teDAFAK );
+
+    root->AddPlugin( "DEFAULT_TRANSFORM", teDAFAK ); // FIXME
+
+    return root;
+}
+
 // *********************************
 //
 void BVAppLogic::LoadScene          ( void )
@@ -137,7 +148,22 @@ void BVAppLogic::LoadScene          ( void )
     //model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
 	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
 	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
-    model::BasicNodePtr root = TestScenesFactory::CreedVideoInputTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
+    //model::BasicNodePtr root = TestScenesFactory::CreedVideoInputTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
+
+    std::string filename = "Assets/07_Results.xml";
+    assert( File::Exists( filename ) );
+
+    xml_document<> doc;
+    std::ifstream file( filename );
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    file.close();
+    std::string content( buffer.str() );
+    doc.parse<0>( &content[0] );
+
+    auto nNode = doc.first_node( "scene" )->first_node( "nodes" )->first_node( "node" );
+
+    model::BasicNodePtr root = ParseNode( nNode, m_globalTimeline );
 
 	assert( root );
 
