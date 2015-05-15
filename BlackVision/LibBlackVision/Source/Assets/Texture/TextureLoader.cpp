@@ -95,6 +95,20 @@ TextureFormat				TextureLoader::ToTextureFormat( UInt32 bpp, UInt32 channelNum )
 	return TextureFormat::F_TOTAL;
 }
 
+// ******************************
+//
+TextureFormat				TextureLoader::NearestSupportedTextureFormat	( TextureFormat format )
+{
+	switch( format )
+	{
+	case TextureFormat::F_R32FG32FB32F:
+		return TextureFormat::F_A32FR32FG32FB32F;
+	case TextureFormat::F_R8G8B8:
+		return TextureFormat::F_A8R8G8B8;
+	default:
+		return format;
+	}
+}
 
 // ******************************
 //
@@ -105,35 +119,35 @@ SingleTextureAssetConstPtr	TextureLoader::LoadSingleTexture( const SingleTexture
 
 	MemoryChunkConstPtr mmChunk = loadFromCache ? RawDataCache::GetInstance().Get( Hash::FromString( key ) ) : nullptr;
 	
-	UInt32 w			= 0;
-	UInt32 h			= 0;
-	UInt32 bpp			= 0;
-	UInt32 channelNum	= 0;
-
-	if( !mmChunk )
+	if( mmChunk ) // if found in the cache
 	{
+		auto format		= NearestSupportedTextureFormat( sinlgeTextureResDesc->GetFormat() );
+		return SingleTextureAsset::Create( mmChunk, key, sinlgeTextureResDesc->GetWidth(), sinlgeTextureResDesc->GetHeight(), format );
+	}
+	else
+	{
+		UInt32 w			= 0;
+		UInt32 h			= 0;
+		UInt32 bpp			= 0;
+		UInt32 channelNum	= 0;
+
 		mmChunk = LoadImage( imgPath, &w, &h, &bpp, &channelNum );
 		if( loadFromCache )
 		{
 			auto res = RawDataCache::GetInstance().Add( Hash::FromString( key ), mmChunk );
 			assert( res );
-            { res; }
+			{ res; }
 		}
+
+		if( !mmChunk )
+		{
+			return nullptr;
+		}
+
+		auto format		= ToTextureFormat( bpp, channelNum );
+
+		return SingleTextureAsset::Create( mmChunk, key, sinlgeTextureResDesc->GetWidth(), sinlgeTextureResDesc->GetHeight(), format );
 	}
-
-	if( !mmChunk )
-	{
-		return nullptr;
-	}
-
-	assert( sinlgeTextureResDesc->GetWidth() == w );
-	assert( sinlgeTextureResDesc->GetHeight() == h );
-
-	auto format		= ToTextureFormat( bpp, channelNum );
-
-	//assert( sinlgeTextureResDesc->GetFormat() == format );
-
-	return SingleTextureAsset::Create( mmChunk, key, w, h, format );
 }
 
 // ******************************

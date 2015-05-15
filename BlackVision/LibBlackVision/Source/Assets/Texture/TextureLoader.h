@@ -32,6 +32,7 @@ private:
 	static TextureAssetConstPtr			LoadTextureAndGenerateMipMaps	( const TextureAssetDescConstPtr & desc );
 
 	static TextureFormat				ToTextureFormat					( UInt32 bpp, UInt32 channelNum );
+	static TextureFormat				NearestSupportedTextureFormat	( TextureFormat format );
 };
 
 } // bv

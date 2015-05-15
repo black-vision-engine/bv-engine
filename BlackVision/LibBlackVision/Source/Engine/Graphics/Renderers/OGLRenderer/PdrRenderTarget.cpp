@@ -28,7 +28,6 @@ PdrRenderTarget::PdrRenderTarget     ( Renderer * renderer, const RenderTarget *
     , m_numTargets( rt->NumTargets() )
     , m_drawBuffers( rt->NumTargets() )
     , m_textures( rt->NumTargets() )
-    , m_textureFormats( rt->NumTargets() )
     , m_readbackBuffers( rt->NumTargets() )
 {
     assert( m_numTargets > 0 );
