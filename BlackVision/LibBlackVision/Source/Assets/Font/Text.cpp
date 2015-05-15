@@ -169,8 +169,8 @@ void Text::GenerateMipMaps()
 
 	if( levelsNum > 0 )
 	{
-		tools::Image32 img32 = { m_atlas->m_textureAsset->GetOriginal()->GetData(), m_atlas->GetWidth(), m_atlas->GetHeight() };
-		auto mipmap = tools::GenerateMipmaps( img32, levelsNum, image::FilterType::FT_BILINEAR ); // FIXME: filter type is hardcoded.
+		tools::Image img = { m_atlas->m_textureAsset->GetOriginal()->GetData(), m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() };
+		auto mipmap = tools::GenerateMipmaps( img, levelsNum, image::FilterType::FT_BILINEAR ); // FIXME: filter type is hardcoded.
 
 		std::vector< SingleTextureAssetConstPtr > mipMapsRes;
 		for( SizeType i = 0; i < mipmap.size(); ++i )

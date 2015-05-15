@@ -7,11 +7,12 @@
 namespace tools
 {
 
-struct Image32
+struct Image
 {
 	bv::MemoryChunkConstPtr	data;
 	bv::UInt32				width;
 	bv::UInt32				height;
+	bv::UInt32				bpp;
 };
 
 struct ImageSize
@@ -26,10 +27,10 @@ struct ImageSize
 };
 
 
-typedef std::vector< Image32 >		Mipmaps;
+typedef std::vector< Image >		Mipmaps;
 typedef std::vector< ImageSize >	MipmapsSizes;
 
-Mipmaps				GenerateMipmaps( const Image32 & data, int levelsNum, bv::image::FilterType ft );
+Mipmaps				GenerateMipmaps( const Image & data, int levelsNum, bv::image::FilterType ft );
 Mipmaps				GenerateMipmaps( const std::string & imageFilePath, int levelsNum, bv::image::FilterType ft );
 MipmapsSizes		GenerateMipmapsSizes( const ImageSize & origSize );
 

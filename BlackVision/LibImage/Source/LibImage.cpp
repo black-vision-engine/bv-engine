@@ -354,17 +354,21 @@ FREE_IMAGE_FILTER ToFIFilter( FilterType ft )
 
 // ******************************
 //
-MemoryChunkConstPtr		Resize( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 newWidth, UInt32 newHeight, FilterType ft )
+MemoryChunkConstPtr		Resize( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 newWidth, UInt32 newHeight, FilterType ft )
 {
-	auto inBitmap = FreeImage_ConvertFromRawBits( (BYTE*)in->Get(), ( int )width, ( int )height, ( int )width * 4, 32, 255, 255, 255 );
+	auto inBitmap = FreeImage_ConvertFromRawBits( (BYTE*)in->Get(), ( int )width, ( int )height, ((((bpp * width) + 31) / 32) * 4), bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK, FALSE );
 
+	auto b = FreeImage_GetBPP( inBitmap );
+	
 	auto outBitmap = FreeImage_Rescale( inBitmap, ( int )newWidth, ( int )newHeight, ToFIFilter( ft ) );
 
+	auto ob = FreeImage_GetBPP( inBitmap );
+	{b; ob; }
 	//FreeImage_AdjustColors( outBitmap, 1.0, 1.0, 1.0, 1 );
 
-	outBitmap = FreeImage_ConvertTo32Bits( outBitmap );
+	//outBitmap = FreeImage_ConvertTo32Bits( outBitmap );
 
-	auto numBytes = newWidth * newHeight * 4;
+	auto numBytes = newWidth * newHeight * bpp / 8;
 
     char * pixels = new char[ numBytes ]; // FIXME: Use normal allocation to free it with free not delete []
     memcpy( pixels, FreeImage_GetBits( outBitmap ), numBytes );

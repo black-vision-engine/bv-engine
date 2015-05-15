@@ -43,7 +43,7 @@ MemoryChunkConstPtr		LoadRAWImage	( const std::string & filePath );
 bool					SaveBMPImage	( const std::string & filePath, MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp );
 void					SaveRAWImage	( const std::string & filePath, MemoryChunkConstPtr data );
 
-MemoryChunkConstPtr		Resize			( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 newWidth, UInt32 newHeight, FilterType ft );
+MemoryChunkConstPtr		Resize			( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 newWidth, UInt32 newHeight, FilterType ft );
 MemoryChunkConstPtr		BlurImage		( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp, UInt32 blurSize );
 
 } // image
