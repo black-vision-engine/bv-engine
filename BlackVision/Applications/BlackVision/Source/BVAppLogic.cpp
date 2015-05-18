@@ -147,7 +147,7 @@ void BVAppLogic::LoadScene          ( void )
     //model::BasicNodePtr root = TestScenesFactory::CreedTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
     //model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
 	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
-	model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
+	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
     //model::BasicNodePtr root = TestScenesFactory::CreedVideoInputTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
 
     std::string filename = "Assets/07_Results.xml";
