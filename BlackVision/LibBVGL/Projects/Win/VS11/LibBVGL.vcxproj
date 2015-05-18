@@ -80,6 +80,7 @@
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonDirs.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommon.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonInclude.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.Win32.debug.props" />
   </ImportGroup>
@@ -88,6 +89,7 @@
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonDirs.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommon.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonInclude.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.x64.debug.props" />
   </ImportGroup>
@@ -96,6 +98,7 @@
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonDirs.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommon.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonInclude.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.Win32.release.props" />
   </ImportGroup>
@@ -104,6 +107,7 @@
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonDirs.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommon.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonInclude.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.x64.release.props" />
   </ImportGroup>
@@ -124,7 +128,7 @@
     <ClCompile>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(DepDir)/Common/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DepDir)/3rdParty/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -134,7 +138,7 @@
     <ClCompile>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(DepDir)/Common/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DepDir)/3rdParty/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -145,7 +149,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(DepDir)/Common/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DepDir)/3rdParty/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -158,7 +162,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(DepDir)/Common/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DepDir)/3rdParty/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

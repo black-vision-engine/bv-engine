@@ -25,6 +25,10 @@
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 
+#include "System/Env.h"
+#include "BVConfig.h"
+
+
 namespace bv {
 
 namespace {
@@ -459,6 +463,49 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 
 // *****************************
 //
+model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    auto scene = Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
+
+    model::BasicNodePtr node = nullptr;
+
+    if( scene == "TWO_TEXTURED_RECTANGLES" )
+    {
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
+    }
+    else if( scene == "ONE_TEXTURED_RECTANGLE" )
+    {
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
+    }
+    else if( scene == "OLAF_TEST_SCENE" )
+    {
+        node = TestScenesFactory::OlafTestScene( pluginsManager, timelineManager, timeEvaluator );
+    }
+    else if( scene == "CREED_TEST_SCENE" )
+    {
+        // FIXME: there was no implementation of CreedTestScene
+        node = TestScenesFactory::CreedVideoInputTestScene( pluginsManager, timelineManager, timeEvaluator );
+    }
+    else if( scene == "VIDEO_INPUT_TEST_SCENE" )
+    {
+        node = TestScenesFactory::CreedVideoInputTestScene( pluginsManager, timelineManager, timeEvaluator );
+    }
+    else if( scene == "DEFAULT_TEXT" )
+    {
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
+    }
+    else
+    {
+        printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
+
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_ONE_SOLID_COLOR_RECTANGLE );
+    }
+
+    return node;
+}
+
+// *****************************
+//
 model::BasicNodePtr     TestScenesFactory::CreateTestRandomNode        ( const std::string & name,  const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     return TexturedTestRandomRect( name, pluginsManager, timelineManager, timeEvaluator );
@@ -470,6 +517,8 @@ model::BasicNodePtr     TestScenesFactory::CreateTestScene      ( const model::P
 {
     switch( tss )
     {
+        case TestSceneSelector::TSS_ONE_SOLID_COLOR_RECTANGLE:
+            return SolidRect( pluginsManager, timelineManager, timeEvaluator );
         case TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES:
             return TwoTexturedRectangles( pluginsManager, timelineManager, timeEvaluator );
 		case TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE:

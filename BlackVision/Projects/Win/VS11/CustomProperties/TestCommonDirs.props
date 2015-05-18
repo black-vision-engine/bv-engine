@@ -11,6 +11,7 @@
     <TestDir>..\..\..\..\..\..\Test</TestDir>
     <LibImageDir>..\..\..\..\..\..\LibImage\Source</LibImageDir>
     <LibCoreDir>..\..\..\..\..\..\LibCore\Source</LibCoreDir>
+    <ToolsDir>..\..\..\..\..\..\Tools</ToolsDir>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
@@ -38,6 +39,9 @@
     </BuildMacro>
     <BuildMacro Include="LibCoreDir">
       <Value>$(LibCoreDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ToolsDir">
+      <Value>$(ToolsDir)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>
