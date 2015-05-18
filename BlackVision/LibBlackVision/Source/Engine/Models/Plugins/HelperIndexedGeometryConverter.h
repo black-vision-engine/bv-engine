@@ -14,9 +14,9 @@ private:
 	unsigned int			remainnigTriangles;	///< Number of traingles to use.
 	std::vector<bool>		usedTriangles;		///< Indicates which indicies(triangles) have been used.
 protected:
-	bool findNeighbour( unsigned short index1, unsigned short index2, unsigned short& foundIndex, std::vector<unsigned short>& indicies, std::vector<glm::vec3>& verticies );
-	bool findNeighbour( unsigned short index1, unsigned short& foundIndex, std::vector<unsigned short>& indicies, std::vector<glm::vec3>& verticies );
-	void addFirstUnusedPoints( unsigned short& index1, unsigned short& index2, std::vector<unsigned short>& indicies, std::vector<glm::vec3>& verticies, Float3AttributeChannelPtr verts );
+	bool findNeighbour( unsigned short index1, unsigned short index2, unsigned short& foundIndex, std::vector<unsigned short>& indicies );
+	bool findNeighbourPair( unsigned short index1, unsigned short& foundIndex1, unsigned short& foundIndex2, std::vector<unsigned short>& indicies );
+	void findFirstUnusedTriangle( unsigned short& index1, std::vector<unsigned short>& indicies );
 public:
 	IndexedGeometryConverter(void);
 	~IndexedGeometryConverter(void);
