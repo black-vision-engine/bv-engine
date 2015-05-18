@@ -79,6 +79,27 @@ model::BasicNodePtr CreateSingleTestNodeUidsOnly( const std::string & nodeName, 
 
 // *****************************
 //
+model::BasicNodePtr SolidRect( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { timelineManager; } // FIXME: suppress unused warning
+
+    auto rootNode =     CreateSingleTestNodeUidsOnly( "root", pluginsManager, timeEvaluator, 3,
+                                                      "DEFAULT_TRANSFORM", 
+                                                      "DEFAULT_RECTANGLE", 
+                                                      "DEFAULT_COLOR" );
+    assert( rootNode );
+
+    auto color = rootNode->GetPlugin( "solid color" )->GetParameter( "color" );
+    assert( color );
+
+    auto success = SetParameter( color, 0.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    assert( success );
+
+    return rootNode;
+}
+
+// *****************************
+//
 model::BasicNodePtr TexturedTestRandomRect( const std::string & name, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { timelineManager; } // FIXME: suppress unused warning

@@ -177,4 +177,11 @@ inline const char *         BVConfig::FrameStatsSection         () const
     return "FRAME";
 }
 
+// *********************************
+//
+inline std::string          BVConfig::DefaultSceneEnvVarName    () const
+{
+    return m_defaultSceneEnvVarName;
+}
+
 } //bv

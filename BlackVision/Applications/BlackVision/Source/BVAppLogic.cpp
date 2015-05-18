@@ -188,14 +188,11 @@ void BVAppLogic::LoadSceneFromFile( std::string filename )
 //
 void BVAppLogic::LoadScene          ( void )
 {
-    //model::BasicNodePtr root = TestScenesFactory::OlafTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
-    //model::BasicNodePtr root = TestScenesFactory::CreedTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
-    //model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
-	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
-	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
-    //model::BasicNodePtr root = TestScenesFactory::CreedVideoInputTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
+    auto root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, m_timelineManager, m_globalTimeline );
+	assert( root );
 
-    LoadSceneFromFile( "Assets/07_Results.xml" );
+    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline, m_renderer );
+    assert( m_bvScene );
 }
 
 // *********************************
