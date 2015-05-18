@@ -9,7 +9,6 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
-
 namespace bv {
 
 // *******************************

@@ -376,6 +376,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Interfaces\ISerializable.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\ICachedParameter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IState.h" />
@@ -648,6 +649,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Processes\ProcessManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Processes\ProcessThreaded.h" />
     <ClInclude Include="..\..\..\Source\Engine\Processes\ProcessThreadedEvents.h" />
+    <ClInclude Include="..\..\..\Source\Engine\SerializationObjects.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Enums.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\EnumsUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\BaseValue.h" />

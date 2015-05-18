@@ -1709,6 +1709,12 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Interfaces\ISerializable.h">
+      <Filter>Engine\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\SerializationObjects.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
