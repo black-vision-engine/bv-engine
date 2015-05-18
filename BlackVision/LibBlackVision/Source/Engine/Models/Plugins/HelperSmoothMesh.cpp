@@ -45,6 +45,8 @@ void HelperSmoothMesh::private_smooth( IndexedGeometry& mesh, std::vector<unsign
 
 	IndexedGeometry new_mesh( mesh );
 
+	tesselate( mesh, new_mesh );
+	move_verticies( mesh, edges, resultMesh );
 
 	smooth( new_mesh, edges, tesselation - 1, resultMesh );
 	// Remember! You can't do anything with new_mesh after smooth call. It have been already moved to resultMesh.
@@ -53,18 +55,25 @@ void HelperSmoothMesh::private_smooth( IndexedGeometry& mesh, std::vector<unsign
 /**Tesselates given mesh one time.*/
 void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& resultMesh )
 {
-	mesh;
 	resultMesh;
-	std::vector<unsigned short> indicies = mesh.getIndicies();
-	std::vector<glm::vec3> move_verticies = mesh.getVerticies();
+	std::vector<unsigned short>& indicies = mesh.getIndicies();
+	std::vector<glm::vec3>& verticies = mesh.getVerticies();
+	std::vector<bool> verticies_bitset;
 
-	//for( auto i = 0; i < 
+
+	verticies_bitset.resize( verticies.size() );
+
+	for( unsigned int i = 0; i < indicies.size(); i += 3 )
+	{
+
+	}
 }
 
 /**Moves verticies of the new mesh to appropriate positions.*/
-void move_verticies( IndexedGeometry& mesh, IndexedGeometry& resultMesh )
+void move_verticies( IndexedGeometry& mesh, std::vector<unsigned short>& edges, IndexedGeometry& resultMesh )
 {
 	mesh;
+	edges;
 	resultMesh;
 }
 

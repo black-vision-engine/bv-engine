@@ -39,7 +39,7 @@ private:
 protected:
 	void private_smooth( IndexedGeometry& mesh, std::vector<unsigned short>& edges, unsigned int tesselation, IndexedGeometry& resultMesh );
 	void tesselate( IndexedGeometry& mesh, IndexedGeometry& resultMesh );
-	void move_verticies( IndexedGeometry& mesh, IndexedGeometry& resultMesh );
+	void move_verticies( IndexedGeometry& mesh, std::vector<unsigned short>& edges, IndexedGeometry& resultMesh );
 
 public:
 	HelperSmoothMesh(void);
