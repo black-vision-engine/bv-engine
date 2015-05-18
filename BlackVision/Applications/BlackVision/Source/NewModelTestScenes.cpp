@@ -714,6 +714,7 @@ model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const mod
     auto vi = new ExampleVideoInput( 10, 10, 1.f );
     auto success = plugin->LoadResource( AssetDescConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture(), vi ) ) );
     assert(success);
+	{ success; }
     //auto vi2 = new ExampleVideoInput( 20, 20, 1.f );
     //success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi2->GetTexture(), vi2 ) ) );
     //assert(success);
