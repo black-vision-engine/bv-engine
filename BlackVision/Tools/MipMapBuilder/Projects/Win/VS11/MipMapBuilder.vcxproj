@@ -57,6 +57,7 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonDirs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommon.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.Win32.debug.props" />
   </ImportGroup>
@@ -65,6 +66,7 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonDirs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommon.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.x64.debug.props" />
   </ImportGroup>
@@ -73,6 +75,7 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonDirs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommon.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.Win32.release.props" />
   </ImportGroup>
@@ -81,6 +84,7 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonDirs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommon.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.x64.release.props" />
   </ImportGroup>

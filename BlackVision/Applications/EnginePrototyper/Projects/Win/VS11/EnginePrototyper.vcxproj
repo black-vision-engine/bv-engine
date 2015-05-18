@@ -57,8 +57,10 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.Win32.debug.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibDirs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.Win32.debug.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
@@ -66,8 +68,10 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.x64.debug.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibDirs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.x64.debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -75,8 +79,10 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.Win32.release.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibDirs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.Win32.release.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
@@ -84,8 +90,10 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.x64.release.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibDirs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.x64.release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />

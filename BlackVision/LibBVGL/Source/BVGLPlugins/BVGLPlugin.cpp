@@ -6,7 +6,7 @@
 namespace bv {
 
 // *****************************
-// FIXME: this initialization should check much more caps and return an error code instead of a simple bool
+// FIXME: this initialization should check more caps and return an error code instead of a simple bool
 bool        BVGLPlugin::InitializeBVGL						()
 {
     glewInit();

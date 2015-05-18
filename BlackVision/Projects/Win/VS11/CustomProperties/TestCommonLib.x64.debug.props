@@ -5,7 +5,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalLibraryDirectories>$(BOOST_DEBUG_64_LIB);$(DepDir)\Common\gtest\Lib\x64;$(DepDir)/Common/FreeType/objs/x64/debug;$(DepDir)/Common/FreeImage/Dist/x64;$(DepDir)/Common/glew/lib/x64/;$(DepDir)/Common/glfw/lib/x64/;$(DepDir)/Common/hashlib2plus/Dist/x64/Debug;$(DepDir)/Common/sqlite/Dist/x64/Debug;$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BOOST_DEBUG_64_LIB);$(OutDir)</AdditionalLibraryDirectories>
       <AdditionalDependencies>gtestD.lib;sqliteD.lib;hashlib2plusD.lib;freetype250_D.lib;opengl32.lib;glu32.lib;glew32s.lib;FreeImage.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
