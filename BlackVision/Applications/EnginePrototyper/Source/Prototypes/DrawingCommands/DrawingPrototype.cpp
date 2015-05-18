@@ -30,10 +30,11 @@ void    DrawingPrototype::Initialize          ()
 {
     BVGLExt::bvglClearColor( 0.f, 0.f, 0.f, 0.f );
 
-    m_mode = DrawingMode::CreateDrawingMode( 0 );
-	m_scene = DrawingTestScene::CreateDrawingTestScene( 0 ); 
+	DrawingTestScene::Initialize();
+	DrawingMode::Initialize();
 
-	PrepareShader();
+	m_mode = DrawingMode::GetMode( '0' );
+	m_scene = DrawingTestScene::GetNextScene(); 
 }
 
 // *****************************
@@ -47,7 +48,17 @@ void    DrawingPrototype::Update              ( TimeType t )
 //
 void    DrawingPrototype::Key                 ( unsigned char c )
 {
-	{ c; }
+	if( c == 'n' )
+	{
+		delete m_scene;
+		m_scene = DrawingTestScene::GetNextScene(); 
+		printf( "Drawing scene: %s\n", m_scene->GetName() );
+	} 
+	else if( c > 40 && c < 65 ) {
+		delete m_mode;
+		m_mode = DrawingMode::GetMode( c ); 
+		printf( "Drawing mode: %s\n", m_mode->GetName() );
+	}
 }
 
 // *****************************
@@ -62,41 +73,9 @@ void    DrawingPrototype::Resize              ( UInt32 w, UInt32 h )
 void    DrawingPrototype::Render              ()
 {
     BVGLExt::bvglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    
-	m_prog.Use();
 	
 	m_scene->Bind();
 	m_mode->Render( m_scene->GetDrawingModeData() );
-}
-
-// **************************
-//
-bool    DrawingPrototype::PrepareShader		()
-{
-    std::string shadersRoot = config::PROTOTYPES_SHADERS_ROOT + "DrawingCommands/";
-
-    std::string vsFile = shadersRoot + "default.vert";
-    std::string psFile = shadersRoot + "default.frag";
-
-    if( !m_prog.CompileShaderFromFile( vsFile.c_str(), GL_VERTEX_SHADER ) )
-    {
-        printf( "Vertex shader failed to compile!\n%s", m_prog.Log().c_str());
-        return false;
-    }
-
-    if( !m_prog.CompileShaderFromFile( psFile.c_str(), GL_FRAGMENT_SHADER ) )
-    {
-        printf( "Pixel shader failed to compile!\n%s", m_prog.Log().c_str());
-        return false;
-    }
-
-    if( !m_prog.Link() )
-    {
-        printf( "Shader program failed to link!\n%s", m_prog.Log().c_str() );
-        return false;
-    }
-
-    return true;
 }
 
 } // bv

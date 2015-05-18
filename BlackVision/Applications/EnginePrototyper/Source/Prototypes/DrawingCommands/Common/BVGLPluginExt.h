@@ -30,6 +30,7 @@ public:
 	virtual void				VertexAttribDivisor								( GLuint index,  GLuint divisor );
 	
 	virtual void				BufferSubData									( GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid * data );
+	virtual void *				MapBufferRange									( GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access );
 	
 	//overrides..
 	virtual void                BufferData										( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage ) override;

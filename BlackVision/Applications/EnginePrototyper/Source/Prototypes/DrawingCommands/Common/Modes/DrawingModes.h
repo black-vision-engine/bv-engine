@@ -1,39 +1,33 @@
-#	pragma once
+#pragma once
 
 #include "Prototypes/DrawingCommands/Common/DrawingMode.h"
+#include "Prototypes/DrawingCommands/Common/DrawingTestScene.h"
 
 namespace bv {
 
 class DrawingModeArrays : public DrawingMode
 {
 public:
-    virtual void                Render			( const DrawingModeData& data );
+    virtual void				Render		( const DrawingModeData& data );
+	virtual const char *		GetName		()  { return "glDrawArrays"; }
 };
 
-inline	void		DrawingModeArrays::Render							( const DrawingModeData& data ){
-	BVGLExt::bvglDrawArrays( data.mode, data.first, data.count );
-}
-
-class DrawingModeElements : public DrawingMode
+inline	void					DrawingModeArrays::Render		( const DrawingModeData& data )
 {
-public:
-    virtual void                Render			( const DrawingModeData& data );
-};
-
-inline	void		DrawingModeElements::Render							( const DrawingModeData& data ){
-	BVGLExt::bvglDrawElements( data.mode, data.count, data.type, data.indices );
+	BVGLExt::bvglDrawArrays( data.mode, data.first, data.count );
 }
 
 // *****************************
 //
-class DrawingModeElementsBaseVertex : public DrawingMode
+class DrawingModeElements : public DrawingMode
 {
 public:
-    virtual void                Render			( const DrawingModeData& data );
+    virtual void		Render		( const DrawingModeData& data );
+	const char *		GetName		()  { return "glDrawElements"; }
 };
 
-inline	void		DrawingModeElementsBaseVertex::Render					( const DrawingModeData& data ){
-	BVGLExt::bvglDrawElementsBaseVertex( data.mode, data.count, data.type, const_cast<void *>( data.indices ), data.basevertex );
+inline	void		DrawingModeElements::Render							( const DrawingModeData& data ){
+	BVGLExt::bvglDrawElements( data.mode, data.count, data.type, 0 );
 }
 
 // *****************************
@@ -41,23 +35,39 @@ inline	void		DrawingModeElementsBaseVertex::Render					( const DrawingModeData& 
 class DrawingModeArraysInstanced : public DrawingMode
 {
 public:
-    virtual void                Render			( const DrawingModeData& data );
+    virtual void		Render		( const DrawingModeData& data );
+	const char *		GetName		()  { return "glDrawArraysInstanced"; }
 };
 
 inline	void		DrawingModeArraysInstanced::Render					( const DrawingModeData& data ){
 	BVGLExt::bvglDrawArraysInstanced( data.mode, data.first, data.count, data.primcount );
 }
 
+
 // *****************************
 //
 class DrawingModeElementsInstanced : public DrawingMode
 {
 public:
-    virtual void                Render			( const DrawingModeData& data );
+    virtual void		Render		( const DrawingModeData& data );
+	const char *		GetName		()  { return "glDrawElementsInstanced"; }
 };
 
 inline	void		DrawingModeElementsInstanced::Render				( const DrawingModeData& data ){
-	BVGLExt::bvglDrawElementsInstanced( data.mode, data.count, data.type, data.indices, data.primcount );
+	BVGLExt::bvglDrawElementsInstanced( data.mode, data.count, data.type, 0, data.primcount );
+}
+
+// *****************************
+//
+class DrawingModeElementsBaseVertex : public DrawingMode
+{
+public:
+    virtual void		Render		( const DrawingModeData& data );
+	const char *		GetName		()  { return "glDrawElementsBaseVertex"; }
+};
+
+inline	void		DrawingModeElementsBaseVertex::Render					( const DrawingModeData& data ){
+	BVGLExt::bvglDrawElementsBaseVertex( data.mode, data.count, data.type, 0, data.basevertex );
 }
 
 // *****************************
@@ -65,7 +75,8 @@ inline	void		DrawingModeElementsInstanced::Render				( const DrawingModeData& da
 class DrawingModeArraysInstancedBaseInstance : public DrawingMode
 {
 public:
-    virtual void                Render			( const DrawingModeData& data );
+    virtual void		Render		( const DrawingModeData& data );
+	const char *		GetName		()  { return "glDrawArraysInstancedBaseInstance"; }
 };
 
 inline	void		DrawingModeArraysInstancedBaseInstance::Render		( const DrawingModeData& data ){
@@ -77,12 +88,12 @@ inline	void		DrawingModeArraysInstancedBaseInstance::Render		( const DrawingMode
 class DrawingModeElementsInstancedBaseVertexBaseInstance : public DrawingMode
 {
 public:
-    virtual void                Render			( const DrawingModeData& data );
+    virtual void		Render		( const DrawingModeData& data );
+	const char *		GetName		()  { return "glDrawElementsInstancedBaseVertexBaseInstance"; }
 };
 
 inline	void		DrawingModeElementsInstancedBaseVertexBaseInstance::Render	( const DrawingModeData& data ){
-	//const_cast?
-	BVGLExt::bvglDrawElementsInstancedBaseVertexBaseInstance( data.mode, data.count, data.type, const_cast<void *>( data.indices ), data.primcount, data.basevertex, data.baseinstance );
+	BVGLExt::bvglDrawElementsInstancedBaseVertexBaseInstance( data.mode, data.count, data.type, 0, data.primcount, data.basevertex, data.baseinstance );
 }
 
 // *****************************
@@ -90,12 +101,12 @@ inline	void		DrawingModeElementsInstancedBaseVertexBaseInstance::Render	( const 
 class DrawingModeElementsInstancedBaseVertex : public DrawingMode
 {
 public:
-    virtual void                Render			( const DrawingModeData& data );
+    virtual void		Render		( const DrawingModeData& data );
+	const char *		GetName		()  { return "glDrawElementsInstancedBaseVertex"; }
 };
 
 inline	void		DrawingModeElementsInstancedBaseVertex::Render		( const DrawingModeData& data ){
-	//const_cast?
-	BVGLExt::bvglDrawElementsInstancedBaseVertex( data.mode, data.count, data.type, const_cast<void *>( data.indices ), data.primcount, data.basevertex );
+	BVGLExt::bvglDrawElementsInstancedBaseVertex( data.mode, data.count, data.type, 0, data.primcount, data.basevertex );
 }
 
 // *****************************
@@ -103,11 +114,13 @@ inline	void		DrawingModeElementsInstancedBaseVertex::Render		( const DrawingMode
 class DrawingModeArraysIndirect : public DrawingMode
 {
 public:
-    virtual void                Render			( const DrawingModeData& data );
+    virtual void		Render		( const DrawingModeData& data );
+	const char *		GetName		()  { return "glDrawArraysIndirect"; }
 };
 
 inline	void		DrawingModeArraysIndirect::Render					( const DrawingModeData& data ){
-	BVGLExt::bvglDrawArraysIndirect( data.mode, &data.indirectArrays );
+	data.scene->BindIndirectArrays();
+	BVGLExt::bvglDrawArraysIndirect( data.mode, 0 );
 }
 
 // *****************************
@@ -115,11 +128,13 @@ inline	void		DrawingModeArraysIndirect::Render					( const DrawingModeData& data
 class DrawingModeElementsIndirect : public DrawingMode
 {
 public:
-    virtual void                Render			( const DrawingModeData& data );
+    virtual void		Render		( const DrawingModeData& data );
+	const char *		GetName		()  { return "glDrawElementsIndirect"; }
 };
 
 inline	void		DrawingModeElementsIndirect::Render					( const DrawingModeData& data ){
-	BVGLExt::bvglDrawElementsIndirect( data.mode, data.type, &data.indirectElements );
+	data.scene->BindIndirectElements();
+	BVGLExt::bvglDrawElementsIndirect( data.mode, data.type, 0 );
 }
 
 // *****************************
@@ -127,11 +142,13 @@ inline	void		DrawingModeElementsIndirect::Render					( const DrawingModeData& da
 class DrawingModeMultiArraysIndirect : public DrawingMode
 {
 public:
-    virtual void                Render			( const DrawingModeData& data );
+    virtual void		Render		( const DrawingModeData& data );
+	const char *		GetName		()  { return "glMultiDrawArraysIndirect"; }
 };
 
 inline	void		DrawingModeMultiArraysIndirect::Render				( const DrawingModeData& data ){
-	BVGLExt::bvglMultiDrawArraysIndirect( data.mode, &data.indirectArrays, data.drawcount, data.stride );
+	data.scene->BindIndirectArrays();
+	BVGLExt::bvglMultiDrawArraysIndirect( data.mode, 0, data.primcount, data.stride );
 }
 
 // *****************************
@@ -139,11 +156,13 @@ inline	void		DrawingModeMultiArraysIndirect::Render				( const DrawingModeData& 
 class DrawingModeMultiElementsIndirect : public DrawingMode
 {
 public:
-    virtual void                Render			( const DrawingModeData& data );
+    virtual void		Render		( const DrawingModeData& data );
+	const char *		GetName		()  { return "glMultiDrawElementsIndirect"; }
 };
 
 inline	void		DrawingModeMultiElementsIndirect::Render			( const DrawingModeData& data ){
-	BVGLExt::bvglMultiDrawElementsIndirect( data.mode, data.type, &data.indirectElements, data.drawcount, data.stride );
+	data.scene->BindIndirectElements();
+	BVGLExt::bvglMultiDrawElementsIndirect( data.mode, data.type, 0, data.primcount, data.stride );
 }
 
 } //bv

@@ -16,7 +16,6 @@ private:
 
     DrawingMode *			m_mode;
     DrawingTestScene *		m_scene;
-    GLSLProgram				m_prog;
 
 public:
 
@@ -28,10 +27,6 @@ public:
     virtual     void    Render              ()                      override;
     virtual     void    Key                 ( unsigned char c )     override;
     virtual     void    Resize              ( UInt32 w, UInt32 h )  override;
-
-private:
-
-    bool    PrepareShader                   ();
 
 };
 

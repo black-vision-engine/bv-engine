@@ -29,6 +29,7 @@ public:
 	static void				   bvglVertexAttribDivisor							( GLuint index,  GLuint divisor );
 	
 	static void				   bvglBufferSubData								( GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid * data );
+	static void	*			   bvglMapBufferRange								( GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access );
 
 	//override 'hack'...
 	static  void               bvglBufferDataOverride							( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage );

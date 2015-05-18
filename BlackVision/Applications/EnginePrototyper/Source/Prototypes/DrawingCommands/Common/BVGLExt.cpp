@@ -101,11 +101,18 @@ void		BVGLExt::bvglBufferSubData									( GLenum target, GLintptr offset, GLsiz
 	bvgl.BufferSubData( target, offset, size, data );
 }
 
+// *****************************
+//
+void *		BVGLExt::bvglMapBufferRange									( GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access )
+{
+	return bvgl.MapBufferRange( target, offset, length, access );
+}
+
 //------------------------overrides---------------------------
 
 // *****************************
 //
-void        BVGLExt::bvglBufferDataOverride								( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage )
+void		BVGLExt::bvglBufferDataOverride								( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage )
 {
 	bvgl.BufferData( target, size, data, usage );
 }

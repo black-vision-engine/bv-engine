@@ -7,7 +7,8 @@ namespace bv {
 class DrawingTestScene0 : public DrawingTestScene
 {
 public:
-						DrawingTestScene0		();
+								DrawingTestScene0		();
+	virtual const char *		GetName					();
 };
 
 } //bv

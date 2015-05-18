@@ -87,9 +87,6 @@
     <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingTestScene.cpp">
       <Filter>Prototypes\DrawingCommands\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Scenes\DrawingTestScene1.cpp">
-      <Filter>Prototypes\DrawingCommands\Common\Scenes</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
@@ -193,9 +190,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Modes\DrawingModes.h">
       <Filter>Prototypes\DrawingCommands\Common\Modes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Scenes\DrawingTestScene1.h">
-      <Filter>Prototypes\DrawingCommands\Common\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

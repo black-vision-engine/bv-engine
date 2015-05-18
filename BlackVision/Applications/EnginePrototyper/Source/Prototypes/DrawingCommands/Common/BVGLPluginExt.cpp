@@ -120,6 +120,13 @@ void        BVGLPluginExt::BufferSubData								( GLenum target, GLintptr offset
 	glBufferSubData( target, offset, size, data );
 }
 
+// *****************************
+//
+void *		BVGLPluginExt::MapBufferRange								( GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access )
+{
+	return glMapBufferRange( target, offset, length, access );
+}
+
 
 //overrides...
 
