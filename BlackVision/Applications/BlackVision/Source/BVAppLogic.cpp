@@ -139,6 +139,28 @@ model::BasicNodePtr ParseNode( xml_node<>* node, model::ITimeEvaluatorPtr teDAFA
     return root;
 }
 
+void BVAppLogic::LoadSceneFromFile( std::string filename )
+{
+    assert( File::Exists( filename ) );
+
+    xml_document<> doc;
+    std::ifstream file( filename );
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    file.close();
+    std::string content( buffer.str() );
+    doc.parse<0>( &content[0] );
+        
+    auto nNode = doc.first_node( "scene" )->first_node( "nodes" )->first_node( "node" );
+
+    model::BasicNodePtr root = ParseNode( nNode, m_globalTimeline );
+
+	assert( root );
+
+    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline, m_renderer );
+    assert( m_bvScene );
+}
+
 // *********************************
 //
 void BVAppLogic::LoadScene          ( void )
@@ -150,25 +172,7 @@ void BVAppLogic::LoadScene          ( void )
 	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
     //model::BasicNodePtr root = TestScenesFactory::CreedVideoInputTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline );
 
-    std::string filename = "Assets/07_Results.xml";
-    assert( File::Exists( filename ) );
-
-    xml_document<> doc;
-    std::ifstream file( filename );
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    file.close();
-    std::string content( buffer.str() );
-    doc.parse<0>( &content[0] );
-
-    auto nNode = doc.first_node( "scene" )->first_node( "nodes" )->first_node( "node" );
-
-    model::BasicNodePtr root = ParseNode( nNode, m_globalTimeline );
-
-	assert( root );
-
-    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline, m_renderer );
-    assert( m_bvScene );
+    LoadSceneFromFile( "Assets/07_Results.xml" );
 }
 
 // *********************************
