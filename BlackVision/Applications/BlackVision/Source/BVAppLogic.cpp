@@ -129,61 +129,6 @@ void BVAppLogic::Initialize         ()
 }
 
 
-model::BasicNodePtr ParseNode( xml_node<>* node, model::ITimeEvaluatorPtr teDAFAK )
-{
-    auto aName = node->first_attribute( "name" ); assert( aName );
-    model::BasicNodePtr root = model::BasicNode::Create( aName->value(), teDAFAK );
-
-    root->AddPlugin( "DEFAULT_TRANSFORM", teDAFAK ); // FIXME
-
-    return root;
-}
-
-//class DeserializeObject : public xml_document<>
-//{
-//public:
-//};
-
-void BVAppLogic::LoadSceneFromFile( std::string filename )
-{
-    assert( File::Exists( filename ) );
-
-    xml_document<> doc;
-    std::ifstream file( filename );
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    file.close();
-    std::string content( buffer.str() );
-    doc.parse<0>( &content[0] );
-
-    auto nRoot = doc.first_node();
-
-    if( strcmp( nRoot->name(), "scene" ) )
-    {
-        std::cerr << "[SceneLoader] ERROR: XML root node is not \"scene\"" << std::endl;
-        return;
-    }
-
-    auto nNodes = nRoot->first_node( "nodes" );
-    if( !nNodes )
-    {
-        std::cerr << "[SceneLoader] ERROR: scene has no node \"nodes\"" << std::endl;
-        return;
-    }
-
-    //auto deDoc = DeserializeObject( doc );
-
-    //auto nodes = BVScene::Create( deDoc );
-    auto nNode = nNodes->first_node( "node" );
-
-    model::BasicNodePtr root = ParseNode( nNode, m_globalTimeline );
-
-	assert( root );
-
-    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline, m_renderer );
-    assert( m_bvScene );
-}
-
 // *********************************
 //
 void BVAppLogic::LoadScene          ( void )

@@ -854,6 +854,66 @@ model::BasicNodePtr          TestScenesFactory::XMLTestScene()
 }
 
 
+model::BasicNodePtr ParseNode( xml_node<>* node, model::ITimeEvaluatorPtr teDAFAK )
+{
+    auto aName = node->first_attribute( "name" ); assert( aName );
+    model::BasicNodePtr root = model::BasicNode::Create( aName->value(), teDAFAK );
+
+    root->AddPlugin( "DEFAULT_TRANSFORM", teDAFAK ); // FIXME
+
+    return root;
+}
+
+//class DeserializeObject : public xml_document<>
+//{
+//public:
+//};
+
+model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::PluginsManager * /*pluginsManager*/, model::TimelineManager * timelineManager )
+{
+    assert( File::Exists( filename ) );
+
+    xml_document<> doc;
+    std::ifstream file( filename );
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    file.close();
+    std::string content( buffer.str() );
+    doc.parse<0>( &content[0] );
+
+    auto nRoot = doc.first_node();
+
+    if( strcmp( nRoot->name(), "scene" ) )
+    {
+        std::cerr << "[SceneLoader] ERROR: XML root node is not \"scene\"" << std::endl;
+        return nullptr;
+    }
+
+    auto nNodes = nRoot->first_node( "nodes" );
+    if( !nNodes )
+    {
+        std::cerr << "[SceneLoader] ERROR: scene has no node \"nodes\"" << std::endl;
+        return nullptr;
+    }
+
+    //auto deDoc = DeserializeObject( doc );
+
+    //auto nodes = BVScene::Create( deDoc );
+    auto nNode = nNodes->first_node( "node" );
+
+    model::BasicNodePtr root = ParseNode( nNode, timelineManager->GetRootTimeline() );
+
+	assert( root );
+
+    return root;
+}
+
+
+model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )
+{
+    return LoadSceneFromFile( "Assets/07_Results.xml", pluginsManager, timelineManager );
+}
+
 
 // ******************************
 //
