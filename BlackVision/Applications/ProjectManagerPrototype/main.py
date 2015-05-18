@@ -1,7 +1,4 @@
-
-
-
-def test():
+﻿def test():
     pass
 
 
