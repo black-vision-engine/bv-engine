@@ -6,7 +6,7 @@
   <ItemDefinitionGroup>
     <Link>
       <AdditionalLibraryDirectories>$(BOOST_DEBUG_32_LIB);$(DepDir)\Common\gtest\Lib\win32;$(DepDir)/Common/FreeType/objs/win32/debug;$(DepDir)/Common/FreeImage/Dist/Win32;$(DepDir)/Common/glew/lib/Win32;$(DepDir)/Common/glfw/lib/win32;$(DepDir)/Common/hashlib2plus/Dist/Win32/Debug;$(DepDir)/Common/sqlite/Dist/Win32/Debug;$(OutDir)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>gtestD.lib;sqliteD.lib;hashlib2plusD.lib;freetype250_D.lib;opengl32.lib;glu32.lib;glew32s.lib;FreeImaged.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gtestD.lib;sqliteD.lib;hashlib2plusD.lib;freetype250_D.lib;opengl32.lib;glu32.lib;glew32s.lib;FreeImage.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
