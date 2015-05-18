@@ -11,7 +11,7 @@ namespace
 
 // ******************************
 //
-Image32		EnlargeImageToPowerOfTwo( const Image32 & in, bv::image::FilterType ft )
+Image		EnlargeImageToPowerOfTwo( const Image & in, bv::image::FilterType ft )
 {
 	if( bv::IsPowerOfTwo( in.width ) && bv::IsPowerOfTwo( in.height ) )
 		return in;
@@ -21,16 +21,16 @@ Image32		EnlargeImageToPowerOfTwo( const Image32 & in, bv::image::FilterType ft 
 
 	assert( bv::IsPowerOfTwo( newWidth ) && bv::IsPowerOfTwo( newHeight ) );
 
-	auto data = bv::image::Resize( in.data, in.width, in.height, newWidth, newHeight, ft );
+	auto data = bv::image::Resize( in.data, in.width, in.height, in.bpp, newWidth, newHeight, ft );
 
-	Image32 ret = { data, newWidth, newHeight };
+	Image ret = { data, newWidth, newHeight, in.bpp };
 
 	return ret;
 }
 
 // ******************************
 //
-Image32		GenerateNextLevelMipmap( const Image32 & in, bv::image::FilterType ft )
+Image		GenerateNextLevelMipmap( const Image & in, bv::image::FilterType ft )
 {
 	assert( bv::IsPowerOfTwo( in.width ) && bv::IsPowerOfTwo( in.height ) );
 
@@ -40,11 +40,11 @@ Image32		GenerateNextLevelMipmap( const Image32 & in, bv::image::FilterType ft )
 	if( newWidth == in.width &&  newHeight == in.height )
 		return in;
 
-	auto data = Resize( in.data, in.width, in.height, newWidth, newHeight, ft );
+	auto data = Resize( in.data, in.width, in.height, in.bpp, newWidth, newHeight, ft );
 
 	//bv::image::SaveBMPImage( std::to_string( newWidth ) + std::to_string( newHeight ) + ".bmp", data, newWidth, newHeight, 32 );
 
-	Image32 ret = { data, newWidth, newHeight };
+	Image ret = { data, newWidth, newHeight, in.bpp };
 
 	return ret;
 }
@@ -54,7 +54,7 @@ Image32		GenerateNextLevelMipmap( const Image32 & in, bv::image::FilterType ft )
 
 // ******************************
 //
-Mipmaps				GenerateMipmaps( const Image32 & data, int levelsNum, bv::image::FilterType ft )
+Mipmaps				GenerateMipmaps( const Image & data, int levelsNum, bv::image::FilterType ft )
 {
 	auto imgPowOfTwo = EnlargeImageToPowerOfTwo( data, ft );
 
@@ -63,6 +63,7 @@ Mipmaps				GenerateMipmaps( const Image32 & data, int levelsNum, bv::image::Filt
 	res[ 0 ].data		= imgPowOfTwo.data;
 	res[ 0 ].height		= imgPowOfTwo.height;
 	res[ 0 ].width		= imgPowOfTwo.width;
+	res[ 0 ].bpp		= imgPowOfTwo.bpp;
 
 	if( levelsNum > 1 )
 		for( int i = 1; i < levelsNum; ++i ) 
@@ -92,14 +93,14 @@ Mipmaps				GenerateMipmaps( const std::string & imageFilePath, int levelsNum, bv
 	bv::UInt32 bbp;
 	bv::UInt32 channelNum;
 
-	auto img = bv::image::LoadImage( imageFilePath, &w, &h, &bbp, &channelNum );
+	auto imgMC = bv::image::LoadImage( imageFilePath, &w, &h, &bbp, &channelNum );
 	
-	if( !img )
+	if( !imgMC )
 		return Mipmaps();
 
-	Image32 img32 = { img, props.width, props.height };
+	Image img = { imgMC, props.width, props.height, bbp };
 
-	return GenerateMipmaps( img32, levelsNum, ft );
+	return GenerateMipmaps( img, levelsNum, ft );
 }
 
 // ******************************

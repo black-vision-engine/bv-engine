@@ -95,6 +95,8 @@ ImageProperties GetImageProps( const std::string & imageFilePath )
 	iprops.width = ( bv::SizeType )FreeImage_GetWidth( bitmap );
 	iprops.height = ( bv::SizeType )FreeImage_GetHeight( bitmap );
 
+	FreeImage_Unload( bitmap );
+
 	return iprops;
 }
 
@@ -234,7 +236,11 @@ bool SaveBMPImage( const std::string & filePath, MemoryChunkConstPtr data, UInt3
 
     memcpy( bits, data->Get(), width * height * bpp / 8 );
 
-	return FreeImage_Save( FREE_IMAGE_FORMAT::FIF_BMP, bitmap, filePath.c_str(), BMP_DEFAULT ) ? true : false;
+	auto res = FreeImage_Save( FREE_IMAGE_FORMAT::FIF_BMP, bitmap, filePath.c_str(), BMP_DEFAULT ) ? true : false;
+
+	FreeImage_Unload( bitmap );
+
+	return res;
 }
 
 
@@ -354,20 +360,28 @@ FREE_IMAGE_FILTER ToFIFilter( FilterType ft )
 
 // ******************************
 //
-MemoryChunkConstPtr		Resize( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 newWidth, UInt32 newHeight, FilterType ft )
+MemoryChunkConstPtr		Resize( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 newWidth, UInt32 newHeight, FilterType ft )
 {
-	auto inBitmap = FreeImage_ConvertFromRawBits( (BYTE*)in->Get(), ( int )width, ( int )height, ( int )width * 4, 32, 255, 255, 255 );
+	auto inBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+	memcpy( FreeImage_GetBits( inBitmap ), in->Get(), width * height * bpp / 8 );
 
+	auto b = FreeImage_GetBPP( inBitmap );
+	
 	auto outBitmap = FreeImage_Rescale( inBitmap, ( int )newWidth, ( int )newHeight, ToFIFilter( ft ) );
 
+	auto ob = FreeImage_GetBPP( inBitmap );
+	{b; ob; }
 	//FreeImage_AdjustColors( outBitmap, 1.0, 1.0, 1.0, 1 );
 
-	outBitmap = FreeImage_ConvertTo32Bits( outBitmap );
+	//outBitmap = FreeImage_ConvertTo32Bits( outBitmap );
 
-	auto numBytes = newWidth * newHeight * 4;
+	auto numBytes = newWidth * newHeight * bpp / 8;
 
     char * pixels = new char[ numBytes ]; // FIXME: Use normal allocation to free it with free not delete []
     memcpy( pixels, FreeImage_GetBits( outBitmap ), numBytes );
+
+	FreeImage_Unload( inBitmap );
+	FreeImage_Unload( outBitmap );
 
 	return MemoryChunk::Create( pixels, numBytes );
 }
