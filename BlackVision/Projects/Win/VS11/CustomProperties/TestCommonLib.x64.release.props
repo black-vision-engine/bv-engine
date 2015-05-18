@@ -5,7 +5,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalLibraryDirectories>$(BOOST_RELEASE_64_LIB);$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BOOST_RELEASE_64_LIB);$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>gtest.lib;sqlite.lib;hashlib2plus.lib;freetype250.lib;opengl32.lib;glu32.lib;glew32s.lib;FreeImage.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
