@@ -45,6 +45,8 @@ private:
     glm::vec4       m_defaultClearColor;
     float           m_defaultClearDepth;
 
+    std::string     m_defaultSceneEnvVarName;
+
 private:
 
     BVConfig    ();
@@ -87,6 +89,8 @@ public:
     inline unsigned int         ProfilerDispWaitMillis  () const;
 
     inline const char *         FrameStatsSection       () const;
+
+    inline std::string          DefaultSceneEnvVarName  () const;
 
     static const BVConfig & Instance  ();
 
