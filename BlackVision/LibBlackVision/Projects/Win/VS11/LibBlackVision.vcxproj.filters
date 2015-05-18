@@ -849,6 +849,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.cpp">
       <Filter>Engine\Models\Plugins</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.cpp">
+      <Filter>Engine\Models\Plugins</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1713,6 +1716,12 @@
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h">
+      <Filter>Engine\Models\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.h">
+      <Filter>Engine\Models\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\IndexedGeometry.h">
       <Filter>Engine\Models\Plugins</Filter>
     </ClInclude>
   </ItemGroup>

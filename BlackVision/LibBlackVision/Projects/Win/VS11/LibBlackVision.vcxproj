@@ -302,6 +302,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\GeometryPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\GeometryPluginRect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\GeometryPluginRing.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Manager\PluginsManager.cpp" />
@@ -375,8 +376,10 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\IndexedGeometry.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\ICachedParameter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IState.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IStateSet.h" />
