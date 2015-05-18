@@ -1,17 +1,15 @@
 
-class PMAssetDesc:
+
+class PMAssetType:
 
     def __init__(self):
         pass
 
     @abs
     def getID(self):
-        pass
+        return ""
 
     @abs
     def getLoader(self):
-        pass
+        return None
 
-    @abs
-    def getAssetLocation(self):
-        pass

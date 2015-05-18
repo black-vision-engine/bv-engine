@@ -2,16 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="628a936a-074f-4fb6-b787-fadde4d3e41e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/PMAssetDesc.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Project.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ProjectManager.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Scene.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/ProjectManagerPrototype.iml" afterPath="$PROJECT_DIR$/.idea/ProjectManagerPrototype.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/AssetLocation.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LocationParser.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/PMAssetType.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/PMLocation.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Project.py" afterPath="$PROJECT_DIR$/Project.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ProjectManager.py" afterPath="$PROJECT_DIR$/ProjectManager.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MOVED" beforePath="C:\Users\rodia\sources\bv\BlackVision\Applications\ProjectManagerPrototype\PMAssetDesc.py" afterPath="$PROJECT_DIR$/PMAssetEntity.py" />
     </list>
     <ignored path="ProjectManagerPrototype.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -46,8 +44,20 @@
         <entry file="file://$PROJECT_DIR$/ProjectManager.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
+              <caret line="12" column="34" selection-start-line="12" selection-start-column="34" selection-end-line="12" selection-end-column="34" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LocationParser.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/LocationParser.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -56,17 +66,49 @@
         <entry file="file://$PROJECT_DIR$/Project.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="16" column="57" selection-start-line="16" selection-start-column="57" selection-end-line="16" selection-end-column="57" />
+              <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PMAssetEntity.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PMAssetEntity.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PMAssetDesc.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/PMAssetDesc.py">
+      <file leaf-file-name="AssetLocation.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/AssetLocation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3756906">
-              <caret line="16" column="12" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="3" column="8" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PMLocation.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/PMLocation.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PMAssetType.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/PMAssetType.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.30524862">
+              <caret line="13" column="19" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -94,9 +136,14 @@
       <list>
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/Scene.py" />
-        <option value="$PROJECT_DIR$/Project.py" />
-        <option value="$PROJECT_DIR$/ProjectManager.py" />
         <option value="$PROJECT_DIR$/PMAssetDesc.py" />
+        <option value="$PROJECT_DIR$/PMAssetEntity.py" />
+        <option value="$PROJECT_DIR$/AssetLocation.py" />
+        <option value="$PROJECT_DIR$/PMLocation.py" />
+        <option value="$PROJECT_DIR$/ProjectManager.py" />
+        <option value="$PROJECT_DIR$/LocationParser.py" />
+        <option value="$PROJECT_DIR$/Project.py" />
+        <option value="$PROJECT_DIR$/PMAssetType.py" />
       </list>
     </option>
   </component>
@@ -460,7 +507,41 @@
     <entry file="file://$PROJECT_DIR$/ProjectManager.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
+          <caret line="12" column="34" selection-start-line="12" selection-start-column="34" selection-end-line="12" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AssetLocation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="3" column="8" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LocationParser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PMAssetEntity.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PMLocation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -468,15 +549,17 @@
     <entry file="file://$PROJECT_DIR$/Project.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="57" selection-start-line="16" selection-start-column="57" selection-end-line="16" selection-end-column="57" />
-          <folding />
+          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PMAssetDesc.py">
+    <entry file="file://$PROJECT_DIR$/PMAssetType.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3756906">
-          <caret line="16" column="12" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
+        <state vertical-scroll-proportion="0.30524862">
+          <caret line="13" column="19" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
           <folding />
         </state>
       </provider>
