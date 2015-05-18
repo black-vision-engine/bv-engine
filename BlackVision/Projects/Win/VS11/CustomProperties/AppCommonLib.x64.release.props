@@ -5,8 +5,8 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalLibraryDirectories>$(BOOST_RELEASE_64_LIB);$(DepDir)\Common\FreeImage\Wrapper\FreeImagePlus\dist\x64;$(DepDir)\Common\FreeType\objs\x64\release;$(DepDir)/Common/FreeImage/Dist/x64;$(DepDir)/Common/glew/lib/x64;$(DepDir)/Common/glfw/lib/x64;$(DepDir)/Common/hashlib2plus/Dist/x64/Release;$(DepDir)/Common/sqlite/Dist/x64/Release;$(OutDir)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sqlite.lib;hashlib2plus.lib;freetype250.lib;FreeImagePlus.lib;opengl32.lib;glu32.lib;glew32s.lib;FreeImage.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(BOOST_RELEASE_64_LIB);$(DepDir)\Common\FreeType\objs\x64\release;$(DepDir)/Common/FreeImage/Dist/x64;$(DepDir)/Common/glew/lib/x64;$(DepDir)/Common/glfw/lib/x64;$(DepDir)/Common/hashlib2plus/Dist/x64/Release;$(DepDir)/Common/sqlite/Dist/x64/Release;$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sqlite.lib;hashlib2plus.lib;freetype250.lib;opengl32.lib;glu32.lib;glew32s.lib;FreeImage.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />

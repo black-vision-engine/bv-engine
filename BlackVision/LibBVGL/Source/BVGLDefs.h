@@ -140,6 +140,8 @@ namespace bv {
 #define GL_ALPHA 0x1906
 #define GL_LUMINANCE 0x1909
 #define GL_R32F 0x822E
+#define GL_RGBA32F 0x8814
+#define GL_RGB32F 0x8815
 
 #define GL_RGB8 0x8051
 #define GL_RGBA8 0x8058

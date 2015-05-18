@@ -73,45 +73,88 @@ AssetConstPtr TextureLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 
 // ******************************
 //
-SingleTextureAssetConstPtr TextureLoader::LoadSingleTexture( const SingleTextureAssetDescConstPtr & sinlgeTextureResDesc, bool loadFromCache )
+TextureFormat				TextureLoader::ToTextureFormat( UInt32 bpp, UInt32 channelNum )
+{
+	switch( bpp )
+	{
+	case 128:
+		if( channelNum == 4 )
+			return TextureFormat::F_A32FR32FG32FB32F;
+	case 32:
+		if( channelNum == 4 )
+			return TextureFormat::F_A8R8G8B8;
+		else if( channelNum == 1 )
+			return TextureFormat::F_A32F;
+
+	case 8:
+		if( channelNum == 1 )
+			return TextureFormat::F_A8;
+	}
+
+	assert( !"Should never be here" );
+	return TextureFormat::F_TOTAL;
+}
+
+// ******************************
+//
+TextureFormat				TextureLoader::NearestSupportedTextureFormat	( TextureFormat format )
+{
+	switch( format )
+	{
+	case TextureFormat::F_R32FG32FB32F:
+		return TextureFormat::F_A32FR32FG32FB32F;
+	case TextureFormat::F_R8G8B8:
+		return TextureFormat::F_A8R8G8B8;
+	default:
+		return format;
+	}
+}
+
+// ******************************
+//
+SingleTextureAssetConstPtr	TextureLoader::LoadSingleTexture( const SingleTextureAssetDescConstPtr & sinlgeTextureResDesc, bool loadFromCache )
 {
 	auto key		= TextureCache::GenKeyForSingleTexture( sinlgeTextureResDesc );
 	auto imgPath	= sinlgeTextureResDesc->GetImagePath();
 
 	MemoryChunkConstPtr mmChunk = loadFromCache ? RawDataCache::GetInstance().Get( Hash::FromString( key ) ) : nullptr;
 	
-	if( !mmChunk )
+	if( mmChunk ) // if found in the cache
 	{
-		mmChunk = LoadImage( imgPath );
+		auto format		= NearestSupportedTextureFormat( sinlgeTextureResDesc->GetFormat() );
+		return SingleTextureAsset::Create( mmChunk, key, sinlgeTextureResDesc->GetWidth(), sinlgeTextureResDesc->GetHeight(), format );
+	}
+	else
+	{
+		UInt32 w			= 0;
+		UInt32 h			= 0;
+		UInt32 bpp			= 0;
+		UInt32 channelNum	= 0;
+
+		mmChunk = LoadImage( imgPath, &w, &h, &bpp, &channelNum );
 		if( loadFromCache )
 		{
 			auto res = RawDataCache::GetInstance().Add( Hash::FromString( key ), mmChunk );
 			assert( res );
-            { res; }
+			{ res; }
 		}
+
+		if( !mmChunk )
+		{
+			return nullptr;
+		}
+
+		auto format		= ToTextureFormat( bpp, channelNum );
+
+		return SingleTextureAsset::Create( mmChunk, key, sinlgeTextureResDesc->GetWidth(), sinlgeTextureResDesc->GetHeight(), format );
 	}
-
-	if( !mmChunk )
-	{
-		return nullptr;
-	}
-
-	auto w			= sinlgeTextureResDesc->GetWidth();
-	auto h			= sinlgeTextureResDesc->GetHeight();
-	auto format		= TextureFormat::F_A8R8G8B8;//sinlgeTextureResDesc->GetFormat();
-
-	return SingleTextureAsset::Create( mmChunk, key, w, h, format );
 }
 
 // ******************************
 //
-MemoryChunkConstPtr TextureLoader::LoadImage( const std::string & path )
+MemoryChunkConstPtr TextureLoader::LoadImage( const std::string & path, UInt32 * width, UInt32 * height, UInt32 * bpp, UInt32 * channelNum )
 {
 	MemoryChunkConstPtr data = nullptr;
-
-	unsigned int width   = 0;
-    unsigned int height  = 0;
-    unsigned int bpp     = 0;
 
 	if( path.find( ".raw" ) != std::string::npos )
     {
@@ -119,7 +162,7 @@ MemoryChunkConstPtr TextureLoader::LoadImage( const std::string & path )
     }
 	else
     {
-		data = image::LoadImage( path, &width, &height, &bpp );
+		data = image::LoadImage( path, width, height, bpp, channelNum );
     }
 
 	return data;
