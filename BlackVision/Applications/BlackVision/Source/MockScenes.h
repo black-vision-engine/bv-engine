@@ -79,6 +79,8 @@ public:
     static  model::BasicNodePtr     XMLTestScene                    ();
                             
     static  model::BasicNodePtr     StackThemNow                    ( model::BasicNodePtr n0, model::BasicNodePtr n1 );
+
+	static	model::BasicNodePtr		BasicShapesShowScene		( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 };
 
 // ********************************

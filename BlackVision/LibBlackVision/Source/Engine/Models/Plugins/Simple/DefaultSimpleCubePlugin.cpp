@@ -1,5 +1,7 @@
 #include "DefaultSimpleCubePlugin.h"
 #include "Mathematics/Defines.h"
+#include "..\HelperIndexedGeometryConverter.h"
+#include "..\HelperSmoothMesh.h"
 
 namespace bv { namespace model { namespace DefaultSimpleCube {
 
@@ -103,6 +105,51 @@ namespace Generator
 				}
 				u += 1.0f/3.0f;
 			}
+		}
+
+		void GenerateGeometry( Float3AttributeChannelPtr verts ) 
+		{
+			float x = dimmension.x / 2;
+			float y = dimmension.y / 2;
+			float z = dimmension.z / 2;
+
+			HelperSmoothMesh smoother;
+			IndexedGeometryConverter converter;
+			IndexedGeometry cube;
+
+			auto verticies = cube.getVerticies();
+			auto indicies = cube.getIndicies();
+
+			verticies.reserve( 8 );
+			indicies.reserve( 36 );
+
+			verticies.push_back( glm::vec3( -x, -y, z ) );
+			verticies.push_back( glm::vec3( x, -y, z ) );
+			verticies.push_back( glm::vec3( x, y, z ) );
+			verticies.push_back( glm::vec3( -x, y, z ) );
+			verticies.push_back( glm::vec3( -x, y, -z ) );
+			verticies.push_back( glm::vec3( x, -y, -z ) );
+			verticies.push_back( glm::vec3( x, y, -z ) );
+			verticies.push_back( glm::vec3( -x, y, -z ) );
+
+
+			unsigned short indicesData[] = { 
+				0, 1, 2, 2, 3, 0, 
+				3, 2, 6, 6, 7, 3, 
+				7, 6, 5, 5, 4, 7, 
+				4, 0, 3, 3, 7, 4, 
+				0, 1, 5, 5, 4, 0,
+				1, 5, 6, 6, 2, 1 
+			};
+
+			for( int i = 0; i < 36; ++i )
+				indicies.push_back( indicesData[i] );
+
+			std::vector<unsigned short> sharpEdges;
+			const unsigned tesselation = 3;
+
+			IndexedGeometry resultMesh = smoother.smooth( cube, sharpEdges, tesselation );
+			converter.makeStrip( resultMesh, verts );
 		}
 	};
 }

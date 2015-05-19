@@ -309,6 +309,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\GeometryPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\GeometryPluginRect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\GeometryPluginRing.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Manager\PluginsManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\AbstractModelParameter.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.cpp" />
@@ -330,6 +333,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultColorPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultConePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCubePlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCylinderPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEllipsePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeospherePlugin.cpp" />
@@ -378,9 +382,13 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\IndexedGeometry.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\ICachedParameter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IState.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IStateSet.h" />
@@ -612,6 +620,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultColorPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultConePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCubePlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCylinderPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultEllipsePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeometryPluginBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeospherePlugin.h" />

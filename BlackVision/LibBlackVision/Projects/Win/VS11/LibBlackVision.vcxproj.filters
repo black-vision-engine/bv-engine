@@ -837,14 +837,26 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneEditor.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.cpp">
+      <Filter>Engine\Models\Plugins</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCylinderPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelSceneEditor.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.cpp">
+      <Filter>Engine\Models\Plugins</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.cpp">
+      <Filter>Engine\Models\Plugins</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1699,6 +1711,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultGeospherePlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h">
+      <Filter>Engine\Models\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCylinderPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h">
+      <Filter>Engine\Models\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.h">
+      <Filter>Engine\Models\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\IndexedGeometry.h">
+      <Filter>Engine\Models\Plugins</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>

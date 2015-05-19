@@ -1,13 +1,16 @@
+#pragma once
+
 #include "DefaultGeometryPluginBase.h"
 
 namespace bv { namespace model {
 
-namespace DefaultTorus {
+namespace DefaultCylinder {
 
-class PluginDesc : public DefaultGeometryPluginDescBase
+
+class DefaultCylinderPluginDesc : public DefaultGeometryPluginDescBase
 {
 public:
-    PluginDesc();
+    DefaultCylinderPluginDesc();
 
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
@@ -15,30 +18,35 @@ public:
     static  std::string                     UID                 ();
 };
 
+
+
 struct PN {
-    static const std::string TESSELATION;
-    static const std::string RADIUS;
-    static const std::string RADIUSCROSSSECTION;
-    static const std::string OPENANGLE;
-    static const std::string OPENANGLEMODE;
-    static const std::string WEIGHTCENTERX; // enum WeightCenter (MIN, MAX, CENTER)
+    static const std::string TESSELATION; // int tesselation
+    static const std::string HEIGHT; // VecParam1 Height
+    static const std::string INNERRADIUS; // VecParam1 InnerRadius
+    static const std::string OUTERRADIUS; // VecParam1 OuterRadius
+    static const std::string OPENANGLE; // VecParam1 OpenAngle
+    static const std::string OPENANGLEMODE; // enum OpenAngleMode(Clockwise, CCW, symetric)
+	static const std::string WEIGHTCENTERX;
 	static const std::string WEIGHTCENTERY;
 	static const std::string WEIGHTCENTERZ;
 	static const std::string MAPPINGTYPE;
 };
 
-class Plugin : public DefaultGeometryPluginBase
+
+
+class DefaultPlugin : public DefaultGeometryPluginBase
 {
 public:
 	enum OpenAngleMode : int { CW, CCW, SYMMETRIC };
-	enum WeightCenter : int { MAX, MIN, CENTER };
-	enum MappingType : int { OLDSTYLE/*, SPHERICAL*/, DOUBLETEXTURE };
+	enum WeightCenter : int { MIN, MAX, CENTER };
+	enum MappingType : int { OLDSTYLE/*, SPHERICAL*/, GOODMAPPING };
 
-
-    ValueIntPtr                                 m_tesselation;
-    ValueFloatPtr                               m_radius;
-    ValueFloatPtr                               m_radiusCrossSection;
-    ValueFloatPtr                               m_openAngle;
+	ValueIntPtr                                 m_tesselation;
+    ValueFloatPtr                               m_innerRadius,
+                                                m_outerRadius,
+                                                m_openAngle,
+                                                m_height;
 	std::shared_ptr< ParamEnum< OpenAngleMode > >		m_openAngleMode;
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterX;
 	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterY;
@@ -46,23 +54,22 @@ public:
 	std::shared_ptr< ParamEnum< MappingType >	>		m_mappingType;
 
 private:
-    virtual std::vector<IGeometryGeneratorPtr>  GetGenerators() override;
+    virtual std::vector<IGeometryGeneratorPtr>    GetGenerators() override;
 
     virtual bool                                NeedsTopologyUpdate() override;
 public:
-    Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
+    DefaultPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 };
 
-
-}
+} //DefaultCylinder
 
 // Nie patrzeæ w dó³!!! Brzydkie !!!!!!
 
 template<>
-inline bool SetParameter< DefaultTorus::Plugin::OpenAngleMode >( IParameterPtr param, TimeType t, const DefaultTorus::Plugin::OpenAngleMode & val )
+inline bool SetParameter< DefaultCylinder::DefaultPlugin::OpenAngleMode >( IParameterPtr param, TimeType t, const DefaultCylinder::DefaultPlugin::OpenAngleMode & val )
 {
     //return SetSimpleTypedParameter< ParamEnum<DefaultCirclePlugin::OpenAngleMode> >( param, t, val );
-    typedef ParamEnum<DefaultTorus::Plugin::OpenAngleMode> ParamType;
+	typedef ParamEnum<DefaultCylinder::DefaultPlugin::OpenAngleMode> ParamType;
 
     ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
 
@@ -77,10 +84,10 @@ inline bool SetParameter< DefaultTorus::Plugin::OpenAngleMode >( IParameterPtr p
 }
 
 template<>
-inline bool SetParameter< DefaultTorus::Plugin::WeightCenter >( IParameterPtr param, TimeType t, const DefaultTorus::Plugin::WeightCenter & val )
+inline bool SetParameter< DefaultCylinder::DefaultPlugin::WeightCenter >( IParameterPtr param, TimeType t, const DefaultCylinder::DefaultPlugin::WeightCenter & val )
 {
     //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
-    typedef ParamEnum<DefaultTorus::Plugin::WeightCenter> ParamType;
+    typedef ParamEnum<DefaultCylinder::DefaultPlugin::WeightCenter> ParamType;
 
     ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
 
@@ -93,13 +100,12 @@ inline bool SetParameter< DefaultTorus::Plugin::WeightCenter >( IParameterPtr pa
 
     return true;
 }
-
 
 template<>
-inline bool SetParameter< DefaultTorus::Plugin::MappingType >( IParameterPtr param, TimeType t, const DefaultTorus::Plugin::MappingType & val )
+inline bool SetParameter< DefaultCylinder::DefaultPlugin::MappingType >( IParameterPtr param, TimeType t, const DefaultCylinder::DefaultPlugin::MappingType & val )
 {
     //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
-    typedef ParamEnum<DefaultTorus::Plugin::MappingType> ParamType;
+    typedef ParamEnum<DefaultCylinder::DefaultPlugin::MappingType> ParamType;
 
     ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
 
@@ -113,4 +119,7 @@ inline bool SetParameter< DefaultTorus::Plugin::MappingType >( IParameterPtr par
     return true;
 }
 
-} }
+
+
+} // model
+} // bv

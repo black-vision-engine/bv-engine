@@ -36,9 +36,9 @@ DefaultPluginParamValModelPtr   DefaultEllipsePluginDesc::CreateDefaultModel  ( 
 	ModelHelper h( timeEvaluator );
 
     h.CreateVacModel();
-	h.AddSimpleParam( DefaultEllipsePlugin::PN_QUALITY, 1.f, true, true );
+	h.AddSimpleParam( DefaultEllipsePlugin::PN_QUALITY, 7.f, true, true );
     h.AddSimpleParam( DefaultEllipsePlugin::PN_OUTER_RADIUS1, 1.f, true, true );
-    h.AddSimpleParam( DefaultEllipsePlugin::PN_OUTER_RADIUS2, 1.f, true, true );
+    h.AddSimpleParam( DefaultEllipsePlugin::PN_OUTER_RADIUS2, 0.5f, true, true );
     h.AddSimpleParam( DefaultEllipsePlugin::PN_OPEN_ANGLE, 0.f, true, true );
 	h.AddParam< IntInterpolator, DefaultEllipsePlugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
         ( DefaultEllipsePlugin::PN_OPEN_ANGLE_MODE, DefaultEllipsePlugin::OpenAngleMode::CW, true, true );

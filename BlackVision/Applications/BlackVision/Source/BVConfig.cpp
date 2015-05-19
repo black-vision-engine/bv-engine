@@ -2,7 +2,7 @@
 
 //#define USE_READBACK_API
 //#define FULLSCREEN_MODE
-//#define PERSPECTIVE_CAMERA
+#define PERSPECTIVE_CAMERA
 
 namespace bv
 {

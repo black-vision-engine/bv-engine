@@ -54,6 +54,7 @@ public:
 	static model::BasicNodePtr	CreateCrawlerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 
 	static model::BasicNodePtr	CreateBasicShapesTestNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+	static model::BasicNodePtr	CreateBasicShapeShow( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation );
 };
 
 } //bv
