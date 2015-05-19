@@ -100,7 +100,7 @@ void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& result
 			else
 			{
 				resultVerticies.push_back( newVertex );
-				newIndicies[j] = static_cast<unsigned short>( resultVerticies.size() - 1 );		// Position of new added vertex in vector is our new index;
+				newIndicies[ j ] = static_cast<unsigned short>( resultVerticies.size() - 1 );		// Position of new added vertex in vector is our new index;
 			}
 
 			////Everything was wrong here
@@ -137,7 +137,7 @@ void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& result
 		int k = 2;
 		for( int j = 0; j < 3; ++j )	// Outer triangles.
 		{
-			resultIndicies.push_back( static_cast<unsigned short>( i + j ) );
+			resultIndicies.push_back( static_cast<INDEX_TYPE>( i + j ) );
 			resultIndicies.push_back( newIndicies[ k++ % 3 ] );
 			resultIndicies.push_back( newIndicies[ k % 3 ] );
 		}
