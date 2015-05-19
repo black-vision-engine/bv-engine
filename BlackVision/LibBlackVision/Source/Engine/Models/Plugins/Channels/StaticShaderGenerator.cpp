@@ -15,9 +15,18 @@ std::string         StaticShaderGenerator::GenerateShaderSource( const std::vect
     }
     else
     {
-        std::cout << "File: " << filename << " does not exist. Loading pixel shader failed." << std::endl;
-        assert( false );
-        return "";
+        std::cout << "File: " << filename << " does not exist. Loading default shader." << std::endl;
+		
+		filename = m_shadersDir + "default." + m_shaderExtension;
+
+		if( File::Exists( filename ) )
+			return ReadShaderContentsFromFile( filename );
+		else
+		{
+			std::cout << "File: " << filename << " does not exist. Loading default shader failed!!!" << std::endl;
+			assert( false );
+			return "";
+		}
     }
 }
 
@@ -35,7 +44,11 @@ std::string         StaticShaderGenerator::GenerateFilename( const std::vector< 
                 filename += "_" + abbrv;
 		}
 	}
-    assert( filename.length() > 0 );
+    
+	//assert( filename.length() > 0 );
+	//if( filename.length() == 0 )
+	//	filename = "default";
+
     filename = m_shadersDir + filename;
     filename += "." + m_shaderExtension;
 
