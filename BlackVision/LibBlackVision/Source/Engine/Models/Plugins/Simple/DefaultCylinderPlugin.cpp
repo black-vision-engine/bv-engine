@@ -1,5 +1,5 @@
 #include "DefaultCylinderPlugin.h"
-#include "..\..\Dep\Common\glm\glm\gtx\vector_angle.hpp"
+#include "glm/gtx/vector_angle.hpp"
 
 
 namespace bv { namespace model {

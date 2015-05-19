@@ -494,6 +494,14 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
     {
         node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
+	else if( scene == "ALL_BASIC_SHAPES_SHOW" )
+	{
+		node = TestScenesFactory::BasicShapesShowScene( pluginsManager, timelineManager, timeEvaluator );
+	}
+	else if( scene == "BASIC_SHAPES_TEST_SCENE" )
+	{
+		node = TestScenesFactory::BasicShapesTest(  pluginsManager, timelineManager, timeEvaluator );
+	}
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -1097,6 +1105,14 @@ model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::Plu
 	node0->AddChildToModelOnly( node8 );
 	node0->AddChildToModelOnly( node9 );
 
+	return node0;
+}
+
+model::BasicNodePtr		TestScenesFactory::BasicShapesTest		( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+	pluginsManager;
+
+	auto node0 = SimpleNodesFactory::CreateBasicShapesTestNode( timelineManager, timeEvaluator );
 	return node0;
 }
 
