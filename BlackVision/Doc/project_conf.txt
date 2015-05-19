@@ -32,6 +32,7 @@ CommonLib chyba może również wylecieć - to w apps i test jest
 LibCommon.props wydaje się zbędne - jeśli tak jest, to wywalić
 
 poprawić docelowe katalogi budowania testów, bo teraz test asset manager się kopiuje do katalogu głównego, zamiast do Test
+wobec tego porównać oba projekty z testami i sprawdzić, czym się tak naprawdę różnią
 
 test asset manager przechodzi tylko w debug x64
 test mipmap builder w ogóle nie przechodzi
