@@ -2,8 +2,6 @@
 
 #include "Prototypes/DrawingCommands/Common/BVGLExt.h"
 
-#define OPENGL_3_1_SUPPORT 1
-
 namespace bv {
 
 // *************************
@@ -86,17 +84,14 @@ namespace bv {
     BVGLExt::bvglEnableVertexAttribArray( 1 );
     BVGLExt::bvglEnableVertexAttribArray( 2 );
 	
-#if !OPENGL_3_1_SUPPORT
 	BVGLExt::bvglVertexAttribDivisor( 1, 1 );
 	BVGLExt::bvglVertexAttribDivisor( 2, 1 );
-#endif
 
 	BVGLExt::bvglGenBuffers( 1, &m_indexBuffer );
 
 	BVGLExt::bvglBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer );
 	BVGLExt::bvglBufferDataOverride( GL_ELEMENT_ARRAY_BUFFER, sizeof( indices ), indices, GL_STATIC_DRAW );
 
-#if !OPENGL_3_1_SUPPORT
 	//indirect
 
 	m_drawingModeData.stride = 0;
@@ -135,7 +130,6 @@ namespace bv {
 	BVGLExt::bvglBufferDataOverride( GL_DRAW_INDIRECT_BUFFER, 
 		sizeof( indirectElements ), 
 		&indirectElements, GL_STATIC_READ );
-#endif
 
     BVGLExt::bvglBindVertexArray( 0 );
 
