@@ -1,3 +1,4 @@
+import PMAssetEntity
 import PMAssetType
 import PMLocation
 
@@ -26,3 +27,10 @@ class Project:
         assert isinstance(location, PMLocation)
         assert False  # TODO: Implement
 
+    def exportAsset(self):
+        return None
+
+    def importAsset(self, assetEnt):
+        assert isinstance(assetEnt, PMAssetEntity)
+        assert False  # TODO: Implement
+        pass

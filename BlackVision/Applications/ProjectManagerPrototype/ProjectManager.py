@@ -11,3 +11,8 @@ class ProjectManager:
     def getProject(self, name):
         assert isinstance(name, str)
         return self.projects[name]
+
+    def listProjects(self):
+        return self.projects
+
+
