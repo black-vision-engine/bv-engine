@@ -15,7 +15,7 @@ bool        BVGLPlugin::InitializeBVGL						()
     {		
         return false;
     }
-
+    
     return true;
 }
 
