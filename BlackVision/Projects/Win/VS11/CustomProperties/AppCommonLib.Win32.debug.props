@@ -5,7 +5,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalLibraryDirectories>$(BOOST_DEBUG_32_LIB);$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sqliteD.lib;hashlib2plusD.lib;freetype250_D.lib;opengl32.lib;glu32.lib;glew32s.lib;FreeImage.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

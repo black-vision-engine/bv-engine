@@ -43,6 +43,75 @@ na tej podstawie najpewniej da się zrobić wszystko znacznie mniejszą liczbą 
 http://manski.net/2012/01/sharing-project-properties-in-visual-c/#custom-variables-.28a.k.a.-macros.29
 https://msdn.microsoft.com/en-us/library/ms171481.aspx
 
+Opisać, że nie całe 3rdPartyLib.props nie widać podczas edycji z poziomu IDE (Conditional props są niewidoczne)
+
+3rdPartyDepLib filez:
+
+
+win32-Debug
+
+sqliteD.lib
+hashlib2plusD.lib
+freetype250_D.lib
+opengl32.lib
+glu32.lib
+glew32s.lib
+FreeImage.lib
+libboost_filesystem.lib
+libboost_system.lib
+libboost_thread.lib
+libboost_serialization.lib
+winmm.lib
+
+x64-Debug
+
+sqliteD.lib
+hashlib2plusD.lib
+freetype250_D.lib
+opengl32.lib
+glu32.lib
+glew32s.lib
+FreeImage.lib
+libboost_filesystem.lib
+libboost_system.lib
+libboost_thread.lib
+libboost_serialization.lib
+winmm.lib
+
+
+win32-Release
+
+sqlite.lib
+hashlib2plus.lib
+freetype250.lib
+opengl32.lib
+glu32.lib
+glew32s.lib
+FreeImage.lib
+libboost_filesystem.lib
+libboost_system.lib
+libboost_thread.lib
+libboost_serialization.lib
+winmm.lib
+
+x64-Release
+
+sqlite.lib
+hashlib2plus.lib
+freetype250.lib
+opengl32.lib
+glu32.lib
+glew32s.lib
+FreeImage.lib
+libboost_filesystem.lib
+libboost_system.lib
+libboost_thread.lib
+libboost_serialization.lib
+winmm.lib
+
+
+DLL copy configurations:
+
 win32-Debug
 
 	xcopy $(ThirdPartyDir)\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
