@@ -7,10 +7,12 @@
 namespace bv { namespace model {
 
 
+typedef unsigned short INDEX_TYPE;
+
 class IndexedGeometry
 {
 private:
-	std::vector<unsigned short>		indicies;
+	std::vector<INDEX_TYPE>		indicies;
 	std::vector<glm::vec3>			verticies;
 public:
 	IndexedGeometry() {}
@@ -28,7 +30,7 @@ public:
 		return *this;
 	}
 
-	std::vector<unsigned short>& getIndicies() { return indicies; }
+	std::vector<INDEX_TYPE>& getIndicies() { return indicies; }
 	std::vector<glm::vec3>& getVerticies() { return verticies; }
 };
 

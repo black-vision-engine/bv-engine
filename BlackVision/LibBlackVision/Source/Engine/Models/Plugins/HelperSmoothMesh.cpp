@@ -22,7 +22,7 @@ tesselation = 0, function would move content of mesh to resultMesh, leaving mesh
 @param[in] edges Edges which should remain sharp.
 @param[in] tesselation Number of tesselations, that will be aplied to mesh
 @param[out] resultMesh Result of smooth.*/
-void HelperSmoothMesh::smooth( IndexedGeometry& mesh, std::vector<unsigned short>& edges, unsigned int tesselation, IndexedGeometry& resultMesh )
+void HelperSmoothMesh::smooth( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& edges, unsigned int tesselation, IndexedGeometry& resultMesh )
 {
 	if( tesselation == 0 )
 		resultMesh = mesh;		// Normal copy assignment.
@@ -37,7 +37,7 @@ tesselation = 0, function would move content of mesh to resultMesh, leaving mesh
 @param[in] edges Edges which should remain sharp.
 @param[in] tesselation Number of tesselations, that will be aplied to mesh
 @return resultMesh Result of smooth.*/
-IndexedGeometry HelperSmoothMesh::smooth( IndexedGeometry& mesh, std::vector<unsigned short>& edges, unsigned int tesselation )
+IndexedGeometry HelperSmoothMesh::smooth( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& edges, unsigned int tesselation )
 {
 	IndexedGeometry new_mesh;
 	smooth( mesh, edges, tesselation, new_mesh );
@@ -50,7 +50,7 @@ IndexedGeometry HelperSmoothMesh::smooth( IndexedGeometry& mesh, std::vector<uns
 @param[in] edges Edges which should remain sharp.
 @param[in] tesselation Number of tesselations, that will be aplied to mesh
 @param[out] resultMesh Result of smooth.*/
-void HelperSmoothMesh::privateSmooth( IndexedGeometry& mesh, std::vector<unsigned short>& edges, unsigned int tesselation, IndexedGeometry& resultMesh )
+void HelperSmoothMesh::privateSmooth( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& edges, unsigned int tesselation, IndexedGeometry& resultMesh )
 {
 	if( tesselation == 0 )	// End of recursion.
 	{
@@ -63,58 +63,75 @@ void HelperSmoothMesh::privateSmooth( IndexedGeometry& mesh, std::vector<unsigne
 	tesselate( mesh, new_mesh );
 	moveVerticies( mesh, edges, resultMesh );
 
-	smooth( new_mesh, edges, tesselation - 1, resultMesh );
+	privateSmooth( new_mesh, edges, tesselation - 1, resultMesh );
 	// Remember! You can't do anything with new_mesh after smooth call. It have been already moved to resultMesh.
 }
 
 /**Tesselates given mesh one time.*/
 void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& resultMesh )
 {
-	std::vector<unsigned short>& indicies = mesh.getIndicies();
-	std::vector<glm::vec3>& verticies = mesh.getVerticies();
-	std::vector<unsigned short>& resultIndicies = mesh.getIndicies();
+	const std::vector<INDEX_TYPE>& indicies = mesh.getIndicies();
+	const std::vector<glm::vec3>& verticies = mesh.getVerticies();
+	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.getIndicies();
 	std::vector<glm::vec3>& resultVerticies = resultMesh.getVerticies();
 
-	std::vector<bool> usedVerticies;
+	//std::vector<bool> usedVerticies;
 
-	resultMesh.getIndicies().reserve( 4 * indicies.size() );
+	resultIndicies.reserve( 4 * indicies.size() );
+	resultVerticies.reserve( 3 * verticies.size() / 2 );
+	resultVerticies.resize( verticies.size() );
 	std::copy( verticies.begin(), verticies.end(), resultVerticies.begin() );		//Existing verticies have the same position as in init geometry.
-	resultMesh.getVerticies().reserve( 3 * verticies.size() / 2 );
 
-	usedVerticies.resize( verticies.size(), false );
+	//usedVerticies.resize( verticies.size(), false );
 
 	for( unsigned int i = 0; i < indicies.size(); i += 3 )
 	{
-		unsigned short newIndicies[3];
+		INDEX_TYPE newIndicies[3];
 
 		for( unsigned int j = 0; j < 3; ++j )
-			if( usedVerticies[ indicies[i + j] ] && usedVerticies[ indicies[i + j + 1] ] )
-			{// This edge have been already devided.
-				// Looking for vertex containing this edge in resultIndicies. 
-				for( unsigned int k = 0; k < resultIndicies.size(); k += 12 )	// We have been adding 12 indicies at one time.
-					for( int v = 0; v < 3; v += 3 )		// Onlu 3 verticies are interesting.
-						if( resultIndicies[ k + v ] == indicies[i + j] )	// Indicies are in the same order
-							if( resultIndicies[ k + (v+3) % 9] == indicies[i + j + 1] )
-							{// We found it
-								newIndicies[j] = resultIndicies[ k + 9 + v / 3 ];	// Thats because we know, how we made this table.
-							}
-						else if( resultIndicies[ k + v ] == indicies[i + j + 1] )	// Indicies are in diffrent order.
-							if( resultIndicies[ k + (v+3) % 9] == indicies[i + j] )
-							{// We found it
-								newIndicies[j] = resultIndicies[ k + 9 + v / 3];	// Thats because we know, how we made this table.
-							}
-			}
+		{
+			INDEX_TYPE newIndex;
+			glm::vec3 firstVertex = verticies[ indicies[i + j] ];
+			glm::vec3 secondVertex = verticies[ indicies[i + (j + 1) % 3] ];
+			glm::vec3 newVertex =  ( firstVertex + secondVertex ) * glm::vec3( 0.5, 0.5, 0.5 );\
+
+			if( findVertex( verticies, newVertex, newIndex ) )
+				newIndicies[ j ] = newIndex;
 			else
-			{// We must devide edge.
-				glm::vec3 firstVertex = verticies[ indicies[i + j] ];
-				glm::vec3 secondVertex = verticies[ indicies[i + j + 1] ];
-				resultVerticies.push_back( ( firstVertex + secondVertex ) * glm::vec3( 0.5, 0.5, 0.5 ) );
-
-				newIndicies[j] = static_cast<unsigned short>( resultVerticies.size() - 1 );		// Position of new added vertex in vector is out new index;
-
-				usedVerticies[ indicies[i + j] ] = true;		// Set verticies as used.
-				usedVerticies[ indicies[i + j + 1] ] = true;	// Set verticies as used.
+			{
+				resultVerticies.push_back( newVertex );
+				newIndicies[j] = static_cast<unsigned short>( resultVerticies.size() - 1 );		// Position of new added vertex in vector is our new index;
 			}
+
+			////Everything was wrong here
+			//if( usedVerticies[ indicies[i + j] ] && usedVerticies[ indicies[i + (j + 1) % 3] ] )
+			//{// This edge have been already devided.
+			//	// Looking for vertex containing this edge in resultIndicies. 
+			//	for( unsigned int k = 0; k < resultIndicies.size(); k += 12 )	// We have been adding 12 indicies at one time.
+			//		for( int v = 0; v < 3; v += 3 )		// Only 3 verticies are interesting.
+			//			if( resultIndicies[ k + v ] == indicies[i + j] )	// Indicies are in the same order
+			//				if( resultIndicies[ k + (v+3) % 9] == indicies[i + (j + 1) % 3] )
+			//				{// We found it
+			//					newIndicies[j] = resultIndicies[ k + 9 + v / 3 ];	// Thats because we know, how we made this table.
+			//				}
+			//			else if( resultIndicies[ k + v ] == indicies[i + (j + 1) % 3] )	// Indicies are in diffrent order.
+			//				if( resultIndicies[ k + (v+3) % 9] == indicies[i + j] )
+			//				{// We found it
+			//					newIndicies[j] = resultIndicies[ k + 9 + v / 3];	// Thats because we know, how we made this table.
+			//				}
+			//}
+			//else
+			//{// We must devide edge.
+			//	glm::vec3 firstVertex = verticies[ indicies[i + j] ];
+			//	glm::vec3 secondVertex = verticies[ indicies[i + (j + 1) % 3] ];
+			//	resultVerticies.push_back( ( firstVertex + secondVertex ) * glm::vec3( 0.5, 0.5, 0.5 ) );
+
+			//	newIndicies[j] = static_cast<unsigned short>( resultVerticies.size() - 1 );		// Position of new added vertex in vector is our new index;
+
+			//	usedVerticies[ indicies[i + j] ] = true;		// Set verticies as used.
+			//	usedVerticies[ indicies[i + (j + 1) % 3] ] = true;	// Set verticies as used.
+			//}
+		}
 
 		// Adding new traingles. Don't touch adding order. Function depeds on it, when vertex already existed.
 		int k = 2;
@@ -130,11 +147,27 @@ void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& result
 }
 
 /**Moves verticies of the new mesh to appropriate positions.*/
-void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<unsigned short>& edges, IndexedGeometry& resultMesh )
+void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& edges, IndexedGeometry& resultMesh )
 {
 	mesh;
 	edges;
 	resultMesh;
+}
+
+bool HelperSmoothMesh::findVertex( const std::vector<glm::vec3>& verticies, glm::vec3 vertex, INDEX_TYPE& index )
+{
+	vertex;
+	index;
+
+	for( unsigned int i = 0; i < verticies.size(); ++i )
+		if( verticies[ i ] == vertex )
+		{
+			index = (INDEX_TYPE)i;
+			return true;
+		}
+
+	index = 0;
+	return false;
 }
 
 
