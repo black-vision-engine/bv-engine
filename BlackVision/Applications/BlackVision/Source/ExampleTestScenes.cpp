@@ -151,9 +151,9 @@ model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * 
     bool success = true;
 
     success &= model::SetParameterTranslation( rootTransform, 0, 0.0f, glm::vec3( -1.f, 0.f, -1.f ) );
-   // success &= model::SetParameterRotation( rootTransform, 0, 10.0f, glm::vec3( 0.f, 0.f, -1.f ), 10.f );
+    success &= model::SetParameterRotation( rootTransform, 0, 100.0f, glm::vec3( 0.f, 0.f, -1.f ), 50.f );
     success &= model::SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( 2.f, 0.f, -1.f ) );
-   // success &= model::SetParameterRotation( childTransform, 0, 10.0f, glm::vec3( 0.f, 0.f, -1.f ), 191.f );
+    success &= model::SetParameterRotation( childTransform, 0, 100.0f, glm::vec3( 0.f, 0.f, -1.f ), 360.f );
 
     assert( success );
 

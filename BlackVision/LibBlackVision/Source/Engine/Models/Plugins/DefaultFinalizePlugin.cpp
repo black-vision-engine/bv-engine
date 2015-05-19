@@ -13,6 +13,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 
+#include "Engine/Models/Plugins/Channels/Transform/DefaultTransformChannel.h"
+
 namespace bv { namespace model {
 
 std::string DefaultFinalizePlugin::m_uid = "DEFAULT_FINALIZE";
@@ -29,6 +31,9 @@ DefaultFinalizePlugin::DefaultFinalizePlugin       ()
 
 {
     m_defaultVSChannel = DefaultVertexShaderChannel::Create();
+    m_defaultPSChannel = DefaultPixelShaderChannel::Create();
+
+	m_defaultTransformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create() );
 }
 
 // *******************************
@@ -85,30 +90,47 @@ bv::IValueConstPtr                  DefaultFinalizePlugin::GetValue             
 //
 IVertexAttributesChannelConstPtr    DefaultFinalizePlugin::GetVertexAttributesChannel   () const
 {
-    assert( m_prevPlugin );
+    //assert( m_prevPlugin );
 
-    return m_prevPlugin->GetVertexAttributesChannel();
+	if( m_prevPlugin )
+		return m_prevPlugin->GetVertexAttributesChannel();
+	return nullptr;
 }
 
 // *******************************
 //
 ITransformChannelConstPtr           DefaultFinalizePlugin::GetTransformChannel          () const
 {
-    assert( m_prevPlugin );
+    //assert( m_prevPlugin );
 
-    return m_prevPlugin->GetTransformChannel();
+	if( m_prevPlugin )
+	{
+		auto transformChannel = m_prevPlugin->GetTransformChannel();
+
+		if( transformChannel )
+			return transformChannel;
+	}
+	return m_defaultTransformChannel;
 }
 
 // *******************************
 //
 IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel        () const
 {
-    assert( m_prevPlugin );
-    assert( m_prevPlugin->GetPixelShaderChannel() );
+    //assert( m_prevPlugin );
+    
+	//assert( m_prevPlugin->GetPixelShaderChannel() );
+	IPixelShaderChannelConstPtr psc = nullptr;
+
+	if( m_prevPlugin )
+		psc = m_prevPlugin->GetPixelShaderChannel();
+
+    if( !psc )
+        psc = m_defaultPSChannel;
 
     if( m_finalizePSC == nullptr )
     {
-        m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( std::const_pointer_cast< IPixelShaderChannel >( m_prevPlugin->GetPixelShaderChannel() ), m_shadersDir );
+        m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( std::const_pointer_cast< IPixelShaderChannel >( psc ), m_shadersDir );
         m_finalizePSC->RegenerateShaderSource( GetUIDS() );
     }
 
@@ -119,14 +141,14 @@ IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel
 //
 IVertexShaderChannelConstPtr        DefaultFinalizePlugin::GetVertexShaderChannel       () const
 {
-    assert( m_prevPlugin );
+    //assert( m_prevPlugin );
 
-    auto vsc = m_prevPlugin->GetVertexShaderChannel();
+	IVertexShaderChannelConstPtr vsc = nullptr;
+	if( m_prevPlugin )
+		vsc = m_prevPlugin->GetVertexShaderChannel();
 
-    if( vsc == nullptr )
-    {
+    if( !vsc )
         vsc = m_defaultVSChannel;
-    }
 
     if( m_finalizeVSC == nullptr )
     {
@@ -141,7 +163,7 @@ IVertexShaderChannelConstPtr        DefaultFinalizePlugin::GetVertexShaderChanne
 //
 IGeometryShaderChannelConstPtr           DefaultFinalizePlugin::GetGeometryShaderChannel    () const
 {
-    assert( m_prevPlugin );
+    //assert( m_prevPlugin );
 
     if( m_finalizeGSC == nullptr )
     {
@@ -174,6 +196,13 @@ RendererContextConstPtr             DefaultFinalizePlugin::GetRendererContext   
 // *******************************
 //
 IPluginConstPtr                     DefaultFinalizePlugin::GetPrevPlugin                () const
+{
+    return m_prevPlugin;
+}
+
+// *******************************
+//
+IPluginPtr							DefaultFinalizePlugin::GetPrevPlugin                ()
 {
     return m_prevPlugin;
 }
@@ -218,7 +247,7 @@ void                                DefaultFinalizePlugin::Update               
 //
 void                                DefaultFinalizePlugin::SetPrevPlugin                ( IPluginPtr plugin )
 {
-    assert( plugin != nullptr );
+    //assert( plugin != nullptr );
 
     m_finalizePSC = nullptr;
     m_finalizeVSC = nullptr;
@@ -275,6 +304,21 @@ ParamTransformVecPtr				DefaultFinalizePlugin::GetParamTransform			() const
 
 	return paramTransform;
 }
+
+// *******************************
+//
+bool								DefaultFinalizePlugin::IsValid						()
+{
+	auto plugin = m_prevPlugin;
+	while ( plugin )
+	{
+		if ( !PluginsManager::DefaultInstance().CanBeAttachedTo( plugin->GetTypeUid(), plugin->GetPrevPlugin() ) )
+			return false;
+		plugin = plugin->GetPrevPlugin();
+	}
+	return true;
+}
+
 
 } //model
 }  //bv

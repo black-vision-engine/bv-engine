@@ -525,6 +525,10 @@ model::BasicNodePtr     TestScenesFactory::CreateTestScene      ( const model::P
 			return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
 		case TestSceneSelector::TSS_TEXT:
 			return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 5, false );
+		case TestSceneSelector::TSS_ANIMATION_RECTANGLE:
+			return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, false );
+		case TestSceneSelector::TSS_SOLID_RECTANGLE:
+			return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator, false );
         default:
             assert( false );
 

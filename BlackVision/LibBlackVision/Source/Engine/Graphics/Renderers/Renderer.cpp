@@ -711,52 +711,58 @@ void    Renderer::FreeAllPDResources                        ( RenderableEntity *
 
     // FIXME: this suxx as we implictly assume that RenderableArrayDataSingleVertexBuffer is in fact of type RenderableArrayDataArraysSingleVertexBuffer
     auto radasvb = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( renderable->GetRenderableArrayData() );
-    
-    FreeRADASVBPDR  ( radasvb );
-    FreeEffectPDR   ( renderable->GetRenderableEffect().get() );
+	
+	FreeRADASVBPDR  ( radasvb );
+	FreeEffectPDR   ( renderable->GetRenderableEffect().get() );
 }
 
 // *********************************
 //
 void    Renderer::FreeRADASVBPDR                  ( RenderableArrayDataArraysSingleVertexBuffer * radasvb )
 {
-    auto vao = radasvb->VAO();
+	if( radasvb)
+	{
+		auto vao = radasvb->VAO();
 
-    auto vb = vao->GetVertexBuffer();
-    auto vd = vao->GetVertexDescriptor();
+		auto vb = vao->GetVertexBuffer();
+		auto vd = vao->GetVertexDescriptor();
 
-    if( vb )
-        DeletePDR( vb );
+		if( vb )
+			DeletePDR( vb );
 
-    if( vd )
-        DeletePDR( vd );
+		if( vd )
+			DeletePDR( vd );
 
-    DeletePDR( vao );
+		DeletePDR( vao );
+	}
 }
 
 // *********************************
 //
 void    Renderer::FreeEffectPDR                   ( RenderableEffect * effect )
 {
-    for( unsigned int i = 0; i < effect->NumPasses(); ++i )
-    {
-        auto pass = effect->GetPass( i );
+	if( effect )
+	{
+		for( unsigned int i = 0; i < effect->NumPasses(); ++i )
+		{
+			auto pass = effect->GetPass( i );
 
-        auto ps = pass->GetPixelShader();
-        auto vs = pass->GetVertexShader();
-        auto gs = pass->GetGeometryShader();
+			auto ps = pass->GetPixelShader();
+			auto vs = pass->GetVertexShader();
+			auto gs = pass->GetGeometryShader();
 
-        if( ps )
-            FreeShaderPDR( ps );
+			if( ps )
+				FreeShaderPDR( ps );
 
-        if( vs )
-            FreeShaderPDR( vs );
+			if( vs )
+				FreeShaderPDR( vs );
 
-        if( gs )
-            FreeShaderPDR( gs );
+			if( gs )
+				FreeShaderPDR( gs );
 
-        DeletePDR( pass );
-    }
+			DeletePDR( pass );
+		}
+	}
 }
 
 // *********************************

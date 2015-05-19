@@ -1,5 +1,7 @@
 #include "DefaultPixelShaderChannel.h"
 
+//FIXME: REMOVE after reimplementing access to values from shader channel implementation
+#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 
 namespace bv { namespace model {
 
@@ -81,6 +83,14 @@ DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( co
     }
 
     return nullptr;
+}
+
+// ******************************
+//
+DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create ()
+{
+    //FIXME: remove this DefaultParamValModel construction from here (implement decent ShaderChannel in case of nullptr input IValueSet - simply return empty vector there)
+    return std::make_shared< DefaultPixelShaderChannel >( ReadShaderFromFile( "default.frag" ), std::make_shared< DefaultParamValModel >() );
 }
 
 } //model

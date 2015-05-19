@@ -105,6 +105,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(DepDir)/3rdParty/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -114,6 +115,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(DepDir)/3rdParty/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -125,6 +127,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(DepDir)/3rdParty/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -138,6 +141,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(DepDir)/3rdParty/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -171,6 +175,12 @@
     <ClCompile Include="..\..\..\Source\Common\VBORect.cpp" />
     <ClCompile Include="..\..\..\Source\PrototypeCreator.cpp" />
     <ClCompile Include="..\..\..\Source\PrototyperApp.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLExt.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLPluginExt.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingMode.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingTestScene.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Scenes\DrawingTestScene0.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\DrawingPrototype.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ExperimentalNodeDeleter.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ScenePrototype.cpp" />
@@ -201,6 +211,14 @@
     <ClInclude Include="..\..\..\Source\PrototypeCreator.h" />
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
     <ClInclude Include="..\..\..\Source\PrototypesForwardInc.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLDefsExt.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLExt.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLPluginExt.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingMode.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingTestScene.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Modes\DrawingModes.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Scenes\DrawingTestScene0.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\DrawingPrototype.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ExperimentalNodeDeleter.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ScenePrototype.h" />

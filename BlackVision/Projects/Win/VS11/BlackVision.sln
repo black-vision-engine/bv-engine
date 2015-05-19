@@ -33,6 +33,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestAssetManager", "..\..\.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibEffect", "..\..\..\Tools\LibEffect\Projects\Win\VS11\LibEffect.vcxproj", "{E3611A8A-25FC-4C0E-89AE-89611FC3427A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestModelNodeEditor", "..\..\..\Test\Applications\ModelNodeEditor\Projects\Win\VS11\TestModelNodeEditor.vcxproj", "{B054F6A0-06EC-44E7-AE4E-DA8663237E92}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -163,6 +165,18 @@ Global
 		{E3611A8A-25FC-4C0E-89AE-89611FC3427A}.Release|Win32.Build.0 = Release|Win32
 		{E3611A8A-25FC-4C0E-89AE-89611FC3427A}.Release|x64.ActiveCfg = Release|x64
 		{E3611A8A-25FC-4C0E-89AE-89611FC3427A}.Release|x64.Build.0 = Release|x64
+		{B054F6A0-06EC-44E7-AE4E-DA8663237E92}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{B054F6A0-06EC-44E7-AE4E-DA8663237E92}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{B054F6A0-06EC-44E7-AE4E-DA8663237E92}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B054F6A0-06EC-44E7-AE4E-DA8663237E92}.Debug|Win32.Build.0 = Debug|Win32
+		{B054F6A0-06EC-44E7-AE4E-DA8663237E92}.Debug|x64.ActiveCfg = Debug|x64
+		{B054F6A0-06EC-44E7-AE4E-DA8663237E92}.Debug|x64.Build.0 = Debug|x64
+		{B054F6A0-06EC-44E7-AE4E-DA8663237E92}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{B054F6A0-06EC-44E7-AE4E-DA8663237E92}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{B054F6A0-06EC-44E7-AE4E-DA8663237E92}.Release|Win32.ActiveCfg = Release|Win32
+		{B054F6A0-06EC-44E7-AE4E-DA8663237E92}.Release|Win32.Build.0 = Release|Win32
+		{B054F6A0-06EC-44E7-AE4E-DA8663237E92}.Release|x64.ActiveCfg = Release|x64
+		{B054F6A0-06EC-44E7-AE4E-DA8663237E92}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -174,5 +188,6 @@ Global
 		{E3611A8A-25FC-4C0E-89AE-89611FC3427A} = {7A2AC84D-DA2C-4D5A-BA2B-B5BB25F0BD81}
 		{9D72E88B-3DA9-4B56-A703-29641FA82479} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{C8FE17FB-A0B8-4069-B88A-855CC14D9810} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
+		{B054F6A0-06EC-44E7-AE4E-DA8663237E92} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 	EndGlobalSection
 EndGlobal
