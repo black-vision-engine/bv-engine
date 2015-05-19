@@ -1,10 +1,10 @@
 #pragma once
 
-//#include "Xml/RapidXml/RapidXml.hpp"
-//
-//namespace bv
-//{
-//
+#include "rapidxml/RapidXml.hpp"
+
+namespace bv
+{
+
 //class SerializeObject
 //{
 //    rapidxml::xml_document<> m_doc;
@@ -13,12 +13,13 @@
 //    SerializeObject( rapidxml::xml_document<> doc ) : m_doc( doc ) { }
 //};
 //
-//class DeserializeObject
-//{
+
+class DeserializeObject
+{
 //    rapidxml::xml_document<> m_doc;
 //
-//public:
-//    DeserializeObject( rapidxml::xml_document<> doc ) : m_doc( doc ) { }
-//};
+public:
+    DeserializeObject( rapidxml::xml_document<>& /*doc*/ ) /*: m_doc( doc )*/ { }
+};
 
-//}
+}

@@ -5,7 +5,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ThirdPartyDir)\FreeType\include;$(ThirdPartyDir)\FreeImage\Dist;$(ThirdPartyDir)\glm;$(ThirdPartyDir)\FastDelegate;$(ThirdPartyDir)\hashlib2plus\src;$(ThirdPartyDir)\sqlite\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ThirdPartyDir)\FreeType\include;$(ThirdPartyDir)\FreeImage\Dist;$(ThirdPartyDir)\glm;$(ThirdPartyDir)\FastDelegate;$(ThirdPartyDir)\hashlib2plus\src;$(ThirdPartyDir)\sqlite\src;$(ThirdPartyDir)\xml</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />

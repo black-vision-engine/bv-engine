@@ -52,7 +52,7 @@ public:
                             ~BVScene            ();
 
     static BVScenePtr       Create              ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
-    static ISerializablePtr     Create          (DeserializeObject &/*doc*/) { assert(!"Implement in derived!"); };
+    static ISerializablePtr     Create          (DeserializeObject &/*doc*/) { assert(!"Implement in derived!"); return nullptr; };
 
     virtual void            Update              ( TimeType t );
 
