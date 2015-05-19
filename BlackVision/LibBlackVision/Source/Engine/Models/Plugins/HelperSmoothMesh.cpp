@@ -130,7 +130,7 @@ void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& result
 }
 
 /**Moves verticies of the new mesh to appropriate positions.*/
-void moveVerticies( IndexedGeometry& mesh, std::vector<unsigned short>& edges, IndexedGeometry& resultMesh )
+void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<unsigned short>& edges, IndexedGeometry& resultMesh )
 {
 	mesh;
 	edges;

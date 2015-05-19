@@ -94,16 +94,17 @@ return Returns false if couldn't find traingle having such indicies.
 */
 bool IndexedGeometryConverter::findNeighbour( unsigned short index1, unsigned short index2, unsigned short& foundIndex, std::vector<unsigned short>& indicies )
 {
-	index1;
-	index2;
-	foundIndex;
-	indicies;
-
 	unsigned int i = usedRangeIndex;
 	for( ; i < indicies.size(); ++i )
-		if( indicies[i] == indicies[index1] )
+		if( indicies[ i ] == indicies[ index1 ] )
 		{
-
+			unsigned int triangleStart = i - i % 3;
+			for( unsigned int k = triangleStart; k < triangleStart + 3; ++k )	// Little waste of time to compare i-th triangle, which we know. But it's better then milion of if's.
+				if( indicies[ k ] == indicies[ index2 ] )	//We know that, two indicies exists in this triangle.
+				{// Return remainig index.
+					foundIndex = static_cast<unsigned short> ( 3 * triangleStart + 3 - (i + k) );	// Sum of indicies is 3*triangleStart + 0 + 1 + 2. We substract i and k. Result is new index.
+					return true;
+				}
 		}
 
 	return false;
@@ -112,10 +113,17 @@ bool IndexedGeometryConverter::findNeighbour( unsigned short index1, unsigned sh
 /**Finds neighbour as the second findNeighbour function, but looks for only one common vertex.*/
 bool IndexedGeometryConverter::findNeighbourPair( unsigned short index1, unsigned short& foundIndex1, unsigned short& foundIndex2, std::vector<unsigned short>& indicies )
 {
-	index1;
-	foundIndex1;
-	foundIndex2;
-	indicies;
+	unsigned int i = usedRangeIndex;
+	for( ; i < indicies.size(); ++i )
+		if( indicies[ i ] == indicies[ index1 ] )
+		{
+			unsigned short offsetFromStart = i % 3;
+			unsigned short triangleStart = static_cast<unsigned short>( i - offsetFromStart );
+			foundIndex1 = triangleStart + ( offsetFromStart + 1 ) % 3;
+			foundIndex2 = triangleStart + ( offsetFromStart + 2 ) % 3;
+			return true;
+		}
+
 	return false;
 }
 
