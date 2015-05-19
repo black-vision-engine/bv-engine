@@ -1,6 +1,7 @@
 #pragma once
 
 #include "rapidxml/RapidXml.hpp"
+#include "Engine/Models/Timeline/TimelineManager.h"
 
 namespace bv
 {
@@ -16,10 +17,12 @@ namespace bv
 
 class DeserializeObject
 {
-//    rapidxml::xml_document<> m_doc;
-//
+public: // FIXME
+    rapidxml::xml_document<>* m_doc;
+    model::TimelineManager m_tm; // FIXME(?)
+
 public:
-    DeserializeObject( rapidxml::xml_document<>& /*doc*/ ) /*: m_doc( doc )*/ { }
+    DeserializeObject( rapidxml::xml_document<>& doc ) : m_doc( &doc ) { }
 };
 
 }

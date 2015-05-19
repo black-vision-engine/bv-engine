@@ -238,10 +238,6 @@
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.h" />
     <ClInclude Include="..\..\..\Source\Xml\Auxiliary\Auxiliary.hpp" />
     <ClInclude Include="..\..\..\Source\Xml\BlackTree.h" />
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml.hpp" />
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Iterators.hpp" />
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Print.hpp" />
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Utils.hpp" />
     <ClInclude Include="..\..\..\Source\Xml\Scena.h" />
     <ClInclude Include="..\..\..\Source\Xml\TreeBuilder.h" />
   </ItemGroup>

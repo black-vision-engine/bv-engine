@@ -39,6 +39,7 @@ private:
     model::ParamVec3    m_cameraUp;
 
     model::BasicNodePtr m_pModelSceneRoot;
+    //SceneModelPtr       m_pModelScene;
     SceneNode *         m_pEngineSceneRoot;
 
     std::string         m_name;
@@ -52,7 +53,7 @@ public:
                             ~BVScene            ();
 
     static BVScenePtr       Create              ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
-    static ISerializablePtr     Create          (DeserializeObject &/*doc*/) { assert(!"Implement in derived!"); return nullptr; };
+    static ISerializablePtr Create                  ( DeserializeObject& doc );
 
     virtual void            Update              ( TimeType t );
 
