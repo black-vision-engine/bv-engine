@@ -11,8 +11,8 @@
       <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
-xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

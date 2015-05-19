@@ -1,0 +1,79 @@
+Rodzaje projektów:
+- CoreLib - 	główny katalog 			- dowolna z głównych bibliotek, może zależeć tylko od innech CoreLibs lub Dep/3rdParty
+- ToolLib - 	katalog Tools  			- może zależeć od dowolnej CoreLib, dowolnego Toola lub Dep/3rdParty
+- ToolApp - 	katalog Tools  			- może zależeć od dowolnej CoreLib, dowolnego Toola lub Dep/3rdParty
+- Test - 		latalog Test   			- może zależeć od dowolnej CoreLib, dowolnego Toola lub Dep/3rdParty
+- Application - katalog Applications	- może zależeć od dowolnej CoreLib, dowolnego Toola lub Dep/3rdParty, być może też od innej aplikacji
+
+Usprawnienia:
+
+zmienić położenie i nazewnictwo na jakieś ustalone lib boost i korzystać tylko z BOOST_LIB_DIR
+  + globalny dep od boosta
+sensownie zrobić depy od libek (z ifami, będzie wypas)
+post buid step można zrobić na bazie ustawień aktualnej konfiguracji
+
+zmienić nazwę mipmapbuilder na libmipmapbuilder
+
+poprawić templatki adekwatnie - domyślnie każda z App ma w lib depach katalog output (jeśli to będzie potrzebne, bo może okaże się zbędne)
+
+3rdPartyInc.props - katalogi z includem do third party oraz do boosta
+3rdPartyLib.props - katalogi do libów z third party oraz do odpowiednio nazwanego boosta oraz libki jako takie (z ifami)
+
+oraz pewnie 
+ToolsInc - i duże includy składać z takich kawałków
+TestInc
+
+ToolsLib - - jeśli będzie taka potrzebna, bo to powinny załatwić referencje i depy
+TestLib - jeśli będzie taka potrzebna, bo to powinny załatwić referencje i depy
+
+być może conditional na Preprocesor (zamiast czterech różnych to wersja z conditionalem w jednym pliku)
+
+CommonLib chyba może również wylecieć - to w apps i test jest
+LibCommon.props wydaje się zbędne - jeśli tak jest, to wywalić
+
+poprawić docelowe katalogi budowania testów, bo teraz test asset manager się kopiuje do katalogu głównego, zamiast do Test
+
+test asset manager przechodzi tylko w debug x64
+test mipmap builder w ogóle nie przechodzi
+
+
+dobrze przemyśleć makra
+na tej podstawie najpewniej da się zrobić wszystko znacznie mniejszą liczbą plików (tylko odpowiednio ustawiać warunki)
+http://manski.net/2012/01/sharing-project-properties-in-visual-c/#custom-variables-.28a.k.a.-macros.29
+https://msdn.microsoft.com/en-us/library/ms171481.aspx
+
+win32-Debug
+
+	xcopy $(ThirdPartyDir)\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
+	xcopy $(ThirdPartyDir)\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
+	mkdir $(OutDir)\Assets > nul  2> nul
+	xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y
+
+	xcopy $(ThirdPartyDir)\FreeImage\Wrapper\FreeImagePlus\dist\Win32\FreeImagePlusd.dll $(OutDir) /c /y
+	xcopy $(ThirdPartyDir)\FreeImage\Dist\Win32\FreeImaged.dll $(OutDir) /c /y
+	xcopy $(ThirdPartyDir)\FreeImage\Dist\Win32\FreeImage.dll $(OutDir) /c /y
+	mkdir $(OutDir)\Assets > nul  2> nul
+	xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y
+
+win32-Release
+
+	xcopy $(ThirdPartyDir)\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
+	xcopy $(ThirdPartyDir)\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
+	mkdir $(OutDir)\Assets > nul  2> nul
+	xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y
+
+
+x64-Debug
+
+	xcopy $(ThirdPartyDir)\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
+	xcopy $(ThirdPartyDir)\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
+	mkdir $(OutDir)\Assets > nul  2> nul
+	xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y
+
+	
+x64-Release
+
+	xcopy $(ThirdPartyDir)\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
+	xcopy $(ThirdPartyDir)\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
+	mkdir $(OutDir)\Assets > nul  2> nul
+	xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y

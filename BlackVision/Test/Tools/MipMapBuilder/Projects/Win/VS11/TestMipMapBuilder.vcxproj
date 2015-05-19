@@ -63,6 +63,7 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibDirs.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Test3rdPartyLibDirs.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonLib.Win32.debug.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdParrtyDllCopy.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -75,6 +76,7 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibDirs.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Test3rdPartyLibDirs.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonLib.x64.debug.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdParrtyDllCopy.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -87,6 +89,7 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibDirs.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Test3rdPartyLibDirs.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonLib.Win32.release.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdParrtyDllCopy.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -99,13 +102,14 @@
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibDirs.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Test3rdPartyLibDirs.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonLib.x64.release.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdParrtyDllCopy.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\..\..\..\Tools\MipMapBuilder\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ToolsDir)\MipMapBuilder\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -114,7 +118,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\..\..\..\Tools\MipMapBuilder\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ToolsDir)\MipMapBuilder\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -125,7 +129,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\..\..\..\..\Tools\MipMapBuilder\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ToolsDir)\MipMapBuilder\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -138,7 +142,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\..\..\..\..\Tools\MipMapBuilder\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ToolsDir)\MipMapBuilder\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -94,6 +94,7 @@ model::BasicNodePtr SolidRect( const model::PluginsManager * pluginsManager, mod
 
     auto success = SetParameter( color, 0.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
     assert( success );
+	{ success; }
 
     return rootNode;
 }
