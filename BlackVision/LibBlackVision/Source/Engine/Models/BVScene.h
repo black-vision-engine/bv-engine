@@ -4,6 +4,8 @@
 #include "Mathematics/Interpolators/Interpolators.h"
 
 #include "Engine/Interfaces/IUpdatable.h"
+#include "Engine/Interfaces/ISerializable.h"
+#include "Engine/SerializationObjects.h"
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
@@ -23,7 +25,7 @@ DEFINE_PTR_TYPE(BVScene)
 DEFINE_CONST_PTR_TYPE(BVScene)
 
 
-class BVScene : public IUpdatable
+class BVScene : public IUpdatable, public ISerializable
 {
 private:
     
@@ -50,6 +52,7 @@ public:
                             ~BVScene            ();
 
     static BVScenePtr       Create              ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
+    static ISerializablePtr     Create          (DeserializeObject &/*doc*/) { assert(!"Implement in derived!"); };
 
     virtual void            Update              ( TimeType t );
 
@@ -63,6 +66,8 @@ public:
     BVSceneEditor *         GetSceneEditor      ();
 
     const std::string &     GetName             ()  const;
+
+    virtual void                Serialize       (SerializeObject &/*doc*/) const override {}
 
 private:
 

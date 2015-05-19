@@ -128,6 +128,7 @@ void BVAppLogic::Initialize         ()
 	bv::effect::InitializeLibEffect( m_renderer );
 }
 
+
 // *********************************
 //
 void BVAppLogic::LoadScene          ( void )
