@@ -1715,6 +1715,9 @@
     <ClInclude Include="..\..\..\Source\Engine\SerializationObjects.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\SceneModel.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

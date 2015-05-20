@@ -12,6 +12,7 @@
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
+#include "SceneModel.h"
 
 namespace bv {
 
@@ -38,8 +39,8 @@ private:
     model::ParamVec3    m_cameraDirection;
     model::ParamVec3    m_cameraUp;
 
-    model::BasicNodePtr m_pModelSceneRoot;
-    //SceneModelPtr       m_pModelScene;
+    //model::BasicNodePtr m_pModelSceneRoot;
+    SceneModelPtr       m_pModelSceneRoot;
     SceneNode *         m_pEngineSceneRoot;
 
     std::string         m_name;
