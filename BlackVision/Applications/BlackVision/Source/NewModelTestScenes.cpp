@@ -494,6 +494,10 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
     {
         node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
+    else if( scene == "SERIALIZED_TEST" )
+    {
+        node = TestScenesFactory::CreateSerializedTestScene( pluginsManager, timelineManager );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -1074,6 +1078,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( 
     return root;
 }
 
+    static  model::BasicNodePtr     CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager );
 
 
 } //bv
