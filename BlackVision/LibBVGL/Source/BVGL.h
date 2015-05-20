@@ -70,6 +70,7 @@ public:
 
 	static void                 bvglBindBuffer              ( GLenum target, GLuint buffer );
 	static void                 bvglBufferData              ( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage );
+	static void					bvglBufferSubData			( GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid * data );
 
 	static GLvoid *             bvglMapBuffer               ( GLenum target, GLenum access );
 	static GLboolean            bvglUnmapBuffer             ( GLenum target );
@@ -101,8 +102,19 @@ public:
 	static void                 bvglFramebufferTexture2D    ( GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level ) ;
 	static void                 bvglFramebufferRenderbuffer ( GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer );
 
-	static void                 bvglDrawBuffers             ( GLsizei n, const GLenum * bufs );
-	static void                 bvglDrawArrays              ( GLenum mode, GLint first, GLsizei count );
+	static void                 bvglDrawBuffers					( GLsizei n, const GLenum * bufs );
+	static void                 bvglDrawArrays					( GLenum mode, GLint first, GLsizei count );
+	static void					bvglDrawElements				( GLenum mode, GLsizei count, GLenum type, const GLvoid* indices );
+	static void					bvglDrawElementsBaseVertex		( GLenum mode, GLsizei count, GLenum type, GLvoid* indices, GLint basevertex );
+	static void					bvglDrawArraysInstanced			( GLenum mode, GLint first, GLsizei count, GLsizei primcount );
+	static void					bvglDrawElementsInstanced		( GLenum mode, GLsizei count, GLenum type, const void * indices, GLsizei primcount );
+	static void					bvglDrawArraysInstancedBaseInstance				( GLenum mode, GLint first, GLsizei count, GLsizei primcount, GLuint baseinstance );
+	static void					bvglDrawElementsInstancedBaseVertexBaseInstance	( GLenum mode, GLsizei count, GLenum type, GLvoid *indices, GLsizei primcount, GLint basevertex, GLuint baseinstance );
+	static void					bvglDrawElementsInstancedBaseVertex				( GLenum mode, GLsizei count, GLenum type, GLvoid *indices, GLsizei primcount, GLint basevertex );
+	static void					bvglDrawArraysIndirect			( GLenum mode, const void *indirect );
+	static void					bvglDrawElementsIndirect		( GLenum mode, GLenum type, const void *indirect );
+	static void					bvglMultiDrawArraysIndirect		( GLenum mode, const void * indirect, GLsizei drawcount, GLsizei stride );
+	static void					bvglMultiDrawElementsIndirect	( GLenum mode, GLenum type, const void * indirect, GLsizei drawcount, GLsizei stride );
 
 	static GLenum               bvglCheckFramebufferStatus  ( GLenum target );
 
@@ -136,6 +148,7 @@ public:
 
 	static void                 bvglVertexAttribPointer     ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
 
+	static void					bvglVertexAttribDivisor		( GLuint index,  GLuint divisor );
 
 };
 

@@ -1,7 +1,6 @@
 #include "DrawingPrototype.h"
 
 #include "Prototypes/DrawingCommands/Common/DrawingMode.h"
-#include "Common/BVGLDefsExt.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
@@ -28,7 +27,7 @@ DrawingPrototype::~DrawingPrototype     ()
 //
 void    DrawingPrototype::Initialize          ()
 {
-    BVGLExt::bvglClearColor( 0.f, 0.f, 0.f, 0.f );
+    BVGL::bvglClearColor( 0.f, 0.f, 0.f, 0.f );
 
 	DrawingTestScene::Initialize();
 	DrawingMode::Initialize();
@@ -72,7 +71,7 @@ void    DrawingPrototype::Resize              ( UInt32 w, UInt32 h )
 //
 void    DrawingPrototype::Render              ()
 {
-    BVGLExt::bvglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    BVGL::bvglClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	
 	m_scene->Bind();
 	m_mode->Render( m_scene->GetDrawingModeData() );
