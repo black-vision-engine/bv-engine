@@ -10,17 +10,7 @@
 #include "Engine/Models/ModelNodeEditor.h"
 
 
-namespace bv { 
-    
-template<>
-model::BasicNodePtr DeserializeObject::Load< model::BasicNode >( rapidxml::xml_node<>* node )
-{
-    auto childDob = DeserializeObject( *node, *this->m_tm );
-    auto childNode = model::BasicNode::Create( childDob );
-    return std::static_pointer_cast< model::BasicNode >( childNode );
-}
-
-namespace model {
+namespace bv { namespace model {
 
 // FIXME: hack
 std::hash_map< IModelNode *, SceneNode * >    BasicNode::ms_nodesMapping;
@@ -109,9 +99,6 @@ ISerializablePtr BasicNode::Create( DeserializeObject& dob )
         {
             BasicNodePtr childNode = dob.Load< BasicNode >( child );
             node->AddChildToModelOnly( childNode );
-            //auto childDob = DeserializeObject( *child, *dob.m_tm );
-            //ISerializablePtr childNode = Create( childDob );
-            //node->AddChildToModelOnly( std::static_pointer_cast< BasicNode >( childNode ) );
         }
 
     return node;

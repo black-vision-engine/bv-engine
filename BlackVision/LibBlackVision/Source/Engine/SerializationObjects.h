@@ -25,10 +25,12 @@ public:
     DeserializeObject( rapidxml::xml_node<>& doc, model::TimelineManager& tm ) : m_doc( &doc ), m_tm( &tm ) { }
 
     template< typename T >
-    std::shared_ptr<T> Load( rapidxml::xml_node<>* node );
-    //{
-    //    
-    //}
+    std::shared_ptr<T> Load( rapidxml::xml_node<>* node )
+    {
+        auto dob = DeserializeObject( *node, *this->m_tm );
+        auto obj = T::Create( dob );
+        return std::static_pointer_cast< T >( obj );
+    }
 };
 
 }
