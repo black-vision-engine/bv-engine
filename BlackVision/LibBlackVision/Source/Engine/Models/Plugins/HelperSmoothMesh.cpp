@@ -50,7 +50,7 @@ IndexedGeometry HelperSmoothMesh::smooth( IndexedGeometry& mesh, std::vector<IND
 @param[in] edges Edges which should remain sharp.
 @param[in] tesselation Number of tesselations, that will be aplied to mesh
 @param[out] resultMesh Result of smooth.*/
-void HelperSmoothMesh::privateSmooth( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& edges, unsigned int tesselation, IndexedGeometry& resultMesh )
+void HelperSmoothMesh::privateSmooth( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, unsigned int tesselation, IndexedGeometry& resultMesh )
 {
 	if( tesselation == 0 )	// End of recursion.
 	{
@@ -61,9 +61,9 @@ void HelperSmoothMesh::privateSmooth( IndexedGeometry& mesh, std::vector<INDEX_T
 	IndexedGeometry new_mesh;
 
 	tesselate( mesh, new_mesh );
-	moveVerticies( mesh, edges, new_mesh );
+	moveVerticies( mesh, sharpEdges, new_mesh );
 
-	privateSmooth( new_mesh, edges, tesselation - 1, resultMesh );
+	privateSmooth( new_mesh, sharpEdges, tesselation - 1, resultMesh );
 	// Remember! You can't do anything with new_mesh after smooth call. It have been already moved to resultMesh.
 }
 
@@ -75,14 +75,12 @@ void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& result
 	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.getIndicies();
 	std::vector<glm::vec3>& resultVerticies = resultMesh.getVerticies();
 
-	//std::vector<bool> usedVerticies;
-
 	resultIndicies.reserve( 4 * indicies.size() );
 	resultVerticies.reserve( 3 * verticies.size() / 2 );
 	resultVerticies.resize( verticies.size() );
 	std::copy( verticies.begin(), verticies.end(), resultVerticies.begin() );		//Existing verticies have the same position as in init geometry.
 
-	//usedVerticies.resize( verticies.size(), false );
+
 
 	for( unsigned int i = 0; i < indicies.size(); i += 3 )
 	{
@@ -103,37 +101,8 @@ void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& result
 				resultVerticies.push_back( newVertex );
 			}
 
-			////Everything was wrong here
-			//if( usedVerticies[ indicies[i + j] ] && usedVerticies[ indicies[i + (j + 1) % 3] ] )
-			//{// This edge have been already devided.
-			//	// Looking for vertex containing this edge in resultIndicies. 
-			//	for( unsigned int k = 0; k < resultIndicies.size(); k += 12 )	// We have been adding 12 indicies at one time.
-			//		for( int v = 0; v < 3; v += 3 )		// Only 3 verticies are interesting.
-			//			if( resultIndicies[ k + v ] == indicies[i + j] )	// Indicies are in the same order
-			//				if( resultIndicies[ k + (v+3) % 9] == indicies[i + (j + 1) % 3] )
-			//				{// We found it
-			//					newIndicies[j] = resultIndicies[ k + 9 + v / 3 ];	// Thats because we know, how we made this table.
-			//				}
-			//			else if( resultIndicies[ k + v ] == indicies[i + (j + 1) % 3] )	// Indicies are in diffrent order.
-			//				if( resultIndicies[ k + (v+3) % 9] == indicies[i + j] )
-			//				{// We found it
-			//					newIndicies[j] = resultIndicies[ k + 9 + v / 3];	// Thats because we know, how we made this table.
-			//				}
-			//}
-			//else
-			//{// We must devide edge.
-			//	glm::vec3 firstVertex = verticies[ indicies[i + j] ];
-			//	glm::vec3 secondVertex = verticies[ indicies[i + (j + 1) % 3] ];
-			//	resultVerticies.push_back( ( firstVertex + secondVertex ) * glm::vec3( 0.5, 0.5, 0.5 ) );
-
-			//	newIndicies[j] = static_cast<unsigned short>( resultVerticies.size() - 1 );		// Position of new added vertex in vector is our new index;
-
-			//	usedVerticies[ indicies[i + j] ] = true;		// Set verticies as used.
-			//	usedVerticies[ indicies[i + (j + 1) % 3] ] = true;	// Set verticies as used.
-			//}
 		}
 
-		// Adding new traingles. Don't touch adding order. Function depeds on it, when vertex already existed.
 		int k = 2;
 		for( int j = 0; j < 3; ++j )	// Outer triangles.
 		{
@@ -147,18 +116,38 @@ void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& result
 }
 
 /**Moves verticies of the new mesh to appropriate positions.*/
-void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& edges, IndexedGeometry& resultMesh )
+void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, IndexedGeometry& resultMesh )
 {
-	mesh;
-	edges;
-	resultMesh;
+	const std::vector<INDEX_TYPE>& indicies = mesh.getIndicies();
+	const std::vector<glm::vec3>& verticies = mesh.getVerticies();
+	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.getIndicies();
+	std::vector<glm::vec3>& resultVerticies = resultMesh.getVerticies();
+	
+	std::vector<bool> movedVerticies;
+	movedVerticies.resize( resultVerticies.size(), false );
+	std::vector<INDEX_TYPE> vertexNeighbours;
+	std::vector<float> vertexWeights;
+
+
+	for( INDEX_TYPE i = 0; i < verticies.size(); ++i )
+	{// Make movement for vertex points
+		vertexNeighbours = findAllNeighbours( i, indicies );
+		vertexWeights = makeWeightTable( i, vertexNeighbours, sharpEdges );
+		resultVerticies[ i ] = computeVertexNewPosition( i, vertexNeighbours, vertexWeights, verticies, false );
+	}
+	for( INDEX_TYPE i = (INDEX_TYPE)verticies.size(); i < resultVerticies.size(); ++i )
+	{// Make movement for edge points
+		vertexNeighbours = findNeighboursForEdgeVertex( i, indicies, resultIndicies );
+		vertexWeights = makeWeightTable( i, vertexNeighbours, sharpEdges );
+		resultVerticies[ i ] = computeVertexNewPosition( i, vertexNeighbours, vertexWeights, verticies, true );
+	}
 }
 
+/**Finds given vertex in array of verticies.
+
+@return Returns true if vertex already exists in verticies.*/
 bool HelperSmoothMesh::findVertex( const std::vector<glm::vec3>& verticies, glm::vec3 vertex, INDEX_TYPE& index )
 {
-	vertex;
-	index;
-
 	for( unsigned int i = 0; i < verticies.size(); ++i )
 		if( verticies[ i ] == vertex )
 		{
@@ -168,6 +157,62 @@ bool HelperSmoothMesh::findVertex( const std::vector<glm::vec3>& verticies, glm:
 
 	index = 0;
 	return false;
+}
+
+
+/**
+@return Returns all neighbours of given vertex under index.*/
+std::vector<INDEX_TYPE> HelperSmoothMesh::findAllNeighbours( INDEX_TYPE index, const std::vector<INDEX_TYPE>& indicies )
+{
+	std::vector<INDEX_TYPE> vertexNeighbours;
+	vertexNeighbours.reserve( 6 );		// It's the number of neighbours that I expect in mesh for one vertex.
+
+	for( INDEX_TYPE i : indicies )
+		if( i == index )
+		{
+
+		}
+
+	return std::move( vertexNeighbours );
+}
+
+
+std::vector<float> HelperSmoothMesh::makeWeightTable( INDEX_TYPE index, std::vector<INDEX_TYPE>& vertexNeighbours, std::vector<INDEX_TYPE>& sharpEdges )
+{
+	sharpEdges;
+	index;
+
+	std::vector<float> vertexWeights;
+	vertexWeights.reserve( vertexNeighbours.size() );
+
+	return std::move( vertexWeights );
+}
+
+/**Computes new position of vertex.
+
+@param[in] ignoreIndex If we compute edge vertex, we don't want to count it in. Set flag to true.*/
+glm::vec3 HelperSmoothMesh::computeVertexNewPosition( INDEX_TYPE index, const std::vector<INDEX_TYPE>& vertexNeighbours, const std::vector<float>& vertexWeights, const std::vector<glm::vec3>& verticies, bool ignoreIndex )
+{
+	index;
+	vertexNeighbours;
+	vertexWeights;
+	verticies;
+	ignoreIndex;
+	return glm::vec3( 0.0, 0.0, 0.0 );
+}
+
+/**
+Edge points have another neighbours than vertex points.*/
+std::vector<INDEX_TYPE> HelperSmoothMesh::findNeighboursForEdgeVertex( INDEX_TYPE index, const std::vector<INDEX_TYPE>& preIndicies, const std::vector<INDEX_TYPE>& postIndicies )
+{
+	std::vector<INDEX_TYPE> vertexNeighbours;
+	vertexNeighbours.reserve( 6 );		// It's the number of neighbours that I expect in mesh for one vertex.
+
+	index;
+	preIndicies;
+	postIndicies;
+
+	return std::move( vertexNeighbours );
 }
 
 
