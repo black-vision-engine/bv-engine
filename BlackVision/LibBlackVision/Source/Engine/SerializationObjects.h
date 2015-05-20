@@ -23,6 +23,12 @@ public: // FIXME
 
 public:
     DeserializeObject( rapidxml::xml_node<>& doc, model::TimelineManager& tm ) : m_doc( &doc ), m_tm( &tm ) { }
+
+    template< typename T >
+    std::shared_ptr<T> Load( rapidxml::xml_node<>* node );
+    //{
+    //    
+    //}
 };
 
 }
