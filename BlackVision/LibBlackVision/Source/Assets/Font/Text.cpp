@@ -24,7 +24,7 @@
 #include "LibEffect.h"
 #include "Assets/Assets.h"
 #include "Assets/Font/Engines/FreeTypeEngine.h"
-#include "Tools/MipMapBuilder/Source/MipMapBuilder.h"
+#include "MipMapBuilder.h"
 #include "Assets/Texture/TextureCache.h"
 
 

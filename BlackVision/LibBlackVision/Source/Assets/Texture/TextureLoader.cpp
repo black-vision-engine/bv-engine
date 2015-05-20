@@ -2,7 +2,7 @@
 #include "LibImage.h"
 
 #include "Assets/Texture/TextureCache.h"
-#include "Tools/MipMapBuilder/Source/MipMapBuilder.h"
+#include "MipMapBuilder.h"
 #include "Assets/Cache/RawDataCache.h"
 
 #include <cassert>
