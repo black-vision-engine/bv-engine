@@ -1,36 +1,39 @@
-import PMAssetEntity
-import PMAssetType
-import PMLocation
+import DataCategory
+import LoadableDataDesc
 
 class Project:
 
-    def __init__(self):
-        self.name           = ""
-        self.projectAssets  = {}
-        self.projectScenes  = {}
+    def __init__(self, name):
+        self.name           = name
+        self.categories     = {}
 
-    def appendScene(self, scene):
-        if scene.getName() not in self.projectScenes:
-            self.projectScenes[scene.getName()] = scene
+    def getName(self):
+        return self.name
 
-    def appendAsset(self, type, path):
-        assert isinstance(type, PMAssetType)
-        assert isinstance(path, [str])
-        assert False  # TODO: Implement
+    def registerCategory(self, category):
+        assert isinstance(category, DataCategory)
+        if category.getId() not in self.categories:
+            self.categories[category.getId()] = category
+        else:
+            print("Category '{}' already registered".format(category.getId()))
+
+    def appendData(self, categoryId, path, loadableData):
+        assert isinstance(path, str)
+        assert isinstance(loadableData, LoadableDataDesc)
+        if categoryId in self.categories:
+            self.categories[categoryId].appendData(path, loadableData)
+        else:
+            print("There is no category named {} in project {}".format(categoryId, self.name))
+
+    def getData(self, categoryId, path):
+        assert isinstance(path, str)
+        if categoryId in self.categories:
+            return self.categories[categoryId].getData(path)
+        else:
+            print("There is no category named {} in project {}".format(categoryId, self.name))
+            return None
 
     def __str__(self):
         print("Project {} \n\t".format(self.name))
         print("Scenes: {}".format(self.projectScenes.keys()))
         print("Used assets: {}".format(self.projectAssets))
-
-    def getAssetEntity(self, location):
-        assert isinstance(location, PMLocation)
-        assert False  # TODO: Implement
-
-    def exportAsset(self):
-        return None
-
-    def importAsset(self, assetEnt):
-        assert isinstance(assetEnt, PMAssetEntity)
-        assert False  # TODO: Implement
-        pass
