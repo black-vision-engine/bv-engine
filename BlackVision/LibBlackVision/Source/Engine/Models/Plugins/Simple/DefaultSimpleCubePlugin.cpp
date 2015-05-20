@@ -151,7 +151,7 @@ namespace Generator
 					indicies.push_back( indicesData[i] );
 
 				std::vector<INDEX_TYPE> sharpEdges;
-				const unsigned tesselation = 0;
+				const unsigned tesselation = 3;
 
 				IndexedGeometry resultMesh = smoother.smooth( cube, sharpEdges, tesselation );
 				converter.makeStrip( resultMesh, verts );

@@ -61,7 +61,7 @@ void HelperSmoothMesh::privateSmooth( IndexedGeometry& mesh, std::vector<INDEX_T
 	IndexedGeometry new_mesh;
 
 	tesselate( mesh, new_mesh );
-	moveVerticies( mesh, edges, resultMesh );
+	moveVerticies( mesh, edges, new_mesh );
 
 	privateSmooth( new_mesh, edges, tesselation - 1, resultMesh );
 	// Remember! You can't do anything with new_mesh after smooth call. It have been already moved to resultMesh.
@@ -93,14 +93,14 @@ void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& result
 			INDEX_TYPE newIndex;
 			glm::vec3 firstVertex = verticies[ indicies[i + j] ];
 			glm::vec3 secondVertex = verticies[ indicies[i + (j + 1) % 3] ];
-			glm::vec3 newVertex =  ( firstVertex + secondVertex ) * glm::vec3( 0.5, 0.5, 0.5 );\
+			glm::vec3 newVertex =  ( firstVertex + secondVertex ) * glm::vec3( 0.5, 0.5, 0.5 );
 
-			if( findVertex( verticies, newVertex, newIndex ) )
+			if( findVertex( resultVerticies, newVertex, newIndex ) )
 				newIndicies[ j ] = newIndex;
 			else
 			{
+				newIndicies[ j ] = static_cast<unsigned short>( resultVerticies.size() );		// Position of new added vertex in vector is our new index;
 				resultVerticies.push_back( newVertex );
-				newIndicies[ j ] = static_cast<unsigned short>( resultVerticies.size() - 1 );		// Position of new added vertex in vector is our new index;
 			}
 
 			////Everything was wrong here
@@ -137,7 +137,7 @@ void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& result
 		int k = 2;
 		for( int j = 0; j < 3; ++j )	// Outer triangles.
 		{
-			resultIndicies.push_back( static_cast<INDEX_TYPE>( i + j ) );
+			resultIndicies.push_back( static_cast<INDEX_TYPE>( indicies[ i + j ] ) );
 			resultIndicies.push_back( newIndicies[ k++ % 3 ] );
 			resultIndicies.push_back( newIndicies[ k % 3 ] );
 		}

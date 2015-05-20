@@ -114,6 +114,7 @@ bool IndexedGeometryConverter::findNeighbour( INDEX_TYPE index1, INDEX_TYPE inde
 					usedTriangles[i / 3] = true;
 					return true;
 				}
+			i = triangleStart + 3;	// Omit checked verticies
 		}
 
 	return false;
