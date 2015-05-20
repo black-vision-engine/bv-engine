@@ -494,6 +494,14 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
     {
         node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
+	else if( scene == "ALL_BASIC_SHAPES_SHOW" )
+	{
+		node = TestScenesFactory::BasicShapesShowScene( pluginsManager, timelineManager, timeEvaluator );
+	}
+	else if( scene == "BASIC_SHAPES_TEST_SCENE" )
+	{
+		node = TestScenesFactory::BasicShapesTest(  pluginsManager, timelineManager, timeEvaluator );
+	}
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -547,7 +555,8 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
     //auto node0 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
     //auto node1 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
 
-    //node0->AddChild( node1 );
+
+	
 
     return node0;
 
@@ -1074,6 +1083,42 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( 
     return root;
 }
 
+/**All basic shapes in one scene*/
+model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+	pluginsManager;
+
+	auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ) );
+	auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ) );
+	auto node2 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CIRCLE", glm::vec3( -2.0, 0.0, 3.0 ) );
+	auto node3 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_SPHERE", glm::vec3( -4.0, -3.0, 1.0 ) );
+	auto node4 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_ROUNDEDRECT", glm::vec3( -3.0, -2.0, -3.0 ) );
+	auto node5 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_TORUS", glm::vec3( 1.0, 0.0, -3.0 ) );
+	auto node6 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_SPRING", glm::vec3( 5.0, -5.0, 0.0 ) );
+	auto node7 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_TRIANGLE", glm::vec3( 1.0, -0.7, -3.0 ) );
+	auto node8 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CYLINDER", glm::vec3( -3.0, 2.0, -3.0 ) );
+	auto node9 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_ELLIPSE", glm::vec3( 0.0, -3.0, 4.0 ) );
+	
+    node0->AddChildToModelOnly( node1 );
+	node0->AddChildToModelOnly( node2 );
+	node0->AddChildToModelOnly( node3 );
+	node0->AddChildToModelOnly( node4 );
+	node0->AddChildToModelOnly( node5 );
+	node0->AddChildToModelOnly( node6 );
+	node0->AddChildToModelOnly( node7 );
+	node0->AddChildToModelOnly( node8 );
+	node0->AddChildToModelOnly( node9 );
+
+	return node0;
+}
+
+model::BasicNodePtr		TestScenesFactory::BasicShapesTest		( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+	pluginsManager;
+
+	auto node0 = SimpleNodesFactory::CreateBasicShapesTestNode( timelineManager, timeEvaluator );
+	return node0;
+}
 
 
 } //bv

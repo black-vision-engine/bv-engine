@@ -24,6 +24,7 @@ struct PN
 	static const std::string RADIUS;
 	static const std::string OPEN_ANGLE;
 	static const std::string OPEN_ANGLE_MODE;
+	static const std::string MAPPING_TYPE;
 };
 
 
@@ -32,6 +33,7 @@ class Plugin : public DefaultGeometryPluginBase
 {
 public:
 	enum OpenAngleMode : int { CW, CCW, SYMMETRIC };
+	enum MappingType : int { SINGLETEXTURE, DOUBLETEXTURE };
 private:
 	ValueIntPtr		horizontal_stripes;
 	ValueIntPtr		vertical_stripes;
@@ -39,6 +41,8 @@ private:
 	ValueFloatPtr	open_angle;
 
 	std::shared_ptr< ParamEnum< OpenAngleMode > >		open_angle_mode;
+	std::shared_ptr< ParamEnum< MappingType > >			mapping_type;
+
 public:
 	Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 	~Plugin();
@@ -69,5 +73,22 @@ inline bool SetParameter< DefaultSphere::Plugin::OpenAngleMode >( IParameterPtr 
     return true;
 }	
 
+template<>
+inline bool SetParameter< DefaultSphere::Plugin::MappingType >( IParameterPtr param, TimeType t, const DefaultSphere::Plugin::MappingType & val )
+{
+    //return SetSimpleTypedParameter< ParamEnum<DefaultCirclePlugin::OpenAngleMode> >( param, t, val );
+    typedef ParamEnum<DefaultSphere::Plugin::MappingType> ParamType;
+
+    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
+
+    if( typedParam == nullptr )
+    {
+        return false;
+    }
+
+    typedParam->SetVal( val, t );
+
+    return true;
+}	
 
 }}

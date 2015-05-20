@@ -1,5 +1,7 @@
 #include "DefaultSimpleCubePlugin.h"
 #include "Mathematics/Defines.h"
+#include "..\HelperIndexedGeometryConverter.h"
+#include "..\HelperSmoothMesh.h"
 
 namespace bv { namespace model { namespace DefaultSimpleCube {
 
@@ -38,16 +40,24 @@ namespace Generator
 {
 	glm::vec3		dimmension;
 
+	const unsigned int NORMAL_CUBE = 0;
+	const unsigned int SMOOTH_CUBE = 1;
+
 	/**@brief Generates cube built as strips.*/
 	class SimpleCubeGenerator : public IGeometryAndUVsGenerator
 	{
 	private:
+		Type geometry_type;
+		unsigned int cube_type;
 	public:
 
-		SimpleCubeGenerator() {}
+		SimpleCubeGenerator() { geometry_type = Type::GEOMETRY_AND_UVS;
+								cube_type = SMOOTH_CUBE;}
 		~SimpleCubeGenerator(){}
 
-		Type GetType() { return Type::GEOMETRY_AND_UVS; }
+		Type GetType() { return geometry_type; }
+		//GEOMETRY_AND_UVS
+		//GEOMETRY_ONLY
 
 		void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
         {
@@ -55,54 +65,151 @@ namespace Generator
 			float y = dimmension.y / 2;
 			float z = dimmension.z / 2;
 
-
-			// Generates top strip of cube
-			verts->AddAttribute( glm::vec3( -x, -y, z ) );
-			verts->AddAttribute( glm::vec3( x, -y, z ) );
-			verts->AddAttribute( glm::vec3( -x , y, z ) );
-			verts->AddAttribute( glm::vec3( x, y, z ) );
-			verts->AddAttribute( glm::vec3( -x, y, -z ) );
-			verts->AddAttribute( glm::vec3( x, y, -z ) );
-			verts->AddAttribute( glm::vec3( -x, -y, -z ) );
-			verts->AddAttribute( glm::vec3( x, -y, -z ) );
-
-			// Generates bottom strip of cube
-			verts->AddAttribute( glm::vec3( -x, y, z ) );
-			verts->AddAttribute( glm::vec3( -x, y, -z ) );
-			verts->AddAttribute( glm::vec3( -x, -y, z ) );
-			verts->AddAttribute( glm::vec3( -x, -y, -z ) );
-			verts->AddAttribute( glm::vec3( x, -y, z ) );
-			verts->AddAttribute( glm::vec3( x, -y, -z ) );
-			verts->AddAttribute( glm::vec3( x, y, z ) );
-			verts->AddAttribute( glm::vec3( x, y, -z ) );
-
-			// Generates UVs coordinates for top strip
-			float u = 0.0f;
-			for( int i = 0; i < 4; ++i )
+			if( cube_type == NORMAL_CUBE )
 			{
-				for( int j = 0; j < 2; ++j )
-				{
-					if( j )
-						uvs->AddAttribute( glm::vec2( u, 0.0 ) );
-					else
-						uvs->AddAttribute( glm::vec2( u, 0.5 ) );
-				}
-				u += 1.0f/3.0f;
-			}
+				// Generates top strip of cube
+				verts->AddAttribute( glm::vec3( -x, -y, z ) );
+				verts->AddAttribute( glm::vec3( x, -y, z ) );
+				verts->AddAttribute( glm::vec3( -x , y, z ) );
+				verts->AddAttribute( glm::vec3( x, y, z ) );
+				verts->AddAttribute( glm::vec3( -x, y, -z ) );
+				verts->AddAttribute( glm::vec3( x, y, -z ) );
+				verts->AddAttribute( glm::vec3( -x, -y, -z ) );
+				verts->AddAttribute( glm::vec3( x, -y, -z ) );
 
-			// Generates UVs coordinates for bottom strip
-			u = 0.0;
-			for( int i = 0; i < 4; ++i )
-			{
-				for( int j = 0; j < 2; ++j )
+				// Generates bottom strip of cube
+				verts->AddAttribute( glm::vec3( -x, y, z ) );
+				verts->AddAttribute( glm::vec3( -x, y, -z ) );
+				verts->AddAttribute( glm::vec3( -x, -y, z ) );
+				verts->AddAttribute( glm::vec3( -x, -y, -z ) );
+				verts->AddAttribute( glm::vec3( x, -y, z ) );
+				verts->AddAttribute( glm::vec3( x, -y, -z ) );
+				verts->AddAttribute( glm::vec3( x, y, z ) );
+				verts->AddAttribute( glm::vec3( x, y, -z ) );
+
+				// Generates UVs coordinates for top strip
+				float u = 0.0f;
+				for( int i = 0; i < 4; ++i )
 				{
-					if( j )
-						uvs->AddAttribute( glm::vec2( u, 0.5 ) );
-					else
-						uvs->AddAttribute( glm::vec2( u, 1.0 ) );
+					for( int j = 0; j < 2; ++j )
+					{
+						if( j )
+							uvs->AddAttribute( glm::vec2( u, 0.0 ) );
+						else
+							uvs->AddAttribute( glm::vec2( u, 0.5 ) );
+					}
+					u += 1.0f/3.0f;
 				}
-				u += 1.0f/3.0f;
+
+				// Generates UVs coordinates for bottom strip
+				u = 0.0;
+				for( int i = 0; i < 4; ++i )
+				{
+					for( int j = 0; j < 2; ++j )
+					{
+						if( j )
+							uvs->AddAttribute( glm::vec2( u, 0.5 ) );
+						else
+							uvs->AddAttribute( glm::vec2( u, 1.0 ) );
+					}
+					u += 1.0f/3.0f;
+				}
+
 			}
+			else if( cube_type == SMOOTH_CUBE )
+			{
+				HelperSmoothMesh smoother;
+				IndexedGeometryConverter converter;
+				IndexedGeometry cube;
+
+				std::vector<glm::vec3>& verticies = cube.getVerticies();
+				std::vector<INDEX_TYPE>& indicies = cube.getIndicies();
+
+				verticies.reserve( 8 );
+				indicies.reserve( 36 );
+
+				verticies.push_back( glm::vec3( -x, -y, z ) );
+				verticies.push_back( glm::vec3( x, -y, z ) );
+				verticies.push_back( glm::vec3( x, y, z ) );
+				verticies.push_back( glm::vec3( -x, y, z ) );
+				verticies.push_back( glm::vec3( -x, -y, -z ) );
+				verticies.push_back( glm::vec3( x, -y, -z ) );
+				verticies.push_back( glm::vec3( x, y, -z ) );
+				verticies.push_back( glm::vec3( -x, y, -z ) );
+
+
+				INDEX_TYPE indicesData[] = { 
+					0, 1, 2, 2, 3, 0, 
+					3, 2, 6, 6, 7, 3, 
+					7, 6, 5, 5, 4, 7, 
+					4, 0, 3, 3, 7, 4, 
+					0, 1, 5, 5, 4, 0,
+					1, 5, 6, 6, 2, 1 
+				};
+
+				for( int i = 0; i < 36; ++i )
+					indicies.push_back( indicesData[i] );
+
+				std::vector<INDEX_TYPE> sharpEdges;
+				const unsigned tesselation = 5;
+
+				IndexedGeometry resultMesh = smoother.smooth( cube, sharpEdges, tesselation );
+				converter.makeStrip( resultMesh, verts );
+
+				for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
+				{
+					glm::vec3 vert = verts->GetVertices()[ v ];
+					uvs->AddAttribute( glm::vec2( 0.5*( vert.x + vert.y + 1.f ),
+													vert.z + 0.5 ) ); // FIXME: scaling
+				}
+			}
+		}
+
+		void GenerateGeometry( Float3AttributeChannelPtr verts ) 
+		{
+			//assert( true );
+
+			float x = dimmension.x / 2;
+			float y = dimmension.y / 2;
+			float z = dimmension.z / 2;
+
+			HelperSmoothMesh smoother;
+			IndexedGeometryConverter converter;
+			IndexedGeometry cube;
+
+			auto verticies = cube.getVerticies();
+			auto indicies = cube.getIndicies();
+
+			verticies.reserve( 8 );
+			indicies.reserve( 36 );
+
+			verticies.push_back( glm::vec3( -x, -y, z ) );
+			verticies.push_back( glm::vec3( x, -y, z ) );
+			verticies.push_back( glm::vec3( x, y, z ) );
+			verticies.push_back( glm::vec3( -x, y, z ) );
+			verticies.push_back( glm::vec3( -x, y, -z ) );
+			verticies.push_back( glm::vec3( x, -y, -z ) );
+			verticies.push_back( glm::vec3( x, y, -z ) );
+			verticies.push_back( glm::vec3( -x, y, -z ) );
+
+
+			unsigned short indicesData[] = { 
+				0, 1, 2, 2, 3, 0, 
+				3, 2, 6, 6, 7, 3, 
+				7, 6, 5, 5, 4, 7, 
+				4, 0, 3, 3, 7, 4, 
+				0, 1, 5, 5, 4, 0,
+				1, 5, 6, 6, 2, 1 
+			};
+
+			for( int i = 0; i < 36; ++i )
+				indicies.push_back( indicesData[i] );
+
+			std::vector<INDEX_TYPE> sharpEdges;
+			const unsigned tesselation = 3;
+
+			IndexedGeometry resultMesh = smoother.smooth( cube, sharpEdges, tesselation );
+			converter.makeStrip( resultMesh, verts );
 		}
 	};
 }
