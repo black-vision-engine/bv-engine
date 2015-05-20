@@ -78,10 +78,13 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
 
 // ********************************
 //
-ISerializablePtr BasicNode::Create( DeserializeObject& doc )
+ISerializablePtr BasicNode::Create( DeserializeObject& dob )
 {
-    auto name = "test";
-    auto timeEvaluator = doc.m_tm->GetRootTimeline();
+    auto doc = dob.m_doc;
+    assert( !strcmp( doc->name(), "node" ) );
+
+    auto name = doc->first_attribute( "name" )->value();
+    auto timeEvaluator = dob.m_tm->GetRootTimeline();
     
     auto node = Create( name, timeEvaluator );
 

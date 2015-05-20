@@ -970,12 +970,14 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::Plugin
     std::string content( buffer.str() );
     doc.parse<0>( &content[0] );
 
-    auto deDoc = DeserializeObject( doc, *timelineManager );
-
     //ISerializablePtr scene = BVScene::Create( deDoc );
     //BVScene* realScene = reinterpret_cast<BVScene*>( scene.get() );
     //BVScenePtr realScene = reinterpret_cast<BVScenePtr>( scene );
     //auto root = realScene->GetModelSceneRoot();
+
+    auto docNode = doc.first_node()->first_node( "nodes" )->first_node( "node" );
+
+    auto deDoc = DeserializeObject( *docNode, *timelineManager );
 
     ISerializablePtr node = model::BasicNode::Create( deDoc );
 
