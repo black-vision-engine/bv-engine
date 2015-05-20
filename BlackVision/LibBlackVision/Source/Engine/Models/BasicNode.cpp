@@ -80,7 +80,7 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
 //
 ISerializablePtr BasicNode::Create( DeserializeObject& dob )
 {
-    auto doc = dob.m_doc;
+    auto doc = dob.m_doc; // FIXME: f*ck this sh*t
     assert( !strcmp( doc->name(), "node" ) );
 
     auto name = doc->first_attribute( "name" )->value();
@@ -88,7 +88,19 @@ ISerializablePtr BasicNode::Create( DeserializeObject& dob )
     
     auto node = Create( name, timeEvaluator );
 
+// plugins
     node->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+
+// children
+    auto children = doc->first_node( "nodes" );
+
+    if( children )
+        for( auto child = children->first_node(); child; child = child->next_sibling() )
+        {
+            auto childDob = DeserializeObject( *child, *dob.m_tm );
+            auto childNode = Create( childDob );
+            node->AddChildToModelOnly( BasicNodePtr( static_cast< BasicNode* >( childNode.get() ) ) );
+        }
 
     return node;
 }
