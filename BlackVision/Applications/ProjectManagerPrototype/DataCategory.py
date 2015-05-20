@@ -16,4 +16,4 @@ class DataCategory:
 
     def getData(self, path):
         assert isinstance(path, str)
-        return self.accessor.GetLoadableData(path)
+        return self.accessor.getLoadableDataDesc(path)
