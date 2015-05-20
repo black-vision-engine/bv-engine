@@ -127,10 +127,10 @@ bool IndexedGeometryConverter::findNeighbourPair( INDEX_TYPE index1, INDEX_TYPE&
 	for( ; i < indicies.size(); ++i )
 		if( indicies[ i ] == indicies[ index1 ] && !usedTriangles[ i / 3 ] )
 		{
-			INDEX_TYPE offsetFromStart = i % 3;
-			INDEX_TYPE triangleStart = static_cast<INDEX_TYPE>( i - offsetFromStart );
-			foundIndex1 = triangleStart + ( offsetFromStart + 1 ) % 3;
-			foundIndex2 = triangleStart + ( offsetFromStart + 2 ) % 3;
+			INDEX_TYPE offsetFromTriangleStart = i % 3;
+			INDEX_TYPE triangleStart = static_cast<INDEX_TYPE>( i - offsetFromTriangleStart );
+			foundIndex1 = triangleStart + ( offsetFromTriangleStart + 1 ) % 3;
+			foundIndex2 = triangleStart + ( offsetFromTriangleStart + 2 ) % 3;
 
 			usedTriangles[i / 3] = true;
 			return true;

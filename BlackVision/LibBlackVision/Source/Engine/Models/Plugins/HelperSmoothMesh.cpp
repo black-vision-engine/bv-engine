@@ -1,4 +1,5 @@
 #include "HelperSmoothMesh.h"
+#include "Mathematics\Defines.h"
 
 
 namespace bv { namespace model {
@@ -131,14 +132,14 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 
 	for( INDEX_TYPE i = 0; i < verticies.size(); ++i )
 	{// Make movement for vertex points
-		vertexNeighbours = findAllNeighbours( i, indicies );
-		vertexWeights = makeWeightTable( i, vertexNeighbours, sharpEdges );
+		vertexNeighbours = findAllNeighbours( i, indicies, INDEX_TYPE( resultVerticies.size() - 1 ) );		// 3. parameter - we are looking for neighbours in all vertices
+		vertexWeights = makeWeightTable( i, vertexNeighbours, sharpEdges, false );
 		resultVerticies[ i ] = computeVertexNewPosition( i, vertexNeighbours, vertexWeights, verticies, false );
 	}
 	for( INDEX_TYPE i = (INDEX_TYPE)verticies.size(); i < resultVerticies.size(); ++i )
 	{// Make movement for edge points
-		vertexNeighbours = findNeighboursForEdgeVertex( i, indicies, resultIndicies );
-		vertexWeights = makeWeightTable( i, vertexNeighbours, sharpEdges );
+		vertexNeighbours = findNeighboursForEdgeVertex( i, indicies, resultIndicies, INDEX_TYPE( verticies.size() - 1 ) );	// 3. parameter - we are looking for neighbours only in verticies from previous interation.
+		vertexWeights = makeWeightTable( i, vertexNeighbours, sharpEdges, true );
 		resultVerticies[ i ] = computeVertexNewPosition( i, vertexNeighbours, vertexWeights, verticies, true );
 	}
 }
@@ -162,28 +163,57 @@ bool HelperSmoothMesh::findVertex( const std::vector<glm::vec3>& verticies, glm:
 
 /**
 @return Returns all neighbours of given vertex under index.*/
-std::vector<INDEX_TYPE> HelperSmoothMesh::findAllNeighbours( INDEX_TYPE index, const std::vector<INDEX_TYPE>& indicies )
+std::vector<INDEX_TYPE> HelperSmoothMesh::findAllNeighbours( INDEX_TYPE index, const std::vector<INDEX_TYPE>& indicies, INDEX_TYPE maxIndex )
 {
 	std::vector<INDEX_TYPE> vertexNeighbours;
 	vertexNeighbours.reserve( 6 );		// It's the number of neighbours that I expect in mesh for one vertex.
 
-	for( INDEX_TYPE i : indicies )
-		if( i == index )
+	for( INDEX_TYPE i = 0; i < indicies.size(); ++i )
+	{
+		if( indicies[ i ] == index )
 		{
-
+			INDEX_TYPE offsetFromTriangleStart = i % 3;
+			INDEX_TYPE triangleStart = static_cast<INDEX_TYPE>( i - offsetFromTriangleStart );
+			INDEX_TYPE foundIndex1 = indicies[ triangleStart + ( offsetFromTriangleStart + 1 ) % 3 ];
+			INDEX_TYPE foundIndex2 = indicies[ triangleStart + ( offsetFromTriangleStart + 2 ) % 3 ];
+			if( foundIndex1 <= maxIndex )
+				addIfNotExists( foundIndex1, vertexNeighbours );
+			if( foundIndex2 <= maxIndex )
+				addIfNotExists( foundIndex2, vertexNeighbours );
 		}
+		//i = triangleStart + 3;	// Omit checked verticies
+	}
 
 	return std::move( vertexNeighbours );
 }
 
-
-std::vector<float> HelperSmoothMesh::makeWeightTable( INDEX_TYPE index, std::vector<INDEX_TYPE>& vertexNeighbours, std::vector<INDEX_TYPE>& sharpEdges )
+/**
+Treats edgepoints diffrent then vertex points.
+Set edgePoint to true if you want process edge points.*/
+std::vector<float> HelperSmoothMesh::makeWeightTable( INDEX_TYPE index, std::vector<INDEX_TYPE>& vertexNeighbours, std::vector<INDEX_TYPE>& sharpEdges, bool edgePoint )
 {
 	sharpEdges;
 	index;
+	const float edgeWeight = 3.0;
+	const float distanceWeight = 1.0;
 
 	std::vector<float> vertexWeights;
 	vertexWeights.reserve( vertexNeighbours.size() );
+
+	if( edgePoint )
+	{
+		// For now there're no sharp edge dependent weights.
+		assert( vertexNeighbours.size() == 4 );
+		vertexWeights.push_back( edgeWeight );
+		vertexWeights.push_back( edgeWeight );
+		vertexWeights.push_back( distanceWeight );
+		vertexWeights.push_back( distanceWeight );
+	}
+	else
+	{
+		for( auto i : vertexNeighbours )
+			vertexWeights.push_back( distanceWeight ), i;		// For now there're no sharp edge dependent weights.
+	}
 
 	return std::move( vertexWeights );
 }
@@ -193,28 +223,66 @@ std::vector<float> HelperSmoothMesh::makeWeightTable( INDEX_TYPE index, std::vec
 @param[in] ignoreIndex If we compute edge vertex, we don't want to count it in. Set flag to true.*/
 glm::vec3 HelperSmoothMesh::computeVertexNewPosition( INDEX_TYPE index, const std::vector<INDEX_TYPE>& vertexNeighbours, const std::vector<float>& vertexWeights, const std::vector<glm::vec3>& verticies, bool ignoreIndex )
 {
-	index;
-	vertexNeighbours;
-	vertexWeights;
-	verticies;
-	ignoreIndex;
-	return glm::vec3( 0.0, 0.0, 0.0 );
+	glm::vec3 resultVertex( 0.0, 0.0, 0.0 );
+	float sumWeights = 0.0;
+
+	for( auto weight : vertexWeights )
+		sumWeights += weight;
+
+	if( !ignoreIndex )
+	{// Vertex verticies[ index ] must be took.
+		float centerWeight = computeCenterVertexWeight((unsigned short)vertexNeighbours.size() );
+		sumWeights += centerWeight;
+		resultVertex += verticies[ index ] * ( centerWeight / sumWeights );
+	}
+
+	for( unsigned int i = 0; i < vertexWeights.size(); ++i )
+		resultVertex += verticies[ vertexNeighbours[ i ] ] * vertexWeights[ i ] / sumWeights;
+
+	return resultVertex;
 }
 
 /**
 Edge points have another neighbours than vertex points.*/
-std::vector<INDEX_TYPE> HelperSmoothMesh::findNeighboursForEdgeVertex( INDEX_TYPE index, const std::vector<INDEX_TYPE>& preIndicies, const std::vector<INDEX_TYPE>& postIndicies )
+std::vector<INDEX_TYPE> HelperSmoothMesh::findNeighboursForEdgeVertex( INDEX_TYPE index, const std::vector<INDEX_TYPE>& preIndicies, const std::vector<INDEX_TYPE>& postIndicies, INDEX_TYPE maxIndex )
 {
 	std::vector<INDEX_TYPE> vertexNeighbours;
-	vertexNeighbours.reserve( 6 );		// It's the number of neighbours that I expect in mesh for one vertex.
 
-	index;
 	preIndicies;
-	postIndicies;
+
+	vertexNeighbours = findAllNeighbours( index, postIndicies, maxIndex );
+	
+	assert( vertexNeighbours.size() == 2 );		// Should be 2 neighbours. Otherwise there's bug.
+
+	for( INDEX_TYPE i = 0; i < preIndicies.size(); ++i )
+		if( preIndicies[ i ] == vertexNeighbours[ 0 ] )
+		{
+			INDEX_TYPE triangleStart = i - i % 3;
+			for( INDEX_TYPE k = triangleStart; k < triangleStart + 3; ++k )	// For every triangle
+				if( preIndicies[ k ] == vertexNeighbours[ 1 ] )	//We know that, two indicies exists in this triangle.
+				// Return remainig index.
+					vertexNeighbours.push_back( preIndicies[ static_cast<INDEX_TYPE>( 3 * triangleStart + 3 - (i + k) ) ] );	// Sum of indicies is 3*triangleStart + 0 + 1 + 2. We substract i and k. Result is new index.
+		}
+
+	assert( vertexNeighbours.size() == 4 );
 
 	return std::move( vertexNeighbours );
 }
 
+
+void HelperSmoothMesh::addIfNotExists( INDEX_TYPE index, std::vector<INDEX_TYPE>& vertexNeighbours )
+{
+	for( auto i : vertexNeighbours )
+		if( i == index )
+			return;
+	vertexNeighbours.push_back( index );
+}
+
+float HelperSmoothMesh::computeCenterVertexWeight( unsigned short numNeighbours )
+{
+	double functionA = 5.0 / 8.0 - pow( ( 3.0 + 2.0 * cos( TWOPI / (double) numNeighbours) ), 2 ) / 64.0;
+	return static_cast<float>( double(numNeighbours) / functionA - 1.0 );
+}
 
 }	//model
 }	//bv
