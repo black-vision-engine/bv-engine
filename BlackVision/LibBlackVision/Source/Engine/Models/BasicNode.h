@@ -1,5 +1,8 @@
 #pragma once
 
+#pragma warning( push )
+#pragma warning( disable: 4996 )
+
 #include <vector>
 #include <string>
 #include <hash_map>
@@ -143,3 +146,5 @@ public:
 
 } // model
 } // bv
+
+#pragma warning( pop )

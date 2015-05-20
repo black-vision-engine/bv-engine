@@ -5,11 +5,11 @@
     <BuildDir>..\..\..\..\..\_Builds</BuildDir>
     <TempDir>..\..\..\..\..\_Temp</TempDir>
     <DepDir>..\..\..\..\..\Dep</DepDir>
+    <LibCoreDir>..\..\..\..\..\LibCore\Source</LibCoreDir>
     <LibBlackVisionDir>..\..\..\..\..\LibBlackVision\Source</LibBlackVisionDir>
     <LibBVGLDir>..\..\..\..\..\LibBVGL\Source</LibBVGLDir>
-    <AssetsDir>..\..\..\..\..\Assets</AssetsDir>
     <LibImageDir>..\..\..\..\..\LibImage\Source</LibImageDir>
-    <LibCoreDir>..\..\..\..\..\LibCore\Source</LibCoreDir>
+    <AssetsDir>..\..\..\..\..\Assets</AssetsDir>
     <ToolsDir>..\..\..\..\..\Tools</ToolsDir>
   </PropertyGroup>
   <PropertyGroup />
@@ -24,17 +24,20 @@
     <BuildMacro Include="DepDir">
       <Value>$(DepDir)</Value>
     </BuildMacro>
+    <BuildMacro Include="LibCoreDir">
+      <Value>$(LibCoreDir)</Value>
+    </BuildMacro>
     <BuildMacro Include="LibBlackVisionDir">
       <Value>$(LibBlackVisionDir)</Value>
     </BuildMacro>
-    <BuildMacro Include="AssetsDir">
-      <Value>$(AssetsDir)</Value>
+    <BuildMacro Include="LibBVGLDir">
+      <Value>$(LibBVGLDir)</Value>
     </BuildMacro>
     <BuildMacro Include="LibImageDir">
       <Value>$(LibImageDir)</Value>
     </BuildMacro>
-    <BuildMacro Include="LibCoreDir">
-      <Value>$(LibCoreDir)</Value>
+    <BuildMacro Include="AssetsDir">
+      <Value>$(AssetsDir)</Value>
     </BuildMacro>
     <BuildMacro Include="ToolsDir">
       <Value>$(ToolsDir)</Value>

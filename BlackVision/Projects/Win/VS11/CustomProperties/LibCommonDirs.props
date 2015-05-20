@@ -6,7 +6,10 @@
     <TempDir>..\..\..\..\_Temp</TempDir>
     <DepDir>..\..\..\..\Dep</DepDir>
     <LibsRootDir>..\..\..\..\</LibsRootDir>
+    <LibBlackVisionDir>..\..\..\..\LibBlackVision\Source</LibBlackVisionDir>
     <LibCoreDir>..\..\..\..\LibCore\Source</LibCoreDir>
+    <LibBVGLDir>..\..\..\..\LibBVGL\Source</LibBVGLDir>
+    <LibImageDir>..\..\..\..\LibImage\Source</LibImageDir>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
@@ -20,17 +23,20 @@
     <BuildMacro Include="DepDir">
       <Value>$(DepDir)</Value>
     </BuildMacro>
-    <BuildMacro Include="LibBlackVisionDir">
-      <Value>$(LibBlackVisionDir)</Value>
-    </BuildMacro>
-    <BuildMacro Include="AssetsDir">
-      <Value>$(AssetsDir)</Value>
-    </BuildMacro>
     <BuildMacro Include="LibsRootDir">
       <Value>$(LibsRootDir)</Value>
     </BuildMacro>
+    <BuildMacro Include="LibBlackVisionDir">
+      <Value>$(LibBlackVisionDir)</Value>
+    </BuildMacro>
     <BuildMacro Include="LibCoreDir">
       <Value>$(LibCoreDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibBVGLDir">
+      <Value>$(LibBVGLDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibImageDir">
+      <Value>$(LibImageDir)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

@@ -6,21 +6,26 @@
 namespace bv {
 
 // ******************************
-//
+// @ see: https://msdn.microsoft.com/fr-fr/library/ms175774%28v=vs.90%29.aspx
 bool         Env::GetVar ( const std::string & var, std::string * varVal )
 {
-    const char * varValRaw = getenv( var.c_str() );
+    char    *pVal;
+    size_t  len;
+    _dupenv_s( &pVal, &len, var.c_str() );
+
     auto retVal = false;
 
-    if( varValRaw )
+    if( pVal )
     {
         if( varVal )
         {
-            *varVal = std::string( varValRaw );
+            *varVal = std::string( pVal );
         }
     
         retVal = true;
     }
+
+    free( pVal );
 
     return retVal;
 }

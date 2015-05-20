@@ -1,0 +1,44 @@
+Pliki *.props, które są używane do przyrostowego budowania konfiguracji projektów (PropertiesManager)
+
+Common:
+
+- Definiuje następujące zmienne (makra):
+    SolutionRoot      - $(SolutionDir)..\..\..              - główny katalog całego projektu BlackVision
+    BuildDir          - $(SolutionRoot)/_Builds             - tutaj trafiają zbudowane libki, aplikacje
+    TempDir           - $(SolutionRoot)/_Temp               - pliki tymczasowe powstające podczas budowania (obj, tlog, itd)
+    DepDir            - $(SolutionRoot)/Dep                 - katalog z szeroko pojętymi zależnościami
+    CoreLibsRootDir   - $(SolutionRoot)                     - katalog główny bibliotek typu core
+    LibCoreDir        - $(CoreLibsRootDir)/LibCore          - katalog główny LibCore
+    LibBVGLDir        - $(CoreLibsRootDir)/LibBVGL          - katalog główny LibBVGL
+    LibImageDir       - $(CoreLibsRootDir)/LibImage         - katalog główny LibImage
+    LibBlackVisionDir - $(CoreLibsRootDirt)/LibBlackVision  - katalog główny LibBlackVision 
+    ToolsDir          - $(SolutionRoot)/Tools               - katalog główny bibliotek/aplikacji narzędziowych
+    TestDir           - $(SolutionRoot)/Test                - katalog główny testów
+    ThirdPartyDir     - $(DepDir)\3rdParty                  - katalog główny bibliotek 3rdParty, z których korzystamy
+    
+- Definiuje strukturę katalogóe wyjściowego i tymczasowego:
+    <OutDir>$(BuildDir)\$(Platform)-$(PlatformToolset)-$(Configuration)\$(ProjectCategory)\$(ProjectName)\</OutDir>
+    <IntDir>$(TempDir)\$(Platform)-$(PlatformToolset)-$(Configuration)\$(ProjectCategory)\$(ProjectName)\</IntDir>
+
+- Definiuje główne ustawienia kompilatora
+    - warning level, treat warnings as errors, SDL checks
+    
+- Definiuje główne ustawienia preprocesora
+    - _VARIADIC_MAX = 10
+    - symbol _DEBUG dla konfiguracji Debug
+    - symbol NDEBUG dla konfiguracji Release
+
+    
+3rdPartyInc:
+
+- Definiuje katalogi ze ścieżkami do głównych plików nagłówkowych w zewnętrznych bibliotekach:
+    $(BOOST_INC)
+    $(ThirdPartyDir)\FreeType\include
+    $(ThirdPartyDir)\FreeImage\Dist
+    $(ThirdPartyDir)\glm
+    $(ThirdPartyDir)\FastDelegate
+    $(ThirdPartyDir)\hashlib2plus\src
+    $(ThirdPartyDir)\sqlite\src
+
+- Definiuje symbole preprocesora wymagane przez te biblioteki (przy preferowanym przez nas sposobie budowania i linkowania)
+    BOOST_ALL_NO_LIB=1 pozwalający na jawne podanie, z którymi bibliotekami boost chcemy się linkować

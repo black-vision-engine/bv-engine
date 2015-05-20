@@ -1,6 +1,8 @@
 #include "BasicNode.h"
 
 //FIXME: node na INode
+
+// FIXME: move to some tool code
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/join.hpp>
 
@@ -503,7 +505,8 @@ std::string                         BasicNode::SplitPrefix              ( std::s
     std::vector< std::string > ret;
 
     //FIXME: _SCL_SECURE_NO_WARNINGS is defined due to this fuckin line (or fuckin VS)
-    boost::split( ret, str, boost::is_any_of( separator ) );
+
+    boost::split( ret, str, boost::is_any_of( separator ) ); // 'std::_Copy_impl': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
 
     if( ret.size() == 0 )
     {
