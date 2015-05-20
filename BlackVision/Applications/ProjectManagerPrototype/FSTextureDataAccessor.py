@@ -15,10 +15,10 @@ class FSTextureDataAccessor(TextureDataAccessor):
         super(self)
         self.rootPath = rootPath
 
-    def getLoadableDataDesc(self, path):
-        assert isinstance(path, str)
+    def getLoadableDataDesc(self, internalPath):
+        assert isinstance(internalPath, str)
 
-        absPath = os.path.join(self.rootPath, path)
+        absPath = os.path.join(self.rootPath, internalPath)
 
         if os.path.exists(absPath):
             return LoadableTextureDataDesc(absPath)
