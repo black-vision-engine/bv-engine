@@ -14,7 +14,7 @@ public:
 
 inline	void					DrawingModeArrays::Render		( const DrawingModeData& data )
 {
-	BVGLExt::bvglDrawArrays( data.mode, data.first, data.count );
+	BVGL::bvglDrawArrays( data.mode, data.first, data.count );
 }
 
 // *****************************
@@ -27,7 +27,7 @@ public:
 };
 
 inline	void		DrawingModeElements::Render							( const DrawingModeData& data ){
-	BVGLExt::bvglDrawElements( data.mode, data.count, data.type, 0 );
+	BVGL::bvglDrawElements( data.mode, data.count, data.type, 0 );
 }
 
 // *****************************
@@ -40,7 +40,7 @@ public:
 };
 
 inline	void		DrawingModeArraysInstanced::Render					( const DrawingModeData& data ){
-	BVGLExt::bvglDrawArraysInstanced( data.mode, data.first, data.count, data.primcount );
+	BVGL::bvglDrawArraysInstanced( data.mode, data.first, data.count, data.primcount );
 }
 
 
@@ -54,7 +54,7 @@ public:
 };
 
 inline	void		DrawingModeElementsInstanced::Render				( const DrawingModeData& data ){
-	BVGLExt::bvglDrawElementsInstanced( data.mode, data.count, data.type, 0, data.primcount );
+	BVGL::bvglDrawElementsInstanced( data.mode, data.count, data.type, 0, data.primcount );
 }
 
 // *****************************
@@ -67,7 +67,7 @@ public:
 };
 
 inline	void		DrawingModeElementsBaseVertex::Render					( const DrawingModeData& data ){
-	BVGLExt::bvglDrawElementsBaseVertex( data.mode, data.count, data.type, 0, data.basevertex );
+	BVGL::bvglDrawElementsBaseVertex( data.mode, data.count, data.type, 0, data.basevertex );
 }
 
 // *****************************
@@ -80,7 +80,7 @@ public:
 };
 
 inline	void		DrawingModeArraysInstancedBaseInstance::Render		( const DrawingModeData& data ){
-	BVGLExt::bvglDrawArraysInstancedBaseInstance( data.mode, data.first, data.count, data.primcount, data.baseinstance );
+	BVGL::bvglDrawArraysInstancedBaseInstance( data.mode, data.first, data.count, data.primcount, data.baseinstance );
 }
 
 // *****************************
@@ -93,7 +93,7 @@ public:
 };
 
 inline	void		DrawingModeElementsInstancedBaseVertexBaseInstance::Render	( const DrawingModeData& data ){
-	BVGLExt::bvglDrawElementsInstancedBaseVertexBaseInstance( data.mode, data.count, data.type, 0, data.primcount, data.basevertex, data.baseinstance );
+	BVGL::bvglDrawElementsInstancedBaseVertexBaseInstance( data.mode, data.count, data.type, 0, data.primcount, data.basevertex, data.baseinstance );
 }
 
 // *****************************
@@ -106,7 +106,7 @@ public:
 };
 
 inline	void		DrawingModeElementsInstancedBaseVertex::Render		( const DrawingModeData& data ){
-	BVGLExt::bvglDrawElementsInstancedBaseVertex( data.mode, data.count, data.type, 0, data.primcount, data.basevertex );
+	BVGL::bvglDrawElementsInstancedBaseVertex( data.mode, data.count, data.type, 0, data.primcount, data.basevertex );
 }
 
 // *****************************
@@ -120,7 +120,7 @@ public:
 
 inline	void		DrawingModeArraysIndirect::Render					( const DrawingModeData& data ){
 	data.scene->BindIndirectArrays();
-	BVGLExt::bvglDrawArraysIndirect( data.mode, 0 );
+	BVGL::bvglDrawArraysIndirect( data.mode, 0 );
 }
 
 // *****************************
@@ -134,7 +134,7 @@ public:
 
 inline	void		DrawingModeElementsIndirect::Render					( const DrawingModeData& data ){
 	data.scene->BindIndirectElements();
-	BVGLExt::bvglDrawElementsIndirect( data.mode, data.type, 0 );
+	BVGL::bvglDrawElementsIndirect( data.mode, data.type, 0 );
 }
 
 // *****************************
@@ -148,7 +148,7 @@ public:
 
 inline	void		DrawingModeMultiArraysIndirect::Render				( const DrawingModeData& data ){
 	data.scene->BindIndirectArrays();
-	BVGLExt::bvglMultiDrawArraysIndirect( data.mode, 0, data.primcount, data.stride );
+	BVGL::bvglMultiDrawArraysIndirect( data.mode, 0, data.primcount, data.stride );
 }
 
 // *****************************
@@ -162,7 +162,7 @@ public:
 
 inline	void		DrawingModeMultiElementsIndirect::Render			( const DrawingModeData& data ){
 	data.scene->BindIndirectElements();
-	BVGLExt::bvglMultiDrawElementsIndirect( data.mode, data.type, 0, data.primcount, data.stride );
+	BVGL::bvglMultiDrawElementsIndirect( data.mode, data.type, 0, data.primcount, data.stride );
 }
 
 } //bv

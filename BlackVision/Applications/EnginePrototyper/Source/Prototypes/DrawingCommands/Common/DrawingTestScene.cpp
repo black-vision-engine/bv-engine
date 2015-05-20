@@ -1,7 +1,5 @@
 #include "DrawingTestScene.h"
 
-#include "Prototypes/DrawingCommands/Common/BVGLExt.h"
-
 #include "Scenes\DrawingTestScene0.h"
 //#include "Scenes\DrawingTestScene1.h"
 
@@ -11,19 +9,19 @@ namespace bv {
 //
 							DrawingTestScene::~DrawingTestScene			()
 {
-    BVGLExt::bvglBindVertexArray( 0 );
-    BVGLExt::bvglDeleteVertexArrays( 1, &m_vaoHandle );
-	BVGLExt::bvglDeleteBuffers( 1, &m_vboHandle );
-	BVGLExt::bvglDeleteBuffers( 1, &m_indexBuffer );
-	BVGLExt::bvglDeleteBuffers( 1, &m_indirectArraysBuffer );
-	BVGLExt::bvglDeleteBuffers( 1, &m_indirectElementsBuffer );
+    BVGL::bvglBindVertexArray( 0 );
+    BVGL::bvglDeleteVertexArrays( 1, &m_vaoHandle );
+	BVGL::bvglDeleteBuffers( 1, &m_vboHandle );
+	BVGL::bvglDeleteBuffers( 1, &m_indexBuffer );
+	BVGL::bvglDeleteBuffers( 1, &m_indirectArraysBuffer );
+	BVGL::bvglDeleteBuffers( 1, &m_indirectElementsBuffer );
 }
 
 // *************************
 //
 void						DrawingTestScene::Bind						()
 {
-    BVGLExt::bvglBindVertexArray( m_vaoHandle );
+    BVGL::bvglBindVertexArray( m_vaoHandle );
 	m_prog.Use();
 }
 
@@ -31,14 +29,14 @@ void						DrawingTestScene::Bind						()
 //
 void						DrawingTestScene::BindIndirectArrays		()
 {
-	BVGLExt::bvglBindBuffer( GL_DRAW_INDIRECT_BUFFER, m_indirectArraysBuffer );
+	BVGL::bvglBindBuffer( GL_DRAW_INDIRECT_BUFFER, m_indirectArraysBuffer );
 }
 
 // *************************
 //
 void						DrawingTestScene::BindIndirectElements		()
 {
-	BVGLExt::bvglBindBuffer( GL_DRAW_INDIRECT_BUFFER, m_indirectElementsBuffer );
+	BVGL::bvglBindBuffer( GL_DRAW_INDIRECT_BUFFER, m_indirectElementsBuffer );
 }
 
 // *************************

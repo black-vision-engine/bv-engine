@@ -4,7 +4,6 @@
 
 #include "Engine/Graphics/Types/Transform.h"
 #include "Common/GLSLProgram.h"
-#include "Prototypes/DrawingCommands/Common/BVGLExt.h"
 
 namespace  bv {
 
