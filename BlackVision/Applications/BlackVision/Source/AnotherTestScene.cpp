@@ -958,7 +958,7 @@ model::BasicNodePtr          TestScenesFactory::XMLTestScene()
     return root;
 }
 
-model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::PluginsManager * /*pluginsManager*/, model::TimelineManager * /*timelineManager*/ )
+model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::PluginsManager * /*pluginsManager*/, model::TimelineManager * timelineManager )
 {
     assert( File::Exists( filename ) );
 
@@ -970,15 +970,18 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::Plugin
     std::string content( buffer.str() );
     doc.parse<0>( &content[0] );
 
-    auto deDoc = DeserializeObject( doc );
+    auto deDoc = DeserializeObject( doc, *timelineManager );
 
-    ISerializablePtr scene = BVScene::Create( deDoc );
-    BVScene* realScene = reinterpret_cast<BVScene*>( scene.get() );
+    //ISerializablePtr scene = BVScene::Create( deDoc );
+    //BVScene* realScene = reinterpret_cast<BVScene*>( scene.get() );
     //BVScenePtr realScene = reinterpret_cast<BVScenePtr>( scene );
+    //auto root = realScene->GetModelSceneRoot();
 
-    auto root = realScene->GetModelSceneRoot();
+    ISerializablePtr node = model::BasicNode::Create( deDoc );
+
+    auto root = static_cast< model::BasicNode* >( node.get() );
     assert( root );
-    return root;
+    return BasicNodePtr( root );
 }
 
 model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )

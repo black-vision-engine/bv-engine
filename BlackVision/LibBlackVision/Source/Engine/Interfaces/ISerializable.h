@@ -1,12 +1,13 @@
 #pragma once
 
 #include "CoreDEF.h" //FIXME: store in PCH
+#include "Engine/SerializationObjects.h"
 
 namespace bv
 {
 
 class SerializeObject;
-class DeserializeObject;
+//class DeserializeObject;
 
 class ISerializable;
 DEFINE_PTR_TYPE(ISerializable);

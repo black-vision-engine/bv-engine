@@ -74,7 +74,21 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
 	node->SetModelNodeEditor( new ModelNodeEditor( node ) );
 
     return node;
-}    
+}
+
+// ********************************
+//
+ISerializablePtr BasicNode::Create( DeserializeObject& doc )
+{
+    auto name = "test";
+    auto timeEvaluator = doc.m_tm->GetRootTimeline();
+    
+    auto node = Create( name, timeEvaluator );
+
+    node->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+
+    return node;
+}
 
 // ********************************
 //

@@ -125,7 +125,7 @@ const std::string &     BVScene::GetName            () const
 //
 ISerializablePtr        BVScene::Create          ( DeserializeObject &doc )
 {
-    auto tm = doc.m_tm; // FIXME(?)
+    auto& tm = *doc.m_tm; // FIXME(?)
     auto nRoot = doc.m_doc->first_node();
 
     if( strcmp( nRoot->name(), "scene" ) )
