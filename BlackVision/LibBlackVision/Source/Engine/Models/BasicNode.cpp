@@ -98,8 +98,8 @@ ISerializablePtr BasicNode::Create( DeserializeObject& dob )
         for( auto child = children->first_node(); child; child = child->next_sibling() )
         {
             auto childDob = DeserializeObject( *child, *dob.m_tm );
-            auto childNode = Create( childDob );
-            node->AddChildToModelOnly( BasicNodePtr( static_cast< BasicNode* >( childNode.get() ) ) );
+            ISerializablePtr childNode = Create( childDob );
+            node->AddChildToModelOnly( std::static_pointer_cast< BasicNode >( childNode ) );
         }
 
     return node;
