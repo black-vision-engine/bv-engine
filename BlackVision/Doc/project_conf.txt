@@ -66,6 +66,9 @@ taki builder all.sln czy coś takiego - to może być w xercesie lub analogiczny
 
 uspójnić nazwy bibliotek w trybach debug (albo _D albo D, a nie przemieszane)
 
+Pytanie - czy warto dodać do solucji "Core" jako filtr na te główne biblioteki?
+
+
 win32-Debug
 
 sqliteD.lib
