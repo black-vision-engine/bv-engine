@@ -1,5 +1,5 @@
-import Project
-import Location
+from Project import Project
+from Location import Location
 
 class ProjectManager:
 

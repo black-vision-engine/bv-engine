@@ -1,6 +1,4 @@
-from ProjectManager import ProjectManager
-from Project import Project
-from Location import Location
+import Location
 
 # ./            == current project
 # /             == global                                   TODO

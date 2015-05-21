@@ -1,20 +1,21 @@
-import TextureDataAccessor
-import LoadableDataDesc
+from TextureDataAccessor import TextureDataAccessor
+from LoadableDataDesc import LoadableDataDesc
 
 import os
 import shutil
 
 class LoadableTextureDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::TextureAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
     def __init__(self, absPath):
-        super(self)
+        LoadableDataDesc.__init__(self)
         self.absPath = absPath
         #  TODO: Pewnie jeszcze duzo wiecej memberow w, h, bpp, takie tam
 
 
 class FSTextureDataAccessor(TextureDataAccessor):
     def __init__(self, rootPath):
-        super(self)
+        TextureDataAccessor.__init__(self)
         self.rootPath = rootPath
+        self.__createDir()
 
     def getLoadableDataDesc(self, internalPath):
         assert isinstance(internalPath, str)
@@ -55,3 +56,7 @@ class FSTextureDataAccessor(TextureDataAccessor):
         except Exception as exc:
             print(exc)
             return False
+
+    def __createDir(self):
+        if not os.path.exists(self.rootPath):
+            os.makedirs(self.rootPath)

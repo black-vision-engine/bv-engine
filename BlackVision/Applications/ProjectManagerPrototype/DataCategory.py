@@ -1,4 +1,4 @@
-import DataAccessor
+from DataAccessor import DataAccessor
 import LoadableDataDesc
 
 class DataCategory:

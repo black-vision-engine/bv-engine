@@ -1,6 +1,6 @@
-import DataAccessor
+from DataAccessor import DataAccessor
 
 class TextureDataAccessor(DataAccessor):
     def __init__(self):
-        super(self)
+        DataAccessor.__init__(self)
 

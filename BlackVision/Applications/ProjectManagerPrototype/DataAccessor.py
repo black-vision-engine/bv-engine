@@ -1,3 +1,6 @@
+from abc import abstractmethod
+
+
 class DataAccessor:
     def __init__(self):
         self.internalPathAliases = {}
@@ -10,18 +13,18 @@ class DataAccessor:
         else:
             print("Alias '{}' already exist and points to '{}'".format(src, self.internalPathAliases[src]))
 
-    @abs
+    @abstractmethod
     def getLoadableDataDesc(self, location):
         pass
 
-    @abs
+    @abstractmethod
     def appendData(self, internalPath, loadableDataDesc):
         pass
 
-    @abs
+    @abstractmethod
     def removeData(self, internalPath):
         pass
 
-    @abs
+    @abstractmethod
     def renameData(self, oldPath, newPath):
         pass

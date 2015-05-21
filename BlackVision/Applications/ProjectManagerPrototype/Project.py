@@ -1,5 +1,5 @@
-import DataCategory
-import LoadableDataDesc
+from DataCategory import DataCategory
+from LoadableDataDesc import LoadableDataDesc
 
 class Project:
 
