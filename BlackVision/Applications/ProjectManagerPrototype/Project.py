@@ -1,11 +1,13 @@
 from DataCategory import DataCategory
 from LoadableDataDesc import LoadableDataDesc
+from SceneAccessor import SceneAccessor
 
 class Project:
 
     def __init__(self, name):
-        self.name           = name
-        self.categories     = {}
+        self.name = name
+        self.categories = {}
+        self.sceneAccessor = None
 
     def getName(self):
         return self.name
@@ -32,6 +34,14 @@ class Project:
         else:
             print("There is no category named {} in project {}".format(categoryId, self.name))
             return None
+
+    def getSceneDesc(self, path):
+        assert isinstance(self.sceneAccessor, SceneAccessor)
+        return self.sceneAccessor.getSceneDesc()
+
+    def setSceneAccessor(self, sceneAccessor):
+        assert isinstance(sceneAccessor, SceneAccessor)
+        self.sceneAccessor = sceneAccessor
 
     def __str__(self):
         print("Project {} \n\t".format(self.name))

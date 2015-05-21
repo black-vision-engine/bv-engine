@@ -1,9 +1,9 @@
 
 
-class Scene:
+class SceneDesc:
     def __init__(self):
         self.name = ""
-        self.desc = None # scene descriptor
+        self.
 
     def getName(self):
         return self.name
