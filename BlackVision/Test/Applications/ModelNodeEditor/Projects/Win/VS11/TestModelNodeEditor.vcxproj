@@ -55,51 +55,51 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonDirs.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_Test.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommon.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonInclude.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonPreprocessor.Win32.debug.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibDirs.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Test3rdPartyLibDirs.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonLib.Win32.debug.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdParrtyDllCopy.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonDirs.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_Test.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommon.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonInclude.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonPreprocessor.x64.debug.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibDirs.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Test3rdPartyLibDirs.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonLib.x64.debug.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdParrtyDllCopy.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonDirs.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_Test.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommon.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonInclude.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonPreprocessor.Win32.release.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibDirs.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Test3rdPartyLibDirs.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonLib.Win32.release.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdParrtyDllCopy.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonDirs.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_Test.props" />
     <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommon.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonInclude.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonPreprocessor.x64.release.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibDirs.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Test3rdPartyLibDirs.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\TestCommonLib.x64.release.props" />
-    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdParrtyDllCopy.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_Test.props" />
+    <Import Project="..\..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
@@ -107,7 +107,6 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -137,7 +136,6 @@ xcopy $(TestDir)\Assets $(OutDir)\Assets /e /c /y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -154,7 +152,6 @@ xcopy $(TestDir)\Assets $(OutDir)\Assets /e /c /y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -181,7 +178,7 @@ xcopy $(TestDir)\Assets $(OutDir)\Assets /e /c /y</Command>
     <ProjectReference Include="..\..\..\..\..\..\Tools\LibEffect\Projects\Win\VS11\LibEffect.vcxproj">
       <Project>{e3611a8a-25fc-4c0e-89ae-89611fc3427a}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\Tools\MipMapBuilder\Projects\Win\VS11\MipMapBuilder.vcxproj">
+    <ProjectReference Include="..\..\..\..\..\..\Tools\LibMipMapBuilder\Projects\Win\VS11\LibMipMapBuilder.vcxproj">
       <Project>{6a33f496-e3c1-4c91-a4e1-049c0c3b762e}</Project>
     </ProjectReference>
   </ItemGroup>

@@ -56,24 +56,28 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -93,7 +97,6 @@
     <ClCompile>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ToolsDir)\LibEffect\Source;$(ToolsDir)\MipMapBuilder\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -103,7 +106,6 @@
     <ClCompile>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(ToolsDir)\LibEffect\Source;$(ToolsDir)\MipMapBuilder\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -114,7 +116,6 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ToolsDir)\LibEffect\Source;$(ToolsDir)\MipMapBuilder\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -127,7 +128,6 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ToolsDir)\LibEffect\Source;$(ToolsDir)\MipMapBuilder\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
