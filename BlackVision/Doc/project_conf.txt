@@ -58,6 +58,8 @@ Opisać, że nie całe 3rdPartyLib.props nie widać podczas edycji z poziomu IDE
 To samo dotyczy common.props i <PreprocessorDefinitions> dla symboli _DEBUG, NDEBUG
 3rdPartyDepLib filez:
 
+Napisać o tym, że LibBlackVision ma w sobie wszystkie pozostałe core libsy oraz Tool Libsy i nie trzeba ich referencjonować w projektach.
+To w ogólnym opisie konfiguracji projektu.
 
 win32-Debug
 
