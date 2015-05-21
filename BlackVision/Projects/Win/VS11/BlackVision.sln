@@ -5,7 +5,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Application
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{7A2AC84D-DA2C-4D5A-BA2B-B5BB25F0BD81}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibBlackVision", "..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj", "{78C1F0D1-BD43-4162-8F54-FEA184B03C36}"
 EndProject
