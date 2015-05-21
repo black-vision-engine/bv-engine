@@ -2,18 +2,18 @@ import LocationParser
 
 
 class Location:
-    def __init__(self, path = ""):
+    def __init__(self, path = "", currentProjectName = ""):
         self.projectName = ""
         self.categoryName = ""
         self.internalPath = ""
         self.isGlobalLocation = False
         self.prefix = ""
-        self.__parseString(path)
+        self.__parseString(path, currentProjectName)
 
-    def __parseString(self, path):
+    def __parseString(self, path, currentProjectName):
         assert isinstance(path, str)
 
-        locParser = LocationParser(self)
+        locParser = LocationParser(self, currentProjectName)
         locParser.parseLocationString(path)
 
     def getProjectName(self):

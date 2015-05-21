@@ -2,6 +2,7 @@ import TextureDataAccessor
 import LoadableDataDesc
 
 import os
+import shutil
 
 class LoadableTextureDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::TextureAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
     def __init__(self, absPath):
@@ -26,10 +27,31 @@ class FSTextureDataAccessor(TextureDataAccessor):
             None
 
     def appendData(self, internalPath, loadableDataDesc):
-        assert isinstance(loadableDataDesc, LoadableDataDesc)
         assert isinstance(internalPath, str)
-        # TODO: kopiuj do odpiwedzniega katalogu
+        assert isinstance(loadableDataDesc, LoadableTextureDataDesc)
+
+        absPath = os.path.join(self.rootPath, internalPath)
+
+        try:
+            shutil.copyfile(loadableDataDesc.absPath, absPath)
+            return True
+        except Exception as exc:
+            print(exc)
+            return False
 
     def removeData(self, internalPath):
         assert isinstance(internalPath, str)
-        # TODO: usuń z katalogu
+        try:
+            os.remove(internalPath)
+            return True
+        except Exception as exc:
+            print(exc)
+            return False
+
+    def renameData(self, oldPath, newPath):
+        try:
+            shutil.move(oldPath, newPath)
+            return True
+        except Exception as exc:
+            print(exc)
+            return False

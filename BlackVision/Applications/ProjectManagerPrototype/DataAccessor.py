@@ -21,3 +21,7 @@ class DataAccessor:
     @abs
     def removeData(self, internalPath):
         pass
+
+    @abs
+    def renameData(self, oldPath, newPath):
+        pass

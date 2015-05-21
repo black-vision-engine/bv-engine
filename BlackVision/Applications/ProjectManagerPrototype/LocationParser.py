@@ -16,18 +16,30 @@ class LocationParser:
 
     def parseLocationString(self, string):
         assert isinstance(string, str)
-        # if string.startswith("./"):  # a simple path to the current project
-        #     if self.currentProject:
-        #         string = string[2:]
-        #         splitedString = string.split("/")
-        #         p = self.pm.getProject(splitedString[ 0 ])
-        #         if p:
-        #             assert isinstance(p, Project)
-        #             if splitedString[1] != "scenes":
-        #                 return Location(p, splitedString[1], splitedString[2:])
-        #     else:
-        #         print("LocationParser: Current project not set")
-        #         return None
-        # else:
-        #     assert False  # TODO: Implement for the prefixes and "global"
+        try:
+            projName = ""
+            categoryName = ""
+            internalPath = ""
+            isGlobal = False
+            if string.startswith("./"):
+                if self.currentProjectName:
+                    self.location.projectName = self.currentProjectName
+                    self.location.categoryName = string.split("/", 2)[1]
+                    self.location.internalPath = string.split("/", 2)[2]
+            elif string.startswith("/"):
+                if string[1:7] == "global":
+                    self.location.isGlobalLocation = True
+                else:
+                    self.location.projectName = string.split("/", 2)[0]
+                self.location.categoryName = string.split("/", 2)[1]
+                self.location.internalPath = string.split("/", 2)[2]
+            elif string.startswith("file://"):
+                self.location.prefix = "file"
+                self.location.internalPath = string[7:]
+            elif string.startswith("seq://"):
+                self.location.prefix = "seq"
+                self.location.internalPath = string[6:]
+
+        except Exception as exc:
+            print("Parsing location error: {}".format(exc))
 

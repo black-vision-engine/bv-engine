@@ -10,7 +10,7 @@ class ProjectManager:
     def getData(self, path):
         assert isinstance(path, str)
 
-        loc = Location(path)
+        loc = Location(path, self.currentProject.getName() if self.currentProject else "")
 
         if loc:
             proj = self.getProject(loc.getProjectName())
