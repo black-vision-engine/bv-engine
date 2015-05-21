@@ -7,3 +7,4 @@ syntax: glob
 BlackVision/_Builds/*
 BlackVision/_Temp/*
 *.nvuser
+*.pyc
