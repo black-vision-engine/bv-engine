@@ -169,8 +169,8 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
 {
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTexturePluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultTexturePluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
+    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( /*DefaultTexturePluginDesc::PixelShaderSource(),*/ model->GetPixelShaderChannelModel(), nullptr ) );
+    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( /*DefaultTexturePluginDesc::VertexShaderSource(),*/ model->GetVertexShaderChannelModel() ) );
 
     InitAttributesChannel( prev );
 
