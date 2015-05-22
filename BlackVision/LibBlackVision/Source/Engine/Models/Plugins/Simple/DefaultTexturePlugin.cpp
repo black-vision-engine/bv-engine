@@ -135,20 +135,6 @@ std::string             DefaultTexturePluginDesc::UID                       ()
 }
 
 // *******************************
-//
-std::string             DefaultTexturePluginDesc::VertexShaderSource        ()
-{
-    return "Assets/Shaders/Deprecated/defaulttexture.vert";
-}
-
-// *******************************
-//
-std::string             DefaultTexturePluginDesc::PixelShaderSource         ()
-{
-    return "Assets/Shaders/Deprecated/defaulttexture.frag";
-}
-
-// *******************************
 // 
 std::string             DefaultTexturePluginDesc::TextureName               ()
 {
