@@ -145,12 +145,82 @@ FIBITMAP * ConvertToNearestSupported( FIBITMAP * bitmap, UInt32 * bpp, UInt32 * 
 	return nullptr;
 }
 
-} // anonymous
+// ******************************
+//
+FREE_IMAGE_FILTER ToFIFilter( FilterType ft )
+{
+	switch ( ft )
+	{
+	case FilterType::FT_BOX:
+		return FREE_IMAGE_FILTER::FILTER_BOX;
+	case FilterType::FT_BILINEAR:
+		return FREE_IMAGE_FILTER::FILTER_BILINEAR;
+	case FilterType::FT_B_SPLINE:
+		return FREE_IMAGE_FILTER::FILTER_BSPLINE;
+	case FilterType::FT_BICUBIC:
+		return FREE_IMAGE_FILTER::FILTER_BICUBIC;
+	case FilterType::FT_CATMULL_ROM:
+		return FREE_IMAGE_FILTER::FILTER_CATMULLROM;
+	case FilterType::FT_LANCZOS:
+		return FREE_IMAGE_FILTER::FILTER_LANCZOS3;
+	default:
+		assert( false && "Unreachable" );
+		return FREE_IMAGE_FILTER::FILTER_BOX;
+	}
+}
 
 // *********************************
 //
-MemoryChunkConstPtr LoadImage( const std::string & filePath, UInt32 * width, UInt32 * heigth, UInt32 * bpp, UInt32 * channelNum, bool loadFromMemory )
-{	
+inline unsigned char GetPixelColor( Int32 x, Int32 y, const char* data, UInt32 width, UInt32 height )
+{
+    if( x < 0 || x >= ( Int32 )width || y < 0 || y >= ( Int32 )height )
+        return 0;
+
+    return data[ 4 * ( x + y * width ) ];
+}
+
+// *********************************
+//
+inline Float4 GetPixelColorFloat4( Int32 x, Int32 y, const char * data, UInt32 width, UInt32 height )
+{
+	x = std::max( 0, std::min( x, ( Int32 )width - 1 ) );
+	y = std::max( 0, std::min( y, ( Int32 )height - 1 ) );
+
+	const unsigned char * p = (unsigned char *)&data[ 4 * ( x + y * width ) ];
+
+	return Float4( p[ 0 ] / 255.f, p[ 1 ] / 255.f, p[ 2 ] / 255.f, p[ 3 ] / 255.f );
+}
+
+// *********************************
+//
+inline void SetPixelColor( Int32 x, Int32 y, char * data, UInt32 width, UInt32 height, char color )
+{
+    { height; } // FIXME: suppress unused warning
+
+    memset( &( data[ 4 * ( x + y * width ) ] ), color, 4 );
+}
+
+// *********************************
+//
+inline void SetPixelColorFloat4( Int32 x, Int32 y, char * data, UInt32 width, UInt32 height, const Float4 & color )
+{
+    { height; } // FIXME: suppress unused warning
+
+	char * p = &data[ 4 * ( x + y * width ) ];
+
+	p[ 0 ] = char( color.x * 255.f );
+	p[ 1 ] = char( color.y * 255.f );
+	p[ 2 ] = char( color.z * 255.f );
+	p[ 3 ] = char( color.w * 255.f );
+}
+
+} // anonymous
+
+
+// *********************************
+//
+char *		            LoadImageImpl	( const std::string & filePath, UInt32 * width, UInt32 * heigth, UInt32 * bpp, UInt32 * channelNum, bool loadFromMemory )
+{
 	FIBITMAP * bitmap = nullptr;
 
 	if( !File::Exists( filePath ) )
@@ -186,55 +256,55 @@ MemoryChunkConstPtr LoadImage( const std::string & filePath, UInt32 * width, UIn
         }
     }
 
-	bitmap = ConvertToNearestSupported( bitmap, bpp, channelNum );
+	auto bitmapcvt = ConvertToNearestSupported( bitmap, bpp, channelNum );
 
-    if( bitmap == nullptr )
+    if( bitmapcvt != bitmap )
+    {
+        FreeImage_Unload( bitmap );
+    }
+
+    if( bitmapcvt == nullptr )
 	{
 		return nullptr;
 	}
 
-	*width  = FreeImage_GetWidth( bitmap );
-	*heigth = FreeImage_GetHeight( bitmap );
+	*width  = FreeImage_GetWidth( bitmapcvt );
+	*heigth = FreeImage_GetHeight( bitmapcvt );
 
     auto numBytes = ( *width ) * ( *heigth ) * ( *bpp ) / 8;
 
     char * pixels = new char[ numBytes ];
 
-    memcpy( pixels, FreeImage_GetBits( bitmap ), numBytes );
+    memcpy( pixels, FreeImage_GetBits( bitmapcvt ), numBytes );
 
-    return std::make_shared< MemoryChunk >( pixels, numBytes );
+    FreeImage_Unload( bitmapcvt );
+
+    return pixels;
 }
 
 // *********************************
 //
-MemoryChunkConstPtr LoadRAWImage( const std::string & filePath )
+char *                  LoadRAWImageImpl( const std::string & filePath, SizeType * size )
 {
-	auto size = File::Size( filePath );
+    assert( size != nullptr );
+	*size = File::Size( filePath );
 
-	auto buffer = new char[ size ];
-	File::Read( buffer, filePath );
+	auto buffer = new char[ *size ];
 
-	return std::make_shared< MemoryChunk >( buffer, (SizeType)size );
+    File::Read( buffer, filePath );
+
+    return buffer;
 }
 
 // *********************************
 //
-void SaveRAWImage( const std::string & filePath, MemoryChunkConstPtr data )
-{
-	auto f = File::Open( filePath, File::FOMReadWrite );
-	f.Write( data->Get(), data->Size() );
-	f.Close();
-}
-
-// *********************************
-//
-bool SaveBMPImage( const std::string & filePath, MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp )
+bool					SaveBMPImageImpl( const std::string & filePath, const char * data, UInt32 width, UInt32 height, UInt32 bpp )
 {
 	FIBITMAP * bitmap = FreeImage_Allocate( width, height, bpp );
 
 	auto bits = FreeImage_GetBits( bitmap );
 
-    memcpy( bits, data->Get(), width * height * bpp / 8 );
+    memcpy( bits, data, width * height * bpp / 8 );
 
 	auto res = FreeImage_Save( FREE_IMAGE_FORMAT::FIF_BMP, bitmap, filePath.c_str(), BMP_DEFAULT ) ? true : false;
 
@@ -243,53 +313,47 @@ bool SaveBMPImage( const std::string & filePath, MemoryChunkConstPtr data, UInt3
 	return res;
 }
 
-
 // *********************************
 //
-inline unsigned char GetPixelColor( Int32 x, Int32 y, const char* data, UInt32 width, UInt32 height )
+void					SaveRAWImageImpl( const std::string & filePath, const char * data, SizeType size )
 {
-    if( x < 0 || x >= ( Int32 )width || y < 0 || y >= ( Int32 )height )
-        return 0;
-    return data[ 4 * ( x + y * width ) ];
+	auto f = File::Open( filePath, File::FOMReadWrite );
+	f.Write( data, size );
+	f.Close();
 }
 
 // *********************************
 //
-inline Float4 GetPixelColorFloat4( Int32 x, Int32 y, const char * data, UInt32 width, UInt32 height )
+char *		            ResizeImpl		( const char * in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 newWidth, UInt32 newHeight, FilterType ft )
 {
-	x = std::max( 0, std::min( x, ( Int32 )width - 1 ) );
-	y = std::max( 0, std::min( y, ( Int32 )height - 1 ) );
+	auto inBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+	memcpy( FreeImage_GetBits( inBitmap ), in, width * height * bpp / 8 );
 
-	const unsigned char * p = (unsigned char *)&data[ 4 * ( x + y * width ) ];
-	return Float4( p[ 0 ] / 255.f, p[ 1 ] / 255.f, p[ 2 ] / 255.f, p[ 3 ] / 255.f );
+	auto b = FreeImage_GetBPP( inBitmap );
+	
+	auto outBitmap = FreeImage_Rescale( inBitmap, ( int )newWidth, ( int )newHeight, ToFIFilter( ft ) );
+
+	auto ob = FreeImage_GetBPP( inBitmap );
+
+    // FIXME: what are b and ob required for?
+    {b; ob; }
+	//FreeImage_AdjustColors( outBitmap, 1.0, 1.0, 1.0, 1 );
+	//outBitmap = FreeImage_ConvertTo32Bits( outBitmap );
+
+	auto numBytes = newWidth * newHeight * bpp / 8;
+
+    char * pixels = new char[ numBytes ];
+    memcpy( pixels, FreeImage_GetBits( outBitmap ), numBytes );
+
+	FreeImage_Unload( inBitmap );
+	FreeImage_Unload( outBitmap );
+
+    return pixels;
 }
 
 // *********************************
 //
-inline void SetPixelColor( Int32 x, Int32 y, char * data, UInt32 width, UInt32 height, char color )
-{
-    { height; } // FIXME: suppress unused warning
-
-    memset( &( data[ 4 * ( x + y * width ) ] ), color, 4 );
-}
-
-// *********************************
-//
-inline void SetPixelColorFloat4( Int32 x, Int32 y, char * data, UInt32 width, UInt32 height, const Float4 & color )
-{
-    { height; } // FIXME: suppress unused warning
-
-	char * p = &data[ 4 * ( x + y * width ) ];
-
-	p[ 0 ] = char( color.x * 255.f );
-	p[ 1 ] = char( color.y * 255.f );
-	p[ 2 ] = char( color.z * 255.f );
-	p[ 3 ] = char( color.w * 255.f );
-}
-
-// *********************************
-//
-MemoryChunkConstPtr BlurImage( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp, unsigned int blurSize )
+char *		            BlurImageImpl	( const char * data, UInt32 width, UInt32 height, UInt32 bpp, UInt32 blurSize )
 {
     auto numBytes = width * height * bpp / 8;
 
@@ -305,7 +369,7 @@ MemoryChunkConstPtr BlurImage( MemoryChunkConstPtr data, UInt32 width, UInt32 he
 			Float4 currVal( 0.f, 0.f, 0.f, 0.f );
             for( int i = - (Int32)blurSize; i <= (Int32)blurSize; ++i )
 			{
-				currVal = currVal + GetPixelColorFloat4( x + i, y, data->Get(), width, height );
+				currVal = currVal + GetPixelColorFloat4( x + i, y, data, width, height );
 			}
 
             currVal = currVal * ( 1.f / kernelSize );
@@ -331,57 +395,60 @@ MemoryChunkConstPtr BlurImage( MemoryChunkConstPtr data, UInt32 width, UInt32 he
     }
 
     delete [] tmp;
-    return std::make_shared< MemoryChunk >( out, numBytes );
+
+    return out;
 }
 
-// ******************************
+// *********************************
 //
-FREE_IMAGE_FILTER ToFIFilter( FilterType ft )
+MemoryChunkConstPtr LoadImage( const std::string & filePath, UInt32 * width, UInt32 * height, UInt32 * bpp, UInt32 * channelNum, bool loadFromMemory )
+{	
+    auto pixels = LoadImageImpl( filePath, width, height, bpp, channelNum, loadFromMemory );
+    auto numBytes = ( *width ) * ( *height ) * ( *bpp ) / 8;
+
+    return MemoryChunk::Create( pixels, numBytes );
+}
+
+// *********************************
+//
+MemoryChunkConstPtr LoadRAWImage( const std::string & filePath )
 {
-	switch ( ft )
-	{
-	case FilterType::FT_BOX:
-		return FREE_IMAGE_FILTER::FILTER_BOX;
-	case FilterType::FT_BILINEAR:
-		return FREE_IMAGE_FILTER::FILTER_BILINEAR;
-	case FilterType::FT_B_SPLINE:
-		return FREE_IMAGE_FILTER::FILTER_BSPLINE;
-	case FilterType::FT_BICUBIC:
-		return FREE_IMAGE_FILTER::FILTER_BICUBIC;
-	case FilterType::FT_CATMULL_ROM:
-		return FREE_IMAGE_FILTER::FILTER_CATMULLROM;
-	case FilterType::FT_LANCZOS:
-		return FREE_IMAGE_FILTER::FILTER_LANCZOS3;
-	default:
-		assert( false && "Unreachable" );
-		return FREE_IMAGE_FILTER::FILTER_BOX;
-	}
+    SizeType size = 0;
+    auto buffer = LoadRAWImageImpl( filePath, &size );
+
+    return MemoryChunk::Create( buffer, size );
+}
+
+// *********************************
+//
+bool SaveBMPImage( const std::string & filePath, MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp )
+{
+    return SaveBMPImageImpl( filePath, data->Get(), width, height, bpp );
+}
+
+// *********************************
+//
+void SaveRAWImage( const std::string & filePath, MemoryChunkConstPtr data )
+{
+    SaveRAWImageImpl( filePath, data->Get(), data->Size() );
+}
+
+// *********************************
+//
+MemoryChunkConstPtr BlurImage( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp, unsigned int blurSize )
+{
+    auto numBytes = width * height * bpp / 8;
+    auto pixels = BlurImageImpl( data->Get(), width, height, bpp, blurSize );
+
+    return MemoryChunk::Create( pixels, numBytes );
 }
 
 // ******************************
 //
 MemoryChunkConstPtr		Resize( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 newWidth, UInt32 newHeight, FilterType ft )
 {
-	auto inBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
-	memcpy( FreeImage_GetBits( inBitmap ), in->Get(), width * height * bpp / 8 );
-
-	auto b = FreeImage_GetBPP( inBitmap );
-	
-	auto outBitmap = FreeImage_Rescale( inBitmap, ( int )newWidth, ( int )newHeight, ToFIFilter( ft ) );
-
-	auto ob = FreeImage_GetBPP( inBitmap );
-	{b; ob; }
-	//FreeImage_AdjustColors( outBitmap, 1.0, 1.0, 1.0, 1 );
-
-	//outBitmap = FreeImage_ConvertTo32Bits( outBitmap );
-
-	auto numBytes = newWidth * newHeight * bpp / 8;
-
-    char * pixels = new char[ numBytes ]; // FIXME: Use normal allocation to free it with free not delete []
-    memcpy( pixels, FreeImage_GetBits( outBitmap ), numBytes );
-
-	FreeImage_Unload( inBitmap );
-	FreeImage_Unload( outBitmap );
+    auto numBytes = newWidth * newHeight * bpp / 8;
+    auto pixels = ResizeImpl( in->Get(), width, height, bpp, newWidth, newHeight, ft );
 
 	return MemoryChunk::Create( pixels, numBytes );
 }
