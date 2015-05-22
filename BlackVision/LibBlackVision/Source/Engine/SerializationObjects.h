@@ -19,6 +19,7 @@ class DeserializeObject
 {
 public: // FIXME
     rapidxml::xml_node<>* m_doc;
+public:
     model::TimelineManager* m_tm; // FIXME(?)
 
 public:
