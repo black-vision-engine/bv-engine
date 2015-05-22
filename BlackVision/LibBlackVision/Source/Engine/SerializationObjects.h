@@ -17,7 +17,6 @@ namespace bv
 
 class DeserializeObject
 {
-public: // FIXME
     rapidxml::xml_node<>* m_doc;
 public:
     model::TimelineManager* m_tm; // FIXME(?)
@@ -25,12 +24,41 @@ public:
 public:
     DeserializeObject( rapidxml::xml_node<>& doc, model::TimelineManager& tm ) : m_doc( &doc ), m_tm( &tm ) { }
 
+    std::string                                             GetName()
+    {
+        return m_doc->name();
+    }
+
+    std::string                                             GetValue( std::string name )
+    {
+        auto node = m_doc->first_attribute( name.c_str() );
+        assert( node ); // FIXME: error handling
+        return node->value();
+    }
+
     template< typename T >
-    std::shared_ptr<T> Load( rapidxml::xml_node<>* node )
+    std::shared_ptr< T >                                    Load( rapidxml::xml_node<>* node )
     {
         auto dob = DeserializeObject( *node, *this->m_tm );
         auto obj = T::Create( dob );
         return std::static_pointer_cast< T >( obj );
+    }
+
+    template< typename T >
+    std::vector< std::shared_ptr< T > >                     LoadArray( std::string name )
+    {
+        std::vector< std::shared_ptr< T > > ret;
+
+        auto children = m_doc->first_node( name.c_str() );
+
+        if( children )
+            for( auto child = children->first_node(); child; child = child->next_sibling() )
+            {
+                auto childNode = Load< T >( child );
+                ret.push_back( childNode );
+            }
+
+        return ret;
     }
 };
 

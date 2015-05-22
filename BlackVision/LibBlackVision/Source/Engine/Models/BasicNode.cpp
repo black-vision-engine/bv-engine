@@ -80,10 +80,9 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
 //
 ISerializablePtr BasicNode::Create( DeserializeObject& dob )
 {
-    auto doc = dob.m_doc; // FIXME: f*ck this sh*t
-    assert( !strcmp( doc->name(), "node" ) );
+    assert( dob.GetName() == "node" );
 
-    auto name = doc->first_attribute( "name" )->value();
+    auto name = dob.GetValue( "name" ); // doc->first_attribute( "name" )->value();
     auto timeEvaluator = dob.m_tm->GetRootTimeline();
     
     auto node = Create( name, timeEvaluator );
@@ -92,14 +91,10 @@ ISerializablePtr BasicNode::Create( DeserializeObject& dob )
     node->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
 // children
-    auto children = doc->first_node( "nodes" );
+    auto children = dob.LoadArray< BasicNode >( "children" );
 
-    if( children )
-        for( auto child = children->first_node(); child; child = child->next_sibling() )
-        {
-            BasicNodePtr childNode = dob.Load< BasicNode >( child );
-            node->AddChildToModelOnly( childNode );
-        }
+    for( auto child : children )
+        node->AddChildToModelOnly( child );
 
     return node;
 }
