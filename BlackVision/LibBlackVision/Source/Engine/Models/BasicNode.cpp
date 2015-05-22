@@ -82,7 +82,7 @@ ISerializablePtr BasicNode::Create( DeserializeObject& dob )
 {
     assert( dob.GetName() == "node" );
 
-    auto name = dob.GetValue( "name" ); // doc->first_attribute( "name" )->value();
+    auto name = dob.GetValue( "name" );
     auto timeEvaluator = dob.m_tm->GetRootTimeline();
     
     auto node = Create( name, timeEvaluator );
@@ -91,7 +91,7 @@ ISerializablePtr BasicNode::Create( DeserializeObject& dob )
     node->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
 // children
-    auto children = dob.LoadArray< BasicNode >( "children" );
+    auto children = dob.LoadArray< BasicNode >( "nodes" );
 
     for( auto child : children )
         node->AddChildToModelOnly( child );
