@@ -38,10 +38,22 @@ enum class FilterType : int
 	
 ImageProperties			GetImageProps	( const std::string & imageFilePath );
 
-MemoryChunkConstPtr		LoadImage		( const std::string & filePath, UInt32 * width, UInt32 * heigth, UInt32 * bpp, UInt32 * channelNum, bool loadFromMemory = true );
+ // RAW pointer version
+char *		            LoadImageImpl	( const std::string & filePath, UInt32 * width, UInt32 * height, UInt32 * bpp, UInt32 * channelNum, bool loadFromMemory = true );
+char *                  LoadRAWImageImpl( const std::string & filePath, SizeType * size );
+
+bool					SaveBMPImageImpl( const std::string & filePath, const char * data, UInt32 width, UInt32 height, UInt32 bpp );
+void					SaveRAWImageImpl( const std::string & filePath, const char * data, SizeType size );
+
+char *		            ResizeImpl		( const char * in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 newWidth, UInt32 newHeight, FilterType ft );
+char *		            BlurImageImpl	( const char * data, UInt32 width, UInt32 height, UInt32 bpp, UInt32 blurSize );
+
+// MemoryChunk version
+MemoryChunkConstPtr		LoadImage		( const std::string & filePath, UInt32 * width, UInt32 * height, UInt32 * bpp, UInt32 * channelNum, bool loadFromMemory = true );
 MemoryChunkConstPtr		LoadRAWImage	( const std::string & filePath );
+
 bool					SaveBMPImage	( const std::string & filePath, MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp );
-void					SaveRAWImage	( const std::string & filePath, MemoryChunkConstPtr data );
+void					SaveRAWImage	( const std::string & filePath, MemoryChunkConstPtr data);
 
 MemoryChunkConstPtr		Resize			( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 newWidth, UInt32 newHeight, FilterType ft );
 MemoryChunkConstPtr		BlurImage		( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp, UInt32 blurSize );
