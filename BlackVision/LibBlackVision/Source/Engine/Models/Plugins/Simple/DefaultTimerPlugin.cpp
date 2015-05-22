@@ -112,20 +112,6 @@ std::string             DefaultTimerPluginDesc::UID                      ()
 
 // *******************************
 //
-std::string             DefaultTimerPluginDesc::VertexShaderSource       ()
-{
-    return "Assets/Shaders/Deprecated/dummy.vert";   //FIXME: deprecated
-}
-
-// *******************************
-//
-std::string             DefaultTimerPluginDesc::PixelShaderSource        ()
-{
-    return "Assets/Shaders/Deprecated/dummy.frag";   //FIXME: deprecated
-}
-
-// *******************************
-//
 std::string             DefaultTimerPluginDesc::TextureName              ()
 {
     return "AtlasTex0";
@@ -276,8 +262,8 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
 
     m_spacingParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
 
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTimerPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultTimerPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
+    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
+    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;

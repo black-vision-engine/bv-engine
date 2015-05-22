@@ -111,20 +111,6 @@ std::string             DefaultAnimationPluginDesc::UID                       ()
 
 // *******************************
 //
-std::string             DefaultAnimationPluginDesc::VertexShaderSource        ()
-{
-    return "Assets/Shaders/Deprecated/defaulttexture.vert";
-}
-
-// *******************************
-//
-std::string             DefaultAnimationPluginDesc::PixelShaderSource         ()
-{
-    return "Assets/Shaders/Deprecated/defaulttexture.frag";
-}
-
-// *******************************
-//
 std::string             DefaultAnimationPluginDesc::TextureName               ()
 {
     return "Tex0";
@@ -144,8 +130,8 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
 {
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultAnimationPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultAnimationPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
+    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
+    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
 
     InitAttributesChannel( prev );
 

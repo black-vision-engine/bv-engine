@@ -116,20 +116,6 @@ std::string             DefaultAlphaMaskPluginDesc::UID                     ()
 
 // *******************************
 //
-std::string             DefaultAlphaMaskPluginDesc::VertexShaderSource      ()
-{
-    return "Assets/Shaders/Deprecated/dummy.vert"; //FIXME: deprecated
-}
-
-// *******************************
-//
-std::string             DefaultAlphaMaskPluginDesc::PixelShaderSource       ()
-{
-    return "Assets/Shaders/Deprecated/dummy.frag"; //FIXME: deprecated
-}
-
-// *******************************
-//
 std::string             DefaultAlphaMaskPluginDesc::TextureName             ()
 {
     return "AlphaTex0";
@@ -222,8 +208,8 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
         }
     }
 
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultAlphaMaskPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultAlphaMaskPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
+    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
+    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
 
     InitAttributesChannel( prev );
 

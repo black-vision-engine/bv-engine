@@ -120,20 +120,6 @@ std::string             DefaultTextPluginDesc::UID                      ()
 
 // *******************************
 //
-std::string             DefaultTextPluginDesc::VertexShaderSource       ()
-{
-    return "Assets/Shaders/Deprecated/dummy.vert";   //FIXME: deprecated
-}
-
-// *******************************
-//
-std::string             DefaultTextPluginDesc::PixelShaderSource        ()
-{
-    return "Assets/Shaders/Deprecated/dummy.frag";   //FIXME: deprecated
-}
-
-// *******************************
-//
 std::string             DefaultTextPluginDesc::TextureName              ()
 {
     return "AtlasTex0";
@@ -185,8 +171,8 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     }
 
 
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTextPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultTextPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
+    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
+    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
