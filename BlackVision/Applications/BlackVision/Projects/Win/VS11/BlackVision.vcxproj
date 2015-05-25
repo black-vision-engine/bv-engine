@@ -194,6 +194,7 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
       <AdditionalIncludeDirectories>$(ToolsDir)/LibEffect/Source;$(ToolsDir)/XMLSceneParser/Source;$(ToolsDir)/TCPServer/Source;$(ToolsDir)/ConfigReader/Source;$(ToolsDir)/RapidXML/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
+      <AdditionalOptions>-SCL_SECURE_NO_WARNINGS</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

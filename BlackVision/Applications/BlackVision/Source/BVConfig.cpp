@@ -11,33 +11,54 @@ namespace bv
 //FIXME: read default values from a configuration file
 BVConfig::BVConfig                      ()
 {
+    ConfigManager::LoadXMLConfig();
+
     m_defaultWidth      = 1920;
     m_defaultHeight     = 1080;
 
-#ifdef FULLSCREEN_MODE
-    m_fullscreeMode         = true;
-    m_defaultWindowWidth    = m_defaultWidth;
-    m_defaultWindowHeight   = m_defaultHeight;
-#else
-    m_fullscreeMode         = false;
-    m_defaultWindowWidth    = m_defaultWidth / 2;
-    m_defaultWindowHeight   = m_defaultHeight / 2;
-#endif
+    if(ConfigManager::GetBool("FullScreen"))
+    {
+	    m_windowMode            = WindowMode::FULLSCREEN;
+        m_defaultWindowWidth    = m_defaultWidth;
+    	m_defaultWindowHeight   = m_defaultHeight;
+    }else{
+        m_fullscreeMode         = false;
+        
+        if(ConfigManager::GetString("Application/Window/Mode")=="MULTIPLE_SCREENS")
+        {
+            m_windowMode            = WindowMode::MULTIPLE_SCREENS;
+        }else{
+            m_windowMode            = WindowMode::WINDOWED;
+        }
+        m_defaultWindowWidth    = ConfigManager::GetInt("Application/Window/Size/Width");
+        m_defaultWindowHeight   = ConfigManager::GetInt("Application/Window/Size/Height");
 
-    m_fps               = 5000;
+		m_defaultWidth    = ConfigManager::GetInt("Application/Renderer/FrameBufferSize/Width");
+        m_defaultHeight   = ConfigManager::GetInt("Application/Renderer/FrameBufferSize/Height");
+    }
+
+    
+    if(ConfigManager::GetString("Resolution")=="SD")
+    {
+        m_defaultWidth      = 720;
+        m_defaultHeight     = 576;
+    }
+
+
+    m_fps               = ConfigManager::GetInt("Renderer/MaxFPS");
     m_frameTimeMillis   = 1000 / m_fps;
 
-#ifdef USE_READBACK_API
+if(ConfigManager::GetBool("USE_READBACK_API"))
     m_readbackOn        = true;
-#else
+else
     m_readbackOn        = false;
-#endif
 
-#ifdef PERSPECTIVE_CAMERA
+
+if(ConfigManager::GetBool("PERSPECTIVE_CAMERA"))
     m_isCameraPerspective = true;
-#else
+else
     m_isCameraPerspective = false;
-#endif
+
 
     m_eventLoopUpdateMillis = 20;
 
@@ -45,13 +66,13 @@ BVConfig::BVConfig                      ()
     m_defaultNearClippingPlane  = 0.1f;
     m_defaultFarClippingPlane   = 100.f;
 
-    m_defaultCameraPosition  = glm::vec3( 0.f, 0.f, 1.f );
+    m_defaultCameraPosition  = glm::vec3( ConfigManager::GetFloat("camera/position/x"),ConfigManager::GetFloat("camera/position/y"),ConfigManager::GetFloat("camera/position/z"));
     m_defaultCameraDirection = glm::vec3( 0.f, 0.f, 0.f );
     m_defaultCameraUp        = glm::vec3( 0.f, 1.f, 0.f );
 
     m_defaultStatsMovingAverageWindowSize   = 500; //500
     m_defaultWarmupRoundsStatsMAV           = 10; //10
-    m_defaultStatsRefreshMillisDelta        = 300;
+    m_defaultStatsRefreshMillisDelta        = 1000;
     m_defaultStatsRecalcFramesDelta         = m_defaultStatsMovingAverageWindowSize * m_defaultWarmupRoundsStatsMAV; //* 30
     m_defaultProfilerDisplayWaitMillis      = 10000; //1000
 

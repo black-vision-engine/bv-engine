@@ -35,6 +35,7 @@ RenderLogic::RenderLogic     ()
 //
 RenderLogic::~RenderLogic    ()
 {
+	m_VideoCardManager->m_IsEnding = true;
     delete m_offscreenRenderLogic;
 }
 
@@ -67,7 +68,7 @@ void RenderLogic::InitVideoCards     ( Renderer * renderer )
 		Log::A("VIDEOCARDS", "INFO", "Config file prevents from initializing VideoCards...");
 		return;
 	}
-   m_VideoCardManager->m_VideoCardConfig.ReadbackFlag = bv::DefaultConfig.ReadbackFlag();
+    m_VideoCardManager->m_VideoCardConfig.ReadbackFlag = bv::DefaultConfig.ReadbackFlag();
     m_VideoCardManager->m_VideoCardConfig.BlueFish = bv::ConfigManager::GetBool("VideoCards/BlueFish");
     m_VideoCardManager->m_VideoCardConfig.BlackMagic = bv::ConfigManager::GetBool("VideoCards/BlackMagic");
     m_VideoCardManager->m_VideoCardConfig.superMagic = bv::ConfigManager::GetBool("VideoCards/BlackMagic/SuperMagic");
@@ -207,16 +208,22 @@ void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
     renderer->ClearBuffers();
     renderer->PreDraw();
 
-    m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
-    m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
-
+   
+        m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
+        m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
+        renderer->ClearBuffers();
+    
     renderer->ClearBuffers();
 
     if( node )
         RenderNode( renderer, node );
 
-    m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
-    m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
+   
+        m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
+        m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
+
+        m_offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
+    
 
     m_offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
 
@@ -398,6 +405,23 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
     double readbackStart = GTimer.CurElapsed();
     auto frame = m_offscreenRenderLogic->ReadDisplayTarget( renderer, nReadbackFrame );
     nReadbackFrame = ( nReadbackFrame + 1 ) % m_offscreenRenderLogic->NumReadBuffersPerRT();
+	auto FrameNo = m_offscreenRenderLogic->ReadDisplayTarget( renderer, 0 );
+
+    //GPUDirect;
+	if(m_VideoCardManager->m_Enabled)
+	{
+		if( m_VideoCardManager->m_CurrentTransferMode == bv::videocards::VideoCard_RAM_GPU::GPU )
+		{          
+			//m_offscreenRenderLogic->TransferFromGPUToSDI( renderer, m_VideoCardManager );
+			//m_offscreenRenderLogic->SwapDisplayRenderTargets();
+			//todo: fix gpu direct
+		}
+		else if( m_VideoCardManager->m_CurrentTransferMode==bv::videocards::VideoCard_RAM_GPU::RAM )
+		{
+			
+			m_VideoCardManager->GetBufferFromRenderer(FrameNo);
+		}
+	}
     double readbackTime = GTimer.CurElapsed() - readbackStart;
 
     m_offscreenRenderLogic->SwapDisplayRenderTargets();

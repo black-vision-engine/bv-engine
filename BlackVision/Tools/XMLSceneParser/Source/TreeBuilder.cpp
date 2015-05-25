@@ -515,15 +515,34 @@ namespace bv{
         std::string font = BB::AssetManager::GetFont(text->Font);
         //todo: unhack 1.25
 		float size = (float)atof(text->Size.c_str());// *1.25f;
+		UInt32 outlineSize = (UInt32)atoi(text->OutlineSize.c_str());
+		UInt32 blurSize = (UInt32)atoi(text->BlurSize.c_str());
+		string outlineColor = text->OutlineColor_RGBA;
 
         bool result = node->AddPlugin( "DEFAULT_TEXT", "text", GetTimeline(plugin->timeline) ); 
         
         if(!result) return false;
         bv::model::DefaultTextPlugin * txt =  (bv::model::DefaultTextPlugin*)node->GetPlugin( "text" ).get();
+		
+
+		//outline color
+		vector<string> V;
+															
+		V = split(outlineColor,',',V);
+		float rF	=	(float)	atof(V[0].c_str());
+		float gF	=	(float)	atof(V[1].c_str());
+		float bF	=	(float)	atof(V[2].c_str());
+		float aF	=	(float)	atof(V[3].c_str());
+
+
+		result = result && SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( rF,gF,bF,aF) );
 
         //todo: unhack 1.25 size
         result = result && SetParameter( txt->GetParameter( "fontSize" ), TimeType( 0.0 ), size );
-        result = result && model::LoadFont( node->GetPlugin( "text" ), font, (UInt32) size, 0, 0, false );
+        result = result && model::LoadFont( node->GetPlugin( "text" ), font, (UInt32) size, blurSize, outlineSize, false );
+
+		
+
 
         if(text->Align=="center")
         {

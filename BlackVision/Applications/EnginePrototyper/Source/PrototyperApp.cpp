@@ -43,7 +43,7 @@ bool PrototyperApp::m_sWindowedApplicationInitialized = PrototyperApp::RegisterI
 // *********************************
 //
 PrototyperApp::PrototyperApp	()
-    : WindowedApplication( "BlackVision prototyper", 0, 0, DefaultPrototypeWidth(), DefaultPrototypeHeight(), DefaultPrototypeFullscreenSetting() )
+    : WindowedApplication( "BlackVision prototyper", 0, 0, DefaultPrototypeWidth(), DefaultPrototypeHeight(), DefaultPrototypeWindowModeSetting() )
     , m_appLogicPrototype( nullptr )
 {
 }
