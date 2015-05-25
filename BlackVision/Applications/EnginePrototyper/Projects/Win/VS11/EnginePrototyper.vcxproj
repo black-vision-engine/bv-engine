@@ -54,47 +54,43 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_App.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.Win32.debug.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdParrtyDllCopy.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_App.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.x64.debug.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdParrtyDllCopy.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_App.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.Win32.release.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdParrtyDllCopy.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_App.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.x64.release.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyLibs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdParrtyDllCopy.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
@@ -146,29 +142,12 @@
     <ProjectReference Include="..\..\..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj">
       <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\LibCore\Projects\Win\VS11\LibCore.vcxproj">
-      <Project>{ecabce66-f47e-4889-8a4c-20dcb97c86b8}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\LibImage\Projects\Win\VS11\LibImage.vcxproj">
-      <Project>{33e2cc63-2591-46b1-9b24-2a284566f1d6}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj">
-      <Project>{b0e6c314-5b08-40f7-87ef-17141a389ba5}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Tools\LibEffect\Projects\Win\VS11\LibEffect.vcxproj">
-      <Project>{e3611a8a-25fc-4c0e-89ae-89611fc3427a}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Tools\MipMapBuilder\Projects\Win\VS11\MipMapBuilder.vcxproj">
-      <Project>{6a33f496-e3c1-4c91-a4e1-049c0c3b762e}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Common\GLSLProgram.cpp" />
     <ClCompile Include="..\..\..\Source\Common\VBORect.cpp" />
     <ClCompile Include="..\..\..\Source\PrototypeCreator.cpp" />
     <ClCompile Include="..\..\..\Source\PrototyperApp.cpp" />
-    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLExt.cpp" />
-    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLPluginExt.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingMode.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingTestScene.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Scenes\DrawingTestScene0.cpp" />
@@ -203,9 +182,6 @@
     <ClInclude Include="..\..\..\Source\PrototypeCreator.h" />
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
     <ClInclude Include="..\..\..\Source\PrototypesForwardInc.h" />
-    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLDefsExt.h" />
-    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLExt.h" />
-    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLPluginExt.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingMode.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingTestScene.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Modes\DrawingModes.h" />

@@ -32,11 +32,16 @@ CommonLib chyba może również wylecieć - to w apps i test jest
 LibCommon.props wydaje się zbędne - jeśli tak jest, to wywalić
 
 poprawić docelowe katalogi budowania testów, bo teraz test asset manager się kopiuje do katalogu głównego, zamiast do Test
-wobec tego porównać oba projekty z testami i sprawdzić, czym się tak naprawdę różnią
+wobec tego porównać oba projekty z testami i sprawdzić, czym się tak naprawdę różnią !!!!!!!!!!!!!!
 
 test asset manager przechodzi tylko w debug x64
 test mipmap builder w ogóle nie przechodzi
+zmienić  nazwę  mipmapbuilder na libmipmapbuilder
 
+prefix w Source dla każdego projektu: Source/<prefix_name>/dopiero tutaj kod
+dodatkowo prefix dla katalogu - ten prefix załatwia sprawę
+
+../../../Source jako domyślny includ w commmon, jeśli lib $(OutputDir) będzie potrzebny, to też do common
 
 dobrze przemyśleć makra
 na tej podstawie najpewniej da się zrobić wszystko znacznie mniejszą liczbą plików (tylko odpowiednio ustawiać warunki)
@@ -50,8 +55,18 @@ OPISAĆ NA CZYM POLEGA DZIAŁANIE BVGL
 WRZUCIĆ ten nowe komendy rysujące do BVGL (najwyżej się nie przydadzą)
 
 Opisać, że nie całe 3rdPartyLib.props nie widać podczas edycji z poziomu IDE (Conditional props są niewidoczne)
-
+To samo dotyczy common.props i <PreprocessorDefinitions> dla symboli _DEBUG, NDEBUG
 3rdPartyDepLib filez:
+
+Napisać o tym, że LibBlackVision ma w sobie wszystkie pozostałe core libsy oraz Tool Libsy i nie trzeba ich referencjonować w projektach.
+To w ogólnym opisie konfiguracji projektu.
+
+Ponadto napisać o tym, że Common_Core daje kategorię CoreLibs oraz to samo zrobić w strukturze projektu, ewentualnie dodać (tak jak w jakimś z projektów
+taki builder all.sln czy coś takiego - to może być w xercesie lub analogicznym projekcie)
+
+uspójnić nazwy bibliotek w trybach debug (albo _D albo D, a nie przemieszane)
+
+Pytanie - czy warto dodać do solucji "Core" jako filtr na te główne biblioteki?
 
 
 win32-Debug

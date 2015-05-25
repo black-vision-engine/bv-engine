@@ -72,12 +72,6 @@
     <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\DrawingPrototype.cpp">
       <Filter>Prototypes\DrawingCommands</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLExt.cpp">
-      <Filter>Prototypes\DrawingCommands\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLPluginExt.cpp">
-      <Filter>Prototypes\DrawingCommands\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingMode.cpp">
       <Filter>Prototypes\DrawingCommands\Common</Filter>
     </ClCompile>
@@ -170,16 +164,7 @@
     <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\DrawingPrototype.h">
       <Filter>Prototypes\DrawingCommands</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLExt.h">
-      <Filter>Prototypes\DrawingCommands\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLPluginExt.h">
-      <Filter>Prototypes\DrawingCommands\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingMode.h">
-      <Filter>Prototypes\DrawingCommands\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\BVGLDefsExt.h">
       <Filter>Prototypes\DrawingCommands\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Scenes\DrawingTestScene0.h">
