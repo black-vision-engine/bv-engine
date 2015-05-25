@@ -73,6 +73,7 @@ DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( co
 {
     auto shaderSource = ReadShaderFromFile( shaderFile );
 
+
     if( shaderSource != "" )
     {
         assert( values );
