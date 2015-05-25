@@ -4,6 +4,7 @@
 
 namespace bv { namespace model {
 
+const float CREASE_VERTEX_WEIGHT = 6.0f;
 
 float weightTable[4][4] =
 {
@@ -67,22 +68,26 @@ void HelperSmoothMesh::privateSmooth( IndexedGeometry& mesh, std::vector<INDEX_T
 		return;
 	}
 
+	if( sharpEdges.size() % 2 )	// If true, something wrong with edges.
+		sharpEdges.pop_back();		
+
 	IndexedGeometry new_mesh;
 
-	tesselate( mesh, new_mesh );
+	std::vector<INDEX_TYPE> newSharpEdges =  tesselate( mesh, new_mesh, sharpEdges );
 	moveVerticies( mesh, sharpEdges, new_mesh );
 
-	privateSmooth( new_mesh, sharpEdges, tesselation - 1, resultMesh );
+	privateSmooth( new_mesh, newSharpEdges, tesselation - 1, resultMesh );
 	// Remember! You can't do anything with new_mesh after smooth call. It have been already moved to resultMesh.
 }
 
 /**Tesselates given mesh one time.*/
-void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& resultMesh )
+std::vector<INDEX_TYPE> HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& resultMesh, std::vector<INDEX_TYPE> sharpEdges )
 {
 	const std::vector<INDEX_TYPE>& indicies = mesh.getIndicies();
 	const std::vector<glm::vec3>& verticies = mesh.getVerticies();
 	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.getIndicies();
 	std::vector<glm::vec3>& resultVerticies = resultMesh.getVerticies();
+	std::vector<INDEX_TYPE> newSharpEdges;
 
 	resultIndicies.reserve( 4 * indicies.size() );
 	resultVerticies.reserve( 3 * verticies.size() / 2 );
@@ -108,8 +113,16 @@ void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& result
 			{
 				newIndicies[ j ] = static_cast<unsigned short>( resultVerticies.size() );		// Position of new added vertex in vector is our new index;
 				resultVerticies.push_back( newVertex );
-			}
 
+				// Adding indicies to sharp edges.
+				if( isSharpEdge( indicies[i + j], indicies[i + (j + 1) % 3], sharpEdges ) )
+				{
+					newSharpEdges.push_back( indicies[i + j] );
+					newSharpEdges.push_back( newIndicies[ j ] );
+					newSharpEdges.push_back( newIndicies[ j ] );
+					newSharpEdges.push_back( indicies[i + (j + 1) % 3] );
+				}
+			}
 		}
 
 		// Don't touch order od verticies. Function moveVerticies uses it.
@@ -123,6 +136,8 @@ void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& result
 		for( int j = 0; j < 3; ++j )	// Middle triangle.
 			resultIndicies.push_back( newIndicies[j] );
 	}
+
+	return std::move( newSharpEdges );
 }
 
 /**Moves verticies of the new mesh to appropriate positions.*/
@@ -179,9 +194,16 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 	// We add center vertex position.
 	for( INDEX_TYPE i = 0; i < verticies.size(); ++i )
 	{
-		float numNeighbours = static_cast<float>( vertexData[ i ].numNeighbours / 2 );	// We have taken each vertex two times.
-		float weight = computeCenterVertexWeight( static_cast<unsigned short>( numNeighbours ) );
-		resultVerticies[ i ] = ( resultVerticies[ i ] + verticies[ i ] * weight ) / ( numNeighbours + weight );
+		if( vertexData[ i ].type == VertexType::SMOOTH_VERTEX )
+		{
+			float numNeighbours = static_cast<float>( vertexData[ i ].numNeighbours / 2 );	// We have taken each vertex two times.
+			float weight = computeCenterVertexWeight( static_cast<unsigned short>( numNeighbours ) );
+			resultVerticies[ i ] = ( resultVerticies[ i ] + verticies[ i ] * weight ) / ( numNeighbours + weight );
+		}
+		else if( vertexData[ i ].type == VertexType::CORNER_VERTEX )
+			resultVerticies[ i ] = verticies[ i ];
+		else if( vertexData[ i ].type == VertexType::CREASE_VERTEX )
+			resultVerticies[ i ] = ( verticies[ i ] * CREASE_VERTEX_WEIGHT + resultVerticies[ i ] ) / ( CREASE_VERTEX_WEIGHT + 2 );	//Check weight in docs
 	}
 
 	// Clear edge verticies.

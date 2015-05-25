@@ -30,7 +30,7 @@ private:
 	virtual float computeCenterVertexWeight( unsigned short numNeighbours );
 protected:
 	void privateSmooth( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, unsigned int tesselation, IndexedGeometry& resultMesh );
-	void tesselate( IndexedGeometry& mesh, IndexedGeometry& resultMesh );
+	std::vector<INDEX_TYPE> tesselate( IndexedGeometry& mesh, IndexedGeometry& resultMesh, std::vector<INDEX_TYPE> sharpEdges );
 	void moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, IndexedGeometry& resultMesh );
 	bool findVertex( const std::vector<glm::vec3>& verticies, glm::vec3 vertex, INDEX_TYPE& index );
 	std::vector<INDEX_TYPE> findAllNeighbours( INDEX_TYPE index, const std::vector<INDEX_TYPE>& indicies, INDEX_TYPE maxIndex );

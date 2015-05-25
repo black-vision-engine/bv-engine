@@ -128,30 +128,77 @@ namespace Generator
 				verticies.reserve( 8 );
 				indicies.reserve( 36 );
 
-				verticies.push_back( glm::vec3( -x, -y, z ) );
-				verticies.push_back( glm::vec3( x, -y, z ) );
-				verticies.push_back( glm::vec3( x, y, z ) );
-				verticies.push_back( glm::vec3( -x, y, z ) );
+				//verticies.push_back( glm::vec3( -x, -y, z ) );
+				//verticies.push_back( glm::vec3( x, -y, z ) );
+				//verticies.push_back( glm::vec3( x, y, z ) );
+				//verticies.push_back( glm::vec3( -x, y, z ) );
+				//verticies.push_back( glm::vec3( -x, -y, -z ) );
+				//verticies.push_back( glm::vec3( x, -y, -z ) );
+				//verticies.push_back( glm::vec3( x, y, -z ) );
+				//verticies.push_back( glm::vec3( -x, y, -z ) );
+
+				verticies.push_back( glm::vec3( -x, y, -z ) );
+				verticies.push_back( glm::vec3( x, y, -z ) );
 				verticies.push_back( glm::vec3( -x, -y, -z ) );
 				verticies.push_back( glm::vec3( x, -y, -z ) );
-				verticies.push_back( glm::vec3( x, y, -z ) );
-				verticies.push_back( glm::vec3( -x, y, -z ) );
+				verticies.push_back( glm::vec3( -x, y, z ) );
+				verticies.push_back( glm::vec3( x, y, z ) );
+				verticies.push_back( glm::vec3( -x, -y, z ) );
+				verticies.push_back( glm::vec3( x, -y, z ) );
 
+				//INDEX_TYPE indicesData[] = { 
+				//	0, 1, 2, 2, 3, 0, 
+				//	3, 2, 6, 6, 7, 3, 
+				//	7, 6, 5, 5, 4, 7, 
+				//	4, 0, 3, 3, 7, 4, 
+				//	0, 1, 5, 5, 4, 0,
+				//	1, 5, 6, 6, 2, 1 
+				//};
 
-				INDEX_TYPE indicesData[] = { 
-					0, 1, 2, 2, 3, 0, 
-					3, 2, 6, 6, 7, 3, 
-					7, 6, 5, 5, 4, 7, 
-					4, 0, 3, 3, 7, 4, 
-					0, 1, 5, 5, 4, 0,
-					1, 5, 6, 6, 2, 1 
+				INDEX_TYPE indicesData[] =
+				{
+					0, 1, 2,    // side 1
+					2, 1, 3,
+					4, 0, 6,    // side 2
+					6, 0, 2,
+					7, 5, 6,    // side 3
+					6, 5, 4,
+					3, 1, 7,    // side 4
+					7, 1, 5,
+					4, 5, 0,    // side 5
+					0, 5, 1,
+					3, 7, 2,    // side 6
+					2, 7, 6,
 				};
 
 				for( int i = 0; i < 36; ++i )
 					indicies.push_back( indicesData[i] );
 
 				std::vector<INDEX_TYPE> sharpEdges;
-				const unsigned tesselation = 1;
+
+				//sharpEdges.push_back( 0 );
+				//sharpEdges.push_back( 1 );
+				//sharpEdges.push_back( 1 );
+				//sharpEdges.push_back( 2 );
+				//sharpEdges.push_back( 2 );
+				//sharpEdges.push_back( 3 );
+				//sharpEdges.push_back( 3 );
+				//sharpEdges.push_back( 0 );
+
+				sharpEdges.push_back( 3 );
+				sharpEdges.push_back( 1 );
+				sharpEdges.push_back( 3 );
+				sharpEdges.push_back( 2 );
+				sharpEdges.push_back( 3 );
+				sharpEdges.push_back( 7 );
+				sharpEdges.push_back( 1 );
+				sharpEdges.push_back( 2 );
+				sharpEdges.push_back( 2 );
+				sharpEdges.push_back( 7 );
+				sharpEdges.push_back( 7 );
+				sharpEdges.push_back( 1 );
+
+				const unsigned tesselation = 3;
 
 				IndexedGeometry resultMesh = smoother.smooth( cube, sharpEdges, tesselation );
 				converter.makeStrip( resultMesh, verts );
