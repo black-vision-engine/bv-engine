@@ -104,6 +104,7 @@ void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& result
 
 		}
 
+		// Don't touch order od verticies. Function moveVerticies uses it.
 		int k = 2;
 		for( int j = 0; j < 3; ++j )	// Outer triangles.
 		{
@@ -124,24 +125,68 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.getIndicies();
 	std::vector<glm::vec3>& resultVerticies = resultMesh.getVerticies();
 	
-	std::vector<bool> movedVerticies;
-	movedVerticies.resize( resultVerticies.size(), false );
-	std::vector<INDEX_TYPE> vertexNeighbours;
-	std::vector<float> vertexWeights;
+	//std::vector<INDEX_TYPE> vertexNeighbours;
+	//std::vector<float> vertexWeights;
 
 
+	//for( INDEX_TYPE i = 0; i < verticies.size(); ++i )
+	//{// Make movement for vertex points
+	//	vertexNeighbours = findAllNeighbours( i, indicies, INDEX_TYPE( resultVerticies.size() - 1 ) );		// 3. parameter - we are looking for neighbours in all vertices
+	//	vertexWeights = makeWeightTable( i, vertexNeighbours, sharpEdges, false );
+	//	resultVerticies[ i ] = computeVertexNewPosition( i, vertexNeighbours, vertexWeights, verticies, false );
+	//}
+	//for( INDEX_TYPE i = (INDEX_TYPE)verticies.size(); i < resultVerticies.size(); ++i )
+	//{// Make movement for edge points
+	//	vertexNeighbours = findNeighboursForEdgeVertex( i, indicies, resultIndicies, INDEX_TYPE( verticies.size() - 1 ) );	// 3. parameter - we are looking for neighbours only in verticies from previous interation.
+	//	vertexWeights = makeWeightTable( i, vertexNeighbours, sharpEdges, true );
+	//	resultVerticies[ i ] = computeVertexNewPosition( i, vertexNeighbours, vertexWeights, verticies, true );
+	//}
+
+	std::vector<VertexData> vertexData;
+	vertexData.resize( verticies.size(), VertexData() );
+
+	// Zero vertex check vertex type.
 	for( INDEX_TYPE i = 0; i < verticies.size(); ++i )
-	{// Make movement for vertex points
-		vertexNeighbours = findAllNeighbours( i, indicies, INDEX_TYPE( resultVerticies.size() - 1 ) );		// 3. parameter - we are looking for neighbours in all vertices
-		vertexWeights = makeWeightTable( i, vertexNeighbours, sharpEdges, false );
-		resultVerticies[ i ] = computeVertexNewPosition( i, vertexNeighbours, vertexWeights, verticies, false );
+	{
+		resultVerticies[ i ] = glm::vec3( 0.0, 0.0, 0.0 );
+		vertexData[ i ].type = computeVertexType( i, sharpEdges );
 	}
-	for( INDEX_TYPE i = (INDEX_TYPE)verticies.size(); i < resultVerticies.size(); ++i )
-	{// Make movement for edge points
-		vertexNeighbours = findNeighboursForEdgeVertex( i, indicies, resultIndicies, INDEX_TYPE( verticies.size() - 1 ) );	// 3. parameter - we are looking for neighbours only in verticies from previous interation.
-		vertexWeights = makeWeightTable( i, vertexNeighbours, sharpEdges, true );
-		resultVerticies[ i ] = computeVertexNewPosition( i, vertexNeighbours, vertexWeights, verticies, true );
+
+	// We iterate through edges and add position with weight to verticies.
+	for( INDEX_TYPE i = 0; i < indicies.size(); i += 3 )
+		for( INDEX_TYPE j = 0; j < 3; ++j )
+		{
+			INDEX_TYPE index1 = indicies[ i + j ];
+			INDEX_TYPE index2 = indicies[ i + (j + 1) % 3 ];
+
+			float weight = computeVertexWeight( index1, index2, vertexData[ index1 ].type, sharpEdges );
+			resultVerticies[ index1 ] += ( weight / 2.0f ) * verticies[ index2 ];
+
+			weight = computeVertexWeight( index2, index1, vertexData[ index2 ].type, sharpEdges );
+			resultVerticies[ index2 ] += ( weight / 2.0f ) * verticies[ index1 ];
+
+			vertexData[ index1 ].numNeighbours++;
+			vertexData[ index2 ].numNeighbours++;
+		}
+	// We add center vertex position.
+	for( INDEX_TYPE i = 0; i < verticies.size(); ++i )
+	{
+		float numNeighbours = static_cast<float>( vertexData[ i ].numNeighbours / 2 );	// We have taken each vertex two times.
+		float weight = computeCenterVertexWeight( static_cast<unsigned short>( numNeighbours ) );
+		resultVerticies[ i ] = ( resultVerticies[ i ] + verticies[ i ] * weight ) / ( numNeighbours + weight );
 	}
+
+	// We iterate added verticies.
+	for( INDEX_TYPE i = 0; i < resultIndicies.size(); i += 12 )
+		for( INDEX_TYPE j = 0; j < 9; j += 3 )
+		{
+			INDEX_TYPE edgeIndex1 = resultIndicies[ i + j ];
+			INDEX_TYPE edgeIndex2 = resultIndicies[ i + (j + 3) % 9 ];
+			INDEX_TYPE index3 = resultIndicies[ i + (j + 6) % 9 ];
+			INDEX_TYPE edgeVertex = resultIndicies[ i + j + 2 ];		// We use our knowledge about order of verticies after tessellation.
+
+
+		}
 }
 
 /**Finds given vertex in array of verticies.
@@ -283,6 +328,51 @@ float HelperSmoothMesh::computeCenterVertexWeight( unsigned short numNeighbours 
 	double functionA = 5.0 / 8.0 - pow( ( 3.0 + 2.0 * cos( TWOPI / (double) numNeighbours) ), 2 ) / 64.0;
 	return static_cast<float>( double(numNeighbours) / functionA - 1.0 );
 }
+
+
+VertexType HelperSmoothMesh::computeVertexType( int i, std::vector<INDEX_TYPE> sharpEdges )
+{
+	int numSharpEdges = 0;
+
+	for( unsigned int j = 0; j < sharpEdges.size(); ++j )
+		if( sharpEdges[ j ] == i )
+			++numSharpEdges;
+
+	if( numSharpEdges < 2 )
+		return VertexType::SMOOTH_VERTEX;
+	else if( numSharpEdges == 2 )
+		return VertexType::CREASE_VERTEX;
+	else
+		return VertexType::CORNER_VERTEX;
+}
+
+float HelperSmoothMesh::computeVertexWeight( int vertexIndex, int secondVertexIndex, VertexType vertexType, std::vector<INDEX_TYPE> sharpEdges )
+{
+	if( vertexType == VertexType::CORNER_VERTEX )
+		return 0.0f;
+	else if( vertexType == VertexType::SMOOTH_VERTEX )
+		return 1.0f;
+	else if( vertexType == VertexType::CREASE_VERTEX )
+	{
+		if( isSharpEdge( vertexIndex, secondVertexIndex, sharpEdges ) )
+			return 1.0f;
+		return 0.0f;
+	}
+	else
+	{
+		assert( false );
+		return 0.0f;
+	}
+}
+
+bool HelperSmoothMesh::isSharpEdge( int index1, int index2, std::vector<INDEX_TYPE> sharpEdges )
+{
+	for( unsigned int i = 0; i < sharpEdges.size(); i += 2 )
+		if( sharpEdges[ i ] == index1 && sharpEdges[ i + 1 ] == index2 || sharpEdges[ i ] == index2 && sharpEdges[ i + 1 ] == index1 )
+			return true;
+	return false;
+}
+
 
 }	//model
 }	//bv

@@ -1978,7 +1978,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #endif
 #ifdef SHOW_SIMPLE_CUBE
 	auto plugin = root->GetPlugin( "simple cube" );
-	model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 1.0, 1.0, 1.0 ) );
+	model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 2.0, 1.0, 1.0 ) );
 #endif
 
 

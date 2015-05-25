@@ -6,8 +6,21 @@
 namespace bv { namespace model {
 
 
+enum VertexType : char
+{
+	SMOOTH_VERTEX,
+	CREASE_VERTEX,
+	CORNER_VERTEX
+};
 
 
+struct VertexData
+{
+	VertexType		type;
+	unsigned short	numNeighbours;
+
+	VertexData() { type = SMOOTH_VERTEX; numNeighbours = 0; }
+};
 
 class HelperSmoothMesh
 {
@@ -23,6 +36,9 @@ protected:
 	std::vector<INDEX_TYPE> findNeighboursForEdgeVertex( INDEX_TYPE index, const std::vector<INDEX_TYPE>& preIndicies, const std::vector<INDEX_TYPE>& postIndicies, INDEX_TYPE maxIndex );
 	glm::vec3 computeVertexNewPosition( INDEX_TYPE index, const std::vector<INDEX_TYPE>& vertexNeighbours, const std::vector<float>& vertexWeights, const std::vector<glm::vec3>& verticies, bool ignoreIndex );
 	void addIfNotExists( INDEX_TYPE index, std::vector<INDEX_TYPE>& vertexNeighbours );
+	VertexType computeVertexType( int i, std::vector<INDEX_TYPE> sharpEdges );
+	float computeVertexWeight( int vertexIndex, int secondVertexIndex, VertexType vertexType, std::vector<INDEX_TYPE> sharpEdges );
+	bool isSharpEdge( int index1, int index2, std::vector<INDEX_TYPE> sharpEdges );
 public:
 	HelperSmoothMesh(void);
 	~HelperSmoothMesh(void);
