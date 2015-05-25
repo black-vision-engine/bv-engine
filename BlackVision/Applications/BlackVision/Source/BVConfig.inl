@@ -39,6 +39,13 @@ inline bool    BVConfig::FullScreenMode                         () const
 
 // *********************************
 //
+inline WindowMode    BVConfig::GetWindowMode                   () const
+{
+    return m_windowMode;
+}
+
+// *********************************
+//
 inline bool    BVConfig::ReadbackFlag                           () const
 {
     return m_readbackOn;
@@ -175,6 +182,13 @@ inline unsigned int         BVConfig::ProfilerDispWaitMillis    () const
 inline const char *         BVConfig::FrameStatsSection         () const
 {
     return "FRAME";
+}
+
+// *********************************
+//
+inline std::string          BVConfig::DefaultSceneEnvVarName    () const
+{
+    return m_defaultSceneEnvVarName;
 }
 
 } //bv

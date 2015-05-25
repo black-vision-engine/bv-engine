@@ -1,7 +1,9 @@
 #pragma once
-#include "Engine\Models\Plugins\Simple\DefaultTexturePlugin.h"
+
+#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 //#include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "CompositeVideoInputResourceDescr.h"
+
 
 namespace bv { namespace model {
 
@@ -38,7 +40,7 @@ public:
 	~DefaultVideoInputPlugin(void);
 
 	virtual void                                Update                      ( TimeType t ) override;
-	//virtual bool                            LoadResource  ( IPluginResourceDescrConstPtr resDescr ) override;
+    virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 };
 
 } }

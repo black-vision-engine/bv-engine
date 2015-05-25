@@ -1,11 +1,12 @@
 #include "BasicNode.h"
 
 //FIXME: node na INode
-#include <boost/algorithm/string.hpp>
-#include <boost/algorithm/string/join.hpp>
+#include "Tools/StringHeplers.h"
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/BasicOverrideState.h"
+
+#include "Engine/Models/ModelNodeEditor.h"
 
 
 namespace bv { namespace model {
@@ -38,6 +39,7 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator,
     , m_pluginsManager( pluginsManager )
     , m_overrideState( nullptr )
     , m_visible( true )
+	, m_modelNodeEditor ( nullptr )
 {
     if( pluginsManager == nullptr )
     {
@@ -66,7 +68,11 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
         }
     };
 
-    return std::make_shared<make_shared_enabler_BasicNode>( name, timeEvaluator, pluginsManager );
+	auto node = std::make_shared<make_shared_enabler_BasicNode>( name, timeEvaluator, pluginsManager );
+
+	node->SetModelNodeEditor( new ModelNodeEditor( node ) );
+
+    return node;
 }    
 
 // ********************************
@@ -313,6 +319,34 @@ void            BasicNode::DetachChildNodeOnly              ( BasicNodePtr n )
 
 // ********************************
 //
+ModelNodeEditor *					BasicNode::GetModelNodeEditor		()
+{
+	if( !m_modelNodeEditor)
+	{
+		m_modelNodeEditor = new ModelNodeEditor( shared_from_this() );
+	}
+	return m_modelNodeEditor;
+}
+
+// ********************************
+//
+void								BasicNode::SetModelNodeEditor		( ModelNodeEditor * editor )
+{
+	delete m_modelNodeEditor; //?
+	m_modelNodeEditor = editor;
+}
+
+// ********************************
+//
+DefaultPluginListFinalizedPtr		BasicNode::GetPlugins		()
+{
+    NonNullPluginsListGuard();
+
+    return m_pluginList;
+}
+
+// ********************************
+//
 void            BasicNode::SetPlugins                       ( DefaultPluginListFinalizedPtr plugins )
 {
     m_pluginList = plugins;
@@ -465,23 +499,20 @@ std::string                         BasicNode::SplitPrefix              ( std::s
 {
     assert( separator.length() == 1 );
 
-    std::vector< std::string > ret;
-
-    //FIXME: _SCL_SECURE_NO_WARNINGS is defined due to this fuckin line (or fuckin VS)
-    boost::split( ret, str, boost::is_any_of( separator ) );
+    auto ret = Split( str, separator );
 
     if( ret.size() == 0 )
     {
-        return "";
+        ret.push_back( "" );
     }
     else if ( ret.size() == 1 )
     {
         str = "";
-
-        return ret[ 0 ];
     }
-
-    str = boost::algorithm::join( std::vector< std::string >( ret.begin() + 1, ret.end() ), separator );
+    else
+    {
+        str = Join( std::vector< std::string >( ret.begin() + 1, ret.end() ), separator );
+    }
 
     return ret[ 0 ];
 }

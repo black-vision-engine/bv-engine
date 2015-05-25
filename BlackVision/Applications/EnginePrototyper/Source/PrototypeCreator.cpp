@@ -3,6 +3,7 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 
 
+
 namespace bv {
 
 namespace  {
@@ -26,7 +27,9 @@ IAppLogicPrototype * CreateDefaultPrototype             ( Renderer * renderer )
 	//return new FBOProfilingPrototype0( renderer );
 	//return new FBOProfilingPrototype1( renderer );
 	//return new FBOProfilingPrototype2( renderer );
-	return new FBOProfilingPrototype3( renderer );
+	//return new FBOProfilingPrototype3( renderer );
+
+    return new DrawingPrototype( renderer );
 }
 
 // ****************************
@@ -41,6 +44,13 @@ unsigned int        DefaultPrototypeWidth               ()
 unsigned int        DefaultPrototypeHeight              ()
 {
     return DefaultHeight;
+}
+
+// ****************************
+// FIXME: fatalna imitacja nedznej namiastki configa
+WindowMode       DefaultPrototypeWindowModeSetting             ()
+{
+	return WindowMode::WINDOWED;
 }
 
 // ****************************

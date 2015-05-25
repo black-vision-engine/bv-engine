@@ -10,6 +10,8 @@ namespace bv
 
 class Renderer;
 
+enum WindowMode {FULLSCREEN=0,WINDOWED=1,MULTIPLE_SCREENS=2};
+
 class WindowedApplication : public ApplicationBase
 {
 protected:
@@ -24,16 +26,21 @@ protected:
     int 			m_Height;
 
     bool			m_AllowResize;
+    bool			m_MultipleMonitors;
     bool			m_FullScreen;
 
     glm::vec4		m_ClearColor;
 
     Renderer *		m_Renderer;
 	
+	bool			m_EnableGLFinish;
+	bool			m_EnableGLFlush;
+	int				m_VSYNFrames;
+	
 
 protected:
 
-    WindowedApplication				( const char * title, int x, int y, int w, int h, bool fullScreen = false );
+    WindowedApplication				( const char * title, int x, int y, int w, int h,  WindowMode windowMode);
 
 public:
 
@@ -48,6 +55,7 @@ public:
     int				Height			() const;
     
     bool			ResizeAllowed	() const;
+	bool			MultipleMonitors() const;
     bool			FullScreen		() const;
     void			UnsetFulscreen	();
 

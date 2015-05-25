@@ -21,6 +21,8 @@ DEFINE_CONST_PTR_TYPE(BasicNode)
 
 typedef std::vector< BasicNodePtr > TNodeVec;
 
+class ModelNodeEditor;
+
 
 class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicNode >
 {
@@ -43,6 +45,8 @@ private:
     DefaultPluginListFinalizedPtr   m_pluginList;
 
 	INodeLogicPtr					m_nodeLogic;
+
+	ModelNodeEditor *				m_modelNodeEditor;
 
 protected:
 
@@ -97,6 +101,11 @@ public:
 
     void                                    AddChildToModelOnly     ( BasicNodePtr n );
     void                                    DetachChildNodeOnly     ( BasicNodePtr n );
+
+	ModelNodeEditor *						GetModelNodeEditor		();
+	void									SetModelNodeEditor		( ModelNodeEditor * editor );
+
+	DefaultPluginListFinalizedPtr			GetPlugins				();
 
 private:
 

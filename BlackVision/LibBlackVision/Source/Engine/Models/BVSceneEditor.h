@@ -3,8 +3,8 @@
 #include <hash_map>
 #include <string>
 
+#include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Interfaces/IModelNode.h"
-
 
 namespace bv {
 
@@ -25,7 +25,7 @@ private:
     typedef std::pair< model::IModelNodePtr, SceneNode * >      TNodesPair;
 
 private:
-
+	BVScene *					m_scene;
     TNodesMapping	            m_nodesMapping;
 
     model::ModelSceneEditor *   m_modelSceneEditor;
@@ -52,6 +52,17 @@ public:
     void                    DeleteDetachedNodes ();
 
     model::IModelNodePtr    GetRootNode         ();
+
+	
+	void                    AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, unsigned int idx );
+    bool                    DeletePlugin		( model::BasicNodePtr node, unsigned int idx );
+    bool                    DeletePlugin		( model::BasicNodePtr node, const std::string & name );
+
+    bool                    AttachPlugin		( model::BasicNodePtr node, unsigned int idx );
+    bool                    AttachPlugin		( model::BasicNodePtr sourceNode, model::BasicNodePtr targetNode, unsigned int idx );
+    bool                    DetachPlugin		( model::BasicNodePtr node, unsigned int idx );
+    bool                    DetachPlugin		( model::BasicNodePtr node, const std::string & name );
+    
 
 private:
 

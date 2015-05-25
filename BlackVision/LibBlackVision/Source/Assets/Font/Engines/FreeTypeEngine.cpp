@@ -299,7 +299,15 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 		}
 	}
 
-	return nullptr;
+	// If the character is not supported by the font, render the glyph for the new line character.
+	if( ch != '\n' )
+	{
+		return RenderGlyph( '\n', spans, outlineWidth );
+	}
+	else
+	{
+		return nullptr; // Preventing a recursive call.
+	}
 }
 
 // *********************************
@@ -370,6 +378,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 				currAddress += padding * 4;
 
 				auto ch = wcharsSet[ y * atlasSize + x ];
+
 				auto & sps = spans[ ch ];
 				auto glyph = glyphs[ ch ];
 
@@ -433,7 +442,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 		
 	atlas->m_textureAsset = atlasTextureRes;
 
-	//image::SaveBMPImage( "0level.bmp", atlas->GetWritableData(), altlasWidth, altlasHeight, 32 );
+	image::SaveBMPImage( "0level.bmp", atlas->GetWritableData(), altlasWidth, altlasHeight, 32 );
 
 	atlas->m_kerningMap = BuildKerning( m_face, wcharsSet );
 

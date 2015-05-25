@@ -4,6 +4,7 @@
 
 #include "Engine/Interfaces/IValue.h"
 
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamInt.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamFloat.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamVec2.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamVec3.h"
@@ -45,6 +46,8 @@ GenericShaderParam *    ShaderParamFactory::CreateGenericParameter  ( const IVal
             return new ShaderParamMat3( name, QueryTypedValue< ValueMat3 >( value ) );
         case ParamType::PT_MAT4:
             return new ShaderParamMat4( name, QueryTypedValue< ValueMat4 >( value ) );
+		case ParamType::PT_INT:
+			return new ShaderParamInt( name, QueryTypedValue< ValueInt >( value ) );
     
         default:
             assert( false );

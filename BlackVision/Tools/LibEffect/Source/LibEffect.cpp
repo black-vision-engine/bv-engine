@@ -35,19 +35,19 @@ bv::Renderer * GetRenderer()
 
 // *********************************
 // Returns RenderebleEffect implementing blur.
-RenderableEffectPtr GetBlurEffect( Texture2DPtr texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor )
+RenderableEffectPtr GetBlurEffect( UInt32 blurLength, Float32 pixelWidth, Float32 pixelHeight, Texture2DPtr texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor )
 {
-	return std::make_shared< BlurEffect >( texture, filteringMode, wrapModeX, wrapModeY, borderColor );
+	return std::make_shared< BlurEffect >( blurLength, pixelWidth, pixelHeight, texture, filteringMode, wrapModeX, wrapModeY, borderColor );
 }
 
 // *********************************
-// Bluring image using GPU
-MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bbp )
+// Bluring image with GPU
+MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 blurLength )
 {
 
-	{bbp;}
-	assert( in->Size() == width * height * bbp / 8 );
+    { bpp; }
 
+    assert( in->Size() == width * height * bpp / 8 );
 	auto tex = std::make_shared< Texture2DImpl >( TextureFormat::F_A8R8G8B8, width, height );
 
 	std::vector< MemoryChunkConstPtr > d;
@@ -55,15 +55,13 @@ MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, 
 
 	tex->SetRawData( d, TextureFormat::F_A8R8G8B8, width, height );
 
-	auto effect = GetBlurEffect( tex, TextureFilteringMode::TFM_POINT, TextureWrappingMode::TWM_CLAMP_BORDER, TextureWrappingMode::TWM_CLAMP_BORDER, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+	auto effect = GetBlurEffect( blurLength, 1.f / width, 1.f / height, tex, TextureFilteringMode::TFM_POINT, TextureWrappingMode::TWM_CLAMP_EDGE, TextureWrappingMode::TWM_CLAMP_EDGE, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
-	auto renderLogic = new EffectRenderLogic( width, height, 4, effect );
+	auto renderLogic = new EffectRenderLogic( width, height, effect, new Camera() );
 
-	renderLogic->SetRendererCamera( new Camera() );
+	renderLogic->Draw( GetRenderer() );
 
-	renderLogic->DrawDisplayRenderTarget( GetRenderer() );
-
-	auto texOut = renderLogic->ReadDisplayTarget( GetRenderer(), 0 );
+	auto texOut = renderLogic->ReadTarget( GetRenderer() );
 
 	return texOut->GetData();
 }

@@ -43,7 +43,10 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
     m_height    = texture->GetHeight();
 
     //FIXME: allow more texture types here
-    assert( m_txFormat == TextureFormat::F_A8R8G8B8 || m_txFormat == TextureFormat::F_R8G8B8 || m_txFormat == TextureFormat::F_A8 );
+    assert( m_txFormat == TextureFormat::F_A8R8G8B8 ||
+			m_txFormat == TextureFormat::F_R8G8B8 ||
+			m_txFormat == TextureFormat::F_A8 || 
+			m_txFormat == TextureFormat::F_A32FR32FG32FB32F );
 
     m_internalFormat    = ConstantsMapper::GLConstantTextureInternalFormat( m_txFormat );
     m_format            = ConstantsMapper::GLConstantTextureFormat( m_txFormat );

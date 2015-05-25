@@ -2,67 +2,37 @@
 
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
 #include "Engine/Models/Plugins/EngineConstantsMapper.h"
+#include "Engine/Models/Builder/RendererStatesBuilder.h"
+#include "Engine/Types/Values/ValuesFactory.h"
+
+#include "IO/FileIO.h"
+#include <sstream>
 
 namespace bv { namespace effect
 {
 
-const std::string fragShaderSource = "					\
-												\n		\
-#version 400									\n		\
-												\n		\
-layout (location = 0) out vec4 FragColor;		\n		\
-												\n		\
-in vec2 uvCoord;								\n		\
-												\n		\
-uniform sampler2D Tex0;							\n		\
-												\n		\
-void main()										\n		\
-{												\n		\
-	vec4 col = texture( Tex0, uvCoord );		\n		\
-	FragColor = col; 							\n		\
-}												\n		\
-";
-
-const std::string vertShaderSource = "											 \
-#version 400																\n	 \
-																			\n	 \
-layout (location = 0) in vec3 vertexPosition;								\n	 \
-layout (location = 1) in vec2 vertexTexCoord;								\n	 \
-																			\n	 \
-uniform mat4 MVP;															\n	 \
-uniform mat4 MV;															\n	 \
-uniform mat4 P;																\n	 \
-																			\n	 \
-uniform mat4 txMat;															\n	 \
-																			\n	 \
-out vec2 uvCoord;															\n	 \
-																			\n	 \
-void main()																	\n	 \
-{																			\n	 \
-    gl_Position = MVP * vec4( vertexPosition, 1.0 );						\n	 \
-    uvCoord = ( txMat * vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;				\n	 \
-}																				 \
-";
-
 // ****************************
 //
-BlurEffect::BlurEffect    ( Texture2DPtr texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor )
+BlurEffect::BlurEffect    ( UInt32 blurLenght, Float32 pixelWidth, Float32 pixelHeight, Texture2DPtr texture, TextureFilteringMode filteringMode, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, const glm::vec4 & borderColor )
+	: m_blurLength( blurLenght )
+	, m_pixelWidth( pixelWidth )
+	, m_pixelHeight( pixelHeight )
 {
     auto ps = CreatePS( texture, filteringMode, wrapModeX, wrapModeY, borderColor );
     auto vs = CreateVS();
 
     RenderablePass * pass = new RenderablePass( ps, vs, nullptr );
-    //auto sinst = pass->GetStateInstance();
+    auto sinst = pass->GetStateInstance();
 
-    //RendererStatesBuilder::Create( sinst );
+    RendererStatesBuilder::Create( sinst );
 
-    //auto as = RenderStateAccessor::AccessAlphaState( sinst );
-    //auto ds = RenderStateAccessor::AccessDepthState( sinst );
-    //auto cs = RenderStateAccessor::AccessCullState( sinst );
+    auto as = RenderStateAccessor::AccessAlphaState( sinst );
+    auto ds = RenderStateAccessor::AccessDepthState( sinst );
+    auto cs = RenderStateAccessor::AccessCullState( sinst );
 
-    //as->blendEnabled = true;
-    //ds->enabled = false;
-    //cs->enabled = false;
+    as->blendEnabled = false;
+    ds->enabled = false;
+    cs->enabled = false;
 
     AddPass( pass );
 }
@@ -86,8 +56,23 @@ PixelShader *   BlurEffect::CreatePS   ( Texture2DPtr texture, TextureFilteringM
     auto params = new ShaderParameters();
     params->AddTexture( texture );
 
-    auto shader = new PixelShader( fragShaderSource, params );
-    auto sampler = CreateSampler( filteringMode, wrapModeX, wrapModeY, borderColor );
+	m_blurLenghtVal = ValuesFactory::CreateValueInt( "blurLenght" );
+	m_blurLenghtVal->SetValue( m_blurLength );
+
+	params->AddParameter( ShaderParamFactory::CreateGenericParameter( m_blurLenghtVal.get() ) );
+
+	m_pixelWidthVal = ValuesFactory::CreateValueFloat( "pixelWidth" );
+	m_pixelWidthVal->SetValue( m_pixelWidth );
+
+	params->AddParameter( ShaderParamFactory::CreateGenericParameter( m_pixelWidthVal.get() ) );
+
+	m_pixelHeightVal = ValuesFactory::CreateValueFloat( "pixelHeight" );
+	m_pixelHeightVal->SetValue( m_pixelHeight );
+
+	params->AddParameter( ShaderParamFactory::CreateGenericParameter( m_pixelHeightVal.get() ) );
+
+    auto shader = new PixelShader( GetPSSource(), params );
+	auto sampler = CreateSampler( filteringMode, wrapModeX, wrapModeY, borderColor );
 
     shader->AddTextureSampler( sampler );
 
@@ -103,7 +88,7 @@ VertexShader *  BlurEffect::CreateVS   ()
 
     params->AddParameter( mvpParam );
 
-    auto shader = new VertexShader( vertShaderSource, params );
+    auto shader = new VertexShader( GetVSSource(), params );
 
     return shader;
 }
@@ -123,6 +108,48 @@ TextureSampler *    BlurEffect::CreateSampler   ( TextureFilteringMode filtering
 
     return sampler;
 }
+
+// ****************************
+//
+std::string			BlurEffect::GetPSSource		() const
+{
+	std::string psFilename = "Assets/Shaders/Effects/blur.frag";
+
+	return ReadFile( psFilename );
+}
+
+// ****************************
+//
+std::string			BlurEffect::GetVSSource		() const
+{
+	std::string vsFilename = "Assets/Shaders/Effects/blur.vert";
+
+	return ReadFile( vsFilename );
+}
+
+// ****************************
+//
+std::string				BlurEffect::ReadFile		( const std::string & fileName )
+{
+	if( File::Exists( fileName ) )
+    {
+        std::cout << "BlurEffect: Loading pixel shader from: " << fileName << std::endl;
+
+		std::stringstream shaderSource;
+
+		File::Open( fileName ) >> shaderSource;
+
+		return shaderSource.str();
+
+    }
+    else
+    {
+        std::cout << "BlurEffect: File " << fileName << " does not exist. Loading pixel shader failed." << std::endl;
+        assert( false );
+        return "";
+    }
+}
+
 
 } // effect
 } // bv

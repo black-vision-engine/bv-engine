@@ -26,7 +26,6 @@ public:
     void DefaultPluginProperties()
     {
         RGBA.push_back(TimeProperty("0","0,0,0,1"));
-
     }
 	
 };

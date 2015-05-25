@@ -60,53 +60,6 @@ protected:
         void                                    CreateVacModel      ();
 
 
-        template< typename ValueType >
-        inline void                             AddSimpleParam      ( std::string, const ValueType&, bool = false, bool = false ) const
-        {
-            assert( false );
-        }
-
-        template<>
-        inline void                             AddSimpleParam< float > ( std::string name, const float& defaultValue, bool addValue, bool isState ) const
-        {
-            AddParam< FloatInterpolator, float, ModelParamType::MPT_FLOAT, ParamType::PT_FLOAT1, ParamFloat >
-                ( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
-        }
-
-        template<>
-        inline void                             AddSimpleParam< int > ( std::string name, const int& defaultValue, bool addValue, bool isState ) const
-        {
-            AddParam< IntInterpolator, int, ModelParamType::MPT_INT, ParamType::PT_INT, ParamInt >
-                ( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
-        }
-
-        template<>
-        inline void                             AddSimpleParam< glm::vec3 > ( std::string name, const glm::vec3& defaultValue, bool addValue, bool isState ) const
-        {
-            AddParam< Vec3Interpolator, glm::vec3, ModelParamType::MPT_VEC3, ParamType::PT_FLOAT3, ParamVec3 >
-                ( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
-        }
-
-        template<>
-        inline void                             AddSimpleParam< glm::vec2 > ( std::string name, const glm::vec2& defaultValue, bool addValue, bool isState ) const
-        {
-            AddParam< Vec2Interpolator, glm::vec2, ModelParamType::MPT_VEC2, ParamType::PT_FLOAT2, ParamVec2 >
-                ( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
-        }
-
-        template<>
-        inline void                             AddSimpleParam< glm::vec4 > ( std::string name, const glm::vec4& defaultValue, bool addValue, bool isState ) const
-        {
-            AddParam< Vec4Interpolator, glm::vec4, ModelParamType::MPT_VEC4, ParamType::PT_FLOAT4, ParamVec4 >
-                ( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
-        }
-
-        template< typename InterpolatorType, typename ValueType, ModelParamType MPT, ParamType PT, typename ParamImpl >
-        void                                    AddParam            ( std::string name, const ValueType& defaultValue, bool addValue, bool isState ) const
-        {
-            AddParam< InterpolatorType, ValueType, MPT, PT, ParamImpl >( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
-        }
-
         template< typename InterpolatorType, typename ValueType, ModelParamType MPT, ParamType PT, typename ParamImpl >
         void                                    AddParam            ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const ValueType& defaultValue, bool addValue, bool isState ) const
         {
@@ -115,12 +68,14 @@ protected:
             auto param = std::make_shared< ParamImpl >( name, InterpolatorType(), timeEvaluator );
             param->SetVal( defaultValue, 0.f );
 
-            model->AddParameter( param );
-
             if( addValue )
             {
                 auto evaluator = ParamValEvaluatorFactory::CreateSimpleEvaluator< InterpolatorType, ValueType, MPT, PT >( param );
                 model->RegisterAll( evaluator );
+            }
+            else
+            {
+                model->AddParameter( param );
             }
 
             if( isState )
@@ -137,8 +92,117 @@ protected:
                 model->AddState( name, state, updater );
             }
         }
-    };
 
+        template< typename InterpolatorType, typename ValueType, ModelParamType MPT, ParamType PT, typename ParamImpl >
+        void                                    AddParam            ( std::string name, const ValueType& defaultValue, bool addValue, bool isState ) const
+        {
+            AddParam< InterpolatorType, ValueType, MPT, PT, ParamImpl >( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
+        }
+
+        template< typename ValueType >
+        inline void                             AddSimpleParam      ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string, const ValueType&, bool = false, bool = false ) const
+        {
+            assert( false );
+        }
+
+        template<>
+        inline void                             AddSimpleParam< float > ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const float& defaultValue, bool addValue, bool isState ) const
+        {
+            AddParam< FloatInterpolator, float, ModelParamType::MPT_FLOAT, ParamType::PT_FLOAT1, ParamFloat >
+                ( model, timeEvaluator, name, defaultValue, addValue, isState );
+        }
+
+        template<>
+        inline void                             AddSimpleParam< int > ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const int& defaultValue, bool addValue, bool isState ) const
+        {
+            AddParam< IntInterpolator, int, ModelParamType::MPT_INT, ParamType::PT_INT, ParamInt >
+                ( model, timeEvaluator, name, defaultValue, addValue, isState );
+        }
+
+        template<>
+        inline void                             AddSimpleParam< glm::vec3 > ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const glm::vec3& defaultValue, bool addValue, bool isState ) const
+        {
+            AddParam< Vec3Interpolator, glm::vec3, ModelParamType::MPT_VEC3, ParamType::PT_FLOAT3, ParamVec3 >
+                ( model, timeEvaluator, name, defaultValue, addValue, isState );
+        }
+
+        template<>
+        inline void                             AddSimpleParam< glm::vec2 > ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const glm::vec2& defaultValue, bool addValue, bool isState ) const
+        {
+            AddParam< Vec2Interpolator, glm::vec2, ModelParamType::MPT_VEC2, ParamType::PT_FLOAT2, ParamVec2 >
+                ( model, timeEvaluator, name, defaultValue, addValue, isState );
+        }
+
+        template<>
+        inline void                             AddSimpleParam< glm::vec4 > ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const glm::vec4& defaultValue, bool addValue, bool isState ) const
+        {
+            AddParam< Vec4Interpolator, glm::vec4, ModelParamType::MPT_VEC4, ParamType::PT_FLOAT4, ParamVec4 >
+                ( model, timeEvaluator, name, defaultValue, addValue, isState );
+        }
+
+        template< typename ValueType >
+        inline void                             AddSimpleParam      ( std::string name, const ValueType& defaultValue, bool addValue = false, bool isState = false ) const
+        {
+            AddSimpleParam< ValueType >( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
+        }
+
+        template< typename ValueType >
+        inline void                             AddSimpleStatedParam      ( std::string name, const ValueType& defaultValue ) const
+        {
+            AddSimpleParam< ValueType >( m_lastParamValModel, m_lastTimeEvaluator, name, defaultValue, true, true );
+        }
+
+        template< typename ValueType >
+        inline void                             AddVacSimpleParam      ( std::string name, const ValueType& defaultValue, bool addValue = false, bool isState = false ) const
+        {
+            auto model = GetVacModel();
+            AddSimpleParam< ValueType >( model, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
+        }
+
+        template< typename ValueType >
+        inline void                             AddVacSimpleStatedParam      ( std::string name, const ValueType& defaultValue ) const
+        {
+            auto model = GetVacModel();
+            AddSimpleParam< ValueType >( model, m_lastTimeEvaluator, name, defaultValue, true, true );
+        }
+
+        template< typename ValueType >
+        inline void                             AddPsSimpleParam      ( std::string name, const ValueType& defaultValue, bool addValue = false, bool isState = false ) const
+        {
+            auto model = GetPsModel();
+            AddSimpleParam< ValueType >( model, m_lastTimeEvaluator, name, defaultValue, addValue, isState );
+        }
+
+        template< typename ValueType >
+        inline void                             AddPsSimpleStatedParam      ( std::string name, const ValueType& defaultValue ) const
+        {
+            auto model = GetPsModel();
+            AddSimpleParam< ValueType >( model, m_lastTimeEvaluator, name, defaultValue, true, true );
+        }
+
+private:
+        DefaultParamValModelPtr GetVacModel() const
+        {
+            if( !m_model->GetVertexAttributesChannelModel() )
+            {
+                auto vacModel = std::make_shared< DefaultParamValModel >();
+                m_model->SetVertexAttributesChannelModel( vacModel );
+            }
+
+            return m_model->VertexAttributesChannelModelImpl();
+        }
+    
+        DefaultParamValModelPtr GetPsModel() const
+        {
+            if( !m_model->GetPixelShaderChannelModel() )
+            {
+                auto vacModel = std::make_shared< DefaultParamValModel >();
+                m_model->SetPixelShaderChannelModel( vacModel );
+            }
+
+            return m_model->PixelShaderChannelModelImpl();
+        }
+    };
     
 };
 

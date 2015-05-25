@@ -374,6 +374,7 @@ DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const Tex
     //desc->SetFilteringMode( TextureFilteringMode::TFM_POINT ); 
 	desc->SetBits( res );
     desc->SetName( name );
+	desc->SetFormat( res->GetOriginal()->GetFormat() );
 
     return desc;
 }

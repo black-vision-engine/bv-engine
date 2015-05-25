@@ -3,7 +3,9 @@
 #include <string>
 
 #include "Mathematics/glm_inc.h"
+#include "ConfigManager.h"  
 
+#include "Application/WindowedApplication.h" // enum WindowMode
 
 namespace bv
 {
@@ -17,6 +19,8 @@ private:
 
     int             m_defaultWidth;
     int             m_defaultHeight;
+
+	WindowMode      m_windowMode;
 
     unsigned int    m_eventLoopUpdateMillis;
     unsigned int    m_fps;
@@ -45,6 +49,8 @@ private:
     glm::vec4       m_defaultClearColor;
     float           m_defaultClearDepth;
 
+    std::string     m_defaultSceneEnvVarName;
+
 private:
 
     BVConfig    ();
@@ -58,7 +64,8 @@ public:
     inline int                  DefaultWidth            () const;
     inline int                  DefaultHeight           () const;
 
-    inline bool                 FullScreenMode          () const;
+    inline WindowMode           GetWindowMode	        () const;
+	inline bool                 FullScreenMode          () const;
     inline bool                 ReadbackFlag            () const;
     inline bool                 IsCameraPerspactive     () const;
 
@@ -87,6 +94,8 @@ public:
     inline unsigned int         ProfilerDispWaitMillis  () const;
 
     inline const char *         FrameStatsSection       () const;
+
+    inline std::string          DefaultSceneEnvVarName  () const;
 
     static const BVConfig & Instance  ();
 

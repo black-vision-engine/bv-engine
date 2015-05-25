@@ -71,6 +71,7 @@ public:
 
     virtual void                BindBuffer					( GLenum target, GLuint buffer );
     virtual void                BufferData					( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage );
+	virtual void				BufferSubData				( GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid * data );
 
     virtual GLvoid *            MapBuffer					( GLenum target, GLenum access );
     virtual GLboolean           UnmapBuffer					( GLenum target );
@@ -102,9 +103,20 @@ public:
     virtual void                FramebufferTexture2D		( GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level );
     virtual void                FramebufferRenderbuffer		( GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer );
 
-    virtual void                DrawBuffers					( GLsizei n, const GLenum * bufs );
-    virtual void                DrawArrays					( GLenum mode, GLint first, GLsizei count );
-
+    virtual void                DrawBuffers										( GLsizei n, const GLenum * bufs );
+    virtual void                DrawArrays										( GLenum mode, GLint first, GLsizei count );
+	virtual void                DrawElements									( GLenum mode, GLsizei count, GLenum type, const GLvoid* indices );
+	virtual void                DrawArraysInstanced								( GLenum mode, GLint first, GLsizei count, GLsizei primcount );
+	virtual void                DrawElementsInstanced							( GLenum mode, GLsizei count, GLenum type, const void * indices, GLsizei primcount );
+	virtual void                DrawElementsBaseVertex							( GLenum mode, GLsizei count, GLenum type, GLvoid* indices, GLint basevertex );
+	virtual void                DrawArraysInstancedBaseInstance					( GLenum mode, GLint first, GLsizei count, GLsizei primcount, GLuint baseinstance );
+	virtual void                DrawElementsInstancedBaseVertexBaseInstance		( GLenum mode, GLsizei count, GLenum type, GLvoid *indices, GLsizei primcount, GLint basevertex, GLuint baseinstance );
+	virtual void                DrawElementsInstancedBaseVertex					( GLenum mode, GLsizei count, GLenum type, GLvoid *indices, GLsizei primcount, GLint basevertex );
+	virtual void                DrawArraysIndirect								( GLenum mode, const void *indirect );
+	virtual void                DrawElementsIndirect							( GLenum mode, GLenum type, const void *indirect );
+	virtual void                MultiDrawArraysIndirect							( GLenum mode, const void * indirect, GLsizei drawcount, GLsizei stride );
+	virtual void                MultiDrawElementsIndirect						( GLenum mode, GLenum type, const void * indirect, GLsizei drawcount, GLsizei stride );
+	
     virtual GLenum              CheckFramebufferStatus		( GLenum target );
 
     virtual void                Enable						( GLenum cap );
@@ -146,6 +158,8 @@ public:
 	virtual void				DeleteFramebufferEXT		(GLsizei n, const GLuint *framebuffers);
 	virtual void				DeleteRenderbufferEXT		(GLsizei n, const GLuint *renderbuffers);
 	//virtual GLuint				GetError					();
+	virtual void				VertexAttribDivisor								( GLuint index,  GLuint divisor );
+	
 };
 
 } //bv

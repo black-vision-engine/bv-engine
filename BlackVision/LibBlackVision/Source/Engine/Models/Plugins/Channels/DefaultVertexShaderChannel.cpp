@@ -54,16 +54,17 @@ namespace {
 
 // *********************************
 //
-std::string shaderSource   = " #version 400 \n \
-                                \
-                                layout (location = 0) in vec3 vertexPosition; \n \
-                                \
-                                uniform mat4 MVP; \n \
-                                \
-                                void main() \n \
-                                {\n \
-                                    gl_Position = MVP * vec4( vertexPosition, 1.0 );\n \
-                                }\n \
+std::string shaderSource   = " #version 430 core \n \
+								\
+								layout (location = 0) in vec3 vertexPosition; \n \
+								\
+								uniform mat4 MVP; \n \
+								\
+								void main() \n \
+								{ \n \
+									gl_Position =  MVP * vec4(vertexPosition, 1.0); \n \
+								} \n \
+								\
                             ";
 
 }

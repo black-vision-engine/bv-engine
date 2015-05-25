@@ -24,7 +24,8 @@
 #include "LibImage.h"
 #include "Assets/Texture/TextureLoader.h"
 #include "Assets/Font/Engines/FreeTypeEngine.h"
-#include "Tools/MipMapBuilder/Source/MipMapBuilder.h"
+#include "MipMapBuilder.h"
+
 
 namespace bv { 
 

@@ -79,6 +79,28 @@ model::BasicNodePtr CreateSingleTestNodeUidsOnly( const std::string & nodeName, 
 
 // *****************************
 //
+model::BasicNodePtr SolidRect( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { timelineManager; } // FIXME: suppress unused warning
+
+    auto rootNode =     CreateSingleTestNodeUidsOnly( "root", pluginsManager, timeEvaluator, 3,
+                                                      "DEFAULT_TRANSFORM", 
+                                                      "DEFAULT_RECTANGLE", 
+                                                      "DEFAULT_COLOR" );
+    assert( rootNode );
+
+    auto color = rootNode->GetPlugin( "solid color" )->GetParameter( "color" );
+    assert( color );
+
+    auto success = SetParameter( color, 0.f, glm::vec4( 0.f, 1.f, 0.f, 1.f ) );
+    assert( success );
+	{ success; }
+
+    return rootNode;
+}
+
+// *****************************
+//
 model::BasicNodePtr TexturedTestRandomRect( const std::string & name, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { timelineManager; } // FIXME: suppress unused warning
@@ -129,9 +151,9 @@ model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * 
     bool success = true;
 
     success &= model::SetParameterTranslation( rootTransform, 0, 0.0f, glm::vec3( -1.f, 0.f, -1.f ) );
-   // success &= model::SetParameterRotation( rootTransform, 0, 10.0f, glm::vec3( 0.f, 0.f, -1.f ), 10.f );
+    success &= model::SetParameterRotation( rootTransform, 0, 100.0f, glm::vec3( 0.f, 0.f, -1.f ), 50.f );
     success &= model::SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( 2.f, 0.f, -1.f ) );
-   // success &= model::SetParameterRotation( childTransform, 0, 10.0f, glm::vec3( 0.f, 0.f, -1.f ), 191.f );
+    success &= model::SetParameterRotation( childTransform, 0, 100.0f, glm::vec3( 0.f, 0.f, -1.f ), 360.f );
 
     assert( success );
 

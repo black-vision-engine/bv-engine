@@ -307,6 +307,13 @@ void        BVGL::bvglBufferData                ( GLenum target, GLsizeiptr size
 
 // *****************************
 //
+void		BVGL::bvglBufferSubData				( GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid * data )
+{
+	bvgl.BufferSubData( target, offset, size, data );
+}
+
+// *****************************
+//
 GLvoid *    BVGL::bvglMapBuffer                 ( GLenum target, GLenum access )
 {
 	return bvgl.MapBuffer( target, access );
@@ -464,6 +471,83 @@ void         BVGL::bvglDrawBuffers              ( GLsizei n, const GLenum * bufs
 void        BVGL::bvglDrawArrays                ( GLenum mode, GLint first, GLsizei count )
 {
 	bvgl.DrawArrays( mode, first, count );
+}
+
+// *****************************
+//
+void        BVGL::bvglDrawElements									( GLenum mode, GLsizei count, GLenum type, const GLvoid* indices )
+{
+    bvgl.DrawElements( mode, count, type, indices );
+}
+
+// *****************************
+//
+void        BVGL::bvglDrawElementsBaseVertex						( GLenum mode, GLsizei count, GLenum type, GLvoid* indices, GLint basevertex )
+{
+    bvgl.DrawElementsBaseVertex( mode, count, type, indices, basevertex );
+}
+
+// *****************************
+//
+void        BVGL::bvglDrawArraysInstanced							( GLenum mode, GLint first, GLsizei count, GLsizei primcount )
+{
+    bvgl.DrawArraysInstanced( mode, first, count, primcount );
+}
+
+// *****************************
+//
+void        BVGL::bvglDrawElementsInstanced							( GLenum mode, GLsizei count, GLenum type, const void * indices, GLsizei primcount )
+{
+    bvgl.DrawElementsInstanced( mode, count, type, indices, primcount );
+}
+
+// *****************************
+//
+void        BVGL::bvglDrawArraysInstancedBaseInstance				( GLenum mode, GLint first, GLsizei count, GLsizei primcount, GLuint baseinstance )
+{
+    bvgl.DrawArraysInstancedBaseInstance( mode, first, count, primcount, baseinstance );
+}
+
+// *****************************
+//
+void        BVGL::bvglDrawElementsInstancedBaseVertexBaseInstance	( GLenum mode, GLsizei count, GLenum type, GLvoid *indices, GLsizei primcount, GLint basevertex, GLuint baseinstance )
+{
+    bvgl.DrawElementsInstancedBaseVertexBaseInstance( mode, count, type, indices, primcount, basevertex, baseinstance );
+}
+
+// *****************************
+//
+void        BVGL::bvglDrawElementsInstancedBaseVertex				( GLenum mode, GLsizei count, GLenum type, GLvoid *indices, GLsizei primcount, GLint basevertex )
+{
+    bvgl.DrawElementsInstancedBaseVertex( mode, count, type, indices, primcount, basevertex );
+}
+
+// *****************************
+//
+void        BVGL::bvglDrawArraysIndirect		( GLenum mode, const void *indirect )
+{
+    bvgl.DrawArraysIndirect( mode, indirect );
+}
+
+// *****************************
+//
+void        BVGL::bvglDrawElementsIndirect	( GLenum mode, GLenum type, const void *indirect )
+{
+    bvgl.DrawElementsIndirect( mode, type, indirect );
+}
+
+// *****************************
+//
+void        BVGL::bvglMultiDrawArraysIndirect	( GLenum mode, const void * indirect, GLsizei drawcount, GLsizei stride )
+{
+    bvgl.MultiDrawArraysIndirect( mode, indirect, drawcount, stride );
+}
+
+// *****************************
+//
+void        BVGL::bvglMultiDrawElementsIndirect	( GLenum mode, GLenum type, const void * indirect, GLsizei drawcount, GLsizei stride )
+{
+    bvgl.MultiDrawElementsIndirect( mode, type, indirect, drawcount, stride );
 }
 
 // *****************************
@@ -645,5 +729,12 @@ void			BVGL::bvglDeleteRenderbuffersEXT	(GLsizei n, const GLuint *renderbuffers)
 }*/
 
 
+
+// *****************************
+//
+void			BVGL::bvglVertexAttribDivisor		( GLuint index,  GLuint divisor )
+{
+	bvgl.VertexAttribDivisor( index, divisor );
+}
 
 } // bv

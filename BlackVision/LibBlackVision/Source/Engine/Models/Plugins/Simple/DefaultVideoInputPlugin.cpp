@@ -2,6 +2,10 @@
 //#include "DefaultVideoInput.h"
 #include "Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.h"
 
+
+#include "VideoInput/DefaultVideoInputResourceDescr.h"
+
+
 namespace bv { namespace model {
 
     // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -153,10 +157,8 @@ namespace bv { namespace model {
     }
 
 
-    void                                DefaultVideoInputPlugin::Update                      ( TimeType t )
+    void                                DefaultVideoInputPlugin::Update                      ( TimeType )
     {
-        t=t; // just to reference t ;)
-
         m_paramValModel->Update();
 
         //desc.Update();
@@ -170,56 +172,56 @@ namespace bv { namespace model {
 
 // *************************************
 // 
-//bool                            DefaultVideoInputPlugin::LoadResource  ( IPluginResourceDescrConstPtr resDescr )
-//{
-//    auto txResDescr = QueryTextureResourceDescr( resDescr );
-//
-//    // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
-//    if ( txResDescr != nullptr )
-//    {
-//        auto txData = m_psc->GetTexturesDataImpl();
-//        assert( txData->GetTextures().size() <= 2 ); //FIXME: Second one may be added by a mask
-//
-//        //FIXME: use some better API to handle resources in general and textures in this specific case
-//        auto txDesc = DefaultTextureDescriptor::LoadTexture( txResDescr->GetTextureFile(), DefaultTexturePluginDesc::TextureName() );
-//        txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
-//
-//        if( txDesc != nullptr )
-//        {
-//            if( txData->GetTextures().size() == 0 )
-//            {
-//                txData->AddTexture( txDesc );
-//            }
-//            else
-//            {
-//                txData->SetTexture( 0, txDesc );
-//            }
-//
-//            m_textureWidth = txDesc->GetWidth();
-//            m_textureHeight = txDesc->GetHeight();
-//
-//            return true;
-//        }
-//    }
-//
-//    auto viResDescr = QueryVideoInputResourceDescr( resDescr );
-//
-//    if( viResDescr != nullptr )
-//    {
-//        auto txData = m_psc->GetTexturesDataImpl();
-//        assert( txData->GetTextures().size() <= 1 ); // to be safe for now
-//        
-//        if( txData->GetTextures().size() == 0 )
-//            txData->AddTexture( viResDescr->GetITextureDescriptor() );
-//        //else
-//        //    txData->SetTexture( viResDescr->GetITextureDescriptor() );
-//
-//        desc.AddAndSetInputAsCurrent( viResDescr );
-//
-//        return true;
-//    }
-//
-//    return false;
-//}
+bool                                DefaultVideoInputPlugin::LoadResource                ( AssetDescConstPtr assetDescr )
+{
+	auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( assetDescr );
+
+    // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
+    if ( txAssetDescr != nullptr )
+    {
+        auto txData = m_psc->GetTexturesDataImpl();
+        assert( txData->GetTextures().size() <= 2 ); //FIXME: Second one may be added by a mask
+
+        //FIXME: use some better API to handle resources in general and textures in this specific case
+        auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultTexturePluginDesc::TextureName() );
+        txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+
+        if( txDesc != nullptr )
+        {
+            if( txData->GetTextures().size() == 0 )
+            {
+                txData->AddTexture( txDesc );
+            }
+            else
+            {
+                txData->SetTexture( 0, txDesc );
+            }
+
+            m_textureWidth = txDesc->GetWidth();
+            m_textureHeight = txDesc->GetHeight();
+
+            return true;
+        }
+    }
+
+    auto viResDescr = QueryTypedDesc< DefaultVideoInputResourceDescrConstPtr >( assetDescr );
+
+    if( viResDescr != nullptr )
+    {
+        auto txData = m_psc->GetTexturesDataImpl();
+        assert( txData->GetTextures().size() <= 1 ); // to be safe for now
+        
+        if( txData->GetTextures().size() == 0 )
+            txData->AddTexture( viResDescr->GetITextureDescriptor() );
+        //else
+        //    txData->SetTexture( viResDescr->GetITextureDescriptor() );
+
+        //desc.AddAndSetInputAsCurrent( viResDescr );
+
+        return true;
+    }
+
+    return false;
+}
 
 } }
