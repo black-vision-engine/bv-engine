@@ -55,6 +55,7 @@ void IndexedGeometryConverter::makeStrip( IndexedGeometry& mesh, Float3Attribute
 
 				--remainnigTriangles;
 			}
+			moveRangeIndex();
 
 			if( remainnigTriangles > 0 )
 				verts->AddAttribute( verticies[ indicies[ lastIndex2 ] ] );
@@ -150,6 +151,17 @@ void IndexedGeometryConverter::findFirstUnusedTriangle( INDEX_TYPE& index1 , std
 	usedTriangles[i / 3] = true;
 
 	index1 = static_cast<INDEX_TYPE>( i );
+}
+
+/**For optimizing performence.
+Variable usedIndexRange is used to avoid looking form new triangled in used range
+of vector. All searching begins from usedIndexRange.*/
+void IndexedGeometryConverter::moveRangeIndex()
+{
+	unsigned int i = usedRangeIndex / 3;
+	while( i < usedTriangles.size() && usedTriangles[ i ] )
+		++i;
+	usedRangeIndex = static_cast<INDEX_TYPE>( 3*i );
 }
 
 }

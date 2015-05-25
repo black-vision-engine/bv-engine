@@ -14,6 +14,7 @@ private:
 	int						remainnigTriangles;		///< Number of traingles to use.
 	std::vector<bool>		usedTriangles;			///< Indicates which indicies(triangles) have been used.
 protected:
+	void moveRangeIndex();
 	bool findNeighbour( INDEX_TYPE index1, INDEX_TYPE index2, INDEX_TYPE& foundIndex, std::vector<INDEX_TYPE>& indicies );
 	bool findNeighbourPair( INDEX_TYPE index1, INDEX_TYPE& foundIndex1, INDEX_TYPE& foundIndex2, std::vector<INDEX_TYPE>& indicies );
 	void findFirstUnusedTriangle( INDEX_TYPE& index1, std::vector<INDEX_TYPE>& indicies );

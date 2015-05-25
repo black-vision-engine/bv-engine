@@ -198,7 +198,7 @@ namespace Generator
 				sharpEdges.push_back( 7 );
 				sharpEdges.push_back( 1 );
 
-				const unsigned tesselation = 3;
+				const unsigned tesselation = 4;
 
 				IndexedGeometry resultMesh = smoother.smooth( cube, sharpEdges, tesselation );
 				converter.makeStrip( resultMesh, verts );
