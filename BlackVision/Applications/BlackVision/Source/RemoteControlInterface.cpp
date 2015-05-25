@@ -1,3 +1,5 @@
+#include "Engine/Models/BasicNode.h"
+
 #include "RemoteControlInterface.h"
 #include "Engine/Models/Interfaces/IOverrideState.h"
 #include "Engine/Models/BasicNode.h"
@@ -20,6 +22,9 @@
 
 #include "PerformanceMonitor.h"
 
+#include "Engine\Models\BVSceneEditor.h"
+#include "Engine\Models\ModelNodeEditor.h"
+
 #include <iomanip>
 #include <string>
 #include <sstream>
@@ -37,6 +42,7 @@ RemoteControlInterface::RemoteControlInterface(BVAppLogic *AppLogic)
 	// SetParamEvent
     bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnSetParam ), bv::SetParamEvent::Type() );
     bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnInformation ), bv::InfoEvent::Type() );
+	bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnSceneStructure ), bv::SceneStructureEvent::Type() );
 
     // timeline events
     bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnTimelineCmd ), bv::TimeLineCmd::Type() );
@@ -260,7 +266,7 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 				IPluginPtr plugin = pluginlist->GetPlugin( i );
 				string plugin_name = plugin->GetName();
 
-				std::vector< IParameterPtr > & params = plugin->GetPluginParamValModel()->GetPluginModel()->GetParameters();
+				/*std::vector< IParameterPtr > & params = plugin->GetPluginParamValModel()->GetPluginModel()->GetParameters();
 				for(unsigned int i=0;i<params.size();i++)
 				{
 					IParameterPtr param = params[i];
@@ -274,7 +280,7 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 					// value ?!?!?!
 					IValueConstPtr value =  plugin->GetPluginParamValModel()->GetPluginModel()->GetValue(s_name); 
 					//value->
-				}		
+				}	*/	
 			}
 			
 			string S = "{\"cmd\":\"node_info\",\"visible\":\""+to_string(visible)+"\" }";
@@ -308,6 +314,92 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 
             m_AppLogic->GrabCurrentFrame( s_path );
 		}
+    }
+}
+
+
+// *********************************
+//
+void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
+{
+    if( evt->GetEventType() == bv::SceneStructureEvent::m_sEventType)
+    {
+		bv::SceneStructureEventPtr evtStructure = std::static_pointer_cast<bv::SceneStructureEvent>( evt );
+
+        if(evtStructure->command==L"REMOVE_NODE")
+        {
+            wstring NodeName = evtStructure->NodeName;
+			string NodeNameStr( NodeName.begin(), NodeName.end() );
+		    auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot();
+			auto node = root->GetNode(NodeNameStr);
+			
+			if(node==nullptr &&root->GetName()==NodeNameStr)
+			{
+				Log::A("OK", "root node is node you're looking for ["+ NodeNameStr+"] Applying jedi fix now.");
+				node = root;
+			}
+			if(node==nullptr)
+			{
+				Log::A("error", "Error NodeInfo() node ["+ NodeNameStr+"] not found");
+				return;
+			}
+
+			auto nodeName_parrent = NodeNameStr.substr(0,NodeNameStr.find_last_of("/"));
+			auto node_child= NodeNameStr.substr(NodeNameStr.find_last_of("/")+1);
+			auto node_parrent = root->GetNode(nodeName_parrent);
+			
+			m_AppLogic->GetBVScene()->GetSceneEditor()->DeleteChildNode( node_parrent, node_child );
+        }
+		if(evtStructure->command==L"ADD_NODE")
+        {
+            wstring NodeName = evtStructure->NodeName;
+			string NodeNameStr( NodeName.begin(), NodeName.end() );
+			wstring NodeName2 = evtStructure->NodeName2;
+			string NodeNameStr2( NodeName2.begin(), NodeName2.end() );
+		    auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot();
+			auto node = root->GetNode(NodeNameStr);
+			
+			if(node==nullptr &&root->GetName()==NodeNameStr)
+			{
+				Log::A("OK", "root node is node you're looking for ["+ NodeNameStr+"] Applying jedi fix now.");
+				node = root;
+			}
+			if(node==nullptr)
+			{
+				Log::A("error", "Error NodeInfo() node ["+ NodeNameStr+"] not found");
+				return;
+			}
+
+
+			auto newNode = model::BasicNode::Create(NodeNameStr2,m_AppLogic->GetTimeLineManager()->GetRootTimeline());
+			newNode->AddPlugin( "DEFAULT_TRANSFORM", "transform",m_AppLogic->GetTimeLineManager()->GetRootTimeline() ); 
+
+			m_AppLogic->GetBVScene()->GetSceneEditor()->AddChildNode(node,newNode);
+        }
+		if(evtStructure->command==L"DETACH_PLUGIN")
+        {
+            wstring NodeName = evtStructure->NodeName;
+			string NodeNameStr( NodeName.begin(), NodeName.end() );
+			
+		    auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot();
+			auto node = root->GetNode(NodeNameStr);
+			
+			if(node==nullptr &&root->GetName()==NodeNameStr)
+			{
+				Log::A("OK", "root node is node you're looking for ["+ NodeNameStr+"] Applying jedi fix now.");
+				node = root;
+			}
+			if(node==nullptr)
+			{
+				Log::A("error", "Error NodeInfo() node ["+ NodeNameStr+"] not found");
+				return;
+			}
+
+			bv::model::BasicNodePtr node_ptr      = std::static_pointer_cast< bv::model::BasicNode >(node);
+
+			node_ptr->GetModelNodeEditor()->DetachPlugin("text");
+			
+        }
     }
 }
 

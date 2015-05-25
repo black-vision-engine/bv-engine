@@ -3,8 +3,8 @@
 
 CmdStruct::CmdStruct(void)
 {
-	    Type    =   CmdType::STRUCT;
-        CmdName =   L"STRUCT";
+	    Type    =   CmdType::SCENE_STRUCTURE;
+        CmdName =   L"SCENE_STRUCTURE";
 }
 
 CmdStruct::~CmdStruct(void)

@@ -350,7 +350,20 @@ namespace bv{
                              InfoEventPtr  ev = InfoEventPtr( new InfoEvent() );
 
                              ev->request = cmd->request;
+							 ev->NodeName = cmd->path;
 							 ev->SetAddStrData(cmd->param);
+                             ev->sock_id = (int)*csock;
+ 
+                             GetDefaultEventManager().ConcurrentQueueEvent( ev );
+                        }else if(pm.cmdStack[i]->Type==CmdType::SCENE_STRUCTURE)
+                        {
+                             CmdStruct *cmd = (CmdStruct*)(pm.cmdStack[i]);
+                             SceneStructureEventPtr  ev = SceneStructureEventPtr( new SceneStructureEvent() );
+
+                             ev->command = cmd->Command;
+							 ev->NodeName = cmd->NodeParam1;
+							 ev->NodeName2 = cmd->NodeParam2;
+							 
                              ev->sock_id = (int)*csock;
  
                              GetDefaultEventManager().ConcurrentQueueEvent( ev );

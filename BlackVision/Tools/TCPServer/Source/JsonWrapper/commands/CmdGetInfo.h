@@ -11,6 +11,7 @@ class CmdGetInfo: public CmdBase
 public:
     wstring  request;
 	wstring  param;
+	wstring  path;
    
     CmdGetInfo();
     ~CmdGetInfo();
@@ -19,5 +20,6 @@ public:
         //request = find_value( obj, L"request" ).get_str();
 		request = ParseWstring(obj, L"request");
 		param = ParseWstring(obj, L"param");
+		path = ParseWstring(obj, L"path");
     }
 };

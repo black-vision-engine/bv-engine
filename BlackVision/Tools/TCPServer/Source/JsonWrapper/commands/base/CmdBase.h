@@ -5,7 +5,7 @@
 
 #include "../../json_spirit/json_spirit.h"
 
-enum CmdType{SET_PARAM,GET_PARAM,GET_INFO,GET_VERSION,VIDEOCARD_INFO,TIMELINE,TIMER,WIDGET,STRUCT};
+enum CmdType{SET_PARAM,GET_PARAM,GET_INFO,GET_VERSION,VIDEOCARD_INFO,TIMELINE,TIMER,WIDGET,SCENE_STRUCTURE};
 using namespace std;
 using namespace json_spirit;
 /*

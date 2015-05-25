@@ -50,6 +50,9 @@ std::string TimerCmd::m_sEventName           = "Event_Timer";
 const EventType WidgetCmd::m_sEventType       = 0x10000011;
 std::string WidgetCmd::m_sEventName           = "Event_Widget";
 
+const EventType SceneStructureEvent::m_sEventType       = 0x10000012;
+std::string SceneStructureEvent::m_sEventName           = "Event_SceneStructure";
+
 
 
 // ************************************* PluginAddedEvent *************************************
@@ -515,6 +518,70 @@ const std::string &     InfoEvent::GetName           () const
 // *************************************
 //
 const std::wstring &         InfoEvent::GetAddStrData    () const
+{
+    return m_additionalStrData;
+}
+
+
+
+
+
+SceneStructureEvent::SceneStructureEvent         () 
+{
+  
+}
+
+
+// *************************************
+//
+EventType           SceneStructureEvent::GetEventType         () const
+{
+    return this->m_sEventType;
+}
+
+// *************************************
+//
+void                SceneStructureEvent::Serialize            ( std::ostringstream & out ) const
+{
+    assert( false );
+}
+
+// *************************************
+//
+void                SceneStructureEvent::Deserialize          ( std::istringstream & in )
+{
+    assert( false );
+}
+// *************************************
+//
+IEventPtr               SceneStructureEvent::Clone             () const
+{
+    return IEventPtr( new SceneStructureEvent( *this ) );
+}
+// *************************************
+//
+EventType               SceneStructureEvent::Type              ()
+{
+    return m_sEventType;
+}
+
+// *************************************
+//
+bool                    SceneStructureEvent::ForceSync        () const
+{
+    return request == L"grab_that_frame";
+}
+
+// *************************************
+//
+const std::string &     SceneStructureEvent::GetName           () const
+{
+    return m_sEventName;
+}
+
+// *************************************
+//
+const std::wstring &         SceneStructureEvent::GetAddStrData    () const
 {
     return m_additionalStrData;
 }

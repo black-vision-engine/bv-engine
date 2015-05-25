@@ -3,7 +3,7 @@
 
 CmdSceneManager::CmdSceneManager(void)
 {
-	    Type    =   CmdType::STRUCT;
+	    Type    =   CmdType::SCENE_STRUCTURE;
         CmdName =   L"STRUCT";
 }
 

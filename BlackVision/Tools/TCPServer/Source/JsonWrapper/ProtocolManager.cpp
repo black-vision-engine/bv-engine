@@ -37,6 +37,9 @@ void ProtocolManager::RegisterParsers ()
 	cmd  = new CmdWidget();
     RegisterParser(cmd);
 
+	cmd  = new CmdStruct();
+    RegisterParser(cmd);
+
 }
 
 ProtocolManager::ProtocolManager(void)

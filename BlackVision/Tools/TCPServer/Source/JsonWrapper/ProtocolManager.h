@@ -10,6 +10,7 @@
 #include "commands\CmdTimeline.h"
 #include "commands\CmdTimer.h"
 #include "commands\CmdWidget.h"
+#include "commands\CmdStruct.h"
 
 using namespace json_spirit;
 

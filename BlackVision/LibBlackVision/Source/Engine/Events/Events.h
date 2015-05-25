@@ -318,6 +318,50 @@ public:
 
 DEFINE_PTR_TYPE(InfoEvent)
 
+	// ************************************* Information Event *************************************
+class SceneStructureEvent : public BaseEvent
+{
+private:
+
+    glm::vec3   m_translation;
+    glm::vec3   m_scale;
+
+public:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+
+     std::wstring               command;      // move to private
+     std::wstring               request;
+	 std::wstring				NodeName;
+	 std::wstring				NodeName2;
+     int                        sock_id;
+
+     std::wstring                m_additionalStrData;  // FIXME: temporary
+
+public:
+
+    explicit                        SceneStructureEvent   ();
+
+    virtual EventType               GetEventType        () const;
+
+    virtual void                    Serialize           ( std::ostringstream & out ) const;
+    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual IEventPtr               Clone               () const;
+    static EventType                Type                ();
+
+    virtual bool                    ForceSync           () const;
+
+    virtual const std::string &     GetName             () const;
+    void                            SetData             ( std::wstring cmd ){ command=cmd; };
+
+    void                            SetAddStrData       ( const std::wstring & data ) { m_additionalStrData = data; }
+    const std::wstring &             GetAddStrData       () const;
+
+};
+
+DEFINE_PTR_TYPE(SceneStructureEvent)
+
 
 // ************************************* SetParamEvent *************************************
 class SetParamEvent : public BaseEvent

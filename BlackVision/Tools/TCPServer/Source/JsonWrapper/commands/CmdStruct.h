@@ -17,6 +17,8 @@ public:
     void parse(const wObject& obj){
         
         Command = ParseWstring( obj, L"command" );
+		NodeParam1 = ParseWstring( obj, L"node" );
+		NodeParam2 = ParseWstring( obj, L"node2" );
 	}
 	CmdStruct(void);
 	~CmdStruct(void);

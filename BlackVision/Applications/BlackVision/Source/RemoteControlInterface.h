@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/Events/Events.h"
+#include "Engine/Models/BVScene.h"
 #include "BVAppLogic.h"
 
 
@@ -38,6 +39,7 @@ public:
     void            OnSetParam      ( bv::IEventPtr evt );
 	void            OnWidgetCmd     ( bv::IEventPtr evt );
     void            OnInformation   ( bv::IEventPtr evt );
+	void            OnSceneStructure( bv::IEventPtr evt );
     void            OnTimelineCmd   ( bv::IEventPtr evt );
     void            OnTimerCmd      ( bv::IEventPtr evt );
 	void            OnNodeAppearing ( IEventPtr evt );
