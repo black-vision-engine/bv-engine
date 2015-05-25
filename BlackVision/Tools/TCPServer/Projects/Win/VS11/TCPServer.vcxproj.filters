@@ -75,6 +75,8 @@
     <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit.h">
       <Filter>JsonWrapper\json_spirit</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Log.h" />
+    <ClInclude Include="..\..\..\Source\SocketWrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\JsonWrapper\ProtocolManager.cpp">
@@ -116,5 +118,7 @@
     <ClCompile Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_reader.cpp">
       <Filter>JsonWrapper\json_spirit</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Log.cpp" />
+    <ClCompile Include="..\..\..\Source\SocketWrapper.cpp" />
   </ItemGroup>
 </Project>
