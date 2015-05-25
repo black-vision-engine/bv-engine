@@ -25,6 +25,10 @@
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 
+#include "System/Env.h"
+#include "BVConfig.h"
+
+
 namespace bv {
 
 namespace {
@@ -459,6 +463,49 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 
 // *****************************
 //
+model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    auto scene = Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
+
+    model::BasicNodePtr node = nullptr;
+
+    if( scene == "TWO_TEXTURED_RECTANGLES" )
+    {
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
+    }
+    else if( scene == "ONE_TEXTURED_RECTANGLE" )
+    {
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
+    }
+    else if( scene == "OLAF_TEST_SCENE" )
+    {
+        node = TestScenesFactory::OlafTestScene( pluginsManager, timelineManager, timeEvaluator );
+    }
+    else if( scene == "CREED_TEST_SCENE" )
+    {
+        // FIXME: there was no implementation of CreedTestScene
+        node = TestScenesFactory::CreedVideoInputTestScene( pluginsManager, timelineManager, timeEvaluator );
+    }
+    else if( scene == "VIDEO_INPUT_TEST_SCENE" )
+    {
+        node = TestScenesFactory::CreedVideoInputTestScene( pluginsManager, timelineManager, timeEvaluator );
+    }
+    else if( scene == "DEFAULT_TEXT" )
+    {
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
+    }
+    else
+    {
+        printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
+
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
+    }
+
+    return node;
+}
+
+// *****************************
+//
 model::BasicNodePtr     TestScenesFactory::CreateTestRandomNode        ( const std::string & name,  const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     return TexturedTestRandomRect( name, pluginsManager, timelineManager, timeEvaluator );
@@ -470,12 +517,18 @@ model::BasicNodePtr     TestScenesFactory::CreateTestScene      ( const model::P
 {
     switch( tss )
     {
+        case TestSceneSelector::TSS_ONE_SOLID_COLOR_RECTANGLE:
+            return SolidRect( pluginsManager, timelineManager, timeEvaluator );
         case TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES:
             return TwoTexturedRectangles( pluginsManager, timelineManager, timeEvaluator );
 		case TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE:
 			return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
 		case TestSceneSelector::TSS_TEXT:
 			return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 5, false );
+		case TestSceneSelector::TSS_ANIMATION_RECTANGLE:
+			return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, false );
+		case TestSceneSelector::TSS_SOLID_RECTANGLE:
+			return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator, false );
         default:
             assert( false );
 
@@ -569,37 +622,6 @@ model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::Plug
     return rect;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
-{
-    {timelineManager;}
-    {pluginsManager;}
-
-    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
-    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
-    root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
-
-    //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
-    //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
-
-    //root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
-    //auto plugin = root->GetPlugin( "texture" );
-    //model::LoadTexture( plugin, "time_zones_4.jpg" );
-
-    root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
-    auto plugin = root->GetPlugin( "video input" );
-    //auto success = model::LoadTexture( plugin, "time_zones_4.jpg" );
-    //auto vi = new ExampleVideoInput( 10, 10, 1.f );
-    //auto success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture(), vi ) ) );
-    //assert(success);
-    //auto vi2 = new ExampleVideoInput( 20, 20, 1.f );
-    //success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi2->GetTexture(), vi2 ) ) );
-    //assert(success);
-
-    //model::SetParameter( plugin->GetParameter( "source" ), 0.f, 1.f );
-
-    return root;
-}
-
 model::BasicNodePtr    TestScenesFactory::CreedPieChartTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; } // FIXME: suppress unuse warning
@@ -677,6 +699,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
 
     auto prism = SimpleNodesFactory::CreateCreedColoredPrismNode( timelineManager, timeEvaluator, -1.5f );
     auto success = SetParameter( prism->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 4 );
+    { success; }
     assert( success );
 	{success;}
 
@@ -728,6 +751,30 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     root->AddChildToModelOnly( prism4 );
 
     //return rect;
+    return root;
+}
+
+model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    {timelineManager;}
+    {pluginsManager;}
+
+    model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
+    root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
+
+    root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
+    auto plugin = root->GetPlugin( "video input" );
+    auto vi = new ExampleVideoInput( 10, 10, 1.f );
+    auto success = plugin->LoadResource( AssetDescConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture(), vi ) ) );
+    assert(success);
+	{ success; }
+    //auto vi2 = new ExampleVideoInput( 20, 20, 1.f );
+    //success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi2->GetTexture(), vi2 ) ) );
+    //assert(success);
+
+    model::SetParameter( plugin->GetParameter( "source" ), 0.f, 1.f );
+
     return root;
 }
 

@@ -2,8 +2,9 @@
 
 
 #pragma warning(push)
-#pragma warning(disable : 4512)
-#pragma warning(disable : 4267)
+#pragma warning(disable : 4512) // assignment operator could not be generated
+#pragma warning(disable : 4267) // conversion from 'size_t' to 'type', possible loss of data
+#pragma warning(disable : 4996) // fopen is deprecated, consider using fopen_s instead
 
 #include "hashlibpp.h"
 

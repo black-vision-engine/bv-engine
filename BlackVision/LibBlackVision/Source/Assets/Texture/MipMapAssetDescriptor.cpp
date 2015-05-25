@@ -1,5 +1,5 @@
 #include "MipMapAssetDescriptor.h"
-#include "Tools/MipMapBuilder/Source/MipMapBuilder.h"
+#include "MipMapBuilder.h"
 
 namespace bv
 {

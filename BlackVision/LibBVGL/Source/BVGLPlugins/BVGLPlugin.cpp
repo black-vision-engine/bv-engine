@@ -6,7 +6,7 @@
 namespace bv {
 
 // *****************************
-// FIXME: this initialization should check much more caps and return an error code instead of a simple bool
+// FIXME: this initialization should check more caps and return an error code instead of a simple bool
 bool        BVGLPlugin::InitializeBVGL						()
 {
     glewInit();
@@ -15,7 +15,7 @@ bool        BVGLPlugin::InitializeBVGL						()
     {		
         return false;
     }
-
+    
     return true;
 }
 
@@ -294,6 +294,14 @@ void        BVGLPlugin::BufferData						( GLenum target, GLsizeiptr size, const 
 
 // *****************************
 //
+void        BVGLPlugin::BufferSubData					( GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid * data )
+{
+	glBufferSubData( target, offset, size, data );
+}
+
+
+// *****************************
+//
 GLvoid *    BVGLPlugin::MapBuffer						( GLenum target, GLenum access )
 {
     return glMapBuffer( target, access );
@@ -451,6 +459,83 @@ void         BVGLPlugin::DrawBuffers					( GLsizei n, const GLenum * bufs )
 void        BVGLPlugin::DrawArrays						( GLenum mode, GLint first, GLsizei count )
 {
     glDrawArrays( mode, first, count );
+}
+
+// *****************************
+//
+void        BVGLPlugin::DrawElements									( GLenum mode, GLsizei count, GLenum type, const GLvoid* indices )
+{
+    glDrawElements( mode, count, type, indices );
+}
+
+// *****************************
+//
+void        BVGLPlugin::DrawArraysInstanced							( GLenum mode, GLint first, GLsizei count, GLsizei primcount )
+{
+    glDrawArraysInstanced( mode, first, count, primcount );
+}
+
+// *****************************
+//
+void        BVGLPlugin::DrawElementsInstanced						( GLenum mode, GLsizei count, GLenum type, const void * indices, GLsizei primcount )
+{
+    glDrawElementsInstanced( mode, count, type, indices, primcount );
+}
+
+// *****************************
+//
+void        BVGLPlugin::DrawElementsBaseVertex						( GLenum mode, GLsizei count, GLenum type, GLvoid* indices, GLint basevertex )
+{
+    glDrawElementsBaseVertex( mode, count, type, indices, basevertex );
+}
+
+// *****************************
+//
+void        BVGLPlugin::DrawArraysInstancedBaseInstance				( GLenum mode, GLint first, GLsizei count, GLsizei primcount, GLuint baseinstance )
+{
+    glDrawArraysInstancedBaseInstance( mode, first, count, primcount, baseinstance );
+}
+
+// *****************************
+//
+void        BVGLPlugin::DrawElementsInstancedBaseVertexBaseInstance	( GLenum mode, GLsizei count, GLenum type, GLvoid *indices, GLsizei primcount, GLint basevertex, GLuint baseinstance )
+{
+    glDrawElementsInstancedBaseVertexBaseInstance( mode, count, type, indices, primcount, basevertex, baseinstance );
+}
+
+// *****************************
+//
+void        BVGLPlugin::DrawElementsInstancedBaseVertex				( GLenum mode, GLsizei count, GLenum type, GLvoid *indices, GLsizei primcount, GLint basevertex )
+{
+    glDrawElementsInstancedBaseVertex( mode, count, type, indices, primcount, basevertex );
+}
+
+// *****************************
+//
+void        BVGLPlugin::DrawArraysIndirect							( GLenum mode, const void *indirect )
+{
+    glDrawArraysIndirect( mode, indirect );
+}
+
+// *****************************
+//
+void        BVGLPlugin::DrawElementsIndirect							( GLenum mode, GLenum type, const void *indirect )
+{
+    glDrawElementsIndirect( mode, type, indirect );
+}
+
+// *****************************
+//
+void        BVGLPlugin::MultiDrawArraysIndirect						( GLenum mode, const void * indirect, GLsizei drawcount, GLsizei stride )
+{
+    glMultiDrawArraysIndirect( mode, indirect, drawcount, stride );
+}
+
+// *****************************
+//
+void        BVGLPlugin::MultiDrawElementsIndirect					( GLenum mode, GLenum type, const void * indirect, GLsizei drawcount, GLsizei stride )
+{
+    glMultiDrawElementsIndirect( mode, type, indirect, drawcount, stride );
 }
 
 // *****************************
@@ -629,6 +714,13 @@ void				BVGLPlugin::DeleteRenderbufferEXT		(GLsizei n, const GLuint *renderbuffe
 
 // *****************************
 //
+void			BVGLPlugin::VertexAttribDivisor			( GLuint index,  GLuint divisor )
+{
+    glVertexAttribDivisor( index, divisor );
+}
+
+// *****************************
+//
 void			BVGLPlugin::PrintShortSummary           ( const std::string & )
 {
 }
@@ -638,5 +730,7 @@ void			BVGLPlugin::PrintShortSummary           ( const std::string & )
 void			BVGLPlugin::PrintCompleteSummary        ( const std::string & )
 {
 }
+
+
 
 } //bv

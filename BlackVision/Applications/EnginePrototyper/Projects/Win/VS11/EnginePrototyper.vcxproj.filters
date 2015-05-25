@@ -69,6 +69,18 @@
     <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype3.cpp">
       <Filter>Prototypes\FBOProfiling</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\DrawingPrototype.cpp">
+      <Filter>Prototypes\DrawingCommands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingMode.cpp">
+      <Filter>Prototypes\DrawingCommands\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Scenes\DrawingTestScene0.cpp">
+      <Filter>Prototypes\DrawingCommands\Common\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingTestScene.cpp">
+      <Filter>Prototypes\DrawingCommands\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
@@ -149,6 +161,21 @@
     <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype3.h">
       <Filter>Prototypes\FBOProfiling</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\DrawingPrototype.h">
+      <Filter>Prototypes\DrawingCommands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingMode.h">
+      <Filter>Prototypes\DrawingCommands\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Scenes\DrawingTestScene0.h">
+      <Filter>Prototypes\DrawingCommands\Common\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingTestScene.h">
+      <Filter>Prototypes\DrawingCommands\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Modes\DrawingModes.h">
+      <Filter>Prototypes\DrawingCommands\Common\Modes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -177,6 +204,18 @@
     </Filter>
     <Filter Include="Prototypes\FBOProfiling">
       <UniqueIdentifier>{cbbe6f3a-e405-4e0b-8bf9-bb381a9b561c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prototypes\DrawingCommands">
+      <UniqueIdentifier>{53717c62-b115-4eff-a216-faa561883fa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prototypes\DrawingCommands\Common">
+      <UniqueIdentifier>{f30a8a87-39a9-44d7-bbc2-ea7df6ac5f5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prototypes\DrawingCommands\Common\Modes">
+      <UniqueIdentifier>{eb965ad3-dc56-43ec-a16f-fb3a82613f98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prototypes\DrawingCommands\Common\Scenes">
+      <UniqueIdentifier>{b735905f-fbb9-42cc-8ac4-e7b3d9c6ef37}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

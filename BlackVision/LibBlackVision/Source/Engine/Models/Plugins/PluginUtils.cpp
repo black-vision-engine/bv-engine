@@ -1,8 +1,6 @@
 #include "PluginUtils.h"
 
 #include "Assets/Assets.h"
-#include "Assets/Texture/AnimationAssetDescriptor.h"
-#include "Assets/Font/FontAssetDescriptor.h"
 
 namespace bv { namespace model {
 

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -54,39 +54,46 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_App.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.Win32.debug.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.Win32.debug.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_App.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.x64.debug.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.x64.debug.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_App.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.Win32.release.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.Win32.release.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_App.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonPreprocessor.x64.release.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\AppCommonLib.x64.release.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
@@ -98,6 +105,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+
     <PostBuildEvent>
       <Command>xcopy $(DepDir)\Common\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
 xcopy $(DepDir)\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
@@ -120,10 +128,15 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
+
       <AdditionalIncludeDirectories>$(ToolsDir)/LibEffect/Source;$(ToolsDir)/XMLSceneParser/Source;$(ToolsDir)/TCPServer/Source;$(ToolsDir)/ConfigReader/Source;$(ToolsDir)/RapidXML/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>sqliteD.lib;hashlib2plusD.lib;freetype250_D.lib;opengl32.lib;glu32.lib;FreeImage.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>
+      </SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(DepDir)\Common\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
@@ -143,19 +156,23 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
 </Command>
       <Message>Copying assets and dll files to the working directory.</Message>
     </PostBuildEvent>
+
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+
       <AdditionalIncludeDirectories>$(ToolsDir)/LibEffect/Source;$(ToolsDir)/XMLSceneParser/Source;$(ToolsDir)/TCPServer/Source;$(ToolsDir)/ConfigReader/Source;$(ToolsDir)/RapidXML/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+
     <PostBuildEvent>
       <Command>xcopy $(DepDir)\Common\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
 xcopy $(DepDir)\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
@@ -183,12 +200,14 @@ xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
       <AdditionalIncludeDirectories>$(ToolsDir)/LibEffect/Source;$(ToolsDir)/XMLSceneParser/Source;$(ToolsDir)/TCPServer/Source;$(ToolsDir)/ConfigReader/Source;$(ToolsDir)/RapidXML/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
+
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+
     <PostBuildEvent>
       <Command>xcopy $(DepDir)\Common\FreeImage\Wrapper\FreeImagePlus\dist\x64\FreeImagePlusd.dll $(OutDir) /c /y
 xcopy $(DepDir)\Common\FreeImage\Dist\x64\FreeImage.dll $(OutDir) /c /y
@@ -212,6 +231,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ProjectReference Include="..\..\..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj">
       <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
     </ProjectReference>
+
     <ProjectReference Include="..\..\..\..\..\LibCore\Projects\Win\VS11\LibCore.vcxproj">
       <Project>{ecabce66-f47e-4889-8a4c-20dcb97c86b8}</Project>
     </ProjectReference>
@@ -244,6 +264,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
     <ClCompile Include="..\..\..\Source\bvApp.cpp" />
     <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
@@ -276,6 +297,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h" />
     <ClInclude Include="..\..\..\Source\bvApp.h" />
     <ClInclude Include="..\..\..\Source\BVAppLogic.h" />
     <ClInclude Include="..\..\..\Source\BVConfig.h" />

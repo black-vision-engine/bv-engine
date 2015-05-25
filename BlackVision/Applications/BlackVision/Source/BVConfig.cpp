@@ -59,6 +59,8 @@ BVConfig::BVConfig                      ()
 
     m_defaultClearColor     = glm::vec4( 0.0f, 0.0f, 0.0f, 0.0f );
     m_defaultClearDepth     = 1.0f;
+
+    m_defaultSceneEnvVarName    = "BV_DEFAULT_SCENE";
 }
 
 // *********************************

@@ -7,11 +7,13 @@ namespace bv
 //FIXME: implement all functions that Texture 2D should have
 int TextureBase::m_sPixelSize[ TextureFormat::F_TOTAL ] =
 {
-    4,   // F_A8R8G8B8
-    3,   // F_R8G8B8
-    1,   // F_A8
-    1,   // F_L8
-    4,   //F_R32F
+	16, // F_A32FR32FG32FB32F
+	12, // F_R32FG32FB32F			
+	4,  // F_A32F					
+    4,	// F_A8R8G8B8				
+    3,  // F_R8G8B8				
+    1,  // F_A8					
+    1,  // F_L8					
 };
 
 // *********************************

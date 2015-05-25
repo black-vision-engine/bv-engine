@@ -1,6 +1,9 @@
 #include "DefaultGeospherePlugin.h"
-#include "..\..\Dep\Common\glm\glm\gtx\vector_angle.hpp"
+
+#include "glm/gtx/vector_angle.hpp"
+
 #include "Mathematics/Defines.h"
+
 
 namespace bv { namespace model { namespace DefaultGeosphere {
 

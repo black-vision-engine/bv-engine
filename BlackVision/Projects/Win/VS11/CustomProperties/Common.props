@@ -1,7 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
-  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="UserMacros">
+    <SolutionRoot>$(SolutionDir)..\..\..</SolutionRoot>
+    <BuildDir>$(SolutionRoot)\_Builds</BuildDir>
+    <TempDir>$(SolutionRoot)\_Temp</TempDir>
+    <DepDir>$(SolutionRoot)\Dep</DepDir>
+    <CoreLibsRootDir>$(SolutionRoot)</CoreLibsRootDir>
+    <LibCoreDir>$(CoreLibsRootDir)\LibCore</LibCoreDir>
+    <LibBVGLDir>$(CoreLibsRootDir)\LibBVGL</LibBVGLDir>
+    <LibImageDir>$(CoreLibsRootDir)\LibImage</LibImageDir>
+    <LibBlackVisionDir>$(CoreLibsRootDir)\LibBlackVision</LibBlackVisionDir>
+    <ToolsDir>$(SolutionRoot)\Tools</ToolsDir>
+    <TestDir>$(SolutionRoot)\Test</TestDir>
+    <ThirdPartyDir>$(DepDir)\3rdParty</ThirdPartyDir>
+    <AssetsDir>$(SolutionRoot)\Assets</AssetsDir>
+  </PropertyGroup>
   <PropertyGroup>
     <OutDir>$(BuildDir)\$(Platform)-$(PlatformToolset)-$(Configuration)\$(ProjectCategory)\$(ProjectName)\</OutDir>
     <IntDir>$(TempDir)\$(Platform)-$(PlatformToolset)-$(Configuration)\$(ProjectCategory)\$(ProjectName)\</IntDir>
@@ -9,14 +23,56 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
-      <PreprocessorDefinitions>_VARIADIC_MAX=10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)'=='Debug'">_VARIADIC_MAX=10;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)'=='Release'">_VARIADIC_MAX=10;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <SDLCheck>false</SDLCheck>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>..\..\..\Source</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <BuildMacro Include="SolutionRoot">
+      <Value>$(SolutionRoot)</Value>
+    </BuildMacro>
+    <BuildMacro Include="BuildDir">
+      <Value>$(BuildDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="TempDir">
+      <Value>$(TempDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="DepDir">
+      <Value>$(DepDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="CoreLibsRootDir">
+      <Value>$(CoreLibsRootDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibCoreDir">
+      <Value>$(LibCoreDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibBVGLDir">
+      <Value>$(LibBVGLDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibImageDir">
+      <Value>$(LibImageDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibBlackVisionDir">
+      <Value>$(LibBlackVisionDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ToolsDir">
+      <Value>$(ToolsDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="TestDir">
+      <Value>$(TestDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ThirdPartyDir">
+      <Value>$(ThirdPartyDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="AssetsDir">
+      <Value>$(AssetsDir)</Value>
+    </BuildMacro>
+  </ItemGroup>
 </Project>

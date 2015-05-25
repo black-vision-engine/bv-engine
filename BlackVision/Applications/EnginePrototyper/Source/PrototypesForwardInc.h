@@ -7,5 +7,6 @@
 #include "Prototypes/FBOProfiling/FBOProfilingPrototype3.h"
 #include "Prototypes/Engine/MemManagement/MemManagementInspector.h"
 #include "Prototypes/Engine/MemManagement/PboUpdatesInspector.h"
+#include "Prototypes/DrawingCommands/DrawingPrototype.h"
 
 #include "PrototypeCreator.h"
