@@ -5,6 +5,14 @@
 namespace bv { namespace model {
 
 
+float weightTable[4][4] =
+{
+	{ 3.0f, 3.0f, 3.0f, 3.0f },
+	{ 3.0f, 1.0f, 5.0f, 5.0f },
+	{ 3.0f, 3.0f, 1.0f, 1.0f },
+	{ 3.0f, 3.0f, 1.0f, 1.0f },
+};
+
 
 HelperSmoothMesh::HelperSmoothMesh(void)
 {
@@ -92,7 +100,7 @@ void HelperSmoothMesh::tesselate( IndexedGeometry& mesh, IndexedGeometry& result
 			INDEX_TYPE newIndex;
 			glm::vec3 firstVertex = verticies[ indicies[i + j] ];
 			glm::vec3 secondVertex = verticies[ indicies[i + (j + 1) % 3] ];
-			glm::vec3 newVertex =  ( firstVertex + secondVertex ) * glm::vec3( 0.5, 0.5, 0.5 );
+			glm::vec3 newVertex = ( firstVertex + secondVertex ) * glm::vec3( 0.5, 0.5, 0.5 );
 
 			if( findVertex( resultVerticies, newVertex, newIndex ) )
 				newIndicies[ j ] = newIndex;
@@ -176,6 +184,10 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 		resultVerticies[ i ] = ( resultVerticies[ i ] + verticies[ i ] * weight ) / ( numNeighbours + weight );
 	}
 
+	// Clear edge verticies.
+	for( unsigned int i = verticies.size(); i < resultVerticies.size(); ++i )
+		resultVerticies[ i ] = glm::vec3( 0.0, 0.0, 0.0 );
+
 	// We iterate added verticies.
 	for( INDEX_TYPE i = 0; i < resultIndicies.size(); i += 12 )
 		for( INDEX_TYPE j = 0; j < 9; j += 3 )
@@ -185,7 +197,23 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 			INDEX_TYPE index3 = resultIndicies[ i + (j + 6) % 9 ];
 			INDEX_TYPE edgeVertex = resultIndicies[ i + j + 2 ];		// We use our knowledge about order of verticies after tessellation.
 
+			float weight1;
+			float weight2;
+			float weight3;
+			if( isSharpEdge( edgeIndex1, edgeIndex2, sharpEdges ) )
+			{
+				weight1 = computeEdgeVertexWeight( edgeIndex2, edgeIndex1, vertexData );
+				weight2 = computeEdgeVertexWeight( edgeIndex1, edgeIndex2, vertexData );
+				weight3 = 0.0;
+			}
+			else
+			{
+				weight1 = 3.0f;
+				weight2 = 3.0f;
+				weight3 = 1.0f;
+			}
 
+			resultVerticies[ edgeVertex ] += ( verticies[ edgeIndex1 ] * weight1 + verticies[ edgeIndex2 ] * weight2 + verticies[ index3 ] * weight3 ) / ( 2*( weight1 + weight2 + weight3 ) );
 		}
 }
 
@@ -371,6 +399,21 @@ bool HelperSmoothMesh::isSharpEdge( int index1, int index2, std::vector<INDEX_TY
 		if( sharpEdges[ i ] == index1 && sharpEdges[ i + 1 ] == index2 || sharpEdges[ i ] == index2 && sharpEdges[ i + 1 ] == index1 )
 			return true;
 	return false;
+}
+
+float HelperSmoothMesh::computeEdgeVertexWeight( INDEX_TYPE edgeIndex1, INDEX_TYPE edgeIndex2, std::vector<VertexData>& vertexData )
+{
+	if( vertexData[ edgeIndex1 ].numNeighbours == 12 )
+		vertexData[ edgeIndex1 ].type = VertexType::REGULAR_CREASE_VERTEX;
+	else
+		vertexData[ edgeIndex1 ].type = VertexType::NON_REGULAR_CREASE_VERTEX;
+
+	if( vertexData[ edgeIndex2 ].numNeighbours == 12 )
+		vertexData[ edgeIndex2 ].type = VertexType::REGULAR_CREASE_VERTEX;
+	else
+		vertexData[ edgeIndex2 ].type = VertexType::NON_REGULAR_CREASE_VERTEX;
+
+	return weightTable[ (int) vertexData[ edgeIndex1 ].type ][(int) vertexData[ edgeIndex2 ].type ];
 }
 
 

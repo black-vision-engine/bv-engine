@@ -8,9 +8,11 @@ namespace bv { namespace model {
 
 enum VertexType : char
 {
-	SMOOTH_VERTEX,
-	CREASE_VERTEX,
-	CORNER_VERTEX
+	SMOOTH_VERTEX = 0,
+	CREASE_VERTEX = 4,
+	CORNER_VERTEX = 3,
+	REGULAR_CREASE_VERTEX = 1,
+	NON_REGULAR_CREASE_VERTEX = 2
 };
 
 
@@ -39,6 +41,7 @@ protected:
 	VertexType computeVertexType( int i, std::vector<INDEX_TYPE> sharpEdges );
 	float computeVertexWeight( int vertexIndex, int secondVertexIndex, VertexType vertexType, std::vector<INDEX_TYPE> sharpEdges );
 	bool isSharpEdge( int index1, int index2, std::vector<INDEX_TYPE> sharpEdges );
+	float computeEdgeVertexWeight( INDEX_TYPE edgeIndex1, INDEX_TYPE edgeIndex2, std::vector<VertexData>& vertexData );
 public:
 	HelperSmoothMesh(void);
 	~HelperSmoothMesh(void);
