@@ -5,6 +5,7 @@
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
+#include "Simple/DefaultTransformPlugin.h"
 
 
 namespace bv
@@ -14,9 +15,19 @@ namespace model
 
 // *******************************
 //
-std::shared_ptr< BasePlugin< IPlugin > >                                            PluginsFactory::CreatePluginByName( std::string name )
+std::shared_ptr< BasePlugin< IPlugin > >                                            PluginsFactory::CreatePluginByName( std::string name, ITimeEvaluatorPtr te )
 {
-    return nullptr;
+    if( name == "geometry" // FIXME: deprecated, to remove
+        || name == "transform" || true )
+    {
+        DefaultTransformPluginDesc d;
+        return std::make_shared< DefaultTransformPlugin >( "", DefaultTransformPluginDesc::UID(), nullptr, d.CreateDefaultModel( te ) );
+    }
+    else
+    {
+        //assert( false );
+        return nullptr;
+    }
 }
 
 

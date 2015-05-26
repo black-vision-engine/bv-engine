@@ -114,7 +114,7 @@ BasePlugin< Iface >::BasePlugin   ( const std::string & name, const std::string 
 
 namespace PluginsFactory
 {
-    std::shared_ptr< BasePlugin< IPlugin > >                                            CreatePluginByName( std::string name );
+    std::shared_ptr< BasePlugin< IPlugin > >                                            CreatePluginByName( std::string name, ITimeEvaluatorPtr te );
 };
 
 // *******************************
@@ -124,7 +124,7 @@ ISerializablePtr BasePlugin< Iface >::Create( DeserializeObject& doc )
 {
     auto name = doc.GetValue( "name" );
 
-    return PluginsFactory::CreatePluginByName( name );
+    return PluginsFactory::CreatePluginByName( name, doc.m_tm->GetRootTimeline() );
 }
 
 // *******************************
