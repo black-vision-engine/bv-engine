@@ -5,18 +5,6 @@
     <ProjectCategory>Applications</ProjectCategory>
   </PropertyGroup>
   <PropertyGroup />
-  <ItemDefinitionGroup>
-    <Link>
-      <EntryPointSymbol>
-      </EntryPointSymbol>
-      <SubSystem>
-      </SubSystem>
-    </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
-  </ItemDefinitionGroup>
   <ItemGroup>
     <BuildMacro Include="ProjectCategory">
       <Value>$(ProjectCategory)</Value>

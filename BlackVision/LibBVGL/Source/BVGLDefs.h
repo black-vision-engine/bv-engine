@@ -82,10 +82,7 @@ namespace bv {
 #define GL_STATIC_READ				0x88E5
 #define GL_ARRAY_BUFFER				0x8892
 #define GL_ELEMENT_ARRAY_BUFFER		0x8893
-#ifndef GL_ARB_draw_indirect
-    #define GL_DRAW_INDIRECT_BUFFER				0x8F3F
-    #define GL_DRAW_INDIRECT_BUFFER_BINDING		0x8F43
-#endif
+#define GL_DRAW_INDIRECT_BUFFER		0x8F3F
 #define GL_TRIANGLES 0x0004
 #define GL_TRIANGLE_STRIP 0x0005
 #define GL_CLAMP 0x2900

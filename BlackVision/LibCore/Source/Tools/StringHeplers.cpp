@@ -3,6 +3,9 @@
 #include <locale>
 #include <codecvt>
 
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/join.hpp>
+
 
 //@see: http://stackoverflow.com/questions/2573834/c-convert-string-or-char-to-wstring-or-wchar-t
 // std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
@@ -27,6 +30,24 @@ std::string WStringToString( const std::wstring & data )
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
     return converter.to_bytes( data );
+}
+
+// *******************************
+//
+StrVec          Split           ( const std::string & str, const std::string & sep )
+{
+    StrVec ret;
+
+    boost::split( ret, str, boost::is_any_of( sep ) );
+
+    return ret;
+}
+
+// *******************************
+//
+std::string     Join            ( const StrVec & strVec, const std::string & sep )
+{
+    return boost::algorithm::join( strVec, sep );
 }
 
 } //bv

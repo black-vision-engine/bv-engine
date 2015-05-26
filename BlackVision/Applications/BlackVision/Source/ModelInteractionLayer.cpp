@@ -1,6 +1,6 @@
 #include "ModelInteractionLayer.h"
 
-#include <boost/algorithm/string.hpp>
+#include "Tools/StringHeplers.h"
 
 #include "Engine/Events/Interfaces/IEventManager.h"
 
@@ -54,14 +54,7 @@ void    ModelInteractionLayer::SetScl      ( const std::string & name, const glm
 //
 std::vector< std::string > ModelInteractionLayer::ParseParamName( const std::string & name, const std::string & delimiter )
 {
-    std::vector< std::string > ret;
-
-    char sep[] = " ";
-    sep[ 0 ] = delimiter.c_str()[ 0 ];
-
-    boost::split( ret, name, boost::is_any_of( sep ) );
-
-    return ret;
+    return Split( name, delimiter );
 }
 
 } //bv

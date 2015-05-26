@@ -7,7 +7,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalLibraryDirectories>$(BOOST_LIB)/msvs-11-$(PlatformName)-$(Configuration);$(ThirdPartyDir)/FreeType/objs/$(PlatformName)/$(Configuration);$(ThirdPartyDir)/FreeImage/Dist/$(PlatformName);$(ThirdPartyDir)/hashlib2plus/Dist/$(PlatformName)/$(Configuration);$(ThirdPartyDir)/sqlite/Dist/$(PlatformName)/$(Configuration);$(ThirdPartyDir)/glew/lib/$(PlatformName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BOOST_LIB)\msvs-11-$(PlatformName)-$(Configuration);$(ThirdPartyDir)\FreeType\objs\$(PlatformName)\$(Configuration);$(ThirdPartyDir)\FreeImage\Dist\$(PlatformName);$(ThirdPartyDir)\hashlib2plus\Dist\$(PlatformName)\$(Configuration);$(ThirdPartyDir)\sqlite\Dist\$(PlatformName)\$(Configuration);$(ThirdPartyDir)\glew\lib\$(PlatformName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies Condition="'$(Configuration)'=='Debug'">sqliteD.lib;hashlib2plusD.lib;freetype250_D.lib;opengl32.lib;glu32.lib;FreeImage.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalDependencies Condition="'$(Configuration)'=='Release'">sqlite.lib;hashlib2plus.lib;freetype250.lib;opengl32.lib;glu32.lib;FreeImage.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>

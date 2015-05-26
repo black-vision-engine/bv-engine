@@ -19,13 +19,16 @@ BVGLTranslator BVGLTranslator::ms_instance;
 BVGLTranslator::BVGLTranslator                                      ()
 {
     ms_bufferUsage[ (GLenum) GL_STATIC_DRAW ]	= "GL_STATIC_DRAW";
+    ms_bufferUsage[ (GLenum) GL_STATIC_READ ]	= "GL_STATIC_READ";
     ms_bufferUsage[ (GLenum) GL_DYNAMIC_DRAW ]	= "GL_DYNAMIC_DRAW";
     ms_bufferUsage[ (GLenum) GL_STREAM_READ  ]	= "GL_STREAM_READ";
     ms_bufferUsage[ (GLenum) GL_STREAM_DRAW  ]	= "GL_STREAM_DRAW";
 
-    ms_bufferTarget[ (GLenum) GL_ARRAY_BUFFER ]         = "GL_ARRAY_BUFFER";
-    ms_bufferTarget[ (GLenum) GL_PIXEL_PACK_BUFFER ]    = "GL_PIXEL_PACK_BUFFER";
+    ms_bufferTarget[ (GLenum) GL_ARRAY_BUFFER ]			= "GL_ARRAY_BUFFER";
+    ms_bufferTarget[ (GLenum) GL_ELEMENT_ARRAY_BUFFER ]	= "GL_ELEMENT_ARRAY_BUFFER";
+    ms_bufferTarget[ (GLenum) GL_PIXEL_PACK_BUFFER ]	= "GL_PIXEL_PACK_BUFFER";
     ms_bufferTarget[ (GLenum) GL_PIXEL_UNPACK_BUFFER ]	= "GL_PIXEL_UNPACK_BUFFER";
+    ms_bufferTarget[ (GLenum) GL_DRAW_INDIRECT_BUFFER ]	= "GL_DRAW_INDIRECT_BUFFER";
 
     ms_textureTarget[ (GLenum) GL_TEXTURE_2D ]  = "GL_TEXTURE_2D";
 
@@ -38,6 +41,8 @@ BVGLTranslator::BVGLTranslator                                      ()
 
     ms_attribPointerType[ (GLenum) GL_FLOAT ]           = "GL_FLOAT";
     ms_attribPointerType[ (GLenum) GL_UNSIGNED_BYTE ]   = "GL_UNSIGNED_BYTE";
+    ms_attribPointerType[ (GLenum) GL_UNSIGNED_SHORT ]	= "GL_UNSIGNED_SHORT";
+    ms_attribPointerType[ (GLenum) GL_UNSIGNED_INT ]	= "GL_UNSIGNED_INT";
 }
 
 // ****************************

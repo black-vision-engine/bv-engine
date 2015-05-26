@@ -2,19 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <ProjectCategory>Applications</ProjectCategory>
+    <ProjectCategory>Core</ProjectCategory>
   </PropertyGroup>
   <PropertyGroup />
-  <ItemDefinitionGroup>
-    <Link>
-      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <SubSystem>Windows</SubSystem>
-    </Link>
-    <PostBuildEvent>
-      <Command>
-      </Command>
-    </PostBuildEvent>
-  </ItemDefinitionGroup>
   <ItemGroup>
     <BuildMacro Include="ProjectCategory">
       <Value>$(ProjectCategory)</Value>

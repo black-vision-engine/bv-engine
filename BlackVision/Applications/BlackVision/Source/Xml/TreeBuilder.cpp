@@ -138,12 +138,13 @@ namespace bv{
 					auto tF=atof(timevals->operator[](h).time.c_str());
 					string temp=timevals->operator[](h).value;
 					vector<string> V;
-					//boost::split(V,temp,"|");
-					auto rF=atof(V[0].c_str());
+
+                    auto rF=atof(V[0].c_str());
 					auto gF=atof(V[1].c_str());
 					auto bF=atof(V[2].c_str());
 					auto aF=atof(V[3].c_str());
-					color.AddKey(float(tF),glm::vec4(float(rF),float(gF),float(bF),float(aF)));						
+					
+                    color.AddKey(float(tF),glm::vec4(float(rF),float(gF),float(bF),float(aF)));						
 				}
 			}
 		}

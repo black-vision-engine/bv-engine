@@ -1,8 +1,5 @@
 #pragma once
 
-#pragma warning( push )
-#pragma warning( disable: 4996 )
-
 #include <vector>
 #include <string>
 #include <hash_map>
@@ -11,6 +8,7 @@
 #include "Engine/Models/Interfaces/INodeLogic.h"
 
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
+
 
 namespace bv { namespace model {
 
@@ -146,5 +144,3 @@ public:
 
 } // model
 } // bv
-
-#pragma warning( pop )
