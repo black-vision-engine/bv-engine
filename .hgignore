@@ -8,3 +8,4 @@ BlackVision/_Builds/*
 BlackVision/_Temp/*
 *.nvuser
 *.pyc
+workspace.xml
