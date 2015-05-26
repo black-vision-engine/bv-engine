@@ -13,5 +13,6 @@ unsigned int        DefaultPrototypeWidth               ();
 unsigned int        DefaultPrototypeHeight              ();
 bool                DefaultPrototypeFullscreenSetting   ();
 WindowMode          DefaultPrototypeWindowModeSetting   ();
+RendererInput       DefaultPrototypeRendererInput		();
 
 } // bv

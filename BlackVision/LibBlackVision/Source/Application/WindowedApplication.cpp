@@ -7,7 +7,7 @@ namespace bv {
 
 // *********************************
 //
-WindowedApplication::WindowedApplication			( const char * title, int x, int y, int w, int h, WindowMode windowMode )
+WindowedApplication::WindowedApplication			( const char * title, int x, int y, int w, int h, WindowMode windowMode, RendererInput ri )
     : m_WindowId( 0 )
     , m_WindowTitle( title )
     , m_xPos( x )
@@ -32,6 +32,8 @@ WindowedApplication::WindowedApplication			( const char * title, int x, int y, i
         m_MultipleMonitors = true;
     else
         m_MultipleMonitors = false;
+
+	m_RendererInput = ri;
 }
 
 // *********************************
@@ -45,6 +47,13 @@ WindowedApplication::~WindowedApplication			()
 std::string		WindowedApplication::Title			() const
 {
     return m_WindowTitle;
+}
+
+// *********************************
+//
+RendererInput		WindowedApplication::GetRendererInput	() const
+{
+    return m_RendererInput;
 }
 
 // *********************************

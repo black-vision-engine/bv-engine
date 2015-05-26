@@ -37,6 +37,27 @@ BVConfig::BVConfig                      ()
         m_defaultHeight   = ConfigManager::GetInt("Application/Renderer/FrameBufferSize/Height");
     }
 
+	
+
+	 if(ConfigManager::GetBool("Application/VSYNC")==true)
+	 {
+		m_RendererInput.m_DisableVerticalSync	= false;
+		m_RendererInput.m_EnableGLFinish		= true;
+		m_RendererInput.m_EnableGLFlush			= true;
+		m_RendererInput.m_VerticalBufferFrameCount = 1;
+	 }else{
+		m_RendererInput.m_DisableVerticalSync	= true;
+		m_RendererInput.m_EnableGLFinish		= false;
+		m_RendererInput.m_EnableGLFlush			= false;
+		m_RendererInput.m_VerticalBufferFrameCount = 0;
+	 }
+
+	m_RendererInput.m_WindowHandle			= nullptr;
+    m_RendererInput.m_PixelFormat			= 0;
+    m_RendererInput.m_RendererDC			= 0;
+
+	
+
     
     if(ConfigManager::GetString("Resolution")=="SD")
     {

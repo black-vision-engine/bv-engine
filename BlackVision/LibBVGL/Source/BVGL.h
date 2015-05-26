@@ -154,7 +154,11 @@ public:
 	static void					bvglDeleteFramebuffersEXT	(GLsizei n, const GLuint *framebuffers);
 	static void					bvglDeleteRenderbuffersEXT	(GLsizei n, const GLuint *renderbuffers);
 	//static GLuint				bvglGetError				();
+	static void					bvglFlush					();
+	static void					bvglFinish					();
+
 	static void					bvglVertexAttribDivisor		( GLuint index,  GLuint divisor );
+
 
 };
 

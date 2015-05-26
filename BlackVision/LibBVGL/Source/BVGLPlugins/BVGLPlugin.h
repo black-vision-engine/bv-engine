@@ -157,6 +157,8 @@ public:
 	virtual void				BindRenderbufferEXT			(GLenum target, GLuint renderbuffer);
 	virtual void				DeleteFramebufferEXT		(GLsizei n, const GLuint *framebuffers);
 	virtual void				DeleteRenderbufferEXT		(GLsizei n, const GLuint *renderbuffers);
+	virtual void				Finish						();
+	virtual void				Flush						();
 	//virtual GLuint				GetError					();
 	virtual void				VertexAttribDivisor								( GLuint index,  GLuint divisor );
 	

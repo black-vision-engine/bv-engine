@@ -5,7 +5,7 @@
 #include "CoreDEF.h"
 
 
-#define MAX_PROFILER_SAMPLES 120
+#define MAX_PROFILER_SAMPLES 2024
 #define MAX_PROFILER_FRAMES 10
 
 

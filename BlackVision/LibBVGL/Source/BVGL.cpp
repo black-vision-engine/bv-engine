@@ -723,6 +723,20 @@ void			BVGL::bvglDeleteRenderbuffersEXT	(GLsizei n, const GLuint *renderbuffers)
 
 // ******************************
 //
+void			BVGL::bvglFlush	()
+{
+	bvgl.Flush();
+}
+
+// ******************************
+//
+void			BVGL::bvglFinish	()
+{
+	bvgl.Finish();
+}
+
+// ******************************
+//
 /*GLuint			BVGL::bvglGetError	()
 {
 	return bvgl.GetError();

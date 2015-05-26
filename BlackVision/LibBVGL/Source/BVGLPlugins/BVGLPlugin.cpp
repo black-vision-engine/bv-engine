@@ -705,6 +705,23 @@ void				BVGLPlugin::DeleteRenderbufferEXT		(GLsizei n, const GLuint *renderbuffe
 {
 	glDeleteRenderbuffersEXT(n,renderbuffers);
 }
+
+// *****************************
+//
+void				BVGLPlugin::Finish		()
+{
+	glFinish();
+}
+
+
+// *****************************
+//
+void				BVGLPlugin::Flush		()
+{
+	glFlush();
+}
+
+
 // *****************************
 //
 /*GLuint				GetError					()

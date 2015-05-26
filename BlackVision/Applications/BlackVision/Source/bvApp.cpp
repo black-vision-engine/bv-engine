@@ -22,6 +22,7 @@
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
 void			bv::BlackVisionApp::StaticInitializer	()
 {
+	
     bv::ApplicationBase::MainFun = &bv::WindowedApplication::MainImpl;
     bv::ApplicationBase::ApplicationInstance = new bv::BlackVisionApp();
 }
@@ -43,7 +44,7 @@ namespace bv {
 // *********************************
 //
 BlackVisionApp::BlackVisionApp	()
-    : WindowedApplication( "BlackVision prealpha test app", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.GetWindowMode() )
+    : WindowedApplication( "BlackVision prealpha test app", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.GetWindowMode(), DefaultConfig.GetRendererInput() )
     , m_processManager( nullptr )
     , m_app( nullptr )
 {

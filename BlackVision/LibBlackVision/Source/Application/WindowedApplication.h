@@ -5,6 +5,8 @@
 #include "Mathematics/glm_inc.h"
 #include "win_sock.h"
 
+#include "Engine\Graphics\Renderers\WGLRenderer\WGLRendererInput.h"
+
 namespace bv
 {
 
@@ -25,6 +27,9 @@ protected:
     int				m_Width;
     int 			m_Height;
 
+	//pablito
+	RendererInput	m_RendererInput;
+
     bool			m_AllowResize;
     bool			m_MultipleMonitors;
     bool			m_FullScreen;
@@ -40,13 +45,16 @@ protected:
 
 protected:
 
-    WindowedApplication				( const char * title, int x, int y, int w, int h,  WindowMode windowMode);
+    WindowedApplication				( const char * title, int x, int y, int w, int h,  WindowMode windowMode, RendererInput ri );
 
 public:
 
     virtual ~WindowedApplication	();
 
     virtual int MainFun				( int argc, char ** argv );
+
+	//pablito
+	RendererInput	GetRendererInput() const;
 
     std::string		Title			() const;
     int				XPos			() const;

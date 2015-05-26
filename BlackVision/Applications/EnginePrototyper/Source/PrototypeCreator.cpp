@@ -55,6 +55,18 @@ WindowMode       DefaultPrototypeWindowModeSetting             ()
 
 // ****************************
 // FIXME: fatalna imitacja nedznej namiastki configa
+RendererInput       DefaultPrototypeRendererInput             ()
+{
+	RendererInput ri;
+	ri.m_WindowHandle			= nullptr;
+    ri.m_PixelFormat			= 0;
+    ri.m_RendererDC				= 0;
+    ri.m_DisableVerticalSync	= true;
+	return ri;
+}
+
+// ****************************
+// FIXME: fatalna imitacja nedznej namiastki configa
 bool                DefaultPrototypeFullscreenSetting   ()
 {
     return DefaultFullscreenSetting;

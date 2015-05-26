@@ -151,11 +151,15 @@ HWND CreateApplicationWindow ( WindowedApplication * app )
     {
         dwStyle	= WS_OVERLAPPEDWINDOW;
     }
-    else
+	else if(app->MultipleMonitors())
+    {
+		dwStyle = WS_POPUP | WS_VISIBLE | WS_SYSMENU;
+		dwExStyle = 0;
+    }else
     {
         // This removes WS_THICKFRAME and WS_MAXIMIZEBOX, both of which allow
         // resizing of windows.
-        dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
+        dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
     }
 
     RECT rect = { 0, 0, app->Width()-1, app->Height() - 1 };
@@ -171,7 +175,7 @@ HWND CreateApplicationWindow ( WindowedApplication * app )
     handle = CreateWindowEx     (	dwExStyle, 
                                     sWindowClass,
                                     wtitle.c_str(),
-                                    dwStyle | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 
+                                    dwStyle , 
                                     app->XPos(),
                                     app->YPos(),
                                     rect.right - rect.left + 1,
@@ -239,11 +243,14 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
 
     app->SetWindowId( (INT)(INT_PTR)( handle ) );
 
-    RendererInput ri;
+    /*RendererInput ri;
     ri.m_WindowHandle			= handle;
     ri.m_PixelFormat			= 0;
     ri.m_RendererDC				= 0;
-    ri.m_DisableVerticalSync	= true;
+    ri.m_DisableVerticalSync	= true;*/
+
+	RendererInput ri = app->GetRendererInput();
+	ri.m_WindowHandle = handle;
     
     assert( !m_Renderer );
     m_Renderer = new bv::Renderer( ri, app->Width(), app->Height() );
