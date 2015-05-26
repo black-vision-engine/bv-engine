@@ -97,7 +97,7 @@ DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( IV
 DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create ()
 {
     //FIXME: remove this DefaultParamValModel construction from here (implement decent ShaderChannel in case of nullptr input IValueSet - simply return empty vector there)
-    return std::make_shared< DefaultPixelShaderChannel >( ReadShaderFromFile( "default.frag" ), std::make_shared< DefaultParamValModel >() );
+    return std::make_shared< DefaultPixelShaderChannel >( "", std::make_shared< DefaultParamValModel >() );
 }
 
 } //model
