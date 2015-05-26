@@ -16,9 +16,9 @@ class ISerializable
 {
 public:
 
-    virtual void                Serialize       (SerializeObject &doc) const = 0;
+    virtual void                Serialize       ( SerializeObject &doc ) const = 0;
 
-    static ISerializablePtr     Create          (DeserializeObject &/*doc*/) { assert(!"Implement in derived!"); };
+    static ISerializablePtr     Create          ( DeserializeObject &/*doc*/ ) { assert(!"Implement in derived!"); }
 };
 
 

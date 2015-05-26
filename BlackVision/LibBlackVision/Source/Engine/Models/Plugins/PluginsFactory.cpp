@@ -14,6 +14,14 @@ namespace model
 
 // *******************************
 //
+std::shared_ptr< BasePlugin< IPlugin > >                                            PluginsFactory::CreatePluginByName( std::string name )
+{
+    return nullptr;
+}
+
+
+// *******************************
+//
 GeometryRectPlugin *         PluginsFactory::CreateGeometryRectPlugin            ( float w, float h, ITimeEvaluatorPtr timeEvaluator )
 {
     auto pw = ParametersFactory::CreateParameter( "width", InterpolatorsHelper::CreateConstValue( w ), timeEvaluator );

@@ -58,8 +58,8 @@ public:
     virtual ~BasicNode();
 
     static BasicNodePtr                     Create                  ( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager = nullptr );
-    static ISerializablePtr                 Create          (DeserializeObject &/*doc*/);
-    virtual void                            Serialize       (SerializeObject &/*doc*/) const {}
+    static ISerializablePtr                 Create                  ( DeserializeObject& doc );
+    virtual void                            Serialize               ( SerializeObject& /*doc*/ ) const { assert( !"implement" ); }
 
     virtual IPluginPtr                      GetPlugin               ( const std::string & name ) const override;
     virtual IFinalizePluginConstPtr         GetFinalizePlugin       () const override;

@@ -9,6 +9,7 @@
 
 #include "Engine/Models/ModelNodeEditor.h"
 
+#include "Engine/Models/Plugins/Plugin.h"
 
 namespace bv { namespace model {
 
@@ -88,7 +89,10 @@ ISerializablePtr BasicNode::Create( DeserializeObject& dob )
     auto node = Create( name, timeEvaluator );
 
 // plugins
-    node->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
+    auto plugins = dob.LoadArray< BasePlugin< IPlugin > >( "plugins" );
+
+    for( auto plugin : plugins )
+        node->AddPlugin( plugin );
 
 // children
     auto children = dob.LoadArray< BasicNode >( "nodes" );
