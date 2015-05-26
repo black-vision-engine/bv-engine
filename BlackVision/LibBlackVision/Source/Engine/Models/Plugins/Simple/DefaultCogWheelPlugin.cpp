@@ -45,8 +45,8 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
 	h.AddSimpleParam( PN::TOOTH_BASE_LENGTH, 0.3f, true, true );
 	h.AddSimpleParam( PN::TOOTH_TOP_LENGTH, 0.08f, true, true );
 	h.AddSimpleParam( PN::TEETH_NUMBER, 10, true, true );
-	h.AddSimpleParam( PN::TESSELATION, 0, true, true );
-	h.AddSimpleParam( PN::BEVEL, 0.1f, true, true );
+	h.AddSimpleParam( PN::TESSELATION, 2, true, true );
+	h.AddSimpleParam( PN::BEVEL, 0.3f, true, true );
 	h.AddSimpleParam( PN::HEIGHT, 0.5f, true, true );
 
 
