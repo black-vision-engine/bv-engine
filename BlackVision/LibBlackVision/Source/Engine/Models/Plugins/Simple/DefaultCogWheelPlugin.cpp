@@ -42,7 +42,7 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
 	h.AddSimpleParam( PN::INNER_RADIUS, 0.3f, true, true );
 	h.AddSimpleParam( PN::OUTER_RADIUS, 1.0f, true, true );
 	h.AddSimpleParam( PN::TOOTH_HEIGHT, 0.2f, true, true );
-	h.AddSimpleParam( PN::TOOTH_BASE_LENGTH, 0.1f, true, true );
+	h.AddSimpleParam( PN::TOOTH_BASE_LENGTH, 0.3f, true, true );
 	h.AddSimpleParam( PN::TOOTH_TOP_LENGTH, 0.08f, true, true );
 	h.AddSimpleParam( PN::TEETH_NUMBER, 10, true, true );
 	h.AddSimpleParam( PN::TESSELATION, 0, true, true );
@@ -97,6 +97,31 @@ namespace Generator
 			}
 		}
 
+		void connectVerticiesBetween2( unsigned int begin1, unsigned int begin2, unsigned int offset, std::vector<INDEX_TYPE>& indicies )
+		{
+			for( unsigned int j = 0; j < offset - 1; ++j )
+			{
+				indicies.push_back( static_cast<INDEX_TYPE>( begin1 + j ) );
+				indicies.push_back( static_cast<INDEX_TYPE>( ( begin2 + j ) ) % allVerticies );
+				indicies.push_back( static_cast<INDEX_TYPE>( begin1 + j + 1 ) );
+
+				indicies.push_back( static_cast<INDEX_TYPE>( ( begin2 + j ) ) % allVerticies );
+				indicies.push_back( static_cast<INDEX_TYPE>( begin1 + j + 1 ) );
+				indicies.push_back( static_cast<INDEX_TYPE>( ( begin2 + j + 1 ) ) % allVerticies );
+			}
+		}
+
+		void connectTopToothSurface( int index1, int index2, std::vector<INDEX_TYPE>& indicies )
+		{
+			indicies.push_back( static_cast<INDEX_TYPE>( ( index1 ) % allVerticies ) );
+			indicies.push_back( static_cast<INDEX_TYPE>( ( index1 + verticiesPerRingTooth ) % allVerticies ) );
+			indicies.push_back( static_cast<INDEX_TYPE>( ( index2 ) % allVerticies ) );
+
+			indicies.push_back( static_cast<INDEX_TYPE>( ( index1 + verticiesPerRingTooth ) % allVerticies ) );
+			indicies.push_back( static_cast<INDEX_TYPE>( ( index2 ) % allVerticies ) );
+			indicies.push_back( static_cast<INDEX_TYPE>( ( index2 + verticiesPerRingTooth ) % allVerticies ) );
+		}
+
 		void closeRing( unsigned int begin, std::vector<INDEX_TYPE>& indicies )
 		{
 			indicies.push_back( static_cast<INDEX_TYPE>( ( begin + verticiesPerRing - 1 ) % allVerticies ) );
@@ -116,6 +141,14 @@ namespace Generator
 			const int verticiesWithoutTooth = 5;
 
 			connectVerticiesBetween( index, verticiesWithoutTooth, indicies );
+
+		// We must add tooth
+			connectVerticiesBetween2( index + verticiesWithoutTooth - 1, index + verticiesPerRing, verticiesWithoutTooth - 1, indicies );
+			connectVerticiesBetween2( index + verticiesPerRingTooth + verticiesWithoutTooth - 1, index + verticiesPerRingTooth + verticiesPerRing, verticiesWithoutTooth - 1, indicies );
+			connectVerticiesBetween2( index + verticiesPerRing,  index + verticiesPerRingTooth + verticiesPerRing, verticiesWithoutTooth - 1, indicies );
+			// Top surface of the tooth.
+			connectTopToothSurface( index + verticiesWithoutTooth - 1, index + verticiesPerRing, indicies );
+			connectTopToothSurface( index + 7, index + verticiesPerRingTooth - 1, indicies );
 
 			connectVerticiesBetween( index + 7, verticiesWithoutTooth, indicies );
 			closeRing( index, indicies );
@@ -174,8 +207,6 @@ namespace Generator
 			for( int i = 0; i < 2 * teethNumber; ++i )
 			{
 				if( i & 0x01 ) // Checks parity
-					connectToothRingVerticies( i, indicies );
-				else
 				{
 					// We can make whole ring because there's no tooth.
 					unsigned int index = i * verticiesPerRingTooth;
@@ -184,6 +215,8 @@ namespace Generator
 					// Close the ring.
 					closeRing( index, indicies );
 				}
+				else
+					connectToothRingVerticies( i, indicies );
 			}
 		}
 
@@ -208,8 +241,8 @@ namespace Generator
 				double angle2 = angle1 + anglePerTooth;
 				double toothCenterAngle = ( angle1 + angle2 ) / 2;
 
-				generateRing( verticies, angle1, toothCenterAngle + anglePerTopTooth / 2 );
-				generateRing( verticies, angle2, toothCenterAngle - anglePerTopTooth / 2 );
+				generateRing( verticies, angle1, toothCenterAngle - anglePerTopTooth / 2 );
+				generateRing( verticies, angle2, toothCenterAngle + anglePerTopTooth / 2 );
 			}
 
 			connectVerticiesIntoTriangles( indicies );
