@@ -15,20 +15,20 @@ namespace model
 
 // *******************************
 //
-std::shared_ptr< BasePlugin< IPlugin > >                                            PluginsFactory::CreatePluginByName( std::string name, ITimeEvaluatorPtr te )
-{
-    if( name == "geometry" // FIXME: deprecated, to remove
-        || name == "transform" || true )
-    {
-        DefaultTransformPluginDesc d;
-        return std::make_shared< DefaultTransformPlugin >( "", DefaultTransformPluginDesc::UID(), nullptr, d.CreateDefaultModel( te ) );
-    }
-    else
-    {
-        //assert( false );
-        return nullptr;
-    }
-}
+//std::shared_ptr< BasePlugin< IPlugin > >                                            PluginsFactory::CreatePluginByName( std::string name, ITimeEvaluatorPtr te )
+//{
+//    if( name == "geometry" // FIXME: deprecated, to remove
+//        || name == "transform" || true )
+//    {
+//        DefaultTransformPluginDesc d;
+//        return std::make_shared< DefaultTransformPlugin >( "", DefaultTransformPluginDesc::UID(), nullptr, d.CreateDefaultModel( te ) );
+//    }
+//    else
+//    {
+//        //assert( false );
+//        return nullptr;
+//    }
+//}
 
 
 // *******************************
