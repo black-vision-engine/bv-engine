@@ -4,7 +4,6 @@ import os
 class SceneDesc:
     def __init__(self, absPath):
         self.absPath = absPath
-        #  TODO: Pewnie jeszcze duzo wiecej memberow w, h, bpp, takie tam
 
 class FSSceneAccessor(SceneAccessor):
     def __init__(self, rootPath):
@@ -29,3 +28,5 @@ class FSSceneAccessor(SceneAccessor):
             return None
         else:
             return None
+
+        

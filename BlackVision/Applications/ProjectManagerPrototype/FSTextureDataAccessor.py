@@ -12,9 +12,10 @@ class LoadableTextureDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc le
 
 
 class FSTextureDataAccessor(TextureDataAccessor):
-    def __init__(self, rootPath):
+    def __init__(self, rootPath, supportedFileExt):
         TextureDataAccessor.__init__(self)
         self.rootPath = rootPath
+        self.supportedFileExt = supportedFileExt
         self.__createDir()
 
     def getLoadableDataDesc(self, internalPath):

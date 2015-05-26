@@ -17,9 +17,10 @@ class LoadableSequenceDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc l
         return self.frames
 
 class FSSequenceDataAccessor(SequenceDataAccessor):
-    def __init__(self, rootPath):
+    def __init__(self, rootPath, supportedFileExt):
         SequenceDataAccessor.__init__(self)
         self.rootPath = rootPath
+        self.supportedFileExt = supportedFileExt
         self.__createDir()
 
     def getLoadableDataDesc(self, internalPath):

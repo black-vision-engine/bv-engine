@@ -8,13 +8,13 @@ class LoadableSurfaceDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc le
     def __init__(self, absPath):
         LoadableDataDesc.__init__(self)
         self.absPath = absPath
-        #  TODO: Pewnie jeszcze duzo wiecej memberow w, h, bpp, takie tam
 
 
 class FSSurfaceDataAccessor(SurfaceDataAccessor):
-    def __init__(self, rootPath):
+    def __init__(self, rootPath, supportedFileExt):
         SurfaceDataAccessor.__init__(self)
         self.rootPath = rootPath
+        self.supportedFileExt = supportedFileExt
         self.__createDir()
 
     def getLoadableDataDesc(self, internalPath):
