@@ -2,6 +2,7 @@
 
 #include "rapidxml/RapidXml.hpp"
 #include "Engine/Models/Timeline/TimelineManager.h"
+#include "Models/Plugins/Manager/PluginsManager.h"
 
 namespace bv
 {
@@ -20,9 +21,10 @@ class DeserializeObject
     rapidxml::xml_node<>* m_doc;
 public:
     model::TimelineManager* m_tm; // FIXME(?)
+    const model::PluginsManager* m_pm; // FIXME(?)
 
 public:
-    DeserializeObject( rapidxml::xml_node<>& doc, model::TimelineManager& tm ) : m_doc( &doc ), m_tm( &tm ) { }
+    DeserializeObject( rapidxml::xml_node<>& doc, model::TimelineManager& tm, const model::PluginsManager& pm ) : m_doc( &doc ), m_tm( &tm ), m_pm( &pm ) { }
 
     std::string                                             GetName()
     {
@@ -39,7 +41,7 @@ public:
     template< typename T >
     std::shared_ptr< T >                                    Load( rapidxml::xml_node<>* node )
     {
-        auto dob = DeserializeObject( *node, *this->m_tm );
+        auto dob = DeserializeObject( *node, *this->m_tm, *this->m_pm ); // FIXME for God's sake!!!
         auto obj = T::Create( dob );
         return std::static_pointer_cast< T >( obj );
     }

@@ -958,7 +958,7 @@ model::BasicNodePtr          TestScenesFactory::XMLTestScene()
     return root;
 }
 
-model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::PluginsManager * /*pluginsManager*/, model::TimelineManager * timelineManager )
+model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )
 {
     assert( File::Exists( filename ) );
 
@@ -977,7 +977,7 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::Plugin
 
     auto docNode = doc.first_node()->first_node( "nodes" )->first_node( "node" );
 
-    auto deDoc = DeserializeObject( *docNode, *timelineManager );
+    auto deDoc = DeserializeObject( *docNode, *timelineManager, *pluginsManager );
 
     ISerializablePtr node = model::BasicNode::Create( deDoc );
 

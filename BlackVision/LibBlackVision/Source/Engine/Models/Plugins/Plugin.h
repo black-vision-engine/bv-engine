@@ -122,9 +122,20 @@ namespace PluginsFactory
 template <class Iface>
 ISerializablePtr BasePlugin< Iface >::Create( DeserializeObject& doc )
 {
-    auto name = doc.GetValue( "name" );
+    std::string pluginType = "DEFAULT_TRANSFORM"; //doc.GetValue( "name" );
 
-    return PluginsFactory::CreatePluginByName( name, doc.m_tm->GetRootTimeline() );
+    std::string pluginName = ""; // FIXME
+
+    IPluginPtr plugin__ = doc.m_pm->CreatePlugin( pluginType, pluginName, nullptr, doc.m_tm->GetRootTimeline() );
+    //BasePlugin<>* plugin_ = static_cast< BasePlugin<>* >( plugin__.get() );
+    //std::shared_ptr< BasePlugin<> > plugin = std::shared_ptr< BasePlugin<> >( plugin_ );
+    std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin__ );
+
+// TODO: params
+
+    
+    ISerializablePtr serializablePlugin = std::static_pointer_cast< ISerializable >( plugin );
+    return serializablePlugin;
 }
 
 // *******************************
