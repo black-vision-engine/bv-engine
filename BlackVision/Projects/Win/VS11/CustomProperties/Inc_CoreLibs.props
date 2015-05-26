@@ -4,12 +4,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
   <ItemDefinitionGroup>
-    <Link>
-      <EntryPointSymbol>
-      </EntryPointSymbol>
-      <SubSystem>
-      </SubSystem>
-    </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(LibCoreDir)\Source;$(LibBlackVisionDir)\Source;$(LibBVGLDir)\Source;$(LibImageDir)\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

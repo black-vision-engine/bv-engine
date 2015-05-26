@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6A33F496-E3C1-4C91-A4E1-049C0C3B762E}</ProjectGuid>
-    <RootNamespace>MipMapBuilder</RootNamespace>
+    <RootNamespace>LibMipMapBuilder</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -54,46 +54,33 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.Win32.debug.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.x64.debug.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.Win32.release.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonDirs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommon.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\ToolLibCommonInclude.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.x64.release.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(LibCoreDir);$(BOOST_INC);$(DepDir)\Common\FreeType\include;$(DepDir)\Common\FreeImage\Dist;$(DepDir)\Common\glm;$(DepDir)\Common\FastDelegate;$(DepDir)\Common\hashlib2plus\src;$(DepDir)\Common\sqlite\src;$(LibBlackVisionDir);$(LibBVGLDir);$(LibImageDir);..\..\..\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -102,7 +89,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(BOOST_INC);$(DepDir)\Common\FreeType\include;$(DepDir)\Common\FreeImage\Dist;$(DepDir)\Common\glm;$(DepDir)\Common\FastDelegate;$(DepDir)\Common\hashlib2plus\src;$(DepDir)\Common\sqlite\src;$(LibBlackVisionDir);$(LibBVGLDir);$(LibImageDir);..\..\..\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -113,7 +99,6 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(LibCoreDir);$(BOOST_INC);$(DepDir)\Common\FreeType\include;$(DepDir)\Common\FreeImage\Dist;$(DepDir)\Common\glm;$(DepDir)\Common\FastDelegate;$(DepDir)\Common\hashlib2plus\src;$(DepDir)\Common\sqlite\src;$(LibBlackVisionDir);$(LibBVGLDir);$(LibImageDir);..\..\..\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -126,7 +111,6 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(LibCoreDir);$(BOOST_INC);$(DepDir)\Common\FreeType\include;$(DepDir)\Common\FreeImage\Dist;$(DepDir)\Common\glm;$(DepDir)\Common\FastDelegate;$(DepDir)\Common\hashlib2plus\src;$(DepDir)\Common\sqlite\src;$(LibBlackVisionDir);$(LibBVGLDir);$(LibImageDir);..\..\..\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -2,6 +2,7 @@
 
 #include "ModelInteractionEvents.h"
 
+
 namespace bv
 {
 
@@ -24,4 +25,4 @@ public:
     static std::vector< std::string > ParseParamName( const std::string & name, const std::string & delimiter = "/" );
 };
 
-}
+} // bv

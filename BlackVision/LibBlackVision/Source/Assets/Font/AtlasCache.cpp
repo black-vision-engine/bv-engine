@@ -17,6 +17,7 @@
 #pragma warning(push)
 #pragma warning(disable : 4512)
 #pragma warning(disable : 4267)
+#pragma warning(disable : 4996)
 
 #include "hashlibpp.h"
 

@@ -92,39 +92,27 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonDirs.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommon.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonInclude.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.Win32.debug.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonDirs.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommon.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonInclude.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.x64.debug.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonDirs.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommon.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonInclude.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.Win32.release.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonDirs.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommon.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common_CoreLib.props" />
     <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\3rdPartyInclude.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonInclude.props" />
-    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\LibCommonPreprocessor.x64.release.props" />
+    <Import Project="..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -151,7 +139,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -172,7 +159,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <FunctionLevelLinking>false</FunctionLevelLinking>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <IntrinsicFunctions>true</IntrinsicFunctions>
     </ClCompile>
     <Link>

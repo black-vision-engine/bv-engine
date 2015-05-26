@@ -1,7 +1,9 @@
 #pragma once
-#include "Engine\Models\Plugins\Simple\DefaultTexturePlugin.h"
+
+#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 //#include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "CompositeVideoInputResourceDescr.h"
+
 
 namespace bv { namespace model {
 
