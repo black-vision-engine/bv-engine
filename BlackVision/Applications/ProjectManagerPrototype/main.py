@@ -9,7 +9,7 @@ def test():
 
     proj1 = Project.Project("proj1")
 
-    fstda = FSTextureDataAccessor.FSTextureDataAccessor("./proj1/textures/")
+    fstda = FSTextureDataAccessor.FSTextureDataAccessor("./proj1/textures/", ['jpg', 'tga'])
     texturesProj1 = DataCategory.DataCategory("textures", fstda)
 
     proj1.registerCategory(texturesProj1)

@@ -28,3 +28,11 @@ class DataAccessor:
     @abstractmethod
     def renameData(self, oldPath, newPath):
         pass
+
+    @abstractmethod
+    def importData(self, impDataFile, importToPath):
+        pass
+
+    @abstractmethod
+    def exportData(self, expDataFilePath, internalPath):
+        pass

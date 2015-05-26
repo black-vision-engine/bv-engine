@@ -1,3 +1,4 @@
+from DataCategory import DataCategory
 from Project import Project
 from Location import Location
 
@@ -6,6 +7,8 @@ class ProjectManager:
     def __init__(self):
         self.projects       = {}
         self.currentProject = None
+        self.globalCategories = {}
+        self.globalScenes = {}
 
     def getData(self, path):
         assert isinstance(path, str)
@@ -13,9 +16,14 @@ class ProjectManager:
         loc = Location(path, self.currentProject.getName() if self.currentProject else "")
 
         if loc:
-            proj = self.getProject(loc.getProjectName())
-            if proj:
-                return proj.getData(loc.getCategoryName(), loc.getInternalPath())
+            if loc.getIsGlobalLocation():
+                catName = loc.getCategoryName()
+                if catName in self.globalCategories:
+                    return self.globalCategories[catName].getData(loc.getInternalPath())
+            else:
+                proj = self.getProject(loc.getProjectName())
+                if proj:
+                    return proj.getData(loc.getCategoryName(), loc.getInternalPath())
 
         print("Cannot find data '{}'".format(path))
         return None
@@ -44,3 +52,9 @@ class ProjectManager:
         else:
             print("Project '{}' already exists. Cannot add".format(project.getName()))
 
+    def registerGlobalCategory(self, category):
+        assert isinstance(category, DataCategory)
+        if not category.getId() in self.globalCategories:
+            self.globalCategories[category.getId()] = category
+        else:
+             print("Cannot register global category '{}'. Already registered.".format(category.getId()))
