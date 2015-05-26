@@ -6,15 +6,15 @@
 namespace bv { namespace model { namespace DefaultCogWheel {
 
 
-const std::string INNER_RADIUS = "inner radius";
-const std::string OUTER_RADIUS = "outer radius";
-const std::string TOOTH_HEIGHT = "tooth height";
-const std::string TOOTH_BASE_LENGTH = "tooth base length";
-const std::string TOOTH_TOP_LENGTH = "tooth top length";
-const std::string TEETH_NUMBER = "teeth number";
-const std::string BEVEL = "bevel";
-const std::string TESSELATION = "tesselation";
-const std::string HEIGHT = "height";
+const std::string PN::INNER_RADIUS = "inner radius";
+const std::string PN::OUTER_RADIUS = "outer radius";
+const std::string PN::TOOTH_HEIGHT = "tooth height";
+const std::string PN::TOOTH_BASE_LENGTH = "tooth base length";
+const std::string PN::TOOTH_TOP_LENGTH = "tooth top length";
+const std::string PN::TEETH_NUMBER = "teeth number";
+const std::string PN::BEVEL = "bevel";
+const std::string PN::TESSELATION = "tesselation";
+const std::string PN::HEIGHT = "height";
 
 
 PluginDesc::PluginDesc()
@@ -66,7 +66,9 @@ namespace Generator
 	float		bevel;
 	int			tesselation;
 
-	const unsigned int verticiesPerRing = 16;
+	const unsigned int verticiesPerRing = 12;
+	const unsigned int verticiesPerRingTooth = 16;
+	unsigned int allVerticies;
 
 	/**@brief Generates CogWheel*/
 	class CogWheelGenerator : public IGeometryAndUVsGenerator
@@ -80,6 +82,44 @@ namespace Generator
 		Type GetType() { return GEOMETRY_AND_UVS; }
 		//GEOMETRY_AND_UVS
 		//GEOMETRY_ONLY
+
+		void connectVerticiesBetween( unsigned int begin, unsigned int offset, std::vector<INDEX_TYPE>& indicies )
+		{
+			for( unsigned int j = begin; j < begin + offset - 1; ++j )
+			{
+				indicies.push_back( static_cast<INDEX_TYPE>( j ) );
+				indicies.push_back( static_cast<INDEX_TYPE>( ( j + verticiesPerRingTooth ) % allVerticies ) );
+				indicies.push_back( static_cast<INDEX_TYPE>( j + 1 ) );
+
+				indicies.push_back( static_cast<INDEX_TYPE>( ( j + verticiesPerRingTooth ) % allVerticies ) );
+				indicies.push_back( static_cast<INDEX_TYPE>( j + 1 ) );
+				indicies.push_back( static_cast<INDEX_TYPE>( ( j + verticiesPerRingTooth + 1 ) % allVerticies ) );
+			}
+		}
+
+		void closeRing( unsigned int begin, std::vector<INDEX_TYPE>& indicies )
+		{
+			indicies.push_back( static_cast<INDEX_TYPE>( ( begin + verticiesPerRing - 1 ) % allVerticies ) );
+			indicies.push_back( static_cast<INDEX_TYPE>( ( begin + verticiesPerRingTooth + verticiesPerRing - 1 ) % allVerticies ) );
+			indicies.push_back( static_cast<INDEX_TYPE>( begin ) );
+
+			indicies.push_back( static_cast<INDEX_TYPE>( ( begin + verticiesPerRingTooth + verticiesPerRing - 1 ) % allVerticies ) );
+			indicies.push_back( static_cast<INDEX_TYPE>( begin ) );
+			indicies.push_back( static_cast<INDEX_TYPE>( ( begin + verticiesPerRingTooth ) % allVerticies ) );
+		}
+
+		void connectToothRingVerticies( int i, std::vector<INDEX_TYPE>& indicies )
+		{
+			indicies;
+			i;
+			unsigned int index = i * verticiesPerRingTooth;
+			const int verticiesWithoutTooth = 5;
+
+			connectVerticiesBetween( index, verticiesWithoutTooth, indicies );
+
+			connectVerticiesBetween( index + 7, verticiesWithoutTooth, indicies );
+			closeRing( index, indicies );
+		}
 
 		void generateRing( std::vector<glm::vec3>& verticies, double angle, double topToothAngle )
 		{
@@ -129,35 +169,20 @@ namespace Generator
 			verticies.push_back( newVertex );
 		}
 
-		void connectVerticiesIntoTriangles( std::vector<INDEX_TYPE>& indicies, std::vector<glm::vec3>& verticies )
+		void connectVerticiesIntoTriangles( std::vector<INDEX_TYPE>& indicies )
 		{
-			indicies;
-			verticies;
 			for( int i = 0; i < 2 * teethNumber; ++i )
 			{
 				if( i & 0x01 ) // Checks parity
-				{
-
-				}
+					connectToothRingVerticies( i, indicies );
 				else
 				{
 					// We can make whole ring because there's no tooth.
-					unsigned int index = i * verticiesPerRing;
-					for( unsigned int j = index; j < index + verticiesPerRing - 2; ++j )
-					{
-						indicies.push_back( static_cast<INDEX_TYPE>( j ) );
-						indicies.push_back( static_cast<INDEX_TYPE>( j + 1 ) );
-						indicies.push_back( static_cast<INDEX_TYPE>( j + 2 ) );
-					}
+					unsigned int index = i * verticiesPerRingTooth;
+					connectVerticiesBetween( index, verticiesPerRing, indicies );
+				
 					// Close the ring.
-
-					indicies.push_back( static_cast<INDEX_TYPE>( index + verticiesPerRing - 2 ) );
-					indicies.push_back( static_cast<INDEX_TYPE>( index + verticiesPerRing - 1 ) );
-					indicies.push_back( static_cast<INDEX_TYPE>( index ) );
-
-					indicies.push_back( static_cast<INDEX_TYPE>( index + verticiesPerRing - 1 ) );
-					indicies.push_back( static_cast<INDEX_TYPE>( index ) );
-					indicies.push_back( static_cast<INDEX_TYPE>( index + 1 ) );
+					closeRing( index, indicies );
 				}
 			}
 		}
@@ -170,6 +195,8 @@ namespace Generator
 			IndexedGeometry cogWheel;
 			std::vector<glm::vec3>& verticies = cogWheel.getVerticies();
 			std::vector<INDEX_TYPE>& indicies = cogWheel.getIndicies();
+
+			allVerticies = 2 * teethNumber * verticiesPerRingTooth;
 
 			double anglePerTooth = toothBaseLength / outerRadius;
 			double angleBetweenTeeth = ( TWOPI * outerRadius - toothBaseLength * teethNumber ) / ( teethNumber * outerRadius );
@@ -185,7 +212,7 @@ namespace Generator
 				generateRing( verticies, angle2, toothCenterAngle - anglePerTopTooth / 2 );
 			}
 
-			connectVerticiesIntoTriangles( indicies, verticies );
+			connectVerticiesIntoTriangles( indicies );
 
 			//Smooth cog wheel
 			std::vector<INDEX_TYPE> sharpEdges;

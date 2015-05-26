@@ -28,6 +28,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultGeospherePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultSpringPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCylinderPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultCogWheelPlugin.h"
 
 namespace bv { namespace model {
 
@@ -63,6 +64,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
 	descriptors.push_back( new DefaultGeosphere::PluginDesc() );
     descriptors.push_back( new DefaultSpring::PluginDesc() );
 	descriptors.push_back( new DefaultCylinder::DefaultCylinderPluginDesc() );
+	descriptors.push_back( new DefaultCogWheel::PluginDesc() );
 
     for( auto descr : descriptors )
     {

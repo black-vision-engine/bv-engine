@@ -16,6 +16,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultSpringPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCylinderPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultCogWheelPlugin.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
@@ -1760,7 +1761,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 //#define SHOW_TORUS
 //#define SHOW_SPRING
 //#define SHOW_GEOSPHERE
-#define SHOW_SIMPLE_CUBE
+//#define SHOW_SIMPLE_CUBE
+#define SHOW_COGWHEEL
 
 	  //Timeline stuff
     auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
@@ -1814,6 +1816,9 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #endif
 #ifdef SHOW_SPRING
 	uids.push_back( "DEFAULT_SPRING" );
+#endif
+#ifdef SHOW_COGWHEEL
+	uids.push_back( "DEFAULT_COGWHEEL" );
 #endif
 
 // ============================================ //
@@ -1979,6 +1984,9 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #ifdef SHOW_SIMPLE_CUBE
 	auto plugin = root->GetPlugin( "simple cube" );
 	model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 1.0, 1.0, 1.0 ) );
+#endif
+#ifdef SHOW_COGWHEEL
+	auto plugin = root->GetPlugin( "cog wheel" );
 #endif
 
 
