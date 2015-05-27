@@ -10,14 +10,14 @@ namespace bv { namespace model {
 class IndexedGeometryConverter
 {
 private:
-	INDEX_TYPE				usedRangeIndex;			///< Points element in index table, that is the first unused element.
-	int						remainnigTriangles;		///< Number of traingles to use.
+	unsigned int			usedRangeIndex;			///< Points element in index table, that is the first unused element.
+	unsigned int			remainnigTriangles;		///< Number of traingles to use.
 	std::vector<bool>		usedTriangles;			///< Indicates which indicies(triangles) have been used.
 protected:
 	void moveRangeIndex();
-	bool findNeighbour( INDEX_TYPE index1, INDEX_TYPE index2, INDEX_TYPE& foundIndex, std::vector<INDEX_TYPE>& indicies );
-	bool findNeighbourPair( INDEX_TYPE index1, INDEX_TYPE& foundIndex1, INDEX_TYPE& foundIndex2, std::vector<INDEX_TYPE>& indicies );
-	void findFirstUnusedTriangle( INDEX_TYPE& index1, std::vector<INDEX_TYPE>& indicies );
+	bool findNeighbour( unsigned int index1, unsigned int index2, unsigned int& foundIndex, std::vector<INDEX_TYPE>& indicies );
+	bool findNeighbourPair( unsigned int index1, unsigned int& foundIndex1, unsigned int& foundIndex2, std::vector<INDEX_TYPE>& indicies );
+	void findFirstUnusedTriangle( unsigned int& index1, std::vector<INDEX_TYPE>& indicies );
 public:
 	IndexedGeometryConverter(void);
 	~IndexedGeometryConverter(void);

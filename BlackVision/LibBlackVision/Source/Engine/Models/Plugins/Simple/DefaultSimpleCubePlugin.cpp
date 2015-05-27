@@ -146,6 +146,15 @@ namespace Generator
 				verticies.push_back( glm::vec3( -x, -y, z ) );
 				verticies.push_back( glm::vec3( x, -y, z ) );
 
+				verticies.push_back( glm::vec3( -x / 2, y / 2, -z ) );
+				verticies.push_back( glm::vec3( x / 2, y / 2, -z ) );
+				verticies.push_back( glm::vec3( -x / 2, -y / 2, -z ) );
+				verticies.push_back( glm::vec3( x / 2, -y / 2, -z ) );
+				verticies.push_back( glm::vec3( -x / 2, y / 2, z ) );
+				verticies.push_back( glm::vec3( x / 2, y / 2, z ) );
+				verticies.push_back( glm::vec3( -x / 2, -y / 2, z) );
+				verticies.push_back( glm::vec3( x / 2, -y / 2, z) );
+
 				//INDEX_TYPE indicesData[] = { 
 				//	0, 1, 2, 2, 3, 0, 
 				//	3, 2, 6, 6, 7, 3, 
@@ -155,24 +164,58 @@ namespace Generator
 				//	1, 5, 6, 6, 2, 1 
 				//};
 
+#define in( x ) (x + 8)
+
 				INDEX_TYPE indicesData[] =
 				{
-					0, 1, 2,    // side 1
-					2, 1, 3,
+					//0, 1, 2,    // side 1
+					//2, 1, 3,
 					4, 0, 6,    // side 2
 					6, 0, 2,
-					7, 5, 6,    // side 3
-					6, 5, 4,
+					//7, 5, 6,    // side 3
+					//6, 5, 4,
 					3, 1, 7,    // side 4
 					7, 1, 5,
 					4, 5, 0,    // side 5
 					0, 5, 1,
 					3, 7, 2,    // side 6
 					2, 7, 6,
+
+					//0, 1, 2,    // side 1
+					//2, 1, 3,
+					in(4), in(0), in(6),    // side 2
+					in(6), in(0), in(2),
+					//7, 5, 6,    // side 3
+					//6, 5, 4,
+					in(3), in(1), in(7),    // side 4
+					in(7), in(1), in(5),
+					in(4), in(5), in(0),    // side 5
+					in(0), in(5), in(1),
+					in(3), in(7), in(2),    // side 6
+					in(2), in(7), in(6),
+
+					0, in(0), 1,
+					in(0), 1, in(1),
+					1, in(1), 3,
+					in(1), 3, in(3),
+					3, in(3), 2,
+					in(3), 2, in(2),
+					2, in(2), 0,
+					in(2), 0, in(0),
+
+					4, in(4), 5,
+					in(4), 5, in(5),
+					5, in(5), 7,
+					in(5), 7, in(7),
+					7, in(7), 6,
+					in(7), 6, in(6),
+					6, in(6), 4,
+					in(6), 4, in(4),
 				};
 
-				for( int i = 0; i < 36; ++i )
-					indicies.push_back( indicesData[i] );
+				
+				for( auto i : indicesData )
+					indicies.push_back( i );
 
 				std::vector<INDEX_TYPE> sharpEdges;
 
@@ -185,18 +228,18 @@ namespace Generator
 				//sharpEdges.push_back( 3 );
 				//sharpEdges.push_back( 0 );
 
-				sharpEdges.push_back( 3 );
-				sharpEdges.push_back( 1 );
-				sharpEdges.push_back( 3 );
-				sharpEdges.push_back( 2 );
-				sharpEdges.push_back( 3 );
-				sharpEdges.push_back( 7 );
-				sharpEdges.push_back( 1 );
-				sharpEdges.push_back( 2 );
-				sharpEdges.push_back( 2 );
-				sharpEdges.push_back( 7 );
-				sharpEdges.push_back( 7 );
-				sharpEdges.push_back( 1 );
+				//sharpEdges.push_back( 3 );
+				//sharpEdges.push_back( 1 );
+				//sharpEdges.push_back( 3 );
+				//sharpEdges.push_back( 2 );
+				//sharpEdges.push_back( 3 );
+				//sharpEdges.push_back( 7 );
+				//sharpEdges.push_back( 1 );
+				//sharpEdges.push_back( 2 );
+				//sharpEdges.push_back( 2 );
+				//sharpEdges.push_back( 7 );
+				//sharpEdges.push_back( 7 );
+				//sharpEdges.push_back( 1 );
 
 				const unsigned tesselation = 3;
 

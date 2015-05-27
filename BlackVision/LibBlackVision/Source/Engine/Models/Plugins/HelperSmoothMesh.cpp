@@ -176,20 +176,22 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 	}
 
 	// We iterate through edges and add position with weight to verticies.
-	for( INDEX_TYPE i = 0; i < indicies.size(); i += 3 )
+	for( unsigned int i = 0; i < indicies.size(); i += 3 )
 		for( INDEX_TYPE j = 0; j < 3; ++j )
 		{
 			INDEX_TYPE index1 = indicies[ i + j ];
 			INDEX_TYPE index2 = indicies[ i + (j + 1) % 3 ];
 
-			float weight = computeVertexWeight( index1, index2, vertexData[ index1 ].type, sharpEdges );
-			resultVerticies[ index1 ] += ( weight / 2.0f ) * verticies[ index2 ];
+			float weight1 = computeVertexWeight( index1, index2, vertexData[ index1 ].type, sharpEdges );
+			resultVerticies[ index1 ] += ( weight1 / 2.0f ) * verticies[ index2 ];
 
-			weight = computeVertexWeight( index2, index1, vertexData[ index2 ].type, sharpEdges );
-			resultVerticies[ index2 ] += ( weight / 2.0f ) * verticies[ index1 ];
+			float weight2 = computeVertexWeight( index2, index1, vertexData[ index2 ].type, sharpEdges );
+			resultVerticies[ index2 ] += ( weight2 / 2.0f ) * verticies[ index1 ];
 
 			vertexData[ index1 ].numNeighbours++;
 			vertexData[ index2 ].numNeighbours++;
+			vertexData[ index1 ].sumWeigths += weight1 / 2.0f;
+			vertexData[ index2 ].sumWeigths += weight2 / 2.0f;
 		}
 	// We add center vertex position.
 	for( INDEX_TYPE i = 0; i < verticies.size(); ++i )
@@ -198,12 +200,12 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 		{
 			float numNeighbours = static_cast<float>( vertexData[ i ].numNeighbours / 2 );	// We have taken each vertex two times.
 			float weight = computeCenterVertexWeight( static_cast<unsigned short>( numNeighbours ) );
-			resultVerticies[ i ] = ( resultVerticies[ i ] + verticies[ i ] * weight ) / ( numNeighbours + weight );
+			resultVerticies[ i ] = ( resultVerticies[ i ] + verticies[ i ] * weight ) / ( vertexData[ i ].sumWeigths + weight );
 		}
 		else if( vertexData[ i ].type == VertexType::CORNER_VERTEX )
 			resultVerticies[ i ] = verticies[ i ];
 		else if( vertexData[ i ].type == VertexType::CREASE_VERTEX )
-			resultVerticies[ i ] = ( verticies[ i ] * CREASE_VERTEX_WEIGHT + resultVerticies[ i ] ) / ( CREASE_VERTEX_WEIGHT + 2 );	//Check weight in docs
+			resultVerticies[ i ] = ( verticies[ i ] * CREASE_VERTEX_WEIGHT + resultVerticies[ i ] ) / ( CREASE_VERTEX_WEIGHT + vertexData[ i ].sumWeigths );	//Check weight in docs
 	}
 
 	// Clear edge verticies.
@@ -211,7 +213,7 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 		resultVerticies[ i ] = glm::vec3( 0.0, 0.0, 0.0 );
 
 	// We iterate added verticies.
-	for( INDEX_TYPE i = 0; i < resultIndicies.size(); i += 12 )
+	for( unsigned int i = 0; i < resultIndicies.size(); i += 12 )
 		for( INDEX_TYPE j = 0; j < 9; j += 3 )
 		{
 			INDEX_TYPE edgeIndex1 = resultIndicies[ i + j ];

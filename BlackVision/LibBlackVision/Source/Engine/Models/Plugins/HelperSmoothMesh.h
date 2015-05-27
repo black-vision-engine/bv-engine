@@ -20,8 +20,9 @@ struct VertexData
 {
 	VertexType		type;
 	unsigned short	numNeighbours;
+	float			sumWeigths;
 
-	VertexData() { type = SMOOTH_VERTEX; numNeighbours = 0; }
+	VertexData() { type = SMOOTH_VERTEX; numNeighbours = 0; sumWeigths = 0.0f; }
 };
 
 class HelperSmoothMesh

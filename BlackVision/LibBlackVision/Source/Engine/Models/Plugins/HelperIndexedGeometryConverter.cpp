@@ -26,13 +26,13 @@ void IndexedGeometryConverter::makeStrip( IndexedGeometry& mesh, Float3Attribute
 	if( indicies.size() < 3 )
 		return;
 
-	remainnigTriangles = static_cast<INDEX_TYPE>( indicies.size() / 3 );
+	remainnigTriangles = static_cast<unsigned int>( indicies.size() / 3 );
 	usedTriangles.resize( remainnigTriangles, false );
 
 
-	INDEX_TYPE lastIndex1 = 1;
-	INDEX_TYPE lastIndex2 = 2;
-	INDEX_TYPE newIndex = 0;
+	unsigned int lastIndex1 = 1;
+	unsigned int lastIndex2 = 2;
+	unsigned int newIndex = 0;
 
 	verts->AddAttribute( verticies[ indicies[newIndex] ] );
 	verts->AddAttribute( verticies[ indicies[lastIndex1] ] );
@@ -100,36 +100,36 @@ If next index is found, whole triangle is set as used in usedIndicies table.
 @param[in] index1 Second index of index of vertex.
 return Returns false if couldn't find traingle having such indicies.
 */
-bool IndexedGeometryConverter::findNeighbour( INDEX_TYPE index1, INDEX_TYPE index2, INDEX_TYPE& foundIndex, std::vector<INDEX_TYPE>& indicies )
+bool IndexedGeometryConverter::findNeighbour( unsigned int index1, unsigned int index2, unsigned int& foundIndex, std::vector<INDEX_TYPE>& indicies )
 {
-	INDEX_TYPE i = usedRangeIndex;
+	unsigned int i = usedRangeIndex;
 	for( ; i < indicies.size(); ++i )
 		if( indicies[ i ] == indicies[ index1 ] && !usedTriangles[ i / 3 ] )
 		{
-			INDEX_TYPE triangleStart = i - i % 3;
-			for( INDEX_TYPE k = triangleStart; k < triangleStart + 3; ++k )	// Little waste of time to compare i-th triangle, which we know. But it's better then milion of if's.
+			unsigned int triangleStart = i - i % 3;
+			for( unsigned int k = triangleStart; k < triangleStart + 3; ++k )	// Little waste of time to compare i-th triangle, which we know. But it's better then milion of if's.
 				if( indicies[ k ] == indicies[ index2 ] )	//We know that, two indicies exists in this triangle.
 				{// Return remainig index.
-					foundIndex = static_cast<INDEX_TYPE> ( 3 * triangleStart + 3 - (i + k) );	// Sum of indicies is 3*triangleStart + 0 + 1 + 2. We substract i and k. Result is new index.
+					foundIndex = static_cast<unsigned int> ( 3 * triangleStart + 3 - (i + k) );	// Sum of indicies is 3*triangleStart + 0 + 1 + 2. We substract i and k. Result is new index.
 
 					usedTriangles[i / 3] = true;
 					return true;
 				}
-			i = triangleStart + 3;	// Omit checked verticies
+			//i = triangleStart + 3;	// Omit checked verticies
 		}
 
 	return false;
 }
 
 /**Finds neighbour as the second findNeighbour function, but looks for only one common vertex.*/
-bool IndexedGeometryConverter::findNeighbourPair( INDEX_TYPE index1, INDEX_TYPE& foundIndex1, INDEX_TYPE& foundIndex2, std::vector<INDEX_TYPE>& indicies )
+bool IndexedGeometryConverter::findNeighbourPair( unsigned int index1, unsigned int& foundIndex1, unsigned int& foundIndex2, std::vector<INDEX_TYPE>& indicies )
 {
-	INDEX_TYPE i = usedRangeIndex;
+	unsigned int i = usedRangeIndex;
 	for( ; i < indicies.size(); ++i )
 		if( indicies[ i ] == indicies[ index1 ] && !usedTriangles[ i / 3 ] )
 		{
-			INDEX_TYPE offsetFromTriangleStart = i % 3;
-			INDEX_TYPE triangleStart = static_cast<INDEX_TYPE>( i - offsetFromTriangleStart );
+			unsigned int offsetFromTriangleStart = i % 3;
+			unsigned int triangleStart = static_cast<unsigned int>( i - offsetFromTriangleStart );
 			foundIndex1 = triangleStart + ( offsetFromTriangleStart + 1 ) % 3;
 			foundIndex2 = triangleStart + ( offsetFromTriangleStart + 2 ) % 3;
 
@@ -140,9 +140,9 @@ bool IndexedGeometryConverter::findNeighbourPair( INDEX_TYPE index1, INDEX_TYPE&
 	return false;
 }
 
-void IndexedGeometryConverter::findFirstUnusedTriangle( INDEX_TYPE& index1 , std::vector<INDEX_TYPE>& indicies )
+void IndexedGeometryConverter::findFirstUnusedTriangle( unsigned int& index1 , std::vector<INDEX_TYPE>& indicies )
 {
-	INDEX_TYPE i = usedRangeIndex;
+	unsigned int i = usedRangeIndex;
 	for( ; i < indicies.size(); i += 3 )
 		if( !usedTriangles[i / 3] )
 			break;
@@ -150,7 +150,7 @@ void IndexedGeometryConverter::findFirstUnusedTriangle( INDEX_TYPE& index1 , std
 	//usedRangeIndex = 3;
 	usedTriangles[i / 3] = true;
 
-	index1 = static_cast<INDEX_TYPE>( i );
+	index1 = static_cast<unsigned int>( i );
 }
 
 /**For optimizing performence.
@@ -161,7 +161,7 @@ void IndexedGeometryConverter::moveRangeIndex()
 	unsigned int i = usedRangeIndex / 3;
 	while( i < usedTriangles.size() && usedTriangles[ i ] )
 		++i;
-	usedRangeIndex = static_cast<INDEX_TYPE>( 3*i );
+	usedRangeIndex = static_cast<unsigned int>( 3*i );
 }
 
 }
