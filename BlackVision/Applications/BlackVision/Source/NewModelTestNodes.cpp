@@ -1761,8 +1761,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 //#define SHOW_TORUS
 //#define SHOW_SPRING
 //#define SHOW_GEOSPHERE
-#define SHOW_SIMPLE_CUBE
-//#define SHOW_COGWHEEL
+//#define SHOW_SIMPLE_CUBE
+#define SHOW_COGWHEEL
 
 	  //Timeline stuff
     auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
@@ -1841,7 +1841,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 // ============================================ //
 // Tranformations
-	glm::vec3 rotation_axis( 1.0f, 1.0f, 0.0f );
+	glm::vec3 rotation_axis( 1.0f, 0.0f, 0.0f );
 	glm::vec3 rotation_axis2( -1.f, 1.f, -1.f );
 
 	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
@@ -1991,11 +1991,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.2f );
 	model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 0.8f );
 	model::SetParameter( plugin->GetParameter( "height" ), 0.0f, 0.5f );
-	model::SetParameter( plugin->GetParameter( "bevel" ), 0.0f, 0.49f );
+	model::SetParameter( plugin->GetParameter( "bevel" ), 0.0f, 0.29f );
 	model::SetParameter( plugin->GetParameter( "tooth height" ), 0.0f, 0.2f );
-	model::SetParameter( plugin->GetParameter( "tooth base length" ), 0.0f, 0.3f );
+	model::SetParameter( plugin->GetParameter( "tooth base length" ), 0.0f, 0.02f );
 	model::SetParameter( plugin->GetParameter( "tooth top length" ), 0.0f, 0.08f );
-	model::SetParameter( plugin->GetParameter( "teeth number" ), 0.0f, 10 );
+	model::SetParameter( plugin->GetParameter( "teeth number" ), 0.0f, 14 );
 #endif
 
 

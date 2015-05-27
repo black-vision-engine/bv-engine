@@ -154,7 +154,7 @@ namespace Generator
 			closeRing( index, indicies );
 		}
 
-		void generateRing( std::vector<glm::vec3>& verticies, double angle, double topToothAngle )
+		void generateRing( std::vector<glm::vec3>& verticies, double angle, double uniformAngle, double topToothAngle )
 		{
 			glm::vec3 newVertex;
 			verticies.reserve( verticiesPerRing );
@@ -162,12 +162,18 @@ namespace Generator
 			// Part without teeths.
 			double sinAngle = sin( angle );
 			double cosAngle = cos( angle );
+			double cosUniformAngle = cos( uniformAngle );
+			double sinUniformAngle = sin( uniformAngle );
+			
+			sinUniformAngle;
+			cosUniformAngle;
+			uniformAngle;
 
-			newVertex = glm::vec3( cosAngle * innerRadius, height - bevel, sinAngle * innerRadius );
+			newVertex = glm::vec3( cosUniformAngle * innerRadius, height - bevel, sinUniformAngle * innerRadius );
 			verticies.push_back( newVertex );
-			newVertex = glm::vec3( cosAngle * innerRadius, height, sinAngle * innerRadius );
+			newVertex = glm::vec3( cosUniformAngle * innerRadius, height, sinUniformAngle * innerRadius );
 			verticies.push_back( newVertex );
-			newVertex = glm::vec3( cosAngle * ( innerRadius + bevel ), height, sinAngle * ( innerRadius + bevel ) );
+			newVertex = glm::vec3( cosUniformAngle * ( innerRadius + bevel ), height, sinUniformAngle * ( innerRadius + bevel ) );
 			verticies.push_back( newVertex );
 			newVertex = glm::vec3( cosAngle * ( outerRadius - bevel ), height, sinAngle * ( outerRadius - bevel ) );
 			verticies.push_back( newVertex );
@@ -181,11 +187,11 @@ namespace Generator
 			verticies.push_back( newVertex );
 			newVertex = glm::vec3( cosAngle * ( outerRadius - bevel ), -height, sinAngle * ( outerRadius - bevel ) );
 			verticies.push_back( newVertex );
-			newVertex = glm::vec3( cosAngle * ( innerRadius + bevel ), -height, sinAngle * ( innerRadius + bevel ) );
+			newVertex = glm::vec3( cosUniformAngle * ( innerRadius + bevel ), -height, sinUniformAngle * ( innerRadius + bevel ) );
 			verticies.push_back( newVertex );
-			newVertex = glm::vec3( cosAngle * innerRadius, -height, sinAngle * innerRadius );
+			newVertex = glm::vec3( cosUniformAngle * innerRadius, -height, sinUniformAngle * innerRadius );
 			verticies.push_back( newVertex );
-			newVertex = glm::vec3( cosAngle * innerRadius, -height + bevel, sinAngle * innerRadius );
+			newVertex = glm::vec3( cosUniformAngle * innerRadius, -height + bevel, sinUniformAngle * innerRadius );
 			verticies.push_back( newVertex );
 
 			//Tooth
@@ -239,10 +245,12 @@ namespace Generator
 			{
 				double angle1 = ( anglePerTooth + angleBetweenTeeth ) * (float)i;
 				double angle2 = angle1 + anglePerTooth;
+				double uniformAngle1 = double( i << 1 ) * PI / teethNumber;
+				double uniformAngle2 = double( (i << 1) + 1) * PI / teethNumber;
 				double toothCenterAngle = ( angle1 + angle2 ) / 2;
 
-				generateRing( verticies, angle1, toothCenterAngle - anglePerTopTooth / 2 );
-				generateRing( verticies, angle2, toothCenterAngle + anglePerTopTooth / 2 );
+				generateRing( verticies, angle1, uniformAngle1, toothCenterAngle - anglePerTopTooth / 2 );
+				generateRing( verticies, angle2, uniformAngle2, toothCenterAngle + anglePerTopTooth / 2 );
 			}
 
 			connectVerticiesIntoTriangles( indicies );

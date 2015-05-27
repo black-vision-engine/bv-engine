@@ -182,16 +182,16 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 			INDEX_TYPE index1 = indicies[ i + j ];
 			INDEX_TYPE index2 = indicies[ i + (j + 1) % 3 ];
 
-			float weight1 = computeVertexWeight( index1, index2, vertexData[ index1 ].type, sharpEdges );
-			resultVerticies[ index1 ] += ( weight1 / 2.0f ) * verticies[ index2 ];
+			float weight1 = computeVertexWeight( index1, index2, vertexData[ index1 ].type, sharpEdges ) / 2.0f;
+			resultVerticies[ index1 ] += weight1 * verticies[ index2 ];
 
-			float weight2 = computeVertexWeight( index2, index1, vertexData[ index2 ].type, sharpEdges );
-			resultVerticies[ index2 ] += ( weight2 / 2.0f ) * verticies[ index1 ];
+			float weight2 = computeVertexWeight( index2, index1, vertexData[ index2 ].type, sharpEdges ) / 2.0f;
+			resultVerticies[ index2 ] += weight2 * verticies[ index1 ];
 
 			vertexData[ index1 ].numNeighbours++;
 			vertexData[ index2 ].numNeighbours++;
-			vertexData[ index1 ].sumWeigths += weight1 / 2.0f;
-			vertexData[ index2 ].sumWeigths += weight2 / 2.0f;
+			vertexData[ index1 ].sumWeigths += weight1;
+			vertexData[ index2 ].sumWeigths += weight2;
 		}
 	// We add center vertex position.
 	for( INDEX_TYPE i = 0; i < verticies.size(); ++i )
@@ -209,8 +209,12 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 	}
 
 	// Clear edge verticies.
-	for( unsigned int i = verticies.size(); i < resultVerticies.size(); ++i )
+	unsigned int verticiesOffset = verticies.size();
+	for( unsigned int i = verticiesOffset; i < resultVerticies.size(); ++i )
 		resultVerticies[ i ] = glm::vec3( 0.0, 0.0, 0.0 );
+	// We need sum of weights
+	std::vector<float> sumWeights;
+	sumWeights.resize( resultVerticies.size() - verticiesOffset, 0.0f );
 
 	// We iterate added verticies.
 	for( unsigned int i = 0; i < resultIndicies.size(); i += 12 )
@@ -236,9 +240,15 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 				weight2 = 3.0f;
 				weight3 = 1.0f;
 			}
+			weight1 /= 2.0f;
+			weight2 /= 2.0f;
 
-			resultVerticies[ edgeVertex ] += ( verticies[ edgeIndex1 ] * weight1 + verticies[ edgeIndex2 ] * weight2 + verticies[ index3 ] * weight3 ) / ( 2*( weight1 + weight2 + weight3 ) );
+			resultVerticies[ edgeVertex ] += verticies[ edgeIndex1 ] * weight1 + verticies[ edgeIndex2 ] * weight2 + verticies[ index3 ] * weight3;
+			sumWeights[ edgeVertex - verticiesOffset ] += weight1 + weight2 + weight3;
 		}
+
+	for( unsigned int i = verticiesOffset; i < resultVerticies.size(); ++i )
+		resultVerticies[ i ] = float( 1.0 / sumWeights[ i - verticiesOffset ] ) * resultVerticies[ i ];
 }
 
 /**Finds given vertex in array of verticies.
