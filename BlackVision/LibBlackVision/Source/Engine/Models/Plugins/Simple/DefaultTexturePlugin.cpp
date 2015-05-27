@@ -158,7 +158,8 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( /*DefaultTexturePluginDesc::PixelShaderSource(),*/ model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( /*DefaultTexturePluginDesc::VertexShaderSource(),*/ model->GetVertexShaderChannelModel() ) );
 
-    InitAttributesChannel( prev );
+    if( prev ) // FIXME: hack for serialization
+        InitAttributesChannel( prev );
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
