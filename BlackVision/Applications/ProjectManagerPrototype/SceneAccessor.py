@@ -7,3 +7,11 @@ class SceneAccessor:
     @abstractmethod
     def getSceneDesc(self, path):
         pass
+
+    @abstractmethod
+    def importScene(self, impSceneFile, importToPath):
+        pass
+
+    @abstractmethod
+    def exportScene(self, expSceneFilePath, internalPath):
+        pass

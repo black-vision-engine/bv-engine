@@ -5,6 +5,7 @@ from SceneAccessor import SceneAccessor
 class Project:
 
     def __init__(self, name):
+        assert name not in ["project", "global"]  # TODO: Make better constraints for project name
         self.name = name
         self.categories = {}
         self.sceneAccessor = None
@@ -31,6 +32,14 @@ class Project:
         assert isinstance(path, str)
         if categoryId in self.categories:
             return self.categories[categoryId].getData(path)
+        else:
+            print("There is no category named {} in project {}".format(categoryId, self.name))
+            return None
+
+    def copyData(self, categoryId, path):
+        assert isinstance(path, str)
+        if categoryId in self.categories:
+            return self.categories[categoryId].copyData(path)
         else:
             print("There is no category named {} in project {}".format(categoryId, self.name))
             return None

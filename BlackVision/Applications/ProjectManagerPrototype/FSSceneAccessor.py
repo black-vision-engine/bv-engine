@@ -1,4 +1,5 @@
 from SceneAccessor import SceneAccessor
+from Scene import Scene, SceneReader, SceneWriter
 import os
 
 class SceneDesc:
@@ -17,16 +18,12 @@ class FSSceneAccessor(SceneAccessor):
         else:
             return None
 
-    def importScene(self, sceneDesc):
-        assert isinstance(sceneDesc, SceneDesc)
-        assert False  # TODO: Implement
+    def importScene(self, impSceneFile, importToPath):
+        SceneReader
+        pass
 
-    def exportScene(self, path):
-        absPath = os.path.join(self.rootPath, path)
-        assert False  # TODO: Implement
-        if os.path.exists(absPath):
-            return None
-        else:
-            return None
+    def exportScene(self, expSceneFilePath, internalPath):
+
+        pass
 
         

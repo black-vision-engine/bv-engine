@@ -58,6 +58,12 @@ class FSTextureDataAccessor(TextureDataAccessor):
             print(exc)
             return False
 
+    def copyData(self, internalPath):
+        assert False  # TODO: Implement
+        pass
+
+
+
     def __createDir(self):
         if not os.path.exists(self.rootPath):
             os.makedirs(self.rootPath)
