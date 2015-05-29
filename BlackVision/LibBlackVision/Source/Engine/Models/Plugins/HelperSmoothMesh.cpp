@@ -91,9 +91,7 @@ std::vector<INDEX_TYPE> HelperSmoothMesh::tesselate( IndexedGeometry& mesh, Inde
 
 	resultIndicies.reserve( 4 * indicies.size() );
 	resultVerticies.reserve( 3 * verticies.size() / 2 );
-	resultVerticies.resize( verticies.size() );
-	std::copy( verticies.begin(), verticies.end(), resultVerticies.begin() );		//Existing verticies have the same position as in init geometry.
-
+	resultVerticies.resize( verticies.size() );			//Existing verticies have the same position as in init geometry.
 
 
 	for( unsigned int i = 0; i < indicies.size(); i += 3 )
@@ -107,7 +105,7 @@ std::vector<INDEX_TYPE> HelperSmoothMesh::tesselate( IndexedGeometry& mesh, Inde
 			glm::vec3 secondVertex = verticies[ indicies[i + (j + 1) % 3] ];
 			glm::vec3 newVertex = ( firstVertex + secondVertex ) * glm::vec3( 0.5, 0.5, 0.5 );
 
-			if( findVertex( resultVerticies, newVertex, newIndex ) )
+			if( findVertex( resultVerticies, newVertex, newIndex, (INDEX_TYPE)verticies.size() ) )	//Checking only list of added verticies in this iteration.
 				newIndicies[ j ] = newIndex;
 			else
 			{
@@ -140,6 +138,34 @@ std::vector<INDEX_TYPE> HelperSmoothMesh::tesselate( IndexedGeometry& mesh, Inde
 	return std::move( newSharpEdges );
 }
 
+/**Moves verticies of the new mesh to appropriate positions.
+
+Old version. New is more efficient, but can have problems with not closed meshes.*/
+void HelperSmoothMesh::oldMoveVerticies( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, IndexedGeometry& resultMesh )
+{
+	const std::vector<INDEX_TYPE>& indicies = mesh.getIndicies();
+	const std::vector<glm::vec3>& verticies = mesh.getVerticies();
+	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.getIndicies();
+	std::vector<glm::vec3>& resultVerticies = resultMesh.getVerticies();
+	
+	std::vector<INDEX_TYPE> vertexNeighbours;
+	std::vector<float> vertexWeights;
+
+
+	for( INDEX_TYPE i = 0; i < verticies.size(); ++i )
+	{// Make movement for vertex points
+		vertexNeighbours = findAllNeighbours( i, indicies, INDEX_TYPE( resultVerticies.size() - 1 ) );		// 3. parameter - we are looking for neighbours in all vertices
+		vertexWeights = makeWeightTable( i, vertexNeighbours, sharpEdges, false );
+		resultVerticies[ i ] = computeVertexNewPosition( i, vertexNeighbours, vertexWeights, verticies, false );
+	}
+	for( INDEX_TYPE i = (INDEX_TYPE)verticies.size(); i < resultVerticies.size(); ++i )
+	{// Make movement for edge points
+		vertexNeighbours = findNeighboursForEdgeVertex( i, indicies, resultIndicies, INDEX_TYPE( verticies.size() - 1 ) );	// 3. parameter - we are looking for neighbours only in verticies from previous interation.
+		vertexWeights = makeWeightTable( i, vertexNeighbours, sharpEdges, true );
+		resultVerticies[ i ] = computeVertexNewPosition( i, vertexNeighbours, vertexWeights, verticies, true );
+	}
+}
+
 /**Moves verticies of the new mesh to appropriate positions.*/
 void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_TYPE>& sharpEdges, IndexedGeometry& resultMesh )
 {
@@ -147,23 +173,7 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 	const std::vector<glm::vec3>& verticies = mesh.getVerticies();
 	std::vector<INDEX_TYPE>& resultIndicies = resultMesh.getIndicies();
 	std::vector<glm::vec3>& resultVerticies = resultMesh.getVerticies();
-	
-	//std::vector<INDEX_TYPE> vertexNeighbours;
-	//std::vector<float> vertexWeights;
 
-
-	//for( INDEX_TYPE i = 0; i < verticies.size(); ++i )
-	//{// Make movement for vertex points
-	//	vertexNeighbours = findAllNeighbours( i, indicies, INDEX_TYPE( resultVerticies.size() - 1 ) );		// 3. parameter - we are looking for neighbours in all vertices
-	//	vertexWeights = makeWeightTable( i, vertexNeighbours, sharpEdges, false );
-	//	resultVerticies[ i ] = computeVertexNewPosition( i, vertexNeighbours, vertexWeights, verticies, false );
-	//}
-	//for( INDEX_TYPE i = (INDEX_TYPE)verticies.size(); i < resultVerticies.size(); ++i )
-	//{// Make movement for edge points
-	//	vertexNeighbours = findNeighboursForEdgeVertex( i, indicies, resultIndicies, INDEX_TYPE( verticies.size() - 1 ) );	// 3. parameter - we are looking for neighbours only in verticies from previous interation.
-	//	vertexWeights = makeWeightTable( i, vertexNeighbours, sharpEdges, true );
-	//	resultVerticies[ i ] = computeVertexNewPosition( i, vertexNeighbours, vertexWeights, verticies, true );
-	//}
 
 	std::vector<VertexData> vertexData;
 	vertexData.resize( verticies.size(), VertexData() );
@@ -254,9 +264,9 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 /**Finds given vertex in array of verticies.
 
 @return Returns true if vertex already exists in verticies.*/
-bool HelperSmoothMesh::findVertex( const std::vector<glm::vec3>& verticies, glm::vec3 vertex, INDEX_TYPE& index )
+bool HelperSmoothMesh::findVertex( const std::vector<glm::vec3>& verticies, glm::vec3 vertex, INDEX_TYPE& index, INDEX_TYPE startIndex )
 {
-	for( unsigned int i = 0; i < verticies.size(); ++i )
+	for( unsigned int i = startIndex; i < verticies.size(); ++i )
 		if( verticies[ i ] == vertex )
 		{
 			index = (INDEX_TYPE)i;
