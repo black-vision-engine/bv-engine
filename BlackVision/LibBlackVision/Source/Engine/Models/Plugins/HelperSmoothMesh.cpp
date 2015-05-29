@@ -388,7 +388,12 @@ void HelperSmoothMesh::addIfNotExists( INDEX_TYPE index, std::vector<INDEX_TYPE>
 float HelperSmoothMesh::computeCenterVertexWeight( unsigned short numNeighbours )
 {
 	double functionA = 5.0 / 8.0 - pow( ( 3.0 + 2.0 * cos( TWOPI / (double) numNeighbours) ), 2 ) / 64.0;
-	return static_cast<float>( double(numNeighbours) / functionA - 1.0 );
+	return static_cast<float>( double(numNeighbours) / functionA - numNeighbours );
+
+	//if( numNeighbours > 3 )
+	//	return 3.0f / 8.0f;
+	//else
+	//	return 3.0f / 16.0f;
 }
 
 

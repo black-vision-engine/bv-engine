@@ -1996,6 +1996,10 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( plugin->GetParameter( "tooth base length" ), 0.0f, 0.02f );
 	model::SetParameter( plugin->GetParameter( "tooth top length" ), 0.0f, 0.08f );
 	model::SetParameter( plugin->GetParameter( "teeth number" ), 0.0f, 14 );
+
+	model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCogWheel::Plugin::WeightCenter::MAX );
+	model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCogWheel::Plugin::WeightCenter::MAX );
+	model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultCogWheel::Plugin::WeightCenter::MAX );
 #endif
 
 

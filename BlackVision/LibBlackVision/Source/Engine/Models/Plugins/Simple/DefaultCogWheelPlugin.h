@@ -31,6 +31,9 @@ struct PN
 	static const std::string BEVEL;
 	static const std::string TESSELATION;
 	static const std::string HEIGHT;
+	static const std::string WEIGHTCENTERX; // enum WeightCenter (MIN, MAX, CENTER)
+	static const std::string WEIGHTCENTERY;
+	static const std::string WEIGHTCENTERZ;
 };
 
 /**@brief Plugin containing cube built as two triangle strips.
@@ -41,6 +44,9 @@ UVs cooridiantes are made as follows:
 */
 class Plugin : public DefaultGeometryPluginBase
 {
+public:
+	enum WeightCenter : int { MAX, MIN, CENTER };
+
 private:
 	ValueFloatPtr		innerRadius;
 	ValueFloatPtr		outerRadius;
@@ -51,7 +57,9 @@ private:
 	ValueFloatPtr		bevel;
 	ValueIntPtr			tesselation;
 	ValueFloatPtr		height;
-
+	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterX;
+	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterY;
+	std::shared_ptr< ParamEnum< WeightCenter >	>		m_weightCenterZ;
 public:
 	Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 	~Plugin();
@@ -61,10 +69,28 @@ public:
 	virtual bool Plugin::NeedsTopologyUpdate() override;
 };
 
+} // DefaultCogWheel
 
 
+template<>
+inline bool SetParameter< DefaultCogWheel::Plugin::WeightCenter >( IParameterPtr param, TimeType t, const DefaultCogWheel::Plugin::WeightCenter & val )
+{
+    //return SetSimpleTypedParameter< DefaultCone::DefaultConePlugin::WeightCenter> >( param, t, val );
+    typedef ParamEnum<DefaultCogWheel::Plugin::WeightCenter> ParamType;
 
-} // DefaultSimpleCube
+    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
+
+    if( typedParam == nullptr )
+    {
+        return false;
+    }
+
+    typedParam->SetVal( val, t );
+
+    return true;
+}
+
+
 } // model
 } // bv
 

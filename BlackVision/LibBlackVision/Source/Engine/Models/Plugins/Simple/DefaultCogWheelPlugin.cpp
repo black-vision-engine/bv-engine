@@ -3,7 +3,26 @@
 #include "..\HelperIndexedGeometryConverter.h"
 #include "..\HelperSmoothMesh.h"
 
-namespace bv { namespace model { namespace DefaultCogWheel {
+namespace bv { namespace model {
+
+
+typedef ParamEnum< DefaultCogWheel::Plugin::WeightCenter > ParamEnumWC;
+
+VoidPtr    ParamEnumWC::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
+
+template<>
+static IParameterPtr        ParametersFactory::CreateTypedParameter< DefaultCogWheel::Plugin::WeightCenter >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultCogWheel::Plugin::WeightCenter >( name, timeline );
+}
+	
+#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
+
+	
+namespace DefaultCogWheel {
 
 
 const std::string PN::INNER_RADIUS = "inner radius";
@@ -15,6 +34,9 @@ const std::string PN::TEETH_NUMBER = "teeth number";
 const std::string PN::BEVEL = "bevel";
 const std::string PN::TESSELATION = "tesselation";
 const std::string PN::HEIGHT = "height";
+const std::string PN::WEIGHTCENTERX = "weight center x";
+const std::string PN::WEIGHTCENTERY = "weight center y";
+const std::string PN::WEIGHTCENTERZ = "weight center z";
 
 
 PluginDesc::PluginDesc()
@@ -48,6 +70,12 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
 	h.AddSimpleParam( PN::TESSELATION, 0, true, true );
 	h.AddSimpleParam( PN::BEVEL, 0.3f, true, true );
 	h.AddSimpleParam( PN::HEIGHT, 0.5f, true, true );
+	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( DefaultCogWheel::PN::WEIGHTCENTERX, Plugin::WeightCenter::CENTER, true, true );
+	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( DefaultCogWheel::PN::WEIGHTCENTERY, Plugin::WeightCenter::MAX, true, true );
+	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( DefaultCogWheel::PN::WEIGHTCENTERZ, Plugin::WeightCenter::CENTER, true, true );
 
 
     return h.GetModel();
@@ -65,6 +93,9 @@ namespace Generator
 	int			teethNumber;
 	float		bevel;
 	int			tesselation;
+	Plugin::WeightCenter weight_centerX;
+	Plugin::WeightCenter weight_centerY;
+	Plugin::WeightCenter weight_centerZ;
 
 	const unsigned int verticiesPerRing = 12;
 	const unsigned int verticiesPerRingTooth = 16;
@@ -74,6 +105,7 @@ namespace Generator
 	class CogWheelGenerator : public IGeometryAndUVsGenerator
 	{
 	private:
+		glm::vec3 center_translate;
 	public:
 
 		CogWheelGenerator() {}
@@ -82,6 +114,33 @@ namespace Generator
 		Type GetType() { return GEOMETRY_AND_UVS; }
 		//GEOMETRY_AND_UVS
 		//GEOMETRY_ONLY
+
+		void computeWeightCenter( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY, Plugin::WeightCenter centerZ )
+		{
+			center_translate = glm::vec3( 0.0f, 0.0f, 0.0f );
+
+			if( centerX == Plugin::WeightCenter::MAX )
+				center_translate += glm::vec3( -outerRadius, 0.0, 0.0 );
+			else if( centerX == Plugin::WeightCenter::CENTER )
+				center_translate += glm::vec3( 0.0, 0.0, 0.0 );
+			else if( centerX == Plugin::WeightCenter::MIN )
+				center_translate += glm::vec3( outerRadius, 0.0, 0.0 );
+	
+			if( centerY == Plugin::WeightCenter::MAX )
+				center_translate += glm::vec3( 0.0f, -height / 2, 0.0f );
+			else if( centerY == Plugin::WeightCenter::CENTER )
+				center_translate += glm::vec3( 0.0f, 0.0f, 0.0f );
+			else if( centerY == Plugin::WeightCenter::MIN )
+				center_translate += glm::vec3( 0.0f, height / 2, 0.0f );
+
+			if( centerZ == Plugin::WeightCenter::MAX )
+				center_translate += glm::vec3( 0.0, 0.0, -outerRadius );
+			else if( centerZ == Plugin::WeightCenter::CENTER )
+				center_translate += glm::vec3( 0.0, 0.0, 0.0 );
+			else if( centerZ == Plugin::WeightCenter::MIN )
+				center_translate += glm::vec3( 0.0, 0.0, outerRadius );
+			
+		}
 
 		void connectVerticiesBetween( unsigned int begin, unsigned int offset, std::vector<INDEX_TYPE>& indicies )
 		{
@@ -170,42 +229,42 @@ namespace Generator
 			uniformAngle;
 
 			newVertex = glm::vec3( cosUniformAngle * innerRadius, height - bevel, sinUniformAngle * innerRadius );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 			newVertex = glm::vec3( cosUniformAngle * innerRadius, height, sinUniformAngle * innerRadius );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 			newVertex = glm::vec3( cosUniformAngle * ( innerRadius + bevel ), height, sinUniformAngle * ( innerRadius + bevel ) );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 			newVertex = glm::vec3( cosAngle * ( outerRadius - bevel ), height, sinAngle * ( outerRadius - bevel ) );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 			newVertex = glm::vec3( cosAngle * ( outerRadius ), height, sinAngle * ( outerRadius ) );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 			newVertex = glm::vec3( cosAngle * ( outerRadius ), height - bevel, sinAngle * ( outerRadius ) );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 			newVertex = glm::vec3( cosAngle * ( outerRadius ), -height + bevel, sinAngle * ( outerRadius ) );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 			newVertex = glm::vec3( cosAngle * ( outerRadius ), -height, sinAngle * ( outerRadius ) );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 			newVertex = glm::vec3( cosAngle * ( outerRadius - bevel ), -height, sinAngle * ( outerRadius - bevel ) );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 			newVertex = glm::vec3( cosUniformAngle * ( innerRadius + bevel ), -height, sinUniformAngle * ( innerRadius + bevel ) );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 			newVertex = glm::vec3( cosUniformAngle * innerRadius, -height, sinUniformAngle * innerRadius );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 			newVertex = glm::vec3( cosUniformAngle * innerRadius, -height + bevel, sinUniformAngle * innerRadius );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 
 			//Tooth
 			sinAngle = sin( topToothAngle );
 			cosAngle = cos( topToothAngle );
 			
 			newVertex = glm::vec3( cosAngle * ( outerRadius + toothHeight ), height, sinAngle * ( outerRadius + toothHeight ) );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 			newVertex = glm::vec3( cosAngle * ( outerRadius + toothHeight ), height - bevel, sinAngle * ( outerRadius + toothHeight ) );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 			newVertex = glm::vec3( cosAngle * ( outerRadius + toothHeight ), -height + bevel, sinAngle * ( outerRadius + toothHeight ) );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 			newVertex = glm::vec3( cosAngle * ( outerRadius + toothHeight ), -height, sinAngle * ( outerRadius + toothHeight ) );
-			verticies.push_back( newVertex );
+			verticies.push_back( newVertex + center_translate );
 		}
 
 		void connectVerticiesIntoTriangles( std::vector<INDEX_TYPE>& indicies )
@@ -229,6 +288,8 @@ namespace Generator
 
 		void GenerateGeometryAndUVs( Float3AttributeChannelPtr verts, Float2AttributeChannelPtr uvs ) override
         {
+			computeWeightCenter( weight_centerX, weight_centerY, weight_centerZ );
+
 			HelperSmoothMesh smoother;
 			IndexedGeometryConverter converter;
 			IndexedGeometry cogWheel;
@@ -264,7 +325,7 @@ namespace Generator
 			for( SizeType v = 0; v < verts->GetNumEntries(); v++ )
 			{
 				glm::vec3 vert = verts->GetVertices()[ v ];
-				//vert -= center_translate;
+				vert -= center_translate;
 				uvs->AddAttribute( glm::vec2( vert.x*0.5 + 0.5,
 												vert.y*0.5 + 0.5 ) ); // FIXME: scaling
 			}
@@ -286,6 +347,9 @@ Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr pr
 	tesselation = QueryTypedValue< ValueIntPtr >( GetValue( PN::TESSELATION ) );
 	teethNumber = QueryTypedValue< ValueIntPtr >( GetValue( PN::TEETH_NUMBER ) );
 	height = QueryTypedValue< ValueFloatPtr >( GetValue( PN::HEIGHT ) );
+	m_weightCenterX = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERX ) );
+	m_weightCenterY = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERY ) );
+	m_weightCenterZ = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERZ ) );
 
 
     m_pluginParamValModel->Update();
@@ -308,6 +372,9 @@ std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
 	Generator::toothBaseLength = toothBaseLength->GetValue();
 	Generator::toothHeight = toothHeight->GetValue();
 	Generator::toothTopLength = toothHeight->GetValue();
+	Generator::weight_centerX = m_weightCenterX->Evaluate();
+	Generator::weight_centerY = m_weightCenterY->Evaluate();
+	Generator::weight_centerZ = m_weightCenterZ->Evaluate();
 
 
     std::vector<IGeometryGeneratorPtr> gens;
@@ -325,7 +392,10 @@ bool                                Plugin::NeedsTopologyUpdate()
 		|| ParameterChanged( PN::TOOTH_BASE_LENGTH )
 		|| ParameterChanged( PN::TOOTH_HEIGHT )
 		|| ParameterChanged( PN::TOOTH_TOP_LENGTH )
-		|| ParameterChanged( PN::HEIGHT );
+		|| ParameterChanged( PN::HEIGHT )
+		|| ParameterChanged( PN::WEIGHTCENTERX )
+		|| ParameterChanged( PN::WEIGHTCENTERY )
+		|| ParameterChanged( PN::WEIGHTCENTERZ );
 }
 
 
