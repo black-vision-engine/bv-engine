@@ -27,3 +27,5 @@ class FSSceneAccessor(SceneAccessor):
         absPath = os.path.join(self.rootPath, internalPath)
         s = loadScene(absPath)
         packSceneAndResources(s, self.project, expSceneFilePath)
+
+    def copyScene(self, path):

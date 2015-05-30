@@ -107,7 +107,7 @@ def packSceneAndResources(scene, project, outputFile):
 
     json.dump(resultData, outputFile)
 
-def unpackSceneAndResources(scenePackedFile, toProject):
+def unpackSceneAndResources(scenePackedFile, toProject, scenePath):
     assert isinstance(toProject, Project)
 
     sceneAndResources = json.load(scenePackedFile)
@@ -116,7 +116,7 @@ def unpackSceneAndResources(scenePackedFile, toProject):
 
     resources = sceneAndResources['resourcesData']
 
-    toProject.
+    toProject.appendScene(scene, scenePath)
 
 def saveScene(scene, outputFile):
     sr = SceneWriter(scene, outputFile)

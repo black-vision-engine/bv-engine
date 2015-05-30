@@ -3,6 +3,7 @@ from LoadableDataDesc import LoadableDataDesc
 
 import os
 import shutil
+import json
 
 class LoadableTextureDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::TextureAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
     def __init__(self, absPath):
@@ -10,6 +11,8 @@ class LoadableTextureDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc le
         self.absPath = absPath
         #  TODO: Pewnie jeszcze duzo wiecej memberow w, h, bpp, takie tam
 
+def getLoadableTextureDataDesc(absPath):  # Can be something more complicated
+    return LoadableTextureDataDesc(absPath)
 
 class FSTextureDataAccessor(TextureDataAccessor):
     def __init__(self, rootPath, supportedFileExt):
@@ -62,6 +65,53 @@ class FSTextureDataAccessor(TextureDataAccessor):
         assert False  # TODO: Implement
         pass
 
+    def importData(self, impDataFile, importToPath):
+
+        try:
+            resultFileContent = None
+
+            with open(impDataFile, "r") as fi:
+                resultFileContent = json.load(fi)
+
+            desc = resultFileContent["desc"]
+
+            assert isinstance(desc, LoadableTextureDataDesc)
+            assert(desc.absPath. str)
+            filename = desc.absPath.split('/')[-1]
+
+            toPath = os.path.join(self.rootPath, importToPath, filename)
+
+            with open(toPath, "w") as f:
+                f.write(resultFileContent["resourceData"])
+
+            return True
+        except Exception as exc:
+            print("Cannot import texture from '{}'".format(impDataFile))
+            print(exc)
+            return False
+
+
+    def exportData(self, expDataFilePath, internalPath):
+        try:
+            absPath = os.path.join(self.rootPath, internalPath)
+
+            desc = getLoadableTextureDataDesc(absPath)
+
+            resultFileContent = {}
+
+            resultFileContent["desc"] = json.dumps(desc)
+
+            with open(absPath, "r") as fi:
+                resultFileContent["resourceData"] = fi.read()
+
+            with open(expDataFilePath, "w") as f:
+                json.dump(resultFileContent, f)
+
+            return True
+        except Exception as exc:
+            print("""Cannot export texture '{}'""".format(internalPath))
+            print(exc)
+            return False
 
 
     def __createDir(self):
