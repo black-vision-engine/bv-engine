@@ -1,5 +1,5 @@
 from SceneAccessor import SceneAccessor
-from Scene import Scene, SceneReader, SceneWriter
+from Scene import packSceneAndResources, loadScene, saveScene
 import os
 
 class SceneDesc:
@@ -7,9 +7,10 @@ class SceneDesc:
         self.absPath = absPath
 
 class FSSceneAccessor(SceneAccessor):
-    def __init__(self, rootPath):
+    def __init__(self, rootPath, project):
         SceneAccessor.__init__(self)
         self.rootPath = rootPath
+        self.project = project
 
     def getSceneDesc(self, path):
         absPath = os.path.join(self.rootPath, path)
@@ -19,11 +20,10 @@ class FSSceneAccessor(SceneAccessor):
             return None
 
     def importScene(self, impSceneFile, importToPath):
-        SceneReader
+
         pass
 
     def exportScene(self, expSceneFilePath, internalPath):
-
-        pass
-
-        
+        absPath = os.path.join(self.rootPath, internalPath)
+        s = loadScene(absPath)
+        packSceneAndResources(s, self.project, expSceneFilePath)

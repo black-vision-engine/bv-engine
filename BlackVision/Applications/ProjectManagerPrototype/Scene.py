@@ -1,5 +1,4 @@
 from Project import Project
-from DataAccessor import DataAccessor
 from Location import Location
 import json
 
@@ -95,18 +94,37 @@ def packSceneAndResources(scene, project, outputFile):
     assert isinstance(scene, Scene)
     res = scene.listResources()
 
-    resourceToPack = [r for r in res if isProjectResource(project.getName(), r)]
+    resourcesToPack = [r for r in res if isProjectResource(project.getName(), r)]
 
     sw = SceneWriter(scene, outputFile)
     sStr = sw.dumpsScene()
 
-    resultData = { 'sceneJson' : sStr, 'resourcesData' : {} }
+    resultData = {'sceneJson': sStr, 'resourcesData': {}}
 
-    for r in resourceToPack:
+    for r in resourcesToPack:
         loc = Location(r)
         resultData['resourcesData'][r] = project.copyData(loc.getCategoryName(), loc.getInternalPath())
 
     json.dump(resultData, outputFile)
+
+def unpackSceneAndResources(scenePackedFile, toProject):
+    assert isinstance(toProject, Project)
+
+    sceneAndResources = json.load(scenePackedFile)
+
+    scene = sceneAndResources['sceneJson']
+
+    resources = sceneAndResources['resourcesData']
+
+    toProject.
+
+def saveScene(scene, outputFile):
+    sr = SceneWriter(scene, outputFile)
+    return sr.saveScene()
+
+def loadScene(sceneFile):
+    sr = SceneReader(sceneFile)
+    return sr.loadScene()
 
 
 

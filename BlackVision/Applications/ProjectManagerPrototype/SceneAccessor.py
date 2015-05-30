@@ -9,9 +9,9 @@ class SceneAccessor:
         pass
 
     @abstractmethod
-    def importScene(self, impSceneFile, importToPath):
+    def importScene(self, impSceneFile, project, importToPath):
         pass
 
     @abstractmethod
-    def exportScene(self, expSceneFilePath, internalPath):
+    def exportScene(self, expSceneFilePath, project, internalPath):
         pass

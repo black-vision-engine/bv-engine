@@ -52,6 +52,15 @@ class Project:
         assert isinstance(sceneAccessor, SceneAccessor)
         self.sceneAccessor = sceneAccessor
 
+    def appendScene(self, scene, path):
+        assert isinstance(self.sceneAccessor, SceneAccessor)
+        self.sceneAccessor.addScene(path, scene)
+
+    def copyScene(self, path):
+        assert isinstance(self.sceneAccessor, SceneAccessor)
+        return self.sceneAccessor.copyScene(path)
+
+
     def __str__(self):
         print("Project {} \n\t".format(self.name))
         print("Scenes: {}".format(self.projectScenes.keys()))
