@@ -12,7 +12,7 @@ namespace bv {
 
 auto imagePath = "Assets/AssetManager/checkerboard2.png";
 auto imagePath_512x512 = "Assets/AssetManager/checkerboard2_512X512.png";
-auto AssetsPath = "Assets/AssetManager/"; 
+auto AssetsPath = "Assets/AssetManager/";
 
 TEST(HashTest, Hash)
 {
