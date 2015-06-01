@@ -47,8 +47,8 @@ ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
     IPluginPtr plugin__ = doc.m_pm->CreatePlugin( pluginType, pluginName, doc.m_tm->GetRootTimeline() );
     std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin__ );
 
-// TODO: params
-
+// params
+    auto params = doc.LoadArray< ParamFloat >();
     
     ISerializablePtr serializablePlugin = std::static_pointer_cast< ISerializable >( plugin );
     return serializablePlugin;

@@ -2,7 +2,7 @@
 
 #include "rapidxml/RapidXml.hpp"
 #include "Engine/Models/Timeline/TimelineManager.h"
-#include "Models/Plugins/Manager/PluginsManager.h"
+//#include "Models/Plugins/Manager/PluginsManager.h"
 
 namespace bv
 {
@@ -15,6 +15,8 @@ namespace bv
 //    SerializeObject( rapidxml::xml_document<> doc ) : m_doc( doc ) { }
 //};
 //
+
+namespace model { class PluginsManager; }
 
 class DeserializeObject
 {
@@ -59,6 +61,20 @@ public:
                 auto childNode = Load< T >( child );
                 ret.push_back( childNode );
             }
+
+        return ret;
+    }
+
+    template< typename T >
+    std::vector< std::shared_ptr< T > >                     LoadArray()
+    {
+        std::vector< std::shared_ptr< T > > ret;
+
+        for( auto child = m_doc->first_node(); child; child = child->next_sibling() )
+        {
+            auto childNode = Load< T >( child );
+            ret.push_back( childNode );
+        }
 
         return ret;
     }
