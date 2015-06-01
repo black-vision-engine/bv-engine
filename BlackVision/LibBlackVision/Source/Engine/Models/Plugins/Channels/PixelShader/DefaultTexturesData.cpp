@@ -122,7 +122,9 @@ void                                            DefaultTexturesData::AddAnimatio
 //
 void                                            DefaultTexturesData::SetAnimationFrame   ( unsigned int idx, unsigned int frameNum )
 {
-    assert( idx < m_animationDescriptors.size() );
+    //assert( idx < m_animationDescriptors.size() ); // FUNKED for serialization
+    if( idx >= m_animationDescriptors.size() )
+        return;
 
     auto desc = static_cast< DefaultAnimationDescriptor * >( m_animationDescriptors[ idx ] );
     desc->SetCurrentFrame( frameNum );
