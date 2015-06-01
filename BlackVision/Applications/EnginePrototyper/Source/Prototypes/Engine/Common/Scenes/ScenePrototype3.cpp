@@ -30,7 +30,7 @@ void        ScenePrototype3::OnKey               ( unsigned char c )
 SceneNode * ScenePrototype3::BuildSceneImpl      ()
 {
 	std::string sand( "sand.jpg" );
-	std::string cubeMap( "cube_map.jpg" );
+	std::string cubeMap( "Penguins.jpg" );
 
 	std::vector<std::string*> textures;
 	textures.push_back( &sand );
