@@ -101,16 +101,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>BVGL_D</TargetName>
+    <TargetName>LibBVGLD</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>BVGL_D</TargetName>
+    <TargetName>LibBVGLD</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>BVGL</TargetName>
+    <TargetName>LibBVGL</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>BVGL</TargetName>
+    <TargetName>LibBVGL</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
