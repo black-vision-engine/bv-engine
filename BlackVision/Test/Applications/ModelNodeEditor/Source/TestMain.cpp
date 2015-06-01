@@ -292,3 +292,4 @@ int main( int argc, char **argv )
 	return RUN_ALL_TESTS();
 }
 
+// enable intrinsic functions - w konfiguracji Common (dla Release na true)
