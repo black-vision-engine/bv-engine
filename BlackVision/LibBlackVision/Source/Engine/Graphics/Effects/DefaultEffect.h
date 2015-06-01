@@ -25,7 +25,7 @@ public:
         DefaultEffect   ( const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds );
         ~DefaultEffect  ();
 
-private:
+protected:			///FIXME changed from private
 
     RenderablePass *    CreateRenderablePass    ( const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds ) const;
 

@@ -18,6 +18,7 @@ public:
 
     static IShaderDataSourceConstPtr    VertexShader        ( ShaderDataSourceType sdst );
     static IShaderDataSourceConstPtr    FragmentShader      ( ShaderDataSourceType sdst, const std::string & textureFile = "", const std::string & textureName = "" );
+	static IShaderDataSourceConstPtr    FragmentShader      ( ShaderDataSourceType sdst, float alfa, const std::string & textureFile = "", const std::string & textureName = "" );
     static IShaderDataSourceConstPtr    GeometryShader      ( ShaderDataSourceType sdst );
 
 private:
