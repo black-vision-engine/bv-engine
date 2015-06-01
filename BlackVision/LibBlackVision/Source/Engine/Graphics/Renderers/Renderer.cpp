@@ -229,17 +229,20 @@ bool    Renderer::Draw                  ( RenderableEntity * ent )
     //FIXME: then there should be an instancing loop with MVP binding and then entity rendering
     if( eff )
     {
-        Enable( eff->GetPass( 0 ), ent ); //FIXME: 1 pass ONLY RIGHT NOW
+		for( unsigned int pass = 0; pass < eff->NumPasses(); ++pass )
+		{
+			Enable( eff->GetPass( 0 ), ent ); //FIXME: 1 pass ONLY RIGHT NOW
 
-        DrawRenderable( ent );
+			DrawRenderable( ent );
 
-        //FIXME: Disable whathever there is to be disabled
-        //Disable(eff->GetPass(0));  //FIXME:
-        //Disable(vb, vd);
-        //if(ib) 
-        //    Disable(ib);
+			//FIXME: Disable whathever there is to be disabled
+			//Disable(eff->GetPass(0));  //FIXME:
+			//Disable(vb, vd);
+			//if(ib) 
+			//    Disable(ib);
 
-        //Disable(vb);
+			//Disable(vb);
+		}
     }
 
     return true;

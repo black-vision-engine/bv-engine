@@ -28,7 +28,8 @@ IAppLogicPrototype * CreateDefaultPrototype             ( Renderer * renderer )
 	//return new FBOProfilingPrototype2( renderer );
 	//return new FBOProfilingPrototype3( renderer );
 
-    return new DrawingPrototype( renderer );
+    //return new DrawingPrototype( renderer );
+	return new MultipassTest( renderer );
 }
 
 // ****************************

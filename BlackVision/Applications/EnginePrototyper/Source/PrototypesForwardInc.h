@@ -8,5 +8,6 @@
 #include "Prototypes/Engine/MemManagement/MemManagementInspector.h"
 #include "Prototypes/Engine/MemManagement/PboUpdatesInspector.h"
 #include "Prototypes/DrawingCommands/DrawingPrototype.h"
+#include "Prototypes/Engine/Multipass/MultipassTest.h"
 
 #include "PrototypeCreator.h"

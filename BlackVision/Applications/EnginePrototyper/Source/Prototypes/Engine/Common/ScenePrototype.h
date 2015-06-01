@@ -4,6 +4,7 @@
 
 #include "Prototypes/Engine/Common/Transformations.h"
 #include "Prototypes/Engine/Common/SimpleNodeBuilder.h"
+#include "Prototypes/Engine/Common/MultipassNodeBuilder.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
