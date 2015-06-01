@@ -48,7 +48,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
     std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin__ );
 
 // params
-    auto params = doc.LoadArray< AbstractModelParameter >();
+    auto params = doc.LoadProperties< AbstractModelParameter >( "property" );
     
     ISerializablePtr serializablePlugin = std::static_pointer_cast< ISerializable >( plugin );
     return serializablePlugin;

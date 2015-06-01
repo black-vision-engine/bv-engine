@@ -66,14 +66,17 @@ public:
     }
 
     template< typename T >
-    std::vector< std::shared_ptr< T > >                     LoadArray()
+    std::vector< std::shared_ptr< T > >                     LoadProperties( std::string name )
     {
         std::vector< std::shared_ptr< T > > ret;
 
         for( auto child = m_doc->first_node(); child; child = child->next_sibling() )
         {
-            auto childNode = Load< T >( child );
-            ret.push_back( childNode );
+            if( !strcmp( child->name(), name.c_str() ) )
+            {
+                auto childNode = Load< T >( child );
+                ret.push_back( childNode );
+            }
         }
 
         return ret;

@@ -1,13 +1,15 @@
 #include "AbstractModelParameter.h"
+#include "ParametersFactory.h"
 
 
 namespace bv { namespace model {
 
 // ********************************************************************************************************************
 
-ISerializablePtr AbstractModelParameter::Create(DeserializeObject&)
+ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob )
 {
-    return nullptr;
+    ITimeEvaluatorPtr te = dob.m_tm->GetRootTimeline();
+    return ParametersFactory::CreateParameterFloat( dob.GetValue( "name" ), te ); // FIXME
 }
 
 namespace
