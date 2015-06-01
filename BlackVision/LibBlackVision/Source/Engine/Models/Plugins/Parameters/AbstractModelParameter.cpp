@@ -5,6 +5,11 @@ namespace bv { namespace model {
 
 // ********************************************************************************************************************
 
+ISerializablePtr AbstractModelParameter::Create(DeserializeObject&)
+{
+    return nullptr;
+}
+
 namespace
 {
 

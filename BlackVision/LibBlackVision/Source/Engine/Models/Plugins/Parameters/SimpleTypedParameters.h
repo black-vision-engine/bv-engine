@@ -11,7 +11,7 @@ namespace bv { namespace model {
 
 // *******************************************
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
-class SimpleParameterImpl : public AbstractModelParameter, public ISerializable
+class SimpleParameterImpl : public AbstractModelParameter
 {
 public:
 
@@ -25,9 +25,6 @@ public:
 
     explicit                SimpleParameterImpl ( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator );
                             ~SimpleParameterImpl();
-
-    virtual void                Serialize       ( SerializeObject &/*doc*/ ) const {}
-    static ISerializablePtr     Create          ( DeserializeObject &/*doc*/ ) { return nullptr; }
 
     virtual void                SetInterpolationMethod ( InterpolationMethod method ) override;
     virtual InterpolationMethod GetInterpolationMethod () const override;
