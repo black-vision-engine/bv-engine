@@ -15,11 +15,12 @@ DefaultMultipassEffect::~DefaultMultipassEffect(void)
 }
 
 
-void DefaultMultipassEffect::addPass( const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds )
+RenderablePass* DefaultMultipassEffect::addPass( const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds )
 {
-    auto pass = CreateRenderablePass( psds, vsds, gsds );
+	RenderablePass* pass = CreateRenderablePass( psds, vsds, gsds );
 
     AddPass( pass );
+	return pass;
 }
 
 } //bv

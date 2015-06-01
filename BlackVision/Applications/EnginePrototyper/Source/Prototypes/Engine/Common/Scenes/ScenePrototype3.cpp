@@ -29,7 +29,14 @@ void        ScenePrototype3::OnKey               ( unsigned char c )
 //
 SceneNode * ScenePrototype3::BuildSceneImpl      ()
 {
-	SceneNode * root = MultipassNodeBuilder::CreateMultipassRectNodeTexture( 1.f, 1.f, -1.1f, "sand.jpg", 3 );
+	std::string sand( "sand.jpg" );
+	std::string cubeMap( "cube_map.jpg" );
+
+	std::vector<std::string*> textures;
+	textures.push_back( &sand );
+	textures.push_back( &cubeMap );		// textures.size() is at the same time number of passes
+
+	SceneNode * root = MultipassNodeBuilder::CreateMultipassRectNodeTexture( 1.f, 1.f, -1.1f, textures.data(), (unsigned short)textures.size() );
     SetLocalTransform( root, Transformations::Scale( glm::vec3( 2.f, 2.f, 1.0f ) ) );
 
     return root;

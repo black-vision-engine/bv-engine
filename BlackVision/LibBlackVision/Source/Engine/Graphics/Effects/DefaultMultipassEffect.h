@@ -16,11 +16,12 @@ public:
 	DefaultMultipassEffect( const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds );
 	~DefaultMultipassEffect();
 
-	void addPass( const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds );
+	RenderablePass* addPass( const IShaderDataSource * psds, const IShaderDataSource * vsds, const IShaderDataSource * gsds );
 };
 
 
-
+DEFINE_PTR_TYPE(DefaultMultipassEffect)
+DEFINE_CONST_PTR_TYPE(DefaultMultipassEffect)
 
 
 } //bv

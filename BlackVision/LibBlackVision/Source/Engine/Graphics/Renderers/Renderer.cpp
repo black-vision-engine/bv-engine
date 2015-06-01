@@ -231,7 +231,7 @@ bool    Renderer::Draw                  ( RenderableEntity * ent )
     {
 		for( unsigned int pass = 0; pass < eff->NumPasses(); ++pass )
 		{
-			Enable( eff->GetPass( 0 ), ent ); //FIXME: 1 pass ONLY RIGHT NOW
+			Enable( eff->GetPass( pass ), ent ); //FIXME: 1 pass ONLY RIGHT NOW
 
 			DrawRenderable( ent );
 
