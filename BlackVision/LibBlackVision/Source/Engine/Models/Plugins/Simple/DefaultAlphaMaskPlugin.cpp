@@ -12,6 +12,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
+#include "DefaultTransformPlugin.h"
 
 
 namespace bv { namespace model {
@@ -99,10 +100,10 @@ bool                   DefaultAlphaMaskPluginDesc::CanBeAttachedTo     ( IPlugin
 
     auto uid = plugin->GetTypeUid();
 
-	if ( uid != DefaultColorPluginDesc::UID() && uid != DefaultTexturePluginDesc::UID() && uid != DefaultTextPluginDesc::UID() && uid != DefaultAnimationPluginDesc::UID() && uid != DefaultGradientPluginDesc::UID() )
-    {
-        return false;
-    }
+	//if ( uid != DefaultColorPluginDesc::UID() && uid != DefaultTexturePluginDesc::UID() && uid != DefaultTextPluginDesc::UID() && uid != DefaultAnimationPluginDesc::UID() && uid != DefaultGradientPluginDesc::UID() ) // FUNKED for serialization
+ //   {
+ //       return false;
+ //   }
 
     return true;
 }
@@ -128,15 +129,13 @@ std::string             DefaultAlphaMaskPluginDesc::TextureName             ()
 
 // *************************************
 // 
-DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
-    , m_psc( nullptr )
-    , m_vsc( nullptr )
-    , m_vaChannel( nullptr )
-    , m_paramValModel( model )
-    , m_textureWidth( 0 )
-    , m_textureHeight( 0 )
+void								DefaultAlphaMaskPlugin::SetPrevPlugin               ( IPluginPtr prev )
 {
+    __super::SetPrevPlugin( prev );
+    
+    if( prev == nullptr )
+        return;
+
     //FIXME: The hackiest of it all - added registered parameters to pass on to the engine - ten kod jest przestraszny i wykurwiscie niefajny
     if( prev->GetTypeUid() == DefaultColorPluginDesc::UID() )
     {
@@ -208,9 +207,6 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
         }
     }
 
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
-
     InitAttributesChannel( prev );
 
     if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() || prev->GetTypeUid() == DefaultTextPluginDesc::UID() )
@@ -220,6 +216,23 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
         //FIXME: this line causes changes to Texture Plugin data via current pointer - quite shitty
         m_psc->OverrideTexturesData( std::static_pointer_cast< DefaultTexturesData >( prev_psc ) );
     }
+}
+
+// *************************************
+// 
+DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
+    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
+    , m_psc( nullptr )
+    , m_vsc( nullptr )
+    , m_vaChannel( nullptr )
+    , m_paramValModel( model )
+    , m_textureWidth( 0 )
+    , m_textureHeight( 0 )
+{
+    SetPrevPlugin( prev );
+
+    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
+    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
@@ -385,12 +398,14 @@ void                                DefaultAlphaMaskPlugin::Update              
 
     auto attachmentMode = GetAttachementMode();
 
-    if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
+    auto prevVAC = m_prevPlugin->GetVertexAttributesChannel();
+    if( prevVAC && prevVAC->NeedsAttributesUpdate() ) // FUNKED for serialization
     {
         RecalculateAttrChannel();
     }
 
-    if( m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
+    if( prevVAC && prevVAC->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
+                                                     // FUNKED for serialization
     {
         if( m_vaChannel != nullptr )
         {
@@ -511,13 +526,13 @@ void                                DefaultAlphaMaskPlugin::Update              
     auto wY = GetWrapModeY();
     auto fm = GetFilteringMode();
 
-    if( m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() )
+    if( prevVAC && prevVAC->NeedsTopologyUpdate() )  // FUNKED for serialization
     {
         m_vaChannel->SetNeedsTopologyUpdate( true );
     }
-    else
+    else if( prevVAC ) // seriously FUNKED for serialization
     {
-        if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() || StateChanged( wX, wY, fm, attachmentMode ) )
+        if ( ( prevVAC && prevVAC->NeedsAttributesUpdate() ) || StateChanged( wX, wY, fm, attachmentMode ) ) // FUNKED for serialization
         {
             UpdateState( wX, wY, fm, attachmentMode );
             m_vaChannel->SetNeedsAttributesUpdate( true );
@@ -542,7 +557,7 @@ void DefaultAlphaMaskPlugin::InitAttributesChannel( IPluginConstPtr prev )
 
     if( prevGeomChannel == nullptr ) //FIXME: hackierka
     {
-        assert( prev->GetTypeUid() == DefaultTextPluginDesc::UID() );
+        assert( prev->GetTypeUid() == DefaultTextPluginDesc::UID() || prev->GetTypeUid() == DefaultTransformPluginDesc::UID() );
 
         return;
     }

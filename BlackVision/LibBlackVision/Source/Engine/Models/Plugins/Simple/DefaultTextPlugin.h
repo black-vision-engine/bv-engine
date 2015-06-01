@@ -97,6 +97,8 @@ public:
 												~DefaultTextPlugin          ();
 
 	static bool									SetText						( IPluginPtr, const std::wstring& );
+
+    virtual void								SetPrevPlugin               ( IPluginPtr plugin );
 };
 
 } // model

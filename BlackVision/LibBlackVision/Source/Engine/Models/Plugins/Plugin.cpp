@@ -15,12 +15,17 @@ namespace PluginsSerialization
         else if( serialName == "texture" )
             return "DEFAULT_TEXTURE";
         else if( serialName == "alpha" )
-            //return "DEFAULT_ALPHA_MASK";
-            return "DEFAULT_TRANSFORM";
+            return "DEFAULT_TRANSFORM"; // FIXME
         else if( serialName == "solid" )
             return "DEFAULT_COLOR";
         else if( serialName == "text" )
             return "DEFAULT_TEXT";
+        else if( serialName == "mask" )
+            return "DEFAULT_ALPHA_MASK";
+        else if( serialName == "sequence" )
+            return "DEFAULT_ANIMATION";
+        else if( serialName == "replicator" )
+            return "DEFAULT_TRANSFORM"; // FIXME
         else
         {
             std::cout << "[ERROR] Unable to deserialize plugin: " << serialName << std::endl;

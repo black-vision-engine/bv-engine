@@ -121,6 +121,16 @@ std::string             DefaultAnimationPluginDesc::TextureName               ()
 
 // ************************************************************************* PLUGIN *************************************************************************
 
+void								DefaultAnimationPlugin::SetPrevPlugin               ( IPluginPtr prev )
+{
+    __super::SetPrevPlugin( prev );
+
+    if( prev == nullptr )
+        return;
+
+    InitAttributesChannel( prev );
+}
+
 // *************************************
 // 
 DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
@@ -133,7 +143,7 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
 
-    InitAttributesChannel( prev );
+    SetPrevPlugin( prev );
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;

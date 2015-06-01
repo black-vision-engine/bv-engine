@@ -73,6 +73,7 @@ public:
 
     virtual void                                Update                      ( TimeType t ) override;
 
+    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 private:
 
     void                                        InitAttributesChannel       ( IPluginPtr prev );

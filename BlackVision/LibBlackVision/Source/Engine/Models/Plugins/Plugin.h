@@ -106,9 +106,9 @@ void BasePlugin< Iface >::Update  ( TimeType t )
 template< class Iface >
 BasePlugin< Iface >::BasePlugin   ( const std::string & name, const std::string & uid, IPluginPtr prevPlugin, IPluginParamValModelPtr model )
     : m_prevPlugin( prevPlugin )
-    , m_pluginParamValModel( model )
     , m_name( name )
     , m_uid( uid )
+    , m_pluginParamValModel( model )
 {
 }
 

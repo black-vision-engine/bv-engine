@@ -134,17 +134,13 @@ std::string             DefaultTextPluginDesc::FontFileName             ()
 
 // *************************************
 // 
-DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
-    , m_psc( nullptr )
-    , m_vsc( nullptr )
-    , m_vaChannel( nullptr )
-    , m_paramValModel( model )
-    , m_textSet( true )
-    , m_atlas( nullptr )
-    , m_text( L"" )
-	, m_textLength( 0.f )
+void DefaultTextPlugin::SetPrevPlugin( IPluginPtr prev )
 {
+    __super::SetPrevPlugin( prev );
+
+    if( prev == nullptr )
+        return;
+
     auto colorParam = prev->GetParameter( "color" );
 
     if ( colorParam == nullptr )
@@ -169,7 +165,22 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
         }
         
     }
+}
 
+// *************************************
+// 
+DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
+    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
+    , m_psc( nullptr )
+    , m_vsc( nullptr )
+    , m_vaChannel( nullptr )
+    , m_paramValModel( model )
+    , m_textSet( true )
+    , m_atlas( nullptr )
+    , m_text( L"" )
+	, m_textLength( 0.f )
+{
+    SetPrevPlugin( prev );
 
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
@@ -339,7 +350,8 @@ void                                DefaultTextPlugin::Update                   
     { t; } // FIXME: suppress unused warning
     m_paramValModel->Update();
 
-    m_vaChannel->SetNeedsTopologyUpdate( m_textSet );
+    if( m_vaChannel) // FUNKED for serialization
+        m_vaChannel->SetNeedsTopologyUpdate( m_textSet );
 
     m_textSet = false;
 
