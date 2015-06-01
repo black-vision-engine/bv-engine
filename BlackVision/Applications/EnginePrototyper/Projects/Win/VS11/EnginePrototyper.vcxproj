@@ -110,10 +110,12 @@
     <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\DrawingPrototype.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ExperimentalNodeDeleter.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\MultipassNodeBuilder.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ScenePrototype.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype0.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype1.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype2.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype3.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\SimpleNodeBuilder.cpp" />
@@ -121,6 +123,7 @@
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Transformations.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagement\PboUpdatesInspector.cpp" />
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Multipass\MultipassTest.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\CacheMissBenchmark.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype0.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype1.cpp" />
@@ -145,10 +148,12 @@
     <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\DrawingPrototype.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ExperimentalNodeDeleter.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\GeometryBuilder.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\MultipassNodeBuilder.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ScenePrototype.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype0.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype1.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype2.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype3.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceImpl.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\ShaderDataSourceCreator.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\SimpleNodeBuilder.h" />
@@ -156,6 +161,7 @@
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Transformations.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagement\PboUpdatesInspector.h" />
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Multipass\MultipassTest.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\CacheMissBenchmark.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype0.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\FBOProfiling\FBOProfilingPrototype1.h" />

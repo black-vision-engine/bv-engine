@@ -133,6 +133,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Events\Queues\EventQueue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\Queues\EventQueueConcurrent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\DefaultEffect.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectShaders.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectWithMask.cpp" />
@@ -334,6 +335,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h" />

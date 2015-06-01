@@ -81,6 +81,15 @@
     <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingTestScene.cpp">
       <Filter>Prototypes\DrawingCommands\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype3.cpp">
+      <Filter>Prototypes\Engine\Common\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Multipass\MultipassTest.cpp">
+      <Filter>Prototypes\Engine\Multipass</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\MultipassNodeBuilder.cpp">
+      <Filter>Prototypes\Engine\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
@@ -176,6 +185,15 @@
     <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Modes\DrawingModes.h">
       <Filter>Prototypes\DrawingCommands\Common\Modes</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\Scenes\ScenePrototype3.h">
+      <Filter>Prototypes\Engine\Common\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Multipass\MultipassTest.h">
+      <Filter>Prototypes\Engine\Multipass</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\MultipassNodeBuilder.h">
+      <Filter>Prototypes\Engine\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -216,6 +234,9 @@
     </Filter>
     <Filter Include="Prototypes\DrawingCommands\Common\Scenes">
       <UniqueIdentifier>{b735905f-fbb9-42cc-8ac4-e7b3d9c6ef37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prototypes\Engine\Multipass">
+      <UniqueIdentifier>{38fab6c5-9694-499e-a003-cb93f3012ca5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

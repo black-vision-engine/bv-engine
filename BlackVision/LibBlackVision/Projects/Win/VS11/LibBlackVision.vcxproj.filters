@@ -858,6 +858,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.cpp">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </C1Compile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.cpp">
       <Filter>Engine\Models\Plugins</Filter>
     </ClCompile>
@@ -1745,6 +1748,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </C1Include>  
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCogWheelPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>

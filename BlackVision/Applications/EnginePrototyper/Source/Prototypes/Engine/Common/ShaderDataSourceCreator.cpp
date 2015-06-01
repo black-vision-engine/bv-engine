@@ -67,6 +67,33 @@ IShaderDataSourceConstPtr   ShaderDataSourceCreator::FragmentShader     ( Shader
 
 // *****************************
 //
+IShaderDataSourceConstPtr   ShaderDataSourceCreator::FragmentShader     ( ShaderDataSourceType sdst, float alfa, const std::string & textureFile, const std::string & textureName )
+{
+    auto source = FragmentShaderSource( sdst );
+
+    if( source != "" )
+    {
+        auto shaderDataSource = std::make_shared<ShaderDataSourceImpl>( source );
+
+        if( sdst == ShaderDataSourceType::SDST_SOLID_COLOR )
+        {
+            shaderDataSource->AddValue( "color", glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+        }
+        else if( sdst == ShaderDataSourceType::SDST_ONE_TEXTURE )
+        {
+            { textureFile; }
+            shaderDataSource->AddValue( "alpha", alfa );
+            shaderDataSource->AddTextureFromFile( textureFile, textureName );
+        }
+
+        return shaderDataSource;
+    }
+
+    return nullptr;    
+}
+
+// *****************************
+//
 IShaderDataSourceConstPtr   ShaderDataSourceCreator::GeometryShader     ( ShaderDataSourceType sdst )
 {
     { sdst; }

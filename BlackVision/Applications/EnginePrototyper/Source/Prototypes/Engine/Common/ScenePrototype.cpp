@@ -5,6 +5,7 @@
 #include "Prototypes/Engine/Common/Scenes/ScenePrototype0.h"
 #include "Prototypes/Engine/Common/Scenes/ScenePrototype1.h"
 #include "Prototypes/Engine/Common/Scenes/ScenePrototype2.h"
+#include "Prototypes/Engine/Common/Scenes/ScenePrototype3.h"
 
 
 namespace  bv {
@@ -26,6 +27,9 @@ ScenePrototype *    ScenePrototype::CreateNewPrototype  ( unsigned int i, Render
         case 2:
             res = new ScenePrototype2( renderer );
             break;
+		case 3:
+			res = new ScenePrototype3( renderer );
+			break;
         default:
             ;
     }
