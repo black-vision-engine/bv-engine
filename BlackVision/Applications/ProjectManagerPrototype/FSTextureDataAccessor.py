@@ -11,9 +11,6 @@ class LoadableTextureDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc le
         self.absPath = absPath
         #  TODO: Pewnie jeszcze duzo wiecej memberow w, h, bpp, takie tam
 
-def getLoadableTextureDataDesc(absPath):  # Can be something more complicated
-    return LoadableTextureDataDesc(absPath)
-
 class FSTextureDataAccessor(TextureDataAccessor):
     def __init__(self, rootPath, supportedFileExt):
         TextureDataAccessor.__init__(self)
@@ -95,7 +92,7 @@ class FSTextureDataAccessor(TextureDataAccessor):
         try:
             absPath = os.path.join(self.rootPath, internalPath)
 
-            desc = getLoadableTextureDataDesc(absPath)
+            desc = self.getLoadableDataDesc(internalPath)
 
             resultFileContent = {}
 

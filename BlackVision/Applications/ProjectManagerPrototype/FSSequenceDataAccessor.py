@@ -3,6 +3,7 @@ from LoadableDataDesc import LoadableDataDesc
 
 import os
 import shutil
+import json
 
 class LoadableSequenceDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::SequenceAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
     def __init__(self, absPath, frames):
@@ -70,6 +71,56 @@ class FSSequenceDataAccessor(SequenceDataAccessor):
             shutil.move(oldAbsPath, newAbsPath)
             return True
         except Exception as exc:
+            print(exc)
+            return False
+
+    def importData(self, impDataFile, importToPath):
+
+        try:
+            resultFileContent = None
+
+            with open(impDataFile, "r") as fi:
+                resultFileContent = json.load(fi)
+
+            desc = resultFileContent["desc"]
+
+            assert isinstance(desc, LoadableSequenceDataDesc)
+            assert(desc.absPath. str)
+
+            toPath = os.path.join(self.rootPath, importToPath)
+
+            for frame, i in desc.getFrames():
+                assert isinstance(frame, str)
+                filename = os.path.basename(frame)
+                with open(filename, "w") as f:
+                    f.write(resultFileContent["resourceData"][i])
+
+            return True
+        except Exception as exc:
+            print("Cannot import sequence from '{}'".format(impDataFile))
+            print(exc)
+            return False
+
+
+    def exportData(self, expDataFilePath, internalPath):
+        try:
+            desc = self.getLoadableDataDesc(internalPath)
+
+            resultFileContent = {}
+
+            resultFileContent["desc"] = json.dumps(desc)
+
+            resultFileContent["resourceData"] = []
+            for frame in desc.getFrames():
+                with open(frame, "r") as fi:
+                    resultFileContent["resourceData"].append(fi.read())
+
+            with open(expDataFilePath, "w") as f:
+                json.dump(resultFileContent, f)
+
+            return True
+        except Exception as exc:
+            print("""Cannot export sequence '{}'""".format(internalPath))
             print(exc)
             return False
 
