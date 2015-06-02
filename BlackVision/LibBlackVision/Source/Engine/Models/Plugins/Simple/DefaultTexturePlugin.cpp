@@ -136,20 +136,6 @@ std::string             DefaultTexturePluginDesc::UID                       ()
 }
 
 // *******************************
-//
-std::string             DefaultTexturePluginDesc::VertexShaderSource        ()
-{
-    return "Assets/Shaders/Deprecated/defaulttexture.vert";
-}
-
-// *******************************
-//
-std::string             DefaultTexturePluginDesc::PixelShaderSource         ()
-{
-    return "Assets/Shaders/Deprecated/defaulttexture.frag";
-}
-
-// *******************************
 // 
 std::string             DefaultTexturePluginDesc::TextureName               ()
 {
@@ -163,6 +149,16 @@ std::string             DefaultTexturePluginDesc::TextureName               ()
 
 // *************************************
 // 
+void DefaultTexturePlugin::SetPrevPlugin( IPluginPtr prev )
+{
+    __super::SetPrevPlugin( prev );
+
+    if( prev )
+        InitAttributesChannel( prev );
+}
+
+// *************************************
+// 
 DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_psc( nullptr )
@@ -170,10 +166,10 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
 {
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultTexturePluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultTexturePluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
+    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( /*DefaultTexturePluginDesc::PixelShaderSource(),*/ model->GetPixelShaderChannelModel(), nullptr ) );
+    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( /*DefaultTexturePluginDesc::VertexShaderSource(),*/ model->GetVertexShaderChannelModel() ) );
 
-    InitAttributesChannel( prev );
+    SetPrevPlugin( prev );
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;

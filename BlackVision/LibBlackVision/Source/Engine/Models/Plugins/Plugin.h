@@ -13,11 +13,13 @@
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
 #include "TextureInfo.h"
 
+#include "Engine/Interfaces/ISerializable.h"
+//#include "Engine/Models/Plugins/PluginsFactory.h"
 
 namespace bv { namespace model {
 
 template< class Iface = IPlugin >
-class BasePlugin : public Iface
+class BasePlugin : public Iface, public ISerializable
 {
 protected:
 
@@ -34,6 +36,8 @@ protected:
     explicit                                    BasePlugin                  ( const std::string & name, const std::string & uid, IPluginPtr prevPlugin, IPluginParamValModelPtr model );
 
 public:
+    virtual void                                Serialize                   ( SerializeObject &/*doc*/ ) const override {}
+    static ISerializablePtr                     Create                      ( DeserializeObject&/*doc*/ );
 
     virtual                                     ~BasePlugin                 ();
 
@@ -102,9 +106,9 @@ void BasePlugin< Iface >::Update  ( TimeType t )
 template< class Iface >
 BasePlugin< Iface >::BasePlugin   ( const std::string & name, const std::string & uid, IPluginPtr prevPlugin, IPluginParamValModelPtr model )
     : m_prevPlugin( prevPlugin )
-    , m_pluginParamValModel( model )
     , m_name( name )
     , m_uid( uid )
+    , m_pluginParamValModel( model )
 {
 }
 

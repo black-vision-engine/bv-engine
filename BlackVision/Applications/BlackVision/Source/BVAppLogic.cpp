@@ -128,10 +128,12 @@ void BVAppLogic::Initialize         ()
 	bv::effect::InitializeLibEffect( m_renderer );
 }
 
+
 // *********************************
 //
 void BVAppLogic::LoadScene          ( void )
 {
+    m_timelineManager->RegisterRootTimeline( m_globalTimeline );
     auto root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, m_timelineManager, m_globalTimeline );
 	assert( root );
 

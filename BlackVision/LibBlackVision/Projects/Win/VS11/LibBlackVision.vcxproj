@@ -277,6 +277,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Plugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\PluginUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.cpp" />
@@ -341,6 +342,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Interfaces\ISerializable.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelNodeEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\IndexedGeometry.h" />
@@ -596,6 +598,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\SceneModel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventLoop.h" />
@@ -617,6 +620,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Processes\ProcessManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Processes\ProcessThreaded.h" />
     <ClInclude Include="..\..\..\Source\Engine\Processes\ProcessThreadedEvents.h" />
+    <ClInclude Include="..\..\..\Source\Engine\SerializationObjects.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Enums.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\EnumsUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\BaseValue.h" />

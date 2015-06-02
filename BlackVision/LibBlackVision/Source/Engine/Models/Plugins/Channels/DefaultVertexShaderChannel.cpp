@@ -50,6 +50,13 @@ DefaultVertexShaderChannelPtr DefaultVertexShaderChannel::Create             ( c
     return nullptr;
 }
 
+// ******************************
+//
+DefaultVertexShaderChannelPtr DefaultVertexShaderChannel::Create             ( IValueSetConstPtr values )
+{
+    return std::make_shared< DefaultVertexShaderChannel >( "", values );
+}
+
 namespace {
 
 // *********************************

@@ -21,9 +21,6 @@ public:
 
 	static  std::string                     UID                 ();
 
-	static  std::string                     VertexShaderSource  ();
-	static  std::string                     PixelShaderSource   ();
-
 	static  std::string                     TextureName         ();
 
 };

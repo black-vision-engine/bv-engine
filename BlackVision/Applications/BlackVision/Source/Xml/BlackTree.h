@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Auxiliary\auxiliary.hpp"
-#include "rapidxml\rapidxml.hpp" //"rapidxml.hpp"
+#include "rapidxml/RapidXml.hpp" //"rapidxml.hpp"
 #include "Scena.h"
 #include <iostream>
 #include <string>

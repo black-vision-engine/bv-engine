@@ -38,6 +38,7 @@ public:
 
     static  DefaultPixelShaderChannelPtr    Create              ();
     static  DefaultPixelShaderChannelPtr    Create              ( const std::string & shaderFile, IValueSetConstPtr values, RendererContextPtr ctx = nullptr );
+    static  DefaultPixelShaderChannelPtr    Create              ( IValueSetConstPtr values, RendererContextPtr ctx = nullptr );
 
 };
 

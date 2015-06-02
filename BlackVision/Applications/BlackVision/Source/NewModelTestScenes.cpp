@@ -494,6 +494,10 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
     {
         node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
+    else if( scene == "SERIALIZED_TEST" )
+    {
+        node = TestScenesFactory::CreateSerializedTestScene( pluginsManager, timelineManager );
+    }
 	else if( scene == "ALL_BASIC_SHAPES_SHOW" )
 	{
 		node = TestScenesFactory::BasicShapesShowScene( pluginsManager, timelineManager, timeEvaluator );
@@ -1082,6 +1086,8 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( 
 
     return root;
 }
+
+    static  model::BasicNodePtr     CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager );
 
 /**All basic shapes in one scene*/
 model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )

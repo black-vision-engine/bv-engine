@@ -29,9 +29,6 @@ public:
 
 	static  std::string                     UID                 ();
 
-	static  std::string                     VertexShaderSource  ();
-	static  std::string                     PixelShaderSource   ();
-
 	static  std::string                     TextureName         ();
 
 };
@@ -98,6 +95,7 @@ private:
 	bool                                        StateChanged                ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am/*, glm::vec4 bc*/ ) const;
 	void                                        UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am/*, glm::vec4 bc*/ );
 
+    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
 
 } // model

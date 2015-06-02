@@ -33,9 +33,9 @@ class GeometryMultiRectPlugin;
 class Timeline;
 class TimerPlugin;
 
-struct PluginsFactory
+namespace PluginsFactory
 {
-	static model::GeometryRectPlugin *          CreateGeometryRectPlugin            ( float w, float h, ITimeEvaluatorPtr timeEvaluator );
+	model::GeometryRectPlugin *          CreateGeometryRectPlugin            ( float w, float h, ITimeEvaluatorPtr timeEvaluator );
  //   static model::GeometryMultiRectPlugin *     CreateGeometryMultiRectPlugin       ();
  //   static model::GeometryRingPlugin *          CreateGeometryRingPlugin            ( float startAngle, float endAngle, float innerRadius, float outerRadius, int segmentsNum );
 

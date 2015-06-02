@@ -8,6 +8,7 @@
 
 #include "Engine/Models/ModelNodeEditor.h"
 
+#include "Engine/Models/Plugins/Plugin.h"
 
 namespace bv { namespace model {
 
@@ -73,7 +74,33 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
 	node->SetModelNodeEditor( new ModelNodeEditor( node ) );
 
     return node;
-}    
+}
+
+// ********************************
+//
+ISerializablePtr BasicNode::Create( DeserializeObject& dob )
+{
+    assert( dob.GetName() == "node" );
+
+    auto name = dob.GetValue( "name" );
+    auto timeEvaluator = dob.m_tm->GetRootTimeline();
+    
+    auto node = Create( name, timeEvaluator );
+
+// plugins
+    auto plugins = dob.LoadArray< BasePlugin< IPlugin > >( "plugins" );
+
+    for( auto plugin : plugins )
+        node->AddPlugin( plugin );
+
+// children
+    auto children = dob.LoadArray< BasicNode >( "nodes" );
+
+    for( auto child : children )
+        node->AddChildToModelOnly( child );
+
+    return node;
+}
 
 // ********************************
 //
@@ -518,4 +545,5 @@ std::string                         BasicNode::SplitPrefix              ( std::s
 }
 
 } // model
+
 } // bv

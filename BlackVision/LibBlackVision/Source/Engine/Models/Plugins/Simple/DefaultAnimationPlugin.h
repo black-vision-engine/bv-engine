@@ -29,9 +29,6 @@ public:
 
     static  std::string                     UID                 ();
 
-    static  std::string                     VertexShaderSource  ();
-    static  std::string                     PixelShaderSource   ();
-
     static  std::string                     TextureName         ();
 
 };
@@ -76,6 +73,7 @@ public:
 
     virtual void                                Update                      ( TimeType t ) override;
 
+    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 private:
 
     void                                        InitAttributesChannel       ( IPluginPtr prev );
