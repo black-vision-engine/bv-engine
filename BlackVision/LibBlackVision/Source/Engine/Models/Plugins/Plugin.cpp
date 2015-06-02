@@ -1,5 +1,7 @@
 #include "Plugin.h"
 
+#include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
+
 namespace bv { namespace model {
 
 namespace PluginsSerialization
@@ -37,6 +39,26 @@ namespace PluginsSerialization
 
 // *******************************
 //
+void SetParameter( IPluginParamValModelPtr pvm, AbstractModelParameterPtr param )
+{
+    IParamValModelPtr models[] = {    pvm->GetPluginModel()
+                                    , pvm->GetTransformChannelModel()
+                                    , pvm->GetVertexAttributesChannelModel()
+                                    , pvm->GetPixelShaderChannelModel()
+                                    , pvm->GetVertexShaderChannelModel()
+                                    , pvm->GetGeometryShaderChannelModel() 
+                                };
+
+    for( auto model_ : models )
+        if( model_ && model_->GetParameter( param->GetName() ) )
+            {
+                auto model = std::static_pointer_cast< DefaultParamValModel >( model_ ); // FIXME: this should not really be assumed here, I think
+                model->AddParameter( param ); // FIXME: SetParameter instead of AddParameter
+            }
+}
+
+// *******************************
+//
 template <>
 ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
 {
@@ -71,11 +93,15 @@ ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
             || param->GetName() == "rotation" // DEFAULT_TRANSFORM
             )
             continue;
-        if( !plugin->GetParameter( param->GetName() ) )
+        
+        if( plugin->GetParameter( param->GetName() ) == nullptr )
         {
             std::cout << "[ERROR] Parameter " << param->GetName() << " is not a parameter of " << pluginType << std::endl;
             assert( false );
+            continue;
         }
+
+        SetParameter( plugin->GetPluginParamValModel(), param );
     }
     
     ISerializablePtr serializablePlugin = std::static_pointer_cast< ISerializable >( plugin );
