@@ -3,15 +3,16 @@
 #include <list>
 #include <vector>
 #include<string>
+#include "../base/XMLPlugin.h"
 
 using namespace std;
 
 
 
-class PluginGeometry:public XMLPlugin
+class PluginTransform:public XMLPlugin
 {
 public:
-	PluginGeometry()
+	PluginTransform()
 	{
 		properties.push_back(Property(position,"position"));
 		properties.push_back(Property(rotation,"rotation"));

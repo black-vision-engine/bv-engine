@@ -37,7 +37,7 @@ namespace bv
 		~TreeBuilder(void);
 		model::BasicNodePtr             BuildTree                       (string path, model::TimelineManager * timelineManager);
 		model::BasicNodePtr             SendTree                        (BlackNode &CurrentNode,int depth=0);
-		bool                            AttachGeometryPlugin            (model::BasicNodePtr node,XMLPlugin* plugin);
+		bool                            AttachTransformPlugin            (model::BasicNodePtr node,XMLPlugin* plugin);
         bool                            AttachAlphaPlugin            (model::BasicNodePtr node,XMLPlugin* plugin);
 		bool                            AttachRectanglePlugin           (model::BasicNodePtr node,XMLPlugin* plugin);
 		bool                            AttachMaskPlugin           (model::BasicNodePtr node,XMLPlugin* plugin);

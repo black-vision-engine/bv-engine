@@ -3,6 +3,7 @@
 #include <vector>
 #include<string>
 #include<conio.h>
+#include "../base/XMLPlugin.h"
 
 class PluginLinearGradient:public XMLPlugin
 {

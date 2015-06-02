@@ -350,9 +350,9 @@ PluginRadialGradient* BlackTree::CreatePluginRadialGradient(xml_node<> *NewNode)
 
 // *********************************
 //
-PluginGeometry *BlackTree::CreatePluginGeometry(xml_node<> *NewNode)
+PluginTransform *BlackTree::CreatePluginTransform(xml_node<> *NewNode)
 {
-	PluginGeometry *plugin = new PluginGeometry();;
+	PluginTransform *plugin = new PluginTransform();;
 	//cout<<"parsing..."<<endl;
 	ParsePluginProperties(plugin,NewNode);
 	//cout<<"parsed..."<<endl;
@@ -640,7 +640,7 @@ bool BlackTree::CreatePlugin(BlackNode &node, xml_node<> *NewNode)
 
 	if(type=="geometry")
 	{
-		plugin = CreatePluginGeometry(NewNode);
+		plugin = CreatePluginTransform(NewNode);
 	}else if(type=="solid")
 	{
 		plugin = CreatePluginSolid(NewNode);

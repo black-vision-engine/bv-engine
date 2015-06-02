@@ -366,7 +366,7 @@ namespace bv{
     }
 
 	//**********************************
-	bool TreeBuilder::AttachGeometryPlugin(model::BasicNodePtr node,XMLPlugin* plugin)
+	bool TreeBuilder::AttachTransformPlugin(model::BasicNodePtr node,XMLPlugin* plugin)
 	{
 
         bool result = node->AddPlugin( "DEFAULT_TRANSFORM", "transform", GetTimeline(plugin->timeline) ); 
@@ -465,7 +465,7 @@ namespace bv{
 		}*/else if(pluginName=="geometry")
 		{
 			//cout<<"loading geometry plugin"<<endl;
-			AttachGeometryPlugin(node,plugin);
+			AttachTransformPlugin(node,plugin);
 		}else if(pluginName=="alpha")
 		{
 			//cout<<"loading solid color plugin"<<endl;
@@ -604,7 +604,7 @@ namespace bv{
 		{
 
 			model::BasicNodePtr separatorNode = BasicNode::Create("crawl_separator_img_"+to_string(i),timeline_default_alpha);
-			AttachGeometryPlugin(separatorNode,new PluginGeometry());
+			AttachTransformPlugin(separatorNode,new PluginTransform());
 			
 			PluginRectangle* rectanglePlugin = new PluginRectangle();
 			//rectanglePlugin->autosize = false;
@@ -619,9 +619,9 @@ namespace bv{
 
 			model::BasicNodePtr textNode = BasicNode::Create("Text",timeline_default_alpha);
 			
-			PluginGeometry* geometryPlugin = new PluginGeometry();
+			PluginTransform* geometryPlugin = new PluginTransform();
 			geometryPlugin->position.push_back(TimeProperty("0",crawl->text_offset));
-			AttachGeometryPlugin(textNode,geometryPlugin);
+			AttachTransformPlugin(textNode,geometryPlugin);
 
 			PluginSolid* solidPlugin = new PluginSolid();
 			//solidPlugin->surface="white";

@@ -1,5 +1,5 @@
 #pragma once
-#include "XMLPlugin.h"
+#include "../base/XMLPlugin.h"
 
 using namespace std;
 class PluginText:public XMLPlugin

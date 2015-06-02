@@ -3,29 +3,59 @@
 #include <list>
 #include <vector>
 #include<string>
-#include "plugins/BlackNode.h"
-#include "plugins/BlackTimeline.h"
-#include "helpers/KeyValue.h"
-#include "plugins/SceneMetaTags.h"
 
-#include "plugins\PluginExtrude.h"
-#include "plugins\PluginAlpha.h"
-#include "plugins\PluginGeometry.h"
-#include "plugins\PluginLinearGradient.h"
-#include "plugins\PluginRadialGradient.h"
-#include "plugins\PluginRectangle.h"
-#include "plugins\PluginRing.h"
-#include "plugins\PluginSequence.h"
-#include "plugins\PluginSolid.h"
-#include "plugins\PluginText.h"
-#include "plugins\PluginTimer.h"
-#include "plugins\PluginTexture.h"
-#include "plugins\PluginInstance.h"
-#include "plugins\BlackClass.h"
-#include "plugins\PluginReplicator.h"
-#include "plugins\PluginCrawl.h"
-#include "plugins\PluginMask.h"
-#include "plugins\PluginPrism.h"
+//basic classes
+#include "plugins/base/BlackNode.h"
+#include "plugins/base/BlackTimeline.h"
+#include "helpers/KeyValue.h"
+#include "plugins/base/SceneMetaTags.h"
+
+
+
+#include "plugins/base/BlackClass.h"
+
+//geometry
+#include "plugins/geometry/PluginRectangle.h"
+#include "plugins/geometry/PluginPrism.h"
+#include "plugins/geometry/PluginRing.h"
+#include "plugins/geometry/PluginText.h"
+#include "plugins/geometry/PluginTimer.h"
+#include "plugins/geometry/PluginExtrude.h"
+#include "plugins/geometry/PluginCircle.h"
+#include "plugins/geometry/PluginCone.h"
+#include "plugins/geometry/PluginCube.h"
+#include "plugins/geometry/PluginEllipse.h"
+#include "plugins/geometry/PluginRoundedRectangle.h"
+#include "plugins/geometry/PluginSphere.h"
+#include "plugins/geometry/PluginTriangle.h"
+
+
+
+
+//logic
+#include "plugins/logic/PluginAlpha.h"
+#include "plugins/logic/PluginReplicator.h"
+#include "plugins/logic/PluginCrawl.h"
+#include "plugins/logic/PluginMask.h"
+#include "plugins/logic/PluginInstance.h"
+//texture
+#include "plugins/texture/PluginLinearGradient.h"
+#include "plugins/texture/PluginRadialGradient.h"
+#include "plugins/texture/PluginSequence.h"
+#include "plugins/texture/PluginSolid.h"
+#include "plugins/texture/PluginTexture.h"
+
+//transform
+
+#include "plugins/transform/PluginTransform.h"
+
+
+
+
+
+
+
+
 
 
 using namespace std;

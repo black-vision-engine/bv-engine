@@ -47,7 +47,7 @@ public:
 	string*                 FindNonLinearProperty           (XMLPlugin *plugin,string name);
 	PluginRectangle *       CreatePluginRectangle           (xml_node<> *NewNode);
 	PluginRing *            CreatePluginRing                (xml_node<> *NewNode);
-	PluginGeometry*         CreatePluginGeometry            (xml_node<> *NewNode);
+	PluginTransform*         CreatePluginTransform           (xml_node<> *NewNode);
 	PluginTexture*          CreatePluginTexture             (xml_node<> *NewNode);
     PluginInstance*         CreatePluginInstance            (BlackNode* node, xml_node<> *NewNode);
 	PluginSequence*         CreatePluginSequence            (xml_node<> *NewNode);

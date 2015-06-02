@@ -7,86 +7,23 @@
     <Filter Include="structure">
       <UniqueIdentifier>{734ecae9-3eb8-4be8-a899-e20217acafb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="plugins\transform">
+      <UniqueIdentifier>{9e482ed6-7770-4684-951c-8abb03014f59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="plugins\geometry">
+      <UniqueIdentifier>{2d907339-c539-494e-ae49-950672c373c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="plugins\logic">
+      <UniqueIdentifier>{4255dc08-9f46-473a-97ac-b9ef0ed26923}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="plugins\texture">
+      <UniqueIdentifier>{6b143d2b-d0c3-4f14-9317-f1c6646184b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="plugins\base">
+      <UniqueIdentifier>{0a5b4186-5266-440d-aca5-061aa66a5cd8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Source\plugins\BlackTimeline.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\NonLinearProperty.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginAlpha.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginCrawl.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginExtrude.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginGeometry.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginInstance.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginLinearGradient.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginMask.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginPrism.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginRadialGradient.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginRectangle.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginReplicator.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginRing.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginSequence.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginSolid.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginText.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginTexture.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\PluginTimer.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\Property.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\SceneMetaTags.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\TimeProperty.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\XMLPlugin.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\BlackClass.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\BlackKeyFrame.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\plugins\BlackNode.h">
-      <Filter>plugins</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\structure\AssetManager.h">
       <Filter>structure</Filter>
     </ClInclude>
@@ -97,6 +34,105 @@
     <ClInclude Include="..\..\..\Source\Solution.h" />
     <ClInclude Include="..\..\..\Source\TreeBuilder.h" />
     <ClInclude Include="..\..\..\Source\BlackTree.h" />
+    <ClInclude Include="..\..\..\Source\plugins\base\BlackKeyFrame.h">
+      <Filter>plugins\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\base\BlackNode.h">
+      <Filter>plugins\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\base\BlackTimeline.h">
+      <Filter>plugins\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\base\NonLinearProperty.h">
+      <Filter>plugins\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\base\Property.h">
+      <Filter>plugins\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\base\SceneMetaTags.h">
+      <Filter>plugins\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\base\TimeProperty.h">
+      <Filter>plugins\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\base\XMLPlugin.h">
+      <Filter>plugins\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\base\BlackClass.h">
+      <Filter>plugins\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\geometry\PluginCube.h">
+      <Filter>plugins\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\geometry\PluginEllipse.h">
+      <Filter>plugins\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\geometry\PluginExtrude.h">
+      <Filter>plugins\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\geometry\PluginPrism.h">
+      <Filter>plugins\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\geometry\PluginRectangle.h">
+      <Filter>plugins\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\geometry\PluginRing.h">
+      <Filter>plugins\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\geometry\PluginRoundedRectangle.h">
+      <Filter>plugins\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\geometry\PluginSphere.h">
+      <Filter>plugins\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\geometry\PluginText.h">
+      <Filter>plugins\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\geometry\PluginTimer.h">
+      <Filter>plugins\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\geometry\PluginTriangle.h">
+      <Filter>plugins\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\geometry\PluginCircle.h">
+      <Filter>plugins\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\geometry\PluginCone.h">
+      <Filter>plugins\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\logic\PluginInstance.h">
+      <Filter>plugins\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\logic\PluginMask.h">
+      <Filter>plugins\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\logic\PluginReplicator.h">
+      <Filter>plugins\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\logic\PluginAlpha.h">
+      <Filter>plugins\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\logic\PluginCrawl.h">
+      <Filter>plugins\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\texture\PluginRadialGradient.h">
+      <Filter>plugins\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\texture\PluginSequence.h">
+      <Filter>plugins\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\texture\PluginSolid.h">
+      <Filter>plugins\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\texture\PluginTexture.h">
+      <Filter>plugins\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\texture\PluginLinearGradient.h">
+      <Filter>plugins\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\transform\PluginTransform.h">
+      <Filter>plugins\transform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\structure\SurfaceDescriptor.cpp">
