@@ -8,6 +8,8 @@ namespace bv {
 
 class ScenePrototype3 : public ScenePrototype
 {
+private:
+	int numPasses;
 public:
 
     ScenePrototype3( Renderer * renderer );
@@ -15,6 +17,7 @@ public:
     virtual void                Update              ( TimeType t );
     virtual void                OnKey               ( unsigned char c );
 
+	inline int getNumPasses() { return numPasses; }
 private:
 
     virtual SceneNode *         BuildSceneImpl      ();

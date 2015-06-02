@@ -37,9 +37,9 @@ SceneNode * ScenePrototype3::BuildSceneImpl      ()
 	textures.push_back( &cubeMap );		// textures.size() is at the same time number of passes
 
 	SceneNode * root = MultipassNodeBuilder::CreateMultipassRectNodeTexture( 1.f, 1.f, -1.1f, textures.data(), (unsigned short)textures.size() );
-    //SetLocalTransform( root, Transformations::Scale( glm::vec3( 2.f, 2.f, 1.0f ) ) );
+	numPasses++;
 
-	float alfa = 45;
+	float alfa = 45.0f;
 
 	for( unsigned int i = 0; i < 4; ++i )
 	{
@@ -50,6 +50,8 @@ SceneNode * ScenePrototype3::BuildSceneImpl      ()
 		root->AddChildNode( newNode );
 
 		alfa += 360.0f;
+
+		numPasses++;
 	}
 
     return root;
