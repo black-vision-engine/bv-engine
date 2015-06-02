@@ -3,6 +3,7 @@ from LoadableDataDesc import LoadableDataDesc
 
 import os
 import shutil
+import json
 
 class LoadableSurfaceDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::SurfaceAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
     def __init__(self, absPath):
@@ -54,6 +55,54 @@ class FSSurfaceDataAccessor(SurfaceDataAccessor):
             shutil.move(oldPath, newPath)
             return True
         except Exception as exc:
+            print(exc)
+            return False
+
+    def importData(self, impDataFile, importToPath):
+
+        try:
+            resultFileContent = None
+
+            with open(impDataFile, "r") as fi:
+                resultFileContent = json.load(fi)
+
+            desc = resultFileContent["desc"]
+
+            assert isinstance(desc, LoadableSurfaceDataDesc)
+            assert(desc.absPath. str)
+            filename = desc.absPath.split('/')[-1]
+
+            toPath = os.path.join(self.rootPath, importToPath, filename)
+
+            with open(toPath, "w") as f:
+                f.write(resultFileContent["resourceData"])
+
+            return True
+        except Exception as exc:
+            print("Cannot import surface from '{}'".format(impDataFile))
+            print(exc)
+            return False
+
+
+    def exportData(self, expDataFilePath, internalPath):
+        try:
+            absPath = os.path.join(self.rootPath, internalPath)
+
+            desc = self.getLoadableDataDesc(internalPath)
+
+            resultFileContent = {}
+
+            resultFileContent["desc"] = json.dumps(desc)
+
+            with open(absPath, "r") as fi:
+                resultFileContent["resourceData"] = fi.read()
+
+            with open(expDataFilePath, "w") as f:
+                json.dump(resultFileContent, f)
+
+            return True
+        except Exception as exc:
+            print("""Cannot export surface '{}'""".format(internalPath))
             print(exc)
             return False
 

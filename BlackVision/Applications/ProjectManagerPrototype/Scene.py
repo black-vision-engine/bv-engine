@@ -1,5 +1,4 @@
-from Project import Project
-from Location import Location
+
 import json
 
 class SceneWriter:
@@ -84,39 +83,6 @@ class Scene:
         Scene.__listResourceInTree(self.rootNode, resources)
 
         return resources
-
-def isProjectResource(projectName, res):
-    assert isinstance(res, str)
-    return res[1:len(projectName)] == projectName
-
-def packSceneAndResources(scene, project, outputFile):
-    assert isinstance(project, Project)
-    assert isinstance(scene, Scene)
-    res = scene.listResources()
-
-    resourcesToPack = [r for r in res if isProjectResource(project.getName(), r)]
-
-    sw = SceneWriter(scene, outputFile)
-    sStr = sw.dumpsScene()
-
-    resultData = {'sceneJson': sStr, 'resourcesData': {}}
-
-    for r in resourcesToPack:
-        loc = Location(r)
-        resultData['resourcesData'][r] = project.copyData(loc.getCategoryName(), loc.getInternalPath())
-
-    json.dump(resultData, outputFile)
-
-def unpackSceneAndResources(scenePackedFile, toProject, scenePath):
-    assert isinstance(toProject, Project)
-
-    sceneAndResources = json.load(scenePackedFile)
-
-    scene = sceneAndResources['sceneJson']
-
-    resources = sceneAndResources['resourcesData']
-
-    toProject.appendScene(scene, scenePath)
 
 def saveScene(scene, outputFile):
     sr = SceneWriter(scene, outputFile)

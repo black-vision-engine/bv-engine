@@ -44,6 +44,22 @@ class Project:
             print("There is no category named {} in project {}".format(categoryId, self.name))
             return None
 
+    def exportData(self, expDataFilePath, categoryId, path):
+        assert isinstance(path, str)
+        if categoryId in self.categories:
+            return self.categories[categoryId].exportData(expDataFilePath, path)
+        else:
+            print("There is no category named {} in project {}".format(categoryId, self.name))
+            return None
+
+    def importData(self, impDataFilePath, categoryId, toPath):
+        assert isinstance(toPath, str)
+        if categoryId in self.categories:
+            return self.categories[categoryId].importData(impDataFilePath, toPath)
+        else:
+            print("There is no category named {} in project {}".format(categoryId, self.name))
+            return None
+
     def getSceneDesc(self, path):
         assert isinstance(self.sceneAccessor, SceneAccessor)
         return self.sceneAccessor.getSceneDesc()

@@ -21,3 +21,11 @@ class DataCategory:
     def copyData(self, path):
         assert isinstance(path, str)
         return self.accessor.copyData(path)
+
+    def exportData(self, expDataFilePath, path):
+        assert isinstance(path, str)
+        return self.accessor.exportData(expDataFilePath, path)
+
+    def importData(self, impDataFilePath, toPath):
+        assert isinstance(toPath, str)
+        return self.accessor.importData(impDataFilePath, toPath)

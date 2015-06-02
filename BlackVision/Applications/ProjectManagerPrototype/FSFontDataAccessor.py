@@ -79,7 +79,7 @@ class FSTextureDataAccessor(FontDataAccessor):
 
             return True
         except Exception as exc:
-            print("Cannot import texture from '{}'".format(impDataFile))
+            print("Cannot import font from '{}'".format(impDataFile))
             print(exc)
             return False
 
@@ -102,7 +102,7 @@ class FSTextureDataAccessor(FontDataAccessor):
 
             return True
         except Exception as exc:
-            print("""Cannot export texture '{}'""".format(internalPath))
+            print("""Cannot export font '{}'""".format(internalPath))
             print(exc)
             return False
 
