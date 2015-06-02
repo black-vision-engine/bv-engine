@@ -219,8 +219,8 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 	}
 
 	// Clear edge verticies.
-	unsigned int verticiesOffset = verticies.size();
-	for( unsigned int i = verticiesOffset; i < resultVerticies.size(); ++i )
+	size_t verticiesOffset = verticies.size();
+	for( size_t i = verticiesOffset; i < resultVerticies.size(); ++i )
 		resultVerticies[ i ] = glm::vec3( 0.0, 0.0, 0.0 );
 	// We need sum of weights
 	std::vector<float> sumWeights;
@@ -257,7 +257,7 @@ void HelperSmoothMesh::moveVerticies( IndexedGeometry& mesh, std::vector<INDEX_T
 			sumWeights[ edgeVertex - verticiesOffset ] += weight1 + weight2 + weight3;
 		}
 
-	for( unsigned int i = verticiesOffset; i < resultVerticies.size(); ++i )
+	for( size_t i = verticiesOffset; i < resultVerticies.size(); ++i )
 		resultVerticies[ i ] = float( 1.0 / sumWeights[ i - verticiesOffset ] ) * resultVerticies[ i ];
 }
 

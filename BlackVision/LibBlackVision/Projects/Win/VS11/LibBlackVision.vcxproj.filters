@@ -1756,6 +1756,7 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\SerializationObjects.h">
       <Filter>Engine\Models</Filter>
+    </ClInclude>  
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.h">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>  
