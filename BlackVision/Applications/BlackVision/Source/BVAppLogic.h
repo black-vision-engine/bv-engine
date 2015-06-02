@@ -47,6 +47,7 @@ private:
 
     unsigned long                   m_startTime;
 
+    void            LoadSceneFromFile       ( std::string filename );
 public:
 
                     BVAppLogic      ( Renderer * renderer );

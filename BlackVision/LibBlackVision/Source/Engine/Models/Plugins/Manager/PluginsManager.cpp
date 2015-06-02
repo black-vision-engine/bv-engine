@@ -123,6 +123,22 @@ const std::vector< const IPluginDescriptor * > &    PluginsManager::GetRegistere
 
 // *********************************
 //
+IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator ) const
+{
+    assert( IsRegistered( uid ) );
+
+    return GetDescriptor( uid )->CreatePlugin( name, nullptr, timeEvaluator );
+}
+
+// *********************************
+//
+IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, ITimeEvaluatorPtr timeEvaluator ) const
+{
+    return CreatePlugin( uid, GetDescriptor( uid )->DefaultPluginName(), nullptr, timeEvaluator );
+}
+
+// *********************************
+//
 IPluginListFinalized *                              PluginsManager::CreatePlugins           ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreatePluginsDefaultImpl( uids, timeEvaluator );

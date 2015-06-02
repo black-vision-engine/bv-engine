@@ -42,13 +42,6 @@ std::string             DefaultColorPluginDesc::UID                         ()
     return "DEFAULT_COLOR";
 }
 
-// *******************************
-//
-std::string             DefaultColorPluginDesc::PixelShaderSource           ()
-{
-    return "Assets/Shaders/Deprecated/solid.frag";
-}
-
 
 // ************************************************************************* PLUGIN ************************************************************************* 
 
@@ -59,7 +52,7 @@ DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::s
     , m_pixelShaderChannel( nullptr )
     , m_paramValModel( model )
 { 
-    m_pixelShaderChannel = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultColorPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
+    m_pixelShaderChannel = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
     m_pixelShaderChannel->GetRendererContext()->alphaCtx->blendEnabled = true;
 }
 

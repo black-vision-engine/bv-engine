@@ -22,9 +22,6 @@
     <Filter Include="Widgets\Crawler">
       <UniqueIdentifier>{a5c51410-4f01-4c1b-a9e6-c93795ac17ba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Xml\RapidXml">
-      <UniqueIdentifier>{0f9021ce-7cb7-4117-979e-3ec7841526ef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="VideoInput">
       <UniqueIdentifier>{f67ab42f-30e0-4d7a-90ee-0cfaed68a769}</UniqueIdentifier>
     </Filter>
@@ -161,18 +158,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Xml\TreeBuilder.h">
       <Filter>Xml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml.hpp">
-      <Filter>Xml\RapidXml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Iterators.hpp">
-      <Filter>Xml\RapidXml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Print.hpp">
-      <Filter>Xml\RapidXml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\RapidXml\RapidXml_Utils.hpp">
-      <Filter>Xml\RapidXml</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Xml\Auxiliary\Auxiliary.hpp">
       <Filter>Xml\Auxiliary</Filter>

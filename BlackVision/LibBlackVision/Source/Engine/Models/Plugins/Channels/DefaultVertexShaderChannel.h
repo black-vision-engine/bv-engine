@@ -28,6 +28,7 @@ public:
 
     static  DefaultVertexShaderChannelPtr   Create              ();
     static  DefaultVertexShaderChannelPtr   Create              ( const std::string & shaderFile, IValueSetConstPtr values );
+    static  DefaultVertexShaderChannelPtr   Create              ( IValueSetConstPtr values );
 
 };
 

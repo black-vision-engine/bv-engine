@@ -113,22 +113,7 @@ std::string             DefaultGradientPluginDesc::UID                       ()
     return "DEFAULT_LINEAR_GRADIENT";
 }
 
-// *******************************
-//
-//std::string             DefaultGradientPluginDesc::VertexShaderSource        ()
-//{
-//    return "Assets/Shaders/Deprecated/combinations/lg.vert";
-//}
-//
-//// *******************************
-////
-//std::string             DefaultGradientPluginDesc::PixelShaderSource         ()
-//{
-//    return "Assets/Shaders/Deprecated/combinations/lg.frag";
-//}
-//
-// *******************************
-//
+
 std::string             DefaultGradientPluginDesc::TextureName               ()
 {
     return "Grad0";
