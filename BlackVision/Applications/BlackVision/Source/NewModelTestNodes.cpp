@@ -1987,7 +1987,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #endif
 #ifdef SHOW_COGWHEEL
 	auto plugin = root->GetPlugin( "cog wheel" );
-	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 2 );
+	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 1 );
 	model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.2f );
 	model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 0.8f );
 	model::SetParameter( plugin->GetParameter( "height" ), 0.0f, 0.5f );
