@@ -49,6 +49,34 @@ ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
 
 // params
     auto params = doc.LoadProperties< AbstractModelParameter >( "property" );
+    for( auto param : params )
+    {
+        if( param->GetName() == "position" // some clever remap!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            || param->GetName() == "alpha" // node parameter indeed!!!
+            || param->GetName() == "size" // "fontSize" indeed ;)
+            || param->GetName() == "font" // RESOURCE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            || param->GetName() == "text" // DefaultTextPlugin::SetText indeed!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            || param->GetName() == "align" // "alignment" indeed ;)
+            
+            || param->GetName() == "mask_file_path"
+            || param->GetName() == "scaling"
+            || param->GetName() == "path"
+            || param->GetName() == "extension"
+            || param->GetName() == "frame_count"
+            || param->GetName() == "frame_begin"
+            || param->GetName() == "frames_maping"
+            
+            || param->GetName() == "count" // DEFAULT_TRANSFORM
+            || param->GetName() == "target_name" // DEFAULT_TRANSFORM
+            || param->GetName() == "rotation" // DEFAULT_TRANSFORM
+            )
+            continue;
+        if( !plugin->GetParameter( param->GetName() ) )
+        {
+            std::cout << "[ERROR] Parameter " << param->GetName() << " is not a parameter of " << pluginType << std::endl;
+            assert( false );
+        }
+    }
     
     ISerializablePtr serializablePlugin = std::static_pointer_cast< ISerializable >( plugin );
     return serializablePlugin;
