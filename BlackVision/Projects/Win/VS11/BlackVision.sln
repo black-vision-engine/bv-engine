@@ -35,6 +35,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestModelNodeEditor", "..\.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibMipMapBuilder", "..\..\..\Tools\LibMipMapBuilder\Projects\Win\VS11\LibMipMapBuilder.vcxproj", "{6A33F496-E3C1-4C91-A4E1-049C0C3B762E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestMultipass", "..\..\..\Test\Applications\Multipass\Projects\Win\VS11\TestMultipass.vcxproj", "{EC6E9311-C4FC-4C55-BFB5-29C69C77F520}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -177,6 +179,18 @@ Global
 		{6A33F496-E3C1-4C91-A4E1-049C0C3B762E}.Release|Win32.Build.0 = Release|Win32
 		{6A33F496-E3C1-4C91-A4E1-049C0C3B762E}.Release|x64.ActiveCfg = Release|x64
 		{6A33F496-E3C1-4C91-A4E1-049C0C3B762E}.Release|x64.Build.0 = Release|x64
+		{EC6E9311-C4FC-4C55-BFB5-29C69C77F520}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{EC6E9311-C4FC-4C55-BFB5-29C69C77F520}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{EC6E9311-C4FC-4C55-BFB5-29C69C77F520}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EC6E9311-C4FC-4C55-BFB5-29C69C77F520}.Debug|Win32.Build.0 = Debug|Win32
+		{EC6E9311-C4FC-4C55-BFB5-29C69C77F520}.Debug|x64.ActiveCfg = Debug|x64
+		{EC6E9311-C4FC-4C55-BFB5-29C69C77F520}.Debug|x64.Build.0 = Debug|x64
+		{EC6E9311-C4FC-4C55-BFB5-29C69C77F520}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{EC6E9311-C4FC-4C55-BFB5-29C69C77F520}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{EC6E9311-C4FC-4C55-BFB5-29C69C77F520}.Release|Win32.ActiveCfg = Release|Win32
+		{EC6E9311-C4FC-4C55-BFB5-29C69C77F520}.Release|Win32.Build.0 = Release|Win32
+		{EC6E9311-C4FC-4C55-BFB5-29C69C77F520}.Release|x64.ActiveCfg = Release|x64
+		{EC6E9311-C4FC-4C55-BFB5-29C69C77F520}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -189,5 +203,6 @@ Global
 		{9D72E88B-3DA9-4B56-A703-29641FA82479} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{C8FE17FB-A0B8-4069-B88A-855CC14D9810} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 		{B054F6A0-06EC-44E7-AE4E-DA8663237E92} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
+		{EC6E9311-C4FC-4C55-BFB5-29C69C77F520} = {60AC1703-3195-46CD-AD2A-6F44D2DE8CB1}
 	EndGlobalSection
 EndGlobal
