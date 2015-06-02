@@ -1,14 +1,54 @@
-#include "Application/WindowedApplication.h"
-
+#include "WinApplicationTester.h"
 #include "System/InitSubsystem.h"
-
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/glutils.h"
 
 
+
+const int defaultWindowWidth = 100;
+const int defaultWindowHeight = 100;
+const bool fullscreenMode = false;
+
+
 LRESULT CALLBACK DefaultWindowEventHandler ( HWND handle, UINT msg, WPARAM wParam, LPARAM lParam );
 
-namespace bv {
+namespace bv
+{
+
+
+// *********************************
+// FIXME: move it to a valid BV windowed version of engine and wrap with a macro
+void			WinApplicationTester::StaticInitializer	()
+{
+    bv::ApplicationBase::MainFun = &bv::WinApplicationTester::MainImpl;
+    bv::ApplicationBase::ApplicationInstance = new WinApplicationTester();
+}
+
+
+// *********************************
+// FIXME: move it to valid BV windowed version of engine and wrap with a macro
+bool			WinApplicationTester::RegisterInitializer	()
+{
+    bv::InitSubsystem::AddInitializer( WinApplicationTester::StaticInitializer );
+
+    return true;
+}
+
+bool WinApplicationTester::m_sWindowedApplicationInitialized = WinApplicationTester::RegisterInitializer();
+
+
+
+WinApplicationTester::WinApplicationTester()
+	:	WindowedApplication( "BlackVision prealpha test app", 0, 0, defaultWindowWidth, defaultWindowHeight, fullscreenMode )
+{
+}
+
+
+WinApplicationTester::~WinApplicationTester(void)
+{
+}
+
+
 
 namespace {
 
@@ -19,9 +59,6 @@ namespace {
     const wchar_t sWindowClass[]	= L"Black Vision Window App - OpenGL";
 
 }
-
-namespace LocalWindowHandler
-{
 
 // *********************************
 // TODO: implement more handlers if required (and add them to windowed application callbacks interface)
@@ -90,7 +127,6 @@ LRESULT CALLBACK DefaultWindowEventHandler ( HWND handle, UINT msg, WPARAM wPara
     return DefWindowProc( handle, msg, wParam, lParam );
 }
 
-}
 
 namespace {
 
@@ -102,7 +138,7 @@ HWND CreateApplicationWindow ( WindowedApplication * app )
 
     GHInstance			= GetModuleHandle( NULL );
     wc.style			= CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-    wc.lpfnWndProc		= LocalWindowHandler::DefaultWindowEventHandler;
+    wc.lpfnWndProc		= DefaultWindowEventHandler;
     wc.cbClsExtra		= 0;
     wc.cbWndExtra		= 0;
     wc.hInstance		= GHInstance;
@@ -220,14 +256,19 @@ void DestroyApplicationWindow( WindowedApplication * app, HWND handle )
     }
 }
 
-} // anonymous
+}
 
-// *********************************
-//
-int WindowedApplication::MainFun	( int argc, char ** argv )
+
+
+
+
+
+int WinApplicationTester::MainFun( int argc, char ** argv )
 {
-    { argc; argv; } // FIXME: suppress unused warning
-    WindowedApplication * app = static_cast< WindowedApplication * >( ApplicationBase::ApplicationInstance );
+	::testing::InitGoogleTest( &argc, argv );		// Change comparing to normal WindowedApplication::MainFun
+
+
+    WinApplicationTester * app = static_cast< WinApplicationTester * >( ApplicationBase::ApplicationInstance );
 
     //FIXME: implement
     //Camera::SetDefaultDepthType(Camera::PM_DEPTH_MINUS_ONE_TO_ONE);
@@ -290,7 +331,9 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
             }
             else
             {
-                app->OnIdle();
+				// Change comparing to normal WindowedApplication::MainFun
+                app->OnIdle();		// TESTS
+				quit = true;		// TESTS are invoked only once
             }
         }
     }
@@ -301,7 +344,44 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
 
     DestroyApplicationWindow( app, handle );
 
-    return 0;
+	return 0;
 }
 
-} //bv
+
+void WinApplicationTester::OnIdle()
+{
+	RUN_ALL_TESTS();
+}
+
+//
+//// *********************************
+//// Entry point for all applications derived from this class
+//int main( int argc, char * argv[] )
+//{
+//	::testing::InitGoogleTest( &argc, argv );
+//
+////TODO: Initialize here all generic subsystems here (loggers, generic managers, system wide subsystems)
+////TODO: Register (and/or) initialize all (possibly already registered) components
+////TODO: Load all generic resources
+//
+//    bv::InitSubsystem::CallInitializers();
+//
+//    assert( bv::ApplicationBase::ApplicationInstance != nullptr );
+//
+//    //FIXME: Why not use polymorphism here??
+//    int exitCode = bv::ApplicationBase::MainFun( argc, argv );
+//
+////TODO: deinitialize all subsystems
+////TODO: Free all generic resources
+////TODO: make sure that all logs are closed and no data is corrupted and/or saved 
+//
+//    //FIXME: this should be done in some kind of termination subsystem
+//    delete bv::ApplicationBase::ApplicationInstance;
+//
+//	RUN_ALL_TESTS();
+//
+//	return exitCode;
+//}
+
+
+}

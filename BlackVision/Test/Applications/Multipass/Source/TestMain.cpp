@@ -3,17 +3,17 @@
 #include "DataTypes/Hash.h"
 
 #include "../..\Applications/BlackVision/Source/Rendering/RenderLogic.h"
-#include "../../Applications/EnginePrototyper/Source/Prototypes/Engine/Common/MultipassNodeBuilder.h"
-#include "../../Applications/EnginePrototyper/Source/Prototypes/Engine/Common/Scenes/ScenePrototype3.h"
-#include "../../Applications/EnginePrototyper/Source/Prototypes/Engine/Common/ScenePrototype.h"
-#include "../../Applications/EnginePrototyper/Source/Prototypes/Engine/Multipass/MultipassTest.h"
+//#include "../../Applications/EnginePrototyper/Source/Prototypes/Engine/Common/MultipassNodeBuilder.h"
+//#include "../../Applications/EnginePrototyper/Source/Prototypes/Engine/Common/Scenes/ScenePrototype3.h"
+//#include "../../Applications/EnginePrototyper/Source/Prototypes/Engine/Common/ScenePrototype.h"
+//#include "../../Applications/EnginePrototyper/Source/Prototypes/Engine/Multipass/MultipassTest.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine\Graphics\SceneGraph\RenderableEntity.h"
 
 #include "gtest/gtest.h"
+#include "VisualTester\WinApplicationTester.h"
 
-#include <windows.h>
 
 namespace bv {
 
@@ -46,11 +46,11 @@ TEST(MultipassAlphaBlending, Multipass)
 
 }//bv
 
-int main( int argc, char **argv )
-{
-	::testing::InitGoogleTest( &argc, argv );
-
-	return RUN_ALL_TESTS();
-}
+//int main( int argc, char **argv )
+//{
+//	::testing::InitGoogleTest( &argc, argv );
+//
+//	return RUN_ALL_TESTS();
+//}
 
 // enable intrinsic functions - w konfiguracji Common (dla Release na true)

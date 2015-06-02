@@ -2,7 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\TestMain.cpp" />
-    <ClCompile Include="..\..\..\Source\VisualTester\WinApplicationTester.cpp" />
+    <ClCompile Include="..\..\..\Source\VisualTester\WinApplicationTester.cpp">
+      <Filter>VisualTester</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="VisualTester">
@@ -10,6 +12,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Source\VisualTester\WinApplicationTester.h" />
+    <ClInclude Include="..\..\..\Source\VisualTester\WinApplicationTester.h">
+      <Filter>VisualTester</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
