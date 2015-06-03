@@ -1,19 +1,24 @@
 #include "WinApplicationTester.h"
 #include "System/InitSubsystem.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Graphics/SceneGraph/Camera.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/glutils.h"
 
 
 
-const int defaultWindowWidth = 100;
-const int defaultWindowHeight = 100;
+const int defaultWindowWidth = 700;
+const int defaultWindowHeight = 700;
 const bool fullscreenMode = false;
 
+ 
 
 LRESULT CALLBACK DefaultWindowEventHandler ( HWND handle, UINT msg, WPARAM wParam, LPARAM lParam );
 
 namespace bv
 {
+
+WinApplicationTester* application = nullptr;
+
 
 
 // *********************************
@@ -39,15 +44,44 @@ bool WinApplicationTester::m_sWindowedApplicationInitialized = WinApplicationTes
 
 
 WinApplicationTester::WinApplicationTester()
-	:	WindowedApplication( "BlackVision prealpha test app", 0, 0, defaultWindowWidth, defaultWindowHeight, fullscreenMode )
+	:	WindowedApplication( "Rendering test", 0, 0, defaultWindowWidth, defaultWindowHeight, fullscreenMode )
 {
+	application = this;
+	makeReferenceImage = true;
 }
 
 
 WinApplicationTester::~WinApplicationTester(void)
 {
+	if( m_renderLogic )
+		delete m_renderLogic;
 }
 
+
+bool WinApplicationTester::OnInitialize()
+{
+	bv::Camera * cam = new bv::Camera();
+
+	m_renderLogic = new VisualTesterRenderLogic();
+	m_renderLogic->SetCamera( cam );
+
+	return WindowedApplication::OnInitialize();
+}
+
+
+void WinApplicationTester::testRender( const std::string fileName, SceneNode* node )
+{
+	if( makeReferenceImage )
+		m_renderLogic->renderReferenceImage( m_Renderer, node, fileName );
+	else
+		m_renderLogic->renderCompareWithReferenceImage( m_Renderer, node, fileName );
+}
+
+
+Renderer* WinApplicationTester::getRenderer()
+{
+	return m_Renderer;
+}
 
 
 namespace {
@@ -265,8 +299,8 @@ void DestroyApplicationWindow( WindowedApplication * app, HWND handle )
 
 int WinApplicationTester::MainFun( int argc, char ** argv )
 {
-	::testing::InitGoogleTest( &argc, argv );		// Change comparing to normal WindowedApplication::MainFun
-
+	//::testing::InitGoogleTest( &argc, argv );		// Change comparing to normal WindowedApplication::MainFun
+	argc;	argv;
 
     WinApplicationTester * app = static_cast< WinApplicationTester * >( ApplicationBase::ApplicationInstance );
 
@@ -296,6 +330,10 @@ int WinApplicationTester::MainFun( int argc, char ** argv )
     assert( !m_Renderer );
     m_Renderer = new bv::Renderer( ri, app->Width(), app->Height() );
 
+
+	try
+	{
+
     if ( app->OnInitialize() )
     {
         GLUtils::DumpGLInfo();
@@ -303,10 +341,11 @@ int WinApplicationTester::MainFun( int argc, char ** argv )
 
         app->OnPreidle();
 
-        ShowWindow	( handle, SW_SHOW );
+        //ShowWindow	( handle, SW_SHOW );
         UpdateWindow( handle );
 
-        app->OnIdle();
+        //app->OnIdle();
+
 
         app->OnPreMainLoop();
 
@@ -343,14 +382,21 @@ int WinApplicationTester::MainFun( int argc, char ** argv )
     delete m_Renderer;
 
     DestroyApplicationWindow( app, handle );
+	application = nullptr;
 
+
+	}
+	catch( ... )
+	{
+
+	}
 	return 0;
 }
 
 
 void WinApplicationTester::OnIdle()
 {
-	RUN_ALL_TESTS();
+	//RUN_ALL_TESTS();
 }
 
 //

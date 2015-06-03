@@ -109,7 +109,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\WitekD\BV\BlackVision\Applications\EnginePrototyper\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link />
     <Link>
@@ -118,7 +118,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\WitekD\BV\BlackVision\Applications\EnginePrototyper\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link />
     <Link>
@@ -131,11 +131,59 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Common\ExperimentalNodeDeleter.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\GeometryBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\GLSLProgram.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\MultipassNodeBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\SceneExampleBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\ScenePrototype.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\Scenes\ScenePrototype0.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\Scenes\ScenePrototype1.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\Scenes\ScenePrototype2.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\Scenes\ScenePrototype3.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\ShaderDataSourceCreator.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\ShaderDataSourceImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\SimpleNodeBuilder.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\TexturesDataImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\Transformations.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\VBORect.cpp" />
+    <ClCompile Include="..\..\..\Source\MultipassTest.cpp" />
     <ClCompile Include="..\..\..\Source\TestMain.cpp" />
+    <ClCompile Include="..\..\..\Source\VisualTester\BVConfig.cpp" />
+    <ClCompile Include="..\..\..\Source\VisualTester\OffscreenRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\VisualTester\RenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\VisualTester\VisualTesterRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\VisualTester\WinApplicationTester.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Common\ExperimentalNodeDeleter.h" />
+    <ClInclude Include="..\..\..\Source\Common\GeometryBuilder.h" />
+    <ClInclude Include="..\..\..\Source\Common\GLSLprogram.h" />
+    <ClInclude Include="..\..\..\Source\Common\IAppLogicPrototype.h" />
+    <ClInclude Include="..\..\..\Source\Common\IRenderable.h" />
+    <ClInclude Include="..\..\..\Source\Common\MultipassNodeBuilder.h" />
+    <ClInclude Include="..\..\..\Source\Common\PrototyperCore.h" />
+    <ClInclude Include="..\..\..\Source\Common\SceneExampleBuilder.h" />
+    <ClInclude Include="..\..\..\Source\Common\ScenePrototype.h" />
+    <ClInclude Include="..\..\..\Source\Common\Scenes\ScenePrototype0.h" />
+    <ClInclude Include="..\..\..\Source\Common\Scenes\ScenePrototype1.h" />
+    <ClInclude Include="..\..\..\Source\Common\Scenes\ScenePrototype2.h" />
+    <ClInclude Include="..\..\..\Source\Common\Scenes\ScenePrototype3.h" />
+    <ClInclude Include="..\..\..\Source\Common\ShaderDataSourceCreator.h" />
+    <ClInclude Include="..\..\..\Source\Common\ShaderDataSourceImpl.h" />
+    <ClInclude Include="..\..\..\Source\Common\SimpleNodeBuilder.h" />
+    <ClInclude Include="..\..\..\Source\Common\TexturesDataImpl.h" />
+    <ClInclude Include="..\..\..\Source\Common\Transformations.h" />
+    <ClInclude Include="..\..\..\Source\Common\VBORect.h" />
+    <ClInclude Include="..\..\..\Source\MultipassTest.h" />
+    <ClInclude Include="..\..\..\Source\VisualTester\BVConfig.h" />
+    <ClInclude Include="..\..\..\Source\VisualTester\OffscreenRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\VisualTester\RenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\VisualTester\VisualTesterRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\VisualTester\WinApplicationTester.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Source\VisualTester\BVConfig.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
