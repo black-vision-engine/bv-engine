@@ -69,7 +69,7 @@ BlueFishVideoCard::BlueFishVideoCard(unsigned int id)
     device_id = id;
     if(BLUE_FAIL(pSDK->device_attach(this->device_id, 0)))
     {
-        cout << "Error on device attach (channel A)" << endl;
+        cout << "Error on device attach Device ID:" << this->device_id << endl;
         BlueVelvetDestroy(pSDK);
         system("pause");
     }
@@ -121,6 +121,14 @@ BlueFishVideoCard::BlueFishVideoCard(unsigned int id)
 	ChannelOptions["D"] = tab;
 	tab.clear();	
 }
+
+//**************************************
+//
+BlueFishVideoCard::~BlueFishVideoCard()
+{
+    DeactivateVideoCard();
+}
+
 //**************************************
 //
 void BlueFishVideoCard::DeliverFrameFromGPU(unsigned int bufferPointer)
@@ -218,24 +226,41 @@ void BlueFishVideoCard::DeliverFrameFromGPU(unsigned int bufferPointer)
 //**************************************
 //
 
+//**************************************
+//
 void BlueFishVideoCard::DeliverFrameFromRAM(unsigned char * buffer)
 {
-	
-    for(unsigned int i = 0; i < Channels.size(); i++)
-	{
-		if(Channels[i]->m_playthrough==false && Channels[i]->m_Playback==true && isKilled==false)
-		{
-			Channels[i]->GetPlaybackBuffer()->m_threadsafebuffer.push(std::make_shared<CFrame>(buffer,1,Channels[i]->GetPlaybackBuffer()->m_GoldenSize,Channels[i]->GetPlaybackBuffer()->m_BytesPerLine));
-		}
-	}   
+    if(Channels[0]!=nullptr)
+    {
+        for(unsigned int i = 0; i < Channels.size(); i++)
+	    {
+		    if(Channels[i]->m_playthrough==false && Channels[i]->m_Playback==true && isKilled==false)
+		    {
+			    Channels[i]->GetPlaybackBuffer()->m_threadsafebuffer.push(std::make_shared<CFrame>(buffer,1,Channels[i]->GetPlaybackBuffer()->m_GoldenSize,Channels[i]->GetPlaybackBuffer()->m_BytesPerLine));
+		    }
+	    }   
+    }
 }
 
 //**************************************
 //
-BlueFishVideoCard::~BlueFishVideoCard()
+void BlueFishVideoCard::DeliverFrameFromRAM (std::shared_ptr<CFrame> Frame )
 {
-    DeactivateVideoCard();
+    if(Channels[0]!=nullptr)
+    {
+        for(unsigned int i = 0; i < Channels.size(); i++)
+	    {
+		    if(Channels[i]->m_playthrough==false && Channels[i]->m_Playback==true && isKilled==false)
+		    {
+                Channels[i]->GetPlaybackBuffer()->m_threadsafebuffer.push(Frame);
+		    }
+	    }   
+    }
 }
+
+//**************************************
+//
+
 
 void BlueFishVideoCard::StartVideoCardProccessing()
 {
@@ -356,8 +381,6 @@ bool BlueFishVideoCard::ActivateVideoCard()
 //
 void BlueFishVideoCard::Black()
 {
-    //unsigned char *buffer = new unsigned char[2048*2048*4];
-    //DeliverFrameFromRAM(buffer);,
     for(auto &it:Channels) it->GenerateBlack(); 
 
 }
@@ -722,260 +745,13 @@ int BlueFishVideoCard::InitSDKGPUDirect( const std::vector<int> & hackBuffersUid
 
 //**************************************
 //
-/*
-int BlueFishVideoCard::InitSDK()
-{
-    
-    //VideoMode = ParseVideoMode(outputsManager->Outputs[0]->m_outputConfig);
-    if(mode==VideoCard_Modes::SD)
-    {
-        VideoMode = VID_FMT_PAL;
-    }
-    
-    VideoMode = ParseVideoMode(outputsManager->Outputs[0]->m_outputConfig);
-    /*
-    pSDK = BlueVelvetFactory4();
-
-    pSDK->device_enumerate(iDevices);
-
-    if(iDevices < 1)
-    {
-        cout << "No Bluefish card detected" << endl;
-        BlueVelvetDestroy(pSDK);
-        return 0;
-    }else{
-        cout << "Found "<<iDevices<<" device(s)" << endl;
-    }
-
-
-
-   
-    //Get the card type and firmware type
-    int iCardType = pSDK->has_video_cardtype();
-    if(	iCardType != CRD_BLUE_EPOCH_HORIZON &&
-        iCardType != CRD_BLUE_EPOCH_CORE &&
-        iCardType != CRD_BLUE_EPOCH_ULTRA &&
-        iCardType != CRD_BLUE_EPOCH_2K_HORIZON &&
-        iCardType != CRD_BLUE_EPOCH_2K_CORE &&
-        iCardType != CRD_BLUE_EPOCH_2K_ULTRA &&
-        iCardType != CRD_BLUE_SUPER_NOVA &&
-        iCardType != CRD_BLUE_SUPER_NOVA_S_PLUS)
-    {
-        cout << "Card not supported for OEM playback" << endl;
-        system("pause");
-        BailOut(pSDK);
-        return 0;
-    }
-    pSDK->QueryCardProperty(EPOCH_GET_PRODUCT_ID, varVal);
-    cout << "Product ID / firmware type: " << varVal.ulVal << endl;
-
-    varVal.ulVal = 0;
-    if(BLUE_FAIL(pSDK->QueryCardProperty(CARD_FEATURE_STREAM_INFO, varVal)))
-    {
-        cout << "Function not supported; need driver 5.10.2.x" << endl;
-        system("pause");
-        BailOut(pSDK);
-        return 0;
-    }
-
-
-    unsigned int nOutputStreams = CARD_FEATURE_GET_SDI_OUTPUT_STREAM_COUNT(varVal.ulVal);
-    unsigned int nInputStreams = CARD_FEATURE_GET_SDI_INPUT_STREAM_COUNT(varVal.ulVal);
-
-    cout<<"Found "<<nOutputStreams<<" output channel(s)"<<endl;
-    cout<<"Found "<<nInputStreams<<" input channel(s)"<<endl;
-    if(!nOutputStreams)
-    {
-        cout << "Card does not support output channels" << endl;
-        system("pause");
-        BailOut(pSDK);
-        return 0;
-    }
-
-    pSDK->QueryCardProperty(INVALID_VIDEO_MODE_FLAG, varVal);
-    ULONG InvalidVideoModeFlag = varVal.ulVal;
-
-    InitOutputChannel(pSDK, BLUE_VIDEO_OUTPUT_CHANNEL_A, VideoMode, UpdateFormat, MemoryFormat, VideoEngine);
-
-
-    OverlapChA.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-
-    GoldenSize = BlueVelvetGolden(VideoMode, MemoryFormat, UpdateFormat);
-    PixelsPerLine = BlueVelvetLinePixels(VideoMode);
-    VideoLines =  BlueVelvetFrameLines(VideoMode, UpdateFormat);
-    ULONG BytesPerFrame = BlueVelvetFrameBytes(VideoMode, MemoryFormat, UpdateFormat);
-    ULONG BytesPerLine = BlueVelvetLineBytes(VideoMode, MemoryFormat);
-
-    cout << "Video Golden:          " << GoldenSize << endl;
-    cout << "Video Pixels per line: " << PixelsPerLine << endl;
-    cout << "Video lines:           " << VideoLines << endl;
-    cout << "Video Bytes per frame: " << BytesPerFrame << endl;
-    cout << "Video Bytes per line:  " << BytesPerLine << endl;
-
-    pVideoBufferA_0 = (unsigned char*)VirtualAlloc(NULL, GoldenSize, MEM_COMMIT, PAGE_READWRITE);
-    VirtualLock(pVideoBufferA_0, GoldenSize);
-    pVideoBufferA_1 = (unsigned char*)VirtualAlloc(NULL, GoldenSize, MEM_COMMIT, PAGE_READWRITE);
-    VirtualLock(pVideoBufferA_1, GoldenSize);
-    pBufferArrayA[0] = pVideoBufferA_0;
-    pBufferArrayA[1] = pVideoBufferA_1;
-    VideoFrameIndex = 0;
-
-    //For the test purpose of this sample we simply fill the buffers with a solid color
-    InitBuffer(pVideoBufferA_0, PixelsPerLine, VideoLines);
-    InitBuffer(pVideoBufferA_1, PixelsPerLine, VideoLines);
-
-    //synchronise with the card
-    FieldCount = 0;
-    pSDK->wait_output_video_synch(UpdateFormat, FieldCount);
-
-    BufferIdChA = 0;
-    UnderrunChA = 0;
-    LastUnderrunChA = 0;
-    UniqueIdChA = 0;
-
-
-    pAddressNotUsedChA = NULL;
-    DWORD BytesReturnedChA = 0;
-    FramesToBuffer = 2;
-
-    //Make the first buffer the current one to be updated and DMAd
-    VideoFrameIndex = 0;
-    //You would read the first frame from a file here into pBufferArrayA[VideoFrameIndex]
-    //read frame...start
-    // pBufferArrayA[VideoFrameIndex] = next frame for channel A
-    //read frame...done
-
-    if(BLUE_OK(pSDK->video_playback_allocate(&pAddressNotUsedChA, BufferIdChA, UnderrunChA)))
-    {
-        //cout << ".";
-
-        //start to DMA the frames to the card
-        pSDK->system_buffer_write_async(pBufferArrayA[VideoFrameIndex], GoldenSize, &OverlapChA, BlueImage_DMABuffer(BufferIdChA, BLUE_DATA_FRAME), 0);
-
-        //while DMA is happening read the next frame into our buffer
-        VideoFrameIndex = ((++VideoFrameIndex)%2);
-        // read frame...start
-        // pBufferArrayA[VideoFrameIndex] = next frame for channel A
-        // read frame...done
-
-        //wait for both DMA transfers to be finished
-        GetOverlappedResult(pSDK->m_hDevice, &OverlapChA, &BytesReturnedChA, TRUE);
-        ResetEvent(OverlapChA.hEvent);
-
-        //tell the card to playback the frames on the next interrupt
-        pSDK->video_playback_present(UniqueIdChA, BlueBuffer_Image(BufferIdChA), 1, 0);
-
-        //track UnderrunChA and UnderrunChB to see if frames were dropped
-        if(UnderrunChA != LastUnderrunChA)
-        {
-            cout << "Dropped a frame: ChA underruns: " << UnderrunChA << endl;
-            LastUnderrunChA = UnderrunChA;
-        }
-    }
-    else
-        pSDK->wait_output_video_synch(UpdateFormat, FieldCount);
-
-
-    //todo: ogarn¹æ ring buffer
-
-
-    cout <<"Bluefish ok"<<endl;
-    return true;
-}
-*/
-//**************************************
-//
 bool BlueFishVideoCard::DeactivateVideoCard()
-{
-    //turn on black generator (unless we want to keep displaying the last rendered frame)
+{    
     isKilled = true;
-	//for(auto &it:Channels) delete it; 
-    //Channels.clear();
-   
-	//varVal.ulVal = ENUM_BLACKGENERATOR_ON;
-    //pSDK->SetCardProperty(VIDEO_BLACKGENERATOR, varVal);
-
-    //pSDK->video_playback_stop(0, 0);
-   // CloseHandle(OverlapChA.hEvent);
-
-   // VirtualUnlock(pVideoBufferA_0, GoldenSize);
-    //VirtualUnlock(pVideoBufferA_1, GoldenSize);
-   // VirtualFree(pVideoBufferA_0, 0, MEM_RELEASE);
-   // VirtualFree(pVideoBufferA_1, 0, MEM_RELEASE);
-
-
-    //BailOut(pSDK);
+	for(auto &it:Channels) delete it; 
+    Channels.clear();
     cout << "BlueFishVideoCard Killed" << endl;
-    //system("pause");
     return true;
-}
-
-//**************************************
-//
-void BlueFishVideoCard::InitOutputChannel(CBlueVelvet4* pSDK, ULONG DefaultOutputChannel, ULONG VideoMode, ULONG UpdateFormat, ULONG MemoryFormat, ULONG VideoEngine)
-{
-    VARIANT varVal;
-    varVal.vt = VT_UI4;
-
-     varVal.ulVal = BlueSoftware;
-     pSDK->SetCardProperty(VIDEO_GENLOCK_SIGNAL, varVal);
-
-     unsigned int HPhase=0, VPhase=0; //random value for test purposes
-     varVal.ulVal = HPhase;
-     varVal.ulVal |= ((VPhase & 0xFFFF) << 16);
-     pSDK->SetCardProperty(GENLOCK_TIMING, varVal);
-
-    //MOST IMPORTANT: as the first step set the channel that we want to work with
-    varVal.ulVal = DefaultOutputChannel;
-    pSDK->SetCardProperty(DEFAULT_VIDEO_OUTPUT_CHANNEL, varVal);
-
-    //make sure the FIFO hasn't been left running (e.g. application crash before), otherwise we can't change card properties
-    pSDK->video_playback_stop(0, 0);
-
-	if(outputsManager->Outputs.size()==2 && outputsManager->Outputs[0]->m_outputConfig->type=="FILL" && outputsManager->Outputs[1]->m_outputConfig->type=="KEY")
-	{
-		RouteChannel(pSDK, EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHA, EPOCH_DEST_SDI_OUTPUT_A, BLUE_CONNECTOR_PROP_DUALLINK_LINK_1);
-		RouteChannel(pSDK, EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHA, EPOCH_DEST_SDI_OUTPUT_B, BLUE_CONNECTOR_PROP_DUALLINK_LINK_2);
-	}
-	else if(outputsManager->Outputs.size()==2 && outputsManager->Outputs[1]->m_outputConfig->type=="FILL" && outputsManager->Outputs[0]->m_outputConfig->type=="KEY")
-	{
-		RouteChannel(pSDK, EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHA, EPOCH_DEST_SDI_OUTPUT_A, BLUE_CONNECTOR_PROP_DUALLINK_LINK_2);
-		RouteChannel(pSDK, EPOCH_SRC_OUTPUT_MEM_INTERFACE_CHA, EPOCH_DEST_SDI_OUTPUT_B, BLUE_CONNECTOR_PROP_DUALLINK_LINK_1);
-	}
-	else
-		cout << "UNKNOWN CHANNEL CONFIGURATION" << endl;
-
-    //Set the required video mode
-    varVal.ulVal = VideoMode;
-    pSDK->SetCardProperty(VIDEO_MODE, varVal);
-    pSDK->QueryCardProperty(VIDEO_MODE, varVal);
-    if(varVal.ulVal != VideoMode)
-    {
-        cout << "Can't set video mode; FIFO running already?" << endl;
-        system("pause");
-        BailOut(pSDK);
-        exit(0);
-    }
-
-    varVal.ulVal = UpdateFormat;
-    pSDK->SetCardProperty(VIDEO_UPDATE_TYPE, varVal);
-
-    varVal.ulVal = MemoryFormat;
-    pSDK->SetCardProperty(VIDEO_MEMORY_FORMAT, varVal);
-
-    //Only set the Video Engine after setting up the required video mode, update type and memory format
-    varVal.ulVal = VideoEngine;
-    pSDK->SetCardProperty(VIDEO_OUTPUT_ENGINE, varVal);
-
-    varVal.ulVal = ENUM_BLACKGENERATOR_OFF;
-    pSDK->SetCardProperty(VIDEO_BLACKGENERATOR, varVal);
-
-    varVal.ulVal = ImageOrientation_VerticalFlip;
-    pSDK->SetCardProperty(VIDEO_IMAGE_ORIENTATION, varVal);
-
-
-
-
 }
 
 //**************************************
@@ -1035,35 +811,6 @@ void BlueFishVideoCard::SetReferenceModeValue(string refMode)
 
 //**************************************
 //
-void BlueFishVideoCard::UpdateReferenceOffset()
-{
-    if(pSDK)
-    {
-        VARIANT varVal;       
-        varVal.vt = VT_UI4;
-        varVal.ulVal = m_refH;
-        varVal.ulVal |= ((m_refV & 0xFFFF) << 16);
-        pSDK->SetCardProperty(GENLOCK_TIMING, varVal);
-    }
-    else
-        cout << "BlueFish SDK not INITIALISED" << endl;
-}
-
-void BlueFishVideoCard::UpdateReferenceMode()
-{
-    if(pSDK)
-    {
-        VARIANT varVal;       
-        varVal.vt = VT_UI4;
-        varVal.ulVal = m_referenceMode;
-        pSDK->SetCardProperty(VIDEO_GENLOCK_SIGNAL, varVal);
-    }
-    else
-        cout << "BlueFish SDK not INITIALISED" << endl;
-}
-
-//**************************************
-//
 UINT BlueFishVideoCard::DetectInputs()
 {
     
@@ -1071,9 +818,9 @@ UINT BlueFishVideoCard::DetectInputs()
     if(BLUE_FAIL(pSDK->QueryCardProperty(CARD_FEATURE_STREAM_INFO, varVal)))
     {
         cout << "Function not supported; need driver 5.10.2.x" << endl;
-        //system("pause");
-       // BailOut(pSDK);
-        //return 0;
+        system("pause");
+        BailOut(pSDK);
+        return 0;
     }
 
     return CARD_FEATURE_GET_SDI_INPUT_STREAM_COUNT(varVal.ulVal);
@@ -1087,9 +834,9 @@ UINT BlueFishVideoCard::DetectOutputs()
     if(BLUE_FAIL(pSDK->QueryCardProperty(CARD_FEATURE_STREAM_INFO, varVal)))
     {
         cout << "Function not supported; need driver 5.10.2.x" << endl;
-        //system("pause");
-       // BailOut(pSDK);
-        //return 0;
+        system("pause");
+        BailOut(pSDK);
+        return 0;
     }
 
     return CARD_FEATURE_GET_SDI_OUTPUT_STREAM_COUNT(varVal.ulVal);
@@ -1097,206 +844,6 @@ UINT BlueFishVideoCard::DetectOutputs()
 
 //**************************************
 //
-/*
-ULONG	BlueFishVideoCard::ParseVideoMode(OutputConfigg* config)
-{
-	ULONG VideoMode=100;
-	if(config->interlaced)
-	{
-		switch(config->resolution)
-		{
-		 case 1080:
-			 {
-				switch(config->refresh)
-				{
-				 case 5000:
-					 {
-						 VideoMode = VID_FMT_1080I_5000;
-						 break;
-					 }
-				 case 5994:
-					 {
-						 VideoMode = VID_FMT_1080I_5994;
-						 break;
-					 }
-				 case 6000:
-					 {
-						 VideoMode = VID_FMT_1080I_6000;
-						 break;
-					 }
-				 default:
-					 {
-						 cout << "Unknown refresh rate for Interlaced 1080 resolution" << endl;
-					 }
-				}
-				break;
-			 }
-		 case 576:
-			 {
-				switch(config->refresh)
-				{
-				 case 5000:
-					 {
-						 VideoMode = VID_FMT_576I_5000;
-						 break;
-					 }
-				 default:
-					 {
-						 cout << "Unknown refresh rate for Interlaced 576 resolution" << endl;
-					 }
-				}
-				break;
-			 }
-		 case 486:
-			 {
-				switch(config->refresh)
-				{
-				 case 5994:
-					 {
-						 VideoMode = VID_FMT_486I_5994;
-						 break;
-					 }
-				 default:
-					 {
-						 cout << "Unknown refresh rate for Interlaced 486 resolution" << endl;
-					 }
-				}
-				break;
-			 }
-		 default:
-			 {
-				 cout << "Unknown Resolution for Interlaced Setting" << endl;
-				 break;
-			 }
-		}
-	}
-	else
-	{
-		switch(config->resolution)
-		{
-		 case 1080:
-			 {
-				switch(config->refresh)
-				{
-				 case 2397:
-					 {
-						 VideoMode = VID_FMT_1080P_2397;
-						 break;
-					 }
-				 case 2400:
-					 {
-						 VideoMode = VID_FMT_1080P_2400;
-						 break;
-					 }
-				 case 2500:
-					 {
-						 VideoMode = VID_FMT_1080P_2500;
-						 break;
-					 }
-				 case 2997:
-					 {
-						 VideoMode = VID_FMT_1080P_2997;
-						 break;
-					 }
-				 case 3000:
-					 {
-						 VideoMode = VID_FMT_1080P_3000;
-						 break;
-					 }
-				 case 4800:
-					 {
-						 VideoMode = VID_FMT_1080P_4800;
-						 break;
-					 }
-				 case 5000:
-					 {
-						 VideoMode = VID_FMT_1080P_5000;
-						 break;
-					 }
-				 case 5994:
-					 {
-						 VideoMode = VID_FMT_1080P_5994;
-						 break;
-					 }
-				 case 6000:
-					 {
-						 VideoMode = VID_FMT_1080P_6000;
-						 break;
-					 }
-				 default:
-					 {
-						 cout << "Unknown refresh rate for Progressive 1080 resolution" << endl;
-					 }
-				}
-				break;
-			 }
-		 case 720:
-			 {
-				switch(config->refresh)
-				{
-				 case 2398:
-					 {
-						 VideoMode = VID_FMT_720P_2398;
-						 break;
-					 }
-				 case 2400:
-					 {
-						 VideoMode = VID_FMT_720P_2400;
-						 break;
-					 }
-				 case 2500:
-					 {
-						 VideoMode = VID_FMT_720P_2500;
-						 break;
-					 }
-				 case 2997:
-					 {
-						 VideoMode = VID_FMT_720P_2997;
-						 break;
-					 }
-				 case 3000:
-					 {
-						 VideoMode = VID_FMT_720P_3000;
-						 break;
-					 }
-				 case 5000:
-					 {
-						 VideoMode = VID_FMT_720P_5000;
-						 break;
-					 }
-				 case 5994:
-					 {
-						 VideoMode = VID_FMT_720P_5994;
-						 break;
-					 }
-				 case 6000:
-					 {
-						 VideoMode = VID_FMT_720P_6000;
-						 break;
-					 }
-				 default:
-					 {
-						 cout << "Unknown refresh rate for Progressive 720 resolution" << endl;
-					 }
-				}
-				break;
-			 }
-		 default:
-			 {
-				cout << "Unknown resolution" << endl;
-				break;
-			 }
-		}
-	}
-
-	if(VideoMode==100)  
-        cout << "UNKNOWN RESOLUTION/REFRESH RATE CONFIGURATION" << endl;
-
-	return VideoMode;
-}*/
-
-
-
 int BlueFishVideoCard::InitDuplexPlayback()
 {
 	//ToDo unhack nasfeter
@@ -1325,41 +872,55 @@ int BlueFishVideoCard::InitDuplexPlayback()
 	}*/
 	////
 
+	unsigned int playback_counter = 0;
 	for(unsigned int i = 0; i < Channels.size(); i++)
 	{
-	
 		if(Channels[i]->m_Capture)
 		{
-			if(Channels[i]->GetCaptureChannel()->Init(device_id, (ChannelOptions.at(Channels[i]->GetName()))[0], UPD_FMT_FRAME, MEM_FMT_BGRA, Channels[i]->GetCaptureBuffer()))
-			{
-				cout << "Error on Init CHANNEL A OUTPUT" << endl;
-				Channels[i]->~Channel();
-				system("pause");
-				return 0;
-			}
+            if(Channels[i]->GetInputType()!="FILL_KEY")
+            {
+			    if(Channels[i]->GetCaptureChannel()->Init(device_id, (ChannelOptions.at(Channels[i]->GetName()))[0], UPD_FMT_FRAME, MEM_FMT_BGRA, Channels[i]->GetCaptureBuffer()))
+			    {
+                    cout << "Error on Init CHANNEL " << Channels[i]->GetName() << " INPUT" << endl;
+                    Channels[i]->m_playthrough = false;
+                    Channels[i]->m_Capture = false;
+                    system("pause");
+				    return 0;
+			    }
+            }
+            else
+            {
+                if(Channels[i]->GetCaptureChannel()->InitDualLink(device_id, (ChannelOptions.at(Channels[i]->GetName()))[0], UPD_FMT_FRAME, MEM_FMT_BGRA, Channels[i]->GetCaptureBuffer()))
+			    {
+                    cout << "Error on Init CHANNEL " << Channels[i]->GetName() << " INPUT" << endl;
+                    Channels[i]->m_playthrough = false;
+                    Channels[i]->m_Capture = false;
+                    system("pause");
+				    return 0;
+			    }
+            }
 
 			//Channels[i]->GetCaptureChannel()->RouteChannel((ChannelOptions.at(Channels[i]->GetName()))[1], (ChannelOptions.at(Channels[i]->GetName()))[2], BLUE_CONNECTOR_PROP_SINGLE_LINK);
-
-			if(Channels[i]->GetInputType()=="FILL")
-			{
-				Channels[i]->GetCaptureChannel()->RouteChannel((ChannelOptions.at(Channels[i]->GetName()))[1], (ChannelOptions.at(Channels[i]->GetName()))[2], BLUE_CONNECTOR_PROP_SINGLE_LINK);
-			}
-			else if(Channels[i]->GetInputType()=="KEY")
-			{				
-				Channels[i]->GetCaptureChannel()->RouteChannel((ChannelOptions.at(Channels[i]->GetName()))[1], (ChannelOptions.at(Channels[i]->GetName()))[2], BLUE_CONNECTOR_PROP_SINGLE_LINK);
-			}
-			else if(Channels[i]->GetInputType()=="FILL_KEY")
-			{	
-				Channels[i]->GetCaptureChannel()->RouteChannel((ChannelOptions.at(Channels[i]->GetName()))[1], (ChannelOptions.at(Channels[i]->GetName()))[2], BLUE_CONNECTOR_PROP_DUALLINK_LINK_1);
-				Channels[i]->GetCaptureChannel()->RouteChannel((ChannelOptions.at(Channels[i]->GetName()))[1], (ChannelOptions.upper_bound((Channels[i]->GetName()))->second)[2], BLUE_CONNECTOR_PROP_DUALLINK_LINK_2);
-			}
-			if(Channels[i]->GetCaptureChannel()->InitThread())
-			{
-				cout << "Error on Capture InitThread A" << endl;
-				Channels[i]->~Channel();
-				system("pause");
-				return 0;
-			}
+            if(Channels[i]->m_Capture)
+		    {
+			    if(Channels[i]->GetInputType()=="FILL")
+			    {
+				    Channels[i]->GetCaptureChannel()->RouteChannel((ChannelOptions.at(Channels[i]->GetName()))[1], (ChannelOptions.at(Channels[i]->GetName()))[2], BLUE_CONNECTOR_PROP_SINGLE_LINK);
+			    }
+			    else if(Channels[i]->GetInputType()=="KEY")
+			    {				
+				    Channels[i]->GetCaptureChannel()->RouteChannel((ChannelOptions.at(Channels[i]->GetName()))[1], (ChannelOptions.at(Channels[i]->GetName()))[2], BLUE_CONNECTOR_PROP_SINGLE_LINK);
+			    }
+			    if(Channels[i]->GetCaptureChannel()->InitThread())
+			    {
+				    cout << "Error on Capture InitThread Channel " << Channels[i]->GetName()  << endl;
+                
+                    Channels[i]->m_playthrough = false;
+                    Channels[i]->m_Capture = false;
+				    system("pause");
+				    return 0;
+			    }
+            }
 		}
 
 		if(Channels[i]->m_Playback)
@@ -1367,7 +928,6 @@ int BlueFishVideoCard::InitDuplexPlayback()
             if(Channels[i]->GetPlaybackChannel()->Init(device_id, (ChannelOptions.at(Channels[i]->GetName()))[3], UPD_FMT_FRAME, MEM_FMT_BGRA, (Channels[i]->m_Capture)? Channels[i]->GetCaptureChannel()->m_nVideoMode : Channels[i]->m_VideoMode, Channels[i]->GetPlaybackBuffer(), Channels[i]->m_referenceMode, Channels[i]->m_refH, Channels[i]->m_refV, Channels[i]->m_Flipped ))
 			{
 				cout << "Error on Init CHANNEL A INPUT" << endl;
-				Channels[i]->~Channel();
 				system("pause");
 				return 0;
 			}
@@ -1385,17 +945,44 @@ int BlueFishVideoCard::InitDuplexPlayback()
 				Channels[i]->GetPlaybackChannel()->RouteChannel((ChannelOptions.at(Channels[i]->GetName()))[4], (ChannelOptions.upper_bound((Channels[i]->GetName()))->second)[5], BLUE_CONNECTOR_PROP_DUALLINK_LINK_2);
 			}
 
-			if(Channels[i]->GetPlaybackChannel()->InitThread())
-			{
-				cout << "Error on Playback InitThread A" << endl;
-				Channels[i]->~Channel();
-				system("pause");
-				return 0;
-			}
+            if(Channels[i]->m_playthrough)
+            {
+                if(Channels[i]->GetPlaybackChannel()->InitThread())
+			    {
+				    cout << "Error on Playback InitThread A" << endl;
+				    system("pause");
+				    return 0;
+			    }
+            }
+            else
+            {
+                if(playback_counter > 0)
+                {
+                    if(Channels[i]->GetPlaybackChannel()->InitNotSyncedThread())
+			        {
+				        cout << "Error on Playback InitThread A" << endl;
+				        system("pause");
+				        return 0;
+			        }
+                }
+                else
+                {
+			        if(Channels[i]->GetPlaybackChannel()->InitThread())
+			        {
+				        cout << "Error on Playback InitThread A" << endl;
+				        system("pause");
+				        return 0;
+			        }
+                }
+			    playback_counter++;
+            }
 		}			
 	}
-	return 1;
+    return true;
 }
+
+//**************************************
+//
 void BlueFishVideoCard::StartDuplexPlayback()
 {
 	for(unsigned int i = 0; i < Channels.size(); i++)
@@ -1403,35 +990,72 @@ void BlueFishVideoCard::StartDuplexPlayback()
 		Channels[i]->StartDuplexThread();
 	}
 }
-unsigned int BlueFishVideoCard::GetChannelByName(std::string Name)
+
+//**************************************
+//
+Channel* BlueFishVideoCard::GetChannelByName(std::string Name)
 {
 	for(unsigned int i = 0; i < Channels.size(); i++)
 	{
-		if(Channels[i]->GetName() == Name) return i;
+		if(Channels[i]->GetName() == Name) return Channels[i];
 	}
-    return 0;
+	cout << "CHANNEL " << Name << " DOES NOT EXIST" <<endl;
+    system("pause");
+    return nullptr;
 }
 
+
+//**************************************
+//
 void BlueFishVideoCard::AddChannel( std::string name, std::string type, unsigned short renderer, unsigned short resolution, unsigned short refresh, bool interlaced, bool flipped, bool playback, bool capture, bool playthrough, std::string inputType, string referenceMode, int refH, int refV )
 {
-	if(referenceMode=="FREERUN") m_referenceMode=BlueFreeRunning;
-    else if(referenceMode=="IN_A") m_referenceMode=BlueSDI_A_BNC;
-    else if(referenceMode=="IN_B") m_referenceMode=BlueSDI_B_BNC;
-    else if(referenceMode=="ANALOG") m_referenceMode=BlueAnalog_BNC;
-    else if(referenceMode=="GENLOCK") m_referenceMode=BlueGenlockBNC;
+	if(referenceMode=="FREERUN") m_referenceMode = BlueFreeRunning;
+    else if(referenceMode=="IN_A") m_referenceMode = BlueSDI_A_BNC;
+    else if(referenceMode=="IN_B") m_referenceMode = BlueSDI_B_BNC;
+    else if(referenceMode=="ANALOG") m_referenceMode = BlueAnalog_BNC;
+    else if(referenceMode=="GENLOCK") m_referenceMode = BlueGenlockBNC;
     else 
     {
         cout << "CONFIG REFERENCE MODE NOT SUPPORTED. USING FREERUN" << endl;
-        m_referenceMode=BlueFreeRunning;
+        m_referenceMode = BlueFreeRunning;
     }
 
 	Channels.push_back(new Channel(name, type, renderer, resolution, refresh, interlaced, flipped, playback, capture, playthrough, inputType, m_referenceMode, refH, refV )); 
 }
 
-
+//**************************************
+//
 unsigned char*	BlueFishVideoCard::GetCaptureBufferForShaderProccessing(std::string ChannelName/*A,B,C,D,E,F*/)
 {
-	return Channels[GetChannelByName(ChannelName)]->GetCaptureBuffer()->m_threadsafebuffer.pop()->m_pBuffer;
+	return GetChannelByName(ChannelName)->GetCaptureBuffer()->m_threadsafebuffer.pop()->m_pBuffer;
 }
+
+//**************************************
+//
+bool BlueFishVideoCard::UpdateReferenceOffset(std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV)
+{
+	return GetChannelByName(ChannelName)->GetPlaybackChannel()->UpdateReferenceOffset(refH, refV);
+}
+
+//**************************************
+//
+bool BlueFishVideoCard::UpdateReferenceMode(std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/)
+{
+	long referenceMode = 0;
+
+	if(ReferenceModeName=="FREERUN") referenceMode = BlueFreeRunning;
+    else if(ReferenceModeName=="IN_A") referenceMode = BlueSDI_A_BNC;
+    else if(ReferenceModeName=="IN_B") referenceMode = BlueSDI_B_BNC;
+    else if(ReferenceModeName=="ANALOG") referenceMode = BlueAnalog_BNC;
+    else if(ReferenceModeName=="GENLOCK") referenceMode = BlueGenlockBNC;
+    else 
+    {
+        cout << "CONFIG REFERENCE MODE NOT SUPPORTED. USING FREERUN" << endl;
+        m_referenceMode = BlueFreeRunning;
+    }
+
+	return GetChannelByName(ChannelName)->GetPlaybackChannel()->UpdateReferenceMode(referenceMode);
+}
+
 }
 }

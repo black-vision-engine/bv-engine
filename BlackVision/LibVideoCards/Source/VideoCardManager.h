@@ -15,6 +15,7 @@ namespace bv
 
 namespace videocards{
 using namespace std;
+
 struct InputConfig
 {
     string type;
@@ -79,6 +80,10 @@ private:
 
     vector<VideoCardBase*>	m_VideoCards;
     VideoMidgard*			m_Midgard;
+	HANDLE					m_midgardThreadHandle;
+	unsigned int			m_midgardThreadID;
+	bool					m_midgardThreadStopping;
+
     
 public:
 	
@@ -103,12 +108,16 @@ public:
     void                    SuspendVideoCards		();
     void                    ResumeVideoCards		();
     VideoCardBase*          GetVideoCard			(int i);
-    unsigned int            GetVideoCardsSize		();
+    size_t		            GetVideoCardsSize		();
     void                    OnEventReceived         (bv::IEventPtr evt);
 	void                    DeliverFrameFromRAM     (unsigned char * buffer);
+	void                    DeliverFrameFromRAM     (std::shared_ptr<CFrame> buffer);
 	VideoMidgard*           GetMidgard				();
 	void					GetBufferFromRenderer	(Texture2DConstPtr buffer);
 	unsigned char *			GetCaptureBufferForShaderProccessing    (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);
+	bool					UpdateReferenceMode		(unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/ );
+	bool					UpdateReferenceOffset	(unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV);
+    bool                    StopMidgardThread       ();
 
 private:
 	void                    DetectVideoCards        ();
@@ -121,10 +130,8 @@ private:
     bool                    InitVideoCards          ( const std::vector<int> & hackBuffersUids );
 	void                    RegisterVideoCards      ();
     void                    RegisterBlueFishCards   ();
-    void                    RegisterBlackMagicCards ();
-    static DWORD            VideoThread             (void *lp);
-    bool                    copy_buffer_thread      ();
-
+    void                    RegisterBlackMagicCards ();    
+	unsigned int static __stdcall copy_buffer_thread      (void *args);
 };
 
 

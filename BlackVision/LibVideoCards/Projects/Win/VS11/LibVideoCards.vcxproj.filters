@@ -30,9 +30,6 @@
     <ClInclude Include="..\..\..\Source\Models\BlueFish\CFrame.h">
       <Filter>Models\BlueFish</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueLock.h">
-      <Filter>Models\BlueFish</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.h">
       <Filter>Models\BlueFish</Filter>
     </ClInclude>
@@ -66,9 +63,6 @@
       <Filter>Models\BlueFish</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\CFrame.cpp">
-      <Filter>Models\BlueFish</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueLock.cpp">
       <Filter>Models\BlueFish</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\BlueFishVideoCard.cpp">

@@ -1,6 +1,4 @@
 #pragma once
-#ifndef H_GUARD_FIFOCAPTURE
-#define H_GUARD_FIFOCAPTURE
 
 #include "win_sock.h"
 #include "Bluefish/inc/BlueVelvet4.h"
@@ -19,6 +17,7 @@ public:
 	CFifoCapture();
 	~CFifoCapture();
 
+	BLUE_INT32                      InitDualLink(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer);
 	BLUE_INT32						Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer);
 	void							RouteChannel(ULONG Source, ULONG Destination, ULONG LinkType);
 	unsigned int static __stdcall	CaptureThread(void * pArg);
@@ -52,4 +51,3 @@ public:
 };
 }
 }
-#endif	//H_GUARD_FIFOCAPTURE

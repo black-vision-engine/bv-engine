@@ -39,9 +39,7 @@ CFifoCapture::~CFifoCapture()
 	}
 	m_pSDK = NULL;
 
-	//delete m_pFifoBuffer;
 }
-
 BLUE_INT32 CFifoCapture::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer)
 {
 	ULONG FieldCount = 0;
@@ -67,11 +65,11 @@ BLUE_INT32 CFifoCapture::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, B
 	//Get number of supported inputs and outputs
 	varVal.ulVal = 0;
 	m_pSDK->QueryCardProperty(CARD_FEATURE_STREAM_INFO, varVal);
-
+	//BlueVideoFifoStatus;
 	unsigned int nInputStreams = CARD_FEATURE_GET_SDI_INPUT_STREAM_COUNT(varVal.ulVal);
+	cout << "Card Supports " << nInputStreams << " inputs" << endl;
 	if(nInputStreams < 2)
 	{
-		cout << "Card does not support two input channels" << endl;
 		m_pSDK->device_detach();
 		m_nIsAttached = 0;
 		return -1;
@@ -117,6 +115,95 @@ BLUE_INT32 CFifoCapture::Init(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, B
 
 	::ZeroMemory(&m_Overlap, sizeof(m_Overlap));
 	m_Overlap.hEvent = ::CreateEvent( NULL, TRUE, FALSE, NULL );
+
+	return 0;
+}
+
+BLUE_INT32 CFifoCapture::InitDualLink(BLUE_INT32 CardNumber, BLUE_UINT32 VideoChannel, BLUE_UINT32 UpdateFormat, BLUE_UINT32 MemoryFormat, CFifoBuffer* pFifoBuffer)
+{
+	ULONG FieldCount = 0;
+	VARIANT varVal;
+
+	if(m_nIsAttached)
+	{
+		m_pSDK->device_detach();
+		m_nIsAttached = 0;
+	}
+
+	if(CardNumber <= 0 || CardNumber > m_iDevices)
+	{
+		cout << "Card " << CardNumber << " not available; maximum card number is: " << m_iDevices << endl;
+		return -1;
+	}
+
+	m_pSDK->device_attach(CardNumber, 0);
+	m_nIsAttached = 1;
+
+	m_iCardType = m_pSDK->has_video_cardtype();
+
+	//Get number of supported inputs and outputs
+	varVal.ulVal = 0;
+	m_pSDK->QueryCardProperty(CARD_FEATURE_STREAM_INFO, varVal);
+	//BlueVideoFifoStatus;
+	unsigned int nInputStreams = CARD_FEATURE_GET_SDI_INPUT_STREAM_COUNT(varVal.ulVal);
+	cout << "Card Supports " << nInputStreams << " inputs" << endl;
+	if(nInputStreams < 2)
+	{
+		m_pSDK->device_detach();
+		m_nIsAttached = 0;
+		return -1;
+	}
+
+	varVal.vt = VT_UI4;
+	m_pSDK->QueryCardProperty(INVALID_VIDEO_MODE_FLAG, varVal);
+	m_InvalidVideoModeFlag = varVal.ulVal;
+	
+	varVal.ulVal = VideoChannel;
+	m_pSDK->SetCardProperty(DEFAULT_VIDEO_INPUT_CHANNEL, varVal);
+
+	m_pSDK->wait_input_video_synch(UPD_FMT_FRAME, FieldCount); //synchronise with the card before querying VIDEO_INPUT_SIGNAL_VIDEO_MODE
+	varVal.vt = VT_UI4;
+	m_pSDK->QueryCardProperty(VIDEO_INPUT_SIGNAL_VIDEO_MODE, varVal);
+	if(varVal.ulVal >= m_InvalidVideoModeFlag)
+	{
+		cout << "No valid input signal" << endl;
+		m_pSDK->device_detach();
+		m_nIsAttached = 0;
+		return -1;
+	}
+	m_nVideoMode = varVal.ulVal;
+	cout << "Video Input mode: " << gVideoModeInfo[m_nVideoMode].strVideoModeFriendlyName.c_str() << endl;
+
+	m_nUpdateFormat = UpdateFormat;
+	varVal.ulVal = m_nUpdateFormat;
+	m_pSDK->SetCardProperty(VIDEO_INPUT_UPDATE_TYPE, varVal);
+
+	m_nMemoryFormat = MemoryFormat;
+	varVal.ulVal = m_nMemoryFormat;
+	m_pSDK->SetCardProperty(VIDEO_INPUT_MEMORY_FORMAT, varVal);
+
+
+
+	varVal.ulVal = VIDEO_ENGINE_DUPLEX;	//do not set it to VIDEO_ENGINE_CAPTURE as this will automatically do a playthrough and this will conflict with our playback thread
+	m_pSDK->SetCardProperty(VIDEO_INPUT_ENGINE, varVal);
+
+	GoldenSize = BlueVelvetGolden(m_nVideoMode, m_nMemoryFormat, m_nUpdateFormat);
+	BytesPerLine = BlueVelvetLineBytes(m_nVideoMode, m_nMemoryFormat);
+	m_pFifoBuffer = pFifoBuffer;
+	m_pFifoBuffer->Init(4, GoldenSize, BytesPerLine);
+
+	::ZeroMemory(&m_Overlap, sizeof(m_Overlap));
+	m_Overlap.hEvent = ::CreateEvent( NULL, TRUE, FALSE, NULL );
+
+    //enable dual link input (sets up the routing automatically to SDI A -> Video input channel A link A, SDI B-> Video input channel A link B
+	varVal.ulVal = 1; //turn dual link on
+	m_pSDK->SetCardProperty(VIDEO_DUAL_LINK_INPUT, varVal); //sets routing automatically
+
+	varVal.vt = VT_UI4;
+	varVal.ulVal = Signal_FormatType_4224;	//select format type
+	//vr.ulVal = Signal_FormatType_444_10BitSDI;
+	//vr.ulVal = Signal_FormatType_444_12BitSDI;
+	m_pSDK->SetCardProperty(VIDEO_DUAL_LINK_INPUT_SIGNAL_FORMAT_TYPE, varVal);
 
 	return 0;
 }
@@ -177,7 +264,7 @@ void CFifoCapture::StopCaptureThread()
 	{
 		cout << "Stopping Capture Thread..." << endl;
 		m_nThreadStopping = TRUE;
-		dw = WaitForSingleObject(m_hThread, (DWORD)-1);
+		dw = WaitForSingleObject(m_hThread, INFINITE);
 		CloseHandle(m_hThread);
 	}
 	else
@@ -224,9 +311,7 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 
 			pFrame->m_lFieldCount = video_capture_frame.nFrameTimeStamp;
 			pFrame->m_nCardBufferID = video_capture_frame.BufferId;
-			//pThis->m_pFifoBuffer->PutLiveBuffer(pFrame);
 			pThis->m_pFifoBuffer->m_threadsafebuffer.push(pFrame);
-			//pFrame = NULL;
 			bFirstFrame = FALSE;
 		}
 		else

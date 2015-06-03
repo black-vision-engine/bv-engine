@@ -1,7 +1,9 @@
 #pragma once
 
-#include <vector>
 #include "VideoOutputsManager.h"
+#include "Models/BlueFish/CFrame.h"
+#include <memory>
+
 //#include <..\dep\vld\include\vld.h>
 
 
@@ -14,20 +16,6 @@ using namespace std;
 enum VideoCard_Modes{SD,HD};
 enum VideoCard_RAM_GPU{RAM,GPU};
 
-/*
-struct ChannelConfig
-{
-	int id;
-	std::string type;
-	int renderer;
-	std::string resolution;
-	int refresh;
-	bool interlaced;
-	bool flipped;
-};*/
-
-
-//enum m_referenceModeEnumerator{REF_IN_A, REF_IN_B, REF_FREERUN, REF_ANALOG};
 
 #define NUMBER_OGL_TEXTURES 2
 #define NUMBER_BF_CARD_BUFFERS 3
@@ -38,7 +26,6 @@ class VideoCardBase
 protected:
     string                          Brand;
     string                          Name;
-    //VideoInputManager*            inputs;
     VideoCard_RAM_GPU		        transferMode;
     long                            m_referenceMode;
     unsigned int                    device_id;
@@ -68,15 +55,14 @@ public:
 	virtual bool			InitVideoCard	    ( const std::vector<int> & hackBuffersUids )			{ {hackBuffersUids;}  return false; };
     virtual bool			DetectVideoCard     ()			                                            {return false;};
     virtual void            DeliverFrameFromRAM (unsigned char * )                                      {};
+	virtual void            DeliverFrameFromRAM (std::shared_ptr<CFrame> Frame )                        {};
     virtual bool            ActivateVideoCard   ()                                                      {return false;};
     virtual bool            DeactivateVideoCard ()                                                      {return false;};
     virtual void            Black               ()                                                      {return ;};
     virtual bool            InitOutputChannels  ()                                                      {return false;};
     virtual bool            InitHardwareOutputs ()                                                      {return false;};
-    void                    SetReferenceOffsetValue  (int H, int V);
-    virtual void            SetReferenceModeValue    (string ref)                                       {};
-    virtual void            UpdateReferenceOffset  ()                                                   {};
-    virtual void            UpdateReferenceMode    ()                                                   {};
+	virtual bool            UpdateReferenceOffset  (std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV)													{{refH;}{refV;}return false;};
+    virtual bool            UpdateReferenceMode    (std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/)	{{ChannelName;}{ReferenceModeName;}return false;};
     virtual unsigned int    DetectInputs        ()                                                      {return 0;}
     virtual unsigned int    DetectOutputs       ()                                                      {return 0;}
 	virtual void			AddChannel			()														{};

@@ -12,8 +12,7 @@ VideoOutput::VideoOutput(int _id)
 
 VideoOutput::VideoOutput(OutputConfigg* config)
 {
-    this->m_outputConfig = config;//new OutputConfig;
-	//this->m_outputConfig = config;
+    this->m_outputConfig = config;
 }
 
 VideoOutput::~VideoOutput(void)

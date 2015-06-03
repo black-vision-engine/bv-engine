@@ -68,6 +68,54 @@ void BlackMagicVideoCard::DeliverFrameFromGPU(unsigned int bufferPointer)
 	{bufferPointer;}
 }
 
+void    BlackMagicVideoCard::DeliverFrameFromRAM (std::shared_ptr<CFrame> Frame )
+{
+     VideoOutput* output = outputsManager->GetDefaultVideoOutput();
+    
+    for(unsigned int i=0;i<output->Channels.size();i++)
+    {
+        int hdVideo =  output->Channels[i].OutputId-1;
+        EnterCriticalSection(&Mutex[hdVideo]);
+        if(hdVideo<0 || hdVideo >= ChannelsCount)
+        {
+            printf("VideoCard ERROR DeliverFrameFromRAM(), wrong Output id! \n");
+            LeaveCriticalSection(&Mutex[hdVideo]);
+            return;
+        }
+
+        if(output->Channels[i].OutputType == VideoOutputType::KEY)
+        {
+            CopyAlphaBits((void*) Frame->m_pBuffer,pFrame[hdVideo],VideoFrames[hdVideo]->GetRowBytes() * uiFrameHeight[hdVideo]);
+            //memcpy(pFrame[hdVideo],(void*)buffer,VideoFrames[hdVideo]->GetRowBytes() * uiFrameHeight[hdVideo]);
+        }
+        else if(output->Channels[i].OutputType == VideoOutputType::FILL) {
+            // kopiujemy bez sensu ramkê do jakiegoœ bufora
+            memcpy(pFrame[hdVideo],(void*)Frame->m_pBuffer,VideoFrames[hdVideo]->GetRowBytes() * uiFrameHeight[hdVideo]);
+        }else if(output->Channels[i].OutputType == VideoOutputType::FILL_AUTO_KEY) 
+        {
+            memcpy(pFrame[hdVideo],(void*)Frame->m_pBuffer,VideoFrames[hdVideo]->GetRowBytes() * uiFrameHeight[hdVideo]);
+        }
+        VideoFrames[hdVideo]->GetBytes((void**)&pFrame[hdVideo]);
+        //result = HardwareOutputs[hdVideo]->DisplayVideoFrameSync(VideoFrames[hdVideo]);
+        LeaveCriticalSection(&Mutex[hdVideo]);
+        //bool result=false;
+        /*if(result!=S_OK)
+        {
+            //printf("VideoCard","ERROR", "ScheduleVideoFrame error");
+        }else{
+            //printf("VideoCard","INFO", "Frame out there!");
+        }*/
+    }
+    for(unsigned int i=0;i<output->Channels.size();i++)
+    {
+        int hdVideo =  output->Channels[i].OutputId-1;
+        HardwareOutputs[hdVideo]->DisplayVideoFrameSync(VideoFrames[hdVideo]);
+    }
+
+    LeaveCriticalSection(&pMutex);
+}
+
+
 //**************************************
 //
 void BlackMagicVideoCard::DeliverFrameFromRAM(unsigned char * buffer)

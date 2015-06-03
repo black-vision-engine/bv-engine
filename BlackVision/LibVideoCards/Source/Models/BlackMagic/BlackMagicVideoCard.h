@@ -48,6 +48,7 @@ public:
 	bool                            Init                            ();
 	bool                            DetectVideoCard                 ();
     void                            DeliverFrameFromRAM             (unsigned char * );
+	void                            DeliverFrameFromRAM             (std::shared_ptr<CFrame> Frame );
     bool                            ActivateVideoCard               ();
     bool                            DeactivateVideoCard             ();
     void                            Black                           ();

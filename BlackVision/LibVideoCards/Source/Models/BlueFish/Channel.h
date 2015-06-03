@@ -13,7 +13,6 @@
 #include "BlueFish/inc/BlueHancUtils.h"
 
 #include "Utils.h"
-#include "BlueLock.h"
 #include "FifoBuffer.h"
 #include "FifoCapture.h"
 #include "FifoPlayback.h"
@@ -34,7 +33,7 @@ struct MainThreadArgs
 class Channel
 {
 private:
-	MainThreadArgs*	m_PlaythroughThreadArgs;
+	MainThreadArgs	m_PlaythroughThreadArgs;
 	CFifoBuffer		m_CaptureFifoBuffer;
 	CFifoBuffer		m_PlaybackFifoBuffer;
 	CFifoCapture*	m_CaptureChannel;

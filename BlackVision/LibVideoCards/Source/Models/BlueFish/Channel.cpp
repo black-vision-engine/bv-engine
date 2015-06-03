@@ -31,32 +31,29 @@ Channel::Channel( std::string name, std::string type, unsigned short renderer, u
 //
 Channel::~Channel()
 {
+	cout << "Deleting Channels.... " << endl;
     if(m_playthrough)
 	{
-	    m_PlaythroughThreadArgs->bDoRun = FALSE;
-        DWORD dw = WaitForSingleObject(m_PlaythroughThreadHandle, (DWORD)-1);
-		{dw;}
-		CloseHandle(m_PlaythroughThreadHandle);
-	    //delete m_PlaythroughThreadArgs->pInputFifo;
-	   // delete m_PlaythroughThreadArgs->pOutputFifo;
-	    //delete m_PlaythroughThreadArgs;
-		//m_PlaythroughThreadArgs = NULL;
+	    m_PlaythroughThreadArgs.bDoRun = FALSE;
+        WaitForSingleObject(m_PlaythroughThreadHandle, INFINITE);
+	    CloseHandle(m_PlaythroughThreadHandle);
     }
 
-	if(m_Playback)
+    if(m_Playback)
 	{
 		m_PlaybackChannel->StopPlaybackThread();
-		//delete m_PlaybackChannel;
-		//m_PlaybackChannel = NULL;
+        m_PlaybackChannel->m_pFifoBuffer->m_threadsafebuffer.clear();
+		delete m_PlaybackChannel;
+		m_PlaybackChannel = NULL;
 	}
 
     if(m_Capture)
     {
+        m_CaptureChannel->m_pFifoBuffer->m_threadsafebuffer.clear();
 	    m_CaptureChannel->StopCaptureThread();
-	    //delete m_CaptureChannel;
-	    //m_CaptureChannel = NULL;
+	    delete m_CaptureChannel;
+	    m_CaptureChannel = NULL;
     }
-
 
 }
 
@@ -97,7 +94,7 @@ CFifoBuffer* Channel::GetPlaybackBuffer()
 //
 void Channel::InitThreads()
 {
-	 if(m_Capture)this->m_CaptureChannel->InitThread();
+	if(m_Capture)this->m_CaptureChannel->InitThread();
 	if(m_Playback) this->m_PlaybackChannel->InitThread();
 }
 
@@ -105,7 +102,7 @@ void Channel::InitThreads()
 //
 void Channel::StartThreads()
 {
-	 if(m_Capture)this->m_CaptureChannel->StartCaptureThread();
+	if(m_Capture)this->m_CaptureChannel->StartCaptureThread();
 	if(m_Playback)this->m_PlaybackChannel->StartPlaybackThread();
 }
 //**************************************
@@ -113,20 +110,20 @@ void Channel::StartThreads()
 void Channel::StopThreads()
 {
 	if(m_Playback)this->m_PlaybackChannel->StopPlaybackThread();
-	 if(m_Capture)this->m_CaptureChannel->StopCaptureThread();
+	if(m_Capture)this->m_CaptureChannel->StopCaptureThread();
 }
 //**************************************
 //
 void Channel::SuspendThreads()
 {
 	if(m_Playback)this->m_PlaybackChannel->SuspendPlaybackThread();
-	 if(m_Capture)this->m_CaptureChannel->SuspendCaptureThread();
+	if(m_Capture)this->m_CaptureChannel->SuspendCaptureThread();
 }
 //**************************************
 //
 void Channel::ResumeThreads()
 {
-	 if(m_Capture)this->m_CaptureChannel->ResumeCaptureThread();
+	if(m_Capture)this->m_CaptureChannel->ResumeCaptureThread();
 	if(m_Playback)this->m_PlaybackChannel->ResumePlaybackThread();
 }
 //**************************************
@@ -151,11 +148,15 @@ void Channel::GenerateBlack()
         VARIANT varVal;       
         varVal.ulVal = ENUM_BLACKGENERATOR_ON;
         GetPlaybackChannel()->m_pSDK->SetCardProperty(VIDEO_BLACKGENERATOR, varVal);
-
     }
     
     else
         cout << "BlueFish Playback SDK not INITIALISED" << endl;
+
+   /* if(m_PlaybackChannel!=nullptr)
+    {
+        GetPlaybackBuffer()->PushKillerFrame();		  
+    }*/
 }
 
 //**************************************
@@ -163,58 +164,14 @@ void Channel::GenerateBlack()
 unsigned int __stdcall Channel::PlaythroughThread(void * pArg)
 {
 	MainThreadArgs* pParams = (MainThreadArgs*)pArg;
-	//std::shared_ptr<CFrame> pFrameIn = NULL;
-	//std::shared_ptr<CFrame> pFrameOut = NULL;
-	//BLUE_UINT32 FrameNumber = 0;
-	//BLUE_UINT32 Thickness = 100;	//in lines;
 	cout << "Thread " << pParams->strChannel.c_str() << " running." << endl;
 
 	while(pParams->bDoRun)
-	{
-		//if(!pFrameIn)
-			//threadsafe
-			//pFrameIn = pParams->pInputFifo->GetLiveBuffer();
-			//pFrameIn = pParams->pInputFifo->m_threadsafebuffer.pop();
+	{	
+        pParams->pOutputFifo->m_threadsafebuffer.push(pParams->pInputFifo->m_threadsafebuffer.pop());
+	}
 
-		//if(true)
-		//{
-		//	//pFrameOut = std::make_shared<CFrame>(1,pParams->pOutputFifo->m_GoldenSize, pParams->pOutputFifo->m_BytesPerLine);//GoldenSize,pThis->BytesPerLine);//pParams->pOutputFifo->m_threadsafebuffer.pop();//pParams->pOutputFifo->GetFreeBuffer();
-		//	if(true)
-		//	{
-		//		//copy In to Out
-		//		if(true)//pFrameIn->m_nSize == pFrameOut->m_nSize)
-		//		{
-					//if(pParams->bModifyCapturedFrame)
-					//{
-						//the black line will only shift by 2 lines per update
-					//	BlueMemZero((pFrameIn->m_pBuffer+pFrameIn->m_nSize/2+pFrameIn->m_nBytesPerLine*2*FrameNumber), pFrameIn->m_nBytesPerLine*Thickness);
-					//	FrameNumber = (++FrameNumber%100);	//this is just arbitrary to get our "Animation" to use 100 frames before repeating
-					//}
-					//BlueMemCpy(pFrameOut->m_pBuffer, pFrameIn->m_pBuffer, pFrameIn->m_nSize);
-					//pFrameOut->m_lFieldCount = pFrameIn->m_lFieldCount;		
-
-					pParams->pOutputFifo->m_threadsafebuffer.push(pParams->pInputFifo->m_threadsafebuffer.pop());
-
-					//cout << pParams->strChannel.c_str();
-				}
-	
-				//else
-				//{
-				//	cout << "Input/Output buffers don't match!" << endl;
-				//	pParams->bDoRun = FALSE;
-				//	break;
-				//}
-
-	
-				/*pParams->pInputFifo->PutFreeBuffer(pFrameIn);
-				pFrameIn = NULL;
-				pParams->pOutputFifo->PutLiveBuffer(pFrameOut);
-				pFrameOut = NULL;*/
-	//		}
-	//	}
-	//}
-
-	cout << "Thread " << pParams->strChannel.c_str() << " exiting." << endl;
+	cout << "PlaythroughThread " << pParams->strChannel.c_str() << " exiting." << endl;
 	_endthreadex(0);
 	return 0;
 }
@@ -223,16 +180,16 @@ unsigned int __stdcall Channel::PlaythroughThread(void * pArg)
 //
 void Channel::StartDuplexThread()
 {
-
+    
 	if(m_playthrough)
 	{
-		m_PlaythroughThreadArgs = new MainThreadArgs;
-		m_PlaythroughThreadArgs->bDoRun = TRUE;
-        m_PlaythroughThreadArgs->pInputFifo = GetCaptureBuffer();//>m_CaptureFifoBuffer;
-        m_PlaythroughThreadArgs->pOutputFifo = GetPlaybackBuffer();//&this->m_PlaybackFifoBuffer;
-		m_PlaythroughThreadArgs->strChannel = this->m_Name;
+		m_PlaythroughThreadArgs = MainThreadArgs();
+		m_PlaythroughThreadArgs.bDoRun = TRUE;
+        m_PlaythroughThreadArgs.pInputFifo = GetCaptureBuffer();//>m_CaptureFifoBuffer;
+        m_PlaythroughThreadArgs.pOutputFifo = GetPlaybackBuffer();//&this->m_PlaybackFifoBuffer;
+		m_PlaythroughThreadArgs.strChannel = this->m_Name;
 		m_PlaythroughThreadID = 0;
-		m_PlaythroughThreadHandle = (HANDLE)_beginthreadex(NULL, 0, &PlaythroughThread, m_PlaythroughThreadArgs, CREATE_SUSPENDED, &m_PlaythroughThreadID);
+		m_PlaythroughThreadHandle = (HANDLE)_beginthreadex(NULL, 0, &PlaythroughThread, &m_PlaythroughThreadArgs, CREATE_SUSPENDED, &m_PlaythroughThreadID);
 		if(!m_PlaythroughThreadHandle)
 		{
 			cout << "Error starting Main Thread StartDuplexThread" << endl;
@@ -252,7 +209,7 @@ void Channel::StartDuplexThread()
 //
 ULONG Channel::ParseVideoMode(unsigned short resolution, unsigned short refresh, bool interlaced)
 {
-	ULONG VideoMode=100;
+	ULONG VideoMode=VID_FMT_INVALID;
 	if(interlaced)
 	{
 		switch(resolution)
@@ -441,7 +398,7 @@ ULONG Channel::ParseVideoMode(unsigned short resolution, unsigned short refresh,
 		}
 	}
 
-	if(VideoMode==100)  
+	if(VideoMode==VID_FMT_INVALID)  
         cout << "UNKNOWN RESOLUTION/REFRESH RATE CONFIGURATION" << endl;
 
 	return VideoMode;

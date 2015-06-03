@@ -53,22 +53,25 @@ public:
 	bool                Init                            ();
 	bool                DetectVideoCard                 ();
     void                DeliverFrameFromRAM             (unsigned char * );
+	void                DeliverFrameFromRAM             (std::shared_ptr<CFrame> Frame );
     bool                ActivateVideoCard               ();
     bool                DeactivateVideoCard             ();
     void                Black                           ();
     void                SetReferenceModeValue           (string refMode);
     void                UpdateReferenceOffset           ();
     void                UpdateReferenceMode             ();      
-	//ULONG				ParseVideoMode					(OutputConfigg* config);
     void                StartDuplexPlayback             ();
 	int					InitDuplexPlayback		        ();
 	void				AddChannel						( std::string name, std::string type, unsigned short renderer, unsigned short resolution, unsigned short refresh, bool interlaced, bool flipped, bool playback, bool capture, bool playthrough, std::string inputType, string referenceMode, int refH, int refV );
-	unsigned int 		GetChannelByName				( std::string Name );    
+	Channel*			GetChannelByName				( std::string Name );   
     void                StartVideoCardProccessing                   ();
-    //void                StopVideoCardProccessing                    ();
+    //void              StopVideoCardProccessing                    ();
     void                SuspendVideoCardProccessing                ();
     void                ResumeVideoCardProccessing                  ();
 	unsigned char *		GetCaptureBufferForShaderProccessing    (std::string ChannelName/*A,B,C,D,E,F*/);
+	virtual bool        UpdateReferenceOffset  (std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV)		override;
+    virtual bool        UpdateReferenceMode    (std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/)	override;
+
     ///GPUDirect
 private:    
     GLuint                  frameBufferTest;

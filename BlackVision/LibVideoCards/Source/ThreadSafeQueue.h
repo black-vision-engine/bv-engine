@@ -73,15 +73,14 @@ public:
 		return q_.front();
 	}
 
-    void clear()
+	void clear()
 	{
 		std::unique_lock<std::mutex> lk(mtx_);
-        //std::cerr<< "WAITING  on  pop \n";
-		//cv_push_.wait(lk, [=]{ return !q_.empty(); });
-        //std::cerr<< "Poping \n";
 		while (!q_.empty())q_.pop_back();
+		cv_pop_.notify_one();    
 		//cv_pop_.notify_all();
 	}
+
 
     int getSize()
     {

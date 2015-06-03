@@ -14,7 +14,16 @@ CFrame::CFrame(unsigned int ID, unsigned int Size, unsigned int BytesPerLine) :
 {
 	m_pBuffer = (unsigned char*)VirtualAlloc(NULL, Size, MEM_COMMIT, PAGE_READWRITE);
 	if(m_pBuffer)
+    {
 		VirtualLock(m_pBuffer, Size);
+        if(ID == 0)
+        {
+            for( unsigned int i = 0; i < Size; i++)
+            {
+                m_pBuffer[i] = 0;
+            }
+        }
+    }
 }
 
 CFrame::CFrame(unsigned char* buffer, unsigned int ID, unsigned int Size, unsigned int BytesPerLine) :

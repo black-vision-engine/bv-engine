@@ -1,6 +1,5 @@
 #pragma once
-#ifndef H_GUARD_UTILS
-#define H_GUARD_UTILS
+
 #include <string>
 
 namespace bv
@@ -27,4 +26,3 @@ void BlueMemZero(void* pData, size_t size);
 }
 }
 
-#endif	//H_GUARD_UTILS

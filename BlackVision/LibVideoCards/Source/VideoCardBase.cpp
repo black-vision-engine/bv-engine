@@ -19,13 +19,5 @@ VideoCardBase::~VideoCardBase()
 {
 }
 
-//**************************************
-//
-void VideoCardBase::SetReferenceOffsetValue(int H, int V)
-{
-    m_refH = H; 
-    m_refV = V;
-
-}
 }
 }
