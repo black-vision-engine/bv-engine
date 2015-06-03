@@ -38,5 +38,4 @@ void VisualTesterRenderLogic::renderCompareWithReferenceImage( Renderer* rendere
 	fileName;
 }
 
-
-}
+} //bv
