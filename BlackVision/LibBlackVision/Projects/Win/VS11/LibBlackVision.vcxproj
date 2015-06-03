@@ -307,6 +307,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\SerializationObjects.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventLoop.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventNull.cpp" />

@@ -294,6 +294,13 @@ void BVAppLogic::OnKey           ( unsigned char c )
             BVGL::PrintCompleteSummary( "AFTER ATTACH NODE TO ROOT" );
         }
     }
+    else if( c == 's' )
+    {
+        auto sob = new SerializeObject();
+        //m_bvScene->Serialize( sob );
+        sob->Save( "text.xml" );
+    }
+
 /*
     // FIXME: the code below is must be used with an animation plugin
     unsigned char d = c - '0';

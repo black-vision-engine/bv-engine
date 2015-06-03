@@ -34,7 +34,7 @@
 
 #include "Engine/Models/Plugins/PluginsFactory.h"
 
-#include "Engine/SerializationObjects.h"
+#include "Engine/Models/SerializationObjects.h"
 #include "Engine/Models/BVScene.h"
 
 #define _USE_MATH_DEFINES
