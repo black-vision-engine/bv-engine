@@ -50,7 +50,7 @@ VideoCardManager::~VideoCardManager(void)
         delete m_Midgard;
 
 		cout << "VideoCardManager deleted" << endl;
-        system("pause");
+        //system("pause");
 	}
 
 }
