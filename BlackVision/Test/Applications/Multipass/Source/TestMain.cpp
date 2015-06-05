@@ -23,7 +23,6 @@ namespace bv {
 TEST(MultipassAlphaBlending, Multipass)
 {
 	Renderer* renderer = application->getRenderer();
-	application->setMakeReferenceImage( false );
 
 	std::string sand( "sand.jpg" );
 	std::string cubeMap( "Penguins.jpg" );
@@ -46,7 +45,7 @@ TEST(MultipassAlphaBlending, Multipass)
 	ASSERT_EQ( effect->NumPasses(), (unsigned int)scene.getNumPasses() );
 
 
-	application->testRender( AssetsPath + "MultipassTest", root );
+	application->testRender( AssetsPath + "MultipassTest", root, false );
 }
 
 

@@ -48,7 +48,6 @@ WinApplicationTester::WinApplicationTester()
 	:	WindowedApplication( "Rendering test", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.FullScreenMode() )
 {
 	application = this;
-	makeReferenceImage = false;
 }
 
 
@@ -89,8 +88,18 @@ bool WinApplicationTester::OnInitialize()
 	return WindowedApplication::OnInitialize();
 }
 
+/**@brief Function used to test rendering. It compares reference image with image rendered from
+SceneNode given in parameter. If images are diffrent, function creates image that shows the difference.
 
-void WinApplicationTester::testRender( const std::string fileName, SceneNode* node )
+If you want to render refenrence image, set parameter makeReferenceImage to true, and specify
+fileName, where you want to place it. Reference image has name:
+fileName + "RereferenceImage" + file_ext.
+When specifying name by testing, you shuldn't give a full name, but only the first part.
+
+@param[in] fileName Reference image to compare (or create depending on parameter makeReferenceImage). See description above, how to make a name.
+@param[in] node Scene node to render.
+@param[in] makeReferenceImage By setting true you can render reference image instead of making test. Default: false.*/
+void WinApplicationTester::testRender( const std::string fileName, SceneNode* node, bool makeReferenceImage )
 {
 	if( makeReferenceImage )
 		m_renderLogic->renderReferenceImage( m_Renderer, node, fileName );

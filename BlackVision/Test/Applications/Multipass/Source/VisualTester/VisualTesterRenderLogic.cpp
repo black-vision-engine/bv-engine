@@ -104,7 +104,6 @@ void VisualTesterRenderLogic::renderCompareWithReferenceImage( Renderer* rendere
 
 	for( unsigned int i = 0; i < imageHeight * imageWidth * BytesPP; )
 	{
-		unsigned char step;		// currentCompareFunction will put here our step.
 		double stepError = currentCompareFunction( refImage + i, renderedImage + i );
 		imageError += stepError;
 

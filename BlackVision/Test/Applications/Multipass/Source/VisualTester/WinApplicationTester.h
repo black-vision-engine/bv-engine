@@ -16,13 +16,17 @@ When you want to use it with google test library, do following:
 -	delete main fuction from google test template. Main Function is already defined in WinApplicationTester.cpp
 -	write all your test following google test rules
 In macros defining tests you can use global variable named application, to get Renderer
-and then to render single frame.*/
+and then to render single frame.
+
+To make image comparing test, call function testRender. Give the name of file containig
+reference image.
+
+If you want to render reference image, you can set last parameter of testRender function to true.
+*/
 class WinApplicationTester	:	public WindowedApplication
 {
 private:
 	VisualTesterRenderLogic*		m_renderLogic;
-
-	bool							makeReferenceImage;
 
 public:
     static bool			m_sWindowedApplicationInitialized;
@@ -41,9 +45,8 @@ protected:
 
 	void InitCamera( unsigned int w, unsigned int h );
 public:
-	inline void setMakeReferenceImage( bool value ) { makeReferenceImage = value; }
 
-	void testRender( const std::string fileName, SceneNode* node );
+	void testRender( const std::string fileName, SceneNode* node, bool makeReferenceImage = false );
 
 
 	bv::Renderer* getRenderer();
