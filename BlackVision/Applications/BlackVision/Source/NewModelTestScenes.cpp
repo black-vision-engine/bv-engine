@@ -510,7 +510,7 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
 
-        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
+		node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
 
     return node;

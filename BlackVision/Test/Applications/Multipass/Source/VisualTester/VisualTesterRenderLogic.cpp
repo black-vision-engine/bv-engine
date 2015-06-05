@@ -26,7 +26,8 @@ void VisualTesterRenderLogic::renderReferenceImage( Renderer* renderer, SceneNod
 	RenderFrame( renderer, node );
 
 	Texture2DConstPtr renderTarget = m_offscreenRenderLogic->ReadDisplayTarget( renderer, 0 );
-	bool succes = image::SaveBMPImage( fileName, renderTarget->GetData(), renderTarget->GetWidth(), renderTarget->GetHeight(), 32 );
+	bool succes = image::SaveBMPImage( fileName, renderTarget->GetData(), (UInt32)renderTarget->GetWidth(), (UInt32)renderTarget->GetHeight(), 32 );
+	{ succes; }
 	assert( succes );
 }
 
