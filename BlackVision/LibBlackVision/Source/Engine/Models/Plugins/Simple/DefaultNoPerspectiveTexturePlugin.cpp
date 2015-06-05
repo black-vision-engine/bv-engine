@@ -97,20 +97,6 @@ std::string             DefaultNoPerspectiveTexturePluginDesc::UID              
 }
 
 // *******************************
-//
-std::string             DefaultNoPerspectiveTexturePluginDesc::VertexShaderSource        ()
-{
-    return "Assets/Shaders/Deprecated/defaulttexture.vert";
-}
-
-// *******************************
-//
-std::string             DefaultNoPerspectiveTexturePluginDesc::PixelShaderSource         ()
-{
-    return "Assets/Shaders/Deprecated/defaulttexture.frag";
-}
-
-// *******************************
 // 
 std::string             DefaultNoPerspectiveTexturePluginDesc::TextureName               ()
 {

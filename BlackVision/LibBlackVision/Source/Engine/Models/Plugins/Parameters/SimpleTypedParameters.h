@@ -4,6 +4,7 @@
 #include "Mathematics/Transform/MatTransform.h"
 
 #include "Engine/Models/Plugins/Parameters/AbstractModelParameter.h"
+#include "Engine/Interfaces/ISerializable.h"
 
 
 namespace bv { namespace model {

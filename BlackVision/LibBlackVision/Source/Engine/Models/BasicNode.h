@@ -9,6 +9,7 @@
 
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
 
+#include "Engine/Interfaces/ISerializable.h"
 
 namespace bv { namespace model {
 
@@ -24,7 +25,7 @@ typedef std::vector< BasicNodePtr > TNodeVec;
 class ModelNodeEditor;
 
 
-class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicNode >
+class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicNode >, public ISerializable
 {
 public:
 
@@ -57,6 +58,8 @@ public:
     virtual ~BasicNode();
 
     static BasicNodePtr                     Create                  ( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager = nullptr );
+    static ISerializablePtr                 Create                  ( DeserializeObject& doc );
+    virtual void                            Serialize               ( SerializeObject& /*doc*/ ) const { assert( !"implement" ); }
 
     virtual IPluginPtr                      GetPlugin               ( const std::string & name ) const override;
     virtual IFinalizePluginConstPtr         GetFinalizePlugin       () const override;

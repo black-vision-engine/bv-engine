@@ -6,6 +6,7 @@
 #include "Engine/Types/Enums.h"
 
 #include "CoreDEF.h"
+#include <Engine/Interfaces/ISerializable.h>
 
 
 namespace bv { namespace model {
@@ -13,7 +14,7 @@ namespace bv { namespace model {
 class AbstractModelParameter;
 DEFINE_PTR_TYPE(AbstractModelParameter)
 
-class AbstractModelParameter : public IParameter, public std::enable_shared_from_this< AbstractModelParameter >
+class AbstractModelParameter : public IParameter, public std::enable_shared_from_this< AbstractModelParameter >, public ISerializable
 {
 protected:
 
@@ -29,6 +30,8 @@ protected:
     virtual                     ~AbstractModelParameter ();
 
 public:
+    virtual void                Serialize       ( SerializeObject &/*doc*/ ) const {};
+    static ISerializablePtr     Create          ( DeserializeObject &/*doc*/ );
 
     virtual const std::string & GetName                 () const override;
     virtual ModelParamType      GetType                 () const override;
