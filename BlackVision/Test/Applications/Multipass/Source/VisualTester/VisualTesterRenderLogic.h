@@ -10,9 +10,8 @@ namespace bv
 
 /**@brief Function comparing to samples od images: renderedImage with refImage.
 
-Format of image is undefined. Thats why there's third parameter that returns
-offset to next sample.*/
-typedef double (*SampleCompareFunction)( const char* refImage, const char* renderedImage, unsigned char& step );		
+@todo Format of image is undefined. What if render target isn't 32 bit RGBA?*/
+typedef double (*SampleCompareFunction)( const char* refImage, const char* renderedImage );		
 
 
 typedef void (*SampleDiffWriteFunction)( double stepError, char* diffImage );

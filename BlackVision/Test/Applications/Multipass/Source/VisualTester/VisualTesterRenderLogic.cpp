@@ -5,21 +5,27 @@
 
 
 
-double imageUINT8BitsPerChannel( const char* refImage, const char* renderedImage, unsigned char& step )
+double imageRGBA8BitsPerChannelIgnoreAlpha( const char* refImage, const char* renderedImage )
 {
 	double retValue = 0.0;
-	step = 4;
 	
-	for( char channel = 0; channel < 4; ++channel )
-		retValue += static_cast<double>( abs( refImage[channel] - renderedImage[channel] ) );
+	for( char channel = 0; channel < 3; ++channel )
+	{
+		short refVal = refImage[channel] & 0xFF;
+		short rendVal = renderedImage[channel] & 0xFF;
+		retValue += static_cast<double>( abs( refVal - rendVal ) );
+	}
 	return retValue;
 }
 
-void imageUINT8BitsPerChannelDiff( double imageError, char* diffImage )
+void imageRGBA8BitsPerChannelDiffIgnoreAlpha( double imageError, char* diffImage )
 {
-	unsigned char diff = unsigned char( imageError / 4 );			// UCHAR_MAX * imageError / (4 * UCHAR_MAX);
-	for( char channel = 0; channel < 4; ++channel )
-		diffImage[channel] = diff;
+	unsigned char alpha = UCHAR_MAX;
+	unsigned char diff = unsigned char( imageError / 3 );			// UCHAR_MAX * imageError / (3 * UCHAR_MAX); alpha channel ignored
+
+	for( char channel = 0; channel < 3; ++channel )
+		diffImage[channel] = diff & 0xFF;
+	diffImage[3] = (char)alpha;
 }
 
 const std::string file_ext = ".bmp";
@@ -32,8 +38,8 @@ namespace bv
 
 VisualTesterRenderLogic::VisualTesterRenderLogic()
 {
-	currentCompareFunction = imageUINT8BitsPerChannel;
-	currentDiffWriteFunction = imageUINT8BitsPerChannelDiff;
+	currentCompareFunction = imageRGBA8BitsPerChannelIgnoreAlpha;
+	currentDiffWriteFunction = imageRGBA8BitsPerChannelDiffIgnoreAlpha;
 	errorTolerance = 0.0;
 	makeDiffImage = true;
 }
@@ -79,13 +85,16 @@ void VisualTesterRenderLogic::renderCompareWithReferenceImage( Renderer* rendere
 	UInt32 channelNum;
 	MemoryChunkConstPtr refImageMemChunk = image::LoadImage( fullName, &imageWidth, &imageHeight, &imageBPP, &channelNum, false );
 
+	ASSERT_NE( refImageMemChunk->Get(), nullptr );
 	ASSERT_EQ( renderTarget->GetHeight(), imageHeight );
 	ASSERT_EQ( renderTarget->GetWidth(), imageWidth );
 
+
+	UInt32 BytesPP = imageBPP / 8;
 	char* diffImage = nullptr;
 	if( makeDiffImage )
 	{
-		diffImage  = new char[imageHeight * imageWidth * imageBPP / 8];
+		diffImage  = new char[imageHeight * imageWidth * BytesPP];
 	}
 	
 	const char* refImage = refImageMemChunk->Get();
@@ -93,26 +102,26 @@ void VisualTesterRenderLogic::renderCompareWithReferenceImage( Renderer* rendere
 	double imageError = 0.0;
 
 
-	for( unsigned int i = 0; i < imageHeight * imageWidth; )
+	for( unsigned int i = 0; i < imageHeight * imageWidth * BytesPP; )
 	{
 		unsigned char step;		// currentCompareFunction will put here our step.
-		double stepError = currentCompareFunction( refImage + i, renderedImage + i, step );
+		double stepError = currentCompareFunction( refImage + i, renderedImage + i );
 		imageError += stepError;
 
 
 		if( makeDiffImage )
 			currentDiffWriteFunction( stepError, diffImage + i );
 
-		i += step;
+		i += BytesPP;
 	}
 	
 
-	EXPECT_LE( errorTolerance, imageError );
+	EXPECT_LE( imageError, errorTolerance );
 
 	if( makeDiffImage && imageError > errorTolerance )
 	{
 		fullName = fileName + diff_image + file_ext;
-		MemoryChunkConstPtr diffImageChunk = std::make_shared<MemoryChunk>( diffImage, imageHeight * imageWidth * imageBPP / 8 );
+		MemoryChunkConstPtr diffImageChunk = std::make_shared<MemoryChunk>( diffImage, imageHeight * imageWidth * BytesPP);
 
 		image::SaveBMPImage( fullName, diffImageChunk, imageWidth, imageHeight, imageBPP );
 	}
