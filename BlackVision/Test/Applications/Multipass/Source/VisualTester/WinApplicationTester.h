@@ -41,7 +41,7 @@ protected:
 
 	void InitCamera( unsigned int w, unsigned int h );
 public:
-	void setMakeReferenceImage( bool value );
+	inline void setMakeReferenceImage( bool value ) { makeReferenceImage = value; }
 
 	void testRender( const std::string fileName, SceneNode* node );
 

@@ -23,7 +23,7 @@ namespace bv {
 TEST(MultipassAlphaBlending, Multipass)
 {
 	Renderer* renderer = application->getRenderer();
-
+	application->setMakeReferenceImage( false );
 
 	std::string sand( "sand.jpg" );
 	std::string cubeMap( "Penguins.jpg" );

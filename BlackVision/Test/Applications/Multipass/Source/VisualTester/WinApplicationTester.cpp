@@ -45,10 +45,10 @@ bool WinApplicationTester::m_sWindowedApplicationInitialized = WinApplicationTes
 
 
 WinApplicationTester::WinApplicationTester()
-	:	WindowedApplication( "Rendering test", 0, 0, defaultWindowWidth, defaultWindowHeight, fullscreenMode )
+	:	WindowedApplication( "Rendering test", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.FullScreenMode() )
 {
 	application = this;
-	makeReferenceImage = true;
+	makeReferenceImage = false;
 }
 
 
@@ -82,12 +82,9 @@ void WinApplicationTester::InitCamera         ( unsigned int w, unsigned int h )
 
 bool WinApplicationTester::OnInitialize()
 {
-	//bv::Camera * cam = new bv::Camera();
-
 	m_renderLogic = new VisualTesterRenderLogic();
-	//m_renderLogic->SetCamera( cam );
 
-	InitCamera( defaultWindowWidth, defaultWindowHeight );
+	InitCamera( DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight() );
 
 	return WindowedApplication::OnInitialize();
 }
