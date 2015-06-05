@@ -2,10 +2,12 @@
 import Project
 import DataCategory
 import FSTextureDataAccessor
-import SceneAccessor
+import FSSceneAccessor
 
 def test():
     pm = ProjectManager.ProjectManager()
+
+    pm.setGlobalSceneAccessor(FSSceneAccessor.FSSceneAccessor("global/scenes/", None))
 
     proj1 = Project.Project("proj1")
 
@@ -14,7 +16,7 @@ def test():
 
     proj1.registerCategory(texturesProj1)
 
-    proj1.setSceneAccessor(SceneAccessor.SceneAccessor("./proj1/scenes/"))
+    proj1.setSceneAccessor(FSSceneAccessor.FSSceneAccessor("./proj1/scenes/", proj1))
 
     pm.addProject(proj1)
 
