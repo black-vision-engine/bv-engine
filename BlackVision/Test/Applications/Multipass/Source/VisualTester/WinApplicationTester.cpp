@@ -3,6 +3,7 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/glutils.h"
+#include "BVConfig.h"
 
 
 
@@ -25,7 +26,7 @@ WinApplicationTester* application = nullptr;
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
 void			WinApplicationTester::StaticInitializer	()
 {
-    bv::ApplicationBase::MainFun = &bv::WinApplicationTester::MainImpl;
+	bv::ApplicationBase::MainFun = &bv::WindowedApplication::MainImpl;
     bv::ApplicationBase::ApplicationInstance = new WinApplicationTester();
 }
 
@@ -44,10 +45,10 @@ bool WinApplicationTester::m_sWindowedApplicationInitialized = WinApplicationTes
 
 
 WinApplicationTester::WinApplicationTester()
-	:	WindowedApplication( "Rendering test", 0, 0, defaultWindowWidth, defaultWindowHeight, fullscreenMode )
+	:	WindowedApplication( "Rendering test", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.FullScreenMode() )
 {
 	application = this;
-	makeReferenceImage = true;
+	makeReferenceImage = false;
 }
 
 
@@ -57,13 +58,33 @@ WinApplicationTester::~WinApplicationTester(void)
 		delete m_renderLogic;
 }
 
+void WinApplicationTester::InitCamera         ( unsigned int w, unsigned int h )
+{
+    Camera * cam = new bv::Camera();
+
+    cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
+    
+    if( cam->IsPerspective() )
+    {
+        cam->SetPerspective( DefaultConfig.FOV(), w, h, DefaultConfig.NearClippingPlane(), DefaultConfig.FarClippingPlane() );
+    }
+    else
+    {
+        cam->SetViewportSize( w, h );
+    }
+
+    m_Renderer->SetCamera( cam );
+    m_renderLogic->SetCamera( cam );
+
+    //FIXME: read from configuration file and change the camera appropriately when current resoultion changes
+}
+
 
 bool WinApplicationTester::OnInitialize()
 {
-	bv::Camera * cam = new bv::Camera();
-
 	m_renderLogic = new VisualTesterRenderLogic();
-	m_renderLogic->SetCamera( cam );
+
+	InitCamera( DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight() );
 
 	return WindowedApplication::OnInitialize();
 }
@@ -299,7 +320,7 @@ void DestroyApplicationWindow( WindowedApplication * app, HWND handle )
 
 int WinApplicationTester::MainFun( int argc, char ** argv )
 {
-	//::testing::InitGoogleTest( &argc, argv );		// Change comparing to normal WindowedApplication::MainFun
+	::testing::InitGoogleTest( &argc, argv );		// Change comparing to normal WindowedApplication::MainFun
 	argc;	argv;
 
     WinApplicationTester * app = static_cast< WinApplicationTester * >( ApplicationBase::ApplicationInstance );
@@ -331,8 +352,6 @@ int WinApplicationTester::MainFun( int argc, char ** argv )
     m_Renderer = new bv::Renderer( ri, app->Width(), app->Height() );
 
 
-	try
-	{
 
     if ( app->OnInitialize() )
     {
@@ -341,8 +360,9 @@ int WinApplicationTester::MainFun( int argc, char ** argv )
 
         app->OnPreidle();
 
+		// W zasadzie nie musimy pokazywaæ okna, bo i tak do niego nie renderujemy.
         //ShowWindow	( handle, SW_SHOW );
-        UpdateWindow( handle );
+        //UpdateWindow( handle );
 
         //app->OnIdle();
 
@@ -384,19 +404,13 @@ int WinApplicationTester::MainFun( int argc, char ** argv )
     DestroyApplicationWindow( app, handle );
 	application = nullptr;
 
-
-	}
-	catch( ... )
-	{
-
-	}
 	return 0;
 }
 
 
 void WinApplicationTester::OnIdle()
 {
-	//RUN_ALL_TESTS();
+	RUN_ALL_TESTS();
 }
 
 //

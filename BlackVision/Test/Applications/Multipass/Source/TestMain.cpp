@@ -9,7 +9,7 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine\Graphics\SceneGraph\RenderableEntity.h"
 
-//#include "gtest/gtest.h"
+#include "gtest/gtest.h"
 #include "VisualTester\WinApplicationTester.h"
 
 
@@ -19,33 +19,35 @@ namespace bv {
 
 
 
-//
-//TEST(MultipassAlphaBlending, Multipass)
-//{
-//	//Renderer* renderer = application->getRenderer();
-//
-//
-//	//std::string sand( "sand.jpg" );
-//	//std::string cubeMap( "Penguins.jpg" );
-//
-//	//sand = AssetsPath + sand;
-//	//cubeMap = AssetsPath + cubeMap;
-//
-//	//ScenePrototype3 scene( renderer );
-//	//SceneNode* root = scene.CreateScene( sand, cubeMap );
-//
-//	//ASSERT_TRUE( root != nullptr );
-//
-//	//RenderableEntity* ent = dynamic_cast<RenderableEntity*>( root->GetTransformable() );
-//
-//	//ASSERT_TRUE( ent != nullptr );		// Dynamic_cast failed
-//
-//	//auto effect = ent->GetRenderableEffect();
-//
-//	//ASSERT_TRUE( effect != nullptr );
-//	//ASSERT_EQ( effect->NumPasses(), (unsigned int)scene.getNumPasses() );
-//
-//}
+
+TEST(MultipassAlphaBlending, Multipass)
+{
+	Renderer* renderer = application->getRenderer();
+	application->setMakeReferenceImage( false );
+
+	std::string sand( "sand.jpg" );
+	std::string cubeMap( "Penguins.jpg" );
+
+	sand = AssetsPath + sand;
+	cubeMap = AssetsPath + cubeMap;
+
+	ScenePrototype3 scene( renderer );
+	SceneNode* root = scene.CreateScene( sand, cubeMap );
+
+	ASSERT_TRUE( root != nullptr );
+
+	RenderableEntity* ent = dynamic_cast<RenderableEntity*>( root->GetTransformable() );
+
+	ASSERT_TRUE( ent != nullptr );		// Dynamic_cast failed
+
+	auto effect = ent->GetRenderableEffect();
+
+	ASSERT_TRUE( effect != nullptr );
+	ASSERT_EQ( effect->NumPasses(), (unsigned int)scene.getNumPasses() );
+
+
+	application->testRender( AssetsPath + "MultipassTest", root );
+}
 
 
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "Application\WindowedApplication.h"
 #include "VisualTesterRenderLogic.h"
-//#include "gtest/gtest.h"
+#include "gtest/gtest.h"
 
 namespace bv
 {
@@ -38,8 +38,10 @@ protected:
 	virtual int		MainFun( int argc, char ** argv ) override;
 	virtual void	OnIdle();
 	virtual bool	OnInitialize();
+
+	void InitCamera( unsigned int w, unsigned int h );
 public:
-	void setMakeReferenceImage( bool value );
+	inline void setMakeReferenceImage( bool value ) { makeReferenceImage = value; }
 
 	void testRender( const std::string fileName, SceneNode* node );
 

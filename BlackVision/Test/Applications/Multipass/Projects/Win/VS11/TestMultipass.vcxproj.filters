@@ -14,7 +14,6 @@
     <ClCompile Include="..\..\..\Source\VisualTester\BVConfig.cpp">
       <Filter>VisualTester</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\VisualTester\VisualTesterRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Common\ExperimentalNodeDeleter.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -64,6 +63,9 @@
     <ClCompile Include="..\..\..\Source\Common\VBORect.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\VisualTester\VisualTesterRenderLogic.cpp">
+      <Filter>VisualTester</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="VisualTester">
@@ -89,7 +91,6 @@
     <ClInclude Include="..\..\..\Source\VisualTester\BVConfig.h">
       <Filter>VisualTester</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\VisualTester\VisualTesterRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Common\ExperimentalNodeDeleter.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -147,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Common\VBORect.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VisualTester\VisualTesterRenderLogic.h">
+      <Filter>VisualTester</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
