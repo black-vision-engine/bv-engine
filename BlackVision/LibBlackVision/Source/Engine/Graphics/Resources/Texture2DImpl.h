@@ -14,20 +14,20 @@ private:
 
 public:
 
-                                Texture2DImpl   ( TextureFormat format, SizeType width, SizeType height, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE_STATIC );
+                                Texture2DImpl   ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE_STATIC );
     virtual                     ~Texture2DImpl  ();
 
-	virtual SizeType			GetNumLevels    () const override;
+	virtual UInt32			    GetNumLevels    () const override;
 
     virtual SizeType            GetDataSize     ( UInt32 level = 0 ) const override;
 
     virtual MemoryChunkConstPtr GetData         ( UInt32 level = 0 ) const override;
 
-    bool                        SetRawData      ( const std::vector< MemoryChunkConstPtr > & data, TextureFormat format, SizeType width, SizeType height );
+    bool                        SetRawData      ( const std::vector< MemoryChunkConstPtr > & data, TextureFormat format, UInt32 width, UInt32 height );
 
 private:
 
-    SizeType					SizeInBytes     ( TextureFormat format, SizeType width, SizeType height );
+    SizeType					SizeInBytes     ( TextureFormat format, UInt32 width, UInt32 height );
 
 };
 

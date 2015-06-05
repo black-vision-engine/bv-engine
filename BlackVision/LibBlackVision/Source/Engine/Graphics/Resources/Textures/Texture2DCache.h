@@ -32,21 +32,21 @@ class Texture2DCache
 
 public:
   
-                                Texture2DCache          ();
-    virtual                     ~Texture2DCache         ();
+                                    Texture2DCache      ();
+    virtual                         ~Texture2DCache     ();
 
-    Texture2DPtr                GetTexture              ( const ITextureDescriptor * txParams );
-    Texture2DPtr                GetSequence             ( const IAnimationDescriptor * animParams );
+    Texture2DPtr                    GetTexture          ( const ITextureDescriptor * txParams );
+    Texture2DPtr                    GetSequence         ( const IAnimationDescriptor * animParams );
 
-    bool                        IsRegistered            ( const ITextureDescriptor * txParams ) const;
-    bool                        IsStored                ( Texture2DPtr tex ) const;
+    bool                            IsRegistered        ( const ITextureDescriptor * txParams ) const;
+    bool                            IsStored            ( Texture2DPtr tex ) const;
 
-    void                        ClearCache              ();
+    void                            ClearCache          ();
 
-    static Texture2DImplPtr         CreateEmptyTexture  ( TextureFormat format, SizeType width, SizeType height, DataBuffer::Semantic semantic );
-    static Texture2DImplPtr         CreateTexture       ( TextureFormat format, SizeType width, SizeType height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data );
+    static Texture2DImplPtr         CreateEmptyTexture  ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic );
+    static Texture2DImplPtr         CreateTexture       ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data );
 
-    static Texture2DSequenceImplPtr CreateEmptySequence ( TextureFormat format, SizeType width, SizeType height  );
+    static Texture2DSequenceImplPtr CreateEmptySequence ( TextureFormat format, UInt32 width, UInt32 height  );
 
 };
 

@@ -41,15 +41,19 @@ public:
     virtual UInt32					PreviousFrame       () const override;
 
     virtual const std::string       GetName             () const override;
-    virtual SizeType	            GetWidth            ( UInt32 level = 0 ) const override;
-    virtual SizeType	            GetHeight           ( UInt32 level = 0 ) const override;
-	virtual SizeType	            GetDepth            ( UInt32 level = 0 ) const override;
+
+    virtual UInt32	                GetWidth            ( UInt32 level = 0 ) const override;
+    virtual UInt32	                GetHeight           ( UInt32 level = 0 ) const override;
+	virtual UInt32	                GetDepth            ( UInt32 level = 0 ) const override;
+    
     virtual TextureFormat           GetFormat           () const override;
+
     virtual TextureWrappingMode     GetWrappingModeX    () const override;
     virtual TextureWrappingMode     GetWrappingModeY    () const override;
 	virtual TextureWrappingMode     GetWrappingModeZ	() const override;
 
     virtual TextureFilteringMode    GetFilteringMode    () const override;
+    
     virtual glm::vec4               BorderColor         () const override;
 
     void                            SetBits             ( UInt32 idx, TextureAssetConstPtr handle );
@@ -59,12 +63,17 @@ public:
     void                            SetCurrentFrame     ( UInt32 frameNum );
 
     void                            SetName             ( const std::string & name );
+
     void                            SetWidth            ( UInt32 w );
     void                            SetHeight           ( UInt32 h );
+
     void                            SetFormat           ( TextureFormat fmt );
+
     void                            SetWrappingModeX    ( TextureWrappingMode wm );
     void                            SetWrappingModeY    ( TextureWrappingMode wm );
+
     void                            SetFilteringMode    ( TextureFilteringMode fm );
+
     void                            SetBorderColor      ( const glm::vec4 & bc );
 
     static DefaultAnimationDescriptor * LoadAnimation   ( const AnimationAssetDescConstPtr & frames, const std::string & name );
