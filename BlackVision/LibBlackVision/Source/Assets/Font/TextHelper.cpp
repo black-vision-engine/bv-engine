@@ -210,7 +210,8 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
         }
         else
         {
-            assert( !( "Cannot find glyph for char " + wch) );
+			translate += glm::vec3( spaceGlyphWidth, 0.f, 0.f )+ interspace;
+            //assert( !( "Cannot find glyph for char " + wch) );
         }
     }
 
