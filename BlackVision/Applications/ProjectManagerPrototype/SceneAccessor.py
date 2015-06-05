@@ -5,7 +5,7 @@ class SceneAccessor:
         pass
 
     @abstractmethod
-    def getSceneDesc(self, path):
+    def getScene(self, path):
         pass
 
     @abstractmethod

@@ -32,6 +32,7 @@ class FSSceneAccessor(SceneAccessor):
         self.packSceneAndResources(s, expSceneFilePath)
 
     def packSceneAndResources(self, scene, outputFile):
+        assert self.project
         assert isinstance(scene, Scene)
         res = scene.listResources()
 
@@ -57,6 +58,7 @@ class FSSceneAccessor(SceneAccessor):
 
     def isProjectResource(self, res):
         assert isinstance(res, str)
+        assert self.project
         projectName = self.project.getName()
         return res[1:len(projectName)] == projectName
 

@@ -60,7 +60,7 @@ class Project:
             print("There is no category named {} in project {}".format(categoryId, self.name))
             return None
 
-    def getSceneDesc(self, path):
+    def getScene(self, path):
         assert isinstance(self.sceneAccessor, SceneAccessor)
         return self.sceneAccessor.getSceneDesc()
 
