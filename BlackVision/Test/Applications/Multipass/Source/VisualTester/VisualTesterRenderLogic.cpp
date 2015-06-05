@@ -2,7 +2,14 @@
 #include "LibImage.h"
 #include <limits.h>
 #include "gtest\gtest.h"
+#include "System\Env.h"
 
+
+const std::string AssetsPath = "../../../../Test/Assets/Multipass/";
+const std::string TestsResultsDir = "";
+const std::string file_ext = ".bmp";
+const std::string ref_image = "ReferenceImage";
+const std::string diff_image = "DiffToReference";
 
 
 double imageRGBA8BitsPerChannelIgnoreAlpha( const char* refImage, const char* renderedImage )
@@ -28,9 +35,7 @@ void imageRGBA8BitsPerChannelDiffIgnoreAlpha( double imageError, char* diffImage
 	diffImage[3] = (char)alpha;
 }
 
-const std::string file_ext = ".bmp";
-const std::string ref_image = "ReferenceImage";
-const std::string diff_image = "DiffToReference";
+
 
 namespace bv
 {
@@ -64,7 +69,7 @@ void VisualTesterRenderLogic::renderReferenceImage( Renderer* renderer, SceneNod
 
 	Texture2DConstPtr renderTarget = renderImage( renderer, node );
 
-	std::string fullName = fileName + ref_image + file_ext;
+	std::string fullName = AssetsPath + fileName + ref_image + file_ext;
 	bool succes = image::SaveBMPImage( fullName, renderTarget->GetData(), (UInt32)renderTarget->GetWidth(), (UInt32)renderTarget->GetHeight(), 32 );
 	{ succes; }
 	ASSERT_TRUE( succes );
@@ -78,7 +83,7 @@ void VisualTesterRenderLogic::renderCompareWithReferenceImage( Renderer* rendere
 
 	Texture2DConstPtr renderTarget = renderImage( renderer, node );
 
-	std::string fullName = fileName + ref_image + file_ext;
+	std::string fullName = AssetsPath + fileName + ref_image + file_ext;
 	UInt32 imageWidth;
 	UInt32 imageHeight;
 	UInt32 imageBPP;
@@ -119,7 +124,7 @@ void VisualTesterRenderLogic::renderCompareWithReferenceImage( Renderer* rendere
 
 	if( makeDiffImage && imageError > errorTolerance )
 	{
-		fullName = fileName + diff_image + file_ext;
+		fullName = TestsResultsDir + fileName + diff_image + file_ext;
 		MemoryChunkConstPtr diffImageChunk = std::make_shared<MemoryChunk>( diffImage, imageHeight * imageWidth * BytesPP);
 
 		image::SaveBMPImage( fullName, diffImageChunk, imageWidth, imageHeight, imageBPP );

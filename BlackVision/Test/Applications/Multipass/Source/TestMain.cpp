@@ -45,7 +45,7 @@ TEST(MultipassAlphaBlending, Multipass)
 	ASSERT_EQ( effect->NumPasses(), (unsigned int)scene.getNumPasses() );
 
 
-	application->testRender( AssetsPath + "MultipassTest", root, false );
+	application->testRender( AssetsPath + "MultipassTest/MultipassTest", root, false );
 }
 
 
