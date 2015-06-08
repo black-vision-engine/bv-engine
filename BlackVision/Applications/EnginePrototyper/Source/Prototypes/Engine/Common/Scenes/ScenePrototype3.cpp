@@ -9,6 +9,7 @@ namespace bv {
 ScenePrototype3::ScenePrototype3( Renderer * renderer )
     : ScenePrototype( renderer )
 {
+	numPasses = 0;
 }
 
 // **************************
@@ -37,7 +38,7 @@ SceneNode * ScenePrototype3::BuildSceneImpl      ()
 	textures.push_back( &cubeMap );		// textures.size() is at the same time number of passes
 
 	SceneNode * root = MultipassNodeBuilder::CreateMultipassRectNodeTexture( 1.f, 1.f, -1.1f, textures.data(), (unsigned short)textures.size() );
-	numPasses++;
+	numPasses = 2;
 
 	float alfa = 45.0f;
 
@@ -50,8 +51,6 @@ SceneNode * ScenePrototype3::BuildSceneImpl      ()
 		root->AddChildNode( newNode );
 
 		alfa += 360.0f;
-
-		numPasses++;
 	}
 
     return root;

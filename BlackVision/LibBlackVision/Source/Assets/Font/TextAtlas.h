@@ -69,6 +69,7 @@ public:
 												UInt32 height, 
 												SizeType fontSize, 
 												SizeType blurSize,
+												SizeType outlineSize,
 												MipMapFilterType mmFilterType,
 												SizeType mmLevels );
 

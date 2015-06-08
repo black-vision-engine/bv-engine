@@ -7,7 +7,7 @@ namespace bv {
 
 // *********************************
 //  
-Texture2DSequenceImpl::Texture2DSequenceImpl                        ( TextureFormat format, SizeType width, SizeType height )
+Texture2DSequenceImpl::Texture2DSequenceImpl                        ( TextureFormat format, UInt32 width, UInt32 height )
     : Texture2D( format, width, height, DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE ) //FIXME: are there any chances that other semantics can be used for animations??
     , m_activeTexture( 0 )
 {
@@ -23,7 +23,7 @@ Texture2DSequenceImpl::~Texture2DSequenceImpl                   ()
 
 // *********************************
 //  
-bool                Texture2DSequenceImpl::AddTextureSettingRawData ( MemoryChunkConstPtr data, TextureFormat format, SizeType width, SizeType height )
+bool                Texture2DSequenceImpl::AddTextureSettingRawData ( MemoryChunkConstPtr data, TextureFormat format, UInt32 width, UInt32 height )
 {
     if( format != GetFormat() || width != GetWidth() || height != GetHeight() )
     {
@@ -39,21 +39,21 @@ bool                Texture2DSequenceImpl::AddTextureSettingRawData ( MemoryChun
 
 // *********************************
 //  
-SizeType            Texture2DSequenceImpl::NumTextures             () const
+UInt32              Texture2DSequenceImpl::NumTextures      () const
 {
-    return m_data.size();
+    return (UInt32) m_data.size();
 }
 
 // *********************************
 //  
-SizeType			Texture2DSequenceImpl::GetNumLevels				() const
+UInt32			    Texture2DSequenceImpl::GetNumLevels     () const
 {
 	return 0;
 }
 
 // *********************************
 //  
-void			Texture2DSequenceImpl::SetActiveTexture       ( SizeType txNum )
+void			Texture2DSequenceImpl::SetActiveTexture     ( UInt32 txNum )
 {
     assert( txNum < NumTextures() );
 
@@ -65,14 +65,14 @@ void			Texture2DSequenceImpl::SetActiveTexture       ( SizeType txNum )
 
 // *********************************
 //  
-SizeType		Texture2DSequenceImpl::GetActiveTextureNum          () const
+UInt32		    Texture2DSequenceImpl::GetActiveTextureNum  () const
 {
     return m_activeTexture;
 }
 
 // *********************************
 //  
-SizeType        Texture2DSequenceImpl::GetDataSize                  ( UInt32 level ) const
+SizeType        Texture2DSequenceImpl::GetDataSize          ( UInt32 level ) const
 {
     { level; }
 
@@ -82,7 +82,7 @@ SizeType        Texture2DSequenceImpl::GetDataSize                  ( UInt32 lev
 
 // *********************************
 //  
-MemoryChunkConstPtr Texture2DSequenceImpl::GetData                  ( UInt32 level ) const
+MemoryChunkConstPtr Texture2DSequenceImpl::GetData          ( UInt32 level ) const
 {
     { level; }
 

@@ -113,7 +113,7 @@ void            Texture2DCache::ClearCache              ()
 
 // *********************************
 //
-Texture2DImplPtr         Texture2DCache::CreateEmptyTexture    ( TextureFormat format, SizeType width, SizeType height, DataBuffer::Semantic semantic )
+Texture2DImplPtr         Texture2DCache::CreateEmptyTexture    ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic )
 {
     auto texture = std::make_shared< Texture2DImpl >( format, width, height, semantic );
 
@@ -122,7 +122,7 @@ Texture2DImplPtr         Texture2DCache::CreateEmptyTexture    ( TextureFormat f
 
 // *********************************
 //
-Texture2DImplPtr         Texture2DCache::CreateTexture          ( TextureFormat format, SizeType width, SizeType height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data )
+Texture2DImplPtr         Texture2DCache::CreateTexture          ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data )
 {
     auto texture = CreateEmptyTexture( format, width, height, semantic );
 	std::vector< MemoryChunkConstPtr > tex;
@@ -134,7 +134,7 @@ Texture2DImplPtr         Texture2DCache::CreateTexture          ( TextureFormat 
 
 // *********************************
 //
-Texture2DSequenceImplPtr Texture2DCache::CreateEmptySequence   ( TextureFormat format, SizeType width, SizeType height )
+Texture2DSequenceImplPtr Texture2DCache::CreateEmptySequence   ( TextureFormat format, UInt32 width, UInt32 height )
 {
     auto sequence   = std::make_shared< Texture2DSequenceImpl >( format, width, height );
 

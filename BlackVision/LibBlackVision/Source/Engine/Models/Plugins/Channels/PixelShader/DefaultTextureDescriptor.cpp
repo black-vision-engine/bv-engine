@@ -61,7 +61,7 @@ uintptr_t               DefaultTextureDescriptor::GetUID            () const
 
 // **************************
 //
-SizeType				DefaultTextureDescriptor::GetNumLevels		() const
+UInt32				    DefaultTextureDescriptor::GetNumLevels		() const
 {
 	if( m_texResource->GetMipMaps() != nullptr )
 	{
@@ -135,21 +135,21 @@ const std::string       DefaultTextureDescriptor::GetName           () const
 
 // **************************
 //
-SizeType				DefaultTextureDescriptor::GetWidth          ( UInt32 level ) const
+UInt32				    DefaultTextureDescriptor::GetWidth          ( UInt32 level ) const
 {
     return m_params.GetWidth() >> level;
 }
 
 // **************************
 //
-SizeType				DefaultTextureDescriptor::GetHeight         ( UInt32 level ) const
+UInt32				    DefaultTextureDescriptor::GetHeight         ( UInt32 level ) const
 {
     return m_params.GetHeight() >> level;
 }
 
 // **************************
 //
-SizeType				DefaultTextureDescriptor::GetDepth          ( UInt32 level ) const
+UInt32				    DefaultTextureDescriptor::GetDepth          ( UInt32 level ) const
 {
     return m_params.GetDepth() >> level;
 }
@@ -266,21 +266,21 @@ void                    DefaultTextureDescriptor::SetName           ( const std:
 
 // **************************
 //
-void                    DefaultTextureDescriptor::SetWidth          ( SizeType w )
+void                    DefaultTextureDescriptor::SetWidth          ( UInt32 w )
 {
     m_params.SetWidth( w );
 }
 
 // **************************
 //
-void                    DefaultTextureDescriptor::SetHeight         ( SizeType h )
+void                    DefaultTextureDescriptor::SetHeight         ( UInt32 h )
 {
     m_params.SetHeight( h );
 }
 
 // **************************
 //
-void                    DefaultTextureDescriptor::SetDepth          ( SizeType d )
+void                    DefaultTextureDescriptor::SetDepth          ( UInt32 d )
 {
     m_params.SetDepth( d );
 }

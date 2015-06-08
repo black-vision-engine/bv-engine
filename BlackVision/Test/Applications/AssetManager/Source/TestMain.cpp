@@ -8,6 +8,7 @@
 
 #include <windows.h>
 
+
 namespace bv {
 
 auto imagePath = "Assets/AssetManager/checkerboard2.png";
