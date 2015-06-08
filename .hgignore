@@ -10,3 +10,4 @@ BlackVision/_Temp/*
 *.pyc
 workspace.xml
 BlackVision/_TestsResults/*
+BlackVision/Assets/BasicShapes/*
