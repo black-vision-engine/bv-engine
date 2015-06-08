@@ -26,7 +26,12 @@ void  SimpleTimer::Start            ()
     m_startPause = 0;
     m_totalPausedTime = 0;
 
-    m_startMillis = timeGetTime();
+	LARGE_INTEGER freq;
+
+	QueryPerformanceFrequency( &freq );
+	m_timerFrequency = (unsigned long)freq.QuadPart / 1000;
+
+	m_startMillis = queryMillis();		// Must be after query frequency.
 }
 
 // *********************************
@@ -48,8 +53,17 @@ void  SimpleTimer::UnPause         ()
     {
         m_paused = false;
 
-        m_totalPausedTime += timeGetTime() - m_startPause;
+		m_totalPausedTime += queryMillis() - m_startPause;
     }
+}
+
+
+unsigned long SimpleTimer::queryMillis() const
+{
+	LARGE_INTEGER currentTime;
+	QueryPerformanceCounter( &currentTime );
+
+	return unsigned long( currentTime.QuadPart / m_timerFrequency );
 }
 
 } //bv

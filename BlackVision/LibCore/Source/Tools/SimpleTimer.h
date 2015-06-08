@@ -18,6 +18,8 @@ private:
     unsigned long   m_startPause;
     unsigned long   m_totalPausedTime;
 
+	unsigned long	m_timerFrequency;
+
 public:
 
                             SimpleTimer     ();
@@ -32,6 +34,8 @@ public:
     inline unsigned long    ElapsedMillis   () const;
 
 private:
+
+	unsigned long queryMillis() const;
 
     inline TimeType         MillisToTime    ( unsigned long millis ) const
     {
@@ -56,7 +60,8 @@ unsigned long    SimpleTimer::ElapsedMillis   () const
         return m_startPause - m_startMillis - m_totalPausedTime;
     }
 
-    return timeGetTime() - m_startMillis - m_totalPausedTime;
+
+	return queryMillis() - m_startMillis - m_totalPausedTime;
 }
 
 } //bv
