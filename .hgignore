@@ -9,3 +9,4 @@ BlackVision/_Temp/*
 *.nvuser
 *.pyc
 workspace.xml
+BlackVision/_TestsResults/*

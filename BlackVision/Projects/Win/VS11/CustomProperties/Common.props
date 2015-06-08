@@ -15,6 +15,7 @@
     <TestDir>$(SolutionRoot)\Test</TestDir>
     <ThirdPartyDir>$(DepDir)\3rdParty</ThirdPartyDir>
     <AssetsDir>$(SolutionRoot)\Assets</AssetsDir>
+    <TestsResultsDir>$(SolutionRoot)\_TestsResults\</TestsResultsDir>
   </PropertyGroup>
   <PropertyGroup>
     <OutDir>$(BuildDir)\$(Platform)-$(PlatformToolset)-$(Configuration)\$(ProjectCategory)\$(ProjectName)\</OutDir>
@@ -74,12 +75,17 @@
     </BuildMacro>
     <BuildMacro Include="TestDir">
       <Value>$(TestDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
     <BuildMacro Include="ThirdPartyDir">
       <Value>$(ThirdPartyDir)</Value>
     </BuildMacro>
     <BuildMacro Include="AssetsDir">
       <Value>$(AssetsDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="TestsResultsDir">
+      <Value>$(TestsResultsDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
   </ItemGroup>
 </Project>
